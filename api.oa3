@@ -34,7 +34,7 @@ paths:
     get:
       tags:
         - revision
-      summary: Websocket endpoint for receiving revision updates
+      summary: Websocket placeholder endpoint for receiving revision updates
       operationId: websocket
       responses:
         '200':
@@ -165,13 +165,31 @@ paths:
           description: internal server error
                 
   /portal/profile/authenication:
+    post:
+      tags:
+        - portal
+      summary: Generate authentication update token
+      operationId: prepare-authentication
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: authentication ready
+          content:
+            application/json:
+              schema:
+                type: string
+        '401':
+          description: invalid handle or password
+        '500':
+          description: internal server error
     put:
       tags:
         - portal
       summary: Update authentication with extra auth header
-      operationId: set-handle
+      operationId: set-authentication
       security:
-        - basicAuth: []
+        - bearerAuth: []
         - basicAuth: []
       responses:
         '200':
@@ -187,12 +205,12 @@ paths:
         '500':
           description: internal server error
           
-  /portal/profile/passcode:
+  /portal/profile/code:
     put:
       tags:
         - portal
       summary: Generate pass code
-      operationId: set-passcode
+      operationId: set-access-code
       security:
         - basicAuth: []
       responses:
@@ -456,4 +474,3 @@ components:
     bearerAuth: 
       type: http
       scheme: bearer
-      
