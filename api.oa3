@@ -1,0 +1,459 @@
+openapi: 3.0.0
+info:
+  description: |
+    DataBag provides storage for decentralized identity based self-hosting apps.
+    It is intended to support sharing of personal data and hosting group
+    conversations.
+  version: "0.0.1"
+  title: DataBag
+  termsOfService: 'http://swagger.io/terms/'
+  contact:
+    email: roland.osborne@gmail.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+tags:
+  - name: revision
+    description: websocket endpoint for receiving module revision events
+  - name: portal
+    description: portal creation and configuration for portal backend
+  - name: profile
+    description: getting and setting of the public profile
+  - name: content
+    description: posting and listing of personal subjects, group and tag managment
+  - name: contact
+    description: connection to other identities, hook receiver
+  - name: sharing
+    description: sharing personal subjects, associates content and contacts
+  - name: converstaion
+    description: group sharing of subjects
+    
+paths:
+
+  /revision:
+    get:
+      tags:
+        - revision
+      summary: Websocket endpoint for receiving revision updates
+      operationId: websocket
+      responses:
+        '200':
+          description: Awaiting announce
+        
+  /portal/configurable:
+    get:
+      tags:
+        - portal
+      summary: Check if portal params have been set
+      operationId: get-config
+      responses:
+        '200':
+          description: success
+        '405':
+          description: admin already configured
+        '500':
+          description: internal server error
+          
+  /portal/config:
+    post:
+      tags:
+        - portal
+      summary: Set admin password and node domain
+      operationId: set-config
+      security:
+        - basicAuth: []
+      parameters:
+        - name: domain
+          in: query
+          description: domain of node
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success
+        '405':
+          description: admin already configured
+        '500':
+          description: internal server error
+    put:
+      tags:
+        - portal
+      summary: Set portal domain
+      operationId: set-domain
+      security:
+        - basicAuth: []
+      parameters:
+        - name: domain
+          in: query
+          description: domain of node
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success
+        '401':
+          description: authentication error
+        '500':
+          description: internal server error
+          
+  /portal/claimable:
+    get:
+      tags:
+        - portal
+      description: Check if username is available
+      operationId: check-username
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: username
+          in: query
+          description: username to check 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success
+        '401':
+          description: authentication error
+        '405':
+          description: username already taken
+        '500':
+          description: internal server error
+          
+  /portal/profile:
+    get:
+      tags:
+        - portal
+      description: Get public profile object
+      operationId: get-profile
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+        '401':
+          description: authentication error
+        '500':
+          description: internal server error
+    post:
+      tags:
+        - portal
+      description: Add a new portal
+      operationId: set-profile
+      security:
+        - bearerAuth: []
+        - basicAuth: []
+      responses:
+        '201':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+        '400':
+          description: invalid handle or password
+        '401':
+          description: invalid bearer token
+        '500':
+          description: internal server error
+                
+  /portal/profile/authenication:
+    put:
+      tags:
+        - portal
+      summary: Update authentication with extra auth header
+      operationId: set-handle
+      security:
+        - basicAuth: []
+        - basicAuth: []
+      responses:
+        '200':
+          description: authentication set
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+        '400':
+          description: invalid new handle or password
+        '401':
+          description: invalid handle or password
+        '500':
+          description: internal server error
+          
+  /portal/profile/passcode:
+    put:
+      tags:
+        - portal
+      summary: Generate pass code
+      operationId: set-passcode
+      security:
+        - basicAuth: []
+      responses:
+        '201':
+          description: generated
+          content:
+            application/json:
+              schema:
+                type: string
+        '401':
+          description: invalid password
+        '500':
+          description: internal server error
+
+  /portal/token:
+    get:
+      tags:
+        - portal
+      summary: Check if bearer token is valid
+      operationId: check-token
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: success
+        '401':
+          description: invalid token
+        '500':
+          description: internal server error
+    put:
+      tags:
+        - portal
+      summary: Create password reset token
+      operationId: set-account
+      security:
+        - basicAuth: []
+      parameters:
+        - name: guid
+          in: query
+          description: id of profile to access
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: generated
+          content:
+            application/json:
+              schema:
+                type: string
+        '401':
+          description: invalid password
+        '404':
+          description: unknown portal
+        '500':
+          description: internal server error
+    post:
+      tags:
+        - portal
+      summary: Create new portal token
+      operationId: add-account
+      security:
+        - basicAuth: []
+      responses:
+        '201':
+          description: generated
+          content:
+            application/json:
+              schema:
+                type: string
+        '401':
+          description: invalid password
+        '500':
+          description: internal server error
+          
+  /portal/accounts:
+    get:
+      tags:
+        - portal
+      description: Get list of portals
+      operationId: get-accounts
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        '401':
+          description: invalid password
+        '404':
+          description: handle not found
+        '500':
+          description: internal server error
+          
+  /portal/accounts/{guid}:
+    get:
+      tags:
+        - portal
+      description: Get profile of account
+      operationId: get-account
+      security:
+        - basicAuth: []
+      parameters:
+        - name: guid
+          in: path
+          description: id of account to access
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+        '401':
+          description: invalid password
+        '404':
+          description: account not found
+        '500':
+          description: internal server error
+    delete:
+      tags:
+        - portal
+      description: Remove account from node
+      operationId: remove-account
+      security:
+        - basicAuth: []
+      parameters:
+        - name: guid
+          in: path
+          description: id of account to delete
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+        '401':
+          description: invalid authentication
+        '404':
+          description: account not found
+        '500':
+          description: internal server error
+        
+  /sample:
+    put:
+      tags:
+        - sample
+      summary: sample
+      operationId: sample
+      responses:
+        '400':
+          description: sample
+      requestBody:
+        $ref: '#/components/requestBodies/Sample'
+        
+externalDocs:
+  description: Find out more about Swagger
+  url: 'http://swagger.io'
+
+components:
+  schemas:
+  
+    Announce:
+      type: object
+      required:
+        - appToken
+      properties:
+        appToken:
+          type: string
+          
+    Passcode:
+      type: object
+      required:
+        - value
+      properties:
+        value:
+          type: string
+          
+    Revsion:    
+      type: object
+      required:
+        - profile
+        - content
+        - labels
+        - sharing
+        - contact
+        - dialogue
+        - insight
+      properties:
+        profile:
+          type: integer
+          format: int64
+        content:
+          type: integer
+          format: int64
+        labels:
+          type: integer
+          format: int64
+        sharing:
+          type: integer
+          format: int64
+        contact:
+          type: integer
+          format: int64
+        dialogue:
+          type: integer
+          format: int64
+        insight: 
+          type: integer
+          format: int64
+      
+    Profile:
+      type: object
+      required:
+        - guid
+        - handle
+        - name
+        - description
+        - location
+        - revision
+        - node
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        location:
+          type: string
+        revision:
+          type: integer
+          format: int64
+        node:
+          type: string
+  
+  requestBodies:
+  
+    Sample:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Pet'
+      description: Sample
+      required: true
+      
+  securitySchemes:
+  
+    basicAuth:
+      type: http
+      scheme: basic
+      
+    bearerAuth: 
+      type: http
+      scheme: bearer
+      
