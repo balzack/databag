@@ -15,8 +15,10 @@ info:
 tags:
   - name: revision
     description: websocket endpoint for receiving module revision events
-  - name: portal
-    description: account creation and configuration for portal backend. supports app attachment
+  - name: admin
+    description: account creation for portal backend.
+  - name: account
+    description: account configuration for portal backend. supports app attachment
   - name: registry
     description: listing of public accounts
   - name: authenticate
@@ -44,12 +46,12 @@ paths:
         '200':
           description: Awaiting announce
         
-  /portal/configurable:
+  /admin/claimable:
     get:
       tags:
-        - portal
+        - admin
       description: Check if portal params have been set
-      operationId: get-config
+      operationId: node-configurable
       responses:
         '200':
           description: success
@@ -58,12 +60,12 @@ paths:
         '500':
           description: internal server error
           
-  /portal/config:
+  /admin/config:
     post:
       tags:
-        - portal
+        - admin
       description: Set admin password and node domain
-      operationId: set-config
+      operationId: add-node-config
       security:
         - basicAuth: []
       parameters:
@@ -80,244 +82,34 @@ paths:
           description: admin already configured
         '500':
           description: internal server error
+          
+  /admin/config/domain:
     put:
       tags:
-        - portal
+        - admin
       description: Set portal domain
-      operationId: set-domain
+      operationId: set-node-config-domain
       security:
         - basicAuth: []
-      parameters:
-        - name: domain
-          in: query
-          description: domain of node
-          required: true
-          schema:
-            type: string
       responses:
         '200':
           description: success
         '401':
           description: authentication error
-        '500':
-          description: internal server error
-          
-  /portal/claimable:
-    get:
-      tags:
-        - portal
-      description: Check if username is available
-      operationId: check-username
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: username
-          in: query
-          description: username to check 
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: success
-        '401':
-          description: authentication error
-        '405':
-          description: username already taken
-        '500':
-          description: internal server error
-          
-  /portal/profile:
-    get:
-      tags:
-        - portal
-      description: Get public profile object
-      operationId: get-profile
-      security:
-        - basicAuth: []
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Profile'
-        '401':
-          description: authentication error
-        '500':
-          description: internal server error
-    post:
-      tags:
-        - portal
-      description: Add a new account
-      operationId: set-profile
-      security:
-        - bearerAuth: []
-        - basicAuth: []
-      responses:
-        '201':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Profile'
-        '400':
-          description: invalid handle or password
-        '401':
-          description: invalid bearer token
-        '500':
-          description: internal server error
-                
-  /portal/profile/attachment:
-    post:
-      tags:
-        - portal
-      description: Generate attach token
-      operationId: create-attach-token
-      security:
-        - basicAuth: []
-      responses:
-        '201':
-          description: generated
-          content:
-            application/json:
-              schema:
-                type: string
-        '401':
-          description: invalid password
-        '500':
-          description: internal server error
-    put:
-      tags:
-        - portal
-      description: Apply attach token
-      operationId: apply-attach-token
-      security:
-        - bearerAuth: []
-      responses:
-        '201':
-          description: generated
-          content:
-            application/json:
-              schema:
-                type: string
-        '401':
-          description: invalid token
-        '406':
-          description: app limit reached
         '500':
           description: internal server error
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AppData'
+              type: string
           
-  /portal/profile/apps:
-    get:
-      tags:
-        - portal
-      description: Get list of attached apps
-      operationId: get-apps
-      security:
-        - basicAuth: []
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/App'
-        '401':
-          description: invalid password
-        '500':
-          description: internal server error
-          
-  /portal/profile/apps/{appId}:
-    delete:
-      tags:
-        - portal
-      description: Get list of attached apps
-      operationId: remove-app
-      security:
-        - basicAuth: []
-      parameters:
-        - name: appId
-          in: path
-          description: specified app id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: successful operation
-        '401':
-          description: invalid password
-        '404':
-          description: app not found
-        '500':
-          description: internal server error
-                  
-  /portal/profile/config:
-    get:
-      tags:
-        - portal
-      description: Get account config
-      operationId: get-account-config
-      security:
-        - basicAuth: []
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AccountConfig'
-        '401':
-          description: authentication error
-        '500':
-          description: internal server error
+  /admin/token:
     put:
       tags:
-        - portal
-      description: Set account config
-      operationId: set-account-config
-      security:
-        - basicAuth: []
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AccountConfig'
-        '401':
-          description: authentication error
-        '500':
-          description: internal server error
-          
-  /portal/token:
-    get:
-      tags:
-        - portal
-      description: Check if bearer token is valid
-      operationId: check-token
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: success
-        '401':
-          description: invalid token
-        '500':
-          description: internal server error
-    put:
-      tags:
-        - portal
-      description: Create password reset token
-      operationId: set-account
+        - admin
+      description: Create password reset token url
+      operationId: set-node-account
       security:
         - basicAuth: []
       parameters:
@@ -342,9 +134,9 @@ paths:
           description: internal server error
     post:
       tags:
-        - portal
-      description: Create new portal token
-      operationId: add-account
+        - admin
+      description: Create new account token url
+      operationId: add-node-account
       security:
         - basicAuth: []
       responses:
@@ -359,12 +151,12 @@ paths:
         '500':
           description: internal server error
           
-  /portal/accounts:
+  /admin/accounts:
     get:
       tags:
-        - portal
+        - admin
       description: Get list of portals
-      operationId: get-accounts
+      operationId: get-node-accounts
       security:
         - basicAuth: []
       responses:
@@ -375,7 +167,7 @@ paths:
               schema:
                 type: array
                 items:
-                  type: string
+                  $ref: '#/components/schemas/ProfileView'
         '401':
           description: invalid password
         '404':
@@ -383,39 +175,12 @@ paths:
         '500':
           description: internal server error
           
-  /portal/accounts/{guid}:
-    get:
-      tags:
-        - portal
-      description: Get profile of account
-      operationId: get-account
-      security:
-        - basicAuth: []
-      parameters:
-        - name: guid
-          in: path
-          description: id of account to access
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProfileView'
-        '401':
-          description: invalid password
-        '404':
-          description: account not found
-        '500':
-          description: internal server error
+  /admin/accounts/{guid}:
     delete:
       tags:
-        - portal
+        - admin
       description: Remove account from node
-      operationId: remove-account
+      operationId: remove-node-account
       security:
         - basicAuth: []
       parameters:
@@ -435,6 +200,248 @@ paths:
         '500':
           description: internal server error
         
+  /admin/accounts/{guid}/image:
+    get:
+      tags:
+        - admin
+      description: Get  profile of specified account
+      operationId: get-node-account-image
+      security:
+        - basicAuth: []
+      parameters:
+        - name: guid
+          in: path
+          description: id of specified account
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        '401':
+          description: invalid password
+        '404':
+          description: account not found
+        '500':
+          description: internal server error
+          
+  /account/claimable:
+    get:
+      tags:
+        - account
+      description: Check if username is available
+      operationId: check-username
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: username
+          in: query
+          description: username to check 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success
+        '401':
+          description: authentication error
+        '405':
+          description: username already taken
+        '500':
+          description: internal server error
+          
+  /account/token:
+    get:
+      tags:
+        - account
+      description: Check if bearer token is valid
+      operationId: check-token
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: success
+        '401':
+          description: invalid token
+        '500':
+          description: internal server error
+          
+  /account/profile:
+    get:
+      tags:
+        - account
+      description: Get public profile object
+      operationId: get-account-profile
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+        '401':
+          description: authentication error
+        '500':
+          description: internal server error
+    post:
+      tags:
+        - account
+      description: Add a new account
+      operationId: add-account
+      security:
+        - bearerAuth: []
+        - basicAuth: []
+      responses:
+        '201':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+        '400':
+          description: invalid handle or password
+        '401':
+          description: invalid bearer token
+        '500':
+          description: internal server error
+                
+  /account/attachment:
+    post:
+      tags:
+        - account
+      description: Generate token to attach an app to the account
+      operationId: add-account-app
+      security:
+        - basicAuth: []
+      responses:
+        '201':
+          description: generated
+          content:
+            application/json:
+              schema:
+                type: string
+        '401':
+          description: invalid password
+        '500':
+          description: internal server error
+    put:
+      tags:
+        - account
+      description: Apply the app token and attach an app to the account
+      operationId: set-account-app
+      security:
+        - bearerAuth: []
+      responses:
+        '201':
+          description: generated
+          content:
+            application/json:
+              schema:
+                type: string
+        '401':
+          description: invalid token
+        '406':
+          description: app limit reached
+        '500':
+          description: internal server error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AppData'
+          
+  /account/apps:
+    get:
+      tags:
+        - account
+      description: Get list of attached apps
+      operationId: get-account-apps
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/App'
+        '401':
+          description: invalid password
+        '500':
+          description: internal server error
+          
+  /account/apps/{appId}:
+    delete:
+      tags:
+        - account
+      description: Get list of attached apps
+      operationId: remove-account-app
+      security:
+        - basicAuth: []
+      parameters:
+        - name: appId
+          in: path
+          description: specified app id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+        '401':
+          description: invalid password
+        '404':
+          description: app not found
+        '500':
+          description: internal server error
+                  
+  /account/config:
+    get:
+      tags:
+        - account
+      description: Get account config
+      operationId: get-account-config
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountConfig'
+        '401':
+          description: authentication error
+        '500':
+          description: internal server error
+    put:
+      tags:
+        - account
+      description: Set account config
+      operationId: set-account-config
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountConfig'
+        '401':
+          description: authentication error
+        '500':
+          description: internal server error
+          
   /registry/accounts:
     get:
       tags:
@@ -539,20 +546,6 @@ paths:
         '500':
           description: internal server error
           
-  /sample:
-    put:
-      tags:
-        - sample
-      description: sample
-      operationId: sample
-      responses:
-        '400':
-          description: sample
-      requestBody:
-        $ref: '#/components/requestBodies/Sample'
-        
-      
-        
 externalDocs:
   description: Find out more about Swagger
   url: 'http://swagger.io'
@@ -566,14 +559,6 @@ components:
         - appToken
       properties:
         appToken:
-          type: string
-          
-    Passcode:
-      type: object
-      required:
-        - value
-      properties:
-        value:
           type: string
           
     Revsion:    
@@ -613,14 +598,14 @@ components:
       type: object
       required:
         - guid
-        - data
+        - profileData
         - image
         - revision
         - node
       properties:
         guid:
           type: string
-        data:
+        profileData:
           $ref: '#/components/schemas/ProfileData'
         image:
           type: string
@@ -647,19 +632,20 @@ components:
       type: object
       required:
         - guid
-        - data
+        - profileData
         - imageSet
         - revision
       properties:
         guid:
           type: string
-        data:
+        profileData:
           $ref: '#/components/schemas/ProfileData'
         imageSet:
           type: boolean
         revision:
           type: integer
           format: int64
+          
     AccountConfig:
       type: object
       properties:
@@ -703,7 +689,7 @@ components:
         - publicKey
         - signature
       properties:
-        messageTyep:
+        messageType:
           type: string
           enum: [Connect, Disconnect, Profile, Authenticate]
           format: type of key
@@ -717,17 +703,10 @@ components:
         publicKey:
           type: string
           format: base64 encoding of account key
+        signature:
+          type: string
+          format: base64 encoding of message signature
           
-  requestBodies:
-  
-    Sample:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Profile'
-      description: Sample
-      required: true
-      
   securitySchemes:
   
     basicAuth:
