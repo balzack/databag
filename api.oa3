@@ -312,6 +312,43 @@ paths:
         '500':
           description: internal server error
                 
+  /account/authentication:
+    post:
+      tags:
+        - account
+      description: Generate token to reset authentication
+      operationId: add-account-authentication
+      security:
+        - basicAuth: []
+      responses:
+        '201':
+          description: generated
+          content:
+            application/json:
+              schema:
+                type: string
+        '401':
+          description: invalid password
+        '500':
+          description: internal server error
+    put:
+      tags:
+        - account
+      description: Apply account reset token to set handle and password
+      operationId: set-account-authentication
+      security:
+        - bearerAuth: []
+        - basicAuth: []
+      responses:
+        '201':
+          description: successful operation
+        '401':
+          description: invalid token
+        '406':
+          description: invalid handle or password
+        '500':
+          description: internal server error
+          
   /account/attachment:
     post:
       tags:
@@ -447,7 +484,7 @@ paths:
       tags:
         - registry
       description: Get list of publically searchable profiles
-      operationId: get-public-profiles
+      operationId: get-registry-profiles
       responses:
         '200':
           description: successful operation
@@ -469,7 +506,7 @@ paths:
       tags:
         - registry
       description: Get public profile of specified account
-      operationId: get-profile-image
+      operationId: get-registry-profile-image
       parameters:
         - name: guid
           in: path
@@ -497,7 +534,7 @@ paths:
       tags:
         - registry
       description: Get public profile of specified account
-      operationId: get-profile-message
+      operationId: get-registry-profile-message
       parameters:
         - name: guid
           in: path
@@ -537,6 +574,63 @@ paths:
       responses:
         '201':
           description: generated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataMessage'
+        '401':
+          description: invalid token
+        '500':
+          description: internal server error
+          
+  /profile:
+    get:
+      tags:
+        - profile
+      description: Get profile view object
+      operationId: get-profile
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfileView'
+        '401':
+          description: invalid token
+        '500':
+          description: internal server error
+    put:
+      tags:
+        - profile
+      description: Set profile data
+      operationId: set-profile
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: successful operation
+        '401':
+          description: invalid token
+        '500':
+          description: internal server error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProfileData'
+          
+  /profile/message:
+    get:
+      tags:
+        - profile
+      description: Get profile message
+      operationId: get-profile-message
+      responses:
+        '200':
+          description: successful operation
           content:
             application/json:
               schema:
@@ -598,15 +692,19 @@ components:
       type: object
       required:
         - guid
-        - profileData
-        - image
         - revision
         - node
       properties:
         guid:
           type: string
-        profileData:
-          $ref: '#/components/schemas/ProfileData'
+        handle:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        location:
+          type: string
         image:
           type: string
           format: base64 encoded data
@@ -627,19 +725,26 @@ components:
           type: string
         location:
           type: string
+        image:
+          type: string
           
     ProfileView:
       type: object
       required:
         - guid
-        - profileData
         - imageSet
         - revision
       properties:
         guid:
           type: string
-        profileData:
-          $ref: '#/components/schemas/ProfileData'
+        handle:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        location:
+          type: string
         imageSet:
           type: boolean
         revision:
