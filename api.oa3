@@ -19,6 +19,8 @@ tags:
     description: account creation and configuration for portal backend. supports app attachment
   - name: registry
     description: listing of public accounts
+  - name: authenticate
+    description: authenticate holder of identity for external service
   - name: profile
     description: getting and setting of the public profile
   - name: content
@@ -147,7 +149,7 @@ paths:
     post:
       tags:
         - portal
-      description: Add a new portal
+      description: Add a new account
       operationId: set-profile
       security:
         - bearerAuth: []
@@ -166,47 +168,6 @@ paths:
         '500':
           description: internal server error
                 
-  /portal/profile/authenication:
-    post:
-      tags:
-        - portal
-      description: Generate authentication update token
-      operationId: prepare-authentication
-      security:
-        - basicAuth: []
-      responses:
-        '200':
-          description: authentication ready
-          content:
-            application/json:
-              schema:
-                type: string
-        '401':
-          description: invalid handle or password
-        '500':
-          description: internal server error
-    put:
-      tags:
-        - portal
-      description: Update authentication with extra auth header
-      operationId: set-authentication
-      security:
-        - bearerAuth: []
-        - basicAuth: []
-      responses:
-        '200':
-          description: authentication set
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Profile'
-        '400':
-          description: invalid new handle or password
-        '401':
-          description: invalid handle or password
-        '500':
-          description: internal server error
-          
   /portal/profile/attachment:
     post:
       tags:
@@ -268,14 +229,37 @@ paths:
               schema:
                 type: array
                 items:
-                  type: string
+                  $ref: '#/components/schemas/App'
         '401':
           description: invalid password
-        '404':
-          description: handle not found
         '500':
           description: internal server error
           
+  /portal/profile/apps/{appId}:
+    delete:
+      tags:
+        - portal
+      description: Get list of attached apps
+      operationId: remove-app
+      security:
+        - basicAuth: []
+      parameters:
+        - name: appId
+          in: path
+          description: specified app id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+        '401':
+          description: invalid password
+        '404':
+          description: app not found
+        '500':
+          description: internal server error
+                  
   /portal/profile/config:
     get:
       tags:
@@ -420,7 +404,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Profile'
+                $ref: '#/components/schemas/ProfileView'
         '401':
           description: invalid password
         '404':
@@ -465,7 +449,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Profile'
+                  $ref: '#/components/schemas/ProfileView'
         '401':
           description: invalid password
         '404':
@@ -473,7 +457,35 @@ paths:
         '500':
           description: internal server error
           
-  /registry/accounts/{guid}:
+  /registry/accounts/{guid}/image:
+    get:
+      tags:
+        - registry
+      description: Get public profile of specified account
+      operationId: get-profile-image
+      parameters:
+        - name: guid
+          in: path
+          description: id of specified account
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        '401':
+          description: invalid password
+        '404':
+          description: account not found
+        '500':
+          description: internal server error
+          
+  /registry/accounts/{guid}/message:
     get:
       tags:
         - registry
@@ -500,6 +512,33 @@ paths:
         '500':
           description: internal server error
           
+  /authenticate:
+    put:
+      tags:
+        - authenticate
+      description: Sign payload containing external token for authentication
+      operationId: authenticate
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: token
+          in: query
+          description: token to sign in message response
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: generated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataMessage'
+        '401':
+          description: invalid token
+        '500':
+          description: internal server error
+          
   /sample:
     put:
       tags:
@@ -511,6 +550,8 @@ paths:
           description: sample
       requestBody:
         $ref: '#/components/requestBodies/Sample'
+        
+      
         
 externalDocs:
   description: Find out more about Swagger
@@ -573,6 +614,7 @@ components:
       required:
         - guid
         - data
+        - image
         - revision
         - node
       properties:
@@ -580,6 +622,9 @@ components:
           type: string
         data:
           $ref: '#/components/schemas/ProfileData'
+        image:
+          type: string
+          format: base64 encoded data
         revision:
           type: integer
           format: int64
@@ -595,12 +640,26 @@ components:
           type: string
         description:
           type: string
-        image:
-          type: string
-          format: base64 encoded data
         location:
           type: string
           
+    ProfileView:
+      type: object
+      required:
+        - guid
+        - data
+        - imageSet
+        - revision
+      properties:
+        guid:
+          type: string
+        data:
+          $ref: '#/components/schemas/ProfileData'
+        imageSet:
+          type: boolean
+        revision:
+          type: integer
+          format: int64
     AccountConfig:
       type: object
       properties:
@@ -646,7 +705,7 @@ components:
       properties:
         messageTyep:
           type: string
-          enum: [OpenConnection, CloseConnection, Profile]
+          enum: [Connect, Disconnect, Profile, Authenticate]
           format: type of key
         message:
           type: string
