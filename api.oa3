@@ -19,16 +19,15 @@ tags:
     description: account creation for portal backend.
   - name: account
     description: account configuration for portal backend. supports app attachment
-  - name: registry
-    description: listing of public accounts
   - name: authenticate
     description: authenticate holder of identity for external service
   - name: profile
     description: getting and setting of the public profile
-  - name: content
-    description: posting and listing of personal subjects, group and tag managment
   - name: contact
     description: connection to other identities, hook receiver
+    
+  - name: content
+    description: posting and listing of personal subjects, group and tag managment
   - name: sharing
     description: sharing personal subjects, associates content and contacts
   - name: converstaion
@@ -441,121 +440,6 @@ paths:
         '500':
           description: internal server error
                   
-  /account/config:
-    get:
-      tags:
-        - account
-      description: Get account config
-      operationId: get-account-config
-      security:
-        - basicAuth: []
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AccountConfig'
-        '401':
-          description: authentication error
-        '500':
-          description: internal server error
-    put:
-      tags:
-        - account
-      description: Set account config
-      operationId: set-account-config
-      security:
-        - basicAuth: []
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AccountConfig'
-        '401':
-          description: authentication error
-        '500':
-          description: internal server error
-          
-  /registry/accounts:
-    get:
-      tags:
-        - registry
-      description: Get list of publically searchable profiles
-      operationId: get-registry-profiles
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/ProfileView'
-        '401':
-          description: invalid password
-        '404':
-          description: account not found
-        '500':
-          description: internal server error
-          
-  /registry/accounts/{guid}/image:
-    get:
-      tags:
-        - registry
-      description: Get public profile of specified account
-      operationId: get-registry-profile-image
-      parameters:
-        - name: guid
-          in: path
-          description: id of specified account
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/octet-stream:
-              schema:
-                type: string
-                format: binary
-        '401':
-          description: invalid password
-        '404':
-          description: account not found
-        '500':
-          description: internal server error
-          
-  /registry/accounts/{guid}/message:
-    get:
-      tags:
-        - registry
-      description: Get public profile of specified account
-      operationId: get-registry-profile-message
-      parameters:
-        - name: guid
-          in: path
-          description: id of specified account
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/DataMessage'
-        '401':
-          description: invalid password
-        '404':
-          description: account not found
-        '500':
-          description: internal server error
-          
   /authenticate:
     put:
       tags:
@@ -622,6 +506,27 @@ paths:
             schema:
               $ref: '#/components/schemas/ProfileData'
           
+  /profile/image:
+    get:
+      tags:
+        - profile
+      description: Get profile image
+      operationId: get-profile-image
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        '401':
+          description: invalid token
+        '500':
+          description: internal server error
+          
   /profile/message:
     get:
       tags:
@@ -639,6 +544,30 @@ paths:
           description: invalid token
         '500':
           description: internal server error
+          
+  ## Contact Module: maintain 3 lists
+  ### contacts: { disconnected, connecting, connected }
+  ### blocked: any id on blocked list is silently ignored
+  ### pending: limit number of pending contacts, created with Connect DataMessage
+  
+  # get list of contacts
+  # add contact
+  # remove contact
+  # set contact disconnected
+  # set contact connecting
+  # set contact connected (apply token)
+  # get connect message
+  # get disconnect message
+  # set connect message, if not contact adds to pending
+  # set disconnect message
+  # set pending to add contact with request
+  # clear pending to ignore request
+  # add blocked to block contact
+  # remove blocked to unblock contact
+  # get content&conversation revision
+  # get contact content&conversation revision
+  # set contact content&conversation revision
+  
           
 externalDocs:
   description: Find out more about Swagger
@@ -751,12 +680,6 @@ components:
           type: integer
           format: int64
           
-    AccountConfig:
-      type: object
-      properties:
-        searchable:
-          type: boolean
-          
     App:
       type: object
       required:
@@ -785,6 +708,63 @@ components:
           type: string
           format: base64 encoded image
           
+    Authenticate:
+      type: object
+      required: 
+        - guid
+        - token
+        - timestamp
+      properties:
+        token:
+          type: string
+        timestamp:
+          type: integer
+          format: int32
+          
+    Connect:
+      type: object
+      required:
+        - requestorId
+        - requestedId
+        - timestamp
+        - profile
+        - token
+        - contentRevision
+        - conversationRevision
+      properties:
+        requestorId:
+          type: string
+        requestedId:
+          type: string
+        timestamp: 
+          type: integer
+          format: int32
+        profile:
+          $ref: '#/components/schemas/Profile'
+        token:
+          type: string
+        contentRevision:
+          type: integer
+          format: int64
+        conversationRevision:
+          type: integer
+          format: int64
+          
+    Disconnect:
+      type: object
+      required:
+        - requestorId
+        - requestedId
+        - timestamp
+      properties:
+        requestorId:
+          type: string
+        requestedId:
+          type: string
+        timestamp: 
+          type: integer
+          format: int32
+          
     DataMessage:
       type: object
       required:
@@ -797,20 +777,19 @@ components:
         messageType:
           type: string
           enum: [Connect, Disconnect, Profile, Authenticate]
-          format: type of key
         message:
           type: string
           format: base64 encoded object
         keyType:
           type: string
           enum: [RSA4096, RSA2048]
-          format: type of key
         publicKey:
           type: string
           format: base64 encoding of account key
         signature:
           type: string
           format: base64 encoding of message signature
+          
           
   securitySchemes:
   
