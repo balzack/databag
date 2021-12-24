@@ -545,6 +545,13 @@ paths:
         '500':
           description: internal server error
           
+  ## Share Module
+  ##   structure types: share
+  # get shares
+  # add share
+  # delete share
+  # update share
+          
   ## Contact Module
   ### contacts: { disconnected, connecting, connected }
   ### blocked: any id on blocked list is silently ignored
@@ -566,15 +573,32 @@ paths:
   # get content&conversation revision
   # get contact content&conversation revision
   # set contact content&conversation revision
+  # set share
+  # clear share
   
   ## Content Module
-  
-  # get article block view [ { articleBlockId, revision } ]
-  # get article view (blockId, articleFilter, labelFilter, tagFilter): [ { articleId, revision, type, data, created, modified, labelId[], tagView: {
-  #  revision, count, tag: { type, data, created, modified } 
+  ##   structure types: article, subject, label, tag, articleBlock, tagBlock
+  # get article block view [ { articleBlockId, articleBlockRevision } ]
+  # get article block (blockId, subjectFilter, tagFilter): [ { articleId, articleRevision, subject: { 
+  #     subjectId, revision, type, data, created, modified, set, ready
+  #   }, labelId[], shareId[], tagCount, tagModified
   # } ]
-  # get tags (contentId, filter): [ { tagId, revision, type, data, created, modified } ]  //not cached
+  # get article view (blockId, subjectFilter): [ { articleId, articleRevision } ]
+  # get article (articleId, tagFilter) : { articleId, articleRevision, subject: { 
+  #     subjectId, revision, type, data, created, modified, set, ready
+  #   }, labelId[], shareId[], tagCount, tagModified
+  # }
+  # get tag view (articleId, filter): [ { tagId, revision } ]
+  # get tag block (articleId, filter): [ { tagId, revision, type, data, created, modified } ]
+  # get tag (tagId): { tagId, revision, type, data, created, modified }
   # get labels (filter): [ { labelId, revision, type, data, created, modified } ]
+  # get subject asset
+  # add subject
+  # add subject asset
+  # update subject data
+  # update subject set
+  # set share
+  # clear share
   
 externalDocs:
   description: Find out more about Swagger
