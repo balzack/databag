@@ -545,11 +545,10 @@ paths:
         '500':
           description: internal server error
           
-  ## Contact Module: maintain 3 lists
+  ## Contact Module
   ### contacts: { disconnected, connecting, connected }
   ### blocked: any id on blocked list is silently ignored
   ### pending: limit number of pending contacts, created with Connect DataMessage
-  
   # get list of contacts
   # add contact
   # remove contact
@@ -568,7 +567,15 @@ paths:
   # get contact content&conversation revision
   # set contact content&conversation revision
   
-          
+  ## Content Module
+  
+  # get article block view [ { articleBlockId, revision } ]
+  # get article view (blockId, articleFilter, labelFilter, tagFilter): [ { articleId, revision, type, data, created, modified, labelId[], tagView: {
+  #  revision, count, tag: { type, data, created, modified } 
+  # } ]
+  # get tags (contentId, filter): [ { tagId, revision, type, data, created, modified } ]  //not cached
+  # get labels (filter): [ { labelId, revision, type, data, created, modified } ]
+  
 externalDocs:
   description: Find out more about Swagger
   url: 'http://swagger.io'
