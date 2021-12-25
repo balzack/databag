@@ -44,7 +44,80 @@ paths:
       responses:
         '200':
           description: Awaiting announce
+          
+  /revision/profile:
+    put:
+      tags:
+        - revision
+      description: Hook receiver for contact profile revision updates
+      operationId: revision-profile-hook
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: revision set
+        '401':
+          description: not authorized
+        '500':
+          description: internal server error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: integer
+              format: int64
         
+  /revision/content:
+    put:
+      tags:
+        - revision
+      description: Hook receiver for contact content revision updates
+      operationId: revision-content-hook
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: revision set
+        '401':
+          description: not authorized
+        '500':
+          description: internal server error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: integer
+              format: int64
+              
+  /revision/insight/{insightId}:
+    put:
+      tags:
+        - revision
+      description: Hook receiver for contact insight revision updates
+      operationId: revision-insight-hook
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: insightId
+          in: path
+          description: insight id to update
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: revision set
+        '401':
+          description: not authorized
+        '500':
+          description: internal server error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: integer
+              format: int64
+              
   /admin/claimable:
     get:
       tags:
@@ -636,8 +709,29 @@ paths:
             schema:
               type: string
           
+  /index/contacts:
+    post:
+      tags:
+        - index
+      description: Add contact entry
+      operationId: add-index-contact
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contact'
+        '401':
+          description: invalid password
+        '404':
+          description: not found
+        '500':
+          description: internal server error
           
-  /index/view:
+  /index/contacts/view:
     get:
       tags:
         - index
@@ -659,29 +753,477 @@ paths:
         '500':
           description: internal server error
           
-  ## Contact Module
-  ### contacts: { pending, confirmed, connecting, connected }
-  ### blocked: any id on blocked list is silently ignored
-  ### pending: limit number of pending contacts, created with Connect DataMessage
-  # get list of contacts
-  # add contact
-  # remove contact
-  # set contact disconnected
-  # set contact connecting
-  # set contact connected (apply token)
-  # get connect message
-  # get disconnect message
-  # set connect message, if not contact adds to pending
-  # set disconnect message
-  # set pending to add contact with request
-  # clear pending to ignore request
-  # add blocked to block contact
-  # remove blocked to unblock contact
-  # get content&conversation revision
-  # get contact content&conversation&profile revision
-  # set contact content&conversation&profile revision
-  # set share
-  # clear share
+  /index/contacts/{contactId}:
+    get:
+      tags:
+        - index
+      description: Get contact entry
+      operationId: get-index-contact
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: contactId
+          in: path
+          description: specified contact id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contact'
+        '401':
+          description: invalid password
+        '404':
+          description: not found
+        '500':
+          description: internal server error
+    delete:
+      tags:
+        - index
+      description: Remove contact entry
+      operationId: remove-index-contact
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: contactId
+          in: path
+          description: specified contact id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+        '401':
+          description: invalid password
+        '404':
+          description: not found
+        '500':
+          description: internal server error
+  
+  /index/contacts/{contactId}/status:
+    put:
+      tags:
+        - index
+      description: Update contact status
+      operationId: set-index-contact-status
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: contactId
+          in: path
+          description: specified contact id 
+          required: true
+          schema:
+            type: string
+        - name: token
+          in: query
+          description: token for accessing contact
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactData'
+        '401':
+          description: invalid password
+        '404':
+          description: not found
+        '500':
+          description: internal server error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+              enum: [ pending, confirmed, connecting, connected ]
+          
+  /index/contacts/{contactId}/openMessage:
+    get:
+      tags:
+        - index
+      description: Get message for opening contact connection
+      operationId: get-index-open-message
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: contactId
+          in: path
+          description: specified contact id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataMessage'
+        '401':
+          description: invalid password
+        '404':
+          description: not found
+        '500':
+          description: internal server error
+    put:
+      tags:
+        - index
+      description: Set message for opening contact connection
+      operationId: set-index-open-message
+      parameters:
+        - name: contactId
+          in: path
+          description: specified contact id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactStatus'
+        '401':
+          description: invalid password
+        '404':
+          description: not found
+        '500':
+          description: internal server error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DataMessage'
+          
+  /index/contacts/{contactId}/closeMessage:
+    get:
+      tags:
+        - index
+      description: Get message for closing contact connection
+      operationId: get-index-close-message
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: contactId
+          in: path
+          description: specified contact id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataMessage'
+        '401':
+          description: invalid password
+        '404':
+          description: not found
+        '500':
+          description: internal server error
+    put:
+      tags:
+        - index
+      description: Set message for closing contact connection
+      operationId: set-index-close-message
+      parameters:
+        - name: contactId
+          in: path
+          description: specified contact id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactStatus'
+        '401':
+          description: invalid password
+        '404':
+          description: not found
+        '500':
+          description: internal server error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DataMessage'
+          
+  /index/contacts/{contactId}/profile:
+    get:
+      tags:
+        - index
+      description: Get profile of contact entry
+      operationId: get-index-profile
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: contactId
+          in: path
+          description: specified contact id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactProfile'
+        '401':
+          description: invalid password
+        '404':
+          description: not found
+        '500':
+          description: internal server error
+          
+  /index/contacts/{contactId}/data:
+    get:
+      tags:
+        - index
+      description: Get data of contact entry
+      operationId: get-index-data
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: contactId
+          in: path
+          description: specified contact id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactData'
+        '401':
+          description: invalid password
+        '404':
+          description: not found
+        '500':
+          description: internal server error
+          
+  /index/contacts/{contactId}/notes:
+    put:
+      tags:
+        - index
+      description: Update contact notes
+      operationId: set-index-contact-notes
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: contactId
+          in: path
+          description: specified contact id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactData'
+        '401':
+          description: invalid password
+        '404':
+          description: not found
+        '500':
+          description: internal server error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+    delete:
+      tags:
+        - index
+      description: Clear contact notes
+      operationId: clear-index-contact-notes
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: contactId
+          in: path
+          description: specified contact id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactData'
+        '401':
+          description: invalid password
+        '404':
+          description: not found
+        '500':
+          description: internal server error
+            
+  /index/contacts/{contactId}/{shareId}:
+    put:
+      tags:
+        - index
+      description: Update contact notes
+      operationId: set-index-contact-share
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: contactId
+          in: path
+          description: specified contact id 
+          required: true
+          schema:
+            type: string
+        - name: shareId
+          in: path
+          description: specified share id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactData'
+        '401':
+          description: invalid password
+        '404':
+          description: not found
+        '500':
+          description: internal server error
+    delete:
+      tags:
+        - index
+      description: Clear contact share group
+      operationId: clear-index-contact-share
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: contactId
+          in: path
+          description: specified contact id 
+          required: true
+          schema:
+            type: string
+        - name: shareId
+          in: path
+          description: specified share id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactData'
+        '401':
+          description: invalid password
+        '404':
+          description: not found
+        '500':
+          description: internal server error
+          
+  /index/blocked:
+    get:
+      tags:
+        - index
+      description: Get list of blocked contacts
+      operationId: get-index-blocked-contacts
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        '401':
+          description: invalid password
+        '404':
+          description: not found
+        '500':
+          description: internal server error
+          
+  /index/blocked/{contactId}:
+    post:
+      tags:
+        - index
+      description: Add contact from blocked list
+      operationId: add-index-blocked-contact
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: contactId
+          in: path
+          description: specified contact id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+        '401':
+          description: invalid password
+        '404':
+          description: not found
+        '500':
+          description: internal server error
+    delete:
+      tags:
+        - index
+      description: Remove contact from blocked list
+      operationId: remove-index-blocked-contact
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: contactId
+          in: path
+          description: specified contact id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+        '401':
+          description: invalid password
+        '404':
+          description: not found
+        '500':
+          description: internal server error
+          
+          
   
   ## Content Module
   ##   structure types: article, subject, label, tag, articleBlock, tagBlock
@@ -729,6 +1271,7 @@ components:
         - labels
         - sharing
         - contact
+        - blocked
         - dialogue
         - insight
       properties:
@@ -828,7 +1371,6 @@ components:
         - guid
         - profileRevision
         - contentRevision
-        - conversationRevision
         - contactRevision
       properties:
         guid:
@@ -846,17 +1388,11 @@ components:
           type: integer
           format: int64
           
-    Contact:
+    ContactProfile:
       type: object
       required:
-        - guid
-        - profileRevision
-        - contentRevision
-        - conversationRevision
-        - contactRevision
+        - node
       properties:
-        guid:
-          type: string
         handle:
           type: string
         name:
@@ -865,20 +1401,20 @@ components:
           type: string
         location:
           type: string
+        revision:
+          type: integer
+          format: int64
         imageSet:
           type: boolean
         node:
           type: string
-        contactRevision:
-          type: integer
-          format: int64
-        profileRevision:
-          type: integer
-          format: int64
-        contentRevision:
-          type: integer
-          format: int64
-        converstaionRevision:
+          
+    ContactData:
+      type: object
+      required:
+        - status
+      properties:
+        revision:
           type: integer
           format: int64
         status:
@@ -892,6 +1428,36 @@ components:
           type: array
           items:
             type: string
+          
+    ContactStatus:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          type: string
+          enum: [ pending, confirmed, connecting, connected ]
+        token:
+          type: string
+          
+    Contact:
+      type: object
+      required:
+        - contactProfile
+        - contactData
+        - contentRevision
+        - conversationRevision
+      properties:
+        contactProfile:
+          $ref: '#/components/schemas/ContactProfile'
+        contactData:
+          $ref: '#/components/schemas/ContactData'
+        contentRevision:
+          type: integer
+          format: int64
+        converstaionRevision:
+          type: integer
+          format: int64
             
     Group:
       type: object
@@ -996,3 +1562,4 @@ components:
     bearerAuth: 
       type: http
       scheme: bearer
+
