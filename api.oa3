@@ -992,6 +992,38 @@ paths:
           description: not found
         '500':
           description: internal server error
+    put:
+      tags:
+        - index
+      description: Set profile of contact entry
+      operationId: set-index-profile
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: contactId
+          in: path
+          description: specified contact id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactProfile'
+        '401':
+          description: invalid password
+        '404':
+          description: not found
+        '500':
+          description: internal server error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Profile'
           
   /index/contacts/{contactId}/data:
     get:
