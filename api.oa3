@@ -35,6 +35,13 @@ tags:
     
 paths:
 
+  # prefix for bearer tokens types
+  # app: app_
+  # contact: cnt_
+  # pass code: pas_
+  # account reset: res_
+  # account create: act_
+
   /revision:
     get:
       tags:
@@ -1115,7 +1122,7 @@ paths:
         '500':
           description: internal server error
             
-  /index/contacts/{contactId}/{shareId}:
+  /index/contacts/{contactId}/shares/{shareId}:
     put:
       tags:
         - index
@@ -1255,19 +1262,34 @@ paths:
         '500':
           description: internal server error
           
-          
+  # /content/bundles/view - g
+  # /content/bundles/{bundleId} - g
+  # /content/bundles/{bundleId}/view - g
+  # /content/articles - a
+  # /content/articles/{articleId} - g,d
+  # /content/articles/{articleId}/subject - s
+  # /content/articles/{articleId}/shares/{shareId} - s,c
+  # /content/articles/{articleId}/labels/{labelId} - s,c
+  # /content/articles/{articleId}/rolls/view - g
+  # /content/articles/{articleId}/rolls/{rollId} -g
+  # /content/articles/{articleId}/tags - a
+  # /content/articles/{articleId}/tags/{tagId} - g,d
+  # /content/articles/{articleId}/asset - a
+  # /content/articles/{articleId}/confirmed - s,c
+  # /content/labels - g,a
+  # /content/labels/{labelId} - a,d
   
   ## Content Module
   ##   structure types: article, subject, label, tag, articleBlock, tagBlock
   # get article block view [ { articleBlockId, articleBlockRevision } ]
   # get article block (blockId, subjectFilter, tagFilter): [ { articleId, articleRevision, set, ready, subject: { 
   #     subjectId, revision, type, data, created, modified
-  #   }, labelId[], shareId[], tagCount, tagModified
+  #   }, labelId[], shareId[], tagCount, tagModified, tagRevision
   # } ]
   # get article view (blockId, subjectFilter): [ { articleId, articleRevision } ]
   # get article (articleId, tagFilter) : { articleId, articleRevision, set, ready, subject: { 
   #     subjectId, revision, type, data, created, modified
-  #   }, labelId[], shareId[], tagCount, tagModified
+  #   }, labelId[], shareId[], tagCount, tagModified, targRevision
   # }
   # get tag view (articleId, filter): [ { tagId, revision } ]
   # get tag block (articleId, filter): [ { tagId, revision, type, data, created, modified } ]
@@ -1498,6 +1520,17 @@ components:
         - name
       properties:
         groupId:
+          type: string
+        name:
+          type: string
+          
+    Label:
+      type: object
+      required:
+        - labelId
+        - name
+      properties:
+        labelId:
           type: string
         name:
           type: string
