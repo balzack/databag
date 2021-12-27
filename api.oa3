@@ -1262,22 +1262,24 @@ paths:
         '500':
           description: internal server error
           
-  # /content/bundles/view - g
-  # /content/bundles/{bundleId} - g
-  # /content/bundles/{bundleId}/view - g
+  # /content/articleBlocks/view - g
+  # /content/articleBlocks/{articleBlockId} - g
+  # /content/articleBlocks/{articleBlockId}/view - g
   # /content/articles - a
   # /content/articles/{articleId} - g,d
   # /content/articles/{articleId}/subject - s
   # /content/articles/{articleId}/shares/{shareId} - s,c
   # /content/articles/{articleId}/labels/{labelId} - s,c
-  # /content/articles/{articleId}/rolls/view - g
-  # /content/articles/{articleId}/rolls/{rollId} -g
+  # /content/articles/{articleId}/tagBlocks/view - g
+  # /content/articles/{articleId}/tagBlocks/{tagBlockId} -g
   # /content/articles/{articleId}/tags - a
   # /content/articles/{articleId}/tags/{tagId} - g,d
   # /content/articles/{articleId}/asset - a
   # /content/articles/{articleId}/confirmed - s,c
   # /content/labels - g,a
   # /content/labels/{labelId} - a,d
+  
+  
   
   ## Content Module
   ##   structure types: article, subject, label, tag, articleBlock, tagBlock
@@ -1287,10 +1289,13 @@ paths:
   #   }, labelId[], shareId[], tagCount, tagModified, tagRevision
   # } ]
   # get article view (blockId, subjectFilter): [ { articleId, articleRevision } ]
-  # get article (articleId, tagFilter) : { articleId, articleRevision, set, ready, subject: { 
+  # get article (articleId, tagFilter) : { articleId, articleRevision, confirmed, ready, subject: { 
   #     subjectId, revision, type, data, created, modified
   #   }, labelId[], shareId[], tagCount, tagModified, targRevision
   # }
+  
+          
+          
   # get tag view (articleId, filter): [ { tagId, revision } ]
   # get tag block (articleId, filter): [ { tagId, revision, type, data, created, modified } ]
   # get tag (tagId): { tagId, revision, type, data, created, modified }
@@ -1309,6 +1314,73 @@ externalDocs:
 components:
   schemas:
   
+    Subject:
+      type: object
+      required:
+        - subjectId
+        - revision
+        - type
+        - data
+        - created
+        - modified
+      properties:
+        subjectid:
+          type: string
+        revision:
+          type: integer
+          format: int64
+        type:
+          type: string
+        data:
+          type: string
+        created:
+          type: integer
+          format: int32
+          
+          
+  
+    Article:
+      type: object
+      required:
+        - articleId
+        - revision
+        - status
+        - subject
+        - labels
+        - groups
+        - tagCount
+        - tagUpdated
+        - tagRevision
+      properties:
+        articleId:
+          type: string
+        revision:
+          type: integer
+          format: int64
+        status:
+          type: string
+          enum: [ unconfirmed, confirmed, complete, error ]
+        subject:
+          $ref: '#/components/schemas/Subject'
+        labels:
+          type: array
+          items:
+            type: string
+        groups:
+          type: array
+          items:
+            type: string
+        tagCount:
+          type: integer
+          format: int32
+        tagUpdated:
+          type: integer
+          format: int32
+        tagRevision:
+          type: integer
+          format: int64
+          
+          
     Announce:
       type: object
       required:
