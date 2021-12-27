@@ -26,10 +26,11 @@ tags:
   - name: share
     description: access control for personal subjects, associates content and contacts
     
-  - name: contact
+  - name: index
     description: connection to other identities, hook receiver
   - name: content
     description: posting and listing of personal subjects, group and tag managment
+    
   - name: converstaion
     description: group sharing of subjects
     
@@ -1262,11 +1263,155 @@ paths:
         '500':
           description: internal server error
           
-  # /content/articleBlocks/view - g
-  # /content/articleBlocks/{articleBlockId} - g
-  # /content/articleBlocks/{articleBlockId}/view - g
-  # /content/articles - a
-  # /content/articles/{articleId} - g,d
+  /content/blocks/view:
+    get:
+      tags:
+        - content
+      description: Get view of content blocks
+      operationId: get-article-block-view
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/View'
+        '401':
+          description: invalid password
+        '500':
+          description: internal server error
+          
+  /content/blocks/{blockId}:
+    get:
+      tags:
+        - content
+      description: Get articles from specified block
+      operationId: get-article-block
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: blockId
+          in: path
+          description: specified group id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Article'
+        '401':
+          description: invalid password
+        '500':
+          description: internal server error
+          
+  /content/blocks/{blockId}/view:
+    get:
+      tags:
+        - content
+      description: Get view articles in content block
+      operationId: get-article-view
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: blockId
+          in: path
+          description: specified group id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/View'
+        '401':
+          description: invalid password
+        '500':
+          description: internal server error
+          
+  /content/articles:
+    post:
+      tags:
+        - content
+      description: Add an content article
+      operationId: add-article
+      security:
+        - bearerAuth: []
+      responses:
+        '201':
+          description: entry created
+        '401':
+          description: invalid token
+        '500':
+          description: internal server error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Article'
+              
+  /content/articles/{articleId}:
+    get:
+      tags:
+        - content
+      description: Get specified article
+      operationId: get-article
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: articleId
+          in: path
+          description: specified article id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Article'
+        '401':
+          description: invalid password
+        '500':
+          description: internal server error
+    delete:
+      tags:
+        - content
+      description: Remove specified article
+      operationId: remove-article
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: articleId
+          in: path
+          description: specified article id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+        '401':
+          description: invalid password
+        '500':
+          description: internal server error
+  
   # /content/articles/{articleId}/subject - s
   # /content/articles/{articleId}/shares/{shareId} - s,c
   # /content/articles/{articleId}/labels/{labelId} - s,c
@@ -1314,17 +1459,39 @@ externalDocs:
 components:
   schemas:
   
-    Subject:
+    Announce:
       type: object
       required:
-        - subjectId
+        - appToken
+      properties:
+        appToken:
+          type: string
+          
+    View:
+      type: object
+      required:
+        - id
+        - revision
+      properties:
+        id:
+          type: string
+        revision:
+          type: integer
+          format: int64
+          
+    Post:
+      type: object
+      required:
+        - postId
         - revision
         - type
         - data
         - created
         - modified
       properties:
-        subjectid:
+        postId:
+          type: string
+        guid:  # if null account owner is point owner
           type: string
         revision:
           type: integer
@@ -1337,8 +1504,6 @@ components:
           type: integer
           format: int32
           
-          
-  
     Article:
       type: object
       required:
@@ -1352,7 +1517,9 @@ components:
         - tagUpdated
         - tagRevision
       properties:
-        articleId:
+        subjectId:
+          type: string
+        guid:
           type: string
         revision:
           type: integer
@@ -1361,7 +1528,7 @@ components:
           type: string
           enum: [ unconfirmed, confirmed, complete, error ]
         subject:
-          $ref: '#/components/schemas/Subject'
+          $ref: '#/components/schemas/Post'
         labels:
           type: array
           items:
@@ -1373,21 +1540,12 @@ components:
         tagCount:
           type: integer
           format: int32
-        tagUpdated:
+        tagUpdate:
           type: integer
           format: int32
         tagRevision:
           type: integer
           format: int64
-          
-          
-    Announce:
-      type: object
-      required:
-        - appToken
-      properties:
-        appToken:
-          type: string
           
     Revsion:    
       type: object
