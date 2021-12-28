@@ -626,7 +626,6 @@ paths:
         '500':
           description: internal server error
           
-          
   /share/groups:
     get:
       tags:
@@ -669,27 +668,6 @@ paths:
               type: string
           
   /share/groups/{groupId}:
-    delete:
-      tags:
-        - share
-      description: Get groups for sharing
-      operationId: remove-share-group
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: groupId
-          in: path
-          description: specified group id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: successful operation
-        '401':
-          description: invalid token
-        '500':
-          description: internal server error
     put:
       tags:
         - share
@@ -716,6 +694,27 @@ paths:
           application/json:
             schema:
               type: string
+    delete:
+      tags:
+        - share
+      description: Get groups for sharing
+      operationId: remove-share-group
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: groupId
+          in: path
+          description: specified group id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+        '401':
+          description: invalid token
+        '500':
+          description: internal server error
           
   /index/contacts:
     post:
@@ -1263,7 +1262,7 @@ paths:
         '500':
           description: internal server error
           
-  /content/blocks/view:
+  /content/articleBlocks/view:
     get:
       tags:
         - content
@@ -1279,13 +1278,19 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/View'
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    revision:
+                      type: integer
+                      format: int64
         '401':
           description: invalid password
         '500':
           description: internal server error
           
-  /content/blocks/{blockId}:
+  /content/articleBlocks/{blockId}:
     get:
       tags:
         - content
@@ -1314,7 +1319,7 @@ paths:
         '500':
           description: internal server error
           
-  /content/blocks/{blockId}/view:
+  /content/articleBlocks/{blockId}/view:
     get:
       tags:
         - content
@@ -1337,7 +1342,13 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/View'
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    revision:
+                      type: integer
+                      format: int64
         '401':
           description: invalid password
         '500':
@@ -1354,15 +1365,22 @@ paths:
       responses:
         '201':
           description: entry created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  blockId:
+                    type: string
+                  blockRevision:
+                    type: integer
+                    format: int64
+                  article:
+                    $ref: '#/components/schemas/Article'
         '401':
           description: invalid token
         '500':
           description: internal server error
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Article'
               
   /content/articles/{articleId}:
     get:
@@ -1412,45 +1430,562 @@ paths:
         '500':
           description: internal server error
   
-  # /content/articles/{articleId}/subject - s
-  # /content/articles/{articleId}/shares/{shareId} - s,c
-  # /content/articles/{articleId}/labels/{labelId} - s,c
-  # /content/articles/{articleId}/tagBlocks/view - g
-  # /content/articles/{articleId}/tagBlocks/{tagBlockId} -g
-  # /content/articles/{articleId}/tags - a
-  # /content/articles/{articleId}/tags/{tagId} - g,d
-  # /content/articles/{articleId}/asset - a
-  # /content/articles/{articleId}/confirmed - s,c
-  # /content/labels - g,a
-  # /content/labels/{labelId} - a,d
+  /content/articles/{articleId}/subject:
+    put:
+      tags:
+        - content
+      description: Add an content article
+      operationId: update-content-article
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: articleId
+          in: path
+          description: specified article id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: entry created
+        '401':
+          description: invalid token
+        '500':
+          description: internal server error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - type
+                - data
+              properties:
+                type:
+                  type: string
+                data:
+                  type: string
+                  
+  /content/articles/{articleId}/groups/{groupId}:
+    post:
+      tags:
+        - content
+      description: set sharing group for article
+      operationId: set-article-group
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: articleId
+          in: path
+          description: specified article id 
+          required: true
+          schema:
+            type: string
+        - name: groupId
+          in: path
+          description: specified share group id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: entry set
+        '401':
+          description: invalid token
+        '500':
+          description: internal server error
+    delete:
+      tags:
+        - content
+      description: clear sharing group for article
+      operationId: clear-article-group
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: articleId
+          in: path
+          description: specified article id 
+          required: true
+          schema:
+            type: string
+        - name: groupId
+          in: path
+          description: specified share id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: entry removed
+        '401':
+          description: invalid token
+        '500':
+          description: internal server error
   
-  
-  
-  ## Content Module
-  ##   structure types: article, subject, label, tag, articleBlock, tagBlock
-  # get article block view [ { articleBlockId, articleBlockRevision } ]
-  # get article block (blockId, subjectFilter, tagFilter): [ { articleId, articleRevision, set, ready, subject: { 
-  #     subjectId, revision, type, data, created, modified
-  #   }, labelId[], shareId[], tagCount, tagModified, tagRevision
-  # } ]
-  # get article view (blockId, subjectFilter): [ { articleId, articleRevision } ]
-  # get article (articleId, tagFilter) : { articleId, articleRevision, confirmed, ready, subject: { 
-  #     subjectId, revision, type, data, created, modified
-  #   }, labelId[], shareId[], tagCount, tagModified, targRevision
-  # }
-  
+  /content/articles/{articleId}/labels/{labelId}:
+    post:
+      tags:
+        - content
+      description: set orginizational label for article
+      operationId: set-article-label
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: articleId
+          in: path
+          description: specified article id 
+          required: true
+          schema:
+            type: string
+        - name: labelId
+          in: path
+          description: specified label id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: entry set
+        '401':
+          description: invalid token
+        '500':
+          description: internal server error
+    delete:
+      tags:
+        - content
+      description: clear orginizationl label for article
+      operationId: clear-article-label
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: articleId
+          in: path
+          description: specified article id 
+          required: true
+          schema:
+            type: string
+        - name: labelId
+          in: path
+          description: specified label id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: entry cleared
+        '401':
+          description: invalid token
+        '500':
+          description: internal server error
           
+  /content/articles/{articleId}/tagBlocks/{blockId}/view:
+    get:
+      tags:
+        - content
+      description: Get view tag blocks in article
+      operationId: get-tag-view
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: articleId
+          in: path
+          description: specified article id 
+          required: true
+          schema:
+            type: string
+        - name: blockId
+          in: path
+          description: specified block id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    revision:
+                      type: integer
+                      format: int64
+        '401':
+          description: invalid password
+        '500':
+          description: internal server error
           
-  # get tag view (articleId, filter): [ { tagId, revision } ]
-  # get tag block (articleId, filter): [ { tagId, revision, type, data, created, modified } ]
-  # get tag (tagId): { tagId, revision, type, data, created, modified }
-  # get labels (filter): [ { labelId, revision, type, data, created, modified } ]
-  # get subject asset
-  # add subject
-  # add subject asset
-  # update subject data
-  # set/clear ready
-  # set/clear share
+  /content/articles/{articleId}/tagBlocks/{blockId}:
+    get:
+      tags:
+        - content
+      description: Get tags from specified block
+      operationId: get-tag-block
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: articleId
+          in: path
+          description: specified article id 
+          required: true
+          schema:
+            type: string
+        - name: blockId
+          in: path
+          description: specified block id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    revision:
+                      type: integer
+                      format: int64
+        '401':
+          description: invalid password
+        '500':
+          description: internal server error
+          
+  /content/articles/{articleId}/tags:
+    post:
+      tags:
+        - content
+      description: Add an content article
+      operationId: add-article-tag
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: articleId
+          in: path
+          description: specified article id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: entry created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  blockId:
+                    type: string
+                  blockRevision:
+                    type: integer
+                    format: int64
+                  tag:
+                    $ref: '#/components/schemas/Tag'
+        '401':
+          description: invalid token
+        '500':
+          description: internal server error
+              
+  /content/articles/{articleId}/tags/{tagId}:
+    get:
+      tags:
+        - content
+      description: Add an content article
+      operationId: get-article-tag
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: articleId
+          in: path
+          description: specified article id 
+          required: true
+          schema:
+            type: string
+        - name: tagId
+          in: path
+          description: specified tag id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: entry created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tag'
+        '401':
+          description: invalid token
+        '404':
+          description: tag not found
+        '500':
+          description: internal server error
+    delete:
+      tags:
+        - content
+      description: Add an content article
+      operationId: remove-article-tag
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: articleId
+          in: path
+          description: specified article id 
+          required: true
+          schema:
+            type: string
+        - name: tagId
+          in: path
+          description: specified tag id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: entry removed
+        '401':
+          description: invalid token
+        '404':
+          description: tag not found
+        '500':
+          description: internal server error
+              
+  /content/articles/{articleId}/assets:
+    get:
+      tags:
+        - content
+      description: Get assets attached to article
+      operationId: get-article-assets
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: articleId
+          in: path
+          description: specified article id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: entry created
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Asset'
+        '401':
+          description: invalid token
+        '500':
+          description: internal server error
+    post:
+      tags:
+        - content
+      description: Add an content article
+      operationId: add-article-asset
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: articleId
+          in: path
+          description: specified article id 
+          required: true
+          schema:
+            type: string
+        - name: transforms
+          in: query
+          description: transforms to apply
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        '201':
+          description: entry created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Asset'
+        '401':
+          description: invalid token
+        '500':
+          description: internal server error
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                fileName:
+                  type: string
+                  format: binary
+          
+  /content/articles/{articleId}/assets/{assetId}:
+    get:
+      tags:
+        - content
+      description: Get asset attached to article
+      operationId: get-article-asset
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: articleId
+          in: path
+          description: specified article id 
+          required: true
+          schema:
+            type: string
+        - name: assetId
+          in: path
+          description: specified asset id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: article attachment
+          content:
+            application/octet-stream: #asset specific
+              schema:
+                type: string
+                format: binary
+        '401':
+          description: invalid token
+        '404':
+          description: asset not found
+        '500':
+          description: internal server error
+          
+  /content/articles/{articleId}/confirmed:
+    put:
+      tags:
+        - content
+      description: set confirmed state of article
+      operationId: set-article-confirmed
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: articleId
+          in: path
+          description: specified article id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: entry set
+        '401':
+          description: invalid token
+        '404':
+          description: article not found
+        '500':
+          description: internal server error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: boolean
+          
+  /content/labels:
+    get:
+      tags:
+        - content
+      description: Get labels for organization
+      operationId: get-content-labels
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Label'
+        '401':
+          description: invalid token
+        '500':
+          description: internal server error
+    post:
+      tags:
+        - share
+      description: Add a label for organization
+      operationId: add-content-label
+      security:
+        - bearerAuth: []
+      responses:
+        '201':
+          description: entry created
+        '401':
+          description: invalid token
+        '500':
+          description: internal server error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+          
+  /content/labels/{labelId}:
+    put:
+      tags:
+        - content
+      description: Update label for organization
+      operationId: update-content-label
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: labelId
+          in: path
+          description: specified group id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+        '401':
+          description: invalid token
+        '500':
+          description: internal server error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+    delete:
+      tags:
+        - content
+      description: Remove organizational label
+      operationId: remove-content-label
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: labelId
+          in: path
+          description: specified label id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+        '401':
+          description: invalid token
+        '500':
+          description: internal server error
+          
   
 externalDocs:
   description: Find out more about Swagger
@@ -1467,19 +2002,7 @@ components:
         appToken:
           type: string
           
-    View:
-      type: object
-      required:
-        - id
-        - revision
-      properties:
-        id:
-          type: string
-        revision:
-          type: integer
-          format: int64
-          
-    Post:
+    Subject:
       type: object
       required:
         - postId
@@ -1491,8 +2014,6 @@ components:
       properties:
         postId:
           type: string
-        guid:  # if null account owner is point owner
-          type: string
         revision:
           type: integer
           format: int64
@@ -1503,6 +2024,30 @@ components:
         created:
           type: integer
           format: int32
+          
+    Asset:
+      type: object
+      required:
+        - assetId
+      properties:
+        assetId:
+          type: string
+        transform:
+          type: string
+        status:
+          type: string
+          enum: [ pending, processing, ready, error ]
+          
+    Tag:
+      type: object
+      required:
+        - guid
+        - subject
+      properties:
+        guid:
+          type: string
+        subject:
+          $ref: '#/components/schemas/Subject'
           
     Article:
       type: object
@@ -1519,8 +2064,6 @@ components:
       properties:
         subjectId:
           type: string
-        guid:
-          type: string
         revision:
           type: integer
           format: int64
@@ -1528,7 +2071,7 @@ components:
           type: string
           enum: [ unconfirmed, confirmed, complete, error ]
         subject:
-          $ref: '#/components/schemas/Post'
+          $ref: '#/components/schemas/Subject'
         labels:
           type: array
           items:
