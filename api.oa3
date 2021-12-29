@@ -26,11 +26,11 @@ tags:
   - name: share
     description: access control for personal subjects, associates content and contacts
     
-  - name: index
-    description: connection to other identities, hook receiver
   - name: content
     description: posting and listing of personal subjects, group and tag managment
     
+  - name: index
+    description: connection to other identities, hook receiver
   - name: converstaion
     description: group sharing of subjects
     
@@ -52,79 +52,6 @@ paths:
       responses:
         '200':
           description: Awaiting announce
-          
-  /revision/profile:
-    put:
-      tags:
-        - revision
-      description: Hook receiver for contact profile revision updates
-      operationId: revision-profile-hook
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: revision set
-        '401':
-          description: not authorized
-        '500':
-          description: internal server error
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: integer
-              format: int64
-        
-  /revision/content:
-    put:
-      tags:
-        - revision
-      description: Hook receiver for contact content revision updates
-      operationId: revision-content-hook
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: revision set
-        '401':
-          description: not authorized
-        '500':
-          description: internal server error
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: integer
-              format: int64
-              
-  /revision/insight/{insightId}:
-    put:
-      tags:
-        - revision
-      description: Hook receiver for contact insight revision updates
-      operationId: revision-insight-hook
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: insightId
-          in: path
-          description: insight id to update
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: revision set
-        '401':
-          description: not authorized
-        '500':
-          description: internal server error
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: integer
-              format: int64
               
   /admin/claimable:
     get:
@@ -713,552 +640,6 @@ paths:
           description: successful operation
         '401':
           description: invalid token
-        '500':
-          description: internal server error
-          
-  /index/contacts:
-    post:
-      tags:
-        - index
-      description: Add contact entry
-      operationId: add-index-contact
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Contact'
-        '401':
-          description: invalid password
-        '404':
-          description: not found
-        '500':
-          description: internal server error
-          
-  /index/contacts/view:
-    get:
-      tags:
-        - index
-      description: Get list of contacts
-      operationId: get-index-contacts
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/ContactView'
-        '401':
-          description: invalid password
-        '500':
-          description: internal server error
-          
-  /index/contacts/{contactId}:
-    get:
-      tags:
-        - index
-      description: Get contact entry
-      operationId: get-index-contact
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: contactId
-          in: path
-          description: specified contact id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Contact'
-        '401':
-          description: invalid password
-        '404':
-          description: not found
-        '500':
-          description: internal server error
-    delete:
-      tags:
-        - index
-      description: Remove contact entry
-      operationId: remove-index-contact
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: contactId
-          in: path
-          description: specified contact id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: successful operation
-        '401':
-          description: invalid password
-        '404':
-          description: not found
-        '500':
-          description: internal server error
-  
-  /index/contacts/{contactId}/status:
-    put:
-      tags:
-        - index
-      description: Update contact status
-      operationId: set-index-contact-status
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: contactId
-          in: path
-          description: specified contact id 
-          required: true
-          schema:
-            type: string
-        - name: token
-          in: query
-          description: token for accessing contact
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ContactData'
-        '401':
-          description: invalid password
-        '404':
-          description: not found
-        '500':
-          description: internal server error
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: string
-              enum: [ pending, confirmed, connecting, connected ]
-          
-  /index/contacts/{contactId}/openMessage:
-    get:
-      tags:
-        - index
-      description: Get message for opening contact connection
-      operationId: get-index-open-message
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: contactId
-          in: path
-          description: specified contact id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/DataMessage'
-        '401':
-          description: invalid password
-        '404':
-          description: not found
-        '500':
-          description: internal server error
-    put:
-      tags:
-        - index
-      description: Set message for opening contact connection
-      operationId: set-index-open-message
-      parameters:
-        - name: contactId
-          in: path
-          description: specified contact id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ContactStatus'
-        '401':
-          description: invalid password
-        '404':
-          description: not found
-        '500':
-          description: internal server error
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/DataMessage'
-          
-  /index/contacts/{contactId}/closeMessage:
-    get:
-      tags:
-        - index
-      description: Get message for closing contact connection
-      operationId: get-index-close-message
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: contactId
-          in: path
-          description: specified contact id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/DataMessage'
-        '401':
-          description: invalid password
-        '404':
-          description: not found
-        '500':
-          description: internal server error
-    put:
-      tags:
-        - index
-      description: Set message for closing contact connection
-      operationId: set-index-close-message
-      parameters:
-        - name: contactId
-          in: path
-          description: specified contact id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ContactStatus'
-        '401':
-          description: invalid password
-        '404':
-          description: not found
-        '500':
-          description: internal server error
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/DataMessage'
-          
-  /index/contacts/{contactId}/profile:
-    get:
-      tags:
-        - index
-      description: Get profile of contact entry
-      operationId: get-index-profile
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: contactId
-          in: path
-          description: specified contact id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ContactProfile'
-        '401':
-          description: invalid password
-        '404':
-          description: not found
-        '500':
-          description: internal server error
-    put:
-      tags:
-        - index
-      description: Set profile of contact entry
-      operationId: set-index-profile
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: contactId
-          in: path
-          description: specified contact id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ContactProfile'
-        '401':
-          description: invalid password
-        '404':
-          description: not found
-        '500':
-          description: internal server error
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Profile'
-          
-  /index/contacts/{contactId}/data:
-    get:
-      tags:
-        - index
-      description: Get data of contact entry
-      operationId: get-index-data
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: contactId
-          in: path
-          description: specified contact id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ContactData'
-        '401':
-          description: invalid password
-        '404':
-          description: not found
-        '500':
-          description: internal server error
-          
-  /index/contacts/{contactId}/notes:
-    put:
-      tags:
-        - index
-      description: Update contact notes
-      operationId: set-index-contact-notes
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: contactId
-          in: path
-          description: specified contact id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ContactData'
-        '401':
-          description: invalid password
-        '404':
-          description: not found
-        '500':
-          description: internal server error
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: string
-    delete:
-      tags:
-        - index
-      description: Clear contact notes
-      operationId: clear-index-contact-notes
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: contactId
-          in: path
-          description: specified contact id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ContactData'
-        '401':
-          description: invalid password
-        '404':
-          description: not found
-        '500':
-          description: internal server error
-            
-  /index/contacts/{contactId}/shares/{shareId}:
-    put:
-      tags:
-        - index
-      description: Update contact notes
-      operationId: set-index-contact-share
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: contactId
-          in: path
-          description: specified contact id 
-          required: true
-          schema:
-            type: string
-        - name: shareId
-          in: path
-          description: specified share id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ContactData'
-        '401':
-          description: invalid password
-        '404':
-          description: not found
-        '500':
-          description: internal server error
-    delete:
-      tags:
-        - index
-      description: Clear contact share group
-      operationId: clear-index-contact-share
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: contactId
-          in: path
-          description: specified contact id 
-          required: true
-          schema:
-            type: string
-        - name: shareId
-          in: path
-          description: specified share id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ContactData'
-        '401':
-          description: invalid password
-        '404':
-          description: not found
-        '500':
-          description: internal server error
-          
-  /index/blocked:
-    get:
-      tags:
-        - index
-      description: Get list of blocked contacts
-      operationId: get-index-blocked-contacts
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: string
-        '401':
-          description: invalid password
-        '404':
-          description: not found
-        '500':
-          description: internal server error
-          
-  /index/blocked/{contactId}:
-    post:
-      tags:
-        - index
-      description: Add contact from blocked list
-      operationId: add-index-blocked-contact
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: contactId
-          in: path
-          description: specified contact id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: successful operation
-        '401':
-          description: invalid password
-        '404':
-          description: not found
-        '500':
-          description: internal server error
-    delete:
-      tags:
-        - index
-      description: Remove contact from blocked list
-      operationId: remove-index-blocked-contact
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: contactId
-          in: path
-          description: specified contact id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: successful operation
-        '401':
-          description: invalid password
-        '404':
-          description: not found
         '500':
           description: internal server error
           
@@ -1919,7 +1300,7 @@ paths:
           description: internal server error
     post:
       tags:
-        - share
+        - content
       description: Add a label for organization
       operationId: add-content-label
       security:
@@ -1986,7 +1367,1534 @@ paths:
         '500':
           description: internal server error
           
+  /index/contacts:
+    post:
+      tags:
+        - index
+      description: Add contact entry
+      operationId: add-index-contact
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contact'
+        '401':
+          description: invalid password
+        '404':
+          description: not found
+        '500':
+          description: internal server error
+          
+  /index/contacts/view:
+    get:
+      tags:
+        - index
+      description: Get list of contacts
+      operationId: get-index-contacts
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ContactView'
+        '401':
+          description: invalid password
+        '500':
+          description: internal server error
+          
+  /index/contacts/{contactId}:
+    get:
+      tags:
+        - index
+      description: Get contact entry
+      operationId: get-index-contact
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: contactId
+          in: path
+          description: specified contact id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contact'
+        '401':
+          description: invalid password
+        '404':
+          description: not found
+        '500':
+          description: internal server error
+    delete:
+      tags:
+        - index
+      description: Remove contact entry
+      operationId: remove-index-contact
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: contactId
+          in: path
+          description: specified contact id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+        '401':
+          description: invalid password
+        '404':
+          description: not found
+        '500':
+          description: internal server error
   
+  /index/contacts/{contactId}/status:
+    put:
+      tags:
+        - index
+      description: Update contact status
+      operationId: set-index-contact-status
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: contactId
+          in: path
+          description: specified contact id 
+          required: true
+          schema:
+            type: string
+        - name: token
+          in: query
+          description: token for accessing contact
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactData'
+        '401':
+          description: invalid password
+        '404':
+          description: not found
+        '500':
+          description: internal server error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+              enum: [ pending, confirmed, connecting, connected ]
+          
+  /index/contacts/{contactId}/openMessage:
+    get:
+      tags:
+        - index
+      description: Get message for opening contact connection
+      operationId: get-index-open-message
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: contactId
+          in: path
+          description: specified contact id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataMessage'
+        '401':
+          description: invalid password
+        '404':
+          description: not found
+        '500':
+          description: internal server error
+    put:
+      tags:
+        - index
+      description: Set message for opening contact connection
+      operationId: set-index-open-message
+      parameters:
+        - name: contactId
+          in: path
+          description: specified contact id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactStatus'
+        '401':
+          description: invalid password
+        '404':
+          description: not found
+        '500':
+          description: internal server error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DataMessage'
+          
+  /index/contacts/{contactId}/closeMessage:
+    get:
+      tags:
+        - index
+      description: Get message for closing contact connection
+      operationId: get-index-close-message
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: contactId
+          in: path
+          description: specified contact id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataMessage'
+        '401':
+          description: invalid password
+        '404':
+          description: not found
+        '500':
+          description: internal server error
+    put:
+      tags:
+        - index
+      description: Set message for closing contact connection
+      operationId: set-index-close-message
+      parameters:
+        - name: contactId
+          in: path
+          description: specified contact id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactStatus'
+        '401':
+          description: invalid password
+        '404':
+          description: not found
+        '500':
+          description: internal server error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DataMessage'
+          
+  /index/contacts/{contactId}/profile:
+    get:
+      tags:
+        - index
+      description: Get profile of contact entry
+      operationId: get-index-profile
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: contactId
+          in: path
+          description: specified contact id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactProfile'
+        '401':
+          description: invalid password
+        '404':
+          description: not found
+        '500':
+          description: internal server error
+    put:
+      tags:
+        - index
+      description: Set profile of contact entry
+      operationId: set-index-profile
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: contactId
+          in: path
+          description: specified contact id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactProfile'
+        '401':
+          description: invalid password
+        '404':
+          description: not found
+        '500':
+          description: internal server error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Profile'
+          
+  /index/contacts/{contactId}/data:
+    get:
+      tags:
+        - index
+      description: Get data of contact entry
+      operationId: get-index-data
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: contactId
+          in: path
+          description: specified contact id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactData'
+        '401':
+          description: invalid password
+        '404':
+          description: not found
+        '500':
+          description: internal server error
+          
+  /index/contacts/{contactId}/notes:
+    put:
+      tags:
+        - index
+      description: Update contact notes
+      operationId: set-index-contact-notes
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: contactId
+          in: path
+          description: specified contact id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactData'
+        '401':
+          description: invalid password
+        '404':
+          description: not found
+        '500':
+          description: internal server error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+    delete:
+      tags:
+        - index
+      description: Clear contact notes
+      operationId: clear-index-contact-notes
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: contactId
+          in: path
+          description: specified contact id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactData'
+        '401':
+          description: invalid password
+        '404':
+          description: not found
+        '500':
+          description: internal server error
+            
+  /index/contacts/{contactId}/shares/{shareId}:
+    put:
+      tags:
+        - index
+      description: Update contact notes
+      operationId: set-index-contact-share
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: contactId
+          in: path
+          description: specified contact id 
+          required: true
+          schema:
+            type: string
+        - name: shareId
+          in: path
+          description: specified share id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactData'
+        '401':
+          description: invalid password
+        '404':
+          description: not found
+        '500':
+          description: internal server error
+    delete:
+      tags:
+        - index
+      description: Clear contact share group
+      operationId: clear-index-contact-share
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: contactId
+          in: path
+          description: specified contact id 
+          required: true
+          schema:
+            type: string
+        - name: shareId
+          in: path
+          description: specified share id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactData'
+        '401':
+          description: invalid password
+        '404':
+          description: not found
+        '500':
+          description: internal server error
+          
+  /index/blocked:
+    get:
+      tags:
+        - index
+      description: Get list of blocked contacts
+      operationId: get-index-blocked-contacts
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        '401':
+          description: invalid password
+        '404':
+          description: not found
+        '500':
+          description: internal server error
+          
+  /index/blocked/{contactId}:
+    post:
+      tags:
+        - index
+      description: Add contact from blocked list
+      operationId: add-index-blocked-contact
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: contactId
+          in: path
+          description: specified contact id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+        '401':
+          description: invalid password
+        '404':
+          description: not found
+        '500':
+          description: internal server error
+    delete:
+      tags:
+        - index
+      description: Remove contact from blocked list
+      operationId: remove-index-blocked-contact
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: contactId
+          in: path
+          description: specified contact id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+        '401':
+          description: invalid password
+        '404':
+          description: not found
+        '500':
+          description: internal server error
+          
+  /index/profile/revision:
+    put:
+      tags:
+        - index
+      description: Hook receiver for contact profile revision updates
+      operationId: revision-profile-hook
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: revision set
+        '401':
+          description: not authorized
+        '500':
+          description: internal server error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: integer
+              format: int64
+        
+  /index/content/revision:
+    put:
+      tags:
+        - index
+      description: Hook receiver for contact content revision updates
+      operationId: revision-content-hook
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: revision set
+        '401':
+          description: not authorized
+        '500':
+          description: internal server error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: integer
+              format: int64
+              
+  # /conversation/dialogues/{dialogueId}/sync - s
+  # /conversation/dialogues/{dialogueId}/insights/{guid} - a,d
+  # /conversation/insights/{dialogueId} a,d
+  
+  /conversation/dialogues:
+    get:
+      tags:
+        - conversation
+      description: Retrieve all dialogues.
+      operationId: get-dialogues
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Dialogue'
+        '401':
+          description: invalid token
+        '500':
+          description: internal server error
+    post:
+      tags:
+        - conversation
+      description: Add a new dialogue.
+      operationId: add-dialogue
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Dialogue'
+        '401':
+          description: invalid token
+        '500':
+          description: internal server error
+          
+  /conversation/dialogues/{dialogueId}/subject:
+    put:
+      tags:
+        - conversation
+      description: Set dialogue subject
+      operationId: set-dialogue-subject
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: dialogueId
+          in: path
+          description: specified dialogue id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: entry created
+        '401':
+          description: invalid token
+        '404':
+          description: not found
+        '500':
+          description: internal server error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - type
+                - data
+              properties:
+                type:
+                  type: string
+                data:
+                  type: string
+    
+  /conversation/dialogues/{dialogueId}/active:
+    put:
+      tags:
+        - conversation
+      description: Set dialogue active state
+      operationId: set-dialogue-active
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: dialogueId
+          in: path
+          description: specified dialogue id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success
+        '401':
+          description: invalid token
+        '404':
+          description: not found
+        '500':
+          description: internal server error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: boolean
+                  
+  /conversation/dialogues/{dialogueId}/insight/{guid}:
+    post:
+      tags:
+        - conversation
+      description: Assign a contact to have insight into the conversation
+      operationId: add-contact-insight
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: dialogueId
+          in: path
+          description: specified dialogue id 
+          required: true
+          schema:
+            type: string
+        - name: guid
+          in: path
+          description: specified contact id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: entry set
+        '401':
+          description: invalid token
+        '404':
+          description: id not found
+        '500':
+          description: internal server error
+    delete:
+      tags:
+        - conversation
+      description: Remove insight from the specified contact
+      operationId: remove-contact-insight
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: dialogueId
+          in: path
+          description: specified dialogue id 
+          required: true
+          schema:
+            type: string
+        - name: guid
+          in: path
+          description: specified contact id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: entry cleared
+        '401':
+          description: invalid token
+        '404':
+          description: id not found
+        '500':
+          description: internal server error
+          
+  /conversation/dialogues/{dialogueId}:
+    delete:
+      tags:
+        - conversation
+      description: Remove dialogue
+      operationId: remove-dialogue
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: dialogueId
+          in: path
+          description: specified dialogue id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: entry removed
+        '401':
+          description: invalid token
+        '404':
+          description: not found
+        '500':
+          description: internal server error
+  
+  /conversation/insights:
+    get:
+      tags:
+        - conversation
+      description: Retrieve all insights.
+      operationId: get-insights
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Insight'
+        '401':
+          description: invalid token
+        '500':
+          description: internal server error
+          
+  /conversation/insights/{guid}/dialogues/{dialogueId}:
+    post:
+      tags:
+        - conversation
+      description: Hook receiver for adding an insight and/or updating the dialog revision
+      operationId: add-insight-hook
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: guid
+          in: path
+          description: id of contact hosting the dialogue
+          required: true
+          schema:
+            type: string
+        - name: dialogueId
+          in: path
+          description: dialogue with insight id to update
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: revision set
+        '401':
+          description: not authorized
+        '500':
+          description: internal server error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: integer
+              format: int64
+    delete:
+      tags:
+        - conversation
+      description: Hook receiver for removing an insight
+      operationId: remove-insight-hook
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: guid
+          in: path
+          description: id of contact hosting the dialogue
+          required: true
+          schema:
+            type: string
+        - name: dialogueId
+          in: path
+          description: insight id to update
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: revision set
+        '401':
+          description: not authorized
+        '500':
+          description: internal server error
+  
+  /conversation/insights/{guid}/dialogues/{dialogueId}/active:
+    post:
+      tags:
+        - conversation
+      description: Change active state of insight
+      operationId: update-insight-active
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: guid
+          in: path
+          description: id of contact hosting the dialogue
+          required: true
+          schema:
+            type: string
+        - name: dialogueId
+          in: path
+          description: dialogue with insight id to update
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: revision set
+        '401':
+          description: not authorized
+        '500':
+          description: internal server error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: boolean
+              
+  /conversation/dialogues/{dialogueId}/thoughtBlocks/view:
+    get:
+      tags:
+        - conversation
+      description: Get view of content blocks
+      operationId: get-conversation-thought-block-view
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: dialogueId
+          in: path
+          description: specified dialogue id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    revision:
+                      type: integer
+                      format: int64
+        '401':
+          description: invalid password
+        '500':
+          description: internal server error
+          
+  /conversation/dialogues/{dialogueId}/thoughtBlocks/{blockId}:
+    get:
+      tags:
+        - conversation
+      description: Get thoughts from specified block in conversation
+      operationId: get-conversation-thought-block
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: dialogueId
+          in: path
+          description: specified dialogue id
+          required: true
+          schema:
+            type: string
+        - name: blockId
+          in: path
+          description: specified group id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Thought'
+        '401':
+          description: invalid password
+        '500':
+          description: internal server error
+          
+  /conversation/dialogues/{dialogueId}/thoughtBlocks/{blockId}/view:
+    get:
+      tags:
+        - conversation
+      description: Get view thoughts in content block of dialogue
+      operationId: get-conversation-thought-view
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: dialogueId
+          in: path
+          description: specified dialogue id
+          required: true
+          schema:
+            type: string
+        - name: blockId
+          in: path
+          description: specified group id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    revision:
+                      type: integer
+                      format: int64
+        '401':
+          description: invalid password
+        '500':
+          description: internal server error
+          
+  /conversation/dialogues/{dialogueId}/thoughts:
+    post:
+      tags:
+        - conversation
+      description: Add an content thought to a conversation
+      operationId: add-conversation-thought
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: dialogueId
+          in: path
+          description: specified dialogue id
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: entry created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  blockId:
+                    type: string
+                  blockRevision:
+                    type: integer
+                    format: int64
+                  thought:
+                    $ref: '#/components/schemas/Thought'
+        '401':
+          description: invalid token
+        '500':
+          description: internal server error
+              
+  /conversation/dialogues/{dialogueId}/thoughts/{thoughtId}:
+    get:
+      tags:
+        - conversation
+      description: Get specified thought in dialogue
+      operationId: get-conversation-thought
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: dialogueId
+          in: path
+          description: specified dialogue id
+          required: true
+          schema:
+            type: string
+        - name: thoughtId
+          in: path
+          description: specified thought id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Thought'
+        '401':
+          description: invalid password
+        '500':
+          description: internal server error
+    delete:
+      tags:
+        - conversation
+      description: Remove specified thought from conversation
+      operationId: remove-conversation-thought
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: dialogueId
+          in: path
+          description: specified dialogue id
+          required: true
+          schema:
+            type: string
+        - name: thoughtId
+          in: path
+          description: specified thought id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+        '401':
+          description: invalid password
+        '500':
+          description: internal server error
+  
+  /conversation/dialogues/{dialogueId}/thoughts/{thoughtId}/subject:
+    put:
+      tags:
+        - conversation
+      description: Add an content thought
+      operationId: update-conversation-thought
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: dialogueId
+          in: path
+          description: specified dialogue id
+          required: true
+          schema:
+            type: string
+        - name: thoughtId
+          in: path
+          description: specified thought id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: entry created
+        '401':
+          description: invalid token
+        '500':
+          description: internal server error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - type
+                - data
+              properties:
+                type:
+                  type: string
+                data:
+                  type: string
+                  
+  /conversation/dialogues/{dialogueId}/{thoughtId}/tagBlocks/{blockId}/view:
+    get:
+      tags:
+        - conversation
+      description: Get view tag blocks in thought
+      operationId: get-conversation-tag-view
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: dialogueId
+          in: path
+          description: specified dialogue id
+          required: true
+          schema:
+            type: string
+        - name: thoughtId
+          in: path
+          description: specified thought id 
+          required: true
+          schema:
+            type: string
+        - name: blockId
+          in: path
+          description: specified block id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    revision:
+                      type: integer
+                      format: int64
+        '401':
+          description: invalid password
+        '500':
+          description: internal server error
+          
+  /conversation/dialogues/{dialogueId}/thoughts/{thoughtId}/tagBlocks/{blockId}:
+    get:
+      tags:
+        - conversation
+      description: Get tags from specified block
+      operationId: get-conversation-tag-block
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: dialogueId
+          in: path
+          description: specified dialogue id
+          required: true
+          schema:
+            type: string
+        - name: thoughtId
+          in: path
+          description: specified thought id 
+          required: true
+          schema:
+            type: string
+        - name: blockId
+          in: path
+          description: specified block id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    revision:
+                      type: integer
+                      format: int64
+        '401':
+          description: invalid password
+        '500':
+          description: internal server error
+          
+  /conversation/dialogues/{dialogueId}/thoughts/{thoughtId}/tags:
+    post:
+      tags:
+        - conversation
+      description: Add an content thought
+      operationId: add-conversation-thought-tag
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: dialogueId
+          in: path
+          description: specified dialogue id
+          required: true
+          schema:
+            type: string
+        - name: thoughtId
+          in: path
+          description: specified thought id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: entry created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  blockId:
+                    type: string
+                  blockRevision:
+                    type: integer
+                    format: int64
+                  tag:
+                    $ref: '#/components/schemas/Tag'
+        '401':
+          description: invalid token
+        '500':
+          description: internal server error
+              
+  /conversation/dialogues/{dialogueId}/thoughts/{thoughtId}/tags/{tagId}:
+    get:
+      tags:
+        - conversation
+      description: Add an content thought
+      operationId: get-thought-tag
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: dialogueId
+          in: path
+          description: specified dialogue id
+          required: true
+          schema:
+            type: string
+        - name: thoughtId
+          in: path
+          description: specified thought id 
+          required: true
+          schema:
+            type: string
+        - name: tagId
+          in: path
+          description: specified tag id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: entry created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tag'
+        '401':
+          description: invalid token
+        '404':
+          description: tag not found
+        '500':
+          description: internal server error
+    delete:
+      tags:
+        - conversation
+      description: Remove conversation thought tag
+      operationId: remove-conversation-thought-tag
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: dialogueId
+          in: path
+          description: specified dialogue id
+          required: true
+          schema:
+            type: string
+        - name: thoughtId
+          in: path
+          description: specified thought id 
+          required: true
+          schema:
+            type: string
+        - name: tagId
+          in: path
+          description: specified tag id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: entry removed
+        '401':
+          description: invalid token
+        '404':
+          description: tag not found
+        '500':
+          description: internal server error
+              
+  /conversation/dialogues/{dialogueId}/thoughts/{thoughtId}/assets:
+    get:
+      tags:
+        - conversation
+      description: Get assets attached to thought
+      operationId: get-conversation-thought-assets
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: dialogueId
+          in: path
+          description: specified dialogue id
+          required: true
+          schema:
+            type: string
+        - name: thoughtId
+          in: path
+          description: specified thought id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: entry created
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Asset'
+        '401':
+          description: invalid token
+        '500':
+          description: internal server error
+    post:
+      tags:
+        - conversation
+      description: Add an conversation thought asset
+      operationId: add-conversation-thought-asset
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: dialogueId
+          in: path
+          description: specified dialogue id
+          required: true
+          schema:
+            type: string
+        - name: thoughtId
+          in: path
+          description: specified thought id 
+          required: true
+          schema:
+            type: string
+        - name: transforms
+          in: query
+          description: transforms to apply
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        '201':
+          description: entry created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Asset'
+        '401':
+          description: invalid token
+        '500':
+          description: internal server error
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                fileName:
+                  type: string
+                  format: binary
+          
+  /conversatin/dialogues/{dialogueId}/thoughts/{thoughtId}/assets/{assetId}:
+    get:
+      tags:
+        - conversation
+      description: Get asset attached to thought
+      operationId: get-conversation-thought-asset
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: dialogueId
+          in: path
+          description: specified dialogue id
+          required: true
+          schema:
+            type: string
+        - name: thoughtId
+          in: path
+          description: specified thought id 
+          required: true
+          schema:
+            type: string
+        - name: assetId
+          in: path
+          description: specified asset id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: thought attachment
+          content:
+            application/octet-stream: #asset specific
+              schema:
+                type: string
+                format: binary
+        '401':
+          description: invalid token
+        '404':
+          description: asset not found
+        '500':
+          description: internal server error
+          
+  /conversation/dialogues/{dialogueId}/thoughts/{thoughtId}/confirmed:
+    put:
+      tags:
+        - conversation
+      description: set confirmed state of conversation thought
+      operationId: set-conversation-thought-confirmed
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: dialogueId
+          in: path
+          description: specified dialogue id
+          required: true
+          schema:
+            type: string
+        - name: thoughtId
+          in: path
+          description: specified thought id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: entry set
+        '401':
+          description: invalid token
+        '404':
+          description: thought not found
+        '500':
+          description: internal server error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: boolean
+              
+              
 externalDocs:
   description: Find out more about Swagger
   url: 'http://swagger.io'
@@ -2001,94 +2909,6 @@ components:
       properties:
         appToken:
           type: string
-          
-    Subject:
-      type: object
-      required:
-        - postId
-        - revision
-        - type
-        - data
-        - created
-        - modified
-      properties:
-        postId:
-          type: string
-        revision:
-          type: integer
-          format: int64
-        type:
-          type: string
-        data:
-          type: string
-        created:
-          type: integer
-          format: int32
-          
-    Asset:
-      type: object
-      required:
-        - assetId
-      properties:
-        assetId:
-          type: string
-        transform:
-          type: string
-        status:
-          type: string
-          enum: [ pending, processing, ready, error ]
-          
-    Tag:
-      type: object
-      required:
-        - guid
-        - subject
-      properties:
-        guid:
-          type: string
-        subject:
-          $ref: '#/components/schemas/Subject'
-          
-    Article:
-      type: object
-      required:
-        - articleId
-        - revision
-        - status
-        - subject
-        - labels
-        - groups
-        - tagCount
-        - tagUpdated
-        - tagRevision
-      properties:
-        subjectId:
-          type: string
-        revision:
-          type: integer
-          format: int64
-        status:
-          type: string
-          enum: [ unconfirmed, confirmed, complete, error ]
-        subject:
-          $ref: '#/components/schemas/Subject'
-        labels:
-          type: array
-          items:
-            type: string
-        groups:
-          type: array
-          items:
-            type: string
-        tagCount:
-          type: integer
-          format: int32
-        tagUpdate:
-          type: integer
-          format: int32
-        tagRevision:
-          type: integer
-          format: int64
           
     Revsion:    
       type: object
@@ -2247,7 +3067,7 @@ components:
         status:
           type: string
           enum: [ pending, confirmed, connecting, connected ]
-        notes:
+        details:
           type: string
         token:
           type: string
@@ -2286,6 +3106,205 @@ components:
           type: integer
           format: int64
             
+    Subject:
+      type: object
+      required:
+        - postId
+        - revision
+        - type
+        - data
+        - created
+        - modified
+      properties:
+        postId:
+          type: string
+        revision:
+          type: integer
+          format: int64
+        type:
+          type: string
+        data:
+          type: string
+        created:
+          type: integer
+          format: int32
+          
+    Asset:
+      type: object
+      required:
+        - assetId
+      properties:
+        assetId:
+          type: string
+        transform:
+          type: string
+        status:
+          type: string
+          enum: [ pending, processing, ready, error ]
+          
+    Tag:
+      type: object
+      required:
+        - guid
+        - subject
+      properties:
+        guid:
+          type: string
+        subject:
+          $ref: '#/components/schemas/Subject'
+          
+    Insight:
+      type: object
+      required:
+        - insightId
+        - revision
+        - guid
+      properties:
+        insightId:
+          type: string
+        revision:
+          type: integer
+          format: int64
+        guid:
+          type: string
+        active:
+          type: boolean
+          
+    Dialogue:
+      type: object
+      required:
+        - dialogueId
+        - revision
+        - status
+        - subject
+        - insights
+      properties:
+        dialogueId:
+          type: string
+        revision:
+          type: integer
+          format: int64
+        active:
+          type: boolean
+        subject:
+          $ref: '#/components/schemas/Subject'
+        insights:
+          type: array
+          items:
+            type: object
+            properties:
+              guid:
+                type: string
+              status:
+                type: string
+                enum: [ synced, unsynced ]
+          
+    Thought:
+      type: object
+      required:
+        - thoughtId
+        - revision
+        - status
+        - subject
+        - tagCount
+        - tagUpdated
+        - tagRevision
+      properties:
+        articleId:
+          type: string
+        revision:
+          type: integer
+          format: int64
+        status:
+          type: string
+          enum: [ unconfirmed, confirmed, complete, error ]
+        subject:
+          $ref: '#/components/schemas/Subject'
+        tagCount:
+          type: integer
+          format: int32
+        tagUpdate:
+          type: integer
+          format: int32
+        tagRevision:
+          type: integer
+          format: int64
+          
+    Article:
+      type: object
+      required:
+        - articleId
+        - revision
+        - status
+        - subject
+        - labels
+        - groups
+        - tagCount
+        - tagUpdated
+        - tagRevision
+      properties:
+        articleId:
+          type: string
+        revision:
+          type: integer
+          format: int64
+        status:
+          type: string
+          enum: [ unconfirmed, confirmed, complete, error ]
+        subject:
+          $ref: '#/components/schemas/Subject'
+        labels:
+          type: array
+          items:
+            type: string
+        groups:
+          type: array
+          items:
+            type: string
+        tagCount:
+          type: integer
+          format: int32
+        tagUpdate:
+          type: integer
+          format: int32
+        tagRevision:
+          type: integer
+          format: int64
+          
+    Note:
+      type: object
+      required:
+        - noteId
+        - guid
+        - revision
+        - status
+        - subject
+        - tagCount
+        - tagUpdated
+        - tagRevision
+      properties:
+        thoughtId:
+          type: string
+        guid:
+          type: string
+        revision:
+          type: integer
+          format: int64
+        status:
+          type: string
+          enum: [ unconfirmed, confirmed, complete, error ]
+        subject:
+          $ref: '#/components/schemas/Subject'
+        tagCount:
+          type: integer
+          format: int32
+        tagUpdate:
+          type: integer
+          format: int32
+        tagRevision:
+          type: integer
+          format: int64
+          
     Group:
       type: object
       required:
