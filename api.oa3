@@ -24,12 +24,12 @@ tags:
   - name: profile
     description: getting and setting of the public profile
   - name: share
-    description: access control for personal subjects, associates content and contacts
+    description: access control for personal subjects, associates content and cards
     
   - name: content
     description: posting and listing of personal subjects, group and tag managment
     
-  - name: index
+  - name: contact
     description: connection to other identities, hook receiver
   - name: converstaion
     description: group sharing of subjects
@@ -38,7 +38,7 @@ paths:
 
   # prefix for bearer tokens types
   # app: app_
-  # contact: cnt_
+  # card: cnt_
   # pass code: pas_
   # account reset: res_
   # account create: act_
@@ -1246,6 +1246,40 @@ paths:
           description: asset not found
         '500':
           description: internal server error
+    delete:
+      tags:
+        - content
+      description: Remove asset attached to article
+      operationId: remove-article-asset
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: articleId
+          in: path
+          description: specified article id 
+          required: true
+          schema:
+            type: string
+        - name: assetId
+          in: path
+          description: specified asset id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: article attachment
+          content:
+            application/octet-stream: #asset specific
+              schema:
+                type: string
+                format: binary
+        '401':
+          description: invalid token
+        '404':
+          description: asset not found
+        '500':
+          description: internal server error
           
   /content/articles/{articleId}/confirmed:
     put:
@@ -1367,12 +1401,12 @@ paths:
         '500':
           description: internal server error
           
-  /index/contacts:
+  /contact/cards:
     post:
       tags:
-        - index
-      description: Add contact entry
-      operationId: add-index-contact
+        - contact
+      description: Add card entry
+      operationId: add-contact-card
       security:
         - bearerAuth: []
       responses:
@@ -1381,7 +1415,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Contact'
+                $ref: '#/components/schemas/card'
         '401':
           description: invalid password
         '404':
@@ -1389,12 +1423,12 @@ paths:
         '500':
           description: internal server error
           
-  /index/contacts/view:
+  /contact/cards/view:
     get:
       tags:
-        - index
-      description: Get list of contacts
-      operationId: get-index-contacts
+        - contact
+      description: Get list of cards
+      operationId: get-contact-cards
       security:
         - bearerAuth: []
       responses:
@@ -1405,24 +1439,24 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/ContactView'
+                  $ref: '#/components/schemas/cardView'
         '401':
           description: invalid password
         '500':
           description: internal server error
           
-  /index/contacts/{contactId}:
+  /contact/cards/{cardId}:
     get:
       tags:
-        - index
-      description: Get contact entry
-      operationId: get-index-contact
+        - contact
+      description: Get card entry
+      operationId: get-contact-card
       security:
         - bearerAuth: []
       parameters:
-        - name: contactId
+        - name: cardId
           in: path
-          description: specified contact id 
+          description: specified card id 
           required: true
           schema:
             type: string
@@ -1432,7 +1466,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Contact'
+                $ref: '#/components/schemas/card'
         '401':
           description: invalid password
         '404':
@@ -1441,15 +1475,15 @@ paths:
           description: internal server error
     delete:
       tags:
-        - index
-      description: Remove contact entry
-      operationId: remove-index-contact
+        - contact
+      description: Remove card entry
+      operationId: remove-contact-card
       security:
         - bearerAuth: []
       parameters:
-        - name: contactId
+        - name: cardId
           in: path
-          description: specified contact id 
+          description: specified card id 
           required: true
           schema:
             type: string
@@ -1463,24 +1497,24 @@ paths:
         '500':
           description: internal server error
   
-  /index/contacts/{contactId}/status:
+  /contact/cards/{cardId}/status:
     put:
       tags:
-        - index
-      description: Update contact status
-      operationId: set-index-contact-status
+        - contact
+      description: Update card status
+      operationId: set-contact-card-status
       security:
         - bearerAuth: []
       parameters:
-        - name: contactId
+        - name: cardId
           in: path
-          description: specified contact id 
+          description: specified card id 
           required: true
           schema:
             type: string
         - name: token
           in: query
-          description: token for accessing contact
+          description: token for accessing card
           required: true
           schema:
             type: string
@@ -1490,7 +1524,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ContactData'
+                $ref: '#/components/schemas/cardData'
         '401':
           description: invalid password
         '404':
@@ -1504,18 +1538,18 @@ paths:
               type: string
               enum: [ pending, confirmed, connecting, connected ]
           
-  /index/contacts/{contactId}/openMessage:
+  /contact/cards/{cardId}/openMessage:
     get:
       tags:
-        - index
-      description: Get message for opening contact connection
-      operationId: get-index-open-message
+        - contact
+      description: Get message for opening card connection
+      operationId: get-contact-open-message
       security:
         - bearerAuth: []
       parameters:
-        - name: contactId
+        - name: cardId
           in: path
-          description: specified contact id 
+          description: specified card id 
           required: true
           schema:
             type: string
@@ -1534,13 +1568,13 @@ paths:
           description: internal server error
     put:
       tags:
-        - index
-      description: Set message for opening contact connection
-      operationId: set-index-open-message
+        - contact
+      description: Set message for opening card connection
+      operationId: set-contact-open-message
       parameters:
-        - name: contactId
+        - name: cardId
           in: path
-          description: specified contact id 
+          description: specified card id 
           required: true
           schema:
             type: string
@@ -1550,7 +1584,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ContactStatus'
+                $ref: '#/components/schemas/cardStatus'
         '401':
           description: invalid password
         '404':
@@ -1563,18 +1597,18 @@ paths:
             schema:
               $ref: '#/components/schemas/DataMessage'
           
-  /index/contacts/{contactId}/closeMessage:
+  /contact/cards/{cardId}/closeMessage:
     get:
       tags:
-        - index
-      description: Get message for closing contact connection
-      operationId: get-index-close-message
+        - contact
+      description: Get message for closing card connection
+      operationId: get-contact-close-message
       security:
         - bearerAuth: []
       parameters:
-        - name: contactId
+        - name: cardId
           in: path
-          description: specified contact id 
+          description: specified card id 
           required: true
           schema:
             type: string
@@ -1593,13 +1627,13 @@ paths:
           description: internal server error
     put:
       tags:
-        - index
-      description: Set message for closing contact connection
-      operationId: set-index-close-message
+        - contact
+      description: Set message for closing card connection
+      operationId: set-contact-close-message
       parameters:
-        - name: contactId
+        - name: cardId
           in: path
-          description: specified contact id 
+          description: specified card id 
           required: true
           schema:
             type: string
@@ -1609,7 +1643,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ContactStatus'
+                $ref: '#/components/schemas/cardStatus'
         '401':
           description: invalid password
         '404':
@@ -1622,18 +1656,18 @@ paths:
             schema:
               $ref: '#/components/schemas/DataMessage'
           
-  /index/contacts/{contactId}/profile:
+  /contact/cards/{cardId}/profile:
     get:
       tags:
-        - index
-      description: Get profile of contact entry
-      operationId: get-index-profile
+        - contact
+      description: Get profile of card entry
+      operationId: get-contact-profile
       security:
         - bearerAuth: []
       parameters:
-        - name: contactId
+        - name: cardId
           in: path
-          description: specified contact id 
+          description: specified card id 
           required: true
           schema:
             type: string
@@ -1643,7 +1677,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ContactProfile'
+                $ref: '#/components/schemas/cardProfile'
         '401':
           description: invalid password
         '404':
@@ -1652,15 +1686,15 @@ paths:
           description: internal server error
     put:
       tags:
-        - index
-      description: Set profile of contact entry
-      operationId: set-index-profile
+        - contact
+      description: Set profile of card entry
+      operationId: set-contact-profile
       security:
         - bearerAuth: []
       parameters:
-        - name: contactId
+        - name: cardId
           in: path
-          description: specified contact id 
+          description: specified card id 
           required: true
           schema:
             type: string
@@ -1670,7 +1704,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ContactProfile'
+                $ref: '#/components/schemas/cardProfile'
         '401':
           description: invalid password
         '404':
@@ -1683,18 +1717,18 @@ paths:
             schema:
               $ref: '#/components/schemas/Profile'
           
-  /index/contacts/{contactId}/data:
+  /contact/cards/{cardId}/data:
     get:
       tags:
-        - index
-      description: Get data of contact entry
-      operationId: get-index-data
+        - contact
+      description: Get data of card entry
+      operationId: get-contact-data
       security:
         - bearerAuth: []
       parameters:
-        - name: contactId
+        - name: cardId
           in: path
-          description: specified contact id 
+          description: specified card id 
           required: true
           schema:
             type: string
@@ -1704,7 +1738,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ContactData'
+                $ref: '#/components/schemas/cardData'
         '401':
           description: invalid password
         '404':
@@ -1712,18 +1746,18 @@ paths:
         '500':
           description: internal server error
           
-  /index/contacts/{contactId}/notes:
+  /contact/cards/{cardId}/notes:
     put:
       tags:
-        - index
-      description: Update contact notes
-      operationId: set-index-contact-notes
+        - contact
+      description: Update card notes
+      operationId: set-contact-card-notes
       security:
         - bearerAuth: []
       parameters:
-        - name: contactId
+        - name: cardId
           in: path
-          description: specified contact id 
+          description: specified card id 
           required: true
           schema:
             type: string
@@ -1733,7 +1767,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ContactData'
+                $ref: '#/components/schemas/cardData'
         '401':
           description: invalid password
         '404':
@@ -1747,15 +1781,15 @@ paths:
               type: string
     delete:
       tags:
-        - index
-      description: Clear contact notes
-      operationId: clear-index-contact-notes
+        - contact
+      description: Clear card notes
+      operationId: clear-contact-card-notes
       security:
         - bearerAuth: []
       parameters:
-        - name: contactId
+        - name: cardId
           in: path
-          description: specified contact id 
+          description: specified card id 
           required: true
           schema:
             type: string
@@ -1765,7 +1799,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ContactData'
+                $ref: '#/components/schemas/cardData'
         '401':
           description: invalid password
         '404':
@@ -1773,18 +1807,18 @@ paths:
         '500':
           description: internal server error
             
-  /index/contacts/{contactId}/shares/{shareId}:
+  /contact/cards/{cardId}/shares/{shareId}:
     put:
       tags:
-        - index
-      description: Update contact notes
-      operationId: set-index-contact-share
+        - contact
+      description: Update card notes
+      operationId: set-contact-card-share
       security:
         - bearerAuth: []
       parameters:
-        - name: contactId
+        - name: cardId
           in: path
-          description: specified contact id 
+          description: specified card id 
           required: true
           schema:
             type: string
@@ -1800,7 +1834,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ContactData'
+                $ref: '#/components/schemas/cardData'
         '401':
           description: invalid password
         '404':
@@ -1809,15 +1843,15 @@ paths:
           description: internal server error
     delete:
       tags:
-        - index
-      description: Clear contact share group
-      operationId: clear-index-contact-share
+        - contact
+      description: Clear card share group
+      operationId: clear-contact-card-share
       security:
         - bearerAuth: []
       parameters:
-        - name: contactId
+        - name: cardId
           in: path
-          description: specified contact id 
+          description: specified card id 
           required: true
           schema:
             type: string
@@ -1833,7 +1867,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ContactData'
+                $ref: '#/components/schemas/cardData'
         '401':
           description: invalid password
         '404':
@@ -1841,12 +1875,12 @@ paths:
         '500':
           description: internal server error
           
-  /index/blocked:
+  /contact/blocked:
     get:
       tags:
-        - index
-      description: Get list of blocked contacts
-      operationId: get-index-blocked-contacts
+        - contact
+      description: Get list of blocked cards
+      operationId: get-contact-blocked-cards
       security:
         - bearerAuth: []
       responses:
@@ -1865,18 +1899,18 @@ paths:
         '500':
           description: internal server error
           
-  /index/blocked/{contactId}:
+  /contact/blocked/{cardId}:
     post:
       tags:
-        - index
-      description: Add contact from blocked list
-      operationId: add-index-blocked-contact
+        - contact
+      description: Add card from blocked list
+      operationId: add-contact-blocked-card
       security:
         - bearerAuth: []
       parameters:
-        - name: contactId
+        - name: cardId
           in: path
-          description: specified contact id 
+          description: specified card id 
           required: true
           schema:
             type: string
@@ -1891,15 +1925,15 @@ paths:
           description: internal server error
     delete:
       tags:
-        - index
-      description: Remove contact from blocked list
-      operationId: remove-index-blocked-contact
+        - contact
+      description: Remove card from blocked list
+      operationId: remove-contact-blocked-card
       security:
         - bearerAuth: []
       parameters:
-        - name: contactId
+        - name: cardId
           in: path
-          description: specified contact id 
+          description: specified card id 
           required: true
           schema:
             type: string
@@ -1913,11 +1947,11 @@ paths:
         '500':
           description: internal server error
           
-  /index/profile/revision:
+  /contact/profile/revision:
     put:
       tags:
-        - index
-      description: Hook receiver for contact profile revision updates
+        - contact
+      description: Hook receiver for card profile revision updates
       operationId: revision-profile-hook
       security:
         - bearerAuth: []
@@ -1935,11 +1969,11 @@ paths:
               type: integer
               format: int64
         
-  /index/content/revision:
+  /contact/content/revision:
     put:
       tags:
-        - index
-      description: Hook receiver for contact content revision updates
+        - contact
+      description: Hook receiver for card content revision updates
       operationId: revision-content-hook
       security:
         - bearerAuth: []
@@ -2075,8 +2109,8 @@ paths:
     post:
       tags:
         - conversation
-      description: Assign a contact to have insight into the conversation
-      operationId: add-contact-insight
+      description: Assign a card to have insight into the conversation
+      operationId: add-card-insight
       security:
         - bearerAuth: []
       parameters:
@@ -2088,7 +2122,7 @@ paths:
             type: string
         - name: guid
           in: path
-          description: specified contact id
+          description: specified card id
           required: true
           schema:
             type: string
@@ -2104,8 +2138,8 @@ paths:
     delete:
       tags:
         - conversation
-      description: Remove insight from the specified contact
-      operationId: remove-contact-insight
+      description: Remove insight from the specified card
+      operationId: remove-card-insight
       security:
         - bearerAuth: []
       parameters:
@@ -2117,7 +2151,7 @@ paths:
             type: string
         - name: guid
           in: path
-          description: specified contact id 
+          description: specified card id 
           required: true
           schema:
             type: string
@@ -2189,7 +2223,7 @@ paths:
       parameters:
         - name: guid
           in: path
-          description: id of contact hosting the dialogue
+          description: id of card hosting the dialogue
           required: true
           schema:
             type: string
@@ -2222,7 +2256,7 @@ paths:
       parameters:
         - name: guid
           in: path
-          description: id of contact hosting the dialogue
+          description: id of card hosting the dialogue
           required: true
           schema:
             type: string
@@ -2251,7 +2285,7 @@ paths:
       parameters:
         - name: guid
           in: path
-          description: id of contact hosting the dialogue
+          description: id of card hosting the dialogue
           required: true
           schema:
             type: string
@@ -2274,12 +2308,12 @@ paths:
             schema:
               type: boolean
               
-  /conversation/dialogues/{dialogueId}/thoughtBlocks/view:
+  /conversation/dialogues/{dialogueId}/topicBlocks/view:
     get:
       tags:
         - conversation
       description: Get view of content blocks
-      operationId: get-conversation-thought-block-view
+      operationId: get-conversation-topic-block-view
       security:
         - bearerAuth: []
       parameters:
@@ -2309,12 +2343,12 @@ paths:
         '500':
           description: internal server error
           
-  /conversation/dialogues/{dialogueId}/thoughtBlocks/{blockId}:
+  /conversation/dialogues/{dialogueId}/topicBlocks/{blockId}:
     get:
       tags:
         - conversation
-      description: Get thoughts from specified block in conversation
-      operationId: get-conversation-thought-block
+      description: Get topics from specified block in conversation
+      operationId: get-conversation-topic-block
       security:
         - bearerAuth: []
       parameters:
@@ -2338,18 +2372,18 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Thought'
+                  $ref: '#/components/schemas/Topic'
         '401':
           description: invalid password
         '500':
           description: internal server error
           
-  /conversation/dialogues/{dialogueId}/thoughtBlocks/{blockId}/view:
+  /conversation/dialogues/{dialogueId}/topicBlocks/{blockId}/view:
     get:
       tags:
         - conversation
-      description: Get view thoughts in content block of dialogue
-      operationId: get-conversation-thought-view
+      description: Get view topics in content block of dialogue
+      operationId: get-conversation-topic-view
       security:
         - bearerAuth: []
       parameters:
@@ -2385,12 +2419,12 @@ paths:
         '500':
           description: internal server error
           
-  /conversation/dialogues/{dialogueId}/thoughts:
+  /conversation/dialogues/{dialogueId}/topics:
     post:
       tags:
         - conversation
-      description: Add an content thought to a conversation
-      operationId: add-conversation-thought
+      description: Add an content topic to a conversation
+      operationId: add-conversation-topic
       security:
         - bearerAuth: []
       parameters:
@@ -2413,19 +2447,19 @@ paths:
                   blockRevision:
                     type: integer
                     format: int64
-                  thought:
-                    $ref: '#/components/schemas/Thought'
+                  topic:
+                    $ref: '#/components/schemas/Topic'
         '401':
           description: invalid token
         '500':
           description: internal server error
               
-  /conversation/dialogues/{dialogueId}/thoughts/{thoughtId}:
+  /conversation/dialogues/{dialogueId}/topics/{topicId}:
     get:
       tags:
         - conversation
-      description: Get specified thought in dialogue
-      operationId: get-conversation-thought
+      description: Get specified topic in dialogue
+      operationId: get-conversation-topic
       security:
         - bearerAuth: []
       parameters:
@@ -2435,9 +2469,9 @@ paths:
           required: true
           schema:
             type: string
-        - name: thoughtId
+        - name: topicId
           in: path
-          description: specified thought id 
+          description: specified topic id 
           required: true
           schema:
             type: string
@@ -2447,7 +2481,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Thought'
+                $ref: '#/components/schemas/Topic'
         '401':
           description: invalid password
         '500':
@@ -2455,8 +2489,8 @@ paths:
     delete:
       tags:
         - conversation
-      description: Remove specified thought from conversation
-      operationId: remove-conversation-thought
+      description: Remove specified topic from conversation
+      operationId: remove-conversation-topic
       security:
         - bearerAuth: []
       parameters:
@@ -2466,9 +2500,9 @@ paths:
           required: true
           schema:
             type: string
-        - name: thoughtId
+        - name: topicId
           in: path
-          description: specified thought id 
+          description: specified topic id 
           required: true
           schema:
             type: string
@@ -2480,12 +2514,12 @@ paths:
         '500':
           description: internal server error
   
-  /conversation/dialogues/{dialogueId}/thoughts/{thoughtId}/subject:
+  /conversation/dialogues/{dialogueId}/topics/{topicId}/subject:
     put:
       tags:
         - conversation
-      description: Add an content thought
-      operationId: update-conversation-thought
+      description: Add an content topic
+      operationId: update-conversation-topic
       security:
         - bearerAuth: []
       parameters:
@@ -2495,9 +2529,9 @@ paths:
           required: true
           schema:
             type: string
-        - name: thoughtId
+        - name: topicId
           in: path
-          description: specified thought id 
+          description: specified topic id 
           required: true
           schema:
             type: string
@@ -2522,11 +2556,11 @@ paths:
                 data:
                   type: string
                   
-  /conversation/dialogues/{dialogueId}/{thoughtId}/tagBlocks/{blockId}/view:
+  /conversation/dialogues/{dialogueId}/{topicId}/tagBlocks/{blockId}/view:
     get:
       tags:
         - conversation
-      description: Get view tag blocks in thought
+      description: Get view tag blocks in topic
       operationId: get-conversation-tag-view
       security:
         - bearerAuth: []
@@ -2537,9 +2571,9 @@ paths:
           required: true
           schema:
             type: string
-        - name: thoughtId
+        - name: topicId
           in: path
-          description: specified thought id 
+          description: specified topic id 
           required: true
           schema:
             type: string
@@ -2569,7 +2603,7 @@ paths:
         '500':
           description: internal server error
           
-  /conversation/dialogues/{dialogueId}/thoughts/{thoughtId}/tagBlocks/{blockId}:
+  /conversation/dialogues/{dialogueId}/topics/{topicId}/tagBlocks/{blockId}:
     get:
       tags:
         - conversation
@@ -2584,9 +2618,9 @@ paths:
           required: true
           schema:
             type: string
-        - name: thoughtId
+        - name: topicId
           in: path
-          description: specified thought id 
+          description: specified topic id 
           required: true
           schema:
             type: string
@@ -2616,12 +2650,12 @@ paths:
         '500':
           description: internal server error
           
-  /conversation/dialogues/{dialogueId}/thoughts/{thoughtId}/tags:
+  /conversation/dialogues/{dialogueId}/topics/{topicId}/tags:
     post:
       tags:
         - conversation
-      description: Add an content thought
-      operationId: add-conversation-thought-tag
+      description: Add an content topic
+      operationId: add-conversation-topic-tag
       security:
         - bearerAuth: []
       parameters:
@@ -2631,9 +2665,9 @@ paths:
           required: true
           schema:
             type: string
-        - name: thoughtId
+        - name: topicId
           in: path
-          description: specified thought id 
+          description: specified topic id 
           required: true
           schema:
             type: string
@@ -2657,12 +2691,12 @@ paths:
         '500':
           description: internal server error
               
-  /conversation/dialogues/{dialogueId}/thoughts/{thoughtId}/tags/{tagId}:
+  /conversation/dialogues/{dialogueId}/topics/{topicId}/tags/{tagId}:
     get:
       tags:
         - conversation
-      description: Add an content thought
-      operationId: get-thought-tag
+      description: Add an content topic
+      operationId: get-topic-tag
       security:
         - bearerAuth: []
       parameters:
@@ -2672,9 +2706,9 @@ paths:
           required: true
           schema:
             type: string
-        - name: thoughtId
+        - name: topicId
           in: path
-          description: specified thought id 
+          description: specified topic id 
           required: true
           schema:
             type: string
@@ -2700,8 +2734,8 @@ paths:
     delete:
       tags:
         - conversation
-      description: Remove conversation thought tag
-      operationId: remove-conversation-thought-tag
+      description: Remove conversation topic tag
+      operationId: remove-conversation-topic-tag
       security:
         - bearerAuth: []
       parameters:
@@ -2711,9 +2745,9 @@ paths:
           required: true
           schema:
             type: string
-        - name: thoughtId
+        - name: topicId
           in: path
-          description: specified thought id 
+          description: specified topic id 
           required: true
           schema:
             type: string
@@ -2733,12 +2767,13 @@ paths:
         '500':
           description: internal server error
               
-  /conversation/dialogues/{dialogueId}/thoughts/{thoughtId}/assets:
+  /conversation/dialogues/{dialogueId}/topics/{topicId}/assets:
     get:
       tags:
         - conversation
-      description: Get assets attached to thought
-      operationId: get-conversation-thought-assets
+      description: |
+        Get all assets associated with the specified topic.
+      operationId: get-topic-assets
       security:
         - bearerAuth: []
       parameters:
@@ -2748,15 +2783,15 @@ paths:
           required: true
           schema:
             type: string
-        - name: thoughtId
+        - name: topicId
           in: path
-          description: specified thought id 
+          description: specified topic id 
           required: true
           schema:
             type: string
       responses:
         '201':
-          description: entry created
+          description: success
           content:
             application/json:
               schema:
@@ -2764,14 +2799,19 @@ paths:
                 items:
                   $ref: '#/components/schemas/Asset'
         '401':
-          description: invalid token
+          description: permission denied
+        '404':
+          description: topic or dialogue not found
         '500':
           description: internal server error
     post:
       tags:
         - conversation
-      description: Add an conversation thought asset
-      operationId: add-conversation-thought-asset
+      description: |
+        Add an asset to a topic. The asset will be processed and transcoded according
+        to the specified transformation. Only the author of the topic can invoke
+        this endpoint.
+      operationId: add-topic-asset
       security:
         - bearerAuth: []
       parameters:
@@ -2781,9 +2821,9 @@ paths:
           required: true
           schema:
             type: string
-        - name: thoughtId
+        - name: topicId
           in: path
-          description: specified thought id 
+          description: specified topic id 
           required: true
           schema:
             type: string
@@ -2797,13 +2837,15 @@ paths:
               type: string
       responses:
         '201':
-          description: entry created
+          description: success
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Asset'
         '401':
-          description: invalid token
+          description: permission denied
+        '404':
+          description: topic or dialogue not found
         '500':
           description: internal server error
       requestBody:
@@ -2816,12 +2858,15 @@ paths:
                   type: string
                   format: binary
           
-  /conversatin/dialogues/{dialogueId}/thoughts/{thoughtId}/assets/{assetId}:
+  /conversation/dialogues/{dialogueId}/topics/{topicId}/assets/{assetId}:
     get:
       tags:
         - conversation
-      description: Get asset attached to thought
-      operationId: get-conversation-thought-asset
+      description: |
+        Retrieve an asset associated with a topic. All transformed assets 
+        can be retrieved by anyone with access to the topic, but the original
+        asset can only be retrieved by the author of the topic.
+      operationId: get-topic-asset
       security:
         - bearerAuth: []
       parameters:
@@ -2831,9 +2876,9 @@ paths:
           required: true
           schema:
             type: string
-        - name: thoughtId
+        - name: topicId
           in: path
-          description: specified thought id 
+          description: specified topic id 
           required: true
           schema:
             type: string
@@ -2845,25 +2890,25 @@ paths:
             type: string
       responses:
         '200':
-          description: thought attachment
+          description: success
           content:
             application/octet-stream: #asset specific
               schema:
                 type: string
                 format: binary
         '401':
-          description: invalid token
+          description: permission denied
         '404':
-          description: asset not found
+          description: asset, topic or dialogue not found
         '500':
           description: internal server error
-          
-  /conversation/dialogues/{dialogueId}/thoughts/{thoughtId}/confirmed:
-    put:
+    delete:
       tags:
         - conversation
-      description: set confirmed state of conversation thought
-      operationId: set-conversation-thought-confirmed
+      description: |
+        Remove and delete an asset associated with a topic. Only the author of
+        the topic can invoke this endpoint.
+      operationId: remove-topic-asset
       security:
         - bearerAuth: []
       parameters:
@@ -2873,19 +2918,59 @@ paths:
           required: true
           schema:
             type: string
-        - name: thoughtId
+        - name: topicId
           in: path
-          description: specified thought id 
+          description: specified topic id 
+          required: true
+          schema:
+            type: string
+        - name: assetId
+          in: path
+          description: specified asset id 
           required: true
           schema:
             type: string
       responses:
         '200':
-          description: entry set
+          description: success
         '401':
-          description: invalid token
+          description: permission denied
         '404':
-          description: thought not found
+          description: asset, topic or dialogue not found
+        '500':
+          description: internal server error
+          
+  /conversation/dialogues/{dialogueId}/topics/{topicId}/confirmed:
+    put:
+      tags:
+        - conversation
+      description: |
+        After the assets have been uploaded and the subject has been set, the topic 
+        should be set to confirmed (true) to make the topic available to others. Only the
+        author of the topic can invoke this endpoint.
+      operationId: set-topic-confirmed
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: dialogueId
+          in: path
+          description: specified dialogue id
+          required: true
+          schema:
+            type: string
+        - name: topicId
+          in: path
+          description: specified topic id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success
+        '401':
+          description: permission denied
+        '404':
+          description: topic or dialogue not found
         '500':
           description: internal server error
       requestBody:
@@ -2917,7 +3002,7 @@ components:
         - content
         - labels
         - sharing
-        - contact
+        - card
         - blocked
         - dialogue
         - insight
@@ -2934,7 +3019,7 @@ components:
         sharing:
           type: integer
           format: int64
-        contact:
+        card:
           type: integer
           format: int64
         dialogue:
@@ -3012,17 +3097,17 @@ components:
           type: string
           format: base64 encoded image
           
-    ContactView:
+    cardView:
       type: object
       required:
         - guid
         - profileRevision
         - contentRevision
-        - contactRevision
+        - cardRevision
       properties:
         guid:
           type: string
-        contactRevision:
+        cardRevision:
           type: integer
           format: int64
         profileRevision:
@@ -3035,7 +3120,7 @@ components:
           type: integer
           format: int64
           
-    ContactProfile:
+    cardProfile:
       type: object
       required:
         - node
@@ -3056,7 +3141,7 @@ components:
         node:
           type: string
           
-    ContactData:
+    cardData:
       type: object
       required:
         - status
@@ -3076,7 +3161,7 @@ components:
           items:
             type: string
           
-    ContactStatus:
+    cardStatus:
       type: object
       required:
         - status
@@ -3087,18 +3172,18 @@ components:
         token:
           type: string
           
-    Contact:
+    card:
       type: object
       required:
-        - contactProfile
-        - contactData
+        - cardProfile
+        - cardData
         - contentRevision
         - conversationRevision
       properties:
-        contactProfile:
-          $ref: '#/components/schemas/ContactProfile'
-        contactData:
-          $ref: '#/components/schemas/ContactData'
+        cardProfile:
+          $ref: '#/components/schemas/cardProfile'
+        cardData:
+          $ref: '#/components/schemas/cardData'
         contentRevision:
           type: integer
           format: int64
@@ -3199,10 +3284,10 @@ components:
                 type: string
                 enum: [ synced, unsynced ]
           
-    Thought:
+    Topic:
       type: object
       required:
-        - thoughtId
+        - topicId
         - revision
         - status
         - subject
@@ -3283,7 +3368,7 @@ components:
         - tagUpdated
         - tagRevision
       properties:
-        thoughtId:
+        topicId:
           type: string
         guid:
           type: string
@@ -3349,11 +3434,10 @@ components:
         - profile
         - token
         - contentRevision
-        - conversationRevision
       properties:
-        requestorId:
+        requestorGuid:
           type: string
-        requestedId:
+        requestedGuid:
           type: string
         timestamp: 
           type: integer
@@ -3363,9 +3447,6 @@ components:
         token:
           type: string
         contentRevision:
-          type: integer
-          format: int64
-        conversationRevision:
           type: integer
           format: int64
           
