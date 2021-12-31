@@ -6,7 +6,6 @@ info:
     conversations.
   version: "0.0.1"
   title: DataBag
-  termsOfService: 'http://swagger.io/terms/'
   contact:
     email: roland.osborne@gmail.com
   license:
@@ -26,22 +25,24 @@ tags:
   - name: share
     description: access control for personal subjects, associates content and cards
     
+  - name: contact
+    description: connection to other identities, hook receiver
   - name: content
     description: posting and listing of personal subjects, group and tag managment
     
-  - name: contact
-    description: connection to other identities, hook receiver
   - name: converstaion
     description: group sharing of subjects
     
 paths:
 
-  # prefix for bearer tokens types
-  # app: app_
-  # card: cnt_
-  # pass code: pas_
-  # account reset: res_
-  # account create: act_
+  # Concetps:
+  ## access tokens for bearer auth:prefix for bearer tokens types
+  ### app: app_
+  ### contact: cnt_
+  ### pass code: pas_
+  ### account reset: res_
+  ### account create: act_
+  ## subject based content provides external definition of datatypes
 
   /revision:
     get:
@@ -643,764 +644,6 @@ paths:
         '500':
           description: internal server error
           
-  /content/articleBlocks/view:
-    get:
-      tags:
-        - content
-      description: Get view of content blocks
-      operationId: get-article-block-view
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: string
-                    revision:
-                      type: integer
-                      format: int64
-        '401':
-          description: invalid password
-        '500':
-          description: internal server error
-          
-  /content/articleBlocks/{blockId}:
-    get:
-      tags:
-        - content
-      description: Get articles from specified block
-      operationId: get-article-block
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: blockId
-          in: path
-          description: specified group id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Article'
-        '401':
-          description: invalid password
-        '500':
-          description: internal server error
-          
-  /content/articleBlocks/{blockId}/view:
-    get:
-      tags:
-        - content
-      description: Get view articles in content block
-      operationId: get-article-view
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: blockId
-          in: path
-          description: specified group id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: string
-                    revision:
-                      type: integer
-                      format: int64
-        '401':
-          description: invalid password
-        '500':
-          description: internal server error
-          
-  /content/articles:
-    post:
-      tags:
-        - content
-      description: Add an content article
-      operationId: add-article
-      security:
-        - bearerAuth: []
-      responses:
-        '201':
-          description: entry created
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  blockId:
-                    type: string
-                  blockRevision:
-                    type: integer
-                    format: int64
-                  article:
-                    $ref: '#/components/schemas/Article'
-        '401':
-          description: invalid token
-        '500':
-          description: internal server error
-              
-  /content/articles/{articleId}:
-    get:
-      tags:
-        - content
-      description: Get specified article
-      operationId: get-article
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: articleId
-          in: path
-          description: specified article id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Article'
-        '401':
-          description: invalid password
-        '500':
-          description: internal server error
-    delete:
-      tags:
-        - content
-      description: Remove specified article
-      operationId: remove-article
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: articleId
-          in: path
-          description: specified article id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: successful operation
-        '401':
-          description: invalid password
-        '500':
-          description: internal server error
-  
-  /content/articles/{articleId}/subject:
-    put:
-      tags:
-        - content
-      description: Add an content article
-      operationId: update-content-article
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: articleId
-          in: path
-          description: specified article id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '201':
-          description: entry created
-        '401':
-          description: invalid token
-        '500':
-          description: internal server error
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - type
-                - data
-              properties:
-                type:
-                  type: string
-                data:
-                  type: string
-                  
-  /content/articles/{articleId}/groups/{groupId}:
-    post:
-      tags:
-        - content
-      description: set sharing group for article
-      operationId: set-article-group
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: articleId
-          in: path
-          description: specified article id 
-          required: true
-          schema:
-            type: string
-        - name: groupId
-          in: path
-          description: specified share group id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: entry set
-        '401':
-          description: invalid token
-        '500':
-          description: internal server error
-    delete:
-      tags:
-        - content
-      description: clear sharing group for article
-      operationId: clear-article-group
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: articleId
-          in: path
-          description: specified article id 
-          required: true
-          schema:
-            type: string
-        - name: groupId
-          in: path
-          description: specified share id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: entry removed
-        '401':
-          description: invalid token
-        '500':
-          description: internal server error
-  
-  /content/articles/{articleId}/labels/{labelId}:
-    post:
-      tags:
-        - content
-      description: set orginizational label for article
-      operationId: set-article-label
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: articleId
-          in: path
-          description: specified article id 
-          required: true
-          schema:
-            type: string
-        - name: labelId
-          in: path
-          description: specified label id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: entry set
-        '401':
-          description: invalid token
-        '500':
-          description: internal server error
-    delete:
-      tags:
-        - content
-      description: clear orginizationl label for article
-      operationId: clear-article-label
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: articleId
-          in: path
-          description: specified article id 
-          required: true
-          schema:
-            type: string
-        - name: labelId
-          in: path
-          description: specified label id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: entry cleared
-        '401':
-          description: invalid token
-        '500':
-          description: internal server error
-          
-  /content/articles/{articleId}/tagBlocks/{blockId}/view:
-    get:
-      tags:
-        - content
-      description: Get view tag blocks in article
-      operationId: get-tag-view
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: articleId
-          in: path
-          description: specified article id 
-          required: true
-          schema:
-            type: string
-        - name: blockId
-          in: path
-          description: specified block id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: string
-                    revision:
-                      type: integer
-                      format: int64
-        '401':
-          description: invalid password
-        '500':
-          description: internal server error
-          
-  /content/articles/{articleId}/tagBlocks/{blockId}:
-    get:
-      tags:
-        - content
-      description: Get tags from specified block
-      operationId: get-tag-block
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: articleId
-          in: path
-          description: specified article id 
-          required: true
-          schema:
-            type: string
-        - name: blockId
-          in: path
-          description: specified block id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: string
-                    revision:
-                      type: integer
-                      format: int64
-        '401':
-          description: invalid password
-        '500':
-          description: internal server error
-          
-  /content/articles/{articleId}/tags:
-    post:
-      tags:
-        - content
-      description: Add an content article
-      operationId: add-article-tag
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: articleId
-          in: path
-          description: specified article id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '201':
-          description: entry created
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  blockId:
-                    type: string
-                  blockRevision:
-                    type: integer
-                    format: int64
-                  tag:
-                    $ref: '#/components/schemas/Tag'
-        '401':
-          description: invalid token
-        '500':
-          description: internal server error
-              
-  /content/articles/{articleId}/tags/{tagId}:
-    get:
-      tags:
-        - content
-      description: Add an content article
-      operationId: get-article-tag
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: articleId
-          in: path
-          description: specified article id 
-          required: true
-          schema:
-            type: string
-        - name: tagId
-          in: path
-          description: specified tag id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '201':
-          description: entry created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Tag'
-        '401':
-          description: invalid token
-        '404':
-          description: tag not found
-        '500':
-          description: internal server error
-    delete:
-      tags:
-        - content
-      description: Add an content article
-      operationId: remove-article-tag
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: articleId
-          in: path
-          description: specified article id 
-          required: true
-          schema:
-            type: string
-        - name: tagId
-          in: path
-          description: specified tag id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: entry removed
-        '401':
-          description: invalid token
-        '404':
-          description: tag not found
-        '500':
-          description: internal server error
-              
-  /content/articles/{articleId}/assets:
-    get:
-      tags:
-        - content
-      description: Get assets attached to article
-      operationId: get-article-assets
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: articleId
-          in: path
-          description: specified article id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '201':
-          description: entry created
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Asset'
-        '401':
-          description: invalid token
-        '500':
-          description: internal server error
-    post:
-      tags:
-        - content
-      description: Add an content article
-      operationId: add-article-asset
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: articleId
-          in: path
-          description: specified article id 
-          required: true
-          schema:
-            type: string
-        - name: transforms
-          in: query
-          description: transforms to apply
-          required: false
-          schema:
-            type: array
-            items:
-              type: string
-      responses:
-        '201':
-          description: entry created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Asset'
-        '401':
-          description: invalid token
-        '500':
-          description: internal server error
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              type: object
-              properties:
-                fileName:
-                  type: string
-                  format: binary
-          
-  /content/articles/{articleId}/assets/{assetId}:
-    get:
-      tags:
-        - content
-      description: Get asset attached to article
-      operationId: get-article-asset
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: articleId
-          in: path
-          description: specified article id 
-          required: true
-          schema:
-            type: string
-        - name: assetId
-          in: path
-          description: specified asset id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: article attachment
-          content:
-            application/octet-stream: #asset specific
-              schema:
-                type: string
-                format: binary
-        '401':
-          description: invalid token
-        '404':
-          description: asset not found
-        '500':
-          description: internal server error
-    delete:
-      tags:
-        - content
-      description: Remove asset attached to article
-      operationId: remove-article-asset
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: articleId
-          in: path
-          description: specified article id 
-          required: true
-          schema:
-            type: string
-        - name: assetId
-          in: path
-          description: specified asset id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: article attachment
-          content:
-            application/octet-stream: #asset specific
-              schema:
-                type: string
-                format: binary
-        '401':
-          description: invalid token
-        '404':
-          description: asset not found
-        '500':
-          description: internal server error
-          
-  /content/articles/{articleId}/confirmed:
-    put:
-      tags:
-        - content
-      description: set confirmed state of article
-      operationId: set-article-confirmed
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: articleId
-          in: path
-          description: specified article id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: entry set
-        '401':
-          description: invalid token
-        '404':
-          description: article not found
-        '500':
-          description: internal server error
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: boolean
-          
-  /content/labels:
-    get:
-      tags:
-        - content
-      description: Get labels for organization
-      operationId: get-content-labels
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Label'
-        '401':
-          description: invalid token
-        '500':
-          description: internal server error
-    post:
-      tags:
-        - content
-      description: Add a label for organization
-      operationId: add-content-label
-      security:
-        - bearerAuth: []
-      responses:
-        '201':
-          description: entry created
-        '401':
-          description: invalid token
-        '500':
-          description: internal server error
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: string
-          
-  /content/labels/{labelId}:
-    put:
-      tags:
-        - content
-      description: Update label for organization
-      operationId: update-content-label
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: labelId
-          in: path
-          description: specified group id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: successful operation
-        '401':
-          description: invalid token
-        '500':
-          description: internal server error
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: string
-    delete:
-      tags:
-        - content
-      description: Remove organizational label
-      operationId: remove-content-label
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: labelId
-          in: path
-          description: specified label id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: successful operation
-        '401':
-          description: invalid token
-        '500':
-          description: internal server error
-          
   /contact/cards:
     post:
       tags:
@@ -1991,6 +1234,799 @@ paths:
               type: integer
               format: int64
               
+  /content/articleBlocks/view:
+    get:
+      tags:
+        - content
+      description: Get view of content blocks
+      operationId: get-article-block-view
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    revision:
+                      type: integer
+                      format: int64
+        '401':
+          description: invalid password
+        '500':
+          description: internal server error
+          
+  /content/articleBlocks/{blockId}:
+    get:
+      tags:
+        - content
+      description: Get articles from specified block
+      operationId: get-article-block
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: blockId
+          in: path
+          description: specified group id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Article'
+        '401':
+          description: invalid password
+        '500':
+          description: internal server error
+          
+  /content/articleBlocks/{blockId}/view:
+    get:
+      tags:
+        - content
+      description: Get view articles in content block
+      operationId: get-article-view
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: blockId
+          in: path
+          description: specified group id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    revision:
+                      type: integer
+                      format: int64
+        '401':
+          description: invalid password
+        '500':
+          description: internal server error
+          
+  /content/articles:
+    post:
+      tags:
+        - content
+      description: Add an content article
+      operationId: add-article
+      security:
+        - bearerAuth: []
+      responses:
+        '201':
+          description: entry created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  blockId:
+                    type: string
+                  blockRevision:
+                    type: integer
+                    format: int64
+                  article:
+                    $ref: '#/components/schemas/Article'
+        '401':
+          description: invalid token
+        '500':
+          description: internal server error
+              
+  /content/articles/{articleId}:
+    get:
+      tags:
+        - content
+      description: Get specified article
+      operationId: get-article
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: articleId
+          in: path
+          description: specified article id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Article'
+        '401':
+          description: invalid password
+        '500':
+          description: internal server error
+    delete:
+      tags:
+        - content
+      description: Remove specified article
+      operationId: remove-article
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: articleId
+          in: path
+          description: specified article id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+        '401':
+          description: invalid password
+        '500':
+          description: internal server error
+  
+  /content/articles/{articleId}/subject:
+    put:
+      tags:
+        - content
+      description: Add an content article
+      operationId: update-content-article
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: articleId
+          in: path
+          description: specified article id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: entry created
+        '401':
+          description: invalid token
+        '500':
+          description: internal server error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - type
+                - data
+              properties:
+                type:
+                  type: string
+                data:
+                  type: string
+                  
+  /content/articles/{articleId}/groups/{groupId}:
+    post:
+      tags:
+        - content
+      description: set sharing group for article
+      operationId: set-article-group
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: articleId
+          in: path
+          description: specified article id 
+          required: true
+          schema:
+            type: string
+        - name: groupId
+          in: path
+          description: specified share group id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: entry set
+        '401':
+          description: invalid token
+        '500':
+          description: internal server error
+    delete:
+      tags:
+        - content
+      description: clear sharing group for article
+      operationId: clear-article-group
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: articleId
+          in: path
+          description: specified article id 
+          required: true
+          schema:
+            type: string
+        - name: groupId
+          in: path
+          description: specified share id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: entry removed
+        '401':
+          description: invalid token
+        '500':
+          description: internal server error
+  
+  /content/articles/{articleId}/labels/{labelId}:
+    post:
+      tags:
+        - content
+      description: set orginizational label for article
+      operationId: set-article-label
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: articleId
+          in: path
+          description: specified article id 
+          required: true
+          schema:
+            type: string
+        - name: labelId
+          in: path
+          description: specified label id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: entry set
+        '401':
+          description: invalid token
+        '500':
+          description: internal server error
+    delete:
+      tags:
+        - content
+      description: clear orginizationl label for article
+      operationId: clear-article-label
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: articleId
+          in: path
+          description: specified article id 
+          required: true
+          schema:
+            type: string
+        - name: labelId
+          in: path
+          description: specified label id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: entry cleared
+        '401':
+          description: invalid token
+        '500':
+          description: internal server error
+          
+  /content/articles/{articleId}/tagBlocks/view:
+    get:
+      tags:
+        - content
+      description: Get view tag blocks in article
+      operationId: get-article-tag-block-view
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: articleId
+          in: path
+          description: specified article id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    revision:
+                      type: integer
+                      format: int64
+        '401':
+          description: invalid password
+        '500':
+          description: internal server error
+          
+  /content/articles/{articleId}/tagBlocks/{blockId}/view:
+    get:
+      tags:
+        - content
+      description: Get view tag blocks in article
+      operationId: get-tag-view
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: articleId
+          in: path
+          description: specified article id 
+          required: true
+          schema:
+            type: string
+        - name: blockId
+          in: path
+          description: specified block id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    revision:
+                      type: integer
+                      format: int64
+        '401':
+          description: invalid password
+        '500':
+          description: internal server error
+          
+  /content/articles/{articleId}/tagBlocks/{blockId}:
+    get:
+      tags:
+        - content
+      description: Get tags from specified block
+      operationId: get-tag-block
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: articleId
+          in: path
+          description: specified article id 
+          required: true
+          schema:
+            type: string
+        - name: blockId
+          in: path
+          description: specified block id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    revision:
+                      type: integer
+                      format: int64
+        '401':
+          description: invalid password
+        '500':
+          description: internal server error
+          
+  /content/articles/{articleId}/tags:
+    post:
+      tags:
+        - content
+      description: Add an content article
+      operationId: add-article-tag
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: articleId
+          in: path
+          description: specified article id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: entry created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  blockId:
+                    type: string
+                  blockRevision:
+                    type: integer
+                    format: int64
+                  tag:
+                    $ref: '#/components/schemas/Tag'
+        '401':
+          description: invalid token
+        '500':
+          description: internal server error
+              
+  /content/articles/{articleId}/tags/{tagId}:
+    get:
+      tags:
+        - content
+      description: Add an content article
+      operationId: get-article-tag
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: articleId
+          in: path
+          description: specified article id 
+          required: true
+          schema:
+            type: string
+        - name: tagId
+          in: path
+          description: specified tag id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: entry created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tag'
+        '401':
+          description: invalid token
+        '404':
+          description: tag not found
+        '500':
+          description: internal server error
+    delete:
+      tags:
+        - content
+      description: Add an content article
+      operationId: remove-article-tag
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: articleId
+          in: path
+          description: specified article id 
+          required: true
+          schema:
+            type: string
+        - name: tagId
+          in: path
+          description: specified tag id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: entry removed
+        '401':
+          description: invalid token
+        '404':
+          description: tag not found
+        '500':
+          description: internal server error
+              
+  /content/articles/{articleId}/assets:
+    get:
+      tags:
+        - content
+      description: Get assets attached to article
+      operationId: get-article-assets
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: articleId
+          in: path
+          description: specified article id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: entry created
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Asset'
+        '401':
+          description: invalid token
+        '500':
+          description: internal server error
+    post:
+      tags:
+        - content
+      description: Add an content article
+      operationId: add-article-asset
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: articleId
+          in: path
+          description: specified article id 
+          required: true
+          schema:
+            type: string
+        - name: transforms
+          in: query
+          description: transforms to apply
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        '201':
+          description: entry created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Asset'
+        '401':
+          description: invalid token
+        '500':
+          description: internal server error
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                fileName:
+                  type: string
+                  format: binary
+          
+  /content/articles/{articleId}/assets/{assetId}:
+    get:
+      tags:
+        - content
+      description: Get asset attached to article
+      operationId: get-article-asset
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: articleId
+          in: path
+          description: specified article id 
+          required: true
+          schema:
+            type: string
+        - name: assetId
+          in: path
+          description: specified asset id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: article attachment
+          content:
+            application/octet-stream: #asset specific
+              schema:
+                type: string
+                format: binary
+        '401':
+          description: invalid token
+        '404':
+          description: asset not found
+        '500':
+          description: internal server error
+    delete:
+      tags:
+        - content
+      description: Remove asset attached to article
+      operationId: remove-article-asset
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: articleId
+          in: path
+          description: specified article id 
+          required: true
+          schema:
+            type: string
+        - name: assetId
+          in: path
+          description: specified asset id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: article attachment
+          content:
+            application/octet-stream: #asset specific
+              schema:
+                type: string
+                format: binary
+        '401':
+          description: invalid token
+        '404':
+          description: asset not found
+        '500':
+          description: internal server error
+          
+  /content/articles/{articleId}/confirmed:
+    put:
+      tags:
+        - content
+      description: set confirmed state of article
+      operationId: set-article-confirmed
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: articleId
+          in: path
+          description: specified article id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: entry set
+        '401':
+          description: invalid token
+        '404':
+          description: article not found
+        '500':
+          description: internal server error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: boolean
+          
+  /content/labels:
+    get:
+      tags:
+        - content
+      description: Get labels for organization
+      operationId: get-content-labels
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Label'
+        '401':
+          description: invalid token
+        '500':
+          description: internal server error
+    post:
+      tags:
+        - content
+      description: Add a label for organization
+      operationId: add-content-label
+      security:
+        - bearerAuth: []
+      responses:
+        '201':
+          description: entry created
+        '401':
+          description: invalid token
+        '500':
+          description: internal server error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+          
+  /content/labels/{labelId}:
+    put:
+      tags:
+        - content
+      description: Update label for organization
+      operationId: update-content-label
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: labelId
+          in: path
+          description: specified group id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+        '401':
+          description: invalid token
+        '500':
+          description: internal server error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+    delete:
+      tags:
+        - content
+      description: Remove organizational label
+      operationId: remove-content-label
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: labelId
+          in: path
+          description: specified label id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+        '401':
+          description: invalid token
+        '500':
+          description: internal server error
+              
   # /conversation/dialogues/{dialogueId}/sync - s
   # /conversation/dialogues/{dialogueId}/insights/{guid} - a,d
   # /conversation/insights/{dialogueId} a,d
@@ -2279,7 +2315,7 @@ paths:
       tags:
         - conversation
       description: Change active state of insight
-      operationId: update-insight-active
+      operationId: set-insight-active
       security:
         - bearerAuth: []
       parameters:
@@ -2297,9 +2333,11 @@ paths:
             type: string
       responses:
         '200':
-          description: revision set
+          description: success
         '401':
-          description: not authorized
+          description: permission denied
+        '404':
+          description: dialogue or guid not found
         '500':
           description: internal server error
       requestBody:
@@ -2312,8 +2350,8 @@ paths:
     get:
       tags:
         - conversation
-      description: Get view of content blocks
-      operationId: get-conversation-topic-block-view
+      description: Get a view of the topicBlocks within a dialogue. Authorization granted to account holder app token or dialogue member contact token who is also a member of the dialogue
+      operationId: get-topic-block-view
       security:
         - bearerAuth: []
       parameters:
@@ -2325,7 +2363,7 @@ paths:
             type: string
       responses:
         '200':
-          description: successful operation
+          description: success
           content:
             application/json:
               schema:
@@ -2339,7 +2377,9 @@ paths:
                       type: integer
                       format: int64
         '401':
-          description: invalid password
+          description: permission denied
+        '404':
+          description: dialogue not found
         '500':
           description: internal server error
           
@@ -2347,8 +2387,8 @@ paths:
     get:
       tags:
         - conversation
-      description: Get topics from specified block in conversation
-      operationId: get-conversation-topic-block
+      description: Get the topics within a topicBlock. Only the account holder and the topic creator will retrieve pending topics. Authorization granted to account holder app token or dialogue member contact token who is also a member of the dialogue
+      operationId: get-topic-block
       security:
         - bearerAuth: []
       parameters:
@@ -2374,7 +2414,9 @@ paths:
                 items:
                   $ref: '#/components/schemas/Topic'
         '401':
-          description: invalid password
+          description: permission denied
+        '404':
+          description: block or dialogue not found
         '500':
           description: internal server error
           
@@ -2382,8 +2424,8 @@ paths:
     get:
       tags:
         - conversation
-      description: Get view topics in content block of dialogue
-      operationId: get-conversation-topic-view
+      description: Get a view of the topics within a topicBlock. Authorization granted to account holder app token or dialogue member contact token who is also a member of the dialogue.
+      operationId: get-topic-view
       security:
         - bearerAuth: []
       parameters:
@@ -2415,7 +2457,9 @@ paths:
                       type: integer
                       format: int64
         '401':
-          description: invalid password
+          description: permission denied
+        '404':
+          description: block or dialogue not found
         '500':
           description: internal server error
           
@@ -2423,8 +2467,8 @@ paths:
     post:
       tags:
         - conversation
-      description: Add an content topic to a conversation
-      operationId: add-conversation-topic
+      description: Add a topic to a dialogue. The response contains the topicBlock ID and topicBlock revision to which the topic is assigned. Authorization granted to account holder app token or dialogue member contact token who is a member of the dialogue.
+      operationId: add-dialogue-topic
       security:
         - bearerAuth: []
       parameters:
@@ -2450,7 +2494,9 @@ paths:
                   topic:
                     $ref: '#/components/schemas/Topic'
         '401':
-          description: invalid token
+          description: permission denied
+        '404':
+          description: dialogue not found
         '500':
           description: internal server error
               
@@ -2458,8 +2504,8 @@ paths:
     get:
       tags:
         - conversation
-      description: Get specified topic in dialogue
-      operationId: get-conversation-topic
+      description: Retrieve a specified dialogue topic. Authorization granted to account holder app token or dialogue member contact token who is a member of the dialogue.
+      operationId: get-dialogue-topic
       security:
         - bearerAuth: []
       parameters:
@@ -2483,14 +2529,16 @@ paths:
               schema:
                 $ref: '#/components/schemas/Topic'
         '401':
-          description: invalid password
+          description: permission denied
+        '404':
+          description: topic or dialogue not found
         '500':
           description: internal server error
     delete:
       tags:
         - conversation
-      description: Remove specified topic from conversation
-      operationId: remove-conversation-topic
+      description: Remove a topic from a dialogue. Authorization granted to account holder app token or dialogue member contact token who is either the topic createor or the account holder.
+      operationId: remove-dialogue-topic
       security:
         - bearerAuth: []
       parameters:
@@ -2510,7 +2558,9 @@ paths:
         '200':
           description: successful operation
         '401':
-          description: invalid password
+          description: permission denied
+        '404':
+          description: topic or dilaogue not found
         '500':
           description: internal server error
   
@@ -2518,8 +2568,8 @@ paths:
     put:
       tags:
         - conversation
-      description: Add an content topic
-      operationId: update-conversation-topic
+      description: Set the subject for a topic. Authorization granted to account holder app token or dialogue member contact token who is also the creator of the topic.
+      operationId: set-topic-subject
       security:
         - bearerAuth: []
       parameters:
@@ -2556,12 +2606,55 @@ paths:
                 data:
                   type: string
                   
+  /conversation/dialogues/{dialogueId}/{topicId}/tagBlocks/view:
+    get:
+      tags:
+        - conversation
+      description: Get a view of all of the tags within a block. Authorization granted to account holder app token or dialogue member contact token who has access to the topic. 
+      operationId: get-topic-tag-block-view
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: dialogueId
+          in: path
+          description: specified dialogue id
+          required: true
+          schema:
+            type: string
+        - name: topicId
+          in: path
+          description: specified topic id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    revision:
+                      type: integer
+                      format: int64
+        '401':
+          description: permission denied
+        '404':
+          description: topic or dialogue not found
+        '500':
+          description: internal server error
+          
   /conversation/dialogues/{dialogueId}/{topicId}/tagBlocks/{blockId}/view:
     get:
       tags:
         - conversation
-      description: Get view tag blocks in topic
-      operationId: get-conversation-tag-view
+      description: Get a view of all of the tags within a block. Authorization granted to account holder app token or dialogue member contact token who has access to the topic. 
+      operationId: get-topic-tag-view
       security:
         - bearerAuth: []
       parameters:
@@ -2599,7 +2692,9 @@ paths:
                       type: integer
                       format: int64
         '401':
-          description: invalid password
+          description: permission denied
+        '404':
+          description: block, topic or dialogue not found
         '500':
           description: internal server error
           
@@ -2607,8 +2702,8 @@ paths:
     get:
       tags:
         - conversation
-      description: Get tags from specified block
-      operationId: get-conversation-tag-block
+      description: Get all of the tags within a tag block. Authorization granted to account holder app token or dialogue member contact token who has access to the topic. 
+      operationId: get-topic-tag-block
       security:
         - bearerAuth: []
       parameters:
@@ -2638,15 +2733,11 @@ paths:
               schema:
                 type: array
                 items:
-                  type: object
-                  properties:
-                    id:
-                      type: string
-                    revision:
-                      type: integer
-                      format: int64
+                  $ref: '#/components/schemas/Tag'
         '401':
-          description: invalid password
+          description: permission denied
+        '404':
+          description: block, topic, or dialogue not found
         '500':
           description: internal server error
           
@@ -2654,7 +2745,7 @@ paths:
     post:
       tags:
         - conversation
-      description: Add an content topic
+      description: Add a tag to specified topic. Authorization granted to account holder app token or dialogue member contact token who has access to the topic. The body of the post contains the subject of the tag, which can have no associated assets.
       operationId: add-conversation-topic-tag
       security:
         - bearerAuth: []
@@ -2687,15 +2778,30 @@ paths:
                   tag:
                     $ref: '#/components/schemas/Tag'
         '401':
-          description: invalid token
+          description: permission denied
+        '404':
+          description: topic or dialogue not found
         '500':
           description: internal server error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - type
+                - data
+              properties:
+                type:
+                  type: string
+                data:
+                  type: string
               
   /conversation/dialogues/{dialogueId}/topics/{topicId}/tags/{tagId}:
     get:
       tags:
         - conversation
-      description: Add an content topic
+      description: Retrieve specified tag on the topic. Authorization granted to account holder app token or dialogue member contact token who has access to the topic.
       operationId: get-topic-tag
       security:
         - bearerAuth: []
@@ -2720,22 +2826,22 @@ paths:
             type: string
       responses:
         '201':
-          description: entry created
+          description: success
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Tag'
         '401':
-          description: invalid token
+          description: permission denied
         '404':
-          description: tag not found
+          description: tag, topic, or dialogue not found
         '500':
           description: internal server error
     delete:
       tags:
         - conversation
-      description: Remove conversation topic tag
-      operationId: remove-conversation-topic-tag
+      description: Remove specified tag from the topic. Authorization granted to account holder app token or dialogue member contact token who has access to the topic.
+      operationId: remove-topic-tag
       security:
         - bearerAuth: []
       parameters:
@@ -2759,11 +2865,11 @@ paths:
             type: string
       responses:
         '200':
-          description: entry removed
+          description: success
         '401':
-          description: invalid token
+          description: permission denied
         '404':
-          description: tag not found
+          description: tag, topic, or dialogue not found
         '500':
           description: internal server error
               
@@ -2771,8 +2877,7 @@ paths:
     get:
       tags:
         - conversation
-      description: |
-        Get all assets associated with the specified topic.
+      description: Get all assets associated with the specified topic. Authorization granted to account holder app token or dialogue member contact token who has access to the topic.
       operationId: get-topic-assets
       security:
         - bearerAuth: []
@@ -2807,10 +2912,7 @@ paths:
     post:
       tags:
         - conversation
-      description: |
-        Add an asset to a topic. The asset will be processed and transcoded according
-        to the specified transformation. Only the author of the topic can invoke
-        this endpoint.
+      description: Add an asset to a topic. The asset will be processed and transcoded according to the specified transformation. Authorization granted to account holder app token or dialogue member contact token who is also the creator of the topic.
       operationId: add-topic-asset
       security:
         - bearerAuth: []
@@ -2862,10 +2964,7 @@ paths:
     get:
       tags:
         - conversation
-      description: |
-        Retrieve an asset associated with a topic. All transformed assets 
-        can be retrieved by anyone with access to the topic, but the original
-        asset can only be retrieved by the author of the topic.
+      description: Retrieve an asset associated with a topic. All transformed assets can be retrieved by anyone with access to the topic, but the original asset can only be retrieved by the author of the topic. Authorization granted to account holder app token or dialogue member contact token who is also the creator of the topic.
       operationId: get-topic-asset
       security:
         - bearerAuth: []
@@ -2905,9 +3004,7 @@ paths:
     delete:
       tags:
         - conversation
-      description: |
-        Remove and delete an asset associated with a topic. Only the author of
-        the topic can invoke this endpoint.
+      description: Remove and delete an asset associated with a topic. Authorization granted to account holder app token or dialogue member contact token who is also the creator of the topic.
       operationId: remove-topic-asset
       security:
         - bearerAuth: []
@@ -2944,11 +3041,7 @@ paths:
     put:
       tags:
         - conversation
-      description: |
-        After the assets have been uploaded and the subject has been set, the topic 
-        should be set to confirmed (true) to make the topic available to others. Only the
-        author of the topic can invoke this endpoint.
-      operationId: set-topic-confirmed
+      description: After the assets have been uploaded and the subject has been set, the topic should be set to confirmed (true) to make the topic available to others. Authorization granted to account holder app token or dialogue member contact token who is also the creator of the topic.
       security:
         - bearerAuth: []
       parameters:
@@ -3500,4 +3593,3 @@ components:
     bearerAuth: 
       type: http
       scheme: bearer
-
