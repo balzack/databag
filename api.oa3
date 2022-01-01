@@ -658,7 +658,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/card'
+                $ref: '#/components/schemas/Card'
         '401':
           description: invalid password
         '404':
@@ -682,7 +682,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/cardView'
+                  $ref: '#/components/schemas/CardView'
         '401':
           description: invalid password
         '500':
@@ -709,7 +709,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/card'
+                $ref: '#/components/schemas/Card'
         '401':
           description: invalid password
         '404':
@@ -767,7 +767,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/cardData'
+                $ref: '#/components/schemas/CardData'
         '401':
           description: invalid password
         '404':
@@ -827,7 +827,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/cardStatus'
+                $ref: '#/components/schemas/CardStatus'
         '401':
           description: invalid password
         '404':
@@ -886,7 +886,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/cardStatus'
+                $ref: '#/components/schemas/CardStatus'
         '401':
           description: invalid password
         '404':
@@ -920,7 +920,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/cardProfile'
+                $ref: '#/components/schemas/CardProfile'
         '401':
           description: invalid password
         '404':
@@ -947,7 +947,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/cardProfile'
+                $ref: '#/components/schemas/CardProfile'
         '401':
           description: invalid password
         '404':
@@ -981,7 +981,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/cardData'
+                $ref: '#/components/schemas/CardData'
         '401':
           description: invalid password
         '404':
@@ -1010,7 +1010,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/cardData'
+                $ref: '#/components/schemas/CardData'
         '401':
           description: invalid password
         '404':
@@ -1042,7 +1042,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/cardData'
+                $ref: '#/components/schemas/CardData'
         '401':
           description: invalid password
         '404':
@@ -1077,7 +1077,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/cardData'
+                $ref: '#/components/schemas/CardData'
         '401':
           description: invalid password
         '404':
@@ -1110,7 +1110,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/cardData'
+                $ref: '#/components/schemas/CardData'
         '401':
           description: invalid password
         '404':
@@ -2049,13 +2049,13 @@ paths:
                 items:
                   $ref: '#/components/schemas/Dialogue'
         '401':
-          description: invalid token
+          description: permission denied
         '500':
           description: internal server error
     post:
       tags:
         - conversation
-      description: Add a new dialogue.
+      description: Create and host a new dialogue. Authroization granted to an app token of the account holder.
       operationId: add-dialogue
       security:
         - bearerAuth: []
@@ -2069,7 +2069,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/Dialogue'
         '401':
-          description: invalid token
+          description: permission denied
         '500':
           description: internal server error
           
@@ -2077,7 +2077,7 @@ paths:
     put:
       tags:
         - conversation
-      description: Set dialogue subject
+      description: Set the subject for a dialogue. Authorization granted the an app token for the account holder.
       operationId: set-dialogue-subject
       security:
         - bearerAuth: []
@@ -2090,11 +2090,11 @@ paths:
             type: string
       responses:
         '201':
-          description: entry created
+          description: success
         '401':
-          description: invalid token
+          description: permission denied
         '404':
-          description: not found
+          description: dialogue not found
         '500':
           description: internal server error
       requestBody:
@@ -2115,7 +2115,7 @@ paths:
     put:
       tags:
         - conversation
-      description: Set dialogue active state
+      description: Set active state of dialogue. If a dialogue is inactive any update to the topics will fail. Authorization is granted to an app token of the account holder.
       operationId: set-dialogue-active
       security:
         - bearerAuth: []
@@ -2130,9 +2130,9 @@ paths:
         '200':
           description: success
         '401':
-          description: invalid token
+          description: permission denied
         '404':
-          description: not found
+          description: dialogue not found
         '500':
           description: internal server error
       requestBody:
@@ -2145,8 +2145,8 @@ paths:
     post:
       tags:
         - conversation
-      description: Assign a card to have insight into the conversation
-      operationId: add-card-insight
+      description: Add insight to a dialogue. This endpoint will automatically invoke the add insight on the contact's node. Authorization is granted to the app token of the account holder. 
+      operationId: add-dialogue-insight
       security:
         - bearerAuth: []
       parameters:
@@ -2164,18 +2164,18 @@ paths:
             type: string
       responses:
         '200':
-          description: entry set
+          description: success
         '401':
-          description: invalid token
+          description: permission denied
         '404':
-          description: id not found
+          description: guid or dialogue not found
         '500':
           description: internal server error
     delete:
       tags:
         - conversation
-      description: Remove insight from the specified card
-      operationId: remove-card-insight
+      description: Remove an insight from a dialogue. This endpoint will authomatically invoke the delete insight endpoint on the contact's node. Authorization is granted to the app token of the accoun holder. 
+      operationId: remove-dialogue-insight
       security:
         - bearerAuth: []
       parameters:
@@ -2193,19 +2193,56 @@ paths:
             type: string
       responses:
         '200':
-          description: entry cleared
+          description: success
         '401':
-          description: invalid token
+          description: permission denied
         '404':
-          description: id not found
+          description: guid or dialogue not found
         '500':
           description: internal server error
+          
+  /conversation/dialogues/{dialogueId}/insight/{guid}/status:
+    put:
+      tags:
+        - conversation
+      description: Set active status for contact on the host node. Access is granted to a contact token for an accound with the specified guid
+      operationId: set-dialogue-insight-active
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: dialogueId
+          in: path
+          description: specified dialogue id 
+          required: true
+          schema:
+            type: string
+        - name: guid
+          in: path
+          description: specified card id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success
+        '401':
+          description: permission denied
+        '404':
+          description: guid or dialogue not found
+        '500':
+          description: internal server error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+              enum: [ active, inactive, dismissed ]
           
   /conversation/dialogues/{dialogueId}:
     delete:
       tags:
         - conversation
-      description: Remove dialogue
+      description: Remove specified dialogue. This endpoint will authomatically invoke the delete insight endpoint on all of the contacts' nodes. Access is granted to an app token for the account holder.
       operationId: remove-dialogue
       security:
         - bearerAuth: []
@@ -2218,11 +2255,11 @@ paths:
             type: string
       responses:
         '200':
-          description: entry removed
+          description: success
         '401':
-          description: invalid token
+          description: permission denied
         '404':
-          description: not found
+          description: dialogue not found
         '500':
           description: internal server error
   
@@ -2230,7 +2267,7 @@ paths:
     get:
       tags:
         - conversation
-      description: Retrieve all insights.
+      description: Retrieve all insights. Access granted to app token for the account holder.
       operationId: get-insights
       security:
         - bearerAuth: []
@@ -2252,8 +2289,8 @@ paths:
     post:
       tags:
         - conversation
-      description: Hook receiver for adding an insight and/or updating the dialog revision
-      operationId: add-insight-hook
+      description: Create or update an insight. Access granted to a contact token for a contact with the specified guid. This endpoint is invoked by the webhook from the contact node.
+      operationId: add-insight-dialogue
       security:
         - bearerAuth: []
       parameters:
@@ -2271,9 +2308,16 @@ paths:
             type: string
       responses:
         '200':
-          description: revision set
+          description: success
+          content:
+            application/json:
+              schema:
+                type: string
+                enum: [ active, inactive, dismissed ]
         '401':
-          description: not authorized
+          description: permission denied
+        '404':
+          description: dialogue or guid not found
         '500':
           description: internal server error
       requestBody:
@@ -2285,8 +2329,8 @@ paths:
     delete:
       tags:
         - conversation
-      description: Hook receiver for removing an insight
-      operationId: remove-insight-hook
+      description: Remove a specified insight. If the referenced dialogue is still active, the insight will get recreated with the next hook receiver update. Access granted to app token of account holder or contact token of dialogue host.
+      operationId: set-insight-dialogue
       security:
         - bearerAuth: []
       parameters:
@@ -2304,18 +2348,20 @@ paths:
             type: string
       responses:
         '200':
-          description: revision set
+          description: success
         '401':
-          description: not authorized
+          description: permission denied
+        '404':
+          description: dialogue or guid not found
         '500':
           description: internal server error
   
-  /conversation/insights/{guid}/dialogues/{dialogueId}/active:
-    post:
+  /conversation/insights/{guid}/dialogues/{dialogueId}/status:
+    put:
       tags:
         - conversation
-      description: Change active state of insight
-      operationId: set-insight-active
+      description: Set the active status of an insight. This will cause the hook receiver to return an inactive status. Access granted to app token of account holder. 
+      operationId: set-insight-dialogue-active
       security:
         - bearerAuth: []
       parameters:
@@ -2344,7 +2390,8 @@ paths:
         content:
           application/json:
             schema:
-              type: boolean
+              type: string
+              enum: [ active, inactive, dismissed ]
               
   /conversation/dialogues/{dialogueId}/topicBlocks/view:
     get:
@@ -2495,6 +2542,8 @@ paths:
                     $ref: '#/components/schemas/Topic'
         '401':
           description: permission denied
+        '403':
+          description: inactive dialogue
         '404':
           description: dialogue not found
         '500':
@@ -2559,6 +2608,8 @@ paths:
           description: successful operation
         '401':
           description: permission denied
+        '403':
+          description: inactive dialogue
         '404':
           description: topic or dilaogue not found
         '500':
@@ -2590,6 +2641,10 @@ paths:
           description: entry created
         '401':
           description: invalid token
+        '403':
+          description: inactive dialogue
+        '404':
+          description: topic or dialogue not found
         '500':
           description: internal server error
       requestBody:
@@ -2779,6 +2834,8 @@ paths:
                     $ref: '#/components/schemas/Tag'
         '401':
           description: permission denied
+        '403':
+          description: inactive dialogue
         '404':
           description: topic or dialogue not found
         '500':
@@ -2868,6 +2925,8 @@ paths:
           description: success
         '401':
           description: permission denied
+        '403':
+          description: inactive dialogue
         '404':
           description: tag, topic, or dialogue not found
         '500':
@@ -2946,6 +3005,8 @@ paths:
                 $ref: '#/components/schemas/Asset'
         '401':
           description: permission denied
+        '403':
+          description: inactive dialogue
         '404':
           description: topic or dialogue not found
         '500':
@@ -3032,6 +3093,8 @@ paths:
           description: success
         '401':
           description: permission denied
+        '403':
+          description: inactive dialogue
         '404':
           description: asset, topic or dialogue not found
         '500':
@@ -3062,6 +3125,8 @@ paths:
           description: success
         '401':
           description: permission denied
+        '403':
+          description: inactive dialogue
         '404':
           description: topic or dialogue not found
         '500':
@@ -3190,7 +3255,7 @@ components:
           type: string
           format: base64 encoded image
           
-    cardView:
+    CardView:
       type: object
       required:
         - guid
@@ -3213,7 +3278,7 @@ components:
           type: integer
           format: int64
           
-    cardProfile:
+    CardProfile:
       type: object
       required:
         - node
@@ -3234,7 +3299,7 @@ components:
         node:
           type: string
           
-    cardData:
+    CardData:
       type: object
       required:
         - status
@@ -3254,7 +3319,7 @@ components:
           items:
             type: string
           
-    cardStatus:
+    CardStatus:
       type: object
       required:
         - status
@@ -3265,7 +3330,7 @@ components:
         token:
           type: string
           
-    card:
+    Card:
       type: object
       required:
         - cardProfile
@@ -3274,9 +3339,9 @@ components:
         - conversationRevision
       properties:
         cardProfile:
-          $ref: '#/components/schemas/cardProfile'
+          $ref: '#/components/schemas/CardProfile'
         cardData:
-          $ref: '#/components/schemas/cardData'
+          $ref: '#/components/schemas/CardData'
         contentRevision:
           type: integer
           format: int64
@@ -3337,6 +3402,7 @@ components:
         - insightId
         - revision
         - guid
+        - status
       properties:
         insightId:
           type: string
@@ -3345,15 +3411,16 @@ components:
           format: int64
         guid:
           type: string
-        active:
-          type: boolean
+        status:
+          type: string
+          enum: [ active, inactive, dismissed ]
           
     Dialogue:
       type: object
       required:
         - dialogueId
         - revision
-        - status
+        - active
         - subject
         - insights
       properties:
@@ -3375,7 +3442,7 @@ components:
                 type: string
               status:
                 type: string
-                enum: [ synced, unsynced ]
+                enum: [ active, offsync, inactive, dismissed ]
           
     Topic:
       type: object
