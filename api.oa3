@@ -602,7 +602,15 @@ paths:
         content:
           application/json:
             schema:
-              type: string
+              type: object
+              required:
+                - type
+                - data
+              properties:
+                type:
+                  type: string
+                data:
+                  type: string
           
   /share/groups/{groupId}:
     put:
@@ -630,7 +638,15 @@ paths:
         content:
           application/json:
             schema:
-              type: string
+              type: object
+              required:
+                - type
+                - data
+              properties:
+                type:
+                  type: string
+                data:
+                  type: string
     delete:
       tags:
         - share
@@ -1343,7 +1359,7 @@ paths:
     post:
       tags:
         - content
-      description: Add a content article. Access granted to access token of the account holder.
+      description: Add a content article. Access granted to app token of the account holder.
       operationId: add-article
       security:
         - bearerAuth: []
@@ -1478,7 +1494,7 @@ paths:
     post:
       tags:
         - content
-      description: set sharing group for article
+      description: Assign a sharing group for the specified article. Contacts with the same sharing group will have access to the article. Access granted to app token of account holder.
       operationId: set-article-group
       security:
         - bearerAuth: []
@@ -1497,15 +1513,17 @@ paths:
             type: string
       responses:
         '200':
-          description: entry set
+          description: success
         '401':
-          description: invalid token
+          description: permission denied
+        '404':
+          description: group or article not found
         '500':
           description: internal server error
     delete:
       tags:
         - content
-      description: clear sharing group for article
+      description: Remove article from sharing group. Unless the article is shared through other groups or labels contacts within that group will no longer have access to the article. Access granted to app tokens of the account holder.
       operationId: clear-article-group
       security:
         - bearerAuth: []
@@ -1524,9 +1542,11 @@ paths:
             type: string
       responses:
         '200':
-          description: entry removed
+          description: success
         '401':
-          description: invalid token
+          description: permission denied
+        '404':
+          description: group or article not found
         '500':
           description: internal server error
   
@@ -1534,7 +1554,7 @@ paths:
     post:
       tags:
         - content
-      description: set orginizational label for article
+      description: Assign a label to an article. If the label has been assigned a sharing group the article will be accessible by contacts within that group. Access is granted to app tokens of the account holder.
       operationId: set-article-label
       security:
         - bearerAuth: []
@@ -1553,15 +1573,17 @@ paths:
             type: string
       responses:
         '200':
-          description: entry set
+          description: success
         '401':
-          description: invalid token
+          description: permission denied
+        '404':
+          description: label or article not found
         '500':
           description: internal server error
     delete:
       tags:
         - content
-      description: clear orginizationl label for article
+      description: Remove a label from an article. If the label has been assigned a sharing group the article and the article is not shared in another way, the article will no longer be accessible to that group's contacts. Access is granted to app tokens of the account holder.
       operationId: clear-article-label
       security:
         - bearerAuth: []
@@ -1580,257 +1602,19 @@ paths:
             type: string
       responses:
         '200':
-          description: entry cleared
+          description: success
         '401':
-          description: invalid token
-        '500':
-          description: internal server error
-          
-  /content/articles/{articleId}/tagBlocks/view:
-    get:
-      tags:
-        - content
-      description: Get view tag blocks in article
-      operationId: get-article-tag-block-view
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: articleId
-          in: path
-          description: specified article id 
-          required: true
-          schema:
-            type: string
-        - name: types
-          in: query
-          description: limit resutls to articles of types
-          required: false
-          schema:
-            type: array
-            items:
-              type: string
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: string
-                    revision:
-                      type: integer
-                      format: int64
-        '401':
-          description: invalid password
-        '500':
-          description: internal server error
-          
-  /content/articles/{articleId}/tagBlocks/{blockId}/view:
-    get:
-      tags:
-        - content
-      description: Get view tag blocks in article
-      operationId: get-tag-view
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: articleId
-          in: path
-          description: specified article id 
-          required: true
-          schema:
-            type: string
-        - name: blockId
-          in: path
-          description: specified block id 
-          required: true
-          schema:
-            type: string
-        - name: types
-          in: query
-          description: limit resutls to articles of types
-          required: false
-          schema:
-            type: array
-            items:
-              type: string
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: string
-                    revision:
-                      type: integer
-                      format: int64
-        '401':
-          description: invalid password
-        '500':
-          description: internal server error
-          
-  /content/articles/{articleId}/tagBlocks/{blockId}:
-    get:
-      tags:
-        - content
-      description: Get tags from specified block
-      operationId: get-tag-block
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: articleId
-          in: path
-          description: specified article id 
-          required: true
-          schema:
-            type: string
-        - name: blockId
-          in: path
-          description: specified block id 
-          required: true
-          schema:
-            type: string
-        - name: types
-          in: query
-          description: limit resutls to articles of types
-          required: false
-          schema:
-            type: array
-            items:
-              type: string
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: string
-                    revision:
-                      type: integer
-                      format: int64
-        '401':
-          description: invalid password
-        '500':
-          description: internal server error
-          
-  /content/articles/{articleId}/tags:
-    post:
-      tags:
-        - content
-      description: Add an content article
-      operationId: add-article-tag
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: articleId
-          in: path
-          description: specified article id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '201':
-          description: entry created
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  blockId:
-                    type: string
-                  blockRevision:
-                    type: integer
-                    format: int64
-                  tag:
-                    $ref: '#/components/schemas/Tag'
-        '401':
-          description: invalid token
-        '500':
-          description: internal server error
-              
-  /content/articles/{articleId}/tags/{tagId}:
-    get:
-      tags:
-        - content
-      description: Add an content article
-      operationId: get-article-tag
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: articleId
-          in: path
-          description: specified article id 
-          required: true
-          schema:
-            type: string
-        - name: tagId
-          in: path
-          description: specified tag id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '201':
-          description: entry created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Tag'
-        '401':
-          description: invalid token
+          description: permission denied
         '404':
-          description: tag not found
+          description: label or article not found
         '500':
           description: internal server error
-    delete:
-      tags:
-        - content
-      description: Add an content article
-      operationId: remove-article-tag
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: articleId
-          in: path
-          description: specified article id 
-          required: true
-          schema:
-            type: string
-        - name: tagId
-          in: path
-          description: specified tag id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: entry removed
-        '401':
-          description: invalid token
-        '404':
-          description: tag not found
-        '500':
-          description: internal server error
-              
+          
   /content/articles/{articleId}/assets:
     get:
       tags:
         - content
-      description: Get assets attached to article
+      description: Get list of assets assigned to an article. The original assets will only be available to the account holder to provent the accidental sharing of content metadata. Access is granted to the app token of the account holder and the contact token of accounts the article has been shared with.
       operationId: get-article-assets
       security:
         - bearerAuth: []
@@ -1857,7 +1641,7 @@ paths:
     post:
       tags:
         - content
-      description: Add an content article
+      description: Add an an asset to the to an article. The original posted asset is referenced in the asset list with a null transform. The transformed assets are referenced accordingly. Transforming the asset strips it of metadata and transcodes it into a specified format. Access is granted to the app token of the account holder.
       operationId: add-article-asset
       security:
         - bearerAuth: []
@@ -1878,13 +1662,17 @@ paths:
               type: string
       responses:
         '201':
-          description: entry created
+          description: success
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Asset'
         '401':
-          description: invalid token
+          description: permission denied
+        '404':
+          description: article not found
+        '406':
+          description: storage limit reached
         '500':
           description: internal server error
       requestBody:
@@ -1901,7 +1689,7 @@ paths:
     get:
       tags:
         - content
-      description: Get asset attached to article
+      description: Get asset assigned to an article. The endpoint supports byte-range requests and responds with the content-type set appropriatly. Access granted to the app tokens of the account holder and in the case of non-original assets, the contact token for accounts with which the article is shared.
       operationId: get-article-asset
       security:
         - bearerAuth: []
@@ -1920,22 +1708,22 @@ paths:
             type: string
       responses:
         '200':
-          description: article attachment
+          description: success
           content:
             application/octet-stream: #asset specific
               schema:
                 type: string
                 format: binary
         '401':
-          description: invalid token
+          description: permission denied
         '404':
-          description: asset not found
+          description: asset or article not found
         '500':
           description: internal server error
     delete:
       tags:
         - content
-      description: Remove asset attached to article
+      description: Remove an asset from an article. Access granted to app tokens of the account holder.
       operationId: remove-article-asset
       security:
         - bearerAuth: []
@@ -1954,16 +1742,11 @@ paths:
             type: string
       responses:
         '200':
-          description: article attachment
-          content:
-            application/octet-stream: #asset specific
-              schema:
-                type: string
-                format: binary
+          description: success
         '401':
-          description: invalid token
+          description: permission denied
         '404':
-          description: asset not found
+          description: asset or article not found
         '500':
           description: internal server error
           
@@ -1971,7 +1754,7 @@ paths:
     put:
       tags:
         - content
-      description: set confirmed state of article
+      description: Set confirmed state of the article. Until the confirmed state has been set to true, the article will not be visible to contacts with which the article is shared. Access granted to the app tokens of the acocunt holder.
       operationId: set-article-confirmed
       security:
         - bearerAuth: []
@@ -1984,9 +1767,9 @@ paths:
             type: string
       responses:
         '200':
-          description: entry set
+          description: success
         '401':
-          description: invalid token
+          description: permission denied
         '404':
           description: article not found
         '500':
@@ -1997,18 +1780,266 @@ paths:
             schema:
               type: boolean
           
+  /content/articles/{articleId}/tagBlocks/view:
+    get:
+      tags:
+        - content
+      description: Get view of tag blocks associated with specified article. Access granted to app tokens of account holder and contact tokens of account with which the article is shared. 
+      operationId: get-article-tag-block-view
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: articleId
+          in: path
+          description: specified article id 
+          required: true
+          schema:
+            type: string
+        - name: types
+          in: query
+          description: limit results to tags of types
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    revision:
+                      type: integer
+                      format: int64
+        '401':
+          description: permission denied
+        '404':
+          description: article not found
+        '500':
+          description: internal server error
+          
+  /content/articles/{articleId}/tagBlocks/{blockId}/view:
+    get:
+      tags:
+        - content
+      description: Get view of tags within speicified block. Access granted to app tokens of account holder and contact token of accounts with which the article is shared. 
+      operationId: get-article-tag-view
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: articleId
+          in: path
+          description: specified article id 
+          required: true
+          schema:
+            type: string
+        - name: blockId
+          in: path
+          description: specified block id 
+          required: true
+          schema:
+            type: string
+        - name: types
+          in: query
+          description: limit results to tags of types
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    revision:
+                      type: integer
+                      format: int64
+        '401':
+          description: permission denied
+        '404':
+          description: block or article not found
+        '500':
+          description: internal server error
+          
+  /content/articles/{articleId}/tagBlocks/{blockId}:
+    get:
+      tags:
+        - content
+      description: Get tags within specified block. Access granted to app tokens of account holder and contact tokens of accounts with which the article is shared.
+      operationId: get-article-tags
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: articleId
+          in: path
+          description: specified article id 
+          required: true
+          schema:
+            type: string
+        - name: blockId
+          in: path
+          description: specified block id 
+          required: true
+          schema:
+            type: string
+        - name: types
+          in: query
+          description: limit results to tags of types
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    revision:
+                      type: integer
+                      format: int64
+        '401':
+          description: permission denied
+        '404':
+          description: block or article not found
+        '500':
+          description: internal server error
+          
+  /content/articles/{articleId}/tags:
+    post:
+      tags:
+        - content
+      description: Add a tag to an article. Access granted to app tokens of the account holder and contact tokens of accounts with which the article is shared.
+      operationId: add-article-tag
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: articleId
+          in: path
+          description: specified article id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  blockId:
+                    type: string
+                  blockRevision:
+                    type: integer
+                    format: int64
+                  tag:
+                    $ref: '#/components/schemas/Tag'
+        '401':
+          description: permission denied
+        '404':
+          description: article not found
+        '500':
+          description: internal server error
+              
+  /content/articles/{articleId}/tags/{tagId}:
+    get:
+      tags:
+        - content
+      description: Get specified tag. Access granted to app tokens of account holder and contact tokens of accounts with which the article is shared.
+      operationId: get-article-tag
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: articleId
+          in: path
+          description: specified article id 
+          required: true
+          schema:
+            type: string
+        - name: tagId
+          in: path
+          description: specified tag id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tag'
+        '401':
+          description: permission denied
+        '404':
+          description: tag or article not found
+        '500':
+          description: internal server error
+    delete:
+      tags:
+        - content
+      description: Remove a tag from an article. Access granted to app tokens of account holder and the contact tokens of the account that created the tag.
+      operationId: remove-article-tag
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: articleId
+          in: path
+          description: specified article id 
+          required: true
+          schema:
+            type: string
+        - name: tagId
+          in: path
+          description: specified tag id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success
+        '401':
+          description: permission denied
+        '404':
+          description: tag or article not found
+        '500':
+          description: internal server error
+              
   /content/labels:
     get:
       tags:
         - content
-      description: Get labels for organization
-      operationId: get-content-labels
+      description: Get labels with which to organize the articles. Contacts requesting the labels will only retrieve the labels with which they are shared. Access granted to the app tokens of the account holder and connected contact tokens.
+      operationId: get-labels
       security:
         - bearerAuth: []
       parameters:
         - name: types
           in: query
-          description: limit resutls to labels of types
+          description: limit results to labels of types
           required: false
           schema:
             type: array
@@ -2030,29 +2061,37 @@ paths:
     post:
       tags:
         - content
-      description: Add a label for organization
-      operationId: add-content-label
+      description: Add a new label for organizing the articles. Access granted to the app tokens of the account holder.
+      operationId: add-label
       security:
         - bearerAuth: []
       responses:
-        '201':
-          description: entry created
+        '200':
+          description: success
         '401':
-          description: invalid token
+          description: permission denied
         '500':
           description: internal server error
       requestBody:
         content:
           application/json:
             schema:
-              type: string
+              type: object
+              required:
+                - type
+                - data
+              properties:
+                type:
+                  type: string
+                data:
+                  type: string
           
   /content/labels/{labelId}:
     put:
       tags:
         - content
-      description: Update label for organization
-      operationId: update-content-label
+      description: Update specified label. Access granted to app tokens of the account holder.
+      operationId: update-label
       security:
         - bearerAuth: []
       parameters:
@@ -2073,12 +2112,20 @@ paths:
         content:
           application/json:
             schema:
-              type: string
+              type: object
+              required:
+                - type
+                - data
+              properties:
+                type:
+                  type: string
+                data:
+                  type: string
     delete:
       tags:
         - content
-      description: Remove organizational label
-      operationId: remove-content-label
+      description: Remove specified label. Access granted the the app tokens of the account holder.
+      operationId: remove-label
       security:
         - bearerAuth: []
       parameters:
@@ -2090,9 +2137,11 @@ paths:
             type: string
       responses:
         '200':
-          description: successful operation
+          description: success
         '401':
-          description: invalid token
+          description: permission denied
+        '404':
+          description: label not found
         '500':
           description: internal server error
           
@@ -2101,7 +2150,7 @@ paths:
     post:
       tags:
         - content
-      description: set sharing group for label
+      description: Set a sharing group for the label and articles assigned to the label. Access granted to app tokens of the account holder.
       operationId: set-label-group
       security:
         - bearerAuth: []
@@ -2120,15 +2169,17 @@ paths:
             type: string
       responses:
         '200':
-          description: entry set
+          description: success
         '401':
-          description: invalid token
+          description: permission denied
+        '404':
+          description: group or label not found
         '500':
           description: internal server error
     delete:
       tags:
         - content
-      description: clear sharing group for label
+      description: Clear a sharing group from a label. Access granted to app tokens of the account holder.
       operationId: clear-label-group
       security:
         - bearerAuth: []
@@ -2147,9 +2198,11 @@ paths:
             type: string
       responses:
         '200':
-          description: entry removed
+          description: success
         '401':
-          description: invalid token
+          description: permission denied
+        '404':
+          description: group or label not found
         '500':
           description: internal server error
               
@@ -2530,6 +2583,14 @@ paths:
           required: true
           schema:
             type: string
+        - name: types
+          in: query
+          description: limit results to topics of types
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
       responses:
         '200':
           description: success
@@ -2575,7 +2636,7 @@ paths:
             type: string
         - name: types
           in: query
-          description: limit resutls to topics of types
+          description: limit results to topics of types
           required: false
           schema:
             type: array
@@ -2620,7 +2681,7 @@ paths:
             type: string
         - name: types
           in: query
-          description: limit resutls to topics of types
+          description: limit results to topics of types
           required: false
           schema:
             type: array
@@ -2799,301 +2860,6 @@ paths:
                 data:
                   type: string
                   
-  /conversation/dialogues/{dialogueId}/{topicId}/tagBlocks/view:
-    get:
-      tags:
-        - conversation
-      description: Get a view of all of all tagBlocks. Authorization granted to account holder app token or dialogue member contact token who has access to the topic. 
-      operationId: get-topic-tag-block-view
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: dialogueId
-          in: path
-          description: specified dialogue id
-          required: true
-          schema:
-            type: string
-        - name: topicId
-          in: path
-          description: specified topic id 
-          required: true
-          schema:
-            type: string
-        - name: types
-          in: query
-          description: limit resutls to articles of types
-          required: false
-          schema:
-            type: array
-            items:
-              type: string
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: string
-                    revision:
-                      type: integer
-                      format: int64
-        '401':
-          description: permission denied
-        '404':
-          description: topic or dialogue not found
-        '500':
-          description: internal server error
-          
-  /conversation/dialogues/{dialogueId}/{topicId}/tagBlocks/{blockId}/view:
-    get:
-      tags:
-        - conversation
-      description: Get a view of all of the tags within a block. Authorization granted to account holder app token or dialogue member contact token who has access to the topic. 
-      operationId: get-topic-tag-view
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: dialogueId
-          in: path
-          description: specified dialogue id
-          required: true
-          schema:
-            type: string
-        - name: topicId
-          in: path
-          description: specified topic id 
-          required: true
-          schema:
-            type: string
-        - name: blockId
-          in: path
-          description: specified block id 
-          required: true
-          schema:
-            type: string
-        - name: types
-          in: query
-          description: limit resutls to tags of types
-          required: false
-          schema:
-            type: array
-            items:
-              type: string
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: string
-                    revision:
-                      type: integer
-                      format: int64
-        '401':
-          description: permission denied
-        '404':
-          description: block, topic or dialogue not found
-        '500':
-          description: internal server error
-          
-  /conversation/dialogues/{dialogueId}/topics/{topicId}/tagBlocks/{blockId}:
-    get:
-      tags:
-        - conversation
-      description: Get all of the tags within a tag block. Authorization granted to account holder app token or dialogue member contact token who has access to the topic. 
-      operationId: get-topic-tag-block
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: dialogueId
-          in: path
-          description: specified dialogue id
-          required: true
-          schema:
-            type: string
-        - name: topicId
-          in: path
-          description: specified topic id 
-          required: true
-          schema:
-            type: string
-        - name: blockId
-          in: path
-          description: specified block id 
-          required: true
-          schema:
-            type: string
-        - name: types
-          in: query
-          description: limit resutls to tags of types
-          required: false
-          schema:
-            type: array
-            items:
-              type: string
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Tag'
-        '401':
-          description: permission denied
-        '404':
-          description: block, topic, or dialogue not found
-        '500':
-          description: internal server error
-          
-  /conversation/dialogues/{dialogueId}/topics/{topicId}/tags:
-    post:
-      tags:
-        - conversation
-      description: Add a tag to specified topic. Authorization granted to account holder app token or dialogue member contact token who has access to the topic. The body of the post contains the subject of the tag, which can have no associated assets.
-      operationId: add-conversation-topic-tag
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: dialogueId
-          in: path
-          description: specified dialogue id
-          required: true
-          schema:
-            type: string
-        - name: topicId
-          in: path
-          description: specified topic id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '201':
-          description: entry created
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  blockId:
-                    type: string
-                  blockRevision:
-                    type: integer
-                    format: int64
-                  tag:
-                    $ref: '#/components/schemas/Tag'
-        '401':
-          description: permission denied
-        '403':
-          description: inactive dialogue
-        '404':
-          description: topic or dialogue not found
-        '500':
-          description: internal server error
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - type
-                - data
-              properties:
-                type:
-                  type: string
-                data:
-                  type: string
-              
-  /conversation/dialogues/{dialogueId}/topics/{topicId}/tags/{tagId}:
-    get:
-      tags:
-        - conversation
-      description: Retrieve specified tag on the topic. Authorization granted to account holder app token or dialogue member contact token who has access to the topic.
-      operationId: get-topic-tag
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: dialogueId
-          in: path
-          description: specified dialogue id
-          required: true
-          schema:
-            type: string
-        - name: topicId
-          in: path
-          description: specified topic id 
-          required: true
-          schema:
-            type: string
-        - name: tagId
-          in: path
-          description: specified tag id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '201':
-          description: success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Tag'
-        '401':
-          description: permission denied
-        '404':
-          description: tag, topic, or dialogue not found
-        '500':
-          description: internal server error
-    delete:
-      tags:
-        - conversation
-      description: Remove specified tag from the topic. Authorization granted to account holder app token or dialogue member contact token who has access to the topic.
-      operationId: remove-topic-tag
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: dialogueId
-          in: path
-          description: specified dialogue id
-          required: true
-          schema:
-            type: string
-        - name: topicId
-          in: path
-          description: specified topic id 
-          required: true
-          schema:
-            type: string
-        - name: tagId
-          in: path
-          description: specified tag id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: success
-        '401':
-          description: permission denied
-        '403':
-          description: inactive dialogue
-        '404':
-          description: tag, topic, or dialogue not found
-        '500':
-          description: internal server error
-              
   /conversation/dialogues/{dialogueId}/topics/{topicId}/assets:
     get:
       tags:
@@ -3299,6 +3065,300 @@ paths:
             schema:
               type: boolean
               
+  /conversation/dialogues/{dialogueId}/topics/{topicId}/tagBlocks/view:
+    get:
+      tags:
+        - conversation
+      description: Get a view of all of all tagBlocks. Authorization granted to account holder app token or dialogue member contact token who has access to the topic. 
+      operationId: get-topic-tag-block-view
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: dialogueId
+          in: path
+          description: specified dialogue id
+          required: true
+          schema:
+            type: string
+        - name: topicId
+          in: path
+          description: specified topic id 
+          required: true
+          schema:
+            type: string
+        - name: types
+          in: query
+          description: limit results to articles of types
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    revision:
+                      type: integer
+                      format: int64
+        '401':
+          description: permission denied
+        '404':
+          description: topic or dialogue not found
+        '500':
+          description: internal server error
+          
+  /conversation/dialogues/{dialogueId}/topics/{topicId}/tagBlocks/{blockId}/view:
+    get:
+      tags:
+        - conversation
+      description: Get a view of all of the tags within a block. Authorization granted to account holder app token or dialogue member contact token who has access to the topic. 
+      operationId: get-topic-tag-view
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: dialogueId
+          in: path
+          description: specified dialogue id
+          required: true
+          schema:
+            type: string
+        - name: topicId
+          in: path
+          description: specified topic id 
+          required: true
+          schema:
+            type: string
+        - name: blockId
+          in: path
+          description: specified block id 
+          required: true
+          schema:
+            type: string
+        - name: types
+          in: query
+          description: limit results to tags of types
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    revision:
+                      type: integer
+                      format: int64
+        '401':
+          description: permission denied
+        '404':
+          description: block, topic or dialogue not found
+        '500':
+          description: internal server error
+          
+  /conversation/dialogues/{dialogueId}/topics/{topicId}/tagBlocks/{blockId}:
+    get:
+      tags:
+        - conversation
+      description: Get all of the tags within a tag block. Authorization granted to account holder app token or dialogue member contact token who has access to the topic. 
+      operationId: get-topic-tags
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: dialogueId
+          in: path
+          description: specified dialogue id
+          required: true
+          schema:
+            type: string
+        - name: topicId
+          in: path
+          description: specified topic id 
+          required: true
+          schema:
+            type: string
+        - name: blockId
+          in: path
+          description: specified block id 
+          required: true
+          schema:
+            type: string
+        - name: types
+          in: query
+          description: limit results to tags of types
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Tag'
+        '401':
+          description: permission denied
+        '404':
+          description: block, topic, or dialogue not found
+        '500':
+          description: internal server error
+          
+  /conversation/dialogues/{dialogueId}/topics/{topicId}/tags:
+    post:
+      tags:
+        - conversation
+      description: Add a tag to specified topic. Authorization granted to account holder app token or dialogue member contact token who has access to the topic. The body of the post contains the subject of the tag, which can have no associated assets.
+      operationId: add-topic-tag
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: dialogueId
+          in: path
+          description: specified dialogue id
+          required: true
+          schema:
+            type: string
+        - name: topicId
+          in: path
+          description: specified topic id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: entry created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  blockId:
+                    type: string
+                  blockRevision:
+                    type: integer
+                    format: int64
+                  tag:
+                    $ref: '#/components/schemas/Tag'
+        '401':
+          description: permission denied
+        '403':
+          description: inactive dialogue
+        '404':
+          description: topic or dialogue not found
+        '500':
+          description: internal server error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - type
+                - data
+              properties:
+                type:
+                  type: string
+                data:
+                  type: string
+              
+  /conversation/dialogues/{dialogueId}/topics/{topicId}/tags/{tagId}:
+    get:
+      tags:
+        - conversation
+      description: Retrieve specified tag on the topic. Authorization granted to account holder app token or dialogue member contact token who has access to the topic.
+      operationId: get-topic-tag
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: dialogueId
+          in: path
+          description: specified dialogue id
+          required: true
+          schema:
+            type: string
+        - name: topicId
+          in: path
+          description: specified topic id 
+          required: true
+          schema:
+            type: string
+        - name: tagId
+          in: path
+          description: specified tag id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tag'
+        '401':
+          description: permission denied
+        '404':
+          description: tag, topic, or dialogue not found
+        '500':
+          description: internal server error
+    delete:
+      tags:
+        - conversation
+      description: Remove specified tag from the topic. Authorization granted to account holder app token or dialogue member contact token who has access to the topic.
+      operationId: remove-topic-tag
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: dialogueId
+          in: path
+          description: specified dialogue id
+          required: true
+          schema:
+            type: string
+        - name: topicId
+          in: path
+          description: specified topic id 
+          required: true
+          schema:
+            type: string
+        - name: tagId
+          in: path
+          description: specified tag id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success
+        '401':
+          description: permission denied
+        '403':
+          description: inactive dialogue
+        '404':
+          description: tag, topic, or dialogue not found
+        '500':
+          description: internal server error
               
 externalDocs:
   description: Find out more about Swagger
