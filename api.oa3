@@ -673,21 +673,21 @@ paths:
     post:
       tags:
         - contact
-      description: Add a card entry
-      operationId: add-contact-card
+      description: Add a contact card. Access granted to app tokens of account holder.
+      operationId: add-card
       security:
         - bearerAuth: []
       responses:
         '200':
-          description: successful operation
+          description: success
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/DataMessage'
+        '400':
+          description: invalid data message
         '401':
-          description: invalid password
-        '404':
-          description: not found
+          description: permission denied
         '500':
           description: internal server error
           
@@ -695,8 +695,8 @@ paths:
     get:
       tags:
         - contact
-      description: Get list of cards
-      operationId: get-contact-cards
+      description: Get list of card views. Access granted to app tokens of account holder.
+      operationId: get-card-view
       security:
         - bearerAuth: []
       responses:
@@ -709,7 +709,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/CardView'
         '401':
-          description: invalid password
+          description: permission denied
         '500':
           description: internal server error
           
@@ -717,8 +717,8 @@ paths:
     get:
       tags:
         - contact
-      description: Get card entry
-      operationId: get-contact-card
+      description: Retieve card entry. Permission granted to app tokens for account holder.
+      operationId: get-card
       security:
         - bearerAuth: []
       parameters:
@@ -736,16 +736,16 @@ paths:
               schema:
                 $ref: '#/components/schemas/Card'
         '401':
-          description: invalid password
+          description: permission denied
         '404':
-          description: not found
+          description: card not found
         '500':
           description: internal server error
     delete:
       tags:
         - contact
-      description: Remove card entry
-      operationId: remove-contact-card
+      description: Remove card entry. Access granted to app tokens of account holder.
+      operationId: remove-card
       security:
         - bearerAuth: []
       parameters:
@@ -757,11 +757,11 @@ paths:
             type: string
       responses:
         '200':
-          description: successful operation
+          description: success
         '401':
-          description: invalid password
+          description: permission denied
         '404':
-          description: not found
+          description: card not found
         '500':
           description: internal server error
   
@@ -769,8 +769,8 @@ paths:
     put:
       tags:
         - contact
-      description: Update card status
-      operationId: set-contact-card-status
+      description: Updated connected status of contact. Access granted to app tokens of account holder.
+      operationId: set-card-status
       security:
         - bearerAuth: []
       parameters:
@@ -783,20 +783,20 @@ paths:
         - name: token
           in: query
           description: token for accessing card
-          required: true
+          required: false # required for connected 
           schema:
             type: string
       responses:
         '200':
-          description: successful operation
+          description: success
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/CardData'
         '401':
-          description: invalid password
+          description: permission denied
         '404':
-          description: not found
+          description: card not found
         '500':
           description: internal server error
       requestBody:
@@ -810,8 +810,8 @@ paths:
     get:
       tags:
         - contact
-      description: Get message for opening card connection
-      operationId: get-contact-open-message
+      description: Get message for connecting to other contacts. Access granted to app tokens for account holder.
+      operationId: get-open-message
       security:
         - bearerAuth: []
       parameters:
@@ -823,22 +823,22 @@ paths:
             type: string
       responses:
         '200':
-          description: successful operation
+          description: success
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/DataMessage'
         '401':
-          description: invalid password
+          description: permission denied
         '404':
-          description: not found
+          description: card not found
         '500':
           description: internal server error
     put:
       tags:
         - contact
-      description: Set message for opening card connection
-      operationId: set-contact-open-message
+      description: Set message for connecting to a contact. If card has not already been added, the card will be created in the pending state. Access granted to public.
+      operationId: set-open-message
       parameters:
         - name: cardId
           in: path
@@ -853,10 +853,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CardStatus'
-        '401':
-          description: invalid password
-        '404':
-          description: not found
+        '400':
+          description: invalid data message
         '500':
           description: internal server error
       requestBody:
@@ -869,8 +867,8 @@ paths:
     get:
       tags:
         - contact
-      description: Get message for closing card connection
-      operationId: get-contact-close-message
+      description: Get message for closing connection with contact. Access granted to app tokens for account holder.
+      operationId: get-close-message
       security:
         - bearerAuth: []
       parameters:
@@ -888,16 +886,16 @@ paths:
               schema:
                 $ref: '#/components/schemas/DataMessage'
         '401':
-          description: invalid password
+          description: permission denied
         '404':
-          description: not found
+          description: card not found
         '500':
           description: internal server error
     put:
       tags:
         - contact
-      description: Set message for closing card connection
-      operationId: set-contact-close-message
+      description: Set message for closing card connection. Access granted to public.
+      operationId: set-close-message
       parameters:
         - name: cardId
           in: path
@@ -912,10 +910,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CardStatus'
-        '401':
-          description: invalid password
-        '404':
-          description: not found
+        '400':
+          description: invalid data message
         '500':
           description: internal server error
       requestBody:
@@ -928,7 +924,7 @@ paths:
     get:
       tags:
         - contact
-      description: Get profile of card entry
+      description: Get profile of card entry. 
       operationId: get-contact-profile
       security:
         - bearerAuth: []
@@ -947,7 +943,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/CardProfile'
         '401':
-          description: invalid password
+          description: permission denied
         '404':
           description: not found
         '500':
@@ -3752,7 +3748,7 @@ components:
       properties:
         status:
           type: string
-          enum: [ pending, confirmed, connecting, connected ]
+          enum: [ pending, confirmed, requested, connecting, connected ]
         token:
           type: string
           
