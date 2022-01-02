@@ -562,6 +562,15 @@ paths:
       operationId: get-share-groups
       security:
         - bearerAuth: []
+      parameters:
+        - name: types
+          in: query
+          description: limit resutls to groups of types
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
       responses:
         '200':
           description: successful operation
@@ -1266,7 +1275,7 @@ paths:
     get:
       tags:
         - content
-      description: Get articles within specified block. Access granted for app token or contact token. All of the articles are returned for the app token, but only the shared articles are returned for the contact token.
+      description: Get the articles within specified block. Access granted for app token or contact token. All of the articles are returned for the app token, but only the shared articles are returned for the contact token. An article is shared by assigning a common group to an article or assigning a label to an article that has assigned a common group.
       operationId: get-articles
       security:
         - bearerAuth: []
@@ -1297,7 +1306,7 @@ paths:
     get:
       tags:
         - content
-      description: Get article views within specified block. Access granted for app token or contact token. All of the articles are returned for the app token, but only the shared articles are returned for the contact token.
+      description: Get the article views within specified block. Access granted for app token or contact token. All of the articles are returned for the app token, but only the shared articles are returned for the contact token. An article is shared by assigning a common group to an article or assigning a label to an article that has assigned a common group.
       operationId: get-article-views
       security:
         - bearerAuth: []
@@ -1357,6 +1366,23 @@ paths:
           description: permission denied
         '500':
           description: internal server error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - labels
+                - groups
+              properties:
+                labels:
+                  type: array
+                  items:
+                    type: string
+                groups:
+                  type: array
+                  items:
+                    type: string
               
   /content/articles/{articleId}:
     get:
@@ -1575,6 +1601,14 @@ paths:
           required: true
           schema:
             type: string
+        - name: types
+          in: query
+          description: limit resutls to articles of types
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
       responses:
         '200':
           description: successful operation
@@ -1616,6 +1650,14 @@ paths:
           required: true
           schema:
             type: string
+        - name: types
+          in: query
+          description: limit resutls to articles of types
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
       responses:
         '200':
           description: successful operation
@@ -1657,6 +1699,14 @@ paths:
           required: true
           schema:
             type: string
+        - name: types
+          in: query
+          description: limit resutls to articles of types
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
       responses:
         '200':
           description: successful operation
@@ -1955,6 +2005,15 @@ paths:
       operationId: get-content-labels
       security:
         - bearerAuth: []
+      parameters:
+        - name: types
+          in: query
+          description: limit resutls to labels of types
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
       responses:
         '200':
           description: successful operation
@@ -2032,6 +2091,63 @@ paths:
       responses:
         '200':
           description: successful operation
+        '401':
+          description: invalid token
+        '500':
+          description: internal server error
+          
+                  
+  /content/labels/{labelId}/groups/{groupId}:
+    post:
+      tags:
+        - content
+      description: set sharing group for label
+      operationId: set-label-group
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: labelId
+          in: path
+          description: specified label id 
+          required: true
+          schema:
+            type: string
+        - name: groupId
+          in: path
+          description: specified group id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: entry set
+        '401':
+          description: invalid token
+        '500':
+          description: internal server error
+    delete:
+      tags:
+        - content
+      description: clear sharing group for label
+      operationId: clear-label-group
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: labelId
+          in: path
+          description: specified label id 
+          required: true
+          schema:
+            type: string
+        - name: groupId
+          in: path
+          description: specified group id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: entry removed
         '401':
           description: invalid token
         '500':
@@ -2457,6 +2573,14 @@ paths:
           required: true
           schema:
             type: string
+        - name: types
+          in: query
+          description: limit resutls to topics of types
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
       responses:
         '200':
           description: successful operation
@@ -2494,6 +2618,14 @@ paths:
           required: true
           schema:
             type: string
+        - name: types
+          in: query
+          description: limit resutls to topics of types
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
       responses:
         '200':
           description: successful operation
@@ -2671,7 +2803,7 @@ paths:
     get:
       tags:
         - conversation
-      description: Get a view of all of the tags within a block. Authorization granted to account holder app token or dialogue member contact token who has access to the topic. 
+      description: Get a view of all of all tagBlocks. Authorization granted to account holder app token or dialogue member contact token who has access to the topic. 
       operationId: get-topic-tag-block-view
       security:
         - bearerAuth: []
@@ -2688,6 +2820,14 @@ paths:
           required: true
           schema:
             type: string
+        - name: types
+          in: query
+          description: limit resutls to articles of types
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
       responses:
         '200':
           description: successful operation
@@ -2737,6 +2877,14 @@ paths:
           required: true
           schema:
             type: string
+        - name: types
+          in: query
+          description: limit resutls to tags of types
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
       responses:
         '200':
           description: successful operation
@@ -2786,6 +2934,14 @@ paths:
           required: true
           schema:
             type: string
+        - name: types
+          in: query
+          description: limit resutls to tags of types
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
       responses:
         '200':
           description: successful operation
@@ -3359,14 +3515,14 @@ components:
     Subject:
       type: object
       required:
-        - postId
+        - subjectId
         - revision
         - type
         - data
         - created
         - modified
       properties:
-        postId:
+        subjectId:
           type: string
         revision:
           type: integer
@@ -3559,24 +3715,22 @@ components:
     Group:
       type: object
       required:
-        - groupId
-        - name
+        - subject
       properties:
-        groupId:
-          type: string
-        name:
-          type: string
+        subject:
+          $ref: '#/components/schemas/Subject'
           
     Label:
       type: object
       required:
-        - labelId
-        - name
+        - subject
       properties:
-        labelId:
-          type: string
-        name:
-          type: string
+        subject:
+          $ref: '#/components/schemas/Subject'
+        groups:  # present only in account holder responses
+          type: array
+          items:
+            type: string
       
     Authenticate:
       type: object
