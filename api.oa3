@@ -673,7 +673,7 @@ paths:
     post:
       tags:
         - contact
-      description: Add card entry
+      description: Add a card entry
       operationId: add-contact-card
       security:
         - bearerAuth: []
@@ -683,7 +683,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Card'
+                $ref: '#/components/schemas/DataMessage'
         '401':
           description: invalid password
         '404':
@@ -972,7 +972,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CardProfile'
+                $ref: '#/components/schemas/DataMessage'
         '401':
           description: invalid password
         '404':
@@ -984,6 +984,36 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Profile'
+          
+  /contact/cards/{cardId}/profile/image:
+    get:
+      tags:
+        - contact
+      description: Get profile of card entry
+      operationId: get-contact-profile-image
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: cardId
+          in: path
+          description: specified card id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success
+          content:
+            application/octet-stream: #asset specific
+              schema:
+                type: string
+                format: binary
+        '401':
+          description: invalid password
+        '404':
+          description: not found
+        '500':
+          description: internal server error
           
   /contact/cards/{cardId}/data:
     get:
@@ -1452,6 +1482,43 @@ paths:
         '500':
           description: internal server error
   
+  /content/articles/{articleId}/subject/{field}:
+    get:
+      tags:
+        - content
+      description: Base64 decode and download specified field from the article's subject. Access granted to app token of account holder or contact token of account the article is shared with.
+      operationId: get-article-subject-field
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: articleId
+          in: path
+          description: specified article id 
+          required: true
+          schema:
+            type: string
+        - name: field
+          in: path
+          description: field from subject to base64 decode and download 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Article'
+        '401':
+          description: permission denied
+        '404':
+          description: field, article not found
+        '405':
+          description: invalid field
+        '500':
+          description: internal server error
+          
   /content/articles/{articleId}/subject:
     put:
       tags:
@@ -2028,6 +2095,49 @@ paths:
         '500':
           description: internal server error
               
+  /content/articles/{articleId}/tags/{tagId}/subject/{field}:
+    get:
+      tags:
+        - content
+      description: Base64 decode and retrieve specified tag on the article. Access granted to app tokens of account holder and contact tokens of accounts with which the article is shared.
+      operationId: get-article-tag-subject-field
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: articleId
+          in: path
+          description: specified article id 
+          required: true
+          schema:
+            type: string
+        - name: tagId
+          in: path
+          description: specified tag id 
+          required: true
+          schema:
+            type: string
+        - name: field
+          in: path
+          description: field to base64 decode and transfer 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tag'
+        '401':
+          description: permission denied
+        '404':
+          description: field, tag or article not found
+        '405':
+          description: invalid field
+        '500':
+          description: internal server error
+          
   /content/labels:
     get:
       tags:
@@ -2814,6 +2924,50 @@ paths:
         '500':
           description: internal server error
   
+  /conversation/dialogues/{dialogueId}/topics/{topicId}/subject/{field}:
+    get:
+      tags:
+        - conversation
+      description: Base64 decode and retrieve a specified field from subject of dialogue topic. Authorization granted to account holder app token or dialogue member contact token who is a member of the dialogue.
+      operationId: get-dialogue-topic-subject-field
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: dialogueId
+          in: path
+          description: specified dialogue id
+          required: true
+          schema:
+            type: string
+        - name: topicId
+          in: path
+          description: specified topic id 
+          required: true
+          schema:
+            type: string
+        - name: field
+          in: path
+          description: field to base64 decode and retrieve 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success
+          content:
+            application/octet-stream: #asset specific
+              schema:
+                type: string
+                format: binary
+        '401':
+          description: permission denied
+        '404':
+          description: field, topic or dialogue not found
+        '405':
+          description: invalid field
+        '500':
+          description: internal server error
+          
   /conversation/dialogues/{dialogueId}/topics/{topicId}/subject:
     put:
       tags:
@@ -3360,6 +3514,55 @@ paths:
         '500':
           description: internal server error
               
+  /conversation/dialogues/{dialogueId}/topics/{topicId}/tags/{tagId}/subject/{field}:
+    get:
+      tags:
+        - conversation
+      description: Base64 decode and retrieve specified field of tag subject on the topic. Authorization granted to account holder app token or dialogue member contact token who has access to the topic.
+      operationId: get-topic-tag-subject-field
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: dialogueId
+          in: path
+          description: specified dialogue id
+          required: true
+          schema:
+            type: string
+        - name: topicId
+          in: path
+          description: specified topic id 
+          required: true
+          schema:
+            type: string
+        - name: tagId
+          in: path
+          description: specified tag id 
+          required: true
+          schema:
+            type: string
+        - name: field
+          in: path
+          description: field to base64 decode and download 
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tag'
+        '401':
+          description: permission denied
+        '404':
+          description: field, tag, topic, or dialogue not found
+        '405':
+          description: invalid field
+        '500':
+          description: internal server error
+          
 externalDocs:
   description: Find out more about Swagger
   url: 'http://swagger.io'
@@ -3728,40 +3931,6 @@ components:
           type: array
           items:
             type: string
-        tagCount:
-          type: integer
-          format: int32
-        tagUpdate:
-          type: integer
-          format: int32
-        tagRevision:
-          type: integer
-          format: int64
-          
-    Note:
-      type: object
-      required:
-        - noteId
-        - guid
-        - revision
-        - status
-        - subject
-        - tagCount
-        - tagUpdated
-        - tagRevision
-      properties:
-        topicId:
-          type: string
-        guid:
-          type: string
-        revision:
-          type: integer
-          format: int64
-        status:
-          type: string
-          enum: [ unconfirmed, confirmed, complete, error ]
-        subject:
-          $ref: '#/components/schemas/Subject'
         tagCount:
           type: integer
           format: int32
