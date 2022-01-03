@@ -121,7 +121,7 @@ paths:
       security:
         - basicAuth: []
       parameters:
-        - name: guid
+        - name: cardId
           in: query
           description: id of profile to access
           required: true
@@ -183,7 +183,7 @@ paths:
         '500':
           description: internal server error
           
-  /admin/accounts/{guid}:
+  /admin/accounts/{cardId}:
     delete:
       tags:
         - admin
@@ -192,7 +192,7 @@ paths:
       security:
         - basicAuth: []
       parameters:
-        - name: guid
+        - name: cardId
           in: path
           description: id of account to delete
           required: true
@@ -208,7 +208,7 @@ paths:
         '500':
           description: internal server error
         
-  /admin/accounts/{guid}/image:
+  /admin/accounts/{cardId}/image:
     get:
       tags:
         - admin
@@ -217,7 +217,7 @@ paths:
       security:
         - basicAuth: []
       parameters:
-        - name: guid
+        - name: cardId
           in: path
           description: id of specified account
           required: true
@@ -480,33 +480,33 @@ paths:
     get:
       tags:
         - profile
-      description: Get profile view object
+      description: Get profile of accunt. Access granted to app token of account holder.
       operationId: get-profile
       security:
         - bearerAuth: []
       responses:
         '200':
-          description: successful operation
+          description: success
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Profile'
         '401':
-          description: invalid token
+          description: permission denied
         '500':
           description: internal server error
     put:
       tags:
         - profile
-      description: Set profile data
+      description: Set profile data. Access granted to app tokens of account holder.
       operationId: set-profile
       security:
         - bearerAuth: []
       responses:
         '200':
-          description: successful operation
+          description: success
         '401':
-          description: invalid token
+          description: permission denied
         '500':
           description: internal server error
       requestBody:
@@ -519,20 +519,20 @@ paths:
     get:
       tags:
         - profile
-      description: Get profile image
+      description: Download base64 decoded data of profile image. Access granted to app tokens of account holder.
       operationId: get-profile-image
       security:
         - bearerAuth: []
       responses:
         '200':
-          description: successful operation
+          description: success
           content:
-            application/octet-stream:
+            application/octet-stream: # content specific
               schema:
                 type: string
                 format: binary
         '401':
-          description: invalid token
+          description: permission denied
         '405':
           description: invalid image
         '500':
@@ -542,17 +542,19 @@ paths:
     get:
       tags:
         - profile
-      description: Get profile message
+      description: Get a profile data message. Access granted to app token of account holder or contact token of connected contact.
       operationId: get-profile-message
+      security:
+        - bearerAuth: []
       responses:
         '200':
-          description: successful operation
+          description: success
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/DataMessage'
         '401':
-          description: invalid token
+          description: permission denied
         '500':
           description: internal server error
           
@@ -831,18 +833,13 @@ paths:
           description: card not found
         '500':
           description: internal server error
+          
+  /contact/openMessage:
     put:
       tags:
         - contact
       description: Set message for connecting to a contact. If card has not already been added, the card will be created in the pending state. Access granted to public.
       operationId: set-open-message
-      parameters:
-        - name: cardId
-          in: path
-          description: specified card id 
-          required: true
-          schema:
-            type: string
       responses:
         '200':
           description: successful operation
@@ -896,18 +893,13 @@ paths:
           description: card not found
         '500':
           description: internal server error
+          
+  /contact/closeMessage:
     put:
       tags:
         - contact
       description: Set message for closing card connection. Access granted to public.
       operationId: set-close-message
-      parameters:
-        - name: cardId
-          in: path
-          description: specified card id 
-          required: true
-          schema:
-            type: string
       responses:
         '200':
           description: successful operation
@@ -2356,8 +2348,8 @@ paths:
             schema:
               type: boolean
                   
-  /conversation/dialogues/{dialogueId}/insight/{guid}:
-    post:
+  /conversation/dialogues/{dialogueId}/cards/{cardId}:
+    put:
       tags:
         - conversation
       description: Add insight to a dialogue. This endpoint will automatically invoke the add insight on the contact's node. Authorization is granted to the app token of the account holder. 
@@ -2371,7 +2363,7 @@ paths:
           required: true
           schema:
             type: string
-        - name: guid
+        - name: cardId
           in: path
           description: specified card id
           required: true
@@ -2383,7 +2375,7 @@ paths:
         '401':
           description: permission denied
         '404':
-          description: guid or dialogue not found
+          description: cardId or dialogue not found
         '500':
           description: internal server error
     delete:
@@ -2400,7 +2392,7 @@ paths:
           required: true
           schema:
             type: string
-        - name: guid
+        - name: cardId
           in: path
           description: specified contact id 
           required: true
@@ -2412,15 +2404,15 @@ paths:
         '401':
           description: permission denied
         '404':
-          description: guid or dialogue not found
+          description: cardId or dialogue not found
         '500':
           description: internal server error
           
-  /conversation/dialogues/{dialogueId}/insight/{guid}/status:
+  /conversation/dialogues/{dialogueId}/status:
     put:
       tags:
         - conversation
-      description: Set active status for contact on the host node. Access is granted to a contact token for an accound with the specified guid
+      description: Set active status for contact on the host node. Access is granted to a contact token for an account with the specified contact
       operationId: set-dialogue-insight-status
       security:
         - bearerAuth: []
@@ -2431,19 +2423,13 @@ paths:
           required: true
           schema:
             type: string
-        - name: guid
-          in: path
-          description: specified contact id
-          required: true
-          schema:
-            type: string
       responses:
         '200':
           description: success
         '401':
           description: permission denied
         '404':
-          description: guid or dialogue not found
+          description: dialogue not found
         '500':
           description: internal server error
       requestBody:
@@ -2500,21 +2486,15 @@ paths:
         '500':
           description: internal server error
           
-  /conversation/insights/{guid}/dialogues/{dialogueId}:
+  /conversation/insights/{dialogueId}:
     post:
       tags:
         - conversation
-      description: Create or update an insight. Access granted to a contact token for a contact with the specified guid. This endpoint is invoked by the webhook from the contact node.
+      description: Create or update an insight. Because the insightId is not know by the contact, it is determined from the token and the dialogueId. Access granted to a connected contact token.
       operationId: add-insight-dialogue
       security:
         - bearerAuth: []
       parameters:
-        - name: guid
-          in: path
-          description: id of contact hosting the dialogue
-          required: true
-          schema:
-            type: string
         - name: dialogueId
           in: path
           description: dialogue with insight id to update
@@ -2532,7 +2512,7 @@ paths:
         '401':
           description: permission denied
         '404':
-          description: dialogue or guid not found
+          description: dialogue not found
         '500':
           description: internal server error
       requestBody:
@@ -2544,17 +2524,11 @@ paths:
     delete:
       tags:
         - conversation
-      description: Remove a specified insight. If the referenced dialogue is still active, the insight will get recreated with the next hook receiver update. Access granted to app token of account holder or contact token of dialogue host.
+      description: Remove a specified insight. If the referenced dialogue is still active, the insight will get recreated with the next hook receiver update. Access granted to contact token of a connected card.
       operationId: set-insight-dialogue
       security:
         - bearerAuth: []
       parameters:
-        - name: guid
-          in: path
-          description: id of contact hosting the dialogue
-          required: true
-          schema:
-            type: string
         - name: dialogueId
           in: path
           description: insight id to update
@@ -2567,26 +2541,20 @@ paths:
         '401':
           description: permission denied
         '404':
-          description: dialogue or guid not found
+          description: dialogue not found
         '500':
           description: internal server error
   
-  /conversation/insights/{guid}/dialogues/{dialogueId}/status:
+  /conversation/insights/{insightId}/status:
     put:
       tags:
         - conversation
-      description: Set the active status of an insight. This will cause the hook receiver to return an inactive status. Access granted to app token of account holder. 
-      operationId: set-insight-dialogue-active
+      description: Set the status of an insight. This will cause the hook receiver to return an inactive status. Access granted to app token of account holder. 
+      operationId: set-insight-status
       security:
         - bearerAuth: []
       parameters:
-        - name: guid
-          in: path
-          description: id of contact hosting the dialogue
-          required: true
-          schema:
-            type: string
-        - name: dialogueId
+        - name: insightId
           in: path
           description: dialogue with insight id to update
           required: true
@@ -2597,8 +2565,10 @@ paths:
           description: success
         '401':
           description: permission denied
+        '403':
+          description: invalid state # once dismissed always dismissed
         '404':
-          description: dialogue or guid not found
+          description: insight not found
         '500':
           description: internal server error
       requestBody:
@@ -3546,11 +3516,11 @@ components:
     Profile:
       type: object
       required:
-        - guid
+        - did
         - revision
         - node
       properties:
-        guid:
+        did:
           type: string
         handle:
           type: string
@@ -3614,12 +3584,12 @@ components:
     CardView:
       type: object
       required:
-        - guid
+        - cardId
         - profileRevision
         - contentRevision
         - cardRevision
       properties:
-        guid:
+        cardId:
           type: string
         cardRevision:
           type: integer
@@ -3678,11 +3648,14 @@ components:
     Card:
       type: object
       required:
+        - cardId
         - cardProfile
         - cardData
         - contentRevision
         - conversationRevision
       properties:
+        cardId:
+          type: string
         cardProfile:
           $ref: '#/components/schemas/CardProfile'
         cardData:
@@ -3733,10 +3706,10 @@ components:
     Tag:
       type: object
       required:
-        - guid
+        - cardId
         - subject
       properties:
-        guid:
+        cardId:
           type: string
         subject:
           $ref: '#/components/schemas/Subject'
@@ -3746,7 +3719,7 @@ components:
       required:
         - insightId
         - revision
-        - guid
+        - cardId
         - status
       properties:
         insightId:
@@ -3754,7 +3727,7 @@ components:
         revision:
           type: integer
           format: int64
-        guid:
+        cardId:
           type: string
         status:
           type: string
@@ -3783,7 +3756,7 @@ components:
           items:
             type: object
             properties:
-              guid:
+              cardId:
                 type: string
               status:
                 type: string
@@ -3883,7 +3856,7 @@ components:
     Authenticate:
       type: object
       required: 
-        - guid
+        - cardId
         - token
         - timestamp
       properties:
@@ -3903,9 +3876,9 @@ components:
         - token
         - contentRevision
       properties:
-        requestorGuid:
+        requestorcardId:
           type: string
-        requestedGuid:
+        requestedcardId:
           type: string
         timestamp: 
           type: integer
