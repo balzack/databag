@@ -533,6 +533,8 @@ paths:
                 format: binary
         '401':
           description: invalid token
+        '405':
+          description: invalid image
         '500':
           description: internal server error
           
@@ -558,19 +560,10 @@ paths:
     get:
       tags:
         - share
-      description: Get groups for sharing
-      operationId: get-share-groups
+      description: Get groups for sharing. Access granted to app tokens of the account holder.
+      operationId: get-groups
       security:
         - bearerAuth: []
-      parameters:
-        - name: types
-          in: query
-          description: limit resutls to groups of types
-          required: false
-          schema:
-            type: array
-            items:
-              type: string
       responses:
         '200':
           description: successful operation
@@ -587,15 +580,15 @@ paths:
     post:
       tags:
         - share
-      description: Add a group for sharing
-      operationId: add-share-group
+      description: Add a group for sharing. Access granted to app tokens of account holder.
+      operationId: add-group
       security:
         - bearerAuth: []
       responses:
-        '201':
+        '200':
           description: entry created
         '401':
-          description: invalid token
+          description: permission denied
         '500':
           description: internal server error
       requestBody:
@@ -616,8 +609,8 @@ paths:
     put:
       tags:
         - share
-      description: Update group for sharing
-      operationId: update-share-group
+      description: Update group description for sharing. Access granted to app tokens of account holder.
+      operationId: update-group
       security:
         - bearerAuth: []
       parameters:
@@ -629,9 +622,11 @@ paths:
             type: string
       responses:
         '200':
-          description: successful operation
+          description: success
         '401':
-          description: invalid token
+          description: permission denied
+        '404':
+          description: group not found
         '500':
           description: internal server error
       requestBody:
@@ -650,8 +645,8 @@ paths:
     delete:
       tags:
         - share
-      description: Get groups for sharing
-      operationId: remove-share-group
+      description: Remove sharing group
+      operationId: remove-group
       security:
         - bearerAuth: []
       parameters:
@@ -663,9 +658,11 @@ paths:
             type: string
       responses:
         '200':
-          description: successful operation
+          description: success
         '401':
-          description: invalid token
+          description: permission denied
+        '404':
+          description: group not found
         '500':
           description: internal server error
           
@@ -852,7 +849,15 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CardStatus'
+                type: object
+                required:
+                  - status
+                properties:
+                  token:
+                    type: string
+                  status:
+                    type: string
+                    enum: [ pending, confirmed, requested, connecting, connected ]
         '400':
           description: invalid data message
         '500':
@@ -909,7 +914,15 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CardStatus'
+                type: object
+                required:
+                  - status
+                properties:
+                  token:
+                    type: string
+                  status:
+                    type: string
+                    enum: [ pending, confirmed, requested, connecting, connected ]
         '400':
           description: invalid data message
         '500':
@@ -924,8 +937,8 @@ paths:
     get:
       tags:
         - contact
-      description: Get profile of card entry. 
-      operationId: get-contact-profile
+      description: Get profile of card entry. Access granted to app tokens of account holder.
+      operationId: get-card-profile
       security:
         - bearerAuth: []
       parameters:
@@ -951,8 +964,8 @@ paths:
     put:
       tags:
         - contact
-      description: Set profile of card entry
-      operationId: set-contact-profile
+      description: Set profile of card entry. Access granted to app tokens of account holder.
+      operationId: set-card-profile
       security:
         - bearerAuth: []
       parameters:
@@ -964,15 +977,15 @@ paths:
             type: string
       responses:
         '200':
-          description: successful operation
+          description: success
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/DataMessage'
         '401':
-          description: invalid password
+          description: permission denied
         '404':
-          description: not found
+          description: card not found
         '500':
           description: internal server error
       requestBody:
@@ -985,8 +998,8 @@ paths:
     get:
       tags:
         - contact
-      description: Get profile of card entry
-      operationId: get-contact-profile-image
+      description: Get image of card profile. Access granted to app tokens of account holder.
+      operationId: get-card-profile-image
       security:
         - bearerAuth: []
       parameters:
@@ -1005,9 +1018,11 @@ paths:
                 type: string
                 format: binary
         '401':
-          description: invalid password
+          description: permission denied
         '404':
-          description: not found
+          description: card not found
+        '405':
+          description: invalid image
         '500':
           description: internal server error
           
@@ -1015,8 +1030,8 @@ paths:
     get:
       tags:
         - contact
-      description: Get data of card entry
-      operationId: get-contact-data
+      description: Get specified card data. Access granted to app tokens for account holder.
+      operationId: get-card-data
       security:
         - bearerAuth: []
       parameters:
@@ -1028,15 +1043,15 @@ paths:
             type: string
       responses:
         '200':
-          description: successful operation
+          description: success
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/CardData'
         '401':
-          description: invalid password
+          description: permission denied
         '404':
-          description: not found
+          description: card not found
         '500':
           description: internal server error
           
@@ -1044,8 +1059,8 @@ paths:
     put:
       tags:
         - contact
-      description: Update card notes
-      operationId: set-contact-card-notes
+      description: Update card notes for specified card. Access granted to app tokens for account holder.
+      operationId: set-card-notes
       security:
         - bearerAuth: []
       parameters:
@@ -1057,15 +1072,15 @@ paths:
             type: string
       responses:
         '200':
-          description: successful operation
+          description: success
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/CardData'
         '401':
-          description: invalid password
+          description: permission denied
         '404':
-          description: not found
+          description: card not found
         '500':
           description: internal server error
       requestBody:
@@ -1076,8 +1091,8 @@ paths:
     delete:
       tags:
         - contact
-      description: Clear card notes
-      operationId: clear-contact-card-notes
+      description: Clear notes for specified card. Access granted to app tokens of account holder.
+      operationId: clear-card-notes
       security:
         - bearerAuth: []
       parameters:
@@ -1089,24 +1104,24 @@ paths:
             type: string
       responses:
         '200':
-          description: successful operation
+          description: success
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/CardData'
         '401':
-          description: invalid password
+          description: permission denied
         '404':
-          description: not found
+          description: card not found
         '500':
           description: internal server error
             
-  /contact/cards/{cardId}/shares/{shareId}:
+  /contact/cards/{cardId}/groups/{groupId}:
     put:
       tags:
         - contact
-      description: Update card notes
-      operationId: set-contact-card-share
+      description: Set sharing group for contact. Access granted to app tokens for account holder. 
+      operationId: set-card-group
       security:
         - bearerAuth: []
       parameters:
@@ -1116,7 +1131,40 @@ paths:
           required: true
           schema:
             type: string
-        - name: shareId
+        - name: groupId
+          in: path
+          description: specified group id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CardData'
+        '401':
+          description: permission denied
+        '404':
+          description: card or group not found
+        '500':
+          description: internal server error
+    delete:
+      tags:
+        - contact
+      description: Clear sharing group for card. Access granted to app tokens for account holder.
+      operationId: clear-card-group
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: cardId
+          in: path
+          description: specified card id 
+          required: true
+          schema:
+            type: string
+        - name: groupId
           in: path
           description: specified share id 
           required: true
@@ -1124,120 +1172,15 @@ paths:
             type: string
       responses:
         '200':
-          description: successful operation
+          description: success
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/CardData'
         '401':
-          description: invalid password
+          description: permission denied
         '404':
-          description: not found
-        '500':
-          description: internal server error
-    delete:
-      tags:
-        - contact
-      description: Clear card share group
-      operationId: clear-contact-card-share
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: cardId
-          in: path
-          description: specified card id 
-          required: true
-          schema:
-            type: string
-        - name: shareId
-          in: path
-          description: specified share id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CardData'
-        '401':
-          description: invalid password
-        '404':
-          description: not found
-        '500':
-          description: internal server error
-          
-  /contact/blocked:
-    get:
-      tags:
-        - contact
-      description: Get list of blocked cards
-      operationId: get-contact-blocked-cards
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: string
-        '401':
-          description: invalid password
-        '404':
-          description: not found
-        '500':
-          description: internal server error
-          
-  /contact/blocked/{cardId}:
-    post:
-      tags:
-        - contact
-      description: Add card from blocked list
-      operationId: add-contact-blocked-card
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: cardId
-          in: path
-          description: specified card id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: successful operation
-        '401':
-          description: invalid password
-        '404':
-          description: not found
-        '500':
-          description: internal server error
-    delete:
-      tags:
-        - contact
-      description: Remove card from blocked list
-      operationId: remove-contact-blocked-card
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: cardId
-          in: path
-          description: specified card id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: successful operation
-        '401':
-          description: invalid password
-        '404':
-          description: not found
+          description: card or group not found
         '500':
           description: internal server error
           
@@ -1245,8 +1188,8 @@ paths:
     put:
       tags:
         - contact
-      description: Hook receiver for card profile revision updates
-      operationId: revision-profile-hook
+      description: Set profile revision for contact. This is intend to be invoked automatically anytime a contact updates their profile. Access granted to contact tokens.
+      operationId: set-profile-revision
       security:
         - bearerAuth: []
       responses:
@@ -1267,8 +1210,8 @@ paths:
     put:
       tags:
         - contact
-      description: Hook receiver for card content revision updates
-      operationId: revision-content-hook
+      description: Set content revision for contact. This is intend to be invoked automatically anytime a contact updates their content or sharing. Access granted to contact tokens.
+      operationId: set-content-revision
       security:
         - bearerAuth: []
       responses:
@@ -2142,15 +2085,6 @@ paths:
       operationId: get-labels
       security:
         - bearerAuth: []
-      parameters:
-        - name: types
-          in: query
-          description: limit results to labels of types
-          required: false
-          schema:
-            type: array
-            items:
-              type: string
       responses:
         '200':
           description: successful operation
@@ -3731,8 +3665,8 @@ components:
           format: int64
         status:
           type: string
-          enum: [ pending, confirmed, connecting, connected ]
-        details:
+          enum: [ pending, confirmed, requested, connecting, connected ]
+        notes:
           type: string
         token:
           type: string
@@ -3740,17 +3674,6 @@ components:
           type: array
           items:
             type: string
-          
-    CardStatus:
-      type: object
-      required:
-        - status
-      properties:
-        status:
-          type: string
-          enum: [ pending, confirmed, requested, connecting, connected ]
-        token:
-          type: string
           
     Card:
       type: object
