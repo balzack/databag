@@ -2489,7 +2489,7 @@ paths:
       operationId: get-insights
       security:
         - bearerAuth: []
-      paramters:
+      parameters:
         - name: dismissed
           in: query
           description: if dismissed insights should be included 
