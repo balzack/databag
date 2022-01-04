@@ -12,7 +12,7 @@ info:
     name: Apache 2.0
     url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
 tags:
-  - name: revision
+  - name: status
     description: websocket endpoint for receiving module revision events
   - name: admin
     description: account creation for portal backend.
@@ -39,17 +39,17 @@ paths:
   ## access tokens for bearer auth:prefix for bearer tokens types
   ### app: app_
   ### contact: cnt_
-  ### pass code: pas_
-  ### account reset: res_
-  ### account create: act_
+  ### attach: atc_
+  ### reset: res_
+  ### create: act_
   ## subject based content provides external definition of datatypes
 
-  /revision:
+  /status:
     get:
       tags:
-        - revision
-      description: Websocket placeholder endpoint for receiving revision updates
-      operationId: websocket
+        - status
+      description: Websocket placeholder endpoint for receiving account status updates
+      operationId: status
       responses:
         '200':
           description: Awaiting announce
@@ -59,12 +59,12 @@ paths:
       tags:
         - admin
       description: Check if portal params have been set
-      operationId: node-configurable
+      operationId: get-node-claimable
       responses:
         '200':
           description: success
-        '405':
-          description: admin already configured
+        '406':
+          description: node already claimed
         '500':
           description: internal server error
           
@@ -73,7 +73,7 @@ paths:
       tags:
         - admin
       description: Set admin password and node domain
-      operationId: add-node-config
+      operationId: set-node-config
       security:
         - basicAuth: []
       parameters:
@@ -86,8 +86,8 @@ paths:
       responses:
         '200':
           description: success
-        '405':
-          description: admin already configured
+        '401':
+          description: permission denied
         '500':
           description: internal server error
           
@@ -95,7 +95,7 @@ paths:
     put:
       tags:
         - admin
-      description: Set portal domain
+      description: Set portal domain to be set in profile queries. Access granted to admin username and password.
       operationId: set-node-config-domain
       security:
         - basicAuth: []
@@ -103,7 +103,7 @@ paths:
         '200':
           description: success
         '401':
-          description: authentication error
+          description: permission denide
         '500':
           description: internal server error
       requestBody:
@@ -112,17 +112,59 @@ paths:
             schema:
               type: string
           
-  /admin/token:
+  /admin/accounts:
+    get:
+      tags:
+        - admin
+      description: Get list of accounts hosted on node. Access granted to admin username and password. 
+      operationId: get-node-accounts
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Account'
+        '401':
+          description: invalid password
+        '404':
+          description: handle not found
+        '500':
+          description: internal server error
+    post:
+      tags:
+        - admin
+      description: Gernerate a url for creating a new account. Access granted to admin username and password.
+      operationId: add-node-account
+      security:
+        - basicAuth: []
+      responses:
+        '201':
+          description: generated
+          content:
+            application/json:
+              schema:
+                type: string
+        '401':
+          description: invalid password
+        '500':
+          description: internal server error
+          
+  /admin/accounts/{accountId}/reset:
     put:
       tags:
         - admin
-      description: Create password reset token url
+      description: Generate a password reset url for specified account. Access granted to admin username and password.
       operationId: set-node-account
       security:
         - basicAuth: []
       parameters:
-        - name: cardId
-          in: query
+        - name: accountId
+          in: path
           description: id of profile to access
           required: true
           schema:
@@ -140,59 +182,47 @@ paths:
           description: unknown portal
         '500':
           description: internal server error
-    post:
-      tags:
-        - admin
-      description: Create new account token url
-      operationId: add-node-account
-      security:
-        - basicAuth: []
-      responses:
-        '201':
-          description: generated
-          content:
-            application/json:
-              schema:
-                type: string
-        '401':
-          description: invalid password
-        '500':
-          description: internal server error
           
-  /admin/accounts:
+  /admin/accounts/{accountId}/image:
     get:
       tags:
         - admin
-      description: Get list of portals
-      operationId: get-node-accounts
+      description: Get profile image of specified account. Access granted to admin username and password
+      operationId: get-node-account-image
       security:
         - basicAuth: []
-      responses:
+      parameters:
+        - name: accountId
+          in: path
+          description: id of specified account
+          required: true
+          schema:
+            type: string
+      responses: 
         '200':
-          description: successful operation
+          description: success
           content:
-            application/json:
+            application/octet-stream: # content specific
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Profile'
+                type: string
+                format: binary
         '401':
-          description: invalid password
-        '404':
-          description: handle not found
+          description: permission denied
+        '405':
+          description: invalid image
         '500':
           description: internal server error
           
-  /admin/accounts/{cardId}:
+  /admin/accounts/{accountId}:
     delete:
       tags:
         - admin
-      description: Remove account from node
+      description: Remove account from node. Access granted to admin username and password.
       operationId: remove-node-account
       security:
         - basicAuth: []
       parameters:
-        - name: cardId
+        - name: accountId
           in: path
           description: id of account to delete
           required: true
@@ -207,43 +237,13 @@ paths:
           description: account not found
         '500':
           description: internal server error
-        
-  /admin/accounts/{cardId}/image:
-    get:
-      tags:
-        - admin
-      description: Get  profile of specified account
-      operationId: get-node-account-image
-      security:
-        - basicAuth: []
-      parameters:
-        - name: cardId
-          in: path
-          description: id of specified account
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/octet-stream:
-              schema:
-                type: string
-                format: binary
-        '401':
-          description: invalid password
-        '404':
-          description: account not found
-        '500':
-          description: internal server error
           
   /account/claimable:
     get:
       tags:
         - account
-      description: Check if username is available
-      operationId: check-username
+      description: Check if username is available. Access granted account reset token or account create token.
+      operationId: get-account-username
       security:
         - bearerAuth: []
       parameters:
@@ -257,9 +257,9 @@ paths:
         '200':
           description: success
         '401':
-          description: authentication error
-        '405':
-          description: username already taken
+          description: permission denied
+        '406':
+          description: username already claimed
         '500':
           description: internal server error
           
@@ -267,15 +267,15 @@ paths:
     get:
       tags:
         - account
-      description: Check if bearer token is valid
-      operationId: check-token
+      description: Check if account reset token or account create token is valid. Access granted to valid create or reset token.
+      operationId: get-account-token
       security:
         - bearerAuth: []
       responses:
         '200':
           description: success
         '401':
-          description: invalid token
+          description: permission denied
         '500':
           description: internal server error
           
@@ -283,7 +283,7 @@ paths:
     get:
       tags:
         - account
-      description: Get public profile object
+      description: Get account profile. Access granted to account's username and password.
       operationId: get-account-profile
       security:
         - basicAuth: []
@@ -301,7 +301,7 @@ paths:
     post:
       tags:
         - account
-      description: Add a new account
+      description: Add a new account. Basic auth will be used for the accounts username and password. Access granted to valid create account token.
       operationId: add-account
       security:
         - bearerAuth: []
@@ -320,11 +320,34 @@ paths:
         '500':
           description: internal server error
                 
-  /account/authentication:
+  /account/profile/image:
+    get:
+      tags:
+        - account
+      description: Get profile image. Access granted to account's username and password
+      operationId: get-account-image
+      security:
+        - basicAuth: []
+      responses: 
+        '200':
+          description: success
+          content:
+            application/octet-stream: # content specific
+              schema:
+                type: string
+                format: binary
+        '401':
+          description: permission denied
+        '405':
+          description: invalid image
+        '500':
+          description: internal server error
+          
+  /account/auth:
     post:
       tags:
         - account
-      description: Generate token to reset authentication
+      description: Generate token to reset authentication. Access granted to account's login and password.
       operationId: add-account-authentication
       security:
         - basicAuth: []
@@ -342,26 +365,44 @@ paths:
     put:
       tags:
         - account
-      description: Apply account reset token to set handle and password
+      description: Apply account reset token to set handle and password. Basic auth will be used for new login and password. Access granted to valid reset token.
       operationId: set-account-authentication
       security:
         - bearerAuth: []
         - basicAuth: []
       responses:
         '201':
-          description: successful operation
+          description: success
         '401':
-          description: invalid token
-        '406':
-          description: invalid handle or password
+          description: permission denied
         '500':
           description: internal server error
           
-  /account/attachment:
+  /account/apps:
+    get:
+      tags:
+        - account
+      description: Get list of attached apps to account. Access granted to account's username and password.
+      operationId: get-account-apps
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/App'
+        '401':
+          description: permission denied
+        '500':
+          description: internal server error
     post:
       tags:
         - account
-      description: Generate token to attach an app to the account
+      description: Generate token to attach an app to the account. Access granted to account's username and password.
       operationId: add-account-app
       security:
         - basicAuth: []
@@ -379,7 +420,7 @@ paths:
     put:
       tags:
         - account
-      description: Apply the app token and attach an app to the account
+      description: Apply the token to attach an app to the account. Access granted to valid attach token.
       operationId: set-account-app
       security:
         - bearerAuth: []
@@ -402,33 +443,11 @@ paths:
             schema:
               $ref: '#/components/schemas/AppData'
           
-  /account/apps:
-    get:
-      tags:
-        - account
-      description: Get list of attached apps
-      operationId: get-account-apps
-      security:
-        - basicAuth: []
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/App'
-        '401':
-          description: invalid password
-        '500':
-          description: internal server error
-          
   /account/apps/{appId}:
     delete:
       tags:
         - account
-      description: Get list of attached apps
+      description: Get list of attached apps. Access granted to account's username and password.
       operationId: remove-account-app
       security:
         - basicAuth: []
@@ -448,33 +467,31 @@ paths:
           description: app not found
         '500':
           description: internal server error
-                  
+          
   /authenticate:
     put:
       tags:
         - authenticate
-      description: Sign payload containing external token for authentication
+      description: Retrieve an authenticate data messaging verifying the account holder is accepting the action referenced by the token.
       operationId: authenticate
       security:
         - bearerAuth: []
-      parameters:
-        - name: token
-          in: query
-          description: token to sign in message response
-          required: true
-          schema:
-            type: string
       responses:
-        '201':
-          description: generated
+        '200':
+          description: success
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/DataMessage'
         '401':
-          description: invalid token
+          description: permission denied
         '500':
           description: internal server error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
           
   /profile:
     get:
@@ -3464,8 +3481,8 @@ paths:
           description: internal server error
           
 externalDocs:
-  description: Find out more about Swagger
-  url: 'http://swagger.io'
+  description: App overview
+  url: ''
 
 components:
   schemas:
@@ -3487,7 +3504,6 @@ components:
         - share
         - label
         - card
-        - blocked
         - dialogue
         - insight
       properties:
@@ -3497,10 +3513,10 @@ components:
         content:
           type: integer
           format: int64
-        labels:
+        label:
           type: integer
           format: int64
-        sharing:
+        share:
           type: integer
           format: int64
         card:
@@ -3536,6 +3552,8 @@ components:
         revision:
           type: integer
           format: int64
+        version:
+          type: string
         node:
           type: string
           
@@ -3553,6 +3571,17 @@ components:
         image:
           type: string
           
+    Account:
+      type: object
+      required:
+        - accountId
+        - profile
+      properties:
+        accountId:
+          type: string
+        profile:
+          $ref: '#/components/schemas/Profile'
+        
     App:
       type: object
       required:
@@ -3761,6 +3790,19 @@ components:
               status:
                 type: string
                 enum: [ active, offsync, inactive, dismissed ]
+    
+    Tunnel:
+      type: object
+      required:
+        - cardId
+        - type
+      properties:
+        cardId:
+          type: string
+        type:
+          type: string
+        data:
+          type: string
           
     Topic:
       type: object
@@ -3856,7 +3898,7 @@ components:
     Authenticate:
       type: object
       required: 
-        - cardId
+        - did
         - token
         - timestamp
       properties:
