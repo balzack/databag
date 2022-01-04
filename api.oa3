@@ -2489,6 +2489,13 @@ paths:
       operationId: get-insights
       security:
         - bearerAuth: []
+      paramters:
+        - name: dismissed
+          in: query
+          description: if dismissed insights should be included 
+          required: false
+          schema:
+            type: string
       responses:
         '200':
           description: success
@@ -2499,7 +2506,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/Insight'
         '401':
-          description: invalid token
+          description: permission denied
         '500':
           description: internal server error
           
@@ -3495,7 +3502,7 @@ components:
         appToken:
           type: string
           
-    Revsion:    
+    Status:    
       type: object
       required:
         - profile
