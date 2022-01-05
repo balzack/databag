@@ -18,8 +18,8 @@ tags:
     description: account creation for portal backend.
   - name: account
     description: account configuration for portal backend. supports app attachment
-  - name: authenticate
-    description: authenticate holder of identity for external service
+  - name: authorize
+    description: authorize holder of identity for external service
   - name: profile
     description: getting and setting of the public profile
   - name: share
@@ -68,12 +68,12 @@ paths:
         '500':
           description: internal server error
           
-  /admin/config:
+  /admin/claim:
     post:
       tags:
         - admin
       description: Set admin password and node domain
-      operationId: set-node-config
+      operationId: set-node-claim
       security:
         - basicAuth: []
       parameters:
@@ -91,12 +91,30 @@ paths:
         '500':
           description: internal server error
           
-  /admin/config/domain:
+  /admin/config:
+    get:
+      tags:
+        - admin
+      description: Get node configuration. Access granted to admin username and password.
+      operationId: get-node-config
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NodeConfig'
+        '401':
+          description: permission denied
+        '500':
+          description: internal server error
     put:
       tags:
         - admin
-      description: Set portal domain to be set in profile queries. Access granted to admin username and password.
-      operationId: set-node-config-domain
+      description: Set node config. Access granted to admin username and password.
+      operationId: set-node-config
       security:
         - basicAuth: []
       responses:
@@ -109,9 +127,9 @@ paths:
       requestBody:
         content:
           application/json:
-            schema:
-              type: string
-          
+              schema:
+                $ref: '#/components/schemas/NodeConfig'
+              
   /admin/accounts:
     get:
       tags:
@@ -144,7 +162,7 @@ paths:
         - basicAuth: []
       responses:
         '201':
-          description: generated
+          description: success
           content:
             application/json:
               schema:
@@ -171,7 +189,7 @@ paths:
             type: string
       responses:
         '201':
-          description: generated
+          description: success
           content:
             application/json:
               schema:
@@ -468,10 +486,10 @@ paths:
         '500':
           description: internal server error
           
-  /authenticate:
+  /authorize:
     put:
       tags:
-        - authenticate
+        - authorize
       description: Retrieve an authenticate data messaging verifying the account holder is accepting the action referenced by the token.
       operationId: authenticate
       security:
@@ -3536,6 +3554,15 @@ components:
           type: integer
           format: int64
       
+    NodeConfig:
+      type: object
+      properties:
+        domain:
+          type: string
+        accountStorage:
+          type: integer
+          format: int64
+          
     Profile:
       type: object
       required:
