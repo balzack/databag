@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>DataBag API OVerview</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="UTF-8" />
+</head>
+<body>
+  <h2 style="text-align:center">DataBag API Overview</h2>
+
+  <h3><span style="font-size:9pt"><span style="font-family:Arial"><span style="color:#000000"><strong>Introduction</strong></span></span></span></h3>
+
+  <p><span style="font-size:9pt"><span style="font-family:Arial"><span style="color:#000000">Databag is a decentralized network with the goal of giving people back control of their data. The network supports a wide range of applications including contact apps, photo albums, video players, and social networks. Apps that connect to the Databag network must always be open-source to ensure privacy expectations are met.&nbsp;</span></span></span></p>
+
+  <p><span style="font-size:9pt"><span style="font-family:Arial"><span style="color:#000000">The node comprising the Databag network is designed for self-hosting, allowing a person to host their data and that of their friends and family if they choose. When a person stores their data in a node, they have fine grain control on how it is shared with others. Since a person&rsquo;s data is stored on a node they control, they can switch from one application to another, and their data goes with them.&nbsp;</span></span></span></p>
+
+  <p><span style="font-size:9pt"><span style="font-family:Arial"><span style="color:#000000">The API primarily focuses on the relationship between data and contacts for access control. Data is stored as abstract objects to be defined by the connecting applications. Each person on the network is identified with a decentralized identifier (DID) so they are not permanently tied to a domain or a hosting provider. If a person migrates their account to another node, the contact relationships remain intact.</span></span></span></p>
+
+  <h3><br />
+  <span style="font-size:9pt"><span style="font-family:Arial"><span style="color:#000000"><strong>Mechanisms</strong></span></span></span></h3>
+
+  <p><span style="font-size:9pt"><span style="font-family:Arial"><span style="color:#000000">Data is synchronized between apps and the network nodes through the maintenance of a revision tree. Data objects are grouped together, and those groups are grouped together. When one object changes the revision of that object is incremented as well as all the parent nodes of the tree. An app maintaining the same revision tree can identify and update any changed object by updating any node where the revision has changed.</span></span></span></p>
+
+  <p><span style="font-size:9pt"><span style="font-family:Arial"><span style="color:#000000">Accounts on the network can be connected for the purposes of sharing data. The connection is formed by exchanging signed messages containing access tokens. Because each account, identified by a DID, is backed by a public/private key, the token exchange can be done securely. All further communication between contacts is done using the exchanged token so the identity can be determined.&nbsp;</span></span></span></p>
+
+  <h3><br />
+  <span style="font-size:9pt"><span style="font-family:Arial"><span style="color:#000000"><strong>API Objects</strong></span></span></span></h3>
+
+  <p><span style="font-size:9pt"><span style="font-family:Arial"><span style="color:#000000">The primary data objects in the network are defined by how they are shared while their content is defined by the applications that use them; they consist of articles, topics and tags. Articles are assigned a contact set; contacts can be part of more than one set. Access is granted to the contact when they are part of a set that is assigned to the article. Topics are shared by creating a dialogue, and assigning both contacts and data objects to that dialogue. This difference between articles and topics is subtle; contacts can each have a different view of the set of articles, while members of a dialogue all have the same view of the topics. Finally tags are shared by assigning them to an article or a topic. When a contact has access to an article or topic, they have access to all the assigned tags as well.&nbsp;</span></span></span></p>
+
+  <p><span style="font-size:9pt"><span style="font-family:Arial"><span style="color:#000000">The list of objects used in the API follow:</span></span></span></p>
+
+  <ul>
+    <li style="list-style-type:disc"><span style="font-size:9pt"><span style="font-family:Arial"><span style="color:#000000"><strong>profile</strong></span></span></span><span style="font-size:9pt"><span style="font-family:Arial"><span style="color:#000000">: a public description of an account, includes options fields such as name and image</span></span></span></li>
+    <li style="list-style-type:disc"><span style="font-size:9pt"><span style="font-family:Arial"><span style="color:#000000"><strong>cards</strong></span></span></span><span style="font-size:9pt"><span style="font-family:Arial"><span style="color:#000000">: reference to other accounts existing on the network</span></span></span></li>
+    <li style="list-style-type:disc"><span style="font-size:9pt"><span style="font-family:Arial"><span style="color:#000000"><strong>apps</strong></span></span></span><span style="font-size:9pt"><span style="font-family:Arial"><span style="color:#000000">: applications attached to the account</span></span></span></li>
+    <li style="list-style-type:disc"><span style="font-size:9pt"><span style="font-family:Arial"><span style="color:#000000"><strong>articles</strong></span></span></span><span style="font-size:9pt"><span style="font-family:Arial"><span style="color:#000000">: content defined by applications&nbsp;</span></span></span></li>
+    <li style="list-style-type:disc"><span style="font-size:9pt"><span style="font-family:Arial"><span style="color:#000000"><strong>topics</strong></span></span></span><span style="font-size:9pt"><span style="font-family:Arial"><span style="color:#000000">: content defined by applications&nbsp;</span></span></span></li>
+    <li style="list-style-type:disc"><span style="font-size:9pt"><span style="font-family:Arial"><span style="color:#000000"><strong>tags</strong></span></span></span><span style="font-size:9pt"><span style="font-family:Arial"><span style="color:#000000">: content defined by applications&nbsp;</span></span></span></li>
+    <li style="list-style-type:disc"><span style="font-size:9pt"><span style="font-family:Arial"><span style="color:#000000"><strong>groups</strong></span></span></span><span style="font-size:9pt"><span style="font-family:Arial"><span style="color:#000000">: bundle contacts together and can be assigned to articles for sharing</span></span></span></li>
+    <li style="list-style-type:disc"><span style="font-size:9pt"><span style="font-family:Arial"><span style="color:#000000"><strong>dialogue</strong></span></span></span><span style="font-size:9pt"><span style="font-family:Arial"><span style="color:#000000">: bundle topics together and can be assigned to a contact for sharing</span></span></span></li>
+    <li style="list-style-type:disc"><span style="font-size:9pt"><span style="font-family:Arial"><span style="color:#000000"><strong>insight</strong></span></span></span><span style="font-size:9pt"><span style="font-family:Arial"><span style="color:#000000">: reference to a dialogue on a contacts account</span></span></span></li>
+    <li style="list-style-type:disc"><span style="font-size:9pt"><span style="font-family:Arial"><span style="color:#000000"><strong>labels</strong></span></span></span><span style="font-size:9pt"><span style="font-family:Arial"><span style="color:#000000">: bundles articles together to form things like an album and can also be shared with a group</span></span></span></li>
+  </ul>
+
+  <p>&nbsp;</p>
+
+  <h3><span style="font-size:9pt"><span style="font-family:Arial"><span style="color:#000000"><strong>API Modules</strong></span></span></span></h3>
+
+  <p><span style="font-size:9pt"><span style="font-family:Arial"><span style="color:#000000">The API is divided into 9 different modules:</span></span></span></p>
+
+  <ul>
+    <li style="list-style-type:disc"><span style="font-size:9pt"><span style="font-family:Arial"><span style="color:#000000"><strong>admin</strong></span></span></span><span style="font-size:9pt"><span style="font-family:Arial"><span style="color:#000000"> - Used by a system administrator via a browser application to configure and manage the server. Methods for creating new accounts or resetting the password on existing accounts are included.</span></span></span></li>
+    <li style="list-style-type:disc"><span style="font-size:9pt"><span style="font-family:Arial"><span style="color:#000000"><strong>account</strong></span></span></span><span style="font-size:9pt"><span style="font-family:Arial"><span style="color:#000000"> - Used by an account holder via a browser application to manage the account. Methods for attaching an application to the account are included.</span></span></span></li>
+    <li style="list-style-type:disc"><span style="font-size:9pt"><span style="font-family:Arial"><span style="color:#000000"><strong>profile</strong></span></span></span><span style="font-size:9pt"><span style="font-family:Arial"><span style="color:#000000"> - Manages the accounts public profile. A signed message of the public profile can be generated to distribute the profile to new entities.</span></span></span></li>
+    <li style="list-style-type:disc"><span style="font-size:9pt"><span style="font-family:Arial"><span style="color:#000000"><strong>share</strong></span></span></span><span style="font-size:9pt"><span style="font-family:Arial"><span style="color:#000000"> - Supports adding and removing of share groups.&nbsp;</span></span></span></li>
+    <li style="list-style-type:disc"><span style="font-size:9pt"><span style="font-family:Arial"><span style="color:#000000"><strong>content</strong></span></span></span><span style="font-size:9pt"><span style="font-family:Arial"><span style="color:#000000"> - Allows for adding, updating, sharing, and removing articles from the account. Also allows for organizing the articles by label and assigning those labels or articles to a share group. Articles added to an account need to be processed by stripping any metadata and possibly transcoded before it can be shared. Articles are initially in a not-confirmed and not-ready state. The article is set to confirmed once it has been fully specified, and set to ready when the processing has finished.&nbsp;</span></span></span></li>
+    <li style="list-style-type:disc"><span style="font-size:9pt"><span style="font-family:Arial"><span style="color:#000000"><strong>contact</strong></span></span></span><span style="font-size:9pt"><span style="font-family:Arial"><span style="color:#000000"> - Manages the set of cards referencing contacts on the network. Also supports assigning cards to a share group. Cards can be in several states:</span></span></span>
+    <ul>
+      <li style="list-style-type:circle"><span style="font-size:9pt"><span style="font-family:Arial"><span style="color:#000000">confirmed - a card that has been added to the account but no token exchange has occurred.&nbsp;</span></span></span></li>
+      <li style="list-style-type:circle"><span style="font-size:9pt"><span style="font-family:Arial"><span style="color:#000000">requested - the contact has requested a token exchange for connection</span></span></span></li>
+      <li style="list-style-type:circle"><span style="font-size:9pt"><span style="font-family:Arial"><span style="color:#000000">connecting - the account holder has requested a token exchange for connection</span></span></span></li>
+      <li style="list-style-type:circle"><span style="font-size:9pt"><span style="font-family:Arial"><span style="color:#000000">connected - a token exchange has occurred and articles, topics, and tags can be shared</span></span></span></li>
+      <li style="list-style-type:circle"><span style="font-size:9pt"><span style="font-family:Arial"><span style="color:#000000">pending - an unknown contact has requested a token exchange for connection.</span></span></span></li>
+    </ul>
+    </li>
+    <li style="list-style-type:disc"><span style="font-size:9pt"><span style="font-family:Arial"><span style="color:#000000"><strong>conversation</strong></span></span></span><span style="font-size:9pt"><span style="font-family:Arial"><span style="color:#000000"> - Supports the creation of dialogues and topics within the dialogue. When a contact is added to the dialogue, a reference to the dialogue can also be added to that contact&rsquo;s account in the form of an insight. When a dialogue update occurs, the insight is also updated.</span></span></span></li>
+    <li style="list-style-type:disc"><span style="font-size:9pt"><span style="font-family:Arial"><span style="color:#000000"><strong>authorization</strong></span></span></span><span style="font-size:9pt"><span style="font-family:Arial"><span style="color:#000000"> - Generates a signed message to verify the account holder&rsquo;s identity for some external service. This is primarily used when attaching an app to an account.</span></span></span></li>
+    <li style="list-style-type:disc"><span style="font-size:9pt"><span style="font-family:Arial"><span style="color:#000000"><strong>status</strong></span></span></span><span style="font-size:9pt"><span style="font-family:Arial"><span style="color:#000000"> - Provides a websocket connection to an app for receiving revision updates. When any change occurs, the associated module maintains a revision that is incremented. An app can then reflect changes to the account without polling.</span></span></span></li>
+  </ul>
+</body>
+</html>
