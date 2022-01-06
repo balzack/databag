@@ -256,6 +256,45 @@ paths:
         '500':
           description: internal server error
           
+  /account/public/claimable:
+    get:
+      tags:
+        - account
+      description: Check if a public account can be created.
+      operationId: get-public-claimable
+      responses:
+        '200':
+          description: success
+        '401':
+          description: permission denied
+        '406':
+          description: accounts not available
+        '500':
+          description: internal server error
+          
+  /account/public/profile:
+    post:
+      tags:
+        - account
+      description: Add a new account. Basic auth will be used for the accounts username and password. Access granted to when public account available.
+      operationId: add-public-account
+      security:
+        - bearerAuth: []
+        - basicAuth: []
+      responses:
+        '201':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+        '400':
+          description: invalid handle or password
+        '406':
+          description: accounts not available
+        '500':
+          description: internal server error
+          
   /account/claimable:
     get:
       tags:
@@ -334,7 +373,7 @@ paths:
         '400':
           description: invalid handle or password
         '401':
-          description: invalid bearer token
+          description: permission denied
         '500':
           description: internal server error
                 
@@ -3559,6 +3598,9 @@ components:
       properties:
         domain:
           type: string
+        publicLimit:
+          type: integer
+          format: int64
         accountStorage:
           type: integer
           format: int64
