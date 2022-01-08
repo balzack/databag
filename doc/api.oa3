@@ -3705,9 +3705,6 @@ components:
         contentRevision:
           type: integer
           format: int64
-        converstaionRevision:
-          type: integer
-          format: int64
           
     CardProfile:
       type: object
@@ -3756,8 +3753,8 @@ components:
         - cardId
         - cardProfile
         - cardData
+        - profileRevision
         - contentRevision
-        - conversationRevision
       properties:
         cardId:
           type: string
@@ -3765,10 +3762,10 @@ components:
           $ref: '#/components/schemas/CardProfile'
         cardData:
           $ref: '#/components/schemas/CardData'
-        contentRevision:
+        profileRevision:
           type: integer
           format: int64
-        converstaionRevision:
+        contentRevision:
           type: integer
           format: int64
             
