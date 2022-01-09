@@ -3911,8 +3911,6 @@ components:
     Article:
       type: object
       required:
-        - articleId
-        - revision
         - status
         - subject
         - labels
@@ -3920,11 +3918,6 @@ components:
         - tagUpdated
         - tagRevision
       properties:
-        articleId:
-          type: string
-        revision:
-          type: integer
-          format: int64
         status:
           type: string
           enum: [ unconfirmed, confirmed, complete, error ]
