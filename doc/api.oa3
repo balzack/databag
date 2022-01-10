@@ -3769,29 +3769,6 @@ components:
           type: integer
           format: int64
             
-    Subject:
-      type: object
-      required:
-        - subjectId
-        - revision
-        - type
-        - data
-        - created
-        - modified
-      properties:
-        subjectId:
-          type: string
-        revision:
-          type: integer
-          format: int64
-        type:
-          type: string
-        data:
-          type: string
-        created:
-          type: integer
-          format: int32
-          
     Asset:
       type: object
       required:
@@ -3808,25 +3785,39 @@ components:
     Tag:
       type: object
       required:
-        - cardId
-        - subject
+        - tagId
+        - revision
+        - type
+        - data
+        - created
+        - modified
       properties:
+        tagId:
+          type: string
         cardId:
           type: string
-        subject:
-          $ref: '#/components/schemas/Subject'
+        revision:
+          type: integer
+          format: int64
+        type:
+          type: string
+        data:
+          type: string
+        created:
+          type: integer
+          format: int32
           
     Insight:
       type: object
       required:
         - insightId
-        - revision
+        - insightRevision
         - cardId
         - status
       properties:
         insightId:
           type: string
-        revision:
+        insightRevision:
           type: integer
           format: int64
         cardId:
@@ -3839,20 +3830,31 @@ components:
       type: object
       required:
         - dialogueId
-        - revision
+        - dialogueRevision
+        - type
+        - data
+        - modified
+        - created
         - active
-        - subject
         - insights
       properties:
         dialogueId:
           type: string
-        revision:
+        dialogueRevison:
           type: integer
           format: int64
+        type:
+          type: string
+        data:
+          type: string
+        created:
+          type: integer
+          format: int32
         active:
           type: boolean
-        subject:
-          $ref: '#/components/schemas/Subject'
+        insightRevision:
+          type: integer
+          format: int64
         insights:
           type: array
           items:
@@ -3881,23 +3883,34 @@ components:
       type: object
       required:
         - topicId
-        - revision
+        - topicRevision
+        - type
+        - data
+        - created
+        - modified
         - status
-        - subject
         - tagCount
         - tagUpdated
         - tagRevision
       properties:
-        articleId:
+        topicId:
           type: string
-        revision:
+        topicRevision:
           type: integer
           format: int64
+        type:
+          type: string
+        data:
+          type: string
+        created:
+          type: integer
+          format: int32
+        modified:
+          type: integer
+          format: int32
         status:
           type: string
           enum: [ unconfirmed, confirmed, complete, error ]
-        subject:
-          $ref: '#/components/schemas/Subject'
         tagCount:
           type: integer
           format: int32
@@ -3911,18 +3924,36 @@ components:
     Article:
       type: object
       required:
+        - articleId
+        - articleRevision
+        - type
+        - data
+        - created
+        - modified
         - status
-        - subject
         - labels
         - tagCount
         - tagUpdated
         - tagRevision
       properties:
+        articleId:
+          type: string
+        articleRevision:
+          type: integer
+          format: int64
+        type:
+          type: string
+        data:
+          type: string
+        created:
+          type: integer
+          format: int32
+        modified:
+          type: integer
+          format: int32
         status:
           type: string
           enum: [ unconfirmed, confirmed, complete, error ]
-        subject:
-          $ref: '#/components/schemas/Subject'
         labels:
           type: array
           items:
@@ -3944,18 +3975,51 @@ components:
     Group:
       type: object
       required:
-        - subject
+        - groupId
+        - groupRevision
+        - type
+        - data
+        - created
+        - modified
       properties:
-        subject:
-          $ref: '#/components/schemas/Subject'
+        groupId:
+          type: string
+        groupRevision:
+          type: integer
+          format: int64
+        type:
+          type: string
+        data:
+          type: string
+        created:
+          type: integer
+          format: int32
+        modified:
+          type: integer
+          format: int32
           
     Label:
       type: object
       required:
-        - subject
+        - labelId
+        - labelRevision
+        - type
+        - data
+        - created
+        - modified
       properties:
-        subject:
-          $ref: '#/components/schemas/Subject'
+        labelId:
+          type: string
+        labelRevision:
+          type: integer
+          format: int64
+        type:
+          type: string
+        data:
+          type: string
+        created:
+          type: integer
+          format: int32
         groups:  # present only in account holder responses
           type: array
           items:
