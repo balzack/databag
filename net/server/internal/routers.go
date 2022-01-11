@@ -13,7 +13,7 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
-
+  "gorm.io/gorm"
 	"github.com/gorilla/mux"
 )
 
@@ -26,7 +26,7 @@ type Route struct {
 
 type Routes []Route
 
-func NewRouter() *mux.Router {
+func NewRouter(db *gorm.DB) *mux.Router {
 	router := mux.NewRouter().StrictSlash(true)
 	for _, route := range routes {
 		var handler http.Handler
