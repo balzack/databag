@@ -15,6 +15,7 @@ import (
 	"strings"
   "gorm.io/gorm"
 	"github.com/gorilla/mux"
+  store "databag/internal/store"
 )
 
 type Route struct {
@@ -27,6 +28,8 @@ type Route struct {
 type Routes []Route
 
 func NewRouter(db *gorm.DB) *mux.Router {
+  store.AutoMigrate(db);
+
 	router := mux.NewRouter().StrictSlash(true)
 	for _, route := range routes {
 		var handler http.Handler

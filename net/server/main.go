@@ -15,6 +15,7 @@ import (
   "gorm.io/gorm"
   "gorm.io/driver/sqlite"
 	app "databag/internal"
+  store "databag/internal/store"
 )
 
 func main() {
@@ -23,6 +24,8 @@ func main() {
   if err != nil {
     panic("failed to connect database")
   }
+  store.AutoMigrate(db);
+
 	log.Printf("Server started")
 
 	router := app.NewRouter(db)
