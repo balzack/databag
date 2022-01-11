@@ -1,1 +1,0 @@
-sqlite3 databag.db "VACUUM;"
