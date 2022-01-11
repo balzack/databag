@@ -3,7 +3,9 @@ package store
 import "gorm.io/gorm"
 
 func AutoMigrate(db *gorm.DB) {
+  db.AutoMigrate(&App{});
   db.AutoMigrate(&Account{});
+  db.AutoMigrate(&AccountApp{});
 }
 
 type Account struct {
@@ -16,7 +18,6 @@ type Account struct {
   Description       string
   Location          string
   Image             string
-  Created           int64   `gorm:"autoCreateTime"`
   profileRevision   uint64
   contentRevision   uint64
   viewRevision      uint64
@@ -25,5 +26,25 @@ type Account struct {
   cardRevision      uint64
   dialogueRevision  uint64
   insightRevision   uint64
+  Created           int64 `gorm:"autoCreateTime"`
+  AccountApps       []AccountApp
+}
+
+type App struct {
+  ID                uint    `gorm:"primaryKey;not null;unique;autoIncrement"`
+  Name              string
+  Description       string
+  Image             string
+  Url               string
+  Created           int64 `gorm:"autoCreateTime"`
+}
+
+type AccountApp struct {
+  ID                uint    `gorm:"primaryKey;not null;unique;autoIncrement"`
+  AccountID         uint
+  AppID             uint
+  Token             string  `gorm:"not null"`
+  Created           int64 `gorm:"autoCreateTime"`
+  App               App
 }
 
