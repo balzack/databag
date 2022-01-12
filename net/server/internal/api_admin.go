@@ -10,7 +10,10 @@
 package databag
 
 import (
+  "errors"
 	"net/http"
+  "gorm.io/gorm"
+  store "databag/internal/store"
 )
 
 func AddNodeAccount(w http.ResponseWriter, r *http.Request) {
@@ -30,7 +33,14 @@ func GetNodeAccounts(w http.ResponseWriter, r *http.Request) {
 
 func GetNodeClaimable(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	w.WriteHeader(http.StatusOK)
+
+  var config store.Config
+  err := store.DB.Where("config_id = ?", CONFIG_CLAIMED).First(&config).Error;
+  if errors.Is(err, gorm.ErrRecordNotFound) {
+    w.WriteHeader(http.StatusOK)
+  } else {
+    w.WriteHeader(http.StatusNotAcceptable)
+  }
 }
 
 func GetNodeConfig(w http.ResponseWriter, r *http.Request) {

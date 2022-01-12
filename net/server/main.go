@@ -12,23 +12,17 @@ package main
 import (
 	"log"
 	"net/http"
-  "gorm.io/gorm"
-  "gorm.io/driver/sqlite"
 	app "databag/internal"
   store "databag/internal/store"
 )
 
 func main() {
 
-  db, err := gorm.Open(sqlite.Open("databag.db"), &gorm.Config{})
-  if err != nil {
-    panic("failed to connect database")
-  }
-  store.AutoMigrate(db);
+  store.SetPath("databag.db");
 
 	log.Printf("Server started")
 
-	router := app.NewRouter(db)
+	router := app.NewRouter()
 
 	log.Fatal(http.ListenAndServe(":7000", router))
 }

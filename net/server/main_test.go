@@ -1,7 +1,21 @@
-package main 
+package main
 
-import "testing"
+import (
+  "testing"
+  "net/http/httptest"
+  app "databag/internal"
+  store "databag/internal/store"
+)
 
-func TestMain(t *testing.T) {
+func TestClaim(t *testing.T) {
+
+  store.SetPath("file::memory:?cache=shared");
+
+  r := httptest.NewRequest("GET", "/claimable", nil)
+  w := httptest.NewRecorder()
+  app.GetNodeClaimable(w, r);
+  if w.Code != 200 {
+    t.Errorf("server not initially claimable");
+  }
 }
 
