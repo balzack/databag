@@ -124,11 +124,6 @@ paths:
           description: permission denide
         '500':
           description: internal server error
-      requestBody:
-        content:
-          application/json:
-              schema:
-                $ref: '#/components/schemas/NodeConfig'
               
   /admin/accounts:
     get:
@@ -3595,6 +3590,10 @@ components:
       
     NodeConfig:
       type: object
+      required:
+        - domain
+        - publicLimit
+        - accountStorage
       properties:
         domain:
           type: string

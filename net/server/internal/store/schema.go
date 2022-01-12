@@ -31,6 +31,7 @@ type Config struct {
   StrValue          string
   NumValue          int64
   BoolValue         bool
+  BinValue          []byte
 }
 
 type AccountToken struct {
@@ -46,8 +47,7 @@ type Account struct {
   ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
   Did               string          `gorm:"not null"`
   Username          string          `gorm:"not null;uniqueIndex"`
-  Password          string          `gorm:"not null"`
-  Salt              string          `gorm:"not null"`
+  Password          []byte          `gorm:"not null"`
   Name              string
   Description       string
   Location          string
