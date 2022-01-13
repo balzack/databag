@@ -18,6 +18,27 @@ import (
   "databag/internal/store"
 )
 
+func adminLogin(r *http.Request) bool {
+
+  // check configured state
+  if !_configured || _adminUsername == "" || _adminPassword == nil {
+    return false;
+  }
+
+  // validate imput
+  username, password, ok := r.BasicAuth();
+  if !ok || username == "" || password == "" {
+    return false
+  }
+
+  // compare credentials
+  if username != _adminUsername || bcrypt.CompareHashAndPassword(_adminPassword, []byte(password)) != nil {
+    return false
+  }
+
+  return true;
+}
+
 func AddNodeAccount(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
@@ -35,6 +56,7 @@ func GetNodeAccounts(w http.ResponseWriter, r *http.Request) {
 
 func GetNodeClaimable(w http.ResponseWriter, r *http.Request) {
 
+  // check if has been configured
   if _configured {
     w.WriteHeader(http.StatusNotAcceptable)
   } else {
@@ -64,7 +86,7 @@ func SetNodeAccount(w http.ResponseWriter, r *http.Request) {
 
 func SetNodeClaim(w http.ResponseWriter, r *http.Request) {
 
-  // confirm node is claimable
+  // confirm node hasn't been configured
   if _configured {
     w.WriteHeader(http.StatusUnauthorized)
     return
@@ -72,7 +94,8 @@ func SetNodeClaim(w http.ResponseWriter, r *http.Request) {
 
   // extract credentials
   username, password, ok := r.BasicAuth();
-  if !ok {
+  if !ok || username == "" || password == "" {
+    log.Printf("SetNodeClaim - invalid credenitals");
     w.WriteHeader(http.StatusBadRequest)
     return
   }
@@ -102,19 +125,15 @@ func SetNodeClaim(w http.ResponseWriter, r *http.Request) {
   // set global values
   _adminUsername = username
   _adminPassword = hashedPassword
+  _configured = true
 
 	w.WriteHeader(http.StatusOK)
 }
 
 func SetNodeConfig(w http.ResponseWriter, r *http.Request) {
 
-  // validate admin password
-  username, password, ok := r.BasicAuth();
-  if !ok {
-    w.WriteHeader(http.StatusBadRequest)
-    return
-  }
-  if username != _adminUsername || bcrypt.CompareHashAndPassword(_adminPassword, []byte(password)) != nil {
+  // validate login
+  if !adminLogin(r) {
     log.Printf("SetNodeConfig - invalid admin credentials");
     w.WriteHeader(http.StatusUnauthorized);
     return
@@ -157,3 +176,4 @@ func SetNodeConfig(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusOK)
 }
+
