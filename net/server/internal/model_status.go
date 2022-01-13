@@ -9,17 +9,19 @@
  */
 package databag
 
-type Group struct {
+type Status struct {
 
-	GroupId string `json:"groupId"`
+	Profile int64 `json:"profile"`
 
-	GroupRevision int64 `json:"groupRevision"`
+	Content int64 `json:"content"`
 
-	Type_ string `json:"type"`
+	Label int64 `json:"label"`
 
-	Data string `json:"data"`
+	Share int64 `json:"share"`
 
-	Created int32 `json:"created"`
+	Card int64 `json:"card"`
 
-	Modified int32 `json:"modified"`
+	Dialogue int64 `json:"dialogue"`
+
+	Insight int64 `json:"insight"`
 }

@@ -24,12 +24,10 @@ tags:
     description: getting and setting of the public profile
   - name: share
     description: access control for personal subjects, associates content and cards
-    
   - name: contact
     description: connection to other identities, hook receiver
   - name: content
     description: posting and listing of personal subjects, group and tag managment
-    
   - name: converstaion
     description: group sharing of subjects
     
@@ -251,6 +249,33 @@ paths:
         '500':
           description: internal server error
           
+  /admin/accounts/import:
+    post:
+      tags:
+        - admin
+      description: Import an account account from a backup archive. Access granted to the admin username and password.
+      operationId: import account
+      security:
+        - basicAuth: []
+      responses:
+        '201':
+          description: success
+        '401':
+          description: permission denied
+        '406':
+          description: account already imported
+        '500':
+          description: internal server error
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                fileName:
+                  type: string
+                  format: binary
+          
   /account/public/claimable:
     get:
       tags:
@@ -328,6 +353,46 @@ paths:
           description: success
         '401':
           description: permission denied
+        '500':
+          description: internal server error
+          
+  /account/did:
+    get:
+      tags:
+        - account
+      description: Retrieve account DIDkey. Authorized to account username and password.
+      operationId: get-account-did
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: string
+        '401':
+          description: authentication error
+        '500':
+          description: internal server error
+          
+  /account/disabled:
+    get:
+      tags:
+        - account
+      description: Get disabled status of account. Authorized to account username and password.
+      operationId: get-account-status
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: boolean
+        '401':
+          description: authentication error
         '500':
           description: internal server error
           
@@ -467,6 +532,8 @@ paths:
                 type: string
         '401':
           description: invalid password
+        '410':
+          description: account disabled
         '500':
           description: internal server error
     put:
@@ -487,6 +554,8 @@ paths:
           description: invalid token
         '406':
           description: app limit reached
+        '410':
+          description: account disabled
         '500':
           description: internal server error
       requestBody:
@@ -517,6 +586,24 @@ paths:
           description: invalid password
         '404':
           description: app not found
+        '410':
+          description: account disabled
+        '500':
+          description: internal server error
+                 
+  /account/export:
+    put:
+      tags:
+        - account
+      description: Export account from node. Account is automatically disabled afterwards. Authorized to account username and password.
+      operationId: set-account-export
+      security:
+        - basicAuth: []
+      responses:
+        '201':
+          description: success
+        '401':
+          description: permission denied
         '500':
           description: internal server error
           
@@ -537,6 +624,8 @@ paths:
                 $ref: '#/components/schemas/DataMessage'
         '401':
           description: permission denied
+        '410':
+          description: account disabled
         '500':
           description: internal server error
       requestBody:
@@ -562,6 +651,8 @@ paths:
                 $ref: '#/components/schemas/Profile'
         '401':
           description: permission denied
+        '410':
+          description: account disabled
         '500':
           description: internal server error
     put:
@@ -576,6 +667,8 @@ paths:
           description: success
         '401':
           description: permission denied
+        '410':
+          description: account disabled
         '500':
           description: internal server error
       requestBody:
@@ -604,6 +697,8 @@ paths:
           description: permission denied
         '405':
           description: invalid image
+        '410':
+          description: account disabled
         '500':
           description: internal server error
           
@@ -624,6 +719,8 @@ paths:
                 $ref: '#/components/schemas/DataMessage'
         '401':
           description: permission denied
+        '410':
+          description: account disabled
         '500':
           description: internal server error
           
@@ -646,6 +743,8 @@ paths:
                   $ref: '#/components/schemas/Group'
         '401':
           description: invalid token
+        '410':
+          description: account disabled
         '500':
           description: internal server error
     post:
@@ -660,6 +759,8 @@ paths:
           description: entry created
         '401':
           description: permission denied
+        '410':
+          description: account disabled
         '500':
           description: internal server error
       requestBody:
@@ -698,6 +799,8 @@ paths:
           description: permission denied
         '404':
           description: group not found
+        '410':
+          description: account disabled
         '500':
           description: internal server error
       requestBody:
@@ -734,6 +837,8 @@ paths:
           description: permission denied
         '404':
           description: group not found
+        '410':
+          description: account disabled
         '500':
           description: internal server error
           
@@ -756,6 +861,8 @@ paths:
           description: invalid data message
         '401':
           description: permission denied
+        '410':
+          description: account disabled
         '500':
           description: internal server error
           
@@ -778,6 +885,8 @@ paths:
                   $ref: '#/components/schemas/CardView'
         '401':
           description: permission denied
+        '410':
+          description: account disabled
         '500':
           description: internal server error
           
@@ -807,6 +916,8 @@ paths:
           description: permission denied
         '404':
           description: card not found
+        '410':
+          description: account disabled
         '500':
           description: internal server error
     delete:
@@ -830,6 +941,8 @@ paths:
           description: permission denied
         '404':
           description: card not found
+        '410':
+          description: account disabled
         '500':
           description: internal server error
   
@@ -865,6 +978,8 @@ paths:
           description: permission denied
         '404':
           description: card not found
+        '410':
+          description: account disabled
         '500':
           description: internal server error
       requestBody:
@@ -900,6 +1015,8 @@ paths:
           description: permission denied
         '404':
           description: card not found
+        '410':
+          description: account disabled
         '500':
           description: internal server error
           
@@ -926,6 +1043,8 @@ paths:
                     enum: [ pending, confirmed, requested, connecting, connected ]
         '400':
           description: invalid data message
+        '410':
+          description: account disabled
         '500':
           description: internal server error
       requestBody:
@@ -960,6 +1079,8 @@ paths:
           description: permission denied
         '404':
           description: card not found
+        '410':
+          description: account disabled
         '500':
           description: internal server error
           
@@ -986,6 +1107,8 @@ paths:
                     enum: [ pending, confirmed, requested, connecting, connected ]
         '400':
           description: invalid data message
+        '410':
+          description: account disabled
         '500':
           description: internal server error
       requestBody:
@@ -1020,6 +1143,8 @@ paths:
           description: permission denied
         '404':
           description: not found
+        '410':
+          description: account disabled
         '500':
           description: internal server error
     put:
@@ -1047,6 +1172,8 @@ paths:
           description: permission denied
         '404':
           description: card not found
+        '410':
+          description: account disabled
         '500':
           description: internal server error
       requestBody:
@@ -1084,6 +1211,8 @@ paths:
           description: card not found
         '405':
           description: invalid image
+        '410':
+          description: account disabled
         '500':
           description: internal server error
           
@@ -1113,6 +1242,8 @@ paths:
           description: permission denied
         '404':
           description: card not found
+        '410':
+          description: account disabled
         '500':
           description: internal server error
           
@@ -1142,6 +1273,8 @@ paths:
           description: permission denied
         '404':
           description: card not found
+        '410':
+          description: account disabled
         '500':
           description: internal server error
       requestBody:
@@ -1174,6 +1307,8 @@ paths:
           description: permission denied
         '404':
           description: card not found
+        '410':
+          description: account disabled
         '500':
           description: internal server error
             
@@ -1209,6 +1344,8 @@ paths:
           description: permission denied
         '404':
           description: card or group not found
+        '410':
+          description: account disabled
         '500':
           description: internal server error
     delete:
@@ -1242,6 +1379,8 @@ paths:
           description: permission denied
         '404':
           description: card or group not found
+        '410':
+          description: account disabled
         '500':
           description: internal server error
           
@@ -1258,6 +1397,8 @@ paths:
           description: revision set
         '401':
           description: not authorized
+        '410':
+          description: account disabled
         '500':
           description: internal server error
       requestBody:
@@ -1280,6 +1421,8 @@ paths:
           description: revision set
         '401':
           description: not authorized
+        '410':
+          description: account disabled
         '500':
           description: internal server error
       requestBody:
@@ -1314,6 +1457,8 @@ paths:
                       format: int64
         '401':
           description: permission denied
+        '410':
+          description: account disabled
         '500':
           description: internal server error
           
@@ -1345,6 +1490,8 @@ paths:
           description: permission denied
         '404':
           description: block not found
+        '410':
+          description: account disabled
         '500':
           description: internal server error
           
@@ -1382,6 +1529,8 @@ paths:
           description: permission denied
         '404':
           description: block not found
+        '410':
+          description: account disabled
         '500':
           description: internal server error
           
@@ -1410,6 +1559,8 @@ paths:
                     $ref: '#/components/schemas/Article'
         '401':
           description: permission denied
+        '410':
+          description: account disabled
         '500':
           description: internal server error
       requestBody:
@@ -1456,6 +1607,8 @@ paths:
           description: permission denied
         '404':
           description: article not found
+        '410':
+          description: account disabled
         '500':
           description: internal server error
     delete:
@@ -1479,6 +1632,8 @@ paths:
           description: invalid password
         '404':
           description: article not found
+        '410':
+          description: account disabled
         '500':
           description: internal server error
   
@@ -1516,6 +1671,8 @@ paths:
           description: field, article not found
         '405':
           description: invalid field
+        '410':
+          description: account disabled
         '500':
           description: internal server error
           
@@ -1541,6 +1698,8 @@ paths:
           description: permission denied
         '404':
           description: article not found
+        '410':
+          description: account disabled
         '500':
           description: internal server error
       requestBody:
@@ -1585,6 +1744,8 @@ paths:
           description: permission denied
         '404':
           description: group or article not found
+        '410':
+          description: account disabled
         '500':
           description: internal server error
     delete:
@@ -1614,6 +1775,8 @@ paths:
           description: permission denied
         '404':
           description: group or article not found
+        '410':
+          description: account disabled
         '500':
           description: internal server error
   
@@ -1645,6 +1808,8 @@ paths:
           description: permission denied
         '404':
           description: label or article not found
+        '410':
+          description: account disabled
         '500':
           description: internal server error
     delete:
@@ -1674,6 +1839,8 @@ paths:
           description: permission denied
         '404':
           description: label or article not found
+        '410':
+          description: account disabled
         '500':
           description: internal server error
           
@@ -1703,6 +1870,8 @@ paths:
                   $ref: '#/components/schemas/Asset'
         '401':
           description: invalid token
+        '410':
+          description: account disabled
         '500':
           description: internal server error
     post:
@@ -1740,6 +1909,8 @@ paths:
           description: article not found
         '406':
           description: storage limit reached
+        '410':
+          description: account disabled
         '500':
           description: internal server error
       requestBody:
@@ -1785,6 +1956,8 @@ paths:
           description: permission denied
         '404':
           description: asset or article not found
+        '410':
+          description: account disabled
         '500':
           description: internal server error
     delete:
@@ -1814,6 +1987,8 @@ paths:
           description: permission denied
         '404':
           description: asset or article not found
+        '410':
+          description: account disabled
         '500':
           description: internal server error
           
@@ -1839,6 +2014,8 @@ paths:
           description: permission denied
         '404':
           description: article not found
+        '410':
+          description: account disabled
         '500':
           description: internal server error
       requestBody:
@@ -1889,6 +2066,8 @@ paths:
           description: permission denied
         '404':
           description: article not found
+        '410':
+          description: account disabled
         '500':
           description: internal server error
           
@@ -1940,6 +2119,8 @@ paths:
           description: permission denied
         '404':
           description: block or article not found
+        '410':
+          description: account disabled
         '500':
           description: internal server error
           
@@ -1991,6 +2172,8 @@ paths:
           description: permission denied
         '404':
           description: block or article not found
+        '410':
+          description: account disabled
         '500':
           description: internal server error
           
@@ -2028,6 +2211,8 @@ paths:
           description: permission denied
         '404':
           description: article not found
+        '410':
+          description: account disabled
         '500':
           description: internal server error
               
@@ -2063,6 +2248,8 @@ paths:
           description: permission denied
         '404':
           description: tag or article not found
+        '410':
+          description: account disabled
         '500':
           description: internal server error
     delete:
@@ -2092,6 +2279,8 @@ paths:
           description: permission denied
         '404':
           description: tag or article not found
+        '410':
+          description: account disabled
         '500':
           description: internal server error
               
@@ -2135,6 +2324,8 @@ paths:
           description: field, tag or article not found
         '405':
           description: invalid field
+        '410':
+          description: account disabled
         '500':
           description: internal server error
           
@@ -2157,6 +2348,8 @@ paths:
                   $ref: '#/components/schemas/Label'
         '401':
           description: invalid token
+        '410':
+          description: account disabled
         '500':
           description: internal server error
     post:
@@ -2171,6 +2364,8 @@ paths:
           description: success
         '401':
           description: permission denied
+        '410':
+          description: account disabled
         '500':
           description: internal server error
       requestBody:
@@ -2207,6 +2402,8 @@ paths:
           description: successful operation
         '401':
           description: invalid token
+        '410':
+          description: account disabled
         '500':
           description: internal server error
       requestBody:
@@ -2243,6 +2440,8 @@ paths:
           description: permission denied
         '404':
           description: label not found
+        '410':
+          description: account disabled
         '500':
           description: internal server error
           
@@ -2275,6 +2474,8 @@ paths:
           description: permission denied
         '404':
           description: group or label not found
+        '410':
+          description: account disabled
         '500':
           description: internal server error
     delete:
@@ -2304,6 +2505,8 @@ paths:
           description: permission denied
         '404':
           description: group or label not found
+        '410':
+          description: account disabled
         '500':
           description: internal server error
               
@@ -2326,6 +2529,8 @@ paths:
                   $ref: '#/components/schemas/Dialogue'
         '401':
           description: permission denied
+        '410':
+          description: account disabled
         '500':
           description: internal server error
     post:
@@ -2346,6 +2551,8 @@ paths:
                   $ref: '#/components/schemas/Dialogue'
         '401':
           description: permission denied
+        '410':
+          description: account disabled
         '500':
           description: internal server error
           
@@ -2371,6 +2578,8 @@ paths:
           description: permission denied
         '404':
           description: dialogue not found
+        '410':
+          description: account disabled
         '500':
           description: internal server error
       requestBody:
@@ -2409,6 +2618,8 @@ paths:
           description: permission denied
         '404':
           description: dialogue not found
+        '410':
+          description: account disabled
         '500':
           description: internal server error
       requestBody:
@@ -2445,6 +2656,8 @@ paths:
           description: permission denied
         '404':
           description: cardId or dialogue not found
+        '410':
+          description: account disabled
         '500':
           description: internal server error
     delete:
@@ -2474,6 +2687,8 @@ paths:
           description: permission denied
         '404':
           description: cardId or dialogue not found
+        '410':
+          description: account disabled
         '500':
           description: internal server error
           
@@ -2499,6 +2714,8 @@ paths:
           description: permission denied
         '404':
           description: dialogue not found
+        '410':
+          description: account disabled
         '500':
           description: internal server error
       requestBody:
@@ -2530,6 +2747,8 @@ paths:
           description: permission denied
         '404':
           description: dialogue not found
+        '410':
+          description: account disabled
         '500':
           description: internal server error
   
@@ -2559,6 +2778,8 @@ paths:
                   $ref: '#/components/schemas/Insight'
         '401':
           description: permission denied
+        '410':
+          description: account disabled
         '500':
           description: internal server error
           
@@ -2589,6 +2810,8 @@ paths:
           description: permission denied
         '404':
           description: dialogue not found
+        '410':
+          description: account disabled
         '500':
           description: internal server error
       requestBody:
@@ -2618,6 +2841,8 @@ paths:
           description: permission denied
         '404':
           description: dialogue not found
+        '410':
+          description: account disabled
         '500':
           description: internal server error
   
@@ -2645,6 +2870,8 @@ paths:
           description: invalid state # once dismissed always dismissed
         '404':
           description: insight not found
+        '410':
+          description: account disabled
         '500':
           description: internal server error
       requestBody:
@@ -2696,6 +2923,8 @@ paths:
           description: permission denied
         '404':
           description: dialogue not found
+        '410':
+          description: account disabled
         '500':
           description: internal server error
           
@@ -2741,6 +2970,8 @@ paths:
           description: permission denied
         '404':
           description: block or dialogue not found
+        '410':
+          description: account disabled
         '500':
           description: internal server error
           
@@ -2792,6 +3023,8 @@ paths:
           description: permission denied
         '404':
           description: block or dialogue not found
+        '410':
+          description: account disabled
         '500':
           description: internal server error
           
@@ -2831,6 +3064,8 @@ paths:
           description: inactive dialogue
         '404':
           description: dialogue not found
+        '410':
+          description: account disabled
         '500':
           description: internal server error
               
@@ -2866,6 +3101,8 @@ paths:
           description: permission denied
         '404':
           description: topic or dialogue not found
+        '410':
+          description: account disabled
         '500':
           description: internal server error
     delete:
@@ -2897,6 +3134,8 @@ paths:
           description: inactive dialogue
         '404':
           description: topic or dilaogue not found
+        '410':
+          description: account disabled
         '500':
           description: internal server error
   
@@ -2941,6 +3180,8 @@ paths:
           description: field, topic or dialogue not found
         '405':
           description: invalid field
+        '410':
+          description: account disabled
         '500':
           description: internal server error
           
@@ -2974,6 +3215,8 @@ paths:
           description: inactive dialogue
         '404':
           description: topic or dialogue not found
+        '410':
+          description: account disabled
         '500':
           description: internal server error
       requestBody:
@@ -3024,6 +3267,8 @@ paths:
           description: permission denied
         '404':
           description: topic or dialogue not found
+        '410':
+          description: account disabled
         '500':
           description: internal server error
     post:
@@ -3067,6 +3312,8 @@ paths:
           description: inactive dialogue
         '404':
           description: topic or dialogue not found
+        '410':
+          description: account disabled
         '500':
           description: internal server error
       requestBody:
@@ -3118,6 +3365,8 @@ paths:
           description: permission denied
         '404':
           description: asset, topic or dialogue not found
+        '410':
+          description: account disabled
         '500':
           description: internal server error
     delete:
@@ -3155,6 +3404,8 @@ paths:
           description: inactive dialogue
         '404':
           description: asset, topic or dialogue not found
+        '410':
+          description: account disabled
         '500':
           description: internal server error
           
@@ -3187,6 +3438,8 @@ paths:
           description: inactive dialogue
         '404':
           description: topic or dialogue not found
+        '410':
+          description: account disabled
         '500':
           description: internal server error
       requestBody:
@@ -3243,6 +3496,8 @@ paths:
           description: permission denied
         '404':
           description: topic or dialogue not found
+        '410':
+          description: account disabled
         '500':
           description: internal server error
           
@@ -3300,6 +3555,8 @@ paths:
           description: permission denied
         '404':
           description: block, topic or dialogue not found
+        '410':
+          description: account disabled
         '500':
           description: internal server error
           
@@ -3351,6 +3608,8 @@ paths:
           description: permission denied
         '404':
           description: block, topic, or dialogue not found
+        '410':
+          description: account disabled
         '500':
           description: internal server error
           
@@ -3396,6 +3655,8 @@ paths:
           description: inactive dialogue
         '404':
           description: topic or dialogue not found
+        '410':
+          description: account disabled
         '500':
           description: internal server error
       requestBody:
@@ -3450,6 +3711,8 @@ paths:
           description: permission denied
         '404':
           description: tag, topic, or dialogue not found
+        '410':
+          description: account disabled
         '500':
           description: internal server error
     delete:
@@ -3487,6 +3750,8 @@ paths:
           description: inactive dialogue
         '404':
           description: tag, topic, or dialogue not found
+        '410':
+          description: account disabled
         '500':
           description: internal server error
               
@@ -3536,6 +3801,8 @@ paths:
           description: field, tag, topic, or dialogue not found
         '405':
           description: invalid field
+        '410':
+          description: account disabled
         '500':
           description: internal server error
           
@@ -3607,11 +3874,11 @@ components:
     Profile:
       type: object
       required:
-        - did
+        - profileId
         - revision
         - node
       properties:
-        did:
+        profileId:
           type: string
         handle:
           type: string
@@ -3651,11 +3918,14 @@ components:
       required:
         - accountId
         - profile
+        - disabled
       properties:
         accountId:
           type: string
         profile:
           $ref: '#/components/schemas/Profile'
+        disabled:
+          type: boolean
         
     App:
       type: object
@@ -4097,7 +4367,7 @@ components:
           enum: [RSA4096, RSA2048]
         publicKey:
           type: string
-          format: base64 encoding of account key
+          format: base64 encoding of account public key
         signature:
           type: string
           format: base64 encoding of message signature
