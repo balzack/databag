@@ -61,8 +61,10 @@ paths:
       responses:
         '200':
           description: success
-        '406':
-          description: node already claimed
+          content:
+            application/json:
+              schema:
+                type: boolean
         '500':
           description: internal server error
           
@@ -285,10 +287,10 @@ paths:
       responses:
         '200':
           description: success
-        '401':
-          description: permission denied
-        '406':
-          description: accounts not available
+          content:
+            application/json:
+              schema:
+                type: boolean
         '500':
           description: internal server error
           
@@ -333,10 +335,12 @@ paths:
       responses:
         '200':
           description: success
+          content:
+            application/json:
+              schema:
+                type: boolean
         '401':
           description: permission denied
-        '406':
-          description: username already claimed
         '500':
           description: internal server error
           
@@ -436,6 +440,20 @@ paths:
           description: permission denied
         '500':
           description: internal server error
+    delete:
+      tags:
+        - account
+      description: Delete account. Access granted to valid create account token.
+      operationId: remove-account
+      security:
+        - basicAuth: []
+      responses:
+        '201':
+          description: successful operation
+        '401':
+          description: permission denied
+        '500':
+          description: internal server error
                 
   /account/profile/image:
     get:
@@ -457,6 +475,36 @@ paths:
           description: permission denied
         '405':
           description: invalid image
+        '500':
+          description: internal server error
+          
+  /account/assets/{assetId}:
+    get:
+      tags:
+        - account
+      description: Get asset assigned to an account. The endpoint supports byte-range requests and responds with the content-type set appropriatly. Access granted to the app tokens of the account holder and in the case of non-original assets, the contact token for accounts with which the article is shared.
+      operationId: get-account-asset
+      security:
+        - basicAuth: []
+      parameters:
+        - name: assetId
+          in: path
+          description: specified asset id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success
+          content:
+            application/octet-stream: #asset specific
+              schema:
+                type: string
+                format: binary
+        '401':
+          description: permission denied
+        '404':
+          description: asset or article not found
         '500':
           description: internal server error
           
@@ -492,6 +540,24 @@ paths:
           description: success
         '401':
           description: permission denied
+        '500':
+          description: internal server error
+          
+  /account/node:
+    put:
+      tags:
+        - account
+      description: Set forwarding address after export/import has completed. Access granted to valid reset token.
+      operationId: set-account-node
+      security:        
+        - basicAuth: []
+      responses:
+        '201':
+          description: success
+        '401':
+          description: permission denied
+        '405':
+          description: failed to confirm
         '500':
           description: internal server error
           
@@ -3877,6 +3943,7 @@ components:
         - disabled
         - storageUsed
         - storageAvailable
+        - forwardingAddress
       properties:
         disabled:
           type: boolean
@@ -3886,6 +3953,8 @@ components:
         storageAvailable:
           type: number
           format: int64
+        forwardingAddress:
+          type: string
           
     Profile:
       type: object

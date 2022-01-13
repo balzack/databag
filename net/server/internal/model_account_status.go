@@ -16,4 +16,7 @@ type AccountStatus struct {
 	StorageUsed float64 `json:"storageUsed"`
 
 	StorageAvailable float64 `json:"storageAvailable"`
+
+	ForwardingAddress string `json:"forwardingAddress"`
 }
+

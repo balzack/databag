@@ -56,12 +56,10 @@ func GetNodeAccounts(w http.ResponseWriter, r *http.Request) {
 
 func GetNodeClaimable(w http.ResponseWriter, r *http.Request) {
 
-  // check if has been configured
-  if _configured {
-    w.WriteHeader(http.StatusNotAcceptable)
-  } else {
-    w.WriteHeader(http.StatusOK)
-  }
+  body, _ := json.Marshal(!_configured);
+  w.Write(body);
+	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+  w.WriteHeader(http.StatusOK)
 }
 
 func GetNodeConfig(w http.ResponseWriter, r *http.Request) {

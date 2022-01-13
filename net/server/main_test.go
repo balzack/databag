@@ -23,7 +23,16 @@ func Claimable(t *testing.T) {
   r := httptest.NewRequest("GET", "/admin/claimable", nil)
   w := httptest.NewRecorder()
   app.GetNodeClaimable(w, r)
-  if w.Code != 200 {
+
+  //body, _ := ioutil.ReadAll(resp.Body)
+  resp := w.Result()
+  dec := json.NewDecoder(resp.Body);
+  var res bool
+  err := dec.Decode(&res)
+  if err != nil {
+    t.Errorf("failed to get claimable response")
+  }
+  if resp.StatusCode != 200 {
     t.Errorf("server not initially claimable")
   }
 }

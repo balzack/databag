@@ -139,6 +139,21 @@ type LabelGroup struct {
   Group             Group
 }
 
+type Asset struct {
+  ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
+  AssetId           string          `gorm:"not null;index:asset,unique"`
+  AccountID         uint            `gorm:"not null;index:asset,unique"`
+  Status            string          `gorm:"not null;index"`
+  Size              uint64
+  Crc               uint32
+  Transform         string
+  TransformId       string
+  TransformData     string
+  Created           int64           `gorm:"autoCreateTime"`
+  Updated           int64           `gorm:"autoUpdateTime"`
+  Account           Account
+}
+
 type Article struct {
   ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
   ArticleId         string          `gorm:"not null;index:article,unique"`
@@ -156,17 +171,10 @@ type Article struct {
 
 type ArticleAsset struct {
   ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
-  AssetId           string          `gorm:"not null;index:articleasset,unique"`
-  ArticleID         uint            `gorm:"not null;index:articleasset,unique"`
-  Status            string          `gorm:"not null;index"`
-  Size              uint64
-  Crc               uint32
-  Transform         string
-  TransformId       string
-  TransformData     string
-  Created           int64           `gorm:"autoCreateTime"`
-  Updated           int64           `gorm:"autoUpdateTime"`
+  AssetID           uint
+  ArticleID         uint
   Article           Article
+  Asset             Asset
 }
 
 type ArticleTag struct {
@@ -253,17 +261,10 @@ type Topic struct {
 
 type TopicAsset struct {
   ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
-  AssetId           string          `gorm:"not null;index:topicasset,unique"`
-  TopicID           uint            `gorm:"not null;index:topicasset,unique"`
-  Status            string          `gorm:"not null;index"`
-  Size              uint64
-  Crc               uint32
-  Transform         string
-  TransformId       string
-  TransformData     string
-  Created           int64           `gorm:"autoCreateTime"`
-  Updated           int64           `gorm:"autoUpdateTime"`
+  AssetID           uint
+  TopicID           uint
   Topic             Topic
+  Asset             Asset
 }
 
 type TopicTag struct {
