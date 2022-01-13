@@ -612,7 +612,7 @@ paths:
       tags:
         - authorize
       description: Retrieve an authenticate data messaging verifying the account holder is accepting the action referenced by the token.
-      operationId: authenticate
+      operationId: authorize 
       security:
         - bearerAuth: []
       responses:
@@ -3821,7 +3821,7 @@ components:
         appToken:
           type: string
           
-    Status:    
+    Revision:    
       type: object
       required:
         - profile

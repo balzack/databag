@@ -250,7 +250,7 @@ var routes = Routes{
 		"Authenticate",
 		strings.ToUpper("Put"),
 		"/authorize",
-		Authenticate,
+		Authorize,
 	},
 
 	Route{
