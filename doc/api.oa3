@@ -376,7 +376,7 @@ paths:
         '500':
           description: internal server error
           
-  /account/disabled:
+  /account/status:
     get:
       tags:
         - account
@@ -390,7 +390,7 @@ paths:
           content:
             application/json:
               schema:
-                type: boolean
+                $ref: '#/components/schemas/AccountStatus'
         '401':
           description: authentication error
         '500':
@@ -3869,6 +3869,22 @@ components:
           format: int64
         accountStorage:
           type: integer
+          format: int64
+          
+    AccountStatus:
+      type: object
+      required:
+        - disabled
+        - storageUsed
+        - storageAvailable
+      properties:
+        disabled:
+          type: boolean
+        storageUsed:
+          type: number
+          format: int64
+        storageAvailable:
+          type: number
           format: int64
           
     Profile:
