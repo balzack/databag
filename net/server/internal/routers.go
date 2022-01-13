@@ -28,13 +28,13 @@ type Routes []Route
 
 func NewRouter() *mux.Router {
 
-         // populate context
-         _configured = getBoolConfigValue(CONFIG_CONFIGURED, false);
-         _adminUsername = getStrConfigValue(CONFIG_USERNAME, "");
-         _adminPassword = getBinConfigValue(CONFIG_PASSWORD, nil);
-         _nodeDomain = getStrConfigValue(CONFIG_DOMAIN, "");
-         _publicLimit = getNumConfigValue(CONFIG_PUBLICLIMIT, 0);
-         _accountStorage = getNumConfigValue(CONFIG_STORAGE, 0);
+  // populate context
+  _configured = getBoolConfigValue(CONFIG_CONFIGURED, false);
+  _adminUsername = getStrConfigValue(CONFIG_USERNAME, "");
+  _adminPassword = getBinConfigValue(CONFIG_PASSWORD, nil);
+  _nodeDomain = getStrConfigValue(CONFIG_DOMAIN, "");
+  _publicLimit = getNumConfigValue(CONFIG_PUBLICLIMIT, 0);
+  _accountStorage = getNumConfigValue(CONFIG_STORAGE, 0);
 
 	router := mux.NewRouter().StrictSlash(true)
 	for _, route := range routes {
@@ -100,6 +100,13 @@ var routes = Routes{
 	},
 
 	Route{
+		"GetAccountAsset",
+		strings.ToUpper("Get"),
+		"/account/assets/{assetId}",
+		GetAccountAsset,
+	},
+
+	Route{
 		"GetAccountDid",
 		strings.ToUpper("Get"),
 		"/account/did",
@@ -149,6 +156,13 @@ var routes = Routes{
 	},
 
 	Route{
+		"RemoveAccount",
+		strings.ToUpper("Delete"),
+		"/account/profile",
+		RemoveAccount,
+	},
+
+	Route{
 		"RemoveAccountApp",
 		strings.ToUpper("Delete"),
 		"/account/apps/{appId}",
@@ -174,6 +188,13 @@ var routes = Routes{
 		strings.ToUpper("Put"),
 		"/account/export",
 		SetAccountExport,
+	},
+
+	Route{
+		"SetAccountNode",
+		strings.ToUpper("Put"),
+		"/account/node",
+		SetAccountNode,
 	},
 
 	Route{
@@ -247,7 +268,7 @@ var routes = Routes{
 	},
 
 	Route{
-		"Authenticate",
+		"Authorize",
 		strings.ToUpper("Put"),
 		"/authorize",
 		Authorize,

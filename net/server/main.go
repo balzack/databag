@@ -13,7 +13,7 @@ import (
 	"log"
 	"net/http"
 	app "databag/internal"
-  store "databag/internal/store"
+  "databag/internal/store"
 )
 
 func main() {

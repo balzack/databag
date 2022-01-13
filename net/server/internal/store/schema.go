@@ -12,6 +12,7 @@ func AutoMigrate(db *gorm.DB) {
   db.AutoMigrate(&Card{});
   db.AutoMigrate(&CardGroup{});
   db.AutoMigrate(&LabelGroup{});
+  db.AutoMigrate(&Asset{});
   db.AutoMigrate(&Article{});
   db.AutoMigrate(&ArticleAsset{});
   db.AutoMigrate(&ArticleTag{});
