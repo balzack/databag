@@ -30,6 +30,7 @@ type accountRevision struct {
 }
 
 var wsSync sync.Mutex
+var wsExit = make(chan bool, 1)
 var statusListener = make(map[uint][]chan<-[]byte)
 var upgrader = websocket.Upgrader{}
 
@@ -52,7 +53,7 @@ func Status(w http.ResponseWriter, r *http.Request) {
   err = store.DB.Model(&Revision{}).Where("ID = ?", act).First(&ar).Error
   if err != nil {
     log.Println("Status - failed to get account revision")
-    return
+//    return
   }
   rev := getRevision(ar)
 
@@ -78,13 +79,20 @@ func Status(w http.ResponseWriter, r *http.Request) {
   defer RemoveStatusListener(act, c)
 
   // send revision until channel is closed
-  for msg := range c {
-    err = conn.WriteMessage(websocket.TextMessage, msg)
-    if err != nil {
-      log.Println("Status - failed to send revision, closing")
-      return
-    }
-  }
+  for {
+		select {
+		case msg := <-c:
+      err = conn.WriteMessage(websocket.TextMessage, msg)
+      if err != nil {
+        log.Println("Status - failed to send revision, closing")
+        return
+      }
+		case <-wsExit:
+			log.Println("Status - server exit")
+      wsExit<-true
+			return
+		}
+	}
 }
 
 func getRevision(rev accountRevision) Revision {
@@ -97,6 +105,10 @@ func getRevision(rev accountRevision) Revision {
   r.Dialogue = rev.DialogueRevision
   r.Insight = rev.InsightRevision
   return r
+}
+
+func ExitStatus() {
+  wsExit <- true
 }
 
 func SetStatus(act uint) {
