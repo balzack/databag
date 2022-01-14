@@ -56,14 +56,14 @@ type Account struct {
   Description       string
   Location          string
   Image             string
-  profileRevision   uint64          `gorm:"not null"`
-  contentRevision   uint64          `gorm:"not null"`
-  viewRevision      uint64          `gorm:"not null"`
-  groupRevision     uint64          `gorm:"not null"`
-  labelRevision     uint64          `gorm:"not null"`
-  cardRevision      uint64          `gorm:"not null"`
-  dialogueRevision  uint64          `gorm:"not null"`
-  insightRevision   uint64          `gorm:"not null"`
+  ProfileRevision   int64           `gorm:"not null"`
+  ContentRevision   int64           `gorm:"not null"`
+  ViewRevision      int64           `gorm:"not null"`
+  GroupRevision     int64           `gorm:"not null"`
+  LabelRevision     int64           `gorm:"not null"`
+  CardRevision      int64           `gorm:"not null"`
+  DialogueRevision  int64           `gorm:"not null"`
+  InsightRevision   uint64          `gorm:"not null"`
   Created           int64           `gorm:"autoCreateTime"`
   Apps              []App
 }

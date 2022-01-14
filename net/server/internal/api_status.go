@@ -11,31 +11,121 @@ package databag
 
 import (
   "log"
+  "sync"
 	"net/http"
   "github.com/gorilla/websocket"
+  "databag/internal/store"
 )
 
+type accountRevision struct {
+  ProfileRevision int64
+  ContentRevision int64
+  ViewRevision int64
+  GroupRevision int64
+  LabelRevision int64
+  CardRevision int64
+  DialogueRevision int64
+  InsightRevision int64
+}
+
+var wsSync sync.Mutex;
+var statusListener = make(map[uint][]chan<-accountRevision)
 var upgrader = websocket.Upgrader{}
 
 func Status(w http.ResponseWriter, r *http.Request) {
-    conn, err := upgrader.Upgrade(w, r, nil)
-    if err != nil {
-        log.Print("Error during connection upgradation:", err)
-        return
-    }
-    defer conn.Close()
 
-    for {
-        messageType, message, err := conn.ReadMessage()
-        if err != nil {
-            log.Println("Error during message reading:", err)
-            break
-        }
-        log.Printf("Received: %s", message)
-        err = conn.WriteMessage(messageType, message)
-        if err != nil {
-            log.Println("Error during message writing:", err)
-            break
-        }
-    }
+  // accept websocket connection
+  conn, err := upgrader.Upgrade(w, r, nil)
+  if err != nil {
+      log.Print("Status: failed upgrade connection", err)
+      return
+  }
+  defer conn.Close()
+
+  log.Println("CONNECTED")
+  // receive announce message
+
+  // open channel for revisions
+  c := make(chan accountRevision)
+  AddStatusListener(0, c);
+
+  for {
+      messageType, message, err := conn.ReadMessage()
+      if err != nil {
+          log.Println("Error during message reading:", err)
+          break
+      }
+      log.Printf("Received: %s", message)
+      err = conn.WriteMessage(messageType, message)
+      if err != nil {
+          log.Println("Error during message writing:", err)
+          break
+      }
+  }
+
+  // close channel
+  RemoveStatusListener(0, c);
+  close(c);
 }
+
+func SetStatus(act uint) {
+
+  // get revisions for the account
+  var rev accountRevision;
+  err := store.DB.Model(&Revision{}).Where("ID = ?", act).First(&rev).Error
+  if err != nil {
+    log.Println("SetStatus - failed to retrieve account revisions");
+  }
+
+  // lock access to statusListener
+  wsSync.Lock()
+  defer wsSync.Unlock();
+
+  // check if we have any listeners
+  chs, ok := statusListener[act]
+  if ok {
+
+    // notify all listeners
+    for _, ch := range chs {
+      ch <- rev
+    }
+  }
+}
+
+func AddStatusListener(act uint, ch chan<-accountRevision) {
+
+  // lock access to statusListener
+  wsSync.Lock()
+  defer wsSync.Unlock();
+
+  // check if account has listeners
+  chs, ok := statusListener[act]
+  if ok {
+    chs = append(chs, ch);
+  } else {
+    statusListener[act] = []chan<-accountRevision{ch}
+  }
+}
+
+func RemoveStatusListener(act uint, ch chan<-accountRevision) {
+
+  // lock access to statusListener
+  wsSync.Lock()
+  defer wsSync.Unlock();
+
+  // remove channel
+  chs, ok := statusListener[act]
+  if ok {
+    for i, c := range chs {
+      if ch == c {
+        if len(chs) == 1 {
+          delete(statusListener, act)
+        } else {
+          chs[i] = chs[len(chs)-1]
+          statusListener[act] = chs[:len(chs)-1]
+        }
+      }
+    }
+  }
+}
+
