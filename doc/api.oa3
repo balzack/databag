@@ -3893,7 +3893,7 @@ components:
         - profile
         - content
         - view # revision increment on sharing changes
-        - share
+        - group
         - label
         - card
         - dialogue
@@ -3908,7 +3908,7 @@ components:
         label:
           type: integer
           format: int64
-        share:
+        group:
           type: integer
           format: int64
         card:

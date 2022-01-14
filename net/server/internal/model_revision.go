@@ -17,7 +17,7 @@ type Revision struct {
 
 	Label int64 `json:"label"`
 
-	Share int64 `json:"share"`
+	Group int64 `json:"share"`
 
 	Card int64 `json:"card"`
 

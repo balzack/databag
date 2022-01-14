@@ -13,6 +13,7 @@ import (
   "log"
   "sync"
 	"net/http"
+  "encoding/json"
   "github.com/gorilla/websocket"
   "databag/internal/store"
 )
@@ -28,8 +29,8 @@ type accountRevision struct {
   InsightRevision int64
 }
 
-var wsSync sync.Mutex;
-var statusListener = make(map[uint][]chan<-accountRevision)
+var wsSync sync.Mutex
+var statusListener = make(map[uint][]chan<-[]byte)
 var upgrader = websocket.Upgrader{}
 
 func Status(w http.ResponseWriter, r *http.Request) {
@@ -37,83 +38,119 @@ func Status(w http.ResponseWriter, r *http.Request) {
   // accept websocket connection
   conn, err := upgrader.Upgrade(w, r, nil)
   if err != nil {
-      log.Print("Status: failed upgrade connection", err)
+      log.Println("Status: failed upgrade connection")
       return
   }
   defer conn.Close()
 
   log.Println("CONNECTED")
   // receive announce message
+  var act uint = 0
 
-  // open channel for revisions
-  c := make(chan accountRevision)
-  AddStatusListener(0, c);
+  // get revisions for the account
+  var ar accountRevision
+  err = store.DB.Model(&Revision{}).Where("ID = ?", act).First(&ar).Error
+  if err != nil {
+    log.Println("Status - failed to get account revision")
+    return
+  }
+  rev := getRevision(ar)
 
-  for {
-      messageType, message, err := conn.ReadMessage()
-      if err != nil {
-          log.Println("Error during message reading:", err)
-          break
-      }
-      log.Printf("Received: %s", message)
-      err = conn.WriteMessage(messageType, message)
-      if err != nil {
-          log.Println("Error during message writing:", err)
-          break
-      }
+  // send current version
+  var msg []byte
+  msg, err = json.Marshal(rev)
+  if err != nil {
+    log.Println("Status - failed to marshal revision")
+    return
+  }
+  err = conn.WriteMessage(websocket.TextMessage, msg)
+  if err != nil {
+    log.Println("Status - failed to send initial revision")
+    return
   }
 
-  // close channel
-  RemoveStatusListener(0, c);
-  close(c);
+  // open channel for revisions
+  c := make(chan []byte)
+  defer close(c)
+
+  // register channel for revisions
+  AddStatusListener(0, c)
+  defer RemoveStatusListener(act, c)
+
+  // send revision until channel is closed
+  for msg := range c {
+    err = conn.WriteMessage(websocket.TextMessage, msg)
+    if err != nil {
+      log.Println("Status - failed to send revision, closing")
+      return
+    }
+  }
+}
+
+func getRevision(rev accountRevision) Revision {
+  var r Revision
+  r.Profile = rev.ProfileRevision
+  r.Content = rev.ContentRevision
+  r.Label = rev.LabelRevision
+  r.Group = rev.GroupRevision
+  r.Card = rev.CardRevision
+  r.Dialogue = rev.DialogueRevision
+  r.Insight = rev.InsightRevision
+  return r
 }
 
 func SetStatus(act uint) {
 
   // get revisions for the account
-  var rev accountRevision;
-  err := store.DB.Model(&Revision{}).Where("ID = ?", act).First(&rev).Error
+  var ar accountRevision
+  err := store.DB.Model(&Revision{}).Where("ID = ?", act).First(&ar).Error
   if err != nil {
-    log.Println("SetStatus - failed to retrieve account revisions");
+    log.Println("SetStatus - failed to retrieve account revisions")
+    return
+  }
+  rev := getRevision(ar)
+  var msg []byte
+  msg, err = json.Marshal(rev)
+  if err != nil {
+    log.Println("SetStatus - failed to marshal revision")
+    return
   }
 
   // lock access to statusListener
   wsSync.Lock()
-  defer wsSync.Unlock();
+  defer wsSync.Unlock()
 
-  // check if we have any listeners
+  // notify all listeners
   chs, ok := statusListener[act]
   if ok {
-
-    // notify all listeners
     for _, ch := range chs {
-      ch <- rev
+      ch <- msg
     }
   }
 }
 
-func AddStatusListener(act uint, ch chan<-accountRevision) {
+func AddStatusListener(act uint, ch chan<-[]byte) {
 
   // lock access to statusListener
   wsSync.Lock()
-  defer wsSync.Unlock();
+  defer wsSync.Unlock()
 
-  // check if account has listeners
+  // add new listener to map
   chs, ok := statusListener[act]
   if ok {
-    chs = append(chs, ch);
+    chs = append(chs, ch)
   } else {
-    statusListener[act] = []chan<-accountRevision{ch}
+    statusListener[act] = []chan<-[]byte{ch}
   }
 }
 
-func RemoveStatusListener(act uint, ch chan<-accountRevision) {
+func RemoveStatusListener(act uint, ch chan<-[]byte) {
 
   // lock access to statusListener
   wsSync.Lock()
-  defer wsSync.Unlock();
+  defer wsSync.Unlock()
 
-  // remove channel
+  // remove channel from map
   chs, ok := statusListener[act]
   if ok {
     for i, c := range chs {
