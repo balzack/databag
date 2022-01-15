@@ -105,3 +105,31 @@ type CardView struct {
 	ProfileRevision int64 `json:"profileRevision"`
 	ContentRevision int64 `json:"contentRevision"`
 }
+
+type Connect struct {
+	RequestorcardId string `json:"requestorcardId,omitempty"`
+	RequestedcardId string `json:"requestedcardId,omitempty"`
+	Timestamp int32 `json:"timestamp"`
+	Profile *Profile `json:"profile"`
+	Token string `json:"token"`
+	ContentRevision int64 `json:"contentRevision"`
+}
+
+type ContentArticlesBody struct {
+	Labels []string `json:"labels"`
+	Groups []string `json:"groups"`
+}
+
+type ContentLabelsBody struct {
+	Type_ string `json:"type"`
+	Data string `json:"data"`
+}
+
+type DataMessage struct {
+	MessageType string `json:"messageType"`
+	Message string `json:"message"`
+	KeyType string `json:"keyType"`
+	PublicKey string `json:"publicKey"`
+	Signature string `json:"signature"`
+}
+
