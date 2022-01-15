@@ -148,3 +148,46 @@ type Disconnect struct {
 	RequestedId string `json:"requestedId"`
 	Timestamp int32 `json:"timestamp"`
 }
+
+type Group struct {
+	GroupId string `json:"groupId"`
+	GroupRevision int64 `json:"groupRevision"`
+	Type_ string `json:"type"`
+	Data string `json:"data"`
+	Created int32 `json:"created"`
+	Modified int32 `json:"modified"`
+}
+
+type GroupsGroupIdBody struct {
+	Type_ string `json:"type"`
+	Data string `json:"data"`
+}
+
+type InlineResponse200 struct {
+	Token string `json:"token,omitempty"`
+	Status string `json:"status"`
+}
+
+type InlineResponse2001 struct {
+	Id string `json:"id,omitempty"`
+	Revision int64 `json:"revision,omitempty"`
+}
+
+type InlineResponse2002 struct {
+	BlockId string `json:"blockId,omitempty"`
+	BlockRevision int64 `json:"blockRevision,omitempty"`
+	Tag *Tag `json:"tag,omitempty"`
+}
+
+type InlineResponse201 struct {
+	BlockId string `json:"blockId,omitempty"`
+	BlockRevision int64 `json:"blockRevision,omitempty"`
+	Article *Article `json:"article,omitempty"`
+}
+
+type InlineResponse2011 struct {
+	BlockId string `json:"blockId,omitempty"`
+	BlockRevision int64 `json:"blockRevision,omitempty"`
+	Topic *Topic `json:"topic,omitempty"`
+}
+
