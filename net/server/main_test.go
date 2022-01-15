@@ -16,7 +16,8 @@ func TestSetup(t *testing.T) {
   //store.SetPath("databag.db");
   Claimable(t);
   Claim(t);
-  Config(t);
+  SetConfig(t);
+  GetConfig(t);
 }
 
 func Claimable(t *testing.T) {
@@ -48,7 +49,7 @@ func Claim(t *testing.T) {
   }
 }
 
-func Config(t *testing.T) {
+func SetConfig(t *testing.T) {
   config := app.NodeConfig{Domain: "example.com", PublicLimit: 1024, AccountStorage: 4096}
   auth := base64.StdEncoding.EncodeToString([]byte("admin:pass"))
   body,_ := json.Marshal(config)
@@ -58,5 +59,30 @@ func Config(t *testing.T) {
   app.SetNodeConfig(w, r);
   if w.Code != 200 {
     t.Errorf("failed to set node config")
+  }
+}
+
+func GetConfig(t *testing.T) {
+  auth := base64.StdEncoding.EncodeToString([]byte("admin:pass"))
+  r := httptest.NewRequest("GET", "/admin/config", nil)
+  r.Header.Add("Authorization","Basic " + auth)
+  w := httptest.NewRecorder()
+  app.GetNodeConfig(w, r);
+
+  resp := w.Result();
+  dec := json.NewDecoder(resp.Body);
+  var config app.NodeConfig;
+  dec.Decode(&config);
+  if resp.StatusCode != 200 {
+    t.Errorf("failed to get node config")
+  }
+  if config.Domain != "example.com" {
+    t.Error("failed to set config domain");
+  }
+  if config.PublicLimit != 1024 {
+    t.Error("failed to set public limit");
+  }
+  if config.AccountStorage != 4096 {
+    t.Error("failed to set account storage");
   }
 }
