@@ -133,3 +133,18 @@ type DataMessage struct {
 	Signature string `json:"signature"`
 }
 
+type DialogueIdSubjectBody struct {
+	Type_ string `json:"type"`
+	Data string `json:"data"`
+}
+
+type DialogueInsights struct {
+	CardId string `json:"cardId,omitempty"`
+	Status string `json:"status,omitempty"`
+}
+
+type Disconnect struct {
+	RequestorId string `json:"requestorId"`
+	RequestedId string `json:"requestedId"`
+	Timestamp int32 `json:"timestamp"`
+}
