@@ -20,19 +20,25 @@ import (
 
 func adminLogin(r *http.Request) bool {
 
-  // check configured state
-  if !_configured || _adminUsername == "" || _adminPassword == nil {
-    return false;
-  }
-
-  // validate imput
+  // extract request auth
   username, password, ok := r.BasicAuth();
   if !ok || username == "" || password == "" {
     return false
   }
 
-  // compare credentials
-  if username != _adminUsername || bcrypt.CompareHashAndPassword(_adminPassword, []byte(password)) != nil {
+  // nothing to do if not configured
+  if !getBoolConfigValue(CONFIG_CONFIGURED, false) {
+    return false;
+  }
+
+  // compare username
+  if getStrConfigValue(CONFIG_USERNAME, "") != username {
+    return false
+  }
+
+  // compare password
+  p := getBinConfigValue(CONFIG_PASSWORD, nil);
+  if bcrypt.CompareHashAndPassword(p, []byte(password)) != nil {
     return false
   }
 
@@ -56,7 +62,8 @@ func GetNodeAccounts(w http.ResponseWriter, r *http.Request) {
 
 func GetNodeClaimable(w http.ResponseWriter, r *http.Request) {
 
-  body, _ := json.Marshal(!_configured);
+  c := getBoolConfigValue(CONFIG_CONFIGURED, false);
+  body, _ := json.Marshal(!c);
   w.Write(body);
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
   w.WriteHeader(http.StatusOK)
@@ -85,7 +92,7 @@ func SetNodeAccount(w http.ResponseWriter, r *http.Request) {
 func SetNodeClaim(w http.ResponseWriter, r *http.Request) {
 
   // confirm node hasn't been configured
-  if _configured {
+  if getBoolConfigValue(CONFIG_CONFIGURED, false) {
     w.WriteHeader(http.StatusUnauthorized)
     return
   }
@@ -112,6 +119,9 @@ func SetNodeClaim(w http.ResponseWriter, r *http.Request) {
     if res := tx.Create(&store.Config{ConfigId: CONFIG_PASSWORD, BinValue: hashedPassword}).Error; res != nil {
       return res
     }
+    if res := tx.Create(&store.Config{ConfigId: CONFIG_CONFIGURED, BoolValue: true}).Error; res != nil {
+      return res
+    }
     return nil;
   })
   if(err != nil) {
@@ -119,11 +129,6 @@ func SetNodeClaim(w http.ResponseWriter, r *http.Request) {
     w.WriteHeader(http.StatusInternalServerError)
     return
   }
-
-  // set global values
-  _adminUsername = username
-  _adminPassword = hashedPassword
-  _configured = true
 
 	w.WriteHeader(http.StatusOK)
 }
@@ -166,11 +171,6 @@ func SetNodeConfig(w http.ResponseWriter, r *http.Request) {
     w.WriteHeader(http.StatusInternalServerError)
     return
   }
-
-  // set global values
-  _nodeDomain = config.Domain
-  _publicLimit = config.PublicLimit
-  _accountStorage = config.AccountStorage
 
 	w.WriteHeader(http.StatusOK)
 }

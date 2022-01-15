@@ -28,14 +28,6 @@ type Routes []Route
 
 func NewRouter() *mux.Router {
 
-  // populate context
-  _configured = getBoolConfigValue(CONFIG_CONFIGURED, false);
-  _adminUsername = getStrConfigValue(CONFIG_USERNAME, "");
-  _adminPassword = getBinConfigValue(CONFIG_PASSWORD, nil);
-  _nodeDomain = getStrConfigValue(CONFIG_DOMAIN, "");
-  _publicLimit = getNumConfigValue(CONFIG_PUBLICLIMIT, 0);
-  _accountStorage = getNumConfigValue(CONFIG_STORAGE, 0);
-
 	router := mux.NewRouter().StrictSlash(true)
 	for _, route := range routes {
 		var handler http.Handler

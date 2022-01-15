@@ -6,16 +6,9 @@ import (
     "databag/internal/store"
   )
 
-var _configured bool
-var _adminUsername string
-var _adminPassword []byte
-var _nodeDomain string
-var _accountStorage int64
-var _publicLimit int64
-
 func getStrConfigValue(configId string, empty string) string {
   var config store.Config
-  err := store.DB.Where("config_id = ?", config).First(&config).Error
+  err := store.DB.Where("config_id = ?", configId).First(&config).Error
   if errors.Is(err, gorm.ErrRecordNotFound) {
     return empty
   }
@@ -24,7 +17,7 @@ func getStrConfigValue(configId string, empty string) string {
 
 func getNumConfigValue(configId string, empty int64) int64 {
   var config store.Config
-  err := store.DB.Where("config_id = ?", config).First(&config).Error
+  err := store.DB.Where("config_id = ?", configId).First(&config).Error
   if errors.Is(err, gorm.ErrRecordNotFound) {
     return empty
   }
@@ -33,7 +26,7 @@ func getNumConfigValue(configId string, empty int64) int64 {
 
 func getBoolConfigValue(configId string, empty bool) bool {
   var config store.Config
-  err := store.DB.Where("config_id = ?", config).First(&config).Error
+  err := store.DB.Where("config_id = ?", configId).First(&config).Error
   if errors.Is(err, gorm.ErrRecordNotFound) {
     return empty
   }
@@ -42,7 +35,7 @@ func getBoolConfigValue(configId string, empty bool) bool {
 
 func getBinConfigValue(configId string, empty []byte) []byte {
   var config store.Config
-  err := store.DB.Where("config_id = ?", config).First(&config).Error
+  err := store.DB.Where("config_id = ?", configId).First(&config).Error
   if errors.Is(err, gorm.ErrRecordNotFound) {
     return empty
   }
