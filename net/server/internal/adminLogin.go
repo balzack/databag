@@ -32,3 +32,6 @@ func adminLogin(r *http.Request) bool {
   return true;
 }
 
+func bearerAuth(r *http.Request) string {
+return "";
+}

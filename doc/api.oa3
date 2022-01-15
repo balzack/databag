@@ -355,6 +355,11 @@ paths:
       responses:
         '200':
           description: success
+          content:
+            application/json:
+              schema:
+                type: string
+        '401':
         '401':
           description: permission denied
         '500':
