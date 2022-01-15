@@ -10,40 +10,8 @@
 package databag
 
 import (
-  "log"
-  "encoding/json"
 	"net/http"
-  "gorm.io/gorm"
-  "golang.org/x/crypto/bcrypt"
-  "databag/internal/store"
 )
-
-func adminLogin(r *http.Request) bool {
-
-  // extract request auth
-  username, password, ok := r.BasicAuth();
-  if !ok || username == "" || password == "" {
-    return false
-  }
-
-  // nothing to do if not configured
-  if !getBoolConfigValue(CONFIG_CONFIGURED, false) {
-    return false;
-  }
-
-  // compare username
-  if getStrConfigValue(CONFIG_USERNAME, "") != username {
-    return false
-  }
-
-  // compare password
-  p := getBinConfigValue(CONFIG_PASSWORD, nil);
-  if bcrypt.CompareHashAndPassword(p, []byte(password)) != nil {
-    return false
-  }
-
-  return true;
-}
 
 func GetNodeAccountImage(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
@@ -51,42 +19,6 @@ func GetNodeAccountImage(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetNodeAccounts(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	w.WriteHeader(http.StatusOK)
-}
-
-func GetNodeClaimable(w http.ResponseWriter, r *http.Request) {
-
-  c := getBoolConfigValue(CONFIG_CONFIGURED, false);
-  body, err := json.Marshal(!c);
-  if err != nil {
-    log.Println("GetNodeClaimable - failed to marshal response");
-  }
-  w.Write(body);
-	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-  w.WriteHeader(http.StatusOK)
-}
-
-func GetNodeConfig(w http.ResponseWriter, r *http.Request) {
-
-  // validate login
-  if !adminLogin(r) {
-    log.Printf("SetNodeConfig - invalid admin credentials");
-    w.WriteHeader(http.StatusUnauthorized);
-    return
-  }
-
-  // get node config fields
-  var config NodeConfig;
-  config.Domain = getStrConfigValue(CONFIG_DOMAIN, "");
-  config.PublicLimit = getNumConfigValue(CONFIG_PUBLICLIMIT, 0);
-  config.AccountStorage = getNumConfigValue(CONFIG_STORAGE, 0);
-
-  body, err := json.Marshal(config);
-  if err != nil {
-    log.Println("GetNodeConfig - failed to marshal response");
-  }
-  w.Write(body);
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
 }
@@ -103,92 +35,6 @@ func RemoveNodeAccount(w http.ResponseWriter, r *http.Request) {
 
 func SetNodeAccount(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	w.WriteHeader(http.StatusOK)
-}
-
-func SetNodeClaim(w http.ResponseWriter, r *http.Request) {
-
-  // confirm node hasn't been configured
-  if getBoolConfigValue(CONFIG_CONFIGURED, false) {
-    w.WriteHeader(http.StatusUnauthorized)
-    return
-  }
-
-  // extract credentials
-  username, password, ok := r.BasicAuth();
-  if !ok || username == "" || password == "" {
-    log.Printf("SetNodeClaim - invalid credenitals");
-    w.WriteHeader(http.StatusBadRequest)
-    return
-  }
-  hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
-  if err != nil {
-    log.Printf("SetNodeClaim - failed to hash password");
-    w.WriteHeader(http.StatusInternalServerError)
-    return
-  }
-
-  // store credentials
-  err = store.DB.Transaction(func(tx *gorm.DB) error {
-    if res := tx.Create(&store.Config{ConfigId: CONFIG_USERNAME, StrValue: username}).Error; res != nil {
-      return res
-    }
-    if res := tx.Create(&store.Config{ConfigId: CONFIG_PASSWORD, BinValue: hashedPassword}).Error; res != nil {
-      return res
-    }
-    if res := tx.Create(&store.Config{ConfigId: CONFIG_CONFIGURED, BoolValue: true}).Error; res != nil {
-      return res
-    }
-    return nil;
-  })
-  if(err != nil) {
-    log.Printf("SetNodeCalim - failed to store credentials");
-    w.WriteHeader(http.StatusInternalServerError)
-    return
-  }
-
-	w.WriteHeader(http.StatusOK)
-}
-
-func SetNodeConfig(w http.ResponseWriter, r *http.Request) {
-
-  // validate login
-  if !adminLogin(r) {
-    log.Printf("SetNodeConfig - invalid admin credentials");
-    w.WriteHeader(http.StatusUnauthorized);
-    return
-  }
-
-  // parse node config
-  r.Body = http.MaxBytesReader(w, r.Body, CONFIG_BODYLIMIT)
-  dec := json.NewDecoder(r.Body)
-  dec.DisallowUnknownFields()
-  var config NodeConfig;
-  res := dec.Decode(&config);
-  if res != nil {
-    w.WriteHeader(http.StatusBadRequest)
-    return
-  }
-
-  // store credentials
-  err := store.DB.Transaction(func(tx *gorm.DB) error {
-    if res := tx.Create(&store.Config{ConfigId: CONFIG_DOMAIN, StrValue: config.Domain}).Error; res != nil {
-      return res
-    }
-    if res := tx.Create(&store.Config{ConfigId: CONFIG_PUBLICLIMIT, NumValue: config.PublicLimit}).Error; res != nil {
-      return res
-    }
-    if res := tx.Create(&store.Config{ConfigId: CONFIG_STORAGE, NumValue: config.AccountStorage}).Error; res != nil {
-      return res
-    }
-    return nil;
-  })
-  if(err != nil) {
-    log.Printf("SetNodeConfig - failed to store config");
-    w.WriteHeader(http.StatusInternalServerError)
-    return
-  }
-
 	w.WriteHeader(http.StatusOK)
 }
 
