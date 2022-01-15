@@ -133,6 +133,17 @@ type DataMessage struct {
 	Signature string `json:"signature"`
 }
 
+type Dialogue struct {
+	DialogueId string `json:"dialogueId"`
+	DialogueRevison int64 `json:"dialogueRevison,omitempty"`
+	Type_ string `json:"type"`
+	Data string `json:"data"`
+	Created int32 `json:"created"`
+	Active bool `json:"active"`
+	InsightRevision int64 `json:"insightRevision,omitempty"`
+	Insights []DialogueInsights `json:"insights"`
+}
+
 type DialogueIdSubjectBody struct {
 	Type_ string `json:"type"`
 	Data string `json:"data"`
@@ -253,3 +264,44 @@ type ShareGroupsBody struct {
 	Data string `json:"data"`
 }
 
+type Tag struct {
+	TagId string `json:"tagId"`
+	CardId string `json:"cardId,omitempty"`
+	Revision int64 `json:"revision"`
+	Type_ string `json:"type"`
+	Data string `json:"data"`
+	Created int32 `json:"created"`
+}
+
+type Topic struct {
+	TopicId string `json:"topicId"`
+	TopicRevision int64 `json:"topicRevision"`
+	Type_ string `json:"type"`
+	Data string `json:"data"`
+	Created int32 `json:"created"`
+	Modified int32 `json:"modified"`
+	Status string `json:"status"`
+	TagCount int32 `json:"tagCount"`
+	TagUpdate int32 `json:"tagUpdate,omitempty"`
+	TagRevision int64 `json:"tagRevision"`
+}
+
+type TopicIdAssetsBody struct {
+	FileName **os.File `json:"fileName,omitempty"`
+}
+
+type TopicIdSubjectBody struct {
+	Type_ string `json:"type"`
+	Data string `json:"data"`
+}
+
+type TopicIdTagsBody struct {
+	Type_ string `json:"type"`
+	Data string `json:"data"`
+}
+
+type Tunnel struct {
+	CardId string `json:"cardId"`
+	Type_ string `json:"type"`
+	Data string `json:"data,omitempty"`
+}
