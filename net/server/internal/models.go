@@ -252,3 +252,4 @@ type ShareGroupsBody struct {
 	Type_ string `json:"type"`
 	Data string `json:"data"`
 }
+
