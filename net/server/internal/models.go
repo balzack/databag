@@ -62,4 +62,46 @@ type ArticleIdSubjectBody struct {
 	Data string `json:"data"`
 }
 
+type Asset struct {
+	AssetId string `json:"assetId"`
+	Transform string `json:"transform,omitempty"`
+	Status string `json:"status,omitempty"`
+}
 
+type Authenticate struct {
+	Token string `json:"token"`
+	Timestamp int32 `json:"timestamp"`
+}
+
+type Card struct {
+	CardId string `json:"cardId"`
+	CardProfile *CardProfile `json:"cardProfile"`
+	CardData *CardData `json:"cardData"`
+	ProfileRevision int64 `json:"profileRevision"`
+	ContentRevision int64 `json:"contentRevision"`
+}
+
+type CardData struct {
+	Revision int64 `json:"revision,omitempty"`
+	Status string `json:"status"`
+	Notes string `json:"notes,omitempty"`
+	Token string `json:"token,omitempty"`
+	Groups []string `json:"groups,omitempty"`
+}
+
+type CardProfile struct {
+	Handle string `json:"handle,omitempty"`
+	Name string `json:"name,omitempty"`
+	Description string `json:"description,omitempty"`
+	Location string `json:"location,omitempty"`
+	Revision int64 `json:"revision,omitempty"`
+	ImageSet bool `json:"imageSet,omitempty"`
+	Node string `json:"node"`
+}
+
+type CardView struct {
+	CardId string `json:"cardId"`
+	CardRevision int64 `json:"cardRevision"`
+	ProfileRevision int64 `json:"profileRevision"`
+	ContentRevision int64 `json:"contentRevision"`
+}
