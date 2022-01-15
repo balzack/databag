@@ -191,3 +191,29 @@ type InlineResponse2011 struct {
 	Topic *Topic `json:"topic,omitempty"`
 }
 
+type Insight struct {
+	InsightId string `json:"insightId"`
+	InsightRevision int64 `json:"insightRevision"`
+	CardId string `json:"cardId"`
+	Status string `json:"status"`
+}
+
+type Label struct {
+	LabelId string `json:"labelId"`
+	LabelRevision int64 `json:"labelRevision"`
+	Type_ string `json:"type"`
+	Data string `json:"data"`
+	Created int32 `json:"created"`
+	Groups []string `json:"groups,omitempty"`
+}
+
+type LabelsLabelIdBody struct {
+	Type_ string `json:"type"`
+	Data string `json:"data"`
+}
+
+type NodeConfig struct {
+	Domain string `json:"domain"`
+	PublicLimit int64 `json:"publicLimit"`
+	AccountStorage int64 `json:"accountStorage"`
+}
