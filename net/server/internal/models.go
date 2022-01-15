@@ -217,3 +217,38 @@ type NodeConfig struct {
 	PublicLimit int64 `json:"publicLimit"`
 	AccountStorage int64 `json:"accountStorage"`
 }
+
+type Profile struct {
+	ProfileId string `json:"profileId"`
+	Handle string `json:"handle,omitempty"`
+	Name string `json:"name,omitempty"`
+	Description string `json:"description,omitempty"`
+	Location string `json:"location,omitempty"`
+	Image string `json:"image,omitempty"`
+	Revision int64 `json:"revision"`
+	Version string `json:"version,omitempty"`
+	Node string `json:"node"`
+}
+
+type ProfileData struct {
+	Handle string `json:"handle,omitempty"`
+	Name string `json:"name,omitempty"`
+	Description string `json:"description,omitempty"`
+	Location string `json:"location,omitempty"`
+	Image string `json:"image,omitempty"`
+}
+
+type Revision struct {
+	Profile int64 `json:"profile"`
+	Content int64 `json:"content"`
+	Label int64 `json:"label"`
+	Group int64 `json:"share"`
+	Card int64 `json:"card"`
+	Dialogue int64 `json:"dialogue"`
+	Insight int64 `json:"insight"`
+}
+
+type ShareGroupsBody struct {
+	Type_ string `json:"type"`
+	Data string `json:"data"`
+}
