@@ -47,6 +47,7 @@ func Claim() {
   w := httptest.NewRecorder()
   SetNodeClaim(w, r)
   if w.Code != 200 {
+LogMsg("HERE");
     panic("server not initially claimable")
   }
 }

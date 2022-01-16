@@ -49,13 +49,13 @@ func Status(w http.ResponseWriter, r *http.Request) {
   var act uint = 0
 
   // get revisions for the account
-  var ar accountRevision
-  err = store.DB.Model(&Revision{}).Where("ID = ?", act).First(&ar).Error
+  var account accountRevision
+  err = store.DB.Model(&store.Account{}).Where("ID = ?", act).First(&account).Error
   if err != nil {
     log.Println("Status - failed to get account revision")
 //    return
   }
-  rev := getRevision(ar)
+  rev := getRevision(account)
 
   // send current version
   var msg []byte

@@ -13,6 +13,9 @@ import (
     "log"
     "net/http"
     "time"
+    "os"
+    "runtime"
+    "strings"
 )
 
 func Logger(inner http.Handler, name string) http.Handler {
@@ -29,4 +32,10 @@ func Logger(inner http.Handler, name string) http.Handler {
             time.Since(start),
         )
     })
+}
+
+func LogMsg(msg string) {
+	_, file, line, _ := runtime.Caller(1)
+	p, _ := os.Getwd()
+  log.Printf("%s:%d %s", strings.TrimPrefix(file, p), line, msg)
 }

@@ -46,10 +46,10 @@ type AccountToken struct {
 
 type Account struct {
   ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
-  PublicKey         []byte          `gorm:"not null"`  
-  PrivateKey        []byte          `gorm:"not null"`  
-  KeyType           []byte          `gorm:"not null"` 
-  ProfileId         string          `gorm:"not null;uniqueIndex"` 
+  PublicKey         []byte          `gorm:"not null"`
+  PrivateKey        []byte          `gorm:"not null"`
+  KeyType           []byte          `gorm:"not null"`
+  ProfileId         string          `gorm:"not null;uniqueIndex"`
   Username          string          `gorm:"not null;uniqueIndex"`
   Password          []byte          `gorm:"not null"`
   Name              string

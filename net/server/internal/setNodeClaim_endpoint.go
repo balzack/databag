@@ -1,7 +1,7 @@
 package databag
 
 import (
-  "log"
+  "errors"
 	"net/http"
   "gorm.io/gorm"
   "databag/internal/store"
@@ -10,27 +10,30 @@ import (
 
 func SetNodeClaim(w http.ResponseWriter, r *http.Request) {
 
-  // confirm node hasn't been configured
-  if getBoolConfigValue(CONFIG_CONFIGURED, false) {
+  var config store.Config
+  err := store.DB.Where("config_id = ?", CONFIG_CONFIGURED).First(&config).Error
+  if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+    w.WriteHeader(http.StatusInternalServerError)
+    return
+  }
+  if config.BoolValue {
     w.WriteHeader(http.StatusUnauthorized)
     return
   }
 
-  // extract credentials
   username, password, ok := r.BasicAuth();
   if !ok || username == "" || password == "" {
-    log.Printf("SetNodeClaim - invalid credenitals");
+    LogMsg("SetNodeClaim - invalid credenitals");
     w.WriteHeader(http.StatusBadRequest)
     return
   }
   hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
   if err != nil {
-    log.Printf("SetNodeClaim - failed to hash password");
+    LogMsg("SetNodeClaim - failed to hash password");
     w.WriteHeader(http.StatusInternalServerError)
     return
   }
 
-  // store credentials
   err = store.DB.Transaction(func(tx *gorm.DB) error {
     if res := tx.Create(&store.Config{ConfigId: CONFIG_USERNAME, StrValue: username}).Error; res != nil {
       return res
@@ -44,7 +47,7 @@ func SetNodeClaim(w http.ResponseWriter, r *http.Request) {
     return nil;
   })
   if(err != nil) {
-    log.Printf("SetNodeCalim - failed to store credentials");
+    LogMsg("SetNodeCalim - failed to store credentials");
     w.WriteHeader(http.StatusInternalServerError)
     return
   }

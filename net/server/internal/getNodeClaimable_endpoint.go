@@ -1,20 +1,23 @@
 package databag
 
 import (
-  "log"
-  "encoding/json"
+  "errors"
 	"net/http"
+  "gorm.io/gorm"
+  "databag/internal/store"
 )
 
 func GetNodeClaimable(w http.ResponseWriter, r *http.Request) {
-
-  c := getBoolConfigValue(CONFIG_CONFIGURED, false);
-  body, err := json.Marshal(!c);
+  var config store.Config
+  err := store.DB.Where("config_id = ?", CONFIG_CONFIGURED).First(&config).Error
   if err != nil {
-    log.Println("GetNodeClaimable - failed to marshal response");
+    if errors.Is(err, gorm.ErrRecordNotFound) {
+      WriteResponse(w, true)
+    } else {
+      w.WriteHeader(http.StatusInternalServerError);
+    }
+    return
   }
-  w.Write(body);
-	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-  w.WriteHeader(http.StatusOK)
+  WriteResponse(w, false);
 }
 
