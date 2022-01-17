@@ -18,7 +18,8 @@ func TestMain(m *testing.M) {
   Claim();
   SetConfig();
   GetConfig();
-
+  token := SetToken()
+  SetAccount(token)
   m.Run()
 }
 
@@ -86,5 +87,34 @@ func GetConfig() {
   }
   if config.AccountStorage != 4096 {
     panic("failed to set account storage");
+  }
+}
+
+func SetToken() string {
+  auth := base64.StdEncoding.EncodeToString([]byte("admin:pass"))
+  r := httptest.NewRequest("POST", "/admin/accounts", nil)
+  r.Header.Add("Authorization","Basic " + auth)
+  w := httptest.NewRecorder()
+  AddNodeAccount(w, r)
+  resp := w.Result()
+  dec := json.NewDecoder(resp.Body)
+  var token string
+  dec.Decode(&token)
+  if resp.StatusCode != 200 {
+    panic("failed to create token")
+  }
+  return token
+}
+
+func SetAccount(token string) {
+  auth := base64.StdEncoding.EncodeToString([]byte("test:pass"))
+  r := httptest.NewRequest("GET", "/account/profile", nil)
+  r.Header.Add("Credentials","Basic " + auth)
+  r.Header.Add("Authorization","Bearer " + token)
+  w := httptest.NewRecorder()
+  AddAccount(w, r)
+  resp := w.Result()
+  if resp.StatusCode != 200 {
+    panic("failed to create account")
   }
 }

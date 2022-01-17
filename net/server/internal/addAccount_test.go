@@ -7,7 +7,7 @@ import (
   "encoding/json"
 )
 
-func TestAccount(t *testing.T) {
+func TestAddAccount(t *testing.T) {
 
   // acquire new token for creating accounts
   auth := base64.StdEncoding.EncodeToString([]byte("admin:pass"))
