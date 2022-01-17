@@ -4,7 +4,6 @@ import (
   "testing"
   "net/http/httptest"
   "encoding/base64"
-  "encoding/json"
 )
 
 func TestAddAccount(t *testing.T) {
@@ -15,12 +14,9 @@ func TestAddAccount(t *testing.T) {
   r.Header.Add("Authorization","Basic " + auth)
   w := httptest.NewRecorder()
   AddNodeAccount(w, r)
-  resp := w.Result()
-  dec := json.NewDecoder(resp.Body)
   var token string
-  dec.Decode(&token)
-  if resp.StatusCode != 200 {
-    t.Errorf("failed to create account")
+  if ReadResponse(w, &token) != nil {
+    t.Errorf("failed to create token");
     return
   }
 
@@ -29,16 +25,9 @@ func TestAddAccount(t *testing.T) {
   r.Header.Add("Authorization","Bearer " + token)
   w = httptest.NewRecorder()
   GetAccountToken(w, r)
-  resp = w.Result()
-  if resp.StatusCode != 200 {
-    t.Errorf("invalid token value")
-    return
-  }
-  dec = json.NewDecoder(resp.Body)
   var tokenType string
-  dec.Decode(&tokenType)
-  if tokenType != "create" {
-    t.Errorf("invalid token type")
+  if ReadResponse(w, &tokenType) != nil {
+    t.Errorf("failed to validate token")
     return
   }
 
@@ -47,14 +36,11 @@ func TestAddAccount(t *testing.T) {
   r.Header.Add("Authorization","Bearer " + token)
   w = httptest.NewRecorder()
   GetAccountUsername(w, r)
-  resp = w.Result()
-  if resp.StatusCode != 200 {
-    t.Errorf("invalid token value")
+  var available bool
+  if ReadResponse(w, &available) != nil {
+    t.Errorf("failed to check username")
     return
   }
-  dec = json.NewDecoder(resp.Body)
-  var available bool
-  dec.Decode(&available)
   if !available {
     t.Errorf("username not available")
     return
@@ -67,16 +53,9 @@ func TestAddAccount(t *testing.T) {
   r.Header.Add("Authorization","Bearer " + token)
   w = httptest.NewRecorder()
   AddAccount(w, r)
-  resp = w.Result()
-  if resp.StatusCode != 200 {
-    t.Errorf("invalid token value")
-    return
-  }
-  dec = json.NewDecoder(resp.Body)
   var profile Profile
-  dec.Decode(&profile)
-  if profile.Handle != "user" {
-    t.Errorf("invalid profile")
+  if ReadResponse(w, &profile) != nil {
+    t.Errorf("failed to create account")
     return
   }
 
@@ -86,40 +65,33 @@ func TestAddAccount(t *testing.T) {
   r.Header.Add("Authorization","Basic " + auth)
   w = httptest.NewRecorder()
   AddNodeAccount(w, r)
-  resp = w.Result()
-  dec = json.NewDecoder(resp.Body)
-  dec.Decode(&token)
-  if resp.StatusCode != 200 {
-    t.Errorf("failed to create account")
+  if ReadResponse(w, &token) != nil {
+    t.Errorf("failed to create token")
     return
   }
 
-  // check if username is available
+  // check if dup is available
   r = httptest.NewRequest("GET", "/account/claimable?username=user", nil)
   r.Header.Add("Authorization","Bearer " + token)
   w = httptest.NewRecorder()
   GetAccountUsername(w, r)
-  resp = w.Result()
-  if resp.StatusCode != 200 {
-    t.Errorf("invalid token value")
+  if ReadResponse(w, &available) != nil {
+    t.Errorf("failed to check username")
     return
   }
-  dec = json.NewDecoder(resp.Body)
-  dec.Decode(&available)
   if available {
     t.Errorf("username duplicate available")
     return
   }
 
-  // create account
+  // create dup account
   auth = base64.StdEncoding.EncodeToString([]byte("user:pass"))
   r = httptest.NewRequest("GET", "/account/profile", nil)
   r.Header.Add("Credentials","Basic " + auth)
   r.Header.Add("Authorization","Bearer " + token)
   w = httptest.NewRecorder()
   AddAccount(w, r)
-  resp = w.Result()
-  if resp.StatusCode == 200 {
+  if ReadResponse(w, &profile) == nil {
     t.Errorf("duplicate handle set")
     return
   }

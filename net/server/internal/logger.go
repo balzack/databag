@@ -19,6 +19,8 @@ import (
     "github.com/kr/pretty"
 )
 
+var hideLog bool = false
+
 func Logger(inner http.Handler, name string) http.Handler {
     return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
         start := time.Now()
@@ -36,9 +38,11 @@ func Logger(inner http.Handler, name string) http.Handler {
 }
 
 func LogMsg(msg string) {
-	_, file, line, _ := runtime.Caller(1)
-	p, _ := os.Getwd()
-  log.Printf("%s:%d %s", strings.TrimPrefix(file, p), line, msg)
+  if !hideLog {
+    _, file, line, _ := runtime.Caller(1)
+    p, _ := os.Getwd()
+    log.Printf("%s:%d %s", strings.TrimPrefix(file, p), line, msg)
+  }
 }
 
 func PrintMsg(obj interface{}) {

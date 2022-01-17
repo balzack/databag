@@ -1,16 +1,13 @@
 package databag
 
 import (
-  "strings"
   "testing"
-  "net/http/httptest"
-  "encoding/base64"
-  "encoding/json"
   "databag/internal/store"
 )
 
 func TestMain(m *testing.M) {
 
+  hideLog = true
   store.SetPath("file::memory:?cache=shared");
   //store.SetPath("databag.db");
 
@@ -24,59 +21,39 @@ func TestMain(m *testing.M) {
 }
 
 func Claimable() {
-  r := httptest.NewRequest("GET", "/admin/claimable", nil)
-  w := httptest.NewRecorder()
+  r, w, _ := NewRequest("GET", "/admin/claimable", nil)
   GetNodeClaimable(w, r)
-
-  //body, _ := ioutil.ReadAll(resp.Body)
-  resp := w.Result()
-  dec := json.NewDecoder(resp.Body);
-  var res bool
-  err := dec.Decode(&res)
-  if err != nil {
-    panic("failed to get claimable response")
-  }
-  if resp.StatusCode != 200 {
-    panic("server not initially claimable")
+  var available bool
+  if ReadResponse(w, &available) != nil {
+    panic("server not claimable")
   }
 }
 
 func Claim() {
-  auth := base64.StdEncoding.EncodeToString([]byte("admin:pass"))
-  r := httptest.NewRequest("PUT", "/admin/claim", nil)
-  r.Header.Add("Credentials","Basic " + auth)
-  w := httptest.NewRecorder()
+  r, w, _ := NewRequest("PUT", "/admin/claim", nil)
+  SetCredentials(r, "admin:pass");
   SetNodeClaim(w, r)
-  if w.Code != 200 {
-    panic("server not initially claimable")
+  if ReadResponse(w, nil) != nil {
+    panic("failed to claim server")
   }
 }
 
 func SetConfig() {
   config := NodeConfig{Domain: "example.com", PublicLimit: 1024, AccountStorage: 4096}
-  auth := base64.StdEncoding.EncodeToString([]byte("admin:pass"))
-  body,_ := json.Marshal(config)
-  r := httptest.NewRequest("PUT", "/admin/config", strings.NewReader(string(body)))
-  r.Header.Add("Authorization","Basic " + auth)
-  w := httptest.NewRecorder()
-  SetNodeConfig(w, r);
-  if w.Code != 200 {
-    panic("failed to set node config")
+  r, w, _ := NewRequest("PUT", "/admin/config", &config)
+  SetBasicAuth(r, "admin:pass")
+  SetNodeConfig(w, r)
+  if ReadResponse(w, nil) != nil {
+    panic("failed to set config")
   }
 }
 
 func GetConfig() {
-  auth := base64.StdEncoding.EncodeToString([]byte("admin:pass"))
-  r := httptest.NewRequest("GET", "/admin/config", nil)
-  r.Header.Add("Authorization","Basic " + auth)
-  w := httptest.NewRecorder()
-  GetNodeConfig(w, r);
-
-  resp := w.Result();
-  dec := json.NewDecoder(resp.Body);
-  var config NodeConfig;
-  dec.Decode(&config);
-  if resp.StatusCode != 200 {
+  r, w, _ := NewRequest("GET", "/admin/config", nil)
+  SetBasicAuth(r, "admin:pass")
+  GetNodeConfig(w, r)
+  var config NodeConfig
+  if ReadResponse(w, &config) != nil {
     panic("failed to get node config")
   }
   if config.Domain != "example.com" {
@@ -91,30 +68,22 @@ func GetConfig() {
 }
 
 func SetToken() string {
-  auth := base64.StdEncoding.EncodeToString([]byte("admin:pass"))
-  r := httptest.NewRequest("POST", "/admin/accounts", nil)
-  r.Header.Add("Authorization","Basic " + auth)
-  w := httptest.NewRecorder()
+  r, w, _ := NewRequest("POST", "/admin/accounts", nil)
+  SetBasicAuth(r, "admin:pass")
   AddNodeAccount(w, r)
-  resp := w.Result()
-  dec := json.NewDecoder(resp.Body)
   var token string
-  dec.Decode(&token)
-  if resp.StatusCode != 200 {
+  if ReadResponse(w, &token) != nil {
     panic("failed to create token")
   }
   return token
 }
 
 func SetAccount(token string) {
-  auth := base64.StdEncoding.EncodeToString([]byte("test:pass"))
-  r := httptest.NewRequest("GET", "/account/profile", nil)
-  r.Header.Add("Credentials","Basic " + auth)
-  r.Header.Add("Authorization","Bearer " + token)
-  w := httptest.NewRecorder()
+  r, w, _ := NewRequest("GET", "/account/profile", nil)
+  SetBearerAuth(r, token);
+  SetCredentials(r, "test:pass")
   AddAccount(w, r)
-  resp := w.Result()
-  if resp.StatusCode != 200 {
+  if ReadResponse(w, nil) != nil {
     panic("failed to create account")
   }
 }
