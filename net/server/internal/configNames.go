@@ -1,6 +1,7 @@
 package databag
 
 const CONFIG_BODYLIMIT = 1048576
+const CONFIG_VERSION = "0.0.1"
 
 const CONFIG_CONFIGURED = "configured"
 const CONFIG_USERNAME = "username"

@@ -46,24 +46,24 @@ type AccountToken struct {
 
 type Account struct {
   ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
-  PublicKey         []byte          `gorm:"not null"`
-  PrivateKey        []byte          `gorm:"not null"`
-  KeyType           []byte          `gorm:"not null"`
-  ProfileId         string          `gorm:"not null;uniqueIndex"`
+  PublicKey         string          `gorm:"not null"`
+  PrivateKey        string          `gorm:"not null"`
+  KeyType           string          `gorm:"not null"`
+  Guid              string          `gorm:"not null;uniqueIndex"`
   Username          string          `gorm:"not null;uniqueIndex"`
   Password          []byte          `gorm:"not null"`
   Name              string
   Description       string
   Location          string
   Image             string
-  ProfileRevision   int64           `gorm:"not null"`
-  ContentRevision   int64           `gorm:"not null"`
-  ViewRevision      int64           `gorm:"not null"`
-  GroupRevision     int64           `gorm:"not null"`
-  LabelRevision     int64           `gorm:"not null"`
-  CardRevision      int64           `gorm:"not null"`
-  DialogueRevision  int64           `gorm:"not null"`
-  InsightRevision   uint64          `gorm:"not null"`
+  ProfileRevision   int64           `gorm:"not null;default:1"`
+  ContentRevision   int64           `gorm:"not null;default:1"`
+  ViewRevision      int64           `gorm:"not null;default:1"`
+  GroupRevision     int64           `gorm:"not null;default:1"`
+  LabelRevision     int64           `gorm:"not null;default:1"`
+  CardRevision      int64           `gorm:"not null;default:1"`
+  DialogueRevision  int64           `gorm:"not null;default:1"`
+  InsightRevision   uint64          `gorm:"not null;default:1"`
   Created           int64           `gorm:"autoCreateTime"`
   Apps              []App
 }
@@ -108,7 +108,7 @@ type Card struct {
   ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
   CardId            string          `gorm:"not null;index:card,unique"`
   AccountID         uint            `gorm:"not null;index:card,unique"`
-  DID               string          `gorm:"not null"`
+  GUID              string          `gorm:"not null"`
   Username          string
   Name              string
   Description       string

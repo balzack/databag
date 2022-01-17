@@ -5,6 +5,7 @@ import (
   "encoding/json"
 	"net/http"
   "gorm.io/gorm"
+  "gorm.io/gorm/clause"
   "databag/internal/store"
 )
 
@@ -30,15 +31,31 @@ func SetNodeConfig(w http.ResponseWriter, r *http.Request) {
 
   // store credentials
   err := store.DB.Transaction(func(tx *gorm.DB) error {
-    if res := tx.Create(&store.Config{ConfigId: CONFIG_DOMAIN, StrValue: config.Domain}).Error; res != nil {
+
+    // upsert domain config
+    if res := tx.Clauses(clause.OnConflict{
+      Columns:   []clause.Column{{Name: "config_id"}},
+      DoUpdates: clause.AssignmentColumns([]string{"str_value"}),
+    }).Create(&store.Config{ConfigId: CONFIG_DOMAIN, StrValue: config.Domain}).Error; res != nil {
       return res
     }
-    if res := tx.Create(&store.Config{ConfigId: CONFIG_PUBLICLIMIT, NumValue: config.PublicLimit}).Error; res != nil {
+
+    // upsert public limit config
+    if res := tx.Clauses(clause.OnConflict{
+      Columns:   []clause.Column{{Name: "config_id"}},
+      DoUpdates: clause.AssignmentColumns([]string{"num_value"}),
+    }).Create(&store.Config{ConfigId: CONFIG_PUBLICLIMIT, NumValue: config.PublicLimit}).Error; res != nil {
       return res
     }
-    if res := tx.Create(&store.Config{ConfigId: CONFIG_STORAGE, NumValue: config.AccountStorage}).Error; res != nil {
+
+    // upsert account storage config
+    if res := tx.Clauses(clause.OnConflict{
+      Columns:   []clause.Column{{Name: "config_id"}},
+      DoUpdates: clause.AssignmentColumns([]string{"num_value"}),
+    }).Create(&store.Config{ConfigId: CONFIG_STORAGE, NumValue: config.AccountStorage}).Error; res != nil {
       return res
     }
+
     return nil;
   })
   if(err != nil) {

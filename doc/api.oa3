@@ -75,7 +75,7 @@ paths:
       description: Set admin password and node domain
       operationId: set-node-claim
       security:
-        - basicAuth: []
+        - basicCredentials: []
       parameters:
         - name: domain
           in: query
@@ -302,7 +302,7 @@ paths:
       operationId: add-public-account
       security:
         - bearerAuth: []
-        - basicAuth: []
+        - basicCredentials: []
       responses:
         '201':
           description: successful operation
@@ -431,7 +431,7 @@ paths:
       operationId: add-account
       security:
         - bearerAuth: []
-        - basicAuth: []
+        - basicCredentials: []
       responses:
         '201':
           description: successful operation
@@ -3964,11 +3964,11 @@ components:
     Profile:
       type: object
       required:
-        - profileId
+        - guid
         - revision
         - node
       properties:
-        profileId:
+        guid:
           type: string
         handle:
           type: string
@@ -4468,7 +4468,11 @@ components:
     basicAuth:
       type: http
       scheme: basic
-      
+  
+    basicCredentials:
+      type: http
+      schema      
+
     bearerAuth: 
       type: http
       scheme: bearer

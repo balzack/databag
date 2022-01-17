@@ -230,7 +230,7 @@ type NodeConfig struct {
 }
 
 type Profile struct {
-	ProfileId string `json:"profileId"`
+	Guid string `json:"profileId"`
 	Handle string `json:"handle,omitempty"`
 	Name string `json:"name,omitempty"`
 	Description string `json:"description,omitempty"`

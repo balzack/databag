@@ -16,6 +16,7 @@ import (
     "os"
     "runtime"
     "strings"
+    "github.com/kr/pretty"
 )
 
 func Logger(inner http.Handler, name string) http.Handler {
@@ -38,4 +39,8 @@ func LogMsg(msg string) {
 	_, file, line, _ := runtime.Caller(1)
 	p, _ := os.Getwd()
   log.Printf("%s:%d %s", strings.TrimPrefix(file, p), line, msg)
+}
+
+func PrintMsg(obj interface{}) {
+  pretty.Println(obj);
 }

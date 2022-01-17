@@ -43,11 +43,10 @@ func Claimable() {
 func Claim() {
   auth := base64.StdEncoding.EncodeToString([]byte("admin:pass"))
   r := httptest.NewRequest("PUT", "/admin/claim", nil)
-  r.Header.Add("Authorization","Basic " + auth)
+  r.Header.Add("Credentials","Basic " + auth)
   w := httptest.NewRecorder()
   SetNodeClaim(w, r)
   if w.Code != 200 {
-LogMsg("HERE");
     panic("server not initially claimable")
   }
 }
