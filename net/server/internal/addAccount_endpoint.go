@@ -9,13 +9,13 @@ import (
 
 func AddAccount(w http.ResponseWriter, r *http.Request) {
 
-  if _, err := bearerAccountToken(r); err != nil {
+  if _, err := BearerAccountToken(r); err != nil {
     LogMsg("authentication failed")
     w.WriteHeader(http.StatusUnauthorized)
     return
   }
 
-  username, password, err := basicCredentials(r);
+  username, password, err := BasicCredentials(r);
   if err != nil {
     LogMsg("invalid basic credentials")
     w.WriteHeader(http.StatusUnauthorized)

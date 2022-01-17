@@ -9,7 +9,7 @@ import (
   "databag/internal/store"
 )
 
-func adminLogin(r *http.Request) bool {
+func AdminLogin(r *http.Request) bool {
 
   // extract request auth
   username, password, ok := r.BasicAuth();
@@ -36,7 +36,7 @@ func adminLogin(r *http.Request) bool {
   return true;
 }
 
-func bearerAccountToken(r *http.Request) (store.AccountToken, error) {
+func BearerAccountToken(r *http.Request) (store.AccountToken, error) {
 
   // parse bearer authentication
   auth := r.Header.Get("Authorization")
@@ -48,7 +48,7 @@ func bearerAccountToken(r *http.Request) (store.AccountToken, error) {
   return accountToken, err
 }
 
-func basicCredentials(r *http.Request) (string, []byte, error) {
+func BasicCredentials(r *http.Request) (string, []byte, error) {
 
   var username string
   var password []byte

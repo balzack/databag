@@ -6,7 +6,7 @@ import (
 
 func GetAccountToken(w http.ResponseWriter, r *http.Request) {
 
-  accountToken, err := bearerAccountToken(r);
+  accountToken, err := BearerAccountToken(r);
   if err != nil {
     LogMsg("token not found");
     w.WriteHeader(http.StatusNotFound)

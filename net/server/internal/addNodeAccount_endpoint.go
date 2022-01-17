@@ -8,7 +8,7 @@ import (
 
 func AddNodeAccount(w http.ResponseWriter, r *http.Request) {
 
-  if !adminLogin(r) {
+  if !AdminLogin(r) {
     LogMsg("invalid admin credentials");
     w.WriteHeader(http.StatusUnauthorized);
     return

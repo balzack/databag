@@ -2,7 +2,6 @@ package databag
 
 import (
   "log"
-  "encoding/json"
 	"net/http"
   "gorm.io/gorm"
   "gorm.io/gorm/clause"
@@ -12,19 +11,15 @@ import (
 func SetNodeConfig(w http.ResponseWriter, r *http.Request) {
 
   // validate login
-  if !adminLogin(r) {
+  if !AdminLogin(r) {
     log.Printf("SetNodeConfig - invalid admin credentials");
     w.WriteHeader(http.StatusUnauthorized);
     return
   }
 
   // parse node config
-  r.Body = http.MaxBytesReader(w, r.Body, APP_BODYLIMIT)
-  dec := json.NewDecoder(r.Body)
-  dec.DisallowUnknownFields()
-  var config NodeConfig;
-  res := dec.Decode(&config);
-  if res != nil {
+  var config NodeConfig
+  if ParseRequest(r, w, &config) != nil {
     w.WriteHeader(http.StatusBadRequest)
     return
   }

@@ -20,7 +20,7 @@ func SetNodeClaim(w http.ResponseWriter, r *http.Request) {
     return
   }
 
-  username, password, res := basicCredentials(r);
+  username, password, res := BasicCredentials(r);
   if res != nil {
     LogMsg("invalid credenitals");
     w.WriteHeader(http.StatusBadRequest)
