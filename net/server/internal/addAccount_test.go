@@ -2,17 +2,13 @@ package databag
 
 import (
   "testing"
-  "net/http/httptest"
-  "encoding/base64"
 )
 
 func TestAddAccount(t *testing.T) {
 
   // acquire new token for creating accounts
-  auth := base64.StdEncoding.EncodeToString([]byte("admin:pass"))
-  r := httptest.NewRequest("POST", "/admin/accounts", nil)
-  r.Header.Add("Authorization","Basic " + auth)
-  w := httptest.NewRecorder()
+  r, w, _ := NewRequest("POST", "/admin/accounts", nil)
+  SetBasicAuth(r, "admin:pass");
   AddNodeAccount(w, r)
   var token string
   if ReadResponse(w, &token) != nil {
@@ -21,9 +17,8 @@ func TestAddAccount(t *testing.T) {
   }
 
   // validate account token
-  r = httptest.NewRequest("GET", "/account/token", nil)
-  r.Header.Add("Authorization","Bearer " + token)
-  w = httptest.NewRecorder()
+  r, w, _ = NewRequest("GET", "/account/token", nil)
+  SetBearerAuth(r, token)
   GetAccountToken(w, r)
   var tokenType string
   if ReadResponse(w, &tokenType) != nil {
@@ -32,9 +27,8 @@ func TestAddAccount(t *testing.T) {
   }
 
   // check if username is available
-  r = httptest.NewRequest("GET", "/account/claimable?username=user", nil)
-  r.Header.Add("Authorization","Bearer " + token)
-  w = httptest.NewRecorder()
+  r, w, _ = NewRequest("GET", "/account/claimable?username=user", nil)
+  SetBearerAuth(r, token)
   GetAccountUsername(w, r)
   var available bool
   if ReadResponse(w, &available) != nil {
@@ -47,11 +41,9 @@ func TestAddAccount(t *testing.T) {
   }
 
   // create account
-  auth = base64.StdEncoding.EncodeToString([]byte("user:pass"))
-  r = httptest.NewRequest("GET", "/account/profile", nil)
-  r.Header.Add("Credentials","Basic " + auth)
-  r.Header.Add("Authorization","Bearer " + token)
-  w = httptest.NewRecorder()
+  r, w, _ = NewRequest("GET", "/account/profile", nil)
+  SetCredentials(r, "user:pass")
+  SetBearerAuth(r, token)
   AddAccount(w, r)
   var profile Profile
   if ReadResponse(w, &profile) != nil {
@@ -60,10 +52,8 @@ func TestAddAccount(t *testing.T) {
   }
 
   // acquire new token for creating accounts
-  auth = base64.StdEncoding.EncodeToString([]byte("admin:pass"))
-  r = httptest.NewRequest("POST", "/admin/accounts", nil)
-  r.Header.Add("Authorization","Basic " + auth)
-  w = httptest.NewRecorder()
+  r, w, _ = NewRequest("POST", "/admin/accounts", nil)
+  SetBasicAuth(r, "admin:pass")
   AddNodeAccount(w, r)
   if ReadResponse(w, &token) != nil {
     t.Errorf("failed to create token")
@@ -71,9 +61,8 @@ func TestAddAccount(t *testing.T) {
   }
 
   // check if dup is available
-  r = httptest.NewRequest("GET", "/account/claimable?username=user", nil)
-  r.Header.Add("Authorization","Bearer " + token)
-  w = httptest.NewRecorder()
+  r, w, _ = NewRequest("GET", "/account/claimable?username=user", nil)
+  SetBearerAuth(r, token)
   GetAccountUsername(w, r)
   if ReadResponse(w, &available) != nil {
     t.Errorf("failed to check username")
@@ -85,11 +74,9 @@ func TestAddAccount(t *testing.T) {
   }
 
   // create dup account
-  auth = base64.StdEncoding.EncodeToString([]byte("user:pass"))
-  r = httptest.NewRequest("GET", "/account/profile", nil)
-  r.Header.Add("Credentials","Basic " + auth)
-  r.Header.Add("Authorization","Bearer " + token)
-  w = httptest.NewRecorder()
+  r, w, _ = NewRequest("GET", "/account/profile", nil)
+  SetCredentials(r, "user:pass")
+  SetBearerAuth(r, token);
   AddAccount(w, r)
   if ReadResponse(w, &profile) == nil {
     t.Errorf("duplicate handle set")
