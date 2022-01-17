@@ -6,6 +6,13 @@ import (
     "databag/internal/store"
   )
 
+const CONFIG_CONFIGURED = "configured"
+const CONFIG_USERNAME = "username"
+const CONFIG_PASSWORD = "password"
+const CONFIG_DOMAIN = "domain"
+const CONFIG_PUBLICLIMIT = "public_limit"
+const CONFIG_STORAGE = "storage"
+
 func getStrConfigValue(configId string, empty string) string {
   var config store.Config
   err := store.DB.Where("config_id = ?", configId).First(&config).Error

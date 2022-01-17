@@ -75,7 +75,7 @@ func TestAccount(t *testing.T) {
   dec = json.NewDecoder(resp.Body)
   var profile Profile
   dec.Decode(&profile)
-  if profile.Guid == nil {
+  if profile.Guid == "" {
     t.Errorf("invalid profile")
     return
   }

@@ -66,7 +66,7 @@ func AddAccount(w http.ResponseWriter, r *http.Request) {
     Location: account.Location,
     Image: account.Image,
     Revision: account.ProfileRevision,
-    Version: CONFIG_VERSION,
+    Version: APP_VERSION,
     Node: "https://" + getStrConfigValue(CONFIG_DOMAIN, ""),
   }
 

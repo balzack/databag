@@ -19,7 +19,7 @@ func SetNodeConfig(w http.ResponseWriter, r *http.Request) {
   }
 
   // parse node config
-  r.Body = http.MaxBytesReader(w, r.Body, CONFIG_BODYLIMIT)
+  r.Body = http.MaxBytesReader(w, r.Body, APP_BODYLIMIT)
   dec := json.NewDecoder(r.Body)
   dec.DisallowUnknownFields()
   var config NodeConfig;
