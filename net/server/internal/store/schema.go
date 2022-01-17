@@ -65,6 +65,7 @@ type Account struct {
   DialogueRevision  int64           `gorm:"not null;default:1"`
   InsightRevision   uint64          `gorm:"not null;default:1"`
   Created           int64           `gorm:"autoCreateTime"`
+  Disabled          bool            `gorm:"not null;default:false"`
   Apps              []App
 }
 
