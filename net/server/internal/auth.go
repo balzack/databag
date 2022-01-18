@@ -13,7 +13,6 @@ import (
 type accountLogin struct {
   ID uint
   Password []byte
-  Expires int64
 }
 
 func AdminLogin(r *http.Request) bool {
@@ -53,7 +52,7 @@ func AccountLogin(r *http.Request) (uint, error) {
 
   // find account
   var account accountLogin
-  if store.DB.Model(&Account{}).Where("Username = ?", username).First(&account).Error != nil {
+  if store.DB.Model(&store.Account{}).Where("Username = ?", username).First(&account).Error != nil {
     return 0, errors.New("username not found");
   }
 

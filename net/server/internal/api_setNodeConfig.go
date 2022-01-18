@@ -54,7 +54,7 @@ func SetNodeConfig(w http.ResponseWriter, r *http.Request) {
     return nil;
   })
   if(err != nil) {
-    log.Printf("SetNodeConfig - failed to store config");
+    LogMsg("failed to store config")
     w.WriteHeader(http.StatusInternalServerError)
     return
   }

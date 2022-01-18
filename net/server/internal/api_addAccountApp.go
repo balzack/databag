@@ -23,19 +23,20 @@ func AddAccountApp(w http.ResponseWriter, r *http.Request) {
     w.WriteHeader(http.StatusInternalServerError)
     return
   }
+  token := hex.EncodeToString(data)
 
-  token := store.AccountToken{
+  accountToken := store.AccountToken{
     AccountID: id,
     TokenType: "attach",
-    Token: hex.EncodeToString(data),
+    Token: token,
     Expires: time.Now().Unix() + APP_ATTACHEXPIRE,
   };
-  if store.DB.Create(&token).Error != nil {
+  if store.DB.Create(&accountToken).Error != nil {
     LogMsg("failed to store token")
     w.WriteHeader(http.StatusInternalServerError)
     return
   }
 
-  WriteResponse(w, data);
+  WriteResponse(w, token);
 }
 
