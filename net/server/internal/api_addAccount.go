@@ -46,16 +46,22 @@ func AddAccount(w http.ResponseWriter, r *http.Request) {
 
   // create new account
   account := store.Account{
-    PublicKey: publicPem,
-    PrivateKey: privatePem,
-    KeyType: "RSA4096",
     Username: username,
     Password: password,
     Guid: fingerprint,
-  };
+  }
+  detail := store.AccountDetail{
+    PublicKey: publicPem,
+    PrivateKey: privatePem,
+    KeyType: "RSA4096",
+  }
 
   // save account and delete token
   err = store.DB.Transaction(func(tx *gorm.DB) error {
+    if res := store.DB.Create(&detail).Error; res != nil {
+      return res;
+    }
+    account.AccountDetailID = detail.ID
     if res := store.DB.Create(&account).Error; res != nil {
       return res;
     }
@@ -74,10 +80,10 @@ func AddAccount(w http.ResponseWriter, r *http.Request) {
   profile := Profile{
     Guid: account.Guid,
     Handle: account.Username,
-    Name: account.Name,
-    Description: account.Description,
-    Location: account.Location,
-    Image: account.Image,
+    Name: detail.Name,
+    Description: detail.Description,
+    Location: detail.Location,
+    Image: detail.Image,
     Revision: account.ProfileRevision,
     Version: APP_VERSION,
     Node: "https://" + getStrConfigValue(CONFIG_DOMAIN, ""),

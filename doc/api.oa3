@@ -4387,10 +4387,12 @@ components:
     Authenticate:
       type: object
       required: 
-        - did
+        - guid
         - token
         - timestamp
       properties:
+        guid:
+          type: string
         token:
           type: string
         timestamp:

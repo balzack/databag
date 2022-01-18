@@ -69,6 +69,7 @@ type Asset struct {
 }
 
 type Authenticate struct {
+  Guid string `json:"guid"`
 	Token string `json:"token"`
 	Timestamp int32 `json:"timestamp"`
 }

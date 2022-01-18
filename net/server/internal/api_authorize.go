@@ -14,6 +14,20 @@ import (
 )
 
 func Authorize(w http.ResponseWriter, r *http.Request) {
+
+  account, res := BearerAppToken(r);
+PrintMsg(res);
+PrintMsg(account);
+
+  if res != nil {
+    w.WriteHeader(http.StatusUnauthorized)
+    return
+  }
+  if account.Disabled {
+    w.WriteHeader(http.StatusGone);
+    return
+  }
+
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
 }

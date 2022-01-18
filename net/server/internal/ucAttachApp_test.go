@@ -26,8 +26,12 @@ func TestAttachAccount(t *testing.T) {
   var access string
   assert.NoError(t, ReadResponse(w, &access))
 
-PrintMsg(access)
   // autorize app
+  r, w, _ = NewRequest("PUT", "/authorize", "aabbccdd")
+  SetBearerAuth(r, access);
+  Authorize(w, r);
+  var message DataMessage
+  assert.NoError(t, ReadResponse(w, &message))
 
   // set profile
 }

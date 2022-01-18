@@ -38,7 +38,7 @@ type Config struct {
 type AccountToken struct {
   ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
   AccountID         uint            `gorm:"index"`
-  TokenType         string          `gorm:"not null;        `
+  TokenType         string          `gorm:"not null;`
   Token             string          `gorm:"not null;uniqueIndex"`
   Expires           int64           `gorm:"not null"`
   Created           int64           `gorm:"autoCreateTime"`
@@ -47,16 +47,10 @@ type AccountToken struct {
 
 type Account struct {
   ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
-  PublicKey         string          `gorm:"not null"`
-  PrivateKey        string          `gorm:"not null"`
-  KeyType           string          `gorm:"not null"`
+  AccountDetailID   uint            `gorm:"not null"`
   Guid              string          `gorm:"not null;uniqueIndex"`
   Username          string          `gorm:"not null;uniqueIndex"`
   Password          []byte          `gorm:"not null"`
-  Name              string
-  Description       string
-  Location          string
-  Image             string
   ProfileRevision   int64           `gorm:"not null;default:1"`
   ContentRevision   int64           `gorm:"not null;default:1"`
   ViewRevision      int64           `gorm:"not null;default:1"`
@@ -67,7 +61,19 @@ type Account struct {
   InsightRevision   uint64          `gorm:"not null;default:1"`
   Created           int64           `gorm:"autoCreateTime"`
   Disabled          bool            `gorm:"not null;default:false"`
+  AccountDetail     AccountDetail
   Apps              []App
+}
+
+type AccountDetail struct {
+  ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
+  PublicKey         string          `gorm:"not null"`
+  PrivateKey        string          `gorm:"not null"`
+  KeyType           string          `gorm:"not null"`
+  Name              string
+  Description       string
+  Location          string
+  Image             string
 }
 
 type App struct {
