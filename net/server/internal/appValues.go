@@ -2,4 +2,5 @@ package databag
 
 const APP_BODYLIMIT = 1048576
 const APP_VERSION = "0.0.1"
-
+const APP_ATTACHEXPIRE = 300
+const APP_CREATEEXPIRE = 86400

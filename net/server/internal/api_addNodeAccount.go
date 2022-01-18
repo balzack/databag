@@ -2,6 +2,8 @@ package databag
 
 import (
 	"net/http"
+  "encoding/hex"
+  "time"
   "databag/internal/store"
 	"github.com/theckman/go-securerandom"
 )
@@ -14,20 +16,26 @@ func AddNodeAccount(w http.ResponseWriter, r *http.Request) {
     return
   }
 
-  data, err := securerandom.Base64OfBytes(32)
+  data, err := securerandom.Bytes(16)
   if err != nil {
     LogMsg("failed to generate token");
     w.WriteHeader(http.StatusInternalServerError);
     return
   }
+  token := hex.EncodeToString(data)
 
-  token := store.AccountToken{TokenType: "create", Token: data };
-  if res := store.DB.Create(&token).Error; res != nil {
+  accountToken := store.AccountToken{
+    TokenType: "create",
+    Token: token,
+    Expires: time.Now().Unix() + APP_CREATEEXPIRE,
+  };
+
+  if store.DB.Create(&accountToken).Error != nil {
     LogMsg("failed to store token");
     w.WriteHeader(http.StatusInternalServerError);
     return
   }
 
-  WriteResponse(w, data);
+  WriteResponse(w, token);
 }
 

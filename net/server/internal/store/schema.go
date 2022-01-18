@@ -40,6 +40,7 @@ type AccountToken struct {
   AccountID         uint            `gorm:"index"`
   TokenType         string          `gorm:"not null;        `
   Token             string          `gorm:"not null;uniqueIndex"`
+  Expires           int64           `gorm:"not null"`
   Created           int64           `gorm:"autoCreateTime"`
   Account           Account
 }

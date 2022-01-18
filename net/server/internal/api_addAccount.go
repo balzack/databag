@@ -4,12 +4,14 @@ import (
   "net/http"
   "crypto/sha256"
   "encoding/hex"
+  "gorm.io/gorm"
   "databag/internal/store"
 )
 
 func AddAccount(w http.ResponseWriter, r *http.Request) {
 
-  if _, err := BearerAccountToken(r); err != nil {
+  token, res := BearerAccountToken(r);
+  if res != nil || token.TokenType != "create" {
     LogMsg("authentication failed")
     w.WriteHeader(http.StatusUnauthorized)
     return
@@ -51,8 +53,19 @@ func AddAccount(w http.ResponseWriter, r *http.Request) {
     Password: password,
     Guid: fingerprint,
   };
-  if res := store.DB.Create(&account).Error; res != nil {
-    LogMsg("failed to store account")
+
+  // save account and delete token
+  err = store.DB.Transaction(func(tx *gorm.DB) error {
+    if res := store.DB.Create(&account).Error; res != nil {
+      return res;
+    }
+    if res := store.DB.Delete(token).Error; res != nil {
+      return res;
+    }
+    return nil;
+  });
+  if err != nil {
+    LogMsg("failed to create account");
     w.WriteHeader(http.StatusInternalServerError)
     return
   }

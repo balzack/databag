@@ -11,9 +11,9 @@ type accountUsername struct {
 
 func GetAccountUsername(w http.ResponseWriter, r *http.Request) {
 
-  _, err := BearerAccountToken(r);
-  if err != nil {
-    LogMsg("authentication failed")
+  token, err := BearerAccountToken(r);
+  if err != nil || (token.TokenType != "create" && token.TokenType != "reset") {
+    LogMsg("invalid token")
     w.WriteHeader(http.StatusUnauthorized)
     return
   }
