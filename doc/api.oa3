@@ -4030,7 +4030,7 @@ components:
           $ref: '#/components/schemas/AppData'
         attached:
           type: integer
-          format: int32
+          format: int64
           
     AppData:
       type: object
@@ -4164,7 +4164,7 @@ components:
           type: string
         created:
           type: integer
-          format: int32
+          format: int64
           
     Insight:
       type: object
@@ -4208,7 +4208,7 @@ components:
           type: string
         created:
           type: integer
-          format: int32
+          format: int64
         active:
           type: boolean
         insightRevision:
@@ -4263,10 +4263,10 @@ components:
           type: string
         created:
           type: integer
-          format: int32
+          format: int64
         modified:
           type: integer
-          format: int32
+          format: int64
         status:
           type: string
           enum: [ unconfirmed, confirmed, complete, error ]
@@ -4275,7 +4275,7 @@ components:
           format: int32
         tagUpdate:
           type: integer
-          format: int32
+          format: int64
         tagRevision:
           type: integer
           format: int64
@@ -4306,10 +4306,10 @@ components:
           type: string
         created:
           type: integer
-          format: int32
+          format: int64
         modified:
           type: integer
-          format: int32
+          format: int64
         status:
           type: string
           enum: [ unconfirmed, confirmed, complete, error ]
@@ -4326,7 +4326,7 @@ components:
           format: int32
         tagUpdate:
           type: integer
-          format: int32
+          format: int64
         tagRevision:
           type: integer
           format: int64
@@ -4352,10 +4352,10 @@ components:
           type: string
         created:
           type: integer
-          format: int32
+          format: int64
         modified:
           type: integer
-          format: int32
+          format: int64
           
     Label:
       type: object
@@ -4378,7 +4378,7 @@ components:
           type: string
         created:
           type: integer
-          format: int32
+          format: int64
         groups:  # present only in account holder responses
           type: array
           items:
@@ -4397,7 +4397,7 @@ components:
           type: string
         timestamp:
           type: integer
-          format: int32
+          format: int64
           
     Connect:
       type: object
@@ -4415,7 +4415,7 @@ components:
           type: string
         timestamp: 
           type: integer
-          format: int32
+          format: int64
         profile:
           $ref: '#/components/schemas/Profile'
         token:
@@ -4437,7 +4437,7 @@ components:
           type: string
         timestamp: 
           type: integer
-          format: int32
+          format: int64
           
     DataMessage:
       type: object

@@ -28,7 +28,7 @@ type Announce struct {
 type App struct {
 	AppId string `json:"appId"`
 	AppData *AppData `json:"appData"`
-	Attached int32 `json:"attached"`
+	Attached int64 `json:"attached"`
 }
 
 type AppData struct {
@@ -43,13 +43,13 @@ type Article struct {
 	ArticleRevision int64 `json:"articleRevision"`
 	Type_ string `json:"type"`
 	Data string `json:"data"`
-	Created int32 `json:"created"`
-	Modified int32 `json:"modified"`
+	Created int64 `json:"created"`
+	Modified int64 `json:"modified"`
 	Status string `json:"status"`
 	Labels []string `json:"labels"`
 	Groups []string `json:"groups,omitempty"`
 	TagCount int32 `json:"tagCount"`
-	TagUpdate int32 `json:"tagUpdate,omitempty"`
+	TagUpdate int64 `json:"tagUpdate,omitempty"`
 	TagRevision int64 `json:"tagRevision"`
 }
 
@@ -71,7 +71,7 @@ type Asset struct {
 type Authenticate struct {
   Guid string `json:"guid"`
 	Token string `json:"token"`
-	Timestamp int32 `json:"timestamp"`
+	Timestamp int64 `json:"timestamp"`
 }
 
 type Card struct {
@@ -110,7 +110,7 @@ type CardView struct {
 type Connect struct {
 	RequestorcardId string `json:"requestorcardId,omitempty"`
 	RequestedcardId string `json:"requestedcardId,omitempty"`
-	Timestamp int32 `json:"timestamp"`
+	Timestamp int64 `json:"timestamp"`
 	Profile *Profile `json:"profile"`
 	Token string `json:"token"`
 	ContentRevision int64 `json:"contentRevision"`
@@ -139,7 +139,7 @@ type Dialogue struct {
 	DialogueRevison int64 `json:"dialogueRevison,omitempty"`
 	Type_ string `json:"type"`
 	Data string `json:"data"`
-	Created int32 `json:"created"`
+	Created int64 `json:"created"`
 	Active bool `json:"active"`
 	InsightRevision int64 `json:"insightRevision,omitempty"`
 	Insights []DialogueInsights `json:"insights"`
@@ -158,7 +158,7 @@ type DialogueInsights struct {
 type Disconnect struct {
 	RequestorId string `json:"requestorId"`
 	RequestedId string `json:"requestedId"`
-	Timestamp int32 `json:"timestamp"`
+	Timestamp int64 `json:"timestamp"`
 }
 
 type Group struct {
@@ -166,8 +166,8 @@ type Group struct {
 	GroupRevision int64 `json:"groupRevision"`
 	Type_ string `json:"type"`
 	Data string `json:"data"`
-	Created int32 `json:"created"`
-	Modified int32 `json:"modified"`
+	Created int64 `json:"created"`
+	Modified int64 `json:"modified"`
 }
 
 type GroupsGroupIdBody struct {
@@ -215,7 +215,7 @@ type Label struct {
 	LabelRevision int64 `json:"labelRevision"`
 	Type_ string `json:"type"`
 	Data string `json:"data"`
-	Created int32 `json:"created"`
+	Created int64 `json:"created"`
 	Groups []string `json:"groups,omitempty"`
 }
 
@@ -271,7 +271,7 @@ type Tag struct {
 	Revision int64 `json:"revision"`
 	Type_ string `json:"type"`
 	Data string `json:"data"`
-	Created int32 `json:"created"`
+	Created int64 `json:"created"`
 }
 
 type Topic struct {
@@ -279,11 +279,11 @@ type Topic struct {
 	TopicRevision int64 `json:"topicRevision"`
 	Type_ string `json:"type"`
 	Data string `json:"data"`
-	Created int32 `json:"created"`
-	Modified int32 `json:"modified"`
+	Created int64 `json:"created"`
+	Modified int64 `json:"modified"`
 	Status string `json:"status"`
 	TagCount int32 `json:"tagCount"`
-	TagUpdate int32 `json:"tagUpdate,omitempty"`
+	TagUpdate int64 `json:"tagUpdate,omitempty"`
 	TagRevision int64 `json:"tagRevision"`
 }
 
