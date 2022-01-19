@@ -132,6 +132,7 @@ type DataMessage struct {
 	KeyType string `json:"keyType"`
 	PublicKey string `json:"publicKey"`
 	Signature string `json:"signature"`
+	SignatureType string `json:"signatureType"`
 }
 
 type Dialogue struct {

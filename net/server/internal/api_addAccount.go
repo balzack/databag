@@ -36,13 +36,8 @@ func AddAccount(w http.ResponseWriter, r *http.Request) {
 
   // compute key fingerprint
   msg := []byte(publicPem)
-  hash := sha256.New()
-  if _, err = hash.Write(msg); err != nil {
-    LogMsg("failed to fingerprint key")
-    w.WriteHeader(http.StatusInternalServerError)
-    return
-  }
-  fingerprint := hex.EncodeToString(hash.Sum(nil))
+  hash := sha256.Sum256(msg)
+  fingerprint := hex.EncodeToString(hash[:])
 
   // create new account
   account := store.Account{

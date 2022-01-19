@@ -79,7 +79,7 @@ func BearerAccountToken(r *http.Request) (store.AccountToken, error) {
   return accountToken, err
 }
 
-func BearerAppToken(r *http.Request) (store.Account, error) {
+func BearerAppToken(r *http.Request, detail bool) (store.Account, error) {
 
   // parse bearer authentication
   auth := r.Header.Get("Authorization")
@@ -87,8 +87,16 @@ func BearerAppToken(r *http.Request) (store.Account, error) {
 
   // find token record
   var app store.App
-  err := store.DB.Preload("Account").Where("token = ?", token).First(&app).Error
-  return app.Account, err
+  if detail {
+    if store.DB.Preload("Account.AccountDetail").Where("token = ?", token).First(&app).Error != nil {
+      return app.Account, errors.New("failed to load account");
+    }
+  } else {
+    if store.DB.Preload("Account").Where("token = ?", token).First(&app).Error != nil {
+      return app.Account, errors.New("failed to load account");
+    }
+  }
+  return app.Account, nil
 }
 
 func BasicCredentials(r *http.Request) (string, []byte, error) {

@@ -4447,6 +4447,7 @@ components:
         - keyType
         - publicKey
         - signature
+        - signatureType
       properties:
         messageType:
           type: string
@@ -4463,7 +4464,10 @@ components:
         signature:
           type: string
           format: base64 encoding of message signature
-          
+        signatureType:
+          type: string
+          enum: [PKCS1v15, PSS]
+
           
   securitySchemes:
   

@@ -2,6 +2,13 @@ package databag
 
 import (
   "testing"
+  "encoding/hex"
+  "encoding/json"
+  "encoding/base64"
+  "crypto/sha256"
+  "crypto/rsa"
+  "crypto"
+  "time"
   "github.com/stretchr/testify/assert"
 )
 
@@ -32,6 +39,27 @@ func TestAttachAccount(t *testing.T) {
   Authorize(w, r);
   var message DataMessage
   assert.NoError(t, ReadResponse(w, &message))
+
+  // validate message
+  assert.Equal(t, "RSA4096", message.KeyType)
+  assert.Equal(t, "PKCS1v15", message.SignatureType)
+  var data []byte
+  var hash [32]byte
+  data, _ = base64.StdEncoding.DecodeString(message.PublicKey)
+  hash = sha256.Sum256(data)
+  guid := hex.EncodeToString(hash[:])
+  publicKey, _ := ParseRsaPublicKeyFromPemStr(string(data))
+  signature, _ := base64.StdEncoding.DecodeString(message.Signature)
+  data, _ = base64.StdEncoding.DecodeString(message.Message)
+  hash = sha256.Sum256(data)
+  assert.NoError(t, rsa.VerifyPKCS1v15(publicKey, crypto.SHA256, hash[:], signature))
+  var auth Authenticate
+  assert.NoError(t, json.Unmarshal(data,&auth))
+  assert.Equal(t, "aabbccdd", auth.Token)
+  assert.Equal(t, guid, auth.Guid)
+  cur := time.Now().Unix()
+  assert.GreaterOrEqual(t, cur, auth.Timestamp)
+  assert.Less(t, cur - 60, auth.Timestamp)
 
   // set profile
 }
