@@ -1,7 +1,7 @@
 package databag
 
 import (
-  "log"
+  "errors"
   "sync"
 	"net/http"
   "encoding/json"
@@ -30,27 +30,31 @@ func Status(w http.ResponseWriter, r *http.Request) {
   // accept websocket connection
   conn, err := upgrader.Upgrade(w, r, nil)
   if err != nil {
-      log.Println("Status: failed upgrade connection")
-      return
+    ErrMsg(err)
+    return
   }
   defer conn.Close()
 
   // receive announce
-	t, m, err := conn.ReadMessage()
-  if t != websocket.TextMessage || err != nil {
-    LogMsg("failed to receive announce")
+	t, m, res := conn.ReadMessage()
+  if res != nil {
+    ErrMsg(res)
+    return
+  }
+  if t != websocket.TextMessage {
+    ErrMsg(errors.New("invalid websocket message type"))
     return
 	}
-	var announce Announce
-	if json.Unmarshal(m, &announce) != nil {
-    LogMsg("invalid announce")
+	var a Announce
+	if err := json.Unmarshal(m, &a); err != nil {
+    ErrMsg(err)
     return
 	}
 
   // retrieve reference account
   var app store.App
-  if store.DB.Preload("Account").Where("token = ?", announce.AppToken).First(&app).Error != nil {
-    LogMsg("invalid app token")
+  if err := store.DB.Preload("Account").Where("token = ?", a.AppToken).First(&app).Error; err != nil {
+    ErrMsg(err)
     return
   }
 
@@ -59,12 +63,11 @@ func Status(w http.ResponseWriter, r *http.Request) {
   var msg []byte
   msg, err = json.Marshal(rev)
   if err != nil {
-    log.Println("Status - failed to marshal revision")
+    ErrMsg(err)
     return
   }
-  err = conn.WriteMessage(websocket.TextMessage, msg)
-  if err != nil {
-    log.Println("Status - failed to send initial revision")
+  if err := conn.WriteMessage(websocket.TextMessage, msg); err != nil {
+    ErrMsg(err)
     return
   }
 
@@ -80,13 +83,12 @@ func Status(w http.ResponseWriter, r *http.Request) {
   for {
 		select {
 		case msg := <-c:
-      err = conn.WriteMessage(websocket.TextMessage, msg)
-      if err != nil {
-        log.Println("Status - failed to send revision, closing")
+      if err := conn.WriteMessage(websocket.TextMessage, msg); err != nil {
+        ErrMsg(err)
         return
       }
 		case <-wsExit:
-			log.Println("Status - server exit")
+			LogMsg("exiting server")
       wsExit<-true
 			return
 		}
@@ -115,7 +117,7 @@ func SetStatus(account store.Account) {
   rev := getRevision(account);
   msg, err := json.Marshal(rev)
   if err != nil {
-    log.Println("SetStatus - failed to marshal revision")
+    ErrMsg(err)
     return
   }
 

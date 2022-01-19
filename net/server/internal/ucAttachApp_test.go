@@ -9,26 +9,14 @@ import (
   "crypto/rsa"
   "crypto"
   "time"
-  "net/url"
-  "net/http"
-  "net/http/httptest"
   "github.com/stretchr/testify/assert"
 	"github.com/gorilla/websocket"
 )
 
-type StatusHandler struct {}
-
-func (h *StatusHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-  Status(w, r)
-}
-
 func TestAttachAccount(t *testing.T) {
 
   // setup websocket server
-  h := StatusHandler{}
-  s := httptest.NewServer(&h)
-  wsUrl, _ := url.Parse(s.URL)
-  wsUrl.Scheme = "ws"
+  wsUrl := StartTestWebsocketServer()
 
   // get account token
   r, w, _ := NewRequest("POST", "/admin/accounts", nil)
@@ -96,7 +84,7 @@ func TestAttachAccount(t *testing.T) {
   assert.Less(t, cur - 60, auth.Timestamp)
 
   // app connects websocket
-  ws, _, _ := websocket.DefaultDialer.Dial(wsUrl.String(), nil)
+  ws, _, _ := websocket.DefaultDialer.Dial(wsUrl, nil)
   announce := Announce{ AppToken: access }
   msg, _ := json.Marshal(&announce)
   ws.WriteMessage(websocket.TextMessage, msg)

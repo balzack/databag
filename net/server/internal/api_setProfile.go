@@ -8,22 +8,22 @@ import (
 
 func SetProfile(w http.ResponseWriter, r *http.Request) {
 
-  account, res := BearerAppToken(r, true);
-  if res != nil {
-    w.WriteHeader(http.StatusUnauthorized)
+  account, err := BearerAppToken(r, true);
+  if err != nil {
+    ErrResponse(w, http.StatusUnauthorized, err)
     return
   }
   if account.Disabled {
-    w.WriteHeader(http.StatusGone);
+    ErrResponse(w, http.StatusGone, nil)
     return
   }
   detail := account.AccountDetail
 
   // extract profile data from body
   var profileData ProfileData;
-  err := ParseRequest(r, w, &profileData)
+  err = ParseRequest(r, w, &profileData)
   if err != nil {
-    w.WriteHeader(http.StatusBadRequest)
+    ErrResponse(w, http.StatusBadRequest, err)
     return
   }
 
@@ -42,9 +42,7 @@ func SetProfile(w http.ResponseWriter, r *http.Request) {
     return nil
   })
   if err != nil {
-    PrintMsg(err)
-    LogMsg("failed to store profile")
-    w.WriteHeader(http.StatusInternalServerError)
+    ErrResponse(w, http.StatusInternalServerError, err)
     return
   }
 
