@@ -12,15 +12,13 @@ func AddAccount(w http.ResponseWriter, r *http.Request) {
 
   token, res := BearerAccountToken(r);
   if res != nil || token.TokenType != "create" {
-    LogMsg("authentication failed")
-    w.WriteHeader(http.StatusUnauthorized)
+    ErrResponse(w, http.StatusUnauthorized, res)
     return
   }
 
   username, password, err := BasicCredentials(r);
   if err != nil {
-    LogMsg("invalid basic credentials")
-    w.WriteHeader(http.StatusUnauthorized)
+    ErrResponse(w, http.StatusUnauthorized, err)
     return
   }
 
@@ -29,8 +27,7 @@ func AddAccount(w http.ResponseWriter, r *http.Request) {
   privatePem := ExportRsaPrivateKeyAsPemStr(privateKey)
   publicPem, err := ExportRsaPublicKeyAsPemStr(publicKey)
   if err != nil {
-    LogMsg("failed generate key")
-    w.WriteHeader(http.StatusInternalServerError)
+    ErrResponse(w, http.StatusInternalServerError, err)
     return
   }
 
@@ -66,8 +63,7 @@ func AddAccount(w http.ResponseWriter, r *http.Request) {
     return nil;
   });
   if err != nil {
-    LogMsg("failed to create account");
-    w.WriteHeader(http.StatusInternalServerError)
+    ErrResponse(w, http.StatusInternalServerError, err)
     return
   }
 

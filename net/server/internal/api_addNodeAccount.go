@@ -10,16 +10,14 @@ import (
 
 func AddNodeAccount(w http.ResponseWriter, r *http.Request) {
 
-  if !AdminLogin(r) {
-    LogMsg("invalid admin credentials");
-    w.WriteHeader(http.StatusUnauthorized);
+  if err := AdminLogin(r); err != nil {
+    ErrResponse(w, http.StatusUnauthorized, err)
     return
   }
 
   data, err := securerandom.Bytes(16)
   if err != nil {
-    LogMsg("failed to generate token");
-    w.WriteHeader(http.StatusInternalServerError);
+    ErrResponse(w, http.StatusInternalServerError, err)
     return
   }
   token := hex.EncodeToString(data)
@@ -30,9 +28,8 @@ func AddNodeAccount(w http.ResponseWriter, r *http.Request) {
     Expires: time.Now().Unix() + APP_CREATEEXPIRE,
   };
 
-  if store.DB.Create(&accountToken).Error != nil {
-    LogMsg("failed to store token");
-    w.WriteHeader(http.StatusInternalServerError);
+  if err := store.DB.Create(&accountToken).Error; err != nil {
+    ErrResponse(w, http.StatusInternalServerError, err)
     return
   }
 

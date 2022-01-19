@@ -7,9 +7,8 @@ import (
 func GetNodeConfig(w http.ResponseWriter, r *http.Request) {
 
   // validate login
-  if !AdminLogin(r) {
-    LogMsg("SetNodeConfig - invalid admin credentials");
-    w.WriteHeader(http.StatusUnauthorized);
+  if err := AdminLogin(r); err != nil {
+    ErrResponse(w, http.StatusUnauthorized, err)
     return
   }
 

@@ -6,13 +6,13 @@ import (
 
 func GetProfile(w http.ResponseWriter, r *http.Request) {
 
-  account, res := BearerAppToken(r, true);
-  if res != nil {
-    w.WriteHeader(http.StatusUnauthorized)
+  account, err := BearerAppToken(r, true);
+  if err != nil {
+    ErrResponse(w, http.StatusUnauthorized, err)
     return
   }
   if account.Disabled {
-    w.WriteHeader(http.StatusGone);
+    ErrResponse(w, http.StatusGone, nil)
     return
   }
   detail := account.AccountDetail

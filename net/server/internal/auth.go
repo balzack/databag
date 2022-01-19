@@ -15,31 +15,31 @@ type accountLogin struct {
   Password []byte
 }
 
-func AdminLogin(r *http.Request) bool {
+func AdminLogin(r *http.Request) error {
 
   // extract request auth
-  username, password, ok := r.BasicAuth();
+  username, password, ok := r.BasicAuth()
   if !ok || username == "" || password == "" {
-    return false
+    return errors.New("invalid credentials")
   }
 
   // nothing to do if not configured
   if !getBoolConfigValue(CONFIG_CONFIGURED, false) {
-    return false;
+    return errors.New("node not configured")
   }
 
   // compare username
   if getStrConfigValue(CONFIG_USERNAME, "") != username {
-    return false
+    return errors.New("admin username error")
   }
 
   // compare password
   p := getBinConfigValue(CONFIG_PASSWORD, nil);
   if bcrypt.CompareHashAndPassword(p, []byte(password)) != nil {
-    return false
+    return errors.New("admin password error")
   }
 
-  return true;
+  return nil
 }
 
 func AccountLogin(r *http.Request) (uint, error) {
@@ -72,11 +72,13 @@ func BearerAccountToken(r *http.Request) (store.AccountToken, error) {
 
   // find token record
   var accountToken store.AccountToken
-  err := store.DB.Where("token = ?", token).First(&accountToken).Error
+  if err := store.DB.Where("token = ?", token).First(&accountToken).Error; err != nil {
+    return accountToken, err
+  }
   if accountToken.Expires < time.Now().Unix() {
     return accountToken, errors.New("expired token")
   }
-  return accountToken, err
+  return accountToken, nil
 }
 
 func BearerAppToken(r *http.Request, detail bool) (store.Account, error) {
@@ -88,12 +90,12 @@ func BearerAppToken(r *http.Request, detail bool) (store.Account, error) {
   // find token record
   var app store.App
   if detail {
-    if store.DB.Preload("Account.AccountDetail").Where("token = ?", token).First(&app).Error != nil {
-      return app.Account, errors.New("failed to load account");
+    if err := store.DB.Preload("Account.AccountDetail").Where("token = ?", token).First(&app).Error; err != nil {
+      return app.Account, err
     }
   } else {
-    if store.DB.Preload("Account").Where("token = ?", token).First(&app).Error != nil {
-      return app.Account, errors.New("failed to load account");
+    if err := store.DB.Preload("Account").Where("token = ?", token).First(&app).Error; err != nil {
+      return app.Account, err
     }
   }
   return app.Account, nil
@@ -111,14 +113,12 @@ func BasicCredentials(r *http.Request) (string, []byte, error) {
   // decode basic auth
   credentials, err := base64.StdEncoding.DecodeString(token)
   if err != nil {
-    LogMsg("faield to decode basic credentials");
     return username, password, err
   }
 
   // parse credentials
   login := strings.Split(string(credentials), ":");
   if login[0] == "" || login[1] == "" {
-    LogMsg("failed to parse basic credentials");
     return username, password, errors.New("invalid credentials")
   }
   username = login[0]
@@ -126,7 +126,6 @@ func BasicCredentials(r *http.Request) (string, []byte, error) {
   // hash password
   password, err = bcrypt.GenerateFromPassword([]byte(login[1]), bcrypt.DefaultCost)
   if err != nil {
-    LogMsg("failed to hash password")
     return username, password, err
   }
 

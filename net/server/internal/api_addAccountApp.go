@@ -12,15 +12,13 @@ func AddAccountApp(w http.ResponseWriter, r *http.Request) {
 
   id, err := AccountLogin(r)
   if err != nil {
-    LogMsg("failed to login")
-    w.WriteHeader(http.StatusUnauthorized);
+    ErrResponse(w, http.StatusUnauthorized, err)
     return
   }
 
   data, res := securerandom.Bytes(4)
   if res != nil {
-    LogMsg("failed to generate token")
-    w.WriteHeader(http.StatusInternalServerError)
+    ErrResponse(w, http.StatusInternalServerError, res)
     return
   }
   token := hex.EncodeToString(data)
@@ -31,9 +29,8 @@ func AddAccountApp(w http.ResponseWriter, r *http.Request) {
     Token: token,
     Expires: time.Now().Unix() + APP_ATTACHEXPIRE,
   };
-  if store.DB.Create(&accountToken).Error != nil {
-    LogMsg("failed to store token")
-    w.WriteHeader(http.StatusInternalServerError)
+  if err := store.DB.Create(&accountToken).Error; err != nil {
+    ErrResponse(w, http.StatusInternalServerError, err)
     return
   }
 

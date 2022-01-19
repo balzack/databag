@@ -38,7 +38,11 @@ func Logger(inner http.Handler, name string) http.Handler {
 }
 
 func ErrResponse(w http.ResponseWriter, code int, err error) {
-  ErrMsg(err)
+  if !hideLog && err != nil {
+    _, file, line, _ := runtime.Caller(1)
+    p, _ := os.Getwd()
+    log.Printf("%s:%d %s", strings.TrimPrefix(file, p), line, err.Error())
+  }
   w.WriteHeader(code)
 }
 
@@ -47,7 +51,6 @@ func ErrMsg(err error) {
     _, file, line, _ := runtime.Caller(1)
     p, _ := os.Getwd()
     log.Printf("%s:%d %s", strings.TrimPrefix(file, p), line, err.Error())
-    pretty.Println(err)
   }
 }
 

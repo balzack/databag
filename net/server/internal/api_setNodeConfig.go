@@ -1,7 +1,6 @@
 package databag
 
 import (
-  "log"
 	"net/http"
   "gorm.io/gorm"
   "gorm.io/gorm/clause"
@@ -11,16 +10,15 @@ import (
 func SetNodeConfig(w http.ResponseWriter, r *http.Request) {
 
   // validate login
-  if !AdminLogin(r) {
-    log.Printf("SetNodeConfig - invalid admin credentials");
-    w.WriteHeader(http.StatusUnauthorized);
+  if err := AdminLogin(r); err != nil {
+    ErrResponse(w, http.StatusUnauthorized, err)
     return
   }
 
   // parse node config
   var config NodeConfig
-  if ParseRequest(r, w, &config) != nil {
-    w.WriteHeader(http.StatusBadRequest)
+  if err := ParseRequest(r, w, &config); err != nil {
+    ErrResponse(w, http.StatusBadRequest, err)
     return
   }
 
@@ -54,8 +52,7 @@ func SetNodeConfig(w http.ResponseWriter, r *http.Request) {
     return nil;
   })
   if(err != nil) {
-    LogMsg("failed to store config")
-    w.WriteHeader(http.StatusInternalServerError)
+    ErrResponse(w, http.StatusInternalServerError, err)
     return
   }
 
