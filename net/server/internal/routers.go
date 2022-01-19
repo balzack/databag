@@ -860,8 +860,15 @@ var routes = Routes{
 	Route{
 		"SetProfile",
 		strings.ToUpper("Put"),
-		"/profile",
+		"/profile/data",
 		SetProfile,
+	},
+
+	Route{
+		"SetProfileImage",
+		strings.ToUpper("Put"),
+		"/profile/image",
+		SetProfileImage,
 	},
 
 	Route{
@@ -899,3 +906,4 @@ var routes = Routes{
 		Status,
 	},
 }
+

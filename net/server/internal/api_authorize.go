@@ -27,7 +27,7 @@ func Authorize(w http.ResponseWriter, r *http.Request) {
   var token string
   err := ParseRequest(r, w, &token)
   if err != nil {
-    w.WriteHeader(http.StatusBadRequest);
+    w.WriteHeader(http.StatusBadRequest)
     return
   }
 

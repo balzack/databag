@@ -244,11 +244,9 @@ type Profile struct {
 }
 
 type ProfileData struct {
-	Handle string `json:"handle,omitempty"`
 	Name string `json:"name,omitempty"`
 	Description string `json:"description,omitempty"`
 	Location string `json:"location,omitempty"`
-	Image string `json:"image,omitempty"`
 }
 
 type Revision struct {

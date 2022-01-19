@@ -62,5 +62,24 @@ func TestAttachAccount(t *testing.T) {
   assert.Less(t, cur - 60, auth.Timestamp)
 
   // set profile
+  profileData := ProfileData{
+    Name: "Namer",
+    Location: "San Francisco",
+    Description: "databaggerr",
+  };
+  r, w, _ = NewRequest("PUT", "/profile/data", &profileData)
+  SetBearerAuth(r, access)
+  SetProfile(w, r)
+  assert.NoError(t, ReadResponse(w, nil))
+
+  // get profile
+  r, w, _ = NewRequest("GET", "/profile", nil)
+  SetBearerAuth(r, access)
+  GetProfile(w, r)
+  var profile Profile
+  assert.NoError(t, ReadResponse(w, &profile))
+  assert.Equal(t, guid, profile.Guid)
+  assert.Equal(t, "user", profile.Handle)
+  assert.Equal(t, "Namer", profile.Name)
 }
 

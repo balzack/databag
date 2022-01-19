@@ -360,7 +360,6 @@ paths:
               schema:
                 type: string
         '401':
-        '401':
           description: permission denied
         '500':
           description: internal server error
@@ -726,6 +725,8 @@ paths:
           description: account disabled
         '500':
           description: internal server error
+          
+  /profile/data:
     put:
       tags:
         - profile
@@ -772,6 +773,30 @@ paths:
           description: account disabled
         '500':
           description: internal server error
+    put:
+      tags:
+        - profile
+      description: Set base64 encode image data for profile. Access granted to app tokens of account holder.
+      operationId: set-profile-image
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: success
+        '401':
+          description: permission denied
+        '405':
+          description: invalid image
+        '410':
+          description: account disabled
+        '500':
+          description: internal server error
+      requestBody:
+        content:
+          application/octet-stream:
+            schema:
+              type: string
+              format: binary
           
   /profile/message:
     get:
@@ -3992,15 +4017,11 @@ components:
     ProfileData:
       type: object
       properties:
-        handle:
-          type: string
         name:
           type: string
         description:
           type: string
         location:
-          type: string
-        image:
           type: string
           
     Account:
@@ -4477,7 +4498,7 @@ components:
   
     basicCredentials:
       type: http
-      schema      
+      scheme: basic 
 
     bearerAuth: 
       type: http
