@@ -60,7 +60,6 @@ func TestAttachAccount(t *testing.T) {
   assert.NoError(t, ReadResponse(w, &message))
 
   // validate message
-  assert.Equal(t, "RSA4096", message.KeyType)
   assert.Equal(t, "PKCS1v15", message.SignatureType)
   var data []byte
   var hash [32]byte

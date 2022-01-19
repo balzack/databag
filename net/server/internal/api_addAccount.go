@@ -16,14 +16,18 @@ func AddAccount(w http.ResponseWriter, r *http.Request) {
     return
   }
 
-  username, password, err := BasicCredentials(r);
-  if err != nil {
-    ErrResponse(w, http.StatusUnauthorized, err)
+  username, password, ret := BasicCredentials(r);
+  if ret != nil {
+    ErrResponse(w, http.StatusUnauthorized, ret)
     return
   }
 
   // generate account key
-  privateKey, publicKey := GenerateRsaKeyPair()
+  privateKey, publicKey, keyType, err := GenerateRsaKeyPair()
+  if err != nil {
+    ErrResponse(w, http.StatusInternalServerError, err)
+    return
+  }
   privatePem := ExportRsaPrivateKeyAsPemStr(privateKey)
   publicPem, err := ExportRsaPublicKeyAsPemStr(publicKey)
   if err != nil {
@@ -45,7 +49,7 @@ func AddAccount(w http.ResponseWriter, r *http.Request) {
   detail := store.AccountDetail{
     PublicKey: publicPem,
     PrivateKey: privatePem,
-    KeyType: "RSA4096",
+    KeyType: keyType,
   }
 
   // save account and delete token

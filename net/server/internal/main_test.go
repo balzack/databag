@@ -7,7 +7,8 @@ import (
 
 func TestMain(m *testing.M) {
 
-  hideLog = true
+  SetHideLog(true)
+  SetKeySize(2048)
   store.SetPath("file::memory:?cache=shared");
   //store.SetPath("databag.db");
 

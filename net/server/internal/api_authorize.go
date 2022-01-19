@@ -32,7 +32,7 @@ func Authorize(w http.ResponseWriter, r *http.Request) {
   }
 
   // load details to sign data
-  if account.AccountDetail.KeyType != "RSA4096" {
+  if account.AccountDetail.KeyType != APP_RSA2048 && account.AccountDetail.KeyType != APP_RSA4096 {
     w.WriteHeader(http.StatusServiceUnavailable)
     return
   }

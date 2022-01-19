@@ -8,9 +8,21 @@ import (
     "errors"
 )
 
-func GenerateRsaKeyPair() (*rsa.PrivateKey, *rsa.PublicKey) {
-    privkey, _ := rsa.GenerateKey(rand.Reader, 4096)
-    return privkey, &privkey.PublicKey
+var keySize int = APP_KEYSIZE
+func SetKeySize(size int) {
+  keySize = size
+}
+
+func GenerateRsaKeyPair() (*rsa.PrivateKey, *rsa.PublicKey, string, error) {
+    if keySize == 2048 {
+      privkey, _ := rsa.GenerateKey(rand.Reader, keySize)
+      return privkey, &privkey.PublicKey, "RSA2048", nil
+    } else if keySize == 4096 {
+      privkey, _ := rsa.GenerateKey(rand.Reader, keySize)
+      return privkey, &privkey.PublicKey, "RSA2048", nil
+    } else {
+      return nil, nil, "", errors.New("invalid key setting")
+    }
 }
 
 func ExportRsaPrivateKeyAsPemStr(privkey *rsa.PrivateKey) string {
