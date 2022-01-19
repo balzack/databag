@@ -1,6 +1,9 @@
 package databag
 
 import (
+  "os"
+  "log"
+  "runtime"
   "strings"
   "errors"
   "encoding/json"
@@ -12,7 +15,9 @@ import (
 func WriteResponse(w http.ResponseWriter, v interface{}) {
   body, err := json.Marshal(v);
   if err != nil {
-    LogMsg("marshal failed")
+    _, file, line, _ := runtime.Caller(1)
+    p, _ := os.Getwd()
+    log.Printf("%s:%d %s", strings.TrimPrefix(file, p), line, err.Error())
     w.WriteHeader(http.StatusInternalServerError)
   } else {
     w.Write(body);
