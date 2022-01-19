@@ -22,7 +22,7 @@ func TestAddAccount(t *testing.T) {
   assert.NoError(t, ReadResponse(w, &tokenType))
 
   // check if username is available
-  r, w, _ = NewRequest("GET", "/account/claimable?username=user", nil)
+  r, w, _ = NewRequest("GET", "/account/claimable?username=addaccount", nil)
   SetBearerAuth(r, token)
   GetAccountUsername(w, r)
   var available bool
@@ -31,7 +31,7 @@ func TestAddAccount(t *testing.T) {
 
   // create account
   r, w, _ = NewRequest("GET", "/account/profile", nil)
-  SetCredentials(r, "user:pass")
+  SetCredentials(r, "addaccount:pass")
   SetBearerAuth(r, token)
   AddAccount(w, r)
   var profile Profile
@@ -44,7 +44,7 @@ func TestAddAccount(t *testing.T) {
   assert.NoError(t, ReadResponse(w, &token))
 
   // check if dup is available
-  r, w, _ = NewRequest("GET", "/account/claimable?username=user", nil)
+  r, w, _ = NewRequest("GET", "/account/claimable?username=addaccount", nil)
   SetBearerAuth(r, token)
   GetAccountUsername(w, r)
   assert.NoError(t, ReadResponse(w, &available))
@@ -52,7 +52,7 @@ func TestAddAccount(t *testing.T) {
 
   // create dup account
   r, w, _ = NewRequest("GET", "/account/profile", nil)
-  SetCredentials(r, "user:pass")
+  SetCredentials(r, "addaccount:pass")
   SetBearerAuth(r, token);
   AddAccount(w, r)
   assert.Error(t, ReadResponse(w, &profile))

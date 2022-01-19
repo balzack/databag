@@ -9,14 +9,48 @@ import (
   "crypto/rsa"
   "crypto"
   "time"
+  "net/url"
+  "net/http"
+  "net/http/httptest"
   "github.com/stretchr/testify/assert"
+	"github.com/gorilla/websocket"
 )
+
+type StatusHandler struct {}
+
+func (h *StatusHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+  Status(w, r)
+}
 
 func TestAttachAccount(t *testing.T) {
 
+  // setup websocket server
+  h := StatusHandler{}
+  s := httptest.NewServer(&h)
+  wsUrl, _ := url.Parse(s.URL)
+  wsUrl.Scheme = "ws"
+
+  // get account token
+  r, w, _ := NewRequest("POST", "/admin/accounts", nil)
+  SetBasicAuth(r, "admin:pass")
+  AddNodeAccount(w, r)
+  var account string
+  if ReadResponse(w, &account) != nil {
+    panic("failed to create token")
+  }
+
+  // set account profile
+  r, w, _ = NewRequest("GET", "/account/profile", nil)
+  SetBearerAuth(r, account);
+  SetCredentials(r, "attachapp:pass")
+  AddAccount(w, r)
+  if ReadResponse(w, nil) != nil {
+    panic("failed to create account")
+  }
+
   // acquire new token for attaching app
-  r, w, _ := NewRequest("POST", "/account/apps", nil)
-  SetBasicAuth(r, "user:pass");
+  r, w, _ = NewRequest("POST", "/account/apps", nil)
+  SetBasicAuth(r, "attachapp:pass");
   AddAccountApp(w, r);
   var token string
   assert.NoError(t, ReadResponse(w, &token))
@@ -35,7 +69,7 @@ func TestAttachAccount(t *testing.T) {
 
   // autorize app
   r, w, _ = NewRequest("PUT", "/authorize", "aabbccdd")
-  SetBearerAuth(r, access);
+  SetBearerAuth(r, access)
   Authorize(w, r);
   var message DataMessage
   assert.NoError(t, ReadResponse(w, &message))
@@ -61,6 +95,16 @@ func TestAttachAccount(t *testing.T) {
   assert.GreaterOrEqual(t, cur, auth.Timestamp)
   assert.Less(t, cur - 60, auth.Timestamp)
 
+  // app connects websocket
+  ws, _, _ := websocket.DefaultDialer.Dial(wsUrl.String(), nil)
+  announce := Announce{ AppToken: access }
+  msg, _ := json.Marshal(&announce)
+  ws.WriteMessage(websocket.TextMessage, msg)
+  _, msg, _ = ws.ReadMessage()
+  var revision Revision
+  assert.NoError(t, json.Unmarshal(msg, &revision))
+  profileRevision := revision.Profile
+
   // set profile
   profileData := ProfileData{
     Name: "Namer",
@@ -79,7 +123,12 @@ func TestAttachAccount(t *testing.T) {
   var profile Profile
   assert.NoError(t, ReadResponse(w, &profile))
   assert.Equal(t, guid, profile.Guid)
-  assert.Equal(t, "user", profile.Handle)
+  assert.Equal(t, "attachapp", profile.Handle)
   assert.Equal(t, "Namer", profile.Name)
+
+  // profile revision incremented
+  _, msg, _ = ws.ReadMessage()
+  assert.NoError(t, json.Unmarshal(msg, &revision))
+  assert.NotEqual(t, profileRevision, revision.Profile)
 }
 

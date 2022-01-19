@@ -35,20 +35,27 @@ func Status(w http.ResponseWriter, r *http.Request) {
   }
   defer conn.Close()
 
-  log.Println("CONNECTED")
-  // receive announce message
-  var act uint = 0
+  // receive announce
+	t, m, err := conn.ReadMessage()
+  if t != websocket.TextMessage || err != nil {
+    LogMsg("failed to receive announce")
+    return
+	}
+	var announce Announce
+	if json.Unmarshal(m, &announce) != nil {
+    LogMsg("invalid announce")
+    return
+	}
 
-  // get revisions for the account
-  var account accountRevision
-  err = store.DB.Model(&store.Account{}).Where("ID = ?", act).First(&account).Error
-  if err != nil {
-    log.Println("Status - failed to get account revision")
-//    return
+  // retrieve reference account
+  var app store.App
+  if store.DB.Preload("Account").Where("token = ?", announce.AppToken).First(&app).Error != nil {
+    LogMsg("invalid app token")
+    return
   }
-  rev := getRevision(account)
 
   // send current version
+  rev := getRevision(app.Account)
   var msg []byte
   msg, err = json.Marshal(rev)
   if err != nil {
@@ -66,8 +73,8 @@ func Status(w http.ResponseWriter, r *http.Request) {
   defer close(c)
 
   // register channel for revisions
-  AddStatusListener(0, c)
-  defer RemoveStatusListener(act, c)
+  AddStatusListener(app.Account.ID, c)
+  defer RemoveStatusListener(app.Account.ID, c)
 
   // send revision until channel is closed
   for {
@@ -86,15 +93,15 @@ func Status(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func getRevision(rev accountRevision) Revision {
+func getRevision(account store.Account) Revision {
   var r Revision
-  r.Profile = rev.ProfileRevision
-  r.Content = rev.ContentRevision
-  r.Label = rev.LabelRevision
-  r.Group = rev.GroupRevision
-  r.Card = rev.CardRevision
-  r.Dialogue = rev.DialogueRevision
-  r.Insight = rev.InsightRevision
+  r.Profile = account.ProfileRevision
+  r.Content = account.ContentRevision
+  r.Label = account.LabelRevision
+  r.Group = account.GroupRevision
+  r.Card = account.CardRevision
+  r.Dialogue = account.DialogueRevision
+  r.Insight = account.InsightRevision
   return r
 }
 
@@ -102,18 +109,11 @@ func ExitStatus() {
   wsExit <- true
 }
 
-func SetStatus(act uint) {
+func SetStatus(account store.Account) {
 
   // get revisions for the account
-  var ar accountRevision
-  err := store.DB.Model(&Revision{}).Where("ID = ?", act).First(&ar).Error
-  if err != nil {
-    log.Println("SetStatus - failed to retrieve account revisions")
-    return
-  }
-  rev := getRevision(ar)
-  var msg []byte
-  msg, err = json.Marshal(rev)
+  rev := getRevision(account);
+  msg, err := json.Marshal(rev)
   if err != nil {
     log.Println("SetStatus - failed to marshal revision")
     return
@@ -124,7 +124,7 @@ func SetStatus(act uint) {
   defer wsSync.Unlock()
 
   // notify all listeners
-  chs, ok := statusListener[act]
+  chs, ok := statusListener[account.ID]
   if ok {
     for _, ch := range chs {
       ch <- msg

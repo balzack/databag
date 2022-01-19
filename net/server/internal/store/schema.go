@@ -58,7 +58,7 @@ type Account struct {
   LabelRevision     int64           `gorm:"not null;default:1"`
   CardRevision      int64           `gorm:"not null;default:1"`
   DialogueRevision  int64           `gorm:"not null;default:1"`
-  InsightRevision   uint64          `gorm:"not null;default:1"`
+  InsightRevision   int64           `gorm:"not null;default:1"`
   Created           int64           `gorm:"autoCreateTime"`
   Disabled          bool            `gorm:"not null;default:false"`
   AccountDetail     AccountDetail

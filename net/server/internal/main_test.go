@@ -53,24 +53,6 @@ func TestMain(m *testing.M) {
     panic("failed to set account storage");
   }
 
-  // get account token
-  r, w, _ = NewRequest("POST", "/admin/accounts", nil)
-  SetBasicAuth(r, "admin:pass")
-  AddNodeAccount(w, r)
-  var token string
-  if ReadResponse(w, &token) != nil {
-    panic("failed to create token")
-  }
-
-  // set account profile
-  r, w, _ = NewRequest("GET", "/account/profile", nil)
-  SetBearerAuth(r, token);
-  SetCredentials(r, "test:pass")
-  AddAccount(w, r)
-  if ReadResponse(w, nil) != nil {
-    panic("failed to create account")
-  }
-
   m.Run()
 }
 
