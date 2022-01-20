@@ -20,18 +20,14 @@ func TestAttachAccount(t *testing.T) {
   SetBasicAuth(r, "admin:pass")
   AddNodeAccount(w, r)
   var account string
-  if ReadResponse(w, &account) != nil {
-    panic("failed to create token")
-  }
+  assert.NoError(t, ReadResponse(w, &account))
 
   // set account profile
   r, w, _ = NewRequest("GET", "/account/profile", nil)
   SetBearerAuth(r, account);
   SetCredentials(r, "attachapp:pass")
   AddAccount(w, r)
-  if ReadResponse(w, nil) != nil {
-    panic("failed to create account")
-  }
+  assert.NoError(t, ReadResponse(w, nil))
 
   // acquire new token for attaching app
   r, w, _ = NewRequest("POST", "/account/apps", nil)
