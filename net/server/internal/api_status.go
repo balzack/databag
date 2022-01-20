@@ -59,7 +59,7 @@ func Status(w http.ResponseWriter, r *http.Request) {
   }
 
   // send current version
-  rev := getRevision(app.Account)
+  rev := getRevision(&app.Account)
   var msg []byte
   msg, err = json.Marshal(rev)
   if err != nil {
@@ -95,7 +95,7 @@ func Status(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func getRevision(account store.Account) Revision {
+func getRevision(account *store.Account) Revision {
   var r Revision
   r.Profile = account.ProfileRevision
   r.Content = account.ContentRevision
@@ -111,7 +111,7 @@ func ExitStatus() {
   wsExit <- true
 }
 
-func SetStatus(account store.Account) {
+func SetStatus(account *store.Account) {
 
   // get revisions for the account
   rev := getRevision(account);

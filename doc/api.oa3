@@ -4089,8 +4089,12 @@ components:
     CardProfile:
       type: object
       required:
+        - guid
+        - version
         - node
       properties:
+        guid:
+          type: string
         handle:
           type: string
         name:
@@ -4104,6 +4108,8 @@ components:
           format: int64
         imageSet:
           type: boolean
+        version:
+          type: string
         node:
           type: string
           

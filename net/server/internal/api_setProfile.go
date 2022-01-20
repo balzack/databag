@@ -8,13 +8,9 @@ import (
 
 func SetProfile(w http.ResponseWriter, r *http.Request) {
 
-  account, err := BearerAppToken(r, true);
+  account, code, err := BearerAppToken(r, true);
   if err != nil {
-    ErrResponse(w, http.StatusUnauthorized, err)
-    return
-  }
-  if account.Disabled {
-    ErrResponse(w, http.StatusGone, nil)
+    ErrResponse(w, code, err)
     return
   }
   detail := account.AccountDetail
@@ -47,7 +43,6 @@ func SetProfile(w http.ResponseWriter, r *http.Request) {
   }
 
   SetStatus(account)
-  w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-  w.WriteHeader(http.StatusOK)
+  WriteResponse(w, nil)
 }
 

@@ -85,12 +85,14 @@ type CardData struct {
 }
 
 type CardProfile struct {
+	Guid string `json:"guid"`
 	Handle string `json:"handle,omitempty"`
 	Name string `json:"name,omitempty"`
 	Description string `json:"description,omitempty"`
 	Location string `json:"location,omitempty"`
 	Revision int64 `json:"revision,omitempty"`
 	ImageSet bool `json:"imageSet,omitempty"`
+  Version string `json:"version"`
 	Node string `json:"node"`
 }
 

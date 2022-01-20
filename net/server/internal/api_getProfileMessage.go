@@ -6,13 +6,9 @@ import (
 
 func GetProfileMessage(w http.ResponseWriter, r *http.Request) {
 
-  account, res := BearerAppToken(r, true);
+  account, code, res := BearerAppToken(r, true);
   if res != nil {
-    ErrResponse(w, http.StatusUnauthorized, res)
-    return
-  }
-  if account.Disabled {
-    ErrResponse(w, http.StatusGone, res)
+    ErrResponse(w, code, res)
     return
   }
   detail := account.AccountDetail

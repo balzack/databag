@@ -115,19 +115,24 @@ type Label struct {
 type Card struct {
   ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
   CardId            string          `gorm:"not null;index:card,unique"`
-  AccountID         uint            `gorm:"not null;index:card,unique"`
-  GUID              string          `gorm:"not null"`
+  AccountID         uint            `gorm:"not null;index:card,unique;index:guid,unqiue"`
+  Guid              string          `gorm:"not null;index:guid,unique"`
   Username          string
   Name              string
   Description       string
   Location          string
-  Revision          uint64          `gorm:"not null"`
   Image             string
+  Version           string          `gorm:"not null"`
   Node              string          `gorm:"not null"`
+  ProfileRevision   int64           `gorm:"not null"`
   Status            string          `gorm:"not null"`
   Token             string
+  Notes             string
+  DataRevision      int64           `gorm:"not null"`
   Created           int64           `gorm:"autoCreateTime"`
   Updated           int64           `gorm:"autoUpdateTime"`
+  RemoteProfile     int64
+  RemoteContent     int64
   Account           Account
   Groups            []Group         `gorm:"many2many:card_groups;"`
 }

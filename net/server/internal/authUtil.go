@@ -6,6 +6,7 @@ import (
   "time"
 	"net/http"
   "encoding/base64"
+  "gorm.io/gorm"
   "golang.org/x/crypto/bcrypt"
   "databag/internal/store"
 )
@@ -81,7 +82,7 @@ func BearerAccountToken(r *http.Request) (store.AccountToken, error) {
   return accountToken, nil
 }
 
-func BearerAppToken(r *http.Request, detail bool) (store.Account, error) {
+func BearerAppToken(r *http.Request, detail bool) (*store.Account, int, error) {
 
   // parse bearer authentication
   auth := r.Header.Get("Authorization")
@@ -91,14 +92,26 @@ func BearerAppToken(r *http.Request, detail bool) (store.Account, error) {
   var app store.App
   if detail {
     if err := store.DB.Preload("Account.AccountDetail").Where("token = ?", token).First(&app).Error; err != nil {
-      return app.Account, err
+      if errors.Is(err, gorm.ErrRecordNotFound) {
+        return nil, http.StatusNotFound, err
+      } else {
+        return nil, http.StatusInternalServerError, err
+      }
     }
   } else {
     if err := store.DB.Preload("Account").Where("token = ?", token).First(&app).Error; err != nil {
-      return app.Account, err
+      if errors.Is(err, gorm.ErrRecordNotFound) {
+        return nil, http.StatusNotFound, err
+      } else {
+        return nil, http.StatusInternalServerError, err
+      }
     }
   }
-  return app.Account, nil
+  if app.Account.Disabled {
+    return nil, http.StatusGone, errors.New("account is inactive")
+  }
+
+  return &app.Account, http.StatusOK, nil
 }
 
 func BasicCredentials(r *http.Request) (string, []byte, error) {
