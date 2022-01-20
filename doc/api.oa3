@@ -4408,74 +4408,110 @@ components:
     Authenticate:
       type: object
       required: 
-        - guid
         - token
-        - timestamp
       properties:
-        guid:
-          type: string
         token:
           type: string
-        timestamp:
+          
+    Identity:
+      type: object
+      required:
+        - revision
+        - version
+        - node
+      properties:
+        revision:
           type: integer
           format: int64
+        handle:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        location:
+          type: string
+        image:
+          type: string
+          format: base64 encoded image
+        version:
+          type: string
+        node:
+          type: string
           
     Connect:
       type: object
       required:
-        - requestorId
-        - requestedId
-        - timestamp
-        - profile
+        - contact
         - token
         - contentRevision
       properties:
-        requestorcardId:
+        contact:
           type: string
-        requestedcardId:
-          type: string
-        timestamp: 
-          type: integer
-          format: int64
-        profile:
-          $ref: '#/components/schemas/Profile'
         token:
           type: string
         contentRevision:
           type: integer
           format: int64
+        profileRevision:
+          type: integer
+          format: int64
+        handle:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        location:
+          type: string
+        image:
+          type: string
+          format: base64 encoded image
+        version:
+          type: string
+        node:
+          type: string
           
     Disconnect:
       type: object
       required:
-        - requestorId
-        - requestedId
-        - timestamp
+        - contact
       properties:
-        requestorId:
+        contact:
           type: string
-        requestedId:
+    
+    SignedData:
+      type: object
+      required:
+        - guid
+        - timestamp
+        - messageType
+        - value
+      properties:
+        guid:
           type: string
-        timestamp: 
+        timestamp:
           type: integer
           format: int64
+        messageType:
+          type: string
+          enum: [Connect, Disconnect, Identity, Authenticate]
+        value:
+          type: string
+          format: json string of Connect, Disconnect, Authenticate, or Profile
           
     DataMessage:
       type: object
       required:
         - message
-        - messageType
         - keyType
         - publicKey
         - signature
         - signatureType
       properties:
-        messageType:
-          type: string
-          enum: [Connect, Disconnect, Profile, Authenticate]
         message:
           type: string
-          format: base64 encoded object
+          format: base64 encoded json string of SignedData
         keyType:
           type: string
           enum: [RSA4096, RSA2048]

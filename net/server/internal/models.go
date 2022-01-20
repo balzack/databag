@@ -68,12 +68,6 @@ type Asset struct {
 	Status string `json:"status,omitempty"`
 }
 
-type Authenticate struct {
-  Guid string `json:"guid"`
-	Token string `json:"token"`
-	Timestamp int64 `json:"timestamp"`
-}
-
 type Card struct {
 	CardId string `json:"cardId"`
 	CardProfile *CardProfile `json:"cardProfile"`
@@ -107,15 +101,6 @@ type CardView struct {
 	ContentRevision int64 `json:"contentRevision"`
 }
 
-type Connect struct {
-	RequestorcardId string `json:"requestorcardId,omitempty"`
-	RequestedcardId string `json:"requestedcardId,omitempty"`
-	Timestamp int64 `json:"timestamp"`
-	Profile *Profile `json:"profile"`
-	Token string `json:"token"`
-	ContentRevision int64 `json:"contentRevision"`
-}
-
 type ContentArticlesBody struct {
 	Labels []string `json:"labels"`
 	Groups []string `json:"groups"`
@@ -124,15 +109,6 @@ type ContentArticlesBody struct {
 type ContentLabelsBody struct {
 	Type_ string `json:"type"`
 	Data string `json:"data"`
-}
-
-type DataMessage struct {
-	MessageType string `json:"messageType"`
-	Message string `json:"message"`
-	KeyType string `json:"keyType"`
-	PublicKey string `json:"publicKey"`
-	Signature string `json:"signature"`
-	SignatureType string `json:"signatureType"`
 }
 
 type Dialogue struct {
@@ -154,12 +130,6 @@ type DialogueIdSubjectBody struct {
 type DialogueInsights struct {
 	CardId string `json:"cardId,omitempty"`
 	Status string `json:"status,omitempty"`
-}
-
-type Disconnect struct {
-	RequestorId string `json:"requestorId"`
-	RequestedId string `json:"requestedId"`
-	Timestamp int64 `json:"timestamp"`
 }
 
 type Group struct {
@@ -305,3 +275,52 @@ type Tunnel struct {
 	Type_ string `json:"type"`
 	Data string `json:"data,omitempty"`
 }
+
+type DataMessage struct {
+	Message string `json:"message"`
+	KeyType string `json:"keyType"`
+	PublicKey string `json:"publicKey"`
+	Signature string `json:"signature"`
+	SignatureType string `json:"signatureType"`
+}
+
+type SignedData struct {
+	Guid string `json:"guid"`
+	Timestamp int64 `json:"timestamp"`
+	MessageType string `json:"messageType"`
+	Value string `json:"value"`
+}
+
+type Identity struct {
+	Revision int64 `json:"revision"`
+	Handle string `json:"handle,omitempty"`
+	Name string `json:"name,omitempty"`
+	Description string `json:"description,omitempty"`
+	Location string `json:"location,omitempty"`
+	Image string `json:"image,omitempty"`
+	Version string `json:"version"`
+	Node string `json:"node"`
+}
+
+type Connect struct {
+	Contact string `json:"contact"`
+	Token string `json:"token"`
+	ContentRevision int64 `json:"contentRevision"`
+	ProfileRevision int64 `json:"profileRevision,omitempty"`
+	Handle string `json:"handle,omitempty"`
+	Name string `json:"name,omitempty"`
+	Description string `json:"description,omitempty"`
+	Location string `json:"location,omitempty"`
+	Image string `json:"image,omitempty"`
+	Version string `json:"version,omitempty"`
+	Node string `json:"node,omitempty"`
+}
+
+type Disconnect struct {
+	Contact string `json:"contact"`
+}
+
+type Authenticate struct {
+	Token string `json:"token"`
+}
+
