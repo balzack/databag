@@ -55,7 +55,7 @@ func TestConnectContact(t *testing.T) {
 
   // acquire new token for attaching app
   r, w, _ = NewRequest("POST", "/account/apps", nil)
-  SetBasicAuth(r, "attachapp:pass");
+  SetBasicAuth(r, "connectb:pass");
   AddAccountApp(w, r);
   assert.NoError(t, ReadResponse(w, &token))
 
@@ -66,9 +66,22 @@ func TestConnectContact(t *testing.T) {
   var bToken string
   assert.NoError(t, ReadResponse(w, &bToken))
 
+  // get B identity message
+  r, w, _ = NewRequest("GET", "/profile/message", nil)
+  SetBearerAuth(r, bToken)
+  GetProfileMessage(w, r)
+  var msg DataMessage
+  assert.NoError(t, ReadResponse(w, &msg))
 
+  var identity Identity
+  guid, messageType, ts, err := ReadDataMessage(&msg, &identity)
 
-  // get B profile message
+  PrintMsg(msg)
+  PrintMsg(guid)
+  PrintMsg(messageType)
+  PrintMsg(ts)
+  PrintMsg(err)
+  PrintMsg(identity)
 
   // set B card in A
 
