@@ -6,7 +6,7 @@ import (
 )
 
 var notify = make(chan *store.Notification)
-var notifyExit = make(chan bool, 1)
+var notifyExit = make(chan bool)
 
 func ExitNotifications() {
   notifyExit <- true
@@ -27,12 +27,37 @@ func SendNotifications() {
   for {
     select {
       case notification := <-notify:
-        PrintMsg("SENDING")
-        PrintMsg(notification)
+        node := "https://" + getStrConfigValue(CONFIG_DOMAIN, "") + "/"
+        if notification.Node == node {
+          SendLocalNotification(notification)
+        } else {
+          SendRemoteNotification(notification)
+        }
+        if err := store.DB.Delete(&notification).Error; err != nil {
+          ErrMsg(err)
+        }
       case <-notifyExit:
-        PrintMsg("EXITING")
+        return
     }
   }
+}
+
+func SendLocalNotification(notification *store.Notification) {
+  if notification.Module == APP_MODULEPROFILE {
+    if err := NotifyProfileRevision(notification.Token, notification.Revision); err != nil {
+      ErrMsg(err)
+    }
+  } else if notification.Module == APP_MODULECONTENT {
+    if err := NotifyContentRevision(notification.Token, notification.Revision); err != nil {
+      ErrMsg(err)
+    }
+  } else {
+    LogMsg("unknown notification type")
+  }
+}
+
+func SendRemoteNotification(notification *store.Notification) {
+  PrintMsg(notification)
 }
 
 // notify all cards of profile change
@@ -49,7 +74,8 @@ func SetProfileNotification(account *store.Account) {
   err := store.DB.Transaction(func(tx *gorm.DB) error {
     for _, card := range cards {
       notification := &store.Notification{
-        Url: card.Node + "/contact/profile/revision",
+        Node: card.Node,
+        Module: APP_MODULEPROFILE,
         Token: card.OutToken,
         Revision: account.ProfileRevision,
       }
@@ -81,7 +107,8 @@ func SetContentNotification(account *store.Account) {
   err := store.DB.Transaction(func(tx *gorm.DB) error {
     for _, card := range cards {
       notification := &store.Notification{
-        Url: card.Node + "/contact/content/revision",
+        Node: card.Node,
+        Module: APP_MODULECONTENT,
         Token: card.OutToken,
         Revision: account.ViewRevision + account.ContentRevision + card.ViewRevision,
       }
@@ -112,7 +139,8 @@ func SetContactContentNotification(account *store.Account, cardId string) {
   err := store.DB.Transaction(func(tx *gorm.DB) error {
     for _, card := range cards {
       notification := &store.Notification{
-        Url: card.Node + "/contact/content/revision",
+        Node: card.Node,
+        Module: APP_MODULECONTENT,
         Token: card.OutToken,
         Revision: account.ViewRevision + account.ContentRevision + card.ViewRevision,
       }
