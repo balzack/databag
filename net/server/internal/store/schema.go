@@ -3,6 +3,7 @@ package store
 import "gorm.io/gorm"
 
 func AutoMigrate(db *gorm.DB) {
+  db.AutoMigrate(&Notification{});
   db.AutoMigrate(&Config{});
   db.AutoMigrate(&App{});
   db.AutoMigrate(&Account{});
@@ -24,6 +25,13 @@ func AutoMigrate(db *gorm.DB) {
   db.AutoMigrate(&Topic{});
   db.AutoMigrate(&TopicAsset{});
   db.AutoMigrate(&TopicTag{});
+}
+
+type Notification struct {
+  ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
+  Url               string          `gorm:"not null"`
+  Token             string          `gorm:"not null"`
+  Revision          int64           `gorm:"not null"`
 }
 
 type Config struct {
@@ -53,12 +61,12 @@ type Account struct {
   Password          []byte          `gorm:"not null"`
   ProfileRevision   int64           `gorm:"not null;default:1"`
   ContentRevision   int64           `gorm:"not null;default:1"`
-  ViewRevision      int64           `gorm:"not null;default:1"`
   GroupRevision     int64           `gorm:"not null;default:1"`
   LabelRevision     int64           `gorm:"not null;default:1"`
   CardRevision      int64           `gorm:"not null;default:1"`
   DialogueRevision  int64           `gorm:"not null;default:1"`
   InsightRevision   int64           `gorm:"not null;default:1"`
+  ViewRevision      int64           `gorm:"not null;default:1"`
   Created           int64           `gorm:"autoCreateTime"`
   Disabled          bool            `gorm:"not null;default:false"`
   AccountDetail     AccountDetail
@@ -132,6 +140,7 @@ type Card struct {
   DataRevision      int64           `gorm:"not null"`
   Created           int64           `gorm:"autoCreateTime"`
   Updated           int64           `gorm:"autoUpdateTime"`
+  ViewRevision      int64           `gorm:"not null"`
   RemoteProfile     int64
   RemoteContent     int64
   Account           Account

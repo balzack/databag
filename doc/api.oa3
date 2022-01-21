@@ -3914,7 +3914,6 @@ components:
       required:
         - profile
         - content
-        - view # revision increment on sharing changes
         - group
         - label
         - card

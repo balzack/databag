@@ -49,6 +49,7 @@ func AddCard(w http.ResponseWriter, r *http.Request) {
     card.Node = identity.Node
     card.ProfileRevision = identity.Revision
     card.Status = APP_CARDCONFIRMED
+    card.ViewRevision = 0
 
   } else {
 

@@ -36,7 +36,7 @@ func GetOpenMessage(w http.ResponseWriter, r *http.Request) {
   connect := &Connect{
     Contact: card.Guid,
     Token: card.InToken,
-    ContentRevision: account.ViewRevision,
+    ContentRevision: account.ContentRevision + account.ViewRevision + card.ViewRevision,
     ProfileRevision: account.ProfileRevision,
     Handle: account.Username,
     Name: detail.Name,
