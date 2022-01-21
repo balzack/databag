@@ -19,3 +19,21 @@ const APP_CARDREQUESTED = "requested"
 const APP_CARDCONNECTING = "connecting"
 const APP_CARDCONNECTED = "connected"
 
+func AppCardStatus(status string) bool {
+  if status == APP_CARDPENDING {
+    return true
+  }
+  if status == APP_CARDCONFIRMED {
+    return true
+  }
+  if status == APP_CARDREQUESTED {
+    return true
+  }
+  if status == APP_CARDCONNECTING {
+    return true
+  }
+  if status == APP_CARDCONNECTED {
+    return true
+  }
+  return false
+}

@@ -42,7 +42,7 @@ func NewRouter() *mux.Router {
 	}
 
   fs := http.FileServer(http.Dir("./"))
-  router.PathPrefix("/").Handler(http.StripPrefix("/", fs))
+  router.PathPrefix("/static").Handler(http.StripPrefix("/", fs))
 
 	return router
 }

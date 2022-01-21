@@ -21,8 +21,6 @@ func WriteResponse(w http.ResponseWriter, v interface{}) {
     w.WriteHeader(http.StatusInternalServerError)
   } else {
     w.Write(body);
-    w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-    w.WriteHeader(http.StatusOK)
   }
 }
 
