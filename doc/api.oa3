@@ -1111,8 +1111,6 @@ paths:
           description: permission denied
         '404':
           description: card not found
-        '405':
-          description: invalid card state
         '410':
           description: account disabled
         '500':
@@ -1130,15 +1128,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                required:
-                  - status
-                properties:
-                  token:
-                    type: string
-                  status:
-                    type: string
-                    enum: [ pending, confirmed, requested, connecting, connected ]
+                $ref: '#/components/schemas/ContactStatus'
         '400':
           description: invalid data message
         '410':
@@ -4073,30 +4063,30 @@ components:
       required:
         - cardId
         - profileRevision
-        - contentRevision
-        - cardRevision
+        - dataRevision
+        - remoteProfile
+        - remoteContent
       properties:
         cardId:
           type: string
-        cardRevision:
-          type: integer
-          format: int64
         profileRevision:
           type: integer
           format: int64
-        contentRevision:
+        dataRevision:
+          type: integer
+          format: int64
+        remoteProfile:
+          type: integer
+          format: int64
+        remoteContent:
           type: integer
           format: int64
           
     CardProfile:
       type: object
       required:
-        - guid
-        - version
         - node
       properties:
-        guid:
-          type: string
         handle:
           type: string
         name:
@@ -4110,8 +4100,6 @@ components:
           format: int64
         imageSet:
           type: boolean
-        version:
-          type: string
         node:
           type: string
           
@@ -4507,7 +4495,7 @@ components:
         value:
           type: string
           format: json string of Connect, Disconnect, Authenticate, or Profile
-      
+          
     ContactStatus:
       type: object
       required:
@@ -4518,7 +4506,7 @@ components:
         status:
           type: string
           enum: [ pending, confirmed, requested, connecting, connected ]
-
+          
     DataMessage:
       type: object
       required:

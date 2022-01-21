@@ -98,9 +98,10 @@ type CardProfile struct {
 
 type CardView struct {
 	CardId string `json:"cardId"`
-	CardRevision int64 `json:"cardRevision"`
 	ProfileRevision int64 `json:"profileRevision"`
-	ContentRevision int64 `json:"contentRevision"`
+	DataRevision int64 `json:"dataRevision"`
+	RemoteProfile int64 `json:"remoteProfile"`
+	RemoteContent int64 `json:"remoteContent"`
 }
 
 type ContentArticlesBody struct {

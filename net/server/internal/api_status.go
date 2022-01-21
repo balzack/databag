@@ -9,17 +9,6 @@ import (
   "databag/internal/store"
 )
 
-type accountRevision struct {
-  ProfileRevision int64
-  ContentRevision int64
-  ViewRevision int64
-  GroupRevision int64
-  LabelRevision int64
-  CardRevision int64
-  DialogueRevision int64
-  InsightRevision int64
-}
-
 var wsSync sync.Mutex
 var wsExit = make(chan bool, 1)
 var statusListener = make(map[uint][]chan<-[]byte)

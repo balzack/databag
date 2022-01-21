@@ -73,17 +73,28 @@ func TestConnectContact(t *testing.T) {
   var contactStatus ContactStatus
   assert.NoError(t, ReadResponse(w, &contactStatus))
 
-PrintMsg(contactStatus)
+  // get view of cards in A
+  r, w, _ = NewRequest("GET", "/contact/card/view", nil)
+  SetBearerAuth(r, access[0])
+  GetCardView(w, r)
+  var views []CardView
+  assert.NoError(t, ReadResponse(w, &views))
 
-  // A request B
+PrintMsg(views);
 
-  // set B card in A
 
-  // get A open message
+  // get new card
 
-  // set A card in B
+  // set status of pending to connecting
 
-  // accept A
+  // create open message
+
+  // deliver open message
+
+  // receive websocket message
+
+  // update status to connected
+
 
 }
 
