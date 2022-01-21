@@ -2,14 +2,18 @@ package databag
 
 import (
   "testing"
+  "encoding/json"
+  "github.com/gorilla/websocket"
   "github.com/gorilla/mux"
   "github.com/stretchr/testify/assert"
 )
 
 func TestConnectContact(t *testing.T) {
   var card Card
+  var revision Revision
   var msg DataMessage
   var vars map[string]string
+  var cardRevision int64
 
   // create some contacts for this test
   access := AddTestContacts(t, "connect", 2)
@@ -20,11 +24,26 @@ func TestConnectContact(t *testing.T) {
   GetProfileMessage(w, r)
   assert.NoError(t, ReadResponse(w, &msg))
 
+  // app connects websocket
+  ws := getTestWebsocket()
+  announce := Announce{ AppToken: access[1] }
+  data, _ := json.Marshal(&announce)
+  ws.WriteMessage(websocket.TextMessage, data)
+  _, data, _ = ws.ReadMessage()
+  assert.NoError(t, json.Unmarshal(data, &revision))
+  cardRevision = revision.Card
+
   // add A card in B
   r, w, _ = NewRequest("POST", "/contact/cards", &msg)
   SetBearerAuth(r, access[1])
   AddCard(w, r)
   assert.NoError(t, ReadResponse(w, &card))
+
+  // profile revision incremented
+  _, data, _ = ws.ReadMessage()
+  assert.NoError(t, json.Unmarshal(data, &revision))
+  assert.NotEqual(t, cardRevision, revision.Card)
+  cardRevision = revision.Card
 
   // update A status to connecting
   r, w, _ = NewRequest("PUT", "/contact/cards/{cardId}/status", APP_CARDCONNECTING)
@@ -33,6 +52,14 @@ func TestConnectContact(t *testing.T) {
   SetBearerAuth(r, access[1])
   SetCardStatus(w, r)
   assert.NoError(t, ReadResponse(w, &card))
+
+  // profile revision incremented
+  _, data, _ = ws.ReadMessage()
+  assert.NoError(t, json.Unmarshal(data, &revision))
+  assert.NotEqual(t, cardRevision, revision.Card)
+  cardRevision = revision.Card
+
+PrintMsg(revision)
 
   // get open message to A
   r, w, _ = NewRequest("GET", "/contact/cards/{cardId}/openMessage", nil)

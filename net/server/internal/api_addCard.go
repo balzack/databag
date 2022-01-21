@@ -69,14 +69,23 @@ func AddCard(w http.ResponseWriter, r *http.Request) {
   card.Node = identity.Node
   card.ProfileRevision = identity.Revision
   card.Status = APP_CARDCONFIRMED
-  if err := store.DB.Save(&card).Error; err != nil {
+
+  // save and update contact revision
+  err  = store.DB.Transaction(func(tx *gorm.DB) error {
+    if res := store.DB.Save(&card).Error; res != nil {
+      return res
+    }
+    if res := store.DB.Model(&account).Update("card_revision", account.CardRevision + 1).Error; res != nil {
+      return res
+    }
+    return nil
+  })
+  if err != nil {
     ErrResponse(w, http.StatusInternalServerError, err)
     return
   }
 
-  // TODO UPDATE CONTACT REVISION
-  // TODO SET STATUS
-
+  SetStatus(account)
   WriteResponse(w, getCardModel(&card))
 }
 

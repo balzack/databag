@@ -45,6 +45,7 @@ func SetCardStatus(w http.ResponseWriter, r *http.Request) {
 
   // update card
   card.Status = status
+  card.DataRevision += 1
   if token != "" {
     card.OutToken = token
   }
@@ -57,14 +58,22 @@ func SetCardStatus(w http.ResponseWriter, r *http.Request) {
     card.InToken = hex.EncodeToString(data)
   }
 
-  if err := store.DB.Save(&card).Error; err != nil {
+  // save and update contact revision
+  err = store.DB.Transaction(func(tx *gorm.DB) error {
+    if res := store.DB.Save(&card).Error; res != nil {
+      return res
+    }
+    if res := store.DB.Model(&account).Update("card_revision", account.CardRevision + 1).Error; res != nil {
+      return res
+    }
+    return nil
+  })
+  if err != nil {
     ErrResponse(w, http.StatusInternalServerError, err)
     return
   }
 
-  // TODO UPDATE CARD REVISION, CONTACT REVISION
-  // TODO SET STATUS
-
+  SetStatus(account)
   WriteResponse(w, getCardModel(&card));
 }
 
