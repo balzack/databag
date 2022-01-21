@@ -51,11 +51,13 @@ func AddTestContacts(t *testing.T, prefix string, count int) []string {
   return access
 }
 
-func ConnectTestContacts(t *testing.T, access [2]string) {
+func ConnectTestContacts(t *testing.T, accessA string, accessB string) (contact [2]string) {
   var card Card
   var msg DataMessage
   var vars map[string]string
   var contactStatus ContactStatus
+  var id string
+  access := [2]string{accessA, accessB}
 
   // get A identity message
   r, w, _ := NewRequest("GET", "/profile/message", nil)
@@ -84,6 +86,7 @@ func ConnectTestContacts(t *testing.T, access [2]string) {
   SetBearerAuth(r, access[1])
   GetOpenMessage(w, r)
   assert.NoError(t, ReadResponse(w, &msg))
+  id = card.CardId
 
   // set open message in A
   r, w, _ = NewRequest("PUT", "/contact/openMessage", msg)
@@ -136,4 +139,15 @@ func ConnectTestContacts(t *testing.T, access [2]string) {
   SetCardStatus(w, r)
   assert.NoError(t, ReadResponse(w, &card))
 
+  // extract contact tokens
+  contact[0] = card.CardData.Token
+  r, w, _ = NewRequest("GET", "/contact/cards/{cardId}", nil)
+  vars = map[string]string{ "cardId": id }
+  r = mux.SetURLVars(r, vars)
+  SetBearerAuth(r, access[1])
+  GetCard(w, r)
+  assert.NoError(t, ReadResponse(w, &card))
+  contact[1] = card.CardData.Token
+
+  return
 }

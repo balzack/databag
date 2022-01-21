@@ -31,6 +31,7 @@ func getCardModel(card *store.Card) *Card {
       Revision: card.DataRevision,
       Status: card.Status,
       Notes: card.Notes,
+      Token: card.OutToken,
       Groups: groups,
     },
   }
