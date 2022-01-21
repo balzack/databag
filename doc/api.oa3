@@ -4507,7 +4507,18 @@ components:
         value:
           type: string
           format: json string of Connect, Disconnect, Authenticate, or Profile
-          
+      
+    ContactStatus:
+      type: object
+      required:
+        - status
+      properties:
+        token:
+          type: string
+        status:
+          type: string
+          enum: [ pending, confirmed, requested, connecting, connected ]
+
     DataMessage:
       type: object
       required:

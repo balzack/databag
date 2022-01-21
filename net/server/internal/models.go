@@ -278,6 +278,11 @@ type Tunnel struct {
 	Data string `json:"data,omitempty"`
 }
 
+type ContactStatus struct {
+	Token string `json:"token,omitempty"`
+	Status string `json:"status"`
+}
+
 type DataMessage struct {
 	Message string `json:"message"`
 	KeyType string `json:"keyType"`

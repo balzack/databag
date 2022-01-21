@@ -59,8 +59,6 @@ func TestConnectContact(t *testing.T) {
   assert.NotEqual(t, cardRevision, revision.Card)
   cardRevision = revision.Card
 
-PrintMsg(revision)
-
   // get open message to A
   r, w, _ = NewRequest("GET", "/contact/cards/{cardId}/openMessage", nil)
   vars = map[string]string{ "cardId": card.CardId }
@@ -69,7 +67,13 @@ PrintMsg(revision)
   GetOpenMessage(w, r)
   assert.NoError(t, ReadResponse(w, &msg))
 
-PrintMsg(msg)
+  // set open message in A
+  r, w, _ = NewRequest("PUT", "/contact/openMessage", msg)
+  SetOpenMessage(w, r)
+  var contactStatus ContactStatus
+  assert.NoError(t, ReadResponse(w, &contactStatus))
+
+PrintMsg(contactStatus)
 
   // A request B
 

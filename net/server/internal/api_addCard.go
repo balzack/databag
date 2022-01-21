@@ -35,42 +35,40 @@ func AddCard(w http.ResponseWriter, r *http.Request) {
       ErrResponse(w, http.StatusInternalServerError, err)
       return
     }
+
+    // populate new record
+    card.CardId = uuid.New().String()
+    card.AccountID = account.ID
+    card.Guid = guid
+    card.Username = identity.Handle
+    card.Name = identity.Name
+    card.Description = identity.Description
+    card.Location = identity.Location
+    card.Image = identity.Image
+    card.Version = identity.Version
+    card.Node = identity.Node
+    card.ProfileRevision = identity.Revision
+    card.Status = APP_CARDCONFIRMED
+
   } else {
 
-    // update record if revision changed
-    if identity.Revision > card.ProfileRevision {
-      card.Username = identity.Handle
-      card.Name = identity.Name
-      card.Description = identity.Description
-      card.Location = identity.Location
-      card.Image = identity.Image
-      card.Version = identity.Version
-      card.Node = identity.Node
-      card.ProfileRevision = identity.Revision
-      if err := store.DB.Save(&card).Error; err != nil {
-        ErrResponse(w, http.StatusInternalServerError, err)
-        return
-      }
+    if identity.Revision <= card.ProfileRevision {
+      WriteResponse(w, getCardModel(&card))
+      return
     }
-    WriteResponse(w, getCardModel(&card))
-    return
+
+    // update record if revision changed
+    card.Username = identity.Handle
+    card.Name = identity.Name
+    card.Description = identity.Description
+    card.Location = identity.Location
+    card.Image = identity.Image
+    card.Version = identity.Version
+    card.Node = identity.Node
+    card.ProfileRevision = identity.Revision
   }
 
-  // save new record
-  card.CardId = uuid.New().String()
-  card.AccountID = account.ID
-  card.Guid = guid
-  card.Username = identity.Handle
-  card.Name = identity.Name
-  card.Description = identity.Description
-  card.Location = identity.Location
-  card.Image = identity.Image
-  card.Version = identity.Version
-  card.Node = identity.Node
-  card.ProfileRevision = identity.Revision
-  card.Status = APP_CARDCONFIRMED
-
-  // save and update contact revision
+  // save contact card
   err  = store.DB.Transaction(func(tx *gorm.DB) error {
     if res := store.DB.Save(&card).Error; res != nil {
       return res
