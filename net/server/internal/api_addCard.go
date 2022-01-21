@@ -74,6 +74,9 @@ func AddCard(w http.ResponseWriter, r *http.Request) {
     return
   }
 
+  // TODO UPDATE CONTACT REVISION
+  // TODO SET STATUS
+
   WriteResponse(w, getCardModel(&card))
 }
 

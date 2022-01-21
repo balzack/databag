@@ -126,7 +126,8 @@ type Card struct {
   Node              string          `gorm:"not null"`
   ProfileRevision   int64           `gorm:"not null"`
   Status            string          `gorm:"not null"`
-  Token             string
+  InToken           string
+  OutToken          string
   Notes             string
   DataRevision      int64           `gorm:"not null"`
   Created           int64           `gorm:"autoCreateTime"`

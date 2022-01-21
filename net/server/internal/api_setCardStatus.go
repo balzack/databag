@@ -3,9 +3,11 @@ package databag
 import (
   "errors"
   "net/http"
+  "encoding/hex"
   "gorm.io/gorm"
   "github.com/gorilla/mux"
   "databag/internal/store"
+  "github.com/theckman/go-securerandom"
 )
 
 func SetCardStatus(w http.ResponseWriter, r *http.Request) {
@@ -38,17 +40,30 @@ func SetCardStatus(w http.ResponseWriter, r *http.Request) {
     } else {
       ErrResponse(w, http.StatusNotFound, err)
     }
+    return
   }
 
   // update card
   card.Status = status
   if token != "" {
-    card.Token = token
+    card.OutToken = token
   }
+  if status == APP_CARDCONNECTING {
+    data, err := securerandom.Bytes(32)
+    if err != nil {
+      ErrResponse(w, http.StatusInternalServerError, err)
+      return
+    }
+    card.InToken = hex.EncodeToString(data)
+  }
+
   if err := store.DB.Save(&card).Error; err != nil {
     ErrResponse(w, http.StatusInternalServerError, err)
     return
   }
+
+  // TODO UPDATE CARD REVISION, CONTACT REVISION
+  // TODO SET STATUS
 
   WriteResponse(w, getCardModel(&card));
 }

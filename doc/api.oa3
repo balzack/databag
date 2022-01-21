@@ -1111,6 +1111,8 @@ paths:
           description: permission denied
         '404':
           description: card not found
+        '405':
+          description: invalid card state
         '410':
           description: account disabled
         '500':
