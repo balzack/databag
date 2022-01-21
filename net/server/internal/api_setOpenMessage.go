@@ -31,10 +31,10 @@ func SetOpenMessage(w http.ResponseWriter, r *http.Request) {
   // load referenced account
   var account store.Account
   if err := store.DB.Where("guid = ?", connect.Contact).First(&account).Error; err != nil {
-    if !errors.Is(err, gorm.ErrRecordNotFound) {
-      ErrResponse(w, http.StatusInternalServerError, err)
-    } else {
+    if errors.Is(err, gorm.ErrRecordNotFound) {
       ErrResponse(w, http.StatusNotFound, err)
+    } else {
+      ErrResponse(w, http.StatusInternalServerError, err)
     }
     return
   }

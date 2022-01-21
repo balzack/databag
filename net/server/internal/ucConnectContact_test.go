@@ -74,13 +74,22 @@ func TestConnectContact(t *testing.T) {
   assert.NoError(t, ReadResponse(w, &contactStatus))
 
   // get view of cards in A
-  r, w, _ = NewRequest("GET", "/contact/card/view", nil)
+  r, w, _ = NewRequest("GET", "/contact/cards/view", nil)
   SetBearerAuth(r, access[0])
   GetCardView(w, r)
   var views []CardView
   assert.NoError(t, ReadResponse(w, &views))
+  assert.Equal(t, len(views), 1)
 
-PrintMsg(views);
+  // get B card in A
+  r, w, _ = NewRequest("GET", "/contact/cards/{cardId}", nil)
+  vars = map[string]string{ "cardId": views[0].CardId }
+  r = mux.SetURLVars(r, vars)
+  SetBearerAuth(r, access[0])
+  GetCard(w, r)
+  assert.NoError(t, ReadResponse(w, &card))
+
+PrintMsg(card);
 
 
   // get new card
