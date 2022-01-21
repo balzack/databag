@@ -28,7 +28,11 @@ func SetCardStatus(w http.ResponseWriter, r *http.Request) {
     return
   }
   if !AppCardStatus(status) {
-    ErrResponse(w, http.StatusBadRequest, err)
+    ErrResponse(w, http.StatusBadRequest, errors.New("unknown status"))
+    return
+  }
+  if status == APP_CARDCONNECTED && token == "" {
+    ErrResponse(w, http.StatusBadRequest, errors.New("connected token not set"))
     return
   }
 

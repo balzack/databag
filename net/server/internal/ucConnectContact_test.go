@@ -14,6 +14,7 @@ func TestConnectContact(t *testing.T) {
   var msg DataMessage
   var vars map[string]string
   var cardRevision int64
+  var contactStatus ContactStatus
 
   // create some contacts for this test
   access := AddTestContacts(t, "connect", 2)
@@ -53,7 +54,7 @@ func TestConnectContact(t *testing.T) {
   SetCardStatus(w, r)
   assert.NoError(t, ReadResponse(w, &card))
 
-  // profile revision incremented
+  // card revision incremented
   _, data, _ = ws.ReadMessage()
   assert.NoError(t, json.Unmarshal(data, &revision))
   assert.NotEqual(t, cardRevision, revision.Card)
@@ -70,7 +71,6 @@ func TestConnectContact(t *testing.T) {
   // set open message in A
   r, w, _ = NewRequest("PUT", "/contact/openMessage", msg)
   SetOpenMessage(w, r)
-  var contactStatus ContactStatus
   assert.NoError(t, ReadResponse(w, &contactStatus))
 
   // get view of cards in A
@@ -89,21 +89,41 @@ func TestConnectContact(t *testing.T) {
   GetCard(w, r)
   assert.NoError(t, ReadResponse(w, &card))
 
-PrintMsg(card);
+  // update B status to connecting
+  r, w, _ = NewRequest("PUT", "/contact/cards/{cardId}/status", APP_CARDCONNECTING)
+  vars = map[string]string{ "cardId": views[0].CardId }
+  r = mux.SetURLVars(r, vars)
+  SetBearerAuth(r, access[0])
+  SetCardStatus(w, r)
+  assert.NoError(t, ReadResponse(w, &card))
 
+  // get open message to B
+  r, w, _ = NewRequest("GET", "/contact/cards/{cardId}/openMessage", nil)
+  vars = map[string]string{ "cardId": views[0].CardId }
+  r = mux.SetURLVars(r, vars)
+  SetBearerAuth(r, access[0])
+  GetOpenMessage(w, r)
+  assert.NoError(t, ReadResponse(w, &msg))
 
-  // get new card
+  // set open message in B
+  r, w, _ = NewRequest("PUT", "/contact/openMessage", msg)
+  SetOpenMessage(w, r)
+  assert.NoError(t, ReadResponse(w, &contactStatus))
+  assert.Equal(t, APP_CARDCONNECTED, contactStatus.Status)
 
-  // set status of pending to connecting
+  // card revision incremented
+  _, data, _ = ws.ReadMessage()
+  assert.NoError(t, json.Unmarshal(data, &revision))
+  assert.NotEqual(t, cardRevision, revision.Card)
+  cardRevision = revision.Card
 
-  // create open message
-
-  // deliver open message
-
-  // receive websocket message
-
-  // update status to connected
-
+  // update B status to connected
+  r, w, _ = NewRequest("PUT", "/contact/cards/{cardId}/status?token=" + contactStatus.Token, APP_CARDCONNECTED)
+  vars = map[string]string{ "cardId": views[0].CardId }
+  r = mux.SetURLVars(r, vars)
+  SetBearerAuth(r, access[0])
+  SetCardStatus(w, r)
+  assert.NoError(t, ReadResponse(w, &card))
 
 }
 
