@@ -70,7 +70,7 @@ func SendLocalNotification(notification *store.Notification) {
 }
 
 func SendRemoteNotification(notification *store.Notification) {
-  PrintMsg(notification)
+  // TODO send remote notification
 }
 
 // notify all cards of profile change

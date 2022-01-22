@@ -7,6 +7,8 @@ import (
 
 func TestAddAccount(t *testing.T) {
 
+PrintMsg("ADD")
+
   // acquire new token for creating accounts
   r, w, _ := NewRequest("POST", "/admin/accounts", nil)
   SetBasicAuth(r, "admin:pass");

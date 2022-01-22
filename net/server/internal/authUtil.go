@@ -115,15 +115,27 @@ func BearerAppToken(r *http.Request, detail bool) (*store.Account, int, error) {
   return &app.Account, http.StatusOK, nil
 }
 
+func ParseToken(token string) (string, string, error) {
+  split := strings.Split(token, ":")
+  if len(split) != 2 {
+    return "", "", errors.New("invalid token format")
+  }
+  return split[0], split[1], nil
+}
+
 func BearerContactToken(r *http.Request) (*store.Card, int, error) {
 
   // parse bearer authentication
   auth := r.Header.Get("Authorization")
   token := strings.TrimSpace(strings.TrimPrefix(auth, "Bearer"))
+  target, access, err := ParseToken(token)
+  if err != nil {
+    return nil, http.StatusBadRequest, err
+  }
 
   // find token record
   var card store.Card
-  if err := store.DB.Preload("Account").Where("InToken = ?", token).First(&card).Error; err != nil {
+  if err := store.DB.Preload("Account").Where("account_id = ? AND InToken = ?", target, access).First(&card).Error; err != nil {
     if errors.Is(err, gorm.ErrRecordNotFound) {
       return nil, http.StatusNotFound, err
     } else {

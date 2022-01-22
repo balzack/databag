@@ -87,12 +87,12 @@ type AccountDetail struct {
 
 type App struct {
   ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
-  AccountID         string          `gorm:"index"`
+  AccountID         string          `gorm:"not null;index:appguid,unique"`
   Name              string
   Description       string
   Image             string
   Url               string
-  Token             string          `gorm:"not null;index"`
+  Token             string          `gorm:"not null;index:appguid,unique"`
   Created           int64           `gorm:"autoCreateTime"`
   Account           Account         `gorm:"references:Guid"`
 }
@@ -124,8 +124,8 @@ type Label struct {
 type Card struct {
   ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
   CardId            string          `gorm:"not null;index:card,unique"`
-  AccountID         string          `gorm:"not null;index:card,unique;index:guid,unqiue"`
-  Guid              string          `gorm:"not null;index:guid,unique"`
+  AccountID         string          `gorm:"not null;index:card,unique"`
+  Guid              string          `gorm:"not null;index:cardguid,unique"`
   Username          string
   Name              string
   Description       string
@@ -135,7 +135,7 @@ type Card struct {
   Node              string          `gorm:"not null"`
   ProfileRevision   int64           `gorm:"not null"`
   Status            string          `gorm:"not null"`
-  InToken           string
+  InToken           string          `gorm:"not null;index:cardguid,unique"`
   OutToken          string
   Notes             string
   DataRevision      int64           `gorm:"not null"`
@@ -144,8 +144,8 @@ type Card struct {
   ViewRevision      int64           `gorm:"not null"`
   RemoteProfile     int64
   RemoteContent     int64
-  Account           Account         `gorm:"references:Guid"`
   Groups            []Group         `gorm:"many2many:card_groups;"`
+  Account           Account         `gorm:"references:Guid"`
 }
 
 type CardGroup struct {
