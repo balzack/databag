@@ -38,7 +38,7 @@ func AddCard(w http.ResponseWriter, r *http.Request) {
 
     // populate new record
     card.CardId = uuid.New().String()
-    card.AccountID = account.ID
+    card.AccountID = account.Guid
     card.Guid = guid
     card.Username = identity.Handle
     card.Name = identity.Name

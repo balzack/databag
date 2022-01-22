@@ -87,14 +87,14 @@ type AccountDetail struct {
 
 type App struct {
   ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
-  AccountID         uint            `gorm:"index"`
+  AccountID         string          `gorm:"index"`
   Name              string
   Description       string
   Image             string
   Url               string
   Token             string          `gorm:"not null;index"`
   Created           int64           `gorm:"autoCreateTime"`
-  Account           Account
+  Account           Account         `gorm:"references:Guid"`
 }
 
 type Group struct {
@@ -124,7 +124,7 @@ type Label struct {
 type Card struct {
   ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
   CardId            string          `gorm:"not null;index:card,unique"`
-  AccountID         uint            `gorm:"not null;index:card,unique;index:guid,unqiue"`
+  AccountID         string          `gorm:"not null;index:card,unique;index:guid,unqiue"`
   Guid              string          `gorm:"not null;index:guid,unique"`
   Username          string
   Name              string
@@ -144,7 +144,7 @@ type Card struct {
   ViewRevision      int64           `gorm:"not null"`
   RemoteProfile     int64
   RemoteContent     int64
-  Account           Account
+  Account           Account         `gorm:"references:Guid"`
   Groups            []Group         `gorm:"many2many:card_groups;"`
 }
 

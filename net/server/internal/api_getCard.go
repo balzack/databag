@@ -18,7 +18,7 @@ func GetCard(w http.ResponseWriter, r *http.Request) {
   cardId := mux.Vars(r)["cardId"]
 
   var card store.Card
-  if err := store.DB.Where("account_id = ? AND card_id = ?", account.ID, cardId).First(&card).Error; err != nil {
+  if err := store.DB.Where("account_id = ? AND card_id = ?", account.Guid, cardId).First(&card).Error; err != nil {
     if errors.Is(err, gorm.ErrRecordNotFound) {
       ErrResponse(w, http.StatusNotFound, err)
     } else {

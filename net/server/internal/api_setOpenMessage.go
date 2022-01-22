@@ -41,7 +41,7 @@ func SetOpenMessage(w http.ResponseWriter, r *http.Request) {
 
   // see if card exists
   var card store.Card
-  if err := store.DB.Where("account_id = ? AND guid = ?", account.ID, guid).First(&card).Error; err != nil {
+  if err := store.DB.Where("account_id = ? AND guid = ?", account.Guid, guid).First(&card).Error; err != nil {
     if !errors.Is(err, gorm.ErrRecordNotFound) {
       ErrResponse(w, http.StatusInternalServerError, err)
       return
@@ -49,7 +49,7 @@ func SetOpenMessage(w http.ResponseWriter, r *http.Request) {
 
     // populate new record
     card.CardId = uuid.New().String()
-    card.AccountID = account.ID
+    card.AccountID = account.Guid
     card.Guid = guid
     card.Username = connect.Handle
     card.Name = connect.Name

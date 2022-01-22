@@ -38,7 +38,7 @@ func SetCardStatus(w http.ResponseWriter, r *http.Request) {
 
   // load referenced card
   var card store.Card
-  if err := store.DB.Preload("Groups").Where("account_id = ? AND card_id = ?", account.ID, cardId).First(&card).Error; err != nil {
+  if err := store.DB.Preload("Groups").Where("account_id = ? AND card_id = ?", account.Guid, cardId).First(&card).Error; err != nil {
     if !errors.Is(err, gorm.ErrRecordNotFound) {
       ErrResponse(w, http.StatusInternalServerError, err)
     } else {

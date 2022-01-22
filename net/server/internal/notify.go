@@ -78,7 +78,7 @@ func SetProfileNotification(account *store.Account) {
 
   // select all connected cards
   var cards []store.Card
-  if err := store.DB.Where("account_id = ? AND status = ?", account.ID, APP_CARDCONNECTED).Find(&cards).Error; err != nil {
+  if err := store.DB.Where("account_id = ? AND status = ?", account.Guid, APP_CARDCONNECTED).Find(&cards).Error; err != nil {
     ErrMsg(err)
     return
   }
@@ -111,7 +111,7 @@ func SetContentNotification(account *store.Account) {
 
   // select all connected cards
   var cards []store.Card
-  if err := store.DB.Where("account_id = ? AND status = ?", account.ID, APP_CARDCONNECTED).Find(&cards).Error; err != nil {
+  if err := store.DB.Where("account_id = ? AND status = ?", account.Guid, APP_CARDCONNECTED).Find(&cards).Error; err != nil {
     ErrMsg(err)
     return
   }
@@ -143,7 +143,7 @@ func SetContactContentNotification(account *store.Account, cardId string) {
 
   // select card if connected
   var cards []store.Card
-  if err := store.DB.Where("account_id = ? AND status = ? AND card_id = ?", account.ID, APP_CARDCONNECTED, cardId).Find(&cards).Error; err != nil {
+  if err := store.DB.Where("account_id = ? AND status = ? AND card_id = ?", account.Guid, APP_CARDCONNECTED, cardId).Find(&cards).Error; err != nil {
     ErrMsg(err)
     return
   }

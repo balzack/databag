@@ -22,7 +22,7 @@ func GetCardView(w http.ResponseWriter, r *http.Request) {
   }
 
   var views []CardView
-  if err := store.DB.Model(&store.Card{}).Where("account_id = ?", account.ID).Find(&views).Error; err != nil {
+  if err := store.DB.Model(&store.Card{}).Where("account_id = ?", account.Guid).Find(&views).Error; err != nil {
     ErrResponse(w, http.StatusInternalServerError, err)
     return
   }

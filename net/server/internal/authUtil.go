@@ -13,6 +13,7 @@ import (
 
 type accountLogin struct {
   ID uint
+  Guid string
   Password []byte
 }
 
@@ -73,7 +74,7 @@ func BearerAccountToken(r *http.Request) (store.AccountToken, error) {
 
   // find token record
   var accountToken store.AccountToken
-  if err := store.DB.Where("token = ?", token).First(&accountToken).Error; err != nil {
+  if err := store.DB.Preload("Account").Where("token = ?", token).First(&accountToken).Error; err != nil {
     return accountToken, err
   }
   if accountToken.Expires < time.Now().Unix() {

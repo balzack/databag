@@ -36,7 +36,7 @@ func SetAccountApp(w http.ResponseWriter, r *http.Request) {
 
   // create app entry
   app := store.App {
-    AccountID: token.AccountID,
+    AccountID: token.Account.Guid,
     Name: appData.Name,
     Description: appData.Description,
     Image: appData.Image,
