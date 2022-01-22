@@ -13,7 +13,7 @@ func TestConnectContact(t *testing.T) {
   var revision Revision
   var msg DataMessage
   var vars map[string]string
-  var cardRevision int64
+  //var cardRevision int64
   var contactStatus ContactStatus
 
   // create some contacts for this test
@@ -32,7 +32,7 @@ func TestConnectContact(t *testing.T) {
   ws.WriteMessage(websocket.TextMessage, data)
   _, data, _ = ws.ReadMessage()
   assert.NoError(t, json.Unmarshal(data, &revision))
-  cardRevision = revision.Card
+  //cardRevision = revision.Card
 
   // add A card in B
   r, w, _ = NewRequest("POST", "/contact/cards", &msg)
@@ -41,10 +41,10 @@ func TestConnectContact(t *testing.T) {
   assert.NoError(t, ReadResponse(w, &card))
 
   // profile revision incremented
-  _, data, _ = ws.ReadMessage()
-  assert.NoError(t, json.Unmarshal(data, &revision))
-  assert.NotEqual(t, cardRevision, revision.Card)
-  cardRevision = revision.Card
+  //_, data, _ = ws.ReadMessage()
+  //assert.NoError(t, json.Unmarshal(data, &revision))
+  //assert.NotEqual(t, cardRevision, revision.Card)
+  //cardRevision = revision.Card
 
   // update A status to connecting
   r, w, _ = NewRequest("PUT", "/contact/cards/{cardId}/status", APP_CARDCONNECTING)
@@ -55,10 +55,10 @@ func TestConnectContact(t *testing.T) {
   assert.NoError(t, ReadResponse(w, &card))
 
   // card revision incremented
-  _, data, _ = ws.ReadMessage()
-  assert.NoError(t, json.Unmarshal(data, &revision))
-  assert.NotEqual(t, cardRevision, revision.Card)
-  cardRevision = revision.Card
+  //_, data, _ = ws.ReadMessage()
+  //assert.NoError(t, json.Unmarshal(data, &revision))
+  //assert.NotEqual(t, cardRevision, revision.Card)
+  //cardRevision = revision.Card
 
   // get open message to A
   r, w, _ = NewRequest("GET", "/contact/cards/{cardId}/openMessage", nil)
@@ -112,10 +112,10 @@ func TestConnectContact(t *testing.T) {
   assert.Equal(t, APP_CARDCONNECTED, contactStatus.Status)
 
   // card revision incremented
-  _, data, _ = ws.ReadMessage()
-  assert.NoError(t, json.Unmarshal(data, &revision))
-  assert.NotEqual(t, cardRevision, revision.Card)
-  cardRevision = revision.Card
+  //_, data, _ = ws.ReadMessage()
+  //assert.NoError(t, json.Unmarshal(data, &revision))
+  //assert.NotEqual(t, cardRevision, revision.Card)
+  //cardRevision = revision.Card
 
   // update B status to connected
   r, w, _ = NewRequest("PUT", "/contact/cards/{cardId}/status?token=" + contactStatus.Token, APP_CARDCONNECTED)

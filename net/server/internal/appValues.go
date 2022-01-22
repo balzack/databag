@@ -1,5 +1,6 @@
 package databag
 
+const APP_TOKENSIZE = 16
 const APP_BODYLIMIT = 1048576
 const APP_VERSION = "0.0.1"
 const APP_ATTACHEXPIRE = 300

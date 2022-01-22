@@ -6,7 +6,7 @@ import (
 
 func GetProfile(w http.ResponseWriter, r *http.Request) {
 
-  account, code, err := BearerAppyToken(r, true);
+  account, code, err := BearerAppToken(r, true);
   if err != nil {
     ErrResponse(w, code, err)
     return

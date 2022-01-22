@@ -40,9 +40,16 @@ func Status(w http.ResponseWriter, r *http.Request) {
     return
 	}
 
+  // extract token target and access
+  target, access, ret := ParseToken(a.AppToken)
+  if ret != nil {
+    ErrMsg(err)
+    return
+  }
+
   // retrieve reference account
   var app store.App
-  if err := store.DB.Preload("Account").Where("token = ?", a.AppToken).First(&app).Error; err != nil {
+  if err := store.DB.Preload("Account").Where("account_id = ? AND token = ?", target, access).First(&app).Error; err != nil {
     ErrMsg(err)
     return
   }

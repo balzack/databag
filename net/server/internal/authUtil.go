@@ -88,38 +88,6 @@ func BearerAppToken(r *http.Request, detail bool) (*store.Account, int, error) {
   // parse bearer authentication
   auth := r.Header.Get("Authorization")
   token := strings.TrimSpace(strings.TrimPrefix(auth, "Bearer"))
-
-  // find token record
-  var app store.App
-  if detail {
-    if err := store.DB.Preload("Account.AccountDetail").Where("token = ?", token).First(&app).Error; err != nil {
-      if errors.Is(err, gorm.ErrRecordNotFound) {
-        return nil, http.StatusNotFound, err
-      } else {
-        return nil, http.StatusInternalServerError, err
-      }
-    }
-  } else {
-    if err := store.DB.Preload("Account").Where("token = ?", token).First(&app).Error; err != nil {
-      if errors.Is(err, gorm.ErrRecordNotFound) {
-        return nil, http.StatusNotFound, err
-      } else {
-        return nil, http.StatusInternalServerError, err
-      }
-    }
-  }
-  if app.Account.Disabled {
-    return nil, http.StatusGone, errors.New("account is inactive")
-  }
-
-  return &app.Account, http.StatusOK, nil
-}
-
-func BearerAppyToken(r *http.Request, detail bool) (*store.Account, int, error) {
-
-  // parse bearer authentication
-  auth := r.Header.Get("Authorization")
-  token := strings.TrimSpace(strings.TrimPrefix(auth, "Bearer"))
   target, access, err := ParseToken(token)
   if err != nil {
     return nil, http.StatusBadRequest, err
@@ -136,7 +104,7 @@ func BearerAppyToken(r *http.Request, detail bool) (*store.Account, int, error) 
       }
     }
   } else {
-    if err := store.DB.Preload("Account").Where("token = ?", token).First(&app).Error; err != nil {
+    if err := store.DB.Preload("Account").Where("account_id = ? AND token = ?", target, access).First(&app).Error; err != nil {
       if errors.Is(err, gorm.ErrRecordNotFound) {
         return nil, http.StatusNotFound, err
       } else {

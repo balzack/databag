@@ -31,7 +31,8 @@ func AddTestContacts(t *testing.T, prefix string, count int) []string {
     SetBearerAuth(r, token);
     SetCredentials(r, login)
     AddAccount(w, r)
-    assert.NoError(t, ReadResponse(w, nil))
+    var profile Profile
+    assert.NoError(t, ReadResponse(w, &profile))
 
     // acquire new token for attaching app
     r, w, _ = NewRequest("POST", "/account/apps", nil)
@@ -45,7 +46,7 @@ func AddTestContacts(t *testing.T, prefix string, count int) []string {
     SetAccountApp(w, r)
     assert.NoError(t, ReadResponse(w, &token))
 
-    access = append(access, token)
+    access = append(access, profile.Guid + "." + token)
   }
 
   return access

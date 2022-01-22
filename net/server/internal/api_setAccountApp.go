@@ -26,7 +26,7 @@ func SetAccountApp(w http.ResponseWriter, r *http.Request) {
   }
 
   // gernate app token  
-  data, err := securerandom.Bytes(32)
+  data, err := securerandom.Bytes(APP_TOKENSIZE)
   if err != nil {
     LogMsg("failed to generate token")
     w.WriteHeader(http.StatusInternalServerError);

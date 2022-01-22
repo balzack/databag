@@ -54,7 +54,7 @@ func SetCardStatus(w http.ResponseWriter, r *http.Request) {
   }
   if status == APP_CARDCONNECTING {
     if card.Status != APP_CARDCONNECTING && card.Status != APP_CARDCONNECTED {
-      data, err := securerandom.Bytes(32)
+      data, err := securerandom.Bytes(APP_TOKENSIZE)
       if err != nil {
         ErrResponse(w, http.StatusInternalServerError, err)
         return

@@ -46,7 +46,7 @@ func TestAttachAccount(t *testing.T) {
 
   // autorize app
   r, w, _ = NewRequest("PUT", "/authorize", "aabbccdd")
-  SetBearerAuth(r, access)
+  SetBearerAuth(r, profile.Guid + "." + access)
   Authorize(w, r);
   var message DataMessage
   assert.NoError(t, ReadResponse(w, &message))
@@ -65,7 +65,7 @@ func TestAttachAccount(t *testing.T) {
 
   // app connects websocket
   ws := getTestWebsocket()
-  announce := Announce{ AppToken: access }
+  announce := Announce{ AppToken: profile.Guid + "." + access }
   msg, _ := json.Marshal(&announce)
   ws.WriteMessage(websocket.TextMessage, msg)
   _, msg, _ = ws.ReadMessage()
