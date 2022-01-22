@@ -114,6 +114,28 @@ func BearerAppToken(r *http.Request, detail bool) (*store.Account, int, error) {
   return &app.Account, http.StatusOK, nil
 }
 
+func BearerContactToken(r *http.Request) (*store.Card, int, error) {
+
+  // parse bearer authentication
+  auth := r.Header.Get("Authorization")
+  token := strings.TrimSpace(strings.TrimPrefix(auth, "Bearer"))
+
+  // find token record
+  var card store.Card
+  if err := store.DB.Preload("Account").Where("InToken = ?", token).First(&card).Error; err != nil {
+    if errors.Is(err, gorm.ErrRecordNotFound) {
+      return nil, http.StatusNotFound, err
+    } else {
+      return nil, http.StatusInternalServerError, err
+    }
+  }
+  if card.Account.Disabled {
+    return nil, http.StatusGone, errors.New("account is inactive")
+  }
+
+  return &card, http.StatusOK, nil
+}
+
 func BasicCredentials(r *http.Request) (string, []byte, error) {
 
   var username string

@@ -1,6 +1,7 @@
 package databag
 
 import (
+  "errors"
   "gorm.io/gorm"
   "databag/internal/store"
 )
@@ -43,12 +44,24 @@ func SendNotifications() {
 }
 
 func SendLocalNotification(notification *store.Notification) {
+
+  // pull reference account
+  var card store.Card
+  if err := store.DB.Preload("Account").Where("in_token = ?", notification.Token).First(&card).Error; err != nil {
+    ErrMsg(err)
+    return
+  }
+  if card.Account.Disabled {
+    ErrMsg(errors.New("account is inactive"))
+    return
+  }
+
   if notification.Module == APP_MODULEPROFILE {
-    if err := NotifyProfileRevision(notification.Token, notification.Revision); err != nil {
+    if err := NotifyProfileRevision(&card, notification.Revision); err != nil {
       ErrMsg(err)
     }
   } else if notification.Module == APP_MODULECONTENT {
-    if err := NotifyContentRevision(notification.Token, notification.Revision); err != nil {
+    if err := NotifyContentRevision(&card, notification.Revision); err != nil {
       ErrMsg(err)
     }
   } else {
