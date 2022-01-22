@@ -22,7 +22,8 @@ func TestAttachAccount(t *testing.T) {
   SetBearerAuth(r, account);
   SetCredentials(r, "attachapp:pass")
   AddAccount(w, r)
-  assert.NoError(t, ReadResponse(w, nil))
+  var profile Profile
+  assert.NoError(t, ReadResponse(w, &profile))
 
   // acquire new token for attaching app
   r, w, _ = NewRequest("POST", "/account/apps", nil)
@@ -79,15 +80,14 @@ func TestAttachAccount(t *testing.T) {
     Description: "databaggerr",
   };
   r, w, _ = NewRequest("PUT", "/profile/data", &profileData)
-  SetBearerAuth(r, access)
+  SetBearerAuth(r, profile.Guid + "." + access)
   SetProfile(w, r)
   assert.NoError(t, ReadResponse(w, nil))
 
   // get profile
   r, w, _ = NewRequest("GET", "/profile", nil)
-  SetBearerAuth(r, access)
+  SetBearerAuth(r, profile.Guid + "." + access)
   GetProfile(w, r)
-  var profile Profile
   assert.NoError(t, ReadResponse(w, &profile))
   assert.Equal(t, guid, profile.Guid)
   assert.Equal(t, "attachapp", profile.Handle)
