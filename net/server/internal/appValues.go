@@ -22,6 +22,8 @@ const APP_CARDCONNECTING = "connecting"
 const APP_CARDCONNECTED = "connected"
 const APP_MODULEPROFILE = "profile"
 const APP_MODULECONTENT = "content"
+const APP_TOKENAPP = "app"
+const APP_TOKENCONTACT = "contact"
 
 func AppCardStatus(status string) bool {
   if status == APP_CARDPENDING {

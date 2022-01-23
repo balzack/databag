@@ -806,6 +806,13 @@ paths:
       operationId: get-profile-message
       security:
         - bearerAuth: []
+      parameters:
+        - in: header
+          name: TokenType
+          schema:
+            type: string
+            enum: [ app, contact ]
+          required: true
       responses:
         '200':
           description: success

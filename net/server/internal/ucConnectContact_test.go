@@ -22,6 +22,7 @@ func TestConnectContact(t *testing.T) {
 
   // get A identity message
   r, w, _ := NewRequest("GET", "/profile/message", nil)
+  r.Header.Add("TokenType", APP_TOKENAPP)
   SetBearerAuth(r, access[0])
   GetProfileMessage(w, r)
   assert.NoError(t, ReadResponse(w, &msg))
