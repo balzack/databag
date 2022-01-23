@@ -1,6 +1,7 @@
 package databag
 
 import (
+  "time"
   "testing"
   "encoding/json"
   "github.com/gorilla/websocket"
@@ -13,7 +14,7 @@ func TestConnectContact(t *testing.T) {
   var revision Revision
   var msg DataMessage
   var vars map[string]string
-  //var cardRevision int64
+  var cardRevision int64
   var contactStatus ContactStatus
 
   // create some contacts for this test
@@ -30,6 +31,7 @@ func TestConnectContact(t *testing.T) {
   announce := Announce{ AppToken: access[1] }
   data, _ := json.Marshal(&announce)
   ws.WriteMessage(websocket.TextMessage, data)
+  ws.SetReadDeadline(time.Now().Add(2 * time.Second))
   _, data, _ = ws.ReadMessage()
   assert.NoError(t, json.Unmarshal(data, &revision))
   //cardRevision = revision.Card
@@ -41,10 +43,11 @@ func TestConnectContact(t *testing.T) {
   assert.NoError(t, ReadResponse(w, &card))
 
   // profile revision incremented
-  //_, data, _ = ws.ReadMessage()
-  //assert.NoError(t, json.Unmarshal(data, &revision))
-  //assert.NotEqual(t, cardRevision, revision.Card)
-  //cardRevision = revision.Card
+  ws.SetReadDeadline(time.Now().Add(2 * time.Second))
+  _, data, _ = ws.ReadMessage()
+  assert.NoError(t, json.Unmarshal(data, &revision))
+  assert.NotEqual(t, cardRevision, revision.Card)
+  cardRevision = revision.Card
 
   // update A status to connecting
   r, w, _ = NewRequest("PUT", "/contact/cards/{cardId}/status", APP_CARDCONNECTING)
@@ -55,10 +58,11 @@ func TestConnectContact(t *testing.T) {
   assert.NoError(t, ReadResponse(w, &card))
 
   // card revision incremented
-  //_, data, _ = ws.ReadMessage()
-  //assert.NoError(t, json.Unmarshal(data, &revision))
-  //assert.NotEqual(t, cardRevision, revision.Card)
-  //cardRevision = revision.Card
+  ws.SetReadDeadline(time.Now().Add(2 * time.Second))
+  _, data, _ = ws.ReadMessage()
+  assert.NoError(t, json.Unmarshal(data, &revision))
+  assert.NotEqual(t, cardRevision, revision.Card)
+  cardRevision = revision.Card
 
   // get open message to A
   r, w, _ = NewRequest("GET", "/contact/cards/{cardId}/openMessage", nil)
@@ -112,10 +116,11 @@ func TestConnectContact(t *testing.T) {
   assert.Equal(t, APP_CARDCONNECTED, contactStatus.Status)
 
   // card revision incremented
-  //_, data, _ = ws.ReadMessage()
-  //assert.NoError(t, json.Unmarshal(data, &revision))
-  //assert.NotEqual(t, cardRevision, revision.Card)
-  //cardRevision = revision.Card
+  ws.SetReadDeadline(time.Now().Add(2 * time.Second))
+  _, data, _ = ws.ReadMessage()
+  assert.NoError(t, json.Unmarshal(data, &revision))
+  assert.NotEqual(t, cardRevision, revision.Card)
+  cardRevision = revision.Card
 
   // update B status to connected
   r, w, _ = NewRequest("PUT", "/contact/cards/{cardId}/status?token=" + contactStatus.Token, APP_CARDCONNECTED)

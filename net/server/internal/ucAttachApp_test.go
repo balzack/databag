@@ -68,6 +68,7 @@ func TestAttachAccount(t *testing.T) {
   announce := Announce{ AppToken: profile.Guid + "." + access }
   msg, _ := json.Marshal(&announce)
   ws.WriteMessage(websocket.TextMessage, msg)
+  ws.SetReadDeadline(time.Now().Add(2 * time.Second))
   _, msg, _ = ws.ReadMessage()
   var revision Revision
   assert.NoError(t, json.Unmarshal(msg, &revision))
@@ -94,6 +95,7 @@ func TestAttachAccount(t *testing.T) {
   assert.Equal(t, "Namer", profile.Name)
 
   // profile revision incremented
+  ws.SetReadDeadline(time.Now().Add(2 * time.Second))
   _, msg, _ = ws.ReadMessage()
   assert.NoError(t, json.Unmarshal(msg, &revision))
   assert.NotEqual(t, profileRevision, revision.Profile)

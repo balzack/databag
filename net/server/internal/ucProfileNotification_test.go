@@ -1,6 +1,7 @@
 package databag
 
 import (
+  "time"
   "testing"
   "encoding/json"
   "github.com/gorilla/websocket"
@@ -34,6 +35,7 @@ func TestProfileNotification(t *testing.T) {
   ws.WriteMessage(websocket.TextMessage, data)
 
   // receive revision
+  ws.SetReadDeadline(time.Now().Add(2 * time.Second))
   _, data, _ = ws.ReadMessage()
   assert.NoError(t, json.Unmarshal(data, &revision))
   cardRevision := revision.Card
@@ -50,6 +52,7 @@ func TestProfileNotification(t *testing.T) {
   assert.NoError(t, ReadResponse(w, nil))
 
   // receive revision
+  ws.SetReadDeadline(time.Now().Add(2 * time.Second))
   _, data, _ = ws.ReadMessage()
   assert.NoError(t, json.Unmarshal(data, &revision))
   assert.NotEqual(t, cardRevision, revision.Card)
