@@ -48,10 +48,10 @@ func SetCardGroup(w http.ResponseWriter, r *http.Request) {
   card.ViewRevision += 1
   card.DataRevision += 1
   err = store.DB.Transaction(func(tx *gorm.DB) error {
-    if res := store.DB.Model(&account).Update("card_revision", account.CardRevision + 1).Error; res != nil {
+    if res := tx.Model(&account).Update("card_revision", account.CardRevision + 1).Error; res != nil {
       return res
     }
-    if res := store.DB.Preload("Groups").Save(&card).Error; res != nil {
+    if res := tx.Preload("Groups").Save(&card).Error; res != nil {
       return res
     }
     return nil
@@ -66,7 +66,6 @@ func SetCardGroup(w http.ResponseWriter, r *http.Request) {
     Status: card.Status,
     Notes: card.Notes,
     Token: card.OutToken,
-    Groups: nil,
   }
   for _, group := range card.Groups {
     cardData.Groups = append(cardData.Groups, group.GroupId)
