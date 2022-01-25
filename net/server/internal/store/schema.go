@@ -11,16 +11,11 @@ func AutoMigrate(db *gorm.DB) {
   db.AutoMigrate(&Group{});
   db.AutoMigrate(&Label{});
   db.AutoMigrate(&Card{});
-  db.AutoMigrate(&CardGroup{});
-  db.AutoMigrate(&LabelGroup{});
   db.AutoMigrate(&Asset{});
   db.AutoMigrate(&Article{});
   db.AutoMigrate(&ArticleAsset{});
   db.AutoMigrate(&ArticleTag{});
-  db.AutoMigrate(&ArticleGroup{});
-  db.AutoMigrate(&ArticleLabel{});
   db.AutoMigrate(&Dialogue{});
-  db.AutoMigrate(&DialogueMember{});
   db.AutoMigrate(&Insight{});
   db.AutoMigrate(&Topic{});
   db.AutoMigrate(&TopicAsset{});
@@ -54,6 +49,9 @@ type AccountToken struct {
   Account           Account
 }
 
+// NOTE: card & app reference account by guid, all other tables by id
+//  because token lookup uses guid and is most common and wanted to avoid join
+//  int foreign key should be faster, so left other tables with id reference
 type Account struct {
   ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
   AccountDetailID   uint            `gorm:"not null"`
@@ -118,6 +116,7 @@ type Label struct {
   Data              string
   Created           int64           `gorm:"autoCreateTime"`
   Updated           int64           `gorm:"autoUpdateTime"`
+  Groups            []Group         `gorm:"many2many:label_groups;"`
   Account           Account
 }
 
@@ -148,22 +147,6 @@ type Card struct {
   Account           Account         `gorm:"references:Guid"`
 }
 
-type CardGroup struct {
-  ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
-  CardID            uint            `gorm:"not null;index:cardgroup,unique"`
-  GroupID           uint            `gorm:"not null;index:cardgroup,unique"`
-  Card              Card
-  Group             Group
-}
-
-type LabelGroup struct {
-  ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
-  LabelID           uint            `gorm:"not null;index:labelgroup,unique"`
-  GroupID           uint            `gorm:"not null;index:labelgroup,unique"`
-  Label             Label
-  Group             Group
-}
-
 type Asset struct {
   ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
   AssetId           string          `gorm:"not null;index:asset,unique"`
@@ -187,10 +170,13 @@ type Article struct {
   DataType          string          `gorm:"index"`
   Data              string
   Status            string          `gorm:"not null;index"`
+  Expires           int64
   Created           int64           `gorm:"autoCreateTime"`
   Updated           int64           `gorm:"autoUpdateTime"`
   TagUpdated        int64           `gorm:"not null"`
   TagRevision       uint64          `gorm:"not null"`
+  Groups            []Group         `gorm:"many2many:article_groups;"`
+  Labels            []Label         `gorm:"many2many:article_labels;"`
   Account           Account
 }
 
@@ -216,22 +202,6 @@ type ArticleTag struct {
   Card              Card
 }
 
-type ArticleGroup struct {
-  ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
-  ArticleID         uint            `gorm:"not null;index"`
-  GroupID           uint            `gorm:"not null;index"`
-  Article           Article
-  Group             Group
-}
-
-type ArticleLabel struct {
-  ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
-  ArticleID         uint            `gorm:"not null;index"`
-  LabelID           uint            `gorm:"not null;index"`
-  Article           Article
-  Label             Label
-}
-
 type Dialogue struct {
   ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
   DialogueId        string          `gorm:"not null;index:dialogue,unique"`
@@ -245,16 +215,8 @@ type Dialogue struct {
   MemberRevision    uint64          `gorm:"not null"`
   TopicUpdated      int64
   TopicRevision     uint64          `gorm:"not null"`
+  Cards             []Card          `gorm:"many2many:dialog_cards;"`
   Account           Account
-  Cards             []Card          `gorm:"many2many:dialogue_member"`
-}
-
-type DialogueMember struct {
-  ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
-  DialogueID        uint            `gorm:"not null;index`
-  CardID            uint            `gorm:"not null;index`
-  Created           int64           `gorm:"autoCreateTime"`
-  Card              Card
 }
 
 type Insight struct {

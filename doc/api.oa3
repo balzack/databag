@@ -859,7 +859,11 @@ paths:
         - bearerAuth: []
       responses:
         '200':
-          description: entry created
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Group'
         '401':
           description: permission denied
         '410':
@@ -870,15 +874,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              required:
-                - type
-                - data
-              properties:
-                type:
-                  type: string
-                data:
-                  type: string
+              $ref: '#/components/schemas/Subject'
           
   /share/groups/{groupId}:
     put:
@@ -898,6 +894,10 @@ paths:
       responses:
         '200':
           description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Group'
         '401':
           description: permission denied
         '404':
@@ -910,15 +910,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              required:
-                - type
-                - data
-              properties:
-                type:
-                  type: string
-                data:
-                  type: string
+              $ref: '#/components/schemas/Subject'
     delete:
       tags:
         - share
@@ -4022,6 +4014,17 @@ components:
         location:
           type: string
           
+    Subject:
+      type: object
+      required:
+        - dataType
+        - data
+      properties:
+        dataType:
+          type: string
+        data:
+          type: string
+          
     Account:
       type: object
       required:
@@ -4358,25 +4361,25 @@ components:
       type: object
       required:
         - groupId
-        - groupRevision
-        - type
+        - revision
+        - dataType
         - data
         - created
-        - modified
+        - updated
       properties:
         groupId:
           type: string
-        groupRevision:
+        revision:
           type: integer
           format: int64
-        type:
+        dataType:
           type: string
         data:
           type: string
         created:
           type: integer
           format: int64
-        modified:
+        updated:
           type: integer
           format: int64
           

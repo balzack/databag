@@ -38,6 +38,11 @@ type AppData struct {
 	Image string `json:"image,omitempty"`
 }
 
+type Subject struct {
+	DataType string `json:"dataType"`
+	Data string `json:"data"`
+}
+
 type Article struct {
 	ArticleId string `json:"articleId"`
 	ArticleRevision int64 `json:"articleRevision"`
@@ -137,11 +142,11 @@ type DialogueInsights struct {
 
 type Group struct {
 	GroupId string `json:"groupId"`
-	GroupRevision int64 `json:"groupRevision"`
-	Type_ string `json:"type"`
+	Revision int64 `json:"revision"`
+	DataType string `json:"dataType"`
 	Data string `json:"data"`
 	Created int64 `json:"created"`
-	Modified int64 `json:"modified"`
+	Updated int64 `json:"updated"`
 }
 
 type GroupsGroupIdBody struct {

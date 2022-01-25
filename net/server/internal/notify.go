@@ -6,7 +6,7 @@ import (
   "databag/internal/store"
 )
 
-var notify = make(chan *store.Notification)
+var notify = make(chan *store.Notification, APP_NOTIFYBUFFER)
 var notifyExit = make(chan bool)
 
 func ExitNotifications() {
@@ -139,33 +139,24 @@ func SetContentNotification(account *store.Account) {
 
 // notify single card of content change
 // card.View incremented by adding or removing card from group or label
-func SetContactContentNotification(account *store.Account, cardId string) {
+func SetContactContentNotification(account *store.Account, card *store.Card) {
 
-  // select card if connected
-  var cards []store.Card
-  if err := store.DB.Where("account_id = ? AND status = ? AND card_id = ?", account.Guid, APP_CARDCONNECTED, cardId).Find(&cards).Error; err != nil {
-    ErrMsg(err)
+  if card.Status != APP_CARDCONNECTED {
     return
   }
 
   // add new notification for card
-  err := store.DB.Transaction(func(tx *gorm.DB) error {
-    for _, card := range cards {
-      notification := &store.Notification{
-        Node: card.Node,
-        Module: APP_MODULECONTENT,
-        Token: card.OutToken,
-        Revision: account.ViewRevision + account.ContentRevision + card.ViewRevision,
-      }
-      if err := tx.Save(notification).Error; err != nil {
-        return err
-      }
-      notify <- notification
-    }
-    return nil
-  })
-  if err != nil {
-    ErrMsg(err)
+  notification := &store.Notification{
+    Node: card.Node,
+    Module: APP_MODULECONTENT,
+    Token: card.OutToken,
+    Revision: account.ViewRevision + account.ContentRevision + card.ViewRevision,
+  }
+
+  if res := store.DB.Save(notification).Error; res != nil {
+    ErrMsg(res)
+  } else {
+    notify <- notification
   }
 }
 

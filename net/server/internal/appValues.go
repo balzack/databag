@@ -24,6 +24,7 @@ const APP_MODULEPROFILE = "profile"
 const APP_MODULECONTENT = "content"
 const APP_TOKENAPP = "app"
 const APP_TOKENCONTACT = "contact"
+const APP_NOTIFYBUFFER = 4096
 
 func AppCardStatus(status string) bool {
   if status == APP_CARDPENDING {

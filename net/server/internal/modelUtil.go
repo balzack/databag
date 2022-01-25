@@ -37,3 +37,13 @@ func getCardModel(card *store.Card) *Card {
   }
 }
 
+func getGroupModel(group *store.Group) *Group {
+  return &Group{
+    GroupId: group.GroupId,
+    Revision: group.Revision,
+    DataType: group.DataType,
+    Data: group.Data,
+    Created: group.Created,
+    Updated: group.Updated,
+  }
+}
