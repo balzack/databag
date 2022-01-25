@@ -86,6 +86,16 @@ func TestGroupContact(t *testing.T) {
   assert.NoError(t, ReadResponse(w, &cardData))
   assert.Equal(t, 1, len(cardData.Groups))
 
+  // get contact revision
+  r, w, _ = NewRequest("GET", "/contact/cards/{cardId}", nil)
+  vars = map[string]string{ "cardId": contact[0].ContactCardId }
+  r = mux.SetURLVars(r, vars)
+  SetBearerAuth(r, access[0])
+  GetCard(w, r)
+  card = Card{}
+  assert.NoError(t, ReadResponse(w, &card))
+  assert.Equal(t, len(card.CardData.Groups), 1)
+
   // receive revision
   wsA.SetReadDeadline(time.Now().Add(2 * time.Second))
   _, data, _ = wsA.ReadMessage()
@@ -144,6 +154,16 @@ func TestGroupContact(t *testing.T) {
   SetBearerAuth(r, access[0])
   RemoveGroup(w, r)
   assert.NoError(t, ReadResponse(w, &group))
+
+  // get contact revision
+  r, w, _ = NewRequest("GET", "/contact/cards/{cardId}", nil)
+  vars = map[string]string{ "cardId": contact[0].ContactCardId }
+  r = mux.SetURLVars(r, vars)
+  SetBearerAuth(r, access[0])
+  GetCard(w, r)
+  card = Card{}
+  assert.NoError(t, ReadResponse(w, &card))
+  assert.Equal(t, len(card.CardData.Groups), 0)
 
   // receive revision
   wsA.SetReadDeadline(time.Now().Add(2 * time.Second))
