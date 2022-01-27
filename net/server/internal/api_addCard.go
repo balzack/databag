@@ -4,8 +4,10 @@ import (
   "errors"
   "net/http"
   "gorm.io/gorm"
+  "encoding/hex"
   "github.com/google/uuid"
   "databag/internal/store"
+  "github.com/theckman/go-securerandom"
 )
 
 func AddCard(w http.ResponseWriter, r *http.Request) {
@@ -50,6 +52,12 @@ func AddCard(w http.ResponseWriter, r *http.Request) {
     card.ProfileRevision = identity.Revision
     card.Status = APP_CARDCONFIRMED
     card.ViewRevision = 0
+    data, res := securerandom.Bytes(APP_TOKENSIZE)
+    if res != nil {
+      ErrResponse(w, http.StatusInternalServerError, res)
+      return
+    }
+    card.InToken = hex.EncodeToString(data)
 
   } else {
 

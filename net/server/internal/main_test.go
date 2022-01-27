@@ -1,16 +1,17 @@
 package databag
 
 import (
+  "os"
   "testing"
   "databag/internal/store"
 )
 
 func TestMain(m *testing.M) {
 
-  SetHideLog(true)
+//  SetHideLog(true)
   SetKeySize(2048)
-  store.SetPath("file::memory:?cache=shared");
-//  store.SetPath("databag.db");
+  os.Remove("databag.db")
+  store.SetPath("databag.db")
 
   r, w, _ := NewRequest("GET", "/admin/claimable", nil)
   GetNodeClaimable(w, r)

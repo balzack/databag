@@ -4,9 +4,11 @@ import (
   "time"
   "errors"
   "net/http"
+  "encoding/hex"
   "gorm.io/gorm"
   "github.com/google/uuid"
   "databag/internal/store"
+  "github.com/theckman/go-securerandom"
 )
 
 func SetOpenMessage(w http.ResponseWriter, r *http.Request) {
@@ -64,6 +66,12 @@ func SetOpenMessage(w http.ResponseWriter, r *http.Request) {
     card.Status = APP_CARDPENDING
     card.DataRevision = 1
     card.OutToken = connect.Token
+    data, res := securerandom.Bytes(APP_TOKENSIZE)
+    if res != nil {
+      ErrResponse(w, http.StatusInternalServerError, res)
+      return
+    }
+    card.InToken = hex.EncodeToString(data)
 
   } else {
 
