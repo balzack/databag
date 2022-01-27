@@ -37,20 +37,6 @@ func ReadResponse(w *httptest.ResponseRecorder, v interface{}) error {
   return nil
 }
 
-func NewRequest(rest string, path string, obj interface{}) (*http.Request, *httptest.ResponseRecorder, error) {
-  w := httptest.NewRecorder()
-  if(obj != nil) {
-    body, err := json.Marshal(obj)
-    if err != nil {
-      return nil, nil, err
-    }
-    reader := strings.NewReader(string(body))
-    return httptest.NewRequest(rest, path, reader), w, nil
-  }
-
-  return httptest.NewRequest(rest, path, nil), w, nil
-}
-
 func SetBasicAuth(r *http.Request, login string) {
   auth := base64.StdEncoding.EncodeToString([]byte(login))
   r.Header.Add("Authorization", "Basic " + auth)

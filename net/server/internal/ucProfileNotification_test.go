@@ -17,12 +17,16 @@ func TestProfileNotification(t *testing.T) {
   go SendNotifications()
 
   // connect contacts
-  access := AddTestContacts(t, "profilenotification", 2);
-  ConnectTestContacts(t, access[0], access[1])
+  _, a, _ := AddTestAccount("profilenotification0")
+  _, b, _ := AddTestAccount("profilenotification1")
+  aCard, _ := AddTestCard(a, b)
+  bCard, _ := AddTestCard(b, a)
+  OpenTestCard(a, aCard)
+  OpenTestCard(b, bCard)
 
   // get views list of cards
   r, w, _ := NewRequest("GET", "/contact/cards/view", nil)
-  SetBearerAuth(r, access[0])
+  SetBearerAuth(r, a)
   GetCardView(w, r)
   assert.NoError(t, ReadResponse(w, &views))
   assert.Equal(t, len(views), 1)
@@ -30,7 +34,7 @@ func TestProfileNotification(t *testing.T) {
 
   // app connects websocket
   ws := getTestWebsocket()
-  announce := Announce{ AppToken: access[0] }
+  announce := Announce{ AppToken: a }
   data, _ = json.Marshal(&announce)
   ws.WriteMessage(websocket.TextMessage, data)
 
@@ -47,7 +51,7 @@ func TestProfileNotification(t *testing.T) {
     Description: "databaggerr",
   };
   r, w, _ = NewRequest("PUT", "/profile/data", &profileData)
-  SetBearerAuth(r, access[1])
+  SetBearerAuth(r, b)
   SetProfile(w, r)
   assert.NoError(t, ReadResponse(w, nil))
 
@@ -59,7 +63,7 @@ func TestProfileNotification(t *testing.T) {
 
   // get views list of cards
   r, w, _ = NewRequest("GET", "/contact/cards/view", nil)
-  SetBearerAuth(r, access[0])
+  SetBearerAuth(r, a)
   GetCardView(w, r)
   assert.NoError(t, ReadResponse(w, &views))
   assert.Equal(t, len(views), 1)

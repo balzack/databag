@@ -26,16 +26,20 @@ func TestGroupContact(t *testing.T) {
   go SendNotifications()
 
   // connect contacts
-  access := AddTestContacts(t, "groupcontact", 2);
-  contact := ConnectTestContacts(t, access[0], access[1])
+  _, a, _ := AddTestAccount("groupcontact0")
+  _, b, _ := AddTestAccount("groupcontact1")
+  aCard, _ := AddTestCard(a, b)
+  bCard, _ := AddTestCard(b, a)
+  OpenTestCard(a, aCard)
+  OpenTestCard(b, bCard)
 
   // app connects websocket
   wsA := getTestWebsocket()
-  announce := Announce{ AppToken: access[0] }
+  announce := Announce{ AppToken: a }
   data, _ := json.Marshal(&announce)
   wsA.WriteMessage(websocket.TextMessage, data)
   wsB := getTestWebsocket()
-  announce = Announce{ AppToken: access[1] }
+  announce = Announce{ AppToken: b }
   data, _ = json.Marshal(&announce)
   wsB.WriteMessage(websocket.TextMessage, data)
 
@@ -55,7 +59,7 @@ func TestGroupContact(t *testing.T) {
     Data: "group data with name and logo",
   }
   r, w, _ := NewRequest("POST", "/share/groups", subject)
-  SetBearerAuth(r, access[0])
+  SetBearerAuth(r, a)
   AddGroup(w, r)
   assert.NoError(t, ReadResponse(w, &group))
 
@@ -68,9 +72,9 @@ func TestGroupContact(t *testing.T) {
 
   // get contact revision
   r, w, _ = NewRequest("GET", "/contact/cards/{cardId}", nil)
-  vars = map[string]string{ "cardId": contact[1].ContactCardId }
+  vars = map[string]string{ "cardId": bCard }
   r = mux.SetURLVars(r, vars)
-  SetBearerAuth(r, access[1])
+  SetBearerAuth(r, b)
   GetCard(w, r)
   assert.NoError(t, ReadResponse(w, &card))
   contactCardRevision = card.ContentRevision
@@ -79,18 +83,18 @@ func TestGroupContact(t *testing.T) {
   r, w, _ = NewRequest("PUT", "/contact/cards/{cardId}/groups/{groupId}", nil)
   vars = make(map[string]string)
   vars["groupId"] = group.GroupId
-  vars["cardId"] = contact[0].ContactCardId
+  vars["cardId"] = aCard 
   r = mux.SetURLVars(r, vars)
-  SetBearerAuth(r, access[0])
+  SetBearerAuth(r, a)
   SetCardGroup(w, r)
   assert.NoError(t, ReadResponse(w, &cardData))
   assert.Equal(t, 1, len(cardData.Groups))
 
   // get contact revision
   r, w, _ = NewRequest("GET", "/contact/cards/{cardId}", nil)
-  vars = map[string]string{ "cardId": contact[0].ContactCardId }
+  vars = map[string]string{ "cardId": aCard }
   r = mux.SetURLVars(r, vars)
-  SetBearerAuth(r, access[0])
+  SetBearerAuth(r, a)
   GetCard(w, r)
   card = Card{}
   assert.NoError(t, ReadResponse(w, &card))
@@ -110,9 +114,9 @@ func TestGroupContact(t *testing.T) {
 
   // get contact revision
   r, w, _ = NewRequest("GET", "/contact/cards/{cardId}", nil)
-  vars = map[string]string{ "cardId": contact[1].ContactCardId }
+  vars = map[string]string{ "cardId": bCard }
   r = mux.SetURLVars(r, vars)
-  SetBearerAuth(r, access[1])
+  SetBearerAuth(r, b)
   GetCard(w, r)
   assert.NoError(t, ReadResponse(w, &card))
   assert.NotEqual(t, contactCardRevision, card.ContentRevision)
@@ -120,7 +124,7 @@ func TestGroupContact(t *testing.T) {
 
   // show group view
   r, w, _ = NewRequest("GET", "/share/groups", nil)
-  SetBearerAuth(r, access[0])
+  SetBearerAuth(r, a)
   GetGroups(w, r)
   assert.NoError(t, ReadResponse(w, &groups))
   assert.Equal(t, 1, len(groups))
@@ -134,7 +138,7 @@ func TestGroupContact(t *testing.T) {
   vars = make(map[string]string)
   vars["groupId"] = group.GroupId
   r = mux.SetURLVars(r, vars)
-  SetBearerAuth(r, access[0])
+  SetBearerAuth(r, a)
   UpdateGroup(w, r)
   assert.NoError(t, ReadResponse(w, &group))
   assert.Equal(t, group.DataType, "imagroupEDIT")
@@ -151,15 +155,15 @@ func TestGroupContact(t *testing.T) {
   vars = make(map[string]string)
   vars["groupId"] = group.GroupId
   r = mux.SetURLVars(r, vars)
-  SetBearerAuth(r, access[0])
+  SetBearerAuth(r, a)
   RemoveGroup(w, r)
   assert.NoError(t, ReadResponse(w, &group))
 
   // get contact revision
   r, w, _ = NewRequest("GET", "/contact/cards/{cardId}", nil)
-  vars = map[string]string{ "cardId": contact[0].ContactCardId }
+  vars = map[string]string{ "cardId": aCard }
   r = mux.SetURLVars(r, vars)
-  SetBearerAuth(r, access[0])
+  SetBearerAuth(r, a)
   GetCard(w, r)
   card = Card{}
   assert.NoError(t, ReadResponse(w, &card))
@@ -177,16 +181,16 @@ func TestGroupContact(t *testing.T) {
 
   // get contact revision
   r, w, _ = NewRequest("GET", "/contact/cards/{cardId}", nil)
-  vars = map[string]string{ "cardId": contact[1].ContactCardId }
+  vars = map[string]string{ "cardId": bCard }
   r = mux.SetURLVars(r, vars)
-  SetBearerAuth(r, access[1])
+  SetBearerAuth(r, b)
   GetCard(w, r)
   assert.NoError(t, ReadResponse(w, &card))
   assert.NotEqual(t, contactCardRevision, card.ContentRevision)
 
   // show group view
   r, w, _ = NewRequest("GET", "/share/groups", nil)
-  SetBearerAuth(r, access[0])
+  SetBearerAuth(r, a)
   GetGroups(w, r)
   assert.NoError(t, ReadResponse(w, &groups))
   assert.Equal(t, 0, len(groups))

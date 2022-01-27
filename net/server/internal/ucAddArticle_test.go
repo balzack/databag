@@ -6,8 +6,10 @@ import (
 )
 
 func TestAddArticle(t *testing.T) {
+  var set *TestGroup
+  var err error
 
-    set, err := AddTestGroup("addaccount")
-    assert.NoError(t, err)
-    PrintMsg(set)
+  set, err = AddTestGroup("addaccount1")
+  assert.NoError(t, err)
+  PrintMsg(set)
 }
