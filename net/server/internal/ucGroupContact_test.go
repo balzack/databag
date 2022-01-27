@@ -1,9 +1,7 @@
 package databag
 
 import (
-  "time"
   "testing"
-  "encoding/json"
   "github.com/gorilla/mux"
   "github.com/gorilla/websocket"
   "github.com/stretchr/testify/assert"
@@ -21,9 +19,9 @@ func TestGroupContact(t *testing.T) {
   var contactRevision int64
   var card Card
   var contactCardRevision int64
-
-  // start notification thread
-  go SendNotifications()
+  var wsA *websocket.Conn
+  var wsB *websocket.Conn
+  var err error
 
   // connect contacts
   _, a, _ := AddTestAccount("groupcontact0")
@@ -34,23 +32,11 @@ func TestGroupContact(t *testing.T) {
   OpenTestCard(b, bCard)
 
   // app connects websocket
-  wsA := getTestWebsocket()
-  announce := Announce{ AppToken: a }
-  data, _ := json.Marshal(&announce)
-  wsA.WriteMessage(websocket.TextMessage, data)
-  wsB := getTestWebsocket()
-  announce = Announce{ AppToken: b }
-  data, _ = json.Marshal(&announce)
-  wsB.WriteMessage(websocket.TextMessage, data)
-
-  // receive revision
-  wsA.SetReadDeadline(time.Now().Add(2 * time.Second))
-  _, data, _ = wsA.ReadMessage()
-  assert.NoError(t, json.Unmarshal(data, &revision))
+  wsA, err = StatusConnection(a, &revision);
+  assert.NoError(t, err)
   groupRevision = revision.Group
-  wsB.SetReadDeadline(time.Now().Add(2 * time.Second))
-  _, data, _ = wsB.ReadMessage()
-  assert.NoError(t, json.Unmarshal(data, &revision))
+  wsB, err = StatusConnection(b, &revision);
+  assert.NoError(t, err)
   contactRevision = revision.Card
 
   // add group to conatact 0
@@ -64,9 +50,8 @@ func TestGroupContact(t *testing.T) {
   assert.NoError(t, ReadResponse(w, &group))
 
   // receive revision
-  wsA.SetReadDeadline(time.Now().Add(2 * time.Second))
-  _, data, _ = wsA.ReadMessage()
-  assert.NoError(t, json.Unmarshal(data, &revision))
+  err = StatusRevision(wsA, &revision)
+  assert.NoError(t, err)
   assert.NotEqual(t, groupRevision, revision.Group)
   cardRevision = revision.Card
 
@@ -101,14 +86,12 @@ func TestGroupContact(t *testing.T) {
   assert.Equal(t, len(card.CardData.Groups), 1)
 
   // receive revision
-  wsA.SetReadDeadline(time.Now().Add(2 * time.Second))
-  _, data, _ = wsA.ReadMessage()
-  assert.NoError(t, json.Unmarshal(data, &revision))
+  err = StatusRevision(wsA, &revision)
+  assert.NoError(t, err)
   assert.NotEqual(t, cardRevision, revision.Card)
   groupRevision = revision.Group
-  wsB.SetReadDeadline(time.Now().Add(2 * time.Second))
-  _, data, _ = wsB.ReadMessage()
-  assert.NoError(t, json.Unmarshal(data, &revision))
+  err = StatusRevision(wsB, &revision)
+  assert.NoError(t, err)
   assert.NotEqual(t, contactRevision, revision.Card)
   contactRevision = revision.Card
 
@@ -144,9 +127,8 @@ func TestGroupContact(t *testing.T) {
   assert.Equal(t, group.DataType, "imagroupEDIT")
 
   // receive revision
-  wsA.SetReadDeadline(time.Now().Add(2 * time.Second))
-  _, data, _ = wsA.ReadMessage()
-  assert.NoError(t, json.Unmarshal(data, &revision))
+  err = StatusRevision(wsA, &revision)
+  assert.NoError(t, err)
   assert.NotEqual(t, groupRevision, revision.Group)
   groupRevision = revision.Group
 
@@ -170,13 +152,11 @@ func TestGroupContact(t *testing.T) {
   assert.Equal(t, len(card.CardData.Groups), 0)
 
   // receive revision
-  wsA.SetReadDeadline(time.Now().Add(2 * time.Second))
-  _, data, _ = wsA.ReadMessage()
-  assert.NoError(t, json.Unmarshal(data, &revision))
+  err = StatusRevision(wsA, &revision)
+  assert.NoError(t, err)
   assert.NotEqual(t, groupRevision, revision.Group)
-  wsB.SetReadDeadline(time.Now().Add(2 * time.Second))
-  _, data, _ = wsB.ReadMessage()
-  assert.NoError(t, json.Unmarshal(data, &revision))
+  err = StatusRevision(wsB, &revision)
+  assert.NoError(t, err)
   assert.NotEqual(t, contactRevision, revision.Card)
 
   // get contact revision
@@ -194,7 +174,4 @@ func TestGroupContact(t *testing.T) {
   GetGroups(w, r)
   assert.NoError(t, ReadResponse(w, &groups))
   assert.Equal(t, 0, len(groups))
-
-  // stop notification thread
-  ExitNotifications()
 }

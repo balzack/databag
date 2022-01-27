@@ -3,18 +3,16 @@ package databag
 import (
   "errors"
   "strings"
+  "time"
+  "net/url"
   "net/http"
   "encoding/json"
   "net/http/httptest"
   "github.com/gorilla/mux"
+  "github.com/gorilla/websocket"
 )
 
-type TestAccount struct {
-  AppToken string
-  ContactGuid string
-  ContactToken string
-  ContactCardId string
-}
+const TEST_READDEADLINE = 2
 
 type TestCard struct {
   Guid string
@@ -39,14 +37,21 @@ type TestGroup struct {
   D TestContact
 }
 
-// A-B
-// |x|
-// C-D
 //
-// A: B[connected,group] : C[requested,group] : D[requested,nogroup]
-// B: A[connected,group] : C[confirmed,group] : D[,]
-// C: A[confirmed,group] : B[confirmed,nogroup] : D[connected,group]
-// D: A[pending,nogroup] : B[,] : C[connected,group]
+//    A --- connected,group               connected,group --- B
+//    | \                                                    /|
+//    |   requested,nogroup                  confirmed,group  |
+//    |                                                       |
+//     requested,group                                       ,
+//                                  |
+//                                --x--
+//                                  |
+//     confirmed,group                                       ,
+//    |                                                       |
+//    |  confirmed,nogroup                   pending,nogroup  |
+//    |/                                                     \|
+//    C --- connected,group               connected,group --- D
+//
 func AddTestGroup(prefix string) (*TestGroup, error) {
     var err error
 
@@ -372,5 +377,64 @@ func NewRequest(rest string, path string, obj interface{}) (*http.Request, *http
   }
 
   return httptest.NewRequest(rest, path, nil), w, nil
+}
+
+
+
+// Websocket test support
+type statusHandler struct {}
+func (h *statusHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+  Status(w, r)
+}
+func StatusConnection(token string, rev *Revision) (ws *websocket.Conn, err error) {
+  var data []byte
+  var dataType int
+
+  // connect to websocket
+  s := httptest.NewServer(&statusHandler{})
+  wsUrl, _ := url.Parse(s.URL)
+  wsUrl.Scheme = "ws"
+  if ws, _, err = websocket.DefaultDialer.Dial(wsUrl.String(), nil); err != nil {
+    return
+  }
+
+  // send authentication
+  announce := Announce{ AppToken: token }
+  if data, err = json.Marshal(&announce); err != nil {
+    return
+  }
+  ws.WriteMessage(websocket.TextMessage, data)
+
+  // read revision response
+  ws.SetReadDeadline(time.Now().Add(TEST_READDEADLINE * time.Second))
+  if dataType, data, err = ws.ReadMessage(); err != nil {
+    return
+  }
+  if dataType != websocket.TextMessage {
+    err = errors.New("invalid status data type")
+    return
+  }
+  if err = json.Unmarshal(data, rev); err != nil {
+    return
+  }
+  return
+}
+func StatusRevision(ws *websocket.Conn, rev *Revision) (err error) {
+  var data []byte
+  var dataType int
+
+  // read revision update
+  ws.SetReadDeadline(time.Now().Add(TEST_READDEADLINE * time.Second))
+  if dataType, data, err = ws.ReadMessage(); err != nil {
+    return
+  }
+  if dataType != websocket.TextMessage {
+    err = errors.New("invalid status data type")
+    return
+  }
+  if err = json.Unmarshal(data, rev); err != nil {
+    return
+  }
+  return
 }
 

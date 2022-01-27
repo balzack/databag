@@ -1,9 +1,7 @@
 package databag
 
 import (
-  "time"
   "testing"
-  "encoding/json"
   "github.com/gorilla/websocket"
   "github.com/gorilla/mux"
   "github.com/stretchr/testify/assert"
@@ -16,6 +14,9 @@ func TestConnectContact(t *testing.T) {
   var vars map[string]string
   var cardRevision int64
   var contactStatus ContactStatus
+  var ws *websocket.Conn
+  var err error
+
 
   // create some contacts for this test
   _, a, _ := AddTestAccount("connect0")
@@ -29,14 +30,8 @@ func TestConnectContact(t *testing.T) {
   assert.NoError(t, ReadResponse(w, &msg))
 
   // app connects websocket
-  ws := getTestWebsocket()
-  announce := Announce{ AppToken: b }
-  data, _ := json.Marshal(&announce)
-  ws.WriteMessage(websocket.TextMessage, data)
-  ws.SetReadDeadline(time.Now().Add(2 * time.Second))
-  _, data, _ = ws.ReadMessage()
-  assert.NoError(t, json.Unmarshal(data, &revision))
-  //cardRevision = revision.Card
+  ws, err = StatusConnection(b, &revision);
+  assert.NoError(t, err)
 
   // add A card in B
   r, w, _ = NewRequest("POST", "/contact/cards", &msg)
@@ -45,10 +40,8 @@ func TestConnectContact(t *testing.T) {
   assert.NoError(t, ReadResponse(w, &card))
 
   // profile revision incremented
-  ws.SetReadDeadline(time.Now().Add(2 * time.Second))
-  _, data, _ = ws.ReadMessage()
-  assert.NoError(t, json.Unmarshal(data, &revision))
-  assert.NotEqual(t, cardRevision, revision.Card)
+  err = StatusRevision(ws, &revision)
+  assert.NoError(t, err)
   cardRevision = revision.Card
 
   // update A status to connecting
@@ -60,9 +53,8 @@ func TestConnectContact(t *testing.T) {
   assert.NoError(t, ReadResponse(w, &card))
 
   // card revision incremented
-  ws.SetReadDeadline(time.Now().Add(2 * time.Second))
-  _, data, _ = ws.ReadMessage()
-  assert.NoError(t, json.Unmarshal(data, &revision))
+  err = StatusRevision(ws, &revision)
+  assert.NoError(t, err)
   assert.NotEqual(t, cardRevision, revision.Card)
   cardRevision = revision.Card
 
@@ -118,9 +110,8 @@ func TestConnectContact(t *testing.T) {
   assert.Equal(t, APP_CARDCONNECTED, contactStatus.Status)
 
   // card revision incremented
-  ws.SetReadDeadline(time.Now().Add(2 * time.Second))
-  _, data, _ = ws.ReadMessage()
-  assert.NoError(t, json.Unmarshal(data, &revision))
+  err = StatusRevision(ws, &revision)
+  assert.NoError(t, err)
   assert.NotEqual(t, cardRevision, revision.Card)
   cardRevision = revision.Card
 

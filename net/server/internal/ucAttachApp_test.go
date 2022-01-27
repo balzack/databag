@@ -2,13 +2,15 @@ package databag
 
 import (
   "testing"
-  "encoding/json"
   "time"
   "github.com/gorilla/websocket"
   "github.com/stretchr/testify/assert"
 )
 
 func TestAttachAccount(t *testing.T) {
+  var err error
+  var ws *websocket.Conn
+  var revision Revision
 
   // get account token
   r, w, _ := NewRequest("POST", "/admin/accounts", nil)
@@ -64,14 +66,8 @@ func TestAttachAccount(t *testing.T) {
   assert.Equal(t, msgType, APP_MSGAUTHENTICATE)
 
   // app connects websocket
-  ws := getTestWebsocket()
-  announce := Announce{ AppToken: profile.Guid + "." + access }
-  msg, _ := json.Marshal(&announce)
-  ws.WriteMessage(websocket.TextMessage, msg)
-  ws.SetReadDeadline(time.Now().Add(2 * time.Second))
-  _, msg, _ = ws.ReadMessage()
-  var revision Revision
-  assert.NoError(t, json.Unmarshal(msg, &revision))
+  ws, err = StatusConnection(profile.Guid + "." + access, &revision);
+  assert.NoError(t, err)
   profileRevision := revision.Profile
 
   // set profile
@@ -95,9 +91,8 @@ func TestAttachAccount(t *testing.T) {
   assert.Equal(t, "Namer", profile.Name)
 
   // profile revision incremented
-  ws.SetReadDeadline(time.Now().Add(2 * time.Second))
-  _, msg, _ = ws.ReadMessage()
-  assert.NoError(t, json.Unmarshal(msg, &revision))
+  err = StatusRevision(ws, &revision)
+  assert.NoError(t, err)
   assert.NotEqual(t, profileRevision, revision.Profile)
 }
 

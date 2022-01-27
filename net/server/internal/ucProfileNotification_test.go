@@ -1,9 +1,7 @@
 package databag
 
 import (
-  "time"
   "testing"
-  "encoding/json"
   "github.com/gorilla/websocket"
   "github.com/stretchr/testify/assert"
 )
@@ -11,10 +9,8 @@ import (
 func TestProfileNotification(t *testing.T) {
   var views []CardView
   var revision Revision
-  var data []byte
-
-  // start notifcation thread
-  go SendNotifications()
+  var ws *websocket.Conn
+  var err error
 
   // connect contacts
   _, a, _ := AddTestAccount("profilenotification0")
@@ -33,15 +29,8 @@ func TestProfileNotification(t *testing.T) {
   profileRevision := views[0].RemoteProfile
 
   // app connects websocket
-  ws := getTestWebsocket()
-  announce := Announce{ AppToken: a }
-  data, _ = json.Marshal(&announce)
-  ws.WriteMessage(websocket.TextMessage, data)
-
-  // receive revision
-  ws.SetReadDeadline(time.Now().Add(2 * time.Second))
-  _, data, _ = ws.ReadMessage()
-  assert.NoError(t, json.Unmarshal(data, &revision))
+  ws, err = StatusConnection(a, &revision);
+  assert.NoError(t, err)
   cardRevision := revision.Card
 
   // update B profile
@@ -56,9 +45,8 @@ func TestProfileNotification(t *testing.T) {
   assert.NoError(t, ReadResponse(w, nil))
 
   // receive revision
-  ws.SetReadDeadline(time.Now().Add(2 * time.Second))
-  _, data, _ = ws.ReadMessage()
-  assert.NoError(t, json.Unmarshal(data, &revision))
+  err = StatusRevision(ws, &revision)
+  assert.NoError(t, err)
   assert.NotEqual(t, cardRevision, revision.Card)
 
   // get views list of cards
@@ -68,7 +56,4 @@ func TestProfileNotification(t *testing.T) {
   assert.NoError(t, ReadResponse(w, &views))
   assert.Equal(t, len(views), 1)
   assert.NotEqual(t, profileRevision, views[0].RemoteProfile)
-
-  // stop notification thread
-  ExitNotifications()
 }

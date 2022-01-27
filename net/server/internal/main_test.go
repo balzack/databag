@@ -55,6 +55,10 @@ func TestMain(m *testing.M) {
     panic("failed to set account storage");
   }
 
+  go SendNotifications()
+
   m.Run()
+
+  ExitNotifications()
 }
 
