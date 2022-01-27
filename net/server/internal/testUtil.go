@@ -13,6 +13,7 @@ import (
 )
 
 const TEST_READDEADLINE = 2
+const TEST_REVISIONWAIT = 250
 
 type TestCard struct {
   Guid string
@@ -24,6 +25,7 @@ type TestCard struct {
 type TestContact struct {
   Guid string
   Token string
+  Revisions chan *Revision
   A TestCard
   B TestCard
   C TestCard
@@ -35,6 +37,53 @@ type TestGroup struct {
   B TestContact
   C TestContact
   D TestContact
+}
+
+func GetTestRevision(status chan *Revision) (rev *Revision) {
+  time.Sleep(TEST_REVISIONWAIT * time.Millisecond)
+  for {
+		select {
+		case r:=<-status:
+      rev = r
+		default:
+      return
+		}
+	}
+}
+
+func SendEndpointTest(
+      endpoint func(http.ResponseWriter, *http.Request),
+      params *map[string]string,
+      body interface{},
+      token string,
+      response interface{},
+    ) (err error) {
+
+  var r *http.Request
+  var w *httptest.ResponseRecorder
+
+  if r, w, err = NewRequest("REST", "/NAME", body); err != nil {
+    return
+  }
+  if params != nil {
+    r = mux.SetURLVars(r, *params)
+  }
+  if token != "" {
+    SetBearerAuth(r, token)
+  }
+  endpoint(w, r)
+
+  resp := w.Result()
+  if resp.StatusCode != 200 {
+    err = errors.New("response failed");
+    return
+  }
+  if response == nil {
+    return
+  }
+  dec := json.NewDecoder(resp.Body)
+  dec.Decode(response)
+  return
 }
 
 //
@@ -54,6 +103,8 @@ type TestGroup struct {
 //
 func AddTestGroup(prefix string) (*TestGroup, error) {
     var err error
+    var rev *Revision
+    var ws *websocket.Conn
 
     // allocate contacts
     g := &TestGroup{}
@@ -158,7 +209,61 @@ func AddTestGroup(prefix string) (*TestGroup, error) {
       return g, err
     }
 
+    // connect websockets
+    rev = &Revision{}
+    if ws, err = StatusConnection(g.A.Token, rev); err != nil {
+      return g, err
+    }
+    g.A.Revisions = make(chan *Revision, 64)
+    g.A.Revisions <- rev
+    go MonitorStatus(ws, &g.A);
+    if ws, err = StatusConnection(g.B.Token, rev); err != nil {
+      return g, err
+    }
+    g.B.Revisions = make(chan *Revision, 64)
+    g.B.Revisions <- rev
+    go MonitorStatus(ws, &g.B);
+    if ws, err = StatusConnection(g.C.Token, rev); err != nil {
+      return g, err
+    }
+    g.C.Revisions = make(chan *Revision, 64)
+    g.C.Revisions <- rev
+    go MonitorStatus(ws, &g.C);
+    if ws, err = StatusConnection(g.D.Token, rev); err != nil {
+      return g, err
+    }
+    g.D.Revisions = make(chan *Revision, 64)
+    g.D.Revisions <- rev
+    go MonitorStatus(ws, &g.D);
+
     return g, nil
+}
+
+func MonitorStatus(ws *websocket.Conn, contact *TestContact) {
+  var data []byte
+  var dataType int
+  var err error
+
+  // reset any timeout
+  ws.SetReadDeadline(time.Time{})
+
+  // read revision update
+  for ;; {
+    if dataType, data, err = ws.ReadMessage(); err != nil {
+      LogMsg("failed to read status conenction")
+      return
+    }
+    if dataType != websocket.TextMessage {
+      LogMsg("invalid status data type")
+      return
+    }
+    rev := &Revision{}
+    if err = json.Unmarshal(data, rev); err != nil {
+      LogMsg("invalid status data")
+      return
+    }
+    contact.Revisions <- rev
+  }
 }
 
 func GetCardToken(account string, cardId string) (token string, err error) {
