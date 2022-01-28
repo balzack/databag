@@ -38,6 +38,17 @@ type AppData struct {
 	Image string `json:"image,omitempty"`
 }
 
+type ArticleAccess struct {
+	Labels []string `json:"labels"`
+	Groups []string `json:"groups"`
+}
+
+type ArticleEntry struct {
+	BlockId string `json:"blockId"`
+	BlockRevision int64 `json:"blockRevision"`
+	Article *Article `json:"article"`
+}
+
 type Subject struct {
 	DataType string `json:"dataType"`
 	Data string `json:"data"`
@@ -45,16 +56,16 @@ type Subject struct {
 
 type Article struct {
 	ArticleId string `json:"articleId"`
-	ArticleRevision int64 `json:"articleRevision"`
-	Type_ string `json:"type"`
+	Revision int64 `json:"revision"`
+	DataType string `json:"type"`
 	Data string `json:"data"`
 	Created int64 `json:"created"`
-	Modified int64 `json:"modified"`
+	Updated int64 `json:"updated"`
 	Status string `json:"status"`
 	Labels []string `json:"labels"`
 	Groups []string `json:"groups,omitempty"`
 	TagCount int32 `json:"tagCount"`
-	TagUpdate int64 `json:"tagUpdate,omitempty"`
+	TagUpdated int64 `json:"tagUpdated,omitempty"`
 	TagRevision int64 `json:"tagRevision"`
 }
 

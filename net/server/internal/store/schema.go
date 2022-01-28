@@ -174,7 +174,7 @@ type Article struct {
   Created           int64           `gorm:"autoCreateTime"`
   Updated           int64           `gorm:"autoUpdateTime"`
   TagUpdated        int64           `gorm:"not null"`
-  TagRevision       uint64          `gorm:"not null"`
+  TagRevision       int64           `gorm:"not null"`
   Groups            []Group         `gorm:"many2many:article_groups;"`
   Labels            []Label         `gorm:"many2many:article_labels;"`
   Account           Account

@@ -1635,15 +1635,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  blockId:
-                    type: string
-                  blockRevision:
-                    type: integer
-                    format: int64
-                  article:
-                    $ref: '#/components/schemas/Article'
+                $ref: '#/components/schemas/ArticleEntry'
         '401':
           description: permission denied
         '410':
@@ -1654,19 +1646,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              required:
-                - labels
-                - groups
-              properties:
-                labels:
-                  type: array
-                  items:
-                    type: string
-                groups:
-                  type: array
-                  items:
-                    type: string
+              $ref: '#/components/schemas/ArticleAccess'
               
   /content/articles/{articleId}:
     get:
@@ -4025,6 +4005,36 @@ components:
         data:
           type: string
           
+    ArticleAccess:
+      type: object
+      required:
+        - labels
+        - groups
+      properties:
+        labels:
+          type: array
+          items:
+            type: string
+        groups:
+          type: array
+          items:
+            type: string
+            
+    ArticleEntry:
+      type: object
+      required:
+        - blockId
+        - blockRevision
+        - article
+      properties:
+        blockId:
+          type: string
+        blockRevision:
+          type: integer
+          format: int64
+        article:
+          $ref: '#/components/schemas/Article'
+          
     Account:
       type: object
       required:
@@ -4251,19 +4261,6 @@ components:
                 type: string
                 enum: [ active, offsync, inactive, dismissed ]
     
-    Tunnel:
-      type: object
-      required:
-        - cardId
-        - type
-      properties:
-        cardId:
-          type: string
-        type:
-          type: string
-        data:
-          type: string
-          
     Topic:
       type: object
       required:
@@ -4310,11 +4307,11 @@ components:
       type: object
       required:
         - articleId
-        - articleRevision
-        - type
+        - revision
+        - dataType
         - data
         - created
-        - modified
+        - updated
         - status
         - labels
         - tagCount
@@ -4323,22 +4320,22 @@ components:
       properties:
         articleId:
           type: string
-        articleRevision:
+        revision:
           type: integer
           format: int64
-        type:
+        dataType:
           type: string
         data:
           type: string
         created:
           type: integer
           format: int64
-        modified:
+        updated:
           type: integer
           format: int64
         status:
           type: string
-          enum: [ unconfirmed, confirmed, complete, error ]
+          enum: [ unconfirmed, confirmed, incomplete, error ]
         labels:
           type: array
           items:
@@ -4555,3 +4552,4 @@ components:
     bearerAuth: 
       type: http
       scheme: bearer
+

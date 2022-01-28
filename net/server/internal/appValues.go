@@ -25,6 +25,10 @@ const APP_MODULECONTENT = "content"
 const APP_TOKENAPP = "app"
 const APP_TOKENCONTACT = "contact"
 const APP_NOTIFYBUFFER = 4096
+const APP_ARTICLEUNCONFIRMED = "unconfirmed"
+const APP_ARTICLECONFIRMED = "confirmed"
+const APP_ARTICLEINCOMPLETE = "incomplete"
+const APP_ARTICLEERROR = "error"
 
 func AppCardStatus(status string) bool {
   if status == APP_CARDPENDING {

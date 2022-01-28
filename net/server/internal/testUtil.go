@@ -13,7 +13,7 @@ import (
 )
 
 const TEST_READDEADLINE = 2
-const TEST_REVISIONWAIT = 250
+const TEST_REVISIONWAIT = 100
 
 type TestCard struct {
   Guid string
@@ -91,11 +91,11 @@ func SendEndpointTest(
 //    | \                                                    /|
 //    |   requested,nogroup                  confirmed,group  |
 //    |                                                       |
-//     requested,group                                       ,
+//     connected,group                                       ,
 //                                  |
 //                                --x--
 //                                  |
-//     confirmed,group                                       ,
+//     connected,group                                       ,
 //    |                                                       |
 //    |  confirmed,nogroup                   pending,nogroup  |
 //    |/                                                     \|
@@ -177,6 +177,9 @@ func AddTestGroup(prefix string) (*TestGroup, error) {
     if g.C.A.CardId, err = AddTestCard(g.C.Token, g.A.Token); err != nil {
       return g, err
     }
+    if err = OpenTestCard(g.C.Token, g.C.A.CardId); err != nil {
+      return g, err
+    }
     if g.C.A.GroupId, err = GroupTestCard(g.C.Token, g.C.A.CardId); err != nil {
       return g, err
     }
@@ -202,6 +205,9 @@ func AddTestGroup(prefix string) (*TestGroup, error) {
     if g.B.A.Token, err = GetCardToken(g.B.Token, g.B.A.CardId); err != nil {
       return g, err
     }
+    if g.C.A.Token, err = GetCardToken(g.C.Token, g.C.A.CardId); err != nil {
+      return g, err
+    }
     if g.C.D.Token, err = GetCardToken(g.C.Token, g.C.D.CardId); err != nil {
       return g, err
     }
@@ -217,18 +223,21 @@ func AddTestGroup(prefix string) (*TestGroup, error) {
     g.A.Revisions = make(chan *Revision, 64)
     g.A.Revisions <- rev
     go MonitorStatus(ws, &g.A);
+    rev = &Revision{}
     if ws, err = StatusConnection(g.B.Token, rev); err != nil {
       return g, err
     }
     g.B.Revisions = make(chan *Revision, 64)
     g.B.Revisions <- rev
     go MonitorStatus(ws, &g.B);
+    rev = &Revision{}
     if ws, err = StatusConnection(g.C.Token, rev); err != nil {
       return g, err
     }
     g.C.Revisions = make(chan *Revision, 64)
     g.C.Revisions <- rev
     go MonitorStatus(ws, &g.C);
+    rev = &Revision{}
     if ws, err = StatusConnection(g.D.Token, rev); err != nil {
       return g, err
     }

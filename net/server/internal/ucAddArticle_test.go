@@ -9,24 +9,26 @@ func TestAddArticle(t *testing.T) {
   var set *TestGroup
   var err error
   var rev *Revision
+  var article Article
+  var contentRevision int64
 
   // setup testing group
-  set, err = AddTestGroup("addarticle1")
+  set, err = AddTestGroup("addarticle")
   assert.NoError(t, err)
+
+  // initial revision
   rev = GetTestRevision(set.A.Revisions)
-  assert.NotNil(t, rev)
-
-
-  // EXAMPLE
-  subject := &Subject{
-  }
-  var group Group
-  assert.NoError(t, SendEndpointTest(AddGroup, nil, subject, set.A.Token, &group))
-  PrintMsg(group)
+  contentRevision = rev.Content
 
   // create article
+  articleAccess := &ArticleAccess{ Groups: []string{set.A.B.GroupId} }
+  assert.NoError(t, SendEndpointTest(AddArticle, nil, articleAccess, set.A.Token, &article))
 
-  // check content revision
+  // check revisions
+  rev = GetTestRevision(set.A.Revisions)
+  assert.Greater(t, rev.Content, contentRevision)
 
-  // check contact revisions
+  // view article
+
+  PrintMsg(rev)
 }
