@@ -38,24 +38,19 @@ type AppData struct {
 	Image string `json:"image,omitempty"`
 }
 
-type ArticleAccess struct {
-	Labels []string `json:"labels"`
-	Groups []string `json:"groups"`
-}
-
-type ArticleEntry struct {
-	BlockId string `json:"blockId"`
-	BlockRevision int64 `json:"blockRevision"`
-	Article *Article `json:"article"`
-}
-
 type Subject struct {
 	DataType string `json:"dataType"`
 	Data string `json:"data"`
 }
 
+type ArticleEntry struct {
+	BlockId string `json:"blockId"`
+	Article *Article `json:"article"`
+}
+
 type Article struct {
 	ArticleId string `json:"articleId"`
+  ArticleBlockId string `json:"articleBlockId"`
 	Revision int64 `json:"revision"`
 	DataType string `json:"type"`
 	Data string `json:"data"`
@@ -67,6 +62,17 @@ type Article struct {
 	TagCount int32 `json:"tagCount"`
 	TagUpdated int64 `json:"tagUpdated,omitempty"`
 	TagRevision int64 `json:"tagRevision"`
+}
+
+type ArticleView struct {
+	ArticleId string `json:"articleId"`
+	Revision int64 `json:"revision"`
+	TagRevision int64 `json:"tagRevision"`
+}
+
+type ArticleAccess struct {
+	Labels []string `json:"labels"`
+	Groups []string `json:"groups"`
 }
 
 type ArticleIdAssetsBody struct {
@@ -165,34 +171,6 @@ type Group struct {
 type GroupsGroupIdBody struct {
 	Type_ string `json:"type"`
 	Data string `json:"data"`
-}
-
-type InlineResponse200 struct {
-	Token string `json:"token,omitempty"`
-	Status string `json:"status"`
-}
-
-type InlineResponse2001 struct {
-	Id string `json:"id,omitempty"`
-	Revision int64 `json:"revision,omitempty"`
-}
-
-type InlineResponse2002 struct {
-	BlockId string `json:"blockId,omitempty"`
-	BlockRevision int64 `json:"blockRevision,omitempty"`
-	Tag *Tag `json:"tag,omitempty"`
-}
-
-type InlineResponse201 struct {
-	BlockId string `json:"blockId,omitempty"`
-	BlockRevision int64 `json:"blockRevision,omitempty"`
-	Article *Article `json:"article,omitempty"`
-}
-
-type InlineResponse2011 struct {
-	BlockId string `json:"blockId,omitempty"`
-	BlockRevision int64 `json:"blockRevision,omitempty"`
-	Topic *Topic `json:"topic,omitempty"`
 }
 
 type Insight struct {

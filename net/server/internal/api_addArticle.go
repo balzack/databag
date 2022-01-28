@@ -83,7 +83,6 @@ func AddArticle(w http.ResponseWriter, r *http.Request) {
 
   articleEntry := &ArticleEntry{
     BlockId: articleBlock.ArticleBlockId,
-    BlockRevision: articleBlock.Revision,
     Article: getArticleModel(article, 0),
   }
 

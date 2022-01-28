@@ -1551,6 +1551,19 @@ paths:
       operationId: get-article-block-view
       security:
         - bearerAuth: []
+      parameters:
+        - name: viewRevision
+          in: query
+          description: only return updated if view matches 
+          required: false
+          schema:
+            type: string
+        - name: contentRevision
+          in: query
+          description: only return updated if view matches 
+          required: false
+          schema:
+            type: string
       responses:
         '200':
           description: successful operation
@@ -1559,13 +1572,7 @@ paths:
               schema:
                 type: array
                 items:
-                  type: object
-                  properties:
-                    id:
-                      type: string
-                    revision:
-                      type: integer
-                      format: int64
+                  type: string
         '401':
           description: permission denied
         '410':
@@ -1629,13 +1636,7 @@ paths:
               schema:
                 type: array
                 items:
-                  type: object
-                  properties:
-                    id:
-                      type: string
-                    revision:
-                      type: integer
-                      format: int64
+                  $ref: '#/components/schemas/ArticleView'
         '401':
           description: permission denied
         '404':
@@ -4067,36 +4068,6 @@ components:
         data:
           type: string
           
-    ArticleAccess:
-      type: object
-      required:
-        - labels
-        - groups
-      properties:
-        labels:
-          type: array
-          items:
-            type: string
-        groups:
-          type: array
-          items:
-            type: string
-            
-    ArticleEntry:
-      type: object
-      required:
-        - blockId
-        - blockRevision
-        - article
-      properties:
-        blockId:
-          type: string
-        blockRevision:
-          type: integer
-          format: int64
-        article:
-          $ref: '#/components/schemas/Article'
-          
     Account:
       type: object
       required:
@@ -4372,11 +4343,38 @@ components:
         tagRevision:
           type: integer
           format: int64
+    
+    ArticleAccess:
+      type: object
+      required:
+        - labels
+        - groups
+      properties:
+        labels:
+          type: array
+          items:
+            type: string
+        groups:
+          type: array
+          items:
+            type: string
+            
+    ArticleEntry:
+      type: object
+      required:
+        - articleBlockId
+        - article
+      properties:
+        articleBlockId:
+          type: string
+        article:
+          $ref: '#/components/schemas/Article'
           
     Article:
       type: object
       required:
         - articleId
+        - articleBlockId
         - revision
         - dataType
         - data
@@ -4384,11 +4382,13 @@ components:
         - updated
         - status
         - labels
+        - tagRevision
         - tagCount
         - tagUpdated
-        - tagRevision
       properties:
         articleId:
+          type: string
+        articleBlockId:
           type: string
         revision:
           type: integer
@@ -4418,6 +4418,22 @@ components:
           type: integer
           format: int32
         tagUpdate:
+          type: integer
+          format: int64
+        tagRevision:
+          type: integer
+          format: int64
+          
+    ArticleView:
+      type: object
+      required:
+        - articleId
+        - revision
+        - tagRevision
+      properties:
+        articleId:
+          type: string
+        revision:
           type: integer
           format: int64
         tagRevision:
