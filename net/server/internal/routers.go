@@ -482,10 +482,10 @@ var routes = Routes{
 	},
 
 	Route{
-		"GetArticleBlockView",
+		"GetArticleBlocks",
 		strings.ToUpper("Get"),
-		"/content/articleBlocks/view",
-		GetArticleBlockView,
+		"/content/articleBlocks",
+		GetArticleBlocks,
 	},
 
 	Route{

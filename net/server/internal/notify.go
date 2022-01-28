@@ -109,7 +109,7 @@ func SetProfileNotification(account *store.Account) {
 }
 
 // notify all cards of content change
-// account.Content incremented by adding, updating, removing article
+// account.Content incremented by adding, updating, removing article & setting or clearning group or label from article
 func SetContentNotification(account *store.Account) {
 
   // select all connected cards
@@ -165,7 +165,7 @@ func SetContactContentNotification(account *store.Account, card *store.Card) {
 
 
 // notify all cards of view change
-// account.View incremented by removing a group or label or adding or removing a group with label
+// account.View incremented by removing a group or label or adding or removing a group from a label
 func SetViewNotification(account *store.Account) {
 
   // select all connected cards

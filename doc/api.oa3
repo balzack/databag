@@ -1543,11 +1543,11 @@ paths:
               type: integer
               format: int64
               
-  /content/articleBlocks/view:
+  /content/articleBlocks:
     get:
       tags:
         - content
-      description: Get article block views. Acess granted to account token or contact token. When the request is made with a contact token the account view revision will be added to the block revision.
+      description: Get article blocks that should be updated based on revisions. Acess granted to account token or contact token. When the request is made with a contact token the account view revision will be added to the block revision.
       operationId: get-article-block-view
       security:
         - bearerAuth: []
