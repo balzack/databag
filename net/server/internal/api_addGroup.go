@@ -29,10 +29,10 @@ func AddGroup(w http.ResponseWriter, r *http.Request) {
     Data: subject.Data,
   }
   err = store.DB.Transaction(func(tx *gorm.DB) error {
-    if res := store.DB.Save(group).Error; res != nil {
+    if res := tx.Save(group).Error; res != nil {
       return res
     }
-    if res := store.DB.Model(&account).Update("group_revision", account.GroupRevision + 1).Error; res != nil {
+    if res := tx.Model(&account).Update("group_revision", account.GroupRevision + 1).Error; res != nil {
       return res
     }
     return nil

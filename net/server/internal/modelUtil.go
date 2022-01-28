@@ -14,8 +14,9 @@ func getCardModel(card *store.Card) *Card {
 
   return &Card{
     CardId: card.CardId,
-    ProfileRevision: card.RemoteProfile,
-    ContentRevision: card.RemoteContent,
+    NotifiedProfile: card.NotifiedProfile,
+    NotifiedContent: card.NotifiedContent,
+    NotifiedView: card.NotifiedView,
     CardProfile: &CardProfile{
       Guid: card.Guid,
       Handle: card.Username,

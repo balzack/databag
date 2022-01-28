@@ -1519,6 +1519,30 @@ paths:
               type: integer
               format: int64
               
+  /contact/view/revision:
+    put:
+      tags:
+        - contact
+      description: Set view revision for contact. This is intend to be invoked automatically anytime a contact updates their content or sharing. Access granted to contact tokens.
+      operationId: set-view-revision
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: revision set
+        '401':
+          description: not authorized
+        '410':
+          description: account disabled
+        '500':
+          description: internal server error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: integer
+              format: int64
+              
   /content/articleBlocks/view:
     get:
       tags:
@@ -4121,8 +4145,9 @@ components:
         - cardId
         - profileRevision
         - dataRevision
-        - remoteProfile
-        - remoteContent
+        - notifiedProfile
+        - notifiedContent
+        - notifiedView
       properties:
         cardId:
           type: string
@@ -4132,10 +4157,13 @@ components:
         dataRevision:
           type: integer
           format: int64
-        remoteProfile:
+        notifiedProfile:
           type: integer
           format: int64
-        remoteContent:
+        notifiedContent:
+          type: integer
+          format: int64
+        notifiedView:
           type: integer
           format: int64
           
@@ -4186,8 +4214,9 @@ components:
         - cardId
         - cardProfile
         - cardData
-        - profileRevision
-        - contentRevision
+        - notifiedProfile
+        - notifiedContent
+        - notifiedView
       properties:
         cardId:
           type: string
@@ -4195,10 +4224,13 @@ components:
           $ref: '#/components/schemas/CardProfile'
         cardData:
           $ref: '#/components/schemas/CardData'
-        profileRevision:
+        notifiedProfile:
           type: integer
           format: int64
-        contentRevision:
+        notifiedContent:
+          type: integer
+          format: int64
+        notifiedView:
           type: integer
           format: int64
             
@@ -4484,12 +4516,14 @@ components:
       required:
         - contact
         - token
-        - contentRevision
       properties:
         contact:
           type: string
         token:
           type: string
+        viewRevision:
+          type: integer
+          format: int64
         contentRevision:
           type: integer
           format: int64

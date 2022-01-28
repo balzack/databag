@@ -70,9 +70,9 @@ func SetCardGroup(w http.ResponseWriter, r *http.Request) {
   for _, group := range card.Groups {
     cardData.Groups = append(cardData.Groups, group.GroupId)
   }
-  WriteResponse(w, cardData)
-  SetContactContentNotification(account, &card)
+  SetContactViewNotification(account, &card)
   SetStatus(account)
+  WriteResponse(w, cardData)
 }
 
 

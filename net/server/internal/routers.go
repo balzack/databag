@@ -398,6 +398,13 @@ var routes = Routes{
 	},
 
 	Route{
+		"SetViewRevision",
+		strings.ToUpper("Put"),
+		"/contact/view/revision",
+		SetViewRevision,
+	},
+
+	Route{
 		"SetProfileRevision",
 		strings.ToUpper("Put"),
 		"/contact/profile/revision",

@@ -13,6 +13,7 @@ func AutoMigrate(db *gorm.DB) {
   db.AutoMigrate(&Card{});
   db.AutoMigrate(&Asset{});
   db.AutoMigrate(&Article{});
+  db.AutoMigrate(&ArticleBlock{});
   db.AutoMigrate(&ArticleAsset{});
   db.AutoMigrate(&ArticleTag{});
   db.AutoMigrate(&Dialogue{});
@@ -141,8 +142,9 @@ type Card struct {
   Created           int64           `gorm:"autoCreateTime"`
   Updated           int64           `gorm:"autoUpdateTime"`
   ViewRevision      int64           `gorm:"not null"`
-  RemoteProfile     int64
-  RemoteContent     int64
+  NotifiedView      int64
+  NotifiedContent   int64
+  NotifiedProfile   int64
   Groups            []Group         `gorm:"many2many:card_groups;"`
   Account           Account         `gorm:"references:Guid"`
 }
@@ -162,10 +164,19 @@ type Asset struct {
   Account           Account
 }
 
+type ArticleBlock struct {
+  ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
+  ArticleBlockId    string          `gorm:"not null;index:articleblock,unique"`
+  AccountID         uint            `gorm:"not null;index:articleblock,unique"`
+  Revision          int64           `gorm:"not null"`
+  Articles          []Article
+}
+
 type Article struct {
   ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
   ArticleId         string          `gorm:"not null;index:article,unique"`
   AccountID         uint            `gorm:"not null;index:article,unique"`
+  ArticleBlockID    uint            `gorm:"not null;index:articleblock"`
   Revision          int64           `gorm:"not null"`
   DataType          string          `gorm:"index"`
   Data              string

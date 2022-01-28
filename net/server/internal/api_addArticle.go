@@ -1,6 +1,7 @@
 package databag
 
 import (
+  "errors"
   "net/http"
   "gorm.io/gorm"
   "github.com/google/uuid"
@@ -33,6 +34,25 @@ func AddArticle(w http.ResponseWriter, r *http.Request) {
     return
   }
 
+  var articleBlock store.ArticleBlock
+  if err := store.DB.Preload("Articles").Where("account_id = ?", account.ID).Last(&articleBlock).Error; err != nil {
+    if errors.Is(err, gorm.ErrRecordNotFound) {
+      if err := addArticleBlock(account, &articleBlock); err != nil {
+        ErrResponse(w, http.StatusInternalServerError, err)
+        return
+      }
+    } else {
+      ErrResponse(w, http.StatusInternalServerError, err)
+      return
+    }
+  }
+  if len(articleBlock.Articles) >= APP_ARTICLEBLOCKSIZE {
+    if err := addArticleBlock(account, &articleBlock); err != nil {
+      ErrResponse(w, http.StatusInternalServerError, err)
+      return
+    }
+  }
+
   article := &store.Article{
     ArticleId: uuid.New().String(),
     AccountID: account.ID,
@@ -45,10 +65,13 @@ func AddArticle(w http.ResponseWriter, r *http.Request) {
     Labels: labels,
   }
   err = store.DB.Transaction(func(tx *gorm.DB) error {
-    if res := store.DB.Save(article).Error; res != nil {
+    if res := tx.Save(article).Error; res != nil {
       return res
     }
-    if res := store.DB.Model(&account).Update("content_revision", account.ContentRevision + 1).Error; res != nil {
+    if res := tx.Model(&articleBlock).Update("revision", account.ContentRevision + 1).Error; res != nil {
+      return res
+    }
+    if res := tx.Model(&account).Update("content_revision", account.ContentRevision + 1).Error; res != nil {
       return res
     }
     return nil
@@ -58,7 +81,24 @@ func AddArticle(w http.ResponseWriter, r *http.Request) {
     return
   }
 
+  articleEntry := &ArticleEntry{
+    BlockId: articleBlock.ArticleBlockId,
+    BlockRevision: articleBlock.Revision,
+    Article: getArticleModel(article, 0),
+  }
+
   SetStatus(account)
   SetContentNotification(account)
-  WriteResponse(w, getArticleModel(article, 0))
+  WriteResponse(w, articleEntry)
 }
+
+func addArticleBlock(account *store.Account, articleBlock *store.ArticleBlock) error {
+  articleBlock.ArticleBlockId = uuid.New().String()
+  articleBlock.AccountID = account.ID
+  articleBlock.Revision = account.ContentRevision
+  if err := store.DB.Save(articleBlock).Error; err != nil {
+    return err
+  }
+  return nil
+}
+

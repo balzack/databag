@@ -18,7 +18,7 @@ func TestGroupContact(t *testing.T) {
   var cardData CardData
   var contactRevision int64
   var card Card
-  var contactCardRevision int64
+  var contactViewRevision int64
   var wsA *websocket.Conn
   var wsB *websocket.Conn
   var err error
@@ -62,7 +62,7 @@ func TestGroupContact(t *testing.T) {
   SetBearerAuth(r, b)
   GetCard(w, r)
   assert.NoError(t, ReadResponse(w, &card))
-  contactCardRevision = card.ContentRevision
+  contactViewRevision = card.NotifiedView
 
   // set contact group
   r, w, _ = NewRequest("PUT", "/contact/cards/{cardId}/groups/{groupId}", nil)
@@ -102,8 +102,8 @@ func TestGroupContact(t *testing.T) {
   SetBearerAuth(r, b)
   GetCard(w, r)
   assert.NoError(t, ReadResponse(w, &card))
-  assert.NotEqual(t, contactCardRevision, card.ContentRevision)
-  contactCardRevision = card.ContentRevision
+  assert.NotEqual(t, contactViewRevision, card.NotifiedView)
+  contactViewRevision = card.NotifiedView
 
   // show group view
   r, w, _ = NewRequest("GET", "/share/groups", nil)
@@ -166,7 +166,7 @@ func TestGroupContact(t *testing.T) {
   SetBearerAuth(r, b)
   GetCard(w, r)
   assert.NoError(t, ReadResponse(w, &card))
-  assert.NotEqual(t, contactCardRevision, card.ContentRevision)
+  assert.NotEqual(t, contactViewRevision, card.NotifiedView)
 
   // show group view
   r, w, _ = NewRequest("GET", "/share/groups", nil)

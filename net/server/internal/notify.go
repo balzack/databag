@@ -56,12 +56,16 @@ func SendLocalNotification(notification *store.Notification) {
     return
   }
 
-  if notification.Module == APP_MODULEPROFILE {
+  if notification.Module == APP_NOTIFYPROFILE {
     if err := NotifyProfileRevision(&card, notification.Revision); err != nil {
       ErrMsg(err)
     }
-  } else if notification.Module == APP_MODULECONTENT {
+  } else if notification.Module == APP_NOTIFYCONTENT {
     if err := NotifyContentRevision(&card, notification.Revision); err != nil {
+      ErrMsg(err)
+    }
+  } else if notification.Module == APP_NOTIFYVIEW {
+    if err := NotifyViewRevision(&card, notification.Revision); err != nil {
       ErrMsg(err)
     }
   } else {
@@ -88,7 +92,7 @@ func SetProfileNotification(account *store.Account) {
     for _, card := range cards {
       notification := &store.Notification{
         Node: card.Node,
-        Module: APP_MODULEPROFILE,
+        Module: APP_NOTIFYPROFILE,
         Token: card.OutToken,
         Revision: account.ProfileRevision,
       }
@@ -106,7 +110,6 @@ func SetProfileNotification(account *store.Account) {
 
 // notify all cards of content change
 // account.Content incremented by adding, updating, removing article
-// account.View incremented by removing a group or label or adding or removing a group with label
 func SetContentNotification(account *store.Account) {
 
   // select all connected cards
@@ -121,9 +124,9 @@ func SetContentNotification(account *store.Account) {
     for _, card := range cards {
       notification := &store.Notification{
         Node: card.Node,
-        Module: APP_MODULECONTENT,
+        Module: APP_NOTIFYCONTENT,
         Token: card.OutToken,
-        Revision: account.ViewRevision + account.ContentRevision + card.ViewRevision,
+        Revision: account.ContentRevision,
       }
       if err := tx.Save(notification).Error; err != nil {
         return err
@@ -148,9 +151,65 @@ func SetContactContentNotification(account *store.Account, card *store.Card) {
   // add new notification for card
   notification := &store.Notification{
     Node: card.Node,
-    Module: APP_MODULECONTENT,
+    Module: APP_NOTIFYCONTENT,
     Token: card.OutToken,
-    Revision: account.ViewRevision + account.ContentRevision + card.ViewRevision,
+    Revision: account.ContentRevision,
+  }
+
+  if res := store.DB.Save(notification).Error; res != nil {
+    ErrMsg(res)
+  } else {
+    notify <- notification
+  }
+}
+
+
+// notify all cards of view change
+// account.View incremented by removing a group or label or adding or removing a group with label
+func SetViewNotification(account *store.Account) {
+
+  // select all connected cards
+  var cards []store.Card
+  if err := store.DB.Where("account_id = ? AND status = ?", account.Guid, APP_CARDCONNECTED).Find(&cards).Error; err != nil {
+    ErrMsg(err)
+    return
+  }
+
+  // add new notification for each card
+  err := store.DB.Transaction(func(tx *gorm.DB) error {
+    for _, card := range cards {
+      notification := &store.Notification{
+        Node: card.Node,
+        Module: APP_NOTIFYVIEW,
+        Token: card.OutToken,
+        Revision: account.ViewRevision + card.ViewRevision,
+      }
+      if err := tx.Save(notification).Error; err != nil {
+        return err
+      }
+      notify <- notification
+    }
+    return nil
+  })
+  if err != nil {
+    ErrMsg(err)
+  }
+}
+
+// notify single card of content change
+// card.View incremented by adding or removing card from group or label
+func SetContactViewNotification(account *store.Account, card *store.Card) {
+
+  if card.Status != APP_CARDCONNECTED {
+    return
+  }
+
+  // add new notification for card
+  notification := &store.Notification{
+    Node: card.Node,
+    Module: APP_NOTIFYVIEW,
+    Token: card.OutToken,
+    Revision: account.ViewRevision + card.ViewRevision,
   }
 
   if res := store.DB.Save(notification).Error; res != nil {

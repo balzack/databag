@@ -6,7 +6,7 @@ import (
   "databag/internal/store"
 )
 
-func SetProfileRevision(w http.ResponseWriter, r *http.Request) {
+func SetViewRevision(w http.ResponseWriter, r *http.Request) {
 
   card, code, err := BearerContactToken(r)
   if err != nil {
@@ -28,14 +28,14 @@ func SetProfileRevision(w http.ResponseWriter, r *http.Request) {
   WriteResponse(w, nil)
 }
 
-func NotifyProfileRevision(card *store.Card, revision int64) error {
+func NotifyViewRevision(card *store.Card, revision int64) error {
 
   act := &card.Account
   err := store.DB.Transaction(func(tx *gorm.DB) error {
-    if res := tx.Model(card).Where("id = ?", card.ID).Update("notified_profile", revision).Error; res != nil {
+    if res := tx.Model(card).Where("id = ?", card.ID).Update("notified_view", revision).Error; res != nil {
       return res
     }
-    if res := tx.Model(act).Where("id = ?", act.ID).Update("card_revision", act.CardRevision+1).Error; res != nil {
+    if res := tx.Model(act).Where("id = ?", act.ID).Update("card_revision", act.CardRevision + 1).Error; res != nil {
       return res
     }
     return nil

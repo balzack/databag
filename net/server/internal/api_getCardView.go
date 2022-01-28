@@ -9,8 +9,9 @@ type cardView struct {
   CardId string
   ProfileRevision int64
   DataRevision int64
-  RemoteProfile int64
-  RemoteContent int64
+  NotifiedProfile int64
+  NotifiedContent int64
+  NotifiedView int64
 }
 
 func GetCardView(w http.ResponseWriter, r *http.Request) {

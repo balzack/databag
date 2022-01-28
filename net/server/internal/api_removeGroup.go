@@ -31,8 +31,8 @@ func RemoveGroup(w http.ResponseWriter, r *http.Request) {
     return
   }
 
-  WriteResponse(w, nil)
   SetStatus(account)
-  SetContentNotification(account)
+  SetViewNotification(account)
+  WriteResponse(w, nil)
 }
 

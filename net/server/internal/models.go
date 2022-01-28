@@ -88,8 +88,9 @@ type Card struct {
 	CardId string `json:"cardId"`
 	CardProfile *CardProfile `json:"cardProfile"`
 	CardData *CardData `json:"cardData"`
-	ProfileRevision int64 `json:"profileRevision"`
-	ContentRevision int64 `json:"contentRevision"`
+	NotifiedProfile int64 `json:"notifiedProfile"`
+	NotifiedContent int64 `json:"notifiedContent"`
+	NotifiedView int64 `json:"notifiedView"`
 }
 
 type CardData struct {
@@ -116,8 +117,9 @@ type CardView struct {
 	CardId string `json:"cardId"`
 	ProfileRevision int64 `json:"profileRevision"`
 	DataRevision int64 `json:"dataRevision"`
-	RemoteProfile int64 `json:"remoteProfile"`
-	RemoteContent int64 `json:"remoteContent"`
+	NotifiedProfile int64 `json:"notifiedProfile"`
+	NotifiedContent int64 `json:"notifiedContent"`
+	NotifiedView int64 `json:"notifiedView"`
 }
 
 type ContentArticlesBody struct {
@@ -329,6 +331,7 @@ type Identity struct {
 type Connect struct {
 	Contact string `json:"contact"`
 	Token string `json:"token"`
+  ViewRevision int64 `json:"viewRevision"`
 	ContentRevision int64 `json:"contentRevision"`
 	ProfileRevision int64 `json:"profileRevision,omitempty"`
 	Handle string `json:"handle,omitempty"`
