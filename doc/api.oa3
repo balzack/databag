@@ -1783,6 +1783,44 @@ paths:
                 data:
                   type: string
                   
+  /content/articles/{articleId}/expiration:
+    put:
+      tags:
+        - content
+      description: Set expiration for article. Access granted to app token of account holder.
+      operationId: set-article-expiration
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: articleId
+          in: path
+          description: specified article id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success
+        '401':
+          description: permission denied
+        '404':
+          description: article not found
+        '410':
+          description: account disabled
+        '500':
+          description: internal server error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - expires
+              properties:
+                expires:
+                  type: number
+                  format: int32
+                  
   /content/articles/{articleId}/groups/{groupId}:
     post:
       tags:
@@ -4552,4 +4590,5 @@ components:
     bearerAuth: 
       type: http
       scheme: bearer
+
 

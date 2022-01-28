@@ -580,6 +580,13 @@ var routes = Routes{
 	},
 
 	Route{
+		"SetArticleExpiration",
+		strings.ToUpper("Put"),
+		"/content/articles/{articleId}/expiration",
+		SetArticleExpiration,
+	},
+
+	Route{
 		"SetArticleGroup",
 		strings.ToUpper("Post"),
 		"/content/articles/{articleId}/groups/{groupId}",
@@ -908,4 +915,3 @@ var routes = Routes{
 		Status,
 	},
 }
-
