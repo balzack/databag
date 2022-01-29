@@ -53,6 +53,8 @@ func GetTestRevision(status chan *Revision) (rev *Revision) {
 
 func SendEndpointTest(
       endpoint func(http.ResponseWriter, *http.Request),
+      requestType string,
+      name string,
       params *map[string]string,
       body interface{},
       token string,
@@ -62,13 +64,14 @@ func SendEndpointTest(
   var r *http.Request
   var w *httptest.ResponseRecorder
 
-  if r, w, err = NewRequest("REST", "/NAME", body); err != nil {
+  if r, w, err = NewRequest(requestType, name, body); err != nil {
     return
   }
   if params != nil {
     r = mux.SetURLVars(r, *params)
   }
   if token != "" {
+    r.Header.Add("TokenType", APP_TOKENAPP)
     SetBearerAuth(r, token)
   }
   endpoint(w, r)

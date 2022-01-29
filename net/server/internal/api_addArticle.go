@@ -55,6 +55,7 @@ func AddArticle(w http.ResponseWriter, r *http.Request) {
 
   article := &store.Article{
     ArticleId: uuid.New().String(),
+    ArticleBlockID: articleBlock.ID,
     AccountID: account.ID,
     Revision: 1,
     Status: APP_ARTICLEUNCONFIRMED,
@@ -91,13 +92,13 @@ func AddArticle(w http.ResponseWriter, r *http.Request) {
   WriteResponse(w, articleEntry)
 }
 
-func addArticleBlock(account *store.Account, articleBlock *store.ArticleBlock) error {
+func addArticleBlock(account *store.Account, articleBlock *store.ArticleBlock) (err error) {
   articleBlock.ArticleBlockId = uuid.New().String()
   articleBlock.AccountID = account.ID
   articleBlock.Revision = account.ContentRevision
-  if err := store.DB.Save(articleBlock).Error; err != nil {
-    return err
+  if err = store.DB.Save(articleBlock).Error; err != nil {
+    return
   }
-  return nil
+  return
 }
 

@@ -22,6 +22,7 @@ func SetCardStatus(w http.ResponseWriter, r *http.Request) {
   params := mux.Vars(r)
   cardId := params["cardId"]
   token := r.FormValue("token")
+
   var status string
   if err := ParseRequest(r, w, &status); err != nil {
     ErrResponse(w, http.StatusBadRequest, err)

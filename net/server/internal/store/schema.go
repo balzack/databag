@@ -176,7 +176,7 @@ type Article struct {
   ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
   ArticleId         string          `gorm:"not null;index:article,unique"`
   AccountID         uint            `gorm:"not null;index:article,unique"`
-  ArticleBlockID    uint            `gorm:"not null;index:articleblock"`
+  ArticleBlockID    uint            `gorm:"not null;index:articleblockid"`
   Revision          int64           `gorm:"not null"`
   DataType          string          `gorm:"index"`
   Data              string
@@ -189,6 +189,7 @@ type Article struct {
   Groups            []Group         `gorm:"many2many:article_groups;"`
   Labels            []Label         `gorm:"many2many:article_labels;"`
   Account           Account
+  ArticleBlock      ArticleBlock
 }
 
 type ArticleAsset struct {
