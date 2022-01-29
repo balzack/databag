@@ -64,6 +64,7 @@ func AddArticle(w http.ResponseWriter, r *http.Request) {
     TagRevision: 0,
     Groups: groups,
     Labels: labels,
+    ArticleBlock: articleBlock,
   }
   err = store.DB.Transaction(func(tx *gorm.DB) error {
     if res := tx.Save(article).Error; res != nil {

@@ -65,6 +65,7 @@ func getArticleModel(article *store.Article, tagCount int32) *Article {
 
   return &Article{
     ArticleId: article.ArticleId,
+    ArticleBlockId: article.ArticleBlock.ArticleBlockId,
     Revision: article.Revision,
     DataType: article.DataType,
     Data: article.Data,
