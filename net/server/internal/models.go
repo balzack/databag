@@ -43,15 +43,13 @@ type Subject struct {
 	Data string `json:"data"`
 }
 
-type ArticleEntry struct {
-	BlockId string `json:"blockId"`
-	Article *Article `json:"article"`
+type Article struct {
+  ArticleId string `json:"article_id"`
+	Revision int64 `json:"revision"`
+	ArticleData *ArticleData `json:"articleData"`
 }
 
-type Article struct {
-	ArticleId string `json:"articleId"`
-  ArticleBlockId string `json:"articleBlockId"`
-	Revision int64 `json:"revision"`
+type ArticleData struct {
 	DataType string `json:"type"`
 	Data string `json:"data"`
 	Created int64 `json:"created"`

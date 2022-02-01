@@ -9,9 +9,7 @@ func TestAddArticle(t *testing.T) {
   var set *TestGroup
   var err error
   var rev *Revision
-  var articleEntry ArticleEntry
-  var contentRevision int64
-  var ids []string
+  var article Article
 
   // setup testing group
   set, err = AddTestGroup("addarticle")
@@ -19,20 +17,15 @@ func TestAddArticle(t *testing.T) {
 
   // initial revision
   rev = GetTestRevision(set.A.Revisions)
-  contentRevision = rev.Content
 
   // create article
   articleAccess := &ArticleAccess{ Groups: []string{set.A.B.GroupId} }
-  assert.NoError(t, SendEndpointTest(AddArticle, "POST", "/content/articles", nil, articleAccess, set.A.Token, &articleEntry))
-  PrintMsg(articleEntry);
+  assert.NoError(t, SendEndpointTest(AddArticle, "POST", "/content/articles", nil, articleAccess, set.A.Token, &article))
+  PrintMsg(article);
 
   // check revisions
   rev = GetTestRevision(set.A.Revisions)
-  assert.Greater(t, rev.Content, contentRevision)
 
-  // view article blocks
-  assert.NoError(t, SendEndpointTest(GetArticleBlocks, "GET", "/content/articleBlocks", nil, nil, set.A.Token, &ids))
-  PrintMsg(ids)
 
   // view article
 

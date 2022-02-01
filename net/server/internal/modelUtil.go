@@ -51,32 +51,40 @@ func getGroupModel(group *store.Group) *Group {
 
 func getArticleModel(article *store.Article, tagCount int32) *Article {
 
-  // populate group id list
-  var groups []string;
-  for _, group := range article.Groups {
-    groups = append(groups, group.GroupId)
-  }
+  if article.ArticleData == nil {
+    return &Article{
+      ArticleId: article.ArticleId,
+      Revision: article.Revision,
+    }
+  } else {
 
-  // populate label id list
-  var labels []string;
-  for _, label := range article.Labels {
-    labels = append(labels, label.LabelId)
-  }
+    // populate id list
+    var groups []string;
+    var labels []string;
+    for _, label := range article.ArticleData.Labels {
+      if label.Direct && len(label.Groups) > 0 {
+        groups = append(groups, label.Groups[0].GroupId)
+      } else {
+        labels = append(labels, label.LabelId)
+      }
+    }
 
-  return &Article{
-    ArticleId: article.ArticleId,
-    ArticleBlockId: article.ArticleBlock.ArticleBlockId,
-    Revision: article.Revision,
-    DataType: article.DataType,
-    Data: article.Data,
-    Created: article.Created,
-    Updated: article.Updated,
-    Status: article.Status,
-    Labels: labels,
-    Groups: groups,
-    TagCount: tagCount,
-    TagUpdated: article.TagUpdated,
-    TagRevision: article.TagRevision,
+    return &Article{
+      ArticleId: article.ArticleId,
+      Revision: article.Revision,
+      ArticleData: &ArticleData{
+        DataType: article.ArticleData.DataType,
+        Data: article.ArticleData.Data,
+        Status: article.ArticleData.Status,
+        Labels: labels,
+        Groups: groups,
+        TagCount: tagCount,
+        Created: article.ArticleData.Created,
+        Updated: article.ArticleData.Updated,
+        TagUpdated: article.ArticleData.TagUpdated,
+        TagRevision: article.ArticleData.TagRevision,
+      },
+    }
   }
 }
 

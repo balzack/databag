@@ -1543,12 +1543,12 @@ paths:
               type: integer
               format: int64
               
-  /content/articleBlocks:
+  /content/articles:
     get:
       tags:
         - content
-      description: Get article blocks that should be updated based on revisions. Acess granted to account token or contact token. When the request is made with a contact token the account view revision will be added to the block revision.
-      operationId: get-article-block-view
+      description: Get article slots that should be updated based on revisions. Access granted to account token or contact token. When the request is made with a contact token the account view revision will be added to the block revision.
+      operationId: get-articles
       security:
         - bearerAuth: []
       parameters:
@@ -1579,74 +1579,6 @@ paths:
           description: account disabled
         '500':
           description: internal server error
-          
-  /content/articleBlocks/{blockId}:
-    get:
-      tags:
-        - content
-      description: Get the articles within specified block. Access granted for app token or contact token. All of the articles are returned for the app token, but only the shared articles are returned for the contact token. An article is shared by assigning a common group to an article or assigning a label to an article that has assigned a common group.
-      operationId: get-articles
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: blockId
-          in: path
-          description: specified group id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Article'
-        '401':
-          description: permission denied
-        '404':
-          description: block not found
-        '410':
-          description: account disabled
-        '500':
-          description: internal server error
-          
-  /content/articleBlocks/{blockId}/view:
-    get:
-      tags:
-        - content
-      description: Get the article views within specified block. Access granted for app token or contact token. All of the articles are returned for the app token, but only the shared articles are returned for the contact token. An article is shared by assigning a common group to an article or assigning a label to an article that has assigned a common group.
-      operationId: get-article-views
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: blockId
-          in: path
-          description: specified group id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/ArticleView'
-        '401':
-          description: permission denied
-        '404':
-          description: block not found
-        '410':
-          description: account disabled
-        '500':
-          description: internal server error
-          
-  /content/articles:
     post:
       tags:
         - content
@@ -1672,7 +1604,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/ArticleAccess'
-              
+          
   /content/articles/{articleId}:
     get:
       tags:
@@ -4640,5 +4572,6 @@ components:
     bearerAuth: 
       type: http
       scheme: bearer
+
 
 

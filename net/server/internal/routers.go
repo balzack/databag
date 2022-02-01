@@ -398,17 +398,17 @@ var routes = Routes{
 	},
 
 	Route{
-		"SetViewRevision",
-		strings.ToUpper("Put"),
-		"/contact/view/revision",
-		SetViewRevision,
-	},
-
-	Route{
 		"SetProfileRevision",
 		strings.ToUpper("Put"),
 		"/contact/profile/revision",
 		SetProfileRevision,
+	},
+
+	Route{
+		"SetViewRevision",
+		strings.ToUpper("Put"),
+		"/contact/view/revision",
+		SetViewRevision,
 	},
 
 	Route{
@@ -482,13 +482,6 @@ var routes = Routes{
 	},
 
 	Route{
-		"GetArticleBlocks",
-		strings.ToUpper("Get"),
-		"/content/articleBlocks",
-		GetArticleBlocks,
-	},
-
-	Route{
 		"GetArticleSubjectField",
 		strings.ToUpper("Get"),
 		"/content/articles/{articleId}/subject/{field}",
@@ -531,16 +524,9 @@ var routes = Routes{
 	},
 
 	Route{
-		"GetArticleViews",
-		strings.ToUpper("Get"),
-		"/content/articleBlocks/{blockId}/view",
-		GetArticleViews,
-	},
-
-	Route{
 		"GetArticles",
 		strings.ToUpper("Get"),
-		"/content/articleBlocks/{blockId}",
+		"/content/articles",
 		GetArticles,
 	},
 

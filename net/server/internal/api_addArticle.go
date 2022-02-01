@@ -1,6 +1,7 @@
 package databag
 
 import (
+  "time"
   "errors"
   "net/http"
   "gorm.io/gorm"
@@ -22,8 +23,8 @@ func AddArticle(w http.ResponseWriter, r *http.Request) {
     return
   }
 
-  var groups []store.Group
-  if err := store.DB.Where("group_id IN ?", articleAccess.Groups).Find(&groups).Error; err != nil {
+  var groups []store.Label
+  if err := store.DB.Raw("select labels.* from labels inner join label_groups on labels.id = label_groups.label_id inner join groups on label_groups.group_id = groups.id where groups.group_id in ?", articleAccess.Groups).Scan(&groups).Error; err != nil {
     ErrResponse(w, http.StatusInternalServerError, err)
     return
   }
@@ -34,47 +35,43 @@ func AddArticle(w http.ResponseWriter, r *http.Request) {
     return
   }
 
-  var articleBlock store.ArticleBlock
-  if err := store.DB.Preload("Articles").Where("account_id = ?", account.ID).Last(&articleBlock).Error; err != nil {
-    if errors.Is(err, gorm.ErrRecordNotFound) {
-      if err := addArticleBlock(account, &articleBlock); err != nil {
-        ErrResponse(w, http.StatusInternalServerError, err)
-        return
-      }
-    } else {
-      ErrResponse(w, http.StatusInternalServerError, err)
-      return
-    }
-  }
-  if len(articleBlock.Articles) >= APP_ARTICLEBLOCKSIZE {
-    if err := addArticleBlock(account, &articleBlock); err != nil {
-      ErrResponse(w, http.StatusInternalServerError, err)
-      return
-    }
-  }
 
-  article := &store.Article{
-    ArticleId: uuid.New().String(),
-    ArticleBlockID: articleBlock.ID,
-    AccountID: account.ID,
-    Revision: 1,
-    Status: APP_ARTICLEUNCONFIRMED,
-    Expires: 0,
-    TagUpdated: 0,
-    TagRevision: 0,
-    Groups: groups,
-    Labels: labels,
-    ArticleBlock: articleBlock,
-  }
+  // save data and apply transaction
+  var article *store.Article
   err = store.DB.Transaction(func(tx *gorm.DB) error {
-    if res := tx.Save(article).Error; res != nil {
-      return res
+
+    articleData := &store.ArticleData{
+      DataRevision: 1,
+      Status: APP_ARTICLEUNCONFIRMED,
+      TagUpdated: time.Now().Unix(),
+      TagRevision: 1,
+      Labels: append(groups, labels...),
+    };
+    if res := store.DB.Save(articleData).Error; res != nil {
+      return res;
     }
-    if res := tx.Model(&articleBlock).Update("revision", account.ContentRevision + 1).Error; res != nil {
-      return res
+
+    if res := store.DB.Where("article_data_id is null AND account_id = ?", account.ID).First(&article).Error; res != nil {
+      if errors.Is(res, gorm.ErrRecordNotFound) {
+        article = &store.Article{
+          ArticleId: uuid.New().String(),
+          AccountID: account.ID,
+          Revision: 1,
+          ArticleDataID: articleData.ID,
+          ArticleData: articleData,
+        }
+        if ret := store.DB.Save(article).Error; ret != nil {
+          return ret;
+        }
+      } else {
+        return res
+      }
     }
-    if res := tx.Model(&account).Update("content_revision", account.ContentRevision + 1).Error; res != nil {
-      return res
+    if ret := store.DB.Model(article).Update("article_data_id", articleData.ID).Error; ret != nil {
+      return ret;
+    }
+    if ret := store.DB.Preload("ArticleData.Labels.Groups").Where("id = ?", article.ID).First(article).Error; ret != nil {
+      return ret;
     }
     return nil
   })
@@ -83,23 +80,9 @@ func AddArticle(w http.ResponseWriter, r *http.Request) {
     return
   }
 
-  articleEntry := &ArticleEntry{
-    BlockId: articleBlock.ArticleBlockId,
-    Article: getArticleModel(article, 0),
-  }
-
-  SetStatus(account)
   SetContentNotification(account)
-  WriteResponse(w, articleEntry)
+  SetStatus(account)
+  WriteResponse(w, getArticleModel(article, 0))
 }
 
-func addArticleBlock(account *store.Account, articleBlock *store.ArticleBlock) (err error) {
-  articleBlock.ArticleBlockId = uuid.New().String()
-  articleBlock.AccountID = account.ID
-  articleBlock.Revision = account.ContentRevision
-  if err = store.DB.Save(articleBlock).Error; err != nil {
-    return
-  }
-  return
-}
 

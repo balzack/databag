@@ -21,17 +21,41 @@ func AddGroup(w http.ResponseWriter, r *http.Request) {
     return
   }
 
-  group := &store.Group{
-    GroupId: uuid.New().String(),
-    AccountID: account.ID,
-    Revision: 0,
-    DataType: subject.DataType,
-    Data: subject.Data,
-  }
+  var group *store.Group
   err = store.DB.Transaction(func(tx *gorm.DB) error {
+
+    label := &store.Label{
+      LabelId: uuid.New().String(),
+      AccountID: account.ID,
+      Revision: 1,
+      Direct: true,
+    }
+    if res := tx.Save(label).Error; res != nil {
+      return res
+    }
+
+    group = &store.Group{
+      GroupId: uuid.New().String(),
+      AccountID: account.ID,
+      LabelID: label.ID,
+      Revision: 1,
+      DataType: subject.DataType,
+      Data: subject.Data,
+    }
     if res := tx.Save(group).Error; res != nil {
       return res
     }
+
+    label.Groups = []store.Group{*group}
+    if res := tx.Save(label).Error; res != nil {
+      return res
+    }
+
+PrintMsg("ADDED")
+PrintMsg(group.GroupId)
+PrintMsg(label.LabelId)
+PrintMsg("***")
+
     if res := tx.Model(&account).Update("group_revision", account.GroupRevision + 1).Error; res != nil {
       return res
     }

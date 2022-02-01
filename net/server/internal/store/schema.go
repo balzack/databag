@@ -13,7 +13,7 @@ func AutoMigrate(db *gorm.DB) {
   db.AutoMigrate(&Card{});
   db.AutoMigrate(&Asset{});
   db.AutoMigrate(&Article{});
-  db.AutoMigrate(&ArticleBlock{});
+  db.AutoMigrate(&ArticleData{});
   db.AutoMigrate(&ArticleAsset{});
   db.AutoMigrate(&ArticleTag{});
   db.AutoMigrate(&Dialogue{});
@@ -100,11 +100,13 @@ type Group struct {
   ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
   GroupId           string          `gorm:"not null;index:group,unqiue"`
   AccountID         uint            `gorm:"not null;index:group,unique"`
+  LabelID           uint            `gorm:"not null;index:direct"`
   Revision          int64           `gorm:"not null"`
   DataType          string          `gorm:"index"`
   Data              string
   Created           int64           `gorm:"autoCreateTime"`
   Updated           int64           `gorm:"autoUpdateTime"`
+  Label             Label           //reference to label for direct assignment to articles
   Account           Account
 }
 
@@ -117,6 +119,7 @@ type Label struct {
   Data              string
   Created           int64           `gorm:"autoCreateTime"`
   Updated           int64           `gorm:"autoUpdateTime"`
+  Direct            bool            //special label indicating direct assignment of a group
   Groups            []Group         `gorm:"many2many:label_groups;"`
   Account           Account
 }
@@ -164,20 +167,19 @@ type Asset struct {
   Account           Account
 }
 
-type ArticleBlock struct {
-  ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
-  ArticleBlockId    string          `gorm:"not null;index:articleblock,unique"`
-  AccountID         uint            `gorm:"not null;index:articleblock,unique"`
-  Revision          int64           `gorm:"not null"`
-  Articles          []Article
-}
-
 type Article struct {
   ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
   ArticleId         string          `gorm:"not null;index:article,unique"`
   AccountID         uint            `gorm:"not null;index:article,unique"`
-  ArticleBlockID    uint            `gorm:"not null;index:articleblockid"`
   Revision          int64           `gorm:"not null"`
+  ArticleDataID     uint
+  ArticleData       *ArticleData
+  Account           Account
+}
+
+type ArticleData struct {
+  ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
+  DataRevision      int64           `gorm:"not null"`
   DataType          string          `gorm:"index"`
   Data              string
   Status            string          `gorm:"not null;index"`
@@ -186,10 +188,7 @@ type Article struct {
   Updated           int64           `gorm:"autoUpdateTime"`
   TagUpdated        int64           `gorm:"not null"`
   TagRevision       int64           `gorm:"not null"`
-  Groups            []Group         `gorm:"many2many:article_groups;"`
   Labels            []Label         `gorm:"many2many:article_labels;"`
-  Account           Account
-  ArticleBlock      ArticleBlock
 }
 
 type ArticleAsset struct {
