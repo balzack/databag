@@ -71,17 +71,17 @@ func TestConnectContact(t *testing.T) {
   SetOpenMessage(w, r)
   assert.NoError(t, ReadResponse(w, &contactStatus))
 
-  // get view of cards in A
-  r, w, _ = NewRequest("GET", "/contact/cards/view", nil)
+  // get cards in A
+  r, w, _ = NewRequest("GET", "/contact/cards", nil)
   SetBearerAuth(r, a)
-  GetCardView(w, r)
-  var views []CardView
-  assert.NoError(t, ReadResponse(w, &views))
-  assert.Equal(t, len(views), 1)
+  GetCards(w, r)
+  var cards []Card
+  assert.NoError(t, ReadResponse(w, &cards))
+  assert.Equal(t, len(cards), 1)
 
   // get B card in A
   r, w, _ = NewRequest("GET", "/contact/cards/{cardId}", nil)
-  vars = map[string]string{ "cardId": views[0].CardId }
+  vars = map[string]string{ "cardId": cards[0].CardId }
   r = mux.SetURLVars(r, vars)
   SetBearerAuth(r, a)
   GetCard(w, r)
@@ -89,7 +89,7 @@ func TestConnectContact(t *testing.T) {
 
   // update B status to connecting
   r, w, _ = NewRequest("PUT", "/contact/cards/{cardId}/status", APP_CARDCONNECTING)
-  vars = map[string]string{ "cardId": views[0].CardId }
+  vars = map[string]string{ "cardId": cards[0].CardId }
   r = mux.SetURLVars(r, vars)
   SetBearerAuth(r, a)
   SetCardStatus(w, r)
@@ -97,7 +97,7 @@ func TestConnectContact(t *testing.T) {
 
   // get open message to B
   r, w, _ = NewRequest("GET", "/contact/cards/{cardId}/openMessage", nil)
-  vars = map[string]string{ "cardId": views[0].CardId }
+  vars = map[string]string{ "cardId": cards[0].CardId }
   r = mux.SetURLVars(r, vars)
   SetBearerAuth(r, a)
   GetOpenMessage(w, r)
@@ -117,7 +117,7 @@ func TestConnectContact(t *testing.T) {
 
   // update B status to connected
   r, w, _ = NewRequest("PUT", "/contact/cards/{cardId}/status?token=" + contactStatus.Token, APP_CARDCONNECTED)
-  vars = map[string]string{ "cardId": views[0].CardId }
+  vars = map[string]string{ "cardId": cards[0].CardId }
   r = mux.SetURLVars(r, vars)
   SetBearerAuth(r, a)
   SetCardStatus(w, r)

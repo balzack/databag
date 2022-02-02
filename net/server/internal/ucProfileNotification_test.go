@@ -7,7 +7,7 @@ import (
 )
 
 func TestProfileNotification(t *testing.T) {
-  var views []CardView
+  var cards []Card
   var revision Revision
   var ws *websocket.Conn
   var err error
@@ -20,13 +20,13 @@ func TestProfileNotification(t *testing.T) {
   OpenTestCard(a, aCard)
   OpenTestCard(b, bCard)
 
-  // get views list of cards
-  r, w, _ := NewRequest("GET", "/contact/cards/view", nil)
+  // get list of cards
+  r, w, _ := NewRequest("GET", "/contact/cards", nil)
   SetBearerAuth(r, a)
-  GetCardView(w, r)
-  assert.NoError(t, ReadResponse(w, &views))
-  assert.Equal(t, len(views), 1)
-  profileRevision := views[0].NotifiedProfile
+  GetCards(w, r)
+  assert.NoError(t, ReadResponse(w, &cards))
+  assert.Equal(t, len(cards), 1)
+  profileRevision := cards[0].NotifiedProfile
 
   // app connects websocket
   ws, err = StatusConnection(a, &revision);
@@ -49,11 +49,11 @@ func TestProfileNotification(t *testing.T) {
   assert.NoError(t, err)
   assert.NotEqual(t, cardRevision, revision.Card)
 
-  // get views list of cards
-  r, w, _ = NewRequest("GET", "/contact/cards/view", nil)
+  // get list of cards
+  r, w, _ = NewRequest("GET", "/contact/cards", nil)
   SetBearerAuth(r, a)
-  GetCardView(w, r)
-  assert.NoError(t, ReadResponse(w, &views))
-  assert.Equal(t, len(views), 1)
-  assert.NotEqual(t, profileRevision, views[0].NotifiedProfile)
+  GetCards(w, r)
+  assert.NoError(t, ReadResponse(w, &cards))
+  assert.Equal(t, len(cards), 1)
+  assert.NotEqual(t, profileRevision, cards[0].NotifiedProfile)
 }

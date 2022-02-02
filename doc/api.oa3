@@ -938,6 +938,35 @@ paths:
           description: internal server error
           
   /contact/cards:
+    get:
+      tags:
+        - contact
+      description: Get list of cards. Access granted to app tokens of account holder.
+      operationId: get-cards
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: cardRevision
+          in: query
+          description: only return updated cards since specified revision
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Card'
+        '401':
+          description: permission denied
+        '410':
+          description: account disabled
+        '500':
+          description: internal server error
     post:
       tags:
         - contact
@@ -954,30 +983,6 @@ paths:
                 $ref: '#/components/schemas/DataMessage'
         '400':
           description: invalid data message
-        '401':
-          description: permission denied
-        '410':
-          description: account disabled
-        '500':
-          description: internal server error
-          
-  /contact/cards/view:
-    get:
-      tags:
-        - contact
-      description: Get list of card views. Access granted to app tokens of account holder.
-      operationId: get-card-view
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/CardView'
         '401':
           description: permission denied
         '410':
@@ -4041,34 +4046,6 @@ components:
         image:
           type: string
           format: base64 encoded image
-          
-    CardView:
-      type: object
-      required:
-        - cardId
-        - profileRevision
-        - dataRevision
-        - notifiedProfile
-        - notifiedContent
-        - notifiedView
-      properties:
-        cardId:
-          type: string
-        profileRevision:
-          type: integer
-          format: int64
-        dataRevision:
-          type: integer
-          format: int64
-        notifiedProfile:
-          type: integer
-          format: int64
-        notifiedContent:
-          type: integer
-          format: int64
-        notifiedView:
-          type: integer
-          format: int64
           
     CardProfile:
       type: object

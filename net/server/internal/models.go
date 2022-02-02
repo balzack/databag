@@ -62,12 +62,6 @@ type ArticleData struct {
 	TagRevision int64 `json:"tagRevision"`
 }
 
-type ArticleView struct {
-	ArticleId string `json:"articleId"`
-	Revision int64 `json:"revision"`
-	TagRevision int64 `json:"tagRevision"`
-}
-
 type ArticleAccess struct {
 	Labels []string `json:"labels"`
 	Groups []string `json:"groups"`
@@ -115,15 +109,6 @@ type CardProfile struct {
 	ImageSet bool `json:"imageSet,omitempty"`
   Version string `json:"version"`
 	Node string `json:"node"`
-}
-
-type CardView struct {
-	CardId string `json:"cardId"`
-	ProfileRevision int64 `json:"profileRevision"`
-	DataRevision int64 `json:"dataRevision"`
-	NotifiedProfile int64 `json:"notifiedProfile"`
-	NotifiedContent int64 `json:"notifiedContent"`
-	NotifiedView int64 `json:"notifiedView"`
 }
 
 type ContentArticlesBody struct {

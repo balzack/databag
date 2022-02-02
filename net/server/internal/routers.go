@@ -321,10 +321,10 @@ var routes = Routes{
 	},
 
 	Route{
-		"GetCardView",
+		"GetCards",
 		strings.ToUpper("Get"),
-		"/contact/cards/view",
-		GetCardView,
+		"/contact/cards",
+		GetCards,
 	},
 
 	Route{
