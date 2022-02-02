@@ -57,6 +57,7 @@ func SendEndpointTest(
       name string,
       params *map[string]string,
       body interface{},
+      tokenType string,
       token string,
       response interface{},
     ) (err error) {
@@ -71,7 +72,7 @@ func SendEndpointTest(
     r = mux.SetURLVars(r, *params)
   }
   if token != "" {
-    r.Header.Add("TokenType", APP_TOKENAPP)
+    r.Header.Add("TokenType", tokenType)
     SetBearerAuth(r, token)
   }
   endpoint(w, r)
@@ -205,6 +206,7 @@ func AddTestGroup(prefix string) (*TestGroup, error) {
     if g.A.B.Token, err = GetCardToken(g.A.Token, g.A.B.CardId); err != nil {
       return g, err
     }
+
     if g.B.A.Token, err = GetCardToken(g.B.Token, g.B.A.CardId); err != nil {
       return g, err
     }

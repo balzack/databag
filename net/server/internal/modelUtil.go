@@ -49,9 +49,9 @@ func getGroupModel(group *store.Group) *Group {
   }
 }
 
-func getArticleModel(article *store.Article, tagCount int32) *Article {
+func getArticleModel(article *store.Article, contact bool, shared bool) *Article {
 
-  if article.ArticleData == nil {
+  if !shared || article.ArticleData == nil {
     return &Article{
       ArticleId: article.ArticleId,
       Revision: article.Revision,
@@ -62,8 +62,10 @@ func getArticleModel(article *store.Article, tagCount int32) *Article {
     var groups []string;
     var labels []string;
     for _, label := range article.ArticleData.Labels {
-      if label.Direct && len(label.Groups) > 0 {
-        groups = append(groups, label.Groups[0].GroupId)
+      if label.Direct {
+        if !contact && len(label.Groups) > 0 {
+          groups = append(groups, label.Groups[0].GroupId)
+        }
       } else {
         labels = append(labels, label.LabelId)
       }
@@ -78,7 +80,7 @@ func getArticleModel(article *store.Article, tagCount int32) *Article {
         Status: article.ArticleData.Status,
         Labels: labels,
         Groups: groups,
-        TagCount: tagCount,
+        TagCount: article.ArticleData.TagCount,
         Created: article.ArticleData.Created,
         Updated: article.ArticleData.Updated,
         TagUpdated: article.ArticleData.TagUpdated,

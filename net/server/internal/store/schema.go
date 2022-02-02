@@ -106,6 +106,7 @@ type Group struct {
   Data              string
   Created           int64           `gorm:"autoCreateTime"`
   Updated           int64           `gorm:"autoUpdateTime"`
+  Cards             []Card          `gorm:"many2many:card_groups"`
   Label             Label           //reference to label for direct assignment to articles
   Account           Account
 }
@@ -148,8 +149,8 @@ type Card struct {
   NotifiedView      int64
   NotifiedContent   int64
   NotifiedProfile   int64
-  Groups            []Group         `gorm:"many2many:card_groups;"`
   Account           Account         `gorm:"references:Guid"`
+  Groups            []Group         `gorm:"many2many:card_groups"`
 }
 
 type Asset struct {
@@ -172,7 +173,7 @@ type Article struct {
   ArticleId         string          `gorm:"not null;index:article,unique"`
   AccountID         uint            `gorm:"not null;index:article,unique"`
   Revision          int64           `gorm:"not null"`
-  ArticleDataID     uint
+  ArticleDataID     uint            `gorm:"not null;default:0"`
   ArticleData       *ArticleData
   Account           Account
 }
@@ -187,6 +188,7 @@ type ArticleData struct {
   Created           int64           `gorm:"autoCreateTime"`
   Updated           int64           `gorm:"autoUpdateTime"`
   TagUpdated        int64           `gorm:"not null"`
+  TagCount          int32           `gorm:"not null"`
   TagRevision       int64           `gorm:"not null"`
   Labels            []Label         `gorm:"many2many:article_labels;"`
 }

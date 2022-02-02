@@ -139,7 +139,7 @@ func BearerContactToken(r *http.Request) (*store.Card, int, error) {
 
   // find token record
   var card store.Card
-  if err := store.DB.Preload("Account").Where("account_id = ? AND InToken = ?", target, access).First(&card).Error; err != nil {
+  if err := store.DB.Preload("Account").Where("account_id = ? AND in_token = ?", target, access).First(&card).Error; err != nil {
     if errors.Is(err, gorm.ErrRecordNotFound) {
       return nil, http.StatusNotFound, err
     } else {

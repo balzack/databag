@@ -138,8 +138,6 @@ func TestGroupContact(t *testing.T) {
   vars["groupId"] = group.GroupId
   r = mux.SetURLVars(r, vars)
   SetBearerAuth(r, a)
-PrintMsg(group.GroupId)
-PrintMsg("REMOVED")
   RemoveGroup(w, r)
   assert.NoError(t, ReadResponse(w, &group))
 

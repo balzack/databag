@@ -51,11 +51,6 @@ func AddGroup(w http.ResponseWriter, r *http.Request) {
       return res
     }
 
-PrintMsg("ADDED")
-PrintMsg(group.GroupId)
-PrintMsg(label.LabelId)
-PrintMsg("***")
-
     if res := tx.Model(&account).Update("group_revision", account.GroupRevision + 1).Error; res != nil {
       return res
     }

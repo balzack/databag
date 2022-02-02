@@ -45,13 +45,14 @@ func AddArticle(w http.ResponseWriter, r *http.Request) {
       Status: APP_ARTICLEUNCONFIRMED,
       TagUpdated: time.Now().Unix(),
       TagRevision: 1,
+      TagCount: 0,
       Labels: append(groups, labels...),
     };
     if res := store.DB.Save(articleData).Error; res != nil {
       return res;
     }
 
-    if res := store.DB.Where("article_data_id is null AND account_id = ?", account.ID).First(&article).Error; res != nil {
+    if res := store.DB.Where("article_data_id = 0 AND account_id = ?", account.ID).First(&article).Error; res != nil {
       if errors.Is(res, gorm.ErrRecordNotFound) {
         article = &store.Article{
           ArticleId: uuid.New().String(),
@@ -73,6 +74,9 @@ func AddArticle(w http.ResponseWriter, r *http.Request) {
     if ret := store.DB.Preload("ArticleData.Labels.Groups").Where("id = ?", article.ID).First(article).Error; ret != nil {
       return ret;
     }
+    if ret := tx.Model(&account).Update("content_revision", account.ContentRevision + 1).Error; ret != nil {
+      return ret
+    }
     return nil
   })
   if err != nil {
@@ -82,7 +86,7 @@ func AddArticle(w http.ResponseWriter, r *http.Request) {
 
   SetContentNotification(account)
   SetStatus(account)
-  WriteResponse(w, getArticleModel(article, 0))
+  WriteResponse(w, getArticleModel(article, false, true))
 }
 
 
