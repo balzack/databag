@@ -12,8 +12,8 @@ func AutoMigrate(db *gorm.DB) {
   db.AutoMigrate(&Label{});
   db.AutoMigrate(&Card{});
   db.AutoMigrate(&Asset{});
+  db.AutoMigrate(&ArticleSlot{});
   db.AutoMigrate(&Article{});
-  db.AutoMigrate(&ArticleData{});
   db.AutoMigrate(&ArticleAsset{});
   db.AutoMigrate(&ArticleTag{});
   db.AutoMigrate(&Dialogue{});
@@ -178,17 +178,17 @@ type Asset struct {
   Account           Account
 }
 
-type Article struct {
+type ArticleSlot struct {
   ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
-  ArticleId         string          `gorm:"not null;index:article,unique"`
-  AccountID         uint            `gorm:"not null;index:article,unique"`
+  ArticleSlotId     string          `gorm:"not null;index:articleslot,unique"`
+  AccountID         uint            `gorm:"not null;index:articleslot,unique"`
   Revision          int64           `gorm:"not null"`
-  ArticleDataID     uint            `gorm:"not null;default:0"`
-  ArticleData       *ArticleData
+  ArticleID         uint            `gorm:"not null;default:0"`
+  Article           *Article
   Account           Account
 }
 
-type ArticleData struct {
+type Article struct {
   ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
   DataType          string          `gorm:"index"`
   Data              string

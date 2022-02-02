@@ -49,41 +49,39 @@ func getGroupModel(group *store.Group) *Group {
   }
 }
 
-func getArticleModel(article *store.Article, contact bool, shared bool) *Article {
+func getArticleModel(slot *store.ArticleSlot, contact bool, shared bool) *Article {
 
-  if !shared || article.ArticleData == nil {
+  if !shared || slot.Article == nil {
     return &Article{
-      ArticleId: article.ArticleId,
-      Revision: article.Revision,
+      ArticleId: slot.ArticleSlotId,
     }
   } else {
 
     var groups []string;
     if !contact {
-      for _, group := range article.ArticleData.Groups {
+      for _, group := range slot.Article.Groups {
         groups = append(groups, group.GroupId)
       }
     }
 
     var labels []string;
-    for _, label := range article.ArticleData.Labels {
+    for _, label := range slot.Article.Labels {
       labels = append(labels, label.LabelId)
     }
 
     return &Article{
-      ArticleId: article.ArticleId,
-      Revision: article.Revision,
+      ArticleId: slot.ArticleSlotId,
       ArticleData: &ArticleData{
-        DataType: article.ArticleData.DataType,
-        Data: article.ArticleData.Data,
-        Status: article.ArticleData.Status,
+        DataType: slot.Article.DataType,
+        Data: slot.Article.Data,
+        Status: slot.Article.Status,
         Labels: labels,
         Groups: groups,
-        TagCount: article.ArticleData.TagCount,
-        Created: article.ArticleData.Created,
-        Updated: article.ArticleData.Updated,
-        TagUpdated: article.ArticleData.TagUpdated,
-        TagRevision: article.ArticleData.TagRevision,
+        TagCount: slot.Article.TagCount,
+        Created: slot.Article.Created,
+        Updated: slot.Article.Updated,
+        TagUpdated: slot.Article.TagUpdated,
+        TagRevision: slot.Article.TagRevision,
       },
     }
   }

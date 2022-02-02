@@ -36,10 +36,10 @@ func AddArticle(w http.ResponseWriter, r *http.Request) {
   }
 
   // save data and apply transaction
-  var article *store.Article
+  var slot *store.ArticleSlot
   err = store.DB.Transaction(func(tx *gorm.DB) error {
 
-    articleData := &store.ArticleData{
+    article := &store.Article{
       Status: APP_ARTICLEUNCONFIRMED,
       TagUpdated: time.Now().Unix(),
       TagRevision: 1,
@@ -47,30 +47,30 @@ func AddArticle(w http.ResponseWriter, r *http.Request) {
       Groups: groups,
       Labels: labels,
     };
-    if res := store.DB.Save(articleData).Error; res != nil {
+    if res := store.DB.Save(article).Error; res != nil {
       return res;
     }
 
-    if res := store.DB.Where("article_data_id = 0 AND account_id = ?", account.ID).First(&article).Error; res != nil {
+    if res := store.DB.Where("article_id = 0 AND account_id = ?", account.ID).First(&slot).Error; res != nil {
       if errors.Is(res, gorm.ErrRecordNotFound) {
-        article = &store.Article{
-          ArticleId: uuid.New().String(),
+        slot = &store.ArticleSlot{
+          ArticleSlotId: uuid.New().String(),
           AccountID: account.ID,
           Revision: 1,
-          ArticleDataID: articleData.ID,
-          ArticleData: articleData,
+          ArticleID: article.ID,
+          Article: article,
         }
-        if ret := store.DB.Save(article).Error; ret != nil {
+        if ret := store.DB.Save(slot).Error; ret != nil {
           return ret;
         }
       } else {
         return res
       }
     }
-    if ret := store.DB.Model(article).Update("article_data_id", articleData.ID).Error; ret != nil {
+    if ret := store.DB.Model(slot).Update("article_id", article.ID).Error; ret != nil {
       return ret;
     }
-    if ret := store.DB.Preload("ArticleData.Labels.Groups").Where("id = ?", article.ID).First(article).Error; ret != nil {
+    if ret := store.DB.Preload("Article.Labels.Groups").Where("id = ?", article.ID).First(slot).Error; ret != nil {
       return ret;
     }
     if ret := tx.Model(&account).Update("content_revision", account.ContentRevision + 1).Error; ret != nil {
@@ -85,7 +85,7 @@ func AddArticle(w http.ResponseWriter, r *http.Request) {
 
   SetContentNotification(account)
   SetStatus(account)
-  WriteResponse(w, getArticleModel(article, false, true))
+  WriteResponse(w, getArticleModel(slot, false, true))
 }
 
 

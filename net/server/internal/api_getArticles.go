@@ -37,7 +37,7 @@ func GetArticles(w http.ResponseWriter, r *http.Request) {
       return
     }
 
-    var articles []store.Article
+    var articles []store.ArticleSlot
     if err := getAccountArticles(account, contentRevision, &articles); err != nil {
       ErrResponse(w, http.StatusInternalServerError, err)
       return
@@ -58,7 +58,7 @@ func GetArticles(w http.ResponseWriter, r *http.Request) {
       contentRevision = 0
     }
 
-    var articles []store.Article
+    var articles []store.ArticleSlot
     if err := getContactArticles(card, contentRevision, &articles); err != nil {
       ErrResponse(w, http.StatusInternalServerError, err)
       return
@@ -75,18 +75,18 @@ func GetArticles(w http.ResponseWriter, r *http.Request) {
 }
 
 // better if this filtering was done in gorm or sql
-func isShared(article *store.Article, guid string) bool {
-  if article.ArticleData == nil {
+func isShared(slot *store.ArticleSlot, guid string) bool {
+  if slot.Article == nil {
     return false
   }
-  for _, group := range article.ArticleData.Groups {
+  for _, group := range slot.Article.Groups {
     for _, card := range group.Cards {
       if card.Guid == guid {
         return true
       }
     }
   }
-  for _, label := range article.ArticleData.Labels {
+  for _, label := range slot.Article.Labels {
     for _, group := range label.Groups {
       for _, card := range group.Cards {
         if card.Guid == guid {
@@ -98,12 +98,12 @@ func isShared(article *store.Article, guid string) bool {
   return false
 }
 
-func getAccountArticles(account *store.Account, revision int64, articles *[]store.Article) error {
-  return store.DB.Preload("ArticleData.Groups").Preload("ArticleData.Labels.Groups").Where("account_id = ? AND revision > ?", account.ID, revision).Find(articles).Error
+func getAccountArticles(account *store.Account, revision int64, articles *[]store.ArticleSlot) error {
+  return store.DB.Preload("Article.Groups").Preload("Article.Labels.Groups").Where("account_id = ? AND revision > ?", account.ID, revision).Find(articles).Error
 }
 
-func getContactArticles(card *store.Card, revision int64, articles *[]store.Article) error {
-  return store.DB.Preload("ArticleData.Groups.Cards").Preload("ArticleData.Labels.Groups.Cards").Where("account_id = ? AND revision > ?", card.Account.ID, revision).Find(articles).Error
+func getContactArticles(card *store.Card, revision int64, articles *[]store.ArticleSlot) error {
+  return store.DB.Preload("Article.Groups.Cards").Preload("Article.Labels.Groups.Cards").Where("account_id = ? AND revision > ?", card.Account.ID, revision).Find(articles).Error
 }
 
 

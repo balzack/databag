@@ -67,10 +67,10 @@ func SetCardStatus(w http.ResponseWriter, r *http.Request) {
 
   // save and update contact revision
   err = store.DB.Transaction(func(tx *gorm.DB) error {
-    if res := store.DB.Save(&card).Error; res != nil {
+    if res := tx.Save(&card).Error; res != nil {
       return res
     }
-    if res := store.DB.Model(&account).Update("card_revision", account.CardRevision + 1).Error; res != nil {
+    if res := tx.Model(&account).Update("card_revision", account.CardRevision + 1).Error; res != nil {
       return res
     }
     return nil

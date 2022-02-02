@@ -4283,8 +4283,6 @@ components:
       type: object
       required:
         - articleId
-        - articleBlockId
-        - revision
         - dataType
         - data
         - created
@@ -4297,11 +4295,6 @@ components:
       properties:
         articleId:
           type: string
-        articleBlockId:
-          type: string
-        revision:
-          type: integer
-          format: int64
         dataType:
           type: string
         data:

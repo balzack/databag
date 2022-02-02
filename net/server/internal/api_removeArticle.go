@@ -20,19 +20,19 @@ func RemoveArticle(w http.ResponseWriter, r *http.Request) {
   articleId := params["articleId"]
 
   err = store.DB.Transaction(func(tx *gorm.DB) error {
-    var article store.Article
-    if res := store.DB.Preload("ArticleData").Where("account_id = ? AND article_id = ?", account.ID, articleId).First(&article).Error; res != nil {
+    var slot store.ArticleSlot
+    if res := store.DB.Preload("Article").Where("account_id = ? AND article_slot_id = ?", account.ID, articleId).First(&slot).Error; res != nil {
       return res
     }
-    if article.ArticleData == nil {
+    if slot.Article == nil {
       return nil
     }
-    if res := tx.Delete(article.ArticleData).Error; res != nil {
+    if res := tx.Delete(slot.Article).Error; res != nil {
       return res
     }
-    article.ArticleDataID = 0
-    article.ArticleData = nil
-    if res := tx.Save(&article).Error; res != nil {
+    slot.ArticleID = 0
+    slot.Article = nil
+    if res := tx.Save(&slot).Error; res != nil {
       return res
     }
     if res := tx.Model(&account).Update("content_revision", account.ContentRevision).Error; res != nil {
