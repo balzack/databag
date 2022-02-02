@@ -26,7 +26,7 @@ func UpdateGroup(w http.ResponseWriter, r *http.Request) {
 
   // load specified group
   var group store.Group
-  if err := store.DB.Where("account_id = ? AND group_id = ?", account.ID, groupId).First(&group).Error; err != nil {
+  if err := store.DB.Preload("GroupData").Where("account_id = ? AND group_id = ?", account.ID, groupId).First(&group).Error; err != nil {
     if !errors.Is(err, gorm.ErrRecordNotFound) {
       ErrResponse(w, http.StatusInternalServerError, err)
     } else {
@@ -37,9 +37,12 @@ func UpdateGroup(w http.ResponseWriter, r *http.Request) {
 
   // update specified group
   group.DataType = subject.DataType
-  group.Data = subject.Data
+  group.GroupData.Data = subject.Data
   err = store.DB.Transaction(func(tx *gorm.DB) error {
-    if res := store.DB.Save(group).Error; res != nil {
+    if res := store.DB.Save(&group.GroupData).Error; res != nil {
+      return res
+    }
+    if res := store.DB.Save(&group).Error; res != nil {
       return res
     }
     if res := store.DB.Model(&account).Update("group_revision", account.GroupRevision + 1).Error; res != nil {

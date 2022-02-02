@@ -24,12 +24,19 @@ func AddGroup(w http.ResponseWriter, r *http.Request) {
   var group *store.Group
   err = store.DB.Transaction(func(tx *gorm.DB) error {
 
+    data := &store.GroupData{
+      Data: subject.Data,
+    }
+    if res := tx.Save(data).Error; res != nil {
+      return res
+    }
+
     group = &store.Group{
       GroupId: uuid.New().String(),
       AccountID: account.ID,
+      GroupDataID: data.ID,
       Revision: 1,
       DataType: subject.DataType,
-      Data: subject.Data,
     }
     if res := tx.Save(group).Error; res != nil {
       return res

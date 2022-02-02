@@ -19,7 +19,7 @@ func RemoveGroup(w http.ResponseWriter, r *http.Request) {
   groupId := params["groupId"]
 
   var group store.Group
-  if err := store.DB.Where("account_id = ? AND group_id = ?", account.ID, groupId).First(&group).Error; err != nil {
+  if err := store.DB.Preload("GroupData").Where("account_id = ? AND group_id = ?", account.ID, groupId).First(&group).Error; err != nil {
     if errors.Is(err, gorm.ErrRecordNotFound) {
       ErrResponse(w, http.StatusNotFound, err)
     } else {
@@ -29,6 +29,9 @@ func RemoveGroup(w http.ResponseWriter, r *http.Request) {
   }
 
   err = store.DB.Transaction(func(tx *gorm.DB) error {
+    if res := tx.Delete(&group.GroupData).Error; res != nil {
+      return res
+    }
     if res := tx.Delete(&group).Error; res != nil {
       return res
     }

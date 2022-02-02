@@ -40,7 +40,6 @@ func AddArticle(w http.ResponseWriter, r *http.Request) {
   err = store.DB.Transaction(func(tx *gorm.DB) error {
 
     articleData := &store.ArticleData{
-      DataRevision: 1,
       Status: APP_ARTICLEUNCONFIRMED,
       TagUpdated: time.Now().Unix(),
       TagRevision: 1,

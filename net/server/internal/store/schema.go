@@ -100,27 +100,39 @@ type Group struct {
   ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
   GroupId           string          `gorm:"not null;index:group,unqiue"`
   AccountID         uint            `gorm:"not null;index:group,unique"`
+  GroupDataID       uint            `gorm:"not null;index:groupdata"`
   LabelID           uint            `gorm:"not null;index:direct"`
   Revision          int64           `gorm:"not null"`
   DataType          string          `gorm:"index"`
-  Data              string
   Created           int64           `gorm:"autoCreateTime"`
   Updated           int64           `gorm:"autoUpdateTime"`
   Cards             []Card          `gorm:"many2many:card_groups"`
   Account           Account
+  GroupData         GroupData
+}
+
+type GroupData struct {
+  ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
+  Data              string
 }
 
 type Label struct {
   ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
   LabelId           string          `gorm:"not null;index:label,unique"`
   AccountID         uint            `gorm:"not null;index:label,unique"`
+  LabelDataID       uint            `gorm:"not null;index:labeldata"`
   Revision          int64           `gorm:"not null"`
   DataType          string          `gorm:"index"`
-  Data              string
   Created           int64           `gorm:"autoCreateTime"`
   Updated           int64           `gorm:"autoUpdateTime"`
   Groups            []Group         `gorm:"many2many:label_groups;"`
   Account           Account
+  LabelData         LabelData
+}
+
+type LabelData struct {
+  ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
+  Data              string
 }
 
 type Card struct {
@@ -178,7 +190,6 @@ type Article struct {
 
 type ArticleData struct {
   ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
-  DataRevision      int64           `gorm:"not null"`
   DataType          string          `gorm:"index"`
   Data              string
   Status            string          `gorm:"not null;index"`

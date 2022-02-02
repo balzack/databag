@@ -43,7 +43,7 @@ func getGroupModel(group *store.Group) *Group {
     GroupId: group.GroupId,
     Revision: group.Revision,
     DataType: group.DataType,
-    Data: group.Data,
+    Data: group.GroupData.Data,
     Created: group.Created,
     Updated: group.Updated,
   }
