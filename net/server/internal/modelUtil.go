@@ -58,17 +58,16 @@ func getArticleModel(article *store.Article, contact bool, shared bool) *Article
     }
   } else {
 
-    // populate id list
     var groups []string;
+    if !contact {
+      for _, group := range article.ArticleData.Groups {
+        groups = append(groups, group.GroupId)
+      }
+    }
+
     var labels []string;
     for _, label := range article.ArticleData.Labels {
-      if label.Direct {
-        if !contact && len(label.Groups) > 0 {
-          groups = append(groups, label.Groups[0].GroupId)
-        }
-      } else {
-        labels = append(labels, label.LabelId)
-      }
+      labels = append(labels, label.LabelId)
     }
 
     return &Article{

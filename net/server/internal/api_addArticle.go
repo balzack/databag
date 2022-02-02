@@ -23,8 +23,8 @@ func AddArticle(w http.ResponseWriter, r *http.Request) {
     return
   }
 
-  var groups []store.Label
-  if err := store.DB.Raw("select labels.* from labels inner join label_groups on labels.id = label_groups.label_id inner join groups on label_groups.group_id = groups.id where groups.group_id in ?", articleAccess.Groups).Scan(&groups).Error; err != nil {
+  var groups []store.Group
+  if err := store.DB.Where("group_id IN ?", articleAccess.Groups).Find(&groups).Error; err != nil {
     ErrResponse(w, http.StatusInternalServerError, err)
     return
   }
@@ -34,7 +34,6 @@ func AddArticle(w http.ResponseWriter, r *http.Request) {
     ErrResponse(w, http.StatusInternalServerError, err)
     return
   }
-
 
   // save data and apply transaction
   var article *store.Article
@@ -46,7 +45,8 @@ func AddArticle(w http.ResponseWriter, r *http.Request) {
       TagUpdated: time.Now().Unix(),
       TagRevision: 1,
       TagCount: 0,
-      Labels: append(groups, labels...),
+      Groups: groups,
+      Labels: labels,
     };
     if res := store.DB.Save(articleData).Error; res != nil {
       return res;

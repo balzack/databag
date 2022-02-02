@@ -79,6 +79,13 @@ func isShared(article *store.Article, guid string) bool {
   if article.ArticleData == nil {
     return false
   }
+  for _, group := range article.ArticleData.Groups {
+    for _, card := range group.Cards {
+      if card.Guid == guid {
+        return true
+      }
+    }
+  }
   for _, label := range article.ArticleData.Labels {
     for _, group := range label.Groups {
       for _, card := range group.Cards {
@@ -92,11 +99,11 @@ func isShared(article *store.Article, guid string) bool {
 }
 
 func getAccountArticles(account *store.Account, revision int64, articles *[]store.Article) error {
-  return store.DB.Preload("ArticleData.Labels.Groups").Where("account_id = ? AND revision > ?", account.ID, revision).Find(articles).Error
+  return store.DB.Preload("ArticleData.Groups").Preload("ArticleData.Labels.Groups").Where("account_id = ? AND revision > ?", account.ID, revision).Find(articles).Error
 }
 
 func getContactArticles(card *store.Card, revision int64, articles *[]store.Article) error {
-  return store.DB.Preload("ArticleData.Labels.Groups.Cards").Where("account_id = ? AND revision > ?", card.Account.ID, revision).Find(articles).Error
+  return store.DB.Preload("ArticleData.Groups.Cards").Preload("ArticleData.Labels.Groups.Cards").Where("account_id = ? AND revision > ?", card.Account.ID, revision).Find(articles).Error
 }
 
 
