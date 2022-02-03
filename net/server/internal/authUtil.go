@@ -127,7 +127,7 @@ func ParseToken(token string) (string, string, error) {
   return split[0], split[1], nil
 }
 
-func BearerContactToken(r *http.Request) (*store.Card, int, error) {
+func BearerContactToken(r *http.Request, detail bool) (*store.Card, int, error) {
 
   // parse bearer authentication
   auth := r.Header.Get("Authorization")
@@ -139,11 +139,21 @@ func BearerContactToken(r *http.Request) (*store.Card, int, error) {
 
   // find token record
   var card store.Card
-  if err := store.DB.Preload("Account").Where("account_id = ? AND in_token = ?", target, access).First(&card).Error; err != nil {
-    if errors.Is(err, gorm.ErrRecordNotFound) {
-      return nil, http.StatusNotFound, err
-    } else {
-      return nil, http.StatusInternalServerError, err
+  if detail {
+    if err := store.DB.Preload("Account.AccountDetail").Where("account_id = ? AND in_token = ?", target, access).First(&card).Error; err != nil {
+      if errors.Is(err, gorm.ErrRecordNotFound) {
+        return nil, http.StatusNotFound, err
+      } else {
+        return nil, http.StatusInternalServerError, err
+      }
+    }
+  } else {
+    if err := store.DB.Preload("Account").Where("account_id = ? AND in_token = ?", target, access).First(&card).Error; err != nil {
+      if errors.Is(err, gorm.ErrRecordNotFound) {
+        return nil, http.StatusNotFound, err
+      } else {
+        return nil, http.StatusInternalServerError, err
+      }
     }
   }
   if card.Account.Disabled {

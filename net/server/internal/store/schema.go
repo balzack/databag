@@ -189,6 +189,7 @@ type Card struct {
   NotifiedProfile   int64
   Account           Account         `gorm:"references:Guid"`
   Groups            []Group         `gorm:"many2many:card_groups"`
+  CardSlot          CardSlot
 }
 
 type Asset struct {

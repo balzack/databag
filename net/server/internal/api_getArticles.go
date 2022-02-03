@@ -48,7 +48,7 @@ func GetArticles(w http.ResponseWriter, r *http.Request) {
     }
   } else if tokenType == APP_TOKENCONTACT {
 
-    card, code, err := BearerContactToken(r)
+    card, code, err := BearerContactToken(r, false)
     if err != nil {
       ErrResponse(w, code, err)
       return

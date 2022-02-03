@@ -47,7 +47,7 @@ func SendLocalNotification(notification *store.Notification) {
 
   // pull reference account
   var card store.Card
-  if err := store.DB.Preload("Account").Where("in_token = ?", notification.Token).First(&card).Error; err != nil {
+  if err := store.DB.Preload("Account").Preload("CardSlot").Where("in_token = ?", notification.Token).First(&card).Error; err != nil {
     ErrMsg(err)
     return
   }

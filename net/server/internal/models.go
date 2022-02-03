@@ -91,6 +91,7 @@ type CardData struct {
 	CardData *CardData `json:"cardData"`
 	NotifiedProfile int64 `json:"notifiedProfile"`
 	NotifiedContent int64 `json:"notifiedContent"`
+  NotifiedLabel int64 `json:"notifiedLabel"`
 	NotifiedView int64 `json:"notifiedView"`
 	Status string `json:"status"`
 	Notes string `json:"notes,omitempty"`

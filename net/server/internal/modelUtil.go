@@ -23,6 +23,7 @@ func getCardModel(slot *store.CardSlot) *Card {
       CardData: &CardData {
       NotifiedProfile: slot.Card.NotifiedProfile,
       NotifiedContent: slot.Card.NotifiedContent,
+      NotifiedLabel: slot.Card.NotifiedLabel,
       NotifiedView: slot.Card.NotifiedView,
       CardProfile: &CardProfile{
         Guid: slot.Card.Guid,

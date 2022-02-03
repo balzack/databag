@@ -538,22 +538,4 @@ func StatusConnection(token string, rev *Revision) (ws *websocket.Conn, err erro
   }
   return
 }
-func StatusRevision(ws *websocket.Conn, rev *Revision) (err error) {
-  var data []byte
-  var dataType int
-
-  // read revision update
-  ws.SetReadDeadline(time.Now().Add(TEST_READDEADLINE * time.Second))
-  if dataType, data, err = ws.ReadMessage(); err != nil {
-    return
-  }
-  if dataType != websocket.TextMessage {
-    err = errors.New("invalid status data type")
-    return
-  }
-  if err = json.Unmarshal(data, rev); err != nil {
-    return
-  }
-  return
-}
 
