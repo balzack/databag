@@ -143,7 +143,10 @@ type DialogueInsights struct {
 
 type Group struct {
 	GroupId string `json:"groupId"`
-	Revision int64 `json:"revision"`
+	GroupData *GroupData `json:"groupData"`
+}
+
+type GroupData struct {
 	DataType string `json:"dataType"`
 	Data string `json:"data"`
 	Created int64 `json:"created"`
@@ -164,16 +167,15 @@ type Insight struct {
 
 type Label struct {
 	LabelId string `json:"labelId"`
-	LabelRevision int64 `json:"labelRevision"`
-	Type_ string `json:"type"`
-	Data string `json:"data"`
-	Created int64 `json:"created"`
-	Groups []string `json:"groups,omitempty"`
+	LabelData *LabelData `json:"labelData"`
 }
 
-type LabelsLabelIdBody struct {
-	Type_ string `json:"type"`
+type LabelData struct {
+	DataType string `json:"type"`
 	Data string `json:"data"`
+	Created int64 `json:"created"`
+	Updated int64 `json:"updated"`
+	Groups []string `json:"groups,omitempty"`
 }
 
 type NodeConfig struct {

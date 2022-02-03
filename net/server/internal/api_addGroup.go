@@ -1,6 +1,7 @@
 package databag
 
 import (
+  "errors"
   "net/http"
   "gorm.io/gorm"
   "github.com/google/uuid"
@@ -21,7 +22,8 @@ func AddGroup(w http.ResponseWriter, r *http.Request) {
     return
   }
 
-  var group *store.Group
+  slot := &store.GroupSlot{}
+  group := &store.Group{}
   err = store.DB.Transaction(func(tx *gorm.DB) error {
 
     data := &store.GroupData{
@@ -31,17 +33,26 @@ func AddGroup(w http.ResponseWriter, r *http.Request) {
       return res
     }
 
-    group = &store.Group{
-      GroupId: uuid.New().String(),
-      AccountID: account.ID,
-      GroupDataID: data.ID,
-      Revision: 1,
-      DataType: subject.DataType,
-    }
+    group.GroupDataID = data.ID
+    group.DataType = subject.DataType
     if res := tx.Save(group).Error; res != nil {
       return res
     }
 
+    if res := tx.Where("account_id = ? AND group_id = 0", account.ID).First(slot).Error; res != nil {
+      if errors.Is(res, gorm.ErrRecordNotFound) {
+        slot.GroupSlotId = uuid.New().String()
+        slot.AccountID = account.ID
+      } else {
+        return res
+      }
+    }
+    slot.GroupID = group.ID
+    slot.Revision = account.GroupRevision + 1
+    slot.Group = group
+    if res := tx.Save(slot).Error; res != nil {
+      return res
+    }
     if res := tx.Model(&account).Update("group_revision", account.GroupRevision + 1).Error; res != nil {
       return res
     }
@@ -53,7 +64,7 @@ func AddGroup(w http.ResponseWriter, r *http.Request) {
   }
 
   SetStatus(account)
-  WriteResponse(w, getGroupModel(group))
+  WriteResponse(w, getGroupModel(slot))
 }
 
 

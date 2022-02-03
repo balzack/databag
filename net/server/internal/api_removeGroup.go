@@ -18,8 +18,8 @@ func RemoveGroup(w http.ResponseWriter, r *http.Request) {
   params := mux.Vars(r)
   groupId := params["groupId"]
 
-  var group store.Group
-  if err := store.DB.Preload("GroupData").Where("account_id = ? AND group_id = ?", account.ID, groupId).First(&group).Error; err != nil {
+  var slot store.GroupSlot
+  if err := store.DB.Preload("Group.GroupData").Where("account_id = ? AND group_slot_id = ?", account.ID, groupId).First(&slot).Error; err != nil {
     if errors.Is(err, gorm.ErrRecordNotFound) {
       ErrResponse(w, http.StatusNotFound, err)
     } else {
@@ -29,10 +29,16 @@ func RemoveGroup(w http.ResponseWriter, r *http.Request) {
   }
 
   err = store.DB.Transaction(func(tx *gorm.DB) error {
-    if res := tx.Delete(&group.GroupData).Error; res != nil {
+    if res := tx.Delete(&slot.Group.GroupData).Error; res != nil {
       return res
     }
-    if res := tx.Delete(&group).Error; res != nil {
+    if res := tx.Delete(&slot.Group).Error; res != nil {
+      return res
+    }
+    slot.GroupID = 0
+    slot.Group = nil
+    slot.Revision = account.GroupRevision + 1
+    if res := tx.Save(&slot).Error; res != nil {
       return res
     }
     if res :=  tx.Model(&account).Updates(store.Account{ViewRevision: account.ViewRevision + 1, GroupRevision: account.GroupRevision + 1}).Error; res != nil {

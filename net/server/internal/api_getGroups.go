@@ -13,15 +13,15 @@ func GetGroups(w http.ResponseWriter, r *http.Request) {
     return
   }
 
-  var storeGroups []store.Group
-  if err := store.DB.Where("account_id = ?", account.ID).Find(&storeGroups).Error; err != nil {
+  var slots []store.GroupSlot
+  if err := store.DB.Where("account_id = ?", account.ID).Find(&slots).Error; err != nil {
     ErrResponse(w, http.StatusInternalServerError, err)
     return
   }
 
   var groups []*Group
-  for _, group := range storeGroups {
-    groups = append(groups, getGroupModel(&group))
+  for _, slot := range slots {
+    groups = append(groups, getGroupModel(&slot))
   }
   WriteResponse(w, groups)
 }

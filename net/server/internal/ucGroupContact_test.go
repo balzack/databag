@@ -123,7 +123,7 @@ func TestGroupContact(t *testing.T) {
   SetBearerAuth(r, a)
   UpdateGroup(w, r)
   assert.NoError(t, ReadResponse(w, &group))
-  assert.Equal(t, group.DataType, "imagroupEDIT")
+  assert.Equal(t, group.GroupData.DataType, "imagroupEDIT")
 
   // receive revision
   err = StatusRevision(wsA, &revision)
@@ -172,5 +172,6 @@ func TestGroupContact(t *testing.T) {
   SetBearerAuth(r, a)
   GetGroups(w, r)
   assert.NoError(t, ReadResponse(w, &groups))
-  assert.Equal(t, 0, len(groups))
+  assert.Equal(t, 1, len(groups))
+  assert.Nil(t, groups[0].GroupData)
 }

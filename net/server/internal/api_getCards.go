@@ -14,7 +14,7 @@ func GetCards(w http.ResponseWriter, r *http.Request) {
   }
 
   var slots []store.CardSlot
-  if err := store.DB.Preload("Card").Where("account_id = ?", account.ID).Find(&slots).Error; err != nil {
+  if err := store.DB.Preload("Card.Groups.GroupSlot").Where("account_id = ?", account.ID).Find(&slots).Error; err != nil {
     ErrResponse(w, http.StatusInternalServerError, err)
     return
   }

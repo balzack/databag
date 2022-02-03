@@ -36,8 +36,8 @@ func SetCardGroup(w http.ResponseWriter, r *http.Request) {
   }
 
   // load referenced group
-  var group store.Group
-  if err := store.DB.Where("account_id = ? AND group_id = ?", account.ID, groupId).First(&group).Error; err != nil {
+  var groupSlot store.GroupSlot
+  if err := store.DB.Preload("Group").Where("account_id = ? AND group_slot_id = ?", account.ID, groupId).First(&groupSlot).Error; err != nil {
     if !errors.Is(err, gorm.ErrRecordNotFound) {
       ErrResponse(w, http.StatusInternalServerError, err)
     } else {
@@ -45,9 +45,13 @@ func SetCardGroup(w http.ResponseWriter, r *http.Request) {
     }
     return
   }
+  if groupSlot.Group == nil {
+    ErrResponse(w, http.StatusNotFound, errors.New("referenced deleted group"))
+    return
+  }
 
   // save and update revision
-  slot.Card.Groups = append(slot.Card.Groups, group)
+  slot.Card.Groups = append(slot.Card.Groups, *groupSlot.Group)
   slot.Card.ViewRevision += 1
   slot.Revision = account.CardRevision + 1
   err = store.DB.Transaction(func(tx *gorm.DB) error {

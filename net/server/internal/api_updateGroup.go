@@ -25,8 +25,8 @@ func UpdateGroup(w http.ResponseWriter, r *http.Request) {
   }
 
   // load specified group
-  var group store.Group
-  if err := store.DB.Preload("GroupData").Where("account_id = ? AND group_id = ?", account.ID, groupId).First(&group).Error; err != nil {
+  var slot store.GroupSlot
+  if err := store.DB.Preload("Group.GroupData").Where("account_id = ? AND group_slot_id = ?", account.ID, groupId).First(&slot).Error; err != nil {
     if !errors.Is(err, gorm.ErrRecordNotFound) {
       ErrResponse(w, http.StatusInternalServerError, err)
     } else {
@@ -34,18 +34,26 @@ func UpdateGroup(w http.ResponseWriter, r *http.Request) {
     }
     return
   }
+  if slot.Group == nil {
+    ErrResponse(w, http.StatusNotFound, errors.New("referenced deleted group"))
+    return
+  }
 
   // update specified group
-  group.DataType = subject.DataType
-  group.GroupData.Data = subject.Data
+  slot.Revision = account.GroupRevision + 1
+  slot.Group.DataType = subject.DataType
+  slot.Group.GroupData.Data = subject.Data
   err = store.DB.Transaction(func(tx *gorm.DB) error {
-    if res := store.DB.Save(&group.GroupData).Error; res != nil {
+    if res := tx.Save(&slot.Group.GroupData).Error; res != nil {
       return res
     }
-    if res := store.DB.Save(&group).Error; res != nil {
+    if res := tx.Save(&slot.Group).Error; res != nil {
       return res
     }
-    if res := store.DB.Model(&account).Update("group_revision", account.GroupRevision + 1).Error; res != nil {
+    if res := tx.Save(&slot).Error; res != nil {
+      return res
+    }
+    if res := tx.Model(&account).Update("group_revision", account.GroupRevision + 1).Error; res != nil {
       return res
     }
     return nil
@@ -56,7 +64,7 @@ func UpdateGroup(w http.ResponseWriter, r *http.Request) {
   }
 
   SetStatus(account)
-  WriteResponse(w, getGroupModel(&group))
+  WriteResponse(w, getGroupModel(&slot))
 }
 
 

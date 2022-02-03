@@ -23,10 +23,16 @@ func AddArticle(w http.ResponseWriter, r *http.Request) {
     return
   }
 
-  var groups []store.Group
-  if err := store.DB.Where("group_id IN ?", articleAccess.Groups).Find(&groups).Error; err != nil {
+  var groupSlots []store.GroupSlot
+  if err := store.DB.Preload("Group").Where("group_slot_id IN ?", articleAccess.Groups).Find(&groupSlots).Error; err != nil {
     ErrResponse(w, http.StatusInternalServerError, err)
     return
+  }
+  var groups []store.Group
+  for _, slot := range groupSlots {
+    if slot.Group != nil {
+      groups = append(groups, *slot.Group)
+    }
   }
 
   var labelSlots []store.LabelSlot
