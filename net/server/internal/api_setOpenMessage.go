@@ -149,7 +149,6 @@ func SetOpenMessage(w http.ResponseWriter, r *http.Request) {
     if card.Status == APP_CARDCONNECTING {
       card.Status = APP_CARDCONNECTED
     }
-    card.DataRevision += 1
     card.OutToken = connect.Token
 
     // save contact card

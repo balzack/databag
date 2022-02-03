@@ -84,42 +84,37 @@ type Asset struct {
 
 type Card struct {
 	CardId string `json:"cardId"`
-  Revision int64 `json:"revision"`
-	CardData *CardData `json:"cardData"`
+	Revision int64 `json:"revision,omitempty"`
+	CardData *CardData `json:"articleData"`
 }
 
 type CardData struct {
-	CardProfile *CardProfile `json:"cardProfile"`
+	Guid string `json:"guid"`
+	Status string `json:"status"`
+	Token string `json:"token,omitempty"`
+	DetailRevision int64 `json:"detailRevision"`
+	ProfileRevision int64 `json:"profileRevision"`
 	NotifiedProfile int64 `json:"notifiedProfile"`
 	NotifiedContent int64 `json:"notifiedContent"`
-  NotifiedLabel int64 `json:"notifiedLabel"`
+	NotifiedLabel int64 `json:"notifiedLabel"`
 	NotifiedView int64 `json:"notifiedView"`
-	Status string `json:"status"`
+}
+
+type CardDetail struct {
+	Revision int64 `json:"revision,omitempty"`
 	Notes string `json:"notes,omitempty"`
-	Token string `json:"token,omitempty"`
 	Groups []string `json:"groups,omitempty"`
 }
 
 type CardProfile struct {
-	Guid string `json:"guid"`
+	Revision int64 `json:"revision,omitempty"`
 	Handle string `json:"handle,omitempty"`
 	Name string `json:"name,omitempty"`
 	Description string `json:"description,omitempty"`
 	Location string `json:"location,omitempty"`
-	Revision int64 `json:"revision,omitempty"`
 	ImageSet bool `json:"imageSet,omitempty"`
-  Version string `json:"version"`
+	Version string `json:"version"`
 	Node string `json:"node"`
-}
-
-type ContentArticlesBody struct {
-	Labels []string `json:"labels"`
-	Groups []string `json:"groups"`
-}
-
-type ContentLabelsBody struct {
-	Type_ string `json:"type"`
-	Data string `json:"data"`
 }
 
 type Dialogue struct {

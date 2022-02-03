@@ -300,7 +300,7 @@ func GetCardToken(account string, cardId string) (token string, err error) {
     err = errors.New("card not connected")
     return
   }
-  token = card.CardData.CardProfile.Guid + "." + card.CardData.Token
+  token = card.CardData.Guid + "." + card.CardData.Token
   return
 }
 

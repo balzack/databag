@@ -22,7 +22,7 @@ func ClearCardNotes(w http.ResponseWriter, r *http.Request) {
 
   // load referenced card
   var slot store.CardSlot
-  if err := store.DB.Preload("Card.Groups.GroupSlot").Where("account_id = ? AND card_slot_id = ?", account.ID, cardId).First(&slot).Error; err != nil {
+  if err := store.DB.Preload("Card").Where("account_id = ? AND card_slot_id = ?", account.ID, cardId).First(&slot).Error; err != nil {
     if !errors.Is(err, gorm.ErrRecordNotFound) {
       ErrResponse(w, http.StatusInternalServerError, err)
     } else {
@@ -37,6 +37,7 @@ func ClearCardNotes(w http.ResponseWriter, r *http.Request) {
 
   // update card
   slot.Revision = account.CardRevision + 1
+  slot.Card.DetailRevision += 1
   slot.Card.Notes = ""
 
   // save and update contact revision
@@ -58,6 +59,6 @@ func ClearCardNotes(w http.ResponseWriter, r *http.Request) {
   }
 
   SetStatus(account)
-  WriteResponse(w, getCardModel(&slot));
+  WriteResponse(w, getCardDetailModel(&slot));
 }
 

@@ -12,12 +12,6 @@ func getCardModel(slot *store.CardSlot) *Card {
     }
   }
 
-  // populate group id list
-  var groups []string;
-  for _, group := range slot.Card.Groups {
-    groups = append(groups, group.GroupSlot.GroupSlotId)
-  }
-
   return &Card{
     CardId: slot.CardSlotId,
     Revision: slot.Revision,
@@ -26,22 +20,40 @@ func getCardModel(slot *store.CardSlot) *Card {
       NotifiedContent: slot.Card.NotifiedContent,
       NotifiedLabel: slot.Card.NotifiedLabel,
       NotifiedView: slot.Card.NotifiedView,
-      CardProfile: &CardProfile{
-        Guid: slot.Card.Guid,
-        Handle: slot.Card.Username,
-        Name: slot.Card.Name,
-        Description: slot.Card.Description,
-        Location: slot.Card.Location,
-        Revision: slot.Card.ProfileRevision,
-        ImageSet: slot.Card.Image != "",
-        Version: slot.Card.Version,
-        Node: slot.Card.Node,
-      },
+      ProfileRevision: slot.Card.ProfileRevision,
+      DetailRevision: slot.Card.DetailRevision,
+      Guid: slot.Card.Guid,
       Status: slot.Card.Status,
-      Notes: slot.Card.Notes,
       Token: slot.Card.OutToken,
-      Groups: groups,
     },
+  }
+}
+
+func getCardDetailModel(slot *store.CardSlot) *CardDetail {
+
+  var groups []string;
+  for _, group := range slot.Card.Groups {
+    groups = append(groups, group.GroupSlot.GroupSlotId)
+  }
+
+  return &CardDetail{
+    Revision: slot.Card.DetailRevision,
+    Notes: slot.Card.Notes,
+    Groups: groups,
+  }
+}
+
+func getCardProfileModel(slot *store.CardSlot) *CardProfile {
+
+  return &CardProfile{
+    Revision: slot.Card.ProfileRevision,
+    Handle: slot.Card.Username,
+    Name: slot.Card.Name,
+    Description: slot.Card.Description,
+    Location: slot.Card.Location,
+    ImageSet: slot.Card.Image != "",
+    Version: slot.Card.Version,
+    Node: slot.Card.Node,
   }
 }
 

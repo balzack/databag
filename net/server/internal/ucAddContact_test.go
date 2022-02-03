@@ -13,7 +13,10 @@ func TestAddContact(t *testing.T) {
   var r *Revision
   var msg DataMessage
   var cards []Card
-  var card *Card
+  var detail int64
+  var profile int64
+  var cardProfile *CardProfile
+  var cardDetail *CardDetail
 
   // setup testing group
   set, err = AddTestGroup("addaccount")
@@ -40,35 +43,40 @@ func TestAddContact(t *testing.T) {
 
   assert.NoError(t, SendEndpointTest(GetCards, "GET", "/contact/cards?cardRevision=" + strconv.FormatInt(rev.Card, 10), nil, nil, APP_TOKENAPP, set.B.Token, &cards))
   assert.Equal(t, 1, len(cards))
-  assert.Equal(t, set.A.Guid, cards[0].CardData.CardProfile.Guid)
-  assert.NotEqual(t, "Namer", cards[0].CardData.CardProfile.Name)
+  assert.Equal(t, set.A.Guid, cards[0].CardData.Guid)
+  profile = cards[0].CardData.ProfileRevision
   rev = r
 
-  card = &Card{}
+  cardProfile = &CardProfile{}
   assert.NoError(t, SendEndpointTest(GetProfileMessage, "GET", "/profile/message", nil, nil, APP_TOKENCONTACT, set.B.A.Token, &msg))
-  assert.NoError(t, SendEndpointTest(SetCardProfile, "PUT", "/contact/cards/{cardId}/profile", &map[string]string{"cardId":cards[0].CardId}, msg, APP_TOKENAPP, set.B.Token, &card))
+  assert.NoError(t, SendEndpointTest(SetCardProfile, "PUT", "/contact/cards/{cardId}/profile", &map[string]string{"cardId":cards[0].CardId}, msg, APP_TOKENAPP, set.B.Token, cardProfile))
+  assert.Equal(t, "Namer", cardProfile.Name)
 
   r = GetTestRevision(set.B.Revisions)
   assert.NotEqual(t, rev.Card, r.Card)
 
   assert.NoError(t, SendEndpointTest(GetCards, "GET", "/contact/cards?cardRevision=" + strconv.FormatInt(rev.Card, 10), nil, nil, APP_TOKENAPP, set.B.Token, &cards))
   assert.Equal(t, 1, len(cards))
-  assert.Equal(t, set.A.Guid, cards[0].CardData.CardProfile.Guid)
-  assert.Equal(t, "Namer", cards[0].CardData.CardProfile.Name)
+  assert.Equal(t, set.A.Guid, cards[0].CardData.Guid)
+  assert.NotEqual(t, profile, cards[0].CardData.ProfileRevision)
+  detail = cards[0].CardData.DetailRevision
   rev = r
 
-  card = &Card{}
-  assert.NoError(t, SendEndpointTest(SetCardNotes, "PUT", "/contact/cards/{cardId}/notes", &map[string]string{"cardId":cards[0].CardId}, "some interesting notes", APP_TOKENAPP, set.B.Token, &card))
-  assert.Equal(t, "some interesting notes", card.CardData.Notes)
+  cardDetail = &CardDetail{}
+  assert.NoError(t, SendEndpointTest(SetCardNotes, "PUT", "/contact/cards/{cardId}/notes", &map[string]string{"cardId":cards[0].CardId}, "some interesting notes", APP_TOKENAPP, set.B.Token, cardDetail))
+  assert.Equal(t, "some interesting notes", cardDetail.Notes)
   r = GetTestRevision(set.B.Revisions)
   assert.NotEqual(t, rev.Card, r.Card)
   rev = r
 
-  card = &Card{}
-  assert.NoError(t, SendEndpointTest(ClearCardNotes, "DELETE", "/contact/cards/{cardId}/notes", &map[string]string{"cardId":cards[0].CardId}, nil, APP_TOKENAPP, set.B.Token, &card))
-  assert.Equal(t, "", card.CardData.Notes)
+  cardDetail = &CardDetail{}
+  assert.NoError(t, SendEndpointTest(ClearCardNotes, "DELETE", "/contact/cards/{cardId}/notes", &map[string]string{"cardId":cards[0].CardId}, nil, APP_TOKENAPP, set.B.Token, cardDetail))
+  assert.Equal(t, "", cardDetail.Notes)
   r = GetTestRevision(set.B.Revisions)
   assert.NotEqual(t, rev.Card, r.Card)
-  rev = r
 
+  assert.NoError(t, SendEndpointTest(GetCards, "GET", "/contact/cards?cardRevision=" + strconv.FormatInt(rev.Card, 10), nil, nil, APP_TOKENAPP, set.B.Token, &cards))
+  assert.Equal(t, 1, len(cards))
+  assert.Equal(t, set.A.Guid, cards[0].CardData.Guid)
+  assert.NotEqual(t, detail, cards[0].CardData.DetailRevision)
 }

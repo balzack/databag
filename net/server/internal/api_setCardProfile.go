@@ -87,6 +87,6 @@ func SetCardProfile(w http.ResponseWriter, r *http.Request) {
   }
 
   SetStatus(account)
-  WriteResponse(w, getCardModel(&slot));
+  WriteResponse(w, getCardProfileModel(&slot));
 }
 

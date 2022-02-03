@@ -300,10 +300,10 @@ var routes = Routes{
 	},
 
 	Route{
-		"GetCardData",
+		"GetCardDetail",
 		strings.ToUpper("Get"),
-		"/contact/cards/{cardId}/data",
-		GetCardData,
+		"/contact/cards/{cardId}/detail",
+		GetCardDetail,
 	},
 
 	Route{

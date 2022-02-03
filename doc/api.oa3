@@ -835,13 +835,6 @@ paths:
       operationId: get-groups
       security:
         - bearerAuth: []
-      parameters:
-        - name: groupRevision
-          in: query
-          description: only return updated groups since specified revision
-          required: false
-          schema:
-            type: string
       responses:
         '200':
           description: successful operation
@@ -1080,7 +1073,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CardData'
+                $ref: '#/components/schemas/CardDetail'
         '401':
           description: permission denied
         '404':
@@ -1315,12 +1308,12 @@ paths:
         '500':
           description: internal server error
           
-  /contact/cards/{cardId}/data:
+  /contact/cards/{cardId}/detail:
     get:
       tags:
         - contact
-      description: Get specified card data. Access granted to app tokens for account holder.
-      operationId: get-card-data
+      description: Get specified card detail. Access granted to app tokens for account holder.
+      operationId: get-card-detail
       security:
         - bearerAuth: []
       parameters:
@@ -1336,7 +1329,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CardData'
+                $ref: '#/components/schemas/CardDetail'
         '401':
           description: permission denied
         '404':
@@ -1367,7 +1360,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CardData'
+                $ref: '#/components/schemas/CardDetail'
         '401':
           description: permission denied
         '404':
@@ -1401,7 +1394,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CardData'
+                $ref: '#/components/schemas/CardDetail'
         '401':
           description: permission denied
         '404':
@@ -1438,7 +1431,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CardData'
+                $ref: '#/components/schemas/CardDetail'
         '401':
           description: permission denied
         '404':
@@ -1473,7 +1466,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CardData'
+                $ref: '#/components/schemas/CardDetail'
         '401':
           description: permission denied
         '404':
@@ -1513,30 +1506,6 @@ paths:
         - contact
       description: Set content revision for contact. This is intend to be invoked automatically anytime a contact updates their content or sharing. Access granted to contact tokens.
       operationId: set-content-revision
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: revision set
-        '401':
-          description: not authorized
-        '410':
-          description: account disabled
-        '500':
-          description: internal server error
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: integer
-              format: int64
-              
-  /contact/label/revision:
-    put:
-      tags:
-        - contact
-      description: Set label revision for contact. This is intend to be invoked automatically anytime a contact updates their label or sharing. Access granted to contact tokens.
-      operationId: set-label-revision
       security:
         - bearerAuth: []
       responses:
@@ -2435,19 +2404,6 @@ paths:
       operationId: get-labels
       security:
         - bearerAuth: []
-      parameters:
-        - name: viewRevision
-          in: query
-          description: only return updated if view matches 
-          required: false
-          schema:
-            type: string
-        - name: labelRevision
-          in: query
-          description: only return updated if view matches 
-          required: false
-          schema:
-            type: string
       responses:
         '200':
           description: successful operation
@@ -4096,6 +4052,9 @@ components:
       required:
         - node
       properties:
+        revision:
+          type: integer
+          format: int64
         handle:
           type: string
         name:
@@ -4104,41 +4063,70 @@ components:
           type: string
         location:
           type: string
-        revision:
-          type: integer
-          format: int64
         imageSet:
           type: boolean
+        version:
+          type: string
         node:
           type: string
           
+    CardDetail:
+      type: object
+      required:
+        - revision
+      properties:
+        revision:
+          type: integer
+          format: int64
+        notes:
+          type: string
+        groups:
+          type: array
+          items:
+            type: string
+            
     Card:
       type: object
       required:
         - cardId
+        - revision
         - cardData
       properties:
         cardId:
           type: string
+        revision:
+          type: number
+          format: int64
         cardData:
           $ref: '#/components/schemas/CardData'
-          
+        
+        
     CardData:
       type: object
       required:
+        - guid
         - status
-        - cardProfile
-        - cardData
+        - token
+        - detailRevision
+        - profileRevision
         - notifiedProfile
         - notifiedContent
+        - notifiedLabel
         - notifiedView
       properties:
-        cardId:
+        guid:
           type: string
-        cardProfile:
-          $ref: '#/components/schemas/CardProfile'
-        cardData:
-          $ref: '#/components/schemas/CardData'
+        status:
+          type: string
+          enum: [ pending, confirmed, requested, connecting, connected ]
+        token:
+          type: string
+        detailRevision:
+          type: integer
+          format: int64
+        profileRevision:
+          type: integer
+          format: int64
         notifiedProfile:
           type: integer
           format: int64
@@ -4151,17 +4139,6 @@ components:
         notifiedView:
           type: integer
           format: int64
-        status:
-          type: string
-          enum: [ pending, confirmed, requested, connecting, connected ]
-        notes:
-          type: string
-        token:
-          type: string
-        groups:
-          type: array
-          items:
-            type: string
             
     Asset:
       type: object
@@ -4332,6 +4309,8 @@ components:
       type: object
       required:
         - articleId
+        - articleBlockId
+        - revision
         - dataType
         - data
         - created
@@ -4344,6 +4323,11 @@ components:
       properties:
         articleId:
           type: string
+        articleBlockId:
+          type: string
+        revision:
+          type: integer
+          format: int64
         dataType:
           type: string
         data:
@@ -4375,25 +4359,37 @@ components:
           type: integer
           format: int64
           
+    ArticleView:
+      type: object
+      required:
+        - articleId
+        - revision
+        - tagRevision
+      properties:
+        articleId:
+          type: string
+        revision:
+          type: integer
+          format: int64
+        tagRevision:
+          type: integer
+          format: int64
+          
     Group:
       type: object
       required:
         - groupId
-        - groupData
-      properties:
-        groupId:
-          type: string
-        groupData:
-          $ref: '#/components/schemas/GroupData'
-          
-    GroupData:
-      type: object
-      required:
+        - revision
         - dataType
         - data
         - created
         - updated
       properties:
+        groupId:
+          type: string
+        revision:
+          type: integer
+          format: int64
         dataType:
           type: string
         data:
@@ -4409,22 +4405,18 @@ components:
       type: object
       required:
         - labelId
-        - labelData
-      properties:
-        labelId:
-          type: string
-        labelData:
-          $ref: '#/components/schemas/LabelData'
-          
-    LabelData:
-      type: object
-      required:
-        - dataType
+        - labelRevision
+        - type
         - data
         - created
         - modified
       properties:
-        dataType:
+        labelId:
+          type: string
+        labelRevision:
+          type: integer
+          format: int64
+        type:
           type: string
         data:
           type: string
