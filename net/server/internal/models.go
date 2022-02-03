@@ -45,6 +45,7 @@ type Subject struct {
 
 type Article struct {
   ArticleId string `json:"article_id"`
+  Revision int64 `json:"revision"`
 	ArticleData *ArticleData `json:"articleData"`
 }
 
@@ -83,12 +84,12 @@ type Asset struct {
 
 type Card struct {
 	CardId string `json:"cardId"`
+  Revision int64 `json:"revision"`
 	CardData *CardData `json:"cardData"`
 }
 
 type CardData struct {
 	CardProfile *CardProfile `json:"cardProfile"`
-	CardData *CardData `json:"cardData"`
 	NotifiedProfile int64 `json:"notifiedProfile"`
 	NotifiedContent int64 `json:"notifiedContent"`
   NotifiedLabel int64 `json:"notifiedLabel"`
@@ -144,6 +145,7 @@ type DialogueInsights struct {
 
 type Group struct {
 	GroupId string `json:"groupId"`
+  Revision int64 `json:"revision"`
 	GroupData *GroupData `json:"groupData"`
 }
 
@@ -168,6 +170,7 @@ type Insight struct {
 
 type Label struct {
 	LabelId string `json:"labelId"`
+  Revision int64 `json:"revision"`
 	LabelData *LabelData `json:"labelData"`
 }
 

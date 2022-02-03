@@ -20,7 +20,8 @@ func getCardModel(slot *store.CardSlot) *Card {
 
   return &Card{
     CardId: slot.CardSlotId,
-      CardData: &CardData {
+    Revision: slot.Revision,
+    CardData: &CardData {
       NotifiedProfile: slot.Card.NotifiedProfile,
       NotifiedContent: slot.Card.NotifiedContent,
       NotifiedLabel: slot.Card.NotifiedLabel,
@@ -53,6 +54,7 @@ func getGroupModel(slot *store.GroupSlot) *Group {
 
   return &Group{
     GroupId: slot.GroupSlotId,
+    Revision: slot.Revision,
     GroupData: &GroupData {
       DataType: slot.Group.DataType,
       Data: slot.Group.GroupData.Data,
@@ -67,6 +69,7 @@ func getArticleModel(slot *store.ArticleSlot, contact bool, shared bool) *Articl
   if !shared || slot.Article == nil {
     return &Article{
       ArticleId: slot.ArticleSlotId,
+      Revision: slot.Revision,
     }
   }
 
@@ -84,6 +87,7 @@ func getArticleModel(slot *store.ArticleSlot, contact bool, shared bool) *Articl
 
   return &Article{
     ArticleId: slot.ArticleSlotId,
+    Revision: slot.Revision,
     ArticleData: &ArticleData{
       DataType: slot.Article.DataType,
       Data: slot.Article.Data,
