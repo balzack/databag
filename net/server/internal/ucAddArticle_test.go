@@ -17,8 +17,6 @@ func TestAddArticle(t *testing.T) {
   set, err = AddTestGroup("addarticle")
   assert.NoError(t, err)
 
-PrintMsg(set)
-
   // initial revision
   rev = GetTestRevision(set.B.Revisions)
 

@@ -64,6 +64,10 @@ func SendLocalNotification(notification *store.Notification) {
     if err := NotifyContentRevision(&card, notification.Revision); err != nil {
       ErrMsg(err)
     }
+  } else if notification.Module == APP_NOTIFYLABEL {
+    if err := NotifyLabelRevision(&card, notification.Revision); err != nil {
+      ErrMsg(err)
+    }
   } else if notification.Module == APP_NOTIFYVIEW {
     if err := NotifyViewRevision(&card, notification.Revision); err != nil {
       ErrMsg(err)
@@ -219,5 +223,60 @@ func SetContactViewNotification(account *store.Account, card *store.Card) {
   }
 }
 
+
+// notify all cards of label change
+// account.Label incremented by adding, updating, removing a label & setting or clearning group from article
+func SetLabelNotification(account *store.Account) {
+
+  // select all connected cards
+  var cards []store.Card
+  if err := store.DB.Where("account_id = ? AND status = ?", account.Guid, APP_CARDCONNECTED).Find(&cards).Error; err != nil {
+    ErrMsg(err)
+    return
+  }
+
+  // add new notification for each card
+  err := store.DB.Transaction(func(tx *gorm.DB) error {
+    for _, card := range cards {
+      notification := &store.Notification{
+        Node: card.Node,
+        Module: APP_NOTIFYLABEL,
+        Token: card.OutToken,
+        Revision: account.LabelRevision,
+      }
+      if err := tx.Save(notification).Error; err != nil {
+        return err
+      }
+      notify <- notification
+    }
+    return nil
+  })
+  if err != nil {
+    ErrMsg(err)
+  }
+}
+
+// notify single card of label change
+// card.Label incremented by adding or removing group from label
+func SetContactLabelNotification(account *store.Account, card *store.Card) {
+
+  if card.Status != APP_CARDCONNECTED {
+    return
+  }
+
+  // add new notification for card
+  notification := &store.Notification{
+    Node: card.Node,
+    Module: APP_NOTIFYLABEL,
+    Token: card.OutToken,
+    Revision: account.LabelRevision,
+  }
+
+  if res := store.DB.Save(notification).Error; res != nil {
+    ErrMsg(res)
+  } else {
+    notify <- notification
+  }
+}
 
 

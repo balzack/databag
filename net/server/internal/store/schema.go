@@ -185,6 +185,7 @@ type Card struct {
   ViewRevision      int64           `gorm:"not null"`
   NotifiedView      int64
   NotifiedContent   int64
+  NotifiedLabel     int64
   NotifiedProfile   int64
   Account           Account         `gorm:"references:Guid"`
   Groups            []Group         `gorm:"many2many:card_groups"`

@@ -835,6 +835,13 @@ paths:
       operationId: get-groups
       security:
         - bearerAuth: []
+      parameters:
+        - name: groupRevision
+          in: query
+          description: only return updated groups since specified revision
+          required: false
+          schema:
+            type: string
       responses:
         '200':
           description: successful operation
@@ -1506,6 +1513,30 @@ paths:
         - contact
       description: Set content revision for contact. This is intend to be invoked automatically anytime a contact updates their content or sharing. Access granted to contact tokens.
       operationId: set-content-revision
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: revision set
+        '401':
+          description: not authorized
+        '410':
+          description: account disabled
+        '500':
+          description: internal server error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: integer
+              format: int64
+              
+  /contact/label/revision:
+    put:
+      tags:
+        - contact
+      description: Set label revision for contact. This is intend to be invoked automatically anytime a contact updates their label or sharing. Access granted to contact tokens.
+      operationId: set-label-revision
       security:
         - bearerAuth: []
       responses:
@@ -2404,6 +2435,19 @@ paths:
       operationId: get-labels
       security:
         - bearerAuth: []
+      parameters:
+        - name: viewRevision
+          in: query
+          description: only return updated if view matches 
+          required: false
+          schema:
+            type: string
+        - name: labelRevision
+          in: query
+          description: only return updated if view matches 
+          required: false
+          schema:
+            type: string
       responses:
         '200':
           description: successful operation
@@ -4068,30 +4112,21 @@ components:
         node:
           type: string
           
-    CardData:
-      type: object
-      required:
-        - status
-      properties:
-        revision:
-          type: integer
-          format: int64
-        status:
-          type: string
-          enum: [ pending, confirmed, requested, connecting, connected ]
-        notes:
-          type: string
-        token:
-          type: string
-        groups:
-          type: array
-          items:
-            type: string
-          
     Card:
       type: object
       required:
         - cardId
+        - cardData
+      properties:
+        cardId:
+          type: string
+        cardData:
+          $ref: '#/components/schemas/CardData'
+          
+    CardData:
+      type: object
+      required:
+        - status
         - cardProfile
         - cardData
         - notifiedProfile
@@ -4110,9 +4145,23 @@ components:
         notifiedContent:
           type: integer
           format: int64
+        notifiedLabel:
+          type: integer
+          format: int64
         notifiedView:
           type: integer
           format: int64
+        status:
+          type: string
+          enum: [ pending, confirmed, requested, connecting, connected ]
+        notes:
+          type: string
+        token:
+          type: string
+        groups:
+          type: array
+          items:
+            type: string
             
     Asset:
       type: object
@@ -4326,37 +4375,25 @@ components:
           type: integer
           format: int64
           
-    ArticleView:
-      type: object
-      required:
-        - articleId
-        - revision
-        - tagRevision
-      properties:
-        articleId:
-          type: string
-        revision:
-          type: integer
-          format: int64
-        tagRevision:
-          type: integer
-          format: int64
-          
     Group:
       type: object
       required:
         - groupId
-        - revision
+        - groupData
+      properties:
+        groupId:
+          type: string
+        groupData:
+          $ref: '#/components/schemas/GroupData'
+          
+    GroupData:
+      type: object
+      required:
         - dataType
         - data
         - created
         - updated
       properties:
-        groupId:
-          type: string
-        revision:
-          type: integer
-          format: int64
         dataType:
           type: string
         data:
@@ -4372,18 +4409,22 @@ components:
       type: object
       required:
         - labelId
-        - labelRevision
-        - type
+        - labelData
+      properties:
+        labelId:
+          type: string
+        labelData:
+          $ref: '#/components/schemas/LabelData'
+          
+    LabelData:
+      type: object
+      required:
+        - dataType
         - data
         - created
         - modified
       properties:
-        labelId:
-          type: string
-        labelRevision:
-          type: integer
-          format: int64
-        type:
+        dataType:
           type: string
         data:
           type: string
@@ -4542,6 +4583,5 @@ components:
     bearerAuth: 
       type: http
       scheme: bearer
-
 
 

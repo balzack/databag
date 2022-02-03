@@ -391,6 +391,13 @@ var routes = Routes{
 	},
 
 	Route{
+		"SetLabelRevision",
+		strings.ToUpper("Put"),
+		"/contact/label/revision",
+		SetLabelRevision,
+	},
+
+	Route{
 		"SetOpenMessage",
 		strings.ToUpper("Put"),
 		"/contact/openMessage",
