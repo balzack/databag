@@ -26,7 +26,7 @@ func TestProfileNotification(t *testing.T) {
   GetCards(w, r)
   assert.NoError(t, ReadResponse(w, &cards))
   assert.Equal(t, len(cards), 1)
-  profileRevision := cards[0].NotifiedProfile
+  profileRevision := cards[0].CardData.NotifiedProfile
 
   // app connects websocket
   ws, err = StatusConnection(a, &revision);
@@ -55,5 +55,5 @@ func TestProfileNotification(t *testing.T) {
   GetCards(w, r)
   assert.NoError(t, ReadResponse(w, &cards))
   assert.Equal(t, len(cards), 1)
-  assert.NotEqual(t, profileRevision, cards[0].NotifiedProfile)
+  assert.NotEqual(t, profileRevision, cards[0].CardData.NotifiedProfile)
 }

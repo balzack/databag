@@ -83,15 +83,15 @@ type Asset struct {
 
 type Card struct {
 	CardId string `json:"cardId"`
+	CardData *CardData `json:"cardData"`
+}
+
+type CardData struct {
 	CardProfile *CardProfile `json:"cardProfile"`
 	CardData *CardData `json:"cardData"`
 	NotifiedProfile int64 `json:"notifiedProfile"`
 	NotifiedContent int64 `json:"notifiedContent"`
 	NotifiedView int64 `json:"notifiedView"`
-}
-
-type CardData struct {
-	Revision int64 `json:"revision,omitempty"`
 	Status string `json:"status"`
 	Notes string `json:"notes,omitempty"`
 	Token string `json:"token,omitempty"`

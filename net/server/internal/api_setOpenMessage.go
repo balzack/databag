@@ -42,16 +42,20 @@ func SetOpenMessage(w http.ResponseWriter, r *http.Request) {
   }
 
   // see if card exists
-  var card store.Card
-  if err := store.DB.Where("account_id = ? AND guid = ?", account.Guid, guid).First(&card).Error; err != nil {
+  slot := &store.CardSlot{}
+  card := &store.Card{}
+  if err := store.DB.Where("account_id = ? AND guid = ?", account.Guid, guid).First(card).Error; err != nil {
     if !errors.Is(err, gorm.ErrRecordNotFound) {
       ErrResponse(w, http.StatusInternalServerError, err)
       return
     }
 
-    // populate new record
-    card.CardId = uuid.New().String()
-    card.AccountID = account.Guid
+    // create new card
+    data, res := securerandom.Bytes(APP_TOKENSIZE)
+    if res != nil {
+      ErrResponse(w, http.StatusInternalServerError, res)
+      return
+    }
     card.Guid = guid
     card.Username = connect.Handle
     card.Name = connect.Name
@@ -61,18 +65,61 @@ func SetOpenMessage(w http.ResponseWriter, r *http.Request) {
     card.Version = connect.Version
     card.Node = connect.Node
     card.ProfileRevision = connect.ProfileRevision
+    card.Status = APP_CARDPENDING
     card.NotifiedProfile = connect.ProfileRevision
     card.NotifiedContent = connect.ContentRevision
     card.NotifiedView = connect.ViewRevision
-    card.Status = APP_CARDPENDING
-    card.DataRevision = 1
     card.OutToken = connect.Token
-    data, res := securerandom.Bytes(APP_TOKENSIZE)
-    if res != nil {
-      ErrResponse(w, http.StatusInternalServerError, res)
-      return
-    }
     card.InToken = hex.EncodeToString(data)
+    card.AccountID = account.Guid
+
+    // create new card or update existing
+    if err = store.DB.Preload("Card").Where("account_id = ? AND card_id = 0", account.ID).First(slot).Error; err != nil {
+      if !errors.Is(err, gorm.ErrRecordNotFound) {
+        ErrResponse(w, http.StatusInternalServerError, err)
+        return
+      }
+      err = store.DB.Transaction(func(tx *gorm.DB) error {
+        if res := tx.Save(card).Error; res != nil {
+          return res
+        }
+        slot.CardSlotId = uuid.New().String()
+        slot.AccountID = account.ID
+        slot.Revision = account.CardRevision + 1
+        slot.CardID = card.ID
+        slot.Card = card
+        if res := tx.Save(slot).Error; res != nil {
+          return res
+        }
+        if res := tx.Model(&account).Update("card_revision", account.CardRevision + 1).Error; res != nil {
+          return res
+        }
+        return nil
+      })
+      if err != nil {
+        ErrResponse(w, http.StatusInternalServerError, err)
+        return
+      }
+    } else {
+      err = store.DB.Transaction(func(tx *gorm.DB) error {
+        if res := tx.Save(card).Error; res != nil {
+          return res
+        }
+        slot.Revision = account.CardRevision + 1
+        slot.CardID = card.ID
+        if res := tx.Save(slot).Error; res != nil {
+          return res
+        }
+        if res := tx.Model(&account).Update("card_revision", account.CardRevision + 1).Error; res != nil {
+          return res
+        }
+        return nil
+      })
+      if err != nil {
+        ErrResponse(w, http.StatusInternalServerError, err)
+        return
+      }
+    }
 
   } else {
 
@@ -105,26 +152,42 @@ func SetOpenMessage(w http.ResponseWriter, r *http.Request) {
     card.DataRevision += 1
     card.OutToken = connect.Token
 
-  }
-
-  // save contact card
-  err  = store.DB.Transaction(func(tx *gorm.DB) error {
-    if res := tx.Save(&card).Error; res != nil {
-      return res
+    // save contact card
+    err  = store.DB.Transaction(func(tx *gorm.DB) error {
+      if res := tx.Save(&card).Error; res != nil {
+        return res
+      }
+      if res := tx.Preload("Card").Where("account_id = ? AND card_id = ?", account.ID, card.ID).First(&slot).Error; res != nil {
+        if !errors.Is(res, gorm.ErrRecordNotFound) {
+          return nil
+        }
+        slot = &store.CardSlot{
+          CardSlotId: uuid.New().String(),
+          AccountID: account.ID,
+          Revision: account.CardRevision + 1,
+          CardID: card.ID,
+          Card: card,
+        }
+      } else {
+        slot.Revision = account.CardRevision + 1
+      }
+      if res := tx.Preload("Card").Save(slot).Error; res != nil {
+        return res
+      }
+      if res := tx.Model(&account).Update("card_revision", account.CardRevision + 1).Error; res != nil {
+        return res
+      }
+      return nil
+    })
+    if err != nil {
+      ErrResponse(w, http.StatusInternalServerError, err)
+      return
     }
-    if res := tx.Model(&account).Update("card_revision", account.CardRevision + 1).Error; res != nil {
-      return res
-    }
-    return nil
-  })
-  if err != nil {
-    ErrResponse(w, http.StatusInternalServerError, err)
-    return
   }
 
   status := &ContactStatus{
-    Token: card.InToken,
-    Status: card.Status,
+    Token: slot.Card.InToken,
+    Status: slot.Card.Status,
   }
   SetStatus(&account)
   WriteResponse(w, &status)

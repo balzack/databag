@@ -10,6 +10,7 @@ func AutoMigrate(db *gorm.DB) {
   db.AutoMigrate(&AccountToken{});
   db.AutoMigrate(&Group{});
   db.AutoMigrate(&Label{});
+  db.AutoMigrate(&CardSlot{});
   db.AutoMigrate(&Card{});
   db.AutoMigrate(&Asset{});
   db.AutoMigrate(&ArticleSlot{});
@@ -135,10 +136,19 @@ type LabelData struct {
   Data              string
 }
 
+type CardSlot struct {
+  ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
+  CardSlotId        string          `gorm:"not null;index:cardslot,unique"`
+  AccountID         uint            `gorm:"not null;index:cardslot,unique"`
+  Revision          int64           `gorm:"not null"`
+  CardID            uint            `gorm:"not null;default:0"`
+  Card              *Card
+  Account           Account
+}
+
 type Card struct {
   ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
-  CardId            string          `gorm:"not null;index:card,unique"`
-  AccountID         string          `gorm:"not null;index:card,unique"`
+  AccountID         string          `gorm:"not null;index:cardguid,unique"`
   Guid              string          `gorm:"not null;index:cardguid,unique"`
   Username          string
   Name              string

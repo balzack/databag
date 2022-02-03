@@ -15,7 +15,6 @@ func TestGroupContact(t *testing.T) {
   var cardRevision int64
   var revision Revision
   var vars map[string]string
-  var cardData CardData
   var contactRevision int64
   var card Card
   var contactViewRevision int64
@@ -62,18 +61,18 @@ func TestGroupContact(t *testing.T) {
   SetBearerAuth(r, b)
   GetCard(w, r)
   assert.NoError(t, ReadResponse(w, &card))
-  contactViewRevision = card.NotifiedView
+  contactViewRevision = card.CardData.NotifiedView
 
   // set contact group
   r, w, _ = NewRequest("PUT", "/contact/cards/{cardId}/groups/{groupId}", nil)
   vars = make(map[string]string)
   vars["groupId"] = group.GroupId
-  vars["cardId"] = aCard 
+  vars["cardId"] = aCard
   r = mux.SetURLVars(r, vars)
   SetBearerAuth(r, a)
   SetCardGroup(w, r)
-  assert.NoError(t, ReadResponse(w, &cardData))
-  assert.Equal(t, 1, len(cardData.Groups))
+  assert.NoError(t, ReadResponse(w, &card))
+  assert.Equal(t, 1, len(card.CardData.Groups))
 
   // get contact revision
   r, w, _ = NewRequest("GET", "/contact/cards/{cardId}", nil)
@@ -102,8 +101,8 @@ func TestGroupContact(t *testing.T) {
   SetBearerAuth(r, b)
   GetCard(w, r)
   assert.NoError(t, ReadResponse(w, &card))
-  assert.NotEqual(t, contactViewRevision, card.NotifiedView)
-  contactViewRevision = card.NotifiedView
+  assert.NotEqual(t, contactViewRevision, card.CardData.NotifiedView)
+  contactViewRevision = card.CardData.NotifiedView
 
   // show group view
   r, w, _ = NewRequest("GET", "/share/groups", nil)
@@ -166,7 +165,7 @@ func TestGroupContact(t *testing.T) {
   SetBearerAuth(r, b)
   GetCard(w, r)
   assert.NoError(t, ReadResponse(w, &card))
-  assert.NotEqual(t, contactViewRevision, card.NotifiedView)
+  assert.NotEqual(t, contactViewRevision, card.CardData.NotifiedView)
 
   // show group view
   r, w, _ = NewRequest("GET", "/share/groups", nil)

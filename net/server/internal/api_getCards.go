@@ -13,11 +13,15 @@ func GetCards(w http.ResponseWriter, r *http.Request) {
     return
   }
 
-  var cards []store.Card
-  if err := store.DB.Where("account_id = ?", account.Guid).Find(&cards).Error; err != nil {
+  var slots []store.CardSlot
+  if err := store.DB.Preload("Card").Where("account_id = ?", account.ID).Find(&slots).Error; err != nil {
     ErrResponse(w, http.StatusInternalServerError, err)
     return
   }
 
-  WriteResponse(w, &cards)
+  var response []*Card
+  for _, slot := range slots {
+    response = append(response, getCardModel(&slot))
+  }
+  WriteResponse(w, response)
 }

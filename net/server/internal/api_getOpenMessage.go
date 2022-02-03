@@ -18,8 +18,8 @@ func GetOpenMessage(w http.ResponseWriter, r *http.Request) {
   detail := account.AccountDetail
   cardId := mux.Vars(r)["cardId"]
 
-  var card store.Card
-  if err := store.DB.Where("account_id = ? AND card_id = ?", account.Guid, cardId).First(&card).Error; err != nil {
+  var slot store.CardSlot
+  if err := store.DB.Preload("Card").Where("account_id = ? AND card_slot_id = ?", account.ID, cardId).First(&slot).Error; err != nil {
     if !errors.Is(err, gorm.ErrRecordNotFound) {
       ErrResponse(w, http.StatusInternalServerError, err)
     } else {
@@ -27,16 +27,20 @@ func GetOpenMessage(w http.ResponseWriter, r *http.Request) {
     }
     return
   }
+  if slot.Card == nil {
+    ErrResponse(w, http.StatusNotFound, errors.New("card has been deleted"))
+    return
+  }
 
-  if card.Status != APP_CARDCONNECTING && card.Status != APP_CARDCONNECTED {
+  if slot.Card.Status != APP_CARDCONNECTING && slot.Card.Status != APP_CARDCONNECTED {
     ErrResponse(w, http.StatusMethodNotAllowed, errors.New("invalid card state"))
     return
   }
 
   connect := &Connect{
-    Contact: card.Guid,
-    Token: card.InToken,
-    ContentRevision: account.ContentRevision + account.ViewRevision + card.ViewRevision,
+    Contact: slot.Card.Guid,
+    Token: slot.Card.InToken,
+    ContentRevision: account.ContentRevision + account.ViewRevision + slot.Card.ViewRevision,
     ProfileRevision: account.ProfileRevision,
     Handle: account.Username,
     Name: detail.Name,

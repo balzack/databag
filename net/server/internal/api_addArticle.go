@@ -47,11 +47,11 @@ func AddArticle(w http.ResponseWriter, r *http.Request) {
       Groups: groups,
       Labels: labels,
     };
-    if res := store.DB.Save(article).Error; res != nil {
+    if res := tx.Save(article).Error; res != nil {
       return res;
     }
 
-    if res := store.DB.Where("article_id = 0 AND account_id = ?", account.ID).First(&slot).Error; res != nil {
+    if res := tx.Where("article_id = 0 AND account_id = ?", account.ID).First(&slot).Error; res != nil {
       if errors.Is(res, gorm.ErrRecordNotFound) {
         slot = &store.ArticleSlot{
           ArticleSlotId: uuid.New().String(),
@@ -60,17 +60,17 @@ func AddArticle(w http.ResponseWriter, r *http.Request) {
           ArticleID: article.ID,
           Article: article,
         }
-        if ret := store.DB.Save(slot).Error; ret != nil {
+        if ret := tx.Save(slot).Error; ret != nil {
           return ret;
         }
       } else {
         return res
       }
     }
-    if ret := store.DB.Model(slot).Update("article_id", article.ID).Error; ret != nil {
+    if ret := tx.Model(slot).Update("article_id", article.ID).Error; ret != nil {
       return ret;
     }
-    if ret := store.DB.Preload("Article.Labels.Groups").Where("id = ?", article.ID).First(slot).Error; ret != nil {
+    if ret := tx.Preload("Article.Labels.Groups").Where("id = ?", article.ID).First(slot).Error; ret != nil {
       return ret;
     }
     if ret := tx.Model(&account).Update("content_revision", account.ContentRevision + 1).Error; ret != nil {

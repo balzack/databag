@@ -38,8 +38,8 @@ func SetCardStatus(w http.ResponseWriter, r *http.Request) {
   }
 
   // load referenced card
-  var card store.Card
-  if err := store.DB.Preload("Groups").Where("account_id = ? AND card_id = ?", account.Guid, cardId).First(&card).Error; err != nil {
+  var slot store.CardSlot
+  if err := store.DB.Preload("Card.Groups").Where("account_id = ? AND card_slot_id = ?", account.ID, cardId).First(&slot).Error; err != nil {
     if !errors.Is(err, gorm.ErrRecordNotFound) {
       ErrResponse(w, http.StatusInternalServerError, err)
     } else {
@@ -47,27 +47,34 @@ func SetCardStatus(w http.ResponseWriter, r *http.Request) {
     }
     return
   }
+  if slot.Card == nil {
+    ErrResponse(w, http.StatusNotFound, errors.New("card has been deleted"))
+    return
+  }
 
   // update card
-  card.DataRevision += 1
+  slot.Revision = account.CardRevision + 1
   if token != "" {
-    card.OutToken = token
+    slot.Card.OutToken = token
   }
   if status == APP_CARDCONNECTING {
-    if card.Status != APP_CARDCONNECTING && card.Status != APP_CARDCONNECTED {
+    if slot.Card.Status != APP_CARDCONNECTING && slot.Card.Status != APP_CARDCONNECTED {
       data, err := securerandom.Bytes(APP_TOKENSIZE)
       if err != nil {
         ErrResponse(w, http.StatusInternalServerError, err)
         return
       }
-      card.InToken = hex.EncodeToString(data)
+      slot.Card.InToken = hex.EncodeToString(data)
     }
   }
-  card.Status = status
+  slot.Card.Status = status
 
   // save and update contact revision
   err = store.DB.Transaction(func(tx *gorm.DB) error {
-    if res := tx.Save(&card).Error; res != nil {
+    if res := tx.Save(&slot.Card).Error; res != nil {
+      return res
+    }
+    if res := tx.Preload("Card").Save(&slot).Error; res != nil {
       return res
     }
     if res := tx.Model(&account).Update("card_revision", account.CardRevision + 1).Error; res != nil {
@@ -81,6 +88,6 @@ func SetCardStatus(w http.ResponseWriter, r *http.Request) {
   }
 
   SetStatus(account)
-  WriteResponse(w, getCardModel(&card));
+  WriteResponse(w, getCardModel(&slot));
 }
 

@@ -20,15 +20,18 @@ func SetCardGroup(w http.ResponseWriter, r *http.Request) {
   cardId := params["cardId"]
   groupId := params["groupId"]
 
-
   // load referenced card
-  var card store.Card
-  if err := store.DB.Where("account_id = ? AND card_id = ?", account.Guid, cardId).First(&card).Error; err != nil {
-    if !errors.Is(err, gorm.ErrRecordNotFound) {
-      ErrResponse(w, http.StatusInternalServerError, err)
-    } else {
+  var slot store.CardSlot
+  if err := store.DB.Preload("Card").Where("account_id = ? AND card_slot_id = ?", account.ID, cardId).First(&slot).Error; err != nil {
+    if errors.Is(err, gorm.ErrRecordNotFound) {
       ErrResponse(w, http.StatusNotFound, err)
+    } else {
+      ErrResponse(w, http.StatusInternalServerError, err)
     }
+    return
+  }
+  if slot.Card == nil {
+    ErrResponse(w, http.StatusNotFound, errors.New("card has been deleted"))
     return
   }
 
@@ -44,14 +47,17 @@ func SetCardGroup(w http.ResponseWriter, r *http.Request) {
   }
 
   // save and update revision
-  card.Groups = append(card.Groups, group)
-  card.ViewRevision += 1
-  card.DataRevision += 1
+  slot.Card.Groups = append(slot.Card.Groups, group)
+  slot.Card.ViewRevision += 1
+  slot.Revision = account.CardRevision + 1
   err = store.DB.Transaction(func(tx *gorm.DB) error {
     if res := tx.Model(&account).Update("card_revision", account.CardRevision + 1).Error; res != nil {
       return res
     }
-    if res := tx.Preload("Groups").Save(&card).Error; res != nil {
+    if res := tx.Save(&slot.Card).Error; res != nil {
+      return res
+    }
+    if res := tx.Preload("CardData.Groups").Save(&slot).Error; res != nil {
       return res
     }
     return nil
@@ -61,18 +67,9 @@ func SetCardGroup(w http.ResponseWriter, r *http.Request) {
     return
   }
 
-  cardData := &CardData{
-    Revision: card.DataRevision,
-    Status: card.Status,
-    Notes: card.Notes,
-    Token: card.OutToken,
-  }
-  for _, group := range card.Groups {
-    cardData.Groups = append(cardData.Groups, group.GroupId)
-  }
-  SetContactViewNotification(account, &card)
+  SetContactViewNotification(account, slot.Card)
   SetStatus(account)
-  WriteResponse(w, cardData)
+  WriteResponse(w, getCardModel(&slot))
 }
 
 
