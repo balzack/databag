@@ -71,7 +71,7 @@ func getArticleModel(slot *store.ArticleSlot, contact bool, shared bool) *Articl
 
   var labels []string;
   for _, label := range slot.Article.Labels {
-    labels = append(labels, label.LabelId)
+    labels = append(labels, label.LabelSlot.LabelSlotId)
   }
 
   return &Article{

@@ -31,11 +31,12 @@ func RemoveArticle(w http.ResponseWriter, r *http.Request) {
       return res
     }
     slot.ArticleID = 0
+    slot.Revision = account.ContentRevision + 1
     slot.Article = nil
     if res := tx.Save(&slot).Error; res != nil {
       return res
     }
-    if res := tx.Model(&account).Update("content_revision", account.ContentRevision).Error; res != nil {
+    if res := tx.Model(&account).Update("content_revision", account.ContentRevision + 1).Error; res != nil {
       return res
     }
     return nil

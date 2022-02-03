@@ -29,10 +29,16 @@ func AddArticle(w http.ResponseWriter, r *http.Request) {
     return
   }
 
-  var labels []store.Label
-  if err := store.DB.Where("label_id IN ?", articleAccess.Labels).Find(&labels).Error; err != nil {
+  var labelSlots []store.LabelSlot
+  if err := store.DB.Preload("Label").Where("label_slot_id IN ?", articleAccess.Labels).Find(&labelSlots).Error; err != nil {
     ErrResponse(w, http.StatusInternalServerError, err)
     return
+  }
+  var labels []store.Label
+  for _, slot := range labelSlots {
+    if slot.Label != nil {
+      labels = append(labels, *slot.Label)
+    }
   }
 
   // save data and apply transaction

@@ -9,6 +9,8 @@ func AutoMigrate(db *gorm.DB) {
   db.AutoMigrate(&Account{});
   db.AutoMigrate(&AccountToken{});
   db.AutoMigrate(&Group{});
+  db.AutoMigrate(&LabelSlot{});
+  db.AutoMigrate(&LabelData{});
   db.AutoMigrate(&Label{});
   db.AutoMigrate(&CardSlot{});
   db.AutoMigrate(&Card{});
@@ -117,18 +119,25 @@ type GroupData struct {
   Data              string
 }
 
+type LabelSlot struct {
+  ID                uint
+  LabelSlotId       string          `gorm:"not null;index:labelslot,unique"`
+  AccountID         uint            `gorm:"not null;index:labelslot,unique"`
+  Revision          int64           `gorm:"not null"`
+  LabelID           uint            `gorm:"not null;default:0"`
+  Label             *Label
+  Account           Account
+}
+
 type Label struct {
   ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
-  LabelId           string          `gorm:"not null;index:label,unique"`
-  AccountID         uint            `gorm:"not null;index:label,unique"`
   LabelDataID       uint            `gorm:"not null;index:labeldata"`
-  Revision          int64           `gorm:"not null"`
   DataType          string          `gorm:"index"`
   Created           int64           `gorm:"autoCreateTime"`
   Updated           int64           `gorm:"autoUpdateTime"`
   Groups            []Group         `gorm:"many2many:label_groups;"`
-  Account           Account
   LabelData         LabelData
+  LabelSlot         LabelSlot
 }
 
 type LabelData struct {
