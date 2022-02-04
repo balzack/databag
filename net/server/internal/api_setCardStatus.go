@@ -2,6 +2,7 @@ package databag
 
 import (
   "errors"
+  "strconv"
   "net/http"
   "encoding/hex"
   "gorm.io/gorm"
@@ -11,6 +12,7 @@ import (
 )
 
 func SetCardStatus(w http.ResponseWriter, r *http.Request) {
+  var res error
 
   account, code, err := BearerAppToken(r, false);
   if err != nil {
@@ -22,6 +24,40 @@ func SetCardStatus(w http.ResponseWriter, r *http.Request) {
   params := mux.Vars(r)
   cardId := params["cardId"]
   token := r.FormValue("token")
+
+  // scan revisions
+  var viewRevision int64
+  view := r.FormValue("viewRevision")
+  if view != "" {
+    if viewRevision, res = strconv.ParseInt(view, 10, 64); res != nil {
+      ErrResponse(w, http.StatusBadRequest, res)
+      return
+    }
+  }
+  var contentRevision int64
+  content := r.FormValue("contentRevision")
+  if content != "" {
+    if contentRevision, res = strconv.ParseInt(content, 10, 64); res != nil {
+      ErrResponse(w, http.StatusBadRequest, res)
+      return
+    }
+  }
+  var labelRevision int64
+  label := r.FormValue("labelRevision")
+  if label != "" {
+    if labelRevision, res = strconv.ParseInt(label, 10, 64); res != nil {
+      ErrResponse(w, http.StatusBadRequest, res)
+      return
+    }
+  }
+  var profileRevision int64
+  profile := r.FormValue("profileRevision")
+  if profile != "" {
+    if profileRevision, res = strconv.ParseInt(profile, 10, 64); res != nil {
+      ErrResponse(w, http.StatusBadRequest, res)
+      return
+    }
+  }
 
   var status string
   if err := ParseRequest(r, w, &status); err != nil {
@@ -68,6 +104,10 @@ func SetCardStatus(w http.ResponseWriter, r *http.Request) {
     }
   }
   slot.Card.Status = status
+  slot.Card.NotifiedView = viewRevision
+  slot.Card.NotifiedContent = contentRevision
+  slot.Card.NotifiedLabel = labelRevision
+  slot.Card.NotifiedProfile = profileRevision
 
   // save and update contact revision
   err = store.DB.Transaction(func(tx *gorm.DB) error {

@@ -20,6 +20,7 @@ func WriteResponse(w http.ResponseWriter, v interface{}) {
     log.Printf("%s:%d %s", strings.TrimPrefix(file, p), line, err.Error())
     w.WriteHeader(http.StatusInternalServerError)
   } else {
+    w.Header().Set("Content-Type", "application/json")
     w.Write(body);
   }
 }

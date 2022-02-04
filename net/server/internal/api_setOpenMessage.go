@@ -69,6 +69,7 @@ func SetOpenMessage(w http.ResponseWriter, r *http.Request) {
     card.NotifiedProfile = connect.ProfileRevision
     card.NotifiedContent = connect.ContentRevision
     card.NotifiedView = connect.ViewRevision
+    card.NotifiedLabel = connect.LabelRevision
     card.OutToken = connect.Token
     card.InToken = hex.EncodeToString(data)
     card.AccountID = account.Guid
@@ -140,6 +141,9 @@ func SetOpenMessage(w http.ResponseWriter, r *http.Request) {
     if connect.ViewRevision > card.NotifiedView {
       card.NotifiedView = connect.ViewRevision
     }
+    if connect.LabelRevision > card.NotifiedLabel {
+      card.NotifiedLabel = connect.LabelRevision
+    }
     if connect.ProfileRevision > card.NotifiedProfile {
       card.NotifiedProfile = connect.ProfileRevision
     }
@@ -187,7 +191,15 @@ func SetOpenMessage(w http.ResponseWriter, r *http.Request) {
   status := &ContactStatus{
     Token: slot.Card.InToken,
     Status: slot.Card.Status,
+    ViewRevision: slot.Card.ViewRevision + account.ViewRevision,
+    LabelRevision: account.LabelRevision,
+    ProfileRevision: account.ProfileRevision,
+    ContentRevision: account.ContentRevision,
   }
+  //SetContactProfileNotification(&account, slot.Card)
+  //SetContactContentNotification(&account, slot.Card)
+  //SetContactViewNotification(&account, slot.Card)
+  //SetContactLabelNotification(&account, slot.Card)
   SetStatus(&account)
   WriteResponse(w, &status)
 }

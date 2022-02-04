@@ -112,6 +112,29 @@ func SetProfileNotification(account *store.Account) {
   }
 }
 
+// notify single card of profile revision
+func SetContactProfileNotification(account *store.Account, card *store.Card) {
+
+  if card.Status != APP_CARDCONNECTED {
+    return
+  }
+
+  // add new notification for card
+  notification := &store.Notification{
+    Node: card.Node,
+    Module: APP_NOTIFYPROFILE,
+    Token: card.OutToken,
+    Revision: account.ProfileRevision,
+  }
+
+  if res := store.DB.Save(notification).Error; res != nil {
+    ErrMsg(res)
+  } else {
+    notify <- notification
+  }
+}
+
+
 // notify all cards of content change
 // account.Content incremented by adding, updating, removing article & setting or clearning group or label from article
 func SetContentNotification(account *store.Account) {

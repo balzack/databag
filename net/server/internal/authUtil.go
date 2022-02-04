@@ -159,6 +159,9 @@ func BearerContactToken(r *http.Request, detail bool) (*store.Card, int, error) 
   if card.Account.Disabled {
     return nil, http.StatusGone, errors.New("account is inactive")
   }
+  if card.Status != APP_CARDCONNECTING && card.Status != APP_CARDCONNECTED {
+    return nil, http.StatusUnauthorized, errors.New("invalid connection state")
+  }
 
   return &card, http.StatusOK, nil
 }

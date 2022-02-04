@@ -261,6 +261,10 @@ type Tunnel struct {
 type ContactStatus struct {
 	Token string `json:"token,omitempty"`
 	Status string `json:"status"`
+  ViewRevision int64 `json:"viewRevision"`
+  LabelRevision int64 `json:"labelRevision"`
+	ContentRevision int64 `json:"contentRevision"`
+	ProfileRevision int64 `json:"profileRevision,omitempty"`
 }
 
 type DataMessage struct {
@@ -293,6 +297,7 @@ type Connect struct {
 	Contact string `json:"contact"`
 	Token string `json:"token"`
   ViewRevision int64 `json:"viewRevision"`
+  LabelRevision int64 `json:"labelRevision"`
 	ContentRevision int64 `json:"contentRevision"`
 	ProfileRevision int64 `json:"profileRevision,omitempty"`
 	Handle string `json:"handle,omitempty"`

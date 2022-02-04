@@ -3,6 +3,7 @@ package databag
 import (
   "errors"
   "strings"
+  "strconv"
   "time"
   "net/url"
   "net/http"
@@ -383,7 +384,11 @@ func OpenTestCard(account string, cardId string) (err error) {
 
   // update status if connected
   if contactStatus.Status == APP_CARDCONNECTED {
-    if r, w, err = NewRequest("PUT", "/contact/cards/{cardId}/status?token=" + contactStatus.Token, APP_CARDCONNECTED); err != nil {
+    view := "viewRevision=" + strconv.FormatInt(contactStatus.ViewRevision, 10)
+    content := "contentRevision=" + strconv.FormatInt(contactStatus.ContentRevision, 10)
+    label := "labelRevision=" + strconv.FormatInt(contactStatus.LabelRevision, 10)
+    profile := "profileRevision=" + strconv.FormatInt(contactStatus.ProfileRevision, 10)
+    if r, w, err = NewRequest("PUT", "/contact/cards/{cardId}/status?token=" + contactStatus.Token + "&" + view + "&" + content + "&" + label + "&" + profile, APP_CARDCONNECTED); err != nil {
       return
     }
     r = mux.SetURLVars(r, vars)

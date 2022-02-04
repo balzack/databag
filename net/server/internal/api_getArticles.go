@@ -11,6 +11,7 @@ func GetArticles(w http.ResponseWriter, r *http.Request) {
   var res error
   var viewRevision int64
   var contentRevision int64
+  var revisionSet bool
 
   view := r.FormValue("viewRevision")
   if view != "" {
@@ -25,6 +26,7 @@ func GetArticles(w http.ResponseWriter, r *http.Request) {
       ErrResponse(w, http.StatusBadRequest, res)
       return
     }
+    revisionSet = true
   }
 
   tokenType := r.Header.Get("TokenType")
@@ -55,7 +57,12 @@ func GetArticles(w http.ResponseWriter, r *http.Request) {
     }
 
     if viewRevision != card.ViewRevision + card.Account.ViewRevision {
-      contentRevision = 0
+      if revisionSet {
+        ErrResponse(w, http.StatusGone, errors.New("article view unavailable"))
+        return
+      } else {
+        w.Header().Set("View-Revision", strconv.FormatInt(card.ViewRevision + card.Account.ViewRevision, 10))
+      }
     }
 
     var articles []store.ArticleSlot
@@ -65,7 +72,11 @@ func GetArticles(w http.ResponseWriter, r *http.Request) {
     }
 
     for _, article := range articles {
-      response = append(response, getArticleModel(&article, true, isShared(&article, card.Guid)))
+      if isShared(&article, card.Guid) {
+        response = append(response, getArticleModel(&article, true, true))
+      } else if revisionSet {
+        response = append(response, getArticleModel(&article, true, false))
+      }
     }
   } else {
     ErrResponse(w, http.StatusBadRequest, errors.New("invalid token type"))

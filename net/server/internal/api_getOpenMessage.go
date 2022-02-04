@@ -42,6 +42,8 @@ func GetOpenMessage(w http.ResponseWriter, r *http.Request) {
     Token: slot.Card.InToken,
     ContentRevision: account.ContentRevision + account.ViewRevision + slot.Card.ViewRevision,
     ProfileRevision: account.ProfileRevision,
+    ViewRevision: account.ViewRevision + slot.Card.ViewRevision,
+    LabelRevision: account.LabelRevision,
     Handle: account.Username,
     Name: detail.Name,
     Description: detail.Description,
