@@ -48,6 +48,8 @@ func GetArticles(w http.ResponseWriter, r *http.Request) {
     for _, article := range articles {
       response = append(response, getArticleModel(&article, false, true))
     }
+
+    w.Header().Set("Content-Revision", strconv.FormatInt(account.ContentRevision, 10))
   } else if tokenType == APP_TOKENCONTACT {
 
     card, code, err := BearerContactToken(r, false)
@@ -60,8 +62,6 @@ func GetArticles(w http.ResponseWriter, r *http.Request) {
       if revisionSet {
         ErrResponse(w, http.StatusGone, errors.New("article view unavailable"))
         return
-      } else {
-        w.Header().Set("View-Revision", strconv.FormatInt(card.ViewRevision + card.Account.ViewRevision, 10))
       }
     }
 
@@ -78,6 +78,9 @@ func GetArticles(w http.ResponseWriter, r *http.Request) {
         response = append(response, getArticleModel(&article, true, false))
       }
     }
+
+    w.Header().Set("View-Revision", strconv.FormatInt(card.ViewRevision + card.Account.ViewRevision, 10))
+    w.Header().Set("Content-Revision", strconv.FormatInt(card.Account.ContentRevision, 10))
   } else {
     ErrResponse(w, http.StatusBadRequest, errors.New("invalid token type"))
   }

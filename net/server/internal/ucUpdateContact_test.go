@@ -6,7 +6,7 @@ import (
   "github.com/stretchr/testify/assert"
 )
 
-func TestAddContact(t *testing.T) {
+func TestUpdateContact(t *testing.T) {
   var err error
   var set *TestGroup
   var rev *Revision

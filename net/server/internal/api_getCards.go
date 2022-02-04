@@ -34,5 +34,7 @@ func GetCards(w http.ResponseWriter, r *http.Request) {
   for _, slot := range slots {
     response = append(response, getCardModel(&slot))
   }
+
+  w.Header().Set("Card-Revision", strconv.FormatInt(account.CardRevision, 10))
   WriteResponse(w, response)
 }

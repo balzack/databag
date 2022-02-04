@@ -34,6 +34,8 @@ func GetGroups(w http.ResponseWriter, r *http.Request) {
   for _, slot := range slots {
     groups = append(groups, getGroupModel(&slot))
   }
+
+  w.Header().Set("Group-Revision", strconv.FormatInt(account.GroupRevision, 10))
   WriteResponse(w, groups)
 }
 
