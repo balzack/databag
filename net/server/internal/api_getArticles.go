@@ -113,11 +113,11 @@ func isShared(slot *store.ArticleSlot, guid string) bool {
 }
 
 func getAccountArticles(account *store.Account, revision int64, articles *[]store.ArticleSlot) error {
-  return store.DB.Preload("Article.Groups.GroupSlot").Preload("Article.Labels.Groups.GroupSlot").Where("account_id = ? AND revision > ?", account.ID, revision).Find(articles).Error
+  return store.DB.Preload("Article.Labels.LabelSlot").Preload("Article.Groups.GroupSlot").Preload("Article.Labels.Groups.GroupSlot").Where("account_id = ? AND revision > ?", account.ID, revision).Find(articles).Error
 }
 
 func getContactArticles(card *store.Card, revision int64, articles *[]store.ArticleSlot) error {
-  return store.DB.Preload("Article.Groups.Cards").Preload("Article.Labels.Groups.Cards").Where("account_id = ? AND revision > ?", card.Account.ID, revision).Find(articles).Error
+  return store.DB.Preload("Article.Labels.LabelSlot").Preload("Article.Groups.Cards").Preload("Article.Labels.Groups.Cards").Where("account_id = ? AND revision > ?", card.Account.ID, revision).Find(articles).Error
 }
 
 

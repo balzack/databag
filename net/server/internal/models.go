@@ -174,7 +174,7 @@ type LabelData struct {
 	Data string `json:"data"`
 	Created int64 `json:"created"`
 	Updated int64 `json:"updated"`
-	Groups []string `json:"groups,omitempty"`
+	Groups *[]string `json:"groups,omitempty"`
 }
 
 type NodeConfig struct {

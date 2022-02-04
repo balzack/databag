@@ -230,6 +230,7 @@ type Article struct {
   TagRevision       int64           `gorm:"not null"`
   Groups            []Group         `gorm:"many2many:article_groups;"`
   Labels            []Label         `gorm:"many2many:article_labels;"`
+  ArticleSlot       ArticleSlot
 }
 
 type ArticleAsset struct {

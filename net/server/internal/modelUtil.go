@@ -9,6 +9,7 @@ func getCardModel(slot *store.CardSlot) *Card {
   if slot.Card == nil {
     return &Card{
       CardId: slot.CardSlotId,
+      Revision: slot.Revision,
     }
   }
 
@@ -61,6 +62,7 @@ func getGroupModel(slot *store.GroupSlot) *Group {
   if slot.Group == nil {
     return &Group{
       GroupId: slot.GroupSlotId,
+      Revision: slot.Revision,
     }
   }
 
@@ -76,6 +78,36 @@ func getGroupModel(slot *store.GroupSlot) *Group {
   }
 }
 
+func getLabelModel(slot *store.LabelSlot, includeData bool, includeGroups bool) *Label {
+
+  if !includeData || slot.Label == nil {
+    return &Label{
+      LabelId: slot.LabelSlotId,
+      Revision: slot.Revision,
+    }
+  }
+
+  var groups *[]string
+  if includeGroups {
+    groups = &[]string{}
+    for _, group := range slot.Label.Groups {
+      *groups = append(*groups, group.GroupSlot.GroupSlotId)
+    }
+  }
+
+  return &Label{
+    LabelId: slot.LabelSlotId,
+    Revision: slot.Revision,
+    LabelData: &LabelData{
+      DataType: slot.Label.DataType,
+      Data: slot.Label.LabelData.Data,
+      Created: slot.Label.Created,
+      Updated: slot.Label.Updated,
+      Groups: groups,
+    },
+  }
+}
+
 func getArticleModel(slot *store.ArticleSlot, contact bool, shared bool) *Article {
 
   if !shared || slot.Article == nil {
@@ -85,14 +117,14 @@ func getArticleModel(slot *store.ArticleSlot, contact bool, shared bool) *Articl
     }
   }
 
-  var groups []string;
+  var groups []string
   if !contact {
     for _, group := range slot.Article.Groups {
       groups = append(groups, group.GroupSlot.GroupSlotId)
     }
   }
 
-  var labels []string;
+  var labels []string
   for _, label := range slot.Article.Labels {
     labels = append(labels, label.LabelSlot.LabelSlotId)
   }

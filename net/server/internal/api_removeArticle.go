@@ -27,6 +27,12 @@ func RemoveArticle(w http.ResponseWriter, r *http.Request) {
     if slot.Article == nil {
       return nil
     }
+    if res := tx.Model(slot.Article).Association("Groups").Clear(); res != nil {
+      return res
+    }
+    if res := tx.Model(slot.Article).Association("Labels").Clear(); res != nil {
+      return res
+    }
     if res := tx.Delete(slot.Article).Error; res != nil {
       return res
     }

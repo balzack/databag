@@ -2439,15 +2439,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              required:
-                - type
-                - data
-              properties:
-                type:
-                  type: string
-                data:
-                  type: string
+              $ref: '#/components/schemas/Subject'
           
   /content/labels/{labelId}:
     put:
@@ -2477,15 +2469,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              required:
-                - type
-                - data
-              properties:
-                type:
-                  type: string
-                data:
-                  type: string
+              $ref: '#/components/schemas/Subject'
     delete:
       tags:
         - content
@@ -4405,22 +4389,32 @@ components:
       type: object
       required:
         - labelId
-        - labelRevision
-        - type
-        - data
-        - created
-        - modified
+        - revision
+        - labelData
       properties:
         labelId:
           type: string
-        labelRevision:
-          type: integer
-          format: int64
+        revision:
+          type: string
+        labelData:
+          $ref: '#/components/schemas/LabelData'
+          
+    LabelData:
+      type: object
+      required:
+        - type
+        - data
+        - created
+        - updated
+      properties:
         type:
           type: string
         data:
           type: string
         created:
+          type: integer
+          format: int64
+        updated:
           type: integer
           format: int64
         groups:  # present only in account holder responses
