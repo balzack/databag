@@ -29,6 +29,9 @@ func RemoveGroup(w http.ResponseWriter, r *http.Request) {
   }
 
   err = store.DB.Transaction(func(tx *gorm.DB) error {
+    if res := tx.Model(slot.Group).Association("Cards").Clear(); res != nil {
+      return res
+    }
     if res := tx.Delete(&slot.Group.GroupData).Error; res != nil {
       return res
     }

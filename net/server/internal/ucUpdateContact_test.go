@@ -15,15 +15,15 @@ func TestUpdateContact(t *testing.T) {
   var cards []Card
   var detail int64
   var profile int64
-  var cardProfile *CardProfile
   var cardDetail *CardDetail
+  var cardProfile *CardProfile
 
   // setup testing group
-  set, err = AddTestGroup("addaccount")
+  set, err = AddTestGroup("updatecontact")
   assert.NoError(t, err)
 
   // setup testing group
-  _, err = AddTestGroup("addaccount")
+  _, err = AddTestGroup("updatecontact")
   assert.Error(t, err)
 
   rev = GetTestRevision(set.B.Revisions)
