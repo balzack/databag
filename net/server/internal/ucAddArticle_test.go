@@ -21,6 +21,8 @@ func TestAddArticle(t *testing.T) {
   var contentRevision int64
   var viewRevision int64
   var labelRevision int64
+  var labels *[]Label
+  var view int64
 
   // setup testing group
   set, err = AddTestGroup("addarticle")
@@ -66,7 +68,6 @@ func TestAddArticle(t *testing.T) {
   SetBearerAuth(r, set.B.A.Token)
   GetArticles(w, r)
   resp := w.Result()
-  var view int64
   view, err = strconv.ParseInt(resp.Header["View-Revision"][0], 10, 64)
   assert.NoError(t, err)
   assert.Equal(t, view, cards[0].CardData.NotifiedView)
@@ -141,4 +142,26 @@ func TestAddArticle(t *testing.T) {
   assert.NoError(t, SendEndpointTest(GetArticles, "GET", "/content/articles", nil, nil, APP_TOKENCONTACT, set.B.A.Token, articles))
   assert.Equal(t, 1, len(*articles))
   assert.NotEqual(t, article.ArticleId, (*articles)[0].ArticleId)
+
+  labels = &[]Label{}
+  assert.NoError(t, SendEndpointTest(GetLabels, "GET", "/content/labels", nil, nil, APP_TOKENAPP, set.A.Token, labels))
+  assert.Equal(t, 1, len(*labels))
+
+  labels = &[]Label{}
+  assert.NoError(t, SendEndpointTest(GetLabels, "GET", "/content/labels", nil, nil, APP_TOKENCONTACT, set.B.A.Token, labels))
+  assert.Equal(t, 0, len(*labels))
+
+  labels = &[]Label{}
+  assert.NoError(t, SendEndpointTest(GetLabels, "GET", "/content/labels", nil, nil, APP_TOKENCONTACT, set.C.A.Token, labels))
+  assert.Equal(t, 1, len(*labels))
+
+  r, w, ret = NewRequest("GET", "/content/labels", nil)
+  assert.NoError(t, ret)
+  r.Header.Add("TokenType", APP_TOKENCONTACT)
+  SetBearerAuth(r, set.C.A.Token)
+  GetLabels(w, r)
+  resp = w.Result()
+  view, err = strconv.ParseInt(resp.Header["View-Revision"][0], 10, 64)
+  assert.NoError(t, err)
+  assert.Equal(t, cards[0].CardData.NotifiedView, view)
 }

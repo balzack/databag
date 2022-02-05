@@ -72,7 +72,7 @@ func GetArticles(w http.ResponseWriter, r *http.Request) {
     }
 
     for _, article := range articles {
-      if isShared(&article, card.Guid) {
+      if isArticleShared(&article, card.Guid) {
         response = append(response, getArticleModel(&article, true, true))
       } else if revisionSet {
         response = append(response, getArticleModel(&article, true, false))
@@ -89,7 +89,7 @@ func GetArticles(w http.ResponseWriter, r *http.Request) {
 }
 
 // better if this filtering was done in gorm or sql
-func isShared(slot *store.ArticleSlot, guid string) bool {
+func isArticleShared(slot *store.ArticleSlot, guid string) bool {
   if slot.Article == nil {
     return false
   }
