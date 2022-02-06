@@ -23,6 +23,7 @@ func TestAddArticle(t *testing.T) {
   var labelRevision int64
   var labels *[]Label
   var view int64
+  var header map[string][]string
 
   // setup testing group
   set, err = AddTestGroup("addarticle")
@@ -34,46 +35,39 @@ func TestAddArticle(t *testing.T) {
   // create article
   articleAccess = &ArticleAccess{ Groups: []string{set.A.B.GroupId} }
   article = &Article{}
-  assert.NoError(t, SendEndpointTest(AddArticle, "POST", "/content/articles", nil, articleAccess, APP_TOKENAPP, set.A.Token, article))
+  assert.NoError(t, SendEndpointTest(AddArticle, "POST", "/content/articles", nil, articleAccess, APP_TOKENAPP, set.A.Token, article, nil))
 
   article = &Article{}
-  assert.NoError(t, SendEndpointTest(AddArticle, "POST", "/content/articles", nil, articleAccess, APP_TOKENAPP, set.A.Token, article))
+  assert.NoError(t, SendEndpointTest(AddArticle, "POST", "/content/articles", nil, articleAccess, APP_TOKENAPP, set.A.Token, article, nil))
 
-  assert.NoError(t, SendEndpointTest(RemoveArticle, "DELETE", "/content/articls/" + article.ArticleId, &map[string]string{"articleId": article.ArticleId }, nil, APP_TOKENAPP, set.A.Token, nil))
+  assert.NoError(t, SendEndpointTest(RemoveArticle, "DELETE", "/content/articls/" + article.ArticleId, &map[string]string{"articleId": article.ArticleId }, nil, APP_TOKENAPP, set.A.Token, nil, nil))
 
   ver = GetTestRevision(set.B.Revisions)
-  assert.NoError(t, SendEndpointTest(GetCards, "GET", "/contact/cards?cardRevision=" + strconv.FormatInt(rev.Card, 10), nil, nil, APP_TOKENAPP, set.B.Token, &cards))
+  assert.NoError(t, SendEndpointTest(GetCards, "GET", "/contact/cards?cardRevision=" + strconv.FormatInt(rev.Card, 10), nil, nil, APP_TOKENAPP, set.B.Token, &cards, nil))
   assert.NotEqual(t, ver.Card, rev.Card)
   assert.Equal(t, 1, len(cards))
   rev = ver
 
   articles = &[]Article{}
-  assert.NoError(t, SendEndpointTest(GetArticles, "GET", "/content/articles", nil, nil, APP_TOKENAPP, set.A.Token, articles))
+  assert.NoError(t, SendEndpointTest(GetArticles, "GET", "/content/articles", nil, nil, APP_TOKENAPP, set.A.Token, articles, nil))
   assert.Equal(t, 2, len(*articles))
   assert.True(t, (*articles)[0].ArticleData != nil || (*articles)[1].ArticleData != nil)
   assert.True(t, (*articles)[0].ArticleData == nil || (*articles)[1].ArticleData == nil)
 
   articles = &[]Article{}
-  assert.NoError(t, SendEndpointTest(GetArticles, "GET", "/content/articles", nil, nil, APP_TOKENCONTACT, set.B.A.Token, articles))
+  assert.NoError(t, SendEndpointTest(GetArticles, "GET", "/content/articles", nil, nil, APP_TOKENCONTACT, set.B.A.Token, articles, &header))
   assert.Equal(t, 1, len(*articles))
   assert.True(t, (*articles)[0].ArticleData != nil)
-
-  articles = &[]Article{}
-  assert.NoError(t, SendEndpointTest(GetArticles, "GET", "/content/articles", nil, nil, APP_TOKENCONTACT, set.C.A.Token, articles))
-  assert.Equal(t, 0, len(*articles))
-
-  r, w, ret := NewRequest("GET", "/content/articles", nil)
-  assert.NoError(t, ret)
-  r.Header.Add("TokenType", APP_TOKENCONTACT)
-  SetBearerAuth(r, set.B.A.Token)
-  GetArticles(w, r)
-  resp := w.Result()
-  view, err = strconv.ParseInt(resp.Header["View-Revision"][0], 10, 64)
+  view, err = strconv.ParseInt(header["View-Revision"][0], 10, 64)
   assert.NoError(t, err)
   assert.Equal(t, view, cards[0].CardData.NotifiedView)
 
   articles = &[]Article{}
-  assert.NoError(t, SendEndpointTest(GetArticles, "GET", "/content/articles?contentRevision=0&viewRevision=" + strconv.FormatInt(cards[0].CardData.NotifiedView, 10), nil, nil, APP_TOKENCONTACT, set.B.A.Token, articles))
+  assert.NoError(t, SendEndpointTest(GetArticles, "GET", "/content/articles", nil, nil, APP_TOKENCONTACT, set.C.A.Token, articles, nil))
+  assert.Equal(t, 0, len(*articles))
+
+  articles = &[]Article{}
+  assert.NoError(t, SendEndpointTest(GetArticles, "GET", "/content/articles?contentRevision=0&viewRevision=" + strconv.FormatInt(cards[0].CardData.NotifiedView, 10), nil, nil, APP_TOKENCONTACT, set.B.A.Token, articles, nil))
   assert.Equal(t, 2, len(*articles))
 
   ver = GetTestRevision(set.C.Revisions)
@@ -81,11 +75,11 @@ func TestAddArticle(t *testing.T) {
   // add another article
   article = &Article{}
   articleAccess = &ArticleAccess{}
-  assert.NoError(t, SendEndpointTest(AddArticle, "POST", "/content/articles", nil, articleAccess, APP_TOKENAPP, set.A.Token, article))
+  assert.NoError(t, SendEndpointTest(AddArticle, "POST", "/content/articles", nil, articleAccess, APP_TOKENAPP, set.A.Token, article, nil))
 
   // capture updated card on new article
   rev = GetTestRevision(set.C.Revisions)
-  assert.NoError(t, SendEndpointTest(GetCards, "GET", "/contact/cards?cardRevision=" + strconv.FormatInt(ver.Card, 10), nil, nil, APP_TOKENAPP, set.C.Token, &cards))
+  assert.NoError(t, SendEndpointTest(GetCards, "GET", "/contact/cards?cardRevision=" + strconv.FormatInt(ver.Card, 10), nil, nil, APP_TOKENAPP, set.C.Token, &cards, nil))
   assert.Equal(t, 1, len(cards))
   viewRevision = cards[0].CardData.NotifiedView
   contentRevision = cards[0].CardData.NotifiedContent
@@ -95,17 +89,17 @@ func TestAddArticle(t *testing.T) {
   // create new label
   label = &Label{}
   subject = &Subject{ DataType: "labeltype", Data: "labeldata" }
-  assert.NoError(t, SendEndpointTest(AddLabel, "POST", "/content/labels", nil, subject, APP_TOKENAPP, set.A.Token, label))
+  assert.NoError(t, SendEndpointTest(AddLabel, "POST", "/content/labels", nil, subject, APP_TOKENAPP, set.A.Token, label, nil))
   vars = &map[string]string{
     "labelId": label.LabelId,
     "groupId": set.A.C.GroupId,
   }
   label = &Label{}
-  assert.NoError(t, SendEndpointTest(SetLabelGroup, "POST", "/content/labels/{labelId}/groups/{groupId}", vars, nil, APP_TOKENAPP, set.A.Token, label))
+  assert.NoError(t, SendEndpointTest(SetLabelGroup, "POST", "/content/labels/{labelId}/groups/{groupId}", vars, nil, APP_TOKENAPP, set.A.Token, label, nil))
 
   // capture updated card on new assigned label
   rev = GetTestRevision(set.C.Revisions)
-  assert.NoError(t, SendEndpointTest(GetCards, "GET", "/contact/cards?cardRevision=" + strconv.FormatInt(ver.Card, 10), nil, nil, APP_TOKENAPP, set.C.Token, &cards))
+  assert.NoError(t, SendEndpointTest(GetCards, "GET", "/contact/cards?cardRevision=" + strconv.FormatInt(ver.Card, 10), nil, nil, APP_TOKENAPP, set.C.Token, &cards, nil))
   assert.Equal(t, 1, len(cards))
   assert.NotEqual(t, viewRevision, cards[0].CardData.NotifiedView)
   assert.NotEqual(t, labelRevision, cards[0].CardData.NotifiedLabel)
@@ -120,18 +114,18 @@ func TestAddArticle(t *testing.T) {
     "articleId": article.ArticleId,
   }
   article = &Article{}
-  assert.NoError(t, SendEndpointTest(SetArticleLabel, "POST", "/content/articles/{articleId}/labels/{labelId}", vars, nil, APP_TOKENAPP, set.A.Token, article))
+  assert.NoError(t, SendEndpointTest(SetArticleLabel, "POST", "/content/articles/{articleId}/labels/{labelId}", vars, nil, APP_TOKENAPP, set.A.Token, article, nil))
 
   // capture updated card on assigned article
   rev = GetTestRevision(set.C.Revisions)
-  assert.NoError(t, SendEndpointTest(GetCards, "GET", "/contact/cards?cardRevision=" + strconv.FormatInt(ver.Card, 10), nil, nil, APP_TOKENAPP, set.C.Token, &cards))
+  assert.NoError(t, SendEndpointTest(GetCards, "GET", "/contact/cards?cardRevision=" + strconv.FormatInt(ver.Card, 10), nil, nil, APP_TOKENAPP, set.C.Token, &cards, nil))
   assert.Equal(t, 1, len(cards))
   assert.NotEqual(t, contentRevision, cards[0].CardData.NotifiedContent)
   ver = rev
 
   // confirm c can see new article
   articles = &[]Article{}
-  assert.NoError(t, SendEndpointTest(GetArticles, "GET", "/content/articles", nil, nil, APP_TOKENCONTACT, set.C.A.Token, articles))
+  assert.NoError(t, SendEndpointTest(GetArticles, "GET", "/content/articles", nil, nil, APP_TOKENCONTACT, set.C.A.Token, articles, nil))
   assert.Equal(t, 1, len(*articles))
   assert.Equal(t, (*articles)[0].ArticleId, article.ArticleId)
   assert.Equal(t, 1, len((*articles)[0].ArticleData.Labels))
@@ -139,40 +133,33 @@ func TestAddArticle(t *testing.T) {
 
   // confirm b cannot see new article
   articles = &[]Article{}
-  assert.NoError(t, SendEndpointTest(GetArticles, "GET", "/content/articles", nil, nil, APP_TOKENCONTACT, set.B.A.Token, articles))
+  assert.NoError(t, SendEndpointTest(GetArticles, "GET", "/content/articles", nil, nil, APP_TOKENCONTACT, set.B.A.Token, articles, nil))
   assert.Equal(t, 1, len(*articles))
   assert.NotEqual(t, article.ArticleId, (*articles)[0].ArticleId)
 
   labels = &[]Label{}
-  assert.NoError(t, SendEndpointTest(GetLabels, "GET", "/content/labels", nil, nil, APP_TOKENAPP, set.A.Token, labels))
+  assert.NoError(t, SendEndpointTest(GetLabels, "GET", "/content/labels", nil, nil, APP_TOKENAPP, set.A.Token, labels, nil))
   assert.Equal(t, 1, len(*labels))
 
   labels = &[]Label{}
-  assert.NoError(t, SendEndpointTest(GetLabels, "GET", "/content/labels", nil, nil, APP_TOKENCONTACT, set.B.A.Token, labels))
+  assert.NoError(t, SendEndpointTest(GetLabels, "GET", "/content/labels", nil, nil, APP_TOKENCONTACT, set.B.A.Token, labels, nil))
   assert.Equal(t, 0, len(*labels))
 
   labels = &[]Label{}
-  assert.NoError(t, SendEndpointTest(GetLabels, "GET", "/content/labels", nil, nil, APP_TOKENCONTACT, set.C.A.Token, labels))
+  assert.NoError(t, SendEndpointTest(GetLabels, "GET", "/content/labels", nil, nil, APP_TOKENCONTACT, set.C.A.Token, labels, &header))
   assert.Equal(t, 1, len(*labels))
-
-  r, w, ret = NewRequest("GET", "/content/labels", nil)
-  assert.NoError(t, ret)
-  r.Header.Add("TokenType", APP_TOKENCONTACT)
-  SetBearerAuth(r, set.C.A.Token)
-  GetLabels(w, r)
-  resp = w.Result()
-  view, err = strconv.ParseInt(resp.Header["View-Revision"][0], 10, 64)
+  view, err = strconv.ParseInt(header["View-Revision"][0], 10, 64)
   assert.NoError(t, err)
   assert.Equal(t, cards[0].CardData.NotifiedView, view)
 
   vars = &map[string]string{ "labelId": label.LabelId, }
-  assert.NoError(t, SendEndpointTest(RemoveLabel, "DELETE", "/content/labels/{labelId}", vars, nil, APP_TOKENAPP, set.A.Token, nil))
+  assert.NoError(t, SendEndpointTest(RemoveLabel, "DELETE", "/content/labels/{labelId}", vars, nil, APP_TOKENAPP, set.A.Token, nil, nil))
 
   labels = &[]Label{}
-  assert.NoError(t, SendEndpointTest(GetLabels, "GET", "/content/labels", nil, nil, APP_TOKENCONTACT, set.C.A.Token, labels))
+  assert.NoError(t, SendEndpointTest(GetLabels, "GET", "/content/labels", nil, nil, APP_TOKENCONTACT, set.C.A.Token, labels, nil))
   assert.Equal(t, 0, len(*labels))
 
   articles = &[]Article{}
-  assert.NoError(t, SendEndpointTest(GetArticles, "GET", "/content/articles", nil, nil, APP_TOKENCONTACT, set.C.A.Token, articles))
+  assert.NoError(t, SendEndpointTest(GetArticles, "GET", "/content/articles", nil, nil, APP_TOKENCONTACT, set.C.A.Token, articles, nil))
   assert.Equal(t, 0, len(*articles))
 }

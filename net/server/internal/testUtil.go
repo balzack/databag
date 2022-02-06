@@ -61,6 +61,7 @@ func SendEndpointTest(
       tokenType string,
       token string,
       response interface{},
+      responseHeader *map[string][]string,
     ) (err error) {
 
   var r *http.Request
@@ -82,6 +83,9 @@ func SendEndpointTest(
   if resp.StatusCode != 200 {
     err = errors.New("response failed");
     return
+  }
+  if responseHeader != nil {
+    *responseHeader = resp.Header
   }
   if response == nil {
     return
