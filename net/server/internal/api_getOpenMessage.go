@@ -40,9 +40,9 @@ func GetOpenMessage(w http.ResponseWriter, r *http.Request) {
   connect := &Connect{
     Contact: slot.Card.Guid,
     Token: slot.Card.InToken,
-    ContentRevision: account.ContentRevision + account.ViewRevision + slot.Card.ViewRevision,
+    ContentRevision: account.ContentRevision,
     ProfileRevision: account.ProfileRevision,
-    ViewRevision: account.ViewRevision + slot.Card.ViewRevision,
+    ViewRevision: slot.Card.ViewRevision,
     LabelRevision: account.LabelRevision,
     Handle: account.Username,
     Name: detail.Name,

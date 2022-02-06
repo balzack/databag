@@ -191,7 +191,7 @@ func SetOpenMessage(w http.ResponseWriter, r *http.Request) {
   status := &ContactStatus{
     Token: slot.Card.InToken,
     Status: slot.Card.Status,
-    ViewRevision: slot.Card.ViewRevision + account.ViewRevision,
+    ViewRevision: slot.Card.ViewRevision,
     LabelRevision: account.LabelRevision,
     ProfileRevision: account.ProfileRevision,
     ContentRevision: account.ContentRevision,

@@ -164,4 +164,15 @@ func TestAddArticle(t *testing.T) {
   view, err = strconv.ParseInt(resp.Header["View-Revision"][0], 10, 64)
   assert.NoError(t, err)
   assert.Equal(t, cards[0].CardData.NotifiedView, view)
+
+  vars = &map[string]string{ "labelId": label.LabelId, }
+  assert.NoError(t, SendEndpointTest(RemoveLabel, "DELETE", "/content/labels/{labelId}", vars, nil, APP_TOKENAPP, set.A.Token, nil))
+
+  labels = &[]Label{}
+  assert.NoError(t, SendEndpointTest(GetLabels, "GET", "/content/labels", nil, nil, APP_TOKENCONTACT, set.C.A.Token, labels))
+  assert.Equal(t, 0, len(*labels))
+
+  articles = &[]Article{}
+  assert.NoError(t, SendEndpointTest(GetArticles, "GET", "/content/articles", nil, nil, APP_TOKENCONTACT, set.C.A.Token, articles))
+  assert.Equal(t, 0, len(*articles))
 }

@@ -71,7 +71,6 @@ type Account struct {
   CardRevision      int64           `gorm:"not null;default:1"`
   DialogueRevision  int64           `gorm:"not null;default:1"`
   InsightRevision   int64           `gorm:"not null;default:1"`
-  ViewRevision      int64           `gorm:"not null;default:1"`
   Created           int64           `gorm:"autoCreateTime"`
   Disabled          bool            `gorm:"not null;default:false"`
   AccountDetail     AccountDetail

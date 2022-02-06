@@ -58,7 +58,7 @@ func GetArticles(w http.ResponseWriter, r *http.Request) {
       return
     }
 
-    if viewRevision != card.ViewRevision + card.Account.ViewRevision {
+    if viewRevision != card.ViewRevision {
       if revisionSet {
         ErrResponse(w, http.StatusGone, errors.New("article view unavailable"))
         return
@@ -79,7 +79,7 @@ func GetArticles(w http.ResponseWriter, r *http.Request) {
       }
     }
 
-    w.Header().Set("View-Revision", strconv.FormatInt(card.ViewRevision + card.Account.ViewRevision, 10))
+    w.Header().Set("View-Revision", strconv.FormatInt(card.ViewRevision, 10))
     w.Header().Set("Content-Revision", strconv.FormatInt(card.Account.ContentRevision, 10))
   } else {
     ErrResponse(w, http.StatusBadRequest, errors.New("invalid token type"))

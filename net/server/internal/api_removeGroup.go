@@ -19,7 +19,7 @@ func RemoveGroup(w http.ResponseWriter, r *http.Request) {
   groupId := params["groupId"]
 
   var slot store.GroupSlot
-  if err := store.DB.Preload("Group.GroupData").Where("account_id = ? AND group_slot_id = ?", account.ID, groupId).First(&slot).Error; err != nil {
+  if err := store.DB.Preload("Group.GroupData").Preload("Group.Cards").Where("account_id = ? AND group_slot_id = ?", account.ID, groupId).First(&slot).Error; err != nil {
     if errors.Is(err, gorm.ErrRecordNotFound) {
       ErrResponse(w, http.StatusNotFound, err)
     } else {
@@ -27,6 +27,8 @@ func RemoveGroup(w http.ResponseWriter, r *http.Request) {
     }
     return
   }
+  cards := slot.Group.Cards
+  notify := []*store.Card{}
 
   err = store.DB.Transaction(func(tx *gorm.DB) error {
     if res := tx.Model(slot.Group).Association("Cards").Clear(); res != nil {
@@ -38,13 +40,16 @@ func RemoveGroup(w http.ResponseWriter, r *http.Request) {
     if res := tx.Delete(&slot.Group).Error; res != nil {
       return res
     }
+    for _, card := range cards {
+      if res := tx.Model(&card).Update("ViewRevision", card.ViewRevision + 1).Error; res != nil {
+        return res
+      }
+      notify = append(notify, &card)
+    }
     slot.GroupID = 0
     slot.Group = nil
     slot.Revision = account.GroupRevision + 1
     if res := tx.Save(&slot).Error; res != nil {
-      return res
-    }
-    if res :=  tx.Model(&account).Updates(store.Account{ViewRevision: account.ViewRevision + 1, GroupRevision: account.GroupRevision + 1}).Error; res != nil {
       return res
     }
     return nil
@@ -54,8 +59,10 @@ func RemoveGroup(w http.ResponseWriter, r *http.Request) {
     return
   }
 
+  for _, card := range notify {
+    SetContactViewNotification(account, card)
+  }
   SetStatus(account)
-  SetViewNotification(account)
   WriteResponse(w, nil)
 }
 

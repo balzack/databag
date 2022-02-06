@@ -36,7 +36,7 @@ func SetLabelGroup(w http.ResponseWriter, r *http.Request) {
   }
 
   groupSlot := &store.GroupSlot{}
-  if err := store.DB.Preload("Group.GroupSlot").Where("account_id = ? AND group_slot_id = ?", account.ID, groupId).First(&groupSlot).Error; err != nil {
+  if err := store.DB.Preload("Group.GroupSlot").Preload("Group.Cards").Where("account_id = ? AND group_slot_id = ?", account.ID, groupId).First(&groupSlot).Error; err != nil {
     if !errors.Is(err, gorm.ErrRecordNotFound) {
       ErrResponse(w, http.StatusInternalServerError, err)
     } else {
@@ -48,8 +48,17 @@ func SetLabelGroup(w http.ResponseWriter, r *http.Request) {
     ErrResponse(w, http.StatusNotFound, errors.New("referenced empty group slot"))
     return
   }
+  cards := &groupSlot.Group.Cards
+  notify := []*store.Card{}
 
   err = store.DB.Transaction(func(tx *gorm.DB) error {
+
+    for _, card := range *cards {
+      if res := tx.Model(&card).Update("ViewRevision", card.ViewRevision + 1).Error; res != nil {
+        return res;
+      }
+      notify = append(notify, &card)
+    }
 
     if res := tx.Model(labelSlot.Label).Association("Groups").Append(groupSlot.Group); res != nil {
       return res
@@ -63,10 +72,6 @@ func SetLabelGroup(w http.ResponseWriter, r *http.Request) {
       return res
     }
 
-    if res := tx.Model(account).Update("view_revision", account.ViewRevision + 1).Error; res != nil {
-      return res
-    }
-
     return nil
   })
   if err != nil {
@@ -74,8 +79,10 @@ func SetLabelGroup(w http.ResponseWriter, r *http.Request) {
     return
   }
 
-  SetViewNotification(account)
-  SetLabelNotification(account)
+  for _, card := range notify {
+    SetContactViewNotification(account, card)
+    SetContactLabelNotification(account, card)
+  }
   SetStatus(account)
   WriteResponse(w, getLabelModel(labelSlot, true, true))
 }

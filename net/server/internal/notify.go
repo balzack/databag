@@ -209,7 +209,7 @@ func SetViewNotification(account *store.Account) {
         Node: card.Node,
         Module: APP_NOTIFYVIEW,
         Token: card.OutToken,
-        Revision: account.ViewRevision + card.ViewRevision,
+        Revision: card.ViewRevision,
       }
       if err := tx.Save(notification).Error; err != nil {
         return err
@@ -236,7 +236,7 @@ func SetContactViewNotification(account *store.Account, card *store.Card) {
     Node: card.Node,
     Module: APP_NOTIFYVIEW,
     Token: card.OutToken,
-    Revision: account.ViewRevision + card.ViewRevision,
+    Revision: card.ViewRevision,
   }
 
   if res := store.DB.Save(notification).Error; res != nil {
