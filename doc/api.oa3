@@ -22,14 +22,16 @@ tags:
     description: authorize holder of identity for external service
   - name: profile
     description: getting and setting of the public profile
-  - name: share
-    description: access control for personal subjects, associates content and cards
-  - name: contact
-    description: connection to other identities, hook receiver
+  - name: detail
+    description: attribute management associated with profile
+  - name: alias
+    description: group management for showing attributes
   - name: content
-    description: posting and listing of personal subjects, group and tag managment
-  - name: converstaion
-    description: group sharing of subjects
+    description: article management for hosted data
+  - name: contact
+    description: card management for referencing contacts
+  - name: share
+    description: channel management for hosting communication
     
 paths:
 
@@ -1745,44 +1747,6 @@ paths:
                 data:
                   type: string
                   
-  /content/articles/{articleId}/expiration:
-    put:
-      tags:
-        - content
-      description: Set expiration for article. Access granted to app token of account holder.
-      operationId: set-article-expiration
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: articleId
-          in: path
-          description: specified article id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: success
-        '401':
-          description: permission denied
-        '404':
-          description: article not found
-        '410':
-          description: account disabled
-        '500':
-          description: internal server error
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - expires
-              properties:
-                expires:
-                  type: number
-                  format: int32
-                  
   /content/articles/{articleId}/groups/{groupId}:
     post:
       tags:
@@ -1818,7 +1782,7 @@ paths:
     delete:
       tags:
         - content
-      description: Remove article from sharing group. Unless the article is shared through other groups or labels contacts within that group will no longer have access to the article. Access granted to app tokens of the account holder.
+      description: Remove article from sharing group. Unless the article is shared through other groups or channels contacts within that group will no longer have access to the article. Access granted to app tokens of the account holder.
       operationId: clear-article-group
       security:
         - bearerAuth: []
@@ -1847,12 +1811,12 @@ paths:
         '500':
           description: internal server error
   
-  /content/articles/{articleId}/labels/{labelId}:
+  /content/articles/{articleId}/channels/{channelId}:
     post:
       tags:
         - content
-      description: Assign a label to an article. If the label has been assigned a sharing group the article will be accessible by contacts within that group. Access is granted to app tokens of the account holder.
-      operationId: set-article-label
+      description: Assign a channel to an article. If the channel has been assigned a sharing group the article will be accessible by contacts within that group. Access is granted to app tokens of the account holder.
+      operationId: set-article-channel
       security:
         - bearerAuth: []
       parameters:
@@ -1862,9 +1826,9 @@ paths:
           required: true
           schema:
             type: string
-        - name: labelId
+        - name: channelId
           in: path
-          description: specified label id 
+          description: specified channel id 
           required: true
           schema:
             type: string
@@ -1874,7 +1838,7 @@ paths:
         '401':
           description: permission denied
         '404':
-          description: label or article not found
+          description: channel or article not found
         '410':
           description: account disabled
         '500':
@@ -1882,8 +1846,8 @@ paths:
     delete:
       tags:
         - content
-      description: Remove a label from an article. If the label has been assigned a sharing group the article and the article is not shared in another way, the article will no longer be accessible to that group's contacts. Access is granted to app tokens of the account holder.
-      operationId: clear-article-label
+      description: Remove a channel from an article. If the channel has been assigned a sharing group the article and the article is not shared in another way, the article will no longer be accessible to that group's contacts. Access is granted to app tokens of the account holder.
+      operationId: clear-article-channel
       security:
         - bearerAuth: []
       parameters:
@@ -1893,9 +1857,9 @@ paths:
           required: true
           schema:
             type: string
-        - name: labelId
+        - name: channelId
           in: path
-          description: specified label id 
+          description: specified channel id 
           required: true
           schema:
             type: string
@@ -1905,7 +1869,7 @@ paths:
         '401':
           description: permission denied
         '404':
-          description: label or article not found
+          description: channel or article not found
         '410':
           description: account disabled
         '500':
@@ -2396,12 +2360,12 @@ paths:
         '500':
           description: internal server error
           
-  /content/labels:
+  /content/channels:
     get:
       tags:
         - content
-      description: Get labels with which to organize the articles. Contacts requesting the labels will only retrieve the labels with which they are shared. Access granted to the app tokens of the account holder and connected contact tokens.
-      operationId: get-labels
+      description: Get channels with which to organize the articles. Contacts requesting the channels will only retrieve the channels with which they are shared. Access granted to the app tokens of the account holder and connected contact tokens.
+      operationId: get-channels
       security:
         - bearerAuth: []
       responses:
@@ -2412,7 +2376,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Label'
+                  $ref: '#/components/schemas/Channel'
         '401':
           description: invalid token
         '410':
@@ -2422,8 +2386,8 @@ paths:
     post:
       tags:
         - content
-      description: Add a new label for organizing the articles. Access granted to the app tokens of the account holder.
-      operationId: add-label
+      description: Add a new channel for organizing the articles. Access granted to the app tokens of the account holder.
+      operationId: add-channel
       security:
         - bearerAuth: []
       responses:
@@ -2441,16 +2405,16 @@ paths:
             schema:
               $ref: '#/components/schemas/Subject'
           
-  /content/labels/{labelId}:
+  /content/channels/{channelId}:
     put:
       tags:
         - content
-      description: Update specified label. Access granted to app tokens of the account holder.
-      operationId: update-label
+      description: Update specified channel. Access granted to app tokens of the account holder.
+      operationId: update-channel
       security:
         - bearerAuth: []
       parameters:
-        - name: labelId
+        - name: channelId
           in: path
           description: specified group id 
           required: true
@@ -2473,14 +2437,14 @@ paths:
     delete:
       tags:
         - content
-      description: Remove specified label. Access granted the the app tokens of the account holder.
-      operationId: remove-label
+      description: Remove specified channel. Access granted the the app tokens of the account holder.
+      operationId: remove-channel
       security:
         - bearerAuth: []
       parameters:
-        - name: labelId
+        - name: channelId
           in: path
-          description: specified label id 
+          description: specified channel id 
           required: true
           schema:
             type: string
@@ -2490,25 +2454,25 @@ paths:
         '401':
           description: permission denied
         '404':
-          description: label not found
+          description: channel not found
         '410':
           description: account disabled
         '500':
           description: internal server error
           
                   
-  /content/labels/{labelId}/groups/{groupId}:
+  /content/channels/{channelId}/groups/{groupId}:
     post:
       tags:
         - content
-      description: Set a sharing group for the label and articles assigned to the label. Access granted to app tokens of the account holder.
-      operationId: set-label-group
+      description: Set a sharing group for the channel and articles assigned to the channel. Access granted to app tokens of the account holder.
+      operationId: set-channel-group
       security:
         - bearerAuth: []
       parameters:
-        - name: labelId
+        - name: channelId
           in: path
-          description: specified label id 
+          description: specified channel id 
           required: true
           schema:
             type: string
@@ -2524,7 +2488,7 @@ paths:
         '401':
           description: permission denied
         '404':
-          description: group or label not found
+          description: group or channel not found
         '410':
           description: account disabled
         '500':
@@ -2532,14 +2496,14 @@ paths:
     delete:
       tags:
         - content
-      description: Clear a sharing group from a label. Access granted to app tokens of the account holder.
-      operationId: clear-label-group
+      description: Clear a sharing group from a channel. Access granted to app tokens of the account holder.
+      operationId: clear-channel-group
       security:
         - bearerAuth: []
       parameters:
-        - name: labelId
+        - name: channelId
           in: path
-          description: specified label id 
+          description: specified channel id 
           required: true
           schema:
             type: string
@@ -2555,1308 +2519,12 @@ paths:
         '401':
           description: permission denied
         '404':
-          description: group or label not found
+          description: group or channel not found
         '410':
           description: account disabled
         '500':
           description: internal server error
               
-  /conversation/dialogues:
-    get:
-      tags:
-        - conversation
-      description: Retrieve all dialogues.
-      operationId: get-dialogues
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: success
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Dialogue'
-        '401':
-          description: permission denied
-        '410':
-          description: account disabled
-        '500':
-          description: internal server error
-    post:
-      tags:
-        - conversation
-      description: Create and host a new dialogue. Authroization granted to an app token of the account holder.
-      operationId: add-dialogue
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: success
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Dialogue'
-        '401':
-          description: permission denied
-        '410':
-          description: account disabled
-        '500':
-          description: internal server error
-          
-  /conversation/dialogues/{dialogueId}/subject:
-    put:
-      tags:
-        - conversation
-      description: Set the subject for a dialogue. Authorization granted the an app token for the account holder.
-      operationId: set-dialogue-subject
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: dialogueId
-          in: path
-          description: specified dialogue id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '201':
-          description: success
-        '401':
-          description: permission denied
-        '404':
-          description: dialogue not found
-        '410':
-          description: account disabled
-        '500':
-          description: internal server error
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - type
-                - data
-              properties:
-                type:
-                  type: string
-                data:
-                  type: string
-    
-  /conversation/dialogues/{dialogueId}/active:
-    put:
-      tags:
-        - conversation
-      description: Set active state of dialogue. If a dialogue is inactive any update to the topics will fail. Authorization is granted to an app token of the account holder.
-      operationId: set-dialogue-active
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: dialogueId
-          in: path
-          description: specified dialogue id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: success
-        '401':
-          description: permission denied
-        '404':
-          description: dialogue not found
-        '410':
-          description: account disabled
-        '500':
-          description: internal server error
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: boolean
-                  
-  /conversation/dialogues/{dialogueId}/cards/{cardId}:
-    put:
-      tags:
-        - conversation
-      description: Add insight to a dialogue. This endpoint will automatically invoke the add insight on the contact's node. Authorization is granted to the app token of the account holder. 
-      operationId: add-dialogue-insight
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: dialogueId
-          in: path
-          description: specified dialogue id 
-          required: true
-          schema:
-            type: string
-        - name: cardId
-          in: path
-          description: specified card id
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: success
-        '401':
-          description: permission denied
-        '404':
-          description: cardId or dialogue not found
-        '410':
-          description: account disabled
-        '500':
-          description: internal server error
-    delete:
-      tags:
-        - conversation
-      description: Remove an insight from a dialogue. This endpoint will authomatically invoke the delete insight endpoint on the contact's node. Authorization is granted to the app token of the accoun holder. 
-      operationId: remove-dialogue-insight
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: dialogueId
-          in: path
-          description: specified dialogue id 
-          required: true
-          schema:
-            type: string
-        - name: cardId
-          in: path
-          description: specified contact id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: success
-        '401':
-          description: permission denied
-        '404':
-          description: cardId or dialogue not found
-        '410':
-          description: account disabled
-        '500':
-          description: internal server error
-          
-  /conversation/dialogues/{dialogueId}/status:
-    put:
-      tags:
-        - conversation
-      description: Set active status for contact on the host node. Access is granted to a contact token for an account with the specified contact
-      operationId: set-dialogue-insight-status
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: dialogueId
-          in: path
-          description: specified dialogue id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: success
-        '401':
-          description: permission denied
-        '404':
-          description: dialogue not found
-        '410':
-          description: account disabled
-        '500':
-          description: internal server error
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: string
-              enum: [ active, inactive, dismissed ]
-          
-  /conversation/dialogues/{dialogueId}:
-    delete:
-      tags:
-        - conversation
-      description: Remove specified dialogue. This endpoint will authomatically invoke the delete insight endpoint on all of the contacts' nodes. Access is granted to an app token for the account holder.
-      operationId: remove-dialogue
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: dialogueId
-          in: path
-          description: specified dialogue id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: success
-        '401':
-          description: permission denied
-        '404':
-          description: dialogue not found
-        '410':
-          description: account disabled
-        '500':
-          description: internal server error
-  
-  /conversation/insights:
-    get:
-      tags:
-        - conversation
-      description: Retrieve all insights. Access granted to app token for the account holder.
-      operationId: get-insights
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: dismissed
-          in: query
-          description: if dismissed insights should be included 
-          required: false
-          schema:
-            type: string
-      responses:
-        '200':
-          description: success
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Insight'
-        '401':
-          description: permission denied
-        '410':
-          description: account disabled
-        '500':
-          description: internal server error
-          
-  /conversation/insights/{dialogueId}:
-    post:
-      tags:
-        - conversation
-      description: Create or update an insight. Because the insightId is not know by the contact, it is determined from the token and the dialogueId. Access granted to a connected contact token.
-      operationId: add-insight-dialogue
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: dialogueId
-          in: path
-          description: dialogue with insight id to update
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: success
-          content:
-            application/json:
-              schema:
-                type: string
-                enum: [ active, inactive, dismissed ]
-        '401':
-          description: permission denied
-        '404':
-          description: dialogue not found
-        '410':
-          description: account disabled
-        '500':
-          description: internal server error
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: integer
-              format: int64
-    delete:
-      tags:
-        - conversation
-      description: Remove a specified insight. If the referenced dialogue is still active, the insight will get recreated with the next hook receiver update. Access granted to contact token of a connected card.
-      operationId: set-insight-dialogue
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: dialogueId
-          in: path
-          description: insight id to update
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: success
-        '401':
-          description: permission denied
-        '404':
-          description: dialogue not found
-        '410':
-          description: account disabled
-        '500':
-          description: internal server error
-  
-  /conversation/insights/{insightId}/status:
-    put:
-      tags:
-        - conversation
-      description: Set the status of an insight. This will cause the hook receiver to return an inactive status. Access granted to app token of account holder. 
-      operationId: set-insight-status
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: insightId
-          in: path
-          description: dialogue with insight id to update
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: success
-        '401':
-          description: permission denied
-        '403':
-          description: invalid state # once dismissed always dismissed
-        '404':
-          description: insight not found
-        '410':
-          description: account disabled
-        '500':
-          description: internal server error
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: string
-              enum: [ active, inactive, dismissed ]
-              
-  /conversation/dialogues/{dialogueId}/topicBlocks/view:
-    get:
-      tags:
-        - conversation
-      description: Get a view of the topicBlocks within a dialogue. Authorization granted to account holder app token or dialogue member contact token who is also a member of the dialogue
-      operationId: get-topic-block-view
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: dialogueId
-          in: path
-          description: specified dialogue id
-          required: true
-          schema:
-            type: string
-        - name: types
-          in: query
-          description: limit results to topics of types
-          required: false
-          schema:
-            type: array
-            items:
-              type: string
-      responses:
-        '200':
-          description: success
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: string
-                    revision:
-                      type: integer
-                      format: int64
-        '401':
-          description: permission denied
-        '404':
-          description: dialogue not found
-        '410':
-          description: account disabled
-        '500':
-          description: internal server error
-          
-  /conversation/dialogues/{dialogueId}/topicBlocks/{blockId}:
-    get:
-      tags:
-        - conversation
-      description: Get the topics within a topicBlock. Only the account holder and the topic creator will retrieve pending topics. Authorization granted to account holder app token or dialogue member contact token who is also a member of the dialogue
-      operationId: get-topic-block
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: dialogueId
-          in: path
-          description: specified dialogue id
-          required: true
-          schema:
-            type: string
-        - name: blockId
-          in: path
-          description: specified group id 
-          required: true
-          schema:
-            type: string
-        - name: types
-          in: query
-          description: limit results to topics of types
-          required: false
-          schema:
-            type: array
-            items:
-              type: string
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Topic'
-        '401':
-          description: permission denied
-        '404':
-          description: block or dialogue not found
-        '410':
-          description: account disabled
-        '500':
-          description: internal server error
-          
-  /conversation/dialogues/{dialogueId}/topicBlocks/{blockId}/view:
-    get:
-      tags:
-        - conversation
-      description: Get a view of the topics within a topicBlock. Authorization granted to account holder app token or dialogue member contact token who is also a member of the dialogue.
-      operationId: get-topic-views
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: dialogueId
-          in: path
-          description: specified dialogue id
-          required: true
-          schema:
-            type: string
-        - name: blockId
-          in: path
-          description: specified group id 
-          required: true
-          schema:
-            type: string
-        - name: types
-          in: query
-          description: limit results to topics of types
-          required: false
-          schema:
-            type: array
-            items:
-              type: string
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: string
-                    revision:
-                      type: integer
-                      format: int64
-        '401':
-          description: permission denied
-        '404':
-          description: block or dialogue not found
-        '410':
-          description: account disabled
-        '500':
-          description: internal server error
-          
-  /conversation/dialogues/{dialogueId}/topics:
-    post:
-      tags:
-        - conversation
-      description: Add a topic to a dialogue. The response contains the topicBlock ID and topicBlock revision to which the topic is assigned. Authorization granted to account holder app token or dialogue member contact token who is a member of the dialogue.
-      operationId: add-dialogue-topic
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: dialogueId
-          in: path
-          description: specified dialogue id
-          required: true
-          schema:
-            type: string
-      responses:
-        '201':
-          description: entry created
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  blockId:
-                    type: string
-                  blockRevision:
-                    type: integer
-                    format: int64
-                  topic:
-                    $ref: '#/components/schemas/Topic'
-        '401':
-          description: permission denied
-        '403':
-          description: inactive dialogue
-        '404':
-          description: dialogue not found
-        '410':
-          description: account disabled
-        '500':
-          description: internal server error
-              
-  /conversation/dialogues/{dialogueId}/topics/{topicId}:
-    get:
-      tags:
-        - conversation
-      description: Retrieve a specified dialogue topic. Authorization granted to account holder app token or dialogue member contact token who is a member of the dialogue.
-      operationId: get-dialogue-topic
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: dialogueId
-          in: path
-          description: specified dialogue id
-          required: true
-          schema:
-            type: string
-        - name: topicId
-          in: path
-          description: specified topic id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Topic'
-        '401':
-          description: permission denied
-        '404':
-          description: topic or dialogue not found
-        '410':
-          description: account disabled
-        '500':
-          description: internal server error
-    delete:
-      tags:
-        - conversation
-      description: Remove a topic from a dialogue. Authorization granted to account holder app token or dialogue member contact token who is either the topic createor or the account holder.
-      operationId: remove-dialogue-topic
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: dialogueId
-          in: path
-          description: specified dialogue id
-          required: true
-          schema:
-            type: string
-        - name: topicId
-          in: path
-          description: specified topic id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: successful operation
-        '401':
-          description: permission denied
-        '403':
-          description: inactive dialogue
-        '404':
-          description: topic or dilaogue not found
-        '410':
-          description: account disabled
-        '500':
-          description: internal server error
-  
-  /conversation/dialogues/{dialogueId}/topics/{topicId}/subject/{field}:
-    get:
-      tags:
-        - conversation
-      description: Base64 decode and retrieve a specified field from subject of dialogue topic. Authorization granted to account holder app token or dialogue member contact token who is a member of the dialogue.
-      operationId: get-dialogue-topic-subject-field
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: dialogueId
-          in: path
-          description: specified dialogue id
-          required: true
-          schema:
-            type: string
-        - name: topicId
-          in: path
-          description: specified topic id 
-          required: true
-          schema:
-            type: string
-        - name: field
-          in: path
-          description: field to base64 decode and retrieve 
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: success
-          content:
-            application/octet-stream: #asset specific
-              schema:
-                type: string
-                format: binary
-        '401':
-          description: permission denied
-        '404':
-          description: field, topic or dialogue not found
-        '405':
-          description: invalid field
-        '410':
-          description: account disabled
-        '500':
-          description: internal server error
-          
-  /conversation/dialogues/{dialogueId}/topics/{topicId}/subject:
-    put:
-      tags:
-        - conversation
-      description: Set the subject for a topic. Authorization granted to account holder app token or dialogue member contact token who is also the creator of the topic.
-      operationId: set-topic-subject
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: dialogueId
-          in: path
-          description: specified dialogue id
-          required: true
-          schema:
-            type: string
-        - name: topicId
-          in: path
-          description: specified topic id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '201':
-          description: entry created
-        '401':
-          description: invalid token
-        '403':
-          description: inactive dialogue
-        '404':
-          description: topic or dialogue not found
-        '410':
-          description: account disabled
-        '500':
-          description: internal server error
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - type
-                - data
-              properties:
-                type:
-                  type: string
-                data:
-                  type: string
-                  
-  /conversation/dialogues/{dialogueId}/topics/{topicId}/assets:
-    get:
-      tags:
-        - conversation
-      description: Get all assets associated with the specified topic. Authorization granted to account holder app token or dialogue member contact token who has access to the topic.
-      operationId: get-topic-assets
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: dialogueId
-          in: path
-          description: specified dialogue id
-          required: true
-          schema:
-            type: string
-        - name: topicId
-          in: path
-          description: specified topic id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '201':
-          description: success
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Asset'
-        '401':
-          description: permission denied
-        '404':
-          description: topic or dialogue not found
-        '410':
-          description: account disabled
-        '500':
-          description: internal server error
-    post:
-      tags:
-        - conversation
-      description: Add an asset to a topic. The asset will be processed and transcoded according to the specified transformation. Authorization granted to account holder app token or dialogue member contact token who is also the creator of the topic.
-      operationId: add-topic-asset
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: dialogueId
-          in: path
-          description: specified dialogue id
-          required: true
-          schema:
-            type: string
-        - name: topicId
-          in: path
-          description: specified topic id 
-          required: true
-          schema:
-            type: string
-        - name: transforms
-          in: query
-          description: transforms to apply
-          required: false
-          schema:
-            type: array
-            items:
-              type: string
-      responses:
-        '201':
-          description: success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Asset'
-        '401':
-          description: permission denied
-        '403':
-          description: inactive dialogue
-        '404':
-          description: topic or dialogue not found
-        '410':
-          description: account disabled
-        '500':
-          description: internal server error
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              type: object
-              properties:
-                fileName:
-                  type: string
-                  format: binary
-          
-  /conversation/dialogues/{dialogueId}/topics/{topicId}/assets/{assetId}:
-    get:
-      tags:
-        - conversation
-      description: Retrieve an asset associated with a topic. All transformed assets can be retrieved by anyone with access to the topic, but the original asset can only be retrieved by the author of the topic. Authorization granted to account holder app token or dialogue member contact token who is also the creator of the topic.
-      operationId: get-topic-asset
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: dialogueId
-          in: path
-          description: specified dialogue id
-          required: true
-          schema:
-            type: string
-        - name: topicId
-          in: path
-          description: specified topic id 
-          required: true
-          schema:
-            type: string
-        - name: assetId
-          in: path
-          description: specified asset id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: success
-          content:
-            application/octet-stream: #asset specific
-              schema:
-                type: string
-                format: binary
-        '401':
-          description: permission denied
-        '404':
-          description: asset, topic or dialogue not found
-        '410':
-          description: account disabled
-        '500':
-          description: internal server error
-    delete:
-      tags:
-        - conversation
-      description: Remove and delete an asset associated with a topic. Authorization granted to account holder app token or dialogue member contact token who is also the creator of the topic.
-      operationId: remove-topic-asset
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: dialogueId
-          in: path
-          description: specified dialogue id
-          required: true
-          schema:
-            type: string
-        - name: topicId
-          in: path
-          description: specified topic id 
-          required: true
-          schema:
-            type: string
-        - name: assetId
-          in: path
-          description: specified asset id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: success
-        '401':
-          description: permission denied
-        '403':
-          description: inactive dialogue
-        '404':
-          description: asset, topic or dialogue not found
-        '410':
-          description: account disabled
-        '500':
-          description: internal server error
-          
-  /conversation/dialogues/{dialogueId}/topics/{topicId}/confirmed:
-    put:
-      tags:
-        - conversation
-      description: After the assets have been uploaded and the subject has been set, the topic should be set to confirmed (true) to make the topic available to others. Authorization granted to account holder app token or dialogue member contact token who is also the creator of the topic.
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: dialogueId
-          in: path
-          description: specified dialogue id
-          required: true
-          schema:
-            type: string
-        - name: topicId
-          in: path
-          description: specified topic id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: success
-        '401':
-          description: permission denied
-        '403':
-          description: inactive dialogue
-        '404':
-          description: topic or dialogue not found
-        '410':
-          description: account disabled
-        '500':
-          description: internal server error
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: boolean
-              
-  /conversation/dialogues/{dialogueId}/topics/{topicId}/tagBlocks/view:
-    get:
-      tags:
-        - conversation
-      description: Get a view of all of all tagBlocks. Authorization granted to account holder app token or dialogue member contact token who has access to the topic. 
-      operationId: get-topic-tag-block-view
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: dialogueId
-          in: path
-          description: specified dialogue id
-          required: true
-          schema:
-            type: string
-        - name: topicId
-          in: path
-          description: specified topic id 
-          required: true
-          schema:
-            type: string
-        - name: types
-          in: query
-          description: limit results to articles of types
-          required: false
-          schema:
-            type: array
-            items:
-              type: string
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: string
-                    revision:
-                      type: integer
-                      format: int64
-        '401':
-          description: permission denied
-        '404':
-          description: topic or dialogue not found
-        '410':
-          description: account disabled
-        '500':
-          description: internal server error
-          
-  /conversation/dialogues/{dialogueId}/topics/{topicId}/tagBlocks/{blockId}/view:
-    get:
-      tags:
-        - conversation
-      description: Get a view of all of the tags within a block. Authorization granted to account holder app token or dialogue member contact token who has access to the topic. 
-      operationId: get-topic-tag-view
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: dialogueId
-          in: path
-          description: specified dialogue id
-          required: true
-          schema:
-            type: string
-        - name: topicId
-          in: path
-          description: specified topic id 
-          required: true
-          schema:
-            type: string
-        - name: blockId
-          in: path
-          description: specified block id 
-          required: true
-          schema:
-            type: string
-        - name: types
-          in: query
-          description: limit results to tags of types
-          required: false
-          schema:
-            type: array
-            items:
-              type: string
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: string
-                    revision:
-                      type: integer
-                      format: int64
-        '401':
-          description: permission denied
-        '404':
-          description: block, topic or dialogue not found
-        '410':
-          description: account disabled
-        '500':
-          description: internal server error
-          
-  /conversation/dialogues/{dialogueId}/topics/{topicId}/tagBlocks/{blockId}:
-    get:
-      tags:
-        - conversation
-      description: Get all of the tags within a tag block. Authorization granted to account holder app token or dialogue member contact token who has access to the topic. 
-      operationId: get-topic-tags
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: dialogueId
-          in: path
-          description: specified dialogue id
-          required: true
-          schema:
-            type: string
-        - name: topicId
-          in: path
-          description: specified topic id 
-          required: true
-          schema:
-            type: string
-        - name: blockId
-          in: path
-          description: specified block id 
-          required: true
-          schema:
-            type: string
-        - name: types
-          in: query
-          description: limit results to tags of types
-          required: false
-          schema:
-            type: array
-            items:
-              type: string
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Tag'
-        '401':
-          description: permission denied
-        '404':
-          description: block, topic, or dialogue not found
-        '410':
-          description: account disabled
-        '500':
-          description: internal server error
-          
-  /conversation/dialogues/{dialogueId}/topics/{topicId}/tags:
-    post:
-      tags:
-        - conversation
-      description: Add a tag to specified topic. Authorization granted to account holder app token or dialogue member contact token who has access to the topic. The body of the post contains the subject of the tag, which can have no associated assets.
-      operationId: add-topic-tag
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: dialogueId
-          in: path
-          description: specified dialogue id
-          required: true
-          schema:
-            type: string
-        - name: topicId
-          in: path
-          description: specified topic id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '201':
-          description: entry created
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  blockId:
-                    type: string
-                  blockRevision:
-                    type: integer
-                    format: int64
-                  tag:
-                    $ref: '#/components/schemas/Tag'
-        '401':
-          description: permission denied
-        '403':
-          description: inactive dialogue
-        '404':
-          description: topic or dialogue not found
-        '410':
-          description: account disabled
-        '500':
-          description: internal server error
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - type
-                - data
-              properties:
-                type:
-                  type: string
-                data:
-                  type: string
-              
-  /conversation/dialogues/{dialogueId}/topics/{topicId}/tags/{tagId}:
-    get:
-      tags:
-        - conversation
-      description: Retrieve specified tag on the topic. Authorization granted to account holder app token or dialogue member contact token who has access to the topic.
-      operationId: get-topic-tag
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: dialogueId
-          in: path
-          description: specified dialogue id
-          required: true
-          schema:
-            type: string
-        - name: topicId
-          in: path
-          description: specified topic id 
-          required: true
-          schema:
-            type: string
-        - name: tagId
-          in: path
-          description: specified tag id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '201':
-          description: success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Tag'
-        '401':
-          description: permission denied
-        '404':
-          description: tag, topic, or dialogue not found
-        '410':
-          description: account disabled
-        '500':
-          description: internal server error
-    delete:
-      tags:
-        - conversation
-      description: Remove specified tag from the topic. Authorization granted to account holder app token or dialogue member contact token who has access to the topic.
-      operationId: remove-topic-tag
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: dialogueId
-          in: path
-          description: specified dialogue id
-          required: true
-          schema:
-            type: string
-        - name: topicId
-          in: path
-          description: specified topic id 
-          required: true
-          schema:
-            type: string
-        - name: tagId
-          in: path
-          description: specified tag id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: success
-        '401':
-          description: permission denied
-        '403':
-          description: inactive dialogue
-        '404':
-          description: tag, topic, or dialogue not found
-        '410':
-          description: account disabled
-        '500':
-          description: internal server error
-              
-  /conversation/dialogues/{dialogueId}/topics/{topicId}/tags/{tagId}/subject/{field}:
-    get:
-      tags:
-        - conversation
-      description: Base64 decode and retrieve specified field of tag subject on the topic. Authorization granted to account holder app token or dialogue member contact token who has access to the topic.
-      operationId: get-topic-tag-subject-field
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: dialogueId
-          in: path
-          description: specified dialogue id
-          required: true
-          schema:
-            type: string
-        - name: topicId
-          in: path
-          description: specified topic id 
-          required: true
-          schema:
-            type: string
-        - name: tagId
-          in: path
-          description: specified tag id 
-          required: true
-          schema:
-            type: string
-        - name: field
-          in: path
-          description: field to base64 decode and download 
-          required: true
-          schema:
-            type: string
-      responses:
-        '201':
-          description: success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Tag'
-        '401':
-          description: permission denied
-        '404':
-          description: field, tag, topic, or dialogue not found
-        '405':
-          description: invalid field
-        '410':
-          description: account disabled
-        '500':
-          description: internal server error
-          
 externalDocs:
   description: App overview
   url: ''
@@ -3876,32 +2544,28 @@ components:
       type: object
       required:
         - profile
-        - content
+        - attribute
+        - article
         - group
-        - label
+        - channel
         - card
-        - dialogue
-        - insight
       properties:
         profile:
           type: integer
           format: int64
-        content:
+        attribute:
           type: integer
           format: int64
-        label:
+        article:
           type: integer
           format: int64
         group:
           type: integer
           format: int64
+        channel:
+          type: integer
+          format: int64
         card:
-          type: integer
-          format: int64
-        dialogue:
-          type: integer
-          format: int64
-        insight: 
           type: integer
           format: int64
       
@@ -3976,17 +2640,6 @@ components:
         description:
           type: string
         location:
-          type: string
-          
-    Subject:
-      type: object
-      required:
-        - dataType
-        - data
-      properties:
-        dataType:
-          type: string
-        data:
           type: string
           
     Account:
@@ -4095,7 +2748,7 @@ components:
         - profileRevision
         - notifiedProfile
         - notifiedContent
-        - notifiedLabel
+        - notifiedChannel
         - notifiedView
       properties:
         guid:
@@ -4117,7 +2770,7 @@ components:
         notifiedContent:
           type: integer
           format: int64
-        notifiedLabel:
+        notifiedChannel:
           type: integer
           format: int64
         notifiedView:
@@ -4137,139 +2790,13 @@ components:
           type: string
           enum: [ pending, processing, ready, error ]
           
-    Tag:
-      type: object
-      required:
-        - tagId
-        - revision
-        - type
-        - data
-        - created
-        - modified
-      properties:
-        tagId:
-          type: string
-        cardId:
-          type: string
-        revision:
-          type: integer
-          format: int64
-        type:
-          type: string
-        data:
-          type: string
-        created:
-          type: integer
-          format: int64
-          
-    Insight:
-      type: object
-      required:
-        - insightId
-        - insightRevision
-        - cardId
-        - status
-      properties:
-        insightId:
-          type: string
-        insightRevision:
-          type: integer
-          format: int64
-        cardId:
-          type: string
-        status:
-          type: string
-          enum: [ active, inactive, dismissed ]
-          
-    Dialogue:
-      type: object
-      required:
-        - dialogueId
-        - dialogueRevision
-        - type
-        - data
-        - modified
-        - created
-        - active
-        - insights
-      properties:
-        dialogueId:
-          type: string
-        dialogueRevison:
-          type: integer
-          format: int64
-        type:
-          type: string
-        data:
-          type: string
-        created:
-          type: integer
-          format: int64
-        active:
-          type: boolean
-        insightRevision:
-          type: integer
-          format: int64
-        insights:
-          type: array
-          items:
-            type: object
-            properties:
-              cardId:
-                type: string
-              status:
-                type: string
-                enum: [ active, offsync, inactive, dismissed ]
-    
-    Topic:
-      type: object
-      required:
-        - topicId
-        - topicRevision
-        - type
-        - data
-        - created
-        - modified
-        - status
-        - tagCount
-        - tagUpdated
-        - tagRevision
-      properties:
-        topicId:
-          type: string
-        topicRevision:
-          type: integer
-          format: int64
-        type:
-          type: string
-        data:
-          type: string
-        created:
-          type: integer
-          format: int64
-        modified:
-          type: integer
-          format: int64
-        status:
-          type: string
-          enum: [ unconfirmed, confirmed, complete, error ]
-        tagCount:
-          type: integer
-          format: int32
-        tagUpdate:
-          type: integer
-          format: int64
-        tagRevision:
-          type: integer
-          format: int64
-    
     ArticleAccess:
       type: object
       required:
-        - labels
+        - channels
         - groups
       properties:
-        labels:
+        channels:
           type: array
           items:
             type: string
@@ -4289,91 +2816,29 @@ components:
         article:
           $ref: '#/components/schemas/Article'
           
-    Article:
-      type: object
-      required:
-        - articleId
-        - articleBlockId
-        - revision
-        - dataType
-        - data
-        - created
-        - updated
-        - status
-        - labels
-        - tagRevision
-        - tagCount
-        - tagUpdated
-      properties:
-        articleId:
-          type: string
-        articleBlockId:
-          type: string
-        revision:
-          type: integer
-          format: int64
-        dataType:
-          type: string
-        data:
-          type: string
-        created:
-          type: integer
-          format: int64
-        updated:
-          type: integer
-          format: int64
-        status:
-          type: string
-          enum: [ unconfirmed, confirmed, incomplete, error ]
-        labels:
-          type: array
-          items:
-            type: string
-        groups:  # present only in account holder responses
-          type: array
-          items:
-            type: string
-        tagCount:
-          type: integer
-          format: int32
-        tagUpdate:
-          type: integer
-          format: int64
-        tagRevision:
-          type: integer
-          format: int64
-          
-    ArticleView:
-      type: object
-      required:
-        - articleId
-        - revision
-        - tagRevision
-      properties:
-        articleId:
-          type: string
-        revision:
-          type: integer
-          format: int64
-        tagRevision:
-          type: integer
-          format: int64
-          
     Group:
       type: object
       required:
         - groupId
         - revision
-        - dataType
-        - data
-        - created
-        - updated
+        - groupData
       properties:
         groupId:
           type: string
         revision:
           type: integer
           format: int64
+        groupData:
+          $ref: '#/components/schemas/GroupData'
+          
+    GroupData:
+      type: object
+      required:
+        - dataType
+        - data
+        - created
+        - updated
+      properties:
         dataType:
           type: string
         data:
@@ -4385,21 +2850,21 @@ components:
           type: integer
           format: int64
           
-    Label:
+    Channel:
       type: object
       required:
-        - labelId
+        - channelId
         - revision
-        - labelData
+        - channelData
       properties:
-        labelId:
+        channelId:
           type: string
         revision:
           type: string
-        labelData:
-          $ref: '#/components/schemas/LabelData'
+        channelData:
+          $ref: '#/components/schemas/ChannelData'
           
-    LabelData:
+    ChannelData:
       type: object
       required:
         - type
@@ -4422,6 +2887,162 @@ components:
           items:
             type: string
       
+    Topic:
+      type: object
+      required:
+        - topicId
+        - revision
+        - topicData
+      properties:
+        topicId:
+          type: string
+        revision:
+          type: string
+        topicData:
+          $ref: '#/components/schemas/TopicData'
+    
+    TopicData:
+      type: object
+      required:
+        - dataType
+        - data
+        - created
+        - modified
+        - status
+        - tagCount
+        - tagUpdated
+        - tagRevision
+      properties:
+        dataType:
+          type: string
+        data:
+          type: string
+        created:
+          type: integer
+          format: int64
+        modified:
+          type: integer
+          format: int64
+        status:
+          type: string
+          enum: [ unconfirmed, confirmed, complete, error ]
+        tagCount:
+          type: integer
+          format: int32
+        tagUpdate:
+          type: integer
+          format: int64
+        tagRevision:
+          type: integer
+          format: int64
+          
+    Attribute:
+      type: object
+      required:
+        - attributeId
+        - revision
+        - attributeData
+      properties:
+        attributeId:
+          type: string
+        revision:
+          type: string
+        attributeData:
+          $ref: '#/components/schemas/AttributeData'
+          
+    AttributeData:
+      type: object
+      required:
+        - article
+        - tagRevision
+        - tagCount
+        - tagUpdated
+      properties:
+        article:
+          $ref: '#/components/schemas/AttributeData'
+        groups:  # present only in account holder responses
+          type: array
+          items:
+            type: string
+        tagCount:
+          type: integer
+          format: int32
+        tagUpdate:
+          type: integer
+          format: int64
+        tagRevision:
+          type: integer
+          format: int64
+          
+    Tag:
+      type: object
+      required:
+        - tagId
+        - revision
+        - tagData
+      properties:
+        tagId:
+          type: string
+        revision:
+          type: string
+        tagData:
+          $ref: '#/components/schemas/TagData'
+        
+    TagData:
+      type: object
+      required:
+        - dataType
+        - data
+        - created
+        - updated
+      properties:
+        dataType:
+          type: string
+        data:
+          type: string
+        created:
+          type: integer
+          format: int64
+        updated:
+          type: integer
+          format: int64
+          
+    Article:
+      type: object
+      required:
+        - articleId
+        - revision
+        - status
+      properties:
+        articleId:
+          type: string
+        revision:
+          type: string
+        dataType:
+          type: string
+        data:
+          type: string
+        created:
+          type: integer
+          format: int64
+        updated:
+          type: integer
+          format: int64
+        status:
+          type: string
+          enum: [ unconfirmed, confirmed, incomplete, error ]
+          
+    Subject:
+      type: object
+      required:
+        - dataType
+        - data
+      properties:
+        dataType:
+          type: string
+        data:
+          type: string
+          
     Authenticate:
       type: object
       required: 
