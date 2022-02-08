@@ -7,6 +7,8 @@ import (
 
 func TestUpdateContact(t *testing.T) {
   // setup testing group
-  _, err := AddTestGroup("updatecontact")
+  set, err := AddTestGroup("updatecontact")
   assert.NoError(t, err)
+
+  PrintMsg(set)
 }

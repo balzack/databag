@@ -112,6 +112,8 @@ func SendEndpointTest(
 //
 func AddTestGroup(prefix string) (*TestGroup, error) {
     var err error
+    var rev *Revision
+    var ws *websocket.Conn
 
     // allocate contacts
     g := &TestGroup{}
@@ -128,7 +130,129 @@ func AddTestGroup(prefix string) (*TestGroup, error) {
       return g, err
     }
 
+    // setup A
+    if g.A.B.CardId, err = AddTestCard(g.A.Token, g.B.Token); err != nil {
+      return g, err
+    }
+    if err = OpenTestCard(g.A.Token, g.A.B.CardId); err != nil {
+      return g, err
+    }
+    if g.A.B.GroupId, err = GroupTestCard(g.A.Token, g.A.B.CardId); err != nil {
+      return g, err
+    }
+    if g.A.C.CardId, err = AddTestCard(g.A.Token, g.C.Token); err != nil {
+      return g, err
+    }
+    if err = OpenTestCard(g.A.Token, g.A.C.CardId); err != nil {
+      return g, err
+    }
+    if g.A.C.GroupId, err = GroupTestCard(g.A.Token, g.A.C.CardId); err != nil {
+      return g, err
+    }
+    if g.A.D.CardId, err = AddTestCard(g.A.Token, g.D.Token); err != nil {
+      return g, err
+    }
+    if err = OpenTestCard(g.A.Token, g.A.D.CardId); err != nil {
+      return g, err
+    }
 
+    // setup B
+    if g.B.A.CardId, err = AddTestCard(g.B.Token, g.A.Token); err != nil {
+      return g, err
+    }
+    if err = OpenTestCard(g.B.Token, g.B.A.CardId); err != nil {
+      return g, err
+    }
+    if g.B.A.GroupId, err = GroupTestCard(g.B.Token, g.B.A.CardId); err != nil {
+      return g, err
+    }
+    if g.B.C.CardId, err = AddTestCard(g.B.Token, g.C.Token); err != nil {
+      return g, err
+    }
+    if g.B.C.GroupId, err = GroupTestCard(g.B.Token, g.B.C.CardId); err != nil {
+      return g, err
+    }
+
+    // setup C
+    if g.C.D.CardId, err = AddTestCard(g.C.Token, g.D.Token); err != nil {
+      return g, err
+    }
+    if err = OpenTestCard(g.C.Token, g.C.D.CardId); err != nil {
+      return g, err
+    }
+    if g.C.D.GroupId, err = GroupTestCard(g.C.Token, g.C.D.CardId); err != nil {
+      return g, err
+    }
+    if g.C.A.CardId, err = AddTestCard(g.C.Token, g.A.Token); err != nil {
+      return g, err
+    }
+    if err = OpenTestCard(g.C.Token, g.C.A.CardId); err != nil {
+      return g, err
+    }
+    if g.C.A.GroupId, err = GroupTestCard(g.C.Token, g.C.A.CardId); err != nil {
+      return g, err
+    }
+    if g.C.B.CardId, err = AddTestCard(g.C.Token, g.B.Token); err != nil {
+      return g, err
+    }
+
+    // setup D
+    if g.D.C.CardId, err = AddTestCard(g.D.Token, g.C.Token); err != nil {
+      return g, err
+    }
+    if err = OpenTestCard(g.D.Token, g.D.C.CardId); err != nil {
+      return g, err
+    }
+    if g.D.C.GroupId, err = GroupTestCard(g.D.Token, g.D.C.CardId); err != nil {
+      return g, err
+    }
+
+    // get contact tokens
+    if g.A.B.Token, err = GetCardToken(g.A.Token, g.A.B.CardId); err != nil {
+      return g, err
+    }
+    if g.B.A.Token, err = GetCardToken(g.B.Token, g.B.A.CardId); err != nil {
+      return g, err
+    }
+    if g.C.A.Token, err = GetCardToken(g.C.Token, g.C.A.CardId); err != nil {
+      return g, err
+    }
+    if g.C.D.Token, err = GetCardToken(g.C.Token, g.C.D.CardId); err != nil {
+      return g, err
+    }
+    if g.D.C.Token, err = GetCardToken(g.D.Token, g.D.C.CardId); err != nil {
+      return g, err
+    }
+
+    // connect websockets
+    rev = &Revision{}
+    if ws, err = StatusConnection(g.A.Token, rev); err != nil {
+      return g, err
+    }
+    g.A.Revisions = make(chan *Revision, 64)
+    g.A.Revisions <- rev
+    go MonitorStatus(ws, &g.A);
+    rev = &Revision{}
+    if ws, err = StatusConnection(g.B.Token, rev); err != nil {
+      return g, err
+    }
+    g.B.Revisions = make(chan *Revision, 64)
+    g.B.Revisions <- rev
+    go MonitorStatus(ws, &g.B);
+    rev = &Revision{}
+    if ws, err = StatusConnection(g.C.Token, rev); err != nil {
+      return g, err
+    }
+    g.C.Revisions = make(chan *Revision, 64)
+    g.C.Revisions <- rev
+    go MonitorStatus(ws, &g.C);
+    rev = &Revision{}
+    if ws, err = StatusConnection(g.D.Token, rev); err != nil {
+      return g, err
+    }
+    g.D.Revisions = make(chan *Revision, 64)
+    g.D.Revisions <- rev
+    go MonitorStatus(ws, &g.D);
 
     return g, nil
 }
