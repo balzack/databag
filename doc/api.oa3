@@ -23,7 +23,7 @@ tags:
   - name: profile
     description: getting and setting of the public profile
   - name: alias
-    description: group management for showing attributes
+    description: group management for contenting attributes
   - name: contact
     description: card management for referencing contacts
   - name: attribute
@@ -1019,7 +1019,7 @@ paths:
           description: account disabled
         '500':
           description: internal server error
-  
+          
   /contact/cards/{cardId}/status:
     put:
       tags:
@@ -1775,10 +1775,10 @@ paths:
           description: internal server error
           
           
-  /show/channels:
+  /content/channels:
     get:
       tags:
-        - show
+        - content
       description: Get channel slots. If revision set detail fields omittied in response
       operationId: get-channels
       security:
@@ -1786,7 +1786,7 @@ paths:
       parameters:
         - name: viewRevision
           in: query
-          description: view revision from which show revision applies 
+          description: view revision from which content revision applies 
           required: false
           schema:
             type: string
@@ -1824,7 +1824,7 @@ paths:
           description: internal server error
     post:
       tags:
-        - show
+        - content
       description: Add a channel. 
       operationId: add-channel
       security:
@@ -1848,10 +1848,10 @@ paths:
             schema:
               $ref: '#/components/schemas/Subject'
           
-  /show/channels/{channelId}:
+  /content/channels/{channelId}:
     delete:
       tags:
-        - show
+        - content
       description: Remove specified channel. Access granted to app token of account holder.
       operationId: remove-channel
       security:
@@ -1875,10 +1875,72 @@ paths:
         '500':
           description: internal server error
   
-  /show/channels/{channelId}/subject/{field}:
+  /content/channels/{channelId}/detail:
     get:
       tags:
-        - show
+        - content
+      description: Get detail object of channel.
+      operationId: get-channel-detail
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: channelId
+          in: path
+          description: specified channel id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChannelDetail'
+        '401':
+          description: invalid password
+        '404':
+          description: channel not found
+        '410':
+          description: account disabled
+        '500':
+          description: internal server error
+          
+  /content/channels/{channelId}/size:
+    get:
+      tags:
+        - content
+      description: Get size object of channel.
+      operationId: get-channel-size
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: channelId
+          in: path
+          description: specified channel id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChannelSize'
+        '401':
+          description: invalid password
+        '404':
+          description: channel not found
+        '410':
+          description: account disabled
+        '500':
+          description: internal server error
+          
+  /content/channels/{channelId}/subject/{field}:
+    get:
+      tags:
+        - content
       description: Base64 decode and download specified field from the channel's subject. Access granted to app token of account holder or contact token of account the channel is shared with.
       operationId: get-channel-subject-field
       security:
@@ -1915,10 +1977,10 @@ paths:
         '500':
           description: internal server error
           
-  /show/channels/{channelId}/subject:
+  /content/channels/{channelId}/subject:
     put:
       tags:
-        - show
+        - content
       description: Set subject for channel. Access granted to app token of account holder.
       operationId: set-channel-subject
       security:
@@ -1951,10 +2013,10 @@ paths:
             schema:
               $ref: '#/components/schemas/Subject'
                   
-  /show/channels/{channelId}/groups/{groupId}:
+  /content/channels/{channelId}/groups/{groupId}:
     put:
       tags:
-        - show
+        - content
       description: Set group for channels. Access granted to app tokens for account holder. 
       operationId: set-channel-group
       security:
@@ -1989,7 +2051,7 @@ paths:
           description: internal server error
     delete:
       tags:
-        - show
+        - content
       description: Clear sharing group for channel. Access granted to app tokens for account holder.
       operationId: clear-channel-group
       security:
@@ -2023,10 +2085,10 @@ paths:
         '500':
           description: internal server error
           
-  /show/channels/{channelId}/topics:
+  /content/channels/{channelId}/topics:
     get:
       tags:
-        - show
+        - content
       description: Get channel topic slots. If revision set, detail fields omitted in response
       operationId: get-channel-topics
       security:
@@ -2067,7 +2129,7 @@ paths:
           description: internal server error
     post:
       tags:
-        - show
+        - content
       description: Add a topic to channel channel. 
       operationId: add-channel-topic
       security:
@@ -2098,10 +2160,10 @@ paths:
             schema:
               $ref: '#/components/schemas/Subject'
           
-  /show/channels/{channelId}/topics/{topicId}:
+  /content/channels/{channelId}/topics/{topicId}:
     delete:
       tags:
-        - show
+        - content
       description: Remove specified channel. Access granted to app token of account holder.
       operationId: remove-channel-topic
       security:
@@ -2131,10 +2193,76 @@ paths:
         '500':
           description: internal server error
   
-  /show/channels/{channelId}/topics/{topicId}/subject/{field}:
+  /content/channels/{channelId}/topics/{topicId}/detail:
     get:
       tags:
-        - show
+        - content
+      description: Get detail object of topic.
+      operationId: get-channel-topic-detail
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: channelId
+          in: path
+          description: specified channel id 
+          required: true
+          schema:
+            type: string
+        - name: topicId
+          in: path
+          description: specified topic id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success
+        '401':
+          description: invalid password
+        '404':
+          description: channel not found
+        '410':
+          description: account disabled
+        '500':
+          description: internal server error
+          
+  /content/channels/{channelId}/topics/{topicId}/size:
+    get:
+      tags:
+        - content
+      description: Get detail object of topic.
+      operationId: get-channel-topic-size
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: channelId
+          in: path
+          description: specified channel id 
+          required: true
+          schema:
+            type: string
+        - name: topicId
+          in: path
+          description: specified topic id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success
+        '401':
+          description: invalid password
+        '404':
+          description: channel not found
+        '410':
+          description: account disabled
+        '500':
+          description: internal server error
+          
+  /content/channels/{channelId}/topics/{topicId}/subject/{field}:
+    get:
+      tags:
+        - content
       description: Base64 decode and download specified field from the channel's subject. Access granted to app token of account holder or contact token of account the channel is shared with.
       operationId: get-channel-topic-subject-field
       security:
@@ -2177,10 +2305,10 @@ paths:
         '500':
           description: internal server error
           
-  /show/channels/{channelId}/topics/{topicId}/subject:
+  /content/channels/{channelId}/topics/{topicId}/subject:
     put:
       tags:
-        - show
+        - content
       description: Set subject for channel. Access granted to app token of account holder.
       operationId: set-channel-topic-subject
       security:
@@ -2223,10 +2351,10 @@ paths:
                 data:
                   type: string
                   
-  /show/channels/{channelId}/topics/{topicId}/assets:
+  /content/channels/{channelId}/topics/{topicId}/assets:
     get:
       tags:
-        - show
+        - content
       description: Get list of assets assigned to an channel. The original assets will only be available to the account holder to provent the accidental sharing of content metadata. Access is granted to the app token of the account holder and the contact token of accounts the channel has been shared with.
       operationId: get-channel-assets
       security:
@@ -2261,7 +2389,7 @@ paths:
           description: internal server error
     post:
       tags:
-        - show
+        - content
       description: Add an an asset to the to an channel. The original posted asset is referenced in the asset list with a null transform. The transformed assets are referenced accordingly. Transforming the asset strips it of metadata and transcodes it into a specified format. Access is granted to the app token of the account holder.
       operationId: add-channel-asset
       security:
@@ -2314,10 +2442,10 @@ paths:
                   type: string
                   format: binary
           
-  /show/channels/{channelId}/topics/{topicId}/assets/{assetId}:
+  /content/channels/{channelId}/topics/{topicId}/assets/{assetId}:
     get:
       tags:
-        - show
+        - content
       description: Get asset assigned to an channel. The endpoint supports byte-range requests and responds with the content-type set appropriatly. Access granted to the app tokens of the account holder and in the case of non-original assets, the contact token for accounts with which the channel is shared.
       operationId: get-channel-asset
       security:
@@ -2359,7 +2487,7 @@ paths:
           description: internal server error
     delete:
       tags:
-        - show
+        - content
       description: Remove an asset from an channel. Access granted to app tokens of the account holder.
       operationId: remove-channel-asset
       security:
@@ -2395,10 +2523,10 @@ paths:
         '500':
           description: internal server error
           
-  /show/channels/{channelId}/topics/{topicId}/confirmed:
+  /content/channels/{channelId}/topics/{topicId}/confirmed:
     put:
       tags:
-        - show
+        - content
       description: Set confirmed state of the channel. Until the confirmed state has been set to true, the channel will not be visible to contacts with which the channel is shared. Access granted to the app tokens of the acocunt holder.
       operationId: set-channel-confirmed
       security:
@@ -2434,10 +2562,10 @@ paths:
               type: boolean
               
                   
-  /show/channels/{channelId}/topics/{topicId}/tags:
+  /content/channels/{channelId}/topics/{topicId}/tags:
     get:
       tags:
-        - show
+        - content
       description: Get channel topic tag slots.
       operationId: get-channel-topic-tags
       security:
@@ -2484,7 +2612,7 @@ paths:
           description: internal server error
     post:
       tags:
-        - show
+        - content
       description: Add a tag to channel topic. 
       operationId: add-channel-topic-tag
       security:
@@ -2521,10 +2649,10 @@ paths:
             schema:
               $ref: '#/components/schemas/Subject'
           
-  /show/channels/{channelId}/topics/{topicId}/tags/{tagId}:
+  /content/channels/{channelId}/topics/{topicId}/tags/{tagId}:
     delete:
       tags:
-        - show
+        - content
       description: Remove specified tag from channel topic. Access granted to app token of account holder.
       operationId: remove-channel-topic-tag
       security:
@@ -2560,10 +2688,10 @@ paths:
         '500':
           description: internal server error
   
-  /show/channels/{channelId}/topics/{topicId}/tags/{tagId}/subject/{field}:
+  /content/channels/{channelId}/topics/{topicId}/tags/{tagId}/subject/{field}:
     get:
       tags:
-        - show
+        - content
       description: Base64 decode and download specified field from the channel's subject. Access granted to app token of account holder or contact token of account the channel is shared with.
       operationId: get-channel-topic-tag-subject-field
       security:
@@ -2612,10 +2740,10 @@ paths:
         '500':
           description: internal server error
           
-  /show/channels/{channelId}/topics/{topicId}/tags/{tagId}/subject:
+  /content/channels/{channelId}/topics/{topicId}/tags/{tagId}/subject:
     put:
       tags:
-        - show
+        - content
       description: Set subject for channel. Access granted to app token of account holder.
       operationId: set-channel-topic-tag-subject
       security:
@@ -2968,21 +3096,8 @@ components:
         channelDetail:
           $ref: '#/components/schemas/ChannelDetail'
         channelTopics:
-          $ref: '#/components/schemas/ChannelTopics'
+          $ref: '#/components/schemas/ChannelSize'
           
-    ChannelTopics:
-      type: object
-      required:
-        - topicCount
-        - topicUpdated
-      properties:
-        topicCount:
-          type: integer
-          format: int32
-        topicUpdated:
-          type: integer
-          format: int64
-        
     ChannelDetail:
       type: object
       required:
@@ -3007,6 +3122,19 @@ components:
             type: string
         groups:
           $ref: '#/components/schemas/ChannelGroups'
+          
+    ChannelSize:
+      type: object
+      required:
+        - topicCount
+        - topicUpdated
+      properties:
+        topicCount:
+          type: integer
+          format: int32
+        topicUpdated:
+          type: integer
+          format: int64
           
     ChannelGroups:
       type: object
@@ -3047,7 +3175,7 @@ components:
         topicDetail:
           $ref: '#/components/schemas/TopicDetail'
         topicTags::
-          $ref: '#/components/schemas/TopicTags'
+          $ref: '#/components/schemas/TopicSize'
           
     TopicDetail:
       type: object
@@ -3075,7 +3203,7 @@ components:
           type: string
           enum: [ unconfirmed, confirmed, complete, error ]
           
-    TopicTags:
+    TopicSize:
       type: object
       required:
         - tagCount
