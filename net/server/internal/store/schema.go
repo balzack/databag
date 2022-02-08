@@ -11,21 +11,17 @@ func AutoMigrate(db *gorm.DB) {
   db.AutoMigrate(&GroupSlot{});
   db.AutoMigrate(&GroupData{});
   db.AutoMigrate(&Group{});
-  db.AutoMigrate(&LabelSlot{});
-  db.AutoMigrate(&LabelData{});
-  db.AutoMigrate(&Label{});
+  db.AutoMigrate(&ChannelSlot{});
+  db.AutoMigrate(&Channel{});
   db.AutoMigrate(&CardSlot{});
   db.AutoMigrate(&Card{});
-  db.AutoMigrate(&Asset{});
   db.AutoMigrate(&ArticleSlot{});
   db.AutoMigrate(&Article{});
-  db.AutoMigrate(&ArticleAsset{});
-  db.AutoMigrate(&ArticleTag{});
-  db.AutoMigrate(&Dialogue{});
-  db.AutoMigrate(&Insight{});
+  db.AutoMigrate(&TopicSlot{});
   db.AutoMigrate(&Topic{});
-  db.AutoMigrate(&TopicAsset{});
-  db.AutoMigrate(&TopicTag{});
+  db.AutoMigrate(&Asset{});
+  db.AutoMigrate(&TagSlot{});
+  db.AutoMigrate(&Tag{});
 }
 
 type Notification struct {
@@ -124,32 +120,6 @@ type GroupData struct {
   Data              string
 }
 
-type LabelSlot struct {
-  ID                uint
-  LabelSlotId       string          `gorm:"not null;index:labelslot,unique"`
-  AccountID         uint            `gorm:"not null;index:labelslot,unique"`
-  Revision          int64           `gorm:"not null"`
-  LabelID           uint            `gorm:"not null;default:0"`
-  Label             *Label
-  Account           Account
-}
-
-type Label struct {
-  ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
-  LabelDataID       uint            `gorm:"not null;index:labeldata"`
-  DataType          string          `gorm:"index"`
-  Created           int64           `gorm:"autoCreateTime"`
-  Updated           int64           `gorm:"autoUpdateTime"`
-  Groups            []Group         `gorm:"many2many:label_groups;"`
-  LabelData         LabelData
-  LabelSlot         LabelSlot
-}
-
-type LabelData struct {
-  ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
-  Data              string
-}
-
 type CardSlot struct {
   ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
   CardSlotId        string          `gorm:"not null;index:cardslot,unique"`
@@ -189,21 +159,6 @@ type Card struct {
   CardSlot          CardSlot
 }
 
-type Asset struct {
-  ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
-  AssetId           string          `gorm:"not null;index:asset,unique"`
-  AccountID         uint            `gorm:"not null;index:asset,unique"`
-  Status            string          `gorm:"not null;index"`
-  Size              uint64
-  Crc               uint32
-  Transform         string
-  TransformId       string
-  TransformData     string
-  Created           int64           `gorm:"autoCreateTime"`
-  Updated           int64           `gorm:"autoUpdateTime"`
-  Account           Account
-}
-
 type ArticleSlot struct {
   ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
   ArticleSlotId     string          `gorm:"not null;index:articleslot,unique"`
@@ -219,103 +174,100 @@ type Article struct {
   DataType          string          `gorm:"index"`
   Data              string
   Status            string          `gorm:"not null;index"`
-  Expires           int64
   Created           int64           `gorm:"autoCreateTime"`
   Updated           int64           `gorm:"autoUpdateTime"`
-  TagUpdated        int64           `gorm:"not null"`
-  TagCount          int32           `gorm:"not null"`
-  TagRevision       int64           `gorm:"not null"`
   Groups            []Group         `gorm:"many2many:article_groups;"`
-  Labels            []Label         `gorm:"many2many:article_labels;"`
   ArticleSlot       ArticleSlot
 }
 
-type ArticleAsset struct {
-  ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
-  AssetID           uint
-  ArticleID         uint
-  Article           Article
-  Asset             Asset
-}
-
-type ArticleTag struct {
-  ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
-  TagId             string          `gorm:"not null;index:articletag,unique"`
-  ArticleID         uint            `gorm:"not null;index:articletag,unique"`
-  CardID            uint
+type ChannelSlot struct {
+  ID                uint
+  ChannelSlotId     string          `gorm:"not null;index:channelslot,unique"`
+  AccountID         uint            `gorm:"not null;index:channelslot,unique"`
   Revision          int64           `gorm:"not null"`
-  DataType          string          `gorm:"index"`
-  Data              string
-  Created           int64           `gorm:"autoCreateTime"`
-  Updated           int64           `gorm:"autoUpdateTime"`
-  Article           Article
-  Card              Card
-}
-
-type Dialogue struct {
-  ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
-  DialogueId        string          `gorm:"not null;index:dialogue,unique"`
-  AccountID         uint            `gorm:"not null;index:dialogue,unique"`
-  Revision          int64           `gorm:"not null"`
-  DataType          string          `gorm:"index"`
-  Data              string
-  Created           int64           `gorm:"autoCreateTime"`
-  Updated           int64           `gorm:"autoUpdateTime"`
-  Active            bool            `gorm:"not null"`
-  MemberRevision    uint64          `gorm:"not null"`
-  TopicUpdated      int64
-  TopicRevision     uint64          `gorm:"not null"`
-  Cards             []Card          `gorm:"many2many:dialog_cards;"`
+  ChannelID         uint            `gorm:"not null;default:0"`
+  Channel           *Channel
   Account           Account
 }
 
-type Insight struct {
+type Channel struct {
   ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
-  InsightId         string          `gorm:"not null;index:insight,unique"`
-  CardID            uint            `gorm:"not null;index:insight,unique"`
-  dialogueRevision  uint64          `gorm:"not null"`
-  memberRevision    uint64          `gorm:"not null"`
-  topicRevision     uint64          `gorm:"not null"`
-  Card              Card
+  DetailRevision    int64           `gorm:"not null"`
+  DataType          string          `gorm:"index"`
+  Created           int64           `gorm:"autoCreateTime"`
+  Updated           int64           `gorm:"autoUpdateTime"`
+  SizeRevision      int64           `gorm:"not null"`
+  TopicUpdated      int64
+  TopicCount        int64
+  Viewers           []Group         `gorm:"many2many:viewer_groups;"`
+  Members           []Group         `gorm:"many2many:member_groups;"`
+  ChannelSlot       ChannelSlot
+}
+
+type TopicSlot struct {
+  ID                uint
+  TopicSlotId       string          `gorm:"not null;index:topicslot,unique"`
+  AccountID         uint            `gorm:"not null;index:topicslot,unique"`
+  Revision          int64           `gorm:"not null"`
+  TopicID           uint            `gorm:"not null;default:0"`
+  Topic             *Topic
+  Account           Account
 }
 
 type Topic struct {
   ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
-  TopicId           string          `gorm:"not null;index:topic,unique"`
-  AccountID         uint            `gorm:"not null;index:topic,unique"`
-  CardID            uint
-  Revision          int64           `gorm:"not null"`
+  ChannelID         uint
+  DetailRevision    int64           `gorm:"not null"`
+  Guid              string
   DataType          string          `gorm:"index"`
   Data              string
   Status            string          `gorm:"not null;index"`
   Created           int64           `gorm:"autoCreateTime"`
   Updated           int64           `gorm:"autoUpdateTime"`
+  SizeRevision      int64           `gorm:"not null"`
   TagUpdated        int64           `gorm:"not null"`
   TagRevision       uint64          `gorm:"not null"`
-  Account           Account
-  Card              Card
+  Channel           *Channel
+  Assets            []Asset
+  Tags              []Tag
 }
 
-type TopicAsset struct {
+type Asset struct {
   ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
-  AssetID           uint
+  AssetId           string          `gorm:"not null;index:asset,unique"`
+  AccountID         uint            `gorm:"not null;index:asset,unique"`
   TopicID           uint
-  Topic             Topic
-  Asset             Asset
+  Status            string          `gorm:"not null;index"`
+  Size              uint64
+  Crc               uint32
+  Transform         string
+  TransformId       string
+  TransformData     string
+  Created           int64           `gorm:"autoCreateTime"`
+  Updated           int64           `gorm:"autoUpdateTime"`
+  Account           Account
+  Topic             *Topic
 }
 
-type TopicTag struct {
-  ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
-  TagId             string          `gorm:"not null;index:topictag,unique"`
-  TopicID           uint            `gorm:"not null;index:topictag,unique"`
-  CardID            uint
+type TagSlot struct {
+  ID                uint
+  TagSlotId         string          `gorm:"not null;index:topicslot,unique"`
+  AccountID         uint            `gorm:"not null;index:topicslot,unique"`
   Revision          int64           `gorm:"not null"`
+  TagID             uint            `gorm:"not null;default:0"`
+  Tag               *Tag
+  Account           Account
+}
+
+type Tag struct {
+  ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
+  TopicID           uint            `gorm:"not null;index:tag,unique"`
+  Guid              string
   DataType          string          `gorm:"index"`
   Data              string
   Created           int64           `gorm:"autoCreateTime"`
   Updated           int64           `gorm:"autoUpdateTime"`
-  Topic             Topic
-  Card              Card
+  Topic             *Topic
 }
 
 
