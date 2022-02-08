@@ -5,9 +5,9 @@ import (
   "github.com/stretchr/testify/assert"
 )
 
-func TestUpdateContact(t *testing.T) {
+func TestUpdateProfile(t *testing.T) {
   // setup testing group
-  set, err := AddTestGroup("updatecontact")
+  set, err := AddTestGroup("updateprofile")
   assert.NoError(t, err)
 
   PrintMsg(set)

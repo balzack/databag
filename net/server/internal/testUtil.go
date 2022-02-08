@@ -106,7 +106,7 @@ func SendEndpointTest(
 //                                  |
 //     connected,group                                       ,
 //    |                                                       |
-//    |  confirmed,nogroup                   pending,nogroup  |
+//    |  ,                                   pending,nogroup  |
 //    |/                                                     \|
 //    C --- connected,group               connected,group --- D
 //
@@ -190,9 +190,6 @@ func AddTestGroup(prefix string) (*TestGroup, error) {
       return g, err
     }
     if g.C.A.GroupId, err = GroupTestCard(g.C.Token, g.C.A.CardId); err != nil {
-      return g, err
-    }
-    if g.C.B.CardId, err = AddTestCard(g.C.Token, g.B.Token); err != nil {
       return g, err
     }
 
