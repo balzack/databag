@@ -3116,11 +3116,17 @@ components:
         updated:
           type: integer
           format: int64
-        cards:
+        viewers:
           type: array
           items:
             type: string
-        groups:
+        viewerGroups:
+          $ref: '#/components/schemas/ChannelGroups'
+        members:
+          type: array
+          items:
+            type: string
+        memberGroups:
           $ref: '#/components/schemas/ChannelGroups'
           
     ChannelSize:
