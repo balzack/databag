@@ -8,24 +8,46 @@ func getCardModel(slot *store.CardSlot) *Card {
 
   if slot.Card == nil {
     return &Card{
-      CardId: slot.CardSlotId,
+      Id: slot.CardSlotId,
       Revision: slot.Revision,
     }
   }
 
   return &Card{
-    CardId: slot.CardSlotId,
+    Id: slot.CardSlotId,
     Revision: slot.Revision,
-    CardData: &CardData {
+    Data: &CardData {
       NotifiedProfile: slot.Card.NotifiedProfile,
-      NotifiedContent: slot.Card.NotifiedContent,
-      NotifiedLabel: slot.Card.NotifiedLabel,
+      NotifiedArticle: slot.Card.NotifiedArticle,
+      NotifiedChannel: slot.Card.NotifiedChannel,
       NotifiedView: slot.Card.NotifiedView,
       ProfileRevision: slot.Card.ProfileRevision,
       DetailRevision: slot.Card.DetailRevision,
-      Guid: slot.Card.Guid,
-      Status: slot.Card.Status,
-      Token: slot.Card.OutToken,
+      CardDetail: getCardDetailModel(slot),
+      CardProfile: getCardProfileModel(slot),
+    },
+  }
+}
+
+func getCardRevisionModel(slot *store.CardSlot) *Card {
+
+  if slot.Card == nil {
+    return &Card{
+      Id: slot.CardSlotId,
+      Revision: slot.Revision,
+    }
+  }
+
+  return &Card{
+    Id: slot.CardSlotId,
+    Revision: slot.Revision,
+    Data: &CardData {
+      NotifiedProfile: slot.Card.NotifiedProfile,
+      NotifiedArticle: slot.Card.NotifiedArticle,
+      NotifiedChannel: slot.Card.NotifiedChannel,
+      NotifiedView: slot.Card.NotifiedView,
+      ProfileRevision: slot.Card.ProfileRevision,
+      DetailRevision: slot.Card.DetailRevision,
     },
   }
 }
@@ -38,7 +60,8 @@ func getCardDetailModel(slot *store.CardSlot) *CardDetail {
   }
 
   return &CardDetail{
-    Revision: slot.Card.DetailRevision,
+    Status: slot.Card.Status,
+    Token: slot.Card.OutToken,
     Notes: slot.Card.Notes,
     Groups: groups,
   }
@@ -47,7 +70,7 @@ func getCardDetailModel(slot *store.CardSlot) *CardDetail {
 func getCardProfileModel(slot *store.CardSlot) *CardProfile {
 
   return &CardProfile{
-    Revision: slot.Card.ProfileRevision,
+    Guid: slot.Card.Guid,
     Handle: slot.Card.Username,
     Name: slot.Card.Name,
     Description: slot.Card.Description,
@@ -61,15 +84,15 @@ func getCardProfileModel(slot *store.CardSlot) *CardProfile {
 func getGroupModel(slot *store.GroupSlot) *Group {
   if slot.Group == nil {
     return &Group{
-      GroupId: slot.GroupSlotId,
+      Id: slot.GroupSlotId,
       Revision: slot.Revision,
     }
   }
 
   return &Group{
-    GroupId: slot.GroupSlotId,
+    Id: slot.GroupSlotId,
     Revision: slot.Revision,
-    GroupData: &GroupData {
+    Data: &GroupData {
       DataType: slot.Group.DataType,
       Data: slot.Group.GroupData.Data,
       Created: slot.Group.Created,
@@ -78,72 +101,4 @@ func getGroupModel(slot *store.GroupSlot) *Group {
   }
 }
 
-func getLabelModel(slot *store.LabelSlot, includeData bool, includeGroups bool) *Label {
-
-  if !includeData || slot.Label == nil {
-    return &Label{
-      LabelId: slot.LabelSlotId,
-      Revision: slot.Revision,
-    }
-  }
-
-  var groups *[]string
-  if includeGroups {
-    groups = &[]string{}
-    for _, group := range slot.Label.Groups {
-      *groups = append(*groups, group.GroupSlot.GroupSlotId)
-    }
-  }
-
-  return &Label{
-    LabelId: slot.LabelSlotId,
-    Revision: slot.Revision,
-    LabelData: &LabelData{
-      DataType: slot.Label.DataType,
-      Data: slot.Label.LabelData.Data,
-      Created: slot.Label.Created,
-      Updated: slot.Label.Updated,
-      Groups: groups,
-    },
-  }
-}
-
-func getArticleModel(slot *store.ArticleSlot, contact bool, shared bool) *Article {
-
-  if !shared || slot.Article == nil {
-    return &Article{
-      ArticleId: slot.ArticleSlotId,
-      Revision: slot.Revision,
-    }
-  }
-
-  var groups []string
-  if !contact {
-    for _, group := range slot.Article.Groups {
-      groups = append(groups, group.GroupSlot.GroupSlotId)
-    }
-  }
-
-  var labels []string
-  for _, label := range slot.Article.Labels {
-    labels = append(labels, label.LabelSlot.LabelSlotId)
-  }
-
-  return &Article{
-    ArticleId: slot.ArticleSlotId,
-    Revision: slot.Revision,
-    ArticleData: &ArticleData{
-      DataType: slot.Article.DataType,
-      Data: slot.Article.Data,
-      Status: slot.Article.Status,
-      Labels: labels,
-      Groups: groups,
-      TagCount: slot.Article.TagCount,
-      Created: slot.Article.Created,
-      Updated: slot.Article.Updated,
-      TagUpdated: slot.Article.TagUpdated,
-      TagRevision: slot.Article.TagRevision,
-    },
-  }
-}
 

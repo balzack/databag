@@ -7,7 +7,7 @@ import (
   "databag/internal/store"
 )
 
-func GetNodeClaimable(w http.ResponseWriter, r *http.Request) {
+func GetNodeStatus(w http.ResponseWriter, r *http.Request) {
   var config store.Config
   err := store.DB.Where("config_id = ?", CONFIG_CONFIGURED).First(&config).Error
   if err != nil {

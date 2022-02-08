@@ -7,7 +7,7 @@ import (
   "databag/internal/store"
 )
 
-func SetNodeClaim(w http.ResponseWriter, r *http.Request) {
+func SetNodeStatus(w http.ResponseWriter, r *http.Request) {
 
   var config store.Config
   err := store.DB.Where("config_id = ?", CONFIG_CONFIGURED).First(&config).Error

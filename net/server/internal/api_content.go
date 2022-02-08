@@ -13,107 +13,132 @@ import (
 	"net/http"
 )
 
-func AddArticleAsset(w http.ResponseWriter, r *http.Request) {
+func AddChannel(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
 }
 
-func AddArticleTag(w http.ResponseWriter, r *http.Request) {
+func AddChannelAsset(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
 }
 
-func ClearArticleGroup(w http.ResponseWriter, r *http.Request) {
+func AddChannelTopic(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
 }
 
-func ClearArticleLabel(w http.ResponseWriter, r *http.Request) {
+func AddChannelTopicTag(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
 }
 
-func ClearLabelGroup(w http.ResponseWriter, r *http.Request) {
+func ClearChannelGroup(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
 }
 
-func GetArticle(w http.ResponseWriter, r *http.Request) {
+func GetChannelAsset(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
 }
 
-func GetArticleAsset(w http.ResponseWriter, r *http.Request) {
+func GetChannelAssets(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
 }
 
-func GetArticleAssets(w http.ResponseWriter, r *http.Request) {
+func GetChannelDetail(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
 }
 
-func GetArticleSubjectField(w http.ResponseWriter, r *http.Request) {
+func GetChannelSize(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
 }
 
-func GetArticleTag(w http.ResponseWriter, r *http.Request) {
+func GetChannelSubjectField(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
 }
 
-func GetArticleTagBlockView(w http.ResponseWriter, r *http.Request) {
+func GetChannelTopicDetail(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
 }
 
-func GetArticleTagSubjectField(w http.ResponseWriter, r *http.Request) {
+func GetChannelTopicSize(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
 }
 
-func GetArticleTagView(w http.ResponseWriter, r *http.Request) {
+func GetChannelTopicSubjectField(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
 }
 
-func GetArticleTags(w http.ResponseWriter, r *http.Request) {
+func GetChannelTopicTagSubjectField(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
 }
 
-func RemoveArticleAsset(w http.ResponseWriter, r *http.Request) {
+func GetChannelTopicTags(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
 }
 
-func RemoveArticleTag(w http.ResponseWriter, r *http.Request) {
+func GetChannelTopics(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
 }
 
-func SetArticleConfirmed(w http.ResponseWriter, r *http.Request) {
+func GetChannels(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
 }
 
-func SetArticleExpiration(w http.ResponseWriter, r *http.Request) {
+func RemoveChannel(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
 }
 
-func SetArticleGroup(w http.ResponseWriter, r *http.Request) {
+func RemoveChannelAsset(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
 }
 
-func SetArticleSubject(w http.ResponseWriter, r *http.Request) {
+func RemoveChannelTopic(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
 }
 
-func UpdateLabel(w http.ResponseWriter, r *http.Request) {
+func RemoveChannelTopicTag(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+	w.WriteHeader(http.StatusOK)
+}
+
+func SetChannelConfirmed(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+	w.WriteHeader(http.StatusOK)
+}
+
+func SetChannelGroup(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+	w.WriteHeader(http.StatusOK)
+}
+
+func SetChannelSubject(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+	w.WriteHeader(http.StatusOK)
+}
+
+func SetChannelTopicSubject(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+	w.WriteHeader(http.StatusOK)
+}
+
+func SetChannelTopicTagSubject(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
 }

@@ -13,17 +13,17 @@ func TestMain(m *testing.M) {
   os.Remove("databag.db")
   store.SetPath("databag.db")
 
-  r, w, _ := NewRequest("GET", "/admin/claimable", nil)
-  GetNodeClaimable(w, r)
+  r, w, _ := NewRequest("GET", "/admin/status", nil)
+  GetNodeStatus(w, r)
   var available bool
   if ReadResponse(w, &available) != nil {
     panic("server not claimable")
   }
 
   // claim server
-  r, w, _ = NewRequest("PUT", "/admin/claim", nil)
+  r, w, _ = NewRequest("PUT", "/admin/status", nil)
   SetCredentials(r, "admin:pass");
-  SetNodeClaim(w, r)
+  SetNodeStatus(w, r)
   if ReadResponse(w, nil) != nil {
     panic("failed to claim server")
   }

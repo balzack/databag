@@ -67,9 +67,9 @@ func SetOpenMessage(w http.ResponseWriter, r *http.Request) {
     card.ProfileRevision = connect.ProfileRevision
     card.Status = APP_CARDPENDING
     card.NotifiedProfile = connect.ProfileRevision
-    card.NotifiedContent = connect.ContentRevision
+    card.NotifiedArticle = connect.ArticleRevision
     card.NotifiedView = connect.ViewRevision
-    card.NotifiedLabel = connect.LabelRevision
+    card.NotifiedChannel = connect.ChannelRevision
     card.OutToken = connect.Token
     card.InToken = hex.EncodeToString(data)
     card.AccountID = account.Guid
@@ -135,14 +135,14 @@ func SetOpenMessage(w http.ResponseWriter, r *http.Request) {
       card.Node = connect.Node
       card.ProfileRevision = connect.ProfileRevision
     }
-    if connect.ContentRevision > card.NotifiedContent {
-      card.NotifiedContent = connect.ContentRevision
+    if connect.ArticleRevision > card.NotifiedArticle {
+      card.NotifiedArticle = connect.ArticleRevision
     }
     if connect.ViewRevision > card.NotifiedView {
       card.NotifiedView = connect.ViewRevision
     }
-    if connect.LabelRevision > card.NotifiedLabel {
-      card.NotifiedLabel = connect.LabelRevision
+    if connect.ChannelRevision > card.NotifiedChannel {
+      card.NotifiedChannel = connect.ChannelRevision
     }
     if connect.ProfileRevision > card.NotifiedProfile {
       card.NotifiedProfile = connect.ProfileRevision
@@ -192,14 +192,10 @@ func SetOpenMessage(w http.ResponseWriter, r *http.Request) {
     Token: slot.Card.InToken,
     Status: slot.Card.Status,
     ViewRevision: slot.Card.ViewRevision,
-    LabelRevision: account.LabelRevision,
+    ChannelRevision: account.ChannelRevision,
     ProfileRevision: account.ProfileRevision,
-    ContentRevision: account.ContentRevision,
+    ArticleRevision: account.ArticleRevision,
   }
-  //SetContactProfileNotification(&account, slot.Card)
-  //SetContactContentNotification(&account, slot.Card)
-  //SetContactViewNotification(&account, slot.Card)
-  //SetContactLabelNotification(&account, slot.Card)
   SetStatus(&account)
   WriteResponse(w, &status)
 }

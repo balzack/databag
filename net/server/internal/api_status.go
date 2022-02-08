@@ -95,12 +95,10 @@ func Status(w http.ResponseWriter, r *http.Request) {
 func getRevision(account *store.Account) Revision {
   var r Revision
   r.Profile = account.ProfileRevision
-  r.Content = account.ContentRevision
-  r.Label = account.LabelRevision
+  r.Article = account.ArticleRevision
+  r.Channel = account.ChannelRevision
   r.Group = account.GroupRevision
   r.Card = account.CardRevision
-  r.Dialogue = account.DialogueRevision
-  r.Insight = account.InsightRevision
   return r
 }
 

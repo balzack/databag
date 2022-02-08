@@ -8,7 +8,7 @@ import (
   "databag/internal/store"
 )
 
-func GetCard(w http.ResponseWriter, r *http.Request) {
+func GetCardDetail(w http.ResponseWriter, r *http.Request) {
 
   account, code, err := BearerAppToken(r, false);
   if err != nil {
@@ -26,7 +26,11 @@ func GetCard(w http.ResponseWriter, r *http.Request) {
     }
     return
   }
+  if slot.Card == nil {
+    ErrResponse(w, http.StatusNotFound, errors.New("referenced empty card slot"))
+    return
+  }
 
-  WriteResponse(w, getCardModel(&slot))
+  WriteResponse(w, getCardDetailModel(&slot))
 }
 

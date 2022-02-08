@@ -34,18 +34,18 @@ func SetCardStatus(w http.ResponseWriter, r *http.Request) {
       return
     }
   }
-  var contentRevision int64
-  content := r.FormValue("contentRevision")
-  if content != "" {
-    if contentRevision, res = strconv.ParseInt(content, 10, 64); res != nil {
+  var articleRevision int64
+  article := r.FormValue("articleRevision")
+  if article != "" {
+    if articleRevision, res = strconv.ParseInt(article, 10, 64); res != nil {
       ErrResponse(w, http.StatusBadRequest, res)
       return
     }
   }
-  var labelRevision int64
-  label := r.FormValue("labelRevision")
-  if label != "" {
-    if labelRevision, res = strconv.ParseInt(label, 10, 64); res != nil {
+  var channelRevision int64
+  channel := r.FormValue("channelRevision")
+  if channel != "" {
+    if channelRevision, res = strconv.ParseInt(channel, 10, 64); res != nil {
       ErrResponse(w, http.StatusBadRequest, res)
       return
     }
@@ -105,8 +105,8 @@ func SetCardStatus(w http.ResponseWriter, r *http.Request) {
   }
   slot.Card.Status = status
   slot.Card.NotifiedView = viewRevision
-  slot.Card.NotifiedContent = contentRevision
-  slot.Card.NotifiedLabel = labelRevision
+  slot.Card.NotifiedArticle = articleRevision
+  slot.Card.NotifiedChannel = channelRevision
   slot.Card.NotifiedProfile = profileRevision
 
   // save and update contact revision

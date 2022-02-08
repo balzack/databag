@@ -65,12 +65,10 @@ type Account struct {
   Username          string          `gorm:"not null;uniqueIndex"`
   Password          []byte          `gorm:"not null"`
   ProfileRevision   int64           `gorm:"not null;default:1"`
-  ContentRevision   int64           `gorm:"not null;default:1"`
+  ArticleRevision   int64           `gorm:"not null;default:1"`
   GroupRevision     int64           `gorm:"not null;default:1"`
-  LabelRevision     int64           `gorm:"not null;default:1"`
+  ChannelRevision   int64           `gorm:"not null;default:1"`
   CardRevision      int64           `gorm:"not null;default:1"`
-  DialogueRevision  int64           `gorm:"not null;default:1"`
-  InsightRevision   int64           `gorm:"not null;default:1"`
   Created           int64           `gorm:"autoCreateTime"`
   Disabled          bool            `gorm:"not null;default:false"`
   AccountDetail     AccountDetail
@@ -183,8 +181,8 @@ type Card struct {
   Updated           int64           `gorm:"autoUpdateTime"`
   ViewRevision      int64           `gorm:"not null;default:1"`
   NotifiedView      int64
-  NotifiedContent   int64
-  NotifiedLabel     int64
+  NotifiedArticle   int64
+  NotifiedChannel   int64
   NotifiedProfile   int64
   Account           Account         `gorm:"references:Guid"`
   Groups            []Group         `gorm:"many2many:card_groups"`

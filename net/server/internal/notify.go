@@ -60,12 +60,12 @@ func SendLocalNotification(notification *store.Notification) {
     if err := NotifyProfileRevision(&card, notification.Revision); err != nil {
       ErrMsg(err)
     }
-  } else if notification.Module == APP_NOTIFYCONTENT {
-    if err := NotifyContentRevision(&card, notification.Revision); err != nil {
+  } else if notification.Module == APP_NOTIFYARTICLE {
+    if err := NotifyArticleRevision(&card, notification.Revision); err != nil {
       ErrMsg(err)
     }
-  } else if notification.Module == APP_NOTIFYLABEL {
-    if err := NotifyLabelRevision(&card, notification.Revision); err != nil {
+  } else if notification.Module == APP_NOTIFYCHANNEL {
+    if err := NotifyChannelRevision(&card, notification.Revision); err != nil {
       ErrMsg(err)
     }
   } else if notification.Module == APP_NOTIFYVIEW {
@@ -151,9 +151,9 @@ func SetContentNotification(account *store.Account) {
     for _, card := range cards {
       notification := &store.Notification{
         Node: card.Node,
-        Module: APP_NOTIFYCONTENT,
+        Module: APP_NOTIFYARTICLE,
         Token: card.OutToken,
-        Revision: account.ContentRevision,
+        Revision: account.ArticleRevision,
       }
       if err := tx.Save(notification).Error; err != nil {
         return err
@@ -178,9 +178,9 @@ func SetContactContentNotification(account *store.Account, card *store.Card) {
   // add new notification for card
   notification := &store.Notification{
     Node: card.Node,
-    Module: APP_NOTIFYCONTENT,
+    Module: APP_NOTIFYARTICLE,
     Token: card.OutToken,
-    Revision: account.ContentRevision,
+    Revision: account.ArticleRevision,
   }
 
   if res := store.DB.Save(notification).Error; res != nil {
@@ -263,9 +263,9 @@ func SetLabelNotification(account *store.Account) {
     for _, card := range cards {
       notification := &store.Notification{
         Node: card.Node,
-        Module: APP_NOTIFYLABEL,
+        Module: APP_NOTIFYCHANNEL,
         Token: card.OutToken,
-        Revision: account.LabelRevision,
+        Revision: account.ChannelRevision,
       }
       if err := tx.Save(notification).Error; err != nil {
         return err
@@ -290,9 +290,9 @@ func SetContactLabelNotification(account *store.Account, card *store.Card) {
   // add new notification for card
   notification := &store.Notification{
     Node: card.Node,
-    Module: APP_NOTIFYLABEL,
+    Module: APP_NOTIFYCHANNEL,
     Token: card.OutToken,
-    Revision: account.LabelRevision,
+    Revision: account.ChannelRevision,
   }
 
   if res := store.DB.Save(notification).Error; res != nil {
