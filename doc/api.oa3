@@ -22,27 +22,16 @@ tags:
     description: authorize holder of identity for external service
   - name: profile
     description: getting and setting of the public profile
-  - name: detail
-    description: attribute management associated with profile
   - name: alias
     description: group management for showing attributes
-  - name: content
-    description: article management for hosted data
   - name: contact
     description: card management for referencing contacts
+  - name: attribute
+    description: article management associated with profile
   - name: share
-    description: channel management for hosting communication
+    description: channel and topic management
     
 paths:
-
-  # Concetps:
-  ## access tokens for bearer auth:prefix for bearer tokens types
-  ### app: app_
-  ### contact: cnt_
-  ### attach: atc_
-  ### reset: res_
-  ### create: act_
-  ## subject based content provides external definition of datatypes
 
   /status:
     get:
@@ -54,12 +43,12 @@ paths:
         '200':
           description: Awaiting announce
               
-  /admin/claimable:
+  /admin/available:
     get:
       tags:
         - admin
       description: Check if portal params have been set
-      operationId: get-node-claimable
+      operationId: get-node-available
       responses:
         '200':
           description: success
@@ -280,12 +269,12 @@ paths:
                   type: string
                   format: binary
           
-  /account/public/claimable:
+  /account/public/available:
     get:
       tags:
         - account
       description: Check if a public account can be created.
-      operationId: get-public-claimable
+      operationId: get-public-available
       responses:
         '200':
           description: success
@@ -319,7 +308,7 @@ paths:
         '500':
           description: internal server error
           
-  /account/claimable:
+  /account/available:
     get:
       tags:
         - account
@@ -829,17 +818,23 @@ paths:
         '500':
           description: internal server error
           
-  /share/groups:
+  /alias/groups:
     get:
       tags:
-        - share
+        - alias
       description: Get groups for sharing. Access granted to app tokens of the account holder.
       operationId: get-groups
       security:
         - bearerAuth: []
       responses:
         '200':
-          description: successful operation
+          description: successful operation          
+          headers:
+            X-Group-Revision:
+              schema:
+                type: integer
+                format: int64
+              description: current group revision
           content:
             application/json:
               schema:
@@ -854,7 +849,7 @@ paths:
           description: internal server error
     post:
       tags:
-        - share
+        - alias
       description: Add a group for sharing. Access granted to app tokens of account holder.
       operationId: add-group
       security:
@@ -878,10 +873,10 @@ paths:
             schema:
               $ref: '#/components/schemas/Subject'
           
-  /share/groups/{groupId}:
+  /alias/groups/{groupId}:
     put:
       tags:
-        - share
+        - alias
       description: Update group description for sharing. Access granted to app tokens of account holder.
       operationId: update-group
       security:
@@ -915,7 +910,7 @@ paths:
               $ref: '#/components/schemas/Subject'
     delete:
       tags:
-        - share
+        - alias
       description: Remove sharing group
       operationId: remove-group
       security:
@@ -948,7 +943,7 @@ paths:
       security:
         - bearerAuth: []
       parameters:
-        - name: cardRevision
+        - name: revision
           in: query
           description: only return updated cards since specified revision
           required: false
@@ -957,6 +952,12 @@ paths:
       responses:
         '200':
           description: successful operation
+          headers:
+            X-Card-Revision:
+              schema:
+                type: integer
+                format: int64
+              description: current card revision
           content:
             application/json:
               schema:
@@ -993,35 +994,6 @@ paths:
           description: internal server error
           
   /contact/cards/{cardId}:
-    get:
-      tags:
-        - contact
-      description: Retieve card entry. Permission granted to app tokens for account holder.
-      operationId: get-card
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: cardId
-          in: path
-          description: specified card id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Card'
-        '401':
-          description: permission denied
-        '404':
-          description: card not found
-        '410':
-          description: account disabled
-        '500':
-          description: internal server error
     delete:
       tags:
         - contact
@@ -1550,10 +1522,10 @@ paths:
               type: integer
               format: int64
               
-  /content/articles:
+  /attribute/articles:
     get:
       tags:
-        - content
+        - attribute
       description: Get article slots that should be updated based on revisions. Access granted to account token or contact token. When the request is made with a contact token the account view revision will be added to the block revision.
       operationId: get-articles
       security:
@@ -1561,25 +1533,36 @@ paths:
       parameters:
         - name: viewRevision
           in: query
-          description: only return updated if view matches 
+          description: view revision from which attribute revision applies 
           required: false
           schema:
             type: string
-        - name: contentRevision
+        - name: articleRevision
           in: query
-          description: only return updated if view matches 
+          description: return updated articles since revision 
           required: false
           schema:
             type: string
       responses:
         '200':
           description: successful operation
+          headers:
+            X-View-Revision:
+              schema:
+                type: integer
+                format: int64
+              description: current view revision
+            X-Article-Revision:
+              schema:
+                type: integer
+                format: int64
+              description: current article revision
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  type: string
+                  $ref: '#/components/schemas/Article'
         '401':
           description: permission denied
         '410':
@@ -1588,7 +1571,7 @@ paths:
           description: internal server error
     post:
       tags:
-        - content
+        - attribute
       description: Add a content article. Access granted to app token of the account holder.
       operationId: add-article
       security:
@@ -1599,7 +1582,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ArticleEntry'
+                $ref: '#/components/schemas/Article'
         '401':
           description: permission denied
         '410':
@@ -1610,41 +1593,12 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ArticleAccess'
+              $ref: '#/components/schemas/Subject'
           
-  /content/articles/{articleId}:
-    get:
-      tags:
-        - content
-      description: Get specified article. Access granted to app token of account holder or contact token of account the article is shared with.
-      operationId: get-article
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: articleId
-          in: path
-          description: specified article id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Article'
-        '401':
-          description: permission denied
-        '404':
-          description: article not found
-        '410':
-          description: account disabled
-        '500':
-          description: internal server error
+  /attribute/articles/{articleId}:
     delete:
       tags:
-        - content
+        - attribute
       description: Remove specified article. Access granted to app token of account holder.
       operationId: remove-article
       security:
@@ -1668,10 +1622,10 @@ paths:
         '500':
           description: internal server error
   
-  /content/articles/{articleId}/subject/{field}:
+  /attribute/articles/{articleId}/subject/{field}:
     get:
       tags:
-        - content
+        - attribute
       description: Base64 decode and download specified field from the article's subject. Access granted to app token of account holder or contact token of account the article is shared with.
       operationId: get-article-subject-field
       security:
@@ -1695,7 +1649,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Article'
+                type: string
+                format: binary
         '401':
           description: permission denied
         '404':
@@ -1707,10 +1662,10 @@ paths:
         '500':
           description: internal server error
           
-  /content/articles/{articleId}/subject:
+  /attribute/articles/{articleId}/subject:
     put:
       tags:
-        - content
+        - attribute
       description: Set subject for article. Access granted to app token of account holder.
       operationId: set-article-subject
       security:
@@ -1747,11 +1702,11 @@ paths:
                 data:
                   type: string
                   
-  /content/articles/{articleId}/groups/{groupId}:
-    post:
+  /attribute/articles/{articleId}/groups/{groupId}:
+    put:
       tags:
-        - content
-      description: Assign a sharing group for the specified article. Contacts with the same sharing group will have access to the article. Access granted to app token of account holder.
+        - attribute
+      description: Set group for articles. Access granted to app tokens for account holder. 
       operationId: set-article-group
       security:
         - bearerAuth: []
@@ -1764,32 +1719,36 @@ paths:
             type: string
         - name: groupId
           in: path
-          description: specified share group id 
+          description: specified group id 
           required: true
           schema:
             type: string
       responses:
         '200':
           description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Article'
         '401':
           description: permission denied
         '404':
-          description: group or article not found
+          description: card or group not found
         '410':
           description: account disabled
         '500':
           description: internal server error
     delete:
       tags:
-        - content
-      description: Remove article from sharing group. Unless the article is shared through other groups or channels contacts within that group will no longer have access to the article. Access granted to app tokens of the account holder.
+        - attribute
+      description: Clear sharing group for article. Access granted to app tokens for account holder.
       operationId: clear-article-group
       security:
         - bearerAuth: []
       parameters:
         - name: articleId
           in: path
-          description: specified article id 
+          description: specified card id 
           required: true
           schema:
             type: string
@@ -1802,30 +1761,102 @@ paths:
       responses:
         '200':
           description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Article'
         '401':
           description: permission denied
         '404':
-          description: group or article not found
+          description: card or group not found
         '410':
           description: account disabled
         '500':
           description: internal server error
-  
-  /content/articles/{articleId}/channels/{channelId}:
-    post:
+          
+          
+  /show/channels:
+    get:
       tags:
-        - content
-      description: Assign a channel to an article. If the channel has been assigned a sharing group the article will be accessible by contacts within that group. Access is granted to app tokens of the account holder.
-      operationId: set-article-channel
+        - show
+      description: Get channel slots. If revision set detail fields omittied in response
+      operationId: get-channels
       security:
         - bearerAuth: []
       parameters:
-        - name: articleId
-          in: path
-          description: specified article id 
-          required: true
+        - name: viewRevision
+          in: query
+          description: view revision from which show revision applies 
+          required: false
           schema:
             type: string
+        - name: channelRevision
+          in: query
+          description: return updated channels since revision 
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          headers:
+            X-View-Revision:
+              schema:
+                type: integer
+                format: int64
+              description: current view revision
+            X-Channel-Revision:
+              schema:
+                type: integer
+                format: int64
+              description: current channel revision
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Channel'
+        '401':
+          description: permission denied
+        '410':
+          description: account disabled
+        '500':
+          description: internal server error
+    post:
+      tags:
+        - show
+      description: Add a channel. 
+      operationId: add-channel
+      security:
+        - bearerAuth: []
+      responses:
+        '201':
+          description: entry created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Channel'
+        '401':
+          description: permission denied
+        '410':
+          description: account disabled
+        '500':
+          description: internal server error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Subject'
+          
+  /show/channels/{channelId}:
+    delete:
+      tags:
+        - show
+      description: Remove specified channel. Access granted to app token of account holder.
+      operationId: remove-channel
+      security:
+        - bearerAuth: []
+      parameters:
         - name: channelId
           in: path
           description: specified channel id 
@@ -1836,30 +1867,334 @@ paths:
         '200':
           description: success
         '401':
+          description: invalid password
+        '404':
+          description: channel not found
+        '410':
+          description: account disabled
+        '500':
+          description: internal server error
+  
+  /show/channels/{channelId}/subject/{field}:
+    get:
+      tags:
+        - show
+      description: Base64 decode and download specified field from the channel's subject. Access granted to app token of account holder or contact token of account the channel is shared with.
+      operationId: get-channel-subject-field
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: channelId
+          in: path
+          description: specified channel id 
+          required: true
+          schema:
+            type: string
+        - name: field
+          in: path
+          description: field from subject to base64 decode and download 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: string
+                format: binary
+        '401':
           description: permission denied
         '404':
-          description: channel or article not found
+          description: field, channel not found
+        '405':
+          description: invalid field
+        '410':
+          description: account disabled
+        '500':
+          description: internal server error
+          
+  /show/channels/{channelId}/subject:
+    put:
+      tags:
+        - show
+      description: Set subject for channel. Access granted to app token of account holder.
+      operationId: set-channel-subject
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: channelId
+          in: path
+          description: specified channel id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Channel'
+        '401':
+          description: permission denied
+        '404':
+          description: channel not found
+        '410':
+          description: account disabled
+        '500':
+          description: internal server error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Subject'
+                  
+  /show/channels/{channelId}/groups/{groupId}:
+    put:
+      tags:
+        - show
+      description: Set group for channels. Access granted to app tokens for account holder. 
+      operationId: set-channel-group
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: channelId
+          in: path
+          description: specified channel id 
+          required: true
+          schema:
+            type: string
+        - name: groupId
+          in: path
+          description: specified group id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Channel'
+        '401':
+          description: permission denied
+        '404':
+          description: card or group not found
         '410':
           description: account disabled
         '500':
           description: internal server error
     delete:
       tags:
-        - content
-      description: Remove a channel from an article. If the channel has been assigned a sharing group the article and the article is not shared in another way, the article will no longer be accessible to that group's contacts. Access is granted to app tokens of the account holder.
-      operationId: clear-article-channel
+        - show
+      description: Clear sharing group for channel. Access granted to app tokens for account holder.
+      operationId: clear-channel-group
       security:
         - bearerAuth: []
       parameters:
-        - name: articleId
+        - name: channelId
           in: path
-          description: specified article id 
+          description: specified card id 
           required: true
           schema:
             type: string
+        - name: groupId
+          in: path
+          description: specified share id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Channel'
+        '401':
+          description: permission denied
+        '404':
+          description: card or group not found
+        '410':
+          description: account disabled
+        '500':
+          description: internal server error
+          
+  /show/channels/{channelId}/topics:
+    get:
+      tags:
+        - show
+      description: Get channel topic slots. If revision set, detail fields omitted in response
+      operationId: get-channel-topics
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: channelId
+          in: path
+          description: specified channel id
+          required: true
+          schema:
+            type: string
+        - name: revision
+          in: query
+          description: return updated topics since revision 
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          headers:
+            X-Topic-Revision:
+              schema:
+                type: integer
+                format: int64
+              description: current topic revision
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Topic'
+        '401':
+          description: permission denied
+        '410':
+          description: account disabled
+        '500':
+          description: internal server error
+    post:
+      tags:
+        - show
+      description: Add a topic to channel channel. 
+      operationId: add-channel-topic
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: channelId
+          in: path
+          description: specified channel id
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: entry created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Topic'
+        '401':
+          description: permission denied
+        '410':
+          description: account disabled
+        '500':
+          description: internal server error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Subject'
+          
+  /show/channels/{channelId}/topics/{topicId}:
+    delete:
+      tags:
+        - show
+      description: Remove specified channel. Access granted to app token of account holder.
+      operationId: remove-channel-topic
+      security:
+        - bearerAuth: []
+      parameters:
         - name: channelId
           in: path
           description: specified channel id 
+          required: true
+          schema:
+            type: string
+        - name: topicId
+          in: path
+          description: specified topic id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success
+        '401':
+          description: invalid password
+        '404':
+          description: channel not found
+        '410':
+          description: account disabled
+        '500':
+          description: internal server error
+  
+  /show/channels/{channelId}/topics/{topicId}/subject/{field}:
+    get:
+      tags:
+        - show
+      description: Base64 decode and download specified field from the channel's subject. Access granted to app token of account holder or contact token of account the channel is shared with.
+      operationId: get-channel-topic-subject-field
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: channelId
+          in: path
+          description: specified channel id 
+          required: true
+          schema:
+            type: string
+        - name: topicId
+          in: path
+          description: specified topic id
+          required: true
+          schema:
+            type: string
+        - name: field
+          in: path
+          description: field from subject to base64 decode and download 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: string
+                format: binary
+        '401':
+          description: permission denied
+        '404':
+          description: field, channel not found
+        '405':
+          description: invalid field
+        '410':
+          description: account disabled
+        '500':
+          description: internal server error
+          
+  /show/channels/{channelId}/topics/{topicId}/subject:
+    put:
+      tags:
+        - show
+      description: Set subject for channel. Access granted to app token of account holder.
+      operationId: set-channel-topic-subject
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: channelId
+          in: path
+          description: specified channel id 
+          required: true
+          schema:
+            type: string
+        - name: topicId
+          in: path
+          description: specified topic id
           required: true
           schema:
             type: string
@@ -1869,24 +2204,43 @@ paths:
         '401':
           description: permission denied
         '404':
-          description: channel or article not found
+          description: channel not found
         '410':
           description: account disabled
         '500':
           description: internal server error
-          
-  /content/articles/{articleId}/assets:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - type
+                - data
+              properties:
+                type:
+                  type: string
+                data:
+                  type: string
+                  
+  /show/channels/{channelId}/topics/{topicId}/assets:
     get:
       tags:
-        - content
-      description: Get list of assets assigned to an article. The original assets will only be available to the account holder to provent the accidental sharing of content metadata. Access is granted to the app token of the account holder and the contact token of accounts the article has been shared with.
-      operationId: get-article-assets
+        - show
+      description: Get list of assets assigned to an channel. The original assets will only be available to the account holder to provent the accidental sharing of content metadata. Access is granted to the app token of the account holder and the contact token of accounts the channel has been shared with.
+      operationId: get-channel-assets
       security:
         - bearerAuth: []
       parameters:
-        - name: articleId
+        - name: channelId
           in: path
-          description: specified article id 
+          description: specified channel id 
+          required: true
+          schema:
+            type: string
+        - name: topicId
+          in: path
+          description: specified topic id
           required: true
           schema:
             type: string
@@ -1907,15 +2261,21 @@ paths:
           description: internal server error
     post:
       tags:
-        - content
-      description: Add an an asset to the to an article. The original posted asset is referenced in the asset list with a null transform. The transformed assets are referenced accordingly. Transforming the asset strips it of metadata and transcodes it into a specified format. Access is granted to the app token of the account holder.
-      operationId: add-article-asset
+        - show
+      description: Add an an asset to the to an channel. The original posted asset is referenced in the asset list with a null transform. The transformed assets are referenced accordingly. Transforming the asset strips it of metadata and transcodes it into a specified format. Access is granted to the app token of the account holder.
+      operationId: add-channel-asset
       security:
         - bearerAuth: []
       parameters:
-        - name: articleId
+        - name: channelId
           in: path
-          description: specified article id 
+          description: specified channel id 
+          required: true
+          schema:
+            type: string
+        - name: topicId
+          in: path
+          description: specified topic id
           required: true
           schema:
             type: string
@@ -1937,7 +2297,7 @@ paths:
         '401':
           description: permission denied
         '404':
-          description: article not found
+          description: channel not found
         '406':
           description: storage limit reached
         '410':
@@ -1954,18 +2314,24 @@ paths:
                   type: string
                   format: binary
           
-  /content/articles/{articleId}/assets/{assetId}:
+  /show/channels/{channelId}/topics/{topicId}/assets/{assetId}:
     get:
       tags:
-        - content
-      description: Get asset assigned to an article. The endpoint supports byte-range requests and responds with the content-type set appropriatly. Access granted to the app tokens of the account holder and in the case of non-original assets, the contact token for accounts with which the article is shared.
-      operationId: get-article-asset
+        - show
+      description: Get asset assigned to an channel. The endpoint supports byte-range requests and responds with the content-type set appropriatly. Access granted to the app tokens of the account holder and in the case of non-original assets, the contact token for accounts with which the channel is shared.
+      operationId: get-channel-asset
       security:
         - bearerAuth: []
       parameters:
-        - name: articleId
+        - name: channelId
           in: path
-          description: specified article id 
+          description: specified channel id 
+          required: true
+          schema:
+            type: string
+        - name: topicId
+          in: path
+          description: specified topic id
           required: true
           schema:
             type: string
@@ -1986,22 +2352,28 @@ paths:
         '401':
           description: permission denied
         '404':
-          description: asset or article not found
+          description: asset or channel not found
         '410':
           description: account disabled
         '500':
           description: internal server error
     delete:
       tags:
-        - content
-      description: Remove an asset from an article. Access granted to app tokens of the account holder.
-      operationId: remove-article-asset
+        - show
+      description: Remove an asset from an channel. Access granted to app tokens of the account holder.
+      operationId: remove-channel-asset
       security:
         - bearerAuth: []
       parameters:
-        - name: articleId
+        - name: channelId
           in: path
-          description: specified article id 
+          description: specified channel id 
+          required: true
+          schema:
+            type: string
+        - name: topicId
+          in: path
+          description: specified topic id
           required: true
           schema:
             type: string
@@ -2017,434 +2389,30 @@ paths:
         '401':
           description: permission denied
         '404':
-          description: asset or article not found
+          description: asset or channel not found
         '410':
           description: account disabled
         '500':
           description: internal server error
           
-  /content/articles/{articleId}/confirmed:
+  /show/channels/{channelId}/topics/{topicId}/confirmed:
     put:
       tags:
-        - content
-      description: Set confirmed state of the article. Until the confirmed state has been set to true, the article will not be visible to contacts with which the article is shared. Access granted to the app tokens of the acocunt holder.
-      operationId: set-article-confirmed
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: articleId
-          in: path
-          description: specified article id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: success
-        '401':
-          description: permission denied
-        '404':
-          description: article not found
-        '410':
-          description: account disabled
-        '500':
-          description: internal server error
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: boolean
-          
-  /content/articles/{articleId}/tagBlocks/view:
-    get:
-      tags:
-        - content
-      description: Get view of tag blocks associated with specified article. Access granted to app tokens of account holder and contact tokens of account with which the article is shared. 
-      operationId: get-article-tag-block-view
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: articleId
-          in: path
-          description: specified article id 
-          required: true
-          schema:
-            type: string
-        - name: types
-          in: query
-          description: limit results to tags of types
-          required: false
-          schema:
-            type: array
-            items:
-              type: string
-      responses:
-        '200':
-          description: success
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: string
-                    revision:
-                      type: integer
-                      format: int64
-        '401':
-          description: permission denied
-        '404':
-          description: article not found
-        '410':
-          description: account disabled
-        '500':
-          description: internal server error
-          
-  /content/articles/{articleId}/tagBlocks/{blockId}/view:
-    get:
-      tags:
-        - content
-      description: Get view of tags within speicified block. Access granted to app tokens of account holder and contact token of accounts with which the article is shared. 
-      operationId: get-article-tag-view
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: articleId
-          in: path
-          description: specified article id 
-          required: true
-          schema:
-            type: string
-        - name: blockId
-          in: path
-          description: specified block id 
-          required: true
-          schema:
-            type: string
-        - name: types
-          in: query
-          description: limit results to tags of types
-          required: false
-          schema:
-            type: array
-            items:
-              type: string
-      responses:
-        '200':
-          description: success
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: string
-                    revision:
-                      type: integer
-                      format: int64
-        '401':
-          description: permission denied
-        '404':
-          description: block or article not found
-        '410':
-          description: account disabled
-        '500':
-          description: internal server error
-          
-  /content/articles/{articleId}/tagBlocks/{blockId}:
-    get:
-      tags:
-        - content
-      description: Get tags within specified block. Access granted to app tokens of account holder and contact tokens of accounts with which the article is shared.
-      operationId: get-article-tags
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: articleId
-          in: path
-          description: specified article id 
-          required: true
-          schema:
-            type: string
-        - name: blockId
-          in: path
-          description: specified block id 
-          required: true
-          schema:
-            type: string
-        - name: types
-          in: query
-          description: limit results to tags of types
-          required: false
-          schema:
-            type: array
-            items:
-              type: string
-      responses:
-        '200':
-          description: success
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: string
-                    revision:
-                      type: integer
-                      format: int64
-        '401':
-          description: permission denied
-        '404':
-          description: block or article not found
-        '410':
-          description: account disabled
-        '500':
-          description: internal server error
-          
-  /content/articles/{articleId}/tags:
-    post:
-      tags:
-        - content
-      description: Add a tag to an article. Access granted to app tokens of the account holder and contact tokens of accounts with which the article is shared.
-      operationId: add-article-tag
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: articleId
-          in: path
-          description: specified article id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: success
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  blockId:
-                    type: string
-                  blockRevision:
-                    type: integer
-                    format: int64
-                  tag:
-                    $ref: '#/components/schemas/Tag'
-        '401':
-          description: permission denied
-        '404':
-          description: article not found
-        '410':
-          description: account disabled
-        '500':
-          description: internal server error
-              
-  /content/articles/{articleId}/tags/{tagId}:
-    get:
-      tags:
-        - content
-      description: Get specified tag. Access granted to app tokens of account holder and contact tokens of accounts with which the article is shared.
-      operationId: get-article-tag
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: articleId
-          in: path
-          description: specified article id 
-          required: true
-          schema:
-            type: string
-        - name: tagId
-          in: path
-          description: specified tag id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Tag'
-        '401':
-          description: permission denied
-        '404':
-          description: tag or article not found
-        '410':
-          description: account disabled
-        '500':
-          description: internal server error
-    delete:
-      tags:
-        - content
-      description: Remove a tag from an article. Access granted to app tokens of account holder and the contact tokens of the account that created the tag.
-      operationId: remove-article-tag
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: articleId
-          in: path
-          description: specified article id 
-          required: true
-          schema:
-            type: string
-        - name: tagId
-          in: path
-          description: specified tag id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: success
-        '401':
-          description: permission denied
-        '404':
-          description: tag or article not found
-        '410':
-          description: account disabled
-        '500':
-          description: internal server error
-              
-  /content/articles/{articleId}/tags/{tagId}/subject/{field}:
-    get:
-      tags:
-        - content
-      description: Base64 decode and retrieve specified tag on the article. Access granted to app tokens of account holder and contact tokens of accounts with which the article is shared.
-      operationId: get-article-tag-subject-field
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: articleId
-          in: path
-          description: specified article id 
-          required: true
-          schema:
-            type: string
-        - name: tagId
-          in: path
-          description: specified tag id 
-          required: true
-          schema:
-            type: string
-        - name: field
-          in: path
-          description: field to base64 decode and transfer 
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Tag'
-        '401':
-          description: permission denied
-        '404':
-          description: field, tag or article not found
-        '405':
-          description: invalid field
-        '410':
-          description: account disabled
-        '500':
-          description: internal server error
-          
-  /content/channels:
-    get:
-      tags:
-        - content
-      description: Get channels with which to organize the articles. Contacts requesting the channels will only retrieve the channels with which they are shared. Access granted to the app tokens of the account holder and connected contact tokens.
-      operationId: get-channels
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Channel'
-        '401':
-          description: invalid token
-        '410':
-          description: account disabled
-        '500':
-          description: internal server error
-    post:
-      tags:
-        - content
-      description: Add a new channel for organizing the articles. Access granted to the app tokens of the account holder.
-      operationId: add-channel
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: success
-        '401':
-          description: permission denied
-        '410':
-          description: account disabled
-        '500':
-          description: internal server error
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Subject'
-          
-  /content/channels/{channelId}:
-    put:
-      tags:
-        - content
-      description: Update specified channel. Access granted to app tokens of the account holder.
-      operationId: update-channel
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: channelId
-          in: path
-          description: specified group id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: successful operation
-        '401':
-          description: invalid token
-        '410':
-          description: account disabled
-        '500':
-          description: internal server error
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Subject'
-    delete:
-      tags:
-        - content
-      description: Remove specified channel. Access granted the the app tokens of the account holder.
-      operationId: remove-channel
+        - show
+      description: Set confirmed state of the channel. Until the confirmed state has been set to true, the channel will not be visible to contacts with which the channel is shared. Access granted to the app tokens of the acocunt holder.
+      operationId: set-channel-confirmed
       security:
         - bearerAuth: []
       parameters:
         - name: channelId
           in: path
           description: specified channel id 
+          required: true
+          schema:
+            type: string
+        - name: topicId
+          in: path
+          description: specified topic id
           required: true
           schema:
             type: string
@@ -2459,45 +2427,106 @@ paths:
           description: account disabled
         '500':
           description: internal server error
-          
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: boolean
+              
                   
-  /content/channels/{channelId}/groups/{groupId}:
+  /show/channels/{channelId}/topics/{topicId}/tags:
+    get:
+      tags:
+        - show
+      description: Get channel topic tag slots.
+      operationId: get-channel-topic-tags
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: channelId
+          in: path
+          description: specified channel id
+          required: true
+          schema:
+            type: string
+        - name: topicId
+          in: path
+          description: specified topic id
+          required: true
+          schema:
+            type: string
+        - name: revision
+          in: query
+          description: return updated topics since revision 
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          headers:
+            X-Tag-Revision:
+              schema:
+                type: integer
+                format: int64
+              description: current tag revision
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Tag'
+        '401':
+          description: permission denied
+        '410':
+          description: account disabled
+        '500':
+          description: internal server error
     post:
       tags:
-        - content
-      description: Set a sharing group for the channel and articles assigned to the channel. Access granted to app tokens of the account holder.
-      operationId: set-channel-group
+        - show
+      description: Add a tag to channel topic. 
+      operationId: add-channel-topic-tag
       security:
         - bearerAuth: []
       parameters:
         - name: channelId
           in: path
-          description: specified channel id 
+          description: specified channel id
           required: true
           schema:
             type: string
-        - name: groupId
+        - name: topicId
           in: path
-          description: specified group id 
+          description: specified topic id
           required: true
           schema:
             type: string
       responses:
-        '200':
-          description: success
+        '201':
+          description: entry created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tag'
         '401':
           description: permission denied
-        '404':
-          description: group or channel not found
         '410':
           description: account disabled
         '500':
           description: internal server error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Subject'
+          
+  /show/channels/{channelId}/topics/{topicId}/tags/{tagId}:
     delete:
       tags:
-        - content
-      description: Clear a sharing group from a channel. Access granted to app tokens of the account holder.
-      operationId: clear-channel-group
+        - show
+      description: Remove specified tag from channel topic. Access granted to app token of account holder.
+      operationId: remove-channel-topic-tag
       security:
         - bearerAuth: []
       parameters:
@@ -2507,9 +2536,106 @@ paths:
           required: true
           schema:
             type: string
-        - name: groupId
+        - name: topicId
           in: path
-          description: specified group id 
+          description: specified topic id 
+          required: true
+          schema:
+            type: string
+        - name: tagId
+          in: path
+          description: specified tag id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success
+        '401':
+          description: invalid password
+        '404':
+          description: channel not found
+        '410':
+          description: account disabled
+        '500':
+          description: internal server error
+  
+  /show/channels/{channelId}/topics/{topicId}/tags/{tagId}/subject/{field}:
+    get:
+      tags:
+        - show
+      description: Base64 decode and download specified field from the channel's subject. Access granted to app token of account holder or contact token of account the channel is shared with.
+      operationId: get-channel-topic-tag-subject-field
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: channelId
+          in: path
+          description: specified channel id 
+          required: true
+          schema:
+            type: string
+        - name: topicId
+          in: path
+          description: specified topic id
+          required: true
+          schema:
+            type: string
+        - name: tagId
+          in: path
+          description: specified tag id
+          required: true
+          schema:
+            type: string
+        - name: field
+          in: path
+          description: field from subject to base64 decode and download 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: string
+                format: binary
+        '401':
+          description: permission denied
+        '404':
+          description: field, channel not found
+        '405':
+          description: invalid field
+        '410':
+          description: account disabled
+        '500':
+          description: internal server error
+          
+  /show/channels/{channelId}/topics/{topicId}/tags/{tagId}/subject:
+    put:
+      tags:
+        - show
+      description: Set subject for channel. Access granted to app token of account holder.
+      operationId: set-channel-topic-tag-subject
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: channelId
+          in: path
+          description: specified channel id 
+          required: true
+          schema:
+            type: string
+        - name: topicId
+          in: path
+          description: specified topic id
+          required: true
+          schema:
+            type: string
+        - name: tagId
+          in: path
+          description: specified tag id
           required: true
           schema:
             type: string
@@ -2519,12 +2645,18 @@ paths:
         '401':
           description: permission denied
         '404':
-          description: group or channel not found
+          description: channel not found
         '410':
           description: account disabled
         '500':
           description: internal server error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Subject'
               
+          
 externalDocs:
   description: App overview
   url: ''
@@ -2545,15 +2677,11 @@ components:
       required:
         - profile
         - attribute
-        - article
         - group
         - channel
         - card
       properties:
         profile:
-          type: integer
-          format: int64
-        attribute:
           type: integer
           format: int64
         article:
@@ -2659,20 +2787,22 @@ components:
     App:
       type: object
       required:
-        - appId
-        - appData
-        - attached
+        - id
+        - revision
+        - data
       properties:
-        appId:
+        id:
           type: string
-        appData:
-          $ref: '#/components/schemas/AppData'
-        attached:
+        revision:
           type: integer
           format: int64
+        data:
+          $ref: '#/components/schemas/AppData'
           
     AppData:
       type: object
+      required:
+        - attached
       properties:
         name:
           type: string
@@ -2683,67 +2813,28 @@ components:
         image:
           type: string
           format: base64 encoded image
-          
-    CardProfile:
-      type: object
-      required:
-        - node
-      properties:
-        revision:
+        attached:
           type: integer
           format: int64
-        handle:
-          type: string
-        name:
-          type: string
-        description:
-          type: string
-        location:
-          type: string
-        imageSet:
-          type: boolean
-        version:
-          type: string
-        node:
-          type: string
           
-    CardDetail:
-      type: object
-      required:
-        - revision
-      properties:
-        revision:
-          type: integer
-          format: int64
-        notes:
-          type: string
-        groups:
-          type: array
-          items:
-            type: string
-            
     Card:
       type: object
       required:
-        - cardId
+        - id
         - revision
-        - cardData
+        - data
       properties:
-        cardId:
+        id:
           type: string
         revision:
           type: number
           format: int64
-        cardData:
+        data:
           $ref: '#/components/schemas/CardData'
-        
         
     CardData:
       type: object
       required:
-        - guid
-        - status
-        - token
         - detailRevision
         - profileRevision
         - notifiedProfile
@@ -2751,13 +2842,6 @@ components:
         - notifiedChannel
         - notifiedView
       properties:
-        guid:
-          type: string
-        status:
-          type: string
-          enum: [ pending, confirmed, requested, connecting, connected ]
-        token:
-          type: string
         detailRevision:
           type: integer
           format: int64
@@ -2776,59 +2860,64 @@ components:
         notifiedView:
           type: integer
           format: int64
-            
-    Asset:
+        cardDetail:
+          $ref: '#/components/schemas/CardDetail'
+        cardProfile:
+          $ref: '#/components/schemas/CardProfile'
+      
+    CardProfile:
       type: object
       required:
-        - assetId
+        - guid
+        - node
       properties:
-        assetId:
+        guid:
           type: string
-        transform:
+        handle:
           type: string
+        name:
+          type: string
+        description:
+          type: string
+        location:
+          type: string
+        imageSet:
+          type: boolean
+        version:
+          type: string
+        node:
+          type: string
+          
+    CardDetail:
+      type: object
+      required:
+        - status
+      properties:
         status:
           type: string
-          enum: [ pending, processing, ready, error ]
-          
-    ArticleAccess:
-      type: object
-      required:
-        - channels
-        - groups
-      properties:
-        channels:
-          type: array
-          items:
-            type: string
+          enum: [ pending, confirmed, requested, connecting, connected ]
+        token:
+          type: string
+        notes:
+          type: string
         groups:
           type: array
           items:
             type: string
             
-    ArticleEntry:
-      type: object
-      required:
-        - articleBlockId
-        - article
-      properties:
-        articleBlockId:
-          type: string
-        article:
-          $ref: '#/components/schemas/Article'
-          
     Group:
       type: object
       required:
-        - groupId
+        - id
         - revision
-        - groupData
+        - ata
       properties:
-        groupId:
+        id:
           type: string
         revision:
           type: integer
           format: int64
-        groupData:
+        data:
           $ref: '#/components/schemas/GroupData'
           
     GroupData:
@@ -2853,26 +2942,56 @@ components:
     Channel:
       type: object
       required:
-        - channelId
+        - id
         - revision
-        - channelData
+        - data
       properties:
-        channelId:
+        id:
           type: string
         revision:
           type: string
-        channelData:
+        data:
           $ref: '#/components/schemas/ChannelData'
           
     ChannelData:
       type: object
       required:
-        - type
+        - detailRevision
+        - topicRevision
+      properties:
+        detailRevision:
+          type: integer
+          format: int64
+        topicRevision:
+          type: integer
+          format: int64
+        channelDetail:
+          $ref: '#/components/schemas/ChannelDetail'
+        channelTopics:
+          $ref: '#/components/schemas/ChannelTopics'
+          
+    ChannelTopics:
+      type: object
+      required:
+        - topicCount
+        - topicUpdated
+      properties:
+        topicCount:
+          type: integer
+          format: int32
+        topicUpdated:
+          type: integer
+          format: int64
+        
+    ChannelDetail:
+      type: object
+      required:
+        - dataType
         - data
         - created
         - updated
       properties:
-        type:
+        dataType:
           type: string
         data:
           type: string
@@ -2882,7 +3001,19 @@ components:
         updated:
           type: integer
           format: int64
-        groups:  # present only in account holder responses
+        cards:
+          type: array
+          items:
+            type: string
+        groups:
+          $ref: '#/components/schemas/ChannelGroups'
+          
+    ChannelGroups:
+      type: object
+      required:
+        - groups
+      properties:
+        groups:
           type: array
           items:
             type: string
@@ -2890,29 +3021,46 @@ components:
     Topic:
       type: object
       required:
-        - topicId
+        - id
         - revision
-        - topicData
+        - data
       properties:
-        topicId:
+        id:
           type: string
         revision:
           type: string
-        topicData:
+        data:
           $ref: '#/components/schemas/TopicData'
     
     TopicData:
       type: object
       required:
+        - detailRevision
+        - tagRevision
+      properties:
+        detailRevision:
+          type: integer
+          format: int64
+        tagRevision:
+          type: integer
+          format: int64
+        topicDetail:
+          $ref: '#/components/schemas/TopicDetail'
+        topicTags::
+          $ref: '#/components/schemas/TopicTags'
+          
+    TopicDetail:
+      type: object
+      required:
+        - guid
         - dataType
         - data
         - created
         - modified
         - status
-        - tagCount
-        - tagUpdated
-        - tagRevision
       properties:
+        guid:
+          type: string
         dataType:
           type: string
         data:
@@ -2926,76 +3074,45 @@ components:
         status:
           type: string
           enum: [ unconfirmed, confirmed, complete, error ]
-        tagCount:
-          type: integer
-          format: int32
-        tagUpdate:
-          type: integer
-          format: int64
-        tagRevision:
-          type: integer
-          format: int64
           
-    Attribute:
+    TopicTags:
       type: object
       required:
-        - attributeId
-        - revision
-        - attributeData
-      properties:
-        attributeId:
-          type: string
-        revision:
-          type: string
-        attributeData:
-          $ref: '#/components/schemas/AttributeData'
-          
-    AttributeData:
-      type: object
-      required:
-        - article
-        - tagRevision
         - tagCount
         - tagUpdated
       properties:
-        article:
-          $ref: '#/components/schemas/AttributeData'
-        groups:  # present only in account holder responses
-          type: array
-          items:
-            type: string
         tagCount:
           type: integer
           format: int32
-        tagUpdate:
-          type: integer
-          format: int64
-        tagRevision:
+        tagUpdated:
           type: integer
           format: int64
           
     Tag:
       type: object
       required:
-        - tagId
+        - id
         - revision
-        - tagData
+        - data
       properties:
-        tagId:
+        id:
           type: string
         revision:
           type: string
-        tagData:
+        data:
           $ref: '#/components/schemas/TagData'
         
     TagData:
       type: object
       required:
+        - guid
         - dataType
         - data
         - created
         - updated
       properties:
+        guid:
+          type: string
         dataType:
           type: string
         data:
@@ -3010,14 +3127,26 @@ components:
     Article:
       type: object
       required:
-        - articleId
+        - id
         - revision
-        - status
+        - data
       properties:
-        articleId:
+        id:
           type: string
         revision:
           type: string
+        data:
+          $ref: '#/components/schemas/ArticleData'
+        
+    ArticleData:
+      type: object
+      required:
+        - dataType
+        - data
+        - created
+        - updated
+        - status
+      properties:
         dataType:
           type: string
         data:
@@ -3031,6 +3160,31 @@ components:
         status:
           type: string
           enum: [ unconfirmed, confirmed, incomplete, error ]
+        groups:
+          $ref: '#/components/schemas/ArticleGroups'
+          
+    ArticleGroups:
+      type: object
+      required:
+        - groups
+      properties:
+        groups:
+          type: array
+          items:
+            type: string
+          
+    Asset:
+      type: object
+      required:
+        - assetId
+      properties:
+        assetId:
+          type: string
+        transform:
+          type: string
+        status:
+          type: string
+          enum: [ pending, processing, importing, ready, error ]
           
     Subject:
       type: object
@@ -3043,7 +3197,7 @@ components:
         data:
           type: string
           
-    Authenticate:
+    Claim:
       type: object
       required: 
         - token
