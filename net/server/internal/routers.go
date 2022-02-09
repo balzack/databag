@@ -146,6 +146,13 @@ var routes = Routes{
 	},
 
 	Route{
+		"GetCard",
+		strings.ToUpper("Get"),
+		"/contact/cards/{cardId}",
+		GetCard,
+	},
+
+	Route{
 		"GetPublicStatus",
 		strings.ToUpper("Get"),
 		"/account/public/status",

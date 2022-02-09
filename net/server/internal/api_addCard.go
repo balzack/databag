@@ -110,6 +110,7 @@ func AddCard(w http.ResponseWriter, r *http.Request) {
       }
     }
   } else {
+
     if identity.Revision > card.ProfileRevision {
 
       // update card data
@@ -125,10 +126,10 @@ func AddCard(w http.ResponseWriter, r *http.Request) {
 
     // save contact card
     err  = store.DB.Transaction(func(tx *gorm.DB) error {
-      slot = &card.CardSlot
       if res := tx.Save(&card).Error; res != nil {
         return res
       }
+      slot = &card.CardSlot
       if slot == nil {
         slot = &store.CardSlot{
           CardSlotId: uuid.New().String(),
@@ -146,6 +147,7 @@ func AddCard(w http.ResponseWriter, r *http.Request) {
       if res := tx.Model(&account).Update("card_revision", account.CardRevision + 1).Error; res != nil {
         return res
       }
+      slot.Card = &card
       return nil
     })
   }
