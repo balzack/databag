@@ -43,12 +43,12 @@ paths:
         '200':
           description: Awaiting announce
               
-  /admin/available:
+  /admin/status:
     get:
       tags:
         - admin
       description: Check if portal params have been set
-      operationId: get-node-available
+      operationId: get-node-status
       responses:
         '200':
           description: success
@@ -58,13 +58,11 @@ paths:
                 type: boolean
         '500':
           description: internal server error
-          
-  /admin/claim:
-    post:
+    put:
       tags:
         - admin
       description: Set admin password and node domain
-      operationId: set-node-claim
+      operationId: set-node-status
       security:
         - basicCredentials: []
       parameters:
@@ -269,12 +267,12 @@ paths:
                   type: string
                   format: binary
           
-  /account/public/available:
+  /account/public/status:
     get:
       tags:
         - account
       description: Check if a public account can be created.
-      operationId: get-public-available
+      operationId: get-public-status
       responses:
         '200':
           description: success
@@ -728,6 +726,10 @@ paths:
       responses:
         '200':
           description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
         '401':
           description: permission denied
         '410':
@@ -774,6 +776,10 @@ paths:
       responses:
         '200':
           description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
         '401':
           description: permission denied
         '405':
@@ -784,10 +790,9 @@ paths:
           description: internal server error
       requestBody:
         content:
-          application/octet-stream:
+          application/json:
             schema:
               type: string
-              format: binary
           
   /profile/message:
     get:
@@ -983,7 +988,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Card'
+                $ref: '#/components/schemas/DataMessage'
         '400':
           description: invalid data message
         '401':
@@ -992,42 +997,8 @@ paths:
           description: account disabled
         '500':
           description: internal server error
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/DataMessage'
-                
+          
   /contact/cards/{cardId}:
-    get:
-      tags:
-        - contact
-      description: get card entry. Access granted to app tokens of account holder.
-      operationId: get-card
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: cardId
-          in: path
-          description: specified card id
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Card'
-        '401':
-          description: permission denied
-        '404':
-          description: card not found
-        '410':
-          description: account disabled
-        '500':
-          description: internal server error
     delete:
       tags:
         - contact
@@ -1072,6 +1043,30 @@ paths:
         - name: token
           in: query
           description: token for accessing card
+          required: false # required for connected 
+          schema:
+            type: string
+        - name: profileRevision
+          in: query
+          description: profile revision of contact
+          required: false # required for connected 
+          schema:
+            type: string
+        - name: articleRevision
+          in: query
+          description: article revision of contact
+          required: false # required for connected 
+          schema:
+            type: string
+        - name: channelRevision
+          in: query
+          description: channel revision of contact
+          required: false # required for connected 
+          schema:
+            type: string
+        - name: viewRevision
+          in: query
+          description: view revision of contact
           required: false # required for connected 
           schema:
             type: string
@@ -1193,18 +1188,6 @@ paths:
       responses:
         '200':
           description: successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-                required:
-                  - status
-                properties:
-                  token:
-                    type: string
-                  status:
-                    type: string
-                    enum: [ pending, confirmed, requested, connecting, connected ]
         '400':
           description: invalid data message
         '410':
@@ -1508,12 +1491,36 @@ paths:
               type: integer
               format: int64
         
-  /contact/content/revision:
+  /contact/article/revision:
     put:
       tags:
         - contact
-      description: Set content revision for contact. This is intend to be invoked automatically anytime a contact updates their content or sharing. Access granted to contact tokens.
-      operationId: set-content-revision
+      description: Set artcile revision for contact. This is intend to be invoked automatically anytime a contact updates their content or sharing. Access granted to contact tokens.
+      operationId: set-article-revision
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: revision set
+        '401':
+          description: not authorized
+        '410':
+          description: account disabled
+        '500':
+          description: internal server error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: integer
+              format: int64
+              
+  /contact/channel/revision:
+    put:
+      tags:
+        - contact
+      description: Set channel revision for contact. This is intend to be invoked automatically anytime a contact updates their content or sharing. Access granted to contact tokens.
+      operationId: set-channel-revision
       security:
         - bearerAuth: []
       responses:
@@ -1726,15 +1733,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              required:
-                - type
-                - data
-              properties:
-                type:
-                  type: string
-                data:
-                  type: string
+              $ref: '#/components/schemas/Subject'
                   
   /attribute/articles/{articleId}/groups/{groupId}:
     put:
@@ -2375,15 +2374,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              required:
-                - type
-                - data
-              properties:
-                type:
-                  type: string
-                data:
-                  type: string
+              $ref: '#/components/schemas/Subject'
                   
   /content/channels/{channelId}/topics/{topicId}/assets:
     get:
@@ -2838,7 +2829,7 @@ components:
       type: object
       required:
         - profile
-        - attribute
+        - article
         - group
         - channel
         - card
@@ -2989,7 +2980,7 @@ components:
         id:
           type: string
         revision:
-          type: number
+          type: integer
           format: int64
         data:
           $ref: '#/components/schemas/CardData'
@@ -3000,7 +2991,7 @@ components:
         - detailRevision
         - profileRevision
         - notifiedProfile
-        - notifiedContent
+        - notifiedArticle
         - notifiedChannel
         - notifiedView
       properties:
@@ -3013,7 +3004,7 @@ components:
         notifiedProfile:
           type: integer
           format: int64
-        notifiedContent:
+        notifiedArticle:
           type: integer
           format: int64
         notifiedChannel:
@@ -3072,7 +3063,7 @@ components:
       required:
         - id
         - revision
-        - ata
+        - data
       properties:
         id:
           type: string
@@ -3196,7 +3187,8 @@ components:
         id:
           type: string
         revision:
-          type: string
+          type: integer
+          format: int64
         data:
           $ref: '#/components/schemas/TopicData'
     
@@ -3266,7 +3258,8 @@ components:
         id:
           type: string
         revision:
-          type: string
+          type: integer
+          format: int64
         data:
           $ref: '#/components/schemas/TagData'
         
@@ -3302,7 +3295,8 @@ components:
         id:
           type: string
         revision:
-          type: string
+          type: integer
+          format: int64
         data:
           $ref: '#/components/schemas/ArticleData'
         
@@ -3412,7 +3406,7 @@ components:
         viewRevision:
           type: integer
           format: int64
-        contentRevision:
+        articleRevision:
           type: integer
           format: int64
         profileRevision:
@@ -3469,6 +3463,18 @@ components:
       properties:
         token:
           type: string
+        profileRevision:
+          type: integer
+          format: int64
+        articleRevision:
+          type: integer
+          format: int64
+        channelRevision:
+          type: integer
+          format: int64
+        viewRevision:
+          type: integer
+          format: int64
         status:
           type: string
           enum: [ pending, confirmed, requested, connecting, connected ]

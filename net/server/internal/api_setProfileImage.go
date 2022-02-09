@@ -6,7 +6,7 @@ import (
   "databag/internal/store"
 )
 
-func SetProfile(w http.ResponseWriter, r *http.Request) {
+func SetProfileImage(w http.ResponseWriter, r *http.Request) {
 
   account, code, err := BearerAppToken(r, true);
   if err != nil {
@@ -14,18 +14,13 @@ func SetProfile(w http.ResponseWriter, r *http.Request) {
     return
   }
 
-  // extract profile data from body
-  var profileData ProfileData;
-  err = ParseRequest(r, w, &profileData)
-  if err != nil {
+  var image string
+  if err := ParseRequest(r, w, &image); err != nil {
     ErrResponse(w, http.StatusBadRequest, err)
     return
   }
 
-  // update record
-  account.AccountDetail.Name = profileData.Name
-  account.AccountDetail.Location = profileData.Location
-  account.AccountDetail.Description = profileData.Description
+  account.AccountDetail.Image = image
 
   err = store.DB.Transaction(func(tx *gorm.DB) error {
     if res := store.DB.Save(&account.AccountDetail).Error; res != nil {

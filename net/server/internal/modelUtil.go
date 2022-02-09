@@ -4,6 +4,20 @@ import (
   "databag/internal/store"
 )
 
+func getProfileModel(account *store.Account) *Profile {
+
+  return &Profile{
+    Guid: account.Guid,
+    Handle: account.Username,
+    Description: account.AccountDetail.Description,
+    Location: account.AccountDetail.Location,
+    Image: account.AccountDetail.Image,
+    Revision: account.ProfileRevision,
+    Version: APP_VERSION,
+    Node: "https://" + getStrConfigValue(CONFIG_DOMAIN, "") + "/",
+  }
+}
+
 func getCardModel(slot *store.CardSlot) *Card {
 
   if slot.Card == nil {
