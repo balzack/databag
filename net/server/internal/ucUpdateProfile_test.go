@@ -25,13 +25,11 @@ func TestUpdateProfile(t *testing.T) {
   // reset revision
   bCardRev = GetTestRevision(set.B.Revisions).Card
   cCardRev = GetTestRevision(set.C.Revisions).Card
-
   param["cardId"] = set.B.A.CardId
   assert.NoError(t, SendEndpointTest(GetCard, "GET", "/contact/cards/{cardId}",
     &param, nil,
     APP_TOKENAPP, set.B.Token, &card, nil))
   bProfileRev = card.Data.NotifiedProfile
-
   param["cardId"] = set.C.A.CardId
   assert.NoError(t, SendEndpointTest(GetCard, "GET", "/contact/cards/{cardId}",
     &param, nil,
@@ -48,9 +46,11 @@ func TestUpdateProfile(t *testing.T) {
     nil, profileData,
     APP_TOKENAPP, set.A.Token, nil, nil))
 
+  // recv websocket event
   assert.NotEqual(t, bCardRev, GetTestRevision(set.B.Revisions).Card)
   assert.NotEqual(t, cCardRev, GetTestRevision(set.C.Revisions).Card)
 
+  // check B notified
   param["cardId"] = set.B.A.CardId
   assert.NoError(t, SendEndpointTest(GetCard, "GET", "/contact/cards/{cardId}",
     &param, nil,
@@ -58,6 +58,7 @@ func TestUpdateProfile(t *testing.T) {
   assert.NotEqual(t, bProfileRev, card.Data.NotifiedProfile)
   assert.NotEqual(t, card.Data.ProfileRevision, card.Data.NotifiedProfile)
 
+  // check C notified
   param["cardId"] = set.C.A.CardId
   assert.NoError(t, SendEndpointTest(GetCard, "GET", "/contact/cards/{cardId}",
     &param, nil,
@@ -65,7 +66,7 @@ func TestUpdateProfile(t *testing.T) {
   assert.NotEqual(t, cProfileRev, card.Data.NotifiedProfile)
   assert.NotEqual(t, card.Data.ProfileRevision, card.Data.NotifiedProfile)
 
-  // update profile
+  // sync profile
   assert.NoError(t, SendEndpointTest(GetProfileMessage, "GET", "/profile/message",
     nil, nil,
     APP_TOKENCONTACT, set.B.A.Token, &msg, nil))
@@ -76,7 +77,7 @@ func TestUpdateProfile(t *testing.T) {
   assert.Equal(t, card.Data.ProfileRevision, card.Data.NotifiedProfile)
   assert.Equal(t, card.Data.CardProfile.Name, "Namer")
 
-  // update profile
+  // sync profile
   assert.NoError(t, SendEndpointTest(GetProfileMessage, "GET", "/profile/message",
     nil, nil,
     APP_TOKENCONTACT, set.C.A.Token, &msg, nil))
@@ -87,6 +88,9 @@ func TestUpdateProfile(t *testing.T) {
   assert.Equal(t, card.Data.ProfileRevision, card.Data.NotifiedProfile)
   assert.Equal(t, card.Data.CardProfile.Name, "Namer")
 
+  // TODO set image
+  // "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"
 
+  // TODO retrieve image
 
 }
