@@ -61,8 +61,7 @@ func ApiTestData(
       body interface{},
       tokenType string,
       token string,
-      responseHeader *map[string][]string,
-    ) (data []byte, err error) {
+    ) (data []byte, hdr map[string][]string, err error) {
 
   var r *http.Request
   var w *httptest.ResponseRecorder
@@ -84,9 +83,7 @@ func ApiTestData(
     err = errors.New("response failed");
     return
   }
-  if responseHeader != nil {
-    *responseHeader = resp.Header
-  }
+  hdr = resp.Header
   data, err = ioutil.ReadAll(resp.Body)
   return
 }

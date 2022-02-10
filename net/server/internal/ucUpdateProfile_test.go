@@ -18,6 +18,7 @@ func TestUpdateProfile(t *testing.T) {
   var profile Profile
   var data []byte
   var img []byte
+  var hdr map[string][]string
 
   // setup testing group
   set, err := AddTestGroup("updateprofile")
@@ -44,7 +45,7 @@ func TestUpdateProfile(t *testing.T) {
   // update A profile
   profileData := &ProfileData{
     Name: "Namer",
-    Location: "San Francisco",
+    Location: "San Diago",
     Description: "databaggerr",
   };
   assert.NoError(t, ApiTestMsg(SetProfile, "PUT", "/profile/data",
@@ -101,11 +102,12 @@ func TestUpdateProfile(t *testing.T) {
     APP_TOKENAPP, set.A.Token, &profile, nil))
 
   // retrieve profile image
-  data, err = ApiTestData(GetProfileImage, "GET", "/profile/image", nil, nil,
-    APP_TOKENAPP, set.A.Token, nil)
+  data, hdr, err = ApiTestData(GetProfileImage, "GET", "/profile/image", nil, nil,
+    APP_TOKENAPP, set.A.Token)
   assert.NoError(t, err)
 
   // compare retrieved image
+  assert.Equal(t, "image/png", hdr["Content-Type"][0])
   img, err = base64.StdEncoding.DecodeString(image)
   assert.NoError(t, err)
   assert.Zero(t, bytes.Compare(img, data))
