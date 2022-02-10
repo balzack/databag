@@ -1,6 +1,7 @@
 package databag
 
 import (
+  "io/ioutil"
   "errors"
   "strings"
   "strconv"
@@ -52,7 +53,45 @@ func GetTestRevision(status chan *Revision) (rev *Revision) {
 	}
 }
 
-func SendEndpointTest(
+func ApiTestData(
+      endpoint func(http.ResponseWriter, *http.Request),
+      requestType string,
+      name string,
+      params *map[string]string,
+      body interface{},
+      tokenType string,
+      token string,
+      responseHeader *map[string][]string,
+    ) (data []byte, err error) {
+
+  var r *http.Request
+  var w *httptest.ResponseRecorder
+
+  if r, w, err = NewRequest(requestType, name, body); err != nil {
+    return
+  }
+  if params != nil {
+    r = mux.SetURLVars(r, *params)
+  }
+  if token != "" {
+    r.Header.Add("TokenType", tokenType)
+    SetBearerAuth(r, token)
+  }
+  endpoint(w, r)
+
+  resp := w.Result()
+  if resp.StatusCode != 200 {
+    err = errors.New("response failed");
+    return
+  }
+  if responseHeader != nil {
+    *responseHeader = resp.Header
+  }
+  data, err = ioutil.ReadAll(resp.Body)
+  return
+}
+
+func ApiTestMsg(
       endpoint func(http.ResponseWriter, *http.Request),
       requestType string,
       name string,

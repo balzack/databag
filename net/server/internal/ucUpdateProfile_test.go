@@ -1,7 +1,9 @@
 package databag
 
 import (
+  "bytes"
   "testing"
+  "encoding/base64"
   "github.com/stretchr/testify/assert"
 )
 
@@ -14,6 +16,8 @@ func TestUpdateProfile(t *testing.T) {
   var cProfileRev int64
   var cCardRev int64
   var profile Profile
+  var data []byte
+  var img []byte
 
   // setup testing group
   set, err := AddTestGroup("updateprofile")
@@ -27,12 +31,12 @@ func TestUpdateProfile(t *testing.T) {
   bCardRev = GetTestRevision(set.B.Revisions).Card
   cCardRev = GetTestRevision(set.C.Revisions).Card
   param["cardId"] = set.B.A.CardId
-  assert.NoError(t, SendEndpointTest(GetCard, "GET", "/contact/cards/{cardId}",
+  assert.NoError(t, ApiTestMsg(GetCard, "GET", "/contact/cards/{cardId}",
     &param, nil,
     APP_TOKENAPP, set.B.Token, &card, nil))
   bProfileRev = card.Data.NotifiedProfile
   param["cardId"] = set.C.A.CardId
-  assert.NoError(t, SendEndpointTest(GetCard, "GET", "/contact/cards/{cardId}",
+  assert.NoError(t, ApiTestMsg(GetCard, "GET", "/contact/cards/{cardId}",
     &param, nil,
     APP_TOKENAPP, set.C.Token, &card, nil))
   cProfileRev = card.Data.NotifiedProfile
@@ -43,7 +47,7 @@ func TestUpdateProfile(t *testing.T) {
     Location: "San Francisco",
     Description: "databaggerr",
   };
-  assert.NoError(t, SendEndpointTest(SetProfile, "PUT", "/profile/data",
+  assert.NoError(t, ApiTestMsg(SetProfile, "PUT", "/profile/data",
     nil, profileData,
     APP_TOKENAPP, set.A.Token, &profile, nil))
   assert.Equal(t, "databaggerr", profile.Description)
@@ -54,7 +58,7 @@ func TestUpdateProfile(t *testing.T) {
 
   // check B notified
   param["cardId"] = set.B.A.CardId
-  assert.NoError(t, SendEndpointTest(GetCard, "GET", "/contact/cards/{cardId}",
+  assert.NoError(t, ApiTestMsg(GetCard, "GET", "/contact/cards/{cardId}",
     &param, nil,
     APP_TOKENAPP, set.B.Token, &card, nil))
   assert.NotEqual(t, bProfileRev, card.Data.NotifiedProfile)
@@ -62,17 +66,17 @@ func TestUpdateProfile(t *testing.T) {
 
   // check C notified
   param["cardId"] = set.C.A.CardId
-  assert.NoError(t, SendEndpointTest(GetCard, "GET", "/contact/cards/{cardId}",
+  assert.NoError(t, ApiTestMsg(GetCard, "GET", "/contact/cards/{cardId}",
     &param, nil,
     APP_TOKENAPP, set.C.Token, &card, nil))
   assert.NotEqual(t, cProfileRev, card.Data.NotifiedProfile)
   assert.NotEqual(t, card.Data.ProfileRevision, card.Data.NotifiedProfile)
 
   // sync profile
-  assert.NoError(t, SendEndpointTest(GetProfileMessage, "GET", "/profile/message",
+  assert.NoError(t, ApiTestMsg(GetProfileMessage, "GET", "/profile/message",
     nil, nil,
     APP_TOKENCONTACT, set.B.A.Token, &msg, nil))
-  assert.NoError(t, SendEndpointTest(AddCard, "POST", "/contact/cards",
+  assert.NoError(t, ApiTestMsg(AddCard, "POST", "/contact/cards",
     nil, &msg,
     APP_TOKENAPP, set.B.Token, &card, nil))
   assert.Equal(t, card.Id, set.B.A.CardId)
@@ -80,10 +84,10 @@ func TestUpdateProfile(t *testing.T) {
   assert.Equal(t, card.Data.CardProfile.Name, "Namer")
 
   // sync profile
-  assert.NoError(t, SendEndpointTest(GetProfileMessage, "GET", "/profile/message",
+  assert.NoError(t, ApiTestMsg(GetProfileMessage, "GET", "/profile/message",
     nil, nil,
     APP_TOKENCONTACT, set.C.A.Token, &msg, nil))
-  assert.NoError(t, SendEndpointTest(AddCard, "POST", "/contact/cards",
+  assert.NoError(t, ApiTestMsg(AddCard, "POST", "/contact/cards",
     nil, &msg,
     APP_TOKENAPP, set.C.Token, &card, nil))
   assert.Equal(t, card.Id, set.C.A.CardId)
@@ -92,10 +96,17 @@ func TestUpdateProfile(t *testing.T) {
 
   // set profile image
   image := "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"
-  assert.NoError(t, SendEndpointTest(SetProfileImage, "PUT", "/profile/image",
+  assert.NoError(t, ApiTestMsg(SetProfileImage, "PUT", "/profile/image",
     nil, image,
     APP_TOKENAPP, set.A.Token, &profile, nil))
 
-  // TODO retrieve and validate profile image
+  // retrieve profile image
+  data, err = ApiTestData(GetProfileImage, "GET", "/profile/image", nil, nil,
+    APP_TOKENAPP, set.A.Token, nil)
+  assert.NoError(t, err)
 
+  // compare retrieved image
+  img, err = base64.StdEncoding.DecodeString(image)
+  assert.NoError(t, err)
+  assert.Zero(t, bytes.Compare(img, data))
 }
