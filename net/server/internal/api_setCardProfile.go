@@ -33,7 +33,6 @@ func SetCardProfile(w http.ResponseWriter, r *http.Request) {
     return
   }
 
-PrintMsg(cardId)
   slot := store.CardSlot{}
   if err := store.DB.Preload("Card.Groups").Where("account_id = ? AND card_slot_id = ?", account.ID, cardId).First(&slot).Error; err != nil {
     if errors.Is(err, gorm.ErrRecordNotFound) {
