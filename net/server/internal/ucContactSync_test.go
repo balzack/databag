@@ -87,8 +87,8 @@ func TestContactSync(t *testing.T) {
   param["cardId"] = set.B.A.CardId
   assert.NoError(t, ApiTestMsg(GetCard, "GET", "/contact/cards/{cardId}",
     &param, nil, APP_TOKENAPP, set.B.Token, card, nil))
+  assert.Equal(t, "connected", card.Data.CardDetail.Status)
   viewRevision = card.Data.NotifiedView
-
   card = &Card{}
   param["cardId"] = set.A.B.CardId
   param["groupId"] = set.A.B.GroupId
@@ -96,12 +96,43 @@ func TestContactSync(t *testing.T) {
     &param, nil, APP_TOKENAPP, set.A.Token, card, nil))
   assert.Equal(t, 0, len(card.Data.CardDetail.Groups))
   assert.NotEqual(t, rev.Card, GetTestRevision(set.B.Revisions).Card)
-
   card = &Card{}
   param["cardId"] = set.B.A.CardId
   assert.NoError(t, ApiTestMsg(GetCard, "GET", "/contact/cards/{cardId}",
     &param, nil, APP_TOKENAPP, set.B.Token, card, nil))
   assert.NotEqual(t, viewRevision, card.Data.NotifiedView)
-  PrintMsg(card)
+
+  // disconnect card
+  card = &Card{}
+  param["cardId"] = set.A.B.CardId
+  assert.NoError(t, ApiTestMsg(SetCardStatus, "PUT", "/contact/cards/{cardId}/status",
+    &param, APP_CARDCONFIRMED, APP_TOKENAPP, set.A.Token, card, nil))
+  assert.NoError(t, ApiTestMsg(GetCloseMessage, "GET", "/contact/cards/{cardId}/closeMessage",
+    &param, nil, APP_TOKENAPP, set.A.Token, &msg, nil))
+  assert.NoError(t, ApiTestMsg(SetCloseMessage, "GET", "/contact/closeMessage",
+    nil, &msg, "", "", nil, nil))
+  assert.NotNil(t,  GetTestRevision(set.B.Revisions))
+  card = &Card{}
+  param["cardId"] = set.B.A.CardId
+  assert.NoError(t, ApiTestMsg(GetCard, "GET", "/contact/cards/{cardId}",
+    &param, nil, APP_TOKENAPP, set.B.Token, card, nil))
+  assert.Equal(t, "confirmed", card.Data.CardDetail.Status)
+
+  // cancel request
+  card = &Card{}
+  param["cardId"] = set.D.A.CardId
+  assert.NoError(t, ApiTestMsg(GetCard, "GET", "/contact/cards/{cardId}",
+    &param, nil, APP_TOKENAPP, set.D.Token, card, nil))
+  param["cardId"] = set.A.D.CardId
+  assert.NoError(t, ApiTestMsg(SetCardStatus, "PUT", "/contact/cards/{cardId}/status",
+    &param, APP_CARDCONFIRMED, APP_TOKENAPP, set.A.Token, card, nil))
+  assert.NoError(t, ApiTestMsg(GetCloseMessage, "GET", "/contact/cards/{cardId}/closeMessage",
+    &param, nil, APP_TOKENAPP, set.A.Token, &msg, nil))
+  assert.NoError(t, ApiTestMsg(SetCloseMessage, "GET", "/contact/closeMessage",
+    nil, &msg, "", "", nil, nil))
+  param["cardId"] = set.D.A.CardId
+  assert.NoError(t, ApiTestMsg(GetCard, "GET", "/contact/cards/{cardId}",
+    &param, nil, APP_TOKENAPP, set.D.Token, card, nil))
+  assert.Nil(t, card.Data)
 
 }

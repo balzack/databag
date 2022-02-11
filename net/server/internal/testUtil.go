@@ -109,8 +109,10 @@ func ApiTestMsg(
   if params != nil {
     r = mux.SetURLVars(r, *params)
   }
-  if token != "" {
+  if tokenType != "" {
     r.Header.Add("TokenType", tokenType)
+  }
+  if token != "" {
     SetBearerAuth(r, token)
   }
   endpoint(w, r)
@@ -239,6 +241,9 @@ func AddTestGroup(prefix string) (*TestGroup, error) {
     if g.D.C.GroupId, err = GroupTestCard(g.D.Token, g.D.C.CardId); err != nil {
       return g, err
     }
+    if g.D.A.CardId, err = GetCardId(g.D.Token, g.A.Guid); err != nil {
+      return g, err
+    }
 
     // get contact tokens
     if g.A.B.Token, err = GetCardToken(g.A.Token, g.A.B.CardId); err != nil {
@@ -351,6 +356,30 @@ func GetCardToken(account string, cardId string) (token string, err error) {
   }
 
   token = cardProfile.Guid + "." + cardDetail.Token
+  return
+}
+
+func GetCardId(account string, guid string) (cardId string, err error) {
+  var r *http.Request
+  var w *httptest.ResponseRecorder
+  var cards []Card
+
+  if r, w, err = NewRequest("GET", "/contact/cards", nil); err != nil {
+    return
+  }
+  SetBearerAuth(r, account)
+  GetCards(w, r)
+  if err = ReadResponse(w, &cards); err != nil {
+    return
+  }
+
+  for _, card := range cards {
+    if card.Data.CardProfile.Guid == guid {
+      cardId = card.Id
+      return
+    }
+  }
+  err = errors.New("card not found")
   return
 }
 
