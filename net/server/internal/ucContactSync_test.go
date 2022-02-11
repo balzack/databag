@@ -58,7 +58,7 @@ func TestContactSync(t *testing.T) {
   assert.NoError(t, ApiTestMsg(GetCards, "GET", "/contact/cards?revision=" + cardRevision,
     nil, nil, APP_TOKENAPP, set.B.Token, cards, &hdr))
   cardRevision = hdr["Card-Revision"][0]
-  assert.Equal(t, 0, len(*cards))
+  assert.Equal(t, 0, len(*cards)) // ?? actual 1
 
   // set card notes
   GetTestRevision(set.B.Revisions)
@@ -135,4 +135,12 @@ func TestContactSync(t *testing.T) {
     &param, nil, APP_TOKENAPP, set.D.Token, card, nil))
   assert.Nil(t, card.Data)
 
+  // delete card
+  param["cardId"] = set.A.C.CardId
+  assert.NoError(t, ApiTestMsg(RemoveCard, "DELETE", "/contact/cards/{cardId}",
+    &param, nil, APP_TOKENAPP, set.A.Token, nil, nil))
+  card = &Card{}
+  assert.NoError(t, ApiTestMsg(GetCard, "GET", "/contact/cards/{cardId}",
+    &param, nil, APP_TOKENAPP, set.A.Token, card, nil))
+  assert.Nil(t, card.Data)
 }
