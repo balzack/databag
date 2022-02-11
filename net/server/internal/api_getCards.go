@@ -16,7 +16,7 @@ func GetCards(w http.ResponseWriter, r *http.Request) {
     return
   }
 
-  card := r.FormValue("cardRevision")
+  card := r.FormValue("revision")
   if card != "" {
     cardRevisionSet = true
     if cardRevision, err = strconv.ParseInt(card, 10, 64); err != nil {
@@ -28,7 +28,7 @@ func GetCards(w http.ResponseWriter, r *http.Request) {
   var response []*Card
   if cardRevisionSet {
     var slots []store.CardSlot
-    if err := store.DB.Where("account_id = ? AND revision > ?", account.ID, cardRevision).Find(&slots).Error; err != nil {
+    if err := store.DB.Preload("Card").Where("account_id = ? AND revision > ?", account.ID, cardRevision).Find(&slots).Error; err != nil {
       ErrResponse(w, http.StatusInternalServerError, err)
       return
     }

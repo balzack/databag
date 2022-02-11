@@ -16,7 +16,11 @@ func TestContactSync(t *testing.T) {
   var data []byte
   var hdr map[string][]string
   var res error
-  var cards []Card
+  var cards *[]Card
+  var cardRevision string
+  var detailRevision int64
+  var detail CardDetail
+  var rev *Revision
 
   // setup testing group
   set, err := AddTestGroup("contactsync")
@@ -45,11 +49,36 @@ func TestContactSync(t *testing.T) {
   assert.Zero(t, bytes.Compare(img, data))
 
   // get full card list
+  cards = &[]Card{}
   assert.NoError(t, ApiTestMsg(GetCards, "GET", "/contact/cards",
-    nil, nil, APP_TOKENAPP, set.B.Token, &cards, &hdr))
+    nil, nil, APP_TOKENAPP, set.B.Token, cards, &hdr))
+  cardRevision = hdr["Card-Revision"][0]
+  cards = &[]Card{}
+  assert.NoError(t, ApiTestMsg(GetCards, "GET", "/contact/cards?revision=" + cardRevision,
+    nil, nil, APP_TOKENAPP, set.B.Token, cards, &hdr))
+  cardRevision = hdr["Card-Revision"][0]
+  assert.Equal(t, 0, len(*cards))
 
-  PrintMsg(set.B.A.CardId)
-  PrintMsg(hdr)
-  PrintMsg(cards)
+  // set card notes
+  GetTestRevision(set.B.Revisions)
+  assert.NoError(t, ApiTestMsg(SetCardNotes, "PUT", "/conact/cards/{cardId}/notes",
+    &param, "CardA notes", APP_TOKENAPP, set.B.Token, &detail, nil))
+  rev = GetTestRevision(set.B.Revisions)
+  cards = &[]Card{}
+  assert.NoError(t, ApiTestMsg(GetCards, "GET", "/contact/cards?revision=" + cardRevision,
+    nil, nil, APP_TOKENAPP, set.B.Token, cards, &hdr))
+  assert.Equal(t, 1, len(*cards))
+  detailRevision = (*cards)[0].Data.DetailRevision
+
+  // clear card notes
+  GetTestRevision(set.B.Revisions)
+  assert.NoError(t, ApiTestMsg(ClearCardNotes, "DELETE", "/conact/cards/{cardId}/notes",
+    &param, nil, APP_TOKENAPP, set.B.Token, &detail, nil))
+  assert.NotEqual(t, rev.Card, GetTestRevision(set.B.Revisions).Card)
+  cards = &[]Card{}
+  assert.NoError(t, ApiTestMsg(GetCards, "GET", "/contact/cards?revision=" + cardRevision,
+    nil, nil, APP_TOKENAPP, set.B.Token, cards, &hdr))
+  assert.Equal(t, 1, len(*cards))
+  assert.NotEqual(t, detailRevision, (*cards)[0].Data.DetailRevision)
 
 }
