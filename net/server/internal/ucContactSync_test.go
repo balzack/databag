@@ -10,7 +10,7 @@ import (
 func TestContactSync(t *testing.T) {
   var profile Profile
   var msg DataMessage
-  var card Card
+  var card *Card
   param := map[string]string{}
   var img []byte
   var data []byte
@@ -21,6 +21,7 @@ func TestContactSync(t *testing.T) {
   var detailRevision int64
   var detail CardDetail
   var rev *Revision
+  var viewRevision int64
 
   // setup testing group
   set, err := AddTestGroup("contactsync")
@@ -72,7 +73,7 @@ func TestContactSync(t *testing.T) {
 
   // clear card notes
   GetTestRevision(set.B.Revisions)
-  assert.NoError(t, ApiTestMsg(ClearCardNotes, "DELETE", "/conact/cards/{cardId}/notes",
+  assert.NoError(t, ApiTestMsg(ClearCardNotes, "DELETE", "/contact/cards/{cardId}/notes",
     &param, nil, APP_TOKENAPP, set.B.Token, &detail, nil))
   assert.NotEqual(t, rev.Card, GetTestRevision(set.B.Revisions).Card)
   cards = &[]Card{}
@@ -80,5 +81,27 @@ func TestContactSync(t *testing.T) {
     nil, nil, APP_TOKENAPP, set.B.Token, cards, &hdr))
   assert.Equal(t, 1, len(*cards))
   assert.NotEqual(t, detailRevision, (*cards)[0].Data.DetailRevision)
+
+  // remove card from group
+  card = &Card{}
+  param["cardId"] = set.B.A.CardId
+  assert.NoError(t, ApiTestMsg(GetCard, "GET", "/contact/cards/{cardId}",
+    &param, nil, APP_TOKENAPP, set.B.Token, card, nil))
+  viewRevision = card.Data.NotifiedView
+
+  card = &Card{}
+  param["cardId"] = set.A.B.CardId
+  param["groupId"] = set.A.B.GroupId
+  assert.NoError(t, ApiTestMsg(ClearCardGroup, "DELETE", "/contact/cards/{cardId}/groups/{groupId}",
+    &param, nil, APP_TOKENAPP, set.A.Token, card, nil))
+  assert.Equal(t, 0, len(card.Data.CardDetail.Groups))
+  assert.NotEqual(t, rev.Card, GetTestRevision(set.B.Revisions).Card)
+
+  card = &Card{}
+  param["cardId"] = set.B.A.CardId
+  assert.NoError(t, ApiTestMsg(GetCard, "GET", "/contact/cards/{cardId}",
+    &param, nil, APP_TOKENAPP, set.B.Token, card, nil))
+  assert.NotEqual(t, viewRevision, card.Data.NotifiedView)
+  PrintMsg(card)
 
 }

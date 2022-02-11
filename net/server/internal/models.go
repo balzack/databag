@@ -177,13 +177,9 @@ type ChannelDetail struct {
 
 	Updated int64 `json:"updated"`
 
-	Viewers []string `json:"viewers,omitempty"`
+	Groups *ChannelGroups `json:"groups,omitempty"`
 
-	ViewerGroups *ChannelGroups `json:"viewerGroups,omitempty"`
-
-	Members []string `json:"members,omitempty"`
-
-	MemberGroups *ChannelGroups `json:"memberGroups,omitempty"`
+	Cards []string `json:"cards"`
 }
 
 type ChannelGroups struct {

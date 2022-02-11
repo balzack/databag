@@ -8,7 +8,8 @@ import (
   "databag/internal/store"
 )
 
-func SetCardGroup(w http.ResponseWriter, r *http.Request) {
+func ClearCardGroup(w http.ResponseWriter, r *http.Request) {
+
   account, code, err := BearerAppToken(r, false);
   if err != nil {
     ErrResponse(w, code, err)
@@ -21,8 +22,8 @@ func SetCardGroup(w http.ResponseWriter, r *http.Request) {
   groupId := params["groupId"]
 
   // load referenced card
-  var slot store.CardSlot
-  if err := store.DB.Preload("Card").Where("account_id = ? AND card_slot_id = ?", account.ID, cardId).First(&slot).Error; err != nil {
+  var cardSlot store.CardSlot
+  if err := store.DB.Preload("Card").Where("account_id = ? AND card_slot_id = ?", account.ID, cardId).First(&cardSlot).Error; err != nil {
     if errors.Is(err, gorm.ErrRecordNotFound) {
       ErrResponse(w, http.StatusNotFound, err)
     } else {
@@ -30,7 +31,7 @@ func SetCardGroup(w http.ResponseWriter, r *http.Request) {
     }
     return
   }
-  if slot.Card == nil {
+  if cardSlot.Card == nil {
     ErrResponse(w, http.StatusNotFound, errors.New("card has been deleted"))
     return
   }
@@ -51,17 +52,18 @@ func SetCardGroup(w http.ResponseWriter, r *http.Request) {
   }
 
   // save and update revision
+  cardSlot.Revision = account.CardRevision + 1
   err = store.DB.Transaction(func(tx *gorm.DB) error {
-    if res := tx.Model(&slot.Card).Association("Groups").Append(groupSlot.Group); res != nil {
+    if res := tx.Model(&cardSlot.Card).Association("Groups").Delete(groupSlot.Group); res != nil {
       return res
     }
-    if res := tx.Model(&slot.Card).Update("detail_revision", slot.Card.DetailRevision + 1).Error; res != nil {
+    if res := tx.Model(&cardSlot.Card).Update("detail_revision", cardSlot.Card.DetailRevision + 1).Error; res != nil {
       return res
     }
-    if res := tx.Model(&slot.Card).Update("view_revision", slot.Card.ViewRevision + 1).Error; res != nil {
+    if res := tx.Model(&cardSlot.Card).Update("view_revision", cardSlot.Card.ViewRevision + 1).Error; res != nil {
       return res
     }
-    if res := tx.Model(&slot).Update("revision", account.CardRevision + 1).Error; res != nil {
+    if res := tx.Model(&cardSlot).Update("revision", account.CardRevision + 1).Error; res != nil {
       return res
     }
     if res := tx.Model(&account).Update("card_revision", account.CardRevision + 1).Error; res != nil {
@@ -74,9 +76,9 @@ func SetCardGroup(w http.ResponseWriter, r *http.Request) {
     return
   }
 
-  SetContactViewNotification(account, slot.Card)
+  SetContactViewNotification(account, cardSlot.Card)
   SetStatus(account)
-  WriteResponse(w, getCardModel(&slot))
+  WriteResponse(w, getCardModel(&cardSlot))
 }
 
 

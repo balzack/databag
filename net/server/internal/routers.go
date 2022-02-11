@@ -146,13 +146,6 @@ var routes = Routes{
 	},
 
 	Route{
-		"GetCard",
-		strings.ToUpper("Get"),
-		"/contact/cards/{cardId}",
-		GetCard,
-	},
-
-	Route{
 		"GetPublicStatus",
 		strings.ToUpper("Get"),
 		"/account/public/status",
@@ -524,6 +517,13 @@ var routes = Routes{
 	},
 
 	Route{
+		"ClearChannelCard",
+		strings.ToUpper("Delete"),
+		"/content/channels/{channelId}/cards/{cardId}",
+		ClearChannelCard,
+	},
+
+	Route{
 		"ClearChannelGroup",
 		strings.ToUpper("Delete"),
 		"/content/channels/{channelId}/groups/{groupId}",
@@ -643,6 +643,13 @@ var routes = Routes{
 	},
 
 	Route{
+		"SetChannelCard",
+		strings.ToUpper("Put"),
+		"/content/channels/{channelId}/cards/{cardId}",
+		SetChannelCard,
+	},
+
+	Route{
 		"SetChannelConfirmed",
 		strings.ToUpper("Put"),
 		"/content/channels/{channelId}/topics/{topicId}/confirmed",
@@ -719,3 +726,4 @@ var routes = Routes{
 		Status,
 	},
 }
+

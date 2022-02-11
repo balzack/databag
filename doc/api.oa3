@@ -2045,12 +2045,12 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Subject'
-                  
+           
   /content/channels/{channelId}/groups/{groupId}:
     put:
       tags:
         - content
-      description: Set group for channels. Access granted to app tokens for account holder. 
+      description: Set group for read access to channel. Access granted to app tokens for account holder. 
       operationId: set-channel-group
       security:
         - bearerAuth: []
@@ -2085,7 +2085,7 @@ paths:
     delete:
       tags:
         - content
-      description: Clear sharing group for channel. Access granted to app tokens for account holder.
+      description: Clear read access to channel for group. Access granted to app tokens for account holder.
       operationId: clear-channel-group
       security:
         - bearerAuth: []
@@ -2099,6 +2099,78 @@ paths:
         - name: groupId
           in: path
           description: specified share id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Channel'
+        '401':
+          description: permission denied
+        '404':
+          description: card or group not found
+        '410':
+          description: account disabled
+        '500':
+          description: internal server error
+          
+  /content/channels/{channelId}/cards/{cardId}:
+    put:
+      tags:
+        - content
+      description: Set card for write access to channel. Access granted to app tokens for account holder. 
+      operationId: set-channel-card
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: channelId
+          in: path
+          description: specified channel id 
+          required: true
+          schema:
+            type: string
+        - name: cardId
+          in: path
+          description: specified card id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Channel'
+        '401':
+          description: permission denied
+        '404':
+          description: card or group not found
+        '410':
+          description: account disabled
+        '500':
+          description: internal server error
+    delete:
+      tags:
+        - content
+      description: Clear write access to channel for card. Access granted to app tokens for account holder.
+      operationId: clear-channel-card
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: channelId
+          in: path
+          description: specified channel id 
+          required: true
+          schema:
+            type: string
+        - name: cardId
+          in: path
+          description: specified card id 
           required: true
           schema:
             type: string
@@ -3141,18 +3213,12 @@ components:
         updated:
           type: integer
           format: int64
-        viewers:
+        groups:
+          $ref: '#/components/schemas/ChannelGroups'
+        cards:
           type: array
           items:
             type: string
-        viewerGroups:
-          $ref: '#/components/schemas/ChannelGroups'
-        members:
-          type: array
-          items:
-            type: string
-        memberGroups:
-          $ref: '#/components/schemas/ChannelGroups'
           
     ChannelSize:
       type: object
@@ -3518,5 +3584,6 @@ components:
     bearerAuth: 
       type: http
       scheme: bearer
+
 
 

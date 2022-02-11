@@ -32,7 +32,7 @@ func NotifyArticleRevision(card *store.Card, revision int64) error {
 
   act := &card.Account
   err := store.DB.Transaction(func(tx *gorm.DB) error {
-    if res := tx.Model(card).Where("id = ?", card.ID).Update("notified_profile", revision).Error; res != nil {
+    if res := tx.Model(card).Where("id = ?", card.ID).Update("notified_article", revision).Error; res != nil {
       return res
     }
     if res := tx.Model(&card.CardSlot).Where("id = ?", card.CardSlot.ID).Update("revision", act.CardRevision+1).Error; res != nil {
