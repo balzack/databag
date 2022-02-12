@@ -184,4 +184,36 @@ func SetContactChannelNotification(account *store.Account, card *store.Card) {
   }
 }
 
+// notify all cards of channel change
+// when card is deleted 
+func SetChannelNotification(account *store.Account) {
+
+  // select all connected cards
+  var cards []store.Card
+  if err := store.DB.Where("account_id = ? AND status = ?", account.Guid, APP_CARDCONNECTED).Find(&cards).Error; err != nil {
+    ErrMsg(err)
+    return
+  }
+
+  // add new notification for each card
+  err := store.DB.Transaction(func(tx *gorm.DB) error {
+    for _, card := range cards {
+      notification := &store.Notification{
+        Node: card.Node,
+        Module: APP_NOTIFYCHANNEL,
+        Token: card.OutToken,
+        Revision: account.ChannelRevision,
+      }
+      if err := tx.Save(notification).Error; err != nil {
+        return err
+      }
+      notify <- notification
+    }
+    return nil
+  })
+  if err != nil {
+    ErrMsg(err)
+  }
+}
+
 

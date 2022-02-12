@@ -22,6 +22,7 @@ func TestContactSync(t *testing.T) {
   var detail CardDetail
   var rev *Revision
   var viewRevision int64
+  var groups *[]Group
 
   // setup testing group
   set, err := AddTestGroup("contactsync")
@@ -143,4 +144,34 @@ func TestContactSync(t *testing.T) {
   assert.NoError(t, ApiTestMsg(GetCard, "GET", "/contact/cards/{cardId}",
     &param, nil, APP_TOKENAPP, set.A.Token, card, nil))
   assert.Nil(t, card.Data)
+
+  // update and delete group
+  param["groupId"] = set.D.C.GroupId
+  subject := &Subject{ DataType: "contactsynctype", Data: "contactsyncdata" }
+  assert.NoError(t, ApiTestMsg(UpdateGroup, "PUT", "/alias/groups/{groupId}",
+    &param, subject, APP_TOKENAPP, set.D.Token, nil, nil))
+  groups = &[]Group{}
+  assert.NoError(t, ApiTestMsg(GetGroups, "GET", "/alias/groups",
+    nil, nil, APP_TOKENAPP, set.D.Token, groups, nil))
+  assert.Equal(t, 1, len(*groups))
+  assert.Equal(t, "contactsynctype", (*groups)[0].Data.DataType)
+  assert.Equal(t, "contactsyncdata", (*groups)[0].Data.Data)
+  rev = GetTestRevision(set.C.Revisions)
+  card = &Card{}
+  param["cardId"] = set.C.D.CardId
+  assert.NoError(t, ApiTestMsg(GetCard, "GET", "/contact/cards/{cardId}",
+    &param, nil, APP_TOKENAPP, set.C.Token, card, nil))
+  viewRevision = card.Data.NotifiedView
+  param["groupId"] = set.D.C.GroupId
+  assert.NoError(t, ApiTestMsg(RemoveGroup, "GET", "/alias/groups/{groupId}",
+    &param, nil, APP_TOKENAPP, set.D.Token, nil, nil))
+  groups = &[]Group{}
+  assert.NoError(t, ApiTestMsg(GetGroups, "GET", "/alias/groups",
+    nil, nil, APP_TOKENAPP, set.D.Token, groups, nil))
+  assert.Equal(t, 0, len(*groups))
+  assert.NotEqual(t, rev.Card, GetTestRevision(set.C.Revisions).Card)
+  card = &Card{}
+  assert.NoError(t, ApiTestMsg(GetCard, "GET", "/contact/cards/{cardId}",
+    &param, nil, APP_TOKENAPP, set.C.Token, card, nil))
+  assert.NotEqual(t, viewRevision, card.Data.NotifiedView)
 }

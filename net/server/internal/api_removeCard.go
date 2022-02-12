@@ -22,7 +22,7 @@ func RemoveCard(w http.ResponseWriter, r *http.Request) {
 
   // load referenced card
   var slot store.CardSlot
-  if err := store.DB.Preload("Card.Groups").Where("account_id = ? AND card_slot_id = ?", account.ID, cardId).First(&slot).Error; err != nil {
+  if err := store.DB.Preload("Card.Groups").Preload("Card.Channels.ChannelSlot").Where("account_id = ? AND card_slot_id = ?", account.ID, cardId).First(&slot).Error; err != nil {
     if !errors.Is(err, gorm.ErrRecordNotFound) {
       ErrResponse(w, http.StatusInternalServerError, err)
     } else {
@@ -37,7 +37,14 @@ func RemoveCard(w http.ResponseWriter, r *http.Request) {
 
   // save and update contact revision
   err = store.DB.Transaction(func(tx *gorm.DB) error {
-    // TODO clear from channels
+    for _, channel := range slot.Card.Channels {
+      if res := tx.Model(&channel).Association("Cards").Delete(&slot.Card); res != nil {
+        return res
+      }
+      if res := tx.Model(&channel.ChannelSlot).Update("revision", account.ChannelRevision + 1).Error; res != nil {
+        return res
+      }
+    }
     if res := tx.Model(&slot.Card).Association("Groups").Clear(); res != nil {
       return res
     }
@@ -54,6 +61,9 @@ func RemoveCard(w http.ResponseWriter, r *http.Request) {
     if res := tx.Model(&account).Update("card_revision", account.CardRevision + 1).Error; res != nil {
       return res
     }
+    if res := tx.Model(&account).Update("channel_revision", account.ChannelRevision + 1).Error; res != nil {
+      return res
+    }
     return nil
   })
   if err != nil {
@@ -61,6 +71,7 @@ func RemoveCard(w http.ResponseWriter, r *http.Request) {
     return
   }
 
+  SetChannelNotification(account)
   SetStatus(account)
   WriteResponse(w, nil);
 }

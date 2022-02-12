@@ -111,6 +111,8 @@ type Group struct {
   Created           int64           `gorm:"autoCreateTime"`
   Updated           int64           `gorm:"autoUpdateTime"`
   Cards             []Card          `gorm:"many2many:card_groups"`
+  Channels          []Channel       `gorm:"many2many:channel_groups"`
+  Articles          []Article       `gorm:"many2many:article_groups"`
   GroupData         GroupData
   GroupSlot         GroupSlot
 }
@@ -156,6 +158,7 @@ type Card struct {
   NotifiedProfile   int64
   Account           Account         `gorm:"references:Guid"`
   Groups            []Group         `gorm:"many2many:card_groups"`
+  Channels          []Channel       `gorm:"many2many:channel_cards"`
   CardSlot          CardSlot
 }
 
@@ -199,8 +202,8 @@ type Channel struct {
   SizeRevision      int64           `gorm:"not null"`
   TopicUpdated      int64
   TopicCount        int64
-  Viewers           []Group         `gorm:"many2many:viewer_groups;"`
-  Members           []Group         `gorm:"many2many:member_groups;"`
+  Groups            []Group         `gorm:"many2many:channel_groups;"`
+  Cards             []Card          `gorm:"many2many:channel_cards;"`
   ChannelSlot       ChannelSlot
 }
 
