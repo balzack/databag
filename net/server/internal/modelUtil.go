@@ -115,4 +115,34 @@ func getGroupModel(slot *store.GroupSlot) *Group {
   }
 }
 
+func getArticleModel(slot *store.ArticleSlot, showGroups bool) *Article {
+  if slot.Article == nil {
+    return &Article{
+      Id: slot.ArticleSlotId,
+      Revision: slot.Revision,
+    }
+  }
+
+  var articleGroups *ArticleGroups
+  if showGroups {
+    var groups []string;
+    for _, group := range slot.Article.Groups {
+      groups = append(groups, group.GroupSlot.GroupSlotId)
+    }
+    articleGroups = &ArticleGroups{ Groups: groups }
+  }
+
+  return &Article{
+    Id: slot.ArticleSlotId,
+    Revision: slot.Revision,
+    Data: &ArticleData {
+      DataType: slot.Article.DataType,
+      Data: slot.Article.Data,
+      Created: slot.Article.Created,
+      Updated: slot.Article.Updated,
+      Groups: articleGroups,
+    },
+  }
+}
+
 
