@@ -1584,6 +1584,12 @@ paths:
           required: false
           schema:
             type: string
+        - name: types
+          in: query
+          description: return only articles of specified types
+          required: false
+          schema:
+            type: string
       responses:
         '200':
           description: successful operation

@@ -7,7 +7,7 @@ import (
   "databag/internal/store"
 )
 
-func AddGroup(w http.ResponseWriter, r *http.Request) {
+func AddArticle(w http.ResponseWriter, r *http.Request) {
 
   account, code, err := BearerAppToken(r, false)
   if err != nil {
@@ -21,32 +21,25 @@ func AddGroup(w http.ResponseWriter, r *http.Request) {
     return
   }
 
-  slot := &store.GroupSlot{}
+  slot := &store.ArticleSlot{}
   err = store.DB.Transaction(func(tx *gorm.DB) error {
 
-    data := &store.GroupData{
-      Data: subject.Data,
-    }
-    if res := tx.Save(data).Error; res != nil {
+    article := &store.Article{}
+    article.Data = subject.Data
+    article.DataType = subject.DataType
+    if res := tx.Save(article).Error; res != nil {
       return res
     }
 
-    group := &store.Group{}
-    group.GroupDataID = data.ID
-    group.DataType = subject.DataType
-    if res := tx.Save(group).Error; res != nil {
-      return res
-    }
-
-    slot.GroupSlotId = uuid.New().String()
+    slot.ArticleSlotId = uuid.New().String()
     slot.AccountID = account.ID
-    slot.GroupID = group.ID
-    slot.Revision = account.GroupRevision + 1
-    slot.Group = group
+    slot.ArticleID = article.ID
+    slot.Revision = account.ArticleRevision + 1
+    slot.Article = article
     if res := tx.Save(slot).Error; res != nil {
       return res
     }
-    if res := tx.Model(&account).Update("group_revision", account.GroupRevision + 1).Error; res != nil {
+    if res := tx.Model(&account).Update("article_revision", account.ArticleRevision + 1).Error; res != nil {
       return res
     }
     return nil
@@ -57,8 +50,7 @@ func AddGroup(w http.ResponseWriter, r *http.Request) {
   }
 
   SetStatus(account)
-  WriteResponse(w, getGroupModel(slot))
+  WriteResponse(w, getArticleModel(slot, true))
 }
-
 
 
