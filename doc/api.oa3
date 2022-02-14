@@ -878,12 +878,12 @@ paths:
             schema:
               $ref: '#/components/schemas/Subject'
           
-  /alias/groups/{groupId}:
+  /alias/groups/{groupId}/subject:
     put:
       tags:
         - alias
       description: Update group description for sharing. Access granted to app tokens of account holder.
-      operationId: update-group
+      operationId: set-group-subject
       security:
         - bearerAuth: []
       parameters:

@@ -8,7 +8,7 @@ import (
   "databag/internal/store"
 )
 
-func UpdateGroup(w http.ResponseWriter, r *http.Request) {
+func SetGroupSubject(w http.ResponseWriter, r *http.Request) {
 
   account, code, err := BearerAppToken(r, false);
   if err != nil {

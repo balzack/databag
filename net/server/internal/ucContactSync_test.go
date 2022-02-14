@@ -148,7 +148,7 @@ func TestContactSync(t *testing.T) {
   // update and delete group
   param["groupId"] = set.D.C.GroupId
   subject := &Subject{ DataType: "contactsynctype", Data: "contactsyncdata" }
-  assert.NoError(t, ApiTestMsg(UpdateGroup, "PUT", "/alias/groups/{groupId}",
+  assert.NoError(t, ApiTestMsg(SetGroupSubject, "PUT", "/alias/groups/{groupId}",
     &param, subject, APP_TOKENAPP, set.D.Token, nil, nil))
   groups = &[]Group{}
   assert.NoError(t, ApiTestMsg(GetGroups, "GET", "/alias/groups",

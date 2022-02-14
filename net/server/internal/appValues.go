@@ -27,11 +27,10 @@ const APP_NOTIFYVIEW = "view"
 const APP_TOKENAPP = "app"
 const APP_TOKENCONTACT = "contact"
 const APP_NOTIFYBUFFER = 4096
-const APP_ARTICLEUNCONFIRMED = "unconfirmed"
-const APP_ARTICLECONFIRMED = "confirmed"
-const APP_ARTICLEINCOMPLETE = "incomplete"
-const APP_ARTICLEERROR = "error"
-const APP_ARTICLEBLOCKSIZE = 128
+const APP_TOPICUNCONFIRMED = "unconfirmed"
+const APP_TOPICCONFIRMED = "confirmed"
+const APP_TOPICINCOMPLETE = "incomplete"
+const APP_TOPICERROR = "error"
 
 func AppCardStatus(status string) bool {
   if status == APP_CARDPENDING {

@@ -70,8 +70,6 @@ type ArticleData struct {
 
 	Updated int64 `json:"updated"`
 
-	Status string `json:"status"`
-
 	Groups *ArticleGroups `json:"groups,omitempty"`
 }
 

@@ -286,10 +286,10 @@ var routes = Routes{
 	},
 
 	Route{
-		"UpdateGroup",
+		"SetGroupSubject",
 		strings.ToUpper("Put"),
-		"/alias/groups/{groupId}",
-		UpdateGroup,
+		"/alias/groups/{groupId}/subject",
+		SetGroupSubject,
 	},
 
 	Route{

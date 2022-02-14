@@ -176,7 +176,6 @@ type Article struct {
   ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
   DataType          string          `gorm:"index"`
   Data              string
-  Status            string          `gorm:"not null;index"`
   Created           int64           `gorm:"autoCreateTime"`
   Updated           int64           `gorm:"autoUpdateTime"`
   Groups            []Group         `gorm:"many2many:article_groups;"`
