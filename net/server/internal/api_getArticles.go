@@ -89,7 +89,7 @@ func GetArticles(w http.ResponseWriter, r *http.Request) {
 
     if viewRevisionSet || articleRevisionSet {
       if viewRevision != card.ViewRevision {
-        ErrResponse(w, http.StatusGone, errors.New("artivle view has changed"))
+        ErrResponse(w, http.StatusGone, errors.New("article view has changed"))
         return
       }
     }

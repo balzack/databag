@@ -23,6 +23,7 @@ func TestShareAttribute(t *testing.T) {
   var cViewRevision int64
   var bArticleRevision int64
   var cArticleRevision int64
+  hdr := map[string][]string{}
 
   // setup testing group
   set, err := AddTestGroup("shareattribute")
@@ -145,6 +146,13 @@ func TestShareAttribute(t *testing.T) {
     nil, nil, APP_TOKENAPP, set.C.Token, cards, nil))
   assert.Equal(t, 1, len(*cards))
   cRev = rev
+  articles = &[]Article{}
+  assert.NoError(t, ApiTestMsg(GetArticles, "GET", "/attribute/articles",
+    nil, nil, APP_TOKENCONTACT, set.C.A.Token, articles, &hdr))
+  assert.Equal(t, 1, len(*articles))
+  assert.Equal(t, "nestedimage", (*articles)[0].Data.DataType)
+  cArticleRevision, _ = strconv.ParseInt(hdr["Article-Revision"][0], 10, 64)
+  cViewRevision, _ = strconv.ParseInt(hdr["View-Revision"][0], 10, 64)
 
   // unshare article with B
   param["articleId"] = article.Id
@@ -175,10 +183,6 @@ func TestShareAttribute(t *testing.T) {
   card = &Card{}
   param["cardId"] = set.C.A.CardId
   GetTestRevision(set.B.Revisions)
-  assert.NoError(t, ApiTestMsg(GetCard, "GET", "/contact/cards/{cardId}",
-    &param, nil, APP_TOKENCONTACT, set.C.Token, card, nil))
-  cArticleRevision = card.Data.NotifiedArticle
-  cViewRevision = card.Data.NotifiedView
 
   // delete article
   param["articleId"] = article.Id
@@ -205,5 +209,12 @@ func TestShareAttribute(t *testing.T) {
     nil, nil, APP_TOKENCONTACT, set.C.A.Token, articles, nil))
   assert.Equal(t, 1, len(*articles))
   assert.Nil(t, (*articles)[0].Data)
+
+  // test view change
+  rView = strconv.FormatInt(cViewRevision - 1, 10)
+  rArticle = strconv.FormatInt(cArticleRevision - 1, 10)
+  articles = &[]Article{}
+  assert.Error(t, ApiTestMsg(GetArticles, "GET", "/attribute/articles?viewRevision=" + rView + "&articleRevision=" + rArticle,
+    nil, nil, APP_TOKENCONTACT, set.C.A.Token, articles, nil))
 }
 
