@@ -74,6 +74,6 @@ func RemoveArticle(w http.ResponseWriter, r *http.Request) {
     SetContactArticleNotification(account, card)
   }
 
-  WriteResponse(w, getArticleModel(&slot, true));
+  WriteResponse(w, getArticleModel(&slot, true, true));
 }
 

@@ -50,7 +50,7 @@ func AddArticle(w http.ResponseWriter, r *http.Request) {
   }
 
   SetStatus(account)
-  WriteResponse(w, getArticleModel(slot, true))
+  WriteResponse(w, getArticleModel(slot, true, true))
 }
 
 

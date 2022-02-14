@@ -73,7 +73,7 @@ func GetArticles(w http.ResponseWriter, r *http.Request) {
 
     for _, slot := range slots {
       if !typesSet || hasType(types, slot.Article) {
-        response = append(response, getArticleModel(&slot, true))
+        response = append(response, getArticleModel(&slot, true, true))
       }
     }
 
@@ -97,20 +97,21 @@ func GetArticles(w http.ResponseWriter, r *http.Request) {
     account := &card.Account
     var slots []store.ArticleSlot
     if articleRevisionSet {
-      if err := store.DB.Preload("Article.ArticleData").Where("account_id = ? AND revision > ?", account.ID, articleRevision).Find(&slots).Error; err != nil {
+      if err := store.DB.Preload("Article.Groups.Cards").Where("account_id = ? AND revision > ?", account.ID, articleRevision).Find(&slots).Error; err != nil {
         ErrResponse(w, http.StatusInternalServerError, err)
         return
       }
     } else {
-      if err := store.DB.Preload("Article.ArticleData").Where("account_id = ? AND article_id != 0", account.ID).Find(&slots).Error; err != nil {
+      if err := store.DB.Preload("Article.Groups.Cards").Where("account_id = ? AND article_id != 0", account.ID).Find(&slots).Error; err != nil {
         ErrResponse(w, http.StatusInternalServerError, err)
         return
       }
     }
 
     for _, slot := range slots {
+      shared := isShared(card.Guid, slot.Article)
       if !typesSet || hasType(types, slot.Article) {
-        response = append(response, getArticleModel(&slot, false))
+        response = append(response, getArticleModel(&slot, shared, false))
       }
     }
 
@@ -125,7 +126,24 @@ func GetArticles(w http.ResponseWriter, r *http.Request) {
   WriteResponse(w, response)
 }
 
+func isShared(guid string, article *store.Article) bool {
+  if article == nil {
+    return false
+  }
+  for _, group := range article.Groups {
+    for _, card := range group.Cards {
+      if guid == card.Guid {
+        return true
+      }
+    }
+  }
+  return false
+}
+
 func hasType(types []string, article *store.Article) bool {
+  if article == nil {
+    return false
+  }
   for _, schema := range types {
     if schema == article.DataType {
       return true

@@ -75,6 +75,6 @@ func SetArticleGroup(w http.ResponseWriter, r *http.Request) {
     SetContactArticleNotification(account, &card)
   }
 
-  WriteResponse(w, getArticleModel(&articleSlot, true));
+  WriteResponse(w, getArticleModel(&articleSlot, true, true));
 }
 

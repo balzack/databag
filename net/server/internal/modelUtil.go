@@ -115,8 +115,8 @@ func getGroupModel(slot *store.GroupSlot) *Group {
   }
 }
 
-func getArticleModel(slot *store.ArticleSlot, showGroups bool) *Article {
-  if slot.Article == nil {
+func getArticleModel(slot *store.ArticleSlot, showData bool, showGroups bool) *Article {
+  if !showData || slot.Article == nil {
     return &Article{
       Id: slot.ArticleSlotId,
       Revision: slot.Revision,
