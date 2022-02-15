@@ -519,6 +519,8 @@ func AddTestAccount(username string) (guid string, token string, err error) {
     Description: "A test app",
     Url: "http://app.example.com",
   };
+  var claim Claim
+  var msg DataMessage
   var profile Profile
   var login = username + ":pass"
 
@@ -564,6 +566,21 @@ func AddTestAccount(username string) (guid string, token string, err error) {
     return
   }
   token = guid + "." + access
+
+  // authorize claim
+  if r, w, err = NewRequest("PUT", "/authorize", "1234abcd"); err != nil {
+    return
+  }
+  SetBearerAuth(r, token)
+  Authorize(w, r)
+  if err = ReadResponse(w, &msg); err != nil {
+    return
+  }
+  signer, messageType, _, res := ReadDataMessage(&msg, &claim)
+  if res != nil || signer != guid || messageType != APP_MSGAUTHENTICATE || claim.Token != "1234abcd" {
+    err = errors.New("invalid authenticated claim")
+    return
+  }
   return
 }
 
