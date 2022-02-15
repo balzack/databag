@@ -9,19 +9,19 @@ import (
   "databag/internal/store"
 )
 
-func GetArticles(w http.ResponseWriter, r *http.Request) {
-  var articleRevisionSet bool
-  var articleRevision int64
+func GetChannels(w http.ResponseWriter, r *http.Request) {
+  var channelRevisionSet bool
+  var channelRevision int64
   var viewRevisionSet bool
   var viewRevision int64
   var typesSet bool
   var types []string
 
-  article := r.FormValue("articleRevision")
-  if article != "" {
+  channel := r.FormValue("channelRevision")
+  if channel != "" {
     var err error
-    articleRevisionSet = true
-    if articleRevision, err = strconv.ParseInt(article, 10, 64); err != nil {
+    channelRevisionSet = true
+    if channelRevision, err = strconv.ParseInt(channel, 10, 64); err != nil {
       ErrResponse(w, http.StatusBadRequest, err)
       return
     }
@@ -48,7 +48,7 @@ func GetArticles(w http.ResponseWriter, r *http.Request) {
     }
   }
 
-  var response []*Article
+  var response []*Channel
   tokenType := r.Header.Get("TokenType")
   if tokenType == APP_TOKENAPP {
 
@@ -58,26 +58,26 @@ func GetArticles(w http.ResponseWriter, r *http.Request) {
       return
     }
 
-    var slots []store.ArticleSlot
-    if articleRevisionSet {
-      if err := store.DB.Preload("Article").Where("account_id = ? AND revision > ?", account.ID, articleRevision).Find(&slots).Error; err != nil {
+    var slots []store.ChannelSlot
+    if channelRevisionSet {
+      if err := store.DB.Preload("Channel").Where("account_id = ? AND revision > ?", account.ID, channelRevision).Find(&slots).Error; err != nil {
         ErrResponse(w, http.StatusInternalServerError, err)
         return
       }
     } else {
-      if err := store.DB.Preload("Article").Where("account_id = ? AND article_id != 0", account.ID).Find(&slots).Error; err != nil {
+      if err := store.DB.Preload("Channel").Where("account_id = ? AND channel_id != 0", account.ID).Find(&slots).Error; err != nil {
         ErrResponse(w, http.StatusInternalServerError, err)
         return
       }
     }
 
     for _, slot := range slots {
-      if !typesSet || hasArticleType(types, slot.Article) {
-        response = append(response, getArticleModel(&slot, true, true))
+      if !typesSet || hasChannelType(types, slot.Channel) {
+        response = append(response, getChannelModel(&slot, true, true))
       }
     }
 
-    w.Header().Set("Article-Revision", strconv.FormatInt(account.ArticleRevision, 10))
+    w.Header().Set("Channel-Revision", strconv.FormatInt(account.ChannelRevision, 10))
 
   } else if tokenType == APP_TOKENCONTACT {
 
@@ -87,35 +87,35 @@ func GetArticles(w http.ResponseWriter, r *http.Request) {
       return
     }
 
-    if viewRevisionSet || articleRevisionSet {
+    if viewRevisionSet || channelRevisionSet {
       if viewRevision != card.ViewRevision {
-        ErrResponse(w, http.StatusGone, errors.New("article view has changed"))
+        ErrResponse(w, http.StatusGone, errors.New("channel view has changed"))
         return
       }
     }
 
     account := &card.Account
-    var slots []store.ArticleSlot
-    if articleRevisionSet {
-      if err := store.DB.Preload("Article.Groups.Cards").Where("account_id = ? AND revision > ?", account.ID, articleRevision).Find(&slots).Error; err != nil {
+    var slots []store.ChannelSlot
+    if channelRevisionSet {
+      if err := store.DB.Preload("Channel.Groups.Cards").Where("account_id = ? AND revision > ?", account.ID, channelRevision).Find(&slots).Error; err != nil {
         ErrResponse(w, http.StatusInternalServerError, err)
         return
       }
     } else {
-      if err := store.DB.Preload("Article.Groups.Cards").Where("account_id = ? AND article_id != 0", account.ID).Find(&slots).Error; err != nil {
+      if err := store.DB.Preload("Channel.Groups.Cards").Where("account_id = ? AND channel_id != 0", account.ID).Find(&slots).Error; err != nil {
         ErrResponse(w, http.StatusInternalServerError, err)
         return
       }
     }
 
     for _, slot := range slots {
-      shared := isArticleShared(card.Guid, slot.Article)
-      if !typesSet || hasArticleType(types, slot.Article) {
-        response = append(response, getArticleModel(&slot, shared, false))
+      shared := isChannelShared(card.Guid, slot.Channel)
+      if !typesSet || hasChannelType(types, slot.Channel) {
+        response = append(response, getChannelModel(&slot, shared, false))
       }
     }
 
-    w.Header().Set("Article-Revision", strconv.FormatInt(account.ArticleRevision, 10))
+    w.Header().Set("Channel-Revision", strconv.FormatInt(account.ChannelRevision, 10))
     w.Header().Set("View-Revision", strconv.FormatInt(card.ViewRevision, 10))
 
   } else {
@@ -126,11 +126,16 @@ func GetArticles(w http.ResponseWriter, r *http.Request) {
   WriteResponse(w, response)
 }
 
-func isArticleShared(guid string, article *store.Article) bool {
-  if article == nil {
+func isChannelShared(guid string, channel *store.Channel) bool {
+  if channel == nil {
     return false
   }
-  for _, group := range article.Groups {
+  for _, card := range channel.Cards {
+    if guid == card.Guid {
+      return true
+    }
+  }
+  for _, group := range channel.Groups {
     for _, card := range group.Cards {
       if guid == card.Guid {
         return true
@@ -140,12 +145,12 @@ func isArticleShared(guid string, article *store.Article) bool {
   return false
 }
 
-func hasArticleType(types []string, article *store.Article) bool {
-  if article == nil {
+func hasChannelType(types []string, channel *store.Channel) bool {
+  if channel == nil {
     return false
   }
   for _, schema := range types {
-    if schema == article.DataType {
+    if schema == channel.DataType {
       return true
     }
   }
