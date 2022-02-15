@@ -236,6 +236,54 @@ func TestShareAttribute(t *testing.T) {
   rArticle = strconv.FormatInt(cArticleRevision - 1, 10)
   articles = &[]Article{}
   assert.Error(t, ApiTestMsg(GetArticles, "GET", "/attribute/articles?viewRevision=" + rView + "&articleRevision=" + rArticle,
-    nil, nil, APP_TOKENCONTACT, set.C.A.Token, articles, nil))
+    nil, nil, APP_TOKENCONTACT, set.C.A.Token, articles, &hdr))
+
+  // reset B's view
+  articles = &[]Article{}
+  assert.NoError(t, ApiTestMsg(GetArticles, "GET", "/attribute/articles",
+    nil, nil, APP_TOKENCONTACT, set.B.A.Token, articles, &hdr))
+  bArticleRevision, _ = strconv.ParseInt(hdr["Article-Revision"][0], 10, 64)
+  bViewRevision, _ = strconv.ParseInt(hdr["View-Revision"][0], 10, 64)
+
+  // add a new attribute
+  articles = &[]Article{}
+  assert.NoError(t, ApiTestMsg(GetArticles, "GET", "/attribute/articles",
+    nil, nil, APP_TOKENAPP, set.A.Token, articles, nil))
+  assert.Equal(t, 0, len(*articles))
+  article = &Article{}
+  subject = &Subject{ Data: "subjectdata", DataType: "subjectdatatype" }
+  assert.NoError(t, ApiTestMsg(AddArticle, "POST", "/attributes/articles",
+    nil, subject, APP_TOKENAPP, set.A.Token, article, nil))
+  assert.Equal(t, "subjectdata", article.Data.Data)
+  assert.Equal(t, "subjectdatatype", article.Data.DataType)
+  articles = &[]Article{}
+
+  // share article with B
+  param["articleId"] = article.Id
+  param["groupId"] = set.A.B.GroupId
+  article = &Article{}
+  assert.NoError(t, ApiTestMsg(SetArticleGroup, "PUT", "/attribute/articles/{articleId}/groups/{groupId}",
+    &param, nil, APP_TOKENAPP, set.A.Token, article, nil))
+  rView = strconv.FormatInt(bViewRevision, 10)
+  rArticle = strconv.FormatInt(bArticleRevision, 10)
+  assert.NoError(t, ApiTestMsg(GetArticles, "GET", "/attribute/articles?viewRevision=" + rView + "&articleRevision=" + rArticle,
+    nil, nil, APP_TOKENCONTACT, set.B.A.Token, articles, &hdr))
+  assert.Equal(t, 1, len(*articles))
+  assert.NotNil(t, (*articles)[0].Data)
+  bArticleRevision, _ = strconv.ParseInt(hdr["Article-Revision"][0], 10, 64)
+  bViewRevision, _ = strconv.ParseInt(hdr["View-Revision"][0], 10, 64)
+
+  // delete B's group
+  assert.NoError(t, ApiTestMsg(RemoveGroup, "DELETE", "/alias/groups/{groupId}",
+    &param, nil, APP_TOKENAPP, set.A.Token, nil, nil))
+  assert.Error(t, ApiTestMsg(GetArticles, "GET", "/attribute/articles?viewRevision=" + rView + "&articleRevision=" + rArticle,
+    nil, nil, APP_TOKENCONTACT, set.B.A.Token, articles, &hdr))
+  articles = &[]Article{}
+  assert.NoError(t, ApiTestMsg(GetArticles, "GET", "/attribute/articles",
+    nil, nil, APP_TOKENCONTACT, set.B.A.Token, articles, &hdr))
+  view, _ := strconv.ParseInt(hdr["View-Revision"][0], 10, 64)
+  assert.NotEqual(t, bViewRevision, view)
+  assert.Equal(t, 1, len(*articles))
+  assert.Nil(t, (*articles)[0].Data)
 }
 
