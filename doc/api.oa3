@@ -1944,38 +1944,7 @@ paths:
           description: account disabled
         '500':
           description: internal server error
-          
-  /content/channels/{channelId}/size:
-    get:
-      tags:
-        - content
-      description: Get size object of channel.
-      operationId: get-channel-size
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: channelId
-          in: path
-          description: specified channel id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ChannelSize'
-        '401':
-          description: invalid password
-        '404':
-          description: channel not found
-        '410':
-          description: account disabled
-        '500':
-          description: internal server error
-          
+                   
   /content/channels/{channelId}/subject/{field}:
     get:
       tags:
@@ -3180,7 +3149,7 @@ components:
         id:
           type: string
         revision:
-          type: string
+          type: int64
         data:
           $ref: '#/components/schemas/ChannelData'
           
@@ -3188,18 +3157,12 @@ components:
       type: object
       required:
         - detailRevision
-        - topicRevision
       properties:
         detailRevision:
           type: integer
           format: int64
-        topicRevision:
-          type: integer
-          format: int64
         channelDetail:
           $ref: '#/components/schemas/ChannelDetail'
-        channelTopics:
-          $ref: '#/components/schemas/ChannelSize'
           
     ChannelDetail:
       type: object
@@ -3225,19 +3188,6 @@ components:
           type: array
           items:
             type: string
-          
-    ChannelSize:
-      type: object
-      required:
-        - topicCount
-        - topicUpdated
-      properties:
-        topicCount:
-          type: integer
-          format: int32
-        topicUpdated:
-          type: integer
-          format: int64
           
     ChannelGroups:
       type: object

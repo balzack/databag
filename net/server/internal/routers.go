@@ -552,13 +552,6 @@ var routes = Routes{
 	},
 
 	Route{
-		"GetChannelSize",
-		strings.ToUpper("Get"),
-		"/content/channels/{channelId}/size",
-		GetChannelSize,
-	},
-
-	Route{
 		"GetChannelSubjectField",
 		strings.ToUpper("Get"),
 		"/content/channels/{channelId}/subject/{field}",

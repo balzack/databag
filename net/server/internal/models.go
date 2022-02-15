@@ -149,7 +149,7 @@ type Channel struct {
 
 	Id string `json:"id"`
 
-	Revision string `json:"revision"`
+	Revision int64 `json:"revision"`
 
 	Data *ChannelData `json:"data"`
 }
@@ -158,11 +158,7 @@ type ChannelData struct {
 
 	DetailRevision int64 `json:"detailRevision"`
 
-	TopicRevision int64 `json:"topicRevision"`
-
 	ChannelDetail *ChannelDetail `json:"channelDetail,omitempty"`
-
-	ChannelTopics *ChannelSize `json:"channelTopics,omitempty"`
 }
 
 type ChannelDetail struct {
@@ -183,13 +179,6 @@ type ChannelDetail struct {
 type ChannelGroups struct {
 
 	Groups []string `json:"groups"`
-}
-
-type ChannelSize struct {
-
-	TopicCount int32 `json:"topicCount"`
-
-	TopicUpdated int64 `json:"topicUpdated"`
 }
 
 type Claim struct {

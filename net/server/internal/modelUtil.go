@@ -145,4 +145,63 @@ func getArticleModel(slot *store.ArticleSlot, showData bool, showGroups bool) *A
   }
 }
 
+func getChannelRevisionModel(slot *store.ChannelSlot, showData bool, showGroups bool) *Channel {
+
+  if !showData || slot.Channel == nil {
+    return &Channel{
+      Id: slot.ChannelSlotId,
+      Revision: slot.Revision,
+    }
+  }
+
+  return &Channel{
+    Id: slot.ChannelSlotId,
+    Revision: slot.Revision,
+    Data: &ChannelData {
+      DetailRevision: slot.Channel.DetailRevision,
+    },
+  }
+}
+
+func getChannelModel(slot *store.ChannelSlot, showData bool, showGroups bool) *Channel {
+
+  if !showData || slot.Channel == nil {
+    return &Channel{
+      Id: slot.ChannelSlotId,
+      Revision: slot.Revision,
+    }
+  }
+
+  var channelGroups *ChannelGroups
+  if showGroups {
+    var groups []string;
+    for _, group := range slot.Channel.Groups {
+      groups = append(groups, group.GroupSlot.GroupSlotId)
+    }
+    channelGroups = &ChannelGroups{ Groups: groups }
+  }
+
+  var cards []string
+  for _, card := range slot.Channel.Cards {
+    cards = append(cards, card.CardSlot.CardSlotId)
+  }
+
+  return &Channel{
+    Id: slot.ChannelSlotId,
+    Revision: slot.Revision,
+    Data: &ChannelData {
+      DetailRevision: slot.Channel.DetailRevision,
+      ChannelDetail: &ChannelDetail{
+        DataType: slot.Channel.DataType,
+        Data: slot.Channel.Data,
+        Created: slot.Channel.Created,
+        Updated: slot.Channel.Updated,
+        Groups: channelGroups,
+        Cards: cards,
+      },
+    },
+  }
+}
+
+
 
