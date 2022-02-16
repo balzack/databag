@@ -70,7 +70,7 @@ type ArticleData struct {
 
 	Updated int64 `json:"updated"`
 
-	Groups *ArticleGroups `json:"groups,omitempty"`
+	Groups *IdList `json:"groups,omitempty"`
 }
 
 type ArticleGroups struct {
@@ -171,14 +171,11 @@ type ChannelDetail struct {
 
 	Updated int64 `json:"updated"`
 
-	Groups *ChannelGroups `json:"groups,omitempty"`
+	Groups *IdList `json:"groups,omitempty"`
 
-	Cards []string `json:"cards"`
-}
+  Cards *IdList `json:"groups,omitempty"`
 
-type ChannelGroups struct {
-
-	Groups []string `json:"groups"`
+	Members []string `json:"cards"`
 }
 
 type Claim struct {
@@ -285,6 +282,11 @@ type Identity struct {
 	Version string `json:"version"`
 
 	Node string `json:"node"`
+}
+
+type IdList struct {
+
+	Ids []string `json:"ids"`
 }
 
 type NodeConfig struct {

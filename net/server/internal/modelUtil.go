@@ -115,7 +115,7 @@ func getGroupModel(slot *store.GroupSlot) *Group {
   }
 }
 
-func getArticleModel(slot *store.ArticleSlot, showData bool, showGroups bool) *Article {
+func getArticleModel(slot *store.ArticleSlot, showData bool, showList bool) *Article {
   if !showData || slot.Article == nil {
     return &Article{
       Id: slot.ArticleSlotId,
@@ -123,13 +123,13 @@ func getArticleModel(slot *store.ArticleSlot, showData bool, showGroups bool) *A
     }
   }
 
-  var articleGroups *ArticleGroups
-  if showGroups {
+  var articleGroups *IdList
+  if showList {
     var groups []string;
     for _, group := range slot.Article.Groups {
       groups = append(groups, group.GroupSlot.GroupSlotId)
     }
-    articleGroups = &ArticleGroups{ Groups: groups }
+    articleGroups = &IdList{ Ids: groups }
   }
 
   return &Article{
@@ -145,7 +145,7 @@ func getArticleModel(slot *store.ArticleSlot, showData bool, showGroups bool) *A
   }
 }
 
-func getChannelRevisionModel(slot *store.ChannelSlot, showData bool, showGroups bool) *Channel {
+func getChannelRevisionModel(slot *store.ChannelSlot, showData bool) *Channel {
 
   if !showData || slot.Channel == nil {
     return &Channel{
@@ -163,7 +163,7 @@ func getChannelRevisionModel(slot *store.ChannelSlot, showData bool, showGroups 
   }
 }
 
-func getChannelModel(slot *store.ChannelSlot, showData bool, showGroups bool) *Channel {
+func getChannelModel(slot *store.ChannelSlot, showData bool, showList bool) *Channel {
 
   if !showData || slot.Channel == nil {
     return &Channel{
@@ -172,18 +172,27 @@ func getChannelModel(slot *store.ChannelSlot, showData bool, showGroups bool) *C
     }
   }
 
-  var channelGroups *ChannelGroups
-  if showGroups {
+  var channelGroups *IdList
+  if showList {
     var groups []string;
     for _, group := range slot.Channel.Groups {
       groups = append(groups, group.GroupSlot.GroupSlotId)
     }
-    channelGroups = &ChannelGroups{ Groups: groups }
+    channelGroups = &IdList{ Ids: groups }
   }
 
-  var cards []string
+  var channelCards *IdList
+  if showList {
+    var cards []string;
+    for _, card := range slot.Channel.Cards {
+      cards = append(cards, card.CardSlot.CardSlotId)
+    }
+    channelCards = &IdList{ Ids: cards }
+  }
+
+  members := []string{}
   for _, card := range slot.Channel.Cards {
-    cards = append(cards, card.CardSlot.CardSlotId)
+    members = append(members, card.Guid)
   }
 
   return &Channel{
@@ -197,7 +206,8 @@ func getChannelModel(slot *store.ChannelSlot, showData bool, showGroups bool) *C
         Created: slot.Channel.Created,
         Updated: slot.Channel.Updated,
         Groups: channelGroups,
-        Cards: cards,
+        Cards: channelCards,
+        Members: members,
       },
     },
   }

@@ -60,12 +60,12 @@ func GetChannels(w http.ResponseWriter, r *http.Request) {
 
     var slots []store.ChannelSlot
     if channelRevisionSet {
-      if err := store.DB.Preload("Channel").Where("account_id = ? AND revision > ?", account.ID, channelRevision).Find(&slots).Error; err != nil {
+      if err := store.DB.Preload("Channel.Cards").Preload("Channel.Groups").Where("account_id = ? AND revision > ?", account.ID, channelRevision).Find(&slots).Error; err != nil {
         ErrResponse(w, http.StatusInternalServerError, err)
         return
       }
     } else {
-      if err := store.DB.Preload("Channel").Where("account_id = ? AND channel_id != 0", account.ID).Find(&slots).Error; err != nil {
+      if err := store.DB.Preload("Channel.Cards").Preload("Channel.Groups").Where("account_id = ? AND channel_id != 0", account.ID).Find(&slots).Error; err != nil {
         ErrResponse(w, http.StatusInternalServerError, err)
         return
       }
@@ -73,7 +73,11 @@ func GetChannels(w http.ResponseWriter, r *http.Request) {
 
     for _, slot := range slots {
       if !typesSet || hasChannelType(types, slot.Channel) {
-        response = append(response, getChannelModel(&slot, true, true))
+        if channelRevisionSet {
+          response = append(response, getChannelRevisionModel(&slot, true))
+        } else if slot.Channel != nil {
+          response = append(response, getChannelModel(&slot, true, true))
+        }
       }
     }
 
@@ -97,12 +101,12 @@ func GetChannels(w http.ResponseWriter, r *http.Request) {
     account := &card.Account
     var slots []store.ChannelSlot
     if channelRevisionSet {
-      if err := store.DB.Preload("Channel.Groups.Cards").Where("account_id = ? AND revision > ?", account.ID, channelRevision).Find(&slots).Error; err != nil {
+      if err := store.DB.Preload("Channel.Cards").Preload("Channel.Groups.Cards").Where("account_id = ? AND revision > ?", account.ID, channelRevision).Find(&slots).Error; err != nil {
         ErrResponse(w, http.StatusInternalServerError, err)
         return
       }
     } else {
-      if err := store.DB.Preload("Channel.Groups.Cards").Where("account_id = ? AND channel_id != 0", account.ID).Find(&slots).Error; err != nil {
+      if err := store.DB.Preload("Channel.Cards").Preload("Channel.Groups.Cards").Where("account_id = ? AND channel_id != 0", account.ID).Find(&slots).Error; err != nil {
         ErrResponse(w, http.StatusInternalServerError, err)
         return
       }
@@ -111,7 +115,11 @@ func GetChannels(w http.ResponseWriter, r *http.Request) {
     for _, slot := range slots {
       shared := isChannelShared(card.Guid, slot.Channel)
       if !typesSet || hasChannelType(types, slot.Channel) {
-        response = append(response, getChannelModel(&slot, shared, false))
+        if channelRevisionSet {
+          response = append(response, getChannelRevisionModel(&slot, shared))
+        } else if shared {
+          response = append(response, getChannelModel(&slot, true, false))
+        }
       }
     }
 

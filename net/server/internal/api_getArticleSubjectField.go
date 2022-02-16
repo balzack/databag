@@ -19,6 +19,7 @@ func GetArticleSubjectField(w http.ResponseWriter, r *http.Request) {
   field := params["field"]
   elements := strings.Split(field, ".")
 
+  var guid string
   var act *store.Account
   tokenType := r.Header.Get("TokenType")
   if tokenType == APP_TOKENAPP {
@@ -35,6 +36,7 @@ func GetArticleSubjectField(w http.ResponseWriter, r *http.Request) {
       return
     }
     act = &card.Account
+    guid = card.Guid
   } else {
     ErrResponse(w, http.StatusBadRequest, errors.New("unknown token type"))
     return
@@ -42,7 +44,7 @@ func GetArticleSubjectField(w http.ResponseWriter, r *http.Request) {
 
   // load article
   var slot store.ArticleSlot
-  if err := store.DB.Preload("Article").Where("account_id = ? AND article_slot_id = ?", act.ID, articleId).First(&slot).Error; err != nil {
+  if err := store.DB.Preload("Article.Groups.Cards").Where("account_id = ? AND article_slot_id = ?", act.ID, articleId).First(&slot).Error; err != nil {
     if errors.Is(err, gorm.ErrRecordNotFound) {
       ErrResponse(w, http.StatusNotFound, err)
     } else {
@@ -52,6 +54,12 @@ func GetArticleSubjectField(w http.ResponseWriter, r *http.Request) {
   }
   if slot.Article == nil {
     ErrResponse(w, http.StatusNotFound, errors.New("referenced article missing"))
+    return
+  }
+
+  // check if article is shared
+  if tokenType == APP_TOKENCONTACT && !isArticleShared(guid, slot.Article) {
+    ErrResponse(w, http.StatusNotFound, errors.New("referenced article not shared"))
     return
   }
 
