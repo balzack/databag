@@ -6,7 +6,7 @@ import (
   "github.com/stretchr/testify/assert"
 )
 
-func TestTopicShare(t *testing.T) {
+func TestChannelShare(t *testing.T) {
   var subject *Subject
   var channel *Channel
   var channels *[]Channel
