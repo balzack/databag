@@ -60,12 +60,12 @@ func GetChannels(w http.ResponseWriter, r *http.Request) {
 
     var slots []store.ChannelSlot
     if channelRevisionSet {
-      if err := store.DB.Preload("Channel.Cards").Preload("Channel.Groups").Where("account_id = ? AND revision > ?", account.ID, channelRevision).Find(&slots).Error; err != nil {
+      if err := store.DB.Preload("Channel").Where("account_id = ? AND revision > ?", account.ID, channelRevision).Find(&slots).Error; err != nil {
         ErrResponse(w, http.StatusInternalServerError, err)
         return
       }
     } else {
-      if err := store.DB.Preload("Channel.Cards").Preload("Channel.Groups").Where("account_id = ? AND channel_id != 0", account.ID).Find(&slots).Error; err != nil {
+      if err := store.DB.Preload("Channel.Cards.CardSlot").Preload("Channel.Groups.GroupSlot").Where("account_id = ? AND channel_id != 0", account.ID).Find(&slots).Error; err != nil {
         ErrResponse(w, http.StatusInternalServerError, err)
         return
       }

@@ -74,7 +74,6 @@ func ClearArticleGroup(w http.ResponseWriter, r *http.Request) {
   for _, card := range groupSlot.Group.Cards {
     SetContactArticleNotification(account, &card)
   }
-
   WriteResponse(w, getArticleModel(&articleSlot, true, true));
 }
 

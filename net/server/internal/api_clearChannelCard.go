@@ -8,7 +8,7 @@ import (
   "databag/internal/store"
 )
 
-func SetChannelCard(w http.ResponseWriter, r *http.Request) {
+func ClearChannelCard(w http.ResponseWriter, r *http.Request) {
 
   account, code, err := BearerAppToken(r, false);
   if err != nil {
@@ -61,11 +61,10 @@ func SetChannelCard(w http.ResponseWriter, r *http.Request) {
       cards[card.Guid] = card
     }
   }
-  cards[cardSlot.Card.Guid] = *cardSlot.Card
 
   // save and update contact revision
   err = store.DB.Transaction(func(tx *gorm.DB) error {
-    if res := tx.Model(&channelSlot.Channel).Association("Cards").Append(cardSlot.Card); res != nil {
+    if res := tx.Model(&channelSlot.Channel).Association("Cards").Delete(cardSlot.Card); res != nil {
       return res
     }
     if res := tx.Model(&channelSlot.Channel).Update("detail_revision", account.ChannelRevision + 1).Error; res != nil {

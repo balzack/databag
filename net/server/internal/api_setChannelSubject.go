@@ -8,7 +8,7 @@ import (
   "databag/internal/store"
 )
 
-func SetArticleSubject(w http.ResponseWriter, r *http.Request) {
+func SetChannelSubject(w http.ResponseWriter, r *http.Request) {
 
   account, code, err := BearerAppToken(r, false);
   if err != nil {
@@ -18,7 +18,7 @@ func SetArticleSubject(w http.ResponseWriter, r *http.Request) {
 
   // scan parameters
   params := mux.Vars(r)
-  articleId := params["articleId"]
+  channelId := params["channelId"]
 
   var subject Subject
   if err := ParseRequest(r, w, &subject); err != nil {
@@ -26,9 +26,9 @@ func SetArticleSubject(w http.ResponseWriter, r *http.Request) {
     return
   }
 
-  // load referenced article
-  var slot store.ArticleSlot
-  if err := store.DB.Preload("Article.Groups.Cards").Where("account_id = ? AND article_slot_id = ?", account.ID, articleId).First(&slot).Error; err != nil {
+  // load referenced channel
+  var slot store.ChannelSlot
+  if err := store.DB.Preload("Channel.Cards").Preload("Channel.Groups.Cards").Where("account_id = ? AND channel_slot_id = ?", account.ID, channelId).First(&slot).Error; err != nil {
     if !errors.Is(err, gorm.ErrRecordNotFound) {
       ErrResponse(w, http.StatusInternalServerError, err)
     } else {
@@ -36,14 +36,17 @@ func SetArticleSubject(w http.ResponseWriter, r *http.Request) {
     }
     return
   }
-  if slot.Article == nil {
-    ErrResponse(w, http.StatusNotFound, errors.New("article has been deleted"))
+  if slot.Channel == nil {
+    ErrResponse(w, http.StatusNotFound, errors.New("channel has been deleted"))
     return
   }
 
   // determine affected contact list
   cards := make(map[string]store.Card)
-  for _, group := range slot.Article.Groups {
+  for _, card := range slot.Channel.Cards {
+    cards[card.Guid] = card
+  }
+  for _, group := range slot.Channel.Groups {
     for _, card := range group.Cards {
       cards[card.Guid] = card
     }
@@ -51,16 +54,16 @@ func SetArticleSubject(w http.ResponseWriter, r *http.Request) {
 
   // save and update contact revision
   err = store.DB.Transaction(func(tx *gorm.DB) error {
-    if res := tx.Model(&slot.Article).Update("data", subject.Data).Error; res != nil {
+    if res := tx.Model(&slot.Channel).Update("data", subject.Data).Error; res != nil {
       return res
     }
-    if res := tx.Model(&slot.Article).Update("data_type", subject.DataType).Error; res != nil {
+    if res := tx.Model(&slot.Channel).Update("data_type", subject.DataType).Error; res != nil {
       return res
     }
-    if res := tx.Model(&slot).Update("revision", account.ArticleRevision + 1).Error; res != nil {
+    if res := tx.Model(&slot).Update("revision", account.ChannelRevision + 1).Error; res != nil {
       return res
     }
-    if res := tx.Model(&account).Update("article_revision", account.ArticleRevision + 1).Error; res != nil {
+    if res := tx.Model(&account).Update("channel_revision", account.ChannelRevision + 1).Error; res != nil {
       return res
     }
     return nil
@@ -73,8 +76,8 @@ func SetArticleSubject(w http.ResponseWriter, r *http.Request) {
   // notify contacts of content change
   SetStatus(account)
   for _, card := range cards {
-    SetContactArticleNotification(account, &card)
+    SetContactChannelNotification(account, &card)
   }
-  WriteResponse(w, getArticleModel(&slot, true, true));
+  WriteResponse(w, getChannelModel(&slot, true, true));
 }
 

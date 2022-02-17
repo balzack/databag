@@ -8,7 +8,7 @@ import (
   "databag/internal/store"
 )
 
-func SetChannelCard(w http.ResponseWriter, r *http.Request) {
+func SetChannelGroup(w http.ResponseWriter, r *http.Request) {
 
   account, code, err := BearerAppToken(r, false);
   if err != nil {
@@ -19,7 +19,7 @@ func SetChannelCard(w http.ResponseWriter, r *http.Request) {
   // scan parameters
   params := mux.Vars(r)
   channelId := params["channelId"]
-  cardId := params["cardId"]
+  groupId := params["groupId"]
 
   // load referenced channel
   var channelSlot store.ChannelSlot
@@ -36,9 +36,9 @@ func SetChannelCard(w http.ResponseWriter, r *http.Request) {
     return
   }
 
-  // load referenced card 
-  var cardSlot store.CardSlot
-  if err := store.DB.Preload("Card.CardSlot").Where("account_id = ? AND card_slot_id = ?", account.ID, cardId).First(&cardSlot).Error; err != nil {
+  // load referenced group 
+  var groupSlot store.GroupSlot
+  if err := store.DB.Preload("Group.Cards").Preload("Group.GroupSlot").Where("account_id = ? AND group_slot_id = ?", account.ID, groupId).First(&groupSlot).Error; err != nil {
     if !errors.Is(err, gorm.ErrRecordNotFound) {
       ErrResponse(w, http.StatusInternalServerError, err)
     } else {
@@ -46,29 +46,14 @@ func SetChannelCard(w http.ResponseWriter, r *http.Request) {
     }
     return
   }
-  if cardSlot.Card == nil {
-    ErrResponse(w, http.StatusNotFound, errors.New("card has been deleted"))
+  if groupSlot.Group == nil {
+    ErrResponse(w, http.StatusNotFound, errors.New("group has been deleted"))
     return
   }
 
-  // determine contact list
-  cards := make(map[string]store.Card)
-  for _, card := range channelSlot.Channel.Cards {
-    cards[card.Guid] = card
-  }
-  for _, group := range channelSlot.Channel.Groups {
-    for _, card := range group.Cards {
-      cards[card.Guid] = card
-    }
-  }
-  cards[cardSlot.Card.Guid] = *cardSlot.Card
-
   // save and update contact revision
   err = store.DB.Transaction(func(tx *gorm.DB) error {
-    if res := tx.Model(&channelSlot.Channel).Association("Cards").Append(cardSlot.Card); res != nil {
-      return res
-    }
-    if res := tx.Model(&channelSlot.Channel).Update("detail_revision", account.ChannelRevision + 1).Error; res != nil {
+    if res := tx.Model(&channelSlot.Channel).Association("Groups").Append(groupSlot.Group); res != nil {
       return res
     }
     if res := tx.Model(&channelSlot).Update("revision", account.ChannelRevision + 1).Error; res != nil {
@@ -82,6 +67,14 @@ func SetChannelCard(w http.ResponseWriter, r *http.Request) {
   if err != nil {
     ErrResponse(w, http.StatusInternalServerError, err)
     return
+  }
+
+  // determine contact list
+  cards := make(map[string]store.Card)
+  for _, group := range channelSlot.Channel.Groups {
+    for _, card := range group.Cards {
+      cards[card.Guid] = card
+    }
   }
 
   // notify contacts of content change

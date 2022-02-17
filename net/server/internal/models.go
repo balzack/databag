@@ -173,9 +173,9 @@ type ChannelDetail struct {
 
 	Groups *IdList `json:"groups,omitempty"`
 
-  Cards *IdList `json:"groups,omitempty"`
+  Cards *IdList `json:"cards,omitempty"`
 
-	Members []string `json:"cards"`
+	Members []string `json:"members"`
 }
 
 type Claim struct {
