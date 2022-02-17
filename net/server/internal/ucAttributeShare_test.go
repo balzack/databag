@@ -8,7 +8,7 @@ import (
   "github.com/stretchr/testify/assert"
 )
 
-func TestShareAttribute(t *testing.T) {
+func TestAttributeShare(t *testing.T) {
   var articles *[]Article
   var subject *Subject
   var article *Article

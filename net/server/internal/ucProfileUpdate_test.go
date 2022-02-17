@@ -7,7 +7,7 @@ import (
   "github.com/stretchr/testify/assert"
 )
 
-func TestUpdateProfile(t *testing.T) {
+func TestProfileUpdate(t *testing.T) {
   param := map[string]string{}
   var msg DataMessage
   var card Card
