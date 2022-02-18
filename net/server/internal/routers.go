@@ -559,6 +559,13 @@ var routes = Routes{
 	},
 
 	Route{
+		"GetChannelTopic",
+		strings.ToUpper("Get"),
+		"/content/channels/{channelId}/topics/{topicId}",
+		GetChannelTopic,
+	},
+
+	Route{
 		"GetChannelTopicDetail",
 		strings.ToUpper("Get"),
 		"/content/channels/{channelId}/topics/{topicId}/detail",
@@ -566,10 +573,10 @@ var routes = Routes{
 	},
 
 	Route{
-		"GetChannelTopicSize",
+		"GetChannelTopicCount",
 		strings.ToUpper("Get"),
-		"/content/channels/{channelId}/topics/{topicId}/size",
-		GetChannelTopicSize,
+		"/content/channels/{channelId}/topics/{topicId}/count",
+		GetChannelTopicCount,
 	},
 
 	Route{

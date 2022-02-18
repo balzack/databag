@@ -1894,6 +1894,35 @@ paths:
               $ref: '#/components/schemas/Subject'
           
   /content/channels/{channelId}:
+    get:
+      tags:
+        - content
+      description: Get details of channel.
+      operationId: get-channel
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: channelId
+          in: path
+          description: specified channel id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Channel'
+        '401':
+          description: invalid password
+        '404':
+          description: channel not found
+        '410':
+          description: account disabled
+        '500':
+          description: internal server error
     delete:
       tags:
         - content
@@ -1911,37 +1940,6 @@ paths:
       responses:
         '200':
           description: success
-        '401':
-          description: invalid password
-        '404':
-          description: channel not found
-        '410':
-          description: account disabled
-        '500':
-          description: internal server error
-  
-  /content/channels/{channelId}/detail:
-    get:
-      tags:
-        - content
-      description: Get detail object of channel.
-      operationId: get-channel-detail
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: channelId
-          in: path
-          description: specified channel id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ChannelDetail'
         '401':
           description: invalid password
         '404':
@@ -2247,6 +2245,41 @@ paths:
               $ref: '#/components/schemas/Subject'
           
   /content/channels/{channelId}/topics/{topicId}:
+    get:
+      tags:
+        - content
+      description: Get full object of topic.
+      operationId: get-channel-topic
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: channelId
+          in: path
+          description: specified channel id 
+          required: true
+          schema:
+            type: string
+        - name: topicId
+          in: path
+          description: specified topic id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Topic'
+        '401':
+          description: invalid password
+        '404':
+          description: channel not found
+        '410':
+          description: account disabled
+        '500':
+          description: internal server error
     delete:
       tags:
         - content
@@ -2303,6 +2336,10 @@ paths:
       responses:
         '200':
           description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TopicDetail'
         '401':
           description: invalid password
         '404':
@@ -2312,12 +2349,12 @@ paths:
         '500':
           description: internal server error
           
-  /content/channels/{channelId}/topics/{topicId}/size:
+  /content/channels/{channelId}/topics/{topicId}/count:
     get:
       tags:
         - content
-      description: Get detail object of topic.
-      operationId: get-channel-topic-size
+      description: Get count of associated taghs.
+      operationId: get-channel-topic-count
       security:
         - bearerAuth: []
       parameters:
@@ -2336,6 +2373,10 @@ paths:
       responses:
         '200':
           description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TagCount'
         '401':
           description: invalid password
         '404':
@@ -3236,7 +3277,7 @@ components:
         topicDetail:
           $ref: '#/components/schemas/TopicDetail'
         topicTags::
-          $ref: '#/components/schemas/TopicTags'
+          $ref: '#/components/schemas/TagCount'
           
     TopicDetail:
       type: object
@@ -3264,16 +3305,16 @@ components:
           type: string
           enum: [ unconfirmed, confirmed, complete, error ]
           
-    TopicTags:
+    TagCount:
       type: object
       required:
-        - tagCount
-        - tagUpdated
+        - count
+        - updated
       properties:
-        tagCount:
+        count:
           type: integer
           format: int32
-        tagUpdated:
+        updated:
           type: integer
           format: int64
           

@@ -213,8 +213,6 @@ func getChannelModel(slot *store.ChannelSlot, showData bool, showList bool) *Cha
   }
 }
 
-
-
 func getTopicRevisionModel(slot *store.TopicSlot, showData bool) *Topic {
 
   if !showData || slot.Topic == nil {
@@ -234,9 +232,37 @@ func getTopicRevisionModel(slot *store.TopicSlot, showData bool) *Topic {
   }
 }
 
-func getTopicModel(slot *store.TopicSlot, showData bool, showList bool) *Topic {
+func getTopicDetailModel(slot *store.TopicSlot) *TopicDetail {
 
-  if !showData || slot.Topic == nil {
+  if slot.Topic == nil {
+    return nil
+  }
+
+  return &TopicDetail{
+        Guid: slot.Topic.Guid,
+        DataType: slot.Topic.DataType,
+        Data: slot.Topic.Data,
+        Created: slot.Topic.Created,
+        Updated: slot.Topic.Updated,
+        Status: slot.Topic.Status,
+      }
+}
+
+func getTopicCountModel(slot *store.TopicSlot) *TagCount {
+
+  if slot.Topic == nil {
+    return nil
+  }
+
+  return &TagCount{
+    Count: slot.Topic.TagCount,
+    Updated: slot.Topic.TagUpdated,
+  }
+}
+
+func getTopicModel(slot *store.TopicSlot) *Topic {
+
+  if slot.Topic == nil {
     return &Topic{
       Id: slot.TopicSlotId,
       Revision: slot.Revision,
@@ -248,22 +274,11 @@ func getTopicModel(slot *store.TopicSlot, showData bool, showList bool) *Topic {
     Revision: slot.Revision,
     Data: &TopicData {
       DetailRevision: slot.Topic.DetailRevision,
-      TopicDetail: &TopicDetail{
-        Guid: slot.Topic.Guid,
-        DataType: slot.Topic.DataType,
-        Data: slot.Topic.Data,
-        Created: slot.Topic.Created,
-        Updated: slot.Topic.Updated,
-        Status: slot.Topic.Status,
-      },
+      TopicDetail: getTopicDetailModel(slot),
       TagRevision: slot.Topic.TagRevision,
-      TopicTags: &TopicTags{
-        TagCount: slot.Topic.TagCount,
-        TagUpdated: slot.Topic.TagUpdated,
-      },
+      TopicTags: getTopicCountModel(slot),
     },
   }
 }
-
 
 

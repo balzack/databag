@@ -368,6 +368,13 @@ type Tag struct {
 	Data *TagData `json:"data"`
 }
 
+type TagCount struct {
+
+	Count int32 `json:"count"`
+
+	Updated int64 `json:"updated"`
+}
+
 type TagData struct {
 
 	Guid string `json:"guid"`
@@ -398,7 +405,7 @@ type TopicData struct {
 
 	TopicDetail *TopicDetail `json:"topicDetail,omitempty"`
 
-	TopicTags *TopicTags `json:"topicTags:,omitempty"`
+	TopicTags *TagCount `json:"topicTags:,omitempty"`
 }
 
 type TopicDetail struct {

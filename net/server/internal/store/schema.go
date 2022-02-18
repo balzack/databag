@@ -206,17 +206,18 @@ type Channel struct {
 
 type TopicSlot struct {
   ID                uint
-  TopicSlotId       string          `gorm:"not null;index:topicslot,unique"`
-  AccountID         uint            `gorm:"not null;index:topicslot,unique"`
+  TopicSlotId       string          `gorm:"not null;index:topicaccount,unique;index:topicchannel,unique"`
+  AccountID         uint            `gorm:"not null;index:topicaccount,unique"`
+  ChannelID         uint            `gorm:"not null;index:topicchannel,unique"`
   Revision          int64           `gorm:"not null"`
   TopicID           uint            `gorm:"not null;default:0"`
   Topic             *Topic
+  Channel           *Channel
   Account           Account
 }
 
 type Topic struct {
   ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
-  ChannelID         uint
   DetailRevision    int64           `gorm:"not null"`
   Guid              string
   DataType          string          `gorm:"index"`
@@ -227,7 +228,6 @@ type Topic struct {
   TagCount          int32           `gorm:"not null"`
   TagUpdated        int64           `gorm:"autoUpdateTime"`
   TagRevision       int64           `gorm:"not null"`
-  Channel           *Channel
   Assets            []Asset
   Tags              []Tag
 }
