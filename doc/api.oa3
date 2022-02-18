@@ -2434,7 +2434,7 @@ paths:
       tags:
         - content
       description: Get list of assets assigned to an channel. The original assets will only be available to the account holder to provent the accidental sharing of content metadata. Access is granted to the app token of the account holder and the contact token of accounts the channel has been shared with.
-      operationId: get-channel-assets
+      operationId: get-channel-topic-assets
       security:
         - bearerAuth: []
       parameters:
@@ -2469,7 +2469,7 @@ paths:
       tags:
         - content
       description: Add an an asset to the to an channel. The original posted asset is referenced in the asset list with a null transform. The transformed assets are referenced accordingly. Transforming the asset strips it of metadata and transcodes it into a specified format. Access is granted to the app token of the account holder.
-      operationId: add-channel-asset
+      operationId: add-channel-topic-asset
       security:
         - bearerAuth: []
       parameters:
@@ -2525,7 +2525,7 @@ paths:
       tags:
         - content
       description: Get asset assigned to an channel. The endpoint supports byte-range requests and responds with the content-type set appropriatly. Access granted to the app tokens of the account holder and in the case of non-original assets, the contact token for accounts with which the channel is shared.
-      operationId: get-channel-asset
+      operationId: get-channel-topic-asset
       security:
         - bearerAuth: []
       parameters:
@@ -2567,7 +2567,7 @@ paths:
       tags:
         - content
       description: Remove an asset from an channel. Access granted to app tokens of the account holder.
-      operationId: remove-channel-asset
+      operationId: remove-channel-topic-asset
       security:
         - bearerAuth: []
       parameters:
@@ -2606,7 +2606,7 @@ paths:
       tags:
         - content
       description: Set confirmed state of the channel. Until the confirmed state has been set to true, the channel will not be visible to contacts with which the channel is shared. Access granted to the app tokens of the acocunt holder.
-      operationId: set-channel-confirmed
+      operationId: set-channel-topic-confirmed
       security:
         - bearerAuth: []
       parameters:
@@ -3155,7 +3155,8 @@ components:
         id:
           type: string
         revision:
-          type: int64
+          type: integer
+          format: int64
         data:
           $ref: '#/components/schemas/ChannelData'
           
@@ -3235,7 +3236,7 @@ components:
         topicDetail:
           $ref: '#/components/schemas/TopicDetail'
         topicTags::
-          $ref: '#/components/schemas/TopicSize'
+          $ref: '#/components/schemas/TopicTags'
           
     TopicDetail:
       type: object
@@ -3244,7 +3245,7 @@ components:
         - dataType
         - data
         - created
-        - modified
+        - updated
         - status
       properties:
         guid:
@@ -3256,14 +3257,14 @@ components:
         created:
           type: integer
           format: int64
-        modified:
+        updated:
           type: integer
           format: int64
         status:
           type: string
           enum: [ unconfirmed, confirmed, complete, error ]
           
-    TopicSize:
+    TopicTags:
       type: object
       required:
         - tagCount

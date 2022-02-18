@@ -363,7 +363,7 @@ type Tag struct {
 
 	Id string `json:"id"`
 
-	Revision string `json:"revision"`
+	Revision int64 `json:"revision"`
 
 	Data *TagData `json:"data"`
 }
@@ -385,7 +385,7 @@ type Topic struct {
 
 	Id string `json:"id"`
 
-	Revision string `json:"revision"`
+	Revision int64 `json:"revision"`
 
 	Data *TopicData `json:"data"`
 }
@@ -398,7 +398,7 @@ type TopicData struct {
 
 	TopicDetail *TopicDetail `json:"topicDetail,omitempty"`
 
-	TopicTags *TopicSize `json:"topicTags:,omitempty"`
+	TopicTags *TopicTags `json:"topicTags:,omitempty"`
 }
 
 type TopicDetail struct {
@@ -411,12 +411,12 @@ type TopicDetail struct {
 
 	Created int64 `json:"created"`
 
-	Modified int64 `json:"modified"`
+	Updated int64 `json:"updated"`
 
 	Status string `json:"status"`
 }
 
-type TopicSize struct {
+type TopicTags struct {
 
 	TagCount int32 `json:"tagCount"`
 

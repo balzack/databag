@@ -8,6 +8,7 @@ import (
 )
 
 func TestTopicShare(t *testing.T) {
+  var topic *Topic
   var channel *Channel
   var subject *Subject
   params := make(map[string]string)
@@ -68,7 +69,22 @@ func TestTopicShare(t *testing.T) {
   assert.Zero(t, bytes.Compare(img, data))
 
 
+  // add a topc
+  topic = &Topic{}
+  subject = &Subject{ DataType: "topicdatatype", Data: "subjectfromA" }
+  assert.NoError(t, ApiTestMsg(AddChannelTopic, "POST", "/content/channels/{channelId}/topics",
+    &params, subject, APP_TOKENAPP, set.A.Token, topic, nil))
+  topic = &Topic{}
+  subject = &Subject{ DataType: "topicdatatype", Data: "subjectfromB" }
+  assert.NoError(t, ApiTestMsg(AddChannelTopic, "POST", "/content/channels/{channelId}/topics",
+    &params, subject, APP_TOKENCONTACT, set.B.A.Token, topic, nil))
+   topic = &Topic{}
+  subject = &Subject{ DataType: "topicdatatype", Data: "subjectfromC" }
+  assert.NoError(t, ApiTestMsg(AddChannelTopic, "POST", "/content/channels/{channelId}/topics",
+    &params, subject, APP_TOKENCONTACT, set.C.A.Token, topic, nil))
+ 
 
+  PrintMsg(topic)
 }
 
 

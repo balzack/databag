@@ -215,3 +215,55 @@ func getChannelModel(slot *store.ChannelSlot, showData bool, showList bool) *Cha
 
 
 
+func getTopicRevisionModel(slot *store.TopicSlot, showData bool) *Topic {
+
+  if !showData || slot.Topic == nil {
+    return &Topic{
+      Id: slot.TopicSlotId,
+      Revision: slot.Revision,
+    }
+  }
+
+  return &Topic{
+    Id: slot.TopicSlotId,
+    Revision: slot.Revision,
+    Data: &TopicData {
+      DetailRevision: slot.Topic.DetailRevision,
+      TagRevision: slot.Topic.TagRevision,
+    },
+  }
+}
+
+func getTopicModel(slot *store.TopicSlot, showData bool, showList bool) *Topic {
+
+  if !showData || slot.Topic == nil {
+    return &Topic{
+      Id: slot.TopicSlotId,
+      Revision: slot.Revision,
+    }
+  }
+
+  return &Topic{
+    Id: slot.TopicSlotId,
+    Revision: slot.Revision,
+    Data: &TopicData {
+      DetailRevision: slot.Topic.DetailRevision,
+      TopicDetail: &TopicDetail{
+        Guid: slot.Topic.Guid,
+        DataType: slot.Topic.DataType,
+        Data: slot.Topic.Data,
+        Created: slot.Topic.Created,
+        Updated: slot.Topic.Updated,
+        Status: slot.Topic.Status,
+      },
+      TagRevision: slot.Topic.TagRevision,
+      TopicTags: &TopicTags{
+        TagCount: slot.Topic.TagCount,
+        TagUpdated: slot.Topic.TagUpdated,
+      },
+    },
+  }
+}
+
+
+

@@ -224,9 +224,9 @@ type Topic struct {
   Status            string          `gorm:"not null;index"`
   Created           int64           `gorm:"autoCreateTime"`
   Updated           int64           `gorm:"autoUpdateTime"`
-  SizeRevision      int64           `gorm:"not null"`
-  TagUpdated        int64           `gorm:"not null"`
-  TagRevision       uint64          `gorm:"not null"`
+  TagCount          int32           `gorm:"not null"`
+  TagUpdated        int64           `gorm:"autoUpdateTime"`
+  TagRevision       int64           `gorm:"not null"`
   Channel           *Channel
   Assets            []Asset
   Tags              []Tag
