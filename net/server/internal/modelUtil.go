@@ -213,9 +213,9 @@ func getChannelModel(slot *store.ChannelSlot, showData bool, showList bool) *Cha
   }
 }
 
-func getTopicRevisionModel(slot *store.TopicSlot, showData bool) *Topic {
+func getTopicRevisionModel(slot *store.TopicSlot) *Topic {
 
-  if !showData || slot.Topic == nil {
+  if slot.Topic == nil {
     return &Topic{
       Id: slot.TopicSlotId,
       Revision: slot.Revision,

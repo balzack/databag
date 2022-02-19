@@ -1,53 +1,55 @@
 package databag
 
 import (
+  "errors"
   "net/http"
   "gorm.io/gorm"
-  "github.com/google/uuid"
+  "github.com/gorilla/mux"
   "databag/internal/store"
 )
 
-func AddChannelTopic(w http.ResponseWriter, r *http.Request) {
+func SetChannelTopicConfirmed(w http.ResponseWriter, r *http.Request) {
 
-  var subject Subject
-  if err := ParseRequest(r, w, &subject); err != nil {
+  // scan parameters
+  params := mux.Vars(r)
+  topicId := params["topicId"]
+
+  var status string
+  if err := ParseRequest(r, w, &status); err != nil {
     ErrResponse(w, http.StatusBadRequest, err)
     return
   }
+  if !AppTopicStatus(status) {
+    ErrResponse(w, http.StatusBadRequest, errors.New("unknown status"))
+    return
+  }
 
-  channelSlot, guid, err, code := getChannelSlot(r, true)
+  channelSlot, _, err, code := getChannelSlot(r, true)
   if err != nil {
     ErrResponse(w, code, err)
     return
   }
   act := &channelSlot.Account
 
-  topicSlot := &store.TopicSlot{}
+  // load topic
+  var topicSlot store.TopicSlot
+  if err = store.DB.Where("channel_id = ? AND topic_slot_id = ?", channelSlot.Channel.ID, topicId).First(&topicSlot).Error; err != nil {
+    if errors.Is(err, gorm.ErrRecordNotFound) {
+      code = http.StatusNotFound
+    } else {
+      code = http.StatusInternalServerError
+    }
+    return
+  }
+
   err = store.DB.Transaction(func(tx *gorm.DB) error {
 
-    // add new record
-    topic := &store.Topic{}
-    topic.Data = subject.Data
-    topic.DataType = subject.DataType
-    topic.TagCount = 0
-    topic.Guid = guid
-    topic.DetailRevision = act.ChannelRevision + 1
-    topic.TagRevision = act.ChannelRevision + 1
-    topic.Status = APP_TOPICUNCONFIRMED
-    if res := tx.Save(topic).Error; res != nil {
+    if res := tx.Model(topicSlot.Topic).Update("status", status).Error; res != nil {
       return res
     }
-    topicSlot.TopicSlotId = uuid.New().String()
-    topicSlot.AccountID = act.ID
-    topicSlot.ChannelID = channelSlot.Channel.ID
-    topicSlot.TopicID = topic.ID
-    topicSlot.Revision = act.ChannelRevision + 1
-    topicSlot.Topic = topic
-    if res := tx.Save(topicSlot).Error; res != nil {
+    if res := tx.Model(&topicSlot).Update("revision", act.ChannelRevision + 1).Error; res != nil {
       return res
     }
-
-    // update parent revision
     if res := tx.Model(&channelSlot).Update("revision", act.ChannelRevision + 1).Error; res != nil {
       return res
     }
@@ -76,7 +78,7 @@ func AddChannelTopic(w http.ResponseWriter, r *http.Request) {
   for _, card := range cards {
     SetContactChannelNotification(act, &card)
   }
-  WriteResponse(w, getTopicModel(topicSlot))
+  WriteResponse(w, getTopicModel(&topicSlot))
 }
 
 

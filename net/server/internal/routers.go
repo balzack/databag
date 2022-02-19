@@ -650,10 +650,10 @@ var routes = Routes{
 	},
 
 	Route{
-		"SetChannelConfirmed",
+		"SetChannelTopicConfirmed",
 		strings.ToUpper("Put"),
 		"/content/channels/{channelId}/topics/{topicId}/confirmed",
-		SetChannelConfirmed,
+		SetChannelTopicConfirmed,
 	},
 
 	Route{

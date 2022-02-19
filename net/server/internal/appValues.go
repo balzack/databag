@@ -29,8 +29,6 @@ const APP_TOKENCONTACT = "contact"
 const APP_NOTIFYBUFFER = 4096
 const APP_TOPICUNCONFIRMED = "unconfirmed"
 const APP_TOPICCONFIRMED = "confirmed"
-const APP_TOPICINCOMPLETE = "incomplete"
-const APP_TOPICERROR = "error"
 
 func AppCardStatus(status string) bool {
   if status == APP_CARDPENDING {
@@ -46,6 +44,16 @@ func AppCardStatus(status string) bool {
     return true
   }
   if status == APP_CARDCONNECTED {
+    return true
+  }
+  return false
+}
+
+func AppTopicStatus(status string) bool {
+  if(status == APP_TOPICCONFIRMED) {
+    return true
+  }
+  if(status == APP_TOPICUNCONFIRMED) {
     return true
   }
   return false
