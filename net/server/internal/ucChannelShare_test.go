@@ -26,7 +26,7 @@ func TestChannelShare(t *testing.T) {
   var r int64
 
   // setup testing group
-  set, err := AddTestGroup("topicshare")
+  set, err := AddTestGroup("channelshare")
   assert.NoError(t, err)
 
   // add new channel
