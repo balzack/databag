@@ -138,7 +138,7 @@ func AddStatusListener(act uint, ch chan<-[]byte) {
   // add new listener to map
   chs, ok := statusListener[act]
   if ok {
-    chs = append(chs, ch)
+    statusListener[act] = append(chs, ch)
   } else {
     statusListener[act] = []chan<-[]byte{ch}
   }
