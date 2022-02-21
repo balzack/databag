@@ -3,6 +3,7 @@ package databag
 import (
   "time"
   "errors"
+  "strconv"
   "sync"
   "encoding/json"
   "net/http"
@@ -62,7 +63,28 @@ func (a *TestApp) UpdateProfile() (err error) {
 }
 
 func (a *TestApp) UpdateArticle() (err error) {
-  PrintMsg("update article")
+  var articles []Article
+  if a.revision.Article == 0 {
+    params := &TestApiParams{ query: "/articles", tokenType: APP_TOKENAPP, token: a.token }
+    response := &TestApiResponse{ data: &articles }
+    if err = TestApiRequest(GetArticles, params, response); err != nil {
+      return
+    }
+  } else {
+    revision := strconv.FormatInt(a.revision.Article, 10)
+    params := &TestApiParams{ query: "/articles?revision=" + revision, tokenType: APP_TOKENAPP, token: a.token }
+    response := &TestApiResponse{ data: &articles }
+    if err = TestApiRequest(GetArticles, params, response); err != nil {
+      return
+    }
+  }
+  for _, article := range articles {
+    if article.Data == nil  {
+      delete(a.articles, article.Id)
+    } else {
+      a.articles[article.Id] = article
+    }
+  }
   return
 }
 
