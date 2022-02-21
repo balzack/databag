@@ -5,7 +5,10 @@ import (
   "errors"
   "sync"
   "encoding/json"
+  "net/http"
+  "net/http/httptest"
   "github.com/gorilla/websocket"
+  "github.com/gorilla/mux"
 )
 
 const TEST_TIMEOUT = 5
@@ -22,6 +25,9 @@ type TestChannel struct {
 
 type TestContactData struct {
   card Card
+  viewRevision int64
+  articleRevision int64
+  channelRevision int64
   articles map[string]Article
   channels map[string]TestChannel
 }
@@ -48,13 +54,31 @@ type TestApp struct {
   condition *TestCondition
 }
 
-func (a *TestApp) UpdateProfile() error {
-  var profile Profile
-  err := ApiTestMsg(GetProfile, "GET", "/profile", nil, nil, APP_TOKENAPP, a.token, &profile, nil)
-  if err == nil {
-    a.profile = profile
-  }
-  return err
+func (a *TestApp) UpdateProfile() (err error) {
+  params := &TestApiParams{ query: "/profile", tokenType: APP_TOKENAPP, token: a.token }
+  response := &TestApiResponse{ data: &a.profile }
+  err = TestApiRequest(GetProfile, params, response)
+  return
+}
+
+func (a *TestApp) UpdateArticle() (err error) {
+  PrintMsg("update article")
+  return
+}
+
+func (a *TestApp) UpdateGroup() (err error) {
+  PrintMsg("update group")
+  return
+}
+
+func (a *TestApp) UpdateChannel() (err error) {
+  PrintMsg("update channel")
+  return
+}
+
+func (a *TestApp) UpdateCard() (err error) {
+  PrintMsg("update card")
+  return
 }
 
 func (a *TestApp) UpdateApp(rev *Revision) {
@@ -66,6 +90,38 @@ func (a *TestApp) UpdateApp(rev *Revision) {
       PrintMsg(err)
     } else {
       a.revision.Profile = rev.Profile
+    }
+  }
+
+  if rev.Article != a.revision.Article {
+    if err := a.UpdateArticle(); err != nil {
+      PrintMsg(err)
+    } else {
+      a.revision.Article = rev.Article
+    }
+  }
+
+  if rev.Group != a.revision.Group {
+    if err := a.UpdateGroup(); err != nil {
+      PrintMsg(err)
+    } else {
+      a.revision.Group = rev.Group
+    }
+  }
+
+  if rev.Channel != a.revision.Channel {
+    if err := a.UpdateChannel(); err != nil {
+      PrintMsg(err)
+    } else {
+      a.revision.Channel = rev.Channel
+    }
+  }
+
+  if rev.Card != a.revision.Card {
+    if err := a.UpdateCard(); err != nil {
+      PrintMsg(err)
+    } else {
+      a.revision.Card = rev.Card
     }
   }
 
@@ -144,4 +200,55 @@ func (a *TestApp) WaitFor(check func(*TestApp) bool) error {
   }
 }
 
+/*** endpoint test function ***/
+
+type TestApiParams struct {
+  restType string
+  path map[string]string
+  query string
+  body interface{}
+  tokenType string
+  token string
+}
+
+type TestApiResponse struct {
+  code int
+  data interface{}
+  header map[string][]string
+}
+
+func TestApiRequest(endpoint func(http.ResponseWriter, *http.Request), params *TestApiParams, resp *TestApiResponse) (err error) {
+
+  var r *http.Request
+  var w *httptest.ResponseRecorder
+  rest := params.restType
+  if rest == "" {
+    rest = "GET"
+  }
+  if r, w, err = NewRequest(rest, params.query, params.body); err != nil {
+    return
+  }
+  r = mux.SetURLVars(r, params.path)
+  if params.tokenType != "" {
+    r.Header.Add("TokenType", params.tokenType)
+  }
+  if params.token != "" {
+    SetBearerAuth(r, params.token)
+  }
+  endpoint(w, r)
+
+  res := w.Result()
+  if res.StatusCode != 200 && res.StatusCode != 410 {
+    err = errors.New("response failed");
+    return
+  }
+  resp.header = res.Header
+  if resp.data != nil {
+    dec := json.NewDecoder(res.Body)
+    if err = dec.Decode(resp.data); err != nil {
+      return
+    }
+  }
+  return
+}
 
