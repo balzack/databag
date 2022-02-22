@@ -72,7 +72,7 @@ func (a *TestApp) UpdateArticle() (err error) {
     }
   } else {
     revision := strconv.FormatInt(a.revision.Article, 10)
-    params := &TestApiParams{ query: "/articles?revision=" + revision, tokenType: APP_TOKENAPP, token: a.token }
+    params := &TestApiParams{ query: "/articles?articleRevision=" + revision, tokenType: APP_TOKENAPP, token: a.token }
     response := &TestApiResponse{ data: &articles }
     if err = TestApiRequest(GetArticles, params, response); err != nil {
       return
