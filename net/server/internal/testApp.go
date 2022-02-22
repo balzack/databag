@@ -35,6 +35,7 @@ type TestContactData struct {
 
 func NewTestApp() *TestApp {
   return &TestApp{
+    groups: make(map[string]Group),
     articles: make(map[string]Article),
     channels: make(map[string]TestChannel),
     contacts: make(map[string]TestContactData),
@@ -45,6 +46,7 @@ type TestApp struct {
   name string
   revision Revision
   profile Profile
+  groups map[string]Group
   articles map[string]Article
   channels map[string]TestChannel
   contacts map[string]TestContactData
@@ -59,6 +61,32 @@ func (a *TestApp) UpdateProfile() (err error) {
   params := &TestApiParams{ query: "/profile", tokenType: APP_TOKENAPP, token: a.token }
   response := &TestApiResponse{ data: &a.profile }
   err = TestApiRequest(GetProfile, params, response)
+  return
+}
+
+func (a *TestApp) UpdateGroup() (err error) {
+  var groups []Group
+  if a.revision.Group == 0 {
+    params := &TestApiParams{ query: "/groups", tokenType: APP_TOKENAPP, token: a.token }
+    response := &TestApiResponse{ data: &groups }
+    if err = TestApiRequest(GetGroups, params, response); err != nil {
+      return
+    }
+  } else {
+    revision := strconv.FormatInt(a.revision.Group, 10)
+    params := &TestApiParams{ query: "/groups?revision=" + revision, tokenType: APP_TOKENAPP, token: a.token }
+    response := &TestApiResponse{ data: &groups }
+    if err = TestApiRequest(GetGroups, params, response); err != nil {
+      return
+    }
+  }
+  for _, group := range groups {
+    if group.Data == nil  {
+      delete(a.groups, group.Id)
+    } else {
+      a.groups[group.Id] = group
+    }
+  }
   return
 }
 
@@ -88,11 +116,6 @@ func (a *TestApp) UpdateArticle() (err error) {
   return
 }
 
-func (a *TestApp) UpdateGroup() (err error) {
-  PrintMsg("update group")
-  return
-}
-
 func (a *TestApp) UpdateChannel() (err error) {
   PrintMsg("update channel")
   return
@@ -115,14 +138,6 @@ func (a *TestApp) UpdateApp(rev *Revision) {
     }
   }
 
-  if rev.Article != a.revision.Article {
-    if err := a.UpdateArticle(); err != nil {
-      PrintMsg(err)
-    } else {
-      a.revision.Article = rev.Article
-    }
-  }
-
   if rev.Group != a.revision.Group {
     if err := a.UpdateGroup(); err != nil {
       PrintMsg(err)
@@ -131,11 +146,11 @@ func (a *TestApp) UpdateApp(rev *Revision) {
     }
   }
 
-  if rev.Channel != a.revision.Channel {
-    if err := a.UpdateChannel(); err != nil {
+  if rev.Article != a.revision.Article {
+    if err := a.UpdateArticle(); err != nil {
       PrintMsg(err)
     } else {
-      a.revision.Channel = rev.Channel
+      a.revision.Article = rev.Article
     }
   }
 
@@ -144,6 +159,14 @@ func (a *TestApp) UpdateApp(rev *Revision) {
       PrintMsg(err)
     } else {
       a.revision.Card = rev.Card
+    }
+  }
+
+  if rev.Channel != a.revision.Channel {
+    if err := a.UpdateChannel(); err != nil {
+      PrintMsg(err)
+    } else {
+      a.revision.Channel = rev.Channel
     }
   }
 

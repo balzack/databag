@@ -6,6 +6,8 @@ import (
 )
 
 func TestContactApp(t *testing.T) {
+  var params *TestApiParams
+  var response *TestApiResponse
 
   // allocate test accounts
   set, err := AddTestGroup("contactapp")
@@ -42,8 +44,8 @@ func TestContactApp(t *testing.T) {
   // add a new article
   article := &Article{}
   subject := &Subject{ Data: "subjectdata", DataType: "subjectdatatype" }
-  params := &TestApiParams{ restType: "POST", query: "/articles", tokenType: APP_TOKENAPP, token: set.A.Token, body: subject }
-  response := &TestApiResponse{ data: article }
+  params = &TestApiParams{ restType: "POST", query: "/articles", tokenType: APP_TOKENAPP, token: set.A.Token, body: subject }
+  response = &TestApiResponse{ data: article }
   assert.NoError(t, TestApiRequest(AddArticle, params, response))
 
   // wait for a
