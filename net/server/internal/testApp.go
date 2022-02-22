@@ -29,8 +29,107 @@ type TestContactData struct {
   viewRevision int64
   articleRevision int64
   channelRevision int64
+  detailRevision int64
+  profileRevision int64
   articles map[string]Article
   channels map[string]TestChannel
+  offsync bool
+}
+
+func (c *TestContactData) UpdateContact() (err error) {
+
+  if c.detailRevision != c.card.Data.DetailRevision {
+    if err = c.UpdateContactDetail(); err != nil {
+      return
+    } else {
+      c.detailRevision = c.card.Data.DetailRevision
+    }
+  }
+
+  // sync rest only if connected
+  if c.card.Data.CardDetail.Status != APP_CARDCONNECTED {
+    return
+  }
+
+  if c.profileRevision != c.card.Data.NotifiedProfile {
+    if err = c.UpdateContactProfile(); err != nil {
+      return
+    } else {
+      c.profileRevision = c.card.Data.NotifiedProfile
+    }
+  }
+
+  if c.viewRevision != c.card.Data.NotifiedView {
+    if err = c.UpdateContactArticle(); err != nil {
+      return
+    } else if err = c.UpdateContactChannel(); err != nil {
+      return
+    } else {
+      c.articleRevision = c.card.Data.NotifiedArticle
+      c.channelRevision = c.card.Data.NotifiedChannel
+      c.viewRevision = c.card.Data.NotifiedView
+    }
+  }
+
+  if c.articleRevision != c.card.Data.NotifiedArticle {
+    if err = c.UpdateContactArticle(); err != nil {
+      return
+    } else {
+      c.articleRevision = c.card.Data.NotifiedArticle
+    }
+  }
+
+  if c.channelRevision != c.card.Data.NotifiedChannel {
+    if err = c.UpdateContactChannel(); err != nil {
+      return
+    } else {
+      c.channelRevision = c.card.Data.NotifiedChannel
+    }
+  }
+
+  return
+}
+
+func (c *TestContactData) UpdateContactProfile() (err error) {
+  return nil
+}
+
+func (c *TestContactData) UpdateContactArticle() (err error) {
+  var articles []Article
+  if c.articleRevision == 0 || c.viewRevision != c.card.Data.NotifiedView {
+    token := c.card.Data.CardProfile.Guid + "." + c.card.Data.CardDetail.Token
+    params := &TestApiParams{ query: "/articles", tokenType: APP_TOKENCONTACT, token: token }
+    response := &TestApiResponse{ data: &articles }
+    if err = TestApiRequest(GetArticles, params, response); err != nil {
+      return
+    }
+  } else {
+    token := c.card.Data.CardProfile.Guid + "." + c.card.Data.CardDetail.Token
+    viewRevision := strconv.FormatInt(c.viewRevision, 10)
+    articleRevision := strconv.FormatInt(c.articleRevision, 10)
+    params := &TestApiParams{ query: "/articles?articleRevision=" + articleRevision + "&viewRevision=" + viewRevision,
+        tokenType: APP_TOKENCONTACT, token: token }
+    response := &TestApiResponse{ data: &articles }
+    if err = TestApiRequest(GetArticles, params, response); err != nil {
+      return
+    }
+  }
+  for _, article := range articles {
+    if article.Data == nil  {
+      delete(c.articles, article.Id)
+    } else {
+      c.articles[article.Id] = article
+    }
+  }
+  return nil
+}
+
+func (c *TestContactData) UpdateContactChannel() (err error) {
+  return nil
+}
+
+func (c *TestContactData) UpdateContactDetail() (err error) {
+  return nil
 }
 
 func NewTestApp() *TestApp {
@@ -38,7 +137,7 @@ func NewTestApp() *TestApp {
     groups: make(map[string]Group),
     articles: make(map[string]Article),
     channels: make(map[string]TestChannel),
-    contacts: make(map[string]TestContactData),
+    contacts: make(map[string]*TestContactData),
   }
 }
 
@@ -49,7 +148,7 @@ type TestApp struct {
   groups map[string]Group
   articles map[string]Article
   channels map[string]TestChannel
-  contacts map[string]TestContactData
+  contacts map[string]*TestContactData
 
   token string
 
@@ -117,12 +216,74 @@ func (a *TestApp) UpdateArticle() (err error) {
 }
 
 func (a *TestApp) UpdateChannel() (err error) {
-  PrintMsg("update channel")
   return
 }
 
 func (a *TestApp) UpdateCard() (err error) {
-  PrintMsg("update card")
+  var cards []Card
+  if a.revision.Card == 0 {
+    params := &TestApiParams{ query: "/cards", tokenType: APP_TOKENAPP, token: a.token }
+    response := &TestApiResponse{ data: &cards }
+    if err = TestApiRequest(GetCards, params, response); err != nil {
+      return
+    }
+    for _, card := range cards {
+      if card.Data == nil  {
+        delete(a.contacts, card.Id)
+      } else {
+        // set new card
+        contactData := &TestContactData{ card: card, articles: make(map[string]Article), channels: make(map[string]TestChannel),
+            detailRevision: card.Data.DetailRevision, profileRevision: card.Data.ProfileRevision }
+        a.contacts[card.Id] = contactData
+        if err = contactData.UpdateContact(); err != nil {
+          contactData.offsync = true
+          PrintMsg(err)
+        }
+      }
+    }
+  } else {
+    revision := strconv.FormatInt(a.revision.Card, 10)
+    params := &TestApiParams{ query: "/cards?revision=" + revision, tokenType: APP_TOKENAPP, token: a.token }
+    response := &TestApiResponse{ data: &cards }
+    if err = TestApiRequest(GetCards, params, response); err != nil {
+      return
+    }
+    for _, card := range cards {
+      if card.Data == nil  {
+        delete(a.contacts, card.Id)
+      } else {
+        contactData, set := a.contacts[card.Id]
+        if !set {
+          // download new card
+          params := &TestApiParams{ query: "/cards/{cardId}", path: map[string]string{ "cardId": card.Id },
+              tokenType: APP_TOKENAPP, token: a.token }
+          response := &TestApiResponse{ data: &card }
+          if err = TestApiRequest(GetCard, params, response); err != nil {
+            return
+          }
+          contactData := &TestContactData{ card: card, articles: make(map[string]Article), channels: make(map[string]TestChannel),
+            detailRevision: card.Data.DetailRevision, profileRevision: card.Data.ProfileRevision }
+          a.contacts[card.Id] = contactData
+          if err = contactData.UpdateContact(); err != nil {
+            contactData.offsync = true
+            PrintMsg(err)
+          }
+        } else {
+          // update existing card revisions 
+          contactData.card.Data.NotifiedProfile = card.Data.NotifiedProfile
+          contactData.card.Data.NotifiedArticle = card.Data.NotifiedArticle
+          contactData.card.Data.NotifiedChannel = card.Data.NotifiedChannel
+          contactData.card.Data.NotifiedView = card.Data.NotifiedView
+          contactData.card.Data.DetailRevision = card.Data.DetailRevision
+          contactData.card.Data.ProfileRevision = card.Data.ProfileRevision
+          if err = contactData.UpdateContact(); err != nil {
+            contactData.offsync = true
+            PrintMsg(err)
+          }
+        }
+      }
+    }
+  }
   return
 }
 
