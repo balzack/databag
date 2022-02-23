@@ -163,28 +163,16 @@ func TestContactApp(t *testing.T) {
     return false
   }))
 
-  for i := 0; i < 64; i++ {
-    // add a new article in contact
-    article = &Article{}
-    subject = &Subject{ Data: "subjectdataC", DataType: "subjectdatatypeC" }
-    params = &TestApiParams{ restType: "POST", query: "/articles", tokenType: APP_TOKENAPP, token: set.C.Token, body: subject }
-    response = &TestApiResponse{ data: article }
-    assert.NoError(t, TestApiRequest(AddArticle, params, response))
-    articleId = article.Id
+  // update Bs profile
+  profileData = &ProfileData{ Name: "contactappname" }
+  params = &TestApiParams{ restType: "PUT", query: "/profile/data", tokenType: APP_TOKENAPP, token: set.B.Token, body: profileData }
+  response = &TestApiResponse{}
+  assert.NoError(t, TestApiRequest(SetProfile, params, response))
 
-    // share article
-    article = &Article{}
-    params = &TestApiParams{ restType: "POST", query: "/articles/{articleId}/groups/{groupId}", tokenType: APP_TOKENAPP, token: set.C.Token,
-        path: map[string]string{ "articleId": articleId, "groupId": set.C.A.GroupId }}
-    response = &TestApiResponse{ data: article }
-    assert.NoError(t, TestApiRequest(SetArticleGroup, params, response))
-  }
-
-  // wait for 
+  // wait for
   assert.NoError(t, app.WaitFor(func(testApp *TestApp)bool {
-    contact, contactSet := testApp.contacts[set.A.C.CardId]
-    if contactSet {
-      if len(contact.articles) == 64 {
+    for _, contact := range testApp.contacts {
+      if contact.card.Data.CardProfile.Name == "contactappname" {
         return true
       }
     }

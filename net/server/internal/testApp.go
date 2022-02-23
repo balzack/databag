@@ -25,12 +25,14 @@ type TestChannel struct {
 }
 
 type TestContactData struct {
+  token string
   card Card
+  profileRevision int64
   viewRevision int64
   articleRevision int64
   channelRevision int64
-  detailRevision int64
-  profileRevision int64
+  cardDetailRevision int64
+  cardProfileRevision int64
   articles map[string]Article
   channels map[string]TestChannel
   offsync bool
@@ -38,19 +40,19 @@ type TestContactData struct {
 
 func (c *TestContactData) UpdateContact() (err error) {
 
-  if c.detailRevision != c.card.Data.DetailRevision {
+  if c.cardDetailRevision != c.card.Data.DetailRevision {
     if err = c.UpdateContactCardDetail(); err != nil {
       return
     } else {
-      c.detailRevision = c.card.Data.DetailRevision
+      c.cardDetailRevision = c.card.Data.DetailRevision
     }
   }
 
-  if c.profileRevision != c.card.Data.ProfileRevision {
+  if c.cardProfileRevision != c.card.Data.ProfileRevision {
     if err = c.UpdateContactCardProfile(); err != nil {
       return
     } else {
-      c.profileRevision = c.card.Data.ProfileRevision
+      c.cardProfileRevision = c.card.Data.ProfileRevision
     }
   }
 
@@ -99,7 +101,20 @@ func (c *TestContactData) UpdateContact() (err error) {
 }
 
 func (c *TestContactData) UpdateContactProfile() (err error) {
-  return nil
+  var msg DataMessage
+  token := c.card.Data.CardProfile.Guid + "." + c.card.Data.CardDetail.Token
+  params := &TestApiParams{ query: "/profile/message", tokenType: APP_TOKENCONTACT, token: token }
+  response := &TestApiResponse{ data: &msg }
+  if err = TestApiRequest(GetProfileMessage, params, response); err != nil {
+    return
+  }
+  params = &TestApiParams{ restType: "PUT", query: "/contact/cards/{cardId}/profile", tokenType: APP_TOKENAPP, token: c.token,
+    path: map[string]string{ "cardId": c.card.Id }, body: &msg }
+  response = &TestApiResponse{}
+  if err = TestApiRequest(SetCardProfile, params, response); err != nil {
+    return
+  }
+  return
 }
 
 func (c *TestContactData) UpdateContactArticle() (err error) {
@@ -138,11 +153,27 @@ func (c *TestContactData) UpdateContactChannel() (err error) {
 }
 
 func (c *TestContactData) UpdateContactCardDetail() (err error) {
-  return nil
+  var cardDetail CardDetail
+  params := &TestApiParams{ query: "/contact/cards/{cardId}/detail", tokenType: APP_TOKENAPP, token: c.token,
+    path: map[string]string{ "cardId": c.card.Id } }
+  response := &TestApiResponse{ data: &cardDetail }
+  if err = TestApiRequest(GetCardDetail, params, response); err != nil {
+    return
+  }
+  c.card.Data.CardDetail = &cardDetail
+  return
 }
 
 func (c *TestContactData) UpdateContactCardProfile() (err error) {
-  return nil
+  var cardProfile CardProfile
+  params := &TestApiParams{ query: "/contact/cards/{cardId}/profile", tokenType: APP_TOKENAPP, token: c.token,
+    path: map[string]string{ "cardId": c.card.Id } }
+  response := &TestApiResponse{ data: &cardProfile }
+  if err = TestApiRequest(GetCardProfile, params, response); err != nil {
+    return
+  }
+  c.card.Data.CardProfile = &cardProfile
+  return
 }
 
 func NewTestApp() *TestApp {
@@ -246,7 +277,8 @@ func (a *TestApp) UpdateCard() (err error) {
       } else {
         // set new card
         contactData := &TestContactData{ card: card, articles: make(map[string]Article), channels: make(map[string]TestChannel),
-            detailRevision: card.Data.DetailRevision, profileRevision: card.Data.ProfileRevision }
+            cardDetailRevision: card.Data.DetailRevision, cardProfileRevision: card.Data.ProfileRevision,
+            profileRevision: card.Data.ProfileRevision, token: a.token }
         a.contacts[card.Id] = contactData
         if err = contactData.UpdateContact(); err != nil {
           contactData.offsync = true
@@ -275,7 +307,8 @@ func (a *TestApp) UpdateCard() (err error) {
             return
           }
           contactData := &TestContactData{ card: card, articles: make(map[string]Article), channels: make(map[string]TestChannel),
-            detailRevision: card.Data.DetailRevision, profileRevision: card.Data.ProfileRevision }
+            cardDetailRevision: card.Data.DetailRevision, cardProfileRevision: card.Data.ProfileRevision,
+            profileRevision: card.Data.ProfileRevision, token: a.token }
           a.contacts[card.Id] = contactData
           if err = contactData.UpdateContact(); err != nil {
             contactData.offsync = true
