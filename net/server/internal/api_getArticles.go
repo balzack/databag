@@ -109,9 +109,13 @@ func GetArticles(w http.ResponseWriter, r *http.Request) {
     }
 
     for _, slot := range slots {
-      shared := isArticleShared(card.Guid, slot.Article)
       if !typesSet || hasArticleType(types, slot.Article) {
-        response = append(response, getArticleModel(&slot, shared, false))
+        shared := isArticleShared(card.Guid, slot.Article)
+        if articleRevisionSet {
+          response = append(response, getArticleModel(&slot, shared, false))
+        } else if shared {
+          response = append(response, getArticleModel(&slot, true, false))
+        }
       }
     }
 

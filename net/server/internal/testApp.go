@@ -39,10 +39,18 @@ type TestContactData struct {
 func (c *TestContactData) UpdateContact() (err error) {
 
   if c.detailRevision != c.card.Data.DetailRevision {
-    if err = c.UpdateContactDetail(); err != nil {
+    if err = c.UpdateContactCardDetail(); err != nil {
       return
     } else {
       c.detailRevision = c.card.Data.DetailRevision
+    }
+  }
+
+  if c.profileRevision != c.card.Data.ProfileRevision {
+    if err = c.UpdateContactCardProfile(); err != nil {
+      return
+    } else {
+      c.profileRevision = c.card.Data.ProfileRevision
     }
   }
 
@@ -103,6 +111,7 @@ func (c *TestContactData) UpdateContactArticle() (err error) {
     if err = TestApiRequest(GetArticles, params, response); err != nil {
       return
     }
+    c.articles = make(map[string]Article)
   } else {
     token := c.card.Data.CardProfile.Guid + "." + c.card.Data.CardDetail.Token
     viewRevision := strconv.FormatInt(c.viewRevision, 10)
@@ -128,7 +137,11 @@ func (c *TestContactData) UpdateContactChannel() (err error) {
   return nil
 }
 
-func (c *TestContactData) UpdateContactDetail() (err error) {
+func (c *TestContactData) UpdateContactCardDetail() (err error) {
+  return nil
+}
+
+func (c *TestContactData) UpdateContactCardProfile() (err error) {
   return nil
 }
 
@@ -333,7 +346,10 @@ func (a *TestApp) UpdateApp(rev *Revision) {
 
   if a.condition != nil {
     if a.condition.check(a) {
-      a.condition.channel <- true
+      select {
+        case a.condition.channel <- true:
+        default:
+      }
     }
   }
 }
