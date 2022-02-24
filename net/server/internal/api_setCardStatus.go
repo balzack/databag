@@ -108,6 +108,7 @@ func SetCardStatus(w http.ResponseWriter, r *http.Request) {
   slot.Card.NotifiedArticle = articleRevision
   slot.Card.NotifiedChannel = channelRevision
   slot.Card.NotifiedProfile = profileRevision
+  slot.Card.DetailRevision += 1
 
   // save and update contact revision
   err = store.DB.Transaction(func(tx *gorm.DB) error {

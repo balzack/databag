@@ -178,4 +178,28 @@ func TestContactApp(t *testing.T) {
     }
     return false
   }))
+
+  // disconnect from B
+  card := &Card{}
+  params = &TestApiParams{ restType: "PUT", query: "/contact/cards/{cardId}/status", tokenType: APP_TOKENAPP, token: set.B.Token,
+      path: map[string]string{ "cardId": set.B.A.CardId }, body: APP_CARDCONFIRMED }
+  response = &TestApiResponse{ data: card }
+  assert.NoError(t, TestApiRequest(SetCardStatus, params, response))
+  msg := &DataMessage{}
+  params = &TestApiParams { query: "/contact/cards/{cardId}/closeMessage", tokenType: APP_TOKENAPP, token: set.B.Token,
+      path: map[string]string{ "cardId": set.B.A.CardId } }
+  response = &TestApiResponse{ data: msg }
+  assert.NoError(t, TestApiRequest(GetCloseMessage, params, response))
+  params = &TestApiParams { restType: "PUT", query: "/contact/closeMessage", body: msg }
+  response = &TestApiResponse{}
+  assert.NoError(t, TestApiRequest(SetCloseMessage, params, response))
+
+  // wait for
+  assert.NoError(t, app.WaitFor(func(testApp *TestApp)bool {
+    contact, contactSet := testApp.contacts[set.A.B.CardId]
+    if contactSet && contact.card.Data.CardDetail.Status == APP_CARDCONFIRMED {
+      return true
+    }
+    return false
+  }))
 }
