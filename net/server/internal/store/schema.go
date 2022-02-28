@@ -238,7 +238,7 @@ type Asset struct {
   AccountID         uint            `gorm:"not null;index:asset,unique"`
   TopicID           uint
   Status            string          `gorm:"not null;index"`
-  Size              uint64
+  Size              int64
   Crc               uint32
   Transform         string
   TransformId       string

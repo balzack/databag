@@ -20,7 +20,7 @@ func SetChannelTopicSubject(w http.ResponseWriter, r *http.Request) {
     return
   }
 
-  channelSlot, _, err, code := getChannelSlot(r, true)
+  channelSlot, guid, err, code := getChannelSlot(r, true)
   if err != nil {
     ErrResponse(w, code, err)
     return
@@ -31,10 +31,16 @@ func SetChannelTopicSubject(w http.ResponseWriter, r *http.Request) {
   var topicSlot store.TopicSlot
   if err = store.DB.Where("channel_id = ? AND topic_slot_id = ?", channelSlot.Channel.ID, topicId).First(&topicSlot).Error; err != nil {
     if errors.Is(err, gorm.ErrRecordNotFound) {
-      code = http.StatusNotFound
+      ErrResponse(w, http.StatusNotFound, err)
     } else {
-      code = http.StatusInternalServerError
+      ErrResponse(w, http.StatusInternalServerError, err)
     }
+    return
+  }
+
+  // can only update subject if creator
+  if topicSlot.Topic.Guid != guid {
+    ErrResponse(w, http.StatusUnauthorized, errors.New("topic not created by you"))
     return
   }
 

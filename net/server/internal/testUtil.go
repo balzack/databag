@@ -3,6 +3,8 @@ package databag
 import (
   "io/ioutil"
   "errors"
+  "bytes"
+  "mime/multipart"
   "strings"
   "strconv"
   "time"
@@ -132,6 +134,61 @@ func ApiTestMsg(
   dec.Decode(response)
   return
 }
+
+func ApiTestUpload(
+      endpoint func(http.ResponseWriter, *http.Request),
+      requestType string,
+      name string,
+      params *map[string]string,
+      body []byte,
+      tokenType string,
+      token string,
+      response interface{},
+      responseHeader *map[string][]string,
+    ) (err error) {
+
+  data := bytes.Buffer{}
+	writer := multipart.NewWriter(&data)
+	part, err := writer.CreateFormFile("asset", "asset")
+	if err != nil {
+		return err
+	}
+	part.Write(body)
+  if err = writer.Close(); err != nil {
+    return
+  }
+
+  w := httptest.NewRecorder()
+  r := httptest.NewRequest(requestType, name, &data)
+
+  if params != nil {
+    r = mux.SetURLVars(r, *params)
+  }
+  if tokenType != "" {
+    r.Header.Add("TokenType", tokenType)
+  }
+  if token != "" {
+    SetBearerAuth(r, token)
+  }
+  r.Header.Set("Content-Type", writer.FormDataContentType())
+  endpoint(w, r)
+
+  resp := w.Result()
+  if resp.StatusCode != 200 {
+    err = errors.New("response failed");
+    return
+  }
+  if responseHeader != nil {
+    *responseHeader = resp.Header
+  }
+  if response == nil {
+    return
+  }
+  dec := json.NewDecoder(resp.Body)
+  dec.Decode(response)
+  return
+}
+
 
 //
 //    A --- connected,group               connected,group --- B

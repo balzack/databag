@@ -1,6 +1,7 @@
 package databag
 
 import (
+  "os"
   "net/http"
   "crypto/sha256"
   "encoding/hex"
@@ -40,6 +41,12 @@ func AddAccount(w http.ResponseWriter, r *http.Request) {
   hash := sha256.Sum256(msg)
   fingerprint := hex.EncodeToString(hash[:])
 
+  // create path for account data
+  path := getStrConfigValue(CONFIG_ASSETPATH, ".") + "/" + fingerprint
+  if err := os.Mkdir(path, os.ModePerm); err != nil {
+    ErrResponse(w, http.StatusInternalServerError, err)
+  }
+
   // create new account
   account := store.Account{
     Username: username,
@@ -54,14 +61,14 @@ func AddAccount(w http.ResponseWriter, r *http.Request) {
 
   // save account and delete token
   err = store.DB.Transaction(func(tx *gorm.DB) error {
-    if res := store.DB.Create(&detail).Error; res != nil {
+    if res := tx.Create(&detail).Error; res != nil {
       return res;
     }
     account.AccountDetailID = detail.ID
-    if res := store.DB.Create(&account).Error; res != nil {
+    if res := tx.Create(&account).Error; res != nil {
       return res;
     }
-    if res := store.DB.Delete(token).Error; res != nil {
+    if res := tx.Delete(token).Error; res != nil {
       return res;
     }
     return nil;

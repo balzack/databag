@@ -11,7 +11,12 @@ func TestMain(m *testing.M) {
 //  SetHideLog(true)
   SetKeySize(2048)
   os.Remove("databag.db")
+  os.RemoveAll("testdata")
+
   store.SetPath("databag.db")
+  if err := os.Mkdir("testdata", os.ModePerm); err != nil {
+    panic("failed to create testdata path")
+  }
 
   r, w, _ := NewRequest("GET", "/admin/status", nil)
   GetNodeStatus(w, r)
@@ -26,6 +31,12 @@ func TestMain(m *testing.M) {
   SetNodeStatus(w, r)
   if ReadResponse(w, nil) != nil {
     panic("failed to claim server")
+  }
+
+  // config data path 
+  path := &store.Config{ ConfigId: CONFIG_ASSETPATH, StrValue: "./testdata" }
+  if err := store.DB.Save(path).Error; err != nil {
+    panic("failed to configure datapath")
   }
 
   // config server

@@ -29,6 +29,10 @@ const APP_TOKENCONTACT = "contact"
 const APP_NOTIFYBUFFER = 4096
 const APP_TOPICUNCONFIRMED = "unconfirmed"
 const APP_TOPICCONFIRMED = "confirmed"
+const APP_ASSETREADY = "ready"
+const APP_ASSETWAITING = "waiting"
+const APP_ASSETPROCESSING = "processing"
+const APP_ASSETERROR = "error"
 
 func AppCardStatus(status string) bool {
   if status == APP_CARDPENDING {

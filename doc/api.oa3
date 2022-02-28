@@ -2540,7 +2540,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Asset'
+                type: array
+                items:
+                  $ref: '#/components/schemas/Asset'
         '401':
           description: permission denied
         '404':

@@ -33,17 +33,20 @@ func SetChannelTopicConfirmed(w http.ResponseWriter, r *http.Request) {
 
   // load topic
   var topicSlot store.TopicSlot
-  if err = store.DB.Where("channel_id = ? AND topic_slot_id = ?", channelSlot.Channel.ID, topicId).First(&topicSlot).Error; err != nil {
+  if err = store.DB.Preload("Topic").Where("channel_id = ? AND topic_slot_id = ?", channelSlot.Channel.ID, topicId).First(&topicSlot).Error; err != nil {
     if errors.Is(err, gorm.ErrRecordNotFound) {
-      code = http.StatusNotFound
+      ErrResponse(w, http.StatusNotFound, err)
     } else {
-      code = http.StatusInternalServerError
+      ErrResponse(w, http.StatusInternalServerError, err)
     }
+    return
+  }
+  if topicSlot.Topic == nil {
+    ErrResponse(w, http.StatusNotFound, errors.New("referenced empty slot"))
     return
   }
 
   err = store.DB.Transaction(func(tx *gorm.DB) error {
-
     if res := tx.Model(topicSlot.Topic).Update("status", status).Error; res != nil {
       return res
     }

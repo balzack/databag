@@ -28,10 +28,10 @@ func SetProfile(w http.ResponseWriter, r *http.Request) {
   account.AccountDetail.Description = profileData.Description
 
   err = store.DB.Transaction(func(tx *gorm.DB) error {
-    if res := store.DB.Save(&account.AccountDetail).Error; res != nil {
+    if res := tx.Save(&account.AccountDetail).Error; res != nil {
       return res
     }
-    if res := store.DB.Model(&account).Update("profile_revision", account.ProfileRevision + 1).Error; res != nil {
+    if res := tx.Model(&account).Update("profile_revision", account.ProfileRevision + 1).Error; res != nil {
       return res
     }
     return nil

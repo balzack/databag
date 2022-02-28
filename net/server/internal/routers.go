@@ -496,10 +496,10 @@ var routes = Routes{
 	},
 
 	Route{
-		"AddChannelAsset",
+		"AddChannelTopicAsset",
 		strings.ToUpper("Post"),
 		"/content/channels/{channelId}/topics/{topicId}/assets",
-		AddChannelAsset,
+		AddChannelTopicAsset,
 	},
 
 	Route{

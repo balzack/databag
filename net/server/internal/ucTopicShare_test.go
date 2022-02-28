@@ -5,6 +5,8 @@ import (
   "testing"
   "encoding/base64"
   "github.com/stretchr/testify/assert"
+  "encoding/json"
+  "net/url"
 )
 
 func TestTopicShare(t *testing.T) {
@@ -78,13 +80,28 @@ func TestTopicShare(t *testing.T) {
   subject = &Subject{ DataType: "topicdatatype", Data: "subjectfromB" }
   assert.NoError(t, ApiTestMsg(AddChannelTopic, "POST", "/content/channels/{channelId}/topics",
     &params, subject, APP_TOKENCONTACT, set.B.A.Token, topic, nil))
-   topic = &Topic{}
+  params["topicId"] = topic.Id
+  assert.NoError(t, ApiTestMsg(SetChannelTopicConfirmed, "PUT", "/content/channels/{channelId}/topics/{topicId}/confirmed",
+    &params, APP_TOPICCONFIRMED, APP_TOKENCONTACT, set.B.A.Token, nil, nil))
+  topic = &Topic{}
   subject = &Subject{ DataType: "topicdatatype", Data: "subjectfromC" }
   assert.NoError(t, ApiTestMsg(AddChannelTopic, "POST", "/content/channels/{channelId}/topics",
     &params, subject, APP_TOKENCONTACT, set.C.A.Token, topic, nil))
- 
 
-  PrintMsg(topic)
+  // add asset to topic
+  assets := &[]Asset{}
+  params["topicId"] = topic.Id
+  transforms, err := json.Marshal([]string{ "P01", "P02", "P03" })
+  assert.NoError(t, err)
+  assert.NoError(t, ApiTestUpload(AddChannelTopicAsset, "POST", "/content/channels/{channelId}/topics/{topicId}/assets?transforms=" + url.QueryEscape(string(transforms)),
+    &params, img, APP_TOKENCONTACT, set.C.A.Token, assets, nil))
+  PrintMsg(assets)
+PrintMsg(len(img))
+
+  // view topics
+  topics := &[]Topic{}
+  assert.NoError(t, ApiTestMsg(GetChannelTopics, "GET", "/content/channels/{channelId}/topics",
+    &params, nil, APP_TOKENAPP, set.A.Token, topics, nil))
+
 }
-
 
