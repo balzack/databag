@@ -223,6 +223,7 @@ type Topic struct {
   DataType          string          `gorm:"index"`
   Data              string
   Status            string          `gorm:"not null;index"`
+  Transform         string
   Created           int64           `gorm:"autoCreateTime"`
   Updated           int64           `gorm:"autoUpdateTime"`
   TagCount          int32           `gorm:"not null"`
@@ -230,12 +231,14 @@ type Topic struct {
   TagRevision       int64           `gorm:"not null"`
   Assets            []Asset
   Tags              []Tag
+  TopicSlot         TopicSlot
 }
 
 type Asset struct {
   ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
   AssetId           string          `gorm:"not null;index:asset,unique"`
   AccountID         uint            `gorm:"not null;index:asset,unique"`
+  ChannelID         uint
   TopicID           uint
   Status            string          `gorm:"not null;index"`
   Size              int64
@@ -246,6 +249,7 @@ type Asset struct {
   Created           int64           `gorm:"autoCreateTime"`
   Updated           int64           `gorm:"autoUpdateTime"`
   Account           Account
+  Channel           *Channel
   Topic             *Topic
 }
 

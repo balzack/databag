@@ -421,6 +421,8 @@ type TopicDetail struct {
 	Updated int64 `json:"updated"`
 
 	Status string `json:"status"`
+
+  Transform string `json:"transform"`
 }
 
 type TopicTags struct {

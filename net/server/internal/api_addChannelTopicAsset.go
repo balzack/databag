@@ -26,14 +26,21 @@ func AddChannelTopicAsset(w http.ResponseWriter, r *http.Request) {
     }
   }
 
-PrintMsg(transforms)
-
   channelSlot, guid, err, code := getChannelSlot(r, true)
   if err != nil {
     ErrResponse(w, code, err)
     return
   }
   act := &channelSlot.Account
+
+  // check storage
+  if full, err := isStorageFull(act); err != nil {
+    ErrResponse(w, http.StatusInternalServerError, err)
+    return
+  } else if full {
+    ErrResponse(w, http.StatusNotAcceptable, errors.New("storage limit reached"))
+    return
+  }
 
   // load topic
   var topicSlot store.TopicSlot
@@ -79,6 +86,7 @@ PrintMsg(transforms)
   asset := &store.Asset{}
   asset.AssetId = id
   asset.AccountID = channelSlot.Account.ID
+  asset.ChannelID = channelSlot.Channel.ID
   asset.TopicID = topicSlot.Topic.ID
   asset.Status = APP_ASSETREADY
   asset.Size = size
@@ -92,6 +100,7 @@ PrintMsg(transforms)
       asset := &store.Asset{}
       asset.AssetId = uuid.New().String()
       asset.AccountID = channelSlot.Account.ID
+      asset.ChannelID = channelSlot.Channel.ID
       asset.TopicID = topicSlot.Topic.ID
       asset.Status = APP_ASSETWAITING
       asset.Transform = transform
@@ -100,6 +109,14 @@ PrintMsg(transforms)
         return res
       }
       assets = append(assets, Asset{ AssetId: asset.AssetId, Transform: transform, Status: APP_ASSETWAITING})
+    }
+    if len(transforms) > 0 {
+      if res := tx.Model(&topicSlot.Topic).Update("transform", APP_TRANSFORMINCOMPLETE).Error; res != nil {
+        return res
+      }
+      if res := tx.Model(&topicSlot.Topic).Update("detail_revision", act.ChannelRevision + 1).Error; res != nil {
+        return res
+      }
     }
     if res := tx.Model(&topicSlot).Update("revision", act.ChannelRevision + 1).Error; res != nil {
       return res
@@ -117,6 +134,9 @@ PrintMsg(transforms)
     return
   }
 
+  // invoke transcoder
+  go transcode()
+
   // determine affected contact list
   cards := make(map[string]store.Card)
   for _, card := range channelSlot.Channel.Cards {
@@ -128,11 +148,35 @@ PrintMsg(transforms)
     }
   }
 
+  // notify
   SetStatus(act)
   for _, card := range cards {
     SetContactChannelNotification(act, &card)
   }
+
   WriteResponse(w, &assets)
+}
+
+func isStorageFull(act *store.Account) (full bool, err error) {
+
+  storage := getNumConfigValue(CONFIG_STORAGE, 0);
+  if storage == 0 {
+    return
+  }
+
+  var assets []store.Asset;
+  if err = store.DB.Where("account_id = ?", act.ID).Find(&assets).Error; err != nil {
+    return
+  }
+
+  var size int64
+  for _, asset := range assets {
+    size += asset.Size
+  }
+  if size >= storage {
+    full = true
+  }
+  return
 }
 
 func SaveAsset(src io.Reader, path string) (crc uint32, size int64, err error) {

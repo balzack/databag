@@ -3305,7 +3305,10 @@ components:
           format: int64
         status:
           type: string
-          enum: [ unconfirmed, confirmed, complete, error ]
+          enum: [ unconfirmed, confirmed ]
+        transform:
+          type: string
+          enum: [ complete, incomplete ]
           
     TagCount:
       type: object

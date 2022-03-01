@@ -34,6 +34,7 @@ func AddChannelTopic(w http.ResponseWriter, r *http.Request) {
     topic.DetailRevision = act.ChannelRevision + 1
     topic.TagRevision = act.ChannelRevision + 1
     topic.Status = APP_TOPICUNCONFIRMED
+    topic.Transform = APP_TRANSFORMCOMPLETE
     if res := tx.Save(topic).Error; res != nil {
       return res
     }

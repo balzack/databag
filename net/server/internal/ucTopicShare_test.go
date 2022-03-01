@@ -7,6 +7,7 @@ import (
   "github.com/stretchr/testify/assert"
   "encoding/json"
   "net/url"
+  "time"
 )
 
 func TestTopicShare(t *testing.T) {
@@ -96,12 +97,12 @@ func TestTopicShare(t *testing.T) {
   assert.NoError(t, ApiTestUpload(AddChannelTopicAsset, "POST", "/content/channels/{channelId}/topics/{topicId}/assets?transforms=" + url.QueryEscape(string(transforms)),
     &params, img, APP_TOKENCONTACT, set.C.A.Token, assets, nil))
   PrintMsg(assets)
-PrintMsg(len(img))
 
   // view topics
   topics := &[]Topic{}
   assert.NoError(t, ApiTestMsg(GetChannelTopics, "GET", "/content/channels/{channelId}/topics",
     &params, nil, APP_TOKENAPP, set.A.Token, topics, nil))
 
+  time.Sleep(time.Second)
 }
 

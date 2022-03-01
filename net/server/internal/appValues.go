@@ -33,6 +33,8 @@ const APP_ASSETREADY = "ready"
 const APP_ASSETWAITING = "waiting"
 const APP_ASSETPROCESSING = "processing"
 const APP_ASSETERROR = "error"
+const APP_TRANSFORMCOMPLETE = "complete"
+const APP_TRANSFORMINCOMPLETE = "incomplete"
 
 func AppCardStatus(status string) bool {
   if status == APP_CARDPENDING {

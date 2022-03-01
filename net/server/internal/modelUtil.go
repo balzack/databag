@@ -245,6 +245,7 @@ func getTopicDetailModel(slot *store.TopicSlot) *TopicDetail {
         Created: slot.Topic.Created,
         Updated: slot.Topic.Updated,
         Status: slot.Topic.Status,
+        Transform: slot.Topic.Transform,
       }
 }
 

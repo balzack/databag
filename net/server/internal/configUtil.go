@@ -13,6 +13,7 @@ const CONFIG_DOMAIN = "domain"
 const CONFIG_PUBLICLIMIT = "public_limit"
 const CONFIG_STORAGE = "storage"
 const CONFIG_ASSETPATH = "asset_path"
+const CONFIG_SCRIPTPATH = "script_path"
 
 func getStrConfigValue(configId string, empty string) string {
   var config store.Config
