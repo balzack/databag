@@ -21,8 +21,8 @@ func TestMain(m *testing.M) {
   if err := os.Mkdir("testscripts", os.ModePerm); err != nil {
     panic("failed to create testscripts path")
   }
-  P01 := []byte("#!/bin/bash\n echo \"P01 $1 $2 $3\"\n")
-  if err := os.WriteFile("testscripts/P01.sh", P01, 0555); err != nil {
+  script := []byte("#!/bin/bash\n\ncp $1 $2\n")
+  if err := os.WriteFile("testscripts/transform_copy.sh", script, 0555); err != nil {
     panic("failed to create P01 script")
   }
 

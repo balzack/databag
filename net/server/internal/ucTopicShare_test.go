@@ -92,7 +92,7 @@ func TestTopicShare(t *testing.T) {
   // add asset to topic
   assets := &[]Asset{}
   params["topicId"] = topic.Id
-  transforms, err := json.Marshal([]string{ "P01;A;1234", "P02", "P03" })
+  transforms, err := json.Marshal([]string{ "copy;photo" })
   assert.NoError(t, err)
   assert.NoError(t, ApiTestUpload(AddChannelTopicAsset, "POST", "/content/channels/{channelId}/topics/{topicId}/assets?transforms=" + url.QueryEscape(string(transforms)),
     &params, img, APP_TOKENCONTACT, set.C.A.Token, assets, nil))

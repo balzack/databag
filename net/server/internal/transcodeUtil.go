@@ -13,48 +13,74 @@ import (
   "gorm.io/gorm"
 )
 
-var aSync sync.Mutex
-var bSync sync.Mutex
+var audioSync sync.Mutex
+var videoSync sync.Mutex
+var photoSync sync.Mutex
+var defaultSync sync.Mutex
 
 func transcode() {
-
-  // quick transforms should use A (eg image resize)
-  go transcodeA()
-
-  // slow transofrms should use B (eg video transcode)
-  go transcodeB()
+  go transcodeAudio()
+  go transcodeVideo()
+  go transcodePhoto()
+  go transcodeDefault()
 }
 
-func transcodeA() {
-  aSync.Lock()
-  defer aSync.Unlock()
-
+func transcodeVideo() {
+  videoSync.Lock()
+  defer videoSync.Unlock()
   for ;; {
     var asset store.Asset
-    if err := store.DB.Order("created asc").Preload("Account").Preload("Channel.Cards").Preload("Channel.Groups.Cards").Preload("Channel.ChannelSlot").Preload("Topic.TopicSlot").Where("transform_queue = ? AND status = ?", APP_TRANSFORMQUEUEA, APP_ASSETWAITING).First(&asset).Error; err != nil {
+    if err := store.DB.Order("created asc").Preload("Account").Preload("Channel.Cards").Preload("Channel.Groups.Cards").Preload("Channel.ChannelSlot").Preload("Topic.TopicSlot").Where("transform_queue = ? AND status = ?", APP_QUEUEVIDEO, APP_ASSETWAITING).First(&asset).Error; err != nil {
       if !errors.Is(err, gorm.ErrRecordNotFound) {
         ErrMsg(err)
       }
       return
     }
-
     transcodeAsset(&asset)
   }
 }
 
-func transcodeB() {
-  bSync.Lock()
-  defer bSync.Unlock()
-
+func transcodeAudio() {
+  audioSync.Lock()
+  defer audioSync.Unlock()
   for ;; {
     var asset store.Asset
-    if err := store.DB.Order("created asc").Preload("Account").Preload("Channel.Cards").Preload("Channel.Groups.Cards").Preload("Channel.ChannelSlot").Preload("Topic.TopicSlot").Where("transform_queue != ? AND status = ?", APP_TRANSFORMQUEUEB, APP_ASSETWAITING).First(&asset).Error; err != nil {
+    if err := store.DB.Order("created asc").Preload("Account").Preload("Channel.Cards").Preload("Channel.Groups.Cards").Preload("Channel.ChannelSlot").Preload("Topic.TopicSlot").Where("transform_queue = ? AND status = ?", APP_QUEUEAUDIO, APP_ASSETWAITING).First(&asset).Error; err != nil {
       if !errors.Is(err, gorm.ErrRecordNotFound) {
         ErrMsg(err)
       }
       return
     }
+    transcodeAsset(&asset)
+  }
+}
 
+func transcodePhoto() {
+  photoSync.Lock()
+  defer photoSync.Unlock()
+  for ;; {
+    var asset store.Asset
+    if err := store.DB.Order("created asc").Preload("Account").Preload("Channel.Cards").Preload("Channel.Groups.Cards").Preload("Channel.ChannelSlot").Preload("Topic.TopicSlot").Where("transform_queue = ? AND status = ?", APP_QUEUEPHOTO, APP_ASSETWAITING).First(&asset).Error; err != nil {
+      if !errors.Is(err, gorm.ErrRecordNotFound) {
+        ErrMsg(err)
+      }
+      return
+    }
+    transcodeAsset(&asset)
+  }
+}
+
+func transcodeDefault() {
+  defaultSync.Lock()
+  defer defaultSync.Unlock()
+  for ;; {
+    var asset store.Asset
+    if err := store.DB.Order("created asc").Preload("Account").Preload("Channel.Cards").Preload("Channel.Groups.Cards").Preload("Channel.ChannelSlot").Preload("Topic.TopicSlot").Where("transform_queue != ? AND transform_queue != ? AND transform_queue != ? AND status = ?", APP_QUEUEVIDEO, APP_QUEUEAUDIO, APP_QUEUEPHOTO, APP_ASSETWAITING).First(&asset).Error; err != nil {
+      if !errors.Is(err, gorm.ErrRecordNotFound) {
+        ErrMsg(err)
+      }
+      return
+    }
     transcodeAsset(&asset)
   }
 }
@@ -72,19 +98,27 @@ func transcodeAsset(asset *store.Asset) {
       ErrMsg(err)
     }
   } else {
-    input := data + "/" + asset.TransformId
-    output := data + "/" + asset.AssetId
-    cmd := exec.Command(script + "/" + asset.Transform + ".sh", input, output, asset.TransformParams)
-    var out bytes.Buffer
-    cmd.Stdout = &out
+    input := data + "/" + asset.Account.Guid + "/" + asset.TransformId
+    output := data + "/" + asset.Account.Guid + "/" + asset.AssetId
+    cmd := exec.Command(script + "/transform_" + asset.Transform + ".sh", input, output, asset.TransformParams)
+    var stdout bytes.Buffer
+    cmd.Stdout = &stdout
+    var stderr bytes.Buffer
+    cmd.Stderr = &stderr
     if err := cmd.Run(); err != nil {
-      LogMsg(out.String())
+      LogMsg(stdout.String())
+      LogMsg(stderr.String())
       ErrMsg(err)
       if err := UpdateAsset(asset, APP_ASSETERROR, 0, 0); err != nil {
         ErrMsg(err)
       }
     } else {
-      LogMsg(out.String())
+      if stdout.Len() > 0 {
+        LogMsg(stdout.String())
+      }
+      if stderr.Len() > 0 {
+        LogMsg(stderr.String())
+      }
       crc, size, err := ScanAsset(output)
       if err != nil {
         ErrMsg(err)

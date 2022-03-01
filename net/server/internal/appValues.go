@@ -36,8 +36,10 @@ const APP_ASSETERROR = "error"
 const APP_TRANSFORMCOMPLETE = "complete"
 const APP_TRANSFORMINCOMPLETE = "incomplete"
 const APP_TRANSFORMERROR = "error"
-const APP_TRANSFORMQUEUEA = "A"
-const APP_TRANSFORMQUEUEB = "B"
+const APP_QUEUEAUDIO = "audio"
+const APP_QUEUEVIDEO = "video"
+const APP_QUEUEPHOTO = "photo"
+const APP_QUEUEDEFAULT = ""
 
 func AppCardStatus(status string) bool {
   if status == APP_CARDPENDING {
