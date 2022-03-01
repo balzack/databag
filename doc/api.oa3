@@ -2225,6 +2225,12 @@ paths:
           required: true
           schema:
             type: string
+        - name: confirm
+          in: query
+          description: set if intial state is confirmed
+          required: false
+          schema:
+            type: boolean
       responses:
         '201':
           description: entry created

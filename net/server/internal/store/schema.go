@@ -245,7 +245,8 @@ type Asset struct {
   Crc               uint32
   Transform         string
   TransformId       string
-  TransformData     string
+  TransformParams   string
+  TransformQueue    string
   Created           int64           `gorm:"autoCreateTime"`
   Updated           int64           `gorm:"autoUpdateTime"`
   Account           Account

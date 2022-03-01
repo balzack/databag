@@ -9,6 +9,8 @@ import (
 
 func AddChannelTopic(w http.ResponseWriter, r *http.Request) {
 
+  confirm := r.FormValue("confirm")
+
   var subject Subject
   if err := ParseRequest(r, w, &subject); err != nil {
     ErrResponse(w, http.StatusBadRequest, err)
@@ -33,7 +35,11 @@ func AddChannelTopic(w http.ResponseWriter, r *http.Request) {
     topic.Guid = guid
     topic.DetailRevision = act.ChannelRevision + 1
     topic.TagRevision = act.ChannelRevision + 1
-    topic.Status = APP_TOPICUNCONFIRMED
+    if confirm == "true" {
+      topic.Status = APP_TOPICCONFIRMED
+    } else {
+      topic.Status = APP_TOPICUNCONFIRMED
+    }
     topic.Transform = APP_TRANSFORMCOMPLETE
     if res := tx.Save(topic).Error; res != nil {
       return res

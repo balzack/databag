@@ -3,6 +3,7 @@ package databag
 import (
   "os"
   "io"
+  "strings"
   "errors"
   "github.com/google/uuid"
   "net/http"
@@ -103,8 +104,17 @@ func AddChannelTopicAsset(w http.ResponseWriter, r *http.Request) {
       asset.ChannelID = channelSlot.Channel.ID
       asset.TopicID = topicSlot.Topic.ID
       asset.Status = APP_ASSETWAITING
-      asset.Transform = transform
       asset.TransformId = id
+      t := strings.Split(transform, ";")
+      if len(t) > 0 {
+        asset.Transform = t[0]
+      }
+      if len(t) > 1 {
+        asset.TransformQueue = t[1]
+      }
+      if len(t) > 2 {
+        asset.TransformParams = t[2]
+      }
       if res := tx.Save(asset).Error; res != nil {
         return res
       }
@@ -135,7 +145,7 @@ func AddChannelTopicAsset(w http.ResponseWriter, r *http.Request) {
   }
 
   // invoke transcoder
-  go transcode()
+  transcode()
 
   // determine affected contact list
   cards := make(map[string]store.Card)
