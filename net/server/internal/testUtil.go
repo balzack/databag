@@ -63,6 +63,8 @@ func ApiTestData(
       body interface{},
       tokenType string,
       token string,
+      start int64,
+      end int64,
     ) (data []byte, hdr map[string][]string, err error) {
 
   var r *http.Request
@@ -78,10 +80,14 @@ func ApiTestData(
     r.Header.Add("TokenType", tokenType)
     SetBearerAuth(r, token)
   }
+  if start != 0 || end != 0 {
+    byteRange := "bytes=" + strconv.FormatInt(start, 10) + "-" + strconv.FormatInt(end, 10)
+    r.Header.Add("Range", byteRange)
+  }
   endpoint(w, r)
 
   resp := w.Result()
-  if resp.StatusCode != 200 {
+  if resp.StatusCode != 200 && resp.StatusCode != 206 {
     err = errors.New("response failed");
     return
   }

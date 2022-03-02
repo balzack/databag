@@ -56,17 +56,17 @@ func TestTopicShare(t *testing.T) {
   assert.NotNil(t, channel.Data.ChannelDetail);
   params["field"] = "nested.image"
   data, header, err = ApiTestData(GetChannelSubjectField, "GET", "/content/channels/{channelId}/subject/{field}",
-    &params, nil, APP_TOKENAPP, set.A.Token)
+    &params, nil, APP_TOKENAPP, set.A.Token, 0, 0)
   assert.NoError(t, err)
   assert.Equal(t, "image/png", header["Content-Type"][0])
   assert.Zero(t, bytes.Compare(img, data))
   data, header, err = ApiTestData(GetChannelSubjectField, "GET", "/content/channels/{channelId}/subject/{field}",
-    &params, nil, APP_TOKENCONTACT, set.B.A.Token)
+    &params, nil, APP_TOKENCONTACT, set.B.A.Token, 0, 0)
   assert.NoError(t, err)
   assert.Equal(t, "image/png", header["Content-Type"][0])
   assert.Zero(t, bytes.Compare(img, data))
   data, header, err = ApiTestData(GetChannelSubjectField, "GET", "/content/channels/{channelId}/subject/{field}",
-    &params, nil, APP_TOKENCONTACT, set.C.A.Token)
+    &params, nil, APP_TOKENCONTACT, set.C.A.Token, 0, 0)
   assert.NoError(t, err)
   assert.Equal(t, "image/png", header["Content-Type"][0])
   assert.Zero(t, bytes.Compare(img, data))
@@ -96,7 +96,6 @@ func TestTopicShare(t *testing.T) {
   assert.NoError(t, err)
   assert.NoError(t, ApiTestUpload(AddChannelTopicAsset, "POST", "/content/channels/{channelId}/topics/{topicId}/assets?transforms=" + url.QueryEscape(string(transforms)),
     &params, img, APP_TOKENCONTACT, set.C.A.Token, assets, nil))
-  PrintMsg(assets)
 
   // view topics
   topics := &[]Topic{}
@@ -104,5 +103,14 @@ func TestTopicShare(t *testing.T) {
     &params, nil, APP_TOKENAPP, set.A.Token, topics, nil))
 
   time.Sleep(time.Second)
+
+  // download file
+  params["assetId"] = (*assets)[1].AssetId
+  data, header, err = ApiTestData(GetChannelTopicAsset, "GET", "/content/channels/{channelId}/topics/{topicId}/assets/{assetId}",
+    &params, nil, APP_TOKENAPP, set.A.Token, 1, 2)
+
+  PrintMsg(header)
+  PrintMsg(err)
+  PrintMsg(len(data))
 }
 

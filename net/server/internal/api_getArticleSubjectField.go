@@ -1,6 +1,8 @@
 package databag
 
 import (
+  "time"
+  "bytes"
   "errors"
   "strings"
   "net/http"
@@ -71,7 +73,7 @@ func GetArticleSubjectField(w http.ResponseWriter, r *http.Request) {
     return
   }
 
-  w.Header().Set("Content-Type", http.DetectContentType(binData))
-  w.Write(binData)
+  // response with content
+  http.ServeContent(w, r, field, time.Unix(slot.Article.Updated, 0), bytes.NewReader(binData))
 }
 

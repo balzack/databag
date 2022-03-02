@@ -531,10 +531,10 @@ var routes = Routes{
 	},
 
 	Route{
-		"GetChannelAsset",
+		"GetChannelTopicAsset",
 		strings.ToUpper("Get"),
 		"/content/channels/{channelId}/topics/{topicId}/assets/{assetId}",
-		GetChannelAsset,
+		GetChannelTopicAsset,
 	},
 
 	Route{
