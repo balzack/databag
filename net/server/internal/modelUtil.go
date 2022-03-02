@@ -238,6 +238,15 @@ func getTopicDetailModel(slot *store.TopicSlot) *TopicDetail {
     return nil
   }
 
+  transform := APP_TRANSFORMCOMPLETE
+  for _, asset := range slot.Topic.Assets {
+    if asset.Status == APP_ASSETERROR {
+      transform = APP_TRANSFORMERROR
+    } else if asset.Status == APP_ASSETWAITING && transform == APP_TRANSFORMCOMPLETE {
+      transform = APP_TRANSFORMINCOMPLETE
+    }
+  }
+
   return &TopicDetail{
         Guid: slot.Topic.Guid,
         DataType: slot.Topic.DataType,
@@ -245,7 +254,7 @@ func getTopicDetailModel(slot *store.TopicSlot) *TopicDetail {
         Created: slot.Topic.Created,
         Updated: slot.Topic.Updated,
         Status: slot.Topic.Status,
-        Transform: slot.Topic.Transform,
+        Transform: transform,
       }
 }
 

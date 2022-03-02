@@ -7,7 +7,6 @@ import (
   "github.com/stretchr/testify/assert"
   "encoding/json"
   "net/url"
-  "time"
 )
 
 func TestTopicShare(t *testing.T) {
@@ -90,27 +89,35 @@ func TestTopicShare(t *testing.T) {
     &params, subject, APP_TOKENCONTACT, set.C.A.Token, topic, nil))
 
   // add asset to topic
-  assets := &[]Asset{}
+  assets := []Asset{}
   params["topicId"] = topic.Id
   transforms, err := json.Marshal([]string{ "copy;photo" })
   assert.NoError(t, err)
   assert.NoError(t, ApiTestUpload(AddChannelTopicAsset, "POST", "/content/channels/{channelId}/topics/{topicId}/assets?transforms=" + url.QueryEscape(string(transforms)),
-    &params, img, APP_TOKENCONTACT, set.C.A.Token, assets, nil))
+    &params, img, APP_TOKENCONTACT, set.C.A.Token, &assets, nil))
 
   // view topics
   topics := &[]Topic{}
   assert.NoError(t, ApiTestMsg(GetChannelTopics, "GET", "/content/channels/{channelId}/topics",
     &params, nil, APP_TOKENAPP, set.A.Token, topics, nil))
 
-  time.Sleep(time.Second)
+  // get list of assets
+  assets = []Asset{}
+  assert.NoError(t, ApiTestMsg(GetChannelTopicAssets, "GET", "/content/channels/{channelId}/topics/{topicId}",
+    &params, nil, APP_TOKENCONTACT, set.C.A.Token, &assets, nil))
+  assert.Equal(t, 2, len(assets))
 
-  // download file
-  params["assetId"] = (*assets)[1].AssetId
-  data, header, err = ApiTestData(GetChannelTopicAsset, "GET", "/content/channels/{channelId}/topics/{topicId}/assets/{assetId}",
-    &params, nil, APP_TOKENAPP, set.A.Token, 1, 2)
+  // delete each asset
+  for _, asset := range assets {
+    params["assetId"] = asset.AssetId
+    assert.NoError(t, ApiTestMsg(RemoveChannelTopicAsset, "DELETE", "/content/channels/{channelId}/topics/{topicId}/assets/{assetId}",
+      &params, nil, APP_TOKENCONTACT, set.C.A.Token, nil, nil))
+  }
 
-  PrintMsg(header)
-  PrintMsg(err)
-  PrintMsg(len(data))
+  // get list of assets
+  assets = []Asset{}
+  assert.NoError(t, ApiTestMsg(GetChannelTopicAssets, "GET", "/content/channels/{channelId}/topics/{topicId}",
+    &params, nil, APP_TOKENCONTACT, set.C.A.Token, &assets, nil))
+  assert.Equal(t, 0, len(assets))
 }
 

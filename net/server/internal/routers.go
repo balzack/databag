@@ -538,10 +538,10 @@ var routes = Routes{
 	},
 
 	Route{
-		"GetChannelAssets",
+		"GetChannelTopicAssets",
 		strings.ToUpper("Get"),
 		"/content/channels/{channelId}/topics/{topicId}/assets",
-		GetChannelAssets,
+		GetChannelTopicAssets,
 	},
 
 	Route{
@@ -622,10 +622,10 @@ var routes = Routes{
 	},
 
 	Route{
-		"RemoveChannelAsset",
+		"RemoveChannelTopicAsset",
 		strings.ToUpper("Delete"),
 		"/content/channels/{channelId}/topics/{topicId}/assets/{assetId}",
-		RemoveChannelAsset,
+		RemoveChannelTopicAsset,
 	},
 
 	Route{

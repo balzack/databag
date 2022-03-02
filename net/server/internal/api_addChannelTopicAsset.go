@@ -64,6 +64,10 @@ func AddChannelTopicAsset(w http.ResponseWriter, r *http.Request) {
     return
   }
 
+  // avoid async cleanup of file before record is created
+  garbageSync.Lock()
+  defer garbageSync.Unlock()
+
   // save new file
   id := uuid.New().String()
   path := getStrConfigValue(CONFIG_ASSETPATH, ".") + "/" + channelSlot.Account.Guid + "/" + id
@@ -120,13 +124,8 @@ func AddChannelTopicAsset(w http.ResponseWriter, r *http.Request) {
       }
       assets = append(assets, Asset{ AssetId: asset.AssetId, Transform: transform, Status: APP_ASSETWAITING})
     }
-    if len(transforms) > 0 {
-      if res := tx.Model(&topicSlot.Topic).Update("transform", APP_TRANSFORMINCOMPLETE).Error; res != nil {
-        return res
-      }
-      if res := tx.Model(&topicSlot.Topic).Update("detail_revision", act.ChannelRevision + 1).Error; res != nil {
-        return res
-      }
+    if res := tx.Model(&topicSlot.Topic).Update("detail_revision", act.ChannelRevision + 1).Error; res != nil {
+      return res
     }
     if res := tx.Model(&topicSlot).Update("revision", act.ChannelRevision + 1).Error; res != nil {
       return res

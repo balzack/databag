@@ -14,12 +14,6 @@ func GetChannelTopic(w http.ResponseWriter, r *http.Request) {
   params := mux.Vars(r)
   topicId := params["topicId"]
 
-  var subject Subject
-  if err := ParseRequest(r, w, &subject); err != nil {
-    ErrResponse(w, http.StatusBadRequest, err)
-    return
-  }
-
   channelSlot, _, err, code := getChannelSlot(r, false)
   if err != nil {
     ErrResponse(w, code, err)

@@ -224,7 +224,6 @@ type Topic struct {
   DataType          string          `gorm:"index"`
   Data              string
   Status            string          `gorm:"not null;index"`
-  Transform         string
   Created           int64           `gorm:"autoCreateTime"`
   Updated           int64           `gorm:"autoUpdateTime"`
   TagCount          int32           `gorm:"not null"`

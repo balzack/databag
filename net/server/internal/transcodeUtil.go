@@ -120,6 +120,7 @@ func transcodeAsset(asset *store.Asset) {
         LogMsg(stderr.String())
       }
       crc, size, err := ScanAsset(output)
+
       if err != nil {
         ErrMsg(err)
         if err := UpdateAsset(asset, APP_ASSETERROR, 0, 0); err != nil {
@@ -132,20 +133,6 @@ func transcodeAsset(asset *store.Asset) {
   }
 }
 
-func isComplete(id uint) (complete bool, err error) {
-  var assets []store.Asset
-  if err = store.DB.Where("topic_id = ?", id).Find(&assets).Error; err != nil {
-    return
-  }
-  for _, asset := range assets {
-    if id != asset.ID && asset.Status != APP_ASSETREADY {
-      return
-    }
-  }
-  complete = true
-  return
-}
-
 func UpdateAsset(asset *store.Asset, status string, crc uint32, size int64) (err error) {
 
   act := asset.Account
@@ -153,23 +140,8 @@ func UpdateAsset(asset *store.Asset, status string, crc uint32, size int64) (err
     asset.Crc = crc
     asset.Size = size
     asset.Status = status
-    if res := tx.Save(asset).Error; res != nil {
+    if res := tx.Model(store.Asset{}).Where("id = ?", asset.ID).Updates(asset).Error; res != nil {
       return res
-    }
-    if status == APP_ASSETERROR {
-      if res := tx.Model(&asset.Topic).Update("transform", APP_TRANSFORMERROR).Error; res != nil {
-        return res
-      }
-    } else if status == APP_ASSETREADY {
-      complete, ret := isComplete(asset.ID)
-      if ret != nil {
-        return ret
-      }
-      if complete {
-        if res := tx.Model(&asset.Topic).Update("transform", APP_TRANSFORMCOMPLETE).Error; res != nil {
-          return res
-        }
-      }
     }
     if res := tx.Model(&asset.Topic).Update("detail_revision", act.ChannelRevision + 1).Error; res != nil {
       return res
