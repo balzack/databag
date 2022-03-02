@@ -291,4 +291,25 @@ func getTopicModel(slot *store.TopicSlot) *Topic {
   }
 }
 
+func getTagModel(slot *store.TagSlot) *Tag {
+
+  if slot.Tag == nil {
+    return &Tag{
+      Id: slot.TagSlotId,
+      Revision: slot.Revision,
+    }
+  }
+
+  return &Tag{
+    Id: slot.TagSlotId,
+    Revision: slot.Revision,
+    Data: &TagData{
+      Guid: slot.Tag.Guid,
+      DataType: slot.Tag.DataType,
+      Data: slot.Tag.Data,
+      Created: slot.Tag.Created,
+      Updated: slot.Tag.Updated,
+    },
+  }
+}
 

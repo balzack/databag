@@ -227,7 +227,7 @@ type Topic struct {
   Created           int64           `gorm:"autoCreateTime"`
   Updated           int64           `gorm:"autoUpdateTime"`
   TagCount          int32           `gorm:"not null"`
-  TagUpdated        int64           `gorm:"autoUpdateTime"`
+  TagUpdated        int64
   TagRevision       int64           `gorm:"not null"`
   Assets            []Asset
   Tags              []Tag
@@ -256,23 +256,26 @@ type Asset struct {
 
 type TagSlot struct {
   ID                uint
-  TagSlotId         string          `gorm:"not null;index:topicslot,unique"`
-  AccountID         uint            `gorm:"not null;index:topicslot,unique"`
+  TagSlotId         string          `gorm:"not null;index:tagslot,unique"`
+  AccountID         uint            `gorm:"not null;index:tagslot,unique"`
   Revision          int64           `gorm:"not null"`
-  TagID             uint            `gorm:"not null;default:0"`
   Tag               *Tag
   Account           Account
 }
 
 type Tag struct {
   ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
-  TopicID           uint            `gorm:"not null;index:tag,unique"`
-  Guid              string
+  TagSlotID         uint            `gorm:"not null;index:tagtagslot,unique"`
+  ChannelID         uint            `gorm:"not null;index:channeltag"`
+  TopicID           uint            `gorm:"not null;index:topictag"`
+  Guid              string          `gorm:"not null"`
   DataType          string          `gorm:"index"`
   Data              string
   Created           int64           `gorm:"autoCreateTime"`
   Updated           int64           `gorm:"autoUpdateTime"`
+  Channel           *Channel
   Topic             *Topic
+  TagSlot           TagSlot
 }
 
 
