@@ -1,6 +1,8 @@
 package databag
 
 import (
+  "time"
+  "bytes"
   "errors"
   "net/http"
   "gorm.io/gorm"
@@ -42,7 +44,7 @@ func GetCardProfileImage(w http.ResponseWriter, r *http.Request) {
     return
   }
 
-  w.Header().Set("Content-Type", http.DetectContentType(data))
-  w.Write(data);
+  // response with content
+  http.ServeContent(w, r, "image", time.Unix(slot.Card.Updated, 0), bytes.NewReader(data))
 }
 

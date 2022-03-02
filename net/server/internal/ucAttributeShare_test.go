@@ -140,7 +140,7 @@ func TestAttributeShare(t *testing.T) {
   param["articleId"] = article.Id
   param["field"] = "nested.image"
   aData, aType, aErr := ApiTestData(GetArticleSubjectField, "GET", "/attributes/articles/{articleId}/subject/{field}",
-    &param, nil, APP_TOKENAPP, set.A.Token)
+    &param, nil, APP_TOKENAPP, set.A.Token, 0, 0)
   assert.NoError(t, aErr)
   assert.Equal(t, "image/png", aType["Content-Type"][0])
   img, _ = base64.StdEncoding.DecodeString(image)
@@ -150,7 +150,7 @@ func TestAttributeShare(t *testing.T) {
   param["articleId"] = article.Id
   param["field"] = "nested.image"
   cData, cType, cErr := ApiTestData(GetArticleSubjectField, "GET", "/attributes/articles/{articleId}/subject/{field}",
-    &param, nil, APP_TOKENCONTACT, set.C.A.Token)
+    &param, nil, APP_TOKENCONTACT, set.C.A.Token, 0, 0)
   assert.NoError(t, cErr)
   assert.Equal(t, "image/png", cType["Content-Type"][0])
   img, _ = base64.StdEncoding.DecodeString(image)

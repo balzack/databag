@@ -1,6 +1,8 @@
 package databag
 
 import (
+  "time"
+  "bytes"
   "errors"
 	"net/http"
   "encoding/base64"
@@ -26,8 +28,8 @@ func GetProfileImage(w http.ResponseWriter, r *http.Request) {
     return
   }
 
-  w.Header().Set("Content-Type", http.DetectContentType(data))
-  w.Write(data);
+  // response with content
+  http.ServeContent(w, r, "image", time.Unix(account.Updated, 0), bytes.NewReader(data))
 }
 
 

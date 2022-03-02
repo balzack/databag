@@ -66,6 +66,7 @@ type Account struct {
   ChannelRevision   int64           `gorm:"not null;default:1"`
   CardRevision      int64           `gorm:"not null;default:1"`
   Created           int64           `gorm:"autoCreateTime"`
+  Updated           int64           `gorm:"autoUpdateTime"`
   Disabled          bool            `gorm:"not null;default:false"`
   AccountDetail     AccountDetail
   Apps              []App

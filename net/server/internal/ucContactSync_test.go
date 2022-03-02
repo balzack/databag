@@ -41,7 +41,7 @@ func TestContactSync(t *testing.T) {
     &param, &msg, APP_TOKENAPP, set.B.Token, &card, nil))
   assert.True(t, card.Data.CardProfile.ImageSet)
   data, hdr, res = ApiTestData(GetCardProfileImage, "GET", "/contact/cards/{cardId}/profile/image",
-    &param, &data, APP_TOKENAPP, set.B.Token)
+    &param, &data, APP_TOKENAPP, set.B.Token, 0, 0)
   assert.NoError(t, res)
 
   // compare retrieved image

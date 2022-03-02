@@ -10,8 +10,6 @@ import (
 
 func GetChannelTopicAsset(w http.ResponseWriter, r *http.Request) {
 
-PrintMsg(r)
-
   // scan parameters
   params := mux.Vars(r)
   topicId := params["topicId"]

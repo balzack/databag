@@ -103,7 +103,7 @@ func TestProfileUpdate(t *testing.T) {
 
   // retrieve profile image
   data, hdr, err = ApiTestData(GetProfileImage, "GET", "/profile/image", nil, nil,
-    APP_TOKENAPP, set.A.Token)
+    APP_TOKENAPP, set.A.Token, 0, 0)
   assert.NoError(t, err)
 
   // compare retrieved image
