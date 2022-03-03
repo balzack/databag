@@ -150,5 +150,23 @@ func TestTopicShare(t *testing.T) {
   assert.NoError(t, ApiTestMsg(GetChannelTopicAssets, "GET", "/content/channels/{channelId}/topics/{topicId}",
     &params, nil, APP_TOKENCONTACT, set.C.A.Token, &assets, nil))
   assert.Equal(t, 0, len(assets))
+
+  // add asset to topic
+  assets = []Asset{}
+  params["topicId"] = topic.Id
+  transforms, err = json.Marshal([]string{ "copy;photo" })
+  assert.NoError(t, err)
+  assert.NoError(t, ApiTestUpload(AddChannelTopicAsset, "POST", "/content/channels/{channelId}/topics/{topicId}/assets?transforms=" + url.QueryEscape(string(transforms)),
+    &params, img, APP_TOKENCONTACT, set.C.A.Token, &assets, nil))
+
+  // add a tag to topic
+  tag = Tag{}
+  subject = &Subject{ DataType: "tagdatatype", Data: "subjectfromA" }
+  assert.NoError(t, ApiTestMsg(AddChannelTopicTag, "POST", "/content/channels/{channelId}/topics/{topicId}",
+    &params, subject, APP_TOKENAPP, set.A.Token, &tag, nil))
+
+  // remove channel
+  assert.NoError(t, ApiTestMsg(RemoveChannel, "DELETE", "/content/channels/{channelId}",
+    &params, nil, APP_TOKENAPP, set.A.Token, nil, nil))
 }
 

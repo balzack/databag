@@ -51,6 +51,7 @@ func AddChannelTopicTag(w http.ResponseWriter, r *http.Request) {
     tagSlot.TagSlotId = uuid.New().String()
     tagSlot.AccountID = act.ID
     tagSlot.Revision = act.ChannelRevision + 1
+    tagSlot.ChannelID = channelSlot.Channel.ID
     tagSlot.TopicID = topicSlot.Topic.ID
     if res := tx.Save(tagSlot).Error; res != nil {
       return res

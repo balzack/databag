@@ -261,10 +261,12 @@ type TagSlot struct {
   ID                uint
   TagSlotId         string          `gorm:"not null;index:tagslot,unique"`
   AccountID         uint            `gorm:"not null;index:tagslot,unique"`
+  ChannelID         uint            `gorm:"not null"`
   TopicID           uint            `gorm:"not null;index:tagtopic"`
   Revision          int64           `gorm:"not null"`
   Tag               *Tag
   Account           Account
+  Channel           *Channel
   Topic             *Topic
 }
 
