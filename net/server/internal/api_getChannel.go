@@ -47,10 +47,6 @@ func GetChannel(w http.ResponseWriter, r *http.Request) {
     }
     return
   }
-  if slot.Channel == nil {
-    ErrResponse(w, http.StatusNotFound, errors.New("referenced channel missing"))
-    return
-  }
 
   // return model data
   if guid != "" {
