@@ -17,6 +17,8 @@ func TestTopicShare(t *testing.T) {
   header := make(map[string][]string)
   var err error
   var data []byte
+  var aRev *Revision
+  var cRev *Revision
 
   // setup testing group
   set, err := AddTestGroup("topicshare")
@@ -101,17 +103,35 @@ func TestTopicShare(t *testing.T) {
   assert.NoError(t, ApiTestMsg(GetChannelTopics, "GET", "/content/channels/{channelId}/topics",
     &params, nil, APP_TOKENAPP, set.A.Token, topics, nil))
 
+  aRev = GetTestRevision(set.A.Revisions)
+  cRev = GetTestRevision(set.C.Revisions)
+
   // add a tag to topic
   tag := Tag{}
   subject = &Subject{ DataType: "tagdatatype", Data: "subjectfromA" }
   assert.NoError(t, ApiTestMsg(AddChannelTopicTag, "POST", "/content/channels/{channelId}/topics/{topicId}",
-    &params, subject, APP_TOKENAPP, set.A.Token, tag, nil))
+    &params, subject, APP_TOKENAPP, set.A.Token, &tag, nil))
+
+  assert.NotEqual(t, aRev.Channel, GetTestRevision(set.A.Revisions).Channel)
+  assert.NotEqual(t, cRev.Card, GetTestRevision(set.C.Revisions).Card)
 
   // get tags for topic
-  tags := []Tag{}
+  tags := &[]Tag{}
   assert.NoError(t, ApiTestMsg(GetChannelTopicTags, "GET", "/content/channels/{channelId}/topics/{topicId}",
-    &params, nil, APP_TOKENCONTACT, set.C.A.Token, &tags, nil))
-  assert.Equal(t, 1, len(tags))
+    &params, nil, APP_TOKENCONTACT, set.C.A.Token, tags, nil))
+  assert.Equal(t, 1, len(*tags))
+
+  // delete topic tag
+  params["tagId"] = tag.Id
+  assert.NoError(t, ApiTestMsg(RemoveChannelTopicTag, "DELETE", "/content/channels/{channelId}/topics/{topicId}/tags/{tagId}",
+    &params, nil, APP_TOKENAPP, set.A.Token, nil, nil))
+
+  // get tags for topic
+  tags = &[]Tag{}
+  assert.NoError(t, ApiTestMsg(GetChannelTopicTags, "GET", "/content/channels/{channelId}/topics/{topicId}",
+    &params, nil, APP_TOKENCONTACT, set.C.A.Token, tags, nil))
+PrintMsg(tags)
+  assert.Equal(t, 0, len(*tags))
 
   // get list of assets
   assets = []Asset{}
