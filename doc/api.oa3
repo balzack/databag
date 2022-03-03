@@ -877,7 +877,47 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Subject'
-          
+         
+  /alias/groups/{groupId}/subject/{field}:
+    get:
+      tags:
+        - alias
+      description: Base64 decode and download specified field from the groups's subject. Access granted to app token of account holder.
+      operationId: get-group-subject-field
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: groupId
+          in: path
+          description: specified group id
+          required: true
+          schema:
+            type: string
+        - name: field
+          in: path
+          description: field from subject to base64 decode and download
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: string
+                format: binary
+        '401':
+          description: permission denied
+        '404':
+          description: field, article not found
+        '405':
+          description: invalid field
+        '410':
+          description: account disabled
+        '500':
+          description: internal server error
+ 
   /alias/groups/{groupId}/subject:
     put:
       tags:

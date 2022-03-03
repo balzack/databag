@@ -272,6 +272,13 @@ var routes = Routes{
 	},
 
 	Route{
+		"GetGroupSubjectField",
+		strings.ToUpper("Get"),
+		"/alias/groups/{groupId}/subject/{field}",
+		GetGroupSubjectField,
+	},
+
+	Route{
 		"GetGroups",
 		strings.ToUpper("Get"),
 		"/alias/groups",
