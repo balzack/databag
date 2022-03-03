@@ -130,7 +130,6 @@ func TestTopicShare(t *testing.T) {
   tags = &[]Tag{}
   assert.NoError(t, ApiTestMsg(GetChannelTopicTags, "GET", "/content/channels/{channelId}/topics/{topicId}",
     &params, nil, APP_TOKENCONTACT, set.C.A.Token, tags, nil))
-PrintMsg(tags)
   assert.Equal(t, 0, len(*tags))
 
   // get list of assets

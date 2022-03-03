@@ -212,7 +212,6 @@ type TopicSlot struct {
   AccountID         uint            `gorm:"not null;index:topicaccount,unique"`
   ChannelID         uint            `gorm:"not null;index:topicchannel,unique"`
   Revision          int64           `gorm:"not null"`
-  TopicID           uint            `gorm:"not null;default:0"`
   Topic             *Topic
   Channel           *Channel
   Account           Account
@@ -222,6 +221,7 @@ type Topic struct {
   ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
   DetailRevision    int64           `gorm:"not null"`
   ChannelID         uint
+  TopicSlotID       uint            `gorm:"not null;index:topictopicslot,unique"`
   Guid              string
   DataType          string          `gorm:"index"`
   Data              string

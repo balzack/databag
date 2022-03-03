@@ -27,9 +27,17 @@ func AddChannelTopic(w http.ResponseWriter, r *http.Request) {
   topicSlot := &store.TopicSlot{}
   err = store.DB.Transaction(func(tx *gorm.DB) error {
 
-    // add new record
+    topicSlot.TopicSlotId = uuid.New().String()
+    topicSlot.AccountID = act.ID
+    topicSlot.ChannelID = channelSlot.Channel.ID
+    topicSlot.Revision = act.ChannelRevision + 1
+    if res := tx.Save(topicSlot).Error; res != nil {
+      return res
+    }
+
     topic := &store.Topic{}
     topic.ChannelID = channelSlot.Channel.ID
+    topic.TopicSlotID = topicSlot.ID
     topic.Data = subject.Data
     topic.DataType = subject.DataType
     topic.TagCount = 0
@@ -44,15 +52,8 @@ func AddChannelTopic(w http.ResponseWriter, r *http.Request) {
     if res := tx.Save(topic).Error; res != nil {
       return res
     }
-    topicSlot.TopicSlotId = uuid.New().String()
-    topicSlot.AccountID = act.ID
-    topicSlot.ChannelID = channelSlot.Channel.ID
-    topicSlot.TopicID = topic.ID
-    topicSlot.Revision = act.ChannelRevision + 1
+
     topicSlot.Topic = topic
-    if res := tx.Save(topicSlot).Error; res != nil {
-      return res
-    }
 
     // update parent revision
     if res := tx.Model(&channelSlot).Update("revision", act.ChannelRevision + 1).Error; res != nil {
