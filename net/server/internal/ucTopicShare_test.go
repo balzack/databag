@@ -104,8 +104,14 @@ func TestTopicShare(t *testing.T) {
   // add a tag to topic
   tag := Tag{}
   subject = &Subject{ DataType: "tagdatatype", Data: "subjectfromA" }
-  assert.NoError(t, ApiTestMsg(AddChannelTopicTag, "POST", "/content/channels/{channelId}/topcis/{topicId}",
+  assert.NoError(t, ApiTestMsg(AddChannelTopicTag, "POST", "/content/channels/{channelId}/topics/{topicId}",
     &params, subject, APP_TOKENAPP, set.A.Token, tag, nil))
+
+  // get tags for topic
+  tags := []Tag{}
+  assert.NoError(t, ApiTestMsg(GetChannelTopicTags, "GET", "/content/channels/{channelId}/topics/{topicId}",
+    &params, nil, APP_TOKENCONTACT, set.C.A.Token, &tags, nil))
+  assert.Equal(t, 1, len(tags))
 
   // get list of assets
   assets = []Asset{}
