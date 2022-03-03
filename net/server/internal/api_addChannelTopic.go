@@ -29,6 +29,7 @@ func AddChannelTopic(w http.ResponseWriter, r *http.Request) {
 
     // add new record
     topic := &store.Topic{}
+    topic.ChannelID = channelSlot.Channel.ID
     topic.Data = subject.Data
     topic.DataType = subject.DataType
     topic.TagCount = 0

@@ -202,6 +202,7 @@ type Channel struct {
   Updated           int64           `gorm:"autoUpdateTime"`
   Groups            []Group         `gorm:"many2many:channel_groups;"`
   Cards             []Card          `gorm:"many2many:channel_cards;"`
+  Topics            []Topic
   ChannelSlot       ChannelSlot
 }
 
@@ -220,6 +221,7 @@ type TopicSlot struct {
 type Topic struct {
   ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
   DetailRevision    int64           `gorm:"not null"`
+  ChannelID         uint
   Guid              string
   DataType          string          `gorm:"index"`
   Data              string
@@ -229,6 +231,7 @@ type Topic struct {
   TagCount          int32           `gorm:"not null"`
   TagUpdated        int64
   TagRevision       int64           `gorm:"not null"`
+  Channel           *Channel
   Assets            []Asset
   Tags              []Tag
   TopicSlot         TopicSlot
