@@ -159,6 +159,7 @@ func getChannelRevisionModel(slot *store.ChannelSlot, showData bool) *Channel {
     Revision: slot.Revision,
     Data: &ChannelData {
       DetailRevision: slot.Channel.DetailRevision,
+      TopicRevision: slot.Channel.TopicRevision,
     },
   }
 }
@@ -200,6 +201,7 @@ func getChannelModel(slot *store.ChannelSlot, showData bool, showList bool) *Cha
     Revision: slot.Revision,
     Data: &ChannelData {
       DetailRevision: slot.Channel.DetailRevision,
+      TopicRevision: slot.Channel.TopicRevision,
       ChannelDetail: &ChannelDetail{
         DataType: slot.Channel.DataType,
         Data: slot.Channel.Data,

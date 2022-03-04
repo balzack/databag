@@ -182,7 +182,7 @@ func (c *TestContactData) UpdateContactChannels() (err error) {
           tc.channel.Revision = channel.Revision
         }
       } else {
-        tc := &TestChannel{ channel: Channel{ Id: channel.Id } }
+        tc := &TestChannel{ channel: Channel{ Id: channel.Id, Data: &ChannelData{} } }
         c.channels[channel.Id] = tc
         if err = c.UpdateContactChannel(tc, &channel); err != nil {
           return
@@ -191,28 +191,37 @@ func (c *TestContactData) UpdateContactChannels() (err error) {
       }
     }
   }
-  return nil
+  return
 }
 
-func (c *TestContactData) UpdateContactChannel(testChannel *TestChannel, channel *Channel) (err error) {
-  if testChannel.channel.Revision != channel.Revision {
+func (c *TestContactData) UpdateContactChannel(storeChannel *TestChannel, channel *Channel) (err error) {
+  if storeChannel.channel.Revision != channel.Revision {
+    if storeChannel.channel.Data.TopicRevision != channel.Data.TopicRevision {
+      if err = c.UpdateContactChannelTopics(storeChannel); err != nil {
+        return
+      }
+      storeChannel.channel.Data.TopicRevision = channel.Data.TopicRevision
+    }
     if channel.Data.ChannelDetail != nil {
-      testChannel.channel.Data = channel.Data
-    } else if testChannel.channel.Data == nil || testChannel.channel.Data.DetailRevision != channel.Data.DetailRevision {
+      storeChannel.channel.Data.ChannelDetail = channel.Data.ChannelDetail
+      storeChannel.channel.Data.DetailRevision = channel.Data.DetailRevision
+    } else if storeChannel.channel.Data.DetailRevision != channel.Data.DetailRevision {
       token := c.card.Data.CardProfile.Guid + "." + c.card.Data.CardDetail.Token
-      params := &TestApiParams{ query: "/channels/{channelId}", path: map[string]string{ "channelId": channel.Id }, tokenType: APP_TOKENCONTACT, token: token }
+      params := &TestApiParams{ query: "/channel/{channelId}", path: map[string]string{ "channelId": channel.Id },
+          tokenType: APP_TOKENCONTACT, token: token }
       channel := Channel{}
       response := &TestApiResponse{ data: &channel }
       if err = TestApiRequest(GetChannel, params, response); err != nil {
         return
       }
       if channel.Data == nil {
-        delete(c.channels, channel.Id)
+        err = errors.New("channel removed during update")
+        return
       }
-      testChannel.channel.Data = channel.Data
+      storeChannel.channel.Data.ChannelDetail = channel.Data.ChannelDetail
+      storeChannel.channel.Data.DetailRevision = channel.Data.DetailRevision
     }
   }
-  err = c.UpdateContactChannelTopics(testChannel)
   return
 }
 
@@ -244,7 +253,7 @@ func (c *TestContactData) UpdateContactChannelTopics(testChannel *TestChannel) (
       testChannel.topics[topic.Id] = &topic
     }
   }
-  return nil
+  return
 }
 
 func (c *TestContactData) UpdateContactCardDetail() (err error) {
@@ -375,45 +384,54 @@ func (a *TestApp) UpdateChannels() (err error) {
     if channel.Data == nil {
       delete(a.channels, channel.Id)
     } else {
-      c, set := a.channels[channel.Id]
+      storeChannel, set := a.channels[channel.Id]
       if set {
-        if channel.Revision != c.channel.Revision {
-          if err = a.UpdateChannel(c, &channel); err != nil {
+        if channel.Revision != storeChannel.channel.Revision {
+          if err = a.UpdateChannel(storeChannel, &channel); err != nil {
             return
           }
-          c.channel.Revision = channel.Revision
+          storeChannel.channel.Revision = channel.Revision
         }
       } else {
-        c := &TestChannel{ channel: Channel{ Id: channel.Id } }
-        a.channels[channel.Id] = c
-        if err = a.UpdateChannel(c, &channel); err != nil {
+        storeChannel := &TestChannel{ channel: Channel{ Id: channel.Id, Data: &ChannelData{} } }
+        a.channels[channel.Id] = storeChannel
+        if err = a.UpdateChannel(storeChannel, &channel); err != nil {
           return
         }
-        c.channel.Revision = channel.Revision
+        storeChannel.channel.Revision = channel.Revision
       }
     }
   }
   return
 }
 
-func (a *TestApp) UpdateChannel(testChannel *TestChannel, channel *Channel) (err error) {
-  if testChannel.channel.Revision != channel.Revision {
+func (a *TestApp) UpdateChannel(storeChannel *TestChannel, channel *Channel) (err error) {
+  if storeChannel.channel.Revision != channel.Revision {
+    if storeChannel.channel.Data.TopicRevision != channel.Data.TopicRevision {
+      if err = a.UpdateChannelTopics(storeChannel); err != nil {
+        return
+      }
+      storeChannel.channel.Data.TopicRevision = channel.Data.TopicRevision
+    }
     if channel.Data.ChannelDetail != nil {
-      testChannel.channel.Data = channel.Data
-    } else if testChannel.channel.Data == nil || testChannel.channel.Data.DetailRevision != channel.Data.DetailRevision {
-      c := Channel{}
-      params := &TestApiParams{ query: "/channel/{channelId}", path: map[string]string{ "channelId": channel.Id }, tokenType: APP_TOKENAPP, token: a.token }
-      response := &TestApiResponse{ data: &c }
+      storeChannel.channel.Data.ChannelDetail = channel.Data.ChannelDetail
+      storeChannel.channel.Data.DetailRevision = channel.Data.DetailRevision
+    } else if storeChannel.channel.Data.DetailRevision != channel.Data.DetailRevision {
+      params := &TestApiParams{ query: "/channel/{channelId}", path: map[string]string{ "channelId": channel.Id },
+          tokenType: APP_TOKENAPP, token: a.token }
+      channel := Channel{}
+      response := &TestApiResponse{ data: &channel }
       if err = TestApiRequest(GetChannel, params, response); err != nil {
         return
       }
-      if c.Data == nil {
-        delete(a.channels, channel.Id)
+      if channel.Data == nil {
+        err = errors.New("channel removed during update")
+        return
       }
-      testChannel.channel.Data = c.Data
+      storeChannel.channel.Data.ChannelDetail = channel.Data.ChannelDetail
+      storeChannel.channel.Data.DetailRevision = channel.Data.DetailRevision
     }
   }
-  err = a.UpdateChannelTopics(testChannel)
   return
 }
 
@@ -443,7 +461,7 @@ func (a *TestApp) UpdateChannelTopics(testChannel *TestChannel) (err error) {
       testChannel.topics[topic.Id] = &topic
     }
   }
-  return nil
+  return
 }
 
 func (a *TestApp) UpdateCards() (err error) {

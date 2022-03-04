@@ -168,8 +168,6 @@ func TestMessangerApp(t *testing.T) {
           if testChannel.channel.Id == channel.Id {
             for _, t := range testChannel.topics {
               if t.Id == topic.Id {
-PrintMsg(t)
-PrintMsg(topic)
                 return true
               }
             }
