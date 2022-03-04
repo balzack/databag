@@ -19,9 +19,14 @@ type TestCondition struct {
   channel chan bool
 }
 
+type TestTopic struct {
+  topic Topic
+  tags map[string]*Tag
+}
+
 type TestChannel struct {
   channel Channel
-  topics map[string]*Topic
+  topics map[string]*TestTopic
 }
 
 type TestContactData struct {
@@ -225,32 +230,114 @@ func (c *TestContactData) UpdateContactChannel(storeChannel *TestChannel, channe
   return
 }
 
-func (c *TestContactData) UpdateContactChannelTopics(testChannel *TestChannel) (err error) {
+func (c *TestContactData) UpdateContactChannelTopics(storeChannel *TestChannel) (err error) {
   var topics []Topic
-  if testChannel.channel.Revision == 0 {
+  if storeChannel.channel.Revision == 0 {
     token := c.card.Data.CardProfile.Guid + "." + c.card.Data.CardDetail.Token
     params := &TestApiParams{ query: "/channels/{channelId}/topics",
-      path: map[string]string{ "channelId": testChannel.channel.Id }, tokenType: APP_TOKENCONTACT, token: token }
+      path: map[string]string{ "channelId": storeChannel.channel.Id }, tokenType: APP_TOKENCONTACT, token: token }
     response := &TestApiResponse{ data: &topics }
     if err = TestApiRequest(GetChannelTopics, params, response); err != nil {
       return
     }
-    testChannel.topics = make(map[string]*Topic)
+    storeChannel.topics = make(map[string]*TestTopic)
   } else {
     token := c.card.Data.CardProfile.Guid + "." + c.card.Data.CardDetail.Token
-    revision := strconv.FormatInt(testChannel.channel.Revision, 10)
+    revision := strconv.FormatInt(storeChannel.channel.Revision, 10)
     params := &TestApiParams{ query: "/channels/{channelId}/topics?revision=" + revision,
-        path: map[string]string{ "channelId": testChannel.channel.Id }, tokenType: APP_TOKENCONTACT, token: token }
+        path: map[string]string{ "channelId": storeChannel.channel.Id }, tokenType: APP_TOKENCONTACT, token: token }
     response := &TestApiResponse{ data: &topics }
     if err = TestApiRequest(GetChannelTopics, params, response); err != nil {
       return
     }
   }
+
   for _, topic := range topics {
-    if topic.Data == nil  {
-      delete(testChannel.topics, topic.Id)
+    if topic.Data == nil {
+      delete(storeChannel.topics, topic.Id)
     } else {
-      testChannel.topics[topic.Id] = &topic
+      storeTopic, set := storeChannel.topics[topic.Id]
+      if set {
+        if topic.Revision != storeTopic.topic.Revision {
+          if err = c.UpdateContactChannelTopic(storeChannel, storeTopic, &topic); err != nil {
+            return
+          }
+          storeTopic.topic.Revision = topic.Revision
+        }
+      } else {
+        storeTopic := &TestTopic{ topic: Topic{ Id: topic.Id, Data: &TopicData{} } }
+        storeChannel.topics[topic.Id] = storeTopic
+        if err = c.UpdateContactChannelTopic(storeChannel, storeTopic, &topic); err != nil {
+          return
+        }
+        storeTopic.topic.Revision = topic.Revision
+      }
+    }
+  }
+  return
+}
+
+func (c *TestContactData) UpdateContactChannelTopic(storeChannel *TestChannel, storeTopic *TestTopic, topic *Topic) (err error) {
+  if storeTopic.topic.Revision != topic.Revision {
+    if storeTopic.topic.Data.TagRevision != topic.Data.TagRevision {
+      if err = c.UpdateContactChannelTopicTags(storeChannel, storeTopic); err != nil {
+        return
+      }
+      storeTopic.topic.Data.TagRevision = topic.Data.TagRevision
+    }
+    if topic.Data.TopicDetail != nil {
+      storeTopic.topic.Data.TopicDetail = topic.Data.TopicDetail
+      storeTopic.topic.Data.DetailRevision = topic.Data.DetailRevision
+    } else if storeTopic.topic.Data.DetailRevision != topic.Data.DetailRevision {
+      token := c.card.Data.CardProfile.Guid + "." + c.card.Data.CardDetail.Token
+      params := &TestApiParams{ query: "/channels/{channelId}/topics/{topicId}",
+          path: map[string]string{ "channelId": storeChannel.channel.Id, "topicId": topic.Id },
+          tokenType: APP_TOKENCONTACT, token: token }
+      topic := Topic{}
+      response := &TestApiResponse{ data: &topic }
+      if err = TestApiRequest(GetChannelTopic, params, response); err != nil {
+        return
+      }
+      if topic.Data == nil {
+        err = errors.New("topic removed during update")
+        return
+      }
+      storeTopic.topic.Data.TopicDetail = topic.Data.TopicDetail
+      storeTopic.topic.Data.DetailRevision = topic.Data.DetailRevision
+    }
+  }
+  return
+}
+
+func (c *TestContactData) UpdateContactChannelTopicTags(storeChannel *TestChannel, storeTopic *TestTopic) (err error) {
+  var tags []Tag
+  if storeTopic.topic.Revision == 0 {
+    token := c.card.Data.CardProfile.Guid + "." + c.card.Data.CardDetail.Token
+    params := &TestApiParams{ query: "/channels/{channelId}/topics/{topicId}/tags",
+      path: map[string]string{ "channelId": storeChannel.channel.Id, "topicId": storeTopic.topic.Id },
+      tokenType: APP_TOKENCONTACT, token: token }
+    response := &TestApiResponse{ data: &tags }
+    if err = TestApiRequest(GetChannelTopicTags, params, response); err != nil {
+      return
+    }
+    storeTopic.tags = make(map[string]*Tag)
+  } else {
+    revision := strconv.FormatInt(storeTopic.topic.Revision, 10)
+    token := c.card.Data.CardProfile.Guid + "." + c.card.Data.CardDetail.Token
+    params := &TestApiParams{ query: "/channels/{channelId}/topics/{topicId}/tags?revision=" + revision,
+        path: map[string]string{ "channelId": storeChannel.channel.Id, "topicId": storeTopic.topic.Id },
+        tokenType: APP_TOKENCONTACT, token: token }
+    response := &TestApiResponse{ data: &tags }
+    if err = TestApiRequest(GetChannelTopicTags, params, response); err != nil {
+      return
+    }
+  }
+
+  for _, tag := range tags {
+    if tag.Data == nil {
+      delete(storeTopic.tags, tag.Id)
+    } else {
+      storeTopic.tags[tag.Id] = &tag
     }
   }
   return
@@ -435,30 +522,109 @@ func (a *TestApp) UpdateChannel(storeChannel *TestChannel, channel *Channel) (er
   return
 }
 
-func (a *TestApp) UpdateChannelTopics(testChannel *TestChannel) (err error) {
+func (a *TestApp) UpdateChannelTopics(storeChannel *TestChannel) (err error) {
   var topics []Topic
-  if testChannel.channel.Revision == 0 {
+  if storeChannel.channel.Revision == 0 {
     params := &TestApiParams{ query: "/channels/{channelId}/topics",
-      path: map[string]string{ "channelId": testChannel.channel.Id }, tokenType: APP_TOKENAPP, token: a.token }
+      path: map[string]string{ "channelId": storeChannel.channel.Id }, tokenType: APP_TOKENAPP, token: a.token }
     response := &TestApiResponse{ data: &topics }
     if err = TestApiRequest(GetChannelTopics, params, response); err != nil {
       return
     }
-    testChannel.topics = make(map[string]*Topic)
+    storeChannel.topics = make(map[string]*TestTopic)
   } else {
-    revision := strconv.FormatInt(testChannel.channel.Revision, 10)
+    revision := strconv.FormatInt(storeChannel.channel.Revision, 10)
     params := &TestApiParams{ query: "/channels/{channelId}/topics?revision=" + revision,
-        path: map[string]string{ "channelId": testChannel.channel.Id }, tokenType: APP_TOKENAPP, token: a.token }
+        path: map[string]string{ "channelId": storeChannel.channel.Id }, tokenType: APP_TOKENAPP, token: a.token }
     response := &TestApiResponse{ data: &topics }
     if err = TestApiRequest(GetChannelTopics, params, response); err != nil {
       return
     }
   }
+
   for _, topic := range topics {
-    if topic.Data == nil  {
-      delete(testChannel.topics, topic.Id)
+    if topic.Data == nil {
+      delete(storeChannel.topics, topic.Id)
     } else {
-      testChannel.topics[topic.Id] = &topic
+      storeTopic, set := storeChannel.topics[topic.Id]
+      if set {
+        if topic.Revision != storeTopic.topic.Revision {
+          if err = a.UpdateChannelTopic(storeChannel, storeTopic, &topic); err != nil {
+            return
+          }
+          storeTopic.topic.Revision = topic.Revision
+        }
+      } else {
+        storeTopic := &TestTopic{ topic: Topic{ Id: topic.Id, Data: &TopicData{} } }
+        storeChannel.topics[topic.Id] = storeTopic
+        if err = a.UpdateChannelTopic(storeChannel, storeTopic, &topic); err != nil {
+          return
+        }
+        storeTopic.topic.Revision = topic.Revision
+      }
+    }
+  }
+  return
+}
+
+func (a *TestApp) UpdateChannelTopic(storeChannel *TestChannel, storeTopic *TestTopic, topic *Topic) (err error) {
+  if storeTopic.topic.Revision != topic.Revision {
+    if storeTopic.topic.Data.TagRevision != topic.Data.TagRevision {
+      if err = a.UpdateChannelTopicTags(storeChannel, storeTopic); err != nil {
+        return
+      }
+      storeTopic.topic.Data.TagRevision = topic.Data.TagRevision
+    }
+    if topic.Data.TopicDetail != nil {
+      storeTopic.topic.Data.TopicDetail = topic.Data.TopicDetail
+      storeTopic.topic.Data.DetailRevision = topic.Data.DetailRevision
+    } else if storeTopic.topic.Data.DetailRevision != topic.Data.DetailRevision {
+      params := &TestApiParams{ query: "/channels/{channelId}/topics/{topicId}",
+          path: map[string]string{ "channelId": storeChannel.channel.Id, "topicId": topic.Id },
+          tokenType: APP_TOKENAPP, token: a.token }
+      topic := Topic{}
+      response := &TestApiResponse{ data: &topic }
+      if err = TestApiRequest(GetChannelTopic, params, response); err != nil {
+        return
+      }
+      if topic.Data == nil {
+        err = errors.New("topic removed during update")
+        return
+      }
+      storeTopic.topic.Data.TopicDetail = topic.Data.TopicDetail
+      storeTopic.topic.Data.DetailRevision = topic.Data.DetailRevision
+    }
+  }
+  return
+}
+
+func (a *TestApp) UpdateChannelTopicTags(storeChannel *TestChannel, storeTopic *TestTopic) (err error) {
+  var tags []Tag
+  if storeTopic.topic.Revision == 0 {
+    params := &TestApiParams{ query: "/channels/{channelId}/topics/{topicId}/tags",
+      path: map[string]string{ "channelId": storeChannel.channel.Id, "topicId": storeTopic.topic.Id },
+      tokenType: APP_TOKENAPP, token: a.token }
+    response := &TestApiResponse{ data: &tags }
+    if err = TestApiRequest(GetChannelTopicTags, params, response); err != nil {
+      return
+    }
+    storeTopic.tags = make(map[string]*Tag)
+  } else {
+    revision := strconv.FormatInt(storeTopic.topic.Revision, 10)
+    params := &TestApiParams{ query: "/channels/{channelId}/topics/{topicId}/tags?revision=" + revision,
+        path: map[string]string{ "channelId": storeChannel.channel.Id, "topicId": storeTopic.topic.Id },
+        tokenType: APP_TOKENAPP, token: a.token }
+    response := &TestApiResponse{ data: &tags }
+    if err = TestApiRequest(GetChannelTopicTags, params, response); err != nil {
+      return
+    }
+  }
+
+  for _, tag := range tags {
+    if tag.Data == nil {
+      delete(storeTopic.tags, tag.Id)
+    } else {
+      storeTopic.tags[tag.Id] = &tag
     }
   }
   return

@@ -66,6 +66,7 @@ func AddChannelTopicTag(w http.ResponseWriter, r *http.Request) {
     if res := tx.Save(tag).Error; res != nil {
       return res
     }
+    tagSlot.Tag = tag
 
     if res := tx.Model(&topicSlot.Topic).Update("tag_revision", act.ChannelRevision + 1).Error; res != nil {
       return res

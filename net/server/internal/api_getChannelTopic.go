@@ -22,7 +22,7 @@ func GetChannelTopic(w http.ResponseWriter, r *http.Request) {
 
   // load topic
   var topicSlot store.TopicSlot
-  if err = store.DB.Where("channel_id = ? AND topic_slot_id = ?", channelSlot.Channel.ID, topicId).First(&topicSlot).Error; err != nil {
+  if err = store.DB.Preload("Topic").Where("channel_id = ? AND topic_slot_id = ?", channelSlot.Channel.ID, topicId).First(&topicSlot).Error; err != nil {
     if errors.Is(err, gorm.ErrRecordNotFound) {
       code = http.StatusNotFound
     } else {

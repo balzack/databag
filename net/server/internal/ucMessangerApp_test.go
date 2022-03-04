@@ -10,6 +10,7 @@ func TestMessangerApp(t *testing.T) {
   var response *TestApiResponse
   var channel *Channel
   var topic *Topic
+  var tag *Tag
 
   // allocate test accounts
   set, err := AddTestGroup("messangerapp")
@@ -95,7 +96,7 @@ func TestMessangerApp(t *testing.T) {
     for _, c := range testApp.channels {
       if c.channel.Id == channel.Id {
         for _, t := range c.topics {
-          if t.Id == topic.Id {
+          if t.topic.Id == topic.Id {
             return true
           }
         }
@@ -103,6 +104,41 @@ func TestMessangerApp(t *testing.T) {
     }
     return false
   }))
+
+  // add a tag to channel topic
+  params = &TestApiParams{
+    restType: "POST",
+    query: "/content/channels/{channelId}/topics/{topicId}/tags",
+    path: map[string]string{ "channelId": channel.Id, "topicId": topic.Id },
+    body: &Subject{
+      Data: "channeltopictagdataA",
+      DataType: "channeltopictagdatatypeA",
+    },
+    tokenType: APP_TOKENAPP,
+    token: set.A.Token,
+  }
+  tag = &Tag{}
+  response = &TestApiResponse{ data: tag }
+  assert.NoError(t, TestApiRequest(AddChannelTopicTag, params, response))
+
+  // wait for test
+  assert.NoError(t, app.WaitFor(func(testApp *TestApp)bool{
+    for _, testChannel := range testApp.channels {
+      if testChannel.channel.Id == channel.Id {
+        for _, testTopic := range testChannel.topics {
+          if testTopic.topic.Id == topic.Id {
+            for _, testTag := range testTopic.tags {
+              if testTag.Id == tag.Id {
+                return true
+              }
+            }
+          }
+        }
+      }
+    }
+    return false
+  }))
+
 
   // add a channel
   params = &TestApiParams{
@@ -167,7 +203,7 @@ func TestMessangerApp(t *testing.T) {
         for _, testChannel := range testContact.channels {
           if testChannel.channel.Id == channel.Id {
             for _, t := range testChannel.topics {
-              if t.Id == topic.Id {
+              if t.topic.Id == topic.Id {
                 return true
               }
             }
@@ -177,5 +213,44 @@ func TestMessangerApp(t *testing.T) {
     }
     return false
   }))
+
+  // add a tag to channel topic
+  params = &TestApiParams{
+    restType: "POST",
+    query: "/content/channels/{channelId}/topics/{topicId}/tags",
+    path: map[string]string{ "channelId": channel.Id, "topicId": topic.Id },
+    body: &Subject{
+      Data: "channeltopictagdataB",
+      DataType: "channeltopictagdatatypeB",
+    },
+    tokenType: APP_TOKENAPP,
+    token: set.B.Token,
+  }
+  tag = &Tag{}
+  response = &TestApiResponse{ data: tag }
+  assert.NoError(t, TestApiRequest(AddChannelTopicTag, params, response))
+
+  // wait for test
+  assert.NoError(t, app.WaitFor(func(testApp *TestApp)bool{
+    for _, testContact := range testApp.contacts {
+      if testContact.card.Id == set.A.B.CardId {
+        for _, testChannel := range testContact.channels {
+          if testChannel.channel.Id == channel.Id {
+            for _, testTopic := range testChannel.topics {
+              if testTopic.topic.Id == topic.Id {
+                for _, testTag := range testTopic.tags {
+                  if testTag.Id == tag.Id {
+                    return true
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    return false
+  }))
+
 }
 
