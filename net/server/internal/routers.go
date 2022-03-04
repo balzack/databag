@@ -580,13 +580,6 @@ var routes = Routes{
 	},
 
 	Route{
-		"GetChannelTopicCount",
-		strings.ToUpper("Get"),
-		"/content/channels/{channelId}/topics/{topicId}/count",
-		GetChannelTopicCount,
-	},
-
-	Route{
 		"GetChannelTopicSubjectField",
 		strings.ToUpper("Get"),
 		"/content/channels/{channelId}/topics/{topicId}/subject/{field}",

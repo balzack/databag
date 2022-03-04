@@ -1,7 +1,6 @@
 package databag
 
 import (
-  "time"
   "errors"
   "net/http"
   "github.com/gorilla/mux"
@@ -68,16 +67,13 @@ func AddChannelTopicTag(w http.ResponseWriter, r *http.Request) {
       return res
     }
 
-    if res := tx.Model(&topicSlot.Topic).Update("tag_count", len(topicSlot.Topic.Tags) + 1).Error; res != nil {
-      return res
-    }
-    if res := tx.Model(&topicSlot.Topic).Update("tag_updated", time.Now().Unix()).Error; res != nil {
-      return res
-    }
     if res := tx.Model(&topicSlot.Topic).Update("tag_revision", act.ChannelRevision + 1).Error; res != nil {
       return res
     }
     if res := tx.Model(&topicSlot).Update("revision", act.ChannelRevision + 1).Error; res != nil {
+      return res
+    }
+    if res := tx.Model(&channelSlot.Channel).Update("topic_revision", act.ChannelRevision + 1).Error; res != nil {
       return res
     }
     if res := tx.Model(&channelSlot).Update("revision", act.ChannelRevision + 1).Error; res != nil {

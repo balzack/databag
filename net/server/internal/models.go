@@ -158,6 +158,8 @@ type ChannelData struct {
 
 	DetailRevision int64 `json:"detailRevision"`
 
+  TopicRevision int64 `json:"topicRevision"`
+
 	ChannelDetail *ChannelDetail `json:"channelDetail,omitempty"`
 }
 
@@ -368,13 +370,6 @@ type Tag struct {
 	Data *TagData `json:"data"`
 }
 
-type TagCount struct {
-
-	Count int32 `json:"count"`
-
-	Updated int64 `json:"updated"`
-}
-
 type TagData struct {
 
 	Guid string `json:"guid"`
@@ -404,8 +399,6 @@ type TopicData struct {
 	TagRevision int64 `json:"tagRevision"`
 
 	TopicDetail *TopicDetail `json:"topicDetail,omitempty"`
-
-	TopicTags *TagCount `json:"topicTags:,omitempty"`
 }
 
 type TopicDetail struct {

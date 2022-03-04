@@ -195,6 +195,7 @@ type ChannelSlot struct {
 
 type Channel struct {
   ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
+  TopicRevision     int64           `gorm:"not null"`
   DetailRevision    int64           `gorm:"not null"`
   DataType          string          `gorm:"index"`
   Data              string
@@ -228,8 +229,6 @@ type Topic struct {
   Status            string          `gorm:"not null;index"`
   Created           int64           `gorm:"autoCreateTime"`
   Updated           int64           `gorm:"autoUpdateTime"`
-  TagCount          int32           `gorm:"not null"`
-  TagUpdated        int64
   TagRevision       int64           `gorm:"not null"`
   Channel           *Channel
   Assets            []Asset

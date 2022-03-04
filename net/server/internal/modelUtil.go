@@ -258,18 +258,6 @@ func getTopicDetailModel(slot *store.TopicSlot) *TopicDetail {
       }
 }
 
-func getTopicCountModel(slot *store.TopicSlot) *TagCount {
-
-  if slot.Topic == nil {
-    return nil
-  }
-
-  return &TagCount{
-    Count: slot.Topic.TagCount,
-    Updated: slot.Topic.TagUpdated,
-  }
-}
-
 func getTopicModel(slot *store.TopicSlot) *Topic {
 
   if slot.Topic == nil {
@@ -286,7 +274,6 @@ func getTopicModel(slot *store.TopicSlot) *Topic {
       DetailRevision: slot.Topic.DetailRevision,
       TopicDetail: getTopicDetailModel(slot),
       TagRevision: slot.Topic.TagRevision,
-      TopicTags: getTopicCountModel(slot),
     },
   }
 }

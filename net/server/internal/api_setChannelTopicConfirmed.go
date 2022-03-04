@@ -53,6 +53,9 @@ func SetChannelTopicConfirmed(w http.ResponseWriter, r *http.Request) {
     if res := tx.Model(&topicSlot).Update("revision", act.ChannelRevision + 1).Error; res != nil {
       return res
     }
+    if res := tx.Model(&channelSlot.Channel).Update("topic_revision", act.ChannelRevision + 1).Error; res != nil {
+      return res
+    }
     if res := tx.Model(&channelSlot).Update("revision", act.ChannelRevision + 1).Error; res != nil {
       return res
     }

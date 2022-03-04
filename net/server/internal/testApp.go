@@ -520,8 +520,6 @@ func (a *TestApp) UpdateApp(rev *Revision) {
   a.mutex.Lock()
   defer a.mutex.Unlock()
 
-PrintMsg(rev)
-
   if rev.Profile != a.revision.Profile {
     if err := a.UpdateProfile(); err != nil {
       PrintMsg(err)

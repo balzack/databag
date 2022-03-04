@@ -40,7 +40,6 @@ func AddChannelTopic(w http.ResponseWriter, r *http.Request) {
     topic.TopicSlotID = topicSlot.ID
     topic.Data = subject.Data
     topic.DataType = subject.DataType
-    topic.TagCount = 0
     topic.Guid = guid
     topic.DetailRevision = act.ChannelRevision + 1
     topic.TagRevision = act.ChannelRevision + 1
@@ -56,6 +55,9 @@ func AddChannelTopic(w http.ResponseWriter, r *http.Request) {
     topicSlot.Topic = topic
 
     // update parent revision
+    if res := tx.Model(&channelSlot.Channel).Update("topic_revision", act.ChannelRevision + 1).Error; res != nil {
+      return res
+    }
     if res := tx.Model(&channelSlot).Update("revision", act.ChannelRevision + 1).Error; res != nil {
       return res
     }

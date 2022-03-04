@@ -2395,43 +2395,6 @@ paths:
         '500':
           description: internal server error
           
-  /content/channels/{channelId}/topics/{topicId}/count:
-    get:
-      tags:
-        - content
-      description: Get count of associated taghs.
-      operationId: get-channel-topic-count
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: channelId
-          in: path
-          description: specified channel id 
-          required: true
-          schema:
-            type: string
-        - name: topicId
-          in: path
-          description: specified topic id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TagCount'
-        '401':
-          description: invalid password
-        '404':
-          description: channel not found
-        '410':
-          description: account disabled
-        '500':
-          description: internal server error
-          
   /content/channels/{channelId}/topics/{topicId}/subject/{field}:
     get:
       tags:
@@ -3253,8 +3216,12 @@ components:
       type: object
       required:
         - detailRevision
+        - topicRevision
       properties:
         detailRevision:
+          type: integer
+          format: int64
+        topicRevision:
           type: integer
           format: int64
         channelDetail:
@@ -3324,8 +3291,6 @@ components:
           format: int64
         topicDetail:
           $ref: '#/components/schemas/TopicDetail'
-        topicTags::
-          $ref: '#/components/schemas/TagCount'
           
     TopicDetail:
       type: object
@@ -3355,19 +3320,6 @@ components:
         transform:
           type: string
           enum: [ complete, incomplete ]
-          
-    TagCount:
-      type: object
-      required:
-        - count
-        - updated
-      properties:
-        count:
-          type: integer
-          format: int32
-        updated:
-          type: integer
-          format: int64
           
     Tag:
       type: object
@@ -3639,6 +3591,7 @@ components:
     bearerAuth: 
       type: http
       scheme: bearer
+
 
 
 

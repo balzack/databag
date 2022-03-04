@@ -27,6 +27,8 @@ func AddChannel(w http.ResponseWriter, r *http.Request) {
     channel := &store.Channel{}
     channel.Data = subject.Data
     channel.DataType = subject.DataType
+    channel.DetailRevision = account.ChannelRevision + 1
+    channel.TopicRevision = account.ChannelRevision + 1
     if res := tx.Save(channel).Error; res != nil {
       return res
     }

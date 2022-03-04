@@ -1,7 +1,6 @@
 package databag
 
 import (
-  "time"
   "errors"
   "net/http"
   "gorm.io/gorm"
@@ -71,10 +70,10 @@ func SetChannelTopicTagSubject(w http.ResponseWriter, r *http.Request) {
     if res := tx.Model(&tagSlot.Tag.Topic).Update("tag_revision", act.ChannelRevision + 1).Error; res != nil {
       return res
     }
-    if res := tx.Model(&tagSlot.Tag.Topic).Update("tag_updated", time.Now().Unix()).Error; res != nil {
+    if res := tx.Model(&tagSlot.Tag.Topic.TopicSlot).Update("revision", act.ChannelRevision + 1).Error; res != nil {
       return res
     }
-    if res := tx.Model(&tagSlot.Tag.Topic.TopicSlot).Update("revision", act.ChannelRevision + 1).Error; res != nil {
+    if res := tx.Model(&channelSlot.Channel).Update("topic_revision", act.ChannelRevision + 1).Error; res != nil {
       return res
     }
     if res := tx.Model(&channelSlot).Update("revision", act.ChannelRevision + 1).Error; res != nil {

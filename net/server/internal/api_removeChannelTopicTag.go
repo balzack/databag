@@ -1,7 +1,6 @@
 package databag
 
 import (
-  "time"
   "errors"
   "net/http"
   "gorm.io/gorm"
@@ -74,16 +73,13 @@ func RemoveChannelTopicTag(w http.ResponseWriter, r *http.Request) {
     if res := tx.Model(&tag.TagSlot).Update("revision", act.ChannelRevision + 1).Error; res != nil {
       return res
     }
-    if res := tx.Model(&topicSlot.Topic).Update("tag_count", len(topicSlot.Topic.Tags)).Error; res != nil {
-      return res
-    }
     if res := tx.Model(&topicSlot.Topic).Update("tag_revision", act.ChannelRevision + 1).Error; res != nil {
       return res
     }
-    if res := tx.Model(&topicSlot.Topic).Update("tag_updated", time.Now().Unix()).Error; res != nil {
+    if res := tx.Model(&topicSlot).Update("revision", act.ChannelRevision + 1).Error; res != nil {
       return res
     }
-    if res := tx.Model(&topicSlot).Update("revision", act.ChannelRevision + 1).Error; res != nil {
+    if res := tx.Model(&channelSlot.Channel).Update("topic_revision", act.ChannelRevision + 1).Error; res != nil {
       return res
     }
     if res := tx.Model(&channelSlot).Update("revision", act.ChannelRevision + 1).Error; res != nil {
