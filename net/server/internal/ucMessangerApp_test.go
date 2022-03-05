@@ -252,5 +252,27 @@ func TestMessangerApp(t *testing.T) {
     return false
   }))
 
+  // unshare channel with A
+  params = &TestApiParams{
+    restType: "DELETE",
+    query: "/content/channels/{channelId}/cards/{cardId}",
+    path: map[string]string{ "cardId": set.B.A.CardId, "channelId": channel.Id },
+    tokenType: APP_TOKENAPP,
+    token: set.B.Token,
+  }
+  response = &TestApiResponse{}
+  assert.NoError(t, TestApiRequest(ClearChannelCard, params, response))
+
+  // wait for test
+  assert.NoError(t, app.WaitFor(func(testApp *TestApp)bool {
+    contact, contactSet := testApp.contacts[set.A.B.CardId]
+    if contactSet {
+      _, channelSet := contact.channels[channel.Id]
+      if !channelSet {
+        return true
+      }
+    }
+    return false
+  }))
 }
 
