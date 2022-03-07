@@ -173,22 +173,17 @@ func getChannelModel(slot *store.ChannelSlot, showData bool, showList bool) *Cha
     }
   }
 
-  var channelGroups *IdList
+  var contacts *ChannelContacts
   if showList {
     var groups []string;
     for _, group := range slot.Channel.Groups {
       groups = append(groups, group.GroupSlot.GroupSlotId)
     }
-    channelGroups = &IdList{ Ids: groups }
-  }
-
-  var channelCards *IdList
-  if showList {
     var cards []string;
     for _, card := range slot.Channel.Cards {
       cards = append(cards, card.CardSlot.CardSlotId)
     }
-    channelCards = &IdList{ Ids: cards }
+    contacts = &ChannelContacts{ Groups: groups, Cards: cards }
   }
 
   members := []string{}
@@ -207,9 +202,8 @@ func getChannelModel(slot *store.ChannelSlot, showData bool, showList bool) *Cha
         Data: slot.Channel.Data,
         Created: slot.Channel.Created,
         Updated: slot.Channel.Updated,
-        Groups: channelGroups,
-        Cards: channelCards,
-        Members: members,
+        Contacts: contacts,
+        Members: &ChannelMembers{ members },
       },
     },
   }

@@ -22,6 +22,8 @@ type AccountStatus struct {
 	StorageAvailable float64 `json:"storageAvailable"`
 
 	ForwardingAddress string `json:"forwardingAddress"`
+
+	Searchable bool `json:"searchable"`
 }
 
 type Announce struct {
@@ -145,6 +147,13 @@ type CardProfile struct {
 	Node string `json:"node"`
 }
 
+type ChannelContacts struct {
+
+	Groups []string `json:"groups"`
+
+	Cards []string `json:"cards"`
+}
+
 type Channel struct {
 
 	Id string `json:"id"`
@@ -173,11 +182,23 @@ type ChannelDetail struct {
 
 	Updated int64 `json:"updated"`
 
-	Groups *IdList `json:"groups,omitempty"`
+	Contacts *ChannelContacts `json:"contacts,omitempty"`
 
-  Cards *IdList `json:"cards,omitempty"`
+	Members *ChannelMembers `json:"members,omitempty"`
+}
 
-	Members []string `json:"members"`
+type ChannelMembers struct {
+
+	Members []string `json:"members,omitempty"`
+}
+
+type ChannelParams struct {
+
+	Subject *Subject `json:"subject"`
+
+	Groups []string `json:"groups"`
+
+	Cards []string `json:"cards"`
 }
 
 type Claim struct {

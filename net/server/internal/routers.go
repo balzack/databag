@@ -83,13 +83,6 @@ var routes = Routes{
 	},
 
 	Route{
-		"AddPublicAccount",
-		strings.ToUpper("Post"),
-		"/account/public/profile",
-		AddPublicAccount,
-	},
-
-	Route{
 		"GetAccountApps",
 		strings.ToUpper("Get"),
 		"/account/apps",
@@ -143,13 +136,6 @@ var routes = Routes{
 		strings.ToUpper("Get"),
 		"/account/available",
 		GetAccountUsername,
-	},
-
-	Route{
-		"GetPublicStatus",
-		strings.ToUpper("Get"),
-		"/account/public/status",
-		GetPublicStatus,
 	},
 
 	Route{

@@ -267,45 +267,6 @@ paths:
                   type: string
                   format: binary
           
-  /account/public/status:
-    get:
-      tags:
-        - account
-      description: Check if a public account can be created.
-      operationId: get-public-status
-      responses:
-        '200':
-          description: success
-          content:
-            application/json:
-              schema:
-                type: boolean
-        '500':
-          description: internal server error
-          
-  /account/public/profile:
-    post:
-      tags:
-        - account
-      description: Add a new account. Basic auth will be used for the accounts username and password. Access granted to when public account available.
-      operationId: add-public-account
-      security:
-        - bearerAuth: []
-        - basicCredentials: []
-      responses:
-        '201':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Profile'
-        '400':
-          description: invalid handle or password
-        '406':
-          description: accounts not available
-        '500':
-          description: internal server error
-          
   /account/available:
     get:
       tags:
@@ -333,6 +294,36 @@ paths:
         '500':
           description: internal server error
           
+  /account/listing:
+    get:
+      tags:
+        - account
+      description: Get profile of searchable accounts. Endpoint is publically accessible.
+      operationId: get-account-listing
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: guid
+          in: query
+          description: filter for specified guid 
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Profile'
+                  
+        '401':
+          description: permission denied
+        '500':
+          description: internal server error
+          
   /account/token:
     get:
       tags:
@@ -350,26 +341,6 @@ paths:
                 type: string
         '401':
           description: permission denied
-        '500':
-          description: internal server error
-          
-  /account/did:
-    get:
-      tags:
-        - account
-      description: Retrieve account DIDkey. Authorized to account username and password.
-      operationId: get-account-did
-      security:
-        - basicAuth: []
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                type: string
-        '401':
-          description: authentication error
         '500':
           description: internal server error
           
@@ -393,6 +364,29 @@ paths:
         '500':
           description: internal server error
           
+  /account/searchable:
+    put:
+      tags:
+        - account
+      description: Set whether account is publicly listed.
+      operationId: set-account-seachable
+      security:        
+        - basicAuth: []
+      responses:
+        '201':
+          description: success
+        '401':
+          description: permission denied
+        '405':
+          description: failed to confirm
+        '500':
+          description: internal server error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: boolean
+              
   /account/profile:
     get:
       tags:
@@ -553,6 +547,11 @@ paths:
           description: failed to confirm
         '500':
           description: internal server error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
           
   /account/apps:
     get:
@@ -1931,7 +1930,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Subject'
+              $ref: '#/components/schemas/ChannelParams'
           
   /content/channels/{channelId}:
     get:
@@ -2964,9 +2963,6 @@ components:
       properties:
         domain:
           type: string
-        publicLimit:
-          type: integer
-          format: int64
         accountStorage:
           type: integer
           format: int64
@@ -2978,6 +2974,7 @@ components:
         - storageUsed
         - storageAvailable
         - forwardingAddress
+        - searchable
       properties:
         disabled:
           type: boolean
@@ -2989,6 +2986,8 @@ components:
           format: int64
         forwardingAddress:
           type: string
+        searchable:
+          type: boolean
           
     Profile:
       type: object
@@ -3196,7 +3195,25 @@ components:
         updated:
           type: integer
           format: int64
-          
+
+    ChannelParams:
+      type: object
+      required:
+        - subject
+        - groups
+        - cards
+      properties:
+        subject:
+          $ref: '#/components/schemas/Subject'
+        groups:
+          type: array
+          items:
+            type: string
+        cards:
+          type: array
+          items:
+            type: string
+
     Channel:
       type: object
       required:
@@ -3245,23 +3262,36 @@ components:
         updated:
           type: integer
           format: int64
-        groups:
-          $ref: '#/components/schemas/ChannelGroups'
-        cards:
-          type: array
-          items:
-            type: string
+        contacts:
+          $ref: '#/components/schemas/ChannelContacts'
+        members:
+          $ref: '#/components/schemas/ChannelMembers'
           
-    ChannelGroups:
+    ChannelContacts:
       type: object
       required:
         - groups
+        - cards
       properties:
         groups:
           type: array
           items:
             type: string
+        cards:
+          type: array
+          items:
+            type: string
       
+    ChannelMembers:
+      type: object
+      required:
+        - members
+      properties:
+        members:
+          type: array
+          items:
+            type: string
+    
     Topic:
       type: object
       required:
@@ -3591,6 +3621,7 @@ components:
     bearerAuth: 
       type: http
       scheme: bearer
+
 
 
 
