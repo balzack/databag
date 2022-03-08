@@ -48,7 +48,7 @@ type AccountToken struct {
   Token             string          `gorm:"not null;uniqueIndex"`
   Expires           int64           `gorm:"not null"`
   Created           int64           `gorm:"autoCreateTime"`
-  Account           Account
+  Account           *Account
 }
 
 // NOTE: card & app reference account by guid, all other tables by id

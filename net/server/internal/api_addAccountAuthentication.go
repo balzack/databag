@@ -8,7 +8,7 @@ import (
   "github.com/theckman/go-securerandom"
 )
 
-func AddAccountApp(w http.ResponseWriter, r *http.Request) {
+func AddAccountAuthentication(w http.ResponseWriter, r *http.Request) {
 
   id, err := AccountLogin(r)
   if err != nil {
@@ -25,9 +25,9 @@ func AddAccountApp(w http.ResponseWriter, r *http.Request) {
 
   accountToken := store.AccountToken{
     AccountID: id,
-    TokenType: APP_ACCOUNTATTACH,
+    TokenType: APP_ACCOUNTRESET,
     Token: token,
-    Expires: time.Now().Unix() + APP_ATTACHEXPIRE,
+    Expires: time.Now().Unix() + APP_RESETEXPIRE,
   }
   if err := store.DB.Create(&accountToken).Error; err != nil {
     ErrResponse(w, http.StatusInternalServerError, err)
@@ -36,4 +36,6 @@ func AddAccountApp(w http.ResponseWriter, r *http.Request) {
 
   WriteResponse(w, token)
 }
+
+
 

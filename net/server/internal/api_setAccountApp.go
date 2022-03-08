@@ -11,25 +11,22 @@ import (
 func SetAccountApp(w http.ResponseWriter, r *http.Request) {
 
   token, res := BearerAccountToken(r);
-  if res != nil || token.TokenType != "attach" {
-    LogMsg("invalid bearer token")
-    w.WriteHeader(http.StatusUnauthorized)
+  if res != nil || token.TokenType != APP_ACCOUNTATTACH {
+    ErrResponse(w, http.StatusUnauthorized, res)
     return
   }
 
   // parse app data
   var appData AppData
-  if ParseRequest(r, w, &appData) != nil {
-    LogMsg("invalid request data")
-    w.WriteHeader(http.StatusBadRequest)
+  if res = ParseRequest(r, w, &appData); res != nil {
+    ErrResponse(w, http.StatusBadRequest, res)
     return
   }
 
   // gernate app token  
   data, err := securerandom.Bytes(APP_TOKENSIZE)
   if err != nil {
-    LogMsg("failed to generate token")
-    w.WriteHeader(http.StatusInternalServerError);
+    ErrResponse(w, http.StatusInternalServerError, err)
     return
   }
   access := hex.EncodeToString(data)
@@ -55,8 +52,7 @@ func SetAccountApp(w http.ResponseWriter, r *http.Request) {
     return nil;
   });
   if err != nil {
-    LogMsg("failed to save app")
-    w.WriteHeader(http.StatusInternalServerError)
+    ErrResponse(w, http.StatusInternalServerError, err)
     return
   }
 

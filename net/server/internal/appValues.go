@@ -5,6 +5,7 @@ const APP_BODYLIMIT = 1048576
 const APP_VERSION = "0.0.1"
 const APP_ATTACHEXPIRE = 300
 const APP_CREATEEXPIRE = 86400
+const APP_RESETEXPIRE = 86400
 const APP_CONNECTEXPIRE = 30
 const APP_KEYSIZE = 4096
 const APP_RSA4096 = "RSA4096"
@@ -40,6 +41,9 @@ const APP_QUEUEAUDIO = "audio"
 const APP_QUEUEVIDEO = "video"
 const APP_QUEUEPHOTO = "photo"
 const APP_QUEUEDEFAULT = ""
+const APP_ACCOUNTATTACH = "attach"
+const APP_ACCOUNTCREATE = "create"
+const APP_ACCOUNTRESET = "reset"
 
 func AppCardStatus(status string) bool {
   if status == APP_CARDPENDING {

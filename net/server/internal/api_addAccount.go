@@ -12,7 +12,7 @@ import (
 func AddAccount(w http.ResponseWriter, r *http.Request) {
 
   token, res := BearerAccountToken(r);
-  if res != nil || token.TokenType != "create" {
+  if res != nil || token.TokenType != APP_ACCOUNTCREATE {
     ErrResponse(w, http.StatusUnauthorized, res)
     return
   }
