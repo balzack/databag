@@ -15,7 +15,7 @@ func AddNodeAccount(w http.ResponseWriter, r *http.Request) {
     return
   }
 
-  data, err := securerandom.Bytes(16)
+  data, err := securerandom.Bytes(APP_CREATESIZE)
   if err != nil {
     ErrResponse(w, http.StatusInternalServerError, err)
     return
@@ -23,7 +23,7 @@ func AddNodeAccount(w http.ResponseWriter, r *http.Request) {
   token := hex.EncodeToString(data)
 
   accountToken := store.AccountToken{
-    TokenType: "create",
+    TokenType: APP_TOKENCREATE,
     Token: token,
     Expires: time.Now().Unix() + APP_CREATEEXPIRE,
   };

@@ -11,7 +11,7 @@ import (
 func SetAccountApp(w http.ResponseWriter, r *http.Request) {
 
   token, res := BearerAccountToken(r);
-  if res != nil || token.TokenType != APP_ACCOUNTATTACH {
+  if res != nil || token.TokenType != APP_TOKENATTACH {
     ErrResponse(w, http.StatusUnauthorized, res)
     return
   }

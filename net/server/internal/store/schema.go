@@ -68,6 +68,8 @@ type Account struct {
   Created           int64           `gorm:"autoCreateTime"`
   Updated           int64           `gorm:"autoUpdateTime"`
   Disabled          bool            `gorm:"not null;default:false"`
+  Searchable        bool            `gorm:"not null;default:false"`
+  Forward           string
   AccountDetail     AccountDetail
   Apps              []App
 }

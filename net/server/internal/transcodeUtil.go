@@ -1,6 +1,7 @@
 package databag
 
 import (
+  "time"
   "os"
   "io"
   "hash/crc32"
@@ -105,6 +106,8 @@ func transcodeAsset(asset *store.Asset) {
     cmd.Stdout = &stdout
     var stderr bytes.Buffer
     cmd.Stderr = &stderr
+time.Sleep(time.Second);
+
     if err := cmd.Run(); err != nil {
       LogMsg(stdout.String())
       LogMsg(stderr.String())
@@ -147,6 +150,9 @@ func UpdateAsset(asset *store.Asset, status string, crc uint32, size int64) (err
       return res
     }
     if res := tx.Model(&asset.Topic.TopicSlot).Update("revision", act.ChannelRevision + 1).Error; res != nil {
+      return res
+    }
+    if res := tx.Model(&asset.Channel).Update("topic_revision", act.ChannelRevision + 1).Error; res != nil {
       return res
     }
     if res := tx.Model(&asset.Channel.ChannelSlot).Update("revision", act.ChannelRevision + 1).Error; res != nil {

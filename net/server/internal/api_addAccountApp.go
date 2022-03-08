@@ -10,7 +10,7 @@ import (
 
 func AddAccountApp(w http.ResponseWriter, r *http.Request) {
 
-  id, err := AccountLogin(r)
+  account, err := AccountLogin(r)
   if err != nil {
     ErrResponse(w, http.StatusUnauthorized, err)
     return
@@ -24,8 +24,8 @@ func AddAccountApp(w http.ResponseWriter, r *http.Request) {
   token := hex.EncodeToString(data)
 
   accountToken := store.AccountToken{
-    AccountID: id,
-    TokenType: APP_ACCOUNTATTACH,
+    AccountID: account.ID,
+    TokenType: APP_TOKENATTACH,
     Token: token,
     Expires: time.Now().Unix() + APP_ATTACHEXPIRE,
   }

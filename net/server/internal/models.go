@@ -17,9 +17,9 @@ type AccountStatus struct {
 
 	Disabled bool `json:"disabled"`
 
-	StorageUsed float64 `json:"storageUsed"`
+	StorageUsed int64 `json:"storageUsed"`
 
-	StorageAvailable float64 `json:"storageAvailable"`
+	StorageAvailable int64 `json:"storageAvailable"`
 
 	ForwardingAddress string `json:"forwardingAddress"`
 

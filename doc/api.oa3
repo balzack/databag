@@ -2979,10 +2979,10 @@ components:
         disabled:
           type: boolean
         storageUsed:
-          type: number
+          type: integer
           format: int64
         storageAvailable:
-          type: number
+          type: integer
           format: int64
         forwardingAddress:
           type: string

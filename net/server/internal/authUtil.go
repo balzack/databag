@@ -11,12 +11,6 @@ import (
   "databag/internal/store"
 )
 
-type accountLogin struct {
-  ID uint
-  Guid string
-  Password []byte
-}
-
 func AdminLogin(r *http.Request) error {
 
   // extract request auth
@@ -44,26 +38,26 @@ func AdminLogin(r *http.Request) error {
   return nil
 }
 
-func AccountLogin(r *http.Request) (uint, error) {
+func AccountLogin(r *http.Request) (*store.Account, error) {
 
   // extract request auth
   username, password, ok := r.BasicAuth();
   if !ok || username == "" || password == "" {
-    return 0, errors.New("invalid login")
+    return nil, errors.New("invalid login")
   }
 
   // find account
-  var account accountLogin
+  account := &store.Account{}
   if store.DB.Model(&store.Account{}).Where("Username = ?", username).First(&account).Error != nil {
-    return 0, errors.New("username not found");
+    return nil, errors.New("username not found");
   }
 
   // compare password
   if bcrypt.CompareHashAndPassword(account.Password, []byte(password)) != nil {
-    return 0, errors.New("invalid password");
+    return nil, errors.New("invalid password");
   }
 
-  return account.ID, nil
+  return account, nil
 }
 
 func BearerAccountToken(r *http.Request) (store.AccountToken, error) {

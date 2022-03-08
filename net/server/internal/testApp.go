@@ -831,6 +831,8 @@ type TestApiParams struct {
   body interface{}
   tokenType string
   token string
+  authorization string
+  credentials string
 }
 
 type TestApiResponse struct {
@@ -857,6 +859,12 @@ func TestApiRequest(endpoint func(http.ResponseWriter, *http.Request), params *T
   if params.token != "" {
     SetBearerAuth(r, params.token)
   }
+  if params.authorization != "" {
+    SetBasicAuth(r, params.authorization)
+  }
+  if params.credentials != "" {
+    SetCredentials(r, params.credentials)
+  }
   endpoint(w, r)
 
   res := w.Result()
@@ -864,11 +872,13 @@ func TestApiRequest(endpoint func(http.ResponseWriter, *http.Request), params *T
     err = errors.New("response failed");
     return
   }
-  resp.header = res.Header
-  if resp.data != nil {
-    dec := json.NewDecoder(res.Body)
-    if err = dec.Decode(resp.data); err != nil {
-      return
+  if resp != nil {
+    resp.header = res.Header
+    if resp.data != nil {
+      dec := json.NewDecoder(res.Body)
+      if err = dec.Decode(resp.data); err != nil {
+        return
+      }
     }
   }
   return

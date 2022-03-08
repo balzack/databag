@@ -37,7 +37,7 @@ func GetChannelTopics(w http.ResponseWriter, r *http.Request) {
     }
   } else {
     var slots []store.TopicSlot
-    if err := store.DB.Preload("Topic").Where("channel_id = ?", channelSlot.Channel.ID).Find(&slots).Error; err != nil {
+    if err := store.DB.Preload("Topic.Assets").Where("channel_id = ?", channelSlot.Channel.ID).Find(&slots).Error; err != nil {
       ErrResponse(w, http.StatusInternalServerError, err)
       return
     }

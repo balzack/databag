@@ -3,13 +3,14 @@ package databag
 import (
   "errors"
   "net/http"
+  "gorm.io/gorm"
   "databag/internal/store"
 )
 
 func SetAccountAuthentication(w http.ResponseWriter, r *http.Request) {
 
   token, res := BearerAccountToken(r)
-  if res != nil || token.TokenType != APP_ACCOUNTRESET {
+  if res != nil || token.TokenType != APP_TOKENRESET {
     ErrResponse(w, http.StatusUnauthorized, res)
     return
   }
@@ -19,14 +20,23 @@ func SetAccountAuthentication(w http.ResponseWriter, r *http.Request) {
   }
 
   username, password, ret := BasicCredentials(r)
-  if ret != nil {
-    ErrResponse(w, http.StatusUnauthorized, ret)
+  if ret != nil || username == "" || password == nil || len(password) == 0 {
+    ErrResponse(w, http.StatusBadRequest, errors.New("invalid credentials"))
     return
   }
 
   token.Account.Username = username;
   token.Account.Password = password;
-  if err := store.DB.Save(token.Account).Error; err != nil {
+  err := store.DB.Transaction(func(tx *gorm.DB) error {
+    if res := tx.Save(token.Account).Error; res != nil {
+      return res
+    }
+    if res := tx.Delete(token).Error; res != nil {
+      return res
+    }
+    return nil
+  })
+  if err != nil {
     ErrResponse(w, http.StatusInternalServerError, err)
     return
   }

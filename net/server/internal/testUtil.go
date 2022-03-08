@@ -598,7 +598,7 @@ func AddTestAccount(username string) (guid string, token string, err error) {
   }
 
   // set account profile
-  if r, w, err = NewRequest("GET", "/account/profile", nil); err != nil {
+  if r, w, err = NewRequest("POST", "/account/profile", nil); err != nil {
     return
   }
   SetBearerAuth(r, access);
