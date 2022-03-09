@@ -7,9 +7,9 @@ import (
 
 func GetAccountStatus(w http.ResponseWriter, r *http.Request) {
 
-  account, err := AccountLogin(r)
+  account, code, err := BearerAppToken(r, false)
   if err != nil {
-    ErrResponse(w, http.StatusUnauthorized, err)
+    ErrResponse(w, code, err)
     return
   }
 

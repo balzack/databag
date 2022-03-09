@@ -181,6 +181,13 @@ var routes = Routes{
 	},
 
 	Route{
+		"SetAccountSerchable",
+		strings.ToUpper("Put"),
+		"/account/searchable",
+		SetAccountSearchable,
+	},
+
+	Route{
 		"AddNodeAccount",
 		strings.ToUpper("Post"),
 		"/admin/accounts",

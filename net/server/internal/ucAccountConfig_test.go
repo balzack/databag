@@ -92,12 +92,17 @@ func TestAccountConfig(t *testing.T) {
     return false
   }))
 
+  // set to searchable
+  searchable := true
+  params = &TestApiParams{ query: "/account/searchable", tokenType: APP_TOKENAPP, token: set.A.Token, body: &searchable }
+  assert.NoError(t, TestApiRequest(SetAccountSearchable, params, nil))
+
   // get account status
   accountStatus := &AccountStatus{}
-  params = &TestApiParams{ query: "/account/status", authorization: "newguy:ssap",
-    path: map[string]string{ "channelId": channel.Id, "topicId": topic.Id } }
+  params = &TestApiParams{ query: "/account/status", tokenType: APP_TOKENAPP, token: set.A.Token }
   response = &TestApiResponse{ data: accountStatus }
   assert.NoError(t, TestApiRequest(GetAccountStatus, params, response))
+  assert.True(t, accountStatus.Searchable)
 
   // add asset to topic
   assets = &[]Asset{}
