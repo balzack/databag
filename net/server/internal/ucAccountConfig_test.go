@@ -111,6 +111,12 @@ func TestAccountConfig(t *testing.T) {
     "/content/channels/{channelId}/topics/{topicId}/assets?transforms=" + url.QueryEscape(string(transforms)),
     pathParams, img, APP_TOKENAPP, set.A.Token, assets, nil))
 
-PrintMsg(accountStatus)
+  // get list of accounts
+  profiles := []CardProfile{}
+  params = &TestApiParams{ query: "/account/listing" }
+  response = &TestApiResponse{ data: &profiles }
+  assert.NoError(t, TestApiRequest(GetAccountListing, params, response))
+  assert.Equal(t, 1, len(profiles))
+  assert.Equal(t, set.A.Guid, profiles[0].Guid);
 
 }

@@ -300,8 +300,6 @@ paths:
         - account
       description: Get profile of searchable accounts. Endpoint is publically accessible.
       operationId: get-account-listing
-      security:
-        - bearerAuth: []
       parameters:
         - name: guid
           in: query
@@ -351,7 +349,7 @@ paths:
       description: Get disabled status of account. Authorized to account username and password.
       operationId: get-account-status
       security:
-        - basicAuth: []
+        - bearerAuth: []
       responses:
         '200':
           description: successful operation
@@ -371,7 +369,7 @@ paths:
       description: Set whether account is publicly listed.
       operationId: set-account-seachable
       security:        
-        - basicAuth: []
+        - bearerAuth: []
       responses:
         '201':
           description: success
