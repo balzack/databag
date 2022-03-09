@@ -8,12 +8,17 @@ import (
   "gorm.io/gorm"
   "databag/internal/store"
   "encoding/base64"
+  "github.com/gorilla/mux"
 )
 
 func GetAccountListingImage(w http.ResponseWriter, r *http.Request) {
 
+  // get referenced account guid
+  params := mux.Vars(r)
+  guid := params["guid"]
+
   var account store.Account
-  if err := store.DB.Preload("AccountDetail").Where("searchable = ? AND disabled = ?", true, false).First(&account).Error; err != nil {
+  if err := store.DB.Preload("AccountDetail").Where("guid = ? AND searchable = ? AND disabled = ?", guid, true, false).First(&account).Error; err != nil {
     if errors.Is(err, gorm.ErrRecordNotFound) {
       ErrResponse(w, http.StatusNotFound, err)
     } else {
