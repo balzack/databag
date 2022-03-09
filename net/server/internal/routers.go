@@ -97,24 +97,17 @@ var routes = Routes{
 	},
 
 	Route{
-		"GetAccountDid",
+		"GetAccountListing",
 		strings.ToUpper("Get"),
-		"/account/did",
-		GetAccountDid,
+		"/account/listing",
+		GetAccountListing,
 	},
 
 	Route{
-		"GetAccountImage",
+		"GetAccountListingImage",
 		strings.ToUpper("Get"),
-		"/account/profile/image",
-		GetAccountImage,
-	},
-
-	Route{
-		"GetAccountProfile",
-		strings.ToUpper("Get"),
-		"/account/profile",
-		GetAccountProfile,
+		"/account/listing/{guid}/image",
+		GetAccountListingImage,
 	},
 
 	Route{

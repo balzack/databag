@@ -185,36 +185,6 @@ paths:
         '500':
           description: internal server error
           
-  /admin/accounts/{accountId}/image:
-    get:
-      tags:
-        - admin
-      description: Get profile image of specified account. Access granted to admin username and password
-      operationId: get-node-account-image
-      security:
-        - basicAuth: []
-      parameters:
-        - name: accountId
-          in: path
-          description: id of specified account
-          required: true
-          schema:
-            type: string
-      responses: 
-        '200':
-          description: success
-          content:
-            application/octet-stream: # content specific
-              schema:
-                type: string
-                format: binary
-        '401':
-          description: permission denied
-        '405':
-          description: invalid image
-        '500':
-          description: internal server error
-          
   /admin/accounts/{accountId}:
     delete:
       tags:
@@ -316,7 +286,32 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Profile'
-                  
+        '401':
+          description: permission denied
+        '500':
+          description: internal server error
+          
+  /account/listing/{guid}/image:
+    get:
+      tags:
+        - account
+      description: Get profile image of searchable accounts. Endpoint is publically accessible.
+      operationId: get-account-listing-image
+      parameters:
+        - name: guid
+          in: path
+          description: filter for specified guid 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success
+          content:
+            application/octet-stream: # content specific
+              schema:
+                type: string
+                format: binary
         '401':
           description: permission denied
         '500':
@@ -386,24 +381,6 @@ paths:
               type: boolean
               
   /account/profile:
-    get:
-      tags:
-        - account
-      description: Get account profile. Access granted to account's username and password.
-      operationId: get-account-profile
-      security:
-        - basicAuth: []
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Profile'
-        '401':
-          description: authentication error
-        '500':
-          description: internal server error
     post:
       tags:
         - account
