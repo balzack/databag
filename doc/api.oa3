@@ -130,7 +130,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Account'
+                  $ref: '#/components/schemas/AccountProfile'
         '401':
           description: invalid password
         '404':
@@ -153,6 +153,36 @@ paths:
                 type: string
         '401':
           description: invalid password
+        '500':
+          description: internal server error
+          
+  /admin/accounts/{accountId}/image:
+    get:
+      tags:
+        - admin
+      description: Get profile image of node account.
+      operationId: get-node-account-image
+      security:
+        - basicAuth: []
+      parameters:
+        - name: accountId
+          in: path
+          description: id of account to delete
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/octet-stream: # content specific
+              schema:
+                type: string
+                format: binary
+        '401':
+          description: invalid authentication
+        '404':
+          description: account not found
         '500':
           description: internal server error
           
@@ -3006,13 +3036,23 @@ components:
       type: object
       required:
         - accountId
-        - profile
         - disabled
       properties:
         accountId:
+          type: integer
+          format: uint32
+        guid:
           type: string
-        profile:
-          $ref: '#/components/schemas/Profile'
+        handle:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        location:
+          type: string
+        imageSet:
+          type: boolean
         disabled:
           type: boolean
         

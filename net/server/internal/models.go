@@ -1,14 +1,20 @@
 package databag
 
-import (
-	//"os"
-)
+type AccountProfile struct {
 
-type Account struct {
+	AccountId uint32 `json:"accountId"`
 
-	AccountId string `json:"accountId"`
+  Guid string `json:"guid"`
 
-	Profile *Profile `json:"profile"`
+  Handle string `json:"handle,omitempty"`
+
+  Name string `json:"name,omitempty"`
+
+  Description string `json:"description,omitempty"`
+
+  Location string `json:"location,omitempty"`
+
+  ImageSet bool `json:"imageSet,omitempty"`
 
 	Disabled bool `json:"disabled"`
 }
