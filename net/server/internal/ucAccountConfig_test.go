@@ -119,4 +119,10 @@ func TestAccountConfig(t *testing.T) {
   assert.Equal(t, 1, len(profiles))
   assert.Equal(t, set.A.Guid, profiles[0].Guid);
 
+PrintMsg(set.A.Guid)
+
+  // delete account
+  params = &TestApiParams{ query: "/account/profile", authorization: "newguy:ssap" }
+  assert.NoError(t, TestApiRequest(RemoveAccount, params, nil))
+
 }

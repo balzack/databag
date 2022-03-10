@@ -2,40 +2,20 @@ package databag
 
 import (
   "os"
-  "errors"
-  "strconv"
   "gorm.io/gorm"
 	"net/http"
   "databag/internal/store"
-  "github.com/gorilla/mux"
 )
 
-func RemoveNodeAccount(w http.ResponseWriter, r *http.Request) {
+func RemoveAccount(w http.ResponseWriter, r *http.Request) {
 
-  // get referenced account id
-  params := mux.Vars(r)
-  accountId, res := strconv.ParseUint(params["accountId"], 10, 32)
-  if res != nil {
-    ErrResponse(w, http.StatusBadRequest, res)
-    return
-  }
-
-  if err := AdminLogin(r); err != nil {
+  account, err := AccountLogin(r)
+  if err != nil {
     ErrResponse(w, http.StatusUnauthorized, err)
     return
   }
 
-  var account store.Account
-  if err := store.DB.First(&account, accountId).Error; err != nil {
-    if errors.Is(err, gorm.ErrRecordNotFound) {
-      ErrResponse(w, http.StatusNotFound, err)
-    } else {
-      ErrResponse(w, http.StatusInternalServerError, err)
-    }
-    return
-  }
-
-  err := store.DB.Transaction(func(tx *gorm.DB) error {
+  err = store.DB.Transaction(func(tx *gorm.DB) error {
     if res := tx.Where("account_id = ?", account.ID).Delete(&store.Tag{}).Error; res != nil {
       return res
     }
