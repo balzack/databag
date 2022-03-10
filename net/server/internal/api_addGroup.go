@@ -26,12 +26,14 @@ func AddGroup(w http.ResponseWriter, r *http.Request) {
 
     data := &store.GroupData{
       Data: subject.Data,
+      AccountID: account.ID,
     }
     if res := tx.Save(data).Error; res != nil {
       return res
     }
 
     group := &store.Group{}
+    group.AccountID = account.ID
     group.GroupDataID = data.ID
     group.DataType = subject.DataType
     if res := tx.Save(group).Error; res != nil {

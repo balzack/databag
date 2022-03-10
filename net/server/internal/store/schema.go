@@ -110,6 +110,7 @@ type GroupSlot struct {
 type Group struct {
   ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
   GroupDataID       uint            `gorm:"not null;index:groupdata"`
+  AccountID         uint
   DataType          string          `gorm:"index"`
   Created           int64           `gorm:"autoCreateTime"`
   Updated           int64           `gorm:"autoUpdateTime"`
@@ -123,6 +124,7 @@ type Group struct {
 type GroupData struct {
   ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
   Data              string
+  AccountID         uint
 }
 
 type CardSlot struct {
@@ -177,6 +179,7 @@ type ArticleSlot struct {
 
 type Article struct {
   ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
+  AccountID         uint
   DataType          string          `gorm:"index"`
   Data              string
   Created           int64           `gorm:"autoCreateTime"`
@@ -197,6 +200,7 @@ type ChannelSlot struct {
 
 type Channel struct {
   ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
+  AccountID         uint
   TopicRevision     int64           `gorm:"not null"`
   DetailRevision    int64           `gorm:"not null"`
   DataType          string          `gorm:"index"`
@@ -223,6 +227,7 @@ type TopicSlot struct {
 type Topic struct {
   ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
   DetailRevision    int64           `gorm:"not null"`
+  AccountID         uint
   ChannelID         uint
   TopicSlotID       uint            `gorm:"not null;index:topictopicslot,unique"`
   Guid              string
@@ -274,6 +279,7 @@ type TagSlot struct {
 type Tag struct {
   ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
   TagSlotID         uint            `gorm:"not null;index:tagtagslot,unique"`
+  AccountID         uint
   ChannelID         uint            `gorm:"not null;index:channeltag"`
   TopicID           uint            `gorm:"not null;index:topictag"`
   Guid              string          `gorm:"not null"`

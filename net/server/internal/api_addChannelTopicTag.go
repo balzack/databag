@@ -57,6 +57,7 @@ func AddChannelTopicTag(w http.ResponseWriter, r *http.Request) {
     }
 
     tag := &store.Tag{}
+    tag.AccountID = act.ID
     tag.ChannelID = channelSlot.Channel.ID
     tag.TopicID = topicSlot.Topic.ID
     tag.TagSlotID = tagSlot.ID

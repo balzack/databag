@@ -36,6 +36,7 @@ func AddChannelTopic(w http.ResponseWriter, r *http.Request) {
     }
 
     topic := &store.Topic{}
+    topic.AccountID = act.ID
     topic.ChannelID = channelSlot.Channel.ID
     topic.TopicSlotID = topicSlot.ID
     topic.Data = subject.Data

@@ -25,6 +25,7 @@ func AddChannel(w http.ResponseWriter, r *http.Request) {
   err = store.DB.Transaction(func(tx *gorm.DB) error {
 
     channel := &store.Channel{}
+    channel.AccountID = account.ID
     channel.Data = subject.Data
     channel.DataType = subject.DataType
     channel.DetailRevision = account.ChannelRevision + 1

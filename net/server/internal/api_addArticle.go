@@ -25,6 +25,7 @@ func AddArticle(w http.ResponseWriter, r *http.Request) {
   err = store.DB.Transaction(func(tx *gorm.DB) error {
 
     article := &store.Article{}
+    article.AccountID = account.ID
     article.Data = subject.Data
     article.DataType = subject.DataType
     if res := tx.Save(article).Error; res != nil {
