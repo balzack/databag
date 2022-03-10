@@ -43,8 +43,8 @@ func NewRouter() *mux.Router {
 			Handler(handler)
 	}
 
-  fs := http.FileServer(http.Dir("./"))
-  router.PathPrefix("/static").Handler(http.StripPrefix("/", fs))
+  fs := http.FileServer(http.Dir("/data/web/"))
+  router.PathPrefix("/").Handler(http.StripPrefix("/", fs))
 
 	return router
 }
@@ -54,12 +54,6 @@ func Index(w http.ResponseWriter, r *http.Request) {
 }
 
 var routes = Routes{
-	Route{
-		"Index",
-		"GET",
-		"/",
-		Index,
-	},
 
 	Route{
 		"AddAccount",

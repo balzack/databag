@@ -19,8 +19,13 @@ RUN apt-get -y install imagemagick-6.q16
 RUN apt-get -y install ffmpeg
 RUN apt-get -y install build-essential
 RUN apt-get -y install sqlite3
+RUN apt-get -y install npm
 
 RUN apt-get -y upgrade
+
+RUN npm install --global yarn
+RUN npm install -g n
+RUN n stable
 
 RUN wget https://go.dev/dl/go1.17.5.linux-amd64.tar.gz
 RUN tar -C /usr/local -xzf go1.17.5.linux-amd64.tar.gz
