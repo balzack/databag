@@ -43,7 +43,7 @@ func NewRouter() *mux.Router {
 			Handler(handler)
 	}
 
-  fs := http.FileServer(http.Dir("/data/web/"))
+  fs := http.FileServer(http.Dir("/data/databag/net/web/build/"))
   router.PathPrefix("/").Handler(http.StripPrefix("/", fs))
 
 	return router
