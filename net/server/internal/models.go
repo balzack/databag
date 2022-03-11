@@ -322,7 +322,9 @@ type NodeConfig struct {
 
 	Domain string `json:"domain"`
 
-	PublicLimit int64 `json:"publicLimit"`
+  OpenAccess bool `json:"openAccess"`
+
+	AccountLimit int64 `json:"accountLimit"`
 
 	AccountStorage int64 `json:"accountStorage"`
 }

@@ -54,7 +54,7 @@ func TestMain(m *testing.M) {
   }
 
   // config server
-  config := NodeConfig{Domain: "example.com", PublicLimit: 1024, AccountStorage: 4096}
+  config := NodeConfig{Domain: "example.com", AccountLimit: 1024, OpenAccess: true, AccountStorage: 4096}
   r, w, _ = NewRequest("PUT", "/admin/config", &config)
   SetBasicAuth(r, "admin:pass")
   SetNodeConfig(w, r)
@@ -73,8 +73,11 @@ func TestMain(m *testing.M) {
   if check.Domain != "example.com" {
     panic("failed to set config domain");
   }
-  if check.PublicLimit != 1024 {
-    panic("failed to set public limit");
+  if check.AccountLimit != 1024 {
+    panic("failed to set account limit");
+  }
+  if check.OpenAccess != true {
+    panic("failed to set open access");
   }
   if check.AccountStorage != 4096 {
     panic("failed to set account storage");

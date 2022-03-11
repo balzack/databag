@@ -33,11 +33,19 @@ func SetNodeConfig(w http.ResponseWriter, r *http.Request) {
       return res
     }
 
-    // upsert public limit config
+    // upsert account limit config
     if res := tx.Clauses(clause.OnConflict{
       Columns:   []clause.Column{{Name: "config_id"}},
       DoUpdates: clause.AssignmentColumns([]string{"num_value"}),
-    }).Create(&store.Config{ConfigId: CONFIG_PUBLICLIMIT, NumValue: config.PublicLimit}).Error; res != nil {
+    }).Create(&store.Config{ConfigId: CONFIG_ACCOUNTLIMIT, NumValue: config.AccountLimit}).Error; res != nil {
+      return res
+    }
+
+    // upsert account open access
+    if res := tx.Clauses(clause.OnConflict{
+      Columns:   []clause.Column{{Name: "config_id"}},
+      DoUpdates: clause.AssignmentColumns([]string{"bool_value"}),
+    }).Create(&store.Config{ConfigId: CONFIG_ACCOUNTLIMIT, BoolValue: config.OpenAccess}).Error; res != nil {
       return res
     }
 

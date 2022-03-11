@@ -119,9 +119,16 @@ var routes = Routes{
 	},
 
 	Route{
-		"GetAccountUsername",
+		"GetAccountAvailable",
 		strings.ToUpper("Get"),
 		"/account/available",
+		GetAccountAvailable,
+	},
+
+	Route{
+		"GetAccountUsername",
+		strings.ToUpper("Get"),
+		"/account/username",
 		GetAccountUsername,
 	},
 

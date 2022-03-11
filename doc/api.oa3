@@ -266,8 +266,32 @@ paths:
                 fileName:
                   type: string
                   format: binary
-          
+
   /account/available:
+    get:
+      tags:
+        - account
+      description: Check if any public accounts are available
+      operationId: get-account-available
+      parameters:
+        - name: public
+          in: query
+          description: for open access accounts
+          required: false
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: available public accounts
+          content:
+            application/json:
+              schema:
+                type: integer
+                format: uint32
+        '500':
+          description: internal server error
+          
+  /account/username:
     get:
       tags:
         - account
@@ -2963,12 +2987,18 @@ components:
       type: object
       required:
         - domain
-        - publicLimit
+        - openAccess
+        - accountLimit
         - accountStorage
       properties:
         domain:
           type: string
         accountStorage:
+          type: integer
+          format: int64
+        openAccess
+          type: boolean
+        accountLimit
           type: integer
           format: int64
           
