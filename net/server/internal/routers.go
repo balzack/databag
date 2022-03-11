@@ -147,13 +147,6 @@ var routes = Routes{
 	},
 
 	Route{
-		"SetAccountApp",
-		strings.ToUpper("Put"),
-		"/account/apps",
-		SetAccountApp,
-	},
-
-	Route{
 		"SetAccountAuthentication",
 		strings.ToUpper("Put"),
 		"/account/auth",

@@ -30,7 +30,7 @@ func GetAccountUsername(w http.ResponseWriter, r *http.Request) {
     }
   }
 
-  username := r.URL.Query().Get("username")
+  username := r.URL.Query().Get("name")
   if username == "" {
     ErrResponse(w, http.StatusBadRequest, errors.New("specify a username"))
     return

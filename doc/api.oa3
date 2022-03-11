@@ -293,7 +293,7 @@ paths:
       security:
         - bearerAuth: []
       parameters:
-        - name: username
+        - name: name
           in: query
           description: username to check 
           required: true
@@ -601,28 +601,7 @@ paths:
         - account
       description: Generate token to attach an app to the account. Access granted to account's username and password.
       operationId: add-account-app
-      security:
         - basicAuth: []
-      responses:
-        '201':
-          description: generated
-          content:
-            application/json:
-              schema:
-                type: string
-        '401':
-          description: invalid password
-        '410':
-          description: account disabled
-        '500':
-          description: internal server error
-    put:
-      tags:
-        - account
-      description: Apply the token to attach an app to the account. Access granted to valid attach token.
-      operationId: set-account-app
-      security:
-        - bearerAuth: []
       responses:
         '201':
           description: generated

@@ -610,7 +610,7 @@ func AddTestAccount(username string) (guid string, token string, err error) {
   guid = profile.Guid
 
   // acquire new token for attaching app
-  if r, w, err = NewRequest("POST", "/account/apps", nil); err != nil {
+  if r, w, err = NewRequest("POST", "/account/apps", &app); err != nil {
     return
   }
   SetBasicAuth(r, login);
@@ -618,17 +618,7 @@ func AddTestAccount(username string) (guid string, token string, err error) {
   if err = ReadResponse(w, &access); err != nil {
     return
   }
-
-  // attach app with token
-  if r, w, err = NewRequest("PUT", "/account/apps", &app); err != nil {
-    return
-  }
-  SetBearerAuth(r, access)
-  SetAccountApp(w, r)
-  if err = ReadResponse(w, &access); err != nil {
-    return
-  }
-  token = guid + "." + access
+  token = access
 
   // authorize claim
   if r, w, err = NewRequest("PUT", "/authorize", "1234abcd"); err != nil {

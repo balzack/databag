@@ -50,6 +50,7 @@ func ErrResponse(w http.ResponseWriter, code int, err error) {
 }
 
 func ErrMsg(err error) {
+  PrintMsg("IN ERR MSG")
   if !hideLog && err != nil {
     _, file, line, _ := runtime.Caller(1)
     p, _ := os.Getwd()
