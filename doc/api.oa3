@@ -273,13 +273,6 @@ paths:
         - account
       description: Check if any public accounts are available
       operationId: get-account-available
-      parameters:
-        - name: public
-          in: query
-          description: for open access accounts
-          required: false
-          schema:
-            type: boolean
       responses:
         '200':
           description: available public accounts

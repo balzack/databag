@@ -89,7 +89,7 @@ func transcodeDefault() {
 func transcodeAsset(asset *store.Asset) {
 
   // prepare script path
-  data := getStrConfigValue(CONFIG_ASSETPATH, ".")
+  data := getStrConfigValue(CONFIG_ASSETPATH, APP_DEFAULTPATH)
   script := getStrConfigValue(CONFIG_SCRIPTPATH, ".")
   re := regexp.MustCompile("^[a-zA-Z0-9_]*$")
 

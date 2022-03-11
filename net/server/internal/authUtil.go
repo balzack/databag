@@ -60,7 +60,7 @@ func AccountLogin(r *http.Request) (*store.Account, error) {
   return account, nil
 }
 
-func BearerAccountToken(r *http.Request) (store.AccountToken, error) {
+func BearerAccountToken(r *http.Request) (*store.AccountToken, error) {
 
   // parse bearer authentication
   auth := r.Header.Get("Authorization")
@@ -69,12 +69,12 @@ func BearerAccountToken(r *http.Request) (store.AccountToken, error) {
   // find token record
   var accountToken store.AccountToken
   if err := store.DB.Preload("Account").Where("token = ?", token).First(&accountToken).Error; err != nil {
-    return accountToken, err
+    return nil, err
   }
   if accountToken.Expires < time.Now().Unix() {
-    return accountToken, errors.New("expired token")
+    return nil, errors.New("expired token")
   }
-  return accountToken, nil
+  return &accountToken, nil
 }
 
 func BearerAppToken(r *http.Request, detail bool) (*store.Account, int, error) {

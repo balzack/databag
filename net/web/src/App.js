@@ -1,13 +1,53 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import login from './login.png';
 import { Input, Button } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 
 import 'antd/dist/antd.css'; 
 
+const FETCH_TIMEOUT = 15000;
+
+function checkResponse(response) {
+  if(response.status >= 400 && response.status < 600) {
+    throw new Error(response.url + " failed");
+  }
+}
+
+async function fetchWithTimeout(url, options) {
+  return Promise.race([
+    fetch(url, options).catch(err => { throw new Error(url + ' failed'); }),
+    new Promise((_, reject) => setTimeout(() => reject(new Error(url + ' timeout')), FETCH_TIMEOUT))
+  ]);
+}
+
+async function getAvailable() {
+  let available = await fetchWithTimeout("/account/available", { method: 'GET', timeout: FETCH_TIMEOUT } );
+  checkResponse(available);
+  return await available.json()
+}
+
 function App() {
+  const [available, setAvailable] = useState(0)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+
+  useEffect(() => {
+
+    getAvailable().then(a => {
+      setAvailable(a)
+      console.log(a)
+    }).catch(err => {
+      console.log(err)
+    })
+
+  }, [])
+
+  const Create = () => {
+    if (available > 0) {
+      return <Button type="link" onClick={onCreate} style={{ marginTop: '4px', color: '#000044' }}>Create Account</Button> 
+    }
+    return <></>
+  }
 
   const onLogin = () => {
     console.log(username)
@@ -31,7 +71,7 @@ function App() {
           <Input.Password size="large" onChange={(e) => setPassword(e.target.value)} placeholder="password" prefix={<LockOutlined />} style={{ marginTop: '16px' }} />
           <Button type="primary" onClick={onLogin} style={{ alignSelf: 'center', marginTop: '16px', width: '33%' }}>Sign In</Button> 
         </div>
-        <Button type="link" onClick={onCreate} style={{ marginTop: '4px', color: '#000044' }}>Create Account</Button> 
+        <Create />
       </div>
     </div>
   );

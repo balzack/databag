@@ -2,6 +2,7 @@ package databag
 
 import (
   "os"
+  "errors"
   "net/http"
   "crypto/sha256"
   "encoding/hex"
@@ -10,16 +11,39 @@ import (
 )
 
 func AddAccount(w http.ResponseWriter, r *http.Request) {
+  var token *store.AccountToken
 
-  token, res := BearerAccountToken(r);
-  if res != nil || token.TokenType != APP_TOKENCREATE {
-    ErrResponse(w, http.StatusUnauthorized, res)
-    return
+  if r.Header.Get("Authorization") == "" {
+    if available, err := getAvailableAccounts(); err != nil {
+      ErrResponse(w, http.StatusInternalServerError, err)
+      return
+    } else if available == 0 {
+      ErrResponse(w, http.StatusForbidden, errors.New("no open accounts available"))
+      return
+    }
+  } else {
+    var err error
+    token, err = BearerAccountToken(r);
+    if err != nil || token.TokenType != APP_TOKENCREATE {
+      ErrResponse(w, http.StatusUnauthorized, err)
+      return
+    }
   }
 
   username, password, ret := BasicCredentials(r);
   if ret != nil {
     ErrResponse(w, http.StatusUnauthorized, ret)
+    return
+  }
+
+  // check if username is taken
+  var count int64
+  if err := store.DB.Model(&store.Account{}).Where("username = ?", username).Count(&count).Error; err != nil {
+    ErrResponse(w, http.StatusInternalServerError, err);
+    return
+  }
+  if count != 0 {
+    ErrResponse(w, http.StatusConflict, errors.New("username already taken"))
     return
   }
 
@@ -42,7 +66,7 @@ func AddAccount(w http.ResponseWriter, r *http.Request) {
   fingerprint := hex.EncodeToString(hash[:])
 
   // create path for account data
-  path := getStrConfigValue(CONFIG_ASSETPATH, ".") + "/" + fingerprint
+  path := getStrConfigValue(CONFIG_ASSETPATH, APP_DEFAULTPATH) + "/" + fingerprint
   if err := os.Mkdir(path, os.ModePerm); err != nil {
     ErrResponse(w, http.StatusInternalServerError, err)
   }
@@ -68,8 +92,10 @@ func AddAccount(w http.ResponseWriter, r *http.Request) {
     if res := tx.Create(&account).Error; res != nil {
       return res;
     }
-    if res := tx.Delete(token).Error; res != nil {
-      return res;
+    if token != nil {
+      if res := tx.Delete(token).Error; res != nil {
+        return res;
+      }
     }
     return nil;
   });

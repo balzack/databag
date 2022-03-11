@@ -47,6 +47,7 @@ const APP_QUEUEAUDIO = "audio"
 const APP_QUEUEVIDEO = "video"
 const APP_QUEUEPHOTO = "photo"
 const APP_QUEUEDEFAULT = ""
+const APP_DEFAULTPATH = "./asset"
 
 func AppCardStatus(status string) bool {
   if status == APP_CARDPENDING {

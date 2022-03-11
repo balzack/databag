@@ -70,7 +70,7 @@ func AddChannelTopicAsset(w http.ResponseWriter, r *http.Request) {
 
   // save new file
   id := uuid.New().String()
-  path := getStrConfigValue(CONFIG_ASSETPATH, ".") + "/" + channelSlot.Account.Guid + "/" + id
+  path := getStrConfigValue(CONFIG_ASSETPATH, APP_DEFAULTPATH) + "/" + channelSlot.Account.Guid + "/" + id
   if err := r.ParseMultipartForm(32 << 20); err != nil {
     ErrResponse(w, http.StatusBadRequest, err)
     return
