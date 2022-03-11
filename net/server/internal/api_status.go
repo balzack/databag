@@ -1,6 +1,7 @@
 package databag
 
 import (
+  "time"
   "errors"
   "sync"
 	"net/http"
@@ -44,7 +45,7 @@ func Status(w http.ResponseWriter, r *http.Request) {
   // extract token target and access
   target, access, ret := ParseToken(a.AppToken)
   if ret != nil {
-    ErrMsg(err)
+    ErrMsg(ret)
     return
   }
 
@@ -76,6 +77,10 @@ func Status(w http.ResponseWriter, r *http.Request) {
   AddStatusListener(app.Account.ID, c)
   defer RemoveStatusListener(app.Account.ID, c)
 
+  // start ping pong ticker
+  ticker := time.NewTicker(60 * time.Second)
+	defer ticker.Stop()
+
   // send revision until channel is closed
   for {
 		select {
@@ -84,6 +89,12 @@ func Status(w http.ResponseWriter, r *http.Request) {
         ErrMsg(err)
         return
       }
+    case <-ticker.C:
+      if err := conn.WriteMessage(websocket.PingMessage, nil); err != nil {
+        ErrMsg(err)
+        return
+      }
+      conn.SetReadDeadline(time.Now().Add(15 * time.Second))
 		case <-wsExit:
 			LogMsg("exiting server")
       wsExit<-true

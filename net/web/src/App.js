@@ -55,7 +55,7 @@ function App() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')  
   const [confirmed, setConfirmed] = useState('')
-  const [mode, setMode] = useState('login')
+  const [mode, setMode] = useState('')
   const [creatable, setCreatable] = useState(false)
   const [conflict, setConflict] = useState('')
   const [token, setToken] = useState('')
@@ -63,11 +63,21 @@ function App() {
   const ws = useRef(null) 
 
   useEffect(() => {
-    getAvailable().then(a => {
-      setAvailable(a > 0)
-    }).catch(err => {
-      console.log(err)
-    })
+    let access = localStorage.getItem("access")
+    console.log("ACCESS", access)
+
+    if (access == null) {
+      setMode('login')
+      getAvailable().then(a => {
+        setAvailable(a > 0)
+      }).catch(err => {
+        console.log(err)
+      })
+    }
+    else {
+      setMode('logout')
+      connectStatus(access)
+    }
 
   }, [])
 
@@ -110,6 +120,7 @@ function App() {
     ws.current.error = () => {
       console.log('ws error')
     }
+    localStorage.setItem("access", access)
   }
 
   const Logout = () => {
@@ -171,6 +182,8 @@ function App() {
   const onLogout = () => {
     ws.current.onclose = () => {}
     ws.current.close(1000, "bye")
+    ws.current = null
+    localStorage.removeItem("access")
     setMode('login')
   }
 
