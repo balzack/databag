@@ -1,4 +1,4 @@
-import { Input, Button } from 'antd';
+import { Input, Button, Spin } from 'antd';
 import styled from 'styled-components';
 
 export const CreateWrapper = styled.div`
@@ -59,3 +59,7 @@ export const CreateEnter = styled(Button)`
 export const CreateLogin = styled(Button)`
   margin-top: 4px;
 `;
+
+export const CreateSpin = styled(Spin)`
+  position: absolute;
+`

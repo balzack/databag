@@ -8,6 +8,7 @@ export function useLogin() {
     username: '',
     password: '',
     available: false,
+    spinning: false,
   });
 
   const navigate = useNavigate();
@@ -27,11 +28,15 @@ export function useLogin() {
       return false
     },
     onLogin: async () => {
-      try {
-        await app.actions.login(state.username, state.password)
-      }
-      catch (err) {
-        window.alert(err)
+      if (!state.spinning) {
+        actions.updateState({ spinning: true })
+        try {
+          await app.actions.login(state.username, state.password)
+        }
+        catch (err) {
+          window.alert(err)
+        }
+        actions.updateState({ spinning: false })
       }
     },
     onCreate: () => {

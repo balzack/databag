@@ -3,7 +3,7 @@ import { AppContext } from '../AppContext/AppContext';
 import { Input, Button } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { useLogin } from './useLogin.hook';
-import { LoginWrapper, LoginInput, LoginPassword, LoginCreate, LoginEnter } from './Login.styled';
+import { LoginWrapper, LoginInput, LoginPassword, LoginCreate, LoginEnter, LoginSpin } from './Login.styled';
 
 export function Login(props) {
 
@@ -27,6 +27,7 @@ export function Login(props) {
       <LoginCreate type="link" onClick={() => actions.onCreate()} disabled={!state.available}>
         <span>Create Account</span>
       </LoginCreate>
+      <LoginSpin size="large" spinning={state.spinning} />
     </LoginWrapper>
   );
 }

@@ -1,9 +1,9 @@
 import React, { useContext, useState, useEffect, useRef } from 'react'
 import { AppContext } from '../AppContext/AppContext';
-import { Input, Button } from 'antd';
+import { Input, Button, Spin } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { useCreate } from './useCreate.hook';
-import { CreateWrapper, CreateInput, CreatePassword, CreateLogin, CreateEnter } from './Create.styled';
+import { CreateWrapper, CreateInput, CreatePassword, CreateLogin, CreateEnter, CreateSpin } from './Create.styled';
 
 export function Create() {
   const { state, actions } = useCreate()
@@ -27,6 +27,7 @@ export function Create() {
         </CreateEnter>
       </div>
       <CreateLogin type="link" onClick={() => actions.onLogin()}>Account Sign In</CreateLogin>
+      <CreateSpin size="large" spinning={state.spinning} />
     </CreateWrapper>
   )
 }

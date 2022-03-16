@@ -10,6 +10,7 @@ export function useCreate() {
     password: '',
     confirmed: '',
     conflict: '',
+    spinning: false,
   });
 
   const navigate = useNavigate();
@@ -38,11 +39,15 @@ export function useCreate() {
       navigate('/login')
     },
     onCreate: async () => {
-      try {
-        app.actions.create(state.username, state.password)
-      }
-      catch (err) {
-        window.alert(err);
+      if (!state.spinning) {
+        actions.updateState({ spinning: true })
+        try {
+          await app.actions.create(state.username, state.password)
+        }
+        catch (err) {
+          window.alert(err);
+        }
+        actions.updateState({ spinning: false })
       }
     },
     updateState: (value) => {
