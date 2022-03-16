@@ -6,7 +6,6 @@ import { useLogin } from './useLogin.hook';
 import { LoginWrapper, LoginInput, LoginPassword, LoginCreate, LoginEnter } from './Login.styled';
 
 export function Login(props) {
-console.log(props)
 
   const { state, actions } = useLogin()
 
