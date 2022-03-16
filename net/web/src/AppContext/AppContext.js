@@ -4,9 +4,9 @@ import useAppContext from './useAppContext.hook';
 export const AppContext = createContext({});
 
 export function AppContextProvider({ children }) {
-  const state = useAppContext();
+  const { state, actions } = useAppContext();
   return (
-    <AppContext.Provider value={state}>
+    <AppContext.Provider value={{ state, actions }}>
       {children}
     </AppContext.Provider>
   );

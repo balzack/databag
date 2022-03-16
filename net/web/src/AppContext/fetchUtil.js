@@ -21,13 +21,13 @@ export async function getAvailable() {
   return await available.json()
 }
 
-export async function getUsername(name: string) {
+export async function getUsername(name) {
   let available = await fetchWithTimeout('/account/username?name=' + encodeURIComponent(name), { method: 'GET', timeout: FETCH_TIMEOUT })
   checkResponse(available)
   return await available.json()
 }
 
-export async function setLogin(username: string, password: string) {
+export async function setLogin(username, password) {
   let headers = new Headers()
   headers.append('Authorization', 'Basic ' + base64.encode(username + ":" + password));
   let app = { Name: "indicom", Description: "decentralized communication" }
@@ -36,7 +36,7 @@ export async function setLogin(username: string, password: string) {
   return await login.json()
 }
 
-export async function createAccount(username: string, password: string) {
+export async function createAccount(username, password) {
   let headers = new Headers()
   headers.append('Credentials', 'Basic ' + base64.encode(username + ":" + password));
   let profile = await fetchWithTimeout("/account/profile", { method: 'POST', timeout: FETCH_TIMEOUT, headers: headers })

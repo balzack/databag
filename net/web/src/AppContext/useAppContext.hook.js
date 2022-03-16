@@ -2,17 +2,17 @@ import { useEffect, useState, useRef } from 'react';
 import { getAvailable, getUsername, setLogin, createAccount } from './fetchUtil';
 
 export default function useAppContext() {
-  const [state, setState] = useState(null);
+  const [state, setAppState] = useState(null);
   const ws = useRef(null);
 
-  const login = async (username: string, password: string) => {
+  const login = async (username, password) => {
     let access = await setLogin(username, password)
-    setState({ appToken: access, access: 'user', actions: userActions });
+    setAppState({ appToken: access, access: 'user' });
     localStorage.setItem("session", JSON.stringify({ token: access, access: 'user' }));
     connectStatus(access);    
   }
 
-  const create = async (username: string, password: string) => {
+  const create = async (username, password) => {
     await createAccount(username, password);
     try {
       await login(username, password)
@@ -23,15 +23,13 @@ export default function useAppContext() {
 
   const logout = () => {
     ws.current.onclose = () => {}
-    ws.current.close(1000, "bye")
+    ws.current.close()
     ws.current = null
-    setState({ actions: accessActions })
+    setAppState({ actions: accessActions })
     localStorage.removeItem("session");
   }
 
   const userActions = {
-    setListener: setListener,
-    clearListener: clearListener,
     logout: logout,
   }
 
@@ -46,7 +44,7 @@ export default function useAppContext() {
     available: getAvailable,
   }
 
-  const connectStatus = (token: string) => {
+  const connectStatus = (token) => {
     ws.current = new WebSocket("wss://" + window.location.host + "/status");
     ws.current.onmessage = (ev) => {
       console.log(ev)
@@ -77,33 +75,34 @@ export default function useAppContext() {
       try {
         const session = JSON.parse(storage)
         if (session?.access === 'admin') {
-          setState({ appToken: session.token, access: session.access, actions: adminActions })
+          setAppState({ token: session.token, access: session.access })
           connectStatus(session.token);    
         } else if (session?.access === 'user') {
-          setState({ appToken: session.token, access: session.access, actions: userActions })
+          setAppState({ token: session.token, access: session.access })
           connectStatus(session.token);    
         } else {
-          setState({ actions: accessActions })
+          setAppState({ })
         }
       }
       catch(err) {
         console.log(err)
-        setState({ actions: accessActions })
+        setAppState({ actions: accessActions })
       }
     } else {
-      setState({ actions: accessActions })
+      setAppState({ actions: accessActions })
     }
   }, []);
 
-  return state;
-}
-
-function setListener(name: string, callback: (objectId: string) => void) {
-  return
-}
-
-function clearListener(callback: (objectId: string) => void) {
-  return
+  if (!state) {
+    return {}
+  }
+  if (state.access === 'user') {
+    return { state, actions: userActions }
+  }
+  if (state.access === 'admin') {
+    return { state, actions: adminActions }
+  }
+  return { actions: accessActions }
 }
 
 
