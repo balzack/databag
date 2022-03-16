@@ -23,7 +23,7 @@ export function useUser() {
       if (app.state == null) {
           navigate('/')
       }
-      else if (app.state.access == 'admin') {
+      else if (app.state.access === 'admin') {
         navigate('/admin')
       }
     }

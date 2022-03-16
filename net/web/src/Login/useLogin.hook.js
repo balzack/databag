@@ -50,17 +50,17 @@ export function useLogin() {
   useEffect(() => {
     if (app) {
       if (app.state) {
-        if (app.state.access == 'user') {
+        if (app.state.access === 'user') {
           navigate('/user')
         }
-        if (app.state.access == 'admin') {
+        if (app.state.access === 'admin') {
           navigate('/admin')
         }
       }
       if (app.actions && app.actions.available) {
         const count = async () => {
           const available = await app.actions.available()
-          actions.updateState({ available: available != 0 })
+          actions.updateState({ available: available !== 0 })
         }
         count();
       }

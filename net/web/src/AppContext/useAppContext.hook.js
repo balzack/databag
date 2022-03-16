@@ -81,15 +81,15 @@ export default function useAppContext() {
           setAppState({ token: session.token, access: session.access })
           connectStatus(session.token);    
         } else {
-          setAppState({ })
+          setAppState({})
         }
       }
       catch(err) {
         console.log(err)
-        setAppState({ actions: accessActions })
+        setAppState({})
       }
     } else {
-      setAppState({ actions: accessActions })
+      setAppState({})
     }
   }, []);
 

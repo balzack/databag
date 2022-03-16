@@ -5,7 +5,7 @@ import { Login } from './Login/Login';
 import { Create } from './Create/Create';
 import { User } from './User/User';
 import { HashRouter as Router, Routes, Route } from "react-router-dom";
-import 'antd/dist/antd.css'; 
+import 'antd/dist/antd.min.css'; 
 
 function App() {
 

@@ -1,6 +1,4 @@
-import React, { useContext, useState, useEffect, useRef } from 'react'
-import { AppContext } from '../AppContext/AppContext';
-import { Input, Button, Spin } from 'antd';
+import React from 'react'
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { useCreate } from './useCreate.hook';
 import { CreateWrapper, CreateInput, CreatePassword, CreateLogin, CreateEnter, CreateSpin } from './Create.styled';

@@ -1,6 +1,4 @@
-import React, { useContext, useState, useEffect, useRef } from 'react'
-import { AppContext } from '../AppContext/AppContext';
-import { Input, Button } from 'antd';
+import React from 'react'
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { useLogin } from './useLogin.hook';
 import { LoginWrapper, LoginInput, LoginPassword, LoginCreate, LoginEnter, LoginSpin } from './Login.styled';

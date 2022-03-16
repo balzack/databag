@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 
 export function useCreate() {
   const [checked, setChecked] = useState(true)
-  const [conflict, setConflict] = useState('')
   const [state, setState] = useState({
     username: '',
     password: '',
@@ -29,8 +28,8 @@ export function useCreate() {
       actions.updateState({ confirmed });
     },
     isDisabled: () => {
-      if (state.username != '' && state.password != '' && state.password == state.confirmed && 
-          checked && state.conflict == '') {
+      if (state.username !== '' && state.password !== '' && state.password === state.confirmed && 
+          checked && state.conflict === '') {
         return false
       }
       return true
@@ -60,7 +59,7 @@ export function useCreate() {
     clearTimeout(debounce.current)
     debounce.current = setTimeout(async () => {
       if (app.actions && app.actions.username) {
-        if (name == '') {
+        if (name === '') {
           setChecked(true)
           actions.updateState({ conflict: '' })
         }
@@ -80,10 +79,10 @@ export function useCreate() {
   useEffect(() => {
     if (app) {
       if (app.state) {
-        if (app.state.access == 'user') {
+        if (app.state.access === 'user') {
           navigate('/user')
         }
-        if (app.state.access == 'admin') {
+        if (app.state.access === 'admin') {
           navigate('/admin')
         }
       }

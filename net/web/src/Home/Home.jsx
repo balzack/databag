@@ -1,6 +1,5 @@
-import React, { useContext, useState, useEffect, useRef } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { useNavigate } from "react-router-dom";
-import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import { AppContext } from '../AppContext/AppContext';
                                            
 export function Home() {
