@@ -38,7 +38,7 @@ func GetGroups(w http.ResponseWriter, r *http.Request) {
     }
   }
 
-  var response []*Group
+  response := []*Group{}
   for _, slot := range slots {
     response = append(response, getGroupModel(&slot))
   }

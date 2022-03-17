@@ -43,3 +43,13 @@ export async function createAccount(username, password) {
   checkResponse(profile);
   return await profile.json()
 }
+
+export async function getGroups(token, revision) {
+  let headers = new Headers()
+  headers.append('Authorization', 'Bearer ' + token);
+  let param = revision == null ? '' : '?revision=' + revision
+  let groups = await fetchWithTimeout('/alias/groups' + param, { method: 'GET', timeout: FETCH_TIMEOUT, headers: headers });
+  checkResponse(groups)
+  return await groups.json()
+}
+

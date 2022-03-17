@@ -18,7 +18,7 @@ export function Create() {
            addonAfter={state.conflict} />
         <CreatePassword size="large" spellCheck="false" placeholder="password" prefix={<LockOutlined />} 
             onChange={(e) => actions.setPassword(e.target.value)} value={state.password} />
-        <CreatePassword size="large" spellCheck="false" placeholder="password" prefix={<LockOutlined />}
+        <CreatePassword size="large" spellCheck="false" placeholder="confirm password" prefix={<LockOutlined />}
             onChange={(e) => actions.setConfirmed(e.target.value)} value={state.confirmed} />
         <CreateEnter type="primary" onClick={() => actions.onCreate()} disabled={actions.isDisabled()}>
           <span>Create Account</span>
