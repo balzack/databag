@@ -50,7 +50,7 @@ func GetOpenMessage(w http.ResponseWriter, r *http.Request) {
     Location: detail.Location,
     Image: detail.Image,
     Version: APP_VERSION,
-    Node: "https://" + getStrConfigValue(CONFIG_DOMAIN, "") + "/",
+    Node: getStrConfigValue(CONFIG_DOMAIN, ""),
   }
 
   msg, err := WriteDataMessage(detail.PrivateKey, detail.PublicKey, detail.KeyType,

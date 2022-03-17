@@ -1,11 +1,17 @@
 import { useEffect, useState, useRef } from 'react';
-import { getGroups, getAvailable, getUsername, setLogin, createAccount } from './fetchUtil';
+import { getProfile, getGroups, getAvailable, getUsername, setLogin, createAccount } from './fetchUtil';
 
-async function updateGroups(token, revision, groupMap) {
+async function updateProfile(token, updateData) {
+  let profile = await getProfile(token);
+  updateData({ profile: profile })
+}
+
+async function updateGroups(token, revision, groupMap, updateData) {
   let groups = await getGroups(token, revision);
   for (let group of groups) {
     groupMap.set(group.id, group);
   }
+  updateData({ groups: Array.from(groupMap.values()) });
 }
 
 async function appCreate(username, password, updateState, setWebsocket) {
@@ -33,8 +39,13 @@ function appLogout(updateState, clearWebsocket) {
 
 export function useAppContext() {
   const [state, setState] = useState(null);
+
   const groupRevision = useRef(null);
   const groups = useRef(new Map());
+
+  const profileRevision = useRef(null);
+  const profile = useRef({});
+
   const ws = useRef(null);
   const revision = useRef(null);
   const updateState = (value) => {
@@ -47,15 +58,25 @@ export function useAppContext() {
     })
   }
 
+  const resetData = () => {
+    revision.current = null;
+    profile.current = {};
+    profileRevision.current = null;
+    groups.current = new Map();
+    groupRevision.current = null;
+  }
+
   const userActions = {
     logout: () => {
       appLogout(updateState, clearWebsocket);
+      resetData();
     }
   }
 
   const adminActions = {
     logout: () => {
       appLogout(updateState, clearWebsocket);
+      resetData();
     }
   }
 
@@ -76,9 +97,14 @@ export function useAppContext() {
 
       // update group if revision changed
       if (rev.group != groupRevision.current) {
-        await updateGroups(token, groupRevision.current, groups.current);
-        updateData({ groups: Array.from(groups.current.values()) });
+        await updateGroups(token, groupRevision.current, groups.current, updateData);
         groupRevision.current = rev.group
+      }
+
+      // update profile if revision changed
+      if (rev.profile != profileRevision.current) {
+        await updateProfile(token, updateData) 
+        profileRevision.current = rev.profile
       }
 
       // check if new revision was received during processing

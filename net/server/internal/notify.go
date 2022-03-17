@@ -28,7 +28,7 @@ func SendNotifications() {
   for {
     select {
       case notification := <-notify:
-        node := "https://" + getStrConfigValue(CONFIG_DOMAIN, "") + "/"
+        node := getStrConfigValue(CONFIG_DOMAIN, "")
         if notification.Node == node {
           SendLocalNotification(notification)
         } else {

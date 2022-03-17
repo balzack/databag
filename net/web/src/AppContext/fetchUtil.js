@@ -44,6 +44,14 @@ export async function createAccount(username, password) {
   return await profile.json()
 }
 
+export async function getProfile(token) {
+  let headers = new Headers()
+  headers.append('Authorization', 'Bearer ' + token);
+  let profile = await fetchWithTimeout('/profile', { method: 'GET', timeout: FETCH_TIMEOUT, headers: headers });
+  checkResponse(profile)
+  return await profile.json()
+}
+
 export async function getGroups(token, revision) {
   let headers = new Headers()
   headers.append('Authorization', 'Bearer ' + token);

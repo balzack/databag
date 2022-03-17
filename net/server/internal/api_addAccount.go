@@ -114,7 +114,7 @@ func AddAccount(w http.ResponseWriter, r *http.Request) {
     Image: detail.Image,
     Revision: account.ProfileRevision,
     Version: APP_VERSION,
-    Node: "https://" + getStrConfigValue(CONFIG_DOMAIN, ""),
+    Node: getStrConfigValue(CONFIG_DOMAIN, ""),
   }
 
   // send response

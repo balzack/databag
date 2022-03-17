@@ -40,7 +40,7 @@ func GetProfileMessage(w http.ResponseWriter, r *http.Request) {
     Location: detail.Location,
     Image: detail.Image,
     Version: APP_VERSION,
-    Node: "https://" + getStrConfigValue(CONFIG_DOMAIN, "") + "/",
+    Node: getStrConfigValue(CONFIG_DOMAIN, ""),
   }
   msg, res := WriteDataMessage(detail.PrivateKey, detail.PublicKey, detail.KeyType,
     APP_SIGNPKCS1V15, account.Guid, APP_MSGIDENTITY, &identity)
