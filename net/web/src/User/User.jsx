@@ -15,7 +15,6 @@ export function User() {
       <SideBar />
       <div class="canvas">
         <img class="connect" src={connect} alt="" />
-        <Button type="primary" onClick={() => actions.onLogout()} style={{ alignSelf: 'center', marginTop: '16px', width: '33%' }}>Sign Out</Button>
       </div>
     </UserWrapper>
   )

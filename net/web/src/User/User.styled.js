@@ -13,7 +13,7 @@ export const UserWrapper = styled.div`
     flex-direction: column;
     flex-grow: 1;
     height: 100%;
-    border: 1px solid #8fbea7;
+    background-color: #8fbea7;
     align-items: center;
     justify-content: center;
   }

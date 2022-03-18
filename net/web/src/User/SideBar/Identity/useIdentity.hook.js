@@ -7,7 +7,7 @@ export function useIdentity() {
     name: '',
     handle: '',
     domain: '',
-    imageUrl: ''
+    imageUrl: null
   });
 
   const actions = {

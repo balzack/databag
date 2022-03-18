@@ -2,12 +2,11 @@ import { Button } from 'antd';
 import styled from 'styled-components';
 
 export const IdentityWrapper = styled.div`
-  background-color: #f6f5ed;
-  border-bottom: 2px solid #8fbea7;
   border-top: 1px solid #8fbea7;
-  border-left: 0px;
-  border-right: 0px;
-  border-radius: 0px;
+  border-right: 1px solid #8fbea7;
+  border-bottom: 1px solid #8fbea7;
+  overflow: hidden;
+  border-radius: 8px;
   &:hover {
     cursor: pointer;
   }
@@ -19,19 +18,14 @@ export const IdentityWrapper = styled.div`
     justify-content: center;
     padding-left: 16px;
     padding-right: 16px;
-  }
-
-  .menu {
-    min-width: 0px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    background-color: #f6f5ed;
   }
 
   .logo {
-    width: 33%
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding-top: 4px;
-    padding-bottom: 4px;
+    width: 100%;
+    height: 100%;
   }
 
   .username {
@@ -43,12 +37,16 @@ export const IdentityWrapper = styled.div`
     padding-right: 8px;
   }
 
-  .edit {
-    position: absolute;
+  .avatar {
+    color: #888888;
+    font-size: 3em;
+    width: 64px;
+    height: 64px;
+    border-radius: 6px;
+    overflow: hidden;
     display: flex;
-    align-items: flex-end;
-    right: 0;
-    bottom: 0;
+    align-items: center;
+    justify-content: center;
   }
 
   .name {
@@ -59,10 +57,7 @@ export const IdentityWrapper = styled.div`
   .handle {
     font-size: 1em;
     color: #444444;
+    font-weight: bold;
   }
 
-  .domain {
-    font-size: 1em;
-    color: #444444;
-  }
 `;

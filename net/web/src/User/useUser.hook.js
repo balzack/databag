@@ -10,9 +10,6 @@ export function useUser() {
   const app = useContext(AppContext);
 
   const actions = {
-    onLogout: async () => {
-      app.actions.logout()
-    },
     updateState: (value) => {
       setState((s) => ({ ...s, ...value }));
     },

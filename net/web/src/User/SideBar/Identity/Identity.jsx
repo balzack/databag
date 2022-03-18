@@ -1,7 +1,7 @@
 import { Avatar, Image } from 'antd';
 import React from 'react'
 import { IdentityWrapper } from './Identity.styled';
-import { DownOutlined, EditOutlined, UserOutlined } from '@ant-design/icons';
+import { RightOutlined, EditOutlined, UserOutlined } from '@ant-design/icons';
 import { useIdentity } from './useIdentity.hook';
 import { Menu, Dropdown } from 'antd';
 
@@ -10,10 +10,13 @@ export function Identity() {
   const { state, actions } = useIdentity()
 
   const Logo = () => {
-    if (state.imageUrl === '') {
-      return <Avatar size={64} icon={<UserOutlined />} />
+    if (state.imageUrl != null) {
+      if (state.imageUrl === '') {
+        return <UserOutlined />
+      }
+      return <img class="logo" src={ state.imageUrl } alt="" />
     }
-    return <Avatar size={64} src={<Image preview={false} src={ state.imageUrl } style={{ width: 64 }} />} />
+    return <></>
   }
 
   const menu = (
@@ -29,17 +32,17 @@ export function Identity() {
 
   return (
     <IdentityWrapper>
-      <Dropdown overlay={menu} overlayStyle={{ minWidth: 0 }} trigger={['click']} placement="bottomRight">
+      <Dropdown overlay={menu} overlayStyle={{ minWidth: 0 }} trigger={['click']} placement="right">
         <div>
           <div class="container">
-            <div class="logo">
+            <div class="avatar">
               <Logo />
             </div>
             <div class="username">
               <span class="name">{ state.name }</span>
               <span class="handle">{ state.handle }</span>
             </div>
-            <DownOutlined />
+            <RightOutlined />
           </div>
         </div>
       </Dropdown>     
