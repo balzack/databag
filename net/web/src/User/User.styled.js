@@ -8,16 +8,9 @@ export const UserWrapper = styled.div`
   height: 100%;
   background-color: #f6f5ed;
 
-  .listing {
-    width: 30%;
-    height: 100%;
-    max-width: 300px;
-    min-width: 200px;
-    border: 1px solid #8fbea7;
-  }
-
   .canvas {
     display: flex;
+    flex-direction: column;
     flex-grow: 1;
     height: 100%;
     border: 1px solid #8fbea7;

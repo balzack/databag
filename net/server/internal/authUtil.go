@@ -77,6 +77,40 @@ func BearerAccountToken(r *http.Request) (*store.AccountToken, error) {
   return &accountToken, nil
 }
 
+func ParamAppToken(r *http.Request, detail bool) (*store.Account, int, error) {
+
+  // parse authentication token
+  target, access, err := ParseToken(r.FormValue("token"))
+  if err != nil {
+    return nil, http.StatusBadRequest, err
+  }
+
+  // find token record
+  var app store.App
+  if detail {
+    if err := store.DB.Preload("Account.AccountDetail").Where("account_id = ? AND token = ?", target, access).First(&app).Error; err != nil {
+      if errors.Is(err, gorm.ErrRecordNotFound) {
+        return nil, http.StatusNotFound, err
+      } else {
+        return nil, http.StatusInternalServerError, err
+      }
+    }
+  } else {
+    if err := store.DB.Preload("Account").Where("account_id = ? AND token = ?", target, access).First(&app).Error; err != nil {
+      if errors.Is(err, gorm.ErrRecordNotFound) {
+        return nil, http.StatusNotFound, err
+      } else {
+        return nil, http.StatusInternalServerError, err
+      }
+    }
+  }
+  if app.Account.Disabled {
+    return nil, http.StatusGone, errors.New("account is inactive")
+  }
+
+  return &app.Account, http.StatusOK, nil
+}
+
 func BearerAppToken(r *http.Request, detail bool) (*store.Account, int, error) {
 
   // parse bearer authentication

@@ -9,8 +9,6 @@ export function useUser() {
   const navigate = useNavigate();
   const app = useContext(AppContext);
 
-console.log(app);
-
   const actions = {
     onLogout: async () => {
       app.actions.logout()

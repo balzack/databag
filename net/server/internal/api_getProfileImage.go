@@ -11,7 +11,7 @@ import (
 func GetProfileImage(w http.ResponseWriter, r *http.Request) {
   var data []byte
 
-  account, code, err := BearerAppToken(r, true);
+  account, code, err := ParamAppToken(r, true);
   if err != nil {
     ErrResponse(w, code, err)
     return

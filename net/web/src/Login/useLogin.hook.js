@@ -28,7 +28,7 @@ export function useLogin() {
       return false
     },
     onLogin: async () => {
-      if (!state.spinning) {
+      if (!state.spinning && state.username != '' && state.password != '') {
         actions.updateState({ spinning: true })
         try {
           await app.actions.login(state.username, state.password)

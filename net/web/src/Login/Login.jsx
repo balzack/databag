@@ -7,6 +7,12 @@ export function Login(props) {
 
   const { state, actions } = useLogin()
 
+  const keyDown = (e) => {
+    if (e.key === 'Enter') {
+      actions.onLogin()
+    }
+  }
+
   return(
     <LoginWrapper>
       <div class="container">
@@ -15,9 +21,9 @@ export function Login(props) {
           <span class="subheader-text">Communication for the Decentralized Web</span>
         </div>
         <LoginInput size="large" spellCheck="false" placeholder="username" prefix={<UserOutlined />}
-          onChange={(e) => actions.setUsername(e.target.value)} value={state.username} />
+          onChange={(e) => actions.setUsername(e.target.value)} value={state.username} onKeyDown={(e) => keyDown(e)}/>
         <LoginPassword size="large" spellCheck="false" placeholder="password" prefix={<LockOutlined />}
-          onChange={(e) => actions.setPassword(e.target.value)} value={state.password} />
+          onChange={(e) => actions.setPassword(e.target.value)} value={state.password} onKeyDown={(e) => keyDown(e)}/>
         <LoginEnter type="primary" onClick={() => actions.onLogin()} disabled={actions.isDisabled()}>
           <span>Sign In</span>
         </LoginEnter>

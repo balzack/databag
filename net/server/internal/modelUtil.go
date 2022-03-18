@@ -9,6 +9,7 @@ func getProfileModel(account *store.Account) *Profile {
   return &Profile{
     Guid: account.Guid,
     Handle: account.Username,
+    Name: account.AccountDetail.Name,
     Description: account.AccountDetail.Description,
     Location: account.AccountDetail.Location,
     Image: account.AccountDetail.Image,
