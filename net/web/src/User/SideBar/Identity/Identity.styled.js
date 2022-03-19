@@ -7,9 +7,7 @@ export const IdentityWrapper = styled.div`
   border-bottom: 1px solid #8fbea7;
   overflow: hidden;
   border-radius: 8px;
-  &:hover {
-    cursor: pointer;
-  }
+  cursor: pointer;
 
   .container {
     display: flex;
