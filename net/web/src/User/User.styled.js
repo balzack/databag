@@ -19,9 +19,23 @@ export const UserWrapper = styled.div`
   }
 
   .connect {
+    position: absolute;
     width: 33%;
     height: 33%;
     object-fit: contain;
+  }
+
+  .page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    padding-left: 8px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    padding-right: 4px;
+    z-index: 1;
   }
 `;
  

@@ -1,4 +1,5 @@
 import React from 'react'
+import { Outlet } from 'react-router-dom';
 import { useUser } from './useUser.hook';
 import { Button } from 'antd';
 import { UserWrapper } from './User.styled';
@@ -15,6 +16,9 @@ export function User() {
       <SideBar />
       <div class="canvas">
         <img class="connect" src={connect} alt="" />
+        <div class="page">
+          <Outlet />
+        </div>
       </div>
     </UserWrapper>
   )

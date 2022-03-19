@@ -22,7 +22,7 @@ export function Identity() {
   const menu = (
     <Menu>
       <Menu.Item key="0">
-        <div onClick={() => {}}>Edit Profile</div>
+        <div onClick={() => actions.editProfile()}>Edit Profile</div>
       </Menu.Item>
       <Menu.Item key="1">
         <div onClick={() => actions.logout()}>Sign Out</div>

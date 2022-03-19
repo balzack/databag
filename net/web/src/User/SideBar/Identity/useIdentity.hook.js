@@ -1,5 +1,6 @@
 import { useContext, useState, useEffect } from 'react';
 import { AppContext } from '../../../AppContext/AppContext';
+import { useNavigate } from "react-router-dom";
 
 export function useIdentity() {
   
@@ -13,9 +14,13 @@ export function useIdentity() {
   const actions = {
     logout: async () => {
       app.actions.logout()
+    },
+    editProfile: () => {
+      navigate('/user/profile');
     }
   };
 
+  const navigate = useNavigate();
   const app = useContext(AppContext);
 
   const updateState = (value) => {

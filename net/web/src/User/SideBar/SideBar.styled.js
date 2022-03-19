@@ -9,4 +9,7 @@ export const SideBarWrapper = styled.div`
   background-color: #8fbea7;
   display: flex;
   flex-direction: column;
+  padding-top: 2px;
+  padding-left: 4px;
+  padding-bottom: 4px;
 `;
