@@ -15,6 +15,9 @@ export function useIdentity() {
     logout: async () => {
       app.actions.logout()
     },
+    editLabels: () => {
+      console.log("EDIT LABELS");
+    },
     editProfile: () => {
       navigate('/user/profile');
     }

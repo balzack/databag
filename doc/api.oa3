@@ -601,6 +601,7 @@ paths:
         - account
       description: Generate token to attach an app to the account. Access granted to account's username and password.
       operationId: add-account-app
+      security:
         - basicAuth: []
       responses:
         '201':
@@ -748,8 +749,13 @@ paths:
         - profile
       description: Download base64 decoded data of profile image. Access granted to app tokens of account holder.
       operationId: get-profile-image
-      security:
-        - bearerAuth: []
+      parameters:
+        - name: agent
+          in: query
+          description: agent token 
+          required: false
+          schema:
+            type: string
       responses:
         '200':
           description: success
@@ -2968,9 +2974,9 @@ components:
         accountStorage:
           type: integer
           format: int64
-        openAccess
+        openAccess:
           type: boolean
-        accountLimit
+        accountLimit:
           type: integer
           format: int64
           
@@ -2994,6 +3000,31 @@ components:
         forwardingAddress:
           type: string
         searchable:
+          type: boolean
+          
+    AccountProfile:
+      type: object
+      required:
+        - guid
+        - revision
+        - node
+      properties:
+        accountId:
+          type: integer
+          format: uint32
+        guid:
+          type: string
+        handle:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        location:
+          type: string
+        imageSet:
+          type: boolean
+        disabled:
           type: boolean
           
     Profile:
@@ -3638,6 +3669,7 @@ components:
     bearerAuth: 
       type: http
       scheme: bearer
+
 
 
 

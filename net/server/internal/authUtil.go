@@ -77,10 +77,10 @@ func BearerAccountToken(r *http.Request) (*store.AccountToken, error) {
   return &accountToken, nil
 }
 
-func ParamAppToken(r *http.Request, detail bool) (*store.Account, int, error) {
+func ParamAgentToken(r *http.Request, detail bool) (*store.Account, int, error) {
 
   // parse authentication token
-  target, access, err := ParseToken(r.FormValue("token"))
+  target, access, err := ParseToken(r.FormValue("agent"))
   if err != nil {
     return nil, http.StatusBadRequest, err
   }

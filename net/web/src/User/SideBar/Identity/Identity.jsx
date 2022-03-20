@@ -25,6 +25,9 @@ export function Identity() {
         <div onClick={() => actions.editProfile()}>Edit Profile</div>
       </Menu.Item>
       <Menu.Item key="1">
+        <div onClick={() => actions.editLabels()}>Manage Labels</div>
+      </Menu.Item>
+      <Menu.Item key="2">
         <div onClick={() => actions.logout()}>Sign Out</div>
       </Menu.Item>
     </Menu>
@@ -32,7 +35,7 @@ export function Identity() {
 
   return (
     <IdentityWrapper>
-      <Dropdown overlay={menu} overlayStyle={{ minWidth: 0 }} trigger={['click']} placement="right">
+      <Dropdown overlay={menu} overlayStyle={{ minWidth: 0 }} trigger={['click']} placement="rightTop">
         <div>
           <div class="container">
             <div class="avatar">
