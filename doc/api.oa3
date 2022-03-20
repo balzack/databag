@@ -831,8 +831,13 @@ paths:
         - alias
       description: Get groups for sharing. Access granted to app tokens of the account holder.
       operationId: get-groups
-      security:
-        - bearerAuth: []
+      parameters:
+        - name: agent
+          in: query
+          description: agent token
+          required: false
+          schema:
+            type: string
       responses:
         '200':
           description: successful operation          
@@ -859,8 +864,13 @@ paths:
         - alias
       description: Add a group for sharing. Access granted to app tokens of account holder.
       operationId: add-group
-      security:
-        - bearerAuth: []
+      parameters:
+        - name: agent
+          in: query
+          description: agent token
+          required: false
+          schema:
+            type: string
       responses:
         '200':
           description: success
@@ -886,8 +896,6 @@ paths:
         - alias
       description: Base64 decode and download specified field from the groups's subject. Access granted to app token of account holder.
       operationId: get-group-subject-field
-      security:
-        - bearerAuth: []
       parameters:
         - name: groupId
           in: path
@@ -899,6 +907,12 @@ paths:
           in: path
           description: field from subject to base64 decode and download
           required: true
+          schema:
+            type: string
+        - name: agent
+          in: query
+          description: agent token
+          required: false
           schema:
             type: string
       responses:
@@ -926,13 +940,17 @@ paths:
         - alias
       description: Update group description for sharing. Access granted to app tokens of account holder.
       operationId: set-group-subject
-      security:
-        - bearerAuth: []
       parameters:
         - name: groupId
           in: path
           description: specified group id 
           required: true
+          schema:
+            type: string
+        - name: agent
+          in: query
+          description: agent token
+          required: false
           schema:
             type: string
       responses:
@@ -960,13 +978,17 @@ paths:
         - alias
       description: Remove sharing group
       operationId: remove-group
-      security:
-        - bearerAuth: []
       parameters:
         - name: groupId
           in: path
           description: specified group id 
           required: true
+          schema:
+            type: string
+        - name: agent
+          in: query
+          description: agent token
+          required: false
           schema:
             type: string
       responses:

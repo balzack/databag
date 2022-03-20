@@ -21,7 +21,7 @@ func GetGroupSubjectField(w http.ResponseWriter, r *http.Request) {
   field := params["field"]
   elements := strings.Split(field, ".")
 
-  account, code, err := BearerAppToken(r, false);
+  account, code, err := ParamAgentToken(r, true);
   if err != nil {
     ErrResponse(w, code, err)
     return

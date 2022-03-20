@@ -10,7 +10,7 @@ func GetGroups(w http.ResponseWriter, r *http.Request) {
   var groupRevisionSet bool
   var groupRevision int64
 
-  account, code, err := BearerAppToken(r, false);
+  account, code, err := ParamAgentToken(r, true);
   if err != nil {
     ErrResponse(w, code, err)
     return

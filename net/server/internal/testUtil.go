@@ -475,10 +475,9 @@ func GroupTestCard(account string, cardId string) (groupId string, err error) {
     DataType: "imagroup",
     Data: "group data with name and logo",
   }
-  if r, w, err = NewRequest("POST", "/share/groups", subject); err != nil {
+  if r, w, err = NewRequest("POST", "/share/groups?agent=" + account, subject); err != nil {
     return
   }
-  SetBearerAuth(r, account)
   AddGroup(w, r)
   if err = ReadResponse(w, &group); err != nil {
     return
