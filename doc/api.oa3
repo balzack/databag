@@ -464,29 +464,6 @@ paths:
         '500':
           description: internal server error
                 
-  /account/profile/image:
-    get:
-      tags:
-        - account
-      description: Get profile image. Access granted to account's username and password
-      operationId: get-account-image
-      security:
-        - basicAuth: []
-      responses: 
-        '200':
-          description: success
-          content:
-            application/octet-stream: # content specific
-              schema:
-                type: string
-                format: binary
-        '401':
-          description: permission denied
-        '405':
-          description: invalid image
-        '500':
-          description: internal server error
-          
   /account/assets/{assetId}:
     get:
       tags:
@@ -700,8 +677,13 @@ paths:
         - profile
       description: Get profile of accunt. Access granted to app token of account holder.
       operationId: get-profile
-      security:
-        - bearerAuth: []
+      parameters:
+        - name: agent
+          in: query
+          description: agent token
+          required: false
+          schema:
+            type: string
       responses:
         '200':
           description: success
@@ -722,8 +704,13 @@ paths:
         - profile
       description: Set profile data. Access granted to app tokens of account holder.
       operationId: set-profile
-      security:
-        - bearerAuth: []
+      parameters:
+        - name: agent
+          in: query
+          description: agent token 
+          required: false
+          schema:
+            type: string
       responses:
         '200':
           description: success
@@ -777,8 +764,13 @@ paths:
         - profile
       description: Set base64 encode image data for profile. Access granted to app tokens of account holder.
       operationId: set-profile-image
-      security:
-        - bearerAuth: []
+      parameters:
+        - name: agent
+          in: query
+          description: agent token 
+          required: false
+          schema:
+            type: string
       responses:
         '200':
           description: success
@@ -806,15 +798,19 @@ paths:
         - profile
       description: Get a profile data message. Access granted to app token of account holder or contact token of connected contact.
       operationId: get-profile-message
-      security:
-        - bearerAuth: []
       parameters:
-        - in: header
-          name: TokenType
+        - name: agent
+          in: query
+          description: agent token 
+          required: false
           schema:
             type: string
-            enum: [ app, contact ]
-          required: true
+        - name: contact
+          in: query
+          description: contact token 
+          required: false
+          schema:
+            type: string
       responses:
         '200':
           description: success

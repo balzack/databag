@@ -111,6 +111,22 @@ func ApiTestMsg(
   var r *http.Request
   var w *httptest.ResponseRecorder
 
+  if tokenType == APP_TOKENAPP {
+    if !strings.Contains(name, "?") {
+      name += "?"
+    } else {
+      name += "&"
+    }
+    name += "agent=" + token
+  } else if tokenType == APP_TOKENCONTACT {
+    if !strings.Contains(name, "?") {
+      name += "?"
+    } else {
+      name += "&"
+    }
+    name += "contact=" + token
+  }
+
   if r, w, err = NewRequest(requestType, name, body); err != nil {
     return
   }

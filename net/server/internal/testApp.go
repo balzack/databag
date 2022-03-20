@@ -3,6 +3,7 @@ package databag
 import (
   "time"
   "errors"
+  "strings"
   "strconv"
   "sync"
   "encoding/json"
@@ -849,22 +850,42 @@ func TestApiRequest(endpoint func(http.ResponseWriter, *http.Request), params *T
   if rest == "" {
     rest = "GET"
   }
+
+  if params.tokenType == APP_TOKENAPP {
+    if !strings.Contains(params.query, "?") {
+      params.query += "?"
+    } else {
+      params.query += "&"
+    }
+    params.query += "agent=" + params.token
+  } else if params.tokenType == APP_TOKENCONTACT {
+    if !strings.Contains(params.query, "?") {
+      params.query += "?"
+    } else {
+      params.query += "&"
+    }
+    params.query += "contact=" + params.token
+  }
+
   if r, w, err = NewRequest(rest, params.query, params.body); err != nil {
     return
   }
   r = mux.SetURLVars(r, params.path)
+
   if params.tokenType != "" {
     r.Header.Add("TokenType", params.tokenType)
   }
   if params.token != "" {
     SetBearerAuth(r, params.token)
   }
+
   if params.authorization != "" {
     SetBasicAuth(r, params.authorization)
   }
   if params.credentials != "" {
     SetCredentials(r, params.credentials)
   }
+
   endpoint(w, r)
 
   res := w.Result()
