@@ -28,24 +28,24 @@ func TestTopicShare(t *testing.T) {
   channel = &Channel{}
   subject = &Subject{ Data: "channeldata", DataType: "channeldatatype" }
   assert.NoError(t, ApiTestMsg(AddChannel, "POST", "/content/channels",
-    nil, subject, APP_TOKENAPP, set.A.Token, channel, nil))
+    nil, subject, APP_TOKENAGENT, set.A.Token, channel, nil))
   image := "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"
   img, _ := base64.StdEncoding.DecodeString(image)
   subject = &Subject{ Data: "{ \"nested\" : { \"image\" : \"" + image + "\" } }", DataType: "nestedimage" }
   params["channelId"] = channel.Id
   assert.NoError(t, ApiTestMsg(SetChannelSubject, "PUT", "/content/channels/{channelId}/subject",
-    &params, subject, APP_TOKENAPP, set.A.Token, channel, nil))
+    &params, subject, APP_TOKENAGENT, set.A.Token, channel, nil))
   params["cardId"] = set.A.B.CardId
   assert.NoError(t, ApiTestMsg(SetChannelCard, "PUT", "/content/channels/{channelId}/cards/{cardId}",
-    &params, nil, APP_TOKENAPP, set.A.Token, nil, nil))
+    &params, nil, APP_TOKENAGENT, set.A.Token, nil, nil))
   params["cardId"] = set.A.C.CardId
   assert.NoError(t, ApiTestMsg(SetChannelCard, "PUT", "/content/channels/{channelId}/cards/{cardId}",
-    &params, nil, APP_TOKENAPP, set.A.Token, nil, nil))
+    &params, nil, APP_TOKENAGENT, set.A.Token, nil, nil))
 
   // view channel
   channel = &Channel{}
   assert.NoError(t, ApiTestMsg(GetChannel, "GET", "/content/channels/{channelId}",
-    &params, nil, APP_TOKENAPP, set.A.Token, channel, nil))
+    &params, nil, APP_TOKENAGENT, set.A.Token, channel, nil))
   assert.NotNil(t, channel.Data.ChannelDetail);
   channel = &Channel{}
   assert.NoError(t, ApiTestMsg(GetChannel, "GET", "/content/channels/{channelId}",
@@ -57,7 +57,7 @@ func TestTopicShare(t *testing.T) {
   assert.NotNil(t, channel.Data.ChannelDetail);
   params["field"] = "nested.image"
   data, header, err = ApiTestData(GetChannelSubjectField, "GET", "/content/channels/{channelId}/subject/{field}",
-    &params, nil, APP_TOKENAPP, set.A.Token, 0, 0)
+    &params, nil, APP_TOKENAGENT, set.A.Token, 0, 0)
   assert.NoError(t, err)
   assert.Equal(t, "image/png", header["Content-Type"][0])
   assert.Zero(t, bytes.Compare(img, data))
@@ -77,7 +77,7 @@ func TestTopicShare(t *testing.T) {
   topic = &Topic{}
   subject = &Subject{ DataType: "topicdatatype", Data: "subjectfromA" }
   assert.NoError(t, ApiTestMsg(AddChannelTopic, "POST", "/content/channels/{channelId}/topics",
-    &params, subject, APP_TOKENAPP, set.A.Token, topic, nil))
+    &params, subject, APP_TOKENAGENT, set.A.Token, topic, nil))
   topic = &Topic{}
   subject = &Subject{ DataType: "topicdatatype", Data: "subjectfromB" }
   assert.NoError(t, ApiTestMsg(AddChannelTopic, "POST", "/content/channels/{channelId}/topics",
@@ -101,7 +101,7 @@ func TestTopicShare(t *testing.T) {
   // view topics
   topics := &[]Topic{}
   assert.NoError(t, ApiTestMsg(GetChannelTopics, "GET", "/content/channels/{channelId}/topics",
-    &params, nil, APP_TOKENAPP, set.A.Token, topics, nil))
+    &params, nil, APP_TOKENAGENT, set.A.Token, topics, nil))
 
   aRev = GetTestRevision(set.A.Revisions)
   cRev = GetTestRevision(set.C.Revisions)
@@ -110,7 +110,7 @@ func TestTopicShare(t *testing.T) {
   tag := Tag{}
   subject = &Subject{ DataType: "tagdatatype", Data: "subjectfromA" }
   assert.NoError(t, ApiTestMsg(AddChannelTopicTag, "POST", "/content/channels/{channelId}/topics/{topicId}",
-    &params, subject, APP_TOKENAPP, set.A.Token, &tag, nil))
+    &params, subject, APP_TOKENAGENT, set.A.Token, &tag, nil))
 
   assert.NotEqual(t, aRev.Channel, GetTestRevision(set.A.Revisions).Channel)
   assert.NotEqual(t, cRev.Card, GetTestRevision(set.C.Revisions).Card)
@@ -124,7 +124,7 @@ func TestTopicShare(t *testing.T) {
   // delete topic tag
   params["tagId"] = tag.Id
   assert.NoError(t, ApiTestMsg(RemoveChannelTopicTag, "DELETE", "/content/channels/{channelId}/topics/{topicId}/tags/{tagId}",
-    &params, nil, APP_TOKENAPP, set.A.Token, nil, nil))
+    &params, nil, APP_TOKENAGENT, set.A.Token, nil, nil))
 
   // get tags for topic
   tags = &[]Tag{}
@@ -163,10 +163,10 @@ func TestTopicShare(t *testing.T) {
   tag = Tag{}
   subject = &Subject{ DataType: "tagdatatype", Data: "subjectfromA" }
   assert.NoError(t, ApiTestMsg(AddChannelTopicTag, "POST", "/content/channels/{channelId}/topics/{topicId}",
-    &params, subject, APP_TOKENAPP, set.A.Token, &tag, nil))
+    &params, subject, APP_TOKENAGENT, set.A.Token, &tag, nil))
 
   // remove channel
   assert.NoError(t, ApiTestMsg(RemoveChannel, "DELETE", "/content/channels/{channelId}",
-    &params, nil, APP_TOKENAPP, set.A.Token, nil, nil))
+    &params, nil, APP_TOKENAGENT, set.A.Token, nil, nil))
 }
 

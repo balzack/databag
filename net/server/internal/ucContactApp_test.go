@@ -31,7 +31,7 @@ func TestContactApp(t *testing.T) {
     Location: "San Diago",
   };
   assert.NoError(t, ApiTestMsg(SetProfile, "PUT", "/profile/data", nil, profileData,
-      APP_TOKENAPP, set.A.Token, nil, nil))
+      APP_TOKENAGENT, set.A.Token, nil, nil))
 
   // wait for test
   assert.NoError(t, app.WaitFor(func(testApp *TestApp)bool{
@@ -44,7 +44,7 @@ func TestContactApp(t *testing.T) {
   // add a new article
   article := &Article{}
   subject := &Subject{ Data: "subjectdata", DataType: "subjectdatatype" }
-  params = &TestApiParams{ restType: "POST", query: "/articles", tokenType: APP_TOKENAPP, token: set.A.Token, body: subject }
+  params = &TestApiParams{ restType: "POST", query: "/articles", tokenType: APP_TOKENAGENT, token: set.A.Token, body: subject }
   response = &TestApiResponse{ data: article }
   assert.NoError(t, TestApiRequest(AddArticle, params, response))
 
@@ -59,7 +59,7 @@ func TestContactApp(t *testing.T) {
 
   // remove a new article
   params = &TestApiParams{ restType: "DELETE", query: "/articles/{articleId}", path: map[string]string{ "articleId": article.Id },
-    tokenType: APP_TOKENAPP, token: set.A.Token, body: subject }
+    tokenType: APP_TOKENAGENT, token: set.A.Token, body: subject }
   response = &TestApiResponse{}
   assert.NoError(t, TestApiRequest(RemoveArticle, params, response))
 
@@ -74,14 +74,14 @@ func TestContactApp(t *testing.T) {
   // add a new article in contact
   article = &Article{}
   subject = &Subject{ Data: "subjectdataB", DataType: "subjectdatatypeB" }
-  params = &TestApiParams{ restType: "POST", query: "/articles", tokenType: APP_TOKENAPP, token: set.B.Token, body: subject }
+  params = &TestApiParams{ restType: "POST", query: "/articles", tokenType: APP_TOKENAGENT, token: set.B.Token, body: subject }
   response = &TestApiResponse{ data: article }
   assert.NoError(t, TestApiRequest(AddArticle, params, response))
   articleId := article.Id
 
   // share article
   article = &Article{}
-  params = &TestApiParams{ restType: "POST", query: "/articles/{articleId}/groups/{groupId}", tokenType: APP_TOKENAPP, token: set.B.Token,
+  params = &TestApiParams{ restType: "POST", query: "/articles/{articleId}/groups/{groupId}", tokenType: APP_TOKENAGENT, token: set.B.Token,
       path: map[string]string{ "articleId": articleId, "groupId": set.B.A.GroupId }}
   response = &TestApiResponse{ data: article }
   assert.NoError(t, TestApiRequest(SetArticleGroup, params, response))
@@ -100,7 +100,7 @@ func TestContactApp(t *testing.T) {
 
   // remove new article in contact
   article = &Article{}
-  params = &TestApiParams{ restType: "DELETE", query: "/articles/{articleId}", tokenType: APP_TOKENAPP, token: set.B.Token,
+  params = &TestApiParams{ restType: "DELETE", query: "/articles/{articleId}", tokenType: APP_TOKENAGENT, token: set.B.Token,
       path: map[string]string{ "articleId": articleId }}
   response = &TestApiResponse{ }
   assert.NoError(t, TestApiRequest(RemoveArticle, params, response))
@@ -120,14 +120,14 @@ func TestContactApp(t *testing.T) {
   // add a new article in contact
   article = &Article{}
   subject = &Subject{ Data: "subjectdataB", DataType: "subjectdatatypeB" }
-  params = &TestApiParams{ restType: "POST", query: "/articles", tokenType: APP_TOKENAPP, token: set.B.Token, body: subject }
+  params = &TestApiParams{ restType: "POST", query: "/articles", tokenType: APP_TOKENAGENT, token: set.B.Token, body: subject }
   response = &TestApiResponse{ data: article }
   assert.NoError(t, TestApiRequest(AddArticle, params, response))
   articleId = article.Id
 
   // share article
   article = &Article{}
-  params = &TestApiParams{ restType: "POST", query: "/articles/{articleId}/groups/{groupId}", tokenType: APP_TOKENAPP, token: set.B.Token,
+  params = &TestApiParams{ restType: "POST", query: "/articles/{articleId}/groups/{groupId}", tokenType: APP_TOKENAGENT, token: set.B.Token,
       path: map[string]string{ "articleId": articleId, "groupId": set.B.A.GroupId }}
   response = &TestApiResponse{ data: article }
   assert.NoError(t, TestApiRequest(SetArticleGroup, params, response))
@@ -146,7 +146,7 @@ func TestContactApp(t *testing.T) {
 
   // remove group in contact
   article = &Article{}
-  params = &TestApiParams{ restType: "DELETE", query: "/groups/{groupId}", tokenType: APP_TOKENAPP, token: set.B.Token,
+  params = &TestApiParams{ restType: "DELETE", query: "/groups/{groupId}", tokenType: APP_TOKENAGENT, token: set.B.Token,
       path: map[string]string{ "groupId": set.B.A.GroupId }}
   response = &TestApiResponse{ }
   assert.NoError(t, TestApiRequest(RemoveGroup, params, response))
@@ -165,7 +165,7 @@ func TestContactApp(t *testing.T) {
 
   // update Bs profile
   profileData = &ProfileData{ Name: "contactappname" }
-  params = &TestApiParams{ restType: "PUT", query: "/profile/data", tokenType: APP_TOKENAPP, token: set.B.Token, body: profileData }
+  params = &TestApiParams{ restType: "PUT", query: "/profile/data", tokenType: APP_TOKENAGENT, token: set.B.Token, body: profileData }
   response = &TestApiResponse{}
   assert.NoError(t, TestApiRequest(SetProfile, params, response))
 
@@ -181,12 +181,12 @@ func TestContactApp(t *testing.T) {
 
   // disconnect from B
   card := &Card{}
-  params = &TestApiParams{ restType: "PUT", query: "/contact/cards/{cardId}/status", tokenType: APP_TOKENAPP, token: set.B.Token,
+  params = &TestApiParams{ restType: "PUT", query: "/contact/cards/{cardId}/status", tokenType: APP_TOKENAGENT, token: set.B.Token,
       path: map[string]string{ "cardId": set.B.A.CardId }, body: APP_CARDCONFIRMED }
   response = &TestApiResponse{ data: card }
   assert.NoError(t, TestApiRequest(SetCardStatus, params, response))
   msg := &DataMessage{}
-  params = &TestApiParams { query: "/contact/cards/{cardId}/closeMessage", tokenType: APP_TOKENAPP, token: set.B.Token,
+  params = &TestApiParams { query: "/contact/cards/{cardId}/closeMessage", tokenType: APP_TOKENAGENT, token: set.B.Token,
       path: map[string]string{ "cardId": set.B.A.CardId } }
   response = &TestApiResponse{ data: msg }
   assert.NoError(t, TestApiRequest(GetCloseMessage, params, response))

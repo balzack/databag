@@ -8,19 +8,18 @@ import (
 
 func GetProfileMessage(w http.ResponseWriter, r *http.Request) {
   var code int
-  var err error
-  tokenType := r.Header.Get("TokenType")
+  tokenType, err := ParamTokenType(r)
 
   // load account record
   var account *store.Account
-  if tokenType == APP_TOKENAPP {
-    if account, code, err = BearerAppToken(r, true); err != nil {
+  if tokenType == APP_TOKENAGENT {
+    if account, code, err = ParamAgentToken(r, true); err != nil {
       ErrResponse(w, code, err)
       return
     }
   } else if tokenType == APP_TOKENCONTACT {
     var card *store.Card
-    if card, code, err = BearerContactToken(r, true); err != nil {
+    if card, code, err = ParamContactToken(r, true); err != nil {
       ErrResponse(w, code, err)
       return
     }

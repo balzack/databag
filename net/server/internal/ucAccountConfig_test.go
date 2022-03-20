@@ -47,14 +47,14 @@ func TestAccountConfig(t *testing.T) {
   // create new channel
   channel = &Channel{}
   subject = &Subject{ Data: "channeldata", DataType: "channeldatatype" }
-  params = &TestApiParams{ query: "/content/channels", tokenType: APP_TOKENAPP, token: set.A.Token, body: subject }
+  params = &TestApiParams{ query: "/content/channels", tokenType: APP_TOKENAGENT, token: set.A.Token, body: subject }
   response = &TestApiResponse{ data: channel }
   assert.NoError(t, TestApiRequest(AddChannel, params, response))
 
   // create new topic
   topic = &Topic{}
   subject = &Subject{ DataType: "topicdatatype", Data: "topicdata" }
-  params = &TestApiParams{ query: "/content/channels/{channelId}/topics", tokenType: APP_TOKENAPP, token: set.A.Token,
+  params = &TestApiParams{ query: "/content/channels/{channelId}/topics", tokenType: APP_TOKENAGENT, token: set.A.Token,
     path: map[string]string{ "channelId": channel.Id }, body: subject }
   response = &TestApiResponse{ data: topic }
   assert.NoError(t, TestApiRequest(AddChannelTopic, params, response))
@@ -66,11 +66,11 @@ func TestAccountConfig(t *testing.T) {
   assert.NoError(t, err)
   assert.NoError(t, ApiTestUpload(AddChannelTopicAsset, "POST",
     "/content/channels/{channelId}/topics/{topicId}/assets?transforms=" + url.QueryEscape(string(transforms)),
-    pathParams, img, APP_TOKENAPP, set.A.Token, assets, nil))
+    pathParams, img, APP_TOKENAGENT, set.A.Token, assets, nil))
 
   // update topic
   status := APP_TOPICCONFIRMED
-  params = &TestApiParams{ query: "/content/channels/{channelId}/topics/{topicId}", tokenType: APP_TOKENAPP, token: set.A.Token,
+  params = &TestApiParams{ query: "/content/channels/{channelId}/topics/{topicId}", tokenType: APP_TOKENAGENT, token: set.A.Token,
     path: map[string]string{ "channelId": channel.Id, "topicId": topic.Id }, body: &status }
   assert.NoError(t, TestApiRequest(SetChannelTopicConfirmed, params, nil))
 
@@ -94,12 +94,12 @@ func TestAccountConfig(t *testing.T) {
 
   // set to searchable
   searchable := true
-  params = &TestApiParams{ query: "/account/searchable", tokenType: APP_TOKENAPP, token: set.A.Token, body: &searchable }
+  params = &TestApiParams{ query: "/account/searchable", tokenType: APP_TOKENAGENT, token: set.A.Token, body: &searchable }
   assert.NoError(t, TestApiRequest(SetAccountSearchable, params, nil))
 
   // get account status
   accountStatus := &AccountStatus{}
-  params = &TestApiParams{ query: "/account/status", tokenType: APP_TOKENAPP, token: set.A.Token }
+  params = &TestApiParams{ query: "/account/status", tokenType: APP_TOKENAGENT, token: set.A.Token }
   response = &TestApiResponse{ data: accountStatus }
   assert.NoError(t, TestApiRequest(GetAccountStatus, params, response))
   assert.True(t, accountStatus.Searchable)
@@ -109,7 +109,7 @@ func TestAccountConfig(t *testing.T) {
   pathParams = &map[string]string{ "channelId": channel.Id, "topicId": topic.Id }
   assert.Error(t, ApiTestUpload(AddChannelTopicAsset, "POST",
     "/content/channels/{channelId}/topics/{topicId}/assets?transforms=" + url.QueryEscape(string(transforms)),
-    pathParams, img, APP_TOKENAPP, set.A.Token, assets, nil))
+    pathParams, img, APP_TOKENAGENT, set.A.Token, assets, nil))
 
   // get list of accounts
   profiles := []CardProfile{}

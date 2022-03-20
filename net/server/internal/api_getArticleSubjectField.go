@@ -24,7 +24,7 @@ func GetArticleSubjectField(w http.ResponseWriter, r *http.Request) {
   var guid string
   var act *store.Account
   tokenType := r.Header.Get("TokenType")
-  if tokenType == APP_TOKENAPP {
+  if tokenType == APP_TOKENAGENT {
     account, code, err := BearerAppToken(r, false);
     if err != nil {
       ErrResponse(w, code, err)

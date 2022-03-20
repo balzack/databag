@@ -33,12 +33,12 @@ func TestChannelShare(t *testing.T) {
   channel = &Channel{}
   subject = &Subject{ Data: "channeldata", DataType: "channeldatatype" }
   assert.NoError(t, ApiTestMsg(AddChannel, "POST", "/content/channels",
-    nil, subject, APP_TOKENAPP, set.A.Token, channel, nil))
+    nil, subject, APP_TOKENAGENT, set.A.Token, channel, nil))
 
   // retrieve channels
   channels = &[]Channel{}
   assert.NoError(t, ApiTestMsg(GetChannels, "GET", "/content/channels",
-    nil, nil, APP_TOKENAPP, set.A.Token, channels, &aRevision))
+    nil, nil, APP_TOKENAGENT, set.A.Token, channels, &aRevision))
   assert.Equal(t, 1, len(*channels))
   assert.NotNil(t, (*channels)[0].Data)
   detailRevision = (*channels)[0].Data.DetailRevision
@@ -55,13 +55,13 @@ func TestChannelShare(t *testing.T) {
   params["channelId"] = channel.Id
   params["cardId"] = set.A.B.CardId
   assert.NoError(t, ApiTestMsg(SetChannelCard, "PUT", "/content/channels/{channelId}/cards/{cardId}",
-    &params, nil, APP_TOKENAPP, set.A.Token, nil, nil))
+    &params, nil, APP_TOKENAGENT, set.A.Token, nil, nil))
 
   // check shared channel
   channels = &[]Channel{}
   revision = "?channelRevision=" + aRevision["Channel-Revision"][0]
   assert.NoError(t, ApiTestMsg(GetChannels, "GET", "/content/channels" + revision,
-    nil, nil, APP_TOKENAPP, set.A.Token, channels, &aRevision))
+    nil, nil, APP_TOKENAGENT, set.A.Token, channels, &aRevision))
   assert.Equal(t, 1, len(*channels))
   assert.NotNil(t, (*channels)[0].Data)
   assert.NotEqual(t, detailRevision, (*channels)[0].Data.DetailRevision)
@@ -93,13 +93,13 @@ func TestChannelShare(t *testing.T) {
   cRev = GetTestRevision(set.C.Revisions)
   cards = &[]Card{}
   assert.NoError(t, ApiTestMsg(GetCards, "GET", "/contact/cards",
-    nil, nil, APP_TOKENAPP, set.B.Token, cards, &bCardRevision))
+    nil, nil, APP_TOKENAGENT, set.B.Token, cards, &bCardRevision))
   channels = &[]Channel{}
   assert.NoError(t, ApiTestMsg(GetChannels, "GET", "/content/channels",
     nil, nil, APP_TOKENCONTACT, set.B.A.Token, channels, &bChannelRevision))
   cards = &[]Card{}
   assert.NoError(t, ApiTestMsg(GetCards, "GET", "/contact/cards",
-    nil, nil, APP_TOKENAPP, set.C.Token, cards, &cCardRevision))
+    nil, nil, APP_TOKENAGENT, set.C.Token, cards, &cCardRevision))
   channels = &[]Channel{}
   assert.NoError(t, ApiTestMsg(GetChannels, "GET", "/content/channels",
     nil, nil, APP_TOKENCONTACT, set.C.A.Token, channels, &cChannelRevision))
@@ -108,7 +108,7 @@ func TestChannelShare(t *testing.T) {
   params["channelId"] = channel.Id
   params["cardId"] = set.A.C.CardId
   assert.NoError(t, ApiTestMsg(SetChannelCard, "PUT", "/content/channels/{channelId}/cards/{cardId}",
-    &params, nil, APP_TOKENAPP, set.A.Token, nil, nil))
+    &params, nil, APP_TOKENAGENT, set.A.Token, nil, nil))
 
   // check revision change
   rev = GetTestRevision(set.A.Revisions)
@@ -118,7 +118,7 @@ func TestChannelShare(t *testing.T) {
   assert.NotEqual(t, rev.Card, bRev.Card)
   cards = &[]Card{}
   assert.NoError(t, ApiTestMsg(GetCards, "GET", "/contact/cards?revision=" + bCardRevision["Card-Revision"][0],
-    nil, nil, APP_TOKENAPP, set.B.Token, cards, &bCardRevision))
+    nil, nil, APP_TOKENAGENT, set.B.Token, cards, &bCardRevision))
   assert.Equal(t, 1, len(*cards))
   r, _ = strconv.ParseInt(bChannelRevision["Channel-Revision"][0], 10, 64)
   assert.NotEqual(t, r, (*cards)[0].Data.NotifiedChannel)
@@ -130,7 +130,7 @@ func TestChannelShare(t *testing.T) {
   assert.NotEqual(t, rev.Card, cRev.Card)
   cards = &[]Card{}
   assert.NoError(t, ApiTestMsg(GetCards, "GET", "/contact/cards?revision=" + cCardRevision["Card-Revision"][0],
-    nil, nil, APP_TOKENAPP, set.C.Token, cards, &cCardRevision))
+    nil, nil, APP_TOKENAGENT, set.C.Token, cards, &cCardRevision))
   assert.Equal(t, 1, len(*cards))
   r, _ = strconv.ParseInt(cChannelRevision["Channel-Revision"][0], 10, 64)
   assert.NotEqual(t, r, (*cards)[0].Data.NotifiedChannel)
@@ -165,7 +165,7 @@ func TestChannelShare(t *testing.T) {
   params["channelId"] = channel.Id
   params["cardId"] = set.A.C.CardId
   assert.NoError(t, ApiTestMsg(ClearChannelCard, "DELETE", "/content/channels/{channelId}/cards/{cardId}",
-    &params, nil, APP_TOKENAPP, set.A.Token, nil, nil))
+    &params, nil, APP_TOKENAGENT, set.A.Token, nil, nil))
 
   // check channel view from C
   assert.NotNil(t, GetTestRevision(set.B.Revisions))
@@ -182,7 +182,7 @@ func TestChannelShare(t *testing.T) {
   subject = &Subject{ Data: data, DataType: "nestedimage" }
   channel = &Channel{}
   assert.NoError(t, ApiTestMsg(SetChannelSubject, "PUT", "/content/channels/{channelId}/subject",
-    &params, subject, APP_TOKENAPP, set.A.Token, channel, nil))
+    &params, subject, APP_TOKENAGENT, set.A.Token, channel, nil))
 
   // check notifications
   assert.NotNil(t, GetTestRevision(set.B.Revisions))
@@ -192,7 +192,7 @@ func TestChannelShare(t *testing.T) {
   params["groupId"] = set.A.C.GroupId
   channel = &Channel{}
   assert.NoError(t, ApiTestMsg(SetChannelGroup, "PUT", "/content/channels/{channelId}/groups/{groupId}",
-    &params, nil, APP_TOKENAPP, set.A.Token, channel, nil))
+    &params, nil, APP_TOKENAGENT, set.A.Token, channel, nil))
   assert.Equal(t, 1, len(channel.Data.ChannelDetail.Contacts.Cards))
   assert.Equal(t, 1, len(channel.Data.ChannelDetail.Contacts.Groups))
 
@@ -204,7 +204,7 @@ func TestChannelShare(t *testing.T) {
   params["channelId"] = channel.Id
   params["cardId"] = set.A.B.CardId
   assert.NoError(t, ApiTestMsg(ClearChannelCard, "DELETE", "/content/channels/{channelId}/cards/{cardId}",
-    &params, nil, APP_TOKENAPP, set.A.Token, channel, nil))
+    &params, nil, APP_TOKENAGENT, set.A.Token, channel, nil))
 
   // check notifications
   assert.NotNil(t, GetTestRevision(set.B.Revisions))
@@ -214,7 +214,7 @@ func TestChannelShare(t *testing.T) {
   params["groupId"] = set.A.C.GroupId
   channel = &Channel{}
   assert.NoError(t, ApiTestMsg(ClearChannelGroup, "DELETE", "/content/channels/{channelId}/groups/{groupId}",
-    &params, nil, APP_TOKENAPP, set.A.Token, channel, nil))
+    &params, nil, APP_TOKENAGENT, set.A.Token, channel, nil))
   assert.Equal(t, 0, len(channel.Data.ChannelDetail.Contacts.Cards))
   assert.Equal(t, 0, len(channel.Data.ChannelDetail.Contacts.Groups))
 }

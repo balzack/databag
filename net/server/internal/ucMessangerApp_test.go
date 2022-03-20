@@ -36,7 +36,7 @@ func TestMessangerApp(t *testing.T) {
       Name: "Roland",
       Location: "The City",
     },
-    tokenType: APP_TOKENAPP,
+    tokenType: APP_TOKENAGENT,
     token: set.A.Token,
   }
   response = &TestApiResponse{}
@@ -58,7 +58,7 @@ func TestMessangerApp(t *testing.T) {
       Data: "channeldataA",
       DataType: "channeldatatypeA",
     },
-    tokenType: APP_TOKENAPP,
+    tokenType: APP_TOKENAGENT,
     token: set.A.Token,
   }
   channel = &Channel{}
@@ -84,7 +84,7 @@ func TestMessangerApp(t *testing.T) {
       Data: "channeltopicdataA",
       DataType: "channeltopicdatatypeA",
     },
-    tokenType: APP_TOKENAPP,
+    tokenType: APP_TOKENAGENT,
     token: set.A.Token,
   }
   topic = &Topic{}
@@ -114,7 +114,7 @@ func TestMessangerApp(t *testing.T) {
       Data: "channeltopictagdataA",
       DataType: "channeltopictagdatatypeA",
     },
-    tokenType: APP_TOKENAPP,
+    tokenType: APP_TOKENAGENT,
     token: set.A.Token,
   }
   tag = &Tag{}
@@ -148,7 +148,7 @@ func TestMessangerApp(t *testing.T) {
       Data: "channeldataB",
       DataType: "channeldatatypeB",
     },
-    tokenType: APP_TOKENAPP,
+    tokenType: APP_TOKENAGENT,
     token: set.B.Token,
   }
   channel = &Channel{}
@@ -160,7 +160,7 @@ func TestMessangerApp(t *testing.T) {
     restType: "PUT",
     query: "/content/channels/{channelId}/cards/{cardId}",
     path: map[string]string{ "cardId": set.B.A.CardId, "channelId": channel.Id },
-    tokenType: APP_TOKENAPP,
+    tokenType: APP_TOKENAGENT,
     token: set.B.Token,
   }
   response = &TestApiResponse{}
@@ -223,7 +223,7 @@ func TestMessangerApp(t *testing.T) {
       Data: "channeltopictagdataB",
       DataType: "channeltopictagdatatypeB",
     },
-    tokenType: APP_TOKENAPP,
+    tokenType: APP_TOKENAGENT,
     token: set.B.Token,
   }
   tag = &Tag{}
@@ -257,7 +257,7 @@ func TestMessangerApp(t *testing.T) {
     restType: "DELETE",
     query: "/content/channels/{channelId}/cards/{cardId}",
     path: map[string]string{ "cardId": set.B.A.CardId, "channelId": channel.Id },
-    tokenType: APP_TOKENAPP,
+    tokenType: APP_TOKENAGENT,
     token: set.B.Token,
   }
   response = &TestApiResponse{}

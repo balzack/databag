@@ -63,7 +63,7 @@ func getChannelSlot(r *http.Request, member bool) (slot store.ChannelSlot, guid 
   // validate contact access
   var account *store.Account
   tokenType := r.Header.Get("TokenType")
-  if tokenType == APP_TOKENAPP {
+  if tokenType == APP_TOKENAGENT {
     account, code, err = BearerAppToken(r, false);
     if err != nil {
       return

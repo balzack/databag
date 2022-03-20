@@ -111,7 +111,7 @@ func ApiTestMsg(
   var r *http.Request
   var w *httptest.ResponseRecorder
 
-  if tokenType == APP_TOKENAPP {
+  if tokenType == APP_TOKENAGENT {
     if !strings.Contains(name, "?") {
       name += "?"
     } else {
@@ -565,11 +565,9 @@ func AddTestCard(account string, contact string) (cardId string, err error) {
   var card Card
 
   // get A identity message
-  if r, w, err = NewRequest("GET", "/profile/message", nil); err != nil {
+  if r, w, err = NewRequest("GET", "/profile/message?agent=" + contact, nil); err != nil {
     return
   }
-  r.Header.Add("TokenType", APP_TOKENAPP)
-  SetBearerAuth(r, contact)
   GetProfileMessage(w, r)
   if err = ReadResponse(w, &msg); err != nil {
     return

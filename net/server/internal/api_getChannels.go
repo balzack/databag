@@ -50,7 +50,7 @@ func GetChannels(w http.ResponseWriter, r *http.Request) {
 
   var response []*Channel
   tokenType := r.Header.Get("TokenType")
-  if tokenType == APP_TOKENAPP {
+  if tokenType == APP_TOKENAGENT {
 
     account, code, err := BearerAppToken(r, false);
     if err != nil {

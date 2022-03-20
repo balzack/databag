@@ -34,12 +34,12 @@ func TestProfileUpdate(t *testing.T) {
   param["cardId"] = set.B.A.CardId
   assert.NoError(t, ApiTestMsg(GetCard, "GET", "/contact/cards/{cardId}",
     &param, nil,
-    APP_TOKENAPP, set.B.Token, &card, nil))
+    APP_TOKENAGENT, set.B.Token, &card, nil))
   bProfileRev = card.Data.NotifiedProfile
   param["cardId"] = set.C.A.CardId
   assert.NoError(t, ApiTestMsg(GetCard, "GET", "/contact/cards/{cardId}",
     &param, nil,
-    APP_TOKENAPP, set.C.Token, &card, nil))
+    APP_TOKENAGENT, set.C.Token, &card, nil))
   cProfileRev = card.Data.NotifiedProfile
 
   // update A profile
@@ -50,7 +50,7 @@ func TestProfileUpdate(t *testing.T) {
   };
   assert.NoError(t, ApiTestMsg(SetProfile, "PUT", "/profile/data",
     nil, profileData,
-    APP_TOKENAPP, set.A.Token, &profile, nil))
+    APP_TOKENAGENT, set.A.Token, &profile, nil))
   assert.Equal(t, "databaggerr", profile.Description)
 
   // recv websocket event
@@ -61,7 +61,7 @@ func TestProfileUpdate(t *testing.T) {
   param["cardId"] = set.B.A.CardId
   assert.NoError(t, ApiTestMsg(GetCard, "GET", "/contact/cards/{cardId}",
     &param, nil,
-    APP_TOKENAPP, set.B.Token, &card, nil))
+    APP_TOKENAGENT, set.B.Token, &card, nil))
   assert.NotEqual(t, bProfileRev, card.Data.NotifiedProfile)
   assert.NotEqual(t, card.Data.ProfileRevision, card.Data.NotifiedProfile)
 
@@ -69,7 +69,7 @@ func TestProfileUpdate(t *testing.T) {
   param["cardId"] = set.C.A.CardId
   assert.NoError(t, ApiTestMsg(GetCard, "GET", "/contact/cards/{cardId}",
     &param, nil,
-    APP_TOKENAPP, set.C.Token, &card, nil))
+    APP_TOKENAGENT, set.C.Token, &card, nil))
   assert.NotEqual(t, cProfileRev, card.Data.NotifiedProfile)
   assert.NotEqual(t, card.Data.ProfileRevision, card.Data.NotifiedProfile)
 
@@ -79,7 +79,7 @@ func TestProfileUpdate(t *testing.T) {
     APP_TOKENCONTACT, set.B.A.Token, &msg, nil))
   assert.NoError(t, ApiTestMsg(AddCard, "POST", "/contact/cards",
     nil, &msg,
-    APP_TOKENAPP, set.B.Token, &card, nil))
+    APP_TOKENAGENT, set.B.Token, &card, nil))
   assert.Equal(t, card.Id, set.B.A.CardId)
   assert.Equal(t, card.Data.ProfileRevision, card.Data.NotifiedProfile)
   assert.Equal(t, card.Data.CardProfile.Name, "Namer")
@@ -90,7 +90,7 @@ func TestProfileUpdate(t *testing.T) {
     APP_TOKENCONTACT, set.C.A.Token, &msg, nil))
   assert.NoError(t, ApiTestMsg(AddCard, "POST", "/contact/cards",
     nil, &msg,
-    APP_TOKENAPP, set.C.Token, &card, nil))
+    APP_TOKENAGENT, set.C.Token, &card, nil))
   assert.Equal(t, card.Id, set.C.A.CardId)
   assert.Equal(t, card.Data.ProfileRevision, card.Data.NotifiedProfile)
   assert.Equal(t, card.Data.CardProfile.Name, "Namer")
@@ -99,11 +99,11 @@ func TestProfileUpdate(t *testing.T) {
   image := "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"
   assert.NoError(t, ApiTestMsg(SetProfileImage, "PUT", "/profile/image",
     nil, image,
-    APP_TOKENAPP, set.A.Token, &profile, nil))
+    APP_TOKENAGENT, set.A.Token, &profile, nil))
 
   // retrieve profile image
   data, hdr, err = ApiTestData(GetProfileImage, "GET", "/profile/image?agent=" + set.A.Token, nil, nil,
-    APP_TOKENAPP, set.A.Token, 0, 0)
+    APP_TOKENAGENT, set.A.Token, 0, 0)
   assert.NoError(t, err)
 
   // compare retrieved image

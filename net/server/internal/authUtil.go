@@ -155,6 +155,62 @@ func ParseToken(token string) (string, string, error) {
   return split[0], split[1], nil
 }
 
+func ParamTokenType(r *http.Request) (string, error) {
+  if r.FormValue(APP_TOKENCONTACT) != "" {
+    return APP_TOKENCONTACT, nil
+  }
+  if r.FormValue(APP_TOKENAGENT) != "" {
+    return APP_TOKENAGENT, nil
+  }
+  if r.FormValue(APP_TOKENATTACH) != "" {
+    return APP_TOKENATTACH, nil
+  }
+  if r.FormValue(APP_TOKENCREATE) != "" {
+    return APP_TOKENCREATE, nil
+  }
+  if r.FormValue(APP_TOKENRESET) != "" {
+    return APP_TOKENRESET, nil
+  }
+  return "", errors.New("missing access token")
+}
+
+func ParamContactToken(r *http.Request, detail bool) (*store.Card, int, error) {
+
+  // parse authentication token
+  target, access, err := ParseToken(r.FormValue("contact"))
+  if err != nil {
+    return nil, http.StatusBadRequest, err
+  }
+
+  // find token record
+  var card store.Card
+  if detail {
+    if err := store.DB.Preload("Account.AccountDetail").Where("account_id = ? AND in_token = ?", target, access).First(&card).Error; err != nil {
+      if errors.Is(err, gorm.ErrRecordNotFound) {
+        return nil, http.StatusNotFound, err
+      } else {
+        return nil, http.StatusInternalServerError, err
+      }
+    }
+  } else {
+    if err := store.DB.Preload("Account").Where("account_id = ? AND in_token = ?", target, access).First(&card).Error; err != nil {
+      if errors.Is(err, gorm.ErrRecordNotFound) {
+        return nil, http.StatusNotFound, err
+      } else {
+        return nil, http.StatusInternalServerError, err
+      }
+    }
+  }
+  if card.Account.Disabled {
+    return nil, http.StatusGone, errors.New("account is inactive")
+  }
+  if card.Status != APP_CARDCONNECTING && card.Status != APP_CARDCONNECTED {
+    return nil, http.StatusUnauthorized, errors.New("invalid connection state")
+  }
+
+  return &card, http.StatusOK, nil
+}
+
 func BearerContactToken(r *http.Request, detail bool) (*store.Card, int, error) {
 
   // parse bearer authentication
