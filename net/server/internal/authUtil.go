@@ -155,23 +155,23 @@ func ParseToken(token string) (string, string, error) {
   return split[0], split[1], nil
 }
 
-func ParamTokenType(r *http.Request) (string, error) {
+func ParamTokenType(r *http.Request) string {
   if r.FormValue(APP_TOKENCONTACT) != "" {
-    return APP_TOKENCONTACT, nil
+    return APP_TOKENCONTACT
   }
   if r.FormValue(APP_TOKENAGENT) != "" {
-    return APP_TOKENAGENT, nil
+    return APP_TOKENAGENT
   }
   if r.FormValue(APP_TOKENATTACH) != "" {
-    return APP_TOKENATTACH, nil
+    return APP_TOKENATTACH
   }
   if r.FormValue(APP_TOKENCREATE) != "" {
-    return APP_TOKENCREATE, nil
+    return APP_TOKENCREATE
   }
   if r.FormValue(APP_TOKENRESET) != "" {
-    return APP_TOKENRESET, nil
+    return APP_TOKENRESET
   }
-  return "", errors.New("missing access token")
+  return ""
 }
 
 func ParamContactToken(r *http.Request, detail bool) (*store.Card, int, error) {

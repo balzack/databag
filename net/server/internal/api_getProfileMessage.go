@@ -8,7 +8,8 @@ import (
 
 func GetProfileMessage(w http.ResponseWriter, r *http.Request) {
   var code int
-  tokenType, err := ParamTokenType(r)
+  var err error
+  tokenType := ParamTokenType(r)
 
   // load account record
   var account *store.Account

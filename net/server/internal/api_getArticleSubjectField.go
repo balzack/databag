@@ -23,16 +23,16 @@ func GetArticleSubjectField(w http.ResponseWriter, r *http.Request) {
 
   var guid string
   var act *store.Account
-  tokenType := r.Header.Get("TokenType")
+  tokenType := ParamTokenType(r)
   if tokenType == APP_TOKENAGENT {
-    account, code, err := BearerAppToken(r, false);
+    account, code, err := ParamAgentToken(r, false);
     if err != nil {
       ErrResponse(w, code, err)
       return
     }
     act = account
   } else if tokenType == APP_TOKENCONTACT {
-    card, code, err := BearerContactToken(r, true)
+    card, code, err := ParamContactToken(r, true)
     if err != nil {
       ErrResponse(w, code, err)
       return

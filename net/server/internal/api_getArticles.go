@@ -49,10 +49,10 @@ func GetArticles(w http.ResponseWriter, r *http.Request) {
   }
 
   var response []*Article
-  tokenType := r.Header.Get("TokenType")
+  tokenType := ParamTokenType(r)
   if tokenType == APP_TOKENAGENT {
 
-    account, code, err := BearerAppToken(r, false);
+    account, code, err := ParamAgentToken(r, false);
     if err != nil {
       ErrResponse(w, code, err)
       return
@@ -81,7 +81,7 @@ func GetArticles(w http.ResponseWriter, r *http.Request) {
 
   } else if tokenType == APP_TOKENCONTACT {
 
-    card, code, err := BearerContactToken(r, true)
+    card, code, err := ParamContactToken(r, true)
     if err != nil {
       ErrResponse(w, code, err)
       return
