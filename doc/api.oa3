@@ -1654,6 +1654,18 @@ paths:
           required: false
           schema:
             type: string
+        - name: agent
+          in: query
+          description: agent token
+          required: false
+          schema:
+            type: string
+        - name: contact
+          in: query
+          description: contact token
+          required: false
+          schema:
+            type: string
       responses:
         '200':
           description: successful operation
@@ -1685,8 +1697,13 @@ paths:
         - attribute
       description: Add a content article. Access granted to app token of the account holder.
       operationId: add-article
-      security:
-        - bearerAuth: []
+      parameters:
+        - name: agent
+          in: query
+          description: agent token
+          required: false
+          schema:
+            type: string
       responses:
         '201':
           description: entry created
@@ -1712,13 +1729,17 @@ paths:
         - attribute
       description: Remove specified article. Access granted to app token of account holder.
       operationId: remove-article
-      security:
-        - bearerAuth: []
       parameters:
         - name: articleId
           in: path
           description: specified article id 
           required: true
+          schema:
+            type: string
+        - name: agent
+          in: query
+          description: agent token
+          required: false
           schema:
             type: string
       responses:
@@ -1739,8 +1760,6 @@ paths:
         - attribute
       description: Base64 decode and download specified field from the article's subject. Access granted to app token of account holder or contact token of account the article is shared with.
       operationId: get-article-subject-field
-      security:
-        - bearerAuth: []
       parameters:
         - name: articleId
           in: path
@@ -1752,6 +1771,18 @@ paths:
           in: path
           description: field from subject to base64 decode and download 
           required: true
+          schema:
+            type: string
+        - name: agent
+          in: query
+          description: agent token
+          required: false
+          schema:
+            type: string
+        - name: contact
+          in: query
+          description: contact token
+          required: false
           schema:
             type: string
       responses:
@@ -1779,13 +1810,17 @@ paths:
         - attribute
       description: Set subject for article. Access granted to app token of account holder.
       operationId: set-article-subject
-      security:
-        - bearerAuth: []
       parameters:
         - name: articleId
           in: path
           description: specified article id 
           required: true
+          schema:
+            type: string
+        - name: agent
+          in: query
+          description: agent token
+          required: false
           schema:
             type: string
       responses:
@@ -1811,8 +1846,6 @@ paths:
         - attribute
       description: Set group for articles. Access granted to app tokens for account holder. 
       operationId: set-article-group
-      security:
-        - bearerAuth: []
       parameters:
         - name: articleId
           in: path
@@ -1824,6 +1857,12 @@ paths:
           in: path
           description: specified group id 
           required: true
+          schema:
+            type: string
+        - name: agent
+          in: query
+          description: agent token
+          required: false
           schema:
             type: string
       responses:
@@ -1846,8 +1885,6 @@ paths:
         - attribute
       description: Clear sharing group for article. Access granted to app tokens for account holder.
       operationId: clear-article-group
-      security:
-        - bearerAuth: []
       parameters:
         - name: articleId
           in: path
@@ -1859,6 +1896,12 @@ paths:
           in: path
           description: specified share id 
           required: true
+          schema:
+            type: string
+        - name: agent
+          in: query
+          description: agent token
+          required: false
           schema:
             type: string
       responses:
