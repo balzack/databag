@@ -8,6 +8,10 @@ function checkResponse(response) {
   }
 }
 
+export function getProfileImageUrl(token) {
+  return '/profile/image?agent=' + token
+}
+
 async function fetchWithTimeout(url, options) {
   return Promise.race([
     fetch(url, options).catch(err => { throw new Error(url + ' failed'); }),
@@ -45,18 +49,17 @@ export async function createAccount(username, password) {
 }
 
 export async function getProfile(token) {
-  let headers = new Headers()
-  headers.append('Authorization', 'Bearer ' + token);
-  let profile = await fetchWithTimeout('/profile', { method: 'GET', timeout: FETCH_TIMEOUT, headers: headers });
+  let profile = await fetchWithTimeout('/profile?agent=' + token, { method: 'GET', timeout: FETCH_TIMEOUT });
   checkResponse(profile)
   return await profile.json()
 }
 
 export async function getGroups(token, revision) {
-  let headers = new Headers()
-  headers.append('Authorization', 'Bearer ' + token);
-  let param = revision == null ? '' : '?revision=' + revision
-  let groups = await fetchWithTimeout('/alias/groups' + param, { method: 'GET', timeout: FETCH_TIMEOUT, headers: headers });
+  let param = "?agent=" + token
+  if (revision != null) {
+    param += '&revision=' + revision
+  }
+  let groups = await fetchWithTimeout('/alias/groups' + param, { method: 'GET', timeout: FETCH_TIMEOUT });
   checkResponse(groups)
   return await groups.json()
 }

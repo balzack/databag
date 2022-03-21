@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import { getProfile, getGroups, getAvailable, getUsername, setLogin, createAccount } from './fetchUtil';
+import { getProfileImageUrl, getProfile, getGroups, getAvailable, getUsername, setLogin, createAccount } from './fetchUtil';
 
 async function updateProfile(token, updateData) {
   let profile = await getProfile(token);
@@ -70,7 +70,8 @@ export function useAppContext() {
     logout: () => {
       appLogout(updateState, clearWebsocket);
       resetData();
-    }
+    },
+    profileImageUrl: () => getProfileImageUrl(state.token)
   }
 
   const adminActions = {

@@ -37,7 +37,7 @@ export function useIdentity() {
         updateState({ name: profile.name });
       }
       if (profile.image != null) {
-        updateState({ imageUrl: 'https://' + profile.node + '/profile/image?token=' + app.state.token })
+        updateState({ imageUrl: app.actions.profileImageUrl() })
       } else {
         updateState({ imageUrl: '' })
       }
