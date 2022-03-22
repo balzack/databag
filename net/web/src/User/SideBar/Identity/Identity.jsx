@@ -1,6 +1,6 @@
 import { Avatar, Image } from 'antd';
 import React from 'react'
-import { IdentityWrapper } from './Identity.styled';
+import { IdentityWrapper, MenuWrapper } from './Identity.styled';
 import { RightOutlined, EditOutlined, UserOutlined } from '@ant-design/icons';
 import { useIdentity } from './useIdentity.hook';
 import { Menu, Dropdown } from 'antd';
@@ -20,17 +20,14 @@ export function Identity() {
   }
 
   const menu = (
-    <Menu>
+    <MenuWrapper>
       <Menu.Item key="0">
         <div onClick={() => actions.editProfile()}>Edit Profile</div>
-      </Menu.Item>
-      <Menu.Item key="1">
-        <div onClick={() => actions.editLabels()}>Manage Labels</div>
       </Menu.Item>
       <Menu.Item key="2">
         <div onClick={() => actions.logout()}>Sign Out</div>
       </Menu.Item>
-    </Menu>
+    </MenuWrapper>
   );
 
   return (

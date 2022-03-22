@@ -6,16 +6,97 @@ export const ProfileWrapper = styled.div`
   width: 100%;
   height: 100%;
   background-color: #f6f5ed;
-  border-radius: 8px;
+  border-radius: 2px;
+  flex-direction: column;
+  padding: 16px;
+  align-items: center;
+
+  .header {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    padding-bottom: 3em;
+  }
+
+  .title {
+    flex-grow: 1;
+    text-align: center;
+    font-size: 2em;
+    font-weight: bold;
+  }
 
   .close {
-    position: absolute;
-    right: 0px;
-    padding-right: 16px;
-    padding-top: 8px;
-    font-size: 1.5em;
-    color: #888;
+    font-size: 24px;
+    color: #aaaaaa;
+  }
+
+  .profile {
+    display: flex;
+    flex-direction: row;
+    padding: 1em;
+    width: 66%;
+  }
+
+  .logo {
+    width: 100%;
+    height: 100%;
+    width: 200px;
+    height: 200px;
+    border: 1px solid #dddddd;
+    border-radius: 8px;
+    align-items: center;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+  }
+
+  .avatar {
+    color: #888888;
+    font-size: 8em;
+    justify-content: center;
+  }
+
+  .logoedit {
+    align-self: flex-end;
+    font-size: 16px;
+    position: relative;
+    left: -24px;
     cursor: pointer;
   }
+
+  .detailedit {
+    font-size: 16px;
+  }
+
+  .unset {
+    font-style: italic;
+    color: #dddddd;
+  }
+
+  .details {
+    padding-left: 2em;
+    margin-left: 2em;
+    border-left: 0.5px solid #aaaaaa;
+  }
+
+  .name {
+    font-size: 1.5em;
+    padding-left: 8px;
+  }
+
+  .location {
+    font-size: 1.2em;
+    padding-left: 8px;
+  }
+
+  .description {
+    font-size: 1em;
+    padding-left: 8px;
+  }
 `;
- 
+
+export const CloseButton = styled(Button)`
+  font-size: 24px;
+  color: #aaaaaa;
+`;
+

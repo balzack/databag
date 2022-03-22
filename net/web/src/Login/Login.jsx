@@ -28,7 +28,7 @@ export function Login(props) {
           <span>Sign In</span>
         </LoginEnter>
       </div>
-      <LoginCreate type="link" onClick={() => actions.onCreate()} disabled={!state.available}>
+      <LoginCreate type="text" onClick={() => actions.onCreate()} disabled={!state.available}>
         <span>Create Account</span>
       </LoginCreate>
       <LoginSpin size="large" spinning={state.spinning} />

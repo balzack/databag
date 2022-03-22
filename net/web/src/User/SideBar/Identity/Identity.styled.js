@@ -1,4 +1,4 @@
-import { Button } from 'antd';
+import { Menu, Button } from 'antd';
 import styled from 'styled-components';
 
 export const IdentityWrapper = styled.div`
@@ -57,5 +57,9 @@ export const IdentityWrapper = styled.div`
     color: #444444;
     font-weight: bold;
   }
-
 `;
+
+export const MenuWrapper = styled(Menu)`
+  border-radius: 4px;
+`;
+

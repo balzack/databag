@@ -24,7 +24,7 @@ export function Create() {
           <span>Create Account</span>
         </CreateEnter>
       </div>
-      <CreateLogin type="link" onClick={() => actions.onLogin()}>Account Sign In</CreateLogin>
+      <CreateLogin type="text" onClick={() => actions.onLogin()}>Account Sign In</CreateLogin>
       <CreateSpin size="large" spinning={state.spinning} />
     </CreateWrapper>
   )
