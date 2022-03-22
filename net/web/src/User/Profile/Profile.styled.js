@@ -8,14 +8,16 @@ export const ProfileWrapper = styled.div`
   background-color: #f6f5ed;
   border-radius: 2px;
   flex-direction: column;
-  padding: 16px;
   align-items: center;
+  overflow: hidden;
 
   .header {
     display: flex;
     width: 100%;
     flex-direction: row;
-    padding-bottom: 3em;
+    align-items: center;
+    background-color: #dddddd;
+    height: 72px;
   }
 
   .title {
@@ -35,6 +37,7 @@ export const ProfileWrapper = styled.div`
     flex-direction: row;
     padding: 1em;
     width: 66%;
+    margin-top: 32px;
   }
 
   .logo {

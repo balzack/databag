@@ -62,4 +62,5 @@ export const CreateLogin = styled(Button)`
 
 export const CreateSpin = styled(Spin)`
   position: absolute;
-`
+  z-index: 10;
+`;

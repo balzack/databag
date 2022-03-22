@@ -24,6 +24,9 @@ export function Identity() {
       <Menu.Item key="0">
         <div onClick={() => actions.editProfile()}>Edit Profile</div>
       </Menu.Item>
+      <Menu.Item key="1">
+        <div>Change Login</div>
+      </Menu.Item>
       <Menu.Item key="2">
         <div onClick={() => actions.logout()}>Sign Out</div>
       </Menu.Item>
