@@ -1,13 +1,15 @@
-import { Menu, Button } from 'antd';
+import { Menu, Button, Dropdown } from 'antd';
 import styled from 'styled-components';
 
 export const IdentityWrapper = styled.div`
-  border-top: 1px solid #8fbea7;
-  border-right: 1px solid #8fbea7;
   border-bottom: 1px solid #8fbea7;
   overflow: hidden;
-  border-radius: 8px;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 64px;
+  background-color: #f6f5ed;
 
   .container {
     display: flex;
@@ -38,8 +40,8 @@ export const IdentityWrapper = styled.div`
   .avatar {
     color: #888888;
     font-size: 3em;
-    width: 64px;
-    height: 64px;
+    width: 48px;
+    height: 48px;
     border-radius: 6px;
     overflow: hidden;
     display: flex;
@@ -63,3 +65,11 @@ export const MenuWrapper = styled(Menu)`
   border-radius: 4px;
 `;
 
+export const IdentityDropdown = styled(Dropdown)`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding-left: 16px;
+  padding-right: 16px;
+`;

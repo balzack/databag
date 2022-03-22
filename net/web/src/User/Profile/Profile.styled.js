@@ -6,7 +6,6 @@ export const ProfileWrapper = styled.div`
   width: 100%;
   height: 100%;
   background-color: #f6f5ed;
-  border-radius: 2px;
   flex-direction: column;
   align-items: center;
   overflow: hidden;
@@ -16,8 +15,10 @@ export const ProfileWrapper = styled.div`
     width: 100%;
     flex-direction: row;
     align-items: center;
-    background-color: #dddddd;
-    height: 72px;
+    background-color: #ddeedd;
+    height: 64px;
+    padding-right: 16px;
+    padding-left: 16px;
   }
 
   .title {

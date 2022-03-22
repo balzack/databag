@@ -20,8 +20,8 @@ export const UserWrapper = styled.div`
 
   .connect {
     position: absolute;
-    width: 33%;
-    height: 33%;
+    width: 40%;
+    height: 40%;
     object-fit: contain;
   }
 
@@ -31,10 +31,6 @@ export const UserWrapper = styled.div`
     justify-content: center;
     width: 100%;
     height: 100%;
-    padding-left: 8px;
-    padding-top: 4px;
-    padding-bottom: 4px;
-    padding-right: 4px;
     z-index: 1;
   }
 `;
