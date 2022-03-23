@@ -54,6 +54,13 @@ export async function getProfile(token) {
   return await profile.json()
 }
 
+export async function setProfileData(token, name, location, description) {
+  let data = { name: name, location: location, description: description };
+  let profile = await fetchWithTimeout('/profile/data?agent=' + token, { method: 'PUT', body: JSON.stringify(data), timeout: FETCH_TIMEOUT });
+  checkResponse(profile)
+  return await profile.json()
+}
+
 export async function getGroups(token, revision) {
   let param = "?agent=" + token
   if (revision != null) {

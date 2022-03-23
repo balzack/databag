@@ -9,7 +9,11 @@ export function useProfile() {
     handle: '',
     description: '',
     location: '',
-    imageUrl: null
+    imageUrl: null,
+    modalBusy: false,
+    modalName: '',
+    modalLocation: '',
+    modalDescription: '',
   });
 
   const navigate = useNavigate();
@@ -23,6 +27,30 @@ export function useProfile() {
     close: () => {
       navigate('/user')
     },
+    setModalName: (value) => {
+      updateState({ modalName: value });
+    },
+    setModalLocation: (value) => {
+      updateState({ modalLocation: value });
+    },
+    setModalDescription: (value) => {
+      updateState({ modalDescription: value });
+    },
+    setModalProfile: async () => {
+      let set = false
+      if(!state.modalBusy) {
+        updateState({ modalBusy: true });
+        try {
+          await app.actions.setProfile(state.modalName, state.modalLocation, state.modalDescription);
+          set = true
+        }
+        catch (err) {
+          window.alert(err)
+        }
+        updateState({ modalBusy: false });
+      }
+      return set
+    },
   };
 
   useEffect(() => {
@@ -34,9 +62,12 @@ export function useProfile() {
         updateState({ imageUrl: '' })
       }
       updateState({ name: profile.name });
+      updateState({ modalName: profile.name });
       updateState({ handle: profile.handle });
       updateState({ description: profile.description });
+      updateState({ modalDescription: profile.description });
       updateState({ location: profile.location });
+      updateState({ modalLocation: profile.location });
     }
   }, [app])
 

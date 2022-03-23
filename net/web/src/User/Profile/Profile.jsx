@@ -1,11 +1,13 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { ProfileWrapper, CloseButton } from './Profile.styled';
 import { UserOutlined, CloseOutlined, EditOutlined } from '@ant-design/icons';
 import { useProfile } from './useProfile.hook';
-import { Button } from 'antd'
+import { Button, Modal } from 'antd'
+import { ProfileInfo } from './ProfileInfo/ProfileInfo';
 
 export function Profile(props) {
 
+  const [ infoVisible, setInfoVisible ] = useState(false);
   const { state, actions } = useProfile();
 
   const Logo = () => {
@@ -13,7 +15,6 @@ export function Profile(props) {
       if (state.imageUrl === '') {
         return <div class="logo"><UserOutlined /></div>
       }
-      return <img class="logo" src={ state.imageUrl } alt="" />
     }
     return <></>
   }
@@ -39,6 +40,12 @@ export function Profile(props) {
     return <span>{ state.description }</span>
   }
 
+  const onProfileSave = async () => {
+    if (await actions.setModalProfile()) {
+      setInfoVisible(false);
+    }
+  }
+
   return (
     <ProfileWrapper>
       <div class="header">
@@ -47,18 +54,28 @@ export function Profile(props) {
       </div>
       <div class="profile">
         <div class="avatar">
-          <Logo />
-        </div>
-        <div class="logoedit">
-          <EditOutlined />
+      <img class="logo" src={ state.imageUrl } alt="" />
+          <div class="logoedit">
+            <EditOutlined />
+          </div>
         </div>
         <div class="details">
           <div class="name"><Name /></div>
           <div class="location"><Location /></div>
           <div class="description"><Description /></div>
-          <Button type="text" icon={<EditOutlined />} />
+          <Button type="text" onClick={() => setInfoVisible(true)} icon={<EditOutlined />} />
         </div>
       </div>
+      <Modal
+        title="Profile Info"
+        centered
+        visible={infoVisible}
+        okText="Save"
+        onOk={() => onProfileSave()}
+        onCancel={() => setInfoVisible(false)}
+      >
+        <ProfileInfo state={state} actions={actions} />
+      </Modal>
     </ProfileWrapper>
   )
 }

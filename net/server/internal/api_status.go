@@ -90,7 +90,6 @@ func Status(w http.ResponseWriter, r *http.Request) {
         return
       }
     case <-ticker.C:
-      conn.SetWriteDeadline(time.Now().Add(15 * time.Second))
       if err := conn.WriteMessage(websocket.PingMessage, nil); err != nil {
         ErrMsg(err)
         return

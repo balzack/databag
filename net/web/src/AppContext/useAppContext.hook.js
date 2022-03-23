@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import { getProfileImageUrl, getProfile, getGroups, getAvailable, getUsername, setLogin, createAccount } from './fetchUtil';
+import { setProfileData, getProfileImageUrl, getProfile, getGroups, getAvailable, getUsername, setLogin, createAccount } from './fetchUtil';
 
 async function updateProfile(token, updateData) {
   let profile = await getProfile(token);
@@ -71,6 +71,9 @@ export function useAppContext() {
       appLogout(updateState, clearWebsocket);
       resetData();
     },
+    setProfile: async (name, location, description) => {
+      await setProfileData(state.token, name, location, description);
+    },
     profileImageUrl: () => getProfileImageUrl(state.token)
   }
 
@@ -126,8 +129,8 @@ export function useAppContext() {
         processRevision(token)
       }
     }
-    ws.current.onclose = () => {
-      console.log('ws close')
+    ws.current.onclose = (e) => {
+      console.log(e)
       setTimeout(() => {
         if (ws.current != null) {
           ws.current.onmessage = () => {}
@@ -141,8 +144,8 @@ export function useAppContext() {
     ws.current.onopen = () => {
       ws.current.send(JSON.stringify({ AppToken: token }))
     }
-    ws.current.error = () => {
-      console.log('ws error')
+    ws.current.error = (e) => {
+      console.log(e)
     }
   }
  

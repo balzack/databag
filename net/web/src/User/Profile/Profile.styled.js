@@ -56,8 +56,11 @@ export const ProfileWrapper = styled.div`
 
   .avatar {
     color: #888888;
+    width: 192px;
+    height: 192px;
     font-size: 8em;
-    justify-content: center;
+    display: flex;
+    justify-content: flex-end;
   }
 
   .logoedit {
