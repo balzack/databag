@@ -68,7 +68,7 @@ export function Profile(props) {
         <div class="select">
           <Button key="select" class="select" onClick={() => onSelectImage()}>Select Image</Button>
         </div>
-        <Button key="select" onClick={() => setLogoVisible(false)}>Cancel</Button>
+        <Button key="back" onClick={() => setLogoVisible(false)}>Cancel</Button>
         <Button key="save" type="primary" onClick={() => setLogoVisible(false)}>Save</Button>
       </ModalFooter>
     );
@@ -97,7 +97,7 @@ export function Profile(props) {
           onOk={() => onProfileSave()} onCancel={() => setInfoVisible(false)}>
         <ProfileInfo state={state} actions={actions} />
       </Modal>
-      <Modal title="Profile Image" centered visible={logoVisible} footer={Footer}>
+      <Modal title="Profile Image" centered visible={logoVisible} footer={Footer} onCancel={() => setLogoVisible(false)}>
         <ProfileImage state={state} actions={actions} />
       </Modal>
     </ProfileWrapper>

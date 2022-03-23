@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import Cropper from 'react-easy-crop'
 import { UserOutlined } from '@ant-design/icons';
 import { ProfileImageWrapper, ProfileDefaultImage } from './ProfileImage.styled';
@@ -8,9 +8,9 @@ export function ProfileImage({ state, actions }) {
   const [crop, setCrop] = useState({ x: 0, y: 0 })
   const [zoom, setZoom] = useState(1)
 
-  const onCropComplete = (croppedArea, croppedAreaPixels) => {
+  const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
     console.log("crop complete");
-  };
+  });
 
   const Logo = () => {
     if (state.modalImage == null) {
