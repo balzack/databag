@@ -15,7 +15,7 @@ export const ProfileWrapper = styled.div`
     width: 100%;
     flex-direction: row;
     align-items: center;
-    background-color: #ddeedd;
+    background-color: #dddddd;
     height: 64px;
     padding-right: 16px;
     padding-left: 16px;
@@ -44,8 +44,8 @@ export const ProfileWrapper = styled.div`
   .logo {
     width: 100%;
     height: 100%;
-    width: 200px;
-    height: 200px;
+    width: 192px;
+    height: 192px;
     border: 1px solid #dddddd;
     border-radius: 8px;
     align-items: center;

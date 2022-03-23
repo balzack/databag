@@ -67,6 +67,7 @@ export const MenuWrapper = styled(Menu)`
 
 export const IdentityDropdown = styled(Dropdown)`
   width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: row;
   align-items: center;
