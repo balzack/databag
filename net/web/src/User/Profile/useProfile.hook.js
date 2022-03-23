@@ -14,6 +14,7 @@ export function useProfile() {
     modalName: '',
     modalLocation: '',
     modalDescription: '',
+    modalImage: null,
   });
 
   const navigate = useNavigate();
@@ -35,6 +36,9 @@ export function useProfile() {
     },
     setModalDescription: (value) => {
       updateState({ modalDescription: value });
+    },
+    setModalImage: (value) => {
+      updateState({ modalImage: value });
     },
     setModalProfile: async () => {
       let set = false
@@ -58,8 +62,10 @@ export function useProfile() {
       let profile = app.state.Data.profile;
       if (profile.image != null) {
         updateState({ imageUrl: app.actions.profileImageUrl() })
+        updateState({ modalImage: app.actions.profileImageUrl() })
       } else {
         updateState({ imageUrl: '' })
+        updateState({ modalImage: null })
       }
       updateState({ name: profile.name });
       updateState({ modalName: profile.name });

@@ -102,6 +102,16 @@ export const ProfileWrapper = styled.div`
   }
 `;
 
+export const ModalFooter = styled.div`
+  width: 100%;
+  display: flex;
+
+  .select {
+    display: flex;
+    flex-grow: 1;
+  }
+`
+
 export const CloseButton = styled(Button)`
   font-size: 24px;
   color: #aaaaaa;

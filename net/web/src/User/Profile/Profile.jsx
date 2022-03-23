@@ -1,20 +1,24 @@
-import React, { useState, useEffect } from 'react'
-import { ProfileWrapper, CloseButton } from './Profile.styled';
+import React, { useState, useEffect, useRef } from 'react'
+import { ProfileWrapper, CloseButton, ModalFooter, SelectButton } from './Profile.styled';
 import { UserOutlined, CloseOutlined, EditOutlined } from '@ant-design/icons';
 import { useProfile } from './useProfile.hook';
 import { Button, Modal } from 'antd'
 import { ProfileInfo } from './ProfileInfo/ProfileInfo';
+import { ProfileImage } from './ProfileImage/ProfileImage';
 
 export function Profile(props) {
 
+  const [ logoVisible, setLogoVisible ] = useState(false);
   const [ infoVisible, setInfoVisible ] = useState(false);
   const { state, actions } = useProfile();
+  const imageFile = useRef(null) 
 
   const Logo = () => {
     if (state.imageUrl != null) {
       if (state.imageUrl === '') {
         return <div class="logo"><UserOutlined /></div>
       }
+      return <img class="logo" src={ state.imageUrl } alt="" />
     }
     return <></>
   }
@@ -46,6 +50,29 @@ export function Profile(props) {
     }
   }
 
+  const onSelectImage = () => {
+   imageFile.current.click();
+  };
+  
+  const selected = (e) => {
+    var reader = new FileReader();
+    reader.onload = () => {
+      actions.setModalImage(reader.result);
+    }
+    reader.readAsDataURL(e.target.files[0]);
+  }
+
+  const Footer = (
+      <ModalFooter>
+        <input type='file' id='file' ref={imageFile} onChange={e => selected(e)} style={{display: 'none'}}/>
+        <div class="select">
+          <Button key="select" class="select" onClick={() => onSelectImage()}>Select Image</Button>
+        </div>
+        <Button key="select" onClick={() => setLogoVisible(false)}>Cancel</Button>
+        <Button key="save" type="primary" onClick={() => setLogoVisible(false)}>Save</Button>
+      </ModalFooter>
+    );
+
   return (
     <ProfileWrapper>
       <div class="header">
@@ -53,8 +80,8 @@ export function Profile(props) {
         <CloseButton type="text" class="close" size={'large'} onClick={() => actions.close()} icon={<CloseOutlined />} />
       </div>
       <div class="profile">
-        <div class="avatar">
-      <img class="logo" src={ state.imageUrl } alt="" />
+        <div class="avatar" onClick={() => setLogoVisible(true)}>
+          <Logo />
           <div class="logoedit">
             <EditOutlined />
           </div>
@@ -66,15 +93,12 @@ export function Profile(props) {
           <Button type="text" onClick={() => setInfoVisible(true)} icon={<EditOutlined />} />
         </div>
       </div>
-      <Modal
-        title="Profile Info"
-        centered
-        visible={infoVisible}
-        okText="Save"
-        onOk={() => onProfileSave()}
-        onCancel={() => setInfoVisible(false)}
-      >
+      <Modal title="Profile Info" centered visible={infoVisible} okText="Save"
+          onOk={() => onProfileSave()} onCancel={() => setInfoVisible(false)}>
         <ProfileInfo state={state} actions={actions} />
+      </Modal>
+      <Modal title="Profile Image" centered visible={logoVisible} footer={Footer}>
+        <ProfileImage state={state} actions={actions} />
       </Modal>
     </ProfileWrapper>
   )
