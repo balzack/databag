@@ -1,15 +1,15 @@
 import React, { useState, useCallback } from 'react';
 import Cropper from 'react-easy-crop'
 import { UserOutlined } from '@ant-design/icons';
-import { ProfileImageWrapper, ProfileDefaultImage } from './ProfileImage.styled';
+import { ProfileSpin, ProfileImageWrapper, ProfileDefaultImage } from './ProfileImage.styled';
 
 export function ProfileImage({ state, actions }) {
   
   const [crop, setCrop] = useState({ x: 0, y: 0 })
   const [zoom, setZoom] = useState(1)
 
-  const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
-    console.log("crop complete");
+  const onCropComplete = useCallback((area, crop) => {
+    actions.setModalCrop(crop.width, crop.height, crop.x, crop.y) 
   });
 
   const Logo = () => {
@@ -19,15 +19,12 @@ export function ProfileImage({ state, actions }) {
     return <></>
   }
 
-  const onSelect = () => {
-    console.log("ON SELECT");
-  }
-
   return (
     <ProfileImageWrapper>
-      <Cropper onClick={() => onSelect()} image={state.modalImage} crop={crop} zoom={zoom} aspect={1} 
+      <Cropper image={state.modalImage} crop={crop} zoom={zoom} aspect={1} 
           onCropChange={setCrop} onCropComplete={onCropComplete} onZoomChange={setZoom} />
       <Logo /> 
+      <ProfileSpin size="large" spinning={state.modalBusy} />
     </ProfileImageWrapper>
   )
 }

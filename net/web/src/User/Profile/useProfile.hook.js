@@ -15,6 +15,7 @@ export function useProfile() {
     modalLocation: '',
     modalDescription: '',
     modalImage: null,
+    crop: { w :0, h: 0, x: 0, y: 0 }
   });
 
   const navigate = useNavigate();
@@ -40,12 +41,15 @@ export function useProfile() {
     setModalImage: (value) => {
       updateState({ modalImage: value });
     },
-    setModalProfile: async () => {
+    setModalCrop: (w, h, x, y) => {
+      updateState({ crop: { w: w, h: h, x: x, y: y } });
+    },
+    setProfileData: async () => {
       let set = false
       if(!state.modalBusy) {
         updateState({ modalBusy: true });
         try {
-          await app.actions.setProfile(state.modalName, state.modalLocation, state.modalDescription);
+          await app.actions.setProfileData(state.modalName, state.modalLocation, state.modalDescription);
           set = true
         }
         catch (err) {
@@ -54,6 +58,39 @@ export function useProfile() {
         updateState({ modalBusy: false });
       }
       return set
+    },
+    setProfileImage: async () => {
+      let set = false
+      if(!state.modalBusy) {
+        updateState({ modalBusy: true });
+        try {
+          const processImg = () => {
+            return new Promise((resolve, reject) => {
+              let img = new Image();
+              img.onload = () => {
+                var canvas = document.createElement("canvas");
+                var context = canvas.getContext('2d');
+                canvas.width = state.crop.w;
+                canvas.height = state.crop.h;
+                context.drawImage(img, state.crop.x, state.crop.y, state.crop.w, state.crop.h,
+                    0, 0, state.crop.w, state.crop.h);
+                resolve(canvas.toDataURL());
+              }
+              img.onerror = reject;
+              img.src = state.modalImage;
+            });
+          };
+          let dataUrl = await processImg();
+          let data = dataUrl.split(",")[1];
+          await app.actions.setProfileImage(data);
+          set = true
+        }
+        catch (err) {
+          window.alert(err);
+        }
+        updateState({ modalBusy: false });
+      }
+      return set;
     },
   };
 

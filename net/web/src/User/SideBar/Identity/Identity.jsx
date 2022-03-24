@@ -10,6 +10,7 @@ export function Identity() {
   const { state, actions } = useIdentity()
 
   const Logo = () => {
+console.log(state);
     if (state.imageUrl != null) {
       if (state.imageUrl === '') {
         return <UserOutlined />

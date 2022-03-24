@@ -8,8 +8,8 @@ function checkResponse(response) {
   }
 }
 
-export function getProfileImageUrl(token) {
-  return '/profile/image?agent=' + token
+export function getProfileImageUrl(token, revision) {
+  return '/profile/image?agent=' + token + "&revision=" + revision
 }
 
 async function fetchWithTimeout(url, options) {
@@ -57,6 +57,12 @@ export async function getProfile(token) {
 export async function setProfileData(token, name, location, description) {
   let data = { name: name, location: location, description: description };
   let profile = await fetchWithTimeout('/profile/data?agent=' + token, { method: 'PUT', body: JSON.stringify(data), timeout: FETCH_TIMEOUT });
+  checkResponse(profile)
+  return await profile.json()
+}
+
+export async function setProfileImage(token, image) {
+  let profile = await fetchWithTimeout('/profile/image?agent=' + token, { method: 'PUT', body: JSON.stringify(image), timeout: FETCH_TIMEOUT });
   checkResponse(profile)
   return await profile.json()
 }

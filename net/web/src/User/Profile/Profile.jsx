@@ -45,8 +45,14 @@ export function Profile(props) {
   }
 
   const onProfileSave = async () => {
-    if (await actions.setModalProfile()) {
+    if (await actions.setProfileData()) {
       setInfoVisible(false);
+    }
+  }
+
+  const onImageSave = async () => {
+    if (await actions.setProfileImage()) {
+      setLogoVisible(false);
     }
   }
 
@@ -64,12 +70,12 @@ export function Profile(props) {
 
   const Footer = (
       <ModalFooter>
-        <input type='file' id='file' ref={imageFile} onChange={e => selected(e)} style={{display: 'none'}}/>
+        <input type='file' id='file' accept="image/*" ref={imageFile} onChange={e => selected(e)} style={{display: 'none'}}/>
         <div class="select">
           <Button key="select" class="select" onClick={() => onSelectImage()}>Select Image</Button>
         </div>
         <Button key="back" onClick={() => setLogoVisible(false)}>Cancel</Button>
-        <Button key="save" type="primary" onClick={() => setLogoVisible(false)}>Save</Button>
+        <Button key="save" type="primary" onClick={() => onImageSave()}>Save</Button>
       </ModalFooter>
     );
 
@@ -88,7 +94,7 @@ export function Profile(props) {
             </div>
           </div>
           <div class="block" onClick={() => setInfoVisible(true)}>
-            <span class="label">detail:</span>
+            <span class="label">details:</span>
             <EditIcon class="detailedit" />
           </div>
           <div class="details">
@@ -99,7 +105,7 @@ export function Profile(props) {
         </div>
         <div class="contact"></div>
       </div>
-      <Modal title="Profile Info" centered visible={infoVisible} okText="Save"
+      <Modal title="Profile Details" centered visible={infoVisible} okText="Save"
           onOk={() => onProfileSave()} onCancel={() => setInfoVisible(false)}>
         <ProfileInfo state={state} actions={actions} />
       </Modal>

@@ -84,6 +84,10 @@ export const ProfileWrapper = styled.div`
     position: absolute;
     padding-right: 8px;
     cursor: pointer;
+    background: #f6f5ed;
+    padding-left: 8px;
+    border-radius: 4px;
+    border: 1px solid #dddddd;
   }
 
   .detailedit {
@@ -98,7 +102,7 @@ export const ProfileWrapper = styled.div`
 
   .label {
     padding-right: 8px;
-    font-size: 1.2em;
+    font-size: 1em;
     font-weight: bold;
     color: #888888;
   }

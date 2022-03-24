@@ -1,3 +1,4 @@
+import { Spin } from 'antd';
 import styled from 'styled-components';
 
 export const ProfileImageWrapper = styled.div`
@@ -21,5 +22,10 @@ export const ProfileDefaultImage = styled.div`
   color: #888888;
   font-size: 6em;
   cursor: pointer;
+`;
+
+export const ProfileSpin = styled(Spin)`
+  position: absolute;
+  x-index: 10;
 `;
 

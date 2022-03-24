@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import { setProfileData, getProfileImageUrl, getProfile, getGroups, getAvailable, getUsername, setLogin, createAccount } from './fetchUtil';
+import { setProfileImage, setProfileData, getProfileImageUrl, getProfile, getGroups, getAvailable, getUsername, setLogin, createAccount } from './fetchUtil';
 
 async function updateProfile(token, updateData) {
   let profile = await getProfile(token);
@@ -71,10 +71,13 @@ export function useAppContext() {
       appLogout(updateState, clearWebsocket);
       resetData();
     },
-    setProfile: async (name, location, description) => {
+    setProfileData: async (name, location, description) => {
       await setProfileData(state.token, name, location, description);
     },
-    profileImageUrl: () => getProfileImageUrl(state.token)
+    setProfileImage: async (image) => {
+      await setProfileImage(state.token, image);
+    },
+    profileImageUrl: () => getProfileImageUrl(state.token, state.Data?.profile?.revision)
   }
 
   const adminActions = {
