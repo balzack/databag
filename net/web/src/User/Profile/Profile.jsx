@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { ProfileWrapper, CloseButton, ModalFooter, SelectButton } from './Profile.styled';
+import { EditIcon, ProfileWrapper, CloseButton, ModalFooter, SelectButton } from './Profile.styled';
 import { UserOutlined, CloseOutlined, EditOutlined } from '@ant-design/icons';
 import { useProfile } from './useProfile.hook';
 import { Button, Modal } from 'antd'
@@ -79,19 +79,25 @@ export function Profile(props) {
         <div class="title">{ state.handle }</div>
         <CloseButton type="text" class="close" size={'large'} onClick={() => actions.close()} icon={<CloseOutlined />} />
       </div>
-      <div class="profile">
-        <div class="avatar" onClick={() => setLogoVisible(true)}>
-          <Logo />
-          <div class="logoedit">
-            <EditOutlined />
+      <div class="container">
+        <div class="profile">
+          <div class="avatar" onClick={() => setLogoVisible(true)}>
+            <Logo />
+            <div class="logoedit">
+              <EditIcon />
+            </div>
+          </div>
+          <div class="block" onClick={() => setInfoVisible(true)}>
+            <span class="label">detail:</span>
+            <EditIcon class="detailedit" />
+          </div>
+          <div class="details">
+            <div class="name"><Name /></div>
+            <div class="location"><Location /></div>
+            <div class="description"><Description /></div>
           </div>
         </div>
-        <div class="details">
-          <div class="name"><Name /></div>
-          <div class="location"><Location /></div>
-          <div class="description"><Description /></div>
-          <Button type="text" onClick={() => setInfoVisible(true)} icon={<EditOutlined />} />
-        </div>
+        <div class="contact"></div>
       </div>
       <Modal title="Profile Info" centered visible={infoVisible} okText="Save"
           onOk={() => onProfileSave()} onCancel={() => setInfoVisible(false)}>

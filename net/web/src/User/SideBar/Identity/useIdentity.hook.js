@@ -33,14 +33,12 @@ export function useIdentity() {
   useEffect(() => {
     if (app?.state?.Data?.profile) {
       let profile = app.state.Data.profile;
-      if (profile.name != null) {
-        updateState({ name: profile.name });
-      }
-      if (profile.image != null) {
+      if (profile.image != null && profile.image != '') {
         updateState({ imageUrl: app.actions.profileImageUrl() })
       } else {
         updateState({ imageUrl: '' })
       }
+      updateState({ name: profile.name });
       updateState({ handle: profile.handle });
       updateState({ domain: profile.node });
     }

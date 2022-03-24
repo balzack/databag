@@ -1,5 +1,6 @@
 import { Input, Button, Spin } from 'antd';
 import styled from 'styled-components';
+import { EditOutlined } from '@ant-design/icons';
 
 export const ProfileWrapper = styled.div`
   display: flex;
@@ -33,12 +34,26 @@ export const ProfileWrapper = styled.div`
     color: #aaaaaa;
   }
 
-  .profile {
+  .container {
     display: flex;
     flex-direction: row;
     padding: 1em;
-    width: 66%;
     margin-top: 32px;
+    width: 100%;
+  }
+
+  .profile {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    flex: 2
+  }
+
+  .contact {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-begin;
+    flex: 3
   }
 
   .logo {
@@ -66,8 +81,8 @@ export const ProfileWrapper = styled.div`
   .logoedit {
     align-self: flex-end;
     font-size: 16px;
-    position: relative;
-    left: -24px;
+    position: absolute;
+    padding-right: 8px;
     cursor: pointer;
   }
 
@@ -80,25 +95,49 @@ export const ProfileWrapper = styled.div`
     color: #dddddd;
   }
 
+
+  .label {
+    padding-right: 8px;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #888888;
+  }
+
   .details {
-    padding-left: 2em;
-    margin-left: 2em;
-    border-left: 0.5px solid #aaaaaa;
+    padding: 16px;
+    border-right: 0.5px solid #aaaaaa;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
   }
 
   .name {
     font-size: 1.5em;
-    padding-left: 8px;
+    padding-bottom: 16px;
+    text-align: right;
   }
 
   .location {
     font-size: 1.2em;
-    padding-left: 8px;
+    padding-bottom: 16px;
+    text-align: right;
   }
 
   .description {
     font-size: 1em;
-    padding-left: 8px;
+    padding-bottom: 16px;
+    text-align: right;
+  }
+
+  .block {
+    border-bottom: 0.5px solid #aaaaaa;
+    display: flex;
+    flex-direction: row;
+    margin-top: 32px;
+    align-items: center;
+    justify-content: flex-end;
+    width: 50%;
+    cursor: pointer;
   }
 `;
 
@@ -115,5 +154,9 @@ export const ModalFooter = styled.div`
 export const CloseButton = styled(Button)`
   font-size: 24px;
   color: #aaaaaa;
+`;
+
+export const EditIcon = styled(EditOutlined)`
+    color: #1890ff;
 `;
 
