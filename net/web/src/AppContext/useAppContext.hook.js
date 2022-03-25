@@ -1,5 +1,11 @@
 import { useEffect, useState, useRef } from 'react';
-import { setProfileImage, setProfileData, getProfileImageUrl, getProfile, getGroups, getAvailable, getUsername, setLogin, createAccount } from './fetchUtil';
+import { setProfileImage, setProfileData, getProfileImageUrl, getAccountStatus, setAccountSearchable, getProfile, getGroups, getAvailable, getUsername, setLogin, createAccount } from './fetchUtil';
+
+async function updateAccount(token, updateData) {
+  let status = await getAccountStatus(token);
+console.log(status);
+  updateData({ status: status });
+}
 
 async function updateProfile(token, updateData) {
   let profile = await getProfile(token);
@@ -41,10 +47,10 @@ export function useAppContext() {
   const [state, setState] = useState(null);
 
   const groupRevision = useRef(null);
-  const groups = useRef(new Map());
-
+  const accountRevision = useRef(null);
   const profileRevision = useRef(null);
-  const profile = useRef({});
+
+  const groups = useRef(new Map());
 
   const ws = useRef(null);
   const revision = useRef(null);
@@ -60,10 +66,10 @@ export function useAppContext() {
 
   const resetData = () => {
     revision.current = null;
-    profile.current = {};
     profileRevision.current = null;
-    groups.current = new Map();
     groupRevision.current = null;
+    groups.current = new Map();
+    setState(null);
   }
 
   const userActions = {
@@ -76,6 +82,9 @@ export function useAppContext() {
     },
     setProfileImage: async (image) => {
       await setProfileImage(state.token, image);
+    },
+    setAccountSearchable: async (flag) => {
+      await setAccountSearchable(state.token, flag);
     },
     profileImageUrl: () => getProfileImageUrl(state.token, state.Data?.profile?.revision)
   }
@@ -112,6 +121,12 @@ export function useAppContext() {
       if (rev.profile != profileRevision.current) {
         await updateProfile(token, updateData) 
         profileRevision.current = rev.profile
+      }
+
+      // update account status if revision changed
+      if (rev.account != accountRevision.current) {
+        await updateAccount(token, updateData)
+        accountRevision.current = rev.account
       }
 
       // check if new revision was received during processing
@@ -165,7 +180,6 @@ export function useAppContext() {
         const session = JSON.parse(storage)
         if (session?.access === 'admin') {
           setState({ token: session.token, access: session.access })
-          setWebsocket(session.token);
         } else if (session?.access === 'user') {
           setState({ token: session.token, access: session.access })
           setWebsocket(session.token);   

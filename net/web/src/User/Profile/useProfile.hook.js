@@ -10,6 +10,7 @@ export function useProfile() {
     description: '',
     location: '',
     imageUrl: null,
+    searchable: false,
     modalBusy: false,
     modalName: '',
     modalLocation: '',
@@ -59,6 +60,14 @@ export function useProfile() {
       }
       return set
     },
+    setSearchable: async (flag) => {
+      try {
+        await app.actions.setAccountSearchable(flag);
+      }
+      catch (err) {
+        window.alert(err);
+      }
+    },
     setProfileImage: async () => {
       let set = false
       if(!state.modalBusy) {
@@ -70,10 +79,10 @@ export function useProfile() {
               img.onload = () => {
                 var canvas = document.createElement("canvas");
                 var context = canvas.getContext('2d');
-                canvas.width = state.crop.w;
-                canvas.height = state.crop.h;
+                canvas.width = 256;
+                canvas.height = 256;
                 context.drawImage(img, state.crop.x, state.crop.y, state.crop.w, state.crop.h,
-                    0, 0, state.crop.w, state.crop.h);
+                    0, 0, 256, 256);
                 resolve(canvas.toDataURL());
               }
               img.onerror = reject;
@@ -111,6 +120,10 @@ export function useProfile() {
       updateState({ modalDescription: profile.description });
       updateState({ location: profile.location });
       updateState({ modalLocation: profile.location });
+    }
+    if (app?.state?.Data?.status) {
+      let status = app.state.Data.status;
+      updateState({ searchable: status.searchable });
     }
   }, [app])
 

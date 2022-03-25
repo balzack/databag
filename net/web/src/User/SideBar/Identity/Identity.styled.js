@@ -29,6 +29,8 @@ export const IdentityWrapper = styled.div`
   }
 
   .username {
+    white-space: nowrap;
+    overflow: hidden;
     flex-grow: 1;
     display: flex;
     flex-direction: column;

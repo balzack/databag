@@ -361,7 +361,9 @@ type ProfileData struct {
 
 type Revision struct {
 
-	Profile int64 `json:"profile"`
+	Account int64 `json:"account"`
+
+  Profile int64 `json:"profile"`
 
 	Article int64 `json:"article"`
 

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { EditIcon, ProfileWrapper, CloseButton, ModalFooter, SelectButton } from './Profile.styled';
 import { UserOutlined, CloseOutlined, EditOutlined } from '@ant-design/icons';
 import { useProfile } from './useProfile.hook';
-import { Button, Modal } from 'antd'
+import { Button, Checkbox, Modal } from 'antd'
 import { ProfileInfo } from './ProfileInfo/ProfileInfo';
 import { ProfileImage } from './ProfileImage/ProfileImage';
 
@@ -68,6 +68,10 @@ export function Profile(props) {
     reader.readAsDataURL(e.target.files[0]);
   }
 
+  const onSearchable = (flag) => {
+    actions.setSearchable(flag);
+  }
+
   const Footer = (
       <ModalFooter>
         <input type='file' id='file' accept="image/*" ref={imageFile} onChange={e => selected(e)} style={{display: 'none'}}/>
@@ -87,6 +91,10 @@ export function Profile(props) {
       </div>
       <div class="container">
         <div class="profile">
+          <div class="registry">
+            <span class="search">Listed in Registry</span>
+            <Checkbox checked={state.searchable} onChange={(e) => onSearchable(e.target.checked)} />
+          </div>
           <div class="avatar" onClick={() => setLogoVisible(true)}>
             <Logo />
             <div class="logoedit">

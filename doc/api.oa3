@@ -390,8 +390,13 @@ paths:
         - account
       description: Get disabled status of account. Authorized to account username and password.
       operationId: get-account-status
-      security:
-        - bearerAuth: []
+      parameters:
+        - name: agent
+          in: query
+          description: agent token
+          required: false
+          schema:
+            type: string
       responses:
         '200':
           description: successful operation
@@ -410,8 +415,13 @@ paths:
         - account
       description: Set whether account is publicly listed.
       operationId: set-account-seachable
-      security:        
-        - bearerAuth: []
+      parameters:
+        - name: agent
+          in: query
+          description: agent token
+          required: false
+          schema:
+            type: string
       responses:
         '201':
           description: success

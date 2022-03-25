@@ -40,6 +40,17 @@ export async function setLogin(username, password) {
   return await login.json()
 }
 
+export async function setAccountSearchable(token, flag) {
+  let res = await fetchWithTimeout('/account/searchable?agent=' + token, { method: 'PUT', body: JSON.stringify(flag), timeout: FETCH_TIMEOUT })
+  checkResponse(res);
+}
+
+export async function getAccountStatus(token) {
+  let status = await fetchWithTimeout('/account/status?agent=' + token, { method: 'GET', timeout: FETCH_TIMEOUT });
+  checkResponse(status);
+  return await status.json()
+} 
+
 export async function createAccount(username, password) {
   let headers = new Headers()
   headers.append('Credentials', 'Basic ' + base64.encode(username + ":" + password));

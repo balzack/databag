@@ -104,6 +104,7 @@ func Status(w http.ResponseWriter, r *http.Request) {
 
 func getRevision(account *store.Account) Revision {
   var r Revision
+  r.Account = account.AccountRevision
   r.Profile = account.ProfileRevision
   r.Article = account.ArticleRevision
   r.Channel = account.ChannelRevision

@@ -56,6 +56,16 @@ export const ProfileWrapper = styled.div`
     flex: 3
   }
 
+  .registry {
+    display: flex;
+    flex-direction: row;
+    padding-bottom: 8px;
+  }
+
+  .search {
+    padding-right: 16px;
+  }
+
   .logo {
     width: 100%;
     height: 100%;

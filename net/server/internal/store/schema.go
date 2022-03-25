@@ -60,6 +60,7 @@ type Account struct {
   Guid              string          `gorm:"not null;uniqueIndex"`
   Username          string          `gorm:"not null;uniqueIndex"`
   Password          []byte          `gorm:"not null"`
+  AccountRevision   int64           `gorm:"not null;default:1"`
   ProfileRevision   int64           `gorm:"not null;default:1"`
   ArticleRevision   int64           `gorm:"not null;default:1"`
   GroupRevision     int64           `gorm:"not null;default:1"`
