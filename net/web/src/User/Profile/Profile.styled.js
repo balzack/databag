@@ -23,6 +23,7 @@ export const ProfileWrapper = styled.div`
   }
 
   .title {
+    height: 64px;
     flex-grow: 1;
     text-align: center;
     font-size: 2em;
