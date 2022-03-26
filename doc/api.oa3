@@ -3016,6 +3016,9 @@ components:
         - channel
         - card
       properties:
+        account:
+          type: integer
+          format: int64
         profile:
           type: integer
           format: int64

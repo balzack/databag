@@ -51,6 +51,7 @@ export function useAppContext() {
   const profileRevision = useRef(null);
 
   const groups = useRef(new Map());
+  const delay = useRef(2);
 
   const ws = useRef(null);
   const revision = useRef(null);
@@ -69,7 +70,7 @@ export function useAppContext() {
     profileRevision.current = null;
     groupRevision.current = null;
     groups.current = new Map();
-    setState(null);
+    setState({});
   }
 
   const userActions = {
@@ -156,8 +157,9 @@ export function useAppContext() {
           ws.current.onopen = () => {}
           ws.current.onerror = () => {}
           setWebsocket(token);
+          delay.current += 1;
         }
-      }, 2000)
+      }, delay.current * 1000)
     }
     ws.current.onopen = () => {
       ws.current.send(JSON.stringify({ AppToken: token }))

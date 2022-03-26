@@ -28,6 +28,9 @@ export const ProfileWrapper = styled.div`
     text-align: center;
     font-size: 2em;
     font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .close {
@@ -38,9 +41,9 @@ export const ProfileWrapper = styled.div`
   .container {
     display: flex;
     flex-direction: row;
-    padding: 1em;
-    margin-top: 32px;
+    padding: 32px;
     width: 100%;
+    overflow: scroll
   }
 
   .profile {
@@ -64,7 +67,7 @@ export const ProfileWrapper = styled.div`
   }
 
   .search {
-    padding-right: 16px;
+    padding-right: 6px;
   }
 
   .logo {
