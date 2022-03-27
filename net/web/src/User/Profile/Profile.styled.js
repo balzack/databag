@@ -95,13 +95,15 @@ export const ProfileWrapper = styled.div`
   .logoedit {
     align-self: flex-end;
     font-size: 16px;
-    position: absolute;
+    position: relative;
     padding-right: 8px;
     cursor: pointer;
     background: #f6f5ed;
     padding-left: 8px;
     border-radius: 4px;
     border: 1px solid #dddddd;
+    z-index: 10;
+    left: 192px;
   }
 
   .detailedit {

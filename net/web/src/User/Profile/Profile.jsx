@@ -96,10 +96,10 @@ export function Profile(props) {
             <Checkbox checked={state.searchable} onChange={(e) => onSearchable(e.target.checked)} />
           </div>
           <div class="avatar" onClick={() => setLogoVisible(true)}>
-            <Logo />
             <div class="logoedit">
               <EditIcon />
             </div>
+            <Logo />
           </div>
           <div class="block" onClick={() => setInfoVisible(true)}>
             <span class="label">details:</span>

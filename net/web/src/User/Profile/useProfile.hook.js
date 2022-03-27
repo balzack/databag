@@ -79,10 +79,10 @@ export function useProfile() {
               img.onload = () => {
                 var canvas = document.createElement("canvas");
                 var context = canvas.getContext('2d');
-                canvas.width = 256;
-                canvas.height = 256;
+                canvas.width = 128;
+                canvas.height = 128;
                 context.drawImage(img, state.crop.x, state.crop.y, state.crop.w, state.crop.h,
-                    0, 0, 256, 256);
+                    0, 0, 128, 128);
                 resolve(canvas.toDataURL());
               }
               img.onerror = reject;

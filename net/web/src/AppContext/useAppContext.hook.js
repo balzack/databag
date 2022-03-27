@@ -3,7 +3,6 @@ import { setProfileImage, setProfileData, getProfileImageUrl, getAccountStatus, 
 
 async function updateAccount(token, updateData) {
   let status = await getAccountStatus(token);
-console.log(status);
   updateData({ status: status });
 }
 
@@ -112,16 +111,16 @@ export function useAppContext() {
     while(revision.current != null) {
       let rev = revision.current;
 
-      // update group if revision changed
-      if (rev.group != groupRevision.current) {
-        await updateGroups(token, groupRevision.current, groups.current, updateData);
-        groupRevision.current = rev.group
-      }
-
       // update profile if revision changed
       if (rev.profile != profileRevision.current) {
         await updateProfile(token, updateData) 
         profileRevision.current = rev.profile
+      }
+
+      // update group if revision changed
+      if (rev.group != groupRevision.current) {
+        await updateGroups(token, groupRevision.current, groups.current, updateData);
+        groupRevision.current = rev.group
       }
 
       // update account status if revision changed
