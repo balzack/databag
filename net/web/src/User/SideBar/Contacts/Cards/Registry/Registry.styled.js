@@ -5,8 +5,10 @@ export const RegistryWrapper = styled.div`
   padding-left: 8px;
   padding-right: 8px;
   text-align: center;
-  height: calc(100vh - 143px);
   display: flex;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
   flex-direction: column;
 
   .contacts {

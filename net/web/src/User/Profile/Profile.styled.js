@@ -43,7 +43,7 @@ export const ProfileWrapper = styled.div`
     flex-direction: row;
     padding: 32px;
     width: 100%;
-    overflow: scroll
+    overflow: auto; 
   }
 
   .profile {

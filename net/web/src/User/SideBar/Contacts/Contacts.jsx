@@ -50,7 +50,7 @@ export function Contacts() {
 
   return (
     <ContactsWrapper>
-      <Tabs onChange={onTab} tabBarStyle={{ paddingLeft: 16, paddingRight: 16 }} tabBarExtraContent={addButton}>>
+      <Tabs onChange={onTab} tabBarStyle={{ marginBottom: 0, paddingLeft: 16, paddingRight: 16 }} tabBarExtraContent={addButton}>>
         <TabPane tab="Contacts" key="contact">
           <Cards showRegistry={showRegistry} />
         </TabPane>

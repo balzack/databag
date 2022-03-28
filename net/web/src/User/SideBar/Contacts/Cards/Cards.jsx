@@ -11,19 +11,19 @@ export function Cards({ showRegistry }) {
 
   return (
     <CardsWrapper>
-
+      <div>
         <Drawer
           placement="right"
           closable={false}
           visible={showRegistry}
           getContainer={false}
           contentWrapperStyle={{ width: '100%' }}
-          bodyStyle={{ padding: 0, backgroundColor: '#f6f5ed' }}
+          bodyStyle={{ backgroundColor: '#f6f5ed', padding: 16 }}
           style={{ position: 'absolute' }}
         >
           <Registry />
         </Drawer>
-
+      </div>
     </CardsWrapper>
   )
 }
