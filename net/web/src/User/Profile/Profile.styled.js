@@ -72,9 +72,8 @@ export const ProfileWrapper = styled.div`
 
   .logo {
     width: 100%;
-    height: 100%;
-    width: 192px;
     height: 192px;
+    width: 192px;
     border: 1px solid #dddddd;
     border-radius: 8px;
     align-items: center;
@@ -85,7 +84,6 @@ export const ProfileWrapper = styled.div`
 
   .avatar {
     color: #888888;
-    width: 192px;
     height: 192px;
     font-size: 8em;
     display: flex;

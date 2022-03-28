@@ -22,13 +22,13 @@ export function Contacts() {
   }
 
   const addUser = (
-    <Tooltip placement="bottomRight" title="Add Contact">
+    <Tooltip placement="right" title="Add Contact">
       <AddButton type="primary" onClick={() => onShowRegistry()} icon={<UserAddOutlined />} />
     </Tooltip>
   )
 
   const addConversation = (
-    <Tooltip placement="bottomRight" title="Add Conversation">
+    <Tooltip placement="right" title="Add Conversation">
       <AddButton type="primary" icon={<CommentOutlined />} />
     </Tooltip>
   ) 
