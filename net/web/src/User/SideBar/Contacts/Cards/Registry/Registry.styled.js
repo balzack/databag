@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { List } from 'antd';
 
 export const RegistryWrapper = styled.div`
   position: relative;
@@ -15,14 +16,13 @@ export const RegistryWrapper = styled.div`
     background-color: #fefefe;
     border-radius-bottom-right: 8px;
     border-radius-bottom-left: 8px;
-    height: calc(100vh - 174px);
+    height: calc(100vh - 175px);
     overflow: auto;
   }
 
   .item {
     width: 100%;
     display: flex;
-    padding-left: 16px;
     flex-direction: row;
     align-items: center;
   }
@@ -36,7 +36,7 @@ export const RegistryWrapper = styled.div`
     display: flex;
     flex-direction: column;
     padding-left: 16px;
-    text-align: left;
+    text-align: right;
     flex-grow: 1;
   }
 
@@ -49,5 +49,16 @@ export const RegistryWrapper = styled.div`
     font-weight: bold;
   }
 
+`;
+
+export const RegistryItem = styled(List.Item)`
+  padding-left: 16px;
+  padding-right: 16px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  cursor: pointer;
+  &:hover {
+    background-color: #eeeeee;
+  }
 `;
 

@@ -5,6 +5,7 @@ import { Login } from './Login/Login';
 import { Create } from './Create/Create';
 import { User } from './User/User';
 import { Profile } from './User/Profile/Profile';
+import { Contact } from './User/Contact/Contact';
 import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import 'antd/dist/antd.min.css'; 
 
@@ -19,10 +20,11 @@ function App() {
         <Router>
           <Routes>
             <Route path="/" element={ <Home /> } />
-            <Route path="/Login" element={ <Login /> } />
-            <Route path="/Create" element={ <Create /> } />
-            <Route path="/User" element={ <User /> }>
+            <Route path="/login" element={ <Login /> } />
+            <Route path="/create" element={ <Create /> } />
+            <Route path="/user" element={ <User /> }>
               <Route path="profile" element={<Profile />} />
+              <Route path="contact/:guid" element={<Contact />} />
             </Route>
           </Routes>
         </Router>   

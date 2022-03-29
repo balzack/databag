@@ -10,6 +10,7 @@ export function useRegistry() {
     profiles: [],
   });
 
+  const navigate = useNavigate();
   const app = useContext(AppContext);
   
   const updateState = (value) => {
@@ -33,7 +34,6 @@ export function useRegistry() {
         try {
           let profiles = await app.actions.getRegistry(state.server)
           updateState({ profiles: profiles });
-console.log(profiles);
         }
         catch (err) {
           window.alert(err)
@@ -42,6 +42,9 @@ console.log(profiles);
       }
     },
     getRegistryImageUrl: (guid, revision) => app.actions.getRegistryImageUrl(state.server, guid, revision),
+    select: (contact) => {
+      navigate(`/user/contact/${contact.guid}`, { state: contact });
+    }
   }
 
   return { state, actions };

@@ -5,7 +5,7 @@ import { useContacts } from './useContacts.hook';
 import { Tabs, Button, Tooltip } from 'antd';
 import { Cards } from './Cards/Cards';
 import { Channels } from './Channels/Channels';
-import { UserAddOutlined, CommentOutlined } from '@ant-design/icons';
+import { TeamOutlined, CommentOutlined } from '@ant-design/icons';
 
 const { TabPane } = Tabs;
 
@@ -23,7 +23,7 @@ export function Contacts() {
 
   const addUser = (
     <Tooltip placement="right" title="Add Contact">
-      <AddButton type="primary" onClick={() => onShowRegistry()} icon={<UserAddOutlined />} />
+      <AddButton type="primary" onClick={() => onShowRegistry()} icon={<TeamOutlined />} />
     </Tooltip>
   )
 

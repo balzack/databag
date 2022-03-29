@@ -6,7 +6,6 @@ import { Registry } from './Registry/Registry';
 export function Cards({ showRegistry }) {
 
   useEffect(() => {
-    console.log("HERE", showRegistry);
   }, [showRegistry]);
 
   return (
@@ -18,7 +17,7 @@ export function Cards({ showRegistry }) {
           visible={showRegistry}
           getContainer={false}
           contentWrapperStyle={{ width: '100%' }}
-          bodyStyle={{ backgroundColor: '#f6f5ed', padding: 16 }}
+          bodyStyle={{ backgroundColor: '#f6f5ed', paddingLeft: 16, paddingRight: 16, paddingTop: 16, paddingBottom: 0 }}
           style={{ position: 'absolute' }}
         >
           <Registry />
