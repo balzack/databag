@@ -8,7 +8,8 @@ export function useIdentity() {
     name: '',
     handle: '',
     domain: '',
-    imageUrl: null
+    imageUrl: null,
+    image: null,
   });
 
   const actions = {
@@ -33,11 +34,8 @@ export function useIdentity() {
   useEffect(() => {
     if (app?.state?.Data?.profile) {
       let profile = app.state.Data.profile;
-      if (profile.image != null && profile.image != '') {
-        updateState({ imageUrl: app.actions.profileImageUrl() })
-      } else {
-        updateState({ imageUrl: '' })
-      }
+      updateState({ imageUrl: app.actions.profileImageUrl() })
+      updateState({ image: profile.image });
       updateState({ name: profile.name });
       updateState({ handle: profile.handle });
       updateState({ domain: profile.node });

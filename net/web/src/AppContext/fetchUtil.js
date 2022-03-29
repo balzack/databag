@@ -12,6 +12,10 @@ export function getProfileImageUrl(token, revision) {
   return '/profile/image?agent=' + token + "&revision=" + revision
 }
 
+export function getListingImageUrl(server, guid, revision) {
+  return `https://${server}/account/listing/${guid}/image?revision=${revision}`
+}
+
 async function fetchWithTimeout(url, options) {
   return Promise.race([
     fetch(url, options).catch(err => { throw new Error(url + ' failed'); }),
@@ -86,5 +90,11 @@ export async function getGroups(token, revision) {
   let groups = await fetchWithTimeout('/alias/groups' + param, { method: 'GET', timeout: FETCH_TIMEOUT });
   checkResponse(groups)
   return await groups.json()
+}
+
+export async function getListing(server) {
+  let listing = await fetchWithTimeout(`https://${server}/account/listing`, { method: 'GET', timeout: FETCH_TIMEOUT });
+  checkResponse(listing);
+  return await listing.json();
 }
 

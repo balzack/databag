@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import { setProfileImage, setProfileData, getProfileImageUrl, getAccountStatus, setAccountSearchable, getProfile, getGroups, getAvailable, getUsername, setLogin, createAccount } from './fetchUtil';
+import { getListingImageUrl, getListing, setProfileImage, setProfileData, getProfileImageUrl, getAccountStatus, setAccountSearchable, getProfile, getGroups, getAvailable, getUsername, setLogin, createAccount } from './fetchUtil';
 
 async function updateAccount(token, updateData) {
   let status = await getAccountStatus(token);
@@ -86,7 +86,9 @@ export function useAppContext() {
     setAccountSearchable: async (flag) => {
       await setAccountSearchable(state.token, flag);
     },
-    profileImageUrl: () => getProfileImageUrl(state.token, state.Data?.profile?.revision)
+    profileImageUrl: () => getProfileImageUrl(state.token, state.Data?.profile?.revision),
+    getRegistry: async (node) => getListing(node),
+    getRegistryImageUrl: (server, guid, revision) => getListingImageUrl(server, guid, revision),
   }
 
   const adminActions = {
