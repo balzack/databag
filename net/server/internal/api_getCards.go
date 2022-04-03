@@ -10,7 +10,7 @@ func GetCards(w http.ResponseWriter, r *http.Request) {
   var cardRevisionSet bool
   var cardRevision int64
 
-  account, code, err := BearerAppToken(r, false);
+  account, code, err := ParamAgentToken(r, false);
   if err != nil {
     ErrResponse(w, code, err)
     return

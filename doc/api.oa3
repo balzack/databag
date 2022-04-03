@@ -1019,12 +1019,16 @@ paths:
         - contact
       description: Get list of cards. Access granted to app tokens of account holder.
       operationId: get-cards
-      security:
-        - bearerAuth: []
       parameters:
         - name: revision
           in: query
           description: only return updated cards since specified revision
+          required: false
+          schema:
+            type: string
+        - name: agent
+          in: query
+          description: agent token
           required: false
           schema:
             type: string
@@ -1054,8 +1058,13 @@ paths:
         - contact
       description: Add a contact card. Access granted to app tokens of account holder.
       operationId: add-card
-      security:
-        - bearerAuth: []
+      parameters:
+        - name: agent
+          in: query
+          description: agent token
+          required: false
+          schema:
+            type: string
       responses:
         '200':
           description: success
@@ -1078,13 +1087,17 @@ paths:
         - contact
       description: Remove card entry. Access granted to app tokens of account holder.
       operationId: remove-card
-      security:
-        - bearerAuth: []
       parameters:
         - name: cardId
           in: path
           description: specified card id 
           required: true
+          schema:
+            type: string
+        - name: agent
+          in: query
+          description: agent token
+          required: false
           schema:
             type: string
       responses:
@@ -1105,13 +1118,17 @@ paths:
         - contact
       description: Updated connected status of contact. Access granted to app tokens of account holder.
       operationId: set-card-status
-      security:
-        - bearerAuth: []
       parameters:
         - name: cardId
           in: path
           description: specified card id 
           required: true
+          schema:
+            type: string
+        - name: agent
+          in: query
+          description: agent token
+          required: false
           schema:
             type: string
         - name: token
@@ -1172,13 +1189,17 @@ paths:
         - contact
       description: Get message for connecting to other contacts. Access granted to app tokens for account holder.
       operationId: get-open-message
-      security:
-        - bearerAuth: []
       parameters:
         - name: cardId
           in: path
           description: specified card id 
           required: true
+          schema:
+            type: string
+        - name: agent
+          in: query
+          description: agent token
+          required: false
           schema:
             type: string
       responses:
@@ -1228,13 +1249,17 @@ paths:
         - contact
       description: Get message for closing connection with contact. Access granted to app tokens for account holder.
       operationId: get-close-message
-      security:
-        - bearerAuth: []
       parameters:
         - name: cardId
           in: path
           description: specified card id 
           required: true
+          schema:
+            type: string
+        - name: agent
+          in: query
+          description: agent token
+          required: false
           schema:
             type: string
       responses:
@@ -1280,13 +1305,17 @@ paths:
         - contact
       description: Get profile of card entry. Access granted to app tokens of account holder.
       operationId: get-card-profile
-      security:
-        - bearerAuth: []
       parameters:
         - name: cardId
           in: path
           description: specified card id 
           required: true
+          schema:
+            type: string
+        - name: agent
+          in: query
+          description: agent token
+          required: false
           schema:
             type: string
       responses:
@@ -1309,13 +1338,17 @@ paths:
         - contact
       description: Set profile of card entry. Access granted to app tokens of account holder.
       operationId: set-card-profile
-      security:
-        - bearerAuth: []
       parameters:
         - name: cardId
           in: path
           description: specified card id 
           required: true
+          schema:
+            type: string
+        - name: agent
+          in: query
+          description: agent token
+          required: false
           schema:
             type: string
       responses:
@@ -1345,13 +1378,17 @@ paths:
         - contact
       description: Get image of card profile. Access granted to app tokens of account holder.
       operationId: get-card-profile-image
-      security:
-        - bearerAuth: []
       parameters:
         - name: cardId
           in: path
           description: specified card id 
           required: true
+          schema:
+            type: string
+        - name: agent
+          in: query
+          description: agent token
+          required: false
           schema:
             type: string
       responses:
@@ -1379,13 +1416,17 @@ paths:
         - contact
       description: Get specified card detail. Access granted to app tokens for account holder.
       operationId: get-card-detail
-      security:
-        - bearerAuth: []
       parameters:
         - name: cardId
           in: path
           description: specified card id 
           required: true
+          schema:
+            type: string
+        - name: agent
+          in: query
+          description: agent token
+          required: false
           schema:
             type: string
       responses:
@@ -1410,13 +1451,17 @@ paths:
         - contact
       description: Update card notes for specified card. Access granted to app tokens for account holder.
       operationId: set-card-notes
-      security:
-        - bearerAuth: []
       parameters:
         - name: cardId
           in: path
           description: specified card id 
           required: true
+          schema:
+            type: string
+        - name: agent
+          in: query
+          description: agent token
+          required: false
           schema:
             type: string
       responses:
@@ -1444,13 +1489,17 @@ paths:
         - contact
       description: Clear notes for specified card. Access granted to app tokens of account holder.
       operationId: clear-card-notes
-      security:
-        - bearerAuth: []
       parameters:
         - name: cardId
           in: path
           description: specified card id 
           required: true
+          schema:
+            type: string
+        - name: agent
+          in: query
+          description: agent token
+          required: false
           schema:
             type: string
       responses:
@@ -1475,8 +1524,6 @@ paths:
         - contact
       description: Set sharing group for contact. Access granted to app tokens for account holder. 
       operationId: set-card-group
-      security:
-        - bearerAuth: []
       parameters:
         - name: cardId
           in: path
@@ -1488,6 +1535,12 @@ paths:
           in: path
           description: specified group id 
           required: true
+          schema:
+            type: string
+        - name: agent
+          in: query
+          description: agent token
+          required: false
           schema:
             type: string
       responses:
@@ -1510,8 +1563,6 @@ paths:
         - contact
       description: Clear sharing group for card. Access granted to app tokens for account holder.
       operationId: clear-card-group
-      security:
-        - bearerAuth: []
       parameters:
         - name: cardId
           in: path
@@ -1523,6 +1574,12 @@ paths:
           in: path
           description: specified share id 
           required: true
+          schema:
+            type: string
+        - name: agent
+          in: query
+          description: agent token
+          required: false
           schema:
             type: string
       responses:
@@ -1547,8 +1604,13 @@ paths:
         - contact
       description: Set profile revision for contact. This is intend to be invoked automatically anytime a contact updates their profile. Access granted to contact tokens.
       operationId: set-profile-revision
-      security:
-        - bearerAuth: []
+      parameters:
+        - name: contact
+          in: query
+          description: contact token
+          required: false
+          schema:
+            type: string
       responses:
         '200':
           description: revision set
@@ -1571,8 +1633,13 @@ paths:
         - contact
       description: Set artcile revision for contact. This is intend to be invoked automatically anytime a contact updates their content or sharing. Access granted to contact tokens.
       operationId: set-article-revision
-      security:
-        - bearerAuth: []
+      parameters:
+        - name: contact
+          in: query
+          description: contact token
+          required: false
+          schema:
+            type: string
       responses:
         '200':
           description: revision set
@@ -1595,8 +1662,13 @@ paths:
         - contact
       description: Set channel revision for contact. This is intend to be invoked automatically anytime a contact updates their content or sharing. Access granted to contact tokens.
       operationId: set-channel-revision
-      security:
-        - bearerAuth: []
+      parameters:
+        - name: contact
+          in: query
+          description: contact token
+          required: false
+          schema:
+            type: string
       responses:
         '200':
           description: revision set
@@ -1619,8 +1691,13 @@ paths:
         - contact
       description: Set view revision for contact. This is intend to be invoked automatically anytime a contact updates their content or sharing. Access granted to contact tokens.
       operationId: set-view-revision
-      security:
-        - bearerAuth: []
+      parameters:
+        - name: contact
+          in: query
+          description: contact token
+          required: false
+          schema:
+            type: string
       responses:
         '200':
           description: revision set
@@ -3743,6 +3820,7 @@ components:
     bearerAuth: 
       type: http
       scheme: bearer
+
 
 
 

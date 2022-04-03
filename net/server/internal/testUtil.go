@@ -426,11 +426,10 @@ func GetCardToken(account string, cardId string) (token string, err error) {
   vars := make(map[string]string)
   vars["cardId"] = cardId
 
-  if r, w, err = NewRequest("GET", "/contact/cards/{cardId}/detail", nil); err != nil {
+  if r, w, err = NewRequest("GET", "/contact/cards/{cardId}/detail?agent=" + account, nil); err != nil {
     return
   }
   r = mux.SetURLVars(r, vars)
-  SetBearerAuth(r, account)
   GetCardDetail(w, r)
   if err = ReadResponse(w, &cardDetail); err != nil {
     return
@@ -440,11 +439,10 @@ func GetCardToken(account string, cardId string) (token string, err error) {
     return
   }
 
-  if r, w, err = NewRequest("GET", "/contact/cards/{cardId}/profile", nil); err != nil {
+  if r, w, err = NewRequest("GET", "/contact/cards/{cardId}/profile?agent=" + account, nil); err != nil {
     return
   }
   r = mux.SetURLVars(r, vars)
-  SetBearerAuth(r, account)
   GetCardProfile(w, r)
   if err = ReadResponse(w, &cardProfile); err != nil {
     return
@@ -459,10 +457,9 @@ func GetCardId(account string, guid string) (cardId string, err error) {
   var w *httptest.ResponseRecorder
   var cards []Card
 
-  if r, w, err = NewRequest("GET", "/contact/cards", nil); err != nil {
+  if r, w, err = NewRequest("GET", "/contact/cards?agent=" + account, nil); err != nil {
     return
   }
-  SetBearerAuth(r, account)
   GetCards(w, r)
   if err = ReadResponse(w, &cards); err != nil {
     return

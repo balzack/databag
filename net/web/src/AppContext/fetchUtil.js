@@ -98,3 +98,27 @@ export async function getListing(server) {
   return await listing.json();
 }
 
+export async function getCards(token, revision) {
+  let param = "?agent=" + token
+  if (revision != null) {
+    param += '&revision=' + revision
+  }
+  let cards = await fetchWithTimeout('/contact/cards' + param, { method: 'GET', timeout: FETCH_TIMEOUT });
+  checkResponse(cards)
+  return await cards.json()
+}
+
+export async function getCardProfile(token, cardId) {
+  let param = "?agent=" + token
+  let profile = await fetchWithTimeout(`/contact/cards/${cardId}/profile${param}`, { method: 'GET', timeout: FETCH_TIMEOUT });
+  checkResponse(profile);
+  return await profile.json()
+}
+
+export async function getCardDetail(token, cardId) {
+  let param = "?agent=" + token
+  let detail = await fetchWithTimeout(`/contact/cards/${cardId}/detail${param}`, { method: 'GET', timeout: FETCH_TIMEOUT });
+  checkResponse(detail);
+  return await detail.json()
+}
+
