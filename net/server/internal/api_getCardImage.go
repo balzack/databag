@@ -14,7 +14,7 @@ import (
 func GetCardProfileImage(w http.ResponseWriter, r *http.Request) {
   var data []byte
 
-  account, code, err := BearerAppToken(r, false);
+  account, code, err := ParamAgentToken(r, false);
   if err != nil {
     ErrResponse(w, code, err)
     return

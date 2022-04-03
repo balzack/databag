@@ -46,6 +46,8 @@ func GetCards(w http.ResponseWriter, r *http.Request) {
     }
   }
 
+PrintMsg(response);
+
   w.Header().Set("Card-Revision", strconv.FormatInt(account.CardRevision, 10))
   WriteResponse(w, response)
 }

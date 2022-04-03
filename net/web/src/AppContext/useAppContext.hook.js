@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import { getCards, getCardProfile, getCardDetail, getListingImageUrl, getListing, setProfileImage, setProfileData, getProfileImageUrl, getAccountStatus, setAccountSearchable, getProfile, getGroups, getAvailable, getUsername, setLogin, createAccount } from './fetchUtil';
+import { getCards, getCardImageUrl, getCardProfile, getCardDetail, getListingImageUrl, getListing, setProfileImage, setProfileData, getProfileImageUrl, getAccountStatus, setAccountSearchable, getProfile, getGroups, getAvailable, getUsername, setLogin, createAccount } from './fetchUtil';
 
 async function updateAccount(token, updateData) {
   let status = await getAccountStatus(token);
@@ -14,7 +14,12 @@ async function updateProfile(token, updateData) {
 async function updateGroups(token, revision, groupMap, updateData) {
   let groups = await getGroups(token, revision);
   for (let group of groups) {
-    groupMap.set(group.id, group);
+    if (group.data) {
+      groupMap.set(group.id, group);
+    }
+    else {
+      groupMap.delete(group.id);
+    }
   }
   updateData({ groups: Array.from(groupMap.values()) });
 }
@@ -22,48 +27,55 @@ async function updateGroups(token, revision, groupMap, updateData) {
 async function updateCards(token, revision, cardMap, updateData) {
   let cards = await getCards(token, revision);
   for (let card of cards) {
-    let cur = cardMap.get(card.id);
-    if (cur == null) {
-      cur = { id: card.id, data: {} }
-    }
-    if (cur.data.DetailRevision != card.data.DetailRevision) {
-      if (card.data.CardDetail != null) {
-        cur.data.CardDetail = card.data.CardDetail;
+    if (card.data) {
+      let cur = cardMap.get(card.id);
+      if (cur == null) {
+        cur = { id: card.id, data: {} }
       }
-      else {
-        cur.data.CardDetail = await getCardDetail(token, card.id);
+      if (cur.data.detailRevision != card.data.detailRevision) {
+        if (card.data.cardDetail != null) {
+          cur.data.cardDetail = card.data.cardDetail;
+        }
+        else {
+          cur.data.cardDetail = await getCardDetail(token, card.id);
+        }
+        cur.data.detailRevision = card.data.detailRevision;
       }
-      cur.data.DetailRevision = card.data.DetailRevision;
-    }
-    if (cur.data.ProfileRevision != card.data.ProfileRevision) {
-      if (cur.data.CardProfile != null) {
-        cur.data.CardProfile = card.data.CardProfile;
+      if (cur.data.profileRevision != card.data.profileRevision) {
+        if (cur.data.cardProfile != null) {
+          cur.data.cardProfile = card.data.cardProfile;
+        }
+        else {
+          cur.data.cardProfile = await getCardProfile(token, card.id);
+        }
+        cur.data.profileRevision = card.data.profileRevision;
       }
-      else {
-        cur.data.CardProfile = await getCardProfile(token, card.id);
+      if (cur.data.notifiedProfile != card.data.notifiedProfile) {
+        // update remote profile
+        cur.data.notifiedProfile = card.data.notifiedProfile;
       }
-      cur.data.ProfileRevision = card.data.ProfileRevision;
+      if (cur.data.notifiedView != card.data.notifiedView) {
+        // update remote articles and channels
+        cur.data.notifiedArticle = card.data.notifiedArticle;
+        cur.data.notifiedChannel = card.data.notifiedChannel;
+        cur.data.notifiedView = card.data.notifiedView;
+      }
+      if (cur.data.notifiedArticle != card.data.notifiedArticle) {
+        // update remote articles
+        cur.data.notifiedArticle = card.data.notifiedArticle;
+      }
+      if (cur.data.notifiedChannel != card.data.notifiedChannel) {
+        // update remote channels
+        cur.data.notifiedChannel = card.data.notifiedChannel;
+      }
+      cur.revision = card.revision;
+      cardMap.set(card.id, cur);
     }
-    if (cur.data.NotifiedProfile != card.data.NotifiedProfile) {
-      // update remote profile
-      cur.data.NotifiedProfile = card.data.NotifiedProfile;
+    else {
+      cardMap.delete(card.id);
     }
-    if (cur.data.NotifiedView != card.data.NotifiedView) {
-      // update remote articles and channels
-      cur.data.NotifiedArticle = card.data.NotifiedArticle;
-      cur.data.NotifiedChannel = card.data.NotifiedChannel;
-      cur.data.NotifiedView = card.data.NotifiedView;
-    }
-    if (cur.data.NotifiedArticle != card.data.NotifiedArticle) {
-      // update remote articles
-      cur.data.NotifiedArticle = card.data.NotifiedArticle;
-    }
-    if (cur.data.NotifiedChannel != card.data.NotifiedChannel) {
-      // update remote channels
-      cur.data.NotifiedChannel = card.data.NotifiedChannel;
-    }
-    cur.revision = card.revision;
   }
+  updateData({ cards: Array.from(cardMap.values()) });
 }
 
 async function appCreate(username, password, updateState, setWebsocket) {
@@ -140,6 +152,7 @@ export function useAppContext() {
     profileImageUrl: () => getProfileImageUrl(state.token, state.Data?.profile?.revision),
     getRegistry: async (node) => getListing(node),
     getRegistryImageUrl: (server, guid, revision) => getListingImageUrl(server, guid, revision),
+    getCardImageUrl: (cardId, revision) => getCardImageUrl(state.token, cardId, revision),
   }
 
   const adminActions = {

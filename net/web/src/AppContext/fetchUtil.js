@@ -12,6 +12,10 @@ export function getProfileImageUrl(token, revision) {
   return '/profile/image?agent=' + token + "&revision=" + revision
 }
 
+export function getCardImageUrl(token, cardId, revision) {
+  return `/contact/cards/${cardId}/profile/image?agent=${token}&revision=${revision}`
+}
+
 export function getListingImageUrl(server, guid, revision) {
   return `https://${server}/account/listing/${guid}/image?revision=${revision}`
 }

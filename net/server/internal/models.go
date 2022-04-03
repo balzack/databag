@@ -146,7 +146,7 @@ type CardProfile struct {
 
 	Location string `json:"location,omitempty"`
 
-	ImageSet bool `json:"imageSet,omitempty"`
+	ImageSet bool `json:"imageSet"`
 
 	Version string `json:"version,omitempty"`
 
