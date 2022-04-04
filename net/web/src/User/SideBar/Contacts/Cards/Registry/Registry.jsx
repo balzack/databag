@@ -13,6 +13,13 @@ export function Registry() {
     actions.select(item);
   };
 
+  const registryImage = (item) => {
+    if (actions?.getRegistryImageUrl) {
+      return actions.getRegistryImageUrl(item.guid, item.revision);
+    }
+    return null
+  }
+
   return (
     <RegistryWrapper>
       <Input.Search placeholder="Server" value={state.server} onChange={(e) => actions.setServer(e.target.Value)} 
@@ -27,7 +34,7 @@ export function Registry() {
             <RegistryItem onClick={() => onSelect(item)}>
               <div class="item">
                 <div class="logo">
-                  <Logo imageUrl={actions.getRegistryImageUrl(item.guid, item.revision)}
+                  <Logo imageUrl={registryImage(item)}
                     imageSet={item.imageSet} />
                 </div>
                 <div class="username">

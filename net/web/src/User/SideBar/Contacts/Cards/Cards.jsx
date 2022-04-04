@@ -27,9 +27,7 @@ export function Cards({ showRegistry }) {
     if (actions?.getCardImageUrl) {
       return actions.getCardImageUrl(item.id, item.revision);
     }
-    else {
-      return null
-    }
+    return null
   }
 
   return (

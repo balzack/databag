@@ -41,7 +41,12 @@ export function useRegistry() {
         updateState({ busy: false });
       }
     },
-    getRegistryImageUrl: (guid, revision) => app.actions.getRegistryImageUrl(state.server, guid, revision),
+    getRegistryImageUrl: (guid, revision) => {
+      if (app?.actions?.getRegistryImageUrl) {
+        return app.actions.getRegistryImageUrl(state.server, guid, revision);
+      }
+      return null;
+    },
     select: (contact) => {
       navigate(`/user/contact/${contact.guid}`, { state: contact });
     }
@@ -50,5 +55,3 @@ export function useRegistry() {
   return { state, actions };
 }
 
-      
-  
