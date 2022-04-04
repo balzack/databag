@@ -3,8 +3,6 @@ import { List } from 'antd';
 
 export const RegistryWrapper = styled.div`
   position: relative;
-  padding-left: 8px;
-  padding-right: 8px;
   text-align: center;
   display: flex;
   overflow-y: auto;
@@ -52,8 +50,6 @@ export const RegistryWrapper = styled.div`
 `;
 
 export const RegistryItem = styled(List.Item)`
-  padding-left: 16px;
-  padding-right: 16px;
   padding-top: 4px;
   padding-bottom: 4px;
   cursor: pointer;

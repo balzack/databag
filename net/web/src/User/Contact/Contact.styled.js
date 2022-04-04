@@ -37,12 +37,87 @@ export const ContactWrapper = styled.div`
     color: #aaaaaa;
   }
 
+  .contact {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-begin;
+    flex: 3
+  }
+
+  .profile {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    flex: 2
+  }
+
   .container {
     display: flex;
     flex-direction: row;
     padding: 32px;
     width: 100%;
     overflow: auto; 
+  }
+
+  .avatar {
+    color: #888888;
+    height: 192px;
+    min-height: 192px;
+    width: 192px;
+    min-width: 192px;
+    font-size: 8em;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .unset {
+    font-style: italic;
+    color: #dddddd;
+  }
+
+
+  .label {
+    padding-right: 8px;
+    font-size: 1em;
+    font-weight: bold;
+    color: #888888;
+  }
+
+  .details {
+    padding: 16px;
+    border-right: 0.5px solid #aaaaaa;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+
+  .name {
+    font-size: 1.5em;
+    padding-bottom: 16px;
+    text-align: right;
+  }
+
+  .location {
+    font-size: 1.2em;
+    padding-bottom: 16px;
+    text-align: right;
+  }
+
+  .description {
+    font-size: 1em;
+    padding-bottom: 16px;
+    text-align: right;
+  }
+
+  .block {
+    border-bottom: 0.5px solid #aaaaaa;
+    display: flex;
+    flex-direction: row;
+    margin-top: 32px;
+    align-items: center;
+    justify-content: flex-end;
+    width: 50%;
+    cursor: pointer;
   }
 `;
 

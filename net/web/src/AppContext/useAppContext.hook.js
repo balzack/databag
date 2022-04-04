@@ -125,6 +125,16 @@ export function useAppContext() {
     })
   }
 
+  const getCard = (guid) => {
+    let card = null;
+    cards.current.forEach((value, key, map) => {
+      if(value?.data?.cardProfile?.guid == guid) {
+        card = value
+      }
+    });
+    return card;
+  }
+
   const resetData = () => {
     revision.current = null;
     profileRevision.current = null;
@@ -153,6 +163,7 @@ export function useAppContext() {
     getRegistry: async (node) => getListing(node),
     getRegistryImageUrl: (server, guid, revision) => getListingImageUrl(server, guid, revision),
     getCardImageUrl: (cardId, revision) => getCardImageUrl(state.token, cardId, revision),
+    getCard: getCard,
   }
 
   const adminActions = {
