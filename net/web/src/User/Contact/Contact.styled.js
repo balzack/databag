@@ -66,8 +66,17 @@ export const ContactWrapper = styled.div`
     width: 192px;
     min-width: 192px;
     font-size: 8em;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #888888;
+  }
+
+  .logo {
+    width: 192px;
+    height 192px;
     display: flex;
-    justify-content: flex-end;
+    align-items: center;
+    justify-content: center;
   }
 
   .unset {
@@ -117,7 +126,6 @@ export const ContactWrapper = styled.div`
     align-items: center;
     justify-content: flex-end;
     width: 50%;
-    cursor: pointer;
   }
 `;
 

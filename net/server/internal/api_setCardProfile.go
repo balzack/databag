@@ -10,7 +10,7 @@ import (
 
 func SetCardProfile(w http.ResponseWriter, r *http.Request) {
 
-  account, code, err := BearerAppToken(r, false);
+  account, code, err := ParamAgentToken(r, false);
   if err != nil {
     ErrResponse(w, code, err)
     return

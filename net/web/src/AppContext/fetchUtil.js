@@ -113,8 +113,13 @@ export async function getCards(token, revision) {
 }
 
 export async function getCardProfile(token, cardId) {
-  let param = "?agent=" + token
-  let profile = await fetchWithTimeout(`/contact/cards/${cardId}/profile${param}`, { method: 'GET', timeout: FETCH_TIMEOUT });
+  let profile = await fetchWithTimeout(`/contact/cards/${cardId}/profile?agent=${token}`, { method: 'GET', timeout: FETCH_TIMEOUT });
+  checkResponse(profile);
+  return await profile.json()
+}
+
+export async function setCardProfile(token, cardId, message) {
+  let profile = await fetchWithTimeout(`/contact/cards/${cardId}/profile?agent=${token}`, { method: 'PUT', body: JSON.stringify(message), timeout: FETCH_TIMEOUT });
   checkResponse(profile);
   return await profile.json()
 }
@@ -124,5 +129,11 @@ export async function getCardDetail(token, cardId) {
   let detail = await fetchWithTimeout(`/contact/cards/${cardId}/detail${param}`, { method: 'GET', timeout: FETCH_TIMEOUT });
   checkResponse(detail);
   return await detail.json()
+}
+
+export async function getContactProfile(server, guid, token) {
+  let profile = await fetchWithTimeout(`https://${server}/profile/message?contact=${guid}.${token}`, { method: 'GET', timeout: FETCH_TIMEOUT });
+  checkResponse(profile);
+  return await profile.json()
 }
 

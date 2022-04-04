@@ -2,6 +2,8 @@ import { useContext, useState, useEffect } from 'react';
 import { AppContext } from '../../AppContext/AppContext';
 import { useNavigate } from "react-router-dom";
 
+const IMAGE_DIM = 256;
+
 export function useProfile() {
   
   const [state, setState] = useState({
@@ -79,10 +81,11 @@ export function useProfile() {
               img.onload = () => {
                 var canvas = document.createElement("canvas");
                 var context = canvas.getContext('2d');
-                canvas.width = 128;
-                canvas.height = 128;
+                canvas.width = IMAGE_DIM;
+                canvas.height = IMAGE_DIM;
+                context.imageSmoothingQuality = "medium";
                 context.drawImage(img, state.crop.x, state.crop.y, state.crop.w, state.crop.h,
-                    0, 0, 128, 128);
+                    0, 0, IMAGE_DIM, IMAGE_DIM);
                 resolve(canvas.toDataURL());
               }
               img.onerror = reject;

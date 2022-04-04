@@ -3343,6 +3343,8 @@ components:
           type: string
         node:
           type: string
+        revision:
+          type: int64
           
     CardDetail:
       type: object

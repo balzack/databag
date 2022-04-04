@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import { getCards, getCardImageUrl, getCardProfile, getCardDetail, getListingImageUrl, getListing, setProfileImage, setProfileData, getProfileImageUrl, getAccountStatus, setAccountSearchable, getProfile, getGroups, getAvailable, getUsername, setLogin, createAccount } from './fetchUtil';
+import { getContactProfile, setCardProfile, getCards, getCardImageUrl, getCardProfile, getCardDetail, getListingImageUrl, getListing, setProfileImage, setProfileData, getProfileImageUrl, getAccountStatus, setAccountSearchable, getProfile, getGroups, getAvailable, getUsername, setLogin, createAccount } from './fetchUtil';
 
 async function updateAccount(token, updateData) {
   let status = await getAccountStatus(token);
@@ -25,6 +25,7 @@ async function updateGroups(token, revision, groupMap, updateData) {
 }
 
 async function updateCards(token, revision, cardMap, updateData) {
+
   let cards = await getCards(token, revision);
   for (let card of cards) {
     if (card.data) {
@@ -42,7 +43,7 @@ async function updateCards(token, revision, cardMap, updateData) {
         cur.data.detailRevision = card.data.detailRevision;
       }
       if (cur.data.profileRevision != card.data.profileRevision) {
-        if (cur.data.cardProfile != null) {
+        if (card.data.cardProfile != null) {
           cur.data.cardProfile = card.data.cardProfile;
         }
         else {
@@ -50,7 +51,12 @@ async function updateCards(token, revision, cardMap, updateData) {
         }
         cur.data.profileRevision = card.data.profileRevision;
       }
-      if (cur.data.notifiedProfile != card.data.notifiedProfile) {
+      if (cur.data.profileRevision != card.data.notifiedProfile) {
+        const { cardDetail, cardProfile } = cur.data;
+        if (cardDetail.status === 'connected') {
+          let message = await getContactProfile(cardProfile.node, cardProfile.guid, cardDetail.token);
+          await setCardProfile(token, card.id, message);
+        }
         // update remote profile
         cur.data.notifiedProfile = card.data.notifiedProfile;
       }
