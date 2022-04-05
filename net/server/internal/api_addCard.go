@@ -97,6 +97,10 @@ func AddCard(w http.ResponseWriter, r *http.Request) {
       card.Node = identity.Node
       card.ProfileRevision = identity.Revision
     }
+    if card.Status == APP_CARDPENDING {
+      card.Status = APP_CARDCONFIRMED
+    }
+    card.DetailRevision = account.CardRevision + 1
 
     // save contact card
     err  = store.DB.Transaction(func(tx *gorm.DB) error {

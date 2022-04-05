@@ -10,7 +10,7 @@ import (
 
 func GetOpenMessage(w http.ResponseWriter, r *http.Request) {
 
-  account, code, res := BearerAppToken(r, true);
+  account, code, res := ParamAgentToken(r, true);
   if res != nil {
     ErrResponse(w, code, res)
     return

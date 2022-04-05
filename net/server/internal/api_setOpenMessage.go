@@ -44,7 +44,7 @@ func SetOpenMessage(w http.ResponseWriter, r *http.Request) {
   // see if card exists
   slot := &store.CardSlot{}
   card := &store.Card{}
-  if err := store.DB.Where("account_id = ? AND guid = ?", account.Guid, guid).First(card).Error; err != nil {
+  if err := store.DB.Preload("CardSlot").Where("account_id = ? AND guid = ?", account.Guid, guid).First(card).Error; err != nil {
     if !errors.Is(err, gorm.ErrRecordNotFound) {
       ErrResponse(w, http.StatusInternalServerError, err)
       return
@@ -74,54 +74,28 @@ func SetOpenMessage(w http.ResponseWriter, r *http.Request) {
     card.InToken = hex.EncodeToString(data)
     card.AccountID = account.Guid
 
-    // create new card or update existing
-    if err = store.DB.Preload("Card").Where("account_id = ? AND card_id = 0", account.ID).First(slot).Error; err != nil {
-      if !errors.Is(err, gorm.ErrRecordNotFound) {
-        ErrResponse(w, http.StatusInternalServerError, err)
-        return
+    // create slot
+    err = store.DB.Transaction(func(tx *gorm.DB) error {
+      if res := tx.Save(card).Error; res != nil {
+        return res
       }
-      err = store.DB.Transaction(func(tx *gorm.DB) error {
-        if res := tx.Save(card).Error; res != nil {
-          return res
-        }
-        slot.CardSlotId = uuid.New().String()
-        slot.AccountID = account.ID
-        slot.Revision = account.CardRevision + 1
-        slot.CardID = card.ID
-        slot.Card = card
-        if res := tx.Save(slot).Error; res != nil {
-          return res
-        }
-        if res := tx.Model(&account).Update("card_revision", account.CardRevision + 1).Error; res != nil {
-          return res
-        }
-        return nil
-      })
-      if err != nil {
-        ErrResponse(w, http.StatusInternalServerError, err)
-        return
+      slot.CardSlotId = uuid.New().String()
+      slot.AccountID = account.ID
+      slot.Revision = account.CardRevision + 1
+      slot.CardID = card.ID
+      slot.Card = card
+      if res := tx.Save(slot).Error; res != nil {
+        return res
       }
-    } else {
-      err = store.DB.Transaction(func(tx *gorm.DB) error {
-        if res := tx.Save(card).Error; res != nil {
-          return res
-        }
-        slot.Revision = account.CardRevision + 1
-        slot.CardID = card.ID
-        if res := tx.Save(slot).Error; res != nil {
-          return res
-        }
-        if res := tx.Model(&account).Update("card_revision", account.CardRevision + 1).Error; res != nil {
-          return res
-        }
-        return nil
-      })
-      if err != nil {
-        ErrResponse(w, http.StatusInternalServerError, err)
-        return
+      if res := tx.Model(&account).Update("card_revision", account.CardRevision + 1).Error; res != nil {
+        return res
       }
+      return nil
+    })
+    if err != nil {
+      ErrResponse(w, http.StatusInternalServerError, err)
+      return
     }
-
   } else {
 
     // update profile if revision changed
@@ -160,20 +134,8 @@ func SetOpenMessage(w http.ResponseWriter, r *http.Request) {
       if res := tx.Save(&card).Error; res != nil {
         return res
       }
-      if res := tx.Preload("Card").Where("account_id = ? AND card_id = ?", account.ID, card.ID).First(&slot).Error; res != nil {
-        if !errors.Is(res, gorm.ErrRecordNotFound) {
-          return nil
-        }
-        slot = &store.CardSlot{
-          CardSlotId: uuid.New().String(),
-          AccountID: account.ID,
-          Revision: account.CardRevision + 1,
-          CardID: card.ID,
-          Card: card,
-        }
-      } else {
-        slot.Revision = account.CardRevision + 1
-      }
+      slot = &card.CardSlot
+      slot.Revision = account.CardRevision + 1
       if res := tx.Preload("Card").Save(slot).Error; res != nil {
         return res
       }
@@ -189,9 +151,9 @@ func SetOpenMessage(w http.ResponseWriter, r *http.Request) {
   }
 
   status := &ContactStatus{
-    Token: slot.Card.InToken,
-    Status: slot.Card.Status,
-    ViewRevision: slot.Card.ViewRevision,
+    Token: card.InToken,
+    Status: card.Status,
+    ViewRevision: card.ViewRevision,
     ChannelRevision: account.ChannelRevision,
     ProfileRevision: account.ProfileRevision,
     ArticleRevision: account.ArticleRevision,

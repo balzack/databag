@@ -74,6 +74,13 @@ export function Contact() {
     return <></>
   }
 
+  const Confirm = () => {
+    if (state.showButtons.confirm) {
+      return <ProfileButton ghost onClick={() => actions.confirm()}>Save Contact</ProfileButton>
+    }
+    return <></>
+  }
+
   const SaveRequest = () => {
     if (state.showButtons.saveRequest) {
       return <ProfileButton ghost>Save & Request</ProfileButton>
@@ -83,7 +90,7 @@ export function Contact() {
 
   const Connect = () => {
     if (state.showButtons.connect) {
-      return <ProfileButton ghost>Connect</ProfileButton>
+      return <ProfileButton ghost onClick={() => actions.connect()}>Connect</ProfileButton>
     }
     return <></>
   }
@@ -110,6 +117,7 @@ export function Contact() {
           <ContactSpin size="large" spinning={state.busy} />
           <Disconnect />
           <Remove />
+          <Confirm />
           <Cancel />
           <Ignore />
           <Save />

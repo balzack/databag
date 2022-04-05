@@ -64,6 +64,7 @@ export const ContactWrapper = styled.div`
     display: flex;
     flex-direction: row;
     margin-right: 32px;
+    align-items: center;
   } 
 
   .profile {

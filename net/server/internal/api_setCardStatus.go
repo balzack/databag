@@ -14,7 +14,7 @@ import (
 func SetCardStatus(w http.ResponseWriter, r *http.Request) {
   var res error
 
-  account, code, err := BearerAppToken(r, false);
+  account, code, err := ParamAgentToken(r, false);
   if err != nil {
     ErrResponse(w, code, err)
     return

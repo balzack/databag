@@ -54,7 +54,7 @@ func TestMain(m *testing.M) {
   }
 
   // config server
-  config := NodeConfig{Domain: "example.com", AccountLimit: 1024, OpenAccess: true, AccountStorage: 4096}
+  config := NodeConfig{Domain: "databag.coredb.org", AccountLimit: 1024, OpenAccess: true, AccountStorage: 4096}
   r, w, _ = NewRequest("PUT", "/admin/config", &config)
   SetBasicAuth(r, "admin:pass")
   SetNodeConfig(w, r)
@@ -70,7 +70,7 @@ func TestMain(m *testing.M) {
   if ReadResponse(w, &check) != nil {
     panic("failed to get node config")
   }
-  if check.Domain != "example.com" {
+  if check.Domain != "databag.coredb.org" {
     panic("failed to set config domain");
   }
   if check.AccountLimit != 1024 {

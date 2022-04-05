@@ -4,6 +4,9 @@ import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { getListingMessage } from '../../Api/getListingMessage';
 import { addCard } from '../../Api/addCard';
 import { removeCard } from '../../Api/removeCard';
+import { setCardConnecting, setCardConnected, setCardConfirmed } from '../../Api/setCardStatus';
+import { getCardOpenMessage } from '../../Api/getCardOpenMessage';
+import { setCardOpenMessage } from '../../Api/setCardOpenMessage';
 
 export function useContact() {
   
@@ -46,7 +49,34 @@ export function useContact() {
         updateState({ busy: false });
       }
     },
-    connect: () => {
+    confirm: async () => {
+      if (!state.busy) {
+        updateState({ busy: true });
+        try {
+          await setCardConfirmed(app.state.token, state.cardId);
+        }
+        catch (err) {
+          window.alert(err);
+        }
+        updateState({ busy: false });
+      }
+    },  
+    connect: async () => {
+      if (!state.busy) {
+        updateState({ busy: true });
+        try {
+          await setCardConnecting(app.state.token, state.cardId);
+          let message = await getCardOpenMessage(app.state.token, state.cardId);
+          let contact = await setCardOpenMessage(state.node, message);
+          if (contact.status === 'connected') {
+            await setCardConnected(app.state.token, state.cardId, contact.token, contact.viewRevision, contact.articleRevision, contact.channelRevision, contact.profileRevision);
+          }
+        }
+        catch (err) {
+          window.alert(err);
+        }
+        updateState({ busy: false });
+      }
     },
     disconnect: () => {
     },
@@ -100,11 +130,11 @@ export function useContact() {
           updateState({ showButtons: { cancel: true, remove: true }});
         }
         if (status === 'pending') {
-          updateState({ status: 'requested' });
-          updateState({ showButtons: { ignore: true, save: true, saveAccept: true }});
+          updateState({ status: 'pending' });
+          updateState({ showButtons: { ignore: true, confirm: true, saveAccept: true }});
         }
         if (status === 'confirmed') {
-          updateState({ status: 'disconnected' });
+          updateState({ status: 'confirmed' });
           updateState({ showButtons: { remove: true, connect: true }});
         }
         if (status === 'requested') {

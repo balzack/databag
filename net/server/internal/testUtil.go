@@ -521,22 +521,20 @@ func OpenTestCard(account string, cardId string) (err error) {
   var contactStatus ContactStatus
 
   // set to connecting state
-  if r, w, err = NewRequest("PUT", "/contact/cards/{cardId}/status", APP_CARDCONNECTING); err != nil {
+  if r, w, err = NewRequest("PUT", "/contact/cards/{cardId}/status?agent=" + account, APP_CARDCONNECTING); err != nil {
     return
   }
   r = mux.SetURLVars(r, vars)
-  SetBearerAuth(r, account)
   SetCardStatus(w, r)
   if err = ReadResponse(w, &card); err != nil {
     return
   }
 
   // get open message
-  if r, w, err = NewRequest("GET", "/contact/cards/{cardId}/openMessage", nil); err != nil {
+  if r, w, err = NewRequest("GET", "/contact/cards/{cardId}/openMessage?agent=" + account, nil); err != nil {
     return
   }
   r = mux.SetURLVars(r, vars)
-  SetBearerAuth(r, account)
   GetOpenMessage(w, r)
   if err = ReadResponse(w, &msg); err != nil {
     return
@@ -557,11 +555,10 @@ func OpenTestCard(account string, cardId string) (err error) {
     article := "articleRevision=" + strconv.FormatInt(contactStatus.ArticleRevision, 10)
     channel := "channelRevision=" + strconv.FormatInt(contactStatus.ChannelRevision, 10)
     profile := "profileRevision=" + strconv.FormatInt(contactStatus.ProfileRevision, 10)
-    if r, w, err = NewRequest("PUT", "/contact/cards/{cardId}/status?token=" + contactStatus.Token + "&" + view + "&" + article + "&" + channel + "&" + profile, APP_CARDCONNECTED); err != nil {
+    if r, w, err = NewRequest("PUT", "/contact/cards/{cardId}/status?agent=" + account + "&token=" + contactStatus.Token + "&" + view + "&" + article + "&" + channel + "&" + profile, APP_CARDCONNECTED); err != nil {
       return
     }
     r = mux.SetURLVars(r, vars)
-    SetBearerAuth(r, account)
     SetCardStatus(w, r)
     if err = ReadResponse(w, &card); err != nil {
       return
@@ -605,7 +602,7 @@ func AddTestAccount(username string) (guid string, token string, err error) {
   app := AppData{
     Name: "Appy",
     Description: "A test app",
-    Url: "http://app.example.com",
+    Url: "http://app.coredb.org",
   };
   var claim Claim
   var msg DataMessage
