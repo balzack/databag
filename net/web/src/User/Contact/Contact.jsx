@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { CloseOutlined, UserOutlined } from '@ant-design/icons';
 import { useContact } from './useContact.hook';
 import { Button, Checkbox, Modal } from 'antd'
-import { ContactWrapper, CloseButton } from './Contact.styled';
+import { ContactWrapper, ProfileButton, CloseButton } from './Contact.styled';
 
 export function Contact() {
 
@@ -39,10 +39,84 @@ export function Contact() {
     return <span>{ state.description }</span>
   }
 
+  const Disconnect = () => {
+    if (state.showButtons.disconnect) {
+      return <ProfileButton ghost>Disconnect</ProfileButton>
+    }
+    return <></>
+  }
+
+  const Remove = () => {
+    if (state.showButtons.remove) {
+      return <ProfileButton ghost>Remove Contact</ProfileButton>
+    }
+    return <></>
+  }
+
+  const Cancel = () => {
+    if (state.showButtons.cancel) {
+      return <ProfileButton ghost>Cancel Request</ProfileButton>
+    }
+    return <></>
+  }
+
+  const Ignore = () => {
+    if (state.showButtons.ignore) {
+      return <ProfileButton ghost>Ignore Request</ProfileButton>
+    }
+    return <></>
+  }
+
+  const Save = () => {
+    if (state.showButtons.save) {
+      return <ProfileButton ghost>Save Contact</ProfileButton>
+    }
+    return <></>
+  }
+
+  const SaveRequest = () => {
+    if (state.showButtons.saveRequest) {
+      return <ProfileButton ghost>Save & Request</ProfileButton>
+    }
+    return <></>
+  }
+
+  const Connect = () => {
+    if (state.showButtons.connect) {
+      return <ProfileButton ghost>Connect</ProfileButton>
+    }
+    return <></>
+  }
+
+  const SaveAccept = () => {
+    if (state.showButtons.saveAccept) {
+      return <ProfileButton ghost>Save & Accept</ProfileButton>
+    }
+    return <></>
+  }
+
+  const Accept = () => {
+    if (state.showButtons.accept) {
+      return <ProfileButton ghost>Accept Connection</ProfileButton>
+    }
+    return <></>
+  }
+
   return (
     <ContactWrapper>
       <div class="header">
         <div class="title">{ state.handle }</div>
+        <div class="buttons">
+          <Disconnect />
+          <Remove />
+          <Cancel />
+          <Ignore />
+          <Save />
+          <SaveRequest />
+          <Connect />
+          <SaveAccept />
+          <Accept />
+        </div>
         <CloseButton type="text" class="close" size={'large'} onClick={() => actions.close()} icon={<CloseOutlined />} />
       </div>
       <div class="container">

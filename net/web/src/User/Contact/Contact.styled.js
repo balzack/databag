@@ -15,7 +15,7 @@ export const ContactWrapper = styled.div`
     width: 100%;
     flex-direction: row;
     align-items: center;
-    background-color: #dddddd;
+    background-color: #888888;
     height: 64px;
     padding-right: 16px;
     padding-left: 16px;
@@ -29,12 +29,14 @@ export const ContactWrapper = styled.div`
     font-weight: bold;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-begin;
+    color: white;
+    padding-left: 32px;
   }
 
   .close {
     font-size: 24px;
-    color: #aaaaaa;
+    color: white;
   }
 
   .contact {
@@ -43,6 +45,28 @@ export const ContactWrapper = styled.div`
     align-items: flex-begin;
     flex: 3
   }
+
+  .control {
+    position: absolute;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin-bottom: 8px;
+  }
+
+  .status {
+    color: white;
+    font-weight: bold;
+    line-height: 1;
+  }
+   
+  .buttons {
+    display: flex;
+    flex-direction: row;
+    margin-right: 32px;
+  } 
 
   .profile {
     display: flex;
@@ -83,7 +107,6 @@ export const ContactWrapper = styled.div`
     font-style: italic;
     color: #dddddd;
   }
-
 
   .label {
     padding-right: 8px;
@@ -131,5 +154,12 @@ export const ContactWrapper = styled.div`
 
 export const CloseButton = styled(Button)`
   font-size: 24px;
-  color: #aaaaaa;
+  color: white;
 `;
+
+export const ProfileButton = styled(Button)`
+  text-align: center;
+  margin-left: 8px;
+  margin-right: 8px;
+`;
+

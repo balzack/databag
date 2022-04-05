@@ -16,7 +16,7 @@ export const ProfileWrapper = styled.div`
     width: 100%;
     flex-direction: row;
     align-items: center;
-    background-color: #dddddd;
+    background-color: #888888;
     height: 64px;
     padding-right: 16px;
     padding-left: 16px;
@@ -27,6 +27,7 @@ export const ProfileWrapper = styled.div`
     flex-grow: 1;
     text-align: center;
     font-size: 2em;
+    color: white;
     font-weight: bold;
     display: flex;
     align-items: center;
@@ -171,7 +172,7 @@ export const ModalFooter = styled.div`
 
 export const CloseButton = styled(Button)`
   font-size: 24px;
-  color: #aaaaaa;
+  color: white;
 `;
 
 export const EditIcon = styled(EditOutlined)`

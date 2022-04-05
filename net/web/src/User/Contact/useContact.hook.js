@@ -11,6 +11,7 @@ export function useContact() {
     location: '',
     description: '',
     imageUrl: null,
+    showButtons: {},
   });
 
   const data = useLocation();
@@ -42,6 +43,27 @@ export function useContact() {
         else {
           updateState({ imageUrl: '' });
         }
+        let status = card.data.cardDetail.status;
+        if (status === 'connected') {
+          updateState({ status: 'connected' });
+          updateState({ showButtons: { disconnect: true, remove: true }});
+        }
+        if (status === 'connecting') {
+          updateState({ status: 'connecting' });
+          updateState({ showButtons: { cancel: true, remove: true }});
+        }
+        if (status === 'pending') {
+          updateState({ status: 'requested' });
+          updateState({ showButtons: { ignore: true, save: true, saveAccept: true }});
+        }
+        if (status === 'confirmed') {
+          updateState({ status: 'saved' });
+          updateState({ showButtons: { remove: true, connect: true }});
+        }
+        if (status === 'requested') {
+          updateState({ status: 'requested' });
+          updateState({ showButtons: { ignore: true, accept: true }});
+        }
       }
       else if (data.state) {
         updateState({ handle: data.state.handle });
@@ -54,6 +76,8 @@ export function useContact() {
         else {
           updateState({ imageUrl: '' });
         }
+        updateState({ status: null });
+        updateState({ showButtons: { save: true, saveRequest: true }});
       }
     }
   }, [app, guid])
