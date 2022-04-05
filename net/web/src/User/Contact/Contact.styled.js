@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Button } from 'antd';
+import { Button, Spin } from 'antd';
 
 export const ContactWrapper = styled.div`
   display: flex;
@@ -31,7 +31,7 @@ export const ContactWrapper = styled.div`
     align-items: center;
     justify-content: flex-begin;
     color: white;
-    padding-left: 32px;
+    padding-left: 16px;
   }
 
   .close {
@@ -57,9 +57,7 @@ export const ContactWrapper = styled.div`
   }
 
   .status {
-    color: white;
-    font-weight: bold;
-    line-height: 1;
+    color: #444444;
   }
    
   .buttons {
@@ -109,9 +107,8 @@ export const ContactWrapper = styled.div`
   }
 
   .label {
-    padding-right: 8px;
+    padding-right: 4;
     font-size: 1em;
-    font-weight: bold;
     color: #888888;
   }
 
@@ -161,5 +158,9 @@ export const ProfileButton = styled(Button)`
   text-align: center;
   margin-left: 8px;
   margin-right: 8px;
+`;
+
+export const ContactSpin = styled(Spin)`
+  padding-right: 32px;
 `;
 

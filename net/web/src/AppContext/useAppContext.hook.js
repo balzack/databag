@@ -143,6 +143,7 @@ export function useAppContext() {
 
   const resetData = () => {
     revision.current = null;
+    accountRevision.current = null;
     profileRevision.current = null;
     groupRevision.current = null;
     cardRevision.current = null;

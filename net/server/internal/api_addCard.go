@@ -12,7 +12,7 @@ import (
 
 func AddCard(w http.ResponseWriter, r *http.Request) {
 
-  account, code, err := BearerAppToken(r, false)
+  account, code, err := ParamAgentToken(r, false)
   if err != nil {
     ErrResponse(w, code, err)
     return
@@ -61,53 +61,27 @@ func AddCard(w http.ResponseWriter, r *http.Request) {
       AccountID: account.Guid,
     }
 
-    // create new card or update existing
-    if err = store.DB.Where("account_id = ? AND card_id = 0", account.ID).First(slot).Error; err != nil {
-      if !errors.Is(err, gorm.ErrRecordNotFound) {
-        ErrResponse(w, http.StatusInternalServerError, err)
-        return
+    // save new card
+    err = store.DB.Transaction(func(tx *gorm.DB) error {
+      if res := tx.Save(card).Error; res != nil {
+        return res
       }
-      err = store.DB.Transaction(func(tx *gorm.DB) error {
-        if res := tx.Save(card).Error; res != nil {
-          return res
-        }
-        slot.CardSlotId = uuid.New().String()
-        slot.AccountID = account.ID
-        slot.Revision = account.CardRevision + 1
-        slot.CardID = card.ID
-        slot.Card = card
-        if res := tx.Save(slot).Error; res != nil {
-          return res
-        }
-        if res := tx.Model(&account).Update("card_revision", account.CardRevision + 1).Error; res != nil {
-          return res
-        }
-        return nil
-      })
-      if err != nil {
-        ErrResponse(w, http.StatusInternalServerError, err)
-        return
+      slot.CardSlotId = uuid.New().String()
+      slot.AccountID = account.ID
+      slot.Revision = account.CardRevision + 1
+      slot.CardID = card.ID
+      slot.Card = card
+      if res := tx.Save(slot).Error; res != nil {
+        return res
       }
-    } else {
-      err = store.DB.Transaction(func(tx *gorm.DB) error {
-        if res := tx.Save(&card).Error; res != nil {
-          return res
-        }
-        slot.Revision = account.CardRevision + 1
-        slot.CardID = card.ID
-        slot.Card = card
-        if res := tx.Save(&slot).Error; res != nil {
-          return res
-        }
-        if res := tx.Model(&account).Update("card_revision", account.CardRevision + 1).Error; res != nil {
-          return res
-        }
-        return nil
-      })
-      if err != nil {
-        ErrResponse(w, http.StatusInternalServerError, err)
-        return
+      if res := tx.Model(&account).Update("card_revision", account.CardRevision + 1).Error; res != nil {
+        return res
       }
+      return nil
+    })
+    if err != nil {
+      ErrResponse(w, http.StatusInternalServerError, err)
+      return
     }
   } else {
 

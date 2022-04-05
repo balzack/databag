@@ -148,7 +148,6 @@ type Card struct {
   Location          string
   Image             string
   Version           string          `gorm:"not null"`
-  Revision          string          `gorm:"not null"`
   Node              string          `gorm:"not null"`
   ProfileRevision   int64           `gorm:"not null"`
   DetailRevision    int64           `gorm:"not null;default:1"`

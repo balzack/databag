@@ -1,6 +1,9 @@
 import { useContext, useState, useEffect } from 'react';
 import { AppContext } from '../../AppContext/AppContext';
 import { useNavigate, useLocation, useParams } from "react-router-dom";
+import { getListingMessage } from '../../Api/getListingMessage';
+import { addCard } from '../../Api/addCard';
+import { removeCard } from '../../Api/removeCard';
 
 export function useContact() {
   
@@ -11,7 +14,10 @@ export function useContact() {
     location: '',
     description: '',
     imageUrl: null,
+    node: '',
+    cardId: '',
     showButtons: {},
+    busy: false,
   });
 
   const data = useLocation();
@@ -27,16 +33,57 @@ export function useContact() {
     close: () => {
       navigate('/user')
     },
+    save: async () => {
+      if (!state.busy) {
+        updateState({ busy: true });
+        try {
+          let message = await getListingMessage(state.node, guid);
+          let card = await addCard(app.state.token, message);
+        }
+        catch (err) {
+          window.alert(err);
+        }
+        updateState({ busy: false });
+      }
+    },
+    connect: () => {
+    },
+    disconnect: () => {
+    },
+    ignore: () => {
+    },
+    cancel: () => {
+    },
+    remove: async () => {
+      if (!state.busy) {
+        updateState({ busy: true  });
+        try {
+          await removeCard(app.state.token, state.cardId);
+          navigate('/user');
+        }
+        catch (err) {
+          window.alert(err);
+        }
+        updateState({ busy: false });
+      }
+    },
+    saveRequest: () => {
+    },
+    saveAccept: () => {
+    },
   };
 
   useEffect(() => {
     if (app?.state?.access === 'user') {
       let card = app.actions.getCard(guid);
       if (card) {
-        updateState({ handle: card.data.cardProfile.handle });
-        updateState({ name: card.data.cardProfile.name });
-        updateState({ description: card.data.cardProfile.description });
-        updateState({ location: card.data.cardProfile.location });
+        let profile = card.data.cardProfile;
+        updateState({ cardId: card.id });
+        updateState({ handle: profile.handle });
+        updateState({ name: profile.name });
+        updateState({ description: profile.description });
+        updateState({ location: profile.location });
+        updateState({ node: profile.node });
         if (card.data.cardProfile.imageSet) {
           updateState({ imageUrl: app.actions.getCardImageUrl(card.id, card.revision) });
         }
@@ -57,7 +104,7 @@ export function useContact() {
           updateState({ showButtons: { ignore: true, save: true, saveAccept: true }});
         }
         if (status === 'confirmed') {
-          updateState({ status: 'saved' });
+          updateState({ status: 'disconnected' });
           updateState({ showButtons: { remove: true, connect: true }});
         }
         if (status === 'requested') {
@@ -70,13 +117,14 @@ export function useContact() {
         updateState({ name: data.state.name });
         updateState({ description: data.state.description });
         updateState({ location: data.state.location });
+        updateState({ node: data.state.node });
         if (data.state.imageSet) {
           updateState({ imageUrl: app.actions.getRegistryImageUrl(data.state.node, guid, data.state.revision) });
         }
         else {
           updateState({ imageUrl: '' });
         }
-        updateState({ status: null });
+        updateState({ status: 'unsaved' });
         updateState({ showButtons: { save: true, saveRequest: true }});
       }
     }

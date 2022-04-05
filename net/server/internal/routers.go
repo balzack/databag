@@ -105,6 +105,13 @@ var routes = Routes{
 	},
 
 	Route{
+		"GetAccountListingMessage",
+		strings.ToUpper("Get"),
+		"/account/listing/{guid}/message",
+		GetAccountListingMessage,
+	},
+
+	Route{
 		"GetAccountStatus",
 		strings.ToUpper("Get"),
 		"/account/status",

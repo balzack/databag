@@ -363,7 +363,33 @@ paths:
           description: permission denied
         '500':
           description: internal server error
+           
+  /account/listing/{guid}/message:
+    get:
+      tags:
+        - account
+      description: Get profile message of searchable account. Endpoint is publically accessible.
+      operationId: get-account-listing-message
+      parameters:
+        - name: guid
+          in: path
+          description: filter for specified guid 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataMessage'
+        '401':
+          description: permission denied
+        '500':
+          description: internal server error
           
+
   /account/token:
     get:
       tags:

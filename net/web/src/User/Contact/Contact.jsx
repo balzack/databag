@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { CloseOutlined, UserOutlined } from '@ant-design/icons';
 import { useContact } from './useContact.hook';
 import { Button, Checkbox, Modal } from 'antd'
-import { ContactWrapper, ProfileButton, CloseButton } from './Contact.styled';
+import { ContactWrapper, ProfileButton, CloseButton, ContactSpin } from './Contact.styled';
 
 export function Contact() {
 
@@ -48,7 +48,7 @@ export function Contact() {
 
   const Remove = () => {
     if (state.showButtons.remove) {
-      return <ProfileButton ghost>Remove Contact</ProfileButton>
+      return <ProfileButton ghost onClick={() => actions.remove()}>Remove Contact</ProfileButton>
     }
     return <></>
   }
@@ -69,7 +69,7 @@ export function Contact() {
 
   const Save = () => {
     if (state.showButtons.save) {
-      return <ProfileButton ghost>Save Contact</ProfileButton>
+      return <ProfileButton ghost onClick={() => actions.save()}>Save Contact</ProfileButton>
     }
     return <></>
   }
@@ -107,6 +107,7 @@ export function Contact() {
       <div class="header">
         <div class="title">{ state.handle }</div>
         <div class="buttons">
+          <ContactSpin size="large" spinning={state.busy} />
           <Disconnect />
           <Remove />
           <Cancel />
@@ -125,7 +126,7 @@ export function Contact() {
             <Logo />
           </div>
           <div class="block">
-            <span class="label">details:</span>
+            <span class="label">status: { state.status }</span>
           </div>
           <div class="details">
             <div class="name"><Name /></div>

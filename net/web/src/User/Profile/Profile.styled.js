@@ -31,7 +31,8 @@ export const ProfileWrapper = styled.div`
     font-weight: bold;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-begin;
+    padding-left: 16px;
   }
 
   .close {

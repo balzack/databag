@@ -586,10 +586,9 @@ func AddTestCard(account string, contact string) (cardId string, err error) {
   }
 
   // add A card in B
-  if r, w, err = NewRequest("POST", "/contact/cards", &msg); err != nil {
+  if r, w, err = NewRequest("POST", "/contact/cards?agent=" + account, &msg); err != nil {
     return
   }
-  SetBearerAuth(r, account)
   AddCard(w, r)
   if err = ReadResponse(w, &card); err != nil {
     return
