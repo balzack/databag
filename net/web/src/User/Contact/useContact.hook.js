@@ -7,6 +7,8 @@ import { removeCard } from '../../Api/removeCard';
 import { setCardConnecting, setCardConnected, setCardConfirmed } from '../../Api/setCardStatus';
 import { getCardOpenMessage } from '../../Api/getCardOpenMessage';
 import { setCardOpenMessage } from '../../Api/setCardOpenMessage';
+import { getCardCloseMessage } from '../../Api/getCardCloseMessage';
+import { setCardCloseMessage } from '../../Api/setCardCloseMessage';
 
 export function useContact() {
   
@@ -60,7 +62,7 @@ export function useContact() {
         }
         updateState({ busy: false });
       }
-    },  
+    },
     connect: async () => {
       if (!state.busy) {
         updateState({ busy: true });
@@ -78,11 +80,24 @@ export function useContact() {
         updateState({ busy: false });
       }
     },
-    disconnect: () => {
-    },
-    ignore: () => {
-    },
-    cancel: () => {
+    disconnect: async () => {
+      if (!state.busy) {
+        updateState({ busy: true });
+        try {
+          await setCardConfirmed(app.state.token, state.cardId);
+          try {
+            let message = await getCardCloseMessage(app.state.token, state.cardId);
+            await setCardCloseMessage(state.node, message);
+          }
+          catch (err) {
+            console.log(err);
+          }
+        }
+        catch (err) {
+          window.alert(err);
+        }
+        updateState({ busy: false });
+      }
     },
     remove: async () => {
       if (!state.busy) {
@@ -97,9 +112,24 @@ export function useContact() {
         updateState({ busy: false });
       }
     },
-    saveRequest: () => {
-    },
-    saveAccept: () => {
+    saveConnect: async () => {
+      if (!state.busy) {
+        updateState({ busy: true });
+        try {
+          let profile = await getListingMessage(state.node, guid);
+          let card = await addCard(app.state.token, profile);
+          await setCardConnecting(app.state.token, card.id);
+          let open = await getCardOpenMessage(app.state.token, card.id);
+          let contact = await setCardOpenMessage(state.node, open);
+          if (contact.status === 'connected') {
+            await setCardConnected(app.state.token, card.id, contact.token, contact.viewRevision, contact.articleRevision, contact.channelRevision, contact.profileRevision);
+          }
+        }
+        catch (err) {
+          window.alert(err);
+        }
+        updateState({ busy: false });
+      }
     },
   };
 
@@ -131,7 +161,7 @@ export function useContact() {
         }
         if (status === 'pending') {
           updateState({ status: 'pending' });
-          updateState({ showButtons: { ignore: true, confirm: true, saveAccept: true }});
+          updateState({ showButtons: { ignore: true, confirm: true, saveRequest: true }});
         }
         if (status === 'confirmed') {
           updateState({ status: 'confirmed' });
@@ -139,7 +169,7 @@ export function useContact() {
         }
         if (status === 'requested') {
           updateState({ status: 'requested' });
-          updateState({ showButtons: { ignore: true, accept: true }});
+          updateState({ showButtons: { deny: true, accept: true }});
         }
       }
       else if (data.state) {

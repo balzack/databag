@@ -41,7 +41,7 @@ export function Contact() {
 
   const Disconnect = () => {
     if (state.showButtons.disconnect) {
-      return <ProfileButton ghost>Disconnect</ProfileButton>
+      return <ProfileButton ghost onClick={() => actions.disconnect()}>Disconnect</ProfileButton>
     }
     return <></>
   }
@@ -55,14 +55,21 @@ export function Contact() {
 
   const Cancel = () => {
     if (state.showButtons.cancel) {
-      return <ProfileButton ghost>Cancel Request</ProfileButton>
+      return <ProfileButton ghost onClick={() => actions.disconnect()}>Cancel Request</ProfileButton>
     }
     return <></>
   }
 
   const Ignore = () => {
     if (state.showButtons.ignore) {
-      return <ProfileButton ghost>Ignore Request</ProfileButton>
+      return <ProfileButton ghost onClick={() => actions.remove()}>Ignore Request</ProfileButton>
+    }
+    return <></>
+  }
+
+  const Deny = () => {
+    if (state.showButtons.deny) {
+      return <ProfileButton ghost onClick={() => actions.disconnect()}>Ignore Request</ProfileButton>
     }
     return <></>
   }
@@ -83,7 +90,7 @@ export function Contact() {
 
   const SaveRequest = () => {
     if (state.showButtons.saveRequest) {
-      return <ProfileButton ghost>Save & Request</ProfileButton>
+      return <ProfileButton ghost onClick={() => actions.saveConnect()}>Save & Connect</ProfileButton>
     }
     return <></>
   }
@@ -95,16 +102,9 @@ export function Contact() {
     return <></>
   }
 
-  const SaveAccept = () => {
-    if (state.showButtons.saveAccept) {
-      return <ProfileButton ghost>Save & Accept</ProfileButton>
-    }
-    return <></>
-  }
-
   const Accept = () => {
     if (state.showButtons.accept) {
-      return <ProfileButton ghost>Accept Connection</ProfileButton>
+      return <ProfileButton ghost onClick={() => actions.connect()}>Accept Connection</ProfileButton>
     }
     return <></>
   }
@@ -115,15 +115,15 @@ export function Contact() {
         <div class="title">{ state.handle }</div>
         <div class="buttons">
           <ContactSpin size="large" spinning={state.busy} />
-          <Disconnect />
           <Remove />
+          <Disconnect />
           <Confirm />
           <Cancel />
           <Ignore />
+          <Deny />
           <Save />
           <SaveRequest />
           <Connect />
-          <SaveAccept />
           <Accept />
         </div>
         <CloseButton type="text" class="close" size={'large'} onClick={() => actions.close()} icon={<CloseOutlined />} />

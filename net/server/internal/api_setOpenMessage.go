@@ -128,6 +128,7 @@ func SetOpenMessage(w http.ResponseWriter, r *http.Request) {
       card.Status = APP_CARDCONNECTED
     }
     card.OutToken = connect.Token
+    card.DetailRevision = account.CardRevision + 1
 
     // save contact card
     err  = store.DB.Transaction(func(tx *gorm.DB) error {

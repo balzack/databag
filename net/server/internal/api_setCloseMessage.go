@@ -51,14 +51,7 @@ func SetCloseMessage(w http.ResponseWriter, r *http.Request) {
 
   slot := card.CardSlot
   err = store.DB.Transaction(func(tx *gorm.DB) error {
-    if card.Status == APP_CARDPENDING {
-      if res := tx.Model(&slot).Update("card_id", 0).Error; res != nil {
-        return res
-      }
-      if res := tx.Delete(&card).Error; res != nil {
-        return res
-      }
-    } else {
+    if card.Status != APP_CARDPENDING {
       if res := tx.Model(&card).Update("status", APP_CARDCONFIRMED).Error; res != nil {
         return res
       }
