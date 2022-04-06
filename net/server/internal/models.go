@@ -200,7 +200,9 @@ type ChannelMembers struct {
 
 type ChannelParams struct {
 
-	Subject *Subject `json:"subject"`
+	DataType string `json:"dataType"`
+
+	Data string `json:"data"`
 
 	Groups []string `json:"groups"`
 
@@ -387,9 +389,9 @@ type SignedData struct {
 
 type Subject struct {
 
-	DataType string `json:"dataType"`
+  DataType string `json:"dataType"`
 
-	Data string `json:"data"`
+  Data string `json:"data"`
 }
 
 type Tag struct {

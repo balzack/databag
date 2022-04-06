@@ -131,10 +131,6 @@ func TestContactSync(t *testing.T) {
     &param, nil, APP_TOKENAGENT, set.A.Token, &msg, nil))
   assert.NoError(t, ApiTestMsg(SetCloseMessage, "GET", "/contact/closeMessage",
     nil, &msg, "", "", nil, nil))
-  param["cardId"] = set.D.A.CardId
-  assert.NoError(t, ApiTestMsg(GetCard, "GET", "/contact/cards/{cardId}",
-    &param, nil, APP_TOKENAGENT, set.D.Token, card, nil))
-  assert.Nil(t, card.Data)
 
   // delete card
   param["cardId"] = set.A.C.CardId

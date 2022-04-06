@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Select, Modal } from 'antd';
-import { SelectItem } from './AddChannel.styled';
+import { Button, Select, Modal, Collapse, Input } from 'antd';
+import { SelectItem, ConversationWrapper, Description, BusySpin } from './AddChannel.styled';
 import { Logo } from '../../../../../Logo/Logo';
 
 export function AddChannel({ state, actions }) {
@@ -17,14 +17,24 @@ export function AddChannel({ state, actions }) {
   }, [actions]);
 
   return (
-    <Select
-      mode="multiple"
-      style={{ width: '100%' }}
-      placeholder="Select Contacts"
-      defaultValue={[]}
-      options={options}
-      onChange={(value) => console.log(value)}
-      optionLabelProp="label"
-    />
+    <ConversationWrapper>
+      <Select
+        mode="multiple"
+        style={{ width: '100%' }}
+        placeholder="Select Contacts"
+        defaultValue={[]}
+        options={options}
+        onChange={(value) => actions.setStartCards(value)}
+        optionLabelProp="label"
+      />
+      <Collapse ghost="true">
+        <Collapse.Panel header="Conversation Details (optional)" key="1">
+          <Input placeholder="Subject" onChange={(e) => actions.setStartSubject(e.target.value)} value={state.startSubject} />
+          <Description placeholder="Description" autoSize={{ minRows: 2, maxRows: 6 }}
+              onChange={(e) => actions.setStartDescription(e.target.value)} value={state.startDescription} />
+        </Collapse.Panel>
+      </Collapse>
+      <BusySpin size="large" spinning={state.busy} />
+    </ConversationWrapper>
   )
 }

@@ -95,6 +95,13 @@ export function Contact() {
     return <></>
   }
 
+  const ConfirmConnect = () => {
+    if (state.showButtons.confirmConnect) {
+      return <ProfileButton ghost onClick={() => actions.connect()}>Save & Connect</ProfileButton>
+    }
+    return <></>
+  }
+
   const SaveRequest = () => {
     if (state.showButtons.saveRequest) {
       return <ProfileButton ghost onClick={() => actions.saveConnect()}>Save & Connect</ProfileButton>
@@ -130,6 +137,7 @@ export function Contact() {
           <Ignore />
           <Deny />
           <Save />
+          <ConfirmConnect />
           <SaveRequest />
           <Connect />
           <Accept />

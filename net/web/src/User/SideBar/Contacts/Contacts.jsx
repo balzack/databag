@@ -46,7 +46,7 @@ export function Contacts() {
   }
 
   useEffect(() => {
-    setAddButton(addUser);
+    setAddButton(addConversation);
   }, []);
 
   return (

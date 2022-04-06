@@ -182,7 +182,7 @@ export function useContact() {
         }
         if (status === 'pending') {
           updateState({ status: 'pending' });
-          updateState({ showButtons: { ignore: true, confirm: true, saveRequest: true }});
+          updateState({ showButtons: { ignore: true, confirm: true, confirmConnect: true }});
         }
         if (status === 'confirmed') {
           updateState({ status: 'confirmed' });

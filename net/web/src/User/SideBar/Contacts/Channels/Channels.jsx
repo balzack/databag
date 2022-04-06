@@ -8,10 +8,16 @@ export function Channels({ showAdd, setShowAdd }) {
 
   const { state, actions } = useChannels();
 
+  const onStart = async () => {
+    if (await actions.addChannel()) {
+      setShowAdd(false);
+    }
+  }
+
   return (
     <ChannelsWrapper>
       <Modal title="Start Conversation" visible={showAdd} centered
-          onOk={() => setShowAdd(false)} onCancel={() => setShowAdd(false)}>
+          okText="Start" onOk={() => onStart()} onCancel={() => setShowAdd(false)}>
         <AddChannel state={state} actions={actions} />
       </Modal>
     </ChannelsWrapper>

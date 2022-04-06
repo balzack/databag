@@ -3426,12 +3426,15 @@ components:
     ChannelParams:
       type: object
       required:
-        - subject
+        - dataType
+        - data
         - groups
         - cards
       properties:
-        subject:
-          $ref: '#/components/schemas/Subject'
+        dataType:
+          type: string
+        data:
+          type: string
         groups:
           type: array
           items:

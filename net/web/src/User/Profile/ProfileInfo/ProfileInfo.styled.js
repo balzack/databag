@@ -18,6 +18,6 @@ export const ProfileInput = styled(Input)`
 
 export const ProfileSpin = styled(Spin)`
   position: absolute;
-  x-index: 10;
+  z-index: 10;
 `;
 

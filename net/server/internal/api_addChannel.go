@@ -9,25 +9,26 @@ import (
 
 func AddChannel(w http.ResponseWriter, r *http.Request) {
 
-  account, code, err := BearerAppToken(r, false)
+  account, code, err := ParamAgentToken(r, false)
   if err != nil {
     ErrResponse(w, code, err)
     return
   }
 
-  var subject Subject
-  if err := ParseRequest(r, w, &subject); err != nil {
+  var params ChannelParams
+  if err := ParseRequest(r, w, &params); err != nil {
     ErrResponse(w, http.StatusBadRequest, err)
     return
   }
 
+  cards := []*store.Card{}
   slot := &store.ChannelSlot{}
   err = store.DB.Transaction(func(tx *gorm.DB) error {
 
     channel := &store.Channel{}
     channel.AccountID = account.ID
-    channel.Data = subject.Data
-    channel.DataType = subject.DataType
+    channel.Data = params.Data
+    channel.DataType = params.DataType
     channel.DetailRevision = account.ChannelRevision + 1
     channel.TopicRevision = account.ChannelRevision + 1
     if res := tx.Save(channel).Error; res != nil {
@@ -42,9 +43,31 @@ func AddChannel(w http.ResponseWriter, r *http.Request) {
     if res := tx.Save(slot).Error; res != nil {
       return res
     }
+    for _, cardId := range params.Cards {
+      cardSlot := store.CardSlot{}
+      if res := tx.Preload("Card").Where("account_id = ? AND card_slot_id = ?", account.ID, cardId).First(&cardSlot).Error; res != nil {
+        return res
+      }
+      if res := tx.Model(&slot.Channel).Association("Cards").Append(cardSlot.Card); res != nil {
+        return res
+      }
+      cards = append(cards, cardSlot.Card);
+    }
+
+    for _, groupId := range params.Groups {
+      groupSlot := store.GroupSlot{}
+      if res := tx.Preload("Group").Where("account_id = ? AND group_slot_id = ?", account.ID, groupId).First(&groupSlot).Error; res != nil {
+        return res
+      }
+      if res := tx.Model(&slot.Channel).Association("Groups").Append(groupSlot.Group); res != nil {
+        return res
+      }
+    }
+
     if res := tx.Model(&account).Update("channel_revision", account.ChannelRevision + 1).Error; res != nil {
       return res
     }
+
     return nil
   })
   if err != nil {
@@ -53,6 +76,9 @@ func AddChannel(w http.ResponseWriter, r *http.Request) {
   }
 
   SetStatus(account)
+  for _, card := range cards {
+    SetContactChannelNotification(account, card);
+  }
   WriteResponse(w, getChannelModel(slot, true, true))
 }
 
