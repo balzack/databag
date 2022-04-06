@@ -112,6 +112,27 @@ export function useContact() {
         updateState({ busy: false });
       }
     },
+    disconnectRemove: async () => {
+      if (!state.busy) {
+        updateState({ busy: true });
+        try {
+          await setCardConfirmed(app.state.token, state.cardId);
+          try {
+            let message = await getCardCloseMessage(app.state.token, state.cardId);
+            await setCardCloseMessage(state.node, message);
+            await removeCard(app.state.token, state.cardId);
+            navigate('/user');
+          }
+          catch (err) {
+            console.log(err);
+          }
+        }
+        catch (err) {
+          window.alert(err);
+        }
+        updateState({ busy: false });
+      }
+    },
     saveConnect: async () => {
       if (!state.busy) {
         updateState({ busy: true });
@@ -153,11 +174,11 @@ export function useContact() {
         let status = card.data.cardDetail.status;
         if (status === 'connected') {
           updateState({ status: 'connected' });
-          updateState({ showButtons: { disconnect: true, remove: true }});
+          updateState({ showButtons: { disconnect: true, disconnectRemove: true }});
         }
         if (status === 'connecting') {
           updateState({ status: 'connecting' });
-          updateState({ showButtons: { cancel: true, remove: true }});
+          updateState({ showButtons: { cancel: true, disconnectRemove: true }});
         }
         if (status === 'pending') {
           updateState({ status: 'pending' });

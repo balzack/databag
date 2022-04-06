@@ -46,6 +46,13 @@ export function Contact() {
     return <></>
   }
 
+  const DisconnectRemove = () => {
+    if (state.showButtons.disconnectRemove) {
+      return <ProfileButton ghost onClick={() => actions.disconnectRemove()}>Remove Contact</ProfileButton>
+    }
+    return <></>
+  }
+
   const Remove = () => {
     if (state.showButtons.remove) {
       return <ProfileButton ghost onClick={() => actions.remove()}>Remove Contact</ProfileButton>
@@ -116,6 +123,7 @@ export function Contact() {
         <div class="buttons">
           <ContactSpin size="large" spinning={state.busy} />
           <Remove />
+          <DisconnectRemove />
           <Disconnect />
           <Confirm />
           <Cancel />

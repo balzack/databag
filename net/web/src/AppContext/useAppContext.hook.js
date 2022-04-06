@@ -141,6 +141,16 @@ export function useAppContext() {
     return card;
   }
 
+  const getConnectedCards = () => {
+    let connected = []
+    cards.current.forEach((value, key, map) => {
+      if(value?.data?.cardDetail?.status === 'connected') {
+        connected.push(value);
+      }
+    });
+    return connected;
+  }
+
   const resetData = () => {
     revision.current = null;
     accountRevision.current = null;
@@ -171,6 +181,7 @@ export function useAppContext() {
     getRegistryImageUrl: (server, guid, revision) => getListingImageUrl(server, guid, revision),
     getCardImageUrl: (cardId, revision) => getCardImageUrl(state.token, cardId, revision),
     getCard: getCard,
+    getConnectedCards: getConnectedCards,
   }
 
   const adminActions = {
