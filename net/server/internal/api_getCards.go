@@ -25,7 +25,7 @@ func GetCards(w http.ResponseWriter, r *http.Request) {
     }
   }
 
-  var response []*Card
+  response := []*Card{}
   if cardRevisionSet {
     var slots []store.CardSlot
     if err := store.DB.Preload("Card").Where("account_id = ? AND revision > ?", account.ID, cardRevision).Find(&slots).Error; err != nil {
