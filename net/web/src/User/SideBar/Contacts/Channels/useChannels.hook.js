@@ -44,6 +44,12 @@ export function useChannels() {
   };
 
   useEffect(() => {
+    if (app?.state?.Data?.channels) {
+      updateState({ channels: app.state.Data.channels });
+    }
+    else {
+      updateState({ channels: [] });
+    }
   }, [app])
 
   return { state, actions };

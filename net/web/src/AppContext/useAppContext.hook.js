@@ -1,5 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { getContactProfile, setCardProfile, getCards, getCardImageUrl, getCardProfile, getCardDetail, getListingImageUrl, getListing, setProfileImage, setProfileData, getProfileImageUrl, getAccountStatus, setAccountSearchable, getProfile, getGroups, getAvailable, getUsername, setLogin, createAccount } from './fetchUtil';
+import { getChannels } from '../Api/getChannels';
+import { getContactChannels } from '../Api/getContactChannels';
 
 async function updateAccount(token, updateData) {
   let status = await getAccountStatus(token);
@@ -24,14 +26,27 @@ async function updateGroups(token, revision, groupMap, updateData) {
   updateData({ groups: Array.from(groupMap.values()) });
 }
 
-async function updateCards(token, revision, cardMap, updateData) {
+async function updateChannels(token, revision, channelMap, mergeChannels) {
+  let channels = await getChannels(token, revision);
+  for (let channel of channels) {
+    if (channel.data) {
+      channelMap.set(channel.id, channel);
+    }
+    else {
+      channelMap.delete(channel.id);
+    }
+  }
+  mergeChannels();
+}
+
+async function updateCards(token, revision, cardMap, updateData, mergeChannels) {
 
   let cards = await getCards(token, revision);
   for (let card of cards) {
     if (card.data) {
       let cur = cardMap.get(card.id);
       if (cur == null) {
-        cur = { id: card.id, data: {} }
+        cur = { id: card.id, data: { articles: new Map() }, channels: new Map() }
       }
       if (cur.data.detailRevision != card.data.detailRevision) {
         if (card.data.cardDetail != null) {
@@ -40,6 +55,7 @@ async function updateCards(token, revision, cardMap, updateData) {
         else {
           cur.data.cardDetail = await getCardDetail(token, card.id);
         }
+        mergeChannels();
         cur.data.detailRevision = card.data.detailRevision;
       }
       if (cur.data.profileRevision != card.data.profileRevision) {
@@ -51,37 +67,70 @@ async function updateCards(token, revision, cardMap, updateData) {
         }
         cur.data.profileRevision = card.data.profileRevision;
       }
-      if (cur.data.profileRevision != card.data.notifiedProfile) {
-        const { cardDetail, cardProfile } = cur.data;
-        if (cardDetail.status === 'connected') {
+      const { cardDetail, cardProfile } = cur.data;
+      if (cardDetail.status === 'connected') {
+        if (cur.data.profileRevision != card.data.notifiedProfile) {
           let message = await getContactProfile(cardProfile.node, cardProfile.guid, cardDetail.token);
           await setCardProfile(token, card.id, message);
+
+          // update remote profile
+          cur.data.notifiedProfile = card.data.notifiedProfile;
         }
-        // update remote profile
-        cur.data.notifiedProfile = card.data.notifiedProfile;
-      }
-      if (cur.data.notifiedView != card.data.notifiedView) {
-        // update remote articles and channels
-        cur.data.notifiedArticle = card.data.notifiedArticle;
-        cur.data.notifiedChannel = card.data.notifiedChannel;
-        cur.data.notifiedView = card.data.notifiedView;
-      }
-      if (cur.data.notifiedArticle != card.data.notifiedArticle) {
-        // update remote articles
-        cur.data.notifiedArticle = card.data.notifiedArticle;
-      }
-      if (cur.data.notifiedChannel != card.data.notifiedChannel) {
-        // update remote channels
-        cur.data.notifiedChannel = card.data.notifiedChannel;
+        if (cur.data.notifiedView != card.data.notifiedView) {
+          // update remote articles and channels
+          cur.data.articles = new Map();
+          cur.channels = new Map();
+
+          let contactToken = cur.data.cardProfile.guid + "." + cur.data.cardDetail.token
+          await updateContactChannels(contactToken, cur.data.notifiedView, cur.dataNotifiedChannel, cur.channels);
+          await updateContactArticles(contactToken, cur.data.notifiedView, cur.dataNotifiedArticle, cur.data.articles);
+
+          // update view
+          cur.data.notifiedArticle = card.data.notifiedArticle;
+          cur.data.notifiedChannel = card.data.notifiedChannel;
+          cur.data.notifiedView = card.data.notifiedView;
+          mergeChannels();
+        }
+        if (cur.data.notifiedArticle != card.data.notifiedArticle) {
+          // update remote articles
+          let contactToken = cur.data.cardProfile.guid + "." + cur.data.cardDetail.token
+          await updateContactArticles(contactToken, cur.data.notifiedView, cur.dataNotifiedArticle, cur.data.articles);
+          cur.data.notifiedArticle = card.data.notifiedArticle;
+        }
+        if (cur.data.notifiedChannel != card.data.notifiedChannel) {
+          // update remote channels
+          let contactToken = cur.data.cardProfile.guid + "." + cur.data.cardDetail.token
+          await updateContactChannels(contactToken, cur.data.notifiedView, cur.dataNotifiedChannel, cur.channels);
+          cur.data.notifiedChannel = card.data.notifiedChannel;
+          mergeChannels();
+        }
       }
       cur.revision = card.revision;
       cardMap.set(card.id, cur);
     }
     else {
       cardMap.delete(card.id);
+      mergeChannels();
     }
   }
   updateData({ cards: Array.from(cardMap.values()) });
+}
+
+async function updateContactChannels(token, viewRevision, channelRevision, channelMap) {
+  let channels = await getContactChannels(token, viewRevision, channelRevision);
+
+  for (let channel of channels) {
+    if (channel.data) {
+      channelMap.set(channel.id, channel);
+    }
+    else {
+      channelMap.delete(channel.id);
+    }
+  }
+}
+
+async function updateContactArticles(token, viewRevision, articleRevision, articleMap) {
+  console.log("update contact attributes");
 }
 
 async function appCreate(username, password, updateState, setWebsocket) {
@@ -114,7 +163,9 @@ export function useAppContext() {
   const accountRevision = useRef(null);
   const profileRevision = useRef(null);
   const cardRevision = useRef(null);
+  const channelRevision = useRef(null);
 
+  const channels = useRef(new Map());
   const cards = useRef(new Map());
   const groups = useRef(new Map());
   const delay = useRef(2);
@@ -129,6 +180,21 @@ export function useAppContext() {
       let data = { ...s.Data, ...value }
       return { ...s, Data: data }
     })
+  }
+
+  const mergeChannels = () => {
+    let merged = [];
+    cards.current.forEach((value, key, map) => {
+      if (value?.data?.cardDetail?.status === 'connected') {
+        value.channels.forEach((slot, key, map) => {
+          merged.push({ contact: value?.data?.cardProfile?.guid, channel: slot });
+        });
+      }
+    });
+    channels.current.forEach((value, key, map) => {
+      merged.push({ channel: value });
+    });
+    updateData({ channels: merged });
   }
 
   const getCard = (guid) => {
@@ -218,10 +284,16 @@ export function useAppContext() {
         groupRevision.current = rev.group
       }
 
-      // update card status if revision changed
+      // update card if revision changed
       if (rev.card != cardRevision.current) {
-        await updateCards(token, cardRevision.current, cards.current, updateData);
+        await updateCards(token, cardRevision.current, cards.current, updateData, mergeChannels);
         cardRevision.current = rev.card
+      }
+
+      // update channel if revision changed
+      if (rev.channel != channelRevision.current) {
+        await updateChannels(token, channelRevision.current, channels.current, mergeChannels);
+        channelRevision.current = rev.channel
       }
 
       // update account status if revision changed

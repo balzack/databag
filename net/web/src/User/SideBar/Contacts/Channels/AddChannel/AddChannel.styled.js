@@ -19,6 +19,7 @@ export const Description = styled(Input.TextArea)`
 
 export const BusySpin = styled(Spin)`
   position: absolute;
+  align-self: center;
   z-index: 10;
 `
 

@@ -48,11 +48,11 @@ func GetChannels(w http.ResponseWriter, r *http.Request) {
     }
   }
 
-  var response []*Channel
-  tokenType := r.Header.Get("TokenType")
+  response := []*Channel{}
+  tokenType := ParamTokenType(r)
   if tokenType == APP_TOKENAGENT {
 
-    account, code, err := BearerAppToken(r, false);
+    account, code, err := ParamAgentToken(r, false);
     if err != nil {
       ErrResponse(w, code, err)
       return
@@ -85,7 +85,7 @@ func GetChannels(w http.ResponseWriter, r *http.Request) {
 
   } else if tokenType == APP_TOKENCONTACT {
 
-    card, code, err := BearerContactToken(r, true)
+    card, code, err := ParamContactToken(r, true)
     if err != nil {
       ErrResponse(w, code, err)
       return
