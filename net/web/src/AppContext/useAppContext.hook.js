@@ -187,7 +187,7 @@ export function useAppContext() {
     cards.current.forEach((value, key, map) => {
       if (value?.data?.cardDetail?.status === 'connected') {
         value.channels.forEach((slot, key, map) => {
-          merged.push({ contact: value?.data?.cardProfile?.guid, channel: slot });
+          merged.push({ guid: value?.data?.cardProfile?.guid, cardId: value?.id, channel: slot });
         });
       }
     });
@@ -312,12 +312,17 @@ export function useAppContext() {
   const setWebsocket = (token) => {
     ws.current = new WebSocket("wss://" + window.location.host + "/status");
     ws.current.onmessage = (ev) => {
-      if (revision.current != null) {
-        revision.current = JSON.parse(ev.data);
+      try {
+        if (revision.current != null) {
+          revision.current = JSON.parse(ev.data);
+        }
+        else {
+          revision.current = JSON.parse(ev.data);
+          processRevision(token)
+        }
       }
-      else {
-        revision.current = JSON.parse(ev.data);
-        processRevision(token)
+      catch (err) {
+        console.log(err);
       }
     }
     ws.current.onclose = (e) => {
