@@ -83,8 +83,8 @@ func TestChannelShare(t *testing.T) {
   assert.NoError(t, ApiTestMsg(GetChannel, "GET", "/content/channels/{channelId}",
     &params, nil, APP_TOKENCONTACT, set.B.A.Token, channel, nil))
   assert.Equal(t, "channeldatatype", channel.Data.ChannelDetail.DataType)
-  assert.Equal(t, 1, len(channel.Data.ChannelDetail.Members.Members))
-  assert.Equal(t, set.B.Guid, channel.Data.ChannelDetail.Members.Members[0])
+  assert.Equal(t, 1, len(channel.Data.ChannelDetail.Members))
+  assert.Equal(t, set.B.Guid, channel.Data.ChannelDetail.Members[0])
   assert.Nil(t, channel.Data.ChannelDetail.Contacts)
 
   // get revision
@@ -154,7 +154,7 @@ func TestChannelShare(t *testing.T) {
   assert.NoError(t, ApiTestMsg(GetChannel, "GET", "/content/channels/{channelId}",
     &params, nil, APP_TOKENCONTACT, set.C.A.Token, channel, nil))
   assert.Equal(t, "channeldatatype", channel.Data.ChannelDetail.DataType)
-  assert.Equal(t, 2, len(channel.Data.ChannelDetail.Members.Members))
+  assert.Equal(t, 2, len(channel.Data.ChannelDetail.Members))
   assert.Nil(t, channel.Data.ChannelDetail.Contacts)
 
   // reset notification

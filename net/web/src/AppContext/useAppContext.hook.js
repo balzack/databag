@@ -223,6 +223,7 @@ export function useAppContext() {
     profileRevision.current = null;
     groupRevision.current = null;
     cardRevision.current = null;
+    channels.current = new Map();
     cards.current = new Map();
     groups.current = new Map();
     setState({});
@@ -376,6 +377,7 @@ export function useAppContext() {
   }, []);
 
   if (!state) {
+console.log("STATE IS NULL");
     return {}
   }
   if (state.access === 'user') {

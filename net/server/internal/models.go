@@ -190,12 +190,7 @@ type ChannelDetail struct {
 
 	Contacts *ChannelContacts `json:"contacts,omitempty"`
 
-	Members *ChannelMembers `json:"members,omitempty"`
-}
-
-type ChannelMembers struct {
-
-	Members []string `json:"members,omitempty"`
+	Members []string `json:"members"`
 }
 
 type ChannelParams struct {

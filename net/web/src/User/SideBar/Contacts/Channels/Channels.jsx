@@ -1,23 +1,18 @@
 import React, { useEffect, useState } from 'react'
-import { ChannelsWrapper, ChannelItem } from './Channels.styled';
+import { ChannelsWrapper } from './Channels.styled';
 import { List, Button, Select, Modal } from 'antd';
 import { useChannels } from './useChannels.hook';
 import { AddChannel } from './AddChannel/AddChannel';
+import { ChannelItem } from './ChannelItem/ChannelItem';
 
 export function Channels({ showAdd, setShowAdd }) {
 
   const { state, actions } = useChannels();
 
-console.log(state.channels);
-
   const onStart = async () => {
     if (await actions.addChannel()) {
       setShowAdd(false);
     }
-  }
-
-  const onSelect = (item) => {
-    console.log(item);
   }
 
   return (
@@ -28,8 +23,7 @@ console.log(state.channels);
         dataSource={state.channels}
         gutter="0"
         renderItem={item => (
-          <ChannelItem onClick={() => onSelect(item)}>
-          </ChannelItem>
+          <ChannelItem item={item} />
         )}
       />
       <Modal title="Start Conversation" visible={showAdd} centered

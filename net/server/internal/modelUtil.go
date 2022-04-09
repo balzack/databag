@@ -204,7 +204,7 @@ func getChannelModel(slot *store.ChannelSlot, showData bool, showList bool) *Cha
         Created: slot.Channel.Created,
         Updated: slot.Channel.Updated,
         Contacts: contacts,
-        Members: &ChannelMembers{ members },
+        Members: members,
       },
     },
   }
