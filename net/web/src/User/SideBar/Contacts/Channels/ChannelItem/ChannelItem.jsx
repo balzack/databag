@@ -1,18 +1,15 @@
 import React, { useEffect, useState } from 'react'
+import { useChannelItem } from './useChannelItem.hook';
 import { ChannelItemWrapper } from './ChannelItem.styled';
 import { ChannelLogo } from './ChannelLogo/ChannelLogo';
 import { ChannelLabel } from './ChannelLabel/ChannelLabel';
 
 export function ChannelItem({ item }) {
 
-  // if 0 or 5+ render number in big border
-  // if 2 renber other in big border
-  // if 3 or 4 render others in small borders
-
-  // subject, hosting, username list, last msg, updated time, unread flag  
+  let { state, actions } = useChannelItem();
 
   const onSelect = () => {
-    console.log(item);
+    actions.select(item);
   }
 
   return (

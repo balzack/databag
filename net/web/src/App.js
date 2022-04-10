@@ -6,6 +6,7 @@ import { Create } from './Create/Create';
 import { User } from './User/User';
 import { Profile } from './User/Profile/Profile';
 import { Contact } from './User/Contact/Contact';
+import { Conversation } from './User/Conversation/Conversation';
 import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import 'antd/dist/antd.min.css'; 
 
@@ -25,6 +26,7 @@ function App() {
             <Route path="/user" element={ <User /> }>
               <Route path="profile" element={<Profile />} />
               <Route path="contact/:guid" element={<Contact />} />
+              <Route path="conversation/:id" element={<Conversation />} />
             </Route>
           </Routes>
         </Router>   

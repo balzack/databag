@@ -20,12 +20,15 @@ export function useChannels() {
   const app = useContext(AppContext);
 
   const actions = {
+    select: (channel) => {
+      navigate(`/user/channel/${channel.id}`);
+    },
     getCardImageUrl: app?.actions?.getCardImageurl,
     getCards: app?.actions?.getConnectedCards,
     setStartCards: (cards) => updateState({ startCards: cards }),
     setStartSubject: (value) => updateState({ startSubject: value }),
     setStartDescription: (value) => updateState({ startDescription: value }),
-    addChannel: async () => { 
+    addChannel: async () => {
       let done = false;
       if (!state.busy) {
         updateState({ busy: true });
