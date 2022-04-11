@@ -13,6 +13,7 @@
     "react-easy-crop": "^4.1.4",
     "react-router-dom": "^6.2.2",
     "react-scripts": "5.0.0",
+    "react-virtualized": "^9.22.3",
     "styled-components": "^5.3.3",
     "web-vitals": "^2.1.0"
   },

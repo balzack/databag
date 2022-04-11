@@ -38,10 +38,24 @@ export const ConversationWrapper = styled.div`
     font-size: 24px;
     color: white;
   }
+
+  .container {
+    display: flex;
+    flex-grow: 1;
+    flex-direction: row;
+    width: 100%;
+    overflow: auto; 
+  }
 `;
 
 export const CloseButton = styled(Button)`
   font-size: 24px;
   color: white;
+`;
+
+export const ListItem = styled.div`
+  dispaly: flex;
+  flex-direction: row;
+  width: 64px;
 `;
 
