@@ -377,7 +377,6 @@ export function useAppContext() {
   }, []);
 
   if (!state) {
-console.log("STATE IS NULL");
     return {}
   }
   if (state.access === 'user') {

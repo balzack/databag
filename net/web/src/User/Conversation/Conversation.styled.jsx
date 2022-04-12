@@ -39,13 +39,15 @@ export const ConversationWrapper = styled.div`
     color: white;
   }
 
-  .container {
+  .thread {
     display: flex;
     flex-grow: 1;
-    flex-direction: row;
+    flex-direction: column;
+    padding-left: 16px;
     width: 100%;
     overflow: auto; 
   }
+    
 `;
 
 export const CloseButton = styled(Button)`

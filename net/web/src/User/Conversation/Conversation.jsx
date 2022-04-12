@@ -4,6 +4,7 @@ import { useConversation } from './useConversation.hook';
 import { Button, Checkbox, Modal } from 'antd'
 import { ConversationWrapper, CloseButton, ListItem } from './Conversation.styled';
 import { AutoSizer, CellMeasurer, CellMeasurerCache, List } from 'react-virtualized';
+import { AddTopic } from './AddTopic/AddTopic';
 
 export function Conversation() {
 
@@ -11,11 +12,12 @@ export function Conversation() {
   const { state, actions } = useConversation();
 
   const cache = new CellMeasurerCache({
-    defaultHeight: 50,
+    defaultHeight: 256,
     fixedWidth: true
   });
 
   useEffect(() => {
+    setScrollIndex(998);
   })
 
   const renderRow = ({ index, isScrolling, key, parent, style }) => {
@@ -45,24 +47,25 @@ export function Conversation() {
         <div class="title">{ state.handle }</div>
         <CloseButton type="text" class="close" size={'large'} onClick={() => actions.close()} icon={<CloseOutlined />} />
       </div>
-      <div class="container">
-    <div style={{ flex: '1 1 auto' }}>
-    <AutoSizer>
-      {({height, width}) => (
-        <List
-          width={width}
-          height={height}
-      deferredMeasurementCache={cache}
-      rowHeight={cache.rowHeight}
-          rowRenderer={renderRow}
-          rowCount={999}
-        overscanRowCount={16}
-        scrollToIndex={scrollIndex}
-        />
-      )}
-    </AutoSizer>
-    </div>
+      <div class="thread">
+        <div style={{ flex: '1 1 auto' }}>
+          <AutoSizer>
+            {({height, width}) => (
+              <List
+                width={width}
+                height={height}
+                deferredMeasurementCache={cache}
+                rowHeight={cache.rowHeight}
+                rowRenderer={renderRow}
+                rowCount={999}
+                overscanRowCount={16}
+                scrollToIndex={scrollIndex}
+              />
+            )}
+          </AutoSizer>
+        </div>
       </div>
+      <AddTopic />
     </ConversationWrapper>
   )
 }
