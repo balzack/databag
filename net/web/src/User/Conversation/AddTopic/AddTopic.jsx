@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Dropdown, Input, Tooltip, Menu } from 'antd';
-import { AddTopicWrapper } from './AddTopic.styled';
+import { AddTopicWrapper, BusySpin } from './AddTopic.styled';
 import { AddCarousel } from './AddCarousel/AddCarousel';
 import { useAddTopic } from './useAddTopic.hook';
 import { BgColorsOutlined, FontColorsOutlined, FontSizeOutlined, PaperClipOutlined, SendOutlined } from '@ant-design/icons';
@@ -8,11 +8,6 @@ import { BgColorsOutlined, FontColorsOutlined, FontSizeOutlined, PaperClipOutlin
 export function AddTopic() {
 
   const { state, actions } = useAddTopic();
-
-  const onAttach = () => {
-    console.log("ADD IMAGE");
-    actions.addImage(null);
-  }
 
   const menu = (
     <Menu>
@@ -27,6 +22,10 @@ export function AddTopic() {
       </Menu.Item>
     </Menu>
   );
+
+  const onSend = () => {
+    actions.addTopic();
+  }
 
   return (
     <AddTopicWrapper>
@@ -52,7 +51,8 @@ export function AddTopic() {
             <Button icon={<BgColorsOutlined />} size="large" />
           </div>
           <div class="send">
-            <Button icon={<SendOutlined />} size="large" />
+            <Button icon={<SendOutlined />} onClick={onSend} size="large" />
+            <BusySpin spinning={state.busy} />
           </div>
         </div>
       </div>

@@ -1,3 +1,4 @@
+import { Spin } from 'antd';
 import styled from 'styled-components';
 
 export const AddTopicWrapper = styled.div`
@@ -35,7 +36,14 @@ export const AddTopicWrapper = styled.div`
     display: flex;
     flex-grow: 1;
     justify-content: flex-end;
+    align-items: center;
     padding-top: 4px;
   }
+`;
+
+export const BusySpin = styled(Spin)`
+  position: absolute;
+  margin-right: 12px;
+  x-index: 10;
 `;
 

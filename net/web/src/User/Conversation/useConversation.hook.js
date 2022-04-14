@@ -8,7 +8,7 @@ export function useConversation() {
   });
 
   const data = useLocation();
-  const { id } = useParams();
+  const { contact, channel } = useParams();
   const navigate = useNavigate();
   const app = useContext(AppContext);
 
@@ -21,12 +21,6 @@ export function useConversation() {
       navigate('/user')
     },
   };
-
-  useEffect(() => {
-    if (app?.state?.access === 'user') {
-      console.log("CONVERSATION:", id);
-    }
-  }, [app, id])
 
   return { state, actions };
 }

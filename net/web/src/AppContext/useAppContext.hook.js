@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { getContactProfile, setCardProfile, getCards, getCardImageUrl, getCardProfile, getCardDetail, getListingImageUrl, getListing, setProfileImage, setProfileData, getProfileImageUrl, getAccountStatus, setAccountSearchable, getProfile, getGroups, getAvailable, getUsername, setLogin, createAccount } from './fetchUtil';
 import { getChannels } from '../Api/getChannels';
+import { getChannel } from '../Api/getChannel';
 import { getContactChannels } from '../Api/getContactChannels';
 
 async function updateAccount(token, updateData) {
@@ -30,7 +31,22 @@ async function updateChannels(token, revision, channelMap, mergeChannels) {
   let channels = await getChannels(token, revision);
   for (let channel of channels) {
     if (channel.data) {
-      channelMap.set(channel.id, channel);
+      let cur = channelMap.get(channel.id);
+      if (cur == null) {
+        cur = { id: channel.id, data: { } }
+      }
+      if (cur.data.detailRevision != channel.data.detailRevision) {
+        if (channel.data.channelDetail != null) {
+          cur.data.channelDetail = channel.data.channelDetail;
+          cur.data.detailRevision = channel.data.detailRevision;
+        }
+        else {
+          let slot = await getChannel(token, channel.id);
+          cur.data.channelDetail = slot.data.channelDetail;
+          cur.data.detailRevision = slot.data.detailRevision;
+        }
+      }
+      channelMap.set(channel.id, cur);
     }
     else {
       channelMap.delete(channel.id);

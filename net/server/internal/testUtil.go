@@ -196,17 +196,27 @@ func ApiTestUpload(
     return
   }
 
+  if tokenType == APP_TOKENAGENT {
+    if !strings.Contains(name, "?") {
+      name += "?"
+    } else {
+      name += "&"
+    }
+    name += "agent=" + token
+  } else if tokenType == APP_TOKENCONTACT {
+    if !strings.Contains(name, "?") {
+      name += "?"
+    } else {
+      name += "&"
+    }
+    name += "contact=" + token
+  }
+
   w := httptest.NewRecorder()
   r := httptest.NewRequest(requestType, name, &data)
 
   if params != nil {
     r = mux.SetURLVars(r, *params)
-  }
-  if tokenType != "" {
-    r.Header.Add("TokenType", tokenType)
-  }
-  if token != "" {
-    SetBearerAuth(r, token)
   }
   r.Header.Set("Content-Type", writer.FormDataContentType())
   endpoint(w, r)

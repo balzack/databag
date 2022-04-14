@@ -3,7 +3,7 @@ import { checkResponse, fetchWithTimeout } from './fetchUtil';
 export async function getChannels(token, revision) {
   let param = "?agent=" + token
   if (revision != null) {
-    param += '&revision=' + revision
+    param += '&channelRevision=' + revision
   }
   let channels = await fetchWithTimeout('/content/channels' + param, { method: 'GET' });
   checkResponse(channels)

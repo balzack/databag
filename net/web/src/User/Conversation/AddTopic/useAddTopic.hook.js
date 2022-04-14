@@ -1,5 +1,7 @@
 import { useContext, useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { addChannelTopic } from '../../../Api/addChannelTopic';
+import { AppContext } from '../../../AppContext/AppContext';
 
 export function useAddTopic() {
 
@@ -7,10 +9,13 @@ export function useAddTopic() {
     assets: [],
     messageText: null,
     messageColor: null,
-    messageWeight: null,
     messageSize: null,
     backgroundColor: null,
+    busy: false,
   });
+
+  const { contact, channel } = useParams();
+  const app = useContext(AppContext);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
@@ -22,8 +27,6 @@ export function useAddTopic() {
       return { ...s };
     });
   }
-
-  const navigate = useNavigate();
 
   const actions = {
     addImage: (image) => { addAsset(image) },
@@ -46,7 +49,22 @@ export function useAddTopic() {
     setBackgroundColor: (value) => {
       updateState({ backgroundColor: value });
     },
-    addTopic: () => {},
+    addTopic: async () => {
+      if (!state.busy) {
+        updateState({ busy: true });
+        try {
+if (!contact) {
+          let message = { text: state.messageText, textColor: state.messageColor,
+              textSize: state.messageSize, backgroundColor: state.backgroundColor };
+          await addChannelTopic(app.state.token, channel, message, []);
+}
+        }
+        catch(err) {
+          window.alert(err);
+        }
+        updateState({ busy: false });
+      }
+    },
   };
 
   return { state, actions };

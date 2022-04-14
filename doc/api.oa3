@@ -2113,7 +2113,7 @@ paths:
             schema:
               $ref: '#/components/schemas/ChannelParams'
           
-  /content/channels/{channelId}:
+  /content/channels/{channelId}/detail:
     get:
       tags:
         - content
@@ -2143,6 +2143,8 @@ paths:
           description: account disabled
         '500':
           description: internal server error
+  
+/content/channels/{channelId}:
     delete:
       tags:
         - content
@@ -2869,7 +2871,7 @@ paths:
         content:
           application/json:
             schema:
-              type: boolean
+              type: string
               
                   
   /content/channels/{channelId}/topics/{topicId}/tags:
