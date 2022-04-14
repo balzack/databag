@@ -32,9 +32,8 @@ export function Conversation() {
     >
       {({ measure, registerChild }) => (
         // 'style' attribute required to position cell (within parent List)
-        <div ref={registerChild} style={style}>
-<iframe width="560" height="315" src="https://www.youtube.com/embed/XX4VTIOtkPQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
+        <div class="noselect" ref={registerChild} style={style}>
+          TEST MESSAGE!!!
         </div>
       )}
     </CellMeasurer>

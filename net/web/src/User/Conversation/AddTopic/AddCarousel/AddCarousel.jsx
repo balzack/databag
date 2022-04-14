@@ -17,7 +17,6 @@ export function AddCarousel({ state, actions }) {
   const [scrollRight, setScrollRight] = useState('hidden');
 
   const onLeft = () => {
-    console.log(itemIndex.current);
     if (itemIndex.current > 0) {
       itemIndex.current -= 1;
       setScroll();
@@ -25,7 +24,6 @@ export function AddCarousel({ state, actions }) {
   }
 
   const onRight = () => {
-    console.log(itemIndex.current);
     if(itemIndex.current + 1 < itemCount.current) {
       itemIndex.current += 1;
       setScroll();
@@ -33,7 +31,6 @@ export function AddCarousel({ state, actions }) {
   }
 
   const setScroll = () => {
-    console.log(">>", itemIndex.current);
     let pos = 0;
     for (let i = 0; i < itemIndex.current; i++) {
       pos += itemWidth.current.get(i) + 32;
@@ -69,9 +66,9 @@ export function AddCarousel({ state, actions }) {
           {({ width, height }) => {
             itemWidth.current.set(i, width);
             if (i % 2 == 0) {
-              return <div class="item"><img class="object" src={login} alt="" /></div>
+              return <div class="item noselect"><img class="object" src={login} alt="" /></div>
             }
-            return <div class="item"><img class="object" src={test} alt="" /></div>
+            return <div class="item noselect"><img class="object" src={test} alt="" /></div>
           }}
         </ReactResizeDetector>
       ));

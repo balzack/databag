@@ -25,15 +25,12 @@ export function AddTopic() {
       <Menu.Item key="2">
         <div onClick={() => actions.addAudio()}>Attach Audio</div>
       </Menu.Item>
-      <Menu.Item key="3">
-        <div onClick={() => actions.addIframe()}>Embed Link</div>
-      </Menu.Item>
     </Menu>
   );
 
   return (
     <AddTopicWrapper>
-      <div class="container">
+      <div class="container noselect">
         <AddCarousel state={state} actions={actions} />
         <div class="input">
           <Input.TextArea placeholder="Message" autoSize={{ minRows: 2, maxRows: 6 }}
@@ -42,20 +39,20 @@ export function AddTopic() {
         <div class="buttons">
           <div class="option">
             <Dropdown overlay={menu} overlayStyle={{ minWidth: 0 }} trigger={['click']} placement="topRight">
-              <Button icon={<PaperClipOutlined />} size="medium" />
+              <Button icon={<PaperClipOutlined />} size="large" />
             </Dropdown>
           </div>
           <div class="option">
-            <Button icon={<FontSizeOutlined />} size="medium" />
+            <Button icon={<FontSizeOutlined />} size="large" />
           </div>
           <div class="option">
-            <Button icon={<FontColorsOutlined />} size="medium" />
+            <Button icon={<FontColorsOutlined />} size="large" />
           </div>
           <div class="option">
-            <Button icon={<BgColorsOutlined />} size="medium" />
+            <Button icon={<BgColorsOutlined />} size="large" />
           </div>
           <div class="send">
-            <Button icon={<SendOutlined />} size="medium" />
+            <Button icon={<SendOutlined />} size="large" />
           </div>
         </div>
       </div>
