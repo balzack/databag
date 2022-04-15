@@ -156,7 +156,7 @@ export function useContact() {
 
   useEffect(() => {
     if (app?.state?.access === 'user') {
-      let card = app.actions.getCard(guid);
+      let card = app.actions.getCardByGuid(guid);
       if (card) {
         let profile = card.data.cardProfile;
         updateState({ cardId: card.id });

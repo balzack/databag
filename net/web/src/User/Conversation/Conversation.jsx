@@ -17,8 +17,8 @@ export function Conversation() {
   });
 
   useEffect(() => {
-    setScrollIndex(998);
-  })
+    setScrollIndex(state.topics.length);
+  }, [state])
 
   const renderRow = ({ index, isScrolling, key, parent, style }) => {
 
@@ -33,7 +33,7 @@ export function Conversation() {
       {({ measure, registerChild }) => (
         // 'style' attribute required to position cell (within parent List)
         <div class="noselect" ref={registerChild} style={style}>
-          TEST MESSAGE!!!
+          { state.topics[index].data.topicDetail.data }
         </div>
       )}
     </CellMeasurer>
@@ -56,7 +56,7 @@ export function Conversation() {
                 deferredMeasurementCache={cache}
                 rowHeight={cache.rowHeight}
                 rowRenderer={renderRow}
-                rowCount={999}
+                rowCount={state.topics.length}
                 overscanRowCount={16}
                 scrollToIndex={scrollIndex}
               />

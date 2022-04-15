@@ -2472,7 +2472,7 @@ paths:
             schema:
               $ref: '#/components/schemas/Subject'
           
-  /content/channels/{channelId}/topics/{topicId}:
+  /content/channels/{channelId}/topics/{topicId}/detail:
     get:
       tags:
         - content
@@ -2508,6 +2508,8 @@ paths:
           description: account disabled
         '500':
           description: internal server error
+
+  /content/channels/{channelId}/topics/{topicId}:
     delete:
       tags:
         - content

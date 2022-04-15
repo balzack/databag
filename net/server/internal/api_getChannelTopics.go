@@ -25,7 +25,7 @@ func GetChannelTopics(w http.ResponseWriter, r *http.Request) {
     }
   }
 
-  var response []*Topic
+  response := []*Topic{}
   if revisionSet {
     var slots []store.TopicSlot
     if err := store.DB.Preload("Topic").Where("channel_id = ? AND revision > ?", channelSlot.Channel.ID, revision).Find(&slots).Error; err != nil {

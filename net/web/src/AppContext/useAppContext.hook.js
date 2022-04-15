@@ -47,6 +47,8 @@ async function updateChannels(token, revision, channelMap, mergeChannels) {
           cur.data.detailRevision = slot.data.detailRevision;
         }
       }
+      cur.data.topicRevision = channel.data.topicRevision;
+      cur.revision = channel.revision;
       channelMap.set(channel.id, cur);
     }
     else {
@@ -152,6 +154,8 @@ async function updateContactChannels(token, viewRevision, channelRevision, chann
           cur.data.detailRevision = slot.data.detailRevision;
         }
       }
+      cur.data.topicRevision = channel.data.topicRevision;
+      cur.revision = channel.revision;
       channelMap.set(channel.id, cur);
     }
     else {
@@ -280,6 +284,7 @@ export function useAppContext() {
     getCardImageUrl: (cardId, revision) => getCardImageUrl(state.token, cardId, revision),
     getCardByGuid: getCardByGuid,
     getCard: (id) => cards.current.get(id),
+    getChannel: (id) => channels.current.get(id),
     getConnectedCards: getConnectedCards,
   }
 

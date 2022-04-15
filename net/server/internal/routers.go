@@ -555,7 +555,7 @@ var routes = Routes{
 	Route{
 		"GetChannelTopic",
 		strings.ToUpper("Get"),
-		"/content/channels/{channelId}/topics/{topicId}",
+		"/content/channels/{channelId}/topics/{topicId}/detail",
 		GetChannelTopic,
 	},
 
