@@ -15,7 +15,7 @@ export function useChannelItem() {
   const actions = {
     select: (item) => {
       if (item.guid) {
-        navigate(`/user/conversation/${item.guid}/${item.channel.id}`);
+        navigate(`/user/conversation/${item.cardId}/${item.channel.id}`);
       }
       else {
         navigate(`/user/conversation/${item.channel.id}`);

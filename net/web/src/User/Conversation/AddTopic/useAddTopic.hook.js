@@ -15,7 +15,7 @@ export function useAddTopic() {
     busy: false,
   });
 
-  const { contact, channel } = useParams();
+  const { card, channel } = useParams();
   const app = useContext(AppContext);
 
   const updateState = (value) => {
@@ -56,9 +56,9 @@ export function useAddTopic() {
         try {
           let message = { text: state.messageText, textColor: state.messageColor,
               textSize: state.messageSize, backgroundColor: state.backgroundColor };
-          if (contact) {
-            let card = app.actions.getCard(contact);
-            let token = contact + '.' + card?.data?.cardDetail?.token;
+          if (card) {
+            let contact = app.actions.getCard(card);
+            let token = contact?.data?.cardProfile?.guid + '.' + contact?.data?.cardDetail?.token;
             await addContactChannelTopic(token, channel, message, []);
           }
           else {

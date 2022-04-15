@@ -15,10 +15,10 @@ export function ChannelLabel({ item }) {
     
     let contacts = []; 
     if (item?.guid) {
-      setHost(actions.getCard(item.guid));
+      setHost(actions.getCardByGuid(item.guid));
       for (let member of item.channel.data.channelDetail.members) {
         if (member != state.guid) {
-          contacts.push(actions.getCard(member));
+          contacts.push(actions.getCardByGuid(member));
         }
       }
       setMembers(contacts);
@@ -26,7 +26,7 @@ export function ChannelLabel({ item }) {
     else {
       setHost(null); 
       for (let member of item.channel.data.channelDetail.members) {
-        contacts.push(actions.getCard(member));
+        contacts.push(actions.getCardByGuid(member));
       }
       setMembers(contacts);
     }

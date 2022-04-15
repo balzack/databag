@@ -26,7 +26,7 @@ function App() {
             <Route path="/user" element={ <User /> }>
               <Route path="profile" element={<Profile />} />
               <Route path="contact/:guid" element={<Contact />} />
-              <Route path="conversation/:contact/:channel" element={<Conversation />} />
+              <Route path="conversation/:card/:channel" element={<Conversation />} />
               <Route path="conversation/:channel" element={<Conversation />} />
             </Route>
           </Routes>

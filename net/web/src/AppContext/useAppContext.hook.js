@@ -228,7 +228,7 @@ export function useAppContext() {
     updateData({ channels: merged });
   }
 
-  const getCard = (guid) => {
+  const getCardByGuid = (guid) => {
     let card = null;
     cards.current.forEach((value, key, map) => {
       if(value?.data?.cardProfile?.guid == guid) {
@@ -278,7 +278,8 @@ export function useAppContext() {
     getRegistry: async (node) => getListing(node),
     getRegistryImageUrl: (server, guid, revision) => getListingImageUrl(server, guid, revision),
     getCardImageUrl: (cardId, revision) => getCardImageUrl(state.token, cardId, revision),
-    getCard: getCard,
+    getCardByGuid: getCardByGuid,
+    getCard: (id) => cards.current.get(id),
     getConnectedCards: getConnectedCards,
   }
 

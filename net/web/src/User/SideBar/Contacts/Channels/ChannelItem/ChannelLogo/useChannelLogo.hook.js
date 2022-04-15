@@ -17,7 +17,7 @@ export function useChannelLogo() {
       }
       return null;
     },
-    getCard: app?.actions?.getCard,
+    getCardByGuid: app?.actions?.getCardByGuid,
   };
 
   const updateState = (value) => {

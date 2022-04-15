@@ -11,7 +11,7 @@ export function useChannelLabel() {
   const app = useContext(AppContext);
 
   const actions = {
-    getCard: app?.actions?.getCard,
+    getCardByGuid: app?.actions?.getCardByGuid,
   };
 
   const updateState = (value) => {
