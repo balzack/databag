@@ -1,6 +1,7 @@
 import { useContext, useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { addChannelTopic } from '../../../Api/addChannelTopic';
+import { addContactChannelTopic } from '../../../Api/addContactChannelTopic';
 import { AppContext } from '../../../AppContext/AppContext';
 
 export function useAddTopic() {
@@ -53,11 +54,16 @@ export function useAddTopic() {
       if (!state.busy) {
         updateState({ busy: true });
         try {
-if (!contact) {
           let message = { text: state.messageText, textColor: state.messageColor,
               textSize: state.messageSize, backgroundColor: state.backgroundColor };
-          await addChannelTopic(app.state.token, channel, message, []);
-}
+          if (contact) {
+            let card = app.actions.getCard(contact);
+            let token = contact + '.' + card?.data?.cardDetail?.token;
+            await addContactChannelTopic(token, channel, message, []);
+          }
+          else {
+            await addChannelTopic(app.state.token, channel, message, []);
+          }
         }
         catch(err) {
           window.alert(err);

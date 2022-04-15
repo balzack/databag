@@ -3,6 +3,7 @@ import { getContactProfile, setCardProfile, getCards, getCardImageUrl, getCardPr
 import { getChannels } from '../Api/getChannels';
 import { getChannel } from '../Api/getChannel';
 import { getContactChannels } from '../Api/getContactChannels';
+import { getContactChannel } from '../Api/getContactChannel';
 
 async function updateAccount(token, updateData) {
   let status = await getAccountStatus(token);
@@ -134,10 +135,24 @@ async function updateCards(token, revision, cardMap, updateData, mergeChannels) 
 
 async function updateContactChannels(token, viewRevision, channelRevision, channelMap) {
   let channels = await getContactChannels(token, viewRevision, channelRevision);
-
   for (let channel of channels) {
     if (channel.data) {
-      channelMap.set(channel.id, channel);
+      let cur = channelMap.get(channel.id);
+      if (cur == null) {
+        cur = { id: channel.id, data: { } }
+      }
+      if (cur.data.detailRevision != channel.data.detailRevision) {
+        if (channel.data.channelDetail != null) {
+          cur.data.channelDetail = channel.data.channelDetail;
+          cur.data.detailRevision = channel.data.detailRevision;
+        }
+        else {
+          let slot = await getContactChannel(token, channel.id);
+          cur.data.channelDetail = slot.data.channelDetail;
+          cur.data.detailRevision = slot.data.detailRevision;
+        }
+      }
+      channelMap.set(channel.id, cur);
     }
     else {
       channelMap.delete(channel.id);
