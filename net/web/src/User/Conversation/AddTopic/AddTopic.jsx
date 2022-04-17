@@ -27,12 +27,21 @@ export function AddTopic() {
     actions.addTopic();
   }
 
+  const onKey = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      if (state.messageText) {
+        actions.addTopic();
+      }
+    }
+  }
+
   return (
     <AddTopicWrapper>
       <div class="container noselect">
         <AddCarousel state={state} actions={actions} />
         <div class="input">
-          <Input.TextArea placeholder="Message" autoSize={{ minRows: 2, maxRows: 6 }}
+          <Input.TextArea placeholder="Message" autoSize={{ minRows: 2, maxRows: 6 }} onKeyPress={onKey}
             onChange={(e) => actions.setMessageText(e.target.value)} value={state.messageText} />
         </div>
         <div class="buttons">

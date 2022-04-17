@@ -64,6 +64,7 @@ export function useAddTopic() {
           else {
             await addChannelTopic(app.state.token, channel, message, []);
           }
+          updateState({ messageText: null, messageColor: null, messageSize: null, backgroundColor: null });
         }
         catch(err) {
           window.alert(err);
