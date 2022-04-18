@@ -5,40 +5,11 @@ import { Button, Checkbox, Modal } from 'antd'
 import { ConversationWrapper, CloseButton, ListItem } from './Conversation.styled';
 import { AutoSizer, CellMeasurer, CellMeasurerCache, List } from 'react-virtualized';
 import { AddTopic } from './AddTopic/AddTopic';
+import { VirtualList } from './VirtualList/VirtualList';
 
 export function Conversation() {
 
-  const [ scrollIndex, setScrollIndex ] = useState(null);
   const { state, actions } = useConversation();
-
-  const cache = new CellMeasurerCache({
-    defaultHeight: 256,
-    fixedWidth: true
-  });
-
-  useEffect(() => {
-    setScrollIndex(state.topics.length);
-  }, [state])
-
-  const renderRow = ({ index, isScrolling, key, parent, style }) => {
-
-    return (
-    <CellMeasurer
-      cache={cache}
-      columnIndex={0}
-      key={key}
-      parent={parent}
-      rowIndex={index}
-    >
-      {({ measure, registerChild }) => (
-        // 'style' attribute required to position cell (within parent List)
-        <div class="noselect" ref={registerChild} style={style}>
-          { state.topics[index].data.topicDetail.data }
-        </div>
-      )}
-    </CellMeasurer>
-  );
-  }
 
   return (
     <ConversationWrapper>
@@ -47,22 +18,14 @@ export function Conversation() {
         <CloseButton type="text" class="close" size={'large'} onClick={() => actions.close()} icon={<CloseOutlined />} />
       </div>
       <div class="thread">
-        <div style={{ flex: '1 1 auto' }}>
-          <AutoSizer>
-            {({height, width}) => (
-              <List
-                width={width}
-                height={height}
-                deferredMeasurementCache={cache}
-                rowHeight={cache.rowHeight}
-                rowRenderer={renderRow}
-                rowCount={state.topics.length}
-                overscanRowCount={16}
-                scrollToIndex={scrollIndex}
-              />
-            )}
-          </AutoSizer>
-        </div>
+        <VirtualList topics={[ 
+          'OLDEST TOPIC',
+          'NEXT TOPIC',
+          'NEXT TOPIC',
+          'NEXT TOPIC',
+          'NEXT TOPIC',
+          'NEWEST TOPIC',
+        ]}/>
       </div>
       <AddTopic />
     </ConversationWrapper>

@@ -43,7 +43,6 @@ export const ConversationWrapper = styled.div`
     display: flex;
     flex-grow: 1;
     flex-direction: column;
-    padding-left: 16px;
     width: 100%;
     overflow: auto; 
   }
