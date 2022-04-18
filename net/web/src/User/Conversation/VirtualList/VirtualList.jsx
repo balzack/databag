@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { VirtualListWrapper } from './VirtualList.styled';
+import { VirtualListWrapper, VirtualItem } from './VirtualList.styled';
 import ReactResizeDetector from 'react-resize-detector';
 import { TopicItem } from './TopicItem/TopicItem';
 
@@ -8,12 +8,14 @@ export function VirtualList({ topics }) {
   const OVERSCAN = 300
   const DEFAULT_ITEM_HEIGHT = 64;
   const DEFAULT_LIST_HEIGHT = 1024;
+  const GUTTER = 8;
 
   const [ viewHeight, setViewHeight ] = useState(DEFAULT_LIST_HEIGHT); 
   const [ canvasHeight, setCanvasHeight ] = useState(DEFAULT_LIST_HEIGHT*3);
-  const [ scrolling, setScrolling ] = useState(false);
   const [ items, setItems ] = useState([]);
 
+  let unlatch = useRef(0);
+  let latch = useRef(true);
   let scrollTop = useRef(0);
   let containers = useRef([]);
   let anchor = useRef(null);
@@ -50,7 +52,11 @@ export function VirtualList({ topics }) {
 
     // set or clear latch
 
+    unlatch.current -= 1;
     scrollTop.current = e.target.scrollTop;
+    loadNextItem();
+
+console.log("UNLATCH: ", unlatch.current);
   }
 
   const loadNextItem = () => {
@@ -58,8 +64,9 @@ export function VirtualList({ topics }) {
     if (view) {
       if (view.overscan.top < OVERSCAN) {
         if (containers.current[0].index > 0) {
+          let below = containers.current[0];
           let container = {
-            top: containers.current[0].top - DEFAULT_ITEM_HEIGHT,
+            top: below.top - (DEFAULT_ITEM_HEIGHT + 2 * GUTTER),
             height: DEFAULT_ITEM_HEIGHT,
             index: containers.current[0].index - 1,
           }
@@ -72,8 +79,9 @@ console.log("ADD ITEM BEFORE", container);
       if (view.overscan.bottom < OVERSCAN) {
         if (containers.current[containers.current.length - 1].index + 1 < topics.length) {
 console.log("ADD ITEM AFTER");
+          let above = containers.current[containers.current.length - 1];
           let container = {
-            top: containers.current[containers.current.length - 1].top + containers.current[containers.current.length - 1].height,
+            top: above.top + above.height + 2 * GUTTER,
             height: DEFAULT_ITEM_HEIGHT,
             index: containers.current[containers.current.length - 1].index + 1,
           }
@@ -90,7 +98,7 @@ console.log("ADD ITEM AFTER");
 
       pos = containers.current[anchor.current].top;
       for (let i = anchor.current - 1; i >= 0; i--) {
-        pos -= containers.current[i].height;
+        pos -= (containers.current[i].height + 2 * GUTTER);
         if (containers.current[i].top != pos) {
           containers.current[i].top = pos;
           updateItem(i, getItem(containers.current[i]));
@@ -108,7 +116,7 @@ console.log("ADD ITEM AFTER");
           containers.current[i].top = pos;
           updateItem(i, getItem(containers.current[i]));
         }
-        pos += containers.current[i].height;
+        pos += containers.current[i].height + 2 * GUTTER;
       }
 
       if (pos > canvasHeight) {
@@ -117,12 +125,16 @@ console.log("ADD ITEM AFTER");
       }
 
       let view = getPlacement();
-      if (!scrolling) {
+      if (latch.current) {
         if (view.position.height < viewHeight) {
+          unlatch.current += 1;
           listRef.current.scrollTo({ top: view.position.top, left: 0, behavior: 'smooth' });
+          scrollTop.current = view.position.top;
         }
         else {
+          unlatch.current += 1;
           listRef.current.scrollTo({ top: view.position.bottom - viewHeight, left: 0, behavior: 'smooth' });
+          scrollTop.current = view.position.bottom - viewHeight;
         }
       }
     }
@@ -137,6 +149,7 @@ console.log("ADD ITEM AFTER");
       let view = getPlacement();
       if (!view) {
         let pos = canvasHeight / 2;
+        unlatch.current += 1;
         listRef.current.scrollTo({ top: pos, left: 0 });
         scrollTop.current = pos;
 
@@ -150,6 +163,7 @@ console.log("ADD ITEM AFTER");
         containers.current.push(container);
         addItemBottom(getItem(container));
 
+        unlatch.current += 1;
         listRef.current.scrollTo({ top: container.top, left: 0, behavior: 'smooth' });
       }
       else {
@@ -164,11 +178,11 @@ console.log("ADD ITEM AFTER");
   }
 
   const getItem = (container) => {
-
     return (
-      <div style={{ position: 'absolute', top: container.top }}>
-      <TopicItem topic={topics[container.index]} onHeight={(height) => onTopicHeight(container, height)} />
-      </div>
+      <VirtualItem style={{ top: container.top }}>
+        <TopicItem topic={topics[container.index]} padding={GUTTER}
+            onHeight={(height) => onTopicHeight(container, height)} />
+      </VirtualItem>
     )
   }
 
@@ -177,7 +191,7 @@ console.log("ADD ITEM AFTER");
       return null;
     }
     let top = containers.current[0].top;
-    let bottom = containers.current[containers.current.length-1].top + containers.current[containers.current.length-1].height;
+    let bottom = containers.current[containers.current.length-1].top + containers.current[containers.current.length-1].height + 2 * GUTTER;
     let overTop = scrollTop.current - top;
     let overBottom = bottom - (scrollTop.current + viewHeight);
     return { 

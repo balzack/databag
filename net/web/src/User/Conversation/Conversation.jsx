@@ -11,6 +11,10 @@ export function Conversation() {
 
   const { state, actions } = useConversation();
 
+  useEffect(() => {
+    console.log(state.topics);
+  }, [state]);
+
   return (
     <ConversationWrapper>
       <div class="header">
@@ -18,14 +22,7 @@ export function Conversation() {
         <CloseButton type="text" class="close" size={'large'} onClick={() => actions.close()} icon={<CloseOutlined />} />
       </div>
       <div class="thread">
-        <VirtualList topics={[ 
-          'OLDEST TOPIC',
-          'NEXT TOPIC',
-          'NEXT TOPIC',
-          'NEXT TOPIC',
-          'NEXT TOPIC',
-          'NEWEST TOPIC',
-        ]}/>
+        <VirtualList topics={state.topics}/>
       </div>
       <AddTopic />
     </ConversationWrapper>

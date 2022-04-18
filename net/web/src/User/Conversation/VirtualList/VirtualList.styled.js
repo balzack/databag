@@ -18,4 +18,8 @@ export const VirtualListWrapper = styled.div`
   }
 `;
 
-
+export const VirtualItem = styled.div`
+  position: absolute;
+  width: 100%;
+  overflow: hidden;
+`;

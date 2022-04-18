@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { TopicItemWrapper } from './TopicItem.styled';
 import ReactResizeDetector from 'react-resize-detector';
 
-export function TopicItem({ topic, onHeight }) {
+export function TopicItem({ topic, padding, onHeight }) {
 
   return (
       <ReactResizeDetector handleHeight={true}>
@@ -11,8 +11,8 @@ export function TopicItem({ topic, onHeight }) {
             onHeight(height);
           }
           return (
-            <TopicItemWrapper>
-              <div>topic</div>
+            <TopicItemWrapper style={{ paddingTop: padding }}>
+              <div>{ JSON.stringify(topic) }</div>
             </TopicItemWrapper>
           )
         }}
