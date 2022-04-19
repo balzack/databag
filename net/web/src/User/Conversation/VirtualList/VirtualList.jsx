@@ -13,8 +13,8 @@ export function VirtualList({ topics }) {
   const [ viewHeight, setViewHeight ] = useState(DEFAULT_LIST_HEIGHT); 
   const [ canvasHeight, setCanvasHeight ] = useState(DEFAULT_LIST_HEIGHT*3);
   const [ items, setItems ] = useState([]);
+  const [ scroll, setScroll ] = useState('hidden');
 
-  let unlatch = useRef(0);
   let latch = useRef(true);
   let scrollTop = useRef(0);
   let containers = useRef([]);
@@ -44,6 +44,15 @@ export function VirtualList({ topics }) {
     setTopics();
   }, [topics]);
 
+  const onScrollWheel = (e) => {
+    if (e.deltaY < 0 && latch.current) {
+      scrollTop.current -= 32;
+      listRef.current.scrollTo({ top: scrollTop.current, left: 0, behavior: 'smooth' });
+      setScroll('auto');
+      latch.current = false;
+    }
+  }
+
   const onScrollView = (e) => {
 
     // add or remove from overscan
@@ -52,11 +61,19 @@ export function VirtualList({ topics }) {
 
     // set or clear latch
 
-    unlatch.current -= 1;
     scrollTop.current = e.target.scrollTop;
-    loadNextItem();
 
-console.log("UNLATCH: ", unlatch.current);
+    if (!latch.current) {
+      let view = getPlacement();
+      if (view?.overscan?.bottom <= 0) {
+        setScroll('hidden');
+        latch.current = true;
+        alignItems();
+        listRef.current.scrollTo({ top: scrollTop.current, left: 0 });
+      }
+    }
+
+    loadNextItem();
   }
 
   const loadNextItem = () => {
@@ -127,15 +144,18 @@ console.log("ADD ITEM AFTER");
       let view = getPlacement();
       if (latch.current) {
         if (view.position.height < viewHeight) {
-          unlatch.current += 1;
-          listRef.current.scrollTo({ top: view.position.top, left: 0, behavior: 'smooth' });
-          scrollTop.current = view.position.top;
+          if (scrollTop.current != view.position.top) {
+            listRef.current.scrollTo({ top: view.position.top, left: 0, behavior: 'smooth' });
+            scrollTop.current = view.position.top;
+          }
         }
         else {
-          unlatch.current += 1;
-          listRef.current.scrollTo({ top: view.position.bottom - viewHeight, left: 0, behavior: 'smooth' });
-          scrollTop.current = view.position.bottom - viewHeight;
+          if (scrollTop.current != view.position.bottom - viewHeight) {
+            listRef.current.scrollTo({ top: view.position.bottom - viewHeight, left: 0, behavior: 'smooth' });
+            scrollTop.current = view.position.bottom - viewHeight;
+          }
         }
+console.log("ALIGN: ", scrollTop.current)
       }
     }
 
@@ -149,7 +169,6 @@ console.log("ADD ITEM AFTER");
       let view = getPlacement();
       if (!view) {
         let pos = canvasHeight / 2;
-        unlatch.current += 1;
         listRef.current.scrollTo({ top: pos, left: 0 });
         scrollTop.current = pos;
 
@@ -163,7 +182,6 @@ console.log("ADD ITEM AFTER");
         containers.current.push(container);
         addItemBottom(getItem(container));
 
-        unlatch.current += 1;
         listRef.current.scrollTo({ top: container.top, left: 0, behavior: 'smooth' });
       }
       else {
@@ -205,8 +223,8 @@ console.log("ADD ITEM AFTER");
       {({ height }) => {
         setViewHeight(height);
         return (
-          <VirtualListWrapper onScroll={onScrollView}>
-            <div class="rollview" ref={listRef} onScroll={onScrollView}>
+          <VirtualListWrapper onScroll={onScrollView} onWheel={onScrollWheel}>
+            <div class="rollview" style={{ overflowY: scroll }} ref={listRef} onScroll={onScrollView}>
               <div class="roll" style={{ height: canvasHeight }}>
                 { items }
               </div>

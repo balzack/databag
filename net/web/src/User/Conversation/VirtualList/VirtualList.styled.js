@@ -7,9 +7,16 @@ export const VirtualListWrapper = styled.div`
   overflow: hidden;
 
   .rollview {
-    overflow-y: auto;
     width: 100%;
     height: 100%;
+
+    /* hide scrollbar for IE, Edge and Firefox */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .rollview::-webkit-scrollbar {
+    display: none;
   }
 
   .roll {

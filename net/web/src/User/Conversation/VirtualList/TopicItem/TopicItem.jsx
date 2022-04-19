@@ -1,8 +1,19 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { TopicItemWrapper } from './TopicItem.styled';
 import ReactResizeDetector from 'react-resize-detector';
 
 export function TopicItem({ topic, padding, onHeight }) {
+
+  const [ text, setText ] = useState(null);
+
+  useEffect(() => {
+    try {
+      setText(JSON.parse(topic.data.topicDetail.data).text);
+    }
+    catch(err) {
+      console.log("invalid topic", topic);
+    }
+  }, [topic]);
 
   return (
       <ReactResizeDetector handleHeight={true}>
@@ -12,7 +23,7 @@ export function TopicItem({ topic, padding, onHeight }) {
           }
           return (
             <TopicItemWrapper style={{ paddingTop: padding }}>
-              <div>{ JSON.stringify(topic) }</div>
+              <div>{ text }</div>
             </TopicItemWrapper>
           )
         }}
