@@ -3,11 +3,15 @@ import { VirtualListWrapper, VirtualItem } from './VirtualList.styled';
 import ReactResizeDetector from 'react-resize-detector';
 import { TopicItem } from './TopicItem/TopicItem';
 
+// TODO: drop items past overscan
+// TODO: sync topic updates
+
 export function VirtualList({ topics }) {
 
-  const OVERSCAN = 300
+  const REDZONE = 256;
+  const OVERSCAN = 256;
   const DEFAULT_ITEM_HEIGHT = 64;
-  const DEFAULT_LIST_HEIGHT = 1024;
+  const DEFAULT_LIST_HEIGHT = 4096;
   const GUTTER = 8;
 
   const [ viewHeight, setViewHeight ] = useState(DEFAULT_LIST_HEIGHT); 
@@ -51,16 +55,14 @@ export function VirtualList({ topics }) {
 
   const onScrollView = (e) => {
 
-    // add or remove from overscan
-
-    // clip to top or bottom
-
-    // set or clear latch
-
     scrollTop.current = e.target.scrollTop;
 
     if (!latch.current) {
       let view = getPlacement();
+      if (view?.overscan?.top <= 0) {
+        scrollTop.current = containers.current[0].top;
+        listRef.current.scrollTo({ top: scrollTop.current, left: 0 });
+      }
       if (view?.overscan?.bottom <= 0) {
         setScroll('hidden');
         latch.current = true;
@@ -119,9 +121,14 @@ export function VirtualList({ topics }) {
           }
         }
 
-        if (pos < 0) {
-          // TODO reset canvas
-          console.log("ALERT: reset convas");
+        if (pos < REDZONE) {
+          let shift = canvasHeight / 2;
+          for (let i = 0; i < containers.current.length; i++) {
+            containers.current[i].top += shift;
+            updateItem(containers.current[i].id, getItem(containers.current[i]));
+          }
+          scrollTop.current += shift;
+          listRef.current.scrollTo({ top: scrollTop.current, left: 0 });
         }
       }
       else {
@@ -134,9 +141,14 @@ export function VirtualList({ topics }) {
           pos += containers.current[i].height + 2 * GUTTER;
         }
 
-        if (pos > canvasHeight) {
-          // TODO reset canvas
-          console.log("ALERT: reset canvas");
+        if (pos + viewHeight + REDZONE > canvasHeight) {
+          let shift = canvasHeight / 2;
+          for (let i = 0; i < containers.current.length; i++) {
+            containers.current[i].top -= shift;
+            updateItem(containers.current[i].id, getItem(containers.current[i]));
+          }
+          scrollTop.current -= shift;
+          listRef.current.scrollTo({ top: scrollTop.current, left: 0 });
         }
       }
 
