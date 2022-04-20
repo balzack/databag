@@ -18,7 +18,7 @@ export function VirtualList({ topics }) {
   let latch = useRef(true);
   let scrollTop = useRef(0);
   let containers = useRef([]);
-  let anchor = useRef(null);
+  let anchorBottom = useRef(true);
   let listRef = useRef();
 
   const addItemTop = (item) => {
@@ -87,10 +87,10 @@ export function VirtualList({ topics }) {
             height: DEFAULT_ITEM_HEIGHT,
             index: containers.current[0].index - 1,
           }
-          anchor.current += 1;
           containers.current.unshift(container);
 console.log("ADD ITEM BEFORE", container);
           addItemTop(getItem(container))
+          anchorBottom.current = true;
         }
       }
       if (view.overscan.bottom < OVERSCAN) {
@@ -104,6 +104,7 @@ console.log("ADD ITEM AFTER");
           }
           containers.current.push(container);
           addItemBottom(getItem(container))
+          anchorBottom.current = false;
         }
       }
     }
@@ -111,34 +112,36 @@ console.log("ADD ITEM AFTER");
 
   const alignItems = () => {
     if (containers.current.length > 0) {
-      let pos = null;
 
-      pos = containers.current[anchor.current].top;
-      for (let i = anchor.current - 1; i >= 0; i--) {
-        pos -= (containers.current[i].height + 2 * GUTTER);
-        if (containers.current[i].top != pos) {
-          containers.current[i].top = pos;
-          updateItem(i, getItem(containers.current[i]));
+      if (anchorBottom.current) {
+        let pos = containers.current[containers.current.length - 1].top;
+        for (let i = containers.current.length - 2; i >= 0; i--) {
+          pos -= (containers.current[i].height + 2 * GUTTER);
+          if (containers.current[i].top != pos) {
+            containers.current[i].top = pos;
+            updateItem(i, getItem(containers.current[i]));
+          }
+        }
+
+        if (pos < 0) {
+          // TODO reset canvas
+          console.log("ALERT: reset convas");
         }
       }
-
-      if (pos < 0) {
-        // TODO reset canvas
-        console.log("ALERT: reset convas");
-      }
-
-      pos = containers.current[anchor.current].top + containers.current[anchor.current].height;
-      for (let i = anchor.current + 1; i < containers.current.length; i++) {
-        if (containers.current[i].top != pos) {
-          containers.current[i].top = pos;
-          updateItem(i, getItem(containers.current[i]));
+      else {
+        let pos = containers.current[0].top + containers.current[0].height;
+        for (let i = 1; i < containers.current.length; i++) {
+          if (containers.current[i].top != pos) {
+            containers.current[i].top = pos;
+            updateItem(i, getItem(containers.current[i]));
+          }
+          pos += containers.current[i].height + 2 * GUTTER;
         }
-        pos += containers.current[i].height + 2 * GUTTER;
-      }
 
-      if (pos > canvasHeight) {
-        // TODO reset canvas
-        console.log("ALERT: reset canvas");
+        if (pos > canvasHeight) {
+          // TODO reset canvas
+          console.log("ALERT: reset canvas");
+        }
       }
 
       let view = getPlacement();
@@ -155,7 +158,6 @@ console.log("ADD ITEM AFTER");
             scrollTop.current = view.position.bottom - viewHeight;
           }
         }
-console.log("ALIGN: ", scrollTop.current)
       }
     }
 
@@ -178,7 +180,7 @@ console.log("ALIGN: ", scrollTop.current)
           index: topics.length - 1,
         }
 
-        anchor.current = 0;
+        anchorBottom.current = true;
         containers.current.push(container);
         addItemBottom(getItem(container));
 
