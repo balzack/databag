@@ -12,7 +12,7 @@ export function VirtualList({ topics }) {
 
   const [ viewHeight, setViewHeight ] = useState(DEFAULT_LIST_HEIGHT); 
   const [ canvasHeight, setCanvasHeight ] = useState(DEFAULT_LIST_HEIGHT*3);
-  const [ items, setItems ] = useState([]);
+  const [ items, setItems ] = useState(new Map());
   const [ scroll, setScroll ] = useState('hidden');
 
   let latch = useRef(true);
@@ -21,16 +21,12 @@ export function VirtualList({ topics }) {
   let anchorBottom = useRef(true);
   let listRef = useRef();
 
-  const addItemTop = (item) => {
-    setItems((i) => { i.unshift(item); return [...i] });
+  const addItem = (id, item) => {
+    setItems((m) => { m.set(id, item); return new Map(m); })
   }
 
-  const addItemBottom = (item) => {
-    setItems((i) => { i.push(item); return [...i] });
-  }
-
-  const updateItem = (idx, item) => {
-    setItems((i) => { i[idx] = item; return [...i] });
+  const updateItem = (id, item) => {
+    setItems((m) => { m.set(id, item); return new Map(m); })
   }
 
   useEffect(() => {
@@ -86,24 +82,24 @@ export function VirtualList({ topics }) {
             top: below.top - (DEFAULT_ITEM_HEIGHT + 2 * GUTTER),
             height: DEFAULT_ITEM_HEIGHT,
             index: containers.current[0].index - 1,
+            id: topics[containers.current[0].index - 1].id,
           }
           containers.current.unshift(container);
-console.log("ADD ITEM BEFORE", container);
-          addItemTop(getItem(container))
+          addItem(container.id, getItem(container))
           anchorBottom.current = true;
         }
       }
       if (view.overscan.bottom < OVERSCAN) {
         if (containers.current[containers.current.length - 1].index + 1 < topics.length) {
-console.log("ADD ITEM AFTER");
           let above = containers.current[containers.current.length - 1];
           let container = {
             top: above.top + above.height + 2 * GUTTER,
             height: DEFAULT_ITEM_HEIGHT,
             index: containers.current[containers.current.length - 1].index + 1,
+            id: topics[containers.current[containers.current.length - 1].index + 1].id,
           }
           containers.current.push(container);
-          addItemBottom(getItem(container))
+          addItem(container.id, getItem(container))
           anchorBottom.current = false;
         }
       }
@@ -119,7 +115,7 @@ console.log("ADD ITEM AFTER");
           pos -= (containers.current[i].height + 2 * GUTTER);
           if (containers.current[i].top != pos) {
             containers.current[i].top = pos;
-            updateItem(i, getItem(containers.current[i]));
+            updateItem(containers.current[i].id, getItem(containers.current[i]));
           }
         }
 
@@ -133,7 +129,7 @@ console.log("ADD ITEM AFTER");
         for (let i = 1; i < containers.current.length; i++) {
           if (containers.current[i].top != pos) {
             containers.current[i].top = pos;
-            updateItem(i, getItem(containers.current[i]));
+            updateItem(containers.current[i].id, getItem(containers.current[i]));
           }
           pos += containers.current[i].height + 2 * GUTTER;
         }
@@ -178,11 +174,12 @@ console.log("ADD ITEM AFTER");
           top: pos - DEFAULT_ITEM_HEIGHT,
           height: DEFAULT_ITEM_HEIGHT,
           index: topics.length - 1,
+          id: topics[topics.length - 1].id,
         }
 
         anchorBottom.current = true;
         containers.current.push(container);
-        addItemBottom(getItem(container));
+        addItem(container.id, getItem(container));
 
         listRef.current.scrollTo({ top: container.top, left: 0, behavior: 'smooth' });
       }
@@ -228,7 +225,7 @@ console.log("ADD ITEM AFTER");
           <VirtualListWrapper onScroll={onScrollView} onWheel={onScrollWheel}>
             <div class="rollview" style={{ overflowY: scroll }} ref={listRef} onScroll={onScrollView}>
               <div class="roll" style={{ height: canvasHeight }}>
-                { items }
+                { items.values() }
               </div>
             </div>
           </VirtualListWrapper>

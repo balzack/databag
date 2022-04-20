@@ -11,10 +11,6 @@ export function Conversation() {
 
   const { state, actions } = useConversation();
 
-  useEffect(() => {
-    console.log(state.topics);
-  }, [state]);
-
   return (
     <ConversationWrapper>
       <div class="header">
