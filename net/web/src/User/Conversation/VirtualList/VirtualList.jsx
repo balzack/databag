@@ -35,9 +35,18 @@ export function VirtualList({ topics }) {
     setItems((m) => { m.delete(id); return new Map(m); })
   }
 
+  const growCanvasHeight = (val) => {
+    setCanvasHeight((h) => {
+      if (val > h) {
+        return val;
+      }
+      return h;
+    });
+  }
+
   useEffect(() => {
     if (viewHeight * 3 > canvasHeight) {
-      setCanvasHeight(viewHeight*3);
+      growCanvasHeight(viewHeight*3);
     }
     setTopics();
   }, [viewHeight]);
@@ -147,6 +156,11 @@ export function VirtualList({ topics }) {
           }
           scrollTop.current += shift;
           listRef.current.scrollTo({ top: scrollTop.current, left: 0 });
+
+          let view = getPlacement();
+          if (view.position.bottom + REDZONE > canvasHeight) {
+            growCanvasHeight(view.position.bottom + REDZONE);
+          }
         }
       }
       else {
@@ -159,14 +173,20 @@ export function VirtualList({ topics }) {
           pos += containers.current[i].height + 2 * GUTTER;
         }
 
-        if (pos + viewHeight + REDZONE > canvasHeight) {
+        if (pos + REDZONE > canvasHeight) {
           let shift = canvasHeight / 2;
-          for (let i = 0; i < containers.current.length; i++) {
-            containers.current[i].top -= shift;
-            updateItem(containers.current[i].id, getItem(containers.current[i]));
+          let view = getPlacement();
+          if (view.position.top < shift + REDZONE) {
+            growCanvasHeight(view.position.bottom + REDZONE);
           }
-          scrollTop.current -= shift;
-          listRef.current.scrollTo({ top: scrollTop.current, left: 0 });
+          else {
+            for (let i = 0; i < containers.current.length; i++) {
+              containers.current[i].top -= shift;
+              updateItem(containers.current[i].id, getItem(containers.current[i]));
+            }
+            scrollTop.current -= shift;
+            listRef.current.scrollTo({ top: scrollTop.current, left: 0 });
+          }
         }
       }
 
