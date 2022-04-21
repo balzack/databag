@@ -3,13 +3,11 @@ import { VirtualListWrapper, VirtualItem } from './VirtualList.styled';
 import ReactResizeDetector from 'react-resize-detector';
 import { TopicItem } from './TopicItem/TopicItem';
 
-// TODO: drop items past overscan
-// TODO: sync topic updates
-
 export function VirtualList({ topics }) {
 
-  const REDZONE = 256;
-  const OVERSCAN = 256;
+  const REDZONE = 256; // recenter on canvas if in canvas edge redzone
+  const HOLDZONE = 512; // drop items outside of holdzone of view
+  const OVERSCAN = 256; // add items in overscan of view
   const DEFAULT_ITEM_HEIGHT = 64;
   const DEFAULT_LIST_HEIGHT = 4096;
   const GUTTER = 8;
@@ -31,6 +29,10 @@ export function VirtualList({ topics }) {
 
   const updateItem = (id, item) => {
     setItems((m) => { m.set(id, item); return new Map(m); })
+  }
+
+  const removeItem = (id) => {
+    setItems((m) => { m.delete(id); return new Map(m); })
   }
 
   useEffect(() => {
@@ -85,10 +87,18 @@ export function VirtualList({ topics }) {
             height: DEFAULT_ITEM_HEIGHT,
             index: containers.current[0].index - 1,
             id: topics[containers.current[0].index - 1].id,
+            revision: topics[containers.current[0].index - 1].revision,
           }
           containers.current.unshift(container);
           addItem(container.id, getItem(container))
           anchorBottom.current = true;
+
+          if (containers.current[containers.current.length - 1].top > scrollTop.current + viewHeight + HOLDZONE) {
+            removeItem(containers.current[containers.current.length - 1].id);
+            containers.current.pop();
+          }
+          
+          alignItems();
         }
       }
       if (view.overscan.bottom < OVERSCAN) {
@@ -99,10 +109,18 @@ export function VirtualList({ topics }) {
             height: DEFAULT_ITEM_HEIGHT,
             index: containers.current[containers.current.length - 1].index + 1,
             id: topics[containers.current[containers.current.length - 1].index + 1].id,
+            revision: topics[containers.current[containers.current.length - 1].index + 1].revision,
           }
           containers.current.push(container);
           addItem(container.id, getItem(container))
           anchorBottom.current = false;
+
+          if (containers.current[0].top + containers.current[0].height + 2 * GUTTER < scrollTop.current) {
+            removeItem(containers.current[0].id);
+            containers.current.shift();
+          }
+
+          alignItems();
         }
       }
     }
@@ -173,8 +191,42 @@ export function VirtualList({ topics }) {
   }
 
   const setTopics = () => {
-    // validate items
 
+    // update or removed any affected items
+    if (anchorBottom.current) {
+      for (let i = containers.current.length - 1; i >= 0; i--) {
+        let container = containers.current[i];
+        if (topics.length < container.index || topics[container.index].id != container.id) {
+          for (let j = 0; j <= i; j++) {
+            let shifted = containers.current.shift();
+            removeItem(shifted.id);
+          }
+          break;
+        }
+        else if (topics[container.index].revision != container.revision) {
+          updateItem(container.id, getItem(containers.current[i]));
+          containers.revision = topics[container.index].revision; 
+        }
+      }
+    }
+    else {
+      for (let i = 0; i < containers.current.length; i++) {
+        let container = containers.current[i];
+        if (topics.length < container.index || topics[container.index].id != container.id) {
+          for (let j = i; j < containers.current.length; j++) {
+            let popped = containers.current.pop();
+            removeItem(popped.id);
+          }
+          break;
+        }
+        else if (topics[container.index].revision != container.revision) {
+          updateItem(container.id, getItem(containers.current[i]));
+          containers.revision = topics[container.index].revision; 
+        }
+      }
+    }
+
+    // place first item
     if (topics.length > 0 && canvasHeight > 0) {
       let view = getPlacement();
       if (!view) {
@@ -187,6 +239,7 @@ export function VirtualList({ topics }) {
           height: DEFAULT_ITEM_HEIGHT,
           index: topics.length - 1,
           id: topics[topics.length - 1].id,
+          revision: topics[topics.length - 1].revision,
         }
 
         anchorBottom.current = true;
