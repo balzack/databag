@@ -1,20 +1,19 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { VirtualListWrapper, VirtualItem } from './VirtualList.styled';
 import ReactResizeDetector from 'react-resize-detector';
-import { TopicItem } from './TopicItem/TopicItem';
 
-export function VirtualList({ topics }) {
+export function VirtualList({ items, itemRenderer }) {
 
   const REDZONE = 256; // recenter on canvas if in canvas edge redzone
-  const HOLDZONE = 512; // drop items outside of holdzone of view
-  const OVERSCAN = 256; // add items in overscan of view
+  const HOLDZONE = 512; // drop slots outside of holdzone of view
+  const OVERSCAN = 256; // add slots in overscan of view
   const DEFAULT_ITEM_HEIGHT = 64;
   const DEFAULT_LIST_HEIGHT = 4096;
   const GUTTER = 8;
 
   const [ viewHeight, setViewHeight ] = useState(DEFAULT_LIST_HEIGHT); 
   const [ canvasHeight, setCanvasHeight ] = useState(DEFAULT_LIST_HEIGHT*3);
-  const [ items, setItems ] = useState(new Map());
+  const [ slots, setSlots ] = useState(new Map());
   const [ scroll, setScroll ] = useState('hidden');
 
   let latch = useRef(true);
@@ -23,16 +22,16 @@ export function VirtualList({ topics }) {
   let anchorBottom = useRef(true);
   let listRef = useRef();
 
-  const addItem = (id, item) => {
-    setItems((m) => { m.set(id, item); return new Map(m); })
+  const addSlot = (id, slot) => {
+    setSlots((m) => { m.set(id, slot); return new Map(m); })
   }
 
-  const updateItem = (id, item) => {
-    setItems((m) => { m.set(id, item); return new Map(m); })
+  const updateSlot = (id, slot) => {
+    setSlots((m) => { m.set(id, slot); return new Map(m); })
   }
 
-  const removeItem = (id) => {
-    setItems((m) => { m.delete(id); return new Map(m); })
+  const removeSlot = (id) => {
+    setSlots((m) => { m.delete(id); return new Map(m); })
   }
 
   const growCanvasHeight = (val) => {
@@ -48,12 +47,12 @@ export function VirtualList({ topics }) {
     if (viewHeight * 3 > canvasHeight) {
       growCanvasHeight(viewHeight*3);
     }
-    setTopics();
+    setItems();
   }, [viewHeight]);
 
   useEffect(() => {
-    setTopics();
-  }, [topics]);
+    setItems();
+  }, [items]);
 
   const onScrollWheel = (e) => {
     if (e.deltaY < 0 && latch.current) {
@@ -77,15 +76,15 @@ export function VirtualList({ topics }) {
       if (view?.overscan?.bottom <= 0) {
         setScroll('hidden');
         latch.current = true;
-        alignItems();
+        alignSlots();
         listRef.current.scrollTo({ top: scrollTop.current, left: 0 });
       }
     }
 
-    loadNextItem();
+    loadNextSlot();
   }
 
-  const loadNextItem = () => {
+  const loadNextSlot = () => {
     let view = getPlacement();
     if (view) {
       if (view.overscan.top < OVERSCAN) {
@@ -95,47 +94,47 @@ export function VirtualList({ topics }) {
             top: below.top - (DEFAULT_ITEM_HEIGHT + 2 * GUTTER),
             height: DEFAULT_ITEM_HEIGHT,
             index: containers.current[0].index - 1,
-            id: topics[containers.current[0].index - 1].id,
-            revision: topics[containers.current[0].index - 1].revision,
+            id: items[containers.current[0].index - 1].id,
+            revision: items[containers.current[0].index - 1].revision,
           }
           containers.current.unshift(container);
-          addItem(container.id, getItem(container))
+          addSlot(container.id, getSlot(container))
           anchorBottom.current = true;
 
           if (containers.current[containers.current.length - 1].top > scrollTop.current + viewHeight + HOLDZONE) {
-            removeItem(containers.current[containers.current.length - 1].id);
+            removeSlot(containers.current[containers.current.length - 1].id);
             containers.current.pop();
           }
           
-          alignItems();
+          alignSlots();
         }
       }
       if (view.overscan.bottom < OVERSCAN) {
-        if (containers.current[containers.current.length - 1].index + 1 < topics.length) {
+        if (containers.current[containers.current.length - 1].index + 1 < items.length) {
           let above = containers.current[containers.current.length - 1];
           let container = {
             top: above.top + above.height + 2 * GUTTER,
             height: DEFAULT_ITEM_HEIGHT,
             index: containers.current[containers.current.length - 1].index + 1,
-            id: topics[containers.current[containers.current.length - 1].index + 1].id,
-            revision: topics[containers.current[containers.current.length - 1].index + 1].revision,
+            id: items[containers.current[containers.current.length - 1].index + 1].id,
+            revision: items[containers.current[containers.current.length - 1].index + 1].revision,
           }
           containers.current.push(container);
-          addItem(container.id, getItem(container))
+          addSlot(container.id, getSlot(container))
           anchorBottom.current = false;
 
           if (containers.current[0].top + containers.current[0].height + 2 * GUTTER < scrollTop.current) {
-            removeItem(containers.current[0].id);
+            removeSlot(containers.current[0].id);
             containers.current.shift();
           }
 
-          alignItems();
+          alignSlots();
         }
       }
     }
   }
 
-  const alignItems = () => {
+  const alignSlots = () => {
     if (containers.current.length > 0) {
 
       if (anchorBottom.current) {
@@ -144,7 +143,7 @@ export function VirtualList({ topics }) {
           pos -= (containers.current[i].height + 2 * GUTTER);
           if (containers.current[i].top != pos) {
             containers.current[i].top = pos;
-            updateItem(containers.current[i].id, getItem(containers.current[i]));
+            updateSlot(containers.current[i].id, getSlot(containers.current[i]));
           }
         }
 
@@ -152,7 +151,7 @@ export function VirtualList({ topics }) {
           let shift = canvasHeight / 2;
           for (let i = 0; i < containers.current.length; i++) {
             containers.current[i].top += shift;
-            updateItem(containers.current[i].id, getItem(containers.current[i]));
+            updateSlot(containers.current[i].id, getSlot(containers.current[i]));
           }
           scrollTop.current += shift;
           listRef.current.scrollTo({ top: scrollTop.current, left: 0 });
@@ -168,7 +167,7 @@ export function VirtualList({ topics }) {
         for (let i = 1; i < containers.current.length; i++) {
           if (containers.current[i].top != pos) {
             containers.current[i].top = pos;
-            updateItem(containers.current[i].id, getItem(containers.current[i]));
+            updateSlot(containers.current[i].id, getSlot(containers.current[i]));
           }
           pos += containers.current[i].height + 2 * GUTTER;
         }
@@ -182,7 +181,7 @@ export function VirtualList({ topics }) {
           else {
             for (let i = 0; i < containers.current.length; i++) {
               containers.current[i].top -= shift;
-              updateItem(containers.current[i].id, getItem(containers.current[i]));
+              updateSlot(containers.current[i].id, getSlot(containers.current[i]));
             }
             scrollTop.current -= shift;
             listRef.current.scrollTo({ top: scrollTop.current, left: 0 });
@@ -207,47 +206,47 @@ export function VirtualList({ topics }) {
       }
     }
 
-    loadNextItem();
+    loadNextSlot();
   }
 
-  const setTopics = () => {
+  const setItems = () => {
 
-    // update or removed any affected items
+    // update or removed any affected slots
     if (anchorBottom.current) {
       for (let i = containers.current.length - 1; i >= 0; i--) {
         let container = containers.current[i];
-        if (topics.length < container.index || topics[container.index].id != container.id) {
+        if (items.length < container.index || items[container.index].id != container.id) {
           for (let j = 0; j <= i; j++) {
             let shifted = containers.current.shift();
-            removeItem(shifted.id);
+            removeSlot(shifted.id);
           }
           break;
         }
-        else if (topics[container.index].revision != container.revision) {
-          updateItem(container.id, getItem(containers.current[i]));
-          containers.revision = topics[container.index].revision; 
+        else if (items[container.index].revision != container.revision) {
+          updateSlot(container.id, getSlot(containers.current[i]));
+          containers.revision = items[container.index].revision; 
         }
       }
     }
     else {
       for (let i = 0; i < containers.current.length; i++) {
         let container = containers.current[i];
-        if (topics.length < container.index || topics[container.index].id != container.id) {
+        if (items.length < container.index || items[container.index].id != container.id) {
           for (let j = i; j < containers.current.length; j++) {
             let popped = containers.current.pop();
-            removeItem(popped.id);
+            removeSlot(popped.id);
           }
           break;
         }
-        else if (topics[container.index].revision != container.revision) {
-          updateItem(container.id, getItem(containers.current[i]));
-          containers.revision = topics[container.index].revision; 
+        else if (items[container.index].revision != container.revision) {
+          updateSlot(container.id, getSlot(containers.current[i]));
+          containers.revision = items[container.index].revision; 
         }
       }
     }
 
-    // place first item
-    if (topics.length > 0 && canvasHeight > 0) {
+    // place first slot
+    if (items.length > 0 && canvasHeight > 0) {
       let view = getPlacement();
       if (!view) {
         let pos = canvasHeight / 2;
@@ -257,33 +256,39 @@ export function VirtualList({ topics }) {
         let container = {
           top: pos - DEFAULT_ITEM_HEIGHT,
           height: DEFAULT_ITEM_HEIGHT,
-          index: topics.length - 1,
-          id: topics[topics.length - 1].id,
-          revision: topics[topics.length - 1].revision,
+          index: items.length - 1,
+          id: items[items.length - 1].id,
+          revision: items[items.length - 1].revision,
         }
 
         anchorBottom.current = true;
         containers.current.push(container);
-        addItem(container.id, getItem(container));
+        addSlot(container.id, getSlot(container));
 
         listRef.current.scrollTo({ top: container.top, left: 0, behavior: 'smooth' });
       }
       else {
-        loadNextItem();
+        loadNextSlot();
       }
     }
   }
 
-  const onTopicHeight = (container, height) => {
+  const onItemHeight = (container, height) => {
     container.height = height;
-    alignItems();
+    alignSlots();
   }
 
-  const getItem = (container) => {
+  const getSlot = (container) => {
     return (
-      <VirtualItem style={{ top: container.top }}>
-        <TopicItem topic={topics[container.index]} padding={GUTTER}
-            onHeight={(height) => onTopicHeight(container, height)} />
+      <VirtualItem style={{ top: container.top, paddingTop: GUTTER, paddingBottom: GUTTER }}>
+        <ReactResizeDetector handleHeight={true}>
+          {({ height }) => {
+            if (typeof height !== 'undefined' && height > 0) {
+              onItemHeight(container, height);
+            }
+            return itemRenderer(items[container.index]);
+          }}
+        </ReactResizeDetector> 
       </VirtualItem>
     )
   }
@@ -310,7 +315,7 @@ export function VirtualList({ topics }) {
           <VirtualListWrapper onScroll={onScrollView} onWheel={onScrollWheel}>
             <div class="rollview" style={{ overflowY: scroll }} ref={listRef} onScroll={onScrollView}>
               <div class="roll" style={{ height: canvasHeight }}>
-                { items.values() }
+                { slots.values() }
               </div>
             </div>
           </VirtualListWrapper>

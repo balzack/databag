@@ -29,4 +29,5 @@ export const VirtualItem = styled.div`
   position: absolute;
   width: 100%;
   overflow: hidden;
+  border-top: 1px solid #dddddd;
 `;
