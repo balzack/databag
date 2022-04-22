@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const AddCarouselWrapper = styled.div`
+export const CarouselWrapper = styled.div`
   position: relative;
   display: grid;
   width: 100%;

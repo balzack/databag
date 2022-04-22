@@ -1,24 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, Dropdown, Input, Tooltip, Menu } from 'antd';
 import { AddTopicWrapper, BusySpin } from './AddTopic.styled';
-import { AddCarousel } from './AddCarousel/AddCarousel';
+import { Carousel } from '../../../Carousel/Carousel';
 import { useAddTopic } from './useAddTopic.hook';
 import { BgColorsOutlined, FontColorsOutlined, FontSizeOutlined, PaperClipOutlined, SendOutlined } from '@ant-design/icons';
 
+import login from '../../../login.png';
+import test from '../../../test.png';
+
+
 export function AddTopic() {
 
+  let [ items, setItems] = useState([]);
   const { state, actions } = useAddTopic();
 
   const menu = (
     <Menu>
       <Menu.Item key="0">
-        <div onClick={() => actions.addImage()}>Attach Image</div>
+        <div onClick={() => setItems([test, login, login, test, test, login])}>Attach Image</div>
       </Menu.Item>
       <Menu.Item key="1">
-        <div onClick={() => actions.addVideo()}>Attach Video</div>
+        <div onClick={() => setItems([test, login, login, test, test, login])}>Attach Video</div>
       </Menu.Item>
       <Menu.Item key="2">
-        <div onClick={() => actions.addAudio()}>Attach Audio</div>
+        <div onClick={() => setItems([test, login, login, test, test, login])}>Attach Audio</div>
       </Menu.Item>
     </Menu>
   );
@@ -39,7 +44,9 @@ export function AddTopic() {
   return (
     <AddTopicWrapper>
       <div class="container noselect">
-        <AddCarousel state={state} actions={actions} />
+        <Carousel items={items} itemRenderer={(item) => {
+          return <img style={{ height: '100%', objectFit: 'contain' }} src={item} alt="" />
+        }} />
         <div class="input">
           <Input.TextArea placeholder="Message" autoSize={{ minRows: 2, maxRows: 6 }} onKeyPress={onKey}
             onChange={(e) => actions.setMessageText(e.target.value)} value={state.messageText} />

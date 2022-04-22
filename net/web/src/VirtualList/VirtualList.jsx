@@ -45,7 +45,7 @@ export function VirtualList({ items, itemRenderer }) {
 
   useEffect(() => {
     if (viewHeight * 3 > canvasHeight) {
-      growCanvasHeight(viewHeight*3);
+      growCanvasHeight(viewHeight * 3);
     }
     setItems();
   }, [viewHeight]);
@@ -53,6 +53,12 @@ export function VirtualList({ items, itemRenderer }) {
   useEffect(() => {
     setItems();
   }, [items]);
+
+  useEffect(() => {
+    if (latch.current) {
+      alignSlots();
+    }
+  }, [viewHeight, canvasHeight]);
 
   const onScrollWheel = (e) => {
     if (e.deltaY < 0 && latch.current) {

@@ -1,7 +1,7 @@
 import { useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-export function useAddCarousel() {
+export function useCarousel() {
 
   const [state, setState] = useState({
   });
