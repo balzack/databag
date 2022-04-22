@@ -78,6 +78,9 @@ export function Carousel({ items, itemRenderer }) {
         </ReactResizeDetector>
       ));
     }
+    if (items.length > 0) {
+      assets.push(<div class="space">&nbsp;</div>)
+    }
     if (itemIndex >= items.length) {
       if (items.length > 0) {
         setItemIndex(items.length - 1);

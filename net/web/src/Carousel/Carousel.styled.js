@@ -13,7 +13,6 @@ export const CarouselWrapper = styled.div`
     width: 100%;
     padding-left: 16px;
     overflow: hidden;
-    padding-right: 100%;
 
     /* hide scrollbar for IE, Edge and Firefox */
     -ms-overflow-style: none;
@@ -58,8 +57,8 @@ export const CarouselWrapper = styled.div`
   }
 
   .space {
-    width: 100%;
-    background-color: red;
+    height: 128px;
+    padding-left: 100%;
   }
 
   .object {
