@@ -5,6 +5,7 @@ import { getChannelTopics } from '../../Api/getChannelTopics';
 import { getChannelTopic } from '../../Api/getChannelTopic';
 import { getContactChannelTopics } from '../../Api/getContactChannelTopics';
 import { getContactChannelTopic } from '../../Api/getContactChannelTopic';
+import { ConversationContext } from '../../ConversationContext/ConversationContext';
 
 export function useConversation() {
   
@@ -15,6 +16,7 @@ export function useConversation() {
   const { card, channel } = useParams();
   const navigate = useNavigate();
   const app = useContext(AppContext);
+  const conversation = useContext(ConversationContext);
   const topics = useRef(new Map());
 
   const updateState = (value) => {

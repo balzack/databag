@@ -1,5 +1,6 @@
 import login from './login.png';
 import { AppContextProvider } from './AppContext/AppContext';
+import { ConversationContextProvider } from './ConversationContext/ConversationContext';
 import { Home } from './Home/Home';
 import { Login } from './Login/Login';
 import { Create } from './Create/Create';
@@ -26,8 +27,16 @@ function App() {
             <Route path="/user" element={ <User /> }>
               <Route path="profile" element={<Profile />} />
               <Route path="contact/:guid" element={<Contact />} />
-              <Route path="conversation/:card/:channel" element={<Conversation />} />
-              <Route path="conversation/:channel" element={<Conversation />} />
+              <Route path="conversation/:card/:channel" element={
+                <ConversationContextProvider>
+                  <Conversation />
+                </ConversationContextProvider>
+              } />
+              <Route path="conversation/:channel" element={
+                <ConversationContextProvider>
+                  <Conversation />
+                </ConversationContextProvider>
+              } />
             </Route>
           </Routes>
         </Router>   

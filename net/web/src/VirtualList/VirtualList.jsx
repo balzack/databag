@@ -289,7 +289,7 @@ export function VirtualList({ items, itemRenderer }) {
       <VirtualItem style={{ top: container.top, paddingTop: GUTTER, paddingBottom: GUTTER }}>
         <ReactResizeDetector handleHeight={true}>
           {({ height }) => {
-            if (typeof height !== 'undefined' && height > 0) {
+            if (typeof height !== 'undefined') {
               onItemHeight(container, height);
             }
             return itemRenderer(items[container.index]);

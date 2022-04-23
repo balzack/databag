@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { TopicItemWrapper } from './TopicItem.styled';
 import ReactResizeDetector from 'react-resize-detector';
+import { useTopicItem } from './useTopicItem.hook';
 
 export function TopicItem({ topic }) {
 
+  const { state, actions } = useTopicItem();
   const [ text, setText ] = useState(null);
 
   useEffect(() => {
