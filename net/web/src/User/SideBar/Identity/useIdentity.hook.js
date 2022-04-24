@@ -1,5 +1,6 @@
 import { useContext, useState, useEffect } from 'react';
 import { AppContext } from '../../../AppContext/AppContext';
+import { ProfileContext } from '../../../AppContext/ProfileContext';
 import { useNavigate } from "react-router-dom";
 
 export function useIdentity() {
@@ -11,6 +12,14 @@ export function useIdentity() {
     imageUrl: null,
     image: null,
   });
+
+  const navigate = useNavigate();
+  const profile = useContext(ProfileContext);
+  const app = useContext(AppContext);
+
+  const updateState = (value) => {
+    setState((s) => ({ ...s, ...value }));
+  }
 
   const actions = {
     logout: async () => {
@@ -24,23 +33,16 @@ export function useIdentity() {
     }
   };
 
-  const navigate = useNavigate();
-  const app = useContext(AppContext);
-
-  const updateState = (value) => {
-    setState((s) => ({ ...s, ...value }));
-  }
-
   useEffect(() => {
-    if (app?.state?.Data?.profile) {
-      let profile = app.state.Data.profile;
-      updateState({ imageUrl: app.actions.profileImageUrl() })
-      updateState({ image: profile.image });
-      updateState({ name: profile.name });
-      updateState({ handle: profile.handle });
-      updateState({ domain: profile.node });
+    if (profile?.state?.profile) {
+      let identity = profile.state.profile;
+      updateState({ imageUrl: profile.actions.profileImageUrl() })
+      updateState({ image: identity.image });
+      updateState({ name: identity.name });
+      updateState({ handle: identity.handle });
+      updateState({ domain: identity.node });
     }
-  }, [app])
+  }, [profile])
 
   return { state, actions };
 }

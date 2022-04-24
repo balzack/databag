@@ -1,19 +1,16 @@
-import { useEffect, useState, useRef } from 'react';
-import { getContactProfile, setCardProfile, getCards, getCardImageUrl, getCardProfile, getCardDetail, getListingImageUrl, getListing, setProfileImage, setProfileData, getProfileImageUrl, getAccountStatus, setAccountSearchable, getProfile, getGroups, getAvailable, getUsername, setLogin, createAccount } from './fetchUtil';
+import { useEffect, useState, useRef, useContext } from 'react';
+import { getContactProfile, setCardProfile, getCards, getCardImageUrl, getCardProfile, getCardDetail, getListingImageUrl, getListing, getGroups, getAvailable, getUsername, setLogin, createAccount } from './fetchUtil';
 import { getChannels } from '../Api/getChannels';
 import { getChannel } from '../Api/getChannel';
 import { getContactChannels } from '../Api/getContactChannels';
 import { getContactChannel } from '../Api/getContactChannel';
 
-async function updateAccount(token, updateData) {
-  let status = await getAccountStatus(token);
-  updateData({ status: status });
-}
-
-async function updateProfile(token, updateData) {
-  let profile = await getProfile(token);
-  updateData({ profile: profile })
-}
+import { AccountContext } from './AccountContext';
+import { ProfileContext } from './ProfileContext';
+import { ArticleContext } from './ArticleContext';
+import { GroupContext } from './GroupContext';
+import { CardContext } from './CardContext';
+import { ChannelContext } from './ChannelContext';
 
 async function updateGroups(token, revision, groupMap, updateData) {
   let groups = await getGroups(token, revision);
@@ -189,10 +186,9 @@ function appLogout(updateState, clearWebsocket) {
   localStorage.removeItem("session");
 }
 
-
-
 export function useAppContext() {
   const [state, setState] = useState(null);
+  const [appRevision, setAppRevision] = useState();
 
   const groupRevision = useRef(null);
   const accountRevision = useRef(null);
@@ -216,6 +212,13 @@ export function useAppContext() {
       return { ...s, Data: data }
     })
   }
+
+  const accountContext = useContext(AccountContext);
+  const profileContext = useContext(ProfileContext);
+  const channelContext = useContext(ChannelContext);
+  const cardContext = useContext(CardContext);
+  const groupContext = useContext(GroupContext);
+  const articleContext = useContext(ArticleContext);
 
   const mergeChannels = () => {
     let merged = [];
@@ -269,16 +272,6 @@ export function useAppContext() {
       appLogout(updateState, clearWebsocket);
       resetData();
     },
-    setProfileData: async (name, location, description) => {
-      await setProfileData(state.token, name, location, description);
-    },
-    setProfileImage: async (image) => {
-      await setProfileImage(state.token, image);
-    },
-    setAccountSearchable: async (flag) => {
-      await setAccountSearchable(state.token, flag);
-    },
-    profileImageUrl: () => getProfileImageUrl(state.token, state.Data?.profile?.revision),
     getRegistry: async (node) => getListing(node),
     getRegistryImageUrl: (server, guid, revision) => getListingImageUrl(server, guid, revision),
     getCardImageUrl: (cardId, revision) => getCardImageUrl(state.token, cardId, revision),
@@ -306,15 +299,20 @@ export function useAppContext() {
     available: getAvailable,
   }
 
+  useEffect(() => {
+    if (appRevision) {
+      accountContext.actions.setRevision(appRevision.account);
+      profileContext.actions.setRevision(appRevision.profile);
+      articleContext.actions.setRevision(appRevision.article);
+      groupContext.actions.setRevision(appRevision.group);
+      cardContext.actions.setRevision(appRevision.card);
+      channelContext.actions.setRevision(appRevision.channel);
+    }
+  }, [appRevision]);
+  
   const processRevision = async (token) => {
     while(revision.current != null) {
       let rev = revision.current;
-
-      // update profile if revision changed
-      if (rev.profile != profileRevision.current) {
-        await updateProfile(token, updateData) 
-        profileRevision.current = rev.profile
-      }
 
       // update group if revision changed
       if (rev.group != groupRevision.current) {
@@ -334,12 +332,6 @@ export function useAppContext() {
         channelRevision.current = rev.channel
       }
 
-      // update account status if revision changed
-      if (rev.account != accountRevision.current) {
-        await updateAccount(token, updateData)
-        accountRevision.current = rev.account
-      }
-
       // check if new revision was received during processing
       if (rev == revision.current) {
         revision.current = null
@@ -348,6 +340,14 @@ export function useAppContext() {
   }
 
   const setWebsocket = (token) => {
+
+    accountContext.actions.setToken(token);
+    profileContext.actions.setToken(token);
+    articleContext.actions.setToken(token);
+    groupContext.actions.setToken(token);
+    cardContext.actions.setToken(token);
+    channelContext.actions.setToken(token);
+
     ws.current = new WebSocket("wss://" + window.location.host + "/status");
     ws.current.onmessage = (ev) => {
       try {
@@ -355,8 +355,10 @@ export function useAppContext() {
           revision.current = JSON.parse(ev.data);
         }
         else {
-          revision.current = JSON.parse(ev.data);
-          processRevision(token)
+          let rev = JSON.parse(ev.data);
+          revision.current = rev;
+          processRevision(token);
+          setAppRevision(rev);
         }
       }
       catch (err) {

@@ -1,5 +1,6 @@
 import { useContext, useState, useEffect } from 'react';
-import { AppContext } from '../../AppContext/AppContext';
+import { ProfileContext } from '../../AppContext/ProfileContext';
+import { AccountContext } from '../../AppContext/AccountContext';
 import { useNavigate } from "react-router-dom";
 
 const IMAGE_DIM = 256;
@@ -22,7 +23,10 @@ export function useProfile() {
   });
 
   const navigate = useNavigate();
-  const app = useContext(AppContext);
+  const profile = useContext(ProfileContext);
+  const account = useContext(AccountContext);
+
+console.log("ACCOUNT:", account);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
@@ -52,7 +56,7 @@ export function useProfile() {
       if(!state.modalBusy) {
         updateState({ modalBusy: true });
         try {
-          await app.actions.setProfileData(state.modalName, state.modalLocation, state.modalDescription);
+          await profile.actions.setProfileData(state.modalName, state.modalLocation, state.modalDescription);
           set = true
         }
         catch (err) {
@@ -64,7 +68,7 @@ export function useProfile() {
     },
     setSearchable: async (flag) => {
       try {
-        await app.actions.setAccountSearchable(flag);
+        await account.actions.setSearchable(flag);
       }
       catch (err) {
         window.alert(err);
@@ -94,7 +98,7 @@ export function useProfile() {
           };
           let dataUrl = await processImg();
           let data = dataUrl.split(",")[1];
-          await app.actions.setProfileImage(data);
+          await profile.actions.setProfileImage(data);
           set = true
         }
         catch (err) {
@@ -107,28 +111,31 @@ export function useProfile() {
   };
 
   useEffect(() => {
-    if (app?.state?.Data?.profile) {
-      let profile = app.state.Data.profile;
-      if (profile.image != null) {
-        updateState({ imageUrl: app.actions.profileImageUrl() })
-        updateState({ modalImage: app.actions.profileImageUrl() })
+    if (profile?.state?.profile) {
+      let identity = profile.state.profile;
+      if (identity.image != null) {
+        updateState({ imageUrl: profile.actions.profileImageUrl() })
+        updateState({ modalImage: profile.actions.profileImageUrl() })
       } else {
         updateState({ imageUrl: '' })
         updateState({ modalImage: null })
       }
-      updateState({ name: profile.name });
-      updateState({ modalName: profile.name });
-      updateState({ handle: profile.handle });
-      updateState({ description: profile.description });
-      updateState({ modalDescription: profile.description });
-      updateState({ location: profile.location });
-      updateState({ modalLocation: profile.location });
+      updateState({ name: identity.name });
+      updateState({ modalName: identity.name });
+      updateState({ handle: identity.handle });
+      updateState({ description: identity.description });
+      updateState({ modalDescription: identity.description });
+      updateState({ location: identity.location });
+      updateState({ modalLocation: identity.location });
     }
-    if (app?.state?.Data?.status) {
-      let status = app.state.Data.status;
+  }, [profile]);
+
+  useEffect(() => {
+    if (account?.state?.status) {
+      let status = account.state.status;
       updateState({ searchable: status.searchable });
     }
-  }, [app])
+  }, [account])
 
   return { state, actions };
 }
