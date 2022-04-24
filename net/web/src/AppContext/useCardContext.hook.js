@@ -148,9 +148,8 @@ export function useCardContext() {
     setRevision: async (rev) => {
       setCards(rev);
     },
+    getImageUrl: (cardId, rev) => getCardImageUrl(access.current, cardId, rev),
   }
-
-console.log(state);
 
   return { state, actions }
 }

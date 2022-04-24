@@ -24,8 +24,8 @@ export function Cards({ showRegistry }) {
   }
 
   const cardImage = (item) => {
-    if (actions?.getCardImageUrl) {
-      return actions.getCardImageUrl(item.id, item.revision);
+    if (actions?.getImageUrl) {
+      return actions.getImageUrl(item.id, item.revision);
     }
     return null
   }
