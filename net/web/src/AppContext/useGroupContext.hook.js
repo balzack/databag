@@ -3,49 +3,53 @@ import { getGroups } from '../Api/getGroups';
 
 export function useGroupContext() {
   const [state, setState] = useState({
-    token: null,
-    revision: null,
     groups: new Map(),
   });
-  const next = useRef(null);
+  const access = useRef(null);
+  const revision = useRef(null);
   const groups = useRef(new Map());
-
-  useEffect(() => {
-  }, []);
+  const next = useRef(null);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }))
   }
 
-  const setGroups = async (revision) => {
-    if (next.current == null) {
-      let delta = await getGroups(state.token, state.revision);
-      for (let group of delta) {
-        if (group.data) {
-          groups.set(group.id, group);
-        }
-        else {
-          groups.delete(group.id);
-        }
+  const updateGroups = async () => {
+    let delta = await getGroups(access.current, revision.current);
+    for (let group of delta) {
+      if (group.data) {
+        groups.set(group.id, group);
       }
-      updateState({ revision, groups });
+      else {
+        groups.delete(group.id);
+      }
+    }
+  }
+
+  const setGroups = async (rev) => {
+    if (next.current == null) {
+      if (revision.current != rev) {
+        await updateGroups();
+        updateState({ groups: groups.current });
+        revision.current = rev;
+      }
       if (next.current != null) {
-        let rev = next.current;
+        let r = next.current;
         next.current = null;
-        setGroups(rev);
+        setGroups(r);
       }
     }
     else {
-      next.current = revision;
+      next.current = rev;
     }
   }
 
   const actions = {
     setToken: async (token) => {
-      updateState({ token });
+      access.current = token;
     },
-    setRevision: async (revision) => {
-      setGroups(revision);
+    setRevision: async (rev) => {
+      setGroups(rev);
     },
   }
 

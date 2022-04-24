@@ -37,7 +37,6 @@ export function useConversation() {
         if (conversation?.revision != state.revision) {
           let token = contact.data.cardProfile.guid + "." + contact.data.cardDetail.token;
           let slots = await getContactChannelTopics(token, channel, state.revision);
-
           for (let topic of slots) {
             if (topic.data == null) {
               topics.current.delete(topic.id);
@@ -65,7 +64,7 @@ export function useConversation() {
 
           updateState({
             topics: Array.from(topics.current.values()), 
-            revision: conversation.Revision,
+            revision: conversation.revision,
           });
         }
       }

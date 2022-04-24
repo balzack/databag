@@ -4,37 +4,40 @@ import { getAccountStatus } from '../Api/getAccountStatus';
 
 export function useAccountContext() {
   const [state, setState] = useState({
-    token: null,
-    revision: 0,
     status: null,
   });
+  const access = useRef(null);
+  const revision = useRef(null);
   const next = useRef(null);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }))
   }
 
-  const setStatus = async (revision) => {
+  const setStatus = async (rev) => {
     if (next.current == null) {
-      let status = await getAccountStatus(state.token);
-      updateState({ revision, status });
+      if (revision.current != rev) {
+        let status = await getAccountStatus(access.current);
+        updateState({ status });
+        revision.current = rev;
+      }
       if (next.current != null) {
-        let rev = next.current;
+        let r = next.current;
         next.current = null;
-        setStatus(rev);
+        setStatus(r);
       }
     }
     else {
-      next.current = revision;
+      next.current = rev;
     }
   }
 
   const actions = {
     setToken: async (token) => {
-      updateState({ token });
+      access.current = token;
     },
-    setRevision: async (revision) => {
-      setStatus(revision);
+    setRevision: async (rev) => {
+      setStatus(rev);
     },
     setSearchable: async (flag) => {
       await setAccountSearchable(state.token, flag);

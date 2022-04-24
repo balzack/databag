@@ -6,37 +6,40 @@ import { getProfileImageUrl } from '../Api/getProfileImageUrl';
 
 export function useProfileContext() {
   const [state, setState] = useState({
-    token: null,
-    revision: 0,
     profile: {},
   });
+  const access = useRef(null);
+  const revision = useRef(null);
   const next = useRef(null);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }))
   }
 
-  const setProfile = async (revision) => {
+  const setProfile = async (rev) => {
     if (next.current == null) {
-      let profile = await getProfile(state.token);
-      updateState({ revision, profile });
+      if (revision.current != rev) {
+        let profile = await getProfile(access.current);
+        updateState({ profile });
+        revision.current = rev;
+      }
       if (next.current != null) {
-        let rev = next.current;
+        let r = next.current;
         next.current = null;
-        setProfile(rev);
+        setProfile(r);
       }
     }
     else {
-      next.current = revision;
+      next.current = rev;
     }
   }
 
   const actions = {
     setToken: (token) => {
-      updateState({ token });
+      access.current = token;
     },
-    setRevision: (revision) => {
-      setProfile(revision);
+    setRevision: (rev) => {
+      setProfile(rev);
     },
     setProfileData: async (name, location, description) => {
       await setProfileData(state.token, name, location, description);
@@ -44,7 +47,7 @@ export function useProfileContext() {
     setProfileImage: async (image) => {
       await setProfileImage(state.token, image);
     },
-    profileImageUrl: () => getProfileImageUrl(state.token, state.Data?.profile?.revision),
+    profileImageUrl: () => getProfileImageUrl(access.current, revision.current),
   }
 
   return { state, actions }
