@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef, useContext } from 'react';
-import { getContactProfile, setCardProfile, getCards, getCardImageUrl, getCardProfile, getCardDetail, getListingImageUrl, getListing, getGroups, getAvailable, getUsername, setLogin, createAccount } from './fetchUtil';
+import { getContactProfile, setCardProfile, getCards, getCardImageUrl, getCardProfile, getCardDetail, getListingImageUrl, getListing, getAvailable, getUsername, setLogin, createAccount } from './fetchUtil';
 import { getChannels } from '../Api/getChannels';
 import { getChannel } from '../Api/getChannel';
 import { getContactChannels } from '../Api/getContactChannels';
@@ -11,19 +11,6 @@ import { ArticleContext } from './ArticleContext';
 import { GroupContext } from './GroupContext';
 import { CardContext } from './CardContext';
 import { ChannelContext } from './ChannelContext';
-
-async function updateGroups(token, revision, groupMap, updateData) {
-  let groups = await getGroups(token, revision);
-  for (let group of groups) {
-    if (group.data) {
-      groupMap.set(group.id, group);
-    }
-    else {
-      groupMap.delete(group.id);
-    }
-  }
-  updateData({ groups: Array.from(groupMap.values()) });
-}
 
 async function updateChannels(token, revision, channelMap, mergeChannels) {
   let channels = await getChannels(token, revision);
@@ -190,15 +177,11 @@ export function useAppContext() {
   const [state, setState] = useState(null);
   const [appRevision, setAppRevision] = useState();
 
-  const groupRevision = useRef(null);
-  const accountRevision = useRef(null);
-  const profileRevision = useRef(null);
   const cardRevision = useRef(null);
   const channelRevision = useRef(null);
 
   const channels = useRef(new Map());
   const cards = useRef(new Map());
-  const groups = useRef(new Map());
   const delay = useRef(2);
 
   const ws = useRef(null);
@@ -257,13 +240,9 @@ export function useAppContext() {
 
   const resetData = () => {
     revision.current = null;
-    accountRevision.current = null;
-    profileRevision.current = null;
-    groupRevision.current = null;
     cardRevision.current = null;
     channels.current = new Map();
     cards.current = new Map();
-    groups.current = new Map();
     setState({});
   }
 
@@ -313,12 +292,6 @@ export function useAppContext() {
   const processRevision = async (token) => {
     while(revision.current != null) {
       let rev = revision.current;
-
-      // update group if revision changed
-      if (rev.group != groupRevision.current) {
-        await updateGroups(token, groupRevision.current, groups.current, updateData);
-        groupRevision.current = rev.group
-      }
 
       // update card if revision changed
       if (rev.card != cardRevision.current) {
