@@ -159,7 +159,7 @@ export function useContact() {
       updateState({ location: profile.location });
       updateState({ node: profile.node });
       if (contact.data.cardProfile.imageSet) {
-        updateState({ imageUrl: card.actions.getImageUrl(contact.id, contact.revision) });
+        updateState({ imageUrl: card.actions.getImageUrl(contact.id) });
       }
       else {
         updateState({ imageUrl: '' });

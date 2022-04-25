@@ -3,6 +3,8 @@ import { getChannels } from '../Api/getChannels';
 import { getChannel } from '../Api/getChannel';
 import { addChannel } from '../Api/addChannel';
 import { addChannelTopic } from '../Api/addChannelTopic';
+import { getChannelTopics } from '../Api/getChannelTopics';
+import { getChannelTopic } from '../Api/getChannelTopic';
 
 export function useChannelContext() {
   const [state, setState] = useState({
@@ -31,7 +33,7 @@ export function useChannelContext() {
             cur.data.detailRevision = channel.data.detailRevision;
           }
           else {
-            let slot = await getChannel(state.token, channel.id);
+            let slot = await getChannel(access.current, channel.id);
             cur.data.channelDetail = slot.data.channelDetail;
             cur.data.detailRevision = slot.data.detailRevision;
           }
@@ -48,14 +50,15 @@ export function useChannelContext() {
 
   const setChannels = async (rev) => {
     if (next.current == null) {
+      next.current = rev;
       if (revision.current != rev) {
         await updateChannels();
         updateState({ channels: channels.current });
         revision.current = rev;
       }
-      if (next.current != null) {
-        let r = next.current;
-        next.current = null;
+      let r = next.current;
+      next.current = null;
+      if (revision.current != r) {
         setChannels(r);
       }
     }
@@ -76,6 +79,16 @@ export function useChannelContext() {
     },
     addChannelTopic: async (channelId, message, assets) => {
       await addChannelTopic(access.current, channelId, message, assets);
+    },
+    getChannelRevision: (channelId) => {
+      let channel = channels.current.get(channelId);
+      return channel.revision;
+    },
+    getChannelTopics: async (channelId, revision) => {
+      return await getChannelTopics(access.current, channelId, revision);
+    },
+    getChannelTopic: async (channelId, topicId) => {
+      return await getChannelTopic(access.current, channelId, topicId);
     },
   }
 

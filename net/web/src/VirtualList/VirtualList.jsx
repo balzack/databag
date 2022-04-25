@@ -169,7 +169,7 @@ export function VirtualList({ items, itemRenderer }) {
         }
       }
       else {
-        let pos = containers.current[0].top + containers.current[0].height;
+        let pos = containers.current[0].top + containers.current[0].height + 2 * GUTTER;
         for (let i = 1; i < containers.current.length; i++) {
           if (containers.current[i].top != pos) {
             containers.current[i].top = pos;

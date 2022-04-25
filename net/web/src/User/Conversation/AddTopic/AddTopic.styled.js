@@ -42,8 +42,9 @@ export const AddTopicWrapper = styled.div`
 `;
 
 export const BusySpin = styled(Spin)`
+  display: flex;
   position: absolute;
-  margin-right: 12px;
+  padding-right: 12px;
   x-index: 10;
 `;
 
