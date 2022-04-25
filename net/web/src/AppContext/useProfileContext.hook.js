@@ -42,10 +42,10 @@ export function useProfileContext() {
       setProfile(rev);
     },
     setProfileData: async (name, location, description) => {
-      await setProfileData(state.token, name, location, description);
+      await setProfileData(access.current, name, location, description);
     },
     setProfileImage: async (image) => {
-      await setProfileImage(state.token, image);
+      await setProfileImage(access.current, image);
     },
     profileImageUrl: () => getProfileImageUrl(access.current, revision.current),
   }

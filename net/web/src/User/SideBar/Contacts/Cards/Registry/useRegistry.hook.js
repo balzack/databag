@@ -1,6 +1,8 @@
 import { useContext, useState, useEffect } from 'react';
-import { AppContext } from '../../../../../AppContext/AppContext';
+import { ProfileContext } from '../../../../../AppContext/ProfileContext';
 import { useNavigate } from "react-router-dom";
+import { getListing } from '../../../../../Api/getListing';
+import { getListingImageUrl } from '../../../../../Api/getListingImageUrl';
 
 export function useRegistry() {
 
@@ -11,18 +13,18 @@ export function useRegistry() {
   });
 
   const navigate = useNavigate();
-  const app = useContext(AppContext);
+  const profile = useContext(ProfileContext);
   
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
   }
 
   useEffect(() => {
-    if (app?.state?.Data?.profile) {
-      let profile = app.state.Data.profile;
-      updateState({ server: profile.node });
+    if (profile?.state?.profile) {
+      let identity = profile.state.profile;
+      updateState({ server: identity.node });
     }
-  }, [app]);
+  }, [profile]);
 
   const actions = {
     setServer: (server) => {
@@ -32,7 +34,7 @@ export function useRegistry() {
       if (!state.busy && state.server != '') {
         updateState({ busy: true });
         try {
-          let profiles = await app.actions.getRegistry(state.server)
+          let profiles = await getListing(state.server)
           updateState({ profiles: profiles });
         }
         catch (err) {
@@ -42,10 +44,7 @@ export function useRegistry() {
       }
     },
     getRegistryImageUrl: (guid, revision) => {
-      if (app?.actions?.getRegistryImageUrl) {
-        return app.actions.getRegistryImageUrl(state.server, guid, revision);
-      }
-      return null;
+      return getListingImageUrl(state.server, guid, revision);
     },
     select: (contact) => {
       navigate(`/user/contact/${contact.guid}`, { state: contact });

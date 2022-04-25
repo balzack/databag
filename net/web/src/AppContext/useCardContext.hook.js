@@ -8,6 +8,13 @@ import { getCardImageUrl } from '../Api/getCardImageUrl';
 import { getCardProfile } from '../Api/getCardProfile';
 import { getCardDetail } from '../Api/getCardDetail';
 import { addContactChannelTopic } from '../Api/addContactChannelTopic';
+import { setCardConnecting, setCardConnected, setCardConfirmed } from '../Api/setCardStatus';
+import { getCardOpenMessage } from '../Api/getCardOpenMessage';
+import { setCardOpenMessage } from '../Api/setCardOpenMessage';
+import { getCardCloseMessage } from '../Api/getCardCloseMessage';
+import { setCardCloseMessage } from '../Api/setCardCloseMessage';
+import { addCard } from '../Api/addCard';
+import { removeCard } from '../Api/removeCard';
 
 export function useCardContext() {
   const [state, setState] = useState({
@@ -139,6 +146,16 @@ export function useCardContext() {
     }
   }
 
+  const getCardByGuid = (guid) => {
+    let card = null;
+    cards.current.forEach((value, key, map) => {
+      if(value?.data?.cardProfile?.guid == guid) {
+        card = value;
+      }
+    });
+    return card;
+  }
+
   const actions = {
     setToken: async (token) => {
       access.current = token;
@@ -146,12 +163,40 @@ export function useCardContext() {
     setRevision: async (rev) => {
       setCards(rev);
     },
+    getCardByGuid: getCardByGuid,
     getImageUrl: (cardId, rev) => getCardImageUrl(access.current, cardId, rev),
     addChannelTopic: async (cardId, channelId, message, assets) => {
       let { cardProfile, cardDetail } = cards.current.get(cardId).data;
       let token = cardProfile.guid + '.' + cardDetail.token;
       let node = cardProfile.node;
       await addContactChannelTopic(node, token, channelId, message, assets);
+    },
+    addCard: async (message) => {
+      return await addCard(access.current, message);
+    },
+    removeCard: async (cardId) => {
+      return await removeCard(access.current, cardId);
+    },
+    setCardConnecting: async (cardId) => {
+      return await setCardConnecting(access.current, cardId);
+    },
+    setCardConnected: async (cardId, token, view, article, channel, profile) => {
+      return await setCardConnected(access.current, cardId, token, view, article, channel, profile);
+    },
+    setCardConfirmed: async (cardId) => {
+      return await setCardConfirmed(access.current, cardId);
+    },
+    getCardOpenMessage: async (cardId) => {
+      return await getCardOpenMessage(access.current, cardId);
+    },
+    setCardOpenMessage: async (server, message) => {
+      return await setCardOpenMessage(server, message);
+    },
+    getCardCloseMessage: async (cardId) => {
+      return await getCardCloseMessage(access.current, cardId);
+    },
+    setCardCloseMessage: async (server, message) => {
+      return await setCardCloseMessage(server, message);
     },
   }
 

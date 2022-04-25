@@ -40,7 +40,7 @@ export function useAccountContext() {
       setStatus(rev);
     },
     setSearchable: async (flag) => {
-      await setAccountSearchable(state.token, flag);
+      await setAccountSearchable(access.current, flag);
     },
   }
 
