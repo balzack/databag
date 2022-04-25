@@ -2,7 +2,8 @@ import { useContext, useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { addChannelTopic } from '../../../Api/addChannelTopic';
 import { addContactChannelTopic } from '../../../Api/addContactChannelTopic';
-import { AppContext } from '../../../AppContext/AppContext';
+import { CardContext } from '../../../AppContext/CardContext';
+import { ChannelContext } from '../../../AppContext/ChannelContext';
 
 export function useAddTopic() {
 
@@ -15,8 +16,9 @@ export function useAddTopic() {
     busy: false,
   });
 
-  const { card, channel } = useParams();
-  const app = useContext(AppContext);
+  const { cardId, channelId } = useParams();
+  const card = useContext(CardContext);
+  const channel = useContext(ChannelContext);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
@@ -56,13 +58,11 @@ export function useAddTopic() {
         try {
           let message = { text: state.messageText, textColor: state.messageColor,
               textSize: state.messageSize, backgroundColor: state.backgroundColor };
-          if (card) {
-            let contact = app.actions.getCard(card);
-            let token = contact?.data?.cardProfile?.guid + '.' + contact?.data?.cardDetail?.token;
-            await addContactChannelTopic(token, channel, message, []);
+          if (cardId) {
+            await card.actions.addChannelTopic(cardId, channelId, message, []);
           }
           else {
-            await addChannelTopic(app.state.token, channel, message, []);
+            await channel.actions.addChannelTopic(channelId, message, []);
           }
           updateState({ messageText: null, messageColor: null, messageSize: null, backgroundColor: null });
         }

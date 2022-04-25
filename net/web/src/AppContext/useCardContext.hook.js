@@ -7,6 +7,7 @@ import { getCards } from '../Api/getCards';
 import { getCardImageUrl } from '../Api/getCardImageUrl';
 import { getCardProfile } from '../Api/getCardProfile';
 import { getCardDetail } from '../Api/getCardDetail';
+import { addContactChannelTopic } from '../Api/addContactChannelTopic';
 
 export function useCardContext() {
   const [state, setState] = useState({
@@ -146,6 +147,12 @@ export function useCardContext() {
       setCards(rev);
     },
     getImageUrl: (cardId, rev) => getCardImageUrl(access.current, cardId, rev),
+    addChannelTopic: async (cardId, channelId, message, assets) => {
+      let { cardProfile, cardDetail } = cards.current.get(cardId).data;
+      let token = cardProfile.guid + '.' + cardDetail.token;
+      let node = cardProfile.node;
+      await addContactChannelTopic(node, token, channelId, message, assets);
+    },
   }
 
   return { state, actions }

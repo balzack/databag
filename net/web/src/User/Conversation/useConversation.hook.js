@@ -13,11 +13,13 @@ export function useConversation() {
     topics: [],
   });
 
-  const { card, channel } = useParams();
+  const { cardId, channelId } = useParams();
   const navigate = useNavigate();
   const app = useContext(AppContext);
   const conversation = useContext(ConversationContext);
   const topics = useRef(new Map());
+
+console.log("PARAMS: ", cardId, channelId);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
@@ -30,13 +32,13 @@ export function useConversation() {
   };
 
   const updateConversation = async () => {
-    if (card) {
+    if (cardId) {
       if(app?.actions?.getCard) {
-        let contact = app.actions.getCard(card);
-        let conversation = contact.channels.get(channel);
+        let contact = app.actions.getCard(cardId);
+        let conversation = contact.channels.get(channelId);
         if (conversation?.revision != state.revision) {
           let token = contact.data.cardProfile.guid + "." + contact.data.cardDetail.token;
-          let slots = await getContactChannelTopics(token, channel, state.revision);
+          let slots = await getContactChannelTopics(token, channelId, state.revision);
           for (let topic of slots) {
             if (topic.data == null) {
               topics.current.delete(topic.id);
@@ -52,7 +54,7 @@ export function useConversation() {
                   cur.data.detailRevision = topic.data.detailRevision;
                 }
                 else {
-                  let slot = await getContactChannelTopic(token, channel, topic.id);
+                  let slot = await getContactChannelTopic(token, channelId, topic.id);
                   cur.data.topicDetail = slot.data.topicDetail;
                   cur.data.detailRevision = slot.data.detailRevision;
                 }
@@ -71,9 +73,9 @@ export function useConversation() {
     }
     else {
       if(app?.actions?.getChannel) {
-        let conversation = app.actions.getChannel(channel);
+        let conversation = app.actions.getChannel(channelId);
         if (conversation?.revision != state.revision) {
-          let slots = await getChannelTopics(app.state.token, channel, state.revision);
+          let slots = await getChannelTopics(app.state.token, channelId, state.revision);
 
           for (let topic of slots) {
             if (topic.data == null) {
@@ -90,7 +92,7 @@ export function useConversation() {
                   cur.data.detailRevision = topic.data.detailRevision;
                 }
                 else {
-                  let slot = await getChannelTopic(app.state.token, channel, topic.id);
+                  let slot = await getChannelTopic(app.state.token, channelId, topic.id);
                   cur.data.topicDetail = slot.data.topicDetail;
                   cur.data.detailRevision = slot.data.detailRevision;
                 }

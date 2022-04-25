@@ -39,12 +39,12 @@ function App() {
                         <Route path="/user" element={ <User /> }>
                           <Route path="profile" element={<Profile />} />
                           <Route path="contact/:guid" element={<Contact />} />
-                          <Route path="conversation/:card/:channel" element={
+                          <Route path="conversation/:cardId/:channelId" element={
                             <ConversationContextProvider>
                               <Conversation />
                             </ConversationContextProvider>
                           } />
-                          <Route path="conversation/:channel" element={
+                          <Route path="conversation/:channelId" element={
                             <ConversationContextProvider>
                               <Conversation />
                             </ConversationContextProvider>

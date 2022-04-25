@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from 'react';
 import { getChannels } from '../Api/getChannels';
 import { getChannel } from '../Api/getChannel';
 import { addChannel } from '../Api/addChannel';
+import { addChannelTopic } from '../Api/addChannelTopic';
 
 export function useChannelContext() {
   const [state, setState] = useState({
@@ -72,6 +73,9 @@ export function useChannelContext() {
     },
     addChannel: async (cards, subject, description) => {
       await addChannel(access.current, cards, subject, description);
+    },
+    addChannelTopic: async (channelId, message, assets) => {
+      await addChannelTopic(access.current, channelId, message, assets);
     },
   }
 
