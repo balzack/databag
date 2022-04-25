@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect } from 'react';
-import { AppContext } from '../../../../../../AppContext/AppContext';
-import { getCardImageUrl } from '../../../../../../Api/getCardImageUrl';
+import { CardContext } from '../../../../../../AppContext/CardContext';
+import { ProfileContext } from '../../../../../../AppContext/ProfileContext';
 
 export function useChannelLogo() {
   
@@ -8,16 +8,20 @@ export function useChannelLogo() {
     guid: null
   });
 
-  const app = useContext(AppContext);
+  const card = useContext(CardContext);
+  const profile = useContext(ProfileContext);
 
   const actions = {
-    getCardImageUrl: (cardId, revision) => {
-      if (app?.state?.token) {
-        return getCardImageUrl(app.state.token, cardId, revision)
-      }
-      return null;
+    getCardImageUrl: card.actions.getImageUrl,
+    getCardByGuid: (guid) => {
+      let c = null;
+      card.state.cards.forEach((value, key, map) => {
+        if(value?.data?.cardProfile?.guid == guid) {
+          c = value;
+        }
+      });
+      return c;
     },
-    getCardByGuid: app?.actions?.getCardByGuid,
   };
 
   const updateState = (value) => {
@@ -25,8 +29,8 @@ export function useChannelLogo() {
   }
 
   useEffect(() => {
-    updateState({ guid: app?.state?.Data?.profile?.guid })
-  }, [app])
+    updateState({ guid: profile.state.profile.guid })
+  }, [profile])
 
   return { state, actions };
 }

@@ -16,7 +16,7 @@ export function ChannelLabel({ item }) {
     let contacts = []; 
     if (item?.guid) {
       setHost(actions.getCardByGuid(item.guid));
-      for (let member of item.channel.data.channelDetail.members) {
+      for (let member of item.data.channelDetail.members) {
         if (member != state.guid) {
           contacts.push(actions.getCardByGuid(member));
         }
@@ -25,14 +25,14 @@ export function ChannelLabel({ item }) {
     }
     else {
       setHost(null); 
-      for (let member of item.channel.data.channelDetail.members) {
+      for (let member of item.data.channelDetail.members) {
         contacts.push(actions.getCardByGuid(member));
       }
       setMembers(contacts);
     }
 
-    if (item?.channel?.data?.channelDetail?.data) {
-      let data = JSON.parse(item.channel.data.channelDetail.data);
+    if (item?.data?.channelDetail?.data) {
+      let data = JSON.parse(item.data.channelDetail.data);
       if (data.subject != '' && data.subject != null) {
         setSubject(data.subject);
         return

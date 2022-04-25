@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { getChannels } from '../Api/getChannels';
 import { getChannel } from '../Api/getChannel';
+import { addChannel } from '../Api/addChannel';
 
 export function useChannelContext() {
   const [state, setState] = useState({
@@ -68,6 +69,9 @@ export function useChannelContext() {
     },
     setRevision: async (rev) => {
       setChannels(rev);
+    },
+    addChannel: async (cards, subject, description) => {
+      await addChannel(access.current, cards, subject, description);
     },
   }
 

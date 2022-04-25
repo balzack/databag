@@ -15,10 +15,10 @@ export function useChannelItem() {
   const actions = {
     select: (item) => {
       if (item.guid) {
-        navigate(`/user/conversation/${item.cardId}/${item.channel.id}`);
+        navigate(`/user/conversation/${item.cardId}/${item.id}`);
       }
       else {
-        navigate(`/user/conversation/${item.channel.id}`);
+        navigate(`/user/conversation/${item.id}`);
       }
     },
   };

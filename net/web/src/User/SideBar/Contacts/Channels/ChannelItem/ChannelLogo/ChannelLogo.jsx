@@ -17,7 +17,7 @@ export function ChannelLogo({ item }) {
       setHome(false);
       setHost(actions.getCardByGuid(item.guid));
       let contacts = [];
-      for (let member of item.channel.data.channelDetail.members) {
+      for (let member of item.data.channelDetail.members) {
         if (member != state.guid) {
           contacts.push(actions.getCardByGuid(member));
         }
@@ -27,7 +27,7 @@ export function ChannelLogo({ item }) {
     else {
       setHome(true);
       let contacts = [];
-      for (let member of item.channel.data.channelDetail.members) {
+      for (let member of item.data.channelDetail.members) {
         contacts.push(actions.getCardByGuid(member));
       }
       setMembers(contacts);
