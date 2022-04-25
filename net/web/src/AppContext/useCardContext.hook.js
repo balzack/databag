@@ -20,6 +20,7 @@ import { removeCard } from '../Api/removeCard';
 
 export function useCardContext() {
   const [state, setState] = useState({
+    init: false,
     cards: new Map(),
   });
   const access = useRef(null);
@@ -86,14 +87,11 @@ export function useCardContext() {
           }
           if (cur.data.notifiedChannel != card.data.notifiedChannel) {
             // update remote channels
-console.log("UPDATE CHANNEL: ", cur.data.notifiedChannel, card.data.notifiedChannel);
-
             await updateContactChannels(card.id, cur.data.cardProfile.guid, cur.data.cardDetail.token, cur.data.notifiedView, cur.data.notifiedChannel, cur.channels);
             cur.data.notifiedChannel = card.data.notifiedChannel;
           }
         }
         cur.revision = card.revision;
-console.log("SAVE:", cur.data.notifiedChannel);
         cards.current.set(card.id, cur);
       }
       else {
@@ -103,8 +101,6 @@ console.log("SAVE:", cur.data.notifiedChannel);
   }
 
   const updateContactChannels = async (cardId, guid, token, viewRevision, channelRevision, channelMap) => {
-console.log("UPDATE CONTACT CHANNELS: ", viewRevision, channelRevision);
-
     let delta = await getContactChannels(guid + "." + token, viewRevision, channelRevision);
     for (let channel of delta) {
       if (channel.data) {
@@ -142,7 +138,7 @@ console.log("UPDATE CONTACT CHANNELS: ", viewRevision, channelRevision);
       next.current = rev;
       if (revision.current != rev) {
         await updateCards();
-        updateState({ cards: cards.current });
+        updateState({ init: true, cards: cards.current });
         revision.current = rev;
       }
       let r = next.current;

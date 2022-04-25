@@ -6,6 +6,7 @@ import { getProfileImageUrl } from '../Api/getProfileImageUrl';
 
 export function useProfileContext() {
   const [state, setState] = useState({
+    init: false,
     profile: {},
   });
   const access = useRef(null);
@@ -20,7 +21,7 @@ export function useProfileContext() {
     if (next.current == null) {
       if (revision.current != rev) {
         let profile = await getProfile(access.current);
-        updateState({ profile });
+        updateState({ init: true, profile });
         revision.current = rev;
       }
       if (next.current != null) {

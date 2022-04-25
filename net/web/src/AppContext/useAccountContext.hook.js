@@ -4,6 +4,7 @@ import { getAccountStatus } from '../Api/getAccountStatus';
 
 export function useAccountContext() {
   const [state, setState] = useState({
+    init: false,
     status: null,
   });
   const access = useRef(null);
@@ -18,7 +19,7 @@ export function useAccountContext() {
     if (next.current == null) {
       if (revision.current != rev) {
         let status = await getAccountStatus(access.current);
-        updateState({ status });
+        updateState({ init: true, status });
         revision.current = rev;
       }
       if (next.current != null) {

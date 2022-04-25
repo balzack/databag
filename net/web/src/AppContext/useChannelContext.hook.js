@@ -8,6 +8,7 @@ import { getChannelTopic } from '../Api/getChannelTopic';
 
 export function useChannelContext() {
   const [state, setState] = useState({
+    init: false,
     channels: new Map(),
   });
   const access = useRef(null);
@@ -53,7 +54,7 @@ export function useChannelContext() {
       next.current = rev;
       if (revision.current != rev) {
         await updateChannels();
-        updateState({ channels: channels.current });
+        updateState({ init: true, channels: channels.current });
         revision.current = rev;
       }
       let r = next.current;

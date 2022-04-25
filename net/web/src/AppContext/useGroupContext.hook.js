@@ -3,6 +3,7 @@ import { getGroups } from '../Api/getGroups';
 
 export function useGroupContext() {
   const [state, setState] = useState({
+    init: false,
     groups: new Map(),
   });
   const access = useRef(null);
@@ -30,7 +31,7 @@ export function useGroupContext() {
     if (next.current == null) {
       if (revision.current != rev) {
         await updateGroups();
-        updateState({ groups: groups.current });
+        updateState({ init: true, groups: groups.current });
         revision.current = rev;
       }
       if (next.current != null) {

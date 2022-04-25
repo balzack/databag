@@ -101,7 +101,9 @@ export function useConversation() {
   }
 
   useEffect(() => {
-    updateConversation();
+    if (card.state.init && channel.state.init) {
+      updateConversation();
+    }
   }, [card, channel]);
 
   return { state, actions };

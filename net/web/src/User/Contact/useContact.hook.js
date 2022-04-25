@@ -148,7 +148,7 @@ export function useContact() {
     },
   };
 
-  useEffect(() => {
+  const updateContact = () => {
     let contact = card.actions.getCardByGuid(guid);
     if (contact) {
       let profile = contact.data.cardProfile;
@@ -200,6 +200,12 @@ export function useContact() {
       }
       updateState({ status: 'unsaved' });
       updateState({ showButtons: { save: true, saveRequest: true }});
+    }
+  }
+  
+  useEffect(() => {
+    if (card.state.init) {
+      updateContact();
     }
   }, [card, guid])
 
