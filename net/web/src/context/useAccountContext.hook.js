@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
-import { setAccountSearchable } from '../Api/setAccountSearchable';
-import { getAccountStatus } from '../Api/getAccountStatus';
+import { setAccountSearchable } from 'api/setAccountSearchable';
+import { getAccountStatus } from 'api/getAccountStatus';
 
 export function useAccountContext() {
   const [state, setState] = useState({

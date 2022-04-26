@@ -1,8 +1,8 @@
 import { useContext, useState, useEffect } from 'react';
-import { CardContext } from '../../AppContext/CardContext';
+import { CardContext } from 'context/CardContext';
 import { useNavigate, useLocation, useParams } from "react-router-dom";
-import { getListingMessage } from '../../Api/getListingMessage';
-import { getListingImageUrl } from '../../Api/getListingImageUrl';
+import { getListingMessage } from 'api/getListingMessage';
+import { getListingImageUrl } from 'api/getListingImageUrl';
 
 export function useContact() {
   

@@ -1,8 +1,8 @@
 import { useEffect, useState, useRef } from 'react';
-import { getProfile } from '../Api/getProfile';
-import { setProfileData } from '../Api/setProfileData';
-import { setProfileImage } from '../Api/setProfileImage';
-import { getProfileImageUrl } from '../Api/getProfileImageUrl';
+import { getProfile } from 'api/getProfile';
+import { setProfileData } from 'api/setProfileData';
+import { setProfileImage } from 'api/setProfileImage';
+import { getProfileImageUrl } from 'api/getProfileImageUrl';
 
 export function useProfileContext() {
   const [state, setState] = useState({

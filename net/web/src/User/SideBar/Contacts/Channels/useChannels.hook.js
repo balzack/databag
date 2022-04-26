@@ -1,7 +1,7 @@
 import { useContext, useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { CardContext } from '../../../../AppContext/CardContext';
-import { ChannelContext } from '../../../../AppContext/ChannelContext';
+import { CardContext } from 'context/CardContext';
+import { ChannelContext } from 'context/ChannelContext';
 
 export function useChannels() {
 

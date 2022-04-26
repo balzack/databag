@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import { getGroups } from '../Api/getGroups';
+import { getGroups } from 'api/getGroups';
 
 export function useGroupContext() {
   const [state, setState] = useState({

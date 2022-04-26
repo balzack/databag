@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect } from 'react';
-import { AppContext } from '../../../AppContext/AppContext';
-import { ProfileContext } from '../../../AppContext/ProfileContext';
+import { AppContext } from 'context/AppContext';
+import { ProfileContext } from 'context/ProfileContext';
 import { useNavigate } from "react-router-dom";
 
 export function useIdentity() {

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react'
 import { useNavigate } from "react-router-dom";
-import { AppContext } from '../AppContext/AppContext';
+import { AppContext } from 'context/AppContext';
                                            
 export function Home() {
 

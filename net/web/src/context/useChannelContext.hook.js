@@ -1,10 +1,10 @@
 import { useEffect, useState, useRef } from 'react';
-import { getChannels } from '../Api/getChannels';
-import { getChannel } from '../Api/getChannel';
-import { addChannel } from '../Api/addChannel';
-import { addChannelTopic } from '../Api/addChannelTopic';
-import { getChannelTopics } from '../Api/getChannelTopics';
-import { getChannelTopic } from '../Api/getChannelTopic';
+import { getChannels } from 'api/getChannels';
+import { getChannel } from 'api/getChannel';
+import { addChannel } from 'api/addChannel';
+import { addChannelTopic } from 'api/addChannelTopic';
+import { getChannelTopics } from 'api/getChannelTopics';
+import { getChannelTopic } from 'api/getChannelTopic';
 
 export function useChannelContext() {
   const [state, setState] = useState({

@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect } from 'react';
-import { CardContext } from '../../../../../../AppContext/CardContext';
-import { ProfileContext } from '../../../../../../AppContext/ProfileContext';
+import { CardContext } from 'context/CardContext';
+import { ProfileContext } from 'context/ProfileContext';
 
 export function useChannelLogo() {
   

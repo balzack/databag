@@ -1,8 +1,8 @@
 import { useContext, useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { ConversationContext } from '../../ConversationContext/ConversationContext';
-import { CardContext } from '../../AppContext/CardContext';
-import { ChannelContext } from '../../AppContext/ChannelContext';
+import { CardContext } from 'context/CardContext';
+import { ChannelContext } from 'context/ChannelContext';
 
 export function useConversation() {
   

@@ -1,7 +1,7 @@
 import { useContext, useState, useEffect } from 'react';
-import { CardContext } from '../../../../../../AppContext/CardContext';
-import { ProfileContext } from '../../../../../../AppContext/ProfileContext';
-import { getCardImageUrl } from '../../../../../../Api/getCardImageUrl';
+import { CardContext } from 'context/CardContext';
+import { ProfileContext } from 'context/ProfileContext';
+import { getCardImageUrl } from 'api/getCardImageUrl';
 
 export function useChannelLabel() {
 

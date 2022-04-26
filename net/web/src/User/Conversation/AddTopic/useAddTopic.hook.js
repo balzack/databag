@@ -1,9 +1,9 @@
 import { useContext, useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { addChannelTopic } from '../../../Api/addChannelTopic';
-import { addContactChannelTopic } from '../../../Api/addContactChannelTopic';
-import { CardContext } from '../../../AppContext/CardContext';
-import { ChannelContext } from '../../../AppContext/ChannelContext';
+import { addChannelTopic } from 'api/addChannelTopic';
+import { addContactChannelTopic } from 'api/addContactChannelTopic';
+import { CardContext } from 'context/CardContext';
+import { ChannelContext } from 'context/ChannelContext';
 
 export function useAddTopic() {
 

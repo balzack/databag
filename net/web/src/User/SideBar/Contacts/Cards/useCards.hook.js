@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect } from 'react';
-import { CardContext } from '../../../../AppContext/CardContext';
+import { CardContext } from 'context/CardContext';
 import { useNavigate } from 'react-router-dom';
 
 export function useCards() {

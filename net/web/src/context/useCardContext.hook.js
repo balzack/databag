@@ -1,22 +1,22 @@
 import { useEffect, useState, useRef } from 'react';
-import { getContactChannels } from '../Api/getContactChannels';
-import { getContactChannel } from '../Api/getContactChannel';
-import { getContactProfile } from '../Api/getContactProfile';
-import { setCardProfile } from '../Api/setCardProfile';
-import { getCards } from '../Api/getCards';
-import { getCardImageUrl } from '../Api/getCardImageUrl';
-import { getCardProfile } from '../Api/getCardProfile';
-import { getCardDetail } from '../Api/getCardDetail';
-import { addContactChannelTopic } from '../Api/addContactChannelTopic';
-import { setCardConnecting, setCardConnected, setCardConfirmed } from '../Api/setCardStatus';
-import { getCardOpenMessage } from '../Api/getCardOpenMessage';
-import { setCardOpenMessage } from '../Api/setCardOpenMessage';
-import { getCardCloseMessage } from '../Api/getCardCloseMessage';
-import { setCardCloseMessage } from '../Api/setCardCloseMessage';
-import { getContactChannelTopics } from '../Api/getContactChannelTopics';
-import { getContactChannelTopic } from '../Api/getContactChannelTopic';
-import { addCard } from '../Api/addCard';
-import { removeCard } from '../Api/removeCard';
+import { getContactChannels } from 'api/getContactChannels';
+import { getContactChannel } from 'api/getContactChannel';
+import { getContactProfile } from 'api/getContactProfile';
+import { setCardProfile } from 'api/setCardProfile';
+import { getCards } from 'api/getCards';
+import { getCardImageUrl } from 'api/getCardImageUrl';
+import { getCardProfile } from 'api/getCardProfile';
+import { getCardDetail } from 'api/getCardDetail';
+import { addContactChannelTopic } from 'api/addContactChannelTopic';
+import { setCardConnecting, setCardConnected, setCardConfirmed } from 'api/setCardStatus';
+import { getCardOpenMessage } from 'api/getCardOpenMessage';
+import { setCardOpenMessage } from 'api/setCardOpenMessage';
+import { getCardCloseMessage } from 'api/getCardCloseMessage';
+import { setCardCloseMessage } from 'api/setCardCloseMessage';
+import { getContactChannelTopics } from 'api/getContactChannelTopics';
+import { getContactChannelTopic } from 'api/getContactChannelTopic';
+import { addCard } from 'api/addCard';
+import { removeCard } from 'api/removeCard';
 
 export function useCardContext() {
   const [state, setState] = useState({

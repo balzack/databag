@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect } from 'react';
-import { ProfileContext } from '../../AppContext/ProfileContext';
-import { AccountContext } from '../../AppContext/AccountContext';
+import { ProfileContext } from 'context/ProfileContext';
+import { AccountContext } from 'context/AccountContext';
 import { useNavigate } from "react-router-dom";
 
 const IMAGE_DIM = 256;

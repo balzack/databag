@@ -1,8 +1,8 @@
 import { useContext, useState, useEffect } from 'react';
-import { ProfileContext } from '../../../../../AppContext/ProfileContext';
+import { ProfileContext } from 'context/ProfileContext';
 import { useNavigate } from "react-router-dom";
-import { getListing } from '../../../../../Api/getListing';
-import { getListingImageUrl } from '../../../../../Api/getListingImageUrl';
+import { getListing } from 'api/getListing';
+import { getListingImageUrl } from 'api/getListingImageUrl';
 
 export function useRegistry() {
 

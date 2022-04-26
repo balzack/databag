@@ -1,11 +1,11 @@
 import login from './login.png';
-import { AppContextProvider } from './AppContext/AppContext';
-import { AccountContextProvider } from './AppContext/AccountContext';
-import { ProfileContextProvider } from './AppContext/ProfileContext';
-import { ArticleContextProvider } from './AppContext/ArticleContext';
-import { GroupContextProvider } from './AppContext/GroupContext';
-import { CardContextProvider } from './AppContext/CardContext';
-import { ChannelContextProvider } from './AppContext/ChannelContext';
+import { AppContextProvider } from 'context/AppContext';
+import { AccountContextProvider } from 'context/AccountContext';
+import { ProfileContextProvider } from 'context/ProfileContext';
+import { ArticleContextProvider } from 'context/ArticleContext';
+import { GroupContextProvider } from 'context/GroupContext';
+import { CardContextProvider } from 'context/CardContext';
+import { ChannelContextProvider } from 'context/ChannelContext';
 import { ConversationContextProvider } from './ConversationContext/ConversationContext';
 import { Home } from './Home/Home';
 import { Login } from './Login/Login';
