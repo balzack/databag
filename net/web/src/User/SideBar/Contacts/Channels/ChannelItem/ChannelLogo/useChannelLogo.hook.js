@@ -13,15 +13,7 @@ export function useChannelLogo() {
 
   const actions = {
     getCardImageUrl: card.actions.getImageUrl,
-    getCardByGuid: (guid) => {
-      let c = null;
-      card.state.cards.forEach((value, key, map) => {
-        if(value?.data?.cardProfile?.guid == guid) {
-          c = value;
-        }
-      });
-      return c;
-    },
+    getCardByGuid: card.actions.getCardByGuid,
   };
 
   const updateState = (value) => {
@@ -29,8 +21,10 @@ export function useChannelLogo() {
   }
 
   useEffect(() => {
-    updateState({ guid: profile.state.profile.guid })
-  }, [profile])
+    if (card.state.init && profile.state.init) {
+      updateState({ guid: profile.state.profile.guid })
+    }
+  }, [card, profile])
 
   return { state, actions };
 }
