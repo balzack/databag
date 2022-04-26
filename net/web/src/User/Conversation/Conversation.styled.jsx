@@ -40,13 +40,13 @@ export const ConversationWrapper = styled.div`
   }
 
   .thread {
+    position: relative;
     display: flex;
     flex-grow: 1;
     flex-direction: column;
     width: 100%;
     overflow: auto; 
   }
-    
 `;
 
 export const CloseButton = styled(Button)`
@@ -60,3 +60,8 @@ export const ListItem = styled.div`
   width: 64px;
 `;
 
+export const BusySpin = styled(Spin)`
+  position: absolute;
+  left: calc(50% - 16px);
+  top: calc(50% - 16px);
+`;

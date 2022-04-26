@@ -2,8 +2,8 @@ import React, { useState, useEffect, useRef } from 'react'
 import { ConversationContextProvider } from '../../ConversationContext/ConversationContext';
 import { CloseOutlined, UserOutlined } from '@ant-design/icons';
 import { useConversation } from './useConversation.hook';
-import { Button, Checkbox, Modal } from 'antd'
-import { ConversationWrapper, CloseButton, ListItem } from './Conversation.styled';
+import { Button, Checkbox, Modal, Spin } from 'antd'
+import { ConversationWrapper, CloseButton, ListItem, BusySpin } from './Conversation.styled';
 import { AutoSizer, CellMeasurer, CellMeasurerCache, List } from 'react-virtualized';
 import { AddTopic } from './AddTopic/AddTopic';
 import { VirtualList } from '../../VirtualList/VirtualList';
@@ -26,6 +26,7 @@ export function Conversation() {
       </div>
       <div class="thread">
         <VirtualList items={state.topics} itemRenderer={topicRenderer} />
+        <BusySpin size="large" delay="1000" spinning={!state.init} />
       </div>
       <AddTopic />
     </ConversationWrapper>

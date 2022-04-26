@@ -7,6 +7,7 @@ import { ChannelContext } from 'context/ChannelContext';
 export function useConversation() {
   
   const [state, setState] = useState({
+    init: false,
     cardId: null,
     channelId: null,
     topics: [],
@@ -61,6 +62,7 @@ export function useConversation() {
           }
         }
         updateState({
+          init: true,
           topics: Array.from(topics.current.values()), 
         });
         revision.current = rev;
@@ -95,8 +97,8 @@ export function useConversation() {
           }
         }
         updateState({
+          init: true,
           topics: Array.from(topics.current.values()),
-          revision: conversation.revision
         });
         revision.current = rev;
       }
@@ -108,7 +110,7 @@ export function useConversation() {
       id.current = { cardId, channelId };
       topics.current = new Map();
       revision.current = null;
-      updateState({ cardId, channelId, topics: [] });
+      updateState({ init: false, cardId, channelId, topics: [] });
     }
     if (card.state.init && channel.state.init) {
       if (cardId) {

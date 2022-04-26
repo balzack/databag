@@ -108,7 +108,7 @@ export function VirtualList({ id, items, itemRenderer }) {
     let view = getPlacement();
     if (view) {
       if (view.overscan.top < OVERSCAN) {
-        if (containers.current[0].index > 0) {
+        if (containers.current[0].index > 0 && containers.current[0].index < items.length) {
           let below = containers.current[0];
           let container = {
             top: below.top - (DEFAULT_ITEM_HEIGHT + 2 * GUTTER),
