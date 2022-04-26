@@ -43,8 +43,8 @@ export function useRegistry() {
         updateState({ busy: false });
       }
     },
-    getRegistryImageUrl: (guid, revision) => {
-      return getListingImageUrl(state.server, guid, revision);
+    getRegistryImageUrl: (guid) => {
+      return getListingImageUrl(state.server, guid);
     },
     select: (contact) => {
       navigate(`/user/contact/${contact.guid}`, { state: contact });

@@ -15,7 +15,7 @@ export function Registry() {
 
   const registryImage = (item) => {
     if (actions?.getRegistryImageUrl) {
-      return actions.getRegistryImageUrl(item.guid, item.revision);
+      return actions.getRegistryImageUrl(item.guid);
     }
     return null
   }

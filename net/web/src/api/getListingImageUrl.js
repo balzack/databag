@@ -1,5 +1,5 @@
-export function getListingImageUrl(server, guid, revision) {
-  return `https://${server}/account/listing/${guid}/image?revision=${revision}`
+export function getListingImageUrl(server, guid) {
+  return `https://${server}/account/listing/${guid}/image`
 }
 
 
