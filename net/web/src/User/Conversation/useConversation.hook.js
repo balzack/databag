@@ -104,7 +104,7 @@ export function useConversation() {
   }
 
   useEffect(() => {
-    if (id.current.channelId != channelId || id.current.cardId) {
+    if (id.current.channelId != channelId || id.current.cardId != cardId) {
       id.current = { cardId, channelId };
       topics.current = new Map();
       revision.current = null;
