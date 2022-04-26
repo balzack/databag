@@ -7,6 +7,8 @@ import { ChannelContext } from 'context/ChannelContext';
 export function useConversation() {
   
   const [state, setState] = useState({
+    cardId: null,
+    channelId: null,
     topics: [],
   });
 
@@ -17,6 +19,7 @@ export function useConversation() {
   const conversation = useContext(ConversationContext);
   const topics = useRef(new Map());
   const revision = useRef(null);
+  const id = useRef({});
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
@@ -101,10 +104,27 @@ export function useConversation() {
   }
 
   useEffect(() => {
-    if (card.state.init && channel.state.init) {
-      updateConversation();
+    if (id.current.channelId != channelId || id.current.cardId) {
+      id.current = { cardId, channelId };
+      topics.current = new Map();
+      revision.current = null;
+      updateState({ cardId, channelId, topics: [] });
     }
-  }, [card, channel]);
+    if (card.state.init && channel.state.init) {
+      if (cardId) {
+        if(card.state.cards.get(cardId)?.data.cardDetail.status != 'connected') {
+          window.alert("You are no longer connected to the host");
+          navigate('/user')
+        }
+      }
+      try {
+        updateConversation();
+      }
+      catch (err) {
+        console.log(err);
+      }
+    }
+  }, [card, channel, cardId, channelId]);
 
   return { state, actions };
 }

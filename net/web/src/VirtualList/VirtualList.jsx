@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { VirtualListWrapper, VirtualItem } from './VirtualList.styled';
 import ReactResizeDetector from 'react-resize-detector';
 
-export function VirtualList({ items, itemRenderer }) {
+export function VirtualList({ id, items, itemRenderer }) {
 
   const REDZONE = 256; // recenter on canvas if in canvas edge redzone
   const HOLDZONE = 512; // drop slots outside of holdzone of view
@@ -21,6 +21,7 @@ export function VirtualList({ items, itemRenderer }) {
   let containers = useRef([]);
   let anchorBottom = useRef(true);
   let listRef = useRef();
+  let view = useRef(null);
 
   const addSlot = (id, slot) => {
     setSlots((m) => { m.set(id, slot); return new Map(m); })
@@ -32,6 +33,10 @@ export function VirtualList({ items, itemRenderer }) {
 
   const removeSlot = (id) => {
     setSlots((m) => { m.delete(id); return new Map(m); })
+  }
+
+  const clearSlots = () => {
+    setSlots((m) => { new Map() })
   }
 
   const growCanvasHeight = (val) => {
@@ -51,8 +56,17 @@ export function VirtualList({ items, itemRenderer }) {
   }, [viewHeight]);
 
   useEffect(() => {
+    if (view.current != id) {
+      view.current = id;
+      latch.current = true;
+      containers.current = [];
+      anchorBottom.current = true;
+      scrollTop.current = 0;
+      listRef.current.scrollTo({ top: scrollTop.current, left: 0 });
+      clearSlots();
+    }
     setItems();
-  }, [items]);
+  }, [items, id]);
 
   useEffect(() => {
     if (latch.current) {

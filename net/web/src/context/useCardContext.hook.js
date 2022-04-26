@@ -91,6 +91,10 @@ export function useCardContext() {
             cur.data.notifiedChannel = card.data.notifiedChannel;
           }
         }
+        else {
+          cur.channels = new Map();
+          cur.articles = new Map();
+        }
         cur.revision = card.revision;
         cards.current.set(card.id, cur);
       }
@@ -137,7 +141,12 @@ export function useCardContext() {
     if (next.current == null) {
       next.current = rev;
       if (revision.current != rev) {
-        await updateCards();
+        try {
+          await updateCards();
+        }
+        catch(err) {
+          console.log(err);
+        }
         updateState({ init: true, cards: cards.current });
         revision.current = rev;
       }
@@ -171,8 +180,11 @@ export function useCardContext() {
     },
     getCardByGuid: getCardByGuid,
     getImageUrl: (cardId) => {
-      let { data } = cards.current.get(cardId);
-      return getCardImageUrl(access.current, cardId, data.profileRevision)
+      let card = cards.current.get(cardId);
+      if (!card) {
+        return null;
+      }
+      return getCardImageUrl(access.current, cardId, card.data.profileRevision)
     },
     addChannelTopic: async (cardId, channelId, message, assets) => {
       let { cardProfile, cardDetail } = cards.current.get(cardId).data;
@@ -183,7 +195,7 @@ export function useCardContext() {
     getChannelRevision: (cardId, channelId) => {
       let card = cards.current.get(cardId);
       let channel = card.channels.get(channelId);
-      return channel.revision;
+      return channel?.revision;
     },
     getChannelTopics: async (cardId, channelId, revision) => {
       let card = cards.current.get(cardId);
