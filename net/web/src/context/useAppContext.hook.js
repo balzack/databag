@@ -163,8 +163,8 @@ export function useAppContext() {
     }
   }, []);
 
-  if (!state) {
-    return {}
+  if (state == null) {
+    return {};
   }
   if (state.access === 'user') {
     return { state, actions: userActions }

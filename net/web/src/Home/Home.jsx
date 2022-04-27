@@ -19,7 +19,7 @@ export function Home() {
         navigate('/admin')
       }
     }
-  }, [])
+  }, [app])
 
   return <></>
 }
