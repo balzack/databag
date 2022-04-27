@@ -21,7 +21,7 @@ export function VirtualList({ id, items, itemRenderer }) {
   let containers = useRef([]);
   let anchorBottom = useRef(true);
   let listRef = useRef();
-  let view = useRef(null);
+  let key = useRef(null);
 
   const addSlot = (id, slot) => {
     setSlots((m) => { m.set(id, slot); return new Map(m); })
@@ -36,7 +36,7 @@ export function VirtualList({ id, items, itemRenderer }) {
   }
 
   const clearSlots = () => {
-    setSlots((m) => { new Map() })
+    setSlots((m) => { return new Map() })
   }
 
   const growCanvasHeight = (val) => {
@@ -56,8 +56,8 @@ export function VirtualList({ id, items, itemRenderer }) {
   }, [viewHeight]);
 
   useEffect(() => {
-    if (view.current != id) {
-      view.current = id;
+    if (key.current != id) {
+      key.current = id;
       latch.current = true;
       containers.current = [];
       anchorBottom.current = true;

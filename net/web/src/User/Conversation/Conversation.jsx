@@ -25,7 +25,8 @@ export function Conversation() {
             onClick={() => actions.close()} icon={<CloseOutlined />} />
       </div>
       <div class="thread">
-        <VirtualList items={state.topics} itemRenderer={topicRenderer} />
+        <VirtualList id={state.channelId + state.cardId} 
+            items={state.topics} itemRenderer={topicRenderer} />
         <BusySpin size="large" delay="1000" spinning={!state.init} />
       </div>
       <AddTopic />
