@@ -235,7 +235,7 @@ export function VirtualList({ id, items, itemRenderer }) {
     if (anchorBottom.current) {
       for (let i = containers.current.length - 1; i >= 0; i--) {
         let container = containers.current[i];
-        if (items.length < container.index || items[container.index].id != container.id) {
+        if (items.length <= container.index || items[container.index].id != container.id) {
           for (let j = 0; j <= i; j++) {
             let shifted = containers.current.shift();
             removeSlot(shifted.id);
@@ -251,7 +251,7 @@ export function VirtualList({ id, items, itemRenderer }) {
     else {
       for (let i = 0; i < containers.current.length; i++) {
         let container = containers.current[i];
-        if (items.length < container.index || items[container.index].id != container.id) {
+        if (items.length <= container.index || items[container.index].id != container.id) {
           for (let j = i; j < containers.current.length; j++) {
             let popped = containers.current.pop();
             removeSlot(popped.id);
