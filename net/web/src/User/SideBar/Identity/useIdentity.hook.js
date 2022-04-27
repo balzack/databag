@@ -23,7 +23,8 @@ export function useIdentity() {
 
   const actions = {
     logout: async () => {
-      app.actions.logout()
+      app.actions.logout();
+      navigate('/');
     },
     editLabels: () => {
       console.log("EDIT LABELS");
