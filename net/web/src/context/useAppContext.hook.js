@@ -172,7 +172,7 @@ export function useAppContext() {
   if (state.access === 'admin') {
     return { state, actions: adminActions }
   }
-  return { actions: accessActions }
+  return { state, actions: accessActions }
 }
 
 

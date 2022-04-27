@@ -35,6 +35,12 @@ export function useIdentity() {
   };
 
   useEffect(() => {
+    if (app.state && app.state.access != 'user') {
+      navigate('/');
+    }
+  }, [app]);
+
+  useEffect(() => {
     if (profile?.state?.profile) {
       let identity = profile.state.profile;
       updateState({ imageUrl: profile.actions.profileImageUrl() })

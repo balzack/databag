@@ -4,7 +4,6 @@ export function useConversationContext() {
   const [state, setState] = useState({});
 
   useEffect(() => {
-    console.log("CREATED CONVERSATION");
   }, []);
 
   const updateState = (value) => {

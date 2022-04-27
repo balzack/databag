@@ -5,7 +5,7 @@ import ReactResizeDetector from 'react-resize-detector';
 export function VirtualList({ id, items, itemRenderer }) {
 
   const REDZONE = 256; // recenter on canvas if in canvas edge redzone
-  const HOLDZONE = 512; // drop slots outside of holdzone of view
+  const HOLDZONE = 1024; // drop slots outside of holdzone of view
   const OVERSCAN = 256; // add slots in overscan of view
   const DEFAULT_ITEM_HEIGHT = 64;
   const DEFAULT_LIST_HEIGHT = 4096;
@@ -143,7 +143,7 @@ export function VirtualList({ id, items, itemRenderer }) {
           addSlot(container.id, getSlot(container))
           anchorBottom.current = false;
 
-          if (containers.current[0].top + containers.current[0].height + 2 * GUTTER < scrollTop.current) {
+          if (containers.current[0].top + containers.current[0].height + 2 * GUTTER + HOLDZONE < scrollTop.current) {
             removeSlot(containers.current[0].id);
             containers.current.shift();
           }

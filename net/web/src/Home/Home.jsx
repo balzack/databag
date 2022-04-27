@@ -8,8 +8,8 @@ export function Home() {
   const app = useContext(AppContext);
 
   useEffect(() => {
-    if (app) {
-      if (app.state == null) {
+    if (app?.state) {
+      if (app.state.access == null) {
         navigate('/login')
       }
       else if (app.state.access === 'user') {
