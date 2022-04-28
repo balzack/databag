@@ -179,9 +179,20 @@ export function useCardContext() {
       setCards(rev);
     },
     getCardByGuid: getCardByGuid,
+    getCardProfileByGuid: (guid) => {
+      let card = getCardByGuid(guid);
+      if (card) {
+        let { name, handle } = card.data.cardProfile;
+        if (card.data.cardProfile.imageSet) {
+          return { name, handle, imageUrl: getCardImageUrl(access.current, card.id, card.data.profileRevision) };
+        }
+        return { name, handle }
+      }
+      return {};
+    },
     getImageUrl: (cardId) => {
       let card = cards.current.get(cardId);
-      if (!card) {
+      if (!card || !card.data.cardProfile.imageSet) {
         return null;
       }
       return getCardImageUrl(access.current, cardId, card.data.profileRevision)

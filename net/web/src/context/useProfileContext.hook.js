@@ -48,6 +48,13 @@ export function useProfileContext() {
     setProfileImage: async (image) => {
       await setProfileImage(access.current, image);
     },
+    getProfile: () => {
+      const { name, handle, image, revision } = state.profile;
+      if (image == null || image == '') {
+        return { name, handle };
+      }
+      return { name, handle, imageUrl: getProfileImageUrl(access.current, revision) };
+    },
     profileImageUrl: () => getProfileImageUrl(access.current, revision.current),
   }
 
