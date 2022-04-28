@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect, useRef } from 'react';
-import { ConversationContext } from '../../../ConversationContext/ConversationContext';
+import { ConversationContext } from 'context/ConversationContext';
 
 export function useTopicItem() {
 

@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { ConversationContextProvider } from '../../ConversationContext/ConversationContext';
 import { CloseOutlined, UserOutlined } from '@ant-design/icons';
 import { useConversation } from './useConversation.hook';
 import { Button, Checkbox, Modal, Spin } from 'antd'

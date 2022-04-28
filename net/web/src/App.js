@@ -6,7 +6,7 @@ import { ArticleContextProvider } from 'context/ArticleContext';
 import { GroupContextProvider } from 'context/GroupContext';
 import { CardContextProvider } from 'context/CardContext';
 import { ChannelContextProvider } from 'context/ChannelContext';
-import { ConversationContextProvider } from './ConversationContext/ConversationContext';
+import { ConversationContextProvider } from 'context/ConversationContext';
 import { Home } from './Home/Home';
 import { Login } from './Login/Login';
 import { Create } from './Create/Create';
