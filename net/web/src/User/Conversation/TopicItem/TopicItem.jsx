@@ -3,7 +3,7 @@ import { TopicItemWrapper } from './TopicItem.styled';
 import ReactResizeDetector from 'react-resize-detector';
 import { useTopicItem } from './useTopicItem.hook';
 import { Avatar } from 'avatar/Avatar';
-import { BranchesOutlined } from '@ant-design/icons';
+import { CommentOutlined } from '@ant-design/icons';
 
 export function TopicItem({ topic }) {
 
@@ -24,7 +24,7 @@ export function TopicItem({ topic }) {
           <div class={nameClass}>{ name }</div>
           <div>{ getTime(offset) }</div>
           <div class="comments">
-            <BranchesOutlined rotate="90" />
+            <CommentOutlined />
           </div>
         </div>
         <div class="message">{ state.message }</div>
@@ -34,6 +34,9 @@ export function TopicItem({ topic }) {
 }
 
 function getTime(offset) {
+  if (offset < 1) {
+    return ''
+  }
   if (offset < 60) {
     return Math.floor(offset) + "s";
   }

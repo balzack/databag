@@ -6,10 +6,7 @@ export const TopicItemWrapper = styled.div`
   width: 100%;
   padding-left: 8px;
   padding-right: 8px;
-  &:hover {
-    background-color: #eeeeee;
-  }
-
+  
   .avatar {
     height: 32px;
     width: 32px;

@@ -30,6 +30,6 @@ export const VirtualItem = styled.div`
   width: 100%;
   overflow: hidden;
   &:hover {
-    background-color: #eeeeee;
+    background-color: #f0f5e0;
   }
 `;

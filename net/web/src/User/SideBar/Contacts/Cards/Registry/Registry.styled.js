@@ -54,7 +54,7 @@ export const RegistryItem = styled(List.Item)`
   padding-bottom: 4px;
   cursor: pointer;
   &:hover {
-    background-color: #eeeeee;
+    background-color: #f0f5e0;
   }
 `;
 

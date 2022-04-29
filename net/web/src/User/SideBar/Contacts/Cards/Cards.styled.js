@@ -17,6 +17,9 @@ export const CardItem = styled(List.Item)`
   padding-top: 4px;
   padding-bottom: 4px;
   cursor: pointer;
+  &:hover {
+    background-color: #f0f5e0;
+  }
 
   .item {
     width: 100%;

@@ -12,7 +12,7 @@ export const ChannelItemWrapper = styled(List.Item)`
   flex-direction: row;
   align-items: center;
   &:hover {
-    background-color: #eeeeee;
+    background-color: #f0f5e0;
   }
 `;
 
