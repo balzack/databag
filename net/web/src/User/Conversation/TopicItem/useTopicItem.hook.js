@@ -12,6 +12,7 @@ export function useTopicItem(topic) {
     handle: null,
     imageUrl: null,
     message: null,
+    created: null,
   });
 
   const profile = useContext(ProfileContext);
@@ -32,15 +33,15 @@ export function useTopicItem(topic) {
     }
 
     if (profile.state.init && card.state.init && conversation.state.init) {
-      const topicGuid = topic.data.topicDetail.guid;
-      if (profile.state.profile.guid == topicGuid) {
+      const { guid, created } = topic.data.topicDetail;
+      if (profile.state.profile.guid == guid) {
         const { name, handle, imageUrl } = profile.actions.getProfile();
-        updateState({ name, handle, imageUrl, message });
+        updateState({ name, handle, imageUrl, message, created });
       }
       else {
-        const { name, handle, imageUrl } = card.actions.getCardProfileByGuid(topicGuid);
-        updateState({ name, handle, imageUrl, message });
-      }   
+        const { name, handle, imageUrl } = card.actions.getCardProfileByGuid(guid);
+        updateState({ name, handle, imageUrl, message, created });
+      }
     }
   }, [profile, card, conversation, topic]);
 
