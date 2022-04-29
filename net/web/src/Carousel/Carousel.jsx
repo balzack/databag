@@ -11,6 +11,7 @@ export function Carousel({ items, itemRenderer }) {
   const [itemIndex, setItemIndex] = useState(0);
   const [scrollLeft, setScrollLeft] = useState('hidden');
   const [scrollRight, setScrollRight] = useState('hidden');
+  const FUDGE = 1;
 
   let carousel = useRef();
   let itemWidth = useRef(new Map());
@@ -44,7 +45,7 @@ export function Carousel({ items, itemRenderer }) {
   const setScroll = () => {
     let pos = 0;
     for (let i = 0; i < itemIndex; i++) {
-      pos += itemWidth.current.get(i) + 32;
+      pos += itemWidth.current.get(i) + 32 + FUDGE;
     }
     if (carousel.current) {
       carousel.current.scrollTo({ top: 0, left: pos, behavior: 'smooth' });
@@ -102,8 +103,8 @@ export function Carousel({ items, itemRenderer }) {
           {slots}
         </div>
         <div class="arrows">
-          <div class="arrow" style={{ visibility: scrollLeft }} onClick={onLeft}><LeftOutlined /></div>
-          <div class="arrow" style={{ visibility: scrollRight }} onClick={onRight}><RightOutlined /></div>
+          <div class="arrow" onClick={onRight}><RightOutlined style={{ visibility: scrollRight }} /></div>
+          <div class="arrow" onClick={onLeft}><LeftOutlined style={{ visibility: scrollLeft }} /></div>
         </div>
       </CarouselWrapper>
     );

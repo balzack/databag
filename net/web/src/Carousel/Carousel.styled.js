@@ -11,7 +11,7 @@ export const CarouselWrapper = styled.div`
     display: flex;
     flex-direction: row;
     width: 100%;
-    padding-left: 16px;
+    padding-left: 32px;
     overflow: hidden;
 
     /* hide scrollbar for IE, Edge and Firefox */
@@ -24,27 +24,22 @@ export const CarouselWrapper = styled.div`
   }
 
   .arrows {
-    width: 128px;
+    height: 100%;
     display: flex;
-    flex-direction: row;
+    padding-left: 16px;
+    flex-direction: column;
     position: absolute;
-    left: calc(50% - 64px);
-    justify-content: center;
-    bottom: 8px;
   }
 
   .arrow {
+    height: 50%;
     background-color: #888888;
     color: white;
-    opacity: 0.8;
-    padding-left: 4px;
-    padding-right: 4px;
-    margin-left: 8px;
-    margin-right: 8px;
-    font-size: 20px;
-    border-radius: 8px;
+    font-size: 16px;
     cursor: pointer;
-    border: 1px solid white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 
   .arrow:hover {
