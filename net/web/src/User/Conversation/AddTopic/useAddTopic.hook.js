@@ -26,17 +26,24 @@ export function useAddTopic() {
 
   const addAsset = (value) => {
     setState((s) => {
-      s.assets.push(value);
-      return { ...s };
+      let assets = [...s.assets, value];
+      return { ...s, assets };
+    });
+  }
+
+  const removeAsset = (index) => {
+    setState((s) => {
+      s.assets.splice(index, 1);
+      let assets = [...s.assets];
+      return { ...s, assets };
     });
   }
 
   const actions = {
-    addImage: (image) => { addAsset(image) },
-    addVideo: (video) => { addAsset(video) },
-    addAudio: (audio) => { addAsset(audio) },
-    addIframe: (iframe) => { addAsset(iframe) },
-    removeAsset: (idx) => {},
+    addImage: (image) => { addAsset({ image }) },
+    addVideo: (video) => { addAsset({ video }) },
+    addAudio: (audio) => { addAsset({ audio }) },
+    removeAsset: (idx) => { removeAsset(idx) },
     setMessageText: (value) => {
       updateState({ messageText: value });
     },

@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { CarouselWrapper } from './Carousel.styled';
-import { RightOutlined, LeftOutlined } from '@ant-design/icons';
+import { RightOutlined, LeftOutlined, CloseOutlined } from '@ant-design/icons';
 import ReactResizeDetector from 'react-resize-detector';
 
 import login from '../login.png';
 import test from '../test.png';
 
-export function Carousel({ items, itemRenderer }) {
+export function Carousel({ items, itemRenderer, itemRemove }) {
   const [slots, setSlots] = useState([]);
   const [itemIndex, setItemIndex] = useState(0);
   const [scrollLeft, setScrollLeft] = useState('hidden');
@@ -74,7 +74,12 @@ export function Carousel({ items, itemRenderer }) {
         <ReactResizeDetector handleWidth={true} handleHeight={false}>
           {({ width, height }) => {
             itemWidth.current.set(i, width);
-            return <div class="item noselect">{ itemRenderer(items[i]) }</div>
+            return (
+              <div class="item noselect">
+                <div class="asset">{ itemRenderer(items[i]) }</div>
+                <div class="delitem" onClick={() => itemRemove(i)}><CloseOutlined /></div>
+              </div>
+            );
           }}
         </ReactResizeDetector>
       ));

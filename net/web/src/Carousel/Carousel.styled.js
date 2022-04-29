@@ -47,8 +47,23 @@ export const CarouselWrapper = styled.div`
     }
 
   .item {
-    height: 128px;
     margin-right: 32px;
+    position: relative;
+  }
+
+  .delitem {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: white;
+    border-bottom-left-radius: 2px;
+    padding-left: 2px;
+    padding-right: 2px;
+    cursor: pointer;
+  }
+
+  .asset {
+    height: 128px;
   }
 
   .space {

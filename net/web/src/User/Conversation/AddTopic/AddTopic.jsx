@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Button, Dropdown, Input, Tooltip, Menu } from 'antd';
 import { AddTopicWrapper, BusySpin } from './AddTopic.styled';
 import { Carousel } from '../../../Carousel/Carousel';
@@ -13,17 +13,31 @@ export function AddTopic() {
 
   let [ items, setItems] = useState([]);
   const { state, actions } = useAddTopic();
+  const attachImage = useRef(null);
+  const attachAudio = useRef(null);
+  const attachVideo = useRef(null);
+
+  const onSelect = (e, action) => {
+    var reader = new FileReader();
+    reader.onload = () => {
+      action(reader.result);
+    }
+    reader.readAsDataURL(e.target.files[0]);
+  }
 
   const menu = (
     <Menu>
       <Menu.Item key="0">
-        <div onClick={() => setItems([test, login, login, test, test, login])}>Attach Image</div>
+        <input type='file' accept="image/*" ref={attachImage} onChange={e => onSelect(e, actions.addImage)} style={{display: 'none'}}/>
+        <div onClick={() => attachImage.current.click()}>Attach Image</div>
       </Menu.Item>
       <Menu.Item key="1">
-        <div onClick={() => setItems([test, login, login, test, test, login])}>Attach Video</div>
+        <input type='file' accept="audio/*" ref={attachAudio} onChange={e => onSelect(e, actions.addAudio)} style={{display: 'none'}}/>
+        <div onClick={() => attachAudio.current.click()}>Attach Audio</div>
       </Menu.Item>
       <Menu.Item key="2">
-        <div onClick={() => setItems([test, login, login, test, test, login])}>Attach Audio</div>
+        <input type='file' accept="video/*" ref={attachVideo} onChange={e => onSelect(e, actions.addVideo)} style={{display: 'none'}}/>
+        <div onClick={() => attachVideo.current.click()}>Attach Video</div>
       </Menu.Item>
     </Menu>
   );
@@ -41,12 +55,27 @@ export function AddTopic() {
     }
   }
 
+  const renderItem = (item) => {
+    if (item.image) {
+      return <img style={{ height: '100%', objectFit: 'contain' }} src={item.image} alt="" />
+    }
+    if (item.audio) {
+      return <img style={{ height: '100%', objectFit: 'contain' }} src={test} alt="" />
+    }
+    if (item.video) {
+      return <img style={{ height: '100%', objectFit: 'contain' }} src={login} alt="" />
+    }
+    return <></>
+  }
+
+  const removeItem = (index) => {
+    actions.removeAsset(index);
+  }
+
   return (
     <AddTopicWrapper>
       <div class="container noselect">
-        <Carousel items={items} itemRenderer={(item) => {
-          return <img style={{ height: '100%', objectFit: 'contain' }} src={item} alt="" />
-        }} />
+        <Carousel items={state.assets} itemRenderer={renderItem} itemRemove={removeItem} />
         <div class="input">
           <Input.TextArea placeholder="Message" autoSize={{ minRows: 2, maxRows: 6 }} onKeyPress={onKey}
             onChange={(e) => actions.setMessageText(e.target.value)} value={state.messageText} />
