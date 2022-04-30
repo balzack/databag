@@ -17,33 +17,42 @@ export function AddTopic() {
   const attachAudio = useRef(null);
   const attachVideo = useRef(null);
 
-  const onSelect = (e, action) => {
-    var reader = new FileReader();
-    reader.onload = () => {
-      action(reader.result);
-    }
-    reader.readAsDataURL(e.target.files[0]);
+  const onSelectImage = (e) => {
+    actions.addImage(e.target.files[0]);
+    attachImage.current.value = '';
+  }
+
+  const onSelectAudio = (e) => {
+    actions.addAudio(e.target.files[0]);
+    attachAudio.current.value = '';
+  }
+
+  const onSelectVideo = (e) => {
+    actions.addVideo(e.target.files[0]);
+    attachVideo.current.value = '';
   }
 
   const menu = (
     <Menu>
       <Menu.Item key="0">
-        <input type='file' accept="image/*" ref={attachImage} onChange={e => onSelect(e, actions.addImage)} style={{display: 'none'}}/>
+        <input type='file' name="asset" accept="image/*" ref={attachImage} onChange={e => onSelectImage(e)} style={{display: 'none'}}/>
         <div onClick={() => attachImage.current.click()}>Attach Image</div>
       </Menu.Item>
       <Menu.Item key="1">
-        <input type='file' accept="audio/*" ref={attachAudio} onChange={e => onSelect(e, actions.addAudio)} style={{display: 'none'}}/>
+        <input type='file' name="asset" accept="audio/*" ref={attachAudio} onChange={e => onSelectAudio(e)} style={{display: 'none'}}/>
         <div onClick={() => attachAudio.current.click()}>Attach Audio</div>
       </Menu.Item>
       <Menu.Item key="2">
-        <input type='file' accept="video/*" ref={attachVideo} onChange={e => onSelect(e, actions.addVideo)} style={{display: 'none'}}/>
+        <input type='file' name="asset" accept="video/*" ref={attachVideo} onChange={e => onSelectVideo(e)} style={{display: 'none'}}/>
         <div onClick={() => attachVideo.current.click()}>Attach Video</div>
       </Menu.Item>
     </Menu>
   );
 
   const onSend = () => {
-    actions.addTopic();
+    if (state.messageText || state.assets.length) {
+      actions.addTopic();
+    }
   }
 
   const onKey = (e) => {
@@ -57,7 +66,7 @@ export function AddTopic() {
 
   const renderItem = (item) => {
     if (item.image) {
-      return <img style={{ height: '100%', objectFit: 'contain' }} src={item.image} alt="" />
+      return <img style={{ height: '100%', objectFit: 'contain' }} src={item.url} alt="" />
     }
     if (item.audio) {
       return <img style={{ height: '100%', objectFit: 'contain' }} src={test} alt="" />

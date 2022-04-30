@@ -47,7 +47,10 @@ func SetChannelTopicConfirmed(w http.ResponseWriter, r *http.Request) {
   }
 
   err = store.DB.Transaction(func(tx *gorm.DB) error {
-    if res := tx.Model(topicSlot.Topic).Update("status", status).Error; res != nil {
+    if res := tx.Model(&topicSlot.Topic).Update("status", status).Error; res != nil {
+      return res
+    }
+    if res := tx.Model(&topicSlot.Topic).Update("detail_revision", act.ChannelRevision + 1).Error; res != nil {
       return res
     }
     if res := tx.Model(&topicSlot).Update("revision", act.ChannelRevision + 1).Error; res != nil {

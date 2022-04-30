@@ -40,9 +40,18 @@ export function useAddTopic() {
   }
 
   const actions = {
-    addImage: (image) => { addAsset({ image }) },
-    addVideo: (video) => { addAsset({ video }) },
-    addAudio: (audio) => { addAsset({ audio }) },
+    addImage: (image) => { 
+      let url = URL.createObjectURL(image);
+      addAsset({ image, url }) 
+    },
+    addVideo: (video) => { 
+      let url = URL.createObjectURL(video);
+      addAsset({ video, url }) 
+    },
+    addAudio: (audio) => {
+      let url = URL.createObjectURL(audio);
+      addAsset({ audio, url }) 
+    },
     removeAsset: (idx) => { removeAsset(idx) },
     setMessageText: (value) => {
       updateState({ messageText: value });
@@ -66,12 +75,12 @@ export function useAddTopic() {
           let message = { text: state.messageText, textColor: state.messageColor,
               textSize: state.messageSize, backgroundColor: state.backgroundColor };
           if (cardId) {
-            await card.actions.addChannelTopic(cardId, channelId, message, []);
+            await card.actions.addChannelTopic(cardId, channelId, message, state.assets);
           }
           else {
-            await channel.actions.addChannelTopic(channelId, message, []);
+            await channel.actions.addChannelTopic(channelId, message, state.assets);
           }
-          updateState({ messageText: null, messageColor: null, messageSize: null, backgroundColor: null });
+          updateState({ messageText: null, messageColor: null, messageSize: null, backgroundColor: null, assets: [] });
         }
         catch(err) {
           window.alert(err);

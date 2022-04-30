@@ -55,7 +55,8 @@ export const CarouselWrapper = styled.div`
     position: absolute;
     top: 0;
     right: 0;
-    background-color: white;
+    background-color: #888888;
+    color: white;
     border-bottom-left-radius: 2px;
     padding-left: 2px;
     padding-right: 2px;

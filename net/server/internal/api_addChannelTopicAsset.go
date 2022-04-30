@@ -75,6 +75,7 @@ func AddChannelTopicAsset(w http.ResponseWriter, r *http.Request) {
     ErrResponse(w, http.StatusBadRequest, err)
     return
   }
+
   file, _, err := r.FormFile("asset")
 	if err != nil {
 		ErrResponse(w, http.StatusBadRequest, err)
@@ -188,6 +189,7 @@ func isStorageFull(act *store.Account) (full bool, err error) {
   if size >= storage {
     full = true
   }
+
   return
 }
 

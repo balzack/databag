@@ -52,6 +52,9 @@ func SetChannelTopicSubject(w http.ResponseWriter, r *http.Request) {
     if res := tx.Model(topicSlot.Topic).Update("data_type", subject.DataType).Error; res != nil {
       return res
     }
+    if res := tx.Model(&topicSlot.Topic).Update("detail_revision", act.ChannelRevision + 1).Error; res != nil {
+      return res
+    }
     if res := tx.Model(&topicSlot).Update("revision", act.ChannelRevision + 1).Error; res != nil {
       return res
     }

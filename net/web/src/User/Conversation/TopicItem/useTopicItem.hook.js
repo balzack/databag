@@ -25,11 +25,13 @@ export function useTopicItem(topic) {
 
   useEffect(() => {
     let message;
-    try {
-      message = JSON.parse(topic.data.topicDetail.data).text;
-    }
-    catch(err) {
-      console.log(err);
+    if( topic.data.topicDetail.status === 'confirmed') {
+      try {
+        message = JSON.parse(topic.data.topicDetail.data).text;
+      }
+      catch(err) {
+        console.log(err);
+      }
     }
 
     if (profile.state.init && card.state.init && conversation.state.init) {

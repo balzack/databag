@@ -26,6 +26,7 @@ export function useConversationContext() {
       let rev = card.actions.getChannelRevision(cardId, channelId);
       if (revision.current != rev) {
         let delta = await card.actions.getChannelTopics(cardId, channelId, revision.current);
+    console.log(delta);
         for (let topic of delta) {
           if (topic.data == null) {
             topics.current.delete(topic.id);
