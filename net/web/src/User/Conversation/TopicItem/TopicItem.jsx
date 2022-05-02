@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import ReactPlayer from 'react-player'
 import { TopicItemWrapper } from './TopicItem.styled';
 import ReactResizeDetector from 'react-resize-detector';
 import { useTopicItem } from './useTopicItem.hook';
@@ -18,6 +19,12 @@ export function TopicItem({ topic }) {
   const renderAsset = (asset) => {
     if (asset.image) {
       return <img style={{ height: '100%', objectFit: 'container' }} src={actions.getAssetUrl(asset.image.full)} alt="" />
+    }
+    if (asset.video) {
+      return <ReactPlayer height="100%" width="auto" controls="true" url={actions.getAssetUrl(asset.video.full)} />
+    }
+    if (asset.audio) {
+      return <ReactPlayer height="100%" width="auto" controls="true" url={actions.getAssetUrl(asset.audio.full)} />
     }
     return <></>
   }

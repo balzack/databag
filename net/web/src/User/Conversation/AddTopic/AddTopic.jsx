@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import ReactPlayer from 'react-player'
 import { Button, Dropdown, Input, Tooltip, Menu } from 'antd';
 import { AddTopicWrapper, BusySpin } from './AddTopic.styled';
 import { Carousel } from '../../../Carousel/Carousel';
@@ -69,10 +70,10 @@ export function AddTopic() {
       return <img style={{ height: '100%', objectFit: 'contain' }} src={item.url} alt="" />
     }
     if (item.audio) {
-      return <img style={{ height: '100%', objectFit: 'contain' }} src={test} alt="" />
+      return <ReactPlayer height="100%" width="auto" url={item.url} />
     }
     if (item.video) {
-      return <img style={{ height: '100%', objectFit: 'contain' }} src={login} alt="" />
+      return <ReactPlayer height="100%" width="auto" url={item.url} />
     }
     return <></>
   }
