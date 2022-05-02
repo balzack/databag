@@ -13,6 +13,9 @@ export function useTopicItem(topic) {
     imageUrl: null,
     message: null,
     created: null,
+    status: null,
+    transform: null,
+    assets: [],
   });
 
   const profile = useContext(ProfileContext);
@@ -24,10 +27,19 @@ export function useTopicItem(topic) {
   }
 
   useEffect(() => {
+
+    const { status, transform, data } = topic.data.topicDetail;
     let message;
-    if( topic.data.topicDetail.status === 'confirmed') {
+    let assets = [];
+    if (status === 'confirmed') {
       try {
-        message = JSON.parse(topic.data.topicDetail.data).text;
+        message = JSON.parse(data);
+        if (transform === 'complete') {
+          if (message.assets) {
+            assets = message.assets;
+            delete message.assets;
+          }
+        }
       }
       catch(err) {
         console.log(err);
@@ -38,16 +50,19 @@ export function useTopicItem(topic) {
       const { guid, created } = topic.data.topicDetail;
       if (profile.state.profile.guid == guid) {
         const { name, handle, imageUrl } = profile.actions.getProfile();
-        updateState({ name, handle, imageUrl, message, created });
+        updateState({ name, handle, imageUrl, status, message, transform, assets, created });
       }
       else {
         const { name, handle, imageUrl } = card.actions.getCardProfileByGuid(guid);
-        updateState({ name, handle, imageUrl, message, created });
+        updateState({ name, handle, imageUrl, status, message, transform, assets, created });
       }
     }
   }, [profile, card, conversation, topic]);
 
   const actions = {
+    getAssetUrl: (assetId) => {
+      return conversation.actions.getAssetUrl(topic.id, assetId);
+    }
   };
 
   return { state, actions };

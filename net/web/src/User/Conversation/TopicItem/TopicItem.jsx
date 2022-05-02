@@ -4,6 +4,7 @@ import ReactResizeDetector from 'react-resize-detector';
 import { useTopicItem } from './useTopicItem.hook';
 import { Avatar } from 'avatar/Avatar';
 import { CommentOutlined } from '@ant-design/icons';
+import { Carousel } from 'Carousel/Carousel';
 
 export function TopicItem({ topic }) {
 
@@ -13,7 +14,14 @@ export function TopicItem({ topic }) {
   let nameClass = state.name ? 'set' : 'unset';
   let d = new Date();
   let offset = d.getTime() / 1000 - state.created;
-  
+
+  const renderAsset = (asset) => {
+    if (asset.image) {
+      return <img style={{ height: '100%', objectFit: 'container' }} src={actions.getAssetUrl(asset.image.full)} alt="" />
+    }
+    return <></>
+  }
+
   return (
     <TopicItemWrapper>
       <div class="avatar">
@@ -27,7 +35,8 @@ export function TopicItem({ topic }) {
             <CommentOutlined />
           </div>
         </div>
-        <div class="message">{ state.message }</div>
+        <Carousel items={state.assets} itemRenderer={renderAsset} />
+        <div class="message">{ state.message?.text }</div>
       </div>
     </TopicItemWrapper>
   )

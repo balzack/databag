@@ -1,7 +1,6 @@
 package databag
 
 import (
-  "time"
   "os"
   "io"
   "hash/crc32"
@@ -106,7 +105,6 @@ func transcodeAsset(asset *store.Asset) {
     cmd.Stdout = &stdout
     var stderr bytes.Buffer
     cmd.Stderr = &stderr
-time.Sleep(time.Second);
 
     if err := cmd.Run(); err != nil {
       LogMsg(stdout.String())
@@ -138,7 +136,7 @@ time.Sleep(time.Second);
 
 func UpdateAsset(asset *store.Asset, status string, crc uint32, size int64) (err error) {
 
-  act := asset.Account
+  topic := store.Topic{};
   err = store.DB.Transaction(func(tx *gorm.DB) error {
     asset.Crc = crc
     asset.Size = size
@@ -146,19 +144,22 @@ func UpdateAsset(asset *store.Asset, status string, crc uint32, size int64) (err
     if res := tx.Model(store.Asset{}).Where("id = ?", asset.ID).Updates(asset).Error; res != nil {
       return res
     }
-    if res := tx.Model(&asset.Topic).Update("detail_revision", act.ChannelRevision + 1).Error; res != nil {
+    if res := tx.Preload("Account").Preload("TopicSlot").Preload("Channel.ChannelSlot").First(&topic, asset.Topic.ID).Error; res != nil {
+      return res;
+    }
+    if res := tx.Model(&topic).Update("detail_revision", topic.Account.ChannelRevision + 1).Error; res != nil {
       return res
     }
-    if res := tx.Model(&asset.Topic.TopicSlot).Update("revision", act.ChannelRevision + 1).Error; res != nil {
+    if res := tx.Model(&topic.TopicSlot).Update("revision", topic.Account.ChannelRevision + 1).Error; res != nil {
       return res
     }
-    if res := tx.Model(&asset.Channel).Update("topic_revision", act.ChannelRevision + 1).Error; res != nil {
+    if res := tx.Model(&topic.Channel).Update("topic_revision", topic.Account.ChannelRevision + 1).Error; res != nil {
       return res
     }
-    if res := tx.Model(&asset.Channel.ChannelSlot).Update("revision", act.ChannelRevision + 1).Error; res != nil {
+    if res := tx.Model(&topic.Channel.ChannelSlot).Update("revision", topic.Account.ChannelRevision + 1).Error; res != nil {
       return res
     }
-    if res := tx.Model(&act).Update("channel_revision", act.ChannelRevision + 1).Error; res != nil {
+    if res := tx.Model(&topic.Account).Update("channel_revision", topic.Account.ChannelRevision + 1).Error; res != nil {
       return res
     }
     return nil
@@ -169,19 +170,19 @@ func UpdateAsset(asset *store.Asset, status string, crc uint32, size int64) (err
 
   // determine affected contact list
   cards := make(map[string]store.Card)
-  for _, card := range asset.Channel.Cards {
+  for _, card := range topic.Channel.Cards {
     cards[card.Guid] = card
   }
-  for _, group := range asset.Channel.Groups {
+  for _, group := range topic.Channel.Groups {
     for _, card := range group.Cards {
       cards[card.Guid] = card
     }
   }
 
   // notify
-  SetStatus(&act)
+  SetStatus(&topic.Account)
   for _, card := range cards {
-    SetContactChannelNotification(&act, &card)
+    SetContactChannelNotification(&topic.Account, &card)
   }
 
   return

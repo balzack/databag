@@ -13,6 +13,7 @@ export function useConversationContext() {
   const channel = useContext(ChannelContext);
   const topics = useRef(new Map());
   const revision = useRef(null);
+  const count = useRef(0);
   const conversationId = useRef(null);
 
   const updateState = (value) => {
@@ -21,12 +22,11 @@ export function useConversationContext() {
 
   const setTopics = async () => {
     const { cardId, channelId } = conversationId.current;
-    
+
     if (cardId) {
       let rev = card.actions.getChannelRevision(cardId, channelId);
       if (revision.current != rev) {
         let delta = await card.actions.getChannelTopics(cardId, channelId, revision.current);
-    console.log(delta);
         for (let topic of delta) {
           if (topic.data == null) {
             topics.current.delete(topic.id);
@@ -37,7 +37,7 @@ export function useConversationContext() {
               cur = { id: topic.id, data: {} };
             }
             if (topic.data.detailRevision != cur.data.detailRevision) {
-              if(topic.data.topicDetail != null) {
+              if(topic.data.topicDetail) {
                 cur.data.topicDetail = topic.data.topicDetail;
                 cur.data.detailRevision = topic.data.detailRevision;
               }
@@ -108,11 +108,20 @@ export function useConversationContext() {
       return;
     }
 
-    try {
-      setTopics();
+    if (count.current == 0) {
+      count.current += 1;
+      while(count.current > 0) {
+        try {
+          await setTopics();
+        }
+        catch (err) {
+          console.log(err);
+        }
+        count.current -= 1;
+      }
     }
-    catch (err) {
-      console.log(err);
+    else {
+      count.current += 1;
     }
   };
 
@@ -129,6 +138,15 @@ export function useConversationContext() {
       topics.current = new Map();
       updateState({ init: false, topics: topics.current });
       updateConversation();
+    },
+    getAssetUrl: (topicId, assetId) => {
+      const { cardId, channelId } = conversationId.current;
+      if (conversationId.current.cardId) {
+        return card.actions.getContactChannelTopicAssetUrl(cardId, channelId, topicId, assetId);
+      }
+      else {
+        return channel.actions.getChannelTopicAssetUrl(channelId, topicId, assetId);
+      }
     }
   }
 

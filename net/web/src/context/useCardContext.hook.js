@@ -15,6 +15,7 @@ import { getCardCloseMessage } from 'api/getCardCloseMessage';
 import { setCardCloseMessage } from 'api/setCardCloseMessage';
 import { getContactChannelTopics } from 'api/getContactChannelTopics';
 import { getContactChannelTopic } from 'api/getContactChannelTopic';
+import { getContactChannelTopicAssetUrl } from 'api/getContactChannelTopicAssetUrl';
 import { addCard } from 'api/addCard';
 import { removeCard } from 'api/removeCard';
 
@@ -249,6 +250,12 @@ export function useCardContext() {
     setCardCloseMessage: async (server, message) => {
       return await setCardCloseMessage(server, message);
     },
+    getContactChannelTopicAssetUrl: (cardId, channelId, topicId, assetId) => {
+      let card = cards.current.get(cardId);
+      let node = card.data.cardProfile.node;
+      let token = card.data.cardProfile.guid + "." + card.data.cardDetail.token;
+      return getContactChannelTopicAssetUrl(node, token, channelId, topicId, assetId);
+    }
   }
 
   return { state, actions }

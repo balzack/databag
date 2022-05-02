@@ -238,6 +238,7 @@ type Topic struct {
   Created           int64           `gorm:"autoCreateTime"`
   Updated           int64           `gorm:"autoUpdateTime"`
   TagRevision       int64           `gorm:"not null"`
+  Account           Account
   Channel           *Channel
   Assets            []Asset
   Tags              []Tag

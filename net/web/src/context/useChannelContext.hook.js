@@ -5,6 +5,7 @@ import { addChannel } from 'api/addChannel';
 import { addChannelTopic } from 'api/addChannelTopic';
 import { getChannelTopics } from 'api/getChannelTopics';
 import { getChannelTopic } from 'api/getChannelTopic';
+import { getChannelTopicAssetUrl } from 'api/getChannelTopicAssetUrl';
 
 export function useChannelContext() {
   const [state, setState] = useState({
@@ -91,6 +92,9 @@ export function useChannelContext() {
     getChannelTopic: async (channelId, topicId) => {
       return await getChannelTopic(access.current, channelId, topicId);
     },
+    getChannelTopicAssetUrl: (channelId, topicId, assetId) => {
+      return getChannelTopicAssetUrl(access.current, channelId, topicId, assetId);
+    }
   }
 
   return { state, actions }
