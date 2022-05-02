@@ -19,6 +19,10 @@ export const AddTopicWrapper = styled.div`
     width: 100%;
   }
 
+  .carousel {
+    padding-left: 16px;
+  }
+
   .buttons {
     padding-left: 16px;
     padding-right: 16px;

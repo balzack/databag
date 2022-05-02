@@ -8,6 +8,7 @@ import test from '../test.png';
 
 export function Carousel({ items, itemRenderer, itemRemove }) {
   const [slots, setSlots] = useState([]);
+  const [carouselRef, setCarouselRef] = useState(false);
   const [itemIndex, setItemIndex] = useState(0);
   const [scrollLeft, setScrollLeft] = useState('hidden');
   const [scrollRight, setScrollRight] = useState('hidden');
@@ -17,9 +18,13 @@ export function Carousel({ items, itemRenderer, itemRemove }) {
   let itemWidth = useRef(new Map());
 
   useEffect(() => {
-    setScroll();
+    setScroll('smooth');
     setArrows();
   }, [itemIndex, items]);
+
+  useEffect(() => {
+    setScroll('auto');
+  }, [carouselRef]);
 
   const updateItemIndex = (val) => {
     setItemIndex((i) => {
@@ -42,13 +47,13 @@ export function Carousel({ items, itemRenderer, itemRemove }) {
     }
   }
 
-  const setScroll = () => {
-    let pos = 0;
+  const setScroll = (behavior) => {
+    let pos = FUDGE;
     for (let i = 0; i < itemIndex; i++) {
-      pos += itemWidth.current.get(i) + 32 + FUDGE;
+      pos += itemWidth.current.get(i) + 32;
     }
     if (carousel.current) {
-      carousel.current.scrollTo({ top: 0, left: pos, behavior: 'smooth' });
+      carousel.current.scrollTo({ top: 0, left: pos, behavior });
     }
   }
 
@@ -67,6 +72,13 @@ export function Carousel({ items, itemRenderer, itemRemove }) {
     }
   }
 
+  const RemoveItem = ({ index }) => {
+    if (itemRemove) {
+      return <div class="delitem" onClick={() => itemRemove(index)}><CloseOutlined /></div>
+    }
+    return <></>
+  }
+
   useEffect(() => {
     let assets = [];
     for (let i = 0; i < items.length; i++) {
@@ -77,7 +89,7 @@ export function Carousel({ items, itemRenderer, itemRemove }) {
             return (
               <div class="item noselect">
                 <div class="asset">{ itemRenderer(items[i]) }</div>
-                <div class="delitem" onClick={() => itemRemove(i)}><CloseOutlined /></div>
+                <RemoveItem index={i} />
               </div>
             );
           }}
@@ -101,10 +113,17 @@ export function Carousel({ items, itemRenderer, itemRemove }) {
     setArrows();
   }, [items]);
 
+  const onRefSet = (r) => {
+    if (r != null) {
+      carousel.current = r;
+      setCarouselRef(true);
+    }
+  }
+
   if (slots.length != 0) {
     return (
       <CarouselWrapper>
-        <div class="carousel" ref={carousel}>
+        <div class="carousel" ref={onRefSet}>
           {slots}
         </div>
         <div class="arrows">

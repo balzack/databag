@@ -84,7 +84,9 @@ export function AddTopic() {
   return (
     <AddTopicWrapper>
       <div class="container noselect">
-        <Carousel items={state.assets} itemRenderer={renderItem} itemRemove={removeItem} />
+        <div class="carousel">
+          <Carousel items={state.assets} itemRenderer={renderItem} itemRemove={removeItem} />
+        </div>
         <div class="input">
           <Input.TextArea placeholder="Message" autoSize={{ minRows: 2, maxRows: 6 }} onKeyPress={onKey}
             onChange={(e) => actions.setMessageText(e.target.value)} value={state.messageText} />

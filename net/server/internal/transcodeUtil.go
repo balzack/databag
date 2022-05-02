@@ -144,7 +144,7 @@ func UpdateAsset(asset *store.Asset, status string, crc uint32, size int64) (err
     if res := tx.Model(store.Asset{}).Where("id = ?", asset.ID).Updates(asset).Error; res != nil {
       return res
     }
-    if res := tx.Preload("Account").Preload("TopicSlot").Preload("Channel.ChannelSlot").First(&topic, asset.Topic.ID).Error; res != nil {
+    if res := tx.Preload("Account").Preload("TopicSlot").Preload("Channel.Groups").Preload("Channel.Cards").Preload("Channel.ChannelSlot").First(&topic, asset.Topic.ID).Error; res != nil {
       return res;
     }
     if res := tx.Model(&topic).Update("detail_revision", topic.Account.ChannelRevision + 1).Error; res != nil {

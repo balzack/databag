@@ -10,8 +10,8 @@ export const CarouselWrapper = styled.div`
   .carousel {
     display: flex;
     flex-direction: row;
+    padding-left: 16px;
     width: 100%;
-    padding-left: 32px;
     overflow: hidden;
 
     /* hide scrollbar for IE, Edge and Firefox */
@@ -26,7 +26,6 @@ export const CarouselWrapper = styled.div`
   .arrows {
     height: 100%;
     display: flex;
-    padding-left: 16px;
     flex-direction: column;
     position: absolute;
   }
