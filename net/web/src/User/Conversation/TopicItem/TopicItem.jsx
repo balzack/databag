@@ -35,7 +35,7 @@ export function TopicItem({ topic }) {
             <CommentOutlined />
           </div>
         </div>
-        <Carousel items={state.assets} itemRenderer={renderAsset} />
+        <Carousel ready={state.ready} items={state.assets} itemRenderer={renderAsset} />
         <div class="message">{ state.message?.text }</div>
       </div>
     </TopicItemWrapper>

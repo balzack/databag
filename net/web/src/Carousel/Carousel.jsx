@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { Skeleton } from 'antd';
 import { CarouselWrapper } from './Carousel.styled';
 import { RightOutlined, LeftOutlined, CloseOutlined } from '@ant-design/icons';
 import ReactResizeDetector from 'react-resize-detector';
@@ -6,7 +7,7 @@ import ReactResizeDetector from 'react-resize-detector';
 import login from '../login.png';
 import test from '../test.png';
 
-export function Carousel({ items, itemRenderer, itemRemove }) {
+export function Carousel({ ready, items, itemRenderer, itemRemove }) {
   const [slots, setSlots] = useState([]);
   const [carouselRef, setCarouselRef] = useState(false);
   const [itemIndex, setItemIndex] = useState(0);
@@ -81,43 +82,59 @@ export function Carousel({ items, itemRenderer, itemRemove }) {
 
   useEffect(() => {
     let assets = [];
-    for (let i = 0; i < items.length; i++) {
-      assets.push((
-        <ReactResizeDetector handleWidth={true} handleHeight={false}>
-          {({ width, height }) => {
-            itemWidth.current.set(i, width);
-            return (
-              <div class="item noselect">
-                <div class="asset">{ itemRenderer(items[i]) }</div>
-                <RemoveItem index={i} />
-              </div>
-            );
-          }}
-        </ReactResizeDetector>
-      ));
-    }
-    if (items.length > 0) {
-      assets.push(<div class="space">&nbsp;</div>)
-    }
-    if (itemIndex >= items.length) {
-      if (items.length > 0) {
-        setItemIndex(items.length - 1);
+    if (ready) {
+      for (let i = 0; i < items.length; i++) {
+        assets.push((
+          <ReactResizeDetector handleWidth={true} handleHeight={false}>
+            {({ width, height }) => {
+              itemWidth.current.set(i, width);
+              return (
+                <div class="item noselect">
+                  <div class="asset">{ itemRenderer(items[i]) }</div>
+                  <RemoveItem index={i} />
+                </div>
+              );
+            }}
+          </ReactResizeDetector>
+        ));
       }
-      else {
-        setItemIndex(0);
+      if (items.length > 0) {
+        assets.push(<div class="space">&nbsp;</div>)
+      }
+      if (itemIndex >= items.length) {
+        if (items.length > 0) {
+          setItemIndex(items.length - 1);
+        }
+        else {
+          setItemIndex(0);
+        }
       }
     }
     
     setSlots(assets);
     setScroll();
     setArrows();
-  }, [items]);
+  }, [ready, items]);
 
   const onRefSet = (r) => {
     if (r != null) {
       carousel.current = r;
       setCarouselRef(true);
     }
+  }
+
+  if (!ready) {
+    return (
+      <CarouselWrapper>
+        <div class="carousel">
+          <Skeleton.Image style={{ height: 128 }} />
+        </div>
+        <div class="arrows">
+          <div class="arrow" onClick={onRight}><RightOutlined style={{ visibility: scrollRight }} /></div>
+          <div class="arrow" onClick={onLeft}><LeftOutlined style={{ visibility: scrollLeft }} /></div>
+        </div>
+      </CarouselWrapper>
+    )
   }
 
   if (slots.length != 0) {

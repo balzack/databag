@@ -13,8 +13,7 @@ export function useTopicItem(topic) {
     imageUrl: null,
     message: null,
     created: null,
-    status: null,
-    transform: null,
+    ready: false,
     assets: [],
   });
 
@@ -28,17 +27,24 @@ export function useTopicItem(topic) {
 
   useEffect(() => {
 
+    if (!topic?.data) {
+      console.log("invalid topic:", topic);
+      return;
+    }
+
     const { status, transform, data } = topic.data.topicDetail;
     let message;
+    let ready = false;
     let assets = [];
     if (status === 'confirmed') {
       try {
         message = JSON.parse(data);
+        if (message.assets) {
+          assets = message.assets;
+          delete message.assets;
+        }
         if (transform === 'complete') {
-          if (message.assets) {
-            assets = message.assets;
-            delete message.assets;
-          }
+          ready = true;
         }
       }
       catch(err) {
@@ -50,11 +56,11 @@ export function useTopicItem(topic) {
       const { guid, created } = topic.data.topicDetail;
       if (profile.state.profile.guid == guid) {
         const { name, handle, imageUrl } = profile.actions.getProfile();
-        updateState({ name, handle, imageUrl, status, message, transform, assets, created });
+        updateState({ name, handle, imageUrl, status, message, transform, assets, ready, created });
       }
       else {
         const { name, handle, imageUrl } = card.actions.getCardProfileByGuid(guid);
-        updateState({ name, handle, imageUrl, status, message, transform, assets, created });
+        updateState({ name, handle, imageUrl, status, message, transform, assets, ready, created });
       }
     }
   }, [profile, card, conversation, topic]);
