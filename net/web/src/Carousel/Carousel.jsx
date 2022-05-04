@@ -130,8 +130,8 @@ export function Carousel({ ready, items, itemRenderer, itemRemove }) {
           <Skeleton.Image style={{ height: 128 }} />
         </div>
         <div class="arrows">
-          <div class="arrow" onClick={onRight}><RightOutlined style={{ visibility: scrollRight }} /></div>
-          <div class="arrow" onClick={onLeft}><LeftOutlined style={{ visibility: scrollLeft }} /></div>
+          <div class="arrow" onClick={onRight}><LeftOutlined style={{ visibility: 'hidden' }} /></div>
+          <div class="arrow" onClick={onLeft}><RightOutlined style={{ visibility: 'hidden' }} /></div>
         </div>
       </CarouselWrapper>
     )
@@ -144,8 +144,8 @@ export function Carousel({ ready, items, itemRenderer, itemRemove }) {
           {slots}
         </div>
         <div class="arrows">
-          <div class="arrow" onClick={onRight}><RightOutlined style={{ visibility: scrollRight }} /></div>
-          <div class="arrow" onClick={onLeft}><LeftOutlined style={{ visibility: scrollLeft }} /></div>
+          <div class="arrow" onClick={onRight}><LeftOutlined style={{ visibility: scrollRight }} /></div>
+          <div class="arrow" onClick={onLeft}><RightOutlined style={{ visibility: scrollLeft }} /></div>
         </div>
       </CarouselWrapper>
     );
