@@ -4,10 +4,10 @@ import ReactResizeDetector from 'react-resize-detector';
 
 export function VirtualList({ id, items, itemRenderer }) {
 
-  const REDZONE = 256; // recenter on canvas if in canvas edge redzone
-  const HOLDZONE = 1024; // drop slots outside of holdzone of view
-  const OVERSCAN = 256; // add slots in overscan of view
-  const DEFAULT_ITEM_HEIGHT = 64;
+  const REDZONE = 1024; // recenter on canvas if in canvas edge redzone
+  const HOLDZONE = 2048; // drop slots outside of holdzone of view
+  const OVERSCAN = 1024; // add slots in overscan of view
+  const DEFAULT_ITEM_HEIGHT = 256;
   const DEFAULT_LIST_HEIGHT = 4096;
   const GUTTER = 6;
 
@@ -16,10 +16,10 @@ export function VirtualList({ id, items, itemRenderer }) {
   const [ slots, setSlots ] = useState(new Map());
   const [ scroll, setScroll ] = useState('hidden');
 
+  let update = useRef(0);
   let latch = useRef(true);
   let scrollTop = useRef(0);
   let containers = useRef([]);
-  let anchorBottom = useRef(true);
   let listRef = useRef();
   let key = useRef(null);
 
@@ -32,7 +32,7 @@ export function VirtualList({ id, items, itemRenderer }) {
   }
 
   const removeSlot = (id) => {
-    setSlots((m) => { m.delete(id); return new Map(m); })
+    setSlots((m) => { m.delete(id); return new Map(m); });
   }
 
   const clearSlots = () => {
@@ -52,7 +52,7 @@ export function VirtualList({ id, items, itemRenderer }) {
     if (viewHeight * 3 > canvasHeight) {
       growCanvasHeight(viewHeight * 3);
     }
-    setItems();
+    updateCanvas();
   }, [viewHeight]);
 
   useEffect(() => {
@@ -60,48 +60,63 @@ export function VirtualList({ id, items, itemRenderer }) {
       key.current = id;
       latch.current = true;
       containers.current = [];
-      anchorBottom.current = true;
-      scrollTop.current = 0;
-      listRef.current.scrollTo({ top: scrollTop.current, left: 0 });
       clearSlots();
     }
     setItems();
   }, [items, id]);
 
   useEffect(() => {
-    if (latch.current) {
-      alignSlots();
-    }
+    updateCanvas();
   }, [viewHeight, canvasHeight]);
 
   const onScrollWheel = (e) => {
     if (e.deltaY < 0 && latch.current) {
-      scrollTop.current -= 32;
-      listRef.current.scrollTo({ top: scrollTop.current, left: 0, behavior: 'smooth' });
-      setScroll('auto');
       latch.current = false;
     }
   }
 
   const onScrollView = (e) => {
-
     scrollTop.current = e.target.scrollTop;
+    loadNextSlot();
+    dropSlots();
+    centerCanvas();
+    limitScroll();
+  }
 
-    if (!latch.current) {
-      let view = getPlacement();
+  const updateCanvas = () => {
+    alignSlots();
+    loadNextSlot();
+    dropSlots();
+    centerCanvas();
+    limitScroll();
+    latchScroll();
+  }
+
+  const limitScroll = () => {
+    let view = getPlacement();
+    if (view && containers.current[containers.current.length - 1].index == items.length - 1) {
+      if (view?.overscan?.bottom <= 0) {
+        if (view.position.height < viewHeight) {
+          if (scrollTop.current != view.position.top) {
+            scrollTop.current = view.position.top;
+            listRef.current.scrollTo({ top: scrollTop.current, left: 0 });
+          }
+        }
+        else {
+          if (scrollTop.current != view.position.bottom - viewHeight) {
+            scrollTop.current = view.position.bottom - viewHeight;
+            listRef.current.scrollTo({ top: scrollTop.current, left: 0 });
+          }
+        }
+        latch.current = true;
+      }
+    }
+    if (view && containers.current[0].index == 0) {
       if (view?.overscan?.top <= 0) {
         scrollTop.current = containers.current[0].top;
         listRef.current.scrollTo({ top: scrollTop.current, left: 0 });
       }
-      if (view?.overscan?.bottom <= 0) {
-        setScroll('hidden');
-        latch.current = true;
-        alignSlots();
-        listRef.current.scrollTo({ top: scrollTop.current, left: 0 });
-      }
     }
-
-    loadNextSlot();
   }
 
   const loadNextSlot = () => {
@@ -119,14 +134,7 @@ export function VirtualList({ id, items, itemRenderer }) {
           }
           containers.current.unshift(container);
           addSlot(container.id, getSlot(container))
-          anchorBottom.current = true;
-
-          if (containers.current[containers.current.length - 1].top > scrollTop.current + viewHeight + HOLDZONE) {
-            removeSlot(containers.current[containers.current.length - 1].id);
-            containers.current.pop();
-          }
-          
-          alignSlots();
+          loadNextSlot();  
         }
       }
       if (view.overscan.bottom < OVERSCAN) {
@@ -141,127 +149,113 @@ export function VirtualList({ id, items, itemRenderer }) {
           }
           containers.current.push(container);
           addSlot(container.id, getSlot(container))
-          anchorBottom.current = false;
-
-          if (containers.current[0].top + containers.current[0].height + 2 * GUTTER + HOLDZONE < scrollTop.current) {
-            removeSlot(containers.current[0].id);
-            containers.current.shift();
-          }
-
-          alignSlots();
+          loadNextSlot();
         }
       }
+    }
+  }
+
+  const dropSlots = () => {
+    while (containers.current.length > 0 &&
+        containers.current[0].top + containers.current[0].height + 2 * GUTTER + HOLDZONE < scrollTop.current) {
+      removeSlot(containers.current[0].id);
+      containers.current.shift();
+    }
+    while (containers.current.length > 0 &&
+        containers.current[containers.current.length - 1].top > scrollTop.current + viewHeight + HOLDZONE) {
+      removeSlot(containers.current[containers.current.length - 1].id);
+      containers.current.pop();
     }
   }
 
   const alignSlots = () => {
-    if (containers.current.length > 0) {
+    if (containers.current.length > 1) {
+      let mid = Math.floor(containers.current.length / 2);
 
-      if (anchorBottom.current) {
-        let pos = containers.current[containers.current.length - 1].top;
-        for (let i = containers.current.length - 2; i >= 0; i--) {
-          pos -= (containers.current[i].height + 2 * GUTTER);
-          if (containers.current[i].top != pos) {
-            containers.current[i].top = pos;
-            updateSlot(containers.current[i].id, getSlot(containers.current[i]));
-          }
+      let alignTop = containers.current[mid].top + containers.current[mid].height + 2 * GUTTER;
+      for (let i = mid + 1; i < containers.current.length; i++) {
+        if (containers.current[i].top != alignTop) {
+          containers.current[i].top = alignTop;
+          updateSlot(containers.current[i].id, getSlot(containers.current[i]));
         }
-
-        if (pos < REDZONE) {
-          let shift = canvasHeight / 2;
-          for (let i = 0; i < containers.current.length; i++) {
-            containers.current[i].top += shift;
-            updateSlot(containers.current[i].id, getSlot(containers.current[i]));
-          }
-          scrollTop.current += shift;
-          listRef.current.scrollTo({ top: scrollTop.current, left: 0 });
-
-          let view = getPlacement();
-          if (view.position.bottom + REDZONE > canvasHeight) {
-            growCanvasHeight(view.position.bottom + REDZONE);
-          }
-        }
-      }
-      else {
-        let pos = containers.current[0].top + containers.current[0].height + 2 * GUTTER;
-        for (let i = 1; i < containers.current.length; i++) {
-          if (containers.current[i].top != pos) {
-            containers.current[i].top = pos;
-            updateSlot(containers.current[i].id, getSlot(containers.current[i]));
-          }
-          pos += containers.current[i].height + 2 * GUTTER;
-        }
-
-        if (pos + REDZONE > canvasHeight) {
-          let shift = canvasHeight / 2;
-          let view = getPlacement();
-          if (view.position.top < shift + REDZONE) {
-            growCanvasHeight(view.position.bottom + REDZONE);
-          }
-          else {
-            for (let i = 0; i < containers.current.length; i++) {
-              containers.current[i].top -= shift;
-              updateSlot(containers.current[i].id, getSlot(containers.current[i]));
-            }
-            scrollTop.current -= shift;
-            listRef.current.scrollTo({ top: scrollTop.current, left: 0 });
-          }
-        }
+        alignTop += containers.current[i].height + 2 * GUTTER;
       }
 
+      let alignBottom = containers.current[mid].top;
+      for (let i = mid - 1; i >= 0; i--) {
+        alignBottom -= (containers.current[i].height + 2 * GUTTER);
+        if (containers.current[i].top != alignBottom) {
+          containers.current[i].top = alignBottom;
+          updateSlot(containers.current[i].id, getSlot(containers.current[i]));
+        }
+      }
+    }
+  };
+
+  const centerCanvas = () => {
+    let view = getPlacement();
+    if (view) {
+      let height = canvasHeight;
+      let resize = view.position.height * 3 + (2 * REDZONE) + (2 * HOLDZONE);
+      if (resize > canvasHeight) {
+        height = 2 * resize;
+        growCanvasHeight(height);
+      }
+      if (view.position.top < REDZONE) {
+        let shift = height / 2;
+        for (let i = 0; i < containers.current.length; i++) {
+          containers.current[i].top += shift;
+          updateSlot(containers.current[i].id, getSlot(containers.current[i]));
+        }
+        scrollTop.current += shift;
+        listRef.current.scrollTo({ top: scrollTop.current, left: 0 });
+      }
+      else if (view.position.bottom + REDZONE > height) {
+        let shift = height / 2;
+        for (let i = 0; i < containers.current.length; i++) {
+          containers.current[i].top -= shift;
+          updateSlot(containers.current[i].id, getSlot(containers.current[i]));
+        }
+        scrollTop.current -= shift;
+        listRef.current.scrollTo({ top: scrollTop.current, left: 0 });
+      }
+    }
+  }
+
+  const latchScroll = () => {
+    if (latch.current) {
       let view = getPlacement();
-      if (latch.current) {
+      if (view) {
         if (view.position.height < viewHeight) {
           if (scrollTop.current != view.position.top) {
-            listRef.current.scrollTo({ top: view.position.top, left: 0, behavior: 'smooth' });
             scrollTop.current = view.position.top;
+            listRef.current.scrollTo({ top: scrollTop.current, left: 0, behavior: 'smooth' });
           }
         }
         else {
           if (scrollTop.current != view.position.bottom - viewHeight) {
-            listRef.current.scrollTo({ top: view.position.bottom - viewHeight, left: 0, behavior: 'smooth' });
             scrollTop.current = view.position.bottom - viewHeight;
+            listRef.current.scrollTo({ top: scrollTop.current, left: 0, behavior: 'smooth' });
           }
         }
       }
     }
-
-    loadNextSlot();
   }
 
   const setItems = () => {
 
-    // update or removed any affected slots
-    if (anchorBottom.current) {
-      for (let i = containers.current.length - 1; i >= 0; i--) {
-        let container = containers.current[i];
-        if (items.length <= container.index || items[container.index].id != container.id) {
-          for (let j = 0; j <= i; j++) {
-            let shifted = containers.current.shift();
-            removeSlot(shifted.id);
-          }
-          break;
+    for (let i = 0; i < containers.current.length; i++) {
+      let container = containers.current[i];
+      if (items.length <= container.index || items[container.index].id != container.id) {
+        for (let j = i; j < containers.current.length; j++) {
+          let popped = containers.current.pop();
+          removeSlot(popped.id);
         }
-        else if (items[container.index].revision != container.revision) {
-          updateSlot(container.id, getSlot(containers.current[i]));
-          containers.revision = items[container.index].revision; 
-        }
+        break;
       }
-    }
-    else {
-      for (let i = 0; i < containers.current.length; i++) {
-        let container = containers.current[i];
-        if (items.length <= container.index || items[container.index].id != container.id) {
-          for (let j = i; j < containers.current.length; j++) {
-            let popped = containers.current.pop();
-            removeSlot(popped.id);
-          }
-          break;
-        }
-        else if (items[container.index].revision != container.revision) {
-          updateSlot(container.id, getSlot(containers.current[i]));
-          containers.revision = items[container.index].revision; 
-        }
+      else if (items[container.index].revision != container.revision) {
+        updateSlot(container.id, getSlot(containers.current[i]));
+        containers.revision = items[container.index].revision; 
       }
     }
 
@@ -281,21 +275,17 @@ export function VirtualList({ id, items, itemRenderer }) {
           revision: items[items.length - 1].revision,
         }
 
-        anchorBottom.current = true;
         containers.current.push(container);
         addSlot(container.id, getSlot(container));
-
-        listRef.current.scrollTo({ top: container.top, left: 0, behavior: 'smooth' });
-      }
-      else {
-        loadNextSlot();
       }
     }
+
+    updateCanvas();
   }
 
   const onItemHeight = (container, height) => {
     container.height = height;
-    alignSlots();
+    updateCanvas();
   }
 
   const getSlot = (container) => {
@@ -333,7 +323,7 @@ export function VirtualList({ id, items, itemRenderer }) {
         setViewHeight(height);
         return (
           <VirtualListWrapper onScroll={onScrollView} onWheel={onScrollWheel}>
-            <div class="rollview" style={{ overflowY: scroll }} ref={listRef} onScroll={onScrollView}>
+            <div class="rollview" style={{ overflowY: 'auto' }} ref={listRef} onScroll={onScrollView}>
               <div class="roll" style={{ height: canvasHeight }}>
                 { slots.values() }
               </div>

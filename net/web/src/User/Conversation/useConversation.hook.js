@@ -29,12 +29,13 @@ export function useConversation() {
 
   useEffect(() => {
     conversation.actions.setConversationId(cardId, channelId);
-    updateState({ cardId, channelId });
   }, [cardId, channelId]);
 
   useEffect(() => {
     updateState({
       init: conversation.state.init,
+      cardId: conversation.state.cardId,
+      channelId: conversation.state.channelId,
       topics: Array.from(conversation.state.topics.values()),
     });
   }, [conversation]);

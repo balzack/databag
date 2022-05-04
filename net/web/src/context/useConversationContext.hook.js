@@ -6,6 +6,8 @@ export function useConversationContext() {
 
   const [state, setState] = useState({
     init: false,
+    cardId: null,
+    channelId: null,
     topics: new Map(),
   });
 
@@ -15,6 +17,7 @@ export function useConversationContext() {
   const revision = useRef(null);
   const count = useRef(0);
   const conversationId = useRef(null);
+  const view = useRef(0);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
@@ -22,11 +25,13 @@ export function useConversationContext() {
 
   const setTopics = async () => {
     const { cardId, channelId } = conversationId.current;
+    const curRevision = revision.current;
+    const curView = view.current;
 
     if (cardId) {
-      let rev = card.actions.getChannelRevision(cardId, channelId);
-      if (revision.current != rev) {
-        let delta = await card.actions.getChannelTopics(cardId, channelId, revision.current);
+      let deltaRevision = card.actions.getChannelRevision(cardId, channelId);
+      if (curRevision != deltaRevision) {
+        let delta = await card.actions.getChannelTopics(cardId, channelId, curRevision);
         for (let topic of delta) {
           if (topic.data == null) {
             topics.current.delete(topic.id);
@@ -51,17 +56,22 @@ export function useConversationContext() {
             topics.current.set(topic.id, cur);
           }
         }
-        updateState({
-          init: true,
-          topics: topics.current,
-        });
-        revision.current = rev;
+        if (curView == view.current) {
+          updateState({
+            init: true,
+            topics: topics.current,
+          });
+          revision.current = deltaRevision;
+        }
+        else {
+          topics.current = new Map();
+        }
       }
     }
     else {
-      let rev = channel.actions.getChannelRevision(channelId);
-      if (revision.current != rev) {
-        let delta = await channel.actions.getChannelTopics(channelId, revision.current);
+      let deltaRevision = channel.actions.getChannelRevision(channelId);
+      if (curRevision != deltaRevision) {
+        let delta = await channel.actions.getChannelTopics(channelId, curRevision);
         for (let topic of delta) {
           if (topic.data == null) {
             topics.current.delete(topic.id);
@@ -86,11 +96,16 @@ export function useConversationContext() {
             topics.current.set(topic.id, cur);
           }
         }
-        updateState({
-          init: true,
-          topics: topics.current,
-        });
-        revision.current = rev;
+        if (curView == view.current) {
+          updateState({
+            init: true,
+            topics: topics.current,
+          });
+          revision.current = deltaRevision;
+        }
+        else {
+          topics.current = new Map();
+        }
       }
     }
   }
@@ -133,10 +148,11 @@ export function useConversationContext() {
 
   const actions = {
     setConversationId: (cardId, channelId) => {
+      view.current += 1;
       conversationId.current = { cardId, channelId };
       revision.current = null;
       topics.current = new Map();
-      updateState({ init: false, topics: topics.current });
+      updateState({ init: false, cardId, channelId, topics: topics.current });
       updateConversation();
     },
     getAssetUrl: (topicId, assetId) => {
