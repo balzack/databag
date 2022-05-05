@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button } from 'antd';
 import ReactPlayer from 'react-player'
 import ReactResizeDetector from 'react-resize-detector';
-import { PlayCircleOutlined, PauseCircleOutlined, SoundOutlined } from '@ant-design/icons';
+import { PlayCircleOutlined, MinusCircleOutlined, SoundOutlined } from '@ant-design/icons';
 import { AudioAssetWrapper } from './AudioAsset.styled';
 
 export function AudioAsset({ label, audioUrl }) {
@@ -14,11 +14,14 @@ export function AudioAsset({ label, audioUrl }) {
 
   useEffect(() => {
     setActive(false);
-    setPlaying(true);
+    setPlaying(false);
   }, [label, audioUrl]);
 
   const onReady = () => {
-    setReady(true);
+    if (!ready) {
+      setReady(true);
+      setPlaying(true);
+    }
   }
 
   const Control = () => {
@@ -28,7 +31,7 @@ export function AudioAsset({ label, audioUrl }) {
     if (playing) {
       return (
         <div onClick={() => setPlaying(false)}>
-          <PauseCircleOutlined style={{ fontSize: 48, color: '#eeeeee', cursor: 'pointer' }} />
+          <MinusCircleOutlined style={{ fontSize: 48, color: '#eeeeee', cursor: 'pointer' }} />
         </div>
       )
     }
