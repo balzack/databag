@@ -67,7 +67,7 @@ export function useTopicItem(topic) {
 
   const actions = {
     getAssetUrl: (assetId) => {
-      return conversation.actions.getAssetUrl(topic.id, assetId);
+      return conversation.actions.getAssetUrl(topic?.id, assetId);
     }
   };
 

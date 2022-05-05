@@ -70,10 +70,10 @@ export function AddTopic() {
       return <img style={{ height: '100%', objectFit: 'contain' }} src={item.url} alt="" />
     }
     if (item.audio) {
-      return <ReactPlayer height="100%" width="auto" url={item.url} />
+      return <ReactPlayer controls="true" height="100%" width="auto" url={item.url} />
     }
     if (item.video) {
-      return <ReactPlayer height="100%" width="auto" url={item.url} />
+      return <ReactPlayer controls="true" height="100%" width="auto" url={item.url} />
     }
     return <></>
   }
