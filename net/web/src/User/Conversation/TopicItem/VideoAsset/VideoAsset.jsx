@@ -19,8 +19,11 @@ export function VideoAsset({ thumbUrl, videoUrl }) {
   }, [thumbUrl, videoUrl]);
 
   const onReady = () => {
-    setVisibility('visible');
     setPlaying(true);
+  }
+
+  const onPlay = () => {
+    setVisibility('visible');
   }
 
   if (!thumbUrl) {
@@ -35,7 +38,7 @@ export function VideoAsset({ thumbUrl, videoUrl }) {
         </div>
       )
     }
-    return <ReactPlayer style={{ visibility }} playing={playing} height="100%" width="100%" controls="true" url={videoUrl} onReady={onReady} />
+    return <ReactPlayer style={{ visibility }} playing={playing} height="100%" width="100%" controls="true" url={videoUrl} onReady={onReady} onPlay={onPlay} />
   }
 
   return (
