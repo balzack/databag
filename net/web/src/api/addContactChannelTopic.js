@@ -39,14 +39,15 @@ export async function addContactChannelTopic(server, token, channelId, message, 
       else if (asset.video) {
         const formData = new FormData();
         formData.append('asset', asset.video);
-        let transform = encodeURIComponent(JSON.stringify(["vcopy;video", "vthumb;video"]));
+        let transform = encodeURIComponent(JSON.stringify(["vhd;video", "vlq;video", "vthumb;video"]));
         let topicAsset = await fetch(`https://${server}/content/channels/${channelId}/topics/${slot.id}/assets?transforms=${transform}&contact=${token}`, { method: 'POST', body: formData });
         checkResponse(topicAsset);
         let assetEntry = await topicAsset.json();
         message.assets.push({
           video: {
             thumb: assetEntry.find(item => item.transform === 'vthumb;video').assetId,
-            full: assetEntry.find(item => item.transform === 'vcopy;video').assetId,
+            lq: assetEntry.find(item => item.transform === 'vlq;video').assetId,
+            hd: assetEntry.find(item => item.transform === 'vhd;video').assetId,
           }
         });
       }

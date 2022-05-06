@@ -1,59 +1,84 @@
-import React, { useEffect, useState } from 'react';
-import { Button } from 'antd';
+import React, { useRef, useEffect, useState } from 'react';
+import { Button, Modal } from 'antd';
 import ReactPlayer from 'react-player'
 import ReactResizeDetector from 'react-resize-detector';
-import { PlayCircleOutlined } from '@ant-design/icons';
+import { SelectOutlined, ExpandOutlined, MinusCircleOutlined, PlayCircleOutlined } from '@ant-design/icons';
 import { VideoAssetWrapper } from './VideoAsset.styled';
 
-export function VideoAsset({ thumbUrl, videoUrl }) {
+export function VideoAsset({ thumbUrl, lqUrl, hdUrl }) {
 
-  const [active, setActive] = useState(false);
-  const [dimension, setDimension] = useState({});
-  const [visibility, setVisibility] = useState('hidden');
-  const [playing, setPlaying] = useState(false);
+  const [state, setState] = useState({});
+  const player = useRef(null);
+
+  const updateState = (value) => {
+    setState((s) => ({ ...s, ...value }));
+  }
 
   useEffect(() => {
-    setActive(false);
-    setVisibility('hidden');
-    setPlaying(false);
-  }, [thumbUrl, videoUrl]);
+  }, [thumbUrl, hdUrl, lqUrl]);
 
-  const onReady = () => {
-    setPlaying(true);
+  const onFullScreen = () => {
+    updateState({ fullscreen: true, modalUrl: hdUrl, playing: false, url: null });
   }
 
-  const onPlay = () => {
-    setVisibility('visible');
-  }
-
-  if (!thumbUrl) {
-    return <ReactPlayer height="100%" width="auto" controls="true" url={videoUrl} />
-  }
-
-  const Player = () => {
-    if (!active) {
+  const CenterButton = () => {
+    if (!state.loaded) {
       return (
-        <div onClick={() => setActive(true)}>
+        <div onClick={() => updateState({ loaded: true, url: lqUrl, controls: false, paused: true, playing: false })}>
+          <SelectOutlined style={{ fontSize: 48, color: '#eeeeee', cursor: 'pointer' }} />
+        </div>
+      )
+    }
+    if (state.playing) {
+      return (
+        <div onClick={() => updateState({ playing: false })}>
+          <MinusCircleOutlined style={{ fontSize: 48, color: '#eeeeee', cursor: 'pointer' }} />
+        </div>
+      )
+    }
+    else {
+      return (
+        <div onClick={() => updateState({ playing: true })}>
           <PlayCircleOutlined style={{ fontSize: 48, color: '#eeeeee', cursor: 'pointer' }} />
         </div>
       )
     }
-    return <ReactPlayer style={{ visibility }} playing={playing} height="100%" width="100%" controls="true" url={videoUrl} onReady={onReady} onPlay={onPlay} />
+  }
+
+  const Controls = () => {
+    if (state.controls) {
+      return <></>;
+    }
+    return (
+      <div>
+        <div class="control">
+          <CenterButton />
+        </div>
+        <div class="fullscreen" onClick={() => onFullScreen()}>
+          <ExpandOutlined style={{ fontSize: 24, color: '#eeeeee', cursor: 'pointer' }} />
+        </div>
+      </div>
+    )
   }
 
   return (
     <VideoAssetWrapper>
       <ReactResizeDetector handleWidth={true} handleHeight={true}>
         {({ width, height }) => {
-          if (width != dimension.width || height != dimension.height) {
-            setDimension({ width, height });
+          if (width != state.width || height != state.height) {
+            updateState({ width, height });
           }
           return <img style={{ height: '100%', objectFit: 'contain' }} src={thumbUrl} alt="" />
         }}
       </ReactResizeDetector>
-      <div class="player" style={{ width: dimension.width, height: dimension.height }}>
-        <Player />
+      <div class="player" style={{ width: state.width, height: state.height }}>
+        <ReactPlayer ref={player} controls={state.controls} playing={state.playing}
+            height="100%" width="100%" url={state.url} />
+        <Controls />
       </div>
+      <Modal visible={state.fullscreen} width={'60%'} bodyStyle={{ paddingBottom: 0, paddingTop: 6, paddingLeft: 6, paddingRight: 6, backgroundColor: '#dddddd' }} footer={null} destroyOnClose={true} closable={false} onCancel={() => { updateState({ fullscreen: false, modalUrl: null })}}>
+        <ReactPlayer controls={true} height="100%" width="100%" url={state.modalUrl} />
+      </Modal>
     </VideoAssetWrapper>
   )
 }

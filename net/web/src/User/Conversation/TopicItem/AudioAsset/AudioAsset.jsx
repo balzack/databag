@@ -46,7 +46,7 @@ export function AudioAsset({ label, audioUrl }) {
     if (!active) {
       return (
         <div onClick={() => setActive(true)}>
-          <SoundOutlined style={{ fontSize: 48, color: '#eeeeee', cursor: 'pointer' }} />
+          <SoundOutlined style={{ fontSize: 32, color: '#eeeeee', cursor: 'pointer' }} />
         </div>
       )
     }
@@ -65,7 +65,7 @@ export function AudioAsset({ label, audioUrl }) {
           if (height != dimension.height) {
             setDimension({ height });
           }
-          return <div style={{ height: '100%', width: dimension.height, backgroundColor: '#444444' }} />
+          return <div style={{ height: '100%', borderRadius: 4, width: dimension.height, backgroundColor: '#444444' }} />
         }}
       </ReactResizeDetector>
       <div class="player" style={{ width: dimension.height, height: dimension.height }}>

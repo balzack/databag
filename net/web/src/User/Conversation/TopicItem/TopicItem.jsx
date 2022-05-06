@@ -24,7 +24,8 @@ export function TopicItem({ topic }) {
       return <img style={{ height: '100%', objectFit: 'contain' }} src={actions.getAssetUrl(asset.image.full)} alt="" />
     }
     if (asset.video) {
-      return <VideoAsset thumbUrl={actions.getAssetUrl(asset.video.thumb)} videoUrl={actions.getAssetUrl(asset.video.full)} />
+      return <VideoAsset thumbUrl={actions.getAssetUrl(asset.video.thumb)}
+          lqUrl={actions.getAssetUrl(asset.video.lq)} hdUrl={actions.getAssetUrl(asset.video.hd)} />
     }
     if (asset.audio) {
       return <AudioAsset label={asset.audio.label} audioUrl={actions.getAssetUrl(asset.audio.full)} />

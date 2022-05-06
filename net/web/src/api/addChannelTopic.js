@@ -38,14 +38,15 @@ export async function addChannelTopic(token, channelId, message, assets ) {
       else if (asset.video) {
         const formData = new FormData();
         formData.append('asset', asset.video);
-        let transform = encodeURIComponent(JSON.stringify(["vcopy;video", 'vthumb;video']));
+        let transform = encodeURIComponent(JSON.stringify(["vlq;video", "vhd;video", 'vthumb;video']));
         let topicAsset = await fetch(`/content/channels/${channelId}/topics/${slot.id}/assets?transforms=${transform}&agent=${token}`, { method: 'POST', body: formData });
         checkResponse(topicAsset);
         let assetEntry = await topicAsset.json();
         message.assets.push({
           video: {
             thumb: assetEntry.find(item => item.transform === 'vthumb;video').assetId,
-            full: assetEntry.find(item => item.transform === 'vcopy;video').assetId,
+            lq: assetEntry.find(item => item.transform === 'vlq;video').assetId,
+            hd: assetEntry.find(item => item.transform === 'vhd;video').assetId,
           }
         });
       }
