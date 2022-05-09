@@ -2144,6 +2144,37 @@ paths:
         '500':
           description: internal server error
   
+  /content/channels/{channelId}/summary:
+    get:
+      tags:
+        - content
+      description: Get summary of channel.
+      operationId: get-channel-summary
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: channelId
+          in: path
+          description: specified channel id 
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChannelSummary'
+        '401':
+          description: invalid password
+        '404':
+          description: channel not found
+        '410':
+          description: account disabled
+        '500':
+          description: internal server error
+          
   /content/channels/{channelId}:
     delete:
       tags:
@@ -3439,6 +3470,8 @@ components:
         topicRevision:
           type: integer
           format: int64
+        channelSummary:
+          $ref: '#/components/schemas/ChannelSummary'
         channelDetail:
           $ref: '#/components/schemas/ChannelDetail'
           
@@ -3466,6 +3499,12 @@ components:
           type: array
           items:
             type: string
+            
+    ChannelSummary:
+      type: object
+      properties:
+        lastTopic:
+          $ref: '#/components/schemas/TopicDetail'
           
     ChannelContacts:
       type: object

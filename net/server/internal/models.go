@@ -175,6 +175,8 @@ type ChannelData struct {
 
   TopicRevision int64 `json:"topicRevision"`
 
+	ChannelSummary *ChannelSummary `json:"channelSummary,omitempty"`
+
 	ChannelDetail *ChannelDetail `json:"channelDetail,omitempty"`
 }
 
@@ -191,6 +193,11 @@ type ChannelDetail struct {
 	Contacts *ChannelContacts `json:"contacts,omitempty"`
 
 	Members []string `json:"members"`
+}
+
+type ChannelSummary struct {
+
+	LastTopic *TopicDetail `json:"lastTopic,omitempty"`
 }
 
 type ChannelParams struct {
@@ -443,7 +450,7 @@ type TopicDetail struct {
 
 	Status string `json:"status"`
 
-  Transform string `json:"transform"`
+  Transform string `json:"transform,omitempty"`
 }
 
 type TopicTags struct {

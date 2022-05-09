@@ -546,6 +546,13 @@ var routes = Routes{
 	},
 
 	Route{
+		"GetChannelSummary",
+		strings.ToUpper("Get"),
+		"/content/channels/{channelId}/summary",
+		GetChannelSummary,
+	},
+
+	Route{
 		"GetChannelSubjectField",
 		strings.ToUpper("Get"),
 		"/content/channels/{channelId}/subject/{field}",

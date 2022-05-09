@@ -199,6 +199,27 @@ func getChannelDetailModel(slot *store.ChannelSlot, showList bool) *ChannelDetai
   }
 }
 
+func getChannelSummaryModel(slot *store.ChannelSlot) *ChannelSummary {
+
+  if slot.Channel == nil {
+    return nil
+  }
+
+  topicDetail := TopicDetail{};
+  if len(slot.Channel.Topics) > 0 {
+    topicDetail.Guid = slot.Channel.Topics[0].Guid;
+    topicDetail.DataType = slot.Channel.Topics[0].DataType;
+    topicDetail.Data = slot.Channel.Topics[0].Data;
+    topicDetail.Created = slot.Channel.Topics[0].Created;
+    topicDetail.Updated = slot.Channel.Topics[0].Updated;
+    topicDetail.Status = slot.Channel.Topics[0].Status;
+  }
+
+  return &ChannelSummary{
+    LastTopic: &topicDetail,
+  }
+}
+
 func getChannelModel(slot *store.ChannelSlot, showData bool, showList bool) *Channel {
 
   if !showData || slot.Channel == nil {
@@ -215,6 +236,7 @@ func getChannelModel(slot *store.ChannelSlot, showData bool, showList bool) *Cha
       DetailRevision: slot.Channel.DetailRevision,
       TopicRevision: slot.Channel.TopicRevision,
       ChannelDetail: getChannelDetailModel(slot, showList),
+      ChannelSummary: getChannelSummaryModel(slot),
     },
   }
 }
