@@ -215,16 +215,16 @@ func (c *TestContactData) UpdateContactChannel(storeChannel *TestChannel, channe
       token := c.card.Data.CardProfile.Guid + "." + c.card.Data.CardDetail.Token
       params := &TestApiParams{ query: "/channel/{channelId}", path: map[string]string{ "channelId": channel.Id },
           tokenType: APP_TOKENCONTACT, token: token }
-      channel := Channel{}
-      response := &TestApiResponse{ data: &channel }
-      if err = TestApiRequest(GetChannel, params, response); err != nil {
+      detail := &ChannelDetail{}
+      response := &TestApiResponse{ data: &detail }
+      if err = TestApiRequest(GetChannelDetail, params, response); err != nil {
         return
       }
       if channel.Data == nil {
         err = errors.New("channel removed during update")
         return
       }
-      storeChannel.channel.Data.ChannelDetail = channel.Data.ChannelDetail
+      storeChannel.channel.Data.ChannelDetail = detail
       storeChannel.channel.Data.DetailRevision = channel.Data.DetailRevision
     }
   }
@@ -507,16 +507,16 @@ func (a *TestApp) UpdateChannel(storeChannel *TestChannel, channel *Channel) (er
     } else if storeChannel.channel.Data.DetailRevision != channel.Data.DetailRevision {
       params := &TestApiParams{ query: "/channel/{channelId}", path: map[string]string{ "channelId": channel.Id },
           tokenType: APP_TOKENAGENT, token: a.token }
-      channel := Channel{}
-      response := &TestApiResponse{ data: &channel }
-      if err = TestApiRequest(GetChannel, params, response); err != nil {
+      detail := &ChannelDetail{}
+      response := &TestApiResponse{ data: &detail }
+      if err = TestApiRequest(GetChannelDetail, params, response); err != nil {
         return
       }
       if channel.Data == nil {
         err = errors.New("channel removed during update")
         return
       }
-      storeChannel.channel.Data.ChannelDetail = channel.Data.ChannelDetail
+      storeChannel.channel.Data.ChannelDetail = detail
       storeChannel.channel.Data.DetailRevision = channel.Data.DetailRevision
     }
   }

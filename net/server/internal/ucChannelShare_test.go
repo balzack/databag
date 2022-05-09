@@ -9,6 +9,7 @@ import (
 func TestChannelShare(t *testing.T) {
   var subject *Subject
   var channel *Channel
+  var detail *ChannelDetail
   var channels *[]Channel
   var cards *[]Card
   aRevision := make(map[string][]string)
@@ -79,13 +80,13 @@ func TestChannelShare(t *testing.T) {
   assert.Nil(t, (*channels)[0].Data)
 
   // get discovered channel
-  channel = &Channel{}
-  assert.NoError(t, ApiTestMsg(GetChannel, "GET", "/content/channels/{channelId}",
-    &params, nil, APP_TOKENCONTACT, set.B.A.Token, channel, nil))
-  assert.Equal(t, "channeldatatype", channel.Data.ChannelDetail.DataType)
-  assert.Equal(t, 1, len(channel.Data.ChannelDetail.Members))
-  assert.Equal(t, set.B.Guid, channel.Data.ChannelDetail.Members[0])
-  assert.Nil(t, channel.Data.ChannelDetail.Contacts)
+  detail = &ChannelDetail{}
+  assert.NoError(t, ApiTestMsg(GetChannelDetail, "GET", "/content/channels/{channelId}/detail",
+    &params, nil, APP_TOKENCONTACT, set.B.A.Token, detail, nil))
+  assert.Equal(t, "channeldatatype", detail.DataType)
+  assert.Equal(t, 1, len(detail.Members))
+  assert.Equal(t, set.B.Guid, detail.Members[0])
+  assert.Nil(t, detail.Contacts)
 
   // get revision
   aRev = GetTestRevision(set.A.Revisions)
@@ -150,12 +151,12 @@ func TestChannelShare(t *testing.T) {
   assert.Equal(t, 1, len(*channels))
 
   // get discovered channel
-  channel = &Channel{}
-  assert.NoError(t, ApiTestMsg(GetChannel, "GET", "/content/channels/{channelId}",
-    &params, nil, APP_TOKENCONTACT, set.C.A.Token, channel, nil))
-  assert.Equal(t, "channeldatatype", channel.Data.ChannelDetail.DataType)
-  assert.Equal(t, 2, len(channel.Data.ChannelDetail.Members))
-  assert.Nil(t, channel.Data.ChannelDetail.Contacts)
+  detail = &ChannelDetail{}
+  assert.NoError(t, ApiTestMsg(GetChannelDetail, "GET", "/content/channels/{channelId}/detail",
+    &params, nil, APP_TOKENCONTACT, set.C.A.Token, detail, nil))
+  assert.Equal(t, "channeldatatype", detail.DataType)
+  assert.Equal(t, 2, len(detail.Members))
+  assert.Nil(t, detail.Contacts)
 
   // reset notification
   GetTestRevision(set.B.Revisions)

@@ -18,13 +18,13 @@ export function VideoAsset({ thumbUrl, lqUrl, hdUrl }) {
   }, [thumbUrl, hdUrl, lqUrl]);
 
   const onFullScreen = () => {
-    updateState({ fullscreen: true, modalUrl: hdUrl, playing: false, url: null });
+    updateState({ inline: false, popout: true, popoutUrl: hdUrl, playing: false, inlineUrl: null });
   }
 
   const CenterButton = () => {
-    if (!state.loaded) {
+    if (!state.inline) {
       return (
-        <div onClick={() => updateState({ loaded: true, url: lqUrl, controls: false, paused: true, playing: false })}>
+        <div onClick={() => updateState({ inline: true, inlineUrl: lqUrl, playing: false })}>
           <SelectOutlined style={{ fontSize: 48, color: '#eeeeee', cursor: 'pointer' }} />
         </div>
       )
@@ -46,15 +46,12 @@ export function VideoAsset({ thumbUrl, lqUrl, hdUrl }) {
   }
 
   const Controls = () => {
-    if (state.controls) {
-      return <></>;
-    }
     return (
       <div>
         <div class="control">
           <CenterButton />
         </div>
-        <div class="fullscreen" onClick={() => onFullScreen()}>
+        <div class="expand" onClick={() => onFullScreen()}>
           <ExpandOutlined style={{ fontSize: 24, color: '#eeeeee', cursor: 'pointer' }} />
         </div>
       </div>
@@ -72,12 +69,12 @@ export function VideoAsset({ thumbUrl, lqUrl, hdUrl }) {
         }}
       </ReactResizeDetector>
       <div class="player" style={{ width: state.width, height: state.height }}>
-        <ReactPlayer ref={player} controls={state.controls} playing={state.playing}
-            height="100%" width="100%" url={state.url} />
+        <ReactPlayer ref={player} controls={false} playing={state.playing}
+            height="100%" width="100%" url={state.inlineUrl} />
         <Controls />
       </div>
-      <Modal visible={state.fullscreen} width={'60%'} bodyStyle={{ paddingBottom: 0, paddingTop: 6, paddingLeft: 6, paddingRight: 6, backgroundColor: '#dddddd' }} footer={null} destroyOnClose={true} closable={false} onCancel={() => { updateState({ fullscreen: false, modalUrl: null })}}>
-        <ReactPlayer controls={true} height="100%" width="100%" url={state.modalUrl} />
+      <Modal visible={state.popout} width={'60%'} bodyStyle={{ paddingBottom: 0, paddingTop: 6, paddingLeft: 6, paddingRight: 6, backgroundColor: '#dddddd' }} footer={null} destroyOnClose={true} closable={false} onCancel={() => { updateState({ popout: false })}}>
+        <ReactPlayer controls={true} height="100%" width="100%" url={state.popoutUrl} />
       </Modal>
     </VideoAssetWrapper>
   )

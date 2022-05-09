@@ -12,6 +12,7 @@ import (
 func TestTopicShare(t *testing.T) {
   var topic *Topic
   var channel *Channel
+  var detail *ChannelDetail
   var subject *Subject
   params := make(map[string]string)
   header := make(map[string][]string)
@@ -43,17 +44,17 @@ func TestTopicShare(t *testing.T) {
     &params, nil, APP_TOKENAGENT, set.A.Token, nil, nil))
 
   // view channel
-  channel = &Channel{}
-  assert.NoError(t, ApiTestMsg(GetChannel, "GET", "/content/channels/{channelId}",
-    &params, nil, APP_TOKENAGENT, set.A.Token, channel, nil))
+  detail = &ChannelDetail{}
+  assert.NoError(t, ApiTestMsg(GetChannelDetail, "GET", "/content/channels/{channelId}/detail",
+    &params, nil, APP_TOKENAGENT, set.A.Token, detail, nil))
+  assert.NotNil(t, detail);
+  detail = &ChannelDetail{}
+  assert.NoError(t, ApiTestMsg(GetChannelDetail, "GET", "/content/channels/{channelId}/detail",
+    &params, nil, APP_TOKENCONTACT, set.B.A.Token, detail, nil))
   assert.NotNil(t, channel.Data.ChannelDetail);
-  channel = &Channel{}
-  assert.NoError(t, ApiTestMsg(GetChannel, "GET", "/content/channels/{channelId}",
-    &params, nil, APP_TOKENCONTACT, set.B.A.Token, channel, nil))
-  assert.NotNil(t, channel.Data.ChannelDetail);
-  channel = &Channel{}
-  assert.NoError(t, ApiTestMsg(GetChannel, "GET", "/content/channels/{channelId}",
-    &params, nil, APP_TOKENCONTACT, set.B.A.Token, channel, nil))
+  detail = &ChannelDetail{}
+  assert.NoError(t, ApiTestMsg(GetChannelDetail, "GET", "/content/channels/{channelId}/detail",
+    &params, nil, APP_TOKENCONTACT, set.B.A.Token, detail, nil))
   assert.NotNil(t, channel.Data.ChannelDetail);
   params["field"] = "nested.image"
   data, header, err = ApiTestData(GetChannelSubjectField, "GET", "/content/channels/{channelId}/subject/{field}",

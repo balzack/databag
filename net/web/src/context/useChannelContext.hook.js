@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { getChannels } from 'api/getChannels';
-import { getChannel } from 'api/getChannel';
+import { getChannelDetail } from 'api/getChannelDetail';
 import { addChannel } from 'api/addChannel';
 import { addChannelTopic } from 'api/addChannelTopic';
 import { getChannelTopics } from 'api/getChannelTopics';
@@ -35,9 +35,9 @@ export function useChannelContext() {
             cur.data.detailRevision = channel.data.detailRevision;
           }
           else {
-            let slot = await getChannel(access.current, channel.id);
-            cur.data.channelDetail = slot.data.channelDetail;
-            cur.data.detailRevision = slot.data.detailRevision;
+            let detail = await getChannelDetail(access.current, channel.id);
+            cur.data.channelDetail = detail;
+            cur.data.detailRevision = channel.data.detailRevision;
           }
         }
         cur.data.topicRevision = channel.data.topicRevision;

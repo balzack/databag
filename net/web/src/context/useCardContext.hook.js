@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { getContactChannels } from 'api/getContactChannels';
-import { getContactChannel } from 'api/getContactChannel';
+import { getContactChannelDetail } from 'api/getContactChannelDetail';
 import { getContactProfile } from 'api/getContactProfile';
 import { setCardProfile } from 'api/setCardProfile';
 import { getCards } from 'api/getCards';
@@ -119,9 +119,9 @@ export function useCardContext() {
             cur.data.detailRevision = channel.data.detailRevision;
           }
           else {
-            let slot = await getContactChannel(guid + "." + token, channel.id);
-            cur.data.channelDetail = slot.data.channelDetail;
-            cur.data.detailRevision = slot.data.detailRevision;
+            let detail = await getContactChannelDetail(guid + "." + token, channel.id);
+            cur.data.channelDetail = detail;
+            cur.data.detailRevision = channel.data.detailRevision;
           }
         }
         cur.data.topicRevision = channel.data.topicRevision;

@@ -2118,7 +2118,7 @@ paths:
       tags:
         - content
       description: Get details of channel.
-      operationId: get-channel
+      operationId: get-channel-detail
       security:
         - bearerAuth: []
       parameters:
@@ -2134,7 +2134,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Channel'
+                $ref: '#/components/schemas/ChannelDetail'
         '401':
           description: invalid password
         '404':
@@ -2144,7 +2144,7 @@ paths:
         '500':
           description: internal server error
   
-/content/channels/{channelId}:
+  /content/channels/{channelId}:
     delete:
       tags:
         - content
@@ -2472,43 +2472,6 @@ paths:
             schema:
               $ref: '#/components/schemas/Subject'
           
-  /content/channels/{channelId}/topics/{topicId}/detail:
-    get:
-      tags:
-        - content
-      description: Get full object of topic.
-      operationId: get-channel-topic
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: channelId
-          in: path
-          description: specified channel id 
-          required: true
-          schema:
-            type: string
-        - name: topicId
-          in: path
-          description: specified topic id 
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Topic'
-        '401':
-          description: invalid password
-        '404':
-          description: channel not found
-        '410':
-          description: account disabled
-        '500':
-          description: internal server error
-
   /content/channels/{channelId}/topics/{topicId}:
     delete:
       tags:
@@ -3374,7 +3337,8 @@ components:
         node:
           type: string
         revision:
-          type: int64
+          type: integer
+          format: int64
           
     CardDetail:
       type: object
@@ -3500,7 +3464,7 @@ components:
           $ref: '#/components/schemas/ChannelContacts'
         members:
           type: array
-          item:
+          items:
             type: string
           
     ChannelContacts:
@@ -3857,10 +3821,6 @@ components:
     bearerAuth: 
       type: http
       scheme: bearer
-
-
-
-
 
 
 

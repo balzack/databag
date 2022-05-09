@@ -5,6 +5,7 @@ import (
   "errors"
   "strconv"
   "net/http"
+  "gorm.io/gorm"
   "encoding/json"
   "databag/internal/store"
 )
@@ -101,7 +102,9 @@ func GetChannels(w http.ResponseWriter, r *http.Request) {
     account := &card.Account
     var slots []store.ChannelSlot
     if channelRevisionSet {
-      if err := store.DB.Preload("Channel.Cards").Preload("Channel.Groups.Cards").Where("account_id = ? AND revision > ?", account.ID, channelRevision).Find(&slots).Error; err != nil {
+      if err := store.DB.Preload("Channel.Topics", func(db *gorm.DB) *gorm.DB {
+        return store.DB.Order("topics.id DESC").Limit(1)
+      }).Preload("Channel.Cards").Preload("Channel.Groups.Cards").Where("account_id = ? AND revision > ?", account.ID, channelRevision).Find(&slots).Error; err != nil {
         ErrResponse(w, http.StatusInternalServerError, err)
         return
       }

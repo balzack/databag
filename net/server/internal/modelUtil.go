@@ -165,13 +165,10 @@ func getChannelRevisionModel(slot *store.ChannelSlot, showData bool) *Channel {
   }
 }
 
-func getChannelModel(slot *store.ChannelSlot, showData bool, showList bool) *Channel {
+func getChannelDetailModel(slot *store.ChannelSlot, showList bool) *ChannelDetail {
 
-  if !showData || slot.Channel == nil {
-    return &Channel{
-      Id: slot.ChannelSlotId,
-      Revision: slot.Revision,
-    }
+  if slot.Channel == nil {
+    return nil
   }
 
   var contacts *ChannelContacts
@@ -192,20 +189,32 @@ func getChannelModel(slot *store.ChannelSlot, showData bool, showList bool) *Cha
     members = append(members, card.Guid)
   }
 
+  return &ChannelDetail{
+    DataType: slot.Channel.DataType,
+    Data: slot.Channel.Data,
+    Created: slot.Channel.Created,
+    Updated: slot.Channel.Updated,
+    Contacts: contacts,
+    Members: members,
+  }
+}
+
+func getChannelModel(slot *store.ChannelSlot, showData bool, showList bool) *Channel {
+
+  if !showData || slot.Channel == nil {
+    return &Channel{
+      Id: slot.ChannelSlotId,
+      Revision: slot.Revision,
+    }
+  }
+
   return &Channel{
     Id: slot.ChannelSlotId,
     Revision: slot.Revision,
     Data: &ChannelData {
       DetailRevision: slot.Channel.DetailRevision,
       TopicRevision: slot.Channel.TopicRevision,
-      ChannelDetail: &ChannelDetail{
-        DataType: slot.Channel.DataType,
-        Data: slot.Channel.Data,
-        Created: slot.Channel.Created,
-        Updated: slot.Channel.Updated,
-        Contacts: contacts,
-        Members: members,
-      },
+      ChannelDetail: getChannelDetailModel(slot, showList),
     },
   }
 }

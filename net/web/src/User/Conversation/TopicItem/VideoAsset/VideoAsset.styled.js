@@ -16,7 +16,7 @@ export const VideoAssetWrapper = styled.div`
     visibility: visible;
   }
 
-  .player:hover .fullscreen {
+  .player:hover .expand {
     visibility: visible;
   }
 
@@ -38,7 +38,7 @@ export const VideoAssetWrapper = styled.div`
     opacity: 0.5;
   }
 
-  .fullscreen {
+  .expand {
     padding-right: 2px;
     visibility: hidden;
     position: absolute;
