@@ -58,12 +58,30 @@ export function useChannels() {
     card.state.cards.forEach((value, key, map) => {
       cardChannels.current.push(...Array.from(value.channels.values()));
     });
-    updateState({ channels: [ ...channels.current, ...cardChannels.current ]});
+    let merged = [ ...channels.current, ...cardChannels.current ];
+    merged.sort((a, b) => {
+      if (a?.data?.channelSummary?.lastTopic?.created > b?.data?.channelSummary?.lastTopic?.created) {
+        return -1;
+      }
+      return 1;
+    });
+    updateState({ channels: merged });
   }, [card])
 
   useEffect(() => {
     channels.current = Array.from(channel.state.channels.values());
-    updateState({ channels: [ ...channels.current, ...cardChannels.current ]});
+    let merged = [ ...channels.current, ...cardChannels.current ];
+    merged.sort((a, b) => {
+      if (a?.data?.channelSummary?.lastTopic?.created > b?.data?.channelSummary?.lastTopic?.created) {
+        return -1;
+      }
+      return 1;
+    });
+for (let i = 0; i < merged.length; i++) {
+  console.log(merged[i]);
+  console.log(merged[i]?.data?.channelSummary?.lastTopic?.created);
+}
+    updateState({ channels: merged });
   }, [channel])
 
   return { state, actions };

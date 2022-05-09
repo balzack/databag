@@ -41,8 +41,8 @@ export function useChannelContext() {
           cur.data.detailRevision = channel.data.detailRevision;
         }
         if (cur.data.topicRevision != channel.data.topicRevision) {
-          if (channel.data.channelDetail != null) {
-            cur.data.channelDetail = channel.data.channelDetail;
+          if (channel.data.channelSummary != null) {
+            cur.data.channelSummary = channel.data.channelSummary;
           }
           else {
             let summary = await getChannelSummary(access.current, channel.id);

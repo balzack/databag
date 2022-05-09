@@ -124,7 +124,7 @@ export function useCardContext() {
           }
           cur.data.detailRevision = channel.data.detailRevision;
         }
-        if (cur.data.detailRevision != channel.data.detailRevision) {
+        if (cur.data.topicRevision != channel.data.topicRevision) {
           if (channel.data.channelSummary != null) {
             cur.data.channelSummary = channel.data.channelSummary;
           }
