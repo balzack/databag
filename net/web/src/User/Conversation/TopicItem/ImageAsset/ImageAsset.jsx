@@ -13,7 +13,18 @@ export function ImageAsset({ thumbUrl, fullUrl }) {
   }
 
   const onPopOut = () => {
-    updateState({ popout: true });
+    if (state.width == 0 || state.height == 0) {
+      updateState({ popout: true, popWidth: '50%', popHeight: '50%' });
+    }
+    else {
+      if (state.width / state.height > window.innerWidth / window.innerHeight) {
+        updateState({ popout: true, popWidth: '80%', popHeight: 'auto' });
+      }
+      else {
+        let width = Math.floor(80 * state.width / state.height);
+        updateState({ popout: true, popWidth: width + '%', popHeight: 'auto' });
+      }
+    }
   }
 
   return (
@@ -33,7 +44,7 @@ export function ImageAsset({ thumbUrl, fullUrl }) {
           </div>
         </div>
       </div>
-      <Modal visible={state.popout} width={'80%'} bodyStyle={{ paddingBottom: 6, paddingTop: 6, paddingLeft: 6, paddingRight: 6, backgroundColor: '#dddddd' }} footer={null} destroyOnClose={true} closable={false} onCancel={() => { updateState({ popout: false })}}>
+      <Modal visible={state.popout} width={state.popWidth} height={state.popHeight} bodyStyle={{ width: '100%', height: 'auto', paddingBottom: 6, paddingTop: 6, paddingLeft: 6, paddingRight: 6, backgroundColor: '#dddddd' }} footer={null} destroyOnClose={true} closable={false} onCancel={() => { updateState({ popout: false })}}>
         <img style={{ width: '100%', objectFit: 'contain' }} src={fullUrl} alt="" />
       </Modal>
     </ImageAssetWrapper>
