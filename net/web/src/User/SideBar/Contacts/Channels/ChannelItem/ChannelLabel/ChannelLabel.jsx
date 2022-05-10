@@ -6,29 +6,42 @@ import { HomeOutlined, DatabaseOutlined } from '@ant-design/icons';
 export function ChannelLabel({ item }) {
 
   const [host, setHost] = useState(null);
-  const [members, setMembers] = useState([]);
   const [subject, setSubject] = useState('');
+  const [message, setMessage] = useState('');
 
   const { state, actions } = useChannelLabel();
 
   useEffect(() => {
-    
+
+    try {
+      if (item.data.channelSummary.lastTopic.dataType === 'superbasictopic') {
+        let msg = JSON.parse(item.data.channelSummary.lastTopic.data);
+        setMessage(msg.text);
+      }
+      else {
+        setMessage('');
+      }
+    }
+    catch (err) {
+      console.log(err);
+      setMessage('');
+    }
+ 
     let contacts = []; 
     if (item?.guid) {
-      setHost(actions.getCardByGuid(item.guid));
+      setHost(false);
+      contacts.push(actions.getCardByGuid(item.guid)?.data?.cardProfile?.handle);
       for (let member of item.data.channelDetail.members) {
         if (member != state.guid) {
-          contacts.push(actions.getCardByGuid(member));
+          contacts.push(actions.getCardByGuid(member)?.data?.cardProfile?.handle);
         }
       }
-      setMembers(contacts);
     }
     else {
-      setHost(null); 
+      setHost(true); 
       for (let member of item.data.channelDetail.members) {
-        contacts.push(actions.getCardByGuid(member));
+        contacts.push(actions.getCardByGuid(member)?.data?.cardProfile?.handle);
       }
-      setMembers(contacts);
     }
 
     if (item?.data?.channelDetail?.data) {
@@ -38,34 +51,23 @@ export function ChannelLabel({ item }) {
         return
       }
     }
-
-    let names = ''
-    for (let contact of contacts) {
-      if (contact != null) {
-        if (names != '') {
-          names += ', ';
-        }
-        names += contact.data.cardProfile.handle;
-      }
-    }
-    if (names != '') {
-      names = '[' + names + ']';
-    }
-    setSubject(names)
-
+    setSubject(contacts.join(', '));
   }, [item, state]);
 
   const Host = () => {
     if (host) {
-      return (<div><DatabaseOutlined />&nbsp;{ host.data.cardProfile.handle }</div>)
+      return <HomeOutlined />
     }
-    return <HomeOutlined />
+    return <DatabaseOutlined />
   }
 
   return (
     <LabelWrapper>
-      <div class="subject">{subject}</div>
-      <div class="host"><Host /></div>
+      <div class="title">
+        <div class="subject">{subject}</div>
+        <Host />
+      </div>
+      <div class="message">{message}</div>
     </LabelWrapper>
   )
 }

@@ -25,9 +25,6 @@ export function useChannels() {
   const channel = useContext(ChannelContext);
 
   const actions = {
-    select: (channel) => {
-      navigate(`/user/channel/${channel.id}`);
-    },
     getCardImageUrl: card.actions.getImageUrl,
     getCards: () => {
       let cards = Array.from(card.state.cards.values())
@@ -41,8 +38,9 @@ export function useChannels() {
       if (!state.busy) {
         updateState({ busy: true });
         try {
-          await channel.actions.addChannel(state.startCards, state.startSubject, state.startDescription);
+          let added = await channel.actions.addChannel(state.startCards, state.startSubject, state.startDescription);
           done = true;
+          navigate(`/user/conversation/${added.id}`);
         }
         catch (err) {
           window.alert(err);
@@ -77,10 +75,6 @@ export function useChannels() {
       }
       return 1;
     });
-for (let i = 0; i < merged.length; i++) {
-  console.log(merged[i]);
-  console.log(merged[i]?.data?.channelSummary?.lastTopic?.created);
-}
     updateState({ channels: merged });
   }, [channel])
 

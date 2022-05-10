@@ -1,5 +1,6 @@
 import { useContext, useState, useEffect } from 'react';
 import { CardContext } from 'context/CardContext';
+import { ChannelContext } from 'context/ChannelContext';
 import { ProfileContext } from 'context/ProfileContext';
 import { getCardImageUrl } from 'api/getCardImageUrl';
 
@@ -10,6 +11,7 @@ export function useChannelLabel() {
   });
 
   const card = useContext(CardContext);
+  const channel = useContext(ChannelContext);
   const profile = useContext(ProfileContext);
 
   const actions = {
@@ -24,7 +26,7 @@ export function useChannelLabel() {
     if (card.state.init && profile.state.init) {
       updateState({ guid: profile.state.profile.guid });
     }
-  }, [card, profile])
+  }, [channel, card, profile])
 
   return { state, actions };
 }
