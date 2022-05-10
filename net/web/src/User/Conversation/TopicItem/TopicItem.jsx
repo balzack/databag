@@ -3,6 +3,7 @@ import { TopicItemWrapper } from './TopicItem.styled';
 import { useTopicItem } from './useTopicItem.hook';
 import { VideoAsset } from './VideoAsset/VideoAsset';
 import { AudioAsset } from './AudioAsset/AudioAsset';
+import { ImageAsset } from './ImageAsset/ImageAsset';
 import { Avatar } from 'avatar/Avatar';
 import { CommentOutlined } from '@ant-design/icons';
 import { Carousel } from 'Carousel/Carousel';
@@ -18,10 +19,8 @@ export function TopicItem({ topic }) {
 
   const renderAsset = (asset) => {
     if (asset.image) {
-      if (asset.image.thumb) {
-        return <img style={{ height: '100%', objectFit: 'contain' }} src={actions.getAssetUrl(asset.image.thumb)} alt="" />
-      }
-      return <img style={{ height: '100%', objectFit: 'contain' }} src={actions.getAssetUrl(asset.image.full)} alt="" />
+      return <ImageAsset thumbUrl={actions.getAssetUrl(asset.image.thumb)}
+          fullUrl={actions.getAssetUrl(asset.image.full)} />
     }
     if (asset.video) {
       return <VideoAsset thumbUrl={actions.getAssetUrl(asset.video.thumb)}

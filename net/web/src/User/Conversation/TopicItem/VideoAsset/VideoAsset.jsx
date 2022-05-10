@@ -17,7 +17,7 @@ export function VideoAsset({ thumbUrl, lqUrl, hdUrl }) {
   useEffect(() => {
   }, [thumbUrl, hdUrl, lqUrl]);
 
-  const onFullScreen = () => {
+  const onPopOut = () => {
     updateState({ inline: false, popout: true, popoutUrl: hdUrl, playing: false, inlineUrl: null });
   }
 
@@ -51,7 +51,7 @@ export function VideoAsset({ thumbUrl, lqUrl, hdUrl }) {
         <div class="control">
           <CenterButton />
         </div>
-        <div class="expand" onClick={() => onFullScreen()}>
+        <div class="expand" onClick={() => onPopOut()}>
           <ExpandOutlined style={{ fontSize: 24, color: '#eeeeee', cursor: 'pointer' }} />
         </div>
       </div>
