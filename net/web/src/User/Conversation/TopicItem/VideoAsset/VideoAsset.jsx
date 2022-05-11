@@ -18,7 +18,18 @@ export function VideoAsset({ thumbUrl, lqUrl, hdUrl }) {
   }, [thumbUrl, hdUrl, lqUrl]);
 
   const onPopOut = () => {
-    updateState({ inline: false, popout: true, popoutUrl: hdUrl, playing: false, inlineUrl: null });
+    if (state.width == 0 || state.height == 0) {
+      updateState({ popout: true, popWidth: '50%', inline: false, popoutUrl: hdUrl, playing: false, inlineUrl: null });
+    }
+    else {
+      if (state.width / state.height > window.innerWidth / window.innerHeight) {
+        updateState({ popout: true, popWidth: '70%', inline: false, popoutUrl: hdUrl, playing: false, inlineUrl: null });
+      }
+      else {
+        let width = Math.floor(70 * state.width / state.height);
+        updateState({ popout: true, popWidth: width + '%', inline: false, popoutUrl: hdUrl, playing: false, inlineUrl: null });
+      }
+    }
   }
 
   const CenterButton = () => {
@@ -73,7 +84,7 @@ export function VideoAsset({ thumbUrl, lqUrl, hdUrl }) {
             height="100%" width="100%" url={state.inlineUrl} />
         <Controls />
       </div>
-      <Modal visible={state.popout} width={'60%'} bodyStyle={{ paddingBottom: 0, paddingTop: 6, paddingLeft: 6, paddingRight: 6, backgroundColor: '#dddddd' }} footer={null} destroyOnClose={true} closable={false} onCancel={() => { updateState({ popout: false })}}>
+      <Modal visible={state.popout} width={state.popWidth} bodyStyle={{ paddingBottom: 0, paddingTop: 6, paddingLeft: 6, paddingRight: 6, backgroundColor: '#dddddd' }} footer={null} destroyOnClose={true} closable={false} onCancel={() => { updateState({ popout: false })}}>
         <ReactPlayer controls={true} height="100%" width="100%" url={state.popoutUrl} />
       </Modal>
     </VideoAssetWrapper>

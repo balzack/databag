@@ -59,6 +59,7 @@ export async function addChannelTopic(token, channelId, message, assets ) {
         let assetEntry = await topicAsset.json();
         message.assets.push({
           audio: {
+            label: asset.label,
             full: assetEntry.find(item => item.transform === 'acopy;audio').assetId,
           }
         });

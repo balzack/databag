@@ -71,6 +71,7 @@ export function AudioAsset({ label, audioUrl }) {
       <div class="player" style={{ width: dimension.height, height: dimension.height }}>
         <Player />
       </div>
+      <div class="label">{ label }</div>
     </AudioAssetWrapper>
   )
 }

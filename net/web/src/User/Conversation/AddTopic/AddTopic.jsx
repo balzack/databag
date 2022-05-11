@@ -5,6 +5,7 @@ import { AddTopicWrapper, BusySpin } from './AddTopic.styled';
 import { Carousel } from '../../../Carousel/Carousel';
 import { useAddTopic } from './useAddTopic.hook';
 import { BgColorsOutlined, FontColorsOutlined, FontSizeOutlined, PaperClipOutlined, SendOutlined } from '@ant-design/icons';
+import { AudioFile } from './AudioFile/AudioFile';
 
 import login from '../../../login.png';
 import test from '../../../test.png';
@@ -65,12 +66,12 @@ export function AddTopic() {
     }
   }
 
-  const renderItem = (item) => {
+  const renderItem = (item, index) => {
     if (item.image) {
       return <img style={{ height: '100%', objectFit: 'contain' }} src={item.url} alt="" />
     }
     if (item.audio) {
-      return <ReactPlayer controls="true" height="100%" width="auto" url={item.url} />
+      return <AudioFile onLabel={(label) => actions.setLabel(index, label)}/>
     }
     if (item.video) {
       return <ReactPlayer controls="true" height="100%" width="auto" url={item.url} />

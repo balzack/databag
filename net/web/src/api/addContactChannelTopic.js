@@ -60,6 +60,7 @@ export async function addContactChannelTopic(server, token, channelId, message, 
         let assetEntry = await topicAsset.json();
         message.assets.push({
           audio: {
+            label: asset.label,
             full: assetEntry.find(item => item.transform === 'acopy;audio').assetId,
           }
         });

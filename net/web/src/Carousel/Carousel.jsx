@@ -90,7 +90,7 @@ export function Carousel({ ready, items, itemRenderer, itemRemove }) {
               itemWidth.current.set(i, width);
               return (
                 <div class="item noselect">
-                  <div class="asset">{ itemRenderer(items[i]) }</div>
+                  <div class="asset">{ itemRenderer(items[i], i) }</div>
                   <RemoveItem index={i} />
                 </div>
               );

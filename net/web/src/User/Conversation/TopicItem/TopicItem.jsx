@@ -41,9 +41,6 @@ export function TopicItem({ topic }) {
         <div class="info">
           <div class={nameClass}>{ name }</div>
           <div>{ getTime(offset) }</div>
-          <div class="comments">
-            <CommentOutlined />
-          </div>
         </div>
         <Carousel ready={state.ready} items={state.assets} itemRenderer={renderAsset} />
         <div class="message">{ state.message?.text }</div>

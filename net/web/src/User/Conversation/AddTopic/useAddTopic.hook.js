@@ -31,6 +31,13 @@ export function useAddTopic() {
     });
   }
 
+  const updateAsset = (index, value) => {
+    setState((s) => {
+      s.assets[index] = { ...s.assets[index], ...value };
+      return { ...s };
+    });
+  }
+
   const removeAsset = (index) => {
     setState((s) => {
       s.assets.splice(index, 1);
@@ -51,6 +58,9 @@ export function useAddTopic() {
     addAudio: (audio) => {
       let url = URL.createObjectURL(audio);
       addAsset({ audio, url }) 
+    },
+    setLabel: (index, label) => {
+      updateAsset(index, { label });
     },
     removeAsset: (idx) => { removeAsset(idx) },
     setMessageText: (value) => {
