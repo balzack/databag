@@ -49,11 +49,11 @@ export function useAddTopic() {
   const actions = {
     addImage: (image) => { 
       let url = URL.createObjectURL(image);
-      addAsset({ image, url }) 
+      addAsset({ image, url, position: 0 }) 
     },
     addVideo: (video) => { 
       let url = URL.createObjectURL(video);
-      addAsset({ video, url }) 
+      addAsset({ video, url, label: '' }) 
     },
     addAudio: (audio) => {
       let url = URL.createObjectURL(audio);
@@ -61,6 +61,9 @@ export function useAddTopic() {
     },
     setLabel: (index, label) => {
       updateAsset(index, { label });
+    },
+    setPosition: (index, position) => {
+      updateAsset(index, { position });
     },
     removeAsset: (idx) => { removeAsset(idx) },
     setMessageText: (value) => {

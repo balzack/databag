@@ -26,7 +26,7 @@ export function VideoAsset({ thumbUrl, lqUrl, hdUrl }) {
         updateState({ popout: true, popWidth: '70%', inline: false, popoutUrl: hdUrl, playing: false, inlineUrl: null });
       }
       else {
-        let width = Math.floor(70 * state.width / state.height);
+        let width = Math.floor(70 * (state.width / state.height) * (window.innerHeight / window.innerWidth));
         updateState({ popout: true, popWidth: width + '%', inline: false, popoutUrl: hdUrl, playing: false, inlineUrl: null });
       }
     }

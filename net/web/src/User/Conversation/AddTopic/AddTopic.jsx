@@ -6,6 +6,7 @@ import { Carousel } from '../../../Carousel/Carousel';
 import { useAddTopic } from './useAddTopic.hook';
 import { BgColorsOutlined, FontColorsOutlined, FontSizeOutlined, PaperClipOutlined, SendOutlined } from '@ant-design/icons';
 import { AudioFile } from './AudioFile/AudioFile';
+import { VideoFile } from './VideoFile/VideoFile';
 
 import login from '../../../login.png';
 import test from '../../../test.png';
@@ -74,7 +75,7 @@ export function AddTopic() {
       return <AudioFile onLabel={(label) => actions.setLabel(index, label)}/>
     }
     if (item.video) {
-      return <ReactPlayer controls="true" height="100%" width="auto" url={item.url} />
+      return <VideoFile onPosition={(pos) => actions.setPosition(index, pos)} url={item.url} />
     }
     return <></>
   }

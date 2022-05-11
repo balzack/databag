@@ -1,3 +1,3 @@
 #!/bin/bash
-convert -strip $1 -auto-orient -resize '640x640>' $2
+convert -strip $1 -auto-orient -resize '320x320>' $2
 

@@ -21,7 +21,7 @@ export function ImageAsset({ thumbUrl, fullUrl }) {
         updateState({ popout: true, popWidth: '80%', popHeight: 'auto' });
       }
       else {
-        let width = Math.floor(80 * state.width / state.height);
+        let width = Math.floor(80 * (state.width / state.height) * (window.innerHeight / window.innerWidth));
         updateState({ popout: true, popWidth: width + '%', popHeight: 'auto' });
       }
     }
