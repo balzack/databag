@@ -2179,7 +2179,7 @@ paths:
     delete:
       tags:
         - content
-      description: Remove specified channel. Access granted to app token of account holder.
+      description: Remove specified channel or membership. When invoked by account holder, channel is removed. When invoked by member, membership is removed.
       operationId: remove-channel
       security:
         - bearerAuth: []
@@ -3860,6 +3860,5 @@ components:
     bearerAuth: 
       type: http
       scheme: bearer
-
 
 

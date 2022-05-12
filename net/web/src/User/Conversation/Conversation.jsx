@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { CloseOutlined, UserOutlined } from '@ant-design/icons';
 import { useConversation } from './useConversation.hook';
 import { Button, Checkbox, Modal, Spin } from 'antd'
-import { ConversationWrapper, CloseButton, ListItem, BusySpin } from './Conversation.styled';
+import { ConversationWrapper, ConversationButton, CloseButton, ListItem, BusySpin } from './Conversation.styled';
 import { AutoSizer, CellMeasurer, CellMeasurerCache, List } from 'react-virtualized';
 import { AddTopic } from './AddTopic/AddTopic';
 import { VirtualList } from '../../VirtualList/VirtualList';
@@ -19,7 +19,10 @@ export function Conversation() {
   return (
     <ConversationWrapper>
       <div class="header">
-        <div class="title">{ state.handle }</div>
+        <div class="title"></div>
+        <div class="buttons">
+          <ConversationButton ghost onClick={() => actions.remove()}>Remove Conversation</ConversationButton>
+        </div>
         <CloseButton type="text" class="close" size={'large'}
             onClick={() => actions.close()} icon={<CloseOutlined />} />
       </div>

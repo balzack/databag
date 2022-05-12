@@ -51,9 +51,6 @@ type AccountToken struct {
   Account           *Account
 }
 
-// NOTE: card & app reference account by guid, all other tables by id
-//  because token lookup uses guid and is most common and wanted to avoid join
-//  int foreign key should be faster, so left other tables with id reference
 type Account struct {
   ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
   AccountDetailID   uint            `gorm:"not null"`

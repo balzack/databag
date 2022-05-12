@@ -32,8 +32,7 @@ export function ChannelLogo({ item }) {
       }
       setMembers(contacts);
     } 
-
-  }, [item, state]);
+  }, [item?.data?.channelDetail?.members, state]);
 
   const Logo = ({card}) => {
     if (card?.data?.cardProfile?.imageSet) {

@@ -3,6 +3,7 @@ import { getChannels } from 'api/getChannels';
 import { getChannelDetail } from 'api/getChannelDetail';
 import { getChannelSummary } from 'api/getChannelSummary';
 import { addChannel } from 'api/addChannel';
+import { removeChannel } from 'api/removeChannel';
 import { addChannelTopic } from 'api/addChannelTopic';
 import { getChannelTopics } from 'api/getChannelTopics';
 import { getChannelTopic } from 'api/getChannelTopic';
@@ -87,6 +88,9 @@ export function useChannelContext() {
     },
     addChannel: async (cards, subject, description) => {
       return await addChannel(access.current, cards, subject, description);
+    },
+    removeChannel: async (channelId) => {
+      return await removeChannel(access.current, channelId);
     },
     addChannelTopic: async (channelId, message, assets) => {
       await addChannelTopic(access.current, channelId, message, assets);

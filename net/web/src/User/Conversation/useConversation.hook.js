@@ -25,6 +25,10 @@ export function useConversation() {
     close: () => {
       navigate('/user')
     },
+    remove: async () => {
+      await conversation.actions.removeConversation();
+      navigate('/user');
+    }
   };
 
   useEffect(() => {

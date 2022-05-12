@@ -30,6 +30,10 @@ export function useConversationContext() {
 
     if (cardId) {
       let deltaRevision = card.actions.getChannelRevision(cardId, channelId);
+      if (!deltaRevision) {
+        window.alert("This converstaion has been removed");
+        return;
+      }
       if (curRevision != deltaRevision) {
         let delta = await card.actions.getChannelTopics(cardId, channelId, curRevision);
         for (let topic of delta) {
@@ -163,7 +167,16 @@ export function useConversationContext() {
       else {
         return channel.actions.getChannelTopicAssetUrl(channelId, topicId, assetId);
       }
-    }
+    },
+    removeConversation: async () => {
+      const { cardId, channelId } = conversationId.current;
+      if (cardId) {
+        return await card.actions.removeChannel(cardId, channelId);
+      }
+      else {
+        return await channel.actions.removeChannel(channelId);
+      }
+    },
   }
 
   return { state, actions }

@@ -34,6 +34,13 @@ export const ConversationWrapper = styled.div`
     padding-left: 16px;
   }
 
+  .buttons {
+    display: flex;
+    flex-direction: row;
+    margin-right: 32px;
+    align-items: center;
+  } 
+
   .close {
     font-size: 24px;
     color: white;
@@ -48,6 +55,12 @@ export const ConversationWrapper = styled.div`
     overflow: auto; 
   }
 `;
+
+export const ConversationButton = styled(Button)`
+  text-align: center;
+  margin-left: 8px;
+  margin-right: 8px;
+`
 
 export const CloseButton = styled(Button)`
   font-size: 24px;
