@@ -18,6 +18,7 @@ export function useConversationContext() {
   const count = useRef(0);
   const conversationId = useRef(null);
   const view = useRef(0);
+  const gone = useRef(false);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
@@ -30,7 +31,8 @@ export function useConversationContext() {
 
     if (cardId) {
       let deltaRevision = card.actions.getChannelRevision(cardId, channelId);
-      if (!deltaRevision) {
+      if (!deltaRevision && !gone.current) {
+        gone.current = true;
         window.alert("This converstaion has been removed");
         return;
       }
@@ -155,6 +157,7 @@ export function useConversationContext() {
       view.current += 1;
       conversationId.current = { cardId, channelId };
       revision.current = null;
+      gone.current = false;
       topics.current = new Map();
       updateState({ init: false, cardId, channelId, topics: topics.current });
       updateConversation();

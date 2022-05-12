@@ -6,8 +6,6 @@ info:
     conversations.
   version: "0.0.1"
   title: DataBag
-  contact:
-    email: roland.osborne@gmail.com
   license:
     name: Apache 2.0
     url: 'http://www.apache.org/licenses/LICENSE-2.0.html'

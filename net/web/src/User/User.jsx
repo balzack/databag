@@ -14,7 +14,7 @@ export function User() {
   return (
     <UserWrapper>
       <SideBar />
-      <div class="canvas noselect">
+      <div class="canvas">
         <img class="connect" src={connect} alt="" />
         <div class="page">
           <Outlet />

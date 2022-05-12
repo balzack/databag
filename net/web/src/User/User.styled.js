@@ -7,6 +7,12 @@ export const UserWrapper = styled.div`
   width: 100%;
   height: 100%;
   background-color: #f6f5ed;
+  webkit-touch-callout: none; 
+    -webkit-user-select: none; 
+     -khtml-user-select: none; 
+       -moz-user-select: none; 
+        -ms-user-select: none; 
+            user-select: none; 
 
   .canvas {
     display: flex;
