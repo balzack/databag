@@ -7,6 +7,7 @@ import { AutoSizer, CellMeasurer, CellMeasurerCache, List } from 'react-virtuali
 import { AddTopic } from './AddTopic/AddTopic';
 import { VirtualList } from '../../VirtualList/VirtualList';
 import { TopicItem } from './TopicItem/TopicItem';
+import { HomeOutlined, DatabaseOutlined } from '@ant-design/icons';
 
 export function Conversation() {
 
@@ -16,15 +17,32 @@ export function Conversation() {
     return (<TopicItem topic={topic} />)
   }
 
+  const onEdit = () => {
+    console.log("EDIT CONVERSATION");
+  }
+
+  const Icon = () => {
+    if (state.cardId) {
+      return <DatabaseOutlined />
+    }
+    return <HomeOutlined />
+  }
+
   return (
     <ConversationWrapper>
       <div class="header">
-        <div class="title"></div>
-        <div class="buttons">
-          <ConversationButton ghost onClick={() => actions.remove()}>Remove Conversation</ConversationButton>
+        <div class="title">
+          <Icon />
+          <div class="subject">{ state.subject }</div>  
         </div>
-        <CloseButton type="text" class="close" size={'large'}
-            onClick={() => actions.close()} icon={<CloseOutlined />} />
+        <div class="control">       
+          <div class="buttons">
+            <ConversationButton ghost onClick={() => onEdit()}>Members</ConversationButton>
+            <ConversationButton ghost onClick={() => actions.remove()}>Delete</ConversationButton>
+          </div>
+          <CloseButton type="text" class="close" size={'large'}
+              onClick={() => actions.close()} icon={<CloseOutlined />} />
+        </div>
       </div>
       <div class="thread">
         <VirtualList id={state.channelId + state.cardId} 

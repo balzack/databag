@@ -11,6 +11,7 @@ export const ConversationWrapper = styled.div`
   overflow: hidden;
 
   .header {
+    flex-grow: 1;
     display: flex;
     width: 100%;
     flex-direction: row;
@@ -22,16 +23,29 @@ export const ConversationWrapper = styled.div`
   }
 
   .title {
-    height: 64px;
-    flex-grow: 1;
-    text-align: center;
-    font-size: 2em;
-    font-weight: bold;
     display: flex;
+    flex-direction: row;
+    flex-shrink: 1;
+    jsutify-content: flex-begin;
+    height: 64px;
     align-items: center;
-    justify-content: flex-begin;
     color: white;
+    font-size: 1.5em;
+    min-width: 0;
+  }
+
+  .control {
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+    justify-content: flex-end;
+  }
+
+  .subject {
     padding-left: 16px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
   }
 
   .buttons {

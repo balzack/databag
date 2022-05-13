@@ -220,6 +220,11 @@ export function useCardContext() {
       let node = cardProfile.node;
       await addContactChannelTopic(node, token, channelId, message, assets);
     },
+    getChannel: (cardId, channelId) => {
+      let card = cards.current.get(cardId);
+      let channel = card.channels.get(channelId);
+      return channel;
+    },
     getChannelRevision: (cardId, channelId) => {
       let card = cards.current.get(cardId);
       let channel = card.channels.get(channelId);

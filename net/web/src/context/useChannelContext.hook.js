@@ -95,6 +95,9 @@ export function useChannelContext() {
     addChannelTopic: async (channelId, message, assets) => {
       await addChannelTopic(access.current, channelId, message, assets);
     },
+    getChannel: (channelId) => {
+      return channels.current.get(channelId);
+    },
     getChannelRevision: (channelId) => {
       let channel = channels.current.get(channelId);
       return channel?.revision;

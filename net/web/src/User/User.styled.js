@@ -6,6 +6,7 @@ export const UserWrapper = styled.div`
   flex-direction: row;
   width: 100%;
   height: 100%;
+  overflow: hidden;
   background-color: #f6f5ed;
   webkit-touch-callout: none; 
     -webkit-user-select: none; 
@@ -22,6 +23,7 @@ export const UserWrapper = styled.div`
     background-color: #8fbea7;
     align-items: center;
     justify-content: center;
+    min-width: 0;
   }
 
   .connect {

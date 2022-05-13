@@ -10,6 +10,7 @@ export function useConversation() {
     init: true,
     cardId: null,
     channelId: null,
+    subject: null,
     topics: [],
   });
 
@@ -38,6 +39,7 @@ export function useConversation() {
   useEffect(() => {
     updateState({
       init: conversation.state.init,
+      subject: conversation.state.subject,
       cardId: conversation.state.cardId,
       channelId: conversation.state.channelId,
       topics: Array.from(conversation.state.topics.values()),
