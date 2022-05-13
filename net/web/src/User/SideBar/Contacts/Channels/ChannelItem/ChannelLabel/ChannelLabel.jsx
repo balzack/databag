@@ -31,16 +31,14 @@ export function ChannelLabel({ item }) {
     if (item?.guid) {
       setHost(false);
       contacts.push(actions.getCardByGuid(item.guid)?.data?.cardProfile?.handle);
-      for (let member of item.data.channelDetail.members) {
-        if (member != state.guid) {
-          contacts.push(actions.getCardByGuid(member)?.data?.cardProfile?.handle);
-        }
-      }
     }
     else {
       setHost(true); 
-      for (let member of item.data.channelDetail.members) {
-        contacts.push(actions.getCardByGuid(member)?.data?.cardProfile?.handle);
+    }
+    for (let member of item.data.channelDetail.members) {
+      let contact = actions.getCardByGuid(member)?.data?.cardProfile?.handle;
+      if (contact) {
+        contacts.push(contact);
       }
     }
 
