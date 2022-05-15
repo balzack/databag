@@ -8,7 +8,7 @@ import { addChannelTopic } from 'api/addChannelTopic';
 import { getChannelTopics } from 'api/getChannelTopics';
 import { getChannelTopic } from 'api/getChannelTopic';
 import { getChannelTopicAssetUrl } from 'api/getChannelTopicAssetUrl';
-
+import { setChannelSubject } from 'api/setChannelSubject';
 export function useChannelContext() {
   const [state, setState] = useState({
     init: false,
@@ -88,6 +88,9 @@ export function useChannelContext() {
     },
     addChannel: async (cards, subject, description) => {
       return await addChannel(access.current, cards, subject, description);
+    },
+    setChannelSubject: async (channelId, subject) => {
+      return await setChannelSubject(access.current, channelId, subject);
     },
     removeChannel: async (channelId) => {
       return await removeChannel(access.current, channelId);

@@ -10,6 +10,11 @@ export const ConversationWrapper = styled.div`
   align-items: center;
   overflow: hidden;
 
+  .edit {
+    font-size: 18px;
+    color: white;
+  }
+
   .header {
     flex-grow: 1;
     display: flex;
@@ -32,6 +37,7 @@ export const ConversationWrapper = styled.div`
     color: white;
     font-size: 1.5em;
     min-width: 0;
+    padding-right: 8px;
   }
 
   .control {
@@ -51,7 +57,7 @@ export const ConversationWrapper = styled.div`
   .buttons {
     display: flex;
     flex-direction: row;
-    margin-right: 32px;
+    margin-right: 16px;
     align-items: center;
   } 
 
@@ -75,6 +81,11 @@ export const ConversationButton = styled(Button)`
   margin-left: 8px;
   margin-right: 8px;
 `
+
+export const EditButton = styled(Button)`
+  font-size: 24px;
+  color: white;
+`;
 
 export const CloseButton = styled(Button)`
   font-size: 24px;

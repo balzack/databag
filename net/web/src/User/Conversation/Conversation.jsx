@@ -1,24 +1,42 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { CloseOutlined, UserOutlined } from '@ant-design/icons';
 import { useConversation } from './useConversation.hook';
-import { Button, Checkbox, Modal, Spin } from 'antd'
-import { ConversationWrapper, ConversationButton, CloseButton, ListItem, BusySpin } from './Conversation.styled';
+import { Button, Input, Checkbox, Modal, Spin } from 'antd'
+import { ConversationWrapper, ConversationButton, EditButton, CloseButton, ListItem, BusySpin } from './Conversation.styled';
 import { AutoSizer, CellMeasurer, CellMeasurerCache, List } from 'react-virtualized';
 import { AddTopic } from './AddTopic/AddTopic';
 import { VirtualList } from '../../VirtualList/VirtualList';
 import { TopicItem } from './TopicItem/TopicItem';
-import { HomeOutlined, DatabaseOutlined } from '@ant-design/icons';
+import { EditOutlined, HomeOutlined, DatabaseOutlined } from '@ant-design/icons';
 
 export function Conversation() {
 
   const { state, actions } = useConversation();
+  const [ showEdit, setShowEdit ] = useState(false);
+  const [ editSubject, setEditSubject ] = useState(null);
+  const [ subject, setSubject ] = useState(null);
+
+  useEffect(() => {
+    if (state.subject) {
+      setSubject(state.subject);
+    }
+    else {
+      setSubject(state.contacts);
+    }
+  }, [state]);
 
   const topicRenderer = (topic) => {
     return (<TopicItem topic={topic} />)
   }
 
+  const onSaveSubject = () => {
+    actions.setSubject(editSubject);
+    setShowEdit(false);
+  }
+
   const onEdit = () => {
-    console.log("EDIT CONVERSATION");
+    setEditSubject(state.subject);
+    setShowEdit(true);
   }
 
   const Icon = () => {
@@ -28,12 +46,22 @@ export function Conversation() {
     return <HomeOutlined />
   }
 
+  const Edit = () => {
+    if (state.cardId) {
+      return <></>
+    }
+    return (
+      <EditButton type="text" size={'large'} onClick={() => onEdit()} icon={<EditOutlined />} />
+    )
+  }
+
   return (
     <ConversationWrapper>
       <div class="header">
         <div class="title">
           <Icon />
-          <div class="subject">{ state.subject }</div>  
+          <div class="subject">{ subject }</div> 
+          <Edit /> 
         </div>
         <div class="control">       
           <div class="buttons">
@@ -50,6 +78,10 @@ export function Conversation() {
         <BusySpin size="large" delay="1000" spinning={!state.init} />
       </div>
       <AddTopic />
+      <Modal title="Edit Subject" visible={showEdit} centered
+        okText="Save" onOk={() => onSaveSubject()} onCancel={() => setShowEdit(false)}>
+        <Input placeholder="Subject" onChange={(e) => setEditSubject(e.target.value)} value={editSubject} />
+      </Modal>
     </ConversationWrapper>
   )
 }

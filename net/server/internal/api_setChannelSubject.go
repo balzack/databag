@@ -10,7 +10,7 @@ import (
 
 func SetChannelSubject(w http.ResponseWriter, r *http.Request) {
 
-  account, code, err := BearerAppToken(r, false);
+  account, code, err := ParamAgentToken(r, false);
   if err != nil {
     ErrResponse(w, code, err)
     return
@@ -58,6 +58,9 @@ func SetChannelSubject(w http.ResponseWriter, r *http.Request) {
       return res
     }
     if res := tx.Model(&slot.Channel).Update("data_type", subject.DataType).Error; res != nil {
+      return res
+    }
+    if res := tx.Model(&slot.Channel).Update("detail_revision", account.ChannelRevision + 1).Error; res != nil {
       return res
     }
     if res := tx.Model(&slot).Update("revision", account.ChannelRevision + 1).Error; res != nil {

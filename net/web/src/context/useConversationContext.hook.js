@@ -9,6 +9,7 @@ export function useConversationContext() {
     cardId: null,
     channelId: null,
     subject: null,
+    contacts: null,
     topics: new Map(),
   });
 
@@ -33,8 +34,11 @@ export function useConversationContext() {
       }
     }
     catch (err) {
-      console.log(err);
+      return null;
     }
+  }
+
+  const getContacts = (conversation) => {
     let members = [];
     if (conversation.guid) {
       members.push(card.actions.getCardByGuid(conversation.guid)?.data?.cardProfile?.handle);
@@ -63,6 +67,7 @@ export function useConversationContext() {
       if (curRevision != deltaRevision) {
         let conversation = card.actions.getChannel(cardId, channelId);
         let subject = getSubject(conversation);
+        let contacts = getContacts(conversation);
         let delta = await card.actions.getChannelTopics(cardId, channelId, curRevision);
         for (let topic of delta) {
           if (topic.data == null) {
@@ -92,6 +97,7 @@ export function useConversationContext() {
           updateState({
             init: true,
             subject,
+            contacts,
             topics: topics.current,
           });
           revision.current = deltaRevision;
@@ -106,6 +112,7 @@ export function useConversationContext() {
       if (curRevision != deltaRevision) {
         let conversation = channel.actions.getChannel(channelId);
         let subject = getSubject(conversation);
+        let contacts = getContacts(conversation);
         let delta = await channel.actions.getChannelTopics(channelId, curRevision);
         for (let topic of delta) {
           if (topic.data == null) {
@@ -135,6 +142,7 @@ export function useConversationContext() {
           updateState({
             init: true,
             subject,
+            contacts,
             topics: topics.current,
           });
           revision.current = deltaRevision;
@@ -191,6 +199,9 @@ export function useConversationContext() {
       topics.current = new Map();
       updateState({ init: false, subject: null, cardId, channelId, topics: topics.current });
       updateConversation();
+    },
+    setChannelSubject: async (subject) => {
+      return await channel.actions.setChannelSubject(conversationId.current.channelId, subject);
     },
     getAssetUrl: (topicId, assetId) => {
       const { cardId, channelId } = conversationId.current;

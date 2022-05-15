@@ -11,6 +11,7 @@ export function useConversation() {
     cardId: null,
     channelId: null,
     subject: null,
+    contacts: null,
     topics: [],
   });
 
@@ -26,6 +27,9 @@ export function useConversation() {
     close: () => {
       navigate('/user')
     },
+    setSubject: async (subject) => {
+      await conversation.actions.setChannelSubject(subject);
+    },
     remove: async () => {
       await conversation.actions.removeConversation();
       navigate('/user');
@@ -40,6 +44,7 @@ export function useConversation() {
     updateState({
       init: conversation.state.init,
       subject: conversation.state.subject,
+      contacts: conversation.state.contacts,
       cardId: conversation.state.cardId,
       channelId: conversation.state.channelId,
       topics: Array.from(conversation.state.topics.values()),
