@@ -34,8 +34,12 @@ export function useAccountContext() {
   }
 
   const actions = {
-    setToken: async (token) => {
+    setToken: (token) => {
       access.current = token;
+    },
+    clearToken: () => {
+      access.current = null;
+      setState({ init: false });
     },
     setRevision: async (rev) => {
       setStatus(rev);

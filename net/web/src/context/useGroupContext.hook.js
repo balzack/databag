@@ -46,8 +46,12 @@ export function useGroupContext() {
   }
 
   const actions = {
-    setToken: async (token) => {
+    setToken: (token) => {
       access.current = token;
+    },
+    clearToken: () => {
+      access.current = null;
+      setState({ init: false });
     },
     setRevision: async (rev) => {
       setGroups(rev);

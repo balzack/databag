@@ -39,6 +39,7 @@ export function useAppContext() {
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }))
   }
+
   const updateData = (value) => {
     setState((s) => {
       let data = { ...s.Data, ...value }
@@ -55,6 +56,12 @@ export function useAppContext() {
 
   const resetData = () => {
     revision.current = null;
+    accountContext.actions.clearToken();
+    profileContext.actions.clearToken();
+    articleContext.actions.clearToken();
+    groupContext.actions.clearToken();
+    cardContext.actions.clearToken();
+    channelContext.actions.clearToken();
     setState({});
   }
 

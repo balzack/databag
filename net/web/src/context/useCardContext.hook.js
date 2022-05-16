@@ -183,9 +183,15 @@ export function useCardContext() {
   }
 
   const actions = {
-    setToken: async (token) => {
+    setToken: (token) => {
       access.current = token;
     },
+    clearToken: () => {
+      access.current = null;
+      cards.current = new Map();
+      revision.current = null;
+      setState({ init: false, cards: new Map() });
+    }, 
     setRevision: async (rev) => {
       setCards(rev);
     },

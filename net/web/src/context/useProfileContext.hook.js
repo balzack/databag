@@ -39,6 +39,11 @@ export function useProfileContext() {
     setToken: (token) => {
       access.current = token;
     },
+    clearToken: () => {
+      access.current = null;
+      revision.current = null;
+      setState({ init: false, profile: {} });
+    },
     setRevision: (rev) => {
       setProfile(rev);
     },

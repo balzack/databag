@@ -83,6 +83,12 @@ export function useChannelContext() {
     setToken: (token) => {
       access.current = token;
     },
+    clearToken: () => {
+      access.current = null;
+      channels.current = new Map();
+      revision.current = null;
+      setState({ init: false, channels: new Map() });
+    },
     setRevision: async (rev) => {
       setChannels(rev);
     },

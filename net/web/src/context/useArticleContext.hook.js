@@ -17,6 +17,9 @@ export function useArticleContext() {
     setToken: (token) => {
       updateState({ token });
     },
+    clearToken: () => {
+      setState({ init: false });
+    },
     setRevision: async (revision) => {
       updateState({ revision });
     },
