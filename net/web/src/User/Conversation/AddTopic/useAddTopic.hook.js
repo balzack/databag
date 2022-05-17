@@ -49,15 +49,15 @@ export function useAddTopic() {
   const actions = {
     addImage: (image) => { 
       let url = URL.createObjectURL(image);
-      addAsset({ image, url, position: 0 }) 
+      addAsset({ image, url }) 
     },
     addVideo: (video) => { 
       let url = URL.createObjectURL(video);
-      addAsset({ video, url, label: '' }) 
+      addAsset({ video, url, position: 0 }) 
     },
     addAudio: (audio) => {
       let url = URL.createObjectURL(audio);
-      addAsset({ audio, url }) 
+      addAsset({ audio, url, label: '' }) 
     },
     setLabel: (index, label) => {
       updateAsset(index, { label });
