@@ -311,7 +311,7 @@ export function VirtualList({ id, items, itemRenderer }) {
   }
 
   return (
-    <ReactResizeDetector handleHeight={true}>
+    <ReactResizeDetector handleHeight={true} handleWidth={true}>
       {({ height }) => {
         if (height) {
           growCanvasHeight(height * 3);
