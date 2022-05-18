@@ -21,10 +21,10 @@ export const ImageAssetWrapper = styled.div`
   }
 
   .expand {
-    padding-right: 2px;
+    padding-left: 4px;
     position: absolute;
     bottom: 0;
-    right: 0;
+    left: 0;
   }
 `;
 

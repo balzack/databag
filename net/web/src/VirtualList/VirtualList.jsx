@@ -11,12 +11,12 @@ export function VirtualList({ id, items, itemRenderer }) {
   const DEFAULT_LIST_HEIGHT = 4096;
   const GUTTER = 6;
 
-  const [ viewHeight, setViewHeight ] = useState(DEFAULT_LIST_HEIGHT); 
   const [ canvasHeight, setCanvasHeight ] = useState(DEFAULT_LIST_HEIGHT*3);
   const [ slots, setSlots ] = useState(new Map());
   const [ scroll, setScroll ] = useState('hidden');
 
   let update = useRef(0);
+  let viewHeight = useRef(DEFAULT_LIST_HEIGHT);
   let latch = useRef(true);
   let scrollTop = useRef(0);
   let containers = useRef([]);
@@ -49,11 +49,8 @@ export function VirtualList({ id, items, itemRenderer }) {
   }
 
   useEffect(() => {
-    if (viewHeight * 3 > canvasHeight) {
-      growCanvasHeight(viewHeight * 3);
-    }
     updateCanvas();
-  }, [viewHeight]);
+  }, [canvasHeight]);
 
   useEffect(() => {
     if (key.current != id) {
@@ -64,10 +61,6 @@ export function VirtualList({ id, items, itemRenderer }) {
     }
     setItems();
   }, [items, id]);
-
-  useEffect(() => {
-    updateCanvas();
-  }, [viewHeight, canvasHeight]);
 
   const onScrollWheel = (e) => {
     if (e.deltaY < 0 && latch.current) {
@@ -96,15 +89,15 @@ export function VirtualList({ id, items, itemRenderer }) {
     let view = getPlacement();
     if (view && containers.current[containers.current.length - 1].index == items.length - 1) {
       if (view?.overscan?.bottom <= 0) {
-        if (view.position.height < viewHeight) {
+        if (view.position.height < viewHeight.current) {
           if (scrollTop.current != view.position.top) {
             scrollTop.current = view.position.top;
             listRef.current.scrollTo({ top: scrollTop.current, left: 0 });
           }
         }
         else {
-          if (scrollTop.current != view.position.bottom - viewHeight) {
-            scrollTop.current = view.position.bottom - viewHeight;
+          if (scrollTop.current != view.position.bottom - viewHeight.current) {
+            scrollTop.current = view.position.bottom - viewHeight.current;
             listRef.current.scrollTo({ top: scrollTop.current, left: 0 });
           }
         }
@@ -162,7 +155,7 @@ export function VirtualList({ id, items, itemRenderer }) {
       containers.current.shift();
     }
     while (containers.current.length > 0 &&
-        containers.current[containers.current.length - 1].top > scrollTop.current + viewHeight + HOLDZONE) {
+        containers.current[containers.current.length - 1].top > scrollTop.current + viewHeight.current + HOLDZONE) {
       removeSlot(containers.current[containers.current.length - 1].id);
       containers.current.pop();
     }
@@ -226,15 +219,15 @@ export function VirtualList({ id, items, itemRenderer }) {
     if (latch.current) {
       let view = getPlacement();
       if (view) {
-        if (view.position.height < viewHeight) {
+        if (view.position.height < viewHeight.current) {
           if (scrollTop.current != view.position.top) {
             scrollTop.current = view.position.top;
             listRef.current.scrollTo({ top: scrollTop.current, left: 0, behavior: 'smooth' });
           }
         }
         else {
-          if (scrollTop.current != view.position.bottom - viewHeight) {
-            scrollTop.current = view.position.bottom - viewHeight;
+          if (scrollTop.current != view.position.bottom - viewHeight.current) {
+            scrollTop.current = view.position.bottom - viewHeight.current;
             listRef.current.scrollTo({ top: scrollTop.current, left: 0, behavior: 'smooth' });
           }
         }
@@ -310,7 +303,7 @@ export function VirtualList({ id, items, itemRenderer }) {
     let top = containers.current[0].top;
     let bottom = containers.current[containers.current.length-1].top + containers.current[containers.current.length-1].height + 2 * GUTTER;
     let overTop = scrollTop.current - top;
-    let overBottom = bottom - (scrollTop.current + viewHeight);
+    let overBottom = bottom - (scrollTop.current + viewHeight.current);
     return { 
       position: { top, bottom, height: bottom - top }, 
       overscan: { top: overTop, bottom: overBottom }
@@ -320,7 +313,10 @@ export function VirtualList({ id, items, itemRenderer }) {
   return (
     <ReactResizeDetector handleHeight={true}>
       {({ height }) => {
-        setViewHeight(height);
+        if (height) {
+          growCanvasHeight(height * 3);
+          viewHeight.current = height;
+        }
         return (
           <VirtualListWrapper onScroll={onScrollView} onWheel={onScrollWheel}>
             <div class="rollview" style={{ overflowY: 'auto' }} ref={listRef} onScroll={onScrollView}>

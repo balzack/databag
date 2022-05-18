@@ -5,7 +5,6 @@ export const TopicItemWrapper = styled.div`
   flex-direction: row;
   width: 100%;
   padding-left: 8px;
-  padding-right: 8px;
   
   .avatar {
     height: 32px;
@@ -43,6 +42,7 @@ export const TopicItemWrapper = styled.div`
 
     .message {
       padding-top: 6px;
+      padding-right: 16px;
     }
   }
 `;
