@@ -18,6 +18,9 @@ export function VideoFile({ url, onPosition }) {
   const onSeek = (offset) => {
     if (player.current) {
       let len = player.current.getDuration();
+      if (len > 128) {
+        offset *= Math.floor(len / 128);
+      } 
       seek.current += offset;
       if (seek.current < 0 || seek.current >= len) {
         seek.current = 0;

@@ -316,6 +316,7 @@ export function VirtualList({ id, items, itemRenderer }) {
         if (height) {
           growCanvasHeight(height * 3);
           viewHeight.current = height;
+          updateCanvas();
         }
         return (
           <VirtualListWrapper onScroll={onScrollView} onWheel={onScrollWheel}>
