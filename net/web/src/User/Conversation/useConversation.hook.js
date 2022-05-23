@@ -48,6 +48,7 @@ export function useConversation() {
       cardId: conversation.state.cardId,
       channelId: conversation.state.channelId,
       topics: Array.from(conversation.state.topics.values()),
+      members: conversation.state.members,
     });
   }, [conversation]);
 

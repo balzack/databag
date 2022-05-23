@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef, useContext } from 'react';
+import { ProfileContext } from 'context/ProfileContext';
 import { CardContext } from 'context/CardContext';
 import { ChannelContext } from 'context/ChannelContext';
 
@@ -10,11 +11,13 @@ export function useConversationContext() {
     channelId: null,
     subject: null,
     contacts: null,
+    members: new Set(),
     topics: new Map(),
   });
 
   const card = useContext(CardContext);
   const channel = useContext(ChannelContext);
+  const profile = useContext(ProfileContext);
   const topics = useRef(new Map());
   const revision = useRef(null);
   const count = useRef(0);
@@ -52,6 +55,19 @@ export function useConversationContext() {
     return members.join(', ');
   }
 
+  const getMembers = (conversation) => {
+    let members = new Set();
+    if (conversation.guid) {
+      members.add(conversation.guid);
+    }
+    for (let member of conversation.data.channelDetail.members) {
+      if (profile.state.profile.guid != member) {
+        members.add(member);
+      }
+    }
+    return members;
+  }
+
   const setTopics = async () => {
     const { cardId, channelId } = conversationId.current;
     const curRevision = revision.current;
@@ -68,6 +84,7 @@ export function useConversationContext() {
         let conversation = card.actions.getChannel(cardId, channelId);
         let subject = getSubject(conversation);
         let contacts = getContacts(conversation);
+        let members = getMembers(conversation);
         let delta = await card.actions.getChannelTopics(cardId, channelId, curRevision);
         for (let topic of delta) {
           if (topic.data == null) {
@@ -98,6 +115,7 @@ export function useConversationContext() {
             init: true,
             subject,
             contacts,
+            members,
             topics: topics.current,
           });
           revision.current = deltaRevision;
@@ -113,6 +131,7 @@ export function useConversationContext() {
         let conversation = channel.actions.getChannel(channelId);
         let subject = getSubject(conversation);
         let contacts = getContacts(conversation);
+        let members = getMembers(conversation);
         let delta = await channel.actions.getChannelTopics(channelId, curRevision);
         for (let topic of delta) {
           if (topic.data == null) {
@@ -143,6 +162,7 @@ export function useConversationContext() {
             init: true,
             subject,
             contacts,
+            members,
             topics: topics.current,
           });
           revision.current = deltaRevision;
