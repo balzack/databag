@@ -31,6 +31,27 @@ export function useMembers({ host, members }) {
         contacts.push({ member: members.has(value.data.cardProfile.guid), card: value });
       });
     }
+    
+    contacts.sort((a, b) => {
+      let aName = a.card?.data?.cardProfile?.name?.toLowerCase();
+      let bName = b.card?.data?.cardProfile?.name?.toLowerCase();
+      if (aName == null && bName == null) {
+        return 0;
+      }
+      if (aName == null && bName != null) {
+        return 1;
+      }
+      if (aName != null && bName == null) {
+        return -1;
+      }
+      if (aName < bName) {
+        return -1;
+      }
+      if (aName > bName) {
+        return 1;
+      }
+      return 0;
+    });
 
     updateState({ readonly, contacts });
   }, [host, members]);

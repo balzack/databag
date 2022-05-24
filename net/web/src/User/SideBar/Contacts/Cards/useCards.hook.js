@@ -23,7 +23,26 @@ export function useCards() {
   }
 
   useEffect(() => {
-    updateState({ cards: Array.from(card.state.cards.values()) });
+    updateState({ cards: Array.from(card.state.cards.values()).sort((a, b) => {
+      let aName = a.data?.cardProfile?.name?.toLowerCase();
+      let bName = b.data?.cardProfile?.name?.toLowerCase();
+      if (aName == null && bName == null) {
+        return 0;
+      }
+      if (aName == null && bName != null) {
+        return 1;
+      }
+      if (aName != null && bName == null) {
+        return -1;
+      }
+      if (aName < bName) {
+        return -1;
+      }
+      if (aName > bName) {
+        return 1;
+      }
+      return 0;
+    })});
   }, [card])
 
   return { state, actions };

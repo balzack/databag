@@ -1,5 +1,6 @@
 import { useContext, useState, useEffect, useRef } from 'react';
 import { CardContext } from 'context/CardContext';
+import { ConversationContext } from 'context/ConversationContext';
 
 export function useMemberItem({ item }) {  
 
@@ -10,10 +11,11 @@ export function useMemberItem({ item }) {
   });
 
   const card = useContext(CardContext);
+  const conversation = useContext(ConversationContext);
 
   useEffect(() => {
     updateState({ 
-      imageUrl: card.actions.getImageUrl(item.card.id),
+      imageUrl: card.actions.getImageUrl(item.card?.id),
       name: item.card?.data.cardProfile.name, 
       handle: item.card?.data.cardProfile.handle,
     });
@@ -25,10 +27,10 @@ export function useMemberItem({ item }) {
 
   const actions = {
     setMembership: async () => {
-      console.log("set membership");
+      conversation.actions.setChannelCard(item.card.id);
     },
     clearMembership: async () => {
-      console.log("clear membership");
+      conversation.actions.clearChannelCard(item.card.id);
     },
   };
 

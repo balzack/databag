@@ -223,6 +223,12 @@ export function useConversationContext() {
     setChannelSubject: async (subject) => {
       return await channel.actions.setChannelSubject(conversationId.current.channelId, subject);
     },
+    setChannelCard: async (cardId) => {
+      return await channel.actions.setChannelCard(conversationId.current.channelId, cardId);
+    },
+    clearChannelCard: async (cardId) => {
+      return await channel.actions.clearChannelCard(conversationId.current.channelId, cardId);
+    },
     getAssetUrl: (topicId, assetId) => {
       const { cardId, channelId } = conversationId.current;
       if (conversationId.current.cardId) {
