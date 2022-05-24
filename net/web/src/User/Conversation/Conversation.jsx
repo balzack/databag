@@ -84,9 +84,8 @@ export function Conversation() {
         <BusySpin size="large" delay="1000" spinning={!state.init} />
       </div>
       <AddTopic />
-      <Modal title="Conversation Members" visible={showMembers} centered onCancel={() => setShowMembers(false)}
+      <Modal title="Conversation Members" visible={showMembers} centered onCancel={() => setShowMembers(false)} width={400} bodyStyle={{ padding: 0 }}
         footer={[
-          <Button key="back" onClick={() => setShowMembers(false)}>Done</Button>
         ]} >
         <Members host={state.cardId} members={state.members} />
       </Modal>
