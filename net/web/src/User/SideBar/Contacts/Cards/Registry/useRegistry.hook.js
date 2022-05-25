@@ -35,7 +35,7 @@ export function useRegistry() {
         updateState({ busy: true });
         try {
           let profiles = await getListing(state.server)
-          updateState({ profiles: profiles });
+          updateState({ profiles: profiles.filter(contact => contact.guid !== profile.state.profile.guid) });
         }
         catch (err) {
           window.alert(err)

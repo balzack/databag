@@ -20,7 +20,7 @@ export function AudioAsset({ label, audioUrl }) {
   const onReady = () => {
     if (!ready) {
       setReady(true);
-      setPlaying(true);
+      setPlaying(false);
     }
   }
 
