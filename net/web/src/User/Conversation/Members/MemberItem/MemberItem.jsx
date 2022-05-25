@@ -20,6 +20,13 @@ export function MemberItem({ readonly, item }) {
         onClick={() => actions.setMembership()} />
   }
 
+  const Unknown = () => {
+    if (state.handle) {
+      return <></>;
+    }
+    return <div class="unknown">unknown contact</div>;
+  }
+
   return (
     <MemberItemWrapper>
       <div class="avatar">
@@ -28,6 +35,7 @@ export function MemberItem({ readonly, item }) {
       <div class="label">
         <div class="name">{state.name}</div>
         <div class="handle">{state.handle}</div>
+        <Unknown />
       </div>
       <SetMembership />
     </MemberItemWrapper>

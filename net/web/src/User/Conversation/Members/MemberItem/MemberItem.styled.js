@@ -33,6 +33,11 @@ export const MemberItemWrapper = styled.div`
       font-weight: bold;
     }
 
+    .unknown {
+      font-style: italic;
+      color: #AAAAAA;
+    }
+
     .name {
     }
   }

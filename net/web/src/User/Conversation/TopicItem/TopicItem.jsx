@@ -16,6 +16,11 @@ export function TopicItem({ topic }) {
   let nameClass = state.name ? 'set' : 'unset';
   let d = new Date();
   let offset = d.getTime() / 1000 - state.created;
+  
+  if (name == null) {
+    name = "unknown contact"
+    nameClass = "unknown"
+  }
 
   const renderAsset = (asset) => {
     if (asset.image) {

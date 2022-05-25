@@ -38,6 +38,11 @@ export const TopicItemWrapper = styled.div`
         color: #888888;
         padding-right: 8px;
       }
+      .unknown {
+        font-style: italic;
+        color: #aaaaaa;
+        padding-right: 8px;
+      }
     }
 
     .message {
