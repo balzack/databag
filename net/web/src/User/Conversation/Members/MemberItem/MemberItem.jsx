@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { Avatar } from 'avatar/Avatar';
-import { MemberItemWrapper } from './MemberItem.styled';
+import { MemberItemWrapper, CheckIcon, UncheckIcon } from './MemberItem.styled';
 import { useMemberItem } from './useMemberItem.hook';
 import { Button } from 'antd';
 
@@ -13,9 +13,11 @@ export function MemberItem({ readonly, item }) {
       return <></>
     }
     if (item.member) {
-      return <Button type="primary" size="small" danger onClick={() => actions.clearMembership()}>Remove</Button>
+      return <Button type="link" icon={<CheckIcon />} loading={state.busy}
+        onClick={() => actions.clearMembership()} />
     }
-    return <Button type="primary" size="small" onClick={() => actions.setMembership()}>Add</Button>
+    return <Button type="link" icon={<UncheckIcon />} loading={state.busy}
+        onClick={() => actions.setMembership()} />
   }
 
   return (

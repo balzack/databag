@@ -7,7 +7,8 @@ export function useMemberItem({ item }) {
   const [state, setState] = useState({
     imageUrl: null,
     name: null,
-    handle: null
+    handle: null,
+    busy: false,
   });
 
   const card = useContext(CardContext);
@@ -27,10 +28,28 @@ export function useMemberItem({ item }) {
 
   const actions = {
     setMembership: async () => {
-      conversation.actions.setChannelCard(item.card.id);
+      if (!state.busy) {
+        updateState({ busy: true });
+        try {
+          conversation.actions.setChannelCard(item.card.id);
+        }
+        catch(err) {
+          window.alert(err);
+        }
+        updateState({ busy: false });
+      }
     },
     clearMembership: async () => {
-      conversation.actions.clearChannelCard(item.card.id);
+      if (!state.busy) {
+        updateState({ busy: true });
+        try {
+          conversation.actions.clearChannelCard(item.card.id);
+        }
+        catch(err) {
+          window.alert(err);
+        }
+        updateState({ busy: false });
+      }
     },
   };
 

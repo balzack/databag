@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { CheckSquareOutlined, BorderOutlined } from '@ant-design/icons';
 
 export const MemberItemWrapper = styled.div`
   display: flex;
@@ -37,3 +38,10 @@ export const MemberItemWrapper = styled.div`
   }
 `;
 
+export const CheckIcon = styled(CheckSquareOutlined)`
+  font-size: 20px;
+`;
+
+export const UncheckIcon = styled(BorderOutlined)`
+  font-size: 20px;
+`;
