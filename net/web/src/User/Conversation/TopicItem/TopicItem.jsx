@@ -5,10 +5,11 @@ import { VideoAsset } from './VideoAsset/VideoAsset';
 import { AudioAsset } from './AudioAsset/AudioAsset';
 import { ImageAsset } from './ImageAsset/ImageAsset';
 import { Avatar } from 'avatar/Avatar';
-import { CommentOutlined } from '@ant-design/icons';
+import { Button } from 'antd';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Carousel } from 'Carousel/Carousel';
 
-export function TopicItem({ topic }) {
+export function TopicItem({ host, topic }) {
 
   const { state, actions } = useTopicItem(topic);
 
@@ -37,6 +38,39 @@ export function TopicItem({ topic }) {
     return <></>
   }
 
+  const onEdit = () => {
+    console.log("EDIT TOPIC");
+  }
+
+  const onDelete = () => {
+    console.log("DELETE TOPIC");
+  }
+
+  const Options = () => {
+    if (state.owner) {
+      return (
+        <div class="buttons">
+          <div class="button" onClick={() => onEdit()}>
+            <EditOutlined />
+          </div>
+          <div class="button" onClick={() => actions.removeTopic()}>
+            <DeleteOutlined />
+          </div>
+        </div>
+      );
+    }
+    if (host) {
+      return (
+        <div class="buttons">
+          <div class="button" onClick={() => actions.removeTopic()}>
+            <DeleteOutlined />
+          </div>
+        </div>
+      );
+    }
+    return <></>;
+  }
+
   return (
     <TopicItemWrapper>
       <div class="avatar">
@@ -49,6 +83,9 @@ export function TopicItem({ topic }) {
         </div>
         <Carousel ready={state.ready} items={state.assets} itemRenderer={renderAsset} />
         <div class="message">{ state.message?.text }</div>
+        <div class="options">
+          <Options />
+        </div>
       </div>
     </TopicItemWrapper>
   )

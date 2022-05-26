@@ -14,6 +14,7 @@ export function useTopicItem(topic) {
     message: null,
     created: null,
     ready: false,
+    owner: false,
     assets: [],
   });
 
@@ -26,6 +27,10 @@ export function useTopicItem(topic) {
   }
 
   useEffect(() => {
+    let owner = false;
+    if (profile.state.profile.guid == topic?.data?.topicDetail.guid) {
+      owner = true;
+    }
 
     if (!topic?.data) {
       console.log("invalid topic:", topic);
@@ -56,11 +61,11 @@ export function useTopicItem(topic) {
       const { guid, created } = topic.data.topicDetail;
       if (profile.state.profile.guid == guid) {
         const { name, handle, imageUrl } = profile.actions.getProfile();
-        updateState({ name, handle, imageUrl, status, message, transform, assets, ready, created });
+        updateState({ name, handle, imageUrl, status, message, transform, assets, ready, created, owner });
       }
       else {
         const { name, handle, imageUrl } = card.actions.getCardProfileByGuid(guid);
-        updateState({ name, handle, imageUrl, status, message, transform, assets, ready, created });
+        updateState({ name, handle, imageUrl, status, message, transform, assets, ready, created, owner });
       }
     }
   }, [profile, card, conversation, topic]);
@@ -68,6 +73,9 @@ export function useTopicItem(topic) {
   const actions = {
     getAssetUrl: (assetId) => {
       return conversation.actions.getAssetUrl(topic?.id, assetId);
+    },
+    removeTopic: async () => {
+      return conversation.actions.removeTopic(topic.id);
     }
   };
 

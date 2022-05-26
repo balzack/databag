@@ -41,8 +41,8 @@ func RemoveChannelTopic(w http.ResponseWriter, r *http.Request) {
   }
 
   // check permission
-  if topicSlot.Topic.Guid != guid {
-    ErrResponse(w, http.StatusUnauthorized, errors.New("not creator of topic"))
+  if act.Guid != guid && topicSlot.Topic.Guid != guid {
+    ErrResponse(w, http.StatusUnauthorized, errors.New("not creator of topic or host"))
     return
   }
 

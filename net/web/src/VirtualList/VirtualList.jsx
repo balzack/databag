@@ -22,6 +22,7 @@ export function VirtualList({ id, items, itemRenderer }) {
   let containers = useRef([]);
   let listRef = useRef();
   let key = useRef(null);
+  let itemView = useRef([]);
 
   const addSlot = (id, slot) => {
     setSlots((m) => { m.set(id, slot); return new Map(m); })
@@ -59,6 +60,7 @@ export function VirtualList({ id, items, itemRenderer }) {
       containers.current = [];
       clearSlots();
     }
+    itemView.current = items;
     setItems();
   }, [items, id]);
 
@@ -87,7 +89,7 @@ export function VirtualList({ id, items, itemRenderer }) {
 
   const limitScroll = () => {
     let view = getPlacement();
-    if (view && containers.current[containers.current.length - 1].index == items.length - 1) {
+    if (view && containers.current[containers.current.length - 1].index == itemView.current.length - 1) {
       if (view?.overscan?.bottom <= 0) {
         if (view.position.height < viewHeight.current) {
           if (scrollTop.current != view.position.top) {
@@ -116,14 +118,14 @@ export function VirtualList({ id, items, itemRenderer }) {
     let view = getPlacement();
     if (view) {
       if (view.overscan.top < OVERSCAN) {
-        if (containers.current[0].index > 0 && containers.current[0].index < items.length) {
+        if (containers.current[0].index > 0 && containers.current[0].index < itemView.current.length) {
           let below = containers.current[0];
           let container = {
             top: below.top - (DEFAULT_ITEM_HEIGHT + 2 * GUTTER),
             height: DEFAULT_ITEM_HEIGHT,
             index: containers.current[0].index - 1,
-            id: items[containers.current[0].index - 1].id,
-            revision: items[containers.current[0].index - 1].revision,
+            id: itemView.current[containers.current[0].index - 1].id,
+            revision: itemView.current[containers.current[0].index - 1].revision,
           }
           containers.current.unshift(container);
           addSlot(container.id, getSlot(container))
@@ -131,14 +133,14 @@ export function VirtualList({ id, items, itemRenderer }) {
         }
       }
       if (view.overscan.bottom < OVERSCAN) {
-        if (containers.current[containers.current.length - 1].index + 1 < items.length) {
+        if (containers.current[containers.current.length - 1].index + 1 < itemView.current.length) {
           let above = containers.current[containers.current.length - 1];
           let container = {
             top: above.top + above.height + 2 * GUTTER,
             height: DEFAULT_ITEM_HEIGHT,
             index: containers.current[containers.current.length - 1].index + 1,
-            id: items[containers.current[containers.current.length - 1].index + 1].id,
-            revision: items[containers.current[containers.current.length - 1].index + 1].revision,
+            id: itemView.current[containers.current[containers.current.length - 1].index + 1].id,
+            revision: itemView.current[containers.current[containers.current.length - 1].index + 1].revision,
           }
           containers.current.push(container);
           addSlot(container.id, getSlot(container))
@@ -239,21 +241,21 @@ export function VirtualList({ id, items, itemRenderer }) {
 
     for (let i = 0; i < containers.current.length; i++) {
       let container = containers.current[i];
-      if (items.length <= container.index || items[container.index].id != container.id) {
-        for (let j = i; j < containers.current.length; j++) {
+      if (itemView.current.length <= container.index || itemView.current[container.index].id != container.id) {
+        while (containers.current.length > i) {
           let popped = containers.current.pop();
           removeSlot(popped.id);
         }
         break;
       }
-      else if (items[container.index].revision != container.revision) {
+      else if (itemView.current[container.index].revision != container.revision) {
         updateSlot(container.id, getSlot(containers.current[i]));
-        containers.revision = items[container.index].revision; 
+        containers.revision = itemView.current[container.index].revision; 
       }
     }
 
     // place first slot
-    if (items.length > 0 && canvasHeight > 0) {
+    if (itemView.current.length > 0 && canvasHeight > 0) {
       let view = getPlacement();
       if (!view) {
         let pos = canvasHeight / 2;
@@ -263,9 +265,9 @@ export function VirtualList({ id, items, itemRenderer }) {
         let container = {
           top: pos - DEFAULT_ITEM_HEIGHT,
           height: DEFAULT_ITEM_HEIGHT,
-          index: items.length - 1,
-          id: items[items.length - 1].id,
-          revision: items[items.length - 1].revision,
+          index: itemView.current.length - 1,
+          id: itemView.current[itemView.current.length - 1].id,
+          revision: itemView.current[itemView.current.length - 1].revision,
         }
 
         containers.current.push(container);
@@ -289,7 +291,7 @@ export function VirtualList({ id, items, itemRenderer }) {
             if (typeof height !== 'undefined') {
               onItemHeight(container, height);
             }
-            return itemRenderer(items[container.index]);
+            return itemRenderer(itemView.current[container.index]);
           }}
         </ReactResizeDetector> 
       </VirtualItem>

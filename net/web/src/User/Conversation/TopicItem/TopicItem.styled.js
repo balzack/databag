@@ -15,6 +15,34 @@ export const TopicItemWrapper = styled.div`
     display: flex;
     flex-direction: column;
     padding-left: 8px;
+    flex-grow: 1;
+
+    &:hover .options {
+      visibility: visible;
+    }
+
+    .options {
+      position: absolute;
+      top: 0;
+      right: 0;
+      visibility: hidden;
+
+      .buttons {
+        display: flex;
+        flex-direction: row;
+        border-radius: 4px;
+        background-color: #eeeeee;
+        border: 1px solid #555555;
+        margin-top: 2px;
+
+        .button {
+          font-size: 14px;
+          margin-left: 8px;
+          margin-right: 8px;
+          cursor: pointer;
+        }
+      }
+    }
  
     .info {
       display: flex;

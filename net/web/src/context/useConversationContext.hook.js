@@ -247,6 +247,15 @@ export function useConversationContext() {
         return await channel.actions.removeChannel(channelId);
       }
     },
+    removeTopic: async (topicId) => {
+      const { cardId, channelId } = conversationId.current;
+      if (cardId) {
+        return await card.actions.removeChannelTopic(cardId, channelId, topicId);
+      }
+      else {
+        return await channel.actions.removeChannelTopic(channelId, topicId);
+      }
+    },
   }
 
   return { state, actions }

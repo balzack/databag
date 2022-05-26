@@ -28,7 +28,7 @@ export function Conversation() {
   }, [state]);
 
   const topicRenderer = (topic) => {
-    return (<TopicItem topic={topic} />)
+    return (<TopicItem host={state.cardId == null} topic={topic} />)
   }
 
   const onSaveSubject = () => {
