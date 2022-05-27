@@ -45,7 +45,6 @@ export function useTopicItem(topic) {
     let ready = false;
     let assets = [];
     if (status === 'confirmed') {
-console.log(data);
       try {
         message = JSON.parse(data);
         if (message.assets) {
@@ -93,7 +92,7 @@ console.log(data);
         updateState({ busy: true });
         try {
           await conversation.actions.setTopicSubject(topic.id,
-              { ...state.message, text: editMessage.current });
+              { ...state.message, text: editMessage.current, assets: state.assets });
           updateState({ editing: false });
         }
         catch (err) {

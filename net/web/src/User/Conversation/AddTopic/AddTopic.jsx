@@ -4,7 +4,7 @@ import { Button, Dropdown, Input, Tooltip, Menu } from 'antd';
 import { AddTopicWrapper, BusySpin } from './AddTopic.styled';
 import { Carousel } from '../../../Carousel/Carousel';
 import { useAddTopic } from './useAddTopic.hook';
-import { BgColorsOutlined, FontColorsOutlined, FontSizeOutlined, PaperClipOutlined, SendOutlined } from '@ant-design/icons';
+import { FontColorsOutlined, FontSizeOutlined, PaperClipOutlined, SendOutlined } from '@ant-design/icons';
 import { AudioFile } from './AudioFile/AudioFile';
 import { VideoFile } from './VideoFile/VideoFile';
 
@@ -105,9 +105,6 @@ export function AddTopic() {
           </div>
           <div class="option">
             <Button icon={<FontColorsOutlined />} size="large" />
-          </div>
-          <div class="option">
-            <Button icon={<BgColorsOutlined />} size="large" />
           </div>
           <div class="send">
             <Button icon={<SendOutlined />} onClick={onSend} size="large" />
