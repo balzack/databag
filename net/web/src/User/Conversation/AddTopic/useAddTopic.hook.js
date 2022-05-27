@@ -8,9 +8,10 @@ export function useAddTopic() {
   const [state, setState] = useState({
     assets: [],
     messageText: null,
-    messageColor: null,
-    messageSize: null,
-    backgroundColor: null,
+    textColor: '#444444',
+    textColorSet: false,
+    textSize: 14,
+    textSizeSet: false,
     busy: false,
   });
 
@@ -64,34 +65,31 @@ export function useAddTopic() {
       updateAsset(index, { position });
     },
     removeAsset: (idx) => { removeAsset(idx) },
+    setTextColor: (value) => {
+      updateState({ textColorSet: true, textColor: value });
+    },
     setMessageText: (value) => {
       updateState({ messageText: value });
     },
-    setMessageColor: (value) => {
-      updateState({ messageColor: value });
-    },
-    setMessageWeight: (value) => {
-      updateState({ messageWeight: value });
-    },
-    setMessageSize: (value) => {
-      updateState({ messageSize: value });
-    },
-    setBackgroundColor: (value) => {
-      updateState({ backgroundColor: value });
+    setTextSize: (value) => {
+      updateState({ textSizeSet: true, textSize: value });
     },
     addTopic: async () => {
       if (!state.busy) {
         updateState({ busy: true });
         try {
-          let message = { text: state.messageText, textColor: state.messageColor,
-              textSize: state.messageSize, backgroundColor: state.backgroundColor };
+          let message = {
+            text: state.messageText,
+            textColor: state.textColorSet ? state.textColor : null,
+            textSize: state.textSizeSet ? state.textSize : null, 
+          };
           if (cardId) {
             await card.actions.addChannelTopic(cardId, channelId, message, state.assets);
           }
           else {
             await channel.actions.addChannelTopic(channelId, message, state.assets);
           }
-          updateState({ messageText: null, messageColor: null, messageSize: null, backgroundColor: null, assets: [] });
+          updateState({ messageText: null, textColor: '#444444', textColorSet: false, textSize: 12, textSizeSet: false, assets: [] });
         }
         catch(err) {
           window.alert(err);

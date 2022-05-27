@@ -9,6 +9,7 @@
     "antd": "^4.19.1",
     "base-64": "^1.0.0",
     "react": "^17.0.2",
+    "react-color": "^2.19.3",
     "react-dom": "^17.0.2",
     "react-easy-crop": "^4.1.4",
     "react-player": "^2.10.0",

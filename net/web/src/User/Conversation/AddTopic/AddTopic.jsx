@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import ReactPlayer from 'react-player'
+import { SketchPicker } from "react-color";
 import { Button, Dropdown, Input, Tooltip, Menu } from 'antd';
 import { AddTopicWrapper, BusySpin } from './AddTopic.styled';
 import { Carousel } from '../../../Carousel/Carousel';
@@ -52,6 +53,24 @@ export function AddTopic() {
     </Menu>
   );
 
+  const picker = (
+    <Menu style={{ backgroundColor: 'unset', boxShadow: 'unset' }}>
+      <SketchPicker disableAlpha={true}
+        color={state.textColor}
+        onChange={(color) => {
+          actions.setTextColor(color.hex);
+        }} />
+    </Menu>
+  );
+
+  const sizer = (
+    <Menu>
+      <Menu.Item key={8}><div onClick={() => actions.setTextSize(8)}>Small</div></Menu.Item>
+      <Menu.Item key={14}><div onClick={() => actions.setTextSize(14)}>Medium</div></Menu.Item>
+      <Menu.Item key={20}><div onClick={() => actions.setTextSize(20)}>Large</div></Menu.Item>
+    </Menu>
+  );
+
   const onSend = () => {
     if (state.messageText || state.assets.length) {
       actions.addTopic();
@@ -92,6 +111,7 @@ export function AddTopic() {
         </div>
         <div class="input">
           <Input.TextArea placeholder="Message" autoSize={{ minRows: 2, maxRows: 6 }} onKeyPress={onKey}
+            style={{ color: state.textColor, fontSize: state.textSize }}
             onChange={(e) => actions.setMessageText(e.target.value)} value={state.messageText} />
         </div>
         <div class="buttons">
@@ -101,10 +121,14 @@ export function AddTopic() {
             </Dropdown>
           </div>
           <div class="option">
-            <Button icon={<FontSizeOutlined />} size="large" />
+            <Dropdown overlay={sizer} overlayStyle={{ minWidth: 0 }} trigger={['click']} placement="topRight">
+              <Button icon={<FontSizeOutlined />} size="large" />
+            </Dropdown>
           </div>
           <div class="option">
-            <Button icon={<FontColorsOutlined />} size="large" />
+            <Dropdown overlay={picker} overlayStyle={{ minWidth: 0 }} trigger={['click']} placement="topRight">
+              <Button icon={<FontColorsOutlined />} size="large" />
+            </Dropdown>
           </div>
           <div class="send">
             <Button icon={<SendOutlined />} onClick={onSend} size="large" />

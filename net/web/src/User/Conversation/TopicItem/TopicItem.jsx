@@ -72,6 +72,7 @@ export function TopicItem({ host, topic }) {
       return (
         <div class="editing">
           <Input.TextArea style={{ resize: 'none' }} defaultValue={state.message?.text} placeholder="message"
+            style={{ color: state.textColor, fontSize: state.textSize }}
             onChange={(e) => actions.setEdit(e.target.value)} rows={3} bordered={false}/>
           <div class="controls">
           <Space>
@@ -82,7 +83,7 @@ export function TopicItem({ host, topic }) {
         </div>
       );
     }
-    return <div>{ state.message?.text }</div>
+    return <div style={{ color: state.textColor, fontSize: state.textSize }}>{ state.message?.text }</div>
   }
 
   return (

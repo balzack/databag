@@ -18,6 +18,8 @@ export function useTopicItem(topic) {
     assets: [],
     editing: false,
     busy: false,
+    textColor: '#444444',
+    textSize: 14,
   });
 
   const profile = useContext(ProfileContext);
@@ -35,6 +37,9 @@ export function useTopicItem(topic) {
       owner = true;
     }
 
+    let textColor = '#444444';
+    let textSize = 14;
+
     if (!topic?.data) {
       console.log("invalid topic:", topic);
       return;
@@ -47,6 +52,12 @@ export function useTopicItem(topic) {
     if (status === 'confirmed') {
       try {
         message = JSON.parse(data);
+        if (message.textColor != null) {
+          textColor = message.textColor;
+        }
+        if (message.textSize != null) {
+          textSize = message.textSize;
+        }
         if (message.assets) {
           assets = message.assets;
           delete message.assets;
@@ -64,11 +75,11 @@ export function useTopicItem(topic) {
       const { guid, created } = topic.data.topicDetail;
       if (profile.state.profile.guid == guid) {
         const { name, handle, imageUrl } = profile.actions.getProfile();
-        updateState({ name, handle, imageUrl, status, message, transform, assets, ready, created, owner });
+        updateState({ name, handle, imageUrl, status, message, transform, assets, ready, created, owner, textColor, textSize });
       }
       else {
         const { name, handle, imageUrl } = card.actions.getCardProfileByGuid(guid);
-        updateState({ name, handle, imageUrl, status, message, transform, assets, ready, created, owner });
+        updateState({ name, handle, imageUrl, status, message, transform, assets, ready, created, owner, textColor, textSize });
       }
     }
   }, [profile, card, conversation, topic]);
