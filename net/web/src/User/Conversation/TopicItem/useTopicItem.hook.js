@@ -16,11 +16,14 @@ export function useTopicItem(topic) {
     ready: false,
     owner: false,
     assets: [],
+    editing: false,
+    busy: false,
   });
 
   const profile = useContext(ProfileContext);
   const card = useContext(CardContext);
   const conversation = useContext(ConversationContext);
+  const editMessage = useRef(null);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
@@ -42,6 +45,7 @@ export function useTopicItem(topic) {
     let ready = false;
     let assets = [];
     if (status === 'confirmed') {
+console.log(data);
       try {
         message = JSON.parse(data);
         if (message.assets) {
@@ -75,8 +79,29 @@ export function useTopicItem(topic) {
       return conversation.actions.getAssetUrl(topic?.id, assetId);
     },
     removeTopic: async () => {
-      return conversation.actions.removeTopic(topic.id);
-    }
+      return await conversation.actions.removeTopic(topic.id);
+    },
+    setEditing: (editing) => {
+      editMessage.current = state.message?.text;
+      updateState({ editing });
+    },
+    setEdit: (edit) => {
+      editMessage.current = edit;
+    },
+    setMessage: async () => {
+      if (!state.busy) {
+        updateState({ busy: true });
+        try {
+          await conversation.actions.setTopicSubject(topic.id,
+              { ...state.message, text: editMessage.current });
+          updateState({ editing: false });
+        }
+        catch (err) {
+          window.alert(err);
+        }
+        updateState({ busy: false });
+      }
+    },
   };
 
   return { state, actions };

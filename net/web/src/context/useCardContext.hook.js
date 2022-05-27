@@ -10,6 +10,7 @@ import { getCardProfile } from 'api/getCardProfile';
 import { getCardDetail } from 'api/getCardDetail';
 import { removeContactChannel } from 'api/removeContactChannel';
 import { removeContactChannelTopic } from 'api/removeContactChannelTopic';
+import { setContactChannelTopicSubject } from 'api/setContactChannelTopicSubject';
 import { addContactChannelTopic } from 'api/addContactChannelTopic';
 import { setCardConnecting, setCardConnected, setCardConfirmed } from 'api/setCardStatus';
 import { getCardOpenMessage } from 'api/getCardOpenMessage';
@@ -226,6 +227,12 @@ export function useCardContext() {
       let token = cardProfile.guid + '.' + cardDetail.token;
       let node = cardProfile.node;
       await removeContactChannelTopic(node, token, channelId, topicId);
+    },
+    setChannelTopicSubject: async (cardId, channelId, topicId, data) => {
+      let { cardProfile, cardDetail } = cards.current.get(cardId).data;
+      let token = cardProfile.guid + '.' + cardDetail.token;
+      let node = cardProfile.node;
+      await setContactChannelTopicSubject(node, token, channelId, topicId, data);
     },
     addChannelTopic: async (cardId, channelId, message, assets) => {
       let { cardProfile, cardDetail } = cards.current.get(cardId).data;

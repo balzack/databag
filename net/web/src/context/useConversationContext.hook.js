@@ -256,6 +256,16 @@ export function useConversationContext() {
         return await channel.actions.removeChannelTopic(channelId, topicId);
       }
     },
+    setTopicSubject: async (topicId, data) => {
+console.log("DATA:", data);
+      const { cardId, channelId } = conversationId.current;
+      if (cardId) {
+        return await card.actions.setChannelTopicSubject(cardId, channelId, topicId, data);
+      }
+      else {
+        return await channel.actions.setChannelTopicSubject(channelId, topicId, data);
+      }
+    }
   }
 
   return { state, actions }

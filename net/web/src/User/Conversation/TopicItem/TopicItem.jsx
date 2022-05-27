@@ -5,13 +5,14 @@ import { VideoAsset } from './VideoAsset/VideoAsset';
 import { AudioAsset } from './AudioAsset/AudioAsset';
 import { ImageAsset } from './ImageAsset/ImageAsset';
 import { Avatar } from 'avatar/Avatar';
-import { Button } from 'antd';
+import { Space, Button, Input } from 'antd';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Carousel } from 'Carousel/Carousel';
 
 export function TopicItem({ host, topic }) {
 
   const { state, actions } = useTopicItem(topic);
+  const [ edit, setEdit ] = useState(null);
 
   let name = state.name ? state.name : state.handle;
   let nameClass = state.name ? 'set' : 'unset';
@@ -38,19 +39,14 @@ export function TopicItem({ host, topic }) {
     return <></>
   }
 
-  const onEdit = () => {
-    console.log("EDIT TOPIC");
-  }
-
-  const onDelete = () => {
-    console.log("DELETE TOPIC");
-  }
-
   const Options = () => {
+    if (state.editing) {
+      return <></>;
+    }
     if (state.owner) {
       return (
         <div class="buttons">
-          <div class="button" onClick={() => onEdit()}>
+          <div class="button" onClick={() => actions.setEditing(true)}>
             <EditOutlined />
           </div>
           <div class="button" onClick={() => actions.removeTopic()}>
@@ -71,6 +67,24 @@ export function TopicItem({ host, topic }) {
     return <></>;
   }
 
+  const Message = () => {
+    if (state.editing) {
+      return (
+        <div class="editing">
+          <Input.TextArea style={{ resize: 'none' }} defaultValue={state.message?.text} placeholder="message"
+            onChange={(e) => actions.setEdit(e.target.value)} rows={3} bordered={false}/>
+          <div class="controls">
+          <Space>
+            <Button onClick={() => actions.setEditing(false)}>Cancel</Button>
+            <Button type="primary" onClick={() => actions.setMessage()} loading={state.body}>Save</Button>
+          </Space>
+          </div>
+        </div>
+      );
+    }
+    return <div>{ state.message?.text }</div>
+  }
+
   return (
     <TopicItemWrapper>
       <div class="avatar">
@@ -82,7 +96,9 @@ export function TopicItem({ host, topic }) {
           <div>{ getTime(offset) }</div>
         </div>
         <Carousel ready={state.ready} items={state.assets} itemRenderer={renderAsset} />
-        <div class="message">{ state.message?.text }</div>
+        <div class="message">
+          <Message />
+        </div>
         <div class="options">
           <Options />
         </div>

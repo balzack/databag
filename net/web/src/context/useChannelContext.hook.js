@@ -5,6 +5,7 @@ import { getChannelSummary } from 'api/getChannelSummary';
 import { addChannel } from 'api/addChannel';
 import { removeChannel } from 'api/removeChannel';
 import { removeChannelTopic } from 'api/removeChannelTopic';
+import { setChannelTopicSubject } from 'api/setChannelTopicSubject';
 import { addChannelTopic } from 'api/addChannelTopic';
 import { getChannelTopics } from 'api/getChannelTopics';
 import { getChannelTopic } from 'api/getChannelTopic';
@@ -112,6 +113,9 @@ export function useChannelContext() {
     },
     removeChannelTopic: async (channelId, topicId) => {
       return await removeChannelTopic(access.current, channelId, topicId);
+    },
+    setChannelTopicSubject: async (channelId, topicId, data) => {
+      return await setChannelTopicSubject(access.current, channelId, topicId, data);
     },
     addChannelTopic: async (channelId, message, assets) => {
       await addChannelTopic(access.current, channelId, message, assets);

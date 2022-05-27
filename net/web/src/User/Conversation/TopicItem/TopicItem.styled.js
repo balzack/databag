@@ -76,6 +76,23 @@ export const TopicItemWrapper = styled.div`
     .message {
       padding-top: 6px;
       padding-right: 16px;
+      white-space: pre-line;
+
+      .editing {
+        display: flex;
+        flex-direction: column;
+        border-radius: 4px;
+        border: 1px solid #aaaaaa;
+        width: 100%;
+
+        .controls {
+          display: flex;
+          flex-direction: row;
+          justify-content: flex-end;
+          padding-bottom: 8px;
+          padding-right: 8px;
+        }
+      }
     }
   }
 `;
