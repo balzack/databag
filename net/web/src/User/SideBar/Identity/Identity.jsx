@@ -1,13 +1,14 @@
-import { Avatar, Image } from 'antd';
-import React from 'react'
+import { Avatar, Space, Image, Modal, Form, Input } from 'antd';
+import React, { useState } from 'react'
 import { IdentityWrapper, IdentityDropdown, MenuWrapper } from './Identity.styled';
-import { RightOutlined, EditOutlined, UserOutlined } from '@ant-design/icons';
+import { RightOutlined, EditOutlined, UserOutlined, LockOutlined } from '@ant-design/icons';
 import { useIdentity } from './useIdentity.hook';
 import { Menu, Dropdown } from 'antd';
 import { Logo } from '../../../Logo/Logo';
 
 export function Identity() {
 
+  const [ showLogin, setShowLogin ] = useState(false);
   const { state, actions } = useIdentity()
 
   const menu = (
@@ -16,13 +17,18 @@ export function Identity() {
         <div onClick={() => actions.editProfile()}>Edit Profile</div>
       </Menu.Item>
       <Menu.Item key="1">
-        <div>Change Login</div>
+        <div onClick={() => setShowLogin(true)}>Change Login</div>
       </Menu.Item>
       <Menu.Item key="2">
         <div onClick={() => actions.logout()}>Sign Out</div>
       </Menu.Item>
     </MenuWrapper>
   );
+
+  const onChangeLogin = () => {
+    let saved = actions.setLogin();
+    setShowLogin(false);
+  };
 
   return (
     <IdentityWrapper>
@@ -37,7 +43,24 @@ export function Identity() {
           </div>
           <RightOutlined />
         </div>
-      </IdentityDropdown>     
+      </IdentityDropdown>
+      <Modal title="Change Login" visible={showLogin} centered okText="Save" 
+          onOk={() => onChangeLogin()} onCancel={() => setShowLogin(false)}>
+
+        <Space direction="vertical" style={{ width: '100%' }}>
+          <Input size="large" spelleCheck="false" placeholder="Username" prefix={<UserOutlined />}
+            onChange={(e) => actions.setUsername(e.target.value)} defaultValue={state.handle}
+            addonAfter={state.usernameStatus} />
+
+          <Input.Password size="large" spelleCheck="false" placeholder="Password" prefix={<LockOutlined />}
+            onChange={(e) => actions.setPassword(e.target.value)}
+            addonAfter={state.passwordStatus} />
+
+          <Input.Password size="large" spelleCheck="false" placeholder="Confirm Password" prefix={<LockOutlined />}
+            onChange={(e) => actions.setConfirm(e.target.value)} 
+            addonAfter={state.confirmStatus} />
+        </Space>
+      </Modal>
     </IdentityWrapper>
   )
 }

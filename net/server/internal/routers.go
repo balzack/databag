@@ -166,6 +166,13 @@ var routes = Routes{
 	},
 
 	Route{
+		"SetAccountLogin",
+		strings.ToUpper("Put"),
+		"/account/login",
+		SetAccountLogin,
+	},
+
+	Route{
 		"SetAccountSerchable",
 		strings.ToUpper("Put"),
 		"/account/searchable",

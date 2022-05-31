@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { setAccountSearchable } from 'api/setAccountSearchable';
 import { getAccountStatus } from 'api/getAccountStatus';
+import { setAccountLogin } from 'api/setAccountLogin';
 
 export function useAccountContext() {
   const [state, setState] = useState({
@@ -46,6 +47,9 @@ export function useAccountContext() {
     },
     setSearchable: async (flag) => {
       await setAccountSearchable(access.current, flag);
+    },
+    setLogin: async (username, password) => {
+      await setAccountLogin(access.current, username, password);
     },
   }
 

@@ -68,6 +68,8 @@ func AddChannelTopicAsset(w http.ResponseWriter, r *http.Request) {
   garbageSync.Lock()
   defer garbageSync.Unlock()
 
+PrintMsg("SAVE NEW ASSET");
+
   // save new file
   id := uuid.New().String()
   path := getStrConfigValue(CONFIG_ASSETPATH, APP_DEFAULTPATH) + "/" + channelSlot.Account.Guid + "/" + id
