@@ -40,6 +40,7 @@ func SetAccountLogin(w http.ResponseWriter, r *http.Request) {
     return
   }
 
+  SetProfileNotification(account);
   SetStatus(account)
   WriteResponse(w, nil)
 }
