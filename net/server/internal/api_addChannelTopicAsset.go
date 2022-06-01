@@ -68,8 +68,6 @@ func AddChannelTopicAsset(w http.ResponseWriter, r *http.Request) {
   garbageSync.Lock()
   defer garbageSync.Unlock()
 
-PrintMsg("SAVE NEW ASSET");
-
   // save new file
   id := uuid.New().String()
   path := getStrConfigValue(CONFIG_ASSETPATH, APP_DEFAULTPATH) + "/" + channelSlot.Account.Guid + "/" + id
@@ -174,7 +172,7 @@ PrintMsg("SAVE NEW ASSET");
 
 func isStorageFull(act *store.Account) (full bool, err error) {
 
-  storage := getNumConfigValue(CONFIG_STORAGE, 0);
+  storage := getNumConfigValue(CONFIG_STORAGE, 0) * 1048576;
   if storage == 0 {
     return
   }

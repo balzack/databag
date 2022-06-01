@@ -131,8 +131,7 @@ export function AddTopic() {
             </Dropdown>
           </div>
           <div class="send">
-            <Button icon={<SendOutlined />} onClick={onSend} size="large" />
-            <BusySpin spinning={state.busy} />
+            <Button icon={<SendOutlined />} onClick={onSend} size="large" loading={state.busy} />
           </div>
         </div>
       </div>
