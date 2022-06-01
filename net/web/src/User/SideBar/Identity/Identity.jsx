@@ -1,4 +1,4 @@
-import { Avatar, Space, Image, Modal, Form, Input } from 'antd';
+import { Avatar, Space, Image, Modal, Form, Input, Button } from 'antd';
 import React, { useState } from 'react'
 import { IdentityWrapper, IdentityDropdown, MenuWrapper } from './Identity.styled';
 import { RightOutlined, EditOutlined, UserOutlined, LockOutlined } from '@ant-design/icons';
@@ -8,7 +8,6 @@ import { Logo } from '../../../Logo/Logo';
 
 export function Identity() {
 
-  const [ showLogin, setShowLogin ] = useState(false);
   const { state, actions } = useIdentity()
 
   const menu = (
@@ -17,18 +16,13 @@ export function Identity() {
         <div onClick={() => actions.editProfile()}>Edit Profile</div>
       </Menu.Item>
       <Menu.Item key="1">
-        <div onClick={() => setShowLogin(true)}>Change Login</div>
+        <div onClick={() => actions.setShowLogin(true)}>Change Login</div>
       </Menu.Item>
       <Menu.Item key="2">
         <div onClick={() => actions.logout()}>Sign Out</div>
       </Menu.Item>
     </MenuWrapper>
   );
-
-  const onChangeLogin = () => {
-    let saved = actions.setLogin();
-    setShowLogin(false);
-  };
 
   return (
     <IdentityWrapper>
@@ -44,8 +38,12 @@ export function Identity() {
           <RightOutlined />
         </div>
       </IdentityDropdown>
-      <Modal title="Change Login" visible={showLogin} centered okText="Save" 
-          onOk={() => onChangeLogin()} onCancel={() => setShowLogin(false)}>
+      <Modal title="Account Login" visible={state.showLogin} centered okText="Save" 
+          onCancel={() => actions.setShowLogin(false)} loading={state.busy}
+          footer={[
+            <Button key="back" onClick={() => actions.setShowLogin(false)}>Cancel</Button>,
+            <Button key="save" type="primary" onClick={() => actions.setLogin()}>Save</Button>
+          ]}>
 
         <Space direction="vertical" style={{ width: '100%' }}>
           <Input size="large" spelleCheck="false" placeholder="Username" prefix={<UserOutlined />}

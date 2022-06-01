@@ -20,7 +20,8 @@ export function useIdentity() {
     passwordStatus: null,
     confirm: null,
     confirmStatus: null,
-    
+    busy: false,
+    showLogin: false,  
   });
 
   const navigate = useNavigate();
@@ -69,6 +70,9 @@ export function useIdentity() {
     setConfirm: (value) => {
       updateState({ confirm: value });
     },
+    setShowLogin: (value) => {
+      updateState({ showLogin: value });
+    },
     setLogin: async () => {
       if (state.username == null || state.username == '') {
         updateState({ usernameStatus: 'username required' });
@@ -91,7 +95,17 @@ export function useIdentity() {
       else {
         updateState({ confirmStatus: null });
       }
-      await account.actions.setLogin(state.username, state.password);
+      if (!state.busy) {
+        updateState({ busy: true });
+        try {
+          await account.actions.setLogin(state.username, state.password);
+          updateState({ showLogin: false });
+        }
+        catch (err) {
+          window.alert(err);
+        }
+        updateState({ busy: false });
+      }
     },
   };
 

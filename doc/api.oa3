@@ -183,36 +183,7 @@ paths:
           description: account not found
         '500':
           description: internal server error
-          
-  /admin/accounts/{accountId}/reset:
-    put:
-      tags:
-        - admin
-      description: Generate a password reset url for specified account. Access granted to admin username and password.
-      operationId: set-node-account
-      security:
-        - basicAuth: []
-      parameters:
-        - name: accountId
-          in: path
-          description: id of profile to access
-          required: true
-          schema:
-            type: string
-      responses:
-        '201':
-          description: success
-          content:
-            application/json:
-              schema:
-                type: string
-        '401':
-          description: invalid password
-        '404':
-          description: unknown portal
-        '500':
-          description: internal server error
-          
+         
   /admin/accounts/{accountId}:
     delete:
       tags:
@@ -460,7 +431,29 @@ paths:
           application/json:
             schema:
               type: boolean
-              
+   
+  /account/login:
+    put:
+      tags:
+        - account
+      description: Reset account login credentials
+      operationId: set-account-login
+      security:
+        - basicAuth: []
+      responses:
+        '201':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: string
+        '401':
+          description: invalid password
+        '404':
+          description: unknown portal
+        '500':
+          description: internal server error
+                      
   /account/profile:
     post:
       tags:

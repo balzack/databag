@@ -84,10 +84,9 @@ export function Conversation() {
         <BusySpin size="large" delay="1000" spinning={!state.init} />
       </div>
       <AddTopic />
-      <Modal title="Conversation Members" visible={showMembers} centered onCancel={() => setShowMembers(false)} width={400} bodyStyle={{ padding: 0 }}
-        footer={[
-        ]} >
-        <Members host={state.cardId} members={state.members} />
+      <Modal title="Conversation Members" visible={showMembers} centered onCancel={() => setShowMembers(false)}
+        width={400} bodyStyle={{ padding: 0 }} footer={[]} >
+          <Members host={state.cardId} members={state.members} />
       </Modal>
       <Modal title="Edit Subject" visible={showEdit} centered
         okText="Save" onOk={() => onSaveSubject()} onCancel={() => setShowEdit(false)}>
