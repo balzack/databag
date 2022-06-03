@@ -3,7 +3,8 @@ import { Input, Button, Space } from 'antd';
 import { AdminWrapper, LoginWrapper, TokenInput } from './Admin.styled';
 import { useAdmin } from './useAdmin.hook';
 import { Dashboard } from './Dashboard/Dashboard';
-          
+import { UserOutlined } from '@ant-design/icons';          
+
 export function Admin() {
 
   const { state, actions } = useAdmin()
@@ -28,6 +29,9 @@ export function Admin() {
   if (!state.access) {
     return (
       <LoginWrapper>
+        <div class="user" onClick={() => actions.onUser()}>
+          <UserOutlined />
+        </div>
         <div className="login">
           <Space>
             <TokenInput placeholder="Admin Token" spellcheck="false" onChange={(e) => actions.setToken(e.target.value)} />

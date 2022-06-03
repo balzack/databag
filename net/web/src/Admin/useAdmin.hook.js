@@ -1,4 +1,5 @@
 import { useContext, useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { getNodeStatus } from 'api/getNodeStatus';
 import { setNodeStatus } from 'api/setNodeStatus';
 import { getNodeConfig } from 'api/getNodeConfig';
@@ -11,6 +12,8 @@ export function useAdmin() {
     token: null,
     busy: false,
   });
+
+  const navigate = useNavigate();
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
@@ -56,6 +59,9 @@ export function useAdmin() {
         window.alert(err);
       }
     },
+    onUser: () => {
+      navigate('/login');
+    }
   };
 
   return { state, actions };

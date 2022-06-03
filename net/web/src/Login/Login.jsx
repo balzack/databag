@@ -1,5 +1,5 @@
 import React from 'react'
-import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import { SettingOutlined, UserOutlined, LockOutlined } from '@ant-design/icons';
 import { useLogin } from './useLogin.hook';
 import { LoginWrapper, LoginInput, LoginPassword, LoginCreate, LoginEnter, LoginSpin } from './Login.styled';
 
@@ -15,6 +15,9 @@ export function Login(props) {
 
   return(
     <LoginWrapper>
+      <div class="settings" onClick={() => actions.onSettings()}>
+        <SettingOutlined />
+      </div>
       <div class="container">
         <div class="header">indicom</div>
         <div class="subheader">

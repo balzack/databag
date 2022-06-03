@@ -27,6 +27,9 @@ export function useLogin() {
       }
       return false
     },
+    onSettings: () => {
+      navigate('/admin');
+    },
     onLogin: async () => {
       if (!state.spinning && state.username != '' && state.password != '') {
         actions.updateState({ spinning: true })

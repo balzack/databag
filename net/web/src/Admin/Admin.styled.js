@@ -40,6 +40,16 @@ export const LoginWrapper = styled.div`
     background-color: #eeeeee;
     border-radius: 4px;
   }
+
+  .user {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    padding: 16px;
+    color: #555555;
+    font-size: 20px;
+    cursor: pointer;
+  }
 `;
  
 export const TokenInput = styled(Input.Password)`

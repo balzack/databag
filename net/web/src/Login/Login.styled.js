@@ -40,6 +40,15 @@ export const LoginWrapper = styled.div`
     width: 100%;
   }
 
+  .settings {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    padding: 16px;
+    color: #555555;
+    font-size: 20px;
+    cursor: pointer;
+  }
 `;
 
 export const LoginInput = styled(Input)`
