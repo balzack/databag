@@ -21,7 +21,7 @@ func SetNodeStatus(w http.ResponseWriter, r *http.Request) {
   }
 
   username, password, res := BasicCredentials(r);
-  if res != nil {
+  if res != nil || username != "admin" {
     LogMsg("invalid credenitals");
     w.WriteHeader(http.StatusBadRequest)
     return

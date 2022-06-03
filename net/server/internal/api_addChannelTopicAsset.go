@@ -172,7 +172,7 @@ func AddChannelTopicAsset(w http.ResponseWriter, r *http.Request) {
 
 func isStorageFull(act *store.Account) (full bool, err error) {
 
-  storage := getNumConfigValue(CONFIG_STORAGE, 0) * 1048576;
+  storage := getNumConfigValue(CONFIG_STORAGE, 0);
   if storage == 0 {
     return
   }

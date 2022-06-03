@@ -8,6 +8,7 @@ import { CardContextProvider } from 'context/CardContext';
 import { ChannelContextProvider } from 'context/ChannelContext';
 import { ConversationContextProvider } from 'context/ConversationContext';
 import { Home } from './Home/Home';
+import { Admin } from './Admin/Admin';
 import { Login } from './Login/Login';
 import { Create } from './Create/Create';
 import { User } from './User/User';
@@ -35,6 +36,7 @@ function App() {
                       <Routes>
                         <Route path="/" element={ <Home /> } />
                         <Route path="/login" element={ <Login /> } />
+                        <Route path="/admin" element={ <Admin /> } />
                         <Route path="/create" element={ <Create /> } />
                         <Route path="/user" element={ <User /> }>
                           <Route path="profile" element={<Profile />} />

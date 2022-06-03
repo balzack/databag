@@ -105,6 +105,7 @@ func TestAccountConfig(t *testing.T) {
   assert.True(t, accountStatus.Searchable)
 
   // add asset to topic
+PrintMsg("ADD TOPIC TEST");
   assets = &[]Asset{}
   pathParams = &map[string]string{ "channelId": channel.Id, "topicId": topic.Id }
   assert.Error(t, ApiTestUpload(AddChannelTopicAsset, "POST",

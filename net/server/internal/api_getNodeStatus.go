@@ -18,6 +18,6 @@ func GetNodeStatus(w http.ResponseWriter, r *http.Request) {
     }
     return
   }
-  WriteResponse(w, false);
+  WriteResponse(w, false)
 }
 
