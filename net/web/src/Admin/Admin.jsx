@@ -44,7 +44,7 @@ export function Admin() {
 
   return (
     <AdminWrapper>
-      <Dashboard />
+      <Dashboard password={state.token} config={state.config} />
     </AdminWrapper>
   )
 }

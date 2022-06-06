@@ -8,7 +8,7 @@ export const LoginWrapper = styled.div`
   justify-content: center;
   width: 100%;
   height: 100%;
-\  
+  
   .container {
     background-color: #ffffff;
     display: flex;
