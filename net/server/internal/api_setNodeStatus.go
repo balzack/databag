@@ -20,18 +20,14 @@ func SetNodeStatus(w http.ResponseWriter, r *http.Request) {
     return
   }
 
-  username, password, res := BasicCredentials(r);
-  if res != nil || username != "admin" {
-    LogMsg("invalid credenitals");
+  token := r.FormValue("token")
+  if token == "" {
     w.WriteHeader(http.StatusBadRequest)
     return
   }
 
   err = store.DB.Transaction(func(tx *gorm.DB) error {
-    if res := tx.Create(&store.Config{ConfigId: CONFIG_USERNAME, StrValue: username}).Error; res != nil {
-      return res
-    }
-    if res := tx.Create(&store.Config{ConfigId: CONFIG_PASSWORD, BinValue: password}).Error; res != nil {
+    if res := tx.Create(&store.Config{ConfigId: CONFIG_TOKEN, StrValue: token}).Error; res != nil {
       return res
     }
     if res := tx.Create(&store.Config{ConfigId: CONFIG_CONFIGURED, BoolValue: true}).Error; res != nil {

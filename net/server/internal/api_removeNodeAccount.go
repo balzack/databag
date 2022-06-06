@@ -20,8 +20,8 @@ func RemoveNodeAccount(w http.ResponseWriter, r *http.Request) {
     return
   }
 
-  if err := AdminLogin(r); err != nil {
-    ErrResponse(w, http.StatusUnauthorized, err)
+  if code, err := ParamAdminToken(r); err != nil {
+    ErrResponse(w, code, err)
     return
   }
 

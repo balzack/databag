@@ -84,8 +84,13 @@ paths:
         - admin
       description: Get node configuration. Access granted to admin username and password.
       operationId: get-node-config
-      security:
-        - basicAuth: []
+      parameters:
+        - name: token
+          in: query
+          description: token for admin access
+          required: true
+          schema:
+            type: string
       responses:
         '200':
           description: success
@@ -102,8 +107,13 @@ paths:
         - admin
       description: Set node config. Access granted to admin username and password.
       operationId: set-node-config
-      security:
-        - basicAuth: []
+      parameters:
+        - name: token
+          in: query
+          description: token for admin access
+          required: true
+          schema:
+            type: string
       responses:
         '200':
           description: success
@@ -118,8 +128,13 @@ paths:
         - admin
       description: Get list of accounts hosted on node. Access granted to admin username and password. 
       operationId: get-node-accounts
-      security:
-        - basicAuth: []
+      parameters:
+        - name: token
+          in: query
+          description: token for admin access
+          required: true
+          schema:
+            type: string
       responses:
         '200':
           description: successful operation
@@ -140,8 +155,13 @@ paths:
         - admin
       description: Gernerate a url for creating a new account. Access granted to admin username and password.
       operationId: add-node-account
-      security:
-        - basicAuth: []
+      parameters:
+        - name: token
+          in: query
+          description: token for admin access
+          required: true
+          schema:
+            type: string
       responses:
         '201':
           description: success
@@ -160,12 +180,16 @@ paths:
         - admin
       description: Get profile image of node account.
       operationId: get-node-account-image
-      security:
-        - basicAuth: []
       parameters:
         - name: accountId
           in: path
           description: id of account to delete
+          required: true
+          schema:
+            type: string
+        - name: token
+          in: query
+          description: token for admin access
           required: true
           schema:
             type: string
@@ -196,6 +220,12 @@ paths:
         - name: accountId
           in: path
           description: id of account to delete
+          required: true
+          schema:
+            type: string
+        - name: token
+          in: query
+          description: token for admin access
           required: true
           schema:
             type: string

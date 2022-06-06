@@ -20,8 +20,8 @@ func SetNodeAccount(w http.ResponseWriter, r *http.Request) {
     return
   }
 
-  if res = AdminLogin(r); res != nil {
-    ErrResponse(w, http.StatusUnauthorized, res)
+  if code, res := ParamAdminToken(r); res != nil {
+    ErrResponse(w, code, res)
     return
   }
 

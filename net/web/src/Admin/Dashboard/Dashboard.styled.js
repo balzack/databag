@@ -17,33 +17,39 @@ export const DashboardWrapper = styled.div`
     border-radius: 4px;
     max-width: 500px;
     width: 50%;
-  }
+    max-height: 80%;
 
-  .header {
-    color: #444444;
-    display: flex;
-    flex-direction: row;
-    font-size: 20px;
-    border-bottom: 1px solid #444444;
-  }
+    .header {
+      color: #444444;
+      display: flex;
+      flex-direction: row;
+      font-size: 20px;
+      border-bottom: 1px solid #444444;
+    }
 
-  .label {
-    padding-right: 8px;
-    padding-left: 4px;
-    display: flex;
-    align-items: center;
-  }
+    .body {
+      min-height: 0;
+      overflow: auto;
+    }
 
-  .settings {
-    display: flex;
-    align-items: center;
-  }
+    .label {
+      padding-right: 8px;
+      padding-left: 4px;
+      display: flex;
+      align-items: center;
+    }
 
-  .add {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    flex-grow: 1;
+    .settings {
+      display: flex;
+      align-items: center;
+    }
+
+    .add {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      flex-grow: 1;
+    }
   }
 `;
 

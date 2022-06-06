@@ -11,33 +11,6 @@ import (
   "databag/internal/store"
 )
 
-func AdminLogin(r *http.Request) error {
-
-  // extract request auth
-  username, password, ok := r.BasicAuth()
-  if !ok || username == "" || password == "" {
-    return errors.New("invalid credentials")
-  }
-
-  // nothing to do if not configured
-  if !getBoolConfigValue(CONFIG_CONFIGURED, false) {
-    return errors.New("node not configured")
-  }
-
-  // compare username
-  if getStrConfigValue(CONFIG_USERNAME, "") != username {
-    return errors.New("admin username error")
-  }
-
-  // compare password
-  p := getBinConfigValue(CONFIG_PASSWORD, nil);
-  if bcrypt.CompareHashAndPassword(p, []byte(password)) != nil {
-    return errors.New("admin password error")
-  }
-
-  return nil
-}
-
 func AccountLogin(r *http.Request) (*store.Account, error) {
 
   // extract request auth
@@ -75,6 +48,28 @@ func BearerAccountToken(r *http.Request) (*store.AccountToken, error) {
     return nil, errors.New("expired token")
   }
   return &accountToken, nil
+}
+
+func ParamAdminToken(r *http.Request) (int, error) {
+
+  // parse authentication token
+  token := r.FormValue("token")
+  if token == "" {
+    return http.StatusUnauthorized, errors.New("token not set");
+  }
+
+  // nothing to do if not configured
+  if !getBoolConfigValue(CONFIG_CONFIGURED, false) {
+    return http.StatusUnauthorized, errors.New("node not configured")
+  }
+
+  // compare password
+  value := getStrConfigValue(CONFIG_TOKEN, "");
+  if (value != token) {
+    return http.StatusUnauthorized, errors.New("invalid admin token")
+  }
+
+  return http.StatusOK, nil;
 }
 
 func ParamAgentToken(r *http.Request, detail bool) (*store.Account, int, error) {

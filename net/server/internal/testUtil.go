@@ -620,10 +620,9 @@ func AddTestAccount(username string) (guid string, token string, err error) {
   var login = username + ":pass"
 
   // get account token
-  if r, w, err= NewRequest("POST", "/admin/accounts", nil); err != nil {
+  if r, w, err= NewRequest("POST", "/admin/accounts?token=pass", nil); err != nil {
     return
   }
-  SetBasicAuth(r, "admin:pass")
   AddNodeAccount(w, r)
   if err = ReadResponse(w, &access); err != nil {
     return

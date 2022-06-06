@@ -34,8 +34,7 @@ func TestMain(m *testing.M) {
   }
 
   // claim server
-  r, w, _ = NewRequest("PUT", "/admin/status", nil)
-  SetCredentials(r, "admin:pass");
+  r, w, _ = NewRequest("PUT", "/admin/status?token=pass", nil)
   SetNodeStatus(w, r)
   if ReadResponse(w, nil) != nil {
     panic("failed to claim server")
@@ -55,16 +54,14 @@ func TestMain(m *testing.M) {
 
   // config server
   config := NodeConfig{Domain: "databag.coredb.org", AccountLimit: 1024, OpenAccess: true, AccountStorage: 4096}
-  r, w, _ = NewRequest("PUT", "/admin/config", &config)
-  SetBasicAuth(r, "admin:pass")
+  r, w, _ = NewRequest("PUT", "/admin/config?token=pass", &config)
   SetNodeConfig(w, r)
   if ReadResponse(w, nil) != nil {
     panic("failed to set config")
   }
 
   // check config
-  r, w, _ = NewRequest("GET", "/admin/config", nil)
-  SetBasicAuth(r, "admin:pass")
+  r, w, _ = NewRequest("GET", "/admin/config?token=pass", nil)
   GetNodeConfig(w, r)
   var check NodeConfig
   if ReadResponse(w, &check) != nil {

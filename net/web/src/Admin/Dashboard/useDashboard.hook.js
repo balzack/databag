@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { setNodeConfig } from 'api/setNodeConfig';
+import { getNodeAccounts } from 'api/getNodeAccounts';
 
 export function useDashboard(password, config) {
 
@@ -8,19 +9,13 @@ export function useDashboard(password, config) {
     storage: null,
     showSettings: false,
     busy: false,
+    loading: false,
+    accounts: [],
   });
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
   }
-
-  useEffect(() => {
-    let storage = config.accountStorage / 1073741824;
-    if (storage > 1) {
-      storage = Math.ceil(storage);
-    }
-    updateState({ host: config.domain, storage: storage });
-  }, []);
 
   const actions = {
     setHost: (value) => {
@@ -32,7 +27,7 @@ export function useDashboard(password, config) {
     setShowSettings: (value) => {
       updateState({ showSettings: value });
     },
-    onSaveSettings: async () => {
+    setSettings: async () => {
       if (!state.busy) {
         updateState({ busy: true });
         try {
@@ -47,7 +42,30 @@ export function useDashboard(password, config) {
         updateState({ busy: false });
       }
     },
+    getAccounts: async () => {
+      if (!state.loading) {
+        updateState({ loading: true });
+        try {
+          let accounts = await getNodeAccounts(password);
+          updateState({ accounts });
+        }
+        catch(err) {
+          console.log(err);
+          window.alert(err);
+        }
+        updateState({ loading: false });
+      }
+    },
   };
+
+  useEffect(() => {
+    let storage = config.accountStorage / 1073741824;
+    if (storage > 1) {
+      storage = Math.ceil(storage);
+    }
+    updateState({ host: config.domain, storage: storage });
+    actions.getAccounts();
+  }, []);
 
   return { state, actions };
 }

@@ -1,7 +1,8 @@
 import { DashboardWrapper, SettingsButton, AddButton, SettingsLayout } from './Dashboard.styled';
-import { Button, Modal, Input, InputNumber, Space } from 'antd';
-import { SettingOutlined, UserAddOutlined } from '@ant-design/icons';
+import { Button, Modal, Input, InputNumber, Space, List } from 'antd';
+import { SettingOutlined, UserAddOutlined, ReloadOutlined } from '@ant-design/icons';
 import { useDashboard } from './useDashboard.hook';
+import { AccountItem } from './AccountItem/AccountItem';
 
 export function Dashboard({ password, config }) {
 
@@ -14,6 +15,10 @@ export function Dashboard({ password, config }) {
         <div class="header">
           <div class="label">Accounts</div>
           <div class="settings">
+            <SettingsButton type="text" size="small" icon={<ReloadOutlined />}
+                onClick={() => actions.getAccounts()}></SettingsButton>
+          </div>
+          <div class="settings">
             <SettingsButton type="text" size="small" icon={<SettingOutlined />}
                 onClick={() => actions.setShowSettings(true)}></SettingsButton>
           </div>
@@ -21,10 +26,20 @@ export function Dashboard({ password, config }) {
             <AddButton type="text" size="large" icon={<UserAddOutlined />}></AddButton>
           </div>
         </div>
+
+        <div class="body">
+          <List
+            locale={{ emptyText: '' }}
+            itemLayout="horizontal"
+            dataSource={state.accounts}
+            loading={state.loading}
+            renderItem={item => (<AccountItem item={item} />)}
+          />
+        </div>
       </div>
 
       <Modal title="Settings" visible={state.showSettings} centered
-          okText="Save" onOk={() => actions.onSaveSettings()} onCancel={() => actions.setShowSettings(false)}>
+          okText="Save" onOk={() => actions.setSettings()} onCancel={() => actions.setShowSettings(false)}>
        <SettingsLayout direction="vertical">
           <div class="host">
             <div>Federated Host:&nbsp;</div>

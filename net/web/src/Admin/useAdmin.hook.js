@@ -42,7 +42,8 @@ export function useAdmin() {
     setAccess: async () => {
       try {
         await setNodeStatus(state.token);
-        updateState({ access: state.token, unclaimed: false });
+        let config = await getNodeConfig(state.token);
+        updateState({ access: state.token, unclaimed: false, config });
       }
       catch(err) {
         console.log(err);

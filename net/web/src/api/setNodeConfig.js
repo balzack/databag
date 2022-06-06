@@ -1,11 +1,8 @@
 import { checkResponse, fetchWithTimeout } from './fetchUtil';
-var base64 = require('base-64');
 
-export async function setNodeConfig(password, config) {
+export async function setNodeConfig(token, config) {
   let body = JSON.stringify(config);
-  let headers = new Headers()
-  headers.append('Authorization', 'Basic ' + base64.encode("admin:" + password));
-  let settings = await fetchWithTimeout(`/admin/config`, { method: 'PUT', headers, body });
+  let settings = await fetchWithTimeout(`/admin/config?token=${token}`, { method: 'PUT', body });
   checkResponse(settings);
 }
 
