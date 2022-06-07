@@ -44,7 +44,7 @@ export function Admin() {
 
   return (
     <AdminWrapper>
-      <Dashboard token={state.token} config={state.config} />
+      <Dashboard token={state.token} config={state.config} logout={() => actions.logout()} />
     </AdminWrapper>
   )
 }

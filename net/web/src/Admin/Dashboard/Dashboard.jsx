@@ -1,10 +1,10 @@
 import { DashboardWrapper, SettingsButton, AddButton, SettingsLayout } from './Dashboard.styled';
 import { Button, Modal, Input, InputNumber, Space, List } from 'antd';
-import { SettingOutlined, UserAddOutlined, ReloadOutlined } from '@ant-design/icons';
+import { SettingOutlined, UserAddOutlined, LogoutOutlined, ReloadOutlined } from '@ant-design/icons';
 import { useDashboard } from './useDashboard.hook';
 import { AccountItem } from './AccountItem/AccountItem';
 
-export function Dashboard({ token, config }) {
+export function Dashboard({ token, config, logout }) {
 
   const { state, actions } = useDashboard(token, config);
 
@@ -21,6 +21,10 @@ export function Dashboard({ token, config }) {
           <div class="settings">
             <SettingsButton type="text" size="small" icon={<SettingOutlined />}
                 onClick={() => actions.setShowSettings(true)}></SettingsButton>
+          </div>
+          <div class="settings">
+            <SettingsButton type="text" size="small" icon={<LogoutOutlined />}
+                onClick={() => logout()}></SettingsButton>
           </div>
           <div class="add">
             <AddButton type="text" size="large" icon={<UserAddOutlined />}></AddButton>

@@ -62,7 +62,10 @@ export function useAdmin() {
     },
     onUser: () => {
       navigate('/login');
-    }
+    },
+    logout: () => {
+      updateState({ access: null, token: null });
+    },
   };
 
   return { state, actions };
