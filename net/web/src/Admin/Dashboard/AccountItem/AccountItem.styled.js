@@ -11,6 +11,7 @@ export const AccountItemWrapper = styled.div`
   padding-top: 2px;
   padding-bottom: 2px;
   border-bottom: 1px solid #eeeeee;
+  align-items: center;
 
   &:hover {
     background-color: #eeeeee;
@@ -23,29 +24,38 @@ export const AccountItemWrapper = styled.div`
     justify-content: center;
   }
 
-  .id {
+  .inactive {
     padding-left: 16px;
     padding-right: 8px;
     display: flex;
     flex-direction: column;
     flex-grow: 1;
+    color: #cccccc;
+  }
 
-    .handle {
-      font-size: 0.8em;
-      font-weight: bold;
-    }
+  .active {
+    padding-left: 16px;
+    padding-right: 8px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
 
-    .guid {
-      font-size: 0.8em;
-      font-weight: bold;
-    }
+  .handle {
+    font-size: 0.8em;
+    font-weight: bold;
+  }
 
-    .control {
-      flex-grow: 1;
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-    }
+  .guid {
+    font-size: 0.8em;
+    font-weight: bold;
+  }
+
+  .control {
+    flex-grow: 1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
   }
 `;
 

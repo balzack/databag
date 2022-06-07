@@ -1,5 +1,5 @@
 import { DashboardWrapper, SettingsButton, AddButton, SettingsLayout } from './Dashboard.styled';
-import { Button, Modal, Input, InputNumber, Space, List } from 'antd';
+import { Tooltip, Button, Modal, Input, InputNumber, Space, List } from 'antd';
 import { SettingOutlined, UserAddOutlined, LogoutOutlined, ReloadOutlined } from '@ant-design/icons';
 import { useDashboard } from './useDashboard.hook';
 import { AccountItem } from './AccountItem/AccountItem';
@@ -15,19 +15,27 @@ export function Dashboard({ token, config, logout }) {
         <div class="header">
           <div class="label">Accounts</div>
           <div class="settings">
-            <SettingsButton type="text" size="small" icon={<ReloadOutlined />}
-                onClick={() => actions.getAccounts()}></SettingsButton>
+            <Tooltip placement="topRight" title="Reload Accounts"> 
+              <SettingsButton type="text" size="small" icon={<ReloadOutlined />}
+                  onClick={() => actions.getAccounts()}></SettingsButton>
+            </Tooltip>
           </div>
           <div class="settings">
-            <SettingsButton type="text" size="small" icon={<SettingOutlined />}
-                onClick={() => actions.setShowSettings(true)}></SettingsButton>
+            <Tooltip placement="topRight" title="Configure Server"> 
+              <SettingsButton type="text" size="small" icon={<SettingOutlined />}
+                  onClick={() => actions.setShowSettings(true)}></SettingsButton>
+            </Tooltip>
           </div>
           <div class="settings">
-            <SettingsButton type="text" size="small" icon={<LogoutOutlined />}
-                onClick={() => logout()}></SettingsButton>
+            <Tooltip placement="topRight" title="Logout"> 
+              <SettingsButton type="text" size="small" icon={<LogoutOutlined />}
+                  onClick={() => logout()}></SettingsButton>
+            </Tooltip>
           </div>
           <div class="add">
-            <AddButton type="text" size="large" icon={<UserAddOutlined />}></AddButton>
+            <Tooltip placement="topRight" title="Add Account"> 
+              <AddButton type="text" size="large" icon={<UserAddOutlined />}></AddButton>
+            </Tooltip>
           </div>
         </div>
 

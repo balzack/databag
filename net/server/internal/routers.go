@@ -194,6 +194,13 @@ var routes = Routes{
 	},
 
 	Route{
+		"SetNodeAccountStatus",
+		strings.ToUpper("Put"),
+		"/admin/accounts/{accountId}/status",
+		SetNodeAccountStatus,
+	},
+
+	Route{
 		"GetNodeAccounts",
 		strings.ToUpper("Get"),
 		"/admin/accounts",

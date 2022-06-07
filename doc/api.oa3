@@ -212,10 +212,8 @@ paths:
     delete:
       tags:
         - admin
-      description: Remove account from node. Access granted to admin username and password.
+      description: Remove account from node. Access granted to admin token
       operationId: remove-node-account
-      security:
-        - basicAuth: []
       parameters:
         - name: accountId
           in: path
@@ -232,6 +230,37 @@ paths:
       responses:
         '200':
           description: successful operation
+        '401':
+          description: invalid authentication
+        '404':
+          description: account not found
+        '500':
+          description: internal server error
+     put:
+      tags:
+        - admin
+      description: Disable account. Access granted to admin token
+      operationId: set-node-account
+      parameters:
+        - name: accountId
+          in: path
+          description: id of account to delete
+          required: true
+          schema:
+            type: string
+        - name: token
+          in: query
+          description: token for admin access
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: boolean
         '401':
           description: invalid authentication
         '404':
