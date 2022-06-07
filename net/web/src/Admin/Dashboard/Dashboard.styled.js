@@ -15,7 +15,8 @@ export const DashboardWrapper = styled.div`
     flex-direction: column;
     padding: 16px;
     border-radius: 4px;
-    max-width: 500px;
+    min-width: 800px;
+    max-width: 900px;
     width: 50%;
     max-height: 80%;
 
@@ -28,6 +29,7 @@ export const DashboardWrapper = styled.div`
     }
 
     .body {
+      padding-top: 8px;
       min-height: 0;
       overflow: auto;
     }

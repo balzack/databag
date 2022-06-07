@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { setNodeConfig } from 'api/setNodeConfig';
 import { getNodeAccounts } from 'api/getNodeAccounts';
 
-export function useDashboard(password, config) {
+export function useDashboard(token, config) {
 
   const [state, setState] = useState({
     host: "",
@@ -31,7 +31,7 @@ export function useDashboard(password, config) {
       if (!state.busy) {
         updateState({ busy: true });
         try {
-          await setNodeConfig(password,
+          await setNodeConfig(token,
             { ...state.config, domain: state.host, accountStorage: state.storage * 1073741824 });
           updateState({ showSettings: false });
         }
@@ -46,7 +46,16 @@ export function useDashboard(password, config) {
       if (!state.loading) {
         updateState({ loading: true });
         try {
-          let accounts = await getNodeAccounts(password);
+          let accounts = await getNodeAccounts(token);
+          accounts.sort((a, b) => {
+            if (a.handle < b.handle) {
+              return -1;
+            }
+            if (a.handle > b.handle) {
+              return 1;
+            }
+            return 0;
+          });
           updateState({ accounts });
         }
         catch(err) {

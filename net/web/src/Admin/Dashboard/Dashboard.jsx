@@ -4,9 +4,9 @@ import { SettingOutlined, UserAddOutlined, ReloadOutlined } from '@ant-design/ic
 import { useDashboard } from './useDashboard.hook';
 import { AccountItem } from './AccountItem/AccountItem';
 
-export function Dashboard({ password, config }) {
+export function Dashboard({ token, config }) {
 
-  const { state, actions } = useDashboard(password, config);
+  const { state, actions } = useDashboard(token, config);
 
   return (
     <DashboardWrapper>
@@ -33,12 +33,12 @@ export function Dashboard({ password, config }) {
             itemLayout="horizontal"
             dataSource={state.accounts}
             loading={state.loading}
-            renderItem={item => (<AccountItem item={item} />)}
+            renderItem={item => (<AccountItem token={token} item={item} />)}
           />
         </div>
       </div>
 
-      <Modal title="Settings" visible={state.showSettings} centered
+      <Modal title="Settings" visible={state.showSettings} centered 
           okText="Save" onOk={() => actions.setSettings()} onCancel={() => actions.setShowSettings(false)}>
        <SettingsLayout direction="vertical">
           <div class="host">
