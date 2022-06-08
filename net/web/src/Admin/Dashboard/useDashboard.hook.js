@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { setNodeConfig } from 'api/setNodeConfig';
 import { getNodeAccounts } from 'api/getNodeAccounts';
+import { removeAccount } from 'api/removeAccount';
 
 export function useDashboard(token, config) {
 
@@ -18,6 +19,10 @@ export function useDashboard(token, config) {
   }
 
   const actions = {
+    removeAccount: async (accountId) => {
+      await removeAccount(token, accountId);
+      actions.getAccounts();
+    },
     setHost: (value) => {
       updateState({ host: value });
     },

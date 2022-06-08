@@ -19,10 +19,10 @@ export function useGroupContext() {
     let delta = await getGroups(access.current, revision.current);
     for (let group of delta) {
       if (group.data) {
-        groups.set(group.id, group);
+        groups.current.set(group.id, group);
       }
       else {
-        groups.delete(group.id);
+        groups.current.delete(group.id);
       }
     }
   }

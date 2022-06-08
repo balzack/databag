@@ -236,6 +236,33 @@ paths:
           description: account not found
         '500':
           description: internal server error
+    
+  /admin/accounts/{accountId}/auth:
+    post:
+      tags:
+        - account
+      description: Generate token to reset authentication.
+      operationId: add-account-authentication
+      parameters:
+        - name: token
+          in: query
+          description: token for admin access
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: generated
+          content:
+            application/json:
+              schema:
+                type: string
+        '401':
+          description: invalid password
+        '500':
+          description: internal server error
+
+  /admin/accounts/{accountId}/status: 
      put:
       tags:
         - admin
@@ -581,24 +608,6 @@ paths:
           description: internal server error
           
   /account/auth:
-    post:
-      tags:
-        - account
-      description: Generate token to reset authentication. Access granted to account's login and password.
-      operationId: add-account-authentication
-      security:
-        - basicAuth: []
-      responses:
-        '201':
-          description: generated
-          content:
-            application/json:
-              schema:
-                type: string
-        '401':
-          description: invalid password
-        '500':
-          description: internal server error
     put:
       tags:
         - account

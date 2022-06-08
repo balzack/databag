@@ -50,6 +50,25 @@ func BearerAccountToken(r *http.Request) (*store.AccountToken, error) {
   return &accountToken, nil
 }
 
+func AccessToken(r *http.Request) (*store.AccountToken, int, error) {
+
+  // parse authentication token
+  token := r.FormValue("token")
+  if token == "" {
+    return nil, http.StatusUnauthorized, errors.New("token not set");
+  }
+
+  // find token record
+  var accountToken store.AccountToken
+  if err := store.DB.Preload("Account").Where("token = ?", token).First(&accountToken).Error; err != nil {
+    return nil, http.StatusUnauthorized, err
+  }
+  if accountToken.Expires < time.Now().Unix() {
+    return nil, http.StatusUnauthorized, errors.New("expired token")
+  }
+  return &accountToken, http.StatusOK, nil
+}
+
 func ParamAdminToken(r *http.Request) (int, error) {
 
   // parse authentication token

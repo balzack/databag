@@ -13,7 +13,9 @@ export const DashboardWrapper = styled.div`
     background-color: #ffffff;
     display: flex;
     flex-direction: column;
-    padding: 16px;
+    padding-top: 16px;
+    padding-left: 16px;
+    padding-right: 16px;
     border-radius: 4px;
     min-width: 800px;
     max-width: 900px;
@@ -25,13 +27,15 @@ export const DashboardWrapper = styled.div`
       display: flex;
       flex-direction: row;
       font-size: 20px;
-      border-bottom: 1px solid #444444;
+      border-bottom: 1px solid #aaaaaa;
     }
 
     .body {
       padding-top: 8px;
       min-height: 0;
       overflow: auto;
+      border-bottom: 1px solid #aaaaaa;
+      margin-bottom: 16px;
     }
 
     .label {

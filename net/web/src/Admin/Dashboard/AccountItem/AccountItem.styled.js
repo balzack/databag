@@ -1,4 +1,4 @@
-import { Button } from 'antd';
+import { Space, Button } from 'antd';
 import styled from 'styled-components';
 
 export const AccountItemWrapper = styled.div`
@@ -73,4 +73,8 @@ export const ResetButton = styled(Button)`
 
 export const DeleteButton = styled(Button)`
   color: red;
+`
+
+export const AccessLayout = styled(Space)`
+  white-space: nowrap;
 `

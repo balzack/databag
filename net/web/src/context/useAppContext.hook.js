@@ -1,5 +1,7 @@
 import { useEffect, useState, useRef, useContext } from 'react';
+import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { getAvailable, getUsername, setLogin, createAccount } from './fetchUtil';
+import { setAccountAccess } from 'api/setAccountAccess';
 import { AccountContext } from './AccountContext';
 import { ProfileContext } from './ProfileContext';
 import { ArticleContext } from './ArticleContext';
@@ -17,6 +19,13 @@ async function appCreate(username, password, updateState, setWebsocket) {
 
 async function appLogin(username, password, updateState, setWebsocket) {
   let access = await setLogin(username, password)
+  updateState({ token: access, access: 'user' });
+  setWebsocket(access)
+  localStorage.setItem("session", JSON.stringify({ token: access, access: 'user' }));
+}
+
+async function appAccess(token, updateState, setWebsocket) {
+  let access = await setAccountAccess(token)
   updateState({ token: access, access: 'user' });
   setWebsocket(access)
   localStorage.setItem("session", JSON.stringify({ token: access, access: 'user' }));
@@ -80,6 +89,9 @@ export function useAppContext() {
   }
 
   const accessActions = {
+    access: async (token) => {
+      await appAccess(token, updateState, setWebsocket)
+    },
     login: async (username, password) => {
       await appLogin(username, password, updateState, setWebsocket)
     },

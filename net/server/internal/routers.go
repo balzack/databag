@@ -145,6 +145,13 @@ var routes = Routes{
 	},
 
 	Route{
+		"SetAccountAccess",
+		strings.ToUpper("Put"),
+		"/account/access",
+		SetAccountAccess,
+	},
+
+	Route{
 		"SetAccountAuthentication",
 		strings.ToUpper("Put"),
 		"/account/auth",
@@ -199,6 +206,13 @@ var routes = Routes{
 		"/admin/accounts/{accountId}/status",
 		SetNodeAccountStatus,
 	},
+
+  Route{
+    "AddNodeAccountAccess",
+    strings.ToUpper("Post"),
+    "/admin/accounts/{accountId}/auth",
+    AddNodeAccountAccess,
+  },
 
 	Route{
 		"GetNodeAccounts",

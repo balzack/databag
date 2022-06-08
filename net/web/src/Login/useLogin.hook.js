@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect } from 'react';
 import { AppContext } from 'context/AppContext';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
 
 export function useLogin() {
   
@@ -12,6 +12,7 @@ export function useLogin() {
   });
 
   const navigate = useNavigate();
+  const { search } = useLocation();
   const app = useContext(AppContext);
 
   const actions = {
@@ -42,6 +43,16 @@ export function useLogin() {
         actions.updateState({ spinning: false })
       }
     },
+    onAccess: async (token) => {
+      actions.updateState({ spinning: true })
+      try {
+        await app.actions.access(token)
+      }
+      catch (err) {
+        window.alert(err);
+      }
+      actions.updateState({ spinning: false })
+    },
     onCreate: () => {
       navigate('/create')
     },
@@ -56,8 +67,12 @@ export function useLogin() {
         if (app.state.access === 'user') {
           navigate('/user')
         }
-        if (app.state.access === 'admin') {
-          navigate('/admin')
+        else {
+          let params = new URLSearchParams(search);
+          let token = params.get("access");
+          if (token) {
+            actions.onAccess(token);
+          }
         }
       }
       if (app.actions && app.actions.available) {

@@ -1,11 +1,14 @@
 import { useContext, useState, useEffect } from 'react';
 import { getAccountImageUrl } from 'api/getAccountImageUrl';
 import { setAccountStatus } from 'api/setAccountStatus';
+import { addAccountAccess } from 'api/addAccountAccess';
 
-export function useAccountItem(token, item) {
+export function useAccountItem(token, item, remove) {
   
   const [state, setState] = useState({
     statusBusy: false,
+    removeBusy: false,
+    showAccess: false,
   });
 
   const updateState = (value) => {
@@ -25,6 +28,26 @@ export function useAccountItem(token, item) {
   }, [token, item]); 
 
   const actions = {
+    setAccessLink: async () => {
+      let access = await addAccountAccess(token, item.accountId);
+      updateState({ accessToken: access, showAccess: true });
+    },
+    setShowAccess: (showAccess) => {
+      updateState({ showAccess });
+    },
+    remove: async () => {
+      if (!state.removeBusy) {
+        updateState({ removeBusy: true });
+        try {
+          await remove(state.accountId);
+        }
+        catch(err) {
+          console.log(err);
+          window.alert(err);
+        }
+        updateState({ removeBusy: false });
+      }
+    },
     setStatus: async (disabled) => {
       if (!state.statusBusy) {
         updateState({ statusBusy: true });

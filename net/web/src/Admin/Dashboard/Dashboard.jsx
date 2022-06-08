@@ -33,7 +33,7 @@ export function Dashboard({ token, config, logout }) {
             </Tooltip>
           </div>
           <div class="add">
-            <Tooltip placement="topRight" title="Add Account"> 
+            <Tooltip placement="topRight" title="Create Account Link"> 
               <AddButton type="text" size="large" icon={<UserAddOutlined />}></AddButton>
             </Tooltip>
           </div>
@@ -45,7 +45,8 @@ export function Dashboard({ token, config, logout }) {
             itemLayout="horizontal"
             dataSource={state.accounts}
             loading={state.loading}
-            renderItem={item => (<AccountItem token={token} item={item} />)}
+            renderItem={item => (<AccountItem token={token} item={item}
+              remove={actions.removeAccount}/>)}
           />
         </div>
       </div>
