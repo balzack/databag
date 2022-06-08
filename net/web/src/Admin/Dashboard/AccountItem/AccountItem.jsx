@@ -45,7 +45,7 @@ export function AccountItem({ token, item, remove }) {
       <div class="control">
         <Tooltip placement="topLeft" title="Account Login Link">
           <ResetButton type="text" size="large" icon={<UnlockOutlined />}
-              onClick={() => actions.setAccessLink()}></ResetButton>
+              loading={state.accessBusy} onClick={() => actions.setAccessLink()}></ResetButton>
         </Tooltip>
         <Enable />
         <Tooltip placement="topLeft" title="Delete Account">
@@ -53,7 +53,7 @@ export function AccountItem({ token, item, remove }) {
               loading={state.removeBusy} onClick={() => actions.remove()}></DeleteButton>
         </Tooltip>
       </div>
-      <Modal title="Access Link" visible={state.showAccess} centered width="fitContent"
+      <Modal title="Access Account Link" visible={state.showAccess} centered width="fitContent"
           footer={[ <Button type="primary" onClick={() => actions.setShowAccess(false)}>OK</Button> ]}
           onCancel={() => actions.setShowAccess(false)}>
         <AccessLayout>

@@ -1,12 +1,20 @@
-import { DashboardWrapper, SettingsButton, AddButton, SettingsLayout } from './Dashboard.styled';
+import { DashboardWrapper, SettingsButton, AddButton, SettingsLayout, CreateLayout } from './Dashboard.styled';
 import { Tooltip, Button, Modal, Input, InputNumber, Space, List } from 'antd';
-import { SettingOutlined, UserAddOutlined, LogoutOutlined, ReloadOutlined } from '@ant-design/icons';
+import { SettingOutlined, CopyOutlined, UserAddOutlined, LogoutOutlined, ReloadOutlined } from '@ant-design/icons';
 import { useDashboard } from './useDashboard.hook';
 import { AccountItem } from './AccountItem/AccountItem';
 
 export function Dashboard({ token, config, logout }) {
 
   const { state, actions } = useDashboard(token, config);
+
+  const onClipboard = (value) => {
+    navigator.clipboard.writeText(value);
+  };
+
+  const createLink = () => {
+    return window.location.origin + '/#/create?add=' + state.createToken;
+  };
 
   return (
     <DashboardWrapper>
@@ -34,7 +42,8 @@ export function Dashboard({ token, config, logout }) {
           </div>
           <div class="add">
             <Tooltip placement="topRight" title="Create Account Link"> 
-              <AddButton type="text" size="large" icon={<UserAddOutlined />}></AddButton>
+              <AddButton type="text" size="large" icon={<UserAddOutlined />}
+                  loading={state.createBusy} onClick={() => actions.setCreateLink()}></AddButton>
             </Tooltip>
           </div>
         </div>
@@ -60,13 +69,22 @@ export function Dashboard({ token, config, logout }) {
                 value={state.host} />
           </div>
           <div class="storage">
-            <div>Account Storage (GB):&nbsp;</div>
+            <div>Storage Limit (GB) / Account:&nbsp;</div>
             <InputNumber defaultValue={8} onChange={(e) => actions.setStorage(e)}
                 placeholder="0 for unrestricted" value={state.storage} />
           </div>
         </SettingsLayout>
       </Modal>
-    
+      <Modal title="Create Account Link" visible={state.showCreate} centered width="fitContent"
+          footer={[ <Button type="primary" onClick={() => actions.setShowCreate(false)}>OK</Button> ]}
+          onCancel={() => actions.setShowCreate(false)}>
+        <CreateLayout>
+          <div>{createLink()}</div>
+          <Button icon={<CopyOutlined />} size="small"
+            onClick={() => onClipboard(createLink())}
+          />
+        </CreateLayout>
+      </Modal>    
     </DashboardWrapper>
   );
 }

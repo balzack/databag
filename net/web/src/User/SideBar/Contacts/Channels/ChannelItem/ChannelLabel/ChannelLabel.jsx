@@ -43,10 +43,16 @@ export function ChannelLabel({ item }) {
     }
 
     if (item?.data?.channelDetail?.data) {
-      let data = JSON.parse(item.data.channelDetail.data);
-      if (data.subject != '' && data.subject != null) {
-        setSubject(data.subject);
-        return
+      try {
+        let data = JSON.parse(item.data.channelDetail.data);
+        if (data.subject != '' && data.subject != null) {
+          setSubject(data.subject);
+          return
+        }
+      }
+      catch (err) {
+        console.log(err);
+        setSubject(null);
       }
     }
     setSubject(contacts.join(', '));

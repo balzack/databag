@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect, useRef } from 'react';
 import { AppContext } from 'context/AppContext';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 export function useCreate() {
   const [checked, setChecked] = useState(true)
@@ -10,10 +10,12 @@ export function useCreate() {
     confirmed: '',
     conflict: '',
     spinning: false,
+    token: null,
   });
 
   const navigate = useNavigate();
   const app = useContext(AppContext);
+  const { search } = useLocation();
   const debounce = useRef(null)
 
   const actions = {
@@ -41,7 +43,7 @@ export function useCreate() {
       if (!state.spinning) {
         actions.updateState({ spinning: true })
         try {
-          await app.actions.create(state.username, state.password)
+          await app.actions.create(state.username, state.password, state.token)
         }
         catch (err) {
           window.alert(err);
@@ -64,7 +66,7 @@ export function useCreate() {
           actions.updateState({ conflict: '' })
         }
         else {
-          let valid = await app.actions.username(name)
+          let valid = await app.actions.username(name, state.token)
           setChecked(true)
           if (!valid) {
             actions.updateState({ conflict: 'not available' })
@@ -82,8 +84,12 @@ export function useCreate() {
         if (app.state.access === 'user') {
           navigate('/user')
         }
-        if (app.state.access === 'admin') {
-          navigate('/admin')
+        else {
+          let params = new URLSearchParams(search);
+          let token = params.get("add");
+          if (token) {
+            actions.updateState({ token });
+          }
         }
       }
     }

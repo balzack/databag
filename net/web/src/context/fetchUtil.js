@@ -21,12 +21,6 @@ export async function getAvailable() {
   return await available.json()
 }
 
-export async function getUsername(name) {
-  let available = await fetchWithTimeout('/account/username?name=' + encodeURIComponent(name), { method: 'GET', timeout: FETCH_TIMEOUT })
-  checkResponse(available)
-  return await available.json()
-}
-
 export async function setLogin(username, password) {
   let headers = new Headers()
   headers.append('Authorization', 'Basic ' + base64.encode(username + ":" + password));

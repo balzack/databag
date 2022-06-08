@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { setNodeConfig } from 'api/setNodeConfig';
 import { getNodeAccounts } from 'api/getNodeAccounts';
 import { removeAccount } from 'api/removeAccount';
+import { addAccountCreate } from 'api/addAccountCreate';
 
 export function useDashboard(token, config) {
 
@@ -12,6 +13,8 @@ export function useDashboard(token, config) {
     busy: false,
     loading: false,
     accounts: [],
+    createBusy: false,
+    showCreate: false,
   });
 
   const updateState = (value) => {
@@ -19,6 +22,22 @@ export function useDashboard(token, config) {
   }
 
   const actions = {
+    setCreateLink: async () => {
+      if (!state.createBusy) {
+        updateState({ createBusy: true });
+        try {
+          let create = await addAccountCreate(token)
+          updateState({ createToken: create, showCreate: true });
+        }
+        catch (err) {
+          window.alert(err);
+        }
+        updateState({ createBusy: false });
+      }
+    },
+    setShowCreate: (showCreate) => {
+      updateState({ showCreate });
+    },
     removeAccount: async (accountId) => {
       await removeAccount(token, accountId);
       actions.getAccounts();

@@ -84,3 +84,7 @@ export const SettingsLayout = styled(Space)`
     align-items: center;
   }
 `;
+
+export const CreateLayout = styled(Space)`
+  white-space: nowrap;
+`

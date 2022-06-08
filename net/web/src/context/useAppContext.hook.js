@@ -1,7 +1,9 @@
 import { useEffect, useState, useRef, useContext } from 'react';
 import { useNavigate, useLocation, useParams } from "react-router-dom";
-import { getAvailable, getUsername, setLogin, createAccount } from './fetchUtil';
+import { getAvailable, setLogin } from './fetchUtil';
 import { setAccountAccess } from 'api/setAccountAccess';
+import { addAccount } from 'api/addAccount';
+import { getUsername } from 'api/getUsername';
 import { AccountContext } from './AccountContext';
 import { ProfileContext } from './ProfileContext';
 import { ArticleContext } from './ArticleContext';
@@ -9,8 +11,8 @@ import { GroupContext } from './GroupContext';
 import { CardContext } from './CardContext';
 import { ChannelContext } from './ChannelContext';
 
-async function appCreate(username, password, updateState, setWebsocket) {
-  await createAccount(username, password);
+async function appCreate(username, password, token, updateState, setWebsocket) {
+  await addAccount(username, password, token);
   let access = await setLogin(username, password)
   updateState({ token: access, access: 'user' });
   setWebsocket(access)
@@ -95,8 +97,8 @@ export function useAppContext() {
     login: async (username, password) => {
       await appLogin(username, password, updateState, setWebsocket)
     },
-    create: async (username, password) => {
-      await appCreate(username, password, updateState, setWebsocket)
+    create: async (username, password, token) => {
+      await appCreate(username, password, token, updateState, setWebsocket)
     },
     username: getUsername,
     available: getAvailable,

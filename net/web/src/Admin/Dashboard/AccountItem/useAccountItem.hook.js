@@ -8,6 +8,7 @@ export function useAccountItem(token, item, remove) {
   const [state, setState] = useState({
     statusBusy: false,
     removeBusy: false,
+    accessBusy: false,
     showAccess: false,
   });
 
@@ -29,8 +30,17 @@ export function useAccountItem(token, item, remove) {
 
   const actions = {
     setAccessLink: async () => {
-      let access = await addAccountAccess(token, item.accountId);
-      updateState({ accessToken: access, showAccess: true });
+      if (!state.accessBusy) {
+        updateState({ accessBusy: true });
+        try {
+          let access = await addAccountAccess(token, item.accountId);
+          updateState({ accessToken: access, showAccess: true });
+        }
+        catch (err) {
+          window.alert(err);
+        }
+        updateState({ accessBusy: false });
+      }
     },
     setShowAccess: (showAccess) => {
       updateState({ showAccess });

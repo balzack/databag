@@ -11,21 +11,19 @@ type accountUsername struct {
 }
 
 func GetAccountUsername(w http.ResponseWriter, r *http.Request) {
-  var token *store.AccountToken
 
-  if r.Header.Get("Authorization") == "" {
+  if r.FormValue("token") != "" {
+    token, _, res := AccessToken(r)
+    if res != nil || token.TokenType != APP_TOKENCREATE {
+      ErrResponse(w, http.StatusUnauthorized, res)
+      return
+    }
+  } else {
     if available, err := getAvailableAccounts(); err != nil {
       ErrResponse(w, http.StatusInternalServerError, err)
       return
     } else if available == 0 {
-      ErrResponse(w, http.StatusUnauthorized, errors.New("no open accounts available"))
-      return
-    }
-  } else {
-    var err error
-    token, err = BearerAccountToken(r);
-    if err != nil || token.TokenType != APP_TOKENCREATE {
-      ErrResponse(w, http.StatusUnauthorized, err)
+      ErrResponse(w, http.StatusForbidden, errors.New("no open accounts available"))
       return
     }
   }
