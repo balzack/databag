@@ -4,9 +4,6 @@ import { CarouselWrapper } from './Carousel.styled';
 import { RightOutlined, LeftOutlined, CloseOutlined } from '@ant-design/icons';
 import ReactResizeDetector from 'react-resize-detector';
 
-import login from '../login.png';
-import test from '../test.png';
-
 export function Carousel({ ready, items, itemRenderer, itemRemove }) {
   const [slots, setSlots] = useState([]);
   const [carouselRef, setCarouselRef] = useState(false);
