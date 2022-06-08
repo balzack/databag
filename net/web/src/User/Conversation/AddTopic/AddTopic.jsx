@@ -9,10 +9,6 @@ import { FontColorsOutlined, FontSizeOutlined, PaperClipOutlined, SendOutlined }
 import { AudioFile } from './AudioFile/AudioFile';
 import { VideoFile } from './VideoFile/VideoFile';
 
-import login from '../../../login.png';
-import test from '../../../test.png';
-
-
 export function AddTopic() {
 
   let [ items, setItems] = useState([]);
