@@ -9,5 +9,18 @@ sqlite3 /var/lib/databag/databag.db "delete from configs where config_id='script
 sqlite3 /var/lib/databag/databag.db "insert into configs (config_id, str_value) values ('asset_path', '/var/lib/databag/');"
 sqlite3 /var/lib/databag/databag.db "insert into configs (config_id, str_value) values ('script_path', '/opt/databag/transform/');"
 
-cd /app/databag/net/server
-/usr/local/go/bin/go run databag
+if [[ -v ADMIN ]]; then
+  sqlite3 /var/lib/databag/databag.db "delete from configs where config_id='configured';"
+  sqlite3 /var/lib/databag/databag.db "delete from configs where config_id='token';"
+  sqlite3 /var/lib/databag/databag.db "insert into configs (config_id, str_value) values ('token', '$ADMIN');"
+  sqlite3 /var/lib/databag/databag.db "insert into configs (config_id, bool_value) values ('configured', true);"
+fi
+
+if [ "$DEV" == "1" ]; then
+  while true; do
+    sleep 1;
+  done
+else
+  cd /app/databag/net/server
+  /usr/local/go/bin/go run databag
+fi
