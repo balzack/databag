@@ -7,6 +7,8 @@ import (
 
 func GetAccountListing(w http.ResponseWriter, r *http.Request) {
 
+  EnableCors(&w);
+
   var accounts []store.Account
   if err := store.DB.Preload("AccountDetail").Where("searchable = ? AND disabled = ?", true, false).Find(&accounts).Error; err != nil {
     ErrResponse(w, http.StatusInternalServerError, err)

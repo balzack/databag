@@ -59,3 +59,7 @@ func ParseRequest(r *http.Request, w http.ResponseWriter, obj interface{}) error
   return dec.Decode(&obj)
 }
 
+func EnableCors(w *http.ResponseWriter) {
+  (*w).Header().Set("Access-Control-Allow-Origin", "*")
+}
+
