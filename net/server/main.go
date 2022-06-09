@@ -9,7 +9,7 @@ import (
 
 func main() {
 
-  store.SetPath("/opt/databag/db/databag.db");
+  store.SetPath("/var/lib/databag/databag.db");
 
 	log.Printf("Server started")
 
