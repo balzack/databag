@@ -1,6 +1,8 @@
 FROM ubuntu:20.04
 LABEL maintainer="roland.osborne@gmail.com"
 
+EXPOSE 7000
+
 ENV TZ=America/Los_Angeles
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
@@ -27,14 +29,25 @@ RUN npm install --global yarn
 RUN npm install -g n
 RUN n stable
 
-RUN wget https://go.dev/dl/go1.17.5.linux-amd64.tar.gz
-RUN tar -C /usr/local -xzf go1.17.5.linux-amd64.tar.gz
+RUN mkdir /app
+RUN wget -P /app https://go.dev/dl/go1.17.5.linux-amd64.tar.gz
+RUN tar -C /usr/local -xzf /app/go1.17.5.linux-amd64.tar.gz
+RUN git  clone https://github.com/balzack/databag.git /app/databag
+RUN yarn --cwd /app/databag/net/web install
+RUN yarn --cwd /app/databag/net/web build
+RUN cd /app/databag/net/server; /usr/local/go/bin/go build databag
 
-ADD configure.sh /root
+RUN mkdir /opt/databag
 
-RUN mkdir -p /data
+ADD transform /opt/databag/transform
+
+RUN mkdir -p /var/lib/databag
+
 RUN echo 'export PATH=$PATH:/usr/local/go/bin' >> /root/.bashrc
-RUN echo -e "set expandtab\nset tabstop=2\nset softtabstop=2\nset shiftwidth=2\n" > /root/.vimrc
+RUN echo "set expandtab\nset tabstop=2\nset softtabstop=2\nset shiftwidth=2\n" > /root/.vimrc
+RUN echo "bind 'set mark-symlinked-directories on'" >> /root/.bashrc
 
-ENTRYPOINT ["/root/configure.sh"]
+ADD entrypoint.sh /app
+
+ENTRYPOINT ["/app/entrypoint.sh"]
 
