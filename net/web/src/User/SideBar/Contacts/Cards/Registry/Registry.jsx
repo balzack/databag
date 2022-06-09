@@ -22,7 +22,7 @@ export function Registry() {
 
   return (
     <RegistryWrapper>
-      <Input.Search placeholder="Server" value={state.server} onChange={(e) => actions.setServer(e.target.Value)} 
+      <Input.Search placeholder="Server" value={state.server} onChange={(e) => actions.setServer(e.target.value)} 
           onSearch={actions.getRegistry} style={{ width: '100%' }} />
       <div class="contacts">
       <List
