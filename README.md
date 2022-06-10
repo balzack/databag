@@ -1,6 +1,10 @@
 # DataBag
 
-Nothing to see yet; I'm just getting started with the project structure.
+<p align="center">
+  <a href="#"><img src="/doc/screenshot.png" /></a>
+</p>
+
+Databag is a self-hosting messager for the DWeb community. 
 
 [Overview](https://htmlpreview.github.io/?https://raw.githubusercontent.com/balzack/databag/main/doc/overview.html)
 
