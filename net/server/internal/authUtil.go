@@ -162,6 +162,7 @@ func BearerAppToken(r *http.Request, detail bool) (*store.Account, int, error) {
 }
 
 func ParseToken(token string) (string, string, error) {
+
   split := strings.Split(token, ".")
   if len(split) != 2 {
     return "", "", errors.New("invalid token format")
@@ -199,7 +200,7 @@ func ParamContactToken(r *http.Request, detail bool) (*store.Card, int, error) {
   // find token record
   var card store.Card
   if detail {
-    if err := store.DB.Preload("Account.AccountDetail").Where("account_id = ? AND in_token = ?", target, access).First(&card).Error; err != nil {
+    if err := store.DB.Preload("CardSlot").Preload("Account.AccountDetail").Where("account_id = ? AND in_token = ?", target, access).First(&card).Error; err != nil {
       if errors.Is(err, gorm.ErrRecordNotFound) {
         return nil, http.StatusNotFound, err
       } else {
@@ -207,7 +208,7 @@ func ParamContactToken(r *http.Request, detail bool) (*store.Card, int, error) {
       }
     }
   } else {
-    if err := store.DB.Preload("Account").Where("account_id = ? AND in_token = ?", target, access).First(&card).Error; err != nil {
+    if err := store.DB.Preload("CardSlot").Preload("Account").Where("account_id = ? AND in_token = ?", target, access).First(&card).Error; err != nil {
       if errors.Is(err, gorm.ErrRecordNotFound) {
         return nil, http.StatusNotFound, err
       } else {

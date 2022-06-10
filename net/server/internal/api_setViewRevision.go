@@ -8,7 +8,7 @@ import (
 
 func SetViewRevision(w http.ResponseWriter, r *http.Request) {
 
-  card, code, err := BearerContactToken(r, false)
+  card, code, err := ParamContactToken(r, false)
   if err != nil {
     ErrResponse(w, code, err)
     return
