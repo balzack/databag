@@ -1,7 +1,10 @@
 package databag
 
 import (
+  "bytes"
   "errors"
+  "net/http"
+  "encoding/json"
   "gorm.io/gorm"
   "databag/internal/store"
 )
@@ -78,7 +81,41 @@ func SendLocalNotification(notification *store.Notification) {
 }
 
 func SendRemoteNotification(notification *store.Notification) {
-  // TODO send remote notification
+
+  var module string
+  if notification.Module == APP_NOTIFYPROFILE {
+    module = "profile"
+  } else if notification.Module == APP_NOTIFYARTICLE {
+    module = "article"
+  } else if notification.Module == APP_NOTIFYCHANNEL {
+    module = "channel"
+  } else if notification.Module == APP_NOTIFYVIEW {
+    module = "view"
+  } else {
+    LogMsg("unknown notification type")
+    return
+  }
+
+  body, err := json.Marshal(notification.Revision);
+  if err != nil {
+    ErrMsg(err);
+    return
+  }
+  url := "https://" + notification.Node + "/contact/" + module + "/revision?contact=" + notification.Guid + "." + notification.Token
+  req, err := http.NewRequest(http.MethodPut, url, bytes.NewBuffer(body))
+  if err != nil {
+    ErrMsg(err)
+    return
+  }
+  req.Header.Set("Content-Type", "application/json; charset=utf-8")
+  client := &http.Client{}
+  resp, err := client.Do(req)
+  if err != nil {
+    ErrMsg(err);
+  }
+  if resp.StatusCode != 200 {
+    LogMsg("failed to notify contact");
+  }
 }
 
 // notify all cards of profile change
@@ -97,6 +134,7 @@ func SetProfileNotification(account *store.Account) {
       notification := &store.Notification{
         Node: card.Node,
         Module: APP_NOTIFYPROFILE,
+        Guid: card.Guid,
         Token: card.OutToken,
         Revision: account.ProfileRevision,
       }
@@ -125,6 +163,7 @@ func SetContactArticleNotification(account *store.Account, card *store.Card) {
   notification := &store.Notification{
     Node: card.Node,
     Module: APP_NOTIFYARTICLE,
+    Guid: card.Guid,
     Token: card.OutToken,
     Revision: account.ArticleRevision,
   }
@@ -149,6 +188,7 @@ func SetContactViewNotification(account *store.Account, card *store.Card) {
   notification := &store.Notification{
     Node: card.Node,
     Module: APP_NOTIFYVIEW,
+    Guid: card.Guid,
     Token: card.OutToken,
     Revision: card.ViewRevision,
   }
@@ -172,6 +212,7 @@ func SetContactChannelNotification(account *store.Account, card *store.Card) {
   notification := &store.Notification{
     Node: card.Node,
     Module: APP_NOTIFYCHANNEL,
+    Guid: card.Guid,
     Token: card.OutToken,
     Revision: account.ChannelRevision,
   }

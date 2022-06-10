@@ -27,6 +27,7 @@ func AutoMigrate(db *gorm.DB) {
 type Notification struct {
   ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
   Node              string          `gorm:"not null"`
+  Guid              string          `gorm:"not null"`
   Module            string          `gorm:"not null"`
   Token             string          `gorm:"not null"`
   Revision          int64           `gorm:"not null"`
