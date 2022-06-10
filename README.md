@@ -9,4 +9,4 @@ Databag is a self-hosting network for the DWeb community, implementing the IndiC
 - Data maintained in revision trees for effient data syncrhonization.
 - Websockets utilized for delivering synchronization events.
 
-You can test out the project [here](https://databag.coredb.org), but dont post anything important as the server is regularly wiped.
+You can test out the project [here](https://databag.coredb.org/#/create), but dont post anything important as the server is regularly wiped.
