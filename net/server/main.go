@@ -5,6 +5,7 @@ import (
 	"net/http"
 	app "databag/internal"
   "databag/internal/store"
+  "github.com/gorilla/handlers"
 )
 
 func main() {
@@ -15,5 +16,8 @@ func main() {
 
 	router := app.NewRouter()
 
-	log.Fatal(http.ListenAndServe(":7000", router))
+  origins := handlers.AllowedOrigins([]string{"*"})
+  methods := handlers.AllowedMethods([]string{"GET", "HEAD", "POST", "PUT", "OPTIONS"})
+
+  log.Fatal(http.ListenAndServe(":7000", handlers.CORS(origins, methods)(router)))
 }
