@@ -11,7 +11,7 @@ Databag is a self-hosting network for the DWeb community, implementing the indic
 - Each node can host any number of accounts.
 - Server written in Go and browser app written with Reactjs.
 
-You can test out the project [here](https://databag.coredb.org/#/create), but don't post anything important as this server is regularly wiped. I would greatly appreciate feedback on the UI/UX, bugs or features.
+You can test out the project [here](https://databag.coredb.org/#/create), but don't post anything important as this server is regularly wiped. Feedback on the UI/UX, bugs or features is greatly appreciated.
 
 ### Installation
 
