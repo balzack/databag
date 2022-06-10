@@ -1,7 +1,7 @@
 # DataBag
 
 <p align="center">
-  <a href="#"><img src="/doc/screenshot.png" /></a>
+  <a href="#"><img src="/doc/screenshot.png" width="50%"/></a>
 </p>
 
 Databag is a self-hosting messager for the DWeb community. 
