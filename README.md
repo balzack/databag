@@ -1,6 +1,6 @@
 
 <p align="center">
-  <a href="#"><img src="/doc/screenshot.png" width="50%"/></a>
+  <a href="#"><img src="/doc/screenshot.png" width="80%"/></a>
 </p>
 
 Databag is a self-hosting network for the DWeb community, implementing the IndiCom messaging service
