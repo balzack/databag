@@ -15,4 +15,4 @@ You can test out the project [here](https://databag.coredb.org/#/create), but do
 
 ### Installation
 
-To use databag, you will need a DNS name pointing to your node with a certificate. You can deloy a node manually, but you will have a much easier time using a container service. A container for arm64 and amd64 are available [here](https://hub.docker.com/r/balzack/databag/tags)
+To use databag, you will need a DNS name pointing to your node with a certificate. You can deloy a node manually, but you will have a much easier time using a container service. Containers for arm64 and amd64 are available [here](https://hub.docker.com/r/balzack/databag/tags)
