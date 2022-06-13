@@ -3,7 +3,7 @@
   <a href="#"><img src="/doc/screenshot.png" width="80%"/></a>
 </p>
 
-Databag is a self-hosting network for the DWeb community, supporting the indicom messaging service. Notable features include:
+Databag is a self-hosting network for the DWeb community. The project includes the messaging service, IndiCom. Notable features include:
 - Public-private key based identity and not bound to any blockchain or hosting domain.
 - Direct communication between app and contact's node with no server-side replication.
 - Data revision trees for efficient syncrhonization.
