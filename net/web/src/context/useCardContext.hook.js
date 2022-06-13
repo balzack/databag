@@ -65,35 +65,46 @@ export function useCardContext() {
         }
         const { cardDetail, cardProfile } = cur.data;
         if (cardDetail.status === 'connected') {
-          if (cur.data.profileRevision != card.data.notifiedProfile) {
-            let message = await getContactProfile(cardProfile.node, cardProfile.guid, cardDetail.token);
-            await setCardProfile(access.current, card.id, message);
+          try {
+            if (cur.data.profileRevision != card.data.notifiedProfile) {
+              let message = await getContactProfile(cardProfile.node, cardProfile.guid, cardDetail.token);
+              await setCardProfile(access.current, card.id, message);
 
-            // update remote profile
-            cur.data.notifiedProfile = card.data.notifiedProfile;
+              // update remote profile
+              cur.data.notifiedProfile = card.data.notifiedProfile;
+            }
+            if (cur.data.notifiedView != card.data.notifiedView) {
+              // update remote articles and channels
+              cur.data.articles = new Map();
+              cur.channels = new Map();
+
+              await updateContactChannels(cur.data.cardProfile.node, card.id, cur.data.cardProfile.guid, cur.data.cardDetail.token, cur.data.notifiedView, cur.data.notifiedChannel, cur.channels);
+              await updateContactArticles(cur.data.cardProfile.node, card.id, cur.data.cardProfile.guid, cur.data.cardDetail.token, cur.data.notifiedView, cur.data.notifiedArticle, cur.data.articles);
+
+              // update view
+              cur.data.notifiedArticle = card.data.notifiedArticle;
+              cur.data.notifiedChannel = card.data.notifiedChannel;
+              cur.data.notifiedView = card.data.notifiedView;
+            }
+            if (cur.data.notifiedArticle != card.data.notifiedArticle) {
+              // update remote articles
+              await updateContactArticles(cur.data.cardProfile.node, card.id, cur.data.cardProfile.guid, cur.data.cardDetail.token, cur.data.notifiedView, cur.data.notifiedArticle, cur.data.articles);
+              cur.data.notifiedArticle = card.data.notifiedArticle;
+            }
+            if (cur.data.notifiedChannel != card.data.notifiedChannel) {
+              // update remote channels
+              await updateContactChannels(cur.data.cardProfile.node, card.id, cur.data.cardProfile.guid, cur.data.cardDetail.token, cur.data.notifiedView, cur.data.notifiedChannel, cur.channels);
+              cur.data.notifiedChannel = card.data.notifiedChannel;
+            }
           }
-          if (cur.data.notifiedView != card.data.notifiedView) {
-            // update remote articles and channels
-            cur.data.articles = new Map();
+          catch (err) {
+            // contact update failed
+            console.log(err);
             cur.channels = new Map();
-
-            await updateContactChannels(cur.data.cardProfile.node, card.id, cur.data.cardProfile.guid, cur.data.cardDetail.token, cur.data.notifiedView, cur.data.notifiedChannel, cur.channels);
-            await updateContactArticles(cur.data.cardProfile.node, card.id, cur.data.cardProfile.guid, cur.data.cardDetail.token, cur.data.notifiedView, cur.data.notifiedArticle, cur.data.articles);
-
-            // update view
-            cur.data.notifiedArticle = card.data.notifiedArticle;
-            cur.data.notifiedChannel = card.data.notifiedChannel;
-            cur.data.notifiedView = card.data.notifiedView;
-          }
-          if (cur.data.notifiedArticle != card.data.notifiedArticle) {
-            // update remote articles
-            await updateContactArticles(cur.data.cardProfile.node, card.id, cur.data.cardProfile.guid, cur.data.cardDetail.token, cur.data.notifiedView, cur.data.notifiedArticle, cur.data.articles);
-            cur.data.notifiedArticle = card.data.notifiedArticle;
-          }
-          if (cur.data.notifiedChannel != card.data.notifiedChannel) {
-            // update remote channels
-            await updateContactChannels(cur.data.cardProfile.node, card.id, cur.data.cardProfile.guid, cur.data.cardDetail.token, cur.data.notifiedView, cur.data.notifiedChannel, cur.channels);
-            cur.data.notifiedChannel = card.data.notifiedChannel;
+            cur.articles = new Map();
+            cur.revision = 0;
+            cards.current.set(card.id, cur);
+            continue;
           }
         }
         else {
