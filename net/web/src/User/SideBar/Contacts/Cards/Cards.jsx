@@ -9,9 +9,6 @@ export function Cards({ showRegistry }) {
 
   const { state, actions } = useCards();
 
-  useEffect(() => {
-  }, [showRegistry]);
-
   const onSelect = (item) => {
     actions.select(item);
   }
@@ -28,6 +25,17 @@ export function Cards({ showRegistry }) {
       return actions.getImageUrl(item.id);
     }
     return null
+  }
+
+  const cardHandle = (item) => {
+    const profile = item.data?.cardProfile
+    if (profile) {
+      if (profile.node == state.node) {
+        return profile.handle;
+      }
+      return profile.handle + '@' + profile.node;
+    }
+    return null; 
   }
 
   return (
@@ -56,7 +64,7 @@ export function Cards({ showRegistry }) {
                   imageSet={cardProfile(item).imageSet} />
               </div>
               <div class="username">
-                <span class="handle">{ cardProfile(item).handle }</span>
+                <span class="handle">{ cardHandle(item) }</span>
                 <span class="name">{ cardProfile(item).name }</span>
               </div>
             </div>

@@ -1,15 +1,18 @@
 import { useContext, useState, useEffect } from 'react';
 import { CardContext } from 'context/CardContext';
+import { ProfileContext } from 'context/ProfileContext';
 import { useNavigate } from 'react-router-dom';
 
 export function useCards() {
   
   const [state, setState] = useState({
     cards: [],
+    node: null,
   });
 
   const navigate = useNavigate();
   const card = useContext(CardContext);
+  const profile = useContext(ProfileContext);
 
   const actions = {
     getImageUrl: card.actions.getImageUrl,
@@ -44,6 +47,10 @@ export function useCards() {
       return 0;
     })});
   }, [card])
+
+  useEffect(() => {
+    updateState({ node: profile.state?.profile?.node });
+  }, [profile])
 
   return { state, actions };
 }

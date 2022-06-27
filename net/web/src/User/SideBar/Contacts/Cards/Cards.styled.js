@@ -46,7 +46,7 @@ export const CardItem = styled(List.Item)`
   }
 
   .handle {
-    font-size: 0.9em;
+    font-size: 0.7em;
     font-weight: bold;
   }
 `;
