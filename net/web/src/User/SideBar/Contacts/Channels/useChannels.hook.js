@@ -1,6 +1,7 @@
 import { useContext, useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CardContext } from 'context/CardContext';
+import { ProfileContext } from 'context/ProfileContext';
 import { ChannelContext } from 'context/ChannelContext';
 
 export function useChannels() {
@@ -10,6 +11,7 @@ export function useChannels() {
     startCards: [],
     startSubject: '',
     startDescription: '',
+    node: null,
     busy: false,
   });
 
@@ -22,6 +24,7 @@ export function useChannels() {
 
   const navigate = useNavigate();
   const card = useContext(CardContext);
+  const profile = useContext(ProfileContext);
   const channel = useContext(ChannelContext);
 
   const actions = {
@@ -77,6 +80,10 @@ export function useChannels() {
     });
     updateState({ channels: merged });
   }, [channel])
+
+  useEffect(() => {
+    updateState({ node: profile.state.profile.node });
+  }, [profile])
 
   return { state, actions };
 }

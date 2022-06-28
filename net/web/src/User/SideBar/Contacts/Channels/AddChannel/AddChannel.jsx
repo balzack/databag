@@ -11,7 +11,11 @@ export function AddChannel({ state, actions }) {
     let contacts = [];
     let cards = actions.getCards();
     for (let card of cards) {
-      contacts.push({ value: card.id, label: card.data.cardProfile.handle });
+      let handle = card.data.cardProfile.handle;
+      if (state.node != card.data.cardProfile.node) {
+        handle += '@' + card.data.cardProfile.node;
+      }
+      contacts.push({ value: card.id, label: handle });
     }
     setOptions(contacts);
   }, [actions]);

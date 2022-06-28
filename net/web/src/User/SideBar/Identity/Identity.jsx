@@ -1,7 +1,7 @@
 import { Avatar, Space, Image, Modal, Form, Input, Button } from 'antd';
 import React, { useState } from 'react'
 import { IdentityWrapper, IdentityDropdown, MenuWrapper } from './Identity.styled';
-import { RightOutlined, EditOutlined, UserOutlined, LockOutlined } from '@ant-design/icons';
+import { ExclamationCircleOutlined, RightOutlined, EditOutlined, UserOutlined, LockOutlined } from '@ant-design/icons';
 import { useIdentity } from './useIdentity.hook';
 import { Menu, Dropdown } from 'antd';
 import { Logo } from '../../../Logo/Logo';
@@ -9,6 +9,16 @@ import { Logo } from '../../../Logo/Logo';
 export function Identity() {
 
   const { state, actions } = useIdentity()
+
+  const showLogout = () => {
+    Modal.confirm({
+      title: 'Do you want to logout?',
+      icon: <ExclamationCircleOutlined />,
+      okText: 'Yes, Logout',
+      cancelText: 'No, Cancel',
+      onOk() { actions.logout() },
+    });
+  };
 
   const menu = (
     <MenuWrapper>
@@ -19,7 +29,7 @@ export function Identity() {
         <div onClick={() => actions.setShowLogin(true)}>Change Login</div>
       </Menu.Item>
       <Menu.Item key="2">
-        <div onClick={() => actions.logout()}>Sign Out</div>
+        <div onClick={() => showLogout()}>Sign Out</div>
       </Menu.Item>
     </MenuWrapper>
   );

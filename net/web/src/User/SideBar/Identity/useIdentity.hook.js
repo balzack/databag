@@ -21,7 +21,7 @@ export function useIdentity() {
     confirm: null,
     confirmStatus: null,
     busy: false,
-    showLogin: false,  
+    showLogin: false,
   });
 
   const navigate = useNavigate();
@@ -38,9 +38,6 @@ export function useIdentity() {
     logout: async () => {
       app.actions.logout();
       navigate('/');
-    },
-    editLabels: () => {
-      console.log("EDIT LABELS");
     },
     editProfile: () => {
       navigate('/user/profile');

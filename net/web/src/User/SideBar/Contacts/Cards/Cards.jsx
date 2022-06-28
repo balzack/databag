@@ -64,8 +64,8 @@ export function Cards({ showRegistry }) {
                   imageSet={cardProfile(item).imageSet} />
               </div>
               <div class="username">
-                <span class="handle">{ cardHandle(item) }</span>
                 <span class="name">{ cardProfile(item).name }</span>
+                <span class="handle">{ cardHandle(item) }</span>
               </div>
             </div>
           </CardItem>

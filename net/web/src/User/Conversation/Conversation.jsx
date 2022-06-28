@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { CloseOutlined, UserOutlined } from '@ant-design/icons';
+import { ExclamationCircleOutlined, CloseOutlined, UserOutlined } from '@ant-design/icons';
 import { useConversation } from './useConversation.hook';
 import { Button, Input, Checkbox, Modal, Spin } from 'antd'
 import { ConversationWrapper, ConversationButton, EditButton, CloseButton, ListItem, BusySpin } from './Conversation.styled';
@@ -61,6 +61,16 @@ export function Conversation() {
     )
   }
 
+  const showDelete = () => {
+    Modal.confirm({
+      title: 'Do you want to delete this conversation?',
+      icon: <ExclamationCircleOutlined />,
+      okText: 'Yes, Delete',
+      cancelText: 'No, Cancel',
+      onOk() { actions.remove() },
+    });
+  };
+
   return (
     <ConversationWrapper>
       <div class="header">
@@ -72,7 +82,7 @@ export function Conversation() {
         <div class="control">       
           <div class="buttons">
             <ConversationButton ghost onClick={() => onMembers()}>Members</ConversationButton>
-            <ConversationButton ghost onClick={() => actions.remove()}>Delete</ConversationButton>
+            <ConversationButton ghost onClick={() => showDelete()}>Delete</ConversationButton>
           </div>
           <CloseButton type="text" class="close" size={'large'}
               onClick={() => actions.close()} icon={<CloseOutlined />} />

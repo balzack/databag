@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { CloseOutlined, UserOutlined } from '@ant-design/icons';
+import { ExclamationCircleOutlined, CloseOutlined, UserOutlined } from '@ant-design/icons';
 import { useContact } from './useContact.hook';
 import { Button, Checkbox, Modal } from 'antd'
 import { ContactWrapper, ProfileButton, CloseButton, ContactSpin } from './Contact.styled';
@@ -39,23 +39,53 @@ export function Contact() {
     return <span>{ state.description }</span>
   }
 
+  const showDisconnect = () => {
+    Modal.confirm({
+      title: 'Do you want to disconnect from this contact?',
+      icon: <ExclamationCircleOutlined />,
+      okText: 'Yes, Disconnect',
+      cancelText: 'No, Cancel',
+      onOk() { actions.disconnect() },
+    });
+  };
+
   const Disconnect = () => {
     if (state.showButtons.disconnect) {
-      return <ProfileButton ghost onClick={() => actions.disconnect()}>Disconnect</ProfileButton>
+      return <ProfileButton ghost onClick={() => showDisconnect()}>Disconnect</ProfileButton>
     }
     return <></>
   }
+
+  const showDisconnectRemove = () => {
+    Modal.confirm({
+      title: 'Do you want to remove this contact?',
+      icon: <ExclamationCircleOutlined />,
+      okText: 'Yes, Remove',
+      cancelText: 'No, Cancel',
+      onOk() { actions.disconnectRemove() },
+    });
+  };
 
   const DisconnectRemove = () => {
     if (state.showButtons.disconnectRemove) {
-      return <ProfileButton ghost onClick={() => actions.disconnectRemove()}>Remove Contact</ProfileButton>
+      return <ProfileButton ghost onClick={() => showDisconnectRemove()}>Remove Contact</ProfileButton>
     }
     return <></>
   }
 
+  const showRemove = () => {
+    Modal.confirm({
+      title: 'Do you want to remove this contact??',
+      icon: <ExclamationCircleOutlined />,
+      okText: 'Yes, Remove',
+      cancelText: 'No, Cancel',
+      onOk() { actions.remove() },
+    });
+  };
+
   const Remove = () => {
     if (state.showButtons.remove) {
-      return <ProfileButton ghost onClick={() => actions.remove()}>Remove Contact</ProfileButton>
+      return <ProfileButton ghost onClick={() => showRemove()}>Remove Contact</ProfileButton>
     }
     return <></>
   }

@@ -4,7 +4,6 @@ import { CheckSquareOutlined, BorderOutlined } from '@ant-design/icons';
 export const MemberItemWrapper = styled.div`
   display: flex;
   width: 100%;
-  background-color: #f6f5ed;
   flex-direction: row;
   overflow: hidden;
   padding-left: 16px;
