@@ -1,5 +1,6 @@
 import { Menu, Button, Dropdown } from 'antd';
 import styled from 'styled-components';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
 
 export const IdentityWrapper = styled.div`
   border-bottom: 1px solid #8fbea7;
@@ -35,7 +36,7 @@ export const IdentityWrapper = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
+    align-items: flex-end;
     padding-right: 8px;
   }
 
@@ -61,6 +62,12 @@ export const IdentityWrapper = styled.div`
     color: #444444;
     font-weight: bold;
   }
+
+`;
+
+export const AlertIcon = styled(ExclamationCircleOutlined)`
+  color: red;
+  margin-right: 6px;
 `;
 
 export const MenuWrapper = styled(Menu)`

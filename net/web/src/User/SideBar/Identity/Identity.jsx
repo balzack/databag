@@ -1,6 +1,6 @@
-import { Avatar, Space, Image, Modal, Form, Input, Button } from 'antd';
+import { Avatar, Space, Tooltip,  Image, Modal, Form, Input, Button } from 'antd';
 import React, { useState } from 'react'
-import { IdentityWrapper, IdentityDropdown, MenuWrapper } from './Identity.styled';
+import { IdentityWrapper, IdentityDropdown, MenuWrapper, AlertIcon } from './Identity.styled';
 import { ExclamationCircleOutlined, RightOutlined, EditOutlined, UserOutlined, LockOutlined } from '@ant-design/icons';
 import { useIdentity } from './useIdentity.hook';
 import { Menu, Dropdown } from 'antd';
@@ -34,6 +34,17 @@ export function Identity() {
     </MenuWrapper>
   );
 
+  const Disconnected = () => {
+    if(state.disconnected) {
+      return (
+        <Tooltip placement="right" title="Disconnected">
+          <AlertIcon />
+        </Tooltip>
+      )
+    }
+    return <></>;
+  }
+
   return (
     <IdentityWrapper>
       <IdentityDropdown overlay={menu} overlayStyle={{ minWidth: 0 }} trigger={['click']} placement="rightTop">
@@ -43,7 +54,10 @@ export function Identity() {
           </div>
           <div class="username">
             <span class="name">{ state.name }</span>
-            <span class="handle">{ state.handle }</span>
+            <div class="handle">
+              <Disconnected />
+              <span>{ state.handle }</span>
+            </div>
           </div>
           <RightOutlined />
         </div>

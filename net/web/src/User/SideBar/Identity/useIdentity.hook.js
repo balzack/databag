@@ -22,6 +22,7 @@ export function useIdentity() {
     confirmStatus: null,
     busy: false,
     showLogin: false,
+    disconnected: false,
   });
 
   const navigate = useNavigate();
@@ -107,8 +108,11 @@ export function useIdentity() {
   };
 
   useEffect(() => {
-    if (app.state && app.state.access != 'user') {
-      navigate('/');
+    if (app.state) {
+      if (app.state.access != 'user') {
+        navigate('/');
+      }
+      updateState({ disconnected: app.state.disconnected });
     }
   }, [app]);
 

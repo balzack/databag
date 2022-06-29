@@ -129,12 +129,14 @@ export function useAppContext() {
       try {
         let rev = JSON.parse(ev.data);
         setAppRevision(rev);
+        updateState({ disconnected: false });
       }
       catch (err) {
         console.log(err);
       }
     }
     ws.current.onclose = (e) => {
+      updateState({ disconnected: true });
       console.log(e)
       setTimeout(() => {
         if (ws.current != null) {
@@ -143,7 +145,9 @@ export function useAppContext() {
           ws.current.onopen = () => {}
           ws.current.onerror = () => {}
           setWebsocket(token);
-          delay.current += 1;
+          if (delay.current < 60) {
+            delay.current += 1;
+          }
         }
       }, delay.current * 1000)
     }
@@ -151,6 +155,7 @@ export function useAppContext() {
       ws.current.send(JSON.stringify({ AppToken: token }))
     }
     ws.current.error = (e) => {
+      updateState({ disconnected: true });
       console.log(e)
     }
   }
