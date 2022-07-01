@@ -19,6 +19,18 @@ export function useAddTopic() {
   const card = useContext(CardContext);
   const channel = useContext(ChannelContext);
 
+  useEffect(() => {
+      updateState({
+      assets: [],
+      messageText: null,
+      textColor: '#444444',
+      textColorSet: false,
+      textSize: 14,
+      textSizeSet: false,
+      busy: false,
+    });
+  }, [cardId, channelId]);
+
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
   }
