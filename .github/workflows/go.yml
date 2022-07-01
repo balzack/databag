@@ -1,0 +1,27 @@
+name: Go
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Go
+      uses: actions/setup-go@v3
+      with:
+        go-version: 1.17.5
+
+    - name: Build
+      run: cd net/server
+      run: go build databag
+
+    - name: Test
+      run: cd net/server
+      run: go test -v ./...
