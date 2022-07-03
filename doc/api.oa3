@@ -2485,7 +2485,7 @@ paths:
     get:
       tags:
         - content
-      description: Get channel topic slots. If revision set, detail fields omitted in response
+      description: Get channel topic slots. If revision set, detail fields omitted in response. Staggered loading supported through sequnce marker. Initially count can be used to limit the topics returned. The sequence marker returned in the header must be used in subsequent queries for the same topic window.
       operationId: get-channel-topics
       security:
         - bearerAuth: []
@@ -2501,16 +2501,43 @@ paths:
           description: return updated topics since revision 
           required: false
           schema:
-            type: string
+            type: integer
+            format: int64
+        - name: count
+          in: query
+          description: limit number of topics from latest when revision not set
+          required: false
+          schema:
+            type: integer
+            format: int64
+        - name: begin
+          in: query
+          description: return topics after and including sequence marker
+          required: false
+          schema:
+            type: integer
+            format: int64
+        - name: end
+          in: query
+          description: return topics before and not including sequence marker
+          required: false
+          schema:
+            type: integer
+            format: int64
       responses:
         '200':
           description: successful operation
           headers:
-            X-Topic-Revision:
+            Topic-Revision:
               schema:
                 type: integer
                 format: int64
               description: current topic revision
+            Topic-Marker:
+              schema:
+                type: integer
+                format: int64
+              description: sequnce marker of first topic when count set
           content:
             application/json:
               schema:
