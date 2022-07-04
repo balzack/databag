@@ -170,6 +170,6 @@ func TestStaggardLoad(t *testing.T) {
   topics = &[]Topic{}
   response = &TestApiResponse{ data: topics }
   assert.NoError(t, TestApiRequest(GetChannelTopics, params, response));
-  assert.Equal(t, 0, len(*topics));
+  assert.Equal(t, 1, len(*topics));
 }
 
