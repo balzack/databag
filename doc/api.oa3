@@ -2982,16 +2982,43 @@ paths:
           description: return updated topics since revision 
           required: false
           schema:
-            type: string
+            type: integer
+            format: int64
+        - name: count
+          in: query
+          description: limit number of latest from latest when revision not set
+          required: false
+          schema:
+            type: integer
+            format: int64
+        - name: begin
+          in: query
+          description: return tags after and including sequence marker
+          required: false
+          schema:
+            type: integer
+            format: int64
+        - name: end
+          in: query
+          description: return tags before and not including sequence marker
+          required: false
+          schema:
+            type: integer
+            format: int64
       responses:
         '200':
           description: successful operation
           headers:
-            X-Tag-Revision:
+            Tag-Revision:
               schema:
                 type: integer
                 format: int64
               description: current tag revision
+            Tag-Marker:
+              schema:
+                type: integer
+                format: int64
+              description: sequnce marker of first tag when count set
           content:
             application/json:
               schema:

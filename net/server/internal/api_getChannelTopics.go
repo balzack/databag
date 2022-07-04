@@ -6,7 +6,7 @@ import (
   "databag/internal/store"
 )
 
-func reverse(input []store.TopicSlot) []store.TopicSlot {
+func reverseTopics(input []store.TopicSlot) []store.TopicSlot {
   var output []store.TopicSlot
   for i := len(input) - 1; i >= 0; i-- {
     output = append(output, input[i])
@@ -107,7 +107,7 @@ func GetChannelTopics(w http.ResponseWriter, r *http.Request) {
           return
         }
       }
-      slots = reverse(slots)
+      slots = reverseTopics(slots)
     } else if beginSet && !endSet {
       if err := store.DB.Preload("Topic.Assets").Where("channel_id = ? AND id >= ?", channelSlot.Channel.ID, begin).Find(&slots).Error; err != nil {
         ErrResponse(w, http.StatusInternalServerError, err)
@@ -132,7 +132,7 @@ func GetChannelTopics(w http.ResponseWriter, r *http.Request) {
     for _, slot := range slots {
       if slot.Topic != nil {
         if countSet {
-          w.Header().Set("Topic-Index", strconv.FormatUint(uint64(slot.ID), 10))
+          w.Header().Set("Topic-Marker", strconv.FormatUint(uint64(slot.ID), 10))
           countSet = false
         }
         response = append(response, getTopicModel(&slot))
