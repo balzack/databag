@@ -1,4 +1,5 @@
 FROM ubuntu:20.04
+ARG TARGETPLATFORM
 LABEL maintainer="roland.osborne@gmail.com"
 
 EXPOSE 7000
@@ -30,9 +31,14 @@ RUN npm install -g n
 RUN n stable
 
 RUN mkdir /app
-RUN wget -P /app https://go.dev/dl/go1.17.5.linux-amd64.tar.gz
-RUN tar -C /usr/local -xzf /app/go1.17.5.linux-amd64.tar.gz
+
+RUN if [ "$TARGETPLATFORM" = "linux/amd64" ]; then ARCHITECTURE=amd64; elif [ "$TARGETPLATFORM" = "linux/arm64" ]; then ARCHITECTURE=arm64; elif [ "$TARGETPLATFORM" = "linux/arm64" ]; then ARCHITECTURE=aarch64; else ARCHITECTURE=unsupported; fi \
+    && wget -P /app https://go.dev/dl/go1.17.5.linux-${ARCHITECTURE}.tar.gz \
+    && tar -C /usr/local -xzf /app/go1.17.5.linux-${ARCHITECTURE}.tar.gz 
+
 RUN git  clone https://github.com/balzack/databag.git /app/databag
+
+RUN yarn config set network-timeout 300000
 RUN yarn --cwd /app/databag/net/web install
 RUN yarn --cwd /app/databag/net/web build
 RUN cd /app/databag/net/server; /usr/local/go/bin/go build databag
