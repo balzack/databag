@@ -19,7 +19,7 @@ export function Login(props) {
         <SettingOutlined />
       </div>
       <div class="container">
-        <div class="header">indicom</div>
+        <div class="header">databag</div>
         <div class="subheader">
           <span class="subheader-text">Communication for the Decentralized Web</span>
         </div>
