@@ -4,12 +4,11 @@
 </p>
 
 Databag is a self-hosting messaging service for the DWeb community. Notable features include:
-- Public-private key based identity and not bound to any blockchain or hosting domain.
-- Communication between accounts across different nodes
-- Direct communication between app and contact's node with no server-side replication.
-- Data revision trees for efficient syncrhonization.
+- Public-private key based identity (not bound to any blockchain or hosting domain)
+- Federated (accounts on different nodes can communicate)
+- No server-side replication (direct communication between app and contact's node)
 - Websockets for delivering synchronization events.
-- Each node can host any number of accounts.
+- Unlimited accounts per node
 - Server written in Go and browser app written with Reactjs.
 
 You can test out the project [here](https://databag.coredb.org/#/create), but don't post anything important as this server is regularly wiped. Feedback on the UI/UX, bugs or features is greatly appreciated.
