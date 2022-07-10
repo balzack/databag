@@ -7,7 +7,7 @@ import { ChannelContext } from 'context/ChannelContext';
 export function useConversation() {
   
   const [state, setState] = useState({
-    init: true,
+    loading: true,
     cardId: null,
     channelId: null,
     subject: null,
@@ -33,6 +33,9 @@ export function useConversation() {
     remove: async () => {
       await conversation.actions.removeConversation();
       navigate('/user');
+    },
+    more: () => {
+      conversation.actions.addHistory();
     }
   };
 
@@ -51,7 +54,7 @@ export function useConversation() {
       return 0;
     });
     updateState({
-      init: conversation.state.init,
+      loading: conversation.state.loading,
       subject: conversation.state.subject,
       contacts: conversation.state.contacts,
       cardId: conversation.state.cardId,

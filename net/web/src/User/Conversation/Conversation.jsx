@@ -27,6 +27,10 @@ export function Conversation() {
     }
   }, [state]);
 
+  const onMoreTopics = () => {
+    actions.more();
+  }
+
   const topicRenderer = (topic) => {
     return (<TopicItem host={state.cardId == null} topic={topic} />)
   }
@@ -90,8 +94,8 @@ export function Conversation() {
       </div>
       <div class="thread">
         <VirtualList id={state.channelId + state.cardId} 
-            items={state.topics} itemRenderer={topicRenderer} />
-        <BusySpin size="large" delay="1000" spinning={!state.init} />
+            items={state.topics} itemRenderer={topicRenderer} onMore={onMoreTopics} />
+        <BusySpin size="large" delay="1000" spinning={state.loading} />
       </div>
       <AddTopic />
       <Modal title="Conversation Members" visible={showMembers} centered onCancel={() => setShowMembers(false)}

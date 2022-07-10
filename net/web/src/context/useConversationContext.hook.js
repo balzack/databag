@@ -8,6 +8,7 @@ export function useConversationContext() {
 
   const [state, setState] = useState({
     init: false,
+    loading: false,
     cardId: null,
     channelId: null,
     subject: null,
@@ -210,6 +211,7 @@ export function useConversationContext() {
         await setTopics(events.current[0]);
         events.current.shift();
       }
+      updateState({ loading: false });
 
       serialize.current--;
     }
@@ -223,12 +225,15 @@ export function useConversationContext() {
   const actions = {
     setConversationId: (cardId, channelId) => {
       view.current += 1;
+      updateState({ loading: true });
       events.current = [{ type: EVENT_OPEN, data: { cardId, channelId }}];
       updateState({ init: false, subject: null, cardId, channelId, topics: new Map() });
+      topics.current = new Map();
       updateConversation();
 
     },
     addHistory: () => {
+      updateState({ loading: true });
       events.current.push({ type: EVENT_MORE });
       updateConversation();
     },

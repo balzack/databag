@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { VirtualListWrapper, VirtualItem } from './VirtualList.styled';
 import ReactResizeDetector from 'react-resize-detector';
 
-export function VirtualList({ id, items, itemRenderer }) {
+export function VirtualList({ id, items, itemRenderer, onMore }) {
 
   const REDZONE = 1024; // recenter on canvas if in canvas edge redzone
   const HOLDZONE = 2048; // drop slots outside of holdzone of view
@@ -23,6 +23,7 @@ export function VirtualList({ id, items, itemRenderer }) {
   let listRef = useRef();
   let key = useRef(null);
   let itemView = useRef([]);
+  let nomore = useRef(false);
 
   const addSlot = (id, slot) => {
     setSlots((m) => { m.set(id, slot); return new Map(m); })
@@ -110,6 +111,13 @@ export function VirtualList({ id, items, itemRenderer }) {
       if (view?.overscan?.top <= 0) {
         scrollTop.current = containers.current[0].top;
         listRef.current.scrollTo({ top: scrollTop.current, left: 0 });
+        if (!nomore.current) {
+          nomore.current = true;
+          onMore();
+          setTimeout(() => {
+            nomore.current = false;
+          }, 2500);
+        }
       }
     }
   }
