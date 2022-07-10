@@ -41,14 +41,23 @@ export function useConversation() {
   }, [cardId, channelId]);
 
   useEffect(() => {
+    let topics = Array.from(conversation.state.topics.values()).sort((a, b) => {
+      if (a?.data?.topicDetail?.created > b?.data?.topicDetail?.created) {
+        return 1;
+      }
+      if (a?.data?.topicDetail?.created < b?.data?.topicDetail?.created) {
+        return -1;
+      }
+      return 0;
+    });
     updateState({
       init: conversation.state.init,
       subject: conversation.state.subject,
       contacts: conversation.state.contacts,
       cardId: conversation.state.cardId,
       channelId: conversation.state.channelId,
-      topics: Array.from(conversation.state.topics.values()),
       members: conversation.state.members,
+      topics,
     });
   }, [conversation]);
 

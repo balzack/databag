@@ -127,8 +127,8 @@ export function useChannelContext() {
       let channel = channels.current.get(channelId);
       return channel?.revision;
     },
-    getChannelTopics: async (channelId, revision) => {
-      return await getChannelTopics(access.current, channelId, revision);
+    getChannelTopics: async (channelId, revision, count, begin, end) => {
+      return await getChannelTopics(access.current, channelId, revision, count, begin, end);
     },
     getChannelTopic: async (channelId, topicId) => {
       return await getChannelTopic(access.current, channelId, topicId);

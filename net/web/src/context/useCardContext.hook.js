@@ -261,12 +261,12 @@ export function useCardContext() {
       let channel = card.channels.get(channelId);
       return channel?.revision;
     },
-    getChannelTopics: async (cardId, channelId, revision) => {
+    getChannelTopics: async (cardId, channelId, revision, count, begin, end) => {
       let card = cards.current.get(cardId);
       let node = card.data.cardProfile.node;
       let channel = card.channels.get(channelId);
       let token = card.data.cardProfile.guid + '.' + card.data.cardDetail.token;
-      return await getContactChannelTopics(node, token, channelId, revision);
+      return await getContactChannelTopics(node, token, channelId, revision, count, begin, end);
     },
     getChannelTopic: async (cardId, channelId, topicId) => {
       let card = cards.current.get(cardId);

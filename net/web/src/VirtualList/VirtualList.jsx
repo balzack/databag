@@ -239,6 +239,20 @@ export function VirtualList({ id, items, itemRenderer }) {
 
   const setItems = () => {
 
+    // align containers in case history was loaded
+    if (containers.current.length > 0) {
+      let container = containers.current[0];
+      for (let j = 0; j < itemView.current.length; j++) {
+        if (itemView.current[j].id == container.id) {
+          for(let i = 0; i < containers.current.length; i++) {
+            containers.current[i].index = i + j;
+          }
+          break;
+        }
+      }
+    } 
+
+    // remove containers following any removed item
     for (let i = 0; i < containers.current.length; i++) {
       let container = containers.current[i];
       if (itemView.current.length <= container.index || itemView.current[container.index].id != container.id) {

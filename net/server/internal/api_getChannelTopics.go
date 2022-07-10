@@ -132,7 +132,7 @@ func GetChannelTopics(w http.ResponseWriter, r *http.Request) {
     for _, slot := range slots {
       if slot.Topic != nil {
         if countSet {
-          w.Header().Set("Topic-Marker", strconv.FormatUint(uint64(slot.ID), 10))
+          w.Header().Set("topic-marker", strconv.FormatUint(uint64(slot.ID), 10))
           countSet = false
         }
         response = append(response, getTopicModel(&slot))
@@ -140,7 +140,7 @@ func GetChannelTopics(w http.ResponseWriter, r *http.Request) {
     }
   }
 
-  w.Header().Set("Topic-Revision", strconv.FormatInt(channelSlot.Revision, 10))
+  w.Header().Set("topic-revision", strconv.FormatInt(channelSlot.Revision, 10))
   WriteResponse(w, response)
 }
 
