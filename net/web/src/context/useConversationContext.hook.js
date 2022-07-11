@@ -15,6 +15,7 @@ export function useConversationContext() {
     contacts: null,
     members: new Set(),
     topics: new Map(),
+    revision: null,
   });
 
   const EVENT_OPEN = 1;
@@ -44,6 +45,10 @@ export function useConversationContext() {
   }  
 
   const getSubject = (conversation) => {
+    if (!conversation) {
+      return null;
+    }
+
     try {
       let subject = JSON.parse(conversation.data.channelDetail.data).subject;
       if (subject) {
@@ -56,6 +61,10 @@ export function useConversationContext() {
   }
 
   const getContacts = (conversation) => {
+    if (!conversation) {
+      return null;
+    }
+
     let members = [];
     if (conversation.guid) {
       members.push(card.actions.getCardByGuid(conversation.guid)?.data?.cardProfile?.handle);
@@ -70,6 +79,9 @@ export function useConversationContext() {
   }
 
   const getMembers = (conversation) => {
+    if (!conversation) {
+      return null;
+    }
     let members = new Set();
     if (conversation.guid) {
       members.add(conversation.guid);
@@ -174,23 +186,26 @@ export function useConversationContext() {
         if (channelView.current.init && deltaRevision != channelView.current.revision) {
           let delta = await getTopicDelta(channelView.current.revision, null, channelView.current.begin, null);
           await setTopicDelta(delta.topics, curView);
-          channelView.current.revision = delta.revision
+          channelView.current.revision = delta.revision;
         }
       }
-      let chan = getChannel();
-      let subject = getSubject(chan);
-      let contacts = getContacts(chan);
-      let members = getMembers(chan);
-      updateState({
-        init: true,
-        subject,
-        contacts,
-        members,
-        topics: topics.current,
-      });
+
+      if (curView == view.current) {
+        let chan = getChannel();
+        let subject = getSubject(chan);
+        let contacts = getContacts(chan);
+        let members = getMembers(chan);
+        updateState({
+          init: true,
+          subject,
+          contacts,
+          members,
+          topics: topics.current,
+          revision: channelView.current.revision,
+        });
+      }
     }
     catch (err) {
-      console.log(err);
       if (!channelView.current.error) {
         window.alert("This converstaion failed to update");
         channelView.current.error = true;
@@ -199,7 +214,6 @@ export function useConversationContext() {
   }
 
   const updateConversation = async () => {
-
     if (!card.state.init || !channel.state.init) {
       return;
     }
@@ -208,11 +222,21 @@ export function useConversationContext() {
       serialize.current++;
 
       while (events.current.length > 0) {
-        await setTopics(events.current[0]);
-        events.current.shift();
+
+        // collapse updates
+        while (events.current.length > 1) {
+          if(events.current[0].type == EVENT_UPDATE && events.current[1].type == EVENT_UPDATE) {
+            events.current.shift();
+          }
+          else {
+            break;
+          }
+        }
+
+        const ev = events.current.shift();
+        await setTopics(ev);
       }
       updateState({ loading: false });
-
       serialize.current--;
     }
   };
@@ -224,10 +248,11 @@ export function useConversationContext() {
 
   const actions = {
     setConversationId: (cardId, channelId) => {
+
       view.current += 1;
-      updateState({ loading: true });
+      updateState({ init: false, loading: true });
       events.current = [{ type: EVENT_OPEN, data: { cardId, channelId }}];
-      updateState({ init: false, subject: null, cardId, channelId, topics: new Map() });
+      updateState({ subject: null, cardId, channelId, topics: new Map() });
       topics.current = new Map();
       updateConversation();
 

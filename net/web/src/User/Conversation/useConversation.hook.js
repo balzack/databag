@@ -1,8 +1,7 @@
 import { useContext, useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { ConversationContext } from 'context/ConversationContext';
-import { CardContext } from 'context/CardContext';
-import { ChannelContext } from 'context/ChannelContext';
+import { StoreContext } from 'context/StoreContext';
 
 export function useConversation() {
   
@@ -18,6 +17,7 @@ export function useConversation() {
   const { cardId, channelId } = useParams();
   const navigate = useNavigate();
   const conversation = useContext(ConversationContext);
+  const store = useContext(StoreContext);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
@@ -62,6 +62,11 @@ export function useConversation() {
       members: conversation.state.members,
       topics,
     });
+    if (conversation.state.init) {
+      const channel = conversation.state.channelId;
+      const card = conversation.state.cardId;
+      store.actions.setValue(`${channel}::${card}`, conversation.state.revision);
+    }
   }, [conversation]);
 
   return { state, actions };

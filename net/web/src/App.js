@@ -7,6 +7,7 @@ import { GroupContextProvider } from 'context/GroupContext';
 import { CardContextProvider } from 'context/CardContext';
 import { ChannelContextProvider } from 'context/ChannelContext';
 import { ConversationContextProvider } from 'context/ConversationContext';
+import { StoreContextProvider } from 'context/StoreContext';
 import { Home } from './Home/Home';
 import { Admin } from './Admin/Admin';
 import { Login } from './Login/Login';
@@ -27,35 +28,37 @@ function App() {
           <ArticleContextProvider>
             <ProfileContextProvider>
               <AccountContextProvider>
-                <AppContextProvider>
-                  <div style={{ position: 'absolute', width: '100vw', height: '100vh', backgroundColor: '#8fbea7' }}>
-                    <img src={login} alt="" style={{ position: 'absolute', width: '33%', bottom: 0, right: 0 }}/>
-                  </div>
-                  <div style={{ position: 'absolute', width: '100vw', height: '100vh' }}>
-                    <Router>
-                      <Routes>
-                        <Route path="/" element={ <Home /> } />
-                        <Route path="/login" element={ <Login /> } />
-                        <Route path="/admin" element={ <Admin /> } />
-                        <Route path="/create" element={ <Create /> } />
-                        <Route path="/user" element={ <User /> }>
-                          <Route path="profile" element={<Profile />} />
-                          <Route path="contact/:guid" element={<Contact />} />
-                          <Route path="conversation/:cardId/:channelId" element={
-                            <ConversationContextProvider>
-                              <Conversation />
-                            </ConversationContextProvider>
-                          } />
-                          <Route path="conversation/:channelId" element={
-                            <ConversationContextProvider>
-                              <Conversation />
-                            </ConversationContextProvider>
-                          } />
-                        </Route>
-                      </Routes>
-                    </Router>   
-                  </div>
-                </AppContextProvider>
+                <StoreContextProvider>
+                  <AppContextProvider>
+                    <div style={{ position: 'absolute', width: '100vw', height: '100vh', backgroundColor: '#8fbea7' }}>
+                      <img src={login} alt="" style={{ position: 'absolute', width: '33%', bottom: 0, right: 0 }}/>
+                    </div>
+                    <div style={{ position: 'absolute', width: '100vw', height: '100vh' }}>
+                      <Router>
+                        <Routes>
+                          <Route path="/" element={ <Home /> } />
+                          <Route path="/login" element={ <Login /> } />
+                          <Route path="/admin" element={ <Admin /> } />
+                          <Route path="/create" element={ <Create /> } />
+                          <Route path="/user" element={ <User /> }>
+                            <Route path="profile" element={<Profile />} />
+                            <Route path="contact/:guid" element={<Contact />} />
+                            <Route path="conversation/:cardId/:channelId" element={
+                              <ConversationContextProvider>
+                                <Conversation />
+                              </ConversationContextProvider>
+                            } />
+                            <Route path="conversation/:channelId" element={
+                              <ConversationContextProvider>
+                                <Conversation />
+                              </ConversationContextProvider>
+                            } />
+                          </Route>
+                        </Routes>
+                      </Router>   
+                    </div>
+                  </AppContextProvider>
+                </StoreContextProvider>
               </AccountContextProvider>
             </ProfileContextProvider>
           </ArticleContextProvider>

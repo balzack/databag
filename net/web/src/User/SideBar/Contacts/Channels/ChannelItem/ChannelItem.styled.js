@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { List } from 'antd';
+import { StarTwoTone } from '@ant-design/icons';
 
 export const ChannelItemWrapper = styled(List.Item)`
   padding-left: 16px;
@@ -16,3 +17,8 @@ export const ChannelItemWrapper = styled(List.Item)`
   }
 `;
 
+export const Marker = styled(StarTwoTone)`
+  position: relative;
+  left: -16px;
+  top: 8px;
+`

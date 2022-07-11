@@ -10,6 +10,7 @@ import { ArticleContext } from './ArticleContext';
 import { GroupContext } from './GroupContext';
 import { CardContext } from './CardContext';
 import { ChannelContext } from './ChannelContext';
+import { StoreContext } from './StoreContext';
 
 async function appCreate(username, password, token, updateState, setWebsocket) {
   await addAccount(username, password, token);
@@ -58,6 +59,7 @@ export function useAppContext() {
     })
   }
 
+  const storeContext = useContext(StoreContext);
   const accountContext = useContext(AccountContext);
   const profileContext = useContext(ProfileContext);
   const channelContext = useContext(ChannelContext);
@@ -79,6 +81,7 @@ export function useAppContext() {
   const userActions = {
     logout: () => {
       appLogout(updateState, clearWebsocket);
+      storeContext.actions.clear();
       resetData();
     },
   }
