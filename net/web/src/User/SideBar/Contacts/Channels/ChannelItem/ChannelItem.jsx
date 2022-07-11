@@ -15,7 +15,7 @@ export function ChannelItem({ item }) {
   return (
     <ChannelItemWrapper onClick={() => onSelect()}>
       <ChannelLogo item={item} />
-      {state.updated && (
+      {item.updated && (
         <Marker />
       )}
       <ChannelLabel item={item} />

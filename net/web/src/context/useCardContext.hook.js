@@ -103,7 +103,7 @@ export function useCardContext() {
             cur.channels = new Map();
             cur.articles = new Map();
             cur.revision = 0;
-            cards.current.set(card.id, cur);
+            cards.current.set(card.id, { ...cur });
             continue;
           }
         }
@@ -112,7 +112,7 @@ export function useCardContext() {
           cur.articles = new Map();
         }
         cur.revision = card.revision;
-        cards.current.set(card.id, cur);
+        cards.current.set(card.id, { ...cur });
       }
       else {
         cards.current.delete(card.id);
@@ -149,7 +149,7 @@ export function useCardContext() {
           cur.data.topicRevision = channel.data.topicRevision;
         }
         cur.revision = channel.revision;
-        channelMap.set(channel.id, cur);
+        channelMap.set(channel.id, { ...cur });
       }
       else {
         channelMap.delete(channel.id);

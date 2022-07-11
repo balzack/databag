@@ -56,7 +56,7 @@ export function useChannelContext() {
           cur.data.topicRevision = channel.data.topicRevision;
         }
         cur.revision = channel.revision;
-        channels.current.set(channel.id, cur);
+        channels.current.set(channel.id, { ...cur });
       }
       else {
         channels.current.delete(channel.id);

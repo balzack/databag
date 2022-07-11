@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { CardContext } from 'context/CardContext';
 import { ProfileContext } from 'context/ProfileContext';
 import { ChannelContext } from 'context/ChannelContext';
+import { StoreContext } from 'context/StoreContext';
 
 export function useChannels() {
 
@@ -26,6 +27,7 @@ export function useChannels() {
   const card = useContext(CardContext);
   const profile = useContext(ProfileContext);
   const channel = useContext(ChannelContext);
+  const store = useContext(StoreContext);
 
   const actions = {
     getCardImageUrl: card.actions.getImageUrl,
@@ -54,11 +56,27 @@ export function useChannels() {
     }
   };
 
+  const setUpdated = (chan) => {
+    let key = `${chan.id}::${chan.cardId}`
+    if (store.state[key] && store.state[key] == chan.revision) {
+      chan.updated = false;
+    }
+    else {
+      chan.updated = true;
+    }
+  }
+
+  useEffect(() => {
+    let merged = [ ...channels.current, ...cardChannels.current ];
+    merged.forEach(c => { setUpdated(c) });
+  }, [store]); 
+
   useEffect(() => {
     cardChannels.current = [];
     card.state.cards.forEach((value, key, map) => {
       cardChannels.current.push(...Array.from(value.channels.values()));
     });
+    cardChannels.current.forEach(c => { setUpdated(c) });
     let merged = [ ...channels.current, ...cardChannels.current ];
     merged.sort((a, b) => {
       if (a?.data?.channelSummary?.lastTopic?.created > b?.data?.channelSummary?.lastTopic?.created) {
@@ -71,6 +89,7 @@ export function useChannels() {
 
   useEffect(() => {
     channels.current = Array.from(channel.state.channels.values());
+    channels.current.forEach(c => { setUpdated(c) });
     let merged = [ ...channels.current, ...cardChannels.current ];
     merged.sort((a, b) => {
       if (a?.data?.channelSummary?.lastTopic?.created > b?.data?.channelSummary?.lastTopic?.created) {
