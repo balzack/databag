@@ -104,7 +104,8 @@ export function useAddTopic() {
           updateState({ messageText: null, textColor: '#444444', textColorSet: false, textSize: 12, textSizeSet: false, assets: [] });
         }
         catch(err) {
-          window.alert(err);
+          console.log(err);
+          window.alert("failed to add message");
         }
         updateState({ busy: false });
       }

@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Skeleton } from 'antd';
 import { CarouselWrapper } from './Carousel.styled';
-import { RightOutlined, LeftOutlined, CloseOutlined } from '@ant-design/icons';
+import { RightOutlined, LeftOutlined, CloseOutlined, PictureOutlined, FireOutlined } from '@ant-design/icons';
 import ReactResizeDetector from 'react-resize-detector';
 
-export function Carousel({ ready, items, itemRenderer, itemRemove }) {
+export function Carousel({ ready, error, items, itemRenderer, itemRemove }) {
   const [slots, setSlots] = useState([]);
   const [carouselRef, setCarouselRef] = useState(false);
   const [itemIndex, setItemIndex] = useState(0);
@@ -120,11 +120,20 @@ export function Carousel({ ready, items, itemRenderer, itemRemove }) {
     }
   }
 
-  if (!ready) {
+  if (!ready || error) {
     return (
       <CarouselWrapper>
         <div class="carousel">
-          <Skeleton.Image style={{ height: 128 }} />
+          {error && (
+            <div class="status">
+              <FireOutlined style={{ fontSize: 32, color: 'red' }} />
+            </div>
+          )}
+          {!ready && !error && (
+            <div class="status">
+              <PictureOutlined style={{ fontSize: 32 }} />
+            </div>
+          )}
         </div>
         <div class="arrows">
           <div class="arrow" onClick={onRight}><LeftOutlined style={{ visibility: 'hidden' }} /></div>

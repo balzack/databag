@@ -96,7 +96,7 @@ export function TopicItem({ host, topic }) {
           <div class={nameClass}>{ name }</div>
           <div>{ getTime(offset) }</div>
         </div>
-        <Carousel ready={state.ready} items={state.assets} itemRenderer={renderAsset} />
+        <Carousel ready={state.ready} error={state.error} items={state.assets} itemRenderer={renderAsset} />
         <div class="message">
           <Message />
         </div>

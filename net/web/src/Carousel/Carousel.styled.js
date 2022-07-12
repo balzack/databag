@@ -19,6 +19,16 @@ export const CarouselWrapper = styled.div`
     scrollbar-width: none;
   }
 
+  .status {
+    width: 128px;
+    height: 128px;
+    display: flex;
+    align-items: center;
+    justify-content: center; 
+    color: #888888;
+    background-color: #eeeeee;
+  }
+
   .carousel::-webkit-scrollbar {
     display: none;
   }
