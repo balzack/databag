@@ -3,9 +3,7 @@ import { UserOutlined } from '@ant-design/icons';
 import { LogoWrapper } from './Logo.styled';
 
 export function Logo({ imageSet, imageUrl }) {
-  if (imageUrl == null) {
-    return <></>
-  } else if (!imageSet) {
+  if (!imageSet) {
     return (
       <LogoWrapper>
         <UserOutlined />
