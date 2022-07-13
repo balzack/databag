@@ -16,8 +16,8 @@ import (
   "github.com/gorilla/websocket"
 )
 
-const TEST_READDEADLINE = 2
-const TEST_REVISIONWAIT = 100
+const test_ReadDeadline = 2
+const test_RevisionWait = 100
 
 type TestCard struct {
   Guid string
@@ -44,7 +44,7 @@ type TestGroup struct {
 }
 
 func GetTestRevision(status chan *Revision) (rev *Revision) {
-  time.Sleep(TEST_REVISIONWAIT * time.Millisecond)
+  time.Sleep(test_RevisionWait * time.Millisecond)
   for {
 		select {
 		case r:=<-status:
@@ -695,9 +695,9 @@ func StatusConnection(token string, rev *Revision) (ws *websocket.Conn, err erro
 
   // connect to websocket
   s := httptest.NewServer(&statusHandler{})
-  wsUrl, _ := url.Parse(s.URL)
-  wsUrl.Scheme = "ws"
-  if ws, _, err = websocket.DefaultDialer.Dial(wsUrl.String(), nil); err != nil {
+  wsURL, _ := url.Parse(s.URL)
+  wsURL.Scheme = "ws"
+  if ws, _, err = websocket.DefaultDialer.Dial(wsURL.String(), nil); err != nil {
     return
   }
 
@@ -709,7 +709,7 @@ func StatusConnection(token string, rev *Revision) (ws *websocket.Conn, err erro
   ws.WriteMessage(websocket.TextMessage, data)
 
   // read revision response
-  ws.SetReadDeadline(time.Now().Add(TEST_READDEADLINE * time.Second))
+  ws.SetReadDeadline(time.Now().Add(test_ReadDeadline * time.Second))
   if dataType, data, err = ws.ReadMessage(); err != nil {
     return
   }
