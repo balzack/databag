@@ -97,7 +97,7 @@ export function TopicItem({ host, topic }) {
             <div class={nameClass}>{ name }</div>
             <div>{ getTime(offset) }</div>
           </div>
-          <Skeleton />
+          <Skeleton size={'small'} active={true} />
           <div class="options">
             <Options />
           </div>
