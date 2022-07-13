@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef, useContext } from 'react';
 import { useNavigate, useLocation, useParams } from "react-router-dom";
-import { getAvailable, setLogin } from './fetchUtil';
+import { getAvailable } from 'api/getAvailable';
+import { setLogin } from 'api/setLogin';
 import { setAccountAccess } from 'api/setAccountAccess';
 import { addAccount } from 'api/addAccount';
 import { getUsername } from 'api/getUsername';
