@@ -13,6 +13,7 @@ export function useTopicItem(topic) {
     imageUrl: null,
     message: null,
     created: null,
+    confirmed: false,
     ready: false,
     error: false,
     owner: false,
@@ -50,8 +51,10 @@ export function useTopicItem(topic) {
     let message;
     let ready = false;
     let error = false;
+    let confirmed = false;
     let assets = [];
     if (status === 'confirmed') {
+      confirmed = true;
       try {
         message = JSON.parse(data);
         if (message.textColor != null) {
@@ -80,11 +83,11 @@ export function useTopicItem(topic) {
       const { guid, created } = topic.data.topicDetail;
       if (profile.state.profile.guid == guid) {
         const { name, handle, imageUrl } = profile.actions.getProfile();
-        updateState({ name, handle, imageUrl, status, message, transform, assets, error, ready, created, owner, textColor, textSize });
+        updateState({ name, handle, imageUrl, status, message, transform, assets, confirmed, error, ready, created, owner, textColor, textSize });
       }
       else {
         const { name, handle, imageUrl } = card.actions.getCardProfileByGuid(guid);
-        updateState({ name, handle, imageUrl, status, message, transform, assets, error, ready, created, owner, textColor, textSize });
+        updateState({ name, handle, imageUrl, status, message, transform, assets, confirmed, error, ready, created, owner, textColor, textSize });
       }
     }
   }, [profile, card, conversation, topic]);

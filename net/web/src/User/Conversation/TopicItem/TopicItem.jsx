@@ -5,7 +5,7 @@ import { VideoAsset } from './VideoAsset/VideoAsset';
 import { AudioAsset } from './AudioAsset/AudioAsset';
 import { ImageAsset } from './ImageAsset/ImageAsset';
 import { Avatar } from 'avatar/Avatar';
-import { Space, Button, Input } from 'antd';
+import { Space, Skeleton, Button, Input } from 'antd';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Carousel } from 'Carousel/Carousel';
 
@@ -84,6 +84,26 @@ export function TopicItem({ host, topic }) {
       );
     }
     return <div style={{ color: state.textColor, fontSize: state.textSize }}>{ state.message?.text }</div>
+  }
+
+  if (!state.confirmed) {
+    return (
+      <TopicItemWrapper>
+        <div class="avatar">
+          <Avatar imageUrl={state.imageUrl} />
+        </div>
+        <div class="topic">
+          <div class="info">
+            <div class={nameClass}>{ name }</div>
+            <div>{ getTime(offset) }</div>
+          </div>
+          <Skeleton />
+          <div class="options">
+            <Options />
+          </div>
+        </div>
+      </TopicItemWrapper>
+    )
   }
 
   return (

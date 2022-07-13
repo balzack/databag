@@ -126,7 +126,7 @@ export function Carousel({ ready, error, items, itemRenderer, itemRemove }) {
         <div class="carousel">
           {error && (
             <div class="status">
-              <FireOutlined style={{ fontSize: 32, color: 'red' }} />
+              <FireOutlined style={{ fontSize: 32, color: '#ff8888' }} />
             </div>
           )}
           {!ready && !error && (
