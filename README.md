@@ -9,7 +9,7 @@ Databag is a self-hosting messaging service for the DWeb community. Notable feat
 - No server-side replication (direct communication between app and contact's node)
 - Websockets for delivering synchronization events.
 - Unlimited accounts per node
-- Server written in Go and browser app written with Reactjs.
+- Backend written in Go and frontend written with Reactjs.
 
 You can test out the project [here](https://databag.coredb.org/#/create), but don't post anything important as this server is regularly wiped. Feedback on the UI/UX, bugs or features is greatly appreciated.
 
