@@ -8,6 +8,7 @@ export function useConversationContext() {
 
   const [state, setState] = useState({
     init: false,
+    error: false,
     loading: false,
     cardId: null,
     channelId: null,
@@ -21,6 +22,7 @@ export function useConversationContext() {
   const EVENT_OPEN = 1;
   const EVENT_MORE = 2;
   const EVENT_UPDATE = 3;
+  const EVENT_RESYNC = 4;
   const events = useRef([]);
 
   const channelView = useRef({
@@ -181,7 +183,7 @@ export function useConversationContext() {
           channelView.current.begin = delta.marker;
         }
       }
-      else if (ev.type == EVENT_UPDATE) {
+      else if (ev.type == EVENT_UPDATE || ev.type == EVENT_RESYNC) {
         let deltaRevision = getChannelRevision();
         if (channelView.current.init && deltaRevision != channelView.current.revision) {
           let delta = await getTopicDelta(channelView.current.revision, null, channelView.current.begin, null);
@@ -197,6 +199,7 @@ export function useConversationContext() {
         let members = getMembers(chan);
         updateState({
           init: true,
+          error: false,
           subject,
           contacts,
           members,
@@ -206,9 +209,10 @@ export function useConversationContext() {
       }
     }
     catch (err) {
-      if (!channelView.current.error) {
-        window.alert("This converstaion failed to update");
-        channelView.current.error = true;
+      console.log(err);
+      updateState({ error: true });
+      if (ev.type == EVENT_RESYNC) {
+        window.alert("failed to syncrhonize conversation");
       }
     }
   }
@@ -248,14 +252,12 @@ export function useConversationContext() {
 
   const actions = {
     setConversationId: (cardId, channelId) => {
-
       view.current += 1;
       updateState({ init: false, loading: true });
       events.current = [{ type: EVENT_OPEN, data: { cardId, channelId }}];
       updateState({ subject: null, cardId, channelId, topics: new Map() });
       topics.current = new Map();
       updateConversation();
-
     },
     addHistory: () => {
       updateState({ loading: true });
@@ -306,6 +308,10 @@ export function useConversationContext() {
       else {
         return await channel.actions.setChannelTopicSubject(channelId, topicId, data);
       }
+    },
+    resync: () => {
+      events.current.push({ type: EVENT_RESYNC });
+      updateConversation();
     }
   }
 

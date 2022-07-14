@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { ExclamationCircleOutlined, CloseOutlined, UserOutlined } from '@ant-design/icons';
 import { useConversation } from './useConversation.hook';
-import { Button, Input, Checkbox, Modal, Spin } from 'antd'
-import { ConversationWrapper, ConversationButton, EditButton, CloseButton, ListItem, BusySpin } from './Conversation.styled';
+import { Button, Input, Checkbox, Modal, Spin, Tooltip } from 'antd'
+import { ConversationWrapper, ConversationButton, EditButton, CloseButton, ListItem, BusySpin, Offsync } from './Conversation.styled';
 import { AutoSizer, CellMeasurer, CellMeasurerCache, List } from 'react-virtualized';
 import { AddTopic } from './AddTopic/AddTopic';
 import { VirtualList } from 'VirtualList/VirtualList';
@@ -81,7 +81,14 @@ export function Conversation() {
         <div class="title">
           <Icon />
           <div class="subject">{ subject }</div> 
-          <Edit /> 
+          <Edit />
+          { state.error && (
+            <Tooltip placement="right" title="sync failed: click to retry">
+              <Offsync onClick={() => {actions.resync()}}>
+                <ExclamationCircleOutlined />
+              </Offsync>
+            </Tooltip>
+          )}
         </div>
         <div class="control">       
           <div class="buttons">

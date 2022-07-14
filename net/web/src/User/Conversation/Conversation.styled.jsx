@@ -103,3 +103,9 @@ export const BusySpin = styled(Spin)`
   left: calc(50% - 16px);
   top: calc(50% - 16px);
 `;
+
+export const Offsync = styled.div`
+  padding-left: 8px;
+  color: #ff8888;
+  cursor: pointer;
+`

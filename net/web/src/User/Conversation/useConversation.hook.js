@@ -36,6 +36,9 @@ export function useConversation() {
     },
     more: () => {
       conversation.actions.addHistory();
+    },
+    resync: () => {
+      conversation.actions.resync();
     }
   };
 
@@ -60,6 +63,7 @@ export function useConversation() {
       cardId: conversation.state.cardId,
       channelId: conversation.state.channelId,
       members: conversation.state.members,
+      error: conversation.state.error,
       topics,
     });
     if (conversation.state.init) {
