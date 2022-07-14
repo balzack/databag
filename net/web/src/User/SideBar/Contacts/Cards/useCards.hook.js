@@ -18,6 +18,9 @@ export function useCards() {
     getImageUrl: card.actions.getImageUrl,
     select: (contact) => {
       navigate(`/user/contact/${contact.data.cardProfile.guid}`);
+    },
+    resync: (id) => {
+      card.actions.resync(id);
     }
   };
 

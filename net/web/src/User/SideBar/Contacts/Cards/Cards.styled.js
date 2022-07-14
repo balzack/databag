@@ -51,3 +51,8 @@ export const CardItem = styled(List.Item)`
   }
 `;
 
+export const Offsync = styled.div`
+  padding-left: 4px;
+  color: #ff8888;
+`
+

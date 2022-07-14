@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react'
-import { CardsWrapper, CardItem } from './Cards.styled';
-import { Drawer, List } from 'antd';
+import { CardsWrapper, CardItem, Offsync } from './Cards.styled';
+import { Drawer, List, Tooltip } from 'antd';
 import { Registry } from './Registry/Registry';
 import { useCards } from './useCards.hook';
 import { Logo } from '../../../../Logo/Logo';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
 
 export function Cards({ showRegistry }) {
 
@@ -38,6 +39,10 @@ export function Cards({ showRegistry }) {
     return null; 
   }
 
+  const Resync = (id) => {
+    actions.resync(id);
+  }
+
   return (
     <CardsWrapper>
       <Drawer
@@ -63,6 +68,13 @@ export function Cards({ showRegistry }) {
                 <Logo imageUrl={cardImage(item)}
                   imageSet={cardProfile(item).imageSet} />
               </div>
+              {item.error && (
+                <Tooltip placement="topLeft" title="sync failed: click to retry">
+                  <Offsync onClick={(e) => {e.stopPropagation(); Resync(item.id)}} >
+                    <ExclamationCircleOutlined />
+                  </Offsync>
+                </Tooltip>
+              )}
               <div class="username">
                 <span class="name">{ cardProfile(item).name }</span>
                 <span class="handle">{ cardHandle(item) }</span>

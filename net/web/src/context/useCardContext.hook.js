@@ -32,9 +32,28 @@ export function useCardContext() {
   const revision = useRef(null);
   const next = useRef(null);
   const cards = useRef(new Map());
+  const resync = useRef([]);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }))
+  }
+
+  const updateCard = async (cardId) => {
+    let card = cards.current.get(cardId);
+    const { cardDetail, cardProfile } = card.data;
+
+    if (cardDetail.status === 'connected' && card.error) {
+      let message = await getContactProfile(cardProfile.node, cardProfile.guid, cardDetail.token);
+      await setCardProfile(access.current, card.id, message);
+
+      card.channels = new Map();
+      await updateContactChannels(card.data.cardProfile.node, card.id, card.data.cardProfile.guid, card.data.cardDetail.token, null, null, card.channels);
+      
+      card.data.articles = new Map();
+      await updateContactArticles(card.data.cardProfile.node, card.id, card.data.cardProfile.guid, card.data.cardDetail.token, null, null, card.data.articles);
+        
+      cards.current.set(card.id, { ...card, error: false });
+    }
   }
 
   const updateCards = async () => {
@@ -43,7 +62,7 @@ export function useCardContext() {
       if (card.data) {
         let cur = cards.current.get(card.id);
         if (cur == null) {
-          cur = { id: card.id, data: { articles: new Map() }, channels: new Map() }
+          cur = { id: card.id, data: { articles: new Map() }, error: false, channels: new Map() }
         }
         if (cur.data.detailRevision != card.data.detailRevision) {
           if (card.data.cardDetail != null) {
@@ -64,7 +83,7 @@ export function useCardContext() {
           cur.data.profileRevision = card.data.profileRevision;
         }
         const { cardDetail, cardProfile } = cur.data;
-        if (cardDetail.status === 'connected') {
+        if (cardDetail.status === 'connected' && !cur.error) {
           try {
             if (cur.data.profileRevision != card.data.notifiedProfile) {
               let message = await getContactProfile(cardProfile.node, cardProfile.guid, cardDetail.token);
@@ -103,7 +122,7 @@ export function useCardContext() {
             cur.channels = new Map();
             cur.articles = new Map();
             cur.revision = 0;
-            cards.current.set(card.id, { ...cur });
+            cards.current.set(card.id, { ...cur, error: true });
             continue;
           }
         }
@@ -163,6 +182,9 @@ export function useCardContext() {
 
   const setCards = async (rev) => {
     if (next.current == null) {
+      if (rev == null) {
+        rev = revision.curren;
+      }
       next.current = rev;
       if (revision.current != rev) {
         try {
@@ -174,6 +196,18 @@ export function useCardContext() {
         updateState({ init: true, cards: cards.current });
         revision.current = rev;
       }
+
+      while (resync.current.length) {
+        try {
+          await updateCard(resync.current.shift());
+          updateState({ cards: cards.current });
+        }
+        catch (err) {
+          console.log(err);
+          window.alert("failed to connect to contact");
+        }
+      } 
+     
       let r = next.current;
       next.current = null;
       if (revision.current != r) {
@@ -181,7 +215,9 @@ export function useCardContext() {
       }
     }
     else {
-      next.current = rev;
+      if (rev != null) {
+        next.current = rev;
+      }
     }
   }
 
@@ -307,6 +343,10 @@ export function useCardContext() {
       let node = card.data.cardProfile.node;
       let token = card.data.cardProfile.guid + "." + card.data.cardDetail.token;
       return getContactChannelTopicAssetUrl(node, token, channelId, topicId, assetId);
+    },
+    resync: (cardId) => {
+      resync.current.push(cardId);
+      setCards(null);
     }
   }
 
