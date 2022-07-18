@@ -141,6 +141,7 @@ func GetChannelTopics(w http.ResponseWriter, r *http.Request) {
   }
 
   w.Header().Set("topic-revision", strconv.FormatInt(channelSlot.Revision, 10))
+  w.Header().Set("Access-Control-Expose-Headers", "*");
   WriteResponse(w, response)
 }
 
