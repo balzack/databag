@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useContext } from 'react';
 import { getChannels } from 'api/getChannels';
 import { getChannelDetail } from 'api/getChannelDetail';
 import { getChannelSummary } from 'api/getChannelSummary';
@@ -13,11 +13,14 @@ import { getChannelTopicAssetUrl } from 'api/getChannelTopicAssetUrl';
 import { setChannelSubject } from 'api/setChannelSubject';
 import { setChannelCard } from 'api/setChannelCard';
 import { clearChannelCard } from 'api/clearChannelCard';
+import { UploadContext } from 'context/UploadContext';
+
 export function useChannelContext() {
   const [state, setState] = useState({
     init: false,
     channels: new Map(),
   });
+  const upload = useContext(UploadContext);
   const access = useRef(null);
   const revision = useRef(null);
   const channels = useRef(new Map());
@@ -117,8 +120,26 @@ export function useChannelContext() {
     setChannelTopicSubject: async (channelId, topicId, data) => {
       return await setChannelTopicSubject(access.current, channelId, topicId, data);
     },
-    addChannelTopic: async (channelId, message, assets) => {
-      await addChannelTopic(access.current, channelId, message, assets);
+    addChannelTopic: async (channelId, message, files) => {
+      if (files?.length) {
+        const topicId = await addChannelTopic(access.current, channelId, null, null);
+        upload.actions.addTopic(access.current, channelId, topicId, files, async (assets) => {
+          console.log("success, finalize topic");
+          message.assets = assets;
+          await setChannelTopicSubject(access.current, channelId, topicId, message);
+        }, async () => {
+          console.log("failed, delete topic");
+          try {
+            await removeChannelTopic(access.current, channelId, topicId);
+          }
+          catch(err) {
+            console.log(err);
+          }
+        });
+      }
+      else {
+        await addChannelTopic(access.current, channelId, message, files);
+      }
     },
     getChannel: (channelId) => {
       return channels.current.get(channelId);

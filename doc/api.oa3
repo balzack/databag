@@ -2726,6 +2726,12 @@ paths:
           required: true
           schema:
             type: string
+        - name: confirm
+          in: query
+          description: confirmed state of topic
+          required: false
+          schema:
+            type: boolean
       responses:
         '200':
           description: success

@@ -72,7 +72,36 @@ export const ConversationWrapper = styled.div`
     flex-grow: 1;
     flex-direction: column;
     width: 100%;
-    overflow: auto; 
+    overflow: auto;
+
+    .uploading {
+      position: absolute;
+      top: 0px;
+      right: 0px;
+      display: flex;
+      flex-direction: column;
+      z-index: 10;
+      border-bottom: 1px solid #888888;
+      border-left: 1px solid #888888;
+      border-bottom-left-radius: 4px;
+      padding-left: 8px;
+      background-color: #ffffff;
+
+      .progress {
+        width: 250px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        .index {
+          display: flex;
+          width: 64px;
+          justify-content: center;
+          color: #444444; 
+          font-size: 12px;
+        }
+      }
+    }
   }
 `;
 

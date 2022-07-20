@@ -13,6 +13,7 @@ export function useAddTopic() {
     textSize: 14,
     textSizeSet: false,
     busy: false,
+    progress: null,
   });
 
   const { cardId, channelId } = useParams();

@@ -13,6 +13,7 @@ func SetChannelTopicSubject(w http.ResponseWriter, r *http.Request) {
   // scan parameters
   params := mux.Vars(r)
   topicId := params["topicId"]
+  confirm := r.FormValue("confirm");
 
   var subject Subject
   if err := ParseRequest(r, w, &subject); err != nil {
@@ -51,6 +52,16 @@ func SetChannelTopicSubject(w http.ResponseWriter, r *http.Request) {
     }
     if res := tx.Model(topicSlot.Topic).Update("data_type", subject.DataType).Error; res != nil {
       return res
+    }
+    if confirm == "true" {
+      if res := tx.Model(topicSlot.Topic).Update("status", APP_TOPICCONFIRMED).Error; res != nil {
+        return res
+      }
+    }
+    if confirm == "false" {
+      if res := tx.Model(topicSlot.Topic).Update("status", APP_TOPICUNCONFIRMED).Error; res != nil {
+        return res
+      }
     }
     if res := tx.Model(&topicSlot.Topic).Update("detail_revision", act.ChannelRevision + 1).Error; res != nil {
       return res

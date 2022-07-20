@@ -2,6 +2,7 @@ import { useContext, useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { ConversationContext } from 'context/ConversationContext';
 import { StoreContext } from 'context/StoreContext';
+import { UploadContext } from 'context/UploadContext';
 
 export function useConversation() {
   
@@ -18,10 +19,20 @@ export function useConversation() {
   const navigate = useNavigate();
   const conversation = useContext(ConversationContext);
   const store = useContext(StoreContext);
+  const upload = useContext(UploadContext);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
   }
+
+  useEffect(() => {
+    if (cardId) {
+      updateState({ progress: upload.state.progress.get(`${cardId}:${channelId}`) });
+    }
+    else {
+      updateState({ progress: upload.state.progress.get(`:${channelId}`) });
+    }
+  }, [upload]);
 
   const actions = {
     close: () => {

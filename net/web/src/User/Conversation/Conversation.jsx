@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { ExclamationCircleOutlined, CloseOutlined, UserOutlined } from '@ant-design/icons';
 import { useConversation } from './useConversation.hook';
-import { Button, Input, Checkbox, Modal, Spin, Tooltip } from 'antd'
+import { Button, Input, Progress, Checkbox, Modal, Spin, Tooltip } from 'antd'
 import { ConversationWrapper, ConversationButton, EditButton, CloseButton, ListItem, BusySpin, Offsync } from './Conversation.styled';
 import { AutoSizer, CellMeasurer, CellMeasurerCache, List } from 'react-virtualized';
 import { AddTopic } from './AddTopic/AddTopic';
@@ -43,6 +43,20 @@ export function Conversation() {
   const onEdit = () => {
     setEditSubject(state.subject);
     setShowEdit(true);
+  }
+
+  const uploadProgress = () => {
+    let progress = [];
+    for (let entry of state.progress) {
+      progress.push(
+        <div class="progress">
+          <div class="index">{ entry.index }/{ entry.count }</div>
+          <Progress percent={Math.floor(100 * entry.active?.loaded / entry.active?.total)} size="small" showInfo={false} />
+          <Button type="link">Cancel</Button>
+        </div>
+      );
+    }
+    return progress;
   }
 
   const onMembers = () => {
@@ -100,6 +114,11 @@ export function Conversation() {
         </div>
       </div>
       <div class="thread">
+        { state.progress && (
+          <div class="uploading">
+            { uploadProgress() }
+          </div>
+        )}
         <VirtualList id={state.channelId + state.cardId} 
             items={state.topics} itemRenderer={topicRenderer} onMore={onMoreTopics} />
         <BusySpin size="large" delay="1000" spinning={state.loading} />

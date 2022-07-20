@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useContext } from 'react';
 import { getContactChannels } from 'api/getContactChannels';
 import { getContactChannelDetail } from 'api/getContactChannelDetail';
 import { getContactChannelSummary } from 'api/getContactChannelSummary';
@@ -22,12 +22,14 @@ import { getContactChannelTopic } from 'api/getContactChannelTopic';
 import { getContactChannelTopicAssetUrl } from 'api/getContactChannelTopicAssetUrl';
 import { addCard } from 'api/addCard';
 import { removeCard } from 'api/removeCard';
+import { UploadContext } from 'context/UploadContext';
 
 export function useCardContext() {
   const [state, setState] = useState({
     init: false,
     cards: new Map(),
   });
+  const upload = useContext(UploadContext);
   const access = useRef(null);
   const revision = useRef(null);
   const next = useRef(null);
@@ -281,11 +283,29 @@ export function useCardContext() {
       let node = cardProfile.node;
       await setContactChannelTopicSubject(node, token, channelId, topicId, data);
     },
-    addChannelTopic: async (cardId, channelId, message, assets) => {
+    addChannelTopic: async (cardId, channelId, message, files) => {
       let { cardProfile, cardDetail } = cards.current.get(cardId).data;
       let token = cardProfile.guid + '.' + cardDetail.token;
       let node = cardProfile.node;
-      await addContactChannelTopic(node, token, channelId, message, assets);
+      if (files?.length) {
+        const topicId = await addContactChannelTopic(node, token, channelId, null, null);
+        upload.actions.addContactTopic(node, token, cardId, channelId, topicId, files, async (assets) => {
+          console.log("success, finalize topic");
+          message.assets = assets;
+          await setContactChannelTopicSubject(node, token, channelId, topicId, message);
+        }, async () => {
+          console.log("failed, delete topic");
+          try {
+            await removeContactChannelTopic(node, token, channelId, topicId);
+          }
+          catch(err) {
+            console.log(err);
+          }
+        });
+      }
+      else {
+        await addContactChannelTopic(node, token, channelId, message, files);
+      }
     },
     getChannel: (cardId, channelId) => {
       let card = cards.current.get(cardId);
