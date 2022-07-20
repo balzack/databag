@@ -48,13 +48,24 @@ export function Conversation() {
   const uploadProgress = () => {
     let progress = [];
     for (let entry of state.progress) {
-      progress.push(
-        <div class="progress">
-          <div class="index">{ entry.index }/{ entry.count }</div>
-          <Progress percent={Math.floor(100 * entry.active?.loaded / entry.active?.total)} size="small" showInfo={false} />
-          <Button type="link">Cancel</Button>
-        </div>
-      );
+      if (entry.error) {
+        progress.push(
+          <div class="progress">
+            <div class="index">{ entry.index }/{ entry.count }</div>
+            <Progress percent={100} size="small" status="exception" showInfo={false} />
+            <Button type="link" onClick={() => actions.cancel(entry.topicId)}>Clear</Button>
+          </div>
+        );
+      }
+      else {
+        progress.push(
+          <div class="progress">
+            <div class="index">{ entry.index }/{ entry.count }</div>
+            <Progress percent={Math.floor(100 * entry.active?.loaded / entry.active?.total)} size="small" showInfo={false} />
+            <Button type="link" onClick={() => actions.cancel(entry.topicId)}>Cancel</Button>
+          </div>
+        );
+      }
     }
     return progress;
   }

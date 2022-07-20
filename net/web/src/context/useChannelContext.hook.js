@@ -124,11 +124,9 @@ export function useChannelContext() {
       if (files?.length) {
         const topicId = await addChannelTopic(access.current, channelId, null, null);
         upload.actions.addTopic(access.current, channelId, topicId, files, async (assets) => {
-          console.log("success, finalize topic");
           message.assets = assets;
           await setChannelTopicSubject(access.current, channelId, topicId, message);
         }, async () => {
-          console.log("failed, delete topic");
           try {
             await removeChannelTopic(access.current, channelId, topicId);
           }

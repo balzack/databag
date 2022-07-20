@@ -50,7 +50,15 @@ export function useConversation() {
     },
     resync: () => {
       conversation.actions.resync();
-    }
+    },
+    cancel: (topicId) => {
+      if (cardId) {
+        upload.actions.cancelContactTopic(cardId, channelId, topicId);
+      }
+      else {
+        upload.actions.cancelTopic(channelId, topicId);
+      }
+    },
   };
 
   useEffect(() => {

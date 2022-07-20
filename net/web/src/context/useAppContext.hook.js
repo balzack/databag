@@ -12,6 +12,7 @@ import { GroupContext } from './GroupContext';
 import { CardContext } from './CardContext';
 import { ChannelContext } from './ChannelContext';
 import { StoreContext } from './StoreContext';
+import { UploadContext } from './UploadContext';
 
 async function appCreate(username, password, token, updateState, setWebsocket) {
   await addAccount(username, password, token);
@@ -60,6 +61,7 @@ export function useAppContext() {
     })
   }
 
+  const uploadContext = useContext(UploadContext);
   const storeContext = useContext(StoreContext);
   const accountContext = useContext(AccountContext);
   const profileContext = useContext(ProfileContext);
@@ -83,6 +85,7 @@ export function useAppContext() {
     logout: () => {
       appLogout(updateState, clearWebsocket);
       storeContext.actions.clear();
+      uploadContext.actions.clear();
       resetData();
     },
   }

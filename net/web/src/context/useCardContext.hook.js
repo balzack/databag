@@ -290,11 +290,9 @@ export function useCardContext() {
       if (files?.length) {
         const topicId = await addContactChannelTopic(node, token, channelId, null, null);
         upload.actions.addContactTopic(node, token, cardId, channelId, topicId, files, async (assets) => {
-          console.log("success, finalize topic");
           message.assets = assets;
           await setContactChannelTopicSubject(node, token, channelId, topicId, message);
         }, async () => {
-          console.log("failed, delete topic");
           try {
             await removeContactChannelTopic(node, token, channelId, topicId);
           }
