@@ -80,6 +80,7 @@ func AddAccount(w http.ResponseWriter, r *http.Request) {
   // create new account
   account := store.Account{
     Username: username,
+    Handle: strings.ToLower(username),
     Password: password,
     Guid: fingerprint,
   }

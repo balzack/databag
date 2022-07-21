@@ -2,6 +2,7 @@ package databag
 
 import (
   "errors"
+  "strings"
   "net/http"
   "gorm.io/gorm"
   "databag/internal/store"
@@ -26,6 +27,7 @@ func SetAccountAuthentication(w http.ResponseWriter, r *http.Request) {
   }
 
   token.Account.Username = username;
+  token.Account.Handle = strings.ToLower(username);
   token.Account.Password = password;
   err := store.DB.Transaction(func(tx *gorm.DB) error {
     if res := tx.Save(token.Account).Error; res != nil {

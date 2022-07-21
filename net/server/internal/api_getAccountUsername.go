@@ -41,17 +41,27 @@ func GetAccountUsername(w http.ResponseWriter, r *http.Request) {
   }
 
   var accounts []accountUsername;
-  err := store.DB.Model(&store.Account{}).Where("username = ?", username).Find(&accounts).Error
-  if err != nil {
+  if err := store.DB.Model(&store.Account{}).Where("username = ?", username).Find(&accounts).Error; err != nil {
     LogMsg("failed to query accounts")
     w.WriteHeader(http.StatusInternalServerError)
     return
   }
-
-  if len(accounts) == 0 {
-    WriteResponse(w, true)
-  } else {
+  if len(accounts) != 0 {
     WriteResponse(w, false)
+    return
   }
+
+  handle := strings.ToLower(username);
+  if err := store.DB.Model(&store.Account{}).Where("handle = ?", handle).Find(&accounts).Error; err != nil {
+    LogMsg("failed to query accounts")
+    w.WriteHeader(http.StatusInternalServerError)
+    return
+  }
+  if len(accounts) != 0 {
+    WriteResponse(w, false)
+    return
+  }
+
+  WriteResponse(w, true)
 }
 
