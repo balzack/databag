@@ -608,7 +608,7 @@ func AddTestAccount(username string) (guid string, token string, err error) {
   var r *http.Request
   var w *httptest.ResponseRecorder
 
-  var access string
+  var access LoginAccess
   app := AppData{
     Name: "Appy",
     Description: "A test app",
@@ -632,7 +632,7 @@ func AddTestAccount(username string) (guid string, token string, err error) {
   if r, w, err = NewRequest("POST", "/account/profile", nil); err != nil {
     return
   }
-  SetBearerAuth(r, access);
+  SetBearerAuth(r, access.AppToken);
   SetCredentials(r, login)
   AddAccount(w, r)
   if err = ReadResponse(w, &profile); err != nil {
@@ -649,7 +649,7 @@ func AddTestAccount(username string) (guid string, token string, err error) {
   if err = ReadResponse(w, &access); err != nil {
     return
   }
-  token = access
+  token = access.AppToken
 
   // authorize claim
   if r, w, err = NewRequest("PUT", "/authorize", "1234abcd"); err != nil {
