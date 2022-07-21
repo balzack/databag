@@ -681,7 +681,7 @@ paths:
           content:
             application/json:
               schema:
-                type: string
+                $ref: '#/components/schemas/LoginAccess'
         '401':
           description: invalid token
         '406':
@@ -3226,6 +3226,18 @@ components:
       properties:
         appToken:
           type: string
+
+    LoginAccess {
+      type: object
+      required:
+        - appToken
+        - created
+      properties:
+        appToken:
+          type: string
+        created:
+          type: integer
+          format: int64
           
     Revision:    
       type: object

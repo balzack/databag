@@ -57,6 +57,14 @@ export function useChannels() {
   };
 
   const setUpdated = (chan) => {
+    const login = store.state['login:timestamp'];
+    const update = chan?.data?.channelSummary?.lastTopic?.created;
+    
+    if (!update || (login && update < login)) {
+      chan.updated = false;
+      return;
+    }
+
     let key = `${chan.id}::${chan.cardId}`
     if (store.state[key] && store.state[key] == chan.revision) {
       chan.updated = false;

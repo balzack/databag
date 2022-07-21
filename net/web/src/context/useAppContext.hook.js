@@ -14,34 +14,6 @@ import { ChannelContext } from './ChannelContext';
 import { StoreContext } from './StoreContext';
 import { UploadContext } from './UploadContext';
 
-async function appCreate(username, password, token, updateState, setWebsocket) {
-  await addAccount(username, password, token);
-  let access = await setLogin(username, password)
-  updateState({ token: access, access: 'user' });
-  setWebsocket(access)
-  localStorage.setItem("session", JSON.stringify({ token: access, access: 'user' }));
-} 
-
-async function appLogin(username, password, updateState, setWebsocket) {
-  let access = await setLogin(username, password)
-  updateState({ token: access, access: 'user' });
-  setWebsocket(access)
-  localStorage.setItem("session", JSON.stringify({ token: access, access: 'user' }));
-}
-
-async function appAccess(token, updateState, setWebsocket) {
-  let access = await setAccountAccess(token)
-  updateState({ token: access, access: 'user' });
-  setWebsocket(access)
-  localStorage.setItem("session", JSON.stringify({ token: access, access: 'user' }));
-}
-
-function appLogout(updateState, clearWebsocket) {
-  updateState({ token: null, access: null });
-  clearWebsocket()
-  localStorage.removeItem("session");
-}
-
 export function useAppContext() {
   const [state, setState] = useState(null);
   const [appRevision, setAppRevision] = useState();
@@ -95,6 +67,46 @@ export function useAppContext() {
       appLogout(updateState, clearWebsocket);
       resetData();
     }
+  }
+
+  const appCreate = async (username, password, token) => {
+    await addAccount(username, password, token);
+    let access = await setLogin(username, password)
+    updateState({ token: access.appToken, access: 'user' });
+    storeContext.actions.setValue('login:timestamp', access.created);
+    setWebsocket(access.appToken)
+    localStorage.setItem("session", JSON.stringify({
+      token: access.appToken,
+      access: 'user',
+      timestamp: access.created,
+    }));
+    return access.created;
+  } 
+
+  const  appLogin = async (username, password) => {
+    let access = await setLogin(username, password)
+    updateState({ token: access.appToken, access: 'user' });
+    storeContext.actions.setValue('login:timestamp', access.created);
+    setWebsocket(access.appToken)
+    localStorage.setItem("session", JSON.stringify({
+      token: access.appToken,
+      access: 'user',
+      timestamp: access.created,
+    }));
+    return access.created;
+  }
+
+  const appAccess = async (token) => {
+    let access = await setAccountAccess(token)
+    updateState({ token: access, access: 'user' });
+    setWebsocket(access)
+    localStorage.setItem("session", JSON.stringify({ token: access, access: 'user' }));
+  }
+
+  function appLogout(updateState) {
+    updateState({ token: null, access: null });
+    clearWebsocket()
+    localStorage.removeItem("session");
   }
 
   const accessActions = {

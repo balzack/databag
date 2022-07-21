@@ -322,6 +322,13 @@ type IdList struct {
 	Ids []string `json:"ids"`
 }
 
+type LoginAccess struct {
+
+  AppToken string `json:"appToken"`
+
+  Created int64 `json:"created"`
+}
+
 type NodeConfig struct {
 
 	Domain string `json:"domain"`
