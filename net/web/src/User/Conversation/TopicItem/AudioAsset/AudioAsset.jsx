@@ -11,10 +11,12 @@ export function AudioAsset({ label, audioUrl }) {
   const [dimension, setDimension] = useState({});
   const [playing, setPlaying] = useState(true);
   const [ready, setReady] = useState(false);
+  const [url, setUrl] = useState(null);
 
   useEffect(() => {
     setActive(false);
     setPlaying(false);
+    setUrl(null);
   }, [label, audioUrl]);
 
   const onReady = () => {
@@ -22,6 +24,11 @@ export function AudioAsset({ label, audioUrl }) {
       setReady(true);
       setPlaying(false);
     }
+  }
+
+  const onActivate = () => {
+    setUrl(audioUrl);
+    setActive(true);
   }
 
   const Control = () => {
@@ -42,22 +49,6 @@ export function AudioAsset({ label, audioUrl }) {
     )
   }
 
-  const Player = () => {
-    if (!active) {
-      return (
-        <div onClick={() => setActive(true)}>
-          <SoundOutlined style={{ fontSize: 32, color: '#eeeeee', cursor: 'pointer' }} />
-        </div>
-      )
-    }
-    return (
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <Control />
-        <ReactPlayer style={{ position: 'absolute', top: 0, visibility: 'hidden' }} playing={playing} height="100%" width="100%" controls="true" url={audioUrl} onReady={onReady} />
-      </div>
-    )
-  }
-
   return (
     <AudioAssetWrapper>
       <ReactResizeDetector handleWidth={false} handleHeight={true}>
@@ -69,7 +60,17 @@ export function AudioAsset({ label, audioUrl }) {
         }}
       </ReactResizeDetector>
       <div class="player" style={{ width: dimension.height, height: dimension.height }}>
-        <Player />
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          { !active && (
+            <div onClick={() => onActivate()}>
+              <SoundOutlined style={{ fontSize: 32, color: '#eeeeee', cursor: 'pointer' }} />
+            </div>
+          )}
+          { active && (
+            <Control />
+          )}
+          <ReactPlayer style={{ position: 'absolute', top: 0, visibility: 'hidden' }} playing={playing} height="100%" width="100%" controls="true" url={url} onReady={onReady} />
+        </div>
       </div>
       <div class="label">{ label }</div>
     </AudioAssetWrapper>
