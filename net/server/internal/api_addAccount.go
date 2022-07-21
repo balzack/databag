@@ -2,6 +2,7 @@ package databag
 
 import (
   "os"
+  "strings"
   "errors"
   "net/http"
   "crypto/sha256"
@@ -33,6 +34,11 @@ func AddAccount(w http.ResponseWriter, r *http.Request) {
   username, password, ret := BasicCredentials(r);
   if ret != nil {
     ErrResponse(w, http.StatusUnauthorized, ret)
+    return
+  }
+
+  if strings.Contains(username, " ") || strings.Contains(username, "\t") {
+    ErrResponse(w, http.StatusConflict, errors.New("username has whitespace"));
     return
   }
 

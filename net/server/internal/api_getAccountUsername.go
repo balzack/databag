@@ -2,6 +2,7 @@ package databag
 
 import (
   "errors"
+  "strings"
   "net/http"
   "databag/internal/store"
 )
@@ -31,6 +32,11 @@ func GetAccountUsername(w http.ResponseWriter, r *http.Request) {
   username := r.URL.Query().Get("name")
   if username == "" {
     ErrResponse(w, http.StatusBadRequest, errors.New("specify a username"))
+    return
+  }
+
+  if strings.Contains(username, " ") || strings.Contains(username, "\t") {
+    WriteResponse(w, false)
     return
   }
 
