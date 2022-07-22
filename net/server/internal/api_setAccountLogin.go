@@ -1,6 +1,7 @@
 package databag
 
 import (
+  "strings"
   "net/http"
   "gorm.io/gorm"
   "databag/internal/store"
@@ -28,6 +29,9 @@ func SetAccountLogin(w http.ResponseWriter, r *http.Request) {
       return res
     }
     if res := tx.Model(&account).Update("Username", username).Error; res != nil {
+      return res
+    }
+    if res := tx.Model(&account).Update("Handle", strings.ToLower(username)).Error; res != nil {
       return res
     }
     if res := tx.Model(&account).Update("Password", password).Error; res != nil {

@@ -52,16 +52,14 @@ func SetCardProfile(w http.ResponseWriter, r *http.Request) {
     return
   }
 
-  if identity.Revision > card.ProfileRevision {
-    card.Username = identity.Handle
-    card.Name = identity.Name
-    card.Description = identity.Description
-    card.Location = identity.Location
-    card.Image = identity.Image
-    card.Version = identity.Version
-    card.Node = identity.Node
-    card.ProfileRevision = identity.Revision
-  }
+  card.Username = identity.Handle
+  card.Name = identity.Name
+  card.Description = identity.Description
+  card.Location = identity.Location
+  card.Image = identity.Image
+  card.Version = identity.Version
+  card.Node = identity.Node
+  card.ProfileRevision = identity.Revision
 
   err = store.DB.Transaction(func(tx *gorm.DB) error {
 
