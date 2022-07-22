@@ -59,7 +59,7 @@ func SetChannelTopicSubject(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 		if confirm == "false" {
-			if res := tx.Model(topicSlot.Topic).Update("status", AppTopicUnconfirmed).Error; res != nil {
+			if res := tx.Model(topicSlot.Topic).Update("status", APPTopicUnconfirmed).Error; res != nil {
 				return res
 			}
 		}
