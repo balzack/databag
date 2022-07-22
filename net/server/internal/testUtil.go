@@ -36,6 +36,7 @@ type testContact struct {
 	D         testCard
 }
 
+//TestGroup provides the setup accounts for a test case
 type TestGroup struct {
 	A testContact
 	B testContact
@@ -43,6 +44,7 @@ type TestGroup struct {
 	D testContact
 }
 
+//GetTestRevision retrieves the notified revisions
 func GetTestRevision(status chan *Revision) (rev *Revision) {
 	time.Sleep(testRevisionWait * time.Millisecond)
 	for {
@@ -55,6 +57,7 @@ func GetTestRevision(status chan *Revision) (rev *Revision) {
 	}
 }
 
+//APITestData is a helper function for testing asset download
 func APITestData(
 	endpoint func(http.ResponseWriter, *http.Request),
 	requestType string,
@@ -112,6 +115,7 @@ func APITestData(
 	return
 }
 
+//APITestMsg is a helper function for an endpoint test
 func APITestMsg(
 	endpoint func(http.ResponseWriter, *http.Request),
 	requestType string,
@@ -173,6 +177,7 @@ func APITestMsg(
 	return
 }
 
+//APITestUpload is a helper function for asset upload test
 func APITestUpload(
 	endpoint func(http.ResponseWriter, *http.Request),
 	requestType string,
@@ -668,6 +673,7 @@ func addTestAccount(username string) (guid string, token string, err error) {
 	return
 }
 
+//NewRequest provides a lower level helper function for an endpoint test
 func NewRequest(rest string, path string, obj interface{}) (*http.Request, *httptest.ResponseRecorder, error) {
 	w := httptest.NewRecorder()
 	if obj != nil {
@@ -688,6 +694,8 @@ type statusHandler struct{}
 func (h *statusHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	Status(w, r)
 }
+
+//StatusConnection provides a test interface for the websocket updates
 func StatusConnection(token string, rev *Revision) (ws *websocket.Conn, err error) {
 	var data []byte
 	var dataType int

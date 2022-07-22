@@ -15,21 +15,22 @@ import (
 
 const testTimeout = 5
 
-type TestCondition struct {
+type testCondition struct {
 	check   func(*TestApp) bool
 	channel chan bool
 }
 
-type TestTopic struct {
+type testTopic struct {
 	topic Topic
 	tags  map[string]*Tag
 }
 
-type TestChannel struct {
+type testChannel struct {
 	channel Channel
-	topics  map[string]*TestTopic
+	topics  map[string]*testTopic
 }
 
+//TestContactData holds contact data for a test
 type TestContactData struct {
 	token               string
 	card                Card
@@ -40,26 +41,24 @@ type TestContactData struct {
 	cardDetailRevision  int64
 	cardProfileRevision int64
 	articles            map[string]*Article
-	channels            map[string]*TestChannel
+	channels            map[string]*testChannel
 	offsync             bool
 }
 
-func (c *TestContactData) UpdateContact() (err error) {
+func (c *TestContactData) updateContact() (err error) {
 
 	if c.cardDetailRevision != c.card.Data.DetailRevision {
-		if err = c.UpdateContactCardDetail(); err != nil {
+		if err = c.updateContactCardDetail(); err != nil {
 			return
-		} else {
-			c.cardDetailRevision = c.card.Data.DetailRevision
 		}
+    c.cardDetailRevision = c.card.Data.DetailRevision
 	}
 
 	if c.cardProfileRevision != c.card.Data.ProfileRevision {
-		if err = c.UpdateContactCardProfile(); err != nil {
+		if err = c.updateContactCardProfile(); err != nil {
 			return
-		} else {
-			c.cardProfileRevision = c.card.Data.ProfileRevision
 		}
+    c.cardProfileRevision = c.card.Data.ProfileRevision
 	}
 
 	// sync rest only if connected
@@ -68,45 +67,41 @@ func (c *TestContactData) UpdateContact() (err error) {
 	}
 
 	if c.profileRevision != c.card.Data.NotifiedProfile {
-		if err = c.UpdateContactProfile(); err != nil {
+		if err = c.updateContactProfile(); err != nil {
 			return
-		} else {
-			c.profileRevision = c.card.Data.NotifiedProfile
 		}
+    c.profileRevision = c.card.Data.NotifiedProfile
 	}
 
 	if c.viewRevision != c.card.Data.NotifiedView {
-		if err = c.UpdateContactArticle(); err != nil {
+		if err = c.updateContactArticle(); err != nil {
 			return
-		} else if err = c.UpdateContactChannels(); err != nil {
+		} else if err = c.updateContactChannels(); err != nil {
 			return
-		} else {
-			c.articleRevision = c.card.Data.NotifiedArticle
-			c.channelRevision = c.card.Data.NotifiedChannel
-			c.viewRevision = c.card.Data.NotifiedView
 		}
+    c.articleRevision = c.card.Data.NotifiedArticle
+    c.channelRevision = c.card.Data.NotifiedChannel
+    c.viewRevision = c.card.Data.NotifiedView
 	}
 
 	if c.articleRevision != c.card.Data.NotifiedArticle {
-		if err = c.UpdateContactArticle(); err != nil {
+		if err = c.updateContactArticle(); err != nil {
 			return
-		} else {
-			c.articleRevision = c.card.Data.NotifiedArticle
 		}
+    c.articleRevision = c.card.Data.NotifiedArticle
 	}
 
 	if c.channelRevision != c.card.Data.NotifiedChannel {
-		if err = c.UpdateContactChannels(); err != nil {
+		if err = c.updateContactChannels(); err != nil {
 			return
-		} else {
-			c.channelRevision = c.card.Data.NotifiedChannel
 		}
+    c.channelRevision = c.card.Data.NotifiedChannel
 	}
 
 	return
 }
 
-func (c *TestContactData) UpdateContactProfile() (err error) {
+func (c *TestContactData) updateContactProfile() (err error) {
 	var msg DataMessage
 	token := c.card.Data.CardProfile.GUID + "." + c.card.Data.CardDetail.Token
 	params := &TestAPIParams{query: "/profile/message", tokenType: APPTokenContact, token: token}
@@ -123,7 +118,7 @@ func (c *TestContactData) UpdateContactProfile() (err error) {
 	return
 }
 
-func (c *TestContactData) UpdateContactArticle() (err error) {
+func (c *TestContactData) updateContactArticle() (err error) {
 	var articles []Article
 	if c.articleRevision == 0 || c.viewRevision != c.card.Data.NotifiedView {
 		token := c.card.Data.CardProfile.GUID + "." + c.card.Data.CardDetail.Token
@@ -154,7 +149,7 @@ func (c *TestContactData) UpdateContactArticle() (err error) {
 	return nil
 }
 
-func (c *TestContactData) UpdateContactChannels() (err error) {
+func (c *TestContactData) updateContactChannels() (err error) {
 	var channels []Channel
 	if c.channelRevision == 0 || c.viewRevision != c.card.Data.NotifiedView {
 		token := c.card.Data.CardProfile.GUID + "." + c.card.Data.CardDetail.Token
@@ -182,15 +177,15 @@ func (c *TestContactData) UpdateContactChannels() (err error) {
 			tc, set := c.channels[channel.ID]
 			if set {
 				if channel.Revision != tc.channel.Revision {
-					if err = c.UpdateContactChannel(tc, &channel); err != nil {
+					if err = c.updateContactChannel(tc, &channel); err != nil {
 						return
 					}
 					tc.channel.Revision = channel.Revision
 				}
 			} else {
-				tc := &TestChannel{channel: Channel{ID: channel.ID, Data: &ChannelData{}}}
+				tc := &testChannel{channel: Channel{ID: channel.ID, Data: &ChannelData{}}}
 				c.channels[channel.ID] = tc
-				if err = c.UpdateContactChannel(tc, &channel); err != nil {
+				if err = c.updateContactChannel(tc, &channel); err != nil {
 					return
 				}
 				tc.channel.Revision = channel.Revision
@@ -200,10 +195,10 @@ func (c *TestContactData) UpdateContactChannels() (err error) {
 	return
 }
 
-func (c *TestContactData) UpdateContactChannel(storeChannel *TestChannel, channel *Channel) (err error) {
+func (c *TestContactData) updateContactChannel(storeChannel *testChannel, channel *Channel) (err error) {
 	if storeChannel.channel.Revision != channel.Revision {
 		if storeChannel.channel.Data.TopicRevision != channel.Data.TopicRevision {
-			if err = c.UpdateContactChannelTopics(storeChannel); err != nil {
+			if err = c.updateContactChannelTopics(storeChannel); err != nil {
 				return
 			}
 			storeChannel.channel.Data.TopicRevision = channel.Data.TopicRevision
@@ -231,7 +226,7 @@ func (c *TestContactData) UpdateContactChannel(storeChannel *TestChannel, channe
 	return
 }
 
-func (c *TestContactData) UpdateContactChannelTopics(storeChannel *TestChannel) (err error) {
+func (c *TestContactData) updateContactChannelTopics(storeChannel *testChannel) (err error) {
 	var topics []Topic
 	if storeChannel.channel.Revision == 0 {
 		token := c.card.Data.CardProfile.GUID + "." + c.card.Data.CardDetail.Token
@@ -241,7 +236,7 @@ func (c *TestContactData) UpdateContactChannelTopics(storeChannel *TestChannel) 
 		if err = TestAPIRequest(GetChannelTopics, params, response); err != nil {
 			return
 		}
-		storeChannel.topics = make(map[string]*TestTopic)
+		storeChannel.topics = make(map[string]*testTopic)
 	} else {
 		token := c.card.Data.CardProfile.GUID + "." + c.card.Data.CardDetail.Token
 		revision := strconv.FormatInt(storeChannel.channel.Revision, 10)
@@ -260,15 +255,15 @@ func (c *TestContactData) UpdateContactChannelTopics(storeChannel *TestChannel) 
 			storeTopic, set := storeChannel.topics[topic.ID]
 			if set {
 				if topic.Revision != storeTopic.topic.Revision {
-					if err = c.UpdateContactChannelTopic(storeChannel, storeTopic, &topic); err != nil {
+					if err = c.updateContactChannelTopic(storeChannel, storeTopic, &topic); err != nil {
 						return
 					}
 					storeTopic.topic.Revision = topic.Revision
 				}
 			} else {
-				storeTopic := &TestTopic{topic: Topic{ID: topic.ID, Data: &TopicData{}}}
+				storeTopic := &testTopic{topic: Topic{ID: topic.ID, Data: &TopicData{}}}
 				storeChannel.topics[topic.ID] = storeTopic
-				if err = c.UpdateContactChannelTopic(storeChannel, storeTopic, &topic); err != nil {
+				if err = c.updateContactChannelTopic(storeChannel, storeTopic, &topic); err != nil {
 					return
 				}
 				storeTopic.topic.Revision = topic.Revision
@@ -278,10 +273,10 @@ func (c *TestContactData) UpdateContactChannelTopics(storeChannel *TestChannel) 
 	return
 }
 
-func (c *TestContactData) UpdateContactChannelTopic(storeChannel *TestChannel, storeTopic *TestTopic, topic *Topic) (err error) {
+func (c *TestContactData) updateContactChannelTopic(storeChannel *testChannel, storeTopic *testTopic, topic *Topic) (err error) {
 	if storeTopic.topic.Revision != topic.Revision {
 		if storeTopic.topic.Data.TagRevision != topic.Data.TagRevision {
-			if err = c.UpdateContactChannelTopicTags(storeChannel, storeTopic); err != nil {
+			if err = c.updateContactChannelTopicTags(storeChannel, storeTopic); err != nil {
 				return
 			}
 			storeTopic.topic.Data.TagRevision = topic.Data.TagRevision
@@ -310,7 +305,7 @@ func (c *TestContactData) UpdateContactChannelTopic(storeChannel *TestChannel, s
 	return
 }
 
-func (c *TestContactData) UpdateContactChannelTopicTags(storeChannel *TestChannel, storeTopic *TestTopic) (err error) {
+func (c *TestContactData) updateContactChannelTopicTags(storeChannel *testChannel, storeTopic *testTopic) (err error) {
 	var tags []Tag
 	if storeTopic.topic.Revision == 0 {
 		token := c.card.Data.CardProfile.GUID + "." + c.card.Data.CardDetail.Token
@@ -344,7 +339,7 @@ func (c *TestContactData) UpdateContactChannelTopicTags(storeChannel *TestChanne
 	return
 }
 
-func (c *TestContactData) UpdateContactCardDetail() (err error) {
+func (c *TestContactData) updateContactCardDetail() (err error) {
 	var cardDetail CardDetail
 	params := &TestAPIParams{query: "/contact/cards/{cardID}/detail", tokenType: APPTokenAgent, token: c.token,
 		path: map[string]string{"cardID": c.card.ID}}
@@ -356,7 +351,7 @@ func (c *TestContactData) UpdateContactCardDetail() (err error) {
 	return
 }
 
-func (c *TestContactData) UpdateContactCardProfile() (err error) {
+func (c *TestContactData) updateContactCardProfile() (err error) {
 	var cardProfile CardProfile
 	params := &TestAPIParams{query: "/contact/cards/{cardID}/profile", tokenType: APPTokenAgent, token: c.token,
 		path: map[string]string{"cardID": c.card.ID}}
@@ -368,28 +363,30 @@ func (c *TestContactData) UpdateContactCardProfile() (err error) {
 	return
 }
 
+//NewTestApp allocate a new TestApp structure
 func NewTestApp() *TestApp {
 	return &TestApp{
 		groups:   make(map[string]*Group),
 		articles: make(map[string]*Article),
-		channels: make(map[string]*TestChannel),
+		channels: make(map[string]*testChannel),
 		contacts: make(map[string]*TestContactData),
 	}
 }
 
+//TestApp holds an instance of test app use case
 type TestApp struct {
 	name     string
 	revision Revision
 	profile  Profile
 	groups   map[string]*Group
 	articles map[string]*Article
-	channels map[string]*TestChannel
+	channels map[string]*testChannel
 	contacts map[string]*TestContactData
 
 	token string
 
 	mutex     sync.Mutex
-	condition *TestCondition
+	condition *testCondition
 }
 
 func (a *TestApp) updateProfile() (err error) {
@@ -481,7 +478,7 @@ func (a *TestApp) updateChannels() (err error) {
 					storeChannel.channel.Revision = channel.Revision
 				}
 			} else {
-				storeChannel := &TestChannel{channel: Channel{ID: channel.ID, Data: &ChannelData{}}}
+				storeChannel := &testChannel{channel: Channel{ID: channel.ID, Data: &ChannelData{}}}
 				a.channels[channel.ID] = storeChannel
 				if err = a.updateChannel(storeChannel, &channel); err != nil {
 					return
@@ -493,7 +490,7 @@ func (a *TestApp) updateChannels() (err error) {
 	return
 }
 
-func (a *TestApp) updateChannel(storeChannel *TestChannel, channel *Channel) (err error) {
+func (a *TestApp) updateChannel(storeChannel *testChannel, channel *Channel) (err error) {
 	if storeChannel.channel.Revision != channel.Revision {
 		if storeChannel.channel.Data.TopicRevision != channel.Data.TopicRevision {
 			if err = a.updateChannelTopics(storeChannel); err != nil {
@@ -523,7 +520,7 @@ func (a *TestApp) updateChannel(storeChannel *TestChannel, channel *Channel) (er
 	return
 }
 
-func (a *TestApp) updateChannelTopics(storeChannel *TestChannel) (err error) {
+func (a *TestApp) updateChannelTopics(storeChannel *testChannel) (err error) {
 	var topics []Topic
 	if storeChannel.channel.Revision == 0 {
 		params := &TestAPIParams{query: "/channels/{channelID}/topics",
@@ -532,7 +529,7 @@ func (a *TestApp) updateChannelTopics(storeChannel *TestChannel) (err error) {
 		if err = TestAPIRequest(GetChannelTopics, params, response); err != nil {
 			return
 		}
-		storeChannel.topics = make(map[string]*TestTopic)
+		storeChannel.topics = make(map[string]*testTopic)
 	} else {
 		revision := strconv.FormatInt(storeChannel.channel.Revision, 10)
 		params := &TestAPIParams{query: "/channels/{channelID}/topics?revision=" + revision,
@@ -556,7 +553,7 @@ func (a *TestApp) updateChannelTopics(storeChannel *TestChannel) (err error) {
 					storeTopic.topic.Revision = topic.Revision
 				}
 			} else {
-				storeTopic := &TestTopic{topic: Topic{ID: topic.ID, Data: &TopicData{}}}
+				storeTopic := &testTopic{topic: Topic{ID: topic.ID, Data: &TopicData{}}}
 				storeChannel.topics[topic.ID] = storeTopic
 				if err = a.updateChannelTopic(storeChannel, storeTopic, &topic); err != nil {
 					return
@@ -568,7 +565,7 @@ func (a *TestApp) updateChannelTopics(storeChannel *TestChannel) (err error) {
 	return
 }
 
-func (a *TestApp) updateChannelTopic(storeChannel *TestChannel, storeTopic *TestTopic, topic *Topic) (err error) {
+func (a *TestApp) updateChannelTopic(storeChannel *testChannel, storeTopic *testTopic, topic *Topic) (err error) {
 	if storeTopic.topic.Revision != topic.Revision {
 		if storeTopic.topic.Data.TagRevision != topic.Data.TagRevision {
 			if err = a.updateChannelTopicTags(storeChannel, storeTopic); err != nil {
@@ -599,7 +596,7 @@ func (a *TestApp) updateChannelTopic(storeChannel *TestChannel, storeTopic *Test
 	return
 }
 
-func (a *TestApp) updateChannelTopicTags(storeChannel *TestChannel, storeTopic *TestTopic) (err error) {
+func (a *TestApp) updateChannelTopicTags(storeChannel *testChannel, storeTopic *testTopic) (err error) {
 	var tags []Tag
 	if storeTopic.topic.Revision == 0 {
 		params := &TestAPIParams{query: "/channels/{channelID}/topics/{topicID}/tags",
@@ -644,11 +641,11 @@ func (a *TestApp) updateCards() (err error) {
 				delete(a.contacts, card.ID)
 			} else {
 				// set new card
-				contactData := &TestContactData{card: card, articles: make(map[string]*Article), channels: make(map[string]*TestChannel),
+				contactData := &TestContactData{card: card, articles: make(map[string]*Article), channels: make(map[string]*testChannel),
 					cardDetailRevision: card.Data.DetailRevision, cardProfileRevision: card.Data.ProfileRevision,
 					profileRevision: card.Data.ProfileRevision, token: a.token}
 				a.contacts[card.ID] = contactData
-				if err = contactData.UpdateContact(); err != nil {
+				if err = contactData.updateContact(); err != nil {
 					contactData.offsync = true
 					PrintMsg(err)
 				}
@@ -674,11 +671,11 @@ func (a *TestApp) updateCards() (err error) {
 					if err = TestAPIRequest(GetCard, params, response); err != nil {
 						return
 					}
-					contactData := &TestContactData{card: card, articles: make(map[string]*Article), channels: make(map[string]*TestChannel),
+					contactData := &TestContactData{card: card, articles: make(map[string]*Article), channels: make(map[string]*testChannel),
 						cardDetailRevision: card.Data.DetailRevision, cardProfileRevision: card.Data.ProfileRevision,
 						profileRevision: card.Data.ProfileRevision, token: a.token}
 					a.contacts[card.ID] = contactData
-					if err = contactData.UpdateContact(); err != nil {
+					if err = contactData.updateContact(); err != nil {
 						contactData.offsync = true
 						PrintMsg(err)
 					}
@@ -690,7 +687,7 @@ func (a *TestApp) updateCards() (err error) {
 					contactData.card.Data.NotifiedView = card.Data.NotifiedView
 					contactData.card.Data.DetailRevision = card.Data.DetailRevision
 					contactData.card.Data.ProfileRevision = card.Data.ProfileRevision
-					if err = contactData.UpdateContact(); err != nil {
+					if err = contactData.updateContact(); err != nil {
 						contactData.offsync = true
 						PrintMsg(err)
 					}
@@ -755,6 +752,7 @@ func (a *TestApp) updateApp(rev *Revision) {
 	}
 }
 
+//Connect provides a test handler for the websocket connection
 func (a *TestApp) Connect(token string) error {
 	var revision Revision
 	var data []byte
@@ -789,7 +787,7 @@ func (a *TestApp) Connect(token string) error {
 
 }
 
-func (a *TestApp) setCondition(test *TestCondition) {
+func (a *TestApp) setCondition(test *testCondition) {
 	a.mutex.Lock()
 	if test.check(a) {
 		test.channel <- true
@@ -805,10 +803,11 @@ func (a *TestApp) clearCondition() {
 	a.mutex.Unlock()
 }
 
+//WaitFor provides a helper waiting for a condition to be met
 func (a *TestApp) WaitFor(check func(*TestApp) bool) error {
 	var done = make(chan bool, 1)
 	var wake = make(chan bool, 1)
-	a.setCondition(&TestCondition{channel: done, check: check})
+	a.setCondition(&testCondition{channel: done, check: check})
 	go func() {
 		time.Sleep(testTimeout * time.Second)
 		wake <- true
@@ -825,6 +824,7 @@ func (a *TestApp) WaitFor(check func(*TestApp) bool) error {
 
 /*** endpoint test function ***/
 
+//TestAPIParams holds the config for an endpoint test
 type TestAPIParams struct {
 	restType      string
 	path          map[string]string
@@ -836,12 +836,14 @@ type TestAPIParams struct {
 	credentials   string
 }
 
+//TestAPIResponse holds the endpoint test response
 type TestAPIResponse struct {
 	code   int
 	data   interface{}
 	header map[string][]string
 }
 
+//TestAPIRequest tests and endpoint with provided params
 func TestAPIRequest(endpoint func(http.ResponseWriter, *http.Request), params *TestAPIParams, resp *TestAPIResponse) (err error) {
 
 	var r *http.Request
