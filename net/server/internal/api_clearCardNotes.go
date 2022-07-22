@@ -38,7 +38,7 @@ func ClearCardNotes(w http.ResponseWriter, r *http.Request) {
   // save and update contact revision
   err = store.DB.Transaction(func(tx *gorm.DB) error {
     slot.Card.Notes = ""
-    slot.Card.DetailRevision += 1
+    slot.Card.DetailRevision++
     if res := tx.Save(&slot.Card).Error; res != nil {
       return res
     }

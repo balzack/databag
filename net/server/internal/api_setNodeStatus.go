@@ -10,7 +10,7 @@ import (
 func SetNodeStatus(w http.ResponseWriter, r *http.Request) {
 
   var config store.Config
-  err := store.DB.Where("config_id = ?", CONFIG_CONFIGURED).First(&config).Error
+  err := store.DB.Where("config_id = ?", CNFConfigured).First(&config).Error
   if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
     w.WriteHeader(http.StatusInternalServerError)
     return
@@ -27,10 +27,10 @@ func SetNodeStatus(w http.ResponseWriter, r *http.Request) {
   }
 
   err = store.DB.Transaction(func(tx *gorm.DB) error {
-    if res := tx.Create(&store.Config{ConfigID: CONFIG_TOKEN, StrValue: token}).Error; res != nil {
+    if res := tx.Create(&store.Config{ConfigID: CNFToken, StrValue: token}).Error; res != nil {
       return res
     }
-    if res := tx.Create(&store.Config{ConfigID: CONFIG_CONFIGURED, BoolValue: true}).Error; res != nil {
+    if res := tx.Create(&store.Config{ConfigID: CNFConfigured, BoolValue: true}).Error; res != nil {
       return res
     }
     return nil;

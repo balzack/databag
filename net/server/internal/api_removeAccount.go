@@ -78,7 +78,7 @@ func RemoveAccount(w http.ResponseWriter, r *http.Request) {
   }
 
   // delete asset files
-  path := getStrConfigValue(CONFIG_ASSETPATH, APPDefaultPath) + "/" + account.GUID
+  path := getStrConfigValue(CNFAssetPath, APPDefaultPath) + "/" + account.GUID
   if err = os.RemoveAll(path); err != nil {
     ErrMsg(err)
   }

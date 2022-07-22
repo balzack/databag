@@ -37,7 +37,7 @@ func AddAccountApp(w http.ResponseWriter, r *http.Request) {
     Name: appData.Name,
     Description: appData.Description,
     Image: appData.Image,
-    Url: appData.Url,
+    URL: appData.URL,
     Token: access,
   };
 

@@ -91,7 +91,7 @@ type App struct {
   Name              string
   Description       string
   Image             string
-  Url               string
+  URL               string
   Token             string          `gorm:"not null;index:appguid,unique"`
   Created           int64           `gorm:"autoCreateTime"`
   Account           Account         `gorm:"references:GUID"`

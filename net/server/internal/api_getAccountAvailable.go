@@ -18,8 +18,8 @@ func GetAccountAvailable(w http.ResponseWriter, r *http.Request) {
 
 func getAvailableAccounts() (available int64, err error) {
 
-  open := getBoolConfigValue(CONFIG_OPENACCESS, true)
-  limit := getNumConfigValue(CONFIG_ACCOUNTLIMIT, 16)
+  open := getBoolConfigValue(CNFOpenAccess, true)
+  limit := getNumConfigValue(CNFAccountLimit, 16)
 
   var count int64
   if err = store.DB.Model(&store.Account{}).Count(&count).Error; err != nil {

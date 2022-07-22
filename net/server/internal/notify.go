@@ -31,7 +31,7 @@ func SendNotifications() {
   for {
     select {
       case notification := <-notify:
-        node := getStrConfigValue(CONFIG_DOMAIN, "")
+        node := getStrConfigValue(CNFDomain, "")
         if notification.Node == node {
           SendLocalNotification(notification)
         } else {

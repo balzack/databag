@@ -41,13 +41,13 @@ func TestMain(m *testing.M) {
   }
 
   // config data path 
-  scripts := &store.Config{ ConfigID: CONFIG_SCRIPTPATH, StrValue: "./testscripts" }
+  scripts := &store.Config{ ConfigID: CNFScriptPath, StrValue: "./testscripts" }
   if err := store.DB.Save(scripts).Error; err != nil {
     panic("failed to configure scripts path")
   }
 
   // config data path 
-  path := &store.Config{ ConfigID: CONFIG_ASSETPATH, StrValue: "./testdata" }
+  path := &store.Config{ ConfigID: CNFAssetPath, StrValue: "./testdata" }
   if err := store.DB.Save(path).Error; err != nil {
     panic("failed to configure data path")
   }

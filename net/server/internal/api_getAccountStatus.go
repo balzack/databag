@@ -21,7 +21,7 @@ func GetAccountStatus(w http.ResponseWriter, r *http.Request) {
 
   // construct response
   status := &AccountStatus{}
-  status.StorageAvailable = getNumConfigValue(CONFIG_STORAGE, 0);
+  status.StorageAvailable = getNumConfigValue(CNFStorage, 0);
   for _, asset := range assets {
     status.StorageUsed += asset.Size
   }

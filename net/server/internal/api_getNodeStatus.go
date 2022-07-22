@@ -9,7 +9,7 @@ import (
 
 func GetNodeStatus(w http.ResponseWriter, r *http.Request) {
   var config store.Config
-  err := store.DB.Where("config_id = ?", CONFIG_CONFIGURED).First(&config).Error
+  err := store.DB.Where("config_id = ?", CNFConfigured).First(&config).Error
   if err != nil {
     if errors.Is(err, gorm.ErrRecordNotFound) {
       WriteResponse(w, true)

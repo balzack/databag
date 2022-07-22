@@ -70,7 +70,7 @@ func AddChannelTopicAsset(w http.ResponseWriter, r *http.Request) {
 
   // save new file
   id := uuid.New().String()
-  path := getStrConfigValue(CONFIG_ASSETPATH, APPDefaultPath) + "/" + channelSlot.Account.GUID + "/" + id
+  path := getStrConfigValue(CNFAssetPath, APPDefaultPath) + "/" + channelSlot.Account.GUID + "/" + id
   if err := r.ParseMultipartForm(32 << 20); err != nil {
     ErrResponse(w, http.StatusBadRequest, err)
     return
@@ -172,7 +172,7 @@ func AddChannelTopicAsset(w http.ResponseWriter, r *http.Request) {
 
 func isStorageFull(act *store.Account) (full bool, err error) {
 
-  storage := getNumConfigValue(CONFIG_STORAGE, 0);
+  storage := getNumConfigValue(CNFStorage, 0);
   if storage == 0 {
     return
   }

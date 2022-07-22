@@ -78,12 +78,12 @@ func ParamAdminToken(r *http.Request) (int, error) {
   }
 
   // nothing to do if not configured
-  if !getBoolConfigValue(CONFIG_CONFIGURED, false) {
+  if !getBoolConfigValue(CNFConfigured, false) {
     return http.StatusUnauthorized, errors.New("node not configured")
   }
 
   // compare password
-  value := getStrConfigValue(CONFIG_TOKEN, "");
+  value := getStrConfigValue(CNFToken, "");
   if (value != token) {
     return http.StatusUnauthorized, errors.New("invalid admin token")
   }

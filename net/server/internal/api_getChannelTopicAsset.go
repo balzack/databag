@@ -42,7 +42,7 @@ func GetChannelTopicAsset(w http.ResponseWriter, r *http.Request) {
   }
 
   // construct file path
-  path := getStrConfigValue(CONFIG_ASSETPATH, APPDefaultPath) + "/" + act.GUID + "/" + asset.AssetID
+  path := getStrConfigValue(CNFAssetPath, APPDefaultPath) + "/" + act.GUID + "/" + asset.AssetID
   http.ServeFile(w, r, path)
 }
 

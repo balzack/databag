@@ -14,10 +14,10 @@ func GetNodeConfig(w http.ResponseWriter, r *http.Request) {
 
   // get node config fields
   var config NodeConfig;
-  config.Domain = getStrConfigValue(CONFIG_DOMAIN, "");
-  config.AccountLimit = getNumConfigValue(CONFIG_ACCOUNTLIMIT, 16);
-  config.OpenAccess = getBoolConfigValue(CONFIG_OPENACCESS, true);
-  config.AccountStorage = getNumConfigValue(CONFIG_STORAGE, 0);
+  config.Domain = getStrConfigValue(CNFDomain, "");
+  config.AccountLimit = getNumConfigValue(CNFAccountLimit, 16);
+  config.OpenAccess = getBoolConfigValue(CNFOpenAccess, true);
+  config.AccountStorage = getNumConfigValue(CNFStorage, 0);
 
   WriteResponse(w, config);
 }

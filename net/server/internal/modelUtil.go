@@ -15,7 +15,7 @@ func getProfileModel(account *store.Account) *Profile {
     Image: account.AccountDetail.Image,
     Revision: account.ProfileRevision,
     Version: APPVersion,
-    Node: getStrConfigValue(CONFIG_DOMAIN, ""),
+    Node: getStrConfigValue(CNFDomain, ""),
   }
 }
 

@@ -6,14 +6,14 @@ import (
     "databag/internal/store"
   )
 
-const CONFIG_OPENACCESS = "open_access"
-const CONFIG_ACCOUNTLIMIT = "account_limit"
-const CONFIG_CONFIGURED = "configured"
-const CONFIG_TOKEN = "token"
-const CONFIG_DOMAIN = "domain"
-const CONFIG_STORAGE = "storage"
-const CONFIG_ASSETPATH = "asset_path"
-const CONFIG_SCRIPTPATH = "script_path"
+const CNFOpenAccess = "open_access"
+const CNFAccountLimit = "account_limit"
+const CNFConfigured = "configured"
+const CNFToken = "token"
+const CNFDomain = "domain"
+const CNFStorage = "storage"
+const CNFAssetPath = "asset_path"
+const CNFScriptPath = "script_path"
 
 func getStrConfigValue(configID string, empty string) string {
   var config store.Config

@@ -612,7 +612,7 @@ func AddTestAccount(username string) (guid string, token string, err error) {
   app := AppData{
     Name: "Appy",
     Description: "A test app",
-    Url: "http://app.coredb.org",
+    URL: "http://app.coredb.org",
   };
   var claim Claim
   var msg DataMessage

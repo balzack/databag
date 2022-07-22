@@ -88,8 +88,8 @@ func transcodeDefault() {
 func transcodeAsset(asset *store.Asset) {
 
   // prepare script path
-  data := getStrConfigValue(CONFIG_ASSETPATH, APPDefaultPath)
-  script := getStrConfigValue(CONFIG_SCRIPTPATH, ".")
+  data := getStrConfigValue(CNFAssetPath, APPDefaultPath)
+  script := getStrConfigValue(CNFScriptPath, ".")
   re := regexp.MustCompile("^[a-zA-Z0-9_]*$")
 
   if !re.MatchString(asset.Transform) {

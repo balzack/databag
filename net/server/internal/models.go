@@ -52,7 +52,7 @@ type AppData struct {
 
 	Description string `json:"description,omitempty"`
 
-	Url string `json:"url,omitempty"`
+	URL string `json:"url,omitempty"`
 
 	Image string `json:"image,omitempty"`
 

@@ -72,7 +72,7 @@ func AddAccount(w http.ResponseWriter, r *http.Request) {
   fingerprint := hex.EncodeToString(hash[:])
 
   // create path for account data
-  path := getStrConfigValue(CONFIG_ASSETPATH, APPDefaultPath) + "/" + fingerprint
+  path := getStrConfigValue(CNFAssetPath, APPDefaultPath) + "/" + fingerprint
   if err := os.Mkdir(path, os.ModePerm); err != nil {
     ErrResponse(w, http.StatusInternalServerError, err)
   }
@@ -121,7 +121,7 @@ func AddAccount(w http.ResponseWriter, r *http.Request) {
     Image: detail.Image,
     Revision: account.ProfileRevision,
     Version: APPVersion,
-    Node: getStrConfigValue(CONFIG_DOMAIN, ""),
+    Node: getStrConfigValue(CNFDomain, ""),
   }
 
   // send response

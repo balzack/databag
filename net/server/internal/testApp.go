@@ -13,7 +13,7 @@ import (
   "github.com/gorilla/mux"
 )
 
-const TEST_TIMEOUT = 5
+const testTimeout = 5
 
 type TestCondition struct {
   check func(*TestApp) bool
@@ -810,7 +810,7 @@ func (a *TestApp) WaitFor(check func(*TestApp) bool) error {
   var wake = make(chan bool, 1)
   a.setCondition(&TestCondition{channel: done, check: check, })
   go func(){
-    time.Sleep(TEST_TIMEOUT * time.Second)
+    time.Sleep(testTimeout * time.Second)
     wake <- true
   }()
   select {
