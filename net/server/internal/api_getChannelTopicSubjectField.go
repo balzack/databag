@@ -35,6 +35,7 @@ func GetChannelTopicSubjectField(w http.ResponseWriter, r *http.Request) {
 		} else {
 			code = http.StatusInternalServerError
 		}
+		ErrResponse(w, code, err)
 		return
 	}
 	if topicSlot.Topic == nil {

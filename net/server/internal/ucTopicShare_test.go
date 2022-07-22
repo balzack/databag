@@ -15,7 +15,7 @@ func TestTopicShare(t *testing.T) {
 	var detail *ChannelDetail
 	var subject *Subject
 	params := make(map[string]string)
-	header := make(map[string][]string)
+	var header map[string][]string
 	var err error
 	var data []byte
 	var aRev *Revision

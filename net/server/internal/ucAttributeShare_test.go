@@ -38,8 +38,6 @@ func TestAttributeShare(t *testing.T) {
 	bRev = GetTestRevision(set.B.Revisions)
 	assert.NoError(t, APITestMsg(GetCard, "GET", "/contact/cards/{cardID}",
 		&param, nil, APPTokenAgent, set.B.Token, card, nil))
-	bViewRevision = card.Data.NotifiedView
-	bArticleRevision = card.Data.NotifiedArticle
 	card = &Card{}
 	param["cardID"] = set.C.A.CardID
 	cRev = GetTestRevision(set.C.Revisions)
@@ -269,7 +267,7 @@ func TestAttributeShare(t *testing.T) {
 		nil, nil, APPTokenContact, set.B.A.Token, articles, &hdr))
 	assert.Equal(t, 1, len(*articles))
 	assert.NotNil(t, (*articles)[0].Data)
-	bArticleRevision, _ = strconv.ParseInt(hdr["Article-Revision"][0], 10, 64)
+	strconv.ParseInt(hdr["Article-Revision"][0], 10, 64)
 	bViewRevision, _ = strconv.ParseInt(hdr["View-Revision"][0], 10, 64)
 
 	// delete B's group

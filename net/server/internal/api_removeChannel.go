@@ -36,6 +36,7 @@ func RemoveChannel(w http.ResponseWriter, r *http.Request) {
 	} else {
 		err = errors.New("unknown token type")
 		code = http.StatusBadRequest
+		ErrResponse(w, code, err)
 		return
 	}
 

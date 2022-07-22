@@ -104,6 +104,9 @@ func WriteDataMessage(privateKey string, publicKey string, keyType string,
 	signedData.MessageType = messageType
 	signedData.Value = string(data)
 	data, err = json.Marshal(&signedData)
+  if err != nil {
+    return nil, errors.New("marshall failed");
+  }
 	message := base64.StdEncoding.EncodeToString(data)
 
 	if keyType != APPRSA2048 && keyType != APPRSA4096 {
@@ -126,6 +129,9 @@ func WriteDataMessage(privateKey string, publicKey string, keyType string,
 	} else {
 		return nil, errors.New("unsupported signature type")
 	}
+  if err != nil {
+    return nil, errors.New("rsa sign failed");
+  }
 	signature := base64.StdEncoding.EncodeToString(data)
 
 	dataMessage := DataMessage{
