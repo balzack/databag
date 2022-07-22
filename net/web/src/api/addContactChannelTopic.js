@@ -2,7 +2,7 @@ import { checkResponse, fetchWithTimeout } from './fetchUtil';
 
 export async function addContactChannelTopic(server, token, channelId, message, assets ) {
 
-  if (message == null || (assets == null || assets.length == 0)) {
+  if (message == null && (assets == null || assets.length == 0)) {
     let topic = await fetchWithTimeout(`https://${server}/content/channels/${channelId}/topics?contact=${token}`,
       { method: 'POST', body: JSON.stringify({}) });
     checkResponse(topic);
