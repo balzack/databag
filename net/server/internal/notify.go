@@ -151,7 +151,7 @@ func SetProfileNotification(account *store.Account) {
 }
 
 // notify single card of article change:
-// for each card of groups in updated artcile data
+// for each card of groups in updated article data
 // for each card of group set or cleared from article (does not update data)
 func SetContactArticleNotification(account *store.Account, card *store.Card) {
 

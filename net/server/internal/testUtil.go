@@ -412,7 +412,7 @@ func monitorStatus(ws *websocket.Conn, contact *testContact) {
 	// read revision update
 	for {
 		if dataType, data, err = ws.ReadMessage(); err != nil {
-			LogMsg("failed to read status conenction")
+			LogMsg("failed to read status connection")
 			return
 		}
 		if dataType != websocket.TextMessage {

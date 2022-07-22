@@ -3,6 +3,7 @@ module databag
 go 1.17
 
 require (
+	github.com/client9/misspell v0.3.4 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/felixge/httpsnoop v1.0.1 // indirect
 	github.com/google/uuid v1.3.0 // indirect

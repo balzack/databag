@@ -775,7 +775,7 @@ func (a *TestApp) Connect(token string) error {
 	// read revision update
 	for {
 		if dataType, data, err = ws.ReadMessage(); err != nil {
-			return errors.New("failed to read status conenction")
+			return errors.New("failed to read status connection")
 		}
 		if dataType != websocket.TextMessage {
 			return errors.New("invalid status data type")
