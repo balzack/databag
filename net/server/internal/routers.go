@@ -1,28 +1,27 @@
 package databag
 
 import (
-	"fmt"
 	"net/http"
 	"strings"
-
 	"github.com/gorilla/mux"
 )
 
-type Route struct {
+type route struct {
 	Name        string
 	Method      string
 	Pattern     string
 	HandlerFunc http.HandlerFunc
 }
 
-type Routes []Route
+type routes []route
 
+//NewRouter allocate router for databag API
 func NewRouter() *mux.Router {
 
 	go SendNotifications()
 
 	router := mux.NewRouter().StrictSlash(true)
-	for _, route := range routes {
+	for _, route := range endpoints {
 		var handler http.Handler
 		handler = route.HandlerFunc
 		handler = Logger(handler, route.Name)
@@ -40,699 +39,695 @@ func NewRouter() *mux.Router {
 	return router
 }
 
-func Index(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hello World!")
-}
+var endpoints = routes{
 
-var routes = Routes{
-
-	Route{
+	route{
 		"AddAccount",
 		strings.ToUpper("Post"),
 		"/account/profile",
 		AddAccount,
 	},
 
-	Route{
+	route{
 		"AddAccountApp",
 		strings.ToUpper("Post"),
 		"/account/apps",
 		AddAccountApp,
 	},
 
-	Route{
+	route{
 		"AddAccountAuthentication",
 		strings.ToUpper("Post"),
 		"/account/auth",
 		AddAccountAuthentication,
 	},
 
-	Route{
+	route{
 		"GetAccountApps",
 		strings.ToUpper("Get"),
 		"/account/apps",
 		GetAccountApps,
 	},
 
-	Route{
+	route{
 		"GetAccountAsset",
 		strings.ToUpper("Get"),
 		"/account/assets/{assetID}",
 		GetAccountAsset,
 	},
 
-	Route{
+	route{
 		"GetAccountListing",
 		strings.ToUpper("Get"),
 		"/account/listing",
 		GetAccountListing,
 	},
 
-	Route{
+	route{
 		"GetAccountListingImage",
 		strings.ToUpper("Get"),
 		"/account/listing/{guid}/image",
 		GetAccountListingImage,
 	},
 
-	Route{
+	route{
 		"GetAccountListingMessage",
 		strings.ToUpper("Get"),
 		"/account/listing/{guid}/message",
 		GetAccountListingMessage,
 	},
 
-	Route{
+	route{
 		"GetAccountStatus",
 		strings.ToUpper("Get"),
 		"/account/status",
 		GetAccountStatus,
 	},
 
-	Route{
+	route{
 		"GetAccountToken",
 		strings.ToUpper("Get"),
 		"/account/token",
 		GetAccountToken,
 	},
 
-	Route{
+	route{
 		"GetAccountAvailable",
 		strings.ToUpper("Get"),
 		"/account/available",
 		GetAccountAvailable,
 	},
 
-	Route{
+	route{
 		"GetAccountUsername",
 		strings.ToUpper("Get"),
 		"/account/username",
 		GetAccountUsername,
 	},
 
-	Route{
+	route{
 		"RemoveAccount",
 		strings.ToUpper("Delete"),
 		"/account/profile",
 		RemoveAccount,
 	},
 
-	Route{
+	route{
 		"RemoveAccountApp",
 		strings.ToUpper("Delete"),
 		"/account/apps/{appID}",
 		RemoveAccountApp,
 	},
 
-	Route{
+	route{
 		"SetAccountAccess",
 		strings.ToUpper("Put"),
 		"/account/access",
 		SetAccountAccess,
 	},
 
-	Route{
+	route{
 		"SetAccountAuthentication",
 		strings.ToUpper("Put"),
 		"/account/auth",
 		SetAccountAuthentication,
 	},
 
-	Route{
+	route{
 		"SetAccountExport",
 		strings.ToUpper("Put"),
 		"/account/export",
 		SetAccountExport,
 	},
 
-	Route{
+	route{
 		"SetAccountNode",
 		strings.ToUpper("Put"),
 		"/account/node",
 		SetAccountNode,
 	},
 
-	Route{
+	route{
 		"SetAccountLogin",
 		strings.ToUpper("Put"),
 		"/account/login",
 		SetAccountLogin,
 	},
 
-	Route{
+	route{
 		"SetAccountSerchable",
 		strings.ToUpper("Put"),
 		"/account/searchable",
 		SetAccountSearchable,
 	},
 
-	Route{
+	route{
 		"AddNodeAccount",
 		strings.ToUpper("Post"),
 		"/admin/accounts",
 		AddNodeAccount,
 	},
 
-	Route{
+	route{
 		"GetNodeAccountImage",
 		strings.ToUpper("Get"),
 		"/admin/accounts/{accountID}/image",
 		GetNodeAccountImage,
 	},
 
-	Route{
+	route{
 		"SetNodeAccountStatus",
 		strings.ToUpper("Put"),
 		"/admin/accounts/{accountID}/status",
 		SetNodeAccountStatus,
 	},
 
-	Route{
+	route{
 		"AddNodeAccountAccess",
 		strings.ToUpper("Post"),
 		"/admin/accounts/{accountID}/auth",
 		AddNodeAccountAccess,
 	},
 
-	Route{
+	route{
 		"GetNodeAccounts",
 		strings.ToUpper("Get"),
 		"/admin/accounts",
 		GetNodeAccounts,
 	},
 
-	Route{
+	route{
 		"GetNodeConfig",
 		strings.ToUpper("Get"),
 		"/admin/config",
 		GetNodeConfig,
 	},
 
-	Route{
+	route{
 		"GetNodeStatus",
 		strings.ToUpper("Get"),
 		"/admin/status",
 		GetNodeStatus,
 	},
 
-	Route{
+	route{
 		"ImportAccount",
 		strings.ToUpper("Post"),
 		"/admin/accounts/import",
 		ImportAccount,
 	},
 
-	Route{
+	route{
 		"RemoveNodeAccount",
 		strings.ToUpper("Delete"),
 		"/admin/accounts/{accountID}",
 		RemoveNodeAccount,
 	},
 
-	Route{
+	route{
 		"SetNodeAccount",
 		strings.ToUpper("Put"),
 		"/admin/accounts/{accountID}/reset",
 		SetNodeAccount,
 	},
 
-	Route{
+	route{
 		"SetNodeConfig",
 		strings.ToUpper("Put"),
 		"/admin/config",
 		SetNodeConfig,
 	},
 
-	Route{
+	route{
 		"SetNodeStatus",
 		strings.ToUpper("Put"),
 		"/admin/status",
 		SetNodeStatus,
 	},
 
-	Route{
+	route{
 		"AddGroup",
 		strings.ToUpper("Post"),
 		"/alias/groups",
 		AddGroup,
 	},
 
-	Route{
+	route{
 		"GetGroupSubjectField",
 		strings.ToUpper("Get"),
 		"/alias/groups/{groupID}/subject/{field}",
 		GetGroupSubjectField,
 	},
 
-	Route{
+	route{
 		"GetGroups",
 		strings.ToUpper("Get"),
 		"/alias/groups",
 		GetGroups,
 	},
 
-	Route{
+	route{
 		"RemoveGroup",
 		strings.ToUpper("Delete"),
 		"/alias/groups/{groupID}",
 		RemoveGroup,
 	},
 
-	Route{
+	route{
 		"SetGroupSubject",
 		strings.ToUpper("Put"),
 		"/alias/groups/{groupID}/subject",
 		SetGroupSubject,
 	},
 
-	Route{
+	route{
 		"AddArticle",
 		strings.ToUpper("Post"),
 		"/attribute/articles",
 		AddArticle,
 	},
 
-	Route{
+	route{
 		"ClearArticleGroup",
 		strings.ToUpper("Delete"),
 		"/attribute/articles/{articleID}/groups/{groupID}",
 		ClearArticleGroup,
 	},
 
-	Route{
+	route{
 		"GetArticleSubjectField",
 		strings.ToUpper("Get"),
 		"/attribute/articles/{articleID}/subject/{field}",
 		GetArticleSubjectField,
 	},
 
-	Route{
+	route{
 		"GetArticles",
 		strings.ToUpper("Get"),
 		"/attribute/articles",
 		GetArticles,
 	},
 
-	Route{
+	route{
 		"RemoveArticle",
 		strings.ToUpper("Delete"),
 		"/attribute/articles/{articleID}",
 		RemoveArticle,
 	},
 
-	Route{
+	route{
 		"SetArticleGroup",
 		strings.ToUpper("Put"),
 		"/attribute/articles/{articleID}/groups/{groupID}",
 		SetArticleGroup,
 	},
 
-	Route{
+	route{
 		"SetArticleSubject",
 		strings.ToUpper("Put"),
 		"/attribute/articles/{articleID}/subject",
 		SetArticleSubject,
 	},
 
-	Route{
+	route{
 		"Authorize",
 		strings.ToUpper("Put"),
 		"/authorize",
 		Authorize,
 	},
 
-	Route{
+	route{
 		"AddCard",
 		strings.ToUpper("Post"),
 		"/contact/cards",
 		AddCard,
 	},
 
-	Route{
+	route{
 		"ClearCardGroup",
 		strings.ToUpper("Delete"),
 		"/contact/cards/{cardID}/groups/{groupID}",
 		ClearCardGroup,
 	},
 
-	Route{
+	route{
 		"ClearCardNotes",
 		strings.ToUpper("Delete"),
 		"/contact/cards/{cardID}/notes",
 		ClearCardNotes,
 	},
 
-	Route{
+	route{
 		"GetCardDetail",
 		strings.ToUpper("Get"),
 		"/contact/cards/{cardID}/detail",
 		GetCardDetail,
 	},
 
-	Route{
+	route{
 		"GetCardProfile",
 		strings.ToUpper("Get"),
 		"/contact/cards/{cardID}/profile",
 		GetCardProfile,
 	},
 
-	Route{
+	route{
 		"GetCardProfileImage",
 		strings.ToUpper("Get"),
 		"/contact/cards/{cardID}/profile/image",
 		GetCardProfileImage,
 	},
 
-	Route{
+	route{
 		"GetCards",
 		strings.ToUpper("Get"),
 		"/contact/cards",
 		GetCards,
 	},
 
-	Route{
+	route{
 		"GetCloseMessage",
 		strings.ToUpper("Get"),
 		"/contact/cards/{cardID}/closeMessage",
 		GetCloseMessage,
 	},
 
-	Route{
+	route{
 		"GetOpenMessage",
 		strings.ToUpper("Get"),
 		"/contact/cards/{cardID}/openMessage",
 		GetOpenMessage,
 	},
 
-	Route{
+	route{
 		"RemoveCard",
 		strings.ToUpper("Delete"),
 		"/contact/cards/{cardID}",
 		RemoveCard,
 	},
 
-	Route{
+	route{
 		"SetArticleRevision",
 		strings.ToUpper("Put"),
 		"/contact/article/revision",
 		SetArticleRevision,
 	},
 
-	Route{
+	route{
 		"SetCardGroup",
 		strings.ToUpper("Put"),
 		"/contact/cards/{cardID}/groups/{groupID}",
 		SetCardGroup,
 	},
 
-	Route{
+	route{
 		"SetCardNotes",
 		strings.ToUpper("Put"),
 		"/contact/cards/{cardID}/notes",
 		SetCardNotes,
 	},
 
-	Route{
+	route{
 		"SetCardProfile",
 		strings.ToUpper("Put"),
 		"/contact/cards/{cardID}/profile",
 		SetCardProfile,
 	},
 
-	Route{
+	route{
 		"SetCardStatus",
 		strings.ToUpper("Put"),
 		"/contact/cards/{cardID}/status",
 		SetCardStatus,
 	},
 
-	Route{
+	route{
 		"SetChannelRevision",
 		strings.ToUpper("Put"),
 		"/contact/channel/revision",
 		SetChannelRevision,
 	},
 
-	Route{
+	route{
 		"SetCloseMessage",
 		strings.ToUpper("Put"),
 		"/contact/closeMessage",
 		SetCloseMessage,
 	},
 
-	Route{
+	route{
 		"SetOpenMessage",
 		strings.ToUpper("Put"),
 		"/contact/openMessage",
 		SetOpenMessage,
 	},
 
-	Route{
+	route{
 		"SetProfileRevision",
 		strings.ToUpper("Put"),
 		"/contact/profile/revision",
 		SetProfileRevision,
 	},
 
-	Route{
+	route{
 		"SetViewRevision",
 		strings.ToUpper("Put"),
 		"/contact/view/revision",
 		SetViewRevision,
 	},
 
-	Route{
+	route{
 		"AddChannel",
 		strings.ToUpper("Post"),
 		"/content/channels",
 		AddChannel,
 	},
 
-	Route{
+	route{
 		"AddChannelTopicAsset",
 		strings.ToUpper("Post"),
 		"/content/channels/{channelID}/topics/{topicID}/assets",
 		AddChannelTopicAsset,
 	},
 
-	Route{
+	route{
 		"AddChannelTopic",
 		strings.ToUpper("Post"),
 		"/content/channels/{channelID}/topics",
 		AddChannelTopic,
 	},
 
-	Route{
+	route{
 		"AddChannelTopicTag",
 		strings.ToUpper("Post"),
 		"/content/channels/{channelID}/topics/{topicID}/tags",
 		AddChannelTopicTag,
 	},
 
-	Route{
+	route{
 		"ClearChannelCard",
 		strings.ToUpper("Delete"),
 		"/content/channels/{channelID}/cards/{cardID}",
 		ClearChannelCard,
 	},
 
-	Route{
+	route{
 		"ClearChannelGroup",
 		strings.ToUpper("Delete"),
 		"/content/channels/{channelID}/groups/{groupID}",
 		ClearChannelGroup,
 	},
 
-	Route{
+	route{
 		"GetChannelTopicAsset",
 		strings.ToUpper("Get"),
 		"/content/channels/{channelID}/topics/{topicID}/assets/{assetID}",
 		GetChannelTopicAsset,
 	},
 
-	Route{
+	route{
 		"GetChannelTopicAssets",
 		strings.ToUpper("Get"),
 		"/content/channels/{channelID}/topics/{topicID}/assets",
 		GetChannelTopicAssets,
 	},
 
-	Route{
+	route{
 		"GetChannelDetail",
 		strings.ToUpper("Get"),
 		"/content/channels/{channelID}/detail",
 		GetChannelDetail,
 	},
 
-	Route{
+	route{
 		"GetChannelSummary",
 		strings.ToUpper("Get"),
 		"/content/channels/{channelID}/summary",
 		GetChannelSummary,
 	},
 
-	Route{
+	route{
 		"GetChannelSubjectField",
 		strings.ToUpper("Get"),
 		"/content/channels/{channelID}/subject/{field}",
 		GetChannelSubjectField,
 	},
 
-	Route{
+	route{
 		"GetChannelTopic",
 		strings.ToUpper("Get"),
 		"/content/channels/{channelID}/topics/{topicID}/detail",
 		GetChannelTopic,
 	},
 
-	Route{
+	route{
 		"GetChannelTopicDetail",
 		strings.ToUpper("Get"),
 		"/content/channels/{channelID}/topics/{topicID}/detail",
 		GetChannelTopicDetail,
 	},
 
-	Route{
+	route{
 		"GetChannelTopicSubjectField",
 		strings.ToUpper("Get"),
 		"/content/channels/{channelID}/topics/{topicID}/subject/{field}",
 		GetChannelTopicSubjectField,
 	},
 
-	Route{
+	route{
 		"GetChannelTopicTagSubjectField",
 		strings.ToUpper("Get"),
 		"/content/channels/{channelID}/topics/{topicID}/tags/{tagID}/subject/{field}",
 		GetChannelTopicTagSubjectField,
 	},
 
-	Route{
+	route{
 		"GetChannelTopicTags",
 		strings.ToUpper("Get"),
 		"/content/channels/{channelID}/topics/{topicID}/tags",
 		GetChannelTopicTags,
 	},
 
-	Route{
+	route{
 		"GetChannelTopics",
 		strings.ToUpper("Get"),
 		"/content/channels/{channelID}/topics",
 		GetChannelTopics,
 	},
 
-	Route{
+	route{
 		"GetChannels",
 		strings.ToUpper("Get"),
 		"/content/channels",
 		GetChannels,
 	},
 
-	Route{
+	route{
 		"RemoveChannel",
 		strings.ToUpper("Delete"),
 		"/content/channels/{channelID}",
 		RemoveChannel,
 	},
 
-	Route{
+	route{
 		"RemoveChannelTopicAsset",
 		strings.ToUpper("Delete"),
 		"/content/channels/{channelID}/topics/{topicID}/assets/{assetID}",
 		RemoveChannelTopicAsset,
 	},
 
-	Route{
+	route{
 		"RemoveChannelTopic",
 		strings.ToUpper("Delete"),
 		"/content/channels/{channelID}/topics/{topicID}",
 		RemoveChannelTopic,
 	},
 
-	Route{
+	route{
 		"RemoveChannelTopicTag",
 		strings.ToUpper("Delete"),
 		"/content/channels/{channelID}/topics/{topicID}/tags/{tagID}",
 		RemoveChannelTopicTag,
 	},
 
-	Route{
+	route{
 		"SetChannelCard",
 		strings.ToUpper("Put"),
 		"/content/channels/{channelID}/cards/{cardID}",
 		SetChannelCard,
 	},
 
-	Route{
+	route{
 		"SetChannelTopicConfirmed",
 		strings.ToUpper("Put"),
 		"/content/channels/{channelID}/topics/{topicID}/confirmed",
 		SetChannelTopicConfirmed,
 	},
 
-	Route{
+	route{
 		"SetChannelGroup",
 		strings.ToUpper("Put"),
 		"/content/channels/{channelID}/groups/{groupID}",
 		SetChannelGroup,
 	},
 
-	Route{
+	route{
 		"SetChannelSubject",
 		strings.ToUpper("Put"),
 		"/content/channels/{channelID}/subject",
 		SetChannelSubject,
 	},
 
-	Route{
+	route{
 		"SetChannelTopicSubject",
 		strings.ToUpper("Put"),
 		"/content/channels/{channelID}/topics/{topicID}/subject",
 		SetChannelTopicSubject,
 	},
 
-	Route{
+	route{
 		"SetChannelTopicTagSubject",
 		strings.ToUpper("Put"),
 		"/content/channels/{channelID}/topics/{topicID}/tags/{tagID}/subject",
 		SetChannelTopicTagSubject,
 	},
 
-	Route{
+	route{
 		"GetProfile",
 		strings.ToUpper("Get"),
 		"/profile",
 		GetProfile,
 	},
 
-	Route{
+	route{
 		"GetProfileImage",
 		strings.ToUpper("Get"),
 		"/profile/image",
 		GetProfileImage,
 	},
 
-	Route{
+	route{
 		"GetProfileMessage",
 		strings.ToUpper("Get"),
 		"/profile/message",
 		GetProfileMessage,
 	},
 
-	Route{
+	route{
 		"SetProfile",
 		strings.ToUpper("Put"),
 		"/profile/data",
 		SetProfile,
 	},
 
-	Route{
+	route{
 		"SetProfileImage",
 		strings.ToUpper("Put"),
 		"/profile/image",
 		SetProfileImage,
 	},
 
-	Route{
+	route{
 		"Status",
 		strings.ToUpper("Get"),
 		"/status",

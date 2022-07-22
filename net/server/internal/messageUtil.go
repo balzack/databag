@@ -12,6 +12,7 @@ import (
 	"time"
 )
 
+//ReadDataMessage is a helper function to read signed protocol messages
 func ReadDataMessage(msg *DataMessage, obj interface{}) (string, string, int64, error) {
 
 	var data []byte
@@ -85,6 +86,7 @@ func ReadDataMessage(msg *DataMessage, obj interface{}) (string, string, int64, 
 	return guid, signedData.MessageType, signedData.Timestamp, nil
 }
 
+//WriteDataMessage is a helper function to write signed protocol messages
 func WriteDataMessage(privateKey string, publicKey string, keyType string,
 	signType string, guid string, messageType string, obj interface{}) (*DataMessage, error) {
 

@@ -12,10 +12,12 @@ import (
 var notify = make(chan *store.Notification, APPNotifyBuffer)
 var notifyExit = make(chan bool)
 
+//ExitNotifications stop forwarding notifications
 func ExitNotifications() {
 	notifyExit <- true
 }
 
+//SendNotifications forward notifcations to contacts
 func SendNotifications() {
 
 	// queue all saved notifications
@@ -33,9 +35,9 @@ func SendNotifications() {
 		case notification := <-notify:
 			node := getStrConfigValue(CNFDomain, "")
 			if notification.Node == node {
-				SendLocalNotification(notification)
+				sendLocalNotification(notification)
 			} else {
-				SendRemoteNotification(notification)
+				sendRemoteNotification(notification)
 			}
 			if err := store.DB.Delete(&notification).Error; err != nil {
 				ErrMsg(err)
@@ -46,7 +48,7 @@ func SendNotifications() {
 	}
 }
 
-func SendLocalNotification(notification *store.Notification) {
+func sendLocalNotification(notification *store.Notification) {
 
 	// pull reference account
 	var card store.Card
@@ -80,7 +82,7 @@ func SendLocalNotification(notification *store.Notification) {
 	}
 }
 
-func SendRemoteNotification(notification *store.Notification) {
+func sendRemoteNotification(notification *store.Notification) {
 
 	var module string
 	if notification.Module == APPNotifyProfile {
@@ -118,7 +120,7 @@ func SendRemoteNotification(notification *store.Notification) {
 	}
 }
 
-// notify all cards of profile change
+//SetProfileNotification notifies all connected contacts of profile changes
 func SetProfileNotification(account *store.Account) {
 
 	// select all connected cards
@@ -150,6 +152,7 @@ func SetProfileNotification(account *store.Account) {
 	}
 }
 
+//SetContactArticleNotification notifies all connected contacts of article changes
 // notify single card of article change:
 // for each card of groups in updated article data
 // for each card of group set or cleared from article (does not update data)
@@ -175,6 +178,7 @@ func SetContactArticleNotification(account *store.Account, card *store.Card) {
 	}
 }
 
+//SetContactViewNotification notifies all connected contacts of view change
 // notify single card of view change:
 // card set or cleared from a group
 // for each card in deleted group
@@ -200,6 +204,7 @@ func SetContactViewNotification(account *store.Account, card *store.Card) {
 	}
 }
 
+//SetContactChannelNotification notifies all connected contacts of channel changes
 // notify single card of channel change:
 // for each card in updated channel data
 func SetContactChannelNotification(account *store.Account, card *store.Card) {
