@@ -51,14 +51,14 @@ func (c *TestContactData) updateContact() (err error) {
 		if err = c.updateContactCardDetail(); err != nil {
 			return
 		}
-    c.cardDetailRevision = c.card.Data.DetailRevision
+		c.cardDetailRevision = c.card.Data.DetailRevision
 	}
 
 	if c.cardProfileRevision != c.card.Data.ProfileRevision {
 		if err = c.updateContactCardProfile(); err != nil {
 			return
 		}
-    c.cardProfileRevision = c.card.Data.ProfileRevision
+		c.cardProfileRevision = c.card.Data.ProfileRevision
 	}
 
 	// sync rest only if connected
@@ -70,7 +70,7 @@ func (c *TestContactData) updateContact() (err error) {
 		if err = c.updateContactProfile(); err != nil {
 			return
 		}
-    c.profileRevision = c.card.Data.NotifiedProfile
+		c.profileRevision = c.card.Data.NotifiedProfile
 	}
 
 	if c.viewRevision != c.card.Data.NotifiedView {
@@ -79,23 +79,23 @@ func (c *TestContactData) updateContact() (err error) {
 		} else if err = c.updateContactChannels(); err != nil {
 			return
 		}
-    c.articleRevision = c.card.Data.NotifiedArticle
-    c.channelRevision = c.card.Data.NotifiedChannel
-    c.viewRevision = c.card.Data.NotifiedView
+		c.articleRevision = c.card.Data.NotifiedArticle
+		c.channelRevision = c.card.Data.NotifiedChannel
+		c.viewRevision = c.card.Data.NotifiedView
 	}
 
 	if c.articleRevision != c.card.Data.NotifiedArticle {
 		if err = c.updateContactArticle(); err != nil {
 			return
 		}
-    c.articleRevision = c.card.Data.NotifiedArticle
+		c.articleRevision = c.card.Data.NotifiedArticle
 	}
 
 	if c.channelRevision != c.card.Data.NotifiedChannel {
 		if err = c.updateContactChannels(); err != nil {
 			return
 		}
-    c.channelRevision = c.card.Data.NotifiedChannel
+		c.channelRevision = c.card.Data.NotifiedChannel
 	}
 
 	return

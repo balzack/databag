@@ -129,10 +129,10 @@ func AddCard(w http.ResponseWriter, r *http.Request) {
 			return nil
 		})
 
-    if err != nil {
-      ErrResponse(w, http.StatusInternalServerError, err)
-      return
-    }
+		if err != nil {
+			ErrResponse(w, http.StatusInternalServerError, err)
+			return
+		}
 	}
 
 	SetStatus(account)

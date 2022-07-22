@@ -1,9 +1,9 @@
 package databag
 
 import (
+	"github.com/gorilla/mux"
 	"net/http"
 	"strings"
-	"github.com/gorilla/mux"
 )
 
 type route struct {
