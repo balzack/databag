@@ -1,7 +1,7 @@
 package databag
 
 type AccountProfile struct {
-	AccountID uint32 `json:"accountID"`
+	AccountID uint32 `json:"accountId"`
 
 	GUID string `json:"guid"`
 
@@ -79,7 +79,7 @@ type ArticleGroups struct {
 }
 
 type Asset struct {
-	AssetID string `json:"assetID"`
+	AssetID string `json:"assetId"`
 
 	Transform string `json:"transform,omitempty"`
 
