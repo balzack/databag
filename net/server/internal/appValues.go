@@ -50,30 +50,30 @@ const APPQueueDefault = ""
 const APPDefaultPath = "./asset"
 
 func AppCardStatus(status string) bool {
-  if status == APPCardPending {
-    return true
-  }
-  if status == APPCardConfirmed {
-    return true
-  }
-  if status == APPCardRequested {
-    return true
-  }
-  if status == APPCardConnecting {
-    return true
-  }
-  if status == APPCardConnected {
-    return true
-  }
-  return false
+	if status == APPCardPending {
+		return true
+	}
+	if status == APPCardConfirmed {
+		return true
+	}
+	if status == APPCardRequested {
+		return true
+	}
+	if status == APPCardConnecting {
+		return true
+	}
+	if status == APPCardConnected {
+		return true
+	}
+	return false
 }
 
 func AppTopicStatus(status string) bool {
-  if(status == APPTopicConfirmed) {
-    return true
-  }
-  if(status == AppTopicUnconfirmed) {
-    return true
-  }
-  return false
+	if status == APPTopicConfirmed {
+		return true
+	}
+	if status == AppTopicUnconfirmed {
+		return true
+	}
+	return false
 }

@@ -1,26 +1,24 @@
 package databag
 
 type AccountProfile struct {
-
 	AccountID uint32 `json:"accountID"`
 
-  GUID string `json:"guid"`
+	GUID string `json:"guid"`
 
-  Handle string `json:"handle,omitempty"`
+	Handle string `json:"handle,omitempty"`
 
-  Name string `json:"name,omitempty"`
+	Name string `json:"name,omitempty"`
 
-  Description string `json:"description,omitempty"`
+	Description string `json:"description,omitempty"`
 
-  Location string `json:"location,omitempty"`
+	Location string `json:"location,omitempty"`
 
-  ImageSet bool `json:"imageSet,omitempty"`
+	ImageSet bool `json:"imageSet,omitempty"`
 
 	Disabled bool `json:"disabled"`
 }
 
 type AccountStatus struct {
-
 	Disabled bool `json:"disabled"`
 
 	StorageUsed int64 `json:"storageUsed"`
@@ -33,12 +31,10 @@ type AccountStatus struct {
 }
 
 type Announce struct {
-
 	AppToken string `json:"appToken"`
 }
 
 type App struct {
-
 	ID string `json:"id"`
 
 	Revision int64 `json:"revision"`
@@ -47,7 +43,6 @@ type App struct {
 }
 
 type AppData struct {
-
 	Name string `json:"name,omitempty"`
 
 	Description string `json:"description,omitempty"`
@@ -60,7 +55,6 @@ type AppData struct {
 }
 
 type Article struct {
-
 	ID string `json:"id"`
 
 	Revision int64 `json:"revision"`
@@ -69,7 +63,6 @@ type Article struct {
 }
 
 type ArticleData struct {
-
 	DataType string `json:"dataType"`
 
 	Data string `json:"data"`
@@ -82,12 +75,10 @@ type ArticleData struct {
 }
 
 type ArticleGroups struct {
-
 	Groups []string `json:"groups"`
 }
 
 type Asset struct {
-
 	AssetID string `json:"assetID"`
 
 	Transform string `json:"transform,omitempty"`
@@ -96,7 +87,6 @@ type Asset struct {
 }
 
 type Card struct {
-
 	ID string `json:"id"`
 
 	Revision int64 `json:"revision"`
@@ -105,7 +95,6 @@ type Card struct {
 }
 
 type CardData struct {
-
 	DetailRevision int64 `json:"detailRevision"`
 
 	ProfileRevision int64 `json:"profileRevision"`
@@ -124,7 +113,6 @@ type CardData struct {
 }
 
 type CardDetail struct {
-
 	Status string `json:"status"`
 
 	Token string `json:"token,omitempty"`
@@ -135,7 +123,6 @@ type CardDetail struct {
 }
 
 type CardProfile struct {
-
 	GUID string `json:"guid"`
 
 	Handle string `json:"handle,omitempty"`
@@ -154,14 +141,12 @@ type CardProfile struct {
 }
 
 type ChannelContacts struct {
-
 	Groups []string `json:"groups"`
 
 	Cards []string `json:"cards"`
 }
 
 type Channel struct {
-
 	ID string `json:"id"`
 
 	Revision int64 `json:"revision"`
@@ -170,10 +155,9 @@ type Channel struct {
 }
 
 type ChannelData struct {
-
 	DetailRevision int64 `json:"detailRevision"`
 
-  TopicRevision int64 `json:"topicRevision"`
+	TopicRevision int64 `json:"topicRevision"`
 
 	ChannelSummary *ChannelSummary `json:"channelSummary,omitempty"`
 
@@ -181,7 +165,6 @@ type ChannelData struct {
 }
 
 type ChannelDetail struct {
-
 	DataType string `json:"dataType"`
 
 	Data string `json:"data"`
@@ -196,12 +179,10 @@ type ChannelDetail struct {
 }
 
 type ChannelSummary struct {
-
 	LastTopic *TopicDetail `json:"lastTopic,omitempty"`
 }
 
 type ChannelParams struct {
-
 	DataType string `json:"dataType"`
 
 	Data string `json:"data"`
@@ -212,12 +193,10 @@ type ChannelParams struct {
 }
 
 type Claim struct {
-
 	Token string `json:"token"`
 }
 
 type Connect struct {
-
 	Contact string `json:"contact"`
 
 	Token string `json:"token"`
@@ -230,7 +209,7 @@ type Connect struct {
 
 	ChannelRevision int64 `json:"channelRevision,omitempty"`
 
-  Handle string `json:"handle,omitempty"`
+	Handle string `json:"handle,omitempty"`
 
 	Name string `json:"name,omitempty"`
 
@@ -246,7 +225,6 @@ type Connect struct {
 }
 
 type ContactStatus struct {
-
 	Token string `json:"token,omitempty"`
 
 	ProfileRevision int64 `json:"profileRevision,omitempty"`
@@ -261,7 +239,6 @@ type ContactStatus struct {
 }
 
 type DataMessage struct {
-
 	Message string `json:"message"`
 
 	KeyType string `json:"keyType"`
@@ -274,12 +251,10 @@ type DataMessage struct {
 }
 
 type Disconnect struct {
-
 	Contact string `json:"contact"`
 }
 
 type Group struct {
-
 	ID string `json:"id"`
 
 	Revision int64 `json:"revision"`
@@ -288,7 +263,6 @@ type Group struct {
 }
 
 type GroupData struct {
-
 	DataType string `json:"dataType"`
 
 	Data string `json:"data"`
@@ -299,7 +273,6 @@ type GroupData struct {
 }
 
 type Identity struct {
-
 	Revision int64 `json:"revision"`
 
 	Handle string `json:"handle,omitempty"`
@@ -318,22 +291,19 @@ type Identity struct {
 }
 
 type IDList struct {
-
 	IDs []string `json:"ids"`
 }
 
 type LoginAccess struct {
+	AppToken string `json:"appToken"`
 
-  AppToken string `json:"appToken"`
-
-  Created int64 `json:"created"`
+	Created int64 `json:"created"`
 }
 
 type NodeConfig struct {
-
 	Domain string `json:"domain"`
 
-  OpenAccess bool `json:"openAccess"`
+	OpenAccess bool `json:"openAccess"`
 
 	AccountLimit int64 `json:"accountLimit"`
 
@@ -341,7 +311,6 @@ type NodeConfig struct {
 }
 
 type Profile struct {
-
 	GUID string `json:"guid"`
 
 	Handle string `json:"handle,omitempty"`
@@ -362,7 +331,6 @@ type Profile struct {
 }
 
 type ProfileData struct {
-
 	Name string `json:"name,omitempty"`
 
 	Description string `json:"description,omitempty"`
@@ -371,10 +339,9 @@ type ProfileData struct {
 }
 
 type Revision struct {
-
 	Account int64 `json:"account"`
 
-  Profile int64 `json:"profile"`
+	Profile int64 `json:"profile"`
 
 	Article int64 `json:"article"`
 
@@ -386,7 +353,6 @@ type Revision struct {
 }
 
 type SignedData struct {
-
 	GUID string `json:"guid"`
 
 	Timestamp int64 `json:"timestamp"`
@@ -397,14 +363,12 @@ type SignedData struct {
 }
 
 type Subject struct {
+	DataType string `json:"dataType"`
 
-  DataType string `json:"dataType"`
-
-  Data string `json:"data"`
+	Data string `json:"data"`
 }
 
 type Tag struct {
-
 	ID string `json:"id"`
 
 	Revision int64 `json:"revision"`
@@ -413,7 +377,6 @@ type Tag struct {
 }
 
 type TagData struct {
-
 	GUID string `json:"guid"`
 
 	DataType string `json:"dataType"`
@@ -426,7 +389,6 @@ type TagData struct {
 }
 
 type Topic struct {
-
 	ID string `json:"id"`
 
 	Revision int64 `json:"revision"`
@@ -435,7 +397,6 @@ type Topic struct {
 }
 
 type TopicData struct {
-
 	DetailRevision int64 `json:"detailRevision"`
 
 	TagRevision int64 `json:"tagRevision"`
@@ -444,7 +405,6 @@ type TopicData struct {
 }
 
 type TopicDetail struct {
-
 	GUID string `json:"guid"`
 
 	DataType string `json:"dataType"`
@@ -457,13 +417,11 @@ type TopicDetail struct {
 
 	Status string `json:"status"`
 
-  Transform string `json:"transform,omitempty"`
+	Transform string `json:"transform,omitempty"`
 }
 
 type TopicTags struct {
-
 	TagCount int32 `json:"tagCount"`
 
 	TagUpdated int64 `json:"tagUpdated"`
 }
-

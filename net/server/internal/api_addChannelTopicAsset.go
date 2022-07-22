@@ -1,233 +1,232 @@
 package databag
 
 import (
-  "os"
-  "io"
-  "strings"
-  "errors"
-  "github.com/google/uuid"
-  "net/http"
+	"databag/internal/store"
+	"encoding/json"
+	"errors"
+	"github.com/google/uuid"
+	"github.com/gorilla/mux"
+	"gorm.io/gorm"
 	"hash/crc32"
-  "github.com/gorilla/mux"
-  "gorm.io/gorm"
-  "databag/internal/store"
-  "encoding/json"
+	"io"
+	"net/http"
+	"os"
+	"strings"
 )
 
 func AddChannelTopicAsset(w http.ResponseWriter, r *http.Request) {
 
-  // scan parameters
-  params := mux.Vars(r)
-  topicID := params["topicID"]
-  var transforms []string
-  if r.FormValue("transforms") != "" {
-    if err := json.Unmarshal([]byte(r.FormValue("transforms")), &transforms); err != nil {
-      ErrResponse(w, http.StatusBadRequest, errors.New("invalid asset transform"))
-      return
-    }
-  }
+	// scan parameters
+	params := mux.Vars(r)
+	topicID := params["topicID"]
+	var transforms []string
+	if r.FormValue("transforms") != "" {
+		if err := json.Unmarshal([]byte(r.FormValue("transforms")), &transforms); err != nil {
+			ErrResponse(w, http.StatusBadRequest, errors.New("invalid asset transform"))
+			return
+		}
+	}
 
-  channelSlot, guid, err, code := getChannelSlot(r, true)
-  if err != nil {
-    ErrResponse(w, code, err)
-    return
-  }
-  act := &channelSlot.Account
+	channelSlot, guid, err, code := getChannelSlot(r, true)
+	if err != nil {
+		ErrResponse(w, code, err)
+		return
+	}
+	act := &channelSlot.Account
 
-  // check storage
-  if full, err := isStorageFull(act); err != nil {
-    ErrResponse(w, http.StatusInternalServerError, err)
-    return
-  } else if full {
-    ErrResponse(w, http.StatusNotAcceptable, errors.New("storage limit reached"))
-    return
-  }
+	// check storage
+	if full, err := isStorageFull(act); err != nil {
+		ErrResponse(w, http.StatusInternalServerError, err)
+		return
+	} else if full {
+		ErrResponse(w, http.StatusNotAcceptable, errors.New("storage limit reached"))
+		return
+	}
 
-  // load topic
-  var topicSlot store.TopicSlot
-  if err = store.DB.Preload("Topic").Where("channel_id = ? AND topic_slot_id = ?", channelSlot.Channel.ID, topicID).First(&topicSlot).Error; err != nil {
-    if errors.Is(err, gorm.ErrRecordNotFound) {
-      ErrResponse(w, http.StatusNotFound, err)
-    } else {
-      ErrResponse(w, http.StatusInternalServerError, err)
-    }
-    return
-  }
-  if topicSlot.Topic == nil {
-    ErrResponse(w, http.StatusNotFound, errors.New("referenced empty topic"))
-    return
-  }
+	// load topic
+	var topicSlot store.TopicSlot
+	if err = store.DB.Preload("Topic").Where("channel_id = ? AND topic_slot_id = ?", channelSlot.Channel.ID, topicID).First(&topicSlot).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			ErrResponse(w, http.StatusNotFound, err)
+		} else {
+			ErrResponse(w, http.StatusInternalServerError, err)
+		}
+		return
+	}
+	if topicSlot.Topic == nil {
+		ErrResponse(w, http.StatusNotFound, errors.New("referenced empty topic"))
+		return
+	}
 
-  // can only update topic if creator
-  if topicSlot.Topic.GUID != guid {
-    ErrResponse(w, http.StatusUnauthorized, errors.New("topic not created by you"))
-    return
-  }
+	// can only update topic if creator
+	if topicSlot.Topic.GUID != guid {
+		ErrResponse(w, http.StatusUnauthorized, errors.New("topic not created by you"))
+		return
+	}
 
-  // avoid async cleanup of file before record is created
-  garbageSync.Lock()
-  defer garbageSync.Unlock()
+	// avoid async cleanup of file before record is created
+	garbageSync.Lock()
+	defer garbageSync.Unlock()
 
-  // save new file
-  id := uuid.New().String()
-  path := getStrConfigValue(CNFAssetPath, APPDefaultPath) + "/" + channelSlot.Account.GUID + "/" + id
-  if err := r.ParseMultipartForm(32 << 20); err != nil {
-    ErrResponse(w, http.StatusBadRequest, err)
-    return
-  }
+	// save new file
+	id := uuid.New().String()
+	path := getStrConfigValue(CNFAssetPath, APPDefaultPath) + "/" + channelSlot.Account.GUID + "/" + id
+	if err := r.ParseMultipartForm(32 << 20); err != nil {
+		ErrResponse(w, http.StatusBadRequest, err)
+		return
+	}
 
-  file, _, err := r.FormFile("asset")
+	file, _, err := r.FormFile("asset")
 	if err != nil {
 		ErrResponse(w, http.StatusBadRequest, err)
 		return
 	}
-  defer file.Close()
-  crc, size, err := SaveAsset(file, path)
-  if err != nil {
-    ErrResponse(w, http.StatusInternalServerError, err)
-    return
-  }
+	defer file.Close()
+	crc, size, err := SaveAsset(file, path)
+	if err != nil {
+		ErrResponse(w, http.StatusInternalServerError, err)
+		return
+	}
 
-  assets := []Asset{}
-  asset := &store.Asset{}
-  asset.AssetID = id
-  asset.AccountID = channelSlot.Account.ID
-  asset.ChannelID = channelSlot.Channel.ID
-  asset.TopicID = topicSlot.Topic.ID
-  asset.Status = APPAssetReady
-  asset.Size = size
-  asset.Crc = crc
-  err = store.DB.Transaction(func(tx *gorm.DB) error {
-    if res := tx.Save(asset).Error; res != nil {
-      return res
-    }
-    assets = append(assets, Asset{ AssetID: id, Status: APPAssetReady})
-    for _, transform := range transforms {
-      asset := &store.Asset{}
-      asset.AssetID = uuid.New().String()
-      asset.AccountID = channelSlot.Account.ID
-      asset.ChannelID = channelSlot.Channel.ID
-      asset.TopicID = topicSlot.Topic.ID
-      asset.Status = APPAssetWaiting
-      asset.TransformID = id
-      t := strings.Split(transform, ";")
-      if len(t) > 0 {
-        asset.Transform = t[0]
-      }
-      if len(t) > 1 {
-        asset.TransformQueue = t[1]
-      }
-      if len(t) > 2 {
-        asset.TransformParams = t[2]
-      }
-      if res := tx.Save(asset).Error; res != nil {
-        return res
-      }
-      assets = append(assets, Asset{ AssetID: asset.AssetID, Transform: transform, Status: APPAssetWaiting})
-    }
-    if res := tx.Model(&topicSlot.Topic).Update("detail_revision", act.ChannelRevision + 1).Error; res != nil {
-      return res
-    }
-    if res := tx.Model(&topicSlot).Update("revision", act.ChannelRevision + 1).Error; res != nil {
-      return res
-    }
-    if res := tx.Model(&channelSlot.Channel).Update("topic_revision", act.ChannelRevision + 1).Error; res != nil {
-      return res
-    }
-    if res := tx.Model(&channelSlot).Update("revision", act.ChannelRevision + 1).Error; res != nil {
-      return res
-    }
-    if res := tx.Model(act).Update("channel_revision", act.ChannelRevision + 1).Error; res != nil {
-      return res
-    }
-    return nil
-  })
-  if err != nil {
-    ErrResponse(w, http.StatusInternalServerError, err)
-    return
-  }
+	assets := []Asset{}
+	asset := &store.Asset{}
+	asset.AssetID = id
+	asset.AccountID = channelSlot.Account.ID
+	asset.ChannelID = channelSlot.Channel.ID
+	asset.TopicID = topicSlot.Topic.ID
+	asset.Status = APPAssetReady
+	asset.Size = size
+	asset.Crc = crc
+	err = store.DB.Transaction(func(tx *gorm.DB) error {
+		if res := tx.Save(asset).Error; res != nil {
+			return res
+		}
+		assets = append(assets, Asset{AssetID: id, Status: APPAssetReady})
+		for _, transform := range transforms {
+			asset := &store.Asset{}
+			asset.AssetID = uuid.New().String()
+			asset.AccountID = channelSlot.Account.ID
+			asset.ChannelID = channelSlot.Channel.ID
+			asset.TopicID = topicSlot.Topic.ID
+			asset.Status = APPAssetWaiting
+			asset.TransformID = id
+			t := strings.Split(transform, ";")
+			if len(t) > 0 {
+				asset.Transform = t[0]
+			}
+			if len(t) > 1 {
+				asset.TransformQueue = t[1]
+			}
+			if len(t) > 2 {
+				asset.TransformParams = t[2]
+			}
+			if res := tx.Save(asset).Error; res != nil {
+				return res
+			}
+			assets = append(assets, Asset{AssetID: asset.AssetID, Transform: transform, Status: APPAssetWaiting})
+		}
+		if res := tx.Model(&topicSlot.Topic).Update("detail_revision", act.ChannelRevision+1).Error; res != nil {
+			return res
+		}
+		if res := tx.Model(&topicSlot).Update("revision", act.ChannelRevision+1).Error; res != nil {
+			return res
+		}
+		if res := tx.Model(&channelSlot.Channel).Update("topic_revision", act.ChannelRevision+1).Error; res != nil {
+			return res
+		}
+		if res := tx.Model(&channelSlot).Update("revision", act.ChannelRevision+1).Error; res != nil {
+			return res
+		}
+		if res := tx.Model(act).Update("channel_revision", act.ChannelRevision+1).Error; res != nil {
+			return res
+		}
+		return nil
+	})
+	if err != nil {
+		ErrResponse(w, http.StatusInternalServerError, err)
+		return
+	}
 
-  // invoke transcoder
-  transcode()
+	// invoke transcoder
+	transcode()
 
-  // determine affected contact list
-  cards := make(map[string]store.Card)
-  for _, card := range channelSlot.Channel.Cards {
-    cards[card.GUID] = card
-  }
-  for _, group := range channelSlot.Channel.Groups {
-    for _, card := range group.Cards {
-      cards[card.GUID] = card
-    }
-  }
+	// determine affected contact list
+	cards := make(map[string]store.Card)
+	for _, card := range channelSlot.Channel.Cards {
+		cards[card.GUID] = card
+	}
+	for _, group := range channelSlot.Channel.Groups {
+		for _, card := range group.Cards {
+			cards[card.GUID] = card
+		}
+	}
 
-  // notify
-  SetStatus(act)
-  for _, card := range cards {
-    SetContactChannelNotification(act, &card)
-  }
+	// notify
+	SetStatus(act)
+	for _, card := range cards {
+		SetContactChannelNotification(act, &card)
+	}
 
-  WriteResponse(w, &assets)
+	WriteResponse(w, &assets)
 }
 
 func isStorageFull(act *store.Account) (full bool, err error) {
 
-  storage := getNumConfigValue(CNFStorage, 0);
-  if storage == 0 {
-    return
-  }
+	storage := getNumConfigValue(CNFStorage, 0)
+	if storage == 0 {
+		return
+	}
 
-  var assets []store.Asset;
-  if err = store.DB.Where("account_id = ?", act.ID).Find(&assets).Error; err != nil {
-    return
-  }
+	var assets []store.Asset
+	if err = store.DB.Where("account_id = ?", act.ID).Find(&assets).Error; err != nil {
+		return
+	}
 
-  var size int64
-  for _, asset := range assets {
-    size += asset.Size
-  }
-  if size >= storage {
-    full = true
-  }
+	var size int64
+	for _, asset := range assets {
+		size += asset.Size
+	}
+	if size >= storage {
+		full = true
+	}
 
-  return
+	return
 }
 
 func SaveAsset(src io.Reader, path string) (crc uint32, size int64, err error) {
 
-  output, res := os.OpenFile(path, os.O_WRONLY | os.O_CREATE, 0666)
-  if res != nil {
-    err = res
-    return
-  }
-  defer output.Close()
+	output, res := os.OpenFile(path, os.O_WRONLY|os.O_CREATE, 0666)
+	if res != nil {
+		err = res
+		return
+	}
+	defer output.Close()
 
-  // prepare hash
-  table := crc32.MakeTable(crc32.IEEE)
+	// prepare hash
+	table := crc32.MakeTable(crc32.IEEE)
 
-  // compute has as data is saved
-  data := make([]byte, 4096)
-  for {
-    n, res := src.Read(data)
-    if res != nil {
-      if res == io.EOF {
-        break
-      }
-      err = res
-      return
-    }
+	// compute has as data is saved
+	data := make([]byte, 4096)
+	for {
+		n, res := src.Read(data)
+		if res != nil {
+			if res == io.EOF {
+				break
+			}
+			err = res
+			return
+		}
 
-    crc = crc32.Update(crc, table, data[:n])
-    output.Write(data[:n])
-  }
+		crc = crc32.Update(crc, table, data[:n])
+		output.Write(data[:n])
+	}
 
-  // read size
-  info, ret := output.Stat()
-  if ret != nil {
-    err = ret
-    return
-  }
-  size = info.Size()
-  return
+	// read size
+	info, ret := output.Stat()
+	if ret != nil {
+		err = ret
+		return
+	}
+	size = info.Size()
+	return
 }
-

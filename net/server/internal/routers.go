@@ -19,7 +19,7 @@ type Routes []Route
 
 func NewRouter() *mux.Router {
 
-  go SendNotifications()
+	go SendNotifications()
 
 	router := mux.NewRouter().StrictSlash(true)
 	for _, route := range routes {
@@ -34,8 +34,8 @@ func NewRouter() *mux.Router {
 			Handler(handler)
 	}
 
-  fs := http.FileServer(http.Dir("/app/databag/net/web/build/"))
-  router.PathPrefix("/").Handler(http.StripPrefix("/", fs))
+	fs := http.FileServer(http.Dir("/app/databag/net/web/build/"))
+	router.PathPrefix("/").Handler(http.StripPrefix("/", fs))
 
 	return router
 }
@@ -207,12 +207,12 @@ var routes = Routes{
 		SetNodeAccountStatus,
 	},
 
-  Route{
-    "AddNodeAccountAccess",
-    strings.ToUpper("Post"),
-    "/admin/accounts/{accountID}/auth",
-    AddNodeAccountAccess,
-  },
+	Route{
+		"AddNodeAccountAccess",
+		strings.ToUpper("Post"),
+		"/admin/accounts/{accountID}/auth",
+		AddNodeAccountAccess,
+	},
 
 	Route{
 		"GetNodeAccounts",
@@ -739,4 +739,3 @@ var routes = Routes{
 		Status,
 	},
 }
-
