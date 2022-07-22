@@ -7,7 +7,7 @@ const APPTokenSize = 16
 const APPBodyLimit = 1048576
 
 //APPVersion config for current version of api
-const APPVersion = "0.0.1"
+const APPVersion = "0.1.0"
 
 //APPCreateExpire config for valid duration of create token
 const APPCreateExpire = 86400
