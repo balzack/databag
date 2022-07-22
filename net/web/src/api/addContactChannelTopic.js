@@ -6,7 +6,8 @@ export async function addContactChannelTopic(server, token, channelId, message, 
     let topic = await fetchWithTimeout(`https://${server}/content/channels/${channelId}/topics?contact=${token}`,
       { method: 'POST', body: JSON.stringify({}) });
     checkResponse(topic);
-    return await topic.json().id;
+    let slot = await topic.json();
+    return slot.id;
   }
   else if (assets == null || assets.length == 0) {
     let subject = { data: JSON.stringify(message, (key, value) => {
@@ -16,7 +17,8 @@ export async function addContactChannelTopic(server, token, channelId, message, 
     let topic = await fetchWithTimeout(`https://${server}/content/channels/${channelId}/topics?contact=${token}&confirm=true`,
       { method: 'POST', body: JSON.stringify(subject) });
     checkResponse(topic);
-    return await topic.json().id;
+    let slot = await topic.json();
+    return slot.id;
   }
   else {
     let topic = await fetchWithTimeout(`https://${server}/content/channels/${channelId}/topics?contact=${token}`,
