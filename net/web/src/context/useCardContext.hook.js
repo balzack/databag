@@ -64,7 +64,7 @@ export function useCardContext() {
       if (card.data) {
         let cur = cards.current.get(card.id);
         if (cur == null) {
-          cur = { id: card.id, data: { articles: new Map() }, error: false, channels: new Map() }
+          cur = { id: card.id, data: { articles: new Map() }, error: false, notifiedProfile: null, channels: new Map() }
         }
         if (cur.data.detailRevision != card.data.detailRevision) {
           if (card.data.cardDetail != null) {
@@ -87,12 +87,12 @@ export function useCardContext() {
         const { cardDetail, cardProfile } = cur.data;
         if (cardDetail.status === 'connected' && !cur.error) {
           try {
-            if (cur.data.profileRevision != card.data.notifiedProfile) {
+            if (cur.data.profileRevision != card.data.notifiedProfile && cur.notifiedProfile != card.data.notifiedProfile) {
               let message = await getContactProfile(cardProfile.node, cardProfile.guid, cardDetail.token);
               await setCardProfile(access.current, card.id, message);
 
               // update remote profile
-              cur.data.notifiedProfile = card.data.notifiedProfile;
+              cur.notifiedProfile = card.data.notifiedProfile;
             }
             if (cur.data.notifiedView != card.data.notifiedView) {
               // update remote articles and channels
