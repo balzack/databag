@@ -392,14 +392,14 @@ type TestApp struct {
   condition *TestCondition
 }
 
-func (a *TestApp) UpdateProfile() (err error) {
+func (a *TestApp) updateProfile() (err error) {
   params := &TestAPIParams{ query: "/profile", tokenType: APPTokenAgent, token: a.token }
   response := &TestAPIResponse{ data: &a.profile }
   err = TestAPIRequest(GetProfile, params, response)
   return
 }
 
-func (a *TestApp) UpdateGroups() (err error) {
+func (a *TestApp) updateGroups() (err error) {
   var groups []Group
   if a.revision.Group == 0 {
     params := &TestAPIParams{ query: "/groups", tokenType: APPTokenAgent, token: a.token }
@@ -425,7 +425,7 @@ func (a *TestApp) UpdateGroups() (err error) {
   return
 }
 
-func (a *TestApp) UpdateArticles() (err error) {
+func (a *TestApp) updateArticles() (err error) {
   var articles []Article
   if a.revision.Article == 0 {
     params := &TestAPIParams{ query: "/articles", tokenType: APPTokenAgent, token: a.token }
@@ -451,7 +451,7 @@ func (a *TestApp) UpdateArticles() (err error) {
   return
 }
 
-func (a *TestApp) UpdateChannels() (err error) {
+func (a *TestApp) updateChannels() (err error) {
   var channels []Channel
   if a.revision.Channel == 0 {
     params := &TestAPIParams{ query: "/channels", tokenType: APPTokenAgent, token: a.token }
@@ -475,7 +475,7 @@ func (a *TestApp) UpdateChannels() (err error) {
       storeChannel, set := a.channels[channel.ID]
       if set {
         if channel.Revision != storeChannel.channel.Revision {
-          if err = a.UpdateChannel(storeChannel, &channel); err != nil {
+          if err = a.updateChannel(storeChannel, &channel); err != nil {
             return
           }
           storeChannel.channel.Revision = channel.Revision
@@ -483,7 +483,7 @@ func (a *TestApp) UpdateChannels() (err error) {
       } else {
         storeChannel := &TestChannel{ channel: Channel{ ID: channel.ID, Data: &ChannelData{} } }
         a.channels[channel.ID] = storeChannel
-        if err = a.UpdateChannel(storeChannel, &channel); err != nil {
+        if err = a.updateChannel(storeChannel, &channel); err != nil {
           return
         }
         storeChannel.channel.Revision = channel.Revision
@@ -493,10 +493,10 @@ func (a *TestApp) UpdateChannels() (err error) {
   return
 }
 
-func (a *TestApp) UpdateChannel(storeChannel *TestChannel, channel *Channel) (err error) {
+func (a *TestApp) updateChannel(storeChannel *TestChannel, channel *Channel) (err error) {
   if storeChannel.channel.Revision != channel.Revision {
     if storeChannel.channel.Data.TopicRevision != channel.Data.TopicRevision {
-      if err = a.UpdateChannelTopics(storeChannel); err != nil {
+      if err = a.updateChannelTopics(storeChannel); err != nil {
         return
       }
       storeChannel.channel.Data.TopicRevision = channel.Data.TopicRevision
@@ -523,7 +523,7 @@ func (a *TestApp) UpdateChannel(storeChannel *TestChannel, channel *Channel) (er
   return
 }
 
-func (a *TestApp) UpdateChannelTopics(storeChannel *TestChannel) (err error) {
+func (a *TestApp) updateChannelTopics(storeChannel *TestChannel) (err error) {
   var topics []Topic
   if storeChannel.channel.Revision == 0 {
     params := &TestAPIParams{ query: "/channels/{channelID}/topics",
@@ -550,7 +550,7 @@ func (a *TestApp) UpdateChannelTopics(storeChannel *TestChannel) (err error) {
       storeTopic, set := storeChannel.topics[topic.ID]
       if set {
         if topic.Revision != storeTopic.topic.Revision {
-          if err = a.UpdateChannelTopic(storeChannel, storeTopic, &topic); err != nil {
+          if err = a.updateChannelTopic(storeChannel, storeTopic, &topic); err != nil {
             return
           }
           storeTopic.topic.Revision = topic.Revision
@@ -558,7 +558,7 @@ func (a *TestApp) UpdateChannelTopics(storeChannel *TestChannel) (err error) {
       } else {
         storeTopic := &TestTopic{ topic: Topic{ ID: topic.ID, Data: &TopicData{} } }
         storeChannel.topics[topic.ID] = storeTopic
-        if err = a.UpdateChannelTopic(storeChannel, storeTopic, &topic); err != nil {
+        if err = a.updateChannelTopic(storeChannel, storeTopic, &topic); err != nil {
           return
         }
         storeTopic.topic.Revision = topic.Revision
@@ -568,10 +568,10 @@ func (a *TestApp) UpdateChannelTopics(storeChannel *TestChannel) (err error) {
   return
 }
 
-func (a *TestApp) UpdateChannelTopic(storeChannel *TestChannel, storeTopic *TestTopic, topic *Topic) (err error) {
+func (a *TestApp) updateChannelTopic(storeChannel *TestChannel, storeTopic *TestTopic, topic *Topic) (err error) {
   if storeTopic.topic.Revision != topic.Revision {
     if storeTopic.topic.Data.TagRevision != topic.Data.TagRevision {
-      if err = a.UpdateChannelTopicTags(storeChannel, storeTopic); err != nil {
+      if err = a.updateChannelTopicTags(storeChannel, storeTopic); err != nil {
         return
       }
       storeTopic.topic.Data.TagRevision = topic.Data.TagRevision
@@ -599,7 +599,7 @@ func (a *TestApp) UpdateChannelTopic(storeChannel *TestChannel, storeTopic *Test
   return
 }
 
-func (a *TestApp) UpdateChannelTopicTags(storeChannel *TestChannel, storeTopic *TestTopic) (err error) {
+func (a *TestApp) updateChannelTopicTags(storeChannel *TestChannel, storeTopic *TestTopic) (err error) {
   var tags []Tag
   if storeTopic.topic.Revision == 0 {
     params := &TestAPIParams{ query: "/channels/{channelID}/topics/{topicID}/tags",
@@ -631,7 +631,7 @@ func (a *TestApp) UpdateChannelTopicTags(storeChannel *TestChannel, storeTopic *
   return
 }
 
-func (a *TestApp) UpdateCards() (err error) {
+func (a *TestApp) updateCards() (err error) {
   var cards []Card
   if a.revision.Card == 0 {
     params := &TestAPIParams{ query: "/cards", tokenType: APPTokenAgent, token: a.token }
@@ -701,12 +701,12 @@ func (a *TestApp) UpdateCards() (err error) {
   return
 }
 
-func (a *TestApp) UpdateApp(rev *Revision) {
+func (a *TestApp) updateApp(rev *Revision) {
   a.mutex.Lock()
   defer a.mutex.Unlock()
 
   if rev.Profile != a.revision.Profile {
-    if err := a.UpdateProfile(); err != nil {
+    if err := a.updateProfile(); err != nil {
       PrintMsg(err)
     } else {
       a.revision.Profile = rev.Profile
@@ -714,7 +714,7 @@ func (a *TestApp) UpdateApp(rev *Revision) {
   }
 
   if rev.Group != a.revision.Group {
-    if err := a.UpdateGroups(); err != nil {
+    if err := a.updateGroups(); err != nil {
       PrintMsg(err)
     } else {
       a.revision.Group = rev.Group
@@ -722,7 +722,7 @@ func (a *TestApp) UpdateApp(rev *Revision) {
   }
 
   if rev.Article != a.revision.Article {
-    if err := a.UpdateArticles(); err != nil {
+    if err := a.updateArticles(); err != nil {
       PrintMsg(err)
     } else {
       a.revision.Article = rev.Article
@@ -730,7 +730,7 @@ func (a *TestApp) UpdateApp(rev *Revision) {
   }
 
   if rev.Card != a.revision.Card {
-    if err := a.UpdateCards(); err != nil {
+    if err := a.updateCards(); err != nil {
       PrintMsg(err)
     } else {
       a.revision.Card = rev.Card
@@ -738,7 +738,7 @@ func (a *TestApp) UpdateApp(rev *Revision) {
   }
 
   if rev.Channel != a.revision.Channel {
-    if err := a.UpdateChannels(); err != nil {
+    if err := a.updateChannels(); err != nil {
       PrintMsg(err)
     } else {
       a.revision.Channel = rev.Channel
@@ -767,7 +767,7 @@ func (a *TestApp) Connect(token string) error {
   if err != nil {
     return err
   }
-  a.UpdateApp(&revision)
+  a.updateApp(&revision)
 
   // reset any timeout
   ws.SetReadDeadline(time.Time{})
@@ -784,7 +784,7 @@ func (a *TestApp) Connect(token string) error {
     if err = json.Unmarshal(data, rev); err != nil {
       return errors.New("invalid status data")
     }
-    a.UpdateApp(rev)
+    a.updateApp(rev)
   }
 
 }

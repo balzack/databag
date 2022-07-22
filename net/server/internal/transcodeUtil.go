@@ -94,7 +94,7 @@ func transcodeAsset(asset *store.Asset) {
 
   if !re.MatchString(asset.Transform) {
     ErrMsg(errors.New("invalid transform"))
-    if err := UpdateAsset(asset, APPAssetError, 0, 0); err != nil {
+    if err := updateAsset(asset, APPAssetError, 0, 0); err != nil {
       ErrMsg(err)
     }
   } else {
@@ -110,7 +110,7 @@ func transcodeAsset(asset *store.Asset) {
       LogMsg(stdout.String())
       LogMsg(stderr.String())
       ErrMsg(err)
-      if err := UpdateAsset(asset, APPAssetError, 0, 0); err != nil {
+      if err := updateAsset(asset, APPAssetError, 0, 0); err != nil {
         ErrMsg(err)
       }
     } else {
@@ -120,21 +120,21 @@ func transcodeAsset(asset *store.Asset) {
       if stderr.Len() > 0 {
         LogMsg(stderr.String())
       }
-      crc, size, err := ScanAsset(output)
+      crc, size, err := scanAsset(output)
 
       if err != nil {
         ErrMsg(err)
-        if err := UpdateAsset(asset, APPAssetError, 0, 0); err != nil {
+        if err := updateAsset(asset, APPAssetError, 0, 0); err != nil {
           ErrMsg(err)
         }
-      } else if err := UpdateAsset(asset, APPAssetReady, crc, size); err != nil {
+      } else if err := updateAsset(asset, APPAssetReady, crc, size); err != nil {
         ErrMsg(err)
       }
     }
   }
 }
 
-func UpdateAsset(asset *store.Asset, status string, crc uint32, size int64) (err error) {
+func updateAsset(asset *store.Asset, status string, crc uint32, size int64) (err error) {
 
   topic := store.Topic{};
   err = store.DB.Transaction(func(tx *gorm.DB) error {
@@ -191,7 +191,7 @@ func UpdateAsset(asset *store.Asset, status string, crc uint32, size int64) (err
   return
 }
 
-func ScanAsset(path string) (crc uint32, size int64, err error) {
+func scanAsset(path string) (crc uint32, size int64, err error) {
 
   file, res := os.Open(path)
   if res != nil {

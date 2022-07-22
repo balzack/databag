@@ -19,28 +19,28 @@ import (
 const testReadDeadline = 2
 const testRevisionWait = 100
 
-type TestCard struct {
+type testCard struct {
   GUID string
   Token string
   CardID string
   GroupID string
 }
 
-type TestContact struct {
+type testContact struct {
   GUID string
   Token string
   Revisions chan *Revision
-  A TestCard
-  B TestCard
-  C TestCard
-  D TestCard
+  A testCard
+  B testCard
+  C testCard
+  D testCard
 }
 
 type TestGroup struct {
-  A TestContact
-  B TestContact
-  C TestContact
-  D TestContact
+  A testContact
+  B testContact
+  C testContact
+  D testContact
 }
 
 func GetTestRevision(status chan *Revision) (rev *Revision) {
@@ -253,6 +253,8 @@ func APITestUpload(
 //    |/                                                     \|
 //    C --- connected,group               connected,group --- D
 //
+
+// AddTestGroup creates and connects test accounts for useCases
 func AddTestGroup(prefix string) (*TestGroup, error) {
     var err error
     var rev *Revision
@@ -260,110 +262,110 @@ func AddTestGroup(prefix string) (*TestGroup, error) {
 
     // allocate contacts
     g := &TestGroup{}
-    if g.A.GUID, g.A.Token, err = AddTestAccount(prefix+"A"); err != nil {
+    if g.A.GUID, g.A.Token, err = addTestAccount(prefix+"A"); err != nil {
       return g, err
     }
-    if g.B.GUID, g.B.Token, err = AddTestAccount(prefix+"B"); err != nil {
+    if g.B.GUID, g.B.Token, err = addTestAccount(prefix+"B"); err != nil {
       return g, err
     }
-    if g.C.GUID, g.C.Token, err = AddTestAccount(prefix+"C"); err != nil {
+    if g.C.GUID, g.C.Token, err = addTestAccount(prefix+"C"); err != nil {
       return g, err
     }
-    if g.D.GUID, g.D.Token, err = AddTestAccount(prefix+"D"); err != nil {
+    if g.D.GUID, g.D.Token, err = addTestAccount(prefix+"D"); err != nil {
       return g, err
     }
 
     // setup A
-    if g.A.B.CardID, err = AddTestCard(g.A.Token, g.B.Token); err != nil {
+    if g.A.B.CardID, err = addTestCard(g.A.Token, g.B.Token); err != nil {
       return g, err
     }
-    if err = OpenTestCard(g.A.Token, g.A.B.CardID); err != nil {
+    if err = openTestCard(g.A.Token, g.A.B.CardID); err != nil {
       return g, err
     }
-    if g.A.B.GroupID, err = GroupTestCard(g.A.Token, g.A.B.CardID); err != nil {
+    if g.A.B.GroupID, err = groupTestCard(g.A.Token, g.A.B.CardID); err != nil {
       return g, err
     }
-    if g.A.C.CardID, err = AddTestCard(g.A.Token, g.C.Token); err != nil {
+    if g.A.C.CardID, err = addTestCard(g.A.Token, g.C.Token); err != nil {
       return g, err
     }
-    if err = OpenTestCard(g.A.Token, g.A.C.CardID); err != nil {
+    if err = openTestCard(g.A.Token, g.A.C.CardID); err != nil {
       return g, err
     }
-    if g.A.C.GroupID, err = GroupTestCard(g.A.Token, g.A.C.CardID); err != nil {
+    if g.A.C.GroupID, err = groupTestCard(g.A.Token, g.A.C.CardID); err != nil {
       return g, err
     }
-    if g.A.D.CardID, err = AddTestCard(g.A.Token, g.D.Token); err != nil {
+    if g.A.D.CardID, err = addTestCard(g.A.Token, g.D.Token); err != nil {
       return g, err
     }
-    if err = OpenTestCard(g.A.Token, g.A.D.CardID); err != nil {
+    if err = openTestCard(g.A.Token, g.A.D.CardID); err != nil {
       return g, err
     }
 
     // setup B
-    if g.B.A.CardID, err = AddTestCard(g.B.Token, g.A.Token); err != nil {
+    if g.B.A.CardID, err = addTestCard(g.B.Token, g.A.Token); err != nil {
       return g, err
     }
-    if err = OpenTestCard(g.B.Token, g.B.A.CardID); err != nil {
+    if err = openTestCard(g.B.Token, g.B.A.CardID); err != nil {
       return g, err
     }
-    if g.B.A.GroupID, err = GroupTestCard(g.B.Token, g.B.A.CardID); err != nil {
+    if g.B.A.GroupID, err = groupTestCard(g.B.Token, g.B.A.CardID); err != nil {
       return g, err
     }
-    if g.B.C.CardID, err = AddTestCard(g.B.Token, g.C.Token); err != nil {
+    if g.B.C.CardID, err = addTestCard(g.B.Token, g.C.Token); err != nil {
       return g, err
     }
-    if g.B.C.GroupID, err = GroupTestCard(g.B.Token, g.B.C.CardID); err != nil {
+    if g.B.C.GroupID, err = groupTestCard(g.B.Token, g.B.C.CardID); err != nil {
       return g, err
     }
 
     // setup C
-    if g.C.D.CardID, err = AddTestCard(g.C.Token, g.D.Token); err != nil {
+    if g.C.D.CardID, err = addTestCard(g.C.Token, g.D.Token); err != nil {
       return g, err
     }
-    if err = OpenTestCard(g.C.Token, g.C.D.CardID); err != nil {
+    if err = openTestCard(g.C.Token, g.C.D.CardID); err != nil {
       return g, err
     }
-    if g.C.D.GroupID, err = GroupTestCard(g.C.Token, g.C.D.CardID); err != nil {
+    if g.C.D.GroupID, err = groupTestCard(g.C.Token, g.C.D.CardID); err != nil {
       return g, err
     }
-    if g.C.A.CardID, err = AddTestCard(g.C.Token, g.A.Token); err != nil {
+    if g.C.A.CardID, err = addTestCard(g.C.Token, g.A.Token); err != nil {
       return g, err
     }
-    if err = OpenTestCard(g.C.Token, g.C.A.CardID); err != nil {
+    if err = openTestCard(g.C.Token, g.C.A.CardID); err != nil {
       return g, err
     }
-    if g.C.A.GroupID, err = GroupTestCard(g.C.Token, g.C.A.CardID); err != nil {
+    if g.C.A.GroupID, err = groupTestCard(g.C.Token, g.C.A.CardID); err != nil {
       return g, err
     }
 
     // setup D
-    if g.D.C.CardID, err = AddTestCard(g.D.Token, g.C.Token); err != nil {
+    if g.D.C.CardID, err = addTestCard(g.D.Token, g.C.Token); err != nil {
       return g, err
     }
-    if err = OpenTestCard(g.D.Token, g.D.C.CardID); err != nil {
+    if err = openTestCard(g.D.Token, g.D.C.CardID); err != nil {
       return g, err
     }
-    if g.D.C.GroupID, err = GroupTestCard(g.D.Token, g.D.C.CardID); err != nil {
+    if g.D.C.GroupID, err = groupTestCard(g.D.Token, g.D.C.CardID); err != nil {
       return g, err
     }
-    if g.D.A.CardID, err = GetCardID(g.D.Token, g.A.GUID); err != nil {
+    if g.D.A.CardID, err = getCardID(g.D.Token, g.A.GUID); err != nil {
       return g, err
     }
 
     // get contact tokens
-    if g.A.B.Token, err = GetCardToken(g.A.Token, g.A.B.CardID); err != nil {
+    if g.A.B.Token, err = getCardToken(g.A.Token, g.A.B.CardID); err != nil {
       return g, err
     }
-    if g.B.A.Token, err = GetCardToken(g.B.Token, g.B.A.CardID); err != nil {
+    if g.B.A.Token, err = getCardToken(g.B.Token, g.B.A.CardID); err != nil {
       return g, err
     }
-    if g.C.A.Token, err = GetCardToken(g.C.Token, g.C.A.CardID); err != nil {
+    if g.C.A.Token, err = getCardToken(g.C.Token, g.C.A.CardID); err != nil {
       return g, err
     }
-    if g.C.D.Token, err = GetCardToken(g.C.Token, g.C.D.CardID); err != nil {
+    if g.C.D.Token, err = getCardToken(g.C.Token, g.C.D.CardID); err != nil {
       return g, err
     }
-    if g.D.C.Token, err = GetCardToken(g.D.Token, g.D.C.CardID); err != nil {
+    if g.D.C.Token, err = getCardToken(g.D.Token, g.D.C.CardID); err != nil {
       return g, err
     }
 
@@ -374,34 +376,34 @@ func AddTestGroup(prefix string) (*TestGroup, error) {
     }
     g.A.Revisions = make(chan *Revision, 64)
     g.A.Revisions <- rev
-    go MonitorStatus(ws, &g.A);
+    go monitorStatus(ws, &g.A);
     rev = &Revision{}
     if ws, err = StatusConnection(g.B.Token, rev); err != nil {
       return g, err
     }
     g.B.Revisions = make(chan *Revision, 64)
     g.B.Revisions <- rev
-    go MonitorStatus(ws, &g.B);
+    go monitorStatus(ws, &g.B);
     rev = &Revision{}
     if ws, err = StatusConnection(g.C.Token, rev); err != nil {
       return g, err
     }
     g.C.Revisions = make(chan *Revision, 64)
     g.C.Revisions <- rev
-    go MonitorStatus(ws, &g.C);
+    go monitorStatus(ws, &g.C);
     rev = &Revision{}
     if ws, err = StatusConnection(g.D.Token, rev); err != nil {
       return g, err
     }
     g.D.Revisions = make(chan *Revision, 64)
     g.D.Revisions <- rev
-    go MonitorStatus(ws, &g.D);
+    go monitorStatus(ws, &g.D);
 
     return g, nil
 }
 
 
-func MonitorStatus(ws *websocket.Conn, contact *TestContact) {
+func monitorStatus(ws *websocket.Conn, contact *testContact) {
   var data []byte
   var dataType int
   var err error
@@ -428,7 +430,7 @@ func MonitorStatus(ws *websocket.Conn, contact *TestContact) {
   }
 }
 
-func GetCardToken(account string, cardID string) (token string, err error) {
+func getCardToken(account string, cardID string) (token string, err error) {
   var r *http.Request
   var w *httptest.ResponseRecorder
   var cardDetail CardDetail
@@ -462,7 +464,7 @@ func GetCardToken(account string, cardID string) (token string, err error) {
   return
 }
 
-func GetCardID(account string, guid string) (cardID string, err error) {
+func getCardID(account string, guid string) (cardID string, err error) {
   var r *http.Request
   var w *httptest.ResponseRecorder
   var cards []Card
@@ -485,7 +487,7 @@ func GetCardID(account string, guid string) (cardID string, err error) {
   return
 }
 
-func GroupTestCard(account string, cardID string) (groupID string, err error) {
+func groupTestCard(account string, cardID string) (groupID string, err error) {
   var r *http.Request
   var w *httptest.ResponseRecorder
   var subject *Subject
@@ -522,7 +524,7 @@ func GroupTestCard(account string, cardID string) (groupID string, err error) {
   return
 }
 
-func OpenTestCard(account string, cardID string) (err error) {
+func openTestCard(account string, cardID string) (err error) {
   var r *http.Request
   var w *httptest.ResponseRecorder
   var msg DataMessage
@@ -577,7 +579,7 @@ func OpenTestCard(account string, cardID string) (err error) {
   return
 }
 
-func AddTestCard(account string, contact string) (cardID string, err error) {
+func addTestCard(account string, contact string) (cardID string, err error) {
   var r *http.Request
   var w *httptest.ResponseRecorder
   var msg DataMessage
@@ -604,7 +606,7 @@ func AddTestCard(account string, contact string) (cardID string, err error) {
   return
 }
 
-func AddTestAccount(username string) (guid string, token string, err error) {
+func addTestAccount(username string) (guid string, token string, err error) {
   var r *http.Request
   var w *httptest.ResponseRecorder
 
