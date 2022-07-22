@@ -14,7 +14,7 @@ func getProfileModel(account *store.Account) *Profile {
     Location: account.AccountDetail.Location,
     Image: account.AccountDetail.Image,
     Revision: account.ProfileRevision,
-    Version: APP_VERSION,
+    Version: APPVersion,
     Node: getStrConfigValue(CONFIG_DOMAIN, ""),
   }
 }
@@ -266,12 +266,12 @@ func getTopicDetailModel(slot *store.TopicSlot) *TopicDetail {
     return nil
   }
 
-  transform := APP_TRANSFORMCOMPLETE
+  transform := APPTransformComplete
   for _, asset := range slot.Topic.Assets {
-    if asset.Status == APP_ASSETERROR {
-      transform = APP_TRANSFORMERROR
-    } else if asset.Status == APP_ASSETWAITING && transform == APP_TRANSFORMCOMPLETE {
-      transform = APP_TRANSFORMINCOMPLETE
+    if asset.Status == APPAssetError {
+      transform = APPTransformError
+    } else if asset.Status == APPAssetWaiting && transform == APPTransformComplete {
+      transform = APPTransformIncomplete
     }
   }
 

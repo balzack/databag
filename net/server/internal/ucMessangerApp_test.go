@@ -36,7 +36,7 @@ func TestMessangerApp(t *testing.T) {
       Name: "Roland",
       Location: "The City",
     },
-    tokenType: APP_TOKENAGENT,
+    tokenType: APPTokenAgent,
     token: set.A.Token,
   }
   response = &TestAPIResponse{}
@@ -58,7 +58,7 @@ func TestMessangerApp(t *testing.T) {
       Data: "channeldataA",
       DataType: "channeldatatypeA",
     },
-    tokenType: APP_TOKENAGENT,
+    tokenType: APPTokenAgent,
     token: set.A.Token,
   }
   channel = &Channel{}
@@ -84,7 +84,7 @@ func TestMessangerApp(t *testing.T) {
       Data: "channeltopicdataA",
       DataType: "channeltopicdatatypeA",
     },
-    tokenType: APP_TOKENAGENT,
+    tokenType: APPTokenAgent,
     token: set.A.Token,
   }
   topic = &Topic{}
@@ -114,7 +114,7 @@ func TestMessangerApp(t *testing.T) {
       Data: "channeltopictagdataA",
       DataType: "channeltopictagdatatypeA",
     },
-    tokenType: APP_TOKENAGENT,
+    tokenType: APPTokenAgent,
     token: set.A.Token,
   }
   tag = &Tag{}
@@ -148,7 +148,7 @@ func TestMessangerApp(t *testing.T) {
       Data: "channeldataB",
       DataType: "channeldatatypeB",
     },
-    tokenType: APP_TOKENAGENT,
+    tokenType: APPTokenAgent,
     token: set.B.Token,
   }
   channel = &Channel{}
@@ -160,7 +160,7 @@ func TestMessangerApp(t *testing.T) {
     restType: "PUT",
     query: "/content/channels/{channelID}/cards/{cardID}",
     path: map[string]string{ "cardID": set.B.A.CardID, "channelID": channel.ID },
-    tokenType: APP_TOKENAGENT,
+    tokenType: APPTokenAgent,
     token: set.B.Token,
   }
   response = &TestAPIResponse{}
@@ -189,7 +189,7 @@ func TestMessangerApp(t *testing.T) {
       Data: "channeltopicdataB",
       DataType: "channeltopicdatatypeB",
     },
-    tokenType: APP_TOKENCONTACT,
+    tokenType: APPTokenContact,
     token: set.A.B.Token,
   }
   topic = &Topic{}
@@ -223,7 +223,7 @@ func TestMessangerApp(t *testing.T) {
       Data: "channeltopictagdataB",
       DataType: "channeltopictagdatatypeB",
     },
-    tokenType: APP_TOKENAGENT,
+    tokenType: APPTokenAgent,
     token: set.B.Token,
   }
   tag = &Tag{}
@@ -257,7 +257,7 @@ func TestMessangerApp(t *testing.T) {
     restType: "DELETE",
     query: "/content/channels/{channelID}/cards/{cardID}",
     path: map[string]string{ "cardID": set.B.A.CardID, "channelID": channel.ID },
-    tokenType: APP_TOKENAGENT,
+    tokenType: APPTokenAgent,
     token: set.B.Token,
   }
   response = &TestAPIResponse{}

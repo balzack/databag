@@ -24,14 +24,14 @@ func GetArticleSubjectField(w http.ResponseWriter, r *http.Request) {
   var guid string
   var act *store.Account
   tokenType := ParamTokenType(r)
-  if tokenType == APP_TOKENAGENT {
+  if tokenType == APPTokenAgent {
     account, code, err := ParamAgentToken(r, false);
     if err != nil {
       ErrResponse(w, code, err)
       return
     }
     act = account
-  } else if tokenType == APP_TOKENCONTACT {
+  } else if tokenType == APPTokenContact {
     card, code, err := ParamContactToken(r, true)
     if err != nil {
       ErrResponse(w, code, err)
@@ -60,7 +60,7 @@ func GetArticleSubjectField(w http.ResponseWriter, r *http.Request) {
   }
 
   // check if article is shared
-  if tokenType == APP_TOKENCONTACT && !isArticleShared(guid, slot.Article) {
+  if tokenType == APPTokenContact && !isArticleShared(guid, slot.Article) {
     ErrResponse(w, http.StatusNotFound, errors.New("referenced article not shared"))
     return
   }

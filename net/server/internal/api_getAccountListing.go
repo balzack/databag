@@ -22,7 +22,7 @@ func GetAccountListing(w http.ResponseWriter, r *http.Request) {
       Description: account.AccountDetail.Description,
       Location: account.AccountDetail.Location,
       ImageSet: account.AccountDetail.Image != "",
-      Version: APP_VERSION,
+      Version: APPVersion,
       Node: getStrConfigValue(CONFIG_DOMAIN, ""),
     })
   }

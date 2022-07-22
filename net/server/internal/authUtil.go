@@ -171,20 +171,20 @@ func ParseToken(token string) (string, string, error) {
 }
 
 func ParamTokenType(r *http.Request) string {
-  if r.FormValue(APP_TOKENCONTACT) != "" {
-    return APP_TOKENCONTACT
+  if r.FormValue(APPTokenContact) != "" {
+    return APPTokenContact
   }
-  if r.FormValue(APP_TOKENAGENT) != "" {
-    return APP_TOKENAGENT
+  if r.FormValue(APPTokenAgent) != "" {
+    return APPTokenAgent
   }
-  if r.FormValue(APP_TOKENATTACH) != "" {
-    return APP_TOKENATTACH
+  if r.FormValue(APPTokenAttach) != "" {
+    return APPTokenAttach
   }
-  if r.FormValue(APP_TOKENCREATE) != "" {
-    return APP_TOKENCREATE
+  if r.FormValue(APPTokenCreate) != "" {
+    return APPTokenCreate
   }
-  if r.FormValue(APP_TOKENRESET) != "" {
-    return APP_TOKENRESET
+  if r.FormValue(APPTokenReset) != "" {
+    return APPTokenReset
   }
   return ""
 }
@@ -219,7 +219,7 @@ func ParamContactToken(r *http.Request, detail bool) (*store.Card, int, error) {
   if card.Account.Disabled {
     return nil, http.StatusGone, errors.New("account is inactive")
   }
-  if card.Status != APP_CARDCONNECTING && card.Status != APP_CARDCONNECTED {
+  if card.Status != APPCardConnecting && card.Status != APPCardConnected {
     return nil, http.StatusUnauthorized, errors.New("invalid connection state")
   }
 
@@ -258,7 +258,7 @@ func BearerContactToken(r *http.Request, detail bool) (*store.Card, int, error) 
   if card.Account.Disabled {
     return nil, http.StatusGone, errors.New("account is inactive")
   }
-  if card.Status != APP_CARDCONNECTING && card.Status != APP_CARDCONNECTED {
+  if card.Status != APPCardConnecting && card.Status != APPCardConnected {
     return nil, http.StatusUnauthorized, errors.New("invalid connection state")
   }
 

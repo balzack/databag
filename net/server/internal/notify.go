@@ -9,7 +9,7 @@ import (
   "databag/internal/store"
 )
 
-var notify = make(chan *store.Notification, APP_NOTIFYBUFFER)
+var notify = make(chan *store.Notification, APPNotifyBuffer)
 var notifyExit = make(chan bool)
 
 func ExitNotifications() {
@@ -59,19 +59,19 @@ func SendLocalNotification(notification *store.Notification) {
     return
   }
 
-  if notification.Module == APP_NOTIFYPROFILE {
+  if notification.Module == APPNotifyProfile {
     if err := NotifyProfileRevision(&card, notification.Revision); err != nil {
       ErrMsg(err)
     }
-  } else if notification.Module == APP_NOTIFYARTICLE {
+  } else if notification.Module == APPNotifyArticle {
     if err := NotifyArticleRevision(&card, notification.Revision); err != nil {
       ErrMsg(err)
     }
-  } else if notification.Module == APP_NOTIFYCHANNEL {
+  } else if notification.Module == APPNotifyChannel {
     if err := NotifyChannelRevision(&card, notification.Revision); err != nil {
       ErrMsg(err)
     }
-  } else if notification.Module == APP_NOTIFYVIEW {
+  } else if notification.Module == APPNotifyView {
     if err := NotifyViewRevision(&card, notification.Revision); err != nil {
       ErrMsg(err)
     }
@@ -83,13 +83,13 @@ func SendLocalNotification(notification *store.Notification) {
 func SendRemoteNotification(notification *store.Notification) {
 
   var module string
-  if notification.Module == APP_NOTIFYPROFILE {
+  if notification.Module == APPNotifyProfile {
     module = "profile"
-  } else if notification.Module == APP_NOTIFYARTICLE {
+  } else if notification.Module == APPNotifyArticle {
     module = "article"
-  } else if notification.Module == APP_NOTIFYCHANNEL {
+  } else if notification.Module == APPNotifyChannel {
     module = "channel"
-  } else if notification.Module == APP_NOTIFYVIEW {
+  } else if notification.Module == APPNotifyView {
     module = "view"
   } else {
     LogMsg("unknown notification type")
@@ -123,7 +123,7 @@ func SetProfileNotification(account *store.Account) {
 
   // select all connected cards
   var cards []store.Card
-  if err := store.DB.Where("account_id = ? AND status = ?", account.GUID, APP_CARDCONNECTED).Find(&cards).Error; err != nil {
+  if err := store.DB.Where("account_id = ? AND status = ?", account.GUID, APPCardConnected).Find(&cards).Error; err != nil {
     ErrMsg(err)
     return
   }
@@ -133,7 +133,7 @@ func SetProfileNotification(account *store.Account) {
     for _, card := range cards {
       notification := &store.Notification{
         Node: card.Node,
-        Module: APP_NOTIFYPROFILE,
+        Module: APPNotifyProfile,
         GUID: card.GUID,
         Token: card.OutToken,
         Revision: account.ProfileRevision,
@@ -155,14 +155,14 @@ func SetProfileNotification(account *store.Account) {
 // for each card of group set or cleared from article (does not update data)
 func SetContactArticleNotification(account *store.Account, card *store.Card) {
 
-  if card.Status != APP_CARDCONNECTED {
+  if card.Status != APPCardConnected {
     return
   }
 
   // add new notification for card
   notification := &store.Notification{
     Node: card.Node,
-    Module: APP_NOTIFYARTICLE,
+    Module: APPNotifyArticle,
     GUID: card.GUID,
     Token: card.OutToken,
     Revision: account.ArticleRevision,
@@ -180,14 +180,14 @@ func SetContactArticleNotification(account *store.Account, card *store.Card) {
 // for each card in deleted group
 func SetContactViewNotification(account *store.Account, card *store.Card) {
 
-  if card.Status != APP_CARDCONNECTED {
+  if card.Status != APPCardConnected {
     return
   }
 
   // add new notification for card
   notification := &store.Notification{
     Node: card.Node,
-    Module: APP_NOTIFYVIEW,
+    Module: APPNotifyView,
     GUID: card.GUID,
     Token: card.OutToken,
     Revision: card.ViewRevision,
@@ -204,14 +204,14 @@ func SetContactViewNotification(account *store.Account, card *store.Card) {
 // for each card in updated channel data
 func SetContactChannelNotification(account *store.Account, card *store.Card) {
 
-  if card.Status != APP_CARDCONNECTED {
+  if card.Status != APPCardConnected {
     return
   }
 
   // add new notification for card
   notification := &store.Notification{
     Node: card.Node,
-    Module: APP_NOTIFYCHANNEL,
+    Module: APPNotifyChannel,
     GUID: card.GUID,
     Token: card.OutToken,
     Revision: account.ChannelRevision,

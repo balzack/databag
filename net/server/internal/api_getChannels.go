@@ -51,7 +51,7 @@ func GetChannels(w http.ResponseWriter, r *http.Request) {
 
   response := []*Channel{}
   tokenType := ParamTokenType(r)
-  if tokenType == APP_TOKENAGENT {
+  if tokenType == APPTokenAgent {
 
     account, code, err := ParamAgentToken(r, false);
     if err != nil {
@@ -86,7 +86,7 @@ func GetChannels(w http.ResponseWriter, r *http.Request) {
 
     w.Header().Set("Channel-Revision", strconv.FormatInt(account.ChannelRevision, 10))
 
-  } else if tokenType == APP_TOKENCONTACT {
+  } else if tokenType == APPTokenContact {
 
     card, code, err := ParamContactToken(r, true)
     if err != nil {

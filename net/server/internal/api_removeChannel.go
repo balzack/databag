@@ -20,13 +20,13 @@ func RemoveChannel(w http.ResponseWriter, r *http.Request) {
   var account *store.Account
   var contact *store.Card
   tokenType := ParamTokenType(r);
-  if tokenType == APP_TOKENAGENT {
+  if tokenType == APPTokenAgent {
     account, code, err = ParamAgentToken(r, false);
     if err != nil {
       ErrResponse(w, code, err);
       return
     }
-  } else if tokenType == APP_TOKENCONTACT {
+  } else if tokenType == APPTokenContact {
     contact, code, err = ParamContactToken(r, true)
     if err != nil {
       ErrResponse(w, code, err);

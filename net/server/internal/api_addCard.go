@@ -26,7 +26,7 @@ func AddCard(w http.ResponseWriter, r *http.Request) {
 
   var identity Identity
   guid, messageType, _, err := ReadDataMessage(&message, &identity)
-  if messageType != APP_MSGIDENTITY || err != nil {
+  if messageType != APPMsgIdentity || err != nil {
     ErrResponse(w, http.StatusBadRequest, err)
     return
   }
@@ -40,7 +40,7 @@ func AddCard(w http.ResponseWriter, r *http.Request) {
     }
 
     // create new card data
-    data, res := securerandom.Bytes(APP_TOKENSIZE)
+    data, res := securerandom.Bytes(APPTokenSize)
     if res != nil {
       ErrResponse(w, http.StatusInternalServerError, err)
       return
@@ -55,7 +55,7 @@ func AddCard(w http.ResponseWriter, r *http.Request) {
       Version: identity.Version,
       Node: identity.Node,
       ProfileRevision: identity.Revision,
-      Status: APP_CARDCONFIRMED,
+      Status: APPCardConfirmed,
       ViewRevision: 0,
       InToken: hex.EncodeToString(data),
       AccountID: account.GUID,
@@ -97,8 +97,8 @@ func AddCard(w http.ResponseWriter, r *http.Request) {
       card.Node = identity.Node
       card.ProfileRevision = identity.Revision
     }
-    if card.Status == APP_CARDPENDING {
-      card.Status = APP_CARDCONFIRMED
+    if card.Status == APPCardPending {
+      card.Status = APPCardConfirmed
     }
     card.DetailRevision = account.CardRevision + 1
 

@@ -50,7 +50,7 @@ func GetArticles(w http.ResponseWriter, r *http.Request) {
 
   var response []*Article
   tokenType := ParamTokenType(r)
-  if tokenType == APP_TOKENAGENT {
+  if tokenType == APPTokenAgent {
 
     account, code, err := ParamAgentToken(r, false);
     if err != nil {
@@ -79,7 +79,7 @@ func GetArticles(w http.ResponseWriter, r *http.Request) {
 
     w.Header().Set("Article-Revision", strconv.FormatInt(account.ArticleRevision, 10))
 
-  } else if tokenType == APP_TOKENCONTACT {
+  } else if tokenType == APPTokenContact {
 
     card, code, err := ParamContactToken(r, true)
     if err != nil {

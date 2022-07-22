@@ -37,31 +37,31 @@ func TestAttributeShare(t *testing.T) {
   param["cardID"] = set.B.A.CardID
   bRev = GetTestRevision(set.B.Revisions)
   assert.NoError(t, APITestMsg(GetCard, "GET", "/contact/cards/{cardID}",
-    &param, nil, APP_TOKENAGENT, set.B.Token, card, nil))
+    &param, nil, APPTokenAgent, set.B.Token, card, nil))
   bViewRevision = card.Data.NotifiedView
   bArticleRevision = card.Data.NotifiedArticle
   card = &Card{}
   param["cardID"] = set.C.A.CardID
   cRev = GetTestRevision(set.C.Revisions)
   assert.NoError(t, APITestMsg(GetCard, "GET", "/contact/cards/{cardID}",
-    &param, nil, APP_TOKENAGENT, set.C.Token, card, nil))
+    &param, nil, APPTokenAgent, set.C.Token, card, nil))
   bViewRevision = card.Data.NotifiedView
   bArticleRevision = card.Data.NotifiedArticle
 
   // add a new attribute
   articles = &[]Article{}
   assert.NoError(t, APITestMsg(GetArticles, "GET", "/attribute/articles",
-    nil, nil, APP_TOKENAGENT, set.A.Token, articles, nil))
+    nil, nil, APPTokenAgent, set.A.Token, articles, nil))
   assert.Equal(t, 0, len(*articles))
   article = &Article{}
   subject = &Subject{ Data: "subjectdata", DataType: "subjectdatatype" }
   assert.NoError(t, APITestMsg(AddArticle, "POST", "/attributes/articles",
-    nil, subject, APP_TOKENAGENT, set.A.Token, article, nil))
+    nil, subject, APPTokenAgent, set.A.Token, article, nil))
   assert.Equal(t, "subjectdata", article.Data.Data)
   assert.Equal(t, "subjectdatatype", article.Data.DataType)
   articles = &[]Article{}
   assert.NoError(t, APITestMsg(GetArticles, "GET", "/attribute/articles",
-    nil, nil, APP_TOKENAGENT, set.A.Token, articles, nil))
+    nil, nil, APPTokenAgent, set.A.Token, articles, nil))
   assert.Equal(t, 1, len(*articles))
 
   // should not have generated a revision
@@ -73,7 +73,7 @@ func TestAttributeShare(t *testing.T) {
   param["groupID"] = set.A.B.GroupID
   article = &Article{}
   assert.NoError(t, APITestMsg(SetArticleGroup, "PUT", "/attribute/articles/{articleID}/groups/{groupID}",
-    &param, nil, APP_TOKENAGENT, set.A.Token, article, nil))
+    &param, nil, APPTokenAgent, set.A.Token, article, nil))
 
   // validate B & C view
   cards = &[]Card{}
@@ -82,7 +82,7 @@ func TestAttributeShare(t *testing.T) {
   assert.Nil(t, GetTestRevision(set.C.Revisions))
   revision = strconv.FormatInt(bRev.Card, 10)
   assert.NoError(t, APITestMsg(GetCards, "GET", "/contact/cards?revision=" + revision,
-    nil, nil, APP_TOKENAGENT, set.B.Token, cards, nil))
+    nil, nil, APPTokenAgent, set.B.Token, cards, nil))
   assert.Equal(t, 1, len(*cards))
   assert.NotEqual(t, bArticleRevision, (*cards)[0].Data.NotifiedArticle)
   assert.Equal(t, bViewRevision, (*cards)[0].Data.NotifiedView)
@@ -90,12 +90,12 @@ func TestAttributeShare(t *testing.T) {
   bArticleRevision = (*cards)[0].Data.NotifiedArticle
   articles = &[]Article{}
   assert.NoError(t, APITestMsg(GetArticles, "GET", "/attribute/articles",
-    nil, nil, APP_TOKENCONTACT, set.B.A.Token, articles, nil))
+    nil, nil, APPTokenContact, set.B.A.Token, articles, nil))
   assert.Equal(t, 1, len(*articles))
   assert.NotNil(t, (*articles)[0].Data)
   articles = &[]Article{}
   assert.NoError(t, APITestMsg(GetArticles, "GET", "/attribute/articles",
-    nil, nil, APP_TOKENCONTACT, set.C.A.Token, articles, nil))
+    nil, nil, APPTokenContact, set.C.A.Token, articles, nil))
   assert.Equal(t, 0, len(*articles))
 
   // update attribute
@@ -105,7 +105,7 @@ func TestAttributeShare(t *testing.T) {
   param["articleID"] = article.ID
   article = &Article{}
   assert.NoError(t, APITestMsg(SetArticleSubject, "PUT", "/attribute/articles/{articleID}/subject",
-    &param, subject, APP_TOKENAGENT, set.A.Token, article, nil))
+    &param, subject, APPTokenAgent, set.A.Token, article, nil))
 
   // validate B & C view
   cards = &[]Card{}
@@ -114,7 +114,7 @@ func TestAttributeShare(t *testing.T) {
   assert.Nil(t, GetTestRevision(set.C.Revisions))
   revision = strconv.FormatInt(bRev.Card, 10)
   assert.NoError(t, APITestMsg(GetCards, "GET", "/contact/cards?revision=" + revision,
-    nil, nil, APP_TOKENAGENT, set.B.Token, cards, nil))
+    nil, nil, APPTokenAgent, set.B.Token, cards, nil))
   assert.Equal(t, 1, len(*cards))
   assert.NotEqual(t, bArticleRevision, (*cards)[0].Data.NotifiedArticle)
   assert.Equal(t, bViewRevision, (*cards)[0].Data.NotifiedView)
@@ -123,7 +123,7 @@ func TestAttributeShare(t *testing.T) {
   rArticle = strconv.FormatInt(bArticleRevision, 10)
   articles = &[]Article{}
   assert.NoError(t, APITestMsg(GetArticles, "GET", "/attribute/articles?viewRevision=" + rView + "&articleRevision=" + rArticle,
-    nil, nil, APP_TOKENCONTACT, set.B.A.Token, articles, nil))
+    nil, nil, APPTokenContact, set.B.A.Token, articles, nil))
   assert.Equal(t, 1, len(*articles))
   assert.Equal(t, "nestedimage", (*articles)[0].Data.DataType)
   bArticleRevision = (*cards)[0].Data.NotifiedArticle
@@ -134,13 +134,13 @@ func TestAttributeShare(t *testing.T) {
   param["groupID"] = set.A.C.GroupID
   article = &Article{}
   assert.NoError(t, APITestMsg(SetArticleGroup, "PUT", "/attribute/articles/{articleID}/groups/{groupID}",
-    &param, nil, APP_TOKENAGENT, set.A.Token, article, nil))
+    &param, nil, APPTokenAgent, set.A.Token, article, nil))
 
   // A retrieve image
   param["articleID"] = article.ID
   param["field"] = "nested.image"
   aData, aType, aErr := APITestData(GetArticleSubjectField, "GET", "/attributes/articles/{articleID}/subject/{field}",
-    &param, nil, APP_TOKENAGENT, set.A.Token, 0, 0)
+    &param, nil, APPTokenAgent, set.A.Token, 0, 0)
   assert.NoError(t, aErr)
   assert.Equal(t, "image/png", aType["Content-Type"][0])
   img, _ = base64.StdEncoding.DecodeString(image)
@@ -150,7 +150,7 @@ func TestAttributeShare(t *testing.T) {
   param["articleID"] = article.ID
   param["field"] = "nested.image"
   cData, cType, cErr := APITestData(GetArticleSubjectField, "GET", "/attributes/articles/{articleID}/subject/{field}",
-    &param, nil, APP_TOKENCONTACT, set.C.A.Token, 0, 0)
+    &param, nil, APPTokenContact, set.C.A.Token, 0, 0)
   assert.NoError(t, cErr)
   assert.Equal(t, "image/png", cType["Content-Type"][0])
   img, _ = base64.StdEncoding.DecodeString(image)
@@ -163,12 +163,12 @@ func TestAttributeShare(t *testing.T) {
   assert.Nil(t, GetTestRevision(set.B.Revisions))
   revision = strconv.FormatInt(cRev.Card, 10)
   assert.NoError(t, APITestMsg(GetCards, "GET", "/contact/cards?revision=" + revision,
-    nil, nil, APP_TOKENAGENT, set.C.Token, cards, nil))
+    nil, nil, APPTokenAgent, set.C.Token, cards, nil))
   assert.Equal(t, 1, len(*cards))
   cRev = rev
   articles = &[]Article{}
   assert.NoError(t, APITestMsg(GetArticles, "GET", "/attribute/articles",
-    nil, nil, APP_TOKENCONTACT, set.C.A.Token, articles, &hdr))
+    nil, nil, APPTokenContact, set.C.A.Token, articles, &hdr))
   assert.Equal(t, 1, len(*articles))
   assert.Equal(t, "nestedimage", (*articles)[0].Data.DataType)
   cArticleRevision, _ = strconv.ParseInt(hdr["Article-Revision"][0], 10, 64)
@@ -179,7 +179,7 @@ func TestAttributeShare(t *testing.T) {
   param["groupID"] = set.A.B.GroupID
   article = &Article{}
   assert.NoError(t, APITestMsg(ClearArticleGroup, "DELETE", "/attribute/articles/{articleID}/groups/{groupID}",
-    &param, nil, APP_TOKENAGENT, set.A.Token, article, nil))
+    &param, nil, APPTokenAgent, set.A.Token, article, nil))
 
   // validate B & C view
   cards = &[]Card{}
@@ -188,7 +188,7 @@ func TestAttributeShare(t *testing.T) {
   assert.Nil(t, GetTestRevision(set.C.Revisions))
   revision = strconv.FormatInt(bRev.Card, 10)
   assert.NoError(t, APITestMsg(GetCards, "GET", "/contact/cards?revision=" + revision,
-    nil, nil, APP_TOKENAGENT, set.B.Token, cards, nil))
+    nil, nil, APPTokenAgent, set.B.Token, cards, nil))
   assert.Equal(t, 1, len(*cards))
   assert.NotEqual(t, bArticleRevision, (*cards)[0].Data.NotifiedArticle)
   assert.Equal(t, bViewRevision, (*cards)[0].Data.NotifiedView)
@@ -197,7 +197,7 @@ func TestAttributeShare(t *testing.T) {
   rArticle = strconv.FormatInt(bArticleRevision, 10)
   articles = &[]Article{}
   assert.NoError(t, APITestMsg(GetArticles, "GET", "/attribute/articles?viewRevision=" + rView + "&articleRevision=" + rArticle,
-    nil, nil, APP_TOKENCONTACT, set.B.A.Token, articles, nil))
+    nil, nil, APPTokenContact, set.B.A.Token, articles, nil))
   assert.Equal(t, 1, len(*articles))
   assert.Nil(t, (*articles)[0].Data)
   card = &Card{}
@@ -207,10 +207,10 @@ func TestAttributeShare(t *testing.T) {
   // delete article
   param["articleID"] = article.ID
   assert.NoError(t, APITestMsg(RemoveArticle, "DELETE", "/attribute/articles/{articleID}",
-    &param, nil, APP_TOKENAGENT, set.A.Token, nil, nil))
+    &param, nil, APPTokenAgent, set.A.Token, nil, nil))
   articles = &[]Article{}
   assert.NoError(t, APITestMsg(GetArticles, "GET", "/attribute/articles",
-    nil, nil, APP_TOKENAGENT, set.A.Token, articles, nil))
+    nil, nil, APPTokenAgent, set.A.Token, articles, nil))
   assert.Equal(t, 0, len(*articles))
 
   // validate B & C view
@@ -220,13 +220,13 @@ func TestAttributeShare(t *testing.T) {
   assert.Nil(t, GetTestRevision(set.B.Revisions))
   revision = strconv.FormatInt(cRev.Card, 10)
   assert.NoError(t, APITestMsg(GetCards, "GET", "/contact/cards?revision=" + revision,
-    nil, nil, APP_TOKENAGENT, set.C.Token, cards, nil))
+    nil, nil, APPTokenAgent, set.C.Token, cards, nil))
   assert.Equal(t, 1, len(*cards))
   rView = strconv.FormatInt(cViewRevision, 10)
   rArticle = strconv.FormatInt(cArticleRevision, 10)
   articles = &[]Article{}
   assert.NoError(t, APITestMsg(GetArticles, "GET", "/attribute/articles?viewRevision=" + rView + "&articleRevision=" + rArticle,
-    nil, nil, APP_TOKENCONTACT, set.C.A.Token, articles, nil))
+    nil, nil, APPTokenContact, set.C.A.Token, articles, nil))
   assert.Equal(t, 1, len(*articles))
   assert.Nil(t, (*articles)[0].Data)
 
@@ -235,24 +235,24 @@ func TestAttributeShare(t *testing.T) {
   rArticle = strconv.FormatInt(cArticleRevision - 1, 10)
   articles = &[]Article{}
   assert.Error(t, APITestMsg(GetArticles, "GET", "/attribute/articles?viewRevision=" + rView + "&articleRevision=" + rArticle,
-    nil, nil, APP_TOKENCONTACT, set.C.A.Token, articles, &hdr))
+    nil, nil, APPTokenContact, set.C.A.Token, articles, &hdr))
 
   // reset B's view
   articles = &[]Article{}
   assert.NoError(t, APITestMsg(GetArticles, "GET", "/attribute/articles",
-    nil, nil, APP_TOKENCONTACT, set.B.A.Token, articles, &hdr))
+    nil, nil, APPTokenContact, set.B.A.Token, articles, &hdr))
   bArticleRevision, _ = strconv.ParseInt(hdr["Article-Revision"][0], 10, 64)
   bViewRevision, _ = strconv.ParseInt(hdr["View-Revision"][0], 10, 64)
 
   // add a new attribute
   articles = &[]Article{}
   assert.NoError(t, APITestMsg(GetArticles, "GET", "/attribute/articles",
-    nil, nil, APP_TOKENAGENT, set.A.Token, articles, nil))
+    nil, nil, APPTokenAgent, set.A.Token, articles, nil))
   assert.Equal(t, 0, len(*articles))
   article = &Article{}
   subject = &Subject{ Data: "subjectdata", DataType: "subjectdatatype" }
   assert.NoError(t, APITestMsg(AddArticle, "POST", "/attributes/articles",
-    nil, subject, APP_TOKENAGENT, set.A.Token, article, nil))
+    nil, subject, APPTokenAgent, set.A.Token, article, nil))
   assert.Equal(t, "subjectdata", article.Data.Data)
   assert.Equal(t, "subjectdatatype", article.Data.DataType)
   articles = &[]Article{}
@@ -262,11 +262,11 @@ func TestAttributeShare(t *testing.T) {
   param["groupID"] = set.A.B.GroupID
   article = &Article{}
   assert.NoError(t, APITestMsg(SetArticleGroup, "PUT", "/attribute/articles/{articleID}/groups/{groupID}",
-    &param, nil, APP_TOKENAGENT, set.A.Token, article, nil))
+    &param, nil, APPTokenAgent, set.A.Token, article, nil))
   rView = strconv.FormatInt(bViewRevision, 10)
   rArticle = strconv.FormatInt(bArticleRevision, 10)
   assert.NoError(t, APITestMsg(GetArticles, "GET", "/attribute/articles?viewRevision=" + rView + "&articleRevision=" + rArticle,
-    nil, nil, APP_TOKENCONTACT, set.B.A.Token, articles, &hdr))
+    nil, nil, APPTokenContact, set.B.A.Token, articles, &hdr))
   assert.Equal(t, 1, len(*articles))
   assert.NotNil(t, (*articles)[0].Data)
   bArticleRevision, _ = strconv.ParseInt(hdr["Article-Revision"][0], 10, 64)
@@ -274,12 +274,12 @@ func TestAttributeShare(t *testing.T) {
 
   // delete B's group
   assert.NoError(t, APITestMsg(RemoveGroup, "DELETE", "/alias/groups/{groupID}",
-    &param, nil, APP_TOKENAGENT, set.A.Token, nil, nil))
+    &param, nil, APPTokenAgent, set.A.Token, nil, nil))
   assert.Error(t, APITestMsg(GetArticles, "GET", "/attribute/articles?viewRevision=" + rView + "&articleRevision=" + rArticle,
-    nil, nil, APP_TOKENCONTACT, set.B.A.Token, articles, &hdr))
+    nil, nil, APPTokenContact, set.B.A.Token, articles, &hdr))
   articles = &[]Article{}
   assert.NoError(t, APITestMsg(GetArticles, "GET", "/attribute/articles",
-    nil, nil, APP_TOKENCONTACT, set.B.A.Token, articles, &hdr))
+    nil, nil, APPTokenContact, set.B.A.Token, articles, &hdr))
   view, _ := strconv.ParseInt(hdr["View-Revision"][0], 10, 64)
   assert.NotEqual(t, bViewRevision, view)
   assert.Equal(t, 0, len(*articles))

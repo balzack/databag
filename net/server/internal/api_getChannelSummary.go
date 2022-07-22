@@ -17,14 +17,14 @@ func GetChannelSummary(w http.ResponseWriter, r *http.Request) {
   var guid string
   var act *store.Account
   tokenType := ParamTokenType(r)
-  if tokenType == APP_TOKENAGENT {
+  if tokenType == APPTokenAgent {
     account, code, err := ParamAgentToken(r, false);
     if err != nil {
       ErrResponse(w, code, err)
       return
     }
     act = account
-  } else if tokenType == APP_TOKENCONTACT {
+  } else if tokenType == APPTokenContact {
     card, code, err := ParamContactToken(r, true)
     if err != nil {
       ErrResponse(w, code, err)

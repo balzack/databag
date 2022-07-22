@@ -16,8 +16,8 @@ import (
   "github.com/gorilla/websocket"
 )
 
-const test_ReadDeadline = 2
-const test_RevisionWait = 100
+const testReadDeadline = 2
+const testRevisionWait = 100
 
 type TestCard struct {
   GUID string
@@ -44,7 +44,7 @@ type TestGroup struct {
 }
 
 func GetTestRevision(status chan *Revision) (rev *Revision) {
-  time.Sleep(test_RevisionWait * time.Millisecond)
+  time.Sleep(testRevisionWait * time.Millisecond)
   for {
 		select {
 		case r:=<-status:
@@ -70,14 +70,14 @@ func APITestData(
   var r *http.Request
   var w *httptest.ResponseRecorder
 
-  if tokenType == APP_TOKENAGENT {
+  if tokenType == APPTokenAgent {
     if !strings.Contains(name, "?") {
       name += "?"
     } else {
       name += "&"
     }
     name += "agent=" + token
-  } else if tokenType == APP_TOKENCONTACT {
+  } else if tokenType == APPTokenContact {
     if !strings.Contains(name, "?") {
       name += "?"
     } else {
@@ -127,14 +127,14 @@ func APITestMsg(
   var r *http.Request
   var w *httptest.ResponseRecorder
 
-  if tokenType == APP_TOKENAGENT {
+  if tokenType == APPTokenAgent {
     if !strings.Contains(name, "?") {
       name += "?"
     } else {
       name += "&"
     }
     name += "agent=" + token
-  } else if tokenType == APP_TOKENCONTACT {
+  } else if tokenType == APPTokenContact {
     if !strings.Contains(name, "?") {
       name += "?"
     } else {
@@ -196,14 +196,14 @@ func APITestUpload(
     return
   }
 
-  if tokenType == APP_TOKENAGENT {
+  if tokenType == APPTokenAgent {
     if !strings.Contains(name, "?") {
       name += "?"
     } else {
       name += "&"
     }
     name += "agent=" + token
-  } else if tokenType == APP_TOKENCONTACT {
+  } else if tokenType == APPTokenContact {
     if !strings.Contains(name, "?") {
       name += "?"
     } else {
@@ -444,7 +444,7 @@ func GetCardToken(account string, cardID string) (token string, err error) {
   if err = ReadResponse(w, &cardDetail); err != nil {
     return
   }
-  if cardDetail.Status != APP_CARDCONNECTED {
+  if cardDetail.Status != APPCardConnected {
     err = errors.New("card not connected")
     return
   }
@@ -531,7 +531,7 @@ func OpenTestCard(account string, cardID string) (err error) {
   var contactStatus ContactStatus
 
   // set to connecting state
-  if r, w, err = NewRequest("PUT", "/contact/cards/{cardID}/status?agent=" + account, APP_CARDCONNECTING); err != nil {
+  if r, w, err = NewRequest("PUT", "/contact/cards/{cardID}/status?agent=" + account, APPCardConnecting); err != nil {
     return
   }
   r = mux.SetURLVars(r, vars)
@@ -560,12 +560,12 @@ func OpenTestCard(account string, cardID string) (err error) {
   }
 
   // update status if connected
-  if contactStatus.Status == APP_CARDCONNECTED {
+  if contactStatus.Status == APPCardConnected {
     view := "viewRevision=" + strconv.FormatInt(contactStatus.ViewRevision, 10)
     article := "articleRevision=" + strconv.FormatInt(contactStatus.ArticleRevision, 10)
     channel := "channelRevision=" + strconv.FormatInt(contactStatus.ChannelRevision, 10)
     profile := "profileRevision=" + strconv.FormatInt(contactStatus.ProfileRevision, 10)
-    if r, w, err = NewRequest("PUT", "/contact/cards/{cardID}/status?agent=" + account + "&token=" + contactStatus.Token + "&" + view + "&" + article + "&" + channel + "&" + profile, APP_CARDCONNECTED); err != nil {
+    if r, w, err = NewRequest("PUT", "/contact/cards/{cardID}/status?agent=" + account + "&token=" + contactStatus.Token + "&" + view + "&" + article + "&" + channel + "&" + profile, APPCardConnected); err != nil {
       return
     }
     r = mux.SetURLVars(r, vars)
@@ -661,7 +661,7 @@ func AddTestAccount(username string) (guid string, token string, err error) {
     return
   }
   signer, messageType, _, res := ReadDataMessage(&msg, &claim)
-  if res != nil || signer != guid || messageType != APP_MSGAUTHENTICATE || claim.Token != "1234abcd" {
+  if res != nil || signer != guid || messageType != APPMsgAuthenticate || claim.Token != "1234abcd" {
     err = errors.New("invalid authenticated claim")
     return
   }
@@ -709,7 +709,7 @@ func StatusConnection(token string, rev *Revision) (ws *websocket.Conn, err erro
   ws.WriteMessage(websocket.TextMessage, data)
 
   // read revision response
-  ws.SetReadDeadline(time.Now().Add(test_ReadDeadline * time.Second))
+  ws.SetReadDeadline(time.Now().Add(testReadDeadline * time.Second))
   if dataType, data, err = ws.ReadMessage(); err != nil {
     return
   }

@@ -37,7 +37,7 @@ func TestStaggardLoad(t *testing.T) {
       Data: "channeldataA",
       DataType: "channeldatatypeA",
     },
-    tokenType: APP_TOKENAGENT,
+    tokenType: APPTokenAgent,
     token: set.A.Token,
   }
   channel = &Channel{}
@@ -65,7 +65,7 @@ func TestStaggardLoad(t *testing.T) {
         Data: strconv.Itoa(i),
         DataType: "channeltopicdatatypeA",
       },
-      tokenType: APP_TOKENAGENT,
+      tokenType: APPTokenAgent,
       token: set.A.Token,
     }
     topic = &Topic{}
@@ -90,7 +90,7 @@ func TestStaggardLoad(t *testing.T) {
     restType: "GET",
     query: "/content/channels/{channelID}/topics",
     path: map[string]string{ "channelID": channel.ID, "topicID": topic.ID },
-    tokenType: APP_TOKENAGENT,
+    tokenType: APPTokenAgent,
     token: set.A.Token,
   }
   topics = &[]Topic{}
@@ -102,7 +102,7 @@ func TestStaggardLoad(t *testing.T) {
     restType: "GET",
     query: "/content/channels/{channelID}/topics?count=13",
     path: map[string]string{ "channelID": channel.ID, "topicID": topic.ID },
-    tokenType: APP_TOKENAGENT,
+    tokenType: APPTokenAgent,
     token: set.A.Token,
   }
   topics = &[]Topic{}
@@ -117,7 +117,7 @@ func TestStaggardLoad(t *testing.T) {
     restType: "GET",
     query: "/content/channels/{channelID}/topics?count=13&end=" + response.header["Topic-Marker"][0],
     path: map[string]string{ "channelID": channel.ID, "topicID": topic.ID },
-    tokenType: APP_TOKENAGENT,
+    tokenType: APPTokenAgent,
     token: set.A.Token,
   }
   topics = &[]Topic{}
@@ -132,7 +132,7 @@ func TestStaggardLoad(t *testing.T) {
     restType: "DELETE",
     query: "/content/channels/{channelID}/topics/{topicID}",
     path: map[string]string{ "channelID": channel.ID, "topicID": ids[13] },
-    tokenType: APP_TOKENAGENT,
+    tokenType: APPTokenAgent,
     token: set.A.Token,
   }
   response = &TestAPIResponse{ }
@@ -142,7 +142,7 @@ func TestStaggardLoad(t *testing.T) {
     restType: "GET",
     query: "/content/channels/{channelID}/topics?begin=" + marker + "&revision=" + revision,
     path: map[string]string{ "channelID": channel.ID, "topicID": topic.ID },
-    tokenType: APP_TOKENAGENT,
+    tokenType: APPTokenAgent,
     token: set.A.Token,
   }
   topics = &[]Topic{}
@@ -154,7 +154,7 @@ func TestStaggardLoad(t *testing.T) {
     restType: "DELETE",
     query: "/content/channels/{channelID}/topics/{topicID}",
     path: map[string]string{ "channelID": channel.ID, "topicID": ids[108] },
-    tokenType: APP_TOKENAGENT,
+    tokenType: APPTokenAgent,
     token: set.A.Token,
   }
   response = &TestAPIResponse{ }
@@ -164,7 +164,7 @@ func TestStaggardLoad(t *testing.T) {
     restType: "GET",
     query: "/content/channels/{channelID}/topics?begin=" + marker + "&revision=" + revision,
     path: map[string]string{ "channelID": channel.ID, "topicID": topic.ID },
-    tokenType: APP_TOKENAGENT,
+    tokenType: APPTokenAgent,
     token: set.A.Token,
   }
   topics = &[]Topic{}

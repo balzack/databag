@@ -28,7 +28,7 @@ func SetCardProfile(w http.ResponseWriter, r *http.Request) {
 
   var identity Identity
   guid, messageType, _, err := ReadDataMessage(&message, &identity)
-  if messageType != APP_MSGIDENTITY || err != nil {
+  if messageType != APPMsgIdentity || err != nil {
     ErrResponse(w, http.StatusBadRequest, err)
     return
   }

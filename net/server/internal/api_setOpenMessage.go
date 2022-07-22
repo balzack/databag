@@ -21,11 +21,11 @@ func SetOpenMessage(w http.ResponseWriter, r *http.Request) {
 
   var connect Connect
   guid, messageType, ts, err := ReadDataMessage(&message, &connect)
-  if messageType != APP_MSGCONNECT || err != nil {
+  if messageType != APPMsgConnect || err != nil {
     ErrResponse(w, http.StatusBadRequest, err)
     return
   }
-  if ts + APP_CONNECTEXPIRE < time.Now().Unix() {
+  if ts + APPConnectExpire < time.Now().Unix() {
     ErrResponse(w, http.StatusBadRequest, errors.New("message has expired"))
     return
   }
@@ -51,7 +51,7 @@ func SetOpenMessage(w http.ResponseWriter, r *http.Request) {
     }
 
     // create new card
-    data, res := securerandom.Bytes(APP_TOKENSIZE)
+    data, res := securerandom.Bytes(APPTokenSize)
     if res != nil {
       ErrResponse(w, http.StatusInternalServerError, res)
       return
@@ -65,7 +65,7 @@ func SetOpenMessage(w http.ResponseWriter, r *http.Request) {
     card.Version = connect.Version
     card.Node = connect.Node
     card.ProfileRevision = connect.ProfileRevision
-    card.Status = APP_CARDPENDING
+    card.Status = APPCardPending
     card.NotifiedProfile = connect.ProfileRevision
     card.NotifiedArticle = connect.ArticleRevision
     card.NotifiedView = connect.ViewRevision
@@ -121,11 +121,11 @@ func SetOpenMessage(w http.ResponseWriter, r *http.Request) {
     if connect.ProfileRevision > card.NotifiedProfile {
       card.NotifiedProfile = connect.ProfileRevision
     }
-    if card.Status == APP_CARDCONFIRMED {
-      card.Status = APP_CARDREQUESTED
+    if card.Status == APPCardConfirmed {
+      card.Status = APPCardRequested
     }
-    if card.Status == APP_CARDCONNECTING {
-      card.Status = APP_CARDCONNECTED
+    if card.Status == APPCardConnecting {
+      card.Status = APPCardConnected
     }
     card.OutToken = connect.Token
     card.DetailRevision = account.CardRevision + 1

@@ -15,7 +15,7 @@ func GetAccountUsername(w http.ResponseWriter, r *http.Request) {
 
   if r.FormValue("token") != "" {
     token, _, res := AccessToken(r)
-    if res != nil || token.TokenType != APP_TOKENCREATE {
+    if res != nil || token.TokenType != APPTokenCreate {
       ErrResponse(w, http.StatusUnauthorized, res)
       return
     }

@@ -24,7 +24,7 @@ func AddAccountApp(w http.ResponseWriter, r *http.Request) {
   }
 
   // gernate app token  
-  data, err := securerandom.Bytes(APP_TOKENSIZE)
+  data, err := securerandom.Bytes(APPTokenSize)
   if err != nil {
     ErrResponse(w, http.StatusInternalServerError, err)
     return

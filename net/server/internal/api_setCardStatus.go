@@ -68,7 +68,7 @@ func SetCardStatus(w http.ResponseWriter, r *http.Request) {
     ErrResponse(w, http.StatusBadRequest, errors.New("unknown status"))
     return
   }
-  if status == APP_CARDCONNECTED && token == "" {
+  if status == APPCardConnected && token == "" {
     ErrResponse(w, http.StatusBadRequest, errors.New("connected token not set"))
     return
   }
@@ -93,9 +93,9 @@ func SetCardStatus(w http.ResponseWriter, r *http.Request) {
   if token != "" {
     slot.Card.OutToken = token
   }
-  if status == APP_CARDCONNECTING {
-    if slot.Card.Status != APP_CARDCONNECTING && slot.Card.Status != APP_CARDCONNECTED {
-      data, err := securerandom.Bytes(APP_TOKENSIZE)
+  if status == APPCardConnecting {
+    if slot.Card.Status != APPCardConnecting && slot.Card.Status != APPCardConnected {
+      data, err := securerandom.Bytes(APPTokenSize)
       if err != nil {
         ErrResponse(w, http.StatusInternalServerError, err)
         return

@@ -98,7 +98,7 @@ func RemoveNodeAccount(w http.ResponseWriter, r *http.Request) {
   }
 
   // delete asset files
-  path := getStrConfigValue(CONFIG_ASSETPATH, APP_DEFAULTPATH) + "/" + account.GUID
+  path := getStrConfigValue(CONFIG_ASSETPATH, APPDefaultPath) + "/" + account.GUID
   if err = os.RemoveAll(path); err != nil {
     ErrMsg(err)
   }

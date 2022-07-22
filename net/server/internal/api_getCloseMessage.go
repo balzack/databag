@@ -32,7 +32,7 @@ func GetCloseMessage(w http.ResponseWriter, r *http.Request) {
     return
   }
 
-  if slot.Card.Status == APP_CARDCONNECTING || slot.Card.Status == APP_CARDCONNECTED {
+  if slot.Card.Status == APPCardConnecting || slot.Card.Status == APPCardConnected {
     ErrResponse(w, http.StatusMethodNotAllowed, errors.New("invalid card state"))
     return
   }
@@ -42,7 +42,7 @@ func GetCloseMessage(w http.ResponseWriter, r *http.Request) {
   }
 
   msg, err := WriteDataMessage(detail.PrivateKey, detail.PublicKey, detail.KeyType,
-    APP_SIGNPKCS1V15, account.GUID, APP_MSGDISCONNECT, &disconnect)
+    APPSignPKCS1V15, account.GUID, APPMsgDisconnect, &disconnect)
   if err != nil {
     ErrResponse(w, http.StatusInternalServerError, err)
     return

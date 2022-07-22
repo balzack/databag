@@ -33,11 +33,11 @@ func GetAccountListingMessage(w http.ResponseWriter, r *http.Request) {
     Description: detail.Description,
     Location: detail.Location,
     Image: detail.Image,
-    Version: APP_VERSION,
+    Version: APPVersion,
     Node: getStrConfigValue(CONFIG_DOMAIN, ""),
   }
   msg, res := WriteDataMessage(detail.PrivateKey, detail.PublicKey, detail.KeyType,
-    APP_SIGNPKCS1V15, account.GUID, APP_MSGIDENTITY, &identity)
+    APPSignPKCS1V15, account.GUID, APPMsgIdentity, &identity)
   if res != nil {
     ErrResponse(w, http.StatusInternalServerError, res)
     return

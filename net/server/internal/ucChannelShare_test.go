@@ -34,55 +34,55 @@ func TestChannelShare(t *testing.T) {
   channel = &Channel{}
   subject = &Subject{ Data: "channeldata", DataType: "channeldatatype" }
   assert.NoError(t, APITestMsg(AddChannel, "POST", "/content/channels",
-    nil, subject, APP_TOKENAGENT, set.A.Token, channel, nil))
+    nil, subject, APPTokenAgent, set.A.Token, channel, nil))
 
   // retrieve channels
   channels = &[]Channel{}
   assert.NoError(t, APITestMsg(GetChannels, "GET", "/content/channels",
-    nil, nil, APP_TOKENAGENT, set.A.Token, channels, &aRevision))
+    nil, nil, APPTokenAgent, set.A.Token, channels, &aRevision))
   assert.Equal(t, 1, len(*channels))
   assert.NotNil(t, (*channels)[0].Data)
   detailRevision = (*channels)[0].Data.DetailRevision
   channels = &[]Channel{}
   assert.NoError(t, APITestMsg(GetChannels, "GET", "/content/channels",
-    nil, nil, APP_TOKENCONTACT, set.B.A.Token, channels, &bChannelRevision))
+    nil, nil, APPTokenContact, set.B.A.Token, channels, &bChannelRevision))
   assert.Equal(t, 0, len(*channels))
   channels = &[]Channel{}
   assert.NoError(t, APITestMsg(GetChannels, "GET", "/content/channels",
-    nil, nil, APP_TOKENCONTACT, set.C.A.Token, channels, &cChannelRevision))
+    nil, nil, APPTokenContact, set.C.A.Token, channels, &cChannelRevision))
   assert.Equal(t, 0, len(*channels))
 
   // assign channel to B
   params["channelID"] = channel.ID
   params["cardID"] = set.A.B.CardID
   assert.NoError(t, APITestMsg(SetChannelCard, "PUT", "/content/channels/{channelID}/cards/{cardID}",
-    &params, nil, APP_TOKENAGENT, set.A.Token, nil, nil))
+    &params, nil, APPTokenAgent, set.A.Token, nil, nil))
 
   // check shared channel
   channels = &[]Channel{}
   revision = "?channelRevision=" + aRevision["Channel-Revision"][0]
   assert.NoError(t, APITestMsg(GetChannels, "GET", "/content/channels" + revision,
-    nil, nil, APP_TOKENAGENT, set.A.Token, channels, &aRevision))
+    nil, nil, APPTokenAgent, set.A.Token, channels, &aRevision))
   assert.Equal(t, 1, len(*channels))
   assert.NotNil(t, (*channels)[0].Data)
   assert.NotEqual(t, detailRevision, (*channels)[0].Data.DetailRevision)
   channels = &[]Channel{}
   revision = "?channelRevision=" + bChannelRevision["Channel-Revision"][0] + "&viewRevision=" + bChannelRevision["View-Revision"][0]
   assert.NoError(t, APITestMsg(GetChannels, "GET", "/content/channels" + revision,
-    nil, nil, APP_TOKENCONTACT, set.B.A.Token, channels, &bChannelRevision))
+    nil, nil, APPTokenContact, set.B.A.Token, channels, &bChannelRevision))
   assert.Equal(t, 1, len(*channels))
   assert.NotNil(t, (*channels)[0].Data)
   channels = &[]Channel{}
   revision = "?channelRevision=" + cChannelRevision["Channel-Revision"][0] + "&viewRevision=" + cChannelRevision["View-Revision"][0]
   assert.NoError(t, APITestMsg(GetChannels, "GET", "/content/channels" + revision,
-    nil, nil, APP_TOKENCONTACT, set.C.A.Token, channels, &cChannelRevision))
+    nil, nil, APPTokenContact, set.C.A.Token, channels, &cChannelRevision))
   assert.Equal(t, 1, len(*channels))
   assert.Nil(t, (*channels)[0].Data)
 
   // get discovered channel
   detail = &ChannelDetail{}
   assert.NoError(t, APITestMsg(GetChannelDetail, "GET", "/content/channels/{channelID}/detail",
-    &params, nil, APP_TOKENCONTACT, set.B.A.Token, detail, nil))
+    &params, nil, APPTokenContact, set.B.A.Token, detail, nil))
   assert.Equal(t, "channeldatatype", detail.DataType)
   assert.Equal(t, 1, len(detail.Members))
   assert.Equal(t, set.B.GUID, detail.Members[0])
@@ -94,22 +94,22 @@ func TestChannelShare(t *testing.T) {
   cRev = GetTestRevision(set.C.Revisions)
   cards = &[]Card{}
   assert.NoError(t, APITestMsg(GetCards, "GET", "/contact/cards",
-    nil, nil, APP_TOKENAGENT, set.B.Token, cards, &bCardRevision))
+    nil, nil, APPTokenAgent, set.B.Token, cards, &bCardRevision))
   channels = &[]Channel{}
   assert.NoError(t, APITestMsg(GetChannels, "GET", "/content/channels",
-    nil, nil, APP_TOKENCONTACT, set.B.A.Token, channels, &bChannelRevision))
+    nil, nil, APPTokenContact, set.B.A.Token, channels, &bChannelRevision))
   cards = &[]Card{}
   assert.NoError(t, APITestMsg(GetCards, "GET", "/contact/cards",
-    nil, nil, APP_TOKENAGENT, set.C.Token, cards, &cCardRevision))
+    nil, nil, APPTokenAgent, set.C.Token, cards, &cCardRevision))
   channels = &[]Channel{}
   assert.NoError(t, APITestMsg(GetChannels, "GET", "/content/channels",
-    nil, nil, APP_TOKENCONTACT, set.C.A.Token, channels, &cChannelRevision))
+    nil, nil, APPTokenContact, set.C.A.Token, channels, &cChannelRevision))
 
   // assign channel to C
   params["channelID"] = channel.ID
   params["cardID"] = set.A.C.CardID
   assert.NoError(t, APITestMsg(SetChannelCard, "PUT", "/content/channels/{channelID}/cards/{cardID}",
-    &params, nil, APP_TOKENAGENT, set.A.Token, nil, nil))
+    &params, nil, APPTokenAgent, set.A.Token, nil, nil))
 
   // check revision change
   rev = GetTestRevision(set.A.Revisions)
@@ -119,7 +119,7 @@ func TestChannelShare(t *testing.T) {
   assert.NotEqual(t, rev.Card, bRev.Card)
   cards = &[]Card{}
   assert.NoError(t, APITestMsg(GetCards, "GET", "/contact/cards?revision=" + bCardRevision["Card-Revision"][0],
-    nil, nil, APP_TOKENAGENT, set.B.Token, cards, &bCardRevision))
+    nil, nil, APPTokenAgent, set.B.Token, cards, &bCardRevision))
   assert.Equal(t, 1, len(*cards))
   r, _ = strconv.ParseInt(bChannelRevision["Channel-Revision"][0], 10, 64)
   assert.NotEqual(t, r, (*cards)[0].Data.NotifiedChannel)
@@ -131,7 +131,7 @@ func TestChannelShare(t *testing.T) {
   assert.NotEqual(t, rev.Card, cRev.Card)
   cards = &[]Card{}
   assert.NoError(t, APITestMsg(GetCards, "GET", "/contact/cards?revision=" + cCardRevision["Card-Revision"][0],
-    nil, nil, APP_TOKENAGENT, set.C.Token, cards, &cCardRevision))
+    nil, nil, APPTokenAgent, set.C.Token, cards, &cCardRevision))
   assert.Equal(t, 1, len(*cards))
   r, _ = strconv.ParseInt(cChannelRevision["Channel-Revision"][0], 10, 64)
   assert.NotEqual(t, r, (*cards)[0].Data.NotifiedChannel)
@@ -142,18 +142,18 @@ func TestChannelShare(t *testing.T) {
   channels = &[]Channel{}
   revision = "?channelRevision=" + bChannelRevision["Channel-Revision"][0] + "&viewRevision=" + bChannelRevision["View-Revision"][0]
   assert.NoError(t, APITestMsg(GetChannels, "GET", "/content/channels" + revision,
-    nil, nil, APP_TOKENCONTACT, set.B.A.Token, channels, &bChannelRevision))
+    nil, nil, APPTokenContact, set.B.A.Token, channels, &bChannelRevision))
   assert.Equal(t, 1, len(*channels))
   channels = &[]Channel{}
   revision = "?channelRevision=" + cChannelRevision["Channel-Revision"][0] + "&viewRevision=" + cChannelRevision["View-Revision"][0]
   assert.NoError(t, APITestMsg(GetChannels, "GET", "/content/channels" + revision,
-    nil, nil, APP_TOKENCONTACT, set.C.A.Token, channels, &cChannelRevision))
+    nil, nil, APPTokenContact, set.C.A.Token, channels, &cChannelRevision))
   assert.Equal(t, 1, len(*channels))
 
   // get discovered channel
   detail = &ChannelDetail{}
   assert.NoError(t, APITestMsg(GetChannelDetail, "GET", "/content/channels/{channelID}/detail",
-    &params, nil, APP_TOKENCONTACT, set.C.A.Token, detail, nil))
+    &params, nil, APPTokenContact, set.C.A.Token, detail, nil))
   assert.Equal(t, "channeldatatype", detail.DataType)
   assert.Equal(t, 2, len(detail.Members))
   assert.Nil(t, detail.Contacts)
@@ -166,14 +166,14 @@ func TestChannelShare(t *testing.T) {
   params["channelID"] = channel.ID
   params["cardID"] = set.A.C.CardID
   assert.NoError(t, APITestMsg(ClearChannelCard, "DELETE", "/content/channels/{channelID}/cards/{cardID}",
-    &params, nil, APP_TOKENAGENT, set.A.Token, nil, nil))
+    &params, nil, APPTokenAgent, set.A.Token, nil, nil))
 
   // check channel view from C
   assert.NotNil(t, GetTestRevision(set.B.Revisions))
   assert.NotNil(t, GetTestRevision(set.C.Revisions))
   revision = "?channelRevision=" + cChannelRevision["Channel-Revision"][0] + "&viewRevision=" + cChannelRevision["View-Revision"][0]
   assert.NoError(t, APITestMsg(GetChannels, "GET", "/content/channels" + revision,
-    nil, nil, APP_TOKENCONTACT, set.C.A.Token, channels, &cChannelRevision))
+    nil, nil, APPTokenContact, set.C.A.Token, channels, &cChannelRevision))
   assert.Equal(t, 1, len(*channels))
   assert.Nil(t, (*channels)[0].Data)
 
@@ -183,7 +183,7 @@ func TestChannelShare(t *testing.T) {
   subject = &Subject{ Data: data, DataType: "nestedimage" }
   channel = &Channel{}
   assert.NoError(t, APITestMsg(SetChannelSubject, "PUT", "/content/channels/{channelID}/subject",
-    &params, subject, APP_TOKENAGENT, set.A.Token, channel, nil))
+    &params, subject, APPTokenAgent, set.A.Token, channel, nil))
 
   // check notifications
   assert.NotNil(t, GetTestRevision(set.B.Revisions))
@@ -193,7 +193,7 @@ func TestChannelShare(t *testing.T) {
   params["groupID"] = set.A.C.GroupID
   channel = &Channel{}
   assert.NoError(t, APITestMsg(SetChannelGroup, "PUT", "/content/channels/{channelID}/groups/{groupID}",
-    &params, nil, APP_TOKENAGENT, set.A.Token, channel, nil))
+    &params, nil, APPTokenAgent, set.A.Token, channel, nil))
   assert.Equal(t, 1, len(channel.Data.ChannelDetail.Contacts.Cards))
   assert.Equal(t, 1, len(channel.Data.ChannelDetail.Contacts.Groups))
 
@@ -205,7 +205,7 @@ func TestChannelShare(t *testing.T) {
   params["channelID"] = channel.ID
   params["cardID"] = set.A.B.CardID
   assert.NoError(t, APITestMsg(ClearChannelCard, "DELETE", "/content/channels/{channelID}/cards/{cardID}",
-    &params, nil, APP_TOKENAGENT, set.A.Token, channel, nil))
+    &params, nil, APPTokenAgent, set.A.Token, channel, nil))
 
   // check notifications
   assert.NotNil(t, GetTestRevision(set.B.Revisions))
@@ -215,7 +215,7 @@ func TestChannelShare(t *testing.T) {
   params["groupID"] = set.A.C.GroupID
   channel = &Channel{}
   assert.NoError(t, APITestMsg(ClearChannelGroup, "DELETE", "/content/channels/{channelID}/groups/{groupID}",
-    &params, nil, APP_TOKENAGENT, set.A.Token, channel, nil))
+    &params, nil, APPTokenAgent, set.A.Token, channel, nil))
   assert.Equal(t, 0, len(channel.Data.ChannelDetail.Contacts.Cards))
   assert.Equal(t, 0, len(channel.Data.ChannelDetail.Contacts.Groups))
 }

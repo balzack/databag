@@ -25,7 +25,7 @@ func SetNodeAccount(w http.ResponseWriter, r *http.Request) {
     return
   }
 
-  data, err := securerandom.Bytes(APP_RESETSIZE)
+  data, err := securerandom.Bytes(APPResetSize)
   if err != nil {
     ErrResponse(w, http.StatusInternalServerError, err)
     return
@@ -33,10 +33,10 @@ func SetNodeAccount(w http.ResponseWriter, r *http.Request) {
   token := hex.EncodeToString(data)
 
   accountToken := store.AccountToken{
-    TokenType: APP_TOKENRESET,
+    TokenType: APPTokenReset,
     Token: token,
     AccountID: uint(accountID),
-    Expires: time.Now().Unix() + APP_CREATEEXPIRE,
+    Expires: time.Now().Unix() + APPCreateExpire,
   };
 
   if err := store.DB.Create(&accountToken).Error; err != nil {

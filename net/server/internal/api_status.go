@@ -24,7 +24,7 @@ func Status(w http.ResponseWriter, r *http.Request) {
     return
   }
   defer conn.Close()
-  conn.SetReadLimit(APP_BODYLIMIT)
+  conn.SetReadLimit(APPBodyLimit)
 
   // receive announce
 	t, m, res := conn.ReadMessage()

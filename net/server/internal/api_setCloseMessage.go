@@ -18,11 +18,11 @@ func SetCloseMessage(w http.ResponseWriter, r *http.Request) {
 
   var disconnect Disconnect
   guid, messageType, ts, err := ReadDataMessage(&message, &disconnect)
-  if messageType != APP_MSGDISCONNECT || err != nil {
+  if messageType != APPMsgDisconnect || err != nil {
     ErrResponse(w, http.StatusBadRequest, err)
     return
   }
-  if ts + APP_CONNECTEXPIRE < time.Now().Unix() {
+  if ts + APPConnectExpire < time.Now().Unix() {
     ErrResponse(w, http.StatusBadRequest, errors.New("message has expired"))
     return
   }
@@ -51,8 +51,8 @@ func SetCloseMessage(w http.ResponseWriter, r *http.Request) {
 
   slot := card.CardSlot
   err = store.DB.Transaction(func(tx *gorm.DB) error {
-    if card.Status != APP_CARDPENDING {
-      if res := tx.Model(&card).Update("status", APP_CARDCONFIRMED).Error; res != nil {
+    if card.Status != APPCardPending {
+      if res := tx.Model(&card).Update("status", APPCardConfirmed).Error; res != nil {
         return res
       }
     }

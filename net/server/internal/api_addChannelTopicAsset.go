@@ -70,7 +70,7 @@ func AddChannelTopicAsset(w http.ResponseWriter, r *http.Request) {
 
   // save new file
   id := uuid.New().String()
-  path := getStrConfigValue(CONFIG_ASSETPATH, APP_DEFAULTPATH) + "/" + channelSlot.Account.GUID + "/" + id
+  path := getStrConfigValue(CONFIG_ASSETPATH, APPDefaultPath) + "/" + channelSlot.Account.GUID + "/" + id
   if err := r.ParseMultipartForm(32 << 20); err != nil {
     ErrResponse(w, http.StatusBadRequest, err)
     return
@@ -94,21 +94,21 @@ func AddChannelTopicAsset(w http.ResponseWriter, r *http.Request) {
   asset.AccountID = channelSlot.Account.ID
   asset.ChannelID = channelSlot.Channel.ID
   asset.TopicID = topicSlot.Topic.ID
-  asset.Status = APP_ASSETREADY
+  asset.Status = APPAssetReady
   asset.Size = size
   asset.Crc = crc
   err = store.DB.Transaction(func(tx *gorm.DB) error {
     if res := tx.Save(asset).Error; res != nil {
       return res
     }
-    assets = append(assets, Asset{ AssetID: id, Status: APP_ASSETREADY})
+    assets = append(assets, Asset{ AssetID: id, Status: APPAssetReady})
     for _, transform := range transforms {
       asset := &store.Asset{}
       asset.AssetID = uuid.New().String()
       asset.AccountID = channelSlot.Account.ID
       asset.ChannelID = channelSlot.Channel.ID
       asset.TopicID = topicSlot.Topic.ID
-      asset.Status = APP_ASSETWAITING
+      asset.Status = APPAssetWaiting
       asset.TransformID = id
       t := strings.Split(transform, ";")
       if len(t) > 0 {
@@ -123,7 +123,7 @@ func AddChannelTopicAsset(w http.ResponseWriter, r *http.Request) {
       if res := tx.Save(asset).Error; res != nil {
         return res
       }
-      assets = append(assets, Asset{ AssetID: asset.AssetID, Transform: transform, Status: APP_ASSETWAITING})
+      assets = append(assets, Asset{ AssetID: asset.AssetID, Transform: transform, Status: APPAssetWaiting})
     }
     if res := tx.Model(&topicSlot.Topic).Update("detail_revision", act.ChannelRevision + 1).Error; res != nil {
       return res

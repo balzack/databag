@@ -16,7 +16,7 @@ func AddAccountAuthentication(w http.ResponseWriter, r *http.Request) {
     return
   }
 
-  data, res := securerandom.Bytes(APP_RESETSIZE)
+  data, res := securerandom.Bytes(APPResetSize)
   if res != nil {
     ErrResponse(w, http.StatusInternalServerError, res)
     return
@@ -25,9 +25,9 @@ func AddAccountAuthentication(w http.ResponseWriter, r *http.Request) {
 
   accountToken := store.AccountToken{
     AccountID: account.ID,
-    TokenType: APP_TOKENRESET,
+    TokenType: APPTokenReset,
     Token: token,
-    Expires: time.Now().Unix() + APP_RESETEXPIRE,
+    Expires: time.Now().Unix() + APPResetExpire,
   }
   if err := store.DB.Create(&accountToken).Error; err != nil {
     ErrResponse(w, http.StatusInternalServerError, err)

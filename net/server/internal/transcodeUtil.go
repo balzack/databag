@@ -30,7 +30,7 @@ func transcodeVideo() {
   defer videoSync.Unlock()
   for ;; {
     var asset store.Asset
-    if err := store.DB.Order("created asc").Preload("Account").Preload("Channel.Cards").Preload("Channel.Groups.Cards").Preload("Channel.ChannelSlot").Preload("Topic.TopicSlot").Where("transform_queue = ? AND status = ?", APP_QUEUEVIDEO, APP_ASSETWAITING).First(&asset).Error; err != nil {
+    if err := store.DB.Order("created asc").Preload("Account").Preload("Channel.Cards").Preload("Channel.Groups.Cards").Preload("Channel.ChannelSlot").Preload("Topic.TopicSlot").Where("transform_queue = ? AND status = ?", APPQueueVideo, APPAssetWaiting).First(&asset).Error; err != nil {
       if !errors.Is(err, gorm.ErrRecordNotFound) {
         ErrMsg(err)
       }
@@ -45,7 +45,7 @@ func transcodeAudio() {
   defer audioSync.Unlock()
   for ;; {
     var asset store.Asset
-    if err := store.DB.Order("created asc").Preload("Account").Preload("Channel.Cards").Preload("Channel.Groups.Cards").Preload("Channel.ChannelSlot").Preload("Topic.TopicSlot").Where("transform_queue = ? AND status = ?", APP_QUEUEAUDIO, APP_ASSETWAITING).First(&asset).Error; err != nil {
+    if err := store.DB.Order("created asc").Preload("Account").Preload("Channel.Cards").Preload("Channel.Groups.Cards").Preload("Channel.ChannelSlot").Preload("Topic.TopicSlot").Where("transform_queue = ? AND status = ?", APPQueueAudio, APPAssetWaiting).First(&asset).Error; err != nil {
       if !errors.Is(err, gorm.ErrRecordNotFound) {
         ErrMsg(err)
       }
@@ -60,7 +60,7 @@ func transcodePhoto() {
   defer photoSync.Unlock()
   for ;; {
     var asset store.Asset
-    if err := store.DB.Order("created asc").Preload("Account").Preload("Channel.Cards").Preload("Channel.Groups.Cards").Preload("Channel.ChannelSlot").Preload("Topic.TopicSlot").Where("transform_queue = ? AND status = ?", APP_QUEUEPHOTO, APP_ASSETWAITING).First(&asset).Error; err != nil {
+    if err := store.DB.Order("created asc").Preload("Account").Preload("Channel.Cards").Preload("Channel.Groups.Cards").Preload("Channel.ChannelSlot").Preload("Topic.TopicSlot").Where("transform_queue = ? AND status = ?", APPQueuePhoto, APPAssetWaiting).First(&asset).Error; err != nil {
       if !errors.Is(err, gorm.ErrRecordNotFound) {
         ErrMsg(err)
       }
@@ -75,7 +75,7 @@ func transcodeDefault() {
   defer defaultSync.Unlock()
   for ;; {
     var asset store.Asset
-    if err := store.DB.Order("created asc").Preload("Account").Preload("Channel.Cards").Preload("Channel.Groups.Cards").Preload("Channel.ChannelSlot").Preload("Topic.TopicSlot").Where("transform_queue != ? AND transform_queue != ? AND transform_queue != ? AND status = ?", APP_QUEUEVIDEO, APP_QUEUEAUDIO, APP_QUEUEPHOTO, APP_ASSETWAITING).First(&asset).Error; err != nil {
+    if err := store.DB.Order("created asc").Preload("Account").Preload("Channel.Cards").Preload("Channel.Groups.Cards").Preload("Channel.ChannelSlot").Preload("Topic.TopicSlot").Where("transform_queue != ? AND transform_queue != ? AND transform_queue != ? AND status = ?", APPQueueVideo, APPQueueAudio, APPQueuePhoto, APPAssetWaiting).First(&asset).Error; err != nil {
       if !errors.Is(err, gorm.ErrRecordNotFound) {
         ErrMsg(err)
       }
@@ -88,13 +88,13 @@ func transcodeDefault() {
 func transcodeAsset(asset *store.Asset) {
 
   // prepare script path
-  data := getStrConfigValue(CONFIG_ASSETPATH, APP_DEFAULTPATH)
+  data := getStrConfigValue(CONFIG_ASSETPATH, APPDefaultPath)
   script := getStrConfigValue(CONFIG_SCRIPTPATH, ".")
   re := regexp.MustCompile("^[a-zA-Z0-9_]*$")
 
   if !re.MatchString(asset.Transform) {
     ErrMsg(errors.New("invalid transform"))
-    if err := UpdateAsset(asset, APP_ASSETERROR, 0, 0); err != nil {
+    if err := UpdateAsset(asset, APPAssetError, 0, 0); err != nil {
       ErrMsg(err)
     }
   } else {
@@ -110,7 +110,7 @@ func transcodeAsset(asset *store.Asset) {
       LogMsg(stdout.String())
       LogMsg(stderr.String())
       ErrMsg(err)
-      if err := UpdateAsset(asset, APP_ASSETERROR, 0, 0); err != nil {
+      if err := UpdateAsset(asset, APPAssetError, 0, 0); err != nil {
         ErrMsg(err)
       }
     } else {
@@ -124,10 +124,10 @@ func transcodeAsset(asset *store.Asset) {
 
       if err != nil {
         ErrMsg(err)
-        if err := UpdateAsset(asset, APP_ASSETERROR, 0, 0); err != nil {
+        if err := UpdateAsset(asset, APPAssetError, 0, 0); err != nil {
           ErrMsg(err)
         }
-      } else if err := UpdateAsset(asset, APP_ASSETREADY, crc, size); err != nil {
+      } else if err := UpdateAsset(asset, APPAssetReady, crc, size); err != nil {
         ErrMsg(err)
       }
     }

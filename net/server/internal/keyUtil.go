@@ -8,7 +8,7 @@ import (
     "errors"
 )
 
-var keySize int = APP_KEYSIZE
+var keySize int = APPKeySize
 func SetKeySize(size int) {
   keySize = size
 }

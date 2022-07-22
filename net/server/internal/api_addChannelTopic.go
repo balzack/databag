@@ -45,9 +45,9 @@ func AddChannelTopic(w http.ResponseWriter, r *http.Request) {
     topic.DetailRevision = act.ChannelRevision + 1
     topic.TagRevision = act.ChannelRevision + 1
     if confirm == "true" {
-      topic.Status = APP_TOPICCONFIRMED
+      topic.Status = APPTopicConfirmed
     } else {
-      topic.Status = APP_TOPICUNCONFIRMED
+      topic.Status = AppTopicUnconfirmed
     }
     if res := tx.Save(topic).Error; res != nil {
       return res

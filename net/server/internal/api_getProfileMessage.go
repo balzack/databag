@@ -13,12 +13,12 @@ func GetProfileMessage(w http.ResponseWriter, r *http.Request) {
 
   // load account record
   var account *store.Account
-  if tokenType == APP_TOKENAGENT {
+  if tokenType == APPTokenAgent {
     if account, code, err = ParamAgentToken(r, true); err != nil {
       ErrResponse(w, code, err)
       return
     }
-  } else if tokenType == APP_TOKENCONTACT {
+  } else if tokenType == APPTokenContact {
     var card *store.Card
     if card, code, err = ParamContactToken(r, true); err != nil {
       ErrResponse(w, code, err)
@@ -39,11 +39,11 @@ func GetProfileMessage(w http.ResponseWriter, r *http.Request) {
     Description: detail.Description,
     Location: detail.Location,
     Image: detail.Image,
-    Version: APP_VERSION,
+    Version: APPVersion,
     Node: getStrConfigValue(CONFIG_DOMAIN, ""),
   }
   msg, res := WriteDataMessage(detail.PrivateKey, detail.PublicKey, detail.KeyType,
-    APP_SIGNPKCS1V15, account.GUID, APP_MSGIDENTITY, &identity)
+    APPSignPKCS1V15, account.GUID, APPMsgIdentity, &identity)
   if res != nil {
     ErrResponse(w, http.StatusInternalServerError, res)
     return

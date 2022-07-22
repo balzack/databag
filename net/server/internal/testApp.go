@@ -63,7 +63,7 @@ func (c *TestContactData) UpdateContact() (err error) {
   }
 
   // sync rest only if connected
-  if c.card.Data.CardDetail.Status != APP_CARDCONNECTED {
+  if c.card.Data.CardDetail.Status != APPCardConnected {
     return
   }
 
@@ -109,12 +109,12 @@ func (c *TestContactData) UpdateContact() (err error) {
 func (c *TestContactData) UpdateContactProfile() (err error) {
   var msg DataMessage
   token := c.card.Data.CardProfile.GUID + "." + c.card.Data.CardDetail.Token
-  params := &TestAPIParams{ query: "/profile/message", tokenType: APP_TOKENCONTACT, token: token }
+  params := &TestAPIParams{ query: "/profile/message", tokenType: APPTokenContact, token: token }
   response := &TestAPIResponse{ data: &msg }
   if err = TestAPIRequest(GetProfileMessage, params, response); err != nil {
     return
   }
-  params = &TestAPIParams{ restType: "PUT", query: "/contact/cards/{cardID}/profile", tokenType: APP_TOKENAGENT, token: c.token,
+  params = &TestAPIParams{ restType: "PUT", query: "/contact/cards/{cardID}/profile", tokenType: APPTokenAgent, token: c.token,
     path: map[string]string{ "cardID": c.card.ID }, body: &msg }
   response = &TestAPIResponse{}
   if err = TestAPIRequest(SetCardProfile, params, response); err != nil {
@@ -127,7 +127,7 @@ func (c *TestContactData) UpdateContactArticle() (err error) {
   var articles []Article
   if c.articleRevision == 0 || c.viewRevision != c.card.Data.NotifiedView {
     token := c.card.Data.CardProfile.GUID + "." + c.card.Data.CardDetail.Token
-    params := &TestAPIParams{ query: "/articles", tokenType: APP_TOKENCONTACT, token: token }
+    params := &TestAPIParams{ query: "/articles", tokenType: APPTokenContact, token: token }
     response := &TestAPIResponse{ data: &articles }
     if err = TestAPIRequest(GetArticles, params, response); err != nil {
       return
@@ -138,7 +138,7 @@ func (c *TestContactData) UpdateContactArticle() (err error) {
     viewRevision := strconv.FormatInt(c.viewRevision, 10)
     articleRevision := strconv.FormatInt(c.articleRevision, 10)
     params := &TestAPIParams{ query: "/articles?articleRevision=" + articleRevision + "&viewRevision=" + viewRevision,
-        tokenType: APP_TOKENCONTACT, token: token }
+        tokenType: APPTokenContact, token: token }
     response := &TestAPIResponse{ data: &articles }
     if err = TestAPIRequest(GetArticles, params, response); err != nil {
       return
@@ -158,7 +158,7 @@ func (c *TestContactData) UpdateContactChannels() (err error) {
   var channels []Channel
   if c.channelRevision == 0 || c.viewRevision != c.card.Data.NotifiedView {
     token := c.card.Data.CardProfile.GUID + "." + c.card.Data.CardDetail.Token
-    params := &TestAPIParams{ query: "/channels", tokenType: APP_TOKENCONTACT, token: token }
+    params := &TestAPIParams{ query: "/channels", tokenType: APPTokenContact, token: token }
     response := &TestAPIResponse{ data: &channels }
     if err = TestAPIRequest(GetChannels, params, response); err != nil {
       return
@@ -168,7 +168,7 @@ func (c *TestContactData) UpdateContactChannels() (err error) {
     viewRevision := strconv.FormatInt(c.viewRevision, 10)
     channelRevision := strconv.FormatInt(c.channelRevision, 10)
     params := &TestAPIParams{ query: "/channels?channelRevision=" + channelRevision + "&viewRevision=" + viewRevision,
-        tokenType: APP_TOKENCONTACT, token: token }
+        tokenType: APPTokenContact, token: token }
     response := &TestAPIResponse{ data: &channels }
     if err = TestAPIRequest(GetChannels, params, response); err != nil {
       return
@@ -214,7 +214,7 @@ func (c *TestContactData) UpdateContactChannel(storeChannel *TestChannel, channe
     } else if storeChannel.channel.Data.DetailRevision != channel.Data.DetailRevision {
       token := c.card.Data.CardProfile.GUID + "." + c.card.Data.CardDetail.Token
       params := &TestAPIParams{ query: "/channel/{channelID}", path: map[string]string{ "channelID": channel.ID },
-          tokenType: APP_TOKENCONTACT, token: token }
+          tokenType: APPTokenContact, token: token }
       detail := &ChannelDetail{}
       response := &TestAPIResponse{ data: &detail }
       if err = TestAPIRequest(GetChannelDetail, params, response); err != nil {
@@ -236,7 +236,7 @@ func (c *TestContactData) UpdateContactChannelTopics(storeChannel *TestChannel) 
   if storeChannel.channel.Revision == 0 {
     token := c.card.Data.CardProfile.GUID + "." + c.card.Data.CardDetail.Token
     params := &TestAPIParams{ query: "/channels/{channelID}/topics",
-      path: map[string]string{ "channelID": storeChannel.channel.ID }, tokenType: APP_TOKENCONTACT, token: token }
+      path: map[string]string{ "channelID": storeChannel.channel.ID }, tokenType: APPTokenContact, token: token }
     response := &TestAPIResponse{ data: &topics }
     if err = TestAPIRequest(GetChannelTopics, params, response); err != nil {
       return
@@ -246,7 +246,7 @@ func (c *TestContactData) UpdateContactChannelTopics(storeChannel *TestChannel) 
     token := c.card.Data.CardProfile.GUID + "." + c.card.Data.CardDetail.Token
     revision := strconv.FormatInt(storeChannel.channel.Revision, 10)
     params := &TestAPIParams{ query: "/channels/{channelID}/topics?revision=" + revision,
-        path: map[string]string{ "channelID": storeChannel.channel.ID }, tokenType: APP_TOKENCONTACT, token: token }
+        path: map[string]string{ "channelID": storeChannel.channel.ID }, tokenType: APPTokenContact, token: token }
     response := &TestAPIResponse{ data: &topics }
     if err = TestAPIRequest(GetChannelTopics, params, response); err != nil {
       return
@@ -293,7 +293,7 @@ func (c *TestContactData) UpdateContactChannelTopic(storeChannel *TestChannel, s
       token := c.card.Data.CardProfile.GUID + "." + c.card.Data.CardDetail.Token
       params := &TestAPIParams{ query: "/channels/{channelID}/topics/{topicID}",
           path: map[string]string{ "channelID": storeChannel.channel.ID, "topicID": topic.ID },
-          tokenType: APP_TOKENCONTACT, token: token }
+          tokenType: APPTokenContact, token: token }
       topic := Topic{}
       response := &TestAPIResponse{ data: &topic }
       if err = TestAPIRequest(GetChannelTopic, params, response); err != nil {
@@ -316,7 +316,7 @@ func (c *TestContactData) UpdateContactChannelTopicTags(storeChannel *TestChanne
     token := c.card.Data.CardProfile.GUID + "." + c.card.Data.CardDetail.Token
     params := &TestAPIParams{ query: "/channels/{channelID}/topics/{topicID}/tags",
       path: map[string]string{ "channelID": storeChannel.channel.ID, "topicID": storeTopic.topic.ID },
-      tokenType: APP_TOKENCONTACT, token: token }
+      tokenType: APPTokenContact, token: token }
     response := &TestAPIResponse{ data: &tags }
     if err = TestAPIRequest(GetChannelTopicTags, params, response); err != nil {
       return
@@ -327,7 +327,7 @@ func (c *TestContactData) UpdateContactChannelTopicTags(storeChannel *TestChanne
     token := c.card.Data.CardProfile.GUID + "." + c.card.Data.CardDetail.Token
     params := &TestAPIParams{ query: "/channels/{channelID}/topics/{topicID}/tags?revision=" + revision,
         path: map[string]string{ "channelID": storeChannel.channel.ID, "topicID": storeTopic.topic.ID },
-        tokenType: APP_TOKENCONTACT, token: token }
+        tokenType: APPTokenContact, token: token }
     response := &TestAPIResponse{ data: &tags }
     if err = TestAPIRequest(GetChannelTopicTags, params, response); err != nil {
       return
@@ -346,7 +346,7 @@ func (c *TestContactData) UpdateContactChannelTopicTags(storeChannel *TestChanne
 
 func (c *TestContactData) UpdateContactCardDetail() (err error) {
   var cardDetail CardDetail
-  params := &TestAPIParams{ query: "/contact/cards/{cardID}/detail", tokenType: APP_TOKENAGENT, token: c.token,
+  params := &TestAPIParams{ query: "/contact/cards/{cardID}/detail", tokenType: APPTokenAgent, token: c.token,
     path: map[string]string{ "cardID": c.card.ID } }
   response := &TestAPIResponse{ data: &cardDetail }
   if err = TestAPIRequest(GetCardDetail, params, response); err != nil {
@@ -358,7 +358,7 @@ func (c *TestContactData) UpdateContactCardDetail() (err error) {
 
 func (c *TestContactData) UpdateContactCardProfile() (err error) {
   var cardProfile CardProfile
-  params := &TestAPIParams{ query: "/contact/cards/{cardID}/profile", tokenType: APP_TOKENAGENT, token: c.token,
+  params := &TestAPIParams{ query: "/contact/cards/{cardID}/profile", tokenType: APPTokenAgent, token: c.token,
     path: map[string]string{ "cardID": c.card.ID } }
   response := &TestAPIResponse{ data: &cardProfile }
   if err = TestAPIRequest(GetCardProfile, params, response); err != nil {
@@ -393,7 +393,7 @@ type TestApp struct {
 }
 
 func (a *TestApp) UpdateProfile() (err error) {
-  params := &TestAPIParams{ query: "/profile", tokenType: APP_TOKENAGENT, token: a.token }
+  params := &TestAPIParams{ query: "/profile", tokenType: APPTokenAgent, token: a.token }
   response := &TestAPIResponse{ data: &a.profile }
   err = TestAPIRequest(GetProfile, params, response)
   return
@@ -402,14 +402,14 @@ func (a *TestApp) UpdateProfile() (err error) {
 func (a *TestApp) UpdateGroups() (err error) {
   var groups []Group
   if a.revision.Group == 0 {
-    params := &TestAPIParams{ query: "/groups", tokenType: APP_TOKENAGENT, token: a.token }
+    params := &TestAPIParams{ query: "/groups", tokenType: APPTokenAgent, token: a.token }
     response := &TestAPIResponse{ data: &groups }
     if err = TestAPIRequest(GetGroups, params, response); err != nil {
       return
     }
   } else {
     revision := strconv.FormatInt(a.revision.Group, 10)
-    params := &TestAPIParams{ query: "/groups?revision=" + revision, tokenType: APP_TOKENAGENT, token: a.token }
+    params := &TestAPIParams{ query: "/groups?revision=" + revision, tokenType: APPTokenAgent, token: a.token }
     response := &TestAPIResponse{ data: &groups }
     if err = TestAPIRequest(GetGroups, params, response); err != nil {
       return
@@ -428,14 +428,14 @@ func (a *TestApp) UpdateGroups() (err error) {
 func (a *TestApp) UpdateArticles() (err error) {
   var articles []Article
   if a.revision.Article == 0 {
-    params := &TestAPIParams{ query: "/articles", tokenType: APP_TOKENAGENT, token: a.token }
+    params := &TestAPIParams{ query: "/articles", tokenType: APPTokenAgent, token: a.token }
     response := &TestAPIResponse{ data: &articles }
     if err = TestAPIRequest(GetArticles, params, response); err != nil {
       return
     }
   } else {
     revision := strconv.FormatInt(a.revision.Article, 10)
-    params := &TestAPIParams{ query: "/articles?articleRevision=" + revision, tokenType: APP_TOKENAGENT, token: a.token }
+    params := &TestAPIParams{ query: "/articles?articleRevision=" + revision, tokenType: APPTokenAgent, token: a.token }
     response := &TestAPIResponse{ data: &articles }
     if err = TestAPIRequest(GetArticles, params, response); err != nil {
       return
@@ -454,14 +454,14 @@ func (a *TestApp) UpdateArticles() (err error) {
 func (a *TestApp) UpdateChannels() (err error) {
   var channels []Channel
   if a.revision.Channel == 0 {
-    params := &TestAPIParams{ query: "/channels", tokenType: APP_TOKENAGENT, token: a.token }
+    params := &TestAPIParams{ query: "/channels", tokenType: APPTokenAgent, token: a.token }
     response := &TestAPIResponse{ data: &channels }
     if err = TestAPIRequest(GetChannels, params, response); err != nil {
       return
     }
   } else {
     revision := strconv.FormatInt(a.revision.Channel, 10)
-    params := &TestAPIParams{ query: "/channels?channelRevision=" + revision, tokenType: APP_TOKENAGENT, token: a.token }
+    params := &TestAPIParams{ query: "/channels?channelRevision=" + revision, tokenType: APPTokenAgent, token: a.token }
     response := &TestAPIResponse{ data: &channels }
     if err = TestAPIRequest(GetChannels, params, response); err != nil {
       return
@@ -506,7 +506,7 @@ func (a *TestApp) UpdateChannel(storeChannel *TestChannel, channel *Channel) (er
       storeChannel.channel.Data.DetailRevision = channel.Data.DetailRevision
     } else if storeChannel.channel.Data.DetailRevision != channel.Data.DetailRevision {
       params := &TestAPIParams{ query: "/channel/{channelID}", path: map[string]string{ "channelID": channel.ID },
-          tokenType: APP_TOKENAGENT, token: a.token }
+          tokenType: APPTokenAgent, token: a.token }
       detail := &ChannelDetail{}
       response := &TestAPIResponse{ data: &detail }
       if err = TestAPIRequest(GetChannelDetail, params, response); err != nil {
@@ -527,7 +527,7 @@ func (a *TestApp) UpdateChannelTopics(storeChannel *TestChannel) (err error) {
   var topics []Topic
   if storeChannel.channel.Revision == 0 {
     params := &TestAPIParams{ query: "/channels/{channelID}/topics",
-      path: map[string]string{ "channelID": storeChannel.channel.ID }, tokenType: APP_TOKENAGENT, token: a.token }
+      path: map[string]string{ "channelID": storeChannel.channel.ID }, tokenType: APPTokenAgent, token: a.token }
     response := &TestAPIResponse{ data: &topics }
     if err = TestAPIRequest(GetChannelTopics, params, response); err != nil {
       return
@@ -536,7 +536,7 @@ func (a *TestApp) UpdateChannelTopics(storeChannel *TestChannel) (err error) {
   } else {
     revision := strconv.FormatInt(storeChannel.channel.Revision, 10)
     params := &TestAPIParams{ query: "/channels/{channelID}/topics?revision=" + revision,
-        path: map[string]string{ "channelID": storeChannel.channel.ID }, tokenType: APP_TOKENAGENT, token: a.token }
+        path: map[string]string{ "channelID": storeChannel.channel.ID }, tokenType: APPTokenAgent, token: a.token }
     response := &TestAPIResponse{ data: &topics }
     if err = TestAPIRequest(GetChannelTopics, params, response); err != nil {
       return
@@ -582,7 +582,7 @@ func (a *TestApp) UpdateChannelTopic(storeChannel *TestChannel, storeTopic *Test
     } else if storeTopic.topic.Data.DetailRevision != topic.Data.DetailRevision {
       params := &TestAPIParams{ query: "/channels/{channelID}/topics/{topicID}",
           path: map[string]string{ "channelID": storeChannel.channel.ID, "topicID": topic.ID },
-          tokenType: APP_TOKENAGENT, token: a.token }
+          tokenType: APPTokenAgent, token: a.token }
       topic := Topic{}
       response := &TestAPIResponse{ data: &topic }
       if err = TestAPIRequest(GetChannelTopic, params, response); err != nil {
@@ -604,7 +604,7 @@ func (a *TestApp) UpdateChannelTopicTags(storeChannel *TestChannel, storeTopic *
   if storeTopic.topic.Revision == 0 {
     params := &TestAPIParams{ query: "/channels/{channelID}/topics/{topicID}/tags",
       path: map[string]string{ "channelID": storeChannel.channel.ID, "topicID": storeTopic.topic.ID },
-      tokenType: APP_TOKENAGENT, token: a.token }
+      tokenType: APPTokenAgent, token: a.token }
     response := &TestAPIResponse{ data: &tags }
     if err = TestAPIRequest(GetChannelTopicTags, params, response); err != nil {
       return
@@ -614,7 +614,7 @@ func (a *TestApp) UpdateChannelTopicTags(storeChannel *TestChannel, storeTopic *
     revision := strconv.FormatInt(storeTopic.topic.Revision, 10)
     params := &TestAPIParams{ query: "/channels/{channelID}/topics/{topicID}/tags?revision=" + revision,
         path: map[string]string{ "channelID": storeChannel.channel.ID, "topicID": storeTopic.topic.ID },
-        tokenType: APP_TOKENAGENT, token: a.token }
+        tokenType: APPTokenAgent, token: a.token }
     response := &TestAPIResponse{ data: &tags }
     if err = TestAPIRequest(GetChannelTopicTags, params, response); err != nil {
       return
@@ -634,7 +634,7 @@ func (a *TestApp) UpdateChannelTopicTags(storeChannel *TestChannel, storeTopic *
 func (a *TestApp) UpdateCards() (err error) {
   var cards []Card
   if a.revision.Card == 0 {
-    params := &TestAPIParams{ query: "/cards", tokenType: APP_TOKENAGENT, token: a.token }
+    params := &TestAPIParams{ query: "/cards", tokenType: APPTokenAgent, token: a.token }
     response := &TestAPIResponse{ data: &cards }
     if err = TestAPIRequest(GetCards, params, response); err != nil {
       return
@@ -656,7 +656,7 @@ func (a *TestApp) UpdateCards() (err error) {
     }
   } else {
     revision := strconv.FormatInt(a.revision.Card, 10)
-    params := &TestAPIParams{ query: "/cards?revision=" + revision, tokenType: APP_TOKENAGENT, token: a.token }
+    params := &TestAPIParams{ query: "/cards?revision=" + revision, tokenType: APPTokenAgent, token: a.token }
     response := &TestAPIResponse{ data: &cards }
     if err = TestAPIRequest(GetCards, params, response); err != nil {
       return
@@ -669,7 +669,7 @@ func (a *TestApp) UpdateCards() (err error) {
         if !set {
           // download new card
           params := &TestAPIParams{ query: "/cards/{cardID}", path: map[string]string{ "cardID": card.ID },
-              tokenType: APP_TOKENAGENT, token: a.token }
+              tokenType: APPTokenAgent, token: a.token }
           response := &TestAPIResponse{ data: &card }
           if err = TestAPIRequest(GetCard, params, response); err != nil {
             return
@@ -851,14 +851,14 @@ func TestAPIRequest(endpoint func(http.ResponseWriter, *http.Request), params *T
     rest = "GET"
   }
 
-  if params.tokenType == APP_TOKENAGENT {
+  if params.tokenType == APPTokenAgent {
     if !strings.Contains(params.query, "?") {
       params.query += "?"
     } else {
       params.query += "&"
     }
     params.query += "agent=" + params.token
-  } else if params.tokenType == APP_TOKENCONTACT {
+  } else if params.tokenType == APPTokenContact {
     if !strings.Contains(params.query, "?") {
       params.query += "?"
     } else {

@@ -63,13 +63,13 @@ func getChannelSlot(r *http.Request, member bool) (slot store.ChannelSlot, guid 
   // validate contact access
   var account *store.Account
   tokenType := ParamTokenType(r);
-  if tokenType == APP_TOKENAGENT {
+  if tokenType == APPTokenAgent {
     account, code, err = ParamAgentToken(r, false);
     if err != nil {
       return
     }
     guid = account.GUID
-  } else if tokenType == APP_TOKENCONTACT {
+  } else if tokenType == APPTokenContact {
     var card *store.Card
     card, code, err = ParamContactToken(r, true)
     if err != nil {
@@ -99,7 +99,7 @@ func getChannelSlot(r *http.Request, member bool) (slot store.ChannelSlot, guid 
   }
 
   // validate access to channel
-  if tokenType == APP_TOKENCONTACT {
+  if tokenType == APPTokenContact {
     if member && !isMember(guid, slot.Channel.Cards) {
       err = errors.New("contact is not a channel member")
       code = http.StatusUnauthorized

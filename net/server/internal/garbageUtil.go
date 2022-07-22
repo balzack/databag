@@ -13,7 +13,7 @@ func garbageCollect(act *store.Account) {
   defer garbageSync.Unlock()
 
   // get all asset files
-  dir := getStrConfigValue(CONFIG_ASSETPATH, APP_DEFAULTPATH) + "/" + act.GUID
+  dir := getStrConfigValue(CONFIG_ASSETPATH, APPDefaultPath) + "/" + act.GUID
   files, err := os.ReadDir(dir)
   if err != nil {
     ErrMsg(err)

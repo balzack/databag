@@ -53,7 +53,7 @@ func SetCredentials(r *http.Request, login string) {
 }
 
 func ParseRequest(r *http.Request, w http.ResponseWriter, obj interface{}) error {
-  r.Body = http.MaxBytesReader(w, r.Body, APP_BODYLIMIT)
+  r.Body = http.MaxBytesReader(w, r.Body, APPBodyLimit)
   dec := json.NewDecoder(r.Body)
   dec.DisallowUnknownFields()
   return dec.Decode(&obj)

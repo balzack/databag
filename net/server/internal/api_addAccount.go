@@ -17,7 +17,7 @@ func AddAccount(w http.ResponseWriter, r *http.Request) {
 
   if r.FormValue("token") != "" {
     token, _, res = AccessToken(r)
-    if res != nil || token.TokenType != APP_TOKENCREATE {
+    if res != nil || token.TokenType != APPTokenCreate {
       ErrResponse(w, http.StatusUnauthorized, res)
       return
     }
@@ -72,7 +72,7 @@ func AddAccount(w http.ResponseWriter, r *http.Request) {
   fingerprint := hex.EncodeToString(hash[:])
 
   // create path for account data
-  path := getStrConfigValue(CONFIG_ASSETPATH, APP_DEFAULTPATH) + "/" + fingerprint
+  path := getStrConfigValue(CONFIG_ASSETPATH, APPDefaultPath) + "/" + fingerprint
   if err := os.Mkdir(path, os.ModePerm); err != nil {
     ErrResponse(w, http.StatusInternalServerError, err)
   }
@@ -120,7 +120,7 @@ func AddAccount(w http.ResponseWriter, r *http.Request) {
     Location: detail.Location,
     Image: detail.Image,
     Revision: account.ProfileRevision,
-    Version: APP_VERSION,
+    Version: APPVersion,
     Node: getStrConfigValue(CONFIG_DOMAIN, ""),
   }
 

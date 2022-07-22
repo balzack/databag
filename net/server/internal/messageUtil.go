@@ -19,7 +19,7 @@ func ReadDataMessage(msg *DataMessage, obj interface{}) (string, string, int64, 
   var err error
   var publicKey *rsa.PublicKey
 
-  if msg.KeyType != APP_RSA4096 && msg.KeyType != APP_RSA2048 {
+  if msg.KeyType != APPRSA4096 && msg.KeyType != APPRSA2048 {
     return "", "", 0, errors.New("unsupported key type")
   }
 
@@ -50,12 +50,12 @@ func ReadDataMessage(msg *DataMessage, obj interface{}) (string, string, int64, 
     return "", "", 0, err
   }
   hash = sha256.Sum256(data)
-  if msg.SignatureType == APP_SIGNPKCS1V15 {
+  if msg.SignatureType == APPSignPKCS1V15 {
     err = rsa.VerifyPKCS1v15(publicKey, crypto.SHA256, hash[:], signature)
     if err != nil {
       return "", "", 0, err
     }
-  } else if msg.SignatureType == APP_SIGNPSS {
+  } else if msg.SignatureType == APPSignPSS {
     err = rsa.VerifyPSS(publicKey, crypto.SHA256, hash[:], signature, nil)
     if err != nil {
       return "", "", 0, err
@@ -106,7 +106,7 @@ func WriteDataMessage(privateKey string, publicKey string, keyType string,
   data, err = json.Marshal(&signedData)
   message := base64.StdEncoding.EncodeToString(data)
 
-  if keyType != APP_RSA2048 && keyType != APP_RSA4096 {
+  if keyType != APPRSA2048 && keyType != APPRSA4096 {
     return nil, errors.New("unsupported key type")
   }
 
@@ -119,9 +119,9 @@ func WriteDataMessage(privateKey string, publicKey string, keyType string,
 
   // compute signature
   hash = sha256.Sum256(data)
-  if signType == APP_SIGNPKCS1V15 {
+  if signType == APPSignPKCS1V15 {
     data, err = rsa.SignPKCS1v15(rand.Reader, private, crypto.SHA256, hash[:])
-  } else if signType == APP_SIGNPSS {
+  } else if signType == APPSignPSS {
     data, err = rsa.SignPSS(rand.Reader, private, crypto.SHA256, hash[:], nil)
   } else {
     return nil, errors.New("unsupported signature type")

@@ -12,7 +12,7 @@ import (
 func SetAccountAccess(w http.ResponseWriter, r *http.Request) {
 
   token, _, res := AccessToken(r)
-  if res != nil || token.TokenType != APP_TOKENRESET {
+  if res != nil || token.TokenType != APPTokenReset {
     ErrResponse(w, http.StatusUnauthorized, res)
     return
   }
@@ -30,7 +30,7 @@ func SetAccountAccess(w http.ResponseWriter, r *http.Request) {
   }
 
   // gernate app token  
-  data, err := securerandom.Bytes(APP_TOKENSIZE)
+  data, err := securerandom.Bytes(APPTokenSize)
   if err != nil {
     ErrResponse(w, http.StatusInternalServerError, err)
     return
