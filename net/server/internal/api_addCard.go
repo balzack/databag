@@ -33,7 +33,7 @@ func AddCard(w http.ResponseWriter, r *http.Request) {
 
   slot := &store.CardSlot{}
   var card store.Card
-  if err := store.DB.Preload("CardSlot").Preload("Groups").Where("account_id = ? AND guid = ?", account.Guid, guid).First(&card).Error; err != nil {
+  if err := store.DB.Preload("CardSlot").Preload("Groups").Where("account_id = ? AND guid = ?", account.GUID, guid).First(&card).Error; err != nil {
     if !errors.Is(err, gorm.ErrRecordNotFound) {
       ErrResponse(w, http.StatusInternalServerError, err)
       return
@@ -46,7 +46,7 @@ func AddCard(w http.ResponseWriter, r *http.Request) {
       return
     }
     card := &store.Card{
-      Guid: guid,
+      GUID: guid,
       Username: identity.Handle,
       Name: identity.Name,
       Description: identity.Description,
@@ -58,7 +58,7 @@ func AddCard(w http.ResponseWriter, r *http.Request) {
       Status: APP_CARDCONFIRMED,
       ViewRevision: 0,
       InToken: hex.EncodeToString(data),
-      AccountID: account.Guid,
+      AccountID: account.GUID,
     }
 
     // save new card
@@ -66,7 +66,7 @@ func AddCard(w http.ResponseWriter, r *http.Request) {
       if res := tx.Save(card).Error; res != nil {
         return res
       }
-      slot.CardSlotId = uuid.New().String()
+      slot.CardSlotID = uuid.New().String()
       slot.AccountID = account.ID
       slot.Revision = account.CardRevision + 1
       slot.CardID = card.ID
@@ -110,7 +110,7 @@ func AddCard(w http.ResponseWriter, r *http.Request) {
       slot = &card.CardSlot
       if slot == nil {
         slot = &store.CardSlot{
-          CardSlotId: uuid.New().String(),
+          CardSlotID: uuid.New().String(),
           AccountID: account.ID,
           Revision: account.CardRevision + 1,
           CardID: card.ID,

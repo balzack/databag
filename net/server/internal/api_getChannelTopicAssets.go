@@ -12,7 +12,7 @@ func GetChannelTopicAssets(w http.ResponseWriter, r *http.Request) {
 
   // scan parameters
   params := mux.Vars(r)
-  topicId := params["topicId"]
+  topicID := params["topicID"]
 
   channelSlot, guid, err, code := getChannelSlot(r, true)
   if err != nil {
@@ -22,7 +22,7 @@ func GetChannelTopicAssets(w http.ResponseWriter, r *http.Request) {
 
   // load topic
   var topicSlot store.TopicSlot
-  if err = store.DB.Preload("Topic.Assets").Where("channel_id = ? AND topic_slot_id = ?", channelSlot.Channel.ID, topicId).First(&topicSlot).Error; err != nil {
+  if err = store.DB.Preload("Topic.Assets").Where("channel_id = ? AND topic_slot_id = ?", channelSlot.Channel.ID, topicID).First(&topicSlot).Error; err != nil {
     if errors.Is(err, gorm.ErrRecordNotFound) {
       ErrResponse(w, http.StatusNotFound, err)
     } else {
@@ -36,7 +36,7 @@ func GetChannelTopicAssets(w http.ResponseWriter, r *http.Request) {
   }
 
   // only creator can list assets
-  if topicSlot.Topic.Guid != guid {
+  if topicSlot.Topic.GUID != guid {
     ErrResponse(w, http.StatusUnauthorized, errors.New("permission denied to asset list"))
     return
   }
@@ -44,7 +44,7 @@ func GetChannelTopicAssets(w http.ResponseWriter, r *http.Request) {
   // return list of assets
   assets := []Asset{}
   for _, asset := range topicSlot.Topic.Assets {
-    assets = append(assets, Asset{ AssetId: asset.AssetId, Status: asset.Status })
+    assets = append(assets, Asset{ AssetID: asset.AssetID, Status: asset.Status })
   }
   WriteResponse(w, &assets)
 }

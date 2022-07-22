@@ -39,7 +39,7 @@ func SetAccountAccess(w http.ResponseWriter, r *http.Request) {
 
   // create app entry
   app := store.App {
-    AccountID: account.Guid,
+    AccountID: account.GUID,
     Name: appData.Name,
     Description: appData.Description,
     Image: appData.Image,
@@ -65,7 +65,7 @@ func SetAccountAccess(w http.ResponseWriter, r *http.Request) {
     return
   }
 
-  WriteResponse(w, account.Guid + "." + access)
+  WriteResponse(w, account.GUID + "." + access)
 }
 
 

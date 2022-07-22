@@ -18,11 +18,11 @@ func RemoveCard(w http.ResponseWriter, r *http.Request) {
 
   // scan parameters
   params := mux.Vars(r)
-  cardId := params["cardId"]
+  cardID := params["cardID"]
 
   // load referenced card
   var slot store.CardSlot
-  if err := store.DB.Preload("Card.Groups").Preload("Card.Channels.Cards").Preload("Card.Channels.ChannelSlot").Where("account_id = ? AND card_slot_id = ?", account.ID, cardId).First(&slot).Error; err != nil {
+  if err := store.DB.Preload("Card.Groups").Preload("Card.Channels.Cards").Preload("Card.Channels.ChannelSlot").Where("account_id = ? AND card_slot_id = ?", account.ID, cardID).First(&slot).Error; err != nil {
     if !errors.Is(err, gorm.ErrRecordNotFound) {
       ErrResponse(w, http.StatusInternalServerError, err)
     } else {
@@ -48,7 +48,7 @@ func RemoveCard(w http.ResponseWriter, r *http.Request) {
         return res
       }
       for _, card := range channel.Cards {
-        cards[card.Guid] = &card
+        cards[card.GUID] = &card
       }
     }
     if res := tx.Model(&slot.Card).Association("Groups").Clear(); res != nil {

@@ -12,9 +12,9 @@ func SetChannelTopicTagSubject(w http.ResponseWriter, r *http.Request) {
 
   // scan parameters
   params := mux.Vars(r)
-  channelId := params["channelId"]
-  topicId := params["topicId"]
-  tagId := params["tagId"]
+  channelID := params["channelID"]
+  topicID := params["topicID"]
+  tagID := params["tagID"]
 
   var subject Subject
   if err := ParseRequest(r, w, &subject); err != nil {
@@ -31,7 +31,7 @@ func SetChannelTopicTagSubject(w http.ResponseWriter, r *http.Request) {
 
   // load topic
   var tagSlot store.TagSlot
-  if err = store.DB.Preload("Tag.Channel.ChannelSlot").Preload("Tag.Topic.TopicSlot").Where("account_id = ? AND tag_slot_id = ?", act.ID, tagId).First(&tagSlot).Error; err != nil {
+  if err = store.DB.Preload("Tag.Channel.ChannelSlot").Preload("Tag.Topic.TopicSlot").Where("account_id = ? AND tag_slot_id = ?", act.ID, tagID).First(&tagSlot).Error; err != nil {
     if errors.Is(err, gorm.ErrRecordNotFound) {
       ErrResponse(w, http.StatusNotFound, err)
     } else {
@@ -43,15 +43,15 @@ func SetChannelTopicTagSubject(w http.ResponseWriter, r *http.Request) {
     ErrResponse(w, http.StatusNotFound, errors.New("referenced empty tag"))
     return
   }
-  if tagSlot.Tag.Channel.ChannelSlot.ChannelSlotId != channelId {
+  if tagSlot.Tag.Channel.ChannelSlot.ChannelSlotID != channelID {
     ErrResponse(w, http.StatusNotFound, errors.New("channel tag not found"))
     return
   }
-  if tagSlot.Tag.Topic.TopicSlot.TopicSlotId != topicId {
+  if tagSlot.Tag.Topic.TopicSlot.TopicSlotID != topicID {
     ErrResponse(w, http.StatusNotFound, errors.New("topic tag not found"))
     return
   }
-  if tagSlot.Tag.Guid != guid {
+  if tagSlot.Tag.GUID != guid {
     ErrResponse(w, http.StatusUnauthorized, errors.New("not creator of tag"))
     return
   }
@@ -92,11 +92,11 @@ func SetChannelTopicTagSubject(w http.ResponseWriter, r *http.Request) {
   // determine affected contact list
   cards := make(map[string]store.Card)
   for _, card := range channelSlot.Channel.Cards {
-    cards[card.Guid] = card
+    cards[card.GUID] = card
   }
   for _, group := range channelSlot.Channel.Groups {
     for _, card := range group.Cards {
-      cards[card.Guid] = card
+      cards[card.GUID] = card
     }
   }
 

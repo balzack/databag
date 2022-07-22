@@ -7,8 +7,8 @@ import (
 )
 
 func TestStaggardLoad(t *testing.T) {
-  var params *TestApiParams
-  var response *TestApiResponse
+  var params *TestAPIParams
+  var response *TestAPIResponse
   var channel *Channel
   var topic *Topic
   var topics *[]Topic
@@ -30,7 +30,7 @@ func TestStaggardLoad(t *testing.T) {
   }))
 
   // add a channel
-  params = &TestApiParams{
+  params = &TestAPIParams{
     restType: "POST",
     query: "/content/channels",
     body: &Subject{
@@ -41,13 +41,13 @@ func TestStaggardLoad(t *testing.T) {
     token: set.A.Token,
   }
   channel = &Channel{}
-  response = &TestApiResponse{ data: channel }
-  assert.NoError(t, TestApiRequest(AddChannel, params, response))
+  response = &TestAPIResponse{ data: channel }
+  assert.NoError(t, TestAPIRequest(AddChannel, params, response))
 
   // wait for test
   assert.NoError(t, app.WaitFor(func(testApp *TestApp)bool{
     for _, c := range testApp.channels {
-      if c.channel.Id == channel.Id {
+      if c.channel.ID == channel.ID {
         return true
       }
     }
@@ -57,10 +57,10 @@ func TestStaggardLoad(t *testing.T) {
   // add a topic to channel
   ids := []string{}
   for i := 0; i < 128; i++ {
-    params = &TestApiParams{
+    params = &TestAPIParams{
       restType: "POST",
-      query: "/content/channels/{channelId}/topics",
-      path: map[string]string{ "channelId": channel.Id },
+      query: "/content/channels/{channelID}/topics",
+      path: map[string]string{ "channelID": channel.ID },
       body: &Subject{
         Data: strconv.Itoa(i),
         DataType: "channeltopicdatatypeA",
@@ -69,15 +69,15 @@ func TestStaggardLoad(t *testing.T) {
       token: set.A.Token,
     }
     topic = &Topic{}
-    response = &TestApiResponse{ data: topic }
-    assert.NoError(t, TestApiRequest(AddChannelTopic, params, response))
-    ids = append(ids, topic.Id);
+    response = &TestAPIResponse{ data: topic }
+    assert.NoError(t, TestAPIRequest(AddChannelTopic, params, response))
+    ids = append(ids, topic.ID);
   }
 
   // wait for test
   assert.NoError(t, app.WaitFor(func(testApp *TestApp)bool{
     for _, c := range testApp.channels {
-      if c.channel.Id == channel.Id {
+      if c.channel.ID == channel.ID {
         if  len(c.topics) == 128 {
           return true
         }
@@ -86,90 +86,90 @@ func TestStaggardLoad(t *testing.T) {
     return false
   }))
 
-  params = &TestApiParams {
+  params = &TestAPIParams {
     restType: "GET",
-    query: "/content/channels/{channelId}/topics",
-    path: map[string]string{ "channelId": channel.Id, "topicId": topic.Id },
+    query: "/content/channels/{channelID}/topics",
+    path: map[string]string{ "channelID": channel.ID, "topicID": topic.ID },
     tokenType: APP_TOKENAGENT,
     token: set.A.Token,
   }
   topics = &[]Topic{}
-  response = &TestApiResponse{ data: topics }
-  assert.NoError(t, TestApiRequest(GetChannelTopics, params, response));
+  response = &TestAPIResponse{ data: topics }
+  assert.NoError(t, TestAPIRequest(GetChannelTopics, params, response));
   assert.Equal(t, len(*topics), 128);
 
-  params = &TestApiParams {
+  params = &TestAPIParams {
     restType: "GET",
-    query: "/content/channels/{channelId}/topics?count=13",
-    path: map[string]string{ "channelId": channel.Id, "topicId": topic.Id },
+    query: "/content/channels/{channelID}/topics?count=13",
+    path: map[string]string{ "channelID": channel.ID, "topicID": topic.ID },
     tokenType: APP_TOKENAGENT,
     token: set.A.Token,
   }
   topics = &[]Topic{}
-  response = &TestApiResponse{ data: topics }
-  assert.NoError(t, TestApiRequest(GetChannelTopics, params, response));
+  response = &TestAPIResponse{ data: topics }
+  assert.NoError(t, TestAPIRequest(GetChannelTopics, params, response));
   assert.Equal(t, len(*topics), 13);
 
   //marker, _ := strconv.Atoi(response.header["Topic-Marker"][0])
   //revision, _ := strconv.Atoi(response.header["Topic-Revision"][0])
 
-  params = &TestApiParams {
+  params = &TestAPIParams {
     restType: "GET",
-    query: "/content/channels/{channelId}/topics?count=13&end=" + response.header["Topic-Marker"][0],
-    path: map[string]string{ "channelId": channel.Id, "topicId": topic.Id },
+    query: "/content/channels/{channelID}/topics?count=13&end=" + response.header["Topic-Marker"][0],
+    path: map[string]string{ "channelID": channel.ID, "topicID": topic.ID },
     tokenType: APP_TOKENAGENT,
     token: set.A.Token,
   }
   topics = &[]Topic{}
-  response = &TestApiResponse{ data: topics }
-  assert.NoError(t, TestApiRequest(GetChannelTopics, params, response));
+  response = &TestAPIResponse{ data: topics }
+  assert.NoError(t, TestAPIRequest(GetChannelTopics, params, response));
   assert.Equal(t, len(*topics), 13);
 
   marker := response.header["Topic-Marker"][0]
   revision := response.header["Topic-Revision"][0]
 
-  params = &TestApiParams {
+  params = &TestAPIParams {
     restType: "DELETE",
-    query: "/content/channels/{channelId}/topics/{topicId}",
-    path: map[string]string{ "channelId": channel.Id, "topicId": ids[13] },
+    query: "/content/channels/{channelID}/topics/{topicID}",
+    path: map[string]string{ "channelID": channel.ID, "topicID": ids[13] },
     tokenType: APP_TOKENAGENT,
     token: set.A.Token,
   }
-  response = &TestApiResponse{ }
-  assert.NoError(t, TestApiRequest(RemoveChannelTopic, params, response));
+  response = &TestAPIResponse{ }
+  assert.NoError(t, TestAPIRequest(RemoveChannelTopic, params, response));
 
-  params = &TestApiParams {
+  params = &TestAPIParams {
     restType: "GET",
-    query: "/content/channels/{channelId}/topics?begin=" + marker + "&revision=" + revision,
-    path: map[string]string{ "channelId": channel.Id, "topicId": topic.Id },
+    query: "/content/channels/{channelID}/topics?begin=" + marker + "&revision=" + revision,
+    path: map[string]string{ "channelID": channel.ID, "topicID": topic.ID },
     tokenType: APP_TOKENAGENT,
     token: set.A.Token,
   }
   topics = &[]Topic{}
-  response = &TestApiResponse{ data: topics }
-  assert.NoError(t, TestApiRequest(GetChannelTopics, params, response));
+  response = &TestAPIResponse{ data: topics }
+  assert.NoError(t, TestAPIRequest(GetChannelTopics, params, response));
   assert.Equal(t, 0, len(*topics));
 
-  params = &TestApiParams {
+  params = &TestAPIParams {
     restType: "DELETE",
-    query: "/content/channels/{channelId}/topics/{topicId}",
-    path: map[string]string{ "channelId": channel.Id, "topicId": ids[108] },
+    query: "/content/channels/{channelID}/topics/{topicID}",
+    path: map[string]string{ "channelID": channel.ID, "topicID": ids[108] },
     tokenType: APP_TOKENAGENT,
     token: set.A.Token,
   }
-  response = &TestApiResponse{ }
-  assert.NoError(t, TestApiRequest(RemoveChannelTopic, params, response));
+  response = &TestAPIResponse{ }
+  assert.NoError(t, TestAPIRequest(RemoveChannelTopic, params, response));
 
-  params = &TestApiParams {
+  params = &TestAPIParams {
     restType: "GET",
-    query: "/content/channels/{channelId}/topics?begin=" + marker + "&revision=" + revision,
-    path: map[string]string{ "channelId": channel.Id, "topicId": topic.Id },
+    query: "/content/channels/{channelID}/topics?begin=" + marker + "&revision=" + revision,
+    path: map[string]string{ "channelID": channel.ID, "topicID": topic.ID },
     tokenType: APP_TOKENAGENT,
     token: set.A.Token,
   }
   topics = &[]Topic{}
-  response = &TestApiResponse{ data: topics }
-  assert.NoError(t, TestApiRequest(GetChannelTopics, params, response));
+  response = &TestAPIResponse{ data: topics }
+  assert.NoError(t, TestAPIRequest(GetChannelTopics, params, response));
   assert.Equal(t, 1, len(*topics));
 }
 

@@ -17,8 +17,8 @@ func GetChannelTopicTagSubjectField(w http.ResponseWriter, r *http.Request) {
 
   // scan parameters
   params := mux.Vars(r)
-  topicId := params["topicId"]
-  tagId := params["tagId"]
+  topicID := params["topicID"]
+  tagID := params["tagID"]
   field := params["field"]
   elements := strings.Split(field, ".")
 
@@ -30,7 +30,7 @@ func GetChannelTopicTagSubjectField(w http.ResponseWriter, r *http.Request) {
 
   // load tag
   var tagSlot store.TagSlot
-  if err = store.DB.Preload("Tag.Topic.TopicSlot").Where("channel_id = ? AND tag_slot_id = ?", channelSlot.Channel.ID, tagId).First(&tagSlot).Error; err != nil {
+  if err = store.DB.Preload("Tag.Topic.TopicSlot").Where("channel_id = ? AND tag_slot_id = ?", channelSlot.Channel.ID, tagID).First(&tagSlot).Error; err != nil {
     if errors.Is(err, gorm.ErrRecordNotFound) {
       code = http.StatusNotFound
     } else {
@@ -42,7 +42,7 @@ func GetChannelTopicTagSubjectField(w http.ResponseWriter, r *http.Request) {
     ErrResponse(w, http.StatusNotFound, errors.New("referenced missing tag"))
     return
   }
-  if tagSlot.Tag.Topic.TopicSlot.TopicSlotId != topicId {
+  if tagSlot.Tag.Topic.TopicSlot.TopicSlotID != topicID {
     ErrResponse(w, http.StatusNotFound, errors.New("invalid topic tag"))
     return
   }

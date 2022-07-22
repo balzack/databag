@@ -40,7 +40,7 @@ func SetCloseMessage(w http.ResponseWriter, r *http.Request) {
 
   // see if card exists
   var card store.Card
-  if err := store.DB.Preload("CardSlot").Where("account_id = ? AND guid = ?", account.Guid, guid).First(&card).Error; err != nil {
+  if err := store.DB.Preload("CardSlot").Where("account_id = ? AND guid = ?", account.GUID, guid).First(&card).Error; err != nil {
     if !errors.Is(err, gorm.ErrRecordNotFound) {
       ErrResponse(w, http.StatusInternalServerError, err)
     } else {

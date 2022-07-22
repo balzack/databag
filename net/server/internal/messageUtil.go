@@ -72,7 +72,7 @@ func ReadDataMessage(msg *DataMessage, obj interface{}) (string, string, int64, 
   }
 
   // validate signer
-  if signedData.Guid != guid {
+  if signedData.GUID != guid {
     return "", "", 0, errors.New("invalid message source")
   }
 
@@ -99,7 +99,7 @@ func WriteDataMessage(privateKey string, publicKey string, keyType string,
     return nil, err
   }
   var signedData SignedData
-  signedData.Guid = guid
+  signedData.GUID = guid
   signedData.Timestamp = time.Now().Unix()
   signedData.MessageType = messageType
   signedData.Value = string(data)

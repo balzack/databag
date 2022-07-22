@@ -14,7 +14,7 @@ func RemoveChannel(w http.ResponseWriter, r *http.Request) {
 
   // scan parameters
   params := mux.Vars(r)
-  channelId := params["channelId"]
+  channelID := params["channelID"]
 
   // validate contact access
   var account *store.Account
@@ -41,7 +41,7 @@ func RemoveChannel(w http.ResponseWriter, r *http.Request) {
 
   // load channel
   var slot store.ChannelSlot
-  if err = store.DB.Preload("Channel.Cards").Preload("Channel.Groups.Cards").Where("account_id = ? AND channel_slot_id = ?", account.ID, channelId).First(&slot).Error; err != nil {
+  if err = store.DB.Preload("Channel.Cards").Preload("Channel.Groups.Cards").Where("account_id = ? AND channel_slot_id = ?", account.ID, channelID).First(&slot).Error; err != nil {
     if errors.Is(err, gorm.ErrRecordNotFound) {
       ErrResponse(w, http.StatusNotFound, err)
     } else {
@@ -57,11 +57,11 @@ func RemoveChannel(w http.ResponseWriter, r *http.Request) {
   // determine affected contact list
   cards := make(map[string]store.Card)
   for _, card := range slot.Channel.Cards {
-    cards[card.Guid] = card
+    cards[card.GUID] = card
   }
   for _, group := range slot.Channel.Groups {
     for _, card := range group.Cards {
-      cards[card.Guid] = card
+      cards[card.GUID] = card
     }
   }
 
@@ -114,7 +114,7 @@ func RemoveChannel(w http.ResponseWriter, r *http.Request) {
     // cleanup file assets
     go garbageCollect(account)
   } else {
-    if _, member := cards[contact.Guid]; !member {
+    if _, member := cards[contact.GUID]; !member {
       ErrResponse(w, http.StatusNotFound, errors.New("member channel not found"));
       return
     }

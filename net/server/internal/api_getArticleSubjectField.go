@@ -17,7 +17,7 @@ func GetArticleSubjectField(w http.ResponseWriter, r *http.Request) {
 
   // scan parameters
   params := mux.Vars(r)
-  articleId := params["articleId"]
+  articleID := params["articleID"]
   field := params["field"]
   elements := strings.Split(field, ".")
 
@@ -38,7 +38,7 @@ func GetArticleSubjectField(w http.ResponseWriter, r *http.Request) {
       return
     }
     act = &card.Account
-    guid = card.Guid
+    guid = card.GUID
   } else {
     ErrResponse(w, http.StatusBadRequest, errors.New("unknown token type"))
     return
@@ -46,7 +46,7 @@ func GetArticleSubjectField(w http.ResponseWriter, r *http.Request) {
 
   // load article
   var slot store.ArticleSlot
-  if err := store.DB.Preload("Article.Groups.Cards").Where("account_id = ? AND article_slot_id = ?", act.ID, articleId).First(&slot).Error; err != nil {
+  if err := store.DB.Preload("Article.Groups.Cards").Where("account_id = ? AND article_slot_id = ?", act.ID, articleID).First(&slot).Error; err != nil {
     if errors.Is(err, gorm.ErrRecordNotFound) {
       ErrResponse(w, http.StatusNotFound, err)
     } else {

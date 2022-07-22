@@ -18,7 +18,7 @@ func AddChannelTopicAsset(w http.ResponseWriter, r *http.Request) {
 
   // scan parameters
   params := mux.Vars(r)
-  topicId := params["topicId"]
+  topicID := params["topicID"]
   var transforms []string
   if r.FormValue("transforms") != "" {
     if err := json.Unmarshal([]byte(r.FormValue("transforms")), &transforms); err != nil {
@@ -45,7 +45,7 @@ func AddChannelTopicAsset(w http.ResponseWriter, r *http.Request) {
 
   // load topic
   var topicSlot store.TopicSlot
-  if err = store.DB.Preload("Topic").Where("channel_id = ? AND topic_slot_id = ?", channelSlot.Channel.ID, topicId).First(&topicSlot).Error; err != nil {
+  if err = store.DB.Preload("Topic").Where("channel_id = ? AND topic_slot_id = ?", channelSlot.Channel.ID, topicID).First(&topicSlot).Error; err != nil {
     if errors.Is(err, gorm.ErrRecordNotFound) {
       ErrResponse(w, http.StatusNotFound, err)
     } else {
@@ -59,7 +59,7 @@ func AddChannelTopicAsset(w http.ResponseWriter, r *http.Request) {
   }
 
   // can only update topic if creator
-  if topicSlot.Topic.Guid != guid {
+  if topicSlot.Topic.GUID != guid {
     ErrResponse(w, http.StatusUnauthorized, errors.New("topic not created by you"))
     return
   }
@@ -70,7 +70,7 @@ func AddChannelTopicAsset(w http.ResponseWriter, r *http.Request) {
 
   // save new file
   id := uuid.New().String()
-  path := getStrConfigValue(CONFIG_ASSETPATH, APP_DEFAULTPATH) + "/" + channelSlot.Account.Guid + "/" + id
+  path := getStrConfigValue(CONFIG_ASSETPATH, APP_DEFAULTPATH) + "/" + channelSlot.Account.GUID + "/" + id
   if err := r.ParseMultipartForm(32 << 20); err != nil {
     ErrResponse(w, http.StatusBadRequest, err)
     return
@@ -90,7 +90,7 @@ func AddChannelTopicAsset(w http.ResponseWriter, r *http.Request) {
 
   assets := []Asset{}
   asset := &store.Asset{}
-  asset.AssetId = id
+  asset.AssetID = id
   asset.AccountID = channelSlot.Account.ID
   asset.ChannelID = channelSlot.Channel.ID
   asset.TopicID = topicSlot.Topic.ID
@@ -101,15 +101,15 @@ func AddChannelTopicAsset(w http.ResponseWriter, r *http.Request) {
     if res := tx.Save(asset).Error; res != nil {
       return res
     }
-    assets = append(assets, Asset{ AssetId: id, Status: APP_ASSETREADY})
+    assets = append(assets, Asset{ AssetID: id, Status: APP_ASSETREADY})
     for _, transform := range transforms {
       asset := &store.Asset{}
-      asset.AssetId = uuid.New().String()
+      asset.AssetID = uuid.New().String()
       asset.AccountID = channelSlot.Account.ID
       asset.ChannelID = channelSlot.Channel.ID
       asset.TopicID = topicSlot.Topic.ID
       asset.Status = APP_ASSETWAITING
-      asset.TransformId = id
+      asset.TransformID = id
       t := strings.Split(transform, ";")
       if len(t) > 0 {
         asset.Transform = t[0]
@@ -123,7 +123,7 @@ func AddChannelTopicAsset(w http.ResponseWriter, r *http.Request) {
       if res := tx.Save(asset).Error; res != nil {
         return res
       }
-      assets = append(assets, Asset{ AssetId: asset.AssetId, Transform: transform, Status: APP_ASSETWAITING})
+      assets = append(assets, Asset{ AssetID: asset.AssetID, Transform: transform, Status: APP_ASSETWAITING})
     }
     if res := tx.Model(&topicSlot.Topic).Update("detail_revision", act.ChannelRevision + 1).Error; res != nil {
       return res
@@ -153,11 +153,11 @@ func AddChannelTopicAsset(w http.ResponseWriter, r *http.Request) {
   // determine affected contact list
   cards := make(map[string]store.Card)
   for _, card := range channelSlot.Channel.Cards {
-    cards[card.Guid] = card
+    cards[card.GUID] = card
   }
   for _, group := range channelSlot.Channel.Groups {
     for _, card := range group.Cards {
-      cards[card.Guid] = card
+      cards[card.GUID] = card
     }
   }
 

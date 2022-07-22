@@ -18,7 +18,7 @@ func SetChannelSubject(w http.ResponseWriter, r *http.Request) {
 
   // scan parameters
   params := mux.Vars(r)
-  channelId := params["channelId"]
+  channelID := params["channelID"]
 
   var subject Subject
   if err := ParseRequest(r, w, &subject); err != nil {
@@ -28,7 +28,7 @@ func SetChannelSubject(w http.ResponseWriter, r *http.Request) {
 
   // load referenced channel
   var slot store.ChannelSlot
-  if err := store.DB.Preload("Channel.Cards").Preload("Channel.Groups.Cards").Where("account_id = ? AND channel_slot_id = ?", account.ID, channelId).First(&slot).Error; err != nil {
+  if err := store.DB.Preload("Channel.Cards").Preload("Channel.Groups.Cards").Where("account_id = ? AND channel_slot_id = ?", account.ID, channelID).First(&slot).Error; err != nil {
     if !errors.Is(err, gorm.ErrRecordNotFound) {
       ErrResponse(w, http.StatusInternalServerError, err)
     } else {
@@ -44,11 +44,11 @@ func SetChannelSubject(w http.ResponseWriter, r *http.Request) {
   // determine affected contact list
   cards := make(map[string]store.Card)
   for _, card := range slot.Channel.Cards {
-    cards[card.Guid] = card
+    cards[card.GUID] = card
   }
   for _, group := range slot.Channel.Groups {
     for _, card := range group.Cards {
-      cards[card.Guid] = card
+      cards[card.GUID] = card
     }
   }
 

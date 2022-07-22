@@ -16,7 +16,7 @@ func GetAccountListing(w http.ResponseWriter, r *http.Request) {
   profiles := []CardProfile{}
   for _, account := range accounts {
     profiles = append(profiles, CardProfile{
-      Guid: account.Guid,
+      GUID: account.GUID,
       Handle: account.Username,
       Name: account.AccountDetail.Name,
       Description: account.AccountDetail.Description,

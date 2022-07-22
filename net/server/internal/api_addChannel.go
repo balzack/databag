@@ -35,7 +35,7 @@ func AddChannel(w http.ResponseWriter, r *http.Request) {
       return res
     }
 
-    slot.ChannelSlotId = uuid.New().String()
+    slot.ChannelSlotID = uuid.New().String()
     slot.AccountID = account.ID
     slot.ChannelID = channel.ID
     slot.Revision = account.ChannelRevision + 1
@@ -43,9 +43,9 @@ func AddChannel(w http.ResponseWriter, r *http.Request) {
     if res := tx.Save(slot).Error; res != nil {
       return res
     }
-    for _, cardId := range params.Cards {
+    for _, cardID := range params.Cards {
       cardSlot := store.CardSlot{}
-      if res := tx.Preload("Card").Where("account_id = ? AND card_slot_id = ?", account.ID, cardId).First(&cardSlot).Error; res != nil {
+      if res := tx.Preload("Card").Where("account_id = ? AND card_slot_id = ?", account.ID, cardID).First(&cardSlot).Error; res != nil {
         return res
       }
       if res := tx.Model(&slot.Channel).Association("Cards").Append(cardSlot.Card); res != nil {
@@ -54,9 +54,9 @@ func AddChannel(w http.ResponseWriter, r *http.Request) {
       cards = append(cards, cardSlot.Card);
     }
 
-    for _, groupId := range params.Groups {
+    for _, groupID := range params.Groups {
       groupSlot := store.GroupSlot{}
-      if res := tx.Preload("Group").Where("account_id = ? AND group_slot_id = ?", account.ID, groupId).First(&groupSlot).Error; res != nil {
+      if res := tx.Preload("Group").Where("account_id = ? AND group_slot_id = ?", account.ID, groupID).First(&groupSlot).Error; res != nil {
         return res
       }
       if res := tx.Model(&slot.Channel).Association("Groups").Append(groupSlot.Group); res != nil {

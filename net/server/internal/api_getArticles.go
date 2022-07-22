@@ -110,7 +110,7 @@ func GetArticles(w http.ResponseWriter, r *http.Request) {
 
     for _, slot := range slots {
       if !typesSet || hasArticleType(types, slot.Article) {
-        shared := isArticleShared(card.Guid, slot.Article)
+        shared := isArticleShared(card.GUID, slot.Article)
         if articleRevisionSet {
           response = append(response, getArticleModel(&slot, shared, false))
         } else if shared {
@@ -136,7 +136,7 @@ func isArticleShared(guid string, article *store.Article) bool {
   }
   for _, group := range article.Groups {
     for _, card := range group.Cards {
-      if guid == card.Guid {
+      if guid == card.GUID {
         return true
       }
     }

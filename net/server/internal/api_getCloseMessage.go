@@ -16,10 +16,10 @@ func GetCloseMessage(w http.ResponseWriter, r *http.Request) {
     return
   }
   detail := account.AccountDetail
-  cardId := mux.Vars(r)["cardId"]
+  cardID := mux.Vars(r)["cardID"]
 
   var slot store.CardSlot
-  if err := store.DB.Preload("Card").Where("account_id = ? AND card_slot_id = ?", account.ID, cardId).First(&slot).Error; err != nil {
+  if err := store.DB.Preload("Card").Where("account_id = ? AND card_slot_id = ?", account.ID, cardID).First(&slot).Error; err != nil {
     if !errors.Is(err, gorm.ErrRecordNotFound) {
       ErrResponse(w, http.StatusInternalServerError, err)
     } else {
@@ -38,11 +38,11 @@ func GetCloseMessage(w http.ResponseWriter, r *http.Request) {
   }
 
   disconnect := &Disconnect{
-    Contact: slot.Card.Guid,
+    Contact: slot.Card.GUID,
   }
 
   msg, err := WriteDataMessage(detail.PrivateKey, detail.PublicKey, detail.KeyType,
-    APP_SIGNPKCS1V15, account.Guid, APP_MSGDISCONNECT, &disconnect)
+    APP_SIGNPKCS1V15, account.GUID, APP_MSGDISCONNECT, &disconnect)
   if err != nil {
     ErrResponse(w, http.StatusInternalServerError, err)
     return

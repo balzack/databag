@@ -44,7 +44,7 @@ func SetOpenMessage(w http.ResponseWriter, r *http.Request) {
   // see if card exists
   slot := &store.CardSlot{}
   card := &store.Card{}
-  if err := store.DB.Preload("CardSlot").Where("account_id = ? AND guid = ?", account.Guid, guid).First(card).Error; err != nil {
+  if err := store.DB.Preload("CardSlot").Where("account_id = ? AND guid = ?", account.GUID, guid).First(card).Error; err != nil {
     if !errors.Is(err, gorm.ErrRecordNotFound) {
       ErrResponse(w, http.StatusInternalServerError, err)
       return
@@ -56,7 +56,7 @@ func SetOpenMessage(w http.ResponseWriter, r *http.Request) {
       ErrResponse(w, http.StatusInternalServerError, res)
       return
     }
-    card.Guid = guid
+    card.GUID = guid
     card.Username = connect.Handle
     card.Name = connect.Name
     card.Description = connect.Description
@@ -72,14 +72,14 @@ func SetOpenMessage(w http.ResponseWriter, r *http.Request) {
     card.NotifiedChannel = connect.ChannelRevision
     card.OutToken = connect.Token
     card.InToken = hex.EncodeToString(data)
-    card.AccountID = account.Guid
+    card.AccountID = account.GUID
 
     // create slot
     err = store.DB.Transaction(func(tx *gorm.DB) error {
       if res := tx.Save(card).Error; res != nil {
         return res
       }
-      slot.CardSlotId = uuid.New().String()
+      slot.CardSlotID = uuid.New().String()
       slot.AccountID = account.ID
       slot.Revision = account.CardRevision + 1
       slot.CardID = card.ID

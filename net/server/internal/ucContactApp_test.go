@@ -6,8 +6,8 @@ import (
 )
 
 func TestContactApp(t *testing.T) {
-  var params *TestApiParams
-  var response *TestApiResponse
+  var params *TestAPIParams
+  var response *TestAPIResponse
 
   // allocate test accounts
   set, err := AddTestGroup("contactapp")
@@ -30,7 +30,7 @@ func TestContactApp(t *testing.T) {
     Name: "Roland",
     Location: "San Diago",
   };
-  assert.NoError(t, ApiTestMsg(SetProfile, "PUT", "/profile/data", nil, profileData,
+  assert.NoError(t, APITestMsg(SetProfile, "PUT", "/profile/data", nil, profileData,
       APP_TOKENAGENT, set.A.Token, nil, nil))
 
   // wait for test
@@ -44,13 +44,13 @@ func TestContactApp(t *testing.T) {
   // add a new article
   article := &Article{}
   subject := &Subject{ Data: "subjectdata", DataType: "subjectdatatype" }
-  params = &TestApiParams{ restType: "POST", query: "/articles", tokenType: APP_TOKENAGENT, token: set.A.Token, body: subject }
-  response = &TestApiResponse{ data: article }
-  assert.NoError(t, TestApiRequest(AddArticle, params, response))
+  params = &TestAPIParams{ restType: "POST", query: "/articles", tokenType: APP_TOKENAGENT, token: set.A.Token, body: subject }
+  response = &TestAPIResponse{ data: article }
+  assert.NoError(t, TestAPIRequest(AddArticle, params, response))
 
   // wait for a
   assert.NoError(t, app.WaitFor(func(testApp *TestApp)bool {
-    a, set := testApp.articles[article.Id]
+    a, set := testApp.articles[article.ID]
     if set && a.Data.Data == "subjectdata" {
       return true
     }
@@ -58,14 +58,14 @@ func TestContactApp(t *testing.T) {
   }))
 
   // remove a new article
-  params = &TestApiParams{ restType: "DELETE", query: "/articles/{articleId}", path: map[string]string{ "articleId": article.Id },
+  params = &TestAPIParams{ restType: "DELETE", query: "/articles/{articleID}", path: map[string]string{ "articleID": article.ID },
     tokenType: APP_TOKENAGENT, token: set.A.Token, body: subject }
-  response = &TestApiResponse{}
-  assert.NoError(t, TestApiRequest(RemoveArticle, params, response))
+  response = &TestAPIResponse{}
+  assert.NoError(t, TestAPIRequest(RemoveArticle, params, response))
 
   // wait for a to be removed
   assert.NoError(t, app.WaitFor(func(testApp *TestApp)bool {
-    if _, set := testApp.articles[article.Id]; !set {
+    if _, set := testApp.articles[article.ID]; !set {
       return true
     }
     return false
@@ -74,23 +74,23 @@ func TestContactApp(t *testing.T) {
   // add a new article in contact
   article = &Article{}
   subject = &Subject{ Data: "subjectdataB", DataType: "subjectdatatypeB" }
-  params = &TestApiParams{ restType: "POST", query: "/articles", tokenType: APP_TOKENAGENT, token: set.B.Token, body: subject }
-  response = &TestApiResponse{ data: article }
-  assert.NoError(t, TestApiRequest(AddArticle, params, response))
-  articleId := article.Id
+  params = &TestAPIParams{ restType: "POST", query: "/articles", tokenType: APP_TOKENAGENT, token: set.B.Token, body: subject }
+  response = &TestAPIResponse{ data: article }
+  assert.NoError(t, TestAPIRequest(AddArticle, params, response))
+  articleID := article.ID
 
   // share article
   article = &Article{}
-  params = &TestApiParams{ restType: "POST", query: "/articles/{articleId}/groups/{groupId}", tokenType: APP_TOKENAGENT, token: set.B.Token,
-      path: map[string]string{ "articleId": articleId, "groupId": set.B.A.GroupId }}
-  response = &TestApiResponse{ data: article }
-  assert.NoError(t, TestApiRequest(SetArticleGroup, params, response))
+  params = &TestAPIParams{ restType: "POST", query: "/articles/{articleID}/groups/{groupID}", tokenType: APP_TOKENAGENT, token: set.B.Token,
+      path: map[string]string{ "articleID": articleID, "groupID": set.B.A.GroupID }}
+  response = &TestAPIResponse{ data: article }
+  assert.NoError(t, TestAPIRequest(SetArticleGroup, params, response))
 
   // wait for 
   assert.NoError(t, app.WaitFor(func(testApp *TestApp)bool {
-    contact, contactSet := testApp.contacts[set.A.B.CardId]
+    contact, contactSet := testApp.contacts[set.A.B.CardID]
     if contactSet {
-      _, articleSet := contact.articles[articleId]
+      _, articleSet := contact.articles[articleID]
       if articleSet {
         return true
       }
@@ -100,16 +100,16 @@ func TestContactApp(t *testing.T) {
 
   // remove new article in contact
   article = &Article{}
-  params = &TestApiParams{ restType: "DELETE", query: "/articles/{articleId}", tokenType: APP_TOKENAGENT, token: set.B.Token,
-      path: map[string]string{ "articleId": articleId }}
-  response = &TestApiResponse{ }
-  assert.NoError(t, TestApiRequest(RemoveArticle, params, response))
+  params = &TestAPIParams{ restType: "DELETE", query: "/articles/{articleID}", tokenType: APP_TOKENAGENT, token: set.B.Token,
+      path: map[string]string{ "articleID": articleID }}
+  response = &TestAPIResponse{ }
+  assert.NoError(t, TestAPIRequest(RemoveArticle, params, response))
 
   // wait for 
   assert.NoError(t, app.WaitFor(func(testApp *TestApp)bool {
-    contact, contactSet := testApp.contacts[set.A.B.CardId]
+    contact, contactSet := testApp.contacts[set.A.B.CardID]
     if contactSet {
-      _, articleSet := contact.articles[articleId]
+      _, articleSet := contact.articles[articleID]
       if !articleSet {
         return true
       }
@@ -120,23 +120,23 @@ func TestContactApp(t *testing.T) {
   // add a new article in contact
   article = &Article{}
   subject = &Subject{ Data: "subjectdataB", DataType: "subjectdatatypeB" }
-  params = &TestApiParams{ restType: "POST", query: "/articles", tokenType: APP_TOKENAGENT, token: set.B.Token, body: subject }
-  response = &TestApiResponse{ data: article }
-  assert.NoError(t, TestApiRequest(AddArticle, params, response))
-  articleId = article.Id
+  params = &TestAPIParams{ restType: "POST", query: "/articles", tokenType: APP_TOKENAGENT, token: set.B.Token, body: subject }
+  response = &TestAPIResponse{ data: article }
+  assert.NoError(t, TestAPIRequest(AddArticle, params, response))
+  articleID = article.ID
 
   // share article
   article = &Article{}
-  params = &TestApiParams{ restType: "POST", query: "/articles/{articleId}/groups/{groupId}", tokenType: APP_TOKENAGENT, token: set.B.Token,
-      path: map[string]string{ "articleId": articleId, "groupId": set.B.A.GroupId }}
-  response = &TestApiResponse{ data: article }
-  assert.NoError(t, TestApiRequest(SetArticleGroup, params, response))
+  params = &TestAPIParams{ restType: "POST", query: "/articles/{articleID}/groups/{groupID}", tokenType: APP_TOKENAGENT, token: set.B.Token,
+      path: map[string]string{ "articleID": articleID, "groupID": set.B.A.GroupID }}
+  response = &TestAPIResponse{ data: article }
+  assert.NoError(t, TestAPIRequest(SetArticleGroup, params, response))
 
   // wait for 
   assert.NoError(t, app.WaitFor(func(testApp *TestApp)bool {
-    contact, contactSet := testApp.contacts[set.A.B.CardId]
+    contact, contactSet := testApp.contacts[set.A.B.CardID]
     if contactSet {
-      _, articleSet := contact.articles[articleId]
+      _, articleSet := contact.articles[articleID]
       if articleSet {
         return true
       }
@@ -146,16 +146,16 @@ func TestContactApp(t *testing.T) {
 
   // remove group in contact
   article = &Article{}
-  params = &TestApiParams{ restType: "DELETE", query: "/groups/{groupId}", tokenType: APP_TOKENAGENT, token: set.B.Token,
-      path: map[string]string{ "groupId": set.B.A.GroupId }}
-  response = &TestApiResponse{ }
-  assert.NoError(t, TestApiRequest(RemoveGroup, params, response))
+  params = &TestAPIParams{ restType: "DELETE", query: "/groups/{groupID}", tokenType: APP_TOKENAGENT, token: set.B.Token,
+      path: map[string]string{ "groupID": set.B.A.GroupID }}
+  response = &TestAPIResponse{ }
+  assert.NoError(t, TestAPIRequest(RemoveGroup, params, response))
 
   // wait for 
   assert.NoError(t, app.WaitFor(func(testApp *TestApp)bool {
-    contact, contactSet := testApp.contacts[set.A.B.CardId]
+    contact, contactSet := testApp.contacts[set.A.B.CardID]
     if contactSet {
-      _, articleSet := contact.articles[articleId]
+      _, articleSet := contact.articles[articleID]
       if !articleSet {
         return true
       }
@@ -165,9 +165,9 @@ func TestContactApp(t *testing.T) {
 
   // update Bs profile
   profileData = &ProfileData{ Name: "contactappname" }
-  params = &TestApiParams{ restType: "PUT", query: "/profile/data", tokenType: APP_TOKENAGENT, token: set.B.Token, body: profileData }
-  response = &TestApiResponse{}
-  assert.NoError(t, TestApiRequest(SetProfile, params, response))
+  params = &TestAPIParams{ restType: "PUT", query: "/profile/data", tokenType: APP_TOKENAGENT, token: set.B.Token, body: profileData }
+  response = &TestAPIResponse{}
+  assert.NoError(t, TestAPIRequest(SetProfile, params, response))
 
   // wait for
   assert.NoError(t, app.WaitFor(func(testApp *TestApp)bool {
@@ -181,22 +181,22 @@ func TestContactApp(t *testing.T) {
 
   // disconnect from B
   card := &Card{}
-  params = &TestApiParams{ restType: "PUT", query: "/contact/cards/{cardId}/status", tokenType: APP_TOKENAGENT, token: set.B.Token,
-      path: map[string]string{ "cardId": set.B.A.CardId }, body: APP_CARDCONFIRMED }
-  response = &TestApiResponse{ data: card }
-  assert.NoError(t, TestApiRequest(SetCardStatus, params, response))
+  params = &TestAPIParams{ restType: "PUT", query: "/contact/cards/{cardID}/status", tokenType: APP_TOKENAGENT, token: set.B.Token,
+      path: map[string]string{ "cardID": set.B.A.CardID }, body: APP_CARDCONFIRMED }
+  response = &TestAPIResponse{ data: card }
+  assert.NoError(t, TestAPIRequest(SetCardStatus, params, response))
   msg := &DataMessage{}
-  params = &TestApiParams { query: "/contact/cards/{cardId}/closeMessage", tokenType: APP_TOKENAGENT, token: set.B.Token,
-      path: map[string]string{ "cardId": set.B.A.CardId } }
-  response = &TestApiResponse{ data: msg }
-  assert.NoError(t, TestApiRequest(GetCloseMessage, params, response))
-  params = &TestApiParams { restType: "PUT", query: "/contact/closeMessage", body: msg }
-  response = &TestApiResponse{}
-  assert.NoError(t, TestApiRequest(SetCloseMessage, params, response))
+  params = &TestAPIParams { query: "/contact/cards/{cardID}/closeMessage", tokenType: APP_TOKENAGENT, token: set.B.Token,
+      path: map[string]string{ "cardID": set.B.A.CardID } }
+  response = &TestAPIResponse{ data: msg }
+  assert.NoError(t, TestAPIRequest(GetCloseMessage, params, response))
+  params = &TestAPIParams { restType: "PUT", query: "/contact/closeMessage", body: msg }
+  response = &TestAPIResponse{}
+  assert.NoError(t, TestAPIRequest(SetCloseMessage, params, response))
 
   // wait for
   assert.NoError(t, app.WaitFor(func(testApp *TestApp)bool {
-    contact, contactSet := testApp.contacts[set.A.B.CardId]
+    contact, contactSet := testApp.contacts[set.A.B.CardID]
     if contactSet && contact.card.Data.CardDetail.Status == APP_CARDCONFIRMED {
       return true
     }

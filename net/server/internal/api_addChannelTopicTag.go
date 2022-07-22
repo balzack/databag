@@ -13,7 +13,7 @@ func AddChannelTopicTag(w http.ResponseWriter, r *http.Request) {
 
   // scan parameters
   params := mux.Vars(r)
-  topicId := params["topicId"]
+  topicID := params["topicID"]
 
   var subject Subject
   if err := ParseRequest(r, w, &subject); err != nil {
@@ -30,7 +30,7 @@ func AddChannelTopicTag(w http.ResponseWriter, r *http.Request) {
 
   // load topic
   var topicSlot store.TopicSlot
-  if err = store.DB.Preload("Topic.Tags").Where("channel_id = ? AND topic_slot_id = ?", channelSlot.Channel.ID, topicId).First(&topicSlot).Error; err != nil {
+  if err = store.DB.Preload("Topic.Tags").Where("channel_id = ? AND topic_slot_id = ?", channelSlot.Channel.ID, topicID).First(&topicSlot).Error; err != nil {
     if errors.Is(err, gorm.ErrRecordNotFound) {
       ErrResponse(w, http.StatusNotFound, err)
     } else {
@@ -47,7 +47,7 @@ func AddChannelTopicTag(w http.ResponseWriter, r *http.Request) {
   tagSlot := &store.TagSlot{}
   err = store.DB.Transaction(func(tx *gorm.DB) error {
 
-    tagSlot.TagSlotId = uuid.New().String()
+    tagSlot.TagSlotID = uuid.New().String()
     tagSlot.AccountID = act.ID
     tagSlot.Revision = act.ChannelRevision + 1
     tagSlot.ChannelID = channelSlot.Channel.ID
@@ -61,7 +61,7 @@ func AddChannelTopicTag(w http.ResponseWriter, r *http.Request) {
     tag.ChannelID = channelSlot.Channel.ID
     tag.TopicID = topicSlot.Topic.ID
     tag.TagSlotID = tagSlot.ID
-    tag.Guid = guid
+    tag.GUID = guid
     tag.DataType = subject.DataType
     tag.Data = subject.Data
     if res := tx.Save(tag).Error; res != nil {
@@ -94,11 +94,11 @@ func AddChannelTopicTag(w http.ResponseWriter, r *http.Request) {
   // determine affected contact list
   cards := make(map[string]store.Card)
   for _, card := range channelSlot.Channel.Cards {
-    cards[card.Guid] = card
+    cards[card.GUID] = card
   }
   for _, group := range channelSlot.Channel.Groups {
     for _, card := range group.Cards {
-      cards[card.Guid] = card
+      cards[card.GUID] = card
     }
   }
 

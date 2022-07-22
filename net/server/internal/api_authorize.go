@@ -22,7 +22,7 @@ func Authorize(w http.ResponseWriter, r *http.Request) {
   claim := &Claim{ Token: token }
 
   msg, err := WriteDataMessage(detail.PrivateKey, detail.PublicKey, detail.KeyType,
-    APP_SIGNPKCS1V15, account.Guid, APP_MSGAUTHENTICATE, &claim)
+    APP_SIGNPKCS1V15, account.GUID, APP_MSGAUTHENTICATE, &claim)
   if err != nil {
     ErrResponse(w, http.StatusInternalServerError, err)
     return

@@ -98,8 +98,8 @@ func transcodeAsset(asset *store.Asset) {
       ErrMsg(err)
     }
   } else {
-    input := data + "/" + asset.Account.Guid + "/" + asset.TransformId
-    output := data + "/" + asset.Account.Guid + "/" + asset.AssetId
+    input := data + "/" + asset.Account.GUID + "/" + asset.TransformID
+    output := data + "/" + asset.Account.GUID + "/" + asset.AssetID
     cmd := exec.Command(script + "/transform_" + asset.Transform + ".sh", input, output, asset.TransformParams)
     var stdout bytes.Buffer
     cmd.Stdout = &stdout
@@ -174,11 +174,11 @@ func UpdateAsset(asset *store.Asset, status string, crc uint32, size int64) (err
   // determine affected contact list
   cards := make(map[string]store.Card)
   for _, card := range topic.Channel.Cards {
-    cards[card.Guid] = card
+    cards[card.GUID] = card
   }
   for _, group := range topic.Channel.Groups {
     for _, card := range group.Cards {
-      cards[card.Guid] = card
+      cards[card.GUID] = card
     }
   }
 

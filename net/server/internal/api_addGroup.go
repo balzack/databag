@@ -40,7 +40,7 @@ func AddGroup(w http.ResponseWriter, r *http.Request) {
       return res
     }
 
-    slot.GroupSlotId = uuid.New().String()
+    slot.GroupSlotID = uuid.New().String()
     slot.AccountID = account.ID
     slot.GroupID = group.ID
     slot.Revision = account.GroupRevision + 1

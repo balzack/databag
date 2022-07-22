@@ -13,7 +13,7 @@ func garbageCollect(act *store.Account) {
   defer garbageSync.Unlock()
 
   // get all asset files
-  dir := getStrConfigValue(CONFIG_ASSETPATH, APP_DEFAULTPATH) + "/" + act.Guid
+  dir := getStrConfigValue(CONFIG_ASSETPATH, APP_DEFAULTPATH) + "/" + act.GUID
   files, err := os.ReadDir(dir)
   if err != nil {
     ErrMsg(err)
@@ -35,13 +35,13 @@ func garbageCollect(act *store.Account) {
 
   // mark all referenced files
   for _, asset := range assets {
-    list[asset.AssetId] = true
+    list[asset.AssetID] = true
   }
 
   // delete any unreferenced file
   for id, set := range list {
     if !set {
-      LogMsg("removing file asset " + act.Guid + "/" + id)
+      LogMsg("removing file asset " + act.GUID + "/" + id)
       if err := os.Remove(dir + "/" + id); err != nil {
         ErrMsg(err)
       }

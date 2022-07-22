@@ -18,11 +18,11 @@ func RemoveGroup(w http.ResponseWriter, r *http.Request) {
 
   // scan parameters
   params := mux.Vars(r)
-  groupId := params["groupId"]
+  groupID := params["groupID"]
 
   // load referenced group
   var slot store.GroupSlot
-  if err := store.DB.Preload("Group.Cards.CardSlot").Where("account_id = ? AND group_slot_id = ?", account.ID, groupId).First(&slot).Error; err != nil {
+  if err := store.DB.Preload("Group.Cards.CardSlot").Where("account_id = ? AND group_slot_id = ?", account.ID, groupID).First(&slot).Error; err != nil {
     if !errors.Is(err, gorm.ErrRecordNotFound) {
       ErrResponse(w, http.StatusInternalServerError, err)
     } else {

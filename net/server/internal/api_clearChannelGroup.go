@@ -18,12 +18,12 @@ func ClearChannelGroup(w http.ResponseWriter, r *http.Request) {
 
   // scan parameters
   params := mux.Vars(r)
-  channelId := params["channelId"]
-  groupId := params["groupId"]
+  channelID := params["channelID"]
+  groupID := params["groupID"]
 
   // load referenced channel
   var channelSlot store.ChannelSlot
-  if err := store.DB.Preload("Channel.Cards.CardSlot").Preload("Channel.Groups.GroupSlot").Preload("Channel.Groups.Cards").Where("account_id = ? AND channel_slot_id = ?", account.ID, channelId).First(&channelSlot).Error; err != nil {
+  if err := store.DB.Preload("Channel.Cards.CardSlot").Preload("Channel.Groups.GroupSlot").Preload("Channel.Groups.Cards").Where("account_id = ? AND channel_slot_id = ?", account.ID, channelID).First(&channelSlot).Error; err != nil {
     if !errors.Is(err, gorm.ErrRecordNotFound) {
       ErrResponse(w, http.StatusInternalServerError, err)
     } else {
@@ -38,7 +38,7 @@ func ClearChannelGroup(w http.ResponseWriter, r *http.Request) {
 
   // load referenced group 
   var groupSlot store.GroupSlot
-  if err := store.DB.Preload("Group.Cards").Preload("Group.GroupSlot").Where("account_id = ? AND group_slot_id = ?", account.ID, groupId).First(&groupSlot).Error; err != nil {
+  if err := store.DB.Preload("Group.Cards").Preload("Group.GroupSlot").Where("account_id = ? AND group_slot_id = ?", account.ID, groupID).First(&groupSlot).Error; err != nil {
     if !errors.Is(err, gorm.ErrRecordNotFound) {
       ErrResponse(w, http.StatusInternalServerError, err)
     } else {
@@ -55,7 +55,7 @@ func ClearChannelGroup(w http.ResponseWriter, r *http.Request) {
   cards := make(map[string]store.Card)
   for _, group := range channelSlot.Channel.Groups {
     for _, card := range group.Cards {
-      cards[card.Guid] = card
+      cards[card.GUID] = card
     }
   }
 

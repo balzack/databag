@@ -9,8 +9,8 @@ import (
 )
 
 func TestAccountConfig(t *testing.T) {
-  var params *TestApiParams
-  var response *TestApiResponse
+  var params *TestAPIParams
+  var response *TestAPIResponse
   var channel *Channel
   var topic *Topic
   var assets *[]Asset
@@ -31,55 +31,55 @@ func TestAccountConfig(t *testing.T) {
 
   // get reset token
   var token string
-  params = &TestApiParams{ query: "/account/auth", authorization: "accountconfigA:pass" }
-  response = &TestApiResponse{ data: &token }
-  assert.NoError(t, TestApiRequest(AddAccountAuthentication, params, response))
+  params = &TestAPIParams{ query: "/account/auth", authorization: "accountconfigA:pass" }
+  response = &TestAPIResponse{ data: &token }
+  assert.NoError(t, TestAPIRequest(AddAccountAuthentication, params, response))
 
   // set reset token
-  params = &TestApiParams{ query: "/account/auth", tokenType: APP_TOKENRESET, token: token, credentials: "newguy:ssap" }
-  assert.NoError(t, TestApiRequest(SetAccountAuthentication, params, nil))
+  params = &TestAPIParams{ query: "/account/auth", tokenType: APP_TOKENRESET, token: token, credentials: "newguy:ssap" }
+  assert.NoError(t, TestAPIRequest(SetAccountAuthentication, params, nil))
 
   // fail getting reset token
-  params = &TestApiParams{ query: "/account/auth", authorization: "accountconfigA:pass" }
-  response = &TestApiResponse{ data: &token }
-  assert.Error(t, TestApiRequest(AddAccountAuthentication, params, response))
+  params = &TestAPIParams{ query: "/account/auth", authorization: "accountconfigA:pass" }
+  response = &TestAPIResponse{ data: &token }
+  assert.Error(t, TestAPIRequest(AddAccountAuthentication, params, response))
 
   // create new channel
   channel = &Channel{}
   subject = &Subject{ Data: "channeldata", DataType: "channeldatatype" }
-  params = &TestApiParams{ query: "/content/channels", tokenType: APP_TOKENAGENT, token: set.A.Token, body: subject }
-  response = &TestApiResponse{ data: channel }
-  assert.NoError(t, TestApiRequest(AddChannel, params, response))
+  params = &TestAPIParams{ query: "/content/channels", tokenType: APP_TOKENAGENT, token: set.A.Token, body: subject }
+  response = &TestAPIResponse{ data: channel }
+  assert.NoError(t, TestAPIRequest(AddChannel, params, response))
 
   // create new topic
   topic = &Topic{}
   subject = &Subject{ DataType: "topicdatatype", Data: "topicdata" }
-  params = &TestApiParams{ query: "/content/channels/{channelId}/topics", tokenType: APP_TOKENAGENT, token: set.A.Token,
-    path: map[string]string{ "channelId": channel.Id }, body: subject }
-  response = &TestApiResponse{ data: topic }
-  assert.NoError(t, TestApiRequest(AddChannelTopic, params, response))
+  params = &TestAPIParams{ query: "/content/channels/{channelID}/topics", tokenType: APP_TOKENAGENT, token: set.A.Token,
+    path: map[string]string{ "channelID": channel.ID }, body: subject }
+  response = &TestAPIResponse{ data: topic }
+  assert.NoError(t, TestAPIRequest(AddChannelTopic, params, response))
 
   // add asset to topic
   assets = &[]Asset{}
-  pathParams = &map[string]string{ "channelId": channel.Id, "topicId": topic.Id }
+  pathParams = &map[string]string{ "channelID": channel.ID, "topicID": topic.ID }
   transforms, err := json.Marshal([]string{ "copy;photo", "copy;photo", })
   assert.NoError(t, err)
-  assert.NoError(t, ApiTestUpload(AddChannelTopicAsset, "POST",
-    "/content/channels/{channelId}/topics/{topicId}/assets?transforms=" + url.QueryEscape(string(transforms)),
+  assert.NoError(t, APITestUpload(AddChannelTopicAsset, "POST",
+    "/content/channels/{channelID}/topics/{topicID}/assets?transforms=" + url.QueryEscape(string(transforms)),
     pathParams, img, APP_TOKENAGENT, set.A.Token, assets, nil))
 
   // update topic
   status := APP_TOPICCONFIRMED
-  params = &TestApiParams{ query: "/content/channels/{channelId}/topics/{topicId}", tokenType: APP_TOKENAGENT, token: set.A.Token,
-    path: map[string]string{ "channelId": channel.Id, "topicId": topic.Id }, body: &status }
-  assert.NoError(t, TestApiRequest(SetChannelTopicConfirmed, params, nil))
+  params = &TestAPIParams{ query: "/content/channels/{channelID}/topics/{topicID}", tokenType: APP_TOKENAGENT, token: set.A.Token,
+    path: map[string]string{ "channelID": channel.ID, "topicID": topic.ID }, body: &status }
+  assert.NoError(t, TestAPIRequest(SetChannelTopicConfirmed, params, nil))
 
   // wait for assets
   assert.NoError(t, app.WaitFor(func(testApp *TestApp)bool {
     for _, testChannel := range testApp.channels {
-      if testChannel.channel.Id == channel.Id {
+      if testChannel.channel.ID == channel.ID {
         for _, testTopic := range testChannel.topics {
-          if testTopic.topic.Id == topic.Id {
+          if testTopic.topic.ID == topic.ID {
             detail := testTopic.topic.Data.TopicDetail
             if detail.Status == APP_TOPICCONFIRMED && detail.Transform == APP_TRANSFORMCOMPLETE {
               return true
@@ -94,35 +94,35 @@ func TestAccountConfig(t *testing.T) {
 
   // set to searchable
   searchable := true
-  params = &TestApiParams{ query: "/account/searchable", tokenType: APP_TOKENAGENT, token: set.A.Token, body: &searchable }
-  assert.NoError(t, TestApiRequest(SetAccountSearchable, params, nil))
+  params = &TestAPIParams{ query: "/account/searchable", tokenType: APP_TOKENAGENT, token: set.A.Token, body: &searchable }
+  assert.NoError(t, TestAPIRequest(SetAccountSearchable, params, nil))
 
   // get account status
   accountStatus := &AccountStatus{}
-  params = &TestApiParams{ query: "/account/status", tokenType: APP_TOKENAGENT, token: set.A.Token }
-  response = &TestApiResponse{ data: accountStatus }
-  assert.NoError(t, TestApiRequest(GetAccountStatus, params, response))
+  params = &TestAPIParams{ query: "/account/status", tokenType: APP_TOKENAGENT, token: set.A.Token }
+  response = &TestAPIResponse{ data: accountStatus }
+  assert.NoError(t, TestAPIRequest(GetAccountStatus, params, response))
   assert.True(t, accountStatus.Searchable)
 
   // add asset to topic
   assets = &[]Asset{}
-  pathParams = &map[string]string{ "channelId": channel.Id, "topicId": topic.Id }
-  assert.Error(t, ApiTestUpload(AddChannelTopicAsset, "POST",
-    "/content/channels/{channelId}/topics/{topicId}/assets?transforms=" + url.QueryEscape(string(transforms)),
+  pathParams = &map[string]string{ "channelID": channel.ID, "topicID": topic.ID }
+  assert.Error(t, APITestUpload(AddChannelTopicAsset, "POST",
+    "/content/channels/{channelID}/topics/{topicID}/assets?transforms=" + url.QueryEscape(string(transforms)),
     pathParams, img, APP_TOKENAGENT, set.A.Token, assets, nil))
 
   // get list of accounts
   profiles := []CardProfile{}
-  params = &TestApiParams{ query: "/account/listing" }
-  response = &TestApiResponse{ data: &profiles }
-  assert.NoError(t, TestApiRequest(GetAccountListing, params, response))
+  params = &TestAPIParams{ query: "/account/listing" }
+  response = &TestAPIResponse{ data: &profiles }
+  assert.NoError(t, TestAPIRequest(GetAccountListing, params, response))
   assert.Equal(t, 1, len(profiles))
-  assert.Equal(t, set.A.Guid, profiles[0].Guid);
+  assert.Equal(t, set.A.GUID, profiles[0].GUID);
 
-PrintMsg(set.A.Guid)
+PrintMsg(set.A.GUID)
 
   // delete account
-  params = &TestApiParams{ query: "/account/profile", authorization: "newguy:ssap" }
-  assert.NoError(t, TestApiRequest(RemoveAccount, params, nil))
+  params = &TestAPIParams{ query: "/account/profile", authorization: "newguy:ssap" }
+  assert.NoError(t, TestAPIRequest(RemoveAccount, params, nil))
 
 }

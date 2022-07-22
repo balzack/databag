@@ -82,7 +82,7 @@ func AddAccount(w http.ResponseWriter, r *http.Request) {
     Username: username,
     Handle: strings.ToLower(username),
     Password: password,
-    Guid: fingerprint,
+    GUID: fingerprint,
   }
   detail := store.AccountDetail{
     PublicKey: publicPem,
@@ -113,7 +113,7 @@ func AddAccount(w http.ResponseWriter, r *http.Request) {
 
   // create response
   profile := Profile{
-    Guid: account.Guid,
+    GUID: account.GUID,
     Handle: account.Username,
     Name: detail.Name,
     Description: detail.Description,

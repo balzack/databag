@@ -16,7 +16,7 @@ func GetNodeAccountImage(w http.ResponseWriter, r *http.Request) {
 
   // get referenced account id
   params := mux.Vars(r)
-  accountId, res := strconv.ParseUint(params["accountId"], 10, 32)
+  accountID, res := strconv.ParseUint(params["accountID"], 10, 32)
   if res != nil {
     ErrResponse(w, http.StatusBadRequest, res)
     return
@@ -28,7 +28,7 @@ func GetNodeAccountImage(w http.ResponseWriter, r *http.Request) {
   }
 
   var account store.Account
-  if err := store.DB.Preload("AccountDetail").First(&account, uint(accountId)).Error; err != nil {
+  if err := store.DB.Preload("AccountDetail").First(&account, uint(accountID)).Error; err != nil {
     if errors.Is(err, gorm.ErrRecordNotFound) {
       ErrResponse(w, http.StatusNotFound, err)
     } else {

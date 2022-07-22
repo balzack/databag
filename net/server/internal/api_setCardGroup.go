@@ -17,12 +17,12 @@ func SetCardGroup(w http.ResponseWriter, r *http.Request) {
 
   // scan parameters
   params := mux.Vars(r)
-  cardId := params["cardId"]
-  groupId := params["groupId"]
+  cardID := params["cardID"]
+  groupID := params["groupID"]
 
   // load referenced card
   var slot store.CardSlot
-  if err := store.DB.Preload("Card").Where("account_id = ? AND card_slot_id = ?", account.ID, cardId).First(&slot).Error; err != nil {
+  if err := store.DB.Preload("Card").Where("account_id = ? AND card_slot_id = ?", account.ID, cardID).First(&slot).Error; err != nil {
     if errors.Is(err, gorm.ErrRecordNotFound) {
       ErrResponse(w, http.StatusNotFound, err)
     } else {
@@ -37,7 +37,7 @@ func SetCardGroup(w http.ResponseWriter, r *http.Request) {
 
   // load referenced group
   var groupSlot store.GroupSlot
-  if err := store.DB.Preload("Group").Where("account_id = ? AND group_slot_id = ?", account.ID, groupId).First(&groupSlot).Error; err != nil {
+  if err := store.DB.Preload("Group").Where("account_id = ? AND group_slot_id = ?", account.ID, groupID).First(&groupSlot).Error; err != nil {
     if !errors.Is(err, gorm.ErrRecordNotFound) {
       ErrResponse(w, http.StatusInternalServerError, err)
     } else {

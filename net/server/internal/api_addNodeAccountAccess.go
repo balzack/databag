@@ -13,7 +13,7 @@ import (
 func AddNodeAccountAccess(w http.ResponseWriter, r *http.Request) {
 
   params := mux.Vars(r)
-  accountId, res := strconv.ParseUint(params["accountId"], 10, 32)
+  accountID, res := strconv.ParseUint(params["accountID"], 10, 32)
   if res != nil {
     ErrResponse(w, http.StatusBadRequest, res)
     return
@@ -32,7 +32,7 @@ func AddNodeAccountAccess(w http.ResponseWriter, r *http.Request) {
   token := hex.EncodeToString(data)
 
   accountToken := store.AccountToken{
-    AccountID: uint(accountId),
+    AccountID: uint(accountID),
     TokenType: APP_TOKENRESET,
     Token: token,
     Expires: time.Now().Unix() + APP_RESETEXPIRE,

@@ -77,7 +77,7 @@ var routes = Routes{
 	Route{
 		"GetAccountAsset",
 		strings.ToUpper("Get"),
-		"/account/assets/{assetId}",
+		"/account/assets/{assetID}",
 		GetAccountAsset,
 	},
 
@@ -140,7 +140,7 @@ var routes = Routes{
 	Route{
 		"RemoveAccountApp",
 		strings.ToUpper("Delete"),
-		"/account/apps/{appId}",
+		"/account/apps/{appID}",
 		RemoveAccountApp,
 	},
 
@@ -196,21 +196,21 @@ var routes = Routes{
 	Route{
 		"GetNodeAccountImage",
 		strings.ToUpper("Get"),
-		"/admin/accounts/{accountId}/image",
+		"/admin/accounts/{accountID}/image",
 		GetNodeAccountImage,
 	},
 
 	Route{
 		"SetNodeAccountStatus",
 		strings.ToUpper("Put"),
-		"/admin/accounts/{accountId}/status",
+		"/admin/accounts/{accountID}/status",
 		SetNodeAccountStatus,
 	},
 
   Route{
     "AddNodeAccountAccess",
     strings.ToUpper("Post"),
-    "/admin/accounts/{accountId}/auth",
+    "/admin/accounts/{accountID}/auth",
     AddNodeAccountAccess,
   },
 
@@ -245,14 +245,14 @@ var routes = Routes{
 	Route{
 		"RemoveNodeAccount",
 		strings.ToUpper("Delete"),
-		"/admin/accounts/{accountId}",
+		"/admin/accounts/{accountID}",
 		RemoveNodeAccount,
 	},
 
 	Route{
 		"SetNodeAccount",
 		strings.ToUpper("Put"),
-		"/admin/accounts/{accountId}/reset",
+		"/admin/accounts/{accountID}/reset",
 		SetNodeAccount,
 	},
 
@@ -280,7 +280,7 @@ var routes = Routes{
 	Route{
 		"GetGroupSubjectField",
 		strings.ToUpper("Get"),
-		"/alias/groups/{groupId}/subject/{field}",
+		"/alias/groups/{groupID}/subject/{field}",
 		GetGroupSubjectField,
 	},
 
@@ -294,14 +294,14 @@ var routes = Routes{
 	Route{
 		"RemoveGroup",
 		strings.ToUpper("Delete"),
-		"/alias/groups/{groupId}",
+		"/alias/groups/{groupID}",
 		RemoveGroup,
 	},
 
 	Route{
 		"SetGroupSubject",
 		strings.ToUpper("Put"),
-		"/alias/groups/{groupId}/subject",
+		"/alias/groups/{groupID}/subject",
 		SetGroupSubject,
 	},
 
@@ -315,14 +315,14 @@ var routes = Routes{
 	Route{
 		"ClearArticleGroup",
 		strings.ToUpper("Delete"),
-		"/attribute/articles/{articleId}/groups/{groupId}",
+		"/attribute/articles/{articleID}/groups/{groupID}",
 		ClearArticleGroup,
 	},
 
 	Route{
 		"GetArticleSubjectField",
 		strings.ToUpper("Get"),
-		"/attribute/articles/{articleId}/subject/{field}",
+		"/attribute/articles/{articleID}/subject/{field}",
 		GetArticleSubjectField,
 	},
 
@@ -336,21 +336,21 @@ var routes = Routes{
 	Route{
 		"RemoveArticle",
 		strings.ToUpper("Delete"),
-		"/attribute/articles/{articleId}",
+		"/attribute/articles/{articleID}",
 		RemoveArticle,
 	},
 
 	Route{
 		"SetArticleGroup",
 		strings.ToUpper("Put"),
-		"/attribute/articles/{articleId}/groups/{groupId}",
+		"/attribute/articles/{articleID}/groups/{groupID}",
 		SetArticleGroup,
 	},
 
 	Route{
 		"SetArticleSubject",
 		strings.ToUpper("Put"),
-		"/attribute/articles/{articleId}/subject",
+		"/attribute/articles/{articleID}/subject",
 		SetArticleSubject,
 	},
 
@@ -371,35 +371,35 @@ var routes = Routes{
 	Route{
 		"ClearCardGroup",
 		strings.ToUpper("Delete"),
-		"/contact/cards/{cardId}/groups/{groupId}",
+		"/contact/cards/{cardID}/groups/{groupID}",
 		ClearCardGroup,
 	},
 
 	Route{
 		"ClearCardNotes",
 		strings.ToUpper("Delete"),
-		"/contact/cards/{cardId}/notes",
+		"/contact/cards/{cardID}/notes",
 		ClearCardNotes,
 	},
 
 	Route{
 		"GetCardDetail",
 		strings.ToUpper("Get"),
-		"/contact/cards/{cardId}/detail",
+		"/contact/cards/{cardID}/detail",
 		GetCardDetail,
 	},
 
 	Route{
 		"GetCardProfile",
 		strings.ToUpper("Get"),
-		"/contact/cards/{cardId}/profile",
+		"/contact/cards/{cardID}/profile",
 		GetCardProfile,
 	},
 
 	Route{
 		"GetCardProfileImage",
 		strings.ToUpper("Get"),
-		"/contact/cards/{cardId}/profile/image",
+		"/contact/cards/{cardID}/profile/image",
 		GetCardProfileImage,
 	},
 
@@ -413,21 +413,21 @@ var routes = Routes{
 	Route{
 		"GetCloseMessage",
 		strings.ToUpper("Get"),
-		"/contact/cards/{cardId}/closeMessage",
+		"/contact/cards/{cardID}/closeMessage",
 		GetCloseMessage,
 	},
 
 	Route{
 		"GetOpenMessage",
 		strings.ToUpper("Get"),
-		"/contact/cards/{cardId}/openMessage",
+		"/contact/cards/{cardID}/openMessage",
 		GetOpenMessage,
 	},
 
 	Route{
 		"RemoveCard",
 		strings.ToUpper("Delete"),
-		"/contact/cards/{cardId}",
+		"/contact/cards/{cardID}",
 		RemoveCard,
 	},
 
@@ -441,28 +441,28 @@ var routes = Routes{
 	Route{
 		"SetCardGroup",
 		strings.ToUpper("Put"),
-		"/contact/cards/{cardId}/groups/{groupId}",
+		"/contact/cards/{cardID}/groups/{groupID}",
 		SetCardGroup,
 	},
 
 	Route{
 		"SetCardNotes",
 		strings.ToUpper("Put"),
-		"/contact/cards/{cardId}/notes",
+		"/contact/cards/{cardID}/notes",
 		SetCardNotes,
 	},
 
 	Route{
 		"SetCardProfile",
 		strings.ToUpper("Put"),
-		"/contact/cards/{cardId}/profile",
+		"/contact/cards/{cardID}/profile",
 		SetCardProfile,
 	},
 
 	Route{
 		"SetCardStatus",
 		strings.ToUpper("Put"),
-		"/contact/cards/{cardId}/status",
+		"/contact/cards/{cardID}/status",
 		SetCardStatus,
 	},
 
@@ -511,112 +511,112 @@ var routes = Routes{
 	Route{
 		"AddChannelTopicAsset",
 		strings.ToUpper("Post"),
-		"/content/channels/{channelId}/topics/{topicId}/assets",
+		"/content/channels/{channelID}/topics/{topicID}/assets",
 		AddChannelTopicAsset,
 	},
 
 	Route{
 		"AddChannelTopic",
 		strings.ToUpper("Post"),
-		"/content/channels/{channelId}/topics",
+		"/content/channels/{channelID}/topics",
 		AddChannelTopic,
 	},
 
 	Route{
 		"AddChannelTopicTag",
 		strings.ToUpper("Post"),
-		"/content/channels/{channelId}/topics/{topicId}/tags",
+		"/content/channels/{channelID}/topics/{topicID}/tags",
 		AddChannelTopicTag,
 	},
 
 	Route{
 		"ClearChannelCard",
 		strings.ToUpper("Delete"),
-		"/content/channels/{channelId}/cards/{cardId}",
+		"/content/channels/{channelID}/cards/{cardID}",
 		ClearChannelCard,
 	},
 
 	Route{
 		"ClearChannelGroup",
 		strings.ToUpper("Delete"),
-		"/content/channels/{channelId}/groups/{groupId}",
+		"/content/channels/{channelID}/groups/{groupID}",
 		ClearChannelGroup,
 	},
 
 	Route{
 		"GetChannelTopicAsset",
 		strings.ToUpper("Get"),
-		"/content/channels/{channelId}/topics/{topicId}/assets/{assetId}",
+		"/content/channels/{channelID}/topics/{topicID}/assets/{assetID}",
 		GetChannelTopicAsset,
 	},
 
 	Route{
 		"GetChannelTopicAssets",
 		strings.ToUpper("Get"),
-		"/content/channels/{channelId}/topics/{topicId}/assets",
+		"/content/channels/{channelID}/topics/{topicID}/assets",
 		GetChannelTopicAssets,
 	},
 
 	Route{
 		"GetChannelDetail",
 		strings.ToUpper("Get"),
-		"/content/channels/{channelId}/detail",
+		"/content/channels/{channelID}/detail",
 		GetChannelDetail,
 	},
 
 	Route{
 		"GetChannelSummary",
 		strings.ToUpper("Get"),
-		"/content/channels/{channelId}/summary",
+		"/content/channels/{channelID}/summary",
 		GetChannelSummary,
 	},
 
 	Route{
 		"GetChannelSubjectField",
 		strings.ToUpper("Get"),
-		"/content/channels/{channelId}/subject/{field}",
+		"/content/channels/{channelID}/subject/{field}",
 		GetChannelSubjectField,
 	},
 
 	Route{
 		"GetChannelTopic",
 		strings.ToUpper("Get"),
-		"/content/channels/{channelId}/topics/{topicId}/detail",
+		"/content/channels/{channelID}/topics/{topicID}/detail",
 		GetChannelTopic,
 	},
 
 	Route{
 		"GetChannelTopicDetail",
 		strings.ToUpper("Get"),
-		"/content/channels/{channelId}/topics/{topicId}/detail",
+		"/content/channels/{channelID}/topics/{topicID}/detail",
 		GetChannelTopicDetail,
 	},
 
 	Route{
 		"GetChannelTopicSubjectField",
 		strings.ToUpper("Get"),
-		"/content/channels/{channelId}/topics/{topicId}/subject/{field}",
+		"/content/channels/{channelID}/topics/{topicID}/subject/{field}",
 		GetChannelTopicSubjectField,
 	},
 
 	Route{
 		"GetChannelTopicTagSubjectField",
 		strings.ToUpper("Get"),
-		"/content/channels/{channelId}/topics/{topicId}/tags/{tagId}/subject/{field}",
+		"/content/channels/{channelID}/topics/{topicID}/tags/{tagID}/subject/{field}",
 		GetChannelTopicTagSubjectField,
 	},
 
 	Route{
 		"GetChannelTopicTags",
 		strings.ToUpper("Get"),
-		"/content/channels/{channelId}/topics/{topicId}/tags",
+		"/content/channels/{channelID}/topics/{topicID}/tags",
 		GetChannelTopicTags,
 	},
 
 	Route{
 		"GetChannelTopics",
 		strings.ToUpper("Get"),
-		"/content/channels/{channelId}/topics",
+		"/content/channels/{channelID}/topics",
 		GetChannelTopics,
 	},
 
@@ -630,70 +630,70 @@ var routes = Routes{
 	Route{
 		"RemoveChannel",
 		strings.ToUpper("Delete"),
-		"/content/channels/{channelId}",
+		"/content/channels/{channelID}",
 		RemoveChannel,
 	},
 
 	Route{
 		"RemoveChannelTopicAsset",
 		strings.ToUpper("Delete"),
-		"/content/channels/{channelId}/topics/{topicId}/assets/{assetId}",
+		"/content/channels/{channelID}/topics/{topicID}/assets/{assetID}",
 		RemoveChannelTopicAsset,
 	},
 
 	Route{
 		"RemoveChannelTopic",
 		strings.ToUpper("Delete"),
-		"/content/channels/{channelId}/topics/{topicId}",
+		"/content/channels/{channelID}/topics/{topicID}",
 		RemoveChannelTopic,
 	},
 
 	Route{
 		"RemoveChannelTopicTag",
 		strings.ToUpper("Delete"),
-		"/content/channels/{channelId}/topics/{topicId}/tags/{tagId}",
+		"/content/channels/{channelID}/topics/{topicID}/tags/{tagID}",
 		RemoveChannelTopicTag,
 	},
 
 	Route{
 		"SetChannelCard",
 		strings.ToUpper("Put"),
-		"/content/channels/{channelId}/cards/{cardId}",
+		"/content/channels/{channelID}/cards/{cardID}",
 		SetChannelCard,
 	},
 
 	Route{
 		"SetChannelTopicConfirmed",
 		strings.ToUpper("Put"),
-		"/content/channels/{channelId}/topics/{topicId}/confirmed",
+		"/content/channels/{channelID}/topics/{topicID}/confirmed",
 		SetChannelTopicConfirmed,
 	},
 
 	Route{
 		"SetChannelGroup",
 		strings.ToUpper("Put"),
-		"/content/channels/{channelId}/groups/{groupId}",
+		"/content/channels/{channelID}/groups/{groupID}",
 		SetChannelGroup,
 	},
 
 	Route{
 		"SetChannelSubject",
 		strings.ToUpper("Put"),
-		"/content/channels/{channelId}/subject",
+		"/content/channels/{channelID}/subject",
 		SetChannelSubject,
 	},
 
 	Route{
 		"SetChannelTopicSubject",
 		strings.ToUpper("Put"),
-		"/content/channels/{channelId}/topics/{topicId}/subject",
+		"/content/channels/{channelID}/topics/{topicID}/subject",
 		SetChannelTopicSubject,
 	},
 
 	Route{
 		"SetChannelTopicTagSubject",
 		strings.ToUpper("Put"),
-		"/content/channels/{channelId}/topics/{topicId}/tags/{tagId}/subject",
+		"/content/channels/{channelID}/topics/{topicID}/tags/{tagID}/subject",
 		SetChannelTopicTagSubject,
 	},
 

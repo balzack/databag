@@ -12,8 +12,8 @@ func GetChannelTopicAsset(w http.ResponseWriter, r *http.Request) {
 
   // scan parameters
   params := mux.Vars(r)
-  topicId := params["topicId"]
-  assetId := params["assetId"]
+  topicID := params["topicID"]
+  assetID := params["assetID"]
 
   channelSlot, _, err, code := getChannelSlot(r, true)
   if err != nil {
@@ -24,7 +24,7 @@ func GetChannelTopicAsset(w http.ResponseWriter, r *http.Request) {
 
   // load asset
   var asset store.Asset
-  if err = store.DB.Preload("Topic.TopicSlot").Where("channel_id = ? AND asset_id = ?", channelSlot.Channel.ID, assetId).First(&asset).Error; err != nil {
+  if err = store.DB.Preload("Topic.TopicSlot").Where("channel_id = ? AND asset_id = ?", channelSlot.Channel.ID, assetID).First(&asset).Error; err != nil {
     if errors.Is(err, gorm.ErrRecordNotFound) {
       ErrResponse(w, http.StatusNotFound, err)
     } else {
@@ -32,7 +32,7 @@ func GetChannelTopicAsset(w http.ResponseWriter, r *http.Request) {
     }
     return
   }
-  if asset.Topic.TopicSlot.TopicSlotId != topicId {
+  if asset.Topic.TopicSlot.TopicSlotID != topicID {
     ErrResponse(w, http.StatusNotFound, errors.New("invalid topic asset"))
     return
   }
@@ -42,7 +42,7 @@ func GetChannelTopicAsset(w http.ResponseWriter, r *http.Request) {
   }
 
   // construct file path
-  path := getStrConfigValue(CONFIG_ASSETPATH, APP_DEFAULTPATH) + "/" + act.Guid + "/" + asset.AssetId
+  path := getStrConfigValue(CONFIG_ASSETPATH, APP_DEFAULTPATH) + "/" + act.GUID + "/" + asset.AssetID
   http.ServeFile(w, r, path)
 }
 

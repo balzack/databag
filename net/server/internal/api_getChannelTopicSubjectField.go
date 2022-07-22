@@ -17,7 +17,7 @@ func GetChannelTopicSubjectField(w http.ResponseWriter, r *http.Request) {
 
   // scan parameters
   params := mux.Vars(r)
-  topicId := params["topicId"]
+  topicID := params["topicID"]
   field := params["field"]
   elements := strings.Split(field, ".")
 
@@ -29,7 +29,7 @@ func GetChannelTopicSubjectField(w http.ResponseWriter, r *http.Request) {
 
   // load topic
   var topicSlot store.TopicSlot
-  if err = store.DB.Where("channel_id = ? AND topic_slot_id = ?", channelSlot.Channel.ID, topicId).First(&topicSlot).Error; err != nil {
+  if err = store.DB.Where("channel_id = ? AND topic_slot_id = ?", channelSlot.Channel.ID, topicID).First(&topicSlot).Error; err != nil {
     if errors.Is(err, gorm.ErrRecordNotFound) {
       code = http.StatusNotFound
     } else {

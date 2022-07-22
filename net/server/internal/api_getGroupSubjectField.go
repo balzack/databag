@@ -17,7 +17,7 @@ func GetGroupSubjectField(w http.ResponseWriter, r *http.Request) {
 
   // scan parameters
   params := mux.Vars(r)
-  groupId := params["groupId"]
+  groupID := params["groupID"]
   field := params["field"]
   elements := strings.Split(field, ".")
 
@@ -29,7 +29,7 @@ func GetGroupSubjectField(w http.ResponseWriter, r *http.Request) {
 
   // load group
   var slot store.GroupSlot
-  if err := store.DB.Preload("Group.GroupData").Where("account_id = ? AND group_slot_id = ?", account.ID, groupId).First(&slot).Error; err != nil {
+  if err := store.DB.Preload("Group.GroupData").Where("account_id = ? AND group_slot_id = ?", account.ID, groupID).First(&slot).Error; err != nil {
     if errors.Is(err, gorm.ErrRecordNotFound) {
       ErrResponse(w, http.StatusNotFound, err)
     } else {

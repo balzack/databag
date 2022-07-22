@@ -27,10 +27,10 @@ func SetNodeStatus(w http.ResponseWriter, r *http.Request) {
   }
 
   err = store.DB.Transaction(func(tx *gorm.DB) error {
-    if res := tx.Create(&store.Config{ConfigId: CONFIG_TOKEN, StrValue: token}).Error; res != nil {
+    if res := tx.Create(&store.Config{ConfigID: CONFIG_TOKEN, StrValue: token}).Error; res != nil {
       return res
     }
-    if res := tx.Create(&store.Config{ConfigId: CONFIG_CONFIGURED, BoolValue: true}).Error; res != nil {
+    if res := tx.Create(&store.Config{ConfigID: CONFIG_CONFIGURED, BoolValue: true}).Error; res != nil {
       return res
     }
     return nil;

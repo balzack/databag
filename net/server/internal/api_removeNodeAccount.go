@@ -14,7 +14,7 @@ func RemoveNodeAccount(w http.ResponseWriter, r *http.Request) {
 
   // get referenced account id
   params := mux.Vars(r)
-  accountId, res := strconv.ParseUint(params["accountId"], 10, 32)
+  accountID, res := strconv.ParseUint(params["accountID"], 10, 32)
   if res != nil {
     ErrResponse(w, http.StatusBadRequest, res)
     return
@@ -26,7 +26,7 @@ func RemoveNodeAccount(w http.ResponseWriter, r *http.Request) {
   }
 
   var account store.Account
-  if err := store.DB.First(&account, accountId).Error; err != nil {
+  if err := store.DB.First(&account, accountID).Error; err != nil {
     if errors.Is(err, gorm.ErrRecordNotFound) {
       ErrResponse(w, http.StatusNotFound, err)
     } else {
@@ -98,7 +98,7 @@ func RemoveNodeAccount(w http.ResponseWriter, r *http.Request) {
   }
 
   // delete asset files
-  path := getStrConfigValue(CONFIG_ASSETPATH, APP_DEFAULTPATH) + "/" + account.Guid
+  path := getStrConfigValue(CONFIG_ASSETPATH, APP_DEFAULTPATH) + "/" + account.GUID
   if err = os.RemoveAll(path); err != nil {
     ErrMsg(err)
   }

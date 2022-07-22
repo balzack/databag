@@ -12,8 +12,8 @@ func RemoveChannelTopic(w http.ResponseWriter, r *http.Request) {
 
   // scan parameters
   params := mux.Vars(r)
-  channelId := params["channelId"]
-  topicId := params["topicId"]
+  channelID := params["channelID"]
+  topicID := params["topicID"]
 
   channelSlot, guid, err, code := getChannelSlot(r, true)
   if err != nil {
@@ -24,7 +24,7 @@ func RemoveChannelTopic(w http.ResponseWriter, r *http.Request) {
 
   // load topic
   var topicSlot store.TopicSlot
-  if ret := store.DB.Preload("Topic.Channel.ChannelSlot").Where("account_id = ? AND topic_slot_id = ?", act.ID, topicId).First(&topicSlot).Error; ret != nil {
+  if ret := store.DB.Preload("Topic.Channel.ChannelSlot").Where("account_id = ? AND topic_slot_id = ?", act.ID, topicID).First(&topicSlot).Error; ret != nil {
     if errors.Is(err, gorm.ErrRecordNotFound) {
       ErrResponse(w, http.StatusNotFound, ret)
     } else {
@@ -35,13 +35,13 @@ func RemoveChannelTopic(w http.ResponseWriter, r *http.Request) {
     ErrResponse(w, http.StatusNotFound, errors.New("referenced empty topic"))
     return
   }
-  if topicSlot.Topic.Channel.ChannelSlot.ChannelSlotId != channelId {
+  if topicSlot.Topic.Channel.ChannelSlot.ChannelSlotID != channelID {
     ErrResponse(w, http.StatusNotFound, errors.New("channel topic not found"))
     return
   }
 
   // check permission
-  if act.Guid != guid && topicSlot.Topic.Guid != guid {
+  if act.GUID != guid && topicSlot.Topic.GUID != guid {
     ErrResponse(w, http.StatusUnauthorized, errors.New("not creator of topic or host"))
     return
   }
@@ -86,11 +86,11 @@ func RemoveChannelTopic(w http.ResponseWriter, r *http.Request) {
   // determine affected contact list
   cards := make(map[string]store.Card)
   for _, card := range channelSlot.Channel.Cards {
-    cards[card.Guid] = card
+    cards[card.GUID] = card
   }
   for _, group := range channelSlot.Channel.Groups {
     for _, card := range group.Cards {
-      cards[card.Guid] = card
+      cards[card.GUID] = card
     }
   }
 

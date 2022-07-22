@@ -119,7 +119,7 @@ func GetChannels(w http.ResponseWriter, r *http.Request) {
 
     for _, slot := range slots {
       if !typesSet || hasChannelType(types, slot.Channel) {
-        shared := isChannelShared(card.Guid, slot.Channel)
+        shared := isChannelShared(card.GUID, slot.Channel)
         if channelRevisionSet {
           response = append(response, getChannelRevisionModel(&slot, shared))
         } else if shared {
@@ -144,13 +144,13 @@ func isChannelShared(guid string, channel *store.Channel) bool {
     return false
   }
   for _, card := range channel.Cards {
-    if guid == card.Guid {
+    if guid == card.GUID {
       return true
     }
   }
   for _, group := range channel.Groups {
     for _, card := range group.Cards {
-      if guid == card.Guid {
+      if guid == card.GUID {
         return true
       }
     }

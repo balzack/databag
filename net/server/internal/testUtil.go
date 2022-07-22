@@ -20,14 +20,14 @@ const test_ReadDeadline = 2
 const test_RevisionWait = 100
 
 type TestCard struct {
-  Guid string
+  GUID string
   Token string
-  CardId string
-  GroupId string
+  CardID string
+  GroupID string
 }
 
 type TestContact struct {
-  Guid string
+  GUID string
   Token string
   Revisions chan *Revision
   A TestCard
@@ -55,7 +55,7 @@ func GetTestRevision(status chan *Revision) (rev *Revision) {
 	}
 }
 
-func ApiTestData(
+func APITestData(
       endpoint func(http.ResponseWriter, *http.Request),
       requestType string,
       name string,
@@ -112,7 +112,7 @@ func ApiTestData(
   return
 }
 
-func ApiTestMsg(
+func APITestMsg(
       endpoint func(http.ResponseWriter, *http.Request),
       requestType string,
       name string,
@@ -173,7 +173,7 @@ func ApiTestMsg(
   return
 }
 
-func ApiTestUpload(
+func APITestUpload(
       endpoint func(http.ResponseWriter, *http.Request),
       requestType string,
       name string,
@@ -260,110 +260,110 @@ func AddTestGroup(prefix string) (*TestGroup, error) {
 
     // allocate contacts
     g := &TestGroup{}
-    if g.A.Guid, g.A.Token, err = AddTestAccount(prefix+"A"); err != nil {
+    if g.A.GUID, g.A.Token, err = AddTestAccount(prefix+"A"); err != nil {
       return g, err
     }
-    if g.B.Guid, g.B.Token, err = AddTestAccount(prefix+"B"); err != nil {
+    if g.B.GUID, g.B.Token, err = AddTestAccount(prefix+"B"); err != nil {
       return g, err
     }
-    if g.C.Guid, g.C.Token, err = AddTestAccount(prefix+"C"); err != nil {
+    if g.C.GUID, g.C.Token, err = AddTestAccount(prefix+"C"); err != nil {
       return g, err
     }
-    if g.D.Guid, g.D.Token, err = AddTestAccount(prefix+"D"); err != nil {
+    if g.D.GUID, g.D.Token, err = AddTestAccount(prefix+"D"); err != nil {
       return g, err
     }
 
     // setup A
-    if g.A.B.CardId, err = AddTestCard(g.A.Token, g.B.Token); err != nil {
+    if g.A.B.CardID, err = AddTestCard(g.A.Token, g.B.Token); err != nil {
       return g, err
     }
-    if err = OpenTestCard(g.A.Token, g.A.B.CardId); err != nil {
+    if err = OpenTestCard(g.A.Token, g.A.B.CardID); err != nil {
       return g, err
     }
-    if g.A.B.GroupId, err = GroupTestCard(g.A.Token, g.A.B.CardId); err != nil {
+    if g.A.B.GroupID, err = GroupTestCard(g.A.Token, g.A.B.CardID); err != nil {
       return g, err
     }
-    if g.A.C.CardId, err = AddTestCard(g.A.Token, g.C.Token); err != nil {
+    if g.A.C.CardID, err = AddTestCard(g.A.Token, g.C.Token); err != nil {
       return g, err
     }
-    if err = OpenTestCard(g.A.Token, g.A.C.CardId); err != nil {
+    if err = OpenTestCard(g.A.Token, g.A.C.CardID); err != nil {
       return g, err
     }
-    if g.A.C.GroupId, err = GroupTestCard(g.A.Token, g.A.C.CardId); err != nil {
+    if g.A.C.GroupID, err = GroupTestCard(g.A.Token, g.A.C.CardID); err != nil {
       return g, err
     }
-    if g.A.D.CardId, err = AddTestCard(g.A.Token, g.D.Token); err != nil {
+    if g.A.D.CardID, err = AddTestCard(g.A.Token, g.D.Token); err != nil {
       return g, err
     }
-    if err = OpenTestCard(g.A.Token, g.A.D.CardId); err != nil {
+    if err = OpenTestCard(g.A.Token, g.A.D.CardID); err != nil {
       return g, err
     }
 
     // setup B
-    if g.B.A.CardId, err = AddTestCard(g.B.Token, g.A.Token); err != nil {
+    if g.B.A.CardID, err = AddTestCard(g.B.Token, g.A.Token); err != nil {
       return g, err
     }
-    if err = OpenTestCard(g.B.Token, g.B.A.CardId); err != nil {
+    if err = OpenTestCard(g.B.Token, g.B.A.CardID); err != nil {
       return g, err
     }
-    if g.B.A.GroupId, err = GroupTestCard(g.B.Token, g.B.A.CardId); err != nil {
+    if g.B.A.GroupID, err = GroupTestCard(g.B.Token, g.B.A.CardID); err != nil {
       return g, err
     }
-    if g.B.C.CardId, err = AddTestCard(g.B.Token, g.C.Token); err != nil {
+    if g.B.C.CardID, err = AddTestCard(g.B.Token, g.C.Token); err != nil {
       return g, err
     }
-    if g.B.C.GroupId, err = GroupTestCard(g.B.Token, g.B.C.CardId); err != nil {
+    if g.B.C.GroupID, err = GroupTestCard(g.B.Token, g.B.C.CardID); err != nil {
       return g, err
     }
 
     // setup C
-    if g.C.D.CardId, err = AddTestCard(g.C.Token, g.D.Token); err != nil {
+    if g.C.D.CardID, err = AddTestCard(g.C.Token, g.D.Token); err != nil {
       return g, err
     }
-    if err = OpenTestCard(g.C.Token, g.C.D.CardId); err != nil {
+    if err = OpenTestCard(g.C.Token, g.C.D.CardID); err != nil {
       return g, err
     }
-    if g.C.D.GroupId, err = GroupTestCard(g.C.Token, g.C.D.CardId); err != nil {
+    if g.C.D.GroupID, err = GroupTestCard(g.C.Token, g.C.D.CardID); err != nil {
       return g, err
     }
-    if g.C.A.CardId, err = AddTestCard(g.C.Token, g.A.Token); err != nil {
+    if g.C.A.CardID, err = AddTestCard(g.C.Token, g.A.Token); err != nil {
       return g, err
     }
-    if err = OpenTestCard(g.C.Token, g.C.A.CardId); err != nil {
+    if err = OpenTestCard(g.C.Token, g.C.A.CardID); err != nil {
       return g, err
     }
-    if g.C.A.GroupId, err = GroupTestCard(g.C.Token, g.C.A.CardId); err != nil {
+    if g.C.A.GroupID, err = GroupTestCard(g.C.Token, g.C.A.CardID); err != nil {
       return g, err
     }
 
     // setup D
-    if g.D.C.CardId, err = AddTestCard(g.D.Token, g.C.Token); err != nil {
+    if g.D.C.CardID, err = AddTestCard(g.D.Token, g.C.Token); err != nil {
       return g, err
     }
-    if err = OpenTestCard(g.D.Token, g.D.C.CardId); err != nil {
+    if err = OpenTestCard(g.D.Token, g.D.C.CardID); err != nil {
       return g, err
     }
-    if g.D.C.GroupId, err = GroupTestCard(g.D.Token, g.D.C.CardId); err != nil {
+    if g.D.C.GroupID, err = GroupTestCard(g.D.Token, g.D.C.CardID); err != nil {
       return g, err
     }
-    if g.D.A.CardId, err = GetCardId(g.D.Token, g.A.Guid); err != nil {
+    if g.D.A.CardID, err = GetCardID(g.D.Token, g.A.GUID); err != nil {
       return g, err
     }
 
     // get contact tokens
-    if g.A.B.Token, err = GetCardToken(g.A.Token, g.A.B.CardId); err != nil {
+    if g.A.B.Token, err = GetCardToken(g.A.Token, g.A.B.CardID); err != nil {
       return g, err
     }
-    if g.B.A.Token, err = GetCardToken(g.B.Token, g.B.A.CardId); err != nil {
+    if g.B.A.Token, err = GetCardToken(g.B.Token, g.B.A.CardID); err != nil {
       return g, err
     }
-    if g.C.A.Token, err = GetCardToken(g.C.Token, g.C.A.CardId); err != nil {
+    if g.C.A.Token, err = GetCardToken(g.C.Token, g.C.A.CardID); err != nil {
       return g, err
     }
-    if g.C.D.Token, err = GetCardToken(g.C.Token, g.C.D.CardId); err != nil {
+    if g.C.D.Token, err = GetCardToken(g.C.Token, g.C.D.CardID); err != nil {
       return g, err
     }
-    if g.D.C.Token, err = GetCardToken(g.D.Token, g.D.C.CardId); err != nil {
+    if g.D.C.Token, err = GetCardToken(g.D.Token, g.D.C.CardID); err != nil {
       return g, err
     }
 
@@ -428,15 +428,15 @@ func MonitorStatus(ws *websocket.Conn, contact *TestContact) {
   }
 }
 
-func GetCardToken(account string, cardId string) (token string, err error) {
+func GetCardToken(account string, cardID string) (token string, err error) {
   var r *http.Request
   var w *httptest.ResponseRecorder
   var cardDetail CardDetail
   var cardProfile CardProfile
   vars := make(map[string]string)
-  vars["cardId"] = cardId
+  vars["cardID"] = cardID
 
-  if r, w, err = NewRequest("GET", "/contact/cards/{cardId}/detail?agent=" + account, nil); err != nil {
+  if r, w, err = NewRequest("GET", "/contact/cards/{cardID}/detail?agent=" + account, nil); err != nil {
     return
   }
   r = mux.SetURLVars(r, vars)
@@ -449,7 +449,7 @@ func GetCardToken(account string, cardId string) (token string, err error) {
     return
   }
 
-  if r, w, err = NewRequest("GET", "/contact/cards/{cardId}/profile?agent=" + account, nil); err != nil {
+  if r, w, err = NewRequest("GET", "/contact/cards/{cardID}/profile?agent=" + account, nil); err != nil {
     return
   }
   r = mux.SetURLVars(r, vars)
@@ -458,11 +458,11 @@ func GetCardToken(account string, cardId string) (token string, err error) {
     return
   }
 
-  token = cardProfile.Guid + "." + cardDetail.Token
+  token = cardProfile.GUID + "." + cardDetail.Token
   return
 }
 
-func GetCardId(account string, guid string) (cardId string, err error) {
+func GetCardID(account string, guid string) (cardID string, err error) {
   var r *http.Request
   var w *httptest.ResponseRecorder
   var cards []Card
@@ -476,8 +476,8 @@ func GetCardId(account string, guid string) (cardId string, err error) {
   }
 
   for _, card := range cards {
-    if card.Data.CardProfile.Guid == guid {
-      cardId = card.Id
+    if card.Data.CardProfile.GUID == guid {
+      cardID = card.ID
       return
     }
   }
@@ -485,7 +485,7 @@ func GetCardId(account string, guid string) (cardId string, err error) {
   return
 }
 
-func GroupTestCard(account string, cardId string) (groupId string, err error) {
+func GroupTestCard(account string, cardID string) (groupID string, err error) {
   var r *http.Request
   var w *httptest.ResponseRecorder
   var subject *Subject
@@ -505,14 +505,14 @@ func GroupTestCard(account string, cardId string) (groupId string, err error) {
   if err = ReadResponse(w, &group); err != nil {
     return
   }
-  groupId = group.Id
+  groupID = group.ID
 
   // set contact group
-  if r, w, err = NewRequest("PUT", "/contact/cards/{cardId}/groups/{groupId}", nil); err != nil {
+  if r, w, err = NewRequest("PUT", "/contact/cards/{cardID}/groups/{groupID}", nil); err != nil {
     return
   }
-  vars["groupId"] = group.Id
-  vars["cardId"] = cardId
+  vars["groupID"] = group.ID
+  vars["cardID"] = cardID
   r = mux.SetURLVars(r, vars)
   SetBearerAuth(r, account)
   SetCardGroup(w, r)
@@ -522,16 +522,16 @@ func GroupTestCard(account string, cardId string) (groupId string, err error) {
   return
 }
 
-func OpenTestCard(account string, cardId string) (err error) {
+func OpenTestCard(account string, cardID string) (err error) {
   var r *http.Request
   var w *httptest.ResponseRecorder
   var msg DataMessage
   var card Card
-  var vars = map[string]string{ "cardId": cardId }
+  var vars = map[string]string{ "cardID": cardID }
   var contactStatus ContactStatus
 
   // set to connecting state
-  if r, w, err = NewRequest("PUT", "/contact/cards/{cardId}/status?agent=" + account, APP_CARDCONNECTING); err != nil {
+  if r, w, err = NewRequest("PUT", "/contact/cards/{cardID}/status?agent=" + account, APP_CARDCONNECTING); err != nil {
     return
   }
   r = mux.SetURLVars(r, vars)
@@ -541,7 +541,7 @@ func OpenTestCard(account string, cardId string) (err error) {
   }
 
   // get open message
-  if r, w, err = NewRequest("GET", "/contact/cards/{cardId}/openMessage?agent=" + account, nil); err != nil {
+  if r, w, err = NewRequest("GET", "/contact/cards/{cardID}/openMessage?agent=" + account, nil); err != nil {
     return
   }
   r = mux.SetURLVars(r, vars)
@@ -565,7 +565,7 @@ func OpenTestCard(account string, cardId string) (err error) {
     article := "articleRevision=" + strconv.FormatInt(contactStatus.ArticleRevision, 10)
     channel := "channelRevision=" + strconv.FormatInt(contactStatus.ChannelRevision, 10)
     profile := "profileRevision=" + strconv.FormatInt(contactStatus.ProfileRevision, 10)
-    if r, w, err = NewRequest("PUT", "/contact/cards/{cardId}/status?agent=" + account + "&token=" + contactStatus.Token + "&" + view + "&" + article + "&" + channel + "&" + profile, APP_CARDCONNECTED); err != nil {
+    if r, w, err = NewRequest("PUT", "/contact/cards/{cardID}/status?agent=" + account + "&token=" + contactStatus.Token + "&" + view + "&" + article + "&" + channel + "&" + profile, APP_CARDCONNECTED); err != nil {
       return
     }
     r = mux.SetURLVars(r, vars)
@@ -577,7 +577,7 @@ func OpenTestCard(account string, cardId string) (err error) {
   return
 }
 
-func AddTestCard(account string, contact string) (cardId string, err error) {
+func AddTestCard(account string, contact string) (cardID string, err error) {
   var r *http.Request
   var w *httptest.ResponseRecorder
   var msg DataMessage
@@ -600,7 +600,7 @@ func AddTestCard(account string, contact string) (cardId string, err error) {
   if err = ReadResponse(w, &card); err != nil {
     return
   }
-  cardId = card.Id
+  cardID = card.ID
   return
 }
 
@@ -638,7 +638,7 @@ func AddTestAccount(username string) (guid string, token string, err error) {
   if err = ReadResponse(w, &profile); err != nil {
     return
   }
-  guid = profile.Guid
+  guid = profile.GUID
 
   // acquire new token for attaching app
   if r, w, err = NewRequest("POST", "/account/apps", &app); err != nil {

@@ -7,7 +7,7 @@ import (
 func getProfileModel(account *store.Account) *Profile {
 
   return &Profile{
-    Guid: account.Guid,
+    GUID: account.GUID,
     Handle: account.Username,
     Name: account.AccountDetail.Name,
     Description: account.AccountDetail.Description,
@@ -23,13 +23,13 @@ func getCardModel(slot *store.CardSlot) *Card {
 
   if slot.Card == nil {
     return &Card{
-      Id: slot.CardSlotId,
+      ID: slot.CardSlotID,
       Revision: slot.Revision,
     }
   }
 
   return &Card{
-    Id: slot.CardSlotId,
+    ID: slot.CardSlotID,
     Revision: slot.Revision,
     Data: &CardData {
       NotifiedProfile: slot.Card.NotifiedProfile,
@@ -48,13 +48,13 @@ func getCardRevisionModel(slot *store.CardSlot) *Card {
 
   if slot.Card == nil {
     return &Card{
-      Id: slot.CardSlotId,
+      ID: slot.CardSlotID,
       Revision: slot.Revision,
     }
   }
 
   return &Card{
-    Id: slot.CardSlotId,
+    ID: slot.CardSlotID,
     Revision: slot.Revision,
     Data: &CardData {
       NotifiedProfile: slot.Card.NotifiedProfile,
@@ -71,7 +71,7 @@ func getCardDetailModel(slot *store.CardSlot) *CardDetail {
 
   var groups []string;
   for _, group := range slot.Card.Groups {
-    groups = append(groups, group.GroupSlot.GroupSlotId)
+    groups = append(groups, group.GroupSlot.GroupSlotID)
   }
 
   return &CardDetail{
@@ -85,7 +85,7 @@ func getCardDetailModel(slot *store.CardSlot) *CardDetail {
 func getCardProfileModel(slot *store.CardSlot) *CardProfile {
 
   return &CardProfile{
-    Guid: slot.Card.Guid,
+    GUID: slot.Card.GUID,
     Handle: slot.Card.Username,
     Name: slot.Card.Name,
     Description: slot.Card.Description,
@@ -99,13 +99,13 @@ func getCardProfileModel(slot *store.CardSlot) *CardProfile {
 func getGroupModel(slot *store.GroupSlot) *Group {
   if slot.Group == nil {
     return &Group{
-      Id: slot.GroupSlotId,
+      ID: slot.GroupSlotID,
       Revision: slot.Revision,
     }
   }
 
   return &Group{
-    Id: slot.GroupSlotId,
+    ID: slot.GroupSlotID,
     Revision: slot.Revision,
     Data: &GroupData {
       DataType: slot.Group.DataType,
@@ -119,22 +119,22 @@ func getGroupModel(slot *store.GroupSlot) *Group {
 func getArticleModel(slot *store.ArticleSlot, showData bool, showList bool) *Article {
   if !showData || slot.Article == nil {
     return &Article{
-      Id: slot.ArticleSlotId,
+      ID: slot.ArticleSlotID,
       Revision: slot.Revision,
     }
   }
 
-  var articleGroups *IdList
+  var articleGroups *IDList
   if showList {
     var groups []string;
     for _, group := range slot.Article.Groups {
-      groups = append(groups, group.GroupSlot.GroupSlotId)
+      groups = append(groups, group.GroupSlot.GroupSlotID)
     }
-    articleGroups = &IdList{ Ids: groups }
+    articleGroups = &IDList{ IDs: groups }
   }
 
   return &Article{
-    Id: slot.ArticleSlotId,
+    ID: slot.ArticleSlotID,
     Revision: slot.Revision,
     Data: &ArticleData {
       DataType: slot.Article.DataType,
@@ -150,13 +150,13 @@ func getChannelRevisionModel(slot *store.ChannelSlot, showData bool) *Channel {
 
   if !showData || slot.Channel == nil {
     return &Channel{
-      Id: slot.ChannelSlotId,
+      ID: slot.ChannelSlotID,
       Revision: slot.Revision,
     }
   }
 
   return &Channel{
-    Id: slot.ChannelSlotId,
+    ID: slot.ChannelSlotID,
     Revision: slot.Revision,
     Data: &ChannelData {
       DetailRevision: slot.Channel.DetailRevision,
@@ -175,18 +175,18 @@ func getChannelDetailModel(slot *store.ChannelSlot, showList bool) *ChannelDetai
   if showList {
     var groups []string;
     for _, group := range slot.Channel.Groups {
-      groups = append(groups, group.GroupSlot.GroupSlotId)
+      groups = append(groups, group.GroupSlot.GroupSlotID)
     }
     var cards []string;
     for _, card := range slot.Channel.Cards {
-      cards = append(cards, card.CardSlot.CardSlotId)
+      cards = append(cards, card.CardSlot.CardSlotID)
     }
     contacts = &ChannelContacts{ Groups: groups, Cards: cards }
   }
 
   members := []string{}
   for _, card := range slot.Channel.Cards {
-    members = append(members, card.Guid)
+    members = append(members, card.GUID)
   }
 
   return &ChannelDetail{
@@ -207,7 +207,7 @@ func getChannelSummaryModel(slot *store.ChannelSlot) *ChannelSummary {
 
   topicDetail := TopicDetail{};
   if len(slot.Channel.Topics) > 0 {
-    topicDetail.Guid = slot.Channel.Topics[0].Guid;
+    topicDetail.GUID = slot.Channel.Topics[0].GUID;
     topicDetail.DataType = slot.Channel.Topics[0].DataType;
     topicDetail.Data = slot.Channel.Topics[0].Data;
     topicDetail.Created = slot.Channel.Topics[0].Created;
@@ -224,13 +224,13 @@ func getChannelModel(slot *store.ChannelSlot, showData bool, showList bool) *Cha
 
   if !showData || slot.Channel == nil {
     return &Channel{
-      Id: slot.ChannelSlotId,
+      ID: slot.ChannelSlotID,
       Revision: slot.Revision,
     }
   }
 
   return &Channel{
-    Id: slot.ChannelSlotId,
+    ID: slot.ChannelSlotID,
     Revision: slot.Revision,
     Data: &ChannelData {
       DetailRevision: slot.Channel.DetailRevision,
@@ -245,13 +245,13 @@ func getTopicRevisionModel(slot *store.TopicSlot) *Topic {
 
   if slot.Topic == nil {
     return &Topic{
-      Id: slot.TopicSlotId,
+      ID: slot.TopicSlotID,
       Revision: slot.Revision,
     }
   }
 
   return &Topic{
-    Id: slot.TopicSlotId,
+    ID: slot.TopicSlotID,
     Revision: slot.Revision,
     Data: &TopicData {
       DetailRevision: slot.Topic.DetailRevision,
@@ -276,7 +276,7 @@ func getTopicDetailModel(slot *store.TopicSlot) *TopicDetail {
   }
 
   return &TopicDetail{
-        Guid: slot.Topic.Guid,
+        GUID: slot.Topic.GUID,
         DataType: slot.Topic.DataType,
         Data: slot.Topic.Data,
         Created: slot.Topic.Created,
@@ -290,13 +290,13 @@ func getTopicModel(slot *store.TopicSlot) *Topic {
 
   if slot.Topic == nil {
     return &Topic{
-      Id: slot.TopicSlotId,
+      ID: slot.TopicSlotID,
       Revision: slot.Revision,
     }
   }
 
   return &Topic{
-    Id: slot.TopicSlotId,
+    ID: slot.TopicSlotID,
     Revision: slot.Revision,
     Data: &TopicData {
       DetailRevision: slot.Topic.DetailRevision,
@@ -310,16 +310,16 @@ func getTagModel(slot *store.TagSlot) *Tag {
 
   if slot.Tag == nil {
     return &Tag{
-      Id: slot.TagSlotId,
+      ID: slot.TagSlotID,
       Revision: slot.Revision,
     }
   }
 
   return &Tag{
-    Id: slot.TagSlotId,
+    ID: slot.TagSlotID,
     Revision: slot.Revision,
     Data: &TagData{
-      Guid: slot.Tag.Guid,
+      GUID: slot.Tag.GUID,
       DataType: slot.Tag.DataType,
       Data: slot.Tag.Data,
       Created: slot.Tag.Created,

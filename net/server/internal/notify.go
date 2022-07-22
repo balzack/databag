@@ -101,7 +101,7 @@ func SendRemoteNotification(notification *store.Notification) {
     ErrMsg(err);
     return
   }
-  url := "https://" + notification.Node + "/contact/" + module + "/revision?contact=" + notification.Guid + "." + notification.Token
+  url := "https://" + notification.Node + "/contact/" + module + "/revision?contact=" + notification.GUID + "." + notification.Token
   req, err := http.NewRequest(http.MethodPut, url, bytes.NewBuffer(body))
   if err != nil {
     ErrMsg(err)
@@ -123,7 +123,7 @@ func SetProfileNotification(account *store.Account) {
 
   // select all connected cards
   var cards []store.Card
-  if err := store.DB.Where("account_id = ? AND status = ?", account.Guid, APP_CARDCONNECTED).Find(&cards).Error; err != nil {
+  if err := store.DB.Where("account_id = ? AND status = ?", account.GUID, APP_CARDCONNECTED).Find(&cards).Error; err != nil {
     ErrMsg(err)
     return
   }
@@ -134,7 +134,7 @@ func SetProfileNotification(account *store.Account) {
       notification := &store.Notification{
         Node: card.Node,
         Module: APP_NOTIFYPROFILE,
-        Guid: card.Guid,
+        GUID: card.GUID,
         Token: card.OutToken,
         Revision: account.ProfileRevision,
       }
@@ -163,7 +163,7 @@ func SetContactArticleNotification(account *store.Account, card *store.Card) {
   notification := &store.Notification{
     Node: card.Node,
     Module: APP_NOTIFYARTICLE,
-    Guid: card.Guid,
+    GUID: card.GUID,
     Token: card.OutToken,
     Revision: account.ArticleRevision,
   }
@@ -188,7 +188,7 @@ func SetContactViewNotification(account *store.Account, card *store.Card) {
   notification := &store.Notification{
     Node: card.Node,
     Module: APP_NOTIFYVIEW,
-    Guid: card.Guid,
+    GUID: card.GUID,
     Token: card.OutToken,
     Revision: card.ViewRevision,
   }
@@ -212,7 +212,7 @@ func SetContactChannelNotification(account *store.Account, card *store.Card) {
   notification := &store.Notification{
     Node: card.Node,
     Module: APP_NOTIFYCHANNEL,
-    Guid: card.Guid,
+    GUID: card.GUID,
     Token: card.OutToken,
     Revision: account.ChannelRevision,
   }

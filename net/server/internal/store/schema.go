@@ -27,7 +27,7 @@ func AutoMigrate(db *gorm.DB) {
 type Notification struct {
   ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
   Node              string          `gorm:"not null"`
-  Guid              string          `gorm:"not null"`
+  GUID              string          `gorm:"not null"`
   Module            string          `gorm:"not null"`
   Token             string          `gorm:"not null"`
   Revision          int64           `gorm:"not null"`
@@ -35,7 +35,7 @@ type Notification struct {
 
 type Config struct {
   ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
-  ConfigId          string          `gorm:"not null;uniqueIndex"`
+  ConfigID          string          `gorm:"not null;uniqueIndex"`
   StrValue          string
   NumValue          int64
   BoolValue         bool
@@ -55,7 +55,7 @@ type AccountToken struct {
 type Account struct {
   ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
   AccountDetailID   uint            `gorm:"not null"`
-  Guid              string          `gorm:"not null;uniqueIndex"`
+  GUID              string          `gorm:"not null;uniqueIndex"`
   Username          string          `gorm:"not null;uniqueIndex"`
   Handle            string          `gorm:"uniqueIndex"`
   Password          []byte          `gorm:"not null"`
@@ -94,12 +94,12 @@ type App struct {
   Url               string
   Token             string          `gorm:"not null;index:appguid,unique"`
   Created           int64           `gorm:"autoCreateTime"`
-  Account           Account         `gorm:"references:Guid"`
+  Account           Account         `gorm:"references:GUID"`
 }
 
 type GroupSlot struct {
   ID                uint
-  GroupSlotId       string          `gorm:"not null;index:groupslot,unique"`
+  GroupSlotID       string          `gorm:"not null;index:groupslot,unique"`
   AccountID         uint            `gorm:"not null;index:groupslot,unique"`
   Revision          int64           `gorm:"not null"`
   GroupID           uint            `gorm:"not null;default:0"`
@@ -129,7 +129,7 @@ type GroupData struct {
 
 type CardSlot struct {
   ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
-  CardSlotId        string          `gorm:"not null;index:cardslot,unique"`
+  CardSlotID        string          `gorm:"not null;index:cardslot,unique"`
   AccountID         uint            `gorm:"not null;index:cardslot,unique"`
   Revision          int64           `gorm:"not null"`
   CardID            uint            `gorm:"not null;default:0"`
@@ -140,7 +140,7 @@ type CardSlot struct {
 type Card struct {
   ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
   AccountID         string          `gorm:"not null;index:cardguid,unique"`
-  Guid              string          `gorm:"not null;index:cardguid,unique"`
+  GUID              string          `gorm:"not null;index:cardguid,unique"`
   Username          string
   Name              string
   Description       string
@@ -161,7 +161,7 @@ type Card struct {
   NotifiedArticle   int64
   NotifiedChannel   int64
   NotifiedProfile   int64
-  Account           Account         `gorm:"references:Guid"`
+  Account           Account         `gorm:"references:GUID"`
   Groups            []Group         `gorm:"many2many:card_groups"`
   Channels          []Channel       `gorm:"many2many:channel_cards"`
   CardSlot          CardSlot
@@ -169,7 +169,7 @@ type Card struct {
 
 type ArticleSlot struct {
   ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
-  ArticleSlotId     string          `gorm:"not null;index:articleslot,unique"`
+  ArticleSlotID     string          `gorm:"not null;index:articleslot,unique"`
   AccountID         uint            `gorm:"not null;index:articleslot,unique"`
   Revision          int64           `gorm:"not null"`
   ArticleID         uint            `gorm:"not null;default:0"`
@@ -190,7 +190,7 @@ type Article struct {
 
 type ChannelSlot struct {
   ID                uint
-  ChannelSlotId     string          `gorm:"not null;index:channelslot,unique"`
+  ChannelSlotID     string          `gorm:"not null;index:channelslot,unique"`
   AccountID         uint            `gorm:"not null;index:channelslot,unique"`
   Revision          int64           `gorm:"not null"`
   ChannelID         uint            `gorm:"not null;default:0"`
@@ -215,7 +215,7 @@ type Channel struct {
 
 type TopicSlot struct {
   ID                uint
-  TopicSlotId       string          `gorm:"not null;index:topicaccount,unique;index:topicchannel,unique"`
+  TopicSlotID       string          `gorm:"not null;index:topicaccount,unique;index:topicchannel,unique"`
   AccountID         uint            `gorm:"not null;index:topicaccount,unique"`
   ChannelID         uint            `gorm:"not null;index:topicchannel,unique"`
   Revision          int64           `gorm:"not null"`
@@ -230,7 +230,7 @@ type Topic struct {
   AccountID         uint
   ChannelID         uint
   TopicSlotID       uint            `gorm:"not null;index:topictopicslot,unique"`
-  Guid              string
+  GUID              string
   DataType          string          `gorm:"index"`
   Data              string
   Status            string          `gorm:"not null;index"`
@@ -246,7 +246,7 @@ type Topic struct {
 
 type Asset struct {
   ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
-  AssetId           string          `gorm:"not null;index:asset,unique"`
+  AssetID           string          `gorm:"not null;index:asset,unique"`
   AccountID         uint            `gorm:"not null;index:asset,unique"`
   ChannelID         uint
   TopicID           uint
@@ -254,7 +254,7 @@ type Asset struct {
   Size              int64
   Crc               uint32
   Transform         string
-  TransformId       string
+  TransformID       string
   TransformParams   string
   TransformQueue    string
   Created           int64           `gorm:"autoCreateTime"`
@@ -266,7 +266,7 @@ type Asset struct {
 
 type TagSlot struct {
   ID                uint
-  TagSlotId         string          `gorm:"not null;index:tagslot,unique"`
+  TagSlotID         string          `gorm:"not null;index:tagslot,unique"`
   AccountID         uint            `gorm:"not null;index:tagslot,unique"`
   ChannelID         uint            `gorm:"not null"`
   TopicID           uint            `gorm:"not null;index:tagtopic"`
@@ -283,7 +283,7 @@ type Tag struct {
   AccountID         uint
   ChannelID         uint            `gorm:"not null;index:channeltag"`
   TopicID           uint            `gorm:"not null;index:topictag"`
-  Guid              string          `gorm:"not null"`
+  GUID              string          `gorm:"not null"`
   DataType          string          `gorm:"index"`
   Data              string
   Created           int64           `gorm:"autoCreateTime"`

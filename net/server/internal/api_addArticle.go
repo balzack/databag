@@ -32,7 +32,7 @@ func AddArticle(w http.ResponseWriter, r *http.Request) {
       return res
     }
 
-    slot.ArticleSlotId = uuid.New().String()
+    slot.ArticleSlotID = uuid.New().String()
     slot.AccountID = account.ID
     slot.ArticleID = article.ID
     slot.Revision = account.ArticleRevision + 1

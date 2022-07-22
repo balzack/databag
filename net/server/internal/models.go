@@ -2,9 +2,9 @@ package databag
 
 type AccountProfile struct {
 
-	AccountId uint32 `json:"accountId"`
+	AccountID uint32 `json:"accountID"`
 
-  Guid string `json:"guid"`
+  GUID string `json:"guid"`
 
   Handle string `json:"handle,omitempty"`
 
@@ -39,7 +39,7 @@ type Announce struct {
 
 type App struct {
 
-	Id string `json:"id"`
+	ID string `json:"id"`
 
 	Revision int64 `json:"revision"`
 
@@ -61,7 +61,7 @@ type AppData struct {
 
 type Article struct {
 
-	Id string `json:"id"`
+	ID string `json:"id"`
 
 	Revision int64 `json:"revision"`
 
@@ -78,7 +78,7 @@ type ArticleData struct {
 
 	Updated int64 `json:"updated"`
 
-	Groups *IdList `json:"groups,omitempty"`
+	Groups *IDList `json:"groups,omitempty"`
 }
 
 type ArticleGroups struct {
@@ -88,7 +88,7 @@ type ArticleGroups struct {
 
 type Asset struct {
 
-	AssetId string `json:"assetId"`
+	AssetID string `json:"assetID"`
 
 	Transform string `json:"transform,omitempty"`
 
@@ -97,7 +97,7 @@ type Asset struct {
 
 type Card struct {
 
-	Id string `json:"id"`
+	ID string `json:"id"`
 
 	Revision int64 `json:"revision"`
 
@@ -136,7 +136,7 @@ type CardDetail struct {
 
 type CardProfile struct {
 
-	Guid string `json:"guid"`
+	GUID string `json:"guid"`
 
 	Handle string `json:"handle,omitempty"`
 
@@ -162,7 +162,7 @@ type ChannelContacts struct {
 
 type Channel struct {
 
-	Id string `json:"id"`
+	ID string `json:"id"`
 
 	Revision int64 `json:"revision"`
 
@@ -280,7 +280,7 @@ type Disconnect struct {
 
 type Group struct {
 
-	Id string `json:"id"`
+	ID string `json:"id"`
 
 	Revision int64 `json:"revision"`
 
@@ -317,9 +317,9 @@ type Identity struct {
 	Node string `json:"node"`
 }
 
-type IdList struct {
+type IDList struct {
 
-	Ids []string `json:"ids"`
+	IDs []string `json:"ids"`
 }
 
 type LoginAccess struct {
@@ -342,7 +342,7 @@ type NodeConfig struct {
 
 type Profile struct {
 
-	Guid string `json:"guid"`
+	GUID string `json:"guid"`
 
 	Handle string `json:"handle,omitempty"`
 
@@ -387,7 +387,7 @@ type Revision struct {
 
 type SignedData struct {
 
-	Guid string `json:"guid"`
+	GUID string `json:"guid"`
 
 	Timestamp int64 `json:"timestamp"`
 
@@ -405,7 +405,7 @@ type Subject struct {
 
 type Tag struct {
 
-	Id string `json:"id"`
+	ID string `json:"id"`
 
 	Revision int64 `json:"revision"`
 
@@ -414,7 +414,7 @@ type Tag struct {
 
 type TagData struct {
 
-	Guid string `json:"guid"`
+	GUID string `json:"guid"`
 
 	DataType string `json:"dataType"`
 
@@ -427,7 +427,7 @@ type TagData struct {
 
 type Topic struct {
 
-	Id string `json:"id"`
+	ID string `json:"id"`
 
 	Revision int64 `json:"revision"`
 
@@ -445,7 +445,7 @@ type TopicData struct {
 
 type TopicDetail struct {
 
-	Guid string `json:"guid"`
+	GUID string `json:"guid"`
 
 	DataType string `json:"dataType"`
 

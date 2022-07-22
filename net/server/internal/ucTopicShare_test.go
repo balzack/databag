@@ -28,46 +28,46 @@ func TestTopicShare(t *testing.T) {
   // add new channel
   channel = &Channel{}
   subject = &Subject{ Data: "channeldata", DataType: "channeldatatype" }
-  assert.NoError(t, ApiTestMsg(AddChannel, "POST", "/content/channels",
+  assert.NoError(t, APITestMsg(AddChannel, "POST", "/content/channels",
     nil, subject, APP_TOKENAGENT, set.A.Token, channel, nil))
   image := "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"
   img, _ := base64.StdEncoding.DecodeString(image)
   subject = &Subject{ Data: "{ \"nested\" : { \"image\" : \"" + image + "\" } }", DataType: "nestedimage" }
-  params["channelId"] = channel.Id
-  assert.NoError(t, ApiTestMsg(SetChannelSubject, "PUT", "/content/channels/{channelId}/subject",
+  params["channelID"] = channel.ID
+  assert.NoError(t, APITestMsg(SetChannelSubject, "PUT", "/content/channels/{channelID}/subject",
     &params, subject, APP_TOKENAGENT, set.A.Token, channel, nil))
-  params["cardId"] = set.A.B.CardId
-  assert.NoError(t, ApiTestMsg(SetChannelCard, "PUT", "/content/channels/{channelId}/cards/{cardId}",
+  params["cardID"] = set.A.B.CardID
+  assert.NoError(t, APITestMsg(SetChannelCard, "PUT", "/content/channels/{channelID}/cards/{cardID}",
     &params, nil, APP_TOKENAGENT, set.A.Token, nil, nil))
-  params["cardId"] = set.A.C.CardId
-  assert.NoError(t, ApiTestMsg(SetChannelCard, "PUT", "/content/channels/{channelId}/cards/{cardId}",
+  params["cardID"] = set.A.C.CardID
+  assert.NoError(t, APITestMsg(SetChannelCard, "PUT", "/content/channels/{channelID}/cards/{cardID}",
     &params, nil, APP_TOKENAGENT, set.A.Token, nil, nil))
 
   // view channel
   detail = &ChannelDetail{}
-  assert.NoError(t, ApiTestMsg(GetChannelDetail, "GET", "/content/channels/{channelId}/detail",
+  assert.NoError(t, APITestMsg(GetChannelDetail, "GET", "/content/channels/{channelID}/detail",
     &params, nil, APP_TOKENAGENT, set.A.Token, detail, nil))
   assert.NotNil(t, detail);
   detail = &ChannelDetail{}
-  assert.NoError(t, ApiTestMsg(GetChannelDetail, "GET", "/content/channels/{channelId}/detail",
+  assert.NoError(t, APITestMsg(GetChannelDetail, "GET", "/content/channels/{channelID}/detail",
     &params, nil, APP_TOKENCONTACT, set.B.A.Token, detail, nil))
   assert.NotNil(t, channel.Data.ChannelDetail);
   detail = &ChannelDetail{}
-  assert.NoError(t, ApiTestMsg(GetChannelDetail, "GET", "/content/channels/{channelId}/detail",
+  assert.NoError(t, APITestMsg(GetChannelDetail, "GET", "/content/channels/{channelID}/detail",
     &params, nil, APP_TOKENCONTACT, set.B.A.Token, detail, nil))
   assert.NotNil(t, channel.Data.ChannelDetail);
   params["field"] = "nested.image"
-  data, header, err = ApiTestData(GetChannelSubjectField, "GET", "/content/channels/{channelId}/subject/{field}",
+  data, header, err = APITestData(GetChannelSubjectField, "GET", "/content/channels/{channelID}/subject/{field}",
     &params, nil, APP_TOKENAGENT, set.A.Token, 0, 0)
   assert.NoError(t, err)
   assert.Equal(t, "image/png", header["Content-Type"][0])
   assert.Zero(t, bytes.Compare(img, data))
-  data, header, err = ApiTestData(GetChannelSubjectField, "GET", "/content/channels/{channelId}/subject/{field}",
+  data, header, err = APITestData(GetChannelSubjectField, "GET", "/content/channels/{channelID}/subject/{field}",
     &params, nil, APP_TOKENCONTACT, set.B.A.Token, 0, 0)
   assert.NoError(t, err)
   assert.Equal(t, "image/png", header["Content-Type"][0])
   assert.Zero(t, bytes.Compare(img, data))
-  data, header, err = ApiTestData(GetChannelSubjectField, "GET", "/content/channels/{channelId}/subject/{field}",
+  data, header, err = APITestData(GetChannelSubjectField, "GET", "/content/channels/{channelID}/subject/{field}",
     &params, nil, APP_TOKENCONTACT, set.C.A.Token, 0, 0)
   assert.NoError(t, err)
   assert.Equal(t, "image/png", header["Content-Type"][0])
@@ -77,31 +77,31 @@ func TestTopicShare(t *testing.T) {
   // add a topc
   topic = &Topic{}
   subject = &Subject{ DataType: "topicdatatype", Data: "subjectfromA" }
-  assert.NoError(t, ApiTestMsg(AddChannelTopic, "POST", "/content/channels/{channelId}/topics",
+  assert.NoError(t, APITestMsg(AddChannelTopic, "POST", "/content/channels/{channelID}/topics",
     &params, subject, APP_TOKENAGENT, set.A.Token, topic, nil))
   topic = &Topic{}
   subject = &Subject{ DataType: "topicdatatype", Data: "subjectfromB" }
-  assert.NoError(t, ApiTestMsg(AddChannelTopic, "POST", "/content/channels/{channelId}/topics",
+  assert.NoError(t, APITestMsg(AddChannelTopic, "POST", "/content/channels/{channelID}/topics",
     &params, subject, APP_TOKENCONTACT, set.B.A.Token, topic, nil))
-  params["topicId"] = topic.Id
-  assert.NoError(t, ApiTestMsg(SetChannelTopicConfirmed, "PUT", "/content/channels/{channelId}/topics/{topicId}/confirmed",
+  params["topicID"] = topic.ID
+  assert.NoError(t, APITestMsg(SetChannelTopicConfirmed, "PUT", "/content/channels/{channelID}/topics/{topicID}/confirmed",
     &params, APP_TOPICCONFIRMED, APP_TOKENCONTACT, set.B.A.Token, nil, nil))
   topic = &Topic{}
   subject = &Subject{ DataType: "topicdatatype", Data: "subjectfromC" }
-  assert.NoError(t, ApiTestMsg(AddChannelTopic, "POST", "/content/channels/{channelId}/topics",
+  assert.NoError(t, APITestMsg(AddChannelTopic, "POST", "/content/channels/{channelID}/topics",
     &params, subject, APP_TOKENCONTACT, set.C.A.Token, topic, nil))
 
   // add asset to topic
   assets := []Asset{}
-  params["topicId"] = topic.Id
+  params["topicID"] = topic.ID
   transforms, err := json.Marshal([]string{ "copy;photo" })
   assert.NoError(t, err)
-  assert.NoError(t, ApiTestUpload(AddChannelTopicAsset, "POST", "/content/channels/{channelId}/topics/{topicId}/assets?transforms=" + url.QueryEscape(string(transforms)),
+  assert.NoError(t, APITestUpload(AddChannelTopicAsset, "POST", "/content/channels/{channelID}/topics/{topicID}/assets?transforms=" + url.QueryEscape(string(transforms)),
     &params, img, APP_TOKENCONTACT, set.C.A.Token, &assets, nil))
 
   // view topics
   topics := &[]Topic{}
-  assert.NoError(t, ApiTestMsg(GetChannelTopics, "GET", "/content/channels/{channelId}/topics",
+  assert.NoError(t, APITestMsg(GetChannelTopics, "GET", "/content/channels/{channelID}/topics",
     &params, nil, APP_TOKENAGENT, set.A.Token, topics, nil))
 
   aRev = GetTestRevision(set.A.Revisions)
@@ -110,7 +110,7 @@ func TestTopicShare(t *testing.T) {
   // add a tag to topic
   tag := Tag{}
   subject = &Subject{ DataType: "tagdatatype", Data: "subjectfromA" }
-  assert.NoError(t, ApiTestMsg(AddChannelTopicTag, "POST", "/content/channels/{channelId}/topics/{topicId}",
+  assert.NoError(t, APITestMsg(AddChannelTopicTag, "POST", "/content/channels/{channelID}/topics/{topicID}",
     &params, subject, APP_TOKENAGENT, set.A.Token, &tag, nil))
 
   assert.NotEqual(t, aRev.Channel, GetTestRevision(set.A.Revisions).Channel)
@@ -118,56 +118,56 @@ func TestTopicShare(t *testing.T) {
 
   // get tags for topic
   tags := &[]Tag{}
-  assert.NoError(t, ApiTestMsg(GetChannelTopicTags, "GET", "/content/channels/{channelId}/topics/{topicId}",
+  assert.NoError(t, APITestMsg(GetChannelTopicTags, "GET", "/content/channels/{channelID}/topics/{topicID}",
     &params, nil, APP_TOKENCONTACT, set.C.A.Token, tags, nil))
   assert.Equal(t, 1, len(*tags))
 
   // delete topic tag
-  params["tagId"] = tag.Id
-  assert.NoError(t, ApiTestMsg(RemoveChannelTopicTag, "DELETE", "/content/channels/{channelId}/topics/{topicId}/tags/{tagId}",
+  params["tagID"] = tag.ID
+  assert.NoError(t, APITestMsg(RemoveChannelTopicTag, "DELETE", "/content/channels/{channelID}/topics/{topicID}/tags/{tagID}",
     &params, nil, APP_TOKENAGENT, set.A.Token, nil, nil))
 
   // get tags for topic
   tags = &[]Tag{}
-  assert.NoError(t, ApiTestMsg(GetChannelTopicTags, "GET", "/content/channels/{channelId}/topics/{topicId}",
+  assert.NoError(t, APITestMsg(GetChannelTopicTags, "GET", "/content/channels/{channelID}/topics/{topicID}",
     &params, nil, APP_TOKENCONTACT, set.C.A.Token, tags, nil))
   assert.Equal(t, 0, len(*tags))
 
   // get list of assets
   assets = []Asset{}
-  assert.NoError(t, ApiTestMsg(GetChannelTopicAssets, "GET", "/content/channels/{channelId}/topics/{topicId}",
+  assert.NoError(t, APITestMsg(GetChannelTopicAssets, "GET", "/content/channels/{channelID}/topics/{topicID}",
     &params, nil, APP_TOKENCONTACT, set.C.A.Token, &assets, nil))
   assert.Equal(t, 2, len(assets))
 
   // delete each asset
   for _, asset := range assets {
-    params["assetId"] = asset.AssetId
-    assert.NoError(t, ApiTestMsg(RemoveChannelTopicAsset, "DELETE", "/content/channels/{channelId}/topics/{topicId}/assets/{assetId}",
+    params["assetID"] = asset.AssetID
+    assert.NoError(t, APITestMsg(RemoveChannelTopicAsset, "DELETE", "/content/channels/{channelID}/topics/{topicID}/assets/{assetID}",
       &params, nil, APP_TOKENCONTACT, set.C.A.Token, nil, nil))
   }
 
   // get list of assets
   assets = []Asset{}
-  assert.NoError(t, ApiTestMsg(GetChannelTopicAssets, "GET", "/content/channels/{channelId}/topics/{topicId}",
+  assert.NoError(t, APITestMsg(GetChannelTopicAssets, "GET", "/content/channels/{channelID}/topics/{topicID}",
     &params, nil, APP_TOKENCONTACT, set.C.A.Token, &assets, nil))
   assert.Equal(t, 0, len(assets))
 
   // add asset to topic
   assets = []Asset{}
-  params["topicId"] = topic.Id
+  params["topicID"] = topic.ID
   transforms, err = json.Marshal([]string{ "copy;photo" })
   assert.NoError(t, err)
-  assert.NoError(t, ApiTestUpload(AddChannelTopicAsset, "POST", "/content/channels/{channelId}/topics/{topicId}/assets?transforms=" + url.QueryEscape(string(transforms)),
+  assert.NoError(t, APITestUpload(AddChannelTopicAsset, "POST", "/content/channels/{channelID}/topics/{topicID}/assets?transforms=" + url.QueryEscape(string(transforms)),
     &params, img, APP_TOKENCONTACT, set.C.A.Token, &assets, nil))
 
   // add a tag to topic
   tag = Tag{}
   subject = &Subject{ DataType: "tagdatatype", Data: "subjectfromA" }
-  assert.NoError(t, ApiTestMsg(AddChannelTopicTag, "POST", "/content/channels/{channelId}/topics/{topicId}",
+  assert.NoError(t, APITestMsg(AddChannelTopicTag, "POST", "/content/channels/{channelID}/topics/{topicID}",
     &params, subject, APP_TOKENAGENT, set.A.Token, &tag, nil))
 
   // remove channel
-  assert.NoError(t, ApiTestMsg(RemoveChannel, "DELETE", "/content/channels/{channelId}",
+  assert.NoError(t, APITestMsg(RemoveChannel, "DELETE", "/content/channels/{channelID}",
     &params, nil, APP_TOKENAGENT, set.A.Token, nil, nil))
 }
 

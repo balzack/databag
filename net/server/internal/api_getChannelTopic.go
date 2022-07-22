@@ -12,7 +12,7 @@ func GetChannelTopic(w http.ResponseWriter, r *http.Request) {
 
   // scan parameters
   params := mux.Vars(r)
-  topicId := params["topicId"]
+  topicID := params["topicID"]
 
   channelSlot, _, err, code := getChannelSlot(r, false)
   if err != nil {
@@ -22,7 +22,7 @@ func GetChannelTopic(w http.ResponseWriter, r *http.Request) {
 
   // load topic
   var topicSlot store.TopicSlot
-  if err = store.DB.Preload("Topic.Assets").Where("channel_id = ? AND topic_slot_id = ?", channelSlot.Channel.ID, topicId).First(&topicSlot).Error; err != nil {
+  if err = store.DB.Preload("Topic.Assets").Where("channel_id = ? AND topic_slot_id = ?", channelSlot.Channel.ID, topicID).First(&topicSlot).Error; err != nil {
     if errors.Is(err, gorm.ErrRecordNotFound) {
       code = http.StatusNotFound
     } else {
@@ -36,7 +36,7 @@ func GetChannelTopic(w http.ResponseWriter, r *http.Request) {
 
 func isMember(guid string, cards []store.Card) bool {
   for _, card := range cards {
-    if guid == card.Guid {
+    if guid == card.GUID {
       return true
     }
   }
@@ -46,7 +46,7 @@ func isMember(guid string, cards []store.Card) bool {
 func isViewer(guid string, groups []store.Group) bool {
   for _, group := range groups {
     for _, card := range group.Cards {
-      if guid == card.Guid {
+      if guid == card.GUID {
         return true
       }
     }
@@ -58,7 +58,7 @@ func getChannelSlot(r *http.Request, member bool) (slot store.ChannelSlot, guid 
 
   // scan parameters
   params := mux.Vars(r)
-  channelId := params["channelId"]
+  channelID := params["channelID"]
 
   // validate contact access
   var account *store.Account
@@ -68,7 +68,7 @@ func getChannelSlot(r *http.Request, member bool) (slot store.ChannelSlot, guid 
     if err != nil {
       return
     }
-    guid = account.Guid
+    guid = account.GUID
   } else if tokenType == APP_TOKENCONTACT {
     var card *store.Card
     card, code, err = ParamContactToken(r, true)
@@ -76,7 +76,7 @@ func getChannelSlot(r *http.Request, member bool) (slot store.ChannelSlot, guid 
       return
     }
     account = &card.Account
-    guid = card.Guid
+    guid = card.GUID
   } else {
     err = errors.New("unknown token type")
     code = http.StatusBadRequest
@@ -84,7 +84,7 @@ func getChannelSlot(r *http.Request, member bool) (slot store.ChannelSlot, guid 
   }
 
   // load channel
-  if err = store.DB.Preload("Account").Preload("Channel.Cards").Preload("Channel.Groups.Cards").Where("account_id = ? AND channel_slot_id = ?", account.ID, channelId).First(&slot).Error; err != nil {
+  if err = store.DB.Preload("Account").Preload("Channel.Cards").Preload("Channel.Groups.Cards").Where("account_id = ? AND channel_slot_id = ?", account.ID, channelID).First(&slot).Error; err != nil {
     if errors.Is(err, gorm.ErrRecordNotFound) {
       code = http.StatusNotFound
     } else {

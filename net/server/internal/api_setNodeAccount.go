@@ -14,7 +14,7 @@ func SetNodeAccount(w http.ResponseWriter, r *http.Request) {
 
   // get referenced account id
   params := mux.Vars(r)
-  accountId, res := strconv.ParseUint(params["accountId"], 10, 32)
+  accountID, res := strconv.ParseUint(params["accountID"], 10, 32)
   if res != nil {
     ErrResponse(w, http.StatusBadRequest, res)
     return
@@ -35,7 +35,7 @@ func SetNodeAccount(w http.ResponseWriter, r *http.Request) {
   accountToken := store.AccountToken{
     TokenType: APP_TOKENRESET,
     Token: token,
-    AccountID: uint(accountId),
+    AccountID: uint(accountID),
     Expires: time.Now().Unix() + APP_CREATEEXPIRE,
   };
 

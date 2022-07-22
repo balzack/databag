@@ -33,7 +33,7 @@ func AddAccountApp(w http.ResponseWriter, r *http.Request) {
 
   // create app entry
   app := store.App {
-    AccountID: account.Guid,
+    AccountID: account.GUID,
     Name: appData.Name,
     Description: appData.Description,
     Image: appData.Image,
@@ -54,7 +54,7 @@ func AddAccountApp(w http.ResponseWriter, r *http.Request) {
   }
 
   login := LoginAccess {
-    AppToken: account.Guid + "." + access,
+    AppToken: account.GUID + "." + access,
     Created: app.Created,
   }
 

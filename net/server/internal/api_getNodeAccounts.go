@@ -21,8 +21,8 @@ func GetNodeAccounts(w http.ResponseWriter, r *http.Request) {
   profiles := []AccountProfile{}
   for _, account := range accounts {
     profiles = append(profiles, AccountProfile{
-      AccountId: uint32(account.ID),
-      Guid: account.Guid,
+      AccountID: uint32(account.ID),
+      GUID: account.GUID,
       Handle: account.Username,
       Name: account.AccountDetail.Name,
       Description: account.AccountDetail.Description,

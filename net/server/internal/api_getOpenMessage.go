@@ -16,10 +16,10 @@ func GetOpenMessage(w http.ResponseWriter, r *http.Request) {
     return
   }
   detail := account.AccountDetail
-  cardId := mux.Vars(r)["cardId"]
+  cardID := mux.Vars(r)["cardID"]
 
   var slot store.CardSlot
-  if err := store.DB.Preload("Card").Where("account_id = ? AND card_slot_id = ?", account.ID, cardId).First(&slot).Error; err != nil {
+  if err := store.DB.Preload("Card").Where("account_id = ? AND card_slot_id = ?", account.ID, cardID).First(&slot).Error; err != nil {
     if !errors.Is(err, gorm.ErrRecordNotFound) {
       ErrResponse(w, http.StatusInternalServerError, err)
     } else {
@@ -38,7 +38,7 @@ func GetOpenMessage(w http.ResponseWriter, r *http.Request) {
   }
 
   connect := &Connect{
-    Contact: slot.Card.Guid,
+    Contact: slot.Card.GUID,
     Token: slot.Card.InToken,
     ArticleRevision: account.ArticleRevision,
     ProfileRevision: account.ProfileRevision,
@@ -54,7 +54,7 @@ func GetOpenMessage(w http.ResponseWriter, r *http.Request) {
   }
 
   msg, err := WriteDataMessage(detail.PrivateKey, detail.PublicKey, detail.KeyType,
-    APP_SIGNPKCS1V15, account.Guid, APP_MSGCONNECT, &connect)
+    APP_SIGNPKCS1V15, account.GUID, APP_MSGCONNECT, &connect)
   if err != nil {
     ErrResponse(w, http.StatusInternalServerError, err)
     return

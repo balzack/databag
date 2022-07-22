@@ -43,7 +43,7 @@ func GetProfileMessage(w http.ResponseWriter, r *http.Request) {
     Node: getStrConfigValue(CONFIG_DOMAIN, ""),
   }
   msg, res := WriteDataMessage(detail.PrivateKey, detail.PublicKey, detail.KeyType,
-    APP_SIGNPKCS1V15, account.Guid, APP_MSGIDENTITY, &identity)
+    APP_SIGNPKCS1V15, account.GUID, APP_MSGIDENTITY, &identity)
   if res != nil {
     ErrResponse(w, http.StatusInternalServerError, res)
     return

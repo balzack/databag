@@ -18,7 +18,7 @@ func SetArticleSubject(w http.ResponseWriter, r *http.Request) {
 
   // scan parameters
   params := mux.Vars(r)
-  articleId := params["articleId"]
+  articleID := params["articleID"]
 
   var subject Subject
   if err := ParseRequest(r, w, &subject); err != nil {
@@ -28,7 +28,7 @@ func SetArticleSubject(w http.ResponseWriter, r *http.Request) {
 
   // load referenced article
   var slot store.ArticleSlot
-  if err := store.DB.Preload("Article.Groups.Cards").Where("account_id = ? AND article_slot_id = ?", account.ID, articleId).First(&slot).Error; err != nil {
+  if err := store.DB.Preload("Article.Groups.Cards").Where("account_id = ? AND article_slot_id = ?", account.ID, articleID).First(&slot).Error; err != nil {
     if !errors.Is(err, gorm.ErrRecordNotFound) {
       ErrResponse(w, http.StatusInternalServerError, err)
     } else {
@@ -45,7 +45,7 @@ func SetArticleSubject(w http.ResponseWriter, r *http.Request) {
   cards := make(map[string]store.Card)
   for _, group := range slot.Article.Groups {
     for _, card := range group.Cards {
-      cards[card.Guid] = card
+      cards[card.GUID] = card
     }
   }
 

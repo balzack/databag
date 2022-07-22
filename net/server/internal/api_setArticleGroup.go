@@ -18,12 +18,12 @@ func SetArticleGroup(w http.ResponseWriter, r *http.Request) {
 
   // scan parameters
   params := mux.Vars(r)
-  articleId := params["articleId"]
-  groupId := params["groupId"]
+  articleID := params["articleID"]
+  groupID := params["groupID"]
 
   // load referenced article
   var articleSlot store.ArticleSlot
-  if err := store.DB.Preload("Article").Where("account_id = ? AND article_slot_id = ?", account.ID, articleId).First(&articleSlot).Error; err != nil {
+  if err := store.DB.Preload("Article").Where("account_id = ? AND article_slot_id = ?", account.ID, articleID).First(&articleSlot).Error; err != nil {
     if !errors.Is(err, gorm.ErrRecordNotFound) {
       ErrResponse(w, http.StatusInternalServerError, err)
     } else {
@@ -38,7 +38,7 @@ func SetArticleGroup(w http.ResponseWriter, r *http.Request) {
 
   // load referenced group 
   var groupSlot store.GroupSlot
-  if err := store.DB.Preload("Group.Cards").Preload("Group.GroupSlot").Where("account_id = ? AND group_slot_id = ?", account.ID, groupId).First(&groupSlot).Error; err != nil {
+  if err := store.DB.Preload("Group.Cards").Preload("Group.GroupSlot").Where("account_id = ? AND group_slot_id = ?", account.ID, groupID).First(&groupSlot).Error; err != nil {
     if !errors.Is(err, gorm.ErrRecordNotFound) {
       ErrResponse(w, http.StatusInternalServerError, err)
     } else {

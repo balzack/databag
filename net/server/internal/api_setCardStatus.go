@@ -22,7 +22,7 @@ func SetCardStatus(w http.ResponseWriter, r *http.Request) {
 
   // scan parameters
   params := mux.Vars(r)
-  cardId := params["cardId"]
+  cardID := params["cardID"]
   token := r.FormValue("token")
 
   // scan revisions
@@ -75,7 +75,7 @@ func SetCardStatus(w http.ResponseWriter, r *http.Request) {
 
   // load referenced card
   var slot store.CardSlot
-  if err := store.DB.Preload("Card.Groups").Where("account_id = ? AND card_slot_id = ?", account.ID, cardId).First(&slot).Error; err != nil {
+  if err := store.DB.Preload("Card.Groups").Where("account_id = ? AND card_slot_id = ?", account.ID, cardID).First(&slot).Error; err != nil {
     if !errors.Is(err, gorm.ErrRecordNotFound) {
       ErrResponse(w, http.StatusInternalServerError, err)
     } else {

@@ -18,12 +18,12 @@ func SetChannelCard(w http.ResponseWriter, r *http.Request) {
 
   // scan parameters
   params := mux.Vars(r)
-  channelId := params["channelId"]
-  cardId := params["cardId"]
+  channelID := params["channelID"]
+  cardID := params["cardID"]
 
   // load referenced channel
   var channelSlot store.ChannelSlot
-  if err := store.DB.Preload("Channel.Cards.CardSlot").Preload("Channel.Groups.GroupSlot").Preload("Channel.Groups.Cards").Where("account_id = ? AND channel_slot_id = ?", account.ID, channelId).First(&channelSlot).Error; err != nil {
+  if err := store.DB.Preload("Channel.Cards.CardSlot").Preload("Channel.Groups.GroupSlot").Preload("Channel.Groups.Cards").Where("account_id = ? AND channel_slot_id = ?", account.ID, channelID).First(&channelSlot).Error; err != nil {
     if !errors.Is(err, gorm.ErrRecordNotFound) {
       ErrResponse(w, http.StatusInternalServerError, err)
     } else {
@@ -38,7 +38,7 @@ func SetChannelCard(w http.ResponseWriter, r *http.Request) {
 
   // load referenced card 
   var cardSlot store.CardSlot
-  if err := store.DB.Preload("Card.CardSlot").Where("account_id = ? AND card_slot_id = ?", account.ID, cardId).First(&cardSlot).Error; err != nil {
+  if err := store.DB.Preload("Card.CardSlot").Where("account_id = ? AND card_slot_id = ?", account.ID, cardID).First(&cardSlot).Error; err != nil {
     if !errors.Is(err, gorm.ErrRecordNotFound) {
       ErrResponse(w, http.StatusInternalServerError, err)
     } else {
@@ -54,14 +54,14 @@ func SetChannelCard(w http.ResponseWriter, r *http.Request) {
   // determine contact list
   cards := make(map[string]store.Card)
   for _, card := range channelSlot.Channel.Cards {
-    cards[card.Guid] = card
+    cards[card.GUID] = card
   }
   for _, group := range channelSlot.Channel.Groups {
     for _, card := range group.Cards {
-      cards[card.Guid] = card
+      cards[card.GUID] = card
     }
   }
-  cards[cardSlot.Card.Guid] = *cardSlot.Card
+  cards[cardSlot.Card.GUID] = *cardSlot.Card
 
   // save and update contact revision
   err = store.DB.Transaction(func(tx *gorm.DB) error {

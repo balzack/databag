@@ -11,7 +11,7 @@ func SetNodeAccountStatus(w http.ResponseWriter, r *http.Request) {
 
   // get referenced account id
   params := mux.Vars(r)
-  accountId, res := strconv.ParseUint(params["accountId"], 10, 32)
+  accountID, res := strconv.ParseUint(params["accountID"], 10, 32)
   if res != nil {
     ErrResponse(w, http.StatusBadRequest, res)
     return
@@ -28,7 +28,7 @@ func SetNodeAccountStatus(w http.ResponseWriter, r *http.Request) {
     return
   }
 
-  if err := store.DB.Model(store.Account{}).Where("id = ?", accountId).Update("disabled", flag).Error; err != nil {
+  if err := store.DB.Model(store.Account{}).Where("id = ?", accountID).Update("disabled", flag).Error; err != nil {
     ErrResponse(w, http.StatusInternalServerError, err)
     return
   }
