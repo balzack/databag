@@ -12,6 +12,7 @@ import (
 	"strings"
 )
 
+//WriteResponse serialze and write json body for response
 func WriteResponse(w http.ResponseWriter, v interface{}) {
 	body, err := json.Marshal(v)
 	if err != nil {
@@ -25,6 +26,7 @@ func WriteResponse(w http.ResponseWriter, v interface{}) {
 	}
 }
 
+//ReadResponse read and parse json response body
 func ReadResponse(w *httptest.ResponseRecorder, v interface{}) error {
 	resp := w.Result()
 	if resp.StatusCode != 200 {
@@ -38,20 +40,24 @@ func ReadResponse(w *httptest.ResponseRecorder, v interface{}) error {
 	return nil
 }
 
+//SetBasicAuth sets basic auth in authorization header
 func SetBasicAuth(r *http.Request, login string) {
 	auth := base64.StdEncoding.EncodeToString([]byte(login))
 	r.Header.Add("Authorization", "Basic "+auth)
 }
 
+//SetBearerAuth sets bearer auth token in header
 func SetBearerAuth(r *http.Request, token string) {
 	r.Header.Add("Authorization", "Bearer "+token)
 }
 
+//SetCredentials set basic auth in credentials header
 func SetCredentials(r *http.Request, login string) {
 	auth := base64.StdEncoding.EncodeToString([]byte(login))
 	r.Header.Add("Credentials", "Basic "+auth)
 }
 
+//ParseRequest read and parse json request body
 func ParseRequest(r *http.Request, w http.ResponseWriter, obj interface{}) error {
 	r.Body = http.MaxBytesReader(w, r.Body, APPBodyLimit)
 	dec := json.NewDecoder(r.Body)
@@ -59,6 +65,3 @@ func ParseRequest(r *http.Request, w http.ResponseWriter, obj interface{}) error
 	return dec.Decode(&obj)
 }
 
-func EnableCors(w *http.ResponseWriter) {
-	(*w).Header().Set("Access-Control-Allow-Origin", "*")
-}

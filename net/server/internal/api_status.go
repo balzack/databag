@@ -15,6 +15,7 @@ var wsExit = make(chan bool, 1)
 var statusListener = make(map[uint][]chan<- []byte)
 var upgrader = websocket.Upgrader{}
 
+//Status handler for websocket connection
 func Status(w http.ResponseWriter, r *http.Request) {
 
 	// accept websocket connection
@@ -74,8 +75,8 @@ func Status(w http.ResponseWriter, r *http.Request) {
 	defer close(c)
 
 	// register channel for revisions
-	AddStatusListener(app.Account.ID, c)
-	defer RemoveStatusListener(app.Account.ID, c)
+	addStatusListener(app.Account.ID, c)
+	defer removeStatusListener(app.Account.ID, c)
 
 	// start ping pong ticker
 	ticker := time.NewTicker(60 * time.Second)
@@ -113,10 +114,12 @@ func getRevision(account *store.Account) Revision {
 	return r
 }
 
+//ExitStatus closes websocket handler
 func ExitStatus() {
 	wsExit <- true
 }
 
+//SetStatus sends revision object on all account websockets
 func SetStatus(account *store.Account) {
 
 	// get revisions for the account
@@ -140,7 +143,7 @@ func SetStatus(account *store.Account) {
 	}
 }
 
-func AddStatusListener(act uint, ch chan<- []byte) {
+func addStatusListener(act uint, ch chan<- []byte) {
 
 	// lock access to statusListener
 	wsSync.Lock()
@@ -155,7 +158,7 @@ func AddStatusListener(act uint, ch chan<- []byte) {
 	}
 }
 
-func RemoveStatusListener(act uint, ch chan<- []byte) {
+func removeStatusListener(act uint, ch chan<- []byte) {
 
 	// lock access to statusListener
 	wsSync.Lock()

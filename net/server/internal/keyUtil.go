@@ -28,7 +28,7 @@ func GenerateRsaKeyPair() (*rsa.PrivateKey, *rsa.PublicKey, string, error) {
 	}
 }
 
-//ExportRsaPrivateKeyAsPemString exports account private key
+//ExportRsaPrivateKeyAsPemStr exports account private key
 func ExportRsaPrivateKeyAsPemStr(privkey *rsa.PrivateKey) string {
 	privkeyBytes := x509.MarshalPKCS1PrivateKey(privkey)
 	privkeyPEM := pem.EncodeToMemory(

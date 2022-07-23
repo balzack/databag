@@ -11,6 +11,7 @@ import (
 	"time"
 )
 
+//AccountLogin retrieves account specified by username and password
 func AccountLogin(r *http.Request) (*store.Account, error) {
 
 	// extract request auth
@@ -33,6 +34,7 @@ func AccountLogin(r *http.Request) (*store.Account, error) {
 	return account, nil
 }
 
+//BearerAccountToken retrieves AccountToken object specified by authorization header
 func BearerAccountToken(r *http.Request) (*store.AccountToken, error) {
 
 	// parse bearer authentication
@@ -50,6 +52,7 @@ func BearerAccountToken(r *http.Request) (*store.AccountToken, error) {
 	return &accountToken, nil
 }
 
+//AccessToken retrieves AccountToken specified by token query param
 func AccessToken(r *http.Request) (*store.AccountToken, int, error) {
 
 	// parse authentication token
@@ -69,6 +72,7 @@ func AccessToken(r *http.Request) (*store.AccountToken, int, error) {
 	return &accountToken, http.StatusOK, nil
 }
 
+//ParamAdminToken compares admin token with token query param
 func ParamAdminToken(r *http.Request) (int, error) {
 
 	// parse authentication token
@@ -91,6 +95,7 @@ func ParamAdminToken(r *http.Request) (int, error) {
 	return http.StatusOK, nil
 }
 
+//ParamAgentToken retrieves account specified by agent query param
 func ParamAgentToken(r *http.Request, detail bool) (*store.Account, int, error) {
 
 	// parse authentication token
@@ -105,17 +110,15 @@ func ParamAgentToken(r *http.Request, detail bool) (*store.Account, int, error) 
 		if err := store.DB.Preload("Account.AccountDetail").Where("account_id = ? AND token = ?", target, access).First(&app).Error; err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
 				return nil, http.StatusNotFound, err
-			} else {
-				return nil, http.StatusInternalServerError, err
 			}
+      return nil, http.StatusInternalServerError, err
 		}
 	} else {
 		if err := store.DB.Preload("Account").Where("account_id = ? AND token = ?", target, access).First(&app).Error; err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
 				return nil, http.StatusNotFound, err
-			} else {
-				return nil, http.StatusInternalServerError, err
 			}
+      return nil, http.StatusInternalServerError, err
 		}
 	}
 	if app.Account.Disabled {
@@ -125,6 +128,7 @@ func ParamAgentToken(r *http.Request, detail bool) (*store.Account, int, error) 
 	return &app.Account, http.StatusOK, nil
 }
 
+//BearerAppToken retrieves account specified by authorization header 
 func BearerAppToken(r *http.Request, detail bool) (*store.Account, int, error) {
 
 	// parse bearer authentication
@@ -141,17 +145,15 @@ func BearerAppToken(r *http.Request, detail bool) (*store.Account, int, error) {
 		if err := store.DB.Preload("Account.AccountDetail").Where("account_id = ? AND token = ?", target, access).First(&app).Error; err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
 				return nil, http.StatusNotFound, err
-			} else {
-				return nil, http.StatusInternalServerError, err
 			}
+      return nil, http.StatusInternalServerError, err
 		}
 	} else {
 		if err := store.DB.Preload("Account").Where("account_id = ? AND token = ?", target, access).First(&app).Error; err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
 				return nil, http.StatusNotFound, err
-			} else {
-				return nil, http.StatusInternalServerError, err
 			}
+      return nil, http.StatusInternalServerError, err
 		}
 	}
 	if app.Account.Disabled {
@@ -161,6 +163,7 @@ func BearerAppToken(r *http.Request, detail bool) (*store.Account, int, error) {
 	return &app.Account, http.StatusOK, nil
 }
 
+//ParseToken separates access token into its guid and random value parts
 func ParseToken(token string) (string, string, error) {
 
 	split := strings.Split(token, ".")
@@ -170,6 +173,7 @@ func ParseToken(token string) (string, string, error) {
 	return split[0], split[1], nil
 }
 
+//ParamTokenType returns type of access token specified
 func ParamTokenType(r *http.Request) string {
 	if r.FormValue(APPTokenContact) != "" {
 		return APPTokenContact
@@ -189,6 +193,7 @@ func ParamTokenType(r *http.Request) string {
 	return ""
 }
 
+//ParamContactToken retrieves card specified by contact query param
 func ParamContactToken(r *http.Request, detail bool) (*store.Card, int, error) {
 
 	// parse authentication token
@@ -203,17 +208,15 @@ func ParamContactToken(r *http.Request, detail bool) (*store.Card, int, error) {
 		if err := store.DB.Preload("CardSlot").Preload("Account.AccountDetail").Where("account_id = ? AND in_token = ?", target, access).First(&card).Error; err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
 				return nil, http.StatusNotFound, err
-			} else {
-				return nil, http.StatusInternalServerError, err
 			}
+      return nil, http.StatusInternalServerError, err
 		}
 	} else {
 		if err := store.DB.Preload("CardSlot").Preload("Account").Where("account_id = ? AND in_token = ?", target, access).First(&card).Error; err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
 				return nil, http.StatusNotFound, err
-			} else {
-				return nil, http.StatusInternalServerError, err
 			}
+      return nil, http.StatusInternalServerError, err
 		}
 	}
 	if card.Account.Disabled {
@@ -226,6 +229,7 @@ func ParamContactToken(r *http.Request, detail bool) (*store.Card, int, error) {
 	return &card, http.StatusOK, nil
 }
 
+//BearerContactToken retrieves card specified by authorization header
 func BearerContactToken(r *http.Request, detail bool) (*store.Card, int, error) {
 
 	// parse bearer authentication
@@ -242,17 +246,15 @@ func BearerContactToken(r *http.Request, detail bool) (*store.Card, int, error) 
 		if err := store.DB.Preload("Account.AccountDetail").Where("account_id = ? AND in_token = ?", target, access).First(&card).Error; err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
 				return nil, http.StatusNotFound, err
-			} else {
-				return nil, http.StatusInternalServerError, err
 			}
+      return nil, http.StatusInternalServerError, err
 		}
 	} else {
 		if err := store.DB.Preload("Account").Where("account_id = ? AND in_token = ?", target, access).First(&card).Error; err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
 				return nil, http.StatusNotFound, err
-			} else {
-				return nil, http.StatusInternalServerError, err
 			}
+      return nil, http.StatusInternalServerError, err
 		}
 	}
 	if card.Account.Disabled {
@@ -265,6 +267,7 @@ func BearerContactToken(r *http.Request, detail bool) (*store.Card, int, error) 
 	return &card, http.StatusOK, nil
 }
 
+//BasicCredentials extracts username and password set it credentials header
 func BasicCredentials(r *http.Request) (string, []byte, error) {
 
 	var username string

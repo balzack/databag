@@ -1,5 +1,6 @@
 package databag
 
+//AccountProfile account profile view retrieved by admin
 type AccountProfile struct {
 	AccountID uint32 `json:"accountId"`
 
@@ -18,6 +19,7 @@ type AccountProfile struct {
 	Disabled bool `json:"disabled"`
 }
 
+//AccountStatus server settings for account
 type AccountStatus struct {
 	Disabled bool `json:"disabled"`
 
@@ -30,18 +32,12 @@ type AccountStatus struct {
 	Searchable bool `json:"searchable"`
 }
 
+//Announce initial message sent on websocket
 type Announce struct {
 	AppToken string `json:"appToken"`
 }
 
-type App struct {
-	ID string `json:"id"`
-
-	Revision int64 `json:"revision"`
-
-	Data *AppData `json:"data"`
-}
-
+//AppData describes app connected to account
 type AppData struct {
 	Name string `json:"name,omitempty"`
 
@@ -54,6 +50,7 @@ type AppData struct {
 	Attached int64 `json:"attached"`
 }
 
+//Article slot for account data shared by group list
 type Article struct {
 	ID string `json:"id"`
 
@@ -62,6 +59,7 @@ type Article struct {
 	Data *ArticleData `json:"data"`
 }
 
+//ArticleData account data shared by group list
 type ArticleData struct {
 	DataType string `json:"dataType"`
 
@@ -74,10 +72,7 @@ type ArticleData struct {
 	Groups *IDList `json:"groups,omitempty"`
 }
 
-type ArticleGroups struct {
-	Groups []string `json:"groups"`
-}
-
+//Asset files associated with channel topic
 type Asset struct {
 	AssetID string `json:"assetId"`
 
@@ -86,6 +81,7 @@ type Asset struct {
 	Status string `json:"status,omitempty"`
 }
 
+//Card slot for references to an account contact
 type Card struct {
 	ID string `json:"id"`
 
@@ -94,6 +90,7 @@ type Card struct {
 	Data *CardData `json:"data"`
 }
 
+//CardData account contact data
 type CardData struct {
 	DetailRevision int64 `json:"detailRevision"`
 
@@ -112,6 +109,7 @@ type CardData struct {
 	CardProfile *CardProfile `json:"cardProfile,omitempty"`
 }
 
+//CardDetail values set for associated contact
 type CardDetail struct {
 	Status string `json:"status"`
 
@@ -122,6 +120,7 @@ type CardDetail struct {
 	Groups []string `json:"groups,omitempty"`
 }
 
+//CardProfile profile for account contact
 type CardProfile struct {
 	GUID string `json:"guid"`
 
@@ -140,12 +139,14 @@ type CardProfile struct {
 	Node string `json:"node"`
 }
 
+//ChannelContacts ids for cards and groups with whom channel is shared
 type ChannelContacts struct {
 	Groups []string `json:"groups"`
 
 	Cards []string `json:"cards"`
 }
 
+//Channel slot for communication channel
 type Channel struct {
 	ID string `json:"id"`
 
@@ -154,6 +155,7 @@ type Channel struct {
 	Data *ChannelData `json:"data"`
 }
 
+//ChannelData communication channel data
 type ChannelData struct {
 	DetailRevision int64 `json:"detailRevision"`
 
@@ -164,6 +166,7 @@ type ChannelData struct {
 	ChannelDetail *ChannelDetail `json:"channelDetail,omitempty"`
 }
 
+//ChannelDetail description of channel
 type ChannelDetail struct {
 	DataType string `json:"dataType"`
 
@@ -178,10 +181,12 @@ type ChannelDetail struct {
 	Members []string `json:"members"`
 }
 
+//ChannelSummary latest topic posted on channel
 type ChannelSummary struct {
 	LastTopic *TopicDetail `json:"lastTopic,omitempty"`
 }
 
+//ChannelParams params used when creating a channel
 type ChannelParams struct {
 	DataType string `json:"dataType"`
 
@@ -192,10 +197,12 @@ type ChannelParams struct {
 	Cards []string `json:"cards"`
 }
 
+//Claim token to verify for 3rd party authentication
 type Claim struct {
 	Token string `json:"token"`
 }
 
+//Connect data exchanged in a contact connection message
 type Connect struct {
 	Contact string `json:"contact"`
 
@@ -224,6 +231,7 @@ type Connect struct {
 	Node string `json:"node,omitempty"`
 }
 
+//ContactStatus status of contact returned after connection message
 type ContactStatus struct {
 	Token string `json:"token,omitempty"`
 
@@ -238,6 +246,7 @@ type ContactStatus struct {
 	Status string `json:"status"`
 }
 
+//DataMessage general structure holding signed messages
 type DataMessage struct {
 	Message string `json:"message"`
 
@@ -250,10 +259,12 @@ type DataMessage struct {
 	SignatureType string `json:"signatureType"`
 }
 
+//Disconnect data exchanged when closing connection
 type Disconnect struct {
 	Contact string `json:"contact"`
 }
 
+//Group slot for holding a contact group alias
 type Group struct {
 	ID string `json:"id"`
 
@@ -262,6 +273,7 @@ type Group struct {
 	Data *GroupData `json:"data,omitempty"`
 }
 
+//GroupData a contact group alias
 type GroupData struct {
 	DataType string `json:"dataType"`
 
@@ -272,6 +284,7 @@ type GroupData struct {
 	Updated int64 `json:"updated"`
 }
 
+//Identity data exchanged in a profile message
 type Identity struct {
 	Revision int64 `json:"revision"`
 
@@ -290,16 +303,19 @@ type Identity struct {
 	Node string `json:"node"`
 }
 
+//IDList general list of ids
 type IDList struct {
 	IDs []string `json:"ids"`
 }
 
+//LoginAccess response object when app is associated
 type LoginAccess struct {
 	AppToken string `json:"appToken"`
 
 	Created int64 `json:"created"`
 }
 
+//NodeConfig node configuration values
 type NodeConfig struct {
 	Domain string `json:"domain"`
 
@@ -310,6 +326,7 @@ type NodeConfig struct {
 	AccountStorage int64 `json:"accountStorage"`
 }
 
+//Profile public attributes of account
 type Profile struct {
 	GUID string `json:"guid"`
 
@@ -330,6 +347,7 @@ type Profile struct {
 	Node string `json:"node"`
 }
 
+//ProfileData subset of profile attributes to set
 type ProfileData struct {
 	Name string `json:"name,omitempty"`
 
@@ -338,6 +356,7 @@ type ProfileData struct {
 	Location string `json:"location,omitempty"`
 }
 
+//Revision revision of each account module
 type Revision struct {
 	Account int64 `json:"account"`
 
@@ -352,6 +371,7 @@ type Revision struct {
 	Card int64 `json:"card"`
 }
 
+//SignedData object serialized in message
 type SignedData struct {
 	GUID string `json:"guid"`
 
@@ -362,12 +382,14 @@ type SignedData struct {
 	Value string `json:"value"`
 }
 
+//Subject payload of attribute, channel, topic or tag
 type Subject struct {
 	DataType string `json:"dataType"`
 
 	Data string `json:"data"`
 }
 
+//Tag slot for tags associated with topic
 type Tag struct {
 	ID string `json:"id"`
 
@@ -376,6 +398,7 @@ type Tag struct {
 	Data *TagData `json:"data"`
 }
 
+//TagData data associated with topic
 type TagData struct {
 	GUID string `json:"guid"`
 
@@ -388,6 +411,7 @@ type TagData struct {
 	Updated int64 `json:"updated"`
 }
 
+//Topic slot for object associated with channel
 type Topic struct {
 	ID string `json:"id"`
 
@@ -396,6 +420,7 @@ type Topic struct {
 	Data *TopicData `json:"data"`
 }
 
+//TopicData data and revision of posted topic and tags
 type TopicData struct {
 	DetailRevision int64 `json:"detailRevision"`
 
@@ -404,6 +429,7 @@ type TopicData struct {
 	TopicDetail *TopicDetail `json:"topicDetail,omitempty"`
 }
 
+//TopicDetail payload of topic
 type TopicDetail struct {
 	GUID string `json:"guid"`
 
@@ -420,8 +446,3 @@ type TopicDetail struct {
 	Transform string `json:"transform,omitempty"`
 }
 
-type TopicTags struct {
-	TagCount int32 `json:"tagCount"`
-
-	TagUpdated int64 `json:"tagUpdated"`
-}
