@@ -5,8 +5,8 @@ import { VideoAsset } from './VideoAsset/VideoAsset';
 import { AudioAsset } from './AudioAsset/AudioAsset';
 import { ImageAsset } from './ImageAsset/ImageAsset';
 import { Avatar } from 'avatar/Avatar';
-import { Space, Skeleton, Button, Input } from 'antd';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { Space, Skeleton, Button, Modal, Input } from 'antd';
+import { ExclamationCircleOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Carousel } from 'Carousel/Carousel';
 
 export function TopicItem({ host, topic }) {
@@ -39,6 +39,16 @@ export function TopicItem({ host, topic }) {
     return <></>
   }
 
+  const removeTopic = () => {
+    Modal.confirm({
+      title: 'Do you want to delete this message?',
+      icon: <ExclamationCircleOutlined />,
+      okText: 'Yes, Delete',
+      cancelText: 'No, Cancel',
+      onOk() { actions.removeTopic() },
+    });
+  }
+
   const Options = () => {
     if (state.editing) {
       return <></>;
@@ -49,7 +59,7 @@ export function TopicItem({ host, topic }) {
           <div class="button" onClick={() => actions.setEditing(true)}>
             <EditOutlined />
           </div>
-          <div class="button" onClick={() => actions.removeTopic()}>
+          <div class="button" onClick={() => removeTopic()}>
             <DeleteOutlined />
           </div>
         </div>
@@ -58,7 +68,7 @@ export function TopicItem({ host, topic }) {
     if (host) {
       return (
         <div class="buttons">
-          <div class="button" onClick={() => actions.removeTopic()}>
+          <div class="button" onClick={() => removeTopic()}>
             <DeleteOutlined />
           </div>
         </div>
