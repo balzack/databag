@@ -10,12 +10,7 @@ import (
 	"time"
 )
 
-var hideLog bool = false
-
-func SetHideLog(hide bool) {
-	hideLog = hide
-}
-
+//Logger prints endpoint details
 func Logger(inner http.Handler, name string) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		start := time.Now()
@@ -32,8 +27,9 @@ func Logger(inner http.Handler, name string) http.Handler {
 	})
 }
 
+//ErrResponse prints detailed error event and sets response
 func ErrResponse(w http.ResponseWriter, code int, err error) {
-	if !hideLog && err != nil {
+	if err != nil {
 		_, file, line, _ := runtime.Caller(1)
 		p, _ := os.Getwd()
 		log.Printf("%s:%d %s", strings.TrimPrefix(file, p), line, err.Error())
@@ -41,22 +37,23 @@ func ErrResponse(w http.ResponseWriter, code int, err error) {
 	w.WriteHeader(code)
 }
 
+//ErrMsg prints detailed error event
 func ErrMsg(err error) {
-	if !hideLog && err != nil {
+	if err != nil {
 		_, file, line, _ := runtime.Caller(1)
 		p, _ := os.Getwd()
 		log.Printf("%s:%d %s", strings.TrimPrefix(file, p), line, err.Error())
 	}
 }
 
+//LogMsg prints detailed error string
 func LogMsg(msg string) {
-	if !hideLog {
-		_, file, line, _ := runtime.Caller(1)
-		p, _ := os.Getwd()
-		log.Printf("%s:%d %s", strings.TrimPrefix(file, p), line, msg)
-	}
+  _, file, line, _ := runtime.Caller(1)
+  p, _ := os.Getwd()
+  log.Printf("%s:%d %s", strings.TrimPrefix(file, p), line, msg)
 }
 
+//PrintMsg prints debug message
 func PrintMsg(obj interface{}) {
 	pretty.Println(obj)
 }

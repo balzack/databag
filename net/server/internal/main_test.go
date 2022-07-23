@@ -8,7 +8,6 @@ import (
 
 func TestMain(m *testing.M) {
 
-	//  SetHideLog(true)
 	SetKeySize(2048)
 	os.Remove("databag.db")
 	os.RemoveAll("testdata")
