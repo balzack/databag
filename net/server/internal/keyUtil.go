@@ -10,10 +10,12 @@ import (
 
 var keySize int = APPKeySize
 
+//SetKeySize sets the key size to use for new accounts
 func SetKeySize(size int) {
 	keySize = size
 }
 
+//GenerateRsaKeyPair creates a public/private key for a new account
 func GenerateRsaKeyPair() (*rsa.PrivateKey, *rsa.PublicKey, string, error) {
 	if keySize == 2048 {
 		privkey, _ := rsa.GenerateKey(rand.Reader, keySize)
@@ -26,6 +28,7 @@ func GenerateRsaKeyPair() (*rsa.PrivateKey, *rsa.PublicKey, string, error) {
 	}
 }
 
+//ExportRsaPrivateKeyAsPemString exports account private key
 func ExportRsaPrivateKeyAsPemStr(privkey *rsa.PrivateKey) string {
 	privkeyBytes := x509.MarshalPKCS1PrivateKey(privkey)
 	privkeyPEM := pem.EncodeToMemory(
@@ -37,6 +40,7 @@ func ExportRsaPrivateKeyAsPemStr(privkey *rsa.PrivateKey) string {
 	return string(privkeyPEM)
 }
 
+//ParseRsaPrivateKeyFromPemStr loads account private key
 func ParseRsaPrivateKeyFromPemStr(privPEM string) (*rsa.PrivateKey, error) {
 	block, _ := pem.Decode([]byte(privPEM))
 	if block == nil {
@@ -51,6 +55,7 @@ func ParseRsaPrivateKeyFromPemStr(privPEM string) (*rsa.PrivateKey, error) {
 	return priv, nil
 }
 
+//ExportRsaPublicKeyAsPemStr exports account public key
 func ExportRsaPublicKeyAsPemStr(pubkey *rsa.PublicKey) (string, error) {
 	pubkeyBytes, err := x509.MarshalPKIXPublicKey(pubkey)
 	if err != nil {
@@ -66,6 +71,7 @@ func ExportRsaPublicKeyAsPemStr(pubkey *rsa.PublicKey) (string, error) {
 	return string(pubkeyPEM), nil
 }
 
+//ParseRsaPublicKeyFromPemStr loads account public key
 func ParseRsaPublicKeyFromPemStr(pubPEM string) (*rsa.PublicKey, error) {
 	block, _ := pem.Decode([]byte(pubPEM))
 	if block == nil {

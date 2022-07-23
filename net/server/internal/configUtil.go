@@ -6,13 +6,28 @@ import (
 	"gorm.io/gorm"
 )
 
+//CNFOpenAccess for allowing for public account creation
 const CNFOpenAccess = "open_access"
+
+//CNFAccountLimit for limiting number of accounts for public creation
 const CNFAccountLimit = "account_limit"
+
+//CNFConfigured set when admin token has been set
 const CNFConfigured = "configured"
+
+//CNFToken identifies the admin token
 const CNFToken = "token"
+
+//CNFDomain identifies the configured server hostname
 const CNFDomain = "domain"
+
+//CNFStorage specifies the storage limit per account
 const CNFStorage = "storage"
+
+//CNFAssetPath specifies the path to store assets
 const CNFAssetPath = "asset_path"
+
+//CNFScriptPath specifies the path where transform scripts are found
 const CNFScriptPath = "script_path"
 
 func getStrConfigValue(configID string, empty string) string {

@@ -138,6 +138,7 @@ const APPQueueDefault = ""
 //APPDefaultPath config for default path to store assets
 const APPDefaultPath = "./asset"
 
+//AppCardStatus compares cards status with string
 func AppCardStatus(status string) bool {
 	if status == APPCardPending {
 		return true
@@ -157,6 +158,7 @@ func AppCardStatus(status string) bool {
 	return false
 }
 
+//AppTopicStatus compares topic status with string
 func AppTopicStatus(status string) bool {
 	if status == APPTopicConfirmed {
 		return true
