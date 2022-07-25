@@ -10,6 +10,7 @@ import (
 	"net/http"
 )
 
+//AddCard adds contact to account specified by agent query param
 func AddCard(w http.ResponseWriter, r *http.Request) {
 
 	account, code, err := ParamAgentToken(r, false)

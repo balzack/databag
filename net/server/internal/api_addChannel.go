@@ -7,6 +7,7 @@ import (
 	"net/http"
 )
 
+//AddChannel adds a channel to account specified by qgent query param
 func AddChannel(w http.ResponseWriter, r *http.Request) {
 
 	account, code, err := ParamAgentToken(r, false)

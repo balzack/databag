@@ -7,6 +7,7 @@ import (
 	"net/http"
 )
 
+//AddArticle add a new article for account specified by agent query param
 func AddArticle(w http.ResponseWriter, r *http.Request) {
 
 	account, code, err := ParamAgentToken(r, false)

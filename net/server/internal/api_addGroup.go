@@ -7,6 +7,7 @@ import (
 	"net/http"
 )
 
+//AddGroup adds a group to account identified by agent query param
 func AddGroup(w http.ResponseWriter, r *http.Request) {
 
 	account, code, err := ParamAgentToken(r, true)

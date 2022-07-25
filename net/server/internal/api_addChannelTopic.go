@@ -7,6 +7,7 @@ import (
 	"net/http"
 )
 
+//AddChannelTopic adds a topic to a channel through either contact or agent query param
 func AddChannelTopic(w http.ResponseWriter, r *http.Request) {
 
 	confirm := r.FormValue("confirm")

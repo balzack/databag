@@ -9,6 +9,7 @@ import (
 	"net/http"
 )
 
+//AddChannelTopicTag adds a tag to a specified topic
 func AddChannelTopicTag(w http.ResponseWriter, r *http.Request) {
 
 	// scan parameters

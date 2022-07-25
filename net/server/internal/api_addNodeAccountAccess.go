@@ -10,6 +10,7 @@ import (
 	"time"
 )
 
+//AddNodeAccountAccess generate a new token to be use for account login reset
 func AddNodeAccountAccess(w http.ResponseWriter, r *http.Request) {
 
 	params := mux.Vars(r)

@@ -14,6 +14,7 @@ import (
 	"strings"
 )
 
+//AddChannelTopicAsset adds an asset to a topic and queues it for appropriate transform
 func AddChannelTopicAsset(w http.ResponseWriter, r *http.Request) {
 
 	// scan parameters
@@ -82,7 +83,7 @@ func AddChannelTopicAsset(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer file.Close()
-	crc, size, err := SaveAsset(file, path)
+	crc, size, err := saveAsset(file, path)
 	if err != nil {
 		ErrResponse(w, http.StatusInternalServerError, err)
 		return
@@ -193,7 +194,7 @@ func isStorageFull(act *store.Account) (full bool, err error) {
 	return
 }
 
-func SaveAsset(src io.Reader, path string) (crc uint32, size int64, err error) {
+func saveAsset(src io.Reader, path string) (crc uint32, size int64, err error) {
 
 	output, res := os.OpenFile(path, os.O_WRONLY|os.O_CREATE, 0666)
 	if res != nil {
