@@ -6,6 +6,7 @@ import (
 	"strconv"
 )
 
+//GetGroups retrieves list of groups in account
 func GetGroups(w http.ResponseWriter, r *http.Request) {
 	var groupRevisionSet bool
 	var groupRevision int64

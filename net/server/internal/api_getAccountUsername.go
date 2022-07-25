@@ -11,6 +11,7 @@ type accountUsername struct {
 	Username string
 }
 
+//GetAccountUsername determines if username is assignable
 func GetAccountUsername(w http.ResponseWriter, r *http.Request) {
 
 	if r.FormValue("token") != "" {

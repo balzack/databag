@@ -8,6 +8,7 @@ import (
 	"net/http"
 )
 
+//GetCard retrieves contacts set by account
 func GetCard(w http.ResponseWriter, r *http.Request) {
 
 	account, code, err := BearerAppToken(r, false)

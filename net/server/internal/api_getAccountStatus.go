@@ -5,6 +5,7 @@ import (
 	"net/http"
 )
 
+//GetAccountStatus retrieves account state values
 func GetAccountStatus(w http.ResponseWriter, r *http.Request) {
 
 	account, code, err := ParamAgentToken(r, true)

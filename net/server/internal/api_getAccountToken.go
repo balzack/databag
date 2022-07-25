@@ -4,6 +4,7 @@ import (
 	"net/http"
 )
 
+//GetAccountToken retrieve type of account token
 func GetAccountToken(w http.ResponseWriter, r *http.Request) {
 
 	accountToken, err := BearerAccountToken(r)

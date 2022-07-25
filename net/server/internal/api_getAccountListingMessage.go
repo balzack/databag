@@ -8,6 +8,7 @@ import (
 	"net/http"
 )
 
+//GetAccountListingMessage retrieves signed profile message of publicly listed account
 func GetAccountListingMessage(w http.ResponseWriter, r *http.Request) {
 
 	// get referenced account guid

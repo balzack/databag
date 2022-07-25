@@ -9,6 +9,7 @@ import (
 	"strings"
 )
 
+//GetArticles retrieve articles for account holder or those shared with contact
 func GetArticles(w http.ResponseWriter, r *http.Request) {
 	var articleRevisionSet bool
 	var articleRevision int64

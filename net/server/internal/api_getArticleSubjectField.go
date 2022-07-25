@@ -13,6 +13,7 @@ import (
 	"time"
 )
 
+//GetArticleSubjectField retrieve base64 decoded value of an aritcle subject field
 func GetArticleSubjectField(w http.ResponseWriter, r *http.Request) {
 
 	// scan parameters
