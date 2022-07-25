@@ -11,6 +11,7 @@ import (
 	"time"
 )
 
+//GetAccountListingImage retrieve profile image of publicly accessible account
 func GetAccountListingImage(w http.ResponseWriter, r *http.Request) {
 
 	// get referenced account guid

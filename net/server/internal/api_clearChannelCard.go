@@ -8,6 +8,7 @@ import (
 	"net/http"
 )
 
+//ClearChannelCard removes card from channel membership
 func ClearChannelCard(w http.ResponseWriter, r *http.Request) {
 
 	account, code, err := ParamAgentToken(r, false)

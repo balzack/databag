@@ -5,6 +5,7 @@ import (
 	"net/http"
 )
 
+//GetAccountAvailable return number of accounts available for public creation
 func GetAccountAvailable(w http.ResponseWriter, r *http.Request) {
 
 	available, err := getAvailableAccounts()

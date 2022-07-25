@@ -5,6 +5,7 @@ import (
 	"net/http"
 )
 
+//GetAccountListing retrieves profile list of publicly accessible accounts
 func GetAccountListing(w http.ResponseWriter, r *http.Request) {
 
 	var accounts []store.Account

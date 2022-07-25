@@ -8,6 +8,7 @@ import (
 	"net/http"
 )
 
+//ClearCardGroup removes card from sharing group
 func ClearCardGroup(w http.ResponseWriter, r *http.Request) {
 
 	account, code, err := BearerAppToken(r, false)

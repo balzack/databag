@@ -8,6 +8,7 @@ import (
 	"net/http"
 )
 
+//ClearArticleGroup remove sharing group from article
 func ClearArticleGroup(w http.ResponseWriter, r *http.Request) {
 
 	account, code, err := ParamAgentToken(r, false)

@@ -8,6 +8,7 @@ import (
 	"net/http"
 )
 
+//ClearChannelGroup removes sharing group from channel
 func ClearChannelGroup(w http.ResponseWriter, r *http.Request) {
 
 	account, code, err := BearerAppToken(r, false)
