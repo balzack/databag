@@ -11,6 +11,7 @@ import (
 	"strings"
 )
 
+//AddAccount if available, create account with specified username and password
 func AddAccount(w http.ResponseWriter, r *http.Request) {
 	var token *store.AccountToken
 	var res error

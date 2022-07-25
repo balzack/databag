@@ -8,6 +8,7 @@ import (
 	"net/http"
 )
 
+//AddAccountApp with access token, attach an app to an account generating agent token
 func AddAccountApp(w http.ResponseWriter, r *http.Request) {
 
 	account, res := AccountLogin(r)

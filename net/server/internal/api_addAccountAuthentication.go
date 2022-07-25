@@ -8,6 +8,7 @@ import (
 	"time"
 )
 
+//AddAccountAuthentication create an access token to reset account access
 func AddAccountAuthentication(w http.ResponseWriter, r *http.Request) {
 
 	account, err := AccountLogin(r)
