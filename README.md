@@ -12,7 +12,7 @@ Databag is a self-hosting messaging service for the DWeb community. Notable feat
 
 You can test out the project [here](https://databag.coredb.org/#/create), but don't post anything important as this server is regularly wiped. Feedback on the UI/UX, bugs or features is greatly appreciated.
 
-### Installation
+## Installation
 
 To use databag, you will need a DNS name pointing to your node with a certificate. You can deloy a node manually, but you will have a much easier time using a container service. Containers for arm64 and amd64 are available [here](https://hub.docker.com/r/balzack/databag/tags)
 
