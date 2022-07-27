@@ -64,4 +64,3 @@ func ParseRequest(r *http.Request, w http.ResponseWriter, obj interface{}) error
 	dec.DisallowUnknownFields()
 	return dec.Decode(&obj)
 }
-

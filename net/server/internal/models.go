@@ -445,4 +445,3 @@ type TopicDetail struct {
 
 	Transform string `json:"transform,omitempty"`
 }
-

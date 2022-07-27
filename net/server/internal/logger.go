@@ -48,9 +48,9 @@ func ErrMsg(err error) {
 
 //LogMsg prints detailed error string
 func LogMsg(msg string) {
-  _, file, line, _ := runtime.Caller(1)
-  p, _ := os.Getwd()
-  log.Printf("%s:%d %s", strings.TrimPrefix(file, p), line, msg)
+	_, file, line, _ := runtime.Caller(1)
+	p, _ := os.Getwd()
+	log.Printf("%s:%d %s", strings.TrimPrefix(file, p), line, msg)
 }
 
 //PrintMsg prints debug message
