@@ -8,6 +8,7 @@ import (
 	"net/http"
 )
 
+//GetCardDetail retrieves attributes attributes assigned to card
 func GetCardDetail(w http.ResponseWriter, r *http.Request) {
 
 	account, code, err := ParamAgentToken(r, false)

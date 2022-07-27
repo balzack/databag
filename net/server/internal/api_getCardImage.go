@@ -11,6 +11,7 @@ import (
 	"time"
 )
 
+//GetCardProfileImage retrieves contacts profile image
 func GetCardProfileImage(w http.ResponseWriter, r *http.Request) {
 	var data []byte
 

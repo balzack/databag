@@ -15,7 +15,7 @@ func RemoveChannelTopic(w http.ResponseWriter, r *http.Request) {
 	channelID := params["channelID"]
 	topicID := params["topicID"]
 
-	channelSlot, guid, err, code := getChannelSlot(r, true)
+	channelSlot, guid, code, err := getChannelSlot(r, true)
 	if err != nil {
 		ErrResponse(w, code, err)
 		return

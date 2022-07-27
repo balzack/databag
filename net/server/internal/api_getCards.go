@@ -6,6 +6,7 @@ import (
 	"strconv"
 )
 
+//GetCards retrieves all accounts contacts
 func GetCards(w http.ResponseWriter, r *http.Request) {
 	var cardRevisionSet bool
 	var cardRevision int64

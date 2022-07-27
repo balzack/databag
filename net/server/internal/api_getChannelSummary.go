@@ -8,6 +8,7 @@ import (
 	"net/http"
 )
 
+//GetChannelSummary retrieves latest channel topic
 func GetChannelSummary(w http.ResponseWriter, r *http.Request) {
 
 	// scan parameters

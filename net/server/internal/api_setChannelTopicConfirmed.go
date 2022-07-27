@@ -24,7 +24,7 @@ func SetChannelTopicConfirmed(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	channelSlot, _, err, code := getChannelSlot(r, true)
+	channelSlot, _, code, err := getChannelSlot(r, true)
 	if err != nil {
 		ErrResponse(w, code, err)
 		return

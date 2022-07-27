@@ -21,7 +21,7 @@ func SetChannelTopicSubject(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	channelSlot, guid, err, code := getChannelSlot(r, true)
+	channelSlot, guid, code, err := getChannelSlot(r, true)
 	if err != nil {
 		ErrResponse(w, code, err)
 		return

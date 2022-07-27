@@ -24,7 +24,7 @@ func GetChannelTopics(w http.ResponseWriter, r *http.Request) {
 	var countSet bool
 	var count int
 
-	channelSlot, _, err, code := getChannelSlot(r, false)
+	channelSlot, _, code, err := getChannelSlot(r, false)
 	if err != nil {
 		ErrResponse(w, code, err)
 		return

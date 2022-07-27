@@ -8,6 +8,7 @@ import (
 	"net/http"
 )
 
+//GetCardProfile retrieves contact's public profile
 func GetCardProfile(w http.ResponseWriter, r *http.Request) {
 
 	account, code, err := ParamAgentToken(r, false)

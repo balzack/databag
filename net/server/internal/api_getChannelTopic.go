@@ -14,7 +14,7 @@ func GetChannelTopic(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	topicID := params["topicID"]
 
-	channelSlot, _, err, code := getChannelSlot(r, false)
+	channelSlot, _, code, err := getChannelSlot(r, false)
 	if err != nil {
 		ErrResponse(w, code, err)
 		return
@@ -55,7 +55,7 @@ func isViewer(guid string, groups []store.Group) bool {
 	return false
 }
 
-func getChannelSlot(r *http.Request, member bool) (slot store.ChannelSlot, guid string, err error, code int) {
+func getChannelSlot(r *http.Request, member bool) (slot store.ChannelSlot, guid string, code int, err error) {
 
 	// scan parameters
 	params := mux.Vars(r)

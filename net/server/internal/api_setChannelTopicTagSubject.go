@@ -22,7 +22,7 @@ func SetChannelTopicTagSubject(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	channelSlot, guid, err, code := getChannelSlot(r, false)
+	channelSlot, guid, code, err := getChannelSlot(r, false)
 	if err != nil {
 		ErrResponse(w, code, err)
 		return

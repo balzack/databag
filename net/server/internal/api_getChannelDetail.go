@@ -8,6 +8,7 @@ import (
 	"net/http"
 )
 
+//GetChannelDetail retrieve channel top level attributes
 func GetChannelDetail(w http.ResponseWriter, r *http.Request) {
 
 	// scan parameters

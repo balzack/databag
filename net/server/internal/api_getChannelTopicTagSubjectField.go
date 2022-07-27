@@ -22,7 +22,7 @@ func GetChannelTopicTagSubjectField(w http.ResponseWriter, r *http.Request) {
 	field := params["field"]
 	elements := strings.Split(field, ".")
 
-	channelSlot, _, err, code := getChannelSlot(r, false)
+	channelSlot, _, code, err := getChannelSlot(r, false)
 	if err != nil {
 		ErrResponse(w, code, err)
 		return

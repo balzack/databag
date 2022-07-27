@@ -10,6 +10,7 @@ import (
 	"time"
 )
 
+//GetChannelSubjectField retrieve base64 decoded field from channel subject
 func GetChannelSubjectField(w http.ResponseWriter, r *http.Request) {
 
 	// scan parameters
@@ -18,7 +19,7 @@ func GetChannelSubjectField(w http.ResponseWriter, r *http.Request) {
 	elements := strings.Split(field, ".")
 
 	// get channel stlot
-	channelSlot, _, err, code := getChannelSlot(r, false)
+	channelSlot, _, code, err := getChannelSlot(r, false)
 	if err != nil {
 		ErrResponse(w, code, err)
 		return
