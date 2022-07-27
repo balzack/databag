@@ -8,6 +8,7 @@ import (
 	"net/http"
 )
 
+//GetChannelTopic retrieves channel topic
 func GetChannelTopic(w http.ResponseWriter, r *http.Request) {
 
 	// scan parameters
