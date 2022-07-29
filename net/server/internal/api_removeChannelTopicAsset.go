@@ -8,7 +8,7 @@ import (
 	"net/http"
 )
 
-//RemoveChannelTopic removes topic asset if invoker created topic
+//RemoveChannelTopicAsset removes topic asset if invoker created topic
 func RemoveChannelTopicAsset(w http.ResponseWriter, r *http.Request) {
 
 	// scan parameters

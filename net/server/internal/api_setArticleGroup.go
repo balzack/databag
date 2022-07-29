@@ -8,6 +8,7 @@ import (
 	"net/http"
 )
 
+//SetArticleGroup assigns sharing group to article
 func SetArticleGroup(w http.ResponseWriter, r *http.Request) {
 
 	account, code, err := ParamAgentToken(r, false)

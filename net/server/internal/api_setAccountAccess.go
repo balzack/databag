@@ -9,6 +9,7 @@ import (
 	"net/http"
 )
 
+//SetAccountAccess creates token to gain access to account
 func SetAccountAccess(w http.ResponseWriter, r *http.Request) {
 
 	token, _, res := AccessToken(r)

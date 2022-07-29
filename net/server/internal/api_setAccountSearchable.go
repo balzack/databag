@@ -6,6 +6,7 @@ import (
 	"net/http"
 )
 
+//SetAccountSearchable sets public visibility of account
 func SetAccountSearchable(w http.ResponseWriter, r *http.Request) {
 
 	account, code, err := ParamAgentToken(r, true)

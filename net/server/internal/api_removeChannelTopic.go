@@ -8,7 +8,7 @@ import (
 	"net/http"
 )
 
-//Removes channel topic created by invoker or under invokers channel
+//RemoveChannelTopic removes channel topic created by invoker or under invokers channel
 func RemoveChannelTopic(w http.ResponseWriter, r *http.Request) {
 
 	// scan parameters

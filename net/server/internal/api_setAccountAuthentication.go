@@ -8,6 +8,7 @@ import (
 	"strings"
 )
 
+//SetAccountAuthentication resets account credentials
 func SetAccountAuthentication(w http.ResponseWriter, r *http.Request) {
 
 	token, res := BearerAccountToken(r)

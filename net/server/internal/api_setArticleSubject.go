@@ -8,6 +8,7 @@ import (
 	"net/http"
 )
 
+//SetArticleSubject updates the subject of specified article in account
 func SetArticleSubject(w http.ResponseWriter, r *http.Request) {
 
 	account, code, err := ParamAgentToken(r, false)

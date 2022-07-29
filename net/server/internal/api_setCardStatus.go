@@ -11,6 +11,7 @@ import (
 	"strconv"
 )
 
+//SetCardStatus updates connection status of contact
 func SetCardStatus(w http.ResponseWriter, r *http.Request) {
 	var res error
 

@@ -6,6 +6,7 @@ import (
 	"net/http"
 )
 
+//SetArticleRevision notifies contact of updated article revision
 func SetArticleRevision(w http.ResponseWriter, r *http.Request) {
 
 	card, code, err := ParamContactToken(r, false)
@@ -28,6 +29,7 @@ func SetArticleRevision(w http.ResponseWriter, r *http.Request) {
 	WriteResponse(w, nil)
 }
 
+//NotifyArticleRevision sets article revision of contact
 func NotifyArticleRevision(card *store.Card, revision int64) error {
 
 	act := &card.Account

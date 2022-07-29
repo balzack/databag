@@ -8,6 +8,7 @@ import (
 	"net/http"
 )
 
+//SetCardProfile updates public profile of contact
 func SetCardProfile(w http.ResponseWriter, r *http.Request) {
 
 	account, code, err := ParamAgentToken(r, false)

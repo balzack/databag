@@ -8,6 +8,7 @@ import (
 	"net/http"
 )
 
+//SetCardNotes assignes notes to contact in account
 func SetCardNotes(w http.ResponseWriter, r *http.Request) {
 
 	account, code, err := BearerAppToken(r, false)
