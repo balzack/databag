@@ -8,6 +8,7 @@ import (
 	"net/http"
 )
 
+//RemoveArticle removes article from account
 func RemoveArticle(w http.ResponseWriter, r *http.Request) {
 
 	account, code, err := ParamAgentToken(r, false)

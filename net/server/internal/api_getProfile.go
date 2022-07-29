@@ -4,6 +4,7 @@ import (
 	"net/http"
 )
 
+//GetProfile retrieve public profile of account holder
 func GetProfile(w http.ResponseWriter, r *http.Request) {
 
 	account, code, err := ParamAgentToken(r, true)

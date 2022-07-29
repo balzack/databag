@@ -4,6 +4,7 @@ import (
 	"net/http"
 )
 
+//GetNodeConfig retreive current admin config
 func GetNodeConfig(w http.ResponseWriter, r *http.Request) {
 
 	// validate login

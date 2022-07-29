@@ -7,6 +7,7 @@ import (
 	"os"
 )
 
+//RemoveAccount removes owners account
 func RemoveAccount(w http.ResponseWriter, r *http.Request) {
 
 	account, err := AccountLogin(r)

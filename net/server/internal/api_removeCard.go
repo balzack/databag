@@ -8,6 +8,7 @@ import (
 	"net/http"
 )
 
+//RemoveCard removes card from account
 func RemoveCard(w http.ResponseWriter, r *http.Request) {
 
 	account, code, err := ParamAgentToken(r, false)

@@ -8,6 +8,7 @@ import (
 	"net/http"
 )
 
+//GetOpenMessage retrieve message to deliver to contact for connection
 func GetOpenMessage(w http.ResponseWriter, r *http.Request) {
 
 	account, code, res := ParamAgentToken(r, true)

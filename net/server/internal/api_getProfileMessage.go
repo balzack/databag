@@ -6,6 +6,7 @@ import (
 	"net/http"
 )
 
+//GetProfileMessage get data message for sending profile to federated node
 func GetProfileMessage(w http.ResponseWriter, r *http.Request) {
 	var code int
 	var err error

@@ -8,6 +8,7 @@ import (
 	"time"
 )
 
+//GetProfileImage retreive profile image for account holder
 func GetProfileImage(w http.ResponseWriter, r *http.Request) {
 	var data []byte
 

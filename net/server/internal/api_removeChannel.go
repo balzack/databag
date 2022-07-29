@@ -8,6 +8,7 @@ import (
 	"net/http"
 )
 
+//RemoveChannel removes channel from account
 func RemoveChannel(w http.ResponseWriter, r *http.Request) {
 	var err error
 	var code int

@@ -8,6 +8,7 @@ import (
 	"net/http"
 )
 
+//RemoveGroup removes group from account
 func RemoveGroup(w http.ResponseWriter, r *http.Request) {
 
 	account, code, err := ParamAgentToken(r, true)

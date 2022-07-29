@@ -8,6 +8,7 @@ import (
 	"net/http"
 )
 
+//RemoveChannelTopicTag removes tag from topic
 func RemoveChannelTopicTag(w http.ResponseWriter, r *http.Request) {
 
 	// scan parameters
@@ -60,10 +61,10 @@ func RemoveChannelTopicTag(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// check permission
-	if tag.GUID != guid {
-		ErrResponse(w, http.StatusUnauthorized, errors.New("not creator of tag"))
-		return
-	}
+  if act.GUID != guid && topicSlot.Topic.GUID != guid {
+    ErrResponse(w, http.StatusUnauthorized, errors.New("not creator of topic or host"))
+    return
+  }
 
 	err = store.DB.Transaction(func(tx *gorm.DB) error {
 

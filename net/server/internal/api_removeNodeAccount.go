@@ -10,6 +10,7 @@ import (
 	"strconv"
 )
 
+//RemoveNodeAccount deletes account on behalf of admin
 func RemoveNodeAccount(w http.ResponseWriter, r *http.Request) {
 
 	// get referenced account id
