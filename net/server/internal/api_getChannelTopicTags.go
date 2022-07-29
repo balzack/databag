@@ -17,6 +17,7 @@ func reverseTags(input []store.TagSlot) []store.TagSlot {
 	return output
 }
 
+//GetChannelTopicTags retreives tags associated with topic
 func GetChannelTopicTags(w http.ResponseWriter, r *http.Request) {
 	var revisionSet bool
 	var revision int64

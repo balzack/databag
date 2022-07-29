@@ -8,6 +8,7 @@ import (
 	"net/http"
 )
 
+//GetChannelTopicDetail retrieves topic subject and attributes
 func GetChannelTopicDetail(w http.ResponseWriter, r *http.Request) {
 
 	// scan parameters

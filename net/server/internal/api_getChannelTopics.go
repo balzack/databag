@@ -14,6 +14,7 @@ func reverseTopics(input []store.TopicSlot) []store.TopicSlot {
 	return output
 }
 
+//GetChannelTopics retrieves topics associated with channel
 func GetChannelTopics(w http.ResponseWriter, r *http.Request) {
 	var revisionSet bool
 	var revision int64

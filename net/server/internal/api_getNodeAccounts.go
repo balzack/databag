@@ -5,6 +5,7 @@ import (
 	"net/http"
 )
 
+//GetNodeAccounts retrieves profiles of hosted accounts for the admin
 func GetNodeAccounts(w http.ResponseWriter, r *http.Request) {
 
 	if code, err := ParamAdminToken(r); err != nil {

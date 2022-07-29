@@ -12,6 +12,7 @@ import (
 	"time"
 )
 
+//GetNodeAccountImage downloads profile image for the admin
 func GetNodeAccountImage(w http.ResponseWriter, r *http.Request) {
 
 	// get referenced account id

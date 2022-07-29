@@ -13,6 +13,7 @@ import (
 	"time"
 )
 
+//GetChannelTopicTagSubjectField base64 decodes and downloads a field from a tag
 func GetChannelTopicTagSubjectField(w http.ResponseWriter, r *http.Request) {
 
 	// scan parameters

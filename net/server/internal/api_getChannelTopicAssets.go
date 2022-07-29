@@ -8,6 +8,7 @@ import (
 	"net/http"
 )
 
+//GetChannelTopicAssets retries list of assets associated with topic
 func GetChannelTopicAssets(w http.ResponseWriter, r *http.Request) {
 
 	// scan parameters

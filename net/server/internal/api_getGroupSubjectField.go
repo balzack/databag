@@ -13,6 +13,7 @@ import (
 	"time"
 )
 
+//GetGroupSubjectField base64 decods and downloads field from group subject
 func GetGroupSubjectField(w http.ResponseWriter, r *http.Request) {
 
 	// scan parameters

@@ -8,6 +8,7 @@ import (
 	"net/http"
 )
 
+//GetCloseMessage retrieves message to disconnect from contact
 func GetCloseMessage(w http.ResponseWriter, r *http.Request) {
 
 	account, code, res := ParamAgentToken(r, true)

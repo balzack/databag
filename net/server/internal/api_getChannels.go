@@ -10,6 +10,7 @@ import (
 	"strings"
 )
 
+//GetChannels retrieves channels under account or shared with contact
 func GetChannels(w http.ResponseWriter, r *http.Request) {
 	var channelRevisionSet bool
 	var channelRevision int64
