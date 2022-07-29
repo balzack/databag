@@ -8,6 +8,7 @@ import (
 	"net/http"
 )
 
+//SetChannelTopicTagSubject sets subject of tag created by invoker
 func SetChannelTopicTagSubject(w http.ResponseWriter, r *http.Request) {
 
 	// scan parameters

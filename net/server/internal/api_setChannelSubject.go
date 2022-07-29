@@ -8,6 +8,7 @@ import (
 	"net/http"
 )
 
+//SetChannelSubject updates channel subject for account holder
 func SetChannelSubject(w http.ResponseWriter, r *http.Request) {
 
 	account, code, err := ParamAgentToken(r, false)

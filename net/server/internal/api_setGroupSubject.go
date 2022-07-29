@@ -8,6 +8,7 @@ import (
 	"net/http"
 )
 
+//SetGroupSubject sets subject of group under account
 func SetGroupSubject(w http.ResponseWriter, r *http.Request) {
 
 	account, code, err := ParamAgentToken(r, true)

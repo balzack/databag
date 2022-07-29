@@ -8,6 +8,7 @@ import (
 	"net/http"
 )
 
+//SetChannelTopicConfirmed sets confirmation status of topic
 func SetChannelTopicConfirmed(w http.ResponseWriter, r *http.Request) {
 
 	// scan parameters

@@ -8,6 +8,7 @@ import (
 	"net/http"
 )
 
+//SetChannelGroup adds sharing group to channel
 func SetChannelGroup(w http.ResponseWriter, r *http.Request) {
 
 	account, code, err := BearerAppToken(r, false)

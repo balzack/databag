@@ -8,6 +8,7 @@ import (
 	"net/http"
 )
 
+//SetChannelCard adds contact to channel membership
 func SetChannelCard(w http.ResponseWriter, r *http.Request) {
 
 	account, code, err := ParamAgentToken(r, false)

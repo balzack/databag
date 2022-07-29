@@ -6,6 +6,7 @@ import (
 	"net/http"
 )
 
+//SetChannelRevision notifies contact of updated channel revision
 func SetChannelRevision(w http.ResponseWriter, r *http.Request) {
 
 	card, code, err := ParamContactToken(r, false)
@@ -28,6 +29,7 @@ func SetChannelRevision(w http.ResponseWriter, r *http.Request) {
 	WriteResponse(w, nil)
 }
 
+//NotifyChannelRevision stores updated channel revision
 func NotifyChannelRevision(card *store.Card, revision int64) error {
 
 	act := &card.Account

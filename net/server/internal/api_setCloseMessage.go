@@ -8,6 +8,7 @@ import (
 	"time"
 )
 
+//SetCloseMessage delivers disconnection message to contact
 func SetCloseMessage(w http.ResponseWriter, r *http.Request) {
 
 	var message DataMessage
