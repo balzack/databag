@@ -22,7 +22,12 @@ export function useRegistry() {
   useEffect(() => {
     if (profile?.state?.profile) {
       let identity = profile.state.profile;
-      updateState({ server: identity.node });
+      if (identity.node == null || identity.node == '') {
+        updateState({ server: null });
+      }
+      else {
+        updateState({ server: identity.node });
+      }
     }
   }, [profile]);
 

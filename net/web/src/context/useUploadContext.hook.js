@@ -82,10 +82,14 @@ export function useUploadContext() {
       abort(`:${channelId}`, topicId);
     },
     addContactTopic: (server, token, cardId, channelId, topicId, files, success, failure) => {
+      let host = "";
+      if (server) {
+        host = `https://${server}`
+      }
       const controller = new AbortController();
       const entry = {
         index: index.current,
-        url: `https://${server}/content/channels/${channelId}/topics/${topicId}/assets?contact=${token}`,
+        url: `${host}/content/channels/${channelId}/topics/${topicId}/assets?contact=${token}`,
         files,
         assets: [],
         current: null,

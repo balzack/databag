@@ -9,6 +9,23 @@ export const RegistryWrapper = styled.div`
   overflow-x: hidden;
   flex-direction: column;
 
+  .local {
+    display: flex;
+    flex-directionL row;
+    align-items: center;
+    justify-content: center;
+  
+    .local-name {
+      border: 1px solid rgb(221, 221, 221);
+      height: 32px;
+      display: flex;
+      align-items: center;
+      padding-right: 8px;
+      padding-left: 8px;
+      background-color: rgb(238, 238, 238);
+    }
+  }
+
   .contacts {
     flex-grow: 1
     background-color: #fefefe;

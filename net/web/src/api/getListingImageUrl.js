@@ -1,5 +1,10 @@
 export function getListingImageUrl(server, guid) {
-  return `https://${server}/account/listing/${guid}/image`
+  let host = "";
+  if (server) {
+    host = `https://${server}`;
+  }
+
+  return `${host}/account/listing/${guid}/image`
 }
 
 
