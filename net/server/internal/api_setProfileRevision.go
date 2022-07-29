@@ -6,6 +6,7 @@ import (
 	"net/http"
 )
 
+//SetProfileRevision updates contact of updated public profile
 func SetProfileRevision(w http.ResponseWriter, r *http.Request) {
 
 	card, code, err := ParamContactToken(r, false)
@@ -28,6 +29,7 @@ func SetProfileRevision(w http.ResponseWriter, r *http.Request) {
 	WriteResponse(w, nil)
 }
 
+//NotifyProfileRevision stores update profile revision
 func NotifyProfileRevision(card *store.Card, revision int64) error {
 
 	act := &card.Account

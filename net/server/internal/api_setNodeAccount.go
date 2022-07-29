@@ -10,6 +10,7 @@ import (
 	"time"
 )
 
+//SetNodeAccount creates token to reset account credentials
 func SetNodeAccount(w http.ResponseWriter, r *http.Request) {
 
 	// get referenced account id
@@ -36,7 +37,7 @@ func SetNodeAccount(w http.ResponseWriter, r *http.Request) {
 		TokenType: APPTokenReset,
 		Token:     token,
 		AccountID: uint(accountID),
-		Expires:   time.Now().Unix() + APPCreateExpire,
+		Expires:   time.Now().Unix() + APPResetExpire,
 	}
 
 	if err := store.DB.Create(&accountToken).Error; err != nil {

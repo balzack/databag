@@ -6,6 +6,7 @@ import (
 	"net/http"
 )
 
+//SetViewRevision updates contact with view revision
 func SetViewRevision(w http.ResponseWriter, r *http.Request) {
 
 	card, code, err := ParamContactToken(r, false)
@@ -28,6 +29,7 @@ func SetViewRevision(w http.ResponseWriter, r *http.Request) {
 	WriteResponse(w, nil)
 }
 
+//NotifyViewRevision stores updated contact view revision
 func NotifyViewRevision(card *store.Card, revision int64) error {
 
 	act := &card.Account

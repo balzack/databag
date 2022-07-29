@@ -7,6 +7,7 @@ import (
 	"net/http"
 )
 
+//SetNodeConfig sets node configuration
 func SetNodeConfig(w http.ResponseWriter, r *http.Request) {
 
 	// validate login

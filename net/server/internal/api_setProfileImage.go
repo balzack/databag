@@ -6,6 +6,7 @@ import (
 	"net/http"
 )
 
+//SetProfileImage updates public profile image of account
 func SetProfileImage(w http.ResponseWriter, r *http.Request) {
 
 	account, code, err := ParamAgentToken(r, true)

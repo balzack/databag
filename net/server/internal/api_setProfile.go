@@ -6,6 +6,7 @@ import (
 	"net/http"
 )
 
+//SetProfile updates account public profile details
 func SetProfile(w http.ResponseWriter, r *http.Request) {
 
 	account, code, err := ParamAgentToken(r, true)

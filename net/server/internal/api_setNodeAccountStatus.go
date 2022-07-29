@@ -7,6 +7,7 @@ import (
 	"strconv"
 )
 
+//SetNodeAccountStatus sets disabled status of account
 func SetNodeAccountStatus(w http.ResponseWriter, r *http.Request) {
 
 	// get referenced account id

@@ -11,6 +11,7 @@ import (
 	"time"
 )
 
+//SetOpenMessage delivers connection message to contact
 func SetOpenMessage(w http.ResponseWriter, r *http.Request) {
 
 	var message DataMessage

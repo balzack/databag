@@ -7,6 +7,7 @@ import (
 	"net/http"
 )
 
+//SetNodeStatus sets admin token for account
 func SetNodeStatus(w http.ResponseWriter, r *http.Request) {
 
 	var config store.Config
