@@ -2,14 +2,14 @@ import { checkResponse, fetchWithTimeout } from './fetchUtil';
 
 export async function addChannelTopic(token, channelId, message, assets ): string {
 
-  if (message == null && (assets == null || assets.length == 0)) {
+  if (message == null && (assets == null || assets.length === 0)) {
     let topic = await fetchWithTimeout(`/content/channels/${channelId}/topics?agent=${token}`,
       { method: 'POST', body: JSON.stringify({}) });
     checkResponse(topic);
     let slot = await topic.json();
     return slot.id;
   }  
-  else if (assets == null || assets.length == 0) {
+  else if (assets == null || assets.length === 0) {
     let subject = { data: JSON.stringify(message, (key, value) => {
       if (value !== null) return value
     }), datatype: 'superbasictopic' };

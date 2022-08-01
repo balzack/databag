@@ -1,5 +1,4 @@
 import { useEffect, useState, useRef, useContext } from 'react';
-import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { getAvailable } from 'api/getAvailable';
 import { setLogin } from 'api/setLogin';
 import { setAccountAccess } from 'api/setAccountAccess';
@@ -24,13 +23,6 @@ export function useAppContext() {
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }))
-  }
-
-  const updateData = (value) => {
-    setState((s) => {
-      let data = { ...s.Data, ...value }
-      return { ...s, Data: data }
-    })
   }
 
   const uploadContext = useContext(UploadContext);

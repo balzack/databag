@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { getProfile } from 'api/getProfile';
 import { setProfileData } from 'api/setProfileData';
 import { setProfileImage } from 'api/setProfileImage';
@@ -19,7 +19,7 @@ export function useProfileContext() {
 
   const setProfile = async (rev) => {
     if (next.current == null) {
-      if (revision.current != rev) {
+      if (revision.current !== rev) {
         let profile = await getProfile(access.current);
         updateState({ init: true, profile });
         revision.current = rev;
@@ -55,7 +55,7 @@ export function useProfileContext() {
     },
     getProfile: () => {
       const { name, handle, image, revision } = state.profile;
-      if (image == null || image == '') {
+      if (image == null || image === '') {
         return { name, handle };
       }
       return { name, handle, imageUrl: getProfileImageUrl(access.current, revision) };

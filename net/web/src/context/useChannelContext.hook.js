@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, useContext } from 'react';
+import { useState, useRef, useContext } from 'react';
 import { getChannels } from 'api/getChannels';
 import { getChannelDetail } from 'api/getChannelDetail';
 import { getChannelSummary } from 'api/getChannelSummary';
@@ -38,7 +38,7 @@ export function useChannelContext() {
         if (cur == null) {
           cur = { id: channel.id, data: { } }
         }
-        if (cur.data.detailRevision != channel.data.detailRevision) {
+        if (cur.data.detailRevision !== channel.data.detailRevision) {
           if (channel.data.channelDetail != null) {
             cur.data.channelDetail = channel.data.channelDetail;
           }
@@ -48,7 +48,7 @@ export function useChannelContext() {
           }
           cur.data.detailRevision = channel.data.detailRevision;
         }
-        if (cur.data.topicRevision != channel.data.topicRevision) {
+        if (cur.data.topicRevision !== channel.data.topicRevision) {
           if (channel.data.channelSummary != null) {
             cur.data.channelSummary = channel.data.channelSummary;
           }
@@ -70,14 +70,14 @@ export function useChannelContext() {
   const setChannels = async (rev) => {
     if (next.current == null) {
       next.current = rev;
-      if (revision.current != rev) {
+      if (revision.current !== rev) {
         await updateChannels();
         updateState({ init: true, channels: channels.current });
         revision.current = rev;
       }
       let r = next.current;
       next.current = null;
-      if (revision.current != r) {
+      if (revision.current !== r) {
         setChannels(r);
       }
     }

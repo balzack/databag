@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, useContext } from 'react';
+import { useState, useRef } from 'react';
 import axios from 'axios';
 
 export function useUploadContext() {
