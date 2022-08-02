@@ -8,6 +8,7 @@ import { CardContextProvider } from 'context/CardContext';
 import { ChannelContextProvider } from 'context/ChannelContext';
 import { StoreContextProvider } from 'context/StoreContext';
 import { UploadContextProvider } from 'context/UploadContext';
+import { ViewportContextProvider } from 'context/ViewportContext';
 import 'antd/dist/antd.min.css'; 
 
 function App() {
@@ -21,13 +22,15 @@ function App() {
               <ProfileContextProvider>
                 <AccountContextProvider>
                   <StoreContextProvider>
-                    <AppContextProvider>
-                      <div style={{ position: 'absolute', width: '100vw', height: '100vh', backgroundColor: '#8fbea7' }}>
-                        <img src={login} alt="" style={{ position: 'absolute', width: '33%', bottom: 0, right: 0 }}/>
-                      </div>
-                      <div style={{ position: 'absolute', width: '100vw', height: '100vh' }}>
-                      </div>
-                    </AppContextProvider>
+                    <ViewportContextProvider>
+                      <AppContextProvider>
+                        <div style={{ position: 'absolute', width: '100vw', height: '100vh', backgroundColor: '#8fbea7' }}>
+                          <img src={login} alt="" style={{ position: 'absolute', width: '33%', bottom: 0, right: 0 }}/>
+                        </div>
+                        <div style={{ position: 'absolute', width: '100vw', height: '100vh' }}>
+                        </div>
+                      </AppContextProvider>
+                    </ViewportContextProvider>
                   </StoreContextProvider>
                 </AccountContextProvider>
               </ProfileContextProvider>
