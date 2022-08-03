@@ -3,18 +3,18 @@ import { useEffect, useState } from 'react';
 export function useViewportContext() {
 
   const [state, setState] = useState({ });
+  const SMALL_MEDIUM = 600;
+  const MEDIUM_LARGE = 1600
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
   };
 
   const handleResize = () => {
-    console.log(window.innerWidth);
-    console.log(window.innerHeight);
-    if (window.innerWidth < 600) {
+    if (window.innerWidth < SMALL_MEDIUM) {
       updateState({ display: 'small' });
     }
-    else if (window.innerWidth < 1600) {
+    else if (window.innerWidth < MEDIUM_LARGE) {
       updateState({ display: 'medium' });
     }
     else {
@@ -28,7 +28,7 @@ export function useViewportContext() {
     return () => window.removeEventListener('resize', handleResize)
   }, []);
 
-  return state
+  return { state, actions: {} }
 }
 
 

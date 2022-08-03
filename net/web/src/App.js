@@ -1,4 +1,7 @@
-import login from './login.png';
+
+import 'antd/dist/antd.min.css'; 
+import { HashRouter as Router, Routes, Route } from "react-router-dom";
+
 import { AppContextProvider } from 'context/AppContext';
 import { AccountContextProvider } from 'context/AccountContext';
 import { ProfileContextProvider } from 'context/ProfileContext';
@@ -9,7 +12,10 @@ import { ChannelContextProvider } from 'context/ChannelContext';
 import { StoreContextProvider } from 'context/StoreContext';
 import { UploadContextProvider } from 'context/UploadContext';
 import { ViewportContextProvider } from 'context/ViewportContext';
-import 'antd/dist/antd.min.css'; 
+
+import { AppWrapper } from 'App.styled';
+import { Root } from './root/Root';
+import { Login } from './login/Login';
 
 function App() {
 
@@ -24,11 +30,14 @@ function App() {
                   <StoreContextProvider>
                     <ViewportContextProvider>
                       <AppContextProvider>
-                        <div style={{ position: 'absolute', width: '100vw', height: '100vh', backgroundColor: '#8fbea7' }}>
-                          <img src={login} alt="" style={{ position: 'absolute', width: '33%', bottom: 0, right: 0 }}/>
-                        </div>
-                        <div style={{ position: 'absolute', width: '100vw', height: '100vh' }}>
-                        </div>
+                        <AppWrapper>
+                          <Router>
+                            <Routes>
+                              <Route path="/" element={ <Root /> } />
+                              <Route path="/login" element={ <Login /> } />
+                            </Routes>
+                          </Router>
+                        </AppWrapper>
                       </AppContextProvider>
                     </ViewportContextProvider>
                   </StoreContextProvider>
