@@ -3,8 +3,9 @@ import { useEffect, useState } from 'react';
 export function useViewportContext() {
 
   const [state, setState] = useState({ });
-  const SMALL_MEDIUM = 600;
-  const MEDIUM_LARGE = 1600
+  const SMALL_MEDIUM = 640;
+  const MEDIUM_LARGE = 1024;
+  const LARGE_XLARGE = 1600;
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
@@ -17,8 +18,11 @@ export function useViewportContext() {
     else if (window.innerWidth < MEDIUM_LARGE) {
       updateState({ display: 'medium' });
     }
-    else {
+    else if (window.innerWidth < LARGE_XLARGE) {
       updateState({ display: 'large' });
+    }
+    else {
+      updateState({ display: 'xlarge' });
     }
   };
 

@@ -20,14 +20,11 @@ export function Login() {
 
   return (
     <LoginWrapper>
-      { viewport.state.display === 'large' && (
-        <div>LARGE</div>
+      { (viewport.state.display === 'large' || viewport.state.display === 'xlarge') && (
+        <div class="split-layout"></div>
       )}
-      { viewport.state.display === 'medium' && (
-        <div>MEDIUM</div>
-      )}
-      { viewport.state.display === 'small' && (
-        <div>SMALL</div>
+      { (viewport.state.display === 'medium' || viewport.state.display === 'small') && (
+        <div class="full-layout"></div>
       )}
     </LoginWrapper>
   );
