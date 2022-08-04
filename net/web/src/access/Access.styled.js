@@ -14,6 +14,9 @@ export const AccessWrapper = styled.div`
       height: 100%;
       border-radius: 4px;
       background: ${Colors.formBackground};
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
   }
 
@@ -38,6 +41,9 @@ export const AccessWrapper = styled.div`
       width: 50%;
       height: 100%;
       background: ${Colors.formBackground};
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
   }
 `;

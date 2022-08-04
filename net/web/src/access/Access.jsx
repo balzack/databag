@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { AppContext } from 'context/AppContext';
 import { ViewportContext } from 'context/ViewportContext';
 import { AccessWrapper } from './Access.styled';
+import { Login } from './login/Login';
 
 import login from 'images/login.png'
 
@@ -15,10 +16,17 @@ export function Access({ mode }) {
   useEffect(() => {
     if (app.state) {
       if (app.state.access) {
-        navigate('/user');
+        navigate('/session');
       }
     }
   }, [app]);
+
+  const Prompt = () => {
+    if (mode === 'login') {
+      return <Login />
+    }
+    return <></>
+  } 
 
   return (
     <AccessWrapper>
@@ -27,12 +35,16 @@ export function Access({ mode }) {
           <div class="left">
             <img class="splash" src={login} alt={login} />
           </div>
-          <div class="right">{ mode }</div>
+          <div class="right">
+            <Prompt />
+          </div>
         </div>
       )}
       { (viewport.state.display === 'medium' || viewport.state.display === 'small') && (
         <div class="full-layout">
-          <div class="center"></div>
+          <div class="center">
+            <Prompt />
+          </div>
         </div>
       )}
     </AccessWrapper>

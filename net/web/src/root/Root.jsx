@@ -10,7 +10,7 @@ export function Root() {
   useEffect(() => {
     if (app.state) {
       if (app.state.access) {
-        navigate('/user');
+        navigate('/session');
       }
       else {
         navigate('/login');

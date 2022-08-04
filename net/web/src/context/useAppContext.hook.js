@@ -47,19 +47,19 @@ export function useAppContext() {
 
   const actions = {
     logout: () => {
-      appLogout(updateState, clearWebsocket);
+      appLogout();
       storeContext.actions.clear();
       uploadContext.actions.clear();
       resetData();
     },
     access: async (token) => {
-      await appAccess(token, updateState, setWebsocket)
+      await appAccess(token)
     },
     login: async (username, password) => {
-      await appLogin(username, password, updateState, setWebsocket)
+      await appLogin(username, password)
     },
     create: async (username, password, token) => {
-      await appCreate(username, password, token, updateState, setWebsocket)
+      await appCreate(username, password, token)
     },
     username: getUsername,
     available: getAvailable,
@@ -72,7 +72,7 @@ export function useAppContext() {
     storeContext.actions.setValue('login:timestamp', access.created);
     setWebsocket(access.appToken)
     localStorage.setItem("session", JSON.stringify({
-      token: access.appToken,
+      access: access.appToken,
       timestamp: access.created,
     }));
     return access.created;
@@ -84,7 +84,7 @@ export function useAppContext() {
     storeContext.actions.setValue('login:timestamp', access.created);
     setWebsocket(access.appToken)
     localStorage.setItem("session", JSON.stringify({
-      token: access.appToken,
+      access: access.appToken,
       timestamp: access.created,
     }));
     return access.created;
@@ -170,9 +170,9 @@ export function useAppContext() {
     if (storage != null) {
       try {
         const session = JSON.parse(storage)
-        if (session?.token) {
-          setState({ token: session.token })
-          setWebsocket(session.token);   
+        if (session?.access) {
+          setState({ access: session.access })
+          setWebsocket(session.access);   
         } else {
           setState({})
         }
