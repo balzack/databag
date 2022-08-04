@@ -15,7 +15,7 @@ import { ViewportContextProvider } from 'context/ViewportContext';
 
 import { AppWrapper } from 'App.styled';
 import { Root } from './root/Root';
-import { Login } from './login/Login';
+import { Access } from './access/Access';
 
 function App() {
 
@@ -34,7 +34,8 @@ function App() {
                           <Router>
                             <Routes>
                               <Route path="/" element={ <Root /> } />
-                              <Route path="/login" element={ <Login /> } />
+                              <Route path="/login" element={ <Access mode="login" /> } />
+                              <Route path="/create" element={ <Access mode="create" /> } />
                             </Routes>
                           </Router>
                         </AppWrapper>

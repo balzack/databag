@@ -2,11 +2,11 @@ import React, { useContext, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import { AppContext } from 'context/AppContext';
 import { ViewportContext } from 'context/ViewportContext';
-import { LoginWrapper } from './Login.styled';
+import { AccessWrapper } from './Access.styled';
 
 import login from 'images/login.png'
 
-export function Login() {
+export function Access({ mode }) {
 
   const navigate = useNavigate();
   const app = useContext(AppContext);
@@ -21,13 +21,13 @@ export function Login() {
   }, [app]);
 
   return (
-    <LoginWrapper>
+    <AccessWrapper>
       { (viewport.state.display === 'large' || viewport.state.display === 'xlarge') && (
         <div class="split-layout">
           <div class="left">
             <img class="splash" src={login} alt={login} />
           </div>
-          <div class="right">RIGHT</div>
+          <div class="right">{ mode }</div>
         </div>
       )}
       { (viewport.state.display === 'medium' || viewport.state.display === 'small') && (
@@ -35,7 +35,7 @@ export function Login() {
           <div class="center"></div>
         </div>
       )}
-    </LoginWrapper>
+    </AccessWrapper>
   );
 }
 
