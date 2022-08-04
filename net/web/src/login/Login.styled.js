@@ -6,17 +6,38 @@ export const LoginWrapper = styled.div`
 
   .full-layout {
     width: 100%;
-    height: 100%; 
-    border-radius: 4px;
-    background: ${Colors.formBackground};
+    height: 100%;
+    padding: 8px;
+    
+    .center {
+      width: 100%;
+      height: 100%;
+      border-radius: 4px;
+      background: ${Colors.formBackground};
+    }
   }
 
   .split-layout {
-    position: relative;
-    left: 50%;
-    width: 50%;
+    display: flex;
+    flex-direction: row;
     height: 100%;
-    border-radius: 4px;
-    background: ${Colors.formBackground};
+
+    .left {
+      width: 50%;
+      height: 100%;
+      padding: 32px;
+
+      .splash {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+    }
+
+    .right {
+      width: 50%;
+      height: 100%;
+      background: ${Colors.formBackground};
+    }
   }
 `;
