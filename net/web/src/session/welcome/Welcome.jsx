@@ -1,0 +1,4 @@
+export function Welcome() {
+  return <></>;
+}
+
