@@ -40,7 +40,7 @@ export const CreateAccountWrapper = styled.div`
     flex: 2;
 
     .form-space {
-      height: 16px;
+      height: 8px;
     }
   
     .form-button {
@@ -48,8 +48,12 @@ export const CreateAccountWrapper = styled.div`
       align-items: center;
       justify-content: center;
 
-      .form-login {
+      .form-create {
         width: 50%;
+      }
+
+      .form-login {
+        padding-bottom: 8px;
       }
     }
   }

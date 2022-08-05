@@ -64,9 +64,11 @@ export  function CreateAccount() {
           </div>
 
           <div class="form-button">
-            <Button type="link" block onClick={(e) => actions.onLogin()}>
-              Account Login
-            </Button>
+            <div class="form-login">
+              <Button type="link" block onClick={(e) => actions.onLogin()}>
+                Account Login
+              </Button>
+            </div>
           </div>
 
         </Form>
