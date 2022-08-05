@@ -37,7 +37,7 @@ export function Access({ mode }) {
       { (viewport.state.display === 'large' || viewport.state.display === 'xlarge') && (
         <div class="split-layout">
           <div class="left">
-            <img class="splash" src={login} alt={login} />
+            <img class="splash" src={login} alt="Databag Splash" />
           </div>
           <div class="right">
             <Prompt />

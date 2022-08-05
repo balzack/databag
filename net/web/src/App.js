@@ -12,6 +12,7 @@ import { ChannelContextProvider } from 'context/ChannelContext';
 import { StoreContextProvider } from 'context/StoreContext';
 import { UploadContextProvider } from 'context/UploadContext';
 import { ViewportContextProvider } from 'context/ViewportContext';
+import { ConversationContextProvider } from 'context/ConversationContext';
 
 import { AppWrapper } from 'App.styled';
 import { Root } from './root/Root';
@@ -36,10 +37,15 @@ function App() {
                           <Router>
                             <Routes>
                               <Route path="/" element={ <Root /> } />
+                              <Route path="/admin" element={ <Admin /> } />
                               <Route path="/login" element={ <Access mode="login" /> } />
                               <Route path="/create" element={ <Access mode="create" /> } />
-                              <Route path="/session" element={ <Session /> } />
-                              <Route path="/admin" element={ <Admin /> } />
+                              <Route path="/session" element={
+                                <ConversationContextProvider>
+                                  <Session />
+                                </ConversationContextProvider>
+                              }>
+                              </Route>
                             </Routes>
                           </Router>
                         </AppWrapper>

@@ -89,7 +89,7 @@ export function useConversationContext() {
       members.add(conversation.guid);
     }
     for (let member of conversation.data.channelDetail.members) {
-      if (profile.state.profile.guid != member) {
+      if (profile.state.profile.guid !== member) {
         members.add(member);
       }
     }
@@ -132,7 +132,7 @@ export function useConversationContext() {
   const setTopicDelta = async (delta, curView) => {
     for (let topic of delta) {
       if (topic.data == null) {
-        if (curView == view.current) {
+        if (curView === view.current) {
           topics.current.delete(topic.id);
         }
       }
@@ -141,7 +141,7 @@ export function useConversationContext() {
         if (cur == null) {
           cur = { id: topic.id, data: {} };
         }
-        if (topic.data.detailRevision != cur.data.detailRevision) {
+        if (topic.data.detailRevision !== cur.data.detailRevision) {
           if(topic.data.topicDetail) {
             cur.data.topicDetail = topic.data.topicDetail;
             cur.data.detailRevision = topic.data.detailRevision;
@@ -153,7 +153,7 @@ export function useConversationContext() {
           }
         }
         cur.revision = topic.revision;
-        if (curView == view.current) {    
+        if (curView === view.current) {    
           topics.current.set(topic.id, cur);
         }
       }
@@ -163,7 +163,7 @@ export function useConversationContext() {
   const setTopics = async (ev) => {
     const curView = view.current;
     try {
-      if (ev.type == EVENT_OPEN) {
+      if (ev.type === EVENT_OPEN) {
         const { cardId, channelId } = ev.data;
         channelView.current.cardId = cardId;
         channelView.current.channelId = channelId;
@@ -175,7 +175,7 @@ export function useConversationContext() {
         channelView.current.revision = delta.revision;
         channelView.current.begin = delta.marker;
       }
-      else if (ev.type == EVENT_MORE) {
+      else if (ev.type === EVENT_MORE) {
         if (channelView.current.init) {
           channelView.current.batch += 1;
           let delta = await getTopicDelta(null, channelView.current.batch * TOPIC_BATCH, null, channelView.current.begin);
@@ -183,16 +183,16 @@ export function useConversationContext() {
           channelView.current.begin = delta.marker;
         }
       }
-      else if (ev.type == EVENT_UPDATE || ev.type == EVENT_RESYNC) {
+      else if (ev.type === EVENT_UPDATE || ev.type === EVENT_RESYNC) {
         let deltaRevision = getChannelRevision();
-        if (channelView.current.init && deltaRevision != channelView.current.revision) {
+        if (channelView.current.init && deltaRevision !== channelView.current.revision) {
           let delta = await getTopicDelta(channelView.current.revision, null, channelView.current.begin, null);
           await setTopicDelta(delta.topics, curView);
           channelView.current.revision = delta.revision;
         }
       }
 
-      if (curView == view.current) {
+      if (curView === view.current) {
         let chan = getChannel();
         let subject = getSubject(chan);
         let contacts = getContacts(chan);
@@ -211,7 +211,7 @@ export function useConversationContext() {
     catch (err) {
       console.log(err);
       updateState({ error: true });
-      if (ev.type == EVENT_RESYNC) {
+      if (ev.type === EVENT_RESYNC) {
         window.alert("failed to syncrhonize conversation");
       }
     }
@@ -222,14 +222,14 @@ export function useConversationContext() {
       return;
     }
 
-    if (serialize.current == 0) {
+    if (serialize.current === 0) {
       serialize.current++;
 
       while (events.current.length > 0) {
 
         // collapse updates
         while (events.current.length > 1) {
-          if(events.current[0].type == EVENT_UPDATE && events.current[1].type == EVENT_UPDATE) {
+          if(events.current[0].type === EVENT_UPDATE && events.current[1].type === EVENT_UPDATE) {
             events.current.shift();
           }
           else {
