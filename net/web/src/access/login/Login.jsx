@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
 import { Button, Modal, Form, Input } from 'antd';
 import { SettingOutlined, LockOutlined, UserOutlined } from '@ant-design/icons';
-import { LoginWrapper, SubmitButton } from './Login.styled';
+import { LoginWrapper } from './Login.styled';
 import { useLogin } from './useLogin.hook';
 
 export  function Login() {
@@ -40,12 +39,12 @@ export  function Login() {
 
           <Form.Item name="username">
             <Input placeholder="Username" spellCheck="false" onChange={(e) => actions.setUsername(e.target.value)}
-                autocapitalize="none" onKeyDown={(e) => keyDown(e)} prefix={<UserOutlined />} />
+                autocomplete="username" autocapitalize="none" onKeyDown={(e) => keyDown(e)} prefix={<UserOutlined />} />
           </Form.Item>
 
           <Form.Item name="password">
             <Input.Password placeholder="Password" spellCheck="false" onChange={(e) => actions.setPassword(e.target.value)}
-                onKeyDown={(e) => keyDown(e)} prefix={<LockOutlined />} />
+                autocomplete="current-password" onKeyDown={(e) => keyDown(e)} prefix={<LockOutlined />} />
           </Form.Item>
 
           <div class="form-button">

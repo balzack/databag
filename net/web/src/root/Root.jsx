@@ -16,7 +16,7 @@ export function Root() {
         navigate('/login');
       }
     }
-  }, [app]);
+  }, [app, navigate]);
 
   return <></>
 }

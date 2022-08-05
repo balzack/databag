@@ -4,6 +4,7 @@ import { AppContext } from 'context/AppContext';
 import { ViewportContext } from 'context/ViewportContext';
 import { AccessWrapper } from './Access.styled';
 import { Login } from './login/Login';
+import { CreateAccount } from './createAccount/CreateAccount';
 
 import login from 'images/login.png'
 
@@ -19,11 +20,14 @@ export function Access({ mode }) {
         navigate('/session');
       }
     }
-  }, [app]);
+  }, [app, navigate]);
 
   const Prompt = () => {
     if (mode === 'login') {
       return <Login />
+    }
+    if (mode === 'create') {
+      return <CreateAccount />
     }
     return <></>
   } 

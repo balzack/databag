@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect } from 'react';
 import { AppContext } from 'context/AppContext';
-import { useNavigate, useLocation, useParams } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 export function useLogin() {
 
@@ -37,7 +37,7 @@ export function useLogin() {
       navigate('/admin');
     },
     onLogin: async () => {
-      if (!state.busy && state.username != '' && state.password != '') {
+      if (!state.busy && state.username !== '' && state.password !== '') {
         updateState({ busy: true })
         try {
           await app.actions.login(state.username, state.password)
@@ -45,7 +45,7 @@ export function useLogin() {
         catch (err) {
           console.log(err);
           updateState({ busy: false })
-          throw 'login failed: check your username and password';
+          throw new Error('login failed: check your username and password');
         }
         updateState({ busy: false })
       }
@@ -92,7 +92,7 @@ export function useLogin() {
         count();
       }
     }
-  }, [app])
+  }, [app, navigate, search])
 
   return { state, actions };
 }
