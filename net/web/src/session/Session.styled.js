@@ -11,11 +11,31 @@ export const SessionWrapper = styled.div`
   }
 
   .desktop-layout {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+
     .left {
+      min-width: 256px;
+      max-width: 384px;
+      width: 20%;
+      height: 100%;
+      background-color: yellow; 
+      display: flex;
+      flex-direction: column;
     }
     .center {
+      flex-grow: 1;
     }
     .right {
+      min-width: 256px;
+      max-width: 384px;
+      width: 20%;
+      height: 100%;
+      background-color: yellow; 
+      display: flex;
+      flex-direction: column;
     }
   }
 

@@ -3,9 +3,9 @@ import { useEffect, useState } from 'react';
 export function useViewportContext() {
 
   const [state, setState] = useState({ });
-  const SMALL_MEDIUM = 640;
-  const MEDIUM_LARGE = 1024;
-  const LARGE_XLARGE = 1600;
+  const SMALL_MEDIUM = 600;
+  const MEDIUM_LARGE = 1000;
+  const LARGE_XLARGE = 1400;
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
