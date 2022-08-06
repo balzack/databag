@@ -39,18 +39,18 @@ export  function Login() {
 
           <Form.Item name="username">
             <Input placeholder="Username" spellCheck="false" onChange={(e) => actions.setUsername(e.target.value)}
-                autocomplete="username" autocapitalize="none" onKeyDown={(e) => keyDown(e)} prefix={<UserOutlined />} />
+                autocomplete="username" autocapitalize="none" onKeyDown={(e) => keyDown(e)} prefix={<UserOutlined />} size="large" />
           </Form.Item>
 
           <Form.Item name="password">
             <Input.Password placeholder="Password" spellCheck="false" onChange={(e) => actions.setPassword(e.target.value)}
-                autocomplete="current-password" onKeyDown={(e) => keyDown(e)} prefix={<LockOutlined />} />
+                autocomplete="current-password" onKeyDown={(e) => keyDown(e)} prefix={<LockOutlined />} size="large" />
           </Form.Item>
 
           <div class="form-button">
             <div class="form-login">
               <Button type="primary" block onClick={login} disabled={ actions.isDisabled()} 
-                  loading={state.busy}>
+                  size="middle" loading={state.busy}>
                 Login
               </Button>
             </div>
