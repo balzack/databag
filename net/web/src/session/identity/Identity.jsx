@@ -1,5 +1,3 @@
-import { useContext } from 'react';
-import { AppContext } from 'context/AppContext';
 import { Dropdown, Menu, Tooltip } from 'antd';
 import { Logo } from 'logo/Logo';
 import { IdentityWrapper } from './Identity.styled';

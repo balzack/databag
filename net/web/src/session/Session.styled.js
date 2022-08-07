@@ -40,14 +40,37 @@ export const SessionWrapper = styled.div`
   }
 
   .tablet-layout {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+
     .left {
+      min-width: 256px;
+      max-width: 384px;
+      width: 30%;
+      height: 100%;
+      background-color: yellow; 
+      display: flex;
+      flex-direction: column;
     }
-    .right {
+    .center {
+      flex-grow: 1;
     }
   }
 
   .mobile-layout {
-    .center {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    .top {
+      flex-grow: 1;
+      position: relative;
+    }
+    .bottom {
+      height: 48px;
     }
   }
 `;

@@ -13,6 +13,7 @@ import { Cards } from './cards/Cards';
 import { Contact } from './contact/Contact';
 import { Profile } from './profile/Profile';
 import { Welcome } from './welcome/Welcome';
+import { BottomNav } from './bottomNav/BottomNav';
 
 export function Session() {
 
@@ -107,7 +108,7 @@ export function Session() {
       )}
       { (viewport.state.display === 'small') && (
         <div class="mobile-layout">
-          <div class="center">
+          <div class="top">
             <Channels />
             { state.conversation && (
               <div class="reframe">
@@ -134,6 +135,9 @@ export function Session() {
                 <Profile />
               </div>
             )}
+          </div>
+          <div class="bottom">
+            <BottomNav state={state} actions={actions} />
           </div>
         </div>
       )}

@@ -27,11 +27,17 @@ export function useSession() {
     closeDetails: () => {
       updateState({ details: false });
     },
+    openCards: () => {
+      updateState({ cards: true });
+    },
     closeCards: () => {
       updateState({ cards: false });
     },
     closeContact: () => {
       updateState({ contact: false });
+    },
+    openProfile: () => {
+      updateState({ profile: true });
     },
     closeProfile: () => {
       updateState({ profile: false });
