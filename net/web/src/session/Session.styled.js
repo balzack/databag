@@ -24,9 +24,11 @@ export const SessionWrapper = styled.div`
       background-color: yellow; 
       display: flex;
       flex-direction: column;
+      position: relative;
     }
     .center {
       flex-grow: 1;
+      position: relative;
     }
     .right {
       min-width: 256px;
@@ -36,6 +38,7 @@ export const SessionWrapper = styled.div`
       background-color: yellow; 
       display: flex;
       flex-direction: column;
+      position: relative;
     }
   }
 
@@ -53,9 +56,11 @@ export const SessionWrapper = styled.div`
       background-color: yellow; 
       display: flex;
       flex-direction: column;
+      position: relative;
     }
     .center {
       flex-grow: 1;
+      position: relative;
     }
   }
 
@@ -71,6 +76,7 @@ export const SessionWrapper = styled.div`
     }
     .bottom {
       height: 48px;
+      position: relative;
     }
   }
 `;

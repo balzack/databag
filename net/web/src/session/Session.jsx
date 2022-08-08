@@ -109,7 +109,9 @@ export function Session() {
       { (viewport.state.display === 'small') && (
         <div class="mobile-layout">
           <div class="top">
-            <Channels />
+            <div class="reframe">
+              <Channels />
+            </div>
             { state.conversation && (
               <div class="reframe">
                 <Conversation cardId={state.cardId} conversationId={state.conversationId} />

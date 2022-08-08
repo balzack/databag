@@ -4,7 +4,7 @@ const Colors = {
   formBackground: '#f4f4f4',
   formHover: '#e8e8e8',
   grey: '#888888',
-  white: '#f8f8f8',
+  white: '#ffffff',
   divider: '#dddddd',
   encircle: '#cccccc',
   alert: '#ff8888',
