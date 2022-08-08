@@ -13,23 +13,27 @@ export function useViewportContext() {
 
   const handleResize = () => {
     if (window.innerWidth < SMALL_MEDIUM) {
-      updateState({ display: 'small' });
+      updateState({ display: 'small', width: window.innerWidth, height: window.innerHeight });
     }
     else if (window.innerWidth < MEDIUM_LARGE) {
-      updateState({ display: 'medium' });
+      updateState({ display: 'medium', width: window.innerWidth, height: window.innerHeight });
     }
     else if (window.innerWidth < LARGE_XLARGE) {
-      updateState({ display: 'large' });
+      updateState({ display: 'large', width: window.innerWidth, height: window.innerHeight });
     }
     else {
-      updateState({ display: 'xlarge' });
+      updateState({ display: 'xlarge', width: window.innerWidth, height: window.innerHeight });
     }
   };
 
   useEffect(() => {
     handleResize();
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
+    window.addEventListener('resize', handleResize);
+    window.addEventListener('orientationchange', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('orientationchange', handleResize);
+    }
   }, []);
 
   return { state, actions: {} }
