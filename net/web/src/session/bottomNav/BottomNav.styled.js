@@ -9,7 +9,6 @@ export const BottomNavWrapper = styled.div`
   align-items: center;
   justify-content: center;
   background-color: ${Colors.formBackground};
-  font-size: 24px;
 
   .nav-item {
     width: 33%;
@@ -18,16 +17,20 @@ export const BottomNavWrapper = styled.div`
     .nav-inactive {
       width: 100%;
       height: 100%;
+      color: ${Colors.disabled};
       padding-top: 8px;
       padding-bottom: 8px;
+      font-size: 20px;
+      cursor: pointer;
     }
 
     .nav-active {
       width: 100%;
       height: 100%;
-      background-color: ${Colors.formHover};
+      color: ${Colors.enabled};
       padding-top: 8px;
       padding-bottom: 8px;
+      font-size: 24px;
     }
 
     .nav-div-right {
@@ -46,10 +49,6 @@ export const BottomNavWrapper = styled.div`
       width: 100%;
       height: 100%;
       border-left: 1px solid ${Colors.divider};
-    }
-
-    .nav-button {
-      cursor: pointer;
     }
   }
 `;

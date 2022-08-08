@@ -49,12 +49,10 @@ export function BottomNav({ state, actions }) {
         </div>
       )}
       { (state.cards || state.contact || state.profile) && (
-        <div class="nav-item">
+        <div class="nav-item" onClick={() => setChannels()}>
           <div class="nav-inactive">
             <div class="nav-div-right">
-              <div class="nav-button" onClick={() => setChannels()}>
-                <CommentOutlined />
-              </div>
+              <CommentOutlined />
             </div>
           </div>
         </div>
@@ -69,12 +67,10 @@ export function BottomNav({ state, actions }) {
         </div>
       )}
       { !state.profile && (
-        <div class="nav-item">
+        <div class="nav-item" onClick={() => setProfile()}>
           <div class="nav-inactive">
             <div class="nav-div-right nav-div-left">
-              <div class="nav-button" onClick={() => setProfile()}>
-                <UserOutlined />
-              </div>
+              <UserOutlined />
             </div>
           </div>
         </div>
@@ -89,12 +85,10 @@ export function BottomNav({ state, actions }) {
         </div>
       )}
       { ((!state.cards && !state.contact) || state.profile) && (
-        <div class="nav-item">
+        <div class="nav-item" onClick={() => setCards()}>
           <div class="nav-inactive">
             <div class="nav-div-left">
-              <div class="nav-button" onClick={() => setCards()}>
-                <TeamOutlined />
-              </div>
+              <TeamOutlined />
             </div>
           </div>
         </div>
