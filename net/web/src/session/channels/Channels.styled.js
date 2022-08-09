@@ -7,6 +7,7 @@ export const ChannelsWrapper = styled.div`
   display: flex;
   flex-direction: column;
   background-color: ${Colors.formBackground};
+  min-height: 0;
 
   .search {
     padding: 8px;
@@ -17,4 +18,8 @@ export const ChannelsWrapper = styled.div`
       border-radius: 8px;
     }
   }
+
+  .results {
+    min-height: 0;
+    overflow: scroll;
 `;

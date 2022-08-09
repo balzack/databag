@@ -25,6 +25,7 @@ export const SessionWrapper = styled.div`
       display: flex;
       flex-direction: column;
       position: relative;
+      min-height: 0;
     }
     .center {
       flex-grow: 1;
@@ -57,6 +58,7 @@ export const SessionWrapper = styled.div`
       display: flex;
       flex-direction: column;
       position: relative;
+      min-height: 0;
     }
     .center {
       flex-grow: 1;
