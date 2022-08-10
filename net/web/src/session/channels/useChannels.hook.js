@@ -86,6 +86,20 @@ export function useChannels() {
     chan.subject = subject;  
   }
 
+  const setMessage = (chan) => {
+    let message = "";
+    if (chan.data.channelSummary?.lastTopic?.dataType === 'superbasictopic') {
+      try {
+        message = JSON.parse(chan.data.channelSummary.lastTopic.data).text;
+      }
+      catch (err) {
+        console.log(err);
+      }
+    }
+
+    chan.message = message;
+  } 
+
   useEffect(() => {
     let merged = [];
     card.state.cards.forEach((value, key, map) => {
@@ -104,6 +118,7 @@ export function useChannels() {
       setUpdated(chan);
       setContacts(chan);
       setSubject(chan);
+      setMessage(chan);
     }); 
 
     const filtered = merged.filter((chan) => {

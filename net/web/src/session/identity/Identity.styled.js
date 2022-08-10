@@ -9,7 +9,7 @@ export const IdentityWrapper = styled.div`
   align-items: center;
   padding-left: 16px;
   padding-right: 16px;
-  border-bottom: 1px solid ${Colors.divider};
+  border-bottom: 3px solid ${Colors.divider};
   background-color: ${Colors.formBackground};
 
   &:hover {

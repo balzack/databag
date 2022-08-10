@@ -19,6 +19,7 @@ export const ChannelItemWrapper = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
+    min-width: 0;
 
     .logo {
       display: flex;
@@ -29,14 +30,39 @@ export const ChannelItemWrapper = styled.div`
       height: 32px;
       border-radius: 8px;
       font-size: 18px;
+      flex-shrink: 0;
     }
 
-    .subject {
-      padding-left: 16px;
+    .details {
       flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      padding-left: 16px;
+      justify-content: center;
+      min-width: 0;
+
+      .subject {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .message {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        color: ${Colors.disabled};
+      }
     }
 
     .markup {
+      position: absolute;
+      right: 0;
+      border-radius: 8px;
+      background-color: ${Colors.background};
+      width: 8px;
+      height: 8px;
+      margin-right: 16px;
     }
   }
 `;
