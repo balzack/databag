@@ -5,25 +5,38 @@ export const ChannelItemWrapper = styled.div`
   height: 48px;
   width: 100%;
   display: flex;
-  flex-direction: row;
-  flex-align: center;
+  align-items: center;
   border-bottom: 1px solid ${Colors.divider};
+  padding-left: 16px;
+  padding-right: 16px;
 
-  .logo {
+  &:hover {
+    background-color: ${Colors.formHover};
+    cursor: pointer;
+  }
+
+  .item {
     display: flex;
+    flex-direction: row;
     align-items: center;
-    justify-content: center;
-    border: 1px solid ${Colors.grey};
-    width: 32px;
-    height: 32px;
-    border-radius: 8px;
-    font-size: 18px;
-  }
 
-  .subject {
-    flex-grow: 1;
-  }
+    .logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid ${Colors.grey};
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      font-size: 18px;
+    }
 
-  .markup {
+    .subject {
+      padding-left: 16px;
+      flex-grow: 1;
+    }
+
+    .markup {
+    }
   }
 `;

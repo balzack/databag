@@ -8,13 +8,12 @@ export function Channels() {
 
   const { state, actions } = useChannels();
 
-console.log(state);
-
   return (
     <ChannelsWrapper>
       <div class="search">
         <div class="filter">
-          <Input bordered={false} allowClear={true} placeholder="Channels" prefix={<SearchOutlined />} />
+          <Input bordered={false} allowClear={true} placeholder="Channels" prefix={<SearchOutlined />}
+              size="large" spellCheck="false" onChange={(e) => actions.onFilter(e.target.value)} />
         </div>
       </div>
       <div class="results">

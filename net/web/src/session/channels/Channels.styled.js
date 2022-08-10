@@ -8,9 +8,11 @@ export const ChannelsWrapper = styled.div`
   flex-direction: column;
   background-color: ${Colors.formBackground};
   min-height: 0;
+  overflow: scroll;
 
   .search {
-    padding: 8px;
+    padding: 16px;
+    border-bottom: 1px solid ${Colors.divider};
 
     .filter {
       border: 1px solid ${Colors.divider};
@@ -20,6 +22,5 @@ export const ChannelsWrapper = styled.div`
   }
 
   .results {
-    min-height: 0;
-    overflow: scroll;
+  }
 `;
