@@ -33,10 +33,12 @@ export function Session() {
   return (
     <SessionWrapper>
       { (viewport.state.display === 'xlarge') && (
-        <div class="desktop-layout">
+        <div class="desktop-layout noselect">
           <div class="left">
             <Identity />
-            <Channels />
+            <div class="bottom">
+              <Channels />
+            </div>
           </div>
           <div class="center">
             { state.conversation && (
@@ -71,10 +73,12 @@ export function Session() {
         </div>
       )}
       { (viewport.state.display === 'large' || viewport.state.display === 'medium') && (
-        <div class="tablet-layout">
+        <div class="tablet-layout noselect">
           <div class="left">
             <Identity />
-            <Channels />
+            <div class="bottom">
+              <Channels />
+            </div>
           </div>
           <div class="right">
             <Welcome />
@@ -107,7 +111,7 @@ export function Session() {
         </div>
       )}
       { (viewport.state.display === 'small') && (
-        <div class="mobile-layout">
+        <div class="mobile-layout noselect">
           <div class="top">
             <div class="reframe">
               <Channels />

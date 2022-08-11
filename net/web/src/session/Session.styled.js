@@ -26,6 +26,10 @@ export const SessionWrapper = styled.div`
       flex-direction: column;
       position: relative;
       min-height: 0;
+
+      .bottom {
+        height: calc(100% - 64px);
+      }
     }
     .center {
       flex-grow: 1;
@@ -59,6 +63,10 @@ export const SessionWrapper = styled.div`
       flex-direction: column;
       position: relative;
       min-height: 0;
+
+      .bottom {
+        height: calc(100% - 64px);
+      }
     }
     .center {
       flex-grow: 1;

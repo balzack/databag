@@ -7,20 +7,21 @@ export const ChannelsWrapper = styled.div`
   display: flex;
   flex-direction: column;
   background-color: ${Colors.formBackground};
-  min-height: 0;
-  overflow: scroll;
 
-  .search {
-    padding: 16px;
-    border-bottom: 1px solid ${Colors.divider};
+  .view {
+    min-height: 0;
+    overflow: scroll;
+    flex-grow: 1;
+    
+    .search {
+      padding: 16px;
+      border-bottom: 1px solid ${Colors.divider};
 
-    .filter {
-      border: 1px solid ${Colors.divider};
-      background-color: ${Colors.white};
-      border-radius: 8px;
+      .filter {
+        border: 1px solid ${Colors.divider};
+        background-color: ${Colors.white};
+        border-radius: 8px;
+      }
     }
-  }
-
-  .results {
   }
 `;
