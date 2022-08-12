@@ -35,7 +35,7 @@ export function Session() {
       { (viewport.state.display === 'xlarge') && (
         <div class="desktop-layout noselect">
           <div class="left">
-            <Identity />
+            <Identity openCards={actions.openCards} />
             <div class="bottom">
               <Channels />
             </div>
@@ -75,7 +75,7 @@ export function Session() {
       { (viewport.state.display === 'large' || viewport.state.display === 'medium') && (
         <div class="tablet-layout noselect">
           <div class="left">
-            <Identity />
+            <Identity openCards={actions.openCards} />
             <div class="bottom">
               <Channels />
             </div>
@@ -87,16 +87,16 @@ export function Session() {
                 <Conversation cardId={state.cardId} conversationId={state.conversationId} />
               </div>
             )}
-            <Drawer width={'33%'} closable={false} onClose={actions.closeDetails} visible={state.details} zIndex={10}>
+            <Drawer bodyStyle={{ padding: 0 }} width={'33%'} closable={false} onClose={actions.closeDetails} visible={state.details} zIndex={10}>
               { state.details && (
                 <Details cardId={state.cardId} conversationId={state.conversationId} />
               )}
             </Drawer>
-            <Drawer width={'33%'} closable={false} onClose={actions.closeCards} visible={state.cards} zIndex={20}>
+            <Drawer bodyStyle={{ padding: 0 }} width={'33%'} closable={false} onClose={actions.closeCards} visible={state.cards} zIndex={20}>
               { state.cards && (
                 <Cards />
               )}
-              <Drawer width={'33%'} closable={false} onClose={actions.closeContact} visible={state.contact} zIndex={30}>
+              <Drawer bodyStyle={{ padding: 0 }} width={'33%'} closable={false} onClose={actions.closeContact} visible={state.contact} zIndex={30}>
                 { state.contact && (
                   <Contact guid={state.contactGuid} />
                 )}

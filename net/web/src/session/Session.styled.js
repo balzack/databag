@@ -68,9 +68,13 @@ export const SessionWrapper = styled.div`
         height: calc(100% - 64px);
       }
     }
-    .center {
+    .right {
       flex-grow: 1;
       position: relative;
+
+      .drawer {
+        padding: 0px;
+      }
     }
   }
 
@@ -87,7 +91,7 @@ export const SessionWrapper = styled.div`
     .bottom {
       height: 48px;
       position: relative;
-      box-shadow: 0px -8px 16px 0px rgba(0,0,0,0.3);
+      box-shadow: 0px 0px 8px 0px rgba(0,0,0,0.3);
     }
   }
 `;

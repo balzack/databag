@@ -12,12 +12,12 @@ export function AddTopic() {
         <div class="bar">
           <div class="add">
             <CommentOutlined />
-            <div class="label">New Topic</div>
+            <div class="label">New Channel</div>
           </div>
         </div>
       )}
       { state.mode === 'button' && (
-        <div class="button">New Topic</div>
+        <div class="button">New Channel</div>
       )}
     </AddTopicWrapper>
   );

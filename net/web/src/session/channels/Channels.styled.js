@@ -6,7 +6,7 @@ export const ChannelsWrapper = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  background-color: ${Colors.formBackground};
+  background-color: ${Colors.formFocus};
 
   .view {
     min-height: 0;

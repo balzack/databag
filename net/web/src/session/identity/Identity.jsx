@@ -4,7 +4,7 @@ import { IdentityWrapper } from './Identity.styled';
 import { useIdentity } from './useIdentity.hook';
 import { ExclamationCircleOutlined, DownOutlined } from '@ant-design/icons';
 
-export function Identity() {
+export function Identity({ openCards }) {
 
   const { state, actions } = useIdentity();
 
@@ -14,7 +14,7 @@ export function Identity() {
         <div>Edit Profile</div>
       </Menu.Item>
       <Menu.Item key="1">
-        <div>Change Login</div>
+        <div onClick={openCards} >Manage Contacts</div>
       </Menu.Item>
       <Menu.Item key="2">
         <div onClick={actions.logout}>Logout</div>

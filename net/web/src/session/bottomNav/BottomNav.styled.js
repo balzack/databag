@@ -8,7 +8,7 @@ export const BottomNavWrapper = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  background-color: ${Colors.formBackground};
+  background-color: ${Colors.primary};
 
   .nav-item {
     width: 33%;
@@ -27,7 +27,7 @@ export const BottomNavWrapper = styled.div`
     .nav-active {
       width: 100%;
       height: 100%;
-      color: ${Colors.enabled};
+      color: ${Colors.formFocus};
       padding-top: 8px;
       padding-bottom: 8px;
       font-size: 24px;

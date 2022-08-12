@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import Colors from 'constants/Colors';
 
 export const AddTopicWrapper = styled.div`
+  background-color: ${Colors.formBackground};
 
   .button {
     position: absolute;
