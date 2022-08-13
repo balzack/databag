@@ -1,10 +1,10 @@
 import { Dropdown, Menu, Tooltip } from 'antd';
 import { Logo } from 'logo/Logo';
-import { IdentityWrapper } from './Identity.styled';
+import { IdentityWrapper, ErrorNotice, InfoNotice } from './Identity.styled';
 import { useIdentity } from './useIdentity.hook';
-import { ExclamationCircleOutlined, DownOutlined } from '@ant-design/icons';
+import { InfoCircleOutlined, ExclamationCircleOutlined, DownOutlined } from '@ant-design/icons';
 
-export function Identity({ openCards }) {
+export function Identity({ openCards, cardUpdated }) {
 
   const { state, actions } = useIdentity();
 
@@ -31,15 +31,25 @@ export function Identity({ openCards }) {
         <div class="label">
           <div class="name">{state.name}</div>
           <div class="handle">
-            <div class="alert">
+            <div class="notice">
               { state.disconnected && ( 
                 <Tooltip placement="right" title="disconnected from server">
-                  <ExclamationCircleOutlined />
+                  <ErrorNotice>
+                    <ExclamationCircleOutlined />
+                  </ErrorNotice>
                 </Tooltip>
               )}
             </div>
             <div>{state.handle}</div>
-            <div class="alert"></div>
+            <div class="notice">
+              { cardUpdated && (
+                <Tooltip placement="right" title="contacts have updated">
+                  <InfoNotice>
+                    <InfoCircleOutlined />
+                  </InfoNotice>
+                </Tooltip>
+              )}
+            </div>
           </div>
         </div>
         <div class="drop">

@@ -35,7 +35,7 @@ export function Session() {
       { (viewport.state.display === 'xlarge') && (
         <div class="desktop-layout noselect">
           <div class="left">
-            <Identity openCards={actions.openCards} />
+            <Identity openCards={actions.openCards} cardUpdated={state.cardUpdated} />
             <div class="bottom">
               <Channels />
             </div>
@@ -75,7 +75,7 @@ export function Session() {
       { (viewport.state.display === 'large' || viewport.state.display === 'medium') && (
         <div class="tablet-layout noselect">
           <div class="left">
-            <Identity openCards={actions.openCards} />
+            <Identity openCards={actions.openCards} cardUpdated={state.cardUpdated} />
             <div class="bottom">
               <Channels />
             </div>

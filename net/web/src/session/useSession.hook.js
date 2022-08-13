@@ -1,8 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useContext, useState, useEffect, useRef } from 'react';
+import { CardContext } from 'context/CardContext';
+import { StoreContext } from 'context/StoreContext';
 
 export function useSession() {
 
   const [state, setState] = useState({
+    cardUpdated: false,
     conversation: false,
     details: false,
     cards: false,
@@ -10,18 +13,39 @@ export function useSession() {
     profile: false,
   });
 
+  const card = useContext(CardContext);
+  const store = useContext(StoreContext);
+  
+  const storeStatus = useRef(null);
+  const cardStatus = useRef(null);
+
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
   }
 
   useEffect(() => {
-    setTimeout(() => {
-      updateState({ cards: true });
-    }, 1000);
-    setTimeout(() => {
-      updateState({ contact: true });
-    }, 2000);
-  }, []);
+    const contacts = Array.from(card.state.cards.values());
+    
+    let updated;
+    contacts.forEach(contact => {
+      if (!updated || updated < contact?.data?.cardDetail?.statusUpdated) {
+        updated = contact?.data?.cardDetail?.statusUpdated;
+      }
+    });
+
+    if (state.cards) {
+      cardStatus.current = updated;
+      storeStatus.current = updated;
+      store.actions.setValue('cards:updated', updated);
+    }
+
+    updateState({ cardUpdated: cardStatus.current > storeStatus.current });
+  }, [card]);
+
+  useEffect(() => {
+    storeStatus.current = store.actions.getValue('cards:updated');
+    updateState({ cardUpdated: cardStatus.current > storeStatus.current });
+  }, [store]);
 
   const actions = {
     closeDetails: () => {

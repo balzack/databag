@@ -1,6 +1,6 @@
 import { Input, List } from 'antd';
 import { CardsWrapper } from './Cards.styled';
-import { RightOutlined, UserOutlined, SearchOutlined } from '@ant-design/icons';
+import { SortAscendingOutlined, RightOutlined, UserOutlined, SearchOutlined } from '@ant-design/icons';
 import { useCards } from './useCards.hook';
 import { CardItem } from './cardItem/CardItem';
 
@@ -12,6 +12,16 @@ export function Cards({ close }) {
     <CardsWrapper>
       <div class="view">
         <div class="search">
+          { !state.sorted && (
+            <div class="unsorted" onClick={() => actions.setSort(true)}>
+              <SortAscendingOutlined />
+            </div>
+          )}
+          { state.sorted && (
+            <div class="sorted" onClick={() => actions.setSort(false)}>
+              <SortAscendingOutlined />
+            </div>
+          )}
           <div class="filter">
             <Input bordered={false} allowClear={true} placeholder="Contacts" prefix={<SearchOutlined />}
                 size="large" spellCheck="false" onChange={(e) => actions.onFilter(e.target.value)} />

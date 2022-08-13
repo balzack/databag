@@ -47,11 +47,21 @@ export const IdentityWrapper = styled.div`
       align-items: center;
       font-weight: bold;
 
-      .alert {
-        width: 24px;
-        color: ${Colors.alert};
+      .notice {
+        width: 32px;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
       }
     }
   }
 `;
+
+export const ErrorNotice = styled.div`
+  color: ${Colors.alert};
+`
+
+export const InfoNotice = styled.div`
+  color: ${Colors.primary};
+`
 

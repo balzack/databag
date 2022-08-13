@@ -1,3 +1,3 @@
-export function CardItem() {
-  return <div>CARD ITEM</div>
+export function CardItem({ item }) {
+  return <div>{ item?.data?.cardProfile?.name }</div>
 }

@@ -19,6 +19,25 @@ export const CardsWrapper = styled.div`
       display: flex;
       flex-direction: row;
 
+      .sorted {
+        color: ${Colors.enabled};
+        font-size: 18px;
+        padding-right: 8px;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+      }
+
+      .unsorted {
+        color: ${Colors.disabled};
+        font-size: 18px;
+        padding-right: 8px;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+      }
+
+
       .filter {
         border: 1px solid ${Colors.divider};
         background-color: ${Colors.white};
@@ -70,7 +89,7 @@ export const CardsWrapper = styled.div`
     padding-left: 16px;
     padding-right: 16px;
     border-radius: 4px;
-    font-size: 18px;
+    font-size: 14px;
     cursor: pointer;
     height: 100%;
 
