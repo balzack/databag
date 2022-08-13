@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import Colors from 'constants/Colors';
 
-export const ChannelsWrapper = styled.div`
+export const CardsWrapper = styled.div`
   height: 100%;
   width: 100%;
   display: flex;
@@ -35,6 +35,12 @@ export const ChannelsWrapper = styled.div`
         flex-direction: row;
         align-items: center;
         justify-content: center;
+      }
+
+      .dismiss {
+        font-size: 18px;
+        color: ${Colors.text};
+        cursor: pointer;
       }
     }
   }

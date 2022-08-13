@@ -66,7 +66,7 @@ export function Session() {
             )}
             { state.cards && (
               <div class="reframe">
-                <Cards />
+                <Cards close={actions.closeCards} />
               </div>
             )}
           </div>
@@ -94,7 +94,7 @@ export function Session() {
             </Drawer>
             <Drawer bodyStyle={{ padding: 0 }} width={'33%'} closable={false} onClose={actions.closeCards} visible={state.cards} zIndex={20}>
               { state.cards && (
-                <Cards />
+                <Cards close={actions.closeCards} />
               )}
               <Drawer bodyStyle={{ padding: 0 }} width={'33%'} closable={false} onClose={actions.closeContact} visible={state.contact} zIndex={30}>
                 { state.contact && (
@@ -128,7 +128,7 @@ export function Session() {
             )}
             { state.cards && (
               <div class="reframe">
-                <Cards />
+                <Cards close={actions.closeCards} />
               </div>
             )}
             { state.contact && (

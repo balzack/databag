@@ -11,6 +11,7 @@ const Colors = {
   alert: '#ff8888',
   enabled: '#444444',
   disabled: '#aaaaaa',
+  text: '#444444',
 };
 
 export default Colors;

@@ -3,12 +3,14 @@ import { StoreContext } from 'context/StoreContext';
 import { ChannelContext } from 'context/ChannelContext';
 import { CardContext } from 'context/CardContext';
 import { ProfileContext } from 'context/ProfileContext';
+import { ViewportContext } from 'context/ViewportContext';
 
 export function useChannels() {
 
   const [filter, setFilter] = useState(null);
 
   const [state, setState] = useState({
+    display: null,
     channels: [],
     busy: false }
   );
@@ -17,6 +19,7 @@ export function useChannels() {
   const channel = useContext(ChannelContext);
   const store = useContext(StoreContext);
   const profile = useContext(ProfileContext);
+  const viewport = useContext(ViewportContext);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
@@ -129,6 +132,11 @@ export function useChannels() {
     updateState({ channels: filtered });
 
   }, [channel, card, store, filter]);
+
+  useEffect(() => {
+console.log(viewport.state);
+    updateState({ display: viewport.state.display });
+  }, [viewport]);
 
   return { state, actions };
 }

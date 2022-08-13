@@ -4,8 +4,6 @@ import { AppstoreFilled, SolutionOutlined } from '@ant-design/icons';
 
 export function ChannelItem({ item }) {
 
-console.log(item.contacts);
-
   return (
     <ChannelItemWrapper>
       { item.contacts.length === 0 && (
