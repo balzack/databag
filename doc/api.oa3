@@ -3510,6 +3510,9 @@ components:
         status:
           type: string
           enum: [ pending, confirmed, requested, connecting, connected ]
+        statusUpdated:
+          type: integer
+          format: int64
         token:
           type: string
         notes:

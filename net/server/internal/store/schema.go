@@ -151,6 +151,7 @@ type Card struct {
   ProfileRevision   int64           `gorm:"not null"`
   DetailRevision    int64           `gorm:"not null;default:1"`
   Status            string          `gorm:"not null"`
+  StatusUpdated     int64
   InToken           string          `gorm:"not null;index:cardguid,unique"`
   OutToken          string
   Notes             string
