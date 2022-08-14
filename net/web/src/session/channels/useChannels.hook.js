@@ -134,7 +134,6 @@ export function useChannels() {
   }, [channel, card, store, filter]);
 
   useEffect(() => {
-console.log(viewport.state);
     updateState({ display: viewport.state.display });
   }, [viewport]);
 

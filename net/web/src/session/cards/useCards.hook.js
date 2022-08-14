@@ -44,7 +44,7 @@ export function useCards() {
 
     if (state.sorted) {
       filtered.sort((a, b) => {
-        if (a?.data?.cardProfile?.name > b?.data?.cardProfile?.name) {
+        if (a?.data?.cardProfile?.name < b?.data?.cardProfile?.name) {
           return -1;
         }
         return 1;
@@ -52,7 +52,10 @@ export function useCards() {
     }
     else {
       filtered.sort((a, b) => {
-        if (a?.data?.cardDetails?.statusUpdated > b?.data?.cardDetails?.statusUpdated) {
+        const aUpdated = a?.data?.cardDetail?.statusUpdated;
+        const bUpdated = b?.data?.cardDetail?.statusUpdated;
+
+        if ((aUpdated && !bUpdated) || aUpdated && bUpdated && aUpdated > bUpdated) {
           return -1;
         }
         return 1;

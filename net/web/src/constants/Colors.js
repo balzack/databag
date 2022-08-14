@@ -12,6 +12,12 @@ const Colors = {
   enabled: '#444444',
   disabled: '#aaaaaa',
   text: '#444444',
+
+  connected: '#44cc44',
+  connecting: '#dd88ff',
+  requested: '#4488ff',
+  pending: '#22aaaa',
+  confirmed: '#aaaaaa',
 };
 
 export default Colors;
