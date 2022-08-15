@@ -12,30 +12,30 @@ export const ChannelsWrapper = styled.div`
     min-height: 0;
     overflow: scroll;
     flex-grow: 1;
-    
-    .search {
-      padding: 16px;
-      border-bottom: 1px solid ${Colors.divider};
+  }
+ 
+  .search {
+    padding: 12px;
+    border-bottom: 1px solid ${Colors.divider};
+    display: flex;
+    flex-direction: row;
+
+    .filter {
+      border: 1px solid ${Colors.divider};
+      background-color: ${Colors.white};
+      border-radius: 8px;
+      flex-grow: 1;
+    }
+
+    .inline {
+      padding-left: 8px;
       display: flex;
+      flex-shrink: 0;
+      align-items: center;
+      justify-content: center;
       flex-direction: row;
-
-      .filter {
-        border: 1px solid ${Colors.divider};
-        background-color: ${Colors.white};
-        border-radius: 8px;
-        flex-grow: 1;
-      }
-
-      .inline {
-        padding-left: 8px;
-        display: flex;
-        flex-shrink: 0;
-        align-items: center;
-        justify-content: center;
-        flex-direction: row;
-        align-items: center;
-        justify-content: center;
-      }
+      align-items: center;
+      justify-content: center;
     }
   }
 

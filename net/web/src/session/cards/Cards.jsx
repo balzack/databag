@@ -10,38 +10,38 @@ export function Cards({ close }) {
 
   return (
     <CardsWrapper>
-      <div class="view">
-        <div class="search">
-          { !state.sorted && (
-            <div class="unsorted" onClick={() => actions.setSort(true)}>
-              <SortAscendingOutlined />
-            </div>
-          )}
-          { state.sorted && (
-            <div class="sorted" onClick={() => actions.setSort(false)}>
-              <SortAscendingOutlined />
-            </div>
-          )}
-          <div class="filter">
-            <Input bordered={false} allowClear={true} placeholder="Contacts" prefix={<SearchOutlined />}
-                size="large" spellCheck="false" onChange={(e) => actions.onFilter(e.target.value)} />
+      <div class="search">
+        { !state.sorted && (
+          <div class="unsorted" onClick={() => actions.setSort(true)}>
+            <SortAscendingOutlined />
           </div>
-          { state.display === 'small' && (
-            <div class="inline">
-              <div class="add">
-                <UserOutlined />
-                <div class="label">New</div>
-              </div>
-            </div>
-          )}
-          { state.display !== 'small' && (
-            <div class="inline">
-              <div class="dismiss" onClick={close} >
-                <RightOutlined />
-              </div>
-            </div>
-          )}
+        )}
+        { state.sorted && (
+          <div class="sorted" onClick={() => actions.setSort(false)}>
+            <SortAscendingOutlined />
+          </div>
+        )}
+        <div class="filter">
+          <Input bordered={false} allowClear={true} placeholder="Contacts" prefix={<SearchOutlined />}
+              size="large" spellCheck="false" onChange={(e) => actions.onFilter(e.target.value)} />
         </div>
+        { state.display === 'small' && (
+          <div class="inline">
+            <div class="add">
+              <UserOutlined />
+              <div class="label">New</div>
+            </div>
+          </div>
+        )}
+        { state.display !== 'small' && (
+          <div class="inline">
+            <div class="dismiss" onClick={close} >
+              <RightOutlined />
+            </div>
+          </div>
+        )}
+      </div>
+      <div class="view">
         <List local={{ emptyText: '' }} itemLayout="horizontal" dataSource={state.cards} gutter="0"
           renderItem={item => (
             <CardItem item={item} />

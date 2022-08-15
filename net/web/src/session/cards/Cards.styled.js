@@ -12,55 +12,55 @@ export const CardsWrapper = styled.div`
     min-height: 0;
     overflow: scroll;
     flex-grow: 1;
-    
-    .search {
-      padding: 16px;
-      border-bottom: 1px solid ${Colors.divider};
+  }
+  
+  .search {
+    padding: 12px;
+    border-bottom: 1px solid ${Colors.divider};
+    display: flex;
+    flex-direction: row;
+
+    .sorted {
+      color: ${Colors.enabled};
+      font-size: 18px;
+      padding-right: 8px;
       display: flex;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .unsorted {
+      color: ${Colors.disabled};
+      font-size: 18px;
+      padding-right: 8px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+    }
+
+
+    .filter {
+      border: 1px solid ${Colors.divider};
+      background-color: ${Colors.white};
+      border-radius: 8px;
+      flex-grow: 1;
+    }
+
+    .inline {
+      padding-left: 8px;
+      display: flex;
+      flex-shrink: 0;
+      align-items: center;
+      justify-content: center;
       flex-direction: row;
+      align-items: center;
+      justify-content: center;
+    }
 
-      .sorted {
-        color: ${Colors.enabled};
-        font-size: 18px;
-        padding-right: 8px;
-        display: flex;
-        align-items: center;
-        cursor: pointer;
-      }
-
-      .unsorted {
-        color: ${Colors.disabled};
-        font-size: 18px;
-        padding-right: 8px;
-        display: flex;
-        align-items: center;
-        cursor: pointer;
-      }
-
-
-      .filter {
-        border: 1px solid ${Colors.divider};
-        background-color: ${Colors.white};
-        border-radius: 8px;
-        flex-grow: 1;
-      }
-
-      .inline {
-        padding-left: 8px;
-        display: flex;
-        flex-shrink: 0;
-        align-items: center;
-        justify-content: center;
-        flex-direction: row;
-        align-items: center;
-        justify-content: center;
-      }
-
-      .dismiss {
-        font-size: 18px;
-        color: ${Colors.text};
-        cursor: pointer;
-      }
+    .dismiss {
+      font-size: 18px;
+      color: ${Colors.text};
+      cursor: pointer;
     }
   }
 
