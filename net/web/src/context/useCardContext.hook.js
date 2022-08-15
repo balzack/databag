@@ -206,7 +206,6 @@ export function useCardContext() {
         }
         catch (err) {
           console.log(err);
-          window.alert("failed to connect to contact");
         }
       } 
      
@@ -360,9 +359,9 @@ export function useCardContext() {
       let token = card.data.cardProfile.guid + "." + card.data.cardDetail.token;
       return getContactChannelTopicAssetUrl(node, token, channelId, topicId, assetId);
     },
-    resync: (cardId) => {
+    resync: async (cardId) => {
       resync.current.push(cardId);
-      setCards(null);
+      await setCards(null);
     }
   }
 

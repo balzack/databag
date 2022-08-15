@@ -42,8 +42,18 @@ export const CardItemWrapper = styled.div`
     position: absolute;
     right: 0;
     margin-right: 16px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    cursor: pointer;
   }
 `;
+
+export const StatusError = styled.div`
+  color: ${Colors.error};
+  font-size: 14px;
+  padding-right: 8px;
+`
 
 export const StatusConnected = styled.div`
   background-color: ${Colors.connected};

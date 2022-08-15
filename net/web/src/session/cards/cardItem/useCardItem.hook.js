@@ -5,6 +5,7 @@ export function useCardItem(item) {
 
   const [state, setState] = useState({
     logo: null,
+    resync: false,
   });
 
   const card = useContext(CardContext);
@@ -18,6 +19,13 @@ export function useCardItem(item) {
   }, [card]); 
 
   const actions = {
+    resync: async () => {
+      if (!state.resync) {
+        updateState({ resync: true });
+        await card.actions.resync(item.id);
+        updateState({ resync: false });
+      }
+    },
   };
 
   return { state, actions };

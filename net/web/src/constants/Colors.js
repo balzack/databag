@@ -18,6 +18,7 @@ const Colors = {
   requested: '#4488ff',
   pending: '#22aaaa',
   confirmed: '#aaaaaa',
+  error: '#ff4444',
 };
 
 export default Colors;
