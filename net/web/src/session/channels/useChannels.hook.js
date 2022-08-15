@@ -41,7 +41,7 @@ export function useChannels() {
     }
 
     let key = `${chan.id}::${chan.cardId}`
-    if (store.state[key] && store.state[key] == chan.revision) {
+    if (store.state[key] && store.state[key] === chan.revision) {
       chan.updated = false;
     }
     else {
@@ -51,11 +51,11 @@ export function useChannels() {
 
   const setContacts = (chan) => {
     let contacts = [];
-    if (chan.guid != null && profile.state.profile.guid != chan.guid) {
+    if (chan.guid != null && profile.state.profile.guid !== chan.guid) {
       contacts.push(card.actions.getCardByGuid(chan.guid));
     }
     for (let guid of chan.data.channelDetail?.members) {
-      if (guid != profile.state.profile.guid) {
+      if (guid !== profile.state.profile.guid) {
         contacts.push(card.actions.getCardByGuid(guid));
       }
     }
