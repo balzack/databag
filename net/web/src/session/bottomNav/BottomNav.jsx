@@ -18,6 +18,7 @@ export function BottomNav({ state, actions }) {
     actions.closeCards();
     actions.closeContact();
     actions.closeProfile();
+    actions.closeStats();
     actions.closeConversation();
   }
 
@@ -26,6 +27,7 @@ export function BottomNav({ state, actions }) {
     actions.closeCards();
     actions.closeContact();
     actions.openProfile();
+    actions.closeStats();
     actions.closeConversation();
   }
 
@@ -34,6 +36,7 @@ export function BottomNav({ state, actions }) {
     actions.openCards();
     actions.closeContact();
     actions.closeProfile();
+    actions.closeStats();
     actions.closeConversation();
   }
 

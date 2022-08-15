@@ -12,6 +12,7 @@ import { Channels } from './channels/Channels';
 import { Cards } from './cards/Cards';
 import { Contact } from './contact/Contact';
 import { Profile } from './profile/Profile';
+import { Stats } from './stats/Stats';
 import { Welcome } from './welcome/Welcome';
 import { BottomNav } from './bottomNav/BottomNav';
 
@@ -30,12 +31,24 @@ export function Session() {
     }
   }, [app, navigate]);
 
+  const openProfile = () => {
+    actions.openProfile();
+    actions.closeCards();
+    actions.closeContact();
+  }
+
+  const openCards = () => {
+    actions.openCards();
+    actions.closeProfile();
+    actions.closeStats();
+  }
+
   return (
     <SessionWrapper>
       { (viewport.state.display === 'xlarge') && (
         <div class="desktop-layout noselect">
           <div class="left">
-            <Identity openCards={actions.openCards} cardUpdated={state.cardUpdated} />
+            <Identity openProfile={openProfile} openCards={openCards} cardUpdated={state.cardUpdated} />
             <div class="bottom">
               <Channels />
             </div>
@@ -69,13 +82,18 @@ export function Session() {
                 <Cards close={actions.closeCards} />
               </div>
             )}
+            { state.profile && (
+              <div class="reframe">
+                <Stats />
+              </div>
+            )}
           </div>
         </div>
       )}
       { (viewport.state.display === 'large' || viewport.state.display === 'medium') && (
         <div class="tablet-layout noselect">
           <div class="left">
-            <Identity openCards={actions.openCards} cardUpdated={state.cardUpdated} />
+            <Identity openProfile={actions.openProfile} openCards={actions.openCards} cardUpdated={state.cardUpdated} />
             <div class="bottom">
               <Channels />
             </div>
@@ -106,6 +124,11 @@ export function Session() {
               { state.profile && (
                 <Profile />
               )}
+              <Drawer bodyStyle={{ padding: 0 }} width={'33%'} closable={false} onClose={actions.closeStats} visible={state.stats} zIndex={50}>
+                { state.stats && (
+                  <Stats />
+                )}
+              </Drawer>
             </Drawer>
           </div>
         </div>
@@ -139,6 +162,11 @@ export function Session() {
             { state.profile && (
               <div class="reframe">
                 <Profile />
+              </div>
+            )}
+            { state.stats && (
+              <div class="reframe">
+                <Stats />
               </div>
             )}
           </div>

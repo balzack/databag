@@ -1,6 +1,6 @@
 import { Input, List } from 'antd';
 import { CardsWrapper } from './Cards.styled';
-import { SortAscendingOutlined, RightOutlined, UserOutlined, SearchOutlined } from '@ant-design/icons';
+import { SortAscendingOutlined, DoubleRightOutlined, UserOutlined, SearchOutlined } from '@ant-design/icons';
 import { useCards } from './useCards.hook';
 import { CardItem } from './cardItem/CardItem';
 
@@ -36,7 +36,7 @@ export function Cards({ close }) {
         { state.display !== 'small' && (
           <div class="inline">
             <div class="dismiss" onClick={close} >
-              <RightOutlined />
+              <DoubleRightOutlined />
             </div>
           </div>
         )}

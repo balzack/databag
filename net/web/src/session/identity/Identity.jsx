@@ -4,17 +4,17 @@ import { IdentityWrapper, ErrorNotice, InfoNotice } from './Identity.styled';
 import { useIdentity } from './useIdentity.hook';
 import { InfoCircleOutlined, ExclamationCircleOutlined, DownOutlined } from '@ant-design/icons';
 
-export function Identity({ openCards, cardUpdated }) {
+export function Identity({ openProfile, openCards, cardUpdated }) {
 
   const { state, actions } = useIdentity();
 
   const menu = (
     <Menu>
       <Menu.Item key="0">
-        <div>Edit Profile</div>
+        <div onClick={openProfile}>Profile</div>
       </Menu.Item>
       <Menu.Item key="1">
-        <div onClick={openCards} >Manage Contacts</div>
+        <div onClick={openCards}>Contacts</div>
       </Menu.Item>
       <Menu.Item key="2">
         <div onClick={actions.logout}>Logout</div>
