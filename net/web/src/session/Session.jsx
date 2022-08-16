@@ -12,7 +12,7 @@ import { Channels } from './channels/Channels';
 import { Cards } from './cards/Cards';
 import { Contact } from './contact/Contact';
 import { Profile } from './profile/Profile';
-import { Stats } from './stats/Stats';
+import { Account } from './account/Account';
 import { Welcome } from './welcome/Welcome';
 import { BottomNav } from './bottomNav/BottomNav';
 
@@ -31,8 +31,13 @@ export function Session() {
     }
   }, [app, navigate]);
 
-  const openProfile = () => {
-    actions.openProfile();
+  const closeAccount = () => {
+    actions.closeProfile();
+    actions.closeAccount();
+  }
+
+  const openAccount = () => {
+    actions.openAccount();
     actions.closeCards();
     actions.closeContact();
   }
@@ -40,15 +45,17 @@ export function Session() {
   const openCards = () => {
     actions.openCards();
     actions.closeProfile();
-    actions.closeStats();
+    actions.closeAccount();
   }
+
+console.log("STATE", state);
 
   return (
     <SessionWrapper>
       { (viewport.state.display === 'xlarge') && (
         <div class="desktop-layout noselect">
           <div class="left">
-            <Identity openProfile={openProfile} openCards={openCards} cardUpdated={state.cardUpdated} />
+            <Identity openAccount={openAccount} openCards={openCards} cardUpdated={state.cardUpdated} />
             <div class="bottom">
               <Channels />
             </div>
@@ -66,7 +73,7 @@ export function Session() {
             )}
             { state.profile && (
               <div class="reframe">
-                <Profile />
+                <Profile closeProfile={actions.closeProfile} />
               </div>
             )}
           </div>
@@ -82,9 +89,9 @@ export function Session() {
                 <Cards close={actions.closeCards} />
               </div>
             )}
-            { state.profile && (
+            { (state.profile || state.account) && (
               <div class="reframe">
-                <Stats />
+                <Account closeAccount={closeAccount} openProfile={actions.openProfile} />
               </div>
             )}
           </div>
@@ -93,7 +100,7 @@ export function Session() {
       { (viewport.state.display === 'large' || viewport.state.display === 'medium') && (
         <div class="tablet-layout noselect">
           <div class="left">
-            <Identity openProfile={actions.openProfile} openCards={actions.openCards} cardUpdated={state.cardUpdated} />
+            <Identity openAccount={actions.openProfile} openCards={actions.openCards} cardUpdated={state.cardUpdated} />
             <div class="bottom">
               <Channels />
             </div>
@@ -120,15 +127,10 @@ export function Session() {
                 )}
               </Drawer>
             </Drawer>
-            <Drawer width={'33%'} closable={false} onClose={actions.closeProfile} visible={state.profile} zIndex={40}>
-              { state.profile && (
-                <Profile />
+            <Drawer bodyStyle={{ padding: 0 }} width={'33%'} closable={false} onClose={closeAccount} visible={state.profile || state.account} zIndex={40}>
+              { (state.profile || state.account) && (
+                <Profile closeProfile={closeAccount}/>
               )}
-              <Drawer bodyStyle={{ padding: 0 }} width={'33%'} closable={false} onClose={actions.closeStats} visible={state.stats} zIndex={50}>
-                { state.stats && (
-                  <Stats />
-                )}
-              </Drawer>
             </Drawer>
           </div>
         </div>
@@ -159,14 +161,9 @@ export function Session() {
                 <Contact guid={state.contactGuid} />
               </div>
             )}
-            { state.profile && (
+            { (state.profile || state.account) && (
               <div class="reframe">
                 <Profile />
-              </div>
-            )}
-            { state.stats && (
-              <div class="reframe">
-                <Stats />
               </div>
             )}
           </div>

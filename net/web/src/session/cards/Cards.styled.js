@@ -6,7 +6,7 @@ export const CardsWrapper = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  background-color: ${Colors.formFocus};
+  background-color: ${Colors.card};
 
   .view {
     min-height: 0;
@@ -15,10 +15,14 @@ export const CardsWrapper = styled.div`
   }
   
   .search {
-    padding: 12px;
     border-bottom: 1px solid ${Colors.divider};
     display: flex;
     flex-direction: row;
+    height: 48px;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-top: 8px;
+    padding-bottom: 8px;
 
     .sorted {
       color: ${Colors.enabled};
@@ -65,7 +69,7 @@ export const CardsWrapper = styled.div`
   }
 
   .bar {
-    height: 64px;
+    height: 48px;
     width: 100%;
     display: flex;
     flex-shrink: 0;
@@ -73,9 +77,9 @@ export const CardsWrapper = styled.div`
     align-items: center;
     justify-content: center;
     background-color: ${Colors.formBackground};
-    border-top: 2px solid ${Colors.divider};
-    padding-bottom: 16px;
-    padding-top: 16px;
+    border-top: 1px solid ${Colors.divider};
+    padding-bottom: 12px;
+    padding-top: 12px;
     position: relative;
   }
 

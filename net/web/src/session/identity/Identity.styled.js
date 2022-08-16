@@ -3,13 +3,13 @@ import Colors from 'constants/Colors';
 
 export const IdentityWrapper = styled.div`
   width: 100%;
-  height: 64px;
+  height: 48px;
   display: flex;
   flex-direction: row;
   align-items: center;
   padding-left: 16px;
   padding-right: 16px;
-  border-bottom: 2px solid ${Colors.divider};
+  border-bottom: 1px solid ${Colors.divider};
   background-color: ${Colors.formBackground};
   flex-shrink: 0;
 
@@ -37,10 +37,11 @@ export const IdentityWrapper = styled.div`
     justify-content: center;
 
     .name {
-      font-size: 1.2em;
+      font-size: 14px;
     }
 
     .handle {
+      font-size: 12px;
       display: flex;
       flex-direction: row;
       justify-content: center;

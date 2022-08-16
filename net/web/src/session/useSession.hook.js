@@ -11,7 +11,7 @@ export function useSession() {
     cards: false,
     contact: false,
     profile: false,
-    stats: false,
+    account: false,
   });
 
   const card = useContext(CardContext);
@@ -67,11 +67,11 @@ export function useSession() {
     closeProfile: () => {
       updateState({ profile: false });
     },
-    openStats: () => {
-      updateState({ stats: true });
+    openAccount: () => {
+      updateState({ account: true });
     },
-    closeStats: () => {
-      updateState({ stats: false });
+    closeAccount: () => {
+      updateState({ account: false });
     },
     closeConversation: () => {
       updateState({ conversation: false });

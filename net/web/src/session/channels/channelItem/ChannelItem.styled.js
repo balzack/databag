@@ -6,9 +6,10 @@ export const ChannelItemWrapper = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
-  border-bottom: 1px solid ${Colors.divider};
+  border-bottom: 1px solid ${Colors.itemDivider};
   padding-left: 16px;
   padding-right: 16px;
+  line-height: 16px;
 
   &:hover {
     background-color: ${Colors.formHover};

@@ -15,7 +15,7 @@ export const ChannelsWrapper = styled.div`
   }
  
   .search {
-    padding: 12px;
+    padding: 8px;
     border-bottom: 1px solid ${Colors.divider};
     display: flex;
     flex-direction: row;
@@ -40,7 +40,7 @@ export const ChannelsWrapper = styled.div`
   }
 
   .bar {
-    height: 64px;
+    height: 48px;
     width: 100%;
     display: flex;
     flex-shrink: 0;
@@ -48,9 +48,9 @@ export const ChannelsWrapper = styled.div`
     align-items: center;
     justify-content: center;
     background-color: ${Colors.formBackground};
-    border-top: 2px solid ${Colors.divider};
-    padding-bottom: 16px;
-    padding-top: 16px;
+    border-top: 1px solid ${Colors.divider};
+    padding-bottom: 12px;
+    padding-top: 12px;
     position: relative;
   }
 

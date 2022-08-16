@@ -28,7 +28,7 @@ export const SessionWrapper = styled.div`
       min-height: 0;
 
       .bottom {
-        height: calc(100% - 64px);
+        height: calc(100% - 48px);
       }
     }
     .center {
@@ -65,7 +65,7 @@ export const SessionWrapper = styled.div`
       min-height: 0;
 
       .bottom {
-        height: calc(100% - 64px);
+        height: calc(100% - 48px);
       }
     }
     .right {

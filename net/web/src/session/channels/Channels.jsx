@@ -13,7 +13,7 @@ export function Channels() {
       <div class="search">
         <div class="filter">
           <Input bordered={false} allowClear={true} placeholder="Channels" prefix={<SearchOutlined />}
-              size="large" spellCheck="false" onChange={(e) => actions.onFilter(e.target.value)} />
+              spellCheck="false" onChange={(e) => actions.onFilter(e.target.value)} />
         </div>
         { state.display === 'small' && (
           <div class="inline">

@@ -4,14 +4,14 @@ import { IdentityWrapper, ErrorNotice, InfoNotice } from './Identity.styled';
 import { useIdentity } from './useIdentity.hook';
 import { InfoCircleOutlined, ExclamationCircleOutlined, DownOutlined } from '@ant-design/icons';
 
-export function Identity({ openProfile, openCards, cardUpdated }) {
+export function Identity({ openAccount, openCards, cardUpdated }) {
 
   const { state, actions } = useIdentity();
 
   const menu = (
     <Menu>
       <Menu.Item key="0">
-        <div onClick={openProfile}>Profile</div>
+        <div onClick={openAccount}>Account</div>
       </Menu.Item>
       <Menu.Item key="1">
         <div onClick={openCards}>Contacts</div>
@@ -26,7 +26,7 @@ export function Identity({ openProfile, openCards, cardUpdated }) {
     <Dropdown overlay={menu} overlayStyle={{ minWidth: 0 }} trigger={['click']} placement="bottomRight">
       <IdentityWrapper>
         { state.init && (
-          <Logo url={state.url} width={48} height={48} radius={4} />
+          <Logo url={state.url} width={40} height={40} radius={4} />
         )}
         <div class="label">
           <div class="name">{state.name}</div>
