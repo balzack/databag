@@ -7,7 +7,7 @@ import { Logo } from 'logo/Logo';
 import { Tooltip } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 
-export function CardItem({ item }) {
+export function CardItem({ item, open }) {
 
   const { state, actions } = useCardItem(item);  
   const profile = item?.data?.cardProfile;
@@ -21,7 +21,7 @@ export function CardItem({ item }) {
   }
 
   return (
-    <CardItemWrapper>
+    <CardItemWrapper onClick={() => open(profile.guid, profile.node)}>
       <Logo url={state.logo} width={32} height={32} radius={8} />
       <div class="details">
         <div class="name">{ profile?.name }</div>

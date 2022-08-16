@@ -10,8 +10,8 @@ export function useCards() {
     sorted: false,
     display: null,
     cards: [],
-    busy: false }
-  );
+    busy: false 
+  });
 
   const card = useContext(CardContext);
   const viewport = useContext(ViewportContext);
@@ -55,7 +55,7 @@ export function useCards() {
         const aUpdated = a?.data?.cardDetail?.statusUpdated;
         const bUpdated = b?.data?.cardDetail?.statusUpdated;
 
-        if ((aUpdated && !bUpdated) || aUpdated && bUpdated && aUpdated > bUpdated) {
+        if ((aUpdated && !bUpdated) || (aUpdated && bUpdated && aUpdated > bUpdated)) {
           return -1;
         }
         return 1;

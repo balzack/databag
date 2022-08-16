@@ -6,9 +6,13 @@ export function useSession() {
 
   const [state, setState] = useState({
     cardUpdated: false,
+    contactGuid: null,
+    contactNode: null,
+    listingNode: null,
     conversation: false,
     details: false,
     cards: false,
+    listing: false,
     contact: false,
     profile: false,
     account: false,
@@ -57,6 +61,15 @@ export function useSession() {
     },
     closeCards: () => {
       updateState({ cards: false });
+    },
+    openListing: (listingNode) => {
+      updateState({ listing: true, listingNode });
+    },
+    closeListing: () => {
+      updateState({ listing: false });
+    },
+    openContact: (contactGuid, contactNode) => {
+      updateState({ contact: true, contactGuid, contactNode });
     },
     closeContact: () => {
       updateState({ contact: false });

@@ -1,7 +1,4 @@
-import { useContext } from 'react';
-import { Button, Checkbox } from 'antd';
-import { AppContext } from 'context/AppContext'; 
-import { ViewportContext } from 'context/ViewportContext';
+import { Checkbox } from 'antd';
 import { ProfileWrapper } from './Profile.styled';
 import { useProfile } from './useProfile.hook';
 import { Logo } from 'logo/Logo';

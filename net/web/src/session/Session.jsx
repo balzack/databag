@@ -12,6 +12,7 @@ import { Channels } from './channels/Channels';
 import { Cards } from './cards/Cards';
 import { Contact } from './contact/Contact';
 import { Profile } from './profile/Profile';
+import { Listing } from './listing/Listing';
 import { Account } from './account/Account';
 import { Welcome } from './welcome/Welcome';
 import { BottomNav } from './bottomNav/BottomNav';
@@ -40,6 +41,13 @@ export function Session() {
     actions.openAccount();
     actions.closeCards();
     actions.closeContact();
+    actions.closeListing();
+  }
+
+  const closeCards = () => {
+    actions.closeCards();
+    actions.closeContact();
+    actions.closeListing();
   }
 
   const openCards = () => {
@@ -48,7 +56,7 @@ export function Session() {
     actions.closeAccount();
   }
 
-console.log("STATE", state);
+console.log(state);
 
   return (
     <SessionWrapper>
@@ -68,7 +76,7 @@ console.log("STATE", state);
             )}
             { state.contact && (
               <div class="reframe">
-                <Contact guid={state.contactGuid} />
+                <Contact close={actions.closeContact} guid={state.contactGuid} node={state.contactNode} />
               </div>
             )}
             { state.profile && (
@@ -86,7 +94,11 @@ console.log("STATE", state);
             )}
             { state.cards && (
               <div class="reframe">
-                <Cards close={actions.closeCards} />
+                <Cards closeCards={closeCards} openContact={actions.openContact} openListing={actions.openListing} />
+                <Drawer title="Basic Drawer" placement="bottom" closable={false} visible={state.listing}
+                    onClose={actions.closeListing} getContainer={false} height={'80%'} style={{ position: 'absolute', overflow: 'hidden' }}>
+                  <Listing openContact={actions.openContact} />
+                </Drawer>
               </div>
             )}
             { (state.profile || state.account) && (
@@ -117,13 +129,17 @@ console.log("STATE", state);
                 <Details cardId={state.cardId} conversationId={state.conversationId} />
               )}
             </Drawer>
-            <Drawer bodyStyle={{ padding: 0 }} width={'33%'} closable={false} onClose={actions.closeCards} visible={state.cards} zIndex={20}>
+            <Drawer bodyStyle={{ padding: 0 }} width={'33%'} closable={false} onClose={actions.closeCards} visible={state.cards} zIndex={20} push={state.contact}>
               { state.cards && (
-                <Cards close={actions.closeCards} />
+                <Cards closeCards={closeCards} openContact={actions.openContact} openListing={actions.openListing} />
               )}
+              <Drawer title="Basic Drawer" placement="bottom" closable={false} visible={state.listing}
+                  onClose={actions.closeListing} getContainer={false} height={'80%'} style={{ overflow: 'hidden', position: 'absolute' }}>
+                <Listing openContact={actions.openContact} />
+              </Drawer>
               <Drawer bodyStyle={{ padding: 0 }} width={'33%'} closable={false} onClose={actions.closeContact} visible={state.contact} zIndex={30}>
                 { state.contact && (
-                  <Contact guid={state.contactGuid} />
+                  <Contact close={actions.closeContact} guid={state.contactGuid} node={state.contactNode} />
                 )}
               </Drawer>
             </Drawer>
@@ -153,12 +169,17 @@ console.log("STATE", state);
             )}
             { state.cards && (
               <div class="reframe">
-                <Cards close={actions.closeCards} />
+                <Cards openContact={actions.openContact} openListing={actions.openListing} />
+              </div>
+            )}
+            { state.listing && (
+              <div class="reframe">
+                <Listing openContact={actions.openContact} />
               </div>
             )}
             { state.contact && (
               <div class="reframe">
-                <Contact guid={state.contactGuid} />
+                <Contact close={actions.closeContact} guid={state.contactGuid} node={state.contactNode} />
               </div>
             )}
             { (state.profile || state.account) && (

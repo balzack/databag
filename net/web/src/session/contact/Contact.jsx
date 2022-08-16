@@ -1,4 +1,6 @@
-export function Contact() {
-  return <div>CONTACT</div>
+import { ContactWrapper } from './Contact.styled';
+
+export function Contact({ close, guid, node }) {
+  return <ContactWrapper />;
 }
 

@@ -49,8 +49,8 @@ export const ChannelsWrapper = styled.div`
     justify-content: center;
     background-color: ${Colors.formBackground};
     border-top: 1px solid ${Colors.divider};
-    padding-bottom: 12px;
-    padding-top: 12px;
+    padding-bottom: 10px;
+    padding-top: 10px;
     position: relative;
   }
 

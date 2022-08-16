@@ -1,10 +1,10 @@
-import { Input, List } from 'antd';
+import { Drawer, Input, List } from 'antd';
 import { CardsWrapper } from './Cards.styled';
 import { SortAscendingOutlined, DoubleRightOutlined, UserOutlined, SearchOutlined } from '@ant-design/icons';
 import { useCards } from './useCards.hook';
 import { CardItem } from './cardItem/CardItem';
 
-export function Cards({ close }) {
+export function Cards({ closeCards, openContact, openListing }) {
 
   const { state, actions } = useCards();
 
@@ -35,7 +35,7 @@ export function Cards({ close }) {
         )}
         { state.display !== 'small' && (
           <div class="inline">
-            <div class="dismiss" onClick={close} >
+            <div class="dismiss" onClick={closeCards} >
               <DoubleRightOutlined />
             </div>
           </div>
@@ -44,18 +44,18 @@ export function Cards({ close }) {
       <div class="view">
         <List local={{ emptyText: '' }} itemLayout="horizontal" dataSource={state.cards} gutter="0"
           renderItem={item => (
-            <CardItem item={item} />
+            <CardItem item={item} open={openContact} />
           )} />
       </div>
       { state.display !== 'small' && (
         <div class="bar">
-          <div class="add">
+          <div class="add" onClick={openListing}>
             <UserOutlined />
             <div class="label">New Contact</div>
           </div>
         </div>
       )}
-    </CardsWrapper>
+      </CardsWrapper>
   );
 }
 
