@@ -27,7 +27,9 @@ export function useViewportContext() {
   };
 
   useEffect(() => {
-    setTimeout(handleResize, 1000); //cludge for my mobile browser
+    for (let i = 0; i < 10; i++) {
+      setTimeout(handleResize, 100 * i); //cludge for my mobile browser
+    }
     handleResize();
     window.addEventListener('resize', handleResize);
     window.addEventListener('orientationchange', handleResize);

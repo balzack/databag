@@ -27,7 +27,7 @@ export function Cards({ closeCards, openContact, openListing }) {
         </div>
         { state.display === 'small' && (
           <div class="inline">
-            <div class="add">
+            <div class="add" onClick={openListing}>
               <UserOutlined />
               <div class="label">New</div>
             </div>

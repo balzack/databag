@@ -1,5 +1,6 @@
 import { useContext, useState, useEffect } from 'react';
 import { ProfileContext } from 'context/ProfileContext';
+import { ViewportContext } from 'context/ViewportContext';
 import { getListing } from 'api/getListing';
 
 export function useListing() {
@@ -9,9 +10,11 @@ export function useListing() {
     node: null,
     busy: false,
     disabled: true,
+    display: null,
   });
 
   const profile = useContext(ProfileContext);
+  const viewport = useContext(ViewportContext);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
@@ -25,16 +28,13 @@ export function useListing() {
       updateState({ busy: true });
       try {
         let contacts = await getListing(state.node);
-console.log(contacts);
         let filtered = contacts.filter(contact => (contact.guid !== profile.state.profile.guid));
-console.log(filtered);
         let sorted = filtered.sort((a, b) => {
           if (a?.name < b?.name) {
             return -1;
           }
           return 1;
         });
-console.log(sorted);
         updateState({ busy: false, contacts: sorted });
       }
       catch (err) {
@@ -49,6 +49,10 @@ console.log(sorted);
     let node = profile?.state?.profile?.node;
     updateState({ disabled: node == null || node == '', node });
   }, [profile]);
+
+  useEffect(() => {
+    updateState({ display: viewport.state.display });
+  }, [viewport]);
 
   return { state, actions };
 }

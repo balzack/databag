@@ -1,10 +1,10 @@
 import { Modal, Button, Drawer, Input, List } from 'antd';
 import { ListingWrapper } from './Listing.styled';
-import { DatabaseOutlined, SearchOutlined } from '@ant-design/icons';
+import { DownOutlined, CloseOutlined, DatabaseOutlined, SearchOutlined } from '@ant-design/icons';
 import { useListing } from './useListing.hook';
 import { ListingItem } from './listingItem/ListingItem';
 
-export function Listing({ openContact }) {
+export function Listing({ closeListing, openContact }) {
 
   const { state, actions } = useListing();
 
@@ -31,6 +31,14 @@ export function Listing({ openContact }) {
         </div>
         <div class="inline">
           <Button type="text" icon={<SearchOutlined />} loading={state.busy} onClick={getListing}></Button>
+        </div>
+        <div class="inline">
+          { state.display !== 'small' && (
+            <Button type="text" icon={<DownOutlined />} onClick={closeListing}></Button>
+          )}
+          { state.display === 'small' && (
+            <Button type="text" icon={<CloseOutlined />} onClick={closeListing}></Button>
+          )}
         </div>
       </div>
       <div class="view">

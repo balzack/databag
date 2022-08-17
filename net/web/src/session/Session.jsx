@@ -94,9 +94,9 @@ console.log(state);
               <div class="reframe">
                 <Cards closeCards={closeCards} openContact={actions.openContact} openListing={actions.openListing} />
                 <Drawer bodyStyle={{ padding: 0 }} placement="bottom" closable={false} visible={state.listing}
-                    onClose={actions.closeListing} getContainer={false} height={'80%'}
+                    onClose={actions.closeListing} getContainer={false} height={'100%'}
                     style={{ position: 'absolute', overflow: 'hidden' }}>
-                  <Listing openContact={actions.openContact} />
+                  <Listing closeListing={actions.closeListing} openContact={actions.openContact} />
                 </Drawer>
               </div>
             )}
@@ -133,9 +133,9 @@ console.log(state);
                 <Cards closeCards={closeCards} openContact={actions.openContact} openListing={actions.openListing} />
               )}
               <Drawer bodyStyle={{ padding: 0 }} placement="bottom" closable={false} visible={state.listing}
-                  onClose={actions.closeListing} getContainer={false} height={'80%'}
+                  onClose={actions.closeListing} getContainer={false} height={'100%'}
                   style={{ overflow: 'hidden', position: 'absolute' }}>
-                <Listing openContact={actions.openContact} />
+                <Listing closeListing={actions.closeListing} openContact={actions.openContact} />
               </Drawer>
               <Drawer bodyStyle={{ padding: 0 }} width={'33%'} closable={false} onClose={actions.closeContact} visible={state.contact} zIndex={30}>
                 { state.contact && (
@@ -174,7 +174,7 @@ console.log(state);
             )}
             { state.listing && (
               <div class="reframe">
-                <Listing openContact={actions.openContact} />
+                <Listing closeListing={actions.closeListing} openContact={actions.openContact} />
               </div>
             )}
             { state.contact && (
