@@ -46,20 +46,25 @@ export const ProfileWrapper = styled.div`
       position: relative;
       width: 20vw;
       margin-right: 32px;
+      cursor: pointer;
+
+      &:hover .edit {
+        opacity: 1;
+      }
   
       .edit {
         position: absolute;
         display: flex;
         align-items: center;
         justify-content: center;
-        border-radius: 4px;
+        border-radius: 8px;
         width: 24px;
         height: 24px;
         bottom: 0;
         right: 0;
         color: ${Colors.link};
-        background-color: ${Colors.mask};
-        cursor: pointer;
+        background-color: ${Colors.white};
+        opacity: 0.7;
       }
     }
 
@@ -118,22 +123,27 @@ export const ProfileWrapper = styled.div`
 
     .logo {
       position: relative;
-      width: 80%;
+      width: 60%;
       margin-bottom: 16px;
+      cursor: pointer;
+
+      &:hover .edit {
+        opacity: 1;
+      }
 
       .edit {
         position: absolute;
         display: flex;
         align-items: center;
         justify-content: center;
-        border-radius: 4px;
+        border-radius: 8px;
         width: 24px;
         height: 24px;
         bottom: 0;
         right: 0;
         color: ${Colors.link};
-        background-color: ${Colors.mask};
-        cursor: pointer;
+        background-color: ${Colors.white};
+        opacity: 0.7;
       }
     }
 
@@ -180,7 +190,7 @@ export const ProfileWrapper = styled.div`
     .section {
       width: 100%;
       color: ${Colors.grey};
-      padding-top: 32px;
+      padding-top: 24px;
       font-size: 12px;
       display: flex;
       justify-content: center;
@@ -209,5 +219,31 @@ export const ProfileWrapper = styled.div`
         padding-left: 8px;
       }
     }
+
+    .logout {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      cursor: pointer;
+      color: ${Colors.white};
+      background-color: ${Colors.primary};
+      margin-top: 8px;
+      padding: 8px;
+      border-radius: 4px;
+ 
+      .label {
+        padding-left: 8px;
+      }
+    }
   }
 `
+export const EditImageFooter = styled.div`
+  width: 100%;
+  display: flex;
+
+  .select {
+    display: flex;
+    flex-grow: 1;
+  }
+`
+

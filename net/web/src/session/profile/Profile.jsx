@@ -1,15 +1,40 @@
-import { Checkbox } from 'antd';
-import { ProfileWrapper } from './Profile.styled';
+import { useRef } from 'react';
+import { Modal, Button, Checkbox } from 'antd';
+import { ProfileWrapper, EditImageFooter } from './Profile.styled';
 import { useProfile } from './useProfile.hook';
+import { ProfileImage } from './profileImage/ProfileImage';
 import { Logo } from 'logo/Logo';
-import { DatabaseOutlined, LockOutlined, RightOutlined, EditOutlined, BookOutlined, EnvironmentOutlined } from '@ant-design/icons';
+import { LogoutOutlined, DatabaseOutlined, LockOutlined, RightOutlined, EditOutlined, BookOutlined, EnvironmentOutlined } from '@ant-design/icons';
 
 export function Profile({ closeProfile }) {
 
   const { state, actions } = useProfile();
+  const imageFile = useRef(null);
+
+  const selected = (e) => {
+    var reader = new FileReader();
+    reader.onload = () => {
+      actions.setEditImage(reader.result);
+    }
+    reader.readAsDataURL(e.target.files[0]);
+  }
+
+  const saveImage = async () => {
+    try {
+      await actions.setProfileImage();
+      actions.clearEditProfileImage();
+    }
+    catch(err) {
+      console.log(err);
+      Modal.error({
+        title: 'Failed to Save',
+        content: 'Please try again.',
+      });
+    }
+  }
 
   const Image = (
-    <div class="logo">
+    <div class="logo" onClick={actions.setEditProfileImage}>
       <Logo url={state.url} width={'100%'} radius={8} />
       <div class="edit">
         <EditOutlined />
@@ -38,6 +63,17 @@ export function Profile({ closeProfile }) {
         <div class="data">{ state.description }</div>
       </div>
     </div>
+  );
+
+  const editImageFooter = (
+    <EditImageFooter>
+      <input type='file' id='file' accept="image/*" ref={imageFile} onChange={e => selected(e)} style={{display: 'none'}}/>
+      <div class="select">
+        <Button key="select" class="select" onClick={() => imageFile.current.click()}>Select Image</Button>
+      </div>
+      <Button key="back" onClick={actions.clearEditProfileImage}>Cancel</Button>
+      <Button key="save" type="primary" onClick={saveImage}>Save</Button>
+    </EditImageFooter>
   );
 
   return (
@@ -72,9 +108,19 @@ export function Profile({ closeProfile }) {
               <LockOutlined />
               <div class="label">Change Login</div>
             </div>
+            { state.display === 'small' && (
+              <div class="logout">
+                <LogoutOutlined />
+                <div class="label">Logout</div>
+              </div>
+            )}
           </div>
         </div>
       )}
+      <Modal title="Profile Image" centered visible={state.editProfileImage} footer={editImageFooter}
+          onCancel={actions.clearEditProfileImage}>
+        <ProfileImage state={state} actions={actions} />
+      </Modal>
     </ProfileWrapper>
   );
 }

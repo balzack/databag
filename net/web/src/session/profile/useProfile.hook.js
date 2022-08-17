@@ -2,13 +2,19 @@ import { useState, useEffect, useContext } from 'react';
 import { ProfileContext } from 'context/ProfileContext';
 import { AppContext } from 'context/AppContext';
 import { ViewportContext } from 'context/ViewportContext';
+import avatar from 'images/avatar.png';
 
 export function useProfile() {
   
   const [state, setState] = useState({
     init: false,
+    editProfileImage: false,
+    editImage: null,
+    crop: { w: 0, h: 0, x: 0, y: 0 },
+    busy: false,
   });
 
+  const IMAGE_DIM = 256;
   const app = useContext(AppContext);
   const viewport = useContext(ViewportContext);
   const profile = useContext(ProfileContext);
@@ -21,7 +27,8 @@ export function useProfile() {
     if (profile.state.init) {
       const { node, name, handle, location, description, image } = profile.state.profile;
       let url = !image ? null : profile.actions.profileImageUrl();
-      updateState({ init: true, name, node, handle, url, location, description });
+      let editImage = !image ? avatar : url;
+      updateState({ init: true, name, node, handle, url, editImage, location, description });
     }
   }, [profile]);
 
@@ -31,6 +38,57 @@ export function useProfile() {
 
   const actions = {
     logout: app.actions.logout,
+    setEditImage: (value) => {
+      updateState({ editImage: value });
+    },
+    setEditProfileImage: () => {
+      updateState({ editProfileImage: true });
+    },
+    clearEditProfileImage: () => {
+      updateState({ editProfileImage: false });
+    },
+    setEditImageCrop: (w, h, x, y) => {
+      updateState({ crop: { w, h, x, y }});
+    },
+    setProfileImage: async () => {
+console.log("CHECK1");
+      if(!state.busy) {
+        updateState({ busy: true });
+        try {
+          const processImg = () => {
+            return new Promise((resolve, reject) => {
+              let img = new Image();
+              img.onload = () => {
+                var canvas = document.createElement("canvas");
+                var context = canvas.getContext('2d');
+                canvas.width = IMAGE_DIM;
+                canvas.height = IMAGE_DIM;
+                context.imageSmoothingQuality = "medium";
+                context.drawImage(img, state.crop.x, state.crop.y, state.crop.w, state.crop.h,
+                    0, 0, IMAGE_DIM, IMAGE_DIM);
+                resolve(canvas.toDataURL());
+              }
+              img.onerror = reject;
+              img.src = state.editImage;
+            });
+          };
+          let dataUrl = await processImg();
+          let data = dataUrl.split(",")[1];
+console.log("CHECK2");
+          await profile.actions.setProfileImage(data);
+console.log("CHECK3");
+          updateState({ busy: false });
+        }
+        catch (err) {
+          console.log(err);
+          updateState({ busy: false });
+          throw new Error('failed to save profile image');
+        }
+      }
+      else {
+        throw new Error('save in progress');
+      }
+    },
   };
 
   return { state, actions };
