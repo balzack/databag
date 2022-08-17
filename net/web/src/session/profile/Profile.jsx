@@ -2,7 +2,7 @@ import { Checkbox } from 'antd';
 import { ProfileWrapper } from './Profile.styled';
 import { useProfile } from './useProfile.hook';
 import { Logo } from 'logo/Logo';
-import { LockOutlined, RightOutlined, EditOutlined, BookOutlined, EnvironmentOutlined } from '@ant-design/icons';
+import { DatabaseOutlined, LockOutlined, RightOutlined, EditOutlined, BookOutlined, EnvironmentOutlined } from '@ant-design/icons';
 
 export function Profile({ closeProfile }) {
 
@@ -23,6 +23,12 @@ export function Profile({ closeProfile }) {
         <div class="data">{ state.name }</div>
         <EditOutlined />
       </div>
+      { state.node && (
+        <div class="location">
+          <DatabaseOutlined />
+          <div class="data">{ state.node }</div>
+        </div>
+      )}
       <div class="location">
         <EnvironmentOutlined />
         <div class="data">{ state.location }</div>

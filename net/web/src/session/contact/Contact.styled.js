@@ -27,7 +27,7 @@ export const ContactWrapper = styled.div`
     }
 
     .close {
-      font-size: 16px;
+      font-size: 18px;
       color: ${Colors.primary};
       cursor: pointer;
       padding-right: 16px;
@@ -48,6 +48,45 @@ export const ContactWrapper = styled.div`
       width: 20vw;
       margin-right: 32px;
     }
+
+    .details {
+      display: flex;
+      flex-direction: column;
+
+      .name {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+   
+        .data {
+          padding-right: 8px;
+          font-size: 24px;
+          font-weight: bold;
+        }
+      }
+
+      .location {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        padding-bottom: 8px;
+    
+        .data {
+          padding-left: 8px;
+        }
+      }
+
+      .description {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        padding-bottom: 8px;
+
+        .data {
+          padding-left: 8px;
+        }
+      } 
+    }
   }
 
   .view {
@@ -59,63 +98,75 @@ export const ContactWrapper = styled.div`
     align-items: center;
 
     .title {
+      display: flex;
+      width: 100%;
+      flex-direction: row;
       font-size: 18px;
-      font-weight: bold;
+      padding-top: 8px;
+      padding-bottom: 32px;
+
+      .handle {
+        flex-grow: 1;
+        font-weight: bold;
+        display: flex;
+        justify-content: center;
+      }
+
+      .close {
+        color: ${Colors.primary};
+        cursor: pointer;
+        width: 64px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
     }
 
     .logo {
       position: relative;
-      width: 80%;
+      width: 50%;
       margin-bottom: 16px;
     }
 
-    .section {
-      width: 100%;
-      color: ${Colors.grey};
-      padding-top: 16px;
-      font-size: 12px;
+    .details {
       display: flex;
-      justify-content: center;
-    }
-  }
-
-  .details {
-    display: flex;
-    flex-direction: column;
-
-    .name {
-      display: flex;
-      flex-direction: row;
+      flex-direction: column;
       align-items: center;
- 
-      .data {
-        padding-right: 8px;
-        font-size: 24px;
-        font-weight: bold;
+
+      .name {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+   
+        .data {
+          padding-right: 8px;
+          font-size: 24px;
+          font-weight: bold;
+        }
       }
+
+      .location {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        padding-bottom: 8px;
+    
+        .data {
+          padding-left: 8px;
+        }
+      }
+
+      .description {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        padding-bottom: 8px;
+
+        .data {
+          padding-left: 8px;
+        }
+      } 
     }
-
-    .location {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      padding-bottom: 8px;
-  
-      .data {
-        padding-left: 8px;
-      }
-    }
-
-    .description {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      padding-bottom: 8px;
-
-      .data {
-        padding-left: 8px;
-      }
-    } 
   }
 `
 

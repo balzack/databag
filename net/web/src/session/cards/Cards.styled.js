@@ -59,6 +59,26 @@ export const CardsWrapper = styled.div`
       flex-direction: row;
       align-items: center;
       justify-content: center;
+
+      .add {
+        display: flex;
+        flex-direction: row;
+        color: ${Colors.white};
+        background-color: ${Colors.primary};
+        align-items: center;
+        justify-content: center;
+        padding-left: 16px;
+        padding-right: 16px;
+        border-radius: 4px;
+        font-size: 14px;
+        cursor: pointer;
+        height: 100%;
+        flex-shrink: 0;
+
+        .label {
+          padding-left: 8px;
+        }
+      }
     }
 
     .dismiss {
@@ -81,23 +101,24 @@ export const CardsWrapper = styled.div`
     padding-bottom: 12px;
     padding-top: 12px;
     position: relative;
-  }
 
-  .add {
-    display: flex;
-    flex-direction: row;
-    color: ${Colors.primary};
-    align-items: center;
-    justify-content: center;
-    padding-left: 16px;
-    padding-right: 16px;
-    border-radius: 4px;
-    font-size: 14px;
-    cursor: pointer;
-    height: 100%;
+    .add {
+      display: flex;
+      flex-direction: row;
+      color: ${Colors.primary};
+      align-items: center;
+      justify-content: center;
+      padding-left: 16px;
+      padding-right: 16px;
+      border-radius: 4px;
+      font-size: 14px;
+      cursor: pointer;
+      height: 100%;
+      flex-shrink: 0;
 
-    .label {
-      padding-left: 8px;
+      .label {
+        padding-left: 8px;
+      }
     }
   }
 `;

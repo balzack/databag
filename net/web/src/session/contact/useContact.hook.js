@@ -12,6 +12,7 @@ export function useContact(guid, listing) {
     location: null,
     description: null,
     handle: null,
+    node: null,
     removed: false,
     init: false,
   });
@@ -25,28 +26,20 @@ export function useContact(guid, listing) {
   }
 
   useEffect(() => {
-    let logo, name, location, description, handle;
+    let logo, name, location, description, handle, node;
     let contact = card.actions.getCardByGuid(guid);
     if (contact) {
       let cardProfile = contact?.data?.cardProfile;
-      if (cardProfile.node != profile.state.profile.node) {
-        handle = cardProfile.handle + '@' + cardProfile.node;
-      }
-      else {
-        handle = cardProfile.handle;
-      }
+      handle = cardProfile.handle;
+      node = cardProfile.node;
       logo = card.actions.getImageUrl(contact.id);
       name = cardProfile.name;
       location = cardProfile.location;
       description = cardProfile.description;
     }
     else if (listing) {
-      if (listing.node != profile.state.profile.node) {
-        handle = listing.handle + '@' + listing.node;
-      }
-      else {
-        handle = listing.handle;
-      }
+      handle = listing.handle;
+      node = listing.node;
       logo = listing.imageSet ? getListingImageUrl(listing.node, listing.guid) : null;
       name = listing.name;
       location = listing.location;
@@ -55,7 +48,7 @@ export function useContact(guid, listing) {
     else {
       updateState({ removed: true });
     }
-    updateState({ init: true, logo, name, location, description, handle });
+    updateState({ init: true, logo, name, location, description, handle, node });
   }, [card, guid, listing]); 
 
   useEffect(() => {

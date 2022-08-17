@@ -19,9 +19,9 @@ export function useProfile() {
 
   useEffect(() => {
     if (profile.state.init) {
-      const { name, handle, location, description, image } = profile.state.profile;
+      const { node, name, handle, location, description, image } = profile.state.profile;
       let url = !image ? null : profile.actions.profileImageUrl();
-      updateState({ init: true, name, handle, url, location, description });
+      updateState({ init: true, name, node, handle, url, location, description });
     }
   }, [profile]);
 

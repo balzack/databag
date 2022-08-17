@@ -1,7 +1,7 @@
 import { ContactWrapper } from './Contact.styled';
 import { useContact } from './useContact.hook';
 import { Logo } from 'logo/Logo';
-import { RightOutlined, BookOutlined, EnvironmentOutlined } from '@ant-design/icons';
+import { DatabaseOutlined, CloseOutlined, RightOutlined, BookOutlined, EnvironmentOutlined } from '@ant-design/icons';
 
 export function Contact({ close, guid, listing }) {
 
@@ -18,6 +18,12 @@ export function Contact({ close, guid, listing }) {
       <div class="name">
         <div class="data">{ state.name }</div>
       </div>
+      { state.node && (
+        <div class="location">
+          <DatabaseOutlined />
+          <div class="data">{ state.node }</div>
+        </div>
+      )}
       <div class="location">
         <EnvironmentOutlined />
         <div class="data">{ state.location }</div>
@@ -49,12 +55,19 @@ export function Contact({ close, guid, listing }) {
       )}
       { state.init && state.display !== 'xlarge' && (
         <div class="view">
-          <div class="title">{ state.handle }</div>
-          <div class="section">Contact Profile</div>
-          <div class="controls">
-            { Image }
-            { Details }
+          <div class="title">
+            { state.display === 'small' && (
+              <div class="close"></div>
+            )}
+            <div class="handle">{ state.handle }</div>
+            { state.display === 'small' && (
+              <div class="close" onClick={close}>
+                <CloseOutlined />
+              </div>
+            )}
           </div>
+          { Image }
+          { Details }
         </div>
       )}
     </ContactWrapper>

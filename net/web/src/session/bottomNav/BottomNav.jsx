@@ -16,6 +16,7 @@ export function BottomNav({ state, actions }) {
   const setChannels = () => {
     actions.closeDetails();
     actions.closeCards();
+    actions.closeListing();
     actions.closeContact();
     actions.closeProfile();
     actions.closeAccount();
@@ -25,6 +26,7 @@ export function BottomNav({ state, actions }) {
   const setProfile = () => {
     actions.closeDetails();
     actions.closeCards();
+    actions.closeListing();
     actions.closeContact();
     actions.openProfile();
     actions.closeConversation();

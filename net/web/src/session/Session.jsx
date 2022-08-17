@@ -54,8 +54,6 @@ export function Session() {
     actions.closeAccount();
   }
 
-console.log(state);
-
   return (
     <SessionWrapper>
       { (state.display === 'xlarge') && (

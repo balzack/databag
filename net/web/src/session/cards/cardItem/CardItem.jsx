@@ -20,6 +20,11 @@ export function CardItem({ item, open }) {
     return profile?.handle;
   }
 
+  const resync = (e) => {
+    e.stopPropagation();
+    actions.resync();
+  };
+
   return (
     <CardItemWrapper onClick={() => open(profile.guid)}>
       <Logo url={state.logo} width={32} height={32} radius={8} />
@@ -30,7 +35,7 @@ export function CardItem({ item, open }) {
       <div class="markup">
         { !state.resync && item.error && (
           <Tooltip placement="left" title="sync error">
-            <StatusError onClick={actions.resync}>
+            <StatusError onClick={resync}>
               <ExclamationCircleOutlined />
             </StatusError>
           </Tooltip>

@@ -15,10 +15,14 @@ export const ChannelsWrapper = styled.div`
   }
  
   .search {
-    padding: 8px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-left: 16px;
+    padding-right: 16px;
     border-bottom: 1px solid ${Colors.divider};
     display: flex;
     flex-direction: row;
+    height: 48px;
 
     .filter {
       border: 1px solid ${Colors.divider};

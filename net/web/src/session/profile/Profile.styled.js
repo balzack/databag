@@ -62,6 +62,45 @@ export const ProfileWrapper = styled.div`
         cursor: pointer;
       }
     }
+
+    .details {
+      display: flex;
+      flex-direction: column;
+
+      .name {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+   
+        .data {
+          padding-right: 8px;
+          font-size: 24px;
+          font-weight: bold;
+        }
+      }
+
+      .location {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        padding-bottom: 8px;
+    
+        .data {
+          padding-left: 8px;
+        }
+      }
+
+      .description {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        padding-bottom: 8px;
+
+        .data {
+          padding-left: 8px;
+        }
+      } 
+    }
   }
 
   .view {
@@ -98,10 +137,50 @@ export const ProfileWrapper = styled.div`
       }
     }
 
+    .details {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      .name {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+   
+        .data {
+          padding-right: 8px;
+          font-size: 24px;
+          font-weight: bold;
+        }
+      }
+
+      .location {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        padding-bottom: 8px;
+    
+        .data {
+          padding-left: 8px;
+        }
+      }
+
+      .description {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        padding-bottom: 8px;
+
+        .data {
+          padding-left: 8px;
+        }
+      } 
+    }
+
     .section {
       width: 100%;
       color: ${Colors.grey};
-      padding-top: 16px;
+      padding-top: 32px;
       font-size: 12px;
       display: flex;
       justify-content: center;
@@ -112,7 +191,7 @@ export const ProfileWrapper = styled.div`
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      border: 1px solid ${Colors.divider};
+      border-top: 1px solid ${Colors.divider};
       border-radius: 4px;
       padding: 8px;
       width: 75%;
@@ -130,44 +209,5 @@ export const ProfileWrapper = styled.div`
         padding-left: 8px;
       }
     }
-  }
-
-  .details {
-    display: flex;
-    flex-direction: column;
-
-    .name {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
- 
-      .data {
-        padding-right: 8px;
-        font-size: 24px;
-        font-weight: bold;
-      }
-    }
-
-    .location {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      padding-bottom: 8px;
-  
-      .data {
-        padding-left: 8px;
-      }
-    }
-
-    .description {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      padding-bottom: 8px;
-
-      .data {
-        padding-left: 8px;
-      }
-    } 
   }
 `
