@@ -33,6 +33,30 @@ export function Profile({ closeProfile }) {
     }
   }
 
+  const saveSearchable = async (e) => {
+    try {
+      await actions.setSearchable(e.target.checked);
+    }
+    catch (err) {
+      console.log(err);
+      Modal.error({
+        title: 'Update Registry Failed',
+        content: 'Please try again.',
+      });
+    }
+  };
+
+  const logout = () => {
+    Modal.confirm({
+      title: 'Are you sure you want to logout?',
+      icon: <LogoutOutlined />,
+      onOk() {
+        actions.logout();
+      },
+      onCancel() {},
+    });
+  }
+
   const Image = (
     <div class="logo" onClick={actions.setEditProfileImage}>
       <Logo url={state.url} width={'100%'} radius={8} />
@@ -103,13 +127,13 @@ export function Profile({ closeProfile }) {
           </div>
           <div class="section">Account Settings</div>
           <div class="controls">
-            <Checkbox>Visible in Registry</Checkbox>
+            <Checkbox checked={state.searchable} onChange={(e) => saveSearchable(e)}>Visible in Registry</Checkbox>
             <div class="link">
               <LockOutlined />
               <div class="label">Change Login</div>
             </div>
             { state.display === 'small' && (
-              <div class="logout">
+              <div class="logout" onClick={logout}>
                 <LogoutOutlined />
                 <div class="label">Logout</div>
               </div>

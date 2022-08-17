@@ -1,12 +1,23 @@
-import { Dropdown, Menu, Tooltip } from 'antd';
+import { Modal, Dropdown, Menu, Tooltip } from 'antd';
 import { Logo } from 'logo/Logo';
 import { IdentityWrapper, ErrorNotice, InfoNotice } from './Identity.styled';
 import { useIdentity } from './useIdentity.hook';
-import { InfoCircleOutlined, ExclamationCircleOutlined, DownOutlined } from '@ant-design/icons';
+import { LogoutOutlined, InfoCircleOutlined, ExclamationCircleOutlined, DownOutlined } from '@ant-design/icons';
 
 export function Identity({ openAccount, openCards, cardUpdated }) {
 
   const { state, actions } = useIdentity();
+
+  const logout = () => {
+    Modal.confirm({
+      title: 'Are you sure you want to logout?',
+      icon: <LogoutOutlined />,
+      onOk() {
+        actions.logout();
+      },
+      onCancel() {},
+    });
+  }
 
   const menu = (
     <Menu>
@@ -17,7 +28,7 @@ export function Identity({ openAccount, openCards, cardUpdated }) {
         <div onClick={openCards}>Contacts</div>
       </Menu.Item>
       <Menu.Item key="2">
-        <div onClick={actions.logout}>Logout</div>
+        <div onClick={logout}>Logout</div>
       </Menu.Item>
     </Menu>
   );

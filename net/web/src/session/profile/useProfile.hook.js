@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
 import { ProfileContext } from 'context/ProfileContext';
+import { AccountContext } from 'context/AccountContext';
 import { AppContext } from 'context/AppContext';
 import { ViewportContext } from 'context/ViewportContext';
 import avatar from 'images/avatar.png';
@@ -12,13 +13,15 @@ export function useProfile() {
     editImage: null,
     crop: { w: 0, h: 0, x: 0, y: 0 },
     busy: false,
+    searchable: null,
   });
 
   const IMAGE_DIM = 256;
   const app = useContext(AppContext);
   const viewport = useContext(ViewportContext);
   const profile = useContext(ProfileContext);
-  
+  const account = useContext(AccountContext);  
+
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
   }
@@ -36,6 +39,12 @@ export function useProfile() {
     updateState({ display: viewport.state.display });
   }, [viewport]);
 
+  useEffect(() => {
+    if (account?.state?.status) {
+      updateState({ searchable: account.state.status.searchable });
+    }
+  }, [account]);
+
   const actions = {
     logout: app.actions.logout,
     setEditImage: (value) => {
@@ -51,7 +60,6 @@ export function useProfile() {
       updateState({ crop: { w, h, x, y }});
     },
     setProfileImage: async () => {
-console.log("CHECK1");
       if(!state.busy) {
         updateState({ busy: true });
         try {
@@ -74,9 +82,7 @@ console.log("CHECK1");
           };
           let dataUrl = await processImg();
           let data = dataUrl.split(",")[1];
-console.log("CHECK2");
           await profile.actions.setProfileImage(data);
-console.log("CHECK3");
           updateState({ busy: false });
         }
         catch (err) {
@@ -87,6 +93,20 @@ console.log("CHECK3");
       }
       else {
         throw new Error('save in progress');
+      }
+    },
+    setSearchable: async (flag) => {
+      if (!state.busy) {
+        try {
+          updateState({ busy: true });
+          await account.actions.setSearchable(flag);
+          updateState({ busy: false });
+        }
+        catch (err) {
+          console.log(err);
+          throw new Error('failed to set searchable');
+          updateState({ busy: false });
+        }
       }
     },
   };
