@@ -3,7 +3,6 @@ import { Drawer } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { SessionWrapper } from './Session.styled';
 import { AppContext } from 'context/AppContext';
-import { ViewportContext } from 'context/ViewportContext';
 import { useSession } from './useSession.hook';
 import { Conversation } from './conversation/Conversation';
 import { Details } from './details/Details';
@@ -21,7 +20,6 @@ export function Session() {
 
   const { state, actions } = useSession();
   const app = useContext(AppContext);
-  const viewport = useContext(ViewportContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -60,7 +58,7 @@ console.log(state);
 
   return (
     <SessionWrapper>
-      { (viewport.state.display === 'xlarge') && (
+      { (state.display === 'xlarge') && (
         <div class="desktop-layout noselect">
           <div class="left">
             <Identity openAccount={openAccount} openCards={openCards} cardUpdated={state.cardUpdated} />
@@ -95,8 +93,9 @@ console.log(state);
             { state.cards && (
               <div class="reframe">
                 <Cards closeCards={closeCards} openContact={actions.openContact} openListing={actions.openListing} />
-                <Drawer title="Basic Drawer" placement="bottom" closable={false} visible={state.listing}
-                    onClose={actions.closeListing} getContainer={false} height={'80%'} style={{ position: 'absolute', overflow: 'hidden' }}>
+                <Drawer bodyStyle={{ padding: 0 }} placement="bottom" closable={false} visible={state.listing}
+                    onClose={actions.closeListing} getContainer={false} height={'80%'}
+                    style={{ position: 'absolute', overflow: 'hidden' }}>
                   <Listing openContact={actions.openContact} />
                 </Drawer>
               </div>
@@ -109,7 +108,7 @@ console.log(state);
           </div>
         </div>
       )}
-      { (viewport.state.display === 'large' || viewport.state.display === 'medium') && (
+      { (state.display === 'large' || state.display === 'medium') && (
         <div class="tablet-layout noselect">
           <div class="left">
             <Identity openAccount={actions.openProfile} openCards={actions.openCards} cardUpdated={state.cardUpdated} />
@@ -129,17 +128,18 @@ console.log(state);
                 <Details cardId={state.cardId} conversationId={state.conversationId} />
               )}
             </Drawer>
-            <Drawer bodyStyle={{ padding: 0 }} width={'33%'} closable={false} onClose={actions.closeCards} visible={state.cards} zIndex={20} push={state.contact}>
+            <Drawer bodyStyle={{ padding: 0 }} width={'33%'} closable={false} onClose={closeCards} visible={state.cards} zIndex={20} push={state.contact}>
               { state.cards && (
                 <Cards closeCards={closeCards} openContact={actions.openContact} openListing={actions.openListing} />
               )}
-              <Drawer title="Basic Drawer" placement="bottom" closable={false} visible={state.listing}
-                  onClose={actions.closeListing} getContainer={false} height={'80%'} style={{ overflow: 'hidden', position: 'absolute' }}>
+              <Drawer bodyStyle={{ padding: 0 }} placement="bottom" closable={false} visible={state.listing}
+                  onClose={actions.closeListing} getContainer={false} height={'80%'}
+                  style={{ overflow: 'hidden', position: 'absolute' }}>
                 <Listing openContact={actions.openContact} />
               </Drawer>
               <Drawer bodyStyle={{ padding: 0 }} width={'33%'} closable={false} onClose={actions.closeContact} visible={state.contact} zIndex={30}>
                 { state.contact && (
-                  <Contact close={actions.closeContact} guid={state.contactGuid} node={state.contactNode} />
+                  <Contact close={actions.closeContact} guid={state.contactGuid} listing={state.contactListing} />
                 )}
               </Drawer>
             </Drawer>
@@ -151,7 +151,7 @@ console.log(state);
           </div>
         </div>
       )}
-      { (viewport.state.display === 'small') && (
+      { (state.display === 'small') && (
         <div class="mobile-layout noselect">
           <div class="top">
             <div class="reframe">
@@ -179,7 +179,7 @@ console.log(state);
             )}
             { state.contact && (
               <div class="reframe">
-                <Contact close={actions.closeContact} guid={state.contactGuid} node={state.contactNode} />
+                <Contact close={actions.closeContact} guid={state.contactGuid} listing={state.contactListing} />
               </div>
             )}
             { (state.profile || state.account) && (

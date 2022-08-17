@@ -21,7 +21,7 @@ export function CardItem({ item, open }) {
   }
 
   return (
-    <CardItemWrapper onClick={() => open(profile.guid, profile.node)}>
+    <CardItemWrapper onClick={() => open(profile.guid)}>
       <Logo url={state.logo} width={32} height={32} radius={8} />
       <div class="details">
         <div class="name">{ profile?.name }</div>

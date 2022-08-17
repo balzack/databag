@@ -1,14 +1,14 @@
 import { useContext, useState, useEffect, useRef } from 'react';
 import { CardContext } from 'context/CardContext';
 import { StoreContext } from 'context/StoreContext';
+import { ViewportContext } from 'context/ViewportContext';
 
 export function useSession() {
 
   const [state, setState] = useState({
     cardUpdated: false,
     contactGuid: null,
-    contactNode: null,
-    listingNode: null,
+    contactListing: null,
     conversation: false,
     details: false,
     cards: false,
@@ -20,6 +20,7 @@ export function useSession() {
 
   const card = useContext(CardContext);
   const store = useContext(StoreContext);
+  const viewport = useContext(ViewportContext);
   
   const storeStatus = useRef(null);
   const cardStatus = useRef(null);
@@ -27,6 +28,10 @@ export function useSession() {
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
   }
+
+  useEffect(() => {
+    updateState({ display: viewport.state.display });
+  }, [viewport]);
 
   useEffect(() => {
     const contacts = Array.from(card.state.cards.values());
@@ -62,14 +67,14 @@ export function useSession() {
     closeCards: () => {
       updateState({ cards: false });
     },
-    openListing: (listingNode) => {
-      updateState({ listing: true, listingNode });
+    openListing: () => {
+      updateState({ listing: true });
     },
     closeListing: () => {
       updateState({ listing: false });
     },
-    openContact: (contactGuid, contactNode) => {
-      updateState({ contact: true, contactGuid, contactNode });
+    openContact: (contactGuid, contactListing) => {
+      updateState({ contact: true, contactGuid, contactListing });
     },
     closeContact: () => {
       updateState({ contact: false });

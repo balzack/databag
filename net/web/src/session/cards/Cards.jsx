@@ -1,6 +1,6 @@
 import { Drawer, Input, List } from 'antd';
 import { CardsWrapper } from './Cards.styled';
-import { SortAscendingOutlined, DoubleRightOutlined, UserOutlined, SearchOutlined } from '@ant-design/icons';
+import { SortAscendingOutlined, UpOutlined, DoubleRightOutlined, UserOutlined, SearchOutlined } from '@ant-design/icons';
 import { useCards } from './useCards.hook';
 import { CardItem } from './cardItem/CardItem';
 
@@ -50,8 +50,8 @@ export function Cards({ closeCards, openContact, openListing }) {
       { state.display !== 'small' && (
         <div class="bar">
           <div class="add" onClick={openListing}>
-            <UserOutlined />
-            <div class="label">New Contact</div>
+            <UpOutlined />
+            <div class="label">Find New Contact</div>
           </div>
         </div>
       )}
