@@ -1,8 +1,9 @@
 import { useRef } from 'react';
 import { Modal, Button, Checkbox } from 'antd';
-import { ProfileWrapper, EditImageFooter } from './Profile.styled';
+import { ProfileWrapper, EditFooter } from './Profile.styled';
 import { useProfile } from './useProfile.hook';
 import { ProfileImage } from './profileImage/ProfileImage';
+import { ProfileDetails } from './profileDetails/ProfileDetails';
 import { Logo } from 'logo/Logo';
 import { LogoutOutlined, DatabaseOutlined, LockOutlined, RightOutlined, EditOutlined, BookOutlined, EnvironmentOutlined } from '@ant-design/icons';
 
@@ -23,6 +24,20 @@ export function Profile({ closeProfile }) {
     try {
       await actions.setProfileImage();
       actions.clearEditProfileImage();
+    }
+    catch(err) {
+      console.log(err);
+      Modal.error({
+        title: 'Failed to Save',
+        content: 'Please try again.',
+      });
+    }
+  }
+
+  const saveDetails = async () => {
+    try {
+      await actions.setProfileDetails();
+      actions.clearEditProfileDetails();
     }
     catch(err) {
       console.log(err);
@@ -59,7 +74,7 @@ export function Profile({ closeProfile }) {
 
   const Image = (
     <div class="logo" onClick={actions.setEditProfileImage}>
-      <Logo url={state.url} width={'100%'} radius={8} />
+      <Logo url={state.url} width={'100%'} radius={4} />
       <div class="edit">
         <EditOutlined />
       </div>
@@ -68,16 +83,12 @@ export function Profile({ closeProfile }) {
 
   const Details = (
     <div class="details">
-      <div class="name">
+      <div class="name" onClick={actions.setEditProfileDetails}>
         <div class="data">{ state.name }</div>
-        <EditOutlined />
-      </div>
-      { state.node && (
-        <div class="location">
-          <DatabaseOutlined />
-          <div class="data">{ state.node }</div>
+        <div class="icon">
+          <EditOutlined />
         </div>
-      )}
+      </div>
       <div class="location">
         <EnvironmentOutlined />
         <div class="data">{ state.location }</div>
@@ -90,14 +101,22 @@ export function Profile({ closeProfile }) {
   );
 
   const editImageFooter = (
-    <EditImageFooter>
+    <EditFooter>
       <input type='file' id='file' accept="image/*" ref={imageFile} onChange={e => selected(e)} style={{display: 'none'}}/>
       <div class="select">
         <Button key="select" class="select" onClick={() => imageFile.current.click()}>Select Image</Button>
       </div>
       <Button key="back" onClick={actions.clearEditProfileImage}>Cancel</Button>
-      <Button key="save" type="primary" onClick={saveImage}>Save</Button>
-    </EditImageFooter>
+      <Button key="save" type="primary" onClick={saveImage} loading={state.busy}>Save</Button>
+    </EditFooter>
+  );
+
+  const editDetailsFooter = (
+    <EditFooter>
+      <div class="select"></div>
+      <Button key="back" onClick={actions.clearEditProfileDetails}>Cancel</Button>
+      <Button key="save" type="primary" onClick={saveDetails} loading={state.busy}>Save</Button>
+    </EditFooter>
   );
 
   return (
@@ -144,6 +163,10 @@ export function Profile({ closeProfile }) {
       <Modal title="Profile Image" centered visible={state.editProfileImage} footer={editImageFooter}
           onCancel={actions.clearEditProfileImage}>
         <ProfileImage state={state} actions={actions} />
+      </Modal>
+      <Modal title="Profile Details" centered visible={state.editProfileDetails} footer={editDetailsFooter}
+          onCancel={actions.clearEditProfileDetails}>
+        <ProfileDetails state={state} actions={actions} />
       </Modal>
     </ProfileWrapper>
   );

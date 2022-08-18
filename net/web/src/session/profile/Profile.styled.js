@@ -57,7 +57,8 @@ export const ProfileWrapper = styled.div`
         display: flex;
         align-items: center;
         justify-content: center;
-        border-radius: 8px;
+        border-top-left-radius: 4px;
+        border-bottom-right-radius: 4px;
         width: 24px;
         height: 24px;
         bottom: 0;
@@ -76,9 +77,22 @@ export const ProfileWrapper = styled.div`
         display: flex;
         flex-direction: row;
         align-items: center;
-   
+        cursor: pointer;
+
+        &:hover .icon {
+          border: 1px solid ${Colors.grey};
+          background-color: ${Colors.white};
+        }  
+ 
+        .icon {
+          padding-left: 4px;
+          padding-right: 4px;
+          border: 1px solid ${Colors.profileForm};
+          border-raidus: 4px;
+        }
+
         .data {
-          padding-right: 8px;
+          padding-right: 4px;
           font-size: 24px;
           font-weight: bold;
         }
@@ -136,7 +150,8 @@ export const ProfileWrapper = styled.div`
         display: flex;
         align-items: center;
         justify-content: center;
-        border-radius: 8px;
+        border-top-left-radius: 4px;
+        border-bottom-right-radius: 4px;
         width: 24px;
         height: 24px;
         bottom: 0;
@@ -156,9 +171,22 @@ export const ProfileWrapper = styled.div`
         display: flex;
         flex-direction: row;
         align-items: center;
-   
+        cursor: pointer;
+ 
+        &:hover .icon {
+          border: 1px solid ${Colors.grey};
+          background-color: ${Colors.white};
+        }
+
+        .icon {
+          padding-left: 4px;
+          padding-right: 4px;
+          border: 1px solid ${Colors.profileForm};
+          border-radius: 4px;
+        }  
+ 
         .data {
-          padding-right: 8px;
+          padding-right: 4px;
           font-size: 24px;
           font-weight: bold;
         }
@@ -237,7 +265,7 @@ export const ProfileWrapper = styled.div`
     }
   }
 `
-export const EditImageFooter = styled.div`
+export const EditFooter = styled.div`
   width: 100%;
   display: flex;
 

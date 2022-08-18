@@ -10,7 +10,13 @@ export function useProfile() {
   const [state, setState] = useState({
     init: false,
     editProfileImage: false,
+    name: null,
+    location: null,
+    description: null,
     editImage: null,
+    editName: null,
+    editLocation: null,
+    editDescription: null,
     crop: { w: 0, h: 0, x: 0, y: 0 },
     busy: false,
     searchable: null,
@@ -56,8 +62,23 @@ export function useProfile() {
     clearEditProfileImage: () => {
       updateState({ editProfileImage: false });
     },
+    setEditProfileDetails: () => {
+      updateState({ editProfileDetails: true });
+    },
+    clearEditProfileDetails: () => {
+      updateState({ editProfileDetails: false });
+    },
     setEditImageCrop: (w, h, x, y) => {
       updateState({ crop: { w, h, x, y }});
+    },
+    setEditName: (editName) => {
+      updateState({ editName });
+    },
+    setEditLocation: (editLocation) => {
+      updateState({ editLocation });
+    },
+    setEditDescription: (editDescription) => {
+      updateState({ editDescription });
     },
     setProfileImage: async () => {
       if(!state.busy) {
@@ -89,6 +110,23 @@ export function useProfile() {
           console.log(err);
           updateState({ busy: false });
           throw new Error('failed to save profile image');
+        }
+      }
+      else {
+        throw new Error('save in progress');
+      }
+    },
+    setProfileDetails: async () => {
+      if(!state.busy) {
+        try {
+          updateState({ busy: true });
+          await profile.actions.setProfileData(state.editName, state.editLocation, state.editDescription);
+          updateState({ busy: false });
+        }
+        catch(err) {
+          console.log(err);
+          updateState({ busy: false });
+          throw new Error('failed to save profile details');
         }
       }
       else {
