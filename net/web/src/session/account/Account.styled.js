@@ -41,18 +41,26 @@ export const AccountWrapper = styled.div`
     justify-content: center;
     padding-top: 32px;
     align-items: center;
+    flex-grow: 1;
 
-    .link {
-      color: ${Colors.primary};
-      padding-top: 16px;
-      padding-bottom: 8px;
+    .bottom {
+      flex-grow: 1;
       display: flex;
-      flex-direction: row;
-      align-items: center;
-      cursor: pointer;    
+      align-items: flex-end;
+      padding-bottom: 16px;
 
-      .label {
-        padding-left: 8px;
+      .link {
+        color: ${Colors.primary};
+        padding-top: 16px;
+        padding-bottom: 8px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        cursor: pointer;    
+
+        .label {
+          padding-left: 8px;
+        }
       }
     }
   }

@@ -15,11 +15,13 @@ export function Account({ closeAccount, openProfile }) {
         </div>
       </div>
       <div class="content">
-        <div class="link" onClick={openProfile}>
-          <SettingOutlined />
-          <div class="label">Update Profile</div>
-        </div>
         <AccountAccess />
+        <div class="bottom">
+          <div class="link" onClick={openProfile}>
+            <SettingOutlined />
+            <div class="label">Update Profile</div>
+          </div>
+        </div>
       </div>
     </AccountWrapper>
   );

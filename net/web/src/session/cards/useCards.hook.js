@@ -63,9 +63,9 @@ export function useCards() {
           return 0;
         }
         if (!aUpdated || (aUpdated < bUpdated)) {
-          return -1;
+          return 1;
         }
-        return 1;
+        return -1;
       });
     }
 

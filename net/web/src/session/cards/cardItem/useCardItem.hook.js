@@ -16,7 +16,7 @@ export function useCardItem(item) {
 
   useEffect(() => {
     updateState({ logo: card.actions.getImageUrl(item.id) });
-  }, [card]); 
+  }, [card, item]); 
 
   const actions = {
     resync: async () => {

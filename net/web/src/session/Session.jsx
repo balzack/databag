@@ -72,7 +72,7 @@ export function Session() {
             )}
             { state.contact && (
               <div class="reframe">
-                <Contact close={actions.closeContact} guid={state.contactGuid} node={state.contactNode} />
+                <Contact close={actions.closeContact} guid={state.contactGuid} listing={state.contactListing} />
               </div>
             )}
             { state.profile && (

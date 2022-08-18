@@ -335,8 +335,9 @@ export function useCardContext() {
     setCardConnecting: async (cardId) => {
       return await setCardConnecting(access.current, cardId);
     },
-    setCardConnected: async (cardId, token, view, article, channel, profile) => {
-      return await setCardConnected(access.current, cardId, token, view, article, channel, profile);
+    setCardConnected: async (cardId, token, rev) => {
+      return await setCardConnected(access.current, cardId, token,
+          rev.viewRevision, rev.articleRevision, rev.channelRevision, rev.profileRevision);
     },
     setCardConfirmed: async (cardId) => {
       return await setCardConfirmed(access.current, cardId);

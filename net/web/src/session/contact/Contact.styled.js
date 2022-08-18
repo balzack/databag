@@ -85,7 +85,7 @@ export const ContactWrapper = styled.div`
         .data {
           padding-left: 8px;
         }
-      } 
+      }
     }
   }
 
@@ -166,6 +166,41 @@ export const ContactWrapper = styled.div`
           padding-left: 8px;
         }
       } 
+    }
+  }
+
+  .controls {
+    padding-top: 16px;
+    padding-bottom: 16px;
+
+    .button {
+      width: 192px;
+      padding-top: 2px;
+      padding-bottom: 2px;
+      margin-top: 16px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      border-radius: 2px;
+      color: ${Colors.white};
+      background-color: ${Colors.primary};
+    }
+
+    .label {
+      flex-grow: 1;
+      display: flex;
+      justify-content: center;
+    }
+
+    .idle {
+      cursor: pointer;
+      opactiy: 0;
+    }
+
+    .busy {
+      cursor: not-allowed;
+      opacity: 0.5;
     }
   }
 `
