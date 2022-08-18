@@ -30,6 +30,19 @@ export function useContact(guid, listing, close) {
     setState((s) => ({ ...s, ...value }));
   }
 
+  const statusMap = (status) => {
+    if (status === 'confirmed') {
+      return 'saved';
+    }
+    if (status === 'requested') {
+      return 'request received';
+    }
+    if (status === 'connecting') {
+      return 'request sent';
+    }
+    return status;
+  }
+
   useEffect(() => {
     let logo, name, location, description, handle, node, status, cardId;
     let contact = card.actions.getCardByGuid(guid);
@@ -43,7 +56,7 @@ export function useContact(guid, listing, close) {
       name = cardProfile.name;
       location = cardProfile.location;
       description = cardProfile.description;
-      status = cardDetail.status === 'confirmed' ? 'saved' : cardDetail.status;
+      status = statusMap(cardDetail.status);
     }
     else if (listing) {
       handle = listing.handle;

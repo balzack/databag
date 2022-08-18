@@ -62,14 +62,14 @@ export function Contact({ close, guid, listing }) {
         </div>
       )}
 
-      { state.status === 'requested' && (
+      { state.status === 'request received' && (
         <div class="controls">
           <div class={ state.buttonStatus } onClick={() => updateContact(actions.saveConnect)}>Accept Connection</div>
           <div class={ state.buttonStatus } onClick={() => updateContact(actions.disconnect)}>Ignore Request</div>
         </div>
       )}
 
-      { state.status === 'connecting' && (
+      { state.status === 'request sent' && (
         <div class="controls">
           <div class={ state.buttonStatus } onClick={() => updateContact(actions.disconnect)}>Cancel Request</div>
           <div class={ state.buttonStatus } onClick={() => updateContact(actions.disconnectRemove)}>Delete Contact</div>
@@ -130,7 +130,7 @@ export function Contact({ close, guid, listing }) {
           { Image }
           { Details }
           <div class="footer">
-            <div class="status">Status: { state.status }</div>
+            <div>contact { state.status }</div>
           </div>
         </div>
       )}

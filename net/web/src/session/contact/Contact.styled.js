@@ -210,6 +210,7 @@ export const ContactWrapper = styled.div`
     align-items: flex-end;
     justify-content: center;
     padding-bottom: 16px;
+    color: ${Colors.grey};
   }
 `
 
