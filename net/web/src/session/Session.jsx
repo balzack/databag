@@ -54,6 +54,19 @@ export function Session() {
     actions.closeAccount();
   }
 
+  const openConversation = () => {
+    actions.openConversation();
+    actions.closeCards();
+    actions.closeContact();
+    actions.closeAccount();
+    actions.closeProfile();
+  }
+
+  const closeConversation = () => {
+    actions.closeConversation();
+    actions.closeDetails();
+  }
+
   return (
     <SessionWrapper>
       { (state.display === 'xlarge') && (
@@ -61,13 +74,13 @@ export function Session() {
           <div class="left">
             <Identity openAccount={openAccount} openCards={openCards} cardUpdated={state.cardUpdated} />
             <div class="bottom">
-              <Channels />
+              <Channels open={openConversation} />
             </div>
           </div>
           <div class="center">
             { state.conversation && (
               <div class="reframe">
-                <Conversation cardId={state.cardId} conversationId={state.conversationId} />
+                <Conversation openDetails={actions.openDetails} cardId={state.cardId} conversationId={state.conversationId} />
               </div>
             )}
             { state.contact && (
@@ -83,9 +96,10 @@ export function Session() {
           </div>
           <div class="right">
             <Welcome />
-            { state.conversation && (
+            { (state.conversation || state.details) && (
               <div class="reframe">
-                <Details cardId={state.cardId} conversationId={state.conversationId} />
+                <Details closeDetails={actions.closeDetails} closeConversation={closeConversation} openContact={actions.openContact}
+                    cardId={state.cardId} conversationId={state.conversationId} />
               </div>
             )}
             { state.cards && (
@@ -111,19 +125,20 @@ export function Session() {
           <div class="left">
             <Identity openAccount={actions.openProfile} openCards={actions.openCards} cardUpdated={state.cardUpdated} />
             <div class="bottom">
-              <Channels />
+              <Channels open={actions.openConversation} />
             </div>
           </div>
           <div class="right">
             <Welcome />
             { state.conversation && (
               <div class="reframe">
-                <Conversation cardId={state.cardId} conversationId={state.conversationId} />
+                <Conversation openDetails={actions.openDetails} cardId={state.cardId} conversationId={state.conversationId} />
               </div>
             )}
             <Drawer bodyStyle={{ padding: 0 }} width={'33%'} closable={false} onClose={actions.closeDetails} visible={state.details} zIndex={10}>
               { state.details && (
-                <Details cardId={state.cardId} conversationId={state.conversationId} />
+                <Details closeDetails={actions.closeDetails} closeConversation={closeConversation} openContact={actions.openContact}
+                    cardId={state.cardId} conversationId={state.conversationId} />
               )}
             </Drawer>
             <Drawer bodyStyle={{ padding: 0 }} width={'33%'} closable={false} onClose={closeCards} visible={state.cards} zIndex={20} push={state.contact}>
@@ -153,16 +168,17 @@ export function Session() {
         <div class="mobile-layout noselect">
           <div class="top">
             <div class="reframe">
-              <Channels />
+              <Channels open={actions.openConversation} />
             </div>
             { state.conversation && (
               <div class="reframe">
-                <Conversation cardId={state.cardId} conversationId={state.conversationId} />
+                <Conversation openDetails={actions.openDetails} cardId={state.cardId} conversationId={state.conversationId} />
               </div>
             )}
             { state.details && (
               <div class="reframe">
-                <Details cardId={state.cardId} conversation={state.conversationId} />
+                <Details closeDetails={actions.closeDetails} closeConversation={closeConversation} openContact={actions.openContact} 
+                    cardId={state.cardId} conversation={state.conversationId} />
               </div>
             )}
             { state.cards && (

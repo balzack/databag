@@ -91,8 +91,17 @@ export function useSession() {
     closeAccount: () => {
       updateState({ account: false });
     },
+    openConversation: () => {
+      updateState({ conversation: true });
+    },
     closeConversation: () => {
       updateState({ conversation: false });
+    },
+    openDetails: () => {
+      updateState({ details: true });
+    },
+    closeDetails: () => {
+      updateState({ details: false });
     },
   };
 

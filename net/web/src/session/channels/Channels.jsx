@@ -4,12 +4,12 @@ import { CommentOutlined, SearchOutlined } from '@ant-design/icons';
 import { useChannels } from './useChannels.hook';
 import { ChannelItem } from './channelItem/ChannelItem';
 
-export function Channels() {
+export function Channels({ open }) {
 
   const { state, actions } = useChannels();
 
   return (
-    <ChannelsWrapper>
+    <ChannelsWrapper onClick={open} >
       <div class="search">
         <div class="filter">
           <Input bordered={false} allowClear={true} placeholder="Channels" prefix={<SearchOutlined />}
