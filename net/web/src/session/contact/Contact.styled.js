@@ -203,5 +203,13 @@ export const ContactWrapper = styled.div`
       opacity: 0.5;
     }
   }
+
+  .footer {
+    flex-grow: 1;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 16px;
+  }
 `
 

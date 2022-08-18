@@ -43,7 +43,7 @@ export function useContact(guid, listing, close) {
       name = cardProfile.name;
       location = cardProfile.location;
       description = cardProfile.description;
-      status = cardDetail.status;
+      status = cardDetail.status === 'confirmed' ? 'saved' : cardDetail.status;
     }
     else if (listing) {
       handle = listing.handle;
@@ -53,7 +53,7 @@ export function useContact(guid, listing, close) {
       name = listing.name;
       location = listing.location;
       description = listing.description;
-      status = 'disconnected';
+      status = 'unsaved';
     }
     else {
       updateState({ removed: true });

@@ -4,7 +4,7 @@ import { CommentOutlined, TeamOutlined, UserOutlined } from '@ant-design/icons';
 export function BottomNav({ state, actions }) {
 
   const tab = () => {
-    if (state.profile) {
+    if (state.profile || state.account) {
       return 'profile';
     }
     if (state.cards || state.contact) {
