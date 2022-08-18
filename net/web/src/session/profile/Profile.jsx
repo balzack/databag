@@ -1,10 +1,11 @@
 import { useRef } from 'react';
-import { Modal, Button, Checkbox } from 'antd';
+import { Modal, Button } from 'antd';
 import { ProfileWrapper, EditFooter } from './Profile.styled';
 import { useProfile } from './useProfile.hook';
 import { ProfileImage } from './profileImage/ProfileImage';
 import { ProfileDetails } from './profileDetails/ProfileDetails';
 import { Logo } from 'logo/Logo';
+import { AccountAccess } from '../accountAccess/AccountAccess';
 import { LogoutOutlined, DatabaseOutlined, LockOutlined, RightOutlined, EditOutlined, BookOutlined, EnvironmentOutlined } from '@ant-design/icons';
 
 export function Profile({ closeProfile }) {
@@ -47,19 +48,6 @@ export function Profile({ closeProfile }) {
       });
     }
   }
-
-  const saveSearchable = async (e) => {
-    try {
-      await actions.setSearchable(e.target.checked);
-    }
-    catch (err) {
-      console.log(err);
-      Modal.error({
-        title: 'Update Registry Failed',
-        content: 'Please try again.',
-      });
-    }
-  };
 
   const logout = () => {
     Modal.confirm({
@@ -146,11 +134,7 @@ export function Profile({ closeProfile }) {
           </div>
           <div class="section">Account Settings</div>
           <div class="controls">
-            <Checkbox checked={state.searchable} onChange={(e) => saveSearchable(e)}>Visible in Registry</Checkbox>
-            <div class="link">
-              <LockOutlined />
-              <div class="label">Change Login</div>
-            </div>
+            <AccountAccess />
             { state.display === 'small' && (
               <div class="logout" onClick={logout}>
                 <LogoutOutlined />

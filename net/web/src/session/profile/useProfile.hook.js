@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useRef, useState, useEffect, useContext } from 'react';
 import { ProfileContext } from 'context/ProfileContext';
 import { AccountContext } from 'context/AccountContext';
 import { AppContext } from 'context/AppContext';
@@ -10,6 +10,8 @@ export function useProfile() {
   const [state, setState] = useState({
     init: false,
     editProfileImage: false,
+    editProfileDetails: false,
+    handle: null,
     name: null,
     location: null,
     description: null,
@@ -20,6 +22,7 @@ export function useProfile() {
     crop: { w: 0, h: 0, x: 0, y: 0 },
     busy: false,
     searchable: null,
+    checked: true,
   });
 
   const IMAGE_DIM = 256;
@@ -37,19 +40,14 @@ export function useProfile() {
       const { node, name, handle, location, description, image } = profile.state.profile;
       let url = !image ? null : profile.actions.profileImageUrl();
       let editImage = !image ? avatar : url;
-      updateState({ init: true, name, node, handle, url, editImage, location, description });
+      updateState({ init: true, name, location, description, node, handle, url, 
+          editName: name, editLocation: location, editDescription: description, editHandle: handle, editImage });
     }
   }, [profile]);
 
   useEffect(() => {
     updateState({ display: viewport.state.display });
   }, [viewport]);
-
-  useEffect(() => {
-    if (account?.state?.status) {
-      updateState({ searchable: account.state.status.searchable });
-    }
-  }, [account]);
 
   const actions = {
     logout: app.actions.logout,
@@ -131,20 +129,6 @@ export function useProfile() {
       }
       else {
         throw new Error('save in progress');
-      }
-    },
-    setSearchable: async (flag) => {
-      if (!state.busy) {
-        try {
-          updateState({ busy: true });
-          await account.actions.setSearchable(flag);
-          updateState({ busy: false });
-        }
-        catch (err) {
-          console.log(err);
-          throw new Error('failed to set searchable');
-          updateState({ busy: false });
-        }
       }
     },
   };

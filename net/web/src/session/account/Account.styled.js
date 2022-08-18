@@ -45,6 +45,7 @@ export const AccountWrapper = styled.div`
     .link {
       color: ${Colors.primary};
       padding-top: 16px;
+      padding-bottom: 8px;
       display: flex;
       flex-direction: row;
       align-items: center;

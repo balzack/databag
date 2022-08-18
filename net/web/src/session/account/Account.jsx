@@ -2,6 +2,7 @@ import { AccountWrapper } from './Account.styled';
 import { DoubleRightOutlined } from '@ant-design/icons';
 import { Checkbox } from 'antd';
 import { SettingOutlined, LockOutlined } from '@ant-design/icons';
+import { AccountAccess } from '../accountAccess/AccountAccess';
 
 export function Account({ closeAccount, openProfile }) {
 
@@ -14,15 +15,11 @@ export function Account({ closeAccount, openProfile }) {
         </div>
       </div>
       <div class="content">
-        <Checkbox>Visible in Registry</Checkbox>
         <div class="link" onClick={openProfile}>
           <SettingOutlined />
           <div class="label">Update Profile</div>
         </div>
-        <div class="link">
-          <LockOutlined />
-          <div class="label">Change Login</div>
-        </div>
+        <AccountAccess />
       </div>
     </AccountWrapper>
   );
