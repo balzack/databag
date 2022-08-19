@@ -22,6 +22,10 @@ export const BottomNavWrapper = styled.div`
       padding-bottom: 8px;
       font-size: 20px;
       cursor: pointer;
+
+      .bump {
+        font-size: 26px;
+      }
     }
 
     .nav-active {
@@ -31,6 +35,10 @@ export const BottomNavWrapper = styled.div`
       padding-top: 8px;
       padding-bottom: 8px;
       font-size: 24px;
+
+      .bump {
+        font-size: 30px;
+      }
     }
 
     .nav-div-right {

@@ -6,11 +6,11 @@ export function ProfileDetails({ state, actions }) {
     <ProfileDetailsWrapper>
       <div class="info">
         <Input placeholder="Name" spellCheck="false" onChange={(e) => actions.setEditName(e.target.value)}
-            defaultValue={state.editName} autocapitalizate="word" />
+            defaultValue={state.editName} autocapitalize="word" />
       </div>
       <div class="info">
         <Input placeholder="Location" spellCheck="false" onChange={(e) => actions.setEditLocation(e.target.value)}
-            defaultValue={state.editLocation} autocapitalizate="word" />
+            defaultValue={state.editLocation} autocapitalize="word" />
       </div>
       <div class="info">
         <Input.TextArea placeholder="Description" onChange={(e) => actions.setEditDescription(e.target.value)}

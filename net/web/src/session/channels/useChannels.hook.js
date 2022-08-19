@@ -12,8 +12,11 @@ export function useChannels() {
   const [state, setState] = useState({
     display: null,
     channels: [],
-    busy: false }
-  );
+    showAdd: false,
+    busy: false,
+    members: new Set(),
+    subject: null,
+  });
 
   const card = useContext(CardContext);
   const channel = useContext(ChannelContext);
@@ -26,8 +29,45 @@ export function useChannels() {
   }
 
   const actions = {
+    addChannel: async () => {
+      if (!state.busy) {
+        try {
+          updateState({ busy: true });
+          let cards = Array.from(state.members.values());
+          await channel.actions.addChannel(cards, state.subject, null);
+          updateState({ busy: false });
+        }
+        catch(err) {
+          console.log(err);
+          updateState({ busy: false });
+          throw new Error("failed to create new channel");
+        }
+      }
+      else {
+        throw new Error("operation in progress");
+      }
+    },
     onFilter: (value) => {
       setFilter(value.toUpperCase());
+    },
+    setShowAdd: () => {
+      updateState({ showAdd: true });
+    },
+    clearShowAdd: () => {
+      updateState({ showAdd: false, members: new Set(), subject: null });
+    },
+    onMember: (string) => {
+      let members = new Set(state.members);
+      if (members.has(string)) {
+        members.delete(string);
+      }
+      else {
+        members.add(string);
+      }
+      updateState({ members });
+    },
+    setSubject: (subject) => {
+      updateState({ subject });
     },
   };
 

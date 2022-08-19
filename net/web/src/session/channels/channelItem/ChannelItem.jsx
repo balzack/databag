@@ -2,10 +2,10 @@ import { ChannelItemWrapper } from './ChannelItem.styled';
 import { Logo } from 'logo/Logo';
 import { AppstoreFilled, SolutionOutlined } from '@ant-design/icons';
 
-export function ChannelItem({ item }) {
+export function ChannelItem({ item, openChannel }) {
 
   return (
-    <ChannelItemWrapper>
+    <ChannelItemWrapper onClick={openChannel}>
       { item.contacts.length === 0 && (
         <div class="item">
           <div class="logo">

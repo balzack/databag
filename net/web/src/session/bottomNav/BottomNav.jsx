@@ -1,5 +1,5 @@
 import { BottomNavWrapper } from './BottomNav.styled';
-import { CommentOutlined, TeamOutlined, UserOutlined } from '@ant-design/icons';
+import { CommentOutlined, ContactsOutlined, UserOutlined } from '@ant-design/icons';
 
 export function BottomNav({ state, actions }) {
 
@@ -82,8 +82,8 @@ export function BottomNav({ state, actions }) {
       { (state.cards || state.contact) && !state.profile && (
         <div class="nav-item">
           <div class="nav-active">
-            <div class="nav-div-left">
-              <TeamOutlined />
+            <div class="nav-div-left bump">
+              <ContactsOutlined />
             </div>
           </div>
         </div>
@@ -91,8 +91,8 @@ export function BottomNav({ state, actions }) {
       { ((!state.cards && !state.contact) || state.profile) && (
         <div class="nav-item" onClick={() => setCards()}>
           <div class="nav-inactive">
-            <div class="nav-div-left">
-              <TeamOutlined />
+            <div class="nav-div-left bump">
+              <ContactsOutlined />
             </div>
           </div>
         </div>

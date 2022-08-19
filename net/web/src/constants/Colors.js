@@ -30,6 +30,8 @@ const Colors = {
   statsDivider: '#afafaf',
   channel: '#f2f2f2',
   card: '#eeeeee',
+
+  selectHover: '#fafafa',
 };
 
 export default Colors;
