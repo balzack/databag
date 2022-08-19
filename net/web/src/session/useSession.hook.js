@@ -9,6 +9,8 @@ export function useSession() {
     cardUpdated: false,
     contactGuid: null,
     contactListing: null,
+    cardId: null,
+    channelId: null,
     conversation: false,
     details: false,
     cards: false,
@@ -91,8 +93,8 @@ export function useSession() {
     closeAccount: () => {
       updateState({ account: false });
     },
-    openConversation: () => {
-      updateState({ conversation: true });
+    openConversation: (channelId, cardId) => {
+      updateState({ conversation: true, cardId, channelId });
     },
     closeConversation: () => {
       updateState({ conversation: false });

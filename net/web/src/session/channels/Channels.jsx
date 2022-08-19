@@ -11,8 +11,10 @@ export function Channels({ open }) {
 
   const addChannel = async () => {
     try {
-      await actions.addChannel();
+      const id = await actions.addChannel();
       actions.clearShowAdd();
+      console.log(id);
+      open(id);
     }
     catch(err) {
       console.log(err);

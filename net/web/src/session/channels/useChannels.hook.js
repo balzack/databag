@@ -30,11 +30,12 @@ export function useChannels() {
 
   const actions = {
     addChannel: async () => {
+      let added;
       if (!state.busy) {
         try {
           updateState({ busy: true });
           let cards = Array.from(state.members.values());
-          await channel.actions.addChannel(cards, state.subject, null);
+          added = await channel.actions.addChannel(cards, state.subject, null);
           updateState({ busy: false });
         }
         catch(err) {
@@ -46,6 +47,7 @@ export function useChannels() {
       else {
         throw new Error("operation in progress");
       }
+      return added.id;
     },
     onFilter: (value) => {
       setFilter(value.toUpperCase());
@@ -151,10 +153,15 @@ export function useChannels() {
     merged.push(...Array.from(channel.state.channels.values()));
 
     merged.sort((a, b) => {
-      if (a?.data?.channelSummary?.lastTopic?.created > b?.data?.channelSummary?.lastTopic?.created) {
-        return -1;
+      const aCreated = a?.data?.channelSummary?.lastTopic?.created;
+      const bCreated = b?.data?.channelSummary?.lastTopic?.created;
+      if (aCreated == bCreated) {
+        return 0;
       }
-      return 1;
+      if (!aCreated || aCreated < bCreated) {
+        return 1;
+      }
+      return -1;
     });
 
     merged.forEach(chan => { 

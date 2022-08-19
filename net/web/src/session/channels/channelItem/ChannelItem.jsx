@@ -5,7 +5,7 @@ import { AppstoreFilled, SolutionOutlined } from '@ant-design/icons';
 export function ChannelItem({ item, openChannel }) {
 
   return (
-    <ChannelItemWrapper onClick={openChannel}>
+    <ChannelItemWrapper onClick={() => openChannel(item.id, item.cardId)}>
       { item.contacts.length === 0 && (
         <div class="item">
           <div class="logo">

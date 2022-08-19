@@ -54,8 +54,8 @@ export function Session() {
     actions.closeAccount();
   }
 
-  const openConversation = () => {
-    actions.openConversation();
+  const openConversation = (channelId, cardId) => {
+    actions.openConversation(channelId, cardId);
     actions.closeCards();
     actions.closeContact();
     actions.closeAccount();
@@ -99,7 +99,7 @@ export function Session() {
             { (state.conversation || state.details) && (
               <div class="reframe">
                 <Details closeDetails={actions.closeDetails} closeConversation={closeConversation} openContact={actions.openContact}
-                    cardId={state.cardId} conversationId={state.conversationId} />
+                    cardId={state.cardId} channelId={state.channelId} />
               </div>
             )}
             { state.cards && (
@@ -138,7 +138,7 @@ export function Session() {
             <Drawer bodyStyle={{ padding: 0 }} width={'33%'} closable={false} onClose={actions.closeDetails} visible={state.details} zIndex={10}>
               { state.details && (
                 <Details closeDetails={actions.closeDetails} closeConversation={closeConversation} openContact={actions.openContact}
-                    cardId={state.cardId} conversationId={state.conversationId} />
+                    cardId={state.cardId} channelId={state.channelId} />
               )}
             </Drawer>
             <Drawer bodyStyle={{ padding: 0 }} width={'33%'} closable={false} onClose={closeCards} visible={state.cards} zIndex={20} push={state.contact}>
@@ -178,7 +178,7 @@ export function Session() {
             { state.details && (
               <div class="reframe">
                 <Details closeDetails={actions.closeDetails} closeConversation={closeConversation} openContact={actions.openContact} 
-                    cardId={state.cardId} conversation={state.conversationId} />
+                    cardId={state.cardId} channelId={state.channelId} />
               </div>
             )}
             { state.cards && (
