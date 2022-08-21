@@ -2,16 +2,27 @@ import styled from 'styled-components';
 import Colors from 'constants/Colors';
 
 export const SelectItemWrapper = styled.div`
-  height: 48px;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  padding-left: 8px;
-  padding-right: 8px;
-  cursor: pointer;
+  .active {
+    cursor: pointer;
+    height: 48px;
+    width: 100%;
+    padding-left: 8px;
+    padding-right: 8px;
+    display: flex;
+    align-items: center;
 
-  &:hover {
-    background-color: ${Colors.selectHover};
+    &:hover {
+      background-color: ${Colors.selectHover};
+    }
+  }
+
+  .passive {
+    height: 48px;
+    width: 100%;
+    padding-left: 8px;
+    padding-right: 8px;
+    display: flex;
+    align-items: center;
   }
 
   .details {
@@ -41,3 +52,12 @@ export const SelectItemWrapper = styled.div`
     flex-shrink: 0;
   }
 `
+
+export const Markup = styled.div`
+  background-color: ${Colors.connected};
+  border-radius: 8px;
+  width: 8px;
+  height: 8px;
+  margin-right: 8px;
+`;
+

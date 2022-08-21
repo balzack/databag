@@ -55,15 +55,15 @@ export const ChannelItemWrapper = styled.div`
         color: ${Colors.disabled};
       }
     }
-
-    .markup {
-      position: absolute;
-      right: 0;
-      border-radius: 8px;
-      background-color: ${Colors.background};
-      width: 8px;
-      height: 8px;
-      margin-right: 16px;
-    }
   }
+`
+
+export const Markup = styled.div`
+  position: absolute;
+  right: 0;
+  border-radius: 8px;
+  background-color: ${Colors.background};
+  width: 8px;
+  height: 8px;
+  margin-right: 16px;
 `;

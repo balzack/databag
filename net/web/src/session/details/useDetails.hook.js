@@ -7,6 +7,12 @@ export function useDetails(cardId, channelId) {
   const [state, setState] = useState({
     logo: null,
     img: null,
+    subject: null,
+    server: null,
+    startedDate: null,
+    startedTime: null,
+    host: null,
+    contacts: [],
   });
 
   const card = useContext(CardContext);
@@ -17,7 +23,7 @@ export function useDetails(cardId, channelId) {
   }
 
   useEffect(() => {
-    let logo, img;
+    let img, subject, host, started;
     let chan;
     if (cardId) {
       const cardChan = card.state.cards.get(cardId);
@@ -28,23 +34,41 @@ export function useDetails(cardId, channelId) {
     else {
       chan = channel.state.channels.get(channelId);
     }
-    console.log(chan);
 
     if (chan) {
       if (chan.contacts?.length == 0) {
         img = 'solution';
-        logo = null;
+        subject = 'Private';
       }
       else if (chan.contacts?.length > 1) {
         img = 'appstore'
-        logo = null;
+        subject = 'Group';
       }
       else {
-        img = null;
-        logo = card.actions.getImageUrl(chan.contacts[0]?.id);
+        img = 'team';
+        subject = 'Direct'
+      }
+      const parsed = JSON.parse(chan.data.channelDetail.data);
+      if (parsed.subject) {
+        subject = parsed.subject;
+      }
+      const date = new Date(chan.data.channelDetail.created * 1000);
+      const now = new Date();
+      if(now.getTime() - date.getTime() < 86400000) {
+        started = date.toLocaleTimeString([], {hour: 'numeric', minute:'2-digit'});
+      }
+      else {
+        started = date.toLocaleDateString("en-US");
+      }
+      if (chan.cardId) {
+        host = false;
+      }
+      else {
+        host = true;
       }
     }
-    updateState({ logo, img });
+    updateState({ img, subject, host, started,
+      contacts: chan.contacts.map((contact) => contact?.id) });
   }, [cardId, channelId, card, channel]);
 
   const actions = {

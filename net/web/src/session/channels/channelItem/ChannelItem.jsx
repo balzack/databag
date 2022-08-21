@@ -1,4 +1,5 @@
-import { ChannelItemWrapper } from './ChannelItem.styled';
+import { Tooltip } from 'antd';
+import { ChannelItemWrapper, Markup } from './ChannelItem.styled';
 import { Logo } from 'logo/Logo';
 import { AppstoreFilled, SolutionOutlined } from '@ant-design/icons';
 
@@ -39,7 +40,9 @@ export function ChannelItem({ item, openChannel }) {
             <div class="message">{ item.message }</div>
           </div>
           { item.updated && (
-            <div class="markup"></div>
+            <Tooltip placement="right" title="new message">
+              <Markup />
+            </Tooltip>
           )}
         </div>
       )}

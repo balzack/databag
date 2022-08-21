@@ -1,12 +1,14 @@
 import { useContext, useState, useEffect } from 'react';
 import { CardContext } from 'context/CardContext';
 
-export function useSelectItem(item, selected) {
+export function useSelectItem(item, selected, markup) {
 
   const [state, setState] = useState({
     logo: null,
     selected: false,
     busy: false,
+    className: 'passive',
+    markup: false,
   });
 
   const card = useContext(CardContext);
@@ -16,7 +18,12 @@ export function useSelectItem(item, selected) {
   }
 
   useEffect(() => {
-    updateState({ selected: selected.has(item.id) });
+    if (selected) {
+      updateState({ className: 'active', selected: selected.has(item.id) });
+    }
+    else {
+      updateState({ className: 'passive', markup: item.id === markup });
+    }
   }, [selected]);
 
   useEffect(() => {

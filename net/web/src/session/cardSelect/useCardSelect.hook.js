@@ -17,7 +17,7 @@ export function useCardSelect(filter) {
     let contacts = Array.from(card.state.cards.values());
     let filtered = contacts.filter(filter);
     updateState({ cards: filtered });
-  }, [card]);
+  }, [card, filter]);
 
   const actions = {
   };
