@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { Input, Select } from 'antd';
+import { Input } from 'antd';
 import { AddChannelWrapper } from './AddChannel.styled';
 import { CardSelect } from '../../cardSelect/CardSelect';
 

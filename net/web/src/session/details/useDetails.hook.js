@@ -9,10 +9,15 @@ export function useDetails(cardId, channelId) {
     img: null,
     subject: null,
     server: null,
-    startedDate: null,
-    startedTime: null,
+    started: null,
     host: null,
     contacts: [],
+    members: new Set(),
+    editSubject: false,
+    editMembers: false,
+    busy: false,
+    subjectUpdate: null,
+    unknown: 0,
   });
 
   const card = useContext(CardContext);
@@ -23,7 +28,7 @@ export function useDetails(cardId, channelId) {
   }
 
   useEffect(() => {
-    let img, subject, host, started;
+    let img, subject, host, started, contacts
     let chan;
     if (cardId) {
       const cardChan = card.state.cards.get(cardId);
@@ -67,11 +72,72 @@ export function useDetails(cardId, channelId) {
         host = true;
       }
     }
-    updateState({ img, subject, host, started,
-      contacts: chan.contacts.map((contact) => contact?.id) });
+
+    if (chan?.contacts ) {
+      contacts = chan.contacts.map((contact) => contact?.id);
+    }
+    else {
+      contacts = [];
+    }
+    
+    let members = new Set(contacts);
+    let unknown = 0;
+    contacts.forEach(id => {
+      if (id == null) {
+        unknown++;
+      }
+    });
+
+    updateState({ img, subject, host, started, contacts, members, unknown });
   }, [cardId, channelId, card, channel]);
 
   const actions = {
+    setEditSubject: () => {
+      updateState({ editSubject: true });
+    },
+    clearEditSubject: () => {
+      updateState({ editSubject: false });
+    },
+    setSubjectUpdate: (subjectUpdate) => {
+      updateState({ subjectUpdate });
+    },
+    setSubject: async () => {
+      if (!state.busy) {
+        try {
+          updateState({ busy: true });
+          channel.actions.setChannelSubject(channelId, state.subjectUpdate);
+          updateState({ busy: false });
+        }
+        catch(err) {
+          console.log(err);
+          updateState({ busy: false });
+          throw new Error("set channel subject failed");
+        }
+      }
+      else {
+        throw new Error('operation in progress');
+      }
+    },
+    setEditMembers: () => {
+      updateState({ editMembers: true });
+    },
+    clearEditMembers: () => {
+      updateState({ editMembers: false });
+    },
+    onMember: async (card) => {
+      if (state.members.has(card)) {
+        channel.actions.clearChannelCard(channelId, card);
+      }
+      else {
+        channel.actions.setChannelCard(channelId, card);
+      }
+    },
+    deleteChannel: async () => {
+      await channel.actions.removeChannel(channelId);
+    },
+    leaveChannel: async () => {
+      await card.actions.removeChannel(cardId, channelId);
+    }
   };
 
   return { state, actions };

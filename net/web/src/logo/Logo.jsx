@@ -9,6 +9,9 @@ export function Logo({ url, width, height, radius, img }) {
       { img === 'team' && (
         <img src={team} alt="direct logo" width={width} height={height} />
       )}
+      { img === 'avatar' && (
+        <img src={avatar} alt="anonymous logo" width={width} height={height} />
+      )}
       { img === 'appstore' && (
         <img src={appstore} alt="group logo" width={width} height={height} />
       )}

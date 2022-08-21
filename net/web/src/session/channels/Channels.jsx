@@ -13,11 +13,9 @@ export function Channels({ open }) {
     try {
       const id = await actions.addChannel();
       actions.clearShowAdd();
-      console.log(id);
       open(id);
     }
     catch(err) {
-      console.log(err);
       Modal.error({
         title: 'Failed to Create Channel',
         content: 'Please try again.',

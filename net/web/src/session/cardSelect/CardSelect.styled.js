@@ -5,4 +5,17 @@ export const CardSelectWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+
+  .unknown {
+    height: 48px;
+    width: 100%;
+    padding-left: 8px;
+    padding-right: 8px;
+    display: flex;
+    align-items: center;
+
+    .message {
+      padding-left: 16px;
+    }
+  }
 `;
