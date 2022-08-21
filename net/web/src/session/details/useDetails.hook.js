@@ -28,7 +28,7 @@ export function useDetails(cardId, channelId) {
   }
 
   useEffect(() => {
-    let img, subject, host, started, contacts
+    let img, subject, subjectUpdate, host, started, contacts
     let chan;
     if (cardId) {
       const cardChan = card.state.cards.get(cardId);
@@ -56,6 +56,7 @@ export function useDetails(cardId, channelId) {
       const parsed = JSON.parse(chan.data.channelDetail.data);
       if (parsed.subject) {
         subject = parsed.subject;
+        subjectUpdate = subject;
       }
       const date = new Date(chan.data.channelDetail.created * 1000);
       const now = new Date();
@@ -88,7 +89,7 @@ export function useDetails(cardId, channelId) {
       }
     });
 
-    updateState({ img, subject, host, started, contacts, members, unknown });
+    updateState({ img, subject, host, started, contacts, members, unknown, subjectUpdate });
   }, [cardId, channelId, card, channel]);
 
   const actions = {

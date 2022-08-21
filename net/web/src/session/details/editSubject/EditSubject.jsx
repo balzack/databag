@@ -6,7 +6,7 @@ export function EditSubject({ state, actions }) {
   return (
     <EditSubjectWrapper>
       <Input placeholder="Subject (optional)" spellCheck="false" autocapitalize="word"
-          defaultValue={state.subject} onChange={(e) => actions.setSubjectUpdate(e.target.value)} />
+          value={state.subjectUpdate} onChange={(e) => actions.setSubjectUpdate(e.target.value)} />
     </EditSubjectWrapper>
   );
 }
