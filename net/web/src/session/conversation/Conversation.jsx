@@ -2,6 +2,7 @@ import { ConversationWrapper } from './Conversation.styled';
 import { SettingOutlined, RightOutlined, CloseOutlined } from '@ant-design/icons';
 import { useConversation } from './useConversation.hook';
 import { Logo } from 'logo/Logo';
+import { AddTopic } from './addTopic/AddTopic';
 
 export function Conversation({ closeConversation, openDetails, cardId, channelId }) {
 
@@ -28,6 +29,14 @@ console.log(state);
             <CloseOutlined />
           </div>
         )}
+      </div>
+      <div class="thread">
+      </div>
+      <div class="divider">
+        <div class="line" />
+      </div>
+      <div class="topic">
+        <AddTopic />
       </div>
     </ConversationWrapper>
   );

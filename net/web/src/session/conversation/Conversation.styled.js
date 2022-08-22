@@ -49,4 +49,21 @@ export const ConversationWrapper = styled.div`
       padding-left: 16px;
     }
   }
+
+  .thread {
+    flex-grow: 1;
+  }
+
+  .divider {
+    padding-left: 16px;
+    padding-right: 16px;
+    
+    .line {
+      border-top: 1px solid ${Colors.divider};
+    }
+  }
+
+  .topic {
+    flex-shrink: 0;
+  }
 `
