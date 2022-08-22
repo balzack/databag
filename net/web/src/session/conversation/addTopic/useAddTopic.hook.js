@@ -9,6 +9,9 @@ export function useAddTopic() {
   };
 
   const actions = {
+    setTextColor: (textColor) => {
+      updateState({ textColor });
+    },
   };
 
   return { state, actions };
