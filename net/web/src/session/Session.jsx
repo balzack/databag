@@ -80,7 +80,9 @@ export function Session() {
           <div class="center">
             { state.conversation && (
               <div class="reframe">
-                <Conversation openDetails={actions.openDetails} cardId={state.cardId} conversationId={state.conversationId} />
+                <Conversation closeConversation={actions.closeConversation}
+                    openDetails={actions.openDetails}
+                    cardId={state.cardId} channelId={state.channelId} />
               </div>
             )}
             { state.contact && (
@@ -132,7 +134,9 @@ export function Session() {
             <Welcome />
             { state.conversation && (
               <div class="reframe">
-                <Conversation openDetails={actions.openDetails} cardId={state.cardId} conversationId={state.conversationId} />
+                <Conversation closeConversation={actions.closeConversation}
+                    openDetails={actions.openDetails}
+                    cardId={state.cardId} channelId={state.channelId} />
               </div>
             )}
             <Drawer bodyStyle={{ padding: 0 }} width={'33%'} closable={false} onClose={actions.closeDetails} visible={state.details} zIndex={10}>
@@ -172,7 +176,8 @@ export function Session() {
             </div>
             { state.conversation && (
               <div class="reframe">
-                <Conversation openDetails={actions.openDetails} cardId={state.cardId} conversationId={state.conversationId} />
+                <Conversation closeConversation={actions.closeConversation} openDetails={actions.openDetails}
+                    cardId={state.cardId} channelId={state.channelId} />
               </div>
             )}
             { state.details && (

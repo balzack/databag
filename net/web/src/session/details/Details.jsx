@@ -1,6 +1,6 @@
 import { Space, Button, Modal } from 'antd';
 import { DetailsWrapper, ModalFooter } from './Details.styled';
-import { DoubleRightOutlined } from '@ant-design/icons';
+import { DoubleRightOutlined, RightOutlined, CloseOutlined } from '@ant-design/icons';
 import { useDetails } from './useDetails.hook';
 import { Logo } from 'logo/Logo';
 import { EditOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
@@ -94,9 +94,21 @@ export function Details({ cardId, channelId, closeDetails, closeConversation, op
     <DetailsWrapper>
       <div class="header">
         <div class="label">Channel</div>
-        <div class="dismiss" onClick={closeConversation}>
-          <DoubleRightOutlined />
-        </div>
+        { state.display === 'xlarge' && (
+          <div class="dismiss" onClick={closeConversation}>
+            <DoubleRightOutlined />
+          </div>
+        )}
+        { state.display === 'small' && (
+          <div class="dismiss" onClick={closeDetails}>
+            <CloseOutlined />
+          </div>
+        )}
+        { state.display !== 'small' && state.display !== 'xlarge' && (
+          <div class="dismiss" onClick={closeDetails}>
+            <RightOutlined />
+          </div>
+        )}
       </div>
       <div class="content">
         <div class="description">

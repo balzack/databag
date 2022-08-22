@@ -1,6 +1,7 @@
 import { useContext, useState, useEffect, useRef } from 'react';
 import { CardContext } from 'context/CardContext';
 import { ChannelContext } from 'context/ChannelContext';
+import { ViewportContext } from 'context/ViewportContext';
 
 export function useDetails(cardId, channelId) {
 
@@ -18,14 +19,20 @@ export function useDetails(cardId, channelId) {
     busy: false,
     subjectUpdate: null,
     unknown: 0,
+    display: null,
   });
 
   const card = useContext(CardContext);
   const channel = useContext(ChannelContext);
-  
+  const viewport = useContext(ViewportContext);  
+
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
   }
+
+  useEffect(() => {
+    updateState({ display: viewport.state.display });
+  }, [viewport]);
 
   useEffect(() => {
     let img, subject, subjectUpdate, host, started, contacts

@@ -77,6 +77,7 @@ export const DetailsWrapper = styled.div`
       width: 100%;
 
       .logo {
+        height: fit-content;
         flex-shrink: 0;
         width: 40%;
         display: flex;

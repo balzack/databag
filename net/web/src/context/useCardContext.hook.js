@@ -264,6 +264,13 @@ export function useCardContext() {
       }
       return getCardImageUrl(access.current, cardId, card.data.profileRevision)
     },
+    getName: (cardId) => {
+      let card = cards.current.get(cardId);
+      if (!card) {
+        return null;
+      }
+      return card.data.cardProfile.name;
+    },
     removeChannel: async (cardId, channelId) => {
       let { cardProfile, cardDetail } = cards.current.get(cardId).data;
       let token = cardProfile.guid + '.' + cardDetail.token;
