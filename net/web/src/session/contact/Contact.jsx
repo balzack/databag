@@ -117,13 +117,16 @@ export function Contact({ close, guid, listing }) {
       { state.init && state.display !== 'xlarge' && (
         <div class="view">
           <div class="title">
-            { state.display === 'small' && (
-              <div class="close"></div>
-            )}
+            <div class="close" />
             <div class="handle">{ state.handle }</div>
             { state.display === 'small' && (
               <div class="close" onClick={close}>
                 <CloseOutlined />
+              </div>
+            )}
+            { state.display !== 'small' && (
+              <div class="close" onClick={close}>
+                <RightOutlined />
               </div>
             )}
           </div>

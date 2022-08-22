@@ -26,9 +26,18 @@ export const ConversationWrapper = styled.div`
       display: flex;
       flex-direction: row;
       align-items: center;
+      min-width: 0;
 
       .label {
         padding-left: 8px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        min-width: 0;
+      }
+
+      .logo {
+        flex-shrink: 0;
       }
     }
 

@@ -13,7 +13,9 @@ console.log(state);
     <ConversationWrapper>
       <div class="header">
         <div class="title">
-          <Logo img={state.image} url={state.logo} width={32} height={32} radius={4} />
+          <div class="logo">
+            <Logo img={state.image} url={state.logo} width={32} height={32} radius={4} />
+          </div>
           <div class="label">{ state.subject }</div>
           { state.display !== 'xlarge' && (
             <div class="button" onClick={openDetails}>
