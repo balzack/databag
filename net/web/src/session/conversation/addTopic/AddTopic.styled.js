@@ -28,8 +28,8 @@ export const AddTopicWrapper = styled.div`
       flex-align: center;
       justify-content: center;
       align-items: center;
-      width: 32px;
-      height: 32px;
+      width: 36px;
+      height: 36px;
       cursor: pointer;
       border: 1px solid ${Colors.divider};
       background-color: ${Colors.white};

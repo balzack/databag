@@ -4,16 +4,54 @@ import { Input, Menu, Dropdown } from 'antd';
 import { useRef, useState } from 'react';
 import { FontColorsOutlined, FontSizeOutlined, PaperClipOutlined, SendOutlined } from '@ant-design/icons';
 import { SketchPicker } from "react-color";
+import { AudioFile } from './audioFile/AudioFile';
+import { VideoFile } from './videoFile/VideoFile';
+import { Carousel } from 'carousel/Carousel';
 
-export function AddTopic() {
+export function AddTopic({ cardId, channelId }) {
 
-  const { state, actions } = useAddTopic();
-
+  const { state, actions } = useAddTopic(cardId, channelId);
+  const attachImage = useRef(null);
+  const attachAudio = useRef(null);
+  const attachVideo = useRef(null);
   const msg = useRef();
+
   const keyDown = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       msg.current.blur();
     }
+  }
+
+  const onSelectImage = (e) => {
+    actions.addImage(e.target.files[0]);
+    attachImage.current.value = '';
+  }
+
+  const onSelectAudio = (e) => {
+    actions.addAudio(e.target.files[0]);
+    attachAudio.current.value = '';
+  }
+
+  const onSelectVideo = (e) => {
+    actions.addVideo(e.target.files[0]);
+    attachVideo.current.value = '';
+  }
+
+  const renderItem = (item, index) => {
+    if (item.image) {
+      return <img style={{ height: '100%', objectFit: 'contain' }} src={item.url} alt="" />
+    }
+    if (item.audio) {
+      return <AudioFile onLabel={(label) => actions.setLabel(index, label)}/>
+    }
+    if (item.video) {
+      return <VideoFile onPosition={(pos) => actions.setPosition(index, pos)} url={item.url} />
+    }
+    return <></>
+  }
+
+  const removeItem = (index) => {
+    actions.removeAsset(index);
   }
 
   const picker = (
@@ -37,20 +75,25 @@ export function AddTopic() {
   const attacher = (
     <Menu>
       <Menu.Item key="0">
-        <div>Add Image</div>
+        <input type='file' name="asset" accept="image/*" ref={attachImage} onChange={e => onSelectImage(e)} style={{display: 'none'}}/>
+        <div onClick={() => attachImage.current.click()}>Attach Image</div>
       </Menu.Item>
       <Menu.Item key="1">
-        <div>Add Video</div>
+        <input type='file' name="asset" accept="audio/*" ref={attachAudio} onChange={e => onSelectAudio(e)} style={{display: 'none'}}/>
+        <div onClick={() => attachAudio.current.click()}>Attach Audio</div>
       </Menu.Item>
       <Menu.Item key="2">
-        <div>Add Audio</div>
+        <input type='file' name="asset" accept="video/*" ref={attachVideo} onChange={e => onSelectVideo(e)} style={{display: 'none'}}/>
+        <div onClick={() => attachVideo.current.click()}>Attach Video</div>
       </Menu.Item>
     </Menu>
   );
 
   return (
     <AddTopicWrapper>
-      <div class="carousel"></div>
+      <div class="carousel">
+        <Carousel ready={true} items={state.assets} itemRenderer={renderItem} itemRemove={removeItem} />
+      </div>
       <div class="message">
         <Input.TextArea ref={msg} placeholder="New Message" spellCheck="true" autoSize={{ minRows: 2, maxRows: 6 }}
             autocapitalize="none" enterkeyhint="send" onKeyDown={(e) => keyDown(e)} />

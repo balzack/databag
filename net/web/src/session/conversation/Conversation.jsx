@@ -36,7 +36,7 @@ console.log(state);
         <div class="line" />
       </div>
       <div class="topic">
-        <AddTopic />
+        <AddTopic cardId={cardId} channelId={channelId} />
       </div>
     </ConversationWrapper>
   );
