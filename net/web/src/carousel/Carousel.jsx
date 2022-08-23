@@ -120,43 +120,26 @@ export function Carousel({ ready, error, items, itemRenderer, itemRemove }) {
     }
   }
 
-  if (!ready || error) {
-    return (
-      <CarouselWrapper>
-        <div class="carousel">
-          {error && (
-            <div class="status">
-              <FireOutlined style={{ fontSize: 32, color: '#ff8888' }} />
-            </div>
-          )}
-          {!ready && !error && (
-            <div class="status">
-              <PictureOutlined style={{ fontSize: 32 }} />
-            </div>
-          )}
+  return (
+    <CarouselWrapper>
+      { error && (
+        <div class="status">
+          <FireOutlined style={{ fontSize: 32, color: '#ff8888' }} />
         </div>
-        <div class="arrows">
-          <div class="arrow" onClick={onRight}><LeftOutlined style={{ visibility: 'hidden' }} /></div>
-          <div class="arrow" onClick={onLeft}><RightOutlined style={{ visibility: 'hidden' }} /></div>
+      )}
+      { !ready && !error && (
+        <div class="status">
+          <PictureOutlined style={{ fontSize: 32 }} />
         </div>
-      </CarouselWrapper>
-    )
-  }
-
-  if (slots.length != 0) {
-    return (
-      <CarouselWrapper>
+      )}
+      { ready && !error && (
         <div class="carousel" ref={onRefSet}>
           {slots}
         </div>
-        <div class="arrows">
-          <div class="arrow" onClick={onRight}><LeftOutlined style={{ visibility: scrollRight }} /></div>
-          <div class="arrow" onClick={onLeft}><RightOutlined style={{ visibility: scrollLeft }} /></div>
-        </div>
-      </CarouselWrapper>
-    );
-  }
-  return <></>
-
+      )}
+      <div class="left-arrow" onClick={onRight}><LeftOutlined style={{ visibility: scrollRight }} /></div>
+      <div class="right-arrow" onClick={onLeft} style={{ visibility: scrollLeft }}><RightOutlined /></div>
+    </CarouselWrapper>
+  );
 }
  

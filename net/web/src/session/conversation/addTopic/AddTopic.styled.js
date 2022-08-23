@@ -8,20 +8,27 @@ export const AddTopicWrapper = styled.div`
 
   .message {
     width: 100%;
-    padding-left: 16px;
-    padding-right: 16px;
+    padding-left: 32px;
+    padding-right: 32px;
     padding-top: 8px;
     padding-bottom: 8px;
   }
 
   .buttons {
-    padding-left: 16px;
-    padding-right: 16px;
+    padding-left: 32px;
+    padding-right: 32px;
     padding-bottom: 16px;
     width: 100%;
     display: flex;
     flex-direction: row; 
     align-items: center;
+    
+    .bar {
+      border-left: 1px solid ${Colors.encircle};
+      height: 36px;
+      padding-right 8px;
+      margin-left: 8px;
+    }
 
     .button {
       display: flex;

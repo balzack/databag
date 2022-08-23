@@ -2,7 +2,7 @@ import { AddTopicWrapper } from './AddTopic.styled';
 import { useAddTopic } from './useAddTopic.hook';
 import { Input, Menu, Dropdown } from 'antd';
 import { useRef, useState } from 'react';
-import { FontColorsOutlined, FontSizeOutlined, PaperClipOutlined, SendOutlined } from '@ant-design/icons';
+import { SoundOutlined, VideoCameraOutlined, PictureOutlined, FontColorsOutlined, FontSizeOutlined, PaperClipOutlined, SendOutlined } from '@ant-design/icons';
 import { SketchPicker } from "react-color";
 import { AudioFile } from './audioFile/AudioFile';
 import { VideoFile } from './videoFile/VideoFile';
@@ -72,38 +72,31 @@ export function AddTopic({ cardId, channelId }) {
     </Menu>
   );
 
-  const attacher = (
-    <Menu>
-      <Menu.Item key="0">
-        <input type='file' name="asset" accept="image/*" ref={attachImage} onChange={e => onSelectImage(e)} style={{display: 'none'}}/>
-        <div onClick={() => attachImage.current.click()}>Attach Image</div>
-      </Menu.Item>
-      <Menu.Item key="1">
-        <input type='file' name="asset" accept="audio/*" ref={attachAudio} onChange={e => onSelectAudio(e)} style={{display: 'none'}}/>
-        <div onClick={() => attachAudio.current.click()}>Attach Audio</div>
-      </Menu.Item>
-      <Menu.Item key="2">
-        <input type='file' name="asset" accept="video/*" ref={attachVideo} onChange={e => onSelectVideo(e)} style={{display: 'none'}}/>
-        <div onClick={() => attachVideo.current.click()}>Attach Video</div>
-      </Menu.Item>
-    </Menu>
-  );
-
   return (
     <AddTopicWrapper>
+      <input type='file' name="asset" accept="image/*" ref={attachImage} onChange={e => onSelectImage(e)} style={{display: 'none'}}/>
+      <input type='file' name="asset" accept="audio/*" ref={attachAudio} onChange={e => onSelectAudio(e)} style={{display: 'none'}}/>
+      <input type='file' name="asset" accept="video/*" ref={attachVideo} onChange={e => onSelectVideo(e)} style={{display: 'none'}}/>
       <div class="carousel">
-        <Carousel ready={true} items={state.assets} itemRenderer={renderItem} itemRemove={removeItem} />
+        { state.assets.length > 0 && (
+          <Carousel ready={true} items={state.assets} itemRenderer={renderItem} itemRemove={removeItem} />
+        )}
       </div>
       <div class="message">
         <Input.TextArea ref={msg} placeholder="New Message" spellCheck="true" autoSize={{ minRows: 2, maxRows: 6 }}
             autocapitalize="none" enterkeyhint="send" onKeyDown={(e) => keyDown(e)} />
       </div>
       <div class="buttons">
-        <div class="button space">
-          <Dropdown overlay={attacher} overlayStyle={{ minWidth: 0 }} trigger={['click']} placement="topLeft">
-            <PaperClipOutlined />
-          </Dropdown>
+        <div class="button space" onClick={() => attachImage.current.click()}>
+          <PictureOutlined />
         </div> 
+        <div class="button space" onClick={() => attachVideo.current.click()}>
+          <VideoCameraOutlined />
+        </div> 
+        <div class="button space" onClick={() => attachAudio.current.click()}>
+          <SoundOutlined />
+        </div> 
+        <div class="bar space" />
         <div class="button space">
           <Dropdown overlay={sizer} overlayStyle={{ minWidth: 0 }} trigger={['click']} placement="topLeft">
             <FontSizeOutlined />

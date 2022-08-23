@@ -11,11 +11,13 @@ export function CardSelect({ filter, unknown, select, selected, markup }) {
 
   return (
     <CardSelectWrapper>
-      <List local={{ emptyText: '' }} itemLayout="horizontal" dataSource={state.cards} gutter="0"
-        renderItem={item => (
-          <SelectItem item={item} select={select} selected={selected} markup={markup} />
-        )}
-      />
+      { state.cards?.length > 0 && (
+        <List local={{ emptyText: '' }} itemLayout="horizontal" dataSource={state.cards} gutter="0"
+          renderItem={item => (
+            <SelectItem item={item} select={select} selected={selected} markup={markup} />
+          )}
+        />
+      )}
       { unknown > 0 && (
         <div class="unknown">
           <Logo img="avatar" width={32} height={32} radius={8} />
