@@ -2,6 +2,7 @@ import { useContext, useState, useEffect } from 'react';
 import { ViewportContext } from 'context/ViewportContext';
 import { CardContext } from 'context/CardContext';
 import { ChannelContext } from 'context/ChannelContext';
+import { ConversationContext } from 'context/ConversationContext';
 
 export function useConversation(cardId, channelId) {
 
@@ -10,11 +11,13 @@ export function useConversation(cardId, channelId) {
     image: null,
     logo: null,
     subject: null,
+    topics: [],
   });
 
   const viewport = useContext(ViewportContext);  
   const card = useContext(CardContext);
   const channel = useContext(ChannelContext);
+  const conversation = useContext(ConversationContext);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
@@ -59,8 +62,29 @@ export function useConversation(cardId, channelId) {
     updateState({ image, subject, logo });
   }, [cardId, channelId, card, channel]);
 
+  useEffect(() => {
+    conversation.actions.setConversationId(cardId, channelId);
+  }, [cardId, channelId]);
+
+  useEffect(() => {
+    let topics = Array.from(conversation.state.topics.values()).sort((a, b) => {
+      const aTimestamp = a?.data?.topicDetail?.created;
+      const bTimestamp = b?.data?.topicDetail?.created;
+      if(aTimestamp == bTimestamp) {
+        return 0;
+      }
+      if(aTimestamp == null || aTimestamp < bTimestamp) {
+        return -1;
+      }
+      return 1;
+    });
+    updateState({ topics });
+  }, [conversation]);
 
   const actions = {
+    more: () => {
+      conversation.actions.addHistory();
+    },
   };
 
   return { state, actions };

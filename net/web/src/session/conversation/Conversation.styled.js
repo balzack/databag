@@ -52,6 +52,7 @@ export const ConversationWrapper = styled.div`
 
   .thread {
     flex-grow: 1;
+    min-height: 0;
   }
 
   .divider {

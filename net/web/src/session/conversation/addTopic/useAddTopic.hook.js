@@ -74,8 +74,8 @@ export function useAddTopic(cardId, channelId) {
     },
     addTopic: async () => {
       if (!state.busy) {
-        updateState({ busy: true });
         try {
+          updateState({ busy: true });
           let message = {
             text: state.messageText,
             textColor: state.textColorSet ? state.textColor : null,
@@ -87,13 +87,17 @@ export function useAddTopic(cardId, channelId) {
           else {
             await channel.actions.addChannelTopic(channelId, message, state.assets);
           }
-          updateState({ messageText: null, textColor: '#444444', textColorSet: false, textSize: 12, textSizeSet: false, assets: [] });
+          updateState({ busy: false, messageText: null, textColor: '#444444', textColorSet: false,
+              textSize: 12, textSizeSet: false, assets: [] });
         }
         catch(err) {
           console.log(err);
-          window.alert("failed to add message");
+          updateState({ busy: false });
+          throw new Error("failed to post topic");
         }
-        updateState({ busy: false });
+      }
+      else {
+        throw new Error("operation in progress");
       }
     },
   };

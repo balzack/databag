@@ -1,6 +1,6 @@
 import { AddTopicWrapper } from './AddTopic.styled';
 import { useAddTopic } from './useAddTopic.hook';
-import { Input, Menu, Dropdown } from 'antd';
+import { Modal, Input, Menu, Dropdown } from 'antd';
 import { useRef, useState } from 'react';
 import { SoundOutlined, VideoCameraOutlined, PictureOutlined, FontColorsOutlined, FontSizeOutlined, PaperClipOutlined, SendOutlined } from '@ant-design/icons';
 import { SketchPicker } from "react-color";
@@ -19,23 +19,37 @@ export function AddTopic({ cardId, channelId }) {
   const keyDown = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       msg.current.blur();
+      addTopic();
     }
   }
+
+  const addTopic = async () => {
+    try {
+      await actions.addTopic();
+    }
+    catch (err) {
+      console.log(err);
+      Modal.error({
+        title: 'Failed to Post Message',
+        content: 'Please try again.',
+      });
+    }
+  };
 
   const onSelectImage = (e) => {
     actions.addImage(e.target.files[0]);
     attachImage.current.value = '';
-  }
+  };
 
   const onSelectAudio = (e) => {
     actions.addAudio(e.target.files[0]);
     attachAudio.current.value = '';
-  }
+  };
 
   const onSelectVideo = (e) => {
     actions.addVideo(e.target.files[0]);
     attachVideo.current.value = '';
-  }
+  };
 
   const renderItem = (item, index) => {
     if (item.image) {
@@ -48,11 +62,11 @@ export function AddTopic({ cardId, channelId }) {
       return <VideoFile onPosition={(pos) => actions.setPosition(index, pos)} url={item.url} />
     }
     return <></>
-  }
+  };
 
   const removeItem = (index) => {
     actions.removeAsset(index);
-  }
+  };
 
   const picker = (
     <Menu style={{ backgroundColor: 'unset', boxShadow: 'unset' }}>
@@ -84,7 +98,8 @@ export function AddTopic({ cardId, channelId }) {
       </div>
       <div class="message">
         <Input.TextArea ref={msg} placeholder="New Message" spellCheck="true" autoSize={{ minRows: 2, maxRows: 6 }}
-            autocapitalize="none" enterkeyhint="send" onKeyDown={(e) => keyDown(e)} />
+            enterkeyhint="send" onKeyDown={(e) => keyDown(e)} onChange={(e) => actions.setMessageText(e.target.value)}
+            value={state.messageText} autocapitalize="none" />
       </div>
       <div class="buttons">
         <div class="button space" onClick={() => attachImage.current.click()}>
@@ -98,17 +113,17 @@ export function AddTopic({ cardId, channelId }) {
         </div> 
         <div class="bar space" />
         <div class="button space">
-          <Dropdown overlay={sizer} overlayStyle={{ minWidth: 0 }} trigger={['click']} placement="topLeft">
-            <FontSizeOutlined />
-          </Dropdown>
-        </div>
-        <div class="button space">
-          <Dropdown overlay={picker} overlayStyle={{ minWidth: 0 }} trigger={['click']} placement="topLeft">
+          <Dropdown overlay={picker} overlayStyle={{ minWidth: 0 }} trigger={['click']} placement="top">
             <FontColorsOutlined />
           </Dropdown>
         </div>
+        <div class="button space">
+          <Dropdown overlay={sizer} overlayStyle={{ minWidth: 0 }} trigger={['click']} placement="top">
+            <FontSizeOutlined />
+          </Dropdown>
+        </div>
         <div class="end">
-          <div class="button"><SendOutlined /></div>
+          <div class="button" onClick={addTopic}><SendOutlined /></div>
         </div>
       </div>
     </AddTopicWrapper>

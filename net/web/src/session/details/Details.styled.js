@@ -42,6 +42,8 @@ export const DetailsWrapper = styled.div`
     align-items: center;
     flex-grow: 1;
     position: relative;
+    min-height: 0;
+    overflow: scroll;
 
     .label {
       padding-top: 16px;
@@ -52,8 +54,6 @@ export const DetailsWrapper = styled.div`
 
     .members {
       width: 100%;
-      min-height: 0;
-      overflow: scroll;
       padding-left: 16px;
     }
 
