@@ -6,7 +6,6 @@ export const CarouselWrapper = styled.div`
   display: grid;
   width: 100%;
   height: 128px;
-  margin-top: 16px;
 
   .carousel {
     display: flex;
@@ -46,7 +45,10 @@ export const CarouselWrapper = styled.div`
     margin-left: 8px;
     margin-right: 8px;
     justify-content: center;
-    color: ${Colors.grey};
+    color: ${Colors.text};
+    background-color: ${Colors.profileForm};
+    border-radius: 8px;
+    opacity: 0.7;
   }
 
   .right-arrow {

@@ -2,52 +2,28 @@ import styled from 'styled-components';
 
 export const TopicItemWrapper = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   width: 100%;
-  padding-left: 8px;
-  
-  .avatar {
-    height: 32px;
-    width: 32px;
-  }
 
-  .topic {
+  .topic-header {
     display: flex;
-    flex-direction: column;
-    padding-left: 8px;
-    flex-grow: 1;
+    flex-direction: row;
+    margin-left: 16px;
+    padding-left: 16px;
+    margin-right: 16px;
+    padding-top: 8px;
+    border-top: 1px solid #dddddd;
 
-    &:hover .options {
-      visibility: visible;
+    .avatar {
+      height: 32px;
+      width: 32px;
     }
 
-    .options {
-      position: absolute;
-      top: 0;
-      right: 0;
-      visibility: hidden;
-
-      .buttons {
-        display: flex;
-        flex-direction: row;
-        border-radius: 4px;
-        background-color: #eeeeee;
-        border: 1px solid #555555;
-        margin-top: 2px;
-
-        .button {
-          font-size: 14px;
-          margin-left: 8px;
-          margin-right: 8px;
-          cursor: pointer;
-        }
-      }
-    }
- 
     .info {
       display: flex;
       flex-direction: row;
       line-height: 1;
+      padding-left: 8px;
 
       .comments {
         padding-left: 8px;
@@ -72,26 +48,54 @@ export const TopicItemWrapper = styled.div`
         padding-right: 8px;
       }
     }
+  }
 
-    .message {
-      padding-top: 6px;
-      padding-right: 16px;
-      white-space: pre-line;
+  .options {
+    position: absolute;
+    top: 0;
+    right: 0;
+    visibility: hidden;
 
-      .editing {
+    .buttons {
+      display: flex;
+      flex-direction: row;
+      border-radius: 4px;
+      background-color: #eeeeee;
+      border: 1px solid #555555;
+      margin-top: 2px;
+
+      .button {
+        font-size: 14px;
+        margin-left: 8px;
+        margin-right: 8px;
+        cursor: pointer;
+      }
+    }
+  }
+
+  .topic-assets {
+    padding-top: 4px;
+  }
+
+  .message {
+    padding-right: 16px;
+    padding-left: 72px;
+    white-space: pre-line;
+    min-height: 4px;
+
+    .editing {
+      display: flex;
+      flex-direction: column;
+      border-radius: 4px;
+      border: 1px solid #aaaaaa;
+      width: 100%;
+
+      .controls {
         display: flex;
-        flex-direction: column;
-        border-radius: 4px;
-        border: 1px solid #aaaaaa;
-        width: 100%;
-
-        .controls {
-          display: flex;
-          flex-direction: row;
-          justify-content: flex-end;
-          padding-bottom: 8px;
-          padding-right: 8px;
-        }
+        flex-direction: row;
+        justify-content: flex-end;
+        padding-bottom: 8px;
+        padding-right: 8px;
       }
     }
   }

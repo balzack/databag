@@ -91,11 +91,11 @@ export function AddTopic({ cardId, channelId }) {
       <input type='file' name="asset" accept="image/*" ref={attachImage} onChange={e => onSelectImage(e)} style={{display: 'none'}}/>
       <input type='file' name="asset" accept="audio/*" ref={attachAudio} onChange={e => onSelectAudio(e)} style={{display: 'none'}}/>
       <input type='file' name="asset" accept="video/*" ref={attachVideo} onChange={e => onSelectVideo(e)} style={{display: 'none'}}/>
-      <div class="carousel">
-        { state.assets.length > 0 && (
-          <Carousel ready={true} items={state.assets} itemRenderer={renderItem} itemRemove={removeItem} />
-        )}
-      </div>
+      { state.assets.length > 0 && (
+        <div class="assets">
+          <Carousel pad={0} ready={true} items={state.assets} itemRenderer={renderItem} itemRemove={removeItem} />
+        </div>
+      )}
       <div class="message">
         <Input.TextArea ref={msg} placeholder="New Message" spellCheck="true" autoSize={{ minRows: 2, maxRows: 6 }}
             enterkeyhint="send" onKeyDown={(e) => keyDown(e)} onChange={(e) => actions.setMessageText(e.target.value)}

@@ -100,7 +100,7 @@ export function TopicItem({ host, topic }) {
     return (
       <TopicItemWrapper>
         <div class="avatar">
-          <Logo width={32} height={32} radius={4} imageUrl={state.imageUrl} />
+          <Logo width={32} height={32} radius={4} url={state.imageUrl} />
         </div>
         <div class="topic">
           <div class="info">
@@ -118,23 +118,25 @@ export function TopicItem({ host, topic }) {
 
   return (
     <TopicItemWrapper>
-      <div class="avatar">
-        <Logo width={32} height={32} radius={4} imageUrl={state.imageUrl} />
-      </div>
-      <div class="topic">
+      <div class="topic-header">
+        <div class="avatar">
+          <Logo width={32} height={32} radius={4} url={state.imageUrl} />
+        </div>
         <div class="info">
           <div class={nameClass}>{ name }</div>
           <div>{ getTime(offset) }</div>
         </div>
-        { state.assets.length > 0 && (
-          <Carousel ready={state.ready} error={state.error} items={state.assets} itemRenderer={renderAsset} />
-        )}
-        <div class="message">
-          <Message />
+      </div>
+      { state.assets.length > 0 && (
+        <div class="topic-assets">
+          <Carousel pad={40} ready={state.ready} error={state.error} items={state.assets} itemRenderer={renderAsset} />
         </div>
-        <div class="options">
-          <Options />
-        </div>
+      )}
+      <div class="message">
+        <Message />
+      </div>
+      <div class="options">
+        <Options />
       </div>
     </TopicItemWrapper>
   )

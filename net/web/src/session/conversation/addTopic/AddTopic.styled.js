@@ -14,6 +14,10 @@ export const AddTopicWrapper = styled.div`
     padding-bottom: 8px;
   }
 
+  .assets {
+    padding-top: 8px;
+  }
+
   .buttons {
     padding-left: 32px;
     padding-right: 32px;

@@ -9,7 +9,7 @@ export function VirtualList({ id, items, itemRenderer, onMore }) {
   const OVERSCAN = 1024; // add slots in overscan of view
   const DEFAULT_ITEM_HEIGHT = 256;
   const DEFAULT_LIST_HEIGHT = 4096;
-  const GUTTER = 6;
+  const GUTTER = 1;
 
   const [ msg, setMsg ] = useState("YO");
 

@@ -4,8 +4,9 @@ import { CarouselWrapper } from './Carousel.styled';
 import { RightOutlined, LeftOutlined, CloseOutlined, PictureOutlined, FireOutlined } from '@ant-design/icons';
 import ReactResizeDetector from 'react-resize-detector';
 
-export function Carousel({ ready, error, items, itemRenderer, itemRemove }) {
+export function Carousel({ pad, ready, error, items, itemRenderer, itemRemove }) {
   const [slots, setSlots] = useState([]);
+  const [padClass, setPadClass] = useState('');
   const [carouselRef, setCarouselRef] = useState(false);
   const [itemIndex, setItemIndex] = useState(0);
   const [scrollLeft, setScrollLeft] = useState('hidden');
@@ -133,11 +134,11 @@ export function Carousel({ ready, error, items, itemRenderer, itemRemove }) {
         </div>
       )}
       { ready && !error && (
-        <div class="carousel" ref={onRefSet}>
+        <div class="carousel" style={{ paddingLeft: pad + 32 }} ref={onRefSet}>
           {slots}
         </div>
       )}
-      <div class="left-arrow" onClick={onRight}><LeftOutlined style={{ visibility: scrollRight }} /></div>
+      <div class="left-arrow" onClick={onRight} style={{ marginLeft: pad, visibility: scrollRight }}><LeftOutlined /></div>
       <div class="right-arrow" onClick={onLeft} style={{ visibility: scrollLeft }}><RightOutlined /></div>
     </CarouselWrapper>
   );
