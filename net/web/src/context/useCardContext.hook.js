@@ -310,6 +310,13 @@ export function useCardContext() {
       else {
         await addContactChannelTopic(node, token, channelId, message, files);
       }
+      try {
+        resync.current.push(cardId);
+        await setCards(null);
+      }
+      catch (err) {
+        console.log(err);
+      }
     },
     getChannel: (cardId, channelId) => {
       let card = cards.current.get(cardId);

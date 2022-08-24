@@ -96,26 +96,6 @@ export function TopicItem({ host, topic }) {
     return <div style={{ color: state.textColor, fontSize: state.textSize }}>{ state.message?.text }</div>
   }
 
-  if (!state.confirmed) {
-    return (
-      <TopicItemWrapper>
-        <div class="avatar">
-          <Logo width={32} height={32} radius={4} url={state.imageUrl} />
-        </div>
-        <div class="topic">
-          <div class="info">
-            <div class={nameClass}>{ name }</div>
-            <div>{ getTime(offset) }</div>
-          </div>
-          <Skeleton size={'small'} active={true} />
-          <div class="options">
-            <Options />
-          </div>
-        </div>
-      </TopicItemWrapper>
-    )
-  }
-
   return (
     <TopicItemWrapper>
       <div class="topic-header">
@@ -127,17 +107,31 @@ export function TopicItem({ host, topic }) {
           <div>{ getTime(offset) }</div>
         </div>
       </div>
-      { state.assets.length > 0 && (
-        <div class="topic-assets">
-          <Carousel pad={40} ready={state.ready} error={state.error} items={state.assets} itemRenderer={renderAsset} />
+      { !state.confirmed && (
+        <div>
+          <div class="message">
+            <Skeleton size={'small'} active={true} />
+          </div>
+          <div class="options">
+            <Options />
+          </div>
         </div>
       )}
-      <div class="message">
-        <Message />
-      </div>
-      <div class="options">
-        <Options />
-      </div>
+      { state.confirmed && (
+        <div>
+          { state.assets.length > 0 && (
+            <div class="topic-assets">
+              <Carousel pad={40} ready={state.ready} error={state.error} items={state.assets} itemRenderer={renderAsset} />
+            </div>
+          )}
+          <div class="message">
+            <Message />
+          </div>
+          <div class="options">
+            <Options />
+          </div>
+        </div>
+      )}
     </TopicItemWrapper>
   )
 }

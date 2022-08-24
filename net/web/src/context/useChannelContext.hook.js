@@ -68,9 +68,14 @@ export function useChannelContext() {
   }
 
   const setChannels = async (rev) => {
+    let force = false;
+    if (rev == null) {
+      force = true;
+      rev = revision.current;
+    }
     if (next.current == null) {
       next.current = rev;
-      if (revision.current !== rev) {
+      if (force || revision.current !== rev) {
         await updateChannels();
         updateState({ init: true, channels: channels.current });
         revision.current = rev;
@@ -137,6 +142,12 @@ export function useChannelContext() {
       }
       else {
         await addChannelTopic(access.current, channelId, message, files);
+      }
+      try {
+        await setChannels(null);
+      }
+      catch (err) {
+        console.log(err);
       }
     },
     getChannel: (channelId) => {

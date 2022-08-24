@@ -27,6 +27,7 @@ export const CarouselWrapper = styled.div`
     justify-content: center; 
     color: #888888;
     background-color: #eeeeee;
+    margin-left: 72px;
   }
 
   .carousel::-webkit-scrollbar {

@@ -134,12 +134,14 @@ export function Carousel({ pad, ready, error, items, itemRenderer, itemRemove })
         </div>
       )}
       { ready && !error && (
-        <div class="carousel" style={{ paddingLeft: pad + 32 }} ref={onRefSet}>
-          {slots}
-        </div>
+        <>
+          <div class="carousel" style={{ paddingLeft: pad + 32 }} ref={onRefSet}>
+            {slots}
+          </div>
+          <div class="left-arrow" onClick={onRight} style={{ marginLeft: pad, visibility: scrollRight }}><LeftOutlined /></div>
+          <div class="right-arrow" onClick={onLeft} style={{ visibility: scrollLeft }}><RightOutlined /></div>
+        </>
       )}
-      <div class="left-arrow" onClick={onRight} style={{ marginLeft: pad, visibility: scrollRight }}><LeftOutlined /></div>
-      <div class="right-arrow" onClick={onLeft} style={{ visibility: scrollLeft }}><RightOutlined /></div>
     </CarouselWrapper>
   );
 }

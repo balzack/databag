@@ -24,15 +24,17 @@ export function AddTopic({ cardId, channelId }) {
   }
 
   const addTopic = async () => {
-    try {
-      await actions.addTopic();
-    }
-    catch (err) {
-      console.log(err);
-      Modal.error({
-        title: 'Failed to Post Message',
-        content: 'Please try again.',
-      });
+    if (state.messageText || state.assets.length) {
+      try {
+        await actions.addTopic();
+      }
+      catch (err) {
+        console.log(err);
+        Modal.error({
+          title: 'Failed to Post Message',
+          content: 'Please try again.',
+        });
+      }
     }
   };
 
