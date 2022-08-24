@@ -103,6 +103,11 @@ export function useContact(guid, listing, close) {
         await card.actions.addCard(message);
       });
     },
+    confirmContact: async() => {
+      await applyAction(async () => {
+        await card.actions.setCardConfirmed(state.cardId);
+      });
+    },
     saveConnect: async () => {
       await applyAction(async () => {
         let profile = await getListingMessage(state.node, guid);

@@ -56,8 +56,8 @@ export function Contact({ close, guid, listing }) {
 
       { state.status === 'pending' && (
         <div class="controls">
-          <div class={ state.buttonStatus } onClick={() => updateContact(actions.saveContact)}>Save Contact</div>
-          <div class={ state.buttonStatus } onClick={() => updateContact(actions.saveConnect)}>Save and Accept</div>
+          <div class={ state.buttonStatus } onClick={() => updateContact(actions.confirmContact)}>Save Contact</div>
+          <div class={ state.buttonStatus } onClick={() => updateContact(actions.connect)}>Save and Accept</div>
           <div class={ state.buttonStatus } onClick={() => updateContact(actions.remove)}>Ignore Request</div>
         </div>
       )}
