@@ -8,6 +8,7 @@ export const SessionWrapper = styled.div`
     position: absolute;
     width: 100%;
     height: 100%;
+    z-index: 2;
   }
 
   .desktop-layout {
@@ -21,7 +22,6 @@ export const SessionWrapper = styled.div`
       max-width: 384px;
       width: 20%;
       height: 100%;
-      background-color: yellow; 
       display: flex;
       flex-direction: column;
       position: relative;
@@ -40,7 +40,6 @@ export const SessionWrapper = styled.div`
       max-width: 384px;
       width: 20%;
       height: 100%;
-      background-color: yellow; 
       display: flex;
       flex-direction: column;
       position: relative;
@@ -58,7 +57,6 @@ export const SessionWrapper = styled.div`
       max-width: 384px;
       width: 30%;
       height: 100%;
-      background-color: yellow; 
       display: flex;
       flex-direction: column;
       position: relative;

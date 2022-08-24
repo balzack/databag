@@ -78,6 +78,9 @@ export function Session() {
             </div>
           </div>
           <div class="center">
+            <div class="reframe">
+              <Welcome />
+            </div>
             { state.conversation && (
               <div class="reframe">
                 <Conversation closeConversation={actions.closeConversation}
@@ -97,7 +100,6 @@ export function Session() {
             )}
           </div>
           <div class="right">
-            <Welcome />
             { (state.conversation || state.details) && (
               <div class="reframe">
                 <Details closeDetails={actions.closeDetails} closeConversation={closeConversation} openContact={actions.openContact}
