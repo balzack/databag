@@ -2,30 +2,48 @@ import styled from 'styled-components';
 import Colors from 'constants/Colors';
 
 export const AdminWrapper = styled.div`
-  max-width: 400px;
-  width: 90%;
-  height: 90%;
-  display: flex;
-  flex-direction: column;
+  height: 100%;
 
-  .app-title {
-    font-size: 24px;
+  .full-layout {
+    width: 100%;
+    height: 100%;
+    padding: 8px;
+    
+    .center {
+      width: 100%;
+      height: 100%;
+      border-radius: 4px;
+      background: ${Colors.formBackground};
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
+  .split-layout {
     display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    flex: 1;
-    color: ${Colors.grey};
+    flex-direction: row;
+    height: 100%;
 
-    .user {
-      color: ${Colors.grey};
-      position: absolute;
-      top: 0px;
-      right: 0px;
-      font-size: 20px;
-      cursor: pointer;
-      margin: 16px;
+    .left {
+      width: 50%;
+      height: 100%;
+      padding: 32px;
+
+      .splash {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+    }
+
+    .right {
+      width: 50%;
+      height: 100%;
+      background: ${Colors.formBackground};
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
   }
 `;
-
-

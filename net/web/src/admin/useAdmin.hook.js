@@ -1,22 +1,28 @@
-import { useContext, useState } from 'react';
-import { AppContext } from 'context/AppContext';
-import { useNavigate } from "react-router-dom";
+import { useContext, useState, useEffect } from 'react';
+import { ViewportContext } from 'context/ViewportContext';
 
 export function useAdmin() {
 
   const [state, setState] = useState({
+    display: null,
   });
 
-  const navigate = useNavigate();
-  const app = useContext(AppContext);
+  const viewport = useContext(ViewportContext);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
   }
 
+  useEffect(() => {
+    updateState({ display: viewport.state.display });
+  }, [viewport]);
+
   const actions = {
-    onUser: () => {
-      navigate('/login');
+    login: (token, config) => {
+      updateState({ token, config });
+    },
+    logout: () => {
+      updateState({ token: null, config: null });
     },
   };
 
