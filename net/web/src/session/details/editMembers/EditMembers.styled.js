@@ -11,7 +11,7 @@ export const EditMembersWrapper = styled.div`
     width: 100%;
     min-height: 100px;
     max-height: 200px;
-    overflow: scroll;
+    overflow: auto;
     border: 1px solid ${Colors.divider};
   }
 

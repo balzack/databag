@@ -10,7 +10,7 @@ export const ListingWrapper = styled.div`
 
   .view {
     min-height: 0;
-    overflow: scroll;
+    overflow: auto;
     flex-grow: 1;
   }
   

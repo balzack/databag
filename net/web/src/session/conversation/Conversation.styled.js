@@ -62,6 +62,14 @@ export const ConversationWrapper = styled.div`
     .line {
       border-top: 1px solid ${Colors.divider};
     }
+
+    .progress-idle {
+      border-top: 1px solid ${Colors.divider};
+    }
+
+    .progress-active {
+      border-top: 1px solid ${Colors.primary};
+    }
   }
 
   .topic {

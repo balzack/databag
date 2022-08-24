@@ -5,6 +5,10 @@ export const TopicItemWrapper = styled.div`
   flex-direction: column;
   width: 100%;
 
+  &:hover .options {
+    visibility: visible;
+  }
+
   .topic-header {
     display: flex;
     flex-direction: row;

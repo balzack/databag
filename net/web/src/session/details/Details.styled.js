@@ -35,7 +35,7 @@ export const DetailsWrapper = styled.div`
   .content {
     min-height: 0;
     width: 100%;
-    overflow: scroll;
+    overflow: auto;
     display: flex;
     flex-direction: column;
     padding-top: 32px;
@@ -43,7 +43,6 @@ export const DetailsWrapper = styled.div`
     flex-grow: 1;
     position: relative;
     min-height: 0;
-    overflow: scroll;
 
     .label {
       padding-top: 16px;

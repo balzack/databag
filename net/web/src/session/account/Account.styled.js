@@ -35,7 +35,7 @@ export const AccountWrapper = styled.div`
   .content {
     min-height: 0;
     width: 100%;
-    overflow: scroll;
+    overflow: auto;
     display: flex;
     flex-direction: column;
     justify-content: center;

@@ -36,7 +36,7 @@ export const ProfileWrapper = styled.div`
   .content {
     min-height: 0;
     width: 100%;
-    overflow: scroll;
+    overflow: auto;
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -125,7 +125,7 @@ export const ProfileWrapper = styled.div`
   .view {
     width: 100%;
     height: 100%;
-    overflow: scroll;
+    overflow: auto;
     display: flex;
     flex-direction: column;
     align-items: center;

@@ -5,6 +5,7 @@ import { Logo } from 'logo/Logo';
 import { AddTopic } from './addTopic/AddTopic';
 import { VirtualList } from './virtualList/VirtualList';
 import { TopicItem } from './topicItem/TopicItem';
+import { Progress } from 'antd';
 
 export function Conversation({ closeConversation, openDetails, cardId, channelId }) {
 
@@ -40,6 +41,12 @@ export function Conversation({ closeConversation, openDetails, cardId, channelId
       </div>
       <div class="divider">
         <div class="line" />
+        { state.upload && (
+          <div class="progress-active" style={{ width: state.uploadPercent + '%' }} />
+        )}
+        { !state.upload && (
+          <div class="progress-idle" />
+        )}
       </div>
       <div class="topic">
         <AddTopic cardId={cardId} channelId={channelId} />

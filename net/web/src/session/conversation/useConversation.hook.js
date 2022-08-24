@@ -3,6 +3,7 @@ import { ViewportContext } from 'context/ViewportContext';
 import { CardContext } from 'context/CardContext';
 import { ChannelContext } from 'context/ChannelContext';
 import { ConversationContext } from 'context/ConversationContext';
+import { UploadContext } from 'context/UploadContext';
 
 export function useConversation(cardId, channelId) {
 
@@ -12,12 +13,16 @@ export function useConversation(cardId, channelId) {
     logo: null,
     subject: null,
     topics: [],
+    upload: false,
+    uploadError: false,
+    uploadPercent: 0,
   });
 
   const viewport = useContext(ViewportContext);  
   const card = useContext(CardContext);
   const channel = useContext(ChannelContext);
   const conversation = useContext(ConversationContext);
+  const upload = useContext(UploadContext);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
@@ -26,6 +31,38 @@ export function useConversation(cardId, channelId) {
   useEffect(() => {
     updateState({ display: viewport.state.display });
   }, [viewport]);
+
+  useEffect(() => {
+    let active = false;
+    let uploadError = false;
+    let uploadPercent = 0;
+    let uploadIndex = 0;
+    let uploadCount = 0;
+    let uploadActive = { loaded: 0, total: 0 };
+    let uploadActiveCount = 0;
+
+    const progress = upload.state.progress.get(`${cardId ? cardId : ''}:${channelId}`);
+
+    if (progress) {
+      progress.forEach((entry) => {
+        active = true;
+        if (entry.error) {
+          uploadError = true;
+        }
+        uploadIndex += entry.uploaded;
+        uploadCount += entry.count;
+        if (entry.active) {
+          uploadActiveCount += 1;
+          uploadActive.loaded += entry.active.loaded;
+          uploadActive.total += entry.active.total;
+        }
+      });
+      uploadPercent = (uploadIndex + (uploadActiveCount * (uploadActive.loaded / uploadActive.total)) / uploadCount);
+      uploadPercent = Math.floor(uploadPercent * 100);
+    }
+
+    updateState({ upload: active, uploadError, uploadPercent });
+  }, [cardId, channelId, upload]);
 
   useEffect(() => {
 
@@ -84,6 +121,10 @@ export function useConversation(cardId, channelId) {
   const actions = {
     more: () => {
       conversation.actions.addHistory();
+    },
+    clearUploadError: () => {
+    },
+    cancelUpload: () => {
     },
   };
 
