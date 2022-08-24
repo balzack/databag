@@ -8,6 +8,7 @@ Databag is a self-hosted messaging service for the DWeb community. Notable featu
 - Federated (accounts on different nodes can communicate)
 - No server-side replication (direct communication between app and contact's node)
 - Low latency (use of websockets for push events to avoid polling)
+- Responsive (renders well in browsers for phone, tablet and pc)
 - Unlimited accounts per node (host for your whole family)
 
 You can test out the project [here](https://databag.coredb.org/#/create), but don't post anything important as this server is regularly wiped. Feedback on the UI/UX, bugs or features is greatly appreciated.
