@@ -133,7 +133,9 @@ export function Session() {
             </div>
           </div>
           <div class="right">
-            <Welcome />
+            <div class="reframe">
+              <Welcome />
+            </div>
             { state.conversation && (
               <div class="reframe">
                 <Conversation closeConversation={actions.closeConversation}
