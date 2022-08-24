@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { setAccountSearchable } from 'api/setAccountSearchable';
 import { getAccountStatus } from 'api/getAccountStatus';
 import { setAccountLogin } from 'api/setAccountLogin';
@@ -18,7 +18,7 @@ export function useAccountContext() {
 
   const setStatus = async (rev) => {
     if (next.current == null) {
-      if (revision.current != rev) {
+      if (revision.current !== rev) {
         let status = await getAccountStatus(access.current);
         updateState({ init: true, status });
         revision.current = rev;

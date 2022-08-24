@@ -69,13 +69,14 @@ func getCardRevisionModel(slot *store.CardSlot) *Card {
 
 func getCardDetailModel(slot *store.CardSlot) *CardDetail {
 
-	var groups []string
+	var groups []string = []string{}
 	for _, group := range slot.Card.Groups {
 		groups = append(groups, group.GroupSlot.GroupSlotID)
 	}
 
 	return &CardDetail{
 		Status: slot.Card.Status,
+    StatusUpdated: slot.Card.StatusUpdated,
 		Token:  slot.Card.OutToken,
 		Notes:  slot.Card.Notes,
 		Groups: groups,

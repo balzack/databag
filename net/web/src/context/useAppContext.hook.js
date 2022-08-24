@@ -1,5 +1,4 @@
 import { useEffect, useState, useRef, useContext } from 'react';
-import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { getAvailable } from 'api/getAvailable';
 import { setLogin } from 'api/setLogin';
 import { setAccountAccess } from 'api/setAccountAccess';
@@ -15,7 +14,7 @@ import { StoreContext } from './StoreContext';
 import { UploadContext } from './UploadContext';
 
 export function useAppContext() {
-  const [state, setState] = useState(null);
+  const [state, setState] = useState({});
   const [appRevision, setAppRevision] = useState();
 
   const delay = useRef(2);
@@ -24,13 +23,6 @@ export function useAppContext() {
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }))
-  }
-
-  const updateData = (value) => {
-    setState((s) => {
-      let data = { ...s.Data, ...value }
-      return { ...s, Data: data }
-    })
   }
 
   const uploadContext = useContext(UploadContext);
@@ -53,44 +45,46 @@ export function useAppContext() {
     setState({});
   }
 
-  const userActions = {
+  const actions = {
     logout: () => {
-      appLogout(updateState, clearWebsocket);
+      appLogout();
       storeContext.actions.clear();
       uploadContext.actions.clear();
       resetData();
     },
-  }
-
-  const adminActions = {
-    logout: () => {
-      appLogout(updateState, clearWebsocket);
-      resetData();
-    }
+    access: async (token) => {
+      await appAccess(token)
+    },
+    login: async (username, password) => {
+      await appLogin(username, password)
+    },
+    create: async (username, password, token) => {
+      await appCreate(username, password, token)
+    },
+    username: getUsername,
+    available: getAvailable,
   }
 
   const appCreate = async (username, password, token) => {
     await addAccount(username, password, token);
     let access = await setLogin(username, password)
-    updateState({ token: access.appToken, access: 'user' });
+    updateState({ access: access.appToken });
     storeContext.actions.setValue('login:timestamp', access.created);
     setWebsocket(access.appToken)
     localStorage.setItem("session", JSON.stringify({
-      token: access.appToken,
-      access: 'user',
+      access: access.appToken,
       timestamp: access.created,
     }));
     return access.created;
   } 
 
-  const  appLogin = async (username, password) => {
+  const appLogin = async (username, password) => {
     let access = await setLogin(username, password)
-    updateState({ token: access.appToken, access: 'user' });
+    updateState({ access: access.appToken });
     storeContext.actions.setValue('login:timestamp', access.created);
     setWebsocket(access.appToken)
     localStorage.setItem("session", JSON.stringify({
-      token: access.appToken,
-      access: 'user',
+      access: access.appToken,
       timestamp: access.created,
     }));
     return access.created;
@@ -98,29 +92,15 @@ export function useAppContext() {
 
   const appAccess = async (token) => {
     let access = await setAccountAccess(token)
-    updateState({ token: access, access: 'user' });
+    updateState({ access });
     setWebsocket(access)
-    localStorage.setItem("session", JSON.stringify({ token: access, access: 'user' }));
+    localStorage.setItem("session", JSON.stringify({ token: access }));
   }
 
-  function appLogout(updateState) {
-    updateState({ token: null, access: null });
+  const appLogout = () => {
+    updateState({ access: null });
     clearWebsocket()
     localStorage.removeItem("session");
-  }
-
-  const accessActions = {
-    access: async (token) => {
-      await appAccess(token, updateState, setWebsocket)
-    },
-    login: async (username, password) => {
-      await appLogin(username, password, updateState, setWebsocket)
-    },
-    create: async (username, password, token) => {
-      await appCreate(username, password, token, updateState, setWebsocket)
-    },
-    username: getUsername,
-    available: getAvailable,
   }
 
   useEffect(() => {
@@ -164,7 +144,7 @@ export function useAppContext() {
           ws.current.onopen = () => {}
           ws.current.onerror = () => {}
           setWebsocket(token);
-          if (delay.current < 60) {
+          if (delay.current < 15) {
             delay.current += 1;
           }
         }
@@ -190,11 +170,9 @@ export function useAppContext() {
     if (storage != null) {
       try {
         const session = JSON.parse(storage)
-        if (session?.access === 'admin') {
-          setState({ token: session.token, access: session.access })
-        } else if (session?.access === 'user') {
-          setState({ token: session.token, access: session.access })
-          setWebsocket(session.token);   
+        if (session?.access) {
+          setState({ access: session.access })
+          setWebsocket(session.access);   
         } else {
           setState({})
         }
@@ -211,13 +189,7 @@ export function useAppContext() {
   if (state == null) {
     return {};
   }
-  if (state.access === 'user') {
-    return { state, actions: userActions }
-  }
-  if (state.access === 'admin') {
-    return { state, actions: adminActions }
-  }
-  return { state, actions: accessActions }
+  return { state, actions }
 }
 
 

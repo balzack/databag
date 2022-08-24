@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { getGroups } from 'api/getGroups';
 
 export function useGroupContext() {
@@ -29,7 +29,7 @@ export function useGroupContext() {
 
   const setGroups = async (rev) => {
     if (next.current == null) {
-      if (revision.current != rev) {
+      if (revision.current !== rev) {
         await updateGroups();
         updateState({ init: true, groups: groups.current });
         revision.current = rev;

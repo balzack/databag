@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, useContext } from 'react';
+import { useState, useRef } from 'react';
 import axios from 'axios';
 
 export function useUploadContext() {
@@ -31,6 +31,7 @@ export function useUploadContext() {
           upload: entry.index,
           topicId: topic,
           active: entry.active,
+          uploaded: entry.assets.length,
           index: entry.assets.length + active,
           count: entry.assets.length + entry.files.length + active,
           error: entry.error,

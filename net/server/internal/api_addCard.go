@@ -1,6 +1,7 @@
 package databag
 
 import (
+  "time"
 	"databag/internal/store"
 	"encoding/hex"
 	"errors"
@@ -57,6 +58,7 @@ func AddCard(w http.ResponseWriter, r *http.Request) {
 			Node:            identity.Node,
 			ProfileRevision: identity.Revision,
 			Status:          APPCardConfirmed,
+      StatusUpdated:   time.Now().Unix(),
 			ViewRevision:    0,
 			InToken:         hex.EncodeToString(data),
 			AccountID:       account.GUID,

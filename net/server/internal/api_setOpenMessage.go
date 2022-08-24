@@ -67,6 +67,7 @@ func SetOpenMessage(w http.ResponseWriter, r *http.Request) {
 		card.Node = connect.Node
 		card.ProfileRevision = connect.ProfileRevision
 		card.Status = APPCardPending
+    card.StatusUpdated = time.Now().Unix()
 		card.NotifiedProfile = connect.ProfileRevision
 		card.NotifiedArticle = connect.ArticleRevision
 		card.NotifiedView = connect.ViewRevision
@@ -124,9 +125,11 @@ func SetOpenMessage(w http.ResponseWriter, r *http.Request) {
 		}
 		if card.Status == APPCardConfirmed {
 			card.Status = APPCardRequested
+      card.StatusUpdated = time.Now().Unix()
 		}
 		if card.Status == APPCardConnecting {
 			card.Status = APPCardConnected
+      card.StatusUpdated = time.Now().Unix()
 		}
 		card.OutToken = connect.Token
 		card.DetailRevision = account.CardRevision + 1

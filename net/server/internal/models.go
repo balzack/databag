@@ -113,7 +113,9 @@ type CardData struct {
 type CardDetail struct {
 	Status string `json:"status"`
 
-	Token string `json:"token,omitempty"`
+	StatusUpdated int64 `json:"statusUpdated"`
+
+  Token string `json:"token,omitempty"`
 
 	Notes string `json:"notes,omitempty"`
 

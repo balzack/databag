@@ -4,6 +4,7 @@ import (
 	"databag/internal/store"
 	"encoding/hex"
 	"errors"
+  "time"
 	"github.com/gorilla/mux"
 	"github.com/theckman/go-securerandom"
 	"gorm.io/gorm"
@@ -105,6 +106,7 @@ func SetCardStatus(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	slot.Card.Status = status
+  slot.Card.StatusUpdated = time.Now().Unix()
 	slot.Card.NotifiedView = viewRevision
 	slot.Card.NotifiedArticle = articleRevision
 	slot.Card.NotifiedChannel = channelRevision
