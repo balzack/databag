@@ -20,6 +20,10 @@ export function useListing() {
     setState((s) => ({ ...s, ...value }));
   }
 
+  useEffect(() => {
+    updateState({ contacts: [] });
+  }, [state.node]);
+
   const actions = {
     onNode: (value) => {
       updateState({ node: value });

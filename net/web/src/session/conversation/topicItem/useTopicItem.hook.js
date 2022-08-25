@@ -81,13 +81,24 @@ export function useTopicItem(topic) {
 
     if (profile.state.init && card.state.init && conversation.state.init) {
       const { guid, created } = topic.data.topicDetail;
+
+      let createdStr;
+      const date = new Date(created * 1000);
+      const now = new Date();
+      if(now.getTime() - date.getTime() < 86400000) {
+        createdStr = date.toLocaleTimeString([], {hour: 'numeric', minute:'2-digit'});
+      }
+      else {
+        createdStr = date.toLocaleDateString("en-US");
+      }
+
       if (profile.state.profile.guid == guid) {
         const { name, handle, imageUrl } = profile.actions.getProfile();
-        updateState({ name, handle, imageUrl, status, message, transform, assets, confirmed, error, ready, created, owner, textColor, textSize });
+        updateState({ name, handle, imageUrl, status, message, transform, assets, confirmed, error, ready, created: createdStr, owner, textColor, textSize });
       }
       else {
         const { name, handle, imageUrl } = card.actions.getCardProfileByGuid(guid);
-        updateState({ name, handle, imageUrl, status, message, transform, assets, confirmed, error, ready, created, owner, textColor, textSize });
+        updateState({ name, handle, imageUrl, status, message, transform, assets, confirmed, error, ready, created: createdStr, owner, textColor, textSize });
       }
     }
   }, [profile, card, conversation, topic]);

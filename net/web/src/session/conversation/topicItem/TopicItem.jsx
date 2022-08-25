@@ -16,9 +16,6 @@ export function TopicItem({ host, topic }) {
 
   let name = state.name ? state.name : state.handle;
   let nameClass = state.name ? 'set' : 'unset';
-  let d = new Date();
-  let offset = d.getTime() / 1000 - state.created;
-  
   if (name == null) {
     name = "unknown contact"
     nameClass = "unknown"
@@ -104,7 +101,7 @@ export function TopicItem({ host, topic }) {
         </div>
         <div class="info">
           <div class={nameClass}>{ name }</div>
-          <div>{ getTime(offset) }</div>
+          <div>{ state.created }</div>
         </div>
       </div>
       { !state.confirmed && (
@@ -136,25 +133,3 @@ export function TopicItem({ host, topic }) {
   )
 }
 
-function getTime(offset) {
-  if (offset < 1) {
-    return ''
-  }
-  if (offset < 60) {
-    return Math.floor(offset) + "s";
-  }
-  offset /= 60;
-  if (offset < 60) {
-    return Math.floor(offset) + "m";
-  }
-  offset /= 60;
-  if (offset < 24) {
-    return Math.floor(offset) + "h";
-  }
-  offset /= 24;
-  if (offset < 366) {
-    return Math.floor(offset) + "d";
-  }
-  offset /= 365.25;
-  return Math.floor(offset) + "y";
-}

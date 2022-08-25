@@ -20,6 +20,7 @@ export const WelcomeWrapper = styled.div`
 
     .header {
       font-weight: bold;
+      font-size: 20px;
     }
   }
 
