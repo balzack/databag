@@ -85,8 +85,12 @@ export function useTopicItem(topic) {
       let createdStr;
       const date = new Date(created * 1000);
       const now = new Date();
-      if(now.getTime() - date.getTime() < 86400000) {
+      const offset = now.getTime() - date.getTime();
+      if(offset < 86400000) {
         createdStr = date.toLocaleTimeString([], {hour: 'numeric', minute:'2-digit'});
+      }
+      else if (offset < 31449600000) {
+        createdStr = date.toLocaleDateString("en-US", {day: 'numeric', month:'numeric'});
       }
       else {
         createdStr = date.toLocaleDateString("en-US");
