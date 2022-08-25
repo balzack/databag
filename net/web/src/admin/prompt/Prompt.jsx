@@ -26,6 +26,16 @@ export  function Prompt({ login }) {
     }
   }
 
+  const placeholder = () => {
+    if (state.unclaimed === true) {
+      return 'Set Access Token';
+    }
+    if (state.unclaimed === false) {
+      return 'Access Token';
+    }
+    return '';
+  }
+
   return (
     <PromptWrapper>
       <div class="app-title">
@@ -39,7 +49,7 @@ export  function Prompt({ login }) {
         <Form name="basic" wrapperCol={{ span: 24, }}>
 
           <Form.Item name="password">
-            <Input.Password placeholder="Admin Password" spellCheck="false" onChange={(e) => actions.setPassword(e.target.value)}
+            <Input.Password placeholder={placeholder()} spellCheck="false" onChange={(e) => actions.setPassword(e.target.value)}
                 autocomplete="current-password" onKeyDown={(e) => keyDown(e)} prefix={<LockOutlined />} size="large" />
           </Form.Item>
 

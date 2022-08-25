@@ -79,10 +79,11 @@ export function Dashboard({ token, config, logout }) {
           footer={[ <Button type="primary" onClick={() => actions.setShowCreate(false)}>OK</Button> ]}
           onCancel={() => actions.setShowCreate(false)}>
         <CreateLayout>
-          <div>{createLink()}</div>
-          <Button icon={<CopyOutlined />} size="small"
-            onClick={() => onClipboard(createLink())}
-          />
+          <div class="url">
+            <div class="link">{createLink()}</div>
+            <Button icon={<CopyOutlined />} size="small"
+              onClick={() => onClipboard(createLink())} />
+          </div>
         </CreateLayout>
       </Modal>    
     </DashboardWrapper>

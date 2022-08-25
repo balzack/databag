@@ -24,7 +24,7 @@ export function usePrompt() {
   const checkStatus = async () => {
     try {
       let status = await getNodeStatus();
-      updateState({ uncliamed: status });
+      updateState({ unclaimed: status });
     }
     catch(err) {
       console.log("failed to check node status");

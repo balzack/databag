@@ -82,6 +82,19 @@ export const DeleteButton = styled(Button)`
   color: red;
 `
 
-export const AccessLayout = styled(Space)`
-  white-space: nowrap;
+export const AccessLayout = styled.div`
+  .url {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+   
+    .link {
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      flex-grow: 1;
+      min-width: 0;
+      padding-right: 8px;
+    }
+  }
 `

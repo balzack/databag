@@ -47,6 +47,8 @@ export const DashboardWrapper = styled.div`
     .settings {
       display: flex;
       align-items: center;
+      justify-content: center;
+      width: 40px;
     }
 
     .add {
@@ -84,6 +86,19 @@ export const SettingsLayout = styled(Space)`
   }
 `;
 
-export const CreateLayout = styled(Space)`
-  white-space: nowrap;
+export const CreateLayout = styled.div`
+  .url {
+    display: flex;
+    flex-direction: row;
+    max-width: 100%;
+   
+    .link {
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      flex-grow: 1;
+      min-width: 0;
+      padding-right: 8px;
+    }
+  }
 `

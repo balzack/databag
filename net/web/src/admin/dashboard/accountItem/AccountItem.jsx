@@ -57,10 +57,11 @@ export function AccountItem({ token, item, remove }) {
           footer={[ <Button type="primary" onClick={() => actions.setShowAccess(false)}>OK</Button> ]}
           onCancel={() => actions.setShowAccess(false)}>
         <AccessLayout>
-          <div>{accessLink()}</div>
-          <Button icon={<CopyOutlined />} size="small"
-            onClick={() => onClipboard(accessLink())}
-          />
+          <div class="url">
+            <div class="link">{accessLink()}</div>
+            <Button icon={<CopyOutlined />} size="small"
+              onClick={() => onClipboard(accessLink())}/>
+          </div>
         </AccessLayout>
       </Modal>  
     </AccountItemWrapper>
