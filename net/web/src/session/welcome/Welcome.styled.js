@@ -29,6 +29,7 @@ export const WelcomeWrapper = styled.div`
     display: flex;
     align-items: center;
     min-height: 0;
+    opacity: 0.5;
   }
 
   .message {
