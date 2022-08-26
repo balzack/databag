@@ -1,75 +1,82 @@
-import React, { useEffect, useState } from 'react';
-import { Button } from 'antd';
-import ReactPlayer from 'react-player'
+import React, { useEffect, useState, useRef } from 'react';
+import { Spin } from 'antd';
 import ReactResizeDetector from 'react-resize-detector';
 import { PlayCircleOutlined, MinusCircleOutlined, SoundOutlined } from '@ant-design/icons';
 import { AudioAssetWrapper } from './AudioAsset.styled';
 
+import background from 'images/audio.png';
+
 export function AudioAsset({ label, audioUrl }) {
 
   const [active, setActive] = useState(false);
-  const [dimension, setDimension] = useState({});
-  const [playing, setPlaying] = useState(true);
+  const [width, setWidth] = useState(0);
   const [ready, setReady] = useState(false);
+  const [playing, setPlaying] = useState(true);
   const [url, setUrl] = useState(null);
+
+  const audio = useRef(null);
 
   useEffect(() => {
     setActive(false);
-    setPlaying(false);
+    setReady(false);
+    setPlaying(true);
     setUrl(null);
   }, [label, audioUrl]);
-
-  const onReady = () => {
-    if (!ready) {
-      setReady(true);
-      setPlaying(false);
-    }
-  }
 
   const onActivate = () => {
     setUrl(audioUrl);
     setActive(true);
   }
 
-  const Control = () => {
-    if (!ready) {
-      return <></>
+  const onReady = () => {
+    setReady(true);
+  }
+
+  const play = (on) => {
+    setPlaying(on);
+    if (on) {
+      audio.current.play();
     }
-    if (playing) {
-      return (
-        <div onClick={() => setPlaying(false)}>
-          <MinusCircleOutlined style={{ fontSize: 48, color: '#eeeeee', cursor: 'pointer' }} />
-        </div>
-      )
+    else {
+      audio.current.pause();
     }
-    return (
-      <div onClick={() => setPlaying(true)}>
-        <PlayCircleOutlined style={{ fontSize: 48, color: '#eeeeee', cursor: 'pointer' }} />
-      </div>
-    )
   }
 
   return (
     <AudioAssetWrapper>
       <ReactResizeDetector handleWidth={false} handleHeight={true}>
         {({ height }) => {
-          if (height != dimension.height) {
-            setDimension({ height });
+          if (height != width) {
+            setWidth(height);
           }
-          return <div style={{ height: '100%', borderRadius: 4, width: dimension.height, backgroundColor: '#444444' }} />
+          return <div style={{ height: '100%', width: width }} />
         }}
       </ReactResizeDetector>
-      <div class="player" style={{ width: dimension.height, height: dimension.height }}>
+      <div class="player" style={{ width: width, height: width }}>
+        <img class="background" src={background} alt="audio background" />
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           { !active && (
-            <div onClick={() => onActivate()}>
+            <div class="control" onClick={() => onActivate()}>
               <SoundOutlined style={{ fontSize: 32, color: '#eeeeee', cursor: 'pointer' }} />
             </div>
           )}
-          { active && (
-            <Control />
+          { active && !ready && (
+            <div class="control">
+              <Spin />
+            </div>
           )}
-          <ReactPlayer style={{ position: 'absolute', top: 0, visibility: 'hidden' }} playing={playing} height="100%" width="100%" controls="true" url={url} onReady={onReady} />
+          { active && ready && playing && (
+            <div class="control" onClick={() => play(false)}>
+              <MinusCircleOutlined style={{ fontSize: 32, color: '#eeeeee', cursor: 'pointer' }} />
+            </div>
+          )}
+          { active && ready && !playing && (
+            <div class="control" onClick={() => play(true)}>
+              <PlayCircleOutlined style={{ fontSize: 32, color: '#eeeeee', cursor: 'pointer' }} />
+            </div>
+          )}
+          <audio style={{ position: 'absolute', top: 0, visibility: 'hidden' }} autoplay="true"
+            src={url} type="audio/mpeg" ref={audio} onPlay={onReady} />
         </div>
       </div>
       <div class="label">{ label }</div>

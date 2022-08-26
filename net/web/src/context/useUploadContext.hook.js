@@ -188,7 +188,7 @@ async function upload(entry, update, complete) {
         });
         entry.assets.push({
           audio: {
-            label: asset.label,
+            label: file.label,
             full: asset.data.find(item => item.transform === 'acopy;audio').assetId,
           }
         });

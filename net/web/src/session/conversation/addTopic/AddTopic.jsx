@@ -16,6 +16,8 @@ export function AddTopic({ cardId, channelId }) {
   const attachVideo = useRef(null);
   const msg = useRef();
 
+console.log(state);
+
   const keyDown = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       msg.current.blur();
@@ -58,7 +60,7 @@ export function AddTopic({ cardId, channelId }) {
       return <img style={{ height: 128, objectFit: 'contain' }} src={item.url} alt="" />
     }
     if (item.audio) {
-      return <AudioFile onLabel={(label) => actions.setLabel(index, label)}/>
+      return <AudioFile onLabel={(label) => actions.setLabel(index, label)} url={item.url} />
     }
     if (item.video) {
       return <VideoFile onPosition={(pos) => actions.setPosition(index, pos)} url={item.url} />
