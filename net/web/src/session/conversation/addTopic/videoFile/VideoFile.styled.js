@@ -11,19 +11,19 @@ export const VideoFileWrapper = styled.div`
     display: flex;
     align-items: center;
 
-    .arrows {
+    .seek {
       width: 100%;
       display: flex;
       flex-direction: row;
       align-items: center;
 
-      .left-arrow {
+      .left-seek {
         width: 50%;
         display: flex;
         justify-content: flex-begin;
       }
 
-      .right-arrow {
+      .right-seek {
         width: 50%;
         display: flex;
         justify-content: flex-end;

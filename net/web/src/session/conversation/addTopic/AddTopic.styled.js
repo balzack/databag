@@ -15,7 +15,9 @@ export const AddTopicWrapper = styled.div`
   }
 
   .assets {
-    padding-top: 8px;
+    margin-top: 8px;
+    height: 128px;
+    overflow: auto;
   }
 
   .buttons {

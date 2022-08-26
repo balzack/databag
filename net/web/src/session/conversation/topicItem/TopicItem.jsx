@@ -6,7 +6,7 @@ import { AudioAsset } from './audioAsset/AudioAsset';
 import { ImageAsset } from './imageAsset/ImageAsset';
 import { Logo } from 'logo/Logo';
 import { Space, Skeleton, Button, Modal, Input } from 'antd';
-import { ExclamationCircleOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { ExclamationCircleOutlined, DeleteOutlined, EditOutlined, FireOutlined, PictureOutlined } from '@ant-design/icons';
 import { Carousel } from 'carousel/Carousel';
 
 export function TopicItem({ host, topic }) {
@@ -116,9 +116,19 @@ export function TopicItem({ host, topic }) {
       )}
       { state.confirmed && (
         <div>
-          { state.assets.length > 0 && (
+          { state.error && (
+            <div class="asset-placeholder">
+              <FireOutlined style={{ fontSize: 32, color: '#ff8888' }} />
+            </div>
+          )}
+          { !state.error && !state.ready && (
+            <div class="asset-placeholder">
+              <PictureOutlined style={{ fontSize: 32 }} />
+            </div>
+          )}
+          { !state.error && state.ready && state.assets.length > 0 && (
             <div class="topic-assets">
-              <Carousel pad={40} ready={state.ready} error={state.error} items={state.assets} itemRenderer={renderAsset} />
+              <Carousel pad={40} items={state.assets} itemRenderer={renderAsset} />
             </div>
           )}
           <div class="message">

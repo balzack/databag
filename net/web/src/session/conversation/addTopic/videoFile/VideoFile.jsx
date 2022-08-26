@@ -47,13 +47,13 @@ export function VideoFile({ url, onPosition }) {
         }}
       </ReactResizeDetector>
       <div class="overlay" style={{ width: state.width, height: state.height }}>
-        <div class="arrows">
-          <div class="left-arrow">
+        <div class="seek">
+          <div class="left-seek">
             <div class="icon" onClick={() => onSeek(-1)}>
               <LeftOutlined style={{ fontSize: 32, color: '#eeeeee' }} />
             </div>
           </div>
-          <div class="right-arrow">
+          <div class="right-seek">
             <div class="icon" onClick={() => onSeek(1)}>
               <RightOutlined style={{ fontSize: 32, color: '#eeeeee' }} />
             </div>

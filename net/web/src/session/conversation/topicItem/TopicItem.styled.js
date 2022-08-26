@@ -77,6 +77,17 @@ export const TopicItemWrapper = styled.div`
     }
   }
 
+  .asset-placeholder {
+    width: 128px;
+    height: 128px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #eeeeee;
+    color: #888888;
+    margin-left: 72px;
+  }
+
   .topic-assets {
     padding-top: 4px;
   }

@@ -4,72 +4,10 @@ import { CarouselWrapper } from './Carousel.styled';
 import { RightOutlined, LeftOutlined, CloseOutlined, PictureOutlined, FireOutlined } from '@ant-design/icons';
 import ReactResizeDetector from 'react-resize-detector';
 
-export function Carousel({ pad, ready, error, items, itemRenderer, itemRemove }) {
+export function Carousel({ pad, items, itemRenderer, itemRemove }) {
   const [slots, setSlots] = useState([]);
-  const [padClass, setPadClass] = useState('');
-  const [carouselRef, setCarouselRef] = useState(false);
-  const [itemIndex, setItemIndex] = useState(0);
-  const [scrollLeft, setScrollLeft] = useState('hidden');
-  const [scrollRight, setScrollRight] = useState('hidden');
-  const FUDGE = 1;
 
   let carousel = useRef();
-  let itemWidth = useRef(new Map());
-
-  useEffect(() => {
-    setScroll('smooth');
-    setArrows();
-  }, [itemIndex, items]);
-
-  useEffect(() => {
-    setScroll('auto');
-  }, [carouselRef]);
-
-  const updateItemIndex = (val) => {
-    setItemIndex((i) => {
-      if (i + val < 0) {
-        return 0;
-      }
-      return i + val;
-    })
-  }
-
-  const onLeft = () => {
-    if (itemIndex > 0) {
-      updateItemIndex(-1);
-    }
-  }
-
-  const onRight = () => {
-    if(itemIndex + 1 < items.length) {
-      updateItemIndex(+1);
-    }
-  }
-
-  const setScroll = (behavior) => {
-    let pos = FUDGE;
-    for (let i = 0; i < itemIndex; i++) {
-      pos += itemWidth.current.get(i) + 32;
-    }
-    if (carousel.current) {
-      carousel.current.scrollTo({ top: 0, left: pos, behavior });
-    }
-  }
-
-  const setArrows = () => {
-    if (itemIndex == 0) {
-      setScrollLeft('hidden');
-    }
-    else {
-      setScrollLeft('unset');
-    }
-    if (itemIndex + 1 >= items.length) {
-      setScrollRight('hidden');
-    }
-    else {
-      setScrollRight('unset');
-    }
-  }
 
   const RemoveItem = ({ index }) => {
     if (itemRemove) {
@@ -80,68 +18,31 @@ export function Carousel({ pad, ready, error, items, itemRenderer, itemRemove })
 
   useEffect(() => {
     let assets = [];
-    if (ready) {
-      for (let i = 0; i < items.length; i++) {
-        assets.push((
-          <ReactResizeDetector handleWidth={true} handleHeight={false}>
-            {({ width, height }) => {
-              itemWidth.current.set(i, width);
-              return (
-                <div class="item noselect">
-                  <div class="asset">{ itemRenderer(items[i], i) }</div>
-                  <RemoveItem index={i} />
-                </div>
-              );
-            }}
-          </ReactResizeDetector>
-        ));
-      }
-      if (items.length > 0) {
-        assets.push(<div class="space">&nbsp;</div>)
-      }
-      if (itemIndex >= items.length) {
-        if (items.length > 0) {
-          setItemIndex(items.length - 1);
-        }
-        else {
-          setItemIndex(0);
-        }
-      }
+    for (let i = 0; i < items.length; i++) {
+      assets.push((
+        <ReactResizeDetector handleWidth={true} handleHeight={false}>
+          {({ width, height }) => {
+            return (
+              <div class="item noselect">
+                <div class="asset">{ itemRenderer(items[i], i) }</div>
+                <RemoveItem index={i} />
+              </div>
+            );
+          }}
+        </ReactResizeDetector>
+      ));
     }
-    
+    if (items.length > 0) {
+      assets.push(<div class="space"></div>)
+    }
     setSlots(assets);
-    setScroll();
-    setArrows();
-  }, [ready, items]);
-
-  const onRefSet = (r) => {
-    if (r != null) {
-      carousel.current = r;
-      setCarouselRef(true);
-    }
-  }
+  }, [items]);
 
   return (
     <CarouselWrapper>
-      { error && (
-        <div class="status">
-          <FireOutlined style={{ fontSize: 32, color: '#ff8888' }} />
-        </div>
-      )}
-      { !ready && !error && (
-        <div class="status">
-          <PictureOutlined style={{ fontSize: 32 }} />
-        </div>
-      )}
-      { ready && !error && (
-        <>
-          <div class="carousel" style={{ paddingLeft: pad + 32 }} ref={onRefSet}>
-            {slots}
-          </div>
-          <div class="left-arrow" onClick={onRight} style={{ marginLeft: pad, visibility: scrollRight }}><LeftOutlined /></div>
-          <div class="right-arrow" onClick={onLeft} style={{ visibility: scrollLeft }}><RightOutlined /></div>
-        </>
-      )}
+      <div class="carousel" style={{ paddingLeft: pad + 32 }} ref={carousel}>
+        {slots}
+      </div>
     </CarouselWrapper>
   );
 }

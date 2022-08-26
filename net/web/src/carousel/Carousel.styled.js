@@ -12,7 +12,7 @@ export const CarouselWrapper = styled.div`
     flex-direction: row;
     padding-left: 32px;
     width: 100%;
-    overflow: hidden;
+    overflow: auto;
 
     /* hide scrollbar for IE, Edge and Firefox */
     -ms-overflow-style: none;
@@ -105,7 +105,7 @@ export const CarouselWrapper = styled.div`
 
   .space {
     height: 128px;
-    padding-left: 100%;
+    padding-left: 32px;
   }
 
   .object {

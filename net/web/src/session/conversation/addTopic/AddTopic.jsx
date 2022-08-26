@@ -55,7 +55,7 @@ export function AddTopic({ cardId, channelId }) {
 
   const renderItem = (item, index) => {
     if (item.image) {
-      return <img style={{ height: '100%', objectFit: 'contain' }} src={item.url} alt="" />
+      return <img style={{ height: 128, objectFit: 'contain' }} src={item.url} alt="" />
     }
     if (item.audio) {
       return <AudioFile onLabel={(label) => actions.setLabel(index, label)}/>
@@ -95,7 +95,7 @@ export function AddTopic({ cardId, channelId }) {
       <input type='file' name="asset" accept="video/*" ref={attachVideo} onChange={e => onSelectVideo(e)} style={{display: 'none'}}/>
       { state.assets.length > 0 && (
         <div class="assets">
-          <Carousel pad={0} ready={true} items={state.assets} itemRenderer={renderItem} itemRemove={removeItem} />
+          <Carousel pad={32} items={state.assets} itemRenderer={renderItem} itemRemove={removeItem} />
         </div>
       )}
       <div class="message">
