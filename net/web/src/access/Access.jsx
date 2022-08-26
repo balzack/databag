@@ -40,14 +40,24 @@ export function Access({ mode }) {
             <img class="splash" src={login} alt="Databag Splash" />
           </div>
           <div class="right">
-            <Prompt />
+            { mode === 'login' && (
+              <Login />
+            )}
+            { mode === 'create' && (
+              <CreateAccount />
+            )}
           </div>
         </div>
       )}
       { (viewport.state.display === 'medium' || viewport.state.display === 'small') && (
         <div class="full-layout">
           <div class="center">
-            <Prompt />
+            { mode === 'login' && (
+              <Login />
+            )}
+            { mode === 'create' && (
+              <CreateAccount />
+            )}
           </div>
         </div>
       )}
