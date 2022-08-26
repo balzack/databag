@@ -16,8 +16,6 @@ export function AddTopic({ cardId, channelId }) {
   const attachVideo = useRef(null);
   const msg = useRef();
 
-console.log(state);
-
   const keyDown = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       msg.current.blur();

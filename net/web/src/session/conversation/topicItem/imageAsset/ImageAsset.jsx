@@ -3,26 +3,24 @@ import { Button, Modal } from 'antd';
 import ReactResizeDetector from 'react-resize-detector';
 import { SelectOutlined, ExpandOutlined, MinusCircleOutlined, PlayCircleOutlined } from '@ant-design/icons';
 import { ImageAssetWrapper } from './ImageAsset.styled';
+import { useImageAsset } from './useImageAsset.hook';
 
 export function ImageAsset({ thumbUrl, fullUrl }) {
 
-  const [state, setState] = useState({ width: 0, height: 0, popout: false });
+  const { state, actions } = useImageAsset();
+  const [dimension, setDimension] = useState({ width: 0, height: 0 });
 
-  const updateState = (value) => {
-    setState((s) => ({ ...s, ...value }));
-  }
-
-  const onPopOut = () => {
-    if (state.width == 0 || state.height == 0) {
-      updateState({ popout: true, popWidth: '50%', popHeight: '50%' });
+  const popout = () => {
+    if (dimension.width == 0 || dimension.height == 0) {
+      actions.setPopout('50%', '50%');
     }
     else {
-      if (state.width / state.height > window.innerWidth / window.innerHeight) {
-        updateState({ popout: true, popWidth: '80%', popHeight: 'auto' });
+      if (dimension.width / dimension.height > window.innerWidth / window.innerHeight) {
+        actions.setPopout('80%', 'auto');
       }
       else {
-        let width = Math.floor(80 * (state.width / state.height) * (window.innerHeight / window.innerWidth));
-        updateState({ popout: true, popWidth: width + '%', popHeight: 'auto' });
+        let width = Math.floor(80 * (dimension.width / dimension.height) * (window.innerHeight / window.innerWidth));
+        actions.setPopout(width + '%', 'auto');
       }
     }
   }
@@ -31,22 +29,32 @@ export function ImageAsset({ thumbUrl, fullUrl }) {
     <ImageAssetWrapper>
       <ReactResizeDetector handleWidth={true} handleHeight={true}>
         {({ width, height }) => {
-          if (width != state.width || height != state.height) {
-            updateState({ width, height });
+          if (width != dimension.width || height != dimension.height) {
+            setDimension({ width, height });
           }
           return <img style={{ height: '100%', objectFit: 'contain' }} src={thumbUrl} alt="" />
         }}
       </ReactResizeDetector>
-      <div class="viewer">
-        <div class="overlay" style={{ width: state.width, height: state.height }}>
-          <div class="expand" onClick={() => onPopOut()}>
-            <ExpandOutlined style={{ fontSize: 24, color: '#eeeeee', cursor: 'pointer' }} />
+      { state.display !== 'small' && (
+        <div class="viewer">
+          <div class="overlay" style={{ width: dimension.width, height: dimension.height }}>
+            <div class="expand" onClick={popout}>
+              <ExpandOutlined style={{ fontSize: 24, color: '#eeeeee', cursor: 'pointer' }} />
+            </div>
           </div>
+          <Modal visible={state.popout} width={state.width} height={state.height} bodyStyle={{ width: '100%', height: 'auto', paddingBottom: 6, paddingTop: 6, paddingLeft: 6, paddingRight: 6, backgroundColor: '#dddddd' }} footer={null} destroyOnClose={true} closable={false} onCancel={actions.clearPopout}>
+            <img style={{ width: '100%', objectFit: 'contain' }} src={fullUrl} alt="" />
+          </Modal>
         </div>
-      </div>
-      <Modal visible={state.popout} width={state.popWidth} height={state.popHeight} bodyStyle={{ width: '100%', height: 'auto', paddingBottom: 6, paddingTop: 6, paddingLeft: 6, paddingRight: 6, backgroundColor: '#dddddd' }} footer={null} destroyOnClose={true} closable={false} onCancel={() => { updateState({ popout: false })}}>
-        <img style={{ width: '100%', objectFit: 'contain' }} src={fullUrl} alt="" />
-      </Modal>
+      )}
+      { state.display === 'small' && !state.popout && (
+        <div class="viewer" style={{ width: dimension.width, height: dimension.height }} onClick={popout} />
+      )}
+      { state.display === 'small' && state.popout && (
+        <div class="fullscreen" onClick={actions.clearPopout}>
+          <img class="image" src={fullUrl} />
+        </div>
+      )}
     </ImageAssetWrapper>
   )
 }

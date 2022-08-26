@@ -26,5 +26,22 @@ export const ImageAssetWrapper = styled.div`
     bottom: 0;
     left: 0;
   }
+
+  .fullscreen {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: #000000;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    cursor: pointer;
+
+    .image {
+      object-fit: contain;
+      width: 100%;
+      height: 100%;
+    }
+  }
 `;
 
