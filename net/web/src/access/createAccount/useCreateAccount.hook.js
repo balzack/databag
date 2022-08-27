@@ -74,7 +74,7 @@ export function useCreateAccount() {
       if (!state.busy && state.username !== '' && state.password !== '' && state.password === state.confirm) {
         updateState({ busy: true })
         try {
-          await app.actions.create(state.username, state.password)
+          await app.actions.create(state.username, state.password, state.token)
         }
         catch (err) {
           console.log(err);
