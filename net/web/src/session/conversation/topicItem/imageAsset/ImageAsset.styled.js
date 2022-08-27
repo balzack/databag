@@ -9,15 +9,10 @@ export const ImageAssetWrapper = styled.div`
     position: absolute;
   }
 
-  .viewer:hover .overlay {
-    visibility: visible;
-  }
-
   .overlay {
-    visibility: hidden;
-    position: relative;
-    background-color: black;
-    opacity: 0.5;
+    cursor: pointer;
+    top: 0;
+    position: absolute;
   }
 
   .expand {

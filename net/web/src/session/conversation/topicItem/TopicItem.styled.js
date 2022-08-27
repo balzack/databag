@@ -5,10 +5,6 @@ export const TopicItemWrapper = styled.div`
   flex-direction: column;
   width: 100%;
 
-  &:hover .options {
-    visibility: visible;
-  }
-
   .topic-header {
     display: flex;
     flex-direction: row;
@@ -17,6 +13,33 @@ export const TopicItemWrapper = styled.div`
     margin-right: 16px;
     padding-top: 8px;
     border-top: 1px solid #dddddd;
+
+    &:hover .topic-options {
+      visibility: visible;
+    }
+
+    .topic-options {
+      position: absolute;
+      top: 0;
+      right: 0;
+      visibility: hidden;
+
+      .buttons {
+        display: flex;
+        flex-direction: row;
+        border-radius: 4px;
+        background-color: #eeeeee;
+        border: 1px solid #555555;
+        margin-top: 2px;
+
+        .button {
+          font-size: 14px;
+          margin-left: 8px;
+          margin-right: 8px;
+          cursor: pointer;
+        }
+      }
+    }
 
     .avatar {
       height: 32px;
@@ -50,29 +73,6 @@ export const TopicItemWrapper = styled.div`
         font-style: italic;
         color: #aaaaaa;
         padding-right: 8px;
-      }
-    }
-  }
-
-  .options {
-    position: absolute;
-    top: 0;
-    right: 0;
-    visibility: hidden;
-
-    .buttons {
-      display: flex;
-      flex-direction: row;
-      border-radius: 4px;
-      background-color: #eeeeee;
-      border: 1px solid #555555;
-      margin-top: 2px;
-
-      .button {
-        font-size: 14px;
-        margin-left: 8px;
-        margin-right: 8px;
-        cursor: pointer;
       }
     }
   }

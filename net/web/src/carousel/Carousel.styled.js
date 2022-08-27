@@ -105,7 +105,7 @@ export const CarouselWrapper = styled.div`
 
   .space {
     height: 128px;
-    padding-left: 32px;
+    padding-left: 4px;
   }
 
   .object {

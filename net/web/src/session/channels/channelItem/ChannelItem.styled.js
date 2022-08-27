@@ -22,6 +22,16 @@ export const ChannelItemWrapper = styled.div`
     align-items: center;
     min-width: 0;
 
+    .avatar{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid ${Colors.grey};
+      border-radius: 8px;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
     .logo {
       display: flex;
       align-items: center;

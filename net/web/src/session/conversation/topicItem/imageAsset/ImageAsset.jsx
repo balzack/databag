@@ -11,17 +11,15 @@ export function ImageAsset({ thumbUrl, fullUrl }) {
   const [dimension, setDimension] = useState({ width: 0, height: 0 });
 
   const popout = () => {
-    if (dimension.width == 0 || dimension.height == 0) {
-      actions.setPopout('50%', '50%');
+    if (dimension.width / dimension.height > window.innerWidth / window.innerHeight) {
+      let width = Math.floor(window.innerWidth * 8 / 10);
+      let height = Math.floor(width * dimension.height / dimension.width);
+      actions.setPopout(width, height);
     }
     else {
-      if (dimension.width / dimension.height > window.innerWidth / window.innerHeight) {
-        actions.setPopout('80%', 'auto');
-      }
-      else {
-        let width = Math.floor(80 * (dimension.width / dimension.height) * (window.innerHeight / window.innerWidth));
-        actions.setPopout(width + '%', 'auto');
-      }
+      let height = Math.floor(window.innerHeight * 8 / 10);
+      let width = Math.floor(height * dimension.width / dimension.height);
+      actions.setPopout(width, height);
     }
   }
 
@@ -37,13 +35,10 @@ export function ImageAsset({ thumbUrl, fullUrl }) {
       </ReactResizeDetector>
       { state.display !== 'small' && (
         <div class="viewer">
-          <div class="overlay" style={{ width: dimension.width, height: dimension.height }}>
-            <div class="expand" onClick={popout}>
-              <ExpandOutlined style={{ fontSize: 24, color: '#eeeeee', cursor: 'pointer' }} />
-            </div>
-          </div>
-          <Modal visible={state.popout} width={state.width} height={state.height} bodyStyle={{ width: '100%', height: 'auto', paddingBottom: 6, paddingTop: 6, paddingLeft: 6, paddingRight: 6, backgroundColor: '#dddddd' }} footer={null} destroyOnClose={true} closable={false} onCancel={actions.clearPopout}>
-            <img style={{ width: '100%', objectFit: 'contain' }} src={fullUrl} alt="" />
+          <div class="overlay" style={{ width: dimension.width, height: dimension.height }}
+              onClick={popout} />
+          <Modal centered={true} visible={state.popout} width={state.width + 12} bodyStyle={{ width: '100%', height: 'auto', paddingBottom: 6, paddingTop: 6, paddingLeft: 6, paddingRight: 6, backgroundColor: '#dddddd' }} footer={null} destroyOnClose={true} closable={false} onCancel={actions.clearPopout}>
+            <img style={{ width: '100%', objectFit: 'contain' }} src={fullUrl} alt="topic image" />
           </Modal>
         </div>
       )}

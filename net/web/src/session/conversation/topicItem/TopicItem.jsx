@@ -103,14 +103,14 @@ export function TopicItem({ host, topic }) {
           <div class={nameClass}>{ name }</div>
           <div>{ state.created }</div>
         </div>
+          <div class="topic-options">
+            <Options />
+          </div>
       </div>
       { !state.confirmed && (
         <div>
           <div class="message">
             <Skeleton size={'small'} active={true} />
-          </div>
-          <div class="options">
-            <Options />
           </div>
         </div>
       )}
@@ -133,9 +133,6 @@ export function TopicItem({ host, topic }) {
           )}
           <div class="message">
             <Message />
-          </div>
-          <div class="options">
-            <Options />
           </div>
         </div>
       )}

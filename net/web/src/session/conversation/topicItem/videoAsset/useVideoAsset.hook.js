@@ -1,13 +1,13 @@
 import { useContext, useState, useEffect, useRef } from 'react';
 import { ViewportContext } from 'context/ViewportContext';
 
-export function useImageAsset() {
+export function useVideoAsset() {
 
   const [state, setState] = useState({
     display: null,
-    popout: false,
     width: 0,
     height: 0,
+    active: false,
   });
 
   const viewport = useContext(ViewportContext);
@@ -21,13 +21,15 @@ export function useImageAsset() {
   }, []);
 
   const actions = {
-    setPopout: (width, height) => {
-      updateState({ popout: true, width, height });
+    setActive: (width, height, url) => {
+console.log(width, height);
+      updateState({ active: true, width, height });
     },
-    clearPopout: () => {
-      updateState({ popout: false });
+    clearActive: () => {
+      updateState({ active: false });
     },
   };
 
   return { state, actions };
 }
+
