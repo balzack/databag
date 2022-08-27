@@ -90,19 +90,10 @@ export function useCreateAccount() {
   };
 
   useEffect(() => {
-    if (app) {
-      if (app.state) {
-        if (app.state.access) {
-          navigate('/session')
-        }
-      }
-      else {
-        let params = new URLSearchParams(search);
-        let token = params.get("add");
-        if (token) {
-          updateState({ token });
-        }
-      }
+    let params = new URLSearchParams(search);
+    let token = params.get("add");
+    if (token) {
+      updateState({ token });
     }
   }, [app, navigate, search])
 
