@@ -2,6 +2,8 @@ import { useContext, useState, useEffect, useRef } from 'react';
 import { CardContext } from 'context/CardContext';
 import { StoreContext } from 'context/StoreContext';
 import { ViewportContext } from 'context/ViewportContext';
+import { ProfileContext } from 'context/ProfileContext';
+import { ChannelContext } from 'context/ChannelContext';
 
 export function useSession() {
 
@@ -18,11 +20,14 @@ export function useSession() {
     contact: false,
     profile: false,
     account: false,
+    loading: false,
   });
 
   const card = useContext(CardContext);
   const store = useContext(StoreContext);
   const viewport = useContext(ViewportContext);
+  const channel = useContext(ChannelContext);
+  const profile = useContext(ProfileContext);
   
   const storeStatus = useRef(null);
   const cardStatus = useRef(null);
@@ -30,6 +35,15 @@ export function useSession() {
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
   }
+
+  useEffect(() => {
+    if (!profile.state.init || !card.state.init || !channel.state.init) {
+      updateState({ loading: true });
+    }
+    else {
+      updateState({ loading: false });
+    }
+  }, [card, channel, profile]);
 
   useEffect(() => {
     updateState({ display: viewport.state.display });

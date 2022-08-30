@@ -1,5 +1,5 @@
 import { useEffect, useContext } from 'react';
-import { Drawer } from 'antd';
+import { Drawer, Spin } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { SessionWrapper } from './Session.styled';
 import { AppContext } from 'context/AppContext';
@@ -76,6 +76,13 @@ export function Session() {
             <div class="bottom">
               <Channels open={openConversation} />
             </div>
+            { state.loading && (
+              <div class="reframe">
+                <div class="spinner">
+                  <Spin size="large" />
+                </div>
+              </div>
+            )}
           </div>
           <div class="center">
             <div class="reframe">
@@ -131,6 +138,13 @@ export function Session() {
             <div class="bottom">
               <Channels open={actions.openConversation} />
             </div>
+            { state.loading && (
+              <div class="reframe">
+                <div class="spinner">
+                  <Spin size="large" />
+                </div>
+              </div>
+            )}
           </div>
           <div class="right">
             <div class="reframe">
@@ -208,6 +222,13 @@ export function Session() {
             { (state.profile || state.account) && (
               <div class="reframe">
                 <Profile />
+              </div>
+            )}
+            { state.loading && (
+              <div class="reframe">
+                <div class="spinner">
+                  <Spin size="large" />
+                </div>
               </div>
             )}
           </div>

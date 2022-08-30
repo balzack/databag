@@ -4,6 +4,7 @@ import { CardContext } from 'context/CardContext';
 import { ChannelContext } from 'context/ChannelContext';
 import { ConversationContext } from 'context/ConversationContext';
 import { UploadContext } from 'context/UploadContext';
+import { StoreContext } from 'context/StoreContext';
 
 export function useConversation(cardId, channelId) {
 
@@ -25,6 +26,7 @@ export function useConversation(cardId, channelId) {
   const channel = useContext(ChannelContext);
   const conversation = useContext(ConversationContext);
   const upload = useContext(UploadContext);
+  const store = useContext(StoreContext);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
@@ -119,6 +121,8 @@ export function useConversation(cardId, channelId) {
     });
     const { loadingInit, loadingMore } = conversation.state;
     updateState({ topics, loadingInit, loadingMore });
+    store.actions.setValue(`${channelId}::${cardId}`, Number(conversation.state.revision));
+ 
   }, [conversation]);
 
   const actions = {
