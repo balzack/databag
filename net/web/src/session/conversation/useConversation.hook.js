@@ -13,6 +13,8 @@ export function useConversation(cardId, channelId) {
     logo: null,
     subject: null,
     topics: [],
+    loadingInit: false,
+    loadingMore: false,
     upload: false,
     uploadError: false,
     uploadPercent: 0,
@@ -115,7 +117,8 @@ export function useConversation(cardId, channelId) {
       }
       return 1;
     });
-    updateState({ topics });
+    const { loadingInit, loadingMore } = conversation.state;
+    updateState({ topics, loadingInit, loadingMore });
   }, [conversation]);
 
   const actions = {

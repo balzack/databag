@@ -9,7 +9,8 @@ export function useConversationContext() {
   const [state, setState] = useState({
     init: false,
     error: false,
-    loading: false,
+    loadingInit: true,
+    loadingMore: false,
     cardId: null,
     channelId: null,
     subject: null,
@@ -240,7 +241,7 @@ export function useConversationContext() {
         const ev = events.current.shift();
         await setTopics(ev);
       }
-      updateState({ loading: false });
+      updateState({ loadingInit: false, loadingMore: false });
       serialize.current--;
     }
   };
@@ -253,14 +254,14 @@ export function useConversationContext() {
   const actions = {
     setConversationId: (cardId, channelId) => {
       view.current += 1;
-      updateState({ init: false, loading: true });
+      updateState({ init: false, loadingInit: true });
       events.current = [{ type: EVENT_OPEN, data: { cardId, channelId }}];
       updateState({ subject: null, cardId, channelId, topics: new Map() });
       topics.current = new Map();
       updateConversation();
     },
     addHistory: () => {
-      updateState({ loading: true });
+      updateState({ loadingMore: true });
       events.current.push({ type: EVENT_MORE });
       updateConversation();
     },

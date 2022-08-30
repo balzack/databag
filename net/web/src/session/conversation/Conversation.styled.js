@@ -51,8 +51,20 @@ export const ConversationWrapper = styled.div`
   }
 
   .thread {
+    position: relative;
     flex-grow: 1;
     min-height: 0;
+
+    .loading {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      top: 0;
+      left: 0;
+    }
   }
 
   .divider {

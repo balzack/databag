@@ -5,7 +5,7 @@ import { Logo } from 'logo/Logo';
 import { AddTopic } from './addTopic/AddTopic';
 import { VirtualList } from './virtualList/VirtualList';
 import { TopicItem } from './topicItem/TopicItem';
-import { Progress } from 'antd';
+import { Progress, Spin } from 'antd';
 
 export function Conversation({ closeConversation, openDetails, cardId, channelId }) {
 
@@ -38,6 +38,16 @@ export function Conversation({ closeConversation, openDetails, cardId, channelId
       <div class="thread">
         <VirtualList id={`${cardId}:${channelId}`}
             items={state.topics} itemRenderer={topicRenderer} loadMore={actions.more} />
+        { state.loadingInit && (
+          <div class="loading">
+            <Spin size="large" delay={250} />
+          </div>
+        )}
+        { state.loadingMore && (
+          <div class="loading">
+            <Spin size="large" delay={500} />
+          </div>
+        )}
       </div>
       <div class="divider">
         <div class="line" />

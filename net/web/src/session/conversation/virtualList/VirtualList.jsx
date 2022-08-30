@@ -29,9 +29,10 @@ export function VirtualList({ id, items, itemRenderer, loadMore }) {
   const [scrollPos, setScrollPos] = useState(0);
 
   useEffect(() => {
+    actions.clearSlots();
     scrollTop.current = 8192;
     list.current.scrollTo({ top: 8192, left: 0 });
-  }, []);
+  }, [id]);
 
   useEffect(() => {
 
