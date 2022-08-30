@@ -8,6 +8,7 @@ export const VirtualListWrapper = styled.div`
   .rollview {
     width: 100%;
     height: 100%;
+    overflow-y: auto;
 
     /* hide scrollbar for IE, Edge and Firefox */
     -ms-overflow-style: none;
@@ -28,4 +29,5 @@ export const VirtualItem = styled.div`
   position: absolute;
   width: 100%;
   overflow: hidden;
+  max-height: 1024px;
 `;

@@ -36,8 +36,8 @@ export function Conversation({ closeConversation, openDetails, cardId, channelId
         )}
       </div>
       <div class="thread">
-        <VirtualList id={channelId + cardId}
-            items={state.topics} itemRenderer={topicRenderer} onMore={actions.more} />
+        <VirtualList id={`${cardId}:${channelId}`}
+            items={state.topics} itemRenderer={topicRenderer} loadMore={actions.more} />
       </div>
       <div class="divider">
         <div class="line" />

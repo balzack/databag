@@ -23,6 +23,11 @@ export function ImageAsset({ thumbUrl, fullUrl }) {
     }
   }
 
+  const clearPopout = (e) => {
+    e.stopPropagation();
+    actions.clearPopout();
+  }
+
   return (
     <ImageAssetWrapper>
       <ReactResizeDetector handleWidth={true} handleHeight={true}>
@@ -46,7 +51,7 @@ export function ImageAsset({ thumbUrl, fullUrl }) {
         <div class="viewer" style={{ width: dimension.width, height: dimension.height }} onClick={popout} />
       )}
       { state.display === 'small' && state.popout && (
-        <div class="fullscreen" onClick={actions.clearPopout}>
+        <div class="fullscreen" onClick={clearPopout} onTouchEnd={clearPopout}>
           <img class="image" src={fullUrl} />
         </div>
       )}

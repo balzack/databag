@@ -8,6 +8,7 @@ export function useTopicItem(topic) {
   const [guid, setGuid] = useState(null);
 
   const [state, setState] = useState({
+    init: false,
     name: null,
     handle: null,
     imageUrl: null,
@@ -18,6 +19,7 @@ export function useTopicItem(topic) {
     error: false,
     owner: false,
     assets: [],
+    topicId: null,
     editing: false,
     busy: false,
     textColor: '#444444',
@@ -98,18 +100,18 @@ export function useTopicItem(topic) {
 
       if (profile.state.profile.guid == guid) {
         const { name, handle, imageUrl } = profile.actions.getProfile();
-        updateState({ name, handle, imageUrl, status, message, transform, assets, confirmed, error, ready, created: createdStr, owner, textColor, textSize });
+        updateState({ name, handle, imageUrl, status, message, transform, assets, confirmed, error, ready, created: createdStr, owner, textColor, textSize, topicId: topic.id, init: true });
       }
       else {
         const { name, handle, imageUrl } = card.actions.getCardProfileByGuid(guid);
-        updateState({ name, handle, imageUrl, status, message, transform, assets, confirmed, error, ready, created: createdStr, owner, textColor, textSize });
+        updateState({ name, handle, imageUrl, status, message, transform, assets, confirmed, error, ready, created: createdStr, owner, textColor, textSize, topicId: topic.id, init: true });
       }
     }
   }, [profile, card, conversation, topic]);
 
   const actions = {
-    getAssetUrl: (assetId) => {
-      return conversation.actions.getAssetUrl(topic?.id, assetId);
+    getAssetUrl: (assetId, topicId) => {
+      return conversation.actions.getAssetUrl(state.topicId, assetId);
     },
     removeTopic: async () => {
       return await conversation.actions.removeTopic(topic.id);
