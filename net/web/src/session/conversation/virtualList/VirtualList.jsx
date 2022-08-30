@@ -13,7 +13,7 @@ export function VirtualList({ id, items, itemRenderer, loadMore }) {
   const moreDelay = 2000;
   const latchDelay = 500;
 
-  const defaultHeight = 32;
+  const defaultHeight = 128;
 
   const rollHeight = 16384;
 

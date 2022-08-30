@@ -1,6 +1,6 @@
 import { AddTopicWrapper } from './AddTopic.styled';
 import { useAddTopic } from './useAddTopic.hook';
-import { Modal, Input, Menu, Dropdown } from 'antd';
+import { Modal, Input, Menu, Dropdown, Spin } from 'antd';
 import { useRef, useState } from 'react';
 import { SoundOutlined, VideoCameraOutlined, PictureOutlined, FontColorsOutlined, FontSizeOutlined, PaperClipOutlined, SendOutlined } from '@ant-design/icons';
 import { SketchPicker } from "react-color";
@@ -125,7 +125,14 @@ export function AddTopic({ cardId, channelId }) {
           </Dropdown>
         </div>
         <div class="end">
-          <div class="button" onClick={addTopic}><SendOutlined /></div>
+          <div class="button" onClick={addTopic}>
+            { state.busy && (
+              <Spin size="small" />
+            )}
+            { !state.busy && (
+              <SendOutlined />
+            )}
+          </div>
         </div>
       </div>
     </AddTopicWrapper>
