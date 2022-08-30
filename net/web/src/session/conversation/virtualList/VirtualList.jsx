@@ -109,16 +109,16 @@ export function VirtualList({ id, items, itemRenderer, loadMore }) {
         const range = getContainerRange();
         if (range.bottom - range.top < state.listHeight) {
           if (scrollTop.current + state.listHeight != range.bottom) {
-            list.current.scrollTo({ top: range.bottom - state.listHeight, left: 0, behavior: 'smooth' });
+            list.current.scrollTo({ top: range.bottom - state.listHeight, left: 0 });
             actions.latch();
           }
         }
         else if (scrollTop.current + state.listHeight > range.bottom) {
-          list.current.scrollTo({ top: range.bottom - state.listHeight, left: 0, behavior: 'smooth' });
+          list.current.scrollTo({ top: range.bottom - state.listHeight, left: 0 });
           actions.latch();
         }
         else if (scrollTop.current < range.top) {
-          list.current.scrollTo({ top: range.top, left: 0, behavior: 'smooth' });
+          list.current.scrollTo({ top: range.top, left: 0 });
         }
       }
     }, pushDelay);
