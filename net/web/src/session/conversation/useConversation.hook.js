@@ -19,6 +19,7 @@ export function useConversation(cardId, channelId) {
     upload: false,
     uploadError: false,
     uploadPercent: 0,
+    error: false,
   });
 
   const viewport = useContext(ViewportContext);  
@@ -119,8 +120,8 @@ export function useConversation(cardId, channelId) {
       }
       return 1;
     });
-    const { loadingInit, loadingMore } = conversation.state;
-    updateState({ topics, loadingInit, loadingMore });
+    const { error, loadingInit, loadingMore } = conversation.state;
+    updateState({ topics, error, loadingInit, loadingMore });
     store.actions.setValue(`${channelId}::${cardId}`, Number(conversation.state.revision));
  
   }, [conversation]);
@@ -128,6 +129,9 @@ export function useConversation(cardId, channelId) {
   const actions = {
     more: () => {
       conversation.actions.addHistory();
+    },
+    resync: () => {
+      conversation.actions.resync();
     },
     clearUploadError: () => {
     },

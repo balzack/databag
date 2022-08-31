@@ -350,6 +350,17 @@ export function VirtualList({ id, items, itemRenderer, loadMore }) {
         nomore.current = false;
       }, moreDelay);
     }
+
+    if (scrollTop.current > e.target.scrollTop) {
+      const len = containers.current.length;
+      const last = containers.current[len-1];
+      if (len > 0) {
+        if (e.target.scrollTop + state.listHeight < last.top) {
+          actions.unlatch();
+        }
+      }
+    }
+
     scrollTop.current = e.target.scrollTop;
     setScrollPos(e.target.scrollTop);
   }

@@ -88,3 +88,11 @@ export const ConversationWrapper = styled.div`
     flex-shrink: 0;
   }
 `
+
+export const StatusError = styled.div`
+  color: ${Colors.error};
+  font-size: 14px;
+  padding-left: 8px;
+  cursor: pointer;
+`
+

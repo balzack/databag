@@ -1,11 +1,11 @@
-import { ConversationWrapper } from './Conversation.styled';
-import { SettingOutlined, RightOutlined, CloseOutlined } from '@ant-design/icons';
+import { ConversationWrapper, StatusError } from './Conversation.styled';
+import { ExclamationCircleOutlined, SettingOutlined, RightOutlined, CloseOutlined } from '@ant-design/icons';
 import { useConversation } from './useConversation.hook';
 import { Logo } from 'logo/Logo';
 import { AddTopic } from './addTopic/AddTopic';
 import { VirtualList } from './virtualList/VirtualList';
 import { TopicItem } from './topicItem/TopicItem';
-import { Progress, Spin } from 'antd';
+import { Progress, Spin, Tooltip } from 'antd';
 
 export function Conversation({ closeConversation, openDetails, cardId, channelId }) {
 
@@ -23,6 +23,13 @@ export function Conversation({ closeConversation, openDetails, cardId, channelId
             <Logo img={state.image} url={state.logo} width={32} height={32} radius={4} />
           </div>
           <div class="label">{ state.subject }</div>
+          { state.error && (
+            <Tooltip placement="bottom" title="sync error">
+              <StatusError onClick={actions.resync}>
+                <ExclamationCircleOutlined />
+              </StatusError>
+            </Tooltip>
+          )}
           { state.display !== 'xlarge' && (
             <div class="button" onClick={openDetails}>
               <SettingOutlined />

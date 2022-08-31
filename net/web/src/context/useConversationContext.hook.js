@@ -311,6 +311,7 @@ export function useConversationContext() {
       }
     },
     resync: () => {
+      updateState({ error: false });
       events.current.push({ type: EVENT_RESYNC });
       updateConversation();
     }
