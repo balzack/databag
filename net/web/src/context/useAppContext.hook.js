@@ -124,7 +124,7 @@ export function useAppContext() {
     channelContext.actions.setToken(token);
 
     let protocol;
-    if (window.location.protocol === 'http') {
+    if (window.location.protocol === 'http:') {
       protocol = 'ws://';
     }
     else {
