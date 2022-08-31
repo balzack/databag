@@ -123,7 +123,15 @@ export function useAppContext() {
     cardContext.actions.setToken(token);
     channelContext.actions.setToken(token);
 
-    ws.current = new WebSocket("wss://" + window.location.host + "/status");
+    let protocol;
+    if (window.location.protocol === 'http') {
+      protocol = 'ws://';
+    }
+    else {
+      protocol = 'wss://';
+    }
+
+    ws.current = new WebSocket(protocol + window.location.host + "/status");
     ws.current.onmessage = (ev) => {
       try {
         let rev = JSON.parse(ev.data);
