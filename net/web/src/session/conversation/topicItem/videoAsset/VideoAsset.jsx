@@ -40,14 +40,10 @@ export function VideoAsset({ thumbUrl, lqUrl, hdUrl }) {
             <VideoCameraOutlined style={{ fontSize: 32, color: '#eeeeee', cursor: 'pointer' }} />
           </div>
         )}
-        { state.active && state.display === 'small' && (
-          <video autoplay controls src={hdUrl} width={dimension.width} height={dimension.height} />
-        )}
-        { state.display !== 'small' && (
-          <Modal centered={true} visible={state.active} width={state.width + 12} bodyStyle={{ paddingBottom: 0, paddingTop: 6, paddingLeft: 6, paddingRight: 6, backgroundColor: '#dddddd' }} footer={null} destroyOnClose={true} closable={false} onCancel={actions.clearActive}>
-            <video autoplay={true} controls src={hdUrl} width={state.width} height={state.height} />
-          </Modal>
-        )}
+        <Modal centered={true} visible={state.active} width={state.width + 12} bodyStyle={{ paddingBottom: 0, paddingTop: 6, paddingLeft: 6, paddingRight: 6, backgroundColor: '#dddddd' }} footer={null} destroyOnClose={true} closable={false} onCancel={actions.clearActive}>
+          <video autoplay="true" controls src={hdUrl} width={state.width} height={state.height} 
+              playsinline="true" />
+        </Modal>
       </div>
     </VideoAssetWrapper>
   )
