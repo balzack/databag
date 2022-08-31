@@ -6,9 +6,9 @@ export function useVirtualList(id) {
     view: null,
     listHeight: 128,
     slots: [],
-    latched: true,   
   });
 
+  const pad = 8;
   const slots = useRef(new Map());
 
   const updateState = (value) => {
@@ -19,14 +19,8 @@ export function useVirtualList(id) {
     setView: (view) => {
       updateState({ view });
     },
-    latch: () => {
-      updateState({ latched: true });
-    },
-    unlatch: () => {
-      updateState({ latched: false });
-    },
     setListHeight: (listHeight) => {
-      updateState({ listHeight });
+      updateState({ listHeight: listHeight });
     },
     addSlot: (id, slot) => {
       slots.current.set(id, slot);

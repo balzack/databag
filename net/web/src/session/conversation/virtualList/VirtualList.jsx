@@ -13,8 +13,8 @@ export function VirtualList({ id, items, itemRenderer, loadMore }) {
   const moreDelay = 2000;
   const latchDelay = 500;
 
+  const pad = 4;
   const defaultHeight = 128;
-
   const rollHeight = 16384;
 
   const { state, actions } = useVirtualList();
@@ -25,10 +25,12 @@ export function VirtualList({ id, items, itemRenderer, loadMore }) {
   const nolatch = useRef(false);
   const list = useRef(null);
   const scrollTop = useRef(0);
+  const latched = useRef(true);
 
   const [scrollPos, setScrollPos] = useState(0);
 
   useEffect(() => {
+    latched.current = true;
     actions.clearSlots();
     scrollTop.current = 8192;
     list.current.scrollTo({ top: 8192, left: 0 });
@@ -85,12 +87,12 @@ export function VirtualList({ id, items, itemRenderer, loadMore }) {
   };
 
   const latchSlots = () => {
-    if (containers.current.length > 0 && state.latched) {
+    if (containers.current.length > 0 && latched.current) {
       if (!nolatch.current) {
         const last = containers.current[containers.current.length - 1];
         const bottom = last.top + last.height;
-        if (last.heightSet && scrollTop.current < bottom - state.listHeight) {
-          list.current.scrollTo({ top: bottom - state.listHeight, left: 0, behavior: 'smooth' });
+        if (last.heightSet && scrollTop.current < bottom - (state.listHeight - pad)) {
+          list.current.scrollTo({ top: bottom - (state.listHeight - pad), left: 0, behavior: 'smooth' });
           nolatch.current = true;
           setTimeout(() => {
             nolatch.current = false;
@@ -108,15 +110,15 @@ export function VirtualList({ id, items, itemRenderer, loadMore }) {
     debounce.current = setTimeout(() => {
       if (containers.current.length > 0) {
         const range = getContainerRange();
-        if (range.bottom - range.top < state.listHeight) {
-          if (scrollTop.current + state.listHeight != range.bottom) {
-            list.current.scrollTo({ top: range.bottom - state.listHeight, left: 0 });
-            actions.latch();
+        if (range.bottom - range.top < (state.listHeight - pad)) {
+          if (scrollTop.current + (state.listHeight - pad) != range.bottom) {
+            list.current.scrollTo({ top: range.bottom - (state.listHeight - pad), left: 0 });
+            latched.current = true;
           }
         }
-        else if (scrollTop.current + state.listHeight > range.bottom) {
-          list.current.scrollTo({ top: range.bottom - state.listHeight, left: 0 });
-          actions.latch();
+        else if (scrollTop.current + (state.listHeight - pad) > range.bottom) {
+          list.current.scrollTo({ top: range.bottom - (state.listHeight - pad), left: 0 });
+          latched.current = true;
         }
         else if (scrollTop.current < range.top) {
           list.current.scrollTo({ top: range.top, left: 0 });
@@ -127,7 +129,7 @@ export function VirtualList({ id, items, itemRenderer, loadMore }) {
 
   const alignSlots = () => {
     if (containers.current.length > 1) {
-      if (state.latched) {
+      if (latched.current) {
         const index = containers.current.length - 1;
         const last = containers.current[index];
         let bottom = last.top + last.height;
@@ -172,7 +174,7 @@ export function VirtualList({ id, items, itemRenderer, loadMore }) {
       if (itemView.current.length > 0) {
         let item = itemView.current[itemView.current.length - 1];
         let slot = {
-          top: rollHeight / 2 + state.listHeight,
+          top: rollHeight / 2 + (state.listHeight - pad),
           height: defaultHeight,
           heightSet: false,
           key: getItemKey(item),
@@ -238,7 +240,7 @@ export function VirtualList({ id, items, itemRenderer, loadMore }) {
       const container = containers.current[containers.current.length - 1];
       if (container.index + 1 < itemView.current.length) {
         const range = getContainerRange();
-        if (scrollTop.current + state.listHeight + fillZone > range.bottom) {
+        if (scrollTop.current + (state.listHeight - pad) + fillZone > range.bottom) {
           const index = container.index + 1;
           const item = itemView.current[index];
           let slot = {
@@ -351,18 +353,12 @@ export function VirtualList({ id, items, itemRenderer, loadMore }) {
       }, moreDelay);
     }
 
-    if (scrollTop.current > e.target.scrollTop) {
-      const len = containers.current.length;
-      const last = containers.current[len-1];
-      if (len > 0) {
-        if (e.target.scrollTop + state.listHeight < last.top) {
-          actions.unlatch();
-        }
-      }
-    }
-
     scrollTop.current = e.target.scrollTop;
     setScrollPos(e.target.scrollTop);
+  }
+
+  const unlatch = () => {
+    latched.current = false;
   }
 
   return (
@@ -374,7 +370,7 @@ export function VirtualList({ id, items, itemRenderer, loadMore }) {
           }
           return (
             <VirtualListWrapper onScroll={scrollView}
-                onWheel={actions.unlatch} onTouchStart={actions.unlatch} >
+                onWheel={unlatch} onTouchStart={unlatch} >
               <div class="rollview" ref={list} onScroll={scrollView}>
                 <div class="roll" style={{ height: rollHeight }}>
                   { state.slots }
