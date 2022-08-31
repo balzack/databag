@@ -9,6 +9,7 @@ export const ChannelItemWrapper = styled.div`
   border-bottom: 1px solid ${Colors.itemDivider};
   line-height: 16px;
   cursor: pointer;
+  overflow: hidden;
 
   &:hover {
     background-color: ${Colors.formHover};

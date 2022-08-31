@@ -137,7 +137,7 @@ async function upload(entry, update, complete) {
       if (file.image) {
         const formData = new FormData();
         formData.append('asset', file.image);
-        let transform = encodeURIComponent(JSON.stringify(["ithumb;photo", "icopy;photo"]));
+        let transform = encodeURIComponent(JSON.stringify(["ithumb;photo", "ilg;photo"]));
         let asset = await axios.post(`${entry.url}&transforms=${transform}`, formData, {
           signal: entry.cancel.signal,
           onUploadProgress: (ev) => {
@@ -149,7 +149,7 @@ async function upload(entry, update, complete) {
         entry.assets.push({
           image: {
             thumb: asset.data.find(item => item.transform === 'ithumb;photo').assetId,
-            full: asset.data.find(item => item.transform === 'icopy;photo').assetId, 
+            full: asset.data.find(item => item.transform === 'ilg;photo').assetId, 
           }
         });
       }
