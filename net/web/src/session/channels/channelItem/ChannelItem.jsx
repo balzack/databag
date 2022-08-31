@@ -28,7 +28,7 @@ export function ChannelItem({ item, openChannel }) {
             <div class="message">{ item.message }</div>
           </div>
           { item.updated && (
-            <div class="markup"></div>
+            <Markup />
           )}
         </div>
       )}
