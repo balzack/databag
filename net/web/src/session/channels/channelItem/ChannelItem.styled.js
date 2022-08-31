@@ -7,13 +7,19 @@ export const ChannelItemWrapper = styled.div`
   display: flex;
   align-items: center;
   border-bottom: 1px solid ${Colors.itemDivider};
-  padding-left: 16px;
-  padding-right: 16px;
   line-height: 16px;
+  cursor: pointer;
 
   &:hover {
     background-color: ${Colors.formHover};
-    cursor: pointer;
+  }
+
+  .active {
+    background-color: ${Colors.profileForm};
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-item: center;
   }
 
   .item {
@@ -21,6 +27,8 @@ export const ChannelItemWrapper = styled.div`
     flex-direction: row;
     align-items: center;
     min-width: 0;
+    padding-left: 16px;
+    padding-right: 16px;
 
     .avatar{
       display: flex;

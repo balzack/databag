@@ -5,7 +5,7 @@ import { useChannels } from './useChannels.hook';
 import { ChannelItem } from './channelItem/ChannelItem';
 import { AddChannel } from './addChannel/AddChannel';
 
-export function Channels({ open }) {
+export function Channels({ open, active }) {
 
   const { state, actions } = useChannels();
 
@@ -49,7 +49,7 @@ export function Channels({ open }) {
       <div class="view">
         <List local={{ emptyText: '' }} itemLayout="horizontal" dataSource={state.channels} gutter="0"
           renderItem={item => (
-            <ChannelItem item={item} openChannel={open} />
+            <ChannelItem item={item} openChannel={open} active={active} />
           )}
         />
       </div>

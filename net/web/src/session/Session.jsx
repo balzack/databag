@@ -74,7 +74,11 @@ export function Session() {
           <div class="left">
             <Identity openAccount={openAccount} openCards={openCards} cardUpdated={state.cardUpdated} />
             <div class="bottom">
-              <Channels open={openConversation} />
+              <Channels open={openConversation} active={{
+                  set: state.conversation,
+                  card: state.cardId,
+                  channel: state.channelId,
+                }} />
             </div>
             { state.loading && (
               <div class="reframe">
@@ -136,7 +140,11 @@ export function Session() {
           <div class="left">
             <Identity openAccount={actions.openProfile} openCards={actions.openCards} cardUpdated={state.cardUpdated} />
             <div class="bottom">
-              <Channels open={actions.openConversation} />
+              <Channels open={actions.openConversation} active={{
+                  set: state.conversation,
+                  card: state.cardId,
+                  channel: state.channelId,
+                }} />
             </div>
             { state.loading && (
               <div class="reframe">
@@ -190,7 +198,11 @@ export function Session() {
         <div class="mobile-layout noselect">
           <div class="top">
             <div class="reframe">
-              <Channels open={actions.openConversation} />
+              <Channels open={actions.openConversation} active={{ 
+                  set: state.conversation,
+                  card: state.cardId,
+                  channel: state.channelId,
+                }} />
             </div>
             { state.conversation && (
               <div class="reframe">
