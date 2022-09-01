@@ -282,12 +282,26 @@ export function useCardContext() {
       let token = cardProfile.guid + '.' + cardDetail.token;
       let node = cardProfile.node;
       await removeContactChannelTopic(node, token, channelId, topicId);
+      try {
+        resync.current.push(cardId);
+        await setCards(null);
+      }
+      catch (err) {
+        console.log(err);
+      }
     },
     setChannelTopicSubject: async (cardId, channelId, topicId, data) => {
       let { cardProfile, cardDetail } = cards.current.get(cardId).data;
       let token = cardProfile.guid + '.' + cardDetail.token;
       let node = cardProfile.node;
       await setContactChannelTopicSubject(node, token, channelId, topicId, data);
+      try {
+        resync.current.push(cardId);
+        await setCards(null);
+      }
+      catch (err) {
+        console.log(err);
+      }
     },
     addChannelTopic: async (cardId, channelId, message, files) => {
       let { cardProfile, cardDetail } = cards.current.get(cardId).data;

@@ -201,7 +201,9 @@ export function useConversationContext() {
         let subject = getSubject(chan);
         let contacts = getContacts(chan);
         let members = getMembers(chan);
-        const { enableImage, enableAudio, enableVideo } = chan.data.channelDetail;
+        const enableImage = chan?.data?.channelDetail?.enableImage;
+        const enableAudio = chan?.data?.channelDetail?.enableAudio;
+        const enableVideo = chan?.data?.channelDetail?.enableVideo;
         updateState({
           init: true,
           error: false,

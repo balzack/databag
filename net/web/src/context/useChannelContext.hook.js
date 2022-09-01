@@ -120,10 +120,22 @@ export function useChannelContext() {
       return await removeChannel(access.current, channelId);
     },
     removeChannelTopic: async (channelId, topicId) => {
-      return await removeChannelTopic(access.current, channelId, topicId);
+      await removeChannelTopic(access.current, channelId, topicId);
+      try {
+        await setChannels(null);
+      }
+      catch (err) {
+        console.log(err);
+      }
     },
     setChannelTopicSubject: async (channelId, topicId, data) => {
-      return await setChannelTopicSubject(access.current, channelId, topicId, data);
+      await setChannelTopicSubject(access.current, channelId, topicId, data);
+      try {
+        await setChannels(null);
+      }
+      catch (err) {
+        console.log(err);
+      }
     },
     addChannelTopic: async (channelId, message, files) => {
       if (files?.length) {

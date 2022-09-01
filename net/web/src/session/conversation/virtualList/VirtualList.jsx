@@ -192,7 +192,7 @@ export function VirtualList({ id, items, itemRenderer, loadMore }) {
       for (let i = 1; i < containers.current.length; i++) {
         let container = containers.current[i];
         if (container.index != index + i) {
-          const item = itemView.current[index + 1];
+          const item = itemView.current[index + i];
           let slot = {
             top: container.top - defaultHeight,
             height: defaultHeight,
