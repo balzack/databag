@@ -133,7 +133,8 @@ export function useConversation(cardId, channelId) {
     resync: () => {
       conversation.actions.resync();
     },
-    clearUploadError: () => {
+    clearUploadErrors: (cardId, channelId) => {
+      upload.actions.clearErrors(cardId, channelId);
     },
     cancelUpload: () => {
     },

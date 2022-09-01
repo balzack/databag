@@ -58,7 +58,10 @@ export function Conversation({ closeConversation, openDetails, cardId, channelId
       </div>
       <div class="divider">
         <div class="line" />
-        { state.upload && (
+        { state.uploadError && (
+          <div class="progress-error" />
+        )}
+        { state.upload && !state.uploadError && (
           <div class="progress-active" style={{ width: state.uploadPercent + '%' }} />
         )}
         { !state.upload && (
@@ -67,6 +70,17 @@ export function Conversation({ closeConversation, openDetails, cardId, channelId
       </div>
       <div class="topic">
         <AddTopic cardId={cardId} channelId={channelId} />
+        { state.uploadError && (
+          <div class="upload-error">
+            <Tooltip placement="bottom" title="upload error">
+              <StatusError>
+                <div onClick={() => actions.clearUploadErrors(cardId, channelId)}>
+                  <ExclamationCircleOutlined />
+                </div>
+              </StatusError>
+            </Tooltip>
+          </div>
+        )}
       </div>
     </ConversationWrapper>
   );

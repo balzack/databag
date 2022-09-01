@@ -77,15 +77,34 @@ export const ConversationWrapper = styled.div`
 
     .progress-idle {
       border-top: 1px solid ${Colors.divider};
+      height: 1px;
     }
 
     .progress-active {
       border-top: 1px solid ${Colors.primary};
+      height: 1px;
+    }
+
+    .progress-error {
+      border-top: 1px solid ${Colors.alert};
+      width: 100%;
+      height: 1px;
+      display: flex;
+      justify-content: flex-end;
     }
   }
 
   .topic {
     flex-shrink: 0;
+    position: relative;
+
+    .upload-error {
+      position: absolute;
+      top: 0;
+      right: 0;
+      margin-right: 16px;
+      cursor-pointer;
+    }
   }
 `
 

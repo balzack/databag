@@ -111,6 +111,19 @@ export function useUploadContext() {
     cancelContactTopic: (cardId, channelId, topicId) => {
       abort(`${cardId}:${channelId}`, topicId);
     },
+    clearErrors: (cardId, channelId) => {
+      const key = cardId ? `${cardId}:${channelId}` : `:${channelId}`;
+      const topics = channels.current.get(key);
+      if (topics) {
+        topics.forEach((topic, topicId) => {
+          if (topic.error) {
+            topic.cancel.abort();
+            topics.delete(topicId);
+            updateProgress();
+          }
+        });
+      }
+    },
     clear: () => {
       channels.current.forEach((topics, channelId) => {
         topics.forEach((assets, topicId) => {
