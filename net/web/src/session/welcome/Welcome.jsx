@@ -13,7 +13,7 @@ export function Welcome() {
       <div class="message">
         <p>Step 1: setup your profile</p>
         <p>Step 2: connect with people</p>
-        <p>Step 3: start a conversation</p>
+        <p>Step 3: start a conversation topic</p>
       </div>
     </WelcomeWrapper>
   );
