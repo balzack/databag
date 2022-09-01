@@ -8,7 +8,6 @@ import (
 
 func TestMain(m *testing.M) {
 
-	SetKeySize(2048)
 	os.Remove("databag.db")
 	os.RemoveAll("testdata")
 	os.RemoveAll("testscripts")
@@ -51,8 +50,20 @@ func TestMain(m *testing.M) {
 		panic("failed to configure data path")
 	}
 
+	// config open access
+	access := &store.Config{ConfigID: CNFOpenAccess, BoolValue: true}
+	if err := store.DB.Save(access).Error; err != nil {
+		panic("failed to configure open access")
+	}
+
+	// config account limit
+	limit := &store.Config{ConfigID: CNFAccountLimit, NumValue: 1024}
+	if err := store.DB.Save(limit).Error; err != nil {
+		panic("failed to configure account limit")
+	}
+
 	// config server
-	config := NodeConfig{Domain: "databag.coredb.org", AccountLimit: 1024, OpenAccess: true, AccountStorage: 4096}
+	config := NodeConfig{Domain: "databag.coredb.org", AccountStorage: 4096, KeyType: "RSA2048"}
 	r, w, _ = NewRequest("PUT", "/admin/config?token=pass", &config)
 	SetNodeConfig(w, r)
 	if ReadResponse(w, nil) != nil {
@@ -68,12 +79,6 @@ func TestMain(m *testing.M) {
 	}
 	if check.Domain != "databag.coredb.org" {
 		panic("failed to set config domain")
-	}
-	if check.AccountLimit != 1024 {
-		panic("failed to set account limit")
-	}
-	if check.OpenAccess != true {
-		panic("failed to set open access")
 	}
 	if check.AccountStorage != 4096 {
 		panic("failed to set account storage")
