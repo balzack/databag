@@ -49,15 +49,19 @@ func GetChannelDetail(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+  video := getBoolConfigValue(CNFEnableVideo, true);
+  audio := getBoolConfigValue(CNFEnableAudio, true);
+  image := getBoolConfigValue(CNFEnableImage, true);
+
 	// return model data
 	if guid != "" {
 		if isChannelShared(guid, slot.Channel) {
-			WriteResponse(w, getChannelDetailModel(&slot, false))
+			WriteResponse(w, getChannelDetailModel(&slot, false, image, audio, video))
 		} else {
 			ErrResponse(w, http.StatusNotFound, errors.New("channel not shared with requestor"))
 			return
 		}
 	} else {
-		WriteResponse(w, getChannelDetailModel(&slot, true))
+		WriteResponse(w, getChannelDetailModel(&slot, true, image, audio, video))
 	}
 }

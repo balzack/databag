@@ -8,20 +8,14 @@ import (
 	"errors"
 )
 
-var keySize int = APPKeySize
-
-//SetKeySize sets the key size to use for new accounts
-func SetKeySize(size int) {
-	keySize = size
-}
-
 //GenerateRsaKeyPair creates a public/private key for a new account
 func GenerateRsaKeyPair() (*rsa.PrivateKey, *rsa.PublicKey, string, error) {
-	if keySize == 2048 {
-		privkey, _ := rsa.GenerateKey(rand.Reader, keySize)
+  keyType := getStrConfigValue(CNFKeyType, "RSA4096");
+	if keyType == "RSA2048" {
+		privkey, _ := rsa.GenerateKey(rand.Reader, 2048)
 		return privkey, &privkey.PublicKey, "RSA2048", nil
-	} else if keySize == 4096 {
-		privkey, _ := rsa.GenerateKey(rand.Reader, keySize)
+	} else if keyType == "RSA4096" {
+		privkey, _ := rsa.GenerateKey(rand.Reader, 4096)
 		return privkey, &privkey.PublicKey, "RSA2048", nil
 	} else {
 		return nil, nil, "", errors.New("invalid key setting")

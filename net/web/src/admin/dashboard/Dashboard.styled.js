@@ -71,14 +71,7 @@ export const SettingsButton = styled(Button)`
 export const SettingsLayout = styled(Space)`
   width: 100%;
 
-  .host {
-    white-space: nowrap;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-  }
-
-  .storage {
+  .field {
     white-space: nowrap;
     display: flex;
     flex-direction: row;

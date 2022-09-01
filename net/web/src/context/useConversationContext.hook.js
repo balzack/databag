@@ -18,6 +18,9 @@ export function useConversationContext() {
     members: new Set(),
     topics: new Map(),
     revision: null,
+    enableImage: null,
+    enabelAudio: null,
+    enableVideo: null,
   });
 
   const EVENT_OPEN = 1;
@@ -198,12 +201,16 @@ export function useConversationContext() {
         let subject = getSubject(chan);
         let contacts = getContacts(chan);
         let members = getMembers(chan);
+        const { enableImage, enableAudio, enableVideo } = chan.data.channelDetail;
         updateState({
           init: true,
           error: false,
           subject,
           contacts,
           members,
+          enableImage,
+          enableAudio,
+          enableVideo,
           topics: topics.current,
           revision: channelView.current.revision,
         });

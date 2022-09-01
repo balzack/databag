@@ -16,9 +16,11 @@ func GetNodeConfig(w http.ResponseWriter, r *http.Request) {
 	// get node config fields
 	var config NodeConfig
 	config.Domain = getStrConfigValue(CNFDomain, "")
-	config.AccountLimit = getNumConfigValue(CNFAccountLimit, 16)
-	config.OpenAccess = getBoolConfigValue(CNFOpenAccess, true)
 	config.AccountStorage = getNumConfigValue(CNFStorage, 0)
+  config.EnableImage = getBoolConfigValue(CNFEnableImage, true)
+  config.EnableAudio = getBoolConfigValue(CNFEnableAudio, true)
+  config.EnableVideo = getBoolConfigValue(CNFEnableVideo, true)
+  config.KeyType = getStrConfigValue(CNFKeyType, APPRSA4096)
 
 	WriteResponse(w, config)
 }

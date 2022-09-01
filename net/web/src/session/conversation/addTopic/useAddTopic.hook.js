@@ -1,10 +1,14 @@
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { CardContext } from 'context/CardContext';
 import { ChannelContext } from 'context/ChannelContext';
+import { ConversationContext } from 'context/ConversationContext';
 
 export function useAddTopic(cardId, channelId) {
   
   const [state, setState] = useState({
+    enableImage: null,
+    enableAudio: null,
+    enableVideo: null,
     assets: [],
     messageText: null,
     textColor: '#444444',
@@ -16,6 +20,7 @@ export function useAddTopic(cardId, channelId) {
 
   const card = useContext(CardContext);
   const channel = useContext(ChannelContext);
+  const conversation = useContext(ConversationContext);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
@@ -42,6 +47,11 @@ export function useAddTopic(cardId, channelId) {
       return { ...s, assets };
     });
   }
+
+  useEffect(() => {
+    const { enableImage, enableAudio, enableVideo } = conversation.state;
+    updateState({ enableImage, enableAudio, enableVideo });
+  }, [conversation]);
 
   const actions = {
     addImage: (image) => {

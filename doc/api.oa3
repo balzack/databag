@@ -3271,8 +3271,6 @@ components:
       type: object
       required:
         - domain
-        - openAccess
-        - accountLimit
         - accountStorage
       properties:
         domain:
@@ -3280,11 +3278,14 @@ components:
         accountStorage:
           type: integer
           format: int64
-        openAccess:
+        enableImage:
           type: boolean
-        accountLimit:
-          type: integer
-          format: int64
+        enableAudio:
+          type: boolean
+        enableVideo:
+          type: boolean
+        keyType:
+          type: string
           
     AccountStatus:
       type: object
@@ -3627,6 +3628,12 @@ components:
         updated:
           type: integer
           format: int64
+        enableImage:
+          type: boolean
+        enableAudio:
+          type: boolean
+        enableVideo:
+          type: video
         contacts:
           $ref: '#/components/schemas/ChannelContacts'
         members:

@@ -30,6 +30,18 @@ const CNFAssetPath = "asset_path"
 //CNFScriptPath specifies the path where transform scripts are found
 const CNFScriptPath = "script_path"
 
+//CNFEnableImage specifies whether node can process image assets
+const CNFEnableImage = "enable_image"
+
+//CNFEnableAudio specifies whether node can process audio assets
+const CNFEnableAudio = "enable_audio"
+
+//CNFEnableVideo specifies whether node can process video assets
+const CNFEnableVideo = "enable_video"
+
+//CNFKeyType specifies the type of key to use for identity
+const CNFKeyType = "key_type"
+
 func getStrConfigValue(configID string, empty string) string {
 	var config store.Config
 	err := store.DB.Where("config_id = ?", configID).First(&config).Error

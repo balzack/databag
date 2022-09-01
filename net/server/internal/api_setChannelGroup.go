@@ -83,5 +83,9 @@ func SetChannelGroup(w http.ResponseWriter, r *http.Request) {
 	for _, card := range cards {
 		SetContactChannelNotification(account, &card)
 	}
-	WriteResponse(w, getChannelModel(&channelSlot, true, true))
+
+  video := getBoolConfigValue(CNFEnableVideo, true);
+  audio := getBoolConfigValue(CNFEnableAudio, true);
+  image := getBoolConfigValue(CNFEnableImage, true);
+	WriteResponse(w, getChannelModel(&channelSlot, true, true, image, audio, video))
 }

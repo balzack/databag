@@ -7,8 +7,12 @@ import { addAccountCreate } from 'api/addAccountCreate';
 export function useDashboard(token, config) {
 
   const [state, setState] = useState({
-    host: "",
-    storage: null,
+    domain: "",
+    accountStorage: null,
+    keyType: null,
+    enableImage: null,
+    enableAudio: null,
+    enableVideo: null,
     showSettings: false,
     busy: false,
     loading: false,
@@ -42,11 +46,23 @@ export function useDashboard(token, config) {
       await removeAccount(token, accountId);
       actions.getAccounts();
     },
-    setHost: (value) => {
-      updateState({ host: value });
+    setHost: (domain) => {
+      updateState({ domain });
     },
-    setStorage: (value) => {
-      updateState({ storage: value });
+    setStorage: (accountStorage) => {
+      updateState({ accountStorage });
+    },
+    setKeyType: (keyType) => {
+      updateState({ keyType });
+    },
+    setEnableImage: (enableImage) => {
+      updateState({ enableImage });
+    },
+    setEnableAudio: (enableAudio) => {
+      updateState({ enableAudio });
+    },
+    setEnableVideo: (enableVideo) => {
+      updateState({ enableVideo });
     },
     setShowSettings: (value) => {
       updateState({ showSettings: value });
@@ -55,8 +71,10 @@ export function useDashboard(token, config) {
       if (!state.busy) {
         updateState({ busy: true });
         try {
+          const { domain, keyType, accountStorage, enableImage, enableAudio, enableVideo } = state;
           await setNodeConfig(token,
-            { ...state.config, domain: state.host, accountStorage: state.storage * 1073741824 });
+            { domain,  accountStorage: accountStorage * 1073741824,
+                keyType, enableImage, enableAudio, enableVideo });
           updateState({ showSettings: false });
         }
         catch(err) {
@@ -92,13 +110,11 @@ export function useDashboard(token, config) {
   };
 
   useEffect(() => {
-    let storage = config.accountStorage / 1073741824;
-    if (storage > 1) {
-      storage = Math.ceil(storage);
-    }
-    updateState({ host: config.domain, storage: storage });
+    const { accountStorage, domain, keyType, enableImage, enableAudio, enableVideo } = config;
+    updateState({ domain, accountStorage: Math.ceil(accountStorage / 1073741824), keyType,
+      enableImage, enableAudio, enableVideo });
     actions.getAccounts();
-  }, []);
+  }, [config]);
 
   return { state, actions };
 }

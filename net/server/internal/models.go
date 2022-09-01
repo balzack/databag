@@ -178,6 +178,12 @@ type ChannelDetail struct {
 
 	Updated int64 `json:"updated"`
 
+  EnableImage bool `json:"enableImage"`
+
+  EnableAudio bool `json:"enableAudio"`
+
+  EnableVideo bool `json:"enableVideo"`
+
 	Contacts *ChannelContacts `json:"contacts,omitempty"`
 
 	Members []string `json:"members"`
@@ -321,9 +327,13 @@ type LoginAccess struct {
 type NodeConfig struct {
 	Domain string `json:"domain"`
 
-	OpenAccess bool `json:"openAccess"`
+	EnableImage bool `json:"enableImage"`
 
-	AccountLimit int64 `json:"accountLimit"`
+	EnableAudio bool `json:"enableAudio"`
+
+	EnableVideo bool `json:"enableVideo"`
+
+	KeyType string `json:"keyType"`
 
 	AccountStorage int64 `json:"accountStorage"`
 }

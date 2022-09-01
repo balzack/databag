@@ -34,27 +34,43 @@ func SetNodeConfig(w http.ResponseWriter, r *http.Request) {
 			return res
 		}
 
-		// upsert account limit config
-		if res := tx.Clauses(clause.OnConflict{
-			Columns:   []clause.Column{{Name: "config_id"}},
-			DoUpdates: clause.AssignmentColumns([]string{"num_value"}),
-		}).Create(&store.Config{ConfigID: CNFAccountLimit, NumValue: config.AccountLimit}).Error; res != nil {
-			return res
-		}
-
-		// upsert account open access
-		if res := tx.Clauses(clause.OnConflict{
-			Columns:   []clause.Column{{Name: "config_id"}},
-			DoUpdates: clause.AssignmentColumns([]string{"bool_value"}),
-		}).Create(&store.Config{ConfigID: CNFAccountLimit, BoolValue: config.OpenAccess}).Error; res != nil {
-			return res
-		}
-
 		// upsert account storage config
 		if res := tx.Clauses(clause.OnConflict{
 			Columns:   []clause.Column{{Name: "config_id"}},
 			DoUpdates: clause.AssignmentColumns([]string{"num_value"}),
 		}).Create(&store.Config{ConfigID: CNFStorage, NumValue: config.AccountStorage}).Error; res != nil {
+			return res
+		}
+
+    // upsert enable image processing
+		if res := tx.Clauses(clause.OnConflict{
+			Columns:   []clause.Column{{Name: "config_id"}},
+			DoUpdates: clause.AssignmentColumns([]string{"bool_value"}),
+		}).Create(&store.Config{ConfigID: CNFEnableImage, BoolValue: config.EnableImage}).Error; res != nil {
+			return res
+		}
+
+    // upsert enable audio processing
+		if res := tx.Clauses(clause.OnConflict{
+			Columns:   []clause.Column{{Name: "config_id"}},
+			DoUpdates: clause.AssignmentColumns([]string{"bool_value"}),
+		}).Create(&store.Config{ConfigID: CNFEnableAudio, BoolValue: config.EnableAudio}).Error; res != nil {
+			return res
+		}
+
+    // upsert enable video processing
+		if res := tx.Clauses(clause.OnConflict{
+			Columns:   []clause.Column{{Name: "config_id"}},
+			DoUpdates: clause.AssignmentColumns([]string{"bool_value"}),
+		}).Create(&store.Config{ConfigID: CNFEnableVideo, BoolValue: config.EnableVideo}).Error; res != nil {
+			return res
+		}
+
+		// upsert key type
+		if res := tx.Clauses(clause.OnConflict{
+			Columns:   []clause.Column{{Name: "config_id"}},
+			DoUpdates: clause.AssignmentColumns([]string{"str_value"}),
+		}).Create(&store.Config{ConfigID: CNFKeyType, StrValue: config.KeyType}).Error; res != nil {
 			return res
 		}
 

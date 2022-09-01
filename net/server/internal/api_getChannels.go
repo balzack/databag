@@ -50,6 +50,10 @@ func GetChannels(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+  video := getBoolConfigValue(CNFEnableVideo, true);
+  audio := getBoolConfigValue(CNFEnableAudio, true);
+  image := getBoolConfigValue(CNFEnableImage, true);
+
 	response := []*Channel{}
 	tokenType := ParamTokenType(r)
 	if tokenType == APPTokenAgent {
@@ -80,7 +84,7 @@ func GetChannels(w http.ResponseWriter, r *http.Request) {
 				if channelRevisionSet {
 					response = append(response, getChannelRevisionModel(&slot, true))
 				} else if slot.Channel != nil {
-					response = append(response, getChannelModel(&slot, true, true))
+					response = append(response, getChannelModel(&slot, true, true, image, audio, video))
 				}
 			}
 		}
@@ -124,7 +128,7 @@ func GetChannels(w http.ResponseWriter, r *http.Request) {
 				if channelRevisionSet {
 					response = append(response, getChannelRevisionModel(&slot, shared))
 				} else if shared {
-					response = append(response, getChannelModel(&slot, true, false))
+					response = append(response, getChannelModel(&slot, true, false, image, audio, video))
 				}
 			}
 		}

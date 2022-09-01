@@ -1,5 +1,5 @@
 import { DashboardWrapper, SettingsButton, AddButton, SettingsLayout, CreateLayout } from './Dashboard.styled';
-import { Tooltip, Button, Modal, Input, InputNumber, Space, List } from 'antd';
+import { Tooltip, Checkbox, Select, Button, Modal, Input, InputNumber, Space, List } from 'antd';
 import { SettingOutlined, CopyOutlined, UserAddOutlined, LogoutOutlined, ReloadOutlined } from '@ant-design/icons';
 import { useDashboard } from './useDashboard.hook';
 import { AccountItem } from './accountItem/AccountItem';
@@ -63,15 +63,35 @@ export function Dashboard({ token, config, logout }) {
       <Modal title="Settings" visible={state.showSettings} centered 
           okText="Save" onOk={() => actions.setSettings()} onCancel={() => actions.setShowSettings(false)}>
        <SettingsLayout direction="vertical">
-          <div class="host">
+          <div class="field">
             <div>Federated Host:&nbsp;</div>
             <Input placeholder="domain:port/app" onChange={(e) => actions.setHost(e.target.value)}
-                value={state.host} />
+                value={state.domain} />
           </div>
-          <div class="storage">
+          <div class="field">
             <div>Storage Limit (GB) / Account:&nbsp;</div>
-            <InputNumber defaultValue={8} onChange={(e) => actions.setStorage(e)}
-                placeholder="0 for unrestricted" value={state.storage} />
+            <InputNumber defaultValue={0} onChange={(e) => actions.setStorage(e)}
+                placeholder="0 for unrestricted" value={state.accountStorage} />
+          </div>
+          <div class="field">
+            <div>Account Key Type:&nbsp;</div>
+            <Select labelInValue defaultValue={{ value: 'RSA4096', label: 'RSA 4096' }}
+                value={state.keyType} onChange={(o) => actions.setKeyType(o.value)}>
+              <Select.Option value="RSA2048">RSA 2048</Select.Option>
+              <Select.Option value="RSA4096">RSA 4096</Select.Option>
+            </Select>
+          </div>
+          <div class="field">
+            <Checkbox onChange={(e) => actions.setEnableImage(e.target.checked)}
+              defaultChecked={true} checked={state.enableImage}>Enable Image Queue</Checkbox>
+          </div>
+          <div class="field">
+            <Checkbox onChange={(e) => actions.setEnableAudio(e.target.checked)}
+              defaultChecked={true} checked={state.enableAudio}>Enable Audio Queue</Checkbox>
+          </div>
+          <div class="field">
+            <Checkbox onChange={(e) => actions.setEnableVideo(e.target.checked)}
+              defaultChecked={true} checked={state.enableVideo}>Enable Video Queue</Checkbox>
           </div>
         </SettingsLayout>
       </Modal>
