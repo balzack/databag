@@ -14,7 +14,7 @@ export function Details({ cardId, channelId, closeDetails, closeConversation, op
 
   const deleteChannel = async () => {
     Modal.confirm({
-      title: 'Are you sure you want to delete the channel?',
+      title: 'Are you sure you want to delete the topic?',
       icon: <ExclamationCircleOutlined />,
       okText: "Yes, Delete",
       cancelText: "No, Cancel",
@@ -32,7 +32,7 @@ export function Details({ cardId, channelId, closeDetails, closeConversation, op
     }
     catch(err) {
       Modal.error({
-        title: 'Failed to Delete Channel',
+        title: 'Failed to Delete Topic',
         content: 'Please try again.',
       });
     }
@@ -40,7 +40,7 @@ export function Details({ cardId, channelId, closeDetails, closeConversation, op
 
   const leaveChannel = async () => {
     Modal.confirm({
-      title: 'Are you sure you want to leave the channel?',
+      title: 'Are you sure you want to leave the topic?',
       icon: <ExclamationCircleOutlined />,
       okText: "Yes, Leave",
       cancelText: "No, Cancel",
@@ -58,7 +58,7 @@ export function Details({ cardId, channelId, closeDetails, closeConversation, op
     }
     catch(err) {
       Modal.error({
-        title: 'Failed to Leave Channel',
+        title: 'Failed to Leave Topic',
         content: 'Please try again.',
       });
     }
@@ -93,7 +93,7 @@ export function Details({ cardId, channelId, closeDetails, closeConversation, op
   return (
     <DetailsWrapper>
       <div class="header">
-        <div class="label">Channel</div>
+        <div class="label">Topic</div>
         { state.display === 'xlarge' && (
           <div class="dismiss" onClick={closeConversation}>
             <DoubleRightOutlined />
@@ -137,13 +137,13 @@ export function Details({ cardId, channelId, closeDetails, closeConversation, op
           </div>
         </div>
         { state.host && (
-          <div class="button" onClick={deleteChannel}>Delete Channel</div>
+          <div class="button" onClick={deleteChannel}>Delete Topic</div>
         )}
         { state.host && (
           <div class="button" onClick={actions.setEditMembers}>Edit Membership</div>
         )}
         { !state.host && (
-          <div class="button" onClick={leaveChannel}>Leave Channel</div>
+          <div class="button" onClick={leaveChannel}>Leave Topic</div>
         )}
         <div class="label">Members</div>
         <div class="members">

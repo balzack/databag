@@ -34,7 +34,7 @@ export function Channels({ open, active }) {
     <ChannelsWrapper>
       <div class="search">
         <div class="filter">
-          <Input bordered={false} allowClear={true} placeholder="Channels" prefix={<SearchOutlined />}
+          <Input bordered={false} allowClear={true} placeholder="Topics" prefix={<SearchOutlined />}
               spellCheck="false" onChange={(e) => actions.onFilter(e.target.value)} />
         </div>
         { state.display === 'small' && (
@@ -57,11 +57,11 @@ export function Channels({ open, active }) {
         <div class="bar">
           <div class="add" onClick={actions.setShowAdd}>
             <CommentOutlined />
-            <div class="label">New Channel</div>
+            <div class="label">New Topic</div>
           </div>
         </div>
       )}
-      <Modal title="New Channel" centered visible={state.showAdd} footer={addFooter}
+      <Modal title="New Topic" centered visible={state.showAdd} footer={addFooter}
           onCancel={actions.clearShowAdd}>
         <AddChannel state={state} actions={actions} />
       </Modal>
