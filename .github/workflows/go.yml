@@ -17,11 +17,11 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: 16
+      run: npm install --global yarn
 
     - name: Build React
       run: |
           cd net/web
-          npm install yarn
           yarn install
           yarn build
 
