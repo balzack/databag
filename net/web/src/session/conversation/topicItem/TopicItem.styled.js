@@ -104,6 +104,8 @@ export const TopicItemWrapper = styled.div`
       border-radius: 4px;
       border: 1px solid #aaaaaa;
       width: 100%;
+      margin-top: 8px;
+      margin-bottom: 8px;
 
       .controls {
         display: flex;
