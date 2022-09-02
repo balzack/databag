@@ -7,10 +7,19 @@ import { Logo } from 'logo/Logo';
 import { Space, Skeleton, Button, Modal, Input } from 'antd';
 import { ExclamationCircleOutlined, DeleteOutlined, EditOutlined, FireOutlined, PictureOutlined } from '@ant-design/icons';
 import { Carousel } from 'carousel/Carousel';
+import { useState, useEffect } from 'react';
 
 export function TopicItem({ host, topic }) {
 
   const { state, actions } = useTopicItem(topic);
+  const [render, setRender] = useState(false);
+
+  // not sure why this helps, on mobile render updates not occuring without
+  useEffect(() => {
+    if (state.ready && state.confirmed) {
+      setRender(true);
+    }
+  }, [state.ready, state.confirmed]);
 
   let name = state.name ? state.name : state.handle;
   let nameClass = state.name ? 'set' : 'unset';
