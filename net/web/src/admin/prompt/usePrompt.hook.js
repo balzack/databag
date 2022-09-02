@@ -50,8 +50,9 @@ export function usePrompt() {
           if (state.unclaimed === true) {
             await setNodeStatus(state.password);
           }
-          await getNodeConfig(state.password);
+          const config = await getNodeConfig(state.password);
           updateState({ busy: false });
+          return config;
         }
         catch (err) {
           console.log(err);

@@ -1,5 +1,5 @@
 import { DashboardWrapper, SettingsButton, AddButton, SettingsLayout, CreateLayout } from './Dashboard.styled';
-import { Tooltip, Checkbox, Select, Button, Modal, Input, InputNumber, List } from 'antd';
+import { Tooltip, Switch, Select, Button, Modal, Input, InputNumber, List } from 'antd';
 import { SettingOutlined, CopyOutlined, UserAddOutlined, LogoutOutlined, ReloadOutlined } from '@ant-design/icons';
 import { useDashboard } from './useDashboard.hook';
 import { AccountItem } from './accountItem/AccountItem';
@@ -82,16 +82,19 @@ export function Dashboard({ token, config, logout }) {
             </Select>
           </div>
           <div class="field">
-            <Checkbox onChange={(e) => actions.setEnableImage(e.target.checked)}
-              defaultChecked={true} checked={state.enableImage}>Enable Image Queue</Checkbox>
+            <div>Enable Image Queue:&nbsp;</div>
+            <Switch onChange={(e) => actions.setEnableImage(e)} size="small"
+              defaultChecked={true} checked={state.enableImage} />
           </div>
           <div class="field">
-            <Checkbox onChange={(e) => actions.setEnableAudio(e.target.checked)}
-              defaultChecked={true} checked={state.enableAudio}>Enable Audio Queue</Checkbox>
+            <div>Enable Audio Queue:&nbsp;</div>
+            <Switch onChange={(e) => actions.setEnableAudio(e)} size="small"
+              defaultChecked={true} checked={state.enableAudio} />
           </div>
           <div class="field">
-            <Checkbox onChange={(e) => actions.setEnableVideo(e.target.checked)}
-              defaultChecked={true} checked={state.enableVideo}>Enable Video Queue</Checkbox>
+            <div>Enable Video Queue:&nbsp;</div>
+            <Switch onChange={(e) => actions.setEnableVideo(e)} size="small"
+              defaultChecked={true} checked={state.enableVideo} />
           </div>
         </SettingsLayout>
       </Modal>
