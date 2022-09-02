@@ -18,11 +18,15 @@ export const TopicItemWrapper = styled.div`
       visibility: visible;
     }
 
+    &:hover .info {
+      text-decoration: underline;
+    }
+
     .topic-options {
-      position: absolute;
-      top: 0;
-      right: 0;
       visibility: hidden;
+      padding-left: 16px;
+      position: relative;
+      top: -4px;
 
       .buttons {
         display: flex;
