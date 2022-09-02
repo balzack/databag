@@ -54,7 +54,7 @@ export function Channels({ open, active }) {
             )}
           />
         )}
-        { state.channels.length == 0 && (
+        { state.channels.length === 0 && (
           <div class="empty">No Topics</div>
         )}
       </div>

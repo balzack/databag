@@ -48,7 +48,7 @@ export function Listing({ closeListing, openContact }) {
               <ListingItem item={item} node={state.node} open={openContact} />
             )} />
         )}
-        { state.contacts.length == 0 && (
+        { state.contacts.length === 0 && (
           <div class="empty">No Contacts</div>
         )}
       </div>

@@ -48,7 +48,7 @@ export function Cards({ closeCards, openContact, openListing }) {
               <CardItem item={item} open={openContact} />
             )} />
         )}
-        { state.cards.length == 0 && (
+        { state.cards.length === 0 && (
           <div class="empty">No Contacts</div>
         )}
       </div>
