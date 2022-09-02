@@ -12,8 +12,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+    
+    - name: Setup Node
+      run: |
+        apt-get install npm
+        npm install --global yarn
+        npm install -g n
+        n stable
 
-    - name: Set up Go
+    - name: Setup Go
       uses: actions/setup-go@v3
       with:
         go-version: 1.17.5
