@@ -12,9 +12,10 @@ import { useState, useEffect } from 'react';
 export function TopicItem({ host, topic }) {
 
   const { state, actions } = useTopicItem(topic);
-  const [render, setRender] = useState(false);
 
   // not sure why this helps, on mobile render updates not occuring without
+  // eslint-disable-next-line
+  const [render, setRender] = useState(false);
   useEffect(() => {
     if (state.ready && state.confirmed) {
       setRender(true);
