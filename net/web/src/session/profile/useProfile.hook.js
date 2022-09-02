@@ -1,6 +1,5 @@
-import { useRef, useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { ProfileContext } from 'context/ProfileContext';
-import { AccountContext } from 'context/AccountContext';
 import { AppContext } from 'context/AppContext';
 import { ViewportContext } from 'context/ViewportContext';
 import avatar from 'images/avatar.png';
@@ -29,7 +28,6 @@ export function useProfile() {
   const app = useContext(AppContext);
   const viewport = useContext(ViewportContext);
   const profile = useContext(ProfileContext);
-  const account = useContext(AccountContext);  
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));

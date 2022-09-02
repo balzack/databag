@@ -155,7 +155,7 @@ export function useChannels() {
     merged.sort((a, b) => {
       const aCreated = a?.data?.channelSummary?.lastTopic?.created;
       const bCreated = b?.data?.channelSummary?.lastTopic?.created;
-      if (aCreated == bCreated) {
+      if (aCreated === bCreated) {
         return 0;
       }
       if (!aCreated || aCreated < bCreated) {
@@ -178,6 +178,7 @@ export function useChannels() {
 
     updateState({ channels: filtered });
 
+    // eslint-disable-next-line
   }, [channel, card, store, filter]);
 
   useEffect(() => {

@@ -1,4 +1,4 @@
-import { Form, Input, Space } from 'antd';
+import { Form, Input } from 'antd';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 
 export function AccountLogin({ state, actions }) {

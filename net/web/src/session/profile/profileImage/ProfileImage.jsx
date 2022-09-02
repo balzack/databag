@@ -1,4 +1,3 @@
-import avatar from 'images/avatar.png';
 import { useState, useCallback } from 'react';
 import Cropper from 'react-easy-crop'
 import { ProfileImageWrapper } from './ProfileImage.styled';
@@ -10,7 +9,8 @@ export function ProfileImage({ state, actions }) {
 
   const onCropComplete = useCallback((area, crop) => {
     actions.setEditImageCrop(crop.width, crop.height, crop.x, crop.y)
-  });
+    // eslint-disable-next-line
+  }, []);
 
   return (
     <ProfileImageWrapper>

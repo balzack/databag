@@ -66,7 +66,7 @@ export function Details({ cardId, channelId, closeDetails, closeConversation, op
 
   const saveSubject = async () => {
     try {
-      const id = await actions.setSubject();
+      await actions.setSubject();
       actions.clearEditSubject();
     }
     catch(err) {

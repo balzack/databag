@@ -1,6 +1,5 @@
 import { useContext, useState, useEffect } from 'react';
 import { CardContext } from 'context/CardContext';
-import { ProfileContext } from 'context/ProfileContext';
 import { ViewportContext } from 'context/ViewportContext';
 import { getListingImageUrl } from 'api/getListingImageUrl';
 import { getListingMessage } from 'api/getListingMessage';
@@ -23,7 +22,6 @@ export function useContact(guid, listing, close) {
   });
 
   const card = useContext(CardContext);
-  const profile = useContext(ProfileContext);
   const viewport = useContext(ViewportContext);  
 
   const updateState = (value) => {

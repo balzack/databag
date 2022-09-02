@@ -1,4 +1,4 @@
-import { Drawer, Input, List } from 'antd';
+import { Input, List } from 'antd';
 import { CardsWrapper } from './Cards.styled';
 import { SortAscendingOutlined, UpOutlined, DoubleRightOutlined, UserOutlined, SearchOutlined } from '@ant-design/icons';
 import { useCards } from './useCards.hook';

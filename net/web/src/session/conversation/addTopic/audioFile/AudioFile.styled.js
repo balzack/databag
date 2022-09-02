@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import Colors from 'constants/Colors';
 
 export const AudioFileWrapper = styled.div`
   position: relative;

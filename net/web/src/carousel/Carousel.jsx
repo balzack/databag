@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Skeleton } from 'antd';
 import { CarouselWrapper } from './Carousel.styled';
-import { RightOutlined, LeftOutlined, CloseOutlined, PictureOutlined, FireOutlined } from '@ant-design/icons';
+import { CloseOutlined } from '@ant-design/icons';
 import ReactResizeDetector from 'react-resize-detector';
 
 export function Carousel({ pad, items, itemRenderer, itemRemove }) {
@@ -36,7 +35,7 @@ export function Carousel({ pad, items, itemRenderer, itemRemove }) {
       assets.push(<div class="space"></div>)
     }
     setSlots(assets);
-  }, [items]);
+  }, [items, itemRenderer]);
 
   return (
     <CarouselWrapper>

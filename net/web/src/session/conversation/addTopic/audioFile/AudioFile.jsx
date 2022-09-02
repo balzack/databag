@@ -1,10 +1,8 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { Spin, Input } from 'antd';
+import React, { useState, useRef } from 'react';
+import { Input } from 'antd';
 import ReactResizeDetector from 'react-resize-detector';
-import { PlayCircleOutlined, MinusCircleOutlined, SoundOutlined } from '@ant-design/icons';
+import { PlayCircleOutlined, MinusCircleOutlined } from '@ant-design/icons';
 import { AudioFileWrapper } from './AudioFile.styled';
-
-import background from 'images/audio.png';
 
 export function AudioFile({ url, onLabel }) {
 
@@ -27,7 +25,7 @@ export function AudioFile({ url, onLabel }) {
     <AudioFileWrapper>
       <ReactResizeDetector handleWidth={false} handleHeight={true}>
         {({ height }) => {
-          if (height != width) {
+          if (height !== width) {
             setWidth(height);
           }
           return <div style={{ height: '100%', width: width }} />

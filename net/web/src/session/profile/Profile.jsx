@@ -6,7 +6,7 @@ import { ProfileImage } from './profileImage/ProfileImage';
 import { ProfileDetails } from './profileDetails/ProfileDetails';
 import { Logo } from 'logo/Logo';
 import { AccountAccess } from '../accountAccess/AccountAccess';
-import { LogoutOutlined, DatabaseOutlined, LockOutlined, RightOutlined, EditOutlined, BookOutlined, EnvironmentOutlined } from '@ant-design/icons';
+import { LogoutOutlined, RightOutlined, EditOutlined, BookOutlined, EnvironmentOutlined } from '@ant-design/icons';
 
 export function Profile({ closeProfile }) {
 

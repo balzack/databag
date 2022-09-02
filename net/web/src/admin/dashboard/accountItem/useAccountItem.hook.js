@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { getAccountImageUrl } from 'api/getAccountImageUrl';
 import { setAccountStatus } from 'api/setAccountStatus';
 import { addAccountAccess } from 'api/addAccountAccess';

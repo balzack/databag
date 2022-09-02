@@ -37,6 +37,7 @@ export function useViewportContext() {
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('orientationchange', handleResize);
     }
+    // eslint-disable-next-line
   }, []);
 
   return { state, actions: {} }

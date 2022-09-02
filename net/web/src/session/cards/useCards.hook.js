@@ -46,7 +46,7 @@ export function useCards() {
       filtered.sort((a, b) => {
         let aName = a?.data?.cardProfile?.name;
         let bName = b?.data?.cardProfile?.name;
-        if (aName == bName) {
+        if (aName === bName) {
           return 0;
         }
         if (!aName || (aName < bName)) {
@@ -59,7 +59,7 @@ export function useCards() {
       filtered.sort((a, b) => {
         const aUpdated = a?.data?.cardDetail?.statusUpdated;
         const bUpdated = b?.data?.cardDetail?.statusUpdated;
-        if (aUpdated == bUpdated) {
+        if (aUpdated === bUpdated) {
           return 0;
         }
         if (!aUpdated || (aUpdated < bUpdated)) {

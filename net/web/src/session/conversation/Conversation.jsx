@@ -1,11 +1,11 @@
 import { ConversationWrapper, StatusError } from './Conversation.styled';
-import { ExclamationCircleOutlined, SettingOutlined, RightOutlined, CloseOutlined } from '@ant-design/icons';
+import { ExclamationCircleOutlined, SettingOutlined, CloseOutlined } from '@ant-design/icons';
 import { useConversation } from './useConversation.hook';
 import { Logo } from 'logo/Logo';
 import { AddTopic } from './addTopic/AddTopic';
 import { VirtualList } from './virtualList/VirtualList';
 import { TopicItem } from './topicItem/TopicItem';
-import { Progress, Spin, Tooltip } from 'antd';
+import { Spin, Tooltip } from 'antd';
 
 export function Conversation({ closeConversation, openDetails, cardId, channelId }) {
 

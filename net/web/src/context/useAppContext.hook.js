@@ -112,6 +112,7 @@ export function useAppContext() {
       cardContext.actions.setRevision(appRevision.card);
       channelContext.actions.setRevision(appRevision.channel);
     }
+    // eslint-disable-next-line
   }, [appRevision]);
   
   const setWebsocket = (token) => {
@@ -192,6 +193,7 @@ export function useAppContext() {
     } else {
       setState({})
     }
+    // eslint-disable-next-line
   }, []);
 
   if (state == null) {

@@ -2,7 +2,7 @@ import { Modal } from 'antd';
 import { ContactWrapper } from './Contact.styled';
 import { useContact } from './useContact.hook';
 import { Logo } from 'logo/Logo';
-import { DatabaseOutlined, LoadingOutlined, CloseOutlined, RightOutlined, BookOutlined, EnvironmentOutlined } from '@ant-design/icons';
+import { DatabaseOutlined, CloseOutlined, RightOutlined, BookOutlined, EnvironmentOutlined } from '@ant-design/icons';
 
 export function Contact({ close, guid, listing }) {
 

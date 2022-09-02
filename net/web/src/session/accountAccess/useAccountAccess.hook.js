@@ -112,8 +112,8 @@ export function useAccountAccess() {
         }
         catch (err) {
           console.log(err);
-          throw new Error('failed to set searchable');
           updateState({ busy: false });
+          throw new Error('failed to set searchable');
         }
       }
     },

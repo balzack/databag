@@ -22,16 +22,6 @@ export function Access({ mode }) {
     }
   }, [app, navigate]);
 
-  const Prompt = () => {
-    if (mode === 'login') {
-      return <Login />
-    }
-    if (mode === 'create') {
-      return <CreateAccount />
-    }
-    return <></>
-  } 
-
   return (
     <AccessWrapper>
       { (viewport.state.display === 'large' || viewport.state.display === 'xlarge') && (

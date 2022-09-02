@@ -5,8 +5,6 @@ import { CardContext } from 'context/CardContext';
 
 export function useTopicItem(topic) {
 
-  const [guid, setGuid] = useState(null);
-
   const [state, setState] = useState({
     init: false,
     name: null,
@@ -37,7 +35,7 @@ export function useTopicItem(topic) {
 
   useEffect(() => {
     let owner = false;
-    if (profile.state.profile.guid == topic?.data?.topicDetail.guid) {
+    if (profile.state.profile.guid === topic?.data?.topicDetail.guid) {
       owner = true;
     }
 
@@ -98,7 +96,7 @@ export function useTopicItem(topic) {
         createdStr = date.toLocaleDateString("en-US");
       }
 
-      if (profile.state.profile.guid == guid) {
+      if (profile.state.profile.guid === guid) {
         const { name, handle, imageUrl } = profile.actions.getProfile();
         updateState({ name, handle, imageUrl, status, message, transform, assets, confirmed, error, ready, created: createdStr, owner, textColor, textSize, topicId: topic.id, init: true });
       }

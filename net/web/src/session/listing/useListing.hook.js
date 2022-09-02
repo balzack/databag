@@ -51,7 +51,7 @@ export function useListing() {
 
   useEffect(() => {
     let node = profile?.state?.profile?.node;
-    updateState({ disabled: node == null || node == '', node });
+    updateState({ disabled: node == null || node === '', node });
   }, [profile]);
 
   useEffect(() => {

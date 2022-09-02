@@ -1,7 +1,3 @@
-import React, { useContext, useEffect } from 'react';
-import { useNavigate } from "react-router-dom";
-import { AppContext } from 'context/AppContext';
-import { ViewportContext } from 'context/ViewportContext';
 import { useAdmin } from './useAdmin.hook';
 import { AdminWrapper } from './Admin.styled';
 import { Prompt } from './prompt/Prompt';

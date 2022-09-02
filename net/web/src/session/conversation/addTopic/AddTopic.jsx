@@ -1,8 +1,8 @@
 import { AddTopicWrapper } from './AddTopic.styled';
 import { useAddTopic } from './useAddTopic.hook';
 import { Modal, Input, Menu, Dropdown, Spin } from 'antd';
-import { useRef, useState } from 'react';
-import { SoundOutlined, VideoCameraOutlined, PictureOutlined, FontColorsOutlined, FontSizeOutlined, PaperClipOutlined, SendOutlined } from '@ant-design/icons';
+import { useRef } from 'react';
+import { SoundOutlined, VideoCameraOutlined, PictureOutlined, FontColorsOutlined, FontSizeOutlined, SendOutlined } from '@ant-design/icons';
 import { SketchPicker } from "react-color";
 import { AudioFile } from './audioFile/AudioFile';
 import { VideoFile } from './videoFile/VideoFile';

@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect, useRef } from 'react';
+import { useState, useRef } from 'react';
 
 export function useVirtualList(id) {
 
@@ -8,7 +8,6 @@ export function useVirtualList(id) {
     slots: [],
   });
 
-  const pad = 8;
   const slots = useRef(new Map());
 
   const updateState = (value) => {

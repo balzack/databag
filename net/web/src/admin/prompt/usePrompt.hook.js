@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect } from 'react';
 import { AppContext } from 'context/AppContext';
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { getNodeStatus } from 'api/getNodeStatus';
 import { setNodeStatus } from 'api/setNodeStatus';
 import { getNodeConfig } from 'api/getNodeConfig';
@@ -33,6 +33,7 @@ export function usePrompt() {
 
   useEffect(() => {
     checkStatus();
+    // eslint-disable-next-line
   }, []);
 
   const actions = {
@@ -48,11 +49,8 @@ export function usePrompt() {
           updateState({ busy: true });
           if (state.unclaimed === true) {
             await setNodeStatus(state.password);
-            return await getNodeConfig(state.password);
           }
-          else {
-            return await getNodeConfig(state.password);
-          }
+          await getNodeConfig(state.password);
           updateState({ busy: false });
         }
         catch (err) {

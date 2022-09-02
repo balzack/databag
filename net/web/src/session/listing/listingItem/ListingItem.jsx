@@ -4,7 +4,7 @@ import { Logo } from 'logo/Logo';
 
 export function ListingItem({ item, node, open }) {
 
-  const { state, actions } = useListingItem(node, item);  
+  const { state } = useListingItem(node, item);  
 
   return (
     <ListingItemWrapper onClick={() => open(item.guid, item)}>

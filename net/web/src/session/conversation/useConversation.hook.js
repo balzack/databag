@@ -106,13 +106,14 @@ export function useConversation(cardId, channelId) {
 
   useEffect(() => {
     conversation.actions.setConversationId(cardId, channelId);
+    // eslint-disable-next-line
   }, [cardId, channelId]);
 
   useEffect(() => {
     let topics = Array.from(conversation.state.topics.values()).sort((a, b) => {
       const aTimestamp = a?.data?.topicDetail?.created;
       const bTimestamp = b?.data?.topicDetail?.created;
-      if(aTimestamp == bTimestamp) {
+      if(aTimestamp === bTimestamp) {
         return 0;
       }
       if(aTimestamp == null || aTimestamp < bTimestamp) {
@@ -123,7 +124,7 @@ export function useConversation(cardId, channelId) {
     const { error, loadingInit, loadingMore } = conversation.state;
     updateState({ topics, error, loadingInit, loadingMore });
     store.actions.setValue(`${channelId}::${cardId}`, Number(conversation.state.revision));
- 
+    // eslint-disable-next-line 
   }, [conversation]);
 
   const actions = {

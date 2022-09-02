@@ -258,6 +258,7 @@ export function useConversationContext() {
   useEffect(() => {
     events.current.push({ type: EVENT_UPDATE });
     updateConversation();
+    // eslint-disable-next-line
   }, [card, channel]);
 
   const actions = {

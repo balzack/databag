@@ -34,6 +34,7 @@ export function VirtualList({ id, items, itemRenderer, loadMore }) {
     actions.clearSlots();
     scrollTop.current = 8192;
     list.current.scrollTo({ top: 8192, left: 0 });
+    // eslint-disable-next-line
   }, [id]);
 
   useEffect(() => {
@@ -71,10 +72,12 @@ export function VirtualList({ id, items, itemRenderer, loadMore }) {
 
     // rerender list
     layoutItems();
+    // eslint-disable-next-line
   }, [items]); 
 
   useEffect(() => {
     layoutItems();
+    // eslint-disable-next-line
   }, [scrollPos, state.listHeight, state.view]);
 
   const layoutItems = () => {
@@ -111,7 +114,7 @@ export function VirtualList({ id, items, itemRenderer, loadMore }) {
       if (containers.current.length > 0) {
         const range = getContainerRange();
         if (range.bottom - range.top < (state.listHeight - pad)) {
-          if (scrollTop.current + (state.listHeight - pad) != range.bottom) {
+          if (scrollTop.current + (state.listHeight - pad) !== range.bottom) {
             list.current.scrollTo({ top: range.bottom - (state.listHeight - pad), left: 0 });
             latched.current = true;
           }
@@ -135,7 +138,7 @@ export function VirtualList({ id, items, itemRenderer, loadMore }) {
         let bottom = last.top + last.height;
         for (let i = index; i >= 0; i--) {
           let container = containers.current[i];
-          if (container.top + container.height != bottom) {
+          if (container.top + container.height !== bottom) {
             container.top = bottom - container.height;
             actions.updateSlot(container.key, getSlot(container));
           }
@@ -148,7 +151,7 @@ export function VirtualList({ id, items, itemRenderer, loadMore }) {
         let top = mid.top;
         for (let i = index; i < containers.current.length; i++) {
           let container = containers.current[i];
-          if (container.top != top) {
+          if (container.top !== top) {
             container.top = top;
             actions.updateSlot(container.key, getSlot(container));
           }
@@ -157,7 +160,7 @@ export function VirtualList({ id, items, itemRenderer, loadMore }) {
         let bottom = mid.top + mid.height;
         for (let i = index; i >= 0; i--) {
           let container = containers.current[i];
-          if (container.top + container.height != bottom) {
+          if (container.top + container.height !== bottom) {
             container.top = bottom - container.height;
             actions.updateSlot(container.key, getSlot(container));
           }
@@ -169,7 +172,7 @@ export function VirtualList({ id, items, itemRenderer, loadMore }) {
 
   const loadSlots = () => {
 
-    if (containers.current.length == 0) {
+    if (containers.current.length === 0) {
       // add the first slot
       if (itemView.current.length > 0) {
         let item = itemView.current[itemView.current.length - 1];
@@ -191,7 +194,7 @@ export function VirtualList({ id, items, itemRenderer, loadMore }) {
       let index = containers.current[0].index;
       for (let i = 1; i < containers.current.length; i++) {
         let container = containers.current[i];
-        if (container.index != index + i) {
+        if (container.index !== index + i) {
           const item = itemView.current[index + i];
           let slot = {
             top: container.top - defaultHeight,
@@ -318,7 +321,7 @@ export function VirtualList({ id, items, itemRenderer, loadMore }) {
       <VirtualItem style={{ top: container.top, key: container.key }}>
         <ReactResizeDetector handleHeight={true}>
           {({ height }) => {
-            if (typeof height !== 'undefined' && container.height != height) {
+            if (typeof height !== 'undefined' && container.height !== height) {
               container.height = height;
               container.heightSet = true;
               layoutItems();
@@ -345,7 +348,7 @@ export function VirtualList({ id, items, itemRenderer, loadMore }) {
   }
 
   const scrollView = (e) => {
-    if (containers.current.length > 0 && containers.current[0].index == 0 && !nomore.current) {
+    if (containers.current.length > 0 && containers.current[0].index === 0 && !nomore.current) {
       loadMore();
       nomore.current = true;
       setTimeout(() => {
@@ -365,7 +368,7 @@ export function VirtualList({ id, items, itemRenderer, loadMore }) {
     <div style={{ position: 'relative', height: '100%' }}>
       <ReactResizeDetector handleHeight={true} handleWidth={false}>
         {({ height }) => {
-          if (height && state.listHeight != height) {
+          if (height && state.listHeight !== height) {
             actions.setListHeight(height);
           }
           return (

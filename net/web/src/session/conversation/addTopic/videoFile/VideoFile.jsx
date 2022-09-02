@@ -1,8 +1,8 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import ReactPlayer from 'react-player'
 import ReactResizeDetector from 'react-resize-detector';
 import { RightOutlined, LeftOutlined } from '@ant-design/icons';
-import { VideoFileWrapper, LabelInput } from './VideoFile.styled';
+import { VideoFileWrapper } from './VideoFile.styled';
 
 export function VideoFile({ url, onPosition }) {
 
@@ -39,7 +39,7 @@ export function VideoFile({ url, onPosition }) {
     <VideoFileWrapper>
       <ReactResizeDetector handleWidth={true} handleHeight={true}>
         {({ width, height }) => {
-          if (width != state.width || height != state.height) {
+          if (width !== state.width || height !== state.height) {
             updateState({ width, height });
           }
           return <ReactPlayer ref={player} playing={playing} playbackRate={0} controls={false} height="100%" width="auto" url={url} 

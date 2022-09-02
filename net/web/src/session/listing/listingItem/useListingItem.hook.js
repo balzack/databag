@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { getListingImageUrl } from 'api/getListingImageUrl';
 
 export function useListingItem(server, item) {

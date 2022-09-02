@@ -1,4 +1,4 @@
-import { Space, Button } from 'antd';
+import { Button } from 'antd';
 import styled from 'styled-components';
 
 export const AccountItemWrapper = styled.div`

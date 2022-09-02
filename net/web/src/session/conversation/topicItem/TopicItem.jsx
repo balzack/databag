@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from 'react';
 import { TopicItemWrapper } from './TopicItem.styled';
 import { useTopicItem } from './useTopicItem.hook';
 import { VideoAsset } from './videoAsset/VideoAsset';
@@ -12,7 +11,6 @@ import { Carousel } from 'carousel/Carousel';
 export function TopicItem({ host, topic }) {
 
   const { state, actions } = useTopicItem(topic);
-  const [ edit, setEdit ] = useState(null);
 
   let name = state.name ? state.name : state.handle;
   let nameClass = state.name ? 'set' : 'unset';
@@ -78,8 +76,8 @@ export function TopicItem({ host, topic }) {
     if (state.editing) {
       return (
         <div class="editing">
-          <Input.TextArea style={{ resize: 'none' }} defaultValue={state.message?.text} placeholder="message"
-            style={{ color: state.textColor, fontSize: state.textSize }}
+          <Input.TextArea defaultValue={state.message?.text} placeholder="message"
+            style={{ resize: 'none', color: state.textColor, fontSize: state.textSize }}
             onChange={(e) => actions.setEdit(e.target.value)} rows={3} bordered={false}/>
           <div class="controls">
           <Space>

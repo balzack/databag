@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect, useRef } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { CardContext } from 'context/CardContext';
 import { ChannelContext } from 'context/ChannelContext';
 import { ViewportContext } from 'context/ViewportContext';
@@ -48,7 +48,7 @@ export function useDetails(cardId, channelId) {
     }
 
     if (chan) {
-      if (chan.contacts?.length == 0) {
+      if (chan.contacts?.length === 0) {
         img = 'solution';
         subject = 'Private';
       }

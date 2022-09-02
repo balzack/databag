@@ -46,7 +46,7 @@ export function AudioAsset({ label, audioUrl }) {
     <AudioAssetWrapper>
       <ReactResizeDetector handleWidth={false} handleHeight={true}>
         {({ height }) => {
-          if (height != width) {
+          if (height !== width) {
             setWidth(height);
           }
           return <div style={{ height: '100%', width: width }} />

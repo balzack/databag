@@ -1,7 +1,7 @@
-import React, { useRef, useEffect, useState } from 'react';
-import { Button, Modal } from 'antd';
+import React, { useState } from 'react';
+import { Modal } from 'antd';
 import ReactResizeDetector from 'react-resize-detector';
-import { SelectOutlined, ExpandOutlined, VideoCameraOutlined, MinusCircleOutlined, PlayCircleOutlined } from '@ant-design/icons';
+import { VideoCameraOutlined } from '@ant-design/icons';
 import { VideoAssetWrapper } from './VideoAsset.styled';
 import { useVideoAsset } from './useVideoAsset.hook';
 
@@ -9,7 +9,6 @@ export function VideoAsset({ thumbUrl, lqUrl, hdUrl }) {
 
   const { state, actions } = useVideoAsset();
   const [dimension, setDimension] = useState({ width: 0, height: 0 });
-  const video = useRef(null);
 
   const activate = () => {
     if (dimension.width / dimension.height > window.innerWidth / window.innerHeight) {
@@ -28,7 +27,7 @@ export function VideoAsset({ thumbUrl, lqUrl, hdUrl }) {
     <VideoAssetWrapper>
       <ReactResizeDetector handleWidth={true} handleHeight={true}>
         {({ width, height }) => {
-          if (width != dimension.width || height != dimension.height) {
+          if (width !== dimension.width || height !== dimension.height) {
             setDimension({ width, height });
           }
           return <img style={{ height: '100%', objectFit: 'contain' }} src={thumbUrl} alt="" />

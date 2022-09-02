@@ -24,6 +24,7 @@ export function useSelectItem(item, selected, markup) {
     else {
       updateState({ className: 'passive', markup: item.id === markup });
     }
+    // eslint-disable-next-line
   }, [selected]);
 
   useEffect(() => {

@@ -66,6 +66,7 @@ export function useSession() {
     }
 
     updateState({ cardUpdated: cardStatus.current > storeStatus.current });
+    // eslint-disable-next-line
   }, [card]);
 
   useEffect(() => {
@@ -74,9 +75,6 @@ export function useSession() {
   }, [store]);
 
   const actions = {
-    closeDetails: () => {
-      updateState({ details: false });
-    },
     openCards: () => {
       updateState({ cards: true });
     },

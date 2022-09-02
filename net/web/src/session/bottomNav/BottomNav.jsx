@@ -3,16 +3,6 @@ import { CommentOutlined, ContactsOutlined, UserOutlined } from '@ant-design/ico
 
 export function BottomNav({ state, actions }) {
 
-  const tab = () => {
-    if (state.profile || state.account) {
-      return 'profile';
-    }
-    if (state.cards || state.contact) {
-      return 'cards';
-    }
-    return 'channels';
-  }
-
   const setChannels = () => {
     actions.closeDetails();
     actions.closeCards();

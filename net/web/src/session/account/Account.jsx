@@ -1,7 +1,6 @@
 import { AccountWrapper } from './Account.styled';
 import { DoubleRightOutlined } from '@ant-design/icons';
-import { Checkbox } from 'antd';
-import { SettingOutlined, LockOutlined } from '@ant-design/icons';
+import { SettingOutlined } from '@ant-design/icons';
 import { AccountAccess } from '../accountAccess/AccountAccess';
 
 export function Account({ closeAccount, openProfile }) {

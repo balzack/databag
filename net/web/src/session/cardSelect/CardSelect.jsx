@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { List } from 'antd';
 import { CardSelectWrapper } from './CardSelect.styled';
 import { SelectItem } from './selectItem/SelectItem';
@@ -7,7 +6,7 @@ import { Logo } from 'logo/Logo';
 
 export function CardSelect({ filter, unknown, select, selected, markup }) {
 
-  const { state, actions } = useCardSelect(filter);
+  const { state } = useCardSelect(filter);
 
   return (
     <CardSelectWrapper>

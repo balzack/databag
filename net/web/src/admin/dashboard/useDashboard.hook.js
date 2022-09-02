@@ -114,6 +114,7 @@ export function useDashboard(token, config) {
     updateState({ domain, accountStorage: Math.ceil(accountStorage / 1073741824), keyType,
       enableImage, enableAudio, enableVideo });
     actions.getAccounts();
+    // eslint-disable-next-line
   }, [config]);
 
   return { state, actions };

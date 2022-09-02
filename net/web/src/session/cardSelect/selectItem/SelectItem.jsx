@@ -5,9 +5,8 @@ import { Logo } from 'logo/Logo';
 
 export function SelectItem({ item, select, selected, markup }) {
 
-  const { state, actions } = useSelectItem(item, selected, markup);
+  const { state } = useSelectItem(item, selected, markup);
   const profile = item?.data?.cardProfile;
-  const detail = item?.data?.cardDetail;
 
   const handle = () => {
     if (profile?.node) {

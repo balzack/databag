@@ -1,4 +1,4 @@
-import { Modal, Button, Drawer, Input, List } from 'antd';
+import { Modal, Button, Input, List } from 'antd';
 import { ListingWrapper } from './Listing.styled';
 import { DownOutlined, CloseOutlined, DatabaseOutlined, SearchOutlined } from '@ant-design/icons';
 import { useListing } from './useListing.hook';
