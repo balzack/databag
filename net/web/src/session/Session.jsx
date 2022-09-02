@@ -81,10 +81,8 @@ export function Session() {
                 }} />
             </div>
             { state.loading && (
-              <div class="reframe">
-                <div class="spinner">
-                  <Spin size="large" />
-                </div>
+              <div class="spinner">
+                <Spin size="large" />
               </div>
             )}
           </div>
@@ -147,10 +145,8 @@ export function Session() {
                 }} />
             </div>
             { state.loading && (
-              <div class="reframe">
-                <div class="spinner">
-                  <Spin size="large" />
-                </div>
+              <div class="spinner">
+                <Spin size="large" />
               </div>
             )}
           </div>
@@ -231,16 +227,14 @@ export function Session() {
                 <Contact close={actions.closeContact} guid={state.contactGuid} listing={state.contactListing} />
               </div>
             )}
+            { state.loading && (
+              <div class="spinner">
+                <Spin size="large" />
+              </div>
+            )}
             { (state.profile || state.account) && (
               <div class="reframe">
                 <Profile />
-              </div>
-            )}
-            { state.loading && (
-              <div class="reframe">
-                <div class="spinner">
-                  <Spin size="large" />
-                </div>
               </div>
             )}
           </div>

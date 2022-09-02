@@ -9,15 +9,19 @@ export const SessionWrapper = styled.div`
     width: 100%;
     height: 100%;
     z-index: 2;
+  }
 
-    .spinner {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background-color: rgba(0,0,0,0.1);
-      width: 100%;
-      height: 100%;
-    }
+  .spinner {
+    position: absolute;
+    width: 100%;
+    height: calc(100% - 48px);
+    z-index: 2;
+    margin-top: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0,0,0,0.1);
+    widtH: 100%;
   }
 
   .desktop-layout {
