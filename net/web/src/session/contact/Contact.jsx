@@ -30,7 +30,12 @@ export function Contact({ close, guid, listing }) {
   const Details = (
     <div class="details">
       <div class="name">
-        <div class="data">{ state.name }</div>
+        { state.name && (
+          <div class="data">{ state.name }</div>
+        )}
+        { !state.name && (
+          <div class="data notset">name</div>
+        )}
       </div>
       { state.node && (
         <div class="location">
@@ -40,11 +45,21 @@ export function Contact({ close, guid, listing }) {
       )}
       <div class="location">
         <EnvironmentOutlined />
-        <div class="data">{ state.location }</div>
+        { state.location && (
+          <div class="data">{ state.location }</div>
+        )}
+        { !state.location && (
+          <div class="data notset">location</div>
+        )}
       </div>
       <div class="description">
         <BookOutlined />
-        <div class="data">{ state.description }</div>
+        { state.description && (
+          <div class="data">{ state.description }</div>
+        )}
+        { !state.description && (
+          <div class="data notset">description</div>
+        )}
       </div>
 
       { state.status === 'connected' && (

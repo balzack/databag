@@ -73,6 +73,11 @@ export const ProfileWrapper = styled.div`
       display: flex;
       flex-direction: column;
 
+      .notset {
+        font-style: italic;
+        color: ${Colors.grey};
+      }
+
       .name {
         display: flex;
         flex-direction: row;

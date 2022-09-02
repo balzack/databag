@@ -72,18 +72,33 @@ export function Profile({ closeProfile }) {
   const Details = (
     <div class="details">
       <div class="name" onClick={actions.setEditProfileDetails}>
-        <div class="data">{ state.name }</div>
+        { state.name && (
+          <div class="data">{ state.name }</div>
+        )}
+        { !state.name && (
+          <div class="data notset">name</div>
+        )}
         <div class="icon">
           <EditOutlined />
         </div>
       </div>
       <div class="location">
         <EnvironmentOutlined />
-        <div class="data">{ state.location }</div>
+          { state.location && (
+            <div class="data">{ state.location }</div>
+          )}
+          { !state.location && (
+            <div class="data notset">location</div>
+          )}
       </div>
       <div class="description">
         <BookOutlined />
-        <div class="data">{ state.description }</div>
+        { state.description && (
+          <div class="data">{ state.description }</div>
+        )}
+        { !state.description && (
+          <div class="data notset">description</div>
+        )}
       </div>
     </div>
   );

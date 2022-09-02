@@ -53,6 +53,11 @@ export const ContactWrapper = styled.div`
       display: flex;
       flex-direction: column;
 
+      .notset {
+        font-style: italic;
+        color: ${Colors.grey};
+      }
+
       .name {
         display: flex;
         flex-direction: row;
