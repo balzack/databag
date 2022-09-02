@@ -42,10 +42,15 @@ export function Listing({ closeListing, openContact }) {
         </div>
       </div>
       <div class="view">
-        <List local={{ emptyText: '' }} itemLayout="horizontal" dataSource={state.contacts} gutter="0"
-          renderItem={item => (
-            <ListingItem item={item} node={state.node} open={openContact} />
-          )} />
+        { state.contacts.length > 0 && (
+          <List local={{ emptyText: '' }} itemLayout="horizontal" dataSource={state.contacts} gutter="0"
+            renderItem={item => (
+              <ListingItem item={item} node={state.node} open={openContact} />
+            )} />
+        )}
+        { state.contacts.length == 0 && (
+          <div class="empty">No Contacts</div>
+        )}
       </div>
     </ListingWrapper>
   );

@@ -47,11 +47,16 @@ export function Channels({ open, active }) {
         )}
       </div>
       <div class="view">
-        <List local={{ emptyText: '' }} itemLayout="horizontal" dataSource={state.channels} gutter="0"
-          renderItem={item => (
-            <ChannelItem item={item} openChannel={open} active={active} />
-          )}
-        />
+        { state.channels.length > 0 && (
+          <List local={{ emptyText: '' }} itemLayout="horizontal" dataSource={state.channels} gutter="0"
+            renderItem={item => (
+              <ChannelItem item={item} openChannel={open} active={active} />
+            )}
+          />
+        )}
+        { state.channels.length == 0 && (
+          <div class="empty">No Topics</div>
+        )}
       </div>
       { state.display !== 'small' && (
         <div class="bar">

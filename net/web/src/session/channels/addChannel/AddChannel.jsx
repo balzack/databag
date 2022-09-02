@@ -18,6 +18,7 @@ export function AddChannel({ state, actions }) {
         <CardSelect
           select={actions.onMember}
           selected={state.members}
+          emptyMessage={'No Connected Contacts'}
           filter={(card) => card?.data?.cardDetail?.status === 'connected'} 
           unknown={0}
         />

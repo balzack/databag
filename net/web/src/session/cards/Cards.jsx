@@ -42,10 +42,15 @@ export function Cards({ closeCards, openContact, openListing }) {
         )}
       </div>
       <div class="view">
-        <List local={{ emptyText: '' }} itemLayout="horizontal" dataSource={state.cards} gutter="0"
-          renderItem={item => (
-            <CardItem item={item} open={openContact} />
-          )} />
+        { state.cards.length > 0 && (
+          <List local={{ emptyText: '' }} itemLayout="horizontal" dataSource={state.cards} gutter="0"
+            renderItem={item => (
+              <CardItem item={item} open={openContact} />
+            )} />
+        )}
+        { state.cards.length == 0 && (
+          <div class="empty">No Contacts</div>
+        )}
       </div>
       { state.display !== 'small' && (
         <div class="bar">

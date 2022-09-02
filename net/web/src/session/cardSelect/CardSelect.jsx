@@ -4,7 +4,7 @@ import { SelectItem } from './selectItem/SelectItem';
 import { useCardSelect } from './useCardSelect.hook';
 import { Logo } from 'logo/Logo';
 
-export function CardSelect({ filter, unknown, select, selected, markup }) {
+export function CardSelect({ filter, unknown, select, selected, markup, emptyMessage }) {
 
   const { state } = useCardSelect(filter);
 
@@ -16,6 +16,9 @@ export function CardSelect({ filter, unknown, select, selected, markup }) {
             <SelectItem item={item} select={select} selected={selected} markup={markup} />
           )}
         />
+      )}
+      { !state.cards?.length && (
+        <div class="empty">{ emptyMessage }</div>
       )}
       { unknown > 0 && (
         <div class="unknown">

@@ -12,6 +12,15 @@ export const ChannelsWrapper = styled.div`
     min-height: 0;
     overflow: auto;
     flex-grow: 1;
+
+    .empty {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-style: italic;
+      color: ${Colors.grey};
+      height: 100%;
+    }
   }
  
   .search {
