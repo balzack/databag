@@ -4,6 +4,7 @@
 </p>
 
 Databag is a self-hosted messaging service for the DWeb community. Notable features include:
+- Lightweight (runs on a raspberry pi zero 1)
 - Public-private key based identity (not bound to any blockchain or hosting domain)
 - Federated (accounts on different nodes can communicate)
 - No server-side replication (direct communication between app and contact's node)
