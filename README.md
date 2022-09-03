@@ -6,6 +6,7 @@
 Databag is a self-hosted messaging service for the DWeb community. Notable features include:
 - Public-private key based identity (not bound to any blockchain or hosting domain)
 - Federated (accounts on different nodes can communicate)
+- Lightweight (runs on a raspberry pi zero v1.3)
 - No server-side replication (direct communication between app and contact's node)
 - Low latency (use of websockets for push events to avoid polling)
 - Responsive (renders well in browsers for phone, tablet and pc)
@@ -15,9 +16,9 @@ You can test out the project [here](https://databag.coredb.org/#/create), but do
 
 ## Installation
 
-To use databag, you will need a DNS name pointing to your node with a certificate. You can deloy a node manually, but you will have a much easier time using a container service. Containers for arm64 and amd64 are available [here](https://hub.docker.com/r/balzack/databag/tags)
+To use databag, you will need a DNS name pointing to your node with a certificate. You can deloy a node manually, but you will have a much easier time using a container service. Containers for arm64 and amd64 are available [here](https://hub.docker.com/r/balzack/databag/tags). 
 
-If you choose to setup your server manually, you can follow the steps in the Dockerfile [here](/net/container/Dockerfile).
+Instruction for installing without a container on a Raspberry Pi Zero are [here](/doc/pizero.md).
 
 ### Example with Portainer and Nginx Proxy Manager
 
