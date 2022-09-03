@@ -1,6 +1,7 @@
 import { useContext, useState, useEffect } from 'react';
 import { CardContext } from 'context/CardContext';
 import { ViewportContext } from 'context/ViewportContext';
+import { StoreContext } from 'context/StoreContext';
 
 export function useCards() {
 
@@ -14,6 +15,7 @@ export function useCards() {
   });
 
   const card = useContext(CardContext);
+  const store = useContext(StoreContext);
   const viewport = useContext(ViewportContext);
 
   const updateState = (value) => {
@@ -28,6 +30,17 @@ export function useCards() {
       updateState({ sorted: value });
     },
   };
+
+  useEffect(() => {
+    let updated;
+    const contacts = Array.from(card.state.cards.values());
+    contacts.forEach(contact => {
+      if (!updated || updated < contact?.data?.cardDetail?.statusUpdated) {
+        updated = contact?.data?.cardDetail?.statusUpdated;
+      }
+    });
+    store.actions.setValue('cards:updated', updated);
+  }, [card]);
 
   useEffect(() => {
     const contacts = Array.from(card.state.cards.values());

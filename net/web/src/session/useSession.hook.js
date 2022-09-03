@@ -50,23 +50,15 @@ export function useSession() {
   }, [viewport]);
 
   useEffect(() => {
-    const contacts = Array.from(card.state.cards.values());
-    
     let updated;
+    const contacts = Array.from(card.state.cards.values());
     contacts.forEach(contact => {
       if (!updated || updated < contact?.data?.cardDetail?.statusUpdated) {
         updated = contact?.data?.cardDetail?.statusUpdated;
       }
     });
-
-    if (state.cards) {
-      cardStatus.current = updated;
-      storeStatus.current = updated;
-      store.actions.setValue('cards:updated', updated);
-    }
-
+    cardStatus.current = updated;
     updateState({ cardUpdated: cardStatus.current > storeStatus.current });
-    // eslint-disable-next-line
   }, [card]);
 
   useEffect(() => {
