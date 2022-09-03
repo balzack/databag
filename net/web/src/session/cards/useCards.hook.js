@@ -40,6 +40,7 @@ export function useCards() {
       }
     });
     store.actions.setValue('cards:updated', updated);
+    // eslint-disable-next-line
   }, [card]);
 
   useEffect(() => {
