@@ -1,4 +1,4 @@
-# Install Databag on Raspberry Pi Zero (1)
+# Install Databag on Raspberry Pi Zero V1.3
 
 These instructions assume you have the following setup:
   - reverse proxy with an assigned hostname and certificate forwarding to your Raspberry Pi
