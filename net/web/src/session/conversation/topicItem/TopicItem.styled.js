@@ -96,6 +96,12 @@ export const TopicItemWrapper = styled.div`
     padding-top: 4px;
   }
 
+  .skeleton {
+    height: 128px;
+    margin-left: 72px;
+    margin-right: 32px;
+  }
+
   .message {
     padding-right: 16px;
     padding-left: 72px;

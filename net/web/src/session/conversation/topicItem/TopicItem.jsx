@@ -13,15 +13,6 @@ export function TopicItem({ host, topic }) {
 
   const { state, actions } = useTopicItem(topic);
 
-  // not sure why this helps, on mobile render updates not occuring without
-  // eslint-disable-next-line
-  const [render, setRender] = useState(false);
-  useEffect(() => {
-    if (state.ready && state.confirmed) {
-      setRender(true);
-    }
-  }, [state.ready, state.confirmed]);
-
   let name = state.name ? state.name : state.handle;
   let nameClass = state.name ? 'set' : 'unset';
   if (name == null) {
@@ -118,10 +109,8 @@ export function TopicItem({ host, topic }) {
             </div>
           </div>
           { !state.confirmed && (
-            <div>
-              <div class="message">
-                <Skeleton size={'small'} active={true} />
-              </div>
+            <div class="skeleton">
+              <Skeleton size={'small'} active={true} title={false} />
             </div>
           )}
           { state.confirmed && (
