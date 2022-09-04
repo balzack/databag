@@ -7,7 +7,6 @@ import { Logo } from 'logo/Logo';
 import { Space, Skeleton, Button, Modal, Input } from 'antd';
 import { ExclamationCircleOutlined, DeleteOutlined, EditOutlined, FireOutlined, PictureOutlined } from '@ant-design/icons';
 import { Carousel } from 'carousel/Carousel';
-import { useState, useEffect } from 'react';
 
 export function TopicItem({ host, topic }) {
 
