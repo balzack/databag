@@ -17,7 +17,7 @@ export function Channels({ open, active }) {
     }
     catch(err) {
       Modal.error({
-        title: 'Failed to Create Channel',
+        title: 'Failed to Create Topic',
         content: 'Please try again.',
       });
     }
