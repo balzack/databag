@@ -69,7 +69,7 @@ These instructions assume you have the following setup:
 
 ## Step 9: launch the server
   cd /app/databag/net/server<br/>
-  nohup /usr/local/go/bin/go run databag<br/>
+  nohup nice -n -5 /usr/local/go/bin/go run databag<br/>
 
 ## Step 10: configure the server
   Open your brower to the pi hostname<br/>
