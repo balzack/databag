@@ -23,7 +23,12 @@ export function Conversation({ closeConversation, openDetails, cardId, channelId
             <Logo img={state.image} url={state.logo} width={32} height={32} radius={4} />
           </div>
           <div class="label">{ state.subject }</div>
-          { state.error && (
+          { state.error && state.display === 'small' && (
+            <StatusError onClick={actions.resync}>
+              <ExclamationCircleOutlined />
+            </StatusError>
+          )}
+          { state.error && state.display !== 'small' && (
             <Tooltip placement="bottom" title="sync error">
               <StatusError onClick={actions.resync}>
                 <ExclamationCircleOutlined />
@@ -72,13 +77,22 @@ export function Conversation({ closeConversation, openDetails, cardId, channelId
         <AddTopic cardId={cardId} channelId={channelId} />
         { state.uploadError && (
           <div class="upload-error">
-            <Tooltip placement="bottom" title="upload error">
+            { state.display === 'small' && (
               <StatusError>
                 <div onClick={() => actions.clearUploadErrors(cardId, channelId)}>
                   <ExclamationCircleOutlined />
                 </div>
               </StatusError>
-            </Tooltip>
+            )}
+            { state.display !== 'small' && (
+              <Tooltip placement="bottom" title="upload error">
+                <StatusError>
+                  <div onClick={() => actions.clearUploadErrors(cardId, channelId)}>
+                    <ExclamationCircleOutlined />
+                  </div>
+                </StatusError>
+              </Tooltip>
+            )}
           </div>
         )}
       </div>

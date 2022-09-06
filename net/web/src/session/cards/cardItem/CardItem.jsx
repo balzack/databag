@@ -33,7 +33,12 @@ export function CardItem({ item, open }) {
         <div class="handle">{ handle() }</div>
       </div>
       <div class="markup">
-        { !state.resync && item.error && (
+        { !state.resync && item.error && state.display === 'small' && (
+          <StatusError onClick={resync}>
+            <ExclamationCircleOutlined />
+          </StatusError>
+        )}
+        { !state.resync && item.error && state.display !== 'small' && (
           <Tooltip placement="left" title="sync error">
             <StatusError onClick={resync}>
               <ExclamationCircleOutlined />

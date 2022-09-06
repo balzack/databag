@@ -1,5 +1,6 @@
 import { useContext, useState, useEffect } from 'react';
 import { CardContext } from 'context/CardContext';
+import { ViewportContext } from 'context/ViewportContext';
 
 export function useCardItem(item) {
 
@@ -9,6 +10,7 @@ export function useCardItem(item) {
   });
 
   const card = useContext(CardContext);
+  const viewport = useContext(ViewportContext);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
@@ -17,6 +19,10 @@ export function useCardItem(item) {
   useEffect(() => {
     updateState({ logo: card.actions.getImageUrl(item.id) });
   }, [card, item]); 
+
+  useEffect(() => {
+    updateState({ display: viewport.state.display });
+  }, [viewport]);
 
   const actions = {
     resync: async () => {

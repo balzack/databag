@@ -221,9 +221,6 @@ export function useConversationContext() {
     catch (err) {
       console.log(err);
       updateState({ error: true });
-      if (ev.type === EVENT_RESYNC) {
-        window.alert("failed to syncrhonize conversation");
-      }
     }
   }
 
