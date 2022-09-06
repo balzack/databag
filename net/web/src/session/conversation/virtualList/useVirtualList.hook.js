@@ -4,7 +4,7 @@ export function useVirtualList(id) {
 
   const [state, setState] = useState({
     view: null,
-    listHeight: 128,
+    listHeight: 0,
     slots: [],
   });
 

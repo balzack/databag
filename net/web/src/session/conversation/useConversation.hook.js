@@ -85,7 +85,7 @@ export function useConversation(cardId, channelId) {
     if (chan) {
       if (!chan.contacts?.length) {
         image = 'solution';
-        subject = 'Private';
+        subject = 'Notes';
       }
       else if (chan.contacts.length > 1) {
         image = 'appstore'

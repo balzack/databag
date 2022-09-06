@@ -90,7 +90,7 @@ export function VirtualList({ id, items, itemRenderer, loadMore }) {
   };
 
   const latchSlots = () => {
-    if (containers.current.length > 0 && latched.current) {
+    if (containers.current.length > 0 && latched.current && state.listHeight > 0) {
       if (!nolatch.current) {
         const last = containers.current[containers.current.length - 1];
         const bottom = last.top + last.height;
@@ -171,6 +171,10 @@ export function VirtualList({ id, items, itemRenderer, loadMore }) {
   }
 
   const loadSlots = () => {
+
+    if (state.listHeight == 0) {
+      return;
+    }
 
     if (containers.current.length === 0) {
       // add the first slot

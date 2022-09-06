@@ -125,7 +125,7 @@ export function useChannels() {
       subject = names.join(", ");
     }
     if (!subject && !chan.contacts?.length) {
-      subject = "notes";
+      subject = "Notes";
     }
     
     chan.subject = subject;  

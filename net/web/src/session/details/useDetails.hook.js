@@ -50,7 +50,7 @@ export function useDetails(cardId, channelId) {
     if (chan) {
       if (chan.contacts?.length === 0) {
         img = 'solution';
-        subject = 'Private';
+        subject = 'Notes';
       }
       else if (chan.contacts?.length > 1) {
         img = 'appstore'
@@ -58,7 +58,7 @@ export function useDetails(cardId, channelId) {
       }
       else {
         img = 'team';
-        subject = 'Direct'
+        subject = 'Conversation'
       }
       const parsed = JSON.parse(chan.data.channelDetail.data);
       if (parsed.subject) {
