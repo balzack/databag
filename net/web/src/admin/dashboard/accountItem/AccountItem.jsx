@@ -1,12 +1,23 @@
 import { Logo } from 'logo/Logo';
 import { AccountItemWrapper, AccessLayout, DeleteButton, EnableButton, DisableButton, ResetButton } from './AccountItem.styled';
 import { useAccountItem } from './useAccountItem.hook';
-import { CopyOutlined, UserDeleteOutlined, UnlockOutlined, CloseCircleOutlined, CheckCircleOutlined } from '@ant-design/icons';
+import { ExclamationCircleOutlined, CopyOutlined, UserDeleteOutlined, UnlockOutlined, CloseCircleOutlined, CheckCircleOutlined } from '@ant-design/icons';
 import { Modal, Tooltip, Button } from 'antd';
 
 export function AccountItem({ token, item, remove }) {
 
   const { state, actions } = useAccountItem(token, item, remove);
+
+  const removeAccount = () => {
+    Modal.confirm({
+      title: 'Are you sure you want to delete the account?',
+      icon: <ExclamationCircleOutlined />,
+      onOk() {
+        actions.remove();
+      },
+      onCancel() {},
+    });
+  }
 
   const onClipboard = (value) => {
     navigator.clipboard.writeText(value);
@@ -50,7 +61,7 @@ export function AccountItem({ token, item, remove }) {
         <Enable />
         <Tooltip placement="topLeft" title="Delete Account">
           <DeleteButton type="text" size="large" icon={<UserDeleteOutlined />}
-              loading={state.removeBusy} onClick={() => actions.remove()}></DeleteButton>
+              loading={state.removeBusy} onClick={removeAccount}></DeleteButton>
         </Tooltip>
       </div>
       <Modal title="Access Account Link" visible={state.showAccess} centered width="fitContent"
