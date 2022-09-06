@@ -172,7 +172,7 @@ export function VirtualList({ id, items, itemRenderer, loadMore }) {
 
   const loadSlots = () => {
 
-    if (state.listHeight == 0) {
+    if (state.listHeight === 0) {
       return;
     }
 
