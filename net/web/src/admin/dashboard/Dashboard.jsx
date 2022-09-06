@@ -22,30 +22,54 @@ export function Dashboard({ token, config, logout }) {
       <div class="container">
         <div class="header">
           <div class="label">Accounts</div>
-          <div class="settings">
-            <Tooltip placement="topRight" title="Reload Accounts"> 
-              <SettingsButton type="text" size="small" icon={<ReloadOutlined />}
-                  onClick={() => actions.getAccounts()}></SettingsButton>
-            </Tooltip>
-          </div>
-          <div class="settings">
-            <Tooltip placement="topRight" title="Configure Server"> 
-              <SettingsButton type="text" size="small" icon={<SettingOutlined />}
-                  onClick={() => actions.setShowSettings(true)}></SettingsButton>
-            </Tooltip>
-          </div>
-          <div class="settings">
-            <Tooltip placement="topRight" title="Logout"> 
-              <SettingsButton type="text" size="small" icon={<LogoutOutlined />}
-                  onClick={() => logout()}></SettingsButton>
-            </Tooltip>
-          </div>
-          <div class="add">
-            <Tooltip placement="topRight" title="Create Account Link"> 
-              <AddButton type="text" size="large" icon={<UserAddOutlined />}
-                  loading={state.createBusy} onClick={() => actions.setCreateLink()}></AddButton>
-            </Tooltip>
-          </div>
+          { state.display === 'small' && (
+            <>
+              <div class="settings">
+                  <SettingsButton type="text" size="small" icon={<ReloadOutlined />}
+                      onClick={() => actions.getAccounts()}></SettingsButton>
+              </div>
+              <div class="settings">
+                  <SettingsButton type="text" size="small" icon={<SettingOutlined />}
+                      onClick={() => actions.setShowSettings(true)}></SettingsButton>
+              </div>
+              <div class="settings">
+                  <SettingsButton type="text" size="small" icon={<LogoutOutlined />}
+                      onClick={() => logout()}></SettingsButton>
+              </div>
+              <div class="add">
+                  <AddButton type="text" size="large" icon={<UserAddOutlined />}
+                      loading={state.createBusy} onClick={() => actions.setCreateLink()}></AddButton>
+              </div>
+            </>
+          )}
+          { state.display !== 'small' && (
+            <>
+              <div class="settings">
+                <Tooltip placement="topRight" title="Reload Accounts"> 
+                  <SettingsButton type="text" size="small" icon={<ReloadOutlined />}
+                      onClick={() => actions.getAccounts()}></SettingsButton>
+                </Tooltip>
+              </div>
+              <div class="settings">
+                <Tooltip placement="topRight" title="Configure Server"> 
+                  <SettingsButton type="text" size="small" icon={<SettingOutlined />}
+                      onClick={() => actions.setShowSettings(true)}></SettingsButton>
+                </Tooltip>
+              </div>
+              <div class="settings">
+                <Tooltip placement="topRight" title="Logout"> 
+                  <SettingsButton type="text" size="small" icon={<LogoutOutlined />}
+                      onClick={() => logout()}></SettingsButton>
+                </Tooltip>
+              </div>
+              <div class="add">
+                <Tooltip placement="topRight" title="Create Account Link"> 
+                  <AddButton type="text" size="large" icon={<UserAddOutlined />}
+                      loading={state.createBusy} onClick={() => actions.setCreateLink()}></AddButton>
+                </Tooltip>
+              </div>
+            </>
+          )}
         </div>
 
         <div class="body">

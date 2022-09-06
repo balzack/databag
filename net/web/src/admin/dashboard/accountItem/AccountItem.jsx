@@ -23,23 +23,6 @@ export function AccountItem({ token, item, remove }) {
     navigator.clipboard.writeText(value);
   };
 
-  const Enable = () => {
-    if (state.disabled) {
-      return (
-        <Tooltip placement="topLeft" title="Enable Account">
-          <EnableButton type="text" size="large" icon={<CheckCircleOutlined />}
-              loading={state.statusBusy} onClick={() => actions.setStatus(false)}></EnableButton>
-        </Tooltip>
-      )
-    }
-    return (
-      <Tooltip placement="topLeft" title="Disable Account">
-        <DisableButton type="text" size="large" icon={<CloseCircleOutlined />}
-              loading={state.statusBusy} onClick={() => actions.setStatus(true)}></DisableButton>
-      </Tooltip>
-    )
-  }
-
   const accessLink = () => {
     return window.location.origin + '/#/login?access=' + state.accessToken;
   };
@@ -54,15 +37,46 @@ export function AccountItem({ token, item, remove }) {
         <div class="guid">{ state.guid }</div>
       </div>
       <div class="control">
-        <Tooltip placement="topLeft" title="Account Login Link">
-          <ResetButton type="text" size="large" icon={<UnlockOutlined />}
-              loading={state.accessBusy} onClick={() => actions.setAccessLink()}></ResetButton>
-        </Tooltip>
-        <Enable />
-        <Tooltip placement="topLeft" title="Delete Account">
-          <DeleteButton type="text" size="large" icon={<UserDeleteOutlined />}
-              loading={state.removeBusy} onClick={removeAccount}></DeleteButton>
-        </Tooltip>
+        { state.display === 'small' && (
+          <>
+            <ResetButton type="text" size="large" icon={<UnlockOutlined />}
+                loading={state.accessBusy} onClick={() => actions.setAccessLink()}></ResetButton>
+            { state.disabled && (
+              <EnableButton type="text" size="large" icon={<CheckCircleOutlined />}
+                  loading={state.statusBusy} onClick={() => actions.setStatus(false)}></EnableButton>
+            )}
+            { !state.disabled && (
+              <DisableButton type="text" size="large" icon={<CloseCircleOutlined />}
+                    loading={state.statusBusy} onClick={() => actions.setStatus(true)}></DisableButton>
+            )}
+            <DeleteButton type="text" size="large" icon={<UserDeleteOutlined />}
+                loading={state.removeBusy} onClick={removeAccount}></DeleteButton>
+          </>
+        )}
+        { state.display !== 'small' && (
+          <>
+            <Tooltip placement="topLeft" title="Account Login Link">
+              <ResetButton type="text" size="large" icon={<UnlockOutlined />}
+                  loading={state.accessBusy} onClick={() => actions.setAccessLink()}></ResetButton>
+            </Tooltip>
+            { state.disabled && (
+              <Tooltip placement="topLeft" title="Enable Account">
+                <EnableButton type="text" size="large" icon={<CheckCircleOutlined />}
+                    loading={state.statusBusy} onClick={() => actions.setStatus(false)}></EnableButton>
+              </Tooltip>
+            )}
+            { !state.disabled && (
+              <Tooltip placement="topLeft" title="Disable Account">
+                <DisableButton type="text" size="large" icon={<CloseCircleOutlined />}
+                      loading={state.statusBusy} onClick={() => actions.setStatus(true)}></DisableButton>
+              </Tooltip>
+            )}
+            <Tooltip placement="topLeft" title="Delete Account">
+              <DeleteButton type="text" size="large" icon={<UserDeleteOutlined />}
+                  loading={state.removeBusy} onClick={removeAccount}></DeleteButton>
+            </Tooltip>
+          </>
+        )}
       </div>
       <Modal title="Access Account Link" visible={state.showAccess} centered width="fitContent"
           footer={[ <Button type="primary" onClick={() => actions.setShowAccess(false)}>OK</Button> ]}

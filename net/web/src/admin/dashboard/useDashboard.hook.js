@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { setNodeConfig } from 'api/setNodeConfig';
 import { getNodeAccounts } from 'api/getNodeAccounts';
 import { removeAccount } from 'api/removeAccount';
 import { addAccountCreate } from 'api/addAccountCreate';
+import { ViewportContext } from 'context/ViewportContext';
 
 export function useDashboard(token, config) {
 
@@ -20,6 +21,8 @@ export function useDashboard(token, config) {
     createBusy: false,
     showCreate: false,
   });
+
+  const viewport = useContext(ViewportContext);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
@@ -108,6 +111,10 @@ export function useDashboard(token, config) {
       }
     },
   };
+
+  useEffect(() => {
+    updateState({ display: viewport.state.display });
+  }, [viewport]);
 
   useEffect(() => {
     const { accountStorage, domain, keyType, enableImage, enableAudio, enableVideo } = config;

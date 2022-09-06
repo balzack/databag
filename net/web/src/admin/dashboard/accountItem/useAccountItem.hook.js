@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { getAccountImageUrl } from 'api/getAccountImageUrl';
 import { setAccountStatus } from 'api/setAccountStatus';
 import { addAccountAccess } from 'api/addAccountAccess';
+import { ViewportContext } from 'context/ViewportContext';
 
 export function useAccountItem(token, item, remove) {
   
@@ -11,6 +12,8 @@ export function useAccountItem(token, item, remove) {
     accessBusy: false,
     showAccess: false,
   });
+ 
+  const viewport = useContext(ViewportContext); 
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
@@ -27,6 +30,10 @@ export function useAccountItem(token, item, remove) {
       imageUrl: item?.imageSet ? getAccountImageUrl(token, item?.accountId) : null,
     });
   }, [token, item]); 
+
+  useEffect(() => {
+    updateState({ display: viewport.state.display });
+  }, [viewport]);
 
   const actions = {
     setAccessLink: async () => {
