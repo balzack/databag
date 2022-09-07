@@ -15,7 +15,10 @@
     "react": "18.0.0",
     "react-dom": "18.0.0",
     "react-native": "0.69.5",
+    "react-native-base64": "^0.2.1",
     "react-native-web": "~0.18.7",
+    "react-router-dom": "6",
+    "react-router-native": "^6.3.0",
     "styled-components": "^5.3.5"
   },
   "devDependencies": {
