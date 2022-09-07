@@ -6,7 +6,12 @@ import { addAccount } from 'api/addAccount';
 import { getUsername } from 'api/getUsername';
 
 export function useAppContext() {
-  const [state, setState] = useState({});
+  const [state, setState] = useState({
+    session: null,
+    disconnected: null,
+    server: null,
+    token: null,
+  });
   const [appRevision, setAppRevision] = useState();
 
   const delay = useRef(2);
@@ -19,7 +24,6 @@ export function useAppContext() {
 
   const resetData = () => {
     revision.current = null;
-    setState({});
   }
 
   const actions = {
@@ -38,33 +42,30 @@ export function useAppContext() {
   }
 
   const appCreate = async (username, password, token) => {
-    await addAccount(username, password, token);
-    let access = await setLogin(username, password)
-    setWebsocket(access.appToken)
-    return access.created;
+    const acc = username.split('@');
+    await addAccount(acc[0], acc[1], password, token);
+    let access = await setLogin(acc[0], acc[1], password)
+    setWebsocket(acc[1], access.appToken)
+    updateState({ session: true, token: access.appToken, server: acc[1] });
+    // store 
   } 
 
   const appLogin = async (username, password) => {
-    let access = await setLogin(username, password)
-    setWebsocket(access.appToken)
-    return access.created;
+    let access = await setLogin(acc[0], acc[1], password)
+    setWebsocket(acc[1], access.appToken)
+    updateState({ session: true, token: access.appToken, server: acc[1] });
+    // store
   }
 
   const appLogout = () => {
-    clearWebsocket()
+    clearWebsocket();
+    updateState({ session: false, });
+    // store
   }
 
-  const setWebsocket = (token) => {
+  const setWebsocket = (server, token) => {
 
-    let protocol;
-    if (window.location.protocol === 'http:') {
-      protocol = 'ws://';
-    }
-    else {
-      protocol = 'wss://';
-    }
-
-    ws.current = new WebSocket(protocol + window.location.host + "/status");
+    ws.current = new WebSocket(`wss://${server}/status`);
     ws.current.onmessage = (ev) => {
       try {
         let rev = JSON.parse(ev.data);
@@ -107,6 +108,7 @@ export function useAppContext() {
   }
 
   useEffect(() => {
+    updateState({ session: false });
     // pull store set websocket
   }, []);
 

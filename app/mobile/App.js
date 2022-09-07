@@ -1,15 +1,14 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { AppContextProvider } from 'context/AppContext';
 import { NativeRouter } from "react-router-native";
 import { Routes, Route } from 'react-router-dom';
-import { Root } from './root/Root';
-import { Access } from './access/Access';
-import { Session } from './session/Session';
-import { Admin } from './admin/Admin';
+import { Root } from 'src/root/Root';
+import { Access } from 'src/access/Access';
+import { Session } from 'src/session/Session';
+import { Admin } from 'src/admin/Admin';
+import { AppContextProvider } from 'context/AppContext';
 
 export default function App() {
+
   return (
     <AppContextProvider>
       <NativeRouter>
