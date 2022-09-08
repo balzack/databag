@@ -11,6 +11,7 @@ export const Colors = {
   encircle: '#cccccc',
   alert: '#ff8888',
   enabled: '#444444',
+  lightgrey: '#bbbbbb',
   disabled: '#aaaaaa',
   text: '#444444',
   link: '#0077CC',
