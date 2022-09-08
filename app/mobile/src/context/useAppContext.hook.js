@@ -51,7 +51,9 @@ export function useAppContext() {
   } 
 
   const appLogin = async (username, password) => {
+    const acc = username.split('@');
     let access = await setLogin(acc[0], acc[1], password)
+console.log(access);
     setWebsocket(acc[1], access.appToken)
     updateState({ session: true, token: access.appToken, server: acc[1] });
     // store

@@ -1,4 +1,4 @@
-import { Text, TextInput, View, TouchableOpacity } from 'react-native';
+import { ActivityIndicator, Alert, Text, TextInput, View, TouchableOpacity } from 'react-native';
 import { styles } from './Login.styled';
 import Ionicons from '@expo/vector-icons/AntDesign';
 import { useLogin } from './useLogin.hook';
@@ -6,6 +6,18 @@ import { useLogin } from './useLogin.hook';
 export function Login() {
 
   const { state, actions } = useLogin();
+
+  const login = async () => {
+    try {
+      await actions.login();
+    }
+    catch (err) {
+      Alert.alert(
+        "Login Failed",
+        "Please check your login and password.",
+      );
+    }
+  }
 
   return (
     <View style={styles.wrapper}>
@@ -26,17 +38,34 @@ export function Login() {
                 autoCapitalize="none" />
             <View style={styles.space} />
           </View>
-          <View style={styles.inputwrapper}>
-            <Ionicons style={styles.icon} name="lock" size={18} color="#aaaaaa" />
-            <TextInput style={styles.inputfield} value={state.password} onChangeText={actions.setPassword}
-                autoCapitalize="none" />
-            <TouchableOpacity>
-              <Ionicons style={styles.icon} name="eye" size={18} color="#aaaaaa" />
-            </TouchableOpacity>
-          </View>
+          { state.showPassword && (
+            <View style={styles.inputwrapper}>
+              <Ionicons style={styles.icon} name="lock" size={18} color="#aaaaaa" />
+              <TextInput style={styles.inputfield} value={state.password} onChangeText={actions.setPassword}
+                  autoCapitalize="none" />
+              <TouchableOpacity onPress={actions.hidePassword}>
+                <Ionicons style={styles.icon} name="eye" size={18} color="#aaaaaa" />
+              </TouchableOpacity>
+            </View>
+          )}
+          { !state.showPassword && (
+            <View style={styles.inputwrapper}>
+              <Ionicons style={styles.icon} name="lock" size={18} color="#aaaaaa" />
+              <TextInput style={styles.inputfield} value={state.password} onChangeText={actions.setPassword}
+                  secureTextEntry={true} autoCapitalize="none" />
+              <TouchableOpacity onPress={actions.showPassword}>
+                <Ionicons style={styles.icon} name="eyeo" size={18} color="#aaaaaa" />
+              </TouchableOpacity>
+            </View>
+          )}
           { state.enabled && (
-            <TouchableOpacity style={styles.login}>
-              <Text style={styles.logintext}>Login</Text>
+            <TouchableOpacity style={styles.login} onPress={login}>
+              { state.busy && (
+                <ActivityIndicator size="small" color="#ffffff" />
+              )}
+              { !state.busy && (
+                <Text style={styles.logintext}>Login</Text>
+              )}
             </TouchableOpacity>
           )}
           { !state.enabled && (
@@ -44,16 +73,9 @@ export function Login() {
               <Text style={styles.nologintext}>Login</Text>
             </View>
           )}
-          { state.createable && (
-            <TouchableOpacity style={styles.create}>
-              <Text style={styles.createtext}>Create Account</Text>
-            </TouchableOpacity>
-          )}
-          { !state.createable && (
-            <View style={styles.create}>
-              <Text style={styles.nocreatetext}>Create Account</Text>
-            </View>
-          )}
+          <TouchableOpacity style={styles.create} onPress={actions.create}>
+            <Text style={styles.createtext}>Create Account</Text>
+          </TouchableOpacity>
         </View>      
       </View>
     </View>
