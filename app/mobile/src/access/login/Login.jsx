@@ -35,14 +35,14 @@ export function Login() {
           <View style={styles.inputwrapper}>
             <Ionicons style={styles.icon} name="user" size={18} color="#aaaaaa" />
             <TextInput style={styles.inputfield} value={state.login} onChangeText={actions.setLogin}
-                autoCapitalize="none" />
+                autoCapitalize="none" placeholder="username@server" />
             <View style={styles.space} />
           </View>
           { state.showPassword && (
             <View style={styles.inputwrapper}>
               <Ionicons style={styles.icon} name="lock" size={18} color="#aaaaaa" />
               <TextInput style={styles.inputfield} value={state.password} onChangeText={actions.setPassword}
-                  autoCapitalize="none" />
+                  autoCapitalize="none" placeholder="password"/>
               <TouchableOpacity onPress={actions.hidePassword}>
                 <Ionicons style={styles.icon} name="eye" size={18} color="#aaaaaa" />
               </TouchableOpacity>
@@ -52,7 +52,7 @@ export function Login() {
             <View style={styles.inputwrapper}>
               <Ionicons style={styles.icon} name="lock" size={18} color="#aaaaaa" />
               <TextInput style={styles.inputfield} value={state.password} onChangeText={actions.setPassword}
-                  secureTextEntry={true} autoCapitalize="none" />
+                  secureTextEntry={true} autoCapitalize="none" placeholder="password" />
               <TouchableOpacity onPress={actions.showPassword}>
                 <Ionicons style={styles.icon} name="eyeo" size={18} color="#aaaaaa" />
               </TouchableOpacity>

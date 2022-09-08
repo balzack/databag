@@ -3,7 +3,7 @@ import { useWindowDimensions } from 'react-native';
 import { useNavigate } from 'react-router-dom';
 import { AppContext } from 'context/AppContext';
 
-export function useLogin() {
+export function useCreate() {
 
   const navigate = useNavigate();
   const app = useContext(AppContext);
@@ -13,7 +13,9 @@ export function useLogin() {
     enabled: false,
     login: null,
     password: null,
+    confirm: null,
     showPassword: false,
+    showConfirm: false,
   });
 
   const updateState = (value) => {
@@ -21,10 +23,10 @@ export function useLogin() {
   }
 
   useEffect(() => {
-    if (state.password && state.login && !state.enabled && state.login.includes('@')) {
+    if (state.password && state.login && !state.enabled) {
       updateState({ enabled: true });
     }
-    if ((!state.password || !state.login || !state.login.includes('@')) && state.enabled) {
+    if ((!state.password || !state.login) && state.enabled) {
       updateState({ enabled: false });
     }
   }, [state.login, state.password]);
@@ -39,8 +41,11 @@ export function useLogin() {
     setPassword: (password) => {
       updateState({ password });
     },
-    create: () => {
-      navigate('/create');
+    setConfirm: (confirm) => {
+      updateState({ confirm });
+    },
+    login: () => {
+      navigate('/login');
     },
     showPassword: () => {
       updateState({ showPassword: true });
@@ -48,17 +53,23 @@ export function useLogin() {
     hidePassword: () => {
       updateState({ showPassword: false });
     },
-    login: async () => {
+    showConfirm: () => {
+      updateState({ showConfirm: true });
+    },
+    hideConfirm: () => {
+      updateState({ showConfirm: false });
+    },
+    create: async () => {
       if (!state.busy) {
         updateState({ busy: true });
         try {
-          await app.actions.login(state.login, state.password);
+          await app.actions.create(state.login, state.password);
           navigate('/');
         }
         catch (err) {
           console.log(err);
           updateState({ busy: false, showAlert: true });
-          throw new Error('login failed');
+          throw new Error('create failed');
         }
         updateState({ busy: false });
       }
