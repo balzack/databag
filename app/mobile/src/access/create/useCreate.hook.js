@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext, useRef } from 'react';
 import { useWindowDimensions } from 'react-native';
 import { useNavigate } from 'react-router-dom';
 import { AppContext } from 'context/AppContext';
@@ -11,23 +11,38 @@ export function useCreate() {
   const [state, setState] = useState({
     busy: false,
     enabled: false,
-    login: null,
+    server: null,
+    token: null,
+    username: null,
     password: null,
     confirm: null,
     showPassword: false,
     showConfirm: false,
+    serverCheck: true,
+    serverValid: false,
+    tokenRequired: false,
+    usernameCheck: true,
+    usernameValid: false,
+    
   });
+
+  const debounceUsername = useRef(null);
+  const debounceServer = useRef(null);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
   }
 
   useEffect(() => {
-    if (state.password && state.login && !state.enabled) {
-      updateState({ enabled: true });
+    if (state.password && state.username && state.server && state.confirm && state.password === state.confirm) {
+      if (!state.enabled) {
+        updateState({ enabled: true });
+      }
     }
-    if ((!state.password || !state.login) && state.enabled) {
-      updateState({ enabled: false });
+    else {
+      if (state.enabled) {
+        updateState({ enabled: false });
+      }
     }
   }, [state.login, state.password]);
 
@@ -35,8 +50,14 @@ export function useCreate() {
     config: () => {
       navigate('/admin');
     },
-    setLogin: (login) => {
-      updateState({ login });
+    setServer: (server) => {
+      updateState({ server });
+    },
+    setToken: (token) => {
+      updateState({ token });
+    },
+    setUsername: (username) => {
+      updateState({ username });
     },
     setPassword: (password) => {
       updateState({ password });

@@ -14,6 +14,14 @@ export const styles = StyleSheet.create({
   },
   space: {
     width: 32,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  required: {
+    fontSize: 12,
+    color: Colors.alert,
+    textAlignVertical: 'center',
   },
   container: {
     flexDirection: 'column',
@@ -22,14 +30,13 @@ export const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     display: 'flex',
-    paddingLeft: 16,
-    paddingRight: 16,
-    },
+  },
   control: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'flex-end',
     color: Colors.grey,
+    marginRight: 16,
   },
   title: {
     width: '100%',
@@ -46,12 +53,16 @@ export const styles = StyleSheet.create({
     width: '100%',
   },
   spacetop: {
-    flexGrow: 1,
-    flexDirection: 'column',
-    textAlign: 'center',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
     width: '100%',
+    paddingLeft: 16,
+    paddingRight: 16,
+  },
+  buttons: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   header: {
     fontSize: 32,
@@ -64,6 +75,17 @@ export const styles = StyleSheet.create({
     borderRadius: 4,
     borderColor: Colors.divider,
     borderWidth: 1,
+    marginBottom: 16,
+    alignItems: 'center',
+  },
+  inputwrapperpad: {
+    display: 'flex',
+    flexDirection: 'row',
+    width: '100%',
+    borderRadius: 4,
+    borderColor: Colors.divider,
+    borderWidth: 1,
+    marginTop: 16,
     marginBottom: 16,
     alignItems: 'center',
   },
@@ -95,12 +117,14 @@ export const styles = StyleSheet.create({
     borderRadius: 4,
     borderColor: Colors.divider,
     borderWidth: 1,
+    marginBottom: 16,
   },
   nocreatetext: {
     color: Colors.disabled,
   },
   create: {
     marginTop: 16,
+    marginBottom: 16,
   },
   createtext: {
     fontColor: 'yellow',
