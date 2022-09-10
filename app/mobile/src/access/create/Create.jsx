@@ -144,8 +144,8 @@ export function Create() {
                 <Text style={styles.nocreatetext}>Create</Text>
               </View>
             )}
-            <TouchableOpacity style={styles.login} onPress={actions.create}>
-              <Text style={styles.createtext}>Account Login</Text>
+            <TouchableOpacity style={styles.login} onPress={actions.login}>
+              <Text style={styles.logintext}>Account Login</Text>
             </TouchableOpacity>
           </View>
         </ScrollView>      

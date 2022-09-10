@@ -7,6 +7,7 @@ import { getUsername } from 'api/getUsername';
 
 export function useCreate() {
 
+  const [count, setCount] = useState(0);
   const navigate = useNavigate();
   const app = useContext(AppContext);
 
@@ -29,6 +30,8 @@ export function useCreate() {
     usernameValid: false,
   });
 
+  const backoff = useRef(false);
+  const checking = useRef(false);
   const debounce = useRef(null);
 
   const updateState = (value) => {
@@ -51,19 +54,23 @@ export function useCreate() {
     }
   }, [state]);
 
-  const check = (server, token, username) => {
+  useEffect(() => {
+    if (checking.current) {
+      backoff.current = true;
+    }
     if (debounce.current) {
       clearTimeout(debounce.current);
     }
     debounce.current = setTimeout(async () => {
+      checking.current = true;
       debounce.current = null;
-      if (server) {
+      if (state.server) {
         try {
-          const available = await getAvailable(server);
+          const available = await getAvailable(state.server);
           if (available) {
-            if (username) {
+            if (state.username) {
               try {
-                const claimable = await getUsername(username, server, null);
+                const claimable = await getUsername(state.username, state.server, null);
                 updateState({ usernameChecked: true, tokenChecked: true, serverChecked: true, tokenRequired: false,
                     usernameValid: claimable, serverValid: true });
               }
@@ -78,13 +85,13 @@ export function useCreate() {
             }
           }
           else {
-            if (token) {
+            if (state.token) {
               try {
-                const accessible = await getUsername(null, server, token);
+                const accessible = await getUsername(null, state.server, state.token);
                 if (accessible) {
-                  if (username) {
+                  if (state.username) {
                     try {
-                      const claimable = await getUsername(username, server, token);
+                      const claimable = await getUsername(state.username, state.server, state.token);
                       updateState({ usernameChecked: true, tokenChecked: true, serverChecked: true, tokenRequired: true,
                           usernameValid: claimable, tokenValid: true, serverValid: true });
                     }
@@ -118,8 +125,14 @@ export function useCreate() {
           updateState({ usernameChecked: true, tokenChecked: true, serverChecked: true, serverValid: false });
         }
       }
+      let retry = backoff.current; 
+      backoff.current = false;
+      checking.current = false;
+      if (retry) {
+        setCount(count++);
+      }
     }, 1000);
-  }
+  }, [count]);
 
   const actions = {
     config: () => {
@@ -127,15 +140,15 @@ export function useCreate() {
     },
     setServer: (server) => {
       updateState({ server, serverChecked: false });
-      check(server, state.token, state.username);
+      setCount(count+1);
     },
     setToken: (token) => {
       updateState({ token, tokenChecked: false });
-      check(state.server, token, state.username);
+      setCount(count+1);
     },
     setUsername: (username) => {
       updateState({ username, usernameChecked: false });
-      check(state.server, state.token, username);
+      setCount(count+1);
     },
     setPassword: (password) => {
       updateState({ password });
