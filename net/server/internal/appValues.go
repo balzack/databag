@@ -96,8 +96,8 @@ const APPTokenReset = "reset"
 //APPNotifyBuffer config for size of channel reciving notifications
 const APPNotifyBuffer = 4096
 
-//APPUsernameWait milliseconds to delay response
-const APPUsernameWait = 333
+//APPUsernameWait seconds to delay response
+const APPUsernameWait = 1
 
 //APPTopicUnconfirmed config for status name for unconfirmed
 const APPTopicUnconfirmed = "unconfirmed"

@@ -4,6 +4,7 @@ import (
 	"databag/internal/store"
 	"encoding/hex"
 	"errors"
+  "time"
 	"github.com/theckman/go-securerandom"
 	"gorm.io/gorm"
 	"net/http"
@@ -14,6 +15,7 @@ func SetAccountAccess(w http.ResponseWriter, r *http.Request) {
 
 	token, _, res := AccessToken(r)
 	if res != nil || token.TokenType != APPTokenReset {
+    time.Sleep(APPUsernameWait * time.Millisecond);
 		ErrResponse(w, http.StatusUnauthorized, res)
 		return
 	}

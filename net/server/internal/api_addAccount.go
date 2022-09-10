@@ -5,6 +5,7 @@ import (
 	"databag/internal/store"
 	"encoding/hex"
 	"errors"
+  "time"
 	"gorm.io/gorm"
 	"net/http"
 	"os"
@@ -19,6 +20,7 @@ func AddAccount(w http.ResponseWriter, r *http.Request) {
 	if r.FormValue("token") != "" {
 		token, _, res = AccessToken(r)
 		if res != nil || token.TokenType != APPTokenCreate {
+      time.Sleep(APPUsernameWait * time.Millisecond);
 			ErrResponse(w, http.StatusUnauthorized, res)
 			return
 		}
