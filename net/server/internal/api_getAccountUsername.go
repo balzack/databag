@@ -3,6 +3,7 @@ package databag
 import (
 	"databag/internal/store"
 	"errors"
+  "time"
 	"net/http"
 	"strings"
 )
@@ -13,6 +14,8 @@ type accountUsername struct {
 
 //GetAccountUsername determines if username is assignable
 func GetAccountUsername(w http.ResponseWriter, r *http.Request) {
+
+  time.Sleep(APPUsernameWait * time.Millisecond);
 
 	if r.FormValue("token") != "" {
 		token, _, res := AccessToken(r)
@@ -32,7 +35,7 @@ func GetAccountUsername(w http.ResponseWriter, r *http.Request) {
 
 	username := r.URL.Query().Get("name")
 	if username == "" {
-		ErrResponse(w, http.StatusBadRequest, errors.New("specify a username"))
+    WriteResponse(w, true);
 		return
 	}
 

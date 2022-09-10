@@ -13,13 +13,13 @@ const APPVersion = "0.1.0"
 const APPCreateExpire = 86400
 
 //APPCreateSize config for size of create token
-const APPCreateSize = 16
+const APPCreateSize = 6
 
 //APPResetExpire config for valid duration of reset token
 const APPResetExpire = 86400
 
 //APPResetSize config for size of reset token
-const APPResetSize = 16
+const APPResetSize = 6
 
 //APPConnectExpire config for valid duration of connection message
 const APPConnectExpire = 30
@@ -95,6 +95,9 @@ const APPTokenReset = "reset"
 
 //APPNotifyBuffer config for size of channel reciving notifications
 const APPNotifyBuffer = 4096
+
+//APPUsernameWait milliseconds to delay response
+const APPUsernameWait = 333
 
 //APPTopicUnconfirmed config for status name for unconfirmed
 const APPTopicUnconfirmed = "unconfirmed"
