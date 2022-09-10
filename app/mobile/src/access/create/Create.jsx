@@ -19,6 +19,10 @@ export function Create() {
     }
   }
 
+  const validServer = (state.server && state.serverChecked && state.serverValid);
+  const validToken = (!state.tokenRequired || (state.token && state.tokenChecked && state.tokenValid));
+  const validUsername = (state.username && state.usernameChecked && state.usernameValid);
+
   return (
     <View style={styles.wrapper}>
       <View style={styles.container}>
@@ -37,23 +41,51 @@ export function Create() {
             <TextInput style={styles.inputfield} value={state.server} onChangeText={actions.setServer}
                 autoCapitalize="none" placeholder="server" />
             <View style={styles.space}>
-              <Text style={styles.required}>✻</Text>
+              { (!state.server || !state.serverChecked) && (
+                <Text style={styles.required}>✻</Text>
+              )}
+              { state.server && state.serverChecked && !state.serverValid && (
+                <Ionicons style={styles.icon} name="exclamationcircleo" size={18} color="#ff8888" />
+              )}
+              { state.server && state.serverChecked && state.serverValid && (
+                <Ionicons style={styles.icon} name="checkcircleo" size={18} color="#448866" />
+              )}
             </View>
           </View>
-          { state.tokenRequired && (
-            <View style={styles.inputwrapper}>
-              <Ionicons style={styles.icon} name="key" size={18} color="#888888" />
-              <TextInput style={styles.inputfield} value={state.token} onChangeText={actions.setToken}
-                  autoCapitalize="none" placeholder="token" />
-              <View style={styles.space} />
-            </View>
-          )}
-          <View style={styles.inputwrapperpad}>
+          <View style={styles.token}>
+            { state.tokenRequired && (
+              <View style={styles.inputwrapper}>
+                <Ionicons style={styles.icon} name="key" size={18} color="#888888" />
+                <TextInput style={styles.inputfield} value={state.token} onChangeText={actions.setToken}
+                    autoCapitalize="none" placeholder="token" />
+                <View style={styles.space}>
+                  { (!validServer || !state.token || !state.tokenChecked) && (
+                    <Text style={styles.required}>✻</Text>
+                  )}
+                  { validServer && state.token && state.tokenChecked && !state.tokenValid && (
+                    <Ionicons style={styles.icon} name="exclamationcircleo" size={18} color="#ff8888" />
+                  )}
+                  { validServer && state.token && state.tokenChecked && state.tokenValid && (
+                    <Ionicons style={styles.icon} name="checkcircleo" size={18} color="#448866" />
+                  )}
+                </View>
+              </View>
+            )}
+          </View>
+          <View style={styles.inputwrapper}>
             <Ionicons style={styles.icon} name="user" size={18} color="#888888" />
             <TextInput style={styles.inputfield} value={state.username} onChangeText={actions.setUsername}
                 autoCapitalize="none" placeholder="username" />
             <View style={styles.space}>
-              <Text style={styles.required}>✻</Text>
+                { (!validServer || !validToken || !state.username || !state.usernameChecked) && (
+                  <Text style={styles.required}>✻</Text>
+                )}
+                { validServer && validToken && state.username && state.usernameChecked && !state.usernameValid && (
+                  <Ionicons style={styles.icon} name="exclamationcircleo" size={18} color="#ff8888" />
+                )}
+                { validServer && validToken && state.username && state.usernameChecked && state.usernameValid && (
+                  <Ionicons style={styles.icon} name="checkcircleo" size={18} color="#448866" />
+                )}
             </View>
           </View>
           { state.showPassword && (

@@ -20,7 +20,7 @@ export const styles = StyleSheet.create({
   },
   required: {
     fontSize: 12,
-    color: Colors.alert,
+    color: Colors.grey,
     textAlignVertical: 'center',
   },
   container: {
@@ -30,6 +30,9 @@ export const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     display: 'flex',
+  },
+  token: {
+    height: 52,
   },
   control: {
     display: 'flex',
@@ -103,6 +106,7 @@ export const styles = StyleSheet.create({
     height: 28,
     backgroundColor: Colors.primary,
     borderRadius: 4,
+    marginBottom: 16,
   },
   createtext: {
     color: Colors.formFocus,
@@ -122,14 +126,14 @@ export const styles = StyleSheet.create({
   nocreatetext: {
     color: Colors.disabled,
   },
-  create: {
+  login: {
     marginTop: 16,
     marginBottom: 16,
   },
-  createtext: {
+  logintext: {
     fontColor: 'yellow',
   },
-  nocreatetext: {
+  nologintext: {
     color: Colors.disabled,
   },
     
