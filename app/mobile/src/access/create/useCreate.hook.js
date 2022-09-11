@@ -71,17 +71,14 @@ export function useCreate() {
             if (state.username) {
               try {
                 const claimable = await getUsername(state.username, state.server, null);
-                updateState({ usernameChecked: true, tokenChecked: true, serverChecked: true, tokenRequired: false,
-                    usernameValid: claimable, serverValid: true });
+                updateState({ tokenRequired: false, usernameValid: claimable, serverValid: true });
               }
               catch (err) {
-                updateState({ usernameChecked: true, tokenChecked: true, serverChecked: true, tokenRequired: false,
-                    usernameValid: false, serverValid: true });
+                updateState({ tokenRequired: false, usernameValid: false, serverValid: true });
               }
             }
             else {
-              updateState({ usernameChecked: true, tokenChecked: true, serverChecked: true, tokenRequired: false,
-                  serverValid: true });
+              updateState({ tokenRequired: false, serverValid: true });
             }
           }
           else {
@@ -92,37 +89,31 @@ export function useCreate() {
                   if (state.username) {
                     try {
                       const claimable = await getUsername(state.username, state.server, state.token);
-                      updateState({ usernameChecked: true, tokenChecked: true, serverChecked: true, tokenRequired: true,
-                          usernameValid: claimable, tokenValid: true, serverValid: true });
+                      updateState({ tokenRequired: true, usernameValid: claimable, tokenValid: true, serverValid: true });
                     }
                     catch (err) {
-                      updateState({ usernameChecked: true, tokenChecked: true, serverChecked: true, tokenRequired: true,
-                          usernameValid: false, tokenValid: true, serverValid: true });
+                      updateState({ tokenRequired: true, usernameValid: false, tokenValid: true, serverValid: true });
                     }
                   }
                   else {
-                    updateState({ usernameChecked: true, tokenChecked: true, serverChecked: true, tokenRequired: true,
-                        tokenValid: true, serverValid: true });
+                    updateState({ tokenRequired: true, tokenValid: true, serverValid: true });
                   }
                 }
                 else {
-                  updateState({ usernameChecked: true, tokenChecked: true, serverChecked: true, tokenRequired: true,
-                      tokenValid: false, serverValid: true });
+                  updateState({ tokenRequired: true, tokenValid: false, serverValid: true });
                 }
               }
               catch (err) {
-                updateState({ usernameChecked: true, tokenChecked: true, serverChecked: true, tokenRequired: true,
-                    tokenValid: false, serverValid: true });
+                updateState({ tokenRequired: true, tokenValid: false, serverValid: true });
               }
             }
             else {
-              updateState({ usernameChecked: true, tokenChecked: true, serverChecked: true, tokenRequired: true,
-                  serverValid: true });
+              updateState({ tokenRequired: true, serverValid: true });
             }
           }
         }
         catch (err) {
-          updateState({ usernameChecked: true, tokenChecked: true, serverChecked: true, serverValid: false });
+          updateState({ serverValid: false });
         }
       }
       let retry = backoff.current; 
@@ -130,6 +121,9 @@ export function useCreate() {
       checking.current = false;
       if (retry) {
         setCount(count++);
+      }
+      else {
+        updateState({ usernameChecked: true, tokenChecked: true, serverChecked: true });
       }
     }, 1000);
   }, [count]);
