@@ -28,7 +28,7 @@ export function Create() {
       <View style={styles.container}>
         <View style={styles.control}>
           <TouchableOpacity onPress={actions.config}>
-            <Ionicons style={styles.config} name="setting" size={24} color="#888888" />
+            <Ionicons style={styles.config} name="setting" size={24} color="#aaaaaa" />
           </TouchableOpacity>
         </View>
         <Text style={styles.title}>Databag</Text>

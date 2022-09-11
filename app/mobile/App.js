@@ -16,6 +16,7 @@ export default function App() {
           <Route path="/" element={ <Root /> } />
           <Route path="/admin" element={ <Admin /> } />
           <Route path="/login" element={ <Access mode="login" /> } />
+          <Route path="/reset" element={ <Access mode="reset" /> } />
           <Route path="/create" element={ <Access mode="create" /> } />
           <Route path="/session" element={ <Session/> } />
         </Routes>

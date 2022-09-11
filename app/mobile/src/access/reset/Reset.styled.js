@@ -72,7 +72,7 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
     padding: 8,
   },
-  login: {
+  reset: {
     marginTop: 16,
     display: 'flex',
     alignItems: 'center',
@@ -82,10 +82,10 @@ export const styles = StyleSheet.create({
     backgroundColor: Colors.primary,
     borderRadius: 4,
   },
-  logintext: {
+  resettext: {
     color: Colors.formFocus,
   },
-  nologin: {
+  noreset: {
     marginTop: 16,
     display: 'flex',
     alignItems: 'center',
@@ -96,24 +96,18 @@ export const styles = StyleSheet.create({
     borderColor: Colors.divider,
     borderWidth: 1,
   },
+  noresettext: {
+    color: Colors.disabled,
+  },
+  login: {
+    marginTop: 16,
+  },
+  logintext: {
+    fontColor: 'yellow',
+  },
   nologintext: {
     color: Colors.disabled,
   },
-  create: {
-    marginTop: 16,
-  },
-  createtext: {
-    fontColor: 'yellow',
-  },
-  nocreatetext: {
-    color: Colors.disabled,
-  },
-  bottom: {
-    display: 'flex',
-    flexGrow: 1,
-    alignItems: 'flex-end',
-    justifyContent: 'flex-end',
-    paddingBottom: 16,
-  },    
+    
 })
 

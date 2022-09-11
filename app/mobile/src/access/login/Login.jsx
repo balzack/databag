@@ -76,6 +76,11 @@ export function Login() {
           <TouchableOpacity style={styles.create} onPress={actions.create}>
             <Text style={styles.createtext}>Create Account</Text>
           </TouchableOpacity>
+          <View style={styles.bottom}>
+            <TouchableOpacity style={styles.create} onPress={actions.reset}>
+              <Text style={styles.createtext}>Forgot Password</Text>
+            </TouchableOpacity>
+          </View>
         </View>      
       </View>
     </View>

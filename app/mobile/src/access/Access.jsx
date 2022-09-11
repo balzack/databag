@@ -3,6 +3,7 @@ import { Wrapper, Container, PaddedPane, Pane, Splash } from './Access.styled';
 import { useAccess } from './useAccess.hook';
 import { Login } from './login/Login';
 import { Create } from './create/Create';
+import { Reset } from './reset/Reset';
 import logo from 'images/login.png'; 
 
 export function Access({ mode }) {
@@ -24,6 +25,9 @@ export function Access({ mode }) {
               { mode === 'create' && (
                 <Create />
               )}
+              { mode === 'reset' && (
+                <Reset />
+              )}
             </Pane>
           </Container>
         )}
@@ -34,6 +38,9 @@ export function Access({ mode }) {
             )}
             { mode === 'create' && (
               <Create />
+            )}
+            { mode === 'reset' && (
+              <Reset />
             )}
           </Container>
         )}

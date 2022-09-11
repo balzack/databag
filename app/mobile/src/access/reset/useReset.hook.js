@@ -3,7 +3,7 @@ import { useWindowDimensions } from 'react-native';
 import { useNavigate } from 'react-router-dom';
 import { AppContext } from 'context/AppContext';
 
-export function useLogin() {
+export function useReset() {
 
   const navigate = useNavigate();
   const app = useContext(AppContext);
@@ -11,9 +11,8 @@ export function useLogin() {
   const [state, setState] = useState({
     busy: false,
     enabled: false,
-    login: null,
-    password: null,
-    showPassword: false,
+    server: null,
+    token: null,
   });
 
   const updateState = (value) => {
@@ -21,37 +20,28 @@ export function useLogin() {
   }
 
   useEffect(() => {
-    if (state.password && state.login && !state.enabled && state.login.includes('@')) {
+    if (state.token && state.server && !state.enabled) {
       updateState({ enabled: true });
     }
-    if ((!state.password || !state.login || !state.login.includes('@')) && state.enabled) {
+    if ((!state.token || !state.server) && state.enabled) {
       updateState({ enabled: false });
     }
-  }, [state.login, state.password]);
+  }, [state.server, state.token]);
 
   const actions = {
     config: () => {
       navigate('/admin');
     },
-    setLogin: (login) => {
-      updateState({ login });
+    setServer: (server) => {
+      updateState({ server });
     },
-    setPassword: (password) => {
-      updateState({ password });
+    setToken: (token) => {
+      updateState({ token });
     },
-    create: () => {
-      navigate('/create');
+    login: () => {
+      navigate('/login');
     },
-    reset: () => {
-      navigate('/reset');
-    },
-    showPassword: () => {
-      updateState({ showPassword: true });
-    },
-    hidePassword: () => {
-      updateState({ showPassword: false });
-    },
-    login: async () => {
+    access: async () => {
       if (!state.busy) {
         updateState({ busy: true });
         try {
