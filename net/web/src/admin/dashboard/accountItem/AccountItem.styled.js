@@ -88,7 +88,21 @@ export const AccessLayout = styled.div`
     display: flex;
     flex-direction: row;
     width: 100%;
-   
+    padding-top: 8px;
+
+    .label {
+      padding-right: 16px;
+      width: 112px;
+    }
+
+    .token {
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      min-width: 0;
+      padding-right: 8px;
+    }  
+ 
     .link {
       text-overflow: ellipsis;
       overflow: hidden;

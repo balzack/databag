@@ -78,14 +78,21 @@ export function AccountItem({ token, item, remove }) {
           </>
         )}
       </div>
-      <Modal title="Access Account Link" visible={state.showAccess} centered width="fitContent"
+      <Modal title="Access Account" visible={state.showAccess} centered width="fitContent"
           footer={[ <Button type="primary" onClick={() => actions.setShowAccess(false)}>OK</Button> ]}
           onCancel={() => actions.setShowAccess(false)}>
         <AccessLayout>
           <div class="url">
+            <div class="label">Browser Link:</div>
             <div class="link">{accessLink()}</div>
             <Button icon={<CopyOutlined />} size="small"
               onClick={() => onClipboard(accessLink())}/>
+          </div>
+          <div class="url">
+            <div class="label">App Token:</div>
+            <div class="token">{state.accessToken}</div>
+            <Button icon={<CopyOutlined />} size="small"
+              onClick={() => onClipboard(state.accessToken)} />
           </div>
         </AccessLayout>
       </Modal>  

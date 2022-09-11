@@ -122,14 +122,21 @@ export function Dashboard({ token, config, logout }) {
           </div>
         </SettingsLayout>
       </Modal>
-      <Modal title="Create Account Link" visible={state.showCreate} centered width="fitContent"
+      <Modal title="Create Account" visible={state.showCreate} centered width="fitContent"
           footer={[ <Button type="primary" onClick={() => actions.setShowCreate(false)}>OK</Button> ]}
           onCancel={() => actions.setShowCreate(false)}>
         <CreateLayout>
           <div class="url">
+            <div class="label">Browser Link:</div>
             <div class="link">{createLink()}</div>
             <Button icon={<CopyOutlined />} size="small"
               onClick={() => onClipboard(createLink())} />
+          </div>
+          <div class="url">
+            <div class="label">App Token:</div>
+            <div class="token">{state.createToken}</div>
+            <Button icon={<CopyOutlined />} size="small"
+              onClick={() => onClipboard(state.createToken)} />
           </div>
         </CreateLayout>
       </Modal>    
