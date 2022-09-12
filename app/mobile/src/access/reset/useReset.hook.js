@@ -20,6 +20,12 @@ export function useReset() {
   }
 
   useEffect(() => {
+    if (app.state.session) {
+      navigate('/session');
+    }
+  }, [app.state.session]);
+
+  useEffect(() => {
     if (state.token && state.server && !state.enabled) {
       updateState({ enabled: true });
     }

@@ -4,15 +4,15 @@ import { setLogin } from 'api/setLogin';
 import { setAccountAccess } from 'api/setAccountAccess';
 import { addAccount } from 'api/addAccount';
 import { getUsername } from 'api/getUsername';
+import { StoreContext } from 'context/StoreContext';
 
 export function useAppContext() {
   const [state, setState] = useState({
     session: null,
     disconnected: null,
-    server: null,
-    token: null,
   });
   const [appRevision, setAppRevision] = useState();
+  const store = useContext(StoreContext);
 
   const delay = useRef(2);
   const ws = useRef(null);
@@ -44,33 +44,26 @@ export function useAppContext() {
   const appCreate = async (username, password, token) => {
     const acc = username.split('@');
     await addAccount(acc[0], acc[1], password, token);
-    let access = await setLogin(acc[0], acc[1], password)
-    setWebsocket(acc[1], access.appToken)
-    updateState({ session: true, token: access.appToken, server: acc[1] });
-    // store 
+    const access = await setLogin(acc[0], acc[1], password)
+    store.actions.setSession({ ...access, server: acc[1] });
   } 
 
   const appLogin = async (username, password) => {
     const acc = username.split('@');
-    let access = await setLogin(acc[0], acc[1], password)
-console.log(access);
-    setWebsocket(acc[1], access.appToken)
-    updateState({ session: true, token: access.appToken, server: acc[1] });
-    // store
+    const access = await setLogin(acc[0], acc[1], password)
+    store.actions.setSession({ ...access, server: acc[1] }); 
   }
 
   const appLogout = () => {
-    clearWebsocket();
-    updateState({ session: false, });
-    // store
+    store.actions.clearSession();
   }
 
   const setWebsocket = (server, token) => {
-
+    clearWebsocket();
     ws.current = new WebSocket(`wss://${server}/status`);
     ws.current.onmessage = (ev) => {
       try {
-        let rev = JSON.parse(ev.data);
+        const rev = JSON.parse(ev.data);
         setAppRevision(rev);
         updateState({ disconnected: false });
       }
@@ -104,15 +97,26 @@ console.log(access);
   }
  
   const clearWebsocket = ()  => {
-    ws.current.onclose = () => {}
-    ws.current.close()
-    ws.current = null
+    if (ws.current) {
+      ws.current.onclose = () => {}
+      ws.current.close()
+      ws.current = null
+    }
   }
 
   useEffect(() => {
-    updateState({ session: false });
-    // pull store set websocket
-  }, []);
+    if (store.state.init) {
+      if (store.state.session) {
+        const { server, appToken } = store.state.session;
+        setWebsocket(server, appToken);
+        updateState({ session: true });
+      }
+      else {
+        clearWebsocket();
+        updateState({ session: false });
+      }
+    }
+  }, [store.state.session, store.state.init]);
 
   return { state, actions }
 }

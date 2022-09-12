@@ -13,14 +13,13 @@ export function useRoot() {
   }
 
   useEffect(() => {
-
     if (app.state.session === true) {
       navigate('/session');
     }
     if (app.state.session === false) {
       navigate('/login');
     }
-  }, [app]);
+  }, [app.state]);
 
   const actions = {
   };

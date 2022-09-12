@@ -21,6 +21,12 @@ export function useLogin() {
   }
 
   useEffect(() => {
+    if (app.state.session) {
+      navigate('/session');
+    }
+  }, [app.state.session]);
+
+  useEffect(() => {
     if (state.password && state.login && !state.enabled && state.login.includes('@')) {
       updateState({ enabled: true });
     }
@@ -56,7 +62,6 @@ export function useLogin() {
         updateState({ busy: true });
         try {
           await app.actions.login(state.login, state.password);
-          navigate('/');
         }
         catch (err) {
           console.log(err);

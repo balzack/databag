@@ -39,6 +39,12 @@ export function useCreate() {
   }
 
   useEffect(() => {
+    if (app.state.session) {
+      navigate('/session');
+    }
+  }, [app.state.session]);
+
+  useEffect(() => {
     if (state.usernameChecked && state.serverChecked && state.tokenChecked &&
         state.password && state.username && state.server && state.confirm &&
         (!state.tokenRequired || state.tokenValid) &&
