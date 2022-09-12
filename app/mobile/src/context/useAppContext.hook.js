@@ -30,32 +30,20 @@ export function useAppContext() {
     available: getAvailable,
     username: getUsername,
     create: async (username, password, token) => {
-      await appCreate(username, password, token)
+      const acc = username.split('@');
+      await addAccount(acc[0], acc[1], password, token);
+      const access = await setLogin(acc[0], acc[1], password)
+      store.actions.setSession({ ...access, server: acc[1] });
     },
     login: async (username, password) => {
-      await appLogin(username, password)
+      const acc = username.split('@');
+      const access = await setLogin(acc[0], acc[1], password)
+      store.actions.setSession({ ...access, server: acc[1] }); 
     },
-    logout: () => {
-      appLogout();
+    logout: async () => {
       resetData();
+      await store.actions.clearSession();
     },
-  }
-
-  const appCreate = async (username, password, token) => {
-    const acc = username.split('@');
-    await addAccount(acc[0], acc[1], password, token);
-    const access = await setLogin(acc[0], acc[1], password)
-    store.actions.setSession({ ...access, server: acc[1] });
-  } 
-
-  const appLogin = async (username, password) => {
-    const acc = username.split('@');
-    const access = await setLogin(acc[0], acc[1], password)
-    store.actions.setSession({ ...access, server: acc[1] }); 
-  }
-
-  const appLogout = () => {
-    store.actions.clearSession();
   }
 
   const setWebsocket = (server, token) => {
