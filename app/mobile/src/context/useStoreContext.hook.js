@@ -7,49 +7,37 @@ export function useStoreContext() {
   const [state, setState] = useState({
     init: false,
     session: null,
-    revision: null,
+    sessionId: 0,
+    profileRevision: null,
+    cardRevision: null,
+    channelRevision: null,
+    accountRevision: null,
   });
   
   const db = useRef(null);
-  const loaded = useRef(false);
-  const syncing = useRef(false);
-  const setRevision = useRef(null);
-  const appRevision = useRef({});
-  const appSession = useRef(null);
+  const session = useRef(null);
+  const sessionId = useRef(0);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }))
   }
 
-  const setAppRevision = async () => {
-    if (syncing.current) {
-      return;
-    }
-    if (!setRevision.current) {
-      return;
-    }
-    if (!loaded.current) {
-      return;
-    }
-    if (!appSession.current) {
-      return;
-    }
+  useEffect(() => {
+    initialize();
+  }, []);
 
-    // sync revisions
-    syncing.current = true;
-    const rev = setRevision.current;
-    
-    try {
-      const id = `${appSession.current.guid}_revision`;
-      await db.current.executeSql(`UPDATE app SET value=? WHERE key='${id}';`, [encodeObject(rev)]);
-      appRevision.current = setRevision.current;
+  useEffect(() => {
+    if (state.init && state.session && sessionId.current === state.sessionId) {
+      const revision = {
+        accountRevision: state.accountRevision,
+        profileRevision: state.profileRevision,
+        cardRevision: state.cardRevision,
+        channelRevision: state.channelRevision,
+      }
+      const revisionId = `${session.current.guid}_revision`;
+      db.current.executeSql(`UPDATE app SET value=? WHERE key='${revisionId}';`, [encodeObject(revision)]);
     }
-    catch (err) {
-      console.log(err);
-    }
-
-    syncing.current = false;
-  };
+  }, [state]);
 
   const initialize = async () => {
     SQLite.DEBUG(false);
@@ -57,16 +45,16 @@ export function useStoreContext() {
     db.current = await SQLite.openDatabase({ name: DATABAG_DB, location: "default" });
     await db.current.executeSql("CREATE TABLE IF NOT EXISTS app (key text, value text, unique(key));");
     await db.current.executeSql("INSERT OR IGNORE INTO app (key, value) values ('session', null);");
-    await db.current.executeSql("INSERT OR IGNORE INTO app (key, value) values ('revision', null);");
 
-    appSession.current = await getAppValue(db.current, 'session');
-    if (appSession.current) {
-      const revisionId = `${appSession.current.guid}_revision`;
-      appRevision.currrent = await getAppValue(db.current, revisionId);
+    session.current = await getAppValue(db.current, 'session');
+    if (!session.current) {
+      updateState({ init: true });
     }
-
-    loaded.current = true;
-    updateState({ init: true, session: appSession.current, revision: appRevision.current });
+    else {
+      const revisionId = `${session.current.guid}_revision`;
+      const revision = await getAppValue(db.current, revisionId, {});
+      updateState({ init: true, session: session.current, ...revision });
+    }
   };
 
   const actions = {
@@ -74,25 +62,38 @@ export function useStoreContext() {
       await db.current.executeSql("UPDATE app SET value=? WHERE key='session';", [encodeObject(access)]);
 
       const revisionId = `${access.guid}_revision`;
-      appRevision.currrent = await getAppValue(db.current, revisionId);
+      const revision = await getAppValue(db.current, revisionId, {});
 
-      appSession.current = access;
-      updateState({ session: access, revision: appRevision.current });
+      session.current = access;
+      sessionId.current++;
+      updateState({ session: access, sessionId: sessionId.current, ...revision });
     },
     clearSession: async () => {
       await db.current.executeSql("UPDATE app set value=? WHERE key='session';", [null]);
-      appSession.current = null;
+      session.current = null;
       updateState({ session: null });
     },
-    setRevision: (rev) => {
-      setRevision.current = rev;
-      setAppRevision();
+    setProfileRevision: (id, profileRevision) => {
+      if (sessionId.current === id) {
+        updateState({ profileRevision });
+      }
+    },
+    setAccountRevision: (id, accountRevision) => {
+      if (sessionId.current === id) {
+        updateState({ accountRevision });
+      }
+    },
+    setCardRevision: (id, cardRevision) => {
+      if (sessionId.current === id) {
+        updateState({ cardRevision });
+      }
+    },
+    setChannelRevision: (channelRevision) => {
+      if (sessionId.current === id) {
+        updateState({ channelRevision });
+      }
     },
   }
-
-  useEffect(() => {
-    initialize();
-  }, []);
 
   return { state, actions }
 }
@@ -118,12 +119,12 @@ function hasResult(res) {
   return true;
 }
 
-async function getAppValue(sql: SQLite.SQLiteDatabase, id: string) {
+async function getAppValue(sql: SQLite.SQLiteDatabase, id: string, unset) {
   const res = await sql.executeSql(`SELECT * FROM app WHERE key='${id}';`);
   if (hasResult(res)) {
     return decodeObject(res[0].rows.item(0).value);
   }
-  return null;
+  return unset;
 }
 
 
