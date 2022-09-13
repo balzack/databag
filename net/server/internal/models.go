@@ -318,6 +318,8 @@ type IDList struct {
 
 //LoginAccess response object when app is associated
 type LoginAccess struct {
+  GUID string `json:"guid"`
+
 	AppToken string `json:"appToken"`
 
 	Created int64 `json:"created"`

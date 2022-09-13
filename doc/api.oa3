@@ -3230,9 +3230,12 @@ components:
     LoginAccess {
       type: object
       required:
+        - guid
         - appToken
         - created
       properties:
+        guid:
+          type: string
         appToken:
           type: string
         created:

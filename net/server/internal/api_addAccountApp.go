@@ -55,6 +55,7 @@ func AddAccountApp(w http.ResponseWriter, r *http.Request) {
 	}
 
 	login := LoginAccess{
+    GUID: account.GUID,
 		AppToken: account.GUID + "." + access,
 		Created:  app.Created,
 	}
