@@ -9,11 +9,11 @@ export function Reset() {
 
   const reset = async () => {
     try {
-      await actions.reset();
+      await actions.access();
     }
     catch (err) {
       Alert.alert(
-        "Reset Failed",
+        "Access Failed",
         "Please check your server and token.",
       );
     }

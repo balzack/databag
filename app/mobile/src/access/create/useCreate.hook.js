@@ -173,14 +173,14 @@ export function useCreate() {
     },
     create: async () => {
       if (!state.busy) {
-        updateState({ busy: true });
         try {
-          await app.actions.create(state.login, state.password);
-          navigate('/');
+          updateState({ busy: true });
+          await app.actions.create(state.server, state.username, state.password, state.token);
+          updateState({ busy: false });
         }
         catch (err) {
           console.log(err);
-          updateState({ busy: false, showAlert: true });
+          updateState({ busy: false });
           throw new Error('create failed');
         }
         updateState({ busy: false });

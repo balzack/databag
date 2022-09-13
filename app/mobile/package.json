@@ -19,8 +19,7 @@
     "react-native-sqlite-storage": "^6.0.1",
     "react-native-web": "~0.18.7",
     "react-router-dom": "6",
-    "react-router-native": "^6.3.0",
-    "styled-components": "^5.3.5"
+    "react-router-native": "^6.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9"

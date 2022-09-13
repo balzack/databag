@@ -49,17 +49,16 @@ export function useReset() {
     },
     access: async () => {
       if (!state.busy) {
-        updateState({ busy: true });
         try {
-          await app.actions.login(state.login, state.password);
-          navigate('/');
+          updateState({ busy: true });
+          await app.actions.access(state.server, state.token);
+          updateState({ busy: false });
         }
         catch (err) {
           console.log(err);
-          updateState({ busy: false, showAlert: true });
-          throw new Error('login failed');
+          updateState({ busy: false });
+          throw new Error("access failed");
         }
-        updateState({ busy: false });
       }
     }
   };

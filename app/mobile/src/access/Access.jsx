@@ -1,5 +1,5 @@
-import { SafeAreaView, View } from 'react-native';
-import { Wrapper, Container, PaddedPane, Pane, Splash } from './Access.styled';
+import { SafeAreaView, Image, View } from 'react-native';
+import { styles } from './Access.styled';
 import { useAccess } from './useAccess.hook';
 import { Login } from './login/Login';
 import { Create } from './create/Create';
@@ -11,14 +11,14 @@ export function Access({ mode }) {
   const { state, actions } = useAccess();
 
   return (
-    <Wrapper>
+    <View style={styles.wrapper}>
       <SafeAreaView>
         { state.split === true && (
-          <Container>
-            <PaddedPane>
-              <Splash source={logo} />
-            </PaddedPane>
-            <Pane>
+          <View style={styles.container}>
+            <View style={styles.paddedPane}>
+              <Image style={styles.splash} source={logo} />
+            </View>
+            <View style={styles.pane}>
               { mode === 'login' && (
                 <Login />
               )}
@@ -28,11 +28,11 @@ export function Access({ mode }) {
               { mode === 'reset' && (
                 <Reset />
               )}
-            </Pane>
-          </Container>
+            </View>
+          </View>
         )}
         { state.split === false && (
-          <Container>
+          <View style={styles.container}>
             { mode === 'login' && (
               <Login />
             )}
@@ -42,10 +42,10 @@ export function Access({ mode }) {
             { mode === 'reset' && (
               <Reset />
             )}
-          </Container>
+          </View>
         )}
       </SafeAreaView>
-    </Wrapper>
+    </View>
   );
 }
 

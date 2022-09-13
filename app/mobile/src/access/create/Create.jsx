@@ -14,7 +14,7 @@ export function Create() {
     catch (err) {
       Alert.alert(
         "Create Failed",
-        "Please check your username and password.",
+        "Please check your server and token.",
       );
     }
   }

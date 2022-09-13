@@ -1,7 +1,8 @@
-import { RootWrapper } from './Root.styled';
+import { View } from 'react-native';
+import { styles } from './Root.styled';
 import { useRoot } from './useRoot.hook';
 
 export function Root() {
   const root = useRoot();
-  return <RootWrapper />
+  return <View style={styles.wrapper} />
 }
