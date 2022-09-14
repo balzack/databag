@@ -5,25 +5,47 @@ import { setAccountAccess } from 'api/setAccountAccess';
 import { addAccount } from 'api/addAccount';
 import { getUsername } from 'api/getUsername';
 import { StoreContext } from 'context/StoreContext';
+import { ProfileContext } from 'context/ProfileContext';
 
 export function useAppContext() {
   const [state, setState] = useState({
     session: null,
     disconnected: null,
   });
-  const [appRevision, setAppRevision] = useState();
   const store = useContext(StoreContext);
+  const profile = useContext(ProfileContext);
 
   const delay = useRef(2);
   const ws = useRef(null);
-  const revision = useRef(null);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }))
   }
 
-  const resetData = () => {
-    revision.current = null;
+  useEffect(() => {
+    init();
+  }, []);
+
+  const init = async () => {
+    const access = await store.actions.init();
+    if (access) {
+      await setSession(access);
+    }
+    else {
+      updateState({ session: false });
+    }
+  }
+
+  const setSession = async (access) => {
+    profile.actions.setSession(access);
+    updateState({ session: true });
+    setWebsocket(access.server, access.appToken);
+  }
+
+  const clearSession = async () => {
+    profile.actions.clearSession();
+    updateState({ session: false });
+    clearWebsocket();
   }
 
   const actions = {
@@ -32,19 +54,22 @@ export function useAppContext() {
     create: async (server, username, password, token) => {
       await addAccount(server, username, password, token);
       const access = await setLogin(username, server, password)
-      store.actions.setSession({ ...access, server });
+      await setSession({ ...access, server });
+      await store.actions.setSession({ ...access, server});
     },
     access: async (server, token) => {
       const access = await setAccountAccess(server, token);
-      store.actions.setSession({ ...access, server });
+      await setSession({ ...access, server });
+      await store.actions.setSession({ ...access, server});
     },
     login: async (username, password) => {
       const acc = username.split('@');
       const access = await setLogin(acc[0], acc[1], password)
-      store.actions.setSession({ ...access, server: acc[1] }); 
+      await setSession({ ...access, server: acc[1] }); 
+      await store.actions.setSession({ ...access, server: acc[1]});
     },
     logout: async () => {
-      resetData();
+      await clearSession();
       await store.actions.clearSession();
     },
   }
@@ -55,7 +80,7 @@ export function useAppContext() {
     ws.current.onmessage = (ev) => {
       try {
         const rev = JSON.parse(ev.data);
-        setAppRevision(rev);
+        profile.actions.setRevision(rev.profileRevision);
         updateState({ disconnected: false });
       }
       catch (err) {
@@ -94,20 +119,6 @@ export function useAppContext() {
       ws.current = null
     }
   }
-
-  useEffect(() => {
-    if (store.state.init) {
-      if (store.state.session) {
-        const { server, appToken } = store.state.session;
-        setWebsocket(server, appToken);
-        updateState({ session: true });
-      }
-      else {
-        clearWebsocket();
-        updateState({ session: false });
-      }
-    }
-  }, [store.state.session, store.state.init]);
 
   return { state, actions }
 }

@@ -1,4 +1,4 @@
-export function getProfileImageUrl(token, revision) {
-  return '/profile/image?agent=' + token + "&revision=" + revision
+export function getProfileImageUrl(server, token, revision) {
+  return `https://${server}/profile/image?agent=${token}&revision=${revision}`;
 }
 
