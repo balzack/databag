@@ -1,7 +1,7 @@
 import { checkResponse, fetchWithTimeout } from './fetchUtil';
 
-export async function getAccountStatus(token) {
-  let status = await fetchWithTimeout('/account/status?agent=' + token, { method: 'GET' });
+export async function getAccountStatus(server, token) {
+  let status = await fetchWithTimeout(`https://${server}/account/status?agent=${token}`, { method: 'GET' });
   checkResponse(status);
   return await status.json()
 }

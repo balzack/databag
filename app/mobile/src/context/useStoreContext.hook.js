@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef, useContext } from 'react';
 import SQLite from "react-native-sqlite-storage";
 
-const DATABAG_DB = 'databag_v001.db';
+const DATABAG_DB = 'databag_v005.db';
 
 export function useStoreContext() {
   const [state, setState] = useState({});
@@ -26,13 +26,15 @@ export function useStoreContext() {
     clearSession: async () => {
       await db.current.executeSql("UPDATE app set value=? WHERE key='session';", [null]);
     },
+
     getProfile: async (guid) => {
       const dataId = `${guid}_profile`;
       return await getAppValue(db.current, dataId, {});
     },
     setProfile: async (guid, profile) => {
       const dataId = `${guid}_profile`;
-      await db.current.executeSql("UPDATE app SET value=? WHERE key='?';", [encodeObject(profile)], dataId);
+      await db.current.executeSql("INSERT OR IGNORE INTO app (key, value) values (?, null);", [dataId]);
+      await db.current.executeSql("UPDATE app SET value=? WHERE key=?;", [encodeObject(profile), dataId]);
     },
     getProfileRevision: async (guid) => {
       const dataId = `${guid}_profileRevision`;
@@ -40,8 +42,28 @@ export function useStoreContext() {
     },
     setProfileRevision: async (guid, revision) => {
       const dataId = `${guid}_profileRevision`;
-      await db.current.executeSql("UPDATE app SET value=? WHERE key='?';", [encodeObject(revision)], dataId);
+      await db.current.executeSql("INSERT OR IGNORE INTO app (key, value) values (?, 0);", [dataId]);
+      await db.current.executeSql("UPDATE app SET value=? WHERE key=?;", [encodeObject(revision), dataId]);
     },
+
+    getAccountStatus: async (guid) => {
+      const dataId = `${guid}_status`;  
+      return await getAppValue(db.current, dataId, {});
+    },
+    setAccountStatus: async (guid, status) => {
+      const dataId = `${guid}_status`;
+      await db.current.executeSql("INSERT OR IGNORE INTO app (key, value) values (?, null);", [dataId]);
+      await db.current.executeSql("UPDATE app SET value=? WHERE key=?;", [encodeObject(status), dataId]);
+    },
+    getAccountRevision: async (guid) => {
+      const dataId = `${guid}_accountRevision`;
+      return await getAppValue(db.current, dataId, 0);
+    },
+    setAccountRevision: async (guid, revision) => {
+      const dataId = `${guid}_accountRevision`;
+      await db.current.executeSql("INSERT OR IGNORE INTO app (key, value) values (?, 0);", [dataId]);
+      await db.current.executeSql("UPDATE app SET value=? WHERE key=?;", [encodeObject(revision), dataId]);
+    }, 
   }
   return { state, actions }
 }
@@ -65,6 +87,14 @@ function hasResult(res) {
     return false;
   }
   return true;
+}
+
+function executeSql(sql: SQLite.SQLiteDatabase, query, params, uset) {
+  return new Promise((resolve, reject) => {
+    sql.executeSql(query, params, (tx, results) => {
+      resolve(results);
+    });
+  });
 }
 
 async function getAppValue(sql: SQLite.SQLiteDatabase, id: string, unset) {

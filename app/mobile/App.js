@@ -7,26 +7,29 @@ import { Session } from 'src/session/Session';
 import { Admin } from 'src/admin/Admin';
 import { StoreContextProvider } from 'context/StoreContext';
 import { AppContextProvider } from 'context/AppContext';
+import { AccountContextProvider } from 'context/AccountContext';
 import { ProfileContextProvider } from 'context/ProfileContext';
 
 export default function App() {
 
   return (
     <StoreContextProvider>
-      <ProfileContextProvider>
-        <AppContextProvider>
-          <NativeRouter>
-            <Routes>
-              <Route path="/" element={ <Root /> } />
-              <Route path="/admin" element={ <Admin /> } />
-              <Route path="/login" element={ <Access mode="login" /> } />
-              <Route path="/reset" element={ <Access mode="reset" /> } />
-              <Route path="/create" element={ <Access mode="create" /> } />
-              <Route path="/session" element={ <Session/> } />
-            </Routes>
-          </NativeRouter>
-        </AppContextProvider>
-      </ProfileContextProvider>
+      <AccountContextProvider>
+        <ProfileContextProvider>
+          <AppContextProvider>
+            <NativeRouter>
+              <Routes>
+                <Route path="/" element={ <Root /> } />
+                <Route path="/admin" element={ <Admin /> } />
+                <Route path="/login" element={ <Access mode="login" /> } />
+                <Route path="/reset" element={ <Access mode="reset" /> } />
+                <Route path="/create" element={ <Access mode="create" /> } />
+                <Route path="/session" element={ <Session/> } />
+              </Routes>
+            </NativeRouter>
+          </AppContextProvider>
+        </ProfileContextProvider>
+      </AccountContextProvider>
     </StoreContextProvider>
   );
 }

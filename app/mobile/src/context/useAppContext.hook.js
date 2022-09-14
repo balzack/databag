@@ -5,6 +5,7 @@ import { setAccountAccess } from 'api/setAccountAccess';
 import { addAccount } from 'api/addAccount';
 import { getUsername } from 'api/getUsername';
 import { StoreContext } from 'context/StoreContext';
+import { AccountContext } from 'context/AccountContext';
 import { ProfileContext } from 'context/ProfileContext';
 
 export function useAppContext() {
@@ -13,6 +14,7 @@ export function useAppContext() {
     disconnected: null,
   });
   const store = useContext(StoreContext);
+  const account = useContext(AccountContext);
   const profile = useContext(ProfileContext);
 
   const delay = useRef(2);
@@ -37,12 +39,14 @@ export function useAppContext() {
   }
 
   const setSession = async (access) => {
-    profile.actions.setSession(access);
+    await account.actions.setSession(access);
+    await profile.actions.setSession(access);
     updateState({ session: true });
     setWebsocket(access.server, access.appToken);
   }
 
   const clearSession = async () => {
+    account.actions.clearSession();
     profile.actions.clearSession();
     updateState({ session: false });
     clearWebsocket();
@@ -80,7 +84,8 @@ export function useAppContext() {
     ws.current.onmessage = (ev) => {
       try {
         const rev = JSON.parse(ev.data);
-        profile.actions.setRevision(rev.profileRevision);
+        profile.actions.setRevision(rev.profile);
+        account.actions.setRevision(rev.account);
         updateState({ disconnected: false });
       }
       catch (err) {
