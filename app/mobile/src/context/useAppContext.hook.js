@@ -7,6 +7,7 @@ import { getUsername } from 'api/getUsername';
 import { StoreContext } from 'context/StoreContext';
 import { AccountContext } from 'context/AccountContext';
 import { ProfileContext } from 'context/ProfileContext';
+import { CardContext } from 'context/CardContext';
 import { ChannelContext } from 'context/ChannelContext';
 
 export function useAppContext() {
@@ -17,6 +18,7 @@ export function useAppContext() {
   const store = useContext(StoreContext);
   const account = useContext(AccountContext);
   const profile = useContext(ProfileContext);
+  const card = useContext(CardContext);
   const channel = useContext(ChannelContext);
 
   const delay = useRef(2);
@@ -43,6 +45,7 @@ export function useAppContext() {
   const setSession = async (access) => {
     await account.actions.setSession(access);
     await profile.actions.setSession(access);
+    await card.actions.setSession(access);
     await channel.actions.setSession(access);
     updateState({ session: true });
     setWebsocket(access.server, access.appToken);
@@ -51,6 +54,7 @@ export function useAppContext() {
   const clearSession = async () => {
     account.actions.clearSession();
     profile.actions.clearSession();
+    card.actions.clearSession();
     channel.actions.clearSession();
     updateState({ session: false });
     clearWebsocket();
@@ -91,7 +95,8 @@ export function useAppContext() {
         try {
           profile.actions.setRevision(rev.profile);
           account.actions.setRevision(rev.account);
-          channel.actions.setRevision(rev.channel);
+          card.actions.setRevision(rev.channel);
+          channel.actions.setRevision(rev.card);
         }
         catch(err) {
           console.log(err);

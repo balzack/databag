@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef, useContext } from 'react';
 import SQLite from "react-native-sqlite-storage";
 
-const DATABAG_DB = 'databag_v011.db';
+const DATABAG_DB = 'databag_v015.db';
 
 export function useStoreContext() {
   const [state, setState] = useState({});
@@ -13,7 +13,10 @@ export function useStoreContext() {
 
   const initSession = async (guid) => {
     await db.current.executeSql(`CREATE TABLE IF NOT EXISTS channel_${guid} (channel_id text, revision integer, detail_revision integer, topic_revision integer, detail text, summary text, unique(channel_id))`);
-    await db.current.executeSql(`CREATE TABLE IF NOT EXISTS topic_${guid} (channel_id text, topic_id text, revision integer, detail_revision integer, detail text, unique(channel_id, topic_id))`);
+    await db.current.executeSql(`CREATE TABLE IF NOT EXISTS channel_topic_${guid} (channel_id text, topic_id text, revision integer, detail_revision integer, detail text, unique(channel_id, topic_id))`);
+    await db.current.executeSql(`CREATE TABLE IF NOT EXISTS card_${guid} (card_id text, revision integer, detail_revision integer, profile_revision integer, detail text, profile text, notified_view integer, notified_article integer, notified_profile integer, notified_channel integer, unique(card_id))`);
+    await db.current.executeSql(`CREATE TABLE IF NOT EXISTS contact_channel_${guid} (card_id text, channel_id text, revision integer, detail_revision integer, topic_revision integer, detail text, summary text, unique(card_id, channel_id))`);
+    await db.current.executeSql(`CREATE TABLE IF NOT EXISTS contact_channel_topic_${guid} (card_id text, channel_id text, topic_id text, revision integer, detail_revision integer, detail text, unique(card_id, channel_id, topic_id))`);
   }
 
   const actions = {
@@ -74,7 +77,65 @@ export function useStoreContext() {
     setCardRevision: async (guid, revision) => {
       const dataId = `${guid}_cardRevision`;
       await db.current.executeSql("INSERT OR REPLACE INTO app (key, value) values (?, ?);", [dataId, encodeObject(revision)]);
-    }, 
+    },
+    setCardItem: async (guid, card) => {
+      const { id, revision, data } = card;
+      await db.current.executeSql(`INSERT OR REPLACE INTO card_${guid} (card_id, revision, detail_revision, profile_revision, detail, profile, notified_view, notified_profile, notified_article, notified_channel) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`, [id, revision, data.detailRevision, data.profileRevision, encodeObject(data.cardDetail), encodeObject(data.cardProfile), data.notifiedView, data.notifiedProfile, data.notifiedArticle, data.notifiedChannel]);
+    },
+    clearCardItem: async (guid, cardId) => {
+      await db.current.executeSql(`DELETE FROM card_${guid} WHERE card_id=?`, [cardId]);
+    },
+    setCardItemRevision: async (guid, cardId, revision) => {
+      await db.current.executeSql(`UPDATE card_${guid} set revision=? where card_id=?`, [revision, cardId]);
+    },
+    setCardItemNotifiedView: async (guid, cardId, notified) => {
+      await db.current.executeSql(`UPDATE card_${guid} set notified_view=? where card_id=?`, [notified, cardId]);
+    },
+    setCardItemNotifiedArtcile: async (guid, cardId, notified) => {
+      await db.current.executeSql(`UPDATE card_${guid} set notified_article=? where card_id=?`, [notified, cardId]);
+    },
+    setCardItemNotifiedProfile: async (guid, cardId, notified) => {
+      await db.current.executeSql(`UPDATE card_${guid} set notified_profile=? where card_id=?`, [notified, cardId]);
+    },
+    setCardItemNotifiedChannel: async (guid, cardId, notified) => {
+      await db.current.executeSql(`UPDATE card_${guid} set notified_channel=? where card_id=?`, [notified, cardId]);
+    },
+    setCardItemDetail: async (guid, cardId, revision, detail) => {
+      await db.current.executeSql(`UPDATE card_${guid} set detail_revision=?, detail=? where card_id=?`, [revision, encodeObject(detail), cardId]);
+    },
+    setCardItemProfile: async (guid, cardId, revision, profile) => {
+      await db.current.executeSql(`UPDATE card_${guid} set profile_revision=?, profile=? where card_id=?`, [revision, encodeObject(profile), cardId]);
+    },
+    getCardItemView: async (guid, cardId) => {
+      const values = await getAppValues(db.current, `SELECT revision, detail_revision, profile_revision, notifed_view, notified_article, notifed_profile, notified_channel FROM card_${guid} WHERE card_id=?`, [cardId]);
+      if (!values.length) {
+        return {};
+      }
+      return {
+        revision: values[0].revision,
+        detailRevision: values[0].detail_revision,
+        profileRevision: values[0].profile_revision,
+        notifiedView: values[0].notified_view,
+        notifiedArticle: values[0].notified_article,
+        notifiedProfile: values[0].notified_profile,
+        notifiedChannel: values[0].notified_cahnnel,
+      };
+    },
+    getCardItems: async (guid) => {
+      const values = await getAppValues(db.current, `SELECT card_id, revision, detail_revision, profile_revision, detail, profile, notified_view, notified_profile, notified_article, notified_channel FROM channel_${guid}`, []);
+      return values.map(card => ({
+        cardId: card.card_id,
+        revision: card.revision,
+        detailRevision: card.detail_revision,
+        profileRevision: card.profile_revision,
+        detail: decodeObject(card.detail),
+        profile: decodeObject(card.profile),
+        notifiedView: card.notified_view,
+        notifiedProfile: card.notified_profile,
+        notifiedArticle: card.notified_article,
+        notifiedChannel: card.notified_channel,
+      }));
+    },
 
     getChannelRevision: async (guid) => {
       const dataId = `${guid}_channelRevision`;
@@ -101,7 +162,6 @@ export function useStoreContext() {
       await db.current.executeSql(`UPDATE channel_${guid} set topic_revision=?, summary=? where channel_id=?`, [revision, encodeObject(summary), channelId]);
     },
     getChannelItemView: async (guid, channelId) => {
-console.log("HERE", channelId);
       const values = await getAppValues(db.current, `SELECT revision, detail_revision, topic_revision FROM channel_${guid} WHERE channel_id=?`, [channelId]);
       if (!values.length) {
         return {};

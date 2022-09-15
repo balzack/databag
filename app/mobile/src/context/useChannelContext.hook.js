@@ -48,7 +48,7 @@ export function useChannelContext() {
             }
           }
           else {
-            await store.actions.clearChannelItem(channel.id);
+            await store.actions.clearChannelItem(guid, channel.id);
           }
         }
 
