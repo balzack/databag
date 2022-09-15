@@ -1,12 +1,8 @@
 import { useState, useRef, useContext } from 'react';
 import { StoreContext } from 'context/StoreContext';
-import { setAccountSearchable } from 'api/setAccountSearchable';
-import { getAccountStatus } from 'api/getAccountStatus';
-import { setAccountLogin } from 'api/setAccountLogin';
 
-export function useAccountContext() {
+export function useCardContext() {
   const [state, setState] = useState({
-    status: {},
   });
   const store = useContext(StoreContext);
 
@@ -26,9 +22,9 @@ export function useAccountContext() {
       try {
         const revision = curRevision.current;
         const { server, appToken, guid } = session.current;
-        const status = await getAccountStatus(server, appToken);
-        await store.actions.setAccountStatus(guid, status);
-        await store.actions.setAccountRevision(guid, revision);
+
+        // get and store
+
         updateState({ status });
         setRevision.current = revision;
       }
@@ -46,9 +42,13 @@ export function useAccountContext() {
   const actions = {
     setSession: async (access) => {
       const { guid, server, appToken } = access;
-      const status = await store.actions.getAccountStatus(guid);
-      const revision = await store.actions.getAccountRevision(guid);
-      updateState({ status });
+
+      // load
+
+      const revision = await store.actions.getCardRevision(guid);
+
+      // update
+ 
       setRevision.current = revision;
       curRevision.current = revision;
       session.current = access;
@@ -61,17 +61,8 @@ export function useAccountContext() {
       curRevision.current = rev;
       sync();
     },
-    setSearchable: async (flag) => {
-      const { server, appToken } = access;
-      await setAccountSearchable(server, appToken, flag);
-    },
-    setLogin: async (username, password) => {
-      const { server, appToken } = access;
-      await setAccountLogin(server, appToken, username, password);
-    },
   }
 
   return { state, actions }
 }
-
 

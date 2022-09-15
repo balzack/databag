@@ -36,6 +36,8 @@ export function useProfileContext() {
       }
       catch(err) {
         console.log(err);
+        syncing.current = false;
+        return;
       }
 
       syncing.current = false;
