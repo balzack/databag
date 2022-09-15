@@ -28,7 +28,6 @@ export function useCardContext() {
 
         // get and store
         const delta = await getCards(server, appToken, setRevision.current);
-console.log("DELTA:", delta);
 
         for (let card of delta) {
           if (card.data) {
@@ -36,42 +35,53 @@ console.log("DELTA:", delta);
               await store.actions.setCardItem(guid, card);
             }
             else {
-              const { detailRevision, profileRevision, cardDetail, cardProfile, notifiedView, notifiedArticle, notifiedProfile, notifiedChannel } = channel.data;
               const view = await store.actions.getCardItemView(guid, card.id);
-              if (view.detailRevision != detailRevision) {
-                const detail = await getCardDetail(server, appToken, card.id);
-                await store.actions.setCardItemDetail(guid, card.id, detailRevision, detail);
-              }
-              if (view.profileRevision != profileRevision) {
-                const profile = await getCardProfile(server, appToken, card.id);
-                await store.actions.setCardItemProfile(guid, card.id, profileRevision, profile);
-              }
-              if (view.notifiedView != notifiedView) {
-                // TODO clear contact and channels
-                // TODO get articles
-                await store.actions.setCardNotifiedArticle(guid, card.id, notifiedArticle);
-                // TODO get channels
-                await store.actions.setCardNotifiedChannel(guid, card.id, notifiedChannel);
-                
-                await store.actions.setCardNotifiedView(guid, card.id, notifiedView);
+              if (view == null) {
+                console.log('alert: expected card not synced');
+                let assembled = JSON.parse(JSON.stringify(card));
+                assembled.data.cardDetail = await getCardDetail(server, appToken, card.id);
+                assembled.data.cardProfile = await getCardProfile(server, appToken, card.id);
+                await store.actions.setCardItem(guid, assembled);
               }
               else {
-                if (view.notifiedArticle != notifiedArticle) {
-                  // TODO get article delta
-                  await store.actions.setCardNotifiedArticle(guid, card.id, notifiedArticle);
+                if (view.detailRevision != detailRevision) {
+                  const detail = await getCardDetail(server, appToken, card.id);
+                  await store.actions.setCardItemDetail(guid, card.id, detailRevision, detail);
                 }
-                if (view.notifiedChannel != notifiedChannel) {
-                  // TODO get channel delta
-                  await store.actions.setCardNotifiedChannel(guid, card.id, notifiedChannel);
+                if (view.profileRevision != profileRevision) {
+                  const profile = await getCardProfile(server, appToken, card.id);
+                  await store.actions.setCardItemProfile(guid, card.id, profileRevision, profile);
                 }
               }
-              if (view.notifiedProflile != notifiedProfile) {
-                // TODO update contact profile
-                await store.actions.setCardNotifiedProfile(guid, card.id, notifiedProfile);
+            }
+
+            const status = await store.actions.getCardItemStatus(guid, card.id);
+            if (status.detail.status === 'connected') {
+              const { notifiedView, notifiedProfile, notifiedArticle, notifiedChannel } = card.data;
+              if (status.notifiedView !== notifiedView) {
+                // TODO clear contact and channels
+                // TODO get articles
+                await store.actions.setCardItemNotifiedArticle(guid, card.id, notifiedArticle);
+                // TODO get channels
+                await store.actions.setCardItemNotifiedChannel(guid, card.id, notifiedChannel);
+                
+                await store.actions.setCardItemNotifiedView(guid, card.id, notifiedView);
+              }
+              else {
+                if (status.notifiedChannel != notifiedChannel) {
+                  // TODO get channel delta
+                  await store.actions.setCardItemNotifiedChannel(guid, card.id, notifiedChannel);
+                }
+              }
+              if (status.notifiedProflile != notifiedProfile) {
+                // TODO update contact profile if different
+                await store.actions.setCardItemNotifiedProfile(guid, card.id, notifiedProfile);
               }
             }
           }
           else {
+            //TODO clear card channel topics
+            await store.actions.clearCardChannelItems(guid, card.id); 
             await store.actions.clearCardItem(guid, card.id);
           }
         }
