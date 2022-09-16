@@ -16,6 +16,9 @@ export const Colors = {
   text: '#444444',
   link: '#0077CC',
 
+  active: '#222222',
+  idle: '#707070',
+
   itemDivider: '#eeeeee',
   
   connected: '#44cc44',
