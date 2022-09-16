@@ -4,6 +4,7 @@ import { getCards } from 'api/getCards';
 import { getCardProfile } from 'api/getCardProfile';
 import { getCardDetail } from 'api/getCardDetail';
 
+import { getContactChannels } from 'api/getContactChannels';
 import { getContactChannelTopics } from 'api/getContactChannelTopics';
 import { getContactChannelDetail } from 'api/getContactChannelDetail';
 import { getContactChannelSummary } from 'api/getContactChannelSummary';
@@ -60,20 +61,20 @@ export function useCardContext() {
             }
 
             const status = await store.actions.getCardItemStatus(guid, card.id);
-            const cardServer = status.cardProfile.node;
-            const cardToken = status.cardDetail.token;
+            const cardServer = status.profile.node;
+            const cardToken = status.profile.guid + '.' + status.detail.token;
             if (status.detail.status === 'connected') {
               try {
                 const { notifiedView, notifiedProfile, notifiedArticle, notifiedChannel } = card.data;
                 if (status.notifiedView !== notifiedView) {
                   await store.actions.clearCardChannelItems(guid, card.id);
-                  await updateCardChannelItems(guid, card.id, cardServer, cardToken, notifiedView, null);
+                  await updateCardChannelItems(card.id, cardServer, cardToken, notifiedView, null);
                   await store.actions.setCardItemNotifiedChannel(guid, card.id, notifiedChannel);
                   await store.actions.setCardItemNotifiedView(guid, card.id, notifiedView);
                 }
                 else {
                   if (status.notifiedChannel != notifiedChannel) {
-                    await updateCardChannelItems(guid, card.id, cardServer, cardToken, status.notifiedChannel)
+                    await updateCardChannelItems(card.id, cardServer, cardToken, status.notifiedChannel)
                     await store.actions.setCardItemNotifiedChannel(guid, card.id, notifiedView, notifiedChannel);
                   }
                 }
@@ -82,12 +83,12 @@ export function useCardContext() {
                   await store.actions.setCardItemNotifiedProfile(guid, card.id, notifiedProfile);
                 }
                 if (status.offsync) {
-                  await store.actions.clearCardItemOffsync(guid, cardId);
+                  await store.actions.clearCardItemOffsync(guid, card.id);
                 }
               }
               catch(err) {
                 console.log(err);
-                await store.actions.setCardItemOffsync(guid, cardId);
+                await store.actions.setCardItemOffsync(guid, card.id);
               } 
             }
           }
