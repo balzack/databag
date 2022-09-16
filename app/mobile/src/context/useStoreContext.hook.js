@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef, useContext } from 'react';
 import SQLite from "react-native-sqlite-storage";
 
-const DATABAG_DB = 'databag_v016.db';
+const DATABAG_DB = 'databag_v017.db';
 
 export function useStoreContext() {
   const [state, setState] = useState({});
@@ -12,10 +12,10 @@ export function useStoreContext() {
   }
 
   const initSession = async (guid) => {
-    await db.current.executeSql(`CREATE TABLE IF NOT EXISTS channel_${guid} (channel_id text, revision integer, detail_revision integer, topic_revision integer, detail text, summary text, unique(channel_id))`);
+    await db.current.executeSql(`CREATE TABLE IF NOT EXISTS channel_${guid} (channel_id text, revision integer, detail_revision integer, topic_revision integer, detail text, summary text, offsync integer, unique(channel_id))`);
     await db.current.executeSql(`CREATE TABLE IF NOT EXISTS channel_topic_${guid} (channel_id text, topic_id text, revision integer, detail_revision integer, detail text, unique(channel_id, topic_id))`);
-    await db.current.executeSql(`CREATE TABLE IF NOT EXISTS card_${guid} (card_id text, revision integer, detail_revision integer, profile_revision integer, detail text, profile text, notified_view integer, notified_article integer, notified_profile integer, notified_channel integer, unique(card_id))`);
-    await db.current.executeSql(`CREATE TABLE IF NOT EXISTS contact_channel_${guid} (card_id text, channel_id text, revision integer, detail_revision integer, topic_revision integer, detail text, summary text, unique(card_id, channel_id))`);
+    await db.current.executeSql(`CREATE TABLE IF NOT EXISTS card_${guid} (card_id text, revision integer, detail_revision integer, profile_revision integer, detail text, profile text, notified_view integer, notified_article integer, notified_profile integer, notified_channel integer, offsync integer, unique(card_id))`);
+    await db.current.executeSql(`CREATE TABLE IF NOT EXISTS contact_channel_${guid} (card_id text, channel_id text, revision integer, detail_revision integer, topic_revision integer, detail text, summary text, offsync integer, unique(card_id, channel_id))`);
     await db.current.executeSql(`CREATE TABLE IF NOT EXISTS contact_channel_topic_${guid} (card_id text, channel_id text, topic_id text, revision integer, detail_revision integer, detail text, unique(card_id, channel_id, topic_id))`);
   }
 
@@ -100,6 +100,12 @@ export function useStoreContext() {
     setCardItemNotifiedChannel: async (guid, cardId, notified) => {
       await db.current.executeSql(`UPDATE card_${guid} set notified_channel=? where card_id=?`, [notified, cardId]);
     },
+    setCardItemOffsync: async (guid, cardId) => {
+      await db.current.executeSql(`UPDATE card_${guid} set offsync=? where card_id=?`, [1, cardId]);
+    },
+    clearCardItemOffsync: async (guid, cardId) => {
+      await db.current.executeSql(`UPDATE card_${guid} set offsync=? where card_id=?`, [0, cardId]);
+    },
     setCardItemDetail: async (guid, cardId, revision, detail) => {
       await db.current.executeSql(`UPDATE card_${guid} set detail_revision=?, detail=? where card_id=?`, [revision, encodeObject(detail), cardId]);
     },
@@ -107,12 +113,14 @@ export function useStoreContext() {
       await db.current.executeSql(`UPDATE card_${guid} set profile_revision=?, profile=? where card_id=?`, [revision, encodeObject(profile), cardId]);
     },
     getCardItemStatus: async (guid, cardId) => {
-      const values = await getAppValues(db.current, `SELECT detail, notified_view, notified_article, notified_profile, notified_channel FROM card_${guid} WHERE card_id=?`, [cardId]);
+      const values = await getAppValues(db.current, `SELECT detail, profile, notified_view, notified_article, notified_profile, notified_channel, offsync FROM card_${guid} WHERE card_id=?`, [cardId]);
       if (!values.length) {
         return null;
       }
       return {
         detail: decodeObject(values[0].detail),
+        profile: decodeObject(values[0].profile),
+        offsync: values[0].offsync,
         notifiedView: values[0].notified_view,
         notifiedArticle: values[0].notified_article,
         notifiedProfile: values[0].notified_profile,
