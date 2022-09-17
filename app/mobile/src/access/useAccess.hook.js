@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useWindowDimensions } from 'react-native';
+import config from 'constants/Config';
 
 export function useAccess() {
 
@@ -13,7 +14,7 @@ export function useAccess() {
   }
 
   useEffect(() => {
-    if (dimensions.width > 650) {
+    if (dimensions.width > config.tabbedWidth) {
       updateState({ split: true });
     }
     else {

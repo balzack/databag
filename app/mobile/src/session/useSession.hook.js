@@ -2,12 +2,14 @@ import { useState, useEffect, useContext } from 'react';
 import { useWindowDimensions } from 'react-native';
 import { useNavigate } from 'react-router-dom';
 import { AppContext } from 'context/AppContext';
+import config from 'constants/Config';
 
 export function useSession() {
 
   const [state, setState] = useState({
+    tabbled: null,
   });
-
+  const dimensions = useWindowDimensions();
   const app = useContext(AppContext);
   const navigate = useNavigate();
 
@@ -15,11 +17,16 @@ export function useSession() {
     setState((s) => ({ ...s, ...value }));
   }
 
+  useEffect(() => {
+    if (dimensions.width > config.tabbedWidth) {
+      updateState({ tabbed: false });
+    }
+    else {
+      updateState({ tabbed: true });
+    }
+  }, [dimensions]);
+
   const actions = {
-    logout: async () => {
-      await app.actions.logout();
-      navigate('/');
-    },
   };
 
   return { state, actions };

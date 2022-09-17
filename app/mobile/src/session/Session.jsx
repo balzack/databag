@@ -47,30 +47,32 @@ export function Session() {
   return (
     <SafeAreaProvider>
       <NavigationContainer>
-        <Tab.Navigator
-          screenOptions={({ route }) => ({
-            tabBarStyle: styles.tabBar,
-            headerShown: false,
-            tabBarIcon: ({ focused, color, size }) => {
-              if (route.name === 'Profile') {
-                return <Ionicons name={'user'} size={size} color={color} />;
-              }
-              if (route.name === 'Conversation') {
-                return <Ionicons name={'message1'} size={size} color={color} />;
-              }
-              if (route.name === 'Contacts') {
-                return <Ionicons name={'contacts'} size={size} color={color} />;
-              }
-            },
-            tabBarShowLabel: false,
-            tabBarActiveTintColor: Colors.white,
-            tabBarInactiveTintColor: Colors.disabled,
-          })}
-            >
-          <Tab.Screen name="Conversation" component={ConversationStackScreen} />
-          <Tab.Screen name="Profile" component={ProfileStackScreen} />
-          <Tab.Screen name="Contacts" component={ContactStackScreen} />
-        </Tab.Navigator>
+        { state.tabbed && (
+          <Tab.Navigator
+            screenOptions={({ route }) => ({
+              tabBarStyle: styles.tabBar,
+              headerShown: false,
+              tabBarIcon: ({ focused, color, size }) => {
+                if (route.name === 'Profile') {
+                  return <Ionicons name={'user'} size={size} color={color} />;
+                }
+                if (route.name === 'Conversation') {
+                  return <Ionicons name={'message1'} size={size} color={color} />;
+                }
+                if (route.name === 'Contacts') {
+                  return <Ionicons name={'contacts'} size={size} color={color} />;
+                }
+              },
+              tabBarShowLabel: false,
+              tabBarActiveTintColor: Colors.white,
+              tabBarInactiveTintColor: Colors.disabled,
+            })}
+              >
+            <Tab.Screen name="Conversation" component={ConversationStackScreen} />
+            <Tab.Screen name="Profile" component={ProfileStackScreen} />
+            <Tab.Screen name="Contacts" component={ContactStackScreen} />
+          </Tab.Navigator>
+        )}
       </NavigationContainer>
     </SafeAreaProvider>
   );
