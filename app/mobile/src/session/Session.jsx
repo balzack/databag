@@ -1,11 +1,15 @@
 import { View, TouchableOpacity, Text } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import Ionicons from '@expo/vector-icons/AntDesign';
 import { useSession } from './useSession.hook';
 import { styles } from './Session.styled';
 import Colors from 'constants/Colors';
+import { Profile } from './profile/Profile';
+import { Channels } from './channels/Channels';
+import { Cards } from './cards/Cards';
 
 export function Session() {
 
@@ -13,10 +17,32 @@ export function Session() {
 
   const Tab = createBottomTabNavigator();
 
-  const Conversation = () => (<TouchableOpacity style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }} onPress={actions.logout}><Text>LOGOUT</Text></TouchableOpacity>);
+  const ConversationStack = createStackNavigator();
+  const ConversationStackScreen = () => {
+    return (
+      <ConversationStack.Navigator screenOptions={({ route }) => ({ headerShown: false })}>
+        <ConversationStack.Screen name="channels" component={Channels} />
+      </ConversationStack.Navigator>
+    );
+  }
 
-  const Profile = () => (<SafeAreaView edges={['top']}><View style={{ width: '100%', height: '100%', backgroundColor: 'yellow'}} /></SafeAreaView>);
-  const Contacts = () => (<SafeAreaView edges={['top']}><View style={{ width: '100%', height: '100%', backgroundColor: 'yellow'}} /></SafeAreaView>);
+  const ProfileStack = createStackNavigator();
+  const ProfileStackScreen = () => {
+    return (
+      <ProfileStack.Navigator screenOptions={({ route }) => ({ headerShown: false })}>
+        <ProfileStack.Screen name="channels" component={Profile} />
+      </ProfileStack.Navigator>
+    );
+  }
+
+  const ContactStack = createStackNavigator();
+  const ContactStackScreen = () => {
+    return (
+      <ContactStack.Navigator screenOptions={({ route }) => ({ headerShown: false })}>
+        <ContactStack.Screen name="channels" component={Cards} />
+      </ContactStack.Navigator>
+    );
+  }
 
   return (
     <SafeAreaProvider>
@@ -36,13 +62,14 @@ export function Session() {
                 return <Ionicons name={'contacts'} size={size} color={color} />;
               }
             },
+            tabBarShowLabel: false,
             tabBarActiveTintColor: Colors.white,
             tabBarInactiveTintColor: Colors.disabled,
           })}
             >
-          <Tab.Screen name="Conversation" component={Conversation} />
-          <Tab.Screen name="Profile" component={Profile} />
-          <Tab.Screen name="Contacts" component={Contacts} />
+          <Tab.Screen name="Conversation" component={ConversationStackScreen} />
+          <Tab.Screen name="Profile" component={ProfileStackScreen} />
+          <Tab.Screen name="Contacts" component={ContactStackScreen} />
         </Tab.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>
