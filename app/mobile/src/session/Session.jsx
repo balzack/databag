@@ -1,6 +1,7 @@
 import { View, TouchableOpacity, Text } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import Ionicons from '@expo/vector-icons/AntDesign';
@@ -44,10 +45,38 @@ export function Session() {
     );
   }
 
+  const Drawer = createDrawerNavigator();
+  const CustomDrawerContent = ({ navigation }) => {
+    return (
+      <SafeAreaView><Text>CUSTOM DRAWER</Text></SafeAreaView>
+    )
+  }
+  const HomeScreen = ({ navigation }) => {
+    return (
+      <SafeAreaView>
+        <TouchableOpacity onPress={() => navigation.openDrawer()}>
+          <Text>OPEN</Text>
+        </TouchableOpacity>
+      </SafeAreaView>
+    )
+  }
+
   return (
     <SafeAreaProvider>
       <NavigationContainer>
-        { state.tabbed && (
+        { state.tabbed === false && (
+          <Drawer.Navigator
+            screenOptions={({ route }) => ({
+              headerShown: false,
+              swipeEnabled: false,
+              drawerType: 'front',
+              drawerPosition: 'right',
+            })}
+            drawerContent={(props) => <CustomDrawerContent {...props} />}>
+            <Drawer.Screen name="Home" component={HomeScreen} />
+          </Drawer.Navigator>
+        )}
+        { state.tabbed === true && (
           <Tab.Navigator
             screenOptions={({ route }) => ({
               tabBarStyle: styles.tabBar,
@@ -66,8 +95,7 @@ export function Session() {
               tabBarShowLabel: false,
               tabBarActiveTintColor: Colors.white,
               tabBarInactiveTintColor: Colors.disabled,
-            })}
-              >
+            })}>
             <Tab.Screen name="Conversation" component={ConversationStackScreen} />
             <Tab.Screen name="Profile" component={ProfileStackScreen} />
             <Tab.Screen name="Contacts" component={ContactStackScreen} />

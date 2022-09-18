@@ -18,12 +18,7 @@ export function useSession() {
   }
 
   useEffect(() => {
-    if (dimensions.width > config.tabbedWidth) {
       updateState({ tabbed: false });
-    }
-    else {
-      updateState({ tabbed: true });
-    }
   }, [dimensions]);
 
   const actions = {
