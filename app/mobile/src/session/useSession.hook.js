@@ -8,6 +8,8 @@ export function useSession() {
 
   const [state, setState] = useState({
     tabbled: null,
+    profileWidth: '33%',
+    cardWidth: '33%',
   });
   const dimensions = useWindowDimensions();
   const app = useContext(AppContext);
@@ -18,7 +20,18 @@ export function useSession() {
   }
 
   useEffect(() => {
-      updateState({ tabbed: false });
+    if (dimensions.width > config.tabbedWidth) {
+      const width = Math.floor((dimensions.width * 33) / 100);
+      if (width > 500) {
+        updateStatus({ tabbed: false, cardWidth: 550, profileWidth: 500 });
+      }
+      else {
+        updateState({ tabbed: false, cardWidth: width + 50, profileWidth: width });
+      }
+    }
+    else {
+      updateState({ tabbed: true });
+    }
   }, [dimensions]);
 
   const actions = {
