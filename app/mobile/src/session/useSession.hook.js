@@ -38,6 +38,9 @@ export function useSession() {
   }, [dimensions]);
 
   const actions = {
+    setContactDrawer: (contactDrawer) => {
+      updateState({ contactDrawer });
+    },
   };
 
   return { state, actions };

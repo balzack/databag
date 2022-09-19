@@ -20,14 +20,12 @@ export const styles = StyleSheet.create({
   conversation: {
     height: '100%',
     flexGrow: 1,
-    backgroundColor: 'yellow',
   },
   options: {
     display: 'flex',
     flexDirection: 'row',
     paddingTop: 8,
     paddingBottom: 4,
-    backgroundColor: 'red',
   },
   option: {
     width: '50%',
@@ -42,6 +40,5 @@ export const styles = StyleSheet.create({
   },
   channels: {
     flexGrow: 1,
-    backgroundColor: 'green',
   },
 });

@@ -1,4 +1,5 @@
 import { View, TouchableOpacity, Text } from 'react-native';
+import { useState } from 'react';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createDrawerNavigator } from '@react-navigation/drawer';
@@ -19,12 +20,17 @@ import { Welcome } from './welcome/Welcome';
 export function Session() {
 
   const { state, actions } = useSession();
-
+  const [ contactDrawer, setContactDrawer ] = useState(null);
   const Tab = createBottomTabNavigator();
 
-  const openCards = (nav) => {}
+  const openCards = (nav) => {
+    nav.openDrawer();
+  }
   const closeCards = (nav) => {}
-  const openProfile = (nav) => {}
+  const openProfile = (nav) => {
+    setContactDrawer('profile');
+    nav.openDrawer();
+  }
   const closeProfile = (nav) => {}
   const openContact = (nav, cardId) => {}
   const closeContact = (nav) => {}
@@ -45,7 +51,11 @@ export function Session() {
     );
   }
   const ChannelsTabScreen = ({ navigation }) => {
-    return <Channels openConversation={(cardId, channelId) => openConversation(navigation, cardId, channelId)} />
+    return (
+      <SafeAreaView style={styles.channels} edges={['top']}>
+        <Channels openConversation={(cardId, channelId) => openConversation(navigation, cardId, channelId)} />
+      </SafeAreaView>
+    )
   }
   const ConversationTabScreen = ({ navigation }) => {
     return <Conversation closeConversation={() => closeConversation(navigation)} openDetails={() => openDetails(navigation)} />
@@ -91,13 +101,13 @@ export function Session() {
   const ContactDrawerContent = ({ navigation }) => {
     return (
       <SafeAreaView>
-        { state.contactDrawer === 'profile' && (
+        { contactDrawer === 'profile' && (
           <Profile closeProfile={() => closeProfile(navigation)} />
         )}
-        { state.contactDrawer === 'contact' && (
+        { contactDrawer === 'contacts' && (
           <Contact closeContact={() => closeContact(navigation)} />
         )}
-        { state.contactDrawer === 'details' && (
+        { contactDrawer === 'details' && (
           <Details closeDetails={() => closeDetails(navigation)} />
         )}
       </SafeAreaView>
@@ -107,17 +117,17 @@ export function Session() {
     return (
       <View style={styles.home}>
         <View style={styles.sidebar}>
-          <SafeAreaView edges={['top']} style={styles.options}>
-            <TouchableOpacity style={styles.option}>
+          <SafeAreaView edges={['top', 'left']} style={styles.options}>
+            <TouchableOpacity style={styles.option} onPress={() => openProfile(contactNav)}>
               <Ionicons style={styles.icon} name={'user'} size={20} />
               <Text>Profile</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.option}>
+            <TouchableOpacity style={styles.option} onPress={() => openCards(navigation)}>
               <Ionicons style={styles.icon} name={'contacts'} size={20} />
               <Text>Contacts</Text>
             </TouchableOpacity>
           </SafeAreaView>
-          <SafeAreaView edges={['bottom']} style={styles.channels}>
+          <SafeAreaView edges={['left', 'bottom']} style={styles.channels}>
             <Channels openConversation={(cardId, channelId) => openConversation(null, cardId, channelId)} />
           </SafeAreaView>
         </View>

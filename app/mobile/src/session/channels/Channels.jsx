@@ -1,12 +1,22 @@
 import { useContext } from 'react';
-import { View, TouchableOpacity, Text } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { AppContext } from 'context/AppContext';
+import { View, TextInput, TouchableOpacity, Text } from 'react-native';
+import { styles } from './Channels.styled';
+import { useChannels } from './useChannels.hook';
+import Ionicons from '@expo/vector-icons/AntDesign';
 
 export function Channels() {
 
-  const app = useContext(AppContext);
+  const { state, actions } = useChannels();
 
-  return (<SafeAreaView edges={['top']}><TouchableOpacity style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }} onPress={app.actions.logout}><Text>~ CHANNELS LOGOUT</Text></TouchableOpacity></SafeAreaView>)
+  return (
+    <View style={styles.container}>
+      <View style={styles.inputwrapper}>
+        <Ionicons style={styles.icon} name="search1" size={18} color={'#ffffff'} />
+        <TextInput style={styles.inputfield} value={state.topic} onChangeText={actions.setTopic}
+            autoCapitalize="none" placeholderTextColor={'#ffffff'}  placeholder="Topic" />
+        <View style={styles.space} />
+      </View>
+    </View>
+  );
 }
 
