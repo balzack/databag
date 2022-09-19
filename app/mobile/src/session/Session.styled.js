@@ -41,4 +41,8 @@ export const styles = StyleSheet.create({
   channels: {
     flexGrow: 1,
   },
+  tabframe: {
+    width: '100%',
+    height: '100%',
+  }
 });

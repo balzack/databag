@@ -12,7 +12,7 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     borderRadius: 4,
-    backgroundColor: Colors.lightgrey,
+    backgroundColor: Colors.background,
     alignItems: 'center',
     marginRight: 8,
     marginLeft: 8,
@@ -20,7 +20,7 @@ export const styles = StyleSheet.create({
   inputfield: {
     flex: 1,
     textAlign: 'center',
-    padding: 8,
+    padding: 4,
     color: Colors.white,
     fontSize: 16,
   },

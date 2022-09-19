@@ -8,11 +8,10 @@ export function useSession() {
 
   const [state, setState] = useState({
     tabbled: null,
-    profileWidth: '33%',
-    cardWidth: '33%',
+    subWidth: '33%',
+    baseWidth: '33%',
     cardId: null,
     converstaionId: null,
-    contactDrawer: 'profile',
   });
   const dimensions = useWindowDimensions();
   const app = useContext(AppContext);
@@ -26,10 +25,10 @@ export function useSession() {
     if (dimensions.width > config.tabbedWidth) {
       const width = Math.floor((dimensions.width * 33) / 100);
       if (width > 500) {
-        updateStatus({ tabbed: false, cardWidth: 550, profileWidth: 500 });
+        updateStatus({ tabbed: false, baseWidth: 550, subWidth: 500 });
       }
       else {
-        updateState({ tabbed: false, cardWidth: width + 50, profileWidth: width });
+        updateState({ tabbed: false, baseWidth: width + 50, subWidth: width });
       }
     }
     else {
@@ -38,9 +37,9 @@ export function useSession() {
   }, [dimensions]);
 
   const actions = {
-    setContactDrawer: (contactDrawer) => {
-      updateState({ contactDrawer });
-    },
+    setCardId: (cardId) => {
+      updateState({ cardId });
+    }
   };
 
   return { state, actions };

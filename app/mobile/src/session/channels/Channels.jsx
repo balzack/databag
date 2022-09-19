@@ -11,7 +11,7 @@ export function Channels() {
   return (
     <View style={styles.container}>
       <View style={styles.inputwrapper}>
-        <Ionicons style={styles.icon} name="search1" size={18} color={'#ffffff'} />
+        <Ionicons style={styles.icon} name="search1" size={16} color={'#ffffff'} />
         <TextInput style={styles.inputfield} value={state.topic} onChangeText={actions.setTopic}
             autoCapitalize="none" placeholderTextColor={'#ffffff'}  placeholder="Topic" />
         <View style={styles.space} />

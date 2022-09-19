@@ -12,6 +12,8 @@ import { AccountContextProvider } from 'context/AccountContext';
 import { ProfileContextProvider } from 'context/ProfileContext';
 import { CardContextProvider } from 'context/CardContext';
 import { ChannelContextProvider } from 'context/ChannelContext';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { NavigationContainer } from '@react-navigation/native';
 
 export default function App() {
 
@@ -22,16 +24,18 @@ export default function App() {
           <AccountContextProvider>
             <ProfileContextProvider>
               <AppContextProvider>
-                <NativeRouter>
-                  <Routes>
-                    <Route path="/" element={ <Root /> } />
-                    <Route path="/admin" element={ <Admin /> } />
-                    <Route path="/login" element={ <Access mode="login" /> } />
-                    <Route path="/reset" element={ <Access mode="reset" /> } />
-                    <Route path="/create" element={ <Access mode="create" /> } />
-                    <Route path="/session" element={ <Session/> } />
-                  </Routes>
-                </NativeRouter>
+                <SafeAreaProvider>
+                  <NativeRouter>
+                    <Routes>
+                      <Route path="/" element={ <Root /> } />
+                      <Route path="/admin" element={ <Admin /> } />
+                      <Route path="/login" element={ <Access mode="login" /> } />
+                      <Route path="/reset" element={ <Access mode="reset" /> } />
+                      <Route path="/create" element={ <Access mode="create" /> } />
+                      <Route path="/session" element={ <NavigationContainer><Session/></NavigationContainer> } />
+                    </Routes>
+                  </NativeRouter>
+                </SafeAreaProvider>
               </AppContextProvider>
             </ProfileContextProvider>
           </AccountContextProvider>
