@@ -14,6 +14,7 @@ import { Cards } from './cards/Cards';
 import { Contact } from './contact/Contact';
 import { Details } from './details/Details';
 import { Conversation } from './conversation/Conversation';
+import { Welcome } from './welcome/Welcome';
 
 export function Session() {
 
@@ -27,9 +28,10 @@ export function Session() {
   const closeProfile = (nav) => {}
   const openContact = (nav, cardId) => {}
   const closeContact = (nav) => {}
-  const openConversation = (nav, channelId) => {}
+  const openConversation = (nav, cardId, channelId) => {}
   const closeConversation = (nav) => {}
-
+  const openDetails = (nav, cardId, channeId) => {}
+  const closeDetails = (nav) => {}
 
   // tabbed containers
   const ConversationStack = createStackNavigator();
@@ -37,15 +39,16 @@ export function Session() {
     return (
       <ConversationStack.Navigator screenOptions={({ route }) => ({ headerShown: false })}>
         <ConversationStack.Screen name="channels" component={ChannelsTabScreen} />
+        <ConversationStack.Screen name="conversation" component={ConversationTabScreen} />
         <ConversationStack.Screen name="details" component={DetailsTabScreen} />
       </ConversationStack.Navigator>
     );
   }
   const ChannelsTabScreen = ({ navigation }) => {
-    return <Channels
-      openConversation={(channelId) => openConversation(navigation, channelId)}
-      openProfile={() => openProfile(navigation)}
-    />
+    return <Channels openConversation={(cardId, channelId) => openConversation(navigation, cardId, channelId)} />
+  }
+  const ConversationTabScreen = ({ navigation }) => {
+    return <Conversation closeConversation={() => closeConversation(navigation)} openDetails={() => openDetails(navigation)} />
   }
   const DetailsTabScreen = ({ navigation }) => {
     return <Details closeDetails={() => closeDetails(navigation)} />
@@ -76,31 +79,57 @@ export function Session() {
 
 
   // drawered containers
-
-
   const CardDrawer = createDrawerNavigator();
-  const CardDrawerContent = ({ otherNav, navigation }) => {
+  const CardDrawerContent = ({ contactNav, navigation }) => {
     return (
-      <SafeAreaView><TouchableOpacity onPress={() => otherNav.openDrawer()}><Text>CARD DRAWER</Text></TouchableOpacity></SafeAreaView>
+      <SafeAreaView>
+        <Cards openContact={(cardId) => openContact(contactNav, cardId)} />
+      </SafeAreaView>
     )
   }
-
   const ContactDrawer = createDrawerNavigator();
   const ContactDrawerContent = ({ navigation }) => {
     return (
-      <SafeAreaView><Text>Contact DRAWER</Text></SafeAreaView>
+      <SafeAreaView>
+        { state.contactDrawer === 'profile' && (
+          <Profile closeProfile={() => closeProfile(navigation)} />
+        )}
+        { state.contactDrawer === 'contact' && (
+          <Contact closeContact={() => closeContact(navigation)} />
+        )}
+        { state.contactDrawer === 'details' && (
+          <Details closeDetails={() => closeDetails(navigation)} />
+        )}
+      </SafeAreaView>
     )
   }
-  const HomeScreen = ({ otherNav, navigation }) => {
+  const HomeScreen = ({ contactNav, navigation }) => {
     return (
-      <SafeAreaView>
-        <TouchableOpacity onPress={() => navigation.openDrawer()}>
-          <Text>OPEN</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => otherNav.openDrawer()}>
-          <Text>OTHER</Text>
-        </TouchableOpacity>
-      </SafeAreaView>
+      <View style={styles.home}>
+        <View style={styles.sidebar}>
+          <SafeAreaView edges={['top']} style={styles.options}>
+            <TouchableOpacity style={styles.option}>
+              <Ionicons style={styles.icon} name={'user'} size={20} />
+              <Text>Profile</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.option}>
+              <Ionicons style={styles.icon} name={'contacts'} size={20} />
+              <Text>Contacts</Text>
+            </TouchableOpacity>
+          </SafeAreaView>
+          <SafeAreaView edges={['bottom']} style={styles.channels}>
+            <Channels openConversation={(cardId, channelId) => openConversation(null, cardId, channelId)} />
+          </SafeAreaView>
+        </View>
+        <View style={styles.conversation}>
+          { state.conversationId && (
+            <Conversation closeConversation={() => closeConversation(null)} openDetails={() => openDetails(contactNav)} />
+          )}
+          { !state.conversationId && (
+            <Welcome />
+          )} 
+        </View>
+      </View>
     )
   }
 
@@ -115,9 +144,9 @@ export function Session() {
               width: state.cardWidth,
             },
           }}
-          drawerContent={(props) => <CardDrawerContent otherNav={navigation}  {...props} />}>
+          drawerContent={(props) => <CardDrawerContent contactNav={navigation}  {...props} />}>
         <CardDrawer.Screen name="Root">
-          {(props) => <HomeScreen otherNav={navigation} {...props} />}
+          {(props) => <HomeScreen contactNav={navigation} {...props} />}
         </CardDrawer.Screen>
       </CardDrawer.Navigator>
     );

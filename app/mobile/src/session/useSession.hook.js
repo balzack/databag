@@ -10,6 +10,9 @@ export function useSession() {
     tabbled: null,
     profileWidth: '33%',
     cardWidth: '33%',
+    cardId: null,
+    converstaionId: null,
+    contactDrawer: 'profile',
   });
   const dimensions = useWindowDimensions();
   const app = useContext(AppContext);
