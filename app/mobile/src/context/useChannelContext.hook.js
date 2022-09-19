@@ -6,6 +6,7 @@ import { getChannelSummary } from 'api/getChannelSummary';
 
 export function useChannelContext() {
   const [state, setState] = useState({
+    channels: new Map(),
   });
   const store = useContext(StoreContext);
 
@@ -13,6 +14,7 @@ export function useChannelContext() {
   const curRevision = useRef(null);
   const setRevision = useRef(null);
   const syncing = useRef(false);
+  const channels = useRef(new Map());
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }))
@@ -78,20 +80,21 @@ export function useChannelContext() {
   const actions = {
     setSession: async (access) => {
       const { guid, server, appToken } = access;
-
-      // load
-
+      channels.current = new Map();
+      const items = await store.actions.getChannelItems(guid);
+      for(item of items) {
+        channels.current.set(item.channelId, item);
+      }
       const revision = await store.actions.getChannelRevision(guid);
-
-      // update
- 
+      updateState({ channels: channels.current });
       setRevision.current = revision;
       curRevision.current = revision;
       session.current = access;
     },
     clearSession: () => {
       session.current = {};
-      updateState({ account: null });
+      channels.current = new Map();
+      updateState({ account: null, channels: channels.current });
     },
     setRevision: (rev) => {
       curRevision.current = rev;

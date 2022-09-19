@@ -26,6 +26,12 @@ export const styles = StyleSheet.create({
   },
   icon: {
     paddingLeft: 8,
-  }  
+  },
+  channels: {
+    flexGrow: 1,
+    width: '100%',
+    paddingLeft: 16,
+    paddingRight: 16,
+  }, 
 })
 

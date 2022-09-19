@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { View, TextInput, TouchableOpacity, Text } from 'react-native';
+import { FlatList, ScrollView, View, TextInput, TouchableOpacity, Text } from 'react-native';
 import { styles } from './Channels.styled';
 import { useChannels } from './useChannels.hook';
 import Ionicons from '@expo/vector-icons/AntDesign';
@@ -16,6 +16,11 @@ export function Channels() {
             autoCapitalize="none" placeholderTextColor={'#ffffff'}  placeholder="Topic" />
         <View style={styles.space} />
       </View>
+      <FlatList style={styles.channels}
+        data={state.channels}
+        renderItem={({ item }) => <Text>{ item.channelId }</Text>}
+        keyExtractor={item => (`${item.cardId}:${item.channelId}`)}
+      />
     </View>
   );
 }
