@@ -31,7 +31,7 @@ export function useChannelContext() {
     update.summary = channel?.data?.channelSummary;
     update.detailRevision = channel?.data?.detailRevision;
     update.topicRevision = channel?.data?.topicRevision;
-    channels.current.set(channelId, channel);
+    channels.current.set(channelId, update);
   }
   const setChannelDetails = (channelId, detail, revision) => {
     let channel = channels.current.get(channelId);
