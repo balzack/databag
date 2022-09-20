@@ -20,6 +20,30 @@ export function useChannelContext() {
     setState((s) => ({ ...s, ...value }))
   }
 
+  const setChannelDetails = (channelId, details, revision) => {
+    let channel = channels.current.get(channelId);
+    if (channel?.data) {
+      channel.data.channelDetails = details;
+      channel.data.detailRevision = revision;
+      channels.current.set(channelId, channel);
+    }
+  }
+  const setChannelSummary = (channelId, summary, revision) => {
+    let channel = channels.current.get(channelId);
+    if (channel?.data) {
+      channel.data.channelSummary = summary;
+      channel.data.topicRevision = revision;
+      channels.curent.set(channelId, channel);
+    }
+  }
+  const setChannelRevision = (channelId, revision) => {
+    let channel = channels.current.get(channelId);
+    if (channel) {
+      channel.revision = revision;
+      channels.current.set(channelId, channel);
+    }
+  }
+
   const sync = async () => {
 
     if (!syncing.current && setRevision.current !== curRevision.current) {
@@ -34,6 +58,7 @@ export function useChannelContext() {
           if (channel.data) {
             if (channel.data.channelDetail && channel.data.channelSummary) {
               await store.actions.setChannelItem(guid, channel);
+              channels.current.set(channel.id, channel);
             }
             else {
               const { detailRevision, topicRevision, channelDetail, channelSummary } = channel.data;
@@ -44,27 +69,33 @@ export function useChannelContext() {
                 assembled.data.channelDetail = await getChannelDetail(server, appToken, channel.id);
                 assembled.data.channelSummary = await getChannelSummary(server, appToken, channel.id);
                 await store.actions.setChannelItem(guid, assembled);
+                channels.current.set(assembled.id, assembled);
               }
               else {
                 if (view.detailRevision != detailRevision) {
                   const detail = await getChannelDetail(server, appToken, channel.id);
                   await store.actions.setChannelItemDetail(guid, channel.id, detailRevision, detail);
+                  setChannelDetail(channel.id, detail, detailRevision);
                 }
                 if (view.topicRevision != topicRevision) {
                   const summary = await getChannelSummary(server, appToken, channel.id);
                   await store.actions.setChannelItemSummary(guid, channel.id, topicRevision, summary);
+                  setChannelSummary(channel.id, summary, topicRevision);
                 }
-                await store.actions.setChannelItemRevision(guid, channel.revision);
+                await store.actions.setChannelItemRevision(guid, channel.id, channel.revision);
+                setChannelRevision(channel.id, channel.revision);
               }
             }
           }
           else {
             await store.actions.clearChannelItem(guid, channel.id);
+            channels.current.delete(channel.id);
           }
         }
 
         setRevision.current = revision;
         await store.actions.setChannelRevision(guid, revision);
+        updateState({ channels: channels.current });
       }
       catch(err) {
         console.log(err);

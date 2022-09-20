@@ -139,7 +139,7 @@ export function useStoreContext() {
       };
     },
     getCardItems: async (guid) => {
-      const values = await getAppValues(db.current, `SELECT card_id, revision, detail_revision, profile_revision, detail, profile, notified_view, notified_profile, notified_article, notified_channel FROM channel_${guid}`, []);
+      const values = await getAppValues(db.current, `SELECT card_id, revision, detail_revision, profile_revision, detail, profile, notified_view, notified_profile, notified_article, notified_channel FROM card_${guid}`, []);
       return values.map(card => ({
         cardId: card.card_id,
         revision: card.revision,
