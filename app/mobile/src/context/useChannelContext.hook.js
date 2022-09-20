@@ -20,19 +20,29 @@ export function useChannelContext() {
     setState((s) => ({ ...s, ...value }))
   }
 
-  const setChannelDetails = (channelId, details, revision) => {
+  const setChannel = (channelId, channel) => {
+    channels.current.set(channelId, {
+      channelId: channel?.id,
+      revision: channel?.revision,
+      detail: channel?.data?.channelDetail,
+      summary: channel?.data?.channelSummary,
+      detailRevision: channel?.data?.detailRevision,
+      topicRevision: channel?.data?.topicRevision,
+    });
+  }
+  const setChannelDetails = (channelId, detail, revision) => {
     let channel = channels.current.get(channelId);
     if (channel?.data) {
-      channel.data.channelDetails = details;
-      channel.data.detailRevision = revision;
+      channel.detail = detail;
+      channel.detailRevision = revision;
       channels.current.set(channelId, channel);
     }
   }
   const setChannelSummary = (channelId, summary, revision) => {
     let channel = channels.current.get(channelId);
-    if (channel?.data) {
-      channel.data.channelSummary = summary;
-      channel.data.topicRevision = revision;
+    if (channel) {
+      channel.summary = summary;
+      channel.topicRevision = revision;
       channels.curent.set(channelId, channel);
     }
   }
@@ -58,7 +68,7 @@ export function useChannelContext() {
           if (channel.data) {
             if (channel.data.channelDetail && channel.data.channelSummary) {
               await store.actions.setChannelItem(guid, channel);
-              channels.current.set(channel.id, channel);
+              setChannel(channel.id, channel);
             }
             else {
               const { detailRevision, topicRevision, channelDetail, channelSummary } = channel.data;
@@ -69,7 +79,7 @@ export function useChannelContext() {
                 assembled.data.channelDetail = await getChannelDetail(server, appToken, channel.id);
                 assembled.data.channelSummary = await getChannelSummary(server, appToken, channel.id);
                 await store.actions.setChannelItem(guid, assembled);
-                channels.current.set(assembled.id, assembled);
+                setChannel(assembled.id, assembled);
               }
               else {
                 if (view.detailRevision != detailRevision) {

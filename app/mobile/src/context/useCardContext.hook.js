@@ -8,6 +8,7 @@ import { getContactChannels } from 'api/getContactChannels';
 import { getContactChannelTopics } from 'api/getContactChannelTopics';
 import { getContactChannelDetail } from 'api/getContactChannelDetail';
 import { getContactChannelSummary } from 'api/getContactChannelSummary';
+import { getCardImageUrl } from 'api/getCardImageUrl';
 
 export function useCardContext() {
   const [state, setState] = useState({
@@ -26,19 +27,38 @@ export function useCardContext() {
     setState((s) => ({ ...s, ...value }))
   }
 
+  const setCard = (cardId, card) => {
+    let updated = cards.current.get(cardId);
+    if (updated == null) {
+      updated = { channels: new Map() };
+    }
+    cards.current.set(cardId, {
+      ...updated,
+      cardId: cardId,
+      revision: card?.revision,
+      detailRevision: card?.data?.detailRevision,
+      profileRevision: card?.data?.profileRevision,
+      detail: card?.data?.cardDetail,
+      profile: card?.data?.cardProfile,
+      notifiedView: card?.data?.notifiedView,
+      notifiedProfile: card?.data?.notifiedProfile,
+      notifiedArtile: card?.data?.notifiedArticle,
+      notifiedChannel: card?.data?.notifiedChannel,
+    });
+  }
   const setCardDetail = (cardId, detail, revision) => {
     let card = cards.current.get(cardId);
-    if (card?.data) {
-      card.data.cardDetail = detail;
-      card.data.detailRevision = revision;
+    if (card) {
+      card.detail = detail;
+      card.detailRevision = revision;
       cards.current.set(cardId, card);
     }
   }
   const setCardProfile = (cardId, profile, revision) => {
     let card = cards.current.get(cardId);
-    if (card?.data) {
-      card.data.cardProfile = profile;
-      card.data.profileRevision = revision;
+    if (card) {
+      card.profile = profile;
+      card.profileRevision = revision;
       cards.current.set(cardId, card);
     }
   }
@@ -64,6 +84,17 @@ export function useCardContext() {
     }
   }
   const setCardChannel = (cardId, channel) => {
+    setCardChannelItem(cardId, {
+      cardId: cardId,
+      channelId: channel?.id,
+      revision: channel?.revision,
+      detailRevision: channel?.data?.detailRevision,
+      topicRevision: channel?.data?.topicRevision,
+      detail: channel?.data?.channelDetail,
+      summary: channel?.data?.channelSummary,
+    });
+  }
+  const setCardChannelItem = (cardId, channel) => {
     let card = cards.current.get(cardId);
     if (card) {
       card.channels.set(channel.id, channel);
@@ -74,9 +105,9 @@ export function useCardContext() {
     let card = cards.current.get(cardId);
     if (card) {
       let channel = card.channels.get(channelId);
-      if (channel?.data) {
-        channel.data.channelDetail = detail;
-        channel.data.detailRevision = revision;
+      if (channel) {
+        channel.detail = detail;
+        channel.detailRevision = revision;
         card.channels.set(channelId, channel);
         cards.current.set(cardId, card);
       }
@@ -86,9 +117,9 @@ export function useCardContext() {
     let card = cards.current.get(cardId);
     if (card) {
       let channel = card.channels.get(channelId);
-      if (channel?.data) {
-        channel.data.channelSummary = detail;
-        channel.data.topicRevision = revision;
+      if (channel) {
+        channel.summary = detail;
+        channel.topicRevision = revision;
         card.channels.set(channelId, channel);
         cards.current.set(cardId, card);
       }
@@ -128,7 +159,7 @@ export function useCardContext() {
           if (card.data) {
             if (card.data.cardDetail && card.data.cardProfile) {
               await store.actions.setCardItem(guid, card);
-              cards.current.set(cardId, card);
+              setCard(card.id, card);
             }
             else {
               const view = await store.actions.getCardItemView(guid, card.id);
@@ -138,7 +169,7 @@ export function useCardContext() {
                 assembled.data.cardDetail = await getCardDetail(server, appToken, card.id);
                 assembled.data.cardProfile = await getCardProfile(server, appToken, card.id);
                 await store.actions.setCardItem(guid, assembled);
-                cards.curent.set(assembled.id, assembled);
+                setCard(assembled.id, assembled);
               }
               else {
                 if (view.detailRevision != detailRevision) {
@@ -185,7 +216,7 @@ export function useCardContext() {
                 }
               }
               catch(err) {
-                console.log(err);
+                console.log("card1:", err);
                 await store.actions.setCardItemOffsync(guid, card.id);
                 setCardOffsync(card.id, true);
               } 
@@ -203,7 +234,7 @@ export function useCardContext() {
         await store.actions.setCardRevision(guid, revision);
       }
       catch(err) {
-        console.log(err);
+        console.log("card2:", err);
         syncing.current = false;
         return;
       }
@@ -267,7 +298,7 @@ export function useCardContext() {
       }
       const cardChannelItems = await store.actions.getCardChannelItems(guid);
       for (item of cardChannelItems) {
-        setCardChannel(item.cardId, item);
+        setCardChannelItem(item.cardId, item);
       }
       const revision = await store.actions.getCardRevision(guid);
       updateState({ cards: cards.current });
@@ -283,6 +314,10 @@ export function useCardContext() {
       curRevision.current = rev;
       sync();
     },
+    getCardLogo: (cardId, revision) => {
+      const { server, appToken } = session.current;
+      return getCardImageUrl(server, appToken, cardId, revision);
+    }
   }
 
   return { state, actions }

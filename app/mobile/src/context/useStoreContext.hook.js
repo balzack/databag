@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef, useContext } from 'react';
 import SQLite from "react-native-sqlite-storage";
 
-const DATABAG_DB = 'databag_v019.db';
+const DATABAG_DB = 'databag_v025.db';
 
 export function useStoreContext() {
   const [state, setState] = useState({});
@@ -113,18 +113,20 @@ export function useStoreContext() {
       await db.current.executeSql(`UPDATE card_${guid} set profile_revision=?, profile=? where card_id=?`, [revision, encodeObject(profile), cardId]);
     },
     getCardItemStatus: async (guid, cardId) => {
-      const values = await getAppValues(db.current, `SELECT detail, profile, notified_view, notified_article, notified_profile, notified_channel, offsync FROM card_${guid} WHERE card_id=?`, [cardId]);
+      const values = await getAppValues(db.current, `SELECT detail, profile, profile_revision, detail_revision, notified_view, notified_article, notified_profile, notified_channel, offsync FROM card_${guid} WHERE card_id=?`, [cardId]);
       if (!values.length) {
         return null;
       }
       return {
         detail: decodeObject(values[0].detail),
         profile: decodeObject(values[0].profile),
-        offsync: values[0].offsync,
+        profileRevision: values[0].profile_revision,
+        detailRevision: values[0].detail_revision,
         notifiedView: values[0].notified_view,
         notifiedArticle: values[0].notified_article,
         notifiedProfile: values[0].notified_profile,
         notifiedChannel: values[0].notified_cahnnel,
+        offsync: values[0].offsync,
       };
     },
     getCardItemView: async (guid, cardId) => {

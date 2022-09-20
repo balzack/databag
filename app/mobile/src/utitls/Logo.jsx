@@ -1,4 +1,4 @@
-import { Image } from 'react-native';
+import { Image, View } from 'react-native';
 import avatar from 'images/avatar.png';
 import appstore from 'images/appstore.png';
 import solution from 'images/solution.png';
@@ -6,7 +6,7 @@ import team from 'images/team.png';
 
 export function Logo({ src, width, height, radius }) {
   return (
-    <div style={{ borderRadius: radius, overflow: 'hidden' }}>
+    <View style={{ borderRadius: radius, overflow: 'hidden' }}>
       { src === 'team' && (
         <Image source={team} style={{ width, height }} />
       )}
@@ -23,9 +23,9 @@ export function Logo({ src, width, height, radius }) {
         <Image source={avatar} style={{ width, height }} />
       )}
       { src && src.startsWith('http') && (
-        <Image source={src} style={{ width, height }} />
+        <Image source={{ uri:src }} resizeMode={'contain'} style={{ width, height }} />
       )}
-    </div>
+    </View>
   );
 }
 

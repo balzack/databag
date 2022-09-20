@@ -66,19 +66,19 @@ export function useAppContext() {
     create: async (server, username, password, token) => {
       await addAccount(server, username, password, token);
       const access = await setLogin(username, server, password)
-      await setSession({ ...access, server });
       await store.actions.setSession({ ...access, server});
+      await setSession({ ...access, server });
     },
     access: async (server, token) => {
       const access = await setAccountAccess(server, token);
-      await setSession({ ...access, server });
       await store.actions.setSession({ ...access, server});
+      await setSession({ ...access, server });
     },
     login: async (username, password) => {
       const acc = username.split('@');
       const access = await setLogin(acc[0], acc[1], password)
-      await setSession({ ...access, server: acc[1] }); 
       await store.actions.setSession({ ...access, server: acc[1]});
+      await setSession({ ...access, server: acc[1] }); 
     },
     logout: async () => {
       await clearSession();
