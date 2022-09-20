@@ -8,6 +8,7 @@ export function useChannelItem(item) {
   const [state, setState] = useState({});
 
   const channel = useContext(ChannelContext);
+  const card = useContext(CardContext);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
@@ -15,7 +16,12 @@ export function useChannelItem(item) {
 
   const actions = {
     setRead: () => {
-      channel.actions.setReadRevision(item.channelId, item.revision);
+      if (item.cardId) {
+        card.actions.setReadRevision(item.cardId, item.channelId, item.revision);
+      }
+      else {
+        channel.actions.setReadRevision(item.channelId, item.revision);
+      }
     },
   };
 

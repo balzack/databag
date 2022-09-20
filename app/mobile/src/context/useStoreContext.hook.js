@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef, useContext } from 'react';
 import SQLite from "react-native-sqlite-storage";
 
-const DATABAG_DB = 'databag_v026.db';
+const DATABAG_DB = 'databag_v027.db';
 
 export function useStoreContext() {
   const [state, setState] = useState({});
@@ -125,7 +125,7 @@ export function useStoreContext() {
         notifiedView: values[0].notified_view,
         notifiedArticle: values[0].notified_article,
         notifiedProfile: values[0].notified_profile,
-        notifiedChannel: values[0].notified_cahnnel,
+        notifiedChannel: values[0].notified_channel,
         offsync: values[0].offsync,
       };
     },
@@ -227,7 +227,7 @@ export function useStoreContext() {
       await db.current.executeSql(`UPDATE card_channel_${guid} set topic_revision=?, summary=? where card_id=? and channel_id=?`, [revision, encodeObject(summary), cardId, channelId]);
     },
     getCardChannelItemView: async (guid, cardId, channelId) => {
-      const values = await getAppValues(db.current, `SELECT revision, detail_revision, topic_revision FROM card_channel_${guid} WHERE channel_id=?`, [cardId, channelId]);
+      const values = await getAppValues(db.current, `SELECT revision, detail_revision, topic_revision FROM card_channel_${guid} WHERE card_id=? and channel_id=?`, [cardId, channelId]);
       if (!values.length) {
         return null;
       }

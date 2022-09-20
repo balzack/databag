@@ -3,6 +3,7 @@ import { useWindowDimensions } from 'react-native';
 import { useNavigate } from 'react-router-dom';
 import { CardContext } from 'context/CardContext';
 import { ChannelContext } from 'context/ChannelContext';
+import { ProfileContext } from 'context/ProfileContext';
 import { AppContext } from 'context/AppContext';
 import config from 'constants/Config';
 
@@ -16,6 +17,7 @@ export function useChannels() {
   const items = useRef([]);
   const channel = useContext(ChannelContext);
   const card = useContext(CardContext);
+  const profile = useContext(ProfileContext);
   const app = useContext(AppContext);
 
   const updateState = (value) => {
@@ -44,9 +46,16 @@ export function useChannels() {
     }
 
     let contacts = [];
+    if (item.cardId) {
+      contacts.push(card.state.cards.get(item.cardId));
+    }
     if (item?.detail?.members) {
+      
       item.detail.members.forEach(guid => {
-        contacts.push(getCard(guid));
+        const profileGuid = profile.state.profile.guid;
+        if (profileGuid !== guid) { 
+          contacts.push(getCard(guid));
+        }
       })
     }
 
@@ -82,7 +91,7 @@ export function useChannels() {
           if (contact?.profile?.name) {
             names.push(contact.profile.name);
           }
-          else {
+          else if (contact?.profile?.handle) {
             names.push(contact?.profile?.handle);
           }
         }
@@ -103,12 +112,17 @@ export function useChannels() {
       }
     }
 
-    return { channelId: item.channelId, contacts, logo, subject, message, updated, revision: item.revision };
+    return { cardId: item.cardId, channelId: item.channelId, contacts, logo, subject, message, updated, revision: item.revision };
   }
 
   useEffect(() => {
-    let channels = Array.from(channel.state.channels.values())
-    channels.sort((a, b) => {
+    let merged = [];
+    card.state.cards.forEach((card, cardId, map) => {
+      merged.push(...Array.from(card.channels.values()));
+    });
+    merged.push(...Array.from(channel.state.channels.values()));
+
+    merged.sort((a, b) => {
       const aCreated = a?.summary?.lastTopic?.created;
       const bCreated = b?.summary?.lastTopic?.created;
       if (aCreated === bCreated) {
@@ -119,7 +133,8 @@ export function useChannels() {
       }
       return -1;
     });
-    updateState({ channels: channels.map(item => setChannelEntry(item)) });
+
+    updateState({ channels: merged.map(item => setChannelEntry(item)) });
   }, [channel, card]);
 
   const actions = {
