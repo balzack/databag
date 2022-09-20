@@ -67,7 +67,12 @@ export function useChannels() {
       if (contacts.length) {
         let names = [];
         for (let contact of contacts) {
-          names.push(contact?.profile?.handle);
+          if (contact?.profile?.name) {
+            names.push(contact.profile.name);
+          }
+          else {
+            names.push(contact?.profile?.handle);
+          }
         }
         subject = names.join(', ');
       }

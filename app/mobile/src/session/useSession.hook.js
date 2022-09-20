@@ -1,7 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
 import { useWindowDimensions } from 'react-native';
 import { useNavigate } from 'react-router-dom';
-import { AppContext } from 'context/AppContext';
 import config from 'constants/Config';
 
 export function useSession() {
@@ -14,7 +13,6 @@ export function useSession() {
     converstaionId: null,
   });
   const dimensions = useWindowDimensions();
-  const app = useContext(AppContext);
   const navigate = useNavigate();
 
   const updateState = (value) => {
