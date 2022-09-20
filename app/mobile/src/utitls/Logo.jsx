@@ -6,7 +6,7 @@ import team from 'images/team.png';
 
 export function Logo({ src, width, height, radius }) {
   return (
-    <View style={{ borderRadius: radius, overflow: 'hidden' }}>
+    <View style={{ borderRadius: radius, overflow: 'hidden', width, height }}>
       { src === 'team' && (
         <Image source={team} style={{ width, height }} />
       )}

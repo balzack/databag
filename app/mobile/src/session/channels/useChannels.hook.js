@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useRef, useContext } from 'react';
 import { useWindowDimensions } from 'react-native';
 import { useNavigate } from 'react-router-dom';
 import { CardContext } from 'context/CardContext';
@@ -12,6 +12,7 @@ export function useChannels() {
     channels: []
   });
 
+  const items = useRef([]);
   const channel = useContext(ChannelContext);
   const card = useContext(CardContext);
 
@@ -53,16 +54,50 @@ export function useChannels() {
       logo = 'appstore';
     }
 
+    let subject = null;
+    if (item?.detail?.data) {
+      try {
+        subject = JSON.parse(item?.detail?.data).subject;
+      }
+      catch (err) {
+        console.log(err);
+      }
+    }
+    if (!subject) {
+      if (contacts.length) {
+        let names = [];
+        for (let contact of contacts) {
+          names.push(contact?.profile?.handle);
+        }
+        subject = names.join(', ');
+      }
+      else {
+        subject = "Notes";
+      }
+    }
+
+    let message;
+    if (item?.summary?.lastTopic?.dataType === 'superbasictopic') {
+      try {
+        message = JSON.parse(item.summary.lastTopic.data).text;
+      }
+      catch (err) {
+        console.log(err);
+      }
+    }
+
     return {
       channelId: item.channelId,
       contacts: contacts,
       logo: logo,
+      subject: subject,
+      message: message,
     }
   }
 
   useEffect(() => {
     const channels = Array.from(channel.state.channels.values()).map(item => setChannelEntry(item));
-    updateState({ channels });
+    updateState({ channels: channels });
   }, [channel, card]);
 
   const actions = {

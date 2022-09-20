@@ -3,12 +3,10 @@ import { FlatList, ScrollView, View, TextInput, TouchableOpacity, Text } from 'r
 import { styles } from './Channels.styled';
 import { useChannels } from './useChannels.hook';
 import Ionicons from '@expo/vector-icons/AntDesign';
-import { ChannelItem } from './channelItem/ChannelItem';
+import { MemoizedChannelItem } from './channelItem/ChannelItem';
 
 export function Channels() {
-
   const { state, actions } = useChannels();
-
   return (
     <View style={styles.container}>
       <View style={styles.inputwrapper}>
@@ -19,7 +17,7 @@ export function Channels() {
       </View>
       <FlatList style={styles.channels}
         data={state.channels}
-        renderItem={({ item }) => <ChannelItem item={item} />}
+        renderItem={({ item }) => <MemoizedChannelItem item={item} />}
         keyExtractor={item => (`${item.cardId}:${item.channelId}`)}
       />
     </View>

@@ -95,8 +95,8 @@ export function useAppContext() {
         try {
           profile.actions.setRevision(rev.profile);
           account.actions.setRevision(rev.account);
-          card.actions.setRevision(rev.channel);
-          channel.actions.setRevision(rev.card);
+          channel.actions.setRevision(rev.channel);
+          card.actions.setRevision(rev.card);
         }
         catch(err) {
           console.log(err);

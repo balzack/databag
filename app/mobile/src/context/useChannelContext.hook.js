@@ -43,7 +43,7 @@ export function useChannelContext() {
     if (channel) {
       channel.summary = summary;
       channel.topicRevision = revision;
-      channels.curent.set(channelId, channel);
+      channels.current.set(channelId, channel);
     }
   }
   const setChannelRevision = (channelId, revision) => {
@@ -64,6 +64,7 @@ export function useChannelContext() {
         const { server, appToken, guid } = session.current;
 
         const delta = await getChannels(server, appToken, setRevision.current);
+console.log(delta);
         for (let channel of delta) {
           if (channel.data) {
             if (channel.data.channelDetail && channel.data.channelSummary) {
@@ -138,6 +139,7 @@ export function useChannelContext() {
       updateState({ account: null, channels: channels.current });
     },
     setRevision: (rev) => {
+console.log("CHANNEL REVISION:", rev);
       curRevision.current = rev;
       sync();
     },
