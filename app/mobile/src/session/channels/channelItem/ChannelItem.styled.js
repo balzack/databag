@@ -20,9 +20,16 @@ export const styles = StyleSheet.create({
     flexShrink: 1,
   },
   subject: {
+    color: Colors.text,
   },
   message: {
     color: Colors.disabled,
   },
+  dot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: Colors.background,
+  }
 })
 

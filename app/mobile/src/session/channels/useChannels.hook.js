@@ -3,6 +3,7 @@ import { useWindowDimensions } from 'react-native';
 import { useNavigate } from 'react-router-dom';
 import { CardContext } from 'context/CardContext';
 import { ChannelContext } from 'context/ChannelContext';
+import { AppContext } from 'context/AppContext';
 import config from 'constants/Config';
 
 export function useChannels() {
@@ -15,6 +16,7 @@ export function useChannels() {
   const items = useRef([]);
   const channel = useContext(ChannelContext);
   const card = useContext(CardContext);
+  const app = useContext(AppContext);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
@@ -31,6 +33,16 @@ export function useChannels() {
   }
 
   const setChannelEntry = (item) => {
+
+    let updated = false;
+    const login = app.state.loginTimestamp;
+    const update = item?.summary?.lastTopic?.created;
+    if (update && login && login < update) {
+      if (!item.readRevision || item.readRevision < item.revision) {
+        updated = true;
+      }
+    }
+
     let contacts = [];
     if (item?.detail?.members) {
       item.detail.members.forEach(guid => {
@@ -91,18 +103,23 @@ export function useChannels() {
       }
     }
 
-    return {
-      channelId: item.channelId,
-      contacts: contacts,
-      logo: logo,
-      subject: subject,
-      message: message,
-    }
+    return { channelId: item.channelId, contacts, logo, subject, message, updated, revision: item.revision };
   }
 
   useEffect(() => {
-    const channels = Array.from(channel.state.channels.values()).map(item => setChannelEntry(item));
-    updateState({ channels: channels });
+    let channels = Array.from(channel.state.channels.values())
+    channels.sort((a, b) => {
+      const aCreated = a?.summary?.lastTopic?.created;
+      const bCreated = b?.summary?.lastTopic?.created;
+      if (aCreated === bCreated) {
+        return 0;
+      }
+      if (!aCreated || aCreated < bCreated) {
+        return 1;
+      }
+      return -1;
+    });
+    updateState({ channels: channels.map(item => setChannelEntry(item)) });
   }, [channel, card]);
 
   const actions = {

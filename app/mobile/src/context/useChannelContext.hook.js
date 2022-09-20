@@ -21,18 +21,21 @@ export function useChannelContext() {
   }
 
   const setChannel = (channelId, channel) => {
-    channels.current.set(channelId, {
-      channelId: channel?.id,
-      revision: channel?.revision,
-      detail: channel?.data?.channelDetail,
-      summary: channel?.data?.channelSummary,
-      detailRevision: channel?.data?.detailRevision,
-      topicRevision: channel?.data?.topicRevision,
-    });
+    let update = channels.current.get(channelId);
+    if (!update) {
+      update = { readRevision: 0 };
+    }
+    update.channelId = channel?.id;
+    update.revision = channel?.revision;
+    update.detail = channel?.data?.channelDetail;
+    update.summary = channel?.data?.channelSummary;
+    update.detailRevision = channel?.data?.detailRevision;
+    update.topicRevision = channel?.data?.topicRevision;
+    channels.current.set(channelId, channel);
   }
   const setChannelDetails = (channelId, detail, revision) => {
     let channel = channels.current.get(channelId);
-    if (channel?.data) {
+    if (channel) {
       channel.detail = detail;
       channel.detailRevision = revision;
       channels.current.set(channelId, channel);
@@ -50,6 +53,13 @@ export function useChannelContext() {
     let channel = channels.current.get(channelId);
     if (channel) {
       channel.revision = revision;
+      channels.current.set(channelId, channel);
+    }
+  }
+  const setChannelReadRevision = (channelId, revision) => {
+    let channel = channels.current.get(channelId);
+    if (channel) {
+      channel.readRevision = revision;
       channels.current.set(channelId, channel);
     }
   }
@@ -141,6 +151,11 @@ export function useChannelContext() {
       curRevision.current = rev;
       sync();
     },
+    setReadRevision: async (channelId, rev) => {
+      await store.actions.setChannelItemReadRevision(session.current.guid, channelId, rev);
+      setChannelReadRevision(channelId, rev);
+      updateState({ channels: channels.current }); 
+    }
   }
 
   return { state, actions }

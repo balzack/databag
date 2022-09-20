@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef, useContext } from 'react';
 import SQLite from "react-native-sqlite-storage";
 
-const DATABAG_DB = 'databag_v025.db';
+const DATABAG_DB = 'databag_v026.db';
 
 export function useStoreContext() {
   const [state, setState] = useState({});
@@ -12,10 +12,10 @@ export function useStoreContext() {
   }
 
   const initSession = async (guid) => {
-    await db.current.executeSql(`CREATE TABLE IF NOT EXISTS channel_${guid} (channel_id text, revision integer, detail_revision integer, topic_revision integer, detail text, summary text, offsync integer, unique(channel_id))`);
+    await db.current.executeSql(`CREATE TABLE IF NOT EXISTS channel_${guid} (channel_id text, revision integer, detail_revision integer, topic_revision integer, detail text, summary text, offsync integer, read_revision integer, unique(channel_id))`);
     await db.current.executeSql(`CREATE TABLE IF NOT EXISTS channel_topic_${guid} (channel_id text, topic_id text, revision integer, detail_revision integer, detail text, unique(channel_id, topic_id))`);
     await db.current.executeSql(`CREATE TABLE IF NOT EXISTS card_${guid} (card_id text, revision integer, detail_revision integer, profile_revision integer, detail text, profile text, notified_view integer, notified_article integer, notified_profile integer, notified_channel integer, offsync integer, unique(card_id))`);
-    await db.current.executeSql(`CREATE TABLE IF NOT EXISTS card_channel_${guid} (card_id text, channel_id text, revision integer, detail_revision integer, topic_revision integer, detail text, summary text, offsync integer, unique(card_id, channel_id))`);
+    await db.current.executeSql(`CREATE TABLE IF NOT EXISTS card_channel_${guid} (card_id text, channel_id text, revision integer, detail_revision integer, topic_revision integer, detail text, summary text, offsync integer, read_revision integer, unique(card_id, channel_id))`);
     await db.current.executeSql(`CREATE TABLE IF NOT EXISTS card_channel_topic_${guid} (card_id text, channel_id text, topic_id text, revision integer, detail_revision integer, detail text, unique(card_id, channel_id, topic_id))`);
   }
 
@@ -174,6 +174,9 @@ export function useStoreContext() {
     setChannelItemRevision: async (guid, channelId, revision) => {
       await db.current.executeSql(`UPDATE channel_${guid} set revision=? where channel_id=?`, [revision, channelId]);
     },
+    setChannelItemReadRevision: async (guid, channelId, revision) => {
+      await db.current.executeSql(`UPDATE channel_${guid} set read_revision=? where channel_id=?`, [revision, channelId]);
+    },
     setChannelItemDetail: async (guid, channelId, revision, detail) => {
       await db.current.executeSql(`UPDATE channel_${guid} set detail_revision=?, detail=? where channel_id=?`, [revision, encodeObject(detail), channelId]);
     },
@@ -192,10 +195,11 @@ export function useStoreContext() {
       };
     },
     getChannelItems: async (guid) => {
-      const values = await getAppValues(db.current, `SELECT channel_id, revision, detail_revision, topic_revision, detail, summary FROM channel_${guid}`, []);
+      const values = await getAppValues(db.current, `SELECT channel_id, read_revision, revision, detail_revision, topic_revision, detail, summary FROM channel_${guid}`, []);
       return values.map(channel => ({
         channelId: channel.channel_id,
         revision: channel.revision,
+        readRevision: channel.read_revision,
         detailRevision: channel.detail_revision,
         topicRevision: channel.topic_revision,
         detail: decodeObject(channel.detail),
@@ -212,6 +216,9 @@ export function useStoreContext() {
     },
     setCardChannelItemRevision: async (guid, cardId, channelId, revision) => {
       await db.current.executeSql(`UPDATE card_channel_${guid} set revision=? where card_id=? and channel_id=?`, [revision, cardId, channelId]);
+    },
+    setCardChannelItemReadRevision: async (guid, cardId, channelId, revision) => {
+      await db.current.executeSql(`UPDATE card_channel_${guid} set read_revision=? where card_id=? and channel_id=?`, [revision, cardId, channelId]);
     },
     setCardChannelItemDetail: async (guid, cardId, channelId, revision, detail) => {
       await db.current.executeSql(`UPDATE card_channel_${guid} set detail_revision=?, detail=? where card_id=? and channel_id=?`, [revision, encodeObject(detail), cardId, channelId]);
@@ -231,11 +238,12 @@ export function useStoreContext() {
       };
     },
     getCardChannelItems: async (guid) => {
-      const values = await getAppValues(db.current, `SELECT card_id, channel_id, revision, detail_revision, topic_revision, detail, summary FROM card_channel_${guid}`, []);
+      const values = await getAppValues(db.current, `SELECT card_id, channel_id, read_revision, revision, detail_revision, topic_revision, detail, summary FROM card_channel_${guid}`, []);
       return values.map(channel => ({
         cardId: channel.card_id,
         channelId: channel.channel_id,
         revision: channel.revision,
+        readRevision: channel.read_revision,
         detailRevision: channel.detail_revision,
         topicRevision: channel.topic_revision,
         detail: decodeObject(channel.detail),
