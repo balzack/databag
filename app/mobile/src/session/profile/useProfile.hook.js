@@ -43,6 +43,9 @@ export function useProfile() {
     setVisible: async (visible) => {
       await account.actions.setSearchable(visible);
     },
+    setProfileImage: async (data) => {
+      await profile.actions.setProfileImage(data);
+    },
   };
 
   return { state, actions };

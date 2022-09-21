@@ -24,11 +24,20 @@ export const styles = StyleSheet.create({
     paddingRight: 4,
     textDecorationLine: 'underline',
   },
-  edit: {
+  camera: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    padding: 8,
+    backgroundColor: Colors.lightgrey,
+    borderBottomLeftRadius: 8,
+    borderTopRightRadius: 8,
+  },
+  gallery: {
     position: 'absolute',
     bottom: 0,
     right: 0,
-    padding: 4,
+    padding: 8,
     backgroundColor: Colors.lightgrey,
     borderBottomRightRadius: 8,
     borderTopLeftRadius: 8,
@@ -89,6 +98,10 @@ export const styles = StyleSheet.create({
   logoutText: {
     color: Colors.white,
     paddingLeft: 8,
-  }
+  },
+  switch: {
+    false: Colors.grey,
+    true: Colors.background,
+  },
 })
 
