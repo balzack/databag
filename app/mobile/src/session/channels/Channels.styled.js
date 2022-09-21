@@ -8,20 +8,33 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
   },
+  topbar: {
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    borderColor: Colors.divider,
+    paddingTop: 6,
+    paddingBottom: 6,
+    paddingLeft: 16,
+    paddingRight: 16,
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  searchbar: {
+    paddingRight: 8,
+  },
   inputwrapper: {
     display: 'flex',
     flexDirection: 'row',
     borderRadius: 4,
-    backgroundColor: Colors.background,
+    backgroundColor: Colors.white,
     alignItems: 'center',
-    marginRight: 8,
-    marginLeft: 8,
+    flexGrow: 1,
   },
   inputfield: {
     flex: 1,
     textAlign: 'center',
     padding: 4,
-    color: Colors.white,
+    color: Colors.text,
     fontSize: 16,
   },
   icon: {
@@ -32,6 +45,29 @@ export const styles = StyleSheet.create({
     width: '100%',
     paddingLeft: 16,
     paddingRight: 16,
-  }, 
+  },
+  addbottom: {
+    backgroundColor: Colors.primary,
+    marginRight: 8,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 8,
+    borderRadius: 4,
+  },
+  add: {
+    backgroundColor: Colors.primary,
+    marginLeft: 16,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 8,
+    borderRadius: 4,
+  },
+  newtext: {
+    paddingLeft: 8,
+    color: Colors.white,
+  }
 })
 

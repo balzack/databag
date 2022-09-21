@@ -11,7 +11,8 @@ export function useChannels() {
 
   const [state, setState] = useState({
     topic: null,
-    channels: []
+    channels: [],
+    tabbed: null,
   });
 
   const items = useRef([]);
@@ -19,10 +20,20 @@ export function useChannels() {
   const card = useContext(CardContext);
   const profile = useContext(ProfileContext);
   const app = useContext(AppContext);
+  const dimensions = useWindowDimensions();
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
   }
+
+  useEffect(() => {
+    if (dimensions.width > config.tabbedWidth) {
+      updateState({ tabbed: false });
+    }
+    else {
+      updateState({ tabbed: true });
+    }
+  }, [dimensions]);
 
   const getCard = (guid) => {
     let contact = null

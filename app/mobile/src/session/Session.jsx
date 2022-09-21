@@ -57,9 +57,7 @@ export function Session() {
   }
   const ChannelsTabScreen = ({ navigation }) => {
     return (
-      <SafeAreaView style={styles.channels} edges={['top']}>
-        <Channels openConversation={(cardId, channelId) => openConversation(navigation, cardId, channelId)} />
-      </SafeAreaView>
+      <Channels openConversation={(cardId, channelId) => openConversation(navigation, cardId, channelId)} />
     )
   }
   const ConversationTabScreen = ({ navigation }) => {
@@ -135,8 +133,8 @@ export function Session() {
   const HomeScreen = ({ cardNav, detailNav, contactNav, profileNav }) => {
     return (
       <View style={styles.home}>
-        <View style={styles.sidebar}>
-          <SafeAreaView edges={['top', 'left']} style={styles.options}>
+        <SafeAreaView edges={['top', 'bottom', 'left']} style={styles.sidebar}>
+          <View style={styles.options}>
             <TouchableOpacity style={styles.option} onPress={() => openProfile(profileNav)}>
               <Ionicons style={styles.icon} name={'user'} size={20} />
               <Text>Profile</Text>
@@ -145,11 +143,11 @@ export function Session() {
               <Ionicons style={styles.icon} name={'contacts'} size={20} />
               <Text>Contacts</Text>
             </TouchableOpacity>
-          </SafeAreaView>
-          <SafeAreaView edges={['left', 'bottom']} style={styles.channels}>
+          </View>
+          <View style={styles.channels}>
             <Channels openConversation={(cardId, channelId) => openConversation(null, cardId, channelId)} />
-          </SafeAreaView>
-        </View>
+          </View>
+        </SafeAreaView>
         <View style={styles.conversation}>
           { state.conversationId && (
             <Conversation closeConversation={() => closeConversation(null)} openDetails={() => openDetails(detailNav)} />
@@ -208,7 +206,7 @@ export function Session() {
   }
 
   return (
-    <>
+    <View style={styles.container}>
       { state.tabbed === false && (
         <DetailDrawer.Navigator screenOptions={{ drawerPosition: 'right', headerShown: false, swipeEnabled: false, drawerType: 'front', drawerStyle: { width: state.subWidth } }}
           drawerContent={(props) => <DetailDrawerContent {...props} />}>
@@ -237,14 +235,16 @@ export function Session() {
             tabBarActiveTintColor: Colors.white,
             tabBarInactiveTintColor: Colors.disabled,
           })}>
-          <Tab.Screen name="Conversation" component={ConversationStackScreen} />
+          <Tab.Screen name="Conversation">
+            {(props) => (<SafeAreaView style={styles.tabframe} edges={['top']}><ConversationStackScreen /></SafeAreaView>)}
+          </Tab.Screen>
           <Tab.Screen name="Profile" component={ProfileStackScreen} />
           <Tab.Screen name="Contacts">
-            {(props) => (<SafeAreaView style={styles.tabframe}><ContactStackScreen /></SafeAreaView>)}
+            {(props) => (<SafeAreaView style={styles.tabframe} edges={['top']}><ContactStackScreen /></SafeAreaView>)}
           </Tab.Screen>
         </Tab.Navigator>
       )}
-    </>
+    </View>
   );
 }
 

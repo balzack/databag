@@ -2,6 +2,10 @@ import { StyleSheet } from 'react-native';
 import { Colors } from 'constants/Colors';
 
 export const styles = StyleSheet.create({
+  container: {
+    width: '100%',
+    height: '100%',
+  },
   tabBar: {
     backgroundColor: Colors.primary,
   },
@@ -26,6 +30,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingTop: 8,
     paddingBottom: 4,
+    paddingRight: 8,
   },
   option: {
     width: '50%',
@@ -40,6 +45,8 @@ export const styles = StyleSheet.create({
   },
   channels: {
     flexGrow: 1,
+    flexShrink: 1,
+    position: 'relative',
   },
   tabframe: {
     width: '100%',
