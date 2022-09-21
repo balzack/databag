@@ -117,7 +117,7 @@ export function useAppContext() {
           ws.current.onclose = () => {}
           ws.current.onopen = () => {}
           ws.current.onerror = () => {}
-          setWebsocket(token);
+          setWebsocket(server, token);
           if (delay.current < 15) {
             delay.current += 1;
           }
