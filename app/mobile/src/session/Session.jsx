@@ -106,7 +106,7 @@ export function Session() {
   }
   const ProfileDrawerContent = ({ navigation }) => {
     return (
-      <SafeAreaView>
+      <SafeAreaView edges={['right']}>
         <Profile closeProfile={() => closeProfile(navigation)} />
       </SafeAreaView>
     )
@@ -238,7 +238,9 @@ export function Session() {
           <Tab.Screen name="Conversation">
             {(props) => (<SafeAreaView style={styles.tabframe} edges={['top']}><ConversationStackScreen /></SafeAreaView>)}
           </Tab.Screen>
-          <Tab.Screen name="Profile" component={ProfileStackScreen} />
+          <Tab.Screen name="Profile">
+            {(props) => (<SafeAreaView style={styles.tabframe} edges={['top']}><ProfileStackScreen /></SafeAreaView>)}
+          </Tab.Screen>
           <Tab.Screen name="Contacts">
             {(props) => (<SafeAreaView style={styles.tabframe} edges={['top']}><ContactStackScreen /></SafeAreaView>)}
           </Tab.Screen>

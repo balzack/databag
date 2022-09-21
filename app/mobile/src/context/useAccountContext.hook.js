@@ -62,11 +62,11 @@ export function useAccountContext() {
       sync();
     },
     setSearchable: async (flag) => {
-      const { server, appToken } = access;
+      const { server, appToken } = session.current;
       await setAccountSearchable(server, appToken, flag);
     },
     setLogin: async (username, password) => {
-      const { server, appToken } = access;
+      const { server, appToken } = session.current;
       await setAccountLogin(server, appToken, username, password);
     },
   }

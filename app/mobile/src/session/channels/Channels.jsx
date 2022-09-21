@@ -19,7 +19,7 @@ export function Channels() {
             <View style={styles.space} />
           </View>
           <TouchableOpacity style={styles.add}>
-            <Ionicons name={'message1'} size={16} color={Colors.white} style={[styles.box, { transform: [ { rotate: "180deg" }, ]} ]}/>
+            <Ionicons name={'message1'} size={16} color={Colors.white} style={[styles.box, { transform: [ { rotateY: "180deg" }, ]} ]}/>
             <Text style={styles.newtext}>New</Text>
           </TouchableOpacity>
         </View>
