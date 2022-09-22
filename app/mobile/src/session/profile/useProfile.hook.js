@@ -22,12 +22,17 @@ export function useProfile() {
     editHandle: null,
     editPassword: null,
     editConfirm: null,
+    checked: true,
+    available: true,
+    showPassword: false,
+    showConfirm: false,
   });
 
   const app = useContext(AppContext);
   const account = useContext(AccountContext);
   const profile = useContext(ProfileContext);
   const navigate = useNavigate();
+  const debounce = useRef(null);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
@@ -76,8 +81,38 @@ export function useProfile() {
     setEditDescription: (editDescription) => {
       updateState({ editDescription });
     },
+    showPassword: () => {
+      updateState({ showPassword: true });
+    },
+    hidePassword: () => {
+      updateState({ showPassword: false });
+    },
+    showConfirm: () => {
+      updateState({ showConfirm: true });
+    },
+    hideConfirm: () => {
+      updateState({ showConfirm: false });
+    },
     setEditHandle: (editHandle) => {
-      updateState({ editHandle });
+      updateState({ editHandle, checked: false });
+
+      if (debounce.current != null) {
+        clearTimeout(debounce.current);
+      }
+      debounce.current = setTimeout(async () => {
+        try {
+          if (editHandle === state.handle) {
+            updateState({ available: true, checked: true });
+          }
+          else {
+            const available = await profile.actions.getHandle(editHandle);
+            updateState({ available, checked: true });
+          }
+        }
+        catch (err) {
+          console.log(err);
+        }
+      }, 1000);
     },
     setEditPassword: (editPassword) => {
       updateState({ editPassword });
@@ -85,8 +120,11 @@ export function useProfile() {
     setEditConfirm: (editConfirm) => {
       updateState({ editConfirm });
     },
-    saveDetails: () => {
-      profile.actions.setProfileData(state.editName, state.editLocation, state.editDescription);
+    saveDetails: async () => {
+      await profile.actions.setProfileData(state.editName, state.editLocation, state.editDescription);
+    },
+    saveLogin: async () => {
+      await account.actions.setLogin(state.editHandle, state.editPassword);
     },
   };
 

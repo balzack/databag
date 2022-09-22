@@ -128,10 +128,12 @@ export const styles = StyleSheet.create({
     padding: 8,
     marginBottom: 8,
     maxHeight: 92,
+    display: 'flex',
+    flexDirection: 'row',
   },
   input: {
     fontSize: 16,
-    width: '100%',
+    flexGrow: 1,
   },
   editControls: {
     display: 'flex',
@@ -147,6 +149,18 @@ export const styles = StyleSheet.create({
     width: 72,
     display: 'flex',
     alignItems: 'center',
+  },
+  disabled: {
+    borderWidth: 1,
+    borderColor: Colors.lightgrey,
+    padding: 8,
+    borderRadius: 4,
+    width: 72,
+    display: 'flex',
+    alignItems: 'center',
+  },
+  disabledText: {
+    color: Colors.disabled,
   },
   save: {
     padding: 8,

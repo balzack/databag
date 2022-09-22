@@ -3,6 +3,7 @@ import { getProfile } from 'api/getProfile';
 import { setProfileData } from 'api/setProfileData';
 import { setProfileImage } from 'api/setProfileImage';
 import { getProfileImageUrl } from 'api/getProfileImageUrl';
+import { getHandle } from 'api/getHandle';
 import { StoreContext } from 'context/StoreContext';
 
 export function useProfileContext() {
@@ -70,6 +71,10 @@ export function useProfileContext() {
     setProfileImage: async (image) => {
       const { server, appToken } = session.current;
       await setProfileImage(server, appToken, image);
+    },
+    getHandle: async (name) => {
+      const { server, appToken } = session.current;
+      return await getHandle(server, appToken, name);
     },
   }
 

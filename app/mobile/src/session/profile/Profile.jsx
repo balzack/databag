@@ -39,6 +39,17 @@ export function Profile() {
   }
 
   const saveLogin = async () => {
+    try {
+      await actions.saveLogin();
+      actions.hideLoginEdit();
+    }
+    catch (err) {
+      console.log(err);
+      Alert.alert(
+        'Failed to Change Login',
+        'Please try again.'
+      )
+    }
   }
 
   const onGallery = async () => {
@@ -62,6 +73,8 @@ export function Profile() {
       console.log(err);
     }
   }
+
+  const enabled = (state.checked && state.available && state.editConfirm === state.editPassword && state.editPassword);
 
   return (
     <ScrollView>
@@ -113,15 +126,15 @@ export function Profile() {
             <Text style={styles.editHeader}>Edit Details:</Text>
             <View style={styles.inputField}>
               <TextInput style={styles.input} value={state.editName} onChangeText={actions.setEditName}
-                  autoCapitalize="word" placeholder="Name" />
+                  autoCapitalize="words" placeholder="Name" />
             </View>
             <View style={styles.inputField}>
               <TextInput style={styles.input} value={state.editLocation} onChangeText={actions.setEditLocation}
-                  autoCapitalize="sentence" placeholder="Location" />
+                  autoCapitalize="words" placeholder="Location" />
             </View>
             <View style={styles.inputField}>
               <TextInput style={styles.input} value={state.editDescription} onChangeText={actions.setEditDescription}
-                  autoCapitalize="none" placeholder="Description" multiline={true} />
+                  autoCapitalize="sentences" placeholder="Description" multiline={true} />
             </View>
             <View style={styles.editControls}>
               <TouchableOpacity style={styles.cancel} onPress={actions.hideDetailEdit}>
@@ -146,23 +159,64 @@ export function Profile() {
             <Text style={styles.editHeader}>Change Login:</Text>
             <View style={styles.inputField}>
               <TextInput style={styles.input} value={state.editHandle} onChangeText={actions.setEditHandle}
-                  placeholder="Username" />
+                  autoCapitalize={'none'} placeholder="Username" />
+              { state.checked && state.available && (
+                <Ionicons style={styles.icon} name="checkcircleo" size={18} color={Colors.background} />
+              )}
+              { state.checked && !state.available && (
+                <Ionicons style={styles.icon} name="exclamationcircleo" size={18} color={Colors.alert} />
+              )}
             </View>
-            <View style={styles.inputField}>
-              <TextInput style={styles.input} value={state.editPassword} onChangeText={actions.setEditPassword}
-                  secureTextEntry={true} placeholder="Password" />
-            </View>
-            <View style={styles.inputField}>
-              <TextInput style={styles.input} value={state.editConfirm} onChangeText={actions.setEditConfirm}
-                  secureTextEntry={true} placeholder="Confirm Password" />
-            </View>
+            { !state.showPassword && (
+              <View style={styles.inputField}>
+                <TextInput style={styles.input} value={state.editPassword} onChangeText={actions.setEditPassword}
+                    autoCapitalize={'none'} secureTextEntry={true} placeholder="Password" />
+                <TouchableOpacity onPress={actions.showPassword}>
+                  <Ionicons style={styles.icon} name="eyeo" size={18} color="#888888" />
+                </TouchableOpacity>
+              </View>
+            )}
+            { state.showPassword && (
+              <View style={styles.inputField}>
+                <TextInput style={styles.input} value={state.editPassword} onChangeText={actions.setEditPassword}
+                    autoCapitalize={'none'} secureTextEntry={false} placeholder="Password" />
+                <TouchableOpacity onPress={actions.hidePassword}>
+                  <Ionicons style={styles.icon} name="eye" size={18} color="#888888" />
+                </TouchableOpacity>
+              </View>
+            )}
+            { !state.showConfirm && (
+              <View style={styles.inputField}>
+                <TextInput style={styles.input} value={state.editConfirm} onChangeText={actions.setEditConfirm}
+                    autoCapitalize={'none'} secureTextEntry={true} placeholder="Confirm" />
+                <TouchableOpacity onPress={actions.showConfirm}>
+                  <Ionicons style={styles.icon} name="eyeo" size={18} color="#888888" />
+                </TouchableOpacity>
+              </View>
+            )}
+            { state.showConfirm && (
+              <View style={styles.inputField}>
+                <TextInput style={styles.input} value={state.editConfirm} onChangeText={actions.setEditConfirm}
+                    autoCapitalize={'none'} secureTextEntry={false} placeholder="Confirm" />
+                <TouchableOpacity onPress={actions.hideConfirm}>
+                  <Ionicons style={styles.icon} name="eye" size={18} color="#888888" />
+                </TouchableOpacity>
+              </View>
+            )}
             <View style={styles.editControls}>
               <TouchableOpacity style={styles.cancel} onPress={actions.hideLoginEdit}>
                 <Text>Cancel</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.save} onPress={saveLogin}>
-                <Text style={styles.saveText}>Save</Text>
-              </TouchableOpacity>
+              { enabled && (
+                <TouchableOpacity style={styles.save} onPress={saveLogin}>
+                  <Text style={styles.saveText}>Save</Text>
+                </TouchableOpacity>
+              )}
+              { !enabled && (
+                <View style={styles.disabled}>
+                  <Text style={styles.disabledText}>Save</Text>
+                </View>
+              )}
             </View>
           </View>
         </View>
