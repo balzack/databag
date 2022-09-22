@@ -15,7 +15,13 @@ type accountUsername struct {
 //GetAccountUsername determines if username is assignable
 func GetAccountUsername(w http.ResponseWriter, r *http.Request) {
 
-	if r.FormValue("token") != "" {
+  if r.FormValue("agent") != "" {
+    _, code, res := ParamAgentToken(r, false)
+    if res != nil {
+      ErrResponse(w, code, res)
+      return
+    }
+  } else if r.FormValue("token") != "" {
 		token, _, res := AccessToken(r)
 		if res != nil || token.TokenType != APPTokenCreate {
       time.Sleep(APPUsernameWait * time.Second);
