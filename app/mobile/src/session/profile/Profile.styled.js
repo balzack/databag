@@ -76,12 +76,11 @@ export const styles = StyleSheet.create({
     paddingTop: 16,
   },
   visibleText: {
-    fontSize: 14,
+    fontSize: 16,
     color: Colors.text,
-    paddingRight: 2,
   },
   visibleSwitch: {
-    transform: [{ scaleX: .6 }, { scaleY: .6 }],
+    transform: [{ scaleX: .7 }, { scaleY: .7 }],
   },
   logout: {
     marginTop: 32,
@@ -92,8 +91,8 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     paddingLeft: 8,
     paddingRight: 8,
-    paddingTop: 4,
-    paddingBottom: 4,
+    paddingTop: 8,
+    paddingBottom: 8,
   },
   logoutText: {
     color: Colors.white,
@@ -103,5 +102,62 @@ export const styles = StyleSheet.create({
     false: Colors.grey,
     true: Colors.background,
   },
+  editWrapper: {
+    display: 'flex',
+    width: '100%',
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(52, 52, 52, 0.8)'
+  },
+  editContainer: {
+    backgroundColor: Colors.formBackground,
+    padding: 16,
+    width: '80%',
+    maxWidth: 400,
+  },
+  editHeader: {
+    fontSize: 20,
+    paddingBottom: 16,
+  },
+  inputField: {
+    width: '100%',
+    borderWidth: 1,
+    borderColor: Colors.lightgrey,
+    borderRadius: 4,
+    padding: 8,
+    marginBottom: 8,
+    maxHeight: 92,
+  },
+  input: {
+    fontSize: 16,
+    width: '100%',
+  },
+  editControls: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
+  cancel: {
+    borderWidth: 1,
+    borderColor: Colors.lightgrey,
+    borderRadius: 4,
+    padding: 8,
+    marginRight: 8,
+    width: 72,
+    display: 'flex',
+    alignItems: 'center',
+  },
+  save: {
+    padding: 8,
+    borderRadius: 4,
+    backgroundColor: Colors.primary,
+    width: 72,
+    display: 'flex',
+    alignItems: 'center',
+  },
+  saveText: {
+    color: Colors.white,
+  }
 })
 
