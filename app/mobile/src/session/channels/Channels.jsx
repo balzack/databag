@@ -15,9 +15,9 @@ export function Channels() {
         <>
           <View style={styles.topbar}>
             <View style={styles.inputwrapper}>
-              <Ionicons style={styles.icon} name="search1" size={16} color={Colors.text} />
-              <TextInput style={styles.inputfield} value={state.topic} onChangeText={actions.setTopic}
-                  autoCapitalize="none" placeholderTextColor={Colors.text}  placeholder="Topic" />
+              <Ionicons style={styles.icon} name="search1" size={16} color={Colors.disabled} />
+              <TextInput style={styles.inputfield} value={state.filter} onChangeText={actions.setFilter}
+                  autoCapitalize="none" placeholderTextColor={Colors.disabled}  placeholder="Topic" />
               <View style={styles.space} />
             </View>
             <TouchableOpacity style={styles.add}>

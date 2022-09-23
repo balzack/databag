@@ -13,13 +13,20 @@ export function Cards() {
     <View style={styles.container}>
       { state.tabbed && (
         <View style={styles.topbar}>
-          <TouchableOpacity style={styles.sort}>
-            <Ionicons style={styles.icon} name="menufold" size={18} color={Colors.text} />
-          </TouchableOpacity>
+          { state.sorting && (
+            <TouchableOpacity style={styles.sort} onPress={actions.unsort}>
+              <Ionicons style={styles.icon} name="menufold" size={18} color={Colors.text} />
+            </TouchableOpacity>
+          )}
+          { !state.sorting && (
+            <TouchableOpacity style={styles.sort} onPress={actions.sort}>
+              <Ionicons style={styles.icon} name="menufold" size={18} color={Colors.disabled} />
+            </TouchableOpacity>
+          )}
           <View style={styles.inputwrapper}>
-            <Ionicons style={styles.icon} name="search1" size={16} color={Colors.text} />
-            <TextInput style={styles.inputfield} value={state.topic} onChangeText={actions.setTopic}
-                autoCapitalize="none" placeholderTextColor={Colors.text}  placeholder="Contacts" />
+            <Ionicons style={styles.icon} name="search1" size={16} color={Colors.disabled} />
+            <TextInput style={styles.inputfield} value={state.filter} onChangeText={actions.setFilter}
+                autoCapitalize="none" placeholderTextColor={Colors.disabled} placeholder="Contacts" />
             <View style={styles.space} />
           </View>
           <TouchableOpacity style={styles.add}>

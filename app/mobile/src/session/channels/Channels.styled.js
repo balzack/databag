@@ -38,7 +38,7 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
     padding: 4,
     color: Colors.text,
-    fontSize: 16,
+    fontSize: 14,
   },
   icon: {
     paddingLeft: 8,

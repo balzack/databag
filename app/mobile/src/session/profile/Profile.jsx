@@ -107,7 +107,9 @@ export function Profile() {
           </View> 
         </TouchableOpacity>
         <View style={styles.visible}>
-          <Text style={styles.visibleText}>Visible in Registry</Text>
+          <TouchableOpacity onPress={() => setVisible(!state.searchable)} activeOpacity={1}>
+            <Text style={styles.visibleText}>Visible in Registry</Text>
+          </TouchableOpacity>
           <Switch style={styles.visibleSwitch} value={state.searchable} onValueChange={setVisible} trackColor={styles.switch}/>
         </View>
         <TouchableOpacity style={styles.logout} onPress={actions.logout}>

@@ -19,19 +19,43 @@ export const styles = StyleSheet.create({
     flexGrow: 1,
     flexShrink: 1,
   },
-  subject: {
+  name: {
     color: Colors.text,
     fontSize: 14,
   },
-  message: {
-    color: Colors.disabled,
+  handle: {
+    color: Colors.text,
     fontSize: 12,
   },
-  dot: {
+  connected: {
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: Colors.background,
-  }
+    backgroundColor: Colors.connected,
+  },
+  requested: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: Colors.requested,
+  },
+  connecting: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: Colors.connecting,
+  },
+  pending: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: Colors.pending,
+  },
+  confirmed: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: Colors.confirmed,
+  },
 })
 

@@ -9,6 +9,8 @@ export function useCards() {
   const [state, setState] = useState({
     tabbed: null,
     cards: [],
+    filter: null,
+    sorting: false,
   });
 
   const dimensions = useWindowDimensions();
@@ -27,10 +29,74 @@ export function useCards() {
     }
   }, [dimensions]);
 
+  const setCardItem = (item) => {
+    const { profile, detail } = item;
+    
+    return {
+      cardId: item.cardId,
+      name: profile.name,
+      handle: `${profile.handle}@${profile.node}`,
+      status: detail.status,
+      updated: detail.statusUpdated,
+      logo: profile.imageSet ? card.actions.getCardLogo(item.cardId, profile.revision) : 'avatar',
+    }
+  };
+
   useEffect(() => {
-  }, [card]);
+    const cards = Array.from(card.state.cards.values());
+    const items = cards.map(setCardItem);
+    const filtered = items.filter(item => {
+      if (!state.filter) {
+        return true;
+      }
+      const lower = state.filter.toLowerCase();
+      if (item.name) {
+        if (item.name.toLowerCase().includes(lower)) {
+          return true;
+        }
+      }
+      if (item.handle) {
+        if (item.handle.toLowerCase().includes(lower)) {
+          return true;
+        }
+      }
+      return false;
+    })
+    if (state.sorting) {
+      filtered.sort((a, b) => {
+        if (a.name === b.name) {
+          return 0;
+        }
+        if (!a.name || (a.name < b.name)) {
+          return -1;
+        }
+        return 1;
+      });
+    }
+    else {
+      filtered.sort((a, b) => {
+        if (a.updated === b.updated) {
+          return 0;
+        }
+        if (!a.updated || (a.updated < b.updated)) {
+          return 1;
+        }
+        return -1;
+      });
+    }
+    updateState({ cards: filtered }); 
+  }, [card, state.filter, state.sorting]);
 
   const actions = {
+    setFilter: (filter) => {
+      updateState({ filter });
+    },
+    sort: () => {
+      updateState({ sorting: true });
+    },
+    unsort: () => {
+      updateState({ sorting: false });
+    },
   };
 
   return { state, actions };

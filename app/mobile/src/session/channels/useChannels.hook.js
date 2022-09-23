@@ -13,6 +13,7 @@ export function useChannels() {
     topic: null,
     channels: [],
     tabbed: null,
+    filter: null,
   });
 
   const items = useRef([]);
@@ -133,7 +134,22 @@ export function useChannels() {
     });
     merged.push(...Array.from(channel.state.channels.values()));
 
-    merged.sort((a, b) => {
+    const items = merged.map(setChannelEntry);
+
+    const filtered  = items.filter(item => {
+      if (!state.filter) {
+        return true;
+      }
+      const lower = state.filter.toLowerCase();
+      if (item.subject) {
+        if (item.subject.toLowerCase().includes(lower)) {
+          return true;
+        }
+      }
+      return false;
+    });
+
+    const sorted = filtered.sort((a, b) => {
       const aCreated = a?.summary?.lastTopic?.created;
       const bCreated = b?.summary?.lastTopic?.created;
       if (aCreated === bCreated) {
@@ -145,12 +161,15 @@ export function useChannels() {
       return -1;
     });
 
-    updateState({ channels: merged.map(item => setChannelEntry(item)) });
-  }, [channel, card]);
+    updateState({ channels: sorted });
+  }, [channel, card, state.filter]);
 
   const actions = {
     setTopic: (topic) => {
       updateState({ topic });
+    },
+    setFilter: (filter) => {
+      updateState({ filter });
     },
   };
 
