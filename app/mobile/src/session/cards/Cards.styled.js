@@ -42,6 +42,8 @@ export const styles = StyleSheet.create({
     flexGrow: 1,
     flexShrink: 1,
     marginRight: 8,
+    paddingTop: 4,
+    paddingBottom: 4,
   },
   inputfield: {
     flex: 1,
