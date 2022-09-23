@@ -89,7 +89,6 @@ export const styles = StyleSheet.create({
   },
   up: {
     marginRight: 8,
-    transform: [ { rotate: "90deg" }, ] 
   },
   sort: {
     paddingRight: 12,

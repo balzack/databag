@@ -7,7 +7,7 @@ import Ionicons from '@expo/vector-icons/AntDesign';
 import { CardItem } from './cardItem/CardItem';
 import Colors from 'constants/Colors';
 
-export function Cards() {
+export function Cards({ openRegistry }) {
   const { state, actions } = useCards();
   return (
     <View style={styles.container}>
@@ -66,7 +66,7 @@ export function Cards() {
       />
       { !state.tabbed && (
         <SafeAreaView edges={['right']} style={styles.findarea}>
-          <TouchableOpacity style={styles.addbottom}>
+          <TouchableOpacity style={styles.addbottom} onPress={() => openRegistry()}>
             <Ionicons style={styles.up} name={'doubleleft'} size={16} color={Colors.primary} />
             <Text style={styles.bottomText}>Find Contacts</Text>
           </TouchableOpacity>

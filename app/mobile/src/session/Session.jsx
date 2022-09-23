@@ -12,6 +12,7 @@ import Colors from 'constants/Colors';
 import { Profile } from './profile/Profile';
 import { Channels } from './channels/Channels';
 import { Cards } from './cards/Cards';
+import { Registry } from './registry/Registry';
 import { Contact } from './contact/Contact';
 import { Details } from './details/Details';
 import { Conversation } from './conversation/Conversation';
@@ -24,6 +25,7 @@ const ProfileDrawer = createDrawerNavigator();
 const ContactDrawer = createDrawerNavigator();
 const DetailDrawer = createDrawerNavigator();
 const CardDrawer = createDrawerNavigator();
+const RegistryDrawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
 
 export function Session() {
@@ -97,12 +99,19 @@ export function Session() {
 
 
   // drawered containers
-  const CardDrawerContent = ({ navigation, setContact }) => {
+  const CardDrawerContent = ({ navigation, setContact, openRegistry }) => {
     return (
       <SafeAreaView edges={['top', 'bottom']} style={styles.drawer}>
-        <Cards navigation={navigation} openContact={setContact} />
+        <Cards navigation={navigation} openContact={setContact} openRegistry={openRegistry} />
       </SafeAreaView>
     )
+  }
+  const RegistryDrawerContent = ({ navigation, setContact }) => {
+    return (
+      <SafeAreaView edges={['top', 'bottom']} style={styles.drawer}>
+        <Registry navigation={navigation} openContact={setContact} />
+      </SafeAreaView>
+    );
   }
   const ProfileDrawerContent = ({ navigation }) => {
     return (
@@ -130,7 +139,7 @@ export function Session() {
     )
   }
 
-  const HomeScreen = ({ cardNav, detailNav, contactNav, profileNav }) => {
+  const HomeScreen = ({ cardNav, registryNav, detailNav, contactNav, profileNav }) => {
     return (
       <View style={styles.home}>
         <SafeAreaView edges={['top', 'bottom']} style={styles.sidebar}>
@@ -160,20 +169,41 @@ export function Session() {
     )
   }
 
-  const CardDrawerScreen = ({ detailNav, contactNav, profileNav, setContact }) => {
+  const CardDrawerScreen = ({ registryNav, detailNav, contactNav, profileNav, setContact }) => {
 
     const setCardDrawer = (cardId) => {
       setContact(cardId);
       contactNav.openDrawer();
    }
 
+    const openRegistry = () => {
+      registryNav.openDrawer();
+    }
+
     return (
       <CardDrawer.Navigator screenOptions={{ drawerPosition: 'right', headerShown: false, swipeEnabled: false, drawerType: 'front', drawerStyle: { width: state.baseWidth } }}
-        drawerContent={(props) => <CardDrawerContent setContact={setCardDrawer} {...props} />}>
+        drawerContent={(props) => <CardDrawerContent setContact={setCardDrawer} openRegistry={openRegistry} {...props} />}>
         <CardDrawer.Screen name="home">
-          {(props) => <HomeScreen cardNav={props.navigation} detailNav={detailNav} contactNav={contactNav} profileNav={profileNav} />}
+          {(props) => <HomeScreen cardNav={props.navigation} registryNav={registryNav} detailNav={detailNav} contactNav={contactNav} profileNav={profileNav} />}
         </CardDrawer.Screen>
       </CardDrawer.Navigator>
+    );
+  };
+
+  const RegistryDrawerScreen = ({ detailNav, contactNav, profileNav, setContact }) => {
+
+    const setRegistryDrawer = (cardId) => {
+      setContact(cardId);
+      contactNav.openDrawer();
+   }
+
+    return (
+      <RegistryDrawer.Navigator screenOptions={{ drawerPosition: 'right', headerShown: false, swipeEnabled: false, drawerType: 'front', drawerStyle: { width: state.baseWidth } }}
+        drawerContent={(props) => <RegistryDrawerContent setContact={setRegistryDrawer} {...props} />}>
+        <RegistryDrawer.Screen name="card">
+          {(props) => <CardDrawerScreen registryNav={props.navigation} detailNav={detailNav} contactNav={contactNav} profileNav={profileNav} />}
+        </RegistryDrawer.Screen>
+      </RegistryDrawer.Navigator>
     );
   };
 
@@ -187,8 +217,8 @@ export function Session() {
     return (
       <ContactDrawer.Navigator screenOptions={{ drawerPosition: 'right', headerShown: false, swipeEnabled: false, drawerType: 'front', drawerStyle: { width: state.subWidth } }}
         drawerContent={(props) => <ContactDrawerContent cardId={cardId} {...props} />}>
-        <ContactDrawer.Screen name="profile">
-          {(props) => <CardDrawerScreen detailNav={detailNav} profileNav={profileNav} contactNav={props.navigation} setContact={setContact} />}
+        <ContactDrawer.Screen name="registry">
+          {(props) => <RegistryDrawerScreen detailNav={detailNav} profileNav={profileNav} contactNav={props.navigation} setContact={setContact} />}
         </ContactDrawer.Screen>
       </ContactDrawer.Navigator>
     );
@@ -198,7 +228,7 @@ export function Session() {
     return (
       <ProfileDrawer.Navigator screenOptions={{ drawerPosition: 'right', headerShown: false, swipeEnabled: false, drawerType: 'front', drawerStyle: { width: state.subWidth } }}
         drawerContent={(props) => <ProfileDrawerContent {...props} />}>
-        <ProfileDrawer.Screen name="card">
+        <ProfileDrawer.Screen name="contact">
           {(props) => <ContactDrawerScreen detailNav={detailNav} profileNav={props.navigation}/>}
         </ProfileDrawer.Screen>
       </ProfileDrawer.Navigator>
@@ -210,7 +240,7 @@ export function Session() {
       { state.tabbed === false && (
         <DetailDrawer.Navigator screenOptions={{ drawerPosition: 'right', headerShown: false, swipeEnabled: false, drawerType: 'front', drawerStyle: { width: state.subWidth } }}
           drawerContent={(props) => <DetailDrawerContent {...props} />}>
-          <DetailDrawer.Screen name="contact">
+          <DetailDrawer.Screen name="profile">
             {(props) => <ProfileDrawerScreen detailNav={props.navigation} />}
           </DetailDrawer.Screen>
         </DetailDrawer.Navigator>
