@@ -36,9 +36,9 @@ export function Channels() {
         <>
           <SafeAreaView edges={['left']} style={styles.searchbar}>
             <View style={styles.inputwrapper}>
-              <Ionicons style={styles.icon} name="search1" size={16} color={Colors.text} />
+              <Ionicons style={styles.icon} name="search1" size={16} color={Colors.disabled} />
               <TextInput style={styles.inputfield} value={state.topic} onChangeText={actions.setTopic}
-                  autoCapitalize="none" placeholderTextColor={Colors.text} placeholder="Topic" />
+                  autoCapitalize="none" placeholderTextColor={Colors.disabled} placeholder="Topic" />
               <View style={styles.space} />
             </View>
           </SafeAreaView>
