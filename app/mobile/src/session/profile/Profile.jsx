@@ -6,6 +6,7 @@ import { Logo } from 'utils/Logo';
 import Ionicons from '@expo/vector-icons/AntDesign';
 import Colors from 'constants/Colors';
 import ImagePicker from 'react-native-image-crop-picker'
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export function Profile() {
 
@@ -78,7 +79,7 @@ export function Profile() {
 
   return (
     <ScrollView>
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container} edges={['right']}>
         <TouchableOpacity style={styles.header} onPress={actions.showLoginEdit}>
           <Text style={styles.headerText}>{ `${state.handle}@${state.node}` }</Text>
         </TouchableOpacity>
@@ -113,7 +114,7 @@ export function Profile() {
           <Ionicons name="logout" size={14} color={Colors.white} />
           <Text style={styles.logoutText}>Logout</Text>
         </TouchableOpacity>
-      </View>
+      </SafeAreaView>
       <Modal
         animationType="fade"
         transparent={true}

@@ -18,12 +18,20 @@ export const styles = StyleSheet.create({
     paddingRight: 16,
     display: 'flex',
     flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  searchbar: {
-    paddingRight: 8,
+  searcharea: {
     borderBottomWidth: 1,
     borderColor: Colors.divider,
+  },
+  searchbar: {
+    display: 'flex',
+    flexDirection: 'row',
+    paddingTop: 16,
+    paddingLeft: 8,
     paddingBottom: 8,
+    alignItems: 'center',
   },
   inputwrapper: {
     display: 'flex',
@@ -32,6 +40,8 @@ export const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     alignItems: 'center',
     flexGrow: 1,
+    flexShrink: 1,
+    marginRight: 8,
   },
   inputfield: {
     flex: 1,
@@ -43,19 +53,13 @@ export const styles = StyleSheet.create({
   icon: {
     paddingLeft: 8,
   },
-  content: {
-    flexGrow: 1,
-    flexShrink: 1,
-  },
-  channels: {
-    flexShrink: 1,
+  cards: {
     flexGrow: 1,
     width: '100%',
     paddingLeft: 16,
     paddingRight: 16,
   },
   addbottom: {
-    backgroundColor: Colors.primary,
     marginRight: 8,
     display: 'flex',
     flexDirection: 'row',
@@ -63,6 +67,10 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 8,
     borderRadius: 4,
+  },
+  bottomText: {
+    color: Colors.primary,
+    paddingLeft: 8,
   },
   add: {
     backgroundColor: Colors.primary,
@@ -77,10 +85,17 @@ export const styles = StyleSheet.create({
     paddingLeft: 8,
     color: Colors.white,
   },
-  bottomArea: {
-    paddingTop: 8,
+  up: {
+    marginRight: 8,
+    transform: [ { rotate: "90deg" }, ] 
+  },
+  sort: {
+    paddingRight: 12,
+    transform: [ { rotate: "270deg" }, ] 
+  },
+  findarea: {
     borderTopWidth: 1,
     borderColor: Colors.divider,
-  },
+  }
 })
 

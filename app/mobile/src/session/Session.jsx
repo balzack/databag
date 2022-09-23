@@ -99,16 +99,16 @@ export function Session() {
   // drawered containers
   const CardDrawerContent = ({ navigation, setContact }) => {
     return (
-      <SafeAreaView>
+      <SafeAreaView edges={['top', 'bottom']} style={styles.drawer}>
         <Cards navigation={navigation} openContact={setContact} />
       </SafeAreaView>
     )
   }
   const ProfileDrawerContent = ({ navigation }) => {
     return (
-      <SafeAreaView edges={['right']}>
+      <View style={styles.drawer}>
         <Profile closeProfile={() => closeProfile(navigation)} />
-      </SafeAreaView>
+      </View>
     )
   }
   const DetailDrawerContent = ({ navigation }) => {
@@ -133,8 +133,8 @@ export function Session() {
   const HomeScreen = ({ cardNav, detailNav, contactNav, profileNav }) => {
     return (
       <View style={styles.home}>
-        <SafeAreaView edges={['top', 'bottom', 'left']} style={styles.sidebar}>
-          <View style={styles.options}>
+        <SafeAreaView edges={['top', 'bottom']} style={styles.sidebar}>
+          <SafeAreaView edges={['left']} style={styles.options}>
             <TouchableOpacity style={styles.option} onPress={() => openProfile(profileNav)}>
               <Ionicons style={styles.icon} name={'user'} size={20} />
               <Text>Profile</Text>
@@ -143,7 +143,7 @@ export function Session() {
               <Ionicons style={styles.icon} name={'contacts'} size={20} />
               <Text>Contacts</Text>
             </TouchableOpacity>
-          </View>
+          </SafeAreaView>
           <View style={styles.channels}>
             <Channels openConversation={(cardId, channelId) => openConversation(null, cardId, channelId)} />
           </View>
