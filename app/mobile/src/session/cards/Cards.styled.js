@@ -76,7 +76,7 @@ export const styles = StyleSheet.create({
   },
   add: {
     backgroundColor: Colors.primary,
-    marginLeft: 16,
+    marginLeft: 8,
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',

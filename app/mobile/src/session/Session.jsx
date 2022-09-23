@@ -101,7 +101,7 @@ export function Session() {
   // drawered containers
   const CardDrawerContent = ({ navigation, setContact, openRegistry }) => {
     return (
-      <SafeAreaView edges={['top', 'bottom']} style={styles.drawer}>
+      <SafeAreaView edges={['top']} style={styles.drawer}>
         <Cards navigation={navigation} openContact={setContact} openRegistry={openRegistry} />
       </SafeAreaView>
     )

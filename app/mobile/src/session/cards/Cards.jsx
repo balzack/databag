@@ -29,7 +29,7 @@ export function Cards({ openRegistry }) {
                 autoCapitalize="none" placeholderTextColor={Colors.disabled} placeholder="Contacts" />
             <View style={styles.space} />
           </View>
-          <TouchableOpacity style={styles.add}>
+          <TouchableOpacity style={styles.add} onPress={openRegistry}>
             <Ionicons name={'adduser'} size={16} color={Colors.white} style={[styles.box, { transform: [ { rotateY: "180deg" }, ]} ]}/>
             <Text style={styles.newtext}>New</Text>
           </TouchableOpacity>
@@ -53,8 +53,8 @@ export function Cards({ openRegistry }) {
               <TextInput style={styles.inputfield} value={state.topic} onChangeText={actions.setTopic}
                   autoCapitalize="none" placeholderTextColor={Colors.disabled} placeholder="Contacts" />
             </View>
-            <TouchableOpacity>
-              <Ionicons name={'doubleright'} size={16} color={Colors.grey} />
+            <TouchableOpacity style={styles.add} onPress={openRegistry}>
+              <Ionicons name={'adduser'} size={16} color={Colors.white} style={[styles.box, { transform: [ { rotateY: "180deg" }, ]} ]}/>
             </TouchableOpacity>
           </View>
         </SafeAreaView>
@@ -64,14 +64,6 @@ export function Cards({ openRegistry }) {
         renderItem={({ item }) => <CardItem item={item} />}
         keyExtractor={item => item.cardId}
       />
-      { !state.tabbed && (
-        <SafeAreaView edges={['right']} style={styles.findarea}>
-          <TouchableOpacity style={styles.addbottom} onPress={() => openRegistry()}>
-            <Ionicons style={styles.up} name={'doubleleft'} size={16} color={Colors.primary} />
-            <Text style={styles.bottomText}>Find Contacts</Text>
-          </TouchableOpacity>
-        </SafeAreaView>
-      )}
     </View>
   );
 }
