@@ -84,14 +84,23 @@ export function Session() {
     const clearCardStack = (navigation) => {
       navigation.goBack();
     }
+    const setRegistryStack = (navigation) => {
+      navigation.navigate('registry');
+    }
+    const clearRegistryStack = (navigation) => {
+      navigation.goBack();
+    }
 
     return (
       <ContactStack.Navigator screenOptions={({ route }) => ({ headerShown: false })}>
         <ContactStack.Screen name="cards">
-          {(props) => <Cards openContact={(cardId) => setCardStack(props.navigation, cardId)} />}
+          {(props) => <Cards openRegistry={() => setRegistryStack(props.navigation)} openContact={(cardId) => setCardStack(props.navigation, cardId)} />}
         </ContactStack.Screen>
         <ContactStack.Screen name="card">
           {(props) => <Contact cardId={cardId} closeContact={() => clearCardStack(props.navigation)} />}
+        </ContactStack.Screen>
+        <ContactStack.Screen name="registry">
+          {(props) => <Registry closeRegistry={() => clearRegistryStack(props.navigation)} />}
         </ContactStack.Screen>
       </ContactStack.Navigator>
     );

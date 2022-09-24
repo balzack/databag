@@ -12,28 +12,35 @@ export function Cards({ openRegistry }) {
   return (
     <View style={styles.container}>
       { state.tabbed && (
-        <View style={styles.topbar}>
-          { state.sorting && (
-            <TouchableOpacity style={styles.sort} onPress={actions.unsort}>
-              <Ionicons style={styles.icon} name="menufold" size={18} color={Colors.text} />
+        <>
+          <View style={styles.topbar}>
+            { state.sorting && (
+              <TouchableOpacity style={styles.sort} onPress={actions.unsort}>
+                <Ionicons style={styles.icon} name="menufold" size={18} color={Colors.text} />
+              </TouchableOpacity>
+            )}
+            { !state.sorting && (
+              <TouchableOpacity style={styles.sort} onPress={actions.sort}>
+                <Ionicons style={styles.icon} name="menufold" size={18} color={Colors.disabled} />
+              </TouchableOpacity>
+            )}
+            <View style={styles.inputwrapper}>
+              <Ionicons style={styles.icon} name="search1" size={16} color={Colors.disabled} />
+              <TextInput style={styles.inputfield} value={state.filter} onChangeText={actions.setFilter}
+                  autoCapitalize="none" placeholderTextColor={Colors.disabled} placeholder="Contacts" />
+              <View style={styles.space} />
+            </View>
+            <TouchableOpacity style={styles.add} onPress={openRegistry}>
+              <Ionicons name={'adduser'} size={16} color={Colors.white} style={[styles.box, { transform: [ { rotateY: "180deg" }, ]} ]}/>
+              <Text style={styles.newtext}>New</Text>
             </TouchableOpacity>
-          )}
-          { !state.sorting && (
-            <TouchableOpacity style={styles.sort} onPress={actions.sort}>
-              <Ionicons style={styles.icon} name="menufold" size={18} color={Colors.disabled} />
-            </TouchableOpacity>
-          )}
-          <View style={styles.inputwrapper}>
-            <Ionicons style={styles.icon} name="search1" size={16} color={Colors.disabled} />
-            <TextInput style={styles.inputfield} value={state.filter} onChangeText={actions.setFilter}
-                autoCapitalize="none" placeholderTextColor={Colors.disabled} placeholder="Contacts" />
-            <View style={styles.space} />
           </View>
-          <TouchableOpacity style={styles.add} onPress={openRegistry}>
-            <Ionicons name={'adduser'} size={16} color={Colors.white} style={[styles.box, { transform: [ { rotateY: "180deg" }, ]} ]}/>
-            <Text style={styles.newtext}>New</Text>
-          </TouchableOpacity>
-        </View>
+          <FlatList style={styles.cards}
+            data={state.cards}
+            renderItem={({ item }) => <CardItem item={item} />}
+            keyExtractor={item => item.cardId}
+          />
+        </>
       )}
       { !state.tabbed && (
         <SafeAreaView edges={['right']} style={styles.searcharea}>
@@ -50,20 +57,20 @@ export function Cards({ openRegistry }) {
             )}
             <View style={styles.inputwrapper}>
               <Ionicons style={styles.icon} name="search1" size={16} color={Colors.disabled} />
-              <TextInput style={styles.inputfield} value={state.topic} onChangeText={actions.setTopic}
+              <TextInput style={styles.inputfield} value={state.filter} onChangeText={actions.setFilter}
                   autoCapitalize="none" placeholderTextColor={Colors.disabled} placeholder="Contacts" />
             </View>
             <TouchableOpacity style={styles.add} onPress={openRegistry}>
               <Ionicons name={'adduser'} size={16} color={Colors.white} style={[styles.box, { transform: [ { rotateY: "180deg" }, ]} ]}/>
             </TouchableOpacity>
           </View>
+          <FlatList style={styles.cards}
+            data={state.cards}
+            renderItem={({ item }) => <CardItem item={item} />}
+            keyExtractor={item => item.cardId}
+          />
         </SafeAreaView>
       )}
-      <FlatList style={styles.cards}
-        data={state.cards}
-        renderItem={({ item }) => <CardItem item={item} />}
-        keyExtractor={item => item.cardId}
-      />
     </View>
   );
 }

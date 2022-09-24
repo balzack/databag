@@ -11,6 +11,9 @@ export const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: Colors.itemDivider,
   },
+  space: {
+    height: 64
+  },
   detail: {
     paddingLeft: 12,
     display: 'flex',
@@ -18,9 +21,6 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     flexGrow: 1,
     flexShrink: 1,
-  },
-  space: {
-    height: 64,
   },
   name: {
     color: Colors.text,

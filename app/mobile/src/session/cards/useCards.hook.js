@@ -84,6 +84,7 @@ export function useCards() {
         return -1;
       });
     }
+    filtered.push({cardId:''});
     updateState({ cards: filtered }); 
   }, [card, state.filter, state.sorting]);
 
