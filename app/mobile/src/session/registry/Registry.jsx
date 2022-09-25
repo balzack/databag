@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { ActivityIndicator, FlatList, ScrollView, View, TextInput, TouchableOpacity, Text } from 'react-native';
+import { ActivityIndicator, Alert, FlatList, ScrollView, View, TextInput, TouchableOpacity, Text } from 'react-native';
 import { styles } from './Registry.styled';
 import { useRegistry } from './useRegistry.hook';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -8,6 +8,20 @@ import { RegistryItem } from './registryItem/RegistryItem';
 import Colors from 'constants/Colors';
 
 export function Registry({ closeRegistry, openContact }) {
+
+  const search = async () => {
+    try {
+      await actions.search();
+    }
+    catch (err) {
+      console.log(err);
+      Alert.alert(
+        'Server Listing Failed',
+        'Please try again.'
+      );
+    }
+  }
+
   const { state, actions } = useRegistry();
   return (
     <View style={styles.container}>
@@ -20,7 +34,7 @@ export function Registry({ closeRegistry, openContact }) {
               </View>
             )}
             { !state.busy && (
-              <TouchableOpacity style={styles.search} onPress={actions.search}>
+              <TouchableOpacity style={styles.search} onPress={search}>
                 <Ionicons name={'search1'} size={16} color={Colors.white} />
               </TouchableOpacity>
             )}
@@ -35,7 +49,7 @@ export function Registry({ closeRegistry, openContact }) {
           </View>
           <FlatList style={styles.accounts}
             data={state.accounts}
-            renderItem={({ item }) => <RegistryItem item={item} />}
+            renderItem={({ item }) => <RegistryItem item={item} openContact={openContact} />}
             keyExtractor={item => item.guid}
           />
         </>
@@ -50,7 +64,7 @@ export function Registry({ closeRegistry, openContact }) {
                 </View>
               )}
               { !state.busy && (
-                <TouchableOpacity style={styles.search} onPress={actions.search}>
+                <TouchableOpacity style={styles.search} onPress={search}>
                   <Ionicons name={'search1'} size={16} color={Colors.white} />
                 </TouchableOpacity>
               )}
@@ -62,7 +76,7 @@ export function Registry({ closeRegistry, openContact }) {
           </View>
           <FlatList style={styles.accounts}
             data={state.accounts}
-            renderItem={({ item }) => <RegistryItem item={item} />}
+            renderItem={({ item }) => <RegistryItem item={item} openContact={openContact} />}
             keyExtractor={item => item.guid}
           />
         </SafeAreaView>

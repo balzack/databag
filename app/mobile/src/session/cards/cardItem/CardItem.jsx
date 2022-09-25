@@ -3,14 +3,18 @@ import { Logo } from 'utils/Logo';
 import { styles } from './CardItem.styled';
 import { useCardItem } from './useCardItem.hook';
 
-export function CardItem({ item }) {
+export function CardItem({ item, openContact }) {
   
   const { state, actions } = useCardItem(item);
+
+  const select = () => {
+    openContact({ card: item });
+  };
 
   return (
     <View>
       { item.cardId && (
-        <TouchableOpacity style={styles.container} activeOpacity={1}>
+        <TouchableOpacity style={styles.container} activeOpacity={1} onPress={select}>
           <Logo src={item.logo} width={32} height={32} radius={6} />
           <View style={styles.detail}>
             <Text style={styles.name} numberOfLines={1} ellipsizeMode={'tail'}>{ item.name }</Text>

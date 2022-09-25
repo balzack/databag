@@ -7,7 +7,7 @@ import Ionicons from '@expo/vector-icons/AntDesign';
 import { CardItem } from './cardItem/CardItem';
 import Colors from 'constants/Colors';
 
-export function Cards({ openRegistry }) {
+export function Cards({ openRegistry, openContact }) {
   const { state, actions } = useCards();
   return (
     <View style={styles.container}>
@@ -37,7 +37,7 @@ export function Cards({ openRegistry }) {
           </View>
           <FlatList style={styles.cards}
             data={state.cards}
-            renderItem={({ item }) => <CardItem item={item} />}
+            renderItem={({ item }) => <CardItem item={item} openContact={openContact} />}
             keyExtractor={item => item.cardId}
           />
         </>
@@ -66,7 +66,7 @@ export function Cards({ openRegistry }) {
           </View>
           <FlatList style={styles.cards}
             data={state.cards}
-            renderItem={({ item }) => <CardItem item={item} />}
+            renderItem={({ item }) => <CardItem item={item} openContact={openContact} />}
             keyExtractor={item => item.cardId}
           />
         </SafeAreaView>

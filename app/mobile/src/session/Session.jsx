@@ -76,10 +76,10 @@ export function Session() {
     );
   }
   const ContactStackScreen = () => {
-    const [cardId, setCardId] = useState(null);
-    const setCardStack = (navigation, id) => {
-      setCardId(id);
-      navigation.navigate('card')
+    const [selected, setSelected] = useState(null);
+    const setCardStack = (navigation, contact) => {
+      setSelected(contact);
+      navigation.navigate('contact')
     }
     const clearCardStack = (navigation) => {
       navigation.goBack();
@@ -94,13 +94,13 @@ export function Session() {
     return (
       <ContactStack.Navigator screenOptions={({ route }) => ({ headerShown: false })}>
         <ContactStack.Screen name="cards">
-          {(props) => <Cards openRegistry={() => setRegistryStack(props.navigation)} openContact={(cardId) => setCardStack(props.navigation, cardId)} />}
+          {(props) => <Cards openRegistry={() => setRegistryStack(props.navigation)} openContact={(contact) => setCardStack(props.navigation, contact)} />}
         </ContactStack.Screen>
-        <ContactStack.Screen name="card">
-          {(props) => <Contact cardId={cardId} closeContact={() => clearCardStack(props.navigation)} />}
+        <ContactStack.Screen name="contact">
+          {(props) => <Contact contact={selected} closeContact={() => clearCardStack(props.navigation)} />}
         </ContactStack.Screen>
         <ContactStack.Screen name="registry">
-          {(props) => <Registry closeRegistry={() => clearRegistryStack(props.navigation)} />}
+          {(props) => <Registry closeRegistry={() => clearRegistryStack(props.navigation)} openContact={(contact) => setCardStack(props.navigation, contact)} />}
         </ContactStack.Screen>
       </ContactStack.Navigator>
     );
@@ -180,20 +180,15 @@ export function Session() {
 
   const CardDrawerScreen = ({ registryNav, detailNav, contactNav, profileNav, setContact }) => {
 
-    const setCardDrawer = (cardId) => {
-      setContact(cardId);
-      contactNav.openDrawer();
-   }
-
     const openRegistry = () => {
       registryNav.openDrawer();
     }
 
     return (
       <CardDrawer.Navigator screenOptions={{ drawerPosition: 'right', headerShown: false, swipeEnabled: false, drawerType: 'front', drawerStyle: { width: state.baseWidth } }}
-        drawerContent={(props) => <CardDrawerContent setContact={setCardDrawer} openRegistry={openRegistry} {...props} />}>
+        drawerContent={(props) => <CardDrawerContent setContact={setContact} openRegistry={openRegistry} {...props} />}>
         <CardDrawer.Screen name="home">
-          {(props) => <HomeScreen cardNav={props.navigation} registryNav={registryNav} detailNav={detailNav} contactNav={contactNav} profileNav={profileNav} />}
+          {(props) => <HomeScreen cardNav={props.navigation} registryNav={registryNav} detailNav={detailNav} contactNav={contactNav} profileNav={profileNav} setContact={setContact} />}
         </CardDrawer.Screen>
       </CardDrawer.Navigator>
     );
@@ -201,16 +196,11 @@ export function Session() {
 
   const RegistryDrawerScreen = ({ detailNav, contactNav, profileNav, setContact }) => {
 
-    const setRegistryDrawer = (cardId) => {
-      setContact(cardId);
-      contactNav.openDrawer();
-   }
-
     return (
       <RegistryDrawer.Navigator screenOptions={{ drawerPosition: 'right', headerShown: false, swipeEnabled: false, drawerType: 'front', drawerStyle: { width: state.baseWidth } }}
-        drawerContent={(props) => <RegistryDrawerContent setContact={setRegistryDrawer} {...props} />}>
+        drawerContent={(props) => <RegistryDrawerContent setContact={setContact} {...props} />}>
         <RegistryDrawer.Screen name="card">
-          {(props) => <CardDrawerScreen registryNav={props.navigation} detailNav={detailNav} contactNav={contactNav} profileNav={profileNav} />}
+          {(props) => <CardDrawerScreen registryNav={props.navigation} detailNav={detailNav} contactNav={contactNav} profileNav={profileNav} setContact={setContact} />}
         </RegistryDrawer.Screen>
       </RegistryDrawer.Navigator>
     );
@@ -218,16 +208,17 @@ export function Session() {
 
   const ContactDrawerScreen = ({ detailNav, profileNav }) => {
 
-    const [cardId, setCardId] = useState(null);
-    const setContact = (id) => {
-      setCardId(id);
+    const [selected, setSelected] = useState(null);
+    const setContact = (navigation, contact) => {
+      setSelected(contact);
+      navigation.openDrawer();
     }
 
     return (
       <ContactDrawer.Navigator screenOptions={{ drawerPosition: 'right', headerShown: false, swipeEnabled: false, drawerType: 'front', drawerStyle: { width: state.subWidth } }}
-        drawerContent={(props) => <ContactDrawerContent cardId={cardId} {...props} />}>
+        drawerContent={(props) => <ContactDrawerContent contact={selected} {...props} />}>
         <ContactDrawer.Screen name="registry">
-          {(props) => <RegistryDrawerScreen detailNav={detailNav} profileNav={profileNav} contactNav={props.navigation} setContact={setContact} />}
+          {(props) => <RegistryDrawerScreen detailNav={detailNav} profileNav={profileNav} contactNav={props.navigation} setContact={(contact) => setContact(props.navigation, contact)} />}
         </ContactDrawer.Screen>
       </ContactDrawer.Navigator>
     );

@@ -72,9 +72,12 @@ export function useRegistry() {
   };    
 
   const actions = {
-    setServer: (filter) => {
-      updateState({ filter });
+    setServer: (server) => {
+      updateState({ server, accounts: [] });
     },
+    search: async () => {
+      await getAccounts(state.server, false);
+    }
   };
 
   return { state, actions };
