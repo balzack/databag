@@ -11,6 +11,12 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  close: {
+    width: '100%',
+    display: 'flex',
+    alignItems: 'flex-end',
+    paddingRight: 32,
+  },
   header: {
     paddingBottom: 32,
     paddingTop: 16,

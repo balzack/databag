@@ -14,6 +14,13 @@ export function Contact({ contact, closeContact }) {
   return (
     <ScrollView>
       <SafeAreaView style={styles.container} edges={['top', 'bottom', 'right']}>
+        { state.tabbed && (
+          <View style={styles.close}>
+            <TouchableOpacity onPress={closeContact}>
+              <Ionicons name={'close'} size={24} color={Colors.text} />
+            </TouchableOpacity>
+          </View>
+        )}
         <View style={styles.header}>
           <Text style={styles.headerText}>{ `${state.handle}@${state.node}` }</Text>
         </View>

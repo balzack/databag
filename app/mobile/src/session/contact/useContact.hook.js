@@ -1,10 +1,13 @@
 import { useState, useEffect, useRef, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CardContext } from 'context/CardContext';
+import { useWindowDimensions } from 'react-native'
+import config from 'constants/Config';
 
 export function useContact(contact) {
 
   const [state, setState] = useState({
+    tabbed: null,
     name: null,
     handle: null,
     node: null,
@@ -14,11 +17,21 @@ export function useContact(contact) {
     status: null,
   });
 
+  const dimensions = useWindowDimensions();
   const card = useContext(CardContext);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
   }
+
+  useEffect(() => {
+    if (dimensions.width > config.tabbedWidth) {
+      updateState({ tabbed: false });
+    }
+    else {
+      updateState({ tabbed: true });
+    }
+  }, [dimensions]);
 
   useEffect(() => {
     let stateSet = false;
