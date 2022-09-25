@@ -136,15 +136,15 @@ export function Session() {
       </SafeAreaView>
     )
   }
-  const ContactDrawerContent = ({ navigation }) => {
+  const ContactDrawerContent = ({ contact, navigation }) => {
     const clearContact = () => {
       navigation.closeDrawer();
     }
 
     return (
-      <SafeAreaView>
-        <Contact closeContact={clearContact} />
-      </SafeAreaView>
+      <View style={styles.drawer}>
+        <Contact contact={contact} closeContact={clearContact} />
+      </View>
     )
   }
 

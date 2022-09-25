@@ -79,7 +79,7 @@ export function Profile() {
 
   return (
     <ScrollView>
-      <SafeAreaView style={styles.container} edges={['right']}>
+      <SafeAreaView style={styles.container} edges={['top', 'bottom', 'right']}>
         <TouchableOpacity style={styles.header} onPress={actions.showLoginEdit}>
           <Text style={styles.headerText}>{ `${state.handle}@${state.node}` }</Text>
         </TouchableOpacity>

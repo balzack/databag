@@ -333,7 +333,16 @@ export function useCardContext() {
     getCardLogo: (cardId, revision) => {
       const { server, appToken } = session.current;
       return getCardImageUrl(server, appToken, cardId, revision);
-    }
+    },
+    getByGuid: (guid) => {
+      let card;
+      cards.current.forEach((value, key, map) => {
+        if (value?.profile?.guid === guid) {
+          card = value;
+        }
+      });
+      return card;
+    },
   }
 
   return { state, actions }

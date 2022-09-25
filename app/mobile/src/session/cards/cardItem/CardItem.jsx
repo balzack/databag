@@ -8,7 +8,7 @@ export function CardItem({ item, openContact }) {
   const { state, actions } = useCardItem(item);
 
   const select = () => {
-    openContact({ card: item });
+    openContact({ card: item.cardId });
   };
 
   return (

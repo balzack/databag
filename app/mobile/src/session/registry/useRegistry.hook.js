@@ -38,12 +38,9 @@ export function useRegistry() {
   }, [profile]);
 
   const setAccountItem = (item) => {
-    return {
-      guid: item.guid,
-      name: item.name,
-      handle: `${item.handle}@${item.node}`,
-      logo: item.imageSet ? getListingImageUrl(item.node, item.guid) : 'avatar',
-    }
+    const { guid, name, handle, node, location, description } = item;
+    const logo = item.imageSet ? getListingImageUrl(node, guid) : 'avatar';
+    return { guid, name, handle, node, location, description, guid, logo };
   };
 
   const getAccounts = async (server, ignore) => {

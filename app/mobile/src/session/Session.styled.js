@@ -26,6 +26,9 @@ export const styles = StyleSheet.create({
     flexGrow: 1,
   },
   drawer: {
+    width: '100%',
+    height: '100%',
+    paddingLeft: 8,
     backgroundColor: Colors.formBackground,
   },
   options: {
