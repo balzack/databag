@@ -25,7 +25,8 @@ export const styles = StyleSheet.create({
   },
   status: {
     color: Colors.grey,
-    paddingBottom: 24,
+    paddingBottom: 20,
+    paddingTop: 4, 
   },
   headerText: {
     fontSize: 16,

@@ -10,6 +10,14 @@ import { getContactChannelDetail } from 'api/getContactChannelDetail';
 import { getContactChannelSummary } from 'api/getContactChannelSummary';
 import { getCardImageUrl } from 'api/getCardImageUrl';
 
+import { addCard } from 'api/addCard';
+import { removeCard } from 'api/removeCard';
+import { setCardConnecting, setCardConnected, setCardConfirmed } from 'api/setCardStatus';
+import { getCardOpenMessage } from 'api/getCardOpenMessage';
+import { setCardOpenMessage } from 'api/setCardOpenMessage';
+import { getCardCloseMessage } from 'api/getCardCloseMessage';
+import { setCardCloseMessage } from 'api/setCardCloseMessage';
+
 export function useCardContext() {
   const [state, setState] = useState({
     cards: new Map(),
@@ -174,7 +182,6 @@ export function useCardContext() {
             else {
               const view = await store.actions.getCardItemView(guid, card.id);
               if (view == null) {
-                console.log('alert: expected card not synced');
                 let assembled = JSON.parse(JSON.stringify(card));
                 assembled.data.cardDetail = await getCardDetail(server, appToken, card.id);
                 assembled.data.cardProfile = await getCardProfile(server, appToken, card.id);
@@ -342,6 +349,41 @@ export function useCardContext() {
         }
       });
       return card;
+    },
+    addCard: async (message) => {
+      const { server, appToken } = session.current;
+      return await addCard(server, appToken, message);
+    },
+    removeCard: async (cardId) => {
+      const { server, appToken } = session.current;
+      return await removeCard(server, appToken, cardId);
+    },
+    setCardConnecting: async (cardId) => {
+      const { server, appToken } = session.current;
+      return await setCardConnecting(server, appToken, cardId);
+    },
+    setCardConnected: async (cardId, token, rev) => {
+      const { server, appToken } = session.current;
+      return await setCardConnected(server, appToken, cardId, token,
+          rev.viewRevision, rev.articleRevision, rev.channelRevision, rev.profileRevision);
+    },
+    setCardConfirmed: async (cardId) => {
+      const { server, appToken } = session.current;
+      return await setCardConfirmed(server, appToken, cardId);
+    },
+    getCardOpenMessage: async (cardId) => {
+      const { server, appToken } = session.current;
+      return await getCardOpenMessage(server, appToken, cardId);
+    },
+    setCardOpenMessage: async (server, message) => {
+      return await setCardOpenMessage(server, message);
+    },
+    getCardCloseMessage: async (cardId) => {
+      const { server, appToken } = session.current;
+      return await getCardCloseMessage(server, appToken, cardId);
+    },
+    setCardCloseMessage: async (server, message) => {
+      return await setCardCloseMessage(server, message);
     },
   }
 

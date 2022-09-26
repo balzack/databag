@@ -2,9 +2,10 @@ import { useState, useEffect, useRef, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CardContext } from 'context/CardContext';
 import { useWindowDimensions } from 'react-native'
+import { getListingMessage } from 'api/getListingMessage';
 import config from 'constants/Config';
 
-export function useContact(contact) {
+export function useContact(contact, close) {
 
   const [state, setState] = useState({
     tabbed: null,
@@ -15,6 +16,9 @@ export function useContact(contact) {
     description: null,
     logo: null,
     status: null,
+    cardId: null,
+    guid: null,
+    busy: false
   });
 
   const dimensions = useWindowDimensions();
@@ -39,9 +43,9 @@ export function useContact(contact) {
       const selected = card.state.cards.get(contact.card);
       if (selected) {
         const { profile, detail, cardId } = selected;
-        const { name, handle, node, location, description, imageSet, revision } = profile;
+        const { name, handle, node, location, description, guid, imageSet, revision } = profile;
         const logo = imageSet ? card.actions.getCardLogo(cardId, revision) : 'avatar';
-        updateState({ name, handle, node, location, description, logo, status: detail.status });
+        updateState({ name, handle, node, location, description, logo, cardId, guid, status: detail.status });
         stateSet = true;
       }
     }
@@ -50,14 +54,14 @@ export function useContact(contact) {
       const selected = card.actions.getByGuid(guid);
       if (selected) {
         const { cardId, profile, detail } = selected;
-        const { name, handle, node, location, description, imageSet, revision } = profile;
+        const { name, handle, node, location, description, guid, imageSet, revision } = profile;
         const logo = imageSet ? card.actions.getCardLogo(cardId, revision) : 'avatar';
-        updateState({ name, handle, node, location, description, logo, status: detail.status });
+        updateState({ name, handle, node, location, description, logo, cardId, guid, status: detail.status });
         stateSet = true;
       }
       else {
-        const { name, handle, node, location, description, logo } = contact.account;
-        updateState({ name, handle, node, location, description, logo, status: null });
+        const { name, handle, node, location, description, logo, guid } = contact.account;
+        updateState({ name, handle, node, location, description, logo, guid, cardId: null, status: null });
         stateSet = true;
       }
     }
@@ -66,7 +70,91 @@ export function useContact(contact) {
     }
   }, [contact, card]);
 
+  const applyAction = async (action) => {
+    if (!state.busy) {
+      try {
+        updateState({ busy: true });
+        await action();
+        updateState({ busy: false });
+      }
+      catch (err) {
+        console.log(err);
+        updateState({ busy: false });
+        throw new Error("failed to update contact");
+      }
+    }
+    else {
+      throw new Error("operation in progress");
+    }
+  }
+
   const actions = {
+    saveAndConnect: async () => {
+      await applyAction(async () => {
+        let profile = await getListingMessage(state.node, state.guid);
+        let added = await card.actions.addCard(profile);
+        await card.actions.setCardConnecting(added.id);
+        let open = await card.actions.getCardOpenMessage(added.id);
+        let contact = await card.actions.setCardOpenMessage(state.node, open);
+        if (contact.status === 'connected') {
+          await card.actions.setCardConnected(added.id, contact.token, contact);
+        }
+      });
+    },
+    saveContact: async () => {
+      await applyAction(async () => {
+        let message = await getListingMessage(state.node, state.guid);
+        await card.actions.addCard(message);
+      });
+    },
+    disconnectContact: async () => {
+      await applyAction(async () => {
+        await card.actions.setCardConfirmed(state.cardId);
+        try {
+          let message = await card.actions.getCardCloseMessage(state.cardId);
+          await card.actions.setCardCloseMessage(state.node, message);
+        }
+        catch (err) {
+          console.log(err);
+        }
+      });
+    },
+    ignoreContact: async () => {
+      await applyAction(async () => {
+        await card.actions.setCardConfirmed(state.cardId);
+      });
+    },
+    closeDelete: async () => {
+      await applyAction(async () => {
+        await card.actions.setCardConfirmed(state.cardId);
+        try {
+          let message = await card.actions.getCardCloseMessage(state.cardId);
+          await card.actions.setCardCloseMessage(state.node, message);
+        }
+        catch (err) {
+          console.log(err);
+        }
+        await card.actions.removeCard(state.cardId);
+        close();
+      });
+    },
+    deleteContact: async () => {
+      await applyAction(async () => {
+        await card.actions.removeCard(state.cardId);
+        close();
+      });
+    },
+    connectContact: async () => {
+      await applyAction(async () => {
+        await card.actions.setCardConnecting(state.cardId);
+        let message = await card.actions.getCardOpenMessage(state.cardId);
+        let contact = await card.actions.setCardOpenMessage(state.node, message);
+        if (contact.status === 'connected') {
+          await card.actions.setCardConnected(state.cardId, contact.token, contact);
+        }
+      });
+    },
+    blockContact: async () => {},
   };
 
   return { state, actions };

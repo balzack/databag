@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react';
-import { ScrollView, View, TouchableOpacity, Text } from 'react-native';
+import { ScrollView, View, Alert, TouchableOpacity, Text } from 'react-native';
 import { useContact } from './useContact.hook';
 import { styles } from './Contact.styled';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -9,22 +9,114 @@ import Colors from 'constants/Colors';
 
 export function Contact({ contact, closeContact }) {
 
-  const { state, actions } = useContact(contact);
+  const { state, actions } = useContact(contact, closeContact);
 
   const getStatusText = (status) => {
     if (status === 'confirmed') {
-      return 'Saved';
+      return 'saved';
     }
     if (status === 'pending') {
-      return 'Request Reveived';
+      return 'request reveived';
     }
     if (status === 'connecting') {
-      return 'Request Sent';
+      return 'request sent';
     }
     if (status === 'connected') {
-      return 'Connected';
+      return 'connected';
     }
-    return 'Unsaved';
+    if (status === 'requested') {
+      return 'request received';
+    }
+    return 'unsaved';
+  }
+
+  const setContact = async (action) => {
+    try {
+      await action();
+    }
+    catch (err) {
+      console.log(err);
+      Alert.alert(
+        'Failed to Update Contact',
+        'Please try again.',
+      );
+    }
+  }
+
+  const disconnectContact = () => {
+    Alert.alert(
+      "Disconnecting Contact",
+      "Confirm?",
+      [
+        { text: "Cancel",
+          onPress: () => {},
+        },
+        { text: "Disconnect", onPress: () => {
+          setContact(actions.disconnectContact);
+        }}
+      ]
+    );
+  }
+
+  const saveAndConnect = () => {
+    setContact(actions.saveAndConnect);
+  }
+  
+  const saveContact = () => {
+    setContact(actions.saveContact);
+  }
+
+  const ignoreContact = () => {
+    setContact(actions.ignoreContact);
+  }
+
+  const deleteContact = () => {
+    Alert.alert(
+      "Deleting Contact",
+      "Confirm?",
+      [
+        { text: "Cancel",
+          onPress: () => {},
+        },
+        { text: "Delete", onPress: () => {
+          setContact(actions.deleteContact);
+        }}
+      ]
+    );
+  }
+
+  const closeDelete = () => {
+    Alert.alert(
+      "Deleting Contact",
+      "Confirm?",
+      [
+        { text: "Cancel",
+          onPress: () => {},
+        },
+        { text: "Delete", onPress: () => {
+          setContact(actions.closeDelete);
+        }}
+      ]
+    );
+  }
+
+  const blockContact = () => {
+    Alert.alert(
+      "Blocking Contact",
+      "Confirm?",
+      [
+        { text: "Cancel",
+          onPress: () => {},
+        },
+        { text: "Block", onPress: () => {
+          setContact(actions.blockContact);
+        }}
+      ]
+    );
+  }
+
+  const connectContact = () => {
+    setContact(actions.connectContact);
   }
 
   return (
@@ -40,7 +132,7 @@ export function Contact({ contact, closeContact }) {
         <View style={styles.header}>
           <Text style={styles.headerText}>{ `${state.handle}@${state.node}` }</Text>
         </View>
-        <Text style={styles.status}>{ getStatusText(state.status) }</Text> 
+        <Text style={styles.status}>{ `[${getStatusText(state.status)}]` }</Text> 
         <View style={{ width: 128 }}>
           <Logo src={state.logo} width={128} height={128} radius={8} />
         </View>
@@ -60,36 +152,90 @@ export function Contact({ contact, closeContact }) {
         <View style={styles.controls}>
           { state.status === 'connected' && (
             <>
-              <TouchableOpacity style={styles.button}>
+              <TouchableOpacity style={styles.button} onPress={disconnectContact}>
                 <Text style={styles.buttonText}>Disconnect</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.button}>
+              <TouchableOpacity style={styles.button} onPress={closeDelete}>
                 <Text style={styles.buttonText}>Delete Contact</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.button}>
+              <TouchableOpacity style={styles.button} onPress={blockContact}>
                 <Text style={styles.buttonText}>Block Contact</Text>
               </TouchableOpacity>
             </>
           )}
           { state.status === 'connecting' && (
-            <TouchableOpacity style={styles.button}>
-              <Text style={styles.buttonText}>Block</Text>
-            </TouchableOpacity>
+            <>
+              <TouchableOpacity style={styles.button} onPress={disconnectContact}>
+                <Text style={styles.buttonText}>Cancel Request</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.button} onPress={closeDelete}>
+                <Text style={styles.buttonText}>Delete Contact</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.button} onPress={blockContact}>
+                <Text style={styles.buttonText}>Block Contact</Text>
+              </TouchableOpacity>
+            </>
           )}
           { state.status === 'confirmed' && (
-            <TouchableOpacity style={styles.button}>
-              <Text style={styles.buttonText}>Block</Text>
-            </TouchableOpacity>
+            <>
+              <TouchableOpacity style={styles.button} onPress={connectContact}>
+                <Text style={styles.buttonText}>Request Connection</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.button} onPress={deleteContact}>
+                <Text style={styles.buttonText}>Delete Contact</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.button} onPress={blockContact}>
+                <Text style={styles.buttonText}>Block Contact</Text>
+              </TouchableOpacity>
+            </>
           )}
           { state.status === 'pending' && (
-            <TouchableOpacity style={styles.button}>
-              <Text style={styles.buttonText}>Block</Text>
-            </TouchableOpacity>
+            <>
+              <TouchableOpacity style={styles.button} onPress={saveAndConnect}>
+                <Text style={styles.buttonText}>Save and Connect</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.button} onPress={saveContact}>
+                <Text style={styles.buttonText}>Save Contact</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.button} onPress={deleteContact}>
+                <Text style={styles.buttonText}>Ignore Request</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.button} onPress={blockContact}>
+                <Text style={styles.buttonText}>Block Contact</Text>
+              </TouchableOpacity>
+            </>
           )}
           { state.status === 'requested' && (
-            <TouchableOpacity style={styles.button}>
-              <Text style={styles.buttonText}>Block</Text>
-            </TouchableOpacity>
+            <>
+              <TouchableOpacity style={styles.button} onPress={connectContact}>
+                <Text style={styles.buttonText}>Accept Connection</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.button} onPress={ignoreContact}>
+                <Text style={styles.buttonText}>Ignore Request</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.button} onPress={disconnectContact}>
+                <Text style={styles.buttonText}>Deny Request</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.button} onPress={deleteContact}>
+                <Text style={styles.buttonText}>Delete Contact</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.button} onPress={blockContact}>
+                <Text style={styles.buttonText}>Block Contact</Text>
+              </TouchableOpacity>
+            </>
+          )}
+          { state.status == null && (
+            <>
+              <TouchableOpacity style={styles.button} onPress={saveAndConnect}>
+                <Text style={styles.buttonText}>Save and Connect</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.button} onPress={saveContact}>
+                <Text style={styles.buttonText}>Save Contact</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.button} onPress={blockContact}>
+                <Text style={styles.buttonText}>Block Contact</Text>
+              </TouchableOpacity>
+            </>
           )}
         </View>
       </SafeAreaView>

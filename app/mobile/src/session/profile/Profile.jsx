@@ -53,6 +53,21 @@ export function Profile() {
     }
   }
 
+  const logout = async () => {
+    Alert.alert(
+      "Logging Out",
+      "Confirm?",
+      [
+        { text: "Cancel",
+          onPress: () => {},
+        },
+        { text: "Logout", onPress: () => {
+          actions.logout();
+        }}
+      ]
+    );
+  }
+
   const onGallery = async () => {
     try {
       const full = await ImagePicker.openPicker({ mediaType: 'photo', width: 256, height: 256 });
@@ -112,7 +127,7 @@ export function Profile() {
           </TouchableOpacity>
           <Switch style={styles.visibleSwitch} value={state.searchable} onValueChange={setVisible} trackColor={styles.switch}/>
         </View>
-        <TouchableOpacity style={styles.logout} onPress={actions.logout}>
+        <TouchableOpacity style={styles.logout} onPress={logout}>
           <Ionicons name="logout" size={14} color={Colors.white} />
           <Text style={styles.logoutText}>Logout</Text>
         </TouchableOpacity>

@@ -58,7 +58,7 @@ export function useProfileContext() {
     },
     clearSession: () => {
       session.current = {};
-      updateState({ profile: null });
+      updateState({ profile: {} });
     },
     setRevision: (rev) => {
       curRevision.current = rev;
