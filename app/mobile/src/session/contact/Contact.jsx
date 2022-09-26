@@ -11,6 +11,22 @@ export function Contact({ contact, closeContact }) {
 
   const { state, actions } = useContact(contact);
 
+  const getStatusText = (status) => {
+    if (status === 'confirmed') {
+      return 'Saved';
+    }
+    if (status === 'pending') {
+      return 'Request Reveived';
+    }
+    if (status === 'connecting') {
+      return 'Request Sent';
+    }
+    if (status === 'connected') {
+      return 'Connected';
+    }
+    return 'Unsaved';
+  }
+
   return (
     <ScrollView>
       <SafeAreaView style={styles.container} edges={['top', 'bottom', 'right']}>
@@ -24,6 +40,7 @@ export function Contact({ contact, closeContact }) {
         <View style={styles.header}>
           <Text style={styles.headerText}>{ `${state.handle}@${state.node}` }</Text>
         </View>
+        <Text style={styles.status}>{ getStatusText(state.status) }</Text> 
         <View style={{ width: 128 }}>
           <Logo src={state.logo} width={128} height={128} radius={8} />
         </View>
@@ -39,6 +56,41 @@ export function Contact({ contact, closeContact }) {
             <Ionicons name="book" size={14} color={Colors.text} />
             <Text style={styles.descriptiontext}>{ state.description }</Text>
           </View>
+        </View>
+        <View style={styles.controls}>
+          { state.status === 'connected' && (
+            <>
+              <TouchableOpacity style={styles.button}>
+                <Text style={styles.buttonText}>Disconnect</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.button}>
+                <Text style={styles.buttonText}>Delete Contact</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.button}>
+                <Text style={styles.buttonText}>Block Contact</Text>
+              </TouchableOpacity>
+            </>
+          )}
+          { state.status === 'connecting' && (
+            <TouchableOpacity style={styles.button}>
+              <Text style={styles.buttonText}>Block</Text>
+            </TouchableOpacity>
+          )}
+          { state.status === 'confirmed' && (
+            <TouchableOpacity style={styles.button}>
+              <Text style={styles.buttonText}>Block</Text>
+            </TouchableOpacity>
+          )}
+          { state.status === 'pending' && (
+            <TouchableOpacity style={styles.button}>
+              <Text style={styles.buttonText}>Block</Text>
+            </TouchableOpacity>
+          )}
+          { state.status === 'requested' && (
+            <TouchableOpacity style={styles.button}>
+              <Text style={styles.buttonText}>Block</Text>
+            </TouchableOpacity>
+          )}
         </View>
       </SafeAreaView>
     </ScrollView>

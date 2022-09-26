@@ -41,7 +41,7 @@ export function useContact(contact) {
         const { profile, detail, cardId } = selected;
         const { name, handle, node, location, description, imageSet, revision } = profile;
         const logo = imageSet ? card.actions.getCardLogo(cardId, revision) : 'avatar';
-        updateState({ name, handle, node, location, description, logo, status: detail.state });
+        updateState({ name, handle, node, location, description, logo, status: detail.status });
         stateSet = true;
       }
     }
@@ -52,7 +52,7 @@ export function useContact(contact) {
         const { cardId, profile, detail } = selected;
         const { name, handle, node, location, description, imageSet, revision } = profile;
         const logo = imageSet ? card.actions.getCardLogo(cardId, revision) : 'avatar';
-        updateState({ name, handle, node, location, description, logo, status: detail.state });
+        updateState({ name, handle, node, location, description, logo, status: detail.status });
         stateSet = true;
       }
       else {

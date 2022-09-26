@@ -13,7 +13,7 @@ export const styles = StyleSheet.create({
   },
   header: {
     paddingBottom: 32,
-    paddingTop: 16,
+    paddingTop: 24,
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'flex-end',

@@ -18,12 +18,14 @@ export const styles = StyleSheet.create({
     paddingRight: 32,
   },
   header: {
-    paddingBottom: 32,
-    paddingTop: 16,
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'flex-end',
     justifyContent: 'center',
+  },
+  status: {
+    color: Colors.grey,
+    paddingBottom: 24,
   },
   headerText: {
     fontSize: 16,
@@ -72,6 +74,19 @@ export const styles = StyleSheet.create({
   descriptiontext: {
     fontSize: 16,
     paddingLeft: 8
+  },
+  button: {
+    width: 192,
+    padding: 6,
+    backgroundColor: Colors.primary,
+    borderRadius: 4,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 16,
+  },
+  buttonText: {
+    color: Colors.white,
   },
 })
 
