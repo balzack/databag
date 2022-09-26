@@ -7,6 +7,8 @@ import Ionicons from '@expo/vector-icons/AntDesign';
 import Colors from 'constants/Colors';
 import ImagePicker from 'react-native-image-crop-picker'
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { BlockedTopics } from './blockedTopics/BlockedTopics';
+import { BlockedContacts } from './blockedContacts/BlockedContacts';
 
 export function Profile() {
 
@@ -127,11 +129,59 @@ export function Profile() {
           </TouchableOpacity>
           <Switch style={styles.visibleSwitch} value={state.searchable} onValueChange={setVisible} trackColor={styles.switch}/>
         </View>
+        <TouchableOpacity style={styles.link} onPress={actions.showBlockedCards}>
+          <Text style={styles.linkText}>Manage Blocked Contacts</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.link} onPress={actions.showBlockedChannels}>
+          <Text style={styles.linkText}>Manager Blocked Topics</Text>
+        </TouchableOpacity>
         <TouchableOpacity style={styles.logout} onPress={logout}>
           <Ionicons name="logout" size={14} color={Colors.white} />
           <Text style={styles.logoutText}>Logout</Text>
         </TouchableOpacity>
       </SafeAreaView>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={state.blockedCards}
+        supportedOrientations={['portrait', 'landscape']}
+        onRequestClose={actions.hideBlockedCards}
+      >
+        <View style={styles.editWrapper}>
+          <View style={styles.editContainer}>
+            <Text style={styles.editHeader}>Blocked Contacts:</Text>
+            <View style={styles.editList}>
+              <BlockedContacts />
+            </View>
+            <View style={styles.editControls}>
+              <TouchableOpacity style={styles.close} onPress={actions.hideBlockedCards}>
+                <Text>Close</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={state.blockedChannels}
+        supportedOrientations={['portrait', 'landscape']}
+        onRequestClose={actions.hideBlockedChannels}
+      >
+        <View style={styles.editWrapper}>
+          <View style={styles.editContainer}>
+            <Text style={styles.editHeader}>Blocked Topics:</Text>
+            <View style={styles.editList}>
+              <BlockedTopics />
+            </View>
+            <View style={styles.editControls}>
+              <TouchableOpacity style={styles.close} onPress={actions.hideBlockedChannels}>
+                <Text>Close</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
       <Modal
         animationType="fade"
         transparent={true}

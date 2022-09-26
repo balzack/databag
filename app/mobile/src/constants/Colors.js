@@ -21,7 +21,7 @@ export const Colors = {
 
   itemDivider: '#eeeeee',
   
-  connected: '#44cc44',
+  connected: '#4488FF',
   connecting: '#dd88ff',
   requested: '#4488ff',
   pending: '#22aaaa',

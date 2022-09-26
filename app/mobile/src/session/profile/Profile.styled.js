@@ -117,8 +117,14 @@ export const styles = StyleSheet.create({
     maxWidth: 400,
   },
   editHeader: {
-    fontSize: 20,
+    fontSize: 18,
     paddingBottom: 16,
+  },
+  editList: {
+    width: '100%',
+    borderWidth: 1,
+    borderColor: Colors.lightgrey,
+    borderRadius: 2,
   },
   inputField: {
     width: '100%',
@@ -132,13 +138,23 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   input: {
-    fontSize: 16,
+    fontSize: 14,
     flexGrow: 1,
   },
   editControls: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'flex-end',
+  },
+  close: {
+    borderWidth: 1,
+    borderColor: Colors.lightgrey,
+    borderRadius: 4,
+    padding: 8,
+    marginTop: 8,
+    width: 72,
+    display: 'flex',
+    alignItems: 'center',
   },
   cancel: {
     borderWidth: 1,
@@ -169,6 +185,12 @@ export const styles = StyleSheet.create({
     width: 72,
     display: 'flex',
     alignItems: 'center',
+  },
+  link: {
+    marginTop: 16,
+  },
+  linkText: {
+    color: Colors.primary,
   },
   saveText: {
     color: Colors.white,

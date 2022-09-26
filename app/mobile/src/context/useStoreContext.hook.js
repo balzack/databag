@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef, useContext } from 'react';
 import SQLite from "react-native-sqlite-storage";
 
-const DATABAG_DB = 'databag_v033.db';
+const DATABAG_DB = 'databag_v034.db';
 
 export function useStoreContext() {
   const [state, setState] = useState({});
@@ -14,8 +14,8 @@ export function useStoreContext() {
   const initSession = async (guid) => {
     await db.current.executeSql(`CREATE TABLE IF NOT EXISTS channel_${guid} (channel_id text, revision integer, detail_revision integer, topic_revision integer, detail text, summary text, offsync integer, read_revision integer, unique(channel_id))`);
     await db.current.executeSql(`CREATE TABLE IF NOT EXISTS channel_topic_${guid} (channel_id text, topic_id text, revision integer, detail_revision integer, detail text, unique(channel_id, topic_id))`);
-    await db.current.executeSql(`CREATE TABLE IF NOT EXISTS card_${guid} (card_id text, revision integer, detail_revision integer, profile_revision integer, detail text, profile text, notified_view integer, notified_article integer, notified_profile integer, notified_channel integer, offsync integer, unique(card_id))`);
-    await db.current.executeSql(`CREATE TABLE IF NOT EXISTS card_channel_${guid} (card_id text, channel_id text, revision integer, detail_revision integer, topic_revision integer, detail text, summary text, offsync integer, read_revision integer, unique(card_id, channel_id))`);
+    await db.current.executeSql(`CREATE TABLE IF NOT EXISTS card_${guid} (card_id text, revision integer, detail_revision integer, profile_revision integer, detail text, profile text, notified_view integer, notified_article integer, notified_profile integer, notified_channel integer, offsync integer, blocked integer, unique(card_id))`);
+    await db.current.executeSql(`CREATE TABLE IF NOT EXISTS card_channel_${guid} (card_id text, channel_id text, revision integer, detail_revision integer, topic_revision integer, detail text, summary text, offsync integer, blocked integer, read_revision integer, unique(card_id, channel_id))`);
     await db.current.executeSql(`CREATE TABLE IF NOT EXISTS card_channel_topic_${guid} (card_id text, channel_id text, topic_id text, revision integer, detail_revision integer, detail text, unique(card_id, channel_id, topic_id))`);
   }
 
@@ -106,6 +106,12 @@ export function useStoreContext() {
     clearCardItemOffsync: async (guid, cardId) => {
       await db.current.executeSql(`UPDATE card_${guid} set offsync=? where card_id=?`, [0, cardId]);
     },
+    setCardItemBlocked: async (guid, cardId) => {
+      await db.current.executeSql(`UPDATE card_${guid} set blocked=? where card_id=?`, [1, cardId]);
+    },
+    clearCardItemBlocked: async (guid, cardId) => {
+      await db.current.executeSql(`UPDATE card_${guid} set blocked=? where card_id=?`, [0, cardId]);
+    },
     setCardItemDetail: async (guid, cardId, revision, detail) => {
       await db.current.executeSql(`UPDATE card_${guid} set detail_revision=?, detail=? where card_id=?`, [revision, encodeObject(detail), cardId]);
     },
@@ -127,6 +133,7 @@ export function useStoreContext() {
         notifiedProfile: values[0].notified_profile,
         notifiedChannel: values[0].notified_channel,
         offsync: values[0].offsync,
+        blocked: values[0].blocked,
       };
     },
     getCardItemView: async (guid, cardId) => {
@@ -141,7 +148,7 @@ export function useStoreContext() {
       };
     },
     getCardItems: async (guid) => {
-      const values = await getAppValues(db.current, `SELECT card_id, revision, detail_revision, profile_revision, detail, profile, notified_view, notified_profile, notified_article, notified_channel FROM card_${guid}`, []);
+      const values = await getAppValues(db.current, `SELECT card_id, revision, detail_revision, profile_revision, detail, profile, offsync, blocked, notified_view, notified_profile, notified_article, notified_channel FROM card_${guid}`, []);
       return values.map(card => ({
         cardId: card.card_id,
         revision: card.revision,
@@ -153,6 +160,8 @@ export function useStoreContext() {
         notifiedProfile: card.notified_profile,
         notifiedArticle: card.notified_article,
         notifiedChannel: card.notified_channel,
+        offsync: card.offsync,
+        blocked: card.blocked,
       }));
     },
 
@@ -238,7 +247,7 @@ export function useStoreContext() {
       };
     },
     getCardChannelItems: async (guid) => {
-      const values = await getAppValues(db.current, `SELECT card_id, channel_id, read_revision, revision, detail_revision, topic_revision, detail, summary FROM card_channel_${guid}`, []);
+      const values = await getAppValues(db.current, `SELECT card_id, channel_id, read_revision, revision, blocked, detail_revision, topic_revision, detail, summary FROM card_channel_${guid}`, []);
       return values.map(channel => ({
         cardId: channel.card_id,
         channelId: channel.channel_id,
@@ -248,6 +257,7 @@ export function useStoreContext() {
         topicRevision: channel.topic_revision,
         detail: decodeObject(channel.detail),
         summary: decodeObject(channel.summary),
+        blocked: channel.blocked,
       }));
     },
     clearCardChannelItems: async (guid, cardId) => {

@@ -130,7 +130,9 @@ export function useChannels() {
   useEffect(() => {
     let merged = [];
     card.state.cards.forEach((card, cardId, map) => {
-      merged.push(...Array.from(card.channels.values()));
+      if (!card.blocked) {
+        merged.push(...Array.from(card.channels.values()));
+      }
     });
     merged.push(...Array.from(channel.state.channels.values()));
 

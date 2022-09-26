@@ -232,9 +232,6 @@ export function Contact({ contact, closeContact }) {
               <TouchableOpacity style={styles.button} onPress={saveContact}>
                 <Text style={styles.buttonText}>Save Contact</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.button} onPress={blockContact}>
-                <Text style={styles.buttonText}>Block Contact</Text>
-              </TouchableOpacity>
             </>
           )}
         </View>

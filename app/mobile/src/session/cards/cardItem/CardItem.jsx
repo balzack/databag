@@ -21,7 +21,7 @@ export function CardItem({ item, openContact }) {
             <Text style={styles.handle} numberOfLines={1} ellipsizeMode={'tail'}>{ item.handle }</Text>
           </View>
           { item.status === 'connected' && (
-            <View style={styles.confirmed} />
+            <View style={styles.connected} />
           )}
           { item.status === 'requested' && (
             <View style={styles.requested} />

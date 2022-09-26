@@ -37,6 +37,8 @@ export function useCards() {
       name: profile.name,
       handle: `${profile.handle}@${profile.node}`,
       status: detail.status,
+      offsync: item.offsync,
+      blocked: item.blocked,
       updated: detail.statusUpdated,
       logo: profile.imageSet ? card.actions.getCardLogo(item.cardId, profile.revision) : 'avatar',
     }
@@ -47,7 +49,7 @@ export function useCards() {
     const items = cards.map(setCardItem);
     const filtered = items.filter(item => {
       if (!state.filter) {
-        return true;
+        return !item.blocked;
       }
       const lower = state.filter.toLowerCase();
       if (item.name) {

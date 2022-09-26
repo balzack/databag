@@ -26,6 +26,8 @@ export function useProfile() {
     available: true,
     showPassword: false,
     showConfirm: false,
+    blockedChannels: false,
+    blockedCards: false,
   });
 
   const app = useContext(AppContext);
@@ -59,6 +61,18 @@ export function useProfile() {
     },
     setProfileImage: async (data) => {
       await profile.actions.setProfileImage(data);
+    },
+    showBlockedChannels: () => {
+      updateState({ blockedChannels: true });
+    },
+    hideBlockedChannels: () => {
+      updateState({ blockedChannels: false });
+    },
+    showBlockedCards: () => {
+      updateState({ blockedCards: true });
+    },
+    hideBlockedCards: () => {
+      updateState({ blockedCards: false });
     },
     showLoginEdit: () => {
       updateState({ showLoginEdit: true });

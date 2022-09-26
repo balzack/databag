@@ -154,7 +154,12 @@ export function useContact(contact, close) {
         }
       });
     },
-    blockContact: async () => {},
+    blockContact: async () => {
+      await applyAction(async () => {
+        await card.actions.setCardBlocked(state.cardId);
+        close();
+      });
+    },
   };
 
   return { state, actions };

@@ -84,6 +84,13 @@ export function useCardContext() {
       cards.current.set(cardId, card);
     }
   }
+  const setCardBlocked = (cardId, blocked) => {
+    let card = cards.current.get(cardId);
+    if (card) {
+      card.blocked = blocked;
+      cards.current.set(cardId, card);
+    }
+  }
   const clearCardChannels = (cardId) => {
     let card = cards.current.get(cardId);
     if (card) {
@@ -385,6 +392,18 @@ export function useCardContext() {
     setCardCloseMessage: async (server, message) => {
       return await setCardCloseMessage(server, message);
     },
+    setCardBlocked: async (cardId) => {
+      const { guid } = session.current;
+      setCardBlocked(cardId, true);
+      await store.actions.setCardItemBlocked(guid, cardId);
+      updateState({ cards: cards.current });
+    },
+    clearCardBlocked: async (cardId) => {
+      const { guid } = session.current;
+      setCardBlocked(cardId, false);
+      await store.actions.clearCardItemBlocked(guid, cardId);
+      updateState({ cards: cards.current });
+    }
   }
 
   return { state, actions }
