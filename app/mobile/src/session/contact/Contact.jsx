@@ -16,7 +16,7 @@ export function Contact({ contact, closeContact }) {
       return 'saved';
     }
     if (status === 'pending') {
-      return 'request reveived';
+      return 'unknown contact request';
     }
     if (status === 'connecting') {
       return 'request sent';

@@ -23,8 +23,8 @@ export const Colors = {
   
   connected: '#4488FF',
   connecting: '#dd88ff',
-  requested: '#4488ff',
-  pending: '#22aaaa',
+  requested: '#448844',
+  pending: '#ffaa22',
   confirmed: '#aaaaaa',
   error: '#ff4444',
 
