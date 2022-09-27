@@ -11,6 +11,12 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  title: {
+    fontSize: 18,
+  },
+  drawer: {
+    paddingTop: 16,
+  },
   close: {
     width: '100%',
     display: 'flex',

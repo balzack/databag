@@ -9,11 +9,13 @@ import Ionicons from '@expo/vector-icons/AntDesign';
 import { useSession } from './useSession.hook';
 import { styles } from './Session.styled';
 import Colors from 'constants/Colors';
-import { Profile } from './profile/Profile';
+import { ProfileTitle, Profile } from './profile/Profile';
 import { Channels } from './channels/Channels';
-import { Cards } from './cards/Cards';
-import { Registry } from './registry/Registry';
-import { Contact } from './contact/Contact';
+import { CardsTitle, CardsBody, Cards } from './cards/Cards';
+import { useCards } from './cards/useCards.hook';
+import { RegistryTitle, RegistryBody, Registry } from './registry/Registry';
+import { useRegistry } from './registry/useRegistry.hook';
+import { Contact, ContactTitle } from './contact/Contact';
 import { Details } from './details/Details';
 import { Conversation } from './conversation/Conversation';
 import { Welcome } from './welcome/Welcome';
@@ -92,8 +94,8 @@ export function Session() {
   }
   const ProfileStackScreen = () => {
     return (
-      <ProfileStack.Navigator screenOptions={({ route }) => ({ headerShown: false })}>
-        <ProfileStack.Screen name="profile" component={Profile} />
+      <ProfileStack.Navigator screenOptions={({ route }) => ({ headerShown: true })}>
+        <ProfileStack.Screen name="profile" component={Profile} options={{ headerStyle: { backgroundColor: Colors.titleBackground }, headerTitle: (props) => <ProfileTitle {...props} /> }} />
       </ProfileStack.Navigator>
     );
   }
@@ -113,16 +115,31 @@ export function Session() {
       navigation.goBack();
     }
 
+    const registry = useRegistry();
+    const cards = useCards();
+
     return (
-      <ContactStack.Navigator screenOptions={({ route }) => ({ headerShown: false })}>
-        <ContactStack.Screen name="cards">
-          {(props) => <Cards openRegistry={() => setRegistryStack(props.navigation)} openContact={(contact) => setCardStack(props.navigation, contact)} />}
+      <ContactStack.Navigator screenOptions={({ route }) => ({ headerShow: true })}>
+        <ContactStack.Screen name="cards" options={{
+            headerStyle: { backgroundColor: Colors.titleBackground }, 
+            headerBackTitleVisible: false, 
+            headerTitle: (props) => { console.log(props); return <CardsTitle state={cards.state} actions={cards.actions} openRegistry={setRegistryStack} /> }
+          }}>
+          {(props) => <CardsBody state={cards.state} actions={cards.actions} openContact={(contact) => setCardStack(props.navigation, contact)} />}
         </ContactStack.Screen>
-        <ContactStack.Screen name="contact">
+        <ContactStack.Screen name="contact" options={{ 
+            headerStyle: { backgroundColor: Colors.titleBackground }, 
+            headerBackTitleVisible: false, 
+            headerTitle: (props) => <ContactTitle contact={selected} {...props} />
+          }}>
           {(props) => <Contact contact={selected} closeContact={() => clearCardStack(props.navigation)} />}
         </ContactStack.Screen>
-        <ContactStack.Screen name="registry">
-          {(props) => <Registry closeRegistry={() => clearRegistryStack(props.navigation)} openContact={(contact) => setCardStack(props.navigation, contact)} />}
+        <ContactStack.Screen name="registry" options={{
+            headerStyle: { backgroundColor: Colors.titleBackground }, 
+            headerBackTitleVisible: false,
+            headerTitle: (props) => <RegistryTitle state={registry.state} actions={registry.actions} contact={selected} {...props} />
+          }}>
+          {(props) => <RegistryBody state={registry.state} actions={registry.actions} openContact={(contact) => setCardStack(props.navigation, contact)} />}
         </ContactStack.Screen>
       </ContactStack.Navigator>
     );
@@ -306,12 +323,8 @@ export function Session() {
           <Tab.Screen name="Conversation">
             {(props) => (<SafeAreaView style={styles.tabframe} edges={['top']}><ConversationStackScreen /></SafeAreaView>)}
           </Tab.Screen>
-          <Tab.Screen name="Profile">
-            {(props) => (<SafeAreaView style={styles.tabframe} edges={['top']}><ProfileStackScreen /></SafeAreaView>)}
-          </Tab.Screen>
-          <Tab.Screen name="Contacts">
-            {(props) => (<SafeAreaView style={styles.tabframe} edges={['top']}><ContactStackScreen /></SafeAreaView>)}
-          </Tab.Screen>
+          <Tab.Screen name="Profile" component={ProfileStackScreen} />
+          <Tab.Screen name="Contacts" component={ContactStackScreen} />
         </Tab.Navigator>
       )}
     </View>

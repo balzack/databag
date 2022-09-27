@@ -1,6 +1,7 @@
 export const Colors = {
   background: '#8fbea7',
   primary: '#448866',
+  titleBackground: '#f6f6f6',
   formBackground: '#f2f2f2',
   formFocus: '#f8f8f8',
   formHover: '#efefef',

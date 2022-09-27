@@ -10,6 +10,13 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { BlockedTopics } from './blockedTopics/BlockedTopics';
 import { BlockedContacts } from './blockedContacts/BlockedContacts';
 
+export function ProfileTitle(props) {
+  const { state, actions } = useProfile();
+  return (
+    <Text style={styles.title}>{ `${state.handle}@${state.node}` }</Text>
+  )
+} 
+
 export function Profile() {
 
   const { state, actions } = useProfile();
@@ -94,12 +101,9 @@ export function Profile() {
 
   const enabled = (state.checked && state.available && state.editConfirm === state.editPassword && state.editPassword);
 
-  return (
-    <ScrollView>
-      <SafeAreaView style={styles.container} edges={['top', 'bottom', 'right']}>
-        <TouchableOpacity style={styles.header} onPress={actions.showLoginEdit}>
-          <Text style={styles.headerText}>{ `${state.handle}@${state.node}` }</Text>
-        </TouchableOpacity>
+  const Body = () => {
+    return (
+      <View style={styles.container}>
         <View style={{ width: 128 }}>
           <Logo src={state.imageSource} width={128} height={128} radius={8} />
           <TouchableOpacity style={styles.camera} onPress={onCamera}>
@@ -129,6 +133,9 @@ export function Profile() {
           </TouchableOpacity>
           <Switch style={styles.visibleSwitch} value={state.searchable} onValueChange={setVisible} trackColor={styles.switch}/>
         </View>
+        <TouchableOpacity style={styles.link} onPress={actions.showLoginEdit}>
+          <Text style={styles.linkText}>Change Login</Text>
+        </TouchableOpacity>
         <TouchableOpacity style={styles.link} onPress={actions.showBlockedCards}>
           <Text style={styles.linkText}>Manage Blocked Contacts</Text>
         </TouchableOpacity>
@@ -139,7 +146,25 @@ export function Profile() {
           <Ionicons name="logout" size={14} color={Colors.white} />
           <Text style={styles.logoutText}>Logout</Text>
         </TouchableOpacity>
-      </SafeAreaView>
+      </View>
+    );
+  };
+ 
+  return (
+    <ScrollView>
+      { state.tabbed && (
+        <View style={styles.body}>
+          <Body />
+        </View>
+      )}
+      { !state.tabbed && (
+        <SafeAreaView style={styles.drawer} edges={['top', 'bottom', 'right']}>
+          <View style={styles.header}>
+            <Text style={styles.headerText}>{ `${state.handle}@${state.node}` }</Text>
+          </View>
+          <Body />
+        </SafeAreaView>
+      )}
       <Modal
         animationType="fade"
         transparent={true}

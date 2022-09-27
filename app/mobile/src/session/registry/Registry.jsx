@@ -7,6 +7,53 @@ import Ionicons from '@expo/vector-icons/AntDesign';
 import { RegistryItem } from './registryItem/RegistryItem';
 import Colors from 'constants/Colors';
 
+export function RegistryTitle({ state, actions }) {
+
+  const search = async () => {
+    try {
+      await actions.search();
+    }
+    catch (err) {
+      console.log(err);
+      Alert.alert(
+        'Server Listing Failed',
+        'Please try again.'
+      );
+    }
+  }
+
+  return (
+    <View style={styles.title}>
+      <View style={styles.inputwrapper}>
+        <TextInput style={styles.inputfield} value={state.server} onChangeText={actions.setServer}
+            autoCapitalize="none" placeholderTextColor={Colors.disabled} placeholder="Server" />
+        <View style={styles.space} />
+      </View>
+      { state.busy && (
+        <View style={styles.search}>
+          <ActivityIndicator />
+        </View>
+      )}
+      { !state.busy && (
+        <TouchableOpacity style={styles.search} onPress={search}>
+          <Ionicons name={'search1'} size={16} color={Colors.white} />
+        </TouchableOpacity>
+      )}
+    </View>
+  );
+}
+
+export function RegistryBody({ state, actions, openContact }) {
+  return (
+    <FlatList style={styles.accounts}
+      data={state.accounts}
+      renderItem={({ item }) => <RegistryItem item={item} openContact={openContact} />}
+      keyExtractor={item => item.guid}
+    />
+  );
+}
+
+
 export function Registry({ closeRegistry, openContact }) {
 
   const search = async () => {

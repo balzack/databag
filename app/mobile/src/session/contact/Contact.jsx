@@ -7,6 +7,11 @@ import { Logo } from 'utils/Logo';
 import Ionicons from '@expo/vector-icons/AntDesign';
 import Colors from 'constants/Colors';
 
+export function ContactTitle({ contact, closeContact }) {
+  const { state, actions } = useContact(contact, closeContact);
+  return (<Text style={styles.title}>{ `${state.handle}@${state.node}` }</Text>);
+}
+
 export function Contact({ contact, closeContact }) {
 
   const { state, actions } = useContact(contact, closeContact);
@@ -119,19 +124,9 @@ export function Contact({ contact, closeContact }) {
     setContact(actions.connectContact);
   }
 
-  return (
-    <ScrollView>
-      <SafeAreaView style={styles.container} edges={['top', 'bottom', 'right']}>
-        { state.tabbed && (
-          <View style={styles.close}>
-            <TouchableOpacity onPress={closeContact}>
-              <Ionicons name={'close'} size={24} color={Colors.text} />
-            </TouchableOpacity>
-          </View>
-        )}
-        <View style={styles.header}>
-          <Text style={styles.headerText}>{ `${state.handle}@${state.node}` }</Text>
-        </View>
+  const Body = () => {
+    return (
+      <View style={styles.container}>
         <Text style={styles.status}>{ `[${getStatusText(state.status)}]` }</Text> 
         <View style={{ width: 128 }}>
           <Logo src={state.logo} width={128} height={128} radius={8} />
@@ -235,7 +230,23 @@ export function Contact({ contact, closeContact }) {
             </>
           )}
         </View>
-      </SafeAreaView>
+      </View>
+    );
+  }
+
+  return (
+    <ScrollView>
+      { state.tabbed && (
+        <Body />
+      )}
+      { !state.tabbed && (
+        <SafeAreaView style={styles.drawer} edges={['top', 'bottom', 'right']}>
+          <View style={styles.header}>
+            <Text style={styles.headerText}>{ `${state.handle}@${state.node}` }</Text>
+          </View>
+          <Body />
+        </SafeAreaView>
+      )} 
     </ScrollView>
   )
 }

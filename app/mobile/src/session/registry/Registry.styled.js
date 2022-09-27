@@ -8,6 +8,12 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
   },
+  title: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   topbar: {
     borderTopWidth: 1,
     borderBottomWidth: 1,

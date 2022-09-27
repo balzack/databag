@@ -11,9 +11,16 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  drawer: {
+    paddingTop: 16,
+  },
+  title: {
+    fontSize: 18,
+  },
+  body: {
+    paddingTop: 16,
+  },
   header: {
-    paddingBottom: 32,
-    paddingTop: 24,
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'flex-end',

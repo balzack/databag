@@ -1,8 +1,10 @@
 import { useState, useEffect, useRef, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useWindowDimensions } from 'react-native';
 import { ProfileContext } from 'context/ProfileContext';
 import { AccountContext } from 'context/AccountContext';
 import { AppContext } from 'context/AppContext';
+import config from 'constants/Config';
 
 export function useProfile() {
 
@@ -28,9 +30,11 @@ export function useProfile() {
     showConfirm: false,
     blockedChannels: false,
     blockedCards: false,
+    tabbed: null,
   });
 
   const app = useContext(AppContext);
+  const dimensions = useWindowDimensions();
   const account = useContext(AccountContext);
   const profile = useContext(ProfileContext);
   const navigate = useNavigate();
@@ -39,6 +43,15 @@ export function useProfile() {
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
   }
+
+  useEffect(() => {
+    if (dimensions.width > config.tabbedWidth) {
+      updateState({ tabbed: false });
+    }
+    else {
+      updateState({ tabbed: true });
+    }
+  }, [dimensions]);
 
   useEffect(() => {
     const { name, handle, node, location, description, image } = profile.state.profile;
