@@ -23,6 +23,7 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     paddingRight: 4,
     textDecorationLine: 'underline',
+    color: Colors.primary,
   },
   camera: {
     position: 'absolute',

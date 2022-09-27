@@ -49,24 +49,46 @@ export function Session() {
 
   // tabbed containers
   const ConversationStackScreen = () => {
+
+    const [selected, setSelected] = useState(null);
+    const setConversation = (navigation, cardId, channelId) => {
+      setSelected({ cardId, channelId });
+      navigation.navigate('conversation');
+    }
+    const clearConversation = (navigation) => {
+      navigation.goBack();
+    }
+    const setDetail = (navigation) => {
+      navigation.navigate('details');
+    }
+    const clearDetail = (navigation) => {
+      navigation.goBack();
+    }
+
     return (
       <ConversationStack.Navigator screenOptions={({ route }) => ({ headerShown: false })}>
-        <ConversationStack.Screen name="channels" component={ChannelsTabScreen} />
-        <ConversationStack.Screen name="conversation" component={ConversationTabScreen} />
-        <ConversationStack.Screen name="details" component={DetailsTabScreen} />
+        <ConversationStack.Screen name="channels">
+          {(props) => <ChannelsTabScreen openConversation={setConversation} navigation={props.navigation} />}
+        </ConversationStack.Screen>
+        <ConversationStack.Screen name="conversation">
+          {(props) => <ConversationTabScreen channel={selected} closeConversation={clearConversation} openDetails={setDetail} navigation={props.navigation} />}
+        </ConversationStack.Screen>
+        <ConversationStack.Screen name="details">
+          {(props) => <DetailsTabScreen channel={selected} closeDetails={clearDetail} navigation={props.navigation} />}
+        </ConversationStack.Screen>
       </ConversationStack.Navigator>
     );
   }
-  const ChannelsTabScreen = ({ navigation }) => {
+  const ChannelsTabScreen = ({ navigation, openConversation }) => {
     return (
       <Channels openConversation={(cardId, channelId) => openConversation(navigation, cardId, channelId)} />
     )
   }
-  const ConversationTabScreen = ({ navigation }) => {
-    return <Conversation closeConversation={() => closeConversation(navigation)} openDetails={() => openDetails(navigation)} />
+  const ConversationTabScreen = ({ navigation, channel, closeConversation, openDetails }) => {
+    return <Conversation channel={channel} closeConversation={() => closeConversation(navigation)} openDetails={() => openDetails(navigation)} />
   }
-  const DetailsTabScreen = ({ navigation }) => {
-    return <Details closeDetails={() => closeDetails(navigation)} />
+  const DetailsTabScreen = ({ navigation, channel, closeDetails }) => {
+    return <Details channel={channel} closeDetails={() => closeDetails(navigation)} />
   }
   const ProfileStackScreen = () => {
     return (
@@ -129,10 +151,10 @@ export function Session() {
       </View>
     )
   }
-  const DetailDrawerContent = ({ navigation }) => {
+  const DetailDrawerContent = ({ channel, navigation }) => {
     return (
       <SafeAreaView>
-        <Details closeDetails={() => closeDetails(navigation)} />
+        <Details channel={channel} closeDetails={() => {}} />
       </SafeAreaView>
     )
   }
@@ -148,7 +170,16 @@ export function Session() {
     )
   }
 
-  const HomeScreen = ({ cardNav, registryNav, detailNav, contactNav, profileNav }) => {
+  const HomeScreen = ({ cardNav, registryNav, detailNav, contactNav, profileNav, setConversation, setDetail }) => {
+
+    const [channel, setChannel] = useState(null);
+    const setTopic = (cardId, channelId) => {
+      setChannel({ cardId, channelId });
+    };
+    const clearTopic = () => {
+      setChannel(null);
+    };
+
     return (
       <View style={styles.home}>
         <SafeAreaView edges={['top', 'bottom']} style={styles.sidebar}>
@@ -163,14 +194,14 @@ export function Session() {
             </TouchableOpacity>
           </SafeAreaView>
           <View style={styles.channels}>
-            <Channels openConversation={(cardId, channelId) => openConversation(null, cardId, channelId)} />
+            <Channels openConversation={setTopic} />
           </View>
         </SafeAreaView>
         <View style={styles.conversation}>
-          { state.conversationId && (
-            <Conversation closeConversation={() => closeConversation(null)} openDetails={() => openDetails(detailNav)} />
+          { channel && (
+            <Conversation channel={channel} closeConversation={clearTopic} openDetails={() => setDetail(detailNav, channel)} />
           )}
-          { !state.conversationId && (
+          { !channel && (
             <Welcome />
           )} 
         </View>
@@ -178,7 +209,7 @@ export function Session() {
     )
   }
 
-  const CardDrawerScreen = ({ registryNav, detailNav, contactNav, profileNav, setContact }) => {
+  const CardDrawerScreen = ({ registryNav, detailNav, contactNav, profileNav, setContact, setDetail }) => {
 
     const openRegistry = () => {
       registryNav.openDrawer();
@@ -188,25 +219,25 @@ export function Session() {
       <CardDrawer.Navigator screenOptions={{ drawerPosition: 'right', headerShown: false, swipeEnabled: false, drawerType: 'front', drawerStyle: { width: state.baseWidth } }}
         drawerContent={(props) => <CardDrawerContent setContact={setContact} openRegistry={openRegistry} {...props} />}>
         <CardDrawer.Screen name="home">
-          {(props) => <HomeScreen cardNav={props.navigation} registryNav={registryNav} detailNav={detailNav} contactNav={contactNav} profileNav={profileNav} setContact={setContact} />}
+          {(props) => <HomeScreen cardNav={props.navigation} registryNav={registryNav} detailNav={detailNav} contactNav={contactNav} profileNav={profileNav} setContact={setContact} setDetail={setDetail} />}
         </CardDrawer.Screen>
       </CardDrawer.Navigator>
     );
   };
 
-  const RegistryDrawerScreen = ({ detailNav, contactNav, profileNav, setContact }) => {
+  const RegistryDrawerScreen = ({ detailNav, contactNav, profileNav, setContact, setDetail }) => {
 
     return (
       <RegistryDrawer.Navigator screenOptions={{ drawerPosition: 'right', headerShown: false, swipeEnabled: false, drawerType: 'front', drawerStyle: { width: state.baseWidth } }}
         drawerContent={(props) => <RegistryDrawerContent setContact={setContact} {...props} />}>
         <RegistryDrawer.Screen name="card">
-          {(props) => <CardDrawerScreen registryNav={props.navigation} detailNav={detailNav} contactNav={contactNav} profileNav={profileNav} setContact={setContact} />}
+          {(props) => <CardDrawerScreen registryNav={props.navigation} detailNav={detailNav} contactNav={contactNav} profileNav={profileNav} setContact={setContact} setDetail={setDetail} />}
         </RegistryDrawer.Screen>
       </RegistryDrawer.Navigator>
     );
   };
 
-  const ContactDrawerScreen = ({ detailNav, profileNav }) => {
+  const ContactDrawerScreen = ({ detailNav, profileNav, setDetail }) => {
 
     const [selected, setSelected] = useState(null);
     const setContact = (navigation, contact) => {
@@ -218,32 +249,39 @@ export function Session() {
       <ContactDrawer.Navigator screenOptions={{ drawerPosition: 'right', headerShown: false, swipeEnabled: false, drawerType: 'front', drawerStyle: { width: state.subWidth } }}
         drawerContent={(props) => <ContactDrawerContent contact={selected} {...props} />}>
         <ContactDrawer.Screen name="registry">
-          {(props) => <RegistryDrawerScreen detailNav={detailNav} profileNav={profileNav} contactNav={props.navigation} setContact={(contact) => setContact(props.navigation, contact)} />}
+          {(props) => <RegistryDrawerScreen detailNav={detailNav} profileNav={profileNav} contactNav={props.navigation} setContact={(contact) => setContact(props.navigation, contact)} setDetail={setDetail} />}
         </ContactDrawer.Screen>
       </ContactDrawer.Navigator>
     );
   }
 
-  const ProfileDrawerScreen = ({ detailNav }) => {
+  const DetailDrawerScreen = ({ profileNav }) => {
+
+    const [selected, setSelected] = useState(null);
+    const setDetail = (navigation, channel) => {
+      setSelected(channel);
+      navigation.openDrawer();
+    };
+  
     return (
-      <ProfileDrawer.Navigator screenOptions={{ drawerPosition: 'right', headerShown: false, swipeEnabled: false, drawerType: 'front', drawerStyle: { width: state.subWidth } }}
-        drawerContent={(props) => <ProfileDrawerContent {...props} />}>
-        <ProfileDrawer.Screen name="contact">
-          {(props) => <ContactDrawerScreen detailNav={detailNav} profileNav={props.navigation}/>}
-        </ProfileDrawer.Screen>
-      </ProfileDrawer.Navigator>
+      <DetailDrawer.Navigator screenOptions={{ drawerPosition: 'right', headerShown: false, swipeEnabled: false, drawerType: 'front', drawerStyle: { width: state.subWidth } }}
+        drawerContent={(props) => <DetailDrawerContent channel={selected} {...props} />}>
+        <DetailDrawer.Screen name="contact">
+          {(props) => <ContactDrawerScreen profileNav={profileNav} detailNav={props.navigation} setDetail={setDetail} />}
+        </DetailDrawer.Screen>
+      </DetailDrawer.Navigator>
     );
   }
 
   return (
     <View style={styles.container}>
       { state.tabbed === false && (
-        <DetailDrawer.Navigator screenOptions={{ drawerPosition: 'right', headerShown: false, swipeEnabled: false, drawerType: 'front', drawerStyle: { width: state.subWidth } }}
-          drawerContent={(props) => <DetailDrawerContent {...props} />}>
-          <DetailDrawer.Screen name="profile">
-            {(props) => <ProfileDrawerScreen detailNav={props.navigation} />}
-          </DetailDrawer.Screen>
-        </DetailDrawer.Navigator>
+        <ProfileDrawer.Navigator screenOptions={{ drawerPosition: 'right', headerShown: false, swipeEnabled: false, drawerType: 'front', drawerStyle: { width: state.subWidth } }}
+          drawerContent={(props) => <ProfileDrawerContent {...props} />}>
+          <ProfileDrawer.Screen name="detail">
+            {(props) => <DetailDrawerScreen profileNav={props.navigation}/>}
+          </ProfileDrawer.Screen>
+        </ProfileDrawer.Navigator>
       )}
       { state.tabbed === true && (
         <Tab.Navigator

@@ -133,7 +133,7 @@ export function Profile() {
           <Text style={styles.linkText}>Manage Blocked Contacts</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.link} onPress={actions.showBlockedChannels}>
-          <Text style={styles.linkText}>Manager Blocked Topics</Text>
+          <Text style={styles.linkText}>Manage Blocked Topics</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.logout} onPress={logout}>
           <Ionicons name="logout" size={14} color={Colors.white} />

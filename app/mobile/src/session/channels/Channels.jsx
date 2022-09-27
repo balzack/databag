@@ -7,7 +7,7 @@ import { ChannelItem } from './channelItem/ChannelItem';
 import Colors from 'constants/Colors';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
-export function Channels() {
+export function Channels({ openConversation }) {
   const { state, actions } = useChannels();
   return (
     <View style={styles.container}>
@@ -27,7 +27,7 @@ export function Channels() {
           </View>
           <FlatList style={styles.channels}
             data={state.channels}
-            renderItem={({ item }) => <ChannelItem item={item} />}
+            renderItem={({ item }) => <ChannelItem item={item} openConversation={openConversation} />}
             keyExtractor={item => (`${item.cardId}:${item.channelId}`)}
           />
         </>
@@ -45,7 +45,7 @@ export function Channels() {
           <SafeAreaView style={styles.channels} edges={['left']}>
             <FlatList 
               data={state.channels}
-              renderItem={({ item }) => <ChannelItem item={item} />}
+              renderItem={({ item }) => <ChannelItem item={item} openConversation={openConversation} />}
               keyExtractor={item => (`${item.cardId}:${item.channelId}`)}
             />
           </SafeAreaView>
