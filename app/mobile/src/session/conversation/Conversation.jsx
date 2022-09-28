@@ -1,5 +1,5 @@
-import { View, TouchableOpacity, Text } from 'react-native';
-import { useLayoutEffect } from 'react';
+import { View, TouchableOpacity, Text, FlatList } from 'react-native';
+import { useState, useRef } from 'react';
 import { useConversation } from './useConversation.hook';
 import { styles } from './Conversation.styled';
 import { useNavigation } from '@react-navigation/native';
@@ -33,15 +33,12 @@ export function ConversationBody({ channel }) {
   const { state, actions } = useConversation(channel?.cardId, channel?.channelId);
 
   return (
-    <View> 
-      <Text>CHANNEL</Text>
-      { channel && (
-        <>
-          <Text>{ channel?.cardId }</Text>
-          <Text>{ channel?.channelId }</Text>
-        </>
-      )}
-    </View>
+    <FlatList style={styles.topics}
+      data={state.topics}
+      inverted={true}
+      renderItem={({item}) => <View style={{ height: item.id }}><Text>ITEM { item.id }</Text></View>}
+      keyExtractor={item => item.id}
+    />
   );
 }
 

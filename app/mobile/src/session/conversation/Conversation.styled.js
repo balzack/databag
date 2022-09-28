@@ -41,5 +41,8 @@ export const styles = StyleSheet.create({
   action: {
     paddingLeft: 8,
   },
+  topics: {
+    height: '100%',
+  },
 })
 

@@ -70,6 +70,7 @@ export function useProfile() {
       navigate('/');
     },
     setVisible: async (visible) => {
+      updateState({ visible });
       await account.actions.setSearchable(visible);
     },
     setProfileImage: async (data) => {
