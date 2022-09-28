@@ -83,7 +83,7 @@ export function Cards({ openRegistry, openContact }) {
         </>
       )}
       { !state.tabbed && (
-        <SafeAreaView edges={['right']} style={styles.searcharea}>
+        <SafeAreaView edges={['top', 'right']} style={styles.searcharea}>
           <View style={styles.searchbar}>
             { state.sorting && (
               <TouchableOpacity style={styles.sort} onPress={actions.unsort}>

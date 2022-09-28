@@ -1,5 +1,5 @@
 import { View, TouchableOpacity, Text } from 'react-native';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createDrawerNavigator } from '@react-navigation/drawer';
@@ -16,10 +16,11 @@ import { RegistryTitle, RegistryBody, Registry } from './registry/Registry';
 import { useRegistry } from './registry/useRegistry.hook';
 import { Contact, ContactTitle } from './contact/Contact';
 import { Details } from './details/Details';
-import { Conversation } from './conversation/Conversation';
+import { Conversation, ConversationHeader, ConversationBody } from './conversation/Conversation';
 import { Welcome } from './welcome/Welcome';
 import { ChannelsTitle, ChannelsBody, Channels } from './channels/Channels';
 import { useChannels } from './channels/useChannels.hook';
+import { CommonActions } from '@react-navigation/native';
 
 const ConversationStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
@@ -59,7 +60,14 @@ export function Session() {
       navigation.navigate('conversation');
     }
     const clearConversation = (navigation) => {
-      navigation.goBack();
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [
+            { name: 'channels' },
+          ],
+        })
+      );
     }
     const setDetail = (navigation) => {
       navigation.navigate('details');
@@ -79,20 +87,18 @@ export function Session() {
           }}>
           {(props) => <ChannelsBody state={channels.state} actions={channels.actions} openConversation={(cardId, channelId) => setConversation(props.navigation, cardId, channelId)} />}
         </ConversationStack.Screen>
-        <ConversationStack.Screen name="conversation">
-          {(props) => <ConversationTabScreen channel={selected} closeConversation={clearConversation} openDetails={setDetail} navigation={props.navigation} />}
+        <ConversationStack.Screen name="conversation" options={{
+            headerStyle: { backgroundColor: Colors.titleBackground }, 
+            headerBackTitleVisible: false, 
+            headerTitle: (props) => <ConversationHeader channel={selected} closeConversation={clearConversation} openDetails={setDetail} />
+          }}>
+          {(props) => <ConversationBody channel={selected} />}
         </ConversationStack.Screen>
         <ConversationStack.Screen name="details">
-          {(props) => <DetailsTabScreen channel={selected} closeDetails={clearDetail} navigation={props.navigation} />}
+          {(props) => <Details channel={selected} clearConversation={() => clearConversation(props.navigation)} />}
         </ConversationStack.Screen>
       </ConversationStack.Navigator>
     );
-  }
-  const ConversationTabScreen = ({ navigation, channel, closeConversation, openDetails }) => {
-    return <Conversation channel={channel} closeConversation={() => closeConversation(navigation)} openDetails={() => openDetails(navigation)} />
-  }
-  const DetailsTabScreen = ({ navigation, channel, closeDetails }) => {
-    return <Details channel={channel} closeDetails={() => closeDetails(navigation)} />
   }
   const ProfileStackScreen = () => {
     return (
@@ -147,57 +153,31 @@ export function Session() {
     );
   }
 
-
-  // drawered containers
-  const CardDrawerContent = ({ navigation, setContact, openRegistry }) => {
-    return (
-      <SafeAreaView edges={['top']} style={styles.drawer}>
-        <Cards navigation={navigation} openContact={setContact} openRegistry={openRegistry} />
-      </SafeAreaView>
-    )
-  }
-  const RegistryDrawerContent = ({ navigation, setContact }) => {
-    return (
-      <SafeAreaView edges={['top', 'bottom']} style={styles.drawer}>
-        <Registry navigation={navigation} openContact={setContact} />
-      </SafeAreaView>
-    );
-  }
-  const ProfileDrawerContent = ({ navigation }) => {
-    return (
-      <View style={styles.drawer}>
-        <Profile closeProfile={() => closeProfile(navigation)} />
-      </View>
-    )
-  }
-  const DetailDrawerContent = ({ channel, navigation }) => {
-    return (
-      <SafeAreaView>
-        <Details channel={channel} closeDetails={() => {}} />
-      </SafeAreaView>
-    )
-  }
-  const ContactDrawerContent = ({ contact, navigation }) => {
-    const clearContact = () => {
-      navigation.closeDrawer();
-    }
-
-    return (
-      <View style={styles.drawer}>
-        <Contact contact={contact} closeContact={clearContact} />
-      </View>
-    )
-  }
-
-  const HomeScreen = ({ cardNav, registryNav, detailNav, contactNav, profileNav, setConversation, setDetail }) => {
+  const HomeScreen = ({ cardNav, registryNav, detailNav, contactNav, profileNav, setDetails, resetConversation, clearReset }) => {
 
     const [channel, setChannel] = useState(null);
-    const setTopic = (cardId, channelId) => {
+    const setConversation = (cardId, channelId) => {
       setChannel({ cardId, channelId });
     };
-    const clearTopic = () => {
+    const clearConversation = () => {
       setChannel(null);
     };
+    const setProfile = () => {
+      profileNav.openDrawer();
+    };
+    const setChannelDetails = (channel) => {
+      setDetails(channel);
+      detailNav.openDrawer();
+    };
+
+    useEffect(() => {
+      if (resetConversation) {
+        detailNav.closeDrawer();
+        setChannel(null);
+        setDetails(null);
+        clearReset();
+      }
+    }, [resetConversation]);
 
     return (
       <View style={styles.home}>
@@ -213,12 +193,12 @@ export function Session() {
             </TouchableOpacity>
           </SafeAreaView>
           <View style={styles.channels}>
-            <Channels openConversation={setTopic} />
+            <Channels openConversation={setConversation} />
           </View>
         </SafeAreaView>
         <View style={styles.conversation}>
           { channel && (
-            <Conversation channel={channel} closeConversation={clearTopic} openDetails={() => setDetail(detailNav, channel)} />
+            <Conversation channel={channel} closeConversation={clearConversation} openDetails={setChannelDetails} />
           )}
           { !channel && (
             <Welcome />
@@ -228,47 +208,85 @@ export function Session() {
     )
   }
 
-  const CardDrawerScreen = ({ registryNav, detailNav, contactNav, profileNav, setContact, setDetail }) => {
+  const CardDrawerScreen = ({ registryNav, detailNav, contactNav, profileNav, setContact, setDetails, clearReset, resetConversation }) => {
 
     const openRegistry = () => {
       registryNav.openDrawer();
-    }
+    };
+    setCardContact = (contact) => {
+      setContact(contact);
+      contactNav.openDrawer();
+    };
+
+    const params = {
+      profileNav,
+      registryNav,
+      detailNav,
+      contactNav,
+      setDetails,
+      setContact,
+      clearReset,
+      resetConversation,
+    };
 
     return (
       <CardDrawer.Navigator screenOptions={{ drawerPosition: 'right', headerShown: false, swipeEnabled: false, drawerType: 'front', drawerStyle: { width: state.baseWidth } }}
-        drawerContent={(props) => <CardDrawerContent setContact={setContact} openRegistry={openRegistry} {...props} />}>
+        drawerContent={(props) => <Cards openContact={setCardContact} openRegistry={openRegistry} />}>
         <CardDrawer.Screen name="home">
-          {(props) => <HomeScreen cardNav={props.navigation} registryNav={registryNav} detailNav={detailNav} contactNav={contactNav} profileNav={profileNav} setContact={setContact} setDetail={setDetail} />}
+          {(props) => <HomeScreen cardNav={props.navigation} {...params} />}
         </CardDrawer.Screen>
       </CardDrawer.Navigator>
     );
   };
 
-  const RegistryDrawerScreen = ({ detailNav, contactNav, profileNav, setContact, setDetail }) => {
+  const RegistryDrawerScreen = ({ detailNav, contactNav, profileNav, setContact, setDetails, clearReset, resetConversation }) => {
+
+    const setRegistryContact = (contact) => {
+      setContact(contact);
+      contactNav.openDrawer();
+    };
+
+    const params = {
+      profileNav,
+      detailNav,
+      contactNav,
+      setDetails,
+      setContact,
+      clearReset,
+      resetConversation,
+    };
 
     return (
       <RegistryDrawer.Navigator screenOptions={{ drawerPosition: 'right', headerShown: false, swipeEnabled: false, drawerType: 'front', drawerStyle: { width: state.baseWidth } }}
-        drawerContent={(props) => <RegistryDrawerContent setContact={setContact} {...props} />}>
+        drawerContent={(props) => <Registry openContact={setRegistryContact} />}>
         <RegistryDrawer.Screen name="card">
-          {(props) => <CardDrawerScreen registryNav={props.navigation} detailNav={detailNav} contactNav={contactNav} profileNav={profileNav} setContact={setContact} setDetail={setDetail} />}
+          {(props) => <CardDrawerScreen registryNav={props.navigation} {...params} />}
         </RegistryDrawer.Screen>
       </RegistryDrawer.Navigator>
     );
   };
 
-  const ContactDrawerScreen = ({ detailNav, profileNav, setDetail }) => {
+  const ContactDrawerScreen = ({ detailNav, profileNav, setDetails, resetConversation, clearReset }) => {
 
     const [selected, setSelected] = useState(null);
-    const setContact = (navigation, contact) => {
+    const setContact = (contact) => {
       setSelected(contact);
-      navigation.openDrawer();
     }
+
+    const params = {
+      profileNav,
+      detailNav,
+      setDetails,
+      setContact,
+      clearReset,
+      resetConversation,
+    };
 
     return (
       <ContactDrawer.Navigator screenOptions={{ drawerPosition: 'right', headerShown: false, swipeEnabled: false, drawerType: 'front', drawerStyle: { width: state.subWidth } }}
-        drawerContent={(props) => <ContactDrawerContent contact={selected} {...props} />}>
+        drawerContent={(props) => <Contact contact={selected} />}>
         <ContactDrawer.Screen name="registry">
-          {(props) => <RegistryDrawerScreen detailNav={detailNav} profileNav={profileNav} contactNav={props.navigation} setContact={(contact) => setContact(props.navigation, contact)} setDetail={setDetail} />}
+          {(props) => <RegistryDrawerScreen {...params} contactNav={props.navigation} setContact={setContact} />}
         </ContactDrawer.Screen>
       </ContactDrawer.Navigator>
     );
@@ -277,16 +295,30 @@ export function Session() {
   const DetailDrawerScreen = ({ profileNav }) => {
 
     const [selected, setSelected] = useState(null);
-    const setDetail = (navigation, channel) => {
+    const [resetConversation, setResetConversation] = useState(false);
+    const setDetails = (channel) => {
       setSelected(channel);
-      navigation.openDrawer();
+    };
+    const clearConversation = () => {
+      setResetConversation(true);
+    }
+    const clearReset = () => {
+      setResetConversation(false);
+    }
+
+    const params = {
+      profileNav,
+      setDetails,
+      clearReset,
+      resetConversation,
     };
   
     return (
       <DetailDrawer.Navigator screenOptions={{ drawerPosition: 'right', headerShown: false, swipeEnabled: false, drawerType: 'front', drawerStyle: { width: state.subWidth } }}
-        drawerContent={(props) => <DetailDrawerContent channel={selected} {...props} />}>
+          drawerContent={(props) => <Details channel={selected} clearConversation={clearConversation} />}
+        >
         <DetailDrawer.Screen name="contact">
-          {(props) => <ContactDrawerScreen profileNav={profileNav} detailNav={props.navigation} setDetail={setDetail} />}
+          {(props) => <ContactDrawerScreen {...params} detailNav={props.navigation} />}
         </DetailDrawer.Screen>
       </DetailDrawer.Navigator>
     );
@@ -296,7 +328,7 @@ export function Session() {
     <View style={styles.container}>
       { state.tabbed === false && (
         <ProfileDrawer.Navigator screenOptions={{ drawerPosition: 'right', headerShown: false, swipeEnabled: false, drawerType: 'front', drawerStyle: { width: state.subWidth } }}
-          drawerContent={(props) => <ProfileDrawerContent {...props} />}>
+          drawerContent={(props) => <Profile />}>
           <ProfileDrawer.Screen name="detail">
             {(props) => <DetailDrawerScreen profileNav={props.navigation}/>}
           </ProfileDrawer.Screen>

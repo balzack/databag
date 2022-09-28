@@ -26,7 +26,7 @@ export function RegistryTitle({ state, actions }) {
     <View style={styles.title}>
       <View style={styles.inputwrapper}>
         <TextInput style={styles.inputfield} value={state.server} onChangeText={actions.setServer}
-            autoCapitalize="none" placeholderTextColor={Colors.disabled} placeholder="Server" />
+            autoCorrect={false} autoCapitalize="none" placeholderTextColor={Colors.disabled} placeholder="Server" />
         <View style={styles.space} />
       </View>
       { state.busy && (

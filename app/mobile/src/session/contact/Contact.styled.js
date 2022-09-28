@@ -10,6 +10,10 @@ export const styles = StyleSheet.create({
     paddingBottom: 32,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: Colors.formBackground,
+  },
+  wrapper: {
+    backgroundColor: Colors.formBackground,
   },
   title: {
     fontSize: 18,

@@ -235,7 +235,7 @@ export function Contact({ contact, closeContact }) {
   }
 
   return (
-    <ScrollView>
+    <ScrollView style={styles.wrapper}>
       { state.tabbed && (
         <Body />
       )}

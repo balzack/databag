@@ -1,6 +1,6 @@
 import { View, Text, TouchableOpacity } from 'react-native';
 
-export function Details({ channel, closeDetails }) {
+export function Details({ channel, clearConversation }) {
   return (
     <View>
       <Text>DETAILS</Text>
@@ -10,8 +10,8 @@ export function Details({ channel, closeDetails }) {
           <Text>{ channel.channelId }</Text>
         </>
       )}
-      <TouchableOpacity onPress={closeDetails}>
-        <Text>CLOSE</Text>
+      <TouchableOpacity onPress={clearConversation}>
+        <Text>CLEAR</Text>
       </TouchableOpacity>
     </View>
   )
