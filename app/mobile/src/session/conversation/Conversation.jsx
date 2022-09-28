@@ -52,6 +52,9 @@ export function Conversation({ channel, closeConversation, openDetails }) {
         <TouchableOpacity style={styles.action} onPress={openDetails}>
           <Ionicons name="setting" size={20} color={Colors.primary} />
         </TouchableOpacity>
+        <TouchableOpacity style={styles.close} onPress={closeConversation}>
+          <Ionicons name="close" size={20} color={Colors.text} />
+        </TouchableOpacity>
       </View>
       <View style={styles.body}>
         <ConversationBody channel={channel} />

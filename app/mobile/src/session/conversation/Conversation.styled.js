@@ -44,5 +44,12 @@ export const styles = StyleSheet.create({
   topics: {
     height: '100%',
   },
+  close: {
+    flexGrow: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'flex-end',
+    paddingRight: 32,
+    paddingLeft: 16,
+  },
 })
 
