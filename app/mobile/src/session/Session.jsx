@@ -71,11 +71,11 @@ export function Session() {
     const channels = useChannels();
 
     return (
-      <ConversationStack.Navigator screenOptions={({ route }) => ({ headerShown: true })}>
+      <ConversationStack.Navigator screenOptions={({ route }) => ({ headerShown: true, headerTintColor: Colors.primary })}>
         <ConversationStack.Screen name="channels" options={{
             headerStyle: { backgroundColor: Colors.titleBackground }, 
             headerBackTitleVisible: false, 
-            headerTitle: (props) => { console.log(props); return <ChannelsTitle state={channels.state} actions={channels.actions} /> }
+            headerTitle: (props) => <ChannelsTitle state={channels.state} actions={channels.actions} />
           }}>
           {(props) => <ChannelsBody state={channels.state} actions={channels.actions} openConversation={(cardId, channelId) => setConversation(props.navigation, cardId, channelId)} />}
         </ConversationStack.Screen>
@@ -96,7 +96,7 @@ export function Session() {
   }
   const ProfileStackScreen = () => {
     return (
-      <ProfileStack.Navigator screenOptions={({ route }) => ({ headerShown: true })}>
+      <ProfileStack.Navigator screenOptions={({ route }) => ({ headerShown: true, headerTintColor: Colors.primary })}>
         <ProfileStack.Screen name="profile" component={Profile} options={{ headerStyle: { backgroundColor: Colors.titleBackground }, headerTitle: (props) => <ProfileTitle {...props} /> }} />
       </ProfileStack.Navigator>
     );
@@ -121,11 +121,11 @@ export function Session() {
     const cards = useCards();
 
     return (
-      <ContactStack.Navigator screenOptions={({ route }) => ({ headerShow: true })}>
+      <ContactStack.Navigator screenOptions={({ route }) => ({ headerShow: true, headerTintColor: Colors.primary })}>
         <ContactStack.Screen name="cards" options={{
             headerStyle: { backgroundColor: Colors.titleBackground }, 
             headerBackTitleVisible: false, 
-            headerTitle: (props) => { console.log(props); return <CardsTitle state={cards.state} actions={cards.actions} openRegistry={setRegistryStack} /> }
+            headerTitle: (props) => <CardsTitle state={cards.state} actions={cards.actions} openRegistry={setRegistryStack} />
           }}>
           {(props) => <CardsBody state={cards.state} actions={cards.actions} openContact={(contact) => setCardStack(props.navigation, contact)} />}
         </ContactStack.Screen>

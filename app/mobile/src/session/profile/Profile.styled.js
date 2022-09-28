@@ -24,6 +24,8 @@ export const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     textAlign: 'start',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   body: {
     paddingTop: 16,
