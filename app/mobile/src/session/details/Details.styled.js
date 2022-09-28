@@ -22,24 +22,7 @@ export const styles = StyleSheet.create({
     width: '100%',
   },
   title: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  subject: {
-    width: '100%',
-    flexGrow: 1,
-    flexShrink: 1,
-    textAlign: 'center',
-    paddingLeft: 16,
-  },
-  subjectText: {
     fontSize: 18,
-    textAlign: 'center',
-  },
-  action: {
-    paddingLeft: 8,
   },
 })
 

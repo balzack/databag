@@ -15,7 +15,7 @@ import { useCards } from './cards/useCards.hook';
 import { RegistryTitle, RegistryBody, Registry } from './registry/Registry';
 import { useRegistry } from './registry/useRegistry.hook';
 import { Contact, ContactTitle } from './contact/Contact';
-import { Details } from './details/Details';
+import { Details, DetailsHeader, DetailsBody } from './details/Details';
 import { Conversation, ConversationHeader, ConversationBody } from './conversation/Conversation';
 import { Welcome } from './welcome/Welcome';
 import { ChannelsTitle, ChannelsBody, Channels } from './channels/Channels';
@@ -94,8 +94,12 @@ export function Session() {
           }}>
           {(props) => <ConversationBody channel={selected} />}
         </ConversationStack.Screen>
-        <ConversationStack.Screen name="details">
-          {(props) => <Details channel={selected} clearConversation={() => clearConversation(props.navigation)} />}
+        <ConversationStack.Screen name="details" options={{
+            headerStyle: { backgroundColor: Colors.titleBackground }, 
+            headerBackTitleVisible: false, 
+            headerTitle: (props) => <DetailsHeader channel={selected} />
+          }}>
+          {(props) => <DetailsBody channel={selected} clearConversation={() => clearConversation(props.navigation)} />}
         </ConversationStack.Screen>
       </ConversationStack.Navigator>
     );

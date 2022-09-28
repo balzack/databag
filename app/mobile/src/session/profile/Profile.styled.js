@@ -13,6 +13,7 @@ export const styles = StyleSheet.create({
   },
   drawer: {
     paddingTop: 16,
+    backgroundColor: Colors.formBackground,
   },
   titleText: {
     fontSize: 18,
