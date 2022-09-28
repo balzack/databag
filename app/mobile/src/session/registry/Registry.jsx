@@ -102,31 +102,35 @@ export function Registry({ closeRegistry, openContact }) {
         </>
       )}
       { !state.tabbed && (
-        <SafeAreaView edges={['right']}>
+        <>
           <View style={styles.searcharea}>
-            <View style={styles.searchbar}>
-              { state.busy && (
-                <View style={styles.search}>
-                  <ActivityIndicator />
+            <SafeAreaView edges={['right']}>
+              <View style={styles.searchbar}>
+                { state.busy && (
+                  <View style={styles.search}>
+                    <ActivityIndicator />
+                  </View>
+                )}
+                { !state.busy && (
+                  <TouchableOpacity style={styles.search} onPress={search}>
+                    <Ionicons name={'search1'} size={16} color={Colors.white} />
+                  </TouchableOpacity>
+                )}
+                <View style={styles.inputwrapper}>
+                  <TextInput style={styles.inputfield} value={state.server} onChangeText={actions.setServer}
+                      autoCapitalize="none" placeholderTextColor={Colors.disabled} placeholder="Server" />
                 </View>
-              )}
-              { !state.busy && (
-                <TouchableOpacity style={styles.search} onPress={search}>
-                  <Ionicons name={'search1'} size={16} color={Colors.white} />
-                </TouchableOpacity>
-              )}
-              <View style={styles.inputwrapper}>
-                <TextInput style={styles.inputfield} value={state.server} onChangeText={actions.setServer}
-                    autoCapitalize="none" placeholderTextColor={Colors.disabled} placeholder="Server" />
               </View>
-            </View>
+            </SafeAreaView>
           </View>
-          <FlatList style={styles.accounts}
-            data={state.accounts}
-            renderItem={({ item }) => <RegistryItem item={item} openContact={openContact} />}
-            keyExtractor={item => item.guid}
-          />
-        </SafeAreaView>
+          <SafeAreaView edges={['right']}>
+            <FlatList style={styles.accounts}
+              data={state.accounts}
+              renderItem={({ item }) => <RegistryItem item={item} openContact={openContact} />}
+              keyExtractor={item => item.guid}
+            />
+          </SafeAreaView>
+        </>
       )}
     </View>
   );

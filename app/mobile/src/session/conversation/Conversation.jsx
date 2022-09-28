@@ -20,7 +20,7 @@ export function ConversationHeader({ channel, closeConversation, openDetails }) 
   return (
     <View style={styles.title}>
       <View style={styles.subject}>
-        <Text style={styles.subjectText}>{ state.subject }</Text>
+        <Text style={styles.subjectText} numberOfLines={1} ellipsizeMode={'tail'}>{ state.subject }</Text>
       </View>
       <TouchableOpacity style={styles.action} onPress={setDetails}>
         <Ionicons name="setting" size={20} color={Colors.primary} />
@@ -48,7 +48,7 @@ export function Conversation({ channel, closeConversation, openDetails }) {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.subjectText}>{ state.subject }</Text>
+        <Text style={styles.subjectText} numberOfLines={1} ellipsizeMode={'tail'}>{ state.subject }</Text>
         <TouchableOpacity style={styles.action} onPress={openDetails}>
           <Ionicons name="setting" size={20} color={Colors.primary} />
         </TouchableOpacity>

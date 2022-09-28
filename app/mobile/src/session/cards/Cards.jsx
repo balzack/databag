@@ -83,33 +83,37 @@ export function Cards({ openRegistry, openContact }) {
         </>
       )}
       { !state.tabbed && (
-        <SafeAreaView edges={['top', 'right']} style={styles.searcharea}>
-          <View style={styles.searchbar}>
-            { state.sorting && (
-              <TouchableOpacity style={styles.sort} onPress={actions.unsort}>
-                <Ionicons style={styles.icon} name="menufold" size={18} color={Colors.text} />
+        <>
+          <View style={styles.searcharea}>
+            <SafeAreaView edges={['top', 'right']} style={styles.searchbar}>
+              { state.sorting && (
+                <TouchableOpacity style={styles.sort} onPress={actions.unsort}>
+                  <Ionicons style={styles.icon} name="menufold" size={18} color={Colors.text} />
+                </TouchableOpacity>
+              )}
+              { !state.sorting && (
+                <TouchableOpacity style={styles.sort} onPress={actions.sort}>
+                  <Ionicons style={styles.icon} name="menufold" size={18} color={Colors.disabled} />
+                </TouchableOpacity>
+              )}
+              <View style={styles.inputwrapper}>
+                <Ionicons style={styles.icon} name="search1" size={16} color={Colors.disabled} />
+                <TextInput style={styles.inputfield} value={state.filter} onChangeText={actions.setFilter}
+                    autoCapitalize="none" placeholderTextColor={Colors.disabled} placeholder="Contacts" />
+              </View>
+              <TouchableOpacity style={styles.add} onPress={openRegistry}>
+                <Ionicons name={'adduser'} size={16} color={Colors.white} style={[styles.box, { transform: [ { rotateY: "180deg" }, ]} ]}/>
               </TouchableOpacity>
-            )}
-            { !state.sorting && (
-              <TouchableOpacity style={styles.sort} onPress={actions.sort}>
-                <Ionicons style={styles.icon} name="menufold" size={18} color={Colors.disabled} />
-              </TouchableOpacity>
-            )}
-            <View style={styles.inputwrapper}>
-              <Ionicons style={styles.icon} name="search1" size={16} color={Colors.disabled} />
-              <TextInput style={styles.inputfield} value={state.filter} onChangeText={actions.setFilter}
-                  autoCapitalize="none" placeholderTextColor={Colors.disabled} placeholder="Contacts" />
-            </View>
-            <TouchableOpacity style={styles.add} onPress={openRegistry}>
-              <Ionicons name={'adduser'} size={16} color={Colors.white} style={[styles.box, { transform: [ { rotateY: "180deg" }, ]} ]}/>
-            </TouchableOpacity>
+            </SafeAreaView>
           </View>
-          <FlatList style={styles.cards}
-            data={state.cards}
-            renderItem={({ item }) => <CardItem item={item} openContact={openContact} />}
-            keyExtractor={item => item.cardId}
-          />
-        </SafeAreaView>
+          <SafeAreaView edges={['right']} style={styles.searcharea}>
+            <FlatList style={styles.cards}
+              data={state.cards}
+              renderItem={({ item }) => <CardItem item={item} openContact={openContact} />}
+              keyExtractor={item => item.cardId}
+            />
+          </SafeAreaView>
+        </>
       )}
     </View>
   );
