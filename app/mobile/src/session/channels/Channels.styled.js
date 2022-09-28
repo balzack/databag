@@ -8,6 +8,12 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
   },
+  title: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   topbar: {
     borderTopWidth: 1,
     borderBottomWidth: 1,
@@ -32,6 +38,9 @@ export const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     alignItems: 'center',
     flexGrow: 1,
+    flexShrink: 1,
+    paddingTop: 4,
+    paddingBottom: 4,
   },
   inputfield: {
     flex: 1,

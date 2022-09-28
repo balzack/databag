@@ -10,7 +10,6 @@ import { useSession } from './useSession.hook';
 import { styles } from './Session.styled';
 import Colors from 'constants/Colors';
 import { ProfileTitle, Profile } from './profile/Profile';
-import { Channels } from './channels/Channels';
 import { CardsTitle, CardsBody, Cards } from './cards/Cards';
 import { useCards } from './cards/useCards.hook';
 import { RegistryTitle, RegistryBody, Registry } from './registry/Registry';
@@ -19,6 +18,8 @@ import { Contact, ContactTitle } from './contact/Contact';
 import { Details } from './details/Details';
 import { Conversation } from './conversation/Conversation';
 import { Welcome } from './welcome/Welcome';
+import { ChannelsTitle, ChannelsBody, Channels } from './channels/Channels';
+import { useChannels } from './channels/useChannels.hook';
 
 const ConversationStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
@@ -67,10 +68,16 @@ export function Session() {
       navigation.goBack();
     }
 
+    const channels = useChannels();
+
     return (
-      <ConversationStack.Navigator screenOptions={({ route }) => ({ headerShown: false })}>
-        <ConversationStack.Screen name="channels">
-          {(props) => <ChannelsTabScreen openConversation={setConversation} navigation={props.navigation} />}
+      <ConversationStack.Navigator screenOptions={({ route }) => ({ headerShown: true })}>
+        <ConversationStack.Screen name="channels" options={{
+            headerStyle: { backgroundColor: Colors.titleBackground }, 
+            headerBackTitleVisible: false, 
+            headerTitle: (props) => { console.log(props); return <ChannelsTitle state={channels.state} actions={channels.actions} /> }
+          }}>
+          {(props) => <ChannelsBody state={channels.state} actions={channels.actions} openConversation={(cardId, channelId) => setConversation(props.navigation, cardId, channelId)} />}
         </ConversationStack.Screen>
         <ConversationStack.Screen name="conversation">
           {(props) => <ConversationTabScreen channel={selected} closeConversation={clearConversation} openDetails={setDetail} navigation={props.navigation} />}
@@ -80,11 +87,6 @@ export function Session() {
         </ConversationStack.Screen>
       </ConversationStack.Navigator>
     );
-  }
-  const ChannelsTabScreen = ({ navigation, openConversation }) => {
-    return (
-      <Channels openConversation={(cardId, channelId) => openConversation(navigation, cardId, channelId)} />
-    )
   }
   const ConversationTabScreen = ({ navigation, channel, closeConversation, openDetails }) => {
     return <Conversation channel={channel} closeConversation={() => closeConversation(navigation)} openDetails={() => openDetails(navigation)} />
@@ -320,9 +322,7 @@ export function Session() {
             tabBarActiveTintColor: Colors.white,
             tabBarInactiveTintColor: Colors.disabled,
           })}>
-          <Tab.Screen name="Conversation">
-            {(props) => (<SafeAreaView style={styles.tabframe} edges={['top']}><ConversationStackScreen /></SafeAreaView>)}
-          </Tab.Screen>
+          <Tab.Screen name="Conversation" component={ConversationStackScreen} />
           <Tab.Screen name="Profile" component={ProfileStackScreen} />
           <Tab.Screen name="Contacts" component={ContactStackScreen} />
         </Tab.Navigator>

@@ -14,8 +14,16 @@ export const styles = StyleSheet.create({
   drawer: {
     paddingTop: 16,
   },
-  title: {
+  titleText: {
     fontSize: 18,
+  }, 
+  title: {
+    display: 'flex',
+    flexDirection: 'column',
+    flexGrow: 1,
+    flex: 1,
+    width: '100%',
+    textAlign: 'start',
   },
   body: {
     paddingTop: 16,
@@ -29,8 +37,7 @@ export const styles = StyleSheet.create({
   headerText: {
     fontSize: 16,
     paddingRight: 4,
-    textDecorationLine: 'underline',
-    color: Colors.primary,
+    color: Colors.text,
   },
   camera: {
     position: 'absolute',

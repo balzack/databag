@@ -13,7 +13,9 @@ import { BlockedContacts } from './blockedContacts/BlockedContacts';
 export function ProfileTitle(props) {
   const { state, actions } = useProfile();
   return (
-    <Text style={styles.title}>{ `${state.handle}@${state.node}` }</Text>
+    <View style={styles.title}>
+      <Text style={styles.titleText}>{ `${state.handle}@${state.node}` }</Text>
+    </View>
   )
 } 
 
