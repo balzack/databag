@@ -102,42 +102,47 @@ export function useConversationContext() {
       if (item && (item.revision !== revision.current || item.syncRevision != syncRevision.current)) {
         syncing.current = true;
 
-        // set channel details
-        if (detailRevision.current != item.detailRevision) {
+        try {
+          // set channel details
+          if (detailRevision.current != item.detailRevision) {
+            if (curView === setView.current) {
+              setChannel(item);
+              detailRevision.current = item.detailRevision;
+            }
+          }
+
+          // set channel topics
+          if (syncRevision.current != item.syncRevision) {
+            if (syncRevision.current) {
+              const topics = await getTopicDeltaItems(cardId, channelId);
+            }
+            else {
+              const topics = await getTopicItems(cardId, channelId);
+            }
+            if (curView === setView.current) {
+              syncRevision.current = item.syncRevision;
+            }
+          }
+
+          // sync from server to store
+          if (item.topicRevision !== item.syncRevision) {
+            const res = await getTopics(cardId, channelId, item.syncRevision)
+          }
+
+          // update revision
           if (curView === setView.current) {
-            setChannel(item);
-            detailRevision.current = item.detailRevision;
+            revision.current = item.revision;
+            //TODO set to synced state
           }
-        }
 
-        // set channel topics
-        if (syncRevision.current != item.syncRevision) {
-          if (syncRevision.current) {
-            const topics = await getTopicDeltaItems(cardId, channelId);
-          }
-          else {
-            const topics = await getTopicItems(cardId, channelId);
-          }
-          if (curView === setView.current) {
-            syncRevision.current = item.syncRevision;
-          }
+          syncing.current = false;
+          sync();
         }
-
-        // sync from server to store
-        if (item.topicRevision !== item.syncRevision) {
-          const res = await getTopics(cardId, channelId, item.syncRevision)
-res.topics.forEach(topic => {
-  console.log(topic.data);
-});
+        catch(err) {
+          console.log(err);
+          syncing.current = false;
+          //TODO set to unsynced state
         }
-
-        // update revision
-        if (curView === setView.current) {
-          revision.current = item.revision;
-        }
-
-        syncing.current = false;
-        sync();
       }
     }
   }

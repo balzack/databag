@@ -184,13 +184,9 @@ export function useChannelContext() {
       const { guid } = session.current;
       return await store.actions.getChannelTopicItems(guid, channelId);
     },
-    getTopicDeltaItems: async (channelId, revision) => {
+    setTopicItem: async (channelId, topicId, topic) => {
       const { guid } = session.current;
-      return await store.actions.getChannelTopicDeltaItems(guid, channelId, revision);
-    },
-    setTopicItem: async (channelId, topicId, channelRevision, topic) => {
-      const { guid } = session.current;
-      return await store.actions.setChannelTopicItem(guid, channelId, topicId, channelRevision, topic);
+      return await store.actions.setChannelTopicItem(guid, channelId, topicId, topic);
     },
     clearTopicItem: async (channelId, topicId) => {
       const { guid } = session.current;

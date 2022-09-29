@@ -23,8 +23,6 @@ export function Profile() {
 
   const { state, actions } = useProfile();
 
-console.log(state.imageSource);
-
   const setVisible = async (visible) => {
     try {
       await actions.setVisible(visible);

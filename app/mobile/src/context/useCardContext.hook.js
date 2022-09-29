@@ -440,13 +440,9 @@ export function useCardContext() {
       const { guid } = session.current;
       return await store.actions.getCardChannelTopicItems(guid, cardId, channelId);
     },
-    getChannelTopicDeltaItems: async (cardId, channelId, revision) => {
+    setChannelTopicItem: async (cardId, channelId, topicId, topic) => {
       const { guid } = session.current;
-      return await store.actions.getCardChannelTopicDeltaItems(guid, cardId, channelId, revision);
-    },
-    setChannelTopicItem: async (cardId, channelId, topicId, channelRevision, topic) => {
-      const { guid } = session.current;
-      return await store.actions.setCardChannelTopicItem(guid, cardId, channelId, topicId, channelRevision, topic);
+      return await store.actions.setCardChannelTopicItem(guid, cardId, channelId, topicId, topic);
     },
     clearChannelTopicItem: async (cardId, channelId, topicId) => {
       const { guid } = session.current;
@@ -457,39 +453,32 @@ export function useCardContext() {
       return await store.actions.clearCardChannelTopicItems(guid, cardId, channelId);
     },
     getChannelTopic: async (cardId, channelId, topicId) => {
-      const { guid } = session.current;
       const { detail, profile } = getCard(cardId);
-      return await getContactChannelTopic(profile.node, detail.token, channelId, topicId);
+      return await getContactChannelTopic(profile.node, `${profile.guid}.${detail.token}`, channelId, topicId);
     },
     getChannelTopics: async (cardId, channelId, revision) => {
-      const { guid } = session.current;
       const { detail, profile } = getCard(cardId);
-      return await getContactChannelTopics(profile.node, detail.token, channelId, revision);
+      return await getContactChannelTopics(profile.node, `${profile.guid}.${detail.token}`, channelId, revision);
     },
     getChannelTopicAssetUrl: (cardId, channelId, topicId, assetId) => {
-      const { guid } = session.current;
       const { detail, profile } = getCard(cardId);
-      return getContactChannelTopicAssetUrl(profile.node, detail.token, channelId, topicId, assetId);
+      return getContactChannelTopicAssetUrl(profile.node, `${profile.guid}.${detail.token}`, channelId, topicId, assetId);
     },
     addChannelTopic: async (cardId, channelId, message, assets) => {
-      const { guid } = session.current;
       const { detail, profile } = getCard(cardId);
-      return await addChannelTopic(profile.node, detail.token, channelId, message, assets);
+      return await addChannelTopic(profile.node, `${profile.guid}.${detail.token}`, channelId, message, assets);
     },
     setChannelTopicSubject: async (cardId, channelId, topicId, data) => {
-      const { guid } = session.current;
       const { detail, profile } = getCard(cardId);
-      return await setContactChannelTopicSubject(profile.node, detail.token, channelId, topicId, data);
+      return await setContactChannelTopicSubject(profile.node, `${profile.guid}.${detail.token}`, channelId, topicId, data);
     },
     removeChannel: async (cardId, channelId) => {
-      const { guid } = session.current;
       const { detail, profile } = getCard(cardId);
-      return await removeChannel(profile.node, detail.token, channelId);
+      return await removeChannel(profile.node, `${profile.guid}.${detail.token}`, channelId);
     },
     removeChannelTopic: async (cardId, channelId, topicId) => {
-      const { guid } = session.current;
       const { detail, profile } = getCard(cardId);
-      return await removeChannelTopic(profile.node, detail.token, channelId, topicId);
+      return await removeChannelTopic(profile.node, `${profile.guid}.${detail.token}`, channelId, topicId);
     },
   }
 
