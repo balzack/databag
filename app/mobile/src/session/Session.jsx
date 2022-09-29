@@ -1,5 +1,5 @@
 import { View, TouchableOpacity, Text } from 'react-native';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createDrawerNavigator } from '@react-navigation/drawer';
@@ -21,6 +21,7 @@ import { Welcome } from './welcome/Welcome';
 import { ChannelsTitle, ChannelsBody, Channels } from './channels/Channels';
 import { useChannels } from './channels/useChannels.hook';
 import { CommonActions } from '@react-navigation/native';
+import { ConversationContext } from 'context/ConversationContext';
 
 const ConversationStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
@@ -77,6 +78,11 @@ export function Session() {
     }
 
     const channels = useChannels();
+    const conversation = useContext(ConversationContext);
+
+    useEffect(() => {
+      conversation.actions.setChannel(selected);
+    }, [selected]);      
 
     return (
       <ConversationStack.Navigator screenOptions={({ route }) => ({ headerShown: true, headerTintColor: Colors.primary })}>

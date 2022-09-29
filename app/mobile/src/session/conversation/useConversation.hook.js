@@ -16,10 +16,6 @@ export function useConversation(cardId, channelId) {
   }
 
   useEffect(() => {
-    conversation.actions.setChannel({ cardId, channelId });
-  }, [cardId, channelId]);
-
-  useEffect(() => {
     const { topics, subject, logo } = conversation.state;
     updateState({ topics, subject, logo });
   }, [conversation]);

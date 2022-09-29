@@ -17,29 +17,97 @@ export function useConversationContext() {
   const profile = useContext(ProfileContext);
   const topics = useRef(new Map());
   const revision = useRef(0);
+  const detailRevision = useRef(0);
+  const syncRevision = useRef(0);
   const syncing = useRef(false);
-  const cardId = useRef(null);
-  const channelId = useRef(null);
+  const conversationId = useRef(null);
   const setView = useRef(0);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }))
   }
 
+  const getTopicItems = async (cardId, channelId) => {
+    if (cardId) {
+      return await card.actions.getChannelTopicItems(cardId, channelId);
+    }
+    return await channel.actions.getTopicItems(channelId);
+  }
+  const getTopicDeltaItems = async (cardId, channelId, revision) => {
+    if (cardId) {
+      return await card.actions.getChannelTopicDeltaItems(cardId, channelId, revision);
+    }
+    return await channel.actions.getTopicDeltaItems(channelId, revision);
+  }
+  const setTopicItem = async (cardId, channelId, revision, topic) => {
+    if (cardId) {
+      return await card.actions.setChannelTopicItem(cardId, channelId, revision, topic);
+    }
+    return await channel.actions.setTopicItem(channelId, revision, topic);
+  }
+  const clearTopicItem = async (cardId, channelId, topicId) => {
+    if (cardId) {
+      return await card.actions.clearChannelTopicItem(cardId, channelId, topicId);
+    }
+    return await channel.actions.clearTopicItem(channelId, topicId);
+  }
+  const getTopic = async (cardId, channelId, topicId) => {
+  }
+  const getTopics = async (cardId, channelId) => {
+  }
+  const getTopicAssetUrl = async (cardId, channelId, assetId) => {
+  }
+  const addTopic = async (cardId, channelId, message, asssets) => {
+  }
+  const setTopicSubject = async (cardId, channelId, topicId, data) => {
+  }
+  const removeChannel = async (cardId, channelId) => {
+  }
+  const removeChannelTopic = async (cardId, channelId, topicId) => {
+  }
+
   const sync = async () => {
     const curView = setView.current;
-    const item = getChannel(cardId.current, channelId.current);
-    if (!syncing.current && item?.revision !== revision.current) {
-      syncing.current = true;
+    if (!syncing.current && conversationId.current) {
+      const { cardId, channelId } = conversationId.current;
+      const item = getChannel(cardId, channelId);
+      if (item && (item.revision !== revision.current || item.syncRevision != syncRevision.current)) {
+        syncing.current = true;
 
-      // stuff
-      setChannel(item);
+        // set channel details
+        if (detailRevision.current != item.detailRevision) {
+          if (curView === setView.current) {
+            setChannel(item);
+            detailRevision.current = item.detailRevision;
+          }
+        }
 
-      if (curView === setView.current) {
-        revision.current = item?.revision;
+        // set channel topics
+        if (syncRevision.current != item.syncRevision) {
+          if (syncRevision.current) {
+            const topics = getTopicDeltaItems(cardId, channelId);
+          }
+          else {
+            const topics = getTopicItems(cardId, channelId);
+          }
+          if (curView === setView.current) {
+            syncRevision.current = item.syncRevision;
+          }
+        }
+
+        // sync from server to store
+        if (item.topicRevision !== item.syncRevision) {
+          console.log("pull latest topics");
+        }
+
+        // update revision
+        if (curView === setView.current) {
+          revision.current = item.revision;
+        }
+
+        syncing.current = false;
+        sync();
       }
-      syncing.current = false;
-      sync();
     }
   }
 
@@ -134,12 +202,20 @@ export function useConversationContext() {
 
   const actions = {
     setChannel: (channel) => {
-      if (channel.cardId !== cardId.current || channel.channelId !== channelId.current) {
+      if (channel == null) {
         setView.current++;
-        revision.current = 0;
+        conversationId.current = null;
+        updateState({ subject: null, logo: null, contacts: [], topics: [] });
+      }
+      else if (channel.cardId !== conversationId.current?.cardId || channel.channelId !== conversationId.current?.channelId) {
+        setView.current++;
+        conversationId.current = channel;
+        updateState({ subject: null, logo: null, contacts: [], topics: [] });
+
+        revision.current = null;
+        detailRevision.current = null;
+        syncRevision.current = null;
         topics.current = new Map();
-        channelId.current = channel.channelId;
-        cardId.current = channel.cardId;
         sync();
       }
     },

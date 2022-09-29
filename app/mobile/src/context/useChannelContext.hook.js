@@ -3,6 +3,17 @@ import { StoreContext } from 'context/StoreContext';
 import { getChannels } from 'api/getChannels';
 import { getChannelDetail } from 'api/getChannelDetail';
 import { getChannelSummary } from 'api/getChannelSummary';
+import { addChannel } from 'api/addChannel';
+import { removeChannel } from 'api/removeChannel';
+import { removeChannelTopic } from 'api/removeChannelTopic';
+import { setChannelTopicSubject } from 'api/setChannelTopicSubject';
+import { addChannelTopic } from 'api/addChannelTopic';
+import { getChannelTopics } from 'api/getChannelTopics';
+import { getChannelTopic } from 'api/getChannelTopic';
+import { getChannelTopicAssetUrl } from 'api/getChannelTopicAssetUrl';
+import { setChannelSubject } from 'api/setChannelSubject';
+import { setChannelCard } from 'api/setChannelCard';
+import { clearChannelCard } from 'api/clearChannelCard';
 
 export function useChannelContext() {
   const [state, setState] = useState({
@@ -60,6 +71,13 @@ export function useChannelContext() {
     let channel = channels.current.get(channelId);
     if (channel) {
       channel.readRevision = revision;
+      channels.current.set(channelId, channel);
+    }
+  }
+  const setChannelSyncRevision = (channelId, revision) => {
+    let channel = channels.current.get(channelId);
+    if (channel) {
+      channel.syncRevision = revision;
       channels.current.set(channelId, channel);
     }
   }
@@ -156,13 +174,11 @@ export function useChannelContext() {
       setChannelReadRevision(channelId, rev);
       updateState({ channels: channels.current }); 
     },
-    getSyncRevision: async (channelId) => {
-      const { guid } = session.current;
-      return await store.actions.getChannelItemSyncRevision(guid, channelId);
-    },
     setSyncRevision: async (channelId, revision) => {
       const { guid } = session.current;
-      return await store.actions.setChannelItemSyncRevision(guid, channelId, revision);
+      await store.actions.setChannelItemSyncRevision(guid, channelId, revision);
+      setChannelSyncRevision(channelId, revision);
+      updateState({ channels: channels.current }); 
     },
     getTopicItems: async (channelId) => {
       const { guid } = session.current;
@@ -184,7 +200,20 @@ export function useChannelContext() {
       const { guid } = session.current;
       return await store.actions.clearChannelTopicItems(guid, channelId);
     },
-
+    getTopic: async (channelId, topicId) => {
+    },
+    getTopics: async (channelId) => {
+    },
+    getTopicAssetUrl: async (channelId, assetId) => {
+    },
+    addTopic: async (channelId, message, assets) => {
+    },
+    setTopicSubject: async (channelId, topicId, data) => {
+    },
+    remove: async (channelId) => {
+    },
+    removeTopic: async (channelId, topicId) => {
+    },
   }
 
   return { state, actions }
