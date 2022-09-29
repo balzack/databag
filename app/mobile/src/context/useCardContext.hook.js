@@ -403,7 +403,35 @@ export function useCardContext() {
       setCardBlocked(cardId, false);
       await store.actions.clearCardItemBlocked(guid, cardId);
       updateState({ cards: cards.current });
-    }
+    },
+    getSyncRevision: async (cardId, channelId) => {
+      const { guid } = session.current;
+      return await store.actions.getCardChannelItemSyncRevision(guid, cardId, channelId);
+    },
+    setSyncRevision: async (cardId, channelId, revision) => {
+      const { guid } = session.current;
+      return await store.actions.setCardChannelItemSyncRevision(guid, cardId, channelId, revision);
+    },
+    getTopicItems: async (cardId, channelId) => {
+      const { guid } = session.current;
+      return await store.actions.getCardChannelTopicItems(guid, cardId, channelId);
+    },
+    getTopicDeltaItems: async (cardId, channelId, revision) => {
+      const { guid } = session.current;
+      return await store.actions.getCardChannelTopicDeltaItems(guid, cardId, channelId, revision);
+    },
+    setTopicItem: async (cardId, channelId, topicId, channelRevision, topic) => {
+      const { guid } = session.current;
+      return await store.actions.setCardChannelTopicItem(guid, cardId, channelId, topicId, channelRevision, topic);
+    },
+    clearTopicItem: async (cardId, channelId, topicId) => {
+      const { guid } = session.current;
+      return await store.actions.clearCardChannelTopicItem(guid, cardId, channelId, topicId);
+    },
+    clearTopicItems: async (cardId, channelId) => {
+      const { guid } = session.current;
+      return await store.actions.clearCardChannelTopicItems(guid, cardId, channelId);
+    },
   }
 
   return { state, actions }

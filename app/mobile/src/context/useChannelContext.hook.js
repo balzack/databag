@@ -155,7 +155,36 @@ export function useChannelContext() {
       await store.actions.setChannelItemReadRevision(session.current.guid, channelId, rev);
       setChannelReadRevision(channelId, rev);
       updateState({ channels: channels.current }); 
-    }
+    },
+    getSyncRevision: async (channelId) => {
+      const { guid } = session.current;
+      return await store.actions.getChannelItemSyncRevision(guid, channelId);
+    },
+    setSyncRevision: async (channelId, revision) => {
+      const { guid } = session.current;
+      return await store.actions.setChannelItemSyncRevision(guid, channelId, revision);
+    },
+    getTopicItems: async (channelId) => {
+      const { guid } = session.current;
+      return await store.actions.getChannelTopicItems(guid, channelId);
+    },
+    getTopicDeltaItems: async (channelId, revision) => {
+      const { guid } = session.current;
+      return await store.actions.getChannelTopicDeltaItems(guid, channelId, revision);
+    },
+    setTopicItem: async (channelId, topicId, channelRevision, topic) => {
+      const { guid } = session.current;
+      return await store.actions.setChannelTopicItem(guid, channelId, topicId, channelRevision, topic);
+    },
+    clearTopicItem: async (channelId, topicId) => {
+      const { guid } = session.current;
+      return await store.actions.clearChannelTopicItem(guid, channelId, topicId);
+    },
+    clearTopicItems: async (channelId) => {
+      const { guid } = session.current;
+      return await store.actions.clearChannelTopicItems(guid, channelId);
+    },
+
   }
 
   return { state, actions }
