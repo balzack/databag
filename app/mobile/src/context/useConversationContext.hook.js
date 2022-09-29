@@ -52,18 +52,46 @@ export function useConversationContext() {
     return await channel.actions.clearTopicItem(channelId, topicId);
   }
   const getTopic = async (cardId, channelId, topicId) => {
+    if (cardId) {
+      return await card.actions.getChannelTopic(cardId, channelId, topicId);
+    }
+    return await channel.actions.getTopic(channelId, topicId);
   }
-  const getTopics = async (cardId, channelId) => {
+  const getTopics = async (cardId, channelId, revision) => {
+    if (cardId) {
+      return await card.actions.getChannelTopics(cardId, channelId, revision);
+    }
+    return await channel.actions.getTopics(channelId, revision)
   }
-  const getTopicAssetUrl = async (cardId, channelId, assetId) => {
+  const getTopicAssetUrl = (cardId, channelId, assetId) => {
+    if (cardId) {
+      return card.actions.getChannelTopicAssetUrl(cardId, channelId, topicId, assetId);
+    }
+    return channel.actions.getTopicAssetUrl(channelId, assetId);
   }
   const addTopic = async (cardId, channelId, message, asssets) => {
+    if (cardId) {
+      return await card.actions.addChannelTopic(cardId, channelId, message, assetId);
+    }
+    return await channel.actions.addTopic(channelId, message, assetId);
   }
   const setTopicSubject = async (cardId, channelId, topicId, data) => {
+    if (cardId) {
+      return await card.actions.setChannelTopicSubject(cardId, channelId, topicId, data);
+    }
+    return await channel.actions.setTopicSubject(channelId, topicId, data);
   }
-  const removeChannel = async (cardId, channelId) => {
+  const remove = async (cardId, channelId) => {
+    if (cardId) {
+      return await card.actions.removeChannel(cardId, channelId);
+    }
+    return await channel.actions.remove(channelId);
   }
-  const removeChannelTopic = async (cardId, channelId, topicId) => {
+  const removeTopic = async (cardId, channelId, topicId) => {
+    if (cardId) {
+      return await card.actions.removeChannelTopic(cardId, channelId, topicId);
+    }
+    return await channel.actions.remvoeTopic(channelId, topicId);
   }
 
   const sync = async () => {
@@ -85,10 +113,10 @@ export function useConversationContext() {
         // set channel topics
         if (syncRevision.current != item.syncRevision) {
           if (syncRevision.current) {
-            const topics = getTopicDeltaItems(cardId, channelId);
+            const topics = await getTopicDeltaItems(cardId, channelId);
           }
           else {
-            const topics = getTopicItems(cardId, channelId);
+            const topics = await getTopicItems(cardId, channelId);
           }
           if (curView === setView.current) {
             syncRevision.current = item.syncRevision;
@@ -97,7 +125,10 @@ export function useConversationContext() {
 
         // sync from server to store
         if (item.topicRevision !== item.syncRevision) {
-          console.log("pull latest topics");
+          const res = await getTopics(cardId, channelId, item.syncRevision)
+res.topics.forEach(topic => {
+  console.log(topic.data);
+});
         }
 
         // update revision

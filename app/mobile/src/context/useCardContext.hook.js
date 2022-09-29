@@ -42,6 +42,14 @@ export function useCardContext() {
     setState((s) => ({ ...s, ...value }))
   }
 
+  const getCard = (cardId) => {
+    const card = cards.current.get(cardId);
+    if (!card) {
+      throw new Error('cared not found');
+    }
+    return card;
+  }
+
   const setCard = (cardId, card) => {
     let updated = cards.current.get(cardId);
     if (updated == null) {
@@ -449,18 +457,39 @@ export function useCardContext() {
       return await store.actions.clearCardChannelTopicItems(guid, cardId, channelId);
     },
     getChannelTopic: async (cardId, channelId, topicId) => {
+      const { guid } = session.current;
+      const { detail, profile } = getCard(cardId);
+      return await getContactChannelTopic(profile.node, detail.token, channelId, topicId);
     },
-    getChannelTopics: async (cardId, channelId) => {
+    getChannelTopics: async (cardId, channelId, revision) => {
+      const { guid } = session.current;
+      const { detail, profile } = getCard(cardId);
+      return await getContactChannelTopics(profile.node, detail.token, channelId, revision);
     },
-    getChannelTopicAssetUrl: async (cardId, channelId, assetId) => {
+    getChannelTopicAssetUrl: (cardId, channelId, topicId, assetId) => {
+      const { guid } = session.current;
+      const { detail, profile } = getCard(cardId);
+      return getContactChannelTopicAssetUrl(profile.node, detail.token, channelId, topicId, assetId);
     },
     addChannelTopic: async (cardId, channelId, message, assets) => {
+      const { guid } = session.current;
+      const { detail, profile } = getCard(cardId);
+      return await addChannelTopic(profile.node, detail.token, channelId, message, assets);
     },
     setChannelTopicSubject: async (cardId, channelId, topicId, data) => {
+      const { guid } = session.current;
+      const { detail, profile } = getCard(cardId);
+      return await setContactChannelTopicSubject(profile.node, detail.token, channelId, topicId, data);
     },
     removeChannel: async (cardId, channelId) => {
+      const { guid } = session.current;
+      const { detail, profile } = getCard(cardId);
+      return await removeChannel(profile.node, detail.token, channelId);
     },
     removeChannelTopic: async (cardId, channelId, topicId) => {
+      const { guid } = session.current;
+      const { detail, profile } = getCard(cardId);
+      return await removeChannelTopic(profile.node, detail.token, channelId, topicId);
     },
   }
 

@@ -201,18 +201,32 @@ export function useChannelContext() {
       return await store.actions.clearChannelTopicItems(guid, channelId);
     },
     getTopic: async (channelId, topicId) => {
+      const { server, appToken } = session.current;
+      return await getChannelTopic(server, appToken, channelId, topicId);
     },
-    getTopics: async (channelId) => {
+    getTopics: async (channelId, revision) => {
+      const { server, appToken } = session.current;
+      return await getChannelTopics(server, appToken, channelId, revision);
     },
-    getTopicAssetUrl: async (channelId, assetId) => {
+    getTopicAssetUrl: (channelId, topicId, assetId) => {
+      const { server, appToken } = session.current;
+      return getChannelTopicAssetUrl(server, appToken, channelId, topicId, assetId);
     },
     addTopic: async (channelId, message, assets) => {
+      const { server, appToken } = session.current;
+      return await addChannelTopic(server, appToken, channelId, message, assets);
     },
     setTopicSubject: async (channelId, topicId, data) => {
+      const { server, appToken } = session.current;
+      return await setChannelTopicSubject(server, appToken, channelId, topicId, data);
     },
     remove: async (channelId) => {
+      const { server, appToken } = session.current;
+      return await removeChannel(server, appToken, channelId);
     },
     removeTopic: async (channelId, topicId) => {
+      const { server, appToken } = session.current;
+      return await removeChannelTopic(server, appToken, channelId, topicId);
     },
   }
 
