@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from 'react';
 import { ConversationContext } from 'context/ConversationContext';
 
-export function useConversation(cardId, channelId) {
+export function useConversation() {
 
   const [state, setState] = useState({
     topics: [],

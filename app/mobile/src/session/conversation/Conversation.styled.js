@@ -51,8 +51,27 @@ export const styles = StyleSheet.create({
     flexGrow: 1,
     justifyContent: 'flex-end',
     alignItems: 'flex-end',
-    paddingRight: 32,
-    paddingLeft: 16,
+  },
+  add: {
+    borderTopWidth: 1,
+    borderColor: Colors.divider,
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  addButtons: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  addButton: {
+    width: 24,
+    height: 24,
+  },
+  input: {
+    margin: 8,
+    padding: 8,
+    borderRadius: 4,
+    backgroundColor: Colors.white,
+    maxHeight: 64,
   },
 })
 
