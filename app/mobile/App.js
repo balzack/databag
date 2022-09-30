@@ -15,6 +15,10 @@ import { ChannelContextProvider } from 'context/ChannelContext';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import { ConversationContextProvider } from 'context/ConversationContext';
+import { LogBox } from 'react-native';
+
+// silence warning: Sending `onAnimatedValueUpdate` with no listeners registered
+//LogBox.ignoreLogs(['Sending']);
 
 export default function App() {
 

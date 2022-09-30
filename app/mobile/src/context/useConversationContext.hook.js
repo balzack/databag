@@ -152,6 +152,7 @@ export function useConversationContext() {
             // update revision
             revision.current = channelItem.revision;
             if (curView == setView.current) {
+console.log("update:", topics.current.size);
               updateState({ topics: topics.current });
             }
 

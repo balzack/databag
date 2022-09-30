@@ -36,8 +36,8 @@ export function ConversationBody({ channel }) {
     <FlatList style={styles.topics}
       data={state.topics}
       inverted={true}
-      renderItem={({item}) => <View style={{ height: item.id }}><Text>ITEM { item.id }</Text></View>}
-      keyExtractor={item => item.id}
+      renderItem={({item}) => <View><Text>ITEM { item?.detail?.data }</Text></View>}
+      keyExtractor={item => item.topicId}
     />
   );
 }

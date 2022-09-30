@@ -16,8 +16,20 @@ export function useConversation(cardId, channelId) {
   }
 
   useEffect(() => {
-    const { topics, subject, logo } = conversation.state;
-    updateState({ topics, subject, logo });
+    const { subject, logo, topics } = conversation.state;
+    const items = Array.from(topics.values());
+    const sorted = items.sort((a, b) => {
+      const aTimestamp = a?.detail?.created;
+      const bTimestamp = b?.detail?.created;
+      if(aTimestamp === bTimestamp) {
+        return 0;
+      }
+      if(aTimestamp == null || aTimestamp < bTimestamp) {
+        return 1;
+      }
+      return -1;
+    });
+    updateState({ topics, subject, logo, topics: sorted });
   }, [conversation]);
 
   const actions = {
