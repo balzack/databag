@@ -214,7 +214,7 @@ export function useStoreContext() {
         readRevision: channel.read_revision,
         detailRevision: channel.detail_revision,
         topicRevision: channel.topic_revision,
-        syncRevsion: channel.sync_revision,
+        syncRevision: channel.sync_revision,
         detail: decodeObject(channel.detail),
         summary: decodeObject(channel.summary),
       }));
@@ -230,9 +230,9 @@ export function useStoreContext() {
         detail: decodeObject(topic.detail),
       }));  
     },
-    setChannelTopicItem: async (guid, channelId, topicId, topic) => { 
-      const { id, revision, data } = channel;
-      await db.current.executeSql(`INSERT OR REPLACE INTO channel_topic_${guid} (channel_id, topic_id, revision, channel_revision, detail_revision, detail) values (?, ?, ?, ?, ?, ?);`, [channelId, id, revision, channelRevision, data.detailRevision, encodeObject(data.topicDetail)]);
+    setChannelTopicItem: async (guid, channelId, topic) => { 
+      const { id, revision, data } = topic;
+      await db.current.executeSql(`INSERT OR REPLACE INTO channel_topic_${guid} (channel_id, topic_id, revision, detail_revision, detail) values (?, ?, ?, ?, ?);`, [channelId, id, revision, data.detailRevision, encodeObject(data.topicDetail)]);
     },
     clearChannelTopicItem: async (guid, channelId, topicId) => {
       await db.current.executeSql(`DELETE FROM channel_topic_${guid} WHERE channel_id=? and topic_id=?`, [channelId, topicId]);
@@ -302,15 +302,15 @@ export function useStoreContext() {
         detail: decodeObject(topic.detail),
       }));  
     },
-    setCardChannelTopicItem: async (guid, cardId, channelId, topicId, topic) => {
-      const { id, revision, data } = channel;
-      await db.current.executeSql(`INSERT OR REPLACE INTO channel_topic_${guid} (card_id, channel_id, topic_id, revision, channel_revision, detail_revision, detail) values (?, ?, ?, ?, ?, ?, ?);`, [cardId, channelId, id, revision, channelRevision, data.detailRevision, encodeObject(data.topicDetail)]);
+    setCardChannelTopicItem: async (guid, cardId, channelId, topic) => {
+      const { id, revision, data } = topic;
+      await db.current.executeSql(`INSERT OR REPLACE INTO card_channel_topic_${guid} (card_id, channel_id, topic_id, revision, detail_revision, detail) values (?, ?, ?, ?, ?, ?);`, [cardId, channelId, id, revision, data.detailRevision, encodeObject(data.topicDetail)]);
     },
     clearCardChannelTopicItem: async (guid, cardId, channelId, topicId) => {
-      await db.current.executeSql(`DELETE FROM channel_topic_${guid} WHERE card_id=? and channel_id=? and topic_id=?`, [cardId, channelId, topicId]);
+      await db.current.executeSql(`DELETE FROM card_channel_topic_${guid} WHERE card_id=? and channel_id=? and topic_id=?`, [cardId, channelId, topicId]);
     },
     clearCardChannelTopicItems: async (guid, cardId, channelId) => {
-      await db.current.executeSql(`DELETE FROM channel_topic_${guid} WHERE card_id=? and channel_id=?`, [cardId, channelId]);
+      await db.current.executeSql(`DELETE FROM card_channel_topic_${guid} WHERE card_id=? and channel_id=?`, [cardId, channelId]);
     },
 
   }

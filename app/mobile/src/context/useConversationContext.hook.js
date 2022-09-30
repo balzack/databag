@@ -9,18 +9,18 @@ export function useConversationContext() {
     subject: null,
     logo: null,
     contacts: [],
-    topics: [],
+    topics: new Map(),
   });
   const store = useContext(StoreContext);
   const card = useContext(CardContext);
   const channel = useContext(ChannelContext);
   const profile = useContext(ProfileContext);
-  const topics = useRef(new Map());
+  const topics = useRef(null);
   const revision = useRef(0);
   const detailRevision = useRef(0);
-  const syncRevision = useRef(0);
   const syncing = useRef(false);
   const conversationId = useRef(null);
+  const reset = useRef(false);
   const setView = useRef(0);
 
   const updateState = (value) => {
@@ -33,17 +33,11 @@ export function useConversationContext() {
     }
     return await channel.actions.getTopicItems(channelId);
   }
-  const getTopicDeltaItems = async (cardId, channelId, revision) => {
+  const setTopicItem = async (cardId, channelId, topic) => {
     if (cardId) {
-      return await card.actions.getChannelTopicDeltaItems(cardId, channelId, revision);
+      return await card.actions.setChannelTopicItem(cardId, channelId, topic);
     }
-    return await channel.actions.getTopicDeltaItems(channelId, revision);
-  }
-  const setTopicItem = async (cardId, channelId, revision, topic) => {
-    if (cardId) {
-      return await card.actions.setChannelTopicItem(cardId, channelId, revision, topic);
-    }
-    return await channel.actions.setTopicItem(channelId, revision, topic);
+    return await channel.actions.setTopicItem(channelId, topic);
   }
   const clearTopicItem = async (cardId, channelId, topicId) => {
     if (cardId) {
@@ -93,55 +87,82 @@ export function useConversationContext() {
     }
     return await channel.actions.remvoeTopic(channelId, topicId);
   }
+  const setSyncRevision = async (cardId, channelId, revision) => {
+    if (cardId) {
+      return await card.actions.setSyncRevision(cardId, channelId, revision);
+    }
+    return await channel.actions.setSyncRevision(channelId, revision);
+  }
 
   const sync = async () => {
     const curView = setView.current;
-    if (!syncing.current && conversationId.current) {
-      const { cardId, channelId } = conversationId.current;
-      const item = getChannel(cardId, channelId);
-      if (item && (item.revision !== revision.current || item.syncRevision != syncRevision.current)) {
-        syncing.current = true;
+    if (!syncing.current) {
+      if (reset.current) {
+        revision.current = null;
+        detailRevision.current = null;
+        topics.current = null;
+        reset.current = false;
+      }
+      if (conversationId.current) {
+        const { cardId, channelId } = conversationId.current;
+        const channelItem = getChannel(cardId, channelId);
+        if (channelItem && (channelItem.revision !== revision.current)) {
+          syncing.current = true;
 
-        try {
-          // set channel details
-          if (detailRevision.current != item.detailRevision) {
-            if (curView === setView.current) {
-              setChannel(item);
-              detailRevision.current = item.detailRevision;
+          try {
+            // set channel details
+            if (detailRevision.current != channelItem.detailRevision) {
+              if (curView === setView.current) {
+                setChannel(channelItem);
+                detailRevision.current = channelItem.detailRevision;
+              }
             }
-          }
 
-          // set channel topics
-          if (syncRevision.current != item.syncRevision) {
-            if (syncRevision.current) {
-              const topics = await getTopicDeltaItems(cardId, channelId);
+            // initial load from store
+            if (!topics.current) {
+              topics.current = new Map();
+              const items = await getTopicItems(cardId, channelId);
+              items.forEach(item => {
+                topics.current.set(item.topicId, item);
+              });
             }
-            else {
-              const topics = await getTopicItems(cardId, channelId);
+
+            // sync from server
+            if (channelItem.topicRevision !== channelItem.syncRevision) {
+              const res = await getTopics(cardId, channelId, channelItem.syncRevision)
+              for (const topic of res.topics) {
+                if (!topic.data) {
+                  topics.current.delete(topic.id);
+                  await clearTopicItem(cardId, channelId, topic.id);
+                }
+                const cached = topics.current.get(topic.id);
+                if (!cached || cached.detailRevision != topic.data.detailRevision) {
+                  if (!topic.data.topicDetail) {
+                    const updated = await getTopic(cardId, channelId, topic.id);
+                    topic.data.topicDetail = updated.data.topicDetail;
+                  }
+                  await setTopicItem(cardId, channelId, topic);
+                  const { id, revision, data } = topic;
+                  topics.current.set(id, { topicId: id, revision: revision, detailRevision: topic.data.detailRevision, detail: topic.data.topicDetail });
+                }
+              }
+              await setSyncRevision(cardId, channelId, channelItem.topicRevision);
             }
-            if (curView === setView.current) {
-              syncRevision.current = item.syncRevision;
+
+            // update revision
+            revision.current = channelItem.revision;
+            if (curView == setView.current) {
+              updateState({ topics: topics.current });
             }
-          }
 
-          // sync from server to store
-          if (item.topicRevision !== item.syncRevision) {
-            const res = await getTopics(cardId, channelId, item.syncRevision)
+            syncing.current = false;
+            sync();
           }
-
-          // update revision
-          if (curView === setView.current) {
-            revision.current = item.revision;
-            //TODO set to synced state
+          catch(err) {
+            console.log(err);
+            syncing.current = false;
+            //TODO set to unsynced state
           }
-
-          syncing.current = false;
-          sync();
-        }
-        catch(err) {
-          console.log(err);
-          syncing.current = false;
-          //TODO set to unsynced state
         }
       }
     }
@@ -241,17 +262,14 @@ export function useConversationContext() {
       if (channel == null) {
         setView.current++;
         conversationId.current = null;
-        updateState({ subject: null, logo: null, contacts: [], topics: [] });
+        reset.current = true;
+        updateState({ subject: null, logo: null, contacts: [], topics: new Map() });
       }
       else if (channel.cardId !== conversationId.current?.cardId || channel.channelId !== conversationId.current?.channelId) {
         setView.current++;
         conversationId.current = channel;
-        updateState({ subject: null, logo: null, contacts: [], topics: [] });
-
-        revision.current = null;
-        detailRevision.current = null;
-        syncRevision.current = null;
-        topics.current = new Map();
+        reset.current = true;
+        updateState({ subject: null, logo: null, contacts: [], topics: new Map() });
         sync();
       }
     },
