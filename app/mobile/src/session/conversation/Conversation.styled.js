@@ -19,6 +19,8 @@ export const styles = StyleSheet.create({
     padding: 8,
   },
   body: {
+    flexGrow: 1,
+    flexShrink: 1,
     width: '100%',
   },
   title: {
@@ -42,7 +44,8 @@ export const styles = StyleSheet.create({
     paddingLeft: 8,
   },
   topics: {
-    height: '100%',
+    flexShrink: 1,
+    flexGrow: 1,
   },
   close: {
     flexGrow: 1,

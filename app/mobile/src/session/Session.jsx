@@ -180,6 +180,8 @@ export function Session() {
       detailNav.openDrawer();
     };
 
+    const conversation = useContext(ConversationContext);
+
     useEffect(() => {
       if (resetConversation) {
         detailNav.closeDrawer();
@@ -188,6 +190,10 @@ export function Session() {
         clearReset();
       }
     }, [resetConversation]);
+
+    useEffect(() => {
+      conversation.actions.setChannel(channel);
+    }, [channel]);      
 
     return (
       <View style={styles.home}>

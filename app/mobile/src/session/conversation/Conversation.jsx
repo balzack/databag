@@ -1,10 +1,12 @@
-import { View, TouchableOpacity, Text, FlatList } from 'react-native';
+import { View, TouchableOpacity, Text, } from 'react-native';
+import { FlatList, ScrollView } from '@stream-io/flat-list-mvcp';
 import { useState, useRef } from 'react';
 import { useConversation } from './useConversation.hook';
 import { styles } from './Conversation.styled';
 import { useNavigation } from '@react-navigation/native';
 import Ionicons from '@expo/vector-icons/AntDesign';
 import Colors from 'constants/Colors';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export function ConversationHeader({ channel, closeConversation, openDetails }) {
   const navigation = useNavigation();
@@ -28,13 +30,14 @@ export function ConversationHeader({ channel, closeConversation, openDetails }) 
     </View>
   );
 }
-  
+
 export function ConversationBody({ channel }) {
   const { state, actions } = useConversation(channel?.cardId, channel?.channelId);
 
   return (
     <FlatList style={styles.topics}
       data={state.topics}
+      //maintainVisibleContentPosition={{ minIndexForVisibile: 0, }}
       inverted={true}
       renderItem={({item}) => <View><Text>ITEM { item?.detail?.data }</Text></View>}
       keyExtractor={item => item.topicId}
@@ -56,9 +59,9 @@ export function Conversation({ channel, closeConversation, openDetails }) {
           <Ionicons name="close" size={20} color={Colors.text} />
         </TouchableOpacity>
       </View>
-      <View style={styles.body}>
+      <SafeAreaView edges={['bottom']} style={styles.body}>
         <ConversationBody channel={channel} />
-      </View>
+      </SafeAreaView>
     </View>
   );
 }

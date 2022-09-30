@@ -22,8 +22,7 @@ export const styles = StyleSheet.create({
     maxWidth: 500,
   },
   conversation: {
-    height: '100%',
-    flexGrow: 1,
+    width: '67%',
   },
   drawer: {
     width: '100%',
