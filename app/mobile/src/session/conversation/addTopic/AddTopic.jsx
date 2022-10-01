@@ -7,6 +7,8 @@ import MaterialIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import Colors from 'constants/Colors';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import ImagePicker from 'react-native-image-crop-picker'
+import { VideoFile } from './videoFile/VideoFile';
+import { ImageFile } from './imageFile/ImageFile';
 
 export function AddTopic() {
 
@@ -14,8 +16,18 @@ export function AddTopic() {
 
   const addImage = async () => {
     try {
-      const full = await ImagePicker.openPicker({ mediaType: 'photo', includeBase64: true });
+      const full = await ImagePicker.openPicker({ mediaType: 'photo' });
       actions.addImage(full.path);
+    }
+    catch (err) {
+      console.log(err);
+    }
+  }
+
+  const addVideo = async () => {
+    try {
+      const full = await ImagePicker.openPicker({ mediaType: 'video' });
+      actions.addVideo(full.path);
     }
     catch (err) {
       console.log(err);
@@ -40,11 +52,17 @@ export function AddTopic() {
   const renderAsset = ({ item }) => {
     if (item.type === 'image') {
       return (
-        <TouchableOpacity onPress={() => remove(item)}>
-          <Image source={{ uri: item.data }} style={{ width: 92 * item.ratio, height: 92, marginRight: 16 }}resizeMode={'contain'} />
-        </TouchableOpacity>
+        <ImageFile path={item.data} remove={() => remove(item)} />
       );
     }
+    if (item.type === 'video') {
+      return (
+        <VideoFile path={item.data}
+          remove={() => remove(item)}
+          setPosition={(position) => actions.setVideoPosition(item.key, position)}
+        />
+      )
+    } 
     else {
       return (
         <View style={styles.asset}></View>
@@ -67,7 +85,7 @@ export function AddTopic() {
         <TouchableOpacity style={styles.addButton} onPress={addImage}>
           <AntIcons name="picture" size={20} color={Colors.text} />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.addButton}>
+        <TouchableOpacity style={styles.addButton} onPress={addVideo}>
           <MaterialIcons name="video-outline" size={24} color={Colors.text} />
         </TouchableOpacity>
         <TouchableOpacity style={styles.addButton}>

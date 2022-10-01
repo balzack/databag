@@ -60,8 +60,8 @@ export const styles = StyleSheet.create({
   },
   carousel: {
     paddingTop: 8,
-    paddingLeft: 16,
     paddingRight: 16,
+    paddingLeft: 16,
   },
 })
 

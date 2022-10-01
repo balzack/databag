@@ -27,6 +27,38 @@ export function useAddTopic(cardId, channelId) {
         updateState({ assets: [ ...state.assets, asset ] });
       });
     },
+    addVideo: (data) => {
+      assetId.current++;
+      const asset = { key: assetId.current, type: 'video', data: data, ratio: 1, duration: 0, position: 0, ref: null };
+      updateState({ assets: [ ...state.assets, asset ] });
+    },
+    setVideoInfo: (key, width, height, duration) => {
+      updateState({ assets: state.assets.map((item) => {
+          if(item.key === key) {
+            return { ...item, ratio: width / height, duration };
+          }
+          return item;
+        })
+      });
+    },
+    setVideoRef: (key, ref) => {
+      updateState({ assets: state.assets.map((item) => {
+          if(item.key === key) {
+            return { ...item, ref };
+          }
+          return item;
+        })
+      });
+    },
+    setVideoPosition: (key, position) => {
+      updateState({ assets: state.assets.map((item) => {
+          if(item.key === key) {
+            return { ...item, position };
+          }
+          return item;
+        })
+      });
+    },
     removeAsset: (key) => {
       updateState({ assets: state.assets.filter(item => (item.key !== key))});
     },
