@@ -11,13 +11,13 @@ export const styles = StyleSheet.create({
   addButtons: {
     display: 'flex',
     flexDirection: 'row',
-    marginLeft: 8,
-    marginRight: 8,
+    marginLeft: 4,
+    marginRight: 4,
     marginBottom: 16,
   },
   addButton: {
-    width: 32,
-    height: 32,
+    width: 36,
+    height: 36,
     backgroundColor: Colors.white,
     display: 'flex',
     alignItems: 'center',
@@ -25,6 +25,8 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: Colors.divider,
     borderRadius: 2,
+    marginLeft: 4,
+    marginRight: 4,
   },
   input: {
     margin: 8,
@@ -34,9 +36,13 @@ export const styles = StyleSheet.create({
     borderColor: Colors.divider,
     backgroundColor: Colors.white,
     maxHeight: 96,
-    minHeight: 48,
+    minHeight: 52,
   },
   space: {
+    height: 32,
+    flexGrow: 1,
+  },
+  divider: {
     borderWidth: 1,
     borderColor: Colors.divider,
     height: 32,
