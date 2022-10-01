@@ -11,8 +11,8 @@ export const styles = StyleSheet.create({
   addButtons: {
     display: 'flex',
     flexDirection: 'row',
-    marginLeft: 4,
-    marginRight: 4,
+    marginLeft: 12,
+    marginRight: 12,
     marginBottom: 16,
   },
   addButton: {
@@ -29,7 +29,10 @@ export const styles = StyleSheet.create({
     marginRight: 4,
   },
   input: {
-    margin: 8,
+    marginLeft: 16,
+    marginRight: 16,
+    marginTop: 8,
+    marginBottom: 8,
     padding: 8,
     borderRadius: 4,
     borderWidth: 1,
@@ -48,6 +51,17 @@ export const styles = StyleSheet.create({
     height: 32,
     marginLeft: 8,
     marginRight: 8,
+  },
+  asset: {
+    width: 92,
+    height: 92,
+    marginRight: 8,
+    backgroundColor: 'yellow',
+  },
+  carousel: {
+    paddingTop: 8,
+    paddingLeft: 16,
+    paddingRight: 16,
   },
 })
 
