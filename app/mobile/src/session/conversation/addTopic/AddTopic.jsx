@@ -8,7 +8,14 @@ import Colors from 'constants/Colors';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import ImagePicker from 'react-native-image-crop-picker'
 import { VideoFile } from './videoFile/VideoFile';
+import { AudioFile } from './audioFile/AudioFile';
 import { ImageFile } from './imageFile/ImageFile';
+import DocumentPicker, {
+  DirectoryPickerResponse,
+  DocumentPickerResponse,
+  isInProgress,
+  types,
+} from 'react-native-document-picker'
 
 export function AddTopic() {
 
@@ -32,6 +39,19 @@ export function AddTopic() {
     catch (err) {
       console.log(err);
     }
+  }
+
+  const addAudio = async () => {
+    try {
+        const audio = await DocumentPicker.pickSingle({
+          presentationStyle: 'fullScreen',
+          copyTo: 'cachesDirectory',
+          type: DocumentPicker.types.audio,
+        })
+        actions.addAudio(audio.fileCopyUri, audio.name.replace(/\.[^/.]+$/, ""));
+      } catch (err) {
+        console.log(err);
+      }
   }
 
   const remove = (item) => {
@@ -62,7 +82,13 @@ export function AddTopic() {
           setPosition={(position) => actions.setVideoPosition(item.key, position)}
         />
       )
-    } 
+    }
+    if (item.type === 'audio') {
+      return (
+        <AudioFile path={item.data} label={item.label} remove={() => remove(item)}
+            setLabel={(label) => actions.setAudioLabel(item.key, label)} />
+      )
+    }
     else {
       return (
         <View style={styles.asset}></View>
@@ -88,7 +114,7 @@ export function AddTopic() {
         <TouchableOpacity style={styles.addButton} onPress={addVideo}>
           <MaterialIcons name="video-outline" size={24} color={Colors.text} />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.addButton}>
+        <TouchableOpacity style={styles.addButton} onPress={addAudio}>
           <MaterialIcons name="music-box-outline" size={20} color={Colors.text} />
         </TouchableOpacity>
         <View style={styles.divider} />

@@ -26,7 +26,7 @@ export function VideoFile({ path, setPosition, remove }) {
         ref={(ref) => video.current = ref}
       />
       <View style={styles.overlay}>
-        <Icons name="video-outline" size={20} color={Colors.grey} /> 
+        <Icons name="arrow-right" size={20} color={Colors.white} /> 
       </View>  
     </TouchableOpacity>
   );

@@ -14,11 +14,8 @@ export function ImageFile({ path, setPosition, remove }) {
   }, [path]);
 
   return (
-    <TouchableOpacity onLongPress={remove}>
+    <TouchableOpacity activeOpacity={1} onLongPress={remove}>
       <Image source={{ uri: path }} style={{ width: 92 * state.ratio, height: 92, marginRight: 16 }} resizeMode={'contain'} />
-      <View style={styles.overlay}>
-        <Icons name="picture" size={20} color={Colors.grey} />
-      </View>
     </TouchableOpacity>
   );
 }

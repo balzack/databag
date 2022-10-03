@@ -9,9 +9,6 @@ export const styles = StyleSheet.create({
     right: 0,
     padding: 2,
     borderTopLeftRadius: 4,
-    backgroundColor: Colors.white,
-    borderWidth: 1,
-    borderColor: Colors.divider,
   },
 })
 

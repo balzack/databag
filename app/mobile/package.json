@@ -21,6 +21,7 @@
     "react-dom": "18.0.0",
     "react-native": "0.69.5",
     "react-native-base64": "^0.2.1",
+    "react-native-document-picker": "^8.1.1",
     "react-native-gesture-handler": "^2.6.1",
     "react-native-image-crop-picker": "^0.38.0",
     "react-native-reanimated": "^2.10.0",
