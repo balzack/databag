@@ -8,6 +8,7 @@ import Ionicons from '@expo/vector-icons/AntDesign';
 import Colors from 'constants/Colors';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AddTopic } from './addTopic/AddTopic';
+import { TopicItem } from './topicItem/TopicItem';
 
 export function ConversationHeader({ closeConversation, openDetails }) {
   const navigation = useNavigation();
@@ -54,7 +55,7 @@ export function ConversationBody() {
         onScrollBeginDrag={actions.unlatch}
         maintainVisibleContentPosition={ state.latched ? null : { minIndexForVisibile: 2, } }
         inverted={true}
-        renderItem={({item}) => <View><Text>ITEM { item?.detail?.data }</Text></View>}
+        renderItem={({item}) => (<TopicItem item={item} />)}
         keyExtractor={item => item.topicId}
       />
       <View>

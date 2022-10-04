@@ -76,6 +76,13 @@ export function useProfileContext() {
       const { server, appToken } = session.current;
       return await getHandle(server, appToken, name);
     },
+    getImageUrl: () => {
+      const { server, appToken } = session.current;
+      if (!state.profile.image) {
+        return null;
+      }
+      return getProfileImageUrl(server, appToken, state.profile.revision);
+    },
   }
 
   return { state, actions }
