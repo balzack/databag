@@ -1,6 +1,6 @@
 import { TextInput, View, TouchableOpacity, Text, } from 'react-native';
 import { FlatList, ScrollView } from '@stream-io/flat-list-mvcp';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useConversation } from './useConversation.hook';
 import { styles } from './Conversation.styled';
 import { useNavigation } from '@react-navigation/native';
@@ -26,25 +26,47 @@ export function ConversationHeader({ closeConversation, openDetails }) {
         <Text style={styles.subjectText} numberOfLines={1} ellipsizeMode={'tail'}>{ state.subject }</Text>
       </View>
       <TouchableOpacity style={styles.action} onPress={setDetails}>
-        <Ionicons name="setting" size={20} color={Colors.primary} />
+        <Ionicons name="setting" size={26} color={Colors.primary} />
       </TouchableOpacity>
     </View>
   );
 }
 
+function show(arg) {
+  console.log(arg);
+}
+
 export function ConversationBody() {
   const { state, actions } = useConversation();
+
+  const ref = useRef();
+
+  const latch = () => {
+    actions.latch();
+    ref.current.scrollToIndex({ animated: true, index: 0 });
+  }
 
   return (
     <View style={styles.topics}>
       <FlatList
+        ref={ref}
         data={state.topics}
-        maintainVisibleContentPosition={{ minIndexForVisibile: 0, }}
+        onScrollBeginDrag={actions.unlatch}
+        maintainVisibleContentPosition={ state.latched ? null : { minIndexForVisibile: 2, } }
         inverted={true}
         renderItem={({item}) => <View><Text>ITEM { item?.detail?.data }</Text></View>}
         keyExtractor={item => item.topicId}
       />
-      <AddTopic />
+      <View>
+        <AddTopic />
+        <View style={styles.latchbar}>
+          { !state.latched && (
+            <TouchableOpacity style={styles.latch} onPress={latch}>
+              <Ionicons name="downcircleo" size={24} color={Colors.primary} />
+            </TouchableOpacity>
+          )} 
+        </View>
+      </View>
     </View>
   );
 }
@@ -57,7 +79,7 @@ export function Conversation({ closeConversation, openDetails }) {
       <SafeAreaView edges={['right']} style={styles.header}>
         <Text style={styles.subjectText} numberOfLines={1} ellipsizeMode={'tail'}>{ state.subject }</Text>
         <TouchableOpacity style={styles.action} onPress={openDetails}>
-          <Ionicons name="setting" size={20} color={Colors.primary} />
+          <Ionicons name="setting" size={24} color={Colors.primary} />
         </TouchableOpacity>
         <TouchableOpacity style={styles.close} onPress={closeConversation}>
           <Ionicons name="close" size={20} color={Colors.text} />

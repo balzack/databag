@@ -70,7 +70,9 @@ export function Session() {
     }, [selected]);      
 
     return (
-      <ConversationStack.Navigator screenOptions={({ route }) => ({ headerShown: true, headerTintColor: Colors.primary })}>
+      <ConversationStack.Navigator
+          screenOptions={({ route }) => ({ headerShown: true, headerTintColor: Colors.primary })}
+          screenListeners={{ state: (e) => { if (e?.data?.state?.index === 0 && selected) { setSelected(null); }}, }}>
         <ConversationStack.Screen name="channels" options={{
             headerStyle: { backgroundColor: Colors.titleBackground }, 
             headerBackTitleVisible: false, 

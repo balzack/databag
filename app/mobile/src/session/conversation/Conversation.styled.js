@@ -73,5 +73,22 @@ export const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     maxHeight: 64,
   },
+  addtopic: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  latchbar: {
+    position: 'absolute',
+    top: -16,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    width: '100%',
+  },
+  latch: {
+    backgroundColor: Colors.formBackground,
+    borderRadius: 8,
+  },
 })
 

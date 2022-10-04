@@ -8,6 +8,7 @@ export function useConversationContext() {
   const [state, setState] = useState({
     subject: null,
     logo: null,
+    revision: null,
     contacts: [],
     topics: new Map(),
   });
@@ -152,7 +153,12 @@ export function useConversationContext() {
             // update revision
             revision.current = channelItem.revision;
             if (curView == setView.current) {
-console.log("update:", topics.current.size);
+              if (cardId) {
+                card.actions.setChannelReadRevision(cardId, channelId, revision.current);
+              }
+              else {
+                channel.actions.setReadRevision(channelId, revision.current);
+              }
               updateState({ topics: topics.current });
             }
 

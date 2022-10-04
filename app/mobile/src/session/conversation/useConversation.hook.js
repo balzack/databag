@@ -7,6 +7,7 @@ export function useConversation() {
     topics: [],
     subject: null,
     logo: null,
+    latched: true,
   });
 
   const conversation = useContext(ConversationContext);
@@ -33,6 +34,12 @@ export function useConversation() {
   }, [conversation]);
 
   const actions = {
+    latch: () => {
+      updateState({ latched: true });
+    },
+    unlatch: () => {
+      updateState({ latched: false });
+    },
   };
 
   return { state, actions };
