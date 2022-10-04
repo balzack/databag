@@ -259,19 +259,26 @@ console.log("update:", topics.current.size);
   }, [card, channel]);
 
   const actions = {
-    setChannel: (channel) => {
-      if (channel == null) {
+    setChannel: (selected) => {
+      if (selected == null) {
         setView.current++;
         conversationId.current = null;
         reset.current = true;
         updateState({ subject: null, logo: null, contacts: [], topics: new Map() });
       }
-      else if (channel.cardId !== conversationId.current?.cardId || channel.channelId !== conversationId.current?.channelId) {
+      else if (selected.cardId !== conversationId.current?.cardId || selected.channelId !== conversationId.current?.channelId) {
         setView.current++;
-        conversationId.current = channel;
+        conversationId.current = selected;
         reset.current = true;
         updateState({ subject: null, logo: null, contacts: [], topics: new Map() });
         sync();
+        const { cardId, channelId, revision } = selected;
+        if (cardId) {
+          card.actions.setChannelReadRevision(cardId, channelId, revision);
+        }
+        else {
+          channel.actions.setReadRevision(channelId, revision);
+        }
       }
     },
   }

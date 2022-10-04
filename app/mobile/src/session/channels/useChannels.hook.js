@@ -124,7 +124,9 @@ export function useChannels() {
       }
     }
 
-    return { cardId: item.cardId, channelId: item.channelId, contacts, logo, subject, message, updated, revision: item.revision };
+    const timestamp = item?.summary?.lastTopic?.created;
+
+    return { cardId: item.cardId, channelId: item.channelId, contacts, logo, subject, message, updated, revision: item.revision, timestamp };
   }
 
   useEffect(() => {
@@ -152,8 +154,8 @@ export function useChannels() {
     });
 
     const sorted = filtered.sort((a, b) => {
-      const aCreated = a?.summary?.lastTopic?.created;
-      const bCreated = b?.summary?.lastTopic?.created;
+      const aCreated = a?.timestamp;
+      const bCreated = b?.timestamp;
       if (aCreated === bCreated) {
         return 0;
       }

@@ -37,27 +37,12 @@ export function Session() {
 
   const { state, actions } = useSession();
 
-  const openCards = (nav) => {
-    nav.openDrawer();
-  }
-  const closeCards = (nav) => {}
-  const openProfile = (nav) => {
-    nav.openDrawer();
-  }
-  const closeProfile = (nav) => {}
-  const openContact = (nav, cardId) => {}
-  const closeContact = (nav) => {}
-  const openConversation = (nav, cardId, channelId) => {}
-  const closeConversation = (nav) => {}
-  const openDetails = (nav, cardId, channeId) => {}
-  const closeDetails = (nav) => {}
-
   // tabbed containers
   const ConversationStackScreen = () => {
 
     const [selected, setSelected] = useState(null);
-    const setConversation = (navigation, cardId, channelId) => {
-      setSelected({ cardId, channelId });
+    const setConversation = (navigation, cardId, channelId, revision) => {
+      setSelected({ cardId, channelId, revision });
       navigation.navigate('conversation');
     }
     const clearConversation = (navigation) => {
@@ -91,7 +76,7 @@ export function Session() {
             headerBackTitleVisible: false, 
             headerTitle: (props) => <ChannelsTitle state={channels.state} actions={channels.actions} />
           }}>
-          {(props) => <ChannelsBody state={channels.state} actions={channels.actions} openConversation={(cardId, channelId) => setConversation(props.navigation, cardId, channelId)} />}
+          {(props) => <ChannelsBody state={channels.state} actions={channels.actions} openConversation={(cardId, channelId, revision) => setConversation(props.navigation, cardId, channelId, revision)} />}
         </ConversationStack.Screen>
         <ConversationStack.Screen name="conversation" options={{
             headerStyle: { backgroundColor: Colors.titleBackground }, 
@@ -166,8 +151,8 @@ export function Session() {
   const HomeScreen = ({ cardNav, registryNav, detailNav, contactNav, profileNav, setDetails, resetConversation, clearReset }) => {
 
     const [channel, setChannel] = useState(null);
-    const setConversation = (cardId, channelId) => {
-      setChannel({ cardId, channelId });
+    const setConversation = (cardId, channelId, revision) => {
+      setChannel({ cardId, channelId, revision });
     };
     const clearConversation = () => {
       setChannel(null);

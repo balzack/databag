@@ -365,7 +365,7 @@ export function useCardContext() {
       curRevision.current = rev;
       sync();
     },
-    setReadRevision: async (cardId, channelId, rev) => {
+    setChannelReadRevision: async (cardId, channelId, rev) => {
       await store.actions.setCardChannelItemReadRevision(session.current.guid, cardId, channelId, rev);
       setCardChannelReadRevision(cardId, channelId, rev);
       updateState({ cards: cards.current });

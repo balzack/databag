@@ -8,7 +8,7 @@ export function ChannelItem({ item, openConversation }) {
   const { state, actions } = useChannelItem(item);
 
   return (
-    <TouchableOpacity style={styles.container} activeOpacity={1} onPress={() => openConversation(item.cardId, item.channelId)}>
+    <TouchableOpacity style={styles.container} activeOpacity={1} onPress={() => openConversation(item.cardId, item.channelId, item.revision)}>
       <Logo src={item.logo} width={32} height={32} radius={6} />
       <View style={styles.detail}>
         <Text style={styles.subject} numberOfLines={1} ellipsizeMode={'tail'}>{ item.subject }</Text>
