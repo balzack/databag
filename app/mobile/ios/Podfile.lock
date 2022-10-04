@@ -246,6 +246,8 @@ PODS:
     - RCTTypeSafety
     - React-Core
     - ReactCommon/turbomodule/core
+  - react-native-slider (4.3.1):
+    - React-Core
   - react-native-sqlite-storage (6.0.1):
     - React-Core
   - react-native-video (5.2.1):
@@ -391,6 +393,7 @@ DEPENDENCIES:
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - react-native-document-picker (from `../node_modules/react-native-document-picker`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
+  - "react-native-slider (from `../node_modules/@react-native-community/slider`)"
   - react-native-sqlite-storage (from `../node_modules/react-native-sqlite-storage`)
   - react-native-video (from `../node_modules/react-native-video`)
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
@@ -474,6 +477,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-document-picker"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
+  react-native-slider:
+    :path: "../node_modules/@react-native-community/slider"
   react-native-sqlite-storage:
     :path: "../node_modules/react-native-sqlite-storage"
   react-native-video:
@@ -542,6 +547,7 @@ SPEC CHECKSUMS:
   React-logger: 15c734997c06fe9c9b88e528fb7757601e7a56df
   react-native-document-picker: f68191637788994baed5f57d12994aa32cf8bf88
   react-native-safe-area-context: b456e1c40ec86f5593d58b275bd0e9603169daca
+  react-native-slider: d3ae4270cf8a8cc45a69912db0cc42b151560d5a
   react-native-sqlite-storage: f6d515e1c446d1e6d026aa5352908a25d4de3261
   react-native-video: c26780b224543c62d5e1b2a7244a5cd1b50e8253
   React-perflogger: 367418425c5e4a9f0f80385ee1eaacd2a7348f8e

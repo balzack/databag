@@ -1,12 +1,17 @@
 import { useState, useRef, useEffect, useContext } from 'react';
 import { ConversationContext } from 'context/ConversationContext';
 import { Image } from 'react-native';
+import Colors from 'constants/Colors';
 
 export function useAddTopic(cardId, channelId) {
 
   const [state, setState] = useState({
     message: null,
     assets: [],
+    fontSize: false,
+    fontColor: false,
+    size: 'medium',
+    color: Colors.text,
   });
 
   const assetId = useRef(0);
@@ -57,6 +62,24 @@ export function useAddTopic(cardId, channelId) {
     },
     removeAsset: (key) => {
       updateState({ assets: state.assets.filter(item => (item.key !== key))});
+    },
+    showFontColor: () => {
+      updateState({ fontColor: true });
+    },
+    hideFontColor: () => {
+      updateState({ fontColor: false });
+    },
+    showFontSize: () => {
+      updateState({ fontSize: true });
+    },
+    hideFontSize: () => {
+      updateState({ fontSize: false });
+    },
+    setFontSize: (size) => {
+      updateState({ size });
+    },
+    setFontColor: (color) => {
+      updateState({ color });
     },
   };
 

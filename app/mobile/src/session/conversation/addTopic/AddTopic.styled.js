@@ -63,5 +63,79 @@ export const styles = StyleSheet.create({
     paddingRight: 16,
     paddingLeft: 16,
   },
+  editHeader: {
+    fontSize: 18,
+    paddingBottom: 16,
+  },
+  editSize: {
+    width: '100%',
+    borderWidth: 1,
+    borderColor: Colors.lightgrey,
+    borderRadius: 2,
+  },
+  editColor: {
+    width: '100%',
+    height: 300,
+    borderWidth: 1,
+    borderColor: Colors.lightgrey,
+    borderRadius: 2,
+  },
+  editControls: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  editWrapper: {
+    display: 'flex',
+    width: '100%',
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(52, 52, 52, 0.8)'
+  },
+  editContainer: {
+    backgroundColor: Colors.formBackground,
+    padding: 16,
+    width: '80%',
+    maxWidth: 400,
+  },
+  option: {
+    borderRadius: 8,
+    margin: 8,
+    borderColor: Colors.primary,
+    borderWidth: 1,
+  },
+  optionText: {
+    padding: 8,
+    color: Colors.primary,
+    textAlign: 'center',
+  },
+  selected: {
+    borderRadius: 8,
+    margin: 8,
+    borderColor: Colors.primary,
+    borderWidth: 1,
+    backgroundColor: Colors.primary,
+  },
+  selectedText: {
+    padding: 8,
+    color: Colors.white,
+    textAlign: 'center',
+  },
+  close: {
+    borderWidth: 1,
+    borderColor: Colors.lightgrey,
+    borderRadius: 4,
+    padding: 8,
+    marginTop: 8,
+    width: 72,
+    display: 'flex',
+    alignItems: 'center',
+  },
+  selection: {
+    flexGrow: 1,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
 })
 
