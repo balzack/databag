@@ -19,11 +19,17 @@ export function VideoFile({ path, setPosition, remove }) {
     }
   }, [state.position]);
 
+  const setInfo = ({ naturalSize, duration }) => {
+    if (video.current) {
+      video.current.seek(0);
+    }
+    actions.setInfo(naturalSize.width, naturalSize.height, duration);
+  }
+
   return (
     <TouchableOpacity onPress={actions.setNextPosition} onLongPress={remove}>
       <Video source={{ uri: path }} style={{ width: 92 * state.ratio, height: 92, marginRight: 16 }} resizeMode={'cover'} paused={true}
-        onLoad={({ naturalSize, duration }) => actions.setInfo(naturalSize.width, naturalSize.height, duration)}
-        ref={(ref) => video.current = ref}
+        onLoad={setInfo} ref={(ref) => video.current = ref}
       />
       <View style={styles.overlay}>
         <Icons name="arrow-right" size={20} color={Colors.white} /> 
