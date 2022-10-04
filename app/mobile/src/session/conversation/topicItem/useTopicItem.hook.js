@@ -1,6 +1,7 @@
 import { useState, useEffect, useContext } from 'react';
 import { CardContext } from 'context/CardContext';
 import { ProfileContext } from 'context/ProfileContext';
+import moment from 'moment';
 
 export function useTopicItem(item) {
 
@@ -80,13 +81,13 @@ export function useTopicItem(item) {
     const now = new Date();
     const offset = now.getTime() - date.getTime();
     if(offset < 86400000) {
-      timestamp = date.toLocaleTimeString([], {hour: 'numeric', minute:'2-digit'});
+      timestamp = moment(date).format('h:mm');
     }
     else if (offset < 31449600000) {
-      timestamp = date.toLocaleDateString("en-US", {day: 'numeric', month:'numeric'});
+      timestamp = moment(date).format('M/DD');
     }
     else {
-      timestamp = date.toLocaleDateString("en-US");
+      timestamp = moment(date).format('M/DD/YYYY');
     }
 
     updateState({ logo, name, known, message, timestamp });
