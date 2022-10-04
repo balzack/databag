@@ -19,7 +19,8 @@ export function useVideoFile() {
     },
     setNextPosition: () => {
       if (state.duration) {
-        const position = (state.position + 1) % state.duration;
+        const step = Math.floor(1 + state.duration / 20);
+        const position = (state.position + step ) % state.duration;
         updateState({ position });
       }
     },

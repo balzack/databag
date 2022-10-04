@@ -8,6 +8,8 @@ export const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     borderRadius: 4,
     marginRight: 16,
+    display: 'flex',
+    alignItems: 'center',
   },
   image: { 
     width: 92,
