@@ -64,7 +64,7 @@ export function Conversation({ closeConversation, openDetails }) {
         </TouchableOpacity>
       </SafeAreaView>
       <SafeAreaView edges={['bottom']} style={styles.body}>
-        <ConversationBody channel={channel} />
+        <ConversationBody />
       </SafeAreaView>
     </View>
   );

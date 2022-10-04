@@ -214,7 +214,7 @@ export function Session() {
         </SafeAreaView>
         <View style={styles.conversation}>
           { channel && (
-            <Conversation channel={channel} closeConversation={clearConversation} openDetails={setChannelDetails} />
+            <Conversation closeConversation={clearConversation} openDetails={setChannelDetails} />
           )}
           { !channel && (
             <Welcome />
