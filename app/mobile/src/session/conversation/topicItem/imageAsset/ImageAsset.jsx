@@ -3,11 +3,11 @@ import { useImageAsset } from './useImageAsset.hook';
 import { styles } from './ImageAsset.styled';
 import Colors from 'constants/Colors';
 
-export function ImageAsset({ topicId, asset, onClearCarousel }) {
+export function ImageAsset({ topicId, asset }) {
   const { state, actions } = useImageAsset(topicId, asset);
 
   return (
-    <TouchableOpacity onPress={onClearCarousel} activeOpacity={1}>
+    <TouchableOpacity activeOpacity={1}>
       <Image source={{ uri: state.url }} style={{ borderRadius: 4, width: state.imageWidth, height: state.imageHeight }} resizeMode={'cover'} />
     </TouchableOpacity>
   );

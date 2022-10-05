@@ -11,6 +11,7 @@ import { AudioAsset } from './audioAsset/AudioAsset';
 import { VideoAsset } from './videoAsset/VideoAsset';
 import AntIcons from '@expo/vector-icons/AntDesign';
 import Carousel from 'react-native-snap-carousel';
+import GestureRecognizer from 'react-native-swipe-gestures';
 
 export function TopicItem({ item }) {
 
@@ -20,13 +21,13 @@ export function TopicItem({ item }) {
     return (
       <View style={styles.frame}>
         { asset.item.image && (
-          <ImageAsset topicId={item.topicId} asset={asset.item.image} onClearCarousel={() => actions.hideCarousel()} />
+          <ImageAsset topicId={item.topicId} asset={asset.item.image} />
         )}
         { asset.item.video && (
-          <VideoAsset topicId={item.topicId} asset={asset.item.video} onClearCarousel={() => actions.hideCarousel()} />
+          <VideoAsset topicId={item.topicId} asset={asset.item.video} />
         )}
         { asset.item.audio && (
-          <AudioAsset topicId={item.topicId} asset={asset.item.audio} onClearCarousel={() => actions.hideCarousel()} />
+          <AudioAsset topicId={item.topicId} asset={asset.item.audio} />
         )}
       </View>
     )
@@ -86,13 +87,15 @@ export function TopicItem({ item }) {
         onRequestClose={actions.hideCarousel}
       >
         <View style={styles.modal}>
-          <Carousel
-            data={state.assets}
-            firstItem={state.carouselIndex}
-            renderItem={renderAsset}
-            sliderWidth={state.width}
-            itemWidth={state.width}
-          />
+          <GestureRecognizer onSwipeUp={actions.hideCarousel} onSwipeDown={actions.hideCarousel}>
+            <Carousel
+              data={state.assets}
+              firstItem={state.carouselIndex}
+              renderItem={renderAsset}
+              sliderWidth={state.width}
+              itemWidth={state.width}
+            />
+          </GestureRecognizer>
         </View>
       </Modal> 
     </View>
