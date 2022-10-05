@@ -54,9 +54,7 @@ export function ConversationBody() {
       <FlatList
         ref={ref}
         data={state.topics}
-        onMomentumScrollBegin={actions.setMomentum}
-        onMomentumScrollEnd={actions.clearMomentum}
-        onScrollBeginDrag={actions.unlatch}
+        onScrollEndDrag={actions.unlatch}
         maintainVisibleContentPosition={ state.latched ? null : { minIndexForVisibile: 2, } }
         inverted={true}
         renderItem={({item}) => (<TopicItem item={item} />)}
