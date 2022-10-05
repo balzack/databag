@@ -1,4 +1,4 @@
-import { TextInput, View, TouchableOpacity, Text, } from 'react-native';
+import { Platform, TextInput, View, TouchableOpacity, Text, } from 'react-native';
 import { FlatList, ScrollView } from '@stream-io/flat-list-mvcp';
 import { useState, useRef, useEffect } from 'react';
 import { useConversation } from './useConversation.hook';
@@ -33,10 +33,6 @@ export function ConversationHeader({ closeConversation, openDetails }) {
   );
 }
 
-function show(arg) {
-  console.log(arg);
-}
-
 export function ConversationBody() {
   const { state, actions } = useConversation();
 
@@ -45,16 +41,19 @@ export function ConversationBody() {
   const latch = () => {
     if (!state.momentum) {
       actions.latch();
-      ref.current.scrollToIndex({ animated: false, index: 0 });
+      ref.current.scrollToIndex({ animated: true, index: 0 });
     }
   }
+
+  const noop = () => {};
 
   return (
     <View style={styles.topics}>
       <FlatList
         ref={ref}
         data={state.topics}
-        onMomentumScrollEnd={actions.unlatch}
+        onMomentumScrollEnd={ Platform.OS === 'ios' ? noop : actions.unlatch }
+        onScrollBeginDrag={ Platform.OS !== 'ios' ? noop : actions.unlatch }
         maintainVisibleContentPosition={ state.latched ? null : { minIndexForVisibile: 2, } }
         inverted={true}
         renderItem={({item}) => (<TopicItem item={item} />)}
