@@ -1,6 +1,6 @@
 import { Platform, TextInput, View, TouchableOpacity, Text, } from 'react-native';
 import { FlatList, ScrollView } from '@stream-io/flat-list-mvcp';
-import { useState, useRef, useEffect } from 'react';
+import { memo, useState, useRef, useEffect } from 'react';
 import { useConversation } from './useConversation.hook';
 import { styles } from './Conversation.styled';
 import { useNavigation } from '@react-navigation/native';
@@ -33,6 +33,14 @@ export function ConversationHeader({ closeConversation, openDetails }) {
   );
 }
 
+const RenderItem = memo((props: { item: number }) => {
+  return (<TopicItem item={props.item} />)
+});
+
+const renderItemHandler = ({ item }: { item: number }) => {
+  return <RenderItem item={item} />
+}
+
 export function ConversationBody() {
   const { state, actions } = useConversation();
 
@@ -56,7 +64,7 @@ export function ConversationBody() {
         onScrollBeginDrag={ Platform.OS !== 'ios' ? noop : actions.unlatch }
         maintainVisibleContentPosition={ state.latched ? null : { minIndexForVisibile: 2, } }
         inverted={true}
-        renderItem={({item}) => (<TopicItem item={item} />)}
+        renderItem={renderItemHandler}
         keyExtractor={item => item.topicId}
       />
       <View>

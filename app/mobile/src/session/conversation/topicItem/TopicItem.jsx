@@ -1,4 +1,4 @@
-import { FlatList, ActivityIndicator, View, Text, TouchableOpacity } from 'react-native';
+import { FlatList, View, Text, TouchableOpacity } from 'react-native';
 import { useTopicItem } from './useTopicItem.hook';
 import { styles } from './TopicItem.styled';
 import { Logo } from 'utils/Logo';
@@ -6,6 +6,7 @@ import Colors from 'constants/Colors';
 import { VideoThumb } from './videoThumb/VideoThumb';
 import { AudioThumb } from './audioThumb/AudioThumb';
 import { ImageThumb } from './imageThumb/ImageThumb';
+import AntIcons from '@expo/vector-icons/AntDesign';
 
 export function TopicItem({ item }) {
 
@@ -41,10 +42,10 @@ export function TopicItem({ item }) {
             />
           )}
           { state.transform === 'incomplete' && (
-            <ActivityIndicator size="large" color={Colors.background} />
+            <AntIcons name="cloudo" size={32} color={Colors.background} />
           )}
           { state.transform === 'error' && (
-            <ActivityIndicator size="large" color={Colors.alert} />
+            <AntIcons name="cloudo" size={32} color={Colors.alert} />
           )}
           { state.message && (
             <Text style={styles.message}>{ state.message }</Text>
@@ -52,7 +53,7 @@ export function TopicItem({ item }) {
         </>
       )}
       { state.status !== 'confirmed' && (
-        <ActivityIndicator size="large" color={Colors.divider} />
+        <AntIcons name="cloudo" size={32} color={Colors.divider} />
       )}
     </View>
   );

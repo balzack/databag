@@ -321,7 +321,7 @@ PODS:
     - React-jsi (= 0.69.5)
     - React-logger (= 0.69.5)
     - React-perflogger (= 0.69.5)
-  - RNGestureHandler (2.6.1):
+  - RNGestureHandler (2.7.0):
     - React-Core
   - RNImageCropPicker (0.38.0):
     - React-Core
@@ -562,7 +562,7 @@ SPEC CHECKSUMS:
   React-RCTVibration: 42b34fde72e42446d9b08d2b9a3ddc2fa9ac6189
   React-runtimeexecutor: c778439c3c430a5719d027d3c67423b390a221fe
   ReactCommon: ab1003b81be740fecd82509c370a45b1a7dda0c1
-  RNGestureHandler: 28ad20bf02257791f7f137b31beef34b9549f54b
+  RNGestureHandler: 7673697e7c0e9391adefae4faa087442bc04af33
   RNImageCropPicker: ffbba608264885c241cbf3a8f78eb7aeeb978241
   RNReanimated: 7faa787e8d4493fbc95fab2ad331fa7625828cfa
   TOCropViewController: 3105367e808b7d3d886a74ff59bf4804e7d3ab38
