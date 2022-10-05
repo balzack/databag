@@ -18,6 +18,9 @@ export const styles = StyleSheet.create({
   },
   timestamp: {
     paddingLeft: 8,
+    fontSize: 11,
+    paddingTop: 2,
+    color: Colors.grey,
   },
   message: {
     paddingLeft: 52,
