@@ -3,23 +3,23 @@ import { useTopicItem } from './useTopicItem.hook';
 import { styles } from './TopicItem.styled';
 import { Logo } from 'utils/Logo';
 import Colors from 'constants/Colors';
-import { VideoAsset } from './videoAsset/VideoAsset';
-import { AudioAsset } from './audioAsset/AudioAsset';
-import { ImageAsset } from './imageAsset/ImageAsset';
+import { VideoThumb } from './videoThumb/VideoThumb';
+import { AudioThumb } from './audioThumb/AudioThumb';
+import { ImageThumb } from './imageThumb/ImageThumb';
 
 export function TopicItem({ item }) {
 
   const { state, actions } = useTopicItem(item);
 
-  const renderAsset = (asset) => {
+  const renderThumb = (asset) => {
     if (asset.item.image) {
-      return <ImageAsset topicId={item.topicId} asset={asset.item.image} />
+      return <ImageThumb topicId={item.topicId} asset={asset.item.image} />
     }
     if (asset.item.video) {
-      return <VideoAsset topicId={item.topicId} asset={asset.item.video} />
+      return <VideoThumb topicId={item.topicId} asset={asset.item.video} />
     }
     if (asset.item.audio) {
-      return <AudioAsset topicId={item.topicId} asset={asset.item.audio} />
+      return <AudioThumb topicId={item.topicId} asset={asset.item.audio} />
     }
     return <></>
   };
@@ -37,7 +37,7 @@ export function TopicItem({ item }) {
             <FlatList style={styles.carousel}
               data={state.assets}
               horizontal={true}
-              renderItem={renderAsset}
+              renderItem={renderThumb}
             />
           )}
           { state.transform === 'incomplete' && (
@@ -46,7 +46,9 @@ export function TopicItem({ item }) {
           { state.transform === 'error' && (
             <ActivityIndicator size="large" color={Colors.alert} />
           )}
-          <Text style={styles.message}>{ state.message }</Text>
+          { state.message && (
+            <Text style={styles.message}>{ state.message }</Text>
+          )}
         </>
       )}
       { state.status !== 'confirmed' && (

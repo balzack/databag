@@ -1,6 +1,6 @@
 import { Text } from 'react-native';
 
-export function AudioAsset() {
+export function AudioThumb() {
   return <Text>AUDIO</Text>
 }
 

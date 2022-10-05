@@ -88,7 +88,7 @@ export const styles = StyleSheet.create({
   },
   latch: {
     backgroundColor: Colors.formBackground,
-    borderRadius: 8,
+    borderRadius: 12,
   },
 })
 

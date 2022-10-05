@@ -1,10 +1,10 @@
 import { Image, TouchableOpacity } from 'react-native';
-import { useImageAsset } from './useImageAsset.hook';
-import { styles } from './ImageAsset.styled';
+import { useImageThumb } from './useImageThumb.hook';
+import { styles } from './ImageThumb.styled';
 import Colors from 'constants/Colors';
 
-export function ImageAsset({ topicId, asset }) {
-  const { state, actions } = useImageAsset(topicId, asset);
+export function ImageThumb({ topicId, asset }) {
+  const { state, actions } = useImageThumb(topicId, asset);
 
   return (
     <TouchableOpacity activeOpacity={1}>

@@ -2,7 +2,7 @@ import { useState, useRef, useEffect, useContext } from 'react';
 import { ConversationContext } from 'context/ConversationContext';
 import { Image } from 'react-native';
 
-export function useImageAsset(topicId, asset) {
+export function useImageThumb(topicId, asset) {
 
   const [state, setState] = useState({
     ratio: 1,
