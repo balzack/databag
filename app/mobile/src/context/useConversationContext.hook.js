@@ -287,6 +287,18 @@ export function useConversationContext() {
         }
       }
     },
+    getTopicAssetUrl: (topicId, assetId) => {
+      if (conversationId.current) {
+        const { cardId, channelId } = conversationId.current;
+        if (cardId) {
+          return card.actions.getChannelTopicAssetUrl(cardId, channelId, topicId, assetId);
+        }
+        else {
+          return channel.actions.getTopicAssetUrl(channelId, topicId, assetId);
+        }
+      }
+      return null;
+    },
   }
 
   return { state, actions }

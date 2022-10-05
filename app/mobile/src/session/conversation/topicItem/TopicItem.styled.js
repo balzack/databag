@@ -22,5 +22,10 @@ export const styles = StyleSheet.create({
   message: {
     paddingLeft: 52,
   },
+  carousel: {
+    paddingLeft: 52,
+    marginTop: 4,
+    marginBottom: 4, 
+  },
 })
 

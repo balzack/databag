@@ -67,10 +67,11 @@ export function useTopicItem(item) {
       }
     }
 
-    let message;
+    let message, assets;
     try {
       const data = JSON.parse(item.detail.data);
       message = data.text;
+      assets = data.assets;
     }
     catch (err) {
       console.log("empty message");
@@ -81,7 +82,7 @@ export function useTopicItem(item) {
     const now = new Date();
     const offset = now.getTime() - date.getTime();
     if(offset < 86400000) {
-      timestamp = moment(date).format('h:mm');
+      timestamp = moment(date).format('h:mma');
     }
     else if (offset < 31449600000) {
       timestamp = moment(date).format('M/DD');
@@ -90,7 +91,7 @@ export function useTopicItem(item) {
       timestamp = moment(date).format('M/DD/YYYY');
     }
 
-    updateState({ logo, name, known, message, timestamp });
+    updateState({ logo, name, known, message, timestamp, transform, status, assets });
   }, [card, item]);
 
   const actions = {

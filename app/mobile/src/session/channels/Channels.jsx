@@ -13,7 +13,7 @@ export function ChannelsTitle({ state, actions }) {
       <View style={styles.inputwrapper}>
         <Ionicons style={styles.icon} name="search1" size={16} color={Colors.disabled} />
         <TextInput style={styles.inputfield} value={state.filter} onChangeText={actions.setFilter}
-            autoCapitalize="none" placeholderTextColor={Colors.disabled}  placeholder="Topic" />
+            autoCapitalize="none" placeholderTextColor={Colors.disabled}  placeholder="Topics" />
         <View style={styles.space} />
       </View>
       <TouchableOpacity style={styles.add}>
@@ -43,7 +43,7 @@ export function Channels({ openConversation }) {
         <View style={styles.inputwrapper}>
           <Ionicons style={styles.icon} name="search1" size={16} color={Colors.disabled} />
           <TextInput style={styles.inputfield} value={state.topic} onChangeText={actions.setTopic}
-              autoCapitalize="none" placeholderTextColor={Colors.disabled} placeholder="Topic" />
+              autoCapitalize="none" placeholderTextColor={Colors.disabled} placeholder="Topics" />
           <View style={styles.space} />
         </View>
       </SafeAreaView>
