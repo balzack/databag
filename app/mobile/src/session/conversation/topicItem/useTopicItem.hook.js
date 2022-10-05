@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from 'react';
 import { CardContext } from 'context/CardContext';
 import { ProfileContext } from 'context/ProfileContext';
 import moment from 'moment';
+import { useWindowDimensions } from 'react-native';
 
 export function useTopicItem(item) {
 
@@ -11,14 +12,23 @@ export function useTopicItem(item) {
     logo: null,
     timestamp: null,
     message: null,
+    carousel: false,
+    carouselIndex: 0,
+    width: null,
+    height: null,
   });
 
   const profile = useContext(ProfileContext);
   const card = useContext(CardContext);
+  const dimensions = useWindowDimensions();
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
   }
+
+  useEffect(() => {
+    updateState({ width: dimensions.width, height: dimensions.height });
+  }, [dimensions]);
 
   useEffect(() => {
     const { topicId, detail } = item;
@@ -95,6 +105,12 @@ export function useTopicItem(item) {
   }, [card, item]);
 
   const actions = {
+    showCarousel: (index) => {
+      updateState({ carousel: true, carouselIndex: index });
+    },
+    hideCarousel: () => {
+      updateState({ carousel: false });
+    },
   };
 
   return { state, actions };

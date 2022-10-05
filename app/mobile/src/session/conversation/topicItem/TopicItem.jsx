@@ -1,4 +1,4 @@
-import { FlatList, View, Text, TouchableOpacity } from 'react-native';
+import { FlatList, View, Text, TouchableOpacity, Modal } from 'react-native';
 import { useTopicItem } from './useTopicItem.hook';
 import { styles } from './TopicItem.styled';
 import { Logo } from 'utils/Logo';
@@ -6,24 +6,47 @@ import Colors from 'constants/Colors';
 import { VideoThumb } from './videoThumb/VideoThumb';
 import { AudioThumb } from './audioThumb/AudioThumb';
 import { ImageThumb } from './imageThumb/ImageThumb';
+import { ImageAsset } from './imageAsset/ImageAsset';
+import { AudioAsset } from './audioAsset/AudioAsset';
+import { VideoAsset } from './videoAsset/VideoAsset';
 import AntIcons from '@expo/vector-icons/AntDesign';
+import Carousel from 'react-native-snap-carousel';
 
 export function TopicItem({ item }) {
 
   const { state, actions } = useTopicItem(item);
 
-  const renderThumb = (asset) => {
-    if (asset.item.image) {
-      return <ImageThumb topicId={item.topicId} asset={asset.item.image} />
-    }
-    if (asset.item.video) {
-      return <VideoThumb topicId={item.topicId} asset={asset.item.video} />
-    }
-    if (asset.item.audio) {
-      return <AudioThumb topicId={item.topicId} asset={asset.item.audio} />
-    }
-    return <></>
-  };
+  const renderAsset = (asset) => {
+    return (
+      <View style={styles.frame}>
+        { asset.item.image && (
+          <ImageAsset topicId={item.topicId} asset={asset.item.image} onClearCarousel={() => actions.hideCarousel()} />
+        )}
+        { asset.item.video && (
+          <VideoAsset topicId={item.topicId} asset={asset.item.video} onClearCarousel={() => actions.hideCarousel()} />
+        )}
+        { asset.item.audio && (
+          <AudioAsset topicId={item.topicId} asset={asset.item.audio} onClearCarousel={() => actions.hideCarousel()} />
+        )}
+      </View>
+    )
+  }
+
+  const renderThumb = (thumb) => {
+    return (
+      <View>
+        { thumb.item.image && (
+          <ImageThumb topicId={item.topicId} asset={thumb.item.image} onAssetView={() => actions.showCarousel(thumb.index)} />
+        )}
+        { thumb.item.video && (
+          <VideoThumb topicId={item.topicId} asset={thumb.item.video} onAssetView={() => actions.showCarousel(thumb.index)} />
+        )}
+        { thumb.item.audio && (
+          <AudioThumb topicId={item.topicId} asset={thumb.item.audio} onAssetView={() => actions.showCarousel(thumb.index)} />
+        )}
+      </View>
+    );
+  }
 
   return (
     <View style={styles.item}>
@@ -55,6 +78,23 @@ export function TopicItem({ item }) {
       { state.status !== 'confirmed' && (
         <AntIcons name="cloudo" size={32} color={Colors.divider} />
       )}
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={state.carousel}
+        supportedOrientations={['portrait', 'landscape']}
+        onRequestClose={actions.hideCarousel}
+      >
+        <View style={styles.modal}>
+          <Carousel
+            data={state.assets}
+            firstItem={state.carouselIndex}
+            renderItem={renderAsset}
+            sliderWidth={state.width}
+            itemWidth={state.width}
+          />
+        </View>
+      </Modal> 
     </View>
   );
 }

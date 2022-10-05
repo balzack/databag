@@ -30,5 +30,17 @@ export const styles = StyleSheet.create({
     marginTop: 4,
     marginBottom: 4, 
   },
+  modal: {
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'rgba(52, 52, 52, 0.8)',
+  },
+  frame: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    height: '100%',
+  },
 })
 
