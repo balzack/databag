@@ -45,7 +45,7 @@ export function ConversationBody() {
   const latch = () => {
     if (!state.momentum) {
       actions.latch();
-      ref.current.scrollToIndex({ animated: true, index: 0 });
+      ref.current.scrollToIndex({ animated: false, index: 0 });
     }
   }
 
