@@ -8,6 +8,7 @@ export function useConversation() {
     subject: null,
     logo: null,
     latched: true,
+    momentum: false,
   });
 
   const conversation = useContext(ConversationContext);
@@ -39,6 +40,12 @@ export function useConversation() {
     },
     unlatch: () => {
       updateState({ latched: false });
+    },
+    setMomentum: () => {
+      updateState({ momentum: true });
+    },
+    clearMomentum: () => {
+      updateState({ momentum: false });
     },
   };
 

@@ -43,8 +43,10 @@ export function ConversationBody() {
   const ref = useRef();
 
   const latch = () => {
-    actions.latch();
-    ref.current.scrollToIndex({ animated: true, index: 0 });
+    if (!state.momentum) {
+      actions.latch();
+      ref.current.scrollToIndex({ animated: true, index: 0 });
+    }
   }
 
   return (
@@ -52,6 +54,8 @@ export function ConversationBody() {
       <FlatList
         ref={ref}
         data={state.topics}
+        onMomentumScrollBegin={actions.setMomentum}
+        onMomentumScrollEnd={actions.clearMomentum}
         onScrollBeginDrag={actions.unlatch}
         maintainVisibleContentPosition={ state.latched ? null : { minIndexForVisibile: 2, } }
         inverted={true}
