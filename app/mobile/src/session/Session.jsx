@@ -167,6 +167,13 @@ export function Session() {
       detailNav.openDrawer();
     };
 
+    const openProfile = () => {
+      profileNav.openDrawer();
+    }
+    const openCards = () => {
+      cardNav.openDrawer();
+    }
+
     const conversation = useContext(ConversationContext);
 
     useEffect(() => {
@@ -186,11 +193,11 @@ export function Session() {
       <View style={styles.home}>
         <SafeAreaView edges={['top', 'bottom']} style={styles.sidebar}>
           <SafeAreaView edges={['left']} style={styles.options}>
-            <TouchableOpacity style={styles.option} onPress={() => openProfile(profileNav)}>
+            <TouchableOpacity style={styles.option} onPress={openProfile}>
               <Ionicons style={styles.icon} name={'user'} size={20} />
               <Text>Profile</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.option} onPress={() => openCards(cardNav)}>
+            <TouchableOpacity style={styles.option} onPress={openCards}>
               <Ionicons style={styles.icon} name={'contacts'} size={20} />
               <Text>Contacts</Text>
             </TouchableOpacity>
