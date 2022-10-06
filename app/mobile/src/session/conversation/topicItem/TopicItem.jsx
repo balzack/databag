@@ -27,7 +27,8 @@ export function TopicItem({ item }) {
           <VideoAsset topicId={item.topicId} asset={asset.item.video} />
         )}
         { asset.item.audio && (
-          <AudioAsset topicId={item.topicId} asset={asset.item.audio} />
+          <AudioAsset topicId={item.topicId} asset={asset.item.audio} active={state.activeId == asset.dataIndex}
+              setActive={() => actions.setActive(asset.dataIndex)} />
         )}
       </TouchableOpacity>
     )

@@ -1,10 +1,34 @@
-import { Image, View, TouchableOpacity } from 'react-native';
+import { Text, Image, View, TouchableOpacity } from 'react-native';
 import Colors from 'constants/Colors';
+import { useAudioAsset } from './useAudioAsset.hook';
+import { styles } from './AudioAsset.styled';
+import audio from 'images/audio.png';
+import Icons from '@expo/vector-icons/MaterialCommunityIcons';
 
-export function AudioAsset({ topicId, asset, onClearCarousel }) {
+export function AudioAsset({ topicId, asset, active, setActive }) {
+
+  const { state, actions } = useAudioAsset(topicId, asset);
+
+  const play = () => {
+    actions.play();
+    setActive();
+  }
 
   return (
-    <TouchableOpacity onPress={onClearCarousel} activeOpacity={1} style={{ width: 100, height: 100, backgroundColor: 'yellow' }} onPress={onClearCarousel} />
+    <View style={styles.background}>
+      <Image source={audio} style={{ width: state.length, height: state.length }} resizeMode={'cover'} />
+      <Text style={styles.label}>{ asset.label }</Text>
+      { state.playing && active && (
+        <TouchableOpacity style={styles.control} onPress={actions.pause}>
+          <Icons name="stop-circle-outline" size={92} color={Colors.white} />
+        </TouchableOpacity>
+      )}
+      { (!state.playing || !active) && (
+        <TouchableOpacity style={styles.control} onPress={play}>
+          <Icons name="play-circle-outline" size={92} color={Colors.white} />
+        </TouchableOpacity>
+      )}
+    </View>
   );
 }
   

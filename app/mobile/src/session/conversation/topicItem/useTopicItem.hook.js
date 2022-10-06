@@ -16,6 +16,7 @@ export function useTopicItem(item) {
     carouselIndex: 0,
     width: null,
     height: null,
+    activeId: null,
   });
 
   const profile = useContext(ProfileContext);
@@ -110,6 +111,9 @@ export function useTopicItem(item) {
     },
     hideCarousel: () => {
       updateState({ carousel: false });
+    },
+    setActive: (activeId) => {
+      updateState({ activeId });
     },
   };
 
