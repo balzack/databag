@@ -1,6 +1,6 @@
 import { Image, View, TouchableOpacity } from 'react-native';
 import Colors from 'constants/Colors';
-import Video from 'react-native-video';
+import { Video, AVPlaybackStatus } from 'expo-av';
 import { useVideoAsset } from './useVideoAsset.hook';
 
 export function VideoAsset({ topicId, asset }) {
@@ -10,8 +10,9 @@ export function VideoAsset({ topicId, asset }) {
   return (
     <>
       { state.url && (
-        <Video source={{ uri: 'https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4' }} style={{ width: state.width, height: state.height }} resizeMode={'cover'} paused={true}
-            controls={true} onLoad={({ naturalSize }) => actions.setResolution(naturalSize.width, naturalSize.height)} />
+        <Video source={{ uri: 'https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4' }} style={{ width: 200, height: 200 }} resizeMode={'cover'} 
+        useNativeControls
+        resizeMode="contain" />
       )}
     </>
   );

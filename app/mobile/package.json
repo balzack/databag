@@ -16,6 +16,7 @@
     "@react-navigation/stack": "^6.3.0",
     "@stream-io/flat-list-mvcp": "^0.10.2",
     "expo": "~46.0.9",
+    "expo-av": "^12.0.4",
     "expo-splash-screen": "~0.16.2",
     "expo-status-bar": "~1.4.0",
     "moment": "^2.29.4",
