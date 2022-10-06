@@ -210,7 +210,13 @@ export function useChannelContext() {
     },
     addTopic: async (channelId, message, assets) => {
       const { server, appToken } = session.current;
-      return await addChannelTopic(server, appToken, channelId, message, assets);
+      if (assets?.length) {
+        console.log("UPLOAD");
+      }
+      else {
+        await addChannelTopic(server, appToken, channelId, message, []);
+        //sync channels
+      }
     },
     setTopicSubject: async (channelId, topicId, data) => {
       const { server, appToken } = session.current;

@@ -327,7 +327,7 @@ export function useCardContext() {
               await store.actions.setCardChannelItemSummary(guid, cardId, channel.id, topicRevision, summary);
               setCardChannelSummary(cardId, channel.id, summary, topicRevision);
             }
-            await store.actions.setCardChannelItemRevision(guid, cardId, channel.revision);
+            await store.actions.setCardChannelItemRevision(guid, cardId, channel.id, channel.revision);
             setCardChannelRevision(cardId, channel.id, channel.revision);
           }
         }
@@ -466,7 +466,13 @@ export function useCardContext() {
     },
     addChannelTopic: async (cardId, channelId, message, assets) => {
       const { detail, profile } = getCard(cardId);
-      return await addChannelTopic(profile.node, `${profile.guid}.${detail.token}`, channelId, message, assets);
+      if (assets?.length > 0) {
+        console.log("UPLOAD");
+      }
+      else {
+        await addContactChannelTopic(profile.node, `${profile.guid}.${detail.token}`, channelId, message, []);
+        // sync channel
+      }
     },
     setChannelTopicSubject: async (cardId, channelId, topicId, data) => {
       const { detail, profile } = getCard(cardId);

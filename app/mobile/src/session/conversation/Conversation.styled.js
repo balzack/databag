@@ -80,7 +80,7 @@ export const styles = StyleSheet.create({
   },
   latchbar: {
     position: 'absolute',
-    top: -16,
+    top: -26,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
@@ -89,6 +89,9 @@ export const styles = StyleSheet.create({
   latch: {
     backgroundColor: Colors.formBackground,
     borderRadius: 12,
+    borderWidth: 1,
+    padding: 4,
+    borderColor: Colors.primary,
   },
 })
 

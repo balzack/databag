@@ -11,7 +11,10 @@ export function useAddTopic(cardId, channelId) {
     fontSize: false,
     fontColor: false,
     size: 'medium',
+    sizeSet: false,
     color: Colors.text,
+    colorSet: false,
+    busy: false,
   });
 
   const assetId = useRef(0);
@@ -76,10 +79,32 @@ export function useAddTopic(cardId, channelId) {
       updateState({ fontSize: false });
     },
     setFontSize: (size) => {
-      updateState({ size });
+      updateState({ size, sizeSet: true });
     },
     setFontColor: (color) => {
-      updateState({ color });
+      updateState({ color, colorSet: true });
+    },
+    addTopic: async () => {
+      if (!state.busy) {
+        try {
+          updateState({ busy: true });
+          let message = {
+            text: state.message,
+            textColor: state.colorSet ? state.color : null,
+            textSize: state.sizeSet ? state.size : null,
+          };
+          await conversation.actions.addTopic(message, state.assets);
+          updateState({ busy: false, assets: [], message: null,
+            size: 'medium', sizeSet: false,
+            color: Colors.text, colorSet: false,
+          });
+        }
+        catch(err) {
+          console.log(err);
+          updateState({ busy: false });
+          throw new Error("failed to add message");
+        }
+      }
     },
   };
 

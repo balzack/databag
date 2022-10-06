@@ -18,6 +18,7 @@ export function useConversationContext() {
   const profile = useContext(ProfileContext);
   const topics = useRef(null);
   const revision = useRef(0);
+  const force = useRef(false);
   const detailRevision = useRef(0);
   const syncing = useRef(false);
   const conversationId = useRef(null);
@@ -107,7 +108,7 @@ export function useConversationContext() {
       if (conversationId.current) {
         const { cardId, channelId } = conversationId.current;
         const channelItem = getChannel(cardId, channelId);
-        if (channelItem && (channelItem.revision !== revision.current)) {
+        if (channelItem && (channelItem.revision !== revision.current || force.current)) {
           syncing.current = true;
 
           try {
@@ -129,7 +130,8 @@ export function useConversationContext() {
             }
 
             // sync from server
-            if (channelItem.topicRevision !== channelItem.syncRevision) {
+            if (channelItem.topicRevision != channelItem.syncRevision || force.current) {
+              force.current = false;
               const res = await getTopics(cardId, channelId, channelItem.syncRevision)
               for (const topic of res.topics) {
                 if (!topic.data) {
@@ -147,7 +149,7 @@ export function useConversationContext() {
                   topics.current.set(id, { topicId: id, revision: revision, detailRevision: topic.data.detailRevision, detail: topic.data.topicDetail });
                 }
               }
-              await setSyncRevision(cardId, channelId, channelItem.topicRevision);
+              await setSyncRevision(cardId, channelId, res.revision);
             }
 
             // update revision
@@ -298,6 +300,19 @@ export function useConversationContext() {
         }
       }
       return null;
+    },
+    addTopic: async (message, files) => {
+      if (conversationId.current) {
+        const { cardId, channelId } = conversationId.current;
+        if (cardId) {
+          await card.actions.addChannelTopic(cardId, channelId, message, files);
+        }
+        else {
+          await channel.actions.addTopic(channelId, message, files);
+        }
+        force.current = true;
+        sync();
+      }
     },
   }
 

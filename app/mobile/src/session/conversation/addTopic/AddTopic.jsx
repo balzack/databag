@@ -1,4 +1,4 @@
-import { Modal, Image, FlatList, TextInput, Alert, View, TouchableOpacity, Text, } from 'react-native';
+import { ActivityIndicator, Modal, Image, FlatList, TextInput, Alert, View, TouchableOpacity, Text, } from 'react-native';
 import { useState, useRef } from 'react';
 import { useAddTopic } from './useAddTopic.hook';
 import { styles } from './AddTopic.styled';
@@ -25,6 +25,19 @@ export function AddTopic() {
     }
     catch (err) {
       console.log(err);
+    }
+  }
+
+  const sendMessage = async () => {
+    try {
+      await actions.addTopic();
+    }
+    catch (err) {
+      console.log(err);
+      Alert.alert(
+        'Failed to Send Message',
+        'Please try again.',
+      )
     }
   }
 
@@ -122,8 +135,16 @@ export function AddTopic() {
           <MaterialIcons name="palette-outline" size={20} color={Colors.text} />
         </TouchableOpacity>
         <View style={styles.space} />
-        <TouchableOpacity style={styles.addButton}>
-          <MaterialIcons name="send-outline" size={20} color={Colors.text} />
+        <TouchableOpacity style={styles.addButton} onPress={sendMessage}>
+          { state.busy && (
+            <ActivityIndicator color={Colors.white} />
+          )}
+          { !state.busy && (state.message || state.assets.length > 0) && (
+            <MaterialIcons name="send-outline" size={20} color={Colors.text} />
+          )}
+          { !state.busy && !(state.message || state.assets.length > 0) && (
+            <MaterialIcons name="send-outline" size={20} color={Colors.lightgrey} />
+          )}
         </TouchableOpacity>
       </View>
       <Modal

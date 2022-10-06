@@ -72,7 +72,7 @@ export function ConversationBody() {
         <View style={styles.latchbar}>
           { !state.latched && (
             <TouchableOpacity style={styles.latch} onPress={latch}>
-              <Ionicons name="downcircleo" size={24} color={Colors.primary} />
+              <Ionicons name="unlock" size={16} color={Colors.primary} />
             </TouchableOpacity>
           )} 
         </View>
