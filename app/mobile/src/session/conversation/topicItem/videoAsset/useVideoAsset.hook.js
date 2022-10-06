@@ -12,6 +12,7 @@ export function useVideoAsset(topicId, asset) {
     width: 1,
     weight: 1,
     url: null,
+    controls: false,
   });
 
   const conversation = useContext(ConversationContext);
@@ -48,7 +49,7 @@ export function useVideoAsset(topicId, asset) {
 
   const actions = {
     setResolution: (width, height) => {
-      updateState({ videoRatio: width / height });
+      updateState({ controls: true, videoRatio: width / height });
     }
   };
 

@@ -12,7 +12,7 @@ export function VideoAsset({ topicId, asset }) {
       { state.url && (
         <Video source={{ uri: state.url }} style={{ width: state.width, height: state.height }} resizeMode={'cover'} 
           onReadyForDisplay={(e) => actions.setResolution(e.naturalSize.width, e.naturalSize.height)}
-          useNativeControls resizeMode="contain" />
+          useNativeControls={state.controls} resizeMode="contain" />
       )}
     </>
   );
