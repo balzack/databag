@@ -33,7 +33,7 @@ export const styles = StyleSheet.create({
   modal: {
     width: '100%',
     height: '100%',
-    backgroundColor: 'rgba(52, 52, 52, 0.8)',
+    backgroundColor: 'rgba(0, 0, 0, 0.9)',
   },
   frame: {
     display: 'flex',

@@ -19,7 +19,7 @@ export function TopicItem({ item }) {
 
   const renderAsset = (asset) => {
     return (
-      <View style={styles.frame}>
+      <TouchableOpacity style={styles.frame} activeOpacity={1}>
         { asset.item.image && (
           <ImageAsset topicId={item.topicId} asset={asset.item.image} />
         )}
@@ -29,7 +29,7 @@ export function TopicItem({ item }) {
         { asset.item.audio && (
           <AudioAsset topicId={item.topicId} asset={asset.item.audio} />
         )}
-      </View>
+      </TouchableOpacity>
     )
   }
 
