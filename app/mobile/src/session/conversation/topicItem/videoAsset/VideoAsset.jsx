@@ -10,9 +10,9 @@ export function VideoAsset({ topicId, asset }) {
   return (
     <>
       { state.url && (
-        <Video source={{ uri: 'https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4' }} style={{ width: 200, height: 200 }} resizeMode={'cover'} 
-        useNativeControls
-        resizeMode="contain" />
+        <Video source={{ uri: state.url }} style={{ width: state.width, height: state.height }} resizeMode={'cover'} 
+          onReadyForDisplay={(e) => actions.setResolution(e.naturalSize.width, e.naturalSize.height)}
+          useNativeControls resizeMode="contain" />
       )}
     </>
   );
