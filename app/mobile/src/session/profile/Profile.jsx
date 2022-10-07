@@ -174,7 +174,7 @@ export function Profile() {
         supportedOrientations={['portrait', 'landscape']}
         onRequestClose={actions.hideBlockedCards}
       >
-        <KeyboardAvoidingView behavior="padding" style={styles.editWrapper}>
+        <KeyboardAvoidingView behavior="height" style={styles.editWrapper}>
           <View style={styles.editContainer}>
             <Text style={styles.editHeader}>Blocked Contacts:</Text>
             <View style={styles.editList}>
@@ -195,7 +195,7 @@ export function Profile() {
         supportedOrientations={['portrait', 'landscape']}
         onRequestClose={actions.hideBlockedChannels}
       >
-        <KeyboardAvoidingView behavior="padding" style={styles.editWrapper}>
+        <KeyboardAvoidingView behavior="height" style={styles.editWrapper}>
           <View style={styles.editContainer}>
             <Text style={styles.editHeader}>Blocked Topics:</Text>
             <View style={styles.editList}>
@@ -216,7 +216,7 @@ export function Profile() {
         supportedOrientations={['portrait', 'landscape']}
         onRequestClose={actions.hideDetailEdit}
       >
-        <KeyboardAvoidingView behavior="padding" style={styles.editWrapper}>
+        <KeyboardAvoidingView behavior="height" style={styles.editWrapper}>
           <View style={styles.editContainer}>
             <Text style={styles.editHeader}>Edit Details:</Text>
             <View style={styles.inputField}>
@@ -249,7 +249,7 @@ export function Profile() {
         supportedOrientations={['portrait', 'landscape']}
         onRequestClose={actions.hideLoginEdit}
       >
-        <KeyboardAvoidingView behavior="padding" style={styles.editWrapper}>
+        <KeyboardAvoidingView behavior="height" style={styles.editWrapper}>
           <View style={styles.editContainer}>
             <Text style={styles.editHeader}>Change Login:</Text>
             <View style={styles.inputField}>

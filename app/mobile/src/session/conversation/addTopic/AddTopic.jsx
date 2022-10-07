@@ -117,7 +117,7 @@ export function AddTopic() {
         />
       )}
       <TextInput style={styles.input} value={state.message} onChangeText={actions.setMessage} ref={message}
-          blurOnSubmit="true" onSubmitEditing={sendMessage} returnKeyType="send"
+          onSubmitEditing={sendMessage} returnKeyType="send"
           autoCapitalize="sentences" placeholder="New Message" multiline={true} />
       <View style={styles.addButtons}>
         <TouchableOpacity style={styles.addButton} onPress={addImage}>
