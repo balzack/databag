@@ -73,7 +73,7 @@ export function TopicItem({ item }) {
             <AntIcons name="cloudo" size={32} color={Colors.alert} />
           )}
           { state.message && (
-            <Text style={styles.message}>{ state.message }</Text>
+            <Text style={{ paddingLeft: 52, fontSize: state.fontSize, color: state.fontColor }}>{ state.message }</Text>
           )}
         </>
       )}

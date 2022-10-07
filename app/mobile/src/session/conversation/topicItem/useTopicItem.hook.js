@@ -3,6 +3,7 @@ import { CardContext } from 'context/CardContext';
 import { ProfileContext } from 'context/ProfileContext';
 import moment from 'moment';
 import { useWindowDimensions } from 'react-native';
+import Colors from 'constants/Colors';
 
 export function useTopicItem(item) {
 
@@ -17,6 +18,8 @@ export function useTopicItem(item) {
     width: null,
     height: null,
     activeId: null,
+    fontSize: 14,
+    fontColor: Colors.text,
   });
 
   const profile = useContext(ProfileContext);
@@ -78,15 +81,31 @@ export function useTopicItem(item) {
       }
     }
 
-    let message, assets;
+    let message, assets, fontSize, fontColor;
     try {
       const data = JSON.parse(item.detail.data);
       message = data.text;
       assets = data.assets;
+      if (data.textSize === 'small') {
+        fontSize = 10;
+      }
+      else if (data.textSize === 'large') {
+        fontSize = 20;
+      }
+      else {
+        fontSize = 14;
+      }
+      if (data.textColor) {
+        fontColor = data.textColor;
+      }
+      else {
+        fontColor = Colors.text;
+      }
     }
     catch (err) {
       console.log("empty message");
     }
+
 
     let timestamp;
     const date = new Date(item.detail.created * 1000);
@@ -102,7 +121,7 @@ export function useTopicItem(item) {
       timestamp = moment(date).format('M/DD/YYYY');
     }
 
-    updateState({ logo, name, known, message, timestamp, transform, status, assets });
+    updateState({ logo, name, known, message, fontSize, fontColor, timestamp, transform, status, assets });
   }, [card, item]);
 
   const actions = {
