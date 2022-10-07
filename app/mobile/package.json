@@ -38,6 +38,7 @@
     "react-native-swipe-gestures": "^1.0.5",
     "react-native-video": "^5.2.1",
     "react-native-web": "~0.18.7",
+    "react-native-wheel-color-picker": "^1.2.0",
     "react-router-dom": "6",
     "react-router-native": "^6.3.0"
   },

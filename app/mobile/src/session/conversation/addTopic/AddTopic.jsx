@@ -11,8 +11,7 @@ import { VideoFile } from './videoFile/VideoFile';
 import { AudioFile } from './audioFile/AudioFile';
 import { ImageFile } from './imageFile/ImageFile';
 import DocumentPicker from 'react-native-document-picker'
-import { ColorPicker } from 'react-native-color-picker'
-import Slider from '@react-native-community/slider';
+import ColorPicker from 'react-native-wheel-color-picker'
 
 export function AddTopic() {
 
@@ -210,10 +209,11 @@ export function AddTopic() {
             <Text style={styles.editHeader}>Font Color:</Text>
             <View style={styles.editColor}>
               <ColorPicker
-                  defaultColor={state.color}
-                  sliderComponent={Slider}
-                  onColorSelected={color => actions.setFontColor(color)}
-                  style={{flex: 1}} />
+                color={state.color}
+                onColorChange={actions.setFontColor}
+                onColorChangeComplete={actions.setFontColor}
+                swatched={false}
+                style={{flex: 1, padding: 8}} />
             </View>
             <View style={styles.editControls}>
               <View style={styles.selection}>
