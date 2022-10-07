@@ -153,6 +153,7 @@ async function upload(entry, update, complete) {
         }
         let transform = encodeURIComponent(JSON.stringify(["ithumb;photo", "ilg;photo"]));
         let asset = await axios.post(`${entry.url}&transforms=${transform}`, formData, {
+          headers: { 'Content-Type': 'multipart/form-data' },
           signal: entry.cancel.signal,
           onUploadProgress: (ev) => {
             const { loaded, total } = ev;
@@ -178,6 +179,7 @@ async function upload(entry, update, complete) {
         let thumb = 'vthumb;video;' + file.position;
         let transform = encodeURIComponent(JSON.stringify(["vlq;video", "vhd;video", thumb]));
         let asset = await axios.post(`${entry.url}&transforms=${transform}`, formData, {
+          headers: { 'Content-Type': 'multipart/form-data' },
           signal: entry.cancel.signal,
           onUploadProgress: (ev) => {
             const { loaded, total } = ev;
@@ -203,6 +205,7 @@ async function upload(entry, update, complete) {
         }
         let transform = encodeURIComponent(JSON.stringify(["acopy;audio"]));
         let asset = await axios.post(`${entry.url}&transforms=${transform}`, formData, {
+          headers: { 'Content-Type': 'multipart/form-data' },
           signal: entry.cancel.signal,
           onUploadProgress: (ev) => {
             const { loaded, total } = ev;
