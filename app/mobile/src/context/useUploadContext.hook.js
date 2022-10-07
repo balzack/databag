@@ -145,7 +145,12 @@ async function upload(entry, update, complete) {
     try {
       if (file.type === 'image') {
         const formData = new FormData();
-        formData.append("asset", {uri: 'file://' + file.data, name: 'asset', type: 'application/octent-stream'});
+        if (file.data.startsWith('file:')) {
+          formData.append("asset", {uri: file.data, name: 'asset', type: 'application/octent-stream'});
+        }
+        else {
+          formData.append("asset", {uri: 'file://' + file.data, name: 'asset', type: 'application/octent-stream'});
+        }
         let transform = encodeURIComponent(JSON.stringify(["ithumb;photo", "ilg;photo"]));
         let asset = await axios.post(`${entry.url}&transforms=${transform}`, formData, {
           signal: entry.cancel.signal,
@@ -164,7 +169,12 @@ async function upload(entry, update, complete) {
       }
       else if (file.type === 'video') {
         const formData = new FormData();
-        formData.append("asset", {uri: 'file://' + file.data, name: 'asset', type: 'application/octent-stream'});
+        if (file.data.startsWith('file:')) {
+          formData.append("asset", {uri: file.data, name: 'asset', type: 'application/octent-stream'});
+        }
+        else {
+          formData.append("asset", {uri: 'file://' + file.data, name: 'asset', type: 'application/octent-stream'});
+        }
         let thumb = 'vthumb;video;' + file.position;
         let transform = encodeURIComponent(JSON.stringify(["vlq;video", "vhd;video", thumb]));
         let asset = await axios.post(`${entry.url}&transforms=${transform}`, formData, {
@@ -185,7 +195,12 @@ async function upload(entry, update, complete) {
       }
       else if (file.type === 'audio') {
         const formData = new FormData();
-        formData.append("asset", {uri: 'file://' + file.data, name: 'asset', type: 'application/octent-stream'});
+        if (file.data.startsWith('file:')) {
+          formData.append("asset", {uri: file.data, name: 'asset', type: 'application/octent-stream'});
+        }
+        else {
+          formData.append("asset", {uri: 'file://' + file.data, name: 'asset', type: 'application/octent-stream'});
+        }
         let transform = encodeURIComponent(JSON.stringify(["acopy;audio"]));
         let asset = await axios.post(`${entry.url}&transforms=${transform}`, formData, {
           signal: entry.cancel.signal,
