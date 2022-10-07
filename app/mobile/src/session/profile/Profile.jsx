@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { Modal, Alert, TextInput, ScrollView, View, Switch, TouchableOpacity, Text } from 'react-native';
+import { KeyboardAvoidingView, Modal, Alert, TextInput, ScrollView, View, Switch, TouchableOpacity, Text } from 'react-native';
 import { styles } from './Profile.styled';
 import { useProfile } from './useProfile.hook';
 import { Logo } from 'utils/Logo';
@@ -174,7 +174,7 @@ export function Profile() {
         supportedOrientations={['portrait', 'landscape']}
         onRequestClose={actions.hideBlockedCards}
       >
-        <View style={styles.editWrapper}>
+        <KeyboardAvoidingView behavior="padding" style={styles.editWrapper}>
           <View style={styles.editContainer}>
             <Text style={styles.editHeader}>Blocked Contacts:</Text>
             <View style={styles.editList}>
@@ -186,7 +186,7 @@ export function Profile() {
               </TouchableOpacity>
             </View>
           </View>
-        </View>
+        </KeyboardAvoidingView>
       </Modal>
       <Modal
         animationType="fade"
@@ -195,7 +195,7 @@ export function Profile() {
         supportedOrientations={['portrait', 'landscape']}
         onRequestClose={actions.hideBlockedChannels}
       >
-        <View style={styles.editWrapper}>
+        <KeyboardAvoidingView behavior="padding" style={styles.editWrapper}>
           <View style={styles.editContainer}>
             <Text style={styles.editHeader}>Blocked Topics:</Text>
             <View style={styles.editList}>
@@ -207,7 +207,7 @@ export function Profile() {
               </TouchableOpacity>
             </View>
           </View>
-        </View>
+        </KeyboardAvoidingView>
       </Modal>
       <Modal
         animationType="fade"
@@ -216,7 +216,7 @@ export function Profile() {
         supportedOrientations={['portrait', 'landscape']}
         onRequestClose={actions.hideDetailEdit}
       >
-        <View style={styles.editWrapper}>
+        <KeyboardAvoidingView behavior="padding" style={styles.editWrapper}>
           <View style={styles.editContainer}>
             <Text style={styles.editHeader}>Edit Details:</Text>
             <View style={styles.inputField}>
@@ -240,7 +240,7 @@ export function Profile() {
               </TouchableOpacity>
             </View>
           </View>
-        </View>
+        </KeyboardAvoidingView>
       </Modal>
       <Modal
         animationType="fade"
@@ -249,7 +249,7 @@ export function Profile() {
         supportedOrientations={['portrait', 'landscape']}
         onRequestClose={actions.hideLoginEdit}
       >
-        <View style={styles.editWrapper}>
+        <KeyboardAvoidingView behavior="padding" style={styles.editWrapper}>
           <View style={styles.editContainer}>
             <Text style={styles.editHeader}>Change Login:</Text>
             <View style={styles.inputField}>
@@ -314,7 +314,7 @@ export function Profile() {
               )}
             </View>
           </View>
-        </View>
+        </KeyboardAvoidingView>
       </Modal>
     </ScrollView>
   )

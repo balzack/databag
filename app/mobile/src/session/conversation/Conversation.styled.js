@@ -43,9 +43,15 @@ export const styles = StyleSheet.create({
   action: {
     paddingLeft: 8,
   },
+  thread: {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+  },
   topics: {
     flexShrink: 1,
     flexGrow: 1,
+    minHeight: 0,
   },
   close: {
     flexGrow: 1,

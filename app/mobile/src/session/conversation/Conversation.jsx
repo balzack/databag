@@ -1,4 +1,4 @@
-import { Platform, TextInput, View, TouchableOpacity, Text, } from 'react-native';
+import { KeyboardAvoidingView, Platform, TextInput, View, TouchableOpacity, Text, } from 'react-native';
 import { FlatList, ScrollView } from '@stream-io/flat-list-mvcp';
 import { memo, useState, useRef, useEffect } from 'react';
 import { useConversation } from './useConversation.hook';
@@ -56,8 +56,8 @@ export function ConversationBody() {
   const noop = () => {};
 
   return (
-    <View style={styles.topics}>
-      <FlatList
+    <KeyboardAvoidingView style={styles.thread} behavior="padding" keyboardVerticalOffset="100">
+      <FlatList style={styles.topics}
         ref={ref}
         data={state.topics}
         onMomentumScrollEnd={ Platform.OS === 'ios' ? noop : actions.unlatch }
@@ -77,7 +77,7 @@ export function ConversationBody() {
           )} 
         </View>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 

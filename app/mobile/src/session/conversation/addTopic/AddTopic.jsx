@@ -16,6 +16,7 @@ import ColorPicker from 'react-native-wheel-color-picker'
 export function AddTopic() {
 
   const { state, actions } = useAddTopic();
+  const message = useRef();
 
   const addImage = async () => {
     try {
@@ -29,6 +30,7 @@ export function AddTopic() {
 
   const sendMessage = async () => {
     try {
+      message.current.blur();
       await actions.addTopic();
     }
     catch (err) {
@@ -114,7 +116,8 @@ export function AddTopic() {
           renderItem={renderAsset}
         />
       )}
-      <TextInput style={styles.input} value={state.message} onChangeText={actions.setMessage}
+      <TextInput style={styles.input} value={state.message} onChangeText={actions.setMessage} ref={message}
+          blurOnSubmit="true" onSubmitEditing={sendMessage} returnKeyType="send"
           autoCapitalize="sentences" placeholder="New Message" multiline={true} />
       <View style={styles.addButtons}>
         <TouchableOpacity style={styles.addButton} onPress={addImage}>
