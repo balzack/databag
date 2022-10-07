@@ -1,5 +1,6 @@
 import { useState, useRef, useContext } from 'react';
 import { StoreContext } from 'context/StoreContext';
+import { UploadContext } from 'context/UploadContext';
 import { getCards } from 'api/getCards';
 import { getCardProfile } from 'api/getCardProfile';
 import { getCardDetail } from 'api/getCardDetail';
@@ -30,6 +31,7 @@ export function useCardContext() {
     cards: new Map(),
   });
   const store = useContext(StoreContext);
+  const upload = useContext(UploadContext);
 
   const session = useRef(null);
   const curRevision = useRef(null);
@@ -464,14 +466,26 @@ export function useCardContext() {
       const { detail, profile } = getCard(cardId);
       return getContactChannelTopicAssetUrl(profile.node, `${profile.guid}.${detail.token}`, channelId, topicId, assetId);
     },
-    addChannelTopic: async (cardId, channelId, message, assets) => {
+    addChannelTopic: async (cardId, channelId, message, files) => {
       const { detail, profile } = getCard(cardId);
-      if (assets?.length > 0) {
-        console.log("UPLOAD");
+      const node = profile.node;
+      const token = `${profile.guid}.${detail.token}`;
+      if (files?.length > 0) {
+        const topicId = await addContactChannelTopic(node, token, channelId, null, null);
+        upload.actions.addContactTopic(node, token, cardId, channelId, topicId, files, async (assets) => {
+          message.assets = assets;
+          await setContactChannelTopicSubject(node, token, channelId, topicId, message);
+        }, async () => {
+          try {
+            await removeContactChannelTopic(node, token, channelId, topicId);
+          }
+          catch (err) {
+            console.log(err);
+          }
+        });
       }
       else {
-        await addContactChannelTopic(profile.node, `${profile.guid}.${detail.token}`, channelId, message, []);
-        // sync channel
+        await addContactChannelTopic(node, token, channelId, message, []);
       }
     },
     setChannelTopicSubject: async (cardId, channelId, topicId, data) => {

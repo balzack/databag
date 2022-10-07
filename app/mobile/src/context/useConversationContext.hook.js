@@ -138,15 +138,23 @@ export function useConversationContext() {
                   topics.current.delete(topic.id);
                   await clearTopicItem(cardId, channelId, topic.id);
                 }
-                const cached = topics.current.get(topic.id);
-                if (!cached || cached.detailRevision != topic.data.detailRevision) {
-                  if (!topic.data.topicDetail) {
-                    const updated = await getTopic(cardId, channelId, topic.id);
-                    topic.data.topicDetail = updated.data.topicDetail;
+                else {
+                  const cached = topics.current.get(topic.id);
+                  if (!cached || cached.detailRevision != topic.data.detailRevision) {
+                    if (!topic.data.topicDetail) {
+                      const updated = await getTopic(cardId, channelId, topic.id);
+                      topic.data = updated.data;
+                    }
+                    if (!topic.data) {
+                      topics.current.delete(topic.id);
+                      await clearTopicItem(cardId, channelId, topic.id);
+                    }
+                    else {
+                      await setTopicItem(cardId, channelId, topic);
+                      const { id, revision, data } = topic;
+                      topics.current.set(id, { topicId: id, revision: revision, detailRevision: topic.data.detailRevision, detail: topic.data.topicDetail }); 
+                    }
                   }
-                  await setTopicItem(cardId, channelId, topic);
-                  const { id, revision, data } = topic;
-                  topics.current.set(id, { topicId: id, revision: revision, detailRevision: topic.data.detailRevision, detail: topic.data.topicDetail });
                 }
               }
               await setSyncRevision(cardId, channelId, res.revision);

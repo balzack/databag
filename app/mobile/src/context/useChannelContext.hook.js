@@ -1,5 +1,6 @@
 import { useState, useRef, useContext } from 'react';
 import { StoreContext } from 'context/StoreContext';
+import { UploadContext } from 'context/UploadContext';
 import { getChannels } from 'api/getChannels';
 import { getChannelDetail } from 'api/getChannelDetail';
 import { getChannelSummary } from 'api/getChannelSummary';
@@ -20,6 +21,7 @@ export function useChannelContext() {
     channels: new Map(),
   });
   const store = useContext(StoreContext);
+  const upload = useContext(UploadContext);
 
   const session = useRef(null);
   const curRevision = useRef(null);
@@ -208,14 +210,24 @@ export function useChannelContext() {
       const { server, appToken } = session.current;
       return getChannelTopicAssetUrl(server, appToken, channelId, topicId, assetId);
     },
-    addTopic: async (channelId, message, assets) => {
+    addTopic: async (channelId, message, files) => {
       const { server, appToken } = session.current;
-      if (assets?.length) {
-        console.log("UPLOAD");
+      if (files?.length > 0) {
+        const topicId = await addChannelTopic(server, appToken, channelId, null, null);
+        upload.actions.addTopic(server, appToken, channelId, topicId, files, async (assets) => {
+          message.assets = assets;
+          await setChannelTopicSubject(server, appToken, channelId, topicId, message);
+        }, async () => {
+          try {
+            await removeChannelTopic(server, appToken, channelId, topicId);
+          }
+          catch (err) {
+            console.log(err);
+          }
+        });
       }
       else {
         await addChannelTopic(server, appToken, channelId, message, []);
-        //sync channels
       }
     },
     setTopicSubject: async (channelId, topicId, data) => {

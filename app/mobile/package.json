@@ -15,6 +15,7 @@
     "@react-navigation/native": "^6.0.13",
     "@react-navigation/stack": "^6.3.0",
     "@stream-io/flat-list-mvcp": "^0.10.2",
+    "axios": "^1.1.0",
     "expo": "~46.0.9",
     "expo-av": "^12.0.4",
     "expo-splash-screen": "~0.16.2",
