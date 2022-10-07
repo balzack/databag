@@ -56,7 +56,9 @@ export function ConversationBody() {
   const noop = () => {};
 
   return (
-    <KeyboardAvoidingView style={styles.thread} behavior="padding" keyboardVerticalOffset="100">
+    <KeyboardAvoidingView style={styles.thread}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}>
       <FlatList style={styles.topics}
         ref={ref}
         data={state.topics}
