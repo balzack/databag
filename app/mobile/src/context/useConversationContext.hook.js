@@ -3,6 +3,7 @@ import { StoreContext } from 'context/StoreContext';
 import { CardContext } from 'context/CardContext';
 import { ChannelContext } from 'context/ChannelContext';
 import { ProfileContext } from 'context/ProfileContext';
+import moment from 'moment';
 
 export function useConversationContext() {
   const [state, setState] = useState({
@@ -11,6 +12,8 @@ export function useConversationContext() {
     revision: null,
     contacts: [],
     topics: new Map(),
+    createed: null,
+    host: null,
   });
   const store = useContext(StoreContext);
   const card = useContext(CardContext);
@@ -208,6 +211,20 @@ export function useConversationContext() {
     let logo = null;
     let subject = null;
 
+    let timestamp;
+    const date = new Date(item.detail.created * 1000);
+    const now = new Date();
+    const offset = now.getTime() - date.getTime();
+    if(offset < 86400000) {
+      timestamp = moment(date).format('h:mma');
+    }
+    else if (offset < 31449600000) {
+      timestamp = moment(date).format('M/DD');
+    }
+    else {
+      timestamp = moment(date).format('M/DD/YYYY');
+    }
+
     if (!item) {
       updateState({ contacts, logo, subject });
       return;
@@ -267,7 +284,7 @@ export function useConversationContext() {
       }
     }
 
-    updateState({ subject, logo, contacts });
+    updateState({ subject, logo, contacts, host: item.cardId, created: timestamp });
   }
 
   useEffect(() => {

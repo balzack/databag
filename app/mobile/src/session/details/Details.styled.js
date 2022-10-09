@@ -2,27 +2,34 @@ import { StyleSheet } from 'react-native';
 import { Colors } from 'constants/Colors';
 
 export const styles = StyleSheet.create({
-  container: {
-    width: '100%',
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-    borderLeftWidth: 1,
-    borderColor: Colors.divider,
-  },
-  header: {
-    width: '100%',
+  details: {
     display: 'flex',
     flexDirection: 'row',
-    borderBottomWidth: 1,
-    borderColor: Colors.divider,
-    padding: 8,
+    justifyContent: 'center',
+    paddingTop: 16,
   },
-  body: {
-    width: '100%',
+  info: {
+    paddingLeft: 8,
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  subject: {
+    fontSize: 18,
+    display: 'flex',
+    flexDirection: 'row',
+    paddingRight: 8,
+    color: Colors.text,
+  },
+  created: {
+    fontSize: 16,
+    color: Colors.text,
+  },
+  mode: {
+    fontSize: 16,
+    color: Colors.text,
   },
   title: {
-    fontSize: 18,
-  },
+    fontSize: 20,
+  }
 })
 

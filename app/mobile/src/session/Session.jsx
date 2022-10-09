@@ -71,6 +71,7 @@ export function Session() {
 
     return (
       <ConversationStack.Navigator
+          initialRouteName="channels"
           screenOptions={({ route }) => ({ headerShown: true, headerTintColor: Colors.primary })}
           screenListeners={{ state: (e) => { if (e?.data?.state?.index === 0 && selected) { setSelected(null); }}, }}>
         <ConversationStack.Screen name="channels" options={{
@@ -124,7 +125,8 @@ export function Session() {
     const cards = useCards();
 
     return (
-      <ContactStack.Navigator screenOptions={({ route }) => ({ headerShow: true, headerTintColor: Colors.primary })}>
+      <ContactStack.Navigator screenOptions={({ route }) => ({ headerShow: true, headerTintColor: Colors.primary })}
+          initialRouteName="cards">
         <ContactStack.Screen name="cards" options={{
             headerStyle: { backgroundColor: Colors.titleBackground }, 
             headerBackTitleVisible: false, 
