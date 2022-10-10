@@ -46,7 +46,7 @@ export function useChannelContext() {
     update.topicRevision = channel?.data?.topicRevision;
     channels.current.set(channelId, update);
   }
-  const setChannelDetails = (channelId, detail, revision) => {
+  const setChannelDetail = (channelId, detail, revision) => {
     let channel = channels.current.get(channelId);
     if (channel) {
       channel.detail = detail;
@@ -94,6 +94,7 @@ export function useChannelContext() {
         const { server, appToken, guid } = session.current;
 
         const delta = await getChannels(server, appToken, setRevision.current);
+console.log("DELTA", delta);
         for (let channel of delta) {
           if (channel.data) {
             if (channel.data.channelDetail && channel.data.channelSummary) {
@@ -233,6 +234,10 @@ export function useChannelContext() {
     setTopicSubject: async (channelId, topicId, data) => {
       const { server, appToken } = session.current;
       return await setChannelTopicSubject(server, appToken, channelId, topicId, data);
+    },
+    setSubject: async (channelId, data) => {
+      const { server, appToken } = session.current;
+      return await setChannelSubject(server, appToken, channelId, data);
     },
     remove: async (channelId) => {
       const { server, appToken } = session.current;

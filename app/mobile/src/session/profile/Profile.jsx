@@ -108,9 +108,6 @@ export function Profile() {
       <View style={styles.container}>
         <View style={{ width: 128 }}>
           <Logo src={state.imageSource} width={128} height={128} radius={8} />
-          <TouchableOpacity style={styles.camera} onPress={onCamera}>
-            <Ionicons name="camerao" size={14} color={Colors.white} />
-          </TouchableOpacity>
           <TouchableOpacity style={styles.gallery} onPress={onGallery}>
             <Ionicons name="picture" size={14} color={Colors.white} />
           </TouchableOpacity>

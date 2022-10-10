@@ -7,6 +7,7 @@ import moment from 'moment';
 
 export function useConversationContext() {
   const [state, setState] = useState({
+    topic: null,
     subject: null,
     logo: null,
     revision: null,
@@ -209,6 +210,7 @@ export function useConversationContext() {
   const setChannel = (item) => {
     let contacts = [];
     let logo = null;
+    let topic = null;
     let subject = null;
 
     let timestamp;
@@ -226,7 +228,7 @@ export function useConversationContext() {
     }
 
     if (!item) {
-      updateState({ contacts, logo, subject });
+      updateState({ contacts, logo, subject, topic });
       return;
     }
 
@@ -260,7 +262,8 @@ export function useConversationContext() {
 
     if (item?.detail?.data) {
       try {
-        subject = JSON.parse(item?.detail?.data).subject;
+        topic = JSON.parse(item?.detail?.data).subject;
+        subject = topic;
       }
       catch (err) {
         console.log(err);
@@ -284,7 +287,7 @@ export function useConversationContext() {
       }
     }
 
-    updateState({ subject, logo, contacts, host: item.cardId, created: timestamp });
+    updateState({ topic, subject, logo, contacts, host: item.cardId, created: timestamp });
   }
 
   useEffect(() => {
@@ -337,6 +340,15 @@ export function useConversationContext() {
         }
         force.current = true;
         sync();
+      }
+    },
+    setSubject: async (subject) => {
+      if (conversationId.current) {
+        const { cardId, channelId } = conversationId.current;
+        if (cardId) {
+          throw new Error("can only set hosted channel subjects");
+        }
+        await channel.actions.setSubject(channelId, subject);
       }
     },
   }

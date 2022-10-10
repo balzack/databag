@@ -10,6 +10,8 @@ export function useDetails() {
     logo: null,
     hostId: null,
     contacts: [],
+    editSubject: false,
+    subjectUpdate: null,
   });
 
   const conversation = useContext(ConversationContext);
@@ -20,12 +22,24 @@ export function useDetails() {
   }
 
   useEffect(() => {
-    const { subject, created, logo, host, contacts } = conversation.state;
-    updateState({ subject, created, logo, hostId: host,
+    const { topic, subject, created, logo, host, contacts } = conversation.state;
+    updateState({ subject, created, logo, hostId: host, subjectUpdate: topic,
       count: contacts.length, contacts: contacts.filter(card => card != null) });
   }, [conversation]);
 
   const actions = {
+    showEditSubject: () => {
+      updateState({ editSubject: true });
+    },
+    hideEditSubject: () => {
+      updateState({ editSubject: false });
+    },
+    setSubjectUpdate: (subjectUpdate) => {
+      updateState({ subjectUpdate });
+    },
+    saveSubject: async () => {
+      await conversation.actions.setSubject(state.subjectUpdate);
+    },
   };
 
   return { state, actions };
