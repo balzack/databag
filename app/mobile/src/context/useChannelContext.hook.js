@@ -94,7 +94,6 @@ export function useChannelContext() {
         const { server, appToken, guid } = session.current;
 
         const delta = await getChannels(server, appToken, setRevision.current);
-console.log("DELTA", delta);
         for (let channel of delta) {
           if (channel.data) {
             if (channel.data.channelDetail && channel.data.channelSummary) {

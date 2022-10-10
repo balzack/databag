@@ -494,7 +494,7 @@ export function useCardContext() {
     },
     removeChannel: async (cardId, channelId) => {
       const { detail, profile } = getCard(cardId);
-      return await removeChannel(profile.node, `${profile.guid}.${detail.token}`, channelId);
+      return await removeContactChannel(profile.node, `${profile.guid}.${detail.token}`, channelId);
     },
     removeChannelTopic: async (cardId, channelId, topicId) => {
       const { detail, profile } = getCard(cardId);

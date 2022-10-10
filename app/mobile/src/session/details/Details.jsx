@@ -28,13 +28,27 @@ export function DetailsBody({ channel, clearConversation }) {
     }
   }
 
+  const remove = async () => {
+    try {
+      await actions.remove(); 
+      clearConversation();
+    }
+    catch (err) {
+      console.log(err);
+      Alert.alert(
+        'Failed to Delete Topic',
+        'Please try again.'
+      )
+    }
+  }
+
   return (
     <View style={styles.body}>
       <View style={styles.details}>
         <Logo src={state.logo} width={72} height={72} radius={8} />
         <View style={styles.info}>
           <TouchableOpacity style={styles.subject} onPress={actions.showEditSubject}>
-            <Text style={styles.subject}>{ state.subject }</Text>
+            <Text style={styles.subjectText} numberOfLines={1} ellipsizeMode={'tail'}>{ state.subject }</Text>
             { !state.hostId && (
               <Ionicons name="edit" size={16} color={Colors.text} />
             )}
@@ -46,7 +60,7 @@ export function DetailsBody({ channel, clearConversation }) {
 
       <View style={styles.controls}>
         { !state.hostId && (
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity style={styles.button} onPress={remove}>
             <Text style={styles.buttonText}>Delete Topic</Text>
           </TouchableOpacity>
         )}
@@ -56,7 +70,7 @@ export function DetailsBody({ channel, clearConversation }) {
           </TouchableOpacity>
         )}
         { state.hostId && (
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity style={styles.button} onPress={remove}>
             <Text style={styles.buttonText}>Leave Topic</Text>
           </TouchableOpacity>
         )}
@@ -108,7 +122,6 @@ export function DetailsBody({ channel, clearConversation }) {
 export function Details({ channel, clearConversation }) {
   return (
     <View>
-      <Text>DETAILS</Text>
       <DetailsBody channel={channel} clearConversation={clearConversation} />
     </View>
   )

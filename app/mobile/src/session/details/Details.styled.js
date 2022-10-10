@@ -2,16 +2,25 @@ import { StyleSheet } from 'react-native';
 import { Colors } from 'constants/Colors';
 
 export const styles = StyleSheet.create({
+  body: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
   details: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
     paddingTop: 16,
+    flexShrink: 1,
+    minWidth: 0,
   },
   info: {
     paddingLeft: 8,
     display: 'flex',
     flexDirection: 'column',
+    minWidth: 0,
+    flexShrink: 1,
   },
   subject: {
     fontSize: 18,
@@ -20,6 +29,13 @@ export const styles = StyleSheet.create({
     paddingRight: 8,
     color: Colors.text,
     alignItems: 'center',
+    minWidth: 0,
+    flexShrink: 1,
+  },
+  subjectText: {
+    fontSize: 18,
+    flexShrink: 1,
+    minWidth: 0,
   },
   created: {
     fontSize: 16,
@@ -31,11 +47,6 @@ export const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
-  },
-  body: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
   },
   controls: {
     paddingTop: 16,

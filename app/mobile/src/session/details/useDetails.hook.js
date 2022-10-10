@@ -40,6 +40,9 @@ export function useDetails() {
     saveSubject: async () => {
       await conversation.actions.setSubject(state.subjectUpdate);
     },
+    remove: async () => {
+      await conversation.actions.remove();
+    },
   };
 
   return { state, actions };
