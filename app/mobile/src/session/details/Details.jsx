@@ -14,12 +14,6 @@ export function DetailsBody({ channel, clearConversation }) {
 
   const { state, actions } = useDetails();
 
-  if(state.contacts) {
-    state.contacts.forEach(c => {
-      console.log(c.cardId, c.profile);
-    });
-  }
-
   return (
     <View style={styles.body}>
       <View style={styles.details}>
@@ -32,7 +26,7 @@ export function DetailsBody({ channel, clearConversation }) {
             )}
           </TouchableOpacity>
           <Text style={styles.created}>{ state.created }</Text>
-          <Text style={styles.mode}>{ state.mode }</Text>
+          <Text style={styles.mode}>{ state.hostId ? 'guest' : 'host' }</Text>
         </View>  
       </View>
 
@@ -56,11 +50,14 @@ export function DetailsBody({ channel, clearConversation }) {
 
       <View style={styles.members}>
         <Text style={styles.membersLabel}>Members:</Text>
+        { state.count - state.contacts.length > 0 && (
+          <Text style={styles.unknown}> (+ {state.count - state.contacts.length} unknown)</Text>
+        )}
       </View>
 
       <FlatList style={styles.cards}
         data={state.contacts}
-        renderItem={({ item }) => <MemberItem item={item} />}
+        renderItem={({ item }) => <MemberItem hostId={state.hostId} item={item} />}
         keyExtractor={item => item.cardId}
       />
 

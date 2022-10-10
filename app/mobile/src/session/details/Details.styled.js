@@ -53,14 +53,20 @@ export const styles = StyleSheet.create({
     padding: 4,
   },
   members: {
-    paddingTop: 16,
+    paddingBottom: 4,
+    paddingTop: 24,
     width: '100%',
     borderBottomWidth: 1,
     borderColor: Colors.divider,
+    display: 'flex',
+    flexDirection: 'row',
   },
   membersLabel: {
     paddingLeft: 16,
-    width: '100%',
+  },
+  unknown: {
+    color: Colors.grey,
+    paddingLeft: 8,
   },
   cards: {
     width: '100%',

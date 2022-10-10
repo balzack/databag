@@ -9,7 +9,7 @@ export function useDetails() {
     created: null,
     logo: null,
     hostId: null,
-    contacts: null,
+    contacts: [],
   });
 
   const conversation = useContext(ConversationContext);
@@ -21,7 +21,8 @@ export function useDetails() {
 
   useEffect(() => {
     const { subject, created, logo, host, contacts } = conversation.state;
-    updateState({ subject, created, logo, hostId: host, contacts: contacts.filter(card => card != null) });
+    updateState({ subject, created, logo, hostId: host,
+      count: contacts.length, contacts: contacts.filter(card => card != null) });
   }, [conversation]);
 
   const actions = {
