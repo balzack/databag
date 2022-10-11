@@ -30,8 +30,10 @@ export function AddTopic() {
 
   const sendMessage = async () => {
     try {
-      message.current.blur();
-      await actions.addTopic();
+      if (state.message || state.assets.length > 0) {
+        message.current.blur();
+        await actions.addTopic();
+      }
     }
     catch (err) {
       console.log(err);

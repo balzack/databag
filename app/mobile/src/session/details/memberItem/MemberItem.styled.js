@@ -11,6 +11,7 @@ export const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: Colors.itemDivider,
     paddingLeft: 8,
+    paddingRight: 8,
   },
   detail: {
     paddingLeft: 12,
