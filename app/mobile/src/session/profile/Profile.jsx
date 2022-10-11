@@ -1,11 +1,23 @@
 import { useContext } from 'react';
-import { Modal, Alert, TextInput, ScrollView, View, Switch, TouchableOpacity, Text } from 'react-native';
+import { KeyboardAvoidingView, Modal, Alert, TextInput, ScrollView, View, Switch, TouchableOpacity, Text } from 'react-native';
 import { styles } from './Profile.styled';
 import { useProfile } from './useProfile.hook';
 import { Logo } from 'utils/Logo';
 import Ionicons from '@expo/vector-icons/AntDesign';
 import Colors from 'constants/Colors';
 import ImagePicker from 'react-native-image-crop-picker'
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { BlockedTopics } from './blockedTopics/BlockedTopics';
+import { BlockedContacts } from './blockedContacts/BlockedContacts';
+
+export function ProfileTitle(props) {
+  const { state, actions } = useProfile();
+  return (
+    <View style={styles.title}>
+      <Text style={styles.titleText}>{ `${state.handle}@${state.node}` }</Text>
+    </View>
+  )
+} 
 
 export function Profile() {
 
@@ -39,6 +51,32 @@ export function Profile() {
   }
 
   const saveLogin = async () => {
+    try {
+      await actions.saveLogin();
+      actions.hideLoginEdit();
+    }
+    catch (err) {
+      console.log(err);
+      Alert.alert(
+        'Failed to Change Login',
+        'Please try again.'
+      )
+    }
+  }
+
+  const logout = async () => {
+    Alert.alert(
+      "Logging Out",
+      "Confirm?",
+      [
+        { text: "Cancel",
+          onPress: () => {},
+        },
+        { text: "Logout", onPress: () => {
+          actions.logout();
+        }}
+      ]
+    );
   }
 
   const onGallery = async () => {
@@ -63,17 +101,13 @@ export function Profile() {
     }
   }
 
-  return (
-    <ScrollView>
+  const enabled = (state.checked && state.available && state.editConfirm === state.editPassword && state.editPassword);
+
+  const Body = () => {
+    return (
       <View style={styles.container}>
-        <TouchableOpacity style={styles.header} onPress={actions.showLoginEdit}>
-          <Text style={styles.headerText}>{ `${state.handle}@${state.node}` }</Text>
-        </TouchableOpacity>
         <View style={{ width: 128 }}>
           <Logo src={state.imageSource} width={128} height={128} radius={8} />
-          <TouchableOpacity style={styles.camera} onPress={onCamera}>
-            <Ionicons name="camerao" size={14} color={Colors.white} />
-          </TouchableOpacity>
           <TouchableOpacity style={styles.gallery} onPress={onGallery}>
             <Ionicons name="picture" size={14} color={Colors.white} />
           </TouchableOpacity>
@@ -93,14 +127,85 @@ export function Profile() {
           </View> 
         </TouchableOpacity>
         <View style={styles.visible}>
-          <Text style={styles.visibleText}>Visible in Registry</Text>
+          <TouchableOpacity onPress={() => setVisible(!state.searchable)} activeOpacity={1}>
+            <Text style={styles.visibleText}>Visible in Registry</Text>
+          </TouchableOpacity>
           <Switch style={styles.visibleSwitch} value={state.searchable} onValueChange={setVisible} trackColor={styles.switch}/>
         </View>
-        <TouchableOpacity style={styles.logout} onPress={actions.logout}>
+        <TouchableOpacity style={styles.link} onPress={actions.showLoginEdit}>
+          <Text style={styles.linkText}>Change Login</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.link} onPress={actions.showBlockedCards}>
+          <Text style={styles.linkText}>Manage Blocked Contacts</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.link} onPress={actions.showBlockedChannels}>
+          <Text style={styles.linkText}>Manage Blocked Topics</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.logout} onPress={logout}>
           <Ionicons name="logout" size={14} color={Colors.white} />
           <Text style={styles.logoutText}>Logout</Text>
         </TouchableOpacity>
       </View>
+    );
+  };
+ 
+  return (
+    <ScrollView>
+      { state.tabbed && (
+        <View style={styles.body}>
+          <Body />
+        </View>
+      )}
+      { !state.tabbed && (
+        <SafeAreaView style={styles.drawer} edges={['top', 'bottom', 'right']}>
+          <View style={styles.header}>
+            <Text style={styles.headerText}>{ `${state.handle}@${state.node}` }</Text>
+          </View>
+          <Body />
+        </SafeAreaView>
+      )}
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={state.blockedCards}
+        supportedOrientations={['portrait', 'landscape']}
+        onRequestClose={actions.hideBlockedCards}
+      >
+        <KeyboardAvoidingView behavior="height" style={styles.editWrapper}>
+          <View style={styles.editContainer}>
+            <Text style={styles.editHeader}>Blocked Contacts:</Text>
+            <View style={styles.editList}>
+              <BlockedContacts />
+            </View>
+            <View style={styles.editControls}>
+              <TouchableOpacity style={styles.close} onPress={actions.hideBlockedCards}>
+                <Text>Close</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </KeyboardAvoidingView>
+      </Modal>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={state.blockedChannels}
+        supportedOrientations={['portrait', 'landscape']}
+        onRequestClose={actions.hideBlockedChannels}
+      >
+        <KeyboardAvoidingView behavior="height" style={styles.editWrapper}>
+          <View style={styles.editContainer}>
+            <Text style={styles.editHeader}>Blocked Topics:</Text>
+            <View style={styles.editList}>
+              <BlockedTopics />
+            </View>
+            <View style={styles.editControls}>
+              <TouchableOpacity style={styles.close} onPress={actions.hideBlockedChannels}>
+                <Text>Close</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </KeyboardAvoidingView>
+      </Modal>
       <Modal
         animationType="fade"
         transparent={true}
@@ -108,20 +213,20 @@ export function Profile() {
         supportedOrientations={['portrait', 'landscape']}
         onRequestClose={actions.hideDetailEdit}
       >
-        <View style={styles.editWrapper}>
+        <KeyboardAvoidingView behavior="height" style={styles.editWrapper}>
           <View style={styles.editContainer}>
             <Text style={styles.editHeader}>Edit Details:</Text>
             <View style={styles.inputField}>
               <TextInput style={styles.input} value={state.editName} onChangeText={actions.setEditName}
-                  autoCapitalize="word" placeholder="Name" />
+                  autoCapitalize="words" placeholder="Name" />
             </View>
             <View style={styles.inputField}>
               <TextInput style={styles.input} value={state.editLocation} onChangeText={actions.setEditLocation}
-                  autoCapitalize="sentence" placeholder="Location" />
+                  autoCapitalize="words" placeholder="Location" />
             </View>
             <View style={styles.inputField}>
               <TextInput style={styles.input} value={state.editDescription} onChangeText={actions.setEditDescription}
-                  autoCapitalize="none" placeholder="Description" multiline={true} />
+                  autoCapitalize="sentences" placeholder="Description" multiline={true} />
             </View>
             <View style={styles.editControls}>
               <TouchableOpacity style={styles.cancel} onPress={actions.hideDetailEdit}>
@@ -132,7 +237,7 @@ export function Profile() {
               </TouchableOpacity>
             </View>
           </View>
-        </View>
+        </KeyboardAvoidingView>
       </Modal>
       <Modal
         animationType="fade"
@@ -141,31 +246,72 @@ export function Profile() {
         supportedOrientations={['portrait', 'landscape']}
         onRequestClose={actions.hideLoginEdit}
       >
-        <View style={styles.editWrapper}>
+        <KeyboardAvoidingView behavior="height" style={styles.editWrapper}>
           <View style={styles.editContainer}>
             <Text style={styles.editHeader}>Change Login:</Text>
             <View style={styles.inputField}>
               <TextInput style={styles.input} value={state.editHandle} onChangeText={actions.setEditHandle}
-                  placeholder="Username" />
+                  autoCapitalize={'none'} placeholder="Username" />
+              { state.checked && state.available && (
+                <Ionicons style={styles.icon} name="checkcircleo" size={18} color={Colors.background} />
+              )}
+              { state.checked && !state.available && (
+                <Ionicons style={styles.icon} name="exclamationcircleo" size={18} color={Colors.alert} />
+              )}
             </View>
-            <View style={styles.inputField}>
-              <TextInput style={styles.input} value={state.editPassword} onChangeText={actions.setEditPassword}
-                  secureTextEntry={true} placeholder="Password" />
-            </View>
-            <View style={styles.inputField}>
-              <TextInput style={styles.input} value={state.editConfirm} onChangeText={actions.setEditConfirm}
-                  secureTextEntry={true} placeholder="Confirm Password" />
-            </View>
+            { !state.showPassword && (
+              <View style={styles.inputField}>
+                <TextInput style={styles.input} value={state.editPassword} onChangeText={actions.setEditPassword}
+                    autoCapitalize={'none'} secureTextEntry={true} placeholder="Password" />
+                <TouchableOpacity onPress={actions.showPassword}>
+                  <Ionicons style={styles.icon} name="eyeo" size={18} color="#888888" />
+                </TouchableOpacity>
+              </View>
+            )}
+            { state.showPassword && (
+              <View style={styles.inputField}>
+                <TextInput style={styles.input} value={state.editPassword} onChangeText={actions.setEditPassword}
+                    autoCapitalize={'none'} secureTextEntry={false} placeholder="Password" />
+                <TouchableOpacity onPress={actions.hidePassword}>
+                  <Ionicons style={styles.icon} name="eye" size={18} color="#888888" />
+                </TouchableOpacity>
+              </View>
+            )}
+            { !state.showConfirm && (
+              <View style={styles.inputField}>
+                <TextInput style={styles.input} value={state.editConfirm} onChangeText={actions.setEditConfirm}
+                    autoCapitalize={'none'} secureTextEntry={true} placeholder="Confirm" />
+                <TouchableOpacity onPress={actions.showConfirm}>
+                  <Ionicons style={styles.icon} name="eyeo" size={18} color="#888888" />
+                </TouchableOpacity>
+              </View>
+            )}
+            { state.showConfirm && (
+              <View style={styles.inputField}>
+                <TextInput style={styles.input} value={state.editConfirm} onChangeText={actions.setEditConfirm}
+                    autoCapitalize={'none'} secureTextEntry={false} placeholder="Confirm" />
+                <TouchableOpacity onPress={actions.hideConfirm}>
+                  <Ionicons style={styles.icon} name="eye" size={18} color="#888888" />
+                </TouchableOpacity>
+              </View>
+            )}
             <View style={styles.editControls}>
               <TouchableOpacity style={styles.cancel} onPress={actions.hideLoginEdit}>
                 <Text>Cancel</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.save} onPress={saveLogin}>
-                <Text style={styles.saveText}>Save</Text>
-              </TouchableOpacity>
+              { enabled && (
+                <TouchableOpacity style={styles.save} onPress={saveLogin}>
+                  <Text style={styles.saveText}>Save</Text>
+                </TouchableOpacity>
+              )}
+              { !enabled && (
+                <View style={styles.disabled}>
+                  <Text style={styles.disabledText}>Save</Text>
+                </View>
+              )}
             </View>
           </View>
-        </View>
+        </KeyboardAvoidingView>
       </Modal>
     </ScrollView>
   )

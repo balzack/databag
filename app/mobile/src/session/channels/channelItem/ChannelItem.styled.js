@@ -21,9 +21,11 @@ export const styles = StyleSheet.create({
   },
   subject: {
     color: Colors.text,
+    fontSize: 14,
   },
   message: {
     color: Colors.disabled,
+    fontSize: 12,
   },
   dot: {
     width: 8,

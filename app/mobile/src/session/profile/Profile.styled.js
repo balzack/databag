@@ -11,9 +11,27 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  header: {
-    paddingBottom: 32,
+  drawer: {
     paddingTop: 16,
+    backgroundColor: Colors.formBackground,
+  },
+  titleText: {
+    fontSize: 18,
+  }, 
+  title: {
+    display: 'flex',
+    flexDirection: 'column',
+    flexGrow: 1,
+    flex: 1,
+    width: '100%',
+    textAlign: 'start',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  body: {
+    paddingTop: 16,
+  },
+  header: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'flex-end',
@@ -22,7 +40,7 @@ export const styles = StyleSheet.create({
   headerText: {
     fontSize: 16,
     paddingRight: 4,
-    textDecorationLine: 'underline',
+    color: Colors.text,
   },
   camera: {
     position: 'absolute',
@@ -117,8 +135,14 @@ export const styles = StyleSheet.create({
     maxWidth: 400,
   },
   editHeader: {
-    fontSize: 20,
+    fontSize: 18,
     paddingBottom: 16,
+  },
+  editList: {
+    width: '100%',
+    borderWidth: 1,
+    borderColor: Colors.lightgrey,
+    borderRadius: 2,
   },
   inputField: {
     width: '100%',
@@ -128,15 +152,27 @@ export const styles = StyleSheet.create({
     padding: 8,
     marginBottom: 8,
     maxHeight: 92,
+    display: 'flex',
+    flexDirection: 'row',
   },
   input: {
-    fontSize: 16,
-    width: '100%',
+    fontSize: 14,
+    flexGrow: 1,
   },
   editControls: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'flex-end',
+  },
+  close: {
+    borderWidth: 1,
+    borderColor: Colors.lightgrey,
+    borderRadius: 4,
+    padding: 8,
+    marginTop: 8,
+    width: 72,
+    display: 'flex',
+    alignItems: 'center',
   },
   cancel: {
     borderWidth: 1,
@@ -148,6 +184,18 @@ export const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
   },
+  disabled: {
+    borderWidth: 1,
+    borderColor: Colors.lightgrey,
+    padding: 8,
+    borderRadius: 4,
+    width: 72,
+    display: 'flex',
+    alignItems: 'center',
+  },
+  disabledText: {
+    color: Colors.disabled,
+  },
   save: {
     padding: 8,
     borderRadius: 4,
@@ -155,6 +203,12 @@ export const styles = StyleSheet.create({
     width: 72,
     display: 'flex',
     alignItems: 'center',
+  },
+  link: {
+    marginTop: 16,
+  },
+  linkText: {
+    color: Colors.primary,
   },
   saveText: {
     color: Colors.white,

@@ -7,10 +7,6 @@ import session from 'images/session.png';
 
 export function Welcome() {
 
-  useEffect(() => {
-    console.log("WELCOME");
-  }, []);
-
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.header}>Welcome to Databag</Text>

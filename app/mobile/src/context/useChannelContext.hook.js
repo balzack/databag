@@ -1,14 +1,27 @@
 import { useState, useRef, useContext } from 'react';
 import { StoreContext } from 'context/StoreContext';
+import { UploadContext } from 'context/UploadContext';
 import { getChannels } from 'api/getChannels';
 import { getChannelDetail } from 'api/getChannelDetail';
 import { getChannelSummary } from 'api/getChannelSummary';
+import { addChannel } from 'api/addChannel';
+import { removeChannel } from 'api/removeChannel';
+import { removeChannelTopic } from 'api/removeChannelTopic';
+import { setChannelTopicSubject } from 'api/setChannelTopicSubject';
+import { addChannelTopic } from 'api/addChannelTopic';
+import { getChannelTopics } from 'api/getChannelTopics';
+import { getChannelTopic } from 'api/getChannelTopic';
+import { getChannelTopicAssetUrl } from 'api/getChannelTopicAssetUrl';
+import { setChannelSubject } from 'api/setChannelSubject';
+import { setChannelCard } from 'api/setChannelCard';
+import { clearChannelCard } from 'api/clearChannelCard';
 
 export function useChannelContext() {
   const [state, setState] = useState({
     channels: new Map(),
   });
   const store = useContext(StoreContext);
+  const upload = useContext(UploadContext);
 
   const session = useRef(null);
   const curRevision = useRef(null);
@@ -33,7 +46,7 @@ export function useChannelContext() {
     update.topicRevision = channel?.data?.topicRevision;
     channels.current.set(channelId, update);
   }
-  const setChannelDetails = (channelId, detail, revision) => {
+  const setChannelDetail = (channelId, detail, revision) => {
     let channel = channels.current.get(channelId);
     if (channel) {
       channel.detail = detail;
@@ -60,6 +73,20 @@ export function useChannelContext() {
     let channel = channels.current.get(channelId);
     if (channel) {
       channel.readRevision = revision;
+      channels.current.set(channelId, channel);
+    }
+  }
+  const setChannelSyncRevision = (channelId, revision) => {
+    let channel = channels.current.get(channelId);
+    if (channel) {
+      channel.syncRevision = revision;
+      channels.current.set(channelId, channel);
+    }
+  }
+  const setChannelBlocked = (channelId, blocked) => {
+    let channel = channels.current.get(channelId);
+    if (channel) {
+      channel.blocked = blocked;
       channels.current.set(channelId, channel);
     }
   }
@@ -155,7 +182,97 @@ export function useChannelContext() {
       await store.actions.setChannelItemReadRevision(session.current.guid, channelId, rev);
       setChannelReadRevision(channelId, rev);
       updateState({ channels: channels.current }); 
-    }
+    },
+    setSyncRevision: async (channelId, revision) => {
+      const { guid } = session.current;
+      await store.actions.setChannelItemSyncRevision(guid, channelId, revision);
+      setChannelSyncRevision(channelId, revision);
+      updateState({ channels: channels.current }); 
+    },
+    setBlocked: async (channelId) => {
+      const { guid } = session.current;
+      await store.actions.setChannelItemBlocked(guid, channelId);
+      setChannelBlocked(channelId, 1);
+      updateState({ channels: channels.current }); 
+    },
+    clearBlocked: async (channelId) => {
+      const { guid } = session.current;
+      await store.actions.clearChannelItemBlocked(guid, channelId);
+      setChannelBlocked(channelId, 0);
+      updateState({ channels: channels.current }); 
+    },
+    getTopicItems: async (channelId) => {
+      const { guid } = session.current;
+      return await store.actions.getChannelTopicItems(guid, channelId);
+    },
+    setTopicItem: async (channelId, topicId, topic) => {
+      const { guid } = session.current;
+      return await store.actions.setChannelTopicItem(guid, channelId, topicId, topic);
+    },
+    clearTopicItem: async (channelId, topicId) => {
+      const { guid } = session.current;
+      return await store.actions.clearChannelTopicItem(guid, channelId, topicId);
+    },
+    clearTopicItems: async (channelId) => {
+      const { guid } = session.current;
+      return await store.actions.clearChannelTopicItems(guid, channelId);
+    },
+    getTopic: async (channelId, topicId) => {
+      const { server, appToken } = session.current;
+      return await getChannelTopic(server, appToken, channelId, topicId);
+    },
+    getTopics: async (channelId, revision) => {
+      const { server, appToken } = session.current;
+      return await getChannelTopics(server, appToken, channelId, revision);
+    },
+    getTopicAssetUrl: (channelId, topicId, assetId) => {
+      const { server, appToken } = session.current;
+      return getChannelTopicAssetUrl(server, appToken, channelId, topicId, assetId);
+    },
+    addTopic: async (channelId, message, files) => {
+      const { server, appToken } = session.current;
+      if (files?.length > 0) {
+        const topicId = await addChannelTopic(server, appToken, channelId, null, null);
+        upload.actions.addTopic(server, appToken, channelId, topicId, files, async (assets) => {
+          message.assets = assets;
+          await setChannelTopicSubject(server, appToken, channelId, topicId, message);
+        }, async () => {
+          try {
+            await removeChannelTopic(server, appToken, channelId, topicId);
+          }
+          catch (err) {
+            console.log(err);
+          }
+        });
+      }
+      else {
+        await addChannelTopic(server, appToken, channelId, message, []);
+      }
+    },
+    setTopicSubject: async (channelId, topicId, data) => {
+      const { server, appToken } = session.current;
+      return await setChannelTopicSubject(server, appToken, channelId, topicId, data);
+    },
+    setSubject: async (channelId, data) => {
+      const { server, appToken } = session.current;
+      return await setChannelSubject(server, appToken, channelId, data);
+    },
+    remove: async (channelId) => {
+      const { server, appToken } = session.current;
+      return await removeChannel(server, appToken, channelId);
+    },
+    removeTopic: async (channelId, topicId) => {
+      const { server, appToken } = session.current;
+      return await removeChannelTopic(server, appToken, channelId, topicId);
+    },
+    setCard: async (channelId, cardId) => {
+      const { server, appToken } = session.current;
+      return await setChannelCard(server, appToken, channelId, cardId);
+    },
+    clearCard: async (channelId, cardId) => {
+      const { server, appToken } = session.current;
+      return await clearChannelCard(server, appToken, channelId, cardId);
+    },
   }
 
   return { state, actions }

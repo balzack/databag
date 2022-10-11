@@ -13,6 +13,7 @@ export function useChannels() {
     topic: null,
     channels: [],
     tabbed: null,
+    filter: null,
   });
 
   const items = useRef([]);
@@ -123,19 +124,42 @@ export function useChannels() {
       }
     }
 
-    return { cardId: item.cardId, channelId: item.channelId, contacts, logo, subject, message, updated, revision: item.revision };
+    const timestamp = item?.summary?.lastTopic?.created;
+
+    return { cardId: item.cardId, channelId: item.channelId, contacts, logo, subject, message, updated, revision: item.revision, timestamp, blocked: item.blocked === 1 };
   }
 
   useEffect(() => {
     let merged = [];
     card.state.cards.forEach((card, cardId, map) => {
-      merged.push(...Array.from(card.channels.values()));
+      if (!card.blocked) {
+        merged.push(...Array.from(card.channels.values()));
+      }
     });
     merged.push(...Array.from(channel.state.channels.values()));
+    
+    const items = merged.map(setChannelEntry);
 
-    merged.sort((a, b) => {
-      const aCreated = a?.summary?.lastTopic?.created;
-      const bCreated = b?.summary?.lastTopic?.created;
+    const filtered  = items.filter(item => {
+      if (item.blocked === true) {
+        return false;
+      }
+
+      if (!state.filter) {
+        return true;
+      }
+      const lower = state.filter.toLowerCase();
+      if (item.subject) {
+        if (item.subject.toLowerCase().includes(lower)) {
+          return true;
+        }
+      }
+      return false;
+    });
+
+    const sorted = filtered.sort((a, b) => {
+      const aCreated = a?.timestamp;
+      const bCreated = b?.timestamp;
       if (aCreated === bCreated) {
         return 0;
       }
@@ -145,12 +169,15 @@ export function useChannels() {
       return -1;
     });
 
-    updateState({ channels: merged.map(item => setChannelEntry(item)) });
-  }, [channel, card]);
+    updateState({ channels: sorted });
+  }, [channel, card, state.filter]);
 
   const actions = {
     setTopic: (topic) => {
       updateState({ topic });
+    },
+    setFilter: (filter) => {
+      updateState({ filter });
     },
   };
 

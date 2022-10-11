@@ -1,11 +1,6 @@
 import { checkResponse, fetchWithTimeout } from './fetchUtil';
 
 export async function getContactChannelTopics(server, token, channelId, revision, count, begin, end) {
-  let host = "";
-  if (server) {
-    host = `https://${server}`;
-  }
-
   let rev = ''
   if (revision != null) {
     rev = `&revision=${revision}`
@@ -22,7 +17,7 @@ export async function getContactChannelTopics(server, token, channelId, revision
   if (end != null) {
     edn = `&end=${end}`
   }
-  let topics = await fetchWithTimeout(`${host}/content/channels/${channelId}/topics?contact=${token}${rev}${cnt}${bgn}${edn}`, 
+  let topics = await fetchWithTimeout(`https://${server}/content/channels/${channelId}/topics?contact=${token}${rev}${cnt}${bgn}${edn}`, 
     { method: 'GET' });
   checkResponse(topics)
   return {

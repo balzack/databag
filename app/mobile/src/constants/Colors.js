@@ -1,6 +1,7 @@
 export const Colors = {
   background: '#8fbea7',
   primary: '#448866',
+  titleBackground: '#f6f6f6',
   formBackground: '#f2f2f2',
   formFocus: '#f8f8f8',
   formHover: '#efefef',
@@ -21,10 +22,10 @@ export const Colors = {
 
   itemDivider: '#eeeeee',
   
-  connected: '#44cc44',
+  connected: '#4488FF',
   connecting: '#dd88ff',
-  requested: '#4488ff',
-  pending: '#22aaaa',
+  requested: '#448844',
+  pending: '#ffaa22',
   confirmed: '#aaaaaa',
   error: '#ff4444',
 

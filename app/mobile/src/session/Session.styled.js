@@ -22,8 +22,13 @@ export const styles = StyleSheet.create({
     maxWidth: 500,
   },
   conversation: {
+    width: '67%',
+  },
+  drawer: {
+    width: '100%',
     height: '100%',
-    flexGrow: 1,
+    paddingLeft: 8,
+    backgroundColor: Colors.formBackground,
   },
   options: {
     display: 'flex',
