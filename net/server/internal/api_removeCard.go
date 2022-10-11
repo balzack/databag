@@ -42,9 +42,12 @@ func RemoveCard(w http.ResponseWriter, r *http.Request) {
 	// save and update contact revision
 	err = store.DB.Transaction(func(tx *gorm.DB) error {
 		for _, channel := range slot.Card.Channels {
-			if res := tx.Model(&channel).Association("Cards").Delete(&slot.Card); res != nil {
+			if res := tx.Model(&channel).Association("Cards").Delete(slot.Card); res != nil {
 				return res
 			}
+      if res := tx.Model(&channel).Update("detail_revision", account.ChannelRevision+1).Error; res != nil {
+        return res
+      }
 			if res := tx.Model(&channel.ChannelSlot).Update("revision", account.ChannelRevision+1).Error; res != nil {
 				return res
 			}
