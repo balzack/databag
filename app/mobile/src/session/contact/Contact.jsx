@@ -66,9 +66,17 @@ export function Contact({ contact, closeContact }) {
   const saveAndConnect = () => {
     setContact(actions.saveAndConnect);
   }
+
+  const confirmAndConnect = () => {
+    setContact(actions.confirmAndConnect);
+  }
   
   const saveContact = () => {
     setContact(actions.saveContact);
+  }
+ 
+  const confirmContact = () => {
+    setContact(actions.confirmContact);
   }
 
   const ignoreContact = () => {
@@ -186,10 +194,10 @@ export function Contact({ contact, closeContact }) {
           )}
           { state.status === 'pending' && (
             <>
-              <TouchableOpacity style={styles.button} onPress={saveAndConnect}>
+              <TouchableOpacity style={styles.button} onPress={confirmAndConnect}>
                 <Text style={styles.buttonText}>Save and Connect</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.button} onPress={saveContact}>
+              <TouchableOpacity style={styles.button} onPress={confirmContact}>
                 <Text style={styles.buttonText}>Save Contact</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.button} onPress={deleteContact}>

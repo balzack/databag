@@ -101,6 +101,17 @@ export function useContact(contact, close) {
         }
       });
     },
+    confirmAndConnect: async () => {
+      await applyAction(async () => {
+        await card.actions.setCardConfirmed(state.cardId);
+        await card.actions.setCardConnecting(state.cardId);
+        let open = await card.actions.getCardOpenMessage(state.cardId);
+        let contact = await card.actions.setCardOpenMessage(state.node, open);
+        if (contact.status === 'connected') {
+          await card.actions.setCardConnected(state.cardId, contact.token, contact);
+        }
+      });
+    },
     saveContact: async () => {
       await applyAction(async () => {
         let message = await getListingMessage(state.node, state.guid);
@@ -117,6 +128,11 @@ export function useContact(contact, close) {
         catch (err) {
           console.log(err);
         }
+      });
+    },
+    confirmContact: async () => {
+      await applyAction(async () => {
+        await card.actions.setCardConfirmed(state.cardId);
       });
     },
     ignoreContact: async () => {
