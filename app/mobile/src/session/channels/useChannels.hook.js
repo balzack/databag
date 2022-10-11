@@ -14,6 +14,8 @@ export function useChannels() {
     channels: [],
     tabbed: null,
     filter: null,
+    adding: false,
+    connected: [],
   });
 
   const items = useRef([]);
@@ -26,6 +28,11 @@ export function useChannels() {
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
   }
+
+  useEffect(() => {
+    const contacts = Array.from(card.state.cards.values());
+    updateState({ connected: contacts.filter(contact => contact.detail.status === 'connected') });
+  }, [card]);
 
   useEffect(() => {
     if (dimensions.width > config.tabbedWidth) {
@@ -178,6 +185,12 @@ export function useChannels() {
     },
     setFilter: (filter) => {
       updateState({ filter });
+    },
+    showAdding: () => {
+      updateState({ adding: true });
+    },
+    hideAdding: () => {
+      updateState({ adding: false });
     },
   };
 

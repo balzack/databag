@@ -1,11 +1,12 @@
 import { useContext } from 'react';
-import { FlatList, ScrollView, View, TextInput, TouchableOpacity, Text } from 'react-native';
+import { FlatList, Modal, KeyboardAvoidingView, ScrollView, View, TextInput, TouchableOpacity, Text } from 'react-native';
 import { styles } from './Channels.styled';
 import { useChannels } from './useChannels.hook';
 import Ionicons from '@expo/vector-icons/AntDesign';
 import { ChannelItem } from './channelItem/ChannelItem';
 import Colors from 'constants/Colors';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { AddMember } from './addMember/AddMember';
 
 export function ChannelsTitle({ state, actions }) {
   return (
@@ -16,7 +17,7 @@ export function ChannelsTitle({ state, actions }) {
             autoCapitalize="none" placeholderTextColor={Colors.disabled}  placeholder="Topics" />
         <View style={styles.space} />
       </View>
-      <TouchableOpacity style={styles.add}>
+      <TouchableOpacity style={styles.add} onPress={actions.showAdding}>
         <Ionicons name={'message1'} size={16} color={Colors.white} style={[styles.box, { transform: [ { rotateY: "180deg" }, ]} ]}/>
         <Text style={styles.newtext}>New</Text>
       </TouchableOpacity>
@@ -26,13 +27,52 @@ export function ChannelsTitle({ state, actions }) {
 
 export function ChannelsBody({ state, actions, openConversation }) {
   return (
-    <FlatList style={styles.channels}
-      data={state.channels}
-      renderItem={({ item }) => <ChannelItem item={item} openConversation={openConversation} />}
-      keyExtractor={item => (`${item.cardId}:${item.channelId}`)}
-    />
+    <>
+      <FlatList style={styles.channels}
+        data={state.channels}
+        renderItem={({ item }) => <ChannelItem item={item} openConversation={openConversation} />}
+        keyExtractor={item => (`${item.cardId}:${item.channelId}`)}
+      />
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={state.adding}
+        supportedOrientations={['portrait', 'landscape']}
+        onRequestClose={actions.hideAdding}
+      >
+        <KeyboardAvoidingView behavior="height" style={styles.addWrapper}>
+          <View style={styles.addContainer}>
+            <Text style={styles.addHeader}>New Topic:</Text>
+            <View style={styles.inputField}>
+              <TextInput style={styles.input} value={state.subjectUpdate} onChangeText={actions.setSubjectUpdate}
+                  autoCapitalize="words" placeholder="Subject" />
+            </View>
+            <Text style={styles.label}>Members:</Text>
+            { state.connected.length == 0 && (
+              <View style={styles.emptyMembers}>
+                <Text style={styles.empty}>No Connected Contacts</Text>
+              </View>
+            )}
+            { state.connected.length > 0 && (
+              <FlatList style={styles.addMembers}
+                data={state.connected}
+                renderItem={({ item }) => <AddMember members={[]} item={item} />}
+                keyExtractor={item => item.cardId}
+              />
+            )}
+            <View style={styles.addControls}>
+              <TouchableOpacity style={styles.cancel} onPress={actions.hideAdding}>
+                <Text>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.save} onPress={actions.hideAdding}>
+                <Text style={styles.saveText}>Save</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </KeyboardAvoidingView>
+      </Modal>
+    </>
   );
-
 }
 
 export function Channels({ openConversation }) {
