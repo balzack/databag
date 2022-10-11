@@ -190,6 +190,17 @@ export function useCardContext() {
       }
     }
   }
+  const setCardChannelBlocked = (cardId, channelId, blocked) => {
+    let card = cards.current.get(cardId);
+    if (card) {
+      let channel = card.channels.get(channelId);
+      if (channel) {
+        channel.blocked = blocked;
+        card.channels.set(channelId, channel);
+        cards.current.set(cardId, card);
+      }
+    }
+  }
   const clearCardChannel = (cardId, channelId) => {
     let card = cards.current.get(cardId);
     if (card) {
@@ -436,6 +447,18 @@ export function useCardContext() {
       const { guid } = session.current;
       await store.actions.setCardChannelItemSyncRevision(guid, cardId, channelId, revision);
       setCardChannelSyncRevision(cardId, channelId, revision);
+      updateState({ cards: cards.current });
+    },
+    setChannelBlocked: async (cardId, channelId) => {
+      const { guid } = session.current;
+      await store.actions.setCardChannelItemBlocked(guid, cardId, channelId);
+      setCardChannelBlocked(cardId, channelId, true);
+      updateState({ cards: cards.current });
+    },
+    clearChannelBlocked: async (cardId, channelId) => {
+      const { guid } = session.current;
+      await store.actions.clearCardChannelItemBlocked(guid, cardId, channelId);
+      setCardChannelBlocked(cardId, channelId, false);
       updateState({ cards: cards.current });
     },
     getChannelTopicItems: async (cardId, channelId) => {

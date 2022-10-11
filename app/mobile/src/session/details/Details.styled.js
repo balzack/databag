@@ -36,6 +36,8 @@ export const styles = StyleSheet.create({
     fontSize: 18,
     flexShrink: 1,
     minWidth: 0,
+    color: Colors.text,
+    paddingRight: 4,
   },
   created: {
     fontSize: 16,

@@ -58,6 +58,9 @@ export function useDetails() {
     remove: async () => {
       await conversation.actions.remove();
     },
+    block: async() => {
+      await conversation.actions.setBlocked();
+    },
   };
 
   return { state, actions };

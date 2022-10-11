@@ -28,18 +28,58 @@ export function DetailsBody({ channel, clearConversation }) {
     }
   }
 
-  const remove = async () => {
-    try {
-      await actions.remove(); 
-      clearConversation();
-    }
-    catch (err) {
-      console.log(err);
-      Alert.alert(
-        'Failed to Delete Topic',
-        'Please try again.'
-      )
-    }
+  const remove = () => {
+    Alert.alert(
+      "Removing Topic",
+      "Confirm?",
+      [
+        { text: "Cancel",
+          onPress: () => {},
+        },
+        { text: "Remove",
+          onPress: async () => {
+            try {
+              await actions.remove(); 
+              clearConversation();
+            }
+            catch (err) {
+              console.log(err);
+              Alert.alert(
+                'Failed to Delete Topic',
+                'Please try again.'
+              )
+            }
+          },
+        }
+      ]
+    );
+  }
+
+  const block = () => {
+    Alert.alert(
+      "Blocking Topic",
+      "Confirm?",
+      [
+        { text: "Cancel",
+          onPress: () => {},
+        },
+        { text: "Block",
+          onPress: async () => {
+            try {
+              await actions.block();
+              clearConversation();
+            }
+            catch (err) {
+              console.log(err);
+              Alert.alert(
+                'Failed to Block Topic',
+                'Please try again.'
+              )
+            }
+          },
+        }
+      ]
+    );
   }
 
   return (
@@ -64,14 +104,17 @@ export function DetailsBody({ channel, clearConversation }) {
             <Text style={styles.buttonText}>Delete Topic</Text>
           </TouchableOpacity>
         )}
-        { !state.hostId && (
-          <TouchableOpacity style={styles.button} onPress={actions.showEditMembers}>
-            <Text style={styles.buttonText}>Edit Membership</Text>
-          </TouchableOpacity>
-        )}
         { state.hostId && (
           <TouchableOpacity style={styles.button} onPress={remove}>
             <Text style={styles.buttonText}>Leave Topic</Text>
+          </TouchableOpacity>
+        )}
+        <TouchableOpacity style={styles.button} onPress={block}>
+          <Text style={styles.buttonText}>Block Topic</Text>
+        </TouchableOpacity>
+        { !state.hostId && (
+          <TouchableOpacity style={styles.button} onPress={actions.showEditMembers}>
+            <Text style={styles.buttonText}>Edit Membership</Text>
           </TouchableOpacity>
         )}
       </View>

@@ -69,9 +69,9 @@ export function useProfile() {
       app.actions.logout();
       navigate('/');
     },
-    setVisible: async (visible) => {
-      updateState({ visible });
-      await account.actions.setSearchable(visible);
+    setVisible: async (searchable) => {
+      updateState({ searchable });
+      await account.actions.setSearchable(searchable);
     },
     setProfileImage: async (data) => {
       await profile.actions.setProfileImage(data);

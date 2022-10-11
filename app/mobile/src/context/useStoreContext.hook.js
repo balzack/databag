@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef, useContext } from 'react';
 import SQLite from "react-native-sqlite-storage";
 
-const DATABAG_DB = 'databag_v038.db';
+const DATABAG_DB = 'databag_v039.db';
 
 export function useStoreContext() {
   const [state, setState] = useState({});
@@ -12,7 +12,7 @@ export function useStoreContext() {
   }
 
   const initSession = async (guid) => {
-    await db.current.executeSql(`CREATE TABLE IF NOT EXISTS channel_${guid} (channel_id text, revision integer, detail_revision integer, topic_revision integer, sync_revision integer, detail text, summary text, offsync integer, read_revision integer, unique(channel_id))`);
+    await db.current.executeSql(`CREATE TABLE IF NOT EXISTS channel_${guid} (channel_id text, revision integer, detail_revision integer, topic_revision integer, blocked integer, sync_revision integer, detail text, summary text, offsync integer, read_revision integer, unique(channel_id))`);
     await db.current.executeSql(`CREATE TABLE IF NOT EXISTS channel_topic_${guid} (channel_id text, topic_id text, revision integer, detail_revision integer, detail text, unique(channel_id, topic_id))`);
     await db.current.executeSql(`CREATE TABLE IF NOT EXISTS card_${guid} (card_id text, revision integer, detail_revision integer, profile_revision integer, detail text, profile text, notified_view integer, notified_article integer, notified_profile integer, notified_channel integer, offsync integer, blocked integer, unique(card_id))`);
     await db.current.executeSql(`CREATE TABLE IF NOT EXISTS card_channel_${guid} (card_id text, channel_id text, revision integer, detail_revision integer, topic_revision integer, sync_revision integer, detail text, summary text, offsync integer, blocked integer, read_revision integer, unique(card_id, channel_id))`);
@@ -189,6 +189,12 @@ export function useStoreContext() {
     setChannelItemSyncRevision: async (guid, channelId, revision) => {
       await db.current.executeSql(`UPDATE channel_${guid} set sync_revision=? where channel_id=?`, [revision, channelId]);
     },
+    setChannelItemBlocked: async (guid, channelId) => {
+      await db.current.executeSql(`UPDATE channel_${guid} set blocked=? where channel_id=?`, [1, channelId]);
+    },
+    clearChannelItemBlocked: async (guid, channelId) => {
+      await db.current.executeSql(`UPDATE channel_${guid} set blocked=? where channel_id=?`, [0, channelId]);
+    },
     setChannelItemDetail: async (guid, channelId, revision, detail) => {
       await db.current.executeSql(`UPDATE channel_${guid} set detail_revision=?, detail=? where channel_id=?`, [revision, encodeObject(detail), channelId]);
     },
@@ -207,7 +213,7 @@ export function useStoreContext() {
       };
     },
     getChannelItems: async (guid) => {
-      const values = await getAppValues(db.current, `SELECT channel_id, read_revision, revision, sync_revision, detail_revision, topic_revision, detail, summary FROM channel_${guid}`, []);
+      const values = await getAppValues(db.current, `SELECT channel_id, read_revision, revision, sync_revision, blocked, detail_revision, topic_revision, detail, summary FROM channel_${guid}`, []);
       return values.map(channel => ({
         channelId: channel.channel_id,
         revision: channel.revision,
@@ -215,6 +221,7 @@ export function useStoreContext() {
         detailRevision: channel.detail_revision,
         topicRevision: channel.topic_revision,
         syncRevision: channel.sync_revision,
+        blocked: channel.blocked,
         detail: decodeObject(channel.detail),
         summary: decodeObject(channel.summary),
       }));

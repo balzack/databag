@@ -375,6 +375,17 @@ export function useConversationContext() {
         await channel.actions.clearCard(channelId, id);
       }
     },
+    setBlocked: async () => {
+      if (conversationId.current) {
+        const { cardId, channelId } = conversationId.current;
+        if (cardId) {
+          await card.actions.setChannelBlocked(cardId, channelId);
+        }
+        else {
+          await channel.actions.setBlocked(channelId);
+        }
+      }
+    },
   }
 
   return { state, actions }

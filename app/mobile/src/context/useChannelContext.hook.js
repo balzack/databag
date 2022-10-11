@@ -83,6 +83,13 @@ export function useChannelContext() {
       channels.current.set(channelId, channel);
     }
   }
+  const setChannelBlocked = (channelId, blocked) => {
+    let channel = channels.current.get(channelId);
+    if (channel) {
+      channel.blocked = blocked;
+      channels.current.set(channelId, channel);
+    }
+  }
 
   const sync = async () => {
 
@@ -180,6 +187,18 @@ export function useChannelContext() {
       const { guid } = session.current;
       await store.actions.setChannelItemSyncRevision(guid, channelId, revision);
       setChannelSyncRevision(channelId, revision);
+      updateState({ channels: channels.current }); 
+    },
+    setBlocked: async (channelId) => {
+      const { guid } = session.current;
+      await store.actions.setChannelItemBlocked(guid, channelId);
+      setChannelBlocked(channelId, 1);
+      updateState({ channels: channels.current }); 
+    },
+    clearBlocked: async (channelId) => {
+      const { guid } = session.current;
+      await store.actions.clearChannelItemBlocked(guid, channelId);
+      setChannelBlocked(channelId, 0);
       updateState({ channels: channels.current }); 
     },
     getTopicItems: async (channelId) => {

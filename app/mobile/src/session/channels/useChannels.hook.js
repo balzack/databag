@@ -126,7 +126,7 @@ export function useChannels() {
 
     const timestamp = item?.summary?.lastTopic?.created;
 
-    return { cardId: item.cardId, channelId: item.channelId, contacts, logo, subject, message, updated, revision: item.revision, timestamp };
+    return { cardId: item.cardId, channelId: item.channelId, contacts, logo, subject, message, updated, revision: item.revision, timestamp, blocked: item.blocked === 1 };
   }
 
   useEffect(() => {
@@ -137,10 +137,14 @@ export function useChannels() {
       }
     });
     merged.push(...Array.from(channel.state.channels.values()));
-
+    
     const items = merged.map(setChannelEntry);
 
     const filtered  = items.filter(item => {
+      if (item.blocked === true) {
+        return false;
+      }
+
       if (!state.filter) {
         return true;
       }
