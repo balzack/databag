@@ -36,7 +36,6 @@ export function useMemberItem(item, members) {
     setMember: (member) => {
       updateState({ member });
       if (member) {
-console.log("SET CARD:", item.cardId);
         conversation.actions.setCard(item.cardId);
       }
       else {

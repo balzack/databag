@@ -152,7 +152,6 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: Colors.lightgrey,
     borderRadius: 4,
-    padding: 8,
     marginBottom: 8,
     height: 250,
   },   

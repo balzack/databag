@@ -10,8 +10,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     borderBottomWidth: 1,
     borderColor: Colors.itemDivider,
-    paddingLeft: 16,
-    paddingRight: 16,
+    paddingLeft: 8,
   },
   detail: {
     paddingLeft: 12,
