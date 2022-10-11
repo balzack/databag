@@ -246,6 +246,14 @@ export function useChannelContext() {
       const { server, appToken } = session.current;
       return await removeChannelTopic(server, appToken, channelId, topicId);
     },
+    setCard: async (channelId, cardId) => {
+      const { server, appToken } = session.current;
+      return await setChannelCard(server, appToken, channelId, cardId);
+    },
+    clearCard: async (channelId, cardId) => {
+      const { server, appToken } = session.current;
+      return await clearChannelCard(server, appToken, channelId, cardId);
+    },
   }
 
   return { state, actions }

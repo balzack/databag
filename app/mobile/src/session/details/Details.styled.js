@@ -147,6 +147,14 @@ export const styles = StyleSheet.create({
     fontSize: 18,
     paddingBottom: 16,
   },
-
+  editMembers: {
+    width: '100%',
+    borderWidth: 1,
+    borderColor: Colors.lightgrey,
+    borderRadius: 4,
+    padding: 8,
+    marginBottom: 8,
+    height: 250,
+  },   
 })
 

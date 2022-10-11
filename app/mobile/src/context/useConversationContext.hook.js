@@ -357,6 +357,24 @@ export function useConversationContext() {
         await remove(cardId, channelId);
       }
     },
+    setCard: async (id) => {
+      if (conversationId.current) {
+        const { cardId, channelId } = conversationId.current;
+        if (cardId) {
+          throw new Error("can only set members on hosted channel");
+        }
+        await channel.actions.setCard(channelId, id);
+      }
+    },
+    clearCard: async (id) => {
+      if (conversationId.current) {
+        const { cardId, channelId } = conversationId.current;
+        if (cardId) {
+          throw new Error("can only clear members on hosted channel");
+        }
+        await channel.actions.clearCard(channelId, id);
+      }
+    },
   }
 
   return { state, actions }

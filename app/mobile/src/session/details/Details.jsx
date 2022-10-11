@@ -65,7 +65,7 @@ export function DetailsBody({ channel, clearConversation }) {
           </TouchableOpacity>
         )}
         { !state.hostId && (
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity style={styles.button} onPress={actions.showEditMembers}>
             <Text style={styles.buttonText}>Edit Membership</Text>
           </TouchableOpacity>
         )}
@@ -85,7 +85,7 @@ export function DetailsBody({ channel, clearConversation }) {
 
       <FlatList style={styles.cards}
         data={state.contacts}
-        renderItem={({ item }) => <MemberItem hostId={state.hostId} item={item} />}
+        renderItem={({ item }) => <MemberItem hostId={state.hostId} editable={false} members={[]} item={item} />}
         keyExtractor={item => item.cardId}
       />
 
@@ -109,6 +109,30 @@ export function DetailsBody({ channel, clearConversation }) {
               </TouchableOpacity>
               <TouchableOpacity style={styles.save} onPress={saveSubject}>
                 <Text style={styles.saveText}>Save</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </KeyboardAvoidingView>
+      </Modal>
+
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={state.editMembers}
+        supportedOrientations={['portrait', 'landscape']}
+        onRequestClose={actions.hideEditMembers}
+      >
+        <KeyboardAvoidingView behavior="height" style={styles.editWrapper}>
+          <View style={styles.editContainer}>
+            <Text style={styles.editHeader}>Channel Members:</Text>
+            <FlatList style={styles.editMembers}
+              data={state.connected}
+              renderItem={({ item }) => <MemberItem editable={true} members={state.contacts} item={item} />}
+              keyExtractor={item => item.cardId}
+            />
+            <View style={styles.editControls}>
+              <TouchableOpacity style={styles.cancel} onPress={actions.hideEditMembers}>
+                <Text>Done</Text>
               </TouchableOpacity>
             </View>
           </View>

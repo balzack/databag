@@ -62,5 +62,13 @@ export const styles = StyleSheet.create({
     borderRadius: 4,
     backgroundColor: Colors.confirmed,
   },
+  track: {
+    false: Colors.grey,
+    true: Colors.background,
+  },
+  switch: {
+    transform: [{ scaleX: .7 }, { scaleY: .7 }],
+  },
+
 })
 
