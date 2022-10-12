@@ -33,7 +33,21 @@ export function useChannels() {
 
   useEffect(() => {
     const contacts = Array.from(card.state.cards.values());
-    updateState({ connected: contacts.filter(contact => contact.detail.status === 'connected') });
+    const connected = contacts.filter(contact => {
+      return contact.detail.status === 'connected'
+    });
+    const sorted = connected.sort((a, b) => {
+      const aName = a?.profile?.name;
+      const bName = b?.profile?.name;
+      if (aName === bName) {
+        return 0;
+      }
+      if (!aName || (aName < bName)) {
+        return -1;
+      }
+      return 1;
+    });
+    updateState({ connected: sorted });
   }, [card]);
 
   useEffect(() => {

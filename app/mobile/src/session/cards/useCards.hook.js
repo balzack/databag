@@ -66,10 +66,12 @@ export function useCards() {
     })
     if (state.sorting) {
       filtered.sort((a, b) => {
-        if (a.name === b.name) {
+        const aName = a?.name?.toLowerCase();
+        const bName = b?.name?.toLowerCase();
+        if (aName === bName) {
           return 0;
         }
-        if (!a.name || (a.name < b.name)) {
+        if (!aName || (aName < bName)) {
           return -1;
         }
         return 1;
