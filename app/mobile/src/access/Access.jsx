@@ -4,6 +4,7 @@ import { useAccess } from './useAccess.hook';
 import { Login } from './login/Login';
 import { Create } from './create/Create';
 import { Reset } from './reset/Reset';
+import { Admin } from './admin/Admin';
 import logo from 'images/login.png'; 
 
 export function Access({ mode }) {
@@ -28,6 +29,9 @@ export function Access({ mode }) {
               { mode === 'reset' && (
                 <Reset />
               )}
+              { mode === 'admin' && (
+                <Admin />
+              )}
             </View>
           </View>
         )}
@@ -41,6 +45,9 @@ export function Access({ mode }) {
             )}
             { mode === 'reset' && (
               <Reset />
+            )}
+            { mode === 'admin' && (
+              <Admin />
             )}
           </View>
         )}

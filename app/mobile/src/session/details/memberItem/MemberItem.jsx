@@ -23,7 +23,7 @@ export function MemberItem({ hostId, editable, members, item }) {
   };
 
   return (
-    <View style={styles.container}>
+    <TouchableOpacity style={styles.container} activeOpacity={1} onPress={() => setMember(!state.member)}>
       <Logo src={state.logo} width={32} height={32} radius={6} />
       <View style={styles.detail}>
         <Text style={styles.name} numberOfLines={1} ellipsizeMode={'tail'}>{ state.name }</Text>
@@ -36,7 +36,7 @@ export function MemberItem({ hostId, editable, members, item }) {
         <Switch style={styles.switch} trackColor={styles.track}
           value={state.member} onValueChange={setMember} />
       )}
-    </View>
+    </TouchableOpacity>
   );
 }
 

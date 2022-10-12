@@ -118,7 +118,8 @@ export function AddTopic() {
           renderItem={renderAsset}
         />
       )}
-      <TextInput style={styles.input} value={state.message} onChangeText={actions.setMessage} ref={message}
+      <TextInput style={{ ...styles.input, color: state.color, fontSize: state.textSize }} value={state.message} onChangeText={actions.setMessage} ref={message}
+          placeholderTextColor={state.color} cursorColor={state.color}
           onSubmitEditing={sendMessage} returnKeyType="send"
           autoCapitalize="sentences" placeholder="New Message" multiline={true} />
       <View style={styles.addButtons}>

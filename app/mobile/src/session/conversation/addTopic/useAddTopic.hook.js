@@ -15,6 +15,7 @@ export function useAddTopic(cardId, channelId) {
     color: Colors.text,
     colorSet: false,
     busy: false,
+    textSize: 14,
   });
 
   const assetId = useRef(0);
@@ -79,7 +80,17 @@ export function useAddTopic(cardId, channelId) {
       updateState({ fontSize: false });
     },
     setFontSize: (size) => {
-      updateState({ size, sizeSet: true });
+      let textSize;
+      if (size === 'large') {
+        textSize = 18;
+      }
+      else if (size === 'small') {
+        textSize = 10;
+      }
+      else {
+        textSize = 14;
+      }
+      updateState({ size, sizeSet: true, textSize });
     },
     setFontColor: (color) => {
       updateState({ color, colorSet: true });
@@ -95,7 +106,7 @@ export function useAddTopic(cardId, channelId) {
           };
           await conversation.actions.addTopic(message, state.assets);
           updateState({ busy: false, assets: [], message: null,
-            size: 'medium', sizeSet: false,
+            size: 'medium', sizeSet: false, textSize: 14,
             color: Colors.text, colorSet: false,
           });
         }

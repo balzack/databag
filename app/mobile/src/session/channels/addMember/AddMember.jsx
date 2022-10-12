@@ -18,7 +18,7 @@ export function AddMember({ members, item, setCard, clearCard }) {
   };
 
   return (
-    <View style={styles.container}>
+    <TouchableOpacity activeOpacity={1} style={styles.container} onPress={() => setMember(!state.member)}>
       <Logo src={state.logo} width={32} height={32} radius={6} />
       <View style={styles.detail}>
         <Text style={styles.name} numberOfLines={1} ellipsizeMode={'tail'}>{ state.name }</Text>
@@ -26,7 +26,7 @@ export function AddMember({ members, item, setCard, clearCard }) {
       </View>
       <Switch style={styles.switch} trackColor={styles.track}
         value={state.member} onValueChange={setMember} />
-    </View>
+    </TouchableOpacity>
   );
 }
 
