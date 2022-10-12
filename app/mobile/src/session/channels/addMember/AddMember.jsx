@@ -4,11 +4,17 @@ import { styles } from './AddMember.styled';
 import { useAddMember } from './useAddMember.hook';
 import Colors from 'constants/Colors';
 
-export function AddMember({ members, item }) {
+export function AddMember({ members, item, setCard, clearCard }) {
 
   const { state, actions } = useAddMember(item, members);
 
-  const setMember = () => {
+  const setMember = (set) => {
+    if (set) {
+      setCard(item.cardId);
+    }
+    else {
+      clearCard(item.cardId);
+    }
   };
 
   return (

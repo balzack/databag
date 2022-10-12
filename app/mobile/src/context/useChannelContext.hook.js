@@ -111,7 +111,6 @@ export function useChannelContext() {
               const { detailRevision, topicRevision, channelDetail, channelSummary } = channel.data;
               const view = await store.actions.getChannelItemView(guid, channel.id);
               if (view == null) {
-                console.log('alert: expected channel not synced');
                 let assembled = JSON.parse(JSON.stringify(channel));
                 assembled.data.channelDetail = await getChannelDetail(server, appToken, channel.id);
                 assembled.data.channelSummary = await getChannelSummary(server, appToken, channel.id);
@@ -260,6 +259,10 @@ export function useChannelContext() {
     remove: async (channelId) => {
       const { server, appToken } = session.current;
       return await removeChannel(server, appToken, channelId);
+    },
+    add: async (subject, cards) => {
+      const { server, appToken } = session.current;
+      return await addChannel(server, appToken, subject, cards);
     },
     removeTopic: async (channelId, topicId) => {
       const { server, appToken } = session.current;

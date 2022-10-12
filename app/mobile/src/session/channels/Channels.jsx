@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { FlatList, Modal, KeyboardAvoidingView, ScrollView, View, TextInput, TouchableOpacity, Text } from 'react-native';
+import { Alert, FlatList, Modal, KeyboardAvoidingView, ScrollView, View, TextInput, TouchableOpacity, Text } from 'react-native';
 import { styles } from './Channels.styled';
 import { useChannels } from './useChannels.hook';
 import Ionicons from '@expo/vector-icons/AntDesign';
@@ -26,6 +26,22 @@ export function ChannelsTitle({ state, actions }) {
 }
 
 export function ChannelsBody({ state, actions, openConversation }) {
+
+  const addTopic = async () => {
+    try {
+      const channel = await actions.addTopic();
+      actions.hideAdding();
+      openConversation(null, channel.id)
+    }
+    catch (err) {
+      console.log(err);
+      Alert.alert(
+        'Failed to Create Topic',
+        'Please try again.'
+      )
+    }
+  }
+
   return (
     <>
       <FlatList style={styles.channels}
@@ -44,7 +60,7 @@ export function ChannelsBody({ state, actions, openConversation }) {
           <View style={styles.addContainer}>
             <Text style={styles.addHeader}>New Topic:</Text>
             <View style={styles.inputField}>
-              <TextInput style={styles.input} value={state.subjectUpdate} onChangeText={actions.setSubjectUpdate}
+              <TextInput style={styles.input} value={state.addSubject} onChangeText={actions.setAddSubject}
                   autoCapitalize="words" placeholder="Subject" />
             </View>
             <Text style={styles.label}>Members:</Text>
@@ -56,7 +72,8 @@ export function ChannelsBody({ state, actions, openConversation }) {
             { state.connected.length > 0 && (
               <FlatList style={styles.addMembers}
                 data={state.connected}
-                renderItem={({ item }) => <AddMember members={[]} item={item} />}
+                renderItem={({ item }) => <AddMember members={state.addMembers} item={item}
+                    setCard={actions.setAddMember} clearCard={actions.clearAddMember} />}
                 keyExtractor={item => item.cardId}
               />
             )}
@@ -64,8 +81,8 @@ export function ChannelsBody({ state, actions, openConversation }) {
               <TouchableOpacity style={styles.cancel} onPress={actions.hideAdding}>
                 <Text>Cancel</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.save} onPress={actions.hideAdding}>
-                <Text style={styles.saveText}>Save</Text>
+              <TouchableOpacity style={styles.save} onPress={addTopic}>
+                <Text style={styles.saveText}>Create</Text>
               </TouchableOpacity>
             </View>
           </View>

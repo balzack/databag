@@ -16,6 +16,8 @@ export function useChannels() {
     filter: null,
     adding: false,
     connected: [],
+    addSubject: null,
+    addMembers: [],
   });
 
   const items = useRef([]);
@@ -186,12 +188,24 @@ export function useChannels() {
     setFilter: (filter) => {
       updateState({ filter });
     },
+    setAddSubject: (addSubject) => {
+      updateState({ addSubject });
+    },
+    setAddMember: (cardId) => {
+      updateState({ addMembers: [ ...state.addMembers, cardId ] });
+    },
+    clearAddMember: (cardId) => {
+      updateState({ addMembers: state.addMembers.filter(item => item !== cardId) });
+    },
     showAdding: () => {
-      updateState({ adding: true });
+      updateState({ adding: true, addSubject: null, addMembers: [] });
     },
     hideAdding: () => {
       updateState({ adding: false });
     },
+    addTopic: async () => {
+      return await channel.actions.add(state.addSubject, state.addMembers);
+    }
   };
 
   return { state, actions };

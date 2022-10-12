@@ -18,7 +18,7 @@ export function useAddMember(item, members) {
   }
 
   useEffect(() => {
-    const member = members.filter(contact => item.cardId === contact.cardId);
+    const member = members.filter(contact => item.cardId === contact);
     updateState({ member: member.length > 0 });
   }, [members]);
 
