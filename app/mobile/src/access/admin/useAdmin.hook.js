@@ -66,8 +66,9 @@ export function useAdmin() {
             await setNodeStatus(state.server, state.token);
           } 
           const config = await getNodeConfig(state.server, state.token);
+          const { server, token } = state;
           updateState({ busy: false });
-          navigate('/dashboard');
+          navigate('/dashboard', { state: { config, server, token }});
         }
         catch (err) {
           console.log(err);
