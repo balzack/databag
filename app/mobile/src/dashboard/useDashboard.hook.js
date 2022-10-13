@@ -15,6 +15,9 @@ export function useDashboard(config, server, token) {
     editConfig: false,
     addUser: false,
     accessUser: false,
+    accessId: null,
+    hostname: null,
+    storage: null,
   });
 
   const navigate = useNavigate();
@@ -49,6 +52,9 @@ export function useDashboard(config, server, token) {
     logout: () => {
       navigate('/admin');
     },
+    refresh: () => {
+      refreshAccounts();
+    },
     showEditConfig: () => {
       updateState({ editConfig: true });
     },
@@ -61,11 +67,18 @@ export function useDashboard(config, server, token) {
     hideAddUser: () => {
       updateState({ addUser: false });
     },
-    showAccessUser: () => {
-      updateState({ accessUser: true });
+    showAccessUser: (accessId) => {
+      updateState({ accessUser: true, accountId: accessId });
     },
     hideAccessUser: () => {
       updateState({ accessUser: false });
+    },
+    setHostname: (hostname) => {
+      updateState({ hostname });
+    },
+    setStorage: (storage) => {
+      console.log(">>> ", storage, Number(storage.replace(/[^0-9]/g, '')));
+      updateState({ storage: Number(storage.replace(/[^0-9]/g, '')) });
     },
   };
 
