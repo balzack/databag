@@ -12,6 +12,9 @@ export function useDashboard(config, server, token) {
   const [state, setState] = useState({
     config: null,
     accounts: [],
+    editConfig: false,
+    addUser: false,
+    accessUser: false,
   });
 
   const navigate = useNavigate();
@@ -45,6 +48,24 @@ export function useDashboard(config, server, token) {
   const actions = {
     logout: () => {
       navigate('/admin');
+    },
+    showEditConfig: () => {
+      updateState({ editConfig: true });
+    },
+    hideEditConfig: () => {
+      updateState({ editConfig: false });
+    },
+    showAddUser: () => {
+      updateState({ addUser: true });
+    },
+    hideAddUser: () => {
+      updateState({ addUser: false });
+    },
+    showAccessUser: () => {
+      updateState({ accessUser: true });
+    },
+    hideAccessUser: () => {
+      updateState({ accessUser: false });
     },
   };
 

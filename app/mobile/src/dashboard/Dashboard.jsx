@@ -16,10 +16,10 @@ export function Dashboard(props) {
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerLabel}>Accounts</Text>
-        <Ionicons style={styles.icon} name={'reload1'} size={24} />        
-        <Ionicons style={styles.icon} name={'setting'} size={24} />
+        <Ionicons style={styles.icon} name={'reload1'} size={20} />        
+        <Ionicons style={styles.icon} name={'setting'} size={20} />
         <TouchableOpacity onPress={actions.logout}>
-          <Ionicons style={styles.icon} name={'logout'} size={24} /> 
+          <Ionicons style={styles.icon} name={'logout'} size={20} /> 
         </TouchableOpacity>
         <View style={styles.end}>       
           <Ionicons style={styles.icon} name={'adduser'} size={24} /> 
@@ -31,7 +31,7 @@ export function Dashboard(props) {
           keyExtractor={item => item.accountId}
           renderItem={({ item }) => (
             <View style={styles.account}>
-              <Logo src={item.logo} width={48} height={48} radius={6} />
+              <Logo src={item.logo} width={32} height={32} radius={4} />
               <View style={styles.details}>
                 <Text style={styles.name}>{ item.name }</Text>
                 <Text style={styles.handle}>{ item.handle }</Text>

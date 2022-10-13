@@ -20,7 +20,7 @@ export const styles = StyleSheet.create({
   },
   headerLabel: {
     paddingLeft: 16,
-    fontSize: 24,
+    fontSize: 20,
     color: Colors.text,
   },
   icon: {
@@ -43,12 +43,14 @@ export const styles = StyleSheet.create({
   },
   account: {
     width: '100%',
-    height: 64,
+    height: 48,
     display: 'flex',
     flexDirection: 'row',
     paddingLeft: 24,
     paddingRight: 24,
     alignItems: 'center',
+    borderBottomWidth: 1,
+    borderColor: Colors.divider,
   },
   details: {
     paddingLeft: 16,
@@ -59,11 +61,11 @@ export const styles = StyleSheet.create({
     paddingTop: 8,
   },
   name: {
-    fontSize: 16,
+    fontSize: 14,
     color: Colors.text,
   },
   handle: {
-    fontSize: 16,
+    fontSize: 14,
     color: Colors.text,
   },
   control: {
