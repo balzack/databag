@@ -44,6 +44,14 @@ export function useStoreContext() {
       const dataId = `${guid}_profile`;
       await db.current.executeSql("INSERT OR REPLACE INTO app (key, value) values (?, ?);", [dataId, encodeObject(profile)]);
     },
+    getCardRequestStatus: async (guid) => {
+      const dataId = `${guid}_card_status`;
+      return await getAppValue(db.current, dataId, {});
+    },
+    setCardRequestStatus: async (guid, status) => {
+      const dataId = `${guid}_card_status`;
+      await db.current.executeSql("INSERT OR REPLACE INTO app (key, value) values (?, ?);", [dataId, encodeObject(status)]);
+    },
     getProfileRevision: async (guid) => {
       const dataId = `${guid}_profileRevision`;
       return await getAppValue(db.current, dataId, null);

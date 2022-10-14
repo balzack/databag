@@ -29,6 +29,7 @@ import { removeContactChannelTopic } from 'api/removeContactChannelTopic';
 export function useCardContext() {
   const [state, setState] = useState({
     cards: new Map(),
+    requestRevision: null,
   });
   const store = useContext(StoreContext);
   const upload = useContext(UploadContext);
@@ -356,6 +357,8 @@ export function useCardContext() {
     setSession: async (access) => {
       const { guid, server, appToken } = access;
       cards.current = new Map();
+      const status = await store.actions.getCardRequestStatus(guid);
+      updateState({ requestRevision: status.revision });
       const cardItems = await store.actions.getCardItems(guid);
       for (item of cardItems) {
         cards.current.set(item.cardId, { ...item, channels: new Map() });
@@ -369,6 +372,11 @@ export function useCardContext() {
       setRevision.current = revision;
       curRevision.current = revision;
       session.current = access;
+    },
+    setRequestRevision: async (revision) => {
+      const { guid } = session.current
+      await store.actions.setCardRequestStatus(guid, { revision });
+      updateState({ requestRevision: revision });
     },
     clearSession: () => {
       session.current = {};

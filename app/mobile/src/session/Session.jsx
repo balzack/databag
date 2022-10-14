@@ -23,6 +23,7 @@ import { useChannels } from './channels/useChannels.hook';
 import { CommonActions } from '@react-navigation/native';
 import { ConversationContext } from 'context/ConversationContext';
 import { ProfileIcon } from './profileIcon/ProfileIcon';
+import { CardsIcon } from './cardsIcon/CardsIcon';
 
 const ConversationStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
@@ -201,8 +202,8 @@ export function Session() {
               <Text style={styles.profileLabel}>Profile</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.option} onPress={openCards}>
-              <Ionicons style={styles.icon} name={'contacts'} size={20} />
-              <Text>Contacts</Text>
+              <CardsIcon color={Colors.text} size={20} />
+              <Text style={styles.profileLabel}>Contacts</Text>
             </TouchableOpacity>
           </SafeAreaView>
           <View style={styles.channels}>
@@ -337,6 +338,8 @@ export function Session() {
     );
   }
 
+  const [cardsActive, setCardsActive] = useState(false);
+
   return (
     <View style={styles.container}>
       { state.tabbed === false && (
@@ -349,6 +352,7 @@ export function Session() {
       )}
       { state.tabbed === true && (
         <Tab.Navigator
+          screenListeners={{ state: (e) => setCardsActive(e?.data?.state?.index === 2) }}
           screenOptions={({ route }) => ({
             tabBarStyle: styles.tabBar,
             headerShown: false,
@@ -360,7 +364,7 @@ export function Session() {
                 return <Ionicons name={'message1'} size={size} color={color} />;
               }
               if (route.name === 'Contacts') {
-                return <Ionicons name={'contacts'} size={size} color={color} />;
+                return <CardsIcon size={size} color={color} active={cardsActive} />;
               }
             },
             tabBarShowLabel: false,
