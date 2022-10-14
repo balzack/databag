@@ -142,11 +142,65 @@ export const styles = StyleSheet.create({
   modalBody: {
     padding: 8,
   },
+  modalLabel: {
+    paddingTop: 8,
+    color: Colors.text,
+  },
+  keyType: {
+    display: 'flex',
+    flexDirection: 'row',
+    padding: 8,
+  },
+  option: {
+    color: Colors.text,
+  },
+  optionLeft: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+  },
+  optionRight: {
+    flexGrow: 1,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
+  radio: {
+    width: 16,
+    height: 16,
+    borderRadius: 8,
+    borderColor: Colors.primary,
+    borderWidth: 1,
+    marginRight: 8,
+  },
+  selected: {
+    width: 16,
+    height: 16,
+    borderRadius: 8,
+    borderColor: Colors.primary,
+    borderWidth: 1,
+    marginRight: 8,
+    backgroundColor: Colors.background,
+  },
   input: {
     marginTop: 4,
-    marginBottom: 4,
     backgroundColor: Colors.white,
     padding: 4,
     borderRadius: 4,
+    marginBottom: 16,
+    fontSize: 16,
+    color: Colors.text,
+  },
+  switch: {
+    transform: [{ scaleX: .7 }, { scaleY: .7 }],
+  },
+  track: {
+    false: Colors.grey,
+    true: Colors.background,
+  },
+  media: {
+    display: 'flex',
+    flexDirection: 'row',
+    marginTop: 8,
   },
 });

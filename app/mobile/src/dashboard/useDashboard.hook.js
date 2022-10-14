@@ -4,6 +4,7 @@ import { AppContext } from 'context/AppContext';
 import { getNodeStatus } from 'api/getNodeStatus';
 import { setNodeStatus } from 'api/setNodeStatus';
 import { getNodeConfig } from 'api/getNodeConfig';
+import { setNodeConfig } from 'api/setNodeConfig';
 import { getNodeAccounts } from 'api/getNodeAccounts';
 import { getAccountImageUrl } from 'api/getAccountImageUrl';
 
@@ -16,8 +17,12 @@ export function useDashboard(config, server, token) {
     addUser: false,
     accessUser: false,
     accessId: null,
-    hostname: null,
+    domain: null,
     storage: null,
+    keyType: null,
+    enableImage: true,
+    enableAudio: true,
+    enableVideo: true,
   });
 
   const navigate = useNavigate();
@@ -43,6 +48,11 @@ export function useDashboard(config, server, token) {
     const accounts = await getNodeAccounts(server, token);
     updateState({ accounts: accounts.map(setAccountItem) });
   };
+
+  useEffect(() => {
+    const { keyType, accountStorage, domain, enableImage, enableAudio, enableVideo } = config;
+    updateState({ keyType, storage: accountStorage.toString(), domain, enableImage, enableAudio, enableVideo });
+  }, [config]);
 
   useEffect(() => {
     refreshAccounts();
@@ -73,12 +83,28 @@ export function useDashboard(config, server, token) {
     hideAccessUser: () => {
       updateState({ accessUser: false });
     },
-    setHostname: (hostname) => {
-      updateState({ hostname });
+    setDomain: (domain) => {
+      updateState({ domain });
     },
     setStorage: (storage) => {
-      console.log(">>> ", storage, Number(storage.replace(/[^0-9]/g, '')));
       updateState({ storage: Number(storage.replace(/[^0-9]/g, '')) });
+    },
+    setEnableImage: (enableImage) => {
+      updateState({ enableImage });
+    },
+    setEnableAudio: (enableAudio) => {
+      updateState({ enableAudio });
+    },
+    setEnableVideo: (enableVideo) => {
+      updateState({ enableVideo });
+    },
+    setKeyType: (keyType) => {
+      updateState({ keyType });
+    },
+    saveConfig: async () => {
+      const { storage, domain, keyType, enableImage, enableAudio, enableVideo } = state;
+      const config = { accountStorage: Number(storage), domain, keyType, enableImage, enableAudio, enableVideo };
+      await setNodeConfig(server, token, config);
     },
   };
 

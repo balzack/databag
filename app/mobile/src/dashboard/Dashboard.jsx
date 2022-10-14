@@ -1,4 +1,4 @@
-import { TextInput, TouchableOpacity, View, Text, Modal, FlatList, KeyboardAvoidingView } from 'react-native';
+import { TextInput, Alert, Switch, TouchableOpacity, View, Text, Modal, FlatList, KeyboardAvoidingView } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import Ionicons from '@expo/vector-icons/AntDesign';
 import { styles } from './Dashboard.styled';
@@ -11,6 +11,20 @@ export function Dashboard(props) {
   const location = useLocation();
   const { config, server, token } = location.state;
   const { state, actions } = useDashboard(config, server, token); 
+
+  const saveConfig = async () => {
+    try {
+      await actions.saveConfig();
+      actions.hideEditConfig();
+    }
+    catch (err) {
+      console.log(err);
+      Alert.alert(
+        'Failed to Save Settings',
+        'Please try again.',
+      );
+    }
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -67,16 +81,58 @@ export function Dashboard(props) {
               <Text style={styles.modalHeaderText}>Settings:</Text>
             </View>
             <View style={styles.modalBody}>
-              <TextInput style={styles.input} value={state.hostname} onChangeText={actions.setHostname}
+              <TextInput style={styles.input} value={state.domain} onChangeText={actions.setDomain}
                   autoCorrect={false} autoCapitalize="none" placeholder="Federated Host" />
-              <TextInput style={styles.input} value={state.storage} onChangeText={actions.setStorage}
+              <TextInput style={styles.input} value={state.storage}
+                  onChangeText={actions.setStorage}
                   keyboardType='numeric' placeholder="Storage Limit (GB) / Account" />
+              <Text style={styles.modalLabel}>Account Key Type:</Text>
+              <View style={styles.keyType}>
+                <TouchableOpacity style={styles.optionLeft} activeOpacity={1}
+                    onPress={() => actions.setKeyType('RSA2048')}>
+                  { state.keyType === 'RSA2048' && (
+                    <View style={styles.selected} />
+                  )}
+                  { state.keyType === 'RSA4096' && (
+                    <View style={styles.radio} />
+                  )}
+                  <Text style={styles.option}>RSA 2048</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.optionRight} activeOpacity={1}
+                    onPress={() => actions.setKeyType('RSA4096')}>
+                  { state.keyType === 'RSA2048' && (
+                    <View style={styles.radio} />
+                  )}
+                  { state.keyType === 'RSA4096' && (
+                    <View style={styles.selected} />
+                  )}
+                  <Text style={styles.option}>RSA 4096</Text>
+                </TouchableOpacity>
+              </View>
+              <TouchableOpacity style={styles.media} activeOpacity={1}
+                  onPress={() => actions.setEnableImage(!state.enableImage)}>
+                <Text style={styles.modalLabel}>Enable Image Queue: </Text>
+                <Switch style={styles.switch} value={state.enableImage}
+                  onValueChange={actions.setEnableImage} trackColor={styles.track}/>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.media} activeOpacity={1}
+                  onPress={() => actions.setEnableAudio(!state.enableAudio)}>
+                <Text style={styles.modalLabel}>Enable Audio Queue: </Text>
+                <Switch style={styles.switch} value={state.enableAudio}
+                  onValueChange={actions.setEnableAudio} trackColor={styles.track}/>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.media} activeOpacity={1}
+                  onPress={() => actions.setEnableVideo(!state.enableVideo)}>
+                <Text style={styles.modalLabel}>Enable Video Queue: </Text>
+                <Switch style={styles.switch} value={state.enableVideo}
+                  onValueChange={actions.setEnableVideo} trackColor={styles.track}/>
+              </TouchableOpacity>
             </View>
             <View style={styles.modalControls}>
               <TouchableOpacity style={styles.cancel} onPress={actions.hideEditConfig}>
                 <Text>Cancel</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.save} onPress={actions.hideEditConfig}>
+              <TouchableOpacity style={styles.save} onPress={saveConfig}>
                 <Text style={styles.saveText}>Save</Text>
               </TouchableOpacity>
             </View>
