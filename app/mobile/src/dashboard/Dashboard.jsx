@@ -1,6 +1,8 @@
 import { TextInput, Alert, Switch, TouchableOpacity, View, Text, Modal, FlatList, KeyboardAvoidingView } from 'react-native';
+import Clipboard from '@react-native-clipboard/clipboard';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
-import Ionicons from '@expo/vector-icons/AntDesign';
+import AntIcon from '@expo/vector-icons/AntDesign';
+import MatIcon from '@expo/vector-icons/MaterialCommunityIcons';
 import { styles } from './Dashboard.styled';
 import { useLocation } from 'react-router-dom';
 import { useDashboard } from './useDashboard.hook';
@@ -26,22 +28,83 @@ export function Dashboard(props) {
     }
   }
 
+  const addUser = async () => {
+    try {
+      await actions.addUser();
+    }
+    catch (err) {
+      console.log(err);
+      Alert.alert(
+        'Failed to Generate Access Token',
+        'Please try again.',
+      );
+    }
+  }
+
+  const accessUser = async (accountId) => {
+    try {
+      await actions.accessUser(accountId);
+    }
+    catch (err) {
+      console.log(err);
+      Alert.alert(
+        'Failed to Generate Access Token',
+        'Please try again.',
+      );
+    }
+  }
+
+  const removeUser = (accountId) => {
+    Alert.alert(
+      "Deleting Account",
+      "Confirm?",
+      [
+        { text: "Cancel", onPress: () => {}, },
+        { text: "Delete", onPress: async() => {
+          try {
+            await actions.removeUser(accountId);
+          }
+          catch (err) {
+            console.log(err);
+            Alert.alert(
+              "Failed to Delete Account",
+              "Please try again.",
+            );
+          }
+        }}
+      ]
+    )
+  }
+
+  const enableUser = async (accountId, enabled) => {
+    try {
+      await actions.enableUser(accountId, enabled);
+    }
+    catch (err) {
+      console.log(err);
+      Alert.alert(
+        'Failed to Update Account',
+        'Please try again.',
+      );
+    }
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerLabel}>Accounts</Text>
         <TouchableOpacity onPress={actions.refresh}>
-          <Ionicons style={styles.icon} name={'reload1'} size={20} />
+          <AntIcon style={styles.icon} name={'reload1'} size={20} />
         </TouchableOpacity>
         <TouchableOpacity onPress={actions.showEditConfig}>
-          <Ionicons style={styles.icon} name={'setting'} size={20} />
+          <AntIcon style={styles.icon} name={'setting'} size={20} />
         </TouchableOpacity>
         <TouchableOpacity onPress={actions.logout}>
-          <Ionicons style={styles.icon} name={'logout'} size={20} /> 
+          <AntIcon style={styles.icon} name={'logout'} size={20} /> 
         </TouchableOpacity>
         <View style={styles.end}>
-          <TouchableOpacity onPress={actions.showAddUser}>
-            <Ionicons style={styles.icon} name={'adduser'} size={24} /> 
+          <TouchableOpacity onPress={addUser}>
+            <AntIcon style={styles.icon} name={'adduser'} size={24} /> 
           </TouchableOpacity>
         </View>       
       </View>
@@ -57,11 +120,22 @@ export function Dashboard(props) {
                 <Text style={styles.handle}>{ item.handle }</Text>
               </View>
               <View style={styles.control}>
-                <TouchableOpacity activeOpacity={1} onPress={() => actions.showAccessUser(item.accountId)}>
-                  <Ionicons style={styles.icon} name={'unlock'} size={20} /> 
+                <TouchableOpacity onPress={() => accessUser(item.accountId)}>
+                  <AntIcon style={styles.icon} name={'unlock'} size={20} /> 
                 </TouchableOpacity>
-                <Ionicons style={styles.disable} name={'closecircleo'} size={20} /> 
-                <Ionicons style={styles.delete} name={'deleteuser'} size={20} /> 
+                { item.disabled && (
+                  <TouchableOpacity onPress={() => enableUser(item.accountId, true)}>
+                    <AntIcon style={styles.disable} name={'playcircleo'} size={20} />
+                  </TouchableOpacity>
+                )}
+                { !item.disabled && (
+                  <TouchableOpacity onPress={() => enableUser(item.accountId, false)}>
+                    <MatIcon style={styles.disable} name={'block-helper'} size={20} />
+                  </TouchableOpacity>
+                )}
+                <TouchableOpacity onPress={() => removeUser(item.accountId)}>
+                  <AntIcon style={styles.delete} name={'deleteuser'} size={20} />
+                </TouchableOpacity> 
               </View>
             </View>
           )}
@@ -149,7 +223,16 @@ export function Dashboard(props) {
       >
         <KeyboardAvoidingView behavior="height" style={styles.modalBackground}>
           <View style={styles.modalContainer}>
-            <Text style={styles.modalHeader}>Add User:</Text>
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalHeaderText}>Create Account:</Text>
+            </View>
+            <View style={styles.accessToken}>
+              <Text style={styles.tokenLabel}>Token:</Text>
+              <TouchableOpacity style={styles.copy} onPress={() => Clipboard.setString(state.createToken)}>
+                <Text style={styles.token}>{ state.createToken }</Text>
+                <AntIcon style={styles.icon} name={'copy1'} size={20} /> 
+              </TouchableOpacity>
+            </View>
             <View style={styles.modalControls}>
               <TouchableOpacity style={styles.cancel} onPress={actions.hideAddUser}>
                 <Text>Done</Text>
@@ -168,7 +251,16 @@ export function Dashboard(props) {
       >
         <KeyboardAvoidingView behavior="height" style={styles.modalBackground}>
           <View style={styles.modalContainer}>
-            <Text style={styles.modalHeader}>Access User:</Text>
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalHeaderText}>Access Account:</Text>
+            </View>
+            <View style={styles.accessToken}>
+              <Text style={styles.tokenLabel}>Token:</Text>
+              <TouchableOpacity style={styles.copy}>
+                <Text style={styles.token}>{ state.accessToken }</Text>
+                <AntIcon style={styles.icon} name={'copy1'} size={20} />  
+              </TouchableOpacity>
+            </View>
             <View style={styles.modalControls}>
               <TouchableOpacity style={styles.cancel} onPress={actions.hideAccessUser}>
                 <Text>Done</Text>

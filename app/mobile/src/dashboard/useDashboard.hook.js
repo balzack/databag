@@ -7,6 +7,10 @@ import { getNodeConfig } from 'api/getNodeConfig';
 import { setNodeConfig } from 'api/setNodeConfig';
 import { getNodeAccounts } from 'api/getNodeAccounts';
 import { getAccountImageUrl } from 'api/getAccountImageUrl';
+import { removeAccount } from 'api/removeAccount';
+import { addAccountCreate } from 'api/addAccountCreate';
+import { setAccountStatus } from 'api/setAccountStatus';
+import { addAccountAccess } from 'api/addAccountAccess';
 
 export function useDashboard(config, server, token) {
 
@@ -23,6 +27,7 @@ export function useDashboard(config, server, token) {
     enableImage: true,
     enableAudio: true,
     enableVideo: true,
+    createToken: null,
   });
 
   const navigate = useNavigate();
@@ -32,7 +37,7 @@ export function useDashboard(config, server, token) {
   }
 
   const setAccountItem = (item) => {
-    const { name, handle, imageSet, accountId } = item;   
+    const { name, handle, imageSet, accountId, disabled } = item;   
  
     let logo;
     if (imageSet) {
@@ -41,7 +46,7 @@ export function useDashboard(config, server, token) {
     else {
       logo = 'avatar';
     }
-    return { logo, name, handle, accountId };
+    return { logo, name, handle, accountId, disabled };
   }
 
   const refreshAccounts = async () => {
@@ -71,14 +76,16 @@ export function useDashboard(config, server, token) {
     hideEditConfig: () => {
       updateState({ editConfig: false });
     },
-    showAddUser: () => {
-      updateState({ addUser: true });
+    addUser: async () => {
+      const createToken = await addAccountCreate(server, token);
+      updateState({ addUser: true, createToken });
     },
     hideAddUser: () => {
       updateState({ addUser: false });
     },
-    showAccessUser: (accessId) => {
-      updateState({ accessUser: true, accountId: accessId });
+    accessUser: async (accountId) => {
+      const accessToken = await addAccountAccess(server, token, accountId);
+      updateState({ accessUser: true, accessToken });
     },
     hideAccessUser: () => {
       updateState({ accessUser: false });
@@ -105,6 +112,14 @@ export function useDashboard(config, server, token) {
       const { storage, domain, keyType, enableImage, enableAudio, enableVideo } = state;
       const config = { accountStorage: Number(storage), domain, keyType, enableImage, enableAudio, enableVideo };
       await setNodeConfig(server, token, config);
+    },
+    enableUser: async (accountId, enabled) => {
+      await setAccountStatus(server, token, accountId, !enabled);
+      await refreshAccounts();
+    },
+    removeUser: async (accountId) => {
+      await removeAccount(server, token, accountId);
+      await refreshAccounts();
     },
   };
 

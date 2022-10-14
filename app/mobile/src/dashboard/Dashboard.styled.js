@@ -142,6 +142,12 @@ export const styles = StyleSheet.create({
   modalBody: {
     padding: 8,
   },
+  accessToken: {
+    padding: 16,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   modalLabel: {
     paddingTop: 8,
     color: Colors.text,
@@ -202,5 +208,19 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     marginTop: 8,
+  },
+  tokenLabel: {
+    fontSize: 16,
+    color: Colors.text,
+  },
+  copy: {
+    marginLeft: 8,
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'row',
+    padding: 8,
+    borderWidth: 1,
+    borderRadius: 4,
+    borderColor: Colors.divider,
   },
 });
