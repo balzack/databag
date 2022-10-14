@@ -112,6 +112,14 @@ export function Profile() {
             <Ionicons name="picture" size={14} color={Colors.white} />
           </TouchableOpacity>
         </View>
+        { state.disconnected && (
+          <View style={styles.alert}>
+            <Text style={styles.disconnected}>Disconnected</Text>
+          </View>
+        )}
+        { !state.disconnected && (
+          <View style={styles.alert} />
+        )}
         <TouchableOpacity style={styles.detail} onPress={actions.showDetailEdit}>
           <View style={styles.attribute}>
             <Text style={styles.nametext}>{ state.name }</Text>

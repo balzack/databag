@@ -60,8 +60,10 @@ export const styles = StyleSheet.create({
     borderBottomRightRadius: 8,
     borderTopLeftRadius: 8,
   },
+  alert: {
+    height: 32,
+  },
   detail: {
-    paddingTop: 32,
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -212,6 +214,9 @@ export const styles = StyleSheet.create({
   },
   saveText: {
     color: Colors.white,
-  }
+  },
+  disconnected: {
+    color: Colors.alert,
+  },
 })
 

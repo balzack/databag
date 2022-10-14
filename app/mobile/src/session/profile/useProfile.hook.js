@@ -31,6 +31,7 @@ export function useProfile() {
     blockedChannels: false,
     blockedCards: false,
     tabbed: null,
+    disconnected: false,
   });
 
   const app = useContext(AppContext);
@@ -63,6 +64,11 @@ export function useProfile() {
   useEffect(() => {
     updateState({ searchable: account.state.status.searchable });
   }, [account]);
+
+  useEffect(() => {
+    const { disconnected } = app.state;
+    updateState({ disconnected });
+  }, [app]);
 
   const actions = {
     logout: () => {

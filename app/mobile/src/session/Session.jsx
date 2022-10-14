@@ -22,6 +22,7 @@ import { ChannelsTitle, ChannelsBody, Channels } from './channels/Channels';
 import { useChannels } from './channels/useChannels.hook';
 import { CommonActions } from '@react-navigation/native';
 import { ConversationContext } from 'context/ConversationContext';
+import { ProfileIcon } from './profileIcon/ProfileIcon';
 
 const ConversationStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
@@ -196,8 +197,8 @@ export function Session() {
         <SafeAreaView edges={['top', 'bottom']} style={styles.sidebar}>
           <SafeAreaView edges={['left']} style={styles.options}>
             <TouchableOpacity style={styles.option} onPress={openProfile}>
-              <Ionicons style={styles.icon} name={'user'} size={20} />
-              <Text>Profile</Text>
+              <ProfileIcon color={Colors.text} size={20} />
+              <Text style={styles.profileLabel}>Profile</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.option} onPress={openCards}>
               <Ionicons style={styles.icon} name={'contacts'} size={20} />
@@ -353,7 +354,7 @@ export function Session() {
             headerShown: false,
             tabBarIcon: ({ focused, color, size }) => {
               if (route.name === 'Profile') {
-                return <Ionicons name={'user'} size={size} color={color} />;
+                return <ProfileIcon size={size} color={color} />
               }
               if (route.name === 'Conversation') {
                 return <Ionicons name={'message1'} size={size} color={color} />;

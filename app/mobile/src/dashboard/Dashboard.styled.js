@@ -208,6 +208,7 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     marginTop: 8,
+    alignItems: 'center',
   },
   tokenLabel: {
     fontSize: 16,
