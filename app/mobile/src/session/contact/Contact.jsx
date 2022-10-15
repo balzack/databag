@@ -48,6 +48,21 @@ export function Contact({ contact, closeContact }) {
     }
   }
 
+  const cancelRequest = () => {
+    Alert.alert(
+      "Closing Request",
+      "Confirm?",
+      [
+        { text: "Cancel",
+          onPress: () => {},
+        },
+        { text: "Close", onPress: () => {
+          setContact(actions.disconnectContact);
+        }}
+      ]
+    );
+  }
+
   const disconnectContact = () => {
     Alert.alert(
       "Disconnecting Contact",
@@ -168,8 +183,8 @@ export function Contact({ contact, closeContact }) {
           )}
           { state.status === 'connecting' && (
             <>
-              <TouchableOpacity style={styles.button} onPress={disconnectContact}>
-                <Text style={styles.buttonText}>Cancel Request</Text>
+              <TouchableOpacity style={styles.button} onPress={cancelRequest}>
+                <Text style={styles.buttonText}>Close Request</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.button} onPress={closeDelete}>
                 <Text style={styles.buttonText}>Delete Contact</Text>
