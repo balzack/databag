@@ -38,13 +38,14 @@ const Tab = createBottomTabNavigator();
 export function Session() {
 
   const { state, actions } = useSession();
+  const [selectedConversation, setSelectedConversation] = useState(null);
+  const [selectedContact, setSelectedContact] = useState(null);
 
   // tabbed containers
   const ConversationStackScreen = () => {
 
-    const [selected, setSelected] = useState(null);
     const setConversation = (navigation, cardId, channelId, revision) => {
-      setSelected({ cardId, channelId, revision });
+      setSelectedConversation({ cardId, channelId, revision });
       navigation.navigate('conversation');
     }
     const clearConversation = (navigation) => {
@@ -68,14 +69,14 @@ export function Session() {
     const conversation = useContext(ConversationContext);
 
     useEffect(() => {
-      conversation.actions.setChannel(selected);
-    }, [selected]);      
+      conversation.actions.setChannel(selectedConversation);
+    }, [selectedConversation]);      
 
     return (
       <ConversationStack.Navigator
           initialRouteName="channels"
           screenOptions={({ route }) => ({ headerShown: true, headerTintColor: Colors.primary })}
-          screenListeners={{ state: (e) => { if (e?.data?.state?.index === 0 && selected) { setSelected(null); }}, }}>
+          screenListeners={{ state: (e) => { if (e?.data?.state?.index === 0 && selectedConversation) { setSelectedConversation(null); }}, }}>
         <ConversationStack.Screen name="channels" options={{
             headerStyle: { backgroundColor: Colors.titleBackground }, 
             headerBackTitleVisible: false, 
@@ -86,16 +87,16 @@ export function Session() {
         <ConversationStack.Screen name="conversation" options={{
             headerStyle: { backgroundColor: Colors.titleBackground }, 
             headerBackTitleVisible: false, 
-            headerTitle: (props) => <ConversationHeader channel={selected} closeConversation={clearConversation} openDetails={setDetail} />
+            headerTitle: (props) => <ConversationHeader channel={selectedConversation} closeConversation={clearConversation} openDetails={setDetail} />
           }}>
-          {(props) => <ConversationBody channel={selected} />}
+          {(props) => <ConversationBody channel={selectedConversation} />}
         </ConversationStack.Screen>
         <ConversationStack.Screen name="details" options={{
             headerStyle: { backgroundColor: Colors.titleBackground }, 
             headerBackTitleVisible: false, 
-            headerTitle: (props) => <DetailsHeader channel={selected} />
+            headerTitle: (props) => <DetailsHeader channel={selectedConversation} />
           }}>
-          {(props) => <DetailsBody channel={selected} clearConversation={() => clearConversation(props.navigation)} />}
+          {(props) => <DetailsBody channel={selectedConversation} clearConversation={() => clearConversation(props.navigation)} />}
         </ConversationStack.Screen>
       </ConversationStack.Navigator>
     );
@@ -108,9 +109,8 @@ export function Session() {
     );
   }
   const ContactStackScreen = () => {
-    const [selected, setSelected] = useState(null);
     const setCardStack = (navigation, contact) => {
-      setSelected(contact);
+      setSelectedContact(contact);
       navigation.navigate('contact')
     }
     const clearCardStack = (navigation) => {
@@ -139,14 +139,14 @@ export function Session() {
         <ContactStack.Screen name="contact" options={{ 
             headerStyle: { backgroundColor: Colors.titleBackground }, 
             headerBackTitleVisible: false, 
-            headerTitle: (props) => <ContactTitle contact={selected} {...props} />
+            headerTitle: (props) => <ContactTitle contact={selectedContact} {...props} />
           }}>
-          {(props) => <Contact contact={selected} closeContact={() => clearCardStack(props.navigation)} />}
+          {(props) => <Contact contact={selectedContact} closeContact={() => clearCardStack(props.navigation)} />}
         </ContactStack.Screen>
         <ContactStack.Screen name="registry" options={{
             headerStyle: { backgroundColor: Colors.titleBackground }, 
             headerBackTitleVisible: false,
-            headerTitle: (props) => <RegistryTitle state={registry.state} actions={registry.actions} contact={selected} {...props} />
+            headerTitle: (props) => <RegistryTitle state={registry.state} actions={registry.actions} contact={selectedContact} {...props} />
           }}>
           {(props) => <RegistryBody state={registry.state} actions={registry.actions} openContact={(contact) => setCardStack(props.navigation, contact)} />}
         </ContactStack.Screen>
