@@ -177,6 +177,9 @@ export function Session() {
     const openCards = () => {
       cardNav.openDrawer();
     }
+    const isCardOpen = () => {
+      return cardNav.getState().history.length > 1;
+    }
 
     const conversation = useContext(ConversationContext);
 
@@ -202,7 +205,7 @@ export function Session() {
               <Text style={styles.profileLabel}>Profile</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.option} onPress={openCards}>
-              <CardsIcon color={Colors.text} size={20} />
+              <CardsIcon color={Colors.text} size={20} active={isCardOpen()} />
               <Text style={styles.profileLabel}>Contacts</Text>
             </TouchableOpacity>
           </SafeAreaView>
