@@ -75,6 +75,7 @@ func SetOpenMessage(w http.ResponseWriter, r *http.Request) {
 		card.OutToken = connect.Token
 		card.InToken = hex.EncodeToString(data)
 		card.AccountID = account.GUID
+		card.DetailRevision = account.CardRevision + 1
 
 		// create slot
 		err = store.DB.Transaction(func(tx *gorm.DB) error {
