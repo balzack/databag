@@ -10,6 +10,7 @@ import { ImageAsset } from './imageAsset/ImageAsset';
 import { AudioAsset } from './audioAsset/AudioAsset';
 import { VideoAsset } from './videoAsset/VideoAsset';
 import AntIcons from '@expo/vector-icons/AntDesign';
+import MatIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import Carousel from 'react-native-snap-carousel';
 import GestureRecognizer from 'react-native-swipe-gestures';
 import avatar from 'images/avatar.png';
@@ -73,10 +74,14 @@ export function TopicItem({ item }) {
             />
           )}
           { state.transform === 'incomplete' && (
-            <AntIcons name="cloudo" size={32} color={Colors.background} />
+            <View style={styles.status}>
+              <MatIcons name="cloud-refresh" size={32} color={Colors.background} />
+            </View>
           )}
           { state.transform === 'error' && (
-            <AntIcons name="cloudo" size={32} color={Colors.alert} />
+            <View style={styles.status}>
+              <AntIcons name="weather-cloudy-alert" size={32} color={Colors.alert} />
+            </View>
           )}
           { state.message && (
             <Text style={{ paddingLeft: 52, fontSize: state.fontSize, color: state.fontColor }}>{ state.message }</Text>
@@ -84,7 +89,9 @@ export function TopicItem({ item }) {
         </>
       )}
       { state.status !== 'confirmed' && (
-        <AntIcons name="cloudo" size={32} color={Colors.divider} />
+        <View style={styles.status}>
+          <MatIcons name="cloud-refresh" size={32} color={Colors.divider} />
+        </View>
       )}
       <Modal
         animationType="fade"
