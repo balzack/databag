@@ -60,7 +60,7 @@ export function useTopicItem(item) {
       const contact = card.actions.getByGuid(guid);
       if (contact) {
         if (contact.profile.imageSet) {
-          logo = card.actions.getCardLogo(contact.cardId, contact.revision);
+          logo = card.actions.getCardLogo(contact.cardId, contact.profileRevision);
         }
         else {
           logo = 'avatar';
