@@ -1,4 +1,4 @@
-import { FlatList, View, Text, TouchableOpacity, Modal } from 'react-native';
+import { FlatList, View, Text, TouchableOpacity, Modal, Image } from 'react-native';
 import { useTopicItem } from './useTopicItem.hook';
 import { styles } from './TopicItem.styled';
 import { Logo } from 'utils/Logo';
@@ -12,6 +12,7 @@ import { VideoAsset } from './videoAsset/VideoAsset';
 import AntIcons from '@expo/vector-icons/AntDesign';
 import Carousel from 'react-native-snap-carousel';
 import GestureRecognizer from 'react-native-swipe-gestures';
+import avatar from 'images/avatar.png';
 
 export function TopicItem({ item }) {
 
@@ -53,7 +54,12 @@ export function TopicItem({ item }) {
   return (
     <View style={styles.item}>
       <View style={styles.header}>
-        <Logo src={state.logo} width={28} height={28} radius={6} />
+        { state.logo && (
+          <Image source={{ uri: state.logo }} style={{ width: 28, height: 28, borderRadius: 6 }} />
+        )}
+        { !state.logo && (
+          <Image source={avatar} style={{ width: 28, height: 28, borderRadius: 6 }} />
+        )}
         <Text style={styles.name}>{ state.name }</Text>
         <Text style={styles.timestamp}>{ state.timestamp }</Text>
       </View>
