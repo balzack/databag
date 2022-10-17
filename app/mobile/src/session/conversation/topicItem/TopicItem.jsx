@@ -22,7 +22,7 @@ export function TopicItem({ item, focused, focus }) {
 
   const renderAsset = (asset) => {
     return (
-      <TouchableOpacity style={styles.frame} activeOpacity={1}>
+      <TouchableOpacity style={styles.frame} activeOpacity={1} onPress={actions.hideCarousel}>
         { asset.item.image && (
           <ImageAsset topicId={item.topicId} asset={asset.item.image} />
         )}
@@ -108,15 +108,13 @@ export function TopicItem({ item, focused, focus }) {
         onRequestClose={actions.hideCarousel}
       >
         <View style={styles.modal}>
-          <GestureRecognizer onSwipeUp={actions.hideCarousel} onSwipeDown={actions.hideCarousel}>
-            <Carousel
-              data={state.assets}
-              firstItem={state.carouselIndex}
-              renderItem={renderAsset}
-              sliderWidth={state.width}
-              itemWidth={state.width}
-            />
-          </GestureRecognizer>
+          <Carousel
+            data={state.assets}
+            firstItem={state.carouselIndex}
+            renderItem={renderAsset}
+            sliderWidth={state.width}
+            itemWidth={state.width}
+          />
         </View>
       </Modal> 
     </TouchableOpacity>
