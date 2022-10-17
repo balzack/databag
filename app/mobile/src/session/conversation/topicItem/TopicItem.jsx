@@ -67,11 +67,12 @@ export function TopicItem({ item }) {
       { state.status === 'confirmed' && (
         <>
           { state.transform === 'complete' && state.assets && (
-            <FlatList style={styles.carousel}
-              data={state.assets}
-              horizontal={true}
-              renderItem={renderThumb}
-            />
+            <FlatList contentContainerStyle={styles.carousel}
+               data={state.assets}
+               horizontal={true}
+               showsHorizontalScrollIndicator={false}
+               renderItem={renderThumb}
+             />
           )}
           { state.transform === 'incomplete' && (
             <View style={styles.status}>

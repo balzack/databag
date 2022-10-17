@@ -25,7 +25,7 @@ export const styles = StyleSheet.create({
   carousel: {
     paddingLeft: 52,
     marginTop: 4,
-    marginBottom: 4, 
+    marginBottom: 4,
   },
   modal: {
     width: '100%',
