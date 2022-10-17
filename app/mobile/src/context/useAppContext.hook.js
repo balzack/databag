@@ -101,14 +101,14 @@ export function useAppContext() {
         catch(err) {
           console.log(err);
         }
-        updateState({ disconnected: false });
+        updateState({ disconnected: 0 });
       }
       catch (err) {
         console.log(err);
       }
     }
     ws.current.onclose = (e) => {
-      updateState({ disconnected: true });
+      updateState({ disconnected: state.disconnected + 1 });
       console.log(e)
       setTimeout(() => {
         if (ws.current != null) {
@@ -124,7 +124,7 @@ export function useAppContext() {
       ws.current.send(JSON.stringify({ AppToken: token }))
     }
     ws.current.error = (e) => {
-      updateState({ disconnected: true });
+      updateState({ disconnected: state.disconnected + 1 });
       console.log(e)
     }
   }

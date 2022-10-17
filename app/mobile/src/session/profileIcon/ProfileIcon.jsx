@@ -10,7 +10,7 @@ export function ProfileIcon({ size, color }) {
   return (
     <View>
       <Ionicons name={'user'} size={size} color={color} />
-      { state.disconnected && (
+      { state.disconnected > 3 && (
         <View style={styles.disconnected} />
       )}
     </View>
