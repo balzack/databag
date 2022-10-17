@@ -7,6 +7,7 @@ export const styles = StyleSheet.create({
     borderColor: Colors.white,
     paddingTop: 8,
     paddingBottom: 8,
+    paddingRight: 16,
   },
   header: {
     display: 'flex',
@@ -42,5 +43,10 @@ export const styles = StyleSheet.create({
   status: {
     paddingLeft: 52,
   },
+  focused: {
+    position: 'absolute',
+    top: -16,
+    right: 16,
+  }
 })
 

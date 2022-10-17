@@ -33,14 +33,6 @@ export function ConversationHeader({ closeConversation, openDetails }) {
   );
 }
 
-const RenderItem = memo((props: { item: number }) => {
-  return (<TopicItem item={props.item} />)
-});
-
-const renderItemHandler = ({ item }: { item: number }) => {
-  return <RenderItem item={item} />
-}
-
 export function ConversationBody() {
   const { state, actions } = useConversation();
 
@@ -58,14 +50,16 @@ export function ConversationBody() {
   return (
     <KeyboardAvoidingView style={styles.thread} behavior="padding" keyboardVerticalOffset="100"
         enabled={Platform.OS === 'ios' ? true : false}>
-      <FlatList style={styles.topics}
-        ref={ref}
-        data={state.topics}
-        onMomentumScrollEnd={ Platform.OS === 'ios' ? noop : actions.unlatch }
-        onScrollBeginDrag={ Platform.OS !== 'ios' ? noop : actions.unlatch }
-        maintainVisibleContentPosition={ state.latched ? null : { minIndexForVisibile: 2, } }
-        inverted={true}
-        renderItem={renderItemHandler}
+      <FlatList style={styles.conversation}
+         contentContainerStyle={styles.topics}
+         ref={ref}
+         data={state.topics}
+         onMomentumScrollEnd={ Platform.OS === 'ios' ? noop : actions.unlatch }
+         onScrollBeginDrag={ Platform.OS !== 'ios' ? noop : actions.unlatch }
+         maintainVisibleContentPosition={ state.latched ? null : { minIndexForVisibile: 2, } }
+         inverted={true}
+         renderItem={({item}) => <TopicItem item={item} focused={item.topicId === state.focus} 
+           focus={() => actions.setFocus(item.topicId)} />}
         keyExtractor={item => item.topicId}
       />
       <View>

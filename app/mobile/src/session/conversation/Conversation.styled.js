@@ -49,6 +49,9 @@ export const styles = StyleSheet.create({
     flexDirection: 'column',
   },
   topics: {
+    paddingBottom: 32,
+  },
+  conversation: {
     flexShrink: 1,
     flexGrow: 1,
     minHeight: 0,

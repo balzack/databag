@@ -9,6 +9,7 @@ export function useConversation() {
     logo: null,
     latched: true,
     momentum: false,
+    focus: null,
   });
 
   const conversation = useContext(ConversationContext);
@@ -46,6 +47,9 @@ export function useConversation() {
     },
     clearMomentum: () => {
       updateState({ momentum: false });
+    },
+    setFocus: (focus) => {
+      updateState({ focus });
     },
   };
 

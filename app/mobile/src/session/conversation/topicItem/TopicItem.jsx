@@ -1,4 +1,5 @@
-import { FlatList, View, Text, TouchableOpacity, Modal, Image } from 'react-native';
+import { FlatList, View, Text, Modal, Image } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useTopicItem } from './useTopicItem.hook';
 import { styles } from './TopicItem.styled';
 import { Logo } from 'utils/Logo';
@@ -15,7 +16,7 @@ import Carousel from 'react-native-snap-carousel';
 import GestureRecognizer from 'react-native-swipe-gestures';
 import avatar from 'images/avatar.png';
 
-export function TopicItem({ item }) {
+export function TopicItem({ item, focused, focus }) {
 
   const { state, actions } = useTopicItem(item);
 
@@ -53,7 +54,7 @@ export function TopicItem({ item }) {
   }
 
   return (
-    <View style={styles.item}>
+    <TouchableOpacity activeOpacity={1} style={styles.item} onPress={focus}>
       <View style={styles.header}>
         { state.logo && (
           <Image source={{ uri: state.logo }} style={{ width: 28, height: 28, borderRadius: 6 }} />
@@ -63,6 +64,11 @@ export function TopicItem({ item }) {
         )}
         <Text style={styles.name}>{ state.name }</Text>
         <Text style={styles.timestamp}>{ state.timestamp }</Text>
+        { focused && (
+          <View style={styles.focused}>
+            <MatIcons name="cloud-braces" size={24} color={Colors.background} />
+          </View>
+        )}
       </View>
       { state.status === 'confirmed' && (
         <>
@@ -113,7 +119,7 @@ export function TopicItem({ item }) {
           </GestureRecognizer>
         </View>
       </Modal> 
-    </View>
+    </TouchableOpacity>
   );
 }
 
