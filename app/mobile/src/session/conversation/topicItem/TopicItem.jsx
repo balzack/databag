@@ -16,9 +16,9 @@ import Carousel from 'react-native-snap-carousel';
 import GestureRecognizer from 'react-native-swipe-gestures';
 import avatar from 'images/avatar.png';
 
-export function TopicItem({ item, focused, focus }) {
+export function TopicItem({ item, focused, focus, hosting }) {
 
-  const { state, actions } = useTopicItem(item);
+  const { state, actions } = useTopicItem(item, hosting);
 
   const renderAsset = (asset) => {
     return (
@@ -66,7 +66,19 @@ export function TopicItem({ item, focused, focus }) {
         <Text style={styles.timestamp}>{ state.timestamp }</Text>
         { focused && (
           <View style={styles.focused}>
-            <MatIcons name="cloud-braces" size={24} color={Colors.background} />
+            { state.deletable && (
+              <TouchableOpacity style={styles.icon}>
+                <MatIcons name="delete-outline" size={20} color={Colors.white} />
+              </TouchableOpacity>
+            )}
+            { state.editable && (
+              <TouchableOpacity style={styles.icon}>
+                <MatIcons name="pencil-outline" size={20} color={Colors.white} />
+              </TouchableOpacity>
+            )}
+            <TouchableOpacity style={styles.icon}>
+              <MatIcons name="block-helper" size={18} color={Colors.white} />
+            </TouchableOpacity>
           </View>
         )}
       </View>

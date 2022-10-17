@@ -11,7 +11,9 @@ export function MemberItem({ hostId, editable, members, item }) {
 
   const setMember = async (member) => {
     try {
-      actions.setMember(member);
+      if (editable) {
+        actions.setMember(member);
+      }
     }
     catch (err) {
       console.log(err);

@@ -46,7 +46,19 @@ export const styles = StyleSheet.create({
   focused: {
     position: 'absolute',
     top: -16,
-    right: 16,
-  }
+    right: 0,
+    display: 'flex',
+    flexDirection: 'row',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    paddingTop: 4,
+    paddingBottom: 4,
+    borderRadius: 4,
+    paddingLeft: 8,
+    paddingRight: 8,
+  },
+  icon: {
+    paddingLeft: 4,
+    paddingRight: 4,
+  },
 })
 

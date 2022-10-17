@@ -10,6 +10,7 @@ export function useConversation() {
     latched: true,
     momentum: false,
     focus: null,
+    host: null,
   });
 
   const conversation = useContext(ConversationContext);
@@ -19,7 +20,7 @@ export function useConversation() {
   }
 
   useEffect(() => {
-    const { subject, logo, topics } = conversation.state;
+    const { subject, logo, topics, host } = conversation.state;
     const items = Array.from(topics.values());
     const sorted = items.sort((a, b) => {
       const aTimestamp = a?.detail?.created;
@@ -32,7 +33,7 @@ export function useConversation() {
       }
       return -1;
     });
-    updateState({ topics, subject, logo, topics: sorted });
+    updateState({ topics, subject, logo, host, topics: sorted });
   }, [conversation]);
 
   const actions = {

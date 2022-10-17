@@ -112,7 +112,7 @@ export function Profile() {
             <Ionicons name="picture" size={14} color={Colors.white} />
           </TouchableOpacity>
         </View>
-        { state.disconnected && (
+        { state.disconnected > 3 && (
           <View style={styles.alert}>
             <Text style={styles.disconnected}>Disconnected</Text>
           </View>

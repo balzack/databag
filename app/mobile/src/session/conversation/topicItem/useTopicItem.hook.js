@@ -5,7 +5,7 @@ import moment from 'moment';
 import { useWindowDimensions } from 'react-native';
 import Colors from 'constants/Colors';
 
-export function useTopicItem(item) {
+export function useTopicItem(item, hosting) {
 
   const [state, setState] = useState({
     name: null,
@@ -20,6 +20,8 @@ export function useTopicItem(item) {
     activeId: null,
     fontSize: 14,
     fontColor: Colors.text,
+    editable: false,
+    deletable: false,
   });
 
   const profile = useContext(ProfileContext);
@@ -121,7 +123,10 @@ export function useTopicItem(item) {
       timestamp = moment(date).format('M/DD/YYYY');
     }
 
-    updateState({ logo, name, known, message, fontSize, fontColor, timestamp, transform, status, assets });
+    const editable = detail.guid === identity.guid;
+    const deletable = editable || hosting;
+
+    updateState({ logo, name, known, message, fontSize, fontColor, timestamp, transform, status, assets, deletable, editable });
   }, [card, item]);
 
   const actions = {

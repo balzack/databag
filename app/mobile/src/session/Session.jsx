@@ -45,8 +45,8 @@ export function Session() {
   const ConversationStackScreen = () => {
 
     const setConversation = (navigation, cardId, channelId, revision) => {
-      setSelectedConversation({ cardId, channelId, revision });
       navigation.navigate('conversation');
+      setSelectedConversation({ cardId, channelId, revision });
     }
     const clearConversation = (navigation) => {
       navigation.dispatch(
