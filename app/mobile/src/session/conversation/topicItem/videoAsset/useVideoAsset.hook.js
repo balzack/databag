@@ -13,8 +13,10 @@ export function useVideoAsset(topicId, asset) {
     weight: 1,
     url: null,
     controls: false,
+    closing: false,
   });
 
+  const closing = useRef(null);
   const conversation = useContext(ConversationContext);
   const dimensions = useWindowDimensions();
 
@@ -50,7 +52,14 @@ export function useVideoAsset(topicId, asset) {
   const actions = {
     setResolution: (width, height) => {
       updateState({ controls: true, videoRatio: width / height });
-    }
+    },
+    showClose: () => {
+      clearTimeout(closing.current);
+      updateState({ closing: true });
+      closing.current = setTimeout(() => {
+        updateState({ closing: false });
+      }, 2000);
+    },
   };
 
   return { state, actions };

@@ -27,11 +27,11 @@ export function TopicItem({ item, focused, focus }) {
           <ImageAsset topicId={item.topicId} asset={asset.item.image} dismiss={actions.hideCarousel} />
         )}
         { asset.item.video && (
-          <VideoAsset topicId={item.topicId} asset={asset.item.video} />
+          <VideoAsset topicId={item.topicId} asset={asset.item.video} dismiss={actions.hideCarousel} />
         )}
         { asset.item.audio && (
           <AudioAsset topicId={item.topicId} asset={asset.item.audio} active={state.activeId == asset.dataIndex}
-              setActive={() => actions.setActive(asset.dataIndex)} />
+              setActive={() => actions.setActive(asset.dataIndex)} dismiss={actions.hideCarousel} />
         )}
       </View>
     )

@@ -15,9 +15,16 @@ export const styles = StyleSheet.create({
     fontSize: 20,
     paddingTop: 8,
     top: 0,
+    paddingLeft: 20,
+    paddingRight: 20,
   },
   control: {
     position: 'absolute',
-  }
+  },
+  close: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+  },
 })
 

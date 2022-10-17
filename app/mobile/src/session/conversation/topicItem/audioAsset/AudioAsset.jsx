@@ -5,7 +5,7 @@ import { styles } from './AudioAsset.styled';
 import audio from 'images/audio.png';
 import Icons from '@expo/vector-icons/MaterialCommunityIcons';
 
-export function AudioAsset({ topicId, asset, active, setActive }) {
+export function AudioAsset({ topicId, asset, active, setActive, dismiss }) {
 
   const { state, actions } = useAudioAsset(topicId, asset);
 
@@ -28,6 +28,9 @@ export function AudioAsset({ topicId, asset, active, setActive }) {
           <Icons name="play-circle-outline" size={92} color={Colors.white} />
         </TouchableOpacity>
       )}
+      <TouchableOpacity style={styles.close} onPress={dismiss}>
+        <Icons name="close" size={24} color={Colors.white} />
+      </TouchableOpacity>
     </View>
   );
 }
