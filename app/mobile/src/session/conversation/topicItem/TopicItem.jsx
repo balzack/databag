@@ -22,9 +22,9 @@ export function TopicItem({ item, focused, focus }) {
 
   const renderAsset = (asset) => {
     return (
-      <TouchableOpacity style={styles.frame} activeOpacity={1} onPress={actions.hideCarousel}>
+      <View style={styles.frame}>
         { asset.item.image && (
-          <ImageAsset topicId={item.topicId} asset={asset.item.image} />
+          <ImageAsset topicId={item.topicId} asset={asset.item.image} dismiss={actions.hideCarousel} />
         )}
         { asset.item.video && (
           <VideoAsset topicId={item.topicId} asset={asset.item.video} />
@@ -33,7 +33,7 @@ export function TopicItem({ item, focused, focus }) {
           <AudioAsset topicId={item.topicId} asset={asset.item.audio} active={state.activeId == asset.dataIndex}
               setActive={() => actions.setActive(asset.dataIndex)} />
         )}
-      </TouchableOpacity>
+      </View>
     )
   }
 
