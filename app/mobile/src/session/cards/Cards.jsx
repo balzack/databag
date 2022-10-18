@@ -41,6 +41,7 @@ export function CardsBody({ state, actions, openContact }) {
   return (
     <FlatList style={styles.cards}
       data={state.cards}
+      initialNumToRender={25}
       renderItem={({ item }) => <CardItem item={item} openContact={openContact} />}
       keyExtractor={item => item.cardId}
     />
@@ -77,6 +78,7 @@ export function Cards({ openRegistry, openContact }) {
           </View>
           <FlatList style={styles.cards}
             data={state.cards}
+            initialNumToRender={25}
             renderItem={({ item }) => <CardItem item={item} openContact={openContact} />}
             keyExtractor={item => item.cardId}
           />

@@ -46,6 +46,7 @@ export function ChannelsBody({ state, actions, openConversation }) {
     <>
       <FlatList style={styles.channels}
         data={state.channels}
+        initialNumToRender={25}
         renderItem={({ item }) => <ChannelItem item={item} openConversation={openConversation} />}
         keyExtractor={item => (`${item.cardId}:${item.channelId}`)}
       />
@@ -107,6 +108,7 @@ export function Channels({ openConversation }) {
       <SafeAreaView style={styles.channels} edges={['left']}>
         <FlatList 
           data={state.channels}
+          initialNumToRender={25}
           renderItem={({ item }) => <ChannelItem item={item} openConversation={openConversation} />}
           keyExtractor={item => (`${item.cardId}:${item.channelId}`)}
         />
