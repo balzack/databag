@@ -422,11 +422,25 @@ export function useConversationContext() {
           await channel.actions.setTopicBlocked(channelId, topicId);
         }
         const topic = topics.current.get(topicId);
-        topic.blocked = 1;
-        force.current = true;
-        sync();
+        if (topic) {
+          topic.blocked = 1;
+          force.current = true;
+          sync();
+        }
       }
     },
+    unblockTopic: async (cardId, channelId, topicId) => {
+      if (conversationId.current) {
+        if (conversationId.current.cardId == cardId && conversationId.current.channelId == channelId) {
+          const topic = topics.current.get(topicId);
+          if (topic) {
+            topic.blocked = 0;
+            force.current = true;
+            sync();
+          }
+        }
+      }
+    }
   }
 
   return { state, actions }

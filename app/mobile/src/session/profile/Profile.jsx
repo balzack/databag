@@ -9,6 +9,7 @@ import ImagePicker from 'react-native-image-crop-picker'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { BlockedTopics } from './blockedTopics/BlockedTopics';
 import { BlockedContacts } from './blockedContacts/BlockedContacts';
+import { BlockedMessages } from './blockedMessages/BlockedMessages';
 
 export function ProfileTitle(props) {
   const { state, actions } = useProfile();
@@ -149,6 +150,9 @@ export function Profile() {
         <TouchableOpacity style={styles.link} onPress={actions.showBlockedChannels}>
           <Text style={styles.linkText}>Manage Blocked Topics</Text>
         </TouchableOpacity>
+        <TouchableOpacity style={styles.link} onPress={actions.showBlockedMessages}>
+          <Text style={styles.linkText}>Manage Blocked Messages</Text>
+        </TouchableOpacity>
         <TouchableOpacity style={styles.logout} onPress={logout}>
           <Ionicons name="logout" size={14} color={Colors.white} />
           <Text style={styles.logoutText}>Logout</Text>
@@ -208,6 +212,27 @@ export function Profile() {
             </View>
             <View style={styles.editControls}>
               <TouchableOpacity style={styles.close} onPress={actions.hideBlockedChannels}>
+                <Text>Close</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </KeyboardAvoidingView>
+      </Modal>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={state.blockedMessages}
+        supportedOrientations={['portrait', 'landscape']}
+        onRequestClose={actions.hideBlockedMessages}
+      >
+        <KeyboardAvoidingView behavior="height" style={styles.editWrapper}>
+          <View style={styles.editContainer}>
+            <Text style={styles.editHeader}>Blocked Messages:</Text>
+            <View style={styles.editList}>
+              <BlockedMessages />
+            </View>
+            <View style={styles.editControls}>
+              <TouchableOpacity style={styles.close} onPress={actions.hideBlockedMessages}>
                 <Text>Close</Text>
               </TouchableOpacity>
             </View>

@@ -30,6 +30,7 @@ export function useProfile() {
     showConfirm: false,
     blockedChannels: false,
     blockedCards: false,
+    blockedMessages: false,
     tabbed: null,
     disconnected: false,
   });
@@ -93,6 +94,12 @@ export function useProfile() {
     },
     hideBlockedCards: () => {
       updateState({ blockedCards: false });
+    },
+    showBlockedMessages: () => {
+      updateState({ blockedMessages: true });
+    },
+    hideBlockedMessages: () => {
+      updateState({ blockedMessages: false });
     },
     showLoginEdit: () => {
       updateState({ showLoginEdit: true });

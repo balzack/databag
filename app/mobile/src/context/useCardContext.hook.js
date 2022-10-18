@@ -473,6 +473,14 @@ export function useCardContext() {
       const { guid } = session.current;
       await store.actions.setCardChannelTopicBlocked(guid, cardId, channelId, topicId, true);
     },
+    clearChannelTopicBlocked: async (cardId, channelId, topicId) => {
+      const { guid } = session.current;
+      await store.actions.setCardChannelTopicBlocked(guid, cardId, channelId, topicId, false);
+    },
+    getChannelTopicBlocked: async () => {
+      const { guid } = session.current;
+      return await store.actions.getCardChannelTopicBlocked(guid);
+    },
     getChannelTopicItems: async (cardId, channelId) => {
       const { guid } = session.current;
       return await store.actions.getCardChannelTopicItems(guid, cardId, channelId);

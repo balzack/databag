@@ -257,7 +257,15 @@ export function useStoreContext() {
       await db.current.executeSql(`DELETE FROM channel_topic_${guid} WHERE channel_id=?`, [channelId]);
     },
     setChannelTopicBlocked: async (guid, channelId, topicId, blocked) => {
-      let ret = await db.current.executeSql(`UPDATE channel_topic_${guid} set blocked=? WHERE channel_id=? and topic_id=?`, [blocked, channelId, topicId]);
+      await db.current.executeSql(`UPDATE channel_topic_${guid} set blocked=? WHERE channel_id=? and topic_id=?`, [blocked, channelId, topicId]);
+    },
+    getChannelTopicBlocked: async (guid) => {
+      const values = await getAppValues(db.current, `SELECT channel_id, topic_id, detail FROM channel_topic_${guid} WHERE blocked=?`, [1]);
+      return values.map(topic => ({
+        channelId: topic.channel_id,
+        topicId: topic.topic_id,
+        detail: decodeObject(topic.detail),
+      }));  
     },
 
     setCardChannelItem: async (guid, cardId, channel) => {
@@ -321,7 +329,7 @@ export function useStoreContext() {
         detailRevision: topic.detail_revision,
         detail: decodeObject(topic.detail),
       }));  
-    },
+    },    
     setCardChannelTopicItem: async (guid, cardId, channelId, topic) => {
       const { id, revision, data } = topic;
       await db.current.executeSql(`INSERT OR REPLACE INTO card_channel_topic_${guid} (card_id, channel_id, topic_id, revision, detail_revision, detail) values (?, ?, ?, ?, ?, ?);`, [cardId, channelId, id, revision, data.detailRevision, encodeObject(data.topicDetail)]);
@@ -334,6 +342,15 @@ export function useStoreContext() {
     },
     setCardChannelTopicBlocked: async (guid, cardId, channelId, topicId, blocked) => {
       await db.current.executeSql(`UPDATE card_channel_topic_${guid} set blocked=? WHERE card_id=? and channel_id=? and topic_id=?`, [blocked ? 1 : 0, cardId, channelId, topicId]);
+    },
+    getCardChannelTopicBlocked: async (guid) => {
+      const values = await getAppValues(db.current, `SELECT card_id, channel_id, topic_id, detail FROM card_channel_topic_${guid} WHERE blocked=?`, [1]);
+      return values.map(topic => ({
+        cardId: topic.card_id,
+        channelId: topic.channel_id,
+        topicId: topic.topic_id,
+        detail: decodeObject(topic.detail),
+      }));  
     },
   }
   return { state, actions }

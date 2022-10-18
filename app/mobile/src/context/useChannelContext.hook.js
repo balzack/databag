@@ -204,6 +204,14 @@ export function useChannelContext() {
       const { guid } = session.current;
       await store.actions.setChannelTopicBlocked(guid, channelId, topicId, true);
     },
+    clearTopicBlocked: async (channelId, topicId) => {
+      const { guid } = session.current;
+      await store.actions.setChannelTopicBlocked(guid, channelId, topicId, false);
+    },
+    getTopicBlocked: async () => {
+      const { guid } = session.current;
+      return await store.actions.getChannelTopicBlocked(guid);
+    },
     getTopicItems: async (channelId) => {
       const { guid } = session.current;
       return await store.actions.getChannelTopicItems(guid, channelId);
