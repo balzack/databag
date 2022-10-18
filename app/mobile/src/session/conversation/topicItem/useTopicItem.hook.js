@@ -5,7 +5,7 @@ import moment from 'moment';
 import { useWindowDimensions } from 'react-native';
 import Colors from 'constants/Colors';
 
-export function useTopicItem(item, hosting) {
+export function useTopicItem(item, hosting, remove) {
 
   const [state, setState] = useState({
     name: null,
@@ -22,6 +22,7 @@ export function useTopicItem(item, hosting) {
     fontColor: Colors.text,
     editable: false,
     deletable: false,
+    editing: false,
   });
 
   const profile = useContext(ProfileContext);
@@ -138,6 +139,14 @@ export function useTopicItem(item, hosting) {
     },
     setActive: (activeId) => {
       updateState({ activeId });
+    },
+    block: async () => {
+    },
+    showEdit: () => {
+      updateState({ editing: true });
+    },
+    hideEdit: () => {
+      updateState({ editing: false });
     },
   };
 

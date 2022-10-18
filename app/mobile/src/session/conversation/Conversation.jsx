@@ -59,7 +59,8 @@ export function ConversationBody() {
          maintainVisibleContentPosition={ state.latched ? null : { minIndexForVisibile: 2, } }
          inverted={true}
          renderItem={({item}) => <TopicItem item={item} focused={item.topicId === state.focus} 
-           focus={() => actions.setFocus(item.topicId)} hosting={state.host == null} />}
+           focus={() => actions.setFocus(item.topicId)} hosting={state.host == null} 
+           remove={actions.removeTopic} />}
         keyExtractor={item => item.topicId}
       />
       <View>

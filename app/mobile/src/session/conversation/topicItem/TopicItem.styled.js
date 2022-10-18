@@ -33,6 +33,9 @@ export const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     backgroundColor: 'rgba(0, 0, 0, 0.9)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   frame: {
     display: 'flex',
@@ -56,6 +59,7 @@ export const styles = StyleSheet.create({
     borderRadius: 4,
     paddingLeft: 8,
     paddingRight: 8,
+    alignItems: 'center',
   },
   icon: {
     paddingLeft: 8,

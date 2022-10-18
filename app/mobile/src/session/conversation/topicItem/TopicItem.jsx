@@ -1,4 +1,4 @@
-import { FlatList, View, Text, Modal, Image } from 'react-native';
+import { FlatList, View, Text, Modal, Image, Alert } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useTopicItem } from './useTopicItem.hook';
 import { styles } from './TopicItem.styled';
@@ -16,9 +16,62 @@ import Carousel from 'react-native-snap-carousel';
 import GestureRecognizer from 'react-native-swipe-gestures';
 import avatar from 'images/avatar.png';
 
-export function TopicItem({ item, focused, focus, hosting }) {
+export function TopicItem({ item, focused, focus, hosting, remove }) {
 
   const { state, actions } = useTopicItem(item, hosting);
+
+  const erase = () => {
+    Alert.alert(
+      "Removing Message",
+      "Confirm?",
+      [
+        { text: "Cancel",
+          onPress: () => {},
+        },
+        { text: "Remove",
+          onPress: async () => {
+            try {
+              await remove(item.topicId);
+            }
+            catch (err) {
+              console.log(err);
+              Alert.alert(
+                'Failed to Remove Message',
+                'Please try again.'
+              )
+            }
+          },
+        }
+      ]
+    );
+  }
+
+  const block = () => {
+    Alert.alert(
+      "Blocking Message",
+      "Confirm?",
+      [
+        { text: "Cancel",
+          onPress: () => {},
+        },
+        { text: "Block",
+          onPress: async () => {
+            try {
+              await actions.block();
+            }
+            catch (err) {
+              console.log(err);
+              Alert.alert(
+                'Failed to Block Message',
+                'Please try again.'
+              )
+            }
+          },
+        }
+      ]
+    );
+  }
+
 
   const renderAsset = (asset) => {
     return (
@@ -113,22 +166,36 @@ export function TopicItem({ item, focused, focus, hosting }) {
             />
           </View>
         </Modal> 
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={state.editing}
+          supportedOrientations={['portrait', 'landscape']}
+          onRequestClose={actions.hideEdit}
+        >
+          <View style={styles.modal}>
+            <TouchableOpacity style={{ backgroundColor: 'white' }} onPress={actions.hideEdit}>
+              <Text>DONE</Text>
+            </TouchableOpacity>
+          </View>
+        </Modal> 
       </TouchableOpacity>
       { focused && (
         <View style={styles.focused}>
-          { state.deletable && (
-            <TouchableOpacity style={styles.icon}>
-              <MatIcons name="delete-outline" size={20} color={Colors.white} />
-            </TouchableOpacity>
-          )}
           { state.editable && (
-            <TouchableOpacity style={styles.icon}>
-              <MatIcons name="pencil-outline" size={20} color={Colors.white} />
+            <TouchableOpacity style={styles.icon} onPress={actions.showEdit}>
+              <AntIcons name="edit" size={24} color={Colors.white} />
             </TouchableOpacity>
           )}
-          <TouchableOpacity style={styles.icon}>
+          <TouchableOpacity style={styles.icon} onPress={block}>
             <MatIcons name="block-helper" size={18} color={Colors.white} />
           </TouchableOpacity>
+          { state.deletable && (
+            <TouchableOpacity style={styles.icon} onPress={erase}>
+              <MatIcons name="delete-outline" size={24} color={Colors.white} />
+            </TouchableOpacity>
+          )}
+
         </View>
       )}
     </View>

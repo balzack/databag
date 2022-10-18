@@ -52,6 +52,9 @@ export function useConversation() {
     setFocus: (focus) => {
       updateState({ focus });
     },
+    removeTopic: async (topicId) => {
+      await conversation.actions.removeTopic(topicId);
+    },
   };
 
   return { state, actions };

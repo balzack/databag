@@ -7,6 +7,7 @@ export const styles = StyleSheet.create({
     borderColor: Colors.divider,
     display: 'flex',
     flexDirection: 'column',
+    marginTop: 8,
   },
   addButtons: {
     display: 'flex',

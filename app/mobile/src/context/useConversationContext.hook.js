@@ -357,6 +357,19 @@ export function useConversationContext() {
         await remove(cardId, channelId);
       }
     },
+    removeTopic: async (topicId) => {
+      if (conversationId.current) {
+        const { cardId, channelId } = conversationId.current;
+        if (cardId) {
+          await card.actions.removeChannelTopic(cardId, channelId, topicId);
+        }
+        else {
+          await channel.actions.removeTopic(channelId, topicId);
+        }
+        force.current = true;
+        sync();
+      }
+    },
     setCard: async (id) => {
       if (conversationId.current) {
         const { cardId, channelId } = conversationId.current;
