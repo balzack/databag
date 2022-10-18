@@ -50,6 +50,7 @@ export const styles = StyleSheet.create({
   },
   topics: {
     paddingBottom: 32,
+    paddingTop: 8,
   },
   conversation: {
     flexShrink: 1,

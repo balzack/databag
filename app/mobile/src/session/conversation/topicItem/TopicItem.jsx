@@ -54,82 +54,84 @@ export function TopicItem({ item, focused, focus, hosting }) {
   }
 
   return (
-    <TouchableOpacity activeOpacity={1} style={styles.item} onPress={focus}>
-      <View style={styles.header}>
-        { state.logo && (
-          <Image source={{ uri: state.logo }} style={{ width: 28, height: 28, borderRadius: 6 }} />
-        )}
-        { !state.logo && (
-          <Image source={avatar} style={{ width: 28, height: 28, borderRadius: 6 }} />
-        )}
-        <Text style={styles.name}>{ state.name }</Text>
-        <Text style={styles.timestamp}>{ state.timestamp }</Text>
-        { focused && (
-          <View style={styles.focused}>
-            { state.deletable && (
-              <TouchableOpacity style={styles.icon}>
-                <MatIcons name="delete-outline" size={20} color={Colors.white} />
-              </TouchableOpacity>
+    <View style={styles.wrapper}>
+      <TouchableOpacity activeOpacity={1} style={styles.item} onPress={focus}>
+        <View style={styles.header}>
+          { state.logo && (
+            <Image source={{ uri: state.logo }} style={{ width: 28, height: 28, borderRadius: 6 }} />
+          )}
+          { !state.logo && (
+            <Image source={avatar} style={{ width: 28, height: 28, borderRadius: 6 }} />
+          )}
+          <Text style={styles.name}>{ state.name }</Text>
+          <Text style={styles.timestamp}>{ state.timestamp }</Text>
+        </View>
+        { state.status === 'confirmed' && (
+          <>
+            { state.transform === 'complete' && state.assets && (
+              <FlatList contentContainerStyle={styles.carousel}
+                 data={state.assets}
+                 horizontal={true}
+                 showsHorizontalScrollIndicator={false}
+                 renderItem={renderThumb}
+               />
             )}
-            { state.editable && (
-              <TouchableOpacity style={styles.icon}>
-                <MatIcons name="pencil-outline" size={20} color={Colors.white} />
-              </TouchableOpacity>
+            { state.transform === 'incomplete' && (
+              <View style={styles.status}>
+                <MatIcons name="cloud-refresh" size={32} color={Colors.background} />
+              </View>
             )}
-            <TouchableOpacity style={styles.icon}>
-              <MatIcons name="block-helper" size={18} color={Colors.white} />
-            </TouchableOpacity>
+            { state.transform === 'error' && (
+              <View style={styles.status}>
+                <AntIcons name="weather-cloudy-alert" size={32} color={Colors.alert} />
+              </View>
+            )}
+            { state.message && (
+              <Text style={{ ...styles.message, fontSize: state.fontSize }}>{ state.message }</Text>
+            )}
+          </>
+        )}
+        { state.status !== 'confirmed' && (
+          <View style={styles.status}>
+            <MatIcons name="cloud-refresh" size={32} color={Colors.divider} />
           </View>
         )}
-      </View>
-      { state.status === 'confirmed' && (
-        <>
-          { state.transform === 'complete' && state.assets && (
-            <FlatList contentContainerStyle={styles.carousel}
-               data={state.assets}
-               horizontal={true}
-               showsHorizontalScrollIndicator={false}
-               renderItem={renderThumb}
-             />
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={state.carousel}
+          supportedOrientations={['portrait', 'landscape']}
+          onRequestClose={actions.hideCarousel}
+        >
+          <View style={styles.modal}>
+            <Carousel
+              data={state.assets}
+              firstItem={state.carouselIndex}
+              renderItem={renderAsset}
+              sliderWidth={state.width}
+              itemWidth={state.width}
+            />
+          </View>
+        </Modal> 
+      </TouchableOpacity>
+      { focused && (
+        <View style={styles.focused}>
+          { state.deletable && (
+            <TouchableOpacity style={styles.icon}>
+              <MatIcons name="delete-outline" size={20} color={Colors.white} />
+            </TouchableOpacity>
           )}
-          { state.transform === 'incomplete' && (
-            <View style={styles.status}>
-              <MatIcons name="cloud-refresh" size={32} color={Colors.background} />
-            </View>
+          { state.editable && (
+            <TouchableOpacity style={styles.icon}>
+              <MatIcons name="pencil-outline" size={20} color={Colors.white} />
+            </TouchableOpacity>
           )}
-          { state.transform === 'error' && (
-            <View style={styles.status}>
-              <AntIcons name="weather-cloudy-alert" size={32} color={Colors.alert} />
-            </View>
-          )}
-          { state.message && (
-            <Text style={{ paddingLeft: 52, fontSize: state.fontSize, color: state.fontColor }}>{ state.message }</Text>
-          )}
-        </>
-      )}
-      { state.status !== 'confirmed' && (
-        <View style={styles.status}>
-          <MatIcons name="cloud-refresh" size={32} color={Colors.divider} />
+          <TouchableOpacity style={styles.icon}>
+            <MatIcons name="block-helper" size={18} color={Colors.white} />
+          </TouchableOpacity>
         </View>
       )}
-      <Modal
-        animationType="fade"
-        transparent={true}
-        visible={state.carousel}
-        supportedOrientations={['portrait', 'landscape']}
-        onRequestClose={actions.hideCarousel}
-      >
-        <View style={styles.modal}>
-          <Carousel
-            data={state.assets}
-            firstItem={state.carouselIndex}
-            renderItem={renderAsset}
-            sliderWidth={state.width}
-            itemWidth={state.width}
-          />
-        </View>
-      </Modal> 
-    </TouchableOpacity>
+    </View>
   );
 }
 

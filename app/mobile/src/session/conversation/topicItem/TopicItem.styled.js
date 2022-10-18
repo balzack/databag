@@ -2,12 +2,13 @@ import { StyleSheet } from 'react-native';
 import { Colors } from 'constants/Colors';
 
 export const styles = StyleSheet.create({
+  wrapper: {
+    paddingTop: 8,
+  },
   item: {
     borderTopWidth: 1,
     borderColor: Colors.white,
     paddingTop: 8,
-    paddingBottom: 8,
-    paddingRight: 16,
   },
   header: {
     display: 'flex',
@@ -45,8 +46,8 @@ export const styles = StyleSheet.create({
   },
   focused: {
     position: 'absolute',
-    top: -16,
-    right: 0,
+    top: 0,
+    right: 16,
     display: 'flex',
     flexDirection: 'row',
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
@@ -57,8 +58,13 @@ export const styles = StyleSheet.create({
     paddingRight: 8,
   },
   icon: {
-    paddingLeft: 4,
-    paddingRight: 4,
+    paddingLeft: 8,
+    paddingRight: 8,
+  },
+  message: {
+    paddingRight: 16,
+    paddingLeft: 52,
+    color: Colors.fontColor,
   },
 })
 
