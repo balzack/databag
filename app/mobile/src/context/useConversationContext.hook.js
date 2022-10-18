@@ -370,6 +370,19 @@ export function useConversationContext() {
         sync();
       }
     },
+    setTopicSubject: async (topicId, data) => {
+      if (conversationId.current) {
+        const { cardId, channelId } = conversationId.current;
+        if (cardId) {
+          return await card.actions.setChannelTopicSubject(cardId, channelId, topicId, data);
+        }
+        else {
+          return await channel.actions.setTopicSubject(channelId, topicId, data);
+        }
+      }
+      force.current = true;
+      sync();
+    },
     setCard: async (id) => {
       if (conversationId.current) {
         const { cardId, channelId } = conversationId.current;

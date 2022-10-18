@@ -23,6 +23,8 @@ export function useTopicItem(item, hosting, remove) {
     editable: false,
     deletable: false,
     editing: false,
+    editMessage: null,
+    editData: null,
   });
 
   const profile = useContext(ProfileContext);
@@ -84,22 +86,22 @@ export function useTopicItem(item, hosting, remove) {
       }
     }
 
-    let message, assets, fontSize, fontColor;
+    let prased, message, assets, fontSize, fontColor;
     try {
-      const data = JSON.parse(item.detail.data);
-      message = data.text;
-      assets = data.assets;
-      if (data.textSize === 'small') {
+      parsed = JSON.parse(data);
+      message = parsed.text;
+      assets = parsed.assets;
+      if (parsed.textSize === 'small') {
         fontSize = 10;
       }
-      else if (data.textSize === 'large') {
+      else if (parsed.textSize === 'large') {
         fontSize = 20;
       }
       else {
         fontSize = 14;
       }
-      if (data.textColor) {
-        fontColor = data.textColor;
+      if (parsed.textColor) {
+        fontColor = parsed.textColor;
       }
       else {
         fontColor = Colors.text;
@@ -124,10 +126,10 @@ export function useTopicItem(item, hosting, remove) {
       timestamp = moment(date).format('M/DD/YYYY');
     }
 
-    const editable = detail.guid === identity.guid;
+    const editable = detail.guid === identity.guid && parsed;
     const deletable = editable || hosting;
 
-    updateState({ logo, name, known, message, fontSize, fontColor, timestamp, transform, status, assets, deletable, editable });
+    updateState({ logo, name, known, message, fontSize, fontColor, timestamp, transform, status, assets, deletable, editable, editData: parsed, editMessage: message });
   }, [card, item]);
 
   const actions = {
@@ -147,6 +149,9 @@ export function useTopicItem(item, hosting, remove) {
     },
     hideEdit: () => {
       updateState({ editing: false });
+    },
+    setEditMessage: (editMessage) => {
+      updateState({ editMessage });
     },
   };
 

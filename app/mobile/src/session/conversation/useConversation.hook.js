@@ -55,6 +55,9 @@ export function useConversation() {
     removeTopic: async (topicId) => {
       await conversation.actions.removeTopic(topicId);
     },
+    updateTopic: async (topicId, data) => {
+      await conversation.actions.setTopicSubject(topicId, data);
+    },
   };
 
   return { state, actions };

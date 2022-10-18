@@ -60,7 +60,7 @@ export function ConversationBody() {
          inverted={true}
          renderItem={({item}) => <TopicItem item={item} focused={item.topicId === state.focus} 
            focus={() => actions.setFocus(item.topicId)} hosting={state.host == null} 
-           remove={actions.removeTopic} />}
+           remove={actions.removeTopic} update={actions.updateTopic} />}
         keyExtractor={item => item.topicId}
       />
       <View>

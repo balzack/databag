@@ -1,4 +1,4 @@
-import { FlatList, View, Text, Modal, Image, Alert } from 'react-native';
+import { KeyboardAvoidingView, FlatList, View, Text, TextInput, Modal, Image, Alert } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useTopicItem } from './useTopicItem.hook';
 import { styles } from './TopicItem.styled';
@@ -16,7 +16,7 @@ import Carousel from 'react-native-snap-carousel';
 import GestureRecognizer from 'react-native-swipe-gestures';
 import avatar from 'images/avatar.png';
 
-export function TopicItem({ item, focused, focus, hosting, remove }) {
+export function TopicItem({ item, focused, focus, hosting, remove, update }) {
 
   const { state, actions } = useTopicItem(item, hosting);
 
@@ -44,6 +44,20 @@ export function TopicItem({ item, focused, focus, hosting, remove }) {
         }
       ]
     );
+  }
+
+  const editMessage = async () => {
+    try {
+      await update(item.topicId, { ...state.editData, text: state.editMessage });
+      actions.hideEdit();
+    }
+    catch (err) {
+      console.log(err);
+      Alert.alert(
+        'Failed to Update Message',
+        'Please try again.',
+      )
+    }
   }
 
   const block = () => {
@@ -173,11 +187,23 @@ export function TopicItem({ item, focused, focus, hosting, remove }) {
           supportedOrientations={['portrait', 'landscape']}
           onRequestClose={actions.hideEdit}
         >
-          <View style={styles.modal}>
-            <TouchableOpacity style={{ backgroundColor: 'white' }} onPress={actions.hideEdit}>
-              <Text>DONE</Text>
-            </TouchableOpacity>
-          </View>
+          <KeyboardAvoidingView behavior="height" style={styles.modal}>
+            <View style={styles.editContainer}>
+              <Text style={styles.editHeader}>Edit Message Text:</Text>
+              <View style={styles.inputField}>
+                <TextInput style={styles.input} value={state.editMessage} onChangeText={actions.setEditMessage}
+                    autoCapitalize="sentences" placeholder="Message Text" multiline={true} />
+              </View>
+              <View style={styles.editControls}>
+                <TouchableOpacity style={styles.cancel} onPress={actions.hideEdit}>
+                  <Text>Cancel</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.save} onPress={editMessage}>
+                  <Text style={styles.saveText}>Save</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </KeyboardAvoidingView>
         </Modal> 
       </TouchableOpacity>
       { focused && (
@@ -195,7 +221,6 @@ export function TopicItem({ item, focused, focus, hosting, remove }) {
               <MatIcons name="delete-outline" size={24} color={Colors.white} />
             </TouchableOpacity>
           )}
-
         </View>
       )}
     </View>
