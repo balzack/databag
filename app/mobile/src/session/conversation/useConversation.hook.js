@@ -33,7 +33,8 @@ export function useConversation() {
       }
       return -1;
     });
-    updateState({ topics, subject, logo, host, topics: sorted });
+    const filtered = sorted.filter(item => !(item.blocked === 1));
+    updateState({ topics, subject, logo, host, topics: filtered });
   }, [conversation]);
 
   const actions = {
@@ -58,6 +59,9 @@ export function useConversation() {
     updateTopic: async (topicId, data) => {
       await conversation.actions.setTopicSubject(topicId, data);
     },
+    blockTopic: async (topicId) => {
+      await conversation.actions.blockTopic(topicId);
+    }
   };
 
   return { state, actions };

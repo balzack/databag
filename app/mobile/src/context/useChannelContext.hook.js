@@ -200,6 +200,10 @@ export function useChannelContext() {
       setChannelBlocked(channelId, 0);
       updateState({ channels: channels.current }); 
     },
+    setTopicBlocked: async (channelId, topicId) => {
+      const { guid } = session.current;
+      await store.actions.setChannelTopicBlocked(guid, channelId, topicId, true);
+    },
     getTopicItems: async (channelId) => {
       const { guid } = session.current;
       return await store.actions.getChannelTopicItems(guid, channelId);

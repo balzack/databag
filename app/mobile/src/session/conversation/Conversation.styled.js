@@ -96,7 +96,7 @@ export const styles = StyleSheet.create({
     width: '100%',
   },
   latch: {
-    backgroundColor: Colors.formBackground,
+    backgroundColor: Colors.white,
     borderRadius: 12,
     borderWidth: 1,
     padding: 4,

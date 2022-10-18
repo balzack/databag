@@ -13,7 +13,7 @@ export function useConversationContext() {
     revision: null,
     contacts: [],
     topics: new Map(),
-    createed: null,
+    created: null,
     host: null,
   });
   const store = useContext(StoreContext);
@@ -410,6 +410,21 @@ export function useConversationContext() {
         else {
           await channel.actions.setBlocked(channelId);
         }
+      }
+    },
+    blockTopic: async (topicId) => {
+      if (conversationId.current) {
+        const { cardId, channelId } = conversationId.current;
+        if (cardId) {
+          await card.actions.setChannelTopicBlocked(cardId, channelId, topicId);
+        }
+        else {
+          await channel.actions.setTopicBlocked(channelId, topicId);
+        }
+        const topic = topics.current.get(topicId);
+        topic.blocked = 1;
+        force.current = true;
+        sync();
       }
     },
   }

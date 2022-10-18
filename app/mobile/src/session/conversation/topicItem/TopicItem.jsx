@@ -16,7 +16,7 @@ import Carousel from 'react-native-snap-carousel';
 import GestureRecognizer from 'react-native-swipe-gestures';
 import avatar from 'images/avatar.png';
 
-export function TopicItem({ item, focused, focus, hosting, remove, update }) {
+export function TopicItem({ item, focused, focus, hosting, remove, update, block }) {
 
   const { state, actions } = useTopicItem(item, hosting);
 
@@ -60,7 +60,7 @@ export function TopicItem({ item, focused, focus, hosting, remove, update }) {
     }
   }
 
-  const block = () => {
+  const hideMessage = () => {
     Alert.alert(
       "Blocking Message",
       "Confirm?",
@@ -71,7 +71,7 @@ export function TopicItem({ item, focused, focus, hosting, remove, update }) {
         { text: "Block",
           onPress: async () => {
             try {
-              await actions.block();
+              await block(item.topicId);
             }
             catch (err) {
               console.log(err);
@@ -213,7 +213,7 @@ export function TopicItem({ item, focused, focus, hosting, remove, update }) {
               <AntIcons name="edit" size={24} color={Colors.white} />
             </TouchableOpacity>
           )}
-          <TouchableOpacity style={styles.icon} onPress={block}>
+          <TouchableOpacity style={styles.icon} onPress={hideMessage}>
             <MatIcons name="block-helper" size={18} color={Colors.white} />
           </TouchableOpacity>
           { state.deletable && (

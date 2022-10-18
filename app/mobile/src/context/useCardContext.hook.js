@@ -469,6 +469,10 @@ export function useCardContext() {
       setCardChannelBlocked(cardId, channelId, false);
       updateState({ cards: cards.current });
     },
+    setChannelTopicBlocked: async (cardId, channelId, topicId) => {
+      const { guid } = session.current;
+      await store.actions.setCardChannelTopicBlocked(guid, cardId, channelId, topicId, true);
+    },
     getChannelTopicItems: async (cardId, channelId) => {
       const { guid } = session.current;
       return await store.actions.getCardChannelTopicItems(guid, cardId, channelId);
