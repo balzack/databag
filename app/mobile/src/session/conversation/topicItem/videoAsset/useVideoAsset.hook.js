@@ -52,7 +52,10 @@ export function useVideoAsset(topicId, asset) {
 
   const actions = {
     setResolution: (width, height) => {
-      updateState({ loaded: true, display: {}, videoRatio: width / height });
+      updateState({ display: {}, videoRatio: width / height });
+    },
+    loaded: () => {
+      updateState({ loaded: true });
     },
     play: () => {
       actions.showControls();

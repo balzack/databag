@@ -25,5 +25,8 @@ export const styles = StyleSheet.create({
     paddingLeft: 8,
     paddingRight: 8,
   },
+  loading: {
+    position: 'absolute',
+  },
 })
 
