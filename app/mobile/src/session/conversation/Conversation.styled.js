@@ -55,6 +55,7 @@ export const styles = StyleSheet.create({
     flexShrink: 1,
     flexGrow: 1,
     minHeight: 0,
+    paddingTop: 8,
   },
   close: {
     flexGrow: 1,
