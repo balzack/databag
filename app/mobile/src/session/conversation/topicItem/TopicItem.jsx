@@ -166,7 +166,7 @@ export function TopicItem({ item, focused, focus, hosting, remove, update, block
       { focused && (
         <View style={styles.focused}>
           { state.editable && (
-            <TouchableOpacity style={styles.icon} onPress={actions.showEdit}>
+            <TouchableOpacity style={styles.icon} onPress={() => update(item.topicId, state.editData)}>
               <AntIcons name="edit" size={24} color={Colors.white} />
             </TouchableOpacity>
           )}

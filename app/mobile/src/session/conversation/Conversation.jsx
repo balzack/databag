@@ -1,4 +1,4 @@
-import { KeyboardAvoidingView, Platform, TextInput, View, TouchableOpacity, Text, } from 'react-native';
+import { KeyboardAvoidingView, Modal, Platform, TextInput, View, TouchableOpacity, Text, } from 'react-native';
 import { FlatList, ScrollView } from '@stream-io/flat-list-mvcp';
 import { memo, useState, useRef, useEffect } from 'react';
 import { useConversation } from './useConversation.hook';
@@ -13,6 +13,8 @@ import { TopicItem } from './topicItem/TopicItem';
 export function ConversationHeader({ closeConversation, openDetails }) {
   const navigation = useNavigation();
   const { state, actions } = useConversation();
+console.log(state.editing);
+
 
   const setDetails = () => {
     openDetails(navigation);
@@ -48,32 +50,58 @@ export function ConversationBody() {
   const noop = () => {};
 
   return (
-    <KeyboardAvoidingView style={styles.thread} behavior="padding" keyboardVerticalOffset="100"
-        enabled={Platform.OS === 'ios' ? true : false}>
-      <FlatList style={styles.conversation}
-         contentContainerStyle={styles.topics}
-         ref={ref}
-         data={state.topics}
-         onMomentumScrollEnd={ Platform.OS === 'ios' ? noop : actions.unlatch }
-         onScrollBeginDrag={ Platform.OS !== 'ios' ? noop : actions.unlatch }
-         maintainVisibleContentPosition={ state.latched ? null : { minIndexForVisibile: 2, } }
-         inverted={true}
-         renderItem={({item}) => <TopicItem item={item} focused={item.topicId === state.focus} 
-           focus={() => actions.setFocus(item.topicId)} hosting={state.host == null} 
-           remove={actions.removeTopic} update={actions.updateTopic} block={actions.blockTopic} />}
-        keyExtractor={item => item.topicId}
-      />
-      <View>
-        <AddTopic />
-        <View style={styles.latchbar}>
-          { !state.latched && (
-            <TouchableOpacity style={styles.latch} onPress={latch}>
-              <Ionicons name="unlock" size={16} color={Colors.primary} />
-            </TouchableOpacity>
-          )} 
+      <KeyboardAvoidingView style={styles.thread} behavior="padding" keyboardVerticalOffset="100"
+          enabled={Platform.OS === 'ios' ? true : false}>
+        <FlatList style={styles.conversation}
+           contentContainerStyle={styles.topics}
+           ref={ref}
+           data={state.topics}
+           onMomentumScrollEnd={ Platform.OS === 'ios' ? noop : actions.unlatch }
+           onScrollBeginDrag={ Platform.OS !== 'ios' ? noop : actions.unlatch }
+           maintainVisibleContentPosition={ state.latched ? null : { minIndexForVisibile: 2, } }
+           inverted={true}
+           renderItem={({item}) => <TopicItem item={item} focused={item.topicId === state.focus} 
+             focus={() => actions.setFocus(item.topicId)} hosting={state.host == null} 
+             remove={actions.removeTopic} update={actions.editTopic} block={actions.blockTopic} />}
+          keyExtractor={item => item.topicId}
+        />
+        <View>
+          <AddTopic />
+          <View style={styles.latchbar}>
+            { !state.latched && (
+              <TouchableOpacity style={styles.latch} onPress={latch}>
+                <Ionicons name="unlock" size={16} color={Colors.primary} />
+              </TouchableOpacity>
+            )} 
+          </View>
         </View>
-      </View>
-    </KeyboardAvoidingView>
+      <Modal
+          animationType="fade"
+          transparent={true}
+          visible={state.editing}
+          supportedOrientations={['portrait', 'landscape']}
+          onRequestClose={actions.hideEdit}
+      >
+        <KeyboardAvoidingView behavior="height" style={styles.modal}>
+          <View style={styles.editContainer}>
+            <Text style={styles.editHeader}>Edit Message Text:</Text>
+            <View style={styles.inputField}>
+              <TextInput style={styles.input} value={state.editMessage} onChangeText={actions.setEditMessage}
+                  autoCapitalize="sentences" placeholder="Message Text" multiline={true} />
+            </View>
+            <View style={styles.editControls}>
+              <TouchableOpacity style={styles.cancel} onPress={actions.hideEdit}>
+                <Text>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.save} onPress={actions.updateTopic}>
+                <Text style={styles.saveText}>Save</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </KeyboardAvoidingView>
+      </Modal>
+
+      </KeyboardAvoidingView>
   );
 }
 

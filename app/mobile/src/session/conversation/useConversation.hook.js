@@ -11,6 +11,10 @@ export function useConversation() {
     momentum: false,
     focus: null,
     host: null,
+    editing: false,
+    editTopicId: null,
+    editData: null,
+    editMessage: null,
   });
 
   const conversation = useContext(ConversationContext);
@@ -56,8 +60,19 @@ export function useConversation() {
     removeTopic: async (topicId) => {
       await conversation.actions.removeTopic(topicId);
     },
-    updateTopic: async (topicId, data) => {
-      await conversation.actions.setTopicSubject(topicId, data);
+    editTopic: async (topicId, data) => {
+console.log("EDITING!");
+      updateState({ editing: true, editTopicId: topicId, editData: data });
+      //await conversation.actions.setTopicSubject(topicId, data);
+    },
+    hideEdit: () => {
+      updateState({ editing: false });
+    },
+    updateTopic: () => {
+      updateState({ editing: false });
+    },
+    setEditMessage: (editMessage) => {
+      updateState({ editMessage });
     },
     blockTopic: async (topicId) => {
       await conversation.actions.blockTopic(topicId);
