@@ -162,48 +162,6 @@ export function TopicItem({ item, focused, focus, hosting, remove, update, block
             <MatIcons name="cloud-refresh" size={32} color={Colors.divider} />
           </View>
         )}
-        <Modal
-          animationType="fade"
-          transparent={true}
-          visible={state.carousel}
-          supportedOrientations={['portrait', 'landscape']}
-          onRequestClose={actions.hideCarousel}
-        >
-          <View style={styles.modal}>
-            <Carousel
-              data={state.assets}
-              firstItem={state.carouselIndex}
-              renderItem={renderAsset}
-              sliderWidth={state.width}
-              itemWidth={state.width}
-            />
-          </View>
-        </Modal> 
-        <Modal
-          animationType="fade"
-          transparent={true}
-          visible={state.editing}
-          supportedOrientations={['portrait', 'landscape']}
-          onRequestClose={actions.hideEdit}
-        >
-          <KeyboardAvoidingView behavior="height" style={styles.modal}>
-            <View style={styles.editContainer}>
-              <Text style={styles.editHeader}>Edit Message Text:</Text>
-              <View style={styles.inputField}>
-                <TextInput style={styles.input} value={state.editMessage} onChangeText={actions.setEditMessage}
-                    autoCapitalize="sentences" placeholder="Message Text" multiline={true} />
-              </View>
-              <View style={styles.editControls}>
-                <TouchableOpacity style={styles.cancel} onPress={actions.hideEdit}>
-                  <Text>Cancel</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.save} onPress={editMessage}>
-                  <Text style={styles.saveText}>Save</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </KeyboardAvoidingView>
-        </Modal> 
       </TouchableOpacity>
       { focused && (
         <View style={styles.focused}>
@@ -222,6 +180,48 @@ export function TopicItem({ item, focused, focus, hosting, remove, update, block
           )}
         </View>
       )}
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={state.carousel}
+        supportedOrientations={['portrait', 'landscape']}
+        onRequestClose={actions.hideCarousel}
+      >
+        <View style={styles.modal}>
+          <Carousel
+            data={state.assets}
+            firstItem={state.carouselIndex}
+            renderItem={renderAsset}
+            sliderWidth={state.width}
+            itemWidth={state.width}
+          />
+        </View>
+      </Modal> 
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={state.editing}
+        supportedOrientations={['portrait', 'landscape']}
+        onRequestClose={actions.hideEdit}
+      >
+        <KeyboardAvoidingView behavior="height" style={styles.modal}>
+          <View style={styles.editContainer}>
+            <Text style={styles.editHeader}>Edit Message Text:</Text>
+            <View style={styles.inputField}>
+              <TextInput style={styles.input} value={state.editMessage} onChangeText={actions.setEditMessage}
+                  autoCapitalize="sentences" placeholder="Message Text" multiline={true} />
+            </View>
+            <View style={styles.editControls}>
+              <TouchableOpacity style={styles.cancel} onPress={actions.hideEdit}>
+                <Text>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.save} onPress={editMessage}>
+                <Text style={styles.saveText}>Save</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </KeyboardAvoidingView>
+      </Modal> 
     </View>
   );
 }
