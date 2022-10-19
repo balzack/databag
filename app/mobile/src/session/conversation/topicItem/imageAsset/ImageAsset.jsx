@@ -8,8 +8,14 @@ export function ImageAsset({ topicId, asset, dismiss }) {
 
   return (
     <TouchableOpacity style={styles.container} activeOpacity={1} onPress={dismiss}>
-      <Image source={{ uri: state.url }} onLoad={actions.loaded} style={{ borderRadius: 4, width: state.imageWidth, height: state.imageHeight }} resizeMode={'cover'} />
-      { !state.loaded && (
+      <Image source={{ uri: state.url }} onLoad={actions.loaded} onError={actions.failed}
+          style={{ borderRadius: 4, width: state.imageWidth, height: state.imageHeight }} resizeMode={'cover'} />
+      { state.failed && (
+        <View style={styles.loading}>
+          <ActivityIndicator color={Colors.alert} size="large" />
+        </View>
+      )}
+      { !state.loaded && !state.failed && (
         <View style={styles.loading}>
           <ActivityIndicator color={Colors.white} size="large" />
         </View>

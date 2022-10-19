@@ -13,6 +13,7 @@ export function useImageAsset(topicId, asset) {
     imageHeight: 1,
     url: null,
     loaded: false,
+    failed: false,
   });
 
   const conversation = useContext(ConversationContext);
@@ -44,17 +45,17 @@ export function useImageAsset(topicId, asset) {
 
   useEffect(() => {
     const url = conversation.actions.getTopicAssetUrl(topicId, asset.full); 
-    if (url) {
-      Image.getSize(url, (width, height) => {
-        updateState({ url, imageRatio: width / height });
-      });
-    }
+    updateState({ url });
   }, [topicId, conversation, asset]);
 
   const actions = {
-    loaded: () => {
-      updateState({ loaded: true });
-    }
+    loaded: (e) => {
+      const { width, height } = e.nativeEvent.source;
+      updateState({ loaded: true, imageRatio: width / height });
+    },
+    failed: () => {
+      updateState({ failed: true });
+    },
   };
 
   return { state, actions };

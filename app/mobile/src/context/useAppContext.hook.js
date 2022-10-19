@@ -21,6 +21,7 @@ export function useAppContext() {
   const profile = useContext(ProfileContext);
   const card = useContext(CardContext);
   const channel = useContext(ChannelContext);
+  const count = useRef(0);
 
   const ws = useRef(null);
 
@@ -101,14 +102,17 @@ export function useAppContext() {
         catch(err) {
           console.log(err);
         }
-        updateState({ disconnected: 0 });
+        count.current = 0;
+        updateState({ disconnected: count.current });
       }
       catch (err) {
         console.log(err);
       }
     }
     ws.current.onclose = (e) => {
-      updateState({ disconnected: state.disconnected + 1 });
+      count.current += 1;
+console.log("CURRENT1: ", count.current);
+      updateState({ disconnected: count.current });
       console.log(e)
       setTimeout(() => {
         if (ws.current != null) {
@@ -124,7 +128,9 @@ export function useAppContext() {
       ws.current.send(JSON.stringify({ AppToken: token }))
     }
     ws.current.error = (e) => {
-      updateState({ disconnected: state.disconnected + 1 });
+      count.current += 1;
+console.log("CURRENT2: ", count.current);
+      updateState({ disconnected: count.current });
       console.log(e)
     }
   }
