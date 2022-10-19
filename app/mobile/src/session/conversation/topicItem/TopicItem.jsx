@@ -1,4 +1,4 @@
-import { KeyboardAvoidingView, FlatList, View, Text, TextInput, Modal, Image, Alert } from 'react-native';
+import { KeyboardAvoidingView, TouchableOpacity as Touchy, FlatList, View, Text, TextInput, Modal, Image, Alert } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useTopicItem } from './useTopicItem.hook';
 import { styles } from './TopicItem.styled';
@@ -212,12 +212,12 @@ export function TopicItem({ item, focused, focus, hosting, remove, update, block
                   autoCapitalize="sentences" placeholder="Message Text" multiline={true} />
             </View>
             <View style={styles.editControls}>
-              <TouchableOpacity style={styles.cancel} onPress={actions.hideEdit}>
+              <Touchy style={styles.cancel} onPress={actions.hideEdit}>
                 <Text>Cancel</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.save} onPress={editMessage}>
+              </Touchy>
+              <Touchy style={styles.save} onPress={editMessage}>
                 <Text style={styles.saveText}>Save</Text>
-              </TouchableOpacity>
+              </Touchy>
             </View>
           </View>
         </KeyboardAvoidingView>
