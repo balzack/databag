@@ -97,8 +97,7 @@ export function TopicItem({ item, focused, focus, hosting, remove, update, block
           <VideoAsset topicId={item.topicId} asset={asset.item.video} dismiss={actions.hideCarousel} />
         )}
         { asset.item.audio && (
-          <AudioAsset topicId={item.topicId} asset={asset.item.audio} active={state.activeId == asset.dataIndex}
-              setActive={() => actions.setActive(asset.dataIndex)} dismiss={actions.hideCarousel} />
+          <AudioAsset topicId={item.topicId} asset={asset.item.audio} dismiss={actions.hideCarousel} />
         )}
       </View>
     )

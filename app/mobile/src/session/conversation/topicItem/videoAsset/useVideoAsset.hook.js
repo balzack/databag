@@ -10,13 +10,14 @@ export function useVideoAsset(topicId, asset) {
     frameHeight: 1,
     videoRatio: 1,
     width: 1,
-    weight: 1,
     url: null,
+    playing: false,
+    loaded: false,
     controls: false,
-    closing: false,
+    display: { display: 'none' },
   });
 
-  const closing = useRef(null);
+  const controls = useRef(null);
   const conversation = useContext(ConversationContext);
   const dimensions = useWindowDimensions();
 
@@ -51,13 +52,20 @@ export function useVideoAsset(topicId, asset) {
 
   const actions = {
     setResolution: (width, height) => {
-      updateState({ controls: true, videoRatio: width / height });
+      updateState({ loaded: true, display: {}, videoRatio: width / height });
     },
-    showClose: () => {
-      clearTimeout(closing.current);
-      updateState({ closing: true });
-      closing.current = setTimeout(() => {
-        updateState({ closing: false });
+    play: () => {
+      actions.showControls();
+      updateState({ playing: true });
+    },
+    pause: () => {
+      updateState({ playing: false });
+    },
+    showControls: () => {
+      clearTimeout(controls.current);
+      updateState({ controls: true });
+      controls.current = setTimeout(() => {
+        updateState({ controls: false });
       }, 2000);
     },
   };

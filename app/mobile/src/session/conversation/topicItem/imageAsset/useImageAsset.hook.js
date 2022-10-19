@@ -12,6 +12,7 @@ export function useImageAsset(topicId, asset) {
     imageWidth: 1,
     imageHeight: 1,
     url: null,
+    loaded: false,
   });
 
   const conversation = useContext(ConversationContext);
@@ -51,6 +52,9 @@ export function useImageAsset(topicId, asset) {
   }, [topicId, conversation, asset]);
 
   const actions = {
+    loaded: () => {
+      updateState({ loaded: true });
+    }
   };
 
   return { state, actions };

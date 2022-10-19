@@ -2,12 +2,18 @@ import { StyleSheet } from 'react-native';
 import { Colors } from 'constants/Colors';
 
 export const styles = StyleSheet.create({
-  background: {
-    backgroundColor: Colors.lightgrey,
-    borderRadius: 4,
+  container: {
+    position: 'relative',
+    borderRadius: 8,
+    backgroundColor: Colors.formBackground,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  control: {
+    position: 'absolute',
+    paddingRight: 8,
+    paddingTop: 4,
   },
   label: {
     position: 'absolute',
@@ -18,13 +24,17 @@ export const styles = StyleSheet.create({
     paddingLeft: 20,
     paddingRight: 20,
   },
-  control: {
-    position: 'absolute',
-  },
   close: {
     position: 'absolute',
     top: 0,
     right: 0,
+    paddingTop: 4,
+    paddingBottom: 4,
+    paddingLeft: 8,
+    paddingRight: 8,
+  },
+  player: {
+    display: 'none',
   },
 })
 
