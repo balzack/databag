@@ -1,4 +1,5 @@
-import { Image, TouchableOpacity } from 'react-native';
+import { Image } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useImageThumb } from './useImageThumb.hook';
 import { styles } from './ImageThumb.styled';
 import Colors from 'constants/Colors';

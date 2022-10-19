@@ -1,4 +1,4 @@
-import { KeyboardAvoidingView, TouchableOpacity as Touchy, FlatList, View, Text, TextInput, Modal, Image, Alert } from 'react-native';
+import { KeyboardAvoidingView, FlatList, View, Text, TextInput, Modal, Image, Alert } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useTopicItem } from './useTopicItem.hook';
 import { styles } from './TopicItem.styled';
