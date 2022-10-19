@@ -1,5 +1,5 @@
 import { KeyboardAvoidingView, Modal, Platform, TextInput, View, TouchableOpacity, Text, } from 'react-native';
-import { activateKeepAwake, deactivateKeepAwake } from 'expo-keep-awake';
+import { useKeepAwake } from 'expo-keep-awake';
 import { FlatList, ScrollView } from '@stream-io/flat-list-mvcp';
 import { memo, useState, useRef, useEffect } from 'react';
 import { useConversation } from './useConversation.hook';
@@ -39,10 +39,7 @@ export function ConversationBody() {
 
   const ref = useRef();
 
-  useEffect(() => {
-    activateKeepAwake();
-    return () => { deactivateKeepAwake() };
-  }, []);
+  useKeepAwake();
 
   const latch = () => {
     if (!state.momentum) {
