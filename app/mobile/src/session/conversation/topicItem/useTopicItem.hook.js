@@ -22,9 +22,6 @@ export function useTopicItem(item, hosting, remove) {
     fontColor: Colors.text,
     editable: false,
     deletable: false,
-    editing: false,
-    editMessage: null,
-    editData: null,
   });
 
   const profile = useContext(ProfileContext);
@@ -141,17 +138,6 @@ export function useTopicItem(item, hosting, remove) {
     },
     setActive: (activeId) => {
       updateState({ activeId });
-    },
-    block: async () => {
-    },
-    showEdit: () => {
-      updateState({ editing: true });
-    },
-    hideEdit: () => {
-      updateState({ editing: false });
-    },
-    setEditMessage: (editMessage) => {
-      updateState({ editMessage });
     },
   };
 

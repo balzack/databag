@@ -46,20 +46,6 @@ export function TopicItem({ item, focused, focus, hosting, remove, update, block
     );
   }
 
-  const editMessage = async () => {
-    try {
-      await update(item.topicId, { ...state.editData, text: state.editMessage });
-      actions.hideEdit();
-    }
-    catch (err) {
-      console.log(err);
-      Alert.alert(
-        'Failed to Update Message',
-        'Please try again.',
-      )
-    }
-  }
-
   const hideMessage = () => {
     Alert.alert(
       "Blocking Message",
@@ -196,31 +182,6 @@ export function TopicItem({ item, focused, focus, hosting, remove, update, block
             itemWidth={state.width}
           />
         </View>
-      </Modal> 
-      <Modal
-        animationType="fade"
-        transparent={true}
-        visible={state.editing}
-        supportedOrientations={['portrait', 'landscape']}
-        onRequestClose={actions.hideEdit}
-      >
-        <KeyboardAvoidingView behavior="height" style={styles.modal}>
-          <View style={styles.editContainer}>
-            <Text style={styles.editHeader}>Edit Message Text:</Text>
-            <View style={styles.inputField}>
-              <TextInput style={styles.input} value={state.editMessage} onChangeText={actions.setEditMessage}
-                  autoCapitalize="sentences" placeholder="Message Text" multiline={true} />
-            </View>
-            <View style={styles.editControls}>
-              <Touchy style={styles.cancel} onPress={actions.hideEdit}>
-                <Text>Cancel</Text>
-              </Touchy>
-              <Touchy style={styles.save} onPress={editMessage}>
-                <Text style={styles.saveText}>Save</Text>
-              </Touchy>
-            </View>
-          </View>
-        </KeyboardAvoidingView>
       </Modal> 
     </View>
   );

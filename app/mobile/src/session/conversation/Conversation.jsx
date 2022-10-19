@@ -13,8 +13,6 @@ import { TopicItem } from './topicItem/TopicItem';
 export function ConversationHeader({ closeConversation, openDetails }) {
   const navigation = useNavigation();
   const { state, actions } = useConversation();
-console.log(state.editing);
-
 
   const setDetails = () => {
     openDetails(navigation);
@@ -44,6 +42,20 @@ export function ConversationBody() {
     if (!state.momentum) {
       actions.latch();
       ref.current.scrollToIndex({ animated: true, index: 0 });
+    }
+  }
+
+  const updateTopic = async () => {
+    try {
+      await actions.updateTopic();
+      actions.hideEdit();
+    }
+    catch (err) {
+      console.log(err);
+      Alert.alert(
+        'Failed to Update Message',
+        'Please try again.',
+      )
     }
   }
 
@@ -93,7 +105,7 @@ export function ConversationBody() {
               <TouchableOpacity style={styles.cancel} onPress={actions.hideEdit}>
                 <Text>Cancel</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.save} onPress={actions.updateTopic}>
+              <TouchableOpacity style={styles.save} onPress={updateTopic}>
                 <Text style={styles.saveText}>Save</Text>
               </TouchableOpacity>
             </View>

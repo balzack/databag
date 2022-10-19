@@ -61,15 +61,13 @@ export function useConversation() {
       await conversation.actions.removeTopic(topicId);
     },
     editTopic: async (topicId, data) => {
-console.log("EDITING!");
-      updateState({ editing: true, editTopicId: topicId, editData: data });
-      //await conversation.actions.setTopicSubject(topicId, data);
+      updateState({ editing: true, editTopicId: topicId, editMessage: data.text, editData: data });
     },
     hideEdit: () => {
       updateState({ editing: false });
     },
-    updateTopic: () => {
-      updateState({ editing: false });
+    updateTopic: async () => {
+      await conversation.actions.setTopicSubject(state.editTopicId, { ...state.editData, text: state.editMessage });
     },
     setEditMessage: (editMessage) => {
       updateState({ editMessage });
