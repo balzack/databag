@@ -9,8 +9,8 @@ export function useImageAsset(topicId, asset) {
     frameWidth: 1,
     frameHeight: 1,
     imageRatio: 1,
-    imageWidth: 128,
-    imageHeight: 128,
+    imageWidth: 1,
+    imageHeight: 1,
     url: null,
     loaded: false,
     failed: false,
@@ -39,7 +39,7 @@ export function useImageAsset(topicId, asset) {
         updateState({ imageWidth: width, imageHeight: height });
       }
     }
-  }, [state.frameWidth, state.frameHeight, state.imageRatio]);
+  }, [state.frameWidth, state.frameHeight, state.imageRatio, state.loaded]);
 
   useEffect(() => {
     updateState({ frameWidth: dimensions.width, frameHeight: dimensions.height });
