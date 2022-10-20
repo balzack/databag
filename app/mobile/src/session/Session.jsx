@@ -1,4 +1,4 @@
-import { View, TouchableOpacity, Text } from 'react-native';
+import { View, StatusBar, TouchableOpacity, Text } from 'react-native';
 import { useState, useEffect, useContext } from 'react';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -379,6 +379,7 @@ export function Session() {
           <Tab.Screen name="Contacts" component={ContactStackScreen} />
         </Tab.Navigator>
       )}
+      <StatusBar barStyle="dark-content" backgroundColor={Colors.background} /> 
     </View>
   );
 }

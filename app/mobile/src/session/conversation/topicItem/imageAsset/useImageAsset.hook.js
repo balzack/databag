@@ -9,8 +9,8 @@ export function useImageAsset(topicId, asset) {
     frameWidth: 1,
     frameHeight: 1,
     imageRatio: 1,
-    imageWidth: 1,
-    imageHeight: 1,
+    imageWidth: 128,
+    imageHeight: 128,
     url: null,
     loaded: false,
     failed: false,
@@ -24,18 +24,20 @@ export function useImageAsset(topicId, asset) {
   }
 
   useEffect(() => {
-    const frameRatio = state.frameWidth / state.frameHeight;
-    if (frameRatio > state.imageRatio) {
-      //height constrained
-      const height = 0.9 * state.frameHeight;
-      const width = height * state.imageRatio;
-      updateState({ imageWidth: width, imageHeight: height }); 
-    }
-    else {
-      //width constrained
-      const width = 0.9 * state.frameWidth;
-      const height = width / state.imageRatio;
-      updateState({ imageWidth: width, imageHeight: height });
+    if (state.loaded) {
+      const frameRatio = state.frameWidth / state.frameHeight;
+      if (frameRatio > state.imageRatio) {
+        //height constrained
+        const height = 0.9 * state.frameHeight;
+        const width = height * state.imageRatio;
+        updateState({ imageWidth: width, imageHeight: height }); 
+      }
+      else {
+        //width constrained
+        const width = 0.9 * state.frameWidth;
+        const height = width / state.imageRatio;
+        updateState({ imageWidth: width, imageHeight: height });
+      }
     }
   }, [state.frameWidth, state.frameHeight, state.imageRatio]);
 
