@@ -21,8 +21,8 @@ export const styles = StyleSheet.create({
     fontSize: 20,
     paddingTop: 8,
     top: 0,
-    paddingLeft: 20,
-    paddingRight: 20,
+    paddingLeft: 48,
+    paddingRight: 48,
   },
   close: {
     position: 'absolute',
