@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
 import { CardContext } from 'context/CardContext';
+import { AppContext } from 'context/AppContext';
 
 export function useCardsIcon(active) {
 
@@ -8,6 +9,7 @@ export function useCardsIcon(active) {
     setRevision: null,
   });
 
+  const app = useContext(AppContext);
   const card = useContext(CardContext);
 
   const updateState = (value) => {
@@ -23,9 +25,11 @@ export function useCardsIcon(active) {
   useEffect(() => {
     let revision;
     card.state.cards.forEach((contact) => {
-      if (contact?.detail?.status === 'pending' || contact?.detail?.status === 'requested') {
-        if (!revision || contact.detailRevision > revision) {
-          revision = contact.detailRevision;
+      if (contact?.detail?.statusUpdated > app.state.loginTimestamp) {
+        if (contact?.detail?.status === 'pending' || contact?.detail?.status === 'requested') {
+          if (!revision || contact.detailRevision > revision) {
+            revision = contact.detailRevision;
+          }
         }
       }
     });
@@ -33,7 +37,6 @@ export function useCardsIcon(active) {
       card.actions.setRequestRevision(state.curRevision);
     }
     updateState({ setRevision: card.state.requestRevision, curRevision: revision });
-    
   }, [card]);
 
   const actions = {};

@@ -1,4 +1,4 @@
-import { View, StatusBar, TouchableOpacity, Text } from 'react-native';
+import { View, TouchableOpacity, StatusBar, Text } from 'react-native';
 import { useState, useEffect, useContext } from 'react';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';

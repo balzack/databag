@@ -14,6 +14,9 @@ export function Dashboard(props) {
   const { config, server, token } = location.state;
   const { state, actions } = useDashboard(config, server, token); 
 
+console.log(state.createToken);
+console.log(state.accessToken);
+
   const saveConfig = async () => {
     try {
       await actions.saveConfig();
@@ -256,7 +259,7 @@ export function Dashboard(props) {
             </View>
             <View style={styles.accessToken}>
               <Text style={styles.tokenLabel}>Token:</Text>
-              <TouchableOpacity style={styles.copy}>
+              <TouchableOpacity style={styles.copy} onPress={() => Clipboard.setString(state.accessToken)}>
                 <Text style={styles.token}>{ state.accessToken }</Text>
                 <AntIcon style={styles.icon} name={'copy1'} size={20} />  
               </TouchableOpacity>
