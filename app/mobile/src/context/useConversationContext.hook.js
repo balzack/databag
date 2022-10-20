@@ -15,6 +15,7 @@ export function useConversationContext() {
     topics: new Map(),
     created: null,
     host: null,
+    init: false,
   });
   const store = useContext(StoreContext);
   const card = useContext(CardContext);
@@ -173,7 +174,7 @@ export function useConversationContext() {
               else {
                 channel.actions.setReadRevision(channelId, revision.current);
               }
-              updateState({ topics: topics.current });
+              updateState({ topics: topics.current, init: true });
             }
 
             syncing.current = false;
@@ -306,7 +307,7 @@ export function useConversationContext() {
         setView.current++;
         conversationId.current = selected;
         reset.current = true;
-        updateState({ subject: null, logo: null, contacts: [], topics: new Map() });
+        updateState({ subject: null, logo: null, contacts: [], topics: new Map(), init: false });
         sync();
         const { cardId, channelId, revision } = selected;
         if (cardId) {

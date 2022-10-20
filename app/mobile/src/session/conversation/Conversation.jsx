@@ -1,4 +1,4 @@
-import { KeyboardAvoidingView, Modal, Platform, TextInput, View, TouchableOpacity, Text, } from 'react-native';
+import { KeyboardAvoidingView, ActivityIndicator, Modal, Platform, TextInput, View, TouchableOpacity, Text, } from 'react-native';
 import { useKeepAwake } from 'expo-keep-awake';
 import { FlatList, ScrollView } from '@stream-io/flat-list-mvcp';
 import { memo, useState, useRef, useEffect } from 'react';
@@ -80,6 +80,11 @@ export function ConversationBody() {
              remove={actions.removeTopic} update={actions.editTopic} block={actions.blockTopic} />}
           keyExtractor={item => item.topicId}
         />
+        { !state.init && (
+          <View style={styles.loading}>
+            <ActivityIndicator size="large" color={Colors.primary} />
+          </View>
+        )}
         <View>
           <AddTopic />
           <View style={styles.latchbar}>

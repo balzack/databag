@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useRef, useState, useEffect, useContext } from 'react';
 import { ConversationContext } from 'context/ConversationContext';
 
 export function useConversation() {
@@ -15,8 +15,10 @@ export function useConversation() {
     editTopicId: null,
     editData: null,
     editMessage: null,
+    init: false,
   });
 
+  const delay = useRef(null);
   const conversation = useContext(ConversationContext);
 
   const updateState = (value) => {
@@ -24,7 +26,7 @@ export function useConversation() {
   }
 
   useEffect(() => {
-    const { subject, logo, topics, host } = conversation.state;
+    const { subject, logo, topics, host, init } = conversation.state;
     const items = Array.from(topics.values());
     const sorted = items.sort((a, b) => {
       const aTimestamp = a?.detail?.created;
@@ -39,6 +41,17 @@ export function useConversation() {
     });
     const filtered = sorted.filter(item => !(item.blocked === 1));
     updateState({ topics, subject, logo, host, topics: filtered });
+    if (init) {
+      clearTimeout(delay.current);
+      updateState({ init: true });
+    }
+    else {
+      if (!delay.current) {
+        delay.current = setTimeout(() => {
+          updateState({ init: false });
+        }, 500);
+      }
+    }
   }, [conversation]);
 
   const actions = {
