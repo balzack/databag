@@ -379,7 +379,7 @@ export function Session() {
           <Tab.Screen name="Contacts" component={ContactStackScreen} />
         </Tab.Navigator>
       )}
-      <StatusBar barStyle="dark-content" backgroundColor={Colors.background} /> 
+      <StatusBar barStyle="dark-content" backgroundColor={Colors.formBackground} /> 
     </View>
   );
 }
