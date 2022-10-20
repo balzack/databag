@@ -92,9 +92,14 @@ export function useAppContext() {
 
   const appAccess = async (token) => {
     let access = await setAccountAccess(token)
-    updateState({ access });
-    setWebsocket(access)
-    localStorage.setItem("session", JSON.stringify({ token: access }));
+    updateState({ access: access.appToken });
+    storeContext.actions.setValue('login:timestamp', access.created);
+    setWebsocket(access.appToken)
+    localStorage.setItem("session", JSON.stringify({
+      access: access.appToken,
+      timestamp: access.created,
+    }));
+    return access.created;
   }
 
   const appLogout = () => {
