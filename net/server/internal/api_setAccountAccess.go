@@ -68,5 +68,11 @@ func SetAccountAccess(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	WriteResponse(w, account.GUID+"."+access)
+  login := LoginAccess{
+    GUID: account.GUID,
+    AppToken: account.GUID + "." + access,
+    Created:  app.Created,
+  }
+
+	WriteResponse(w, login)
 }
