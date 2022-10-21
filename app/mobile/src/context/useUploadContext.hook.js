@@ -136,8 +136,16 @@ export function useUploadContext() {
 
 async function upload(entry, update, complete) {
   if (!entry.files?.length) {
-    entry.success(entry.assets);
-    complete();
+    try {
+      await entry.success(entry.assets);
+      complete();
+    }
+    catch (err) {
+      console.log(err);
+      entry.failure();
+      entry.error = true;
+      update();
+    }
   }
   else {
     const file = entry.files.shift();

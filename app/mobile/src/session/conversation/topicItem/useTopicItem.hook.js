@@ -83,7 +83,7 @@ export function useTopicItem(item, hosting, remove) {
       }
     }
 
-    let prased, message, assets, fontSize, fontColor;
+    let parsed, message, assets, fontSize, fontColor;
     try {
       parsed = JSON.parse(data);
       message = parsed.text;
@@ -104,9 +104,7 @@ export function useTopicItem(item, hosting, remove) {
         fontColor = Colors.text;
       }
     }
-    catch (err) {
-      console.log("empty message");
-    }
+    catch (err) { }
 
 
     let timestamp;

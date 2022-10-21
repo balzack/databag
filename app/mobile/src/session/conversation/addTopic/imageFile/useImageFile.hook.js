@@ -12,7 +12,8 @@ export function useImageFile() {
   }
 
   const actions = {
-    setInfo: (width, height) => {
+    loaded: (e) => {
+      const { width, height } = e.nativeEvent.source;
       updateState({ ratio: width / height });
     },
   };
