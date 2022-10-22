@@ -97,7 +97,7 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
   },
   nologintext: {
-    color: Colors.disabled,
+    color: Colors.grey,
   },
   create: {
     marginTop: 16,

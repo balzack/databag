@@ -2,6 +2,7 @@ import { ActivityIndicator, Alert, Text, TextInput, View, TouchableOpacity } fro
 import { styles } from './Login.styled';
 import Ionicons from '@expo/vector-icons/AntDesign';
 import { useLogin } from './useLogin.hook';
+import { Colors } from 'constants/Colors';
 
 export function Login() {
 
@@ -35,14 +36,14 @@ export function Login() {
           <View style={styles.inputwrapper}>
             <Ionicons style={styles.icon} name="user" size={18} color="#aaaaaa" />
             <TextInput style={styles.inputfield} value={state.login} onChangeText={actions.setLogin}
-                autoCorrect={false} autoCapitalize="none" placeholder="username@server" />
+                autoCorrect={false} autoCapitalize="none" placeholder="username@server" placeholderTextColor={Colors.grey} />
             <View style={styles.space} />
           </View>
           { state.showPassword && (
             <View style={styles.inputwrapper}>
               <Ionicons style={styles.icon} name="lock" size={18} color="#aaaaaa" />
               <TextInput style={styles.inputfield} value={state.password} onChangeText={actions.setPassword}
-                  autoCorrect={false} autoCapitalize="none" placeholder="password"/>
+                  autoCorrect={false} autoCapitalize="none" placeholder="password" placeholderTextColor={Colors.grey} />
               <TouchableOpacity onPress={actions.hidePassword}>
                 <Ionicons style={styles.icon} name="eye" size={18} color="#aaaaaa" />
               </TouchableOpacity>
@@ -52,7 +53,8 @@ export function Login() {
             <View style={styles.inputwrapper}>
               <Ionicons style={styles.icon} name="lock" size={18} color="#aaaaaa" />
               <TextInput style={styles.inputfield} value={state.password} onChangeText={actions.setPassword}
-                  autoCorrect={false} secureTextEntry={true} autoCapitalize="none" placeholder="password" />
+                  autoCorrect={false} secureTextEntry={true} autoCapitalize="none" placeholder="password" 
+                  placeholderTextColor={Colors.grey} />
               <TouchableOpacity onPress={actions.showPassword}>
                 <Ionicons style={styles.icon} name="eyeo" size={18} color="#aaaaaa" />
               </TouchableOpacity>

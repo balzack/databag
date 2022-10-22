@@ -2,6 +2,7 @@ import { ActivityIndicator, Alert, Text, TextInput, View, TouchableOpacity } fro
 import { styles } from './Reset.styled';
 import Ionicons from '@expo/vector-icons/AntDesign';
 import { useReset } from './useReset.hook';
+import Colors from 'constants/Colors';
 
 export function Reset() {
 
@@ -35,13 +36,13 @@ export function Reset() {
           <View style={styles.inputwrapper}>
             <Ionicons style={styles.icon} name="database" size={18} color="#aaaaaa" />
             <TextInput style={styles.inputfield} value={state.server} onChangeText={actions.setServer}
-                autoCapitalize="none" placeholder="server" />
+                autoCapitalize="none" placeholder="server" placeholderTextColor={Colors.grey} />
             <View style={styles.space} />
           </View>
           <View style={styles.inputwrapper}>
             <Ionicons style={styles.icon} name="key" size={18} color="#aaaaaa" />
             <TextInput style={styles.inputfield} value={state.token} onChangeText={actions.setToken}
-                autoCapitalize="none" placeholder="token"/>
+                autoCapitalize="none" placeholder="token" placeholderTextColor={Colors.grey} />
             <View style={styles.space} />
           </View>
           { state.enabled && (

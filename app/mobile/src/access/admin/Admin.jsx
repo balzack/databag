@@ -2,6 +2,7 @@ import { ActivityIndicator, Alert, Text, TextInput, View, TouchableOpacity } fro
 import { styles } from './Admin.styled';
 import Ionicons from '@expo/vector-icons/AntDesign';
 import { useAdmin } from './useAdmin.hook';
+import Colors from 'constants/Colors';
 
 export function Admin() {
 
@@ -35,13 +36,14 @@ export function Admin() {
           <View style={styles.inputwrapper}>
             <Ionicons style={styles.icon} name="database" size={18} color="#aaaaaa" />
             <TextInput style={styles.inputfield} value={state.server} onChangeText={actions.setServer}
-                autoCorrect={false} autoCapitalize="none" placeholder="server" />
+                autoCorrect={false} autoCapitalize="none" placeholder="server" placeholderTextColor={Colors.grey} />
             <View style={styles.space} />
           </View>
           <View style={styles.inputwrapper}>
             <Ionicons style={styles.icon} name="key" size={18} color="#aaaaaa" />
             <TextInput style={styles.inputfield} value={state.token} onChangeText={actions.setToken}
-                secureTextEntry={!state.plainText} autoCapitalize="none" placeholder="token"/>
+                secureTextEntry={!state.plainText} autoCapitalize="none" placeholder="token"
+                placeholderTextColor={Colors.grey} />
             <TouchableOpacity>
               { state.plainText && (
                 <Ionicons style={styles.icon} name="eye" size={18} color="#aaaaaa" onPress={actions.hidePass}/>

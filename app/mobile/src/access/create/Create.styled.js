@@ -124,7 +124,7 @@ export const styles = StyleSheet.create({
     marginBottom: 16,
   },
   nocreatetext: {
-    color: Colors.disabled,
+    color: Colors.grey,
   },
   login: {
     marginTop: 16,
