@@ -34,6 +34,7 @@ export function useConversationContext() {
   const conversationId = useRef(null);
   const reset = useRef(false);
   const setView = useRef(0);
+  const transfer = useRef(null);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }))
@@ -63,17 +64,22 @@ export function useConversationContext() {
         }
       });
       percent = Math.floor(((((loaded / total) * active) + complete) / count) * 100);
-      updateState({ progress: percent, uploadError: error });
+      if (transfer.current == null || error || Math.abs(transfer.current - percent) > 5) {
+        updateState({ progress: percent, uploadError: error });
+        transfer.current = percent;
+      }
 
       if (error) {
         setTimeout(() => {
           upload.actions.clearErrors(cardId, channelId);
           updateState({ progress: null, uploadError: false });
+          transfer.current = null;
         }, 2000);
       }
     }
     else {
       updateState({ progress: null });
+      transfer.current = null;
     }
   }, [upload, state.cardId, state.channelId]);
 
