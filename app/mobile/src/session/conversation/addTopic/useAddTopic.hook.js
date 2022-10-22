@@ -25,6 +25,11 @@ export function useAddTopic(cardId, channelId) {
     setState((s) => ({ ...s, ...value }));
   }
 
+  useEffect(() => {
+    const { progress, uploadError } = conversation.state;
+    updateState({ progress, uploadError });
+  }, [conversation]);
+
   const actions = {
     setMessage: (message) => {
       updateState({ message });

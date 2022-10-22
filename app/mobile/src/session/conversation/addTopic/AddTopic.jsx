@@ -111,6 +111,15 @@ export function AddTopic() {
 
   return (
     <SafeAreaView style={styles.add} edges={['right']}>
+      { !state.uploadError && state.progress && (
+        <View style={{ height: 0, width: `${state.progress}%`, borderColor: Colors.background, borderWidth: 1 }} />
+      )}
+      { !state.uploadError && !state.progress && (
+        <View style={{ height: 0, width: '100%', borderColor: Colors.formBackground, borderWidth: 1 }} />
+      )}
+      { state.uploadError && (
+        <View style={{ height: 0, width: '100%', borderColor: Colors.alert, borderWidth: 1 }} />
+      )}
       { state.assets.length > 0 && (
         <FlatList style={styles.carousel}
           data={state.assets}
