@@ -36,6 +36,9 @@ export function useCardsIcon(active) {
     if (active && revision !== state.setRevision) {
       card.actions.setRequestRevision(state.curRevision);
     }
+    if (!active && state.setRevision) {
+      card.actions.setRequestRevision(null);
+    } 
     updateState({ setRevision: card.state.requestRevision, curRevision: revision });
   }, [card]);
 
