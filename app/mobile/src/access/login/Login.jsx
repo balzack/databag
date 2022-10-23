@@ -1,4 +1,4 @@
-import { ActivityIndicator, Alert, Text, TextInput, View, TouchableOpacity } from 'react-native';
+import { KeyboardAvoidingView, ActivityIndicator, Alert, Text, TextInput, View, TouchableOpacity } from 'react-native';
 import { styles } from './Login.styled';
 import Ionicons from '@expo/vector-icons/AntDesign';
 import { useLogin } from './useLogin.hook';
@@ -21,7 +21,7 @@ export function Login() {
   }
 
   return (
-    <View style={styles.wrapper}>
+    <KeyboardAvoidingView style={styles.wrapper} behavior="padding" enabled={Platform.OS === 'ios' ? true : false}>
       <View style={styles.container}>
         <View style={styles.control}>
           <TouchableOpacity onPress={actions.config}>
@@ -85,6 +85,6 @@ export function Login() {
           </View>
         </View>      
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 }

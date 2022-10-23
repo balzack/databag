@@ -1,4 +1,4 @@
-import { ScrollView, ActivityIndicator, Alert, Text, TextInput, View, TouchableOpacity } from 'react-native';
+import { KeyboardAvoidingView, ScrollView, ActivityIndicator, Alert, Text, TextInput, View, TouchableOpacity } from 'react-native';
 import { styles } from './Create.styled';
 import Ionicons from '@expo/vector-icons/AntDesign';
 import { useCreate } from './useCreate.hook';
@@ -25,7 +25,7 @@ export function Create() {
   const validUsername = (state.username && state.usernameChecked && state.usernameValid);
 
   return (
-    <View style={styles.wrapper}>
+    <KeyboardAvoidingView style={styles.wrapper} behavior="padding" enabled={Platform.OS === 'ios' ? true : false}>
       <View style={styles.container}>
         <View style={styles.control}>
           <TouchableOpacity onPress={actions.config}>
@@ -154,6 +154,6 @@ export function Create() {
           </View>
         </ScrollView>      
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 }

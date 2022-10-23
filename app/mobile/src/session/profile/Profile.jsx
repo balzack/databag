@@ -251,15 +251,16 @@ export function Profile() {
             <Text style={styles.editHeader}>Edit Details:</Text>
             <View style={styles.inputField}>
               <TextInput style={styles.input} value={state.editName} onChangeText={actions.setEditName}
-                  autoCapitalize="words" placeholder="Name" />
+                  autoCapitalize="words" placeholder="Name" placeholderTextColor={Colors.grey} />
             </View>
             <View style={styles.inputField}>
               <TextInput style={styles.input} value={state.editLocation} onChangeText={actions.setEditLocation}
-                  autoCapitalize="words" placeholder="Location" />
+                  autoCapitalize="words" placeholder="Location" placeholderTextColor={Colors.grey} />
             </View>
             <View style={styles.inputField}>
               <TextInput style={styles.input} value={state.editDescription} onChangeText={actions.setEditDescription}
-                  autoCapitalize="sentences" placeholder="Description" multiline={true} />
+                  autoCapitalize="sentences" placeholder="Description" multiline={true} 
+                  placeholderTextColor={Colors.grey} />
             </View>
             <View style={styles.editControls}>
               <TouchableOpacity style={styles.cancel} onPress={actions.hideDetailEdit}>
@@ -284,7 +285,7 @@ export function Profile() {
             <Text style={styles.editHeader}>Change Login:</Text>
             <View style={styles.inputField}>
               <TextInput style={styles.input} value={state.editHandle} onChangeText={actions.setEditHandle}
-                  autoCapitalize={'none'} placeholder="Username" />
+                  autoCapitalize={'none'} placeholder="Username" placeholderTextColor={Colors.grey} />
               { state.checked && state.available && (
                 <Ionicons style={styles.icon} name="checkcircleo" size={18} color={Colors.background} />
               )}
@@ -295,7 +296,8 @@ export function Profile() {
             { !state.showPassword && (
               <View style={styles.inputField}>
                 <TextInput style={styles.input} value={state.editPassword} onChangeText={actions.setEditPassword}
-                    autoCapitalize={'none'} secureTextEntry={true} placeholder="Password" />
+                    autoCapitalize={'none'} secureTextEntry={true} placeholder="Password"
+                    placeholderTextColor={Colors.grey} />
                 <TouchableOpacity onPress={actions.showPassword}>
                   <Ionicons style={styles.icon} name="eyeo" size={18} color="#888888" />
                 </TouchableOpacity>
@@ -304,7 +306,8 @@ export function Profile() {
             { state.showPassword && (
               <View style={styles.inputField}>
                 <TextInput style={styles.input} value={state.editPassword} onChangeText={actions.setEditPassword}
-                    autoCapitalize={'none'} secureTextEntry={false} placeholder="Password" />
+                    autoCapitalize={'none'} secureTextEntry={false} placeholder="Password"
+                    placeholderTextColor={Colors.grey} />
                 <TouchableOpacity onPress={actions.hidePassword}>
                   <Ionicons style={styles.icon} name="eye" size={18} color="#888888" />
                 </TouchableOpacity>
@@ -313,7 +316,8 @@ export function Profile() {
             { !state.showConfirm && (
               <View style={styles.inputField}>
                 <TextInput style={styles.input} value={state.editConfirm} onChangeText={actions.setEditConfirm}
-                    autoCapitalize={'none'} secureTextEntry={true} placeholder="Confirm" />
+                    autoCapitalize={'none'} secureTextEntry={true} placeholder="Confirm"
+                    placeholderTextColor={Colors.grey} />
                 <TouchableOpacity onPress={actions.showConfirm}>
                   <Ionicons style={styles.icon} name="eyeo" size={18} color="#888888" />
                 </TouchableOpacity>
@@ -322,7 +326,8 @@ export function Profile() {
             { state.showConfirm && (
               <View style={styles.inputField}>
                 <TextInput style={styles.input} value={state.editConfirm} onChangeText={actions.setEditConfirm}
-                    autoCapitalize={'none'} secureTextEntry={false} placeholder="Confirm" />
+                    autoCapitalize={'none'} secureTextEntry={false} placeholder="Confirm"
+                    placeholderTextColor={Colors.grey} />
                 <TouchableOpacity onPress={actions.hideConfirm}>
                   <Ionicons style={styles.icon} name="eye" size={18} color="#888888" />
                 </TouchableOpacity>

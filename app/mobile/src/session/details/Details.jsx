@@ -144,7 +144,7 @@ export function DetailsBody({ channel, clearConversation }) {
             <Text style={styles.editHeader}>Edit Subject:</Text>
             <View style={styles.inputField}>
               <TextInput style={styles.input} value={state.subjectUpdate} onChangeText={actions.setSubjectUpdate}
-                  autoCapitalize="words" placeholder="Subject" />
+                  autoCapitalize="words" placeholder="Subject" placeholderTextColor={Colors.grey} />
             </View>
             <View style={styles.editControls}>
               <TouchableOpacity style={styles.cancel} onPress={actions.hideEditSubject}>

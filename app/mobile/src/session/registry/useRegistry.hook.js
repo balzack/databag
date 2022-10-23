@@ -34,7 +34,7 @@ export function useRegistry() {
   useEffect(() => {
     const server = profile.state.profile.node;
     updateState({ server });  
-    getAccounts(server);
+    getAccounts(server, true);
   }, [profile]);
 
   const setAccountItem = (item) => {

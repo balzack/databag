@@ -1,4 +1,4 @@
-import { ActivityIndicator, Alert, Text, TextInput, View, TouchableOpacity } from 'react-native';
+import { KeyboardAvoidingView, ActivityIndicator, Alert, Text, TextInput, View, TouchableOpacity } from 'react-native';
 import { styles } from './Reset.styled';
 import Ionicons from '@expo/vector-icons/AntDesign';
 import { useReset } from './useReset.hook';
@@ -21,7 +21,7 @@ export function Reset() {
   }
 
   return (
-    <View style={styles.wrapper}>
+    <KeyboardAvoidingView style={styles.wrapper} behavior="padding" enabled={Platform.OS === 'ios' ? true : false}>
       <View style={styles.container}>
         <View style={styles.control}>
           <TouchableOpacity onPress={actions.config}>
@@ -65,6 +65,6 @@ export function Reset() {
           </TouchableOpacity>
         </View>      
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 }

@@ -62,7 +62,7 @@ export function ChannelsBody({ state, actions, openConversation }) {
             <Text style={styles.addHeader}>New Topic:</Text>
             <View style={styles.inputField}>
               <TextInput style={styles.input} value={state.addSubject} onChangeText={actions.setAddSubject}
-                  autoCapitalize="words" placeholder="Subject (optional)" />
+                  autoCapitalize="words" placeholder="Subject (optional)" placeholderTextColor={Colors.grey} />
             </View>
             <Text style={styles.label}>Members:</Text>
             { state.connected.length == 0 && (

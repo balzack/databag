@@ -73,10 +73,12 @@ export function useChannels() {
 
     let updated = false;
     const login = app.state.loginTimestamp;
-    const update = item?.summary?.lastTopic?.created;
-    if (update && login && login < update) {
+    const { created, guid } = item?.summary?.lastTopic;
+    if (created && login && login < created) {
       if (!item.readRevision || item.readRevision < item.revision) {
-        updated = true;
+        if (profile.state.profile.guid != guid) {
+          updated = true;
+        }
       }
     }
 
@@ -147,9 +149,7 @@ export function useChannels() {
       }
     }
 
-    const timestamp = item?.summary?.lastTopic?.created;
-
-    return { cardId: item.cardId, channelId: item.channelId, contacts, logo, subject, message, updated, revision: item.revision, timestamp, blocked: item.blocked === 1 };
+    return { cardId: item.cardId, channelId: item.channelId, contacts, logo, subject, message, updated, revision: item.revision, timestamp: created, blocked: item.blocked === 1 };
   }
 
   useEffect(() => {
