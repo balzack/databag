@@ -9,6 +9,7 @@ export function useTopicItem(item, hosting, remove) {
 
   const [state, setState] = useState({
     name: null,
+    nameSet: null,
     known: null,
     logo: null,
     timestamp: null,
@@ -40,7 +41,7 @@ export function useTopicItem(item, hosting, remove) {
     const { topicId, detail } = item;
     const { guid, data, status, transform } = detail;
 
-    let name, known, logo;
+    let name, nameSet, known, logo;
     const identity = profile.state?.profile;
     if (guid === identity.guid) {
       known = true;
@@ -65,21 +66,24 @@ export function useTopicItem(item, hosting, remove) {
           logo = card.actions.getCardLogo(contact.cardId, contact.profileRevision);
         }
         else {
-          logo = 'avatar';
+          logo = null;
         }
 
         known = true;
         if (contact.profile.name) {
           name = contact.profile.name;
+          nameSet = true;
         }
         else {
-          name = `${contact.handle}@${contact.node}`;
+          name = `${contact.profile.handle}@${contact.profile.node}`;
+          nameSet = false;
         }
       }
       else {
         name = "unknown";
+        nameSet = false;
         known = false;
-        logo = 'avatar';
+        logo = null;
       }
     }
 
@@ -124,7 +128,7 @@ export function useTopicItem(item, hosting, remove) {
     const editable = detail.guid === identity.guid && parsed;
     const deletable = editable || hosting;
 
-    updateState({ logo, name, known, message, fontSize, fontColor, timestamp, transform, status, assets, deletable, editable, editData: parsed, editMessage: message });
+    updateState({ logo, name, nameSet, known, message, fontSize, fontColor, timestamp, transform, status, assets, deletable, editable, editData: parsed, editMessage: message });
   }, [card, item]);
 
   const actions = {

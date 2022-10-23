@@ -2,7 +2,6 @@ import { KeyboardAvoidingView, FlatList, View, Text, TextInput, Modal, Image, Al
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useTopicItem } from './useTopicItem.hook';
 import { styles } from './TopicItem.styled';
-import { Logo } from 'utils/Logo';
 import Colors from 'constants/Colors';
 import { VideoThumb } from './videoThumb/VideoThumb';
 import { AudioThumb } from './audioThumb/AudioThumb';
@@ -115,7 +114,7 @@ export function TopicItem({ item, focused, focus, hosting, remove, update, block
           { !state.logo && (
             <Image source={avatar} style={{ width: 28, height: 28, borderRadius: 6 }} />
           )}
-          <Text style={styles.name}>{ state.name }</Text>
+          <Text style={{ ...styles.name, color: state.nameSet ? Colors.text : Colors.grey }}>{ state.name }</Text>
           <Text style={styles.timestamp}>{ state.timestamp }</Text>
         </View>
         { state.status === 'confirmed' && (
@@ -139,7 +138,7 @@ export function TopicItem({ item, focused, focus, hosting, remove, update, block
               </View>
             )}
             { state.message && (
-              <Text style={{ ...styles.message, fontSize: state.fontSize }}>{ state.message }</Text>
+              <Text style={{ ...styles.message, fontSize: state.fontSize, color: state.fontColor }}>{ state.message }</Text>
             )}
           </>
         )}

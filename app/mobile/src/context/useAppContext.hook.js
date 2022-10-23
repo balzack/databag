@@ -72,14 +72,12 @@ export function useAppContext() {
     },
     access: async (server, token) => {
       const access = await setAccountAccess(server, token);
-console.log("ACCESS", access);
       await store.actions.setSession({ ...access, server});
       await setSession({ ...access, server });
     },
     login: async (username, password) => {
       const acc = username.split('@');
       const access = await setLogin(acc[0], acc[1], password)
-console.log("ACCESS2", access);
       await store.actions.setSession({ ...access, server: acc[1]});
       await setSession({ ...access, server: acc[1] }); 
     },

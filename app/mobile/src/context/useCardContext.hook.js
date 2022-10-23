@@ -3,8 +3,10 @@ import { StoreContext } from 'context/StoreContext';
 import { UploadContext } from 'context/UploadContext';
 import { getCards } from 'api/getCards';
 import { getCardProfile } from 'api/getCardProfile';
+import { setCardProfile } from 'api/setCardProfile';
 import { getCardDetail } from 'api/getCardDetail';
 
+import { getContactProfile } from 'api/getContactProfile';
 import { getContactChannels } from 'api/getContactChannels';
 import { getContactChannelDetail } from 'api/getContactChannelDetail';
 import { getContactChannelSummary } from 'api/getContactChannelSummary';
@@ -80,7 +82,7 @@ export function useCardContext() {
       cards.current.set(cardId, card);
     }
   }
-  const setCardProfile = (cardId, profile, revision) => {
+  const setCardIdentity = (cardId, profile, revision) => {
     let card = cards.current.get(cardId);
     if (card) {
       card.profile = profile;
@@ -245,7 +247,7 @@ export function useCardContext() {
                 if (view.profileRevision != profileRevision) {
                   const profile = await getCardProfile(server, appToken, card.id);
                   await store.actions.setCardItemProfile(guid, card.id, profileRevision, profile);
-                  setCardProfile(card.id, profile, profileRevision);
+                  setCardIdentity(card.id, profile, profileRevision);
                 }
                 await store.actions.setCardItemRevision(guid, card.id, card.revision);
                 setCardRevision(card.id, card.revision);
@@ -271,8 +273,9 @@ export function useCardContext() {
                     await store.actions.setCardItemNotifiedChannel(guid, card.id, notifiedChannel);
                   }
                 }
-                if (status.notifiedProflile != notifiedProfile) {
-                  // TODO update contact profile if different
+                if (status.notifiedProfile != notifiedProfile) {
+                  const message = await getContactProfile(cardServer, cardToken);
+                  await setCardProfile(server, appToken, card.id, message);
                   await store.actions.setCardItemNotifiedProfile(guid, card.id, notifiedProfile);
                 }
                 if (status.offsync) {
