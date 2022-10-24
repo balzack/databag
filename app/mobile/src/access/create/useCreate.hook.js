@@ -14,7 +14,7 @@ export function useCreate() {
   const [state, setState] = useState({
     busy: false,
     enabled: false,
-    server: null,
+    server: "databag.coredb.org",
     token: null,
     username: null,
     password: null,
@@ -22,7 +22,7 @@ export function useCreate() {
     showPassword: false,
     showConfirm: false,
     serverChecked: true,
-    serverValid: false,
+    serverValid: true,
     tokenRequired: false,
     tokenChecked: true,
     tokenValid: false,
