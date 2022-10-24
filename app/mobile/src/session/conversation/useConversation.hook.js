@@ -16,6 +16,7 @@ export function useConversation() {
     editData: null,
     editMessage: null,
     init: false,
+    error: false,
   });
 
   const delay = useRef(null);
@@ -26,7 +27,7 @@ export function useConversation() {
   }
 
   useEffect(() => {
-    const { subject, logo, topics, host, init } = conversation.state;
+    const { error, subject, logo, topics, host, init } = conversation.state;
     const items = Array.from(topics.values());
     const sorted = items.sort((a, b) => {
       const aTimestamp = a?.detail?.created;
@@ -40,7 +41,7 @@ export function useConversation() {
       return -1;
     });
     const filtered = sorted.filter(item => !(item.blocked === 1));
-    updateState({ topics, subject, logo, host, topics: filtered });
+    updateState({ topics, subject, logo, host, error, topics: filtered });
     if (init) {
       clearTimeout(delay.current);
       updateState({ init: true });
@@ -87,7 +88,10 @@ export function useConversation() {
     },
     blockTopic: async (topicId) => {
       await conversation.actions.blockTopic(topicId);
-    }
+    },
+    resync: () => {
+      conversation.actions.resync();
+    },
   };
 
   return { state, actions };

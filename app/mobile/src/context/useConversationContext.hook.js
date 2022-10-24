@@ -223,7 +223,7 @@ export function useConversationContext() {
               else {
                 channel.actions.setReadRevision(channelId, revision.current);
               }
-              updateState({ topics: topics.current, init: true });
+              updateState({ topics: topics.current, init: true, error: false });
             }
 
             syncing.current = false;
@@ -232,7 +232,7 @@ export function useConversationContext() {
           catch(err) {
             console.log(err);
             syncing.current = false;
-            //TODO set to unsynced state
+            updateState({ error: true });
           }
         }
       }
@@ -491,7 +491,13 @@ export function useConversationContext() {
           }
         }
       }
-    }
+    },
+    resync: () => {
+      if (conversationId.current) {
+        force.current = true;
+        sync();
+      }
+    },
   }
 
   return { state, actions }

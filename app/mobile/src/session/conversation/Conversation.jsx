@@ -24,9 +24,15 @@ export function ConversationHeader({ closeConversation, openDetails }) {
 
   return (
     <View style={styles.title}>
-      <View style={styles.subject}>
+      <TouchableOpacity style={styles.subject} activeOpacity={1} onPress={actions.resync}>
+        <View style={styles.icon} />
         <Text style={styles.subjectText} numberOfLines={1} ellipsizeMode={'tail'}>{ state.subject }</Text>
-      </View>
+        <View style={styles.icon}>
+          { state.error && (
+            <Ionicons name="exclamationcircleo" size={16} color={Colors.alert} />
+          )}
+        </View>
+      </TouchableOpacity>
       <TouchableOpacity style={styles.action} onPress={setDetails}>
         <Ionicons name="setting" size={26} color={Colors.primary} />
       </TouchableOpacity>

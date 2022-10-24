@@ -35,6 +35,14 @@ export const styles = StyleSheet.create({
     flexShrink: 1,
     textAlign: 'center',
     paddingLeft: 16,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  icon: {
+    paddingLeft: 4,
+    width: 32,
   },
   subjectText: {
     fontSize: 18,
