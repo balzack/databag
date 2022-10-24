@@ -40,6 +40,17 @@ export const styles = StyleSheet.create({
     paddingBottom: 8,
     alignItems: 'center',
   },
+  filterwrapper: {
+    display: 'flex',
+    flexDirection: 'row',
+    borderRadius: 4,
+    backgroundColor: Colors.white,
+    alignItems: 'center',
+    paddingTop: 4,
+    paddingBottom: 4,
+    marginLeft: 8,
+    width: '25%',
+  },
   inputwrapper: {
     display: 'flex',
     flexDirection: 'row',
@@ -100,8 +111,6 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 8,
     borderRadius: 4,
-  },
-  newtext: {
     paddingLeft: 8,
     color: Colors.white,
   },

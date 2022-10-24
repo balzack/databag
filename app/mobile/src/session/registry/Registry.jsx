@@ -24,10 +24,20 @@ export function RegistryTitle({ state, actions }) {
 
   return (
     <View style={styles.title}>
+      { !state.filter && (
+        <TouchableOpacity style={styles.sort} onPress={actions.filter}>
+          <Ionicons style={styles.icon} name="filter" size={18} color={Colors.disabled} />
+        </TouchableOpacity>
+      )}
+      { state.filter && (
+        <View style={styles.filterwrapper}>
+          <TextInput style={styles.inputfield} value={state.username} onChangeText={actions.setUsername}
+              autoCorrect={false} autoCapitalize="none" placeholderTextColor={Colors.disabled} placeholder="Username" />
+        </View>
+      )}
       <View style={styles.inputwrapper}>
         <TextInput style={styles.inputfield} value={state.server} onChangeText={actions.setServer}
             autoCorrect={false} autoCapitalize="none" placeholderTextColor={Colors.disabled} placeholder="Server" />
-        <View style={styles.space} />
       </View>
       { state.busy && (
         <View style={styles.search}>

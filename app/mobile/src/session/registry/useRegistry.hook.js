@@ -12,6 +12,8 @@ export function useRegistry() {
     tabbed: null,
     accounts: [],
     server: null,
+    filter: false,
+    username: null,
     busy: false,
   });
 
@@ -47,7 +49,13 @@ export function useRegistry() {
     if (!state.busy) {
       try {
         updateState({ busy: true });
-        const accounts = await getListing(server, true);
+        let accounts;
+        if (state.filter && state.username) {
+          accounts = await getListing(server, state.username);
+        }
+        else {
+          accounts = await getListing(server);
+        }
         const filtered = accounts.filter(item => {
           if (item.guid === profile.state.profile.guid) {
             return false;
@@ -74,7 +82,13 @@ export function useRegistry() {
     },
     search: async () => {
       await getAccounts(state.server, false);
-    }
+    },
+    filter: async () => {
+      updateState({ filter: true });
+    },
+    setUsername: async (username) => {
+      updateState({ username });
+    },
   };
 
   return { state, actions };

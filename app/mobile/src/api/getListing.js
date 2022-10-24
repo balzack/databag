@@ -1,12 +1,8 @@
 import { checkResponse, fetchWithTimeout } from './fetchUtil';
 
-export async function getListing(server) {
-  let host = "";
-  if (server) {
-    host = `https://${server}`;
-  }
-
-  let listing = await fetchWithTimeout(`${host}/account/listing`, { method: 'GET' });
+export async function getListing(server, filter) {
+  const param = filter ? `?filter=${filter}` : '';
+  let listing = await fetchWithTimeout(`https://${server}/account/listing${param}`, { method: 'GET' });
   checkResponse(listing);
   return await listing.json();
 }
