@@ -45,13 +45,11 @@ export function useStoreContext() {
       await db.current.executeSql("INSERT OR REPLACE INTO app (key, value) values (?, ?);", [dataId, encodeObject(profile)]);
     },
     getFirstRun: async (guid) => {
-      const dataId = `${guid}_first_run`;
-      const firstRun = await getAppValue(db.current, dataId, { set: true });
+      const firstRun = await getAppValue(db.current, "firstrun", { set: true });
       return firstRun.set;
     },
-    setFirstRun: async (guid) => {
-      const dataId = `${guid}_first_run`;
-      await db.current.executeSql("INSERT OR REPLACE INTO app (key, value) values (?, ?);", [dataId, encodeObject({ set: false })]);
+    setFirstRun: async () => {
+      await db.current.executeSql("INSERT OR REPLACE INTO app (key, value) values (?, ?);", ["firstrun", encodeObject({ set: false })]);
     },
     getCardRequestStatus: async (guid) => {
       const dataId = `${guid}_card_status`;
