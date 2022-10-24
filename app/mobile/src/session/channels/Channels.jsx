@@ -45,8 +45,8 @@ export function ChannelsBody({ state, actions, openConversation }) {
   return (
     <>
       { state.channels.length == 0 && (
-        <View style={styles.channels}>
-          <Text style={styles.notfound}>No Topics Found</Text>
+        <View style={styles.notfound}>
+          <Text style={styles.notfoundtext}>No Topics Found</Text>
         </View>
       )}
       { state.channels.length > 0 && (
@@ -114,8 +114,8 @@ export function Channels({ openConversation }) {
       </SafeAreaView>
       <SafeAreaView style={styles.channels} edges={['left']}>
         { state.channels.length == 0 && (
-          <View style={styles.channels}>
-            <Text style={styles.notfound}>No Topics Found</Text>
+          <View style={styles.notfound}>
+            <Text style={styles.notfoundtext}>No Topics Found</Text>
           </View>
         )}
         { state.channels.length != 0 && (

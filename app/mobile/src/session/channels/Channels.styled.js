@@ -57,6 +57,15 @@ export const styles = StyleSheet.create({
     flexShrink: 1,
   },
   notfound: {
+    flexShrink: 1,
+    flexGrow: 1,
+    width: '100%',
+    paddingLeft: 16,
+    paddingRight: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  notfoundtext: {
     fontSize: 20,
     color: Colors.grey,
   },
@@ -66,8 +75,6 @@ export const styles = StyleSheet.create({
     width: '100%',
     paddingLeft: 16,
     paddingRight: 16,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   addbottom: {
     backgroundColor: Colors.primary,

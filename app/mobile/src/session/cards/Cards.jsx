@@ -85,12 +85,19 @@ export function Cards({ openRegistry, openContact }) {
               <Text style={styles.newtext}>New</Text>
             </TouchableOpacity>
           </View>
-          <FlatList style={styles.cards}
-            data={state.cards}
-            initialNumToRender={25}
-            renderItem={({ item }) => <CardItem item={item} openContact={openContact} />}
-            keyExtractor={item => item.cardId}
-          />
+          { state.cards.length == 0 && (
+            <View style={styles.notfound}>
+              <Text style={styles.notfoundtext}>No Contacts Found</Text>
+            </View>
+          )}
+          { state.cards.length != 0 && (
+            <FlatList style={styles.cards}
+              data={state.cards}
+              initialNumToRender={25}
+              renderItem={({ item }) => <CardItem item={item} openContact={openContact} />}
+              keyExtractor={item => item.cardId}
+            />
+          )}
         </>
       )}
       { !state.tabbed && (
