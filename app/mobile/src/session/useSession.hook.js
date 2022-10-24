@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useRef, useState, useEffect, useContext } from 'react';
 import { useWindowDimensions } from 'react-native';
 import { useNavigate } from 'react-router-dom';
 import config from 'constants/Config';
@@ -12,25 +12,31 @@ export function useSession() {
     cardId: null,
     converstaionId: null,
   });
+
   const dimensions = useWindowDimensions();
   const navigate = useNavigate();
+  const tabbed = useRef(null);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
   }
 
   useEffect(() => {
-    if (dimensions.width > config.tabbedWidth) {
-      const width = Math.floor((dimensions.width * 33) / 100);
-      if (width > 500) {
-        updateStatus({ tabbed: false, baseWidth: 550, subWidth: 500 });
+    if (tabbed.current !== true) {
+      if (dimensions.width > config.tabbedWidth) {
+        const width = Math.floor((dimensions.width * 33) / 100);
+        tabbed.current = false;
+        if (width > 500) {
+          updateStatus({ tabbed: false, baseWidth: 550, subWidth: 500 });
+        }
+        else {
+          updateState({ tabbed: false, baseWidth: width + 50, subWidth: width });
+        }
       }
       else {
-        updateState({ tabbed: false, baseWidth: width + 50, subWidth: width });
+        tabbed.current = true;
+        updateState({ tabbed: true });
       }
-    }
-    else {
-      updateState({ tabbed: true });
     }
   }, [dimensions]);
 
