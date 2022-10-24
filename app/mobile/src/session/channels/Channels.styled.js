@@ -56,12 +56,18 @@ export const styles = StyleSheet.create({
     flexGrow: 1,
     flexShrink: 1,
   },
+  notfound: {
+    fontSize: 20,
+    color: Colors.grey,
+  },
   channels: {
     flexShrink: 1,
     flexGrow: 1,
     width: '100%',
     paddingLeft: 16,
     paddingRight: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   addbottom: {
     backgroundColor: Colors.primary,

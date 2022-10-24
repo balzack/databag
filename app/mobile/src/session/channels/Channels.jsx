@@ -44,12 +44,19 @@ export function ChannelsBody({ state, actions, openConversation }) {
 
   return (
     <>
-      <FlatList style={styles.channels}
-        data={state.channels}
-        initialNumToRender={25}
-        renderItem={({ item }) => <ChannelItem item={item} openConversation={openConversation} />}
-        keyExtractor={item => (`${item.cardId}:${item.channelId}`)}
-      />
+      { state.channels.length == 0 && (
+        <View style={styles.channels}>
+          <Text style={styles.notfound}>No Topics Found</Text>
+        </View>
+      )}
+      { state.channels.length > 0 && (
+        <FlatList style={styles.channels}
+          data={state.channels}
+          initialNumToRender={25}
+          renderItem={({ item }) => <ChannelItem item={item} openConversation={openConversation} />}
+          keyExtractor={item => (`${item.cardId}:${item.channelId}`)}
+        />
+      )}
       <Modal
         animationType="fade"
         transparent={true}
@@ -106,12 +113,19 @@ export function Channels({ openConversation }) {
         </View>
       </SafeAreaView>
       <SafeAreaView style={styles.channels} edges={['left']}>
-        <FlatList 
-          data={state.channels}
-          initialNumToRender={25}
-          renderItem={({ item }) => <ChannelItem item={item} openConversation={openConversation} />}
-          keyExtractor={item => (`${item.cardId}:${item.channelId}`)}
-        />
+        { state.channels.length == 0 && (
+          <View style={styles.channels}>
+            <Text style={styles.notfound}>No Topics Found</Text>
+          </View>
+        )}
+        { state.channels.length != 0 && (
+          <FlatList 
+            data={state.channels}
+            initialNumToRender={25}
+            renderItem={({ item }) => <ChannelItem item={item} openConversation={openConversation} />}
+            keyExtractor={item => (`${item.cardId}:${item.channelId}`)}
+          />
+        )}
       </SafeAreaView>
       <SafeAreaView style={styles.bottomArea} edges={['left']}>
         <TouchableOpacity style={styles.addbottom}>

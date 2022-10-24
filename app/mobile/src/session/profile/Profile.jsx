@@ -123,16 +123,31 @@ export function Profile() {
         )}
         <TouchableOpacity style={styles.detail} onPress={actions.showDetailEdit}>
           <View style={styles.attribute}>
-            <Text style={styles.nametext}>{ state.name }</Text>
+            { state.name && (
+              <Text style={styles.nametext}>{ state.name }</Text>
+            )}
+            { !state.name && (
+              <Text style={styles.nonametext}>Name</Text>
+            )}
             <Ionicons name="edit" size={16} color={Colors.text} />
           </View>
           <View style={styles.attribute}>
             <Ionicons name="enviromento" size={14} color={Colors.text} />
-            <Text style={styles.locationtext}>{ state.location }</Text>
+            { state.location && (
+              <Text style={styles.locationtext}>{ state.location }</Text>
+            )}
+            { !state.location && (
+              <Text style={styles.nolocationtext}>Location</Text>
+            )}
           </View> 
           <View style={styles.attribute}>
             <Ionicons name="book" size={14} color={Colors.text} />
-            <Text style={styles.descriptiontext}>{ state.description }</Text>
+            { state.description && (
+              <Text style={styles.descriptiontext}>{ state.description }</Text>
+            )}
+            { !state.description && (
+              <Text style={styles.nodescriptiontext}>Description</Text>
+            )}
           </View> 
         </TouchableOpacity>
         <View style={styles.visible}>

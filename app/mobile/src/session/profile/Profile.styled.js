@@ -75,6 +75,12 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     paddingBottom: 8,
   },
+  nonametext: {
+    fontSize: 18,
+    paddingRight: 8,
+    fontWeight: 'bold',
+    color: Colors.grey,
+  },
   nametext: {
     fontSize: 18,
     paddingRight: 8,
@@ -83,10 +89,22 @@ export const styles = StyleSheet.create({
   locationtext: {
     fontSize: 16,
     paddingLeft: 8,
+    color: Colors.text,
+  },
+  nolocationtext: {
+    fontSize: 16,
+    paddingLeft: 8,
+    color: Colors.grey,
   },
   descriptiontext: {
     fontSize: 16,
-    paddingLeft: 8
+    paddingLeft: 8,
+    color: Colors.text,
+  },
+  nodescriptiontext: {
+    fontSize: 16,
+    paddingLeft: 8,
+    color: Colors.grey,
   },
   visible: {
     display: 'flex',

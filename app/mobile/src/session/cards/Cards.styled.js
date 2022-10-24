@@ -104,6 +104,16 @@ export const styles = StyleSheet.create({
   findarea: {
     borderTopWidth: 1,
     borderColor: Colors.divider,
+  },
+  notfound: {
+    width: '100%',
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  notfoundtext: {
+    fontSize: 20,
+    color: Colors.grey,
   }
 })
 
