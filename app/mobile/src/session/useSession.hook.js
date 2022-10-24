@@ -2,6 +2,7 @@ import { useRef, useState, useEffect, useContext } from 'react';
 import { useWindowDimensions } from 'react-native';
 import { useNavigate } from 'react-router-dom';
 import config from 'constants/Config';
+import { StoreContext } from 'context/StoreContext';
 
 export function useSession() {
 
@@ -11,14 +12,25 @@ export function useSession() {
     baseWidth: '33%',
     cardId: null,
     converstaionId: null,
+    firstRun: null,
   });
 
+  const store = useContext(StoreContext);
   const dimensions = useWindowDimensions();
   const navigate = useNavigate();
   const tabbed = useRef(null);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
+  }
+
+  useEffect(() => {
+    checkFirstRun();
+  }, []);
+
+  const checkFirstRun = async () => {
+    const firstRun = await store.actions.getFirstRun();
+    updateState({ firstRun });
   }
 
   useEffect(() => {
@@ -43,7 +55,11 @@ export function useSession() {
   const actions = {
     setCardId: (cardId) => {
       updateState({ cardId });
-    }
+    },
+    clearFirstRun: () => {
+      updateState({ firstRun: false });
+      store.actions.setFirstRun();
+    },
   };
 
   return { state, actions };

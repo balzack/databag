@@ -1,4 +1,4 @@
-import { View, TouchableOpacity, StatusBar, Text } from 'react-native';
+import { View, TouchableOpacity, StatusBar, Text, Image } from 'react-native';
 import { useState, useEffect, useContext } from 'react';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -24,6 +24,7 @@ import { CommonActions } from '@react-navigation/native';
 import { ConversationContext } from 'context/ConversationContext';
 import { ProfileIcon } from './profileIcon/ProfileIcon';
 import { CardsIcon } from './cardsIcon/CardsIcon';
+import splash from 'images/session.png';
 
 const ConversationStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
@@ -344,42 +345,71 @@ export function Session() {
   const [cardsActive, setCardsActive] = useState(false);
 
   return (
-    <View style={styles.container}>
-      { state.tabbed === false && (
-        <ProfileDrawer.Navigator screenOptions={{ drawerPosition: 'right', headerShown: false, swipeEnabled: false, drawerType: 'front', drawerStyle: { width: state.subWidth } }}
-          drawerContent={(props) => <Profile />}>
-          <ProfileDrawer.Screen name="detail">
-            {(props) => <DetailDrawerScreen profileNav={props.navigation}/>}
-          </ProfileDrawer.Screen>
-        </ProfileDrawer.Navigator>
+    <View style={styles.body}>
+      { state.firstRun == true && (
+        <View style={styles.firstRun}>
+          <View style={styles.title}>
+            <Text style={styles.titleText}>Welcome To Databag</Text>
+          </View>
+          <Image style={styles.splash} source={splash} resizeMode="contain" />
+          <View style={styles.steps} >
+            <View style={styles.step}>
+              <Ionicons name={'user'} size={18} color={Colors.white} />
+              <Text style={styles.stepText}>Setup Your Profile</Text>
+            </View>
+            <View style={styles.step}>
+              <Ionicons name={'contacts'} size={18} color={Colors.white} />
+              <Text style={styles.stepText}>Connect With People</Text>
+            </View>
+            <View style={styles.step}>
+              <Ionicons name={'message1'} size={18} color={Colors.white} />
+              <Text style={styles.stepText}>Start a Conversation</Text>
+            </View>
+            <TouchableOpacity style={styles.start} onPress={actions.clearFirstRun}>
+              <Text style={styles.startText}>Get Started</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
       )}
-      { state.tabbed === true && (
-        <Tab.Navigator
-          screenListeners={{ state: (e) => setCardsActive(e?.data?.state?.index === 2) }}
-          screenOptions={({ route }) => ({
-            tabBarStyle: styles.tabBar,
-            headerShown: false,
-            tabBarIcon: ({ focused, color, size }) => {
-              if (route.name === 'Profile') {
-                return <ProfileIcon size={size} color={color} />
-              }
-              if (route.name === 'Conversation') {
-                return <Ionicons name={'message1'} size={size} color={color} />;
-              }
-              if (route.name === 'Contacts') {
-                return <CardsIcon size={size} color={color} active={cardsActive} />;
-              }
-            },
-            tabBarShowLabel: false,
-            tabBarActiveTintColor: Colors.white,
-            tabBarInactiveTintColor: Colors.disabled,
-          })}>
-          <Tab.Screen name="Conversation" component={ConversationStackScreen} />
-          <Tab.Screen name="Profile" component={ProfileStackScreen} />
-          <Tab.Screen name="Contacts" component={ContactStackScreen} />
-        </Tab.Navigator>
+      { state.firstRun == false && (
+        <View style={styles.container}>
+          { state.tabbed === false && (
+            <ProfileDrawer.Navigator screenOptions={{ drawerPosition: 'right', headerShown: false, swipeEnabled: false, drawerType: 'front', drawerStyle: { width: state.subWidth } }}
+              drawerContent={(props) => <Profile />}>
+              <ProfileDrawer.Screen name="detail">
+                {(props) => <DetailDrawerScreen profileNav={props.navigation}/>}
+              </ProfileDrawer.Screen>
+            </ProfileDrawer.Navigator>
+          )}
+          { state.tabbed === true && (
+            <Tab.Navigator
+              screenListeners={{ state: (e) => setCardsActive(e?.data?.state?.index === 2) }}
+              screenOptions={({ route }) => ({
+                tabBarStyle: styles.tabBar,
+                headerShown: false,
+                tabBarIcon: ({ focused, color, size }) => {
+                  if (route.name === 'Profile') {
+                    return <ProfileIcon size={size} color={color} />
+                  }
+                  if (route.name === 'Conversation') {
+                    return <Ionicons name={'message1'} size={size} color={color} />;
+                  }
+                  if (route.name === 'Contacts') {
+                    return <CardsIcon size={size} color={color} active={cardsActive} />;
+                  }
+                },
+                tabBarShowLabel: false,
+                tabBarActiveTintColor: Colors.white,
+                tabBarInactiveTintColor: Colors.disabled,
+              })}>
+              <Tab.Screen name="Conversation" component={ConversationStackScreen} />
+              <Tab.Screen name="Profile" component={ProfileStackScreen} />
+              <Tab.Screen name="Contacts" component={ContactStackScreen} />
+            </Tab.Navigator>
+          )}
+          <StatusBar barStyle="dark-content" backgroundColor={Colors.formBackground} /> 
+        </View>
       )}
-      <StatusBar barStyle="dark-content" backgroundColor={Colors.formBackground} /> 
     </View>
   );
 }

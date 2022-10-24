@@ -2,9 +2,63 @@ import { StyleSheet } from 'react-native';
 import { Colors } from 'constants/Colors';
 
 export const styles = StyleSheet.create({
+  body: {
+    width: '100%',
+    height: '100%',
+    backgroundColor: Colors.formBackground,
+  },
   container: {
     width: '100%',
     height: '100%',
+  },
+  firstRun: {
+    width: '100%',
+    height: '100%',
+    backgroundColor: Colors.background,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  splash: {
+    width: '100%',
+    height: '100%',
+    maxWidth: '80%',
+    maxHeight: '50%',
+  },
+  steps: {
+    flexGrow: 1,
+    display: 'flex',
+    justifyContent: 'center',
+  },
+  step: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingBottom: 12,
+  },
+  titleText: {
+    color: Colors.white,
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  title: {
+    flexGrow: 1,
+    justifyContent: 'center',
+  },
+  stepText: {
+    color: Colors.white,
+    paddingLeft: 16,
+    fontSize: 16,
+  },
+  start: {
+    marginTop: 16,
+    padding: 8,
+    backgroundColor: Colors.primary,
+    borderRadius: 4,
+    display: 'flex',
+    alignItems: 'center',
+  },
+  startText: {
+    color: Colors.white,
   },
   tabBar: {
     backgroundColor: Colors.primary,

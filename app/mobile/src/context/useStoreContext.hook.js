@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef, useContext } from 'react';
 import SQLite from "react-native-sqlite-storage";
 
-const DATABAG_DB = 'databag_v045.db';
+const DATABAG_DB = 'databag_v046.db';
 
 export function useStoreContext() {
   const [state, setState] = useState({});
@@ -43,6 +43,15 @@ export function useStoreContext() {
     setProfile: async (guid, profile) => {
       const dataId = `${guid}_profile`;
       await db.current.executeSql("INSERT OR REPLACE INTO app (key, value) values (?, ?);", [dataId, encodeObject(profile)]);
+    },
+    getFirstRun: async (guid) => {
+      const dataId = `${guid}_first_run`;
+      const firstRun = await getAppValue(db.current, dataId, { set: true });
+      return firstRun.set;
+    },
+    setFirstRun: async (guid) => {
+      const dataId = `${guid}_first_run`;
+      await db.current.executeSql("INSERT OR REPLACE INTO app (key, value) values (?, ?);", [dataId, encodeObject({ set: false })]);
     },
     getCardRequestStatus: async (guid) => {
       const dataId = `${guid}_card_status`;
