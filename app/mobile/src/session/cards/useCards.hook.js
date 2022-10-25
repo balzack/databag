@@ -31,7 +31,7 @@ export function useCards() {
 
   const setCardItem = (item) => {
     const { profile, detail } = item;
-    
+
     return {
       cardId: item.cardId,
       name: profile.name,
@@ -39,6 +39,7 @@ export function useCards() {
       status: detail.status,
       offsync: item.offsync,
       blocked: item.blocked,
+      offsync: item.offsync,
       updated: detail.statusUpdated,
       logo: profile.imageSet ? card.actions.getCardLogo(item.cardId, profile.revision) : 'avatar',
     }

@@ -1,6 +1,7 @@
 import { useState, useRef, useContext } from 'react';
 import { StoreContext } from 'context/StoreContext';
 import { UploadContext } from 'context/UploadContext';
+import { getCard } from 'api/getCard';
 import { getCards } from 'api/getCards';
 import { getCardProfile } from 'api/getCardProfile';
 import { setCardProfile } from 'api/setCardProfile';
@@ -42,15 +43,16 @@ export function useCardContext() {
   const syncing = useRef(false);
   const cards = useRef(new Map());
   const cardChannels = useRef(new Map());
+  const resync = useRef([]);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }))
   }
 
-  const getCard = (cardId) => {
+  const getCardEntry = (cardId) => {
     const card = cards.current.get(cardId);
     if (!card) {
-      throw new Error('cared not found');
+      throw new Error('card not found');
     }
     return card;
   }
@@ -213,12 +215,12 @@ export function useCardContext() {
   }
 
   const sync = async () => {
-    if (!syncing.current && setRevision.current !== curRevision.current) {
+    if (!syncing.current && (setRevision.current !== curRevision.current || resync.current.length > 0)) {
       syncing.current = true;
+      const { server, appToken, guid } = session.current;
 
       try {
         const revision = curRevision.current;
-        const { server, appToken, guid } = session.current;
 
         // get and store
         const delta = await getCards(server, appToken, setRevision.current);
@@ -254,41 +256,7 @@ export function useCardContext() {
               }
             }
 
-            const status = await store.actions.getCardItemStatus(guid, card.id);
-            const cardServer = status.profile.node;
-            const cardToken = status.profile.guid + '.' + status.detail.token;
-            if (status.detail.status === 'connected') {
-              try {
-                const { notifiedView, notifiedProfile, notifiedArticle, notifiedChannel } = card.data;
-                if (status.notifiedView !== notifiedView) {
-                  await store.actions.clearCardChannelItems(guid, card.id);
-                  await updateCardChannelItems(card.id, cardServer, cardToken, notifiedView, null);
-                  await store.actions.setCardItemNotifiedChannel(guid, card.id, notifiedChannel);
-                  await store.actions.setCardItemNotifiedView(guid, card.id, notifiedView);
-                  clearCardChannel(card.id);
-                }
-                else {
-                  if (status.notifiedChannel != notifiedChannel) {
-                    await updateCardChannelItems(card.id, cardServer, cardToken, status.notifiedView, status.notifiedChannel)
-                    await store.actions.setCardItemNotifiedChannel(guid, card.id, notifiedChannel);
-                  }
-                }
-                if (status.notifiedProfile != notifiedProfile) {
-                  const message = await getContactProfile(cardServer, cardToken);
-                  await setCardProfile(server, appToken, card.id, message);
-                  await store.actions.setCardItemNotifiedProfile(guid, card.id, notifiedProfile);
-                }
-                if (status.offsync) {
-                  await store.actions.clearCardItemOffsync(guid, card.id);
-                  setCardOffsync(card.id, false);
-                }
-              }
-              catch(err) {
-                console.log("card1:", err);
-                await store.actions.setCardItemOffsync(guid, card.id);
-                setCardOffsync(card.id, true);
-              } 
-            }
+            await syncCard(card);
           }
           else {
             //TODO clear card channel topics
@@ -307,11 +275,64 @@ export function useCardContext() {
         return;
       }
 
+      if (resync.current.length > 0) {
+        const ids = resync.current;
+        resync.current = [];
+
+        for(let i = 0; i < ids.length; i++) {
+          const item = cards.current.get(ids[i]);
+          if (item) {
+            const card = await getCard(server, appToken, ids[i]);
+            await syncCard(card);
+          }
+        }
+      }
+
       updateState({ cards: cards.current });
       syncing.current = false;
       sync();
     }
   };
+
+  const syncCard = async (card) => {
+
+    const { server, appToken, guid } = session.current;
+    const status = await store.actions.getCardItemStatus(guid, card.id);
+    const cardServer = status.profile.node;
+    const cardToken = status.profile.guid + '.' + status.detail.token;
+    if (status.detail.status === 'connected') {
+      try {
+        const { notifiedView, notifiedProfile, notifiedArticle, notifiedChannel } = card.data;
+        if (status.notifiedView !== notifiedView) {
+          await store.actions.clearCardChannelItems(guid, card.id);
+          await updateCardChannelItems(card.id, cardServer, cardToken, notifiedView, null);
+          await store.actions.setCardItemNotifiedChannel(guid, card.id, notifiedChannel);
+          await store.actions.setCardItemNotifiedView(guid, card.id, notifiedView);
+          clearCardChannel(card.id);
+        }
+        else {
+          if (status.notifiedChannel != notifiedChannel) {
+            await updateCardChannelItems(card.id, cardServer, cardToken, status.notifiedView, status.notifiedChannel)
+            await store.actions.setCardItemNotifiedChannel(guid, card.id, notifiedChannel);
+          }
+        }
+        if (status.notifiedProfile != notifiedProfile) {
+          const message = await getContactProfile(cardServer, cardToken);
+          await setCardProfile(server, appToken, card.id, message);
+          await store.actions.setCardItemNotifiedProfile(guid, card.id, notifiedProfile);
+        }
+        if (status.offsync) {
+          await store.actions.clearCardItemOffsync(guid, card.id);
+          setCardOffsync(card.id, 0);
+        }
+      }
+      catch(err) {
+        console.log("card1:", err);
+        await store.actions.setCardItemOffsync(guid, card.id);
+        setCardOffsync(card.id, 1);
+      } 
+    }
+  }
 
   const updateCardChannelItems = async (cardId, cardServer, cardToken, notifiedView, notifiedChannel) => {
     const { guid } = session.current;
@@ -501,19 +522,19 @@ export function useCardContext() {
       return await store.actions.clearCardChannelTopicItems(guid, cardId, channelId);
     },
     getChannelTopic: async (cardId, channelId, topicId) => {
-      const { detail, profile } = getCard(cardId);
+      const { detail, profile } = getCardEntry(cardId);
       return await getContactChannelTopic(profile.node, `${profile.guid}.${detail.token}`, channelId, topicId);
     },
     getChannelTopics: async (cardId, channelId, revision) => {
-      const { detail, profile } = getCard(cardId);
+      const { detail, profile } = getCardEntry(cardId);
       return await getContactChannelTopics(profile.node, `${profile.guid}.${detail.token}`, channelId, revision);
     },
     getChannelTopicAssetUrl: (cardId, channelId, topicId, assetId) => {
-      const { detail, profile } = getCard(cardId);
+      const { detail, profile } = getCardEntry(cardId);
       return getContactChannelTopicAssetUrl(profile.node, `${profile.guid}.${detail.token}`, channelId, topicId, assetId);
     },
     addChannelTopic: async (cardId, channelId, message, files) => {
-      const { detail, profile } = getCard(cardId);
+      const { detail, profile } = getCardEntry(cardId);
       const node = profile.node;
       const token = `${profile.guid}.${detail.token}`;
       if (files?.length > 0) {
@@ -535,16 +556,20 @@ export function useCardContext() {
       }
     },
     setChannelTopicSubject: async (cardId, channelId, topicId, data) => {
-      const { detail, profile } = getCard(cardId);
+      const { detail, profile } = getCardEntry(cardId);
       return await setContactChannelTopicSubject(profile.node, `${profile.guid}.${detail.token}`, channelId, topicId, data);
     },
     removeChannel: async (cardId, channelId) => {
-      const { detail, profile } = getCard(cardId);
+      const { detail, profile } = getCardEntry(cardId);
       return await removeContactChannel(profile.node, `${profile.guid}.${detail.token}`, channelId);
     },
     removeChannelTopic: async (cardId, channelId, topicId) => {
-      const { detail, profile } = getCard(cardId);
+      const { detail, profile } = getCardEntry(cardId);
       return await removeContactChannelTopic(profile.node, `${profile.guid}.${detail.token}`, channelId, topicId);
+    },
+    resync: (cardId) => {
+      resync.current.push(cardId);
+      sync();
     },
   }
 

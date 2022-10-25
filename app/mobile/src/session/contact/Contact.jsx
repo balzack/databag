@@ -9,7 +9,18 @@ import Colors from 'constants/Colors';
 
 export function ContactTitle({ contact, closeContact }) {
   const { state, actions } = useContact(contact, closeContact);
-  return (<Text style={styles.title}>{ `${state.handle}@${state.node}` }</Text>);
+
+  return (
+    <TouchableOpacity style={styles.resync} activeOpacity={1} onPress={actions.resync}>
+      <View style={styles.icon} />
+      <Text style={styles.title}>{ `${state.handle}@${state.node}` }</Text>
+      <View style={styles.icon}>
+        { state.offsync === 1 && (
+          <Ionicons name="exclamationcircleo" size={16} color={Colors.alert} />
+        )}
+      </View>
+    </TouchableOpacity>
+  );
 }
 
 export function Contact({ contact, closeContact }) {

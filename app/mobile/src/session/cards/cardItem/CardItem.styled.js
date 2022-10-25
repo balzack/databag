@@ -48,6 +48,12 @@ export const styles = StyleSheet.create({
     borderRadius: 4,
     backgroundColor: Colors.connecting,
   },
+  offsync: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: Colors.error,
+  },
   pending: {
     width: 8,
     height: 8,

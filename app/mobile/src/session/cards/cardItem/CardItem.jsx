@@ -20,7 +20,10 @@ export function CardItem({ item, openContact }) {
             <Text style={styles.name} numberOfLines={1} ellipsizeMode={'tail'}>{ item.name }</Text>
             <Text style={styles.handle} numberOfLines={1} ellipsizeMode={'tail'}>{ item.handle }</Text>
           </View>
-          { item.status === 'connected' && (
+          { item.status === 'connected' && item.offsync === 1 && (
+            <View style={styles.offsync} />
+          )}
+          { item.status === 'connected' && item.offsync !== 1 && (
             <View style={styles.connected} />
           )}
           { item.status === 'requested' && (

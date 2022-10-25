@@ -18,7 +18,8 @@ export function useContact(contact, close) {
     status: null,
     cardId: null,
     guid: null,
-    busy: false
+    busy: false,
+    offsync: false,
   });
 
   const dimensions = useWindowDimensions();
@@ -42,10 +43,10 @@ export function useContact(contact, close) {
     if (contact?.card) {
       const selected = card.state.cards.get(contact.card);
       if (selected) {
-        const { profile, detail, cardId } = selected;
+        const { offsync, profile, detail, cardId } = selected;
         const { name, handle, node, location, description, guid, imageSet, revision } = profile;
         const logo = imageSet ? card.actions.getCardLogo(cardId, revision) : 'avatar';
-        updateState({ name, handle, node, location, description, logo, cardId, guid, status: detail.status });
+        updateState({ offsync, name, handle, node, location, description, logo, cardId, guid, status: detail.status });
         stateSet = true;
       }
     }
@@ -56,12 +57,12 @@ export function useContact(contact, close) {
         const { cardId, profile, detail } = selected;
         const { name, handle, node, location, description, guid, imageSet, revision } = profile;
         const logo = imageSet ? card.actions.getCardLogo(cardId, revision) : 'avatar';
-        updateState({ name, handle, node, location, description, logo, cardId, guid, status: detail.status });
+        updateState({ offsync, name, handle, node, location, description, logo, cardId, guid, status: detail.status });
         stateSet = true;
       }
       else {
         const { name, handle, node, location, description, logo, guid } = contact.account;
-        updateState({ name, handle, node, location, description, logo, guid, cardId: null, status: null });
+        updateState({ offsync: false, name, handle, node, location, description, logo, guid, cardId: null, status: null });
         stateSet = true;
       }
     }
@@ -175,6 +176,9 @@ export function useContact(contact, close) {
         await card.actions.setCardBlocked(state.cardId);
         close();
       });
+    },
+    resync: () => {
+      card.actions.resync(contact.card);
     },
   };
 

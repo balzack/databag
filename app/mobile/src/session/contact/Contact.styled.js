@@ -18,6 +18,16 @@ export const styles = StyleSheet.create({
   title: {
     fontSize: 18,
   },
+  resync: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  icon: {
+    width: 32,
+    paddingLeft: 8
+  },
   drawer: {
     paddingTop: 16,
   },
