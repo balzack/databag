@@ -378,6 +378,13 @@ var endpoints = routes{
 	},
 
 	route{
+		"GetCard",
+		strings.ToUpper("Get"),
+		"/contact/cards/{cardID}",
+		GetCard,
+	},
+
+	route{
 		"GetCardDetail",
 		strings.ToUpper("Get"),
 		"/contact/cards/{cardID}/detail",
