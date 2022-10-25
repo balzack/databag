@@ -1,0 +1,237 @@
+
+Databag Privacy Policy
+
+Effective: October 24, 2022
+Purpose of the Policy
+
+Databag is committed to protecting your privacy as you use our service! We created this Privacy Policy (“Policy”) to give you confidence as you visit and use the Databag website and related services, including but not limited to Databag (collectively, the “Service”). This Policy covers how we collect, use, store, and share your information when you use our Service. The provisions of our Terms of Service apply to this Policy as well. All references to “we”, “us”, “our”, or “Databag” refer to Databag, a California nonprofit public benefit corporation. All references to “you”, “your”, or “user” refers to the user of the Service. Further, you agree that this Policy and our Terms apply to your past use, if any, of the Service prior to the Effective Date.
+
+ 
+
+Do not hesitate to contact us at github.com/balzack/databag if you have any questions or want to discuss this Policy. Capitalized terms used but not defined shall have the respective meanings given to them in the Terms.
+Contents
+
+Please visit each link to read the policy in full.
+
+What Information We Collect
+
+Lists the various types of information you voluntarily provide us, such as an email address or phone number.
+
+How We Use Your Information
+
+Describes how we use your information to provide you with our services, such as creating an account or hosting your data.
+
+How We Share Your Information
+
+Explains that we do not share your personally identifiable information with other third parties except to the extent that it is in furtherance of the Service, or when you choose to do so.
+
+Storing Your Information
+
+Policies on the storage and retention of your information, as well as security measures to safeguard your information.
+
+Government Requests
+
+How we will respond to governmental requests for your information.
+
+Third-Party Services and Practices Are Beyond Our Control
+
+Describes our lack of control over services we may utilize to deliver our services, such as a third-party hosting service or payment processor.
+
+Retention
+
+Explains our policy for retaining your data.
+
+California Privacy Statement
+
+A special policy for users in the State of California and their rights.
+What Information We Collect
+
+Information You Voluntarily Provide Us
+
+In order to sign up for the Service, you must create an Account which requires you to provide us with various information that is, or may be, considered personally identifiable information.
+
+ 
+
+To create an Account to access the Service, you will be required to create a username and password.
+
+ 
+
+Optional Information You Voluntarily Provide Us
+
+Our Services are designed as a simple and personalized way for you to store your personal data and information like your contact connections, email, phone number, physical or mailing address, geolocation, videos and image (“Digital Identity”). You are not required to provide us with your Digital Identity to create an Account. You have the ability to provide us with specific information about you in your use of our Services as outlined below.
+
+ 
+
+Further, now or in the future, we may allow you to provide us with access to additional information and data through integrations with third party goods and services.
+
+ 
+
+We also may gain access to other personally identifiable information that you provide us through communications between us and you.
+
+ 
+
+The various categories of information in this subsection is, or may be, considered personally identifiable information, and is used for the purpose of providing you with the Service’s functionality. These include:
+
+ 
+
+User Directory Profile – For users who choose to be included in the User Directory, Databag stores a digital copy of your profile image, name, username, user supplied location and description (or whichever of these you choose to include) in a separate registry to enable this service. You may choose to disable this service at any time.
+
+ 
+
+Location – For users who utilize the service which enables finding nearby users, a digital copy of your physical location is temporarily stored in a separate registry in order to use this service.
+
+ 
+
+Usage information – With your opt-in consent, we collect anonymized information related to how you use the Services, including actions you take in your Account like first launch, log in, log out, your general geographic location, some app events and crash data, type of device and operating system you are using. We use this information to provide, and improve our Services, and protect Databag users. To protect Databag users, we analyze things like IP addresses, login history, and email and password changes to detect and respond to abusive behavior.
+
+ 
+
+Email – If you choose to subscribe to our marketing emails or contact customer support and request a reply. Your email is not associated with your Databag account.
+
+ 
+
+Cookies
+
+We do not use cookies, and because of that, our website may occasionally not work right on certain browsers. We apologize for that, but we believe that is a small price to pay to assure your privacy.
+
+ 
+
+In the future, if we decide to support browser login to your Account or other functionalities where it would be necessary to utilize software that could reveal your identity, we will strive to keep it as safe and private as possible.
+
+ 
+
+Do Not Track Signals
+
+We do not track you or collect your information across third party websites or online services. Thus, we do not receive Do-Not-Track signals, or other similar signals. To the extent that we do receive any such signals, we will not comply with them as it is not an aspect of the functionality of our Service.
+How We Use Your Information
+
+As stated above, we use certain information voluntarily provided by you so that you may create an Account, to provide you with the core aspects of the Service, and to provide you with information and updates about the Service. For example, we may host your data, back it up, and share it when you ask us to.
+How We Share Your Information
+
+We also do not share your personally identifiable information with other third parties except to the extent that it is in furtherance of the Service, or when you choose to do so (as described below). We will not sell it to advertisers or other third parties.
+
+ 
+
+Information Shared By You Through The Service
+
+You may, now or in the future, be able to choose to voluntarily share information collected through the Service. For example, you may decide to share your Digital Identity on the User Directory. In addition, as described in this Policy, some aspects of the functionality of the Service will require us to share your personally identifiable information with third parties.
+
+ 
+
+Our Personnel And Vendors
+
+To be able to effectively provide you with the Service, and to improve the functionality of the Service, we may disclose your information to our employees, contractors, agents, vendors, and other similar persons or entities, to the extent that such persons or entities have a need-to-know such information in furtherance of the Service.
+
+Databag uses certain trusted third parties (for example, providers of cloud hosting services) for the purposes of helping us provide, improve, protect, and promote our Services. These third parties will access your information to perform tasks on our behalf.
+
+ 
+
+Trusted third parties include:
+
+Amazon Web Services Inc.
+
+Bluehost Inc.
+
+The Rocket Science Group, LLC (Mailchimp Email Marketing Platform)
+
+ 
+
+You can also choose to connect your Account with third-party services. By doing so, you are enabling Databag and those third parties to exchange information about you and data in your Account so that Databag and those third parties can provide, improve, protect, and promote their services. Please remember that third parties’ use of your information will be governed by their own privacy policies and terms of service.
+
+ 
+
+Other Third Parties
+
+In addition to our practices described above, we may share your information if we have a good-faith belief that such action is necessary to (1) comply with the law (see the section below on “Government Requests”), (2) protect and defend the rights or property of Databag, or (3) prevent an emergency involving danger of death or serious physical or mental injury to any person.
+Storing Your Information
+
+Storage and Retention Of Your Information
+
+ 
+
+We use commercially reasonable physical, managerial, and technical safeguards to preserve the integrity and security of your personal information.
+
+ 
+
+We cannot, however, ensure or warrant the security of any information you transmit to Databag or guarantee that your information on the Service may not be accessed, disclosed, altered, or destroyed by breach of any of our physical, technical, or managerial safeguards. As such, we will not be liable for any loss or damage you incur as a result of a breach of our security systems. In the event that personal information is compromised as a result of a breach of our security systems, we will promptly notify those persons whose personal information has been compromised, in accordance with the notification procedures set forth in this Policy, or as otherwise required by applicable law. If you would like to review your information that we have access to, you may contact via forums at github.com/balzack/databag.
+
+ 
+
+Security
+
+ 
+
+We use reasonable efforts to secure your information and to attempt to prevent the loss, misuse, and alteration of the information that we obtain from you. For example, we will require our personnel to sign confidentiality agreements that extend to your personal information; we review the privacy practices of new products and services that we integrate into our Service; we train our personnel on privacy issues; we will have personnel to monitor privacy issues; we restrict access to your personal information to individuals within and outside of Databag who need access to such information to provide the Service; we continue to work on features to keep your personal information safe in addition to measures like two-factor authentication and alerts when new devices and apps are linked to your account; we use encryption technology to secure data; and we deploy automated technologies to detect abusive behavior and content that may harm our Services, you, or other users. In addition, we rely on the technical safeguards provided by the third-party vendors we use to host, store, and process your information. However, you acknowledge and agree that loss, misuse, and alteration may occur despite our efforts to protect your information. We are not responsible to our users or to any third party due to any such loss, misuse, or alteration.
+
+ 
+
+Databag Hosts
+
+To promote the adoption of our ecosystem, we encourage volunteers (“Hosts”) who have technical ability to host Databags for their friends and family to help us grow our ecosystem. This is a first step to achieving individual privacy by creating a smaller “group” privacy system managed by Hosts.
+
+ 
+
+Due to security, liability, legal compliance and safety reasons, Hosts have access to the files and data you upload to your Databag. This functionality is in place to keep both you, your Host and Databag protected.
+Because of this potential access, we strongly urge users to consider the trustworthiness and capabilities of your Host. If you are concerned about the trustworthiness or capabilities of your host, you should not accept their invite to create an account. Instead, you may opt to wait until Databag is able to host accounts.
+
+ 
+
+If you do not trust your potential host, you may keep your Databag private by hosting your own Databag and node. In this case, YOU will be responsible for the security, liability, legal compliance and safety of your Databag.
+
+ 
+
+We ask our Hosts to agree and abide by the following set of policies in the treatment and handling of your Databag and Digital Identity, although we have no control or liability if they do not.
+
+ 
+
+Best Practices for Hosts:
+
+    Keep Databags secure by encrypting their contents while in a resting state and utilizing a strong password to access their Host portal.
+    Regularly backup Databags to a secure cloud or off-site location.Promptly update Nodes, Databags and other software when new versions are released.
+    Not analyze, distribute or transfer Databags and their data in any way except in the course of providing the service.
+    Not view or access a user’s Databag and its contents in any way except to
+        Honor federal, state and local rules regarding GDPR and government data requests.
+        Access to review data reported by other users for violating Databag’s Terms of Service, Privacy Policy or Community Standards.
+    Promptly remove data or accounts that do not comply with Databag’s Terms of Service, Privacy Policy or Community Standards.
+
+Government Requests
+
+Stewardship of your data is critical to us and a responsibility that we take seriously. We believe that your data should receive the same legal protections regardless of whether it is stored on our Services or on your home computer’s hard drive. We will abide by the following Government Request Principles when receiving, scrutinizing, and responding to government requests (including national security requests) for your data:
+
+ 
+
+Be accountable and transparent with our users. We share information with our users about how we handle government requests and about our disclosure of user data and removal of content.
+
+ 
+
+Minimize disclosure of user data and restrictions to freedom of expression online and fight blanket requests. We minimize the disclosure of user data and the restriction of user content by narrowly interpreting government requests in these areas.
+
+ 
+
+Protect all user’s human rights, including the rights to privacy and freedom of expression. We examine all appropriate options when faced with a government request that raises human rights concerns, including seeking clarification or modification or contesting the request.
+
+ 
+
+Provide trusted services to our users. Governments should not install backdoors into online services or compromise infrastructure to obtain user data. We’ll continue to work to protect our systems from this type of activity.
+
+ 
+
+We will publish a Transparency Report as part of our commitment to informing you about when and how governments ask us for information. This report details the types and numbers of requests we receive from law enforcement.
+Third-Party Services
+
+Our Service may utilize numerous third party services as part of the functionality of the Service, such as hosting services, analytics providers, communications services, and other vendors; and we may share your information with third parties to the extent explained in this Policy. Additionally, we use third party payment processing services for individual donations made through our website, such that we do not receive any of your sensitive financial information. We have no control over such third parties. Thus, we make no guarantees about, and assume no responsibility for the information, services, or data/privacy practices of third parties, which may differ significantly from our practices described in this Policy. We encourage you to review the privacy practices of such third parties to the extent possible, and we encourage you to use caution in deciding the information you choose to make available on the Service.
+Retention
+
+When you sign up for an Account with us, we will retain information you store on our Services for as long as your Account exists or as long as we need it to provide you the Services. If you delete your Account, we will initiate deletion of this information after 30 days, but please note: (1) there might be some latency in deleting this information from our servers and back-up storage; and (2) we may retain this information if necessary to comply with our legal obligations, resolve disputes, or enforce our agreements.  
+California Privacy Statement
+
+The following provision applies to users in the State of California. We do our best to keep your data accurate and up to date, to the extent that you provide us with the information we need to do so. If your data changes, then you are responsible for notifying us of those changes. Upon request, we will provide you with information about whether we hold, or process on behalf of a third party, any of your personally identifiable information.
+
+ 
+
+We will retain your information for as long as needed to provide you with the Service. We may also retain and use your information in order to comply with our legal obligations, resolve disputes, prevent abuse, and enforce our agreements.
+
+ 
+
+As explained in this Policy, we share your personally identifiable information in order to provide and support our Services.
+
