@@ -54,7 +54,7 @@ export function useContact(contact, close) {
       const { handle, name, node, logo, guid } = contact.account;
       const selected = card.actions.getByGuid(guid);
       if (selected) {
-        const { cardId, profile, detail } = selected;
+        const { offsync, cardId, profile, detail } = selected;
         const { name, handle, node, location, description, guid, imageSet, revision } = profile;
         const logo = imageSet ? card.actions.getCardLogo(cardId, revision) : 'avatar';
         updateState({ offsync, name, handle, node, location, description, logo, cardId, guid, status: detail.status });
