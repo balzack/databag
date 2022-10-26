@@ -8,53 +8,6 @@ Databag is committed to protecting your privacy as you use our service! We creat
 
  
 
-Do not hesitate to contact us at github.com/balzack/databag if you have any questions or want to discuss this Policy. Capitalized terms used but not defined shall have the respective meanings given to them in the Terms.
-Contents
-
-Please visit each link to read the policy in full.
-
-What Information We Collect
-
-Lists the various types of information you voluntarily provide us, such as an email address or phone number.
-
-How We Use Your Information
-
-Describes how we use your information to provide you with our services, such as creating an account or hosting your data.
-
-How We Share Your Information
-
-Explains that we do not share your personally identifiable information with other third parties except to the extent that it is in furtherance of the Service, or when you choose to do so.
-
-Storing Your Information
-
-Policies on the storage and retention of your information, as well as security measures to safeguard your information.
-
-Government Requests
-
-How we will respond to governmental requests for your information.
-
-Third-Party Services and Practices Are Beyond Our Control
-
-Describes our lack of control over services we may utilize to deliver our services, such as a third-party hosting service or payment processor.
-
-Retention
-
-Explains our policy for retaining your data.
-
-California Privacy Statement
-
-A special policy for users in the State of California and their rights.
-What Information We Collect
-
-Information You Voluntarily Provide Us
-
-In order to sign up for the Service, you must create an Account which requires you to provide us with various information that is, or may be, considered personally identifiable information.
-
- 
-
-To create an Account to access the Service, you will be required to create a username and password.
-
- 
 
 Optional Information You Voluntarily Provide Us
 

@@ -39,29 +39,29 @@ These instructions assume you have the following setup:
   Extract it to /usr/local:<br/>
     tar -C /usr/local -xzf go1.19.linux-armv6l.tar.gz<br/>
 
-## Step 5: setup databag paths
+## Step 5: clone and build the server
+  mkdir /app<br/>
+  cd /app<br/>
+  git clone https://github.com/balzack/databag.git<br/>
+  cd /app/databag/net/server<br/>
+  /usr/local/go/bin/go build databag<br/>
+  
+## Step 6: setup databag paths
   mkdir -p /var/lib/databag<br/>
   mkdir -p /opt/databag/transform<br/>
   cp /app/databag/net/container/transform/* /opt/databag/transform/<br/>
 
-## Step 6: initialize the internal datbase
+## Step 7: initialize the internal datbase
   sqlite3 /var/lib/databag/databag.db "VACUUM;"<br/>
   sqlite3 /var/lib/databag/databag.db "CREATE TABLE IF NOT EXISTS 'configs' ('id' integer NOT NULL UNIQUE,'config_id' text NOT NULL,'str_value' text,'num_value' integer,'bool_value' numeric,'bin_value' blob,PRIMARY KEY ('id'));"<br/>
   sqlite3 /var/lib/databag/databag.db "CREATE UNIQUE INDEX IF NOT EXISTS 'idx_configs_config_id' ON 'configs'('config_id');"<br/>
   sqlite3 /var/lib/databag/databag.db "insert into configs (config_id, str_value) values ('asset_path', '/var/lib/databag/');"<br/>
   sqlite3 /var/lib/databag/databag.db "insert into configs (config_id, str_value) values ('script_path', '/opt/databag/transform/');"<br/>
 
-## Step 7: clone and build the server
-  mkdir /app<br/>
-  cd /app<br/>
-  git clone https://github.com/balzack/databag.git<br/>
-  cd /app/databag/net/server<br/>
-  /usr/local/go/bin/go build databag<br/>
-
 ## Step 8: download the webapp
   // because the react toolchain isn't available for the pi zero, the webapp is build in a github action<br/>
   Download webapp.zip from the most recent build:<br/>
-    https://github.com/balzack/databag/actions/runs/2981276524<br/>
+    https://github.com/balzack/databag/actions/runs/3332539686<br/>
   SCP webapp.zip into the pi<br/>
   Extract it into the web/build directory<br/>
     mkdir /app/databag/net/web/build<br/>
