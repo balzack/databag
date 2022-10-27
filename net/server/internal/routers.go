@@ -735,6 +735,13 @@ var endpoints = routes{
 	},
 
 	route{
+		"RemoveProfile",
+		strings.ToUpper("Delete"),
+		"/profile",
+		RemoveProfile,
+	},
+
+	route{
 		"Status",
 		strings.ToUpper("Get"),
 		"/status",

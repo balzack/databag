@@ -14,9 +14,6 @@ export function Dashboard(props) {
   const { config, server, token } = location.state;
   const { state, actions } = useDashboard(config, server, token); 
 
-console.log(state.createToken);
-console.log(state.accessToken);
-
   const saveConfig = async () => {
     try {
       await actions.saveConfig();

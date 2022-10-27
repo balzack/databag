@@ -65,6 +65,21 @@ export function Profile() {
     }
   }
 
+  const remove = async () => {
+    Alert.alert(
+      "Deleting Account",
+      "Confirm?",
+      [
+        { text: "Cancel",
+          onPress: () => {},
+        },
+        { text: "Delete", onPress: () => {
+          actions.remove();
+        }}
+      ]
+    );
+  }
+
   const logout = async () => {
     Alert.alert(
       "Logging Out",
@@ -171,6 +186,10 @@ export function Profile() {
         <TouchableOpacity style={styles.logout} onPress={logout}>
           <Ionicons name="logout" size={14} color={Colors.white} />
           <Text style={styles.logoutText}>Logout</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.delete} onPress={remove}>
+          <Ionicons name="delete" size={14} color={Colors.white} />
+          <Text style={styles.deleteText}>Delete</Text>
         </TouchableOpacity>
       </View>
     );
