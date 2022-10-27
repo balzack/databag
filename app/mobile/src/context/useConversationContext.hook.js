@@ -337,7 +337,9 @@ export function useConversationContext() {
       }
     }
 
-    updateState({ topic, subject, logo, contacts, host: item.cardId, created: timestamp });
+    const { enableImage, enableAudio, enableVideo } = item.detail;
+    updateState({ topic, subject, logo, contacts, host: item.cardId, created: timestamp,
+      enableImage, enableAudio, enableVideo });
   }
 
   useEffect(() => {

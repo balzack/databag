@@ -16,6 +16,9 @@ export function useAddTopic(cardId, channelId) {
     colorSet: false,
     busy: false,
     textSize: 14,
+    enableImage: false,
+    enableAudio: false,
+    enableVideo: false,
   });
 
   const assetId = useRef(0);
@@ -26,8 +29,8 @@ export function useAddTopic(cardId, channelId) {
   }
 
   useEffect(() => {
-    const { progress, uploadError } = conversation.state;
-    updateState({ progress, uploadError });
+    const { progress, uploadError, enableImage, enableAudio, enableVideo } = conversation.state;
+    updateState({ progress, uploadError, enableImage, enableAudio, enableVideo });
   }, [conversation]);
 
   const actions = {
