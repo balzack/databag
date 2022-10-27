@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef, useContext } from 'react';
 import { getAvailable } from 'api/getAvailable';
 import { setLogin } from 'api/setLogin';
+import { removeProfile } from 'api/removeProfile';
 import { setAccountAccess } from 'api/setAccountAccess';
 import { addAccount } from 'api/addAccount';
 import { getUsername } from 'api/getUsername';
@@ -48,7 +49,8 @@ export function useAppContext() {
     await profile.actions.setSession(access);
     await card.actions.setSession(access);
     await channel.actions.setSession(access);
-    updateState({ session: true, loginTimestamp: access.created });
+    updateState({ session: true, server: access.server, appToken: access.appToken,
+      loginTimestamp: access.created });
     setWebsocket(access.server, access.appToken);
   }
 
@@ -82,6 +84,11 @@ export function useAppContext() {
       await setSession({ ...access, server: acc[1] }); 
     },
     logout: async () => {
+      await clearSession();
+      await store.actions.clearSession();
+    },
+    remove: async () => {
+      await removeProfile(state.server, state.appToken);
       await clearSession();
       await store.actions.clearSession();
     },

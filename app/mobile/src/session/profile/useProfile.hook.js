@@ -76,6 +76,10 @@ export function useProfile() {
       app.actions.logout();
       navigate('/');
     },
+    remove: async () => {
+      await app.actions.remove();
+      navigate('/');
+    },
     setVisible: async (searchable) => {
       updateState({ searchable });
       await account.actions.setSearchable(searchable);

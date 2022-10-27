@@ -136,6 +136,22 @@ export const styles = StyleSheet.create({
     color: Colors.white,
     paddingLeft: 8,
   },
+  delete: {
+    marginTop: 32,
+    borderRadius: 4,
+    backgroundColor: Colors.error,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingLeft: 8,
+    paddingRight: 8,
+    paddingTop: 8,
+    paddingBottom: 8,
+  },
+  deleteText: {
+    color: Colors.white,
+    paddingLeft: 8,
+  },
   switch: {
     false: Colors.grey,
     true: Colors.background,
