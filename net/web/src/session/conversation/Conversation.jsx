@@ -1,19 +1,30 @@
+import { useRef } from 'react';
 import { ConversationWrapper, StatusError } from './Conversation.styled';
 import { ExclamationCircleOutlined, SettingOutlined, CloseOutlined } from '@ant-design/icons';
 import { useConversation } from './useConversation.hook';
 import { Logo } from 'logo/Logo';
 import { AddTopic } from './addTopic/AddTopic';
-import { VirtualList } from './virtualList/VirtualList';
 import { TopicItem } from './topicItem/TopicItem';
-import { Spin, Tooltip } from 'antd';
+import { List, Spin, Tooltip } from 'antd';
 
 export function Conversation({ closeConversation, openDetails, cardId, channelId }) {
 
   const { state, actions } = useConversation(cardId, channelId);
+  const thread = useRef(null);
 
   const topicRenderer = (topic) => {
     return (<TopicItem host={cardId == null} topic={topic} />)
   }
+
+  const scrollThread = (e) => {
+    const content = thread.current?.scrollHeight;
+    const frame = thread.current?.clientHeight;
+    const position = e.target.scrollTop;
+    const above = content - (Math.abs(position) + frame);
+    if (above < 1024) {
+      actions.more();
+    }
+  };
 
   return (
     <ConversationWrapper>
@@ -47,9 +58,9 @@ export function Conversation({ closeConversation, openDetails, cardId, channelId
           </div>
         )}
       </div>
-      <div class="thread">
-        <VirtualList id={`${cardId}:${channelId}`}
-            items={state.topics} itemRenderer={topicRenderer} loadMore={actions.more} />
+      <div class="thread" ref={thread} onScroll={scrollThread}>
+        <List local={{ emptyText: '' }} itemLayout="horizontal" dataSource={state.topics} gutter="0"
+            renderItem={topicRenderer} />
         { state.loadingInit && (
           <div class="loading">
             <Spin size="large" delay={250} />

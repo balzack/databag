@@ -105,6 +105,7 @@ export function useConversation(cardId, channelId) {
   }, [cardId, channelId, card, channel]);
 
   useEffect(() => {
+    updateState({ topics: [] });
     conversation.actions.setConversationId(cardId, channelId);
     // eslint-disable-next-line
   }, [cardId, channelId]);

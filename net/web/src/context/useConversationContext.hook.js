@@ -44,6 +44,7 @@ export function useConversationContext() {
   const profile = useContext(ProfileContext);
   const topics = useRef(new Map());
   const view = useRef(0);
+  const more = useRef(true);
   const serialize = useRef(0);
 
   const updateState = (value) => {
@@ -268,9 +269,15 @@ export function useConversationContext() {
       updateConversation();
     },
     addHistory: () => {
-      updateState({ loadingMore: true });
-      events.current.push({ type: EVENT_MORE });
-      updateConversation();
+      if (more.current && !state.loadingMore) {
+        more.current = false;
+        updateState({ loadingMore: true });
+        events.current.push({ type: EVENT_MORE });
+        updateConversation();
+        setTimeout(() => {
+          more.current = true;
+        }, 2000);
+      }
     },
     setChannelSubject: async (subject) => {
       return await channel.actions.setChannelSubject(channelView.current.channelId, subject);
