@@ -134,7 +134,7 @@ export function TopicItem({ item, focused, focus, hosting, remove, update, block
             )}
             { state.transform === 'error' && (
               <View style={styles.status}>
-                <AntIcons name="weather-cloudy-alert" size={32} color={Colors.alert} />
+                <MatIcons name="weather-cloudy-alert" size={32} color={Colors.alert} />
               </View>
             )}
             { state.message && (
