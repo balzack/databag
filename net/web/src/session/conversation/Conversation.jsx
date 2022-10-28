@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import { ConversationWrapper, StatusError } from './Conversation.styled';
 import { ExclamationCircleOutlined, SettingOutlined, CloseOutlined } from '@ant-design/icons';
 import ReactResizeDetector from 'react-resize-detector';

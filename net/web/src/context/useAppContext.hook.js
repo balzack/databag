@@ -17,7 +17,6 @@ export function useAppContext() {
   const [state, setState] = useState({});
   const [appRevision, setAppRevision] = useState();
 
-  const delay = useRef(2);
   const ws = useRef(null);
   const revision = useRef(null);
 
@@ -158,11 +157,8 @@ export function useAppContext() {
           ws.current.onopen = () => {}
           ws.current.onerror = () => {}
           setWebsocket(token);
-          if (delay.current < 15) {
-            delay.current += 1;
-          }
         }
-      }, delay.current * 1000)
+      }, 1000)
     }
     ws.current.onopen = () => {
       ws.current.send(JSON.stringify({ AppToken: token }))
