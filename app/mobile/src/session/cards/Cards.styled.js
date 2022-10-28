@@ -99,7 +99,6 @@ export const styles = StyleSheet.create({
   },
   sort: {
     paddingRight: 12,
-    transform: [ { rotate: "270deg" }, ] 
   },
   findarea: {
     borderTopWidth: 1,
