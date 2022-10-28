@@ -41,7 +41,7 @@ export function useConversation(cardId, channelId) {
     let active = false;
     let uploadError = false;
     let uploadPercent = 0;
-    let uploadIndex = 0;
+    let uploadComplete = 0;
     let uploadCount = 0;
     let uploadActive = { loaded: 0, total: 0 };
     let uploadActiveCount = 0;
@@ -54,15 +54,15 @@ export function useConversation(cardId, channelId) {
         if (entry.error) {
           uploadError = true;
         }
-        uploadIndex += entry.uploaded;
         uploadCount += entry.count;
+        uploadComplete += (entry.index - 1);
         if (entry.active) {
           uploadActiveCount += 1;
           uploadActive.loaded += entry.active.loaded;
           uploadActive.total += entry.active.total;
         }
       });
-      uploadPercent = (uploadIndex + (uploadActiveCount * (uploadActive.loaded / uploadActive.total)) / uploadCount);
+      uploadPercent = (uploadComplete + (uploadActiveCount * (uploadActive.loaded / uploadActive.total))) / uploadCount;
       uploadPercent = Math.floor(uploadPercent * 100);
     }
 
