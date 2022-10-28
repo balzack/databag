@@ -54,9 +54,19 @@ export const ConversationWrapper = styled.div`
     position: relative;
     flex-grow: 1;
     min-height: 0;
-    overflow: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
     display: flex;
     flex-direction: column-reverse;
+
+    .empty {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20;
+      color: ${Colors.grey};
+    }
 
     .loading {
       position: absolute;

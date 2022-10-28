@@ -59,8 +59,13 @@ export function Conversation({ closeConversation, openDetails, cardId, channelId
         )}
       </div>
       <div class="thread" ref={thread} onScroll={scrollThread}>
-        <List local={{ emptyText: '' }} itemLayout="horizontal" dataSource={state.topics} gutter="0"
-            renderItem={topicRenderer} />
+        { state.topics.length === 0 && (
+          <div class="empty">This Topic Has No Messages</div>
+        )}
+        { state.topics.length !== 0 && (
+          <List local={{ emptyText: '' }} itemLayout="horizontal" dataSource={state.topics}
+              gutter="0" renderItem={topicRenderer} />
+        )}
         { state.loadingInit && (
           <div class="loading">
             <Spin size="large" delay={250} />
