@@ -11,6 +11,8 @@ export function useListing() {
     busy: false,
     disabled: true,
     display: null,
+    showFilter: false,
+    username: null,
   });
 
   const profile = useContext(ProfileContext);
@@ -25,13 +27,22 @@ export function useListing() {
   }, [state.node]);
 
   const actions = {
+    showFilter: () => {
+      updateState({ showFilter: true });
+    },
+    hideFilter: () => {
+      updateState({ showFilter: false });
+    },
+    setUsername: (username) => {
+      updateState({ username });
+    },
     onNode: (value) => {
       updateState({ node: value });
     },
     getListing: async () => {
       updateState({ busy: true });
       try {
-        let contacts = await getListing(state.node);
+        let contacts = await getListing(state.node, state.username);
         let filtered = contacts.filter(contact => (contact.guid !== profile.state.profile.guid));
         let sorted = filtered.sort((a, b) => {
           if (a?.name < b?.name) {

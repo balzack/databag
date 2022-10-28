@@ -27,21 +27,50 @@ export const ListingWrapper = styled.div`
     border-bottom: 1px solid ${Colors.divider};
     display: flex;
     flex-direction: row;
-    height: 48px;
+    min-height: 48px;
     padding-left: 16px;
     padding-right: 16px;
     padding-top: 8px;
     padding-bottom: 8px;
+    flex-shrink: 0;
+
+    .showfilter {
+      color: ${Colors.disabled};
+      font-size: 18px;
+      padding-right: 8px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+    } 
+
+    .hidefilter {
+      color: ${Colors.enabled};
+      font-size: 18px;
+      padding-right: 8px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+    } 
+
+    .params {
+      flex-grow: 1;
+    }
+
+    .username {
+      border: 1px solid ${Colors.divider};
+      background-color: ${Colors.white};
+      border-radius: 8px;
+      margin-top: 4px;
+    }
 
     .node {
       border: 1px solid ${Colors.divider};
       background-color: ${Colors.white};
       border-radius: 8px;
-      flex-grow: 1;
     }
 
     .inline {
-      padding-left: 8px;
+      padding-left: 4px;
       display: flex;
       flex-shrink: 0;
       align-items: center;
