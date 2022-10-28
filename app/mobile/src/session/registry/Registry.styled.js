@@ -79,8 +79,18 @@ export const styles = StyleSheet.create({
     flexShrink: 1,
     width: '100%',
     paddingLeft: 16,
-    paddingRight: 16,
     minHeight: 0,
+  },
+  empty: {
+    flexGrow: 1,
+    width: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  emptyText: {
+    color: Colors.grey,
+    fontSize: 16,
   },
   addbottom: {
     marginRight: 8,

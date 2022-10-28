@@ -55,11 +55,20 @@ export function RegistryTitle({ state, actions }) {
 
 export function RegistryBody({ state, actions, openContact }) {
   return (
-    <FlatList style={styles.accounts}
-      data={state.accounts}
-      renderItem={({ item }) => <RegistryItem item={item} openContact={openContact} />}
-      keyExtractor={item => item.guid}
-    />
+    <View style={styles.accounts}> 
+      { state.accounts.length === 0 && state.searcheg && (
+        <View style={styles.empty}>
+          <Text style={styles.emptyText}>No Contacts Found</Text>
+        </View>
+      )}
+      { state.accounts.length !== 0 && (
+        <FlatList
+          data={state.accounts}
+          renderItem={({ item }) => <RegistryItem item={item} openContact={openContact} />}
+          keyExtractor={item => item.guid}
+        />
+      )}
+    </View>
   );
 }
 
@@ -104,11 +113,18 @@ export function Registry({ closeRegistry, openContact }) {
               <Ionicons name={'close'} size={24} color={Colors.text} />
             </TouchableOpacity>
           </View>
-          <FlatList style={styles.accounts}
-            data={state.accounts}
-            renderItem={({ item }) => <RegistryItem item={item} openContact={openContact} />}
-            keyExtractor={item => item.guid}
-          />
+          { state.accounts.length === 0 && state.searched && (
+            <View style={styles.empty}>
+              <Text style={styles.emptyText}>No Contacts Found</Text>
+            </View>
+          )}
+          { state.accounts.length !== 0 && (
+            <FlatList style={styles.accounts}
+              data={state.accounts}
+              renderItem={({ item }) => <RegistryItem item={item} openContact={openContact} />}
+              keyExtractor={item => item.guid}
+            />
+          )}
         </>
       )}
       { !state.tabbed && (
@@ -134,11 +150,18 @@ export function Registry({ closeRegistry, openContact }) {
             </SafeAreaView>
           </View>
           <SafeAreaView edges={['right']}>
-            <FlatList style={styles.accounts}
-              data={state.accounts}
-              renderItem={({ item }) => <RegistryItem item={item} openContact={openContact} />}
-              keyExtractor={item => item.guid}
-            />
+            { state.accounts.length === 0 && state.searched && (
+              <View style={style.empty}>
+                <Text style={styles.emptyText}>No Contacts Found</Text>
+              </View>
+            )}
+            { state.accounts.length !== 0 && (
+              <FlatList style={styles.accounts}
+                data={state.accounts}
+                renderItem={({ item }) => <RegistryItem item={item} openContact={openContact} />}
+                keyExtractor={item => item.guid}
+              />
+            )}
           </SafeAreaView>
         </>
       )}

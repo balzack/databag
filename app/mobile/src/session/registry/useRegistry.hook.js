@@ -14,6 +14,7 @@ export function useRegistry() {
     server: null,
     filter: false,
     username: null,
+    searched: false,
     busy: false,
   });
 
@@ -63,8 +64,7 @@ export function useRegistry() {
           return true;
         });
         const items = filtered.map(setAccountItem);
-        items.push({guid:''});
-        updateState({ busy: false, accounts: items });
+        updateState({ busy: false, searched: true, accounts: items });
       }
       catch (err) {
         console.log(err);
@@ -78,7 +78,7 @@ export function useRegistry() {
 
   const actions = {
     setServer: (server) => {
-      updateState({ server, accounts: [] });
+      updateState({ server, searched: false, accounts: [] });
     },
     search: async () => {
       await getAccounts(state.server, false);
