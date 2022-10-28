@@ -9,9 +9,6 @@ export const styles = StyleSheet.create({
   config: {
     paddingTop: 8,
   },
-  icon: {
-    padding: 8,
-  },
   space: {
     width: 32,
     display: 'flex',
