@@ -66,18 +66,16 @@ export function Profile() {
   }
 
   const remove = async () => {
-    Alert.alert(
-      "Deleting Account",
-      "Confirm?",
-      [
-        { text: "Cancel",
-          onPress: () => {},
-        },
-        { text: "Delete", onPress: () => {
-          actions.remove();
-        }}
-      ]
-    );
+    try {
+      await actions.remove();
+    }
+    catch (err) {
+      console.log(err);
+      Alert.alert(
+        'Failed to Delete Account',
+        'Please try again.'
+      )
+    }
   }
 
   const logout = async () => {
@@ -187,7 +185,7 @@ export function Profile() {
           <Ionicons name="logout" size={14} color={Colors.white} />
           <Text style={styles.logoutText}>Logout</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.delete} onPress={remove}>
+        <TouchableOpacity style={styles.delete} onPress={actions.showDelete}>
           <Ionicons name="delete" size={14} color={Colors.white} />
           <Text style={styles.deleteText}>Delete</Text>
         </TouchableOpacity>
@@ -385,6 +383,39 @@ export function Profile() {
           </View>
         </KeyboardAvoidingView>
       </Modal>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={state.showDelete}
+        supportedOrientations={['portrait', 'landscape']}
+        onRequestClose={actions.hideDelete}
+      >
+        <KeyboardAvoidingView behavior="height" style={styles.editWrapper}>
+          <View style={styles.editContainer}>
+            <Text style={styles.editHeader}>Deleting Your Account</Text>
+            <View style={styles.inputField}>
+              <TextInput style={styles.input} value={state.confirmDelete} onChangeText={actions.setConfirmDelete}
+                  autoCapitalize="none" placeholder="Type 'delete' to Confirm" placeholderTextColor={Colors.grey} />
+            </View>
+            <View style={styles.editControls}>
+              <TouchableOpacity style={styles.cancel} onPress={actions.hideDelete}>
+                <Text>Cancel</Text>
+              </TouchableOpacity>
+              { state.confirmDelete === 'delete' && (
+                <TouchableOpacity style={styles.remove} onPress={remove}>
+                  <Text style={styles.removeText}>Delete</Text>
+                </TouchableOpacity>
+              )}
+              { state.confirmDelete !== 'delete' && (
+                <TouchableOpacity style={styles.unconfirmed}>
+                  <Text style={styles.removeText}>Delete</Text>
+                </TouchableOpacity>
+              )}
+            </View>
+          </View>
+        </KeyboardAvoidingView>
+      </Modal>
+
     </ScrollView>
   )
 }

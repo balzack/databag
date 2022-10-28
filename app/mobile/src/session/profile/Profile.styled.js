@@ -136,21 +136,26 @@ export const styles = StyleSheet.create({
     color: Colors.white,
     paddingLeft: 8,
   },
-  delete: {
-    marginTop: 32,
+  unconfirmed: {
+    backgroundColor: Colors.lightgrey,
     borderRadius: 4,
-    backgroundColor: Colors.error,
+    padding: 8,
+    width: 72,
     display: 'flex',
-    flexDirection: 'row',
     alignItems: 'center',
-    paddingLeft: 8,
-    paddingRight: 8,
-    paddingTop: 8,
-    paddingBottom: 8,
+    justifyContent: 'center',
   },
-  deleteText: {
+  remove: {
+    backgroundColor: Colors.error,
+    borderRadius: 4,
+    padding: 8,
+    width: 72,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  removeText: {
     color: Colors.white,
-    paddingLeft: 8,
   },
   switch: {
     false: Colors.grey,
@@ -240,11 +245,35 @@ export const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
   },
+  save: {
+    padding: 8,
+    borderRadius: 4,
+    backgroundColor: Colors.error,
+    width: 72,
+    display: 'flex',
+    alignItems: 'center',
+  },
   link: {
     marginTop: 16,
   },
   linkText: {
     color: Colors.primary,
+  },
+  delete: {
+    backgroundColor: Colors.error,
+    marginTop: 16,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingLeft: 8,
+    paddingRight: 8,
+    paddingTop: 8,
+    paddingBottom: 8,
+    borderRadius: 4,
+  }, 
+  deleteText: {
+    paddingLeft: 8,
+    color: Colors.white,
   },
   saveText: {
     color: Colors.white,

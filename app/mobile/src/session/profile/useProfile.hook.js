@@ -28,11 +28,13 @@ export function useProfile() {
     available: true,
     showPassword: false,
     showConfirm: false,
+    showDelete: false,
     blockedChannels: false,
     blockedCards: false,
     blockedMessages: false,
     tabbed: null,
     disconnected: false,
+    confirmDelete: null,
   });
 
   const app = useContext(AppContext);
@@ -78,6 +80,7 @@ export function useProfile() {
     },
     remove: async () => {
       await app.actions.remove();
+      updateState({ showDelete: false });
       navigate('/');
     },
     setVisible: async (searchable) => {
@@ -126,6 +129,9 @@ export function useProfile() {
     setEditDescription: (editDescription) => {
       updateState({ editDescription });
     },
+    setConfirmDelete: (confirmDelete) => {
+      updateState({ confirmDelete });
+    },
     showPassword: () => {
       updateState({ showPassword: true });
     },
@@ -137,6 +143,12 @@ export function useProfile() {
     },
     hideConfirm: () => {
       updateState({ showConfirm: false });
+    },
+    showDelete: () => {
+      updateState({ showDelete: true });
+    },
+    hideDelete: () => {
+      updateState({ showDelete: false });
     },
     setEditHandle: (editHandle) => {
       updateState({ editHandle, checked: false });
