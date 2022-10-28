@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { ConversationWrapper, StatusError } from './Conversation.styled';
 import { ExclamationCircleOutlined, SettingOutlined, CloseOutlined } from '@ant-design/icons';
 import { useConversation } from './useConversation.hook';
@@ -9,12 +9,30 @@ import { List, Spin, Tooltip } from 'antd';
 
 export function Conversation({ closeConversation, openDetails, cardId, channelId }) {
 
+  const height = useRef(0);
+  const latch = useRef(null);
+
   const { state, actions } = useConversation(cardId, channelId);
   const thread = useRef(null);
 
   const topicRenderer = (topic) => {
     return (<TopicItem host={cardId == null} topic={topic} />)
   }
+
+  // an unfortunate cludge for the mobile browser
+  // scrollTop not updated without a scroll event
+  useEffect(() => {
+    latch.current = setInterval(() => {
+      if (thread.current && height.current !== thread.current.scrollHeight) {
+        height.current = thread.current.scrollHeight;
+        if (thread.current.scrollTop === 0) {
+          thread.current.scrollTo({ top: -16, left: 0, behavior: 'smooth' });
+          thread.current.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+        }
+      }
+    }, 1000);
+    return () => clearInterval(latch.current);
+  }, []);
 
   const scrollThread = (e) => {
     const content = thread.current?.scrollHeight;
@@ -64,7 +82,7 @@ export function Conversation({ closeConversation, openDetails, cardId, channelId
         )}
         { state.topics.length !== 0 && (
           <List local={{ emptyText: '' }} itemLayout="horizontal" dataSource={state.topics}
-              gutter="0" renderItem={topicRenderer} />
+              size="large"  gutter="0" renderItem={topicRenderer} />
         )}
         { state.loadingInit && (
           <div class="loading">
