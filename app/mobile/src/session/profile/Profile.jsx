@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useEffect, useContext } from 'react';
 import { KeyboardAvoidingView, Modal, Alert, TextInput, ScrollView, View, Switch, TouchableOpacity, Text } from 'react-native';
 import { styles } from './Profile.styled';
 import { useProfile } from './useProfile.hook';
@@ -11,18 +11,26 @@ import { BlockedTopics } from './blockedTopics/BlockedTopics';
 import { BlockedContacts } from './blockedContacts/BlockedContacts';
 import { BlockedMessages } from './blockedMessages/BlockedMessages';
 
-export function ProfileTitle(props) {
-  const { state, actions } = useProfile();
-  return (
-    <View style={styles.title}>
-      <Text style={styles.titleText}>{ `${state.handle}@${state.node}` }</Text>
-    </View>
-  )
-} 
-
-export function Profile() {
+export function Profile({ navigation }) {
 
   const { state, actions } = useProfile();
+
+  useEffect(() => {
+    if (navigation) {
+      navigation.setOptions({
+        headerTitle: () => (
+          <View style={styles.title}>
+            <Text style={styles.titleText}>{ `${state.handle}@${state.node}` }</Text>
+          </View>
+        ),
+        headerRight: () => (
+          <TouchableOpacity style={styles.action} onPress={logout} onLongPress={actions.showDelete}>
+            <Ionicons name="logout" size={22} color={Colors.primary} />
+          </TouchableOpacity>
+        ),
+      });
+    }
+  }, [navigation, state]);
 
   const setVisible = async (visible) => {
     try {
@@ -181,14 +189,6 @@ export function Profile() {
         <TouchableOpacity style={styles.link} onPress={actions.showBlockedMessages}>
           <Text style={styles.linkText}>Manage Blocked Messages</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.logout} onPress={logout}>
-          <Ionicons name="logout" size={14} color={Colors.white} />
-          <Text style={styles.logoutText}>Logout</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.delete} onPress={actions.showDelete}>
-          <Ionicons name="delete" size={14} color={Colors.white} />
-          <Text style={styles.deleteText}>Delete</Text>
-        </TouchableOpacity>
       </View>
     );
   };
@@ -203,7 +203,10 @@ export function Profile() {
       { !state.tabbed && (
         <SafeAreaView style={styles.drawer} edges={['top', 'bottom', 'right']}>
           <View style={styles.header}>
-            <Text style={styles.headerText}>{ `${state.handle}@${state.node}` }</Text>
+            <Text style={styles.headerText} numberOfLines={1}>{ `${state.handle}@${state.node}` }</Text>
+            <TouchableOpacity onPress={logout} onLongPress={actions.showDelete}>
+              <Ionicons name="logout" size={16} color={Colors.grey} />
+            </TouchableOpacity>
           </View>
           <Body />
         </SafeAreaView>

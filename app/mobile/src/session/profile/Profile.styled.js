@@ -15,12 +15,21 @@ export const styles = StyleSheet.create({
     paddingTop: 16,
     backgroundColor: Colors.formBackground,
   },
+  action: {
+    width: 64,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   titleText: {
     fontSize: 18,
+    overflow: 'hidden',
+    flexGrow: 1,
+    textAlign: 'center',
   }, 
   title: {
     display: 'flex',
-    flexDirection: 'column',
+    flexDirection: 'row',
     flexGrow: 1,
     flex: 1,
     width: '100%',
@@ -38,8 +47,9 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   headerText: {
-    fontSize: 16,
-    paddingRight: 4,
+    paddingLeft: 16,
+    fontSize: 14,
+    paddingRight: 8,
     color: Colors.text,
   },
   camera: {

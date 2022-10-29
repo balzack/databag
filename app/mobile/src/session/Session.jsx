@@ -9,7 +9,7 @@ import Ionicons from '@expo/vector-icons/AntDesign';
 import { useSession } from './useSession.hook';
 import { styles } from './Session.styled';
 import Colors from 'constants/Colors';
-import { ProfileTitle, Profile } from './profile/Profile';
+import { Profile } from './profile/Profile';
 import { CardsTitle, CardsBody, Cards } from './cards/Cards';
 import { useCards } from './cards/useCards.hook';
 import { RegistryTitle, RegistryBody, Registry } from './registry/Registry';
@@ -105,7 +105,7 @@ export function Session() {
   const ProfileStackScreen = () => {
     return (
       <ProfileStack.Navigator screenOptions={({ route }) => ({ headerShown: true, headerTintColor: Colors.primary })}>
-        <ProfileStack.Screen name="profile" component={Profile} options={{ headerStyle: { backgroundColor: Colors.titleBackground }, headerTitle: (props) => <ProfileTitle {...props} /> }} />
+        <ProfileStack.Screen name="profile" component={Profile} options={{ headerStyle: { backgroundColor: Colors.titleBackground }}} />
       </ProfileStack.Navigator>
     );
   }

@@ -90,7 +90,7 @@ export const styles = StyleSheet.create({
   },
   emptyText: {
     color: Colors.grey,
-    fontSize: 16,
+    fontSize: 18,
   },
   addbottom: {
     marginRight: 8,

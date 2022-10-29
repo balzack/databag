@@ -54,9 +54,10 @@ export function RegistryTitle({ state, actions }) {
 }
 
 export function RegistryBody({ state, actions, openContact }) {
+
   return (
     <View style={styles.accounts}> 
-      { state.accounts.length === 0 && state.searcheg && (
+      { state.accounts.length === 0 && state.searched && (
         <View style={styles.empty}>
           <Text style={styles.emptyText}>No Contacts Found</Text>
         </View>
@@ -89,6 +90,7 @@ export function Registry({ closeRegistry, openContact }) {
   }
 
   const { state, actions } = useRegistry();
+
   return (
     <View style={styles.container}>
       { state.tabbed && (
