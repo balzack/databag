@@ -102,6 +102,22 @@ export function ChannelsBody({ state, actions, openConversation }) {
 
 export function Channels({ openConversation }) {
   const { state, actions } = useChannels();
+
+  const addTopic = async () => {
+    try {
+      const channel = await actions.addTopic();
+      actions.hideAdding();
+      openConversation(null, channel.id)
+    }
+    catch (err) {
+      console.log(err);
+      Alert.alert(
+        'Failed to Create Topic',
+        'Please try again.'
+      )
+    }
+  }
+
   return (
     <View style={styles.container}>
       <SafeAreaView edges={['left']} style={styles.searchbar}>
@@ -128,11 +144,50 @@ export function Channels({ openConversation }) {
         )}
       </SafeAreaView>
       <SafeAreaView style={styles.bottomArea} edges={['left']}>
-        <TouchableOpacity style={styles.addbottom}>
+        <TouchableOpacity style={styles.addbottom} onPress={actions.showAdding}>
           <Ionicons name={'message1'} size={16} color={Colors.white} />
           <Text style={styles.newtext}>New Topic</Text>
         </TouchableOpacity>
       </SafeAreaView>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={state.adding}
+        supportedOrientations={['portrait', 'landscape']}
+        onRequestClose={actions.hideAdding}
+      >
+        <KeyboardAvoidingView behavior="height" style={styles.addWrapper}>
+          <View style={styles.addContainer}>
+            <Text style={styles.addHeader}>New Topic:</Text>
+            <View style={styles.inputField}>
+              <TextInput style={styles.input} value={state.addSubject} onChangeText={actions.setAddSubject}
+                  autoCapitalize="words" placeholder="Subject (optional)" placeholderTextColor={Colors.grey} />
+            </View>
+            <Text style={styles.label}>Members:</Text>
+            { state.connected.length == 0 && (
+              <View style={styles.emptyMembers}>
+                <Text style={styles.empty}>No Connected Contacts</Text>
+              </View>
+            )}
+            { state.connected.length > 0 && (
+              <FlatList style={styles.addMembers}
+                data={state.connected}
+                renderItem={({ item }) => <AddMember members={state.addMembers} item={item}
+                    setCard={actions.setAddMember} clearCard={actions.clearAddMember} />}
+                keyExtractor={item => item.cardId}
+              />
+            )}
+            <View style={styles.addControls}>
+              <TouchableOpacity style={styles.cancel} onPress={actions.hideAdding}>
+                <Text>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.save} onPress={addTopic}>
+                <Text style={styles.saveText}>Create</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </KeyboardAvoidingView>
+      </Modal>
     </View>
   );
 }
