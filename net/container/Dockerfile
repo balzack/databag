@@ -36,7 +36,7 @@ RUN if [ "$TARGETPLATFORM" = "linux/amd64" ]; then ARCHITECTURE=amd64; elif [ "$
     && wget -P /app https://go.dev/dl/go1.17.5.linux-${ARCHITECTURE}.tar.gz \
     && tar -C /usr/local -xzf /app/go1.17.5.linux-${ARCHITECTURE}.tar.gz 
 
-RUN git  clone https://github.com/balzack/databag.git /app/databag
+RUN git        clone  https://github.com/balzack/databag.git /app/databag
 
 RUN yarn config set network-timeout 300000
 RUN yarn --cwd /app/databag/net/web install
