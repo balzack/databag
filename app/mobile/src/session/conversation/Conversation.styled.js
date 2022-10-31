@@ -52,7 +52,7 @@ export const styles = StyleSheet.create({
     paddingLeft: 8,
   },
   thread: {
-    flex: 1,
+    height: '100%',
     display: 'flex',
     flexDirection: 'column',
   },

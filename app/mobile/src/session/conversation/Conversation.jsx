@@ -71,8 +71,9 @@ export function ConversationBody() {
   const noop = () => {};
 
   return (
-      <KeyboardAvoidingView style={styles.thread} behavior="padding"
+      <KeyboardAvoidingView behavior="padding"
           enabled={Platform.OS === 'ios' ? true : false}>
+<View style={styles.thread}>
         <FlatList style={styles.conversation}
            contentContainerStyle={styles.topics}
            ref={ref}
@@ -128,6 +129,7 @@ export function ConversationBody() {
         </KeyboardAvoidingView>
       </Modal>
 
+</View>
       </KeyboardAvoidingView>
   );
 }
