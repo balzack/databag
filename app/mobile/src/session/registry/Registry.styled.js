@@ -35,7 +35,7 @@ export const styles = StyleSheet.create({
   searchbar: {
     display: 'flex',
     flexDirection: 'row',
-    paddingTop: 16,
+    paddingTop: 8,
     paddingLeft: 8,
     paddingBottom: 8,
     alignItems: 'center',

@@ -11,9 +11,14 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  icon: {
+    paddingTop: 2,
+  },
+  wrapper: {
+    backgroundColor: Colors.formBackground,
+  },
   drawer: {
     paddingTop: 16,
-    backgroundColor: Colors.formBackground,
   },
   action: {
     width: 64,
@@ -78,11 +83,12 @@ export const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     color: Colors.text,
+    paddingLeft: 32,
+    paddingRight: 32,
   },
   attribute: {
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'center',
     paddingBottom: 8,
   },
   nonametext: {
@@ -258,7 +264,7 @@ export const styles = StyleSheet.create({
   save: {
     padding: 8,
     borderRadius: 4,
-    backgroundColor: Colors.error,
+    backgroundColor: Colors.primary,
     width: 72,
     display: 'flex',
     alignItems: 'center',

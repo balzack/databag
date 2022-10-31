@@ -72,6 +72,11 @@ export function Create() {
                 </View>
               </View>
             )}
+            { !state.tokenRequired && state.server === 'databag.coredb.org' && (
+              <View style={styles.demo}>
+                <Text style={styles.demoText}>The default public server is to test out the system. Use a private server othersise.</Text>
+              </View>
+            )}
           </View>
           <View style={styles.inputwrapper}>
             <Ionicons style={styles.icon} name="user" size={18} color="#888888" />

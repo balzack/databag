@@ -27,6 +27,7 @@ export const styles = StyleSheet.create({
   },
   searchbar: {
     paddingRight: 8,
+    paddingLeft: 16,
     borderBottomWidth: 1,
     borderColor: Colors.divider,
     paddingBottom: 8,
@@ -73,17 +74,16 @@ export const styles = StyleSheet.create({
     flexShrink: 1,
     flexGrow: 1,
     width: '100%',
-    paddingLeft: 16,
-    paddingRight: 16,
   },
   addbottom: {
     backgroundColor: Colors.primary,
     marginRight: 8,
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 8,
+    paddingTop: 8,
+    paddingBottom: 8,
+    paddingLeft: 16,
+    paddingRight: 16,
     borderRadius: 4,
   },
   add: {
@@ -103,6 +103,8 @@ export const styles = StyleSheet.create({
     paddingTop: 8,
     borderTopWidth: 1,
     borderColor: Colors.divider,
+    display: 'flex',
+    alignItems: 'center',
   },
   cancel: {
     borderWidth: 1,

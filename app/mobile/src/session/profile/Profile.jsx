@@ -153,7 +153,9 @@ export function Profile({ navigation }) {
             <Ionicons name="edit" size={16} color={Colors.text} />
           </View>
           <View style={styles.attribute}>
-            <Ionicons name="enviromento" size={14} color={Colors.text} />
+            <View style={styles.icon}>
+              <Ionicons name="enviromento" size={14} color={Colors.text} />
+            </View>
             { state.location && (
               <Text style={styles.locationtext}>{ state.location }</Text>
             )}
@@ -162,7 +164,9 @@ export function Profile({ navigation }) {
             )}
           </View> 
           <View style={styles.attribute}>
-            <Ionicons name="book" size={14} color={Colors.text} />
+            <View style={styles.icon}>
+              <Ionicons name="book" size={14} color={Colors.text} />
+            </View>
             { state.description && (
               <Text style={styles.descriptiontext}>{ state.description }</Text>
             )}
@@ -194,7 +198,7 @@ export function Profile({ navigation }) {
   };
  
   return (
-    <ScrollView>
+    <ScrollView style={styles.wrapper}>
       { state.tabbed && (
         <View style={styles.body}>
           <Body />

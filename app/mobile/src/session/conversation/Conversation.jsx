@@ -71,7 +71,7 @@ export function ConversationBody() {
   const noop = () => {};
 
   return (
-      <KeyboardAvoidingView style={styles.thread} behavior="padding" keyboardVerticalOffset="100"
+      <KeyboardAvoidingView style={styles.thread} behavior="padding"
           enabled={Platform.OS === 'ios' ? true : false}>
         <FlatList style={styles.conversation}
            contentContainerStyle={styles.topics}
@@ -136,7 +136,7 @@ export function Conversation({ closeConversation, openDetails }) {
 
   return (
     <View style={styles.container}>
-      <SafeAreaView edges={['right']} style={styles.header}>
+      <SafeAreaView edges={['right', 'top']} style={styles.header}>
         <Text style={styles.subjectText} numberOfLines={1} ellipsizeMode={'tail'}>{ state.subject }</Text>
         <TouchableOpacity style={styles.action} onPress={openDetails}>
           <Ionicons name="setting" size={24} color={Colors.primary} />

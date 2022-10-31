@@ -248,7 +248,7 @@ export function Session() {
     };
 
     return (
-      <CardDrawer.Navigator screenOptions={{ drawerPosition: 'right', headerShown: false, swipeEnabled: false, drawerType: 'front', drawerStyle: { width: state.baseWidth } }}
+      <CardDrawer.Navigator screenOptions={{ drawerPosition: 'right', headerShown: false, swipeEnabled: false, drawerType: 'front', drawerStyle: { width: '50%' } }}
         drawerContent={(props) => <Cards openContact={setCardContact} openRegistry={openRegistry} />}>
         <CardDrawer.Screen name="home">
           {(props) => <HomeScreen cardNav={props.navigation} {...params} />}
@@ -275,7 +275,7 @@ export function Session() {
     };
 
     return (
-      <RegistryDrawer.Navigator screenOptions={{ drawerPosition: 'right', headerShown: false, swipeEnabled: false, drawerType: 'front', drawerStyle: { width: state.baseWidth } }}
+      <RegistryDrawer.Navigator screenOptions={{ drawerPosition: 'right', headerShown: false, swipeEnabled: false, drawerType: 'front', drawerStyle: { width: '50%' } }}
         drawerContent={(props) => <Registry openContact={setRegistryContact} />}>
         <RegistryDrawer.Screen name="card">
           {(props) => <CardDrawerScreen registryNav={props.navigation} {...params} />}
@@ -301,7 +301,7 @@ export function Session() {
     };
 
     return (
-      <ContactDrawer.Navigator screenOptions={{ drawerPosition: 'right', headerShown: false, swipeEnabled: false, drawerType: 'front', drawerStyle: { width: state.subWidth } }}
+      <ContactDrawer.Navigator screenOptions={{ drawerPosition: 'right', headerShown: false, swipeEnabled: false, drawerType: 'front', drawerStyle: { width: '45%' } }}
         drawerContent={(props) => <Contact contact={selected} />}>
         <ContactDrawer.Screen name="registry">
           {(props) => <RegistryDrawerScreen {...params} contactNav={props.navigation} setContact={setContact} />}
@@ -332,7 +332,7 @@ export function Session() {
     };
   
     return (
-      <DetailDrawer.Navigator screenOptions={{ drawerPosition: 'right', headerShown: false, swipeEnabled: false, drawerType: 'front', drawerStyle: { width: state.subWidth } }}
+      <DetailDrawer.Navigator screenOptions={{ drawerPosition: 'right', headerShown: false, swipeEnabled: false, drawerType: 'front', drawerStyle: { width: '45%' } }}
           drawerContent={(props) => <Details channel={selected} clearConversation={clearConversation} />}
         >
         <DetailDrawer.Screen name="contact">
@@ -347,9 +347,10 @@ export function Session() {
   return (
     <View style={styles.body}>
       { state.firstRun == true && (
-        <View style={styles.firstRun}>
+        <SafeAreaView edges={['top', 'bottom']}  style={styles.firstRun}>
           <View style={styles.title}>
             <Text style={styles.titleText}>Welcome To Databag</Text>
+            <Text style={styles.tagText}>Communication for the Decentralized Web</Text>
           </View>
           <Image style={styles.splash} source={splash} resizeMode="contain" />
           <View style={styles.steps} >
@@ -369,12 +370,12 @@ export function Session() {
               <Text style={styles.startText}>Get Started</Text>
             </TouchableOpacity>
           </View>
-        </View>
+        </SafeAreaView>
       )}
       { state.firstRun == false && (
         <View style={styles.container}>
           { state.tabbed === false && (
-            <ProfileDrawer.Navigator screenOptions={{ drawerPosition: 'right', headerShown: false, swipeEnabled: false, drawerType: 'front', drawerStyle: { width: state.subWidth } }}
+            <ProfileDrawer.Navigator screenOptions={{ drawerPosition: 'right', headerShown: false, swipeEnabled: false, drawerType: 'front', drawerStyle: { width: '45%' } }}
               drawerContent={(props) => <Profile />}>
               <ProfileDrawer.Screen name="detail">
                 {(props) => <DetailDrawerScreen profileNav={props.navigation}/>}

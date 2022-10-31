@@ -170,11 +170,15 @@ export function Contact({ contact, closeContact }) {
             <Text style={styles.nametext}>{ state.name }</Text>
           </View>
           <View style={styles.attribute}>
-            <Ionicons name="enviromento" size={14} color={Colors.text} />
+            <View style={styles.glyph}>
+              <Ionicons name="enviromento" size={14} color={Colors.text} />
+            </View>
             <Text style={styles.locationtext}>{ state.location }</Text>
           </View>
           <View style={styles.attribute}>
-            <Ionicons name="book" size={14} color={Colors.text} />
+            <View style={styles.glyph}>
+              <Ionicons name="book" size={14} color={Colors.text} />
+            </View>
             <Text style={styles.descriptiontext}>{ state.description }</Text>
           </View>
         </View>

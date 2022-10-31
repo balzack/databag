@@ -130,7 +130,7 @@ export function Registry({ closeRegistry, openContact }) {
         </>
       )}
       { !state.tabbed && (
-        <>
+        <SafeAreaView edges={['top', 'right', 'bottom']}>
           <View style={styles.searcharea}>
             <SafeAreaView edges={['right']}>
               <View style={styles.searchbar}>
@@ -151,21 +151,19 @@ export function Registry({ closeRegistry, openContact }) {
               </View>
             </SafeAreaView>
           </View>
-          <SafeAreaView edges={['right']}>
-            { state.accounts.length === 0 && state.searched && (
-              <View style={style.empty}>
-                <Text style={styles.emptyText}>No Contacts Found</Text>
-              </View>
-            )}
-            { state.accounts.length !== 0 && (
-              <FlatList style={styles.accounts}
-                data={state.accounts}
-                renderItem={({ item }) => <RegistryItem item={item} openContact={openContact} />}
-                keyExtractor={item => item.guid}
-              />
-            )}
-          </SafeAreaView>
-        </>
+          { state.accounts.length === 0 && state.searched && (
+            <View style={style.empty}>
+              <Text style={styles.emptyText}>No Contacts Found</Text>
+            </View>
+          )}
+          { state.accounts.length !== 0 && (
+            <FlatList style={styles.accounts}
+              data={state.accounts}
+              renderItem={({ item }) => <RegistryItem item={item} openContact={openContact} />}
+              keyExtractor={item => item.guid}
+            />
+          )}
+        </SafeAreaView>
       )}
     </View>
   );

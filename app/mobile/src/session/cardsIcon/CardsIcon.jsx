@@ -10,7 +10,7 @@ export function CardsIcon({ size, color, active }) {
   return (
     <View>
       <Ionicons name={'contacts'} size={size} color={color} />
-      { state.curRevision !== state.setRevision && (
+      { state.curRevision && state.curRevision !== state.setRevision && (
         <View style={styles.requested} />
       )}
     </View>

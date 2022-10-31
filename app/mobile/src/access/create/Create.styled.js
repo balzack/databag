@@ -9,6 +9,16 @@ export const styles = StyleSheet.create({
   config: {
     paddingTop: 8,
   },
+  demo: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingLeft: 16,
+    paddingRight: 16,
+  },
+  demoText: {
+    color: Colors.grey,
+    textAlign: 'center',
+  },
   space: {
     width: 32,
     display: 'flex',

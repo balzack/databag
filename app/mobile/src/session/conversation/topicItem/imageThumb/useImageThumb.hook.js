@@ -17,14 +17,14 @@ export function useImageThumb(topicId, asset) {
 
   useEffect(() => {
     const url = conversation.actions.getTopicAssetUrl(topicId, asset.thumb); 
-    if (url) {
-      Image.getSize(url, (width, height) => {
-        updateState({ url, ratio: width / height });
-      });
-    }
+    updateState({ url });
   }, [topicId, conversation, asset]);
 
   const actions = {
+    loaded: (e) => {
+      const { width, height } = e.nativeEvent.source;
+      updateState({ ratio: width / height });
+    },
   };
 
   return { state, actions };

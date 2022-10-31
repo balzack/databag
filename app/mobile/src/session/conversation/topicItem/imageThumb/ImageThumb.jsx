@@ -9,7 +9,8 @@ export function ImageThumb({ topicId, asset, onAssetView }) {
 
   return (
     <TouchableOpacity activeOpacity={1} onPress={onAssetView}>
-      <Image source={{ uri: state.url }} style={{ borderRadius: 4, width: 92 * state.ratio, height: 92, marginRight: 16 }} resizeMode={'cover'} />
+      <Image source={{ uri: state.url }} style={{ borderRadius: 4, width: 92 * state.ratio, height: 92, marginRight: 16 }}
+          onLoad={actions.loaded} resizeMode={'cover'} />
     </TouchableOpacity>
   );
 

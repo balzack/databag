@@ -9,6 +9,9 @@ export const styles = StyleSheet.create({
     flexDirection: 'column',
     backgroundColor: Colors.formBackground,
   },
+  drawer: {
+    flexGrow: 1,
+  },
   title: {
     display: 'flex',
     flexDirection: 'row',
@@ -28,6 +31,11 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  cardlist: {
+    flexGrow: 1,
+    borderBottomWidth: 1,
+    borderColor: Colors.divider,
+  },
   searcharea: {
     borderBottomWidth: 1,
     borderColor: Colors.divider,
@@ -35,8 +43,9 @@ export const styles = StyleSheet.create({
   searchbar: {
     display: 'flex',
     flexDirection: 'row',
-    paddingTop: 16,
+    paddingTop: 8,
     paddingLeft: 8,
+    paddingRight: 8,
     paddingBottom: 8,
     alignItems: 'center',
   },
@@ -63,7 +72,6 @@ export const styles = StyleSheet.create({
     paddingLeft: 8,
   },
   cards: {
-    flexGrow: 1,
     width: '100%',
     paddingLeft: 16,
     paddingRight: 16,

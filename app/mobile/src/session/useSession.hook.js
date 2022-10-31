@@ -8,8 +8,8 @@ export function useSession() {
 
   const [state, setState] = useState({
     tabbled: null,
-    subWidth: '33%',
-    baseWidth: '33%',
+    subWidth: '50%',
+    baseWidth: '50%',
     cardId: null,
     converstaionId: null,
     firstRun: null,
@@ -38,12 +38,7 @@ export function useSession() {
       if (dimensions.width > config.tabbedWidth) {
         const width = Math.floor((dimensions.width * 33) / 100);
         tabbed.current = false;
-        if (width > 500) {
-          updateStatus({ tabbed: false, baseWidth: 550, subWidth: 500 });
-        }
-        else {
-          updateState({ tabbed: false, baseWidth: width + 50, subWidth: width });
-        }
+        updateState({ tabbed: false, baseWidth: width + 50, subWidth: width });
       }
       else {
         tabbed.current = true;

@@ -40,9 +40,15 @@ export const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
   },
+  tagText: {
+    paddingTop: 8,
+    color: Colors.white,
+    fontSize: 16,
+  },
   title: {
     flexGrow: 1,
     justifyContent: 'center',
+    alignItems: 'center',
   },
   stepText: {
     color: Colors.white,

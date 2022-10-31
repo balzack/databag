@@ -24,6 +24,9 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  glyph: {
+    paddingTop: 2,
+  },
   icon: {
     width: 32,
     paddingLeft: 8
@@ -72,6 +75,8 @@ export const styles = StyleSheet.create({
   },
   detail: {
     paddingTop: 32,
+    paddingLeft: 32,
+    paddingRight: 32,
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -80,7 +85,6 @@ export const styles = StyleSheet.create({
   attribute: {
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'center',
     paddingBottom: 8,
   },
   nametext: {
