@@ -17,6 +17,7 @@ export function useConversation() {
     editMessage: null,
     init: false,
     error: false,
+    keyboard: false,
   });
 
   const delay = useRef(null);
@@ -94,6 +95,12 @@ export function useConversation() {
     },
     resync: () => {
       conversation.actions.resync();
+    },
+    setKeyboard: () => {
+      updateState({ keyboard: true });
+    },
+    clearKeyboard: () => {
+      updateState({ keyboard: false });
     },
   };
 

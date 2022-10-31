@@ -1,4 +1,4 @@
-import { KeyboardAvoidingView, ActivityIndicator, Modal, Platform, TextInput, View, TouchableOpacity, Text, } from 'react-native';
+import { Keyboard, KeyboardAvoidingView, ActivityIndicator, Modal, Platform, TextInput, View, TouchableOpacity, Text, } from 'react-native';
 import { useKeepAwake } from 'expo-keep-awake';
 import { FlatList, ScrollView } from '@stream-io/flat-list-mvcp';
 import { memo, useState, useRef, useEffect } from 'react';
@@ -45,6 +45,20 @@ export function ConversationBody() {
 
   const ref = useRef();
 
+  useEffect(() => {
+    const showSubscription = Keyboard.addListener("keyboardWillShow", () => {
+      actions.setKeyboard();
+    });
+    const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
+      actions.clearKeyboard();
+    });
+
+    return () => {
+      showSubscription.remove();
+      hideSubscription.remove();
+    };
+  }, []);
+
   useKeepAwake();
 
   const latch = () => {
@@ -71,8 +85,8 @@ export function ConversationBody() {
   const noop = () => {};
 
   return (
-      <KeyboardAvoidingView behavior="padding"
-          enabled={Platform.OS === 'ios' ? true : false}>
+      <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={72}
+          enabled={Platform.OS === 'ios' ? state.keyboard : false}>
 <View style={styles.thread}>
         <FlatList style={styles.conversation}
            contentContainerStyle={styles.topics}
