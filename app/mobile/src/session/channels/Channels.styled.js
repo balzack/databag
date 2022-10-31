@@ -85,6 +85,7 @@ export const styles = StyleSheet.create({
     paddingLeft: 16,
     paddingRight: 16,
     borderRadius: 4,
+    marginBottom: 16,
   },
   add: {
     backgroundColor: Colors.primary,
