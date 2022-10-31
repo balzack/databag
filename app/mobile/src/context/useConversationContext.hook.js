@@ -454,6 +454,28 @@ export function useConversationContext() {
         await channel.actions.clearCard(channelId, id);
       }
     },
+    addReport: async () => {
+      if (conversationId.current) {
+        const { cardId, channelId } = conversationId.current;
+        if (cardId) {
+          return await card.actions.addChannelReport(cardId, channelId);
+        }
+        else {
+          return await channel.actions.addReport(channelId);
+        }
+      }
+    },
+    addTopicReport: async(topicId) => {
+      if (conversationId.current) {
+        const { cardId, channelId } = conversationId.current;
+        if (cardId) {
+          return await card.actions.addChannelTopicReport(cardId, channelId, topicId);
+        }
+        else {
+          return await channel.actions.addTopicReport(channelId, topicId);
+        }
+      }
+    },
     setBlocked: async () => {
       if (conversationId.current) {
         const { cardId, channelId } = conversationId.current;

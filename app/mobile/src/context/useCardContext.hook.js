@@ -1,6 +1,7 @@
 import { useState, useRef, useContext } from 'react';
 import { StoreContext } from 'context/StoreContext';
 import { UploadContext } from 'context/UploadContext';
+import { addFlag } from 'api/addFlag';
 import { getCard } from 'api/getCard';
 import { getCards } from 'api/getCards';
 import { getCardProfile } from 'api/getCardProfile';
@@ -566,6 +567,14 @@ export function useCardContext() {
     removeChannelTopic: async (cardId, channelId, topicId) => {
       const { detail, profile } = getCardEntry(cardId);
       return await removeContactChannelTopic(profile.node, `${profile.guid}.${detail.token}`, channelId, topicId);
+    },
+    addChannelReport: async (cardId, channelId) => {
+      const { detail, profile } = getCardEntry(cardId);
+      return await addFlag(profile.node, profile.guid, channelId);
+    },
+    addChannelTopicReport: async (cardId, channelId, topicId) => {
+      const { detail, profile } = getCardEntry(cardId);
+      return await addFlag(profile.node, profile.guid, channelId, topicId);
     },
     resync: (cardId) => {
       resync.current.push(cardId);

@@ -83,7 +83,8 @@ export function ConversationBody() {
            inverted={true}
            renderItem={({item}) => <TopicItem item={item} focused={item.topicId === state.focus} 
              focus={() => actions.setFocus(item.topicId)} hosting={state.host == null} 
-             remove={actions.removeTopic} update={actions.editTopic} block={actions.blockTopic} />}
+             remove={actions.removeTopic} update={actions.editTopic} block={actions.blockTopic}
+             report={actions.reportTopic} />}
           keyExtractor={item => item.topicId}
         />
         { !state.init && (

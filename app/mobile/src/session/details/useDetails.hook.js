@@ -61,6 +61,9 @@ export function useDetails() {
     block: async() => {
       await conversation.actions.setBlocked();
     },
+    report: async() => {
+      await conversation.actions.addReport();
+    },
   };
 
   return { state, actions };

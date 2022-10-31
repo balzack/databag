@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { CardContext } from 'context/CardContext';
 import { useWindowDimensions } from 'react-native'
 import { getListingMessage } from 'api/getListingMessage';
+import { addFlag } from 'api/addFlag';
 import config from 'constants/Config';
 
 export function useContact(contact, close) {
@@ -176,6 +177,9 @@ export function useContact(contact, close) {
         await card.actions.setCardBlocked(state.cardId);
         close();
       });
+    },
+    reportContact: async () => {
+      await addFlag(state.node, state.guid);
     },
     resync: () => {
       card.actions.resync(contact.card);

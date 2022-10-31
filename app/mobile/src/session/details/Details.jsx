@@ -82,6 +82,33 @@ export function DetailsBody({ channel, clearConversation }) {
     );
   }
 
+
+  const report = () => {
+    Alert.alert(
+      "Report Topic",
+      "Confirm?",
+      [
+        { text: "Cancel",
+          onPress: () => {},
+        },
+        { text: "Report",
+          onPress: async () => {
+            try {
+              await actions.report();
+            }
+            catch (err) {
+              console.log(err);
+              Alert.alert(
+                'Failed to Report Topic',
+                'Please try again.'
+              )
+            }
+          },
+        }
+      ]
+    );
+  }
+
   return (
     <View style={styles.body}>
       <View style={styles.details}>
@@ -112,6 +139,11 @@ export function DetailsBody({ channel, clearConversation }) {
         <TouchableOpacity style={styles.button} onPress={block}>
           <Text style={styles.buttonText}>Block Topic</Text>
         </TouchableOpacity>
+        { state.hostId && (
+          <TouchableOpacity style={styles.button} onPress={report}>
+            <Text style={styles.buttonText}>Report Topic</Text>
+          </TouchableOpacity>
+        )}
         { !state.hostId && (
           <TouchableOpacity style={styles.button} onPress={actions.showEditMembers}>
             <Text style={styles.buttonText}>Edit Membership</Text>

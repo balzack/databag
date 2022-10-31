@@ -89,6 +89,9 @@ export function useConversation() {
     blockTopic: async (topicId) => {
       await conversation.actions.blockTopic(topicId);
     },
+    reportTopic: async (topicId) => {
+      await conversation.actions.addTopicReport(topicId);
+    },
     resync: () => {
       conversation.actions.resync();
     },

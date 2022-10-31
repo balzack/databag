@@ -15,7 +15,7 @@ import Carousel from 'react-native-snap-carousel';
 import GestureRecognizer from 'react-native-swipe-gestures';
 import avatar from 'images/avatar.png';
 
-export function TopicItem({ item, focused, focus, hosting, remove, update, block }) {
+export function TopicItem({ item, focused, focus, hosting, remove, update, block, report }) {
 
   const { state, actions } = useTopicItem(item, hosting);
 
@@ -36,6 +36,32 @@ export function TopicItem({ item, focused, focus, hosting, remove, update, block
               console.log(err);
               Alert.alert(
                 'Failed to Remove Message',
+                'Please try again.'
+              )
+            }
+          },
+        }
+      ]
+    );
+  }
+
+  const reportMessage = () => {
+    Alert.alert(
+      "Report Message",
+      "Confirm?",
+      [
+        { text: "Cancel",
+          onPress: () => {},
+        },
+        { text: "Report",
+          onPress: async () => {
+            try {
+              await report(item.topicId);
+            }
+            catch (err) {
+              console.log(err);
+              Alert.alert(
+                'Failed to Report Message',
                 'Please try again.'
               )
             }
@@ -155,9 +181,16 @@ export function TopicItem({ item, focused, focus, hosting, remove, update, block
               <AntIcons name="edit" size={24} color={Colors.white} />
             </TouchableOpacity>
           )}
-          <TouchableOpacity style={styles.icon} onPress={hideMessage}>
-            <MatIcons name="block-helper" size={18} color={Colors.white} />
-          </TouchableOpacity>
+          { !state.editable && (
+            <TouchableOpacity style={styles.icon} onPress={hideMessage}>
+              <MatIcons name="block-helper" size={18} color={Colors.white} />
+            </TouchableOpacity>
+          )}
+          { !state.editable && (
+            <TouchableOpacity style={styles.icon} onPress={reportMessage}>
+              <MatIcons name="flag-outline" size={18} color={Colors.white} />
+            </TouchableOpacity>
+          )}
           { state.deletable && (
             <TouchableOpacity style={styles.icon} onPress={erase}>
               <MatIcons name="delete-outline" size={24} color={Colors.white} />

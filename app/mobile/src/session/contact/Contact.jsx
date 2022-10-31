@@ -154,6 +154,21 @@ export function Contact({ contact, closeContact }) {
     );
   }
 
+  const reportContact = () => {
+    Alert.alert(
+      "Report Contact",
+      "Confirm?",
+      [
+        { text: "Cancel",
+          onPress: () => {},
+        },
+        { text: "Report", onPress: () => {
+          setContact(actions.reportContact);
+        }}
+      ]
+    );
+  }
+
   const connectContact = () => {
     setContact(actions.connectContact);
   }
@@ -194,6 +209,9 @@ export function Contact({ contact, closeContact }) {
               <TouchableOpacity style={styles.button} onPress={blockContact}>
                 <Text style={styles.buttonText}>Block Contact</Text>
               </TouchableOpacity>
+              <TouchableOpacity style={styles.button} onPress={reportContact}>
+                <Text style={styles.buttonText}>Report Contact</Text>
+              </TouchableOpacity>
             </>
           )}
           { state.status === 'connecting' && (
@@ -207,6 +225,9 @@ export function Contact({ contact, closeContact }) {
               <TouchableOpacity style={styles.button} onPress={blockContact}>
                 <Text style={styles.buttonText}>Block Contact</Text>
               </TouchableOpacity>
+              <TouchableOpacity style={styles.button} onPress={reportContact}>
+                <Text style={styles.buttonText}>Report Contact</Text>
+              </TouchableOpacity>
             </>
           )}
           { state.status === 'confirmed' && (
@@ -219,6 +240,9 @@ export function Contact({ contact, closeContact }) {
               </TouchableOpacity>
               <TouchableOpacity style={styles.button} onPress={blockContact}>
                 <Text style={styles.buttonText}>Block Contact</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.button} onPress={reportContact}>
+                <Text style={styles.buttonText}>Report Contact</Text>
               </TouchableOpacity>
             </>
           )}
@@ -235,6 +259,9 @@ export function Contact({ contact, closeContact }) {
               </TouchableOpacity>
               <TouchableOpacity style={styles.button} onPress={blockContact}>
                 <Text style={styles.buttonText}>Block Contact</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.button} onPress={reportContact}>
+                <Text style={styles.buttonText}>Report Contact</Text>
               </TouchableOpacity>
             </>
           )}
@@ -255,6 +282,9 @@ export function Contact({ contact, closeContact }) {
               <TouchableOpacity style={styles.button} onPress={blockContact}>
                 <Text style={styles.buttonText}>Block Contact</Text>
               </TouchableOpacity>
+              <TouchableOpacity style={styles.button} onPress={reportContact}>
+                <Text style={styles.buttonText}>Report Contact</Text>
+              </TouchableOpacity>
             </>
           )}
           { state.status == null && (
@@ -264,6 +294,9 @@ export function Contact({ contact, closeContact }) {
               </TouchableOpacity>
               <TouchableOpacity style={styles.button} onPress={saveContact}>
                 <Text style={styles.buttonText}>Save Contact</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.button} onPress={reportContact}>
+                <Text style={styles.buttonText}>Report Contact</Text>
               </TouchableOpacity>
             </>
           )}

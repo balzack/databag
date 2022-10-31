@@ -15,6 +15,7 @@ import { getChannelTopicAssetUrl } from 'api/getChannelTopicAssetUrl';
 import { setChannelSubject } from 'api/setChannelSubject';
 import { setChannelCard } from 'api/setChannelCard';
 import { clearChannelCard } from 'api/clearChannelCard';
+import { addFlag } from 'api/addFlag';
 
 export function useChannelContext() {
   const [state, setState] = useState({
@@ -279,6 +280,14 @@ export function useChannelContext() {
     removeTopic: async (channelId, topicId) => {
       const { server, appToken } = session.current;
       return await removeChannelTopic(server, appToken, channelId, topicId);
+    },
+    addReport: async (channelId) => {
+      const { server, guid } = session.current;
+      return await addFlag(server, guid, channelId);
+    },
+    addTopicReport: async (channelId, topicId) => {
+      const { server, guid } = session.current;
+      return await addFlag(server, guid, channelId, topicId);
     },
     setCard: async (channelId, cardId) => {
       const { server, appToken } = session.current;
