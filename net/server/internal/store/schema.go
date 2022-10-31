@@ -22,6 +22,7 @@ func AutoMigrate(db *gorm.DB) {
   db.AutoMigrate(&Asset{});
   db.AutoMigrate(&TagSlot{});
   db.AutoMigrate(&Tag{});
+  db.AutoMigrate(&Flag{});
 }
 
 type Notification struct {
@@ -50,6 +51,13 @@ type AccountToken struct {
   Expires           int64           `gorm:"not null"`
   Created           int64           `gorm:"autoCreateTime"`
   Account           *Account
+}
+
+type Flag struct {
+  ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
+  GUID              string          `gorm:"not null;"`
+  ChannelSlotID     string
+  TopicSlotID       string
 }
 
 type Account struct {

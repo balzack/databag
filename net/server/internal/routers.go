@@ -265,6 +265,13 @@ var endpoints = routes{
 		SetNodeStatus,
 	},
 
+  route{
+    "AddFlag",
+    strings.ToUpper("Post"),
+    "/account/flag/{guid}",
+    AddFlag,
+  },
+
 	route{
 		"AddGroup",
 		strings.ToUpper("Post"),
