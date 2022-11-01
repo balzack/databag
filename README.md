@@ -1,5 +1,3 @@
-# Databag - Communication for the Decentralized Web
-
 <p align="center">
   <a href="/doc/mobile.png"><img src="/doc/mobile.png" width="48%"/></a>
   &nbsp;&nbsp;
