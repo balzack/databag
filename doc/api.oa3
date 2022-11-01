@@ -250,6 +250,12 @@ paths:
           required: true
           schema:
             type: string
+        - name: accountId
+          in: path
+          description: specified account
+          required: true
+          schema:
+            type: string
       responses:
         '201':
           description: generated
@@ -366,6 +372,45 @@ paths:
         '500':
           description: internal server error
           
+  /account/flag/{guid}:
+    get:
+      tags:
+        - account
+      description: Report record for admin review.
+      operationId: add-flag
+      parameters:
+        - name: guid
+          in: path
+          description: guid of account holder 
+          required: true
+          schema:
+            type: string
+        - name: channel
+          in: query
+          description: channel of or reported record 
+          required: false
+          schema:
+            type: string
+        - name: topic
+          in: query
+          description: topic id of reported record 
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Profile'
+        '401':
+          description: permission denied
+        '500':
+          description: internal server error
+          
   /account/listing:
     get:
       tags:
@@ -373,9 +418,9 @@ paths:
       description: Get profile of searchable accounts. Endpoint is publically accessible.
       operationId: get-account-listing
       parameters:
-        - name: guid
+        - name: filter
           in: query
-          description: filter for specified guid 
+          description: filter handles by text 
           required: false
           schema:
             type: string
@@ -792,6 +837,25 @@ paths:
           description: account disabled
         '500':
           description: internal server error
+    delete:
+      tags:
+        - profile
+      description: Delete own account.
+      operationId: remove-profile
+      parameters:
+        - name: agent
+          in: query
+          description: agent token
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success
+        '401':
+          description: permission denied
+        '500':
+          description: internal server error
           
   /profile/data:
     put:
@@ -1167,6 +1231,39 @@ paths:
           description: internal server error
           
   /contact/cards/{cardId}:
+    get:
+      tags:
+        - contact
+      description: Get specified card. Access granted to app tokens of account holder.
+      operationId: get-card
+      parameters:
+        - name: cardId
+          in: path
+          description: specified card id 
+          required: true
+          schema:
+            type: string
+        - name: agent
+          in: query
+          description: agent token
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Card'
+        '401':
+          description: permission denied
+        '404':
+          description: card not found
+        '410':
+          description: account disabled
+        '500':
+          description: internal server error
     delete:
       tags:
         - contact
@@ -3227,7 +3324,7 @@ components:
         appToken:
           type: string
 
-    LoginAccess {
+    LoginAccess:
       type: object
       required:
         - guid
@@ -3636,7 +3733,7 @@ components:
         enableAudio:
           type: boolean
         enableVideo:
-          type: video
+          type: boolean
         contacts:
           $ref: '#/components/schemas/ChannelContacts'
         members:
@@ -4004,5 +4101,6 @@ components:
     bearerAuth: 
       type: http
       scheme: bearer
+
 
 
