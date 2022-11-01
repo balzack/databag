@@ -1,9 +1,9 @@
 # Databag - Communication for the Decentralized Web
 
 <p align="center">
-  <a href="/doc/mobile.png"><img src="/doc/mobile.png" width="45%"/></a>
+  <a href="/doc/mobile.png"><img src="/doc/mobile.png" width="48%"/></a>
   &nbsp;&nbsp;
-  <a href="/doc/browser.png"><img src="/doc/browser.png" width="45%"/></a>
+  <a href="/doc/browser.png"><img src="/doc/browser.png" width="48%"/></a>
 </p>
 <p align="center">
   Mobile and Browser App Screens
