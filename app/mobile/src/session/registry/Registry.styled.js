@@ -8,6 +8,9 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     backgroundColor: Colors.formBackground,
+    paddingLeft: 16,
+    paddingRight: 16,
+    paddingTop: 8,
   },
   title: {
     display: 'flex',

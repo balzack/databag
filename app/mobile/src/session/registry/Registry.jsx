@@ -92,80 +92,10 @@ export function Registry({ closeRegistry, openContact }) {
   const { state, actions } = useRegistry();
 
   return (
-    <View style={styles.container}>
-      { state.tabbed && (
-        <>
-          <View style={styles.topbar}>
-            { state.busy && (
-              <View style={styles.search}>
-                <ActivityIndicator />
-              </View>
-            )}
-            { !state.busy && (
-              <TouchableOpacity style={styles.search} onPress={search}>
-                <Ionicons name={'search1'} size={16} color={Colors.white} />
-              </TouchableOpacity>
-            )}
-            <View style={styles.inputwrapper}>
-              <TextInput style={styles.inputfield} value={state.server} onChangeText={actions.setServer}
-                  autoCapitalize="none" placeholderTextColor={Colors.disabled} placeholder="Server" />
-              <View style={styles.space} />
-            </View>
-            <TouchableOpacity style={styles.close} onPress={closeRegistry}>
-              <Ionicons name={'close'} size={24} color={Colors.text} />
-            </TouchableOpacity>
-          </View>
-          { state.accounts.length === 0 && state.searched && (
-            <View style={styles.empty}>
-              <Text style={styles.emptyText}>No Contacts Found</Text>
-            </View>
-          )}
-          { state.accounts.length !== 0 && (
-            <FlatList style={styles.accounts}
-              data={state.accounts}
-              renderItem={({ item }) => <RegistryItem item={item} openContact={openContact} />}
-              keyExtractor={item => item.guid}
-            />
-          )}
-        </>
-      )}
-      { !state.tabbed && (
-        <SafeAreaView edges={['top', 'right', 'bottom']}>
-          <View style={styles.searcharea}>
-            <SafeAreaView edges={['right']}>
-              <View style={styles.searchbar}>
-                { state.busy && (
-                  <View style={styles.search}>
-                    <ActivityIndicator />
-                  </View>
-                )}
-                { !state.busy && (
-                  <TouchableOpacity style={styles.search} onPress={search}>
-                    <Ionicons name={'search1'} size={16} color={Colors.white} />
-                  </TouchableOpacity>
-                )}
-                <View style={styles.inputwrapper}>
-                  <TextInput style={styles.inputfield} value={state.server} onChangeText={actions.setServer}
-                      autoCapitalize="none" placeholderTextColor={Colors.disabled} placeholder="Server" />
-                </View>
-              </View>
-            </SafeAreaView>
-          </View>
-          { state.accounts.length === 0 && state.searched && (
-            <View style={style.empty}>
-              <Text style={styles.emptyText}>No Contacts Found</Text>
-            </View>
-          )}
-          { state.accounts.length !== 0 && (
-            <FlatList style={styles.accounts}
-              data={state.accounts}
-              renderItem={({ item }) => <RegistryItem item={item} openContact={openContact} />}
-              keyExtractor={item => item.guid}
-            />
-          )}
-        </SafeAreaView>
-      )}
-    </View>
+    <SafeAreaView style={styles.container} edges={['top', 'right', 'bottom']}>
+      <RegistryTitle state={state} actions={actions} />
+      <RegistryBody state={state} actions={actions} openContact={openContact} />
+    </SafeAreaView>
   );
 }
 
