@@ -88,20 +88,27 @@ export function ConversationBody() {
       <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={72}
           enabled={Platform.OS === 'ios' ? state.keyboard : false}>
 <View style={styles.thread}>
-        <FlatList style={styles.conversation}
-           contentContainerStyle={styles.topics}
-           ref={ref}
-           data={state.topics}
-           onMomentumScrollEnd={ Platform.OS === 'ios' ? noop : actions.unlatch }
-           onScrollBeginDrag={ Platform.OS !== 'ios' ? noop : actions.unlatch }
-           maintainVisibleContentPosition={ state.latched ? null : { minIndexForVisibile: 2, } }
-           inverted={true}
-           renderItem={({item}) => <TopicItem item={item} focused={item.topicId === state.focus} 
-             focus={() => actions.setFocus(item.topicId)} hosting={state.host == null} 
-             remove={actions.removeTopic} update={actions.editTopic} block={actions.blockTopic}
-             report={actions.reportTopic} />}
-          keyExtractor={item => item.topicId}
-        />
+        { state.topics.length === 0 && (
+          <View style={styles.empty}>
+            <Text style={styles.emptyText}>No Messages</Text>
+          </View>
+        )}
+        { state.topics.length !== 0 && (
+          <FlatList style={styles.conversation}
+             contentContainerStyle={styles.topics}
+             ref={ref}
+             data={state.topics}
+             onMomentumScrollEnd={ Platform.OS === 'ios' ? noop : actions.unlatch }
+             onScrollBeginDrag={ Platform.OS !== 'ios' ? noop : actions.unlatch }
+             maintainVisibleContentPosition={ state.latched ? null : { minIndexForVisibile: 2, } }
+             inverted={true}
+             renderItem={({item}) => <TopicItem item={item} focused={item.topicId === state.focus} 
+               focus={() => actions.setFocus(item.topicId)} hosting={state.host == null} 
+               remove={actions.removeTopic} update={actions.editTopic} block={actions.blockTopic}
+               report={actions.reportTopic} />}
+            keyExtractor={item => item.topicId}
+          />
+        )}
         { !state.init && (
           <View style={styles.loading}>
             <ActivityIndicator size="large" color={Colors.primary} />

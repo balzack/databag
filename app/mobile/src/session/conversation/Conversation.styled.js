@@ -65,6 +65,16 @@ export const styles = StyleSheet.create({
     minHeight: 0,
     paddingTop: 8,
   },
+  empty: {
+    flexGrow: 1,
+    flexShrink: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  emptyText: {
+    fontSize: 16,
+    color: Colors.grey,
+  },
   close: {
     flexGrow: 1,
     justifyContent: 'flex-end',
