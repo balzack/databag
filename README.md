@@ -3,7 +3,7 @@
 <p align="center">
   <a href="#"><img src="/doc/mobile.png" width="45%"/></a>
   &nbsp;&nbsp;
-  <a href="#"><img src="/doc/browser.png" width="45%"/></a>
+  <a href="/doc/browser.png"><img src="/doc/browser.png" width="45%"/></a>
 </p>
 <p align="center">
   Mobile and Browser App Screens
