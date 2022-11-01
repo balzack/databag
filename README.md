@@ -1,3 +1,11 @@
+<div align="center">
+  <a href="/doc/mobile.png"><img src="/doc/icon.png" width="8%" style="border-radius:50%"></a>
+  <h3 align="center">Databag</h3>
+  <p align="center">Communication for the Decentralized Web</p>
+</div>
+
+<br>
+
 <p align="center">
   <a href="/doc/mobile.png"><img src="/doc/mobile.png" width="48%"/></a>
   &nbsp;&nbsp;
