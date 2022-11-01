@@ -1,7 +1,14 @@
+# Databag - Communication for the Decentralized Web
 
 <p align="center">
-  <a href="#"><img src="/doc/screenshot.png" width="80%"/></a>
+  <a href="#"><img src="/doc/mobile.png" width="45%"/></a>
+  &nbsp;&nbsp;
+  <a href="#"><img src="/doc/browser.png" width="45%"/></a>
 </p>
+<p align="center">
+  Mobile and Browser App Screens
+</p>
+<br>
 
 Databag is a self-hosted messaging service for the DWeb community. Notable features include:
 - Public-private key based identity (not bound to any blockchain or hosting domain)
@@ -12,6 +19,17 @@ Databag is a self-hosted messaging service for the DWeb community. Notable featu
 - Responsive (renders well in browsers for phone, tablet and pc)
 - Unlimited accounts per node (host for your whole family)
 
+<br>
+<p align="center">
+  <a href="https://apps.apple.com/us/app/databag/id6443741428">
+    <img src="/doc/astore.png" width="15%">
+  </a>
+  <a href="https://play.google.com/store/apps/details?id=com.databag">
+    <img src="/doc/gplay.png" width="15%">
+  </a>
+</p>
+
+<br>
 You can test out the project [here](https://databag.coredb.org/#/create), but don't post anything important as this server is regularly wiped. Feedback on the UI/UX, bugs or features is greatly appreciated.
 
 ## Installation
