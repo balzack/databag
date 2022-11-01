@@ -12,7 +12,7 @@
   <a href="/doc/browser.png"><img src="/doc/browser.png" width="48%"/></a>
 </p>
 <p align="center">
-  Mobile and Browser App Screens
+  <sub>Mobile and Browser App Screens</sub>
 </p>
 <br>
 
