@@ -1,5 +1,5 @@
 <div align="center">
-  <a href="/doc/mobile.png"><img src="/doc/icon.png" width="8%" style="border-radius:50%"></a>
+  <a href="#"><img src="/doc/icon.png" width="8%" style="border-radius:50%"></a>
   <h3 align="center">Databag</h3>
   <p align="center">Communication for the Decentralized Web</p>
 </div>
