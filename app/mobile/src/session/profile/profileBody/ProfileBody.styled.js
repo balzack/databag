@@ -4,18 +4,21 @@ import { Colors } from 'constants/Colors';
 export const styles = StyleSheet.create({
   container: {
     width: '100%',
-    height: '100%',
     display: 'flex',
     flexDirection: 'column',
     paddingBottom: 32,
     alignItems: 'center',
     justifyContent: 'center',
+    paddingTop: 32,
   },
   icon: {
     paddingTop: 2,
   },
   wrapper: {
     backgroundColor: Colors.formBackground,
+  },
+  drawer: {
+    paddingTop: 16,
   },
   action: {
     width: 64,
@@ -38,6 +41,9 @@ export const styles = StyleSheet.create({
     textAlign: 'start',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  body: {
+    paddingTop: 16,
   },
   header: {
     display: 'flex',
@@ -160,18 +166,12 @@ export const styles = StyleSheet.create({
     borderRadius: 4,
     padding: 8,
     width: 72,
-     display: 'flex',
-     alignItems: 'center',
-     justifyContent: 'center',
-  },
-  removeText: {
-    color: Colors.white,
-  },
-  erase: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    width: '100%',
+  },
+  removeText: {
+    color: Colors.white,
   },
   switch: {
     false: Colors.grey,
@@ -290,9 +290,6 @@ export const styles = StyleSheet.create({
   deleteText: {
     paddingLeft: 8,
     color: Colors.white,
-  },
-  eraseText: {
-    color: Colors.alert,
   },
   saveText: {
     color: Colors.white,
