@@ -1,3 +1,4 @@
+$RNFirebaseAsStaticFramework = true
 require File.join(File.dirname(`node --print "require.resolve('expo/package.json')"`), "scripts/autolinking")
 require File.join(File.dirname(`node --print "require.resolve('react-native/package.json')"`), "scripts/react_native_pods")
 require File.join(File.dirname(`node --print "require.resolve('@react-native-community/cli-platform-ios/package.json')"`), "native_modules")
@@ -10,6 +11,7 @@ install! 'cocoapods',
   :deterministic_uuids => false
 
 target 'Databag' do
+  use_frameworks!
   use_expo_modules!
   config = use_native_modules!
 
