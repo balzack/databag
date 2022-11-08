@@ -622,6 +622,14 @@ paths:
           required: false
           schema:
             type: string
+        - name: notifications
+          in: query
+          description: push notifications to receive
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
       responses:
         '201':
           description: successful operation
@@ -734,6 +742,14 @@ paths:
           required: false
           schema:
             type: string
+        - name: notifications
+          in: query
+          description: push notifications to receive
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
       responses:
         '201':
           description: generated
@@ -822,6 +838,14 @@ paths:
           required: false
           schema:
             type: string
+        - name: notifications
+          in: query
+          description: push notifications to receive
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
       responses:
         '201':
           description: generated
