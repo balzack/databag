@@ -4,7 +4,7 @@ info:
     DataBag provides storage for decentralized identity based self-hosting apps.
     It is intended to support sharing of personal data and hosting group
     conversations.
-  version: "0.0.1"
+  version: 1.0.5
   title: DataBag
   license:
     name: Apache 2.0
@@ -591,16 +591,44 @@ paths:
         - account
       description: Add a new account. Basic auth will be used for the accounts username and password. Access granted to valid create account token.
       operationId: add-account
-      security:
-        - bearerAuth: []
-        - basicCredentials: []
+      parameters:
+        - name: token
+          in: query
+          description: access token for creating accounts
+          required: false
+          schema:
+            type: string
+        - name: appName
+          in: query
+          description: name of connecting app
+          required: false
+          schema:
+            type: string
+        - name: appVersion
+          in: query
+          description: version of connecting app
+          required: false
+          schema:
+            type: string
+        - name: platform
+          in: query
+          description: device platform
+          required: false
+          schema:
+            type: string
+        - name: deviceToken
+          in: query
+          description: deviceToken for push notification
+          required: false
+          schema:
+            type: string
       responses:
         '201':
           description: successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Profile'
+                $ref: '#/components/schemas/LoginAccess'
         '400':
           description: invalid handle or password
         '401':
@@ -669,6 +697,55 @@ paths:
         '500':
           description: internal server error
           
+  /account/access:
+    put:
+      tags:
+        - account
+      description: Apply reset token to acquire app token for access.
+      operationId: set-account-access
+      parameters:
+        - name: token
+          in: query
+          description: access token for connecting to accounts
+          required: false
+          schema:
+            type: string
+        - name: appName
+          in: query
+          description: name of connecting app
+          required: false
+          schema:
+            type: string
+        - name: appVersion
+          in: query
+          description: version of connecting app
+          required: false
+          schema:
+            type: string
+        - name: platform
+          in: query
+          description: device platform
+          required: false
+          schema:
+            type: string
+        - name: deviceToken
+          in: query
+          description: deviceToken for push notification
+          required: false
+          schema:
+            type: string
+      responses:
+        '201':
+          description: generated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginAccess'
+        '401':
+          description: permission denied
+        '500':
+          description: internal server error
+          
   /account/node:
     put:
       tags:
@@ -720,6 +797,31 @@ paths:
       operationId: add-account-app
       security:
         - basicAuth: []
+      parameters:
+        - name: appName
+          in: query
+          description: name of connecting app
+          required: false
+          schema:
+            type: string
+        - name: appVersion
+          in: query
+          description: version of connecting app
+          required: false
+          schema:
+            type: string
+        - name: platform
+          in: query
+          description: device platform
+          required: false
+          schema:
+            type: string
+        - name: deviceToken
+          in: query
+          description: deviceToken for push notification
+          required: false
+          schema:
+            type: string
       responses:
         '201':
           description: generated
@@ -740,6 +842,51 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/AppData'
+    delete:
+      tags:
+        - account
+      description: Remove an app entry to achieve logout. Access granted to agent token.
+      operationId: remove-agent-token
+      parameters:
+        - name: agent
+          in: query
+          description: agent token for account access
+          required: true
+          schema:
+            type: string
+        - name: appName
+          in: query
+          description: name of connecting app
+          required: false
+          schema:
+            type: string
+        - name: appVersion
+          in: query
+          description: version of connecting app
+          required: false
+          schema:
+            type: string
+        - name: platform
+          in: query
+          description: device platform
+          required: false
+          schema:
+            type: string
+        - name: deviceToken
+          in: query
+          description: deviceToken for push notification
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ok
+        '401':
+          description: invalid token
+        '410':
+          description: account disabled
+        '500':
+          description: internal server error
           
   /account/apps/{appId}:
     delete:
@@ -4101,6 +4248,3 @@ components:
     bearerAuth: 
       type: http
       scheme: bearer
-
-
-
