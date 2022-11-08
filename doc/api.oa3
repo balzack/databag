@@ -2528,7 +2528,49 @@ paths:
           description: account disabled
         '500':
           description: internal server error
-                   
+ 
+   /content/channels/{channelId}/notification:
+     put:
+      tags:
+        - content
+      description: Set notification enabled state for the specified channel
+      operationId: set-channel-notifications
+      parameters:
+        - name: channelId
+          in: path
+          description: specified channel id 
+          required: true
+          schema:
+            type: string
+        - name: agent
+          in: query
+          description: access token granted to agent
+          required: true
+          schema:
+            type: string
+        - name: contact
+          in: query
+          description: access token granted to contact
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success
+        '401':
+          description: permission denied
+        '404':
+          description: field, channel not found
+        '410':
+          description: account disabled
+        '500':
+          description: internal server error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: bool
+        
   /content/channels/{channelId}/subject/{field}:
     get:
       tags:
@@ -3910,7 +3952,7 @@ components:
         members:
           type: array
           items:
-            type: string
+            $ref: '#/components/schemas/ChannelMember'
             
     ChannelSummary:
       type: object
@@ -3933,15 +3975,15 @@ components:
           items:
             type: string
       
-    ChannelMembers:
+    ChannelMember:
       type: object
       required:
         - members
       properties:
         members:
-          type: array
-          items:
-            type: string
+          type: string
+        pushEnabled:
+          type: bool
     
     Topic:
       type: object
