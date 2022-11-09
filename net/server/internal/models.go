@@ -330,6 +330,8 @@ type LoginAccess struct {
 	AppToken string `json:"appToken"`
 
 	Created int64 `json:"created"`
+
+  PushSupported bool `json:"pushSupported"`
 }
 
 //NodeConfig node configuration values

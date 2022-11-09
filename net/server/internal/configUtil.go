@@ -6,6 +6,9 @@ import (
 	"gorm.io/gorm"
 )
 
+//CNFPushSupported for allowing push notifications
+const CNFPushSupported = "push_notifications"
+
 //CNFOpenAccess for allowing for public account creation
 const CNFOpenAccess = "open_access"
 

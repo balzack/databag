@@ -50,6 +50,7 @@ func AddAccountApp(w http.ResponseWriter, r *http.Request) {
 	login := LoginAccess{
     GUID: account.GUID,
 		AppToken: account.GUID + "." + access,
+    PushSupported: getBoolConfigValue(CNFPushSupported, true),
 	}
 
 	// save app and delete token
