@@ -51,14 +51,14 @@ func Status(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// retrieve reference account
-	var app store.App
-	if err := store.DB.Preload("Account").Where("account_id = ? AND token = ?", target, access).First(&app).Error; err != nil {
+	var session store.Session
+	if err := store.DB.Preload("Account").Where("account_id = ? AND token = ?", target, access).First(&session).Error; err != nil {
 		ErrMsg(err)
 		return
 	}
 
 	// send current version
-	rev := getRevision(&app.Account)
+	rev := getRevision(&session.Account)
 	var msg []byte
 	msg, err = json.Marshal(rev)
 	if err != nil {
@@ -75,8 +75,8 @@ func Status(w http.ResponseWriter, r *http.Request) {
 	defer close(c)
 
 	// register channel for revisions
-	addStatusListener(app.Account.ID, c)
-	defer removeStatusListener(app.Account.ID, c)
+	addStatusListener(session.Account.ID, c)
+	defer removeStatusListener(session.Account.ID, c)
 
 	// start ping pong ticker
 	ticker := time.NewTicker(60 * time.Second)

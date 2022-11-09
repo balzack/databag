@@ -41,12 +41,8 @@ func SetAccountAccess(w http.ResponseWriter, r *http.Request) {
 	access := hex.EncodeToString(data)
 
 	// create app entry
-	app := store.App{
+	app := store.Session{
 		AccountID:   account.GUID,
-		Name:        appData.Name,
-		Description: appData.Description,
-		Image:       appData.Image,
-		URL:         appData.URL,
 		Token:       access,
 	}
 

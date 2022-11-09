@@ -104,28 +104,29 @@ func ParamAgentToken(r *http.Request, detail bool) (*store.Account, int, error) 
 		return nil, http.StatusBadRequest, err
 	}
 
-	// find token record
-	var app store.App
-	if detail {
-		if err := store.DB.Preload("Account.AccountDetail").Where("account_id = ? AND token = ?", target, access).First(&app).Error; err != nil {
+  // find session record
+  var session store.Session;
+  if detail {
+    if err := store.DB.Preload("Account.AccountDetail").Where("account_id = ? AND token =?", target, access).Find(&session).Error; err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
 				return nil, http.StatusNotFound, err
 			}
 			return nil, http.StatusInternalServerError, err
-		}
-	} else {
-		if err := store.DB.Preload("Account").Where("account_id = ? AND token = ?", target, access).First(&app).Error; err != nil {
+    }
+  } else {
+    if err := store.DB.Preload("Account").Where("account_id = ? AND token =?", target, access).Find(&session).Error; err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
 				return nil, http.StatusNotFound, err
 			}
 			return nil, http.StatusInternalServerError, err
-		}
-	}
-	if app.Account.Disabled {
+    }
+  }
+
+	if session.Account.Disabled {
 		return nil, http.StatusGone, errors.New("account is inactive")
 	}
 
-	return &app.Account, http.StatusOK, nil
+	return &session.Account, http.StatusOK, nil
 }
 
 //BearerAppToken retrieves account specified by authorization header

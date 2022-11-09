@@ -6,6 +6,8 @@ func AutoMigrate(db *gorm.DB) {
   db.AutoMigrate(&Notification{});
   db.AutoMigrate(&Config{});
   db.AutoMigrate(&App{});
+  db.AutoMigrate(&Session{});
+  db.AutoMigrate(&EventType{});
   db.AutoMigrate(&Account{});
   db.AutoMigrate(&AccountToken{});
   db.AutoMigrate(&GroupSlot{});
@@ -13,6 +15,7 @@ func AutoMigrate(db *gorm.DB) {
   db.AutoMigrate(&Group{});
   db.AutoMigrate(&ChannelSlot{});
   db.AutoMigrate(&Channel{});
+  db.AutoMigrate(&Member{});
   db.AutoMigrate(&CardSlot{});
   db.AutoMigrate(&Card{});
   db.AutoMigrate(&ArticleSlot{});
@@ -91,6 +94,27 @@ type AccountDetail struct {
   Description       string
   Location          string
   Image             string
+}
+
+type Session struct {
+  ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
+  AccountID         string          `gorm:"not null;index:sessguid,unique"`
+  AppName           string
+  AppVersion        string
+  Platform          string
+  PushEnabled       bool
+  PushToken         string 
+  Created           int64           `gorm:"autoCreateTime"`
+  Account           Account         `gorm:"references:GUID"`
+  Token             string          `gorm:"not null;index:sessguid,unique"`
+  EventTypes        []EventType
+}
+
+type EventType struct {
+  ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
+  SessionID         uint            `gorm:"not null;index:sessiontype"`
+  Name              string
+  Session           *Session
 }
 
 type App struct {
@@ -214,12 +238,22 @@ type Channel struct {
   DetailRevision    int64           `gorm:"not null"`
   DataType          string          `gorm:"index"`
   Data              string
+  ChannelPush       bool
+  HostPush          bool
   Created           int64           `gorm:"autoCreateTime"`
   Updated           int64           `gorm:"autoUpdateTime"`
   Groups            []Group         `gorm:"many2many:channel_groups;"`
   Cards             []Card          `gorm:"many2many:channel_cards;"`
+  Members           []Member
   Topics            []Topic
   ChannelSlot       ChannelSlot
+}
+
+type Member struct {
+  ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
+  ChannelID         uint
+  CardID            uint
+  PushEnabled       bool
 }
 
 type TopicSlot struct {

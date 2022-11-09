@@ -139,6 +139,13 @@ var endpoints = routes{
 		RemoveAccountApp,
 	},
 
+  route{
+    "RemoveAgentToken",
+    strings.ToUpper("Delete"),
+    "/account/apps",
+    RemoveAgentToken,
+  },
+
 	route{
 		"SetAccountAccess",
 		strings.ToUpper("Put"),

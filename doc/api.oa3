@@ -591,52 +591,16 @@ paths:
         - account
       description: Add a new account. Basic auth will be used for the accounts username and password. Access granted to valid create account token.
       operationId: add-account
-      parameters:
-        - name: token
-          in: query
-          description: access token for creating accounts
-          required: false
-          schema:
-            type: string
-        - name: appName
-          in: query
-          description: name of connecting app
-          required: false
-          schema:
-            type: string
-        - name: appVersion
-          in: query
-          description: version of connecting app
-          required: false
-          schema:
-            type: string
-        - name: platform
-          in: query
-          description: device platform
-          required: false
-          schema:
-            type: string
-        - name: deviceToken
-          in: query
-          description: deviceToken for push notification
-          required: false
-          schema:
-            type: string
-        - name: notifications
-          in: query
-          description: push notifications to receive
-          required: false
-          schema:
-            type: array
-            items:
-              type: string
-      responses:
+      security:
+        - bearerAuth: []
+        - basicCredentials: []
+     responses:
         '201':
           description: successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LoginAccess'
+                $ref: '#/components/schemas/Profile'
         '400':
           description: invalid handle or password
         '401':

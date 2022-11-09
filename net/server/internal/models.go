@@ -189,6 +189,13 @@ type ChannelDetail struct {
 	Members []string `json:"members"`
 }
 
+//ChannelMember contact member of channel
+type ChannelMember struct {
+  Member string `json:"member"`
+
+  PushEnabled bool `json:"pushEnabled"`
+}
+
 //ChannelSummary latest topic posted on channel
 type ChannelSummary struct {
 	LastTopic *TopicDetail `json:"lastTopic,omitempty"`
