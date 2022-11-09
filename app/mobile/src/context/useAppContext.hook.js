@@ -10,12 +10,15 @@ import { AccountContext } from 'context/AccountContext';
 import { ProfileContext } from 'context/ProfileContext';
 import { CardContext } from 'context/CardContext';
 import { ChannelContext } from 'context/ChannelContext';
+import { getVersion, getApplicationName, getDeviceId } from 'react-native-device-info';
+import messaging from '@react-native-firebase/messaging';
 
 export function useAppContext() {
   const [state, setState] = useState({
     session: null,
     loginTimestamp: null,
     disconnected: null,
+    deviceToken: null,
   });
   const store = useContext(StoreContext);
   const account = useContext(AccountContext);
@@ -31,6 +34,10 @@ export function useAppContext() {
   }
 
   useEffect(() => {
+    messaging().getToken().then(token => {
+      updateState({ deviceToken: token });
+    })
+
     init();
   }, []);
 
@@ -68,18 +75,18 @@ export function useAppContext() {
     username: getUsername,
     create: async (server, username, password, token) => {
       await addAccount(server, username, password, token);
-      const access = await setLogin(username, server, password)
+      const access = await setLogin(username, server, password, getApplicatioName(), getVersion(), getDeviceId(), state.deviceToken, ['contact', 'channel'])
       await store.actions.setSession({ ...access, server});
       await setSession({ ...access, server });
     },
     access: async (server, token) => {
-      const access = await setAccountAccess(server, token);
+      const access = await setAccountAccess(server, token, getApplicationName(), getVersion(), getDeviceId(), state.deviceToken, ['contact', 'channel']);
       await store.actions.setSession({ ...access, server});
       await setSession({ ...access, server });
     },
     login: async (username, password) => {
       const acc = username.split('@');
-      const access = await setLogin(acc[0], acc[1], password)
+      const access = await setLogin(acc[0], acc[1], password, getApplicationName(), getVersion(), getDeviceId(), state.deviceToken, ['contact', 'channel'])
       await store.actions.setSession({ ...access, server: acc[1]});
       await setSession({ ...access, server: acc[1] }); 
     },
