@@ -47,8 +47,8 @@ export function useProfile() {
   }, [app]);
 
   const actions = {
-    logout: () => {
-      app.actions.logout();
+    logout: async () => {
+      await app.actions.logout();
       navigate('/');
     },
     remove: async () => {

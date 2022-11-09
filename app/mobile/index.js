@@ -3,8 +3,6 @@ import { registerRootComponent } from 'expo';
 import App from './App';
 import messaging from '@react-native-firebase/messaging';
 
-messaging().requestPermission().then(status => {})
-
 messaging().registerDeviceForRemoteMessages().then(() => {});
 
 messaging().setBackgroundMessageHandler(async remoteMessage => {});

@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef, useContext } from 'react';
 import { getAvailable } from 'api/getAvailable';
 import { setLogin } from 'api/setLogin';
+import { clearLogin } from 'api/clearLogin';
 import { removeProfile } from 'api/removeProfile';
 import { setAccountAccess } from 'api/setAccountAccess';
 import { addAccount } from 'api/addAccount';
@@ -87,10 +88,22 @@ export function useAppContext() {
     login: async (username, password) => {
       const acc = username.split('@');
       const access = await setLogin(acc[0], acc[1], password, getApplicationName(), getVersion(), getDeviceId(), state.deviceToken, ['contact', 'channel'])
+      if (access.pushSupported) {
+        messaging().requestPermission().then(status => {})
+      }
       await store.actions.setSession({ ...access, server: acc[1]});
       await setSession({ ...access, server: acc[1] }); 
     },
     logout: async () => {
+      try {
+        await messaging().deleteToken();
+        const token = await messaging().getToken();
+        updateState({ deviceToken: token });
+        await clearLogin(state.server, state.appToken);
+      }
+      catch (err) {
+        console.log(err);
+      }
       await clearSession();
       await store.actions.clearSession();
     },
