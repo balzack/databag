@@ -11,6 +11,7 @@ export function useDashboard(token, config) {
     domain: "",
     accountStorage: null,
     keyType: null,
+    pushSupported: null,
     enableImage: null,
     enableAudio: null,
     enableVideo: null,
@@ -58,6 +59,9 @@ export function useDashboard(token, config) {
     setKeyType: (keyType) => {
       updateState({ keyType });
     },
+    setPushSupported: (pushSupported) => {
+      updateState({ pushSupported });
+    },
     setEnableImage: (enableImage) => {
       updateState({ enableImage });
     },
@@ -74,10 +78,10 @@ export function useDashboard(token, config) {
       if (!state.busy) {
         updateState({ busy: true });
         try {
-          const { domain, keyType, accountStorage, enableImage, enableAudio, enableVideo } = state;
+          const { domain, keyType, accountStorage, pushSupported, enableImage, enableAudio, enableVideo } = state;
           await setNodeConfig(token,
             { domain,  accountStorage: accountStorage * 1073741824,
-                keyType, enableImage, enableAudio, enableVideo });
+                keyType, enableImage, enableAudio, enableVideo, pushSupported });
           updateState({ showSettings: false });
         }
         catch(err) {
@@ -117,9 +121,9 @@ export function useDashboard(token, config) {
   }, [viewport]);
 
   useEffect(() => {
-    const { accountStorage, domain, keyType, enableImage, enableAudio, enableVideo } = config;
+    const { accountStorage, domain, keyType, pushSupported, enableImage, enableAudio, enableVideo } = config;
     updateState({ domain, accountStorage: Math.ceil(accountStorage / 1073741824), keyType,
-      enableImage, enableAudio, enableVideo });
+      enableImage, enableAudio, enableVideo, pushSupported });
     actions.getAccounts();
     // eslint-disable-next-line
   }, [config]);

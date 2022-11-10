@@ -106,6 +106,11 @@ export function Dashboard({ token, config, logout }) {
             </Select>
           </div>
           <div class="field">
+            <div>Enable Push Notification:&nbsp;</div>
+            <Switch onChange={(e) => actions.setPushSupported(e)} size="small"
+              defaultChecked={true} checked={state.pushSupported} />
+          </div>
+          <div class="field">
             <div>Enable Image Queue:&nbsp;</div>
             <Switch onChange={(e) => actions.setEnableImage(e)} size="small"
               defaultChecked={true} checked={state.enableImage} />
