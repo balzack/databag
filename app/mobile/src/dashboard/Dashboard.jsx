@@ -183,6 +183,14 @@ export function Dashboard(props) {
                   <Text style={styles.option}>RSA 4096</Text>
                 </TouchableOpacity>
               </View>
+
+              <TouchableOpacity style={styles.media} activeOpacity={1}
+                  onPress={() => actions.setPushSupported(!state.pushSupported)}>
+                <Text style={styles.modalLabel}>Enable Push Notifications: </Text>
+                <Switch style={styles.switch} value={state.pushSupported}
+                  onValueChange={actions.setPushSupported} trackColor={styles.track}/>
+              </TouchableOpacity>
+
               <TouchableOpacity style={styles.media} activeOpacity={1}
                   onPress={() => actions.setEnableImage(!state.enableImage)}>
                 <Text style={styles.modalLabel}>Enable Image Queue: </Text>

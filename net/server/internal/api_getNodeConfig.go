@@ -21,6 +21,7 @@ func GetNodeConfig(w http.ResponseWriter, r *http.Request) {
   config.EnableAudio = getBoolConfigValue(CNFEnableAudio, true)
   config.EnableVideo = getBoolConfigValue(CNFEnableVideo, true)
   config.KeyType = getStrConfigValue(CNFKeyType, APPRSA4096)
+  config.PushSupported = getBoolConfigValue(CNFPushSupported, true)
 
 	WriteResponse(w, config)
 }

@@ -66,6 +66,14 @@ func SetNodeConfig(w http.ResponseWriter, r *http.Request) {
 			return res
 		}
 
+    // upsert push supported
+    if res := tx.Clauses(clause.OnConflict{
+       Columns:   []clause.Column{{Name: "config_id"}},
+       DoUpdates: clause.AssignmentColumns([]string{"bool_value"}),
+    }).Create(&store.Config{ConfigID: CNFPushSupported, BoolValue: config.PushSupported}).Error; res != nil {
+      return res
+    }
+
 		// upsert key type
 		if res := tx.Clauses(clause.OnConflict{
 			Columns:   []clause.Column{{Name: "config_id"}},

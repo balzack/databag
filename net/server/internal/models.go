@@ -347,6 +347,8 @@ type NodeConfig struct {
 	KeyType string `json:"keyType"`
 
 	AccountStorage int64 `json:"accountStorage"`
+
+  PushSupported bool `json:"pushSupported"`
 }
 
 //Profile public attributes of account

@@ -96,6 +96,9 @@ export function useDashboard(config, server, token) {
     setStorage: (storage) => {
       updateState({ storage: Number(storage.replace(/[^0-9]/g, '')) });
     },
+    setPushSupported: (pushSupported) => {
+      updateState({ pushSupported });
+    },
     setEnableImage: (enableImage) => {
       updateState({ enableImage });
     },

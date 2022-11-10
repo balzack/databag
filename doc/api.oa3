@@ -3566,6 +3566,8 @@ components:
           type: boolean
         keyType:
           type: string
+        pushSupported:
+          type: boolean
           
     AccountStatus:
       type: object
