@@ -55,8 +55,8 @@ export function useDashboard(config, server, token) {
   };
 
   useEffect(() => {
-    const { keyType, accountStorage, domain, enableImage, enableAudio, enableVideo } = config;
-    updateState({ keyType, storage: accountStorage.toString(), domain, enableImage, enableAudio, enableVideo });
+    const { keyType, accountStorage, domain, enableImage, enableAudio, enableVideo, pushSupported } = config;
+    updateState({ keyType, storage: accountStorage.toString(), domain, enableImage, enableAudio, enableVideo, pushSupported });
   }, [config]);
 
   useEffect(() => {
