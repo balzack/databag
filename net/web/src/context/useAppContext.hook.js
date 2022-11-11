@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef, useContext } from 'react';
 import { getAvailable } from 'api/getAvailable';
 import { setLogin } from 'api/setLogin';
+import { clearLogin } from 'api/clearLogin';
 import { setAccountAccess } from 'api/setAccountAccess';
 import { addAccount } from 'api/addAccount';
 import { getUsername } from 'api/getUsername';
@@ -14,8 +15,13 @@ import { StoreContext } from './StoreContext';
 import { UploadContext } from './UploadContext';
 
 export function useAppContext() {
-  const [state, setState] = useState({});
+  const [state, setState] = useState({
+  });
   const [appRevision, setAppRevision] = useState();
+
+  const appName = "Databag";
+  const appVersion = "1.0.0";
+  const userAgent = window.navigator.userAgent;
 
   const ws = useRef(null);
   const revision = useRef(null);
@@ -66,7 +72,7 @@ export function useAppContext() {
 
   const appCreate = async (username, password, token) => {
     await addAccount(username, password, token);
-    let access = await setLogin(username, password)
+    let access = await setLogin(username, password, appName, appVersion, userAgent)
     updateState({ access: access.appToken });
     storeContext.actions.setValue('login:timestamp', access.created);
     setWebsocket(access.appToken)
@@ -78,7 +84,7 @@ export function useAppContext() {
   } 
 
   const appLogin = async (username, password) => {
-    let access = await setLogin(username, password)
+    let access = await setLogin(username, password, appName, appVersion, userAgent)
     updateState({ access: access.appToken });
     storeContext.actions.setValue('login:timestamp', access.created);
     setWebsocket(access.appToken)
@@ -90,7 +96,7 @@ export function useAppContext() {
   }
 
   const appAccess = async (token) => {
-    let access = await setAccountAccess(token)
+    let access = await setAccountAccess(token, appName, appVersion, userAgent)
     updateState({ access: access.appToken });
     storeContext.actions.setValue('login:timestamp', access.created);
     setWebsocket(access.appToken)
@@ -101,7 +107,13 @@ export function useAppContext() {
     return access.created;
   }
 
-  const appLogout = () => {
+  const appLogout = async () => {
+    try {
+      await clearLogin(state.access);
+    }
+    catch (err) {
+      console.log(err);
+    }
     updateState({ access: null });
     clearWebsocket()
     localStorage.removeItem("session");
