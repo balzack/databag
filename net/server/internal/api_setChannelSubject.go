@@ -44,8 +44,8 @@ func SetChannelSubject(w http.ResponseWriter, r *http.Request) {
 
 	// determine affected contact list
 	cards := make(map[string]store.Card)
-	for _, card := range slot.Channel.Cards {
-		cards[card.GUID] = card
+	for _, member := range slot.Channel.Members {
+		cards[member.Card.GUID] = member.Card
 	}
 	for _, group := range slot.Channel.Groups {
 		for _, card := range group.Cards {

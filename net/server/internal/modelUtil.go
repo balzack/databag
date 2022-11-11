@@ -179,15 +179,15 @@ func getChannelDetailModel(slot *store.ChannelSlot, showList bool, image bool, a
 			groups = append(groups, group.GroupSlot.GroupSlotID)
 		}
 		var cards []string
-		for _, card := range slot.Channel.Cards {
-			cards = append(cards, card.CardSlot.CardSlotID)
+		for _, member := range slot.Channel.Members {
+			cards = append(cards, member.Card.CardSlot.CardSlotID)
 		}
 		contacts = &ChannelContacts{Groups: groups, Cards: cards}
 	}
 
 	members := []string{}
-	for _, card := range slot.Channel.Cards {
-		members = append(members, card.GUID)
+	for _, member := range slot.Channel.Members {
+		members = append(members, member.Card.GUID)
 	}
 
 	return &ChannelDetail{

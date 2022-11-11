@@ -49,7 +49,13 @@ func AddChannel(w http.ResponseWriter, r *http.Request) {
 			if res := tx.Preload("Card").Where("account_id = ? AND card_slot_id = ?", account.ID, cardID).First(&cardSlot).Error; res != nil {
 				return res
 			}
-			if res := tx.Model(&slot.Channel).Association("Cards").Append(cardSlot.Card); res != nil {
+      member := &store.Member{}
+      member.ChannelID = channel.ID
+      member.CardID = cardSlot.Card.ID
+      member.Card = *cardSlot.Card
+      member.Channel = channel
+      member.PushEnabled = true
+			if res := tx.Save(member).Error; res != nil {
 				return res
 			}
 			cards = append(cards, cardSlot.Card)

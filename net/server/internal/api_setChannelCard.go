@@ -54,8 +54,8 @@ func SetChannelCard(w http.ResponseWriter, r *http.Request) {
 
 	// determine contact list
 	cards := make(map[string]store.Card)
-	for _, card := range channelSlot.Channel.Cards {
-		cards[card.GUID] = card
+	for _, member := range channelSlot.Channel.Members {
+		cards[member.Card.GUID] = member.Card
 	}
 	for _, group := range channelSlot.Channel.Groups {
 		for _, card := range group.Cards {
@@ -66,13 +66,19 @@ func SetChannelCard(w http.ResponseWriter, r *http.Request) {
 
 	// save and update contact revision
 	err = store.DB.Transaction(func(tx *gorm.DB) error {
-		if res := tx.Model(&channelSlot.Channel).Association("Cards").Append(cardSlot.Card); res != nil {
+    member := &store.Member{}
+    member.ChannelID = channelSlot.Channel.ID
+    member.CardID = cardSlot.Card.ID
+    member.Channel = channelSlot.Channel
+    member.Card = *cardSlot.Card
+    member.PushEnabled = true
+		if res := tx.Save(member).Error; res != nil {
 			return res
 		}
-		if res := tx.Model(&channelSlot.Channel).Update("detail_revision", account.ChannelRevision+1).Error; res != nil {
+    if res := tx.Model(&store.Channel{}).Where("id = ?", channelSlot.Channel.ID).Update("detail_revision", account.ChannelRevision+1).Error; res != nil {
 			return res
 		}
-		if res := tx.Model(&channelSlot).Update("revision", account.ChannelRevision+1).Error; res != nil {
+		if res := tx.Model(&store.ChannelSlot{}).Where("id = ?", channelSlot.ID).Update("revision", account.ChannelRevision+1).Error; res != nil {
 			return res
 		}
 		if res := tx.Model(&account).Update("channel_revision", account.ChannelRevision+1).Error; res != nil {

@@ -94,8 +94,8 @@ func AddChannelTopicTag(w http.ResponseWriter, r *http.Request) {
 
 	// determine affected contact list
 	cards := make(map[string]store.Card)
-	for _, card := range channelSlot.Channel.Cards {
-		cards[card.GUID] = card
+	for _, member := range channelSlot.Channel.Members {
+		cards[member.Card.GUID] = member.Card
 	}
 	for _, group := range channelSlot.Channel.Groups {
 		for _, card := range group.Cards {

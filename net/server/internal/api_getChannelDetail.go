@@ -40,7 +40,7 @@ func GetChannelDetail(w http.ResponseWriter, r *http.Request) {
 
 	// load channel
 	var slot store.ChannelSlot
-	if err := store.DB.Preload("Channel.Cards.CardSlot").Preload("Channel.Groups.Cards").Preload("Channel.Groups.GroupSlot").Where("account_id = ? AND channel_slot_id = ?", act.ID, channelID).First(&slot).Error; err != nil {
+	if err := store.DB.Preload("Channel.Members.Card.CardSlot").Preload("Channel.Groups.Cards").Preload("Channel.Groups.GroupSlot").Where("account_id = ? AND channel_slot_id = ?", act.ID, channelID).First(&slot).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			ErrResponse(w, http.StatusNotFound, err)
 		} else {

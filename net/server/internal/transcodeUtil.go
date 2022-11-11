@@ -173,8 +173,8 @@ func updateAsset(asset *store.Asset, status string, crc uint32, size int64) (err
 
 	// determine affected contact list
 	cards := make(map[string]store.Card)
-	for _, card := range topic.Channel.Cards {
-		cards[card.GUID] = card
+	for _, member := range topic.Channel.Members {
+		cards[member.Card.GUID] = member.Card
 	}
 	for _, group := range topic.Channel.Groups {
 		for _, card := range group.Cards {

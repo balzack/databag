@@ -51,8 +51,8 @@ func RemoveCard(w http.ResponseWriter, r *http.Request) {
 			if res := tx.Model(&channel.ChannelSlot).Update("revision", account.ChannelRevision+1).Error; res != nil {
 				return res
 			}
-			for _, card := range channel.Cards {
-				cards[card.GUID] = &card
+			for _, member := range channel.Members {
+				cards[member.Card.GUID] = &member.Card
 			}
 		}
 		if res := tx.Model(&slot.Card).Association("Groups").Clear(); res != nil {

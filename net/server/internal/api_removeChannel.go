@@ -43,7 +43,7 @@ func RemoveChannel(w http.ResponseWriter, r *http.Request) {
 
 	// load channel
 	var slot store.ChannelSlot
-	if err = store.DB.Preload("Channel.Cards").Preload("Channel.Groups.Cards").Where("account_id = ? AND channel_slot_id = ?", account.ID, channelID).First(&slot).Error; err != nil {
+	if err = store.DB.Preload("Channel.Members.Card").Preload("Channel.Groups.Cards").Where("account_id = ? AND channel_slot_id = ?", account.ID, channelID).First(&slot).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			ErrResponse(w, http.StatusNotFound, err)
 		} else {
@@ -58,8 +58,8 @@ func RemoveChannel(w http.ResponseWriter, r *http.Request) {
 
 	// determine affected contact list
 	cards := make(map[string]store.Card)
-	for _, card := range slot.Channel.Cards {
-		cards[card.GUID] = card
+	for _, member := range slot.Channel.Members {
+		cards[member.Card.GUID] = member.Card
 	}
 	for _, group := range slot.Channel.Groups {
 		for _, card := range group.Cards {
@@ -76,7 +76,7 @@ func RemoveChannel(w http.ResponseWriter, r *http.Request) {
 			if res := tx.Model(&slot.Channel).Association("Cards").Clear(); res != nil {
 				return res
 			}
-			slot.Channel.Cards = []store.Card{}
+			slot.Channel.Members = []store.Member{}
 			if res := tx.Where("channel_id = ?", slot.Channel.ID).Delete(&store.Tag{}).Error; res != nil {
 				return res
 			}
@@ -121,15 +121,15 @@ func RemoveChannel(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		err = store.DB.Transaction(func(tx *gorm.DB) error {
-			if res := tx.Model(&slot.Channel).Association("Cards").Delete(contact); res != nil {
+      if res := tx.Where("channel_id = ? AND card_id = ?", slot.Channel.ID, contact.ID).Delete(&store.Member{}).Error; res != nil {
 				return res
 			}
-			if res := tx.Model(&slot.Channel).Update("detail_revision", account.ChannelRevision+1).Error; res != nil {
-				return res
-			}
-			if res := tx.Model(&slot).Update("revision", account.ChannelRevision+1).Error; res != nil {
-				return res
-			}
+      if res := tx.Model(&store.Channel{}).Where("id = ?", slot.Channel.ID).Update("detail_revision", account.ChannelRevision+1).Error; res != nil {
+        return res
+      }
+      if res := tx.Model(&store.ChannelSlot{}).Where("id = ?", slot.ID).Update("revision", account.ChannelRevision+1).Error; res != nil {
+        return res
+      }
 			if res := tx.Model(&account).Update("channel_revision", account.ChannelRevision+1).Error; res != nil {
 				return res
 			}

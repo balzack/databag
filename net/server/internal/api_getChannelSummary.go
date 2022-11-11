@@ -42,7 +42,7 @@ func GetChannelSummary(w http.ResponseWriter, r *http.Request) {
 	var slot store.ChannelSlot
 	if err := store.DB.Preload("Channel.Topics", func(db *gorm.DB) *gorm.DB {
 		return store.DB.Order("topics.id DESC").Limit(1)
-	}).Preload("Channel.Cards.CardSlot").Preload("Channel.Groups.Cards").Preload("Channel.Groups.GroupSlot").Where("account_id = ? AND channel_slot_id = ?", act.ID, channelID).First(&slot).Error; err != nil {
+	}).Preload("Channel.Members.Card").Preload("Channel.Groups.Cards").Preload("Channel.Groups.GroupSlot").Where("account_id = ? AND channel_slot_id = ?", act.ID, channelID).First(&slot).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			ErrResponse(w, http.StatusNotFound, err)
 		} else {

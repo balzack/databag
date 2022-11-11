@@ -36,9 +36,9 @@ func GetChannelTopic(w http.ResponseWriter, r *http.Request) {
 	WriteResponse(w, getTopicModel(&topicSlot))
 }
 
-func isMember(guid string, cards []store.Card) bool {
-	for _, card := range cards {
-		if guid == card.GUID {
+func isMember(guid string, members []store.Member) bool {
+	for _, member := range members {
+		if guid == member.Card.GUID {
 			return true
 		}
 	}
@@ -86,7 +86,7 @@ func getChannelSlot(r *http.Request, member bool) (slot store.ChannelSlot, guid 
 	}
 
 	// load channel
-	if err = store.DB.Preload("Account").Preload("Channel.Cards").Preload("Channel.Groups.Cards").Where("account_id = ? AND channel_slot_id = ?", account.ID, channelID).First(&slot).Error; err != nil {
+	if err = store.DB.Preload("Account").Preload("Channel.Members.Card").Preload("Channel.Groups.Cards").Where("account_id = ? AND channel_slot_id = ?", account.ID, channelID).First(&slot).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			code = http.StatusNotFound
 		} else {
@@ -102,11 +102,11 @@ func getChannelSlot(r *http.Request, member bool) (slot store.ChannelSlot, guid 
 
 	// validate access to channel
 	if tokenType == APPTokenContact {
-		if member && !isMember(guid, slot.Channel.Cards) {
+		if member && !isMember(guid, slot.Channel.Members) {
 			err = errors.New("contact is not a channel member")
 			code = http.StatusUnauthorized
 			return
-		} else if !isViewer(guid, slot.Channel.Groups) && !isMember(guid, slot.Channel.Cards) {
+		} else if !isViewer(guid, slot.Channel.Groups) && !isMember(guid, slot.Channel.Members) {
 			err = errors.New("contact is not a channel viewer")
 			code = http.StatusUnauthorized
 			return

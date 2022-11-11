@@ -103,7 +103,7 @@ type Session struct {
   AppVersion        string
   Platform          string
   PushEnabled       bool
-  PushToken         string 
+  PushToken         string
   Created           int64           `gorm:"autoCreateTime"`
   Account           Account         `gorm:"references:GUID"`
   Token             string          `gorm:"not null;index:sessguid,unique"`
@@ -243,7 +243,6 @@ type Channel struct {
   Created           int64           `gorm:"autoCreateTime"`
   Updated           int64           `gorm:"autoUpdateTime"`
   Groups            []Group         `gorm:"many2many:channel_groups;"`
-  Cards             []Card          `gorm:"many2many:channel_cards;"`
   Members           []Member
   Topics            []Topic
   ChannelSlot       ChannelSlot
@@ -254,6 +253,8 @@ type Member struct {
   ChannelID         uint
   CardID            uint
   PushEnabled       bool
+  Card              Card
+  Channel           *Channel
 }
 
 type TopicSlot struct {

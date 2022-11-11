@@ -69,7 +69,7 @@ func GetChannels(w http.ResponseWriter, r *http.Request) {
 		} else {
 			if err := store.DB.Preload("Channel.Topics", func(db *gorm.DB) *gorm.DB {
 				return store.DB.Order("topics.id DESC")
-			}).Preload("Channel.Cards.CardSlot").Preload("Channel.Groups.GroupSlot").Where("account_id = ? AND channel_id != 0", account.ID).Find(&slots).Error; err != nil {
+			}).Preload("Channel.Members.Card.CardSlot").Preload("Channel.Groups.GroupSlot").Where("account_id = ? AND channel_id != 0", account.ID).Find(&slots).Error; err != nil {
 				ErrResponse(w, http.StatusInternalServerError, err)
 				return
 			}
@@ -108,14 +108,14 @@ func GetChannels(w http.ResponseWriter, r *http.Request) {
 		account := &card.Account
 		var slots []store.ChannelSlot
 		if channelRevisionSet {
-			if err := store.DB.Preload("Channel.Cards").Preload("Channel.Groups.Cards").Where("account_id = ? AND revision > ?", account.ID, channelRevision).Find(&slots).Error; err != nil {
+			if err := store.DB.Preload("Channel.Members.Card").Preload("Channel.Groups.Cards").Where("account_id = ? AND revision > ?", account.ID, channelRevision).Find(&slots).Error; err != nil {
 				ErrResponse(w, http.StatusInternalServerError, err)
 				return
 			}
 		} else {
 			if err := store.DB.Preload("Channel.Topics", func(db *gorm.DB) *gorm.DB {
 				return store.DB.Order("topics.id DESC")
-			}).Preload("Channel.Cards").Preload("Channel.Groups.Cards").Where("account_id = ? AND channel_id != 0", account.ID).Find(&slots).Error; err != nil {
+			}).Preload("Channel.Members.Card").Preload("Channel.Groups.Cards").Where("account_id = ? AND channel_id != 0", account.ID).Find(&slots).Error; err != nil {
 				ErrResponse(w, http.StatusInternalServerError, err)
 				return
 			}
@@ -150,8 +150,8 @@ func isChannelShared(guid string, channel *store.Channel) bool {
 	if channel == nil {
 		return false
 	}
-	for _, card := range channel.Cards {
-		if guid == card.GUID {
+	for _, member := range channel.Members {
+		if guid == member.Card.GUID {
 			return true
 		}
 	}
