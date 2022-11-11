@@ -3,6 +3,7 @@ package databag
 import (
 	"databag/internal/store"
 	"encoding/hex"
+	"encoding/json"
 	"errors"
   "time"
 	"github.com/theckman/go-securerandom"
@@ -25,6 +26,19 @@ func SetAccountAccess(w http.ResponseWriter, r *http.Request) {
 	}
 	account := token.Account
 
+  // parse authentication token
+  appName := r.FormValue("appName")
+  appVersion := r.FormValue("appVersion")
+  platform := r.FormValue("platform")
+  deviceToken := r.FormValue("deviceToken")
+  var notifications []string
+  if r.FormValue("notifications") != "" {
+    if err := json.Unmarshal([]byte(r.FormValue("notifications")), &notifications); err != nil {
+      ErrResponse(w, http.StatusBadRequest, errors.New("invalid notification types"));
+      return;
+    }
+  }
+
 	// parse app data
 	var appData AppData
 	if err := ParseRequest(r, w, &appData); err != nil {
@@ -41,19 +55,28 @@ func SetAccountAccess(w http.ResponseWriter, r *http.Request) {
 	access := hex.EncodeToString(data)
 
 	// create app entry
-	app := store.Session{
+	session := store.Session{
 		AccountID:   account.GUID,
 		Token:       access,
+    AppName:     appName,
+    AppVersion:  appVersion,
+    Platform:    platform,
+    PushToken:   deviceToken,
 	}
 
 	// save app and delete token
 	err = store.DB.Transaction(func(tx *gorm.DB) error {
-		if res := tx.Create(&app).Error; res != nil {
+		if res := tx.Create(&session).Error; res != nil {
 			return res
 		}
-		if res := tx.Save(token.Account).Error; res != nil {
-			return res
-		}
+    for _, notification := range notifications {
+      eventType := &store.EventType{}
+      eventType.SessionID = session.ID
+      eventType.Name = notification
+      if res := tx.Save(eventType).Error; res != nil {
+        return res
+      }
+    }
 		if res := tx.Delete(token).Error; res != nil {
 			return res
 		}
@@ -67,7 +90,8 @@ func SetAccountAccess(w http.ResponseWriter, r *http.Request) {
   login := LoginAccess{
     GUID: account.GUID,
     AppToken: account.GUID + "." + access,
-    Created:  app.Created,
+    Created:  session.Created,
+    PushSupported: getBoolConfigValue(CNFPushSupported, true),
   }
 
 	WriteResponse(w, login)
