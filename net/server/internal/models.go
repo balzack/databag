@@ -30,6 +30,8 @@ type AccountStatus struct {
 	ForwardingAddress string `json:"forwardingAddress"`
 
 	Searchable bool `json:"searchable"`
+
+	PushEnabled bool `json:"pushEnabled"`
 }
 
 //Announce initial message sent on websocket

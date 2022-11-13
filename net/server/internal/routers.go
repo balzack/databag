@@ -182,6 +182,13 @@ var endpoints = routes{
 	},
 
 	route{
+		"SetAccountNotification",
+		strings.ToUpper("Get"),
+		"/account/notification",
+		SetAccountNotification,
+	},
+
+	route{
 		"SetAccountSerchable",
 		strings.ToUpper("Put"),
 		"/account/searchable",
@@ -691,6 +698,20 @@ var endpoints = routes{
 		"/content/channels/{channelID}/groups/{groupID}",
 		SetChannelGroup,
 	},
+
+  route{
+    "GetChannelNotification",
+    strings.ToUpper("Get"),
+    "/content/channels/{channelID}/notification",
+    GetChannelNotification,
+  },
+
+  route{
+    "SetChannelNotification",
+    strings.ToUpper("Put"),
+    "/content/channels/{channelID}/notification",
+    SetChannelNotification,
+  },
 
 	route{
 		"SetChannelSubject",

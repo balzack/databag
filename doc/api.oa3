@@ -534,7 +534,35 @@ paths:
           description: authentication error
         '500':
           description: internal server error
-          
+           
+  /account/notification:
+    put:
+      tags:
+        - account
+      description: Set whether account should receive push notifications.
+      operationId: set-account-notification
+      parameters:
+        - name: agent
+          in: query
+          description: agent token
+          required: false
+          schema:
+            type: string
+      responses:
+        '201':
+          description: success
+        '401':
+          description: permission denied
+        '405':
+          description: failed to confirm
+        '500':
+          description: internal server error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: boolean
+
   /account/searchable:
     put:
       tags:
@@ -2494,7 +2522,46 @@ paths:
           description: internal server error
  
    /content/channels/{channelId}/notification:
-     put:
+    get:
+      tags:
+        - content
+      description: Get notification enabled state for the specified channel
+      operationId: get-channel-notifications
+      parameters:
+        - name: channelId
+          in: path
+          description: specified channel id 
+          required: true
+          schema:
+            type: string
+        - name: agent
+          in: query
+          description: access token granted to agent
+          required: true
+          schema:
+            type: string
+        - name: contact
+          in: query
+          description: access token granted to contact
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: boolean
+        '401':
+          description: permission denied
+        '404':
+          description: field, channel not found
+        '410':
+          description: account disabled
+        '500':
+          description: internal server error
+    put:
       tags:
         - content
       description: Set notification enabled state for the specified channel
@@ -3577,6 +3644,7 @@ components:
         - storageAvailable
         - forwardingAddress
         - searchable
+        - pushEnabled
       properties:
         disabled:
           type: boolean
@@ -3589,6 +3657,8 @@ components:
         forwardingAddress:
           type: string
         searchable:
+          type: boolean
+        pushEnabled:
           type: boolean
           
     AccountProfile:

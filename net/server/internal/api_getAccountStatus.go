@@ -29,6 +29,7 @@ func GetAccountStatus(w http.ResponseWriter, r *http.Request) {
 	status.Disabled = account.Disabled
 	status.ForwardingAddress = account.Forward
 	status.Searchable = account.Searchable
+  status.PushEnabled = account.PushEnabled
 
 	WriteResponse(w, status)
 }

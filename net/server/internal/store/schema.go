@@ -80,6 +80,7 @@ type Account struct {
   Updated           int64           `gorm:"autoUpdateTime"`
   Disabled          bool            `gorm:"not null;default:false"`
   Searchable        bool            `gorm:"not null;default:false"`
+  PushEnabled       bool            `gorm:"not null;default:true"`
   Forward           string
   AccountDetail     AccountDetail
   Apps              []App
@@ -238,7 +239,6 @@ type Channel struct {
   DetailRevision    int64           `gorm:"not null"`
   DataType          string          `gorm:"index"`
   Data              string
-  ChannelPush       bool
   HostPush          bool
   Created           int64           `gorm:"autoCreateTime"`
   Updated           int64           `gorm:"autoUpdateTime"`
