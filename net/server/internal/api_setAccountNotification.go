@@ -9,7 +9,7 @@ import (
 //SetAccountNotification sets whether notifications should be received
 func SetAccountNotification(w http.ResponseWriter, r *http.Request) {
 
-	account, code, err := ParamAgentToken(r, true)
+	session, code, err := GetSession(r)
 	if err != nil {
 		ErrResponse(w, code, err)
 		return
@@ -22,11 +22,10 @@ func SetAccountNotification(w http.ResponseWriter, r *http.Request) {
 	}
 
 	err = store.DB.Transaction(func(tx *gorm.DB) error {
-		if res := tx.Model(account).Update("push_enabled", flag).Error; res != nil {
-			ErrResponse(w, http.StatusInternalServerError, res)
+		if res := tx.Model(session).Update("push_enabled", flag).Error; res != nil {
 			return res
 		}
-		if res := tx.Model(&account).Update("account_revision", account.AccountRevision+1).Error; res != nil {
+		if res := tx.Model(session.Account).Update("account_revision", session.Account.AccountRevision+1).Error; res != nil {
 			return res
 		}
 		return nil
@@ -36,6 +35,6 @@ func SetAccountNotification(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	SetStatus(account)
+	SetStatus(&session.Account)
 	WriteResponse(w, nil)
 }

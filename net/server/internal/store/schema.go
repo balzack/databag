@@ -80,7 +80,6 @@ type Account struct {
   Updated           int64           `gorm:"autoUpdateTime"`
   Disabled          bool            `gorm:"not null;default:false"`
   Searchable        bool            `gorm:"not null;default:false"`
-  PushEnabled       bool            `gorm:"not null;default:true"`
   Forward           string
   AccountDetail     AccountDetail
   Apps              []App

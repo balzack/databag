@@ -30,8 +30,19 @@ func GetChannelNotification(w http.ResponseWriter, r *http.Request) {
       return
     }
 
-    // return notification status
-    WriteResponse(w, account.PushEnabled)
+    // get channel entry
+    channel := store.Channel{}
+    if store.DB.Model(&channel).Where("channel_id = ? AND account_id = ?", channelID, account.ID).First(&channel).Error != nil {
+      if errors.Is(err, gorm.ErrRecordNotFound) {
+        ErrResponse(w, http.StatusNotFound, err)
+      } else {
+        ErrResponse(w, http.StatusInternalServerError, err)
+      }
+      return
+    }
+
+    // retrun notification status
+    WriteResponse(w, channel.HostPush)
   } else if tokenType == APPTokenContact {
     card, code, err := ParamContactToken(r, true)
     if err != nil {
@@ -39,7 +50,7 @@ func GetChannelNotification(w http.ResponseWriter, r *http.Request) {
       return
     }
 
-    // update member notification status
+    // get member entry
     member := store.Member{}
     if store.DB.Model(&member).Where("channel_id ? AND card_id = ?", channelID, card.ID).First(&member).Error != nil {
       if errors.Is(err, gorm.ErrRecordNotFound) {

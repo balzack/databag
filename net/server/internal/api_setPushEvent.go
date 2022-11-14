@@ -26,10 +26,20 @@ func SetPushEvent(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+  if code, err := SendPushEvent(card.Account, event); err != nil {
+    ErrResponse(w, code, err);
+    return;
+  }
+
+	WriteResponse(w, nil)
+}
+
+//SendPushEvent delivers notification to clients
+func SendPushEvent(account store.Account, event string) (int, error) {
+
   messages := []push{}
-  if err := store.DB.Model(&store.Session{}).Select("sessions.push_token, push_events.message_title, push_events.message_body").Joins("left join push_events on push_events.session_id = session.id").Where("sessions.account_id = ? AND session.push_enabled = ?", card.Account.ID, true).Scan(messages).Error; err != nil {
-    ErrResponse(w, http.StatusInternalServerError, err)
-    return
+  if err := store.DB.Model(&store.Session{}).Select("sessions.push_token, push_events.message_title, push_events.message_body").Joins("left join push_events on push_events.session_id = session.id").Where("sessions.account_id = ? AND session.push_enabled = ? AND push_events.event = ?", account.ID, true, event).Scan(messages).Error; err != nil {
+    return http.StatusInternalServerError, err
   }
 
   // send push notification for each
@@ -37,6 +47,6 @@ func SetPushEvent(w http.ResponseWriter, r *http.Request) {
     PrintMsg(message);
   }
 
-	WriteResponse(w, nil)
+  return http.StatusOK, nil
 }
 

@@ -96,6 +96,31 @@ func ParamAdminToken(r *http.Request) (int, error) {
 }
 
 //ParamAgentToken retrieves account specified by agent query param
+func GetSession(r *http.Request) (*store.Session, int, error) {
+
+  // parse authentication token
+  target, access, err := ParseToken(r.FormValue("agent"))
+  if err != nil {
+    return nil, http.StatusBadRequest, err
+  }
+
+  // find session record
+  var session store.Session;
+  if err := store.DB.Preload("Account").Where("account_id = ? AND token = ?", target, access).Find(&session).Error; err != nil {
+    if errors.Is(err, gorm.ErrRecordNotFound) {
+      return nil, http.StatusNotFound, err
+    }
+    return nil, http.StatusInternalServerError, err
+  }
+
+  if session.Account.Disabled {
+    return nil, http.StatusGone, errors.New("account is inactive")
+  }
+
+  return &session, http.StatusOK, nil
+}
+
+//ParamAgentToken retrieves account specified by agent query param
 func ParamAgentToken(r *http.Request, detail bool) (*store.Account, int, error) {
 
 	// parse authentication token

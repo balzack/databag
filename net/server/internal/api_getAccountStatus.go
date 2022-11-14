@@ -8,11 +8,12 @@ import (
 //GetAccountStatus retrieves account state values
 func GetAccountStatus(w http.ResponseWriter, r *http.Request) {
 
-	account, code, err := ParamAgentToken(r, true)
+  session, code, err := GetSession(r)
 	if err != nil {
 		ErrResponse(w, code, err)
 		return
 	}
+  account := session.Account
 
 	var assets []store.Asset
 	if err = store.DB.Where("account_id = ?", account.ID).Find(&assets).Error; err != nil {
@@ -29,7 +30,7 @@ func GetAccountStatus(w http.ResponseWriter, r *http.Request) {
 	status.Disabled = account.Disabled
 	status.ForwardingAddress = account.Forward
 	status.Searchable = account.Searchable
-  status.PushEnabled = account.PushEnabled
+  status.PushEnabled = session.PushEnabled
 
 	WriteResponse(w, status)
 }
