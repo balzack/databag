@@ -29,9 +29,18 @@ func RemoveAgentToken(w http.ResponseWriter, r *http.Request) {
   }
 
   // delete session
-  if err = store.DB.Delete(&session).Error; err != nil {
-    ErrResponse(w, http.StatusInternalServerError, err);
-    return;
+  err = store.DB.Transaction(func(tx *gorm.DB) error {
+    if res := tx.Where("session_id = ?", session.ID).Delete(&store.PushEvent{}).Error; res != nil {
+      return res
+    }
+    if res := tx.Where("id = ?", session.ID).Delete(&store.Session{}).Error; res != nil {
+      return res
+    }
+    return nil
+  })
+  if err != nil {
+    ErrResponse(w, http.StatusInternalServerError, err)
+    return
   }
 
 	WriteResponse(w, nil)
