@@ -3,6 +3,7 @@ package databag
 import (
   "databag/internal/store"
   "errors"
+  "gorm.io/gorm"
   "github.com/gorilla/mux"
   "net/http"
 )
@@ -29,8 +30,23 @@ func SetChannelNotification(w http.ResponseWriter, r *http.Request) {
       return
     }
 
+    // get channel entry
+    slot := store.ChannelSlot{}
+    if err := store.DB.Model(&slot).Preload("Channel").Where("channel_slot_id = ? AND account_id = ?", channelID, account.ID).First(&slot).Error; err != nil {
+      if errors.Is(err, gorm.ErrRecordNotFound) {
+        ErrResponse(w, http.StatusNotFound, err)
+      } else {
+        ErrResponse(w, http.StatusInternalServerError, err)
+      }
+      return
+    }
+    if (slot.Channel == nil) {
+      ErrResponse(w, http.StatusNotFound, errors.New("referenced empty channel"));
+      return;
+    }
+
     // update host notification status
-    if err = store.DB.Model(&store.Channel{}).Where("account_id = ? AND id = ?", account.ID, channelID).Update("host_push", flag).Error; err != nil {
+    if err = store.DB.Model(&store.Channel{}).Where("account_id = ? AND id = ?", account.ID, slot.Channel.ID).Update("host_push", flag).Error; err != nil {
       ErrResponse(w, http.StatusInternalServerError, err)
       return
     }
@@ -41,8 +57,23 @@ func SetChannelNotification(w http.ResponseWriter, r *http.Request) {
       return
     }
 
+    // get channel entry
+    slot := store.ChannelSlot{}
+    if err := store.DB.Model(&slot).Preload("Channel").Where("channel_slot_id = ? AND account_id = ?", channelID, card.Account.ID).First(&slot).Error; err != nil {
+      if errors.Is(err, gorm.ErrRecordNotFound) {
+        ErrResponse(w, http.StatusNotFound, err)
+      } else {
+        ErrResponse(w, http.StatusInternalServerError, err)
+      }
+      return
+    }
+    if (slot.Channel == nil) {
+      ErrResponse(w, http.StatusNotFound, errors.New("referenced empty channel"));
+      return;
+    }
+
     // update member notification status
-    if err := store.DB.Model(&store.Member{}).Where("channel_id = ? AND card_id = ?", channelID, card.ID).Update("push_enabled", flag).Error; err != nil {
+    if err := store.DB.Model(&store.Member{}).Where("channel_id = ? AND card_id = ?", slot.Channel.ID, card.ID).Update("push_enabled", flag).Error; err != nil {
       ErrResponse(w, http.StatusInternalServerError, err)
     }
   } else {

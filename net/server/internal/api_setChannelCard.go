@@ -24,7 +24,7 @@ func SetChannelCard(w http.ResponseWriter, r *http.Request) {
 
 	// load referenced channel
 	var channelSlot store.ChannelSlot
-	if err := store.DB.Preload("Channel.Cards.CardSlot").Preload("Channel.Groups.GroupSlot").Preload("Channel.Groups.Cards").Where("account_id = ? AND channel_slot_id = ?", account.ID, channelID).First(&channelSlot).Error; err != nil {
+	if err := store.DB.Preload("Channel.Members.Card.CardSlot").Preload("Channel.Groups.GroupSlot").Preload("Channel.Groups.Cards").Where("account_id = ? AND channel_slot_id = ?", account.ID, channelID).First(&channelSlot).Error; err != nil {
 		if !errors.Is(err, gorm.ErrRecordNotFound) {
 			ErrResponse(w, http.StatusInternalServerError, err)
 		} else {
