@@ -15,6 +15,19 @@ export function ProfileBody({ navigation }) {
 
   const { state, actions } = useProfileBody();
 
+  const setNotifications = async (notify) => {
+    try {
+      await actions.setNotifications(notify);
+    }
+    catch (err) {
+      console.log(err);
+      Alert.alert(
+        'Account Update Failed',
+        'Please try again.',
+      );
+    }
+  }
+
   const setVisible = async (visible) => {
     try {
       await actions.setVisible(visible);
@@ -123,6 +136,12 @@ export function ProfileBody({ navigation }) {
           <Text style={styles.visibleText}>Visible in Registry</Text>
         </TouchableOpacity>
         <Switch style={styles.visibleSwitch} value={state.searchable} onValueChange={setVisible} trackColor={styles.switch}/>
+      </View>
+      <View style={styles.notify}>
+        <TouchableOpacity onPress={() => setNotifications(!state.pushEnabled)} activeOpacity={1}>
+          <Text style={styles.notifyText}>Enable Notifications</Text>
+        </TouchableOpacity>
+        <Switch style={styles.visibleSwitch} value={state.pushEnabled} onValueChange={setNotifications} trackColor={styles.switch}/>
       </View>
       <TouchableOpacity style={styles.link} onPress={actions.showLoginEdit}>
         <Text style={styles.linkText}>Change Login</Text>

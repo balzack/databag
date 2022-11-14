@@ -16,6 +16,7 @@ export function useProfileBody() {
     node: null,
     imageSource: null,
     searchable: null,
+    notifications: null,
     showDetailEdit: false,
     showLoginEdit: false,
     editName: null,
@@ -63,7 +64,8 @@ export function useProfileBody() {
   }, [profile]);
 
   useEffect(() => {
-    updateState({ searchable: account.state.status.searchable });
+    const { searchable, pushEnabled } = account.state.status;
+    updateState({ searchable, pushEnabled });
   }, [account]);
 
   useEffect(() => {
@@ -84,6 +86,10 @@ export function useProfileBody() {
     setVisible: async (searchable) => {
       updateState({ searchable });
       await account.actions.setSearchable(searchable);
+    },
+    setNotifications: async (pushEnabled) => {
+      updateState({ pushEnabled });
+      await account.actions.setNotifications(pushEnabled);
     },
     setProfileImage: async (data) => {
       await profile.actions.setProfileImage(data);
