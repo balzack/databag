@@ -122,6 +122,17 @@ export const styles = StyleSheet.create({
     paddingLeft: 8,
     color: Colors.grey,
   },
+  notify: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: 16,
+  },
+  notifyText: {
+    fontSize: 16,
+    color: Colors.text,
+  },
   visible: {
     display: 'flex',
     flexDirection: 'row',

@@ -1,6 +1,7 @@
 import { useState, useRef, useContext } from 'react';
 import { StoreContext } from 'context/StoreContext';
 import { setAccountSearchable } from 'api/setAccountSearchable';
+import { setAccountNotifications } from 'api/setAccountNotifications';
 import { getAccountStatus } from 'api/getAccountStatus';
 import { setAccountLogin } from 'api/setAccountLogin';
 
@@ -14,7 +15,7 @@ export function useAccountContext() {
   const curRevision = useRef(null);
   const setRevision = useRef(null);
   const syncing = useRef(false);
-
+  
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }))
   }
@@ -60,6 +61,10 @@ export function useAccountContext() {
     setRevision: (rev) => {
       curRevision.current = rev;
       sync();
+    },
+    setNotifications: async (flag) => {
+      const { server, appToken } = session.current;
+      await setAccountNotifications(server, appToken, flag);
     },
     setSearchable: async (flag) => {
       const { server, appToken } = session.current;
