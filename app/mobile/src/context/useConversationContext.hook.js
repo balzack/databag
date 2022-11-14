@@ -20,6 +20,7 @@ export function useConversationContext() {
     progress: null,
     cardId: null,
     channelId: null,
+    pushEnabled: null,
   });
   const store = useContext(StoreContext);
   const upload = useContext(UploadContext);
@@ -141,7 +142,19 @@ export function useConversationContext() {
     if (cardId) {
       return await card.actions.removeChannelTopic(cardId, channelId, topicId);
     }
-    return await channel.actions.remvoeTopic(channelId, topicId);
+    return await channel.actions.removeTopic(channelId, topicId);
+  }
+  const setNotifications = async (cardId, channelId, notify) => {
+    if (cardId) {
+      return await card.actions.setChannelNotifications(cardId, channelId, notify);
+    }
+    return await channel.actions.setNotifications(channelId, notify);
+  }
+  const getNotifications = async (cardId, channelId) => {
+    if (cardId) {
+      return await card.actions.getChannelNotifications(cardId, channelId);
+    }
+    return await channel.actions.getNotifications(channelId);
   }
   const setSyncRevision = async (cardId, channelId, revision) => {
     if (cardId) {
@@ -169,7 +182,7 @@ export function useConversationContext() {
             // set channel details
             if (detailRevision.current != channelItem.detailRevision) {
               if (curView === setView.current) {
-                setChannel(channelItem);
+                await setChannel(channelItem);
                 detailRevision.current = channelItem.detailRevision;
               }
             }
@@ -257,7 +270,7 @@ export function useConversationContext() {
     return channel.state.channels.get(channelId);
   }
 
-  const setChannel = (item) => {
+  const setChannel = async (item) => {
     let contacts = [];
     let logo = null;
     let topic = null;
@@ -337,9 +350,11 @@ export function useConversationContext() {
       }
     }
 
+    const pushEnabled = await getNotifications(item.cardId, item.channelId);
+
     const { enableImage, enableAudio, enableVideo } = item.detail;
     updateState({ topic, subject, logo, contacts, host: item.cardId, created: timestamp,
-      enableImage, enableAudio, enableVideo });
+      enableImage, enableAudio, enableVideo, pushEnabled });
   }
 
   useEffect(() => {
@@ -408,6 +423,13 @@ export function useConversationContext() {
       if (conversationId.current) {
         const { cardId, channelId } = conversationId.current;
         await remove(cardId, channelId);
+      }
+    },
+    setNotifications: async (notify) => {
+      if (conversationId.current) {
+        const { cardId, channelId } = conversationId.current;
+        await setNotifications(cardId, channelId, notify);
+        updateState({ pushEnabled: notify });
       }
     },
     removeTopic: async (topicId) => {

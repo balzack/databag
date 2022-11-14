@@ -30,6 +30,9 @@ import { setContactChannelTopicSubject } from 'api/setContactChannelTopicSubject
 import { removeContactChannel } from 'api/removeContactChannel';
 import { removeContactChannelTopic } from 'api/removeContactChannelTopic';
 
+import { getContactChannelNotifications } from 'api/getContactChannelNotifications';
+import { setContactChannelNotifications } from 'api/setContactChannelNotifications';
+
 export function useCardContext() {
   const [state, setState] = useState({
     cards: new Map(),
@@ -576,12 +579,20 @@ export function useCardContext() {
       const { detail, profile } = getCardEntry(cardId);
       return await addFlag(profile.node, profile.guid, channelId, topicId);
     },
+    getChannelNotifications: async (cardId, channelId) => {
+      const { detail, profile } = getCardEntry(cardId);
+      return await getContactChannelNotifications(profile.node, `${profile.guid}.${detail.token}`, channelId);
+    },
+    setChannelNotifications: async (cardId, channelId, notify) => {
+      const { detail, profile } = getCardEntry(cardId);
+      return await setContactChannelNotifications(profile.node, `${profile.guid}.${detail.token}`, channelId, notify);
+    },
     resync: (cardId) => {
       resync.current.push(cardId);
       sync();
     },
   }
-
+  
   return { state, actions }
 }
 

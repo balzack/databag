@@ -1,4 +1,4 @@
-import { KeyboardAvoidingView, FlatList, Alert, Modal, View, Text, TouchableOpacity, TextInput } from 'react-native';
+import { KeyboardAvoidingView, FlatList, Alert, Modal, View, Text, Switch, TouchableOpacity, TextInput } from 'react-native';
 import { styles } from './Details.styled';
 import { useDetails } from './useDetails.hook';
 import { Logo } from 'utils/Logo';
@@ -24,6 +24,19 @@ export function DetailsBody({ channel, clearConversation }) {
       Alert.alert(
         'Failed to Save Subject',
         'Please try again.'
+      )
+    }
+  }
+
+  const setNotifications = async (notify) => {
+    try {
+      await actions.setNotifications(notify);
+    }
+    catch (err) {
+      console.log(err);
+      Alert.alert(
+        'Failed to Update Channel',
+        'Please try again.',
       )
     }
   }
@@ -149,6 +162,14 @@ export function DetailsBody({ channel, clearConversation }) {
             <Text style={styles.buttonText}>Edit Membership</Text>
           </TouchableOpacity>
         )}
+
+        <View style={styles.notify}>
+          <TouchableOpacity onPress={() => setNotifications(!state.pushEnabled)} activeOpacity={1}>
+            <Text style={styles.notifyText}>Enable Notifications</Text>
+          </TouchableOpacity>
+          <Switch style={styles.notifySwitch} value={state.pushEnabled} onValueChange={setNotifications} trackColor={styles.switch}/>
+        </View>
+
       </View>
 
       <View style={styles.members}>

@@ -156,6 +156,20 @@ export const styles = StyleSheet.create({
     borderRadius: 4,
     marginBottom: 8,
     height: 250,
-  },   
+  }, 
+  notify: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: 16,
+  },
+  notifyText: {
+    fontSize: 16,
+    color: Colors.text,
+  },
+  notifySwitch: {
+    transform: [{ scaleX: .7 }, { scaleY: .7 }],
+  },
 })
 

@@ -15,6 +15,7 @@ export function useDetails() {
     editSubject: false,
     editMembers: false,
     subjectUpdate: null,
+    pushEnabled: null,
   });
 
   const card = useContext(CardContext);
@@ -31,8 +32,8 @@ export function useDetails() {
   }, [card]);
 
   useEffect(() => {
-    const { topic, subject, created, logo, host, contacts } = conversation.state;
-    updateState({ subject, created, logo, hostId: host, subjectUpdate: topic,
+    const { topic, subject, created, logo, host, contacts, pushEnabled } = conversation.state;
+    updateState({ subject, created, logo, pushEnabled, hostId: host, subjectUpdate: topic,
       count: contacts.length, contacts: contacts.filter(card => card != null) });
   }, [conversation]);
 
@@ -63,6 +64,9 @@ export function useDetails() {
     },
     report: async() => {
       await conversation.actions.addReport();
+    },
+    setNotifications: async (notify) => {
+      await conversation.actions.setNotifications(notify);
     },
   };
 

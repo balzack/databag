@@ -16,6 +16,8 @@ import { setChannelSubject } from 'api/setChannelSubject';
 import { setChannelCard } from 'api/setChannelCard';
 import { clearChannelCard } from 'api/clearChannelCard';
 import { addFlag } from 'api/addFlag';
+import { setChannelNotifications } from 'api/setChannelNotifications';
+import { getChannelNotifications } from 'api/getChannelNotifications';
 
 export function useChannelContext() {
   const [state, setState] = useState({
@@ -296,6 +298,14 @@ export function useChannelContext() {
     clearCard: async (channelId, cardId) => {
       const { server, appToken } = session.current;
       return await clearChannelCard(server, appToken, channelId, cardId);
+    },
+    getNotifications: async (channelId) => {
+      const { server, appToken } = session.current;
+      return await getChannelNotifications(server, appToken, channelId);
+    },
+    setNotifications: async (channelId, notify) => {
+      const { server, appToken } = session.current;
+      return await setChannelNotifications(server, appToken, channelId, notify);
     },
   }
 
