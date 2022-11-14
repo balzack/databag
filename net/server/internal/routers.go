@@ -183,7 +183,7 @@ var endpoints = routes{
 
 	route{
 		"SetAccountNotification",
-		strings.ToUpper("Get"),
+		strings.ToUpper("Put"),
 		"/account/notification",
 		SetAccountNotification,
 	},
