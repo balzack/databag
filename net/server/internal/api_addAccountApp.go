@@ -3,11 +3,9 @@ package databag
 import (
 	"databag/internal/store"
 	"encoding/hex"
-  "encoding/json"
 	"github.com/theckman/go-securerandom"
 	"gorm.io/gorm"
 	"net/http"
-  "errors"
 )
 
 //AddAccountApp with access token, attach an app to an account generating agent token
@@ -24,17 +22,10 @@ func AddAccountApp(w http.ResponseWriter, r *http.Request) {
   appVersion := r.FormValue("appVersion")
   platform := r.FormValue("platform")
   deviceToken := r.FormValue("deviceToken")
-  var notifications []string
-  if r.FormValue("notifications") != "" {
-    if err := json.Unmarshal([]byte(r.FormValue("notifications")), &notifications); err != nil {
-      ErrResponse(w, http.StatusBadRequest, errors.New("invalid notification types"));
-      return;
-    }
-  }
 
-	// parse app data
-	var appData AppData
-	if err := ParseRequest(r, w, &appData); err != nil {
+	// parse requested notifications
+	var notifications []Notification
+	if err := ParseRequest(r, w, &notifications); err != nil {
 		ErrResponse(w, http.StatusBadRequest, err)
 		return
 	}
@@ -70,10 +61,12 @@ func AddAccountApp(w http.ResponseWriter, r *http.Request) {
 		login.Created = session.Created
 
     for _, notification := range notifications {
-      eventType := &store.EventType{}
-      eventType.SessionID = session.ID
-      eventType.Name = notification
-      if res := tx.Save(eventType).Error; res != nil {
+      pushEvent := &store.PushEvent{}
+      pushEvent.SessionID = session.ID
+      pushEvent.Event = notification.Event
+      pushEvent.MessageTitle = notification.MessageTitle
+      pushEvent.MessageBody = notification.MessageBody
+      if res := tx.Save(pushEvent).Error; res != nil {
         return res
       }
     }

@@ -7,7 +7,7 @@ func AutoMigrate(db *gorm.DB) {
   db.AutoMigrate(&Config{});
   db.AutoMigrate(&App{});
   db.AutoMigrate(&Session{});
-  db.AutoMigrate(&EventType{});
+  db.AutoMigrate(&PushEvent{});
   db.AutoMigrate(&Account{});
   db.AutoMigrate(&AccountToken{});
   db.AutoMigrate(&GroupSlot{});
@@ -108,13 +108,15 @@ type Session struct {
   Created           int64           `gorm:"autoCreateTime"`
   Account           Account         `gorm:"references:GUID"`
   Token             string          `gorm:"not null;index:sessguid,unique"`
-  EventTypes        []EventType
+  PushEvents        []PushEvent
 }
 
-type EventType struct {
+type PushEvent struct {
   ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
   SessionID         uint            `gorm:"not null;index:sessiontype"`
-  Name              string
+  Event             string
+  MessageTitle      string
+  MessageBody       string
   Session           *Session
 }
 

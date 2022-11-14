@@ -39,17 +39,13 @@ type Announce struct {
 	AppToken string `json:"appToken"`
 }
 
-//AppData describes app connected to account
-type AppData struct {
-	Name string `json:"name,omitempty"`
+//Notification describes type of notifications to receive
+type Notification struct {
+	Event string `json:"event,omitempty"`
 
-	Description string `json:"description,omitempty"`
+	MessageTitle string `json:"messageTitle,omitempty"`
 
-	URL string `json:"url,omitempty"`
-
-	Image string `json:"image,omitempty"`
-
-	Attached int64 `json:"attached"`
+	MessageBody string `json:"messageBoday,omitempty"`
 }
 
 //Article slot for account data shared by group list

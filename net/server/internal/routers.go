@@ -525,6 +525,13 @@ var endpoints = routes{
 	},
 
 	route{
+		"SetPushEvent",
+		strings.ToUpper("Post"),
+		"/contact/notification",
+		SetPushEvent,
+	},
+
+	route{
 		"AddChannel",
 		strings.ToUpper("Post"),
 		"/content/channels",

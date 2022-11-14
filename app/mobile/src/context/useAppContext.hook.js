@@ -71,23 +71,29 @@ export function useAppContext() {
     clearWebsocket();
   }
 
+  const notifications = [
+    { event: 'contact.statusChange', messageTitle: 'Contact Update' },
+    { event: 'channel.addChannel.superbasic', messageTitle: 'New Topic' },
+    { event: 'contact.addChannelTopic.superbasictopic', messageTitle: 'New Topic Message' },
+  ];
+
   const actions = {
     available: getAvailable,
     username: getUsername,
     create: async (server, username, password, token) => {
       await addAccount(server, username, password, token);
-      const access = await setLogin(username, server, password, getApplicatioName(), getVersion(), getDeviceId(), state.deviceToken, ['contact', 'channel'])
+      const access = await setLogin(username, server, password, getApplicatioName(), getVersion(), getDeviceId(), state.deviceToken, notifications)
       await store.actions.setSession({ ...access, server});
       await setSession({ ...access, server });
     },
     access: async (server, token) => {
-      const access = await setAccountAccess(server, token, getApplicationName(), getVersion(), getDeviceId(), state.deviceToken, ['contact', 'channel']);
+      const access = await setAccountAccess(server, token, getApplicationName(), getVersion(), getDeviceId(), state.deviceToken, notifications);
       await store.actions.setSession({ ...access, server});
       await setSession({ ...access, server });
     },
     login: async (username, password) => {
       const acc = username.split('@');
-      const access = await setLogin(acc[0], acc[1], password, getApplicationName(), getVersion(), getDeviceId(), state.deviceToken, ['contact', 'channel'])
+      const access = await setLogin(acc[0], acc[1], password, getApplicationName(), getVersion(), getDeviceId(), state.deviceToken, notifications)
       if (access.pushSupported) {
         messaging().requestPermission().then(status => {})
       }

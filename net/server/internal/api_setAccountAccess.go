@@ -3,7 +3,6 @@ package databag
 import (
 	"databag/internal/store"
 	"encoding/hex"
-	"encoding/json"
 	"errors"
   "time"
 	"github.com/theckman/go-securerandom"
@@ -31,20 +30,13 @@ func SetAccountAccess(w http.ResponseWriter, r *http.Request) {
   appVersion := r.FormValue("appVersion")
   platform := r.FormValue("platform")
   deviceToken := r.FormValue("deviceToken")
-  var notifications []string
-  if r.FormValue("notifications") != "" {
-    if err := json.Unmarshal([]byte(r.FormValue("notifications")), &notifications); err != nil {
-      ErrResponse(w, http.StatusBadRequest, errors.New("invalid notification types"));
-      return;
-    }
-  }
 
-	// parse app data
-	var appData AppData
-	if err := ParseRequest(r, w, &appData); err != nil {
-		ErrResponse(w, http.StatusBadRequest, err)
-		return
-	}
+  // parse requested notifications
+  var notifications []Notification
+  if err := ParseRequest(r, w, &notifications); err != nil {
+    ErrResponse(w, http.StatusBadRequest, err)
+    return
+  }
 
 	// gernate app token
 	data, err := securerandom.Bytes(APPTokenSize)
@@ -70,10 +62,12 @@ func SetAccountAccess(w http.ResponseWriter, r *http.Request) {
 			return res
 		}
     for _, notification := range notifications {
-      eventType := &store.EventType{}
-      eventType.SessionID = session.ID
-      eventType.Name = notification
-      if res := tx.Save(eventType).Error; res != nil {
+      pushEvent := &store.PushEvent{}
+      pushEvent.SessionID = session.ID
+      pushEvent.Event = notification.Event
+      pushEvent.MessageTitle = notification.MessageTitle
+      pushEvent.MessageBody = notification.MessageBody
+      if res := tx.Save(pushEvent).Error; res != nil {
         return res
       }
     }

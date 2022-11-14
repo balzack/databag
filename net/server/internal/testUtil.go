@@ -614,11 +614,6 @@ func addTestAccount(username string) (guid string, token string, err error) {
 	var w *httptest.ResponseRecorder
 
 	var access LoginAccess
-	app := AppData{
-		Name:        "Appy",
-		Description: "A test app",
-		URL:         "http://app.coredb.org",
-	}
 	var claim Claim
 	var msg DataMessage
 	var profile Profile
@@ -646,7 +641,8 @@ func addTestAccount(username string) (guid string, token string, err error) {
 	guid = profile.GUID
 
 	// acquire new token for attaching app
-	if r, w, err = NewRequest("POST", "/account/apps", &app); err != nil {
+  notifications := []Notification{}
+	if r, w, err = NewRequest("POST", "/account/apps", &notifications); err != nil {
 		return
 	}
 	SetBasicAuth(r, login)

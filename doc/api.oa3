@@ -2058,6 +2058,34 @@ paths:
             schema:
               type: integer
               format: int64
+
+  /contact/notification:
+    post:
+      tags:
+        - contact
+      description: Inform contact of a push notification event
+      operationId: set-push-event
+      paramters:
+        - name: contact
+          in: query
+          description: contact token
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: event set
+        '401':
+          description: not authorized
+        '410':
+          description: account disabled
+        '500':
+          description: internal server error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
               
   /attribute/articles:
     get:

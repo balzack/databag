@@ -5,8 +5,7 @@ export async function setLogin(username, password, appName, appVersion, userAgen
   const platform = encodeURIComponent(userAgent);
   let headers = new Headers()
   headers.append('Authorization', 'Basic ' + base64.encode(username + ":" + password));
-  let app = { Name: "indicom", Description: "decentralized communication" }
-  let login = await fetchWithTimeout(`/account/apps?appName=${appName}&appVersion=${appVersion}&platform=${platform}`, { method: 'POST', body: JSON.stringify(app), headers: headers })
+  let login = await fetchWithTimeout(`/account/apps?appName=${appName}&appVersion=${appVersion}&platform=${platform}`, { method: 'POST', body: JSON.stringify([]), headers: headers })
   checkResponse(login)
   return await login.json()
 }
