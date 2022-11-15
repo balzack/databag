@@ -72,7 +72,8 @@ export function useAppContext() {
   }
 
   const notifications = [
-    { event: 'contact.statusChange', messageTitle: 'Contact Update' },
+    { event: 'contact.addCard', messageTitle: 'New Contact Request' },
+    { event: 'contact.updateCard', messageTitle: 'Contact Update' },
     { event: 'channel.addChannel.superbasic', messageTitle: 'New Topic' },
     { event: 'contact.addChannelTopic.superbasictopic', messageTitle: 'New Topic Message' },
   ];
