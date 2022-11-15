@@ -199,7 +199,7 @@ type Card struct {
   NotifiedProfile   int64
   Account           Account         `gorm:"references:GUID"`
   Groups            []Group         `gorm:"many2many:card_groups"`
-  Channels          []Channel       `gorm:"many2many:channel_cards"`
+  Members           []Member
   CardSlot          CardSlot
 }
 
