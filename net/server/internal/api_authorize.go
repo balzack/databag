@@ -7,7 +7,7 @@ import (
 //Authorize confirm account authorization with signed data message
 func Authorize(w http.ResponseWriter, r *http.Request) {
 
-	account, code, res := BearerAppToken(r, true)
+	account, code, res := ParamAgentToken(r, true)
 	if res != nil {
 		ErrResponse(w, code, res)
 		return

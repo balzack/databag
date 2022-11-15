@@ -95,7 +95,7 @@ func ParamAdminToken(r *http.Request) (int, error) {
 	return http.StatusOK, nil
 }
 
-//ParamAgentToken retrieves account specified by agent query param
+//GetSession retrieves account specified by agent query param
 func GetSession(r *http.Request) (*store.Session, int, error) {
 
   // parse authentication token

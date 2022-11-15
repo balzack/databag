@@ -513,13 +513,12 @@ func groupTestCard(account string, cardID string) (groupID string, err error) {
 	groupID = group.ID
 
 	// set contact group
-	if r, w, err = NewRequest("PUT", "/contact/cards/{cardID}/groups/{groupID}", nil); err != nil {
+	if r, w, err = NewRequest("PUT", "/contact/cards/{cardID}/groups/{groupID}?agent="+account, nil); err != nil {
 		return
 	}
 	vars["groupID"] = group.ID
 	vars["cardID"] = cardID
 	r = mux.SetURLVars(r, vars)
-	SetBearerAuth(r, account)
 	SetCardGroup(w, r)
 	if err = ReadResponse(w, &cardData); err != nil {
 		return
@@ -653,10 +652,9 @@ func addTestAccount(username string) (guid string, token string, err error) {
 	token = access.AppToken
 
 	// authorize claim
-	if r, w, err = NewRequest("PUT", "/authorize", "1234abcd"); err != nil {
+	if r, w, err = NewRequest("PUT", "/authorize?agent="+token, "1234abcd"); err != nil {
 		return
 	}
-	SetBearerAuth(r, token)
 	Authorize(w, r)
 	if err = ReadResponse(w, &msg); err != nil {
 		return

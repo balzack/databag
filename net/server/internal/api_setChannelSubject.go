@@ -29,7 +29,7 @@ func SetChannelSubject(w http.ResponseWriter, r *http.Request) {
 
 	// load referenced channel
 	var slot store.ChannelSlot
-	if err := store.DB.Preload("Channel.Cards").Preload("Channel.Groups.Cards").Where("account_id = ? AND channel_slot_id = ?", account.ID, channelID).First(&slot).Error; err != nil {
+	if err := store.DB.Preload("Channel.Members.Card").Preload("Channel.Groups.Cards").Where("account_id = ? AND channel_slot_id = ?", account.ID, channelID).First(&slot).Error; err != nil {
 		if !errors.Is(err, gorm.ErrRecordNotFound) {
 			ErrResponse(w, http.StatusInternalServerError, err)
 		} else {

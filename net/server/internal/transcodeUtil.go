@@ -30,7 +30,7 @@ func transcodeVideo() {
 	defer videoSync.Unlock()
 	for {
 		var asset store.Asset
-		if err := store.DB.Order("created asc").Preload("Account").Preload("Channel.Cards").Preload("Channel.Groups.Cards").Preload("Channel.ChannelSlot").Preload("Topic.TopicSlot").Where("transform_queue = ? AND status = ?", APPQueueVideo, APPAssetWaiting).First(&asset).Error; err != nil {
+		if err := store.DB.Order("created asc").Preload("Account").Preload("Channel.Members.Card").Preload("Channel.Groups.Cards").Preload("Channel.ChannelSlot").Preload("Topic.TopicSlot").Where("transform_queue = ? AND status = ?", APPQueueVideo, APPAssetWaiting).First(&asset).Error; err != nil {
 			if !errors.Is(err, gorm.ErrRecordNotFound) {
 				ErrMsg(err)
 			}
@@ -45,7 +45,7 @@ func transcodeAudio() {
 	defer audioSync.Unlock()
 	for {
 		var asset store.Asset
-		if err := store.DB.Order("created asc").Preload("Account").Preload("Channel.Cards").Preload("Channel.Groups.Cards").Preload("Channel.ChannelSlot").Preload("Topic.TopicSlot").Where("transform_queue = ? AND status = ?", APPQueueAudio, APPAssetWaiting).First(&asset).Error; err != nil {
+		if err := store.DB.Order("created asc").Preload("Account").Preload("Channel.Members.Card").Preload("Channel.Groups.Cards").Preload("Channel.ChannelSlot").Preload("Topic.TopicSlot").Where("transform_queue = ? AND status = ?", APPQueueAudio, APPAssetWaiting).First(&asset).Error; err != nil {
 			if !errors.Is(err, gorm.ErrRecordNotFound) {
 				ErrMsg(err)
 			}
@@ -60,7 +60,7 @@ func transcodePhoto() {
 	defer photoSync.Unlock()
 	for {
 		var asset store.Asset
-		if err := store.DB.Order("created asc").Preload("Account").Preload("Channel.Cards").Preload("Channel.Groups.Cards").Preload("Channel.ChannelSlot").Preload("Topic.TopicSlot").Where("transform_queue = ? AND status = ?", APPQueuePhoto, APPAssetWaiting).First(&asset).Error; err != nil {
+		if err := store.DB.Order("created asc").Preload("Account").Preload("Channel.Members.Card").Preload("Channel.Groups.Cards").Preload("Channel.ChannelSlot").Preload("Topic.TopicSlot").Where("transform_queue = ? AND status = ?", APPQueuePhoto, APPAssetWaiting).First(&asset).Error; err != nil {
 			if !errors.Is(err, gorm.ErrRecordNotFound) {
 				ErrMsg(err)
 			}
@@ -75,7 +75,7 @@ func transcodeDefault() {
 	defer defaultSync.Unlock()
 	for {
 		var asset store.Asset
-		if err := store.DB.Order("created asc").Preload("Account").Preload("Channel.Cards").Preload("Channel.Groups.Cards").Preload("Channel.ChannelSlot").Preload("Topic.TopicSlot").Where("transform_queue != ? AND transform_queue != ? AND transform_queue != ? AND status = ?", APPQueueVideo, APPQueueAudio, APPQueuePhoto, APPAssetWaiting).First(&asset).Error; err != nil {
+		if err := store.DB.Order("created asc").Preload("Account").Preload("Channel.Members.Card").Preload("Channel.Groups.Cards").Preload("Channel.ChannelSlot").Preload("Topic.TopicSlot").Where("transform_queue != ? AND transform_queue != ? AND transform_queue != ? AND status = ?", APPQueueVideo, APPQueueAudio, APPQueuePhoto, APPAssetWaiting).First(&asset).Error; err != nil {
 			if !errors.Is(err, gorm.ErrRecordNotFound) {
 				ErrMsg(err)
 			}
@@ -147,7 +147,7 @@ func updateAsset(asset *store.Asset, status string, crc uint32, size int64) (err
 		if asset.Topic == nil {
 			return errors.New("asset not found")
 		}
-		if res := tx.Preload("Account").Preload("TopicSlot").Preload("Channel.Groups").Preload("Channel.Cards").Preload("Channel.ChannelSlot").First(&topic, asset.Topic.ID).Error; res != nil {
+		if res := tx.Preload("Account").Preload("TopicSlot").Preload("Channel.Groups").Preload("Channel.Members.Card").Preload("Channel.ChannelSlot").First(&topic, asset.Topic.ID).Error; res != nil {
 			return res
 		}
 		if res := tx.Model(&topic).Update("detail_revision", topic.Account.ChannelRevision+1).Error; res != nil {

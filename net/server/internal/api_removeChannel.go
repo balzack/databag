@@ -73,9 +73,9 @@ func RemoveChannel(w http.ResponseWriter, r *http.Request) {
 				return res
 			}
 			slot.Channel.Groups = []store.Group{}
-			if res := tx.Model(&slot.Channel).Association("Cards").Clear(); res != nil {
-				return res
-			}
+      if res := tx.Where("channel_id = ?", slot.Channel.ID).Delete(&store.Member{}).Error; res != nil {
+        return res
+      }
 			slot.Channel.Members = []store.Member{}
 			if res := tx.Where("channel_id = ?", slot.Channel.ID).Delete(&store.Tag{}).Error; res != nil {
 				return res
