@@ -10,7 +10,7 @@ var DB *gorm.DB;
 
 func SetPath(path string) {
   db, err := gorm.Open(sqlite.Open(path), &gorm.Config{
-    Logger: logger.Default.LogMode(logger.Info),
+    Logger: logger.Default.LogMode(logger.Silent),
   })
   if err != nil {
     panic("failed to connect database")

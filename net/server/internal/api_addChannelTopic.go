@@ -87,6 +87,9 @@ func AddChannelTopic(w http.ResponseWriter, r *http.Request) {
 	SetStatus(act)
 	for _, card := range cards {
 		SetContactChannelNotification(act, &card)
+    if card.GUID != guid {
+      SetContactPushNotification(&card, "content.addChannelTopic." + channelSlot.Channel.DataType)
+    }
 	}
 	WriteResponse(w, getTopicModel(topicSlot))
 }

@@ -96,6 +96,7 @@ func SetChannelCard(w http.ResponseWriter, r *http.Request) {
 	for _, card := range cards {
 		SetContactChannelNotification(account, &card)
 	}
+  SetContactPushNotification(cardSlot.Card, "content.addChannel." + channelSlot.Channel.DataType)
 
   video := getBoolConfigValue(CNFEnableVideo, true);
   audio := getBoolConfigValue(CNFEnableAudio, true);

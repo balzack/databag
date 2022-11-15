@@ -85,6 +85,7 @@ func AddChannel(w http.ResponseWriter, r *http.Request) {
 	SetStatus(account)
 	for _, card := range cards {
 		SetContactChannelNotification(account, card)
+    SetContactPushNotification(card, "content.addChannel." + params.DataType)
 	}
 
   video := getBoolConfigValue(CNFEnableVideo, true);

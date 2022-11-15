@@ -101,7 +101,7 @@ func SetOpenMessage(w http.ResponseWriter, r *http.Request) {
 		}
 
     // push event
-    SendPushEvent(account, "contact.updateCard");
+    SendPushEvent(account, "contact.addCard");
 	} else {
 
 		// update profile if revision changed
@@ -159,7 +159,7 @@ func SetOpenMessage(w http.ResponseWriter, r *http.Request) {
 		}
 
     // push event
-    SendPushEvent(account, "contact.addCard");
+    SendPushEvent(account, "contact.updateCard");
 	}
 
 	status := &ContactStatus{
