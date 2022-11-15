@@ -26,8 +26,7 @@ func AddAccountApp(w http.ResponseWriter, r *http.Request) {
 	// parse requested notifications
 	var notifications []Notification
 	if err := ParseRequest(r, w, &notifications); err != nil {
-		ErrResponse(w, http.StatusBadRequest, err)
-		return
+    ErrMsg(err);
 	}
 
 	// gernate app token
@@ -55,6 +54,7 @@ func AddAccountApp(w http.ResponseWriter, r *http.Request) {
     session.AppVersion = appVersion
     session.Platform = platform
     session.PushToken = deviceToken
+    session.PushEnabled = true
 		if res := tx.Save(session).Error; res != nil {
 			return res
 		}

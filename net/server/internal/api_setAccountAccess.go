@@ -34,8 +34,7 @@ func SetAccountAccess(w http.ResponseWriter, r *http.Request) {
   // parse requested notifications
   var notifications []Notification
   if err := ParseRequest(r, w, &notifications); err != nil {
-    ErrResponse(w, http.StatusBadRequest, err)
-    return
+    ErrMsg(err);
   }
 
 	// gernate app token
@@ -54,6 +53,7 @@ func SetAccountAccess(w http.ResponseWriter, r *http.Request) {
     AppVersion:  appVersion,
     Platform:    platform,
     PushToken:   deviceToken,
+    PushEnabled: true,
 	}
 
 	// save app and delete token
