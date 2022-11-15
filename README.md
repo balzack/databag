@@ -24,6 +24,7 @@ Databag is a self-hosted messaging service. Notable features include:
 - Low latency (use of websockets for push events to avoid polling)
 - Responsive (renders well in phone, tablet and pc)
 - Unlimited accounts per node (host for your whole family)
+- Mobile alerts (push notifications on new contacts and messages)
 
 <br>
 <p align="center">
