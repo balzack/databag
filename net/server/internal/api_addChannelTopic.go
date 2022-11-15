@@ -75,8 +75,12 @@ func AddChannelTopic(w http.ResponseWriter, r *http.Request) {
 
 	// determine affected contact list
 	cards := make(map[string]store.Card)
+	notify := make(map[string]store.Card)
 	for _, member := range channelSlot.Channel.Members {
 		cards[member.Card.GUID] = member.Card
+    if member.PushEnabled && member.Card.GUID != guid {
+		  notify[member.Card.GUID] = member.Card
+    }
 	}
 	for _, group := range channelSlot.Channel.Groups {
 		for _, card := range group.Cards {
@@ -87,9 +91,9 @@ func AddChannelTopic(w http.ResponseWriter, r *http.Request) {
 	SetStatus(act)
 	for _, card := range cards {
 		SetContactChannelNotification(act, &card)
-    if card.GUID != guid {
-      SetContactPushNotification(&card, "content.addChannelTopic." + channelSlot.Channel.DataType)
-    }
 	}
+  for _, card := range notify {
+    SetContactPushNotification(&card, "content.addChannelTopic." + channelSlot.Channel.DataType)
+  }
 	WriteResponse(w, getTopicModel(topicSlot))
 }
