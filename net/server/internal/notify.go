@@ -102,37 +102,49 @@ func sendRemoteNotification(notification *store.Notification) {
 		return
 	}
 
-  var body []byte
-  var err error
   if module == "notification" {
-    body, err = json.Marshal(notification.Event)
+    body, err := json.Marshal(notification.Event)
     if err != nil {
       ErrMsg(err)
       return
+    }
+    url := "https://" + notification.Node + "/contact/" + module + "?contact=" + notification.GUID + "." + notification.Token
+    req, err := http.NewRequest(http.MethodPut, url, bytes.NewBuffer(body))
+    if err != nil {
+      ErrMsg(err)
+      return
+    }
+    req.Header.Set("Content-Type", "application/json; charset=utf-8")
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    if err != nil {
+      ErrMsg(err)
+    }
+    if resp.StatusCode != 200 {
+      LogMsg("failed to notify contact")
     }
   } else {
-    body, err = json.Marshal(notification.Revision)
+    body, err := json.Marshal(notification.Revision)
     if err != nil {
       ErrMsg(err)
       return
     }
+    url := "https://" + notification.Node + "/contact/" + module + "?contact=" + notification.GUID + "." + notification.Token
+    req, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer(body))
+    if err != nil {
+      ErrMsg(err)
+      return
+    }
+    req.Header.Set("Content-Type", "application/json; charset=utf-8")
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    if err != nil {
+      ErrMsg(err)
+    }
+    if resp.StatusCode != 200 {
+      LogMsg("failed to notify contact")
+    }
   }
-
-	url := "https://" + notification.Node + "/contact/" + module + "?contact=" + notification.GUID + "." + notification.Token
-	req, err := http.NewRequest(http.MethodPut, url, bytes.NewBuffer(body))
-	if err != nil {
-		ErrMsg(err)
-		return
-	}
-	req.Header.Set("Content-Type", "application/json; charset=utf-8")
-	client := &http.Client{}
-	resp, err := client.Do(req)
-	if err != nil {
-		ErrMsg(err)
-	}
-	if resp.StatusCode != 200 {
-		LogMsg("failed to notify contact")
-	}
 }
 
 //SetProfileNotification notifies all connected contacts of profile changes
