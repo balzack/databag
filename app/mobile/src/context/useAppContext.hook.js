@@ -86,20 +86,26 @@ export function useAppContext() {
       const access = await setLogin(username, server, password, getApplicatioName(), getVersion(), getDeviceId(), state.deviceToken, notifications)
       await store.actions.setSession({ ...access, server});
       await setSession({ ...access, server });
+      if (access.pushSupported) {
+        messaging().requestPermission().then(status => {})
+      }
     },
     access: async (server, token) => {
       const access = await setAccountAccess(server, token, getApplicationName(), getVersion(), getDeviceId(), state.deviceToken, notifications);
       await store.actions.setSession({ ...access, server});
       await setSession({ ...access, server });
+      if (access.pushSupported) {
+        messaging().requestPermission().then(status => {})
+      }
     },
     login: async (username, password) => {
       const acc = username.split('@');
       const access = await setLogin(acc[0], acc[1], password, getApplicationName(), getVersion(), getDeviceId(), state.deviceToken, notifications)
+      await store.actions.setSession({ ...access, server: acc[1]});
+      await setSession({ ...access, server: acc[1] }); 
       if (access.pushSupported) {
         messaging().requestPermission().then(status => {})
       }
-      await store.actions.setSession({ ...access, server: acc[1]});
-      await setSession({ ...access, server: acc[1] }); 
     },
     logout: async () => {
       try {
