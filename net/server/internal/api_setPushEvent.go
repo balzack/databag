@@ -26,27 +26,30 @@ func SetPushEvent(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-  if code, err := SendPushEvent(card.Account, event); err != nil {
-    ErrResponse(w, code, err);
-    return;
-  }
-
+  SendPushEvent(card.Account, event)
 	WriteResponse(w, nil)
 }
 
 //SendPushEvent delivers notification to clients
-func SendPushEvent(account store.Account, event string) (int, error) {
+func SendPushEvent(account store.Account, event string) {
 
-  messages := []push{}
-  if err := store.DB.Model(&store.Session{}).Select("sessions.push_token, push_events.message_title, push_events.message_body").Joins("left join push_events on push_events.session_id = session.id").Where("sessions.account_id = ? AND session.push_enabled = ? AND push_events.event = ?", account.ID, true, event).Scan(messages).Error; err != nil {
-    return http.StatusInternalServerError, err
+  // check if server supports push
+  if getBoolConfigValue(CNFPushSupported, true) != true {
+    return
   }
 
-  // send push notification for each
-  for _, message := range messages {
-    PrintMsg(message);
+  // get all sessions supporting push for specified event
+  rows, err := store.DB.Table("sessions").Select("sessions.push_token, push_events.message_title, push_events.message_body").Joins("left join push_events on push_events.session_id = sessions.id").Where("sessions.account_id = ? AND sessions.push_enabled = ? AND push_events.event = ?", account.GUID, true, event).Rows();
+  if err != nil {
+    ErrMsg(err);
+    return
   }
-
-  return http.StatusOK, nil
+  for rows.Next() {
+    PrintMsg("IN ROW");
+    var pushToken string
+    var messageTitle string
+    var messageBody string
+    rows.Scan(&pushToken, &messageTitle, &messageBody)
+  }
 }
 

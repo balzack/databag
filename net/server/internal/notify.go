@@ -77,6 +77,8 @@ func sendLocalNotification(notification *store.Notification) {
 		if err := NotifyViewRevision(&card, notification.Revision); err != nil {
 			ErrMsg(err)
 		}
+  } else if notification.Module == APPPushNotify {
+    SendPushEvent(card.Account, notification.Event)
 	} else {
 		LogMsg("unknown notification type")
 	}
@@ -86,24 +88,37 @@ func sendRemoteNotification(notification *store.Notification) {
 
 	var module string
 	if notification.Module == APPNotifyProfile {
-		module = "profile"
+		module = "profile/revision"
 	} else if notification.Module == APPNotifyArticle {
-		module = "article"
+		module = "article/revision"
 	} else if notification.Module == APPNotifyChannel {
-		module = "channel"
+		module = "channel/revision"
 	} else if notification.Module == APPNotifyView {
-		module = "view"
+		module = "view/revision"
+  } else if notification.Module == APPPushNotify {
+    module = "notification"
 	} else {
 		LogMsg("unknown notification type")
 		return
 	}
 
-	body, err := json.Marshal(notification.Revision)
-	if err != nil {
-		ErrMsg(err)
-		return
-	}
-	url := "https://" + notification.Node + "/contact/" + module + "/revision?contact=" + notification.GUID + "." + notification.Token
+  var body []byte
+  var err error
+  if module == "notification" {
+    body, err = json.Marshal(notification.Event)
+    if err != nil {
+      ErrMsg(err)
+      return
+    }
+  } else {
+    body, err = json.Marshal(notification.Revision)
+    if err != nil {
+      ErrMsg(err)
+      return
+    }
+  }
+
+	url := "https://" + notification.Node + "/contact/" + module + "?contact=" + notification.GUID + "." + notification.Token
 	req, err := http.NewRequest(http.MethodPut, url, bytes.NewBuffer(body))
 	if err != nil {
 		ErrMsg(err)
@@ -228,3 +243,28 @@ func SetContactChannelNotification(account *store.Account, card *store.Card) {
 		notify <- notification
 	}
 }
+
+//SetContactPushNotification notifies contacts of push event
+func SetContactPushNotification(card *store.Card, event string) {
+
+  if card.Status != APPCardConnected {
+    return
+  }
+
+  // add new notification for card
+  notification := &store.Notification{
+    Node:       card.Node,
+    Module:     APPPushNotify,
+    GUID:       card.GUID,
+    Token:      card.OutToken,
+    Revision:   0,
+    Event:      event,
+  };
+
+  if res := store.DB.Save(notification).Error; res != nil {
+    ErrMsg(res)
+  } else {
+    notify <- notification
+  }
+}
+

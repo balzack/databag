@@ -99,6 +99,9 @@ func SetOpenMessage(w http.ResponseWriter, r *http.Request) {
 			ErrResponse(w, http.StatusInternalServerError, err)
 			return
 		}
+
+    // push event
+    SendPushEvent(account, "contact.updateCard");
 	} else {
 
 		// update profile if revision changed
@@ -154,6 +157,9 @@ func SetOpenMessage(w http.ResponseWriter, r *http.Request) {
 			ErrResponse(w, http.StatusInternalServerError, err)
 			return
 		}
+
+    // push event
+    SendPushEvent(account, "contact.addCard");
 	}
 
 	status := &ContactStatus{

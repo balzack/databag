@@ -35,6 +35,7 @@ type Notification struct {
   Module            string          `gorm:"not null"`
   Token             string          `gorm:"not null"`
   Revision          int64           `gorm:"not null"`
+  Event             string
 }
 
 type Config struct {

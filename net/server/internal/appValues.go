@@ -75,6 +75,9 @@ const APPNotifyArticle = "article"
 //APPNotifyChannel config for notification name for channel
 const APPNotifyChannel = "channel"
 
+//APPPushNotify config for push notifications
+const APPPushNotify = "push"
+
 //APPNotifyView config for notification name for view
 const APPNotifyView = "view"
 
