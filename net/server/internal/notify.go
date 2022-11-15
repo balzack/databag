@@ -109,7 +109,7 @@ func sendRemoteNotification(notification *store.Notification) {
       return
     }
     url := "https://" + notification.Node + "/contact/" + module + "?contact=" + notification.GUID + "." + notification.Token
-    req, err := http.NewRequest(http.MethodPut, url, bytes.NewBuffer(body))
+    req, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer(body))
     if err != nil {
       ErrMsg(err)
       return
@@ -130,7 +130,7 @@ func sendRemoteNotification(notification *store.Notification) {
       return
     }
     url := "https://" + notification.Node + "/contact/" + module + "?contact=" + notification.GUID + "." + notification.Token
-    req, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer(body))
+    req, err := http.NewRequest(http.MethodPut, url, bytes.NewBuffer(body))
     if err != nil {
       ErrMsg(err)
       return
