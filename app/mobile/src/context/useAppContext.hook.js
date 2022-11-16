@@ -83,7 +83,7 @@ export function useAppContext() {
     username: getUsername,
     create: async (server, username, password, token) => {
       await addAccount(server, username, password, token);
-      const access = await setLogin(username, server, password, getApplicatioName(), getVersion(), getDeviceId(), state.deviceToken, notifications)
+      const access = await setLogin(username, server, password, getApplicationName(), getVersion(), getDeviceId(), state.deviceToken, notifications)
       await store.actions.setSession({ ...access, server});
       await setSession({ ...access, server });
       if (access.pushSupported) {
