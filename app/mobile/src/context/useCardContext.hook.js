@@ -263,7 +263,6 @@ export function useCardContext() {
             await syncCard(card);
           }
           else {
-            //TODO clear card channel topics
             await store.actions.clearCardChannelItems(guid, card.id); 
             await store.actions.clearCardItem(guid, card.id);
             cards.current.delete(card.id);
@@ -312,7 +311,7 @@ export function useCardContext() {
           await updateCardChannelItems(card.id, cardServer, cardToken, notifiedView, null);
           await store.actions.setCardItemNotifiedChannel(guid, card.id, notifiedChannel);
           await store.actions.setCardItemNotifiedView(guid, card.id, notifiedView);
-          clearCardChannel(card.id);
+          clearCardChannels(card.id);
         }
         else {
           if (status.notifiedChannel != notifiedChannel) {
@@ -335,6 +334,10 @@ export function useCardContext() {
         await store.actions.setCardItemOffsync(guid, card.id);
         setCardOffsync(card.id, 1);
       } 
+    }
+    else {
+      await store.actions.clearCardChannelItems(guid, card.id);
+      clearCardChannels(card.id);
     }
   }
 
