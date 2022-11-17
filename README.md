@@ -45,6 +45,8 @@ To use databag, you will need a DNS name pointing to your node with a certificat
 
 Instruction for installing without a container on a Raspberry Pi Zero are [here](/doc/pizero.md).
 
+Instruction for installing without a container in AWS are [here](/doc/aws.md).
+
 ### Example with Portainer and Nginx Proxy Manager
 
 From Portainer:
