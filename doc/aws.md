@@ -7,7 +7,7 @@ These instructions assume you have the following setup:
 
 ## Step 1: obtain cert
   sudo apt-get install certbot<br/>
-  sudo certbot certonly --standalone -d <dns name><br/>
+  sudo certbot certonly --standalone -d [dns name]<br/>
 
 ## Step 2: install databag dependencies
   sudo apt-get -y install ffmpeg<br/>
@@ -50,7 +50,7 @@ These instructions assume you have the following setup:
   mkdir -p /opt/databag/transform<br/>
   cp /app/databag/net/container/transform/* /opt/databag/transform/<br/>
 
-## Step 6: install and mount EFS
+## Step 6: mount EFS to store assets
   sudo apt-get update<br/>
   sudo apt-get -y install git binutils<br/>
   git clone https://github.com/aws/efs-utils<br/>
@@ -68,14 +68,14 @@ These instructions assume you have the following setup:
 
 ## Step 8: launch the server
   cd /app/databag/net/server<br/>
-  nohup nice -n -5 /usr/local/go/bin/go run databag <dns name> &<br/>
+  nohup nice -n -5 /usr/local/go/bin/go run databag [dns name] &<br/>
 
 ## Step 9: configure the server
   Open your brower to the pi hostname<br/>
   Click the 'cog' in the upper right<br/>
   Set an admin password<br/>
   Select the 'cog' to bring up the settings modal<br/>
-    - set your hostname as <dns name><br/>
+    - set your hostname as [dns name]<br/>
     - set the key to RSA 2048<br/>
     - enable push notifications<br/>
     - enable images<br/>
