@@ -43,10 +43,6 @@ The app is available in the google and apple stores. You can also test out the p
 
 To use databag, you will need a DNS name pointing to your node with a certificate. You can deploy a node manually, but you will have a much easier time using a container service. Containers for arm64 and amd64 are available [here](https://hub.docker.com/r/balzack/databag/tags). 
 
-Instruction for installing without a container on a Raspberry Pi Zero are [here](/doc/pizero.md).
-
-Instruction for installing without a container in AWS are [here](/doc/aws.md).
-
 ### Example with Portainer and Nginx Proxy Manager
 
 From Portainer:
@@ -73,3 +69,9 @@ From Your Browser:
       - Click 'Save'
     - Click the user icon to generate a new account link
       - Follow the link to create an account
+
+### Other installation options
+
+Instruction for installing without a container on a Raspberry Pi Zero are [here](/doc/pizero.md).
+
+Instruction for installing without a container in AWS are [here](/doc/aws.md).
