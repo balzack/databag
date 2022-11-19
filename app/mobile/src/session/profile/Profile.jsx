@@ -1,5 +1,5 @@
 import { useEffect, useContext } from 'react';
-import { KeyboardAvoidingView, Modal, Alert, TextInput, ScrollView, View, Switch, TouchableOpacity, Text } from 'react-native';
+import { ActivityIndicator, KeyboardAvoidingView, Modal, Alert, TextInput, ScrollView, View, Switch, TouchableOpacity, Text } from 'react-native';
 import { styles } from './Profile.styled';
 import { useProfile } from './useProfile.hook';
 import Ionicons from '@expo/vector-icons/AntDesign';
@@ -21,9 +21,16 @@ export function Profile({ navigation }) {
           </View>
         ),
         headerRight: () => (
-          <TouchableOpacity style={styles.action} onPress={logout} onLongPress={actions.showDelete}>
-            <Ionicons name="logout" size={22} color={Colors.primary} />
-          </TouchableOpacity>
+          <>
+            { state.loggingOut && (
+              <ActivityIndicator style={styles.action} size="small" />
+            )}
+            { !state.loggingOut && (
+              <TouchableOpacity style={styles.action} onPress={logout} onLongPress={actions.showDelete}>
+                <Ionicons name="logout" size={22} color={Colors.primary} />
+              </TouchableOpacity>
+            )}
+          </>
         ),
       });
     }
@@ -71,9 +78,14 @@ export function Profile({ navigation }) {
         <SafeAreaView style={styles.drawer} edges={['top', 'bottom', 'right']}>
           <View style={styles.header}>
             <Text style={styles.headerText} numberOfLines={1}>{ `${state.handle}@${state.node}` }</Text>
-            <TouchableOpacity onPress={logout} onLongPress={actions.showDelete}>
-              <Ionicons name="logout" size={16} color={Colors.grey} />
-            </TouchableOpacity>
+            { state.loggingOut && (
+              <ActivityIndicator size="small" />
+            )}
+            { !state.loggingOut && (
+              <TouchableOpacity onPress={logout} onLongPress={actions.showDelete}>
+                <Ionicons name="logout" size={16} color={Colors.grey} />
+              </TouchableOpacity>
+            )}
           </View>
           <ProfileBody />
           <TouchableOpacity style={styles.erase} activeOpacity={1} onPress={actions.showDelete}>

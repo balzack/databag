@@ -20,6 +20,7 @@ export function useAppContext() {
     loginTimestamp: null,
     disconnected: null,
     deviceToken: null,
+    loggingOut: false,
   });
   const store = useContext(StoreContext);
   const account = useContext(AccountContext);
@@ -108,6 +109,7 @@ export function useAppContext() {
       }
     },
     logout: async () => {
+      updateState({ loggingOut: true });
       try {
         await messaging().deleteToken();
         const token = await messaging().getToken();
@@ -119,6 +121,7 @@ export function useAppContext() {
       }
       await clearSession();
       await store.actions.clearSession();
+      updateState({ loggingOut: false });
     },
     remove: async () => {
       await removeProfile(state.server, state.appToken);

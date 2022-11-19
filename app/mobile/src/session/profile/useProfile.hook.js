@@ -14,6 +14,7 @@ export function useProfile() {
     showDelete: false,
     tabbed: null,
     confirmDelete: null,
+    logginOut: false,
   });
 
   const app = useContext(AppContext);
@@ -42,8 +43,8 @@ export function useProfile() {
   }, [profile]);
 
   useEffect(() => {
-    const { disconnected } = app.state;
-    updateState({ disconnected });
+    const { disconnected, loggingOut } = app.state;
+    updateState({ disconnected, loggingOut });
   }, [app]);
 
   const actions = {
