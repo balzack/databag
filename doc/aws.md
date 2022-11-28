@@ -71,7 +71,7 @@ These instructions assume you have the following setup:
   nohup nice -n -5 /usr/local/go/bin/go run databag [dns name] &<br/>
 
 ## Step 9: configure the server
-  Open your brower to the pi hostname<br/>
+  Open your brower to https://[dns name]<br/>
   Click the 'cog' in the upper right<br/>
   Set an admin password<br/>
   Select the 'cog' to bring up the settings modal<br/>
