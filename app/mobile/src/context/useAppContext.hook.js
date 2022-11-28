@@ -28,6 +28,7 @@ export function useAppContext() {
   const card = useContext(CardContext);
   const channel = useContext(ChannelContext);
   const count = useRef(0);
+  const delay = useRef(0);
 
   const ws = useRef(null);
 
@@ -134,6 +135,7 @@ export function useAppContext() {
     clearWebsocket();
     ws.current = new WebSocket(`wss://${server}/status`);
     ws.current.onmessage = (ev) => {
+      delay.current = 0;
       try {
         const rev = JSON.parse(ev.data);
         try {
@@ -162,9 +164,10 @@ export function useAppContext() {
           ws.current.onclose = () => {}
           ws.current.onopen = () => {}
           ws.current.onerror = () => {}
+          delay.current = 1;
           setWebsocket(server, token);
         }
-      }, 1000)
+      }, 1000 * delay.current)
     }
     ws.current.onopen = () => {
       ws.current.send(JSON.stringify({ AppToken: token }))
