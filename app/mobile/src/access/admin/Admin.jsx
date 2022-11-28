@@ -69,6 +69,9 @@ export function Admin() {
             </View>
           )}
         </View>      
+        <View style={styles.version}>
+          <Text style={styles.versiontext}>v{ state.version }</Text>
+        </View>
       </View>
     </KeyboardAvoidingView>
   );

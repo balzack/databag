@@ -21,6 +21,7 @@ export function useAppContext() {
     disconnected: null,
     deviceToken: null,
     loggingOut: false,
+    version: getVersion(),
   });
   const store = useContext(StoreContext);
   const account = useContext(AccountContext);
