@@ -43,6 +43,11 @@ The app is available in the google and apple stores. You can also test out the p
 
 To use databag, you will need a DNS name pointing to your node with a certificate. You can deploy a node manually, but you will have a much easier time using a container service. Containers for arm64 and amd64 are available [here](https://hub.docker.com/r/balzack/databag/tags). 
 
+### Docker Compose Command
+
+From the container sub director:
+  - sudo docker-compose -f compose.yaml -p databag up
+
 ### Example with Portainer and Nginx Proxy Manager
 
 From Portainer:
