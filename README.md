@@ -45,7 +45,7 @@ To use databag, you will need a DNS name pointing to your node with a certificat
 
 ### Docker Compose Command
 
-From the net/container sub director:
+From the net/container sub directory:
   - sudo docker-compose -f compose.yaml -p databag up
 
 ### Example with Portainer and Nginx Proxy Manager
