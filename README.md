@@ -30,10 +30,10 @@ Databag is a self-hosted messaging service. Notable features include:
 <br>
 <p align="center">
   <a href="https://apps.apple.com/us/app/databag/id6443741428">
-    <img src="/doc/astore.png" width="15%">
+    <img src="/doc/astore.png" width="18%">
   </a>
   <a href="https://play.google.com/store/apps/details?id=com.databag">
-    <img src="/doc/gplay.png" width="15%">
+    <img src="/doc/gplay.png" width="18%">
   </a>
 </p>
 
