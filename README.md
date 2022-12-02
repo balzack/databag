@@ -1,3 +1,6 @@
+
+[![contribute.design](https://contribute.design/api/shield/balzack/databag)](https://contribute.design/balzack/databag)
+
 <div align="center">
   <a href="#"><img src="/doc/icon.png" width="8%" style="border-radius:50%"></a>
   <h3 align="center">Databag</h3>
