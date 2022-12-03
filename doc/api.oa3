@@ -563,6 +563,34 @@ paths:
             schema:
               type: boolean
 
+  /account/seal:
+    put:
+      tags:
+        - account
+      description: Set sealing key for account.
+      operationId: set-account-seal
+      parameters:
+        - name: agent
+          in: query
+          description: agent token
+          required: false
+          schema:
+            type: string
+      responses:
+        '201':
+          description: success
+        '401':
+          description: permission denied
+        '410':
+          description: account disabled
+        '500':
+          description: internal server error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Seal'
+              
   /account/searchable:
     put:
       tags:
@@ -3664,6 +3692,23 @@ components:
         pushSupported:
           type: boolean
           
+    Seal:
+      type: object
+      required:
+        - salt
+        - privateKeyEncrypted
+        - publicKey
+      properties:
+        salt:
+          type: string
+          format: base64 encoded data
+        privateKeyEncrypted:
+          type: string
+          format: base64 encoded data
+        publicKey:
+          type: string
+          format: base64 encoded data
+          
     AccountStatus:
       type: object
       required:
@@ -3688,6 +3733,10 @@ components:
           type: boolean
         pushEnabled:
           type: boolean
+        sealable:
+          type: boolean
+        seal:
+          $ref: '#/components/schemas/Seal'
           
     AccountProfile:
       type: object
@@ -3737,6 +3786,9 @@ components:
         revision:
           type: integer
           format: int64
+        seal:
+          type: string
+          format: base64 encoded data
         version:
           type: string
         node:
