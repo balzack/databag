@@ -622,7 +622,7 @@ paths:
       security:
         - bearerAuth: []
         - basicCredentials: []
-     responses:
+      responses:
         '201':
           description: successful operation
           content:
@@ -2065,7 +2065,7 @@ paths:
         - contact
       description: Inform contact of a push notification event
       operationId: set-push-event
-      paramters:
+      parameters:
         - name: contact
           in: query
           description: contact token
@@ -2549,7 +2549,7 @@ paths:
         '500':
           description: internal server error
  
-   /content/channels/{channelId}/notification:
+  /content/channels/{channelId}/notification:
     get:
       tags:
         - content
@@ -2628,7 +2628,7 @@ paths:
         content:
           application/json:
             schema:
-              type: bool
+              type: boolean
         
   /content/channels/{channelId}/subject/{field}:
     get:
@@ -4050,7 +4050,7 @@ components:
         members:
           type: string
         pushEnabled:
-          type: bool
+          type: boolean
     
     Topic:
       type: object
@@ -4381,3 +4381,4 @@ components:
     bearerAuth: 
       type: http
       scheme: bearer
+
