@@ -16,6 +16,7 @@ func getProfileModel(account *store.Account) *Profile {
 		Revision:    account.ProfileRevision,
 		Version:     APPVersion,
 		Node:        getStrConfigValue(CNFDomain, ""),
+    Seal:        account.AccountDetail.SealPublic,
 	}
 }
 
@@ -94,6 +95,7 @@ func getCardProfileModel(slot *store.CardSlot) *CardProfile {
 		ImageSet:    slot.Card.Image != "",
 		Version:     slot.Card.Version,
 		Node:        slot.Card.Node,
+    Seal:        slot.Card.Seal,
 	}
 }
 

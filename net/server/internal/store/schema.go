@@ -95,6 +95,9 @@ type AccountDetail struct {
   Description       string
   Location          string
   Image             string
+  SealSalt          string
+  SealPrivate       string
+  SealPublic        string
 }
 
 type Session struct {
@@ -181,6 +184,7 @@ type Card struct {
   Description       string
   Location          string
   Image             string
+  Seal              string
   Version           string          `gorm:"not null"`
   Node              string          `gorm:"not null"`
   ProfileRevision   int64           `gorm:"not null"`

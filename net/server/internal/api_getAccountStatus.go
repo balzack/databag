@@ -8,7 +8,7 @@ import (
 //GetAccountStatus retrieves account state values
 func GetAccountStatus(w http.ResponseWriter, r *http.Request) {
 
-  session, code, err := GetSession(r)
+  session, code, err := GetSessionDetail(r)
 	if err != nil {
 		ErrResponse(w, code, err)
 		return
@@ -22,6 +22,10 @@ func GetAccountStatus(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// construct response
+  seal := &Seal{}
+  seal.Salt = account.AccountDetail.SealSalt
+  seal.PrivateKeyEncrypted = account.AccountDetail.SealPrivate
+  seal.PublicKey = account.AccountDetail.SealPublic
 	status := &AccountStatus{}
 	status.StorageAvailable = getNumConfigValue(CNFStorage, 0)
 	for _, asset := range assets {
@@ -31,6 +35,6 @@ func GetAccountStatus(w http.ResponseWriter, r *http.Request) {
 	status.ForwardingAddress = account.Forward
 	status.Searchable = account.Searchable
   status.PushEnabled = session.PushEnabled
-
+  status.Seal = seal
 	WriteResponse(w, status)
 }

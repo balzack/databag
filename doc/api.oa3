@@ -3762,6 +3762,8 @@ components:
           type: boolean
         disabled:
           type: boolean
+        seal:
+          type: string
           
     Profile:
       type: object
@@ -3930,6 +3932,8 @@ components:
         version:
           type: string
         node:
+          type: string
+        seal:
           type: string
         revision:
           type: integer

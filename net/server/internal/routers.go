@@ -189,6 +189,13 @@ var endpoints = routes{
 	},
 
 	route{
+		"SetAccountSeal",
+		strings.ToUpper("Put"),
+		"/account/seal",
+		SetAccountSeal,
+	},
+
+	route{
 		"SetAccountSerchable",
 		strings.ToUpper("Put"),
 		"/account/searchable",

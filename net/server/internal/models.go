@@ -16,6 +16,8 @@ type AccountProfile struct {
 
 	ImageSet bool `json:"imageSet,omitempty"`
 
+  Seal string `json:"seal,emitempty"`
+
 	Disabled bool `json:"disabled"`
 }
 
@@ -32,6 +34,10 @@ type AccountStatus struct {
 	Searchable bool `json:"searchable"`
 
 	PushEnabled bool `json:"pushEnabled"`
+
+  Sealable bool `json:"sealable"`
+
+	Seal *Seal `json:"seal,omitempty"`
 }
 
 //Announce initial message sent on websocket
@@ -133,6 +139,8 @@ type CardProfile struct {
 	Location string `json:"location,omitempty"`
 
 	ImageSet bool `json:"imageSet"`
+
+  Seal string `json:"seal,omitempty"`
 
 	Version string `json:"version,omitempty"`
 
@@ -363,6 +371,8 @@ type Profile struct {
 
 	Image string `json:"image,omitempty"`
 
+  Seal string `json:"seal,omitempty"`
+
 	Revision int64 `json:"revision"`
 
 	Version string `json:"version,omitempty"`
@@ -392,6 +402,15 @@ type Revision struct {
 	Channel int64 `json:"channel"`
 
 	Card int64 `json:"card"`
+}
+
+//Seal key for channel sealing
+type Seal struct {
+	Salt string `json:"salt"`
+
+	PrivateKeyEncrypted string `json:"privateKeyEncrypted,omitempty"`
+
+	PublicKey string `json:"publicKey,omitempty"`
 }
 
 //SignedData object serialized in message
