@@ -406,9 +406,11 @@ type Revision struct {
 
 //Seal key for channel sealing
 type Seal struct {
-	Salt string `json:"salt"`
+	PasswordSalt string `json:"passwordSalt"`
 
-	PrivateKeyEncrypted string `json:"privateKeyEncrypted,omitempty"`
+	PrivateKeyIV string `json:"privateKeyIv,omitempty"`
+
+  PrivateKeyEncrypted string `json:"privateKeyEncrypted,omitempty"`
 
 	PublicKey string `json:"publicKey,omitempty"`
 }

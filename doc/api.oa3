@@ -3699,9 +3699,12 @@ components:
         - privateKeyEncrypted
         - publicKey
       properties:
-        salt:
+        passwordSalt:
           type: string
-          format: base64 encoded data
+          format: hex encoded data
+        privateKeyIv:
+          type: string
+          format: hex encoded data
         privateKeyEncrypted:
           type: string
           format: base64 encoded data

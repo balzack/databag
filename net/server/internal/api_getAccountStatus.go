@@ -23,7 +23,8 @@ func GetAccountStatus(w http.ResponseWriter, r *http.Request) {
 
 	// construct response
   seal := &Seal{}
-  seal.Salt = account.AccountDetail.SealSalt
+  seal.PasswordSalt = account.AccountDetail.SealSalt
+  seal.PrivateKeyIV = account.AccountDetail.SealIV
   seal.PrivateKeyEncrypted = account.AccountDetail.SealPrivate
   seal.PublicKey = account.AccountDetail.SealPublic
 	status := &AccountStatus{}

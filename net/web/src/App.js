@@ -1,5 +1,5 @@
 
-import 'antd/dist/antd.min.css'; 
+import 'antd/dist/reset.css';
 import { HashRouter as Router, Routes, Route } from "react-router-dom";
 
 import { AppContextProvider } from 'context/AppContext';
@@ -29,8 +29,8 @@ function App() {
           <GroupContextProvider>
             <ArticleContextProvider>
               <ProfileContextProvider>
-                <AccountContextProvider>
-                  <StoreContextProvider>
+                <StoreContextProvider>
+                  <AccountContextProvider>
                     <ViewportContextProvider>
                       <AppContextProvider>
                         <AppWrapper>
@@ -51,8 +51,8 @@ function App() {
                         </AppWrapper>
                       </AppContextProvider>
                     </ViewportContextProvider>
-                  </StoreContextProvider>
-                </AccountContextProvider>
+                  </AccountContextProvider>
+                </StoreContextProvider>
               </ProfileContextProvider>
             </ArticleContextProvider>
           </GroupContextProvider>

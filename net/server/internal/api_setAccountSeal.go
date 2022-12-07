@@ -22,7 +22,8 @@ func SetAccountSeal(w http.ResponseWriter, r *http.Request) {
 	}
 
   // update record
-  account.AccountDetail.SealSalt = seal.Salt
+  account.AccountDetail.SealSalt = seal.PasswordSalt
+  account.AccountDetail.SealIV = seal.PrivateKeyIV
   account.AccountDetail.SealPrivate = seal.PrivateKeyEncrypted
   account.AccountDetail.SealPublic = seal.PublicKey
 

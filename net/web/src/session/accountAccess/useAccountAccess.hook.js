@@ -2,20 +2,31 @@ import { useRef, useState, useEffect, useContext } from 'react';
 import { AccountContext } from 'context/AccountContext';
 import { ProfileContext } from 'context/ProfileContext';
 import { getUsername } from 'api/getUsername';
+import CryptoJS from 'crypto-js';
+import { JSEncrypt } from 'jsencrypt'
 
 export function useAccountAccess() {
   
   const [state, setState] = useState({
     editLogin: false,
+    editSeal: false,
     handle: null,
     editHandle: null,
     editStatus: null,
     editMessage: null,
     editPassword: null,
-    editConfirm: null,
+    EditConfirm: null,
     busy: false,
     searchable: null,
     checked: true,
+    editSealEnabled: false,
+    editSealMode: null,
+    sealPassword: null,
+    sealConfirm: null,
+    unseal: null,
+    unlock: null,
+    seal: null,
+    sealPrivate: null,
   });
 
   const profile = useContext(ProfileContext);
@@ -35,11 +46,241 @@ export function useAccountAccess() {
 
   useEffect(() => {
     if (account?.state?.status) {
-      updateState({ searchable: account.state.status.searchable });
+      const { seal, sealPrivate, status } = account.state;
+      updateState({ searchable: status.searchabled, seal, sealPrivate });
     }
   }, [account]);
 
+  const convertPem = (pem) => {
+    var lines = pem.split('\n');
+    var encoded = '';
+    for(var i = 0;i < lines.length;i++){
+      if (lines[i].trim().length > 0 &&
+          lines[i].indexOf('-BEGIN RSA PRIVATE KEY-') < 0 && 
+          lines[i].indexOf('-BEGIN RSA PUBLIC KEY-') < 0 &&
+          lines[i].indexOf('-BEGIN PUBLIC KEY-') < 0 &&
+          lines[i].indexOf('-END PUBLIC KEY-') < 0 &&
+          lines[i].indexOf('-END RSA PRIVATE KEY-') < 0 &&
+          lines[i].indexOf('-END RSA PUBLIC KEY-') < 0) {
+        encoded += lines[i].trim();
+      }
+    }
+    return encoded
+  };
+ 
+  const sealUnlock = async () => {
+
+console.log("UNLOCKING");
+console.log(state.seal.passwordSalt);
+console.log(state.seal.privateKeyIv);
+console.log(state.unlock);
+    // generate key to encrypt private key
+    const salt = CryptoJS.enc.Hex.parse(state.seal.passwordSalt);
+    const aes = CryptoJS.PBKDF2(state.unlock, salt, {
+      keySize: 256 / 32,
+      iterations: 1024,
+    });
+
+    // decrypt private key
+    const iv = CryptoJS.enc.Hex.parse(state.seal.privateKeyIv);
+    const enc = CryptoJS.enc.Base64.parse(state.seal.privateKeyEncrypted)
+    let cipherParams = CryptoJS.lib.CipherParams.create({
+      ciphertext: enc,
+      iv: iv
+    });
+    const dec = CryptoJS.AES.decrypt(cipherParams, aes, { iv: iv });
+
+    // store keuy
+    await account.actions.unlockSeal(dec.toString(CryptoJS.enc.Utf8))
+  };
+
+  const sealEnable = async () => {
+
+    // generate key to encrypt private key
+    const salt = CryptoJS.lib.WordArray.random(128 / 8);
+    const aes = CryptoJS.PBKDF2(state.sealPassword, salt, {
+      keySize: 256 / 32,
+      iterations: 1024,
+    });
+
+    // generate rsa key for sealing channel
+    const crypto = new JSEncrypt({ default_key_size: 2048 });
+    const key = crypto.getKey();
+
+    // encrypt private key
+    const iv = CryptoJS.lib.WordArray.random(128 / 8);
+    const privateKey = convertPem(crypto.getPrivateKey());
+    const enc = CryptoJS.AES.encrypt(privateKey, aes, { iv: iv });
+
+    // update account
+    const seal = {
+      passwordSalt: salt.toString(),
+      privateKeyIv: iv.toString(),
+      privateKeyEncrypted: enc.ciphertext.toString(CryptoJS.enc.Base64),
+      publicKey: convertPem(crypto.getPublicKey()),
+    }
+    await account.actions.setSeal(seal, privateKey);
+  };
+
+  const sealRemove = async () => {
+    await account.actions.setSeal({});
+  };
+
+  const sealUpdate = async () => {
+
+    // generate key to encrypt private key
+    const salt = CryptoJS.lib.WordArray.random(128 / 8);
+    const aes = CryptoJS.PBKDF2(state.sealPassword, salt, {
+      keySize: 256 / 32,
+      iterations: 1024,
+    });
+
+    // encrypt private key
+    const iv = CryptoJS.lib.WordArray.random(128 / 8);
+    const enc = CryptoJS.AES.encrypt(state.privateKey, aes, { iv: iv });
+
+    // update account
+    const seal = {
+      passwordSalt: salt.toString(),
+      privateKeyIv: iv.toString(),
+      privateKeyEncrypted: enc.ciphertext.toString(CryptoJS.enc.Base64),
+      publicKey: state.seal.publicKey,
+    }
+    await account.actions.setSeal(seal, state.privateKey);
+  };
+
+  const test = async () => {
+console.log("TESTING");
+    var salt = CryptoJS.lib.WordArray.random(128 / 8);
+    var key256Bits = CryptoJS.PBKDF2("Secret Passphrase", salt, {
+      keySize: 256 / 32,
+      iterations: 1024,
+    });
+console.log(key256Bits);
+
+  const crypto = new JSEncrypt({ default_key_size: 2048 });
+console.log(crypto);
+
+  const key = crypto.getKey();
+console.log(key);
+console.log(crypto.getPrivateKey());
+
+  const encrypted = crypto.encrypt("TEST MESSAGE");
+
+console.log(encrypted);
+
+  const decrypted = crypto.decrypt(encrypted);
+
+console.log(decrypted);
+
+  const recrypt = crypto.encrypt("TEST MESSAGE");
+
+console.log(recrypt);
+
+  const output = crypto.decrypt(recrypt);
+
+console.log(output);
+
+
+var aes = CryptoJS.lib.WordArray.random(256 / 8);
+var iv = CryptoJS.lib.WordArray.random(128 / 8);
+var enc = CryptoJS.AES.encrypt("Message", key, { iv: iv });
+
+console.log(aes);
+console.log(key256Bits);
+
+console.log(enc);
+
+var cipherParams = CryptoJS.lib.CipherParams.create({
+    ciphertext: enc.ciphertext,
+    iv: iv
+  });
+
+var dec = CryptoJS.AES.decrypt(cipherParams, key, { iv: iv });
+
+console.log(dec);
+
+console.log(dec.toString(CryptoJS.enc.Utf8));
+  };
+
+
   const actions = {
+    setEditSeal: () => {
+      updateState({ editSeal: true, editSealMode: null, unlock: null, editSealEnabled: state.seal });
+    },
+    clearEditSeal: () => {
+      updateState({ editSeal: false });
+    },
+    setSealPassword: (sealPassword) => {
+      updateState({ sealPassword });
+    },
+    setSealConfirm: (sealConfirm) => {
+      updateState({ sealConfirm });
+    },
+    setUnseal: (unseal) => {
+      updateState({ unseal });
+    },
+    setUnlock: (unlock) => {
+      updateState({ unlock });
+    },
+    updateSeal: () => {
+      updateState({ editSealMode: 'updating', sealConfirm: null, sealPassword: null });
+    },
+    enableSeal: (enable) => {
+      if (enable && state.seal) {
+        updateState({ editSealEnabled: true, editSealMode: null });
+      }
+      else if (enable) {
+        updateState({ editSealEnabled: true, editSealMode: 'sealing', sealConfirm: null, sealPassword: null });
+      }
+      else if (!enable && state.seal) {
+        updateState({ editSealEnabled: false, editSealMode: 'unsealing', unseal: null });
+      }
+      else {
+        updateState({ editSealEnabled: false, editSealMode: null });
+      }
+    },
+    canSaveSeal: () => {
+      if (state.editSealMode === 'unsealing' && state.unseal === 'delete') {
+        return true;
+      }
+      if (state.editSealMode === 'sealing' && state.sealPassword && state.sealPassword === state.sealConfirm) {
+        return true;
+      }
+      if (state.editSealMode === 'updating' && state.sealPassword && state.sealPassword === state.sealConfirm) {
+        return true;
+      }
+      if (state.editSealMode == null && state.seal && !state.sealPrivate) {
+        return true;
+      }
+      return false;
+    },
+    saveSeal: async () => {
+      if (state.busy) {
+        throw new Error("operation in progress");
+      }
+      updateState({ busy: true });
+      try {
+        if (state.editSealMode === 'sealing') {
+          await sealEnable();
+        }
+        else if (state.editSealMode === 'unsealing') {
+          await sealRemove();
+        }
+        else if (state.editSealMode === 'updating') {
+          await sealUpdate();
+        } 
+        else {
+          await sealUnlock();
+        }
+        updateState({ busy: false });
+      }
+      catch (err) {
+        updateState({ busy: false });
+        console.log(err);
+        throw new Error("failed to save seal");
+      }
+    },
     setEditLogin: () => {
       updateState({ editLogin: true });
     },

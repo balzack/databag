@@ -96,6 +96,7 @@ type AccountDetail struct {
   Location          string
   Image             string
   SealSalt          string
+  SealIV            string
   SealPrivate       string
   SealPublic        string
 }
