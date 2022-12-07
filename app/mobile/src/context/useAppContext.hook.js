@@ -20,6 +20,8 @@ export function useAppContext() {
     loginTimestamp: null,
     disconnected: null,
     deviceToken: null,
+    loggingOut: false,
+    version: getVersion(),
   });
   const store = useContext(StoreContext);
   const account = useContext(AccountContext);
@@ -27,6 +29,7 @@ export function useAppContext() {
   const card = useContext(CardContext);
   const channel = useContext(ChannelContext);
   const count = useRef(0);
+  const delay = useRef(0);
 
   const ws = useRef(null);
 
@@ -83,7 +86,7 @@ export function useAppContext() {
     username: getUsername,
     create: async (server, username, password, token) => {
       await addAccount(server, username, password, token);
-      const access = await setLogin(username, server, password, getApplicatioName(), getVersion(), getDeviceId(), state.deviceToken, notifications)
+      const access = await setLogin(username, server, password, getApplicationName(), getVersion(), getDeviceId(), state.deviceToken, notifications)
       await store.actions.setSession({ ...access, server});
       await setSession({ ...access, server });
       if (access.pushSupported) {
@@ -108,6 +111,7 @@ export function useAppContext() {
       }
     },
     logout: async () => {
+      updateState({ loggingOut: true });
       try {
         await messaging().deleteToken();
         const token = await messaging().getToken();
@@ -119,6 +123,7 @@ export function useAppContext() {
       }
       await clearSession();
       await store.actions.clearSession();
+      updateState({ loggingOut: false });
     },
     remove: async () => {
       await removeProfile(state.server, state.appToken);
@@ -131,6 +136,7 @@ export function useAppContext() {
     clearWebsocket();
     ws.current = new WebSocket(`wss://${server}/status`);
     ws.current.onmessage = (ev) => {
+      delay.current = 0;
       try {
         const rev = JSON.parse(ev.data);
         try {
@@ -159,9 +165,10 @@ export function useAppContext() {
           ws.current.onclose = () => {}
           ws.current.onopen = () => {}
           ws.current.onerror = () => {}
+          delay.current = 1;
           setWebsocket(server, token);
         }
-      }, 1000)
+      }, 1000 * delay.current)
     }
     ws.current.onopen = () => {
       ws.current.send(JSON.stringify({ AppToken: token }))

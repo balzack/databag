@@ -1,5 +1,6 @@
 import { ActivityIndicator, Image, View, TouchableOpacity } from 'react-native';
 import Colors from 'constants/Colors';
+import { useKeepAwake } from 'expo-keep-awake';
 import { Video, AVPlaybackStatus } from 'expo-av';
 import { useVideoAsset } from './useVideoAsset.hook';
 import { styles } from './VideoAsset.styled';
@@ -8,6 +9,8 @@ import Icons from '@expo/vector-icons/MaterialCommunityIcons';
 export function VideoAsset({ topicId, asset, dismiss }) {
 
   const { state, actions } = useVideoAsset(topicId, asset);
+
+  useKeepAwake();
 
   return (
     <View style={styles.container}>

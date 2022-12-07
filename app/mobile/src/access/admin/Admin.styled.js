@@ -108,6 +108,13 @@ export const styles = StyleSheet.create({
   nologintext: {
     color: Colors.disabled,
   },
-    
+  version: {
+    display: 'flex',
+    alignItems: 'flex-end',
+  },
+  versiontext: {
+    color: Colors.grey,
+    fontSize: 14,
+  },
 })
 

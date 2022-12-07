@@ -17,11 +17,16 @@ export function useAdmin() {
     server: null,
     token: null,
     plainText: false,
+    version: null,
   });
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
   }
+
+  useEffect(() => {
+    updateState({ version: app.state.version });
+  }, [app]);
 
   const checkStatus = async () => {
     try {

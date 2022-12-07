@@ -1,5 +1,6 @@
 import { Image, View, Text, TouchableOpacity } from 'react-native';
 import { useRef } from 'react';
+import { useKeepAwake } from 'expo-keep-awake';
 import Colors from 'constants/Colors';
 import { Video, AVPlaybackStatus } from 'expo-av';
 import { useAudioAsset } from './useAudioAsset.hook';
@@ -11,6 +12,8 @@ import audio from 'images/audio.png';
 export function AudioAsset({ topicId, asset, dismiss }) {
 
   const { state, actions } = useAudioAsset(topicId, asset);
+
+  useKeepAwake();
 
   const player = useRef(null);
 

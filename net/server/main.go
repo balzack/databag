@@ -21,11 +21,11 @@ func main() {
   args := os.Args
   if len(args) == 3 {
     port := ":" + args[2]
-    path := "etc/letsencrypt/live/" + args[1]
+    path := "/etc/letsencrypt/live/" + args[1]
     log.Printf("starting server at: " + path + " " + port);
     log.Fatal(http.ListenAndServeTLS(port, path + "/fullchain.pem", path + "/privkey.pem", handlers.CORS(origins, methods)(router)))
   } else if len(args) == 2 {
-    path := "etc/letsencrypt/live/" + args[1]
+    path := "/etc/letsencrypt/live/" + args[1]
     log.Printf("starting server at: " + path);
     log.Fatal(http.ListenAndServeTLS(":443", path + "/fullchain.pem", path + "/privkey.pem", handlers.CORS(origins, methods)(router)))
   } else {

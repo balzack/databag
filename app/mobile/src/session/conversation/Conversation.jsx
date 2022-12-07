@@ -1,5 +1,4 @@
 import { Keyboard, KeyboardAvoidingView, ActivityIndicator, Modal, Platform, TextInput, View, TouchableOpacity, Text, } from 'react-native';
-import { useKeepAwake } from 'expo-keep-awake';
 import { FlatList, ScrollView } from '@stream-io/flat-list-mvcp';
 import { memo, useState, useRef, useEffect } from 'react';
 import { useConversation } from './useConversation.hook';
@@ -58,8 +57,6 @@ export function ConversationBody() {
       hideSubscription.remove();
     };
   }, []);
-
-  useKeepAwake();
 
   const latch = () => {
     if (!state.momentum) {
