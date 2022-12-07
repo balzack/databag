@@ -143,6 +143,9 @@ export function ProfileBody({ navigation }) {
         </TouchableOpacity>
         <Switch style={styles.visibleSwitch} value={state.pushEnabled} onValueChange={setNotifications} trackColor={styles.switch}/>
       </View>
+      <TouchableOpacity style={styles.link} onPress={actions.sealTest}>
+        <Text style={styles.linkText}>Test Seal</Text>
+      </TouchableOpacity>
       <TouchableOpacity style={styles.link} onPress={actions.showLoginEdit}>
         <Text style={styles.linkText}>Change Login</Text>
       </TouchableOpacity>

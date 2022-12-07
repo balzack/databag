@@ -5,6 +5,8 @@ import { ProfileContext } from 'context/ProfileContext';
 import { AccountContext } from 'context/AccountContext';
 import { AppContext } from 'context/AppContext';
 import config from 'constants/Config';
+import { JSEncrypt } from 'jsencrypt'
+import CryptoJS from "crypto-js";
 
 export function useProfileBody() {
 
@@ -73,7 +75,53 @@ export function useProfileBody() {
     updateState({ disconnected });
   }, [app]);
 
+  const convertPem = (pem) => {
+    var lines = pem.split('\n');
+    var encoded = '';
+    for(var i = 0;i < lines.length;i++){
+      if (lines[i].trim().length > 0 &&
+          lines[i].indexOf('-BEGIN RSA PRIVATE KEY-') < 0 &&
+          lines[i].indexOf('-BEGIN RSA PUBLIC KEY-') < 0 &&
+          lines[i].indexOf('-BEGIN PUBLIC KEY-') < 0 &&
+          lines[i].indexOf('-END PUBLIC KEY-') < 0 &&
+          lines[i].indexOf('-END RSA PRIVATE KEY-') < 0 &&
+          lines[i].indexOf('-END RSA PUBLIC KEY-') < 0) {
+        encoded += lines[i].trim();
+      }
+    }
+    return encoded
+  };
+
   const actions = {
+    sealTest: async () => {
+      console.log("SEAL TEST");
+
+      // generate key to encrypt private key
+      const salt = CryptoJS.lib.WordArray.random(128 / 8);
+      const aes = CryptoJS.PBKDF2('testpassword', salt, {
+        keySize: 256 / 32,
+        iterations: 1024,
+      });
+
+      // generate rsa key for sealing channel, delay for activity indicator
+      await new Promise(r => setTimeout(r, 1000));
+      const crypto = new JSEncrypt({ default_key_size: 2048 });
+      const key = crypto.getKey();
+
+      // encrypt private key
+      const iv = CryptoJS.lib.WordArray.random(128 / 8);
+      const privateKey = convertPem(crypto.getPrivateKey());
+      const enc = CryptoJS.AES.encrypt(privateKey, aes, { iv: iv });
+
+      const seal = {
+        passwordSalt: salt.toString(),
+        privateKeyIv: iv.toString(),
+        privateKeyEncrypted: enc.ciphertext.toString(CryptoJS.enc.Base64),
+        publicKey: convertPem(crypto.getPublicKey()),
+      }
+      console.log("SEAL:", seal);
+
+    },
     logout: () => {
       app.actions.logout();
       navigate('/');
