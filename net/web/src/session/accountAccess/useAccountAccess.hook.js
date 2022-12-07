@@ -70,10 +70,6 @@ export function useAccountAccess() {
  
   const sealUnlock = async () => {
 
-console.log("UNLOCKING");
-console.log(state.seal.passwordSalt);
-console.log(state.seal.privateKeyIv);
-console.log(state.unlock);
     // generate key to encrypt private key
     const salt = CryptoJS.enc.Hex.parse(state.seal.passwordSalt);
     const aes = CryptoJS.PBKDF2(state.unlock, salt, {
@@ -103,7 +99,8 @@ console.log(state.unlock);
       iterations: 1024,
     });
 
-    // generate rsa key for sealing channel
+    // generate rsa key for sealing channel, delay for activity indicator
+    await new Promise(r => setTimeout(r, 1000));
     const crypto = new JSEncrypt({ default_key_size: 2048 });
     const key = crypto.getKey();
 
@@ -148,61 +145,6 @@ console.log(state.unlock);
     }
     await account.actions.setSeal(seal, state.privateKey);
   };
-
-  const test = async () => {
-console.log("TESTING");
-    var salt = CryptoJS.lib.WordArray.random(128 / 8);
-    var key256Bits = CryptoJS.PBKDF2("Secret Passphrase", salt, {
-      keySize: 256 / 32,
-      iterations: 1024,
-    });
-console.log(key256Bits);
-
-  const crypto = new JSEncrypt({ default_key_size: 2048 });
-console.log(crypto);
-
-  const key = crypto.getKey();
-console.log(key);
-console.log(crypto.getPrivateKey());
-
-  const encrypted = crypto.encrypt("TEST MESSAGE");
-
-console.log(encrypted);
-
-  const decrypted = crypto.decrypt(encrypted);
-
-console.log(decrypted);
-
-  const recrypt = crypto.encrypt("TEST MESSAGE");
-
-console.log(recrypt);
-
-  const output = crypto.decrypt(recrypt);
-
-console.log(output);
-
-
-var aes = CryptoJS.lib.WordArray.random(256 / 8);
-var iv = CryptoJS.lib.WordArray.random(128 / 8);
-var enc = CryptoJS.AES.encrypt("Message", key, { iv: iv });
-
-console.log(aes);
-console.log(key256Bits);
-
-console.log(enc);
-
-var cipherParams = CryptoJS.lib.CipherParams.create({
-    ciphertext: enc.ciphertext,
-    iv: iv
-  });
-
-var dec = CryptoJS.AES.decrypt(cipherParams, key, { iv: iv });
-
-console.log(dec);
-
-console.log(dec.toString(CryptoJS.enc.Utf8));
-  };
-
 
   const actions = {
     setEditSeal: () => {

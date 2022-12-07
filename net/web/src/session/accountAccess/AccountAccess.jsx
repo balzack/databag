@@ -62,10 +62,10 @@ export function AccountAccess() {
       <div class="select"></div>
       <Button key="back" onClick={actions.clearEditSeal}>Cancel</Button>
       { state.editSealMode == null && state.seal && !state.sealPrivate && (
-        <Button key="save" type="primary" onClick={() => saveSeal()} disabled={!actions.canSaveSeal()} loading={state.busy}>Unlock</Button>
+        <Button key="save" type="primary" onClick={saveSeal} disabled={!actions.canSaveSeal()} loading={state.busy}>Unlock</Button>
       )}
       { !(state.editSealMode == null && state.seal && !state.sealPrivate) && (
-        <Button key="save" type="primary" onClick={() => saveSeal()} disabled={!actions.canSaveSeal()} loading={state.busy}>Save</Button>
+        <Button key="save" type="primary" onClick={saveSeal} disabled={!actions.canSaveSeal()} loading={state.busy}>Save</Button>
       )}
     </EditFooter>
   );

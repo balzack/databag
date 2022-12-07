@@ -69,6 +69,7 @@ export function useAccountContext() {
     },
     clearToken: () => {
       access.current = null;
+      revision.current = 0;
       setState({ init: false });
     },
     setRevision: async (rev) => {
@@ -85,7 +86,6 @@ export function useAccountContext() {
       updateState({ seal, sealPrivate });
     },
     unlockSeal: async (sealPrivate) => {
-console.log("UNLOCKING: ", sealPrivate);
       await storeContext.actions.setValue("seal:private", sealPrivate);
       updateState({ sealPrivate });
     },
