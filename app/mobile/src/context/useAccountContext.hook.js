@@ -1,5 +1,6 @@
 import { useState, useRef, useContext } from 'react';
 import { StoreContext } from 'context/StoreContext';
+import { setAccountSeal } from 'api/setAccountSeal';
 import { setAccountSearchable } from 'api/setAccountSearchable';
 import { setAccountNotifications } from 'api/setAccountNotifications';
 import { getAccountStatus } from 'api/getAccountStatus';
@@ -78,6 +79,7 @@ export function useAccountContext() {
       updateState({ sealKey: key });
     },
     unlockAccountSeal: async (key) => {
+      const { guid } = session.current;
       await store.actions.setAccountSealKey(guid, key);
       updateState({ sealKey: key });
     },

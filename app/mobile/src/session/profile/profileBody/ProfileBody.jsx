@@ -41,6 +41,20 @@ export function ProfileBody({ navigation }) {
     }
   }
 
+  const saveSeal = async () => {
+    try {
+      await actions.saveSeal();
+      actions.hideSealEdit();
+    }
+    catch (err) {
+      console.log(err);
+      Alert.alert(
+        'Failed to Update Topic Sealing',
+        'Please try again.',
+      )
+    }
+  }
+
   const saveDetails = async () => {
     try {
       await actions.saveDetails();
@@ -258,9 +272,6 @@ export function ProfileBody({ navigation }) {
           </View>
         </KeyboardAvoidingView>
       </Modal>
-
-
-
       <Modal
         animationType="fade"
         transparent={true}
@@ -282,7 +293,7 @@ export function ProfileBody({ navigation }) {
                 { !state.showSealUnlock && (
                   <View style={styles.inputField}>
                     <TextInput style={styles.input} value={state.sealUnlock} onChangeText={actions.setSealUnlock}
-                        autoCapitalize={'none'} secureTextEntry={true} placeholder="Seal Password"
+                        autoCapitalize={'none'} secureTextEntry={true} placeholder="Password for Seal"
                         placeholderTextColor={Colors.grey} />
                     <TouchableOpacity onPress={actions.showSealUnlock}>
                       <Ionicons style={styles.icon} name="eyeo" size={18} color="#888888" />
@@ -292,7 +303,7 @@ export function ProfileBody({ navigation }) {
                 { state.showSealUnlock && (
                   <View style={styles.inputField}>
                     <TextInput style={styles.input} value={state.sealUnlock} onChangeText={actions.setSealUnlock}
-                        autoCapitalize={'none'} secureTextEntry={false} placeholder="Seal Password"
+                        autoCapitalize={'none'} secureTextEntry={false} placeholder="Password for Seal"
                         placeholderTextColor={Colors.grey} />
                     <TouchableOpacity onPress={actions.hideSealUnlock}>
                       <Ionicons style={styles.icon} name="eye" size={18} color="#888888" />
@@ -306,7 +317,7 @@ export function ProfileBody({ navigation }) {
                 { !state.showSealPassword && (
                   <View style={styles.inputField}>
                     <TextInput style={styles.input} value={state.sealPassword} onChangeText={actions.setSealPassword}
-                        autoCapitalize={'none'} secureTextEntry={true} placeholder="Password Seal"
+                        autoCapitalize={'none'} secureTextEntry={true} placeholder="Password for Seal"
                         placeholderTextColor={Colors.grey} />
                     <TouchableOpacity onPress={actions.showSealPassword}>
                       <Ionicons style={styles.icon} name="eyeo" size={18} color="#888888" />
@@ -316,7 +327,7 @@ export function ProfileBody({ navigation }) {
                 { state.showSealPassword && (
                   <View style={styles.inputField}>
                     <TextInput style={styles.input} value={state.sealPassword} onChangeText={actions.setSealPassword}
-                        autoCapitalize={'none'} secureTextEntry={false} placeholder="Password Seal"
+                        autoCapitalize={'none'} secureTextEntry={false} placeholder="Password for Seal"
                         placeholderTextColor={Colors.grey} />
                     <TouchableOpacity onPress={actions.hideSealPassword}>
                       <Ionicons style={styles.icon} name="eye" size={18} color="#888888" />
@@ -326,7 +337,7 @@ export function ProfileBody({ navigation }) {
                 { !state.showSealConfirm && (
                   <View style={styles.inputField}>
                     <TextInput style={styles.input} value={state.sealConfirm} onChangeText={actions.setSealConfirm}
-                        autoCapitalize={'none'} secureTextEntry={true} placeholder="Confirm Seal"
+                        autoCapitalize={'none'} secureTextEntry={true} placeholder="Confirm Password"
                         placeholderTextColor={Colors.grey} />
                     <TouchableOpacity onPress={actions.showSealConfirm}>
                       <Ionicons style={styles.icon} name="eyeo" size={18} color="#888888" />
@@ -336,7 +347,7 @@ export function ProfileBody({ navigation }) {
                 { state.showSealConfirm && (
                   <View style={styles.inputField}>
                     <TextInput style={styles.input} value={state.sealConfirm} onChangeText={actions.setSealConfirm}
-                        autoCapitalize={'none'} secureTextEntry={false} placeholder="Confirm Seal"
+                        autoCapitalize={'none'} secureTextEntry={false} placeholder="Confirm Password"
                         placeholderTextColor={Colors.grey} />
                     <TouchableOpacity onPress={actions.hideSealConfirm}>
                       <Ionicons style={styles.icon} name="eye" size={18} color="#888888" />
@@ -356,6 +367,7 @@ export function ProfileBody({ navigation }) {
             { state.sealMode === 'unlocked' && (
               <View style={styles.inputField}>
                 <TextInput style={styles.input} value={'xxxxxxxx'} editable="false" secureTextEntry={true} />
+                <Ionicons style={styles.icon} name="eyeo" size={18} color="#888888" />
                 <TouchableOpacity style={styles.sealUpdate} onPress={actions.updateSeal} />
               </View>
             )}
@@ -363,23 +375,39 @@ export function ProfileBody({ navigation }) {
               <TouchableOpacity style={styles.cancel} onPress={actions.hideSealEdit}>
                 <Text>Cancel</Text>
               </TouchableOpacity>
-              { state.sealMode !== 'unlocking' && (
-                <TouchableOpacity style={styles.cancel} onPress={actions.hideSealEdit}>
-                  <Text>Save</Text>
-                </TouchableOpacity>
+              { state.canSaveSeal && (
+                <>
+                  { state.sealMode !== 'unlocking' && (
+                    <TouchableOpacity style={styles.save} onPress={saveSeal}>
+                      <Text style={styles.saveText}>Save</Text>
+                    </TouchableOpacity>
+                  )}
+                  { state.sealMode === 'unlocking' && (
+                    <TouchableOpacity style={styles.save} onPress={saveSeal}>
+                      <Text style={styles.saveText}>Unlock</Text>
+                    </TouchableOpacity>
+                  )}  
+                </>
               )}
-              { state.sealMode === 'unlocking' && (
-                <TouchableOpacity style={styles.cancel} onPress={actions.hideSealEdit}>
-                  <Text>Unlock</Text>
-                </TouchableOpacity>
+              { !state.canSaveSeal && (
+                <>
+                  { state.sealMode !== 'unlocking' && (
+                    <View style={styles.disabled}>
+                      <Text style={styles.disabledText}>Save</Text>
+                    </View>
+                  )}
+                  { state.sealMode === 'unlocking' && (
+                    <View style={styles.disabled}>
+                      <Text style={styles.disabledText}>Unlock</Text>
+                    </View>
+                  )}  
+                </>
               )}
+
             </View>
           </View>
         </KeyboardAvoidingView>
       </Modal> 
-
-
-
       <Modal
         animationType="fade"
         transparent={true}
@@ -458,7 +486,6 @@ export function ProfileBody({ navigation }) {
           </View>
         </KeyboardAvoidingView>
       </Modal>
-
     </View>
   );
 };

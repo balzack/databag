@@ -41,7 +41,8 @@ export function useProfileBody() {
     sealKey: null,
     sealEnabled: false,
     sealUnlocked: false,
-
+    canSaveSeal: false, 
+    
     sealEdit: false,
     sealMode: null,
     sealable: false,
@@ -111,36 +112,107 @@ export function useProfileBody() {
     return encoded
   };
 
+  const sealEnable = async () => {
+    // generate key to encrypt private key
+    const salt = CryptoJS.lib.WordArray.random(128 / 8);
+    const aes = CryptoJS.PBKDF2(state.sealPassword, salt, {
+      keySize: 256 / 32,
+      iterations: 1024,
+    });
+
+    // generate rsa key for sealing channel, delay for activity indicator
+    await new Promise(r => setTimeout(r, 1000));
+    const crypto = new JSEncrypt({ default_key_size: 2048 });
+    const key = crypto.getKey();
+
+    // encrypt private key
+    const iv = CryptoJS.lib.WordArray.random(128 / 8);
+    const privateKey = convertPem(crypto.getPrivateKey());
+    const publicKey = convertPem(crypto.getPublicKey());
+    const enc = CryptoJS.AES.encrypt(privateKey, aes, { iv: iv });
+
+    const seal = {
+      passwordSalt: salt.toString(),
+      privateKeyIv: iv.toString(),
+      privateKeyEncrypted: enc.ciphertext.toString(CryptoJS.enc.Base64),
+      publicKey: publicKey,
+    }
+    const sealKey = {
+      public: publicKey,
+      private: privateKey,
+    }
+    await account.actions.setAccountSeal(seal, sealKey); 
+  };
+
+  const sealDisable = async () => {
+    await account.actions.setAccountSeal({}, {});
+  };
+
+  const sealUnlock = async () => {
+    // generate key to encrypt private key
+    const salt = CryptoJS.enc.Hex.parse(state.seal.passwordSalt);
+    const aes = CryptoJS.PBKDF2(state.sealUnlock, salt, {
+      keySize: 256 / 32,
+      iterations: 1024,
+    });
+
+    // decrypt private key
+    const iv = CryptoJS.enc.Hex.parse(state.seal.privateKeyIv);
+    const enc = CryptoJS.enc.Base64.parse(state.seal.privateKeyEncrypted)
+    let cipherParams = CryptoJS.lib.CipherParams.create({
+      ciphertext: enc,
+      iv: iv
+    });
+    const dec = CryptoJS.AES.decrypt(cipherParams, aes, { iv: iv });
+
+    // store unlocked seal
+    const sealKey = {
+      public: state.seal.publicKey,
+      private: dec.toString(CryptoJS.enc.Utf8),
+    };
+    await account.actions.unlockAccountSeal(sealKey);
+  };
+
+  const sealUpdate = async () => {
+    // generate key to encrypt private key
+    const salt = CryptoJS.lib.WordArray.random(128 / 8);
+    const aes = CryptoJS.PBKDF2(state.sealPassword, salt, {
+      keySize: 256 / 32,
+      iterations: 1024,
+    });
+
+    // encrypt private key
+    const iv = CryptoJS.lib.WordArray.random(128 / 8);
+    const enc = CryptoJS.AES.encrypt(state.sealKey.private, aes, { iv: iv });
+
+    // update account
+    const seal = {
+      passwordSalt: salt.toString(),
+      privateKeyIv: iv.toString(),
+      privateKeyEncrypted: enc.ciphertext.toString(CryptoJS.enc.Base64),
+      publicKey: state.sealKey.public,
+    }
+    const sealKey = { ...state.sealKey }
+    await account.actions.setAccountSeal(seal, sealKey); 
+  };
+
+  useEffect(() => {
+    if (state.sealMode === 'unlocking' && state.sealUnlock != null && state.sealUnlock !== '') {
+      return updateState({ canSaveSeal: true });
+    }
+    if (state.sealMode === 'enabling' && state.sealPassword != null && state.sealPassword === state.sealConfirm) {
+      return updateState({ canSaveSeal: true });
+    }
+    if (state.sealMode === 'disabling' && state.sealDelete === 'delete') {
+      return updateState({ canSaveSeal: true });
+    }
+    if (state.sealMode === 'updating' && state.sealPassword != null && state.sealPassword === state.sealConfirm) {
+      return updateState({ canSaveSeal: true });
+    }
+    updateState({ canSaveSeal: false });
+  }, [state.sealMode, state.sealable, state.sealUnlock, state.sealPassword, state.sealConfirm, state.sealDelete]);
+ 
   const actions = {
-    sealTest: async () => {
-      console.log("SEAL TEST");
-
-      // generate key to encrypt private key
-      const salt = CryptoJS.lib.WordArray.random(128 / 8);
-      const aes = CryptoJS.PBKDF2('testpassword', salt, {
-        keySize: 256 / 32,
-        iterations: 1024,
-      });
-
-      // generate rsa key for sealing channel, delay for activity indicator
-      await new Promise(r => setTimeout(r, 1000));
-      const crypto = new JSEncrypt({ default_key_size: 2048 });
-      const key = crypto.getKey();
-
-      // encrypt private key
-      const iv = CryptoJS.lib.WordArray.random(128 / 8);
-      const privateKey = convertPem(crypto.getPrivateKey());
-      const enc = CryptoJS.AES.encrypt(privateKey, aes, { iv: iv });
-
-      const seal = {
-        passwordSalt: salt.toString(),
-        privateKeyIv: iv.toString(),
-        privateKeyEncrypted: enc.ciphertext.toString(CryptoJS.enc.Base64),
-        publicKey: convertPem(crypto.getPublicKey()),
-      }
-      console.log("SEAL:", seal);
-
-    },
     showSealEdit: () => {
       let sealMode = null;
       const sealable = state.sealEnabled;
@@ -153,7 +225,7 @@ export function useProfileBody() {
       else {
         sealMode = 'disabled';
       }
-      updateState({ sealEdit: true, sealable, sealMode });
+      updateState({ sealEdit: true, sealable, sealMode, sealUnlock: null, sealPassword: null, sealConfirm: null, sealDelete: null });
     },
     hideSealEdit: () => {
       updateState({ sealEdit: false });
@@ -180,6 +252,23 @@ export function useProfileBody() {
         }
       }
       updateState({ sealable, sealMode });
+    },
+    saveSeal: async () => {
+      if (state.sealMode === 'enabling') {
+        await sealEnable();
+      }
+      else if (state.sealMode === 'disabling') {
+        await sealDisable();
+      }
+      else if (state.sealMode === 'unlocking') {
+        await sealUnlock();
+      }
+      else if (state.sealMode === 'updating') {
+        await sealUpdate();
+      }
+      else {
+        console.log(state.sealMode);
+      }
     },
     showSealUnlock: () => {
       updateState({ showSealUnlock: true });

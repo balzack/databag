@@ -140,8 +140,8 @@ export const styles = StyleSheet.create({
   sealUpdate: {
     position: 'absolute',
     top: 0,
-    height: '100%',
-    left: 0,
+    height: 36,
+    left: 8,
     width: '100%',
   },
   sealable: {
