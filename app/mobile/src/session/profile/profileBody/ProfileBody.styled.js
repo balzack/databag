@@ -14,6 +14,10 @@ export const styles = StyleSheet.create({
   icon: {
     paddingTop: 2,
   },
+  warn: {
+    paddingTop: 2,
+    paddingRight: 8,
+  },
   wrapper: {
     backgroundColor: Colors.formBackground,
   },
@@ -132,6 +136,27 @@ export const styles = StyleSheet.create({
   notifyText: {
     fontSize: 16,
     color: Colors.text,
+  },
+  sealUpdate: {
+    position: 'absolute',
+    top: 0,
+    height: '100%',
+    left: 0,
+    width: '100%',
+  },
+  sealable: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingBottom: 8,
+  },
+  sealableText: {
+    fontSize: 16,
+    color: Colors.text,
+  },
+  sealableSwitch: {
+    transform: [{ scaleX: .7 }, { scaleY: .7 }],
   },
   visible: {
     display: 'flex',
@@ -282,8 +307,11 @@ export const styles = StyleSheet.create({
   },
   link: {
     marginTop: 16,
+    display: 'flex',
+    flexDirection: 'row',
   },
   linkText: {
+    paddingLeft: 8,
     color: Colors.primary,
   },
   delete: {

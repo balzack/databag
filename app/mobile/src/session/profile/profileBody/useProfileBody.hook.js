@@ -36,6 +36,22 @@ export function useProfileBody() {
     blockedMessages: false,
     tabbed: null,
     disconnected: false,
+
+    seal: null,
+    sealKey: null,
+    sealEnabled: false,
+    sealUnlocked: false,
+
+    sealEdit: false,
+    sealMode: null,
+    sealable: false,
+    sealUnlock: null,
+    showSealUnlock: false,
+    sealPassword: null,
+    showSealPassword: false,
+    sealConfirm: null,
+    showSealConfirm: false,
+    sealDelete: null,
   });
 
   const app = useContext(AppContext);
@@ -66,8 +82,11 @@ export function useProfileBody() {
   }, [profile]);
 
   useEffect(() => {
-    const { searchable, pushEnabled } = account.state.status;
-    updateState({ searchable, pushEnabled });
+    const { searchable, pushEnabled, seal } = account.state.status;
+    const sealKey = account.state.sealKey;
+    const sealEnabled = seal?.publicKey != null;
+    const sealUnlocked = seal?.publicKey === sealKey?.public && sealKey?.private && sealKey?.public;
+    updateState({ searchable, pushEnabled, seal, sealKey, sealEnabled, sealUnlocked });
   }, [account]);
 
   useEffect(() => {
@@ -121,6 +140,79 @@ export function useProfileBody() {
       }
       console.log("SEAL:", seal);
 
+    },
+    showSealEdit: () => {
+      let sealMode = null;
+      const sealable = state.sealEnabled;
+      if (state.sealEnabled && !state.sealUnlocked) {
+        sealMode = 'unlocking';
+      }
+      else if (state.sealEnabled && state.sealUnlocked) {
+        sealMode = 'unlocked';
+      }
+      else {
+        sealMode = 'disabled';
+      }
+      updateState({ sealEdit: true, sealable, sealMode });
+    },
+    hideSealEdit: () => {
+      updateState({ sealEdit: false });
+    },
+    setSealable: (sealable) => {
+      let sealMode = null;
+      if (sealable !== state.sealEnabled) {
+        if (sealable) {
+          sealMode = 'enabling';
+        }
+        else {
+          sealMode = 'disabling';
+        }
+      }
+      else {
+        if (state.sealEnabled && !state.sealUnlocked) {
+          sealMode = 'unlocking';
+        }
+        else if (state.sealEnabled && state.sealUnlocked) {
+          sealMode = 'unlocked';
+        }
+        else {
+          sealMode = 'disabled';
+        }
+      }
+      updateState({ sealable, sealMode });
+    },
+    showSealUnlock: () => {
+      updateState({ showSealUnlock: true });
+    },
+    hideSealUnlock: () => {
+      updateState({ showSealUnlock: false });
+    },
+    setSealUnlock: (sealUnlock) => {
+      updateState({ sealUnlock });
+    },
+    showSealPassword: () => {
+      updateState({ showSealPassword: true });
+    },
+    hideSealPassword: () => {
+      updateState({ showSealPassword: false });
+    },
+    setSealPassword: (sealPassword) => {
+      updateState({ sealPassword });
+    },
+    showSealConfirm: () => {
+      updateState({ showSealConfirm: true });
+    },
+    hideSealConfirm: () => {
+      updateState({ showSealConfirm: false });
+    },
+    setSealConfirm: (sealConfirm) => {
+      updateState({ sealConfirm });
+    },
+    setSealDelete: (sealDelete) => {
+      updateState({ sealDelete });
+    },
+    updateSeal: () => {
+      updateState({ sealMode: 'updating' });
     },
     logout: () => {
       app.actions.logout();

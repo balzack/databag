@@ -48,8 +48,9 @@ export function useAccountContext() {
     setSession: async (access) => {
       const { guid, server, appToken } = access;
       const status = await store.actions.getAccountStatus(guid);
+      const sealKey = await store.actions.getAccountSealKey(guid);
       const revision = await store.actions.getAccountRevision(guid);
-      updateState({ status });
+      updateState({ status, sealKey });
       setRevision.current = revision;
       curRevision.current = revision;
       session.current = access;
@@ -69,6 +70,16 @@ export function useAccountContext() {
     setSearchable: async (flag) => {
       const { server, appToken } = session.current;
       await setAccountSearchable(server, appToken, flag);
+    },
+    setAccountSeal: async (seal, key) => {
+      const { guid, server, appToken } = session.current;
+      await setAccountSeal(server, appToken, seal);
+      await store.actions.setAccountSealKey(guid, key);
+      updateState({ sealKey: key });
+    },
+    unlockAccountSeal: async (key) => {
+      await store.actions.setAccountSealKey(guid, key);
+      updateState({ sealKey: key });
     },
     setLogin: async (username, password) => {
       const { server, appToken } = session.current;

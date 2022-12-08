@@ -143,10 +143,12 @@ export function ProfileBody({ navigation }) {
         </TouchableOpacity>
         <Switch style={styles.visibleSwitch} value={state.pushEnabled} onValueChange={setNotifications} trackColor={styles.switch}/>
       </View>
-      <TouchableOpacity style={styles.link} onPress={actions.sealTest}>
-        <Text style={styles.linkText}>Test Seal</Text>
+      <TouchableOpacity style={styles.link} onPress={actions.showSealEdit}>
+        <Ionicons name="setting" size={14} color={Colors.primary} />
+        <Text style={styles.linkText}>Sealed Topics</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.link} onPress={actions.showLoginEdit}>
+        <Ionicons name="lock" size={14} color={Colors.primary} />
         <Text style={styles.linkText}>Change Login</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.link} onPress={actions.showBlockedCards}>
@@ -256,6 +258,128 @@ export function ProfileBody({ navigation }) {
           </View>
         </KeyboardAvoidingView>
       </Modal>
+
+
+
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={state.sealEdit}
+        supportedOrientations={['portrait', 'landscape']}
+        onRequestClose={actions.hideSealEdit}
+      >
+        <KeyboardAvoidingView behavior="height" style={styles.editWrapper}>
+          <View style={styles.editContainer}>
+            <Text style={styles.editHeader}>Sealed Topics:</Text>
+            <View style={styles.sealable}>
+              <TouchableOpacity onPress={() => actions.setSealable(!state.sealable)} activeOpacity={1}>
+                <Text style={styles.sealableText}>Enable Sealed Topics</Text>
+              </TouchableOpacity>
+              <Switch style={styles.sealableSwitch} value={state.sealable} onValueChange={actions.setSealable} trackColor={styles.switch}/>
+            </View>
+            { state.sealMode === 'unlocking' && (
+              <>
+                { !state.showSealUnlock && (
+                  <View style={styles.inputField}>
+                    <TextInput style={styles.input} value={state.sealUnlock} onChangeText={actions.setSealUnlock}
+                        autoCapitalize={'none'} secureTextEntry={true} placeholder="Seal Password"
+                        placeholderTextColor={Colors.grey} />
+                    <TouchableOpacity onPress={actions.showSealUnlock}>
+                      <Ionicons style={styles.icon} name="eyeo" size={18} color="#888888" />
+                    </TouchableOpacity>
+                  </View>
+                )}
+                { state.showSealUnlock && (
+                  <View style={styles.inputField}>
+                    <TextInput style={styles.input} value={state.sealUnlock} onChangeText={actions.setSealUnlock}
+                        autoCapitalize={'none'} secureTextEntry={false} placeholder="Seal Password"
+                        placeholderTextColor={Colors.grey} />
+                    <TouchableOpacity onPress={actions.hideSealUnlock}>
+                      <Ionicons style={styles.icon} name="eye" size={18} color="#888888" />
+                    </TouchableOpacity>
+                  </View>
+                )}
+              </>
+            )}
+            { (state.sealMode === 'updating' || state.sealMode === 'enabling') && (
+              <>
+                { !state.showSealPassword && (
+                  <View style={styles.inputField}>
+                    <TextInput style={styles.input} value={state.sealPassword} onChangeText={actions.setSealPassword}
+                        autoCapitalize={'none'} secureTextEntry={true} placeholder="Password Seal"
+                        placeholderTextColor={Colors.grey} />
+                    <TouchableOpacity onPress={actions.showSealPassword}>
+                      <Ionicons style={styles.icon} name="eyeo" size={18} color="#888888" />
+                    </TouchableOpacity>
+                  </View>
+                )}
+                { state.showSealPassword && (
+                  <View style={styles.inputField}>
+                    <TextInput style={styles.input} value={state.sealPassword} onChangeText={actions.setSealPassword}
+                        autoCapitalize={'none'} secureTextEntry={false} placeholder="Password Seal"
+                        placeholderTextColor={Colors.grey} />
+                    <TouchableOpacity onPress={actions.hideSealPassword}>
+                      <Ionicons style={styles.icon} name="eye" size={18} color="#888888" />
+                    </TouchableOpacity>
+                  </View>
+                )}
+                { !state.showSealConfirm && (
+                  <View style={styles.inputField}>
+                    <TextInput style={styles.input} value={state.sealConfirm} onChangeText={actions.setSealConfirm}
+                        autoCapitalize={'none'} secureTextEntry={true} placeholder="Confirm Seal"
+                        placeholderTextColor={Colors.grey} />
+                    <TouchableOpacity onPress={actions.showSealConfirm}>
+                      <Ionicons style={styles.icon} name="eyeo" size={18} color="#888888" />
+                    </TouchableOpacity>
+                  </View>
+                )}
+                { state.showSealConfirm && (
+                  <View style={styles.inputField}>
+                    <TextInput style={styles.input} value={state.sealConfirm} onChangeText={actions.setSealConfirm}
+                        autoCapitalize={'none'} secureTextEntry={false} placeholder="Confirm Seal"
+                        placeholderTextColor={Colors.grey} />
+                    <TouchableOpacity onPress={actions.hideSealConfirm}>
+                      <Ionicons style={styles.icon} name="eye" size={18} color="#888888" />
+                    </TouchableOpacity>
+                  </View>
+                )}
+              </>
+            )}
+            { state.sealMode === 'disabling' && (
+              <View style={styles.inputField}>
+                <Ionicons style={styles.warn} name="exclamationcircleo" size={18} color="#888888" />
+                <TextInput style={styles.input} value={state.sealDelete} onChangeText={actions.setSealDelete}
+                    autoCapitalize={'none'} placeholder="Type 'delete' to remove sealing key"
+                    placeholderTextColor={Colors.grey} />
+              </View>
+            )}
+            { state.sealMode === 'unlocked' && (
+              <View style={styles.inputField}>
+                <TextInput style={styles.input} value={'xxxxxxxx'} editable="false" secureTextEntry={true} />
+                <TouchableOpacity style={styles.sealUpdate} onPress={actions.updateSeal} />
+              </View>
+            )}
+            <View style={styles.editControls}>
+              <TouchableOpacity style={styles.cancel} onPress={actions.hideSealEdit}>
+                <Text>Cancel</Text>
+              </TouchableOpacity>
+              { state.sealMode !== 'unlocking' && (
+                <TouchableOpacity style={styles.cancel} onPress={actions.hideSealEdit}>
+                  <Text>Save</Text>
+                </TouchableOpacity>
+              )}
+              { state.sealMode === 'unlocking' && (
+                <TouchableOpacity style={styles.cancel} onPress={actions.hideSealEdit}>
+                  <Text>Unlock</Text>
+                </TouchableOpacity>
+              )}
+            </View>
+          </View>
+        </KeyboardAvoidingView>
+      </Modal> 
+
+
+
       <Modal
         animationType="fade"
         transparent={true}

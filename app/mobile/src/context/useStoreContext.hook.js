@@ -76,6 +76,14 @@ export function useStoreContext() {
       const dataId = `${guid}_status`;
       await db.current.executeSql("INSERT OR REPLACE INTO app (key, value) values (?, ?);", [dataId, encodeObject(status)]);
     },
+    getAccountSealKey: async (guid) => {
+      const dataId = `${guid}_sealkey`;
+      return await getAppValue(db.current, dataId, {});
+    },
+    setAccountSealKey: async (guid, key) => {
+      const dataId = `${guid}_sealkey`;
+      await db.current.executeSql("INSERT OR REPLACE INTO app (key, value) values (?, ?);", [dataId, encodeObject(key)]);
+    },
     getAccountRevision: async (guid) => {
       const dataId = `${guid}_accountRevision`;
       return await getAppValue(db.current, dataId, null);
