@@ -25,7 +25,7 @@ export function useSelectItem(item, selected, markup) {
       updateState({ className: 'passive', markup: item.id === markup });
     }
     // eslint-disable-next-line
-  }, [selected]);
+  }, [selected, item]);
 
   useEffect(() => {
     updateState({ logo: card.actions.getImageUrl(item.id) });

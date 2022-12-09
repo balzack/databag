@@ -322,6 +322,8 @@ type Identity struct {
 	Version string `json:"version"`
 
 	Node string `json:"node"`
+
+  Seal string `json:"seal"`
 }
 
 //IDList general list of ids

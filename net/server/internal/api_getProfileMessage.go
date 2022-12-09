@@ -42,6 +42,7 @@ func GetProfileMessage(w http.ResponseWriter, r *http.Request) {
 		Image:       detail.Image,
 		Version:     APPVersion,
 		Node:        getStrConfigValue(CNFDomain, ""),
+    Seal:        detail.SealPublic,
 	}
 	msg, res := WriteDataMessage(detail.PrivateKey, detail.PublicKey, detail.KeyType,
 		APPSignPKCS1V15, account.GUID, APPMsgIdentity, &identity)

@@ -1,4 +1,4 @@
-import { Modal, Input, List, Button } from 'antd';
+import { Modal, Input, List, Button, Switch } from 'antd';
 import { ChannelsWrapper, AddFooter } from './Channels.styled';
 import { CommentOutlined, SearchOutlined } from '@ant-design/icons';
 import { useChannels } from './useChannels.hook';
@@ -25,6 +25,10 @@ export function Channels({ open, active }) {
 
   const addFooter = (
     <AddFooter>
+      <div class="seal">
+        <Switch checked={state.seal} onChange={actions.setSeal} size="small" />
+        <span class="sealText">Sealed Channel</span>
+      </div>
       <Button key="back" onClick={actions.clearShowAdd}>Cancel</Button>
       <Button key="save" type="primary" loading={state.busy} onClick={addChannel}>Save</Button>
     </AddFooter>

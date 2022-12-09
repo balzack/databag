@@ -102,7 +102,7 @@ export function useAccountAccess() {
     // generate rsa key for sealing channel, delay for activity indicator
     await new Promise(r => setTimeout(r, 1000));
     const crypto = new JSEncrypt({ default_key_size: 2048 });
-    const key = crypto.getKey();
+    crypto.getKey();
 
     // encrypt private key
     const iv = CryptoJS.lib.WordArray.random(128 / 8);

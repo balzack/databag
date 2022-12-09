@@ -91,7 +91,18 @@ export const AddFooter = styled.div`
   width: 100%;
   display: flex;
   flex-direction: row;
-  justify-content: flex-end;
+  justify-content: center;
   align-items: center;
+
+  .seal {
+    display: flex;
+    flex-grow: 1;
+    flex-direction: row;
+    align-items: center;
+
+    .sealText {
+      padding-left: 8px;
+    }
+  }
 `
 

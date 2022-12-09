@@ -61,6 +61,7 @@ func SetCardProfile(w http.ResponseWriter, r *http.Request) {
 	card.Version = identity.Version
 	card.Node = identity.Node
 	card.ProfileRevision = identity.Revision
+  card.Seal = identity.Seal;
 
 	err = store.DB.Transaction(func(tx *gorm.DB) error {
 

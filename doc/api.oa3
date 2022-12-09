@@ -4314,7 +4314,9 @@ components:
           type: string
         node:
           type: string
-          
+        seal:
+          type: string    
+      
     Connect:
       type: object
       required:

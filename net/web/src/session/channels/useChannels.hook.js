@@ -16,6 +16,7 @@ export function useChannels() {
     busy: false,
     members: new Set(),
     subject: null,
+    seal: false,
   });
 
   const card = useContext(CardContext);
@@ -49,11 +50,26 @@ export function useChannels() {
       }
       return added.id;
     },
+    setSeal: (seal) => {
+      if (seal) {
+        let cards = Array.from(state.members.values());
+        let members = new Set(state.members);
+        cards.forEach(id => {
+          if (!(card.state.cards.get(id)?.data?.cardProfile?.seal)) {
+            members.delete(id);
+          }    
+        });
+        updateState({ seal: true, members });
+      }
+      else {
+        updateState({ seal: false });
+      }
+    },
     onFilter: (value) => {
       setFilter(value.toUpperCase());
     },
     setShowAdd: () => {
-      updateState({ showAdd: true });
+      updateState({ showAdd: true, seal: false });
     },
     clearShowAdd: () => {
       updateState({ showAdd: false, members: new Set(), subject: null });
@@ -70,6 +86,12 @@ export function useChannels() {
     },
     setSubject: (subject) => {
       updateState({ subject });
+    },
+    cardFilter: (card) => {
+      if (state.seal) {
+        return card?.data?.cardDetail?.status === 'connected' && card?.data?.cardProfile?.seal;
+      }
+      return card?.data?.cardDetail?.status === 'connected';
     },
   };
 
