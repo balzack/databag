@@ -61,10 +61,10 @@ export function AccountAccess() {
     <EditFooter>
       <div class="select"></div>
       <Button key="back" onClick={actions.clearEditSeal}>Cancel</Button>
-      { state.editSealMode == null && state.seal && !state.sealPrivate && (
+      { state.sealMode === 'unlocking' && (
         <Button key="save" type="primary" onClick={saveSeal} disabled={!actions.canSaveSeal()} loading={state.busy}>Unlock</Button>
       )}
-      { !(state.editSealMode == null && state.seal && !state.sealPrivate) && (
+      { state.sealMode !== 'unlocking' && (
         <Button key="save" type="primary" onClick={saveSeal} disabled={!actions.canSaveSeal()} loading={state.busy}>Save</Button>
       )}
     </EditFooter>
@@ -87,36 +87,36 @@ export function AccountAccess() {
       <Modal title="Topic Sealing Key" centered visible={state.editSeal} footer={editSealFooter} onCancel={actions.clearEditSeal}>
         <SealModal>
           <div class="switch">
-            <Switch size="small" checked={state.editSealEnabled} onChange={enable => actions.enableSeal(enable)} />
+            <Switch size="small" checked={state.sealEnabled} onChange={enable => actions.enableSeal(enable)} />
             <div class="switchLabel">Enable Sealed Topics</div>
           </div>
-          { (state.editSealMode === 'updating' || state.editSealMode === 'sealing') && (
+          { (state.sealMode === 'updating' || state.sealMode === 'enabling') && (
             <div class="sealPassword">
               <Input.Password placeholder="New Password" spellCheck="false" onChange={(e) => actions.setSealPassword(e.target.value)}
                 autocomplete="new-password" prefix={<LockOutlined />} />
             </div>
           )}
-          { (state.editSealMode === 'updating' || state.editSealMode === 'sealing') && (
+          { (state.sealMode === 'updating' || state.sealMode === 'enabling') && (
             <div class="sealPassword">
               <Input.Password placeholder="Confirm Password" spellCheck="false" onChange={(e) => actions.setSealConfirm(e.target.value)}
                 autocomplete="new-password" prefix={<LockOutlined />} />
             </div>
           )}
-          { state.editSealMode === 'unsealing' && (
+          { state.sealMode === 'disabling' && (
             <div class="sealPassword">
-              <Input placeholder="Type 'delete' to remove key" spellCheck="false" onChange={(e) => actions.setUnseal(e.target.value)}
+              <Input placeholder="Type 'delete' to remove key" spellCheck="false" onChange={(e) => actions.setSealDelete(e.target.value)}
                 prefix={<ExclamationCircleOutlined />} />
             </div>
           )}
-          { state.editSealMode == null && state.editSealEnabled && state.sealPrivate && (
+          { state.sealMode === 'enabled' && (
             <div class="sealPassword" onClick={() => actions.updateSeal()}>
               <Input.Password defaultValue="xxxxxxxxxx" disabled={true} prefix={<LockOutlined />} />
               <div class="editPassword" />
             </div>
           )}
-          { state.editSealMode == null && state.seal && !state.sealPrivate && (
+          { state.sealMode === 'unlocking' && (
             <div class="sealPassword">
-              <Input placeholder="Password" spellCheck="false" onChange={(e) => actions.setUnlock(e.target.value)}
+              <Input placeholder="Password" spellCheck="false" onChange={(e) => actions.setSealUnlock(e.target.value)}
                 prefix={<LockOutlined />} />
             </div>
           )}

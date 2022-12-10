@@ -19,14 +19,16 @@ export function useAccountAccess() {
     busy: false,
     searchable: null,
     checked: true,
-    editSealEnabled: false,
-    editSealMode: null,
+
+    sealEnabled: false,
+    sealMode: null,
     sealPassword: null,
     sealConfirm: null,
-    unseal: null,
-    unlock: null,
+    sealDelete: null,
+    sealUnlock: null,
+
     seal: null,
-    sealPrivate: null,
+    sealKey: null,
   });
 
   const profile = useContext(ProfileContext);
@@ -46,8 +48,8 @@ export function useAccountAccess() {
 
   useEffect(() => {
     if (account?.state?.status) {
-      const { seal, sealPrivate, status } = account.state;
-      updateState({ searchable: status.searchabled, seal, sealPrivate });
+      const { seal, sealKey, status } = account.state;
+      updateState({ searchable: status.searchabled, seal, sealKey });
     }
   }, [account]);
 
@@ -72,7 +74,7 @@ export function useAccountAccess() {
 
     // generate key to encrypt private key
     const salt = CryptoJS.enc.Hex.parse(state.seal.passwordSalt);
-    const aes = CryptoJS.PBKDF2(state.unlock, salt, {
+    const aes = CryptoJS.PBKDF2(state.sealUnlock, salt, {
       keySize: 256 / 32,
       iterations: 1024,
     });
@@ -80,14 +82,21 @@ export function useAccountAccess() {
     // decrypt private key
     const iv = CryptoJS.enc.Hex.parse(state.seal.privateKeyIv);
     const enc = CryptoJS.enc.Base64.parse(state.seal.privateKeyEncrypted)
+
     let cipherParams = CryptoJS.lib.CipherParams.create({
       ciphertext: enc,
       iv: iv
     });
     const dec = CryptoJS.AES.decrypt(cipherParams, aes, { iv: iv });
+    const privateKey = dec.toString(CryptoJS.enc.Utf8)
 
-    // store keuy
-    await account.actions.unlockSeal(dec.toString(CryptoJS.enc.Utf8))
+    // store ke
+    const sealKey = {
+      public: state.seal.publicKey,
+      private: privateKey,
+    }
+
+    await account.actions.unlockSeal(sealKey);
   };
 
   const sealEnable = async () => {
@@ -108,19 +117,24 @@ export function useAccountAccess() {
     const iv = CryptoJS.lib.WordArray.random(128 / 8);
     const privateKey = convertPem(crypto.getPrivateKey());
     const enc = CryptoJS.AES.encrypt(privateKey, aes, { iv: iv });
+    const publicKey = convertPem(crypto.getPublicKey());
 
     // update account
     const seal = {
       passwordSalt: salt.toString(),
       privateKeyIv: iv.toString(),
       privateKeyEncrypted: enc.ciphertext.toString(CryptoJS.enc.Base64),
-      publicKey: convertPem(crypto.getPublicKey()),
+      publicKey: publicKey, 
     }
-    await account.actions.setSeal(seal, privateKey);
+    const sealKey = {
+      public: publicKey,
+      private: privateKey,
+    }
+    await account.actions.setSeal(seal, sealKey);
   };
 
   const sealRemove = async () => {
-    await account.actions.setSeal({});
+    await account.actions.setSeal({}, {});
   };
 
   const sealUpdate = async () => {
@@ -134,7 +148,7 @@ export function useAccountAccess() {
 
     // encrypt private key
     const iv = CryptoJS.lib.WordArray.random(128 / 8);
-    const enc = CryptoJS.AES.encrypt(state.privateKey, aes, { iv: iv });
+    const enc = CryptoJS.AES.encrypt(state.sealKey.private, aes, { iv: iv });
 
     // update account
     const seal = {
@@ -143,12 +157,44 @@ export function useAccountAccess() {
       privateKeyEncrypted: enc.ciphertext.toString(CryptoJS.enc.Base64),
       publicKey: state.seal.publicKey,
     }
-    await account.actions.setSeal(seal, state.privateKey);
+    await account.actions.updateSeal(seal);
   };
+
+  const isEnabled = () => {
+    if (state.seal?.publicKey) {
+      return true;
+    }
+    return false;
+  }
+
+  const isUnlocked = () => {
+    if (state.sealKey?.public && state.sealKey?.private && state.sealKey.public === state.seal.publicKey) {
+      return true;
+    }
+    return false;
+  }
 
   const actions = {
     setEditSeal: () => {
-      updateState({ editSeal: true, editSealMode: null, unlock: null, editSealEnabled: state.seal });
+      let sealMode;
+      let sealEnabled = isEnabled();
+      if (sealEnabled) {
+        if (isUnlocked()) {
+          sealMode = 'enabled';
+        }
+        else {
+          sealMode = 'unlocking';
+        }
+      }
+      else {
+        sealMode = 'disabled';
+      }
+      const editSeal = true;
+      const sealPassword = null;
+      const sealConfirm = null;
+      const sealUnlock = null;
+      const sealDelete = null;
+      updateState({ editSeal, sealMode, sealEnabled, sealPassword, sealConfirm, sealUnlock, sealDelete });
     },
     clearEditSeal: () => {
       updateState({ editSeal: false });
@@ -159,40 +205,47 @@ export function useAccountAccess() {
     setSealConfirm: (sealConfirm) => {
       updateState({ sealConfirm });
     },
-    setUnseal: (unseal) => {
-      updateState({ unseal });
+    setSealDelete: (sealDelete) => {
+      updateState({ sealDelete });
     },
-    setUnlock: (unlock) => {
-      updateState({ unlock });
+    setSealUnlock: (sealUnlock) => {
+      updateState({ sealUnlock });
     },
     updateSeal: () => {
-      updateState({ editSealMode: 'updating', sealConfirm: null, sealPassword: null });
+      updateState({ sealMode: 'updating', sealConfirm: null, sealPassword: null });
     },
     enableSeal: (enable) => {
-      if (enable && state.seal) {
-        updateState({ editSealEnabled: true, editSealMode: null });
+      let sealMode;
+      if (enable && isEnabled()) {
+        if (isUnlocked()) {
+          sealMode = 'enabled';
+        }
+        else {
+          sealMode = 'unlocking';
+        }
       }
-      else if (enable) {
-        updateState({ editSealEnabled: true, editSealMode: 'sealing', sealConfirm: null, sealPassword: null });
+      if (enable && !isEnabled()) {
+        sealMode = 'enabling';
       }
-      else if (!enable && state.seal) {
-        updateState({ editSealEnabled: false, editSealMode: 'unsealing', unseal: null });
+      if (!enable && isEnabled()) {
+        sealMode = 'disabling';
       }
-      else {
-        updateState({ editSealEnabled: false, editSealMode: null });
+      if (!enable && !isEnabled()) {
+        sealMode = 'disabled';
       }
+      updateState({ sealEnabled: enable, sealMode });
     },
     canSaveSeal: () => {
-      if (state.editSealMode === 'unsealing' && state.unseal === 'delete') {
+      if (state.sealMode === 'disabling' && state.sealDelete === 'delete') {
         return true;
       }
-      if (state.editSealMode === 'sealing' && state.sealPassword && state.sealPassword === state.sealConfirm) {
+      if (state.sealMode === 'enabling' && state.sealPassword && state.sealPassword === state.sealConfirm) {
         return true;
       }
-      if (state.editSealMode === 'updating' && state.sealPassword && state.sealPassword === state.sealConfirm) {
+      if (state.sealMode === 'updating' && state.sealPassword && state.sealPassword === state.sealConfirm) {
         return true;
       }
-      if (state.editSealMode == null && state.seal && !state.sealPrivate) {
+      if (state.sealMode === 'unlocking' && state.sealUnlock) {
         return true;
       }
       return false;
@@ -203,16 +256,16 @@ export function useAccountAccess() {
       }
       updateState({ busy: true });
       try {
-        if (state.editSealMode === 'sealing') {
+        if (state.sealMode === 'enabling') {
           await sealEnable();
         }
-        else if (state.editSealMode === 'unsealing') {
+        else if (state.sealMode === 'disabling') {
           await sealRemove();
         }
-        else if (state.editSealMode === 'updating') {
+        else if (state.sealMode === 'updating') {
           await sealUpdate();
-        } 
-        else {
+        }
+        else if (state.sealMode === 'unlocking') {
           await sealUnlock();
         }
         updateState({ busy: false });

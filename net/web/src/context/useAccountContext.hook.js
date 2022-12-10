@@ -1,4 +1,4 @@
-import { useContext, useState, useRef } from 'react';
+import { useEffect, useContext, useState, useRef } from 'react';
 import { setAccountSearchable } from 'api/setAccountSearchable';
 import { setAccountSeal } from 'api/setAccountSeal';
 import { getAccountStatus } from 'api/getAccountStatus';
@@ -22,34 +22,15 @@ export function useAccountContext() {
     setState((s) => ({ ...s, ...value }))
   }
 
+  useEffect(() => {
+    updateState({ sealKey: storeContext.state.sealKey });
+  }, [storeContext.state.sealKey]);
+
   const setStatus = async (rev) => {
     if (next.current == null) {
       if (revision.current !== rev) {
         let status = await getAccountStatus(access.current);
-        let seal = status.seal?.publicKey ? status.seal : null;
-        let sealPrivate = null;
-        const pubKey = await storeContext.actions.getValue("seal:public");
-        const privKey = await storeContext.actions.getValue("seal:private");
-        if (status.seal?.publicKey == null) {
-          if (pubKey != null) {
-            await storeContext.actions.setValue("seal:public", null);
-          }
-          if (privKey != null) {
-            await storeContext.actions.setValue("seal:private", null);
-          }
-        }
-        else {
-          if (pubKey !== status.seal?.publicKey) {
-            if (privKey != null) {
-              await storeContext.actions.setValue("seal:private", null);
-            }
-            await storeContext.actions.setValue("seal:public", status.seal?.publicKey);
-          }
-          if (privKey != null) {
-            sealPrivate = privKey;
-          }
-        }
-        updateState({ init: true, status, seal, sealPrivate });
+        updateState({ init: true, status, seal: status.seal });
         revision.current = rev;
       }
       if (next.current != null) {
@@ -70,7 +51,7 @@ export function useAccountContext() {
     clearToken: () => {
       access.current = null;
       revision.current = 0;
-      setState({ init: false });
+      setState({ init: false, seal: {}, sealKey: {} });
     },
     setRevision: async (rev) => {
       setStatus(rev);
@@ -78,16 +59,17 @@ export function useAccountContext() {
     setSearchable: async (flag) => {
       await setAccountSearchable(access.current, flag);
     },
-    setSeal: async (seal, sealPrivate) => {
-      await storeContext.actions.setValue("seal:private", null);
-      await storeContext.actions.setValue("seal:public", seal.publicKey);
-      await storeContext.actions.setValue("seal:private", sealPrivate);
+    setSeal: async (seal, sealKey) => {
       await setAccountSeal(access.current, seal);
-      updateState({ seal, sealPrivate });
+      await storeContext.actions.setValue("sealKey", sealKey);
+      updateState({ sealKey });
     },
-    unlockSeal: async (sealPrivate) => {
-      await storeContext.actions.setValue("seal:private", sealPrivate);
-      updateState({ sealPrivate });
+    updateSeal: async (seal) => {
+      await setAccountSeal(access.current, seal);
+    },
+    unlockSeal: async (sealKey) => {
+      await storeContext.actions.setValue("sealKey", sealKey);
+      updateState({ sealKey });
     },
     setLogin: async (username, password) => {
       await setAccountLogin(access.current, username, password);
