@@ -229,7 +229,7 @@ export function useChannels() {
       updateState({ adding: false });
     },
     addTopic: async () => {
-      return await channel.actions.add(state.addSubject, state.addMembers);
+      return await channel.actions.addBasic(state.addSubject, state.addMembers);
     }
   };
 

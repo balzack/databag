@@ -275,9 +275,13 @@ export function useChannelContext() {
       const { server, appToken } = session.current;
       return await removeChannel(server, appToken, channelId);
     },
-    add: async (subject, cards) => {
+    addBasic: async (subject, cards) => {
       const { server, appToken } = session.current;
-      return await addChannel(server, appToken, subject, cards);
+      return await addChannel(server, appToken, 'superbasic', subject, cards);
+    },
+    addSealed: async (subject, cards) => {
+      const { server, appToken } = session.current;
+      return await addChannel(server, appToken, 'sealed', subject, cards);
     },
     removeTopic: async (channelId, topicId) => {
       const { server, appToken } = session.current;
