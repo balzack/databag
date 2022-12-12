@@ -15,9 +15,10 @@ export function useChannels() {
     tabbed: null,
     filter: null,
     adding: false,
-    connected: [],
+    contacts: [],
     addSubject: null,
     addMembers: [],
+    sealed: false,
   });
 
   const items = useRef([]);
@@ -33,10 +34,16 @@ export function useChannels() {
 
   useEffect(() => {
     const contacts = Array.from(card.state.cards.values());
-    const connected = contacts.filter(contact => {
-      return contact.detail.status === 'connected'
+    const filtered = contacts.filter(contact => {
+      if (contact.detail.status !== 'connected') {
+        return false;
+      }
+      if (state.sealed && !contact.profile.seal) {
+        return false;
+      }
+      return true;
     });
-    const sorted = connected.sort((a, b) => {
+    const sorted = filtered.sort((a, b) => {
       const aName = a?.profile?.name;
       const bName = b?.profile?.name;
       if (aName === bName) {
@@ -47,8 +54,9 @@ export function useChannels() {
       }
       return 1;
     });
-    updateState({ connected: sorted });
-  }, [card]);
+    const addMembers = state.addMembers.filter(item => sorted.some(contact => contact.cardId === item));
+    updateState({ contacts: sorted, addMembers });
+  }, [card, state.sealed]);
 
   useEffect(() => {
     if (dimensions.width > config.tabbedWidth) {
@@ -196,6 +204,9 @@ export function useChannels() {
   }, [channel, card, state.filter]);
 
   const actions = {
+    setSealed: (sealed) => {
+      updateState({ sealed });
+    },
     setTopic: (topic) => {
       updateState({ topic });
     },

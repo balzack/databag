@@ -116,6 +116,7 @@ export const styles = StyleSheet.create({
     width: 72,
     display: 'flex',
     alignItems: 'center',
+    justifyContent: 'center',
   },
   save: {
     backgroundColor: Colors.primary,
@@ -125,6 +126,7 @@ export const styles = StyleSheet.create({
     width: 72,
     display: 'flex',
     alignItems: 'center',
+    justifyContent: 'center',
   },
   saveText: {
     color: Colors.white,
@@ -132,7 +134,15 @@ export const styles = StyleSheet.create({
   addControls: {
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'flex-end',
+  },
+  sealed: {
+    display: 'flex',
+    flexDirection: 'row',
+    flexGrow: 1,
+    alignItems: 'center',
+  },
+  sealedText: {
+    color: Colors.text,
   },
   addWrapper: {
     display: 'flex',
@@ -193,6 +203,13 @@ export const styles = StyleSheet.create({
   label: {
     fontSize: 12,
     color: Colors.grey,
+  },
+  track: {
+    false: Colors.grey,
+    true: Colors.background,
+  },
+  switch: {
+    transform: [{ scaleX: .7 }, { scaleY: .7 }],
   },
 })
 

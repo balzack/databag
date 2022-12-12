@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { Alert, FlatList, Modal, KeyboardAvoidingView, ScrollView, View, TextInput, TouchableOpacity, Text } from 'react-native';
+import { Switch, Alert, FlatList, Modal, KeyboardAvoidingView, ScrollView, View, TextInput, TouchableOpacity, Text } from 'react-native';
 import { styles } from './Channels.styled';
 import { useChannels } from './useChannels.hook';
 import Ionicons from '@expo/vector-icons/AntDesign';
@@ -72,20 +72,25 @@ export function ChannelsBody({ state, actions, openConversation }) {
                   autoCapitalize="words" placeholder="Subject (optional)" placeholderTextColor={Colors.grey} />
             </View>
             <Text style={styles.label}>Members:</Text>
-            { state.connected.length == 0 && (
+            { state.contacts.length == 0 && (
               <View style={styles.emptyMembers}>
                 <Text style={styles.empty}>No Connected Contacts</Text>
               </View>
             )}
-            { state.connected.length > 0 && (
+            { state.contacts.length > 0 && (
               <FlatList style={styles.addMembers}
-                data={state.connected}
+                data={state.contacts}
                 renderItem={({ item }) => <AddMember members={state.addMembers} item={item}
                     setCard={actions.setAddMember} clearCard={actions.clearAddMember} />}
                 keyExtractor={item => item.cardId}
               />
             )}
             <View style={styles.addControls}>
+              <View style={styles.sealed}>
+                <Switch style={styles.switch} trackColor={styles.track}
+                  value={state.sealed} onValueChange={actions.setSealed} />
+                <Text style={styles.sealedText}>Sealed</Text>
+              </View>
               <TouchableOpacity style={styles.cancel} onPress={actions.hideAdding}>
                 <Text>Cancel</Text>
               </TouchableOpacity>
@@ -164,20 +169,25 @@ export function Channels({ openConversation }) {
                   autoCapitalize="words" placeholder="Subject (optional)" placeholderTextColor={Colors.grey} />
             </View>
             <Text style={styles.label}>Members:</Text>
-            { state.connected.length == 0 && (
+            { state.contacts.length == 0 && (
               <View style={styles.emptyMembers}>
                 <Text style={styles.empty}>No Connected Contacts</Text>
               </View>
             )}
-            { state.connected.length > 0 && (
+            { state.contacts.length > 0 && (
               <FlatList style={styles.addMembers}
-                data={state.connected}
+                data={state.contacts}
                 renderItem={({ item }) => <AddMember members={state.addMembers} item={item}
                     setCard={actions.setAddMember} clearCard={actions.clearAddMember} />}
                 keyExtractor={item => item.cardId}
               />
             )}
             <View style={styles.addControls}>
+              <View style={styles.sealed}>
+                <Switch style={styles.switch} trackColor={styles.track}
+                  value={state.sealed} onValueChange={actions.setSealed} />
+                <Text>Sealed</Text>
+              </View>
               <TouchableOpacity style={styles.cancel} onPress={actions.hideAdding}>
                 <Text>Cancel</Text>
               </TouchableOpacity>
