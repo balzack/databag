@@ -3,6 +3,7 @@ import { useWindowDimensions } from 'react-native';
 import { useNavigate } from 'react-router-dom';
 import { CardContext } from 'context/CardContext';
 import { ChannelContext } from 'context/ChannelContext';
+import { AccountContext } from 'context/AccountContext';
 import { ProfileContext } from 'context/ProfileContext';
 import { AppContext } from 'context/AppContext';
 import config from 'constants/Config';
@@ -19,9 +20,11 @@ export function useChannels() {
     addSubject: null,
     addMembers: [],
     sealed: false,
+    sealable: false,
   });
 
   const items = useRef([]);
+  const account = useContext(AccountContext);
   const channel = useContext(ChannelContext);
   const card = useContext(CardContext);
   const profile = useContext(ProfileContext);
@@ -31,6 +34,16 @@ export function useChannels() {
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
   }
+
+  useEffect(() => {
+    const { status, sealKey } = account.state;
+    if (status?.seal?.publicKey && sealKey?.public && sealKey?.private && sealKey?.public === status.seal.publicKey) {
+      updateState({ sealable: true });
+    }
+    else {
+      updateState({ sealed: false, sealable: false });
+    }
+  }, [account]);
 
   useEffect(() => {
     const contacts = Array.from(card.state.cards.values());

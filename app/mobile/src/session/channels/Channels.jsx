@@ -87,9 +87,13 @@ export function ChannelsBody({ state, actions, openConversation }) {
             )}
             <View style={styles.addControls}>
               <View style={styles.sealed}>
-                <Switch style={styles.switch} trackColor={styles.track}
-                  value={state.sealed} onValueChange={actions.setSealed} />
-                <Text style={styles.sealedText}>Sealed</Text>
+                { state.sealable && (
+                  <>
+                    <Switch style={styles.switch} trackColor={styles.track}
+                      value={state.sealed} onValueChange={actions.setSealed} />
+                    <Text style={styles.sealedText}>Sealed</Text>
+                  </>
+                )}
               </View>
               <TouchableOpacity style={styles.cancel} onPress={actions.hideAdding}>
                 <Text>Cancel</Text>
@@ -184,9 +188,13 @@ export function Channels({ openConversation }) {
             )}
             <View style={styles.addControls}>
               <View style={styles.sealed}>
-                <Switch style={styles.switch} trackColor={styles.track}
-                  value={state.sealed} onValueChange={actions.setSealed} />
-                <Text>Sealed</Text>
+                { state.sealable && (
+                  <>
+                    <Switch style={styles.switch} trackColor={styles.track}
+                      value={state.sealed} onValueChange={actions.setSealed} />
+                    <Text>Sealed</Text>
+                  </>
+                )}
               </View>
               <TouchableOpacity style={styles.cancel} onPress={actions.hideAdding}>
                 <Text>Cancel</Text>
