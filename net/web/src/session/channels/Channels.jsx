@@ -26,8 +26,12 @@ export function Channels({ open, active }) {
   const addFooter = (
     <AddFooter>
       <div class="seal">
-        <Switch checked={state.seal} onChange={actions.setSeal} size="small" />
-        <span class="sealText">Sealed Channel</span>
+        { state.sealable && (
+          <>
+            <Switch checked={state.seal} onChange={actions.setSeal} size="small" />
+            <span class="sealText">Sealed Channel</span>
+          </>
+        )}
       </div>
       <Button key="back" onClick={actions.clearShowAdd}>Cancel</Button>
       <Button key="save" type="primary" loading={state.busy} onClick={addChannel}>Save</Button>

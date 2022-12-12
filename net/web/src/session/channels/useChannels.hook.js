@@ -2,6 +2,7 @@ import { useContext, useState, useEffect } from 'react';
 import { StoreContext } from 'context/StoreContext';
 import { ChannelContext } from 'context/ChannelContext';
 import { CardContext } from 'context/CardContext';
+import { AccountContext } from 'context/AccountContext';
 import { ProfileContext } from 'context/ProfileContext';
 import { ViewportContext } from 'context/ViewportContext';
 
@@ -17,13 +18,25 @@ export function useChannels() {
     members: new Set(),
     subject: null,
     seal: false,
+    sealable: false,
   });
 
   const card = useContext(CardContext);
   const channel = useContext(ChannelContext);
+  const account = useContext(AccountContext);
   const store = useContext(StoreContext);
   const profile = useContext(ProfileContext);
   const viewport = useContext(ViewportContext);
+
+  useEffect(() => {
+    const { seal, sealKey } = account.state;
+    if (seal?.publicKey && sealKey?.public && sealKey?.private && seal.publicKey === sealKey.public) {
+      updateState({ sealable: true });
+    }
+    else {
+      updateState({ sealable: false });
+    }
+  }, [account]);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
