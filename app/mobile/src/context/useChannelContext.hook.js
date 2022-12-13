@@ -46,7 +46,9 @@ export function useChannelContext() {
     update.channelId = channel?.id;
     update.revision = channel?.revision;
     update.detail = channel?.data?.channelDetail;
+    update.unsealedDetail = null;
     update.summary = channel?.data?.channelSummary;
+    update.unsealedSummary = null;
     update.detailRevision = channel?.data?.detailRevision;
     update.topicRevision = channel?.data?.topicRevision;
     channels.current.set(channelId, update);
@@ -55,6 +57,7 @@ export function useChannelContext() {
     let channel = channels.current.get(channelId);
     if (channel) {
       channel.detail = detail;
+      channel.unsealed_detail = null;
       channel.detailRevision = revision;
       channels.current.set(channelId, channel);
     }
@@ -63,6 +66,7 @@ export function useChannelContext() {
     let channel = channels.current.get(channelId);
     if (channel) {
       channel.summary = summary;
+      channel.unsealed_summary = null;
       channel.topicRevision = revision;
       channels.current.set(channelId, channel);
     }

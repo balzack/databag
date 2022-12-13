@@ -8,7 +8,7 @@ export async function getContactChannels(server, token, viewRevision, channelRev
   if (channelRevision != null) {
     param += `&channelRevision=${channelRevision}`;
   }
-  param += `&types=${encodeURIComponent(JSON.stringify(['superbasic']))}`;
+  param += `&types=${encodeURIComponent(JSON.stringify(['sealed','superbasic']))}`;
   let channels = await fetchWithTimeout(`https://${server}/content/channels${param}`, { method: 'GET' });
   checkResponse(channels)
   return await channels.json()

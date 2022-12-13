@@ -132,7 +132,9 @@ export function useCardContext() {
       detailRevision: channel?.data?.detailRevision,
       topicRevision: channel?.data?.topicRevision,
       detail: channel?.data?.channelDetail,
+      unsealed_detail: null,
       summary: channel?.data?.channelSummary,
+      unsealed_summary: null,
     });
   }
   const setCardChannelItem = (cardId, channel) => {
@@ -148,6 +150,7 @@ export function useCardContext() {
       let channel = card.channels.get(channelId);
       if (channel) {
         channel.detail = detail;
+        channel.unsealed_detail = null;
         channel.detailRevision = revision;
         card.channels.set(channelId, channel);
         cards.current.set(cardId, card);
@@ -160,6 +163,7 @@ export function useCardContext() {
       let channel = card.channels.get(channelId);
       if (channel) {
         channel.summary = summary;
+        channel.unsealed_summary = null;
         channel.topicRevision = revision;
         card.channels.set(channelId, channel);
         cards.current.set(cardId, card);
