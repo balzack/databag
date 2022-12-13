@@ -242,6 +242,15 @@ export function useChannels() {
       updateState({ adding: false });
     },
     addTopic: async () => {
+      if (state.sealed) {
+        let keys = [ account.state.status.seal.publicKey ];
+        state.contacts.forEach(contact => {
+          if(state.addMembers.includes(contact.cardId)) {
+            keys.push(contact.profile.seal);
+          }
+        });
+        return await channel.actions.addSealed(state.addSubject, state.addMembers, keys);
+      }
       return await channel.actions.addBasic(state.addSubject, state.addMembers);
     }
   };

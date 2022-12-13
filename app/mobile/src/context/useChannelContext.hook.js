@@ -18,6 +18,8 @@ import { clearChannelCard } from 'api/clearChannelCard';
 import { addFlag } from 'api/addFlag';
 import { setChannelNotifications } from 'api/setChannelNotifications';
 import { getChannelNotifications } from 'api/getChannelNotifications';
+import { JSEncrypt } from 'jsencrypt'
+import CryptoJS from "crypto-js";
 
 export function useChannelContext() {
   const [state, setState] = useState({
@@ -277,11 +279,28 @@ export function useChannelContext() {
     },
     addBasic: async (subject, cards) => {
       const { server, appToken } = session.current;
-      return await addChannel(server, appToken, 'superbasic', subject, cards);
+      return await addChannel(server, appToken, 'superbasic', { subject }, cards);
     },
-    addSealed: async (subject, cards) => {
+    addSealed: async (subject, cards, keys) => {
       const { server, appToken } = session.current;
-      return await addChannel(server, appToken, 'sealed', subject, cards);
+
+      const key = CryptoJS.lib.WordArray.random(256 / 8);
+      const iv = CryptoJS.lib.WordArray.random(128 / 8);
+      const encrypted = CryptoJS.AES.encrypt(JSON.stringify({ subject }), key, { iv: iv });
+      const subjectEncrypted = encrypted.ciphertext.toString(CryptoJS.enc.Base64)
+      const subjectIv = iv.toString();
+      const keyHex = key.toString();
+
+      let seals = [];
+      let crypto = new JSEncrypt();
+      keys.forEach(publicKey => {
+        crypto.setPublicKey(publicKey);
+        const sealedKey = crypto.encrypt(keyHex);
+        seals.push({ publicKey, sealedKey });
+      });
+
+      const data = { subjectEncrypted, subjectIv, seals };
+      return await addChannel(server, appToken, 'sealed', data, cards);
     },
     removeTopic: async (channelId, topicId) => {
       const { server, appToken } = session.current;
