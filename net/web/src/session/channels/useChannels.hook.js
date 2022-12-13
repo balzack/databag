@@ -153,12 +153,36 @@ export function useChannels() {
 
   const setSubject = (chan) => {
     let subject = "";
-    if (chan.data.channelDetail?.data) {
-      try {
-        subject = JSON.parse(chan.data.channelDetail?.data).subject;
+    if (chan.data.channelDetail.dataType === 'sealed') {
+      chan.locked = chan.data.channelDetail.dataType === 'sealed'
+      if (state.sealable) {
+        try {
+          if (chan.data.unsealedChannel == null) {
+            if (chan.cardId) {
+              card.actions.unsealChannelSubject(chan.cardId, chan.id, account.state.sealKey);
+            }
+            else {
+              channel.actions.unsealChannelSubject(chan.id, account.state.sealKey);
+            }
+          }
+          else {
+            chan.unlocked = true;
+            subject = chan.data.unsealedChannel.subject;
+          }
+        }
+        catch (err) {
+          console.log(err)
+        }
       }
-      catch (err) {
-        console.log(err);
+    }
+    else {
+      if (chan.data.channelDetail?.data) {
+        try {
+          subject = JSON.parse(chan.data.channelDetail?.data).subject;
+        }
+        catch (err) {
+          console.log(err);
+        }
       }
     }
     if (!subject) {
@@ -223,7 +247,7 @@ export function useChannels() {
     updateState({ channels: filtered });
 
     // eslint-disable-next-line
-  }, [channel, card, store, filter]);
+  }, [channel, card, store, filter, state.sealable]);
 
   useEffect(() => {
     updateState({ display: viewport.state.display });

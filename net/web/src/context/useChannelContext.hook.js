@@ -43,10 +43,12 @@ export function useChannelContext() {
         if (cur.data.detailRevision !== channel.data.detailRevision) {
           if (channel.data.channelDetail != null) {
             cur.data.channelDetail = channel.data.channelDetail;
+            cur.data.unsealedSubject = null;
           }
           else {
             let detail = await getChannelDetail(access.current, channel.id);
             cur.data.channelDetail = detail;
+            cur.data.unsealedSubject = null;
           }
           cur.data.detailRevision = channel.data.detailRevision;
         }
@@ -127,6 +129,11 @@ export function useChannelContext() {
 
       const data = { subjectEncrypted, subjectIv, seals };
       return await addChannel(access.current, 'sealed', cards, data);
+    },
+    unsealChannelSubject: (channelId, sealKey) => {
+      console.log("unseal: ", channelId);
+      let sealed = channels.current.get(channelId);
+      console.log(sealed);
     },
     setChannelSubject: async (channelId, subject) => {
       return await setChannelSubject(access.current, channelId, subject);

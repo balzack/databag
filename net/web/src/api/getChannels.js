@@ -5,7 +5,7 @@ export async function getChannels(token, revision) {
   if (revision != null) {
     param += `&channelRevision=${revision}`
   }
-  let types = encodeURIComponent(JSON.stringify([ 'superbasic' ]));
+  let types = encodeURIComponent(JSON.stringify([ 'sealed', 'superbasic' ]));
   param += `&types=${types}`
   let channels = await fetchWithTimeout('/content/channels' + param, { method: 'GET' });
   checkResponse(channels)

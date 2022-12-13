@@ -1,7 +1,7 @@
 import { Tooltip } from 'antd';
 import { ChannelItemWrapper, Markup } from './ChannelItem.styled';
 import { Logo } from 'logo/Logo';
-import { AppstoreFilled, SolutionOutlined } from '@ant-design/icons';
+import { AppstoreFilled, SolutionOutlined, UnlockOutlined, LockFilled } from '@ant-design/icons';
 
 export function ChannelItem({ item, openChannel, active }) {
 
@@ -32,7 +32,15 @@ export function ChannelItem({ item, openChannel, active }) {
               <Logo url={item.logo} width={32} height={32} radius={8} />
             </div>
             <div class="details">
-              <div class="subject">{ item.subject }</div>
+              <div class="subject">
+                { item.locked && !item.unlocked && (
+                  <LockFilled style={{ paddingRight: 8 }}/>
+                )}
+                { item.locked && item.unlocked && (
+                  <UnlockOutlined style={{ paddingRight: 8 }}/>
+                )}
+                <span>{ item.subject }</span>
+              </div>
               <div class="message">{ item.message }</div>
             </div>
             { item.updated && (
@@ -46,7 +54,15 @@ export function ChannelItem({ item, openChannel, active }) {
               <AppstoreFilled />
             </div>
             <div class="details">
-              <div class="subject">{ item.subject }</div>
+              <div class="subject">
+                { item.locked && !item.unlocked && (
+                  <LockFilled style={{ paddingRight: 8 }}/>
+                )}
+                { item.locked && item.unlocked && (
+                  <UnlockOutlined style={{ paddingRight: 8 }}/>
+                )}
+                <span>{ item.subject }</span>
+              </div>
               <div class="message">{ item.message }</div>
             </div>
             { item.updated && (

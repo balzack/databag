@@ -116,7 +116,7 @@ export function AccountAccess() {
           )}
           { state.sealMode === 'unlocking' && (
             <div class="sealPassword">
-              <Input placeholder="Password" spellCheck="false" onChange={(e) => actions.setSealUnlock(e.target.value)}
+              <Input.Password placeholder="Password" spellCheck="false" onChange={(e) => actions.setSealUnlock(e.target.value)}
                 prefix={<LockOutlined />} />
             </div>
           )}

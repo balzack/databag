@@ -23,6 +23,8 @@ import { getContactChannelTopicAssetUrl } from 'api/getContactChannelTopicAssetU
 import { addCard } from 'api/addCard';
 import { removeCard } from 'api/removeCard';
 import { UploadContext } from 'context/UploadContext';
+import CryptoJS from 'crypto-js';
+import { JSEncrypt } from 'jsencrypt'
 
 export function useCardContext() {
   const [state, setState] = useState({
@@ -270,6 +272,28 @@ export function useCardContext() {
         return null;
       }
       return card.data.cardProfile.name;
+    },
+    unsealChannelSubject: (cardId, channelId, sealKey) => {
+      const card = cards.current.get(cardId);
+      const channel = card.channels.get(channelId);
+
+      const { subjectEncrypted, subjectIv, seals } = JSON.parse(channel.data.channelDetail.data);
+      seals.forEach(seal => {
+        if (seal.publicKey === sealKey.public) {
+          let crypto = new JSEncrypt();
+          crypto.setPrivateKey(sealKey.private);
+          const unsealedKey = crypto.decrypt(seal.sealedKey);
+          const iv = CryptoJS.enc.Hex.parse(subjectIv);
+          const key = CryptoJS.enc.Hex.parse(unsealedKey);
+          const enc = CryptoJS.enc.Base64.parse(subjectEncrypted);
+          let cipher = CryptoJS.lib.CipherParams.create({ ciphertext: enc, iv: iv });
+          const dec = CryptoJS.AES.decrypt(cipher, key, { iv: iv });
+          channel.data.unsealedChannel = JSON.parse(dec.toString(CryptoJS.enc.Utf8));
+          card.channels.set(channel.id, { ...channel });
+          cards.current.set(cardId, { ...card });
+          updateState({ cards: cards.current });
+        }
+      });
     },
     removeChannel: async (cardId, channelId) => {
       let { cardProfile, cardDetail } = cards.current.get(cardId).data;
