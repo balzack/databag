@@ -34,7 +34,7 @@ export function useChannels() {
       updateState({ sealable: true });
     }
     else {
-      updateState({ sealable: false });
+      updateState({ seal: false, sealable: false });
     }
   }, [account]);
 
@@ -49,7 +49,16 @@ export function useChannels() {
         try {
           updateState({ busy: true });
           let cards = Array.from(state.members.values());
-          added = await channel.actions.addChannel(cards, state.subject, null);
+          if (state.seal) {
+            let keys = [ account.state.sealKey.public ];
+            cards.forEach(id => {
+              keys.push(card.state.cards.get(id).data.cardProfile.seal);
+            });
+            added = await channel.actions.addSealedChannel(cards, state.subject, keys);
+          }
+          else {
+            added = await channel.actions.addBasicChannel(cards, state.subject);
+          }
           updateState({ busy: false });
         }
         catch(err) {

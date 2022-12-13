@@ -14,6 +14,8 @@ import { setChannelSubject } from 'api/setChannelSubject';
 import { setChannelCard } from 'api/setChannelCard';
 import { clearChannelCard } from 'api/clearChannelCard';
 import { UploadContext } from 'context/UploadContext';
+import CryptoJS from 'crypto-js';
+import { JSEncrypt } from 'jsencrypt'
 
 export function useChannelContext() {
   const [state, setState] = useState({
@@ -104,8 +106,27 @@ export function useChannelContext() {
     setRevision: async (rev) => {
       setChannels(rev);
     },
-    addChannel: async (cards, subject, description) => {
-      return await addChannel(access.current, cards, subject, description);
+    addBasicChannel: async (cards, subject) => {
+      return await addChannel(access.current, 'superbasic', cards, { subject });
+    },
+    addSealedChannel: async (cards, subject, keys) => {
+      const key = CryptoJS.lib.WordArray.random(256 / 8);
+      const iv = CryptoJS.lib.WordArray.random(128 / 8);
+      const encrypted = CryptoJS.AES.encrypt(JSON.stringify({ subject }), key, { iv: iv });
+      const subjectEncrypted = encrypted.ciphertext.toString(CryptoJS.enc.Base64)
+      const subjectIv = iv.toString();
+      const keyHex = key.toString();
+
+      let seals = [];
+      let crypto = new JSEncrypt();
+      keys.forEach(publicKey => {
+        crypto.setPublicKey(publicKey);
+        const sealedKey = crypto.encrypt(keyHex);
+        seals.push({ publicKey, sealedKey });
+      });
+
+      const data = { subjectEncrypted, subjectIv, seals };
+      return await addChannel(access.current, 'sealed', cards, data);
     },
     setChannelSubject: async (channelId, subject) => {
       return await setChannelSubject(access.current, channelId, subject);
