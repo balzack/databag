@@ -21,6 +21,9 @@ export function useConversationContext() {
     cardId: null,
     channelId: null,
     pushEnabled: null,
+    locked: false,
+    unlocked: false,
+    seals: null,
   });
   const store = useContext(StoreContext);
   const upload = useContext(UploadContext);
@@ -275,6 +278,9 @@ export function useConversationContext() {
     let logo = null;
     let topic = null;
     let subject = null;
+    let locked = false;
+    let unlocked = false;
+    let seals = null;
 
     let timestamp;
     const date = new Date(item.detail.created * 1000);
@@ -323,13 +329,28 @@ export function useConversationContext() {
       logo = 'appstore';
     }
 
-    if (item?.detail?.data) {
+    if (item?.detail?.dataType === 'sealed') {
+      locked = true;
+      unlocked = item.unsealedDetail != null;
+      if (item.unsealedDetail?.subject) {
+        subject = item.unsealedDetail.subject;
+      }
       try {
-        topic = JSON.parse(item?.detail?.data).subject;
-        subject = topic;
+        seals = JSON.parse(item.detail.data).seals;
       }
       catch (err) {
         console.log(err);
+      }
+    }
+    else {
+      if (item?.detail?.data) {
+        try {
+          topic = JSON.parse(item?.detail?.data).subject;
+          subject = topic;
+        }
+        catch (err) {
+          console.log(err);
+        }
       }
     }
     if (!subject) {
@@ -354,7 +375,7 @@ export function useConversationContext() {
 
     const { enableImage, enableAudio, enableVideo } = item.detail;
     updateState({ topic, subject, logo, contacts, host: item.cardId, created: timestamp,
-      enableImage, enableAudio, enableVideo, pushEnabled });
+      enableImage, enableAudio, enableVideo, pushEnabled, locked, unlocked, seals });
   }
 
   useEffect(() => {

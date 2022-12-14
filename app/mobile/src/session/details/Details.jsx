@@ -2,7 +2,8 @@ import { KeyboardAvoidingView, FlatList, Alert, Modal, View, Text, Switch, Touch
 import { styles } from './Details.styled';
 import { useDetails } from './useDetails.hook';
 import { Logo } from 'utils/Logo';
-import Ionicons from '@expo/vector-icons/AntDesign';
+import AntIcons from '@expo/vector-icons/AntDesign';
+import MatIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import Colors from 'constants/Colors';
 import { MemberItem } from './memberItem/MemberItem';
 
@@ -127,12 +128,20 @@ export function DetailsBody({ channel, clearConversation }) {
       <View style={styles.details}>
         <Logo src={state.logo} width={72} height={72} radius={8} />
         <View style={styles.info}>
-          <TouchableOpacity style={styles.subject} onPress={actions.showEditSubject}>
+          <View style={styles.subject}>
+            { state.locked && !state.unlocked && (
+              <AntIcons name="lock" style={styles.subjectIcon} size={16} color={Colors.text} />
+            )}
+            { state.locked && state.unlocked && (
+              <MatIcons name="lock-open-variant-outline" style={styles.subjectIcon} size={16} color={Colors.text} />
+            )}
             <Text style={styles.subjectText} numberOfLines={1} ellipsizeMode={'tail'}>{ state.subject }</Text>
             { !state.hostId && (
-              <Ionicons name="edit" size={16} color={Colors.text} />
+              <TouchableOpacity onPress={actions.showEditSubject}>
+                <AntIcons name="edit" size={16} color={Colors.text} />
+              </TouchableOpacity>
             )}
-          </TouchableOpacity>
+          </View>
           <Text style={styles.created}>{ state.created }</Text>
           <Text style={styles.mode}>{ state.hostId ? 'guest' : 'host' }</Text>
         </View>  

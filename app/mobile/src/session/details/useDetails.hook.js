@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ConversationContext } from 'context/ConversationContext';
 import { CardContext } from 'context/CardContext';
+import { AccountContext } from 'context/AccountContext';
 
 export function useDetails() {
 
@@ -16,8 +17,13 @@ export function useDetails() {
     editMembers: false,
     subjectUpdate: null,
     pushEnabled: null,
+    locked: false,
+    unlocked: false,
+    sealable: false,
+    
   });
 
+  const account = useContext(AccountContext);
   const card = useContext(CardContext);
   const conversation = useContext(ConversationContext);
   const navigate = useNavigate();
@@ -27,13 +33,25 @@ export function useDetails() {
   }
 
   useEffect(() => {
+    let sealable = false;
+    if (account.state.sealKey && conversation.state.seals) {
+      conversation.state.seals.forEach(seal => {
+        if (seal.publicKey === account.state.sealKey.public) {
+          sealabel = true;
+        }
+      });
+    }
+    updateState({ sealable });
+  }, [account, conversation]);
+
+  useEffect(() => {
     const contacts = Array.from(card.state.cards.values());
     updateState({ connected: contacts.filter(contact => contact.detail.status === 'connected') });
   }, [card]);
 
   useEffect(() => {
-    const { topic, subject, created, logo, host, contacts, pushEnabled } = conversation.state;
-    updateState({ subject, created, logo, pushEnabled, hostId: host, subjectUpdate: topic,
+    const { topic, subject, created, logo, host, contacts, pushEnabled, locked, unlocked, seals } = conversation.state;
+    updateState({ subject, created, logo, pushEnabled, hostId: host, subjectUpdate: topic, locked, unlocked, seals,
       count: contacts.length, contacts: contacts.filter(card => card != null) });
   }, [conversation]);
 

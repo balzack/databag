@@ -57,7 +57,7 @@ export function useChannelContext() {
     let channel = channels.current.get(channelId);
     if (channel) {
       channel.detail = detail;
-      channel.unsealed_detail = null;
+      channel.unsealedDetail = null;
       channel.detailRevision = revision;
       channels.current.set(channelId, channel);
     }
@@ -66,7 +66,7 @@ export function useChannelContext() {
     let channel = channels.current.get(channelId);
     if (channel) {
       channel.summary = summary;
-      channel.unsealed_summary = null;
+      channel.unsealedSummary = null;
       channel.topicRevision = revision;
       channels.current.set(channelId, channel);
     }

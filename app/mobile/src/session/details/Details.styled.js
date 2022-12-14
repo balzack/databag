@@ -32,6 +32,9 @@ export const styles = StyleSheet.create({
     minWidth: 0,
     flexShrink: 1,
   },
+  subjectIcon: {
+    paddingRight: 4
+  },
   subjectText: {
     fontSize: 18,
     flexShrink: 1,
