@@ -1,6 +1,7 @@
 import { useContext, useState, useEffect } from 'react';
 import { CardContext } from 'context/CardContext';
 import { ChannelContext } from 'context/ChannelContext';
+import { AccountContext } from 'context/AccountContext';
 import { ViewportContext } from 'context/ViewportContext';
 
 export function useDetails(cardId, channelId) {
@@ -20,9 +21,13 @@ export function useDetails(cardId, channelId) {
     subjectUpdate: null,
     unknown: 0,
     display: null,
+    locked: false,
+    unlocked: false,
+    editable: false,
   });
 
   const card = useContext(CardContext);
+  const account = useContext(AccountContext);
   const channel = useContext(ChannelContext);
   const viewport = useContext(ViewportContext);  
 
@@ -35,7 +40,7 @@ export function useDetails(cardId, channelId) {
   }, [viewport]);
 
   useEffect(() => {
-    let img, subject, subjectUpdate, host, started, contacts
+    let img, subject, subjectUpdate, host, started, contacts, locked, unlocked, editable;
     let chan;
     if (cardId) {
       const cardChan = card.state.cards.get(cardId);
@@ -60,10 +65,34 @@ export function useDetails(cardId, channelId) {
         img = 'team';
         subject = 'Conversation'
       }
-      const parsed = JSON.parse(chan.data.channelDetail.data);
-      if (parsed.subject) {
-        subject = parsed.subject;
-        subjectUpdate = subject;
+      if (chan.data.channelDetail.dataType === 'sealed') {
+        editable = false;
+        try {
+          const seals = JSON.parse(chan.data.channelDetail.data).seals;
+          seals.forEach(seal => {
+            if (account.state.sealKey.public === seal.publicKey) {
+              editable = true;
+            }
+          });
+        }
+        catch (err) {
+          console.log(err);
+        }
+        locked = true;
+        unlocked = chan.data.unsealedChannel != null;
+        if (chan.data.unsealedChannel?.subject) {
+          subject = chan.data.unsealedChannel.subject;
+          subjectUpdate = subject;
+        }
+      }
+      else {
+        locked = false;
+        editable = (chan.cardId == null);
+        const parsed = JSON.parse(chan.data.channelDetail.data);
+        if (parsed.subject) {
+          subject = parsed.subject;
+          subjectUpdate = subject;
+        }
       }
       const date = new Date(chan.data.channelDetail.created * 1000);
       const now = new Date();
@@ -96,8 +125,8 @@ export function useDetails(cardId, channelId) {
       }
     });
 
-    updateState({ img, subject, host, started, contacts, members, unknown, subjectUpdate });
-  }, [cardId, channelId, card, channel]);
+    updateState({ img, subject, host, started, contacts, members, unknown, subjectUpdate, locked, unlocked, editable });
+  }, [cardId, channelId, card, channel, account]);
 
   const actions = {
     setEditSubject: () => {
@@ -113,7 +142,12 @@ export function useDetails(cardId, channelId) {
       if (!state.busy) {
         try {
           updateState({ busy: true });
-          channel.actions.setChannelSubject(channelId, state.subjectUpdate);
+          if (state.locked) {
+            channel.actions.setChannelSealedSubject(channelId, state.subjectUpdate, account.state.sealKey);
+          }
+          else {
+            channel.actions.setChannelSubject(channelId, state.subjectUpdate);
+          }
           updateState({ busy: false });
         }
         catch(err) {

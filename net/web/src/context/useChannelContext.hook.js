@@ -48,7 +48,7 @@ export function useChannelContext() {
           else {
             let detail = await getChannelDetail(access.current, channel.id);
             cur.data.channelDetail = detail;
-            cur.data.unsealedSubject = null;
+            cur.data.unsealedChannel = null;
           }
           cur.data.detailRevision = channel.data.detailRevision;
         }
@@ -151,7 +151,27 @@ export function useChannelContext() {
       });
     },
     setChannelSubject: async (channelId, subject) => {
-      return await setChannelSubject(access.current, channelId, subject);
+      return await setChannelSubject(access.current, channelId, 'superbasic', { subject });
+    },
+    setChannelSealedSubject: async (channelId, subject, sealKey) => {
+      const channel = channels.current.get(channelId);
+
+      let { seals, subjectEncrypted, subjectIv } = JSON.parse(channel.data.channelDetail.data);
+      seals.forEach(seal => {
+        if (seal.publicKey === sealKey.public) {
+          let crypto = new JSEncrypt();
+          crypto.setPrivateKey(sealKey.private);
+          const unsealedKey = crypto.decrypt(seal.sealedKey);
+          const key = CryptoJS.enc.Hex.parse(unsealedKey);
+
+          const iv = CryptoJS.lib.WordArray.random(128 / 8);
+          const encrypted = CryptoJS.AES.encrypt(JSON.stringify({ subject }), key, { iv: iv });
+          subjectEncrypted = encrypted.ciphertext.toString(CryptoJS.enc.Base64)
+          subjectIv = iv.toString();
+        }
+      });
+      const data = { subjectEncrypted, subjectIv, seals };
+      return await setChannelSubject(access.current, channelId, 'sealed', data);
     },
     setChannelCard: async (channelId, cardId) => {
       return await setChannelCard(access.current, channelId, cardId);

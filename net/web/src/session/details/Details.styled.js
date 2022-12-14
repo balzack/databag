@@ -90,9 +90,6 @@ export const DetailsWrapper = styled.div`
         padding-left: 16px;
 
         .edit {
-          display: flex;
-          flex-direction: row;
-          align-items: center;
           cursor: pointer;
         }
 

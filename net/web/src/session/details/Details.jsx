@@ -7,6 +7,7 @@ import { EditOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import { CardSelect } from '../cardSelect/CardSelect';
 import { EditSubject } from './editSubject/EditSubject';
 import { EditMembers } from './editMembers/EditMembers';
+import { UnlockOutlined, LockFilled } from '@ant-design/icons';
 
 export function Details({ cardId, channelId, closeDetails, closeConversation, openContact }) {
 
@@ -117,15 +118,31 @@ export function Details({ cardId, channelId, closeDetails, closeConversation, op
           </div>
           <div class="stats">
             { state.host && (
-              <div class="subject edit" onClick={actions.setEditSubject}>
-                <Space>
-                  <div>{ state.subject }</div>
-                  <EditOutlined />
-                </Space>
+              <div class="subject" onClick={actions.setEditSubject}>
+                { state.locked && !state.unlocked && (
+                  <LockFilled style={{ paddingRight: 4 }} />
+                )}
+                { state.locked && state.unlocked && (
+                  <UnlockOutlined style={{ paddingRight: 4 }} />
+                )}
+                <span>{ state.subject }</span>
+                { state.editable && (
+                  <span class="edit" onClick={actions.setEditSubject}>
+                    <EditOutlined style={{ paddingLeft: 4 }}/>
+                  </span>
+                )}
               </div>
             )}
             { !state.host && (
-              <div class="subject">{ state.subject }</div>
+              <div class="subject">
+                { state.locked && !state.unlocked && (
+                  <LockFilled style={{ paddingRight: 4 }} />
+                )}
+                { state.locked && state.unlocked && (
+                  <UnlockOutlined style={{ paddingRight: 4 }} />
+                )}
+                <span>{ state.subject }</span>
+              </div>
             )}
             { state.host && (
               <div class="host">host</div>
@@ -139,7 +156,7 @@ export function Details({ cardId, channelId, closeDetails, closeConversation, op
         { state.host && (
           <div class="button" onClick={deleteChannel}>Delete Topic</div>
         )}
-        { state.host && (
+        { state.host && !state.locked && (
           <div class="button" onClick={actions.setEditMembers}>Edit Membership</div>
         )}
         { !state.host && (
