@@ -33,6 +33,9 @@ import { removeContactChannelTopic } from 'api/removeContactChannelTopic';
 import { getContactChannelNotifications } from 'api/getContactChannelNotifications';
 import { setContactChannelNotifications } from 'api/setContactChannelNotifications';
 
+import CryptoJS from 'crypto-js';
+import { JSEncrypt } from 'jsencrypt'
+
 export function useCardContext() {
   const [state, setState] = useState({
     cards: new Map(),
@@ -594,6 +597,36 @@ export function useCardContext() {
     setChannelNotifications: async (cardId, channelId, notify) => {
       const { detail, profile } = getCardEntry(cardId);
       return await setContactChannelNotifications(profile.node, `${profile.guid}.${detail.token}`, channelId, notify);
+    },
+    unsealChannelSubject: async (cardId, channelId, revision, sealKey) => {
+      try {
+        const { guid } = session.current;
+        const card = cards.current.get(cardId);
+        const channel = card.channels.get(channelId);
+        const { subjectEncrypted, subjectIv, seals } = JSON.parse(channel.detail.data);
+        seals.forEach(seal => {
+          if (seal.publicKey === sealKey.public) {
+            let crypto = new JSEncrypt();
+            crypto.setPrivateKey(sealKey.private);
+            const unsealedKey = crypto.decrypt(seal.sealedKey);
+            const iv = CryptoJS.enc.Hex.parse(subjectIv);
+            const key = CryptoJS.enc.Hex.parse(unsealedKey);
+            const enc = CryptoJS.enc.Base64.parse(subjectEncrypted);
+            let cipher = CryptoJS.lib.CipherParams.create({ ciphertext: enc, iv: iv });
+            const dec = CryptoJS.AES.decrypt(cipher, key, { iv: iv });
+            if (revision === channel.detailRevision) {
+              channel.unsealedDetail = JSON.parse(dec.toString(CryptoJS.enc.Utf8));
+            }
+          }
+        });
+        await store.actions.setCardChannelItemUnsealedDetail(guid, cardId, channelId, revision, channel.unsealedDetail);
+        card.channels.set(channelId, { ...channel });
+        cards.current.set(cardId, { ...card });
+        updateState({ cards: cards.current });
+      }
+      catch(err) {
+        console.log(err);
+      }
     },
     resync: (cardId) => {
       resync.current.push(cardId);

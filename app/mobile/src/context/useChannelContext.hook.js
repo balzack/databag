@@ -334,6 +334,34 @@ export function useChannelContext() {
       const { server, appToken } = session.current;
       return await setChannelNotifications(server, appToken, channelId, notify);
     },
+    unsealChannelSubject: async (channelId, revision, sealKey) => {
+      try {
+        const { guid } = session.current;
+        const channel = channels.current.get(channelId);
+        const { subjectEncrypted, subjectIv, seals } = JSON.parse(channel.detail.data);
+        seals.forEach(seal => {
+          if (seal.publicKey === sealKey.public) {
+            let crypto = new JSEncrypt();
+            crypto.setPrivateKey(sealKey.private);
+            const unsealedKey = crypto.decrypt(seal.sealedKey);
+            const iv = CryptoJS.enc.Hex.parse(subjectIv);
+            const key = CryptoJS.enc.Hex.parse(unsealedKey);
+            const enc = CryptoJS.enc.Base64.parse(subjectEncrypted);
+            let cipher = CryptoJS.lib.CipherParams.create({ ciphertext: enc, iv: iv });
+            const dec = CryptoJS.AES.decrypt(cipher, key, { iv: iv });
+            if (revision === channel.detailRevision) {
+              channel.unsealedDetail = JSON.parse(dec.toString(CryptoJS.enc.Utf8));
+            }
+          }
+        });
+        await store.actions.setChannelItemUnsealedDetail(guid, channelId, revision, channel.unsealedDetail);
+        channels.current.set(channelId, { ...channel });
+        updateState({ channels: channels.current });
+      }
+      catch(err) {
+        console.log(err);
+      }
+    },
   }
 
   return { state, actions }

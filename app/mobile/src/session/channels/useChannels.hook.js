@@ -133,8 +133,32 @@ export function useChannels() {
       logo = 'appstore';
     }
 
+    let locked = false;
+    let unlocked = false;
     let subject = null;
-    if (item?.detail?.data) {
+    if (item?.detail?.dataType === 'sealed') {
+      locked = true;
+      if (state.sealable) {
+        try {
+          if (item.unsealedDetail == null) {
+            if (item.cardId) {
+              card.actions.unsealChannelSubject(item.cardId, item.channelId, item.detailRevision, account.state.sealKey);
+            }
+            else {
+              channel.actions.unsealChannelSubject(item.channelId, item.detailRevision, account.state.sealKey);
+            }
+          }
+          else {
+            unlocked = true;
+            subject = item.unsealedDetail.subject;
+          }
+        }
+        catch (err) {
+          console.log(err)
+        }
+      }
+    }
+    else {
       try {
         subject = JSON.parse(item?.detail?.data).subject;
       }
@@ -170,7 +194,7 @@ export function useChannels() {
       }
     }
 
-    return { cardId: item.cardId, channelId: item.channelId, contacts, logo, subject, message, updated, revision: item.revision, timestamp: created, blocked: item.blocked === 1 };
+    return { cardId: item.cardId, channelId: item.channelId, contacts, logo, subject, locked, unlocked, message, updated, revision: item.revision, timestamp: created, blocked: item.blocked === 1 };
   }
 
   useEffect(() => {
@@ -214,7 +238,7 @@ export function useChannels() {
     });
 
     updateState({ channels: sorted });
-  }, [channel, card, state.filter]);
+  }, [channel, card, state.filter, state.sealable]);
 
   const actions = {
     setSealed: (sealed) => {

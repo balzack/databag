@@ -22,6 +22,13 @@ export const styles = StyleSheet.create({
     flexShrink: 1,
   },
   subject: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  subjectIcon: {
+    paddingRight: 4,
+  },
+  subjectText: {
     color: Colors.text,
     fontSize: 14,
   },

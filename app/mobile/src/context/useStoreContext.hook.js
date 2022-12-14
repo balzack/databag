@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef, useContext } from 'react';
 import SQLite from "react-native-sqlite-storage";
 
-const DATABAG_DB = 'databag_v064.db';
+const DATABAG_DB = 'databag_v068.db';
 
 export function useStoreContext() {
   const [state, setState] = useState({});
@@ -221,6 +221,9 @@ export function useStoreContext() {
     setChannelItemDetail: async (guid, channelId, revision, detail) => {
       await db.current.executeSql(`UPDATE channel_${guid} set detail_revision=?, detail=?, unsealed_detail=null where channel_id=?`, [revision, encodeObject(detail), channelId]);
     },
+    setChannelItemUnsealedDetail: async (guid, channelId, revision, unsealed) => {
+      await db.current.executeSql(`UPDATE channel_${guid} set unsealed_detail=? where detail_revision=? AND channel_id=?`, [encodeObject(unsealed), revision, channelId]);
+    },
     setChannelItemSummary: async (guid, channelId, revision, summary) => {
       await db.current.executeSql(`UPDATE channel_${guid} set topic_revision=?, summary=?, unsealed_summary=null where channel_id=?`, [revision, encodeObject(summary), channelId]);
     },
@@ -236,7 +239,7 @@ export function useStoreContext() {
       };
     },
     getChannelItems: async (guid) => {
-      const values = await getAppValues(db.current, `SELECT channel_id, read_revision, revision, sync_revision, blocked, detail_revision, topic_revision, detail, summary FROM channel_${guid}`, []);
+      const values = await getAppValues(db.current, `SELECT channel_id, read_revision, revision, sync_revision, blocked, detail_revision, topic_revision, detail, unsealed_detail, summary, unsealed_summary FROM channel_${guid}`, []);
       return values.map(channel => ({
         channelId: channel.channel_id,
         revision: channel.revision,
@@ -254,7 +257,7 @@ export function useStoreContext() {
 
 
     getChannelTopicItems: async (guid, channelId) => {
-      const values = await getAppValues(db.current, `SELECT topic_id, revision, blocked, detail_revision, detail FROM channel_topic_${guid} WHERE channel_id=?`, [channelId]);
+      const values = await getAppValues(db.current, `SELECT topic_id, revision, blocked, detail_revision, detail, unsealed_detail FROM channel_topic_${guid} WHERE channel_id=?`, [channelId]);
       return values.map(topic => ({
         topicId: topic.topic_id,
         revision: topic.revision,
@@ -305,6 +308,9 @@ export function useStoreContext() {
     setCardChannelItemDetail: async (guid, cardId, channelId, revision, detail) => {
       await db.current.executeSql(`UPDATE card_channel_${guid} set detail_revision=?, detail=?, unsealed_detail=null where card_id=? and channel_id=?`, [revision, encodeObject(detail), cardId, channelId]);
     },
+    setCardChannelItemUnsealedDetail: async (guid, cardId, channelId, revision, unsealed) => {
+      await db.current.executeSql(`UPDATE card_channel_${guid} set unsealed_detail=? where detail_revision=? AND card_id=? AND channel_id=?`, [encodeObject(unsealed), revision, cardId, channelId]);
+    },
     setCardChannelItemSummary: async (guid, cardId, channelId, revision, summary) => {
       await db.current.executeSql(`UPDATE card_channel_${guid} set topic_revision=?, summary=?, unsealed_summary=null where card_id=? and channel_id=?`, [revision, encodeObject(summary), cardId, channelId]);
     },
@@ -320,7 +326,7 @@ export function useStoreContext() {
       };
     },
     getCardChannelItems: async (guid) => {
-      const values = await getAppValues(db.current, `SELECT card_id, channel_id, read_revision, sync_revision, revision, blocked, detail_revision, topic_revision, detail, summary FROM card_channel_${guid}`, []);
+      const values = await getAppValues(db.current, `SELECT card_id, channel_id, read_revision, sync_revision, revision, blocked, detail_revision, topic_revision, detail, unsealed_detail, summary, unsealed_summary FROM card_channel_${guid}`, []);
       return values.map(channel => ({
         cardId: channel.card_id,
         channelId: channel.channel_id,
@@ -341,7 +347,7 @@ export function useStoreContext() {
     },
 
     getCardChannelTopicItems: async (guid, cardId, channelId) => {
-      const values = await getAppValues(db.current, `SELECT topic_id, revision, blocked, detail_revision, detail FROM card_channel_topic_${guid} WHERE card_id=? AND channel_id=?`, [cardId, channelId]);
+      const values = await getAppValues(db.current, `SELECT topic_id, revision, blocked, detail_revision, detail, unsealed_detail FROM card_channel_topic_${guid} WHERE card_id=? AND channel_id=?`, [cardId, channelId]);
       return values.map(topic => ({
         topicId: topic.topic_id,
         revision: topic.revision,
