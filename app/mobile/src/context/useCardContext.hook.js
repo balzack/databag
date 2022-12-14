@@ -312,10 +312,10 @@ export function useCardContext() {
         const { notifiedView, notifiedProfile, notifiedArticle, notifiedChannel } = card.data;
         if (status.notifiedView !== notifiedView) {
           await store.actions.clearCardChannelItems(guid, card.id);
+          clearCardChannels(card.id);
           await updateCardChannelItems(card.id, cardServer, cardToken, notifiedView, null);
           await store.actions.setCardItemNotifiedChannel(guid, card.id, notifiedChannel);
           await store.actions.setCardItemNotifiedView(guid, card.id, notifiedView);
-          clearCardChannels(card.id);
         }
         else {
           if (status.notifiedChannel != notifiedChannel) {
@@ -348,6 +348,7 @@ export function useCardContext() {
   const updateCardChannelItems = async (cardId, cardServer, cardToken, notifiedView, notifiedChannel) => {
     const { guid } = session.current;
     const delta = await getContactChannels(cardServer, cardToken, notifiedView, notifiedChannel);
+
     for (let channel of delta) {
       if (channel.data) {
         if (channel.data.channelDetail && channel.data.channelSummary) {
