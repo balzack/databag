@@ -332,7 +332,7 @@ export function useCardContext() {
       let token = cardProfile.guid + '.' + cardDetail.token;
       let node = cardProfile.node;
       if (files?.length) {
-        const topicId = await addContactChannelTopic(node, token, channelId, null, null);
+        const topicId = await addContactChannelTopic(node, token, channelId, null, null, null);
         upload.actions.addContactTopic(node, token, cardId, channelId, topicId, files, async (assets) => {
           message.assets = assets;
           await setContactChannelTopicSubject(node, token, channelId, topicId, message);
@@ -346,7 +346,7 @@ export function useCardContext() {
         });
       }
       else {
-        await addContactChannelTopic(node, token, channelId, message, files);
+        await addContactChannelTopic(node, token, channelId, 'superbasictopic', message, files);
       }
       try {
         resync.current.push(cardId);
@@ -355,6 +355,17 @@ export function useCardContext() {
       catch (err) {
         console.log(err);
       }
+    },
+    addSealedChannelTopic: async (cardId, channelId, sealKey, message) => {
+      let { cardProfile, cardDetail } = cards.current.get(cardId).data;
+      let token = cardProfile.guid + '.' + cardDetail.token;
+      let node = cardProfile.node;
+      const iv = CryptoJS.lib.WordArray.random(128 / 8);
+      const key = CryptoJS.enc.Hex.parse(sealKey);
+      const encrypted = CryptoJS.AES.encrypt(JSON.stringify({ message }), key, { iv: iv });
+      const messageEncrypted = encrypted.ciphertext.toString(CryptoJS.enc.Base64)
+      const messageIv = iv.toString();
+      await addContactChannelTopic(node, token, channelId, 'sealedtopic', { messageEncrypted, messageIv });
     },
     getChannel: (cardId, channelId) => {
       let card = cards.current.get(cardId);

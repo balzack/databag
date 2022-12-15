@@ -81,6 +81,11 @@ export const TopicItemWrapper = styled.div`
     }
   }
 
+  .sealed-message {
+    font-style: italic;
+    color: #aaaaaa;
+  }
+
   .asset-placeholder {
     width: 128px;
     height: 128px;

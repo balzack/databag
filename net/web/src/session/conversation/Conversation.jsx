@@ -14,7 +14,7 @@ export function Conversation({ closeConversation, openDetails, cardId, channelId
   const thread = useRef(null);
 
   const topicRenderer = (topic) => {
-    return (<TopicItem host={cardId == null} topic={topic} />)
+    return (<TopicItem host={cardId == null} topic={topic} sealKey={state.sealKey} />)
   }
 
   // an unfortunate cludge for the mobile browser
@@ -106,8 +106,10 @@ export function Conversation({ closeConversation, openDetails, cardId, channelId
           <div class="progress-idle" />
         )}
       </div>
-      <div class="topic">
-        <AddTopic cardId={cardId} channelId={channelId} />
+      <div class="topic"> 
+        { (!state.sealed || state.sealKey) && (
+          <AddTopic cardId={cardId} channelId={channelId} sealed={state.sealed} sealKey={state.sealKey} />
+        )}
         { state.uploadError && (
           <div class="upload-error">
             { state.display === 'small' && (

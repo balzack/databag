@@ -3,14 +3,14 @@ import { ConversationContext } from 'context/ConversationContext';
 import { ProfileContext } from 'context/ProfileContext';
 import { CardContext } from 'context/CardContext';
 
-export function useTopicItem(topic) {
+export function useTopicItem(topic, sealKey) {
 
   const [state, setState] = useState({
     init: false,
     name: null,
     handle: null,
     imageUrl: null,
-    message: null,
+    text: null,
     created: null,
     confirmed: false,
     ready: false,
@@ -39,6 +39,7 @@ export function useTopicItem(topic) {
       owner = true;
     }
 
+    let text = null;
     let textColor = '#444444';
     let textSize = 14;
 
@@ -47,35 +48,50 @@ export function useTopicItem(topic) {
       return;
     }
 
-    const { status, transform, data } = topic.data.topicDetail;
+    const { status, transform, data, dataType } = topic.data.topicDetail;
     let message;
+    let sealed = false;
     let ready = false;
     let error = false;
     let confirmed = false;
     let assets = [];
     if (status === 'confirmed') {
       confirmed = true;
-      try {
-        message = JSON.parse(data);
-        if (message.textColor != null) {
-          textColor = message.textColor;
+      if (dataType === 'superbasictopic') {
+        try {
+          message = JSON.parse(data);
+          text = message.text;
+          if (message.textColor != null) {
+            textColor = message.textColor;
+          }
+          if (message.textSize != null) {
+            textSize = message.textSize;
+          }
+          if (message.assets) {
+            assets = message.assets;
+            delete message.assets;
+          }
+          if (transform === 'complete') {
+            ready = true;
+          }
+          if (transform === 'error') {
+            error = true;
+          }
         }
-        if (message.textSize != null) {
-          textSize = message.textSize;
-        }
-        if (message.assets) {
-          assets = message.assets;
-          delete message.assets;
-        }
-        if (transform === 'complete') {
-          ready = true;
-        }
-        if (transform === 'error') {
-          error = true;
+        catch(err) {
+          console.log(err);
         }
       }
-      catch(err) {
-        console.log(err);
+      else if (dataType === 'sealedtopic') {
+        if (topic.data.unsealedMessage) {
+          text = topic.data.unsealedMessage.message.text;
+          sealed = false;
+        }
+        else {
+          conversation.actions.unsealTopic(topic.id, sealKey);
+          sealed = true;
+        }
+        ready = true;
       }
     }
 
@@ -98,11 +114,11 @@ export function useTopicItem(topic) {
 
       if (profile.state.profile.guid === guid) {
         const { name, handle, imageUrl } = profile.actions.getProfile();
-        updateState({ name, handle, imageUrl, status, message, transform, assets, confirmed, error, ready, created: createdStr, owner, textColor, textSize, topicId: topic.id, init: true });
+        updateState({ sealed, name, handle, imageUrl, status, text, transform, assets, confirmed, error, ready, created: createdStr, owner, textColor, textSize, topicId: topic.id, init: true });
       }
       else {
         const { name, handle, imageUrl } = card.actions.getCardProfileByGuid(guid);
-        updateState({ name, handle, imageUrl, status, message, transform, assets, confirmed, error, ready, created: createdStr, owner, textColor, textSize, topicId: topic.id, init: true });
+        updateState({ sealed, name, handle, imageUrl, status, text, transform, assets, confirmed, error, ready, created: createdStr, owner, textColor, textSize, topicId: topic.id, init: true });
       }
     }
   }, [profile, card, conversation, topic]);

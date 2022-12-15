@@ -1,6 +1,6 @@
 import { checkResponse, fetchWithTimeout } from './fetchUtil';
 
-export async function addContactChannelTopic(server, token, channelId, message, assets ) {
+export async function addContactChannelTopic(server, token, channelId, datatype, message, assets ) {
   let host = "";
   if (server) {
     host = `https://${server}`
@@ -16,7 +16,7 @@ export async function addContactChannelTopic(server, token, channelId, message, 
   else if (assets == null || assets.length === 0) {
     let subject = { data: JSON.stringify(message, (key, value) => {
       if (value !== null) return value
-    }), datatype: 'superbasictopic' };
+    }), datatype };
 
     let topic = await fetchWithTimeout(`${host}/content/channels/${channelId}/topics?contact=${token}&confirm=true`,
       { method: 'POST', body: JSON.stringify(subject) });
@@ -81,7 +81,7 @@ export async function addContactChannelTopic(server, token, channelId, message, 
 
     let subject = { data: JSON.stringify(message, (key, value) => {
       if (value !== null) return value
-    }), datatype: 'superbasictopic' };
+    }), datatype };
 
     let unconfirmed = await fetchWithTimeout(`${host}/content/channels/${channelId}/topics/${slot.id}/subject?contact=${token}`, 
       { method: 'PUT', body: JSON.stringify(subject) });

@@ -1,10 +1,13 @@
 import { useContext, useState, useEffect } from 'react';
 import { ViewportContext } from 'context/ViewportContext';
+import { AccountContext } from 'context/AccountContext';
 import { CardContext } from 'context/CardContext';
 import { ChannelContext } from 'context/ChannelContext';
 import { ConversationContext } from 'context/ConversationContext';
 import { UploadContext } from 'context/UploadContext';
 import { StoreContext } from 'context/StoreContext';
+import CryptoJS from 'crypto-js';
+import { JSEncrypt } from 'jsencrypt'
 
 export function useConversation(cardId, channelId) {
 
@@ -19,8 +22,11 @@ export function useConversation(cardId, channelId) {
     uploadError: false,
     uploadPercent: 0,
     error: false,
+    sealed: false,
+    sealKey: null,
   });
 
+  const account = useContext(AccountContext);
   const viewport = useContext(ViewportContext);  
   const card = useContext(CardContext);
   const channel = useContext(ChannelContext);
@@ -35,6 +41,21 @@ export function useConversation(cardId, channelId) {
   useEffect(() => {
     updateState({ display: viewport.state.display });
   }, [viewport]);
+
+  useEffect(() => {
+    let sealKey;
+    const seals = conversation.state.seals;
+    if (seals?.length > 0) {
+      seals.forEach(seal => {
+        if (seal.publicKey === account.state.sealKey?.public) {
+          let crypto = new JSEncrypt();
+          crypto.setPrivateKey(account.state.sealKey.private);
+          sealKey = crypto.decrypt(seal.sealedKey);
+        }
+      });
+    }
+    updateState({ sealed: conversation.state.sealed, sealKey });
+  }, [account.state.sealKey, conversation.state.seals, conversation.state.sealed]);
 
   useEffect(() => {
     let active = false;

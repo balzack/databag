@@ -1,6 +1,6 @@
 import { checkResponse, fetchWithTimeout } from './fetchUtil';
 
-export async function addChannelTopic(token, channelId, message, assets ): string {
+export async function addChannelTopic(token, channelId, datatype, message, assets ): string {
 
   if (message == null && (assets == null || assets.length === 0)) {
     let topic = await fetchWithTimeout(`/content/channels/${channelId}/topics?agent=${token}`,
@@ -12,7 +12,7 @@ export async function addChannelTopic(token, channelId, message, assets ): strin
   else if (assets == null || assets.length === 0) {
     let subject = { data: JSON.stringify(message, (key, value) => {
       if (value !== null) return value
-    }), datatype: 'superbasictopic' };
+    }), datatype };
     
     let topic = await fetchWithTimeout(`/content/channels/${channelId}/topics?agent=${token}&confirm=true`,
       { method: 'POST', body: JSON.stringify(subject) });
@@ -78,7 +78,7 @@ export async function addChannelTopic(token, channelId, message, assets ): strin
 
     let subject = { data: JSON.stringify(message, (key, value) => {
       if (value !== null) return value
-    }), datatype: 'superbasictopic' };
+    }), datatype };
  
     let unconfirmed = await fetchWithTimeout(`/content/channels/${channelId}/topics/${slot.id}/subject?agent=${token}`, 
       { method: 'PUT', body: JSON.stringify(subject) });

@@ -8,9 +8,9 @@ import { Space, Skeleton, Button, Modal, Input } from 'antd';
 import { ExclamationCircleOutlined, DeleteOutlined, EditOutlined, FireOutlined, PictureOutlined } from '@ant-design/icons';
 import { Carousel } from 'carousel/Carousel';
 
-export function TopicItem({ host, topic }) {
+export function TopicItem({ host, topic, sealKey }) {
 
-  const { state, actions } = useTopicItem(topic);
+  const { state, actions } = useTopicItem(topic, sealKey);
 
   let name = state.name ? state.name : state.handle;
   let nameClass = state.name ? 'set' : 'unset';
@@ -76,7 +76,7 @@ export function TopicItem({ host, topic }) {
     if (state.editing) {
       return (
         <div class="editing">
-          <Input.TextArea defaultValue={state.message?.text} placeholder="message"
+          <Input.TextArea defaultValue={state.text} placeholder="message"
             style={{ resize: 'none', color: state.textColor, fontSize: state.textSize }}
             onChange={(e) => actions.setEdit(e.target.value)} rows={3} bordered={false}/>
           <div class="controls">
@@ -88,7 +88,7 @@ export function TopicItem({ host, topic }) {
         </div>
       );
     }
-    return <div style={{ color: state.textColor, fontSize: state.textSize }}>{ state.message?.text }</div>
+    return <div style={{ color: state.textColor, fontSize: state.textSize }}>{ state.text }</div>
   }
 
   return (
@@ -103,9 +103,11 @@ export function TopicItem({ host, topic }) {
               <div class={nameClass}>{ name }</div>
               <div>{ state.created }</div>
             </div>
-            <div class="topic-options">
-              <Options />
-            </div>
+            { !state.sealed && (
+              <div class="topic-options">
+                <Options />
+              </div>
+            )}
           </div>
           { !state.confirmed && (
             <div class="skeleton">
@@ -130,7 +132,12 @@ export function TopicItem({ host, topic }) {
                 </div>
               )}
               <div class="message">
-                <Message />
+                { !state.sealed && (
+                  <Message />
+                )}
+                { state.sealed && (
+                  <div class="sealed-message">sealed message</div>
+                )}
               </div>
             </div>
           )}

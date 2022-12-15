@@ -83,7 +83,7 @@ export function useAddTopic(cardId, channelId) {
     setTextSize: (value) => {
       updateState({ textSizeSet: true, textSize: value });
     },
-    addTopic: async () => {
+    addTopic: async (sealed, sealKey) => {
       if (!state.busy) {
         try {
           updateState({ busy: true });
@@ -93,10 +93,20 @@ export function useAddTopic(cardId, channelId) {
             textSize: state.textSizeSet ? state.textSize : null,
           };
           if (cardId) {
-            await card.actions.addChannelTopic(cardId, channelId, message, state.assets);
+            if (sealed) {
+              await card.actions.addSealedChannelTopic(cardId, channelId, sealKey, message, state.assets);
+            }
+            else {
+              await card.actions.addChannelTopic(cardId, channelId, message, state.assets);
+            }
           }
           else {
-            await channel.actions.addChannelTopic(channelId, message, state.assets);
+            if (sealed) {
+              await channel.actions.addSealedChannelTopic(channelId, sealKey, message, state.assets);
+            }
+            else {
+              await channel.actions.addChannelTopic(channelId, message, state.assets);
+            }
           }
           updateState({ busy: false, messageText: null, textColor: '#444444', textColorSet: false,
               textSize: 12, textSizeSet: false, assets: [] });

@@ -2,6 +2,8 @@ import { useEffect, useState, useRef, useContext } from 'react';
 import { ProfileContext } from 'context/ProfileContext';
 import { CardContext } from 'context/CardContext';
 import { ChannelContext } from 'context/ChannelContext';
+import CryptoJS from 'crypto-js';
+import { JSEncrypt } from 'jsencrypt'
 
 export function useConversationContext() {
   const TOPIC_BATCH = 32;
@@ -22,6 +24,7 @@ export function useConversationContext() {
     enabelAudio: null,
     enableVideo: null,
     sealed: false,
+    seals: null,
     image: null,
     logoUrl: null,
     logoImg: null,
@@ -54,6 +57,18 @@ export function useConversationContext() {
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
   }  
+
+  const getSeals = (conversation) => {
+    try {
+      if (conversation.data.channelDetail.dataType === 'sealed') {
+        return JSON.parse(conversation.data.channelDetail.data).seals;
+      }
+    }
+    catch (err) {
+      console.log(err);
+    }
+    return null;
+  }
 
   const getSubject = (conversation) => {
     if (!conversation) {
@@ -160,11 +175,13 @@ export function useConversationContext() {
           if(topic.data.topicDetail) {
             cur.data.topicDetail = topic.data.topicDetail;
             cur.data.detailRevision = topic.data.detailRevision;
+            cur.data.unsealedMessage = null;
           }
           else {
             let slot = await getTopic(topic.id);
             cur.data.topicDetail = slot.data.topicDetail;
             cur.data.detailRevision = slot.data.detailRevision;
+            cur.data.unsealedMessage = null;
           }
         }
         cur.revision = topic.revision;
@@ -212,6 +229,7 @@ export function useConversationContext() {
         let contacts = getContacts(chan);
         let subject = getSubject(chan);
         let members = getMembers(chan);
+        const seals = getSeals(chan);
         const enableImage = chan?.data?.channelDetail?.enableImage;
         const enableAudio = chan?.data?.channelDetail?.enableAudio;
         const enableVideo = chan?.data?.channelDetail?.enableVideo;
@@ -237,6 +255,7 @@ export function useConversationContext() {
           init: true,
           error: false,
           sealed,
+          seals,
           subject,
           logoImg,
           logoUrl,
@@ -335,6 +354,23 @@ export function useConversationContext() {
       }
       else {
         return await channel.actions.removeChannel(channelId);
+      }
+    },
+    unsealTopic: async (topicId, sealKey) => {
+      try {
+        const topic = topics.current.get(topicId);
+        const { messageEncrypted, messageIv } = JSON.parse(topic.data.topicDetail.data);
+        const iv = CryptoJS.enc.Hex.parse(messageIv);
+        const key = CryptoJS.enc.Hex.parse(sealKey);
+        const enc = CryptoJS.enc.Base64.parse(messageEncrypted);
+        let cipher = CryptoJS.lib.CipherParams.create({ ciphertext: enc, iv: iv });
+        const dec = CryptoJS.AES.decrypt(cipher, key, { iv: iv });
+        topic.data.unsealedMessage = JSON.parse(dec.toString(CryptoJS.enc.Utf8));
+        topics.current.set(topicId, topic);
+        updateState({ topics: topics.current });
+      }
+      catch(err) {
+        console.log(err);
       }
     },
     removeTopic: async (topicId) => {

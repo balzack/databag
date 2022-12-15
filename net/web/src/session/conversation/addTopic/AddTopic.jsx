@@ -8,7 +8,7 @@ import { AudioFile } from './audioFile/AudioFile';
 import { VideoFile } from './videoFile/VideoFile';
 import { Carousel } from 'carousel/Carousel';
 
-export function AddTopic({ cardId, channelId }) {
+export function AddTopic({ cardId, channelId, sealed, sealKey }) {
 
   const { state, actions } = useAddTopic(cardId, channelId);
   const attachImage = useRef(null);
@@ -26,7 +26,7 @@ export function AddTopic({ cardId, channelId }) {
   const addTopic = async () => {
     if (state.messageText || state.assets.length) {
       try {
-        await actions.addTopic();
+        await actions.addTopic(sealed, sealKey);
       }
       catch (err) {
         console.log(err);

@@ -202,7 +202,7 @@ export function useChannelContext() {
     },
     addChannelTopic: async (channelId, message, files) => {
       if (files?.length) {
-        const topicId = await addChannelTopic(access.current, channelId, null, null);
+        const topicId = await addChannelTopic(access.current, channelId, null, null, null);
         upload.actions.addTopic(access.current, channelId, topicId, files, async (assets) => {
           message.assets = assets;
           await setChannelTopicSubject(access.current, channelId, topicId, message);
@@ -216,7 +216,7 @@ export function useChannelContext() {
         });
       }
       else {
-        await addChannelTopic(access.current, channelId, message, files);
+        await addChannelTopic(access.current, channelId, 'superbasictopic', message, files);
       }
       try {
         await setChannels(null);
@@ -224,6 +224,14 @@ export function useChannelContext() {
       catch (err) {
         console.log(err);
       }
+    },
+    addSealedChannelTopic: async (channelId, sealKey, message) => {
+      const iv = CryptoJS.lib.WordArray.random(128 / 8);
+      const key = CryptoJS.enc.Hex.parse(sealKey);
+      const encrypted = CryptoJS.AES.encrypt(JSON.stringify({ message }), key, { iv: iv });
+      const messageEncrypted = encrypted.ciphertext.toString(CryptoJS.enc.Base64)
+      const messageIv = iv.toString();
+      await addChannelTopic(access.current, channelId, 'sealedtopic', { messageEncrypted, messageIv });
     },
     getChannel: (channelId) => {
       return channels.current.get(channelId);
