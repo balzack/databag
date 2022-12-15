@@ -20,7 +20,6 @@ export function useDetails() {
     locked: false,
     unlocked: false,
     sealable: false,
-    
   });
 
   const account = useContext(AccountContext);
@@ -37,7 +36,7 @@ export function useDetails() {
     if (account.state.sealKey && conversation.state.seals) {
       conversation.state.seals.forEach(seal => {
         if (seal.publicKey === account.state.sealKey.public) {
-          sealabel = true;
+          sealable = true;
         }
       });
     }
@@ -72,7 +71,12 @@ export function useDetails() {
       updateState({ subjectUpdate });
     },
     saveSubject: async () => {
-      await conversation.actions.setSubject(state.subjectUpdate);
+      if (state.locked) {
+        await conversation.actions.setSealedSubject(state.subjectUpdate, account.state.sealKey);
+      }
+      else {
+        await conversation.actions.setSubject(state.subjectUpdate);
+      }
     },
     remove: async () => {
       await conversation.actions.remove();

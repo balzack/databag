@@ -136,7 +136,7 @@ export function DetailsBody({ channel, clearConversation }) {
               <MatIcons name="lock-open-variant-outline" style={styles.subjectIcon} size={16} color={Colors.text} />
             )}
             <Text style={styles.subjectText} numberOfLines={1} ellipsizeMode={'tail'}>{ state.subject }</Text>
-            { !state.hostId && (
+            { !state.hostId && (!state.locked || state.sealable) && (
               <TouchableOpacity onPress={actions.showEditSubject}>
                 <AntIcons name="edit" size={16} color={Colors.text} />
               </TouchableOpacity>
@@ -166,7 +166,7 @@ export function DetailsBody({ channel, clearConversation }) {
             <Text style={styles.buttonText}>Report Topic</Text>
           </TouchableOpacity>
         )}
-        { !state.hostId && (
+        { !state.hostId && !state.locked && (
           <TouchableOpacity style={styles.button} onPress={actions.showEditMembers}>
             <Text style={styles.buttonText}>Edit Membership</Text>
           </TouchableOpacity>

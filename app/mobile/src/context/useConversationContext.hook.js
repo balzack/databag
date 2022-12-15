@@ -333,7 +333,8 @@ export function useConversationContext() {
       locked = true;
       unlocked = item.unsealedDetail != null;
       if (item.unsealedDetail?.subject) {
-        subject = item.unsealedDetail.subject;
+        topic = item.unsealedDetail.subject;
+        subject = topic;
       }
       try {
         seals = JSON.parse(item.detail.data).seals;
@@ -438,6 +439,15 @@ export function useConversationContext() {
           throw new Error("can only set hosted channel subjects");
         }
         await channel.actions.setSubject(channelId, subject);
+      }
+    },
+    setSealedSubject: async (subject, sealKey) => {
+      if (conversationId.current) {
+        const { cardId, channelId } = conversationId.current;
+        if (cardId) {
+          throw new Error("can only set hosted channel subjects");
+        }
+        await channel.actions.setSealedSubject(channelId, subject, sealKey);
       }
     },
     remove: async () => {

@@ -273,9 +273,30 @@ export function useChannelContext() {
       const { server, appToken } = session.current;
       return await setChannelTopicSubject(server, appToken, channelId, topicId, data);
     },
-    setSubject: async (channelId, data) => {
+    setSubject: async (channelId, subject) => {
       const { server, appToken } = session.current;
-      return await setChannelSubject(server, appToken, channelId, data);
+      return await setChannelSubject(server, appToken, channelId, 'superbasic', { subject });
+    },
+    setSealedSubject: async (channelId, subject, sealKey) => {
+      const { server, appToken } = session.current;
+      const channel = channels.current.get(channelId);
+
+      let { seals, subjectEncrypted, subjectIv } = JSON.parse(channel.detail.data);
+      seals.forEach(seal => {
+        if (seal.publicKey === sealKey.public) {
+          let crypto = new JSEncrypt();
+          crypto.setPrivateKey(sealKey.private);
+          const unsealedKey = crypto.decrypt(seal.sealedKey);
+          const key = CryptoJS.enc.Hex.parse(unsealedKey);
+
+          const iv = CryptoJS.lib.WordArray.random(128 / 8);
+          const encrypted = CryptoJS.AES.encrypt(JSON.stringify({ subject }), key, { iv: iv });
+          subjectEncrypted = encrypted.ciphertext.toString(CryptoJS.enc.Base64)
+          subjectIv = iv.toString();
+        }
+      });
+      const data = { subjectEncrypted, subjectIv, seals };
+      return await setChannelSubject(server, appToken, channelId, 'sealed', data);
     },
     remove: async (channelId) => {
       const { server, appToken } = session.current;
