@@ -21,6 +21,10 @@ export function useConversationContext() {
     enableImage: null,
     enabelAudio: null,
     enableVideo: null,
+    sealed: false,
+    image: null,
+    logoUrl: null,
+    logoImg: null,
   });
 
   const EVENT_OPEN = 1;
@@ -56,15 +60,21 @@ export function useConversationContext() {
       return null;
     }
 
-    try {
-      let subject = JSON.parse(conversation.data.channelDetail.data).subject;
-      if (subject) {
-        return subject;
+    if (conversation.data.channelDetail.dataType === 'sealed') {
+      return conversation.data.unsealedChannel?.subject;
+    }
+    else {
+      try {
+        let subject = JSON.parse(conversation.data.channelDetail.data).subject;
+        if (subject) {
+          return subject;
+        }
+      }
+      catch (err) {
+        console.log(err);
       }
     }
-    catch (err) {
-      return null;
-    }
+    return null;
   }
 
   const getContacts = (conversation) => {
@@ -199,16 +209,37 @@ export function useConversationContext() {
 
       if (curView === view.current) {
         let chan = getChannel();
-        let subject = getSubject(chan);
         let contacts = getContacts(chan);
+        let subject = getSubject(chan);
         let members = getMembers(chan);
         const enableImage = chan?.data?.channelDetail?.enableImage;
         const enableAudio = chan?.data?.channelDetail?.enableAudio;
         const enableVideo = chan?.data?.channelDetail?.enableVideo;
+        const sealed = chan?.data?.channelDetail?.dataType === 'sealed';
+
+        let logoUrl = null;
+        let logoImg = null;
+        if (!members?.size) {
+          subject = subject ? subject : "Notes";
+          logoImg = "solution";
+        }
+        else if (members.size > 1) {
+          subject = subject ? subject : "Group";
+          logoImg = "appstore";
+        }
+        else {
+          const contact = card.actions.getCardByGuid(members.values().next().value);
+          subject = subject ? subject : card.actions.getName(contact.id);
+          logoUrl = card.actions.getImageUrl(contact.id);
+        }
+
         updateState({
           init: true,
           error: false,
+          sealed,
           subject,
+          logoImg,
+          logoUrl,
           contacts,
           members,
           enableImage,

@@ -9,6 +9,7 @@ export function useAddTopic(cardId, channelId) {
     enableImage: null,
     enableAudio: null,
     enableVideo: null,
+    sealed: false,
     assets: [],
     messageText: null,
     textColor: '#444444',
@@ -49,8 +50,8 @@ export function useAddTopic(cardId, channelId) {
   }
 
   useEffect(() => {
-    const { enableImage, enableAudio, enableVideo } = conversation.state;
-    updateState({ enableImage, enableAudio, enableVideo });
+    const { enableImage, enableAudio, enableVideo, sealed } = conversation.state;
+    updateState({ enableImage, enableAudio, enableVideo, sealed });
   }, [conversation]);
 
   const actions = {

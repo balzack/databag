@@ -104,22 +104,24 @@ export function AddTopic({ cardId, channelId }) {
             value={state.messageText} autocapitalize="none" />
       </div>
       <div class="buttons">
-        { state.enableImage && (
+        { !state.sealed && state.enableImage && (
           <div class="button space" onClick={() => attachImage.current.click()}>
             <PictureOutlined />
           </div> 
         )}
-        { state.enableVideo && (
+        { !state.sealed && state.enableVideo && (
           <div class="button space" onClick={() => attachVideo.current.click()}>
             <VideoCameraOutlined />
           </div> 
         )}
-        { state.enableAudio && (
+        { !state.sealed && state.enableAudio && (
           <div class="button space" onClick={() => attachAudio.current.click()}>
             <SoundOutlined />
           </div> 
         )}
-        <div class="bar space" />
+        { !state.sealed && (
+          <div class="bar space" />
+        )}
         <div class="button space">
           <Dropdown overlay={picker} overlayStyle={{ minWidth: 0 }} trigger={['click']} placement="top">
             <FontColorsOutlined />

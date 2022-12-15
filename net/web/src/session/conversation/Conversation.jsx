@@ -41,7 +41,7 @@ export function Conversation({ closeConversation, openDetails, cardId, channelId
       <div class="header">
         <div class="title">
           <div class="logo">
-            <Logo img={state.image} url={state.logo} width={32} height={32} radius={4} />
+            <Logo img={state.logoImg} url={state.logoUrl} width={32} height={32} radius={4} />
           </div>
           <div class="label">{ state.subject }</div>
           { state.error && state.display === 'small' && (

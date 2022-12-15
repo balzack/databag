@@ -10,7 +10,6 @@ export function useConversation(cardId, channelId) {
 
   const [state, setState] = useState({
     display: null,
-    image: null,
     logo: null,
     subject: null,
     topics: [],
@@ -70,41 +69,6 @@ export function useConversation(cardId, channelId) {
   }, [cardId, channelId, upload]);
 
   useEffect(() => {
-
-    let chan, image, subject, logo; 
-    if (cardId) {
-      const cardChan = card.state.cards.get(cardId);
-      if (cardChan) {
-        chan = cardChan.channels.get(channelId);
-      }
-    }
-    else {
-      chan = channel.state.channels.get(channelId);
-    }
-
-    if (chan) {
-      if (!chan.contacts?.length) {
-        image = 'solution';
-        subject = 'Notes';
-      }
-      else if (chan.contacts.length > 1) {
-        image = 'appstore'
-        subject = 'Group';
-      }
-      else {
-        logo = card.actions.getImageUrl(chan.contacts[0]?.id);
-        subject = card.actions.getName(chan.contacts[0]?.id);
-      }
-      const parsed = JSON.parse(chan.data.channelDetail.data);
-      if (parsed.subject) {
-        subject = parsed.subject;
-      }
-    }
-
-    updateState({ image, subject, logo });
-  }, [cardId, channelId, card, channel]);
-
-  useEffect(() => {
     updateState({ topics: [] });
     conversation.actions.setConversationId(cardId, channelId);
     // eslint-disable-next-line
@@ -122,8 +86,8 @@ export function useConversation(cardId, channelId) {
       }
       return 1;
     });
-    const { error, loadingInit, loadingMore } = conversation.state;
-    updateState({ topics, error, loadingInit, loadingMore });
+    const { error, loadingInit, loadingMore, subject, logoUrl, logoImg } = conversation.state;
+    updateState({ topics, error, loadingInit, loadingMore, subject, logoUrl, logoImg });
     store.actions.setValue(`${channelId}::${cardId}`, Number(conversation.state.revision));
     // eslint-disable-next-line 
   }, [conversation]);
