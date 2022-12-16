@@ -1,5 +1,8 @@
 import { useRef, useState, useEffect, useContext } from 'react';
 import { ConversationContext } from 'context/ConversationContext';
+import { AccountContext } from 'context/AccountContext';
+import CryptoJS from 'crypto-js';
+import { JSEncrypt } from 'jsencrypt'
 
 export function useConversation() {
 
@@ -18,14 +21,32 @@ export function useConversation() {
     init: false,
     error: false,
     keyboard: false,
+    locked: false,
+    sealKey: null,
   });
 
   const delay = useRef(null);
   const conversation = useContext(ConversationContext);
+  const account = useContext(AccountContext);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
   }
+
+  useEffect(() => {
+    let sealKey;
+    const { locked, seals } = conversation.state;
+    if (seals?.length) {
+      seals.forEach(seal => {
+        if (seal.publicKey === account.state.sealKey?.public) {
+          let crypto = new JSEncrypt();
+          crypto.setPrivateKey(account.state.sealKey.private);
+          sealKey = crypto.decrypt(seal.sealedKey);
+        }
+      });
+    }
+    updateState({ locked, sealKey }); 
+  }, [conversation.state.locked, conversation.state.seals, account.state.sealKey])
 
   useEffect(() => {
     const { error, subject, logo, topics, host, init } = conversation.state;
@@ -42,7 +63,7 @@ export function useConversation() {
       return -1;
     });
     const filtered = sorted.filter(item => !(item.blocked === 1));
-    updateState({ topics, subject, logo, host, error, topics: filtered });
+    updateState({ subject, logo, host, error, topics: filtered });
     if (init) {
       clearTimeout(delay.current);
       updateState({ init: true });

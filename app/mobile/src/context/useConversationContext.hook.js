@@ -5,6 +5,8 @@ import { CardContext } from 'context/CardContext';
 import { ChannelContext } from 'context/ChannelContext';
 import { ProfileContext } from 'context/ProfileContext';
 import moment from 'moment';
+import CryptoJS from 'crypto-js';
+import { JSEncrypt } from 'jsencrypt'
 
 export function useConversationContext() {
   const [state, setState] = useState({
@@ -430,6 +432,46 @@ export function useConversationContext() {
         }
         force.current = true;
         sync();
+      }
+    },
+    addSealedTopic: async (message, sealKey) => {
+      if (conversationId.current) {
+        const { cardId, channelId } = conversationId.current;
+        if (cardId) {
+          await card.actions.addSealedChannelTopic(cardId, channelId,  message, sealKey);
+        }
+        else {
+          await channel.actions.addSealedTopic(channelId, message, sealKey);
+        }
+        force.current = true;
+        sync();
+      }
+    },
+    unsealTopic: async (topicId, sealKey) => {
+console.log("UNSEAL TOPIC");
+      try {
+        const topic = topics.current.get(topicId);
+        const { messageEncrypted, messageIv } = JSON.parse(topic.detail.data);
+        const iv = CryptoJS.enc.Hex.parse(messageIv);
+        const key = CryptoJS.enc.Hex.parse(sealKey);
+        const enc = CryptoJS.enc.Base64.parse(messageEncrypted);
+        let cipher = CryptoJS.lib.CipherParams.create({ ciphertext: enc, iv: iv });
+        const dec = CryptoJS.AES.decrypt(cipher, key, { iv: iv });
+        topic.unsealedDetail = JSON.parse(dec.toString(CryptoJS.enc.Utf8));
+        topics.current.set(topicId, { ...topic });
+        updateState({ topics: topics.current });
+    
+        const { cardId, channelId } = conversationId.current;
+        if (cardId) {
+          await card.actions.setChannelTopicUnsealedDetail(cardId, channelId, topic.topicId, topic.detailRevision, topic.unsealedDetial);
+        }
+        else {
+console.log("channel topic", topic);
+          await channel.actions.setTopicUnsealedDetail(channelId, topic.topicId, topic.detailRevision, topic.unsealedDetail);
+        }
+      }
+      catch(err) {
+        console.log(err);
       }
     },
     setSubject: async (subject) => {

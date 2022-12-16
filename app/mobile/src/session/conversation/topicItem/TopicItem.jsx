@@ -15,9 +15,9 @@ import Carousel from 'react-native-snap-carousel';
 import GestureRecognizer from 'react-native-swipe-gestures';
 import avatar from 'images/avatar.png';
 
-export function TopicItem({ item, focused, focus, hosting, remove, update, block, report }) {
+export function TopicItem({ item, focused, focus, hosting, sealed, sealKey, remove, update, block, report }) {
 
-  const { state, actions } = useTopicItem(item, hosting);
+  const { state, actions } = useTopicItem(item, hosting, remove, sealed, sealKey);
 
   const erase = () => {
     Alert.alert(
@@ -163,8 +163,11 @@ export function TopicItem({ item, focused, focus, hosting, remove, update, block
                 <MatIcons name="weather-cloudy-alert" size={32} color={Colors.alert} />
               </View>
             )}
-            { state.message && (
+            { state.message && !state.sealed && (
               <Text style={{ ...styles.message, fontSize: state.fontSize, color: state.fontColor }}>{ state.message }</Text>
+            )}
+            { state.sealed && (
+              <Text style={ styles.sealed }>sealed message</Text>
             )}
           </>
         )}

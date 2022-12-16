@@ -100,7 +100,8 @@ export function ConversationBody() {
              maintainVisibleContentPosition={ state.latched ? null : { minIndexForVisibile: 2, } }
              inverted={true}
              renderItem={({item}) => <TopicItem item={item} focused={item.topicId === state.focus} 
-               focus={() => actions.setFocus(item.topicId)} hosting={state.host == null} 
+               focus={() => actions.setFocus(item.topicId)} hosting={state.host == null}
+               sealed={state.sealed} sealKey={state.sealKey}
                remove={actions.removeTopic} update={actions.editTopic} block={actions.blockTopic}
                report={actions.reportTopic} />}
             keyExtractor={item => item.topicId}
@@ -112,7 +113,9 @@ export function ConversationBody() {
           </View>
         )}
         <View>
-          <AddTopic />
+          { (!state.locked || state.sealKey) && (
+            <AddTopic sealed={state.locked} sealKey={state.sealKey} />
+          )}
           <View style={styles.latchbar}>
             { !state.latched && (
               <TouchableOpacity style={styles.latch} onPress={latch}>

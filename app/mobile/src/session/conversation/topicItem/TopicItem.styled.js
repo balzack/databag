@@ -47,6 +47,12 @@ export const styles = StyleSheet.create({
   status: {
     paddingLeft: 52,
   },
+  sealed: {
+    paddingRight: 16,
+    paddingLeft: 52,
+    color: Colors.grey,
+    fontStyle: 'italic',
+  },
   focused: {
     position: 'absolute',
     top: 0,

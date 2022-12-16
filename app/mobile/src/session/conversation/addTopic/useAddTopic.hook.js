@@ -3,7 +3,7 @@ import { ConversationContext } from 'context/ConversationContext';
 import { Image } from 'react-native';
 import Colors from 'constants/Colors';
 
-export function useAddTopic(cardId, channelId) {
+export function useAddTopic(sealed, sealKey) {
 
   const [state, setState] = useState({
     message: null,
@@ -112,7 +112,12 @@ export function useAddTopic(cardId, channelId) {
             textColor: state.colorSet ? state.color : null,
             textSize: state.sizeSet ? state.size : null,
           };
-          await conversation.actions.addTopic(message, state.assets);
+          if (sealed) {
+            await conversation.actions.addSealedTopic(message, sealKey);
+          }
+          else {
+            await conversation.actions.addTopic(message, state.assets);
+          }
           updateState({ busy: false, assets: [], message: null,
             size: 'medium', sizeSet: false, textSize: 14,
             color: Colors.text, colorSet: false,

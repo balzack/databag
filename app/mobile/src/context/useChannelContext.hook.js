@@ -252,10 +252,10 @@ export function useChannelContext() {
     addTopic: async (channelId, message, files) => {
       const { server, appToken } = session.current;
       if (files?.length > 0) {
-        const topicId = await addChannelTopic(server, appToken, channelId, null, null);
+        const topicId = await addChannelTopic(server, appToken, channelId, null, null, null);
         upload.actions.addTopic(server, appToken, channelId, topicId, files, async (assets) => {
           message.assets = assets;
-          await setChannelTopicSubject(server, appToken, channelId, topicId, message);
+          await setChannelTopicSubject(server, appToken, channelId, topicId, 'superbasictopic', message);
         }, async () => {
           try {
             await removeChannelTopic(server, appToken, channelId, topicId);
@@ -266,12 +266,25 @@ export function useChannelContext() {
         });
       }
       else {
-        await addChannelTopic(server, appToken, channelId, message, []);
+        await addChannelTopic(server, appToken, channelId, 'superbasictopic', message, []);
       }
+    },
+    addSealedTopic: async (channelId, message, sealKey) => {
+      const { server, appToken } = session.current;
+      const iv = CryptoJS.lib.WordArray.random(128 / 8);
+      const key = CryptoJS.enc.Hex.parse(sealKey);
+      const encrypted = CryptoJS.AES.encrypt(JSON.stringify({ message }), key, { iv: iv });
+      const messageEncrypted = encrypted.ciphertext.toString(CryptoJS.enc.Base64)
+      const messageIv = iv.toString();
+      await addChannelTopic(server, appToken, channelId, 'sealedtopic', { messageEncrypted, messageIv });
     },
     setTopicSubject: async (channelId, topicId, data) => {
       const { server, appToken } = session.current;
       return await setChannelTopicSubject(server, appToken, channelId, topicId, data);
+    },
+    setTopicUnsealedDetail: async (channelId, topicId, revision, unsealed) => {
+      const { guid } = session.current;
+      await store.actions.setChannelTopicItemUnsealedDetail(guid, channelId, topicId, revision, unsealed);
     },
     setSubject: async (channelId, subject) => {
       const { server, appToken } = session.current;
@@ -360,24 +373,30 @@ export function useChannelContext() {
         const { guid } = session.current;
         const channel = channels.current.get(channelId);
         const { subjectEncrypted, subjectIv, seals } = JSON.parse(channel.detail.data);
-        seals.forEach(seal => {
-          if (seal.publicKey === sealKey.public) {
-            let crypto = new JSEncrypt();
-            crypto.setPrivateKey(sealKey.private);
-            const unsealedKey = crypto.decrypt(seal.sealedKey);
-            const iv = CryptoJS.enc.Hex.parse(subjectIv);
-            const key = CryptoJS.enc.Hex.parse(unsealedKey);
-            const enc = CryptoJS.enc.Base64.parse(subjectEncrypted);
-            let cipher = CryptoJS.lib.CipherParams.create({ ciphertext: enc, iv: iv });
-            const dec = CryptoJS.AES.decrypt(cipher, key, { iv: iv });
-            if (revision === channel.detailRevision) {
-              channel.unsealedDetail = JSON.parse(dec.toString(CryptoJS.enc.Utf8));
+        if (seals?.length) {
+          let unsealed = false;
+          seals.forEach(seal => {
+            if (seal.publicKey === sealKey.public) {
+              let crypto = new JSEncrypt();
+              crypto.setPrivateKey(sealKey.private);
+              const unsealedKey = crypto.decrypt(seal.sealedKey);
+              const iv = CryptoJS.enc.Hex.parse(subjectIv);
+              const key = CryptoJS.enc.Hex.parse(unsealedKey);
+              const enc = CryptoJS.enc.Base64.parse(subjectEncrypted);
+              let cipher = CryptoJS.lib.CipherParams.create({ ciphertext: enc, iv: iv });
+              const dec = CryptoJS.AES.decrypt(cipher, key, { iv: iv });
+              if (revision === channel.detailRevision) {
+                channel.unsealedDetail = JSON.parse(dec.toString(CryptoJS.enc.Utf8));
+                unsealed = true;
+              }
             }
+          });
+          if (unsealed) {
+            await store.actions.setChannelItemUnsealedDetail(guid, channelId, revision, channel.unsealedDetail);
+            channels.current.set(channelId, { ...channel });
+            updateState({ channels: channels.current });
           }
-        });
-        await store.actions.setChannelItemUnsealedDetail(guid, channelId, revision, channel.unsealedDetail);
-        channels.current.set(channelId, { ...channel });
-        updateState({ channels: channels.current });
+        }
       }
       catch(err) {
         console.log(err);

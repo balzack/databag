@@ -1,11 +1,12 @@
 import { useState, useEffect, useContext } from 'react';
+import { ConversationContext } from 'context/ConversationContext';
 import { CardContext } from 'context/CardContext';
 import { ProfileContext } from 'context/ProfileContext';
 import moment from 'moment';
 import { useWindowDimensions } from 'react-native';
 import Colors from 'constants/Colors';
 
-export function useTopicItem(item, hosting, remove) {
+export function useTopicItem(item, hosting, remove, sealed, sealKey) {
 
   const [state, setState] = useState({
     name: null,
@@ -25,6 +26,7 @@ export function useTopicItem(item, hosting, remove) {
     deletable: false,
   });
 
+  const conversation = useContext(ConversationContext);
   const profile = useContext(ProfileContext);
   const card = useContext(CardContext);
   const dimensions = useWindowDimensions();
@@ -38,8 +40,8 @@ export function useTopicItem(item, hosting, remove) {
   }, [dimensions]);
 
   useEffect(() => {
-    const { topicId, detail } = item;
-    const { guid, data, status, transform } = detail;
+    const { topicId, detail, unsealedDetail } = item;
+    const { guid, dataType, data, status, transform } = detail;
 
     let name, nameSet, known, logo;
     const identity = profile.state?.profile;
@@ -87,29 +89,59 @@ export function useTopicItem(item, hosting, remove) {
       }
     }
 
-    let parsed, message, assets, fontSize, fontColor;
-    try {
-      parsed = JSON.parse(data);
-      message = parsed.text;
-      assets = parsed.assets;
-      if (parsed.textSize === 'small') {
-        fontSize = 10;
+    let parsed, sealed, message, assets, fontSize, fontColor;
+    if (dataType === 'superbasictopic') {
+      try {
+        sealed = false;
+        parsed = JSON.parse(data);
+        message = parsed.text;
+        assets = parsed.assets;
+        if (parsed.textSize === 'small') {
+          fontSize = 10;
+        }
+        else if (parsed.textSize === 'large') {
+          fontSize = 20;
+        }
+        else {
+          fontSize = 14;
+        }
+        if (parsed.textColor) {
+          fontColor = parsed.textColor;
+        }
+        else {
+          fontColor = Colors.text;
+        }
       }
-      else if (parsed.textSize === 'large') {
-        fontSize = 20;
-      }
-      else {
-        fontSize = 14;
-      }
-      if (parsed.textColor) {
-        fontColor = parsed.textColor;
-      }
-      else {
-        fontColor = Colors.text;
+      catch (err) {
+        console.log(err);
       }
     }
-    catch (err) { }
-
+    else if (dataType === 'sealedtopic') {
+      if (unsealedDetail) {
+        sealed = false;
+        parsed = unsealedDetail.message;
+        message = parsed?.text;
+        if (parsed?.textSize === 'small') {
+          fontSize = 10;
+        }
+        else if (parsed?.textSize === 'large') {
+          fontSize = 20;
+        }
+        else {
+          fontSize = 14;
+        }
+        if (parsed?.textColor) {
+          fontColor = parsed?.textColor;
+        }
+        else {
+          fontColor = Colors.text;
+        }
+      }
+      else {
+        conversation.actions.unsealTopic(topicId, sealKey);
+        sealed = true;
+      }
+    }
 
     let timestamp;
     const date = new Date(item.detail.created * 1000);
@@ -128,7 +160,7 @@ export function useTopicItem(item, hosting, remove) {
     const editable = detail.guid === identity.guid && parsed;
     const deletable = editable || hosting;
 
-    updateState({ logo, name, nameSet, known, message, fontSize, fontColor, timestamp, transform, status, assets, deletable, editable, editData: parsed, editMessage: message });
+    updateState({ logo, name, nameSet, known, sealed, message, fontSize, fontColor, timestamp, transform, status, assets, deletable, editable, editData: parsed, editMessage: message });
   }, [card, item]);
 
   const actions = {

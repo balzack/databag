@@ -553,10 +553,10 @@ export function useCardContext() {
       const node = profile.node;
       const token = `${profile.guid}.${detail.token}`;
       if (files?.length > 0) {
-        const topicId = await addContactChannelTopic(node, token, channelId, null, null);
+        const topicId = await addContactChannelTopic(node, token, channelId, null, null, null);
         upload.actions.addContactTopic(node, token, cardId, channelId, topicId, files, async (assets) => {
           message.assets = assets;
-          await setContactChannelTopicSubject(node, token, channelId, topicId, message);
+          await setContactChannelTopicSubject(node, token, channelId, topicId, 'superbasictopic', message);
         }, async () => {
           try {
             await removeContactChannelTopic(node, token, channelId, topicId);
@@ -567,12 +567,27 @@ export function useCardContext() {
         });
       }
       else {
-        await addContactChannelTopic(node, token, channelId, message, []);
+        await addContactChannelTopic(node, token, channelId, 'superbasictopic', message, []);
       }
+    },
+    addSealedChannelTopic: async (cardId, channelId, message, sealKey) => {
+      const { detail, profile } = getCardEntry(cardId);
+      const node = profile.node;
+      const token = `${profile.guid}.${detail.token}`;
+      const iv = CryptoJS.lib.WordArray.random(128 / 8);
+      const key = CryptoJS.enc.Hex.parse(sealKey);
+      const encrypted = CryptoJS.AES.encrypt(JSON.stringify({ message }), key, { iv: iv });
+      const messageEncrypted = encrypted.ciphertext.toString(CryptoJS.enc.Base64)
+      const messageIv = iv.toString();
+      await addContactChannelTopic(node, token, channelId, 'sealedtopic', { messageEncrypted, messageIv });
     },
     setChannelTopicSubject: async (cardId, channelId, topicId, data) => {
       const { detail, profile } = getCardEntry(cardId);
       return await setContactChannelTopicSubject(profile.node, `${profile.guid}.${detail.token}`, channelId, topicId, data);
+    },
+    setChannelTopicUnsealedDetail: async (cardId, channelId, topicId, revision, unsealed) => {
+      const { guid } = session.current;
+      await store.actions.setCardChannelTopicItemUnsealedDetail(guid, cardId, channelId, revision, unsealed);
     },
     removeChannel: async (cardId, channelId) => {
       const { detail, profile } = getCardEntry(cardId);
@@ -604,25 +619,31 @@ export function useCardContext() {
         const card = cards.current.get(cardId);
         const channel = card.channels.get(channelId);
         const { subjectEncrypted, subjectIv, seals } = JSON.parse(channel.detail.data);
-        seals.forEach(seal => {
-          if (seal.publicKey === sealKey.public) {
-            let crypto = new JSEncrypt();
-            crypto.setPrivateKey(sealKey.private);
-            const unsealedKey = crypto.decrypt(seal.sealedKey);
-            const iv = CryptoJS.enc.Hex.parse(subjectIv);
-            const key = CryptoJS.enc.Hex.parse(unsealedKey);
-            const enc = CryptoJS.enc.Base64.parse(subjectEncrypted);
-            let cipher = CryptoJS.lib.CipherParams.create({ ciphertext: enc, iv: iv });
-            const dec = CryptoJS.AES.decrypt(cipher, key, { iv: iv });
-            if (revision === channel.detailRevision) {
-              channel.unsealedDetail = JSON.parse(dec.toString(CryptoJS.enc.Utf8));
+        let unsealed = false;
+        if (seals?.length) {
+          seals.forEach(seal => {
+            if (seal.publicKey === sealKey.public) {
+              let crypto = new JSEncrypt();
+              crypto.setPrivateKey(sealKey.private);
+              const unsealedKey = crypto.decrypt(seal.sealedKey);
+              const iv = CryptoJS.enc.Hex.parse(subjectIv);
+              const key = CryptoJS.enc.Hex.parse(unsealedKey);
+              const enc = CryptoJS.enc.Base64.parse(subjectEncrypted);
+              let cipher = CryptoJS.lib.CipherParams.create({ ciphertext: enc, iv: iv });
+              const dec = CryptoJS.AES.decrypt(cipher, key, { iv: iv });
+              if (revision === channel.detailRevision) {
+                channel.unsealedDetail = JSON.parse(dec.toString(CryptoJS.enc.Utf8));
+                unsealed = true;
+              }
             }
+          });
+          if (unsealed) {
+            await store.actions.setCardChannelItemUnsealedDetail(guid, cardId, channelId, revision, channel.unsealedDetail);
+            card.channels.set(channelId, { ...channel });
+            cards.current.set(cardId, { ...card });
+            updateState({ cards: cards.current });
           }
-        });
-        await store.actions.setCardChannelItemUnsealedDetail(guid, cardId, channelId, revision, channel.unsealedDetail);
-        card.channels.set(channelId, { ...channel });
-        cards.current.set(cardId, { ...card });
-        updateState({ cards: cards.current });
+        }
       }
       catch(err) {
         console.log(err);

@@ -13,9 +13,9 @@ import { ImageFile } from './imageFile/ImageFile';
 import DocumentPicker from 'react-native-document-picker'
 import ColorPicker from 'react-native-wheel-color-picker'
 
-export function AddTopic() {
+export function AddTopic({ sealed, sealKey }) {
 
-  const { state, actions } = useAddTopic();
+  const { state, actions } = useAddTopic(sealed, sealKey);
   const message = useRef();
 
   const addImage = async () => {
@@ -132,22 +132,24 @@ export function AddTopic() {
           onSubmitEditing={sendMessage} returnKeyType="send"
           autoCapitalize="sentences" placeholder="New Message" multiline={true} />
       <View style={styles.addButtons}>
-        { state.enableImage && (
+        { !sealed && state.enableImage && (
           <TouchableOpacity style={styles.addButton} onPress={addImage}>
             <AntIcons name="picture" size={20} color={Colors.text} />
           </TouchableOpacity>
         )}
-        { state.enableVideo && (
+        { !sealed && state.enableVideo && (
           <TouchableOpacity style={styles.addButton} onPress={addVideo}>
             <MaterialIcons name="video-outline" size={24} color={Colors.text} />
           </TouchableOpacity>
         )}
-        { state.enableAudio && (
+        { !sealed && state.enableAudio && (
           <TouchableOpacity style={styles.addButton} onPress={addAudio}>
             <MaterialIcons name="music-box-outline" size={20} color={Colors.text} />
           </TouchableOpacity>
         )}
-        <View style={styles.divider} />
+        { !sealed && (
+          <View style={styles.divider} />
+        )}
         <TouchableOpacity style={styles.addButton} onPress={actions.showFontSize}>
           <MaterialIcons name="format-size" size={20} color={Colors.text} />
         </TouchableOpacity>

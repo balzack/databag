@@ -271,6 +271,10 @@ export function useStoreContext() {
       const { id, revision, data } = topic;
       await db.current.executeSql(`INSERT OR REPLACE INTO channel_topic_${guid} (channel_id, topic_id, revision, detail_revision, detail, unsealed_detail) values (?, ?, ?, ?, ?, null);`, [channelId, id, revision, data.detailRevision, encodeObject(data.topicDetail)]);
     },
+    setChannelTopicItemUnsealedDetail: async (guid, channelId, topicId, revision, unsealed) => {
+console.log("SAVING:", channelId, revision, unsealed);
+      await db.current.executeSql(`UPDATE channel_topic_${guid} set unsealed_detail=? where detail_revision=? AND channel_id=? AND topic_id=?`, [encodeObject(unsealed), revision, channelId, topicId]);
+    },
     clearChannelTopicItem: async (guid, channelId, topicId) => {
       await db.current.executeSql(`DELETE FROM channel_topic_${guid} WHERE channel_id=? and topic_id=?`, [channelId, topicId]);
     },
@@ -309,6 +313,7 @@ export function useStoreContext() {
       await db.current.executeSql(`UPDATE card_channel_${guid} set detail_revision=?, detail=?, unsealed_detail=null where card_id=? and channel_id=?`, [revision, encodeObject(detail), cardId, channelId]);
     },
     setCardChannelItemUnsealedDetail: async (guid, cardId, channelId, revision, unsealed) => {
+console.log("SAVING:", cardId, channelId, revision, unsealed);
       await db.current.executeSql(`UPDATE card_channel_${guid} set unsealed_detail=? where detail_revision=? AND card_id=? AND channel_id=?`, [encodeObject(unsealed), revision, cardId, channelId]);
     },
     setCardChannelItemSummary: async (guid, cardId, channelId, revision, summary) => {
@@ -360,6 +365,9 @@ export function useStoreContext() {
     setCardChannelTopicItem: async (guid, cardId, channelId, topic) => {
       const { id, revision, data } = topic;
       await db.current.executeSql(`INSERT OR REPLACE INTO card_channel_topic_${guid} (card_id, channel_id, topic_id, revision, detail_revision, detail, unsealed_detail) values (?, ?, ?, ?, ?, ?, null);`, [cardId, channelId, id, revision, data.detailRevision, encodeObject(data.topicDetail)]);
+    },
+    setCardChannelTopicItemUnsealedDetail: async (guid, cardId, channelId, topicId, revision, unsealed) => {
+      await db.current.executeSql(`UPDATE card_channel_topic_${guid} set unsealed_detail=? where detail_revision=? AND card_id=? AND channel_id=? AND topic_id=?`, [encodeObject(unsealed), revision, cardId, channelId, topicId]);
     },
     clearCardChannelTopicItem: async (guid, cardId, channelId, topicId) => {
       await db.current.executeSql(`DELETE FROM card_channel_topic_${guid} WHERE card_id=? and channel_id=? and topic_id=?`, [cardId, channelId, topicId]);
