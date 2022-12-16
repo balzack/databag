@@ -14,7 +14,7 @@ export function Conversation({ closeConversation, openDetails, cardId, channelId
   const thread = useRef(null);
 
   const topicRenderer = (topic) => {
-    return (<TopicItem host={cardId == null} topic={topic} sealKey={state.sealKey} />)
+    return (<TopicItem host={cardId == null} topic={topic} sealed={state.sealed} sealKey={state.sealKey} />)
   }
 
   // an unfortunate cludge for the mobile browser

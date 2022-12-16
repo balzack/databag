@@ -278,22 +278,24 @@ export function useCardContext() {
       const channel = card.channels.get(channelId);
 
       const { subjectEncrypted, subjectIv, seals } = JSON.parse(channel.data.channelDetail.data);
-      seals.forEach(seal => {
-        if (seal.publicKey === sealKey.public) {
-          let crypto = new JSEncrypt();
-          crypto.setPrivateKey(sealKey.private);
-          const unsealedKey = crypto.decrypt(seal.sealedKey);
-          const iv = CryptoJS.enc.Hex.parse(subjectIv);
-          const key = CryptoJS.enc.Hex.parse(unsealedKey);
-          const enc = CryptoJS.enc.Base64.parse(subjectEncrypted);
-          let cipher = CryptoJS.lib.CipherParams.create({ ciphertext: enc, iv: iv });
-          const dec = CryptoJS.AES.decrypt(cipher, key, { iv: iv });
-          channel.data.unsealedChannel = JSON.parse(dec.toString(CryptoJS.enc.Utf8));
-          card.channels.set(channel.id, { ...channel });
-          cards.current.set(cardId, { ...card });
-          updateState({ cards: cards.current });
-        }
-      });
+      if (seals?.length) {
+        seals.forEach(seal => {
+          if (seal.publicKey === sealKey.public) {
+            let crypto = new JSEncrypt();
+            crypto.setPrivateKey(sealKey.private);
+            const unsealedKey = crypto.decrypt(seal.sealedKey);
+            const iv = CryptoJS.enc.Hex.parse(subjectIv);
+            const key = CryptoJS.enc.Hex.parse(unsealedKey);
+            const enc = CryptoJS.enc.Base64.parse(subjectEncrypted);
+            let cipher = CryptoJS.lib.CipherParams.create({ ciphertext: enc, iv: iv });
+            const dec = CryptoJS.AES.decrypt(cipher, key, { iv: iv });
+            channel.data.unsealedChannel = JSON.parse(dec.toString(CryptoJS.enc.Utf8));
+            card.channels.set(channel.id, { ...channel });
+            cards.current.set(cardId, { ...card });
+            updateState({ cards: cards.current });
+          }
+        });
+      }
     },
     removeChannel: async (cardId, channelId) => {
       let { cardProfile, cardDetail } = cards.current.get(cardId).data;
@@ -318,7 +320,27 @@ export function useCardContext() {
       let { cardProfile, cardDetail } = cards.current.get(cardId).data;
       let token = cardProfile.guid + '.' + cardDetail.token;
       let node = cardProfile.node;
-      await setContactChannelTopicSubject(node, token, channelId, topicId, data);
+      await setContactChannelTopicSubject(node, token, channelId, topicId, 'superbasictopic', data);
+      try {
+        resync.current.push(cardId);
+        await setCards(null);
+      }
+      catch (err) {
+        console.log(err);
+      }
+    },
+    setSealedChannelTopicSubject: async (cardId, channelId, topicId, data, sealKey) => {
+console.log("SETTING:", data, sealKey);
+
+      let { cardProfile, cardDetail } = cards.current.get(cardId).data;
+      let token = cardProfile.guid + '.' + cardDetail.token;
+      let node = cardProfile.node;
+      const iv = CryptoJS.lib.WordArray.random(128 / 8);
+      const key = CryptoJS.enc.Hex.parse(sealKey);
+      const encrypted = CryptoJS.AES.encrypt(JSON.stringify(data), key, { iv: iv });
+      const messageEncrypted = encrypted.ciphertext.toString(CryptoJS.enc.Base64)
+      const messageIv = iv.toString();
+      await setContactChannelTopicSubject(node, token, channelId, topicId, 'sealedtopic', { messageEncrypted, messageIv });
       try {
         resync.current.push(cardId);
         await setCards(null);

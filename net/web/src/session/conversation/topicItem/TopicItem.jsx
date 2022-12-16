@@ -8,9 +8,9 @@ import { Space, Skeleton, Button, Modal, Input } from 'antd';
 import { ExclamationCircleOutlined, DeleteOutlined, EditOutlined, FireOutlined, PictureOutlined } from '@ant-design/icons';
 import { Carousel } from 'carousel/Carousel';
 
-export function TopicItem({ host, topic, sealKey }) {
+export function TopicItem({ host, topic, sealed, sealKey }) {
 
-  const { state, actions } = useTopicItem(topic, sealKey);
+  const { state, actions } = useTopicItem(topic, sealed, sealKey);
 
   let name = state.name ? state.name : state.handle;
   let nameClass = state.name ? 'set' : 'unset';

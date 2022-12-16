@@ -60,7 +60,7 @@ export function useConversationContext() {
 
   const getSeals = (conversation) => {
     try {
-      if (conversation.data.channelDetail.dataType === 'sealed') {
+      if (conversation?.data.channelDetail.dataType === 'sealed') {
         return JSON.parse(conversation.data.channelDetail.data).seals;
       }
     }
@@ -226,10 +226,11 @@ export function useConversationContext() {
 
       if (curView === view.current) {
         let chan = getChannel();
+
         let contacts = getContacts(chan);
         let subject = getSubject(chan);
         let members = getMembers(chan);
-        const seals = getSeals(chan);
+        let seals = getSeals(chan);
         const enableImage = chan?.data?.channelDetail?.enableImage;
         const enableAudio = chan?.data?.channelDetail?.enableAudio;
         const enableVideo = chan?.data?.channelDetail?.enableVideo;
@@ -389,6 +390,15 @@ export function useConversationContext() {
       }
       else {
         return await channel.actions.setChannelTopicSubject(channelId, topicId, data);
+      }
+    },
+    setSealedTopicSubject: async (topicId, data, sealKey) => {
+      const { cardId, channelId } = channelView.current;
+      if (cardId) {
+        return await card.actions.setSealedChannelTopicSubject(cardId, channelId, topicId, data, sealKey);
+      }
+      else {
+        return await channel.actions.setSealedChannelTopicSubject(channelId, topicId, data, sealKey);
       }
     },
     resync: () => {

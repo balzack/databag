@@ -200,7 +200,7 @@ export function useChannels() {
   }
 
   const setMessage = (chan) => {
-    let message = "";
+    let message;
     if (chan.data.channelSummary?.lastTopic?.dataType === 'superbasictopic') {
       try {
         message = JSON.parse(chan.data.channelSummary.lastTopic.data).text;
@@ -210,7 +210,9 @@ export function useChannels() {
       }
     }
 
-    chan.message = message;
+    if (typeof message === 'string') {
+      chan.message = message;
+    }
   } 
 
   useEffect(() => {

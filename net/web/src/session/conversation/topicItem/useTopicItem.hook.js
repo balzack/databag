@@ -3,7 +3,7 @@ import { ConversationContext } from 'context/ConversationContext';
 import { ProfileContext } from 'context/ProfileContext';
 import { CardContext } from 'context/CardContext';
 
-export function useTopicItem(topic, sealKey) {
+export function useTopicItem(topic, sealed, sealKey) {
 
   const [state, setState] = useState({
     init: false,
@@ -60,7 +60,9 @@ export function useTopicItem(topic, sealKey) {
       if (dataType === 'superbasictopic') {
         try {
           message = JSON.parse(data);
-          text = message.text;
+          if (typeof message.text === 'string') {
+            text = message.text;
+          }
           if (message.textColor != null) {
             textColor = message.textColor;
           }
@@ -84,7 +86,9 @@ export function useTopicItem(topic, sealKey) {
       }
       else if (dataType === 'sealedtopic') {
         if (topic.data.unsealedMessage) {
-          text = topic.data.unsealedMessage.message.text;
+console.log("UNSEALED MESSAGE", topic.data.unsealedMessage);
+
+          text = topic.data.unsealedMessage.message?.text;
           sealed = false;
         }
         else {
@@ -141,8 +145,15 @@ export function useTopicItem(topic, sealKey) {
       if (!state.busy) {
         updateState({ busy: true });
         try {
-          await conversation.actions.setTopicSubject(topic.id,
+          if (sealed) {
+console.log("SET SEALED");
+            await conversation.actions.setSealedTopicSubject(topic.id, {...state.message, text: editMessage.current }, sealKey);
+          }
+          else {
+console.log("SET UNSEALED");
+            await conversation.actions.setTopicSubject(topic.id,
               { ...state.message, text: editMessage.current, assets: state.assets });
+          }
           updateState({ editing: false });
         }
         catch (err) {
