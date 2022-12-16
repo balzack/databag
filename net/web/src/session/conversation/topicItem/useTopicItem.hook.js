@@ -86,8 +86,6 @@ export function useTopicItem(topic, sealed, sealKey) {
       }
       else if (dataType === 'sealedtopic') {
         if (topic.data.unsealedMessage) {
-console.log("UNSEALED MESSAGE", topic.data.unsealedMessage);
-
           text = topic.data.unsealedMessage.message?.text;
           sealed = false;
         }
@@ -146,11 +144,9 @@ console.log("UNSEALED MESSAGE", topic.data.unsealedMessage);
         updateState({ busy: true });
         try {
           if (sealed) {
-console.log("SET SEALED");
             await conversation.actions.setSealedTopicSubject(topic.id, {...state.message, text: editMessage.current }, sealKey);
           }
           else {
-console.log("SET UNSEALED");
             await conversation.actions.setTopicSubject(topic.id,
               { ...state.message, text: editMessage.current, assets: state.assets });
           }

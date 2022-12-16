@@ -209,6 +209,26 @@ export function useChannels() {
         console.log(err);
       }
     }
+    if (chan.data.channelSummary?.lastTopic?.dataType === 'sealedtopic') {
+      try {
+        if (chan.data.unsealedSummary == null) {
+          if (chan.cardId) {
+            card.actions.unsealChannelSummary(chan.cardId, chan.id, account.state.sealKey);
+          }
+          else {
+            channel.actions.unsealChannelSummary(chan.id, account.state.sealKey);
+          }
+        }
+        else {
+          if (typeof chan.data.unsealedSummary.message.text === 'string') {
+            chan.message = chan.data.unsealedSummary.message.text;
+          }
+        }
+      }
+      catch (err) {
+        console.log(err)
+      }
+    }
 
     if (typeof message === 'string') {
       chan.message = message;

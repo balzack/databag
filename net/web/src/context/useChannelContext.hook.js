@@ -32,6 +32,20 @@ export function useChannelContext() {
     setState((s) => ({ ...s, ...value }))
   }
 
+  const unsealKey = (seals, sealKey) => {
+    let unsealedKey;
+    if (seals?.length) {
+      seals.forEach(seal => {
+        if (seal.publicKey === sealKey.public) {
+          let crypto = new JSEncrypt();
+          crypto.setPrivateKey(sealKey.private);
+          unsealedKey = crypto.decrypt(seal.sealedKey);
+        }
+      });
+    }
+    return unsealedKey;
+  }
+
   const updateChannels = async () => {
     let delta = await getChannels(access.current, revision.current);
     for (let channel of delta) {
@@ -43,13 +57,12 @@ export function useChannelContext() {
         if (cur.data.detailRevision !== channel.data.detailRevision) {
           if (channel.data.channelDetail != null) {
             cur.data.channelDetail = channel.data.channelDetail;
-            cur.data.unsealedSubject = null;
           }
           else {
             let detail = await getChannelDetail(access.current, channel.id);
             cur.data.channelDetail = detail;
-            cur.data.unsealedChannel = null;
           }
+          cur.data.unsealedChannel = null;
           cur.data.detailRevision = channel.data.detailRevision;
         }
         if (cur.data.topicRevision !== channel.data.topicRevision) {
@@ -60,6 +73,7 @@ export function useChannelContext() {
             let summary = await getChannelSummary(access.current, channel.id);
             cur.data.channelSummary = summary;
           }
+          cur.data.unsealedSummary = null;
           cur.data.topicRevision = channel.data.topicRevision;
         }
         cur.revision = channel.revision;
@@ -131,25 +145,44 @@ export function useChannelContext() {
       return await addChannel(access.current, 'sealed', cards, data);
     },
     unsealChannelSubject: (channelId, sealKey) => {
-      const channel = channels.current.get(channelId);
-
-      const { subjectEncrypted, subjectIv, seals } = JSON.parse(channel.data.channelDetail.data);
-      if (seals?.length) {
-        seals.forEach(seal => {
-          if (seal.publicKey === sealKey.public) {
-            let crypto = new JSEncrypt();
-            crypto.setPrivateKey(sealKey.private);
-            const unsealedKey = crypto.decrypt(seal.sealedKey);
-            const iv = CryptoJS.enc.Hex.parse(subjectIv);
-            const key = CryptoJS.enc.Hex.parse(unsealedKey);
-            const enc = CryptoJS.enc.Base64.parse(subjectEncrypted);
-            let cipher = CryptoJS.lib.CipherParams.create({ ciphertext: enc, iv: iv });
-            const dec = CryptoJS.AES.decrypt(cipher, key, { iv: iv });
-            channel.data.unsealedChannel = JSON.parse(dec.toString(CryptoJS.enc.Utf8));
-            channels.current.set(channel.id, { ...channel });
-            updateState({ channels: channels.current });
-          }
-        });
+      try {
+        const channel = channels.current.get(channelId);
+        const { subjectEncrypted, subjectIv, seals } = JSON.parse(channel.data.channelDetail.data);
+        const unsealedKey = unsealKey(seals, sealKey);
+        if (unsealKey) {
+          const iv = CryptoJS.enc.Hex.parse(subjectIv);
+          const key = CryptoJS.enc.Hex.parse(unsealedKey);
+          const enc = CryptoJS.enc.Base64.parse(subjectEncrypted);
+          const cipher = CryptoJS.lib.CipherParams.create({ ciphertext: enc, iv: iv });
+          const dec = CryptoJS.AES.decrypt(cipher, key, { iv: iv });
+          channel.data.unsealedChannel = JSON.parse(dec.toString(CryptoJS.enc.Utf8));
+          channels.current.set(channel.id, { ...channel });
+          updateState({ channels: channels.current });
+        }
+      }
+      catch(err) {
+        console.log(err);
+      }
+    },
+    unsealChannelSummary: (channelId, sealKey) => {
+      try {
+        const channel = channels.current.get(channelId);
+        const { seals } = JSON.parse(channel.data.channelDetail.data);
+        const { messageEncrypted, messageIv } = JSON.parse(channel.data.channelSummary.lastTopic.data);
+        const unsealedKey = unsealKey(seals, sealKey);
+        if (unsealKey) {
+          const iv = CryptoJS.enc.Hex.parse(messageIv);
+          const key = CryptoJS.enc.Hex.parse(unsealedKey);
+          const enc = CryptoJS.enc.Base64.parse(messageEncrypted);
+          const cipher = CryptoJS.lib.CipherParams.create({ ciphertext: enc, iv: iv });
+          const dec = CryptoJS.AES.decrypt(cipher, key, { iv: iv });
+          channel.data.unsealedSummary = JSON.parse(dec.toString(CryptoJS.enc.Utf8));
+          channels.current.set(channel.id, { ...channel });
+          updateState({ channels: channels.current });
+        }
+      }
+      catch(err) {
+        console.log(err);
       }
     },
     setChannelSubject: async (channelId, subject) => {
