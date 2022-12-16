@@ -131,11 +131,11 @@ export function useConversationContext() {
     }
     return await channel.actions.addTopic(channelId, message, assetId);
   }
-  const setTopicSubject = async (cardId, channelId, topicId, data) => {
+  const setTopicSubject = async (cardId, channelId, topicId, dataType, data) => {
     if (cardId) {
-      return await card.actions.setChannelTopicSubject(cardId, channelId, topicId, data);
+      return await card.actions.setChannelTopicSubject(cardId, channelId, topicId, dataType, data);
     }
-    return await channel.actions.setTopicSubject(channelId, topicId, data);
+    return await channel.actions.setTopicSubject(channelId, topicId, dataType, data);
   }
   const remove = async (cardId, channelId) => {
     if (cardId) {
@@ -448,7 +448,6 @@ export function useConversationContext() {
       }
     },
     unsealTopic: async (topicId, sealKey) => {
-console.log("UNSEAL TOPIC");
       try {
         const topic = topics.current.get(topicId);
         const { messageEncrypted, messageIv } = JSON.parse(topic.detail.data);
@@ -466,7 +465,6 @@ console.log("UNSEAL TOPIC");
           await card.actions.setChannelTopicUnsealedDetail(cardId, channelId, topic.topicId, topic.detailRevision, topic.unsealedDetial);
         }
         else {
-console.log("channel topic", topic);
           await channel.actions.setTopicUnsealedDetail(channelId, topic.topicId, topic.detailRevision, topic.unsealedDetail);
         }
       }
@@ -522,14 +520,33 @@ console.log("channel topic", topic);
       if (conversationId.current) {
         const { cardId, channelId } = conversationId.current;
         if (cardId) {
-          return await card.actions.setChannelTopicSubject(cardId, channelId, topicId, data);
+          return await card.actions.setChannelTopicSubject(cardId, channelId, topicId, 'superbasictopic', data);
         }
         else {
-          return await channel.actions.setTopicSubject(channelId, topicId, data);
+          return await channel.actions.setTopicSubject(channelId, topicId, 'superbasictopic', data);
         }
       }
       force.current = true;
       sync();
+    },
+    setSealedTopicSubject: async (topicId, data, sealKey) => {
+      if (conversationId.current) {
+        const { cardId, channelId } = conversationId.current;
+
+        const iv = CryptoJS.lib.WordArray.random(128 / 8);
+        const key = CryptoJS.enc.Hex.parse(sealKey);
+        const encrypted = CryptoJS.AES.encrypt(JSON.stringify({ message: data }), key, { iv: iv });
+        const messageEncrypted = encrypted.ciphertext.toString(CryptoJS.enc.Base64)
+        const messageIv = iv.toString();
+
+        if (cardId) {
+          return await card.actions.setChannelTopicSubject(cardId, channelId, topicId, 'sealedtopic', { messageEncrypted, messageIv });
+        }
+        else {
+          return await channel.actions.setTopicSubject(channelId, topicId, 'sealedtopic', { messageEncrypted, messageIv });
+        }
+ 
+      }
     },
     setCard: async (id) => {
       if (conversationId.current) {
