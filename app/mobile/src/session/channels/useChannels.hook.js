@@ -94,7 +94,8 @@ export function useChannels() {
 
     let updated = false;
     const login = app.state.loginTimestamp;
-    const { created, guid } = item?.summary?.lastTopic;
+    const created = item?.summary?.lastTopic?.created;
+    const guid = item?.summary?.lastTopic?.guid;
     if (created && login && login < created) {
       if (!item.readRevision || item.readRevision < item.revision) {
         if (profile.state.profile.guid != guid) {
@@ -191,6 +192,28 @@ export function useChannels() {
       }
       catch (err) {
         console.log(err);
+      }
+    }
+    if (item?.summary?.lastTopic?.dataType === 'sealedtopic') {
+      if (state.sealable) {
+        try {
+          if (item.unsealedSummary == null) {
+            if (item.cardId) {
+              card.actions.unsealChannelSummary(item.cardId, item.channelId, item.topicRevision, account.state.sealKey);
+            }
+            else {
+              channel.actions.unsealChannelSummary(item.channelId, item.topicRevision, account.state.sealKey);
+            }
+          }
+          else {
+            if (typeof item.unsealedSummary.message.text === 'string') {
+              message = item.unsealedSummary.message.text;
+            }
+          }
+        }
+        catch (err) {
+          console.log(err)
+        }
       }
     }
 

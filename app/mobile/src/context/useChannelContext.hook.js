@@ -38,6 +38,20 @@ export function useChannelContext() {
     setState((s) => ({ ...s, ...value }))
   }
 
+  const unsealKey = (seals, sealKey) => {
+    let unsealedKey;
+    if (seals?.length) {
+      seals.forEach(seal => {
+        if (seal.publicKey === sealKey.public) {
+          let crypto = new JSEncrypt();
+          crypto.setPrivateKey(sealKey.private);
+          unsealedKey = crypto.decrypt(seal.sealedKey);
+        }
+      });
+    }
+    return unsealedKey
+  };
+
   const setChannel = (channelId, channel) => {
     let update = channels.current.get(channelId);
     if (!update) {
@@ -286,6 +300,10 @@ export function useChannelContext() {
       const { guid } = session.current;
       await store.actions.setChannelTopicItemUnsealedDetail(guid, channelId, topicId, revision, unsealed);
     },
+    setTopicUnsealedSummary: async (channelId, topicId, revision, unsealed) => {
+      const { guid } = seassion.current;
+      await store.actions.setChannelTopicItemUnsealedSummary(guid, channelId, topicId, revision, unsealed);
+    },
     setSubject: async (channelId, subject) => {
       const { server, appToken } = session.current;
       return await setChannelSubject(server, appToken, channelId, 'superbasic', { subject });
@@ -373,26 +391,41 @@ export function useChannelContext() {
         const { guid } = session.current;
         const channel = channels.current.get(channelId);
         const { subjectEncrypted, subjectIv, seals } = JSON.parse(channel.detail.data);
-        if (seals?.length) {
-          let unsealed = false;
-          seals.forEach(seal => {
-            if (seal.publicKey === sealKey.public) {
-              let crypto = new JSEncrypt();
-              crypto.setPrivateKey(sealKey.private);
-              const unsealedKey = crypto.decrypt(seal.sealedKey);
-              const iv = CryptoJS.enc.Hex.parse(subjectIv);
-              const key = CryptoJS.enc.Hex.parse(unsealedKey);
-              const enc = CryptoJS.enc.Base64.parse(subjectEncrypted);
-              let cipher = CryptoJS.lib.CipherParams.create({ ciphertext: enc, iv: iv });
-              const dec = CryptoJS.AES.decrypt(cipher, key, { iv: iv });
-              if (revision === channel.detailRevision) {
-                channel.unsealedDetail = JSON.parse(dec.toString(CryptoJS.enc.Utf8));
-                unsealed = true;
-              }
-            }
-          });
-          if (unsealed) {
+        const unsealedKey = unsealKey(seals, sealKey);
+        if (unsealedKey) {
+          const iv = CryptoJS.enc.Hex.parse(subjectIv);
+          const key = CryptoJS.enc.Hex.parse(unsealedKey);
+          const enc = CryptoJS.enc.Base64.parse(subjectEncrypted);
+          let cipher = CryptoJS.lib.CipherParams.create({ ciphertext: enc, iv: iv });
+          const dec = CryptoJS.AES.decrypt(cipher, key, { iv: iv });
+          if (revision === channel.detailRevision) {
+            channel.unsealedDetail = JSON.parse(dec.toString(CryptoJS.enc.Utf8));
             await store.actions.setChannelItemUnsealedDetail(guid, channelId, revision, channel.unsealedDetail);
+            channels.current.set(channelId, { ...channel });
+            updateState({ channels: channels.current });
+          }
+        }
+      }
+      catch(err) {
+        console.log(err);
+      }
+    },
+    unsealChannelSummary: async (channelId, revision, sealKey) => {
+      try {
+        const { guid } = session.current;
+        const channel = channels.current.get(channelId);
+        const { seals } = JSON.parse(channel.detail.data);
+        const { messageEncrypted, messageIv } = JSON.parse(channel.summary.lastTopic.data);
+        const unsealedKey = unsealKey(seals, sealKey);
+        if (unsealedKey) {
+          const iv = CryptoJS.enc.Hex.parse(messageIv);
+          const key = CryptoJS.enc.Hex.parse(unsealedKey);
+          const enc = CryptoJS.enc.Base64.parse(messageEncrypted);
+          let cipher = CryptoJS.lib.CipherParams.create({ ciphertext: enc, iv: iv });
+          const dec = CryptoJS.AES.decrypt(cipher, key, { iv: iv });
+          if (revision === channel.topicRevision) {
+            channel.unsealedSummary = JSON.parse(dec.toString(CryptoJS.enc.Utf8));
+            await store.actions.setChannelItemUnsealedSummary(guid, channelId, revision, channel.unsealedSummary);
             channels.current.set(channelId, { ...channel });
             updateState({ channels: channels.current });
           }

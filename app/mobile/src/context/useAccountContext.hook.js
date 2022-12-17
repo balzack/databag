@@ -16,7 +16,7 @@ export function useAccountContext() {
   const curRevision = useRef(null);
   const setRevision = useRef(null);
   const syncing = useRef(false);
-  
+
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }))
   }
