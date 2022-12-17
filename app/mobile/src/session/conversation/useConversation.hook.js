@@ -103,7 +103,12 @@ export function useConversation() {
       updateState({ editing: false });
     },
     updateTopic: async () => {
-      await conversation.actions.setTopicSubject(state.editTopicId, { ...state.editData, text: state.editMessage });
+      if (state.locked) {
+        await conversation.actions.setSealedTopicSubject(state.editTopicId, { ...state.editData, text: state.editMessage }, state.sealKey);
+      }
+      else {
+        await conversation.actions.setTopicSubject(state.editTopicId, { ...state.editData, text: state.editMessage });
+      }
     },
     setEditMessage: (editMessage) => {
       updateState({ editMessage });

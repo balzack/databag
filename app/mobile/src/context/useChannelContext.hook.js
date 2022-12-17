@@ -278,9 +278,9 @@ export function useChannelContext() {
       const messageIv = iv.toString();
       await addChannelTopic(server, appToken, channelId, 'sealedtopic', { messageEncrypted, messageIv });
     },
-    setTopicSubject: async (channelId, topicId, data) => {
+    setTopicSubject: async (channelId, topicId, dataType, data) => {
       const { server, appToken } = session.current;
-      return await setChannelTopicSubject(server, appToken, channelId, topicId, data);
+      return await setChannelTopicSubject(server, appToken, channelId, topicId, dataType, data);
     },
     setTopicUnsealedDetail: async (channelId, topicId, revision, unsealed) => {
       const { guid } = session.current;

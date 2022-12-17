@@ -581,9 +581,9 @@ export function useCardContext() {
       const messageIv = iv.toString();
       await addContactChannelTopic(node, token, channelId, 'sealedtopic', { messageEncrypted, messageIv });
     },
-    setChannelTopicSubject: async (cardId, channelId, topicId, data) => {
+    setChannelTopicSubject: async (cardId, channelId, topicId, dataType, data) => {
       const { detail, profile } = getCardEntry(cardId);
-      return await setContactChannelTopicSubject(profile.node, `${profile.guid}.${detail.token}`, channelId, topicId, data);
+      return await setContactChannelTopicSubject(profile.node, `${profile.guid}.${detail.token}`, channelId, topicId, dataType, data);
     },
     setChannelTopicUnsealedDetail: async (cardId, channelId, topicId, revision, unsealed) => {
       const { guid } = session.current;
