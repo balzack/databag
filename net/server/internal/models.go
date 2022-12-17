@@ -249,6 +249,8 @@ type Connect struct {
 
 	Version string `json:"version,omitempty"`
 
+  Seal string `json:"seal,omitempty"`
+
 	Node string `json:"node,omitempty"`
 }
 

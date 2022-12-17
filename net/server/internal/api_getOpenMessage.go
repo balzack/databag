@@ -48,6 +48,7 @@ func GetOpenMessage(w http.ResponseWriter, r *http.Request) {
 		Handle:          account.Username,
 		Name:            detail.Name,
 		Description:     detail.Description,
+    Seal:            detail.SealPublic,
 		Location:        detail.Location,
 		Image:           detail.Image,
 		Version:         APPVersion,

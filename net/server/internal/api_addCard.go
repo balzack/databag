@@ -56,6 +56,7 @@ func AddCard(w http.ResponseWriter, r *http.Request) {
 			Image:           identity.Image,
 			Version:         identity.Version,
 			Node:            identity.Node,
+      Seal:            identity.Seal,
 			ProfileRevision: identity.Revision,
 			Status:          APPCardConfirmed,
       StatusUpdated:   time.Now().Unix(),

@@ -62,6 +62,7 @@ func SetOpenMessage(w http.ResponseWriter, r *http.Request) {
 		card.Name = connect.Name
 		card.Description = connect.Description
 		card.Location = connect.Location
+    card.Seal = connect.Seal
 		card.Image = connect.Image
 		card.Version = connect.Version
 		card.Node = connect.Node
@@ -109,6 +110,7 @@ func SetOpenMessage(w http.ResponseWriter, r *http.Request) {
 			card.Username = connect.Handle
 			card.Name = connect.Name
 			card.Description = connect.Description
+      card.Seal = connect.Seal
 			card.Location = connect.Location
 			card.Image = connect.Image
 			card.Version = connect.Version
