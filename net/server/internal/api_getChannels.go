@@ -76,7 +76,7 @@ func GetChannels(w http.ResponseWriter, r *http.Request) {
 		}
 
 		for _, slot := range slots {
-			if !typesSet || hasChannelType(types, slot.Channel) {
+			if !typesSet || hasChannelType(types, slot.Channel) || slot.Channel == nil {
 				if channelRevisionSet {
 					response = append(response, getChannelRevisionModel(&slot, true))
 				} else if slot.Channel != nil {
