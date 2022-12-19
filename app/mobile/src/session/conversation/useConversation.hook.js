@@ -19,12 +19,15 @@ export function useConversation() {
     editData: null,
     editMessage: null,
     init: false,
+    delayed: false,
     error: false,
     keyboard: false,
     locked: false,
     sealKey: null,
+    delayed: false,
   });
 
+  const init = useRef(true);
   const delay = useRef(null);
   const conversation = useContext(ConversationContext);
   const account = useContext(AccountContext);
@@ -32,15 +35,6 @@ export function useConversation() {
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
   }
-
-const converPem = (str) => {
-  var result = '';
-  while (str.length > 0) {
-    result += str.substring(0, 64) + '\n';
-    str = str.substring(64);
-  }
-  return result;
-}
 
   useEffect(() => {
     let sealKey;
@@ -59,6 +53,7 @@ const converPem = (str) => {
 
   useEffect(() => {
     const { error, subject, logo, topics, host, init } = conversation.state;
+
     const items = Array.from(topics.values());
     const sorted = items.sort((a, b) => {
       const aTimestamp = a?.detail?.created;
@@ -72,18 +67,17 @@ const converPem = (str) => {
       return -1;
     });
     const filtered = sorted.filter(item => !(item.blocked === 1));
-    updateState({ subject, logo, host, error, topics: filtered });
-    if (init) {
-      clearTimeout(delay.current);
-      updateState({ init: true });
+
+    if (!init) {
+      setTimeout(() => {
+        updateState({ delayed: true });
+      }, 500);
     }
     else {
-      if (!delay.current) {
-        delay.current = setTimeout(() => {
-          updateState({ init: false });
-        }, 500);
-      }
+      updateState({ delayed: false });
     }
+
+    updateState({ init, subject, logo, host, error, topics: filtered });
   }, [conversation]);
 
   const actions = {

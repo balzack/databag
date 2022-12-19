@@ -87,7 +87,9 @@ export function ConversationBody() {
 <View style={styles.thread}>
         { state.topics.length === 0 && (
           <View style={styles.empty}>
-            <Text style={styles.emptyText}>No Messages</Text>
+            { state.init && (
+              <Text style={styles.emptyText}>No Messages</Text>
+            )}
           </View>
         )}
         { state.topics.length !== 0 && (
@@ -107,7 +109,7 @@ export function ConversationBody() {
             keyExtractor={item => item.topicId}
           />
         )}
-        { !state.init && (
+        { !state.init && state.delayed && (
           <View style={styles.loading}>
             <ActivityIndicator size="large" color={Colors.primary} />
           </View>

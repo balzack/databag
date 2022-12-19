@@ -17,6 +17,7 @@ export function useProfileBody() {
     description: null,
     node: null,
     imageSource: null,
+    sealable: false,
     searchable: null,
     notifications: null,
     showDetailEdit: false,
@@ -83,11 +84,11 @@ export function useProfileBody() {
   }, [profile]);
 
   useEffect(() => {
-    const { searchable, pushEnabled, seal } = account.state.status;
+    const { searchable, pushEnabled, seal, sealable } = account.state.status;
     const sealKey = account.state.sealKey;
     const sealEnabled = seal?.publicKey != null;
     const sealUnlocked = seal?.publicKey === sealKey?.public && sealKey?.private && sealKey?.public;
-    updateState({ searchable, pushEnabled, seal, sealKey, sealEnabled, sealUnlocked });
+    updateState({ searchable, sealable, pushEnabled, seal, sealKey, sealEnabled, sealUnlocked });
   }, [account]);
 
   useEffect(() => {

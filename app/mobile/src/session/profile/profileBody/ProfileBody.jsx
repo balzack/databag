@@ -157,10 +157,12 @@ export function ProfileBody({ navigation }) {
         </TouchableOpacity>
         <Switch style={styles.visibleSwitch} value={state.pushEnabled} onValueChange={setNotifications} trackColor={styles.switch}/>
       </View>
-      <TouchableOpacity style={styles.link} onPress={actions.showSealEdit}>
-        <Ionicons name="setting" size={14} color={Colors.primary} />
-        <Text style={styles.linkText}>Sealed Topics</Text>
-      </TouchableOpacity>
+      { state.sealable && (
+        <TouchableOpacity style={styles.link} onPress={actions.showSealEdit}>
+          <Ionicons name="setting" size={14} color={Colors.primary} />
+          <Text style={styles.linkText}>Sealed Topics</Text>
+        </TouchableOpacity>
+      )}
       <TouchableOpacity style={styles.link} onPress={actions.showLoginEdit}>
         <Ionicons name="lock" size={14} color={Colors.primary} />
         <Text style={styles.linkText}>Change Login</Text>
