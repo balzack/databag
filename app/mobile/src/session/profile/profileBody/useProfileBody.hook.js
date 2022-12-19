@@ -7,6 +7,7 @@ import { AppContext } from 'context/AppContext';
 import config from 'constants/Config';
 import { JSEncrypt } from 'jsencrypt'
 import CryptoJS from "crypto-js";
+import { RSA } from 'react-native-rsa-native';
 
 export function useProfileBody() {
 
@@ -122,13 +123,12 @@ export function useProfileBody() {
 
     // generate rsa key for sealing channel, delay for activity indicator
     await new Promise(r => setTimeout(r, 1000));
-    const crypto = new JSEncrypt({ default_key_size: 2048 });
-    const key = crypto.getKey();
+    const keys = await RSA.generateKeys(2048);
 
     // encrypt private key
     const iv = CryptoJS.lib.WordArray.random(128 / 8);
-    const privateKey = convertPem(crypto.getPrivateKey());
-    const publicKey = convertPem(crypto.getPublicKey());
+    const privateKey = convertPem(keys.private);
+    const publicKey = convertPem(keys.public);
     const enc = CryptoJS.AES.encrypt(privateKey, aes, { iv: iv });
 
     const seal = {

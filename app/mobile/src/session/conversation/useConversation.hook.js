@@ -3,6 +3,7 @@ import { ConversationContext } from 'context/ConversationContext';
 import { AccountContext } from 'context/AccountContext';
 import CryptoJS from 'crypto-js';
 import { JSEncrypt } from 'jsencrypt'
+import { RSA } from 'react-native-rsa-native';
 
 export function useConversation() {
 
@@ -33,19 +34,28 @@ export function useConversation() {
     setState((s) => ({ ...s, ...value }));
   }
 
+const converPem = (str) => {
+  var result = '';
+  while (str.length > 0) {
+    result += str.substring(0, 64) + '\n';
+    str = str.substring(64);
+  }
+  return result;
+}
+
   useEffect(() => {
     let sealKey;
     const { locked, seals } = conversation.state;
     if (seals?.length) {
       seals.forEach(seal => {
         if (seal.publicKey === account.state.sealKey?.public) {
-          let crypto = new JSEncrypt();
-          crypto.setPrivateKey(account.state.sealKey.private);
-          sealKey = crypto.decrypt(seal.sealedKey);
+          const key = '-----BEGIN RSA PRIVATE KEY-----\n' + account.state.sealKey.private + '\n-----END RSA PRIVATE KEY-----'
+          RSA.decrypt(seal.sealedKey, key).then(sealKey => {
+            updateState({ locked, sealKey }); 
+          });
         }
       });
     }
-    updateState({ locked, sealKey }); 
   }, [conversation.state.locked, conversation.state.seals, account.state.sealKey])
 
   useEffect(() => {
