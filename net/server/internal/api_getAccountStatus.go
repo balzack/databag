@@ -35,6 +35,7 @@ func GetAccountStatus(w http.ResponseWriter, r *http.Request) {
 	status.Disabled = account.Disabled
 	status.ForwardingAddress = account.Forward
 	status.Searchable = account.Searchable
+  status.Sealable = true
   status.PushEnabled = session.PushEnabled
   status.Seal = seal
 	WriteResponse(w, status)
