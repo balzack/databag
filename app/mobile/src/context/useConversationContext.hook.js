@@ -6,7 +6,6 @@ import { ChannelContext } from 'context/ChannelContext';
 import { ProfileContext } from 'context/ProfileContext';
 import moment from 'moment';
 import CryptoJS from 'crypto-js';
-import { JSEncrypt } from 'jsencrypt'
 
 export function useConversationContext() {
   const [state, setState] = useState({
@@ -167,6 +166,14 @@ export function useConversationContext() {
     }
     return await channel.actions.setSyncRevision(channelId, revision);
   }
+
+  useEffect(() => {
+    if (conversationId.current) {
+      const { cardId, channelId } = conversationId.current;
+      const channelItem = getChannel(cardId, channelId);
+      setChannel(channelItem);
+    }
+  }, [card, channel]);
 
   const sync = async () => {
     const curView = setView.current;

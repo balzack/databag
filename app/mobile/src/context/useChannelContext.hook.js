@@ -18,8 +18,8 @@ import { clearChannelCard } from 'api/clearChannelCard';
 import { addFlag } from 'api/addFlag';
 import { setChannelNotifications } from 'api/setChannelNotifications';
 import { getChannelNotifications } from 'api/getChannelNotifications';
-import { JSEncrypt } from 'jsencrypt'
 import CryptoJS from "crypto-js";
+import { RSA } from 'react-native-rsa-native';
 
 export function useChannelContext() {
   const [state, setState] = useState({
@@ -38,18 +38,20 @@ export function useChannelContext() {
     setState((s) => ({ ...s, ...value }))
   }
 
-  const unsealKey = (seals, sealKey) => {
-    let unsealedKey;
+  const unsealKey = async (seals, sealKey) => {
+    let seal;
     if (seals?.length) {
-      seals.forEach(seal => {
-        if (seal.publicKey === sealKey.public) {
-          let crypto = new JSEncrypt();
-          crypto.setPrivateKey(sealKey.private);
-          unsealedKey = crypto.decrypt(seal.sealedKey);
+      seals.forEach(s => {
+        if (s.publicKey === sealKey.public) {
+          seal = s;
         }
       });
     }
-    return unsealedKey
+    if (seal) {
+    const key = '-----BEGIN RSA PRIVATE KEY-----\n' + sealKey.private + '\n-----END RSA PRIVATE KEY-----'
+    return await RSA.decrypt(seal.sealedKey, key);
+    }
+    return null;
   };
 
   const setChannel = (channelId, channel) => {
@@ -313,19 +315,15 @@ export function useChannelContext() {
       const channel = channels.current.get(channelId);
 
       let { seals, subjectEncrypted, subjectIv } = JSON.parse(channel.detail.data);
-      seals.forEach(seal => {
-        if (seal.publicKey === sealKey.public) {
-          let crypto = new JSEncrypt();
-          crypto.setPrivateKey(sealKey.private);
-          const unsealedKey = crypto.decrypt(seal.sealedKey);
-          const key = CryptoJS.enc.Hex.parse(unsealedKey);
-
-          const iv = CryptoJS.lib.WordArray.random(128 / 8);
-          const encrypted = CryptoJS.AES.encrypt(JSON.stringify({ subject }), key, { iv: iv });
-          subjectEncrypted = encrypted.ciphertext.toString(CryptoJS.enc.Base64)
-          subjectIv = iv.toString();
-        }
-      });
+      const unsealedKey = await unsealKey(seals, sealKey);
+      if (!unsealedKey) {
+        throw new Error("cannot reseal subject");
+      }
+      const key = CryptoJS.enc.Hex.parse(unsealedKey);
+      const iv = CryptoJS.lib.WordArray.random(128 / 8);
+      const encrypted = CryptoJS.AES.encrypt(JSON.stringify({ subject }), key, { iv: iv });
+      subjectEncrypted = encrypted.ciphertext.toString(CryptoJS.enc.Base64)
+      subjectIv = iv.toString();
       const data = { subjectEncrypted, subjectIv, seals };
       return await setChannelSubject(server, appToken, channelId, 'sealed', data);
     },
@@ -348,12 +346,12 @@ export function useChannelContext() {
       const keyHex = key.toString();
 
       let seals = [];
-      let crypto = new JSEncrypt();
-      keys.forEach(publicKey => {
-        crypto.setPublicKey(publicKey);
-        const sealedKey = crypto.encrypt(keyHex);
+      for (let i = 0; i < keys.length; i++) {
+        const publicKey = keys[i];
+        const key = '-----BEGIN PUBLIC KEY-----\n' + publicKey + '\n-----END PUBLIC KEY-----'
+        const sealedKey = await RSA.encrypt(keyHex, key);
         seals.push({ publicKey, sealedKey });
-      });
+      };
 
       const data = { subjectEncrypted, subjectIv, seals };
       return await addChannel(server, appToken, 'sealed', data, cards);
@@ -391,7 +389,7 @@ export function useChannelContext() {
         const { guid } = session.current;
         const channel = channels.current.get(channelId);
         const { subjectEncrypted, subjectIv, seals } = JSON.parse(channel.detail.data);
-        const unsealedKey = unsealKey(seals, sealKey);
+        const unsealedKey = await unsealKey(seals, sealKey);
         if (unsealedKey) {
           const iv = CryptoJS.enc.Hex.parse(subjectIv);
           const key = CryptoJS.enc.Hex.parse(unsealedKey);
@@ -416,7 +414,7 @@ export function useChannelContext() {
         const channel = channels.current.get(channelId);
         const { seals } = JSON.parse(channel.detail.data);
         const { messageEncrypted, messageIv } = JSON.parse(channel.summary.lastTopic.data);
-        const unsealedKey = unsealKey(seals, sealKey);
+        const unsealedKey = await unsealKey(seals, sealKey);
         if (unsealedKey) {
           const iv = CryptoJS.enc.Hex.parse(messageIv);
           const key = CryptoJS.enc.Hex.parse(unsealedKey);

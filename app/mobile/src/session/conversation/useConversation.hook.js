@@ -2,7 +2,6 @@ import { useRef, useState, useEffect, useContext } from 'react';
 import { ConversationContext } from 'context/ConversationContext';
 import { AccountContext } from 'context/AccountContext';
 import CryptoJS from 'crypto-js';
-import { JSEncrypt } from 'jsencrypt'
 import { RSA } from 'react-native-rsa-native';
 
 export function useConversation() {

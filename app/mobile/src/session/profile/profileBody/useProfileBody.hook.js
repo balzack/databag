@@ -5,7 +5,6 @@ import { ProfileContext } from 'context/ProfileContext';
 import { AccountContext } from 'context/AccountContext';
 import { AppContext } from 'context/AppContext';
 import config from 'constants/Config';
-import { JSEncrypt } from 'jsencrypt'
 import CryptoJS from "crypto-js";
 import { RSA } from 'react-native-rsa-native';
 
@@ -122,8 +121,8 @@ export function useProfileBody() {
     });
 
     // generate rsa key for sealing channel, delay for activity indicator
-    await new Promise(r => setTimeout(r, 1000));
     const keys = await RSA.generateKeys(2048);
+    console.log("NEW KEYS", keys);
 
     // encrypt private key
     const iv = CryptoJS.lib.WordArray.random(128 / 8);
