@@ -54,7 +54,8 @@ From the net/container sub directory:
 ### Example with Portainer and Nginx Proxy Manager
 
 From Portainer:
-  - In the volume view, create a new volume
+  - In the volume view, click add volumen:
+    - Enter a name, then click 'Create the volume'
   - In the container view, click add container:
     - In the 'Image' field enter 'balzack/databag:latest'
     - Click 'publish a new network port', and select port 7000 for both host and container
