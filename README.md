@@ -54,11 +54,14 @@ From the net/container sub directory:
 ### Example with Portainer and Nginx Proxy Manager
 
 From Portainer:
+  - In the volume view, create a new volume
   - In the container view, click add container:
     - In the 'Image' field enter 'balzack/databag:latest'
     - Click 'publish a new network port', and select port 7000 for both host and container
     - Under 'Advanced container settings', select 'Env', and click 'Add Environment Variable'
       - Enter 'Name' as 'ADMIN' and your admin password [password]
+    - Under 'Advanced container settings', select 'Volumes', then 'map additional volume'
+      - Enter '/var/lib/databag' for 'container' and the created volume for 'volume'
     - Click 'Deploy the Container'
 
 From Nginx Proxy Manager:
