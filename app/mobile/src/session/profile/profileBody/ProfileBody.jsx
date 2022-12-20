@@ -368,7 +368,7 @@ export function ProfileBody({ navigation }) {
             )}
             { state.sealMode === 'unlocked' && (
               <View style={styles.inputField}>
-                <TextInput style={styles.input} value={'xxxxxxxx'} editable="false" secureTextEntry={true} />
+                <TextInput style={styles.input} value={'xxxxxxxx'} editable={false} secureTextEntry={true} />
                 <Ionicons style={styles.icon} name="eyeo" size={18} color="#888888" />
                 <TouchableOpacity style={styles.sealUpdate} onPress={actions.updateSeal} />
               </View>
