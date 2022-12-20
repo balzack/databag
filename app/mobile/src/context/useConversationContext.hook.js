@@ -171,7 +171,9 @@ export function useConversationContext() {
     if (conversationId.current) {
       const { cardId, channelId } = conversationId.current;
       const channelItem = getChannel(cardId, channelId);
-      setChannel(channelItem);
+      if (channelItem) {
+        setChannel(channelItem);
+      }
     }
   }, [card, channel]);
 
