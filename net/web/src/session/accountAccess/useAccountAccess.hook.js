@@ -49,7 +49,7 @@ export function useAccountAccess() {
   useEffect(() => {
     if (account?.state?.status) {
       const { seal, sealKey, status } = account.state;
-      updateState({ searchable: status.searchabled, seal, sealKey });
+      updateState({ searchable: status.searchable, seal, sealKey });
     }
   }, [account]);
 
