@@ -126,7 +126,7 @@ export function useCreate() {
       backoff.current = false;
       checking.current = false;
       if (retry) {
-        setCount(count++);
+        setCount(count+1);
       }
       else {
         updateState({ usernameChecked: true, tokenChecked: true, serverChecked: true });
