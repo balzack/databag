@@ -356,6 +356,7 @@ export function ProfileBody({ navigation }) {
                     </TouchableOpacity>
                   </View>
                 )}
+                <Text style={styles.notice}>saving can take a minute</Text>
               </>
             )}
             { state.sealMode === 'disabling' && (

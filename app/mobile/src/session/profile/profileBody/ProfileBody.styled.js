@@ -11,6 +11,12 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingTop: 32,
   },
+  notice: {
+    color: Colors.grey,
+    fontStyle: 'italic',
+    textAlign: 'center',
+    paddingBottom: 8,
+  },
   icon: {
     paddingTop: 2,
   },
