@@ -4,7 +4,7 @@ These instructions assume you have the following setup:
   - reverse proxy with an assigned hostname and certificate forwarding to your Raspberry Pi
   - micro usb to ethernet adapter
   - address reservation on your router
-  - reasonably large micro sd card (~64 GB)
+  - reasonably large micro sd card (~16 GB)
 
 ## Step 1: setup the hardware
   Download the DietPi OS and select the ARMv6 32-bit image:<br/>
