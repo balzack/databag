@@ -6,5 +6,5 @@ services:
    ports:
      - "7000:7000"
    volumes:
-     - ./databag-data:/data
+     - ./databag-data:/var/lib/databag
 
