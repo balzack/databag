@@ -59,7 +59,7 @@ These instructions assume you have the following setup:
   sqlite3 /var/lib/databag/databag.db "insert into configs (config_id, str_value) values ('script_path', '/opt/databag/transform/');"<br/>
 
 ## Step 8: download the webapp
-  // because the react toolchain isn't available for the pi zero, the webapp is build in a github action<br/>
+  // because the react toolchain isn't available for the pi zero, the webapp is built in a github action<br/>
   Download webapp.zip from the most recent build:<br/>
     https://github.com/balzack/databag/actions/runs/3352251466<br/>
   SCP webapp.zip into the pi<br/>
