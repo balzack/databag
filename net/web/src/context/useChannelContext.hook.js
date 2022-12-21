@@ -164,6 +164,21 @@ export function useChannelContext() {
         console.log(err);
       }
     },
+    isUnsealed: (channelId, sealKey) => {
+      try {
+        const channel = channels.current.get(channelId);
+        const { seals } = JSON.parse(channel.data.channelDetail.data);
+        for (let i = 0; i < seals.length; i++) {
+          if (seals[i].publicKey === sealKey.public) {
+            return sealKey.private != null;
+          }
+        }
+      }
+      catch(err) {
+        console.log(err);
+      }
+      return false;
+    },
     unsealChannelSummary: (channelId, sealKey) => {
       try {
         const channel = channels.current.get(channelId);
