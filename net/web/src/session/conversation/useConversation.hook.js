@@ -24,6 +24,7 @@ export function useConversation(cardId, channelId) {
     error: false,
     sealed: false,
     sealKey: null,
+    delayed: false,
   });
 
   const account = useContext(AccountContext);
@@ -90,7 +91,10 @@ export function useConversation(cardId, channelId) {
   }, [cardId, channelId, upload]);
 
   useEffect(() => {
-    updateState({ topics: [] });
+    updateState({ delayed: false, topics: [] });
+    setTimeout(() => {
+      updateState({ delayed: true });
+    }, 250);
     conversation.actions.setConversationId(cardId, channelId);
     // eslint-disable-next-line
   }, [cardId, channelId]);
@@ -107,6 +111,14 @@ export function useConversation(cardId, channelId) {
       }
       return 1;
     });
+    if (topics.length) {
+      updateState({ delayed: false });
+    }
+    else {
+      setTimeout(() => {
+        updateState({ delayed: true });
+      }, 250);
+    }
     const { error, loadingInit, loadingMore, subject, logoUrl, logoImg } = conversation.state;
     updateState({ topics, error, loadingInit, loadingMore, subject, logoUrl, logoImg });
     store.actions.setValue(`${channelId}::${cardId}`, Number(conversation.state.revision));

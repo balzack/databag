@@ -69,7 +69,7 @@ export function Conversation({ closeConversation, openDetails, cardId, channelId
         )}
       </div>
       <div class="thread" ref={thread} onScroll={scrollThread}>
-        { state.topics.length === 0 && (
+        { state.delayed && state.topics.length === 0 && (
           <div class="empty">This Topic Has No Messages</div>
         )}
         { state.topics.length !== 0 && (
