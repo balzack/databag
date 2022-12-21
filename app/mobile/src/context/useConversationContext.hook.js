@@ -400,7 +400,7 @@ export function useConversationContext() {
         setView.current++;
         conversationId.current = null;
         reset.current = true;
-        updateState({ subject: null, logo: null, contacts: [], topics: new Map() });
+        updateState({ subject: null, logo: null, locked: true, unlocked: false, contacts: [], topics: new Map() });
       }
       else if (selected.cardId !== conversationId.current?.cardId || selected.channelId !== conversationId.current?.channelId) {
         setView.current++;
