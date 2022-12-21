@@ -10,9 +10,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { AddTopic } from './addTopic/AddTopic';
 import { TopicItem } from './topicItem/TopicItem';
 
-export function ConversationHeader({ closeConversation, openDetails }) {
+export function ConversationHeader({ closeConversation, openDetails, state, actions }) {
   const navigation = useNavigation();
-  const { state, actions } = useConversation();
 
   const setDetails = () => {
     openDetails(navigation);
@@ -39,9 +38,7 @@ export function ConversationHeader({ closeConversation, openDetails }) {
   );
 }
 
-export function ConversationBody() {
-  const { state, actions } = useConversation();
-
+export function ConversationBody({ state, actions }) {
   const ref = useRef();
 
   useEffect(() => {
@@ -172,7 +169,7 @@ export function Conversation({ closeConversation, openDetails }) {
         </TouchableOpacity>
       </SafeAreaView>
       <SafeAreaView edges={['bottom']} style={styles.body}>
-        <ConversationBody />
+        <ConversationBody state={state} actions={actions} />
       </SafeAreaView>
     </View>
   );

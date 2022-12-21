@@ -19,6 +19,7 @@ import { Details, DetailsHeader, DetailsBody } from './details/Details';
 import { Conversation, ConversationHeader, ConversationBody } from './conversation/Conversation';
 import { Welcome } from './welcome/Welcome';
 import { ChannelsTitle, ChannelsBody, Channels } from './channels/Channels';
+import { useConversation } from './conversation/useConversation.hook';
 import { useChannels } from './channels/useChannels.hook';
 import { CommonActions } from '@react-navigation/native';
 import { ConversationContext } from 'context/ConversationContext';
@@ -66,11 +67,12 @@ export function Session() {
       navigation.goBack();
     }
 
+    const conversation = useConversation();
     const channels = useChannels();
-    const conversation = useContext(ConversationContext);
+    const conversationContext = useContext(ConversationContext);
 
     useEffect(() => {
-      conversation.actions.setChannel(selectedConversation);
+      conversationContext.actions.setChannel(selectedConversation);
     }, [selectedConversation]);      
 
     return (
@@ -88,9 +90,10 @@ export function Session() {
         <ConversationStack.Screen name="conversation" options={{
             headerStyle: { backgroundColor: Colors.titleBackground }, 
             headerBackTitleVisible: false, 
-            headerTitle: (props) => <ConversationHeader channel={selectedConversation} closeConversation={clearConversation} openDetails={setDetail} />
+            headerTitle: (props) => <ConversationHeader channel={selectedConversation} closeConversation={clearConversation} openDetails={setDetail}
+              state={conversation.state} actions={conversation.actions} />
           }}>
-          {(props) => <ConversationBody channel={selectedConversation} />}
+          {(props) => <ConversationBody channel={selectedConversation} state={conversation.state} actions={conversation.actions} />}
         </ConversationStack.Screen>
         <ConversationStack.Screen name="details" options={{
             headerStyle: { backgroundColor: Colors.titleBackground }, 
