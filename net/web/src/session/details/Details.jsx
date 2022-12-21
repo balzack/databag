@@ -1,4 +1,4 @@
-import { Space, Button, Modal } from 'antd';
+import { Button, Modal } from 'antd';
 import { DetailsWrapper, ModalFooter } from './Details.styled';
 import { DoubleRightOutlined, RightOutlined, CloseOutlined } from '@ant-design/icons';
 import { useDetails } from './useDetails.hook';

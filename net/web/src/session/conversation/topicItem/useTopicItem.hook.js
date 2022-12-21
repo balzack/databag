@@ -123,7 +123,7 @@ export function useTopicItem(topic, sealed, sealKey) {
         updateState({ sealed, name, handle, imageUrl, status, text, transform, assets, confirmed, error, ready, created: createdStr, owner, textColor, textSize, topicId: topic.id, init: true });
       }
     }
-  }, [profile, card, conversation, topic]);
+  }, [profile, card, conversation, topic, sealKey]);
 
   const actions = {
     getAssetUrl: (assetId, topicId) => {

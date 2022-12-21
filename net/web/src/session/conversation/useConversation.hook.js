@@ -6,7 +6,6 @@ import { ChannelContext } from 'context/ChannelContext';
 import { ConversationContext } from 'context/ConversationContext';
 import { UploadContext } from 'context/UploadContext';
 import { StoreContext } from 'context/StoreContext';
-import CryptoJS from 'crypto-js';
 import { JSEncrypt } from 'jsencrypt'
 
 export function useConversation(cardId, channelId) {
@@ -29,8 +28,6 @@ export function useConversation(cardId, channelId) {
 
   const account = useContext(AccountContext);
   const viewport = useContext(ViewportContext);  
-  const card = useContext(CardContext);
-  const channel = useContext(ChannelContext);
   const conversation = useContext(ConversationContext);
   const upload = useContext(UploadContext);
   const store = useContext(StoreContext);

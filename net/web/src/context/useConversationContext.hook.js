@@ -3,7 +3,6 @@ import { ProfileContext } from 'context/ProfileContext';
 import { CardContext } from 'context/CardContext';
 import { ChannelContext } from 'context/ChannelContext';
 import CryptoJS from 'crypto-js';
-import { JSEncrypt } from 'jsencrypt'
 
 export function useConversationContext() {
   const TOPIC_BATCH = 32;
