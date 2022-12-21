@@ -380,9 +380,14 @@ export function ProfileBody({ navigation }) {
               </TouchableOpacity>
               { state.canSaveSeal && (
                 <>
-                  { state.sealMode !== 'unlocking' && (
+                  { state.sealMode !== 'unlocking' && state.sealMode !== 'unlocked' && (
                     <TouchableOpacity style={styles.save} onPress={saveSeal}>
                       <Text style={styles.saveText}>Save</Text>
+                    </TouchableOpacity>
+                  )}
+                  { state.sealMode === 'unlocked' && (
+                    <TouchableOpacity style={styles.save} onPress={saveSeal}>
+                      <Text style={styles.saveText}>Forget</Text>
                     </TouchableOpacity>
                   )}
                   { state.sealMode === 'unlocking' && (

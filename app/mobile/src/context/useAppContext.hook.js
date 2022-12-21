@@ -78,7 +78,9 @@ export function useAppContext() {
     { event: 'contact.addCard', messageTitle: 'New Contact Request' },
     { event: 'contact.updateCard', messageTitle: 'Contact Update' },
     { event: 'content.addChannel.superbasic', messageTitle: 'New Topic' },
+    { event: 'content.addChannel.sealed', messageTitle: 'New Topic' },
     { event: 'content.addChannelTopic.superbasic', messageTitle: 'New Topic Message' },
+    { event: 'content.addChannelTopic.sealedtopic', messageTitle: 'New Topic Message' },
   ];
 
   const actions = {
