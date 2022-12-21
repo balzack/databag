@@ -1,8 +1,6 @@
 import { useContext, useState, useEffect } from 'react';
 import { ViewportContext } from 'context/ViewportContext';
 import { AccountContext } from 'context/AccountContext';
-import { CardContext } from 'context/CardContext';
-import { ChannelContext } from 'context/ChannelContext';
 import { ConversationContext } from 'context/ConversationContext';
 import { UploadContext } from 'context/UploadContext';
 import { StoreContext } from 'context/StoreContext';
