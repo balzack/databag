@@ -175,6 +175,10 @@ export function useProfileBody() {
     await account.actions.unlockAccountSeal(sealKey);
   };
 
+  const sealForget = async () => {
+    await account.actions.unlockAccountSeal({});
+  }
+
   const sealUpdate = async () => {
     // generate key to encrypt private key
     const salt = CryptoJS.lib.WordArray.random(128 / 8);
@@ -199,6 +203,9 @@ export function useProfileBody() {
   };
 
   useEffect(() => {
+    if (state.sealMode === 'unlocked') {
+      return updateState({ canSaveSeal: true });
+    }
     if (state.sealMode === 'unlocking' && state.sealUnlock != null && state.sealUnlock !== '') {
       return updateState({ canSaveSeal: true });
     }
@@ -264,6 +271,9 @@ export function useProfileBody() {
       }
       else if (state.sealMode === 'unlocking') {
         await sealUnlock();
+      }
+      else if (state.sealMode === 'unlocked') {
+        await sealForget();
       }
       else if (state.sealMode === 'updating') {
         await sealUpdate();
