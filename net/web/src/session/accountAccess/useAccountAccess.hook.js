@@ -99,6 +99,10 @@ export function useAccountAccess() {
     await account.actions.unlockSeal(sealKey);
   };
 
+  const sealForget = async () => {
+    await account.actions.unlockSeal({});
+  };
+
   const sealEnable = async () => {
 
     // generate key to encrypt private key
@@ -267,6 +271,9 @@ export function useAccountAccess() {
         }
         else if (state.sealMode === 'unlocking') {
           await sealUnlock();
+        }
+        else if (state.sealMode === 'enabled') {
+          await sealForget();
         }
         updateState({ busy: false });
       }
