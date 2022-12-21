@@ -134,10 +134,10 @@ export function TopicItem({ item, focused, focus, hosting, sealed, sealKey, remo
     <View style={styles.wrapper}>
       <TouchableOpacity activeOpacity={1} style={styles.item} onPress={focus}>
         <View style={styles.header}>
-          { state.logo && (
+          { state.logo !== 'avatar' && state.logo && (
             <Image source={{ uri: state.logo }} style={{ width: 28, height: 28, borderRadius: 6 }} />
           )}
-          { !state.logo && (
+          { (state.logo === 'avatar' || !state.logo) && (
             <Image source={avatar} style={{ width: 28, height: 28, borderRadius: 6 }} />
           )}
           <Text style={{ ...styles.name, color: state.nameSet ? Colors.text : Colors.grey }}>{ state.name }</Text>
