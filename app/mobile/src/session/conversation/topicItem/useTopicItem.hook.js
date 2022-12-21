@@ -161,7 +161,7 @@ export function useTopicItem(item, hosting, remove, sealed, sealKey) {
     const deletable = editable || hosting;
 
     updateState({ logo, name, nameSet, known, sealed, message, fontSize, fontColor, timestamp, transform, status, assets, deletable, editable, editData: parsed, editMessage: message });
-  }, [card, item]);
+  }, [sealKey, card, item]);
 
   const actions = {
     showCarousel: (index) => {

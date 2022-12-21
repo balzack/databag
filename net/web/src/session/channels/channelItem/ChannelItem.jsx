@@ -21,7 +21,15 @@ export function ChannelItem({ item, openChannel, active }) {
               <SolutionOutlined />
             </div>
             <div class="details">
-              <div class="subject">{ item.subject }</div>
+              <div class="subject">
+                { item.locked && !item.unlocked && (
+                  <LockFilled style={{ paddingRight: 8 }}/>
+                )}
+                { item.locked && item.unlocked && (
+                  <UnlockOutlined style={{ paddingRight: 8 }}/>
+                )}
+                <span>{ item.subject }</span>
+              </div>
               <div class="message">{ item.message }</div>
             </div>
           </div>

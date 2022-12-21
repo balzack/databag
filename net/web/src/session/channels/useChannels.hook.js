@@ -166,7 +166,12 @@ export function useChannels() {
             }
           }
           else {
-            chan.unlocked = true;
+            if (chan.cardId) {
+              chan.unlocked = card.actions.isUnsealed(chan.cardId, chan.id, account.state.sealKey);
+            }
+            else {
+              chan.unlocked = channel.actions.isUnsealed(chan.id, account.state.sealKey);
+            }
             subject = chan.data.unsealedChannel.subject;
           }
         }
@@ -200,7 +205,7 @@ export function useChannels() {
   }
 
   const setMessage = (chan) => {
-    let message;
+    let message = '';
     if (chan.data.channelSummary?.lastTopic?.dataType === 'superbasictopic') {
       try {
         message = JSON.parse(chan.data.channelSummary.lastTopic.data).text;
@@ -211,17 +216,20 @@ export function useChannels() {
     }
     if (chan.data.channelSummary?.lastTopic?.dataType === 'sealedtopic') {
       try {
-        if (chan.data.unsealedSummary == null) {
-          if (chan.cardId) {
-            card.actions.unsealChannelSummary(chan.cardId, chan.id, account.state.sealKey);
+        if (chan.unlocked) {
+          message = "...";
+          if (chan.data.unsealedSummary == null) {
+            if (chan.cardId) {
+              card.actions.unsealChannelSummary(chan.cardId, chan.id, account.state.sealKey);
+            }
+            else {
+              channel.actions.unsealChannelSummary(chan.id, account.state.sealKey);
+            }
           }
           else {
-            channel.actions.unsealChannelSummary(chan.id, account.state.sealKey);
-          }
-        }
-        else {
-          if (typeof chan.data.unsealedSummary.message.text === 'string') {
-            chan.message = chan.data.unsealedSummary.message.text;
+            if (typeof chan.data.unsealedSummary.message.text === 'string') {
+              message = chan.data.unsealedSummary.message.text;
+            }
           }
         }
       }
@@ -269,7 +277,7 @@ export function useChannels() {
     updateState({ channels: filtered });
 
     // eslint-disable-next-line
-  }, [channel, card, store, filter, state.sealable]);
+  }, [account, channel, card, store, filter, state.sealable]);
 
   useEffect(() => {
     updateState({ display: viewport.state.display });

@@ -311,6 +311,22 @@ export function useCardContext() {
         console.log(err);
       }
     },
+    isUnsealed: (cardId, channelId, sealKey) => {
+      try {
+        const card = cards.current.get(cardId);
+        const channel = card.channels.get(channelId);
+        const { seals } = JSON.parse(channel.data.channelDetail.data);
+        for (let i = 0; i < seals.length; i++) {
+          if (seals[i].publicKey === sealKey.public) {
+            return sealKey.private != null;
+          }
+        }
+      }
+      catch(err) {
+        console.log(err);
+      }
+      return false;
+    },
     unsealChannelSummary: (cardId, channelId, sealKey) => {
       try {
         const card = cards.current.get(cardId);

@@ -36,19 +36,29 @@ export function useConversation() {
     setState((s) => ({ ...s, ...value }));
   }
 
-  useEffect(() => {
-    let sealKey;
+  unlockSeal = async () => {
     const { locked, seals } = conversation.state;
-    if (seals?.length) {
-      seals.forEach(seal => {
-        if (seal.publicKey === account.state.sealKey?.public) {
-          const key = '-----BEGIN RSA PRIVATE KEY-----\n' + account.state.sealKey.private + '\n-----END RSA PRIVATE KEY-----'
-          RSA.decrypt(seal.sealedKey, key).then(sealKey => {
-            updateState({ locked, sealKey }); 
-          });
+    try {
+      let sealKey;
+      if (seals?.length) {
+        for (let i = 0; i < seals.length; i++) {
+          const seal = seals[i];
+          if (seal.publicKey === account.state.sealKey?.public) {
+            const key = '-----BEGIN RSA PRIVATE KEY-----\n' + account.state.sealKey.private + '\n-----END RSA PRIVATE KEY-----'
+            const sealKey = await RSA.decrypt(seal.sealedKey, key);
+            return updateState({ locked, sealKey }); 
+          }
         }
-      });
+      }
     }
+    catch(err) {
+      console.log(err);
+    }
+    return updateState({ locked, sealKey: null });
+  }
+ 
+  useEffect(() => {
+    unlockSeal();
   }, [conversation.state.locked, conversation.state.seals, account.state.sealKey])
 
   useEffect(() => {
