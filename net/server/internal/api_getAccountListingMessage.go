@@ -34,6 +34,7 @@ func GetAccountListingMessage(w http.ResponseWriter, r *http.Request) {
 		Description: detail.Description,
 		Location:    detail.Location,
 		Image:       detail.Image,
+    Seal:        detail.SealPublic,
 		Version:     APPVersion,
 		Node:        getStrConfigValue(CNFDomain, ""),
 	}
