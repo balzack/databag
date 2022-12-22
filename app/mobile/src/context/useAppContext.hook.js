@@ -80,7 +80,7 @@ export function useAppContext() {
     { event: 'content.addChannel.superbasic', messageTitle: 'New Topic' },
     { event: 'content.addChannel.sealed', messageTitle: 'New Topic' },
     { event: 'content.addChannelTopic.superbasic', messageTitle: 'New Topic Message' },
-    { event: 'content.addChannelTopic.sealedtopic', messageTitle: 'New Topic Message' },
+    { event: 'content.addChannelTopic.sealed', messageTitle: 'New Topic Message' },
   ];
 
   const actions = {
