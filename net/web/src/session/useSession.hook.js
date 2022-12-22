@@ -30,7 +30,7 @@ export function useSession() {
   const profile = useContext(ProfileContext);
   
   const storeStatus = useRef(null);
-  const cardStatus = useRef(null);
+  const cardStatus = useRef(0);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));

@@ -32,7 +32,7 @@ export function useCards() {
   };
 
   useEffect(() => {
-    let updated;
+    let updated = 0;
     const contacts = Array.from(card.state.cards.values());
     contacts.forEach(contact => {
       if (!updated || updated < contact?.data?.cardDetail?.statusUpdated) {
