@@ -61,7 +61,7 @@ These instructions assume you have the following setup:
 ## Step 8: download the webapp
   // because the react toolchain isn't available for the pi zero, the webapp is built in a github action<br/>
   Download webapp.zip from the most recent build:<br/>
-    https://github.com/balzack/databag/actions/runs/3352251466<br/>
+    https://github.com/balzack/databag/actions/runs/3758970117<br/>
   SCP webapp.zip into the pi<br/>
   Extract it into the web/build directory<br/>
     mkdir /app/databag/net/web/build<br/>
