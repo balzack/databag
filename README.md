@@ -21,7 +21,7 @@
 
 Databag is a self-hosted messaging service. Notable features include:
 - Public-private key based identity (not bound to any blockchain or hosting domain)
-- End-to-end encryption (the hosting admin cannot view topics set as sealed)
+- End-to-end encryption (the hosting admin cannot view sealed topics)
 - Federated (accounts on different nodes can communicate)
 - Topic based threads (messages organized by topic not contacts)
 - Lightweight (server runs on a raspberry pi zero v1.3)
