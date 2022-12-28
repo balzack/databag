@@ -61,7 +61,7 @@ export function useLogin() {
       if (!state.busy) {
         updateState({ busy: true });
         try {
-          await app.actions.login(state.login, state.password);
+          await app.actions.login(state.login.trim(), state.password);
         }
         catch (err) {
           console.log(err);
