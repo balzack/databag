@@ -32,8 +32,9 @@ export function useConversationContext() {
   const channel = useContext(ChannelContext);
   const profile = useContext(ProfileContext);
   const topics = useRef(null);
-  const revision = useRef(0);
+  const revision = useRef(null);
   const force = useRef(false);
+  const more = useRef(false);
   const detailRevision = useRef(0);
   const syncing = useRef(false);
   const conversationId = useRef(null);
@@ -112,11 +113,11 @@ export function useConversationContext() {
     }
     return await channel.actions.getTopic(channelId, topicId);
   }
-  const getTopics = async (cardId, channelId, revision) => {
+  const getTopics = async (cardId, channelId, revision, begin, end) => {
     if (cardId) {
-      return await card.actions.getChannelTopics(cardId, channelId, revision);
+      return await card.actions.getChannelTopics(cardId, channelId, revision, 16, begin, end);
     }
-    return await channel.actions.getTopics(channelId, revision)
+    return await channel.actions.getTopics(channelId, revision, 16, begin, end)
   }
   const getTopicAssetUrl = (cardId, channelId, assetId) => {
     if (cardId) {
@@ -166,6 +167,12 @@ export function useConversationContext() {
     }
     return await channel.actions.setSyncRevision(channelId, revision);
   }
+  const setTopicMarker = async (cardId, channelId, marker) => {
+    if (cardId) {
+      return await card.actions.setTopicMarker(cardId, channelId, marker);
+    }
+    return await channel.actions.setTopicMarker(channelId, marker);
+  } 
 
   useEffect(() => {
     if (conversationId.current) {
@@ -189,31 +196,46 @@ export function useConversationContext() {
       if (conversationId.current) {
         const { cardId, channelId } = conversationId.current;
         const channelItem = getChannel(cardId, channelId);
-        if (channelItem && (channelItem.revision !== revision.current || force.current)) {
+
+        if (channelItem && (channelItem.revision !== revision.current || force.current || more.current)) {
           syncing.current = true;
 
           try {
-            // set channel details
-            if (detailRevision.current != channelItem.detailRevision) {
-              if (curView === setView.current) {
-                await setChannel(channelItem);
-                detailRevision.current = channelItem.detailRevision;
-              }
-            }
 
-            // initial load from store
+            // sync from server
+            let res;
             if (!topics.current) {
               topics.current = new Map();
               const items = await getTopicItems(cardId, channelId);
               items.forEach(item => {
                 topics.current.set(item.topicId, item);
               });
+              await setChannel(channelItem);
+              detailRevision.current = channelItem.detailRevision;
+            }
+            else if (detailRevision.current != channelItem.detailRevision) {
+              await setChannel(channelItem);
+              detailRevision.current = channelItem.detailRevision;
+            }
+            else if (more.current) {
+              more.current = false;
+              res = await getTopics(cardId, channelId, null, null, channelItem.topicMarker)
+            }
+            else if (channelItem.topicRevision !== channelItem.syncRevision || force.current) {
+              force.current = false;
+              res = await getTopics(cardId, channelId, channelItem.syncRevision, channelItem.topicMarker)
+            }
+            else {
+              if (cardId) {
+                card.actions.setChannelReadRevision(cardId, channelId, revision.current);
+              }
+              else {
+                channel.actions.setReadRevision(channelId, channelItem.revision);
+              }
+              revision.current = channelItem.revision;
             }
 
-            // sync from server
-            if (channelItem.topicRevision != channelItem.syncRevision || force.current) {
-              force.current = false;
-              const res = await getTopics(cardId, channelId, channelItem.syncRevision)
+            if (res?.topics) {
               for (const topic of res.topics) {
                 if (!topic.data) {
                   topics.current.delete(topic.id);
@@ -238,18 +260,16 @@ export function useConversationContext() {
                   }
                 }
               }
+            }
+
+            if (res?.marker) {
+              await setTopicMarker(cardId, channelId, res.marker);
+            }
+            if (res?.revision) {
               await setSyncRevision(cardId, channelId, res.revision);
             }
 
-            // update revision
-            revision.current = channelItem.revision;
             if (curView == setView.current) {
-              if (cardId) {
-                card.actions.setChannelReadRevision(cardId, channelId, revision.current);
-              }
-              else {
-                channel.actions.setReadRevision(channelId, revision.current);
-              }
               updateState({ topics: topics.current, init: true, error: false });
             }
 
@@ -635,6 +655,12 @@ export function useConversationContext() {
             sync();
           }
         }
+      }
+    },
+    loadMore: () => {
+      if (conversationId.current) {
+        more.current = true;
+        sync();
       }
     },
     resync: () => {

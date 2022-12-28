@@ -24,7 +24,12 @@ export function ConversationHeader({ closeConversation, openDetails, state, acti
     <View style={styles.title}>
       <TouchableOpacity style={styles.subject} activeOpacity={1} onPress={actions.resync}>
         <View style={styles.icon} />
-        <Text style={styles.subjectText} numberOfLines={1} ellipsizeMode={'tail'}>{ state.subject }</Text>
+        { state.more && !state.latched && (
+          <ActivityIndicator size="small" color={Colors.primary} />
+        )}
+        { (!state.more || state.latched) && (
+          <Text style={styles.subjectText} numberOfLines={1} ellipsizeMode={'tail'}>{ state.subject }</Text>
+        )}
         <View style={styles.icon}>
           { state.error && (
             <Ionicons name="exclamationcircleo" size={16} color={Colors.alert} />
@@ -94,10 +99,12 @@ export function ConversationBody({ state, actions }) {
              contentContainerStyle={styles.topics}
              ref={ref}
              data={state.topics}
+             onEndReached={actions.loadMore}
              onMomentumScrollEnd={ Platform.OS === 'ios' ? noop : actions.unlatch }
              onScrollBeginDrag={ Platform.OS !== 'ios' ? noop : actions.unlatch }
              maintainVisibleContentPosition={ state.latched ? null : { minIndexForVisibile: 2, } }
              inverted={true}
+             initialNumToRender={16}
              renderItem={({item}) => <TopicItem item={item} focused={item.topicId === state.focus} 
                focus={() => actions.setFocus(item.topicId)} hosting={state.host == null}
                sealed={state.sealed} sealKey={state.sealKey}

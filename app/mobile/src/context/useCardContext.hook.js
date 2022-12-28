@@ -222,6 +222,17 @@ export function useCardContext() {
       }
     }
   }
+  const setCardChannelTopicMarker = (cardId, channelId, marker) => {
+    let card = cards.current.get(cardId);
+    if (card) {
+      let channel = card.channels.get(channelId);
+      if (channel) {
+        channel.topicMarker = marker;
+        card.channels.set(channelId, channel);
+        cards.current.set(cardId, card);
+      }
+    }
+  }
   const setCardChannelBlocked = (cardId, channelId, blocked) => {
     let card = cards.current.get(cardId);
     if (card) {
@@ -512,6 +523,12 @@ export function useCardContext() {
       setCardChannelSyncRevision(cardId, channelId, revision);
       updateState({ cards: cards.current });
     },
+    setTopicMarker: async (cardId, channelId, marker) => {
+      const { guid } = session.current;
+      await store.actions.setCardChannelItemTopicMarker(guid, cardId, channelId, marker);
+      setCardChannelTopicMarker(cardId, channelId, marker);
+      updateState({ cards: cards.current });
+    },
     setChannelBlocked: async (cardId, channelId) => {
       const { guid } = session.current;
       await store.actions.setCardChannelItemBlocked(guid, cardId, channelId);
@@ -556,9 +573,9 @@ export function useCardContext() {
       const { detail, profile } = getCardEntry(cardId);
       return await getContactChannelTopic(profile.node, `${profile.guid}.${detail.token}`, channelId, topicId);
     },
-    getChannelTopics: async (cardId, channelId, revision) => {
+    getChannelTopics: async (cardId, channelId, revision, count, begin, end) => {
       const { detail, profile } = getCardEntry(cardId);
-      return await getContactChannelTopics(profile.node, `${profile.guid}.${detail.token}`, channelId, revision);
+      return await getContactChannelTopics(profile.node, `${profile.guid}.${detail.token}`, channelId, revision, count, begin, end);
     },
     getChannelTopicAssetUrl: (cardId, channelId, topicId, assetId) => {
       const { detail, profile } = getCardEntry(cardId);

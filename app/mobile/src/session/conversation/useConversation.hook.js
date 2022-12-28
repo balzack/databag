@@ -25,6 +25,7 @@ export function useConversation() {
     locked: false,
     sealKey: null,
     delayed: false,
+    more: false,
   });
 
   const init = useRef(true);
@@ -128,6 +129,15 @@ export function useConversation() {
     },
     blockTopic: async (topicId) => {
       await conversation.actions.blockTopic(topicId);
+    },
+    loadMore: async () => {
+      if (!state.more) {
+        updateState({ more: true });
+        setTimeout(() => {
+          updateState({ more: false });
+        }, 1000);    
+        await conversation.actions.loadMore();
+      }
     },
     reportTopic: async (topicId) => {
       await conversation.actions.addTopicReport(topicId);

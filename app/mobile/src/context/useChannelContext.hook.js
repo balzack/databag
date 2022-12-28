@@ -108,6 +108,13 @@ export function useChannelContext() {
       channels.current.set(channelId, channel);
     }
   }
+  const setChannelTopicMarker = (channelId, marker) => {
+    let channel = channels.current.get(channelId);
+    if (channel) {
+      channel.topicMarker = marker;
+      channels.current.set(channelId, channel);
+    }
+  }
   const setChannelBlocked = (channelId, blocked) => {
     let channel = channels.current.get(channelId);
     if (channel) {
@@ -213,6 +220,12 @@ export function useChannelContext() {
       setChannelSyncRevision(channelId, revision);
       updateState({ channels: channels.current }); 
     },
+    setTopicMarker: async (channelId, marker) => {
+      const { guid } = session.current;
+      await store.actions.setChannelItemTopicMarker(guid, channelId, marker);
+      setChannelTopicMarker(channelId, marker);
+      updateState({ channels: channels.current }); 
+    },
     setBlocked: async (channelId) => {
       const { guid } = session.current;
       await store.actions.setChannelItemBlocked(guid, channelId);
@@ -257,9 +270,9 @@ export function useChannelContext() {
       const { server, appToken } = session.current;
       return await getChannelTopic(server, appToken, channelId, topicId);
     },
-    getTopics: async (channelId, revision) => {
+    getTopics: async (channelId, revision, count, begin, end) => {
       const { server, appToken } = session.current;
-      return await getChannelTopics(server, appToken, channelId, revision);
+      return await getChannelTopics(server, appToken, channelId, revision, count, begin, end);
     },
     getTopicAssetUrl: (channelId, topicId, assetId) => {
       const { server, appToken } = session.current;
