@@ -51,7 +51,7 @@ export function useReset() {
       if (!state.busy) {
         try {
           updateState({ busy: true });
-          await app.actions.access(state.server, state.token);
+          await app.actions.access(state.server.trim(), state.token);
           updateState({ busy: false });
         }
         catch (err) {

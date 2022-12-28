@@ -66,14 +66,15 @@ export function useAdmin() {
       if (!state.busy) {
         try {
           updateState({ busy: true });
-          const unclaimed = await getNodeStatus(state.server);
+          const node = state.server.trim();
+          const token = state.token;
+          const unclaimed = await getNodeStatus(node);
           if (unclaimed) {
-            await setNodeStatus(state.server, state.token);
+            await setNodeStatus(node, token);
           } 
-          const config = await getNodeConfig(state.server, state.token);
-          const { server, token } = state;
-          updateState({ busy: false });
-          navigate('/dashboard', { state: { config, server, token }});
+          const config = await getNodeConfig(node, token);
+          updateState({ server: node, busy: false });
+          navigate('/dashboard', { state: { config, server: node, token }});
         }
         catch (err) {
           console.log(err);
