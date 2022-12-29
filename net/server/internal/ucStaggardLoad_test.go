@@ -110,8 +110,7 @@ func TestStaggardLoad(t *testing.T) {
 	assert.NoError(t, TestAPIRequest(GetChannelTopics, params, response))
 	assert.Equal(t, len(*topics), 13)
 
-	//marker, _ := strconv.Atoi(response.header["Topic-Marker"][0])
-	//revision, _ := strconv.Atoi(response.header["Topic-Revision"][0])
+	revision := response.header["Topic-Revision"][0]
 
 	params = &TestAPIParams{
 		restType:  "GET",
@@ -126,7 +125,6 @@ func TestStaggardLoad(t *testing.T) {
 	assert.Equal(t, len(*topics), 13)
 
 	marker := response.header["Topic-Marker"][0]
-	revision := response.header["Topic-Revision"][0]
 
 	params = &TestAPIParams{
 		restType:  "DELETE",
