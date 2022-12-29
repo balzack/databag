@@ -491,7 +491,7 @@ export function useConversationContext() {
     
         const { cardId, channelId } = conversationId.current;
         if (cardId) {
-          await card.actions.setChannelTopicUnsealedDetail(cardId, channelId, topic.topicId, topic.detailRevision, topic.unsealedDetial);
+          await card.actions.setChannelTopicUnsealedDetail(cardId, channelId, topic.topicId, topic.detailRevision, topic.unsealedDetail);
         }
         else {
           await channel.actions.setTopicUnsealedDetail(channelId, topic.topicId, topic.detailRevision, topic.unsealedDetail);

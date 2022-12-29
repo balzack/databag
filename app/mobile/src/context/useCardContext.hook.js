@@ -620,7 +620,7 @@ export function useCardContext() {
     },
     setChannelTopicUnsealedDetail: async (cardId, channelId, topicId, revision, unsealed) => {
       const { guid } = session.current;
-      await store.actions.setCardChannelTopicItemUnsealedDetail(guid, cardId, channelId, revision, unsealed);
+      await store.actions.setCardChannelTopicItemUnsealedDetail(guid, cardId, channelId, topicId, revision, unsealed);
     },
     removeChannel: async (cardId, channelId) => {
       const { detail, profile } = getCardEntry(cardId);
