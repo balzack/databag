@@ -3,7 +3,6 @@ import SQLite from "react-native-sqlite-storage";
 
 export function useTestStoreContext() {
   const [state, setState] = useState({});
-  const db = useRef(null);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }))
@@ -23,11 +22,10 @@ export function useTestStoreContext() {
     },
 
     getProfile: async (guid) => {
-      console.log("GET PROFILE", guid);
-      return {};
+      return state.profile;
     },
     setProfile: async (guid, profile) => {
-      console.log("SET PROFILE", guid, profile);
+      updateState({ profile });
     },
     getFirstRun: async (guid) => {
     },
@@ -38,11 +36,10 @@ export function useTestStoreContext() {
     setCardRequestStatus: async (guid, status) => {
     },
     getProfileRevision: async (guid) => {
-      console.log("GET PROFILE REVISION", guid);
-      return 0;
+      return state.profileRevision;
     },
     setProfileRevision: async (guid, revision) => {
-      console.log("SET PROFILE REVISION", guid, revision);
+      updateState({ profileRevision: revision });
     },
 
     getAccountStatus: async (guid) => {
