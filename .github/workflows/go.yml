@@ -35,16 +35,21 @@ jobs:
           cd net/server
           go build databag
           
-    - name: Test
+    - name: Go Test
       run: |
           cd net/server
           go test -v ./...
-      
-    - name: Jest
+          
+    - name: Jest Setup
       uses: actions/setup-node@v3
       with:
         node-version: 18
-      
+
+    - name: Jest ReactJs
+      run: |
+          cd net/web
+          yarn jest
+  
     - name: Export
       uses: actions/upload-artifact@v3
       with:
