@@ -3,11 +3,13 @@ import {render, act, screen, waitFor, fireEvent} from '@testing-library/react'
 import { ProfileContextProvider, ProfileContext } from 'context/ProfileContext';
 import * as fetchUtil from 'api/fetchUtil';
 
+let profileContext = null;
 function ProfileView() {
   const profile = useContext(ProfileContext);
+  profileContext = profile;
 
   return (
-    <div data-testid="profile" profile={profile}>
+    <div>
       <span data-testid="guid">{ profile.state.profile?.guid }</span>
       <span data-testid="handle">{ profile.state.profile?.handle }</span>
       <span data-testid="name">{ profile.state.profile?.name }</span>
@@ -56,9 +58,23 @@ test('testing', async () => {
   render(<ProfileTestApp />);
 
   await waitFor(async () => {
+    expect(profileContext).not.toBe(null);
+  });
+
+  await waitFor(async () => {
     expect(screen.getByTestId('name').textContent).toBe("");
   });
- 
+
+  await act(async () => {
+    identity = { name: 'jester' };
+    await profileContext.actions.setToken({ guid: 'abc', server: 'test.org', appToken: '123' });
+    await profileContext.actions.setRevision(1);
+  });
+
+  await waitFor(async () => {
+    expect(screen.getByTestId('name').textContent).toBe("jester");
+  }); 
+
 });
 
 
