@@ -75,6 +75,24 @@ test('testing', async () => {
     expect(screen.getByTestId('name').textContent).toBe("jester");
   }); 
 
+  await act(async () => {
+    identity = { name: 'tester' };
+    await profileContext.actions.setRevision(2);
+  });
+
+  await waitFor(async () => {
+    expect(screen.getByTestId('name').textContent).toBe("tester");
+  }); 
+
+  await act(async () => {
+    await profileContext.actions.clearToken();
+  });
+
+  await waitFor(async () => {
+    expect(screen.getByTestId('name').textContent).toBe("");
+  });
+
+
 });
 
 
