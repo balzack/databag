@@ -50,6 +50,11 @@ jobs:
           cd net/web
           yarn jest
   
+    - name: Jest ReactNative
+      run: |
+          cd app/mobile
+          yarn jest
+  
     - name: Export
       uses: actions/upload-artifact@v3
       with:
