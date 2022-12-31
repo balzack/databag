@@ -40,6 +40,10 @@ jobs:
           cd net/server
           go test -v ./...
       
+    - name: Jest
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18
       
     - name: Export
       uses: actions/upload-artifact@v3
