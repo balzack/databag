@@ -30,10 +30,10 @@ export function useProfileContext() {
         const revision = curRevision.current;
         const { server, appToken, guid } = session.current;
         const identity = await getProfile(server, appToken);
-        const imageUrl = identity.image ? getProfileImageUrl(server, appToken, revision) : null;
+        const imageUrl = identity?.image ? getProfileImageUrl(server, appToken, revision) : null;
         await store.actions.setProfile(guid, identity);
         await store.actions.setProfileRevision(guid, revision);
-        updateState({ identity, imageUrl: getProfileImageUrl(server, appToken, revision) });
+        updateState({ identity, imageUrl });
         setRevision.current = revision;
       }
       catch(err) {
@@ -52,7 +52,7 @@ export function useProfileContext() {
       const { guid, server, appToken } = access;
       const identity = await store.actions.getProfile(guid);
       const revision = await store.actions.getProfileRevision(guid);
-      const imageUrl = identity.image ? getProfileImageUrl(server, appToken, revision) : null;
+      const imageUrl = identity?.image ? getProfileImageUrl(server, appToken, revision) : null;
       updateState({ identity, imageUrl });
       setRevision.current = revision;
       curRevision.current = revision;
@@ -60,7 +60,7 @@ export function useProfileContext() {
     },
     clearSession: () => {
       session.current = {};
-      updateState({ profile: {} });
+      updateState({ identity: {}, imageUrl: null });
     },
     setRevision: (rev) => {
       curRevision.current = rev;

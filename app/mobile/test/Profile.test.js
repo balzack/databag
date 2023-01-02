@@ -10,16 +10,16 @@ function ProfileView() {
 
   return (
     <View testID="profile" profile={profile}>
-      <Text testID="guid">{ profile.state.profile?.guid }</Text>
-      <Text testID="handle">{ profile.state.profile?.handle }</Text>
-      <Text testID="name">{ profile.state.profile?.name }</Text>
-      <Text testID="description">{ profile.state.profile?.description }</Text>
-      <Text testID="location">{ profile.state.profile?.location }</Text>
-      <Text testID="image">{ profile.state.profile?.image }</Text>
-      <Text testID="revision">{ profile.state.profile?.revision }</Text>
-      <Text testID="seal">{ profile.state.profile?.seal }</Text>
-      <Text testID="version">{ profile.state.profile?.version }</Text>
-      <Text testID="node">{ profile.state.profile?.node }</Text>
+      <Text testID="guid">{ profile.state.identity?.guid }</Text>
+      <Text testID="handle">{ profile.state.identity?.handle }</Text>
+      <Text testID="name">{ profile.state.identity?.name }</Text>
+      <Text testID="description">{ profile.state.identity?.description }</Text>
+      <Text testID="location">{ profile.state.identity?.location }</Text>
+      <Text testID="image">{ profile.state.identity?.image }</Text>
+      <Text testID="revision">{ profile.state.identity?.revision }</Text>
+      <Text testID="seal">{ profile.state.identity?.seal }</Text>
+      <Text testID="version">{ profile.state.identity?.version }</Text>
+      <Text testID="node">{ profile.state.identity?.node }</Text>
       <Text testID="imageUrl">{ profile.state.imageUrl }</Text>
     </View>
   );
@@ -82,13 +82,14 @@ test('testing', async () => {
   });
 
   await act(async () => {
-    identity = { name: 'tester' };
+    identity = { name: 'tester', image: 'abc123' };
     const profile = screen.getByTestId('profile').props.profile;
     await profile.actions.setRevision(2);
   });
 
   await waitFor(async () => {
     expect(screen.getByTestId('name').props.children).toBe("tester");
+    expect(screen.getByTestId('imageUrl').props.children).toBe("https://test.org/profile/image?agent=123&revision=2");
   });
 
   await act(async () => {
@@ -99,6 +100,7 @@ test('testing', async () => {
 
   await waitFor(async () => {
     expect(screen.getByTestId('name').props.children).toBe("tester");
+    expect(screen.getByTestId('imageUrl').props.children).toBe("https://test.org/profile/image?agent=123&revision=2");
   });
 
   await act(async () => {
@@ -119,6 +121,16 @@ test('testing', async () => {
   await waitFor(async () => {
     expect(screen.getByTestId('name').props.children).toBe("tester");
     expect(screen.getByTestId('imageUrl').props.children).toBe("https://test.org/profile/image?agent=123&revision=2");
+  });
+
+  await act(async () => {
+    const profile = screen.getByTestId('profile').props.profile;
+    await profile.actions.setRevision(3);
+  });
+
+  await waitFor(async () => {
+    expect(screen.getByTestId('name').props.children).toBe("jester");
+    expect(screen.getByTestId('imageUrl').props.children).toBe(null);
   });
 
   await act(async () => {
