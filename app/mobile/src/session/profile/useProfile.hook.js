@@ -36,7 +36,7 @@ export function useProfile() {
   }, [dimensions]);
 
   useEffect(() => {
-    const { name, handle, node, location, description, image } = profile.state.profile;
+    const { name, handle, node, location, description, image } = profile.state.identity;
     const imageSource = image ? profile.state.imageUrl : 'avatar';
     updateState({ name, handle, node, location, description, imageSource, editHandle: handle,
         editName: name, editLocation: location, editDescription: description });

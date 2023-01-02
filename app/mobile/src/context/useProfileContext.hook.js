@@ -8,7 +8,7 @@ import { StoreContext } from 'context/StoreContext';
 
 export function useProfileContext() {
   const [state, setState] = useState({
-    profile: {},
+    identity: {},
     imageUrl: null,
   });
   const store = useContext(StoreContext);
@@ -29,10 +29,11 @@ export function useProfileContext() {
       try {
         const revision = curRevision.current;
         const { server, appToken, guid } = session.current;
-        const profile = await getProfile(server, appToken);
-        await store.actions.setProfile(guid, profile);
+        const identity = await getProfile(server, appToken);
+        const imageUrl = identity.image ? getProfileImageUrl(server, appToken, revision) : null;
+        await store.actions.setProfile(guid, identity);
         await store.actions.setProfileRevision(guid, revision);
-        updateState({ profile, imageUrl: getProfileImageUrl(server, appToken, revision) });
+        updateState({ identity, imageUrl: getProfileImageUrl(server, appToken, revision) });
         setRevision.current = revision;
       }
       catch(err) {
@@ -49,9 +50,10 @@ export function useProfileContext() {
   const actions = {
     setSession: async (access) => {
       const { guid, server, appToken } = access;
-      const profile = await store.actions.getProfile(guid);
+      const identity = await store.actions.getProfile(guid);
       const revision = await store.actions.getProfileRevision(guid);
-      updateState({ profile, imageUrl: getProfileImageUrl(server, appToken, revision) });
+      const imageUrl = identity.image ? getProfileImageUrl(server, appToken, revision) : null;
+      updateState({ identity, imageUrl });
       setRevision.current = revision;
       curRevision.current = revision;
       session.current = access;
@@ -72,16 +74,9 @@ export function useProfileContext() {
       const { server, appToken } = session.current;
       await setProfileImage(server, appToken, image);
     },
-    getHandle: async (name) => {
+    getHandleStatus: async (name) => {
       const { server, appToken } = session.current;
       return await getHandle(server, appToken, name);
-    },
-    getImageUrl: () => {
-      const { server, appToken } = session.current;
-      if (!state.profile.image) {
-        return null;
-      }
-      return getProfileImageUrl(server, appToken, state.profile.revision);
     },
   }
 

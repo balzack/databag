@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react';
+import { getHandle } from 'api/getHandle';
 import { getProfile } from 'api/getProfile';
 import { setProfileData } from 'api/setProfileData';
 import { setProfileImage } from 'api/setProfileImage';
@@ -19,26 +20,24 @@ export function useProfileContext() {
   }
 
   const sync = async () => {
-    if (!syncing.current) {
-      if (setRevision.current !== curRevision.current) {
-        syncing.current = true;
+    if (!syncing.current && setRevision.current !== curRevision.current) {
+      syncing.current = true;
+
+      try {
         const revision = curRevision.current;
-
-        try {
-          const identity = await getProfile(access.current);
-          const imageUrl = identity.image ? getProfileImageUrl(access.current, revision) : null;
-          updateState({ identity, imageUrl });
-          setRevision.current = revision;
-        }
-        catch(err) {
-          console.log(err);
-          syncing.current = false;
-          return;
-        }
-
-        syncing.current = false;
-        sync();
+        const identity = await getProfile(access.current);
+        const imageUrl = identity.image ? getProfileImageUrl(access.current, revision) : null;
+        updateState({ identity, imageUrl });
+        setRevision.current = revision;
       }
+      catch(err) {
+        console.log(err);
+        syncing.current = false;
+        return;
+      }
+
+      syncing.current = false;
+      sync();
     }
   }
 
@@ -61,6 +60,9 @@ export function useProfileContext() {
     },
     setProfileImage: async (image) => {
       await setProfileImage(access.current, image);
+    },
+    getHandleStatus: async (name) => {
+      return await getUsername(name, access.current);
     },
   }
 

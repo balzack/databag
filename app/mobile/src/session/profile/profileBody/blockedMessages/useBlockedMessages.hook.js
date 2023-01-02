@@ -24,8 +24,8 @@ export function useBlockedMessages() {
 
   const setItem = (item) => {
     let name, nameSet
-    if (item.detail.guid === profile.state.profile.guid) {
-      const identity = profile.state.profile;
+    if (item.detail.guid === profile.state.identity.guid) {
+      const identity = profile.state.identity;
       if (identity.name) {
         name = identity.name;
       }

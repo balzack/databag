@@ -35,7 +35,7 @@ export function useRegistry() {
   }, [dimensions]);
 
   useEffect(() => {
-    const server = profile.state.profile.node;
+    const server = profile.state.identity.node;
     updateState({ server });  
     getAccounts(server, true);
   }, [profile]);
@@ -58,7 +58,7 @@ export function useRegistry() {
           accounts = await getListing(server);
         }
         const filtered = accounts.filter(item => {
-          if (item.guid === profile.state.profile.guid) {
+          if (item.guid === profile.state.identity.guid) {
             return false;
           }
           return true;

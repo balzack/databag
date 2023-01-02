@@ -79,7 +79,7 @@ export function useProfileBody() {
   }, [dimensions]);
 
   useEffect(() => {
-    const { name, handle, node, location, description, image } = profile.state.profile;
+    const { name, handle, node, location, description, image } = profile.state.identity;
     const imageSource = image ? profile.state.imageUrl : 'avatar';
     updateState({ name, handle, node, location, description, imageSource, editHandle: handle,
         editName: name, editLocation: location, editDescription: description });
@@ -398,7 +398,7 @@ export function useProfileBody() {
             updateState({ available: true, checked: true });
           }
           else {
-            const available = await profile.actions.getHandle(editHandle);
+            const available = await profile.actions.getHandleStatus(editHandle);
             updateState({ available, checked: true });
           }
         }

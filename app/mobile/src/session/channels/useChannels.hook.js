@@ -98,7 +98,7 @@ export function useChannels() {
     const guid = item?.summary?.lastTopic?.guid;
     if (created && login && login < created) {
       if (!item.readRevision || item.readRevision < item.revision) {
-        if (profile.state.profile.guid != guid) {
+        if (profile.state.identity.guid != guid) {
           updated = true;
         }
       }
@@ -111,7 +111,7 @@ export function useChannels() {
     if (item?.detail?.members) {
       
       item.detail.members.forEach(guid => {
-        const profileGuid = profile.state.profile.guid;
+        const profileGuid = profile.state.identity.guid;
         if (profileGuid !== guid) { 
           contacts.push(getCard(guid));
         }

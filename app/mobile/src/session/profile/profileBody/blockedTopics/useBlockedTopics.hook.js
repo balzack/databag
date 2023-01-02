@@ -48,7 +48,7 @@ export function useBlockedTopics() {
       contacts.push(card.state.cards.get(item.cardId));
     }
     if (item?.detail?.members) {
-      const profileGuid = profile.state.profile.guid;
+      const profileGuid = profile.state.identity.guid;
       item.detail.members.forEach(guid => {
         if (profileGuid !== guid) {
           const contact = getCard(guid);

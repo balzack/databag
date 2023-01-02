@@ -44,7 +44,7 @@ export function useTopicItem(item, hosting, remove, sealed, sealKey) {
     const { guid, dataType, data, status, transform } = detail;
 
     let name, nameSet, known, logo;
-    const identity = profile.state?.profile;
+    const identity = profile.state?.identity;
     if (guid === identity.guid) {
       known = true;
       if (identity.name) {
@@ -53,7 +53,7 @@ export function useTopicItem(item, hosting, remove, sealed, sealKey) {
       else {
         name = `${identity.handle}@${identity.node}`;
       }
-      const img = profile.actions.getImageUrl();
+      const img = profile.state.imageUrl;
       if (img) {
         logo = img;
       }
