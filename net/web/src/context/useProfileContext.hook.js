@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { getHandle } from 'api/getHandle';
+import { getUsername } from 'api/getUsername';
 import { getProfile } from 'api/getProfile';
 import { setProfileData } from 'api/setProfileData';
 import { setProfileImage } from 'api/setProfileImage';
