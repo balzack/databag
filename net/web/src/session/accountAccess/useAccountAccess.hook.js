@@ -40,8 +40,8 @@ export function useAccountAccess() {
   }
 
   useEffect(() => {
-    if (profile.state.init) {
-      const { handle } = profile.state.profile;
+    if (profile.state.identity?.guid) {
+      const { handle } = profile.state.identity;
       updateState({ handle, editHandle: handle });
     }
   }, [profile]);

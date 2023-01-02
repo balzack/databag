@@ -6,32 +6,39 @@ import { getProfileImageUrl } from 'api/getProfileImageUrl';
 
 export function useProfileContext() {
   const [state, setState] = useState({
-    init: false,
-    profile: {},
+    identity: {},
+    imageUrl: null,
   });
   const access = useRef(null);
-  const revision = useRef(null);
-  const next = useRef(null);
+  const curRevision = useRef(null);
+  const setRevision = useRef(null);
+  const syncing = useRef(false);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }))
   }
 
-  const setProfile = async (rev) => {
-    if (next.current == null) {
-      if (revision.current !== rev) {
-        let profile = await getProfile(access.current);
-        updateState({ init: true, profile });
-        revision.current = rev;
+  const sync = async () => {
+    if (!syncing.current) {
+      if (setRevision.current !== curRevision.current) {
+        syncing.current = true;
+        const revision = curRevision.current;
+
+        try {
+          const identity = await getProfile(access.current);
+          const imageUrl = identity.image ? getProfileImageUrl(access.current, revision) : null;
+          updateState({ identity, imageUrl });
+          setRevision.current = revision;
+        }
+        catch(err) {
+          console.log(err);
+          syncing.current = false;
+          return;
+        }
+
+        syncing.current = false;
+        sync();
       }
-      if (next.current != null) {
-        let r = next.current;
-        next.current = null;
-        setProfile(r);
-      }
-    }
-    else {
-      next.current = rev;
     }
   }
 
@@ -41,11 +48,13 @@ export function useProfileContext() {
     },
     clearToken: () => {
       access.current = null;
-      revision.current = null;
-      setState({ init: false, profile: {} });
+      curRevision.current = null;
+      setRevision.current = null;
+      setState({ identity: {}, imageUrl: null });
     },
     setRevision: (rev) => {
-      setProfile(rev);
+      curRevision.current = rev;
+      sync();
     },
     setProfileData: async (name, location, description) => {
       await setProfileData(access.current, name, location, description);
@@ -53,14 +62,6 @@ export function useProfileContext() {
     setProfileImage: async (image) => {
       await setProfileImage(access.current, image);
     },
-    getProfile: () => {
-      const { name, handle, image, revision } = state.profile;
-      if (image == null || image === '') {
-        return { name, handle };
-      }
-      return { name, handle, imageUrl: getProfileImageUrl(access.current, revision) };
-    },
-    profileImageUrl: () => getProfileImageUrl(access.current, revision.current),
   }
 
   return { state, actions }

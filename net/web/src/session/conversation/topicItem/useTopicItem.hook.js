@@ -34,8 +34,12 @@ export function useTopicItem(topic, sealed, sealKey) {
   }
 
   useEffect(() => {
+    console.log("TOPIC URL:", state.imageUrl);
+  }, [state.imageUrl]);
+
+  useEffect(() => {
     let owner = false;
-    if (profile.state.profile.guid === topic?.data?.topicDetail.guid) {
+    if (profile.state.identity.guid === topic?.data?.topicDetail.guid) {
       owner = true;
     }
 
@@ -97,7 +101,7 @@ export function useTopicItem(topic, sealed, sealKey) {
       }
     }
 
-    if (profile.state.init && card.state.init && conversation.state.init) {
+    if (profile.state.identity?.guid && card.state.init && conversation.state.init) {
       const { guid, created } = topic.data.topicDetail;
 
       let createdStr;
@@ -114,8 +118,9 @@ export function useTopicItem(topic, sealed, sealKey) {
         createdStr = date.toLocaleDateString("en-US");
       }
 
-      if (profile.state.profile.guid === guid) {
-        const { name, handle, imageUrl } = profile.actions.getProfile();
+      if (profile.state.identity.guid === guid) {
+        const { name, handle } = profile.state.identity;
+        const imageUrl = profile.state.imageUrl;
         updateState({ sealed, name, handle, imageUrl, status, text, transform, assets, confirmed, error, ready, created: createdStr, owner, textColor, textSize, topicId: topic.id, init: true });
       }
       else {

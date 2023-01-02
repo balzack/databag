@@ -137,11 +137,11 @@ export function useChannels() {
 
   const setContacts = (chan) => {
     let contacts = [];
-    if (chan.guid != null && profile.state.profile.guid !== chan.guid) {
+    if (chan.guid != null && profile.state.identity.guid !== chan.guid) {
       contacts.push(card.actions.getCardByGuid(chan.guid));
     }
     for (let guid of chan.data.channelDetail?.members) {
-      if (guid !== profile.state.profile.guid) {
+      if (guid !== profile.state.identity.guid) {
         contacts.push(card.actions.getCardByGuid(guid));
       }
     }

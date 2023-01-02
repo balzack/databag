@@ -43,7 +43,7 @@ export function useListing() {
       updateState({ busy: true });
       try {
         let contacts = await getListing(state.node, state.username);
-        let filtered = contacts.filter(contact => (contact.guid !== profile.state.profile.guid));
+        let filtered = contacts.filter(contact => (contact.guid !== profile.state.identity.guid));
         let sorted = filtered.sort((a, b) => {
           if (a?.name < b?.name) {
             return -1;
@@ -61,7 +61,7 @@ export function useListing() {
   };
 
   useEffect(() => {
-    let node = profile?.state?.profile?.node;
+    let node = profile?.state?.identity?.node;
     updateState({ disabled: node == null || node === '', node });
   }, [profile]);
 

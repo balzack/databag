@@ -34,9 +34,9 @@ export function useProfile() {
   }
 
   useEffect(() => {
-    if (profile.state.init) {
-      const { node, name, handle, location, description, image } = profile.state.profile;
-      let url = !image ? null : profile.actions.profileImageUrl();
+    if (profile.state.identity.guid) {
+      const { node, name, handle, location, description, image } = profile.state.identity;
+      let url = !image ? null : profile.state.imageUrl;
       let editImage = !image ? avatar : url;
       updateState({ init: true, name, location, description, node, handle, url, 
           editName: name, editLocation: location, editDescription: description, editHandle: handle, editImage });

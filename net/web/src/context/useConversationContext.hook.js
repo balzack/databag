@@ -118,7 +118,7 @@ export function useConversationContext() {
       members.add(conversation.guid);
     }
     for (let member of conversation.data.channelDetail.members) {
-      if (profile.state.profile.guid !== member) {
+      if (profile.state.identity.guid !== member) {
         members.add(member);
       }
     }

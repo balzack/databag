@@ -20,9 +20,9 @@ export function useIdentity() {
   }
 
   useEffect(() => {
-    if (profile.state.init) {
-      const { name, handle, image } = profile.state.profile;
-      let url = !image ? null : profile.actions.profileImageUrl();
+    if (profile.state.identity?.guid) {
+      const { name, handle, image } = profile.state.identity;
+      let url = !image ? null : profile.state.imageUrl;
       updateState({ init: true, name, handle, url });
     }
   }, [profile]);
