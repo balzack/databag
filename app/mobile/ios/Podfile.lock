@@ -674,7 +674,7 @@ SPEC CHECKSUMS:
   FirebaseInstallations: 99d24bac0243cf8b0e96cf5426340d211f0bcc80
   FirebaseMessaging: 4487bbff9b9b927ba1dd3ea40d1ceb58e4ee3cb5
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
-  glog: 04b94705f318337d7ead9e6d17c019bd9b1f6b1b
+  glog: 3d02b25ca00c2d456734d0bcff864cbc62f6ae1a
   GoogleDataTransport: 1c8145da7117bd68bbbed00cf304edb6a24de00f
   GoogleUtilities: 1d20a6ad97ef46f67bbdec158ce00563a671ebb7
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
@@ -722,6 +722,6 @@ SPEC CHECKSUMS:
   TOCropViewController: 3105367e808b7d3d886a74ff59bf4804e7d3ab38
   Yoga: c2b1f2494060865ac1f27e49639e72371b1205fa
 
-PODFILE CHECKSUM: 09227ff21bf728ebfa79b5db14df16bd8c8c9a36
+PODFILE CHECKSUM: f15c71aa3d4916c8b96570af8aa99894ea4a0bfd
 
 COCOAPODS: 1.11.3
