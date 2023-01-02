@@ -10,16 +10,16 @@ function ProfileView() {
 
   return (
     <div>
-      <span data-testid="guid">{ profile.state.profile?.guid }</span>
-      <span data-testid="handle">{ profile.state.profile?.handle }</span>
-      <span data-testid="name">{ profile.state.profile?.name }</span>
-      <span data-testid="description">{ profile.state.profile?.description }</span>
-      <span data-testid="location">{ profile.state.profile?.location }</span>
-      <span data-testid="image">{ profile.state.profile?.image }</span>
-      <span data-testid="revision">{ profile.state.profile?.revision }</span>
-      <span data-testid="seal">{ profile.state.profile?.seal }</span>
-      <span data-testid="version">{ profile.state.profile?.version }</span>
-      <span data-testid="node">{ profile.state.profile?.node }</span>
+      <span data-testid="guid">{ profile.state.identity?.guid }</span>
+      <span data-testid="handle">{ profile.state.identity?.handle }</span>
+      <span data-testid="name">{ profile.state.identity?.name }</span>
+      <span data-testid="description">{ profile.state.identity?.description }</span>
+      <span data-testid="location">{ profile.state.identity?.location }</span>
+      <span data-testid="image">{ profile.state.identity?.image }</span>
+      <span data-testid="revision">{ profile.state.identity?.revision }</span>
+      <span data-testid="seal">{ profile.state.identity?.seal }</span>
+      <span data-testid="version">{ profile.state.identity?.version }</span>
+      <span data-testid="node">{ profile.state.identity?.node }</span>
     </div>
   );
 }
