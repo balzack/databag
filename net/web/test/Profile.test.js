@@ -5,11 +5,17 @@ import * as fetchUtil from 'api/fetchUtil';
 
 let profileContext = null;
 function ProfileView() {
+  const [renderCount, setRenderCount] = useState(0);
   const profile = useContext(ProfileContext);
   profileContext = profile;
 
+  useEffect(() => {
+    setRenderCount(renderCount + 1);
+  }, [profile.state]);
+
   return (
     <div>
+      <span data-testid="count">{ renderCount }</span>
       <span data-testid="guid">{ profile.state.identity?.guid }</span>
       <span data-testid="handle">{ profile.state.identity?.handle }</span>
       <span data-testid="name">{ profile.state.identity?.name }</span>
@@ -84,6 +90,19 @@ test('testing', async () => {
     expect(screen.getByTestId('name').textContent).toBe("tester");
   }); 
 
+  const count = screen.getByTestId('count').textContent;
+
+  await act(async () => {
+    identity = { name: 'renderer' };
+    await profileContext.actions.setRevision(3);
+  });
+
+  await waitFor(async () => {
+    const renderCount = parseInt(screen.getByTestId('count').textContent);
+    const nextCount = parseInt(count) + 1;
+    expect(nextCount).toBe(renderCount);
+  });
+
   await act(async () => {
     await profileContext.actions.clearToken();
   });
@@ -91,7 +110,6 @@ test('testing', async () => {
   await waitFor(async () => {
     expect(screen.getByTestId('name').textContent).toBe("");
   });
-
 
 });
 
