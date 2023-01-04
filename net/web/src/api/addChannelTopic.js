@@ -1,6 +1,6 @@
 import { checkResponse, fetchWithTimeout } from './fetchUtil';
 
-export async function addChannelTopic(token, channelId, datatype, message, assets ): string {
+export async function addChannelTopic(token, channelId, datatype, message, assets ) {
 
   if (message == null && (assets == null || assets.length === 0)) {
     let topic = await fetchWithTimeout(`/content/channels/${channelId}/topics?agent=${token}`,
