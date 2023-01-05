@@ -43,10 +43,30 @@ function ChannelTestApp() {
 const realFetchWithTimeout = fetchUtil.fetchWithTimeout;
 const realFetchWithCustomTimeout = fetchUtil.fetchWithCustomTimeout;
 
-let fetching = (url, options) => Promise.resolve({ json: () => Promise.resolve([])});
-
+let fetchDetail = {};
+let fetchSummary = {};
+let fetchChannels = {};
 beforeEach(() => {
-  const mockFetch = jest.fn().mockImplementation((url, options) => fetching(url, options));
+  const mockFetch = jest.fn().mockImplementation((url, options) => {
+    if (url.includes('detail')) {
+      return Promise.resolve({
+        status: 200,
+        json: () => Promise.resolve(fetchDetail),
+      });
+    }
+    else if (url.includes('summary')) {
+      return Promise.resolve({
+        status: 200,
+        json: () => Promise.resolve(fetchSummary),
+      });
+    }
+    else {
+      return Promise.resolve({
+        status: 200,
+        json: () => Promise.resolve(fetchChannels),
+      });
+    }
+  });
   fetchUtil.fetchWithTimeout = mockFetch;
   fetchUtil.fetchWithCustomTimeout = mockFetch;
 });
@@ -57,41 +77,24 @@ afterEach(() => {
 });
 
 test('testing channel sync', async () => {
-
-  fetching = (url, options) => {
-    if (url.startsWith('/content/channels/123/detail')) {
-      return Promise.resolve({
-        status: 200,
-        json: () => Promise.resolve({ dataType: 'superbasic', data: 'testdata' }),
-      });
-    }
-    else if (url.startsWith('/content/channels/123/summary')) {
-      return Promise.resolve({
-        status: 200,
-        json: () => Promise.resolve({ guid: '11', dataType: 'superbasictopic', data: 'testdata' }),
-      });
-    }
-    else {
-      return Promise.resolve({
-        status: 200,
-        json: () => Promise.resolve([
-          { id: '123', revision: 2, data: {
-              detailRevision: 3,
-              topicRevision: 5,
-              channelSummary: { guid: '11', dataType: 'superbasictopic', data: 'testdata' },
-              channelDetail: { dataType: 'superbasic', data: 'testdata' },
-            }
-          },
-        ])
-      });
-    }
-  }
+  fetchDetail = { dataType: 'superbasic', data: 'testdata' };
+  fetchSummary = { guid: '11', dataType: 'superbasictopic', data: 'testdata' };
 
   render(<ChannelTestApp />);
 
   await waitFor(async () => {
     expect(channelContext).not.toBe(null);
   });
+
+  fetchChannels = [
+    { id: '123', revision: 2, data: {
+        detailRevision: 3,
+        topicRevision: 5,
+        channelSummary: { guid: '11', dataType: 'superbasictopic', data: 'testdata' },
+        channelDetail: { dataType: 'superbasic', data: 'testdata' },
+      }
+    },
+  ];
 
   await act( async () => {
     channelContext.actions.setToken('abc123');
@@ -105,6 +108,24 @@ test('testing channel sync', async () => {
     expect(screen.getByTestId('channels').children).toHaveLength(1);
     expect(screen.getByTestId('detail').textContent).toBe('testdata');
     expect(screen.getByTestId('summary').textContent).toBe('testdata');
+  });
+
+  fetchChannels = [ { id: '123', revision: 3 } ];
+
+  await act( async () => {
+    await channelContext.actions.setRevision(1);
+  });
+
+  await waitFor(async () => {
+    expect(screen.getByTestId('channels').children).toHaveLength(1);
+  });
+
+  await act( async () => {
+    await channelContext.actions.setRevision(2);
+  });
+
+  await waitFor(async () => {
+    expect(screen.getByTestId('channels').children).toHaveLength(0);
   });
 
 });
