@@ -26,7 +26,7 @@ function ChannelView() {
   }, [channel.state])
 
   return (
-    <div data-testid="channels" count={renderCount}>
+    <div data-testid="channels" count={renderCount} offsync={channel.state.offsync.toString()}>
       { channels }
     </div>
   );
@@ -43,20 +43,31 @@ function ChannelTestApp() {
 const realFetchWithTimeout = fetchUtil.fetchWithTimeout;
 const realFetchWithCustomTimeout = fetchUtil.fetchWithCustomTimeout;
 
-let fetchDetail = {};
-let fetchSummary = {};
-let fetchChannels = {};
+let statusDetail;
+let statusSummary;
+let statusChannels;
+let fetchDetail;
+let fetchSummary;
+let fetchChannels;
 beforeEach(() => {
+
+  statusDetail = 200;
+  statusSummary = 200;
+  statusChannels = 200;
+  fetchDetail = {};
+  fetchSummary = {};
+  fetchChannels = {};
+
   const mockFetch = jest.fn().mockImplementation((url, options) => {
     if (url.includes('detail')) {
       return Promise.resolve({
-        status: 200,
+        status: statusDetail,
         json: () => Promise.resolve(fetchDetail),
       });
     }
     else if (url.includes('summary')) {
       return Promise.resolve({
-        status: 200,
+        status: statusSummary,
         json: () => Promise.resolve(fetchSummary),
       });
     }
@@ -76,7 +87,7 @@ afterEach(() => {
   fetchUtil.fetchWithCustomTimeout = realFetchWithCustomTimeout;
 });
 
-test('testing channel sync', async () => {
+test('add, update and remove channel', async () => {
   fetchDetail = { dataType: 'superbasic', data: 'testdata' };
   fetchSummary = { guid: '11', dataType: 'superbasictopic', data: 'testdata' };
 
@@ -110,10 +121,28 @@ test('testing channel sync', async () => {
     expect(screen.getByTestId('summary').textContent).toBe('testdata');
   });
 
+  fetchChannels = [
+    { id: '123', revision: 3, data: {
+        detailRevision: 4,
+        topicRevision: 5,
+        channelDetail: { dataType: 'superbasic', data: 'testdata2' },
+      }
+    },
+  ];
+
+  await act( async () => {
+    await channelContext.actions.setRevision(2);
+  });
+
+  await waitFor(async () => {
+    expect(screen.getByTestId('channels').children).toHaveLength(1);
+    expect(screen.getByTestId('detail').textContent).toBe('testdata2');
+  });
+
   fetchChannels = [ { id: '123', revision: 3 } ];
 
   await act( async () => {
-    await channelContext.actions.setRevision(1);
+    await channelContext.actions.setRevision(2);
   });
 
   await waitFor(async () => {
@@ -121,14 +150,20 @@ test('testing channel sync', async () => {
   });
 
   await act( async () => {
-    await channelContext.actions.setRevision(2);
+    await channelContext.actions.setRevision(3);
   });
 
   await waitFor(async () => {
     expect(screen.getByTestId('channels').children).toHaveLength(0);
   });
 
+  await waitFor(async () => {
+    expect(screen.getByTestId('channels').attributes.offsync.value).toBe("false");
+  });
 });
 
 
-
+// set and clear of channel card
+// add, update and remove topic
+// unseal topic and channels
+// offsync resync
