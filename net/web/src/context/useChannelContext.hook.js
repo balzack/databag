@@ -134,7 +134,7 @@ export function useChannelContext() {
       const channel = channels.current.get(channelId);
       if (channel.revision === revision) {
         channel.data.unsealedSummary = unsealed;
-        channels.current.set(channelId, chanel);
+        channels.current.set(channelId, channel);
         updateState({ channels: channels.current });
       }
     },
