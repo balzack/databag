@@ -1,7 +1,6 @@
 import { checkResponse, fetchWithTimeout } from './fetchUtil';
 
 export async function setContactChannelTopicSubject(server, token, channelId, topicId, datatype, data) {
-console.log(data);
   let host = "";
   if (server) {
     host = `https://${server}`;

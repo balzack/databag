@@ -26,14 +26,26 @@ export function useChannelContext() {
   const curRevision = useRef(null);
   const channels = useRef(new Map());
   const syncing = useRef(false);
+  const force = useRef(false);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }))
   }
 
+  const resync = async () => {
+    try {
+      force.current = true;
+      await sync();
+    }
+    catch (err) {
+      console.log(err);
+    }
+  };
+
   const sync = async () => {
-    if (!syncing.current && setRevision.current !== curRevision.current) {
+    if (!syncing.current && (setRevision.current !== curRevision.current || force.current)) {
       syncing.current = true;
+      force.current = false;
 
       try {
         const token = access.current;
@@ -157,19 +169,15 @@ export function useChannelContext() {
         const subject = message([]);
         await addChannelTopic(access.current, channelId, type, subject);
       }
-      try {
-        await setChannels(null);
-      }
-      catch (err) {
-        console.log(err);
-      }
-
+      await resync();
     },
     removeTopic: async (channelId, topicId) => {
       await removeChannelTopic(access.current, channelId, topicId);
+      await resync();
     },
     setTopicSubject: async (channelId, topicId, type, subject) => {
       await setChannelTopicSubject(access.current, channelId, topicId, type, subject);
+      await resync();
     },
     getChannelTopicAssetUrl: (channelId, topicId, assetId) => {
       return getChannelTopicAssetUrl(access.current, channelId, topicId, assetId);
@@ -181,7 +189,7 @@ export function useChannelContext() {
       return await getChannelTopic(access.current, channelId, topicId);
     },
     resync: async () => {
-      await sync();
+      await resync();
     },
   };
 

@@ -15,7 +15,6 @@ function ChannelView() {
     const rendered = []
     const entries = Array.from(channel.state.channels.values());
     entries.forEach(entry => {
-console.log(entry.data.unsealedSubject);
 
       rendered.push(
         <div key={entry.id} data-testid="channel">
