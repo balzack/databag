@@ -61,8 +61,9 @@ export function useCardContext() {
       forceCard.current = null;
 
       try {
+        const token = access.current;
         const card = cards.current.get(card.id);
-        await syncCard(card);
+        await syncCard(token, card);
         cards.current.set(card.id, card);
       }
       catch(err) {
@@ -83,6 +84,7 @@ export function useCardContext() {
         const revision = curRevision.current;
         const delta = await getCards(token, setRevision.current);
         for (let card of delta) {
+
           if (card.data) {
             let cur = cards.current.get(card.id);
             if (cur == null) {
@@ -113,19 +115,21 @@ export function useCardContext() {
               cur.data.curNotifiedArticle = card.data.notifiedArticle;
               cur.data.curNotifiedChannel = card.data.notifiedChannel;
               try {
-                await syncCard(cur);
+                await syncCard(token, cur);
               }
               catch (err) {
                 console.log(err);
                 cur.offsync = true;
               }
             }
-            cards.current.set(cur.id, cur);
+            cards.current.set(card.id, cur);
           }
           else {
-            cards.current.delete(cur.id);
+            cards.current.delete(card.id);
           }
         }
+
+        setRevision.current = revision;
         updateState({ offsync: false, cards: cards.current });
       }
       catch (err) {
@@ -141,7 +145,7 @@ export function useCardContext() {
   };
  
   const syncCard = async (token, card) => {
-    const { cardProfile, cardDetail } = card;
+    const { cardProfile, cardDetail } = card.data;
 
     // sync profile
     if (card.data.setNotifiedProfile !== card.data.curNotifiedProfile) {
@@ -166,12 +170,11 @@ export function useCardContext() {
     card.offsync = false;
   }
 
-  const syncCardArticles = async (card) => {
-    console.log("update contact articles");
-  }
+  const syncCardArticles = async (card) => {}
 
   const syncCardChannels = async (card) => {
-    const { cardProfile, cardDetail } = card;
+    const { cardProfile, cardDetail } = card.data;
+    const { node } = cardProfile.node;
     const token = `${cardProfile.guid}.${cardDetail.token}`;
     let delta;
     if (card.data.setNotifiedView !== card.data.curNotifiedView) {
@@ -186,7 +189,7 @@ export function useCardContext() {
       if (channel.data) {
         let cur = card.channels.get(channel.id);
         if (cur == null) {
-          cur = { guid, cardId, id: channel.id, data: {} };
+          cur = { id: channel.id, data: {} };
         }
         if (cur.data.detailRevision !== channel.data.detailRevision) {
           if (channel.data.channelDetail != null) {
