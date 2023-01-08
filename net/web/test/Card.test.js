@@ -113,6 +113,44 @@ afterEach(() => {
   fetchUtil.fetchWithCustomTimeout = realFetchWithCustomTimeout;
 });
 
+test('resync cards', async() => {
+
+  render(<CardTestApp />);
+
+  await waitFor(async () => {
+    expect(cardContext).not.toBe(null);
+  });
+
+  await act(async () => {
+    cardContext.actions.setToken('abc123');
+  });
+
+  statusCards = 500;
+ 
+  await act(async () => {
+    cardContext.actions.setRevision(1);
+  });
+
+  await waitFor(async () => {
+    expect(screen.getByTestId('cards').attributes.offsync.value).toBe('true');
+  });
+
+  statusCards = 200;
+ 
+  await act(async () => {
+    cardContext.actions.resync();
+  });
+ 
+  await waitFor(async () => {
+    expect(screen.getByTestId('cards').attributes.offsync.value).toBe('false');
+  });
+
+  act(() => {
+    cardContext.actions.clearToken();
+  });
+
+});
+
 test('add, update, remove card', async () => {
 
   render(<CardTestApp />);
