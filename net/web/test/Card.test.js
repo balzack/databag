@@ -46,15 +46,23 @@ const realFetchWithTimeout = fetchUtil.fetchWithTimeout;
 const realFetchWithCustomTimeout = fetchUtil.fetchWithCustomTimeout;
 
 let statusCards;
-let fetchCards;
 let statusMessage;
+let statusDetail;
+let statusProfile;
+let fetchCards;
 let fetchMessage;
+let fetchDetail;
+let fetchProfile;
 beforeEach(() => {
 
   statusMessage = 200;
   fetchMessage = 
   statusCards = 200;
-  fetchCards =[];
+  fetchCards = [];
+  statusDetail = 200;
+  fetchDetail = {};
+  statusProfile = 200;
+  fetchProfile = {};
   const mockFetch = jest.fn().mockImplementation((url, options) => {
 
     const params = url.split('/');
@@ -63,6 +71,20 @@ beforeEach(() => {
         url: 'getMessage',
         status: statusMessage,
         json: () => Promise.resolve(fetchMessage),
+      });
+    }
+    else if (params[4]?.split('?')[0] === 'detail') {
+      return Promise.resolve({
+        url: 'getDetail',
+        status: statusDetail,
+        json: () => Promise.resolve(fetchDetail),
+      });
+    }
+    else if (params[4]?.split('?')[0] === 'profile') {
+      return Promise.resolve({
+        url: 'getProfile',
+        status: statusProfile,
+        json: () => Promise.resolve(fetchProfile),
       });
     }
     else if (params[2]?.split('?')[0] === 'cards') {
@@ -128,6 +150,50 @@ test('add, update, remove card', async () => {
     expect(screen.getByTestId('name').textContent).toBe('tester');
     expect(screen.getByTestId('status').textContent).toBe('connected');
     expect(screen.getByTestId('token').textContent).toBe('01ab');
+  });
+
+  fetchCards = [{
+    id: '000a',
+    revision: 2,
+    data: {
+      detailRevision: 3,
+      profileRevision: 4,
+      notifiedProfile: 3,
+      notifiedArticle: 5,
+      notifiedChannel: 6,
+      notifiedView: 7,
+    },
+  }];
+
+  fetchProfile = {
+    guid: '01ab23',
+    name: 'tested',
+  };
+
+  fetchDetail = {
+    status: 'confirmed',
+  };
+
+  await act( async () => {
+    cardContext.actions.setRevision(2);
+  });
+
+  await waitFor(async () => {
+    expect(screen.getByTestId('name').textContent).toBe('tested');
+    expect(screen.getByTestId('status').textContent).toBe('confirmed');
+  });
+
+  fetchCards = [{
+    id: '000a',
+    revision: 3,
+  }];
+
+  await act( async () => {
+    cardContext.actions.setRevision(3);
+  });
+
+  await waitFor(async () => {
+    expect(screen.getByTestId('cards').children).toHaveLength(0);
   });
 
   act(() => {

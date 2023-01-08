@@ -63,7 +63,10 @@ export function useCardContext() {
       try {
         const token = access.current;
         const card = cards.current.get(card.id);
-        await syncCard(token, card);
+        if (card.data.cardDetail.status === 'connected') {
+          await syncCard(token, card);
+        }
+        card.offsync = false;
         cards.current.set(card.id, card);
       }
       catch(err) {
