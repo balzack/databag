@@ -1,410 +1,290 @@
 import { useEffect, useState, useRef, useContext } from 'react';
-import { ProfileContext } from 'context/ProfileContext';
 import { CardContext } from 'context/CardContext';
 import { ChannelContext } from 'context/ChannelContext';
-import CryptoJS from 'crypto-js';
 
 export function useConversationContext() {
-  const TOPIC_BATCH = 32;
+  const COUNT = 32;
 
   const [state, setState] = useState({
-    init: false,
-    error: false,
-    loadingInit: true,
-    loadingMore: false,
-    cardId: null,
-    channelId: null,
-    subject: null,
-    contacts: null,
-    members: new Set(),
+    offsync: false,
     topics: new Map(),
-    revision: null,
-    enableImage: null,
-    enabelAudio: null,
-    enableVideo: null,
-    sealed: false,
-    seals: null,
-    image: null,
-    logoUrl: null,
-    logoImg: null,
-  });
-
-  const EVENT_OPEN = 1;
-  const EVENT_MORE = 2;
-  const EVENT_UPDATE = 3;
-  const EVENT_RESYNC = 4;
-  const events = useRef([]);
-
-  const channelView = useRef({
-    cardId: null,
-    channelId: null,
-    batch: 1,
-    revision: null,
-    begin: null,
-    init: false,
-    error: false,
+    channel: null,
   });
 
   const card = useContext(CardContext);
   const channel = useContext(ChannelContext);
-  const profile = useContext(ProfileContext);
+
+  const reset = useRef(false);
+  const loadMore = useRef(false);
+  const force = useRef(false);
+  const syncing = useRef(false);
+  const marker = useRef(null);
+  const setTopicRevision = useRef(null);
+  const curTopicRevision = useRef(null);
+  const setDetailRevision = useRef(null);
+  const curDetailRevision = useRef(null);
+  const conversationId = useRef(null);
   const topics = useRef(new Map());
-  const view = useRef(0);
-  const more = useRef(true);
-  const serialize = useRef(0);
 
-  const updateState = (value) => {
-    setState((s) => ({ ...s, ...value }));
-  }  
+  useEffect(() => {
+  }, [card.state, channel.state]);
 
-  const getSeals = (conversation) => {
-    try {
-      if (conversation?.data.channelDetail.dataType === 'sealed') {
-        return JSON.parse(conversation.data.channelDetail.data).seals;
-      }
-    }
-    catch (err) {
-      console.log(err);
-    }
-    return null;
-  }
-
-  const getSubject = (conversation) => {
-    if (!conversation) {
-      return null;
-    }
-
-    if (conversation.data.channelDetail.dataType === 'sealed') {
-      return conversation.data.unsealedChannel?.subject;
-    }
-    else {
-      try {
-        let subject = JSON.parse(conversation.data.channelDetail.data).subject;
-        if (subject) {
-          return subject;
-        }
-      }
-      catch (err) {
-        console.log(err);
-      }
-    }
-    return null;
-  }
-
-  const getContacts = (conversation) => {
-    if (!conversation) {
-      return null;
-    }
-
-    let members = [];
-    if (conversation.guid) {
-      members.push(card.actions.getCardByGuid(conversation.guid)?.data?.cardProfile?.handle);
-    }
-    for (let member of conversation.data.channelDetail.members) {
-      let contact = card.actions.getCardByGuid(member)
-      if(contact?.data?.cardProfile?.handle) {
-        members.push(contact?.data?.cardProfile?.handle);
-      }
-    }
-    return members.join(', ');
-  }
-
-  const getMembers = (conversation) => {
-    if (!conversation) {
-      return null;
-    }
-    let members = new Set();
-    if (conversation.guid) {
-      members.add(conversation.guid);
-    }
-    for (let member of conversation.data.channelDetail.members) {
-      if (profile.state.identity.guid !== member) {
-        members.add(member);
-      }
-    }
-    return members;
-  }
-
-  const getChannel = () => {
-    const { cardId, channelId } = channelView.current;
-    if (cardId) {
-      return card.actions.getChannel(cardId, channelId);
-    }
-    return channel.actions.getChannel(channelId);
-  }
-
-  const getTopicDelta = async (revision, count, begin, end) => {
-
-    const { cardId, channelId } = channelView.current;
+  const getTopicDelta = async (cardId, channelId, revision, count, begin, end) => {
     if (cardId) {
       return await card.actions.getChannelTopics(cardId, channelId, revision, count, begin, end);
     }
     return await channel.actions.getChannelTopics(channelId, revision, count, begin, end);
   }
 
-  const getTopic = async (topicId) => {
-    const { cardId, channelId } = channelView.current;
+  const getTopic = async (cardId, channelId, topicId) => {
     if (cardId) {
       return await card.actions.getChannelTopic(cardId, channelId, topicId);
     }
     return await channel.actions.getChannelTopic(channelId, topicId);
-  } 
+  }
 
-  const getChannelRevision = async () => {
-    const { cardId, channelId } = channelView.current;
+  const removeChannel = async (cardId, channelId) => {
     if (cardId) {
-      return await card.actions.getChannelRevision(cardId, channelId);
+      await card.actions.removeChannel(cardId, channelId);
+      await card.actions.resync();      
     }
-    return await channel.actions.getChannelRevision(channelId);
-  }
-
-  const setTopicDelta = async (delta, curView) => {
-    for (let topic of delta) {
-      if (topic.data == null) {
-        if (curView === view.current) {
-          topics.current.delete(topic.id);
-        }
-      }
-      else {
-        let cur = topics.current.get(topic.id);
-        if (cur == null) {
-          cur = { id: topic.id, data: {} };
-        }
-        if (topic.data.detailRevision !== cur.data.detailRevision) {
-          if(topic.data.topicDetail) {
-            cur.data.topicDetail = topic.data.topicDetail;
-            cur.data.detailRevision = topic.data.detailRevision;
-            cur.data.unsealedMessage = null;
-          }
-          else {
-            let slot = await getTopic(topic.id);
-            cur.data.topicDetail = slot.data.topicDetail;
-            cur.data.detailRevision = slot.data.detailRevision;
-            cur.data.unsealedMessage = null;
-          }
-        }
-        cur.revision = topic.revision;
-        if (curView === view.current) {    
-          topics.current.set(topic.id, cur);
-        }
-      }
-    }
-  }
-
-  const setTopics = async (ev) => {
-    const curView = view.current;
-    try {
-      if (ev.type === EVENT_OPEN) {
-        const { cardId, channelId } = ev.data;
-        channelView.current.cardId = cardId;
-        channelView.current.channelId = channelId;
-        channelView.current.batch = 1;
-        channelView.current.error = false;
-        channelView.current.init = true;
-        let delta = await getTopicDelta(null, TOPIC_BATCH, null, null);
-        await setTopicDelta(delta.topics, curView);
-        channelView.current.revision = delta.revision;
-        channelView.current.begin = delta.marker;
-      }
-      else if (ev.type === EVENT_MORE) {
-        if (channelView.current.init) {
-          channelView.current.batch += 1;
-          let delta = await getTopicDelta(null, channelView.current.batch * TOPIC_BATCH, null, channelView.current.begin);
-          await setTopicDelta(delta.topics, curView);
-          channelView.current.begin = delta.marker;
-        }
-      }
-      else if (ev.type === EVENT_UPDATE || ev.type === EVENT_RESYNC) {
-        let deltaRevision = getChannelRevision();
-        if (channelView.current.init && deltaRevision !== channelView.current.revision) {
-          let delta = await getTopicDelta(channelView.current.revision, null, channelView.current.begin, null);
-          await setTopicDelta(delta.topics, curView);
-          channelView.current.revision = delta.revision;
-        }
-      }
-
-      if (curView === view.current) {
-        let chan = getChannel();
-
-        let contacts = getContacts(chan);
-        let subject = getSubject(chan);
-        let members = getMembers(chan);
-        let seals = getSeals(chan);
-        const enableImage = chan?.data?.channelDetail?.enableImage;
-        const enableAudio = chan?.data?.channelDetail?.enableAudio;
-        const enableVideo = chan?.data?.channelDetail?.enableVideo;
-        const sealed = chan?.data?.channelDetail?.dataType === 'sealed';
-
-        let logoUrl = null;
-        let logoImg = null;
-        if (!members?.size) {
-          subject = subject ? subject : "Notes";
-          logoImg = "solution";
-        }
-        else if (members.size > 1) {
-          subject = subject ? subject : "Group";
-          logoImg = "appstore";
-        }
-        else {
-          const contact = card.actions.getCardByGuid(members.values().next().value);
-          subject = subject ? subject : card.actions.getName(contact.id);
-          logoUrl = card.actions.getImageUrl(contact.id);
-        }
-
-        updateState({
-          init: true,
-          error: false,
-          sealed,
-          seals,
-          subject,
-          logoImg,
-          logoUrl,
-          contacts,
-          members,
-          enableImage,
-          enableAudio,
-          enableVideo,
-          topics: topics.current,
-          revision: channelView.current.revision,
-        });
-      }
-    }
-    catch (err) {
-      console.log(err);
-      updateState({ error: true });
-    }
-  }
-
-  const updateConversation = async () => {
-    if (!card.state.init || !channel.state.init) {
-      return;
-    }
-
-    if (serialize.current === 0) {
-      serialize.current++;
-
-      while (events.current.length > 0) {
-
-        // collapse updates
-        while (events.current.length > 1) {
-          if(events.current[0].type === EVENT_UPDATE && events.current[1].type === EVENT_UPDATE) {
-            events.current.shift();
-          }
-          else {
-            break;
-          }
-        }
-
-        const ev = events.current.shift();
-        await setTopics(ev);
-      }
-      updateState({ loadingInit: false, loadingMore: false });
-      serialize.current--;
+    else {
+      await channel.actions.removeChannel(channelId);
+      await channel.actions.resync();
     }
   };
 
-  useEffect(() => {
-    events.current.push({ type: EVENT_UPDATE });
-    updateConversation();
-    // eslint-disable-next-line
-  }, [card, channel]);
+  const setChannelSubject = async (cardId, channelId, type, subject) => {
+    if (cardId) {
+      console.log('cannot update channel subject');
+    }
+    else {
+      await channel.actions.setChannelSubject(channelId, type, subject);
+    }
+  }
+
+  const setChannelCard = async (cardId, channelId, cardId) => {
+    if (cardId) {
+      console.log('cannot update channel card');
+    }
+    else {
+      await channel.actions.setChannelCard(channelId, cardId);
+      await channel.actions.resync();
+    }
+  }
+
+  const clearChannelCard = async (cardId, channelId, cardId) => {
+    if (cardId) {
+      console.log('cannot update channel card');
+    }
+    else {
+      await channel.actions.clearChannelCard(channelId, cardId);
+      await channelactions.resync();
+    }
+  };
+
+  const addTopic = async (cardId, channelId, type, message, files) => {
+    if (cardId) {
+      await card.actions.addTopic(cardId, channelId, type, message, files);
+    }
+    else {
+      await channel.actions.addTopic(channelId, type, message, files);
+    }
+    await resync();
+  };
+
+  const removeTopic = async (cardId, channelId, topicId) => {
+    if (cardId) {
+      await card.actions.removeTopic(cardId, channelId, topicId);
+    }
+    else {
+      await channel.actions.removeTopic(channelId, topicId);
+    }
+    await resync();
+  };
+
+  const setTopicSubject = async (cardId, channelId, type, subject) => {
+    if (cardId) {
+      await card.actions.setTopicSubject(cardId, channelId, type, subject);
+    }
+    else {
+      await channel.actions.setTopicSubject(channelId, type, subject);
+    }
+    await resync();
+  };
+
+  const getTopicAssetUrl = async (cardId, channelId, topicId, assetId) => {
+    if (cardId) {
+      return card.actions.getTopicAssetUrl(cardId, channelId, topicId, assetId);
+    }
+    else {
+      return channel.actions.getTopicAssetUrl(channelId, topicId, assetId);
+    }
+  };
+
+  const resync = async () => [
+    try {
+      force.current = true;
+      await sync();
+    }
+    catch (err) {
+      console.log(err);
+    }
+  };
+
+  const sync = async () => {
+    if (!syncing.current && (reset.current || force.current || loadMore.current || 
+        setDetailRevision.current !== curDetailRevision.current || setTopicRevision.current !== curTopicRevision.current)) {
+
+      const more = loadMore.current;
+      const update = force.current;
+      const topicRevision = more ? setTopicRevision.current : curTopicRevision.current;
+      const detailRevision = curDetailRevision.current;
+      const conversation = converstaionId.current;
+
+      syncing.current = true;
+      force.current = false;
+      loadMore.current = false;
+
+      if (reset.current) {
+        reset.current = false;
+        marker.current = null;
+        setTopicRevision.current = null;
+        setDetailRevision.current = null;
+        topics.current = new Map();
+        updateState({ offsync: false, channel: null, topics: new Map() }); 
+      }
+
+      if (conversation) {
+
+        // sync channel details
+        if (setDetailRevision.current !== detailRevision) {
+          let channelSync;
+          if (conversation.cardId) {
+            const cardSync = card.state.cards.get(conversation.cardId);
+            channelSync = cardSync?.channels.get(converstaion.channelId);
+          }
+          else {
+            channelSync = channel.state.channels.get(conversation.channelId);
+          }
+          if (channelSync) {
+            setDetailRevision.current = detailRevision;
+            updateState({ channel: channelSync });
+          }
+          else {
+            console.log("converstaion not found");
+          }
+        }
+
+        try {
+          // sync channel topics
+          if (update || more || setTopicRevision.current !== topicRevision) {
+            let delta;
+            if (!marker.current) {
+              delta = await getTopicDelta(conversation.cardId, conversation.channelId, null, COUNT, null, null);
+            }
+            else if (more) {
+              delta = await getTopicDelta(conversation.cardId, conversation.channelId, null, COUNT, null, marker.current);
+            }
+            else {
+              delta = await getTopicDelta(conversation.cardId, conversation.channelId, topicRevision, null, marker.current, null);
+            }
+
+            for (let topic of delta?.topics) {
+              if (topic.data == null) {
+                topics.current.delete(topic.id);
+              }
+              else {
+                let cur = topics.current.get(topic.id);
+                if (cur == null) {
+                  cur = { id: topic.id, data: {} };
+                }
+                if (topic.data.detailRevision !== cur.data.detailRevision) {
+                  if(topic.data.topicDetail) {
+                    cur.data.topicDetail = topic.data.topicDetail;
+                    cur.data.detailRevision = topic.data.detailRevision;
+                  }
+                  else {
+                    const slot = await getTopic(conversation.cardId, conversation.channelId, topic.id);
+                    cur.data.topicDetail = slot.data.topicDetail;
+                    cur.data.detailRevision = slot.data.detailRevision;
+                  }
+                  cur.data.unsealedSubject = null;
+                }
+                cur.revision = topic.revision;
+                topics.current.set(topic.id, cur);
+              }
+            }
+            setTopicRevision.current = topicRevision;
+            updateState({ offsync: false, topics: topics.current });
+          }
+        }
+        catch (err) {
+          console.log(err);
+          updateState({ offsync: true });
+        }
+      }
+
+      syncing.current = false;
+      await sync();
+    }
+  };
 
   const actions = {
-    setConversationId: (cardId, channelId) => {
-      view.current += 1;
-      updateState({ init: false, loadingInit: true });
-      events.current = [{ type: EVENT_OPEN, data: { cardId, channelId }}];
-      updateState({ subject: null, cardId, channelId, topics: new Map() });
-      topics.current = new Map();
-      updateConversation();
+    setChannel: async (cardId, channelId) => {
+      conversationId.current = { cardId, channelId };
+      reset.current = true;
+      await sync();
     },
-    addHistory: () => {
-      if (more.current && !state.loadingMore) {
-        more.current = false;
-        updateState({ loadingMore: true });
-        events.current.push({ type: EVENT_MORE });
-        updateConversation();
-        setTimeout(() => {
-          more.current = true;
-        }, 2000);
-      }
+    clearChannel: async () => {
+      conversationId.current = null;
+      reset.current = true;
+      await sync();
     },
-    setChannelSubject: async (subject) => {
-      return await channel.actions.setChannelSubject(channelView.current.channelId, subject);
+    removeChannel: async () => {
+      const { cardId, channelId } = conversationId.current;
+      await removeChannel(cardId, channelId);
+    },
+    setChannelSubject: async (type, subject) => {
+      const { cardId, channelId } = conversationId.current;
+      await setChannelSubject(cardId, channelId, type, subject);
     },
     setChannelCard: async (cardId) => {
-      return await channel.actions.setChannelCard(channelView.current.channelId, cardId);
+      const { cardId, channelId } = conversationId.current;
+      await setChannelCard(cardId, channelId, cardId);
     },
     clearChannelCard: async (cardId) => {
-      return await channel.actions.clearChannelCard(channelView.current.channelId, cardId);
+      const { cardId, channelId } = conversationId.current;
+      await clearChannelCard(cardId, channelId, cardId);
     },
-    getAssetUrl: (topicId, assetId) => {
-      const { cardId, channelId } = channelView.current;
-      if (channelView.current.cardId) {
-        return card.actions.getContactChannelTopicAssetUrl(cardId, channelId, topicId, assetId);
-      }
-      else {
-        return channel.actions.getChannelTopicAssetUrl(channelId, topicId, assetId);
-      }
+    addTopic: async (type, message, files) => {
+      const { cardId, channelId } = conversationId.current;
+      await addTopic(cardId, channelId, type, message, files);
     },
-    removeConversation: async () => {
-      const { cardId, channelId } = channelView.current;
-      if (cardId) {
-        return await card.actions.removeChannel(cardId, channelId);
-      }
-      else {
-        return await channel.actions.removeChannel(channelId);
-      }
+    removeTopic: async (topicId) => {
+      const { cardId, channelId } = conversationId.current;
+      await removeTopic(cardId, channelId, topicId);
     },
-    unsealTopic: async (topicId, sealKey) => {
-      try {
-        const topic = topics.current.get(topicId);
-        const { messageEncrypted, messageIv } = JSON.parse(topic.data.topicDetail.data);
-        const iv = CryptoJS.enc.Hex.parse(messageIv);
-        const key = CryptoJS.enc.Hex.parse(sealKey);
-        const enc = CryptoJS.enc.Base64.parse(messageEncrypted);
-        let cipher = CryptoJS.lib.CipherParams.create({ ciphertext: enc, iv: iv });
-        const dec = CryptoJS.AES.decrypt(cipher, key, { iv: iv });
-        topic.data.unsealedMessage = JSON.parse(dec.toString(CryptoJS.enc.Utf8));
+    setTopicSubject: async (type, subject) => {
+      const { cardId, channelId } = conversationId.current;
+      await setTopicSubject(cardId, channelId, type, subject);
+    },
+    getTopicAssetUrl: (topicId, assetId) => {
+      const { cardId, channelId } = conversationId.current;
+      return await getTopicAssetUrl(cardId, channelId, topicId, assetId);
+    },
+    unsealTopicSubject: (topicId, unsealed) => {
+      const topic = topics.current.get(topicId);
+      if (topic) {
+        topic.data.unsealedSubject = unsealed;
         topics.current.set(topicId, topic);
         updateState({ topics: topics.current });
       }
-      catch(err) {
-        console.log(err);
-      }
     },
-    removeTopic: async (topicId) => {
-      const { cardId, channelId } = channelView.current;
-      if (cardId) {
-        return await card.actions.removeChannelTopic(cardId, channelId, topicId);
-      }
-      else {
-        return await channel.actions.removeChannelTopic(channelId, topicId);
-      }
+    loadMore: async () => {
+      loadMore.current = true;
+      await resync();
     },
-    setTopicSubject: async (topicId, data) => {
-      const { cardId, channelId } = channelView.current;
-      if (cardId) {
-        return await card.actions.setChannelTopicSubject(cardId, channelId, topicId, data);
-      }
-      else {
-        return await channel.actions.setChannelTopicSubject(channelId, topicId, data);
-      }
-    },
-    setSealedTopicSubject: async (topicId, data, sealKey) => {
-      const { cardId, channelId } = channelView.current;
-      if (cardId) {
-        return await card.actions.setSealedChannelTopicSubject(cardId, channelId, topicId, data, sealKey);
-      }
-      else {
-        return await channel.actions.setSealedChannelTopicSubject(channelId, topicId, data, sealKey);
-      }
-    },
-    resync: () => {
-      updateState({ error: false });
-      events.current.push({ type: EVENT_RESYNC });
-      updateConversation();
-    }
   }
 
   return { state, actions }

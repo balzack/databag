@@ -198,7 +198,7 @@ export function useCardContext() {
           else { 
             cur.data.channelDetail = await getContactChannelDetail(node, token, channel.id);
           }
-          cur.data.unsealedChannel = null;
+          cur.data.unsealedSubject = null;
           cur.data.detailRevision = channel.data.detailRevision;
         }
         if (cur.data.topicRevision !== channel.data.topicRevision) {
@@ -316,33 +316,33 @@ export function useCardContext() {
       }
       resyncCard(cardId);
     },
-    removeChannelTopic: async (cardId, channelId, topicId) => {
+    removeTopic: async (cardId, channelId, topicId) => {
       let { cardProfile, cardDetail } = cards.current.get(cardId).data;
       let token = cardProfile.guid + '.' + cardDetail.token;
       let node = cardProfile.node;
       await removeContactChannelTopic(node, token, channelId, topicId);
       resyncCard(cardId);
     },
-    setChannelTopicSubject: async (cardId, channelId, topicId, type, subject) => {
+    setTopicSubject: async (cardId, channelId, topicId, type, subject) => {
       let { cardProfile, cardDetail } = cards.current.get(cardId).data;
       let token = cardProfile.guid + '.' + cardDetail.token;
       let node = cardProfile.node;
       await setContactChannelTopicSubject(node, token, channelId, topicId, type, subject);
       resyncCard(cardId);
     },
-    getChannelTopicAssetUrl: (cardId, channelId, topicId, assetId) => {
+    getTopicAssetUrl: (cardId, channelId, topicId, assetId) => {
       let { cardProfile, cardDetail } = cards.current.get(cardId).data;
       let token = cardProfile.guid + '.' + cardDetail.token;
       let node = cardProfile.node;
       return getContactChannelTopicAssetUrl(node, token, channelId, topicId, assetId);
     },
-    getChannelTopics: async (channelId, revision, count, begin, end) => {
+    getTopics: async (channelId, revision, count, begin, end) => {
       let { cardProfile, cardDetail } = cards.current.get(cardId).data;
       let token = cardProfile.guid + '.' + cardDetail.token;
       let node = cardProfile.node;
       return await getContactChannelTopics(node, token, channelId, revision, count, begin, end);
     },
-    getChannelTopic: async (channelId, topicId) => {
+    getTopic: async (channelId, topicId) => {
       let { cardProfile, cardDetail } = cards.current.get(cardId).data;
       let token = cardProfile.guid + '.' + cardDetail.token;
       let node = cardProfile.node;
