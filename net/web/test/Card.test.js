@@ -17,7 +17,7 @@ function CardView() {
     entries.forEach(entry => {
 
       rendered.push(
-        <div key={entry.id} data-testid="card">
+        <div key={entry.id} data-testid="card" offsync={entry.offsync.toString()}>
           <span data-testid="name">{ entry.data.cardProfile.name }</span>
           <span data-testid="status">{ entry.data.cardDetail.status }</span>
           <span data-testid="token">{ entry.data.cardDetail.token }</span>
@@ -67,6 +67,7 @@ beforeEach(() => {
 
     const params = url.split('/');
     if (params[4]?.split('?')[0] === 'message') {
+
       return Promise.resolve({
         url: 'getMessage',
         status: statusMessage,
@@ -143,6 +144,74 @@ test('resync cards', async() => {
  
   await waitFor(async () => {
     expect(screen.getByTestId('cards').attributes.offsync.value).toBe('false');
+  });
+
+  act(() => {
+    cardContext.actions.clearToken();
+  });
+
+});
+
+test('resync contact', async () => {
+
+  render(<CardTestApp />);
+
+  await waitFor(async () => {
+    expect(cardContext).not.toBe(null);
+  });
+
+  fetchCards = [{
+    id: '000a',
+    revision: 1,
+    data: {
+      detailRevision: 2,
+      profileRevision: 3,
+      notifiedProfile: 3,
+      notifiedArticle: 5,
+      notifiedChannel: 6,
+      notifiedView: 7,
+      cardDetail: { status: 'connected', statusUpdate: 136, token: '01ab', },
+      cardProfile: { guid: '01ab23', handle: 'test1', name: 'tester', imageSet: false,
+        seal: 'abc', version: '1.1.1', node: 'test.org' },
+    },
+  }];
+
+  await act(async () => {
+    cardContext.actions.setToken('abc123');
+    cardContext.actions.setRevision(1);
+  });
+
+  fetchCards = [{
+    id: '000a',
+    revision: 1,
+    data: {
+      detailRevision: 2,
+      profileRevision: 3,
+      notifiedProfile: 4,
+      notifiedArticle: 5,
+      notifiedChannel: 6,
+      notifiedView: 7,
+    },
+  }];
+
+  statusMessage = 500;
+
+  await act(async () => {
+    cardContext.actions.setRevision(2);
+  });
+ 
+  await waitFor(async () => {
+    expect(screen.getByTestId('card').attributes.offsync.value).toBe('true');
+  });
+
+  statusMessage = 200;
+ 
+  await act(async () => {
+    cardContext.actions.resyncCard('000a');
+  });
+ 
+  await waitFor(async () => {
+    expect(screen.getByTestId('card').attributes.offsync.value).toBe('false');
   });
 
   act(() => {

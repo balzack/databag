@@ -35,7 +35,6 @@ export function useCardContext() {
   const setRevision = useRef(null);
   const curRevision = useRef(null);
   const cards = useRef(new Map());
-  const forceCard = useRef(null);
   const force = useRef(false);
 
   const updateState = (value) => {
@@ -53,21 +52,19 @@ export function useCardContext() {
   };
 
   const resyncCard = async (cardId) => {
-    if (cardId) {
-      forceCard.current = cardId;
-    }
-    if (!syncing.current && forceCard.current) {
+    if (!syncing.current) {
       syncing.current = true;
-      forceCard.current = null;
 
       try {
         const token = access.current;
-        const card = cards.current.get(card.id);
+        const card = cards.current.get(cardId);
+
         if (card.data.cardDetail.status === 'connected') {
           await syncCard(token, card);
         }
         card.offsync = false;
-        cards.current.set(card.id, card);
+        cards.current.set(cardId, card);
+        updateState({ cards: cards.current });
       }
       catch(err) {
         console.log(err);
@@ -353,6 +350,9 @@ export function useCardContext() {
     },
     resync: async () => {
       await resync();
+    },
+    resyncCard: async (cardId) => {
+      await resyncCard(cardId);
     },
   }
 
