@@ -27,14 +27,12 @@ function ConversationView() {
     entries.forEach(entry => {
       rendered.push(
         <div key={entry.id} data-testid="topic">
-          <span data-testid="name">{ entry.data.cardProfile.name }</span>
-          <span data-testid="status">{ entry.data.cardDetail.status }</span>
-          <span data-testid="token">{ entry.data.cardDetail.token }</span>
+          <span data-testid="data">{entry.data.topicDetail.data}</span>
         </div>);
     });
     setTopics(rendered);
     setRenderCount(renderCount + 1);
-  }, [card.state])
+  }, [conversation.state])
 
   return (
     <div data-testid="topics" count={renderCount} offsync={card.state.offsync.toString()}>
@@ -64,6 +62,8 @@ let statusChannels;
 let fetchChannels;
 let statusCardChannels;
 let fetchCardChannels;
+let statusTopics;
+let fetchTopics;
 beforeEach(() => {
 
   statusCards = 200;
@@ -72,6 +72,8 @@ beforeEach(() => {
   fetchChannels = [];
   statusCardChannels = 200;
   fetchCardChannels = [];
+  statusTopics = 200;
+  fetchTopics = [];
 
   const mockFetch = jest.fn().mockImplementation((url, options) => {
     const params = url.split('/');
@@ -95,6 +97,14 @@ beforeEach(() => {
         url: 'getCards',
         status: statusCards,
         json: () => Promise.resolve(fetchCards),
+      });
+    }
+    else if (params[6]?.split('?')[0] === 'topics' || params[4]?.split('?')[0] === 'topics') {
+      return Promise.resolve({
+        url: 'getTopics',
+        status: statusTopics,
+        headers: new Map(),
+        json: () => Promise.resolve(fetchTopics),
       });
     }
     else {
@@ -172,8 +182,56 @@ test('conversation', async() => {
     channelContext.actions.setRevision(1);
   });
 
+  fetchTopics = [
+    { id: '888', revision: 5, data: {
+      detailRevision: 3,
+      tagRevision: 0,
+      topicDetail: {
+        guid: '0123',
+        dataType: 'topictype',
+        data: 'contacttopicdata',
+        created: 1,
+        updated: 1,
+        status: 'confirmed',
+        transform: 'complete',
+      },
+    }
+   }
+  ];
+
   await act(async () => {
     conversationContext.actions.setChannel('000a', 'aabb');
+  });
+
+  await waitFor(async () => {
+    expect(screen.getByTestId('topics').children).toHaveLength(1);
+    expect(screen.getByTestId('data').textContent).toBe('contacttopicdata');
+  });
+
+  fetchTopics = [
+    { id: '888', revision: 5, data: {
+      detailRevision: 3,
+      tagRevision: 0,
+      topicDetail: {
+        guid: '0123',
+        dataType: 'topictype',
+        data: 'agenttopicdata',
+        created: 1,
+        updated: 1,
+        status: 'confirmed',
+        transform: 'complete',
+      },
+    }
+   }
+  ];
+
+  await act(async () => {
+    conversationContext.actions.setChannel(null, '123');
+  });
+
+  await waitFor(async () => {
+    expect(screen.getByTestId('topics').children).toHaveLength(1);
+    expect(screen.getByTestId('data').textContent).toBe('agenttopicdata');
   });
 
   act(() => {

@@ -245,6 +245,7 @@ export function useConversationContext() {
                 topics.current.set(topic.id, cur);
               }
             }
+
             setTopicRevision.current = topicRevision;
             updateState({ offsync: false, topics: topics.current });
           }

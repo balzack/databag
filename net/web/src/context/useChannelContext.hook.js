@@ -179,13 +179,13 @@ export function useChannelContext() {
       await setChannelTopicSubject(access.current, channelId, topicId, type, subject);
       await resync();
     },
-    getChannelTopicAssetUrl: (channelId, topicId, assetId) => {
+    getTopicAssetUrl: (channelId, topicId, assetId) => {
       return getChannelTopicAssetUrl(access.current, channelId, topicId, assetId);
     },
-    getChannelTopics: async (channelId, revision, count, begin, end) => {
+    getTopics: async (channelId, revision, count, begin, end) => {
       return await getChannelTopics(access.current, channelId, revision, count, begin, end);
     },
-    getChannelTopic: async (channelId, topicId) => {
+    getTopic: async (channelId, topicId) => {
       return await getChannelTopic(access.current, channelId, topicId);
     },
     resync: async () => {
