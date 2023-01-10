@@ -101,6 +101,7 @@ beforeEach(() => {
       return Promise.resolve({
         url: 'endpoint',
         status: 200,
+        headers: new Map(),
         json: () => Promise.resolve([]),
       });
     }
@@ -169,6 +170,10 @@ test('conversation', async() => {
   await act(async () => {
     cardContext.actions.setRevision(1);
     channelContext.actions.setRevision(1);
+  });
+
+  await act(async () => {
+    conversationContext.actions.setChannel('000a', 'aabb');
   });
 
   act(() => {

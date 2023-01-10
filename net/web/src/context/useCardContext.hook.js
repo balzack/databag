@@ -317,35 +317,55 @@ export function useCardContext() {
       resyncCard(cardId);
     },
     removeTopic: async (cardId, channelId, topicId) => {
-      let { cardProfile, cardDetail } = cards.current.get(cardId).data;
-      let token = cardProfile.guid + '.' + cardDetail.token;
-      let node = cardProfile.node;
+      const card = cards.current.get(cardId);
+      if (!card) {
+        throw new Error('card not found');
+      }
+      const { cardProfile, cardDetail } = card.data;
+      const token = cardProfile.guid + '.' + cardDetail.token;
+      const node = cardProfile.node;
       await removeContactChannelTopic(node, token, channelId, topicId);
       resyncCard(cardId);
     },
     setTopicSubject: async (cardId, channelId, topicId, type, subject) => {
-      let { cardProfile, cardDetail } = cards.current.get(cardId).data;
-      let token = cardProfile.guid + '.' + cardDetail.token;
-      let node = cardProfile.node;
+      const card = cards.current.get(cardId);
+      if (!card) {
+        throw new Error('card not found');
+      }
+      const { cardProfile, cardDetail } = card.data;
+      const token = cardProfile.guid + '.' + cardDetail.token;
+      const node = cardProfile.node;
       await setContactChannelTopicSubject(node, token, channelId, topicId, type, subject);
       resyncCard(cardId);
     },
     getTopicAssetUrl: (cardId, channelId, topicId, assetId) => {
-      let { cardProfile, cardDetail } = cards.current.get(cardId).data;
-      let token = cardProfile.guid + '.' + cardDetail.token;
-      let node = cardProfile.node;
+      const card = cards.current.get(cardId);
+      if (!card) {
+        throw new Error('card not found');
+      }
+      const { cardProfile, cardDetail } = card.data;
+      const token = cardProfile.guid + '.' + cardDetail.token;
+      const node = cardProfile.node;
       return getContactChannelTopicAssetUrl(node, token, channelId, topicId, assetId);
     },
-    getTopics: async (channelId, revision, count, begin, end) => {
-      let { cardProfile, cardDetail } = cards.current.get(cardId).data;
-      let token = cardProfile.guid + '.' + cardDetail.token;
-      let node = cardProfile.node;
+    getTopics: async (cardId, channelId, revision, count, begin, end) => {
+      const card = cards.current.get(cardId);
+      if (!card) {
+        throw new Error('card not found');
+      }
+      const { cardProfile, cardDetail } = card.data;
+      const token = cardProfile.guid + '.' + cardDetail.token;
+      const node = cardProfile.node;
       return await getContactChannelTopics(node, token, channelId, revision, count, begin, end);
     },
-    getTopic: async (channelId, topicId) => {
-      let { cardProfile, cardDetail } = cards.current.get(cardId).data;
-      let token = cardProfile.guid + '.' + cardDetail.token;
-      let node = cardProfile.node;
+    getTopic: async (cardId, channelId, topicId) => {
+      const card = cards.current.get(cardId);
+      if (!card) {
+        throw new Error('card not found');
+      }
+      const { cardProfile, cardDetail } = card.data;
+      const token = cardProfile.guid + '.' + cardDetail.token;
+      const node = cardProfile.node;
       return await getChannelTopic(node, token, channelId, topicId);
     },
     resync: async () => {

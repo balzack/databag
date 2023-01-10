@@ -26,43 +26,22 @@ export function useConversationContext() {
   const conversationId = useRef(null);
   const topics = useRef(new Map());
 
-  useEffect(() => {
-    if (conversationId.current) {
-      let setChannel;
-      const { cardId, channelId } = conversationId.current;
-      if (cardId) {
-        const setCard = card.state.cards.get(cardId);
-        setChannel = setCard?.channels.get(channelId);
-      }
-      else {
-        setChannel = channel.state.channels.get(channelId);
-      }
-      if (setChannel) {
-        const { topicRevision, detailRevision } = setChannel.data;
-        if (curTopicRevision.current !== topicRevision || curDetailRevision.current !== detailRevision) {
-          curTopicRevision.current = topicRevision;
-          curDetailRevision.current = detailRevision;
-          sync();
-        }
-      }
-      else {
-        console.log('conversation not found');
-      }
-    }
-  }, [card.state, channel.state]);
+  const updateState = (value) => {
+    setState((s) => ({ ...s, ...value }))
+  }
 
   const getTopicDelta = async (cardId, channelId, revision, count, begin, end) => {
     if (cardId) {
-      return await card.actions.getChannelTopics(cardId, channelId, revision, count, begin, end);
+      return await card.actions.getTopics(cardId, channelId, revision, count, begin, end);
     }
-    return await channel.actions.getChannelTopics(channelId, revision, count, begin, end);
+    return await channel.actions.getTopics(channelId, revision, count, begin, end);
   }
 
   const getTopic = async (cardId, channelId, topicId) => {
     if (cardId) {
-      return await card.actions.getChannelTopic(cardId, channelId, topicId);
+      return await card.actions.getTopic(cardId, channelId, topicId);
     }
-    return await channel.actions.getChannelTopic(channelId, topicId);
+    return await channel.actions.getTopic(channelId, topicId);
   }
 
   const removeChannel = async (cardId, channelId) => {
@@ -144,6 +123,35 @@ export function useConversationContext() {
     }
   };
 
+  useEffect(() => {
+    if (conversationId.current) {
+      const { cardId, channelId } = conversationId.current;
+      setChannelRevision(cardId, channelId);
+      sync();
+    }
+  }, [card.state, channel.state]);
+
+  const setChannelRevision = (cardId, channelId) => {
+    let setChannel;
+    if (cardId) {
+      const setCard = card.state.cards.get(cardId);
+      setChannel = setCard?.channels.get(channelId);
+    }
+    else {
+      setChannel = channel.state.channels.get(channelId);
+    }
+    if (setChannel) {
+      const { topicRevision, detailRevision } = setChannel.data;
+      if (curTopicRevision.current !== topicRevision || curDetailRevision.current !== detailRevision) {
+        curTopicRevision.current = topicRevision;
+        curDetailRevision.current = detailRevision;
+      }
+    }
+    else {
+      console.log('conversation not found');
+    }
+  }
+
   const resync = async () => {
     try {
       force.current = true;
@@ -162,7 +170,6 @@ export function useConversationContext() {
       const update = force.current;
       const topicRevision = more ? setTopicRevision.current : curTopicRevision.current;
       const detailRevision = curDetailRevision.current;
-      const conversation = converstaionId.current;
 
       syncing.current = true;
       force.current = false;
@@ -177,17 +184,18 @@ export function useConversationContext() {
         updateState({ offsync: false, channel: null, topics: new Map() }); 
       }
 
-      if (conversation) {
+      if (conversationId.current) {
+        const { cardId, channelId } = conversationId.current;
 
         // sync channel details
         if (setDetailRevision.current !== detailRevision) {
           let channelSync;
-          if (conversation.cardId) {
-            const cardSync = card.state.cards.get(conversation.cardId);
-            channelSync = cardSync?.channels.get(converstaion.channelId);
+          if (cardId) {
+            const cardSync = card.state.cards.get(cardId);
+            channelSync = cardSync?.channels.get(channelId);
           }
           else {
-            channelSync = channel.state.channels.get(conversation.channelId);
+            channelSync = channel.state.channels.get(channelId);
           }
           if (channelSync) {
             setDetailRevision.current = detailRevision;
@@ -203,13 +211,13 @@ export function useConversationContext() {
           if (update || more || setTopicRevision.current !== topicRevision) {
             let delta;
             if (!marker.current) {
-              delta = await getTopicDelta(conversation.cardId, conversation.channelId, null, COUNT, null, null);
+              delta = await getTopicDelta(cardId, channelId, null, COUNT, null, null);
             }
             else if (more) {
-              delta = await getTopicDelta(conversation.cardId, conversation.channelId, null, COUNT, null, marker.current);
+              delta = await getTopicDelta(cardId, channelId, null, COUNT, null, marker.current);
             }
             else {
-              delta = await getTopicDelta(conversation.cardId, conversation.channelId, topicRevision, null, marker.current, null);
+              delta = await getTopicDelta(cardId, channelId, topicRevision, null, marker.current, null);
             }
 
             for (let topic of delta?.topics) {
@@ -227,7 +235,7 @@ export function useConversationContext() {
                     cur.data.detailRevision = topic.data.detailRevision;
                   }
                   else {
-                    const slot = await getTopic(conversation.cardId, conversation.channelId, topic.id);
+                    const slot = await getTopic(cardId, channelId, topic.id);
                     cur.data.topicDetail = slot.data.topicDetail;
                     cur.data.detailRevision = slot.data.detailRevision;
                   }
@@ -244,6 +252,8 @@ export function useConversationContext() {
         catch (err) {
           console.log(err);
           updateState({ offsync: true });
+          syncing.current = false;
+          return;
         }
       }
 
@@ -255,6 +265,7 @@ export function useConversationContext() {
   const actions = {
     setChannel: async (cardId, channelId) => {
       conversationId.current = { cardId, channelId };
+      setChannelRevision(cardId, channelId);
       reset.current = true;
       await sync();
     },
