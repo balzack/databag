@@ -10,8 +10,6 @@
   },
   "dependencies": {
     "@react-native-clipboard/clipboard": "^1.11.1",
-    "@react-native-firebase/app": "^16.4.3",
-    "@react-native-firebase/messaging": "^16.4.3",
     "@react-navigation/bottom-tabs": "^6.4.0",
     "@react-navigation/drawer": "^6.5.0",
     "@react-navigation/native": "^6.0.13",

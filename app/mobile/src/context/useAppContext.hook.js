@@ -12,14 +12,13 @@ import { ProfileContext } from 'context/ProfileContext';
 import { CardContext } from 'context/CardContext';
 import { ChannelContext } from 'context/ChannelContext';
 import { getVersion, getApplicationName, getDeviceId } from 'react-native-device-info';
-import messaging from '@react-native-firebase/messaging';
 
 export function useAppContext() {
   const [state, setState] = useState({
     session: null,
     loginTimestamp: null,
     disconnected: null,
-    deviceToken: null,
+    deviceToken: '',
     loggingOut: false,
     version: getVersion(),
   });
@@ -38,10 +37,6 @@ export function useAppContext() {
   }
 
   useEffect(() => {
-    messaging().getToken().then(token => {
-      updateState({ deviceToken: token });
-    })
-
     init();
   }, []);
 
@@ -75,12 +70,6 @@ export function useAppContext() {
   }
 
   const notifications = [
-    { event: 'contact.addCard', messageTitle: 'New Contact Request' },
-    { event: 'contact.updateCard', messageTitle: 'Contact Update' },
-    { event: 'content.addChannel.superbasic', messageTitle: 'New Topic' },
-    { event: 'content.addChannel.sealed', messageTitle: 'New Topic' },
-    { event: 'content.addChannelTopic.superbasic', messageTitle: 'New Topic Message' },
-    { event: 'content.addChannelTopic.sealed', messageTitle: 'New Topic Message' },
   ];
 
   const actions = {
