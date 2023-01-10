@@ -27,6 +27,28 @@ export function useConversationContext() {
   const topics = useRef(new Map());
 
   useEffect(() => {
+    if (conversationId.current) {
+      let setChannel;
+      const { cardId, channelId } = conversationId.current;
+      if (cardId) {
+        const setCard = card.state.cards.get(cardId);
+        setChannel = setCard?.channels.get(channelId);
+      }
+      else {
+        setChannel = channel.state.channels.get(channelId);
+      }
+      if (setChannel) {
+        const { topicRevision, detailRevision } = setChannel.data;
+        if (curTopicRevision.current !== topicRevision || curDetailRevision.current !== detailRevision) {
+          curTopicRevision.current = topicRevision;
+          curDetailRevision.current = detailRevision;
+          sync();
+        }
+      }
+      else {
+        console.log('conversation not found');
+      }
+    }
   }, [card.state, channel.state]);
 
   const getTopicDelta = async (cardId, channelId, revision, count, begin, end) => {
@@ -63,22 +85,22 @@ export function useConversationContext() {
     }
   }
 
-  const setChannelCard = async (cardId, channelId, cardId) => {
+  const setChannelCard = async (cardId, channelId, id) => {
     if (cardId) {
       console.log('cannot update channel card');
     }
     else {
-      await channel.actions.setChannelCard(channelId, cardId);
+      await channel.actions.setChannelCard(channelId, id);
       await channel.actions.resync();
     }
   }
 
-  const clearChannelCard = async (cardId, channelId, cardId) => {
+  const clearChannelCard = async (cardId, channelId, id) => {
     if (cardId) {
       console.log('cannot update channel card');
     }
     else {
-      await channel.actions.clearChannelCard(channelId, cardId);
+      await channel.actions.clearChannelCard(channelId, id);
       await channelactions.resync();
     }
   };
@@ -122,7 +144,7 @@ export function useConversationContext() {
     }
   };
 
-  const resync = async () => [
+  const resync = async () => {
     try {
       force.current = true;
       await sync();
@@ -249,13 +271,13 @@ export function useConversationContext() {
       const { cardId, channelId } = conversationId.current;
       await setChannelSubject(cardId, channelId, type, subject);
     },
-    setChannelCard: async (cardId) => {
+    setChannelCard: async (id) => {
       const { cardId, channelId } = conversationId.current;
-      await setChannelCard(cardId, channelId, cardId);
+      await setChannelCard(cardId, channelId, id);
     },
-    clearChannelCard: async (cardId) => {
+    clearChannelCard: async (id) => {
       const { cardId, channelId } = conversationId.current;
-      await clearChannelCard(cardId, channelId, cardId);
+      await clearChannelCard(cardId, channelId, id);
     },
     addTopic: async (type, message, files) => {
       const { cardId, channelId } = conversationId.current;
@@ -271,7 +293,7 @@ export function useConversationContext() {
     },
     getTopicAssetUrl: (topicId, assetId) => {
       const { cardId, channelId } = conversationId.current;
-      return await getTopicAssetUrl(cardId, channelId, topicId, assetId);
+      return getTopicAssetUrl(cardId, channelId, topicId, assetId);
     },
     unsealTopicSubject: (topicId, unsealed) => {
       const topic = topics.current.get(topicId);
