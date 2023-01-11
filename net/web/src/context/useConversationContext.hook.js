@@ -246,6 +246,7 @@ export function useConversationContext() {
               }
             }
 
+            marker.current = delta.marker;
             setTopicRevision.current = topicRevision;
             updateState({ offsync: false, topics: topics.current });
           }
@@ -256,10 +257,10 @@ export function useConversationContext() {
           syncing.current = false;
           return;
         }
-      }
 
-      syncing.current = false;
-      await sync();
+        syncing.current = false;
+        await sync();
+      }
     }
   };
 
@@ -272,6 +273,8 @@ export function useConversationContext() {
     },
     clearChannel: async () => {
       conversationId.current = null;
+      curDetailRevision.current = null;
+      curTopicRevision.current = null;
       reset.current = true;
       await sync();
     },

@@ -56,6 +56,7 @@ function ConversationTestApp() {
 const realFetchWithTimeout = fetchUtil.fetchWithTimeout;
 const realFetchWithCustomTimeout = fetchUtil.fetchWithCustomTimeout;
 
+let endSet;
 let statusCards;
 let fetchCards;
 let statusChannels;
@@ -78,6 +79,7 @@ beforeEach(() => {
   fetchTopics = [];
   statusTopic = 200;
   fetchTopic = {};
+  endSet = false;
 
   const mockFetch = jest.fn().mockImplementation((url, options) => {
     const params = url.split('/');
@@ -110,10 +112,17 @@ beforeEach(() => {
       });
     }
     else if (params[6]?.split('?')[0] === 'topics' || params[4]?.split('?')[0] === 'topics') {
+      if (url.endsWith('end=48')) {
+        endSet = true;
+      }
+      console.log(params, options);
+      const headers = new Map();
+      headers.set('topic-marker', 48);
+      headers.set('topic-revision', 55);
       return Promise.resolve({
         url: 'getTopics',
         status: statusTopics,
-        headers: new Map(),
+        headers: headers,
         json: () => Promise.resolve(fetchTopics),
       });
     }
@@ -334,6 +343,114 @@ test('add, update, and remove topic', async() => {
   act(() => {
     cardContext.actions.clearToken();
     channelContext.actions.clearToken();
+  });
+
+});
+
+test('load more', async() => {
+
+  render(<ConversationTestApp />);
+
+  await waitFor(async () => {
+    expect(cardContext).not.toBe(null);
+    expect(channelContext).not.toBe(null);
+    expect(conversationContext).not.toBe(null);
+  });
+
+  await act(async () => {
+    cardContext.actions.setToken('abc123');
+    channelContext.actions.setToken('abc123');
+  });
+
+  fetchCards = [{
+    id: '000a',
+    revision: 1,
+    data: {
+      detailRevision: 2,
+      profileRevision: 3,
+      notifiedProfile: 3,
+      notifiedArticle: 5,
+      notifiedChannel: 6,
+      notifiedView: 7,
+      cardDetail: { status: 'connected', statusUpdate: 136, token: '01ab', },
+      cardProfile: { guid: '01ab23', handle: 'test1', name: 'tester', imageSet: false,
+        seal: 'abc', version: '1.1.1', node: 'test.org' },
+    },
+  }];
+
+  fetchCardChannels = [
+    { id: 'aabb', revision: 2, data: {
+        detailRevision: 3,
+        topicRevision: 5,
+        channelSummary: { guid: '11', dataType: 'superbasictopic', data: 'testcardtopic' },
+        channelDetail: { dataType: 'superbasic', data: 'testcardchannel' },
+      }
+    },
+  ];
+
+  await act(async () => {
+    cardContext.actions.setRevision(1);
+    channelContext.actions.setRevision(1);
+  });
+
+  fetchTopics = [];
+  for (let i = 0; i < 32; i++) {
+    fetchTopics.push({ id: i.toString(), revision: 5, data: {
+      detailRevision: 3,
+      tagRevision: 0,
+      topicDetail: {
+        guid: '0123',
+        dataType: 'topictype',
+        data: 'contacttopicdata',
+        created: 1,
+        updated: 1,
+        status: 'confirmed',
+        transform: 'complete',
+      },
+    }});
+  } 
+
+  await act(async () => {
+    await conversationContext.actions.setChannel('000a', 'aabb');
+  });
+
+  await waitFor(async () => {
+    expect(endSet).toBe(false);
+    expect(screen.getByTestId('topics').children).toHaveLength(32);
+  });
+
+  fetchTopics = [];
+  for (let i = 100; i < 111; i++) {
+    fetchTopics.push({ id: i.toString(), revision: 5, data: {
+      detailRevision: 3,
+      tagRevision: 0,
+      topicDetail: {
+        guid: '0123',
+        dataType: 'topictype',
+        data: 'contacttopicdata',
+        created: 1,
+        updated: 1,
+        status: 'confirmed',
+        transform: 'complete',
+      },
+    }});
+  } 
+
+  await act(async () => {
+    await conversationContext.actions.loadMore();
+  });
+
+  await waitFor(async () => {
+    expect(endSet).toBe(true);
+    expect(screen.getByTestId('topics').children).toHaveLength(43);
+  });
+
+  await act(async () => {
+    await conversationContext.actions.clearChannel();
+  });
+
+  await waitFor(async () => {
+    expect(screen.getByTestId('topics').children).toHaveLength(0);
   });
 
 });
