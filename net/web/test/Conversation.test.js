@@ -64,6 +64,8 @@ let statusCardChannels;
 let fetchCardChannels;
 let statusTopics;
 let fetchTopics;
+let statusTopic;
+let fetchTopic;
 beforeEach(() => {
 
   statusCards = 200;
@@ -74,10 +76,11 @@ beforeEach(() => {
   fetchCardChannels = [];
   statusTopics = 200;
   fetchTopics = [];
+  statusTopic = 200;
+  fetchTopic = {};
 
   const mockFetch = jest.fn().mockImplementation((url, options) => {
     const params = url.split('/');
-      console.log(params, options);
     if (params[2].startsWith('channels?agent')) {
       return Promise.resolve({
         url: 'getChannels',
@@ -99,6 +102,13 @@ beforeEach(() => {
         json: () => Promise.resolve(fetchCards),
       });
     }
+    else if (params[4] === 'topics') {
+      return Promise.resolve({
+        url: 'getTopic',
+        status: statusTopic,
+        json: () => Promise.resolve(fetchTopic),
+      });
+    }
     else if (params[6]?.split('?')[0] === 'topics' || params[4]?.split('?')[0] === 'topics') {
       return Promise.resolve({
         url: 'getTopics',
@@ -108,11 +118,12 @@ beforeEach(() => {
       });
     }
     else {
+      console.log(params, options);
       return Promise.resolve({
         url: 'endpoint',
         status: 200,
         headers: new Map(),
-        json: () => Promise.resolve([]),
+        json: () => Promise.resolve({}),
       });
     }
 
@@ -126,7 +137,7 @@ afterEach(() => {
   fetchUtil.fetchWithCustomTimeout = realFetchWithCustomTimeout;
 });
 
-test('conversation', async() => {
+test('add, update, and remove topic', async() => {
 
   render(<ConversationTestApp />);
 
@@ -233,6 +244,92 @@ test('conversation', async() => {
     expect(screen.getByTestId('topics').children).toHaveLength(1);
     expect(screen.getByTestId('data').textContent).toBe('agenttopicdata');
   });
+
+  fetchChannels = [
+    { id: '123', revision: 2, data: {
+        detailRevision: 3,
+        topicRevision: 6,
+      }
+    },
+  ];
+
+  fetchTopics = [
+    { id: '888', revision: 5, data: {
+      detailRevision: 3,
+      tagRevision: 0,
+    }
+   }
+  ];
+
+  fetchTopic = { id: '888', revision: 5, data: {
+      detailRevision: 4,
+      tagRevision: 0,
+      topicDetail: {
+        guid: '0123',
+        dataType: 'topictype',
+        data: 'agenttopicdata2',
+        created: 1,
+        updated: 1,
+        status: 'confirmed',
+        transform: 'complete',
+      },
+    }
+  };
+
+  await act(async () => {
+    channelContext.actions.setRevision(2);
+  });
+
+  await waitFor(async () => {
+    expect(screen.getByTestId('topics').children).toHaveLength(1);
+    expect(screen.getByTestId('data').textContent).toBe('agenttopicdata');
+  });
+
+  fetchChannels = [
+    { id: '123', revision: 2, data: {
+        detailRevision: 3,
+        topicRevision: 7,
+      }
+    },
+  ];
+
+  fetchTopics = [
+    { id: '888', revision: 5, data: {
+      detailRevision: 4,
+      tagRevision: 0,
+    }
+   }
+  ];
+
+  await act(async () => {
+    channelContext.actions.setRevision(3);
+  });
+
+  await waitFor(async () => {
+    expect(screen.getByTestId('topics').children).toHaveLength(1);
+    expect(screen.getByTestId('data').textContent).toBe('agenttopicdata2');
+  });
+
+  fetchChannels = [
+    { id: '123', revision: 2, data: {
+        detailRevision: 3,
+        topicRevision: 8,
+      }
+    },
+  ];
+
+  fetchTopics = [
+    { id: '888', revision: 6 }
+  ];
+
+  await act(async () => {
+    channelContext.actions.setRevision(4);
+  });
+
+  await waitFor(async () => {
+    expect(screen.getByTestId('topics').children).toHaveLength(0);
+  });
+
 
   act(() => {
     cardContext.actions.clearToken();
