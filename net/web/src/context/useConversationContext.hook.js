@@ -320,7 +320,11 @@ export function useConversationContext() {
     },
     loadMore: async () => {
       loadMore.current = true;
-      await resync();
+      await sync();
+    },
+    resync: async () => {
+      force.current = true;
+      await sync();
     },
   }
 

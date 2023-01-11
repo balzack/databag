@@ -183,7 +183,7 @@ export function useCardContext() {
     }
     else {
       const { setNotifiedView, setNotifiedChannel } = card.data;
-      delta = await getContactChannels(node, notifiedView, notifiedChannel);
+      delta = await getContactChannels(node, setNotifiedView, setNotifiedChannel);
     }
     for (let channel of delta) {
       if (channel.data) {

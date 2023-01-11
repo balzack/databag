@@ -56,6 +56,7 @@ function ConversationTestApp() {
 const realFetchWithTimeout = fetchUtil.fetchWithTimeout;
 const realFetchWithCustomTimeout = fetchUtil.fetchWithCustomTimeout;
 
+let beginSet;
 let endSet;
 let statusCards;
 let fetchCards;
@@ -80,6 +81,7 @@ beforeEach(() => {
   statusTopic = 200;
   fetchTopic = {};
   endSet = false;
+  beginSet = false;
 
   const mockFetch = jest.fn().mockImplementation((url, options) => {
     const params = url.split('/');
@@ -115,7 +117,9 @@ beforeEach(() => {
       if (url.endsWith('end=48')) {
         endSet = true;
       }
-      console.log(params, options);
+      if (url.endsWith('begin=48')) {
+        beginSet = true;
+      }
       const headers = new Map();
       headers.set('topic-marker', 48);
       headers.set('topic-revision', 55);
@@ -416,6 +420,7 @@ test('load more', async() => {
 
   await waitFor(async () => {
     expect(endSet).toBe(false);
+    expect(beginSet).toBe(false);
     expect(screen.getByTestId('topics').children).toHaveLength(32);
   });
 
@@ -442,7 +447,61 @@ test('load more', async() => {
 
   await waitFor(async () => {
     expect(endSet).toBe(true);
+    expect(beginSet).toBe(false);
     expect(screen.getByTestId('topics').children).toHaveLength(43);
+  });
+
+  fetchCards = [{
+    id: '000a',
+    revision: 1,
+    data: {
+      detailRevision: 2,
+      profileRevision: 3,
+      notifiedProfile: 3,
+      notifiedArticle: 5,
+      notifiedChannel: 7,
+      notifiedView: 7,
+    },
+  }];
+
+  fetchCardChannels = [
+    { id: 'aabb', revision: 2, data: {
+        detailRevision: 3,
+        topicRevision: 6,
+        channelSummary: { guid: '11', dataType: 'superbasictopic', data: 'testcardtopic' },
+        channelDetail: { dataType: 'superbasic', data: 'testcardchannel' },
+      }
+    },
+  ];
+
+  await act(async () => {
+    cardContext.actions.setRevision(2);
+  });
+
+  await waitFor(async () => {
+    expect(beginSet).toBe(true);
+  });
+
+  fetchTopics = [{ id: 300, revision: 5, data: {
+    detailRevision: 3,
+    tagRevision: 0,
+    topicDetail: {
+      guid: '0123',
+      dataType: 'topictype',
+      data: 'contacttopicdata',
+      created: 1,
+      updated: 1,
+      status: 'confirmed',
+      transform: 'complete',
+    },
+  }}];
+
+  await act(async () => {
+    conversationContext.actions.resync();
+  });
+
+  await waitFor(async () => {
+    expect(screen.getByTestId('topics').children).toHaveLength(44);
   });
 
   await act(async () => {
