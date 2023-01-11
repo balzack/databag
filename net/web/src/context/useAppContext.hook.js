@@ -7,8 +7,6 @@ import { addAccount } from 'api/addAccount';
 import { getUsername } from 'api/getUsername';
 import { AccountContext } from './AccountContext';
 import { ProfileContext } from './ProfileContext';
-import { ArticleContext } from './ArticleContext';
-import { GroupContext } from './GroupContext';
 import { CardContext } from './CardContext';
 import { ChannelContext } from './ChannelContext';
 import { StoreContext } from './StoreContext';
@@ -36,15 +34,11 @@ export function useAppContext() {
   const profileContext = useContext(ProfileContext);
   const channelContext = useContext(ChannelContext);
   const cardContext = useContext(CardContext);
-  const groupContext = useContext(GroupContext);
-  const articleContext = useContext(ArticleContext);
 
   const resetData = () => {
     revision.current = null;
     accountContext.actions.clearToken();
     profileContext.actions.clearToken();
-    articleContext.actions.clearToken();
-    groupContext.actions.clearToken();
     cardContext.actions.clearToken();
     channelContext.actions.clearToken();
     setState({});
@@ -123,8 +117,6 @@ export function useAppContext() {
     if (appRevision) {
       accountContext.actions.setRevision(appRevision.account);
       profileContext.actions.setRevision(appRevision.profile);
-      articleContext.actions.setRevision(appRevision.article);
-      groupContext.actions.setRevision(appRevision.group);
       cardContext.actions.setRevision(appRevision.card);
       channelContext.actions.setRevision(appRevision.channel);
     }
@@ -135,8 +127,6 @@ export function useAppContext() {
 
     accountContext.actions.setToken(token);
     profileContext.actions.setToken(token);
-    articleContext.actions.setToken(token);
-    groupContext.actions.setToken(token);
     cardContext.actions.setToken(token);
     channelContext.actions.setToken(token);
 

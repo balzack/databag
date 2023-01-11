@@ -26,36 +26,32 @@ function App() {
     <UploadContextProvider>
       <ChannelContextProvider>
         <CardContextProvider>
-          <GroupContextProvider>
-            <ArticleContextProvider>
-              <ProfileContextProvider>
-                <StoreContextProvider>
-                  <AccountContextProvider>
-                    <ViewportContextProvider>
-                      <AppContextProvider>
-                        <AppWrapper>
-                          <Router>
-                            <Routes>
-                              <Route path="/" element={ <Root /> } />
-                              <Route path="/admin" element={ <Admin /> } />
-                              <Route path="/login" element={ <Access mode="login" /> } />
-                              <Route path="/create" element={ <Access mode="create" /> } />
-                              <Route path="/session" element={
-                                <ConversationContextProvider>
-                                  <Session />
-                                </ConversationContextProvider>
-                              }>
-                              </Route>
-                            </Routes>
-                          </Router>
-                        </AppWrapper>
-                      </AppContextProvider>
-                    </ViewportContextProvider>
-                  </AccountContextProvider>
-                </StoreContextProvider>
-              </ProfileContextProvider>
-            </ArticleContextProvider>
-          </GroupContextProvider>
+          <ProfileContextProvider>
+            <StoreContextProvider>
+              <AccountContextProvider>
+                <ViewportContextProvider>
+                  <AppContextProvider>
+                    <AppWrapper>
+                      <Router>
+                        <Routes>
+                          <Route path="/" element={ <Root /> } />
+                          <Route path="/admin" element={ <Admin /> } />
+                          <Route path="/login" element={ <Access mode="login" /> } />
+                          <Route path="/create" element={ <Access mode="create" /> } />
+                          <Route path="/session" element={
+                            <ConversationContextProvider>
+                              <Session />
+                            </ConversationContextProvider>
+                          }>
+                          </Route>
+                        </Routes>
+                      </Router>
+                    </AppWrapper>
+                  </AppContextProvider>
+                </ViewportContextProvider>
+              </AccountContextProvider>
+            </StoreContextProvider>
+          </ProfileContextProvider>
         </CardContextProvider>
       </ChannelContextProvider>
     </UploadContextProvider>
