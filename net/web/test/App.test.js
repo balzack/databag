@@ -12,10 +12,9 @@ import { UploadContextProvider } from 'context/UploadContext';
 import { ViewportContextProvider } from 'context/ViewportContext';
 import { ConversationContextProvider } from 'context/ConversationContext';
 
+let mockWebsocket;
 function MockWebsocket(url) {
-  setTimeout(() => {
-    this.onmessage({ data: JSON.stringify({ account: 1, profile: 1, card: 1, channel: 1 }) });
-  });
+  this.url = url;
 };
 
 let appContext = null;
@@ -31,7 +30,7 @@ function AppView() {
   return (
     <div>
       <span data-testid="count">{ renderCount }</span>
-      <span data-testid="disconnected">{ app.state.disconnected ? 'true' : 'false' }</span>
+      <span data-testid="status">{ app.state.status }</span>
     </div>
   );
 }
@@ -64,7 +63,8 @@ const realFetchWithCustomTimeout = fetchUtil.fetchWithCustomTimeout;
 beforeEach(() => {
 
   const mockCreateWebsocket = jest.fn().mockImplementation((url) => {
-    return new MockWebsocket(url);
+    mockWebsocket = new MockWebsocket(url);
+    return mockWebsocket;
   });
 
   const mockFetch = jest.fn().mockImplementation((url, options) => {
@@ -102,10 +102,29 @@ test('testing app sync', async () => {
 
   await act(async () => {
     appContext.actions.login('testlogin', 'testpassword');
+    expect(mockWebsocket?.onmessage).not.toBe(null);
+    expect(mockWebsocket?.onclose).not.toBe(null);
   });
 
   await waitFor(async () => {
-    expect(screen.getByTestId('disconnected').textContent).toBe('false');
+    expect(screen.getByTestId('status').textContent).toBe('connecting');
+  });
+
+  await act(async () => {
+    mockWebsocket.onmessage({ data: JSON.stringify({ account: 1, profile: 1, card: 1, channel: 1 }) });
+  });
+
+  await waitFor(async () => {
+    expect(screen.getByTestId('status').textContent).toBe('connected');
+  });
+
+  await act(async () => {
+    mockWebsocket.onclose();
+    await new Promise(r => setTimeout(r, 1000));
+  });
+
+  await waitFor(async () => {
+    expect(screen.getByTestId('status').textContent).toBe('connecting');
   });
 
 });
