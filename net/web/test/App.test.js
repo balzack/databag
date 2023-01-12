@@ -68,8 +68,6 @@ beforeEach(() => {
   });
 
   const mockFetch = jest.fn().mockImplementation((url, options) => {
-
-    console.log(url, options);
     const params = url.split('/');
     if (params[1] === 'account' && options.method === 'POST') {
       return Promise.resolve({
@@ -119,7 +117,7 @@ test('testing app sync', async () => {
   });
 
   await act(async () => {
-    mockWebsocket.onclose();
+    mockWebsocket.onclose('test close');
     await new Promise(r => setTimeout(r, 1000));
   });
 

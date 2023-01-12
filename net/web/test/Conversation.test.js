@@ -131,7 +131,6 @@ beforeEach(() => {
       });
     }
     else {
-      console.log(params, options);
       return Promise.resolve({
         url: 'endpoint',
         status: 200,

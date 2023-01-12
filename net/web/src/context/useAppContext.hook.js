@@ -38,10 +38,19 @@ export function useAppContext(websocket) {
   const cardContext = useContext(CardContext);
 
   const setSession = (token) => {
-    accountContext.actions.setToken(token);
-    profileContext.actions.setToken(token);
-    cardContext.actions.setToken(token);
-    channelContext.actions.setToken(token);
+    try {
+      accountContext.actions.setToken(token);
+      profileContext.actions.setToken(token);
+      cardContext.actions.setToken(token);
+      channelContext.actions.setToken(token);
+    }
+    catch (err) {
+      accountContext.actions.clearToken();
+      profileContext.actions.clearToken();
+      cardContext.actions.clearToken();
+      channelContext.actions.clearToken();
+      throw err;
+    }
     setWebsocket(token);
   }
 
