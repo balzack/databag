@@ -27,28 +27,28 @@ export  function Login() {
 
   return (
     <LoginWrapper>
-      <div class="app-title">
+      <div className="app-title">
         <span>Databag</span>
-        <div class="settings" onClick={() => actions.onSettings()}>
+        <div className="settings" onClick={() => actions.onSettings()}>
           <SettingOutlined />
         </div>
       </div>
-      <div class="form-title">Login</div>
-      <div class="form-form">
+      <div className="form-title">Login</div>
+      <div className="form-form">
         <Form name="basic" wrapperCol={{ span: 24, }}>
 
           <Form.Item name="username">
             <Input placeholder="Username" spellCheck="false" onChange={(e) => actions.setUsername(e.target.value)}
-                autocomplete="username" autocapitalize="none" onKeyDown={(e) => keyDown(e)} prefix={<UserOutlined />} size="large" />
+                autoComplete="username" autoCapitalize="none" onKeyDown={(e) => keyDown(e)} prefix={<UserOutlined />} size="large" />
           </Form.Item>
 
           <Form.Item name="password">
             <Input.Password placeholder="Password" spellCheck="false" onChange={(e) => actions.setPassword(e.target.value)}
-                autocomplete="current-password" onKeyDown={(e) => keyDown(e)} prefix={<LockOutlined />} size="large" />
+                autoComplete="current-password" onKeyDown={(e) => keyDown(e)} prefix={<LockOutlined />} size="large" />
           </Form.Item>
 
-          <div class="form-button">
-            <div class="form-login">
+          <div className="form-button">
+            <div className="form-login">
               <Button type="primary" block onClick={login} disabled={ actions.isDisabled()} 
                   size="middle" loading={state.busy}>
                 Login
@@ -56,7 +56,7 @@ export  function Login() {
             </div>
           </div>
 
-          <div class="form-button">
+          <div className="form-button">
             <Button type="link" block disabled={ !state.available } onClick={(e) => actions.onCreate()}>
               Create Account
             </Button>

@@ -77,6 +77,10 @@ export function useLogin() {
         access();
       }
     }
+    // eslint-disable-next-line
+  }, [app.state, navigate, search]);
+
+  useEffect(() => {
     const count = async () => {
       try {
         const available = await getAvailable()
@@ -88,7 +92,7 @@ export function useLogin() {
     }
     count();
     // eslint-disable-next-line
-  }, [app.state, navigate, search])
+  }, [])
 
   return { state, actions };
 }
