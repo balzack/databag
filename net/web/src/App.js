@@ -5,8 +5,6 @@ import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import { AppContextProvider } from 'context/AppContext';
 import { AccountContextProvider } from 'context/AccountContext';
 import { ProfileContextProvider } from 'context/ProfileContext';
-import { ArticleContextProvider } from 'context/ArticleContext';
-import { GroupContextProvider } from 'context/GroupContext';
 import { CardContextProvider } from 'context/CardContext';
 import { ChannelContextProvider } from 'context/ChannelContext';
 import { StoreContextProvider } from 'context/StoreContext';

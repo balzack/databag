@@ -1,10 +1,8 @@
 import { useEffect, useState, useRef, useContext } from 'react';
-import { getAvailable } from 'api/getAvailable';
 import { setLogin } from 'api/setLogin';
 import { clearLogin } from 'api/clearLogin';
 import { setAccountAccess } from 'api/setAccountAccess';
 import { addAccount } from 'api/addAccount';
-import { getUsername } from 'api/getUsername';
 import { AccountContext } from './AccountContext';
 import { ProfileContext } from './ProfileContext';
 import { CardContext } from './CardContext';

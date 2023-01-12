@@ -80,7 +80,7 @@ export function useConversationContext() {
     }
     else {
       await channel.actions.clearChannelCard(channelId, id);
-      await channelactions.resync();
+      await channel.actions.resync();
     }
   };
 
@@ -122,14 +122,6 @@ export function useConversationContext() {
       return channel.actions.getTopicAssetUrl(channelId, topicId, assetId);
     }
   };
-
-  useEffect(() => {
-    if (conversationId.current) {
-      const { cardId, channelId } = conversationId.current;
-      setChannelRevision(cardId, channelId);
-      sync();
-    }
-  }, [card.state, channel.state]);
 
   const setChannelRevision = (cardId, channelId) => {
     let setChannel;
@@ -263,6 +255,15 @@ export function useConversationContext() {
       }
     }
   };
+
+  useEffect(() => {
+    if (conversationId.current) {
+      const { cardId, channelId } = conversationId.current;
+      setChannelRevision(cardId, channelId);
+      sync();
+    }
+    // eslint-disable-next-line
+  }, [card.state, channel.state]);
 
   const actions = {
     setChannel: async (cardId, channelId) => {
