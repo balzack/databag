@@ -2,7 +2,12 @@ import { useEffect, useState } from 'react';
 
 export function useViewportContext() {
 
-  const [state, setState] = useState({ });
+  const [state, setState] = useState({ 
+    display: null,
+    width: null,
+    height: null,
+  });
+
   const SMALL_MEDIUM = 650;
   const MEDIUM_LARGE = 1000;
   const LARGE_XLARGE = 1400;
