@@ -29,7 +29,7 @@ function ViewportTestApp() {
   );
 }
 
-test('get, set and clear', async () => {
+test('display size', async () => {
   render(<ViewportTestApp />);
 
   await waitFor(async () => {
