@@ -104,7 +104,7 @@ export function useChannelContext() {
   const actions = {
     setToken: (token) => {
       if (access.current || syncing.current) {
-        throw new Error("invalid session state");
+        throw new Error("invalid channel session state");
       }
       access.current = token;
       channels.current = new Map();

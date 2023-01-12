@@ -11,9 +11,11 @@ import { CardContext } from './CardContext';
 import { ChannelContext } from './ChannelContext';
 import { StoreContext } from './StoreContext';
 import { UploadContext } from './UploadContext';
+import { createWebsocket } from 'api/fetchUtil';
 
-export function useAppContext() {
+export function useAppContext(websocket) {
   const [state, setState] = useState({
+    disconnected: true,
   });
   const [appRevision, setAppRevision] = useState();
 
@@ -69,6 +71,11 @@ export function useAppContext() {
     let access = await setLogin(username, password, appName, appVersion, userAgent)
     updateState({ access: access.appToken });
     storeContext.actions.setValue('login:timestamp', access.created);
+    accountContext.actions.setToken(access.appToken);
+    profileContext.actions.setToken(access.appToken);
+    cardContext.actions.setToken(access.appToken);
+    channelContext.actions.setToken(access.appToken);
+
     setWebsocket(access.appToken)
     localStorage.setItem("session", JSON.stringify({
       access: access.appToken,
@@ -81,6 +88,11 @@ export function useAppContext() {
     let access = await setLogin(username, password, appName, appVersion, userAgent)
     updateState({ access: access.appToken });
     storeContext.actions.setValue('login:timestamp', access.created);
+    accountContext.actions.setToken(access.appToken);
+    profileContext.actions.setToken(access.appToken);
+    cardContext.actions.setToken(access.appToken);
+    channelContext.actions.setToken(access.appToken);
+
     setWebsocket(access.appToken)
     localStorage.setItem("session", JSON.stringify({
       access: access.appToken,
@@ -93,6 +105,11 @@ export function useAppContext() {
     let access = await setAccountAccess(token, appName, appVersion, userAgent)
     updateState({ access: access.appToken });
     storeContext.actions.setValue('login:timestamp', access.created);
+    accountContext.actions.setToken(access.appToken);
+    profileContext.actions.setToken(access.appToken);
+    cardContext.actions.setToken(access.appToken);
+    channelContext.actions.setToken(access.appToken);
+
     setWebsocket(access.appToken)
     localStorage.setItem("session", JSON.stringify({
       access: access.appToken,
@@ -109,6 +126,11 @@ export function useAppContext() {
       console.log(err);
     }
     updateState({ access: null });
+    accountContext.actions.clearToken();
+    profileContext.actions.clearToken();
+    cardContext.actions.clearToken();
+    channelContext.actions.clearToken();
+
     clearWebsocket()
     localStorage.removeItem("session");
   }
@@ -124,12 +146,6 @@ export function useAppContext() {
   }, [appRevision]);
   
   const setWebsocket = (token) => {
-
-    accountContext.actions.setToken(token);
-    profileContext.actions.setToken(token);
-    cardContext.actions.setToken(token);
-    channelContext.actions.setToken(token);
-
     let protocol;
     if (window.location.protocol === 'http:') {
       protocol = 'ws://';
@@ -138,7 +154,7 @@ export function useAppContext() {
       protocol = 'wss://';
     }
 
-    ws.current = new WebSocket(protocol + window.location.host + "/status");
+    ws.current = createWebsocket(protocol + window.location.host + "/status");
     ws.current.onmessage = (ev) => {
       try {
         let rev = JSON.parse(ev.data);

@@ -47,7 +47,7 @@ export function useProfileContext() {
   const actions = {
     setToken: (token) => {
       if (access.current || syncing.current) {
-        throw new Error("invalid session state");
+        throw new Error("invalid profile session state");
       }
       access.current = token;
       curRevision.current = null;

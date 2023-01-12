@@ -223,7 +223,7 @@ export function useCardContext() {
   const actions = {
     setToken: (token) => {
       if (access.current || syncing.current) {
-        throw new Error("invalid session state");
+        throw new Error("invalid card session state");
       }
       access.current = token;
       cards.current = new Map();
