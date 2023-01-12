@@ -90,7 +90,7 @@ export function useConversation(cardId, channelId) {
     setTimeout(() => {
       updateState({ delayed: true });
     }, 250);
-    conversation.actions.setConversationId(cardId, channelId);
+    conversation.actions.setChannel(cardId, channelId);
     // eslint-disable-next-line
   }, [cardId, channelId]);
 
@@ -122,7 +122,7 @@ export function useConversation(cardId, channelId) {
 
   const actions = {
     more: () => {
-      conversation.actions.addHistory();
+      conversation.actions.loadMore();
     },
     resync: () => {
       conversation.actions.resync();

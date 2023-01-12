@@ -5,6 +5,7 @@ import { CardContext } from 'context/CardContext';
 import { AccountContext } from 'context/AccountContext';
 import { ProfileContext } from 'context/ProfileContext';
 import { ViewportContext } from 'context/ViewportContext';
+import { getCardByGuid } from 'context/cardUtil';
 
 export function useChannels() {
 
@@ -138,16 +139,18 @@ export function useChannels() {
   const setContacts = (chan) => {
     let contacts = [];
     if (chan.guid != null && profile.state.identity.guid !== chan.guid) {
-      contacts.push(card.actions.getCardByGuid(chan.guid));
+      const contact = getCardByGuid(card.state.cards, chan.guid);
+      contacts.push(contact);
     }
     for (let guid of chan.data.channelDetail?.members) {
       if (guid !== profile.state.identity.guid) {
-        contacts.push(card.actions.getCardByGuid(guid));
+        const contact = getCardByGuid(card.state.cards, guid);
+        contacts.push(contact);
       }
     }
     chan.contacts = contacts;
     if (contacts.length === 1 && contacts[0]) {
-      chan.logo = card.actions.getImageUrl(contacts[0].id);
+      chan.logo = card.actions.getCardImageUrl(contacts[0].id);
     }
   }
 

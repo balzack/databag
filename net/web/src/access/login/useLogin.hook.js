@@ -1,5 +1,6 @@
 import { useContext, useState, useEffect } from 'react';
 import { AppContext } from 'context/AppContext';
+import { getAvailable } from 'api/getAvailable';
 import { useNavigate, useLocation } from "react-router-dom";
 
 export function useLogin() {
@@ -56,43 +57,38 @@ export function useLogin() {
   };
 
   useEffect(() => {
-    if (app) {
-      if (app.state) {
-        if (app.state.access) {
-          navigate('/session')
-        }
-        else {
-          let params = new URLSearchParams(search);
-          let token = params.get("access");
-          if (token) {
-            const access = async () => {
-              updateState({ busy: true })
-              try {
-                await app.actions.access(token)
-              }
-              catch (err) {
-                console.log(err);
-              }
-              updateState({ busy: false })
-            }
-            access();
-          }
-        }
-      }
-      if (app.actions && app.actions.available) {
-        const count = async () => {
+    if (app.state.status) {
+      navigate('/session')
+    }
+    else {
+      let params = new URLSearchParams(search);
+      let token = params.get("access");
+      if (token) {
+        const access = async () => {
+          updateState({ busy: true })
           try {
-            const available = await app.actions.available()
-            updateState({ available: available !== 0 })
+            await app.actions.access(token)
           }
-          catch(err) {
+          catch (err) {
             console.log(err);
           }
+          updateState({ busy: false })
         }
-        count();
+        access();
       }
     }
-  }, [app, navigate, search])
+    const count = async () => {
+      try {
+        const available = await getAvailable()
+        updateState({ available: available !== 0 })
+      }
+      catch(err) {
+        console.log(err);
+      }
+    }
+    count();
+    // eslint-disable-next-line
+  }, [app.state, navigate, search])
 
   return { state, actions };
 }

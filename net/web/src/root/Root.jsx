@@ -8,15 +8,16 @@ export function Root() {
   const app = useContext(AppContext);
 
   useEffect(() => {
+console.log(app.state);
     if (app.state) {
-      if (app.state.access) {
+      if (app.state.status) {
         navigate('/session');
       }
       else {
         navigate('/login');
       }
     }
-  }, [app, navigate]);
+  }, [app.state, navigate]);
 
   return <></>
 }

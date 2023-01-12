@@ -70,7 +70,7 @@ export function useDetails(cardId, channelId) {
         try {
           const seals = JSON.parse(chan.data.channelDetail.data).seals;
           seals.forEach(seal => {
-            if (account.state.sealKey.public === seal.publicKey) {
+            if (account.state.sealKey?.public === seal.publicKey) {
               editable = true;
             }
           });

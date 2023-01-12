@@ -23,10 +23,8 @@ export function Session() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (app.state) {
-      if (!app.state.access) {
-        navigate('/');
-      }
+    if (!app.state.status) {
+      navigate('/');
     }
   }, [app, navigate]);
 

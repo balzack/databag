@@ -37,7 +37,7 @@ export function useSession() {
   }
 
   useEffect(() => {
-    if (!profile.state.identity?.guid || !card.state.init || !channel.state.init) {
+    if (!profile.state.identity?.guid) {
       updateState({ loading: true });
     }
     else {

@@ -28,7 +28,7 @@ export function useSelectItem(item, selected, markup) {
   }, [selected, item]);
 
   useEffect(() => {
-    updateState({ logo: card.actions.getImageUrl(item.id) });
+    updateState({ logo: card.actions.getCardImageUrl(item.id) });
   }, [card, item]);
 
   const actions = {

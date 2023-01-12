@@ -2,6 +2,7 @@ import { useContext, useState, useEffect, useRef } from 'react';
 import { ConversationContext } from 'context/ConversationContext';
 import { ProfileContext } from 'context/ProfileContext';
 import { CardContext } from 'context/CardContext';
+import { getProfileByGuid } from 'context/cardUtil';
 
 export function useTopicItem(topic, sealed, sealKey) {
 
@@ -32,10 +33,6 @@ export function useTopicItem(topic, sealed, sealKey) {
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
   }
-
-  useEffect(() => {
-    console.log("TOPIC URL:", state.imageUrl);
-  }, [state.imageUrl]);
 
   useEffect(() => {
     let owner = false;
@@ -94,14 +91,16 @@ export function useTopicItem(topic, sealed, sealKey) {
           sealed = false;
         }
         else {
-          conversation.actions.unsealTopic(topic.id, sealKey);
+          if (sealKey) {
+            conversation.actions.unsealTopic(topic.id, sealKey);
+          }
           sealed = true;
         }
         ready = true;
       }
     }
 
-    if (profile.state.identity?.guid && card.state.init && conversation.state.init) {
+    if (profile.state.identity?.guid) {
       const { guid, created } = topic.data.topicDetail;
 
       let createdStr;
@@ -124,7 +123,8 @@ export function useTopicItem(topic, sealed, sealKey) {
         updateState({ sealed, name, handle, imageUrl, status, text, transform, assets, confirmed, error, ready, created: createdStr, owner, textColor, textSize, topicId: topic.id, init: true });
       }
       else {
-        const { name, handle, imageUrl } = card.actions.getCardProfileByGuid(guid);
+        const { cardId, name, handle, imageSet } = getProfileByGuid(card.state.cards, guid);
+        const imageUrl = imageSet ? card.actions.getCardImageUrl(cardId) : null;
         updateState({ sealed, name, handle, imageUrl, status, text, transform, assets, confirmed, error, ready, created: createdStr, owner, textColor, textSize, topicId: topic.id, init: true });
       }
     }

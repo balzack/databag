@@ -13,7 +13,7 @@ import { createWebsocket } from 'api/fetchUtil';
 
 export function useAppContext(websocket) {
   const [state, setState] = useState({
-    status: 'disconnected',
+    status: null,
   });
   const [appRevision, setAppRevision] = useState();
 
@@ -36,6 +36,7 @@ export function useAppContext(websocket) {
   const cardContext = useContext(CardContext);
 
   const setSession = (token) => {
+console.log("SET SESSION", token);
     try {
       accountContext.actions.setToken(token);
       profileContext.actions.setToken(token);
@@ -185,7 +186,7 @@ export function useAppContext(websocket) {
     ws.current.onclose = () => {}
     ws.current.close()
     ws.current = null
-    updateState({ status: 'disconnected' });
+    updateState({ status: null });
   }
 
   useEffect(() => {
