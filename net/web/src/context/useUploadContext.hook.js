@@ -57,59 +57,65 @@ export function useUploadContext() {
   }
 
   const actions = {
-    addTopic: (token, channelId, topicId, files, success, failure) => {
-      const controller = new AbortController();
-      const entry = {
-        index: index.current,
-        url: `/content/channels/${channelId}/topics/${topicId}/assets?agent=${token}`,
-        files,
-        assets: [],
-        current: null,
-        error: false,
-        success,
-        failure,
-        cancel: controller,
+    addTopic: (token, channelId, topicId, files, success, failure, contact) => {
+      if (contact) {
+        const { server, token, cardId } = contact;
+
+        let host = "";
+        if (server) {
+          host = `https://${server}`
+        }
+        const controller = new AbortController();
+        const entry = {
+          index: index.current,
+          url: `${host}/content/channels/${channelId}/topics/${topicId}/assets?contact=${token}`,
+          files,
+          assets: [],
+          current: null,
+          error: false,
+          success,
+          failure,
+          cancel: controller,
+        }
+        index.current += 1;
+        const key = `${cardId}:${channelId}`;
+        if (!channels.current.has(key)) {
+          channels.current.set(key, new Map());
+        }
+        const topics = channels.current.get(key);
+        topics.set(topicId, entry);
+        upload(entry, updateProgress, () => { updateComplete(key, topicId) });
       }
-      index.current += 1;
-      const key = `:${channelId}`;
-      if (!channels.current.has(key)) {
-        channels.current.set(key, new Map());
+      else {
+        const controller = new AbortController();
+        const entry = {
+          index: index.current,
+          url: `/content/channels/${channelId}/topics/${topicId}/assets?agent=${token}`,
+          files,
+          assets: [],
+          current: null,
+          error: false,
+          success,
+          failure,
+          cancel: controller,
+        }
+        index.current += 1;
+        const key = `:${channelId}`;
+        if (!channels.current.has(key)) {
+          channels.current.set(key, new Map());
+        }
+        const topics = channels.current.get(key);
+        topics.set(topicId, entry);
+        upload(entry, updateProgress, () => { updateComplete(key, topicId) } );
       }
-      const topics = channels.current.get(key);
-      topics.set(topicId, entry);
-      upload(entry, updateProgress, () => { updateComplete(key, topicId) } );
     },
-    cancelTopic: (channelId, topicId) => {
-      abort(`:${channelId}`, topicId);
-    },
-    addContactTopic: (server, token, cardId, channelId, topicId, files, success, failure) => {
-      let host = "";
-      if (server) {
-        host = `https://${server}`
+    cancelTopic: (channelId, topicId, cardId) => {
+      if (cardId) {
+        abort(`${cardId}:${channelId}`, topicId);
       }
-      const controller = new AbortController();
-      const entry = {
-        index: index.current,
-        url: `${host}/content/channels/${channelId}/topics/${topicId}/assets?contact=${token}`,
-        files,
-        assets: [],
-        current: null,
-        error: false,
-        success,
-        failure,
-        cancel: controller,
+      else {
+        abort(`:${channelId}`, topicId);
       }
-      index.current += 1;
-      const key = `${cardId}:${channelId}`;
-      if (!channels.current.has(key)) {
-        channels.current.set(key, new Map());
-      }
-      const topics = channels.current.get(key);
-      topics.set(topicId, entry);
-      upload(entry, updateProgress, () => { updateComplete(key, topicId) });
-    },
-    cancelContactTopic: (cardId, channelId, topicId) => {
-      abort(`${cardId}:${channelId}`, topicId);
     },
     clearErrors: (cardId, channelId) => {
       const key = cardId ? `${cardId}:${channelId}` : `:${channelId}`;
