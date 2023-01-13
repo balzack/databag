@@ -1,7 +1,7 @@
 import { useContext, useState, useEffect } from 'react';
 import { AppContext } from 'context/AppContext';
 import { getAvailable } from 'api/getAvailable';
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export function useLogin() {
 
@@ -14,7 +14,6 @@ export function useLogin() {
   });
 
   const navigate = useNavigate();
-  const { search } = useLocation();
   const app = useContext(AppContext);
 
   const updateState = (value) => {
@@ -55,30 +54,6 @@ export function useLogin() {
       navigate('/create');
     },
   };
-
-  useEffect(() => {
-    if (app.state.status) {
-      navigate('/session')
-    }
-    else {
-      let params = new URLSearchParams(search);
-      let token = params.get("access");
-      if (token) {
-        const access = async () => {
-          updateState({ busy: true })
-          try {
-            await app.actions.access(token)
-          }
-          catch (err) {
-            console.log(err);
-          }
-          updateState({ busy: false })
-        }
-        access();
-      }
-    }
-    // eslint-disable-next-line
-  }, [app.state, navigate, search]);
 
   useEffect(() => {
     const count = async () => {

@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect } from 'react';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { AppContext } from 'context/AppContext';
 import { ViewportContext } from 'context/ViewportContext';
 
@@ -10,8 +10,10 @@ export function useAccess() {
   });
 
   const navigate = useNavigate();
+  const location = useLocation();
   const app = useContext(AppContext);
   const viewport = useContext(ViewportContext);
+
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
@@ -22,6 +24,24 @@ export function useAccess() {
       navigate('/session');
     }
   }, [app.state, navigate]);
+
+  useEffect(() => {
+    let params = new URLSearchParams(location);
+    let token = params.get("access");
+    if (token) {
+      const access = async () => {
+        try {
+          await app.actions.access(token)
+        }
+        catch (err) {
+          console.log(err);
+        }
+      }
+      access();
+    }
+    // eslint-disable-next-line
+  }, [navigate, location]);
+
 
   useEffect(() => {
     const { display } = viewport.state;

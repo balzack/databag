@@ -21,7 +21,8 @@ export function useAppContext(websocket) {
   const appVersion = "1.0.0";
   const userAgent = window.navigator.userAgent;
 
-  const access = useRef(null);
+  const checked = useRef(false);
+  const appToken = useRef(null);
   const ws = useRef(null);
 
   const updateState = (value) => {
@@ -36,7 +37,6 @@ export function useAppContext(websocket) {
   const cardContext = useContext(CardContext);
 
   const setSession = (token) => {
-console.log("SET SESSION", token);
     try {
       accountContext.actions.setToken(token);
       profileContext.actions.setToken(token);
@@ -80,10 +80,14 @@ console.log("SET SESSION", token);
   }
 
   const appCreate = async (username, password, token) => {
+    if (appToken.current || !checked.current) {
+      throw new Error('invalid session state');
+    }
     await addAccount(username, password, token);
     const access = await setLogin(username, password, appName, appVersion, userAgent);
     storeContext.actions.setValue('login:timestamp', access.created);
     setSession(access.appToken);
+    appToken.current = access.appToken;
 
     localStorage.setItem("session", JSON.stringify({
       access: access.appToken,
@@ -93,9 +97,13 @@ console.log("SET SESSION", token);
   } 
 
   const appLogin = async (username, password) => {
+    if (appToken.current || !checked.current) {
+      throw new Error('invalid session state');
+    }
     const access = await setLogin(username, password, appName, appVersion, userAgent);
     storeContext.actions.setValue('login:timestamp', access.created);
     setSession(access.appToken);
+    appToken.current = access.appToken;
 
     localStorage.setItem("session", JSON.stringify({
       access: access.appToken,
@@ -105,9 +113,13 @@ console.log("SET SESSION", token);
   }
 
   const appAccess = async (token) => {
+    if (appToken.current || !checked.current) {
+      throw new Error('invalid session state');
+    }
     const access = await setAccountAccess(token, appName, appVersion, userAgent);
     storeContext.actions.setValue('login:timestamp', access.created);
     setSession(access.appToken);
+    appToken.current = access.appToken;
 
     localStorage.setItem("session", JSON.stringify({
       access: access.appToken,
@@ -119,11 +131,12 @@ console.log("SET SESSION", token);
   const appLogout = async () => {
     clearSession();
     try {
-      await clearLogin(access.current);
+      await clearLogin(appToken.current);
     }
     catch (err) {
       console.log(err);
     }
+    appToken.current = null;
     localStorage.removeItem("session");
   };
 
@@ -195,13 +208,16 @@ console.log("SET SESSION", token);
       try {
         const session = JSON.parse(storage)
         if (session?.access) {
-          setSession(session.access);
+          const access = session.access;
+          setSession(access);
+          appToken.current = access;
         }
       }
       catch(err) {
         console.log(err)
       }
     }
+    checked.current = true;
     // eslint-disable-next-line
   }, []);
 
