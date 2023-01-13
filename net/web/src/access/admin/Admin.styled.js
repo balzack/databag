@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import Colors from 'constants/Colors';
 
-export const PromptWrapper = styled.div`
+export const AdminWrapper = styled.div`
   max-width: 400px;
   width: 90%;
   height: 90%;
@@ -16,7 +16,7 @@ export const PromptWrapper = styled.div`
     flex: 1;
     color: ${Colors.grey};
 
-    .user {
+    .settings {
       color: ${Colors.grey};
       position: absolute;
       top: 0px;

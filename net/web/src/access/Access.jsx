@@ -1,6 +1,7 @@
 import { useAccess } from './useAccess.hook';
 import { AccessWrapper } from './Access.styled';
 import { Login } from './login/Login';
+import { Admin } from './admin/Admin';
 import { CreateAccount } from './createAccount/CreateAccount';
 
 import login from 'images/login.png'
@@ -23,6 +24,9 @@ export function Access({ mode }) {
             { mode === 'create' && (
               <CreateAccount />
             )}
+            { mode === 'admin' && (
+              <Admin />
+            )}
           </div>
         </div>
       )}
@@ -34,6 +38,9 @@ export function Access({ mode }) {
             )}
             { mode === 'create' && (
               <CreateAccount />
+            )}
+            { mode === 'admin' && (
+              <Admin />
             )}
           </div>
         </div>

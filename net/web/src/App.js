@@ -16,7 +16,7 @@ import { AppWrapper } from 'App.styled';
 import { Root } from './root/Root';
 import { Access } from './access/Access';
 import { Session } from './session/Session';
-import { Admin } from './admin/Admin';
+import { Dashboard } from './dashboard/Dashboard';
 
 function App() {
 
@@ -33,7 +33,8 @@ function App() {
                       <Router>
                         <Routes>
                           <Route path="/" element={ <Root /> } />
-                          <Route path="/admin" element={ <Admin /> } />
+                          <Route path="/dashboard" element={ <Dashboard /> } />
+                          <Route path="/admin" element={ <Access mode="admin" /> } />
                           <Route path="/login" element={ <Access mode="login" /> } />
                           <Route path="/create" element={ <Access mode="create" /> } />
                           <Route path="/session" element={

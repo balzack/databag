@@ -1,6 +1,6 @@
 import { DashboardWrapper, SettingsButton, AddButton, SettingsLayout, CreateLayout } from './Dashboard.styled';
 import { Tooltip, Switch, Select, Button, Modal, Input, InputNumber, List } from 'antd';
-import { SettingOutlined, CopyOutlined, UserAddOutlined, LogoutOutlined, ReloadOutlined } from '@ant-design/icons';
+import { ExclamationCircleOutlined, SettingOutlined, CopyOutlined, UserAddOutlined, LogoutOutlined, ReloadOutlined } from '@ant-design/icons';
 import { useDashboard } from './useDashboard.hook';
 import { AccountItem } from './accountItem/AccountItem';
 
@@ -18,7 +18,6 @@ export function Dashboard({ token, config, logout }) {
 
   return (
     <DashboardWrapper>
-
       <div class="container">
         <div class="header">
           <div class="label">Accounts</div>
@@ -36,6 +35,11 @@ export function Dashboard({ token, config, logout }) {
                   <SettingsButton type="text" size="small" icon={<LogoutOutlined />}
                       onClick={() => logout()}></SettingsButton>
               </div>
+              { state.errorMessage && (
+                <div class="alert">
+                    <ExclamationCircleOutlined />
+                </div>
+              )}
               <div class="add">
                   <AddButton type="text" size="large" icon={<UserAddOutlined />}
                       loading={state.createBusy} onClick={() => actions.setCreateLink()}></AddButton>
@@ -62,6 +66,13 @@ export function Dashboard({ token, config, logout }) {
                       onClick={() => logout()}></SettingsButton>
                 </Tooltip>
               </div>
+              { state.errorMessage && (
+                <Tooltip placement="topRight" title={state.errorMessage}>
+                  <div class="alert">
+                    <ExclamationCircleOutlined />
+                  </div>
+                </Tooltip>
+              )}
               <div class="add">
                 <Tooltip placement="topRight" title="Create Account Link"> 
                   <AddButton type="text" size="large" icon={<UserAddOutlined />}

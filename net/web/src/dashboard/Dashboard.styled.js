@@ -1,5 +1,6 @@
 import { Button, Space } from 'antd';
 import styled from 'styled-components';
+import Colors from 'constants/Colors';
 
 export const DashboardWrapper = styled.div`
   display: flex;
@@ -56,6 +57,12 @@ export const DashboardWrapper = styled.div`
       align-items: center;
       justify-content: flex-end;
       flex-grow: 1;
+    }
+
+    .alert {
+      display: flex;
+      align-items: center;
+      color: ${Colors.alert};
     }
   }
 `;

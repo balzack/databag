@@ -1,11 +1,11 @@
-import { useContext, useState, useEffect } from 'react';
+import { useContext, useRef, useState, useEffect } from 'react';
 import { setNodeConfig } from 'api/setNodeConfig';
 import { getNodeAccounts } from 'api/getNodeAccounts';
 import { removeAccount } from 'api/removeAccount';
 import { addAccountCreate } from 'api/addAccountCreate';
-import { ViewportContext } from 'context/ViewportContext';
+import { useNavigation, useLocation } from 'react-router-dom';
 
-export function useDashboard(token, config) {
+export function useDashboard() {
 
   const [state, setState] = useState({
     domain: "",
@@ -15,15 +15,18 @@ export function useDashboard(token, config) {
     enableImage: null,
     enableAudio: null,
     enableVideo: null,
+
+    errorMessage: null,
+    createToken: null,
     showSettings: false,
-    busy: false,
-    loading: false,
-    accounts: [],
-    createBusy: false,
     showCreate: false,
+    busy: false,
+    accounts: [],
   });
 
-  const viewport = useContext(ViewportContext);
+  const navigate = useNavigation();
+  const location = useLocation();
+  const token = useRef();
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
@@ -32,15 +35,15 @@ export function useDashboard(token, config) {
   const actions = {
     setCreateLink: async () => {
       if (!state.createBusy) {
-        updateState({ createBusy: true });
+        updateState({ busy: true });
         try {
-          let create = await addAccountCreate(token)
+          const create = await addAccountCreate(token.current)
           updateState({ createToken: create, showCreate: true });
         }
         catch (err) {
           window.alert(err);
         }
-        updateState({ createBusy: false });
+        updateState({ busy: false });
       }
     },
     setShowCreate: (showCreate) => {
@@ -79,23 +82,23 @@ export function useDashboard(token, config) {
         updateState({ busy: true });
         try {
           const { domain, keyType, accountStorage, pushSupported, enableImage, enableAudio, enableVideo } = state;
-          await setNodeConfig(token,
-            { domain,  accountStorage: accountStorage * 1073741824,
-                keyType, enableImage, enableAudio, enableVideo, pushSupported });
-          updateState({ showSettings: false });
+          const storage = accountStorage * 1073741824;
+          const config = { domain,  accountStorage: storage, keyType, enableImage, enableAudio, enableVideo, pushSupported };
+          await setNodeConfig(token.current, config);
+          updateState({ busy: false, showSettings: false });
         }
         catch(err) {
           console.log(err);
-          window.alert(err);
+          updateState({ busy: false });
+          throw new Error("failed to set settings");
         }
-        updateState({ busy: false });
       }
     },
     getAccounts: async () => {
-      if (!state.loading) {
-        updateState({ loading: true });
+      if (!state.busy) {
+        updateState({ busy: true });
         try {
-          let accounts = await getNodeAccounts(token);
+          let accounts = await getNodeAccounts(token.current);
           accounts.sort((a, b) => {
             if (a.handle < b.handle) {
               return -1;
@@ -105,29 +108,32 @@ export function useDashboard(token, config) {
             }
             return 0;
           });
-          updateState({ accounts });
+          updateState({ busy: false, accounts });
         }
         catch(err) {
           console.log(err);
-          window.alert(err);
+          updateState({ busy: false, errorMessage: 'failed to load accounts' });
         }
-        updateState({ loading: false });
       }
     },
   };
 
   useEffect(() => {
-    updateState({ display: viewport.state.display });
-  }, [viewport]);
-
-  useEffect(() => {
-    const { accountStorage, domain, keyType, pushSupported, enableImage, enableAudio, enableVideo } = config;
-    updateState({ domain, accountStorage: Math.ceil(accountStorage / 1073741824), keyType,
-      enableImage, enableAudio, enableVideo, pushSupported });
-    actions.getAccounts();
-    // eslint-disable-next-line
-  }, [config]);
-
+    const params = new URLSearchParams(location);
+    const pass = params.get("pass");
+    if (!pass) {
+      navigate('/admin');
+    }
+    else {
+      token.current = pass;
+      const config = JSON.parse(params.get("config"));
+      const { storage, domain, keyType, pushSupported, enableImage, enableAudio, enableVideo } = config;
+      const accountStorage = Math.ceil(accountStorage / 1073741824);
+      updateState({ domain, accountStorage, keyType, enableImage, enableAudio, enableVideo, pushSupported });
+      actions.getAccounts();
+    }
+  }, []);
+      
   return { state, actions };
 }
 

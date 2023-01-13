@@ -1,73 +1,66 @@
 import { useContext, useState, useEffect } from 'react';
-import { AppContext } from 'context/AppContext';
 import { useNavigate } from "react-router-dom";
 import { getNodeStatus } from 'api/getNodeStatus';
 import { setNodeStatus } from 'api/setNodeStatus';
 import { getNodeConfig } from 'api/getNodeConfig';
 
-export function usePrompt() {
+export function useAdmin() {
 
   const [state, setState] = useState({
-    password: null,
+    password: '',
     placeholder: '',
     unclaimed: null,
     busy: false,
   });
 
   const navigate = useNavigate();
-  const app = useContext(AppContext);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
   }
 
-  const checkStatus = async () => {
-    try {
-      let status = await getNodeStatus();
-      updateState({ unclaimed: status });
-    }
-    catch(err) {
-      console.log("failed to check node status");
-    }
-  };
-
   useEffect(() => {
-    checkStatus();
-    // eslint-disable-next-line
+    const check = async () => {
+      try {
+        const unclaimed = await getNodeStatus();
+        updateState({ unclaimed });
+      }
+      catch(err) {
+        console.log("getNodeStatus failed");
+      }
+    };
+    check();
   }, []);
 
   const actions = {
     setPassword: (password) => {
       updateState({ password });
     },
-    onUser: () => {
+    navUser: () => {
       navigate('/login');
     },
-    onLogin: async () => {
+    login: async () => {
       if (!state.busy) {
         try {
           updateState({ busy: true });
           if (state.unclaimed === true) {
             await setNodeStatus(state.password);
           }
-          const config = await getNodeConfig(state.password);
+          const status = await getNodeConfig(state.password);
+          const config = encodeURIComponent(JSON.stringify(config));
+          const pass= encodeURIComponent(state.password);
+          
           updateState({ busy: false });
-          return config;
+          navigate(`/dashboard?config=${status}&pass=${pass}`); 
         }
-        catch (err) {
+        catch(err) {
           console.log(err);
           updateState({ busy: false });
-          throw new Error("access denied");
+          throw new Error("login failed");
         }
       }
-      else {
-        throw new Error("operation in progress");
-      }
     },
-  };
-
-  useEffect(() => {
-  }, [app, navigate])
+  }
 
   return { state, actions };
 }

@@ -14,7 +14,6 @@ export function useAccess() {
   const app = useContext(AppContext);
   const viewport = useContext(ViewportContext);
 
-
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
   }
