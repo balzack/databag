@@ -1,4 +1,4 @@
-import { DashboardWrapper, SettingsButton, AddButton, SettingsLayout, CreateLayout } from './Dashboard.styled';
+import { AlertIcon, DashboardWrapper, SettingsButton, AddButton, SettingsLayout, CreateLayout } from './Dashboard.styled';
 import { Tooltip, Switch, Select, Button, Modal, Input, InputNumber, List } from 'antd';
 import { ExclamationCircleOutlined, SettingOutlined, CopyOutlined, UserAddOutlined, LogoutOutlined, ReloadOutlined } from '@ant-design/icons';
 import { useDashboard } from './useDashboard.hook';
@@ -39,9 +39,9 @@ console.log("IN DASHBOARD here");
                       onClick={() => actions.logout()}></SettingsButton>
               </div>
               { state.errorMessage && (
-                <div class="alert">
+                <AlertIcon>
                     <ExclamationCircleOutlined />
-                </div>
+                </AlertIcon>
               )}
               <div class="add">
                   <AddButton type="text" size="large" icon={<UserAddOutlined />}
@@ -71,9 +71,9 @@ console.log("IN DASHBOARD here");
               </div>
               { state.errorMessage && (
                 <Tooltip placement="topRight" title={state.errorMessage}>
-                  <div class="alert">
+                  <AlertIcon class="alert">
                     <ExclamationCircleOutlined />
-                  </div>
+                  </AlertIcon>
                 </Tooltip>
               )}
               <div class="add">

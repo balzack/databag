@@ -76,6 +76,13 @@ export const SettingsButton = styled(Button)`
   color: #1890ff;
 `;
 
+export const AlertIcon = styled.div`
+  display: flex;
+  align-items: center;
+  color: ${Colors.alert};
+  padding-left: 8px;
+`
+
 export const SettingsLayout = styled(Space)`
   width: 100%;
 

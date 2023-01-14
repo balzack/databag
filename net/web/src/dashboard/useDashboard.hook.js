@@ -26,11 +26,8 @@ export function useDashboard() {
     accounts: [],
   });
 
-console.log("HERE1");
   const navigate = useNavigate();
-console.log("HERE2");
   const app = useContext(AppContext);
-console.log("HERE4");
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
@@ -127,6 +124,7 @@ console.log("HERE4");
       console.log(err);
       updateState({ errorMessage: 'failed to sync config' });
     }
+      updateState({ errorMessage: 'failed to sync config' });
   };
 
   const syncAccounts = async () => {

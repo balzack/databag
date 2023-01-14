@@ -54,17 +54,11 @@ export function useAdmin() {
           if (state.unclaimed === true) {
             await setNodeStatus(state.password);
           }
-console.log("CHECK1");
           await getNodeConfig(state.password);
-console.log("CHECK2");
           updateState({ busy: false });
-console.log("CHECK3");
-console.log(app);
           app.actions.setAdmin(state.password);          
-console.log("DONE!");
         }
         catch(err) {
-console.log("ERROR!");
           console.log(err);
           updateState({ busy: false });
           throw new Error("login failed");
