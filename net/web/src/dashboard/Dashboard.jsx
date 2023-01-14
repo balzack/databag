@@ -21,20 +21,20 @@ console.log("IN DASHBOARD here");
 
   return (
     <DashboardWrapper>
-      <div class="container">
-        <div class="header">
-          <div class="label">Accounts</div>
+      <div className="container">
+        <div className="header">
+          <div className="label">Accounts</div>
           { state.display === 'small' && (
             <>
-              <div class="settings">
+              <div className="settings">
                   <SettingsButton type="text" size="small" icon={<ReloadOutlined />}
                       onClick={() => actions.reload()}></SettingsButton>
               </div>
-              <div class="settings">
+              <div className="settings">
                   <SettingsButton type="text" size="small" icon={<SettingOutlined />}
                       onClick={() => actions.setShowSettings(true)}></SettingsButton>
               </div>
-              <div class="settings">
+              <div className="settings">
                   <SettingsButton type="text" size="small" icon={<LogoutOutlined />}
                       onClick={() => actions.logout()}></SettingsButton>
               </div>
@@ -43,7 +43,7 @@ console.log("IN DASHBOARD here");
                     <ExclamationCircleOutlined />
                 </AlertIcon>
               )}
-              <div class="add">
+              <div className="add">
                   <AddButton type="text" size="large" icon={<UserAddOutlined />}
                       loading={state.createBusy} onClick={() => actions.setCreateLink()}></AddButton>
               </div>
@@ -51,19 +51,19 @@ console.log("IN DASHBOARD here");
           )}
           { state.display !== 'small' && (
             <>
-              <div class="settings">
+              <div className="settings">
                 <Tooltip placement="topRight" title="Reload Accounts"> 
                   <SettingsButton type="text" size="small" icon={<ReloadOutlined />}
                       onClick={() => actions.reload()}></SettingsButton>
                 </Tooltip>
               </div>
-              <div class="settings">
+              <div className="settings">
                 <Tooltip placement="topRight" title="Configure Server"> 
                   <SettingsButton type="text" size="small" icon={<SettingOutlined />}
                       onClick={() => actions.setShowSettings(true)}></SettingsButton>
                 </Tooltip>
               </div>
-              <div class="settings">
+              <div className="settings">
                 <Tooltip placement="topRight" title="Logout"> 
                   <SettingsButton type="text" size="small" icon={<LogoutOutlined />}
                       onClick={() => actions.logout()}></SettingsButton>
@@ -71,19 +71,19 @@ console.log("IN DASHBOARD here");
               </div>
               { state.configError && (
                 <Tooltip placement="topRight" title="failed to load accounts">
-                  <AlertIcon class="alert">
+                  <AlertIcon className="alert">
                     <ExclamationCircleOutlined />
                   </AlertIcon>
                 </Tooltip>
               )}
               { state.accountsError && (
                 <Tooltip placement="topRight" title="failed to load config">
-                  <AlertIcon class="alert">
+                  <AlertIcon className="alert">
                     <ExclamationCircleOutlined />
                   </AlertIcon>
                 </Tooltip>
               )}
-              <div class="add">
+              <div className="add">
                 <Tooltip placement="topRight" title="Create Account Link"> 
                   <AddButton type="text" size="large" icon={<UserAddOutlined />}
                       loading={state.createBusy} onClick={() => actions.setCreateLink()}></AddButton>
@@ -93,7 +93,7 @@ console.log("IN DASHBOARD here");
           )}
         </div>
 
-        <div class="body">
+        <div className="body">
           <List
             locale={{ emptyText: '' }}
             itemLayout="horizontal"
@@ -107,17 +107,17 @@ console.log("IN DASHBOARD here");
       <Modal title="Settings" visible={state.showSettings} centered 
           okText="Save" onOk={() => actions.setSettings()} onCancel={() => actions.setShowSettings(false)}>
        <SettingsLayout direction="vertical">
-          <div class="field">
+          <div className="field">
             <div>Federated Host:&nbsp;</div>
             <Input placeholder="domain:port/app" onChange={(e) => actions.setHost(e.target.value)}
                 value={state.domain} />
           </div>
-          <div class="field">
+          <div className="field">
             <div>Storage Limit (GB) / Account:&nbsp;</div>
             <InputNumber defaultValue={0} onChange={(e) => actions.setStorage(e)}
                 placeholder="0 for unrestricted" value={state.accountStorage} />
           </div>
-          <div class="field">
+          <div className="field">
             <div>Account Key Type:&nbsp;</div>
             <Select labelInValue defaultValue={{ value: 'RSA4096', label: 'RSA 4096' }}
                 value={state.keyType} onChange={(o) => actions.setKeyType(o.value)}>
@@ -125,22 +125,22 @@ console.log("IN DASHBOARD here");
               <Select.Option value="RSA4096">RSA 4096</Select.Option>
             </Select>
           </div>
-          <div class="field">
+          <div className="field">
             <div>Enable Push Notification:&nbsp;</div>
             <Switch onChange={(e) => actions.setPushSupported(e)} size="small"
               defaultChecked={true} checked={state.pushSupported} />
           </div>
-          <div class="field">
+          <div className="field">
             <div>Enable Image Queue:&nbsp;</div>
             <Switch onChange={(e) => actions.setEnableImage(e)} size="small"
               defaultChecked={true} checked={state.enableImage} />
           </div>
-          <div class="field">
+          <div className="field">
             <div>Enable Audio Queue:&nbsp;</div>
             <Switch onChange={(e) => actions.setEnableAudio(e)} size="small"
               defaultChecked={true} checked={state.enableAudio} />
           </div>
-          <div class="field">
+          <div className="field">
             <div>Enable Video Queue:&nbsp;</div>
             <Switch onChange={(e) => actions.setEnableVideo(e)} size="small"
               defaultChecked={true} checked={state.enableVideo} />
@@ -151,15 +151,15 @@ console.log("IN DASHBOARD here");
           footer={[ <Button type="primary" onClick={() => actions.setShowCreate(false)}>OK</Button> ]}
           onCancel={() => actions.setShowCreate(false)}>
         <CreateLayout>
-          <div class="url">
-            <div class="label">Browser Link:</div>
-            <div class="link">{createLink()}</div>
+          <div className="url">
+            <div className="label">Browser Link:</div>
+            <div className="link">{createLink()}</div>
             <Button icon={<CopyOutlined />} size="small"
               onClick={() => onClipboard(createLink())} />
           </div>
-          <div class="url">
-            <div class="label">App Token:</div>
-            <div class="token">{state.createToken}</div>
+          <div className="url">
+            <div className="label">App Token:</div>
+            <div className="token">{state.createToken}</div>
             <Button icon={<CopyOutlined />} size="small"
               onClick={() => onClipboard(state.createToken)} />
           </div>
