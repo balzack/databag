@@ -1,5 +1,6 @@
 
 import 'antd/dist/reset.css';
+import Colors from 'constants/Colors';
 import { HashRouter as Router, Routes, Route } from "react-router-dom";
 
 import { AppContextProvider } from 'context/AppContext';
@@ -18,6 +19,8 @@ import { Access } from './access/Access';
 import { Session } from './session/Session';
 import { Dashboard } from './dashboard/Dashboard';
 
+import { ConfigProvider } from 'antd';
+
 function App() {
 
   return (
@@ -30,21 +33,23 @@ function App() {
                 <ViewportContextProvider>
                   <AppContextProvider>
                     <AppWrapper>
-                      <Router>
-                        <Routes>
-                          <Route path="/" element={ <Root /> } />
-                          <Route path="/dashboard" element={ <Dashboard /> } />
-                          <Route path="/admin" element={ <Access mode="admin" /> } />
-                          <Route path="/login" element={ <Access mode="login" /> } />
-                          <Route path="/create" element={ <Access mode="create" /> } />
-                          <Route path="/session" element={
-                            <ConversationContextProvider>
-                              <Session />
-                            </ConversationContextProvider>
-                          }>
-                          </Route>
-                        </Routes>
-                      </Router>
+                      <ConfigProvider theme={{ token: { colorPrimary: Colors.primary } }}>
+                        <Router>
+                          <Routes>
+                            <Route path="/" element={ <Root /> } />
+                            <Route path="/dashboard" element={ <Dashboard /> } />
+                            <Route path="/admin" element={ <Access mode="admin" /> } />
+                            <Route path="/login" element={ <Access mode="login" /> } />
+                            <Route path="/create" element={ <Access mode="create" /> } />
+                            <Route path="/session" element={
+                              <ConversationContextProvider>
+                                <Session />
+                              </ConversationContextProvider>
+                            }>
+                            </Route>
+                          </Routes>
+                        </Router>
+                      </ConfigProvider>
                     </AppWrapper>
                   </AppContextProvider>
                 </ViewportContextProvider>

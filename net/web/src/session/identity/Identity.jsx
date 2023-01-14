@@ -1,4 +1,4 @@
-import { Modal, Dropdown, Menu, Tooltip } from 'antd';
+import { Button, Modal, Dropdown, Menu, Tooltip } from 'antd';
 import { Logo } from 'logo/Logo';
 import { IdentityWrapper, ErrorNotice, InfoNotice } from './Identity.styled';
 import { useIdentity } from './useIdentity.hook';
@@ -10,12 +10,9 @@ export function Identity({ openAccount, openCards, cardUpdated }) {
 
   const logout = () => {
     Modal.confirm({
-      title: 'Are you sure you want to logout?',
+      title: 'you sure you want to logout?',
       icon: <LogoutOutlined />,
-      onOk() {
-        actions.logout();
-      },
-      onCancel() {},
+      footer: <div><Button type="primary">COOL</Button></div>,
     });
   }
 

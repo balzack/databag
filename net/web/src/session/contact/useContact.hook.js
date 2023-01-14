@@ -3,6 +3,7 @@ import { CardContext } from 'context/CardContext';
 import { ViewportContext } from 'context/ViewportContext';
 import { getListingImageUrl } from 'api/getListingImageUrl';
 import { getListingMessage } from 'api/getListingMessage';
+import { getCardByGuid } from 'context/cardUtil';
 
 export function useContact(guid, listing, close) {
 
@@ -43,14 +44,14 @@ export function useContact(guid, listing, close) {
 
   useEffect(() => {
     let logo, name, location, description, handle, node, status, cardId;
-    let contact = card.actions.getCardByGuid(guid);
+    let contact = getCardByGuid(card.state.cards, guid);
     if (contact) {
       let cardProfile = contact?.data?.cardProfile;
       let cardDetail = contact?.data?.cardDetail;
       cardId = contact.id;
       handle = cardProfile.handle;
       node = cardProfile.node;
-      logo = card.actions.getImageUrl(contact.id);
+      logo = card.actions.getCardImageUrl(contact.id);
       name = cardProfile.name;
       location = cardProfile.location;
       description = cardProfile.description;

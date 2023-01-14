@@ -17,7 +17,7 @@ export function useCardItem(item) {
   }
 
   useEffect(() => {
-    updateState({ logo: card.actions.getImageUrl(item.id) });
+    updateState({ logo: card.actions.getCardImageUrl(item.id) });
   }, [card, item]); 
 
   useEffect(() => {
