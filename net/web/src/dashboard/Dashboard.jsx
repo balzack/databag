@@ -28,7 +28,7 @@ console.log("IN DASHBOARD here");
             <>
               <div class="settings">
                   <SettingsButton type="text" size="small" icon={<ReloadOutlined />}
-                      onClick={() => actions.getAccounts()}></SettingsButton>
+                      onClick={() => actions.reload()}></SettingsButton>
               </div>
               <div class="settings">
                   <SettingsButton type="text" size="small" icon={<SettingOutlined />}
@@ -38,7 +38,7 @@ console.log("IN DASHBOARD here");
                   <SettingsButton type="text" size="small" icon={<LogoutOutlined />}
                       onClick={() => actions.logout()}></SettingsButton>
               </div>
-              { state.errorMessage && (
+              { (state.configError || state.accountsError) && (
                 <AlertIcon>
                     <ExclamationCircleOutlined />
                 </AlertIcon>
@@ -54,7 +54,7 @@ console.log("IN DASHBOARD here");
               <div class="settings">
                 <Tooltip placement="topRight" title="Reload Accounts"> 
                   <SettingsButton type="text" size="small" icon={<ReloadOutlined />}
-                      onClick={() => actions.getAccounts()}></SettingsButton>
+                      onClick={() => actions.reload()}></SettingsButton>
                 </Tooltip>
               </div>
               <div class="settings">
@@ -69,8 +69,15 @@ console.log("IN DASHBOARD here");
                       onClick={() => actions.logout()}></SettingsButton>
                 </Tooltip>
               </div>
-              { state.errorMessage && (
-                <Tooltip placement="topRight" title={state.errorMessage}>
+              { state.configError && (
+                <Tooltip placement="topRight" title="failed to load accounts">
+                  <AlertIcon class="alert">
+                    <ExclamationCircleOutlined />
+                  </AlertIcon>
+                </Tooltip>
+              )}
+              { state.accountsError && (
+                <Tooltip placement="topRight" title="failed to load config">
                   <AlertIcon class="alert">
                     <ExclamationCircleOutlined />
                   </AlertIcon>

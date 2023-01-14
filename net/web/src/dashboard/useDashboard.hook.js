@@ -18,7 +18,8 @@ export function useDashboard() {
     enableAudio: null,
     enableVideo: null,
 
-    errorMessage: null,
+    configError: false,
+    accountsError: false,
     createToken: null,
     showSettings: false,
     showCreate: false,
@@ -91,7 +92,8 @@ export function useDashboard() {
     logout: () => {
       app.actions.clearAdmin();
     },
-    getAccounts: async () => {
+    reload: async () => {
+      await syncConfig();
       await syncAccounts();
     },
     setSettings: async () => {
@@ -118,13 +120,12 @@ export function useDashboard() {
       const config = await getNodeConfig(app.state.adminToken);
       const { storage, domain, keyType, pushSupported, enableImage, enableAudio, enableVideo } = config;
       const accountStorage = Math.ceil(storage / 1073741824);
-      updateState({ domain, accountStorage, keyType, enableImage, enableAudio, enableVideo, pushSupported });
+      updateState({ configError: false, domain, accountStorage, keyType, enableImage, enableAudio, enableVideo, pushSupported });
     }
     catch(err) {
       console.log(err);
-      updateState({ errorMessage: 'failed to sync config' });
+      updateState({ configError: true });
     }
-      updateState({ errorMessage: 'failed to sync config' });
   };
 
   const syncAccounts = async () => {
@@ -139,11 +140,11 @@ export function useDashboard() {
         }
         return 0;
       });
-      updateState({ accounts });
+      updateState({ accounstError: false, accounts });
     }
     catch(err) {
       console.log(err);
-      updateState({ errorMessage: 'failed to sync accounts' });
+      updateState({ accountsError: true });
     }
   };
 
