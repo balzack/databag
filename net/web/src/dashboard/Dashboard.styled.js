@@ -21,6 +21,7 @@ export const DashboardWrapper = styled.div`
     border-radius: 4px;
     max-width: 100%;
     max-height: 80%;
+    background-color: ${Colors.formBackground};
 
     .header {
       color: #444444;

@@ -4,9 +4,9 @@ import { useAccountItem } from './useAccountItem.hook';
 import { ExclamationCircleOutlined, CopyOutlined, UserDeleteOutlined, UnlockOutlined, CloseCircleOutlined, CheckCircleOutlined } from '@ant-design/icons';
 import { Modal, Tooltip, Button } from 'antd';
 
-export function AccountItem({ token, item, remove }) {
+export function AccountItem({ item, remove }) {
 
-  const { state, actions } = useAccountItem(token, item, remove);
+  const { state, actions } = useAccountItem(item, remove);
 
   const removeAccount = () => {
     Modal.confirm({

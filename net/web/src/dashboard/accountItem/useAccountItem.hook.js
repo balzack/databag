@@ -3,8 +3,9 @@ import { getAccountImageUrl } from 'api/getAccountImageUrl';
 import { setAccountStatus } from 'api/setAccountStatus';
 import { addAccountAccess } from 'api/addAccountAccess';
 import { ViewportContext } from 'context/ViewportContext';
+import { AppContext } from 'context/AppContext';
 
-export function useAccountItem(token, item, remove) {
+export function useAccountItem(item, remove) {
   
   const [state, setState] = useState({
     statusBusy: false,
@@ -13,6 +14,7 @@ export function useAccountItem(token, item, remove) {
     showAccess: false,
   });
  
+  const app = useContext(AppContext);
   const viewport = useContext(ViewportContext); 
 
   const updateState = (value) => {
@@ -27,9 +29,9 @@ export function useAccountItem(token, item, remove) {
       name: item?.name,
       guid: item?.guid,
       handle: item?.handle,
-      imageUrl: item?.imageSet ? getAccountImageUrl(token, item?.accountId) : null,
+      imageUrl: item?.imageSet ? getAccountImageUrl(app.state.adminToken, item?.accountId) : null,
     });
-  }, [token, item]); 
+  }, [app.state.adminToken, item]); 
 
   useEffect(() => {
     updateState({ display: viewport.state.display });
@@ -40,7 +42,7 @@ export function useAccountItem(token, item, remove) {
       if (!state.accessBusy) {
         updateState({ accessBusy: true });
         try {
-          let access = await addAccountAccess(token, item.accountId);
+          let access = await addAccountAccess(app.state.adminToken, item.accountId);
           updateState({ accessToken: access, showAccess: true });
         }
         catch (err) {
@@ -69,7 +71,7 @@ export function useAccountItem(token, item, remove) {
       if (!state.statusBusy) {
         updateState({ statusBusy: true });
         try {
-          await setAccountStatus(token, item.accountId, disabled);
+          await setAccountStatus(app.state.adminToken, item.accountId, disabled);
           updateState({ disabled, activeClass: disabled ? 'inactive' : 'active' });
         }
         catch(err) {

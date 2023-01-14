@@ -14,6 +14,7 @@ import { createWebsocket } from 'api/fetchUtil';
 export function useAppContext(websocket) {
   const [state, setState] = useState({
     status: null,
+    adminToken: null,
   });
   const [appRevision, setAppRevision] = useState();
 
@@ -26,6 +27,7 @@ export function useAppContext(websocket) {
   const ws = useRef(null);
 
   const updateState = (value) => {
+console.log(" UPDATE STATE", value);
     setState((s) => ({ ...s, ...value }))
   }
 
@@ -76,6 +78,14 @@ export function useAppContext(websocket) {
     },
     create: async (username, password, token) => {
       await appCreate(username, password, token)
+    },
+    setAdmin: (token) => {
+console.log("TOKEN SET!", token);
+      updateState({ adminToken: token });
+console.log("TOKEN SET: done");
+    },
+    clearAdmin: () => {
+      updateState({ adminToken: null });
     },
   }
 

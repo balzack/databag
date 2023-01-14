@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { getNodeStatus } from 'api/getNodeStatus';
 import { setNodeStatus } from 'api/setNodeStatus';
 import { getNodeConfig } from 'api/getNodeConfig';
+import { AppContext } from 'context/AppContext';
 
 export function useAdmin() {
 
@@ -14,6 +15,7 @@ export function useAdmin() {
   });
 
   const navigate = useNavigate();
+  const app = useContext(AppContext);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
@@ -32,6 +34,12 @@ export function useAdmin() {
     check();
   }, []);
 
+  useEffect(() => {
+    if (app.state.adminToken) {
+      navigate('/dashboard'); 
+    }
+  }, [app.state]);
+
   const actions = {
     setPassword: (password) => {
       updateState({ password });
@@ -46,14 +54,17 @@ export function useAdmin() {
           if (state.unclaimed === true) {
             await setNodeStatus(state.password);
           }
-          const status = await getNodeConfig(state.password);
-          const config = encodeURIComponent(JSON.stringify(config));
-          const pass= encodeURIComponent(state.password);
-          
+console.log("CHECK1");
+          await getNodeConfig(state.password);
+console.log("CHECK2");
           updateState({ busy: false });
-          navigate(`/dashboard?config=${status}&pass=${pass}`); 
+console.log("CHECK3");
+console.log(app);
+          app.actions.setAdmin(state.password);          
+console.log("DONE!");
         }
         catch(err) {
+console.log("ERROR!");
           console.log(err);
           updateState({ busy: false });
           throw new Error("login failed");

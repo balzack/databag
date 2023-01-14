@@ -1,5 +1,5 @@
 import { Button, Modal, Form, Input } from 'antd';
-import { SettingOutlined, LockOutlined } from '@ant-design/icons';
+import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { AdminWrapper } from './Admin.styled';
 import { useAdmin } from './useAdmin.hook';
 
@@ -30,7 +30,7 @@ export  function Admin() {
       <div className="app-title">
         <span>Databag</span>
         <div className="settings" onClick={() => actions.navUser()}>
-          <SettingOutlined />
+          <UserOutlined />
         </div>
       </div>
       <div className="form-title">Admin</div>

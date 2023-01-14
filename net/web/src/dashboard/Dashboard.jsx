@@ -4,9 +4,12 @@ import { ExclamationCircleOutlined, SettingOutlined, CopyOutlined, UserAddOutlin
 import { useDashboard } from './useDashboard.hook';
 import { AccountItem } from './accountItem/AccountItem';
 
-export function Dashboard({ token, config, logout }) {
+export function Dashboard() {
 
-  const { state, actions } = useDashboard(token, config);
+console.log("IN DASHBOARD");
+
+  const { state, actions } = useDashboard();
+console.log("IN DASHBOARD here");
 
   const onClipboard = (value) => {
     navigator.clipboard.writeText(value);
@@ -33,7 +36,7 @@ export function Dashboard({ token, config, logout }) {
               </div>
               <div class="settings">
                   <SettingsButton type="text" size="small" icon={<LogoutOutlined />}
-                      onClick={() => logout()}></SettingsButton>
+                      onClick={() => actions.logout()}></SettingsButton>
               </div>
               { state.errorMessage && (
                 <div class="alert">
@@ -63,7 +66,7 @@ export function Dashboard({ token, config, logout }) {
               <div class="settings">
                 <Tooltip placement="topRight" title="Logout"> 
                   <SettingsButton type="text" size="small" icon={<LogoutOutlined />}
-                      onClick={() => logout()}></SettingsButton>
+                      onClick={() => actions.logout()}></SettingsButton>
                 </Tooltip>
               </div>
               { state.errorMessage && (
@@ -89,8 +92,7 @@ export function Dashboard({ token, config, logout }) {
             itemLayout="horizontal"
             dataSource={state.accounts}
             loading={state.loading}
-            renderItem={item => (<AccountItem token={token} item={item}
-              remove={actions.removeAccount}/>)}
+            renderItem={item => (<AccountItem item={item} remove={actions.removeAccount}/>)}
           />
         </div>
       </div>
