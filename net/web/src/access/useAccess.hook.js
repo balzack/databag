@@ -19,8 +19,8 @@ export function useAccess() {
   }
 
   useEffect(() => {
-    if (app.state.status) {
-      navigate('/session');
+    if (app.state.status || app.state.adminToken) {
+      navigate('/');
     }
   }, [app.state, navigate]);
 

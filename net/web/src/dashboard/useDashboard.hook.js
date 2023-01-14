@@ -36,7 +36,7 @@ export function useDashboard() {
 
   useEffect(() => {
     if (!app.state.adminToken) {
-      navigate('/admin');
+      navigate('/');
     }
     else {
       syncConfig();

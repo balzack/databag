@@ -82,7 +82,7 @@ test('nav to session after login', async () => {
     });
 
     await waitFor(async () => {
-      expect(navPath).toBe('/session');
+      expect(navPath).toBe('/');
     });
 });
 
