@@ -33,7 +33,11 @@ function App() {
                 <ViewportContextProvider>
                   <AppContextProvider>
                     <AppWrapper>
-                      <ConfigProvider theme={{ token: { colorPrimary: Colors.primary } }}>
+                      <ConfigProvider theme={{ token: {
+                          colorPrimary: Colors.primary,
+                          colorLink: Colors.primary,
+                          colorLinkHover: Colors.background,
+                        } }}>
                         <Router>
                           <Routes>
                             <Route path="/" element={ <Root /> } />

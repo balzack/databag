@@ -27,7 +27,6 @@ export function useAppContext(websocket) {
   const ws = useRef(null);
 
   const updateState = (value) => {
-console.log(" UPDATE STATE", value);
     setState((s) => ({ ...s, ...value }))
   }
 
