@@ -1,4 +1,6 @@
 import { useContext, useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { AppContext } from 'context/AppContext';
 import { CardContext } from 'context/CardContext';
 import { StoreContext } from 'context/StoreContext';
 import { ViewportContext } from 'context/ViewportContext';
@@ -23,11 +25,14 @@ export function useSession() {
     loading: false,
   });
 
+  const app = useContext(AppContext);
   const card = useContext(CardContext);
   const store = useContext(StoreContext);
   const viewport = useContext(ViewportContext);
   const channel = useContext(ChannelContext);
   const profile = useContext(ProfileContext);
+
+  const navigate = useNavigate();
   
   const storeStatus = useRef(null);
   const cardStatus = useRef(0);
@@ -44,6 +49,13 @@ export function useSession() {
       updateState({ loading: false });
     }
   }, [card, channel, profile]);
+
+  useEffect(() => {
+    if (!app.state.status) {
+      navigate('/');
+    }
+    // eslint-disable-next-line
+  }, [app.state]);
 
   useEffect(() => {
     updateState({ display: viewport.state.display });

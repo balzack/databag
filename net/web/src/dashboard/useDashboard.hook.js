@@ -1,4 +1,4 @@
-import { useContext, useRef, useState, useEffect } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { getNodeConfig } from 'api/getNodeConfig';
 import { setNodeConfig } from 'api/setNodeConfig';
 import { getNodeAccounts } from 'api/getNodeAccounts';
@@ -42,6 +42,7 @@ export function useDashboard() {
       syncConfig();
       syncAccounts();
     }
+    // eslint-disable-next-line
   }, [app]);
 
   const actions = {

@@ -34,12 +34,6 @@ export function useAdmin() {
     check();
   }, []);
 
-  useEffect(() => {
-    if (app.state.adminToken) {
-      navigate('/dashboard'); 
-    }
-  }, [app.state]);
-
   const actions = {
     setPassword: (password) => {
       updateState({ password });

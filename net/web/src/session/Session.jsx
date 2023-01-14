@@ -1,8 +1,5 @@
-import { useEffect, useContext } from 'react';
 import { Drawer, Spin } from 'antd';
-import { useNavigate } from 'react-router-dom';
 import { SessionWrapper } from './Session.styled';
-import { AppContext } from 'context/AppContext';
 import { useSession } from './useSession.hook';
 import { Conversation } from './conversation/Conversation';
 import { Details } from './details/Details';
@@ -19,14 +16,6 @@ import { BottomNav } from './bottomNav/BottomNav';
 export function Session() {
 
   const { state, actions } = useSession();
-  const app = useContext(AppContext);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!app.state.status) {
-      navigate('/');
-    }
-  }, [app, navigate]);
 
   const closeAccount = () => {
     actions.closeProfile();
