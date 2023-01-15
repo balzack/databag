@@ -64,7 +64,7 @@ export function useDashboard() {
     },
     removeAccount: async (accountId) => {
       await removeAccount(app.state.adminToken, accountId);
-      actions.getAccounts();
+      syncAccounts();
     },
     setHost: (domain) => {
       updateState({ domain });

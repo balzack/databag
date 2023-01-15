@@ -42,13 +42,14 @@ export function useAccountItem(item, remove) {
       if (!state.accessBusy) {
         updateState({ accessBusy: true });
         try {
-          let access = await addAccountAccess(app.state.adminToken, item.accountId);
-          updateState({ accessToken: access, showAccess: true });
+          const access = await addAccountAccess(app.state.adminToken, item.accountId);
+          updateState({ accessToken: access, showAccess: true, accessBusy: false });
         }
         catch (err) {
-          window.alert(err);
+          console.log(err);
+          updateState({ accessBusy: false });
+          throw new Error('failed to generate token');
         }
-        updateState({ accessBusy: false });
       }
     },
     setShowAccess: (showAccess) => {
@@ -59,12 +60,13 @@ export function useAccountItem(item, remove) {
         updateState({ removeBusy: true });
         try {
           await remove(state.accountId);
+          updateState({ removeBusy: false });
         }
         catch(err) {
           console.log(err);
-          window.alert(err);
+          updateState({ removeBusy: false });
+          throw new Error('failed to remove account');
         }
-        updateState({ removeBusy: false });
       }
     },
     setStatus: async (disabled) => {
@@ -72,13 +74,13 @@ export function useAccountItem(item, remove) {
         updateState({ statusBusy: true });
         try {
           await setAccountStatus(app.state.adminToken, item.accountId, disabled);
-          updateState({ disabled, activeClass: disabled ? 'inactive' : 'active' });
+          updateState({ statusBusy: false, disabled, activeClass: disabled ? 'inactive' : 'active' });
         }
         catch(err) {
           console.log(err);
-          window.alert(err);
+          updateState({ statusBusy: false });
+          throw new Error('failed to set account status'); 
         }
-        updateState({ statusBusy: false });
       }
     },
   };

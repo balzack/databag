@@ -13,10 +13,46 @@ export function AccountItem({ item, remove }) {
       title: 'Are you sure you want to delete the account?',
       icon: <ExclamationCircleOutlined />,
       onOk() {
-        actions.remove();
+        applyRemoveAccount();
       },
       onCancel() {},
     });
+  }
+
+  const applyRemoveAccount = async () => {
+    try {
+      await actions.remove();
+    }
+    catch(err) {
+      Modal.error({ 
+        title: 'Failed to Remove Account',
+        content: 'Please try again.',
+      });
+    }
+  }
+
+  const applyAccountStatus = async (status) => {
+    try {
+      await actions.setStatus(status);
+    }
+    catch(err) {
+      Modal.error({
+        title: 'Failed to Set Account Status',
+        content: 'Please try again.',
+      });
+    }
+  }
+
+  const setAccountAccess = async () => {
+    try {
+      await actions.setAccessLink();
+    }
+    catch(err) {
+      Modal.error({
+        title: 'Failed to Set Account Access',
+        content: 'Please try again.',
+      });
+    }
   }
 
   const onClipboard = (value) => {
@@ -29,25 +65,25 @@ export function AccountItem({ item, remove }) {
 
   return (
     <AccountItemWrapper>
-      <div class="avatar">
+      <div className="avatar">
         <Logo url={state.imageUrl} width={32} height={32} radius={4} />
       </div>
-      <div class={state.activeClass}>
-        <div class="handle">{ state.handle }</div>
-        <div class="guid">{ state.guid }</div>
+      <div className={state.activeClass}>
+        <div className="handle">{ state.handle }</div>
+        <div className="guid">{ state.guid }</div>
       </div>
-      <div class="control">
+      <div className="control">
         { state.display === 'small' && (
           <>
             <ResetButton type="text" size="large" icon={<UnlockOutlined />}
-                loading={state.accessBusy} onClick={() => actions.setAccessLink()}></ResetButton>
+                loading={state.accessBusy} onClick={setAccountAccess}></ResetButton>
             { state.disabled && (
               <EnableButton type="text" size="large" icon={<CheckCircleOutlined />}
-                  loading={state.statusBusy} onClick={() => actions.setStatus(false)}></EnableButton>
+                  loading={state.statusBusy} onClick={() => applyAccountStatus(false)}></EnableButton>
             )}
             { !state.disabled && (
               <DisableButton type="text" size="large" icon={<CloseCircleOutlined />}
-                    loading={state.statusBusy} onClick={() => actions.setStatus(true)}></DisableButton>
+                    loading={state.statusBusy} onClick={() => applyAccountStatus(true)}></DisableButton>
             )}
             <DeleteButton type="text" size="large" icon={<UserDeleteOutlined />}
                 loading={state.removeBusy} onClick={removeAccount}></DeleteButton>
@@ -57,18 +93,18 @@ export function AccountItem({ item, remove }) {
           <>
             <Tooltip placement="topLeft" title="Account Login Link">
               <ResetButton type="text" size="large" icon={<UnlockOutlined />}
-                  loading={state.accessBusy} onClick={() => actions.setAccessLink()}></ResetButton>
+                  loading={state.accessBusy} onClick={setAccountAccess}></ResetButton>
             </Tooltip>
             { state.disabled && (
               <Tooltip placement="topLeft" title="Enable Account">
                 <EnableButton type="text" size="large" icon={<CheckCircleOutlined />}
-                    loading={state.statusBusy} onClick={() => actions.setStatus(false)}></EnableButton>
+                    loading={state.statusBusy} onClick={() => applyAccountStatus(false)}></EnableButton>
               </Tooltip>
             )}
             { !state.disabled && (
               <Tooltip placement="topLeft" title="Disable Account">
                 <DisableButton type="text" size="large" icon={<CloseCircleOutlined />}
-                      loading={state.statusBusy} onClick={() => actions.setStatus(true)}></DisableButton>
+                      loading={state.statusBusy} onClick={() => applyAccountStatus(true)}></DisableButton>
               </Tooltip>
             )}
             <Tooltip placement="topLeft" title="Delete Account">
@@ -82,15 +118,15 @@ export function AccountItem({ item, remove }) {
           footer={[ <Button type="primary" onClick={() => actions.setShowAccess(false)}>OK</Button> ]}
           onCancel={() => actions.setShowAccess(false)}>
         <AccessLayout>
-          <div class="url">
-            <div class="label">Browser Link:</div>
-            <div class="link">{accessLink()}</div>
+          <div className="url">
+            <div className="label">Browser Link:</div>
+            <div className="link">{accessLink()}</div>
             <Button icon={<CopyOutlined />} size="small"
               onClick={() => onClipboard(accessLink())}/>
           </div>
-          <div class="url">
-            <div class="label">App Token:</div>
-            <div class="token">{state.accessToken}</div>
+          <div className="url">
+            <div className="label">App Token:</div>
+            <div className="token">{state.accessToken}</div>
             <Button icon={<CopyOutlined />} size="small"
               onClick={() => onClipboard(state.accessToken)} />
           </div>

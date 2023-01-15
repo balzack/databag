@@ -6,10 +6,7 @@ import { AccountItem } from './accountItem/AccountItem';
 
 export function Dashboard() {
 
-console.log("IN DASHBOARD");
-
   const { state, actions } = useDashboard();
-console.log("IN DASHBOARD here");
 
   const onClipboard = (value) => {
     navigator.clipboard.writeText(value);

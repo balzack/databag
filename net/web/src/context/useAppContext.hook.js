@@ -79,9 +79,7 @@ export function useAppContext(websocket) {
       await appCreate(username, password, token)
     },
     setAdmin: (token) => {
-console.log("TOKEN SET!", token);
       updateState({ adminToken: token });
-console.log("TOKEN SET: done");
     },
     clearAdmin: () => {
       updateState({ adminToken: null });
