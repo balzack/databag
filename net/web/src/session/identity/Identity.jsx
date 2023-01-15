@@ -6,10 +6,11 @@ import { LogoutOutlined, InfoCircleOutlined, ExclamationCircleOutlined, DownOutl
 
 export function Identity({ openAccount, openCards, cardUpdated }) {
 
+  const [modal, modalContext] = Modal.useModal();
   const { state, actions } = useIdentity();
 
   const logout = () => {
-    Modal.confirm({
+    modal.confirm({
       title: 'Are you sure you want to logout?',
       icon: <LogoutOutlined />,
       onOk() {
@@ -36,6 +37,7 @@ export function Identity({ openAccount, openCards, cardUpdated }) {
   return (
     <Dropdown overlay={menu} overlayStyle={{ minWidth: 0 }} trigger={['click']} placement="bottomRight">
       <IdentityWrapper>
+        { modalContext }
         { state.init && (
           <Logo url={state.url} width={40} height={40} radius={4} />
         )}
