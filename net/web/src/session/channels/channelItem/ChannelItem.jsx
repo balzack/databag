@@ -6,80 +6,35 @@ import { AppstoreFilled, SolutionOutlined, UnlockOutlined, LockFilled } from '@a
 export function ChannelItem({ item, openChannel, active }) {
 
   const itemClass = () => {
-    if (active.set && active.channel === item.id && active.card === item.cardId) {
+    if (active.set && active.channel === item.channelId && active.card === item.cardId) {
       return "active"
     }
     return "idle"
   };
 
   return (
-    <ChannelItemWrapper onClick={() => openChannel(item.id, item.cardId)}>
+    <ChannelItemWrapper onClick={() => openChannel(item.channelId, item.cardId)}>
       <div class={itemClass()}>
-        { item.contacts.length === 0 && (
-          <div class="item">
-            <div class="logo">
-              <SolutionOutlined />
-            </div>
-            <div class="details">
-              <div class="subject">
-                { item.locked && !item.unlocked && (
-                  <LockFilled style={{ paddingRight: 8 }}/>
-                )}
-                { item.locked && item.unlocked && (
-                  <UnlockOutlined style={{ paddingRight: 8 }}/>
-                )}
-                <span>{ item.subject }</span>
-              </div>
-              <div class="message">{ item.message }</div>
-            </div>
+        <div class="item">
+          <div class="avatar">
+            <Logo url={item.logo} img={item.img} width={32} height={32} radius={8} />
           </div>
-        )}
-        { item.contacts.length === 1 && (
-          <div class="item">
-            <div class="avatar">
-              <Logo url={item.logo} width={32} height={32} radius={8} />
+          <div class="details">
+            <div class="subject">
+              { item.locked && !item.unlocked && (
+                <LockFilled style={{ paddingRight: 8 }}/>
+              )}
+              { item.locked && item.unlocked && (
+                <UnlockOutlined style={{ paddingRight: 8 }}/>
+              )}
+              <span>{ item.subject }</span>
             </div>
-            <div class="details">
-              <div class="subject">
-                { item.locked && !item.unlocked && (
-                  <LockFilled style={{ paddingRight: 8 }}/>
-                )}
-                { item.locked && item.unlocked && (
-                  <UnlockOutlined style={{ paddingRight: 8 }}/>
-                )}
-                <span>{ item.subject }</span>
-              </div>
-              <div class="message">{ item.message }</div>
-            </div>
-            { item.updated && (
-              <Markup />
-            )}
+            <div class="message">{ item.message }</div>
           </div>
-        )}
-        { item.contacts.length > 1 && (
-          <div class="item">
-            <div class="logo">
-              <AppstoreFilled />
-            </div>
-            <div class="details">
-              <div class="subject">
-                { item.locked && !item.unlocked && (
-                  <LockFilled style={{ paddingRight: 8 }}/>
-                )}
-                { item.locked && item.unlocked && (
-                  <UnlockOutlined style={{ paddingRight: 8 }}/>
-                )}
-                <span>{ item.subject }</span>
-              </div>
-              <div class="message">{ item.message }</div>
-            </div>
-            { item.updated && (
-              <Tooltip placement="right" title="new message">
-                <Markup />
-              </Tooltip>
-            )}
-          </div>
-        )}
+          { item.updatedFlag && (
+            <Markup />
+          )}
+        </div>
       </div>
     </ChannelItemWrapper>
   )

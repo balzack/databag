@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from 'react';
+import { useContext, useState, useEffect, useRef } from 'react';
 import { StoreContext } from 'context/StoreContext';
 import { ChannelContext } from 'context/ChannelContext';
 import { CardContext } from 'context/CardContext';
@@ -118,162 +118,148 @@ export function useChannels() {
     },
   };
 
-  const setUpdated = (chan) => {
+  // TODO optimize (avoid rebuild object when not needed)
+  const getChannel = (cardId, channelId, value) => {
+    const chan = {};
+    chan.cardId = cardId;
+    chan.channelId = channelId;
+    chan.revision = value.revision;
+    chan.updated = value.data?.channelSummary?.lastTopic?.created;
+
+    // set updated flag
+    const key = `${cardId}:${channelId}`
     const login = store.state['login:timestamp'];
-    const update = chan?.data?.channelSummary?.lastTopic?.created;
-
-    if (!update || (login && update < login)) {
-      chan.updated = false;
-      return;
+    if (!chan.updated || !login || chan.updated < login) {
+      chan.updatedFlag = false;
     }
-
-    let key = `${chan.id}::${chan.cardId}`
-    if (store.state[key] && store.state[key] === chan.revision) {
-      chan.updated = false;
+    else if (store.state[key] && store.state[key] === value.revision) {
+      chan.updatedFlag = false;
     }
     else {
-      chan.updated = true;
+      chan.updatedFlag = true;
     }
-  }
 
-  const setContacts = (chan) => {
-    let contacts = [];
-    if (chan.guid != null && profile.state.identity.guid !== chan.guid) {
-      const contact = getCardByGuid(card.state.cards, chan.guid);
-      contacts.push(contact);
+    // extract member info
+    let memberCount = 0;
+    let names = [];
+    let img = null;
+    let logo = null;
+    if (cardId) {
+      const contact = card.state.cards.get(cardId);
+      const profile = contact?.data?.cardProfile;
+      if (profile?.name) {
+        names.push(profile.name);
+      }
+      if (profile?.imageSet) {
+        img = null;
+        logo = card.actions.getCardImageUrl(contact.id);
+      }
+      else {
+        img = 'avatar';
+        logo = null;
+      }
+      memberCount++;
     }
-    for (let guid of chan.data.channelDetail?.members) {
+    for (let guid of value?.data?.channelDetail?.members) {
       if (guid !== profile.state.identity.guid) {
         const contact = getCardByGuid(card.state.cards, guid);
-        contacts.push(contact);
+        const profile = contact?.data?.cardProfile;
+        if (profile?.name) {
+          names.push(profile.name);
+        }
+        if (profile?.imageSet) {
+          img = null;
+          logo = card.actions.getCardImageUrl(contact.id);
+        }
+        else {
+          img = 'avatar';
+          logo = null;
+        }
+        memberCount++;
       }
     }
-    chan.contacts = contacts;
-    if (contacts.length === 1 && contacts[0]) {
-      chan.logo = card.actions.getCardImageUrl(contacts[0].id);
-    }
-  }
 
-  const setSubject = (chan) => {
-    let subject = "";
-    if (chan.data.channelDetail.dataType === 'sealed') {
-      chan.locked = chan.data.channelDetail.dataType === 'sealed'
-      if (state.sealable) {
-        try {
-          if (chan.data.unsealedChannel == null) {
-            if (chan.cardId) {
-              card.actions.unsealChannelSubject(chan.cardId, chan.id, account.state.sealKey);
-            }
-            else {
-              channel.actions.unsealChannelSubject(chan.id, account.state.sealKey);
-            }
-          }
-          else {
-            if (chan.cardId) {
-              chan.unlocked = card.actions.isUnsealed(chan.cardId, chan.id, account.state.sealKey);
-            }
-            else {
-              chan.unlocked = channel.actions.isUnsealed(chan.id, account.state.sealKey);
-            }
-            subject = chan.data.unsealedChannel.subject;
-          }
-        }
-        catch (err) {
-          console.log(err)
-        }
-      }
+    // set logo and label
+    if (memberCount === 0) {
+      chan.img = 'solution';
+      chan.label = 'Notes';
+    }
+    else if (memberCount === 1) {
+      chan.logo = logo;
+      chan.img = img;
+      chan.label = names.join(',');
     }
     else {
-      if (chan.data.channelDetail?.data) {
-        try {
-          subject = JSON.parse(chan.data.channelDetail?.data).subject;
-        }
-        catch (err) {
-          console.log(err);
-        }
-      }
-    }
-    if (!subject) {
-      let names = [];
-      for (let contact of chan.contacts) {
-        names.push(contact?.data?.cardProfile?.name);
-      }
-      subject = names.join(", ");
-    }
-    if (!subject && !chan.contacts?.length) {
-      subject = "Notes";
+      chan.img = 'appstore';
+      chan.label = names.join(',');
     }
     
-    chan.subject = subject;  
-  }
-
-  const setMessage = (chan) => {
-    let message = '';
-    if (chan.data.channelSummary?.lastTopic?.dataType === 'superbasictopic') {
+    // set subject
+    const detail = value.data?.channelDetail;
+    if (detail?.dataType === 'sealedchannel') {
+      // handle sealed subject
+      chan.locked = true;
+      chan.unlocked = false;
+    }
+    else if (detail?.dataType === 'superbasic') {
+      chan.locked = false;
+      chan.unlocked = true;
       try {
-        message = JSON.parse(chan.data.channelSummary.lastTopic.data).text;
+        const data = JSON.parse(detail.data);
+        chan.subject = data.subject;
       }
-      catch (err) {
+      catch(err) {
         console.log(err);
       }
     }
-    if (chan.data.channelSummary?.lastTopic?.dataType === 'sealedtopic') {
+    if (chan.subject == null) {
+      chan.subject = chan.label;
+    }
+
+    // set message
+    const topic = value.data?.channelSummary?.lastTopic;
+    if (topic?.dataType === 'sealedtopic') {
+      // handle sealed topic
+    }
+    else if (topic?.dataType === 'superbasictopic') {
       try {
-        if (chan.unlocked) {
-          message = "...";
-          if (chan.data.unsealedSummary == null) {
-            if (chan.cardId) {
-              card.actions.unsealChannelSummary(chan.cardId, chan.id, account.state.sealKey);
-            }
-            else {
-              channel.actions.unsealChannelSummary(chan.id, account.state.sealKey);
-            }
-          }
-          else {
-            if (typeof chan.data.unsealedSummary.message.text === 'string') {
-              message = chan.data.unsealedSummary.message.text;
-            }
-          }
-        }
+        const data = JSON.parse(topic.data);
+        chan.message = data.text;
       }
-      catch (err) {
-        console.log(err)
+      catch(err) {
+        console.log(err);
       }
     }
 
-    if (typeof message === 'string') {
-      chan.message = message;
-    }
-  } 
+    return chan;
+  }
 
   useEffect(() => {
-    let merged = [];
-    card.state.cards.forEach((value, key, map) => {
-      merged.push(...Array.from(value.channels.values()));
+    const merged = [];
+    card.state.cards.forEach((cardValue, cardKey) => {
+      cardValue.channels.forEach((channelValue, channelKey) => {
+        const chan = getChannel(cardKey, channelKey, channelValue);
+        merged.push(chan);
+      });
     });
-    merged.push(...Array.from(channel.state.channels.values()));
+    channel.state.channels.forEach((channelValue, channelKey) => {
+      merged.push(getChannel(null, channelKey, channelValue));
+    });
 
     merged.sort((a, b) => {
-      const aCreated = a?.data?.channelSummary?.lastTopic?.created;
-      const bCreated = b?.data?.channelSummary?.lastTopic?.created;
-      if (aCreated === bCreated) {
+      const aUpdated = a.updated;
+      const bUpdated = b.updated;
+      if (aUpdated === bUpdated) {
         return 0;
       }
-      if (!aCreated || aCreated < bCreated) {
+      if (!aUpdated || aUpdated < bUpdated) {
         return 1;
       }
       return -1;
     });
 
-    merged.forEach(chan => { 
-      setUpdated(chan);
-      setContacts(chan);
-      setSubject(chan);
-      setMessage(chan);
-    }); 
-
     const filtered = merged.filter((chan) => {
-      let subject = chan?.subject?.toUpperCase();
+      const subject = chan?.subject?.toUpperCase();
       return !filter || subject?.includes(filter);    
     });
 

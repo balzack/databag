@@ -146,7 +146,6 @@ export function useCardContext() {
  
   const syncCard = async (token, card) => {
     const { cardProfile, cardDetail } = card.data;
-
     // sync profile
     if (card.data.setNotifiedProfile !== card.data.curNotifiedProfile) {
       if (card.data.profileRevision !== card.data.curNotifiedProfile) {
@@ -174,7 +173,7 @@ export function useCardContext() {
 
   const syncCardChannels = async (card) => {
     const { cardProfile, cardDetail } = card.data;
-    const { node } = cardProfile.node;
+    const node = cardProfile.node;
     const token = `${cardProfile.guid}.${cardDetail.token}`;
     let delta;
     if (card.data.setNotifiedView !== card.data.curNotifiedView) {
@@ -183,7 +182,7 @@ export function useCardContext() {
     }
     else {
       const { setNotifiedView, setNotifiedChannel } = card.data;
-      delta = await getContactChannels(node, setNotifiedView, setNotifiedChannel);
+      delta = await getContactChannels(node, token, setNotifiedView, setNotifiedChannel);
     }
     for (let channel of delta) {
       if (channel.data) {
@@ -206,7 +205,7 @@ export function useCardContext() {
             cur.data.channelSummary = channel.data.channelSummary;
           }
           else {
-            cur.data.channelSummary = getContactChannelSummary(node, token, channel.id);
+            cur.data.channelSummary = await getContactChannelSummary(node, token, channel.id);
           }
           cur.data.unsealedSummary = null;
           cur.data.topicRevision = channel.data.topicRevision;

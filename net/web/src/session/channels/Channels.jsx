@@ -47,10 +47,7 @@ export function Channels({ open, active }) {
         </div>
         { state.display === 'small' && (
           <div class="inline">
-            <div class="add" onClick={actions.setShowAdd}>
-              <CommentOutlined />
-              <div class="label">New</div>
-            </div> 
+            <Button type="primary" icon={<CommentOutlined />} onClick={actions.setShowAdd}>New</Button>
           </div>
         )}
       </div>
@@ -68,10 +65,7 @@ export function Channels({ open, active }) {
       </div>
       { state.display !== 'small' && (
         <div class="bar">
-          <div class="add" onClick={actions.setShowAdd}>
-            <CommentOutlined />
-            <div class="label">New Topic</div>
-          </div>
+          <Button type="primary" icon={<CommentOutlined />} onClick={actions.setShowAdd}>New Topic</Button>
         </div>
       )}
       <Modal title="New Topic" centered visible={state.showAdd} footer={addFooter}

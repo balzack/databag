@@ -29,7 +29,6 @@ export function useSession() {
   const card = useContext(CardContext);
   const store = useContext(StoreContext);
   const viewport = useContext(ViewportContext);
-  const channel = useContext(ChannelContext);
   const profile = useContext(ProfileContext);
 
   const navigate = useNavigate();
@@ -48,7 +47,7 @@ export function useSession() {
     else {
       updateState({ loading: false });
     }
-  }, [card, channel, profile]);
+  }, [profile]);
 
   useEffect(() => {
     if (!app.state.status) {
