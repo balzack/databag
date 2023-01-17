@@ -1,38 +1,37 @@
 import { Tooltip } from 'antd';
 import { ChannelItemWrapper, Markup } from './ChannelItem.styled';
 import { Logo } from 'logo/Logo';
-import { AppstoreFilled, SolutionOutlined, UnlockOutlined, LockFilled } from '@ant-design/icons';
+import { UnlockOutlined, LockFilled } from '@ant-design/icons';
+import { useChannelItem } from './useChannelItem.hook';
 
-export function ChannelItem({ cardId, channelId, openChannel, active }) {
+export function ChannelItem({ cardId, channelId, filter, openChannel, active }) {
 
-  const itemClass = () => {
-    if (active.set && active.channel === item.channelId && active.card === item.cardId) {
-      return "active"
-    }
-    return "idle"
-  };
+  const { state } = useChannelItem(cardId, channelId, filter, active);
 
   return (
-    <ChannelItemWrapper onClick={() => openChannel(item.channelId, item.cardId)}>
-      <div class={itemClass()}>
+    <ChannelItemWrapper style={{ display: (!state.set || !state.visible) ? 'none' : null }}
+          onClick={() => openChannel(channelId, cardId)}>
+      <div class={state.active ? 'active' : 'idle'}>
         <div class="item">
           <div class="avatar">
-            <Logo url={item.logo} img={item.img} width={32} height={32} radius={8} />
+            <Logo url={state.logo} img={state.img} width={32} height={32} radius={8} />
           </div>
           <div class="details">
             <div class="subject">
-              { item.locked && !item.unlocked && (
+              { state.locked && !state.unlocked && (
                 <LockFilled style={{ paddingRight: 8 }}/>
               )}
-              { item.locked && item.unlocked && (
+              { state.locked && state.unlocked && (
                 <UnlockOutlined style={{ paddingRight: 8 }}/>
               )}
-              <span>{ item.subject }</span>
+              <span>{ state.subject }</span>
             </div>
-            <div class="message">{ item.message }</div>
+            <div class="message">{ state.message }</div>
           </div>
-          { item.updatedFlag && (
-            <Markup />
+          { state.updatedFlag && (
+            <Tooltip placement="topRight" title="New Message">
+              <Markup />
+            </Tooltip>
           )}
         </div>
       </div>

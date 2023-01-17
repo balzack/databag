@@ -5,7 +5,6 @@ import { CardContext } from 'context/CardContext';
 import { StoreContext } from 'context/StoreContext';
 import { ViewportContext } from 'context/ViewportContext';
 import { ProfileContext } from 'context/ProfileContext';
-import { ChannelContext } from 'context/ChannelContext';
 
 export function useSession() {
 

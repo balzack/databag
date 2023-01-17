@@ -6,10 +6,19 @@ import { AccountContext } from 'context/AccountContext';
 import { ProfileContext } from 'context/ProfileContext';
 import { getCardByGuid } from 'context/cardUtil';
 
-export function useChannelItem(cardId, channelId, filter) {
+export function useChannelItem(cardId, channelId, filter, active) {
 
   const [state, setState] = useState({
     set: false,
+    visible: false,
+    active: false,
+    locked: false,
+    unlocked: false,
+    updateFlag: false,
+    img: null,
+    logo: null,
+    subject: null,
+    message: null,
   });
 
   const card = useContext(CardContext);
@@ -34,8 +43,31 @@ export function useChannelItem(cardId, channelId, filter) {
 
   useEffect(() => {
     sync();
-  }, [card, channel, store, account, filter]);
+    // eslint-disable-next-line
+  }, [card.state, channel.state, store.state, account.state]);
 
+  useEffect(() => {
+    if (cardId === active?.card && channelId === active?.channel) {
+      updateState({ active: true });
+    }
+    else {
+      updateState({ active: false });
+    }
+  }, [cardId, channelId, active]);
+
+  useEffect(() => {
+    if (filter) {
+      if (state.subject) {
+        updateState({ visible: state.subject.toUpperCase().includes(filter) });
+      }
+      else {
+        updateState({ visible: false });
+      }
+    }
+    else {
+      updateState({ visible: true });
+    }
+  }, [filter, state.subject]);
 
   const sync = async () => {
     if (!syncing.current) {
@@ -87,35 +119,34 @@ export function useChannelItem(cardId, channelId, filter) {
   const setChannel = (cardId, channelId) => {
     if (cardId) {
       const cardItem = card.state.cards.get(cardId);
-      setChannelItem(cardItem?.channels?.get(channelId));
+      const channelItem = cardItem?.channels?.get(channelId);
+      setChannelItem(cardItem, channelItem);
+      setCardRevision.current = cardItem?.revision;
+      setChannelRevision.current = channelItem?.revision;
     }
     else {
-      setChannelItem(channel.state.channels.get(channelId);
+      const channelItem = channel.state.channels.get(channelId);
+      setChannelItem(null, channelItem);
+      setChannelRevision.current = channelItem?.revision;
     }
+    setSealKey.current = account.state.sealKey;
   };
 
-  const setChannelItem = (item) => {
+  const setChannelItem = (cardItem, channelItem) => {
 
-    if (!item) {
+    if (!channelItem) {
       updateState({ set: false });
       return;
     }
-  }
-    
+    const chan = { set: true };
       
-    const chan = {};
-    chan.cardId = cardId;
-    chan.channelId = channelId;
-    chan.revision = value.revision;
-    chan.updated = value.data?.channelSummary?.lastTopic?.created;
-
     // set updated flag
     const key = `${cardId}:${channelId}`
     const login = store.state['login:timestamp'];
     if (!chan.updated || !login || chan.updated < login) {
       chan.updatedFlag = false;
     }
-    else if (store.state[key] && store.state[key] === value.revision) {
+    else if (store.state[key] && store.state[key] === channelItem.revision) {
       chan.updatedFlag = false;
     }
     else {
@@ -127,15 +158,14 @@ export function useChannelItem(cardId, channelId, filter) {
     let names = [];
     let img = null;
     let logo = null;
-    if (cardId) {
-      const contact = card.state.cards.get(cardId);
-      const profile = contact?.data?.cardProfile;
+    if (cardItem) {
+      const profile = cardItem?.data?.cardProfile;
       if (profile?.name) {
         names.push(profile.name);
       }
       if (profile?.imageSet) {
         img = null;
-        logo = card.actions.getCardImageUrl(contact.id);
+        logo = card.actions.getCardImageUrl(cardId);
       }
       else {
         img = 'avatar';
@@ -143,7 +173,7 @@ export function useChannelItem(cardId, channelId, filter) {
       }
       memberCount++;
     }
-    for (let guid of value?.data?.channelDetail?.members) {
+    for (let guid of channelItem?.data?.channelDetail?.members) {
       if (guid !== profile.state.identity.guid) {
         const contact = getCardByGuid(card.state.cards, guid);
         const profile = contact?.data?.cardProfile;
@@ -178,7 +208,7 @@ export function useChannelItem(cardId, channelId, filter) {
     }
     
     // set subject
-    const detail = value.data?.channelDetail;
+    const detail = channelItem.data?.channelDetail;
     if (detail?.dataType === 'sealedchannel') {
       // handle sealed subject
       chan.locked = true;
@@ -200,7 +230,7 @@ export function useChannelItem(cardId, channelId, filter) {
     }
 
     // set message
-    const topic = value.data?.channelSummary?.lastTopic;
+    const topic = channel.data?.channelSummary?.lastTopic;
     if (topic?.dataType === 'sealedtopic') {
       // handle sealed topic
     }
@@ -214,12 +244,8 @@ export function useChannelItem(cardId, channelId, filter) {
       }
     }
 
-    return chan;
+    updateState({ ...chan });
   }
-
-  useEffect(() => {
-    // eslint-disable-next-line
-  }, [account, channel, card, store, filter, state.sealable]);
 
   return { state, actions };
 }
