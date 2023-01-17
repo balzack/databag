@@ -4,21 +4,12 @@ import { ChannelContext } from 'context/ChannelContext';
 import { CardContext } from 'context/CardContext';
 import { AccountContext } from 'context/AccountContext';
 import { ProfileContext } from 'context/ProfileContext';
-import { ViewportContext } from 'context/ViewportContext';
 import { getCardByGuid } from 'context/cardUtil';
 
-export function useChannels() {
+export function useChannelItem(cardId, channelId, filter) {
 
   const [state, setState] = useState({
-    display: null,
-    channels: [],
-    showAdd: false,
-    busy: false,
-    members: new Set(),
-    subject: null,
-    seal: false,
-    sealable: false,
-    filter: null,
+    set: false,
   });
 
   const card = useContext(CardContext);
@@ -26,99 +17,92 @@ export function useChannels() {
   const account = useContext(AccountContext);
   const store = useContext(StoreContext);
   const profile = useContext(ProfileContext);
-  const viewport = useContext(ViewportContext);
-
-  useEffect(() => {
-    const { seal, sealKey } = account.state;
-    if (seal?.publicKey && sealKey?.public && sealKey?.private && seal.publicKey === sealKey.public) {
-      updateState({ sealable: true });
-    }
-    else {
-      updateState({ seal: false, sealable: false });
-    }
-  }, [account]);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
   }
 
+  const syncing = useRef(false);
+  const setCardId = useRef();
+  const setChannelId = useRef();
+  const setCardRevision = useRef();
+  const setChannelRevision = useRef();
+  const setSealKey = useRef();
+
   const actions = {
-    addChannel: async () => {
-      let added;
-      if (!state.busy) {
-        try {
-          updateState({ busy: true });
-          let cards = Array.from(state.members.values());
-          if (state.seal) {
-            let keys = [ account.state.sealKey.public ];
-            cards.forEach(id => {
-              keys.push(card.state.cards.get(id).data.cardProfile.seal);
-            });
-            added = await channel.actions.addSealedChannel(cards, state.subject, keys);
-          }
-          else {
-            added = await channel.actions.addBasicChannel(cards, state.subject);
-          }
-          updateState({ busy: false });
-        }
-        catch(err) {
-          console.log(err);
-          updateState({ busy: false });
-          throw new Error("failed to create new channel");
-        }
-      }
-      else {
-        throw new Error("operation in progress");
-      }
-      return added.id;
-    },
-    setSeal: (seal) => {
-      if (seal) {
-        let cards = Array.from(state.members.values());
-        let members = new Set(state.members);
-        cards.forEach(id => {
-          if (!(card.state.cards.get(id)?.data?.cardProfile?.seal)) {
-            members.delete(id);
-          }    
-        });
-        updateState({ seal: true, members });
-      }
-      else {
-        updateState({ seal: false });
-      }
-    },
-    onFilter: (value) => {
-      updateState({ filter: value.toUpperCase() });
-    },
-    setShowAdd: () => {
-      updateState({ showAdd: true, seal: false });
-    },
-    clearShowAdd: () => {
-      updateState({ showAdd: false, members: new Set(), subject: null });
-    },
-    onMember: (string) => {
-      let members = new Set(state.members);
-      if (members.has(string)) {
-        members.delete(string);
-      }
-      else {
-        members.add(string);
-      }
-      updateState({ members });
-    },
-    setSubject: (subject) => {
-      updateState({ subject });
-    },
-    cardFilter: (card) => {
-      if (state.seal) {
-        return card?.data?.cardDetail?.status === 'connected' && card?.data?.cardProfile?.seal;
-      }
-      return card?.data?.cardDetail?.status === 'connected';
-    },
   };
 
-  // TODO optimize (avoid rebuild object when not needed)
-  const getChannel = (cardId, channelId, value) => {
+  useEffect(() => {
+    sync();
+  }, [card, channel, store, account, filter]);
+
+
+  const sync = async () => {
+    if (!syncing.current) {
+      syncing.current = true;
+
+      if (cardId !== setCardId.current || channelId !== setChannelId.current) {
+        await setChannel(cardId, channelId);
+        syncing.current = false;
+        await sync();
+        return;
+      }
+      if (cardId) {
+        const contact = card.state.cards.get(cardId);
+        if (contact?.revision !== setCardRevision.current) {
+          await setChannel(cardId, channelId);
+          syncing.current = false;
+          await sync();
+          return;
+        }
+        const conversation = contact.channels.get(channelId);
+        if (conversation?.revision !== setChannelRevision.current) {
+          await setChannel(cardId, channelId);
+          syncing.current = false;
+          await sync();
+          return;
+        }
+      }
+      else {
+        const conversation = channel.state.channels.get(channelId);
+        if (conversation?.revision !== setChannelRevision.current) {
+          await setChannel(cardId, channelId);
+          syncing.current = false;
+          await sync();
+          return;
+        }
+      }
+      const key = account.state.sealKey;
+      if (key?.pulic !== setSealKey.current?.public || key?.private !==  setSealKey.current?.private) {
+        await setChannel(cardId, channelId);
+        syncing.current = false;
+        await sync();
+        return;
+      }
+
+      syncing.current = false;
+    }
+  }
+
+  const setChannel = (cardId, channelId) => {
+    if (cardId) {
+      const cardItem = card.state.cards.get(cardId);
+      setChannelItem(cardItem?.channels?.get(channelId));
+    }
+    else {
+      setChannelItem(channel.state.channels.get(channelId);
+    }
+  };
+
+  const setChannelItem = (item) => {
+
+    if (!item) {
+      updateState({ set: false });
+      return;
+    }
+  }
+    
+      
     const chan = {};
     chan.cardId = cardId;
     chan.channelId = channelId;
@@ -234,38 +218,8 @@ export function useChannels() {
   }
 
   useEffect(() => {
-    const merged = [];
-    card.state.cards.forEach((cardValue, cardId) => {
-      cardValue.channels.forEach((channelValue, channelId) => {
-        const updated = value.data?.channelSummary?.lastTopic?.created;
-        merged.push{ updated, cardId, channelId };
-      });
-    });
-    channel.state.channels.forEach((channelValue, channelId) => {
-      const updated = value.data?.channelSummary?.lastTopic?.created;
-      merged.push{ updated, channelId };
-    });
-
-    merged.sort((a, b) => {
-      const aUpdated = a.updated;
-      const bUpdated = b.updated;
-      if (aUpdated === bUpdated) {
-        return 0;
-      }
-      if (!aUpdated || aUpdated < bUpdated) {
-        return 1;
-      }
-      return -1;
-    });
-
-    updateState({ channels: merged });
-
     // eslint-disable-next-line
   }, [account, channel, card, store, filter, state.sealable]);
-
-  useEffect(() => {
-    updateState({ display: viewport.state.display });
-  }, [viewport]);
 
   return { state, actions };
 }

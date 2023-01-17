@@ -3,7 +3,7 @@ import { ChannelItemWrapper, Markup } from './ChannelItem.styled';
 import { Logo } from 'logo/Logo';
 import { AppstoreFilled, SolutionOutlined, UnlockOutlined, LockFilled } from '@ant-design/icons';
 
-export function ChannelItem({ item, openChannel, active }) {
+export function ChannelItem({ cardId, channelId, openChannel, active }) {
 
   const itemClass = () => {
     if (active.set && active.channel === item.channelId && active.card === item.cardId) {
