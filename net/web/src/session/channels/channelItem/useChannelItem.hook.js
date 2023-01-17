@@ -130,6 +130,8 @@ export function useChannelItem(cardId, channelId, filter, active) {
       setChannelRevision.current = channelItem?.revision;
     }
     setSealKey.current = account.state.sealKey;
+    setChannelId.current = channelId;
+    setCardId.current = cardId;
   };
 
   const setChannelItem = (cardItem, channelItem) => {
