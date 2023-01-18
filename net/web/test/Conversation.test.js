@@ -84,15 +84,16 @@ beforeEach(() => {
   beginSet = false;
 
   const mockFetch = jest.fn().mockImplementation((url, options) => {
+
     const params = url.split('/');
-    if (params[2].startsWith('channels?agent')) {
+    if (params[2]?.startsWith('channels?agent')) {
       return Promise.resolve({
         url: 'getChannels',
         status: statusChannels,
         json: () => Promise.resolve(fetchChannels),
       });
     }
-    if (params[2].startsWith('channels?contact')) {
+    else if (params[4]?.startsWith('channels?contact')) {
       return Promise.resolve({
         url: 'getCardChannels',
         status: statusCardChannels,

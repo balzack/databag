@@ -116,7 +116,7 @@ export function useConversation(cardId, channelId) {
     }
     const { error, loadingInit, loadingMore, subject, logoUrl, logoImg } = conversation.state;
     updateState({ topics, error, loadingInit, loadingMore, subject, logoUrl, logoImg });
-    store.actions.setValue(`${channelId}::${cardId}`, Number(conversation.state.revision));
+    store.actions.setValue(`${channelId}::${cardId}`, Number(conversation.state.topicRevision));
     // eslint-disable-next-line 
   }, [conversation]);
 

@@ -84,7 +84,6 @@ export function useCardContext() {
         const revision = curRevision.current;
         const delta = await getCards(token, setRevision.current);
         for (let card of delta) {
-
           if (card.data) {
             let cur = cards.current.get(card.id);
             if (cur == null) {
@@ -172,7 +171,7 @@ export function useCardContext() {
   const syncCardArticles = async (card) => {}
 
   const syncCardChannels = async (card) => {
-    const { cardProfile, cardDetail } = card.data;
+    const { cardProfile, cardDetail, setNotifiedView, setNotifiedChannel } = card.data;
     const node = cardProfile.node;
     const token = `${cardProfile.guid}.${cardDetail.token}`;
     let delta;
@@ -181,7 +180,6 @@ export function useCardContext() {
       delta = await getContactChannels(node, token);
     }
     else {
-      const { setNotifiedView, setNotifiedChannel } = card.data;
       delta = await getContactChannels(node, token, setNotifiedView, setNotifiedChannel);
     }
     for (let channel of delta) {
@@ -197,7 +195,6 @@ export function useCardContext() {
           else { 
             cur.data.channelDetail = await getContactChannelDetail(node, token, channel.id);
           }
-          cur.data.unsealedSubject = null;
           cur.data.detailRevision = channel.data.detailRevision;
         }
         if (cur.data.topicRevision !== channel.data.topicRevision) {
@@ -207,7 +204,6 @@ export function useCardContext() {
           else {
             cur.data.channelSummary = await getContactChannelSummary(node, token, channel.id);
           }
-          cur.data.unsealedSummary = null;
           cur.data.topicRevision = channel.data.topicRevision;
         }
         cur.revision = channel.revision;
@@ -277,26 +273,6 @@ export function useCardContext() {
       let token = cardProfile.guid + '.' + cardDetail.token;
       let node = cardProfile.node;
       await removeContactChannel(node, token, channelId);
-    },
-    unsealChannelSubject: async (cardId, channelId, unsealed, revision) => {
-      const card = cards.current.get(cardId);
-      const channel = card.channels.get(channelId);
-      if (channel.revision === revision) {
-        channel.data.unsealedSubject = unsealed;
-        card.channels.set(channelId, channel);
-        cards.current.set(cardId, card);
-        updateState({ cards: cards.current });
-      }
-    },
-    unsealChannelSummary: async (cardId, channelId, unsealed, revision) => {
-      const card = cards.current.get(cardId);
-      const channel = card.channels.get(channelId);
-      if (channel.revision === revision) {
-        channel.data.unsealedSummary = unsealed;
-        card.channels.set(channelId, channel);
-        cards.current.set(cardId, card);
-        updateState({ cards: cards.current });
-      }
     },
     addTopic: async (cardId, channelId, type, message, files) => {
       let { cardProfile, cardDetail } = cards.current.get(cardId).data;

@@ -10,6 +10,7 @@ import { Carousel } from 'carousel/Carousel';
 
 export function AddTopic({ cardId, channelId, sealed, sealKey }) {
 
+  const [modal, modalContext] = Modal.useModal();
   const { state, actions } = useAddTopic(cardId, channelId);
   const attachImage = useRef(null);
   const attachAudio = useRef(null);
@@ -30,7 +31,7 @@ export function AddTopic({ cardId, channelId, sealed, sealKey }) {
       }
       catch (err) {
         console.log(err);
-        Modal.error({
+        modal.error({
           title: 'Failed to Post Message',
           content: 'Please try again.',
         });
@@ -90,6 +91,7 @@ export function AddTopic({ cardId, channelId, sealed, sealKey }) {
 
   return (
     <AddTopicWrapper>
+      { modalContext }
       <input type='file' name="asset" accept="image/*" ref={attachImage} onChange={e => onSelectImage(e)} style={{display: 'none'}}/>
       <input type='file' name="asset" accept="audio/*" ref={attachAudio} onChange={e => onSelectAudio(e)} style={{display: 'none'}}/>
       <input type='file' name="asset" accept="video/*" ref={attachVideo} onChange={e => onSelectVideo(e)} style={{display: 'none'}}/>

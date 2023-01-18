@@ -65,7 +65,6 @@ export function useChannelContext() {
                 let detail = await getChannelDetail(token, channel.id);
                 cur.data.channelDetail = detail;
               }
-              cur.data.unsealedSubject = null;
               cur.data.detailRevision = channel.data.detailRevision;
             }
             if (cur.data.topicRevision !== channel.data.topicRevision) {
@@ -76,7 +75,6 @@ export function useChannelContext() {
                 let summary = await getChannelSummary(token, channel.id);
                 cur.data.channelSummary = summary;
               }
-              cur.data.unsealedSummary = null;
               cur.data.topicRevision = channel.data.topicRevision;
             }
             cur.revision = channel.revision;
@@ -133,22 +131,6 @@ export function useChannelContext() {
     },
     clearChannelCard: async (channelId, cardId) => {
       return await clearChannelCard(access.current, channelId, cardId);
-    },
-    unsealChannelSubject: async (channelId, unsealed, revision) => {
-      const channel = channels.current.get(channelId);
-      if (channel.revision === revision) {
-        channel.data.unsealedSubject = unsealed;
-        channels.current.set(channelId, channel);
-        updateState({ channels: channels.current });
-      }
-    },
-    unsealChannelSummary: async (channelId, unsealed, revision) => {
-      const channel = channels.current.get(channelId);
-      if (channel.revision === revision) {
-        channel.data.unsealedSummary = unsealed;
-        channels.current.set(channelId, channel);
-        updateState({ channels: channels.current });
-      }
     },
     addTopic: async (channelId, type, message, files) => {
       if (files?.length) {

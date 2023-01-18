@@ -9,6 +9,7 @@ export function useConversationContext() {
     offsync: false,
     topics: new Map(),
     channel: null,
+    topicRevision: null,
   });
 
   const card = useContext(CardContext);
@@ -231,7 +232,6 @@ export function useConversationContext() {
                     cur.data.topicDetail = slot.data.topicDetail;
                     cur.data.detailRevision = slot.data.detailRevision;
                   }
-                  cur.data.unsealedSubject = null;
                 }
                 cur.revision = topic.revision;
                 topics.current.set(topic.id, cur);
@@ -240,7 +240,7 @@ export function useConversationContext() {
 
             marker.current = delta.marker;
             setTopicRevision.current = topicRevision;
-            updateState({ offsync: false, topics: topics.current });
+            updateState({ offsync: false, topicRevision: topicRevision, topics: topics.current });
           }
         }
         catch (err) {
@@ -310,14 +310,6 @@ export function useConversationContext() {
     getTopicAssetUrl: (topicId, assetId) => {
       const { cardId, channelId } = conversationId.current;
       return getTopicAssetUrl(cardId, channelId, topicId, assetId);
-    },
-    unsealTopicSubject: (topicId, unsealed) => {
-      const topic = topics.current.get(topicId);
-      if (topic) {
-        topic.data.unsealedSubject = unsealed;
-        topics.current.set(topicId, topic);
-        updateState({ topics: topics.current });
-      }
     },
     loadMore: async () => {
       loadMore.current = true;

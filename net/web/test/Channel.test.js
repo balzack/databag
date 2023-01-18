@@ -18,8 +18,6 @@ function ChannelView() {
 
       rendered.push(
         <div key={entry.id} data-testid="channel">
-          <span data-testid="unsealed-subject">{ entry.data.unsealedSubject }</span>
-          <span data-testid="unsealed-summary">{ entry.data.unsealedSummary }</span>
           <span data-testid="detail">{ entry.data.channelDetail.data }</span>
           <span data-testid="summary">{ entry.data.channelSummary.data }</span>
         </div>);
@@ -232,16 +230,6 @@ test('add, update and remove channel', async () => {
     expect(screen.getByTestId('channels').attributes.count.value).toBe(count.toString());
   });
 
-  await act( async () => {
-    await channelContext.actions.unsealChannelSubject('123', 'unsealedsubject', 3);
-    await channelContext.actions.unsealChannelSummary('123', 'unsealedsummary', 3);
-  });
-
-  await waitFor(async () => {
-    expect(screen.getByTestId('unsealed-subject').textContent).toBe('unsealedsubject');
-    expect(screen.getByTestId('unsealed-summary').textContent).toBe('unsealedsummary');
-  });
- 
   fetchChannels = [ { id: '123', revision: 3 } ];
 
   await act( async () => {

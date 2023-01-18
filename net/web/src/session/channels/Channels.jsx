@@ -55,8 +55,8 @@ export function Channels({ open, active }) {
         { state.channels.length > 0 && (
           <List local={{ emptyText: '' }} itemLayout="horizontal" dataSource={state.channels} gutter="0"
             renderItem={item => (
-              <ChannelItem cardId={item.cardId} channelId={item.channelId}
-                  filter={state.filter} openChannel={open} active={active} />
+              <ChannelItem item={item} openChannel={open}
+                  active={active.card === item.cardId && active.channel === item.channelId} />
             )}
           />
         )}

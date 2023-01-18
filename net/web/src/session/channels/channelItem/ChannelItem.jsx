@@ -2,33 +2,29 @@ import { Tooltip } from 'antd';
 import { ChannelItemWrapper, Markup } from './ChannelItem.styled';
 import { Logo } from 'logo/Logo';
 import { UnlockOutlined, LockFilled } from '@ant-design/icons';
-import { useChannelItem } from './useChannelItem.hook';
 
-export function ChannelItem({ cardId, channelId, filter, openChannel, active }) {
-
-  const { state } = useChannelItem(cardId, channelId, filter, active);
+export function ChannelItem({ item, openChannel, active }) {
 
   return (
-    <ChannelItemWrapper style={{ display: (!state.set || !state.visible) ? 'none' : null }}
-          onClick={() => openChannel(channelId, cardId)}>
-      <div class={state.active ? 'active' : 'idle'}>
+    <ChannelItemWrapper onClick={() => openChannel(item.channelId, item.cardId)}>
+      <div class={active ? 'active' : 'idle'}>
         <div class="item">
           <div class="avatar">
-            <Logo url={state.logo} img={state.img} width={32} height={32} radius={8} />
+            <Logo url={item.logo} img={item.img} width={32} height={32} radius={8} />
           </div>
           <div class="details">
             <div class="subject">
-              { state.locked && !state.unlocked && (
+              { item.locked && !item.unlocked && (
                 <LockFilled style={{ paddingRight: 8 }}/>
               )}
-              { state.locked && state.unlocked && (
+              { item.locked && item.unlocked && (
                 <UnlockOutlined style={{ paddingRight: 8 }}/>
               )}
-              <span>{ state.subject }</span>
+              <span>{ item.subject }</span>
             </div>
-            <div class="message">{ state.message }</div>
+            <div class="message">{ item.message }</div>
           </div>
-          { state.updatedFlag && (
+          { item.updatedFlag && (
             <Tooltip placement="topRight" title="New Message">
               <Markup />
             </Tooltip>
