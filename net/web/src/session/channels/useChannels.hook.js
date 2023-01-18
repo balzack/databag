@@ -6,7 +6,7 @@ import { AccountContext } from 'context/AccountContext';
 import { ViewportContext } from 'context/ViewportContext';
 import { ProfileContext } from 'context/ProfileContext';
 import { getCardByGuid } from 'context/cardUtil';
-import { isUnsealed, getChannelSeals, getContentKey, decryptChannelSubject } from 'context/sealUtil';
+import { isUnsealed, getChannelSeals, getContentKey, decryptChannelSubject, decryptTopicSubject } from 'context/sealUtil';
 
 export function useChannels() {
 
@@ -111,6 +111,7 @@ export function useChannels() {
         else {
           item.unlocked = false;
           item.contentKey = null;
+          item.subject = null;
         }
       }
       catch(err) {
@@ -127,6 +128,7 @@ export function useChannels() {
       }
       catch(err) {
         console.log(err);
+        item.subject = null;
       }
     }
     if (item.subject == null) {
@@ -138,7 +140,33 @@ export function useChannels() {
   }
 
   const syncChannelSummary = (item, channelValue) => {
-    item.updated = channelValue.data?.channelSummary?.lastTopic?.created;
+
+    const topic = channelValue.data?.channelSummary?.lastTopic;
+    item.updated = topic?.created;
+    if (topic?.dataType === 'superbasictopic') {
+      try {
+        const data = JSON.parse(topic.data);
+        item.message = data.text;
+      }
+      catch (err) {
+        console.log(err);
+      }
+    }
+    else if (topic?.dataType === 'sealedtopic') {
+      try {
+        if (item.contentKey) {
+          const unsealed = decryptTopicSubject(topic.data, item.contentKey);
+          item.message = unsealed?.message?.text;
+        }
+        else {
+          item.message = null;
+        }
+      }
+      catch(err) {
+        console.log(err);
+        item.message = null;
+      }
+    }
 
     // set updated revision
     item.topicRevision = channelValue.data.topicRevision;
@@ -176,7 +204,6 @@ export function useChannels() {
         }
         item.sealKey = sealKey;
         const revision = store.state[key];
-console.log("> ", channelValue.id, topicRevision, revision);
         if (login && item.updated && item.updated > login && topicRevision !== revision) {
           item.updatedFlag = true;
         }
@@ -203,7 +230,6 @@ console.log("> ", channelValue.id, topicRevision, revision);
       }
       item.sealKey = sealKey;
       const revision = store.state[key];
-console.log("> ", channelValue.id, topicRevision, revision);
       if (login && item.updated && item.updated > login && topicRevision !== revision) {
         item.updatedFlag = true;
       }
@@ -228,8 +254,18 @@ console.log("> ", channelValue.id, topicRevision, revision);
     });
 
     const filtered = merged.filter((item) => {
-      const subject = item.subject?.toUpperCase();
-      return !filter || subject?.includes(filter);    
+      if (filter) {
+        const subject = item.subject?.toUpperCase();
+        if (subject) {
+          return subject.includes(filter);
+        }
+        else {
+          return false;
+        }
+      }
+      else {
+        return true;
+      }
     });
 
     updateState({ channels: filtered });
@@ -287,7 +323,7 @@ console.log("> ", channelValue.id, topicRevision, revision);
       }
     },
     onFilter: (value) => {
-      updateState({ filter: value.toUpperCase() });
+      setFilter(value?.toUpperCase());
     },
     setShowAdd: () => {
       updateState({ showAdd: true, seal: false, members: new Set(), subject: null });

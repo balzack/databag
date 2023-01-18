@@ -23,6 +23,10 @@ export const ChannelItemWrapper = styled.div`
     align-item: center;
   }
 
+  .idle {
+    width: 100%;
+  }
+
   .item {
     display: flex;
     flex-direction: row;
@@ -35,7 +39,6 @@ export const ChannelItemWrapper = styled.div`
       display: flex;
       align-items: center;
       justify-content: center;
-      border: 1px solid ${Colors.grey};
       border-radius: 8px;
       font-size: 18px;
       flex-shrink: 0;
@@ -48,7 +51,7 @@ export const ChannelItemWrapper = styled.div`
       border: 1px solid ${Colors.grey};
       width: 32px;
       height: 32px;
-      border-radius: 8px;
+      border-radius: 4px;
       font-size: 18px;
       flex-shrink: 0;
     }
@@ -84,5 +87,5 @@ export const Markup = styled.div`
   background-color: ${Colors.background};
   width: 8px;
   height: 8px;
-  margin-right: 16px;
+  margin-right: 8px;
 `;

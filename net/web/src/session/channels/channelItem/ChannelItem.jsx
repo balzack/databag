@@ -10,7 +10,7 @@ export function ChannelItem({ item, openChannel, active }) {
       <div class={active ? 'active' : 'idle'}>
         <div class="item">
           <div class="avatar">
-            <Logo url={item.logo} img={item.img} width={32} height={32} radius={8} />
+            <Logo url={item.logo} img={item.img} width={32} height={32} radius={4} />
           </div>
           <div class="details">
             <div class="subject">
