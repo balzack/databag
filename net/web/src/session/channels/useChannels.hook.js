@@ -15,13 +15,7 @@ export function useChannels() {
   const [state, setState] = useState({
     display: null,
     channels: [],
-    sealable: false,
-    busy: false,
-
     showAdd: false,
-    subject: null,
-    members: new Set(),
-    seal: false,
   });
 
   const profile = useContext(ProfileContext);
@@ -173,16 +167,6 @@ export function useChannels() {
   };
 
   useEffect(() => {
-    const { seal, sealKey } = account.state;
-    if (seal?.publicKey && sealKey?.public && sealKey?.private && seal.publicKey === sealKey.public) {
-      updateState({ seal: false, sealable: true });
-    }
-    else {
-      updateState({ seal: false, sealable: false });
-    }
-  }, [account.state]);
-
-  useEffect(() => {
     const login = store.state['login:timestamp'];
     const conversations = new Map();
     const { sealKey } = account.state;
@@ -278,77 +262,14 @@ export function useChannels() {
   }, [viewport]);
 
   const actions = {
-    addChannel: async () => {
-      let added;
-      if (!state.busy) {
-        try {
-          updateState({ busy: true });
-          const cards = Array.from(state.members.values());
-          if (state.seal) {
-            const keys = [ account.state.sealKey.public ];
-            cards.forEach(id => {
-              keys.push(card.state.cards.get(id).data.cardProfile.seal);
-            });
-            added = await channel.actions.addSealedChannel(cards, state.subject, keys);
-          }
-          else {
-            added = await channel.actions.addBasicChannel(cards, state.subject);
-          }
-          updateState({ busy: false });
-        }
-        catch(err) {
-          console.log(err);
-          updateState({ busy: false });
-          throw new Error("failed to create new channel");
-        }
-      }
-      else {
-        throw new Error("operation in progress");
-      }
-      return added.id;
-    },
-    setSeal: (seal) => {
-      if (seal) {
-        const cards = Array.from(state.members.values());
-        const members = new Set(state.members);
-        cards.forEach(id => {
-          if (!(card.state.cards.get(id)?.data?.cardProfile?.seal)) {
-            members.delete(id);
-          }    
-        });
-        updateState({ seal: true, members });
-      }
-      else {
-        updateState({ seal: false });
-      }
-    },
     onFilter: (value) => {
       setFilter(value?.toUpperCase());
     },
     setShowAdd: () => {
-      updateState({ showAdd: true, seal: false, members: new Set(), subject: null });
+      updateState({ showAdd: true });
     },
     clearShowAdd: () => {
       updateState({ showAdd: false });
-    },
-    onMember: (string) => {
-      const members = new Set(state.members);
-      if (members.has(string)) {
-        members.delete(string);
-      }
-      else {
-        members.add(string);
-      }
-      updateState({ members });
-    },
-    setSubject: (subject) => {
-      updateState({ subject });
-    },
-    cardFilter: (card) => {
-      if (state.seal) {
-        return card?.data?.cardDetail?.status === 'connected' && card?.data?.cardProfile?.seal;
-      }
-      return card?.data?.cardDetail?.status === 'connected';
     },
   };
 

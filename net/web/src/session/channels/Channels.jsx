@@ -1,5 +1,5 @@
-import { Modal, Input, List, Button, Switch } from 'antd';
-import { ChannelsWrapper, AddFooter } from './Channels.styled';
+import { Modal, Input, List, Button } from 'antd';
+import { ChannelsWrapper } from './Channels.styled';
 import { CommentOutlined, SearchOutlined } from '@ant-design/icons';
 import { useChannels } from './useChannels.hook';
 import { ChannelItem } from './channelItem/ChannelItem';
@@ -9,34 +9,14 @@ export function Channels({ open, active }) {
 
   const { state, actions } = useChannels();
 
-  const addChannel = async () => {
-    try {
-      const id = await actions.addChannel();
-      actions.clearShowAdd();
-      open(id);
-    }
-    catch(err) {
-      Modal.error({
-        title: 'Failed to Create Topic',
-        content: 'Please try again.',
-      });
-    }
+  const added = (id) => {
+    actions.clearShowAdd();
+    open(id);
   };
 
-  const addFooter = (
-    <AddFooter>
-      <div class="seal">
-        { state.sealable && (
-          <>
-            <Switch checked={state.seal} onChange={actions.setSeal} size="small" />
-            <span class="sealText">Sealed Channel</span>
-          </>
-        )}
-      </div>
-      <Button key="back" onClick={actions.clearShowAdd}>Cancel</Button>
-      <Button key="save" type="primary" loading={state.busy} onClick={addChannel}>Save</Button>
-    </AddFooter>
-  );
+  const cancelled = () => {
+    actions.clearShowAdd();
+  }
 
   return (
     <ChannelsWrapper>
@@ -69,9 +49,8 @@ export function Channels({ open, active }) {
           <Button type="primary" icon={<CommentOutlined />} onClick={actions.setShowAdd}>New Topic</Button>
         </div>
       )}
-      <Modal title="New Topic" centered visible={state.showAdd} footer={addFooter}
-          onCancel={actions.clearShowAdd}>
-        <AddChannel state={state} actions={actions} />
+      <Modal title="New Topic" centered visible={state.showAdd} footer={null}>
+        <AddChannel added={added} cancelled={cancelled} />
       </Modal>
     </ChannelsWrapper>
   );
