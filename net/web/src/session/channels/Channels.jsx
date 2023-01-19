@@ -14,10 +14,6 @@ export function Channels({ open, active }) {
     open(id);
   };
 
-  const cancelled = () => {
-    actions.clearShowAdd();
-  }
-
   return (
     <ChannelsWrapper>
       <div class="search">
@@ -49,8 +45,9 @@ export function Channels({ open, active }) {
           <Button type="primary" icon={<CommentOutlined />} onClick={actions.setShowAdd}>New Topic</Button>
         </div>
       )}
-      <Modal title="New Topic" centered visible={state.showAdd} footer={null}>
-        <AddChannel added={added} cancelled={cancelled} />
+      <Modal title="New Topic" centered visible={state.showAdd} footer={null} destroyOnClose={true}
+          onCancel={actions.clearShowAdd}>
+        <AddChannel added={added} cancelled={actions.clearShowAdd} />
       </Modal>
     </ChannelsWrapper>
   );

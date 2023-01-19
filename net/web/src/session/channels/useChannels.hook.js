@@ -125,6 +125,7 @@ export function useChannels() {
         item.subject = null;
       }
     }
+
     if (item.subject == null || typeof item.subject !== 'string') {
       item.subject = item.label;
     }
@@ -178,10 +179,7 @@ export function useChannels() {
         if (!item) {
           item = { cardId, channelId };
         }
-        if (item.detailRevision !== detailRevision ||
-            item.sealKey !== sealKey) {
-          syncChannelDetail(item, cardValue, channelValue);
-        }
+        syncChannelDetail(item, cardValue, channelValue);
         if (item.topicRevision !== topicRevision ||
             item.sealKey !== sealKey) {
           syncChannelSummary(item, channelValue);
@@ -204,10 +202,7 @@ export function useChannels() {
       if (!item) {
         item = { channelId };
       }
-      if (item.detailRevision !== detailRevision ||
-          item.sealKey !== sealKey) {
-        syncChannelDetail(item, null, channelValue);
-      }
+      syncChannelDetail(item, null, channelValue);
       if (item.topicRevision !== topicRevision ||
           item.sealKey !== sealKey) {
         syncChannelSummary(item, channelValue);
