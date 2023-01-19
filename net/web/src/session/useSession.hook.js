@@ -111,7 +111,7 @@ export function useSession() {
       updateState({ conversation: true, cardId, channelId });
     },
     closeConversation: () => {
-      updateState({ conversation: false });
+      updateState({ conversation: false, cardId: null, channelId: null });
     },
     openDetails: () => {
       updateState({ details: true });

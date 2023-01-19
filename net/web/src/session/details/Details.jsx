@@ -11,10 +11,11 @@ import { UnlockOutlined, LockFilled } from '@ant-design/icons';
 
 export function Details({ cardId, channelId, closeDetails, closeConversation, openContact }) {
 
+  const [modal, modalContext] = Modal.useModal();
   const { state, actions } = useDetails(cardId, channelId);
 
   const deleteChannel = async () => {
-    Modal.confirm({
+    modal.confirm({
       title: 'Are you sure you want to delete the topic?',
       icon: <ExclamationCircleOutlined />,
       okText: "Yes, Delete",
@@ -32,7 +33,7 @@ export function Details({ cardId, channelId, closeDetails, closeConversation, op
       closeConversation();
     }
     catch(err) {
-      Modal.error({
+      modal.error({
         title: 'Failed to Delete Topic',
         content: 'Please try again.',
       });
@@ -40,7 +41,7 @@ export function Details({ cardId, channelId, closeDetails, closeConversation, op
   }
 
   const leaveChannel = async () => {
-    Modal.confirm({
+    modal.confirm({
       title: 'Are you sure you want to leave the topic?',
       icon: <ExclamationCircleOutlined />,
       okText: "Yes, Leave",
@@ -58,7 +59,7 @@ export function Details({ cardId, channelId, closeDetails, closeConversation, op
       closeConversation();
     }
     catch(err) {
-      Modal.error({
+      modal.error({
         title: 'Failed to Leave Topic',
         content: 'Please try again.',
       });
@@ -71,7 +72,7 @@ export function Details({ cardId, channelId, closeDetails, closeConversation, op
       actions.clearEditSubject();
     }
     catch(err) {
-      Modal.error({
+      modal.error({
         title: 'Failed to Update Subject',
         content: 'Please try again.',
       });
@@ -93,6 +94,7 @@ export function Details({ cardId, channelId, closeDetails, closeConversation, op
 
   return (
     <DetailsWrapper>
+      { modalContext }
       <div class="header">
         <div class="label">Topic</div>
         { state.display === 'xlarge' && (

@@ -45,7 +45,7 @@ export function useChannels() {
       }
       if (profile?.imageSet) {
         img = null;
-        logo = card.actions.getCardImageUrl(cardValue.data.profileRevision);
+        logo = card.actions.getCardImageUrl(cardValue.id);
       }
       else {
         img = 'avatar';
@@ -87,84 +87,96 @@ export function useChannels() {
       item.label = names.join(',');
     }
 
-    // set subject
-    const detail = channelValue.data?.channelDetail;
-    if (detail?.dataType === 'sealed') {
-      item.locked = true;
-      try {
-        const { sealKey } = account.state;
-        const seals = getChannelSeals(detail.data);
-        if (isUnsealed(seals, sealKey)) {
-          item.unlocked = true;
-          if (!item.contentKey) {
-            item.contentKey = getContentKey(seals, sealKey);
+    // update title on detailRevision or sealKey changes
+    const sealKey = account.state.sealKey;
+    const detailRevision = channelValue?.data?.detailRevision;
+    if (item.detailRevision !== detailRevision || item.sealKey !== sealKey) {
+      const detail = channelValue.data?.channelDetail;
+      if (detail?.dataType === 'sealed') {
+        item.locked = true;
+        try {
+          const { sealKey } = account.state;
+          const seals = getChannelSeals(detail.data);
+          if (isUnsealed(seals, sealKey)) {
+            item.unlocked = true;
+            if (!item.contentKey) {
+              item.contentKey = getContentKey(seals, sealKey);
+            }
+            const unsealed = decryptChannelSubject(detail.data, item.contentKey);
+            item.title = unsealed?.subject;
           }
-          const unsealed = decryptChannelSubject(detail.data, item.contentKey);
-          item.subject = unsealed?.subject;
+          else {
+            item.unlocked = false;
+            item.contentKey = null;
+            item.title = null;
+          }
         }
-        else {
+        catch(err) {
+          console.log(err);
           item.unlocked = false;
-          item.contentKey = null;
-          item.subject = null;
         }
       }
-      catch(err) {
-        console.log(err);
-        item.unlocked = false;
+      else if (detail?.dataType === 'superbasic') {
+        item.locked = false;
+        item.unlocked = true;
+        try {
+          const data = JSON.parse(detail.data);
+          item.title = data.subject;
+        }
+        catch(err) {
+          console.log(err);
+          item.title = null;
+        }
       }
-    }
-    else if (detail?.dataType === 'superbasic') {
-      item.locked = false;
-      item.unlocked = true;
-      try {
-        const data = JSON.parse(detail.data);
-        item.subject = data.subject;
-      }
-      catch(err) {
-        console.log(err);
-        item.subject = null;
-      }
+      item.detailRevision = detailRevision;
+      item.sealKey = sealKey;
     }
 
-    if (item.subject == null || typeof item.subject !== 'string') {
+    if (item.title == null || typeof item.title !== 'string') {
       item.subject = item.label;
     }
-
-    // set updated revision
-    item.detailRevision = channelValue.data.detailRevision;
+    else {
+      item.subject = item.title;
+    }
   }
+
 
   const syncChannelSummary = (item, channelValue) => {
 
-    const topic = channelValue.data?.channelSummary?.lastTopic;
-    item.updated = topic?.created;
-    if (topic?.dataType === 'superbasictopic') {
-      try {
-        const data = JSON.parse(topic.data);
-        item.message = data.text;
-      }
-      catch (err) {
-        console.log(err);
-      }
-    }
-    else if (topic?.dataType === 'sealedtopic') {
-      try {
-        if (item.contentKey) {
-          const unsealed = decryptTopicSubject(topic.data, item.contentKey);
-          item.message = unsealed?.message?.text;
+    const sealKey = account.state.sealKey;
+    const topicRevision = channelValue?.data?.topicRevision;
+    if (item.topicRevision !== topicRevision || item.sealKey !== sealKey) {
+      const topic = channelValue.data?.channelSummary?.lastTopic;
+      item.updated = topic?.created;
+      if (topic?.dataType === 'superbasictopic') {
+        try {
+          const data = JSON.parse(topic.data);
+          item.message = data.text;
         }
-        else {
+        catch (err) {
+          console.log(err);
+        }
+      }
+      else if (topic?.dataType === 'sealedtopic') {
+        try {
+          if (item.contentKey) {
+            const unsealed = decryptTopicSubject(topic.data, item.contentKey);
+            item.message = unsealed?.message?.text;
+          }
+          else {
+            item.message = null;
+          }
+        }
+        catch(err) {
+          console.log(err);
           item.message = null;
         }
       }
-      catch(err) {
-        console.log(err);
-        item.message = null;
-      }
-    }
 
-    // set updated revision
-    item.topicRevision = channelValue.data.topicRevision;
+      // set updated revision
+      item.topicRevision = topicRevision;
+      item.sealKey = sealKey;
+    }
   };
 
   useEffect(() => {
@@ -179,12 +191,10 @@ export function useChannels() {
         if (!item) {
           item = { cardId, channelId };
         }
+
         syncChannelDetail(item, cardValue, channelValue);
-        if (item.topicRevision !== topicRevision ||
-            item.sealKey !== sealKey) {
-          syncChannelSummary(item, channelValue);
-        }
-        item.sealKey = sealKey;
+        syncChannelSummary(item, channelValue);
+
         const revision = store.state[key];
         if (login && item.updated && item.updated > login && topicRevision !== revision) {
           item.updatedFlag = true;
@@ -203,11 +213,8 @@ export function useChannels() {
         item = { channelId };
       }
       syncChannelDetail(item, null, channelValue);
-      if (item.topicRevision !== topicRevision ||
-          item.sealKey !== sealKey) {
-        syncChannelSummary(item, channelValue);
-      }
-      item.sealKey = sealKey;
+      syncChannelSummary(item, channelValue);
+
       const revision = store.state[key];
       if (login && item.updated && item.updated > login && topicRevision !== revision) {
         item.updatedFlag = true;
