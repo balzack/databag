@@ -2,13 +2,13 @@ import { useContext, useState, useEffect } from 'react';
 import { ChannelContext } from 'context/ChannelContext';
 import { CardContext } from 'context/CardContext';
 import { AccountContext } from 'context/AccountContext';
+import { encryptChannelSubject } from 'context/sealUtil';
 
 export function useAddChannel() {
 
   const [state, setState] = useState({
     sealable: false,
     busy: false,
-
     showAdd: false,
     subject: null,
     members: new Set(),
@@ -45,11 +45,12 @@ export function useAddChannel() {
             cards.forEach(id => {
               keys.push(card.state.cards.get(id).data.cardProfile.seal);
             });
-
-            throw new Error("TODO");
+            const sealed = encryptChannelSubject(state.subject, keys);
+            conversation = await channel.actions.addChannel('sealed', sealed, cards);
           }
           else {
-            conversation = await channel.actions.addChannel('superbasic', state.subject, cards);
+            const subject = { subject: state.subject };
+            conversation = await channel.actions.addChannel('superbasic', subject, cards);
           }
           updateState({ busy: false });
         }

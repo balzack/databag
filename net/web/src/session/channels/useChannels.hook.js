@@ -125,7 +125,7 @@ export function useChannels() {
         item.subject = null;
       }
     }
-    if (item.subject == null) {
+    if (item.subject == null || typeof item.subject !== 'string') {
       item.subject = item.label;
     }
 

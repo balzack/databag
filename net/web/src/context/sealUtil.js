@@ -37,10 +37,10 @@ export function encryptChannelSubject(subject, publicKeys) {
 
   let seals = [];
   let crypto = new JSEncrypt();
-  publicKeys.forEach(key => {
-    crypto.setPublicKey(key);
+  publicKeys.forEach(publicKey => {
+    crypto.setPublicKey(publicKey);
     const sealedKey = crypto.encrypt(keyHex);
-    seals.push({ key, sealedKey });
+    seals.push({ publicKey, sealedKey });
   });
 
   return { subjectEncrypted, subjectIv, seals };

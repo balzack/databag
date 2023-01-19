@@ -195,7 +195,9 @@ export function useConversationContext() {
             updateState({ channel: channelSync });
           }
           else {
+            syncing.current = false;
             console.log("converstaion not found");
+            return;
           }
         }
 
