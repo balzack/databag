@@ -106,7 +106,7 @@ export function useCards() {
       updateState({ sorted: value });
     },
     resync: async (cardId) => {
-      await card.actions.resync(cardId);
+      await card.actions.resyncCard(cardId);
     },
   };
 
