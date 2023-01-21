@@ -10,53 +10,54 @@ export function Cards({ closeCards, openContact, openListing }) {
 
   return (
     <CardsWrapper>
-      <div class="search">
+      <div className="search">
         { !state.sorted && (
-          <div class="unsorted" onClick={() => actions.setSort(true)}>
+          <div className="unsorted" onClick={() => actions.setSort(true)}>
             <SortAscendingOutlined />
           </div>
         )}
         { state.sorted && (
-          <div class="sorted" onClick={() => actions.setSort(false)}>
+          <div className="sorted" onClick={() => actions.setSort(false)}>
             <SortAscendingOutlined />
           </div>
         )}
-        <div class="filter">
+        <div className="filter">
           <Input bordered={false} allowClear={true} placeholder="Contacts" prefix={<SearchOutlined />}
               spellCheck="false" onChange={(e) => actions.onFilter(e.target.value)} />
         </div>
         { state.display === 'small' && (
-          <div class="inline">
-            <div class="add" onClick={openListing}>
+          <div className="inline">
+            <div className="add" onClick={openListing}>
               <UserOutlined />
-              <div class="label">New</div>
+              <div className="label">New</div>
             </div>
           </div>
         )}
         { state.display !== 'small' && (
-          <div class="inline">
-            <div class="dismiss" onClick={closeCards} >
+          <div className="inline">
+            <div className="dismiss" onClick={closeCards} >
               <DoubleRightOutlined />
             </div>
           </div>
         )}
       </div>
-      <div class="view">
+      <div className="view">
         { state.cards.length > 0 && (
           <List local={{ emptyText: '' }} itemLayout="horizontal" dataSource={state.cards} gutter="0"
             renderItem={item => (
-              <CardItem item={item} open={openContact} />
+              <CardItem item={item} tooltip={state.tooltip} resync={() => actions.resync(item.cardId)}
+                  open={() => openContact(item.guid)} />
             )} />
         )}
         { state.cards.length === 0 && (
-          <div class="empty">No Contacts</div>
+          <div className="empty">No Contacts</div>
         )}
       </div>
       { state.display !== 'small' && (
-        <div class="bar">
-          <div class="add" onClick={openListing}>
+        <div className="bar">
+          <div className="add" onClick={openListing}>
             <UpOutlined />
-            <div class="label">Find New Contact</div>
+            <div className="label">Find New Contact</div>
           </div>
         </div>
       )}
