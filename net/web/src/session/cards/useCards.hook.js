@@ -23,7 +23,6 @@ export function useCards() {
   }
 
   useEffect(() => {
-
     const contacts = Array.from(card.state.cards.values()).map(item => {
       const profile = item?.data?.cardProfile;
       const detail = item?.data?.cardDetail;

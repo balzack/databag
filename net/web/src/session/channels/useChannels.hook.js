@@ -182,11 +182,9 @@ export function useChannels() {
   useEffect(() => {
     const login = store.state['login:timestamp'];
     const conversations = new Map();
-    const { sealKey } = account.state;
     card.state.cards.forEach((cardValue, cardId) => {
       cardValue.channels.forEach((channelValue, channelId) => {
         const key = `${channelId}::${cardId}`;
-        const { detailRevision, topicRevision } = channelValue.data;
         let item = channels.current.get(key);
         if (!item) {
           item = { cardId, channelId };
@@ -196,6 +194,7 @@ export function useChannels() {
         syncChannelSummary(item, channelValue);
 
         const revision = store.state[key];
+        const topicRevision = channelValue.data?.topicRevision;
         if (login && item.updated && item.updated > login && topicRevision !== revision) {
           item.updatedFlag = true;
         }
@@ -207,7 +206,6 @@ export function useChannels() {
     });
     channel.state.channels.forEach((channelValue, channelId) => {
       const key = `${channelId}::${undefined}`;
-      const { detailRevision, topicRevision } = channelValue.data;
       let item = channels.current.get(key);
       if (!item) {
         item = { channelId };
@@ -216,6 +214,7 @@ export function useChannels() {
       syncChannelSummary(item, channelValue);
 
       const revision = store.state[key];
+      const topicRevision = channelValue.data?.topicRevision;
       if (login && item.updated && item.updated > login && topicRevision !== revision) {
         item.updatedFlag = true;
       }

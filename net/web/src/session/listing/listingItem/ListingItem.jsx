@@ -1,17 +1,14 @@
 import { ListingItemWrapper } from './ListingItem.styled';
-import { useListingItem } from './useListingItem.hook';
 import { Logo } from 'logo/Logo';
 
-export function ListingItem({ item, node, open }) {
-
-  const { state } = useListingItem(node, item);  
+export function ListingItem({ item, open }) {
 
   return (
-    <ListingItemWrapper onClick={() => open(item.guid, item)}>
-      <Logo url={state.logo} width={32} height={32} radius={8} />
+    <ListingItemWrapper onClick={open}>
+      <Logo url={item.logo} width={32} height={32} radius={4} />
       <div class="details">
-        <div class="name">{ state.name }</div>
-        <div class="handle">{ state.handle }</div>
+        <div class="name">{ item.name }</div>
+        <div class="handle">{ item.handle }</div>
       </div>
     </ListingItemWrapper>
   );
