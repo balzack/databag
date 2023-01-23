@@ -28,7 +28,7 @@ export function useProfileContext() {
         const token = access.current;
         const revision = curRevision.current;
         const identity = await getProfile(access.current);
-        const imageUrl = identity.image ? getProfileImageUrl(token, revision) : null;
+        const imageUrl = identity.image ? getProfileImageUrl(token, identity.revision) : null;
         setRevision.current = revision;
         updateState({ offsync: false, identity, imageUrl });
       }

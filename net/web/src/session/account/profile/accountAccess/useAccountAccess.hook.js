@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect, useContext } from 'react';
 import { AccountContext } from 'context/AccountContext';
 import { ProfileContext } from 'context/ProfileContext';
+import { generateSeal, unlockSeal, updateSeal } from 'context/sealUtil';
 import { getUsername } from 'api/getUsername';
 import CryptoJS from 'crypto-js';
 import { JSEncrypt } from 'jsencrypt'
@@ -40,63 +41,18 @@ export function useAccountAccess() {
   }
 
   useEffect(() => {
-    if (profile.state.identity?.guid) {
-      const { handle } = profile.state.identity;
-      updateState({ handle, editHandle: handle });
-    }
-  }, [profile]);
+    const { handle } = profile.state.identity;
+    updateState({ handle, editHandle: handle });
+  }, [profile.state]);
 
   useEffect(() => {
-    if (account?.state?.status) {
-      const { seal, sealKey, status } = account.state;
-      updateState({ searchable: status.searchable, seal, sealKey });
-    }
-  }, [account]);
+    const { seal, sealKey, status } = account.state;
+    updateState({ searchable: status.searchable, seal, sealKey });
+  }, [account.state]);
 
-  const convertPem = (pem) => {
-    var lines = pem.split('\n');
-    var encoded = '';
-    for(var i = 0;i < lines.length;i++){
-      if (lines[i].trim().length > 0 &&
-          lines[i].indexOf('-BEGIN RSA PRIVATE KEY-') < 0 && 
-          lines[i].indexOf('-BEGIN RSA PUBLIC KEY-') < 0 &&
-          lines[i].indexOf('-BEGIN PUBLIC KEY-') < 0 &&
-          lines[i].indexOf('-END PUBLIC KEY-') < 0 &&
-          lines[i].indexOf('-END RSA PRIVATE KEY-') < 0 &&
-          lines[i].indexOf('-END RSA PUBLIC KEY-') < 0) {
-        encoded += lines[i].trim();
-      }
-    }
-    return encoded
-  };
- 
   const sealUnlock = async () => {
-
-    // generate key to encrypt private key
-    const salt = CryptoJS.enc.Hex.parse(state.seal.passwordSalt);
-    const aes = CryptoJS.PBKDF2(state.sealUnlock, salt, {
-      keySize: 256 / 32,
-      iterations: 1024,
-    });
-
-    // decrypt private key
-    const iv = CryptoJS.enc.Hex.parse(state.seal.privateKeyIv);
-    const enc = CryptoJS.enc.Base64.parse(state.seal.privateKeyEncrypted)
-
-    let cipherParams = CryptoJS.lib.CipherParams.create({
-      ciphertext: enc,
-      iv: iv
-    });
-    const dec = CryptoJS.AES.decrypt(cipherParams, aes, { iv: iv });
-    const privateKey = dec.toString(CryptoJS.enc.Utf8)
-
-    // store ke
-    const sealKey = {
-      public: state.seal.publicKey,
-      private: privateKey,
-    }
-
-    await account.actions.unlockSeal(sealKey);
+    const unlocked = unlockSeal(state.seal, state.sealUnlock);
+    await account.actions.unlockSeal(unlocked);
   };
 
   const sealForget = async () => {
@@ -104,37 +60,8 @@ export function useAccountAccess() {
   };
 
   const sealEnable = async () => {
-
-    // generate key to encrypt private key
-    const salt = CryptoJS.lib.WordArray.random(128 / 8);
-    const aes = CryptoJS.PBKDF2(state.sealPassword, salt, {
-      keySize: 256 / 32,
-      iterations: 1024,
-    });
-
-    // generate rsa key for sealing channel, delay for activity indicator
-    await new Promise(r => setTimeout(r, 1000));
-    const crypto = new JSEncrypt({ default_key_size: 2048 });
-    crypto.getKey();
-
-    // encrypt private key
-    const iv = CryptoJS.lib.WordArray.random(128 / 8);
-    const privateKey = convertPem(crypto.getPrivateKey());
-    const enc = CryptoJS.AES.encrypt(privateKey, aes, { iv: iv });
-    const publicKey = convertPem(crypto.getPublicKey());
-
-    // update account
-    const seal = {
-      passwordSalt: salt.toString(),
-      privateKeyIv: iv.toString(),
-      privateKeyEncrypted: enc.ciphertext.toString(CryptoJS.enc.Base64),
-      publicKey: publicKey, 
-    }
-    const sealKey = {
-      public: publicKey,
-      private: privateKey,
-    }
-    await account.actions.setSeal(seal, sealKey);
+    const generated = await generateSeal(state.sealPassword);
+    await account.actions.setSeal(generated.seal, generated.sealKey);
   };
 
   const sealRemove = async () => {
@@ -142,26 +69,8 @@ export function useAccountAccess() {
   };
 
   const sealUpdate = async () => {
-
-    // generate key to encrypt private key
-    const salt = CryptoJS.lib.WordArray.random(128 / 8);
-    const aes = CryptoJS.PBKDF2(state.sealPassword, salt, {
-      keySize: 256 / 32,
-      iterations: 1024,
-    });
-
-    // encrypt private key
-    const iv = CryptoJS.lib.WordArray.random(128 / 8);
-    const enc = CryptoJS.AES.encrypt(state.sealKey.private, aes, { iv: iv });
-
-    // update account
-    const seal = {
-      passwordSalt: salt.toString(),
-      privateKeyIv: iv.toString(),
-      privateKeyEncrypted: enc.ciphertext.toString(CryptoJS.enc.Base64),
-      publicKey: state.seal.publicKey,
-    }
-    await account.actions.updateSeal(seal);
+    const updated = updateSeal(state.seal, state.sealKey, state.sealPassword);
+    await account.actions.updateSeal(state.seal);
   };
 
   const isEnabled = () => {
@@ -296,18 +205,20 @@ export function useAccountAccess() {
         if (editHandle.toLowerCase() === state.handle.toLowerCase()) {
           updateState({ checked: true, editStatus: 'success', editMessage: '' });
         }
-        try {
-          let valid = await getUsername(editHandle);
-          if (valid) {
+        else {
+          try {
+            let valid = await getUsername(editHandle);
+            if (valid) {
+              updateState({ checked: true, editStatus: 'success', editMessage: '' });
+            }
+            else {
+              updateState({ checked: true, editStatus: 'error', editMessage: 'Username is not available' });
+            }
+          }
+          catch(err) {
+            console.log(err);
             updateState({ checked: true, editStatus: 'success', editMessage: '' });
           }
-          else {
-            updateState({ checked: true, editStatus: 'error', editMessage: 'Username is not available' });
-          }
-        }
-        catch(err) {
-          console.log(err);
-          updateState({ checked: true, editStatus: 'success', editMessage: '' });
         }
       }, 500);
     },

@@ -140,7 +140,7 @@ export function Profile({ closeProfile }) {
           </div>
         </div>
       </div>
-      { state.init && state.display !== 'xlarge' && (
+      { state.display !== 'xlarge' && (
         <div className="account">
           <div className="section">Account Settings</div>
           <div className="controls">

@@ -1,11 +1,11 @@
 import { AccountAccessWrapper, SealModal, EditFooter } from './AccountAccess.styled';
 import { useAccountAccess } from './useAccountAccess.hook';
-import { AccountLogin } from './accountLogin/AccountLogin';
-import { Button, Modal, Switch, Input } from 'antd';
-import { SettingOutlined, LockOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
+import { Button, Modal, Switch, Form, Input } from 'antd';
+import { SettingOutlined, UserOutlined, LockOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 
 export function AccountAccess() {
 
+  const [ modal, modalContext ] = Modal.useModal();
   const { state, actions } = useAccountAccess();
 
   const saveSeal = async () => {
@@ -15,7 +15,7 @@ export function AccountAccess() {
     }
     catch (err) {
       console.log(err);
-      Modal.error({
+      modal.error({
         title: 'Failed to Set Sealing Key',
         comment: 'Please try again.',
       });
@@ -28,7 +28,7 @@ export function AccountAccess() {
     }
     catch (err) {
       console.log(err);
-      Modal.error({
+      modal.error({
         title: 'Update Registry Failed',
         content: 'Please try again.',
       });
@@ -42,7 +42,7 @@ export function AccountAccess() {
     }
     catch (err) {
       console.log(err);
-      Modal.error({
+      modal.error({
         title: 'Failed to Save',
         comment: 'Please try again.',
       });
@@ -51,7 +51,7 @@ export function AccountAccess() {
 
   const editLoginFooter = (
     <EditFooter>
-      <div class="select"></div>
+      <div className="select"></div>
       <Button key="back" onClick={actions.clearEditLogin}>Cancel</Button>
       <Button key="save" type="primary" onClick={saveLogin} disabled={!actions.canSaveLogin()} loading={state.busy}>Save</Button>
     </EditFooter>
@@ -59,7 +59,7 @@ export function AccountAccess() {
 
   const editSealFooter = (
     <EditFooter>
-      <div class="select"></div>
+      <div className="select"></div>
       <Button key="back" onClick={actions.clearEditSeal}>Cancel</Button>
       { state.sealMode === 'enabled' && (
         <Button key="save" type="primary" onClick={saveSeal} loading={state.busy}>Forget</Button>
@@ -75,50 +75,51 @@ export function AccountAccess() {
         
   return (
     <AccountAccessWrapper>
-      <div class="switch">
+      { modalContext }
+      <div className="switch">
         <Switch size="small" checked={state.searchable} onChange={enable => saveSearchable(enable)} />
-        <div class="switchLabel">Visible in Registry &nbsp;&nbsp;</div>
+        <div className="switchLabel">Visible in Registry &nbsp;&nbsp;</div>
       </div>
-      <div class="link" onClick={actions.setEditSeal}>
+      <div className="link" onClick={actions.setEditSeal}>
         <SettingOutlined />
-        <div class="label">Sealed Topics</div>
+        <div className="label">Sealed Topics</div>
       </div>
-      <div class="link" onClick={actions.setEditLogin}>
+      <div className="link" onClick={actions.setEditLogin}>
         <LockOutlined />
-        <div class="label">Change Login</div>
+        <div className="label">Change Login</div>
       </div>
       <Modal title="Topic Sealing Key" centered visible={state.editSeal} footer={editSealFooter} onCancel={actions.clearEditSeal}>
         <SealModal>
-          <div class="switch">
+          <div className="switch">
             <Switch size="small" checked={state.sealEnabled} onChange={enable => actions.enableSeal(enable)} />
-            <div class="switchLabel">Enable Sealed Topics</div>
+            <div className="switchLabel">Enable Sealed Topics</div>
           </div>
           { (state.sealMode === 'updating' || state.sealMode === 'enabling') && (
-            <div class="sealPassword">
+            <div className="sealPassword">
               <Input.Password placeholder="New Password" spellCheck="false" onChange={(e) => actions.setSealPassword(e.target.value)}
                 autocomplete="new-password" prefix={<LockOutlined />} />
             </div>
           )}
           { (state.sealMode === 'updating' || state.sealMode === 'enabling') && (
-            <div class="sealPassword">
+            <div className="sealPassword">
               <Input.Password placeholder="Confirm Password" spellCheck="false" onChange={(e) => actions.setSealConfirm(e.target.value)}
                 autocomplete="new-password" prefix={<LockOutlined />} />
             </div>
           )}
           { state.sealMode === 'disabling' && (
-            <div class="sealPassword">
+            <div className="sealPassword">
               <Input placeholder="Type 'delete' to remove key" spellCheck="false" onChange={(e) => actions.setSealDelete(e.target.value)}
                 prefix={<ExclamationCircleOutlined />} />
             </div>
           )}
           { state.sealMode === 'enabled' && (
-            <div class="sealPassword" onClick={() => actions.updateSeal()}>
+            <div className="sealPassword" onClick={() => actions.updateSeal()}>
               <Input.Password defaultValue="xxxxxxxxxx" disabled={true} prefix={<LockOutlined />} />
-              <div class="editPassword" />
+              <div className="editPassword" />
             </div>
           )}
           { state.sealMode === 'unlocking' && (
-            <div class="sealPassword">
+            <div className="sealPassword">
               <Input.Password placeholder="Password" spellCheck="false" onChange={(e) => actions.setSealUnlock(e.target.value)}
                 prefix={<LockOutlined />} />
             </div>
@@ -127,7 +128,22 @@ export function AccountAccess() {
       </Modal>
       <Modal title="Account Login" centered visible={state.editLogin} footer={editLoginFooter}
           onCancel={actions.clearEditLogin}>
-        <AccountLogin state={state} actions={actions} />
+        <Form name="basic" wrapperCol={{ span: 24, }}>
+            <Form.Item name="username" validateStatus={state.editStatus} help={state.editMessage}>
+              <Input placeholder="Username" spellCheck="false" onChange={(e) => actions.setEditHandle(e.target.value)}
+                  defaultValue={state.editHandle} autocomplete="username" autocapitalize="none" prefix={<UserOutlined />} />
+            </Form.Item>
+
+            <Form.Item name="password">
+              <Input.Password placeholder="Password" spellCheck="false" onChange={(e) => actions.setEditPassword(e.target.value)}
+                  autocomplete="new-password" prefix={<LockOutlined />} />
+            </Form.Item>
+
+            <Form.Item name="confirm">
+              <Input.Password placeholder="Confirm Password" spellCheck="false" onChange={(e) => actions.setEditConfirm(e.target.value)}
+                  autocomplete="new-password" prefix={<LockOutlined />} />
+            </Form.Item>
+        </Form>
       </Modal>
     </AccountAccessWrapper>
   );

@@ -173,8 +173,6 @@ export const ProfileWrapper = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    border-top: 1px solid ${Colors.divider};
-    border-radius: 4px;
     padding: 8px;
     width: 75%;
   }

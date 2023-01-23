@@ -18,10 +18,8 @@ export function useProfile() {
     editProfileImage: false,
     editProfileDetails: false,
     clip: { w: 0, h: 0, x: 0, y: 0 },
-
     crop: { x: 0, y: 0},
     zoom: 1,
-
     busy: false,
   });
 
@@ -35,13 +33,11 @@ export function useProfile() {
   }
 
   useEffect(() => {
-    if (profile.state.identity.guid) {
-      const { node, name, handle, location, description, image, imageUrl } = profile.state.identity;
-      let url = !image ? null : profile.state.imageUrl;
-      let editImage = !image ? avatar : url;
-      updateState({ name, location, description, node, handle, url, 
-          editName: name, editLocation: location, editDescription: description, editHandle: handle, editImage });
-    }
+    const { node, name, handle, location, description, image, imageUrl } = profile.state.identity;
+    let url = !image ? null : profile.state.imageUrl;
+    let editImage = !image ? avatar : url;
+    updateState({ name, location, description, node, handle, url, 
+        editName: name, editLocation: location, editDescription: description, editHandle: handle, editImage });
   }, [profile.state]);
 
   useEffect(() => {
