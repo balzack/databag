@@ -7,9 +7,6 @@ import avatar from 'images/avatar.png';
 export function useProfile() {
   
   const [state, setState] = useState({
-    init: false,
-    editProfileImage: false,
-    editProfileDetails: false,
     handle: null,
     name: null,
     location: null,
@@ -18,10 +15,14 @@ export function useProfile() {
     editName: null,
     editLocation: null,
     editDescription: null,
-    crop: { w: 0, h: 0, x: 0, y: 0 },
+    editProfileImage: false,
+    editProfileDetails: false,
+    clip: { w: 0, h: 0, x: 0, y: 0 },
+
+    crop: { x: 0, y: 0},
+    zoom: 1,
+
     busy: false,
-    searchable: null,
-    checked: true,
   });
 
   const IMAGE_DIM = 256;
@@ -35,17 +36,17 @@ export function useProfile() {
 
   useEffect(() => {
     if (profile.state.identity.guid) {
-      const { node, name, handle, location, description, image } = profile.state.identity;
+      const { node, name, handle, location, description, image, imageUrl } = profile.state.identity;
       let url = !image ? null : profile.state.imageUrl;
       let editImage = !image ? avatar : url;
-      updateState({ init: true, name, location, description, node, handle, url, 
+      updateState({ name, location, description, node, handle, url, 
           editName: name, editLocation: location, editDescription: description, editHandle: handle, editImage });
     }
-  }, [profile]);
+  }, [profile.state]);
 
   useEffect(() => {
     updateState({ display: viewport.state.display });
-  }, [viewport]);
+  }, [viewport.state]);
 
   const actions = {
     logout: app.actions.logout,
@@ -65,7 +66,7 @@ export function useProfile() {
       updateState({ editProfileDetails: false });
     },
     setEditImageCrop: (w, h, x, y) => {
-      updateState({ crop: { w, h, x, y }});
+      updateState({ clip: { w, h, x, y }});
     },
     setEditName: (editName) => {
       updateState({ editName });
@@ -75,6 +76,12 @@ export function useProfile() {
     },
     setEditDescription: (editDescription) => {
       updateState({ editDescription });
+    },
+    setCrop: (crop) => {
+      updateState({ crop });
+    },
+    setZoom: (zoom) => {
+      updateState({ zoom });
     },
     setProfileImage: async () => {
       if(!state.busy) {
@@ -89,7 +96,7 @@ export function useProfile() {
                 canvas.width = IMAGE_DIM;
                 canvas.height = IMAGE_DIM;
                 context.imageSmoothingQuality = "medium";
-                context.drawImage(img, state.crop.x, state.crop.y, state.crop.w, state.crop.h,
+                context.drawImage(img, state.clip.x, state.clip.y, state.clip.w, state.clip.h,
                     0, 0, IMAGE_DIM, IMAGE_DIM);
                 resolve(canvas.toDataURL());
               }

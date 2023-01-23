@@ -204,4 +204,24 @@ export const EditFooter = styled.div`
     flex-grow: 1;
   }
 `
+export const ProfileDetailsWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  .info {
+    width: 100%;
+    padding: 8px;
+  }
+`;
+
+export const ProfileImageWrapper = styled.div`
+  position: relative;
+  height: 256px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
 

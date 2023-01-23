@@ -1,12 +1,11 @@
-import { useRef } from 'react';
-import { Space, Modal, Button } from 'antd';
-import { ProfileWrapper, EditFooter } from './Profile.styled';
+import { useRef, useCallback } from 'react';
+import { Space, Modal, Input, Button } from 'antd';
+import { ProfileWrapper, ProfileDetailsWrapper, ProfileImageWrapper, EditFooter } from './Profile.styled';
 import { useProfile } from './useProfile.hook';
-import { ProfileImage } from './profileImage/ProfileImage';
-import { ProfileDetails } from './profileDetails/ProfileDetails';
 import { Logo } from 'logo/Logo';
 import { AccountAccess } from './accountAccess/AccountAccess';
 import { LogoutOutlined, RightOutlined, EditOutlined, BookOutlined, EnvironmentOutlined } from '@ant-design/icons';
+import Cropper from 'react-easy-crop';
 
 export function Profile({ closeProfile }) {
 
@@ -65,7 +64,7 @@ export function Profile({ closeProfile }) {
     <EditFooter>
       <input type='file' id='file' accept="image/*" ref={imageFile} onChange={e => selected(e)} style={{display: 'none'}}/>
       <div className="select">
-        <Button key="select" className="select" onClick={() => imageFile.current.click()}>Select Image</Button>
+        <Button key="select" className="pic" onClick={() => imageFile.current.click()}>Select Image</Button>
       </div>
       <Button key="back" onClick={actions.clearEditProfileImage}>Cancel</Button>
       <Button key="save" type="primary" onClick={saveImage} loading={state.busy}>Save</Button>
@@ -79,6 +78,11 @@ export function Profile({ closeProfile }) {
       <Button key="save" type="primary" onClick={saveDetails} loading={state.busy}>Save</Button>
     </EditFooter>
   );
+
+  const onCropComplete = useCallback((area, crop) => {
+    actions.setEditImageCrop(crop.width, crop.height, crop.x, crop.y)
+    // eslint-disable-next-line
+  }, []);
 
   return (
     <ProfileWrapper>
@@ -152,11 +156,31 @@ export function Profile({ closeProfile }) {
       )}
       <Modal title="Profile Image" centered visible={state.editProfileImage} footer={editImageFooter}
           onCancel={actions.clearEditProfileImage}>
-        <ProfileImage state={state} actions={actions} />
+
+        <ProfileImageWrapper>
+          <Cropper image={state.editImage} crop={state.crop} zoom={state.zoom} aspect={1}
+              onCropChange={actions.setCrop} onCropComplete={onCropComplete} onZoomChange={actions.setZoom} />
+        </ProfileImageWrapper>
+
       </Modal>
       <Modal title="Profile Details" centered visible={state.editProfileDetails} footer={editDetailsFooter}
           onCancel={actions.clearEditProfileDetails}>
-        <ProfileDetails state={state} actions={actions} />
+
+        <ProfileDetailsWrapper>
+          <div class="info">
+            <Input placeholder="Name" spellCheck="false" onChange={(e) => actions.setEditName(e.target.value)}
+                defaultValue={state.editName} autocapitalize="word" />
+          </div>
+          <div class="info">
+            <Input placeholder="Location" spellCheck="false" onChange={(e) => actions.setEditLocation(e.target.value)}
+                defaultValue={state.editLocation} autocapitalize="word" />
+          </div>
+          <div class="info">
+            <Input.TextArea placeholder="Description" onChange={(e) => actions.setEditDescription(e.target.value)}
+                spellCheck="false" defaultValue={state.editDescription} autoSize={{ minRows: 2, maxRows: 6 }} />
+          </div>
+        </ProfileDetailsWrapper>
+
       </Modal>
     </ProfileWrapper>
   );
