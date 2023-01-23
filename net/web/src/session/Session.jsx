@@ -7,7 +7,7 @@ import { Identity } from './identity/Identity';
 import { Channels } from './channels/Channels';
 import { Cards } from './cards/Cards';
 import { Contact } from './contact/Contact';
-import { Profile } from './profile/Profile';
+import { Profile } from './account/profile/Profile';
 import { Listing } from './listing/Listing';
 import { Account } from './account/Account';
 import { Welcome } from './welcome/Welcome';

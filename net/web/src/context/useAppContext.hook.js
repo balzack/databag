@@ -37,6 +37,10 @@ export function useAppContext(websocket) {
   const channelContext = useContext(ChannelContext);
   const cardContext = useContext(CardContext);
 
+  useEffect(() => {
+    console.log(state.status);
+  }, [state.status]);
+
   const setSession = (token) => {
     try {
       accountContext.actions.setToken(token);
