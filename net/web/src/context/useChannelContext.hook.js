@@ -57,28 +57,30 @@ export function useChannelContext() {
             if (cur == null) {
               cur = { id: channel.id, data: { } }
             }
-            if (cur.data.detailRevision !== channel.data.detailRevision) {
-              if (channel.data.channelDetail != null) {
-                cur.data.channelDetail = channel.data.channelDetail;
+            if (cur.revision !== channel.revision) {
+              if (cur.data.detailRevision !== channel.data.detailRevision) {
+                if (channel.data.channelDetail != null) {
+                  cur.data.channelDetail = channel.data.channelDetail;
+                }
+                else {
+                  let detail = await getChannelDetail(token, channel.id);
+                  cur.data.channelDetail = detail;
+                }
+                cur.data.detailRevision = channel.data.detailRevision;
               }
-              else {
-                let detail = await getChannelDetail(token, channel.id);
-                cur.data.channelDetail = detail;
+              if (cur.data.topicRevision !== channel.data.topicRevision) {
+                if (channel.data.channelSummary != null) {
+                  cur.data.channelSummary = channel.data.channelSummary;
+                }
+                else {
+                  let summary = await getChannelSummary(token, channel.id);
+                  cur.data.channelSummary = summary;
+                }
+                cur.data.topicRevision = channel.data.topicRevision;
               }
-              cur.data.detailRevision = channel.data.detailRevision;
+              cur.revision = channel.revision;
+              channels.current.set(channel.id, cur);
             }
-            if (cur.data.topicRevision !== channel.data.topicRevision) {
-              if (channel.data.channelSummary != null) {
-                cur.data.channelSummary = channel.data.channelSummary;
-              }
-              else {
-                let summary = await getChannelSummary(token, channel.id);
-                cur.data.channelSummary = summary;
-              }
-              cur.data.topicRevision = channel.data.topicRevision;
-            }
-            cur.revision = channel.revision;
-            channels.current.set(channel.id, cur);
           }
           else {
             channels.current.delete(channel.id);

@@ -181,7 +181,7 @@ test('resync contact', async () => {
 
   fetchCards = [{
     id: '000a',
-    revision: 1,
+    revision: 2,
     data: {
       detailRevision: 2,
       profileRevision: 3,

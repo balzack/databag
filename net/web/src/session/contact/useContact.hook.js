@@ -15,7 +15,6 @@ export function useContact(guid, listing, close) {
     description: null,
     handle: null,
     node: null,
-    removed: false,
     status: null,
     busy: false,
     buttonStatus: 'button idle',
@@ -58,7 +57,8 @@ export function useContact(guid, listing, close) {
       updateState({ logo, name, location, description, handle, node, status: 'unsaved', cardId: null });
     }
     else {
-      updateState({ removed: true });
+      updateState({ logo: null, name: null, cardId: null, location: null, description: null, handle: null,
+          node: null, status: null });
     }
     // eslint-disable-next-line
   }, [card.state, guid, listing]); 

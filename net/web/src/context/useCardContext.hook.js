@@ -89,39 +89,42 @@ export function useCardContext() {
             if (cur == null) {
               cur = { id: card.id, data: { articles: new Map() }, offsync: false, channels: new Map() }
             }
-            if (cur.data.detailRevision !== card.data.detailRevision) {
-              if (card.data.cardDetail != null) {
-                cur.data.cardDetail = card.data.cardDetail;
+            if (cur.revision !== card.revision) {
+              if (cur.data.detailRevision !== card.data.detailRevision) {
+                if (card.data.cardDetail != null) {
+                  cur.data.cardDetail = card.data.cardDetail;
+                }
+                else {
+                  cur.data.cardDetail = await getCardDetail(access.current, card.id);
+                }
+                cur.data.detailRevision = card.data.detailRevision;
               }
-              else {
-                cur.data.cardDetail = await getCardDetail(access.current, card.id);
+              if (cur.data.profileRevision !== card.data.profileRevision) {
+                if (card.data.cardProfile != null) {
+                  cur.data.cardProfile = card.data.cardProfile;
+                }
+                else {
+                  cur.data.cardProfile = await getCardProfile(access.current, card.id);
+                }
+                cur.data.profileRevision = card.data.profileRevision;
               }
-              cur.data.detailRevision = card.data.detailRevision;
-            }
-            if (cur.data.profileRevision !== card.data.profileRevision) {
-              if (card.data.cardProfile != null) {
-                cur.data.cardProfile = card.data.cardProfile;
-              }
-              else {
-                cur.data.cardProfile = await getCardProfile(access.current, card.id);
-              }
-              cur.data.profileRevision = card.data.profileRevision;
-            }
 
-            if (cur.data.cardDetail.status === 'connected' && !cur.offsync) {
-              cur.data.curNotifiedView = card.data.notifiedView;
-              cur.data.curNotifiedProfile = card.data.notifiedProfile;
-              cur.data.curNotifiedArticle = card.data.notifiedArticle;
-              cur.data.curNotifiedChannel = card.data.notifiedChannel;
-              try {
-                await syncCard(token, cur);
+              if (cur.data.cardDetail.status === 'connected' && !cur.offsync) {
+                cur.data.curNotifiedView = card.data.notifiedView;
+                cur.data.curNotifiedProfile = card.data.notifiedProfile;
+                cur.data.curNotifiedArticle = card.data.notifiedArticle;
+                cur.data.curNotifiedChannel = card.data.notifiedChannel;
+                try {
+                  await syncCard(token, cur);
+                }
+                catch (err) {
+                  console.log(err);
+                  cur.offsync = true;
+                }
               }
-              catch (err) {
-                console.log(err);
-                cur.offsync = true;
-              }
+              cur.revision = card.revision;
+              cards.current.set(card.id, cur);
             }
-            cards.current.set(card.id, cur);
           }
           else {
             cards.current.delete(card.id);

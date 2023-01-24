@@ -299,7 +299,7 @@ test('add, update, and remove topic', async() => {
   });
 
   fetchChannels = [
-    { id: '123', revision: 2, data: {
+    { id: '123', revision: 3, data: {
         detailRevision: 3,
         topicRevision: 7,
       }
@@ -307,7 +307,7 @@ test('add, update, and remove topic', async() => {
   ];
 
   fetchTopics = [
-    { id: '888', revision: 5, data: {
+    { id: '888', revision: 6, data: {
       detailRevision: 4,
       tagRevision: 0,
     }
@@ -453,7 +453,7 @@ test('load more', async() => {
 
   fetchCards = [{
     id: '000a',
-    revision: 1,
+    revision: 2,
     data: {
       detailRevision: 2,
       profileRevision: 3,
