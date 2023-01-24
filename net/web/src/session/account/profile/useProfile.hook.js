@@ -33,7 +33,7 @@ export function useProfile() {
   }
 
   useEffect(() => {
-    const { node, name, handle, location, description, image, imageUrl } = profile.state.identity;
+    const { node, name, handle, location, description, image } = profile.state.identity;
     let url = !image ? null : profile.state.imageUrl;
     let editImage = !image ? avatar : url;
     updateState({ name, location, description, node, handle, url, 
