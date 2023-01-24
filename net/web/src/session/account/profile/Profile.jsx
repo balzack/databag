@@ -1,5 +1,5 @@
 import { useRef, useCallback } from 'react';
-import { Space, Modal, Input, Button } from 'antd';
+import { Modal, Input, Button } from 'antd';
 import { ProfileWrapper, ProfileDetailsWrapper, ProfileImageWrapper, EditFooter } from './Profile.styled';
 import { useProfile } from './useProfile.hook';
 import { Logo } from 'logo/Logo';

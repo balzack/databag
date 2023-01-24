@@ -3,9 +3,6 @@ import { AccountContext } from 'context/AccountContext';
 import { ProfileContext } from 'context/ProfileContext';
 import { generateSeal, unlockSeal, updateSeal } from 'context/sealUtil';
 import { getUsername } from 'api/getUsername';
-import CryptoJS from 'crypto-js';
-import { JSEncrypt } from 'jsencrypt'
-
 export function useAccountAccess() {
   
   const [state, setState] = useState({
@@ -70,7 +67,7 @@ export function useAccountAccess() {
 
   const sealUpdate = async () => {
     const updated = updateSeal(state.seal, state.sealKey, state.sealPassword);
-    await account.actions.updateSeal(state.seal);
+    await account.actions.updateSeal(updated.seal);
   };
 
   const isEnabled = () => {
