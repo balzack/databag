@@ -11,9 +11,9 @@ export function getCardByGuid(cards, guid) {
 export function getProfileByGuid(cards, guid) {
   const card = getCardByGuid(cards, guid);
   if (card?.data?.cardProfile) {
-    const { name, handle, imageSet } = card.data.cardProfile;
+    const { name, handle, imageSet, node } = card.data.cardProfile;
     const cardId = card.id;
-    return { cardId, name, handle, imageSet }
+    return { cardId, name, handle, imageSet, node }
   }
   return {};
 }

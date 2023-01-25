@@ -1,34 +1,41 @@
-import { useContext, useState, useEffect } from 'react';
+import { useContext, useRef, useState, useEffect } from 'react';
 import { ViewportContext } from 'context/ViewportContext';
 import { AccountContext } from 'context/AccountContext';
 import { ConversationContext } from 'context/ConversationContext';
 import { UploadContext } from 'context/UploadContext';
 import { StoreContext } from 'context/StoreContext';
+import { CardContext } from 'context/CardContext';
+import { ProfileContext } from 'context/ProfileContext';
+import { isUnsealed, getChannelSeals, getContentKey } from 'context/sealUtil';
 import { JSEncrypt } from 'jsencrypt'
+
+import { decryptTopicSubject } from 'context/sealUtil';
+import { getProfileByGuid } from 'context/cardUtil';
 
 export function useConversation(cardId, channelId) {
 
   const [state, setState] = useState({
     display: null,
-    logo: null,
-    subject: null,
-    topics: [],
-    loadingInit: false,
-    loadingMore: false,
     upload: false,
     uploadError: false,
     uploadPercent: 0,
-    error: false,
+    topics: [],
+    loading: false,
     sealed: false,
-    sealKey: null,
-    delayed: false,
+    contentKey: null,
   });
 
+  const profile = useContext(ProfileContext);
+  const card = useContext(CardContext);
   const account = useContext(AccountContext);
   const viewport = useContext(ViewportContext);  
   const conversation = useContext(ConversationContext);
   const upload = useContext(UploadContext);
   const store = useContext(StoreContext);
+
+  const loading = useRef(false);
+  const conversationId = useRef(null);
+  const topics = useRef(new Map());
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
@@ -39,19 +46,28 @@ export function useConversation(cardId, channelId) {
   }, [viewport]);
 
   useEffect(() => {
-    let sealKey;
-    const seals = conversation.state.seals;
-    if (seals?.length > 0) {
-      seals.forEach(seal => {
-        if (seal.publicKey === account.state.sealKey?.public) {
-          let crypto = new JSEncrypt();
-          crypto.setPrivateKey(account.state.sealKey.private);
-          sealKey = crypto.decrypt(seal.sealedKey);
+    const { dataType, data } = conversation.state.channel?.data?.channelDetail || {};
+    if (dataType === 'sealed') {
+      try {
+        const { sealKey } = account.state;
+        const seals = getChannelSeals(data);
+        if (isUnsealed(seals, sealKey)) {
+          const contentKey = getContentKey(seals, sealKey);
+          updateState({ sealed: true, contentKey });
         }
-      });
+        else {
+          updateState({ sealed: true, contentKey: null });
+        }
+      }
+      catch (err) {
+        console.log(err);
+        updateState({ sealed: true, contentKey: null });
+      }
     }
-    updateState({ sealed: conversation.state.sealed, sealKey });
-  }, [account.state.sealKey, conversation.state.seals, conversation.state.sealed]);
+    else {
+      updateState({ sealed: false, contentKey: null });
+    }
+  }, [account.state.sealKey, conversation.state.channel?.data?.channelDetail]);
 
   useEffect(() => {
     let active = false;
@@ -83,42 +99,133 @@ export function useConversation(cardId, channelId) {
     }
 
     updateState({ upload: active, uploadError, uploadPercent });
-  }, [cardId, channelId, upload]);
+  }, [cardId, channelId, upload.state]);
+  
+  const setChannel = async () => {
+    if (!loading.current && conversationId.current) {
+      const { card, channel } = conversationId.current;
+      loading.current = true;
+      conversationId.current = null;
+      updateState({ loading: true });
+      await conversation.setChannel(card, channel);
+      updateState({ loading: false });
+      loading.current = false;
+      await setChannel();
+    }
+  }
 
   useEffect(() => {
-    updateState({ delayed: false, topics: [] });
-    setTimeout(() => {
-      updateState({ delayed: true });
-    }, 250);
     conversation.actions.setChannel(cardId, channelId);
     // eslint-disable-next-line
   }, [cardId, channelId]);
 
+  const syncTopic = async (item, value) => {
+    const revision = value.data?.detailRevision;
+    const detail = value.data?.topicDetail || {};
+    const identity = profile.state.identity || {};
+    
+    item.create = detail.created;
+    const date = new Date(detail.created * 1000);
+    const now = new Date();
+    const offset = now.getTime() - date.getTime();
+    if(offset < 86400000) {
+      item.createdStr = date.toLocaleTimeString([], {hour: 'numeric', minute:'2-digit'});
+    }
+    else if (offset < 31449600000) {
+      item.createdStr = date.toLocaleDateString("en-US", {day: 'numeric', month:'numeric'});
+    }
+    else {
+      item.createdStr = date.toLocaleDateString("en-US");
+    }
+
+    if (detail.guid === identity.guid) {
+      item.creator = true;
+      item.imageUrl = profile.state.imageUrl;
+      if (identity.name) {
+        item.name = identity.name;
+        item.nameSet = true;
+      }
+      else {
+        item.name = `${identity.handle}@${identity.node}`;
+        item.nameSet = false;
+      }
+    }
+    else {
+      item.creator = false;
+      const contact = getProfileByGuid(card.state.cards, detail.guid);
+      if (contact) {
+        item.imageUrl = contact.imageSet ? card.actions.getCardImageUrl(contact.cardId) : null;
+        if (contact.name) {
+          item.name = contact.name;
+          item.nameSet = true;
+        }
+        else {
+          item.name = `${contact.handle}@${contact.node}`;
+          item.nameSet = false;
+        }
+      }
+      else {
+        item.imageUrl = null;
+        item.name = 'unknown';
+        item.nameSet = false;
+      }
+    }
+
+    if (detail.dataType === 'superbasictopic') {
+      if (item.revision !== revision) {
+        try {
+          const message = JSON.parse(detail.data);
+          item.text = message.text;
+          item.textColor = message.textColor ? message.textColor : '#444444';
+          item.textSize = message.textSize ? message.textSize : 14;
+        }
+        catch (err) {
+          console.log(err);
+        }
+      }
+    }
+    if (detail.dataType === 'sealedtopic') {
+      if (item.revision !== revision || item.contentKey !== state.contentKey) {
+        item.contentKey = state.contentKey;
+        try {
+          const subject = decryptTopicSubject(detail.data, state.contentKey);
+          item.text = subject.message.text;
+          item.textColor = subject.message.textColor ? subject.message.textColor : '#444444';
+          item.textSize = subject.message.textSize ? subject.message.textSize : 14;
+        }
+        catch (err) {
+          console.log(err);
+        }
+      }
+    }
+    item.revision = revision;
+  };
+
   useEffect(() => {
-    let topics = Array.from(conversation.state.topics.values()).sort((a, b) => {
-      const aTimestamp = a?.data?.topicDetail?.created;
-      const bTimestamp = b?.data?.topicDetail?.created;
-      if(aTimestamp === bTimestamp) {
+    const messages = new Map();
+    conversation.state.topics.forEach((value, topicId) => {
+      let item = topics.current.get(topicId);
+      if (!item) {
+        item = { topicId };
+      }
+      syncTopic(item, value);
+      messages.set(topicId, item);
+    });
+    topics.current = messages;
+
+    const sorted = Array.from(messages.values()).sort((a, b) => {
+      if(a.created === b.created) {
         return 0;
       }
-      if(aTimestamp == null || aTimestamp < bTimestamp) {
+      if(a.created == null || a.created < b.created) {
         return -1;
       }
       return 1;
     });
-    if (topics.length) {
-      updateState({ delayed: false });
-    }
-    else {
-      setTimeout(() => {
-        updateState({ delayed: true });
-      }, 250);
-    }
-    const { error, loadingInit, loadingMore, subject, logoUrl, logoImg } = conversation.state;
-    updateState({ topics, error, loadingInit, loadingMore, subject, logoUrl, logoImg });
-    store.actions.setValue(`${channelId}::${cardId}`, Number(conversation.state.topicRevision));
-    // eslint-disable-next-line 
-  }, [conversation]);
+
+    updateState({ topics: sorted });
+    // eslint-disable-next-line
+  }, [conversation.state, profile.state, card.state, state.contentKey]);
 
   const actions = {
     more: () => {

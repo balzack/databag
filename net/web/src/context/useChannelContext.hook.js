@@ -153,7 +153,7 @@ export function useChannelContext() {
         const subject = message([]);
         await addChannelTopic(access.current, channelId, type, subject);
       }
-      await resync();
+      //await resync();
     },
     removeTopic: async (channelId, topicId) => {
       await removeChannelTopic(access.current, channelId, topicId);

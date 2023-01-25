@@ -212,7 +212,7 @@ export function useConversationContext() {
               delta = await getTopicDelta(cardId, channelId, null, COUNT, null, marker.current);
             }
             else {
-              delta = await getTopicDelta(cardId, channelId, topicRevision, null, marker.current, null);
+              delta = await getTopicDelta(cardId, channelId, setTopicRevision.current, null, marker.current, null);
             }
 
             for (let topic of delta?.topics) {
@@ -240,8 +240,9 @@ export function useConversationContext() {
               }
             }
 
-            marker.current = delta.marker;
+            marker.current = delta.marker ? delta.marker : marker.current;
             setTopicRevision.current = topicRevision;
+
             updateState({ offsync: false, topicRevision: topicRevision, topics: topics.current });
           }
         }

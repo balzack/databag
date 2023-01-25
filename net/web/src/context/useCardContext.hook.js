@@ -185,6 +185,7 @@ export function useCardContext() {
     else {
       delta = await getContactChannels(node, token, setNotifiedView, setNotifiedChannel);
     }
+
     for (let channel of delta) {
       if (channel.data) {
         let cur = card.channels.get(channel.id);
@@ -299,7 +300,7 @@ export function useCardContext() {
         const subject = message([]);
         await addContactChannelTopic(node, token, channelId, type, subject, files);
       }
-      resyncCard(cardId);
+      //resyncCard(cardId);
     },
     removeTopic: async (cardId, channelId, topicId) => {
       const card = cards.current.get(cardId);

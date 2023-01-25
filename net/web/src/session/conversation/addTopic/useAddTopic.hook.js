@@ -2,14 +2,14 @@ import { useContext, useState, useEffect } from 'react';
 import { CardContext } from 'context/CardContext';
 import { ChannelContext } from 'context/ChannelContext';
 import { ConversationContext } from 'context/ConversationContext';
+import { encryptTopicSubject } from 'context/sealUtil';
 
-export function useAddTopic(cardId, channelId) {
+export function useAddTopic() {
   
   const [state, setState] = useState({
     enableImage: null,
     enableAudio: null,
     enableVideo: null,
-    sealed: false,
     assets: [],
     messageText: null,
     textColor: '#444444',
@@ -50,9 +50,9 @@ export function useAddTopic(cardId, channelId) {
   }
 
   useEffect(() => {
-    const { enableImage, enableAudio, enableVideo, sealed } = conversation.state;
-    updateState({ enableImage, enableAudio, enableVideo, sealed });
-  }, [conversation]);
+    const { enableImage, enableAudio, enableVideo } = conversation.state.channel?.data?.channelDetail || {};
+    updateState({ enableImage, enableAudio, enableVideo });
+  }, [conversation.state.channel?.data?.channelDetail]);
 
   const actions = {
     addImage: (image) => {
@@ -73,7 +73,9 @@ export function useAddTopic(cardId, channelId) {
     setPosition: (index, position) => {
       updateAsset(index, { position });
     },
-    removeAsset: (idx) => { removeAsset(idx) },
+    removeAsset: (idx) => {
+      removeAsset(idx) 
+    },
     setTextColor: (value) => {
       updateState({ textColorSet: true, textColor: value });
     },
@@ -83,31 +85,42 @@ export function useAddTopic(cardId, channelId) {
     setTextSize: (value) => {
       updateState({ textSizeSet: true, textSize: value });
     },
-    addTopic: async (sealed, sealKey) => {
+    addTopic: async (contentKey) => {
       if (!state.busy) {
         try {
           updateState({ busy: true });
-          let message = {
-            text: state.messageText,
-            textColor: state.textColorSet ? state.textColor : null,
-            textSize: state.textSizeSet ? state.textSize : null,
+          const type = contentKey ? 'sealedtopic' : 'superbasictopic';
+          const message = (assets) => {
+            if (contentKey) {
+              if (assets?.length) {
+                console.log('assets not yet supported on sealed channels');
+              }
+              const message = { 
+                text: state.messageText,
+                textColor: state.textColorSet ? state.textColor : null,
+                textSize: state.textSizeSet ? state.textSize : null,
+              }
+              return encryptTopicSubject({ message }, contentKey);
+            }
+            else {
+              if (assets?.length) {
+                return {
+                  assets,
+                  text: state.messageText,
+                  textColor: state.textColorSet ? state.textColor : null,
+                  textSize: state.textSizeSet ? state.textSize : null,
+                }
+              }
+              else {
+                return {
+                  text: state.messageText,
+                  textColor: state.textColorSet ? state.textColor : null,
+                  textSize: state.textSizeSet ? state.textSize : null,
+                }
+              }
+            }
           };
-          if (cardId) {
-            if (sealed) {
-              await card.actions.addSealedChannelTopic(cardId, channelId, sealKey, message, state.assets);
-            }
-            else {
-              await card.actions.addChannelTopic(cardId, channelId, message, state.assets);
-            }
-          }
-          else {
-            if (sealed) {
-              await channel.actions.addSealedChannelTopic(channelId, sealKey, message, state.assets);
-            }
-            else {
-              await channel.actions.addChannelTopic(channelId, message, state.assets);
-            }
-          }
+          await conversation.actions.addTopic(type, message, state.assets);
           updateState({ busy: false, messageText: null, textColor: '#444444', textColorSet: false,
               textSize: 12, textSizeSet: false, assets: [] });
         }
