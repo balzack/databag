@@ -59,12 +59,13 @@ export function useUploadContext() {
   const actions = {
     addTopic: (token, channelId, topicId, files, success, failure, contact) => {
       if (contact) {
-        const { server, token, cardId } = contact;
+        const { server, cardId } = contact;
 
         let host = "";
         if (server) {
           host = `https://${server}`
         }
+
         const controller = new AbortController();
         const entry = {
           index: index.current,

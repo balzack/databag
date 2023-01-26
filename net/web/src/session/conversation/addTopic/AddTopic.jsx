@@ -35,6 +35,7 @@ export function AddTopic({ contentKey }) {
         modal.error({
           title: 'Failed to Post Message',
           content: 'Please try again.',
+          bodyStyle: { padding: 16 },
         });
       }
     }

@@ -181,11 +181,11 @@ export function Details({ cardId, channelId, closeDetails, closeConversation, op
         </div>
       </div>
       <Modal title="Edit Subject" centered visible={state.editSubject} footer={editSubjectFooter}
-          onCancel={actions.clearEditSubject}>
+          bodyStyle={{ padding: 16 }} onCancel={actions.clearEditSubject}>
         <EditSubject state={state} actions={actions} />
       </Modal>
       <Modal title="Edit Members" centered visible={state.editMembers} footer={editMembersFooter}
-          onCancel={actions.clearEditMembers}>
+          bodyStyle={{ padding: 16 }} onCancel={actions.clearEditMembers}>
         <EditMembers state={state} actions={actions} />
       </Modal>
     </DetailsWrapper>
