@@ -18,6 +18,7 @@ export function Details({ cardId, channelId, closeDetails, closeConversation, op
     modal.confirm({
       title: 'Are you sure you want to delete the topic?',
       icon: <ExclamationCircleOutlined />,
+      bodyStyle: { padding: 16 },
       okText: "Yes, Delete",
       cancelText: "No, Cancel",
       onOk() {
@@ -36,6 +37,7 @@ export function Details({ cardId, channelId, closeDetails, closeConversation, op
       modal.error({
         title: 'Failed to Delete Topic',
         content: 'Please try again.',
+        bodyStyle: { padding: 16 },
       });
     }
   }
@@ -44,6 +46,7 @@ export function Details({ cardId, channelId, closeDetails, closeConversation, op
     modal.confirm({
       title: 'Are you sure you want to leave the topic?',
       icon: <ExclamationCircleOutlined />,
+      bodyStyle: { padding: 16 },
       okText: "Yes, Leave",
       cancelText: "No, Cancel",
       onOk() {
@@ -62,6 +65,7 @@ export function Details({ cardId, channelId, closeDetails, closeConversation, op
       modal.error({
         title: 'Failed to Leave Topic',
         content: 'Please try again.',
+        bodyStyle: { padding: 16 },
       });
     }
   }
@@ -75,6 +79,7 @@ export function Details({ cardId, channelId, closeDetails, closeConversation, op
       modal.error({
         title: 'Failed to Update Subject',
         content: 'Please try again.',
+        bodyStyle: { padding: 16 },
       });
     }
   };

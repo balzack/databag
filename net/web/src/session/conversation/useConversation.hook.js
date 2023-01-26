@@ -106,8 +106,8 @@ export function useConversation(cardId, channelId) {
       const { card, channel } = conversationId.current;
       loading.current = true;
       conversationId.current = null;
-      updateState({ loading: true });
-      await conversation.setChannel(card, channel);
+      updateState({ loading: true, contentKey: null });
+      await conversation.actions.setChannel(card, channel);
       updateState({ loading: false });
       loading.current = false;
       await setChannel();
@@ -115,7 +115,8 @@ export function useConversation(cardId, channelId) {
   }
 
   useEffect(() => {
-    conversation.actions.setChannel(cardId, channelId);
+    conversationId.current = { card: cardId, channel: channelId };
+    setChannel();
     // eslint-disable-next-line
   }, [cardId, channelId]);
 
@@ -175,6 +176,7 @@ export function useConversation(cardId, channelId) {
       if (item.revision !== revision) {
         try {
           const message = JSON.parse(detail.data);
+          item.assets = message.assets;
           item.text = message.text;
           item.textColor = message.textColor ? message.textColor : '#444444';
           item.textSize = message.textSize ? message.textSize : 14;
@@ -189,6 +191,7 @@ export function useConversation(cardId, channelId) {
         item.contentKey = state.contentKey;
         try {
           const subject = decryptTopicSubject(detail.data, state.contentKey);
+          item.assets = subject.message.assets;
           item.text = subject.message.text;
           item.textColor = subject.message.textColor ? subject.message.textColor : '#444444';
           item.textSize = subject.message.textSize ? subject.message.textSize : 14;
@@ -198,18 +201,21 @@ export function useConversation(cardId, channelId) {
         }
       }
     }
+    item.transform = detail.transform;
+    item.status = detail.status;
+    item.assetUrl = conversation.actions.getTopicAssetUrl;
     item.revision = revision;
   };
 
   useEffect(() => {
     const messages = new Map();
-    conversation.state.topics.forEach((value, topicId) => {
-      let item = topics.current.get(topicId);
+    conversation.state.topics.forEach((value, id) => {
+      let item = topics.current.get(id);
       if (!item) {
-        item = { topicId };
+        item = { id };
       }
       syncTopic(item, value);
-      messages.set(topicId, item);
+      messages.set(id, item);
     });
     topics.current = messages;
 

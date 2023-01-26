@@ -18,6 +18,7 @@ export function Listing({ closeListing, openContact }) {
       modal.error({
         title: 'Communication Error',
         content: 'Please confirm your server name.',
+        bodyStyle: { padding: 16 },
       });
     }
   }

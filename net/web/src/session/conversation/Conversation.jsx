@@ -7,6 +7,7 @@ import { Logo } from 'logo/Logo';
 import { AddTopic } from './addTopic/AddTopic';
 import { TopicItem } from './topicItem/TopicItem';
 import { List, Spin, Tooltip } from 'antd';
+import { ChannelHeader } from './channelHeader/ChannelHeader';
 
 export function Conversation({ closeConversation, openDetails, cardId, channelId }) {
 
@@ -38,36 +39,7 @@ export function Conversation({ closeConversation, openDetails, cardId, channelId
 
   return (
     <ConversationWrapper>
-      <div class="header">
-        <div class="title">
-          <div class="logo">
-            <Logo img={state.logoImg} url={state.logoUrl} width={32} height={32} radius={4} />
-          </div>
-          <div class="label">{ state.subject }</div>
-          { state.error && state.display === 'small' && (
-            <StatusError onClick={actions.resync}>
-              <ExclamationCircleOutlined />
-            </StatusError>
-          )}
-          { state.error && state.display !== 'small' && (
-            <Tooltip placement="bottom" title="sync error">
-              <StatusError onClick={actions.resync}>
-                <ExclamationCircleOutlined />
-              </StatusError>
-            </Tooltip>
-          )}
-          { state.display !== 'xlarge' && (
-            <div class="button" onClick={openDetails}>
-              <SettingOutlined />
-            </div>
-          )}
-        </div>
-        { state.display !== 'xlarge' && (
-          <div class="button" onClick={closeConversation}>
-            <CloseOutlined />
-          </div>
-        )}
-      </div>
+      <ChannelHeader openDetails={openDetails} closeConversation={closeConversation} contentKey={state.contentKey}/>
       <div class="thread" ref={thread} onScroll={scrollThread}>
         { state.delayed && state.topics.length === 0 && (
           <div class="empty">This Topic Has No Messages</div>

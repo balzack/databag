@@ -101,7 +101,7 @@ export function Dashboard() {
         </div>
       </div>
 
-      <Modal title="Settings" visible={state.showSettings} centered 
+      <Modal title="Settings" visible={state.showSettings} centered bodyStyle={{ padding: 16 }}
           okText="Save" onOk={() => actions.setSettings()} onCancel={() => actions.setShowSettings(false)}>
        <SettingsLayout direction="vertical">
           <div className="field">
@@ -144,7 +144,7 @@ export function Dashboard() {
           </div>
         </SettingsLayout>
       </Modal>
-      <Modal title="Create Account" visible={state.showCreate} centered width="fitContent"
+      <Modal bodyStyle={{ padding: 16 }} title="Create Account" visible={state.showCreate} centered width="fitContent"
           footer={[ <Button type="primary" onClick={() => actions.setShowCreate(false)}>OK</Button> ]}
           onCancel={() => actions.setShowCreate(false)}>
         <CreateLayout>

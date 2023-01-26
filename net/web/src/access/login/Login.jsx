@@ -5,6 +5,7 @@ import { useLogin } from './useLogin.hook';
 
 export  function Login() {
 
+  const [ modal, modalContext ] = Modal.useModal();
   const { state, actions } = useLogin();
 
   const login = async () => {
@@ -12,9 +13,10 @@ export  function Login() {
       await actions.onLogin();
     }
     catch(err) {
-      Modal.error({
+      modal.error({
         title: 'Login Error',
         content: 'Please confirm your username and password.',
+        bodyStyle: { padding: 16 },
       });
     }
   }
@@ -27,6 +29,7 @@ export  function Login() {
 
   return (
     <LoginWrapper>
+      { modalContext }
       <div className="app-title">
         <span>Databag</span>
         <div className="settings" onClick={() => actions.onSettings()}>

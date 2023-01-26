@@ -13,6 +13,7 @@ export function Identity({ openAccount, openCards, cardUpdated }) {
     modal.confirm({
       title: 'Are you sure you want to logout?',
       icon: <LogoutOutlined />,
+      bodyStyle: { padding: 16 },
       onOk() {
         actions.logout();
       },

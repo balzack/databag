@@ -5,6 +5,7 @@ import { useCreateAccount } from './useCreateAccount.hook';
 
 export  function CreateAccount() {
 
+  const [ modal, modalContext ] = Modal.useModal();
   const { state, actions } = useCreateAccount();
 
   const create = async () => {
@@ -12,9 +13,10 @@ export  function CreateAccount() {
       await actions.onCreateAccount();
     }
     catch(err) {
-      Modal.error({
+      modal.error({
         title: 'Create Account Error',
         content: 'Please check with you administrator.',
+        bodyStyle: { padding: 16 },
       });
     }
   }
@@ -27,6 +29,7 @@ export  function CreateAccount() {
 
   return (
     <CreateAccountWrapper>
+      { modalContext }
       <div className="app-title">
         <span>Databag</span>
         <div className="settings" onClick={() => actions.onSettings()}>

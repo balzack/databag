@@ -6,12 +6,14 @@ import { Modal, Tooltip, Button } from 'antd';
 
 export function AccountItem({ item, remove }) {
 
+  const [ modal, modalContext ] = Modal.useModal();
   const { state, actions } = useAccountItem(item, remove);
 
   const removeAccount = () => {
-    Modal.confirm({
+    modal.confirm({
       title: 'Are you sure you want to delete the account?',
       icon: <ExclamationCircleOutlined />,
+      bodyStyle: { padding: 16 },
       onOk() {
         applyRemoveAccount();
       },
@@ -24,9 +26,10 @@ export function AccountItem({ item, remove }) {
       await actions.remove();
     }
     catch(err) {
-      Modal.error({ 
+      modal.error({ 
         title: 'Failed to Remove Account',
         content: 'Please try again.',
+        bodyStyle: { padding: 16 },
       });
     }
   }
@@ -36,9 +39,10 @@ export function AccountItem({ item, remove }) {
       await actions.setStatus(status);
     }
     catch(err) {
-      Modal.error({
+      modal.error({
         title: 'Failed to Set Account Status',
         content: 'Please try again.',
+        bodyStyle: { padding: 16 },
       });
     }
   }
@@ -48,9 +52,10 @@ export function AccountItem({ item, remove }) {
       await actions.setAccessLink();
     }
     catch(err) {
-      Modal.error({
+      modal.error({
         title: 'Failed to Set Account Access',
         content: 'Please try again.',
+        bodyStyle: { padding: 16 },
       });
     }
   }
@@ -65,6 +70,7 @@ export function AccountItem({ item, remove }) {
 
   return (
     <AccountItemWrapper>
+      { modalContext }
       <div className="avatar">
         <Logo url={state.imageUrl} width={32} height={32} radius={4} />
       </div>
@@ -116,7 +122,7 @@ export function AccountItem({ item, remove }) {
       </div>
       <Modal title="Access Account" visible={state.showAccess} centered width="fitContent"
           footer={[ <Button type="primary" onClick={() => actions.setShowAccess(false)}>OK</Button> ]}
-          onCancel={() => actions.setShowAccess(false)}>
+          bodyStyle={{ padding: 16 }} onCancel={() => actions.setShowAccess(false)}>
         <AccessLayout>
           <div className="url">
             <div className="label">Browser Link:</div>

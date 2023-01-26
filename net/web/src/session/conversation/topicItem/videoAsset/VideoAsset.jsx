@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal } from 'antd';
 import ReactResizeDetector from 'react-resize-detector';
 import { VideoCameraOutlined } from '@ant-design/icons';
@@ -9,6 +9,10 @@ export function VideoAsset({ thumbUrl, lqUrl, hdUrl }) {
 
   const { state, actions } = useVideoAsset();
   const [dimension, setDimension] = useState({ width: 0, height: 0 });
+
+  useEffect(() => {
+    console.log(dimension);
+  }, [dimension]);
 
   const activate = () => {
     if (dimension.width / dimension.height > window.innerWidth / window.innerHeight) {
@@ -39,7 +43,7 @@ export function VideoAsset({ thumbUrl, lqUrl, hdUrl }) {
             <VideoCameraOutlined style={{ fontSize: 32, color: '#eeeeee', cursor: 'pointer' }} />
           </div>
         )}
-        <Modal centered={true} visible={state.active} width={state.width + 12} bodyStyle={{ paddingBottom: 0, paddingTop: 6, paddingLeft: 6, paddingRight: 6, backgroundColor: '#dddddd' }} footer={null} destroyOnClose={true} closable={false} onCancel={actions.clearActive}>
+        <Modal centered={true} style={{ backgroundColor: '#aacc00', padding: 0 }} visible={state.active} width={state.width + 12} bodyStyle={{ paddingBottom: 0, paddingTop: 6, paddingLeft: 6, paddingRight: 6, backgroundColor: '#dddddd', margin: 0 }} footer={null} destroyOnClose={true} closable={false} onCancel={actions.clearActive}>
           <video autoplay="true" controls src={hdUrl} width={state.width} height={state.height} 
               playsinline="true" />
         </Modal>

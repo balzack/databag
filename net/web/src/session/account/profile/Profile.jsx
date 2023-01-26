@@ -31,6 +31,7 @@ export function Profile({ closeProfile }) {
       modal.error({
         title: 'Failed to Save',
         content: 'Please try again.',
+        bodyStyle: { padding: 16 },
       });
     }
   }
@@ -45,6 +46,7 @@ export function Profile({ closeProfile }) {
       modal.error({
         title: 'Failed to Save',
         content: 'Please try again.',
+        bodyStyle: { padding: 16 },
       });
     }
   }
@@ -53,6 +55,7 @@ export function Profile({ closeProfile }) {
     modal.confirm({
       title: 'Are you sure you want to logout?',
       icon: <LogoutOutlined />,
+      bodyStyle: { padding: 16 },
       onOk() {
         actions.logout();
       },
@@ -155,7 +158,7 @@ export function Profile({ closeProfile }) {
         </div>
       )}
       <Modal title="Profile Image" centered visible={state.editProfileImage} footer={editImageFooter}
-          onCancel={actions.clearEditProfileImage}>
+          style={{ padding: 16 }} onCancel={actions.clearEditProfileImage}>
 
         <ProfileImageWrapper>
           <Cropper image={state.editImage} crop={state.crop} zoom={state.zoom} aspect={1}
@@ -164,7 +167,7 @@ export function Profile({ closeProfile }) {
 
       </Modal>
       <Modal title="Profile Details" centered visible={state.editProfileDetails} footer={editDetailsFooter}
-          onCancel={actions.clearEditProfileDetails}>
+          style={{ padding: 16 }} onCancel={actions.clearEditProfileDetails}>
 
         <ProfileDetailsWrapper>
           <div class="info">

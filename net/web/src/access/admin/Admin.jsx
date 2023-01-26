@@ -5,6 +5,7 @@ import { useAdmin } from './useAdmin.hook';
 
 export  function Admin() {
 
+  const [ modal, modalContext ] = Modal.useModal();
   const { state, actions } = useAdmin();
 
   const login = async () => {
@@ -12,9 +13,10 @@ export  function Admin() {
       await actions.login();
     }
     catch(err) {
-      Modal.error({
+      modal.error({
         title: 'Login Error',
         content: 'Please confirm your password.',
+        bodyStyle: { padding: 16 },
       });
     }
   }
@@ -27,6 +29,7 @@ export  function Admin() {
 
   return (
     <AdminWrapper>
+      { modalContext }
       <div className="app-title">
         <span>Databag</span>
         <div className="settings" onClick={() => actions.navUser()}>

@@ -18,6 +18,7 @@ export function AddChannel({ added, cancelled }) {
       modal.error({
         title: 'Failed to Create Topic',
         content: 'Please try again.',
+        bodyStyle: { padding: 16 },
       });
     }
   }

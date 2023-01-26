@@ -45,7 +45,7 @@ export function Channels({ open, active }) {
           <Button type="primary" icon={<CommentOutlined />} onClick={actions.setShowAdd}>New Topic</Button>
         </div>
       )}
-      <Modal title="New Topic" centered visible={state.showAdd} footer={null} destroyOnClose={true}
+      <Modal bodyStyle={{ padding: 16 }} title="New Topic" centered visible={state.showAdd} footer={null} destroyOnClose={true}
           onCancel={actions.clearShowAdd}>
         <AddChannel added={added} cancelled={actions.clearShowAdd} />
       </Modal>

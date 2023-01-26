@@ -18,6 +18,7 @@ export function AccountAccess() {
       modal.error({
         title: 'Failed to Set Sealing Key',
         comment: 'Please try again.',
+        bodyStyle: { padding: 16 },
       });
     }
   }
@@ -31,6 +32,7 @@ export function AccountAccess() {
       modal.error({
         title: 'Update Registry Failed',
         content: 'Please try again.',
+        bodyStyle: { padding: 16 },
       });
     }
   };
@@ -45,6 +47,7 @@ export function AccountAccess() {
       modal.error({
         title: 'Failed to Save',
         comment: 'Please try again.',
+        bodyStyle: { padding: 16 },
       });
     }
   }

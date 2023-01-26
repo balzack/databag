@@ -8,6 +8,7 @@ export function useConversationContext() {
   const [state, setState] = useState({
     offsync: false,
     topics: new Map(),
+    card: null,
     channel: null,
     topicRevision: null,
   });
@@ -92,7 +93,7 @@ export function useConversationContext() {
     else {
       await channel.actions.addTopic(channelId, type, message, files);
     }
-    await resync();
+    resync();
   };
 
   const removeTopic = async (cardId, channelId, topicId) => {
@@ -115,7 +116,7 @@ export function useConversationContext() {
     await resync();
   };
 
-  const getTopicAssetUrl = async (cardId, channelId, topicId, assetId) => {
+  const getTopicAssetUrl = (cardId, channelId, topicId, assetId) => {
     if (cardId) {
       return card.actions.getTopicAssetUrl(cardId, channelId, topicId, assetId);
     }
@@ -183,8 +184,9 @@ export function useConversationContext() {
         // sync channel details
         if (setDetailRevision.current !== detailRevision) {
           let channelSync;
+          let cardSync;
           if (cardId) {
-            const cardSync = card.state.cards.get(cardId);
+            cardSync = card.state.cards.get(cardId);
             channelSync = cardSync?.channels.get(channelId);
           }
           else {
@@ -192,7 +194,7 @@ export function useConversationContext() {
           }
           if (channelSync) {
             setDetailRevision.current = detailRevision;
-            updateState({ channel: channelSync });
+            updateState({ card: cardSync, channel: channelSync });
           }
           else {
             syncing.current = false;
@@ -310,7 +312,7 @@ export function useConversationContext() {
       const { cardId, channelId } = conversationId.current;
       await setTopicSubject(cardId, channelId, type, subject);
     },
-    getTopicAssetUrl: (topicId, assetId) => {
+    getTopicAssetUrl: (assetId, topicId) => {
       const { cardId, channelId } = conversationId.current;
       return getTopicAssetUrl(cardId, channelId, topicId, assetId);
     },

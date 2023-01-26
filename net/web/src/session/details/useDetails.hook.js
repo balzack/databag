@@ -88,10 +88,15 @@ export function useDetails(cardId, channelId) {
       else {
         locked = false;
         editable = (chan.cardId == null);
-        const parsed = JSON.parse(chan.data.channelDetail.data);
-        if (parsed.subject) {
-          subject = parsed.subject;
-          subjectUpdate = subject;
+        try {
+          const parsed = JSON.parse(chan.data.channelDetail.data);
+          if (parsed.subject) {
+            subject = parsed.subject;
+            subjectUpdate = subject;
+          }
+        }
+        catch(err) {
+          console.log(err);
         }
       }
       const date = new Date(chan.data.channelDetail.created * 1000);
