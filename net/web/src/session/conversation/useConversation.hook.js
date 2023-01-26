@@ -210,12 +210,15 @@ export function useConversation(cardId, channelId) {
   useEffect(() => {
     const messages = new Map();
     conversation.state.topics.forEach((value, id) => {
-      let item = topics.current.get(id);
+      const curCardId = conversation.state.card?.id;
+      const curChannelId = conversation.state.channel?.id;
+      const key = `${curCardId}:${curChannelId}:${id}`
+      let item = topics.current.get(key);
       if (!item) {
         item = { id };
       }
       syncTopic(item, value);
-      messages.set(id, item);
+      messages.set(key, item);
     });
     topics.current = messages;
 
@@ -244,6 +247,9 @@ export function useConversation(cardId, channelId) {
       upload.actions.clearErrors(cardId, channelId);
     },
     cancelUpload: () => {
+    },
+    removeTopic: async (topicId) => {
+      await conversation.actions.removeTopic(topicId);
     },
   };
 

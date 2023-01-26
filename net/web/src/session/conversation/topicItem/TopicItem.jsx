@@ -7,7 +7,32 @@ import { Space, Skeleton, Button, Modal, Input } from 'antd';
 import { ExclamationCircleOutlined, DeleteOutlined, EditOutlined, FireOutlined, PictureOutlined } from '@ant-design/icons';
 import { Carousel } from 'carousel/Carousel';
 
-export function TopicItem({ host, topic }) {
+export function TopicItem({ host, topic, remove }) {
+
+  const [ modal, modalContext ] = Modal.useModal();
+
+  const removeTopic = () => {
+    modal.confirm({
+      title: 'Do you want to delete this message?',
+      icon: <ExclamationCircleOutlined />,
+      bodyStyle: { padding: 16 },
+      okText: 'Yes, Delete',
+      cancelText: 'No, Cancel',
+      onOk:  async () => {
+        try {
+          await remove();
+        }
+        catch(err) {
+          console.log(err);
+          modal.error({
+            title: 'Failed to Delete Message',
+            content: 'Please try again.',
+            bodyStyle: { padding: 16 },
+          });
+        }
+      },
+    });
+  }
 
   const renderAsset = (asset, idx) => {
     if (asset.image) {
@@ -26,6 +51,7 @@ export function TopicItem({ host, topic }) {
 
   return (
     <TopicItemWrapper>
+      { modalContext }
       <div class="topic-header">
         <div class="avatar">
           <Logo width={32} height={32} radius={4} url={topic.imageUrl} />
@@ -33,6 +59,20 @@ export function TopicItem({ host, topic }) {
         <div class="info">
           <div class={ topic.nameSet ? 'set' : 'unset' }>{ topic.name }</div>
           <div>{ topic.createdStr }</div>
+        </div>
+        <div class="topic-options">
+          <div class="buttons">
+            { topic.creator && (
+              <div class="button edit" onClick={() => console.log('edit')}>
+                <EditOutlined />
+              </div>
+            )}
+            { (host || topic.creator) && (
+              <div class="button remove" onClick={removeTopic}>
+                <DeleteOutlined />
+              </div>
+            )}
+          </div>
         </div>
       </div>
       { topic.status !== 'confirmed' && (

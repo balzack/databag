@@ -10,10 +10,6 @@ export function VideoAsset({ thumbUrl, lqUrl, hdUrl }) {
   const { state, actions } = useVideoAsset();
   const [dimension, setDimension] = useState({ width: 0, height: 0 });
 
-  useEffect(() => {
-    console.log(dimension);
-  }, [dimension]);
-
   const activate = () => {
     if (dimension.width / dimension.height > window.innerWidth / window.innerHeight) {
       let width = Math.floor(window.innerWidth * 8 / 10);

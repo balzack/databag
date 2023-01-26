@@ -15,7 +15,7 @@ export function Conversation({ closeConversation, openDetails, cardId, channelId
   const thread = useRef(null);
 
   const topicRenderer = (topic) => {
-    return (<TopicItem host={cardId == null} topic={topic} />)
+    return (<TopicItem host={cardId == null} topic={topic} remove={() => actions.removeTopic(topic.id)}/>)
   }
 
   // an unfortunate cludge for the mobile browser

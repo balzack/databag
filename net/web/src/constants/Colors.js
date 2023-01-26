@@ -10,6 +10,7 @@ const Colors = {
   mask: '#dddddd',
   encircle: '#cccccc',
   alert: '#ff8888',
+  warn: '#dd4444',
   enabled: '#444444',
   disabled: '#aaaaaa',
   text: '#444444',

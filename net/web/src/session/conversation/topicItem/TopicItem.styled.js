@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import Colors from 'constants/Colors';
 
 export const TopicItemWrapper = styled.div`
   display: flex;
@@ -18,10 +19,6 @@ export const TopicItemWrapper = styled.div`
       visibility: visible;
     }
 
-    &:hover .info {
-      text-decoration: underline;
-    }
-
     .topic-options {
       visibility: hidden;
       padding-left: 16px;
@@ -33,7 +30,6 @@ export const TopicItemWrapper = styled.div`
         flex-direction: row;
         border-radius: 4px;
         background-color: #eeeeee;
-        border: 1px solid #555555;
         margin-top: 2px;
 
         .button {
@@ -41,6 +37,14 @@ export const TopicItemWrapper = styled.div`
           margin-left: 8px;
           margin-right: 8px;
           cursor: pointer;
+        }
+
+        .remove {
+          color: ${Colors.warn};
+        }
+
+        .edit {
+          color: ${Colors.primary};
         }
       }
     }
