@@ -99,7 +99,7 @@ export const CarouselWrapper = styled.div`
 
   .asset {
     height: 128px;
-    border-radius: 8px;
+    border-radius: 3px;
     overflow: hidden;
   }
 
