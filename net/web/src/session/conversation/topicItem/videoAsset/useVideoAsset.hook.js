@@ -6,6 +6,7 @@ export function useVideoAsset() {
     width: 0,
     height: 0,
     active: false,
+    dimension: { width: 0, height: 0 },
   });
 
   const updateState = (value) => {
@@ -18,6 +19,9 @@ export function useVideoAsset() {
     },
     clearActive: () => {
       updateState({ active: false });
+    },
+    setDimension: (dimension) => {
+      updateState({ dimension });
     },
   };
 

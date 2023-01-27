@@ -120,6 +120,7 @@ export function useChannelHeader(contentKey) {
     else {
       updateState({ label, img, logo });
     }
+    // eslint-disable-next-line
   }, [conversation.state, card.state, contentKey]);
 
   const actions = {

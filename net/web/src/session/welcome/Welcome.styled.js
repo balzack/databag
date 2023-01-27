@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import Colors from 'constants/Colors';
 
 export const WelcomeWrapper = styled.div`
   height: 100%;

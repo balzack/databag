@@ -67,6 +67,7 @@ export function useConversation(cardId, channelId) {
     else {
       updateState({ sealed: false, contentKey: null });
     }
+    // eslint-disable-next-line
   }, [account.state.sealKey, conversation.state.channel?.data?.channelDetail]);
 
   useEffect(() => {
@@ -132,6 +133,7 @@ export function useConversation(cardId, channelId) {
   useEffect(() => {
     topics.current = new Map();
     syncChannel();
+    // eslint-disable-next-line
   }, [state.contentKey]);
 
   const syncTopic = (item, value) => {
