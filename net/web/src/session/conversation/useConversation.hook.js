@@ -139,7 +139,7 @@ export function useConversation(cardId, channelId) {
     const detail = value.data?.topicDetail || {};
     const identity = profile.state.identity || {};
     
-    item.create = detail.created;
+    item.created = detail.created;
     const date = new Date(detail.created * 1000);
     const now = new Date();
     const offset = now.getTime() - date.getTime();
