@@ -151,8 +151,8 @@ export function useCardContext() {
     // sync profile
     if (card.data.setNotifiedProfile !== card.data.curNotifiedProfile) {
       if (card.data.profileRevision !== card.data.curNotifiedProfile) {
-        const token = `${cardProfile.guid}.${cardDetail.token}`;
-        const message = await getContactProfile(cardProfile.node, token);
+        const cardToken = `${cardProfile.guid}.${cardDetail.token}`;
+        const message = await getContactProfile(cardProfile.node, cardToken);
         await setCardProfile(token, card.id, message);
       }
     }

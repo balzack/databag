@@ -158,7 +158,7 @@ export function Profile({ closeProfile }) {
         </div>
       )}
       <Modal title="Profile Image" centered visible={state.editProfileImage} footer={editImageFooter}
-          style={{ padding: 16 }} onCancel={actions.clearEditProfileImage}>
+          bodyStyle={{ padding: 16 }} onCancel={actions.clearEditProfileImage}>
 
         <ProfileImageWrapper>
           <Cropper image={state.editImage} crop={state.crop} zoom={state.zoom} aspect={1}
@@ -167,7 +167,7 @@ export function Profile({ closeProfile }) {
 
       </Modal>
       <Modal title="Profile Details" centered visible={state.editProfileDetails} footer={editDetailsFooter}
-          style={{ padding: 16 }} onCancel={actions.clearEditProfileDetails}>
+          bodyStyle={{ padding: 16 }} onCancel={actions.clearEditProfileDetails}>
 
         <ProfileDetailsWrapper>
           <div class="info">
