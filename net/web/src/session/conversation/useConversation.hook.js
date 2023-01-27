@@ -122,6 +122,10 @@ export function useConversation(cardId, channelId) {
   }, [cardId, channelId]);
 
   useEffect(() => {
+    const key = `${conversation.state.channel?.id}::${conversation.state.card?.id}`
+    const topicRevision = conversation.state.channel?.data?.topicRevision; 
+    store.actions.setValue(key, topicRevision);
+
     syncChannel();
     // eslint-disable-next-line
   }, [conversation.state, profile.state, card.state]);
