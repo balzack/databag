@@ -5,6 +5,7 @@ import (
 	"github.com/google/uuid"
 	"gorm.io/gorm"
 	"net/http"
+  "time"
 )
 
 //AddChannelTopic adds a topic to a channel through either contact or agent query param
@@ -88,16 +89,19 @@ func AddChannelTopic(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	SetStatus(act)
-	for _, card := range cards {
-		SetContactChannelNotification(act, &card)
-	}
-  for _, card := range notify {
-    SetContactPushNotification(&card, "content.addChannelTopic." + channelSlot.Channel.DataType)
-  }
-  if act.GUID != guid {
-    go SendPushEvent(*act, "content.addChannelTopic." + channelSlot.Channel.DataType)
-  }
-
 	WriteResponse(w, getTopicModel(topicSlot))
+
+  go func() {
+    time.Sleep(25 * time.Millisecond);
+    SetStatus(act)
+    for _, card := range cards {
+      SetContactChannelNotification(act, &card)
+    }
+    for _, card := range notify {
+      SetContactPushNotification(&card, "content.addChannelTopic." + channelSlot.Channel.DataType)
+    }
+    if act.GUID != guid {
+      go SendPushEvent(*act, "content.addChannelTopic." + channelSlot.Channel.DataType)
+    }
+  }()
 }
