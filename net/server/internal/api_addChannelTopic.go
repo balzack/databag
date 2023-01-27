@@ -56,17 +56,19 @@ func AddChannelTopic(w http.ResponseWriter, r *http.Request) {
 		}
 
 		topicSlot.Topic = topic
+    revision := act.ChannelRevision + 1;
 
 		// update parent revision
-		if res := tx.Model(&store.Channel{}).Where("id = ?", channelSlot.Channel.ID).Update("topic_revision", act.ChannelRevision+1).Error; res != nil {
+		if res := tx.Model(&store.Channel{}).Where("id = ?", channelSlot.Channel.ID).Update("topic_revision", revision).Error; res != nil {
 			return res
 		}
-		if res := tx.Model(&store.ChannelSlot{}).Where("id = ?", channelSlot.ID).Update("revision", act.ChannelRevision+1).Error; res != nil {
+		if res := tx.Model(&store.ChannelSlot{}).Where("id = ?", channelSlot.ID).Update("revision", revision).Error; res != nil {
 			return res
 		}
-		if res := tx.Model(&store.Account{}).Where("id = ?", act.ID).Update("channel_revision", act.ChannelRevision+1).Error; res != nil {
+		if res := tx.Model(&store.Account{}).Where("id = ?", act.ID).Update("channel_revision", revision).Error; res != nil {
 			return res
 		}
+    act.ChannelRevision = revision;
 		return nil
 	})
 	if err != nil {
