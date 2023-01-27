@@ -1,6 +1,4 @@
 import { useContext, useState, useEffect } from 'react';
-import { CardContext } from 'context/CardContext';
-import { ChannelContext } from 'context/ChannelContext';
 import { ConversationContext } from 'context/ConversationContext';
 import { encryptTopicSubject } from 'context/sealUtil';
 
@@ -19,8 +17,6 @@ export function useAddTopic() {
     busy: false,
   });
 
-  const card = useContext(CardContext);
-  const channel = useContext(ChannelContext);
   const conversation = useContext(ConversationContext);
 
   const updateState = (value) => {

@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import Colors from 'constants/Colors';
 
 export const WelcomeWrapper = styled.div`
   height: 100%;
@@ -7,6 +8,7 @@ export const WelcomeWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  color: #555555;
 
   .title {
     width: 100%;
@@ -30,13 +32,13 @@ export const WelcomeWrapper = styled.div`
     display: flex;
     align-items: center;
     min-height: 0;
-    opacity: 0.5;
+    opacity: 0.3;
   }
 
   .message {
     width: 100%;
     display: flex;
-    flex-direction: column;
+    flex-row: column;
     align-items: center;
     justify-content: center;
     align-items: center;

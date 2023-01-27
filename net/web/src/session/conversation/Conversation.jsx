@@ -1,9 +1,8 @@
 import { useRef } from 'react';
 import { ConversationWrapper, StatusError } from './Conversation.styled';
-import { ExclamationCircleOutlined, SettingOutlined, CloseOutlined } from '@ant-design/icons';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
 import ReactResizeDetector from 'react-resize-detector';
 import { useConversation } from './useConversation.hook';
-import { Logo } from 'logo/Logo';
 import { AddTopic } from './addTopic/AddTopic';
 import { TopicItem } from './topicItem/TopicItem';
 import { List, Spin, Tooltip } from 'antd';

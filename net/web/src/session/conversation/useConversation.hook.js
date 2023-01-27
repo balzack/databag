@@ -7,7 +7,6 @@ import { StoreContext } from 'context/StoreContext';
 import { CardContext } from 'context/CardContext';
 import { ProfileContext } from 'context/ProfileContext';
 import { isUnsealed, getChannelSeals, getContentKey, encryptTopicSubject } from 'context/sealUtil';
-import { JSEncrypt } from 'jsencrypt'
 
 import { decryptTopicSubject } from 'context/sealUtil';
 import { getProfileByGuid } from 'context/cardUtil';
