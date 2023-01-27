@@ -7,7 +7,6 @@ import { StoreContext } from 'context/StoreContext';
 import { CardContext } from 'context/CardContext';
 import { ProfileContext } from 'context/ProfileContext';
 import { isUnsealed, getChannelSeals, getContentKey, encryptTopicSubject } from 'context/sealUtil';
-
 import { decryptTopicSubject } from 'context/sealUtil';
 import { getProfileByGuid } from 'context/cardUtil';
 
@@ -19,7 +18,6 @@ export function useConversation(cardId, channelId) {
     uploadError: false,
     uploadPercent: 0,
     topics: [],
-    loading: false,
     sealed: false,
     contentKey: null,
     busy: false,
@@ -107,9 +105,8 @@ export function useConversation(cardId, channelId) {
       const { card, channel } = conversationId.current;
       loading.current = true;
       conversationId.current = null;
-      updateState({ loading: true, contentKey: null });
+      updateState({ contentKey: null });
       await conversation.actions.setChannel(card, channel);
-      updateState({ loading: false });
       loading.current = false;
       await setChannel();
     }
