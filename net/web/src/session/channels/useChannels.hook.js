@@ -132,7 +132,7 @@ export function useChannels() {
       item.sealKey = sealKey;
     }
 
-    if (item.title == null || typeof item.title !== 'string') {
+    if (item.title == null || item.title === '' || typeof item.title !== 'string') {
       item.subject = item.label;
     }
     else {

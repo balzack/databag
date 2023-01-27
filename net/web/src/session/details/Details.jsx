@@ -9,10 +9,38 @@ import { EditSubject } from './editSubject/EditSubject';
 import { EditMembers } from './editMembers/EditMembers';
 import { UnlockOutlined, LockFilled } from '@ant-design/icons';
 
-export function Details({ cardId, channelId, closeDetails, closeConversation, openContact }) {
+export function Details({ closeDetails, closeConversation, openContact }) {
 
   const [modal, modalContext] = Modal.useModal();
-  const { state, actions } = useDetails(cardId, channelId);
+  const { state, actions } = useDetails();
+
+  const setMember = async (id) => {
+    try {
+      await actions.setMember(id);
+    }
+    catch(err) {
+      console.log(err);
+      modal.error({
+        title: 'Failed to Set Conversation Member',
+        content: 'Please try again.',
+        bodyStyle: { padding: 16 },
+      });
+    }
+  }
+
+  const clearMember = async (id) => {
+    try {
+      await actions.clearMember(id);
+    }
+    catch(err) {
+      console.log(err);
+      modal.error({
+        title: 'Failed to Clear Conversation Member',
+        content: 'Please try again.',
+        bodyStyle: { padding: 16 },
+      });
+    }
+  }
 
   const deleteChannel = async () => {
     modal.confirm({
@@ -30,7 +58,7 @@ export function Details({ cardId, channelId, closeDetails, closeConversation, op
 
   const applyDeleteChannel = async () => {
     try {
-      await actions.deleteChannel();
+      await actions.removeChannel();
       closeConversation();
     }
     catch(err) {
@@ -58,7 +86,7 @@ export function Details({ cardId, channelId, closeDetails, closeConversation, op
 
   const applyLeaveChannel = async () => {
     try {
-      await actions.leaveChannel();
+      await actions.removeChannel();
       closeConversation();
     }
     catch(err) {
@@ -121,19 +149,24 @@ export function Details({ cardId, channelId, closeDetails, closeConversation, op
       <div class="content">
         <div class="description">
           <div class="logo">
-            <Logo width={72} height={72} radius={4} img={state.img} />
+            <Logo src={state.logo} width={72} height={72} radius={4} img={state.img} />
           </div>
           <div class="stats">
             { state.host && (
               <div class="subject" onClick={actions.setEditSubject}>
-                { state.locked && !state.unlocked && (
+                { state.sealed && !state.contentKey && (
                   <LockFilled style={{ paddingRight: 4 }} />
                 )}
-                { state.locked && state.unlocked && (
+                { state.sealed && state.contentKey && (
                   <UnlockOutlined style={{ paddingRight: 4 }} />
                 )}
-                <span>{ state.subject }</span>
-                { state.editable && (
+                { state.title && (
+                  <span>{ state.title }</span>
+                )}
+                { !state.title && (
+                  <span>{ state.label }</span>
+                )}
+                { (!state.sealed || state.contentKey) && (
                   <span class="edit" onClick={actions.setEditSubject}>
                     <EditOutlined style={{ paddingLeft: 4 }}/>
                   </span>
@@ -142,13 +175,18 @@ export function Details({ cardId, channelId, closeDetails, closeConversation, op
             )}
             { !state.host && (
               <div class="subject">
-                { state.locked && !state.unlocked && (
+                { state.sealed && !state.contentKey && (
                   <LockFilled style={{ paddingRight: 4 }} />
                 )}
-                { state.locked && state.unlocked && (
+                { state.sealed && state.contentKey && (
                   <UnlockOutlined style={{ paddingRight: 4 }} />
                 )}
-                <span>{ state.subject }</span>
+                { state.title && (
+                  <span>{ state.title }</span>
+                )}
+                { !state.title && (
+                  <span>{ state.label }</span>
+                )}
               </div>
             )}
             { state.host && (
@@ -163,7 +201,7 @@ export function Details({ cardId, channelId, closeDetails, closeConversation, op
         { state.host && (
           <div class="button" onClick={deleteChannel}>Delete Topic</div>
         )}
-        { state.host && !state.locked && (
+        { state.host && !state.sealed && (
           <div class="button" onClick={actions.setEditMembers}>Edit Membership</div>
         )}
         { !state.host && (
@@ -172,21 +210,21 @@ export function Details({ cardId, channelId, closeDetails, closeConversation, op
         <div class="label">Members</div>
         <div class="members">
           <CardSelect filter={(item) => {
-            if(state.contacts.includes(item.id)) {
+            if(state.members.includes(item.id)) {
               return true;
             }
             return false;
           }} unknown={state.unknown}
-          markup={cardId} />
+           />
         </div>
       </div>
-      <Modal title="Edit Subject" centered visible={state.editSubject} footer={editSubjectFooter}
+      <Modal title="Edit Subject" centered visible={state.showEditSubject} footer={editSubjectFooter}
           bodyStyle={{ padding: 16 }} onCancel={actions.clearEditSubject}>
-        <EditSubject state={state} actions={actions} />
+        <EditSubject subject={state.editSubject} setSubject={actions.setSubjectUpdate} />
       </Modal>
-      <Modal title="Edit Members" centered visible={state.editMembers} footer={editMembersFooter}
+      <Modal title="Edit Members" centered visible={state.showEditMembers} footer={editMembersFooter}
           bodyStyle={{ padding: 16 }} onCancel={actions.clearEditMembers}>
-        <EditMembers state={state} actions={actions} />
+        <EditMembers members={state.editMembers} setMember={setMember} clearMember={clearMember} />
       </Modal>
     </DetailsWrapper>
   );

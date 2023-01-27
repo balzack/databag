@@ -46,6 +46,16 @@ export function encryptChannelSubject(subject, publicKeys) {
   return { subjectEncrypted, subjectIv, seals };
 }
 
+export function updateChannelSubject(subject, contentKey) {
+  const key = CryptoJS.enc.Hex.parse(contentKey);
+  const iv = CryptoJS.lib.WordArray.random(128 / 8);
+  const encrypted = CryptoJS.AES.encrypt(JSON.stringify({ subject }), key, { iv: iv });
+  const subjectEncrypted = encrypted.ciphertext.toString(CryptoJS.enc.Base64)
+  const subjectIv = iv.toString();
+
+  return { subjectEncrypted, subjectIv };
+}
+
 export function decryptChannelSubject(subject, contentKey) {
   const { subjectEncrypted, subjectIv } = JSON.parse(subject);
   const iv = CryptoJS.enc.Hex.parse(subjectIv);
