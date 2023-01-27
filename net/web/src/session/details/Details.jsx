@@ -152,7 +152,7 @@ export function Details({ closeDetails, closeConversation, openContact }) {
             <Logo src={state.logo} width={72} height={72} radius={4} img={state.img} />
           </div>
           <div class="stats">
-            { state.host && (
+            { !state.host && (
               <div class="subject" onClick={actions.setEditSubject}>
                 { state.sealed && !state.contentKey && (
                   <LockFilled style={{ paddingRight: 4 }} />
@@ -173,7 +173,7 @@ export function Details({ closeDetails, closeConversation, openContact }) {
                 )}
               </div>
             )}
-            { !state.host && (
+            { state.host && (
               <div class="subject">
                 { state.sealed && !state.contentKey && (
                   <LockFilled style={{ paddingRight: 4 }} />
@@ -189,22 +189,22 @@ export function Details({ closeDetails, closeConversation, openContact }) {
                 )}
               </div>
             )}
-            { state.host && (
+            { !state.host && (
               <div class="host">host</div>
             )}
-            { !state.host && (
+            { state.host && (
               <div class="host">guest</div>
             )}
             <div class="created">{ state.started }</div>
           </div>
         </div>
-        { state.host && (
+        { !state.host && (
           <div class="button" onClick={deleteChannel}>Delete Topic</div>
         )}
-        { state.host && !state.sealed && (
+        { !state.host && !state.sealed && (
           <div class="button" onClick={actions.setEditMembers}>Edit Membership</div>
         )}
-        { !state.host && (
+        { state.host && (
           <div class="button" onClick={leaveChannel}>Leave Topic</div>
         )}
         <div class="label">Members</div>
@@ -215,7 +215,7 @@ export function Details({ closeDetails, closeConversation, openContact }) {
             }
             return false;
           }} unknown={state.unknown}
-           />
+          markup={state.host} />
         </div>
       </div>
       <Modal title="Edit Subject" centered visible={state.showEditSubject} footer={editSubjectFooter}

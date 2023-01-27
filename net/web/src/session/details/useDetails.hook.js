@@ -13,7 +13,7 @@ export function useDetails() {
     logo: null,
     img: null,
     started: null,
-    host: false,
+    host: null,
     title: null,
     label: null,
     members: [],
@@ -92,10 +92,10 @@ export function useDetails() {
       started = date.toLocaleDateString("en-US");
     }
     if (cardValue) {
-      host = false;
+      host = cardValue.id;
     }
     else {
-      host = true;
+      host = null;
     }
 
     // extract member info

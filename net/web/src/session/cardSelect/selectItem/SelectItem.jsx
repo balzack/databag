@@ -15,7 +15,7 @@ export function SelectItem({ item, select, selected, markup, setItem, clearItem 
     return profile?.handle;
   }
 
-  const onSelect = () => {
+  const onSelect = (ev) => {
     if (select) {
       select(item.id);
     }
@@ -25,6 +25,7 @@ export function SelectItem({ item, select, selected, markup, setItem, clearItem 
     if (clearItem && state.selected) {
       clearItem(item.id);
     }
+    ev.stopPropagation()
   }
 
   return (
@@ -37,7 +38,7 @@ export function SelectItem({ item, select, selected, markup, setItem, clearItem 
         </div>
         { (select || setItem || clearItem) && (
           <div class="switch">
-            <Switch checked={state.selected} onChange={onSelect} size="small" />
+            <Switch checked={state.selected} onChange={(flag, ev) => onSelect(ev)} size="small" />
           </div>
         )}
         { state.markup && (
