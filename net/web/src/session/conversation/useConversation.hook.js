@@ -6,7 +6,7 @@ import { UploadContext } from 'context/UploadContext';
 import { StoreContext } from 'context/StoreContext';
 import { CardContext } from 'context/CardContext';
 import { ProfileContext } from 'context/ProfileContext';
-import { isUnsealed, getChannelSeals, getContentKey } from 'context/sealUtil';
+import { isUnsealed, getChannelSeals, getContentKey, encryptTopicSubject } from 'context/sealUtil';
 import { JSEncrypt } from 'jsencrypt'
 
 import { decryptTopicSubject } from 'context/sealUtil';
@@ -23,6 +23,7 @@ export function useConversation(cardId, channelId) {
     loading: false,
     sealed: false,
     contentKey: null,
+    busy: false,
   });
 
   const profile = useContext(ProfileContext);
@@ -120,7 +121,17 @@ export function useConversation(cardId, channelId) {
     // eslint-disable-next-line
   }, [cardId, channelId]);
 
-  const syncTopic = async (item, value) => {
+  useEffect(() => {
+    syncChannel();
+    // eslint-disable-next-line
+  }, [conversation.state, profile.state, card.state]);
+ 
+  useEffect(() => {
+    topics.current = new Map();
+    syncChannel();
+  }, [state.contentKey]);
+
+  const syncTopic = (item, value) => {
     const revision = value.data?.detailRevision;
     const detail = value.data?.topicDetail || {};
     const identity = profile.state.identity || {};
@@ -172,42 +183,34 @@ export function useConversation(cardId, channelId) {
       }
     }
 
-    if (detail.dataType === 'superbasictopic') {
-      if (item.revision !== revision) {
-        try {
+    if (item.revision !== revision) {
+      try {
+        if (detail.dataType === 'superbasictopic') {
           const message = JSON.parse(detail.data);
           item.assets = message.assets;
           item.text = message.text;
           item.textColor = message.textColor ? message.textColor : '#444444';
           item.textSize = message.textSize ? message.textSize : 14;
         }
-        catch (err) {
-          console.log(err);
-        }
-      }
-    }
-    if (detail.dataType === 'sealedtopic') {
-      if (item.revision !== revision || item.contentKey !== state.contentKey) {
-        item.contentKey = state.contentKey;
-        try {
+        if (detail.dataType === 'sealedtopic') {
           const subject = decryptTopicSubject(detail.data, state.contentKey);
           item.assets = subject.message.assets;
           item.text = subject.message.text;
           item.textColor = subject.message.textColor ? subject.message.textColor : '#444444';
           item.textSize = subject.message.textSize ? subject.message.textSize : 14;
         }
-        catch (err) {
-          console.log(err);
-        }
       }
+      catch (err) {
+        console.log(err);
+      }
+      item.revision = revision;
     }
     item.transform = detail.transform;
     item.status = detail.status;
     item.assetUrl = conversation.actions.getTopicAssetUrl;
-    item.revision = revision;
   };
 
-  useEffect(() => {
+  const syncChannel = () => { 
     const messages = new Map();
     conversation.state.topics.forEach((value, id) => {
       const curCardId = conversation.state.card?.id;
@@ -233,8 +236,7 @@ export function useConversation(cardId, channelId) {
     });
 
     updateState({ topics: sorted });
-    // eslint-disable-next-line
-  }, [conversation.state, profile.state, card.state, state.contentKey]);
+  }
 
   const actions = {
     more: () => {
@@ -250,6 +252,34 @@ export function useConversation(cardId, channelId) {
     },
     removeTopic: async (topicId) => {
       await conversation.actions.removeTopic(topicId);
+    },
+    updateTopic: async (topic, text) => {
+      const { assets, textSize, textColor } = topic;
+      const message = { text, textSize, textColor, assets };
+      console.log("UPDATE", message);
+      
+      if (!state.busy) {
+        updateState({ busy: true });
+        try {
+          if (state.sealed) {
+            if (state.contentKey) {
+              const subject = encryptTopicSubject({ message }, state.contentKey);
+              await conversation.actions.setTopicSubject(topic.id, 'sealedtopic', subject);
+            }
+          }
+          else {
+            await conversation.actions.setTopicSubject(topic.id, 'superbasictopic', message);
+          }
+          updateState({ busy: false });
+        }
+        catch(err) {
+          updateState({ busy: false });
+          throw new Error("topic update failed");
+        }
+      }
+      else {
+        throw new Error("operation in progress");
+      }
     },
   };
 

@@ -6,10 +6,12 @@ import { Logo } from 'logo/Logo';
 import { Space, Skeleton, Button, Modal, Input } from 'antd';
 import { ExclamationCircleOutlined, DeleteOutlined, EditOutlined, FireOutlined, PictureOutlined } from '@ant-design/icons';
 import { Carousel } from 'carousel/Carousel';
+import { useTopicItem } from './useTopicItem.hook';
 
-export function TopicItem({ host, topic, remove }) {
+export function TopicItem({ host, sealed, topic, update, remove }) {
 
   const [ modal, modalContext ] = Modal.useModal();
+  const { state, actions } = useTopicItem();
 
   const removeTopic = () => {
     modal.confirm({
@@ -33,6 +35,21 @@ export function TopicItem({ host, topic, remove }) {
       },
     });
   }
+
+  const updateTopic = async () => {
+    try {
+      await update(state.message);
+      actions.clearEditing();
+    }
+    catch(err) {
+      console.log(err);
+      modal.error({
+        title: 'Failed to Update Message',
+        content: 'Please try again.',
+        bodyStyle: { padding: 16 },
+      });
+    }
+  };
 
   const renderAsset = (asset, idx) => {
     if (asset.image) {
@@ -62,8 +79,8 @@ export function TopicItem({ host, topic, remove }) {
         </div>
         <div class="topic-options">
           <div class="buttons">
-            { topic.creator && (
-              <div class="button edit" onClick={() => console.log('edit')}>
+            { !sealed && topic.creator && (
+              <div class="button edit" onClick={() => actions.setEditing(topic.text)}>
                 <EditOutlined />
               </div>
             )}
@@ -101,9 +118,27 @@ export function TopicItem({ host, topic, remove }) {
               )}
             </>
           )}
-          <div class="message">
-            <div style={{ color: topic.textColor, fontSize: topic.textSize }}>{ topic.text }</div>
-          </div>
+          { sealed && (
+            <div class="sealed-message">sealed message</div>
+          )}
+          { !sealed && !state.editing && (
+            <div class="message">
+              <div style={{ color: topic.textColor, fontSize: topic.textSize }}>{ topic.text }</div>
+            </div>
+          )}
+          { state.editing && (
+            <div class="editing">
+              <Input.TextArea defaultValue={state.message} placeholder="message"
+                style={{ resize: 'none', color: state.textColor, fontSize: state.textSize }}
+                onChange={(e) => actions.setMessage(e.target.value)} rows={3} bordered={false}/>
+              <div class="controls">
+                <Space>
+                  <Button onClick={actions.clearEditing}>Cancel</Button>
+                  <Button type="primary" onClick={updateTopic}>Save</Button>
+                </Space>
+              </div>
+            </div>
+          )}
         </>
       )}
     </TopicItemWrapper>

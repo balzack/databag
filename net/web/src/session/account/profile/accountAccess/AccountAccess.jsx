@@ -91,7 +91,7 @@ export function AccountAccess() {
         <LockOutlined />
         <div className="label">Change Login</div>
       </div>
-      <Modal title="Topic Sealing Key" centered visible={state.editSeal} footer={editSealFooter} onCancel={actions.clearEditSeal}>
+      <Modal title="Topic Sealing Key" centered visible={state.editSeal} footer={editSealFooter} onCancel={actions.clearEditSeal} bodyStyle={{ padding: 16 }}>
         <SealModal>
           <div className="switch">
             <Switch size="small" checked={state.sealEnabled} onChange={enable => actions.enableSeal(enable)} />
@@ -130,7 +130,7 @@ export function AccountAccess() {
         </SealModal>
       </Modal>
       <Modal title="Account Login" centered visible={state.editLogin} footer={editLoginFooter}
-          onCancel={actions.clearEditLogin}>
+          bodyStyle={{ paddingLeft: 16, paddingRight: 16 }} onCancel={actions.clearEditLogin}>
         <Form name="basic" wrapperCol={{ span: 24, }}>
             <Form.Item name="username" validateStatus={state.editStatus} help={state.editMessage}>
               <Input placeholder="Username" spellCheck="false" onChange={(e) => actions.setEditHandle(e.target.value)}

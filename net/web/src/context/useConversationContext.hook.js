@@ -106,12 +106,12 @@ export function useConversationContext() {
     await resync();
   };
 
-  const setTopicSubject = async (cardId, channelId, type, subject) => {
+  const setTopicSubject = async (cardId, channelId, topicId, type, subject) => {
     if (cardId) {
-      await card.actions.setTopicSubject(cardId, channelId, type, subject);
+      await card.actions.setTopicSubject(cardId, channelId, topicId, type, subject);
     }
     else {
-      await channel.actions.setTopicSubject(channelId, type, subject);
+      await channel.actions.setTopicSubject(channelId, topicId, type, subject);
     }
     await resync();
   };
@@ -308,9 +308,9 @@ export function useConversationContext() {
       const { cardId, channelId } = conversationId.current;
       await removeTopic(cardId, channelId, topicId);
     },
-    setTopicSubject: async (type, subject) => {
+    setTopicSubject: async (topicId, type, subject) => {
       const { cardId, channelId } = conversationId.current;
-      await setTopicSubject(cardId, channelId, type, subject);
+      await setTopicSubject(cardId, channelId, topicId, type, subject);
     },
     getTopicAssetUrl: (assetId, topicId) => {
       const { cardId, channelId } = conversationId.current;
