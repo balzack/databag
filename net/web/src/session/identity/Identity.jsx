@@ -46,7 +46,7 @@ export function Identity({ openAccount, openCards, cardUpdated }) {
           <div class="name">{state.name}</div>
           <div class="handle">
             <div class="notice">
-              { state.disconnected && ( 
+              { state.status !== 'connected' && ( 
                 <Tooltip placement="right" title="disconnected from server">
                   <ErrorNotice>
                     <ExclamationCircleOutlined />
