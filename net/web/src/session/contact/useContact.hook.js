@@ -52,13 +52,12 @@ export function useContact(guid, listing, close) {
       updateState({ logo, name, location, description, handle, node, status, cardId });
     }
     else if (listing) {
-      const { imageSet, name, location, description, handle, node } = listing;
-      const logo = imageSet ? getListingImageUrl(node, guid) : null;
+      const { logo, name, location, description, handle, node } = listing;
       updateState({ logo, name, location, description, handle, node, status: 'unsaved', cardId: null });
     }
     else {
       updateState({ logo: null, name: null, cardId: null, location: null, description: null, handle: null,
-          node: null, status: null });
+         status: null });
     }
     // eslint-disable-next-line
   }, [card.state, guid, listing]); 

@@ -53,6 +53,7 @@ export function useListing() {
             logo: item.imageSet ? getListingImageUrl(state.node, item.guid) : null,
             name: item.name,
             handle: item.handle,
+            node: item.node,
           };
         });
         const sorted = contacts.sort((a, b) => {
