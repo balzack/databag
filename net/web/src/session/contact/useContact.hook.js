@@ -1,7 +1,6 @@
 import { useContext, useState, useEffect } from 'react';
 import { CardContext } from 'context/CardContext';
 import { ViewportContext } from 'context/ViewportContext';
-import { getListingImageUrl } from 'api/getListingImageUrl';
 import { getListingMessage } from 'api/getListingMessage';
 import { getCardByGuid } from 'context/cardUtil';
 
