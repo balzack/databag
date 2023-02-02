@@ -3,7 +3,6 @@ import { ChannelHeaderWrapper, StatusError } from './ChannelHeader.styled';
 import { ExclamationCircleOutlined, SettingOutlined, CloseOutlined } from '@ant-design/icons';
 import { Tooltip } from 'antd';
 import { Logo } from 'logo/Logo';
-import { useEffect } from 'react';
 
 export function ChannelHeader({ closeConversation, openDetails, contentKey }) {
 
