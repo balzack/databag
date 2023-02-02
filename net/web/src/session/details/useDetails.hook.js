@@ -25,7 +25,7 @@ export function useDetails() {
     showEditSubject: false,
     editSubject: null,
 
-    display: null,
+    display: 'small',
     sealed: false,
     contentKey: null,
     seals: null,
@@ -167,9 +167,14 @@ export function useDetails() {
       let title;
       try {
         const detail = channelValue?.data?.channelDetail;
-        if (detail?.dataType === 'sealed' && state.contentKey) {
-          const unsealed = decryptChannelSubject(detail.data, state.contentKey);
-          title = unsealed.subject;
+        if (detail?.dataType === 'sealed') {
+          if (state.contentKey) {
+            const unsealed = decryptChannelSubject(detail.data, state.contentKey);
+            title = unsealed.subject;
+          }
+          else {
+            title = '...';
+          }
         }
         else if (detail?.dataType === 'superbasic') {
           const data = JSON.parse(detail.data);

@@ -10,7 +10,7 @@ export function useCards() {
   const [state, setState] = useState({
     tooltip: false,
     sorted: false,
-    display: null,
+    display: 'small',
     cards: [],
   });
 
@@ -21,6 +21,11 @@ export function useCards() {
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
   }
+
+  useEffect(() => {
+    const { display } = viewport.state;
+    updateState({ display });
+  }, [viewport.state]);
 
   useEffect(() => {
     const contacts = Array.from(card.state.cards.values()).map(item => {

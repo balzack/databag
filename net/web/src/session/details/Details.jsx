@@ -129,7 +129,7 @@ export function Details({ closeDetails, closeConversation, openContact }) {
     <DetailsWrapper>
       { modalContext }
       <div class="header">
-        <div class="label">Topic</div>
+        <div class="label">Topic Details</div>
         { state.display === 'xlarge' && (
           <div class="dismiss" onClick={closeConversation}>
             <DoubleRightOutlined />

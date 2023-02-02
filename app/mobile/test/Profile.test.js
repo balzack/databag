@@ -161,15 +161,12 @@ test('testing', async () => {
   });
   
   const renderCount = screen.getByTestId('profile').props.renderCount;
-console.log("RENDER COUNT:", renderCount);
 
   await act(async () => {
     identity = { name: 'renderer' };
     const profile = screen.getByTestId('profile').props.profile;
     await profile.actions.setRevision(2048);
   });
-
-console.log(renderCount);
 
   await act(async () => {
     expect(screen.getByTestId('profile').props.renderCount).toBe(renderCount + 1);

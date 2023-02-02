@@ -51,7 +51,7 @@ export function useConversation(cardId, channelId) {
         const seals = getChannelSeals(data);
         if (isUnsealed(seals, sealKey)) {
           const contentKey = getContentKey(seals, sealKey);
-          updateState({ sealed: true, contentKey });
+          updateState({ sealed: true, wtf: true, contentKey });
         }
         else {
           updateState({ sealed: true, contentKey: null });
@@ -105,7 +105,6 @@ export function useConversation(cardId, channelId) {
       const { card, channel } = conversationId.current;
       loading.current = true;
       conversationId.current = null;
-      updateState({ contentKey: null });
       await conversation.actions.setChannel(card, channel);
       loading.current = false;
       await setChannel();
@@ -258,7 +257,6 @@ export function useConversation(cardId, channelId) {
     updateTopic: async (topic, text) => {
       const { assets, textSize, textColor } = topic;
       const message = { text, textSize, textColor, assets };
-      console.log("UPDATE", message);
       
       if (!state.busy) {
         updateState({ busy: true });
