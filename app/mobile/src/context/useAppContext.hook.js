@@ -60,7 +60,7 @@ export function useAppContext() {
     await profile.actions.setSession(access);
     await card.actions.setSession(access);
     await channel.actions.setSession(access);
-    updateState({ session: true, server: access.server, appToken: access.appToken,
+    updateState({ session: true, server: access.server, token: access.appToken,
       loginTimestamp: access.created });
     setWebsocket(access.server, access.appToken);
   }

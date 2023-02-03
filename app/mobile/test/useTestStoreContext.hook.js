@@ -93,6 +93,7 @@ export function useTestStoreContext() {
     },
 
     getChannelRevision: async (guid) => {
+      return 1;
     },
     setChannelRevision: async (guid, revision) => {
     }, 
@@ -123,6 +124,7 @@ export function useTestStoreContext() {
     getChannelItemView: async (guid, channelId) => {
     },
     getChannelItems: async (guid) => {
+      return [];
     },
 
     getChannelTopicItems: async (guid, channelId) => {

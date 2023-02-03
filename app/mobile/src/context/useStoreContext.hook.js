@@ -198,7 +198,7 @@ export function useStoreContext() {
     }, 
     setChannelItem: async (guid, channel) => {
       const { id, revision, data } = channel;
-      await db.current.executeSql(`INSERT OR REPLACE INTO channel_${guid} (channel_id, revision, detail_revision, topic_revision, detail, summary, unsealed_detail, unsealed_summary) values (?, ?, ?, ?, ?, ?, null, null);`, [id, revision, data.detailRevision, data.topicRevision, encodeObject(data.channelDetail), encodeObject(data.channelSummary)]);
+      await db.current.executeSql(`INSERT OR REPLACE INTO channel_${guid} (channel_id, revision, detail_revision, topic_revision, detail, summary, unsealed_detail, unsealed_summary) values (?, ?, ?, ?, ?, ?, null, null);`, [id, revision, detailRevision, topicRevision, encodeObject(channelDetail), encodeObject(channelSummary)]);
     },
     clearChannelItem: async (guid, channelId) => {
       await db.current.executeSql(`DELETE FROM channel_${guid} WHERE channel_id=?`, [channelId]);
@@ -275,8 +275,8 @@ export function useStoreContext() {
       }));  
     },
     setChannelTopicItem: async (guid, channelId, topic) => { 
-      const { id, revision, data } = topic;
-      await db.current.executeSql(`INSERT OR REPLACE INTO channel_topic_${guid} (channel_id, topic_id, revision, detail_revision, detail, unsealed_detail) values (?, ?, ?, ?, ?, null);`, [channelId, id, revision, data.detailRevision, encodeObject(data.topicDetail)]);
+      const { topicId, revision, detailRevision, detail } = topic;
+      await db.current.executeSql(`INSERT OR REPLACE INTO channel_topic_${guid} (channel_id, topic_id, revision, detail_revision, blocked detail, unsealed_detail) values (?, ?, ?, ?, false, ?, null);`, [channelId, topicId, revision, detailRevision, encodeObject(detail)]);
     },
     setChannelTopicItemUnsealedDetail: async (guid, channelId, topicId, revision, unsealed) => {
       await db.current.executeSql(`UPDATE channel_topic_${guid} set unsealed_detail=? where detail_revision=? AND channel_id=? AND topic_id=?`, [encodeObject(unsealed), revision, channelId, topicId]);
