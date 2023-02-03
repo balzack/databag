@@ -28,9 +28,9 @@ export function useProfileContext() {
 
       try {
         const revision = curRevision.current;
-        const { server, appToken, guid } = session.current;
-        const identity = await getProfile(server, appToken);
-        const imageUrl = identity?.image ? getProfileImageUrl(server, appToken, revision) : null;
+        const { server, token, guid } = session.current;
+        const identity = await getProfile(server, token);
+        const imageUrl = identity?.image ? getProfileImageUrl(server, token, revision) : null;
         await store.actions.setProfile(guid, identity);
         await store.actions.setProfileRevision(guid, revision);
         updateState({ identity, imageUrl });
@@ -49,10 +49,10 @@ export function useProfileContext() {
 
   const actions = {
     setSession: async (access) => {
-      const { guid, server, appToken } = access;
+      const { guid, server, token } = access;
       const identity = await store.actions.getProfile(guid);
       const revision = await store.actions.getProfileRevision(guid);
-      const imageUrl = identity?.image ? getProfileImageUrl(server, appToken, revision) : null;
+      const imageUrl = identity?.image ? getProfileImageUrl(server, token, revision) : null;
       updateState({ identity, imageUrl });
       setRevision.current = revision;
       curRevision.current = revision;
@@ -67,16 +67,16 @@ export function useProfileContext() {
       sync();
     },
     setProfileData: async (name, location, description) => {
-      const { server, appToken } = session.current;
-      await setProfileData(server, appToken, name, location, description);
+      const { server, token } = session.current;
+      await setProfileData(server, token, name, location, description);
     },
     setProfileImage: async (image) => {
-      const { server, appToken } = session.current;
-      await setProfileImage(server, appToken, image);
+      const { server, token } = session.current;
+      await setProfileImage(server, token, image);
     },
     getHandleStatus: async (name) => {
-      const { server, appToken } = session.current;
-      return await getHandle(server, appToken, name);
+      const { server, token } = session.current;
+      return await getHandle(server, token, name);
     },
   }
 

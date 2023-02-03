@@ -78,7 +78,7 @@ test('testing', async () => {
   await act(async () => {
     identity = { name: 'jester' };
     const profile = screen.getByTestId('profile').props.profile;
-    await profile.actions.setSession({ guid: 'abc', server: 'test.org', appToken: '123' });
+    await profile.actions.setSession({ guid: 'abc', server: 'test.org', token: '123' });
     await profile.actions.setRevision(1);
   });
 
@@ -120,7 +120,7 @@ test('testing', async () => {
   await act(async () => {
     identity = { name: 'jester' };
     const profile = screen.getByTestId('profile').props.profile;
-    await profile.actions.setSession({ guid: 'abc', server: 'test.org', appToken: '123' });
+    await profile.actions.setSession({ guid: 'abc', server: 'test.org', token: '123' });
   });
 
   await waitFor(async () => {

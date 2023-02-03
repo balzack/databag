@@ -39,7 +39,7 @@ export function useChannelContext() {
 
   const setChannelItem = (channel) => {
     return {
-      cardId: channel.id,
+      channelId: channel.id,
       revision: channel.revision,
       detailRevision: channel.data?.detailRevision,
       topicRevision: channel.data?.topicRevision,
@@ -70,31 +70,37 @@ export function useChannelContext() {
     if (!syncing.current && (setRevision.current !== curRevision.current || force.current)) {
       syncing.current = true;
       force.current = false;
-
       try {
         const revision = curRevision.current;
-        const { server, token, guid } = session.current;
+        const { server, token, guid } = access.current;
         const delta = await getChannels(server, token, setRevision.current);
         for (let channel of delta) {
           if (channel.data) {
             const item = setChannelItem(channel);
             if (item.detail && item.summary) {
               await store.actions.setChannelItem(guid, item);
-              channels.set(item.channelId, item);
+              channels.current.set(item.channelId, item);
             }
             else {
-              const { channelId, detailRevision, topicRevision, detail, summary } = channel;
-              const view = await store.actions.getChannelItemView(guid, channelId);
-              if (view?.detailRevision !== detailRevision) {
+              const { channelId, detailRevision, topicRevision, detail, summary } = channels.current.get(channel.id) || {} 
+              if (item.detailRevision !== detailRevision) {
+                item.detailRevision = detailRevision;
                 item.detail = await getChannelDetail(server, token, channelId);
                 await store.actions.setChannelItemDetail(guid, channelId, detailRevision, item.detail);
               }
-              if (view?.topicRevision !== topicRevision) {
+              else {
+                item.datail = detail;
+              }
+              if (item.topicRevision !== topicRevision) {
+                item.topicRevision = topicRevision;
                 item.summary = await getChannelSummary(server, token, item.channelId);
-                await store.actions.setChannelItemSummary(guid, channel.id, topicRevision, item.summary);
+                await store.actions.setChannelItemSummary(guid, channelId, topicRevision, item.summary);
+              }
+              else {
+                item.summary = summary;
               }
               await store.actions.setChannelItem(guid, item);
-              channels.set(channelId, item);
+              channels.current.set(channelId, item);
             }
           }
           else {
@@ -134,7 +140,7 @@ export function useChannelContext() {
       setRevision.current = revision;
       setState({ offsync: false, channels: channels.current });
     },
-    clearToken: () => {
+    clearSession: () => {
       access.current = null;
     },
     setRevision: async (rev) => {

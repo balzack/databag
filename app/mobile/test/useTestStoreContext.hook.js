@@ -8,6 +8,9 @@ export function useTestStoreContext() {
     setState((s) => ({ ...s, ...value }))
   }
 
+  const channelRevision = useRef(0);
+  const channels = useRef(new Map());
+
   const initSession = async (guid) => {
   }
 
@@ -93,13 +96,16 @@ export function useTestStoreContext() {
     },
 
     getChannelRevision: async (guid) => {
-      return 1;
+      return channelRevision.current;
     },
     setChannelRevision: async (guid, revision) => {
+      channelRevision.current = revision;
     }, 
     setChannelItem: async (guid, channel) => {
+      channels.current.set(channel.channelId, channel);
     },
     clearChannelItem: async (guid, channelId) => {
+      channels.current.delete(channelId);
     },
     setChannelItemRevision: async (guid, channelId, revision) => {
     },
@@ -122,9 +128,10 @@ export function useTestStoreContext() {
     setChannelItemUnsealedSummary: async (guid, channelId, revision, unsealed) => {
     },
     getChannelItemView: async (guid, channelId) => {
+      return channels.current.get(channelId);
     },
     getChannelItems: async (guid) => {
-      return [];
+      return Array.from(channels.current.values());
     },
 
     getChannelTopicItems: async (guid, channelId) => {
