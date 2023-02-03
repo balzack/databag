@@ -1,4 +1,4 @@
-import { Input, List } from 'antd';
+import { Input, List, Button } from 'antd';
 import { CardsWrapper } from './Cards.styled';
 import { SortAscendingOutlined, UpOutlined, DoubleRightOutlined, UserOutlined, SearchOutlined } from '@ant-design/icons';
 import { useCards } from './useCards.hook';
@@ -27,10 +27,7 @@ export function Cards({ closeCards, openContact, openListing }) {
         </div>
         { state.display === 'small' && (
           <div className="inline">
-            <div className="add" onClick={openListing}>
-              <UserOutlined />
-              <div className="label">New</div>
-            </div>
+            <Button type="primary" icon={<UserOutlined />} onClick={openListing}>Add</Button>
           </div>
         )}
         { state.display !== 'small' && (

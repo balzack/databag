@@ -99,9 +99,14 @@ export function useChannelHeader(contentKey) {
       let title;
       try {
         const detail = channelValue?.data?.channelDetail;
-        if (detail?.dataType === 'sealed' && contentKey) {
-          const unsealed = decryptChannelSubject(detail.data, contentKey);
-          title = unsealed.subject;
+        if (detail?.dataType === 'sealed') {
+          if (contentKey) {
+            const unsealed = decryptChannelSubject(detail.data, contentKey);
+            title = unsealed.subject;
+          }
+          else {
+            title = '...';
+          }
         }
         else if (detail?.dataType === 'superbasic') {
           const data = JSON.parse(detail.data);
