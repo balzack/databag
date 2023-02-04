@@ -300,8 +300,8 @@ export function useStoreContext() {
     },
 
     setCardChannelItem: async (guid, cardId, channel) => {
-      const { id, revision, data } = channel;
-      await db.current.executeSql(`INSERT OR REPLACE INTO card_channel_${guid} (card_id, channel_id, revision, detail_revision, topic_revision, detail, summary, unsealed_detail, unsealed_summary) values (?, ?, ?, ?, ?, ?, ?, null, null);`, [cardId, id, revision, data.detailRevision, data.topicRevision, encodeObject(data.channelDetail), encodeObject(data.channelSummary)]);
+      const { channelId, revision, detailRevision, topicRevision, detail, summary } = channel;
+      await db.current.executeSql(`INSERT OR REPLACE INTO card_channel_${guid} (card_id, channel_id, revision, detail_revision, topic_revision, detail, summary, unsealed_detail, unsealed_summary) values (?, ?, ?, ?, ?, ?, ?, null, null);`, [cardId, channelId, revision, detailRevision, topicRevision, encodeObject(channelDetail), encodeObject(channelSummary)]);
     },
     clearCardChannelItem: async (guid, cardId, channelId) => {
       await db.current.executeSql(`DELETE FROM card_channel_${guid} WHERE card_id=? and channel_id=?`, [cardId, channelId]);

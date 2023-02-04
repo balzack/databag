@@ -211,6 +211,15 @@ export function useChannelContext() {
       await resync();
     },
 
+    getNotifications: async (channelId) => {
+      const { server, token } = session.current;
+      return await getChannelNotifications(server, token, channelId);
+    },
+    setNotifications: async (channelId, notify) => {
+      const { server, token } = session.current;
+      return await setChannelNotifications(server, token, channelId, notify);
+    },
+
     setReadRevision: async (channelId, revision) => {
       const { guid } = access.current;
       await store.actions.setChannelItemReadRevision(guid, channelId, revision);
