@@ -172,7 +172,6 @@ export function useChannelContext() {
       if (files?.length > 0) {
         const topicId = await addChannelTopic(server, token, channelId, null, null, null);
         upload.actions.addTopic(server, token, channelId, topicId, files, async (assets) => {
-          message.assets = assets;
           const subject = message(assets);
           await setChannelTopicSubject(server, token, channelId, topicId, type, sbuject);
         }, async () => {
@@ -201,12 +200,14 @@ export function useChannelContext() {
       const { server, token } = access.current;
       getChannelTopicAssetUrl(server, token, channelId, topicId, assetId);
     },
-
     getTopics: async (channelId) => {
-      const { guid } = session.current;
-      return await store.actions.getChannelTopicItems(guid, channelId); 
+      const { server, token } = access.current;
+      return await getChannelTopics(server, token, channelId, revision, count, begin, end);
     },
-
+    getTopic: async (channelId, topicId) => {
+      const { server, token } = access.current;
+      return await getChannelTopic(server, token, channelId, topicId);
+    },
     resync: async () => {
       await resync();
     },
@@ -262,12 +263,8 @@ export function useChannelContext() {
       return await addFlag(server, guid, channelId, topicId);
     },
     getTopicItems: async (channelId, revision, count, begin, end) => {
-      const { server, token } = session.current;
-      return await getChannelTopics(server, token, channelId, revision, count, begin, end);
-    },
-    getTopicItem: async (channelId, topicId) => {
-      const { server, token } = session.current;
-      return await getChannelTopic(server, token, channelId, topicId);
+      const { guid } = session.current;
+      return await store.actions.getChannelTopicItems(guid, channelId); 
     },
     setTopicItem: async (channelId, topic) => {
       const { guid } = session.current;

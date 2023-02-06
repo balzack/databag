@@ -33,6 +33,7 @@ export function useCardContext() {
   const [state, setState] = useState({
     offsync: false,
     cards: new Map(),
+    viewRevision: null,
   });
   const upload = useContext(UploadContext);
   const access = useRef(null);
@@ -45,6 +46,75 @@ export function useCardContext() {
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }))
+  }
+
+  const setCardItem = (card) => {
+    return {
+      cardId: card.id,
+      revision: card.revision,
+      detailRevision: card.data?.detailRevision,
+      profileRevision: card.data?.profileRevision,
+      detail: card.data?.cardDetail,
+      profile: card.data?.cardProfile,
+      notifiedView: card.data?.notifiedView,
+      notifiedProfile: card.data?.notifiedProfile,
+      notifiedArticle: card.data?.notifiedArticle,
+      notifiedChannel: card.data?.notifiedChannel,
+    }
+  }
+
+  const setCardField = (cardId, field, value) => {
+    const card = cards.current.get(cardId);
+    if (card) {
+      card[field] = value;
+      cards.set(cardId, { ...card });
+      updateState({ cards: cards.current });
+    }
+  };
+
+  const setCardChannelField = (cardId, channelId, field, value) => {
+    const card = cards.current.get(cardId);
+    if (card) {
+      const channel = card.channels.get(channelId);
+      if (channel) {
+        channel[field] = value;
+        card.channels.set(channelId, { ...channel });
+        cards.current.set(cardId, { ...card });
+      }
+    }
+  };
+    
+  const resync = async () => {
+    try {
+      force.current = true;
+      await sync();
+    }
+    catch (err) {
+      console.log(err);
+    }
+  };
+
+  const resyncCard = async (cardId) => {
+    if (!syncing.current) {
+      syncing.current = true;
+
+      try {
+        const { token } = access.current;
+        const card = cards.current.get(cardId) || {};
+
+        if (card.detail?.status === 'connected') {
+          await syncCard(token, card);
+        }
+        card.offsync = false;
+        cards.current.set(cardId, card);
+        updateState({ cards: cards.current });
+      }
+      catch(err) {
+        console.log(err);
+      }
+      syncing.current = false;
+      await sync();
+    }
   }
 
 
@@ -249,17 +319,54 @@ export function useCardContext() {
   }
 
   const sync = async () => {
-    if (!syncing.current && (setRevision.current !== curRevision.current || resync.current.length > 0)) {
+    if (!syncing.current && (setRevision.current !== curRevision.current || force.current)) {
       syncing.current = true;
-      const { server, appToken, guid } = session.current;
+      force.current = false;
 
       try {
+        const { server, token, guid } = session.current;
         const revision = curRevision.current;
-
-        // get and store
-        const delta = await getCards(server, appToken, setRevision.current);
+        const delta = await getCards(server, token, setRevision.current);
         for (let card of delta) {
           if (card.data) {
+            const item = setCardItem(card);
+            const { profileRevision, profile, detailRevision, detail } = cards.current.get(card.id) || {};
+
+            if (item.profileRevision !== profileRevision) {
+            }
+            else {
+              item.profileRevision = profile;
+            }
+
+            if (item.detailRevision !== detailRevision) {
+            }
+            else {
+              item.detailRevision = detail;
+            ]
+
+            await store.actions.setCardItem(guid, card);
+            cards.current.set(card.cardId, 
+          }
+          else {
+            await store.actions.clearCardChannelItems(guid, card.id); 
+            await store.actions.clearCardItem(guid, card.id);
+            cards.current.delete(card.id);
+          }
+        }
+      }
+      catch (err) {
+        console.log(err);
+        syncing.current = false;
+        updateState({ offsync: true });
+        return;
+      }
+
+      syncing.current = false;
+      await sync();
+    }
+  };
+
+
             if (card.data.cardDetail && card.data.cardProfile) {
               await store.actions.setCardItem(guid, card);
               setCard(card.id, card);
@@ -293,9 +400,6 @@ export function useCardContext() {
             await syncCard(card);
           }
           else {
-            await store.actions.clearCardChannelItems(guid, card.id); 
-            await store.actions.clearCardItem(guid, card.id);
-            cards.current.delete(card.id);
           }
         }
 
@@ -434,10 +538,12 @@ export function useCardContext() {
           card.channels.set(card.channelId, cardChannel);
         }
       }
+      const status = await store.actions.getCardRequestStatus(guid);
+
       const revision = await store.actions.getCardRevision(session.guid);
       curRevision.current = revision;
       setRevision.current = revision;
-      setState({ offsync: false, channels: channels.current });
+      setState({ offsync: false, viewRevision: status?.revision, channels: channels.current });
     },
     clearSession: () => {
       access.current = null;
@@ -482,245 +588,24 @@ export function useCardContext() {
     setCardCloseMessage: async (server, message) => {
       return await setCardCloseMessage(server, message);
     },
-
-
     getCardImageUrl: (cardId) => {
+      const { server, token } = access.current;
+      return getCardImageUrl(server, token, cardId, revision);
     },
     removeChannel: async (cardId, channelId) => {
+      const { detail, profile } = cards.current.get(cardId) || {};
+      const cardToken = `${profile?.guid}.${detail?.token}`;
+      return await removeContactChannel(profile?.node, cardToken, channelId);
     },
-    addTopic: async (cardId, channelId, type, message, files) => {
-    },
-    removeTopic: async (cardId, channelId, topicId) => {
-    },
-    setTopicSubject: async (cardId, channelId, topicId, type, subject) => {
-    },
-    getTopicAssetUrl: (cardId, channelId, topicId, assetId) => {
-    },
-    getTopics: async (cardId, channelId, revision, count, begin, end) => {
-    },
-    getTopic: async (cardId, channelId, topicId) => {
-    },
-    resync: async () => {
-    },
-    resyncCard: async (cardId) => {
-    },
-
-    setContactRevision: async (cardId, revision) => {
-    },
-    setCardFlag: async (cardId) => {
-    },
-    clearCardFlag: async (cardId) => {
-    },
-    setChannelReadRevision: async (cardId, channelId, revision) => {
-    },
-    setChannelSyncRevision: async (cardId, channelId, revision) => {
-    },
-    setChannelTopicMarker: async (cardId, channelId, marker) => {
-    },
-    addChannelAlert: async (cardId, channelId) => {
-    },
-    setChannelFlag: async (cardId, channelId) => {
-    },
-    clearChannelFlag: async (cardId, channelId) => {
-    },
-    getChannelNotifications: async (cardId, channelId) => {
-    },
-    setChannelNotifications: async (cardId, channelId, notify) => {
-    },
-    addTopicAlert: async (cardId, channelId, topicId) => {
-    },
-    setTopicFlag: async (cardId, channelId, topicId) => {
-    },
-    clearTopicFlag: async (cardId, channelId, topicId) => {
-    },
-
-    getTopicItems: async (cardId, channelId, revision, count, begin, end) => {
-    },
-    getTopicItem: async (cardId, channelId, topicId) => {
-    },
-    setTopicItem: async (cardId, channelId, topic) => {
-    },
-    clearTopicItem: async (cardId, channelId) => {
-    },
-    
-    setUnsealedChannelSubject: async (cardId, channelId, revision, unsealed) => {
-    },
-    setUnsealedChannelSummary: async (cardId, channelId, revision, unsealed) => {
-    },
-    setUnsealedTopicSubject: async (cardId, channelId, topicId, revision, unsealed) => {
-    },    
-    
-
-    //setSession: async (access) => {
-      const { guid, server, appToken } = access;
-      cards.current = new Map();
-      const status = await store.actions.getCardRequestStatus(guid);
-      updateState({ requestRevision: status.revision });
-      const cardItems = await store.actions.getCardItems(guid);
-      for (item of cardItems) {
-        cards.current.set(item.cardId, { ...item, channels: new Map() });
-      }
-      const cardChannelItems = await store.actions.getCardChannelItems(guid);
-      for (item of cardChannelItems) {
-        setCardChannelItem(item.cardId, item);
-      }
-      const revision = await store.actions.getCardRevision(guid);
-      updateState({ cards: cards.current });
-      setRevision.current = revision;
-      curRevision.current = revision;
-      session.current = access;
-    },
-    setRequestRevision: async (revision) => {
-      const { guid } = session.current
-      await store.actions.setCardRequestStatus(guid, { revision });
-      updateState({ requestRevision: revision });
-    },
-    //clearSession: () => {
-      session.current = {};
-      updateState({ account: null });
-    },
-    setRevision: (rev) => {
-      curRevision.current = rev;
-      sync();
-    },
-    setChannelReadRevision: async (cardId, channelId, rev) => {
-      await store.actions.setCardChannelItemReadRevision(session.current.guid, cardId, channelId, rev);
-      setCardChannelReadRevision(cardId, channelId, rev);
-      updateState({ cards: cards.current });
-    },
-    getCardLogo: (cardId, revision) => {
-      const { server, appToken } = session.current;
-      return getCardImageUrl(server, appToken, cardId, revision);
-    },
-    getByGuid: (guid) => {
-      let card;
-      cards.current.forEach((value, key, map) => {
-        if (value?.profile?.guid === guid) {
-          card = value;
-        }
-      });
-      return card;
-    },
-    //addCard: async (message) => {
-      const { server, appToken } = session.current;
-      return await addCard(server, appToken, message);
-    },
-    //removeCard: async (cardId) => {
-      const { server, appToken } = session.current;
-      return await removeCard(server, appToken, cardId);
-    },
-    //setCardConnecting: async (cardId) => {
-      const { server, appToken } = session.current;
-      return await setCardConnecting(server, appToken, cardId);
-    },
-    //setCardConnected: async (cardId, token, rev) => {
-      const { server, appToken } = session.current;
-      return await setCardConnected(server, appToken, cardId, token,
-          rev.viewRevision, rev.articleRevision, rev.channelRevision, rev.profileRevision);
-    },
-    //setCardConfirmed: async (cardId) => {
-      const { server, appToken } = session.current;
-      return await setCardConfirmed(server, appToken, cardId);
-    },
-    //getCardOpenMessage: async (cardId) => {
-      const { server, appToken } = session.current;
-      return await getCardOpenMessage(server, appToken, cardId);
-    },
-    //setCardOpenMessage: async (server, message) => {
-      return await setCardOpenMessage(server, message);
-    },
-    //getCardCloseMessage: async (cardId) => {
-      const { server, appToken } = session.current;
-      return await getCardCloseMessage(server, appToken, cardId);
-    },
-    //setCardCloseMessage: async (server, message) => {
-      return await setCardCloseMessage(server, message);
-    },
-    setCardBlocked: async (cardId) => {
-      const { guid } = session.current;
-      setCardBlocked(cardId, true);
-      await store.actions.setCardItemBlocked(guid, cardId);
-      updateState({ cards: cards.current });
-    },
-    clearCardBlocked: async (cardId) => {
-      const { guid } = session.current;
-      setCardBlocked(cardId, false);
-      await store.actions.clearCardItemBlocked(guid, cardId);
-      updateState({ cards: cards.current });
-    },
-    setSyncRevision: async (cardId, channelId, revision) => {
-      const { guid } = session.current;
-      await store.actions.setCardChannelItemSyncRevision(guid, cardId, channelId, revision);
-      setCardChannelSyncRevision(cardId, channelId, revision);
-      updateState({ cards: cards.current });
-    },
-    setTopicMarker: async (cardId, channelId, marker) => {
-      const { guid } = session.current;
-      await store.actions.setCardChannelItemTopicMarker(guid, cardId, channelId, marker);
-      setCardChannelTopicMarker(cardId, channelId, marker);
-      updateState({ cards: cards.current });
-    },
-    setChannelBlocked: async (cardId, channelId) => {
-      const { guid } = session.current;
-      await store.actions.setCardChannelItemBlocked(guid, cardId, channelId);
-      setCardChannelBlocked(cardId, channelId, true);
-      updateState({ cards: cards.current });
-    },
-    clearChannelBlocked: async (cardId, channelId) => {
-      const { guid } = session.current;
-      await store.actions.clearCardChannelItemBlocked(guid, cardId, channelId);
-      setCardChannelBlocked(cardId, channelId, false);
-      updateState({ cards: cards.current });
-    },
-    setChannelTopicBlocked: async (cardId, channelId, topicId) => {
-      const { guid } = session.current;
-      await store.actions.setCardChannelTopicBlocked(guid, cardId, channelId, topicId, true);
-    },
-    clearChannelTopicBlocked: async (cardId, channelId, topicId) => {
-      const { guid } = session.current;
-      await store.actions.setCardChannelTopicBlocked(guid, cardId, channelId, topicId, false);
-    },
-    getChannelTopicBlocked: async () => {
-      const { guid } = session.current;
-      return await store.actions.getCardChannelTopicBlocked(guid);
-    },
-    getChannelTopicItems: async (cardId, channelId) => {
-      const { guid } = session.current;
-      return await store.actions.getCardChannelTopicItems(guid, cardId, channelId);
-    },
-    setChannelTopicItem: async (cardId, channelId, topicId, topic) => {
-      const { guid } = session.current;
-      return await store.actions.setCardChannelTopicItem(guid, cardId, channelId, topicId, topic);
-    },
-    clearChannelTopicItem: async (cardId, channelId, topicId) => {
-      const { guid } = session.current;
-      return await store.actions.clearCardChannelTopicItem(guid, cardId, channelId, topicId);
-    },
-    clearChannelTopicItems: async (cardId, channelId) => {
-      const { guid } = session.current;
-      return await store.actions.clearCardChannelTopicItems(guid, cardId, channelId);
-    },
-    getChannelTopic: async (cardId, channelId, topicId) => {
-      const { detail, profile } = getCardEntry(cardId);
-      return await getContactChannelTopic(profile.node, `${profile.guid}.${detail.token}`, channelId, topicId);
-    },
-    getChannelTopics: async (cardId, channelId, revision, count, begin, end) => {
-      const { detail, profile } = getCardEntry(cardId);
-      return await getContactChannelTopics(profile.node, `${profile.guid}.${detail.token}`, channelId, revision, count, begin, end);
-    },
-    getChannelTopicAssetUrl: (cardId, channelId, topicId, assetId) => {
-      const { detail, profile } = getCardEntry(cardId);
-      return getContactChannelTopicAssetUrl(profile.node, `${profile.guid}.${detail.token}`, channelId, topicId, assetId);
-    },
-    addChannelTopic: async (cardId, channelId, message, files) => {
-      const { detail, profile } = getCardEntry(cardId);
-      const node = profile.node;
-      const token = `${profile.guid}.${detail.token}`;
+    addTopic: async (cardId, channelId, type, type, message, files) => {
+      const { detail, profile } = cards.current.get(cardId) || {};
+      const cardToken = `${profile?.guid}.${detail?.token}`;
+      const node = profile?.node;
       if (files?.length > 0) {
         const topicId = await addContactChannelTopic(node, token, channelId, null, null, null);
         upload.actions.addContactTopic(node, token, cardId, channelId, topicId, files, async (assets) => {
-          message.assets = assets;
-          await setContactChannelTopicSubject(node, token, channelId, topicId, 'superbasictopic', message);
+          const subject = message(assets);
+          await setContactChannelTopicSubject(node, token, channelId, topicId, type, subject);
         }, async () => {
           try {
             await removeContactChannelTopic(node, token, channelId, topicId);
@@ -731,108 +616,137 @@ export function useCardContext() {
         });
       }
       else {
-        await addContactChannelTopic(node, token, channelId, 'superbasictopic', message, []);
+        const subject = message([]);
+        await addContactChannelTopic(node, token, channelId, type, subject, []);
       }
     },
-    addSealedChannelTopic: async (cardId, channelId, message, sealKey) => {
-      const { detail, profile } = getCardEntry(cardId);
-      const node = profile.node;
-      const token = `${profile.guid}.${detail.token}`;
-      const iv = CryptoJS.lib.WordArray.random(128 / 8);
-      const key = CryptoJS.enc.Hex.parse(sealKey);
-      const encrypted = CryptoJS.AES.encrypt(JSON.stringify({ message }), key, { iv: iv });
-      const messageEncrypted = encrypted.ciphertext.toString(CryptoJS.enc.Base64)
-      const messageIv = iv.toString();
-      await addContactChannelTopic(node, token, channelId, 'sealedtopic', { messageEncrypted, messageIv });
+    removeTopic: async (cardId, channelId, topicId) => {
+      const { detail, profile } = cards.current.get(cardId) || {};
+      const cardToken = `${profile?.guid}.${detail?.token}`;
+      return await removeContactChannelTopic(profile?.node, cardToken, channelId, topicId);
     },
-    setChannelTopicSubject: async (cardId, channelId, topicId, dataType, data) => {
-      const { detail, profile } = getCardEntry(cardId);
-      return await setContactChannelTopicSubject(profile.node, `${profile.guid}.${detail.token}`, channelId, topicId, dataType, data);
+    setTopicSubject: async (cardId, channelId, topicId, type, subject) => {
+      const { detail, profile } = cards.current.get(cardId) || {};
+      const cardToken = `${profile?.guid}.${detail?.token}`;
+      return await setContactChannelTopicSubject(profile?.node, cardToken, channelId, topicId, type, subject);
     },
-    setChannelTopicUnsealedDetail: async (cardId, channelId, topicId, revision, unsealed) => {
-      const { guid } = session.current;
-      await store.actions.setCardChannelTopicItemUnsealedDetail(guid, cardId, channelId, topicId, revision, unsealed);
+    getTopicAssetUrl: (cardId, channelId, topicId, assetId) => {
+      const { detail, profile } = cards.current.get(cardId) || {};
+      const cardToken = `${profile?.guid}.${detail?.token}`;
+      return getContactChannelTopicAssetUrl(profile?.node, cardToken, channelId, topicId, assetId);
     },
-    removeChannel: async (cardId, channelId) => {
-      const { detail, profile } = getCardEntry(cardId);
-      return await removeContactChannel(profile.node, `${profile.guid}.${detail.token}`, channelId);
+    getTopics: async (cardId, channelId, revision, count, begin, end) => {
+      const { detail, profile } = cards.current.get(cardId) || {};
+      const cardToken = `${profile?.guid}.${detail?.token}`;
+      return await store.actions.getCardChannelTopicItems(guid, cardId, channelId);
     },
-    removeChannelTopic: async (cardId, channelId, topicId) => {
-      const { detail, profile } = getCardEntry(cardId);
-      return await removeContactChannelTopic(profile.node, `${profile.guid}.${detail.token}`, channelId, topicId);
+    getChannelTopic: async (cardId, channelId, topicId) => {
+      const { detail, profile } = cards.current.get(cardId) || {};
+      const cardToken = `${profile?.guid}.${detail?.token}`;
+      return await getContactChannelTopic(profile?.node, cardToken, channelId, topicId);
     },
-    addChannelReport: async (cardId, channelId) => {
-      const { detail, profile } = getCardEntry(cardId);
-      return await addFlag(profile.node, profile.guid, channelId);
+    setContactRevision: async (cardId, revision) => {
+      const { guid } = acccess.current
+      await store.actions.setCardRequestStatus(guid, { revision });
+      updateState({ viewRevision: revision });
     },
-    addChannelTopicReport: async (cardId, channelId, topicId) => {
-      const { detail, profile } = getCardEntry(cardId);
-      return await addFlag(profile.node, profile.guid, channelId, topicId);
+    setChannelReadRevision: async (cardId, channelId, revision) => {
+      const { guid } = access.current;
+      await store.actions.setCardChannelItemReadRevision(guid, cardId, channelId, revision);
+      setCardField(cardId, 'readRevision', revision);
     },
+    setChannelSyncRevision: async (cardId, channelId, revision) => {
+      const { guid } = access.current;
+      await store.actions.setCardChannelItemSyncRevision(guid, cardId, channelId, revision);
+      setCardField(cardId, 'syncRevision', revision);
+    },
+    setChannelTopicMarker: async (cardId, channelId, marker) => {
+      const { guid } = access.current;
+      await store.actions.setCardChannelItemTopicMarker(guid, cardId, channelId, marker);
+      setCardField(cardId, 'topicMarker', marker);
+    },
+    setCardFlag: async (cardId) => {
+      const { guid } = acccess.current;
+      await store.actions.setCardItemBlocked(guid, cardId);
+      setCardField(cardId, 'blocked', true);
+    },
+    clearCardFlag: async (cardId) => {
+      const { guid } = acccess.current;
+      await store.actions.clearCardItemBlocked(guid, cardId);
+      setCardField(cardId, 'blocked', false);
+    },
+    setChannelFlag: async (cardId, channelId) => {
+      const { guid } = access.current;
+      await store.actions.setCardChannelItemBlocked(guid, cardId, channelId);
+      setCardChannelField(cardId, channelId, 'blocked', true);
+    },
+    clearChannelFlag: async (cardId, channelId) => {
+      const { guid } = access.current;
+      await store.actions.setCardChannelItemBlocked(guid, cardId, channelId);
+      setCardChannelField(cardId, channelId, 'blocked', false);
+    },
+    setTopicFlag: async (cardId, channelId, topicId) => {
+      const { guid } = access.current;
+      await store.actions.setCardChannelTopicBlocked(guid, cardId, channelId, topicId, true);
+    },
+    clearTopicFlag: async (cardId, channelId, topicId) => {
+      const { guid } = access.current;
+      await store.actions.setCardChannelTopicBlocked(guid, cardId, channelId, topicId, false);
+    },
+    addChannelAlert: async (cardId, channelId) => {
+      const { profile } = cards.current.get(cardId) || {};
+      return await addFlag(profile?.node, profile?.guid, channelId);
+    },
+    addTopicAlert: async (cardId, channelId, topicId) => {
+      const { detail, profile } = cards.current.get(cardId) || {};
+      return await addFlag(profile?.node, profile?.guid, channelId, topicId);
+    },
+
     getChannelNotifications: async (cardId, channelId) => {
-      const { detail, profile } = getCardEntry(cardId);
-      return await getContactChannelNotifications(profile.node, `${profile.guid}.${detail.token}`, channelId);
+      const { detail, profile } = cards.current.get(cardId) || {};
+      const token = `${profile?.guid}.${detail?.token}`;
+      return await getContactChannelNotifications(profile?.node, token, channelId);
     },
     setChannelNotifications: async (cardId, channelId, notify) => {
-      const { detail, profile } = getCardEntry(cardId);
-      return await setContactChannelNotifications(profile.node, `${profile.guid}.${detail.token}`, channelId, notify);
+      const { detail, profile } = cards.current.get(cardId) || {};
+      const token = `${profile?.guid}.${detail?.token}`;
+      return await setContactChannelNotifications(profile?.node, token, channelId, notify);
     },
-    unsealChannelSubject: async (cardId, channelId, revision, sealKey) => {
-      try {
-        const { guid } = session.current;
-        const card = cards.current.get(cardId);
-        const channel = card.channels.get(channelId);
-        const { subjectEncrypted, subjectIv, seals } = JSON.parse(channel.detail.data);
-        const unsealedKey = await unsealKey(seals, sealKey);
-        if (unsealedKey) {
-          const iv = CryptoJS.enc.Hex.parse(subjectIv);
-          const key = CryptoJS.enc.Hex.parse(unsealedKey);
-          const enc = CryptoJS.enc.Base64.parse(subjectEncrypted);
-          let cipher = CryptoJS.lib.CipherParams.create({ ciphertext: enc, iv: iv });
-          const dec = CryptoJS.AES.decrypt(cipher, key, { iv: iv });
-          if (revision === channel.detailRevision) {
-            channel.unsealedDetail = JSON.parse(dec.toString(CryptoJS.enc.Utf8));
-            await store.actions.setCardChannelItemUnsealedDetail(guid, cardId, channelId, revision, channel.unsealedDetail);
-            card.channels.set(channelId, { ...channel });
-            cards.current.set(cardId, { ...card });
-            updateState({ cards: cards.current });
-          }
-        }
-      }
-      catch(err) {
-        console.log(err);
-      }
+
+    getTopicItems: async (cardId, channelId) => {
+      const { guid } = access.current;
+      return await store.actions.getCardChannelTopicItems(guid, cardId, channelId);
     },
-    unsealChannelSummary: async (cardId, channelId, revision, sealKey) => {
-      try {
-        const { guid } = session.current;
-        const card = cards.current.get(cardId);
-        const channel = card.channels.get(channelId);
-        const { seals } = JSON.parse(channel.detail.data);
-        const { messageEncrypted, messageIv } = JSON.parse(channel.summary.lastTopic.data);
-        const unsealedKey = await unsealKey(seals, sealKey);
-        if (unsealedKey) {
-          const iv = CryptoJS.enc.Hex.parse(messageIv);
-          const key = CryptoJS.enc.Hex.parse(unsealedKey);
-          const enc = CryptoJS.enc.Base64.parse(messageEncrypted);
-          let cipher = CryptoJS.lib.CipherParams.create({ ciphertext: enc, iv: iv });
-          const dec = CryptoJS.AES.decrypt(cipher, key, { iv: iv });
-          if (revision === channel.topicRevision) {
-            channel.unsealedSummary = JSON.parse(dec.toString(CryptoJS.enc.Utf8));
-            await store.actions.setCardChannelItemUnsealedSummary(guid, cardId, channelId, revision, channel.unsealedSummary);
-            card.channels.set(channelId, { ...channel });
-            cards.current.set(cardId, { ...card });
-            updateState({ cards: cards.current });
-          }
-        }
-      }
-      catch(err) {
-        console.log(err);
-      }
+    setChannelTopicItem: async (cardId, channelId, topicId, topic) => {
+      const { guid } = access.current;
+      return await store.actions.setCardChannelTopicItem(guid, cardId, channelId, topicId, topic);
     },
-    resync: (cardId) => {
-      resync.current.push(cardId);
-      sync();
+    clearChannelTopicItem: async (cardId, channelId, topicId) => {
+      const { guid } = access.current;
+      return await store.actions.clearCardChannelTopicItem(guid, cardId, channelId, topicId);
+    },
+    clearChannelTopicItems: async (cardId, channelId) => {
+      const { guid } = access.current;
+      return await store.actions.clearCardChannelTopicItems(guid, cardId, channelId);
+    },
+
+    setUnsealedChannelSubject: async (cardId, channelId, revision, unsealed) => {
+      const { guid } = access.current;
+      await store.actions.setCardChannelItemUnsealedDetail(guid, cardId, channelId, revision, unsealed);
+    },
+    setUnsealedChannelSummary: async (cardId, channelId, revision, unsealed) => {
+      const { guid } = session.current;
+      await store.actions.setCardChannelItemUnsealedSummary(guid, cardId, channelId, revision, unsealed);
+    },
+    setUnsealedTopicSubject: async (cardId, channelId, topicId, revision, unsealed) => {
+      const { guid } = access.current;
+      await store.actions.setCardChannelTopicItemUnsealedDetail(guid, cardId, channelId, topicId, revision, unsealed);
+    },    
+    resync: async () => {
+      await resync();
+    },
+    resyncCard: async (cardId) => {
+      await resyncCard(cardId);
     },
   }
   
