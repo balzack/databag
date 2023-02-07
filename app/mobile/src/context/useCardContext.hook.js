@@ -143,16 +143,26 @@ export function useCardContext() {
         for (let card of delta) {
           if (card.data) {
             const item = setCardItem(card);
-            const entry = cards.current.get(card.id) || { card: {}, channels: new Map() };
+            const entry = cards.current.get(card.id) || { card: { cardId: card.id }, channels: new Map() };
             const { profileRevision, detailRevision } = entry.card; 
             if (item.profileRevision !== profileRevision) {
+              if (item.profile) {
+                entry.card.profile = item.profile;
+              }
+              else {
+                entry.card.profile = await getCardProfile(server, token, card.id);
+              }
               entry.card.profileRevision = item.profileRevision;
-              entry.card.profile = await getCardProfile(server, token, card.id);
               await store.actions.setCardItemProfile(guid, card.id, entry.card.profileRevision, entry.card.profile);
             }
             if (item.detailRevision !== detailRevision) {
+              if (item.detail) {
+                entry.card.detail = item.detail;
+              }
+              else {
+                entry.card.detail = await getCardDetail(server, token, card.id);
+              }
               entry.card.detailRevision = item.detailRevision;
-              entry.card.detail = await getCardDetail(server, token, card.id);
               await store.actions.setCardItemDetail(guid, card.id, entry.card.detailRevision, entry.card.detail);
             }
             if (entry.card.detail?.state === 'connected' && !entry.card.offsync) {
@@ -427,7 +437,6 @@ export function useCardContext() {
       const { detail, profile } = cards.current.get(cardId) || {};
       return await addFlag(profile?.node, profile?.guid, channelId, topicId);
     },
-
     getChannelNotifications: async (cardId, channelId) => {
       const { detail, profile } = cards.current.get(cardId) || {};
       const token = `${profile?.guid}.${detail?.token}`;
@@ -438,7 +447,6 @@ export function useCardContext() {
       const token = `${profile?.guid}.${detail?.token}`;
       return await setContactChannelNotifications(profile?.node, token, channelId, notify);
     },
-
     getTopicItems: async (cardId, channelId) => {
       const { guid } = access.current;
       return await store.actions.getCardChannelTopicItems(guid, cardId, channelId);
@@ -455,7 +463,6 @@ export function useCardContext() {
       const { guid } = access.current;
       return await store.actions.clearCardChannelTopicItems(guid, cardId, channelId);
     },
-
     setUnsealedChannelSubject: async (cardId, channelId, revision, unsealed) => {
       const { guid } = access.current;
       await store.actions.setCardChannelItemUnsealedDetail(guid, cardId, channelId, revision, unsealed);
