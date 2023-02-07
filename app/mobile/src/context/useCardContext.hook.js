@@ -78,8 +78,8 @@ export function useCardContext() {
       revision: cardChannel.revision,
       detailRevision: cardChannel.data.detailRevision,
       topicRevision: cardChannel.data.topicRevision,
-      detail = cardChannel.data.detail,
-      summary = cardChannel.data.summary,
+      detail: cardChannel.data.detail,
+      summary: cardChannel.data.summary,
     };
   };
 
@@ -110,7 +110,7 @@ export function useCardContext() {
       syncing.current = true;
 
       try {
-        const { server, token, guid } = session.current;
+        const { server, token, guid } = access.current;
         const entry = cards.current.get(cardId);
         if (entry?.card?.detail === 'connected') {
           const card = await getCard(server, token, cardId);
@@ -137,7 +137,7 @@ export function useCardContext() {
       force.current = false;
 
       try {
-        const { server, token, guid } = session.current;
+        const { server, token, guid } = access.current;
         const revision = curRevision.current;
         const delta = await getCards(server, token, setRevision.current);
         for (let card of delta) {
@@ -153,7 +153,7 @@ export function useCardContext() {
             if (item.detailRevision !== detailRevision) {
               entry.card.detailRevision = item.detailRevision;
               entry.card.detail = await getCardDetail(server, token, card.id);
-              await store.actions.setCardItemDetail(guid, card.id, item.detailRevision, item.detail);
+              await store.actions.setCardItemDetail(guid, card.id, entry.card.detailRevision, entry.card.detail);
             }
             if (entry.card.detail?.state === 'connected' && !entry.card.offsync) {
               try {
@@ -170,9 +170,13 @@ export function useCardContext() {
           }
           else {
             const entry = cards.current.get(card.id) || { card: {}, channels: new Map() };
+            const ids = [];
             entry.channels.forEach((value, key) => {
-              await store.actions.clearCardChannelTopicItems(guid, card.id, key);
+              ids.push(key);
             });
+            for (let i = 0; i < ids.length; i++) {
+              await store.actions.clearCardChannelTopicItems(guid, card.id, ids[i]);
+            }
             await store.actions.clearCardChannelItems(guid, card.id); 
             await store.actions.clearCardItem(guid, card.id);
             cards.current.delete(card.id);
@@ -221,12 +225,12 @@ export function useCardContext() {
           if (item.detailRevision !== detailRevision) {
             channelEntry.detail = await getContactChannelDetail(cardServer, cardToken, channel.id);
             channelEntry.detailRevision = detailRevision;
-            await store.actions.setCardChannelItemDetail(guid, cardId, channel.id, detailRevision, channelEntry.detail);
+            await store.actions.setCardChannelItemDetail(guid, cardId, channel.id, channelEntry.detailRevision, channelEntry.detail);
           }
           if (item.topicRevision !== topicRevision) {
             channelEntry.summary = await getContactChannelSummary(cardServer, cardToken, channel.id);
             channelEntry.topicRevision = topicRevision;
-            await store.actions.setCardChannelItemSummary(guid, cardId, channel.id, topicRevision, channelEntry.summary);
+            await store.actions.setCardChannelItemSummary(guid, cardId, channel.id, channelEntry.topicRevision, channelEntry.summary);
           }
           entry.card.notifiedChannel = cardRevision.channel;
           await store.actions.setCardItemNotifiedChannel(guid, cardId, channelRevision.channel);
@@ -244,8 +248,7 @@ export function useCardContext() {
   };
 
   const actions = {
-
-    setSession: (session) => {
+    setSession: async (session) => {
       if (access.current || syncing.current) {
         throw new Error('invalid card state');
       }
@@ -255,19 +258,18 @@ export function useCardContext() {
       for(card of cardItems) {
         cards.current.set(card.cardId, { card, channels: new Map() });
       }
-      const cardChannelItems = await store.actions.getCardChannelItems(guid);
+      const cardChannelItems = await store.actions.getCardChannelItems(session.guid);
       for (cardChannel of cardChannelItems) {
         const card = cards.current.get(cardChannel.cardId);
         if (card) {
           card.channels.set(card.channelId, cardChannel);
         }
       }
-      const status = await store.actions.getCardRequestStatus(guid);
-
+      const status = await store.actions.getCardRequestStatus(session.guid);
       const revision = await store.actions.getCardRevision(session.guid);
       curRevision.current = revision;
       setRevision.current = revision;
-      setState({ offsync: false, viewRevision: status?.revision, channels: channels.current });
+      setState({ offsync: false, viewRevision: status?.revision, cards: cards.current });
     },
     clearSession: () => {
       access.current = null;
@@ -321,7 +323,7 @@ export function useCardContext() {
       const cardToken = `${profile?.guid}.${detail?.token}`;
       return await removeContactChannel(profile?.node, cardToken, channelId);
     },
-    addTopic: async (cardId, channelId, type, type, message, files) => {
+    addTopic: async (cardId, channelId, type, message, files) => {
       const { detail, profile } = cards.current.get(cardId) || {};
       const cardToken = `${profile?.guid}.${detail?.token}`;
       const node = profile?.node;
@@ -459,7 +461,7 @@ export function useCardContext() {
       await store.actions.setCardChannelItemUnsealedDetail(guid, cardId, channelId, revision, unsealed);
     },
     setUnsealedChannelSummary: async (cardId, channelId, revision, unsealed) => {
-      const { guid } = session.current;
+      const { guid } = access.current;
       await store.actions.setCardChannelItemUnsealedSummary(guid, cardId, channelId, revision, unsealed);
     },
     setUnsealedTopicSubject: async (cardId, channelId, topicId, revision, unsealed) => {

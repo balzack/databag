@@ -11,6 +11,10 @@ export function useTestStoreContext() {
   const channelRevision = useRef(0);
   const channels = useRef(new Map());
 
+  const cardRevision = useRef(0);
+  const cards = useRef(new Map());
+  const cardChannels = useRef(new Map());
+
   const initSession = async (guid) => {
   }
 
@@ -59,10 +63,13 @@ export function useTestStoreContext() {
     }, 
 
     getCardRevision: async (guid) => {
+      return cardRevision.current;
     },
     setCardRevision: async (guid, revision) => {
+      cardRevision.current = revision;
     },
     setCardItem: async (guid, card) => {
+      cards.current.set(card?.cardId, card)
     },
     clearCardItem: async (guid, cardId) => {
     },
@@ -91,8 +98,10 @@ export function useTestStoreContext() {
     getCardItemStatus: async (guid, cardId) => {
     },
     getCardItemView: async (guid, cardId) => {
+      return cards.current.get(cardId);
     },
     getCardItems: async (guid) => {
+      return Array.from(cards.current.values());
     },
 
     getChannelRevision: async (guid) => {
@@ -131,7 +140,7 @@ export function useTestStoreContext() {
       return channels.current.get(channelId);
     },
     getChannelItems: async (guid) => {
-      return Array.from(channels.current.values());
+      return Array.from(channels.current.values())
     },
 
     getChannelTopicItems: async (guid, channelId) => {
@@ -150,6 +159,7 @@ export function useTestStoreContext() {
     },
 
     setCardChannelItem: async (guid, cardId, channel) => {
+      cardChannelItems.current.set(`${cardId}:${channel.channelId}`, channel);
     },
     clearCardChannelItem: async (guid, cardId, channelId) => {
     },
@@ -172,6 +182,7 @@ export function useTestStoreContext() {
     getCardChannelItemView: async (guid, cardId, channelId) => {
     },
     getCardChannelItems: async (guid) => {
+      return Array.from(cardChannels.current.values());
     },
     clearCardChannelItems: async (guid, cardId) => {
     },

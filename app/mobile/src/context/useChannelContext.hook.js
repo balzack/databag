@@ -132,6 +132,7 @@ export function useChannelContext() {
       access.current = session;
       channels.current = new Map();
       const items = await store.actions.getChannelItems(session.guid);
+      
       for(item of items) {
         channels.current.set(item.channelId, item);
       }
