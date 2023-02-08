@@ -192,7 +192,6 @@ export function useCardContext() {
             cards.current.delete(card.id);
           }
         }
-
         setRevision.current = revision;
         await store.actions.setCardRevision(guid, revision);
         updateState({ offsync: false, cards: cards.current });
@@ -217,8 +216,10 @@ export function useCardContext() {
     const cardToken = `${profile?.guid}.${detail?.token}`;
 
     if (entry.card.notifiedProfile !== cardRevision.profile) {
-      const message = await getContactProfile(cardServer, cardToken);
-      await setCardProfile(server, token, cardId, message);
+      if (entry.card.profileRevision !== cardRevision.profile) {
+        const message = await getContactProfile(cardServer, cardToken);
+        await setCardProfile(server, token, cardId, message);
+      }
       entry.card.notifiedProfile = cardRevision.profile;
       store.actions.setCardItemNotifiedProfile(guid, cardId, cardRevision.profile);
     }
@@ -254,18 +255,18 @@ export function useCardContext() {
             channelEntry.topicRevision = channelItem.topicRevision;
             await store.actions.setCardChannelItemSummary(guid, cardId, channel.id, channelItem.topicRevision, channelEntry.summary);
           }
-          entry.card.notifiedChannel = cardRevision.channel;
-          await store.actions.setCardItemNotifiedChannel(guid, cardId, cardRevision.channel);
-          entry.card.notifiedView = cardRevision.view;
-          await store.actions.setCardItemNotifiedView(guid, cardId, cardRevision.view);
           entry.channels.set(channel.id, channelEntry);
         }
         else {
-          await store.actions.clearCardChannelTopicItems(guid, card.id, channel.id);
-          await store.actions.clearCardChannelItem(guid, card.id, channel.id);
-          entry.channel.delete(channel.id);
+          await store.actions.clearCardChannelTopicItems(guid, cardId, channel.id);
+          await store.actions.clearCardChannelItem(guid, cardId, channel.id);
+          entry.channels.delete(channel.id);
         }
       }
+      entry.card.notifiedChannel = cardRevision.channel;
+      await store.actions.setCardItemNotifiedChannel(guid, cardId, cardRevision.channel);
+      entry.card.notifiedView = cardRevision.view;
+      await store.actions.setCardItemNotifiedView(guid, cardId, cardRevision.view);
     }
   };
 

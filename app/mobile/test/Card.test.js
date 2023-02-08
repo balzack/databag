@@ -14,12 +14,18 @@ function CardView() {
   useEffect(() => {
     setRenderCount(renderCount + 1);
     const rendered = [];
-    card.state.cards.forEach((value) => {
-      const chanels = [];
-      value.channels.forEach((value) => {
-        console.log(value);
+    card.state.cards.forEach((cardValue) => {
+      const content = [(  
+        <Text key="handle" testID={cardValue.card.cardId + "-handle"}>{ cardValue.card.profile.handle }</Text>
+      )];
+      cardValue.channels.forEach((channelValue) => {
+        content.push(<Text key={channelValue.channelId} testID={channelValue.channelId}>{ channelValue.detail.data }</Text>);
       });
-      rendered.push(<Text key={value.card.cardId} testID={value.card.cardId}>{ value.card.profile.handle }</Text>);
+      rendered.push(
+        <Text key={cardValue.card.cardId} testID={cardValue.card.cardId}>
+          { content }
+        </Text>
+      );
     });
     setCards(rendered);
   }, [card.state]);
@@ -43,6 +49,7 @@ const realUseContext = React.useContext;
 const realFetchWithTimeout = fetchUtil.fetchWithTimeout;
 const realFetchWithCustomTimeout = fetchUtil.fetchWithCustomTimeout;
 
+let fetchMessage;
 let fetchCards;
 let fetchDetail;
 let fetchProfile;
@@ -52,6 +59,7 @@ beforeEach(() => {
   fetchDetail = {};
   fetchProfile = {};
   fetchCardChannels = [];
+  fetchMessage = false;
 
   const mockUseContext = jest.fn().mockImplementation((ctx) => {
     return useTestStoreContext();
@@ -59,8 +67,6 @@ beforeEach(() => {
   React.useContext = mockUseContext;
 
   const mockFetch = jest.fn().mockImplementation((url, options) => {
-    console.log(url);
-
     if (url.startsWith('https://test.org/contact/cards?agent')) {
       return Promise.resolve({
         json: () => Promise.resolve(fetchCards)
@@ -79,6 +85,12 @@ beforeEach(() => {
     if (url.startsWith('https://test.org/content/channels?contact')) {
       return Promise.resolve({
         json: () => Promise.resolve(fetchCardChannels)
+      });
+    }
+    if (url.startsWith('https://test.org/profile/message?contact')) {
+      fetchMessage = true;
+      return Promise.resolve({
+        json: () => Promise.resolve({})
       });
     }
     else {
@@ -118,7 +130,7 @@ test('add, update, and remove card', async () => {
     data: {
       detailRevision: 2,
       profileRevision: 3,
-      notifiedProfile: 3,
+      notifiedProfile: 4,
       notifiedArticle: 5,
       notifiedChannel: 6,
       notifiedView: 7,
@@ -135,7 +147,8 @@ test('add, update, and remove card', async () => {
 
   await waitFor(async () => {
     expect(screen.getByTestId('card').props.children).toHaveLength(1);
-    expect(screen.getByTestId('000a').props.children).toBe('test1');
+    expect(screen.getByTestId('000a-handle').props.children).toBe('test1');
+    expect(fetchMessage).toBe(true);
   });
 
   fetchCards = [{
@@ -144,7 +157,7 @@ test('add, update, and remove card', async () => {
     data: {
       detailRevision: 3,
       profileRevision: 4,
-      notifiedProfile: 3,
+      notifiedProfile: 4,
       notifiedArticle: 5,
       notifiedChannel: 6,
       notifiedView: 7,
@@ -162,12 +175,12 @@ test('add, update, and remove card', async () => {
 
   await act(async () => {
     const card = screen.getByTestId('card').props.card;
-    await card.actions.setRevision(3);
+    await card.actions.setRevision(4);
   });
 
   await waitFor(async () => {
     expect(screen.getByTestId('card').props.children).toHaveLength(1);
-    expect(screen.getByTestId('000a').props.children).toBe('test2');
+    expect(screen.getByTestId('000a-handle').props.children).toBe('test2');
   });
 
   fetchCards = [{
@@ -177,7 +190,7 @@ test('add, update, and remove card', async () => {
 
   await act(async () => {
     const card = screen.getByTestId('card').props.card;
-    await card.actions.setRevision(3);
+    await card.actions.setRevision(4);
   });
 
   await waitFor(async () => {
@@ -186,7 +199,7 @@ test('add, update, and remove card', async () => {
 
   await act(async () => {
     const card = screen.getByTestId('card').props.card;
-    await card.actions.setRevision(4);
+    await card.actions.setRevision(5);
   });
 
   await waitFor(async () => {
@@ -222,7 +235,7 @@ test('add, update, and remove channel', async () => {
   });
 
   await waitFor(async () => {
-    expect(screen.getByTestId('card').props.children).toHaveLength(1);
+    expect(screen.getByTestId('000a').props.children).toHaveLength(1);
   });
 
   fetchCardChannels = [{
@@ -242,14 +255,31 @@ test('add, update, and remove channel', async () => {
     },
   }];
 
+  fetchCards = [{
+    id: '000a',
+    revision: 2,
+    data: {
+      detailRevision: 2,
+      profileRevision: 3,
+      notifiedProfile: 3,
+      notifiedArticle: 5,
+      notifiedChannel: 6,
+      notifiedView: 7,
+    },
+  }];
+
   await act(async () => {
     const card = screen.getByTestId('card').props.card;
     await card.actions.setRevision(2);
   });
 
+  await waitFor(async () => {
+    expect(screen.getByTestId('000a').props.children).toHaveLength(1);
+  });
+
   fetchCards = [{
     id: '000a',
-    revision: 1,
+    revision: 2,
     data: {
       detailRevision: 2,
       profileRevision: 3,
@@ -259,6 +289,83 @@ test('add, update, and remove channel', async () => {
       notifiedView: 7,
     },
   }];
+
+  await act(async () => {
+    const card = screen.getByTestId('card').props.card;
+    await card.actions.setRevision(3);
+  });
+
+  await waitFor(async () => {
+    expect(screen.getByTestId('000a').props.children).toHaveLength(2);
+    expect(screen.getByTestId('01').props.children).toBe('testchannel');
+  });
+
+  fetchCardChannels = [{
+    id: '01',
+    revision: 2,
+    data: {
+      detailRevision: 2,
+      topicRevision: 2,
+      channelDetail: {
+        dataType: 'superbasic',
+        data: 'testchannel2',
+      },
+      channelSummary: {
+        dataType: 'superbasictopic',
+        data: 'testtopic',
+      },
+    },
+  }];
+
+  fetchCards = [{
+    id: '000a',
+    revision: 2,
+    data: {
+      detailRevision: 2,
+      profileRevision: 3,
+      notifiedProfile: 3,
+      notifiedArticle: 5,
+      notifiedChannel: 8,
+      notifiedView: 7,
+    },
+  }];
+
+  await act(async () => {
+    const card = screen.getByTestId('card').props.card;
+    await card.actions.setRevision(4);
+  });
+
+  await waitFor(async () => {
+    expect(screen.getByTestId('000a').props.children).toHaveLength(2);
+    expect(screen.getByTestId('01').props.children).toBe('testchannel2');
+  });
+
+  fetchCardChannels = [{
+    id: '01',
+    revision: 3,
+  }];
+
+  fetchCards = [{
+    id: '000a',
+    revision: 3,
+    data: {
+      detailRevision: 2,
+      profileRevision: 3,
+      notifiedProfile: 3,
+      notifiedArticle: 5,
+      notifiedChannel: 9,
+      notifiedView: 7,
+    },
+  }];
+
+  await act(async () => {
+    const card = screen.getByTestId('card').props.card;
+    await card.actions.setRevision(5);
+  });
+
+  await waitFor(async () => {
+    expect(screen.getByTestId('000a').props.children).toHaveLength(1);
+  });
 
 });
 
