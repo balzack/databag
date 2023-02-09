@@ -41,7 +41,6 @@ export function useCardContext() {
   const curRevision = useRef(null);
   const cards = useRef(new Map());
   const syncing = useRef(false);
-  const force = useRef(false);
   const store = useContext(StoreContext);
 
   const updateState = (value) => {
@@ -94,17 +93,7 @@ export function useCardContext() {
       }
     }
   };
-    
-  const resync = async () => {
-    try {
-      force.current = true;
-      await sync();
-    }
-    catch (err) {
-      console.log(err);
-    }
-  };
-
+  
   const resyncCard = async (cardId) => {
     if (!syncing.current) {
       syncing.current = true;
@@ -132,10 +121,8 @@ export function useCardContext() {
   }
 
   const sync = async () => {
-    if (!syncing.current && (setRevision.current !== curRevision.current || force.current)) {
+    if (access.current && !syncing.current && setRevision.current !== curRevision.current) {
       syncing.current = true;
-      force.current = false;
-
       try {
         const { server, token, guid } = access.current;
         const revision = curRevision.current;
@@ -297,9 +284,9 @@ export function useCardContext() {
     clearSession: () => {
       access.current = null;
     },
-    setRevision: async (revision) => {
+    setRevision: (revision) => {
       curRevision.current = revision;
-      await sync();
+      sync();
     },
     addCard: async (message) => {
       const { server, token } = access.current;
@@ -489,7 +476,7 @@ export function useCardContext() {
       await store.actions.setCardChannelTopicItemUnsealedDetail(guid, cardId, channelId, topicId, revision, unsealed);
     },    
     resync: async () => {
-      await resync();
+      await sync();
     },
     resyncCard: async (cardId) => {
       await resyncCard(cardId);
