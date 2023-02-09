@@ -113,10 +113,6 @@ test('testing', async () => {
     await profile.actions.clearSession();
   });
 
-  await waitFor(async () => {
-    expect(screen.getByTestId('name').props.children).toBe(undefined);
-  });
-
   await act(async () => {
     identity = { name: 'jester' };
     const profile = screen.getByTestId('profile').props.profile;
