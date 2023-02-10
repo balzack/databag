@@ -57,11 +57,15 @@ export function useUploadContext() {
   }
 
   const actions = {
-    addTopic: (node, token, channelId, topicId, files, success, failure) => {
+    addTopic: (node, token, channelId, topicId, files, success, failure, cardId) => {
+      const url = cardId ?
+          `https://${node}/content/channels/${channelId}/topics/${topicId}/assets?contact=${token}` : 
+          `https://${node}/content/channels/${channelId}/topics/${topicId}/assets?agent=${token}`;
+      const key = cardId ? `${cardId}:${channelId}` : `:${channelId}`; 
       const controller = new AbortController();
       const entry = {
         index: index.current,
-        url: `https://${node}/content/channels/${channelId}/topics/${topicId}/assets?agent=${token}`,
+        url: url,
         files,
         assets: [],
         current: null,
@@ -71,38 +75,16 @@ export function useUploadContext() {
         cancel: controller,
       }
       index.current += 1;
-      const key = `:${channelId}`;
       if (!channels.current.has(key)) {
         channels.current.set(key, new Map());
       }
       const topics = channels.current.get(key);
       topics.set(topicId, entry);
+
       upload(entry, updateProgress, () => { updateComplete(key, topicId) } );
     },
     cancelTopic: (channelId, topicId) => {
       abort(`:${channelId}`, topicId);
-    },
-    addContactTopic: (node, token, cardId, channelId, topicId, files, success, failure) => {
-      const controller = new AbortController();
-      const entry = {
-        index: index.current,
-        url: `https://${node}/content/channels/${channelId}/topics/${topicId}/assets?contact=${token}`,
-        files,
-        assets: [],
-        current: null,
-        error: false,
-        success,
-        failure,
-        cancel: controller,
-      }
-      index.current += 1;
-      const key = `${cardId}:${channelId}`;
-      if (!channels.current.has(key)) {
-        channels.current.set(key, new Map());
-      }
-      const topics = channels.current.get(key);
-      topics.set(topicId, entry);
-      upload(entry, updateProgress, () => { updateComplete(key, topicId) });
     },
     cancelContactTopic: (cardId, channelId, topicId) => {
       abort(`${cardId}:${channelId}`, topicId);
