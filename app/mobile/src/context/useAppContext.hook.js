@@ -1,26 +1,25 @@
 import { useEffect, useState, useRef, useContext } from 'react';
-import { getAvailable } from 'api/getAvailable';
 import { setLogin } from 'api/setLogin';
 import { clearLogin } from 'api/clearLogin';
 import { removeProfile } from 'api/removeProfile';
 import { setAccountAccess } from 'api/setAccountAccess';
 import { addAccount } from 'api/addAccount';
-import { getUsername } from 'api/getUsername';
+import { createWebsocket } from 'api/fetchUtil';
 import { StoreContext } from 'context/StoreContext';
 import { AccountContext } from 'context/AccountContext';
 import { ProfileContext } from 'context/ProfileContext';
 import { CardContext } from 'context/CardContext';
 import { ChannelContext } from 'context/ChannelContext';
-import { getVersion, getApplicationName, getDeviceId } from 'react-native-device-info';
+import { getVersion, getApplicationName, getDeviceId } from 'react-native-device-info'
 import messaging from '@react-native-firebase/messaging';
 
 export function useAppContext() {
   const [state, setState] = useState({
     session: null,
-    loginTimestamp: null,
-    disconnected: null,
-    deviceToken: null,
+    status: 'disconnected',
+    first: true,
     loggingOut: false,
+    adminToken: null,
     version: getVersion(),
   });
   const store = useContext(StoreContext);
@@ -28,41 +27,38 @@ export function useAppContext() {
   const profile = useContext(ProfileContext);
   const card = useContext(CardContext);
   const channel = useContext(ChannelContext);
-  const count = useRef(0);
   const delay = useRef(0);
 
   const ws = useRef(null);
+  const deviceToken = useRef(null);
+  const access = useRef(null);
+  const init = useRef(false);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }))
   }
 
   useEffect(() => {
-    messaging().getToken().then(token => {
-      updateState({ deviceToken: token });
-    })
-
-    init();
+    (async () => {
+      deviceToken.current = await messaging().getToken();
+      access.current = await store.actions.init();
+      if (access.current) {
+        await setSession(access.current);
+      }
+      else {
+        updateState({ session: false });
+      }
+      init.current = true;
+    })();
   }, []);
 
-  const init = async () => {
-    const access = await store.actions.init();
-    if (access) {
-      await setSession(access);
-    }
-    else {
-      updateState({ session: false });
-    }
-  }
-
-  const setSession = async (access) => {
-    await account.actions.setSession(access);
-    await profile.actions.setSession(access);
-    await card.actions.setSession(access);
-    await channel.actions.setSession(access);
-    updateState({ session: true, server: access.server, token: access.appToken,
-      loginTimestamp: access.created });
-    setWebsocket(access.server, access.appToken);
+  const setSession = async () => {
+    updateState({ session: true });
+    await account.actions.setSession(access.current);
+    await profile.actions.setSession(access.current);
+    await card.actions.setSession(access.current);
+    await channel.actions.setSession(access.current);
+    setWebsocket(access.current);
   }
 
   const clearSession = async () => {
@@ -84,41 +80,54 @@ export function useAppContext() {
   ];
 
   const actions = {
-    available: getAvailable,
-    username: getUsername,
     create: async (server, username, password, token) => {
+      if (!init.current || access.current) {
+        throw new Error('invalid session state');
+      }
       await addAccount(server, username, password, token);
-      const access = await setLogin(username, server, password, getApplicationName(), getVersion(), getDeviceId(), state.deviceToken, notifications)
-      await store.actions.setSession({ ...access, server});
-      await setSession({ ...access, server });
-      if (access.pushSupported) {
+      const session = await setLogin(username, server, password, getApplicationName(), getVersion(), getDeviceId(), deviceToken.current, notifications)
+      access.current = { server, token: session.appToken, guid: session.guid };
+      await store.actions.setSession(access.current);
+      await setSession();
+      if (session.pushSupported) {
         messaging().requestPermission().then(status => {})
       }
     },
     access: async (server, token) => {
-      const access = await setAccountAccess(server, token, getApplicationName(), getVersion(), getDeviceId(), state.deviceToken, notifications);
-      await store.actions.setSession({ ...access, server});
-      await setSession({ ...access, server });
-      if (access.pushSupported) {
+      if (!init.current || access.current) {
+        throw new Error('invalid session state');
+      }
+      const session = await setAccountAccess(server, token, getApplicationName(), getVersion(), getDeviceId(), deviceToken.current, notifications);
+      access.current = { server, token: session.appToken, guid: session.guid };
+      await store.actions.setSession(access.current);
+      await setSession();
+      if (session.pushSupported) {
         messaging().requestPermission().then(status => {})
       }
     },
     login: async (username, password) => {
+      if (!init.current || access.current) {
+        throw new Error('invalid session state');
+      }
       const acc = username.split('@');
-      const access = await setLogin(acc[0], acc[1], password, getApplicationName(), getVersion(), getDeviceId(), state.deviceToken, notifications)
-      await store.actions.setSession({ ...access, server: acc[1]});
-      await setSession({ ...access, server: acc[1] }); 
-      if (access.pushSupported) {
+      const session = await setLogin(acc[0], acc[1], password, getApplicationName(), getVersion(), getDeviceId(), deviceToken.current, notifications)
+      access.current = { server: acc[1], token: session.appToken, guid: session.guid };
+      await store.actions.setSession(access.current);
+      await setSession(); 
+      if (session.pushSupported) {
         messaging().requestPermission().then(status => {})
       }
     },
     logout: async () => {
+      if (!access.current) {
+        throw new Error('invalid session state');
+      }
       updateState({ loggingOut: true });
       try {
         await messaging().deleteToken();
         const token = await messaging().getToken();
         updateState({ deviceToken: token });
-        await clearLogin(state.server, state.appToken);
+        await clearLogin(state.server, state.token);
       }
       catch (err) {
         console.log(err);
@@ -128,39 +137,39 @@ export function useAppContext() {
       updateState({ loggingOut: false });
     },
     remove: async () => {
-      await removeProfile(state.server, state.appToken);
+      if (!access.current) {
+        throw new Error('invalid session state');
+      }
+      const { server, token } = access.current;
+      await removeProfile(server, token);
       await clearSession();
       await store.actions.clearSession();
     },
   }
 
-  const setWebsocket = (server, token) => {
-    clearWebsocket();
-    ws.current = new WebSocket(`wss://${server}/status`);
+  const setWebsocket = (session) => {
+    ws.current = createWebsocket(`wss://${session.server}/status`);
     ws.current.onmessage = (ev) => {
-      delay.current = 0;
       try {
+        delay.current = 0;
         const rev = JSON.parse(ev.data);
-        try {
-          profile.actions.setRevision(rev.profile);
-          account.actions.setRevision(rev.account);
-          channel.actions.setRevision(rev.channel);
-          card.actions.setRevision(rev.card);
-        }
-        catch(err) {
-          console.log(err);
-        }
-        count.current = 0;
-        updateState({ disconnected: count.current });
+        updateState({ first: false, status: 'connected' });
+        profile.actions.setRevision(rev.profile);
+        account.actions.setRevision(rev.account);
+        channel.actions.setRevision(rev.channel);
+        card.actions.setRevision(rev.card);
       }
       catch (err) {
         console.log(err);
       }
     }
+    ws.current.onopen = () => {
+      ws.current.send(JSON.stringify({ AppToken: session.token }))
+    }
     ws.current.onclose = (e) => {
-      count.current += 1;
-      updateState({ disconnected: count.current });
       console.log(e)
+      count.current += 1;
+      updateState({ status: 'disconnected' });
       setTimeout(() => {
         if (ws.current != null) {
           ws.current.onmessage = () => {}
@@ -168,25 +177,23 @@ export function useAppContext() {
           ws.current.onopen = () => {}
           ws.current.onerror = () => {}
           delay.current = 1;
-          setWebsocket(server, token);
+          setWebsocket(session);
         }
       }, 1000 * delay.current)
     }
-    ws.current.onopen = () => {
-      ws.current.send(JSON.stringify({ AppToken: token }))
-    }
     ws.current.error = (e) => {
-      count.current += 1;
-      updateState({ disconnected: count.current });
-      console.log(e)
+      console.log(e);
+      ws.current.close();
     }
   }
  
   const clearWebsocket = ()  => {
     if (ws.current) {
-      ws.current.onclose = () => {}
-      ws.current.close()
-      ws.current = null
+      ws.current.onmessage = () => {};
+      ws.current.onclose = () => {};
+      ws.current.onerror = () => {};
+      ws.current.close();
+      ws.current = null;
     }
   }
 

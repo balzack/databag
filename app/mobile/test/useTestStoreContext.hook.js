@@ -20,8 +20,7 @@ export function useTestStoreContext() {
 
   const actions = {
     init: async () => {
-      console.log("TEST STORE INIT");
-      return {};
+      return null;
     },
     setSession: async (access) => {
     },

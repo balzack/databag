@@ -198,7 +198,6 @@ export function useAppContext(websocket) {
     ws.current.error = (e) => {
       console.log(e)
       ws.current.close();
-      updateState({ status: 'disconnected' });
     }
   }
  
