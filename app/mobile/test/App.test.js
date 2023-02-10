@@ -78,6 +78,11 @@ beforeEach(() => {
   React.useContext = mockUseContext;
 
   const mockFetch = jest.fn().mockImplementation((url, options) => {
+    if (url.startsWith('https://test.org/account/apps')) {
+      return Promise.resolve({
+        json: () => Promise.resolve({ guid: '123', appToken: 'abc' })
+      });
+    }
     return Promise.resolve({
       json: () => Promise.resolve([])
     });
@@ -103,7 +108,7 @@ test('testing', async () => {
 
   await act(async () => {
     const app = screen.getByTestId('app').props.app;
-    app.actions.login('testlogin', 'testpassword');
+    app.actions.login('testlogin@test.org', 'testpassword');
   });
 
   await waitFor(async () => {

@@ -17,7 +17,6 @@ export function useAppContext() {
   const [state, setState] = useState({
     session: null,
     status: 'disconnected',
-    first: true,
     loggingOut: false,
     adminToken: null,
     version: getVersion(),
@@ -53,7 +52,7 @@ export function useAppContext() {
   }, []);
 
   const setSession = async () => {
-    updateState({ session: true });
+    updateState({ session: true, status: 'connecting' });
     await account.actions.setSession(access.current);
     await profile.actions.setSession(access.current);
     await card.actions.setSession(access.current);
@@ -153,7 +152,7 @@ export function useAppContext() {
       try {
         delay.current = 0;
         const rev = JSON.parse(ev.data);
-        updateState({ first: false, status: 'connected' });
+        updateState({ status: 'connected' });
         profile.actions.setRevision(rev.profile);
         account.actions.setRevision(rev.account);
         channel.actions.setRevision(rev.channel);
