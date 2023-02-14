@@ -47,9 +47,12 @@ export function useChannelContext() {
     }
   }
 
-  const setChannelField = (channelId, field, value) => {
+  const setChannelField = (channelId, field, value, field2, value2) => {
     const channel = channels.get(channelId) || {};
     channel[field] = value;
+    if (field2) {
+      channel[field2] = value2;
+    }
     channels.set(channelId, { ...channel });
     updateState({ channels: channels.current }); 
   };
@@ -223,6 +226,11 @@ export function useChannelContext() {
       await store.actions.setChannelItemTopicMarker(guid, channelId, revision);
       setChannelField(channelId, 'topicMarker', marker);
     },
+    setMarkerAndSync: async (channelId, marker, revision) => {
+      const { guid } = access.current;
+      await store.actions.setChannelItemMarkerAndSync(guid, channelId, revision);
+      setChannelField(channelId, 'topicMarker', marker, 'syncRevision', revision);
+    },
     setChannelFlag: async (channelId) => {
       const { guid } = access.current;
       await store.actions.setChannelItemBlocked(guid, channelId);
@@ -249,7 +257,7 @@ export function useChannelContext() {
       const { server, guid } = access.current;
       return await addFlag(server, guid, channelId, topicId);
     },
-    getTopicItems: async (channelId, revision, count, begin, end) => {
+    getTopicItems: async (channelId) => {
       const { guid } = access.current;
       return await store.actions.getChannelTopicItems(guid, channelId); 
     },

@@ -159,17 +159,6 @@ export function useStoreContext() {
         blocked: values[0].blocked,
       };
     },
-    getCardItemView: async (guid, cardId) => {
-      const values = await getAppValues(db.current, `SELECT revision, detail_revision, profile_revision FROM card_${guid} WHERE card_id=?`, [cardId]);
-      if (!values.length) {
-        return null;
-      }
-      return {
-        revision: values[0].revision,
-        detailRevision: values[0].detail_revision,
-        profileRevision: values[0].profile_revision,
-      };
-    },
     getCardItems: async (guid) => {
       const values = await getAppValues(db.current, `SELECT card_id, revision, detail_revision, profile_revision, detail, profile, offsync, blocked, notified_view, notified_profile, notified_article, notified_channel FROM card_${guid}`, []);
       return values.map(card => ({
@@ -215,6 +204,9 @@ export function useStoreContext() {
     setChannelItemTopicMarker: async (guid, channelId, marker) => {
       await db.current.executeSql(`UPDATE channel_${guid} set topic_marker=? where channel_id=?`, [marker, channelId]);
     },
+    setChannelItemMarkerAndSync: async (guid, channelId, marker, revision) => {
+      await db.current.executeSql(`UPDATE channel_${guid} set sync_revision=?, topic_marker=? where channel_id=?`, [revision, maker, channelId]);
+    },
     setChannelItemBlocked: async (guid, channelId) => {
       await db.current.executeSql(`UPDATE channel_${guid} set blocked=? where channel_id=?`, [1, channelId]);
     },
@@ -232,17 +224,6 @@ export function useStoreContext() {
     },
     setChannelItemUnsealedSummary: async (guid, channelId, revision, unsealed) => {
       await db.current.executeSql(`UPDATE channel_${guid} set unsealed_summary=? where topic_revision=? AND channel_id=?`, [encodeObject(unsealed), revision, channelId]);
-    },
-    getChannelItemView: async (guid, channelId) => {
-      const values = await getAppValues(db.current, `SELECT revision, detail_revision, topic_revision FROM channel_${guid} WHERE channel_id=?`, [channelId]);
-      if (!values.length) {
-        return null;
-      }
-      return {
-        revision: values[0].revision,
-        detailRevision: values[0].detail_revision,
-        topicRevision: values[0].topic_revision,
-      };
     },
     getChannelItems: async (guid) => {
       const values = await getAppValues(db.current, `SELECT channel_id, read_revision, revision, sync_revision, blocked, detail_revision, topic_revision, topic_marker, detail, unsealed_detail, summary, unsealed_summary FROM channel_${guid}`, []);
@@ -318,6 +299,9 @@ export function useStoreContext() {
     setCardChannelItemTopicMarker: async (guid, cardId, channelId, marker) => {
       await db.current.executeSql(`UPDATE card_channel_${guid} set topic_marker=? where card_id=? and channel_id=?`, [marker, cardId, channelId]);
     },
+    setCardChannelItemMakerAndSync: async (guid, cardId, channelId, marker, revision) => {
+      await db.current.executeSql(`UPDATE card_channel_${guid} set topic_marker=?, sync_revision=? where card_id=? and channel_id=?`, [marker, revision, cardId, channelId]);
+    },
     setCardChannelItemDetail: async (guid, cardId, channelId, revision, detail) => {
       await db.current.executeSql(`UPDATE card_channel_${guid} set detail_revision=?, detail=?, unsealed_detail=null where card_id=? and channel_id=?`, [revision, encodeObject(detail), cardId, channelId]);
     },
@@ -329,17 +313,6 @@ export function useStoreContext() {
     },
     setCardChannelItemUnsealedSummary: async (guid, cardId, channelId, revision, unsealed) => {
       await db.current.executeSql(`UPDATE card_channel_${guid} set unsealed_summary=? where topic_revision=? AND card_id=? AND channel_id=?`, [encodeObject(unsealed), revision, cardId, channelId]);
-    },
-    getCardChannelItemView: async (guid, cardId, channelId) => {
-      const values = await getAppValues(db.current, `SELECT revision, detail_revision, topic_revision FROM card_channel_${guid} WHERE card_id=? and channel_id=?`, [cardId, channelId]);
-      if (!values.length) {
-        return null;
-      }
-      return {
-        revision: values[0].revision,
-        detailRevision: values[0].detail_revision,
-        topicRevision: values[0].topic_revision,
-      };
     },
     getCardChannelItems: async (guid) => {
       const values = await getAppValues(db.current, `SELECT card_id, channel_id, read_revision, sync_revision, revision, blocked, detail_revision, topic_revision, topic_marker, detail, unsealed_detail, summary, unsealed_summary FROM card_channel_${guid}`, []);
