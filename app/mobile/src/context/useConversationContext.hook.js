@@ -24,7 +24,6 @@ export function useConversationContext() {
   const force = useRef(false);
   const syncing = useRef(false);
   const update = useRef(false);
- 
   const loaded = useRef(false);
   const conversationId = useRef(null);
   const topics = useRef(new Map());
@@ -44,7 +43,7 @@ export function useConversationContext() {
       syncing.current = true;
       update.current = false;
       force.current = false;
-      loadMore.current = false;
+      more.current = false;
 
       if (reset.current) {
         reset.current = false;
@@ -55,44 +54,28 @@ export function useConversationContext() {
 
       if (conversation) {
         const { cardId, channelId } = conversation;
+        const cardValue = cardId ? card.state.cards.get(cardId) : null;
+        const channelValue = cardId ? cardValue?.get(channelId) : channel.state.channels.get(channelId);
+        if (channelValue) {
+          const { topicRevision, syncRevision, topicMarker } = channelValue;
+          curRevision = topicRevision;
+          setRevision = syncRevision;
+          marker = topicMarker;
+          updateState({ card: cardValue, channel: channelValue });
 
-        if (loaded.current) {
-          const cardValue = cardId ? card.state.cards.get(cardId) : null;
-          const channelValue = cardId ? cardValue?.get(channelId) : channel.state.channels.get(channelId);
-          if (channelValue) {
-            const { topicRevision, syncRevision, topicMarker } = channelValue;
-            curRevision = topicRevision;
-            setRevision = syncRevision;
-            marker = topicMarker;
-            updateState({ card: cardValue, channel: channelValue });
-          }
-          else {
-            console.log("failed to load conversation");
-            sysncing.current = false;
-            return;
-          }
-        }
-
-        if (!loaded.current) {
-          const cardValue = cardId ? card.state.cards.get(cardId) : null;
-          const channelValue = cardId ? cardValue?.get(channelId) : channel.state.channels.get(channelId);
-          if (channelValue) {
-            const { topicRevision, syncRevision, topicMarker } = channelValue;
-            curRevision = topicRevision;
-            setRevision = syncRevision;
-            marker = topicMarker;
+          if (!loaded.current) {
             const topicItems = await getTopicItems(cardId, channelId);
-            for (let topic: topicItems) {
+            for (let topic of topicItems) {
               topics.current.set(topic.topicId, topic);
             }
-            updateState({ card: cardValue, channel: channelValue, topics: topics.current });
+            updateState({ offsync: false, topics: topics.current });
             loaded.current = true;
           }
-          else {
-            console.log("failed to load conversation");
-            syncing.current = false;
-            return;
-          }
+        }
+        else {
+          console.log("failed to load conversation");
+          syncing.current = false;
+          return;
         }
 
         try {
@@ -125,7 +108,7 @@ export function useConversationContext() {
     }
   }
 
-  const setTopicDelta(cardId, channelId, entries) => {
+  const setTopicDelta = async (cardId, channelId, entries) => {
     for (let entry of entries) {
       if (entry.data) {
         if (entry.data.detail) {
@@ -139,6 +122,7 @@ export function useConversationContext() {
         }
       }
       else {
+        topics.current.delete(entry.id);
         clearTopicItem(entry.id);
       }
     }
@@ -157,7 +141,7 @@ export function useConversationContext() {
       reset.current = true;
       await sync();
     },
-    clearConversation: async ()
+    clearConversation: async () => {
       conversationId.current = null;
       reset.current = true;
       await sync();
@@ -216,14 +200,22 @@ export function useConversationContext() {
         await channel.actions.clearChannelCard(channelId, id);
       }
     },
+    setChannelReadRevision: async (revision) => {
+      const { cardId, channelId } = conversationId.current || {};
+      if (cardId) {
+        await card.actions.setChannelReadRevision(cardId, channelId, revision);
+      }
+      else if (channelId) {
+        await channel.actions.setReadRevision(channelId, revision);
+      }
+    },
     addChannelAlert: async () => {
       const { cardId, channelId } = conversationId.current || {};
-        if (cardId) {
-          return await card.actions.addChannelAlert(cardId, channelId);
-        }
-        else if (channelId) {
-          return await channel.actions.addChannelAlert(channelId);
-        }
+      if (cardId) {
+        return await card.actions.addChannelAlert(cardId, channelId);
+      }
+      else if (channelId) {
+        return await channel.actions.addChannelAlert(channelId);
       }
     },
     setChannelFlag: async () => {
@@ -271,7 +263,7 @@ export function useConversationContext() {
       if (cardId) {
         await card.actions.setUnsealedTopicSubject(cardId, channelId, topicId, revision, unsealed);
       }
-      else {channelId) {
+      else if (channelId) {
         await channel.actions.setUnsealedTopicSubject(channelId, topicId, revision, unsealed);
       }
       setTopicField(topicId, 'unsaledDetail', unsealed);
@@ -390,8 +382,8 @@ export function useConversationContext() {
     return {
       topicId: entry.id,
       revision: entry.revision,
-      detailRevision = entry.data?.detailRevision,
-      detail = entry.data?.topicDetail,
+      detailRevision: entry.data?.detailRevision,
+      detail: entry.data?.topicDetail,
     };
   };
 

@@ -109,6 +109,7 @@ export function useCardContext() {
           const { notifiedView, notifiedProfile, notifiedArticle, notifiedChannel } = card.data || {};
           const cardRevision = { view: notifiedView, profile: notifiedProfile, artcile: notifiedArticle, channel: notifiedChannel };
           await syncCard(server, token, guid, entry, cardRevision);
+          await store.action.clearCardItemOffsync(guid, cardId);
           entry.card.offsync = false;
         }
         
@@ -164,6 +165,7 @@ export function useCardContext() {
               catch (err) {
                 console.log(err);
                 entry.offsync = true;
+                await store.action.setCardItemOffsync(guid, card.id);
               }
             }
             cards.current.set(card.id, entry); 

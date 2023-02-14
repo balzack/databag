@@ -103,7 +103,7 @@ export function useStoreContext() {
     },
     setCardItem: async (guid, card) => {
       const { id, revision, data } = card;
-      await db.current.executeSql(`INSERT OR REPLACE INTO card_${guid} (card_id, revision, detail_revision, profile_revision, detail, profile, notified_view, notified_profile, notified_article, notified_channel) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`, [id, revision, data.detailRevision, data.profileRevision, encodeObject(data.cardDetail), encodeObject(data.cardProfile), null, null, null, null]);
+      await db.current.executeSql(`INSERT OR REPLACE INTO card_${guid} (card_id, revision, detail_revision, profile_revision, detail, profile, notified_view, notified_profile, notified_article, notified_channel) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`, [card.cardId, card.revision, card.detailRevision, card.profileRevision, encodeObject(card.detail), encodeObject(card.profile), null, null, null, null]);
     },
     clearCardItem: async (guid, cardId) => {
       await db.current.executeSql(`DELETE FROM card_${guid} WHERE card_id=?`, [cardId]);
@@ -140,24 +140,6 @@ export function useStoreContext() {
     },
     setCardItemProfile: async (guid, cardId, revision, profile) => {
       await db.current.executeSql(`UPDATE card_${guid} set profile_revision=?, profile=? where card_id=?`, [revision, encodeObject(profile), cardId]);
-    },
-    getCardItemStatus: async (guid, cardId) => {
-      const values = await getAppValues(db.current, `SELECT detail, profile, profile_revision, detail_revision, notified_view, notified_article, notified_profile, notified_channel, offsync FROM card_${guid} WHERE card_id=?`, [cardId]);
-      if (!values.length) {
-        return null;
-      }
-      return {
-        detail: decodeObject(values[0].detail),
-        profile: decodeObject(values[0].profile),
-        profileRevision: values[0].profile_revision,
-        detailRevision: values[0].detail_revision,
-        notifiedView: values[0].notified_view,
-        notifiedArticle: values[0].notified_article,
-        notifiedProfile: values[0].notified_profile,
-        notifiedChannel: values[0].notified_channel,
-        offsync: values[0].offsync,
-        blocked: values[0].blocked,
-      };
     },
     getCardItems: async (guid) => {
       const values = await getAppValues(db.current, `SELECT card_id, revision, detail_revision, profile_revision, detail, profile, offsync, blocked, notified_view, notified_profile, notified_article, notified_channel FROM card_${guid}`, []);
