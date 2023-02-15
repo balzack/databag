@@ -1,7 +1,7 @@
+import 'react-native-gesture-handler';
 import React from 'react';
 import { NativeRouter } from "react-router-native";
 import { Routes, Route } from 'react-router-dom';
-import { Root } from 'src/root/Root';
 import { StoreContextProvider } from 'context/StoreContext';
 import { UploadContextProvider } from 'context/UploadContext';
 import { AppContextProvider } from 'context/AppContext';
@@ -13,6 +13,10 @@ import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import { ConversationContextProvider } from 'context/ConversationContext';
 import { LogBox } from 'react-native';
+import { Root } from 'src/root/Root';
+import { Access } from 'src/access/Access';
+import { Dashboard } from 'src/dashboard/Dashboard';
+import { Session } from 'src/session/Session';
 
 // silence warning: Sending `onAnimatedValueUpdate` with no listeners registered
 //LogBox.ignoreLogs(['Sending']);
@@ -32,6 +36,12 @@ export default function App() {
                       <NativeRouter>
                         <Routes>
                           <Route path="/" element={ <Root /> } />
+                          <Route path="/admin" element={ <Access mode="admin" /> } />
+                          <Route path="/dashboard" element={ <Dashboard /> } />
+                          <Route path="/login" element={ <Access mode="login" /> } />
+                          <Route path="/reset" element={ <Access mode="reset" /> } />
+                          <Route path="/create" element={ <Access mode="create" /> } />
+                          <Route path="/session" element={ <NavigationContainer><Session/></NavigationContainer> } />
                         </Routes>
                       </NativeRouter>
                     </SafeAreaProvider>
