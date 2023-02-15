@@ -4,7 +4,6 @@ import { UploadContext } from 'context/UploadContext';
 import { CardContext } from 'context/CardContext';
 import { ChannelContext } from 'context/ChannelContext';
 import { ProfileContext } from 'context/ProfileContext';
-import moment from 'moment';
 import CryptoJS from 'crypto-js';
 
 export function useConversationContext() {

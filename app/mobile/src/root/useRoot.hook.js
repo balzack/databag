@@ -12,15 +12,6 @@ export function useRoot() {
     setState((s) => ({ ...s, ...value }));
   }
 
-  useEffect(() => {
-    if (app.state.session === true) {
-      navigate('/session');
-    }
-    if (app.state.session === false) {
-      navigate('/login');
-    }
-  }, [app.state]);
-
   const actions = {
   };
 

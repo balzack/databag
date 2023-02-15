@@ -39,7 +39,13 @@ export function useAppContext() {
 
   useEffect(() => {
     (async () => {
-      deviceToken.current = await messaging().getToken();
+      try {
+        deviceToken.current = await messaging().getToken();
+      }
+      catch (err) {
+        console.log(err);
+        deviceToken.current = null;
+      }
       access.current = await store.actions.init();
       if (access.current) {
         await setSession(access.current);
