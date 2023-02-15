@@ -296,10 +296,9 @@ export function useStoreContext() {
     setCardChannelItemUnsealedSummary: async (guid, cardId, channelId, revision, unsealed) => {
       await db.current.executeSql(`UPDATE card_channel_${guid} set unsealed_summary=? where topic_revision=? AND card_id=? AND channel_id=?`, [encodeObject(unsealed), revision, cardId, channelId]);
     },
-    getCardChannelItems: async (guid) => {
-      const values = await getAppValues(db.current, `SELECT card_id, channel_id, read_revision, sync_revision, revision, blocked, detail_revision, topic_revision, topic_marker, detail, unsealed_detail, summary, unsealed_summary FROM card_channel_${guid}`, []);
+    getCardChannelItems: async (guid, cardId) => {
+      const values = await getAppValues(db.current, `SELECT channel_id, read_revision, sync_revision, revision, blocked, detail_revision, topic_revision, topic_marker, detail, unsealed_detail, summary, unsealed_summary FROM card_channel_${guid} where card_id=?`, [cardId]);
       return values.map(channel => ({
-        cardId: channel.card_id,
         channelId: channel.channel_id,
         revision: channel.revision,
         readRevision: channel.read_revision,

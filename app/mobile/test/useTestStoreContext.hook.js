@@ -123,6 +123,8 @@ export function useTestStoreContext() {
     },
     setChannelItemTopicMarker: async (guid, channelId, marker) => {
     },
+    setChannelItemMarkerAndSync: async (guid, channelId, marker, revision) => {
+    },
     setChannelItemBlocked: async (guid, channelId) => {
     },
     clearChannelItemBlocked: async (guid, channelId) => {
@@ -143,6 +145,7 @@ export function useTestStoreContext() {
     },
 
     getChannelTopicItems: async (guid, channelId) => {
+      return [];
     },
     setChannelTopicItem: async (guid, channelId, topic) => { 
     },
@@ -158,7 +161,9 @@ export function useTestStoreContext() {
     },
 
     setCardChannelItem: async (guid, cardId, channel) => {
-      cardChannelItems.current.set(`${cardId}:${channel.channelId}`, channel);
+      const card = cardChannels.current.get(cardId) || new Map();
+      card.set(channel.channelId, channel);
+      cardChannels.current.set(cardId, card);
     },
     clearCardChannelItem: async (guid, cardId, channelId) => {
     },
@@ -170,6 +175,8 @@ export function useTestStoreContext() {
     },
     setCardChannelItemTopicMarker: async (guid, cardId, channelId, marker) => {
     },
+    setCardChannelItemMarkerAndSync: async (guid, cardid, channelId, marker, revision) => {
+    },
     setCardChannelItemDetail: async (guid, cardId, channelId, revision, detail) => {
     },
     setCardChannelItemUnsealedDetail: async (guid, cardId, channelId, revision, unsealed) => {
@@ -180,13 +187,15 @@ export function useTestStoreContext() {
     },
     getCardChannelItemView: async (guid, cardId, channelId) => {
     },
-    getCardChannelItems: async (guid) => {
-      return Array.from(cardChannels.current.values());
+    getCardChannelItems: async (guid, cardId) => {
+      const card = cardChannels.current.get(cardId) || new Map();
+      return Array.from(card.values());
     },
     clearCardChannelItems: async (guid, cardId) => {
     },
 
     getCardChannelTopicItems: async (guid, cardId, channelId) => {
+      return [];
     },    
     setCardChannelTopicItem: async (guid, cardId, channelId, topic) => {
     },

@@ -33,11 +33,11 @@ export function useConversationContext() {
   }
 
   const sync = async () => {
-    if (!syncing.current && (reset.current || update.current || force.current || more.current)) {
 
+    if (!syncing.current && (reset.current || update.current || force.current || more.current)) {
       const loadMore = more.current;
       const ignoreRevision = force.current;
-      const conversation = converstaionId.current;
+      const conversation = conversationId.current;
       let curRevision, setRevision, marker;
 
       syncing.current = true;
@@ -55,9 +55,11 @@ export function useConversationContext() {
       if (conversation) {
         const { cardId, channelId } = conversation;
         const cardValue = cardId ? card.state.cards.get(cardId) : null;
-        const channelValue = cardId ? cardValue?.get(channelId) : channel.state.channels.get(channelId);
+        const channelValue = cardId ? cardValue?.channels.get(channelId) : channel.state.channels.get(channelId);
+
         if (channelValue) {
           const { topicRevision, syncRevision, topicMarker } = channelValue;
+
           curRevision = topicRevision;
           setRevision = syncRevision;
           marker = topicMarker;
@@ -78,33 +80,35 @@ export function useConversationContext() {
           return;
         }
 
-        try {
-          if (!marker) {
-            const delta = await getTopicDelta(cardId, channelId, null, COUNT, null, null);
-            await setTopicDelta(cardId, channelId, delta.topics);
-            setMarkerAndSync(cardId, channelId, topicMarker, topicRevision);
+        if (ignoreRevision || curRevision !== setRevision) {
+          try {
+            if (!marker) {
+              const delta = await getTopicDelta(cardId, channelId, null, COUNT, null, null);
+              await setTopicDelta(cardId, channelId, delta.topics);
+              await setMarkerAndSync(cardId, channelId, delta.marker, curRevision);
+            }
+            if (loadMore && marker) {
+              const delta = await getTopicDelta(cardId, channelId, null, COUNT, null, marker);
+              await setTopicDelta(cardId, channelId, delta.topics);
+              await setTopicMarker(cardId, channelId, delta.marker);
+            }
+            if (ignoreRevision || curRevision !== setRevision) {
+              const delta = await getTopicDelta(cardId, channelId, setRevision, null, marker, null);
+              await setTopicDelta(cardId, channelId, delta.topics);
+              await setSyncRevision(cardId, channelId, curRevision);
+            }
           }
-          if (loadMore && marker) {
-            const delta = await getTopicDelta(cardId, channelId, null, COUNT, null, marker);
-            await setTopicDelta(cardId, channelId, delta.topics);
-            setTopicMarker(cardId, channelId, delta.topicMarker);
-          }
-          if (ignoreRevision || curTopicRevision.current !== setTopicRevision.current) {
-            const delta = await getTopicDelta(cardId, channelId, setRevision, null, marker, null);
-            await setTopicDelta(cardId, channelId, delta.topics);
-            setSyncRevision(cardid, channelId, delta.topicRevision);
+          catch(err) {
+            console.log(err);
+            updateState({ offysnc: true });
+            syncing.current = false;
+            return
           }
         }
-        catch(err) {
-          console.log(err);
-          updateState({ offysnc: true });
-          syncing.current = false;
-          return
-        }
-
-        syncing.current = false;
-        await sync();
       }
+
+      syncing.current = false;
+      await sync();
     }
   }
 
@@ -354,7 +358,7 @@ export function useConversationContext() {
     if (cardId) {
       return await card.actions.setChannelSyncRevision(cardId, channelId, revision);
     }
-    return await channel.actions.setSyncRevision(channelid, revision);
+    return await channel.actions.setSyncRevision(channelId, revision);
   }
 
   const setMarkerAndSync = async (cardId, channelId, marker, revision) => {
@@ -378,7 +382,7 @@ export function useConversationContext() {
     return await channel.actions.getTopic(channelId, topicId);
   }
 
-  const mapTopicItem = (entry) => {
+  const mapTopicEntry = (entry) => {
     return {
       topicId: entry.id,
       revision: entry.revision,
@@ -392,7 +396,7 @@ export function useConversationContext() {
     if (topic) {
       topic[field] = value;
     }
-    topics.current.set(topicId, topic);
+    topics.current.set(topicId, { ...topic });
     updateState({ topics: topics.current });
   };
 

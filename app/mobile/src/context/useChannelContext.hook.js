@@ -48,12 +48,12 @@ export function useChannelContext() {
   }
 
   const setChannelField = (channelId, field, value, field2, value2) => {
-    const channel = channels.get(channelId) || {};
+    const channel = channels.current.get(channelId) || {};
     channel[field] = value;
     if (field2) {
       channel[field2] = value2;
     }
-    channels.set(channelId, { ...channel });
+    channels.current.set(channelId, { ...channel });
     updateState({ channels: channels.current }); 
   };
 
@@ -67,30 +67,31 @@ export function useChannelContext() {
         for (let channel of delta) {
           if (channel.data) {
             const item = setChannelItem(channel);
-            if (item.detail && item.summary) {
+            const entry = channels.current.get(channel.id);
+            if (!entry) {
+              if (!item.detail) {
+                item.detail = await getChannelDetail(server, token, channel.id);
+              }
+              if (!item.summary) {
+                item.summary = await getChannelSummary(server, token, channel.id);
+              }
               await store.actions.setChannelItem(guid, item);
-              channels.current.set(item.channelId, item);
+              channels.current.set(channel.id, item);
             }
             else {
-              const { channelId, detailRevision, topicRevision, detail, summary } = channels.current.get(channel.id) || {} 
-              if (item.detailRevision !== detailRevision) {
-                item.detailRevision = detailRevision;
-                item.detail = await getChannelDetail(server, token, channelId);
-                await store.actions.setChannelItemDetail(guid, channelId, detailRevision, item.detail);
+              if (item.detailRevision !== entry.detailRevision) {
+                entry.detail = await getChannelDetail(server, token, channel.id);
+                entry.unsealedDetail = null;
+                entry.detailRevision = item.detailRevision;
+                await store.actions.setChannelItemDetail(guid, channel.id, entry.detailRevision, entry.detail);
               }
-              else {
-                item.datail = detail;
+              if (item.topicRevision !== entry.topicRevision) {
+                entry.summary = await getChannelSummary(server, token, channel.id);
+                entry.unsealedSummary = null;
+                entry.topicRevision = item.topicRevision;
+                await store.actions.setChannelItemSummary(guid, channel.id, entry.topicRevision, entry.summary);
               }
-              if (item.topicRevision !== topicRevision) {
-                item.topicRevision = topicRevision;
-                item.summary = await getChannelSummary(server, token, item.channelId);
-                await store.actions.setChannelItemSummary(guid, channelId, topicRevision, item.summary);
-              }
-              else {
-                item.summary = summary;
-              }
-              await store.actions.setChannelItem(guid, item);
-              channels.current.set(channelId, item);
+              channels.current.set(channel.id, { ...entry });
             }
           }
           else {
@@ -192,7 +193,7 @@ export function useChannelContext() {
       const { server, token } = access.current;
       getChannelTopicAssetUrl(server, token, channelId, topicId, assetId);
     },
-    getTopics: async (channelId) => {
+    getTopics: async (channelId, revision, count, begin, end) => {
       const { server, token } = access.current;
       return await getChannelTopics(server, token, channelId, revision, count, begin, end);
     },
