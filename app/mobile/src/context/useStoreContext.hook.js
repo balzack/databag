@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef, useContext } from 'react';
 import SQLite from "react-native-sqlite-storage";
 
-const DATABAG_DB = 'db_v090.db';
+const DATABAG_DB = 'db_v_101.db';
 
 export function useStoreContext() {
   const [state, setState] = useState({});
@@ -168,8 +168,8 @@ export function useStoreContext() {
       await db.current.executeSql("INSERT OR REPLACE INTO app (key, value) values (?, ?);", [dataId, encodeObject(revision)]);
     }, 
     setChannelItem: async (guid, channel) => {
-      const { id, revision, data } = channel;
-      await db.current.executeSql(`INSERT OR REPLACE INTO channel_${guid} (channel_id, revision, detail_revision, topic_revision, detail, summary, unsealed_detail, unsealed_summary) values (?, ?, ?, ?, ?, ?, null, null);`, [id, revision, detailRevision, topicRevision, encodeObject(channelDetail), encodeObject(channelSummary)]);
+      const { id, revision, detailRevision, topicRevision, detail, summary } = channel;
+      await db.current.executeSql(`INSERT OR REPLACE INTO channel_${guid} (channel_id, revision, detail_revision, topic_revision, detail, summary, unsealed_detail, unsealed_summary) values (?, ?, ?, ?, ?, ?, null, null);`, [id, revision, detailRevision, topicRevision, encodeObject(detail), encodeObject(summary)]);
     },
     clearChannelItem: async (guid, channelId) => {
       await db.current.executeSql(`DELETE FROM channel_${guid} WHERE channel_id=?`, [channelId]);
@@ -264,7 +264,7 @@ export function useStoreContext() {
 
     setCardChannelItem: async (guid, cardId, channel) => {
       const { channelId, revision, detailRevision, topicRevision, detail, summary } = channel;
-      await db.current.executeSql(`INSERT OR REPLACE INTO card_channel_${guid} (card_id, channel_id, revision, detail_revision, topic_revision, detail, summary, unsealed_detail, unsealed_summary) values (?, ?, ?, ?, ?, ?, ?, null, null);`, [cardId, channelId, revision, detailRevision, topicRevision, encodeObject(channelDetail), encodeObject(channelSummary)]);
+      await db.current.executeSql(`INSERT OR REPLACE INTO card_channel_${guid} (card_id, channel_id, revision, detail_revision, topic_revision, detail, summary, unsealed_detail, unsealed_summary) values (?, ?, ?, ?, ?, ?, ?, null, null);`, [cardId, channelId, revision, detailRevision, topicRevision, encodeObject(detail), encodeObject(summary)]);
     },
     clearCardChannelItem: async (guid, cardId, channelId) => {
       await db.current.executeSql(`DELETE FROM card_channel_${guid} WHERE card_id=? and channel_id=?`, [cardId, channelId]);

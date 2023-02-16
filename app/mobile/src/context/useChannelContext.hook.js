@@ -58,6 +58,7 @@ export function useChannelContext() {
   };
 
   const sync = async () => {
+  
     if (access.current && !syncing.current && setRevision.current !== curRevision.current) {
       syncing.current = true;
       try {

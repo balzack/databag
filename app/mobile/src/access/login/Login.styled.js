@@ -103,7 +103,7 @@ export const styles = StyleSheet.create({
     marginTop: 16,
   },
   createtext: {
-    color: 'yellow',
+    color: Colors.primary,
   },
   nocreatetext: {
     color: Colors.disabled,

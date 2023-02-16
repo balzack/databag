@@ -138,7 +138,7 @@ export const styles = StyleSheet.create({
     marginBottom: 16,
   },
   logintext: {
-    color: 'yellow',
+    color: Colors.primary,
   },
   nologintext: {
     color: Colors.disabled,
