@@ -173,7 +173,6 @@ export function useAppContext() {
     }
     ws.current.onclose = (e) => {
       console.log(e)
-      count.current += 1;
       updateState({ status: 'disconnected' });
       setTimeout(() => {
         if (ws.current != null) {

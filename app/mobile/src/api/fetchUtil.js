@@ -3,7 +3,6 @@ const TIMEOUT = 15000;
 //await new Promise(r => setTimeout(r, 2000));
 
 export function createWebsocket(url) {
-console.log("REAL WEBSOCKET!");
   return new WebSocket(url);
 }
 
