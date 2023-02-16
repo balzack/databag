@@ -61,7 +61,7 @@ export function Reset() {
             </View>
           )}
           <TouchableOpacity style={styles.login} onPress={actions.login}>
-            <Text style={styles.createtext}>Account Login</Text>
+            <Text style={styles.logintext}>Account Login</Text>
           </TouchableOpacity>
         </View>      
       </View>

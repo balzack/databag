@@ -9,6 +9,9 @@ export const styles = StyleSheet.create({
   config: {
     paddingTop: 8,
   },
+  icon: {
+    padding: 8,
+  },
   demo: {
     alignItems: 'center',
     justifyContent: 'center',
