@@ -61,6 +61,9 @@ export function useCreate() {
   }, [state]);
 
   useEffect(() => {
+    if (!count) {
+      return;
+    }
     if (checking.current) {
       backoff.current = true;
     }

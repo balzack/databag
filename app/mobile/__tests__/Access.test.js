@@ -9,6 +9,7 @@ import { CardContextProvider } from 'context/CardContext';
 import { StoreContext } from 'context/StoreContext';
 import { useTestStoreContext } from 'context/useTestStoreContext.hook';
 import { useLogin } from 'src/access/login/useLogin.hook';
+import { useCreate } from 'src/access/create/useCreate.hook';
 import * as fetchUtil from 'api/fetchUtil';
 
 let navPath;
@@ -18,8 +19,8 @@ jest.mock('react-router-dom', () => ({
   useLocation: () => { return 'path' },
 }));
 
-function AccessView() {
-  const { state, actions } = useLogin();
+function AccessView({ mode }) {
+  const { state, actions } = (mode === 'login') ? useLogin() : useCreate();
   const app = useContext(AppContext);
   const [session, setSession] = useState();
   
@@ -34,18 +35,18 @@ function AccessView() {
   );
 }
 
-function AccessTestApp() {
+function AccessTestApp({ mode }) {
   return (
     <AccountContextProvider>
-    <ProfileContextProvider>
-    <ChannelContextProvider>
-    <CardContextProvider>
-    <AppContextProvider>
-      <AccessView />
-    </AppContextProvider>
-    </CardContextProvider>
-    </ChannelContextProvider>
-    </ProfileContextProvider>
+      <ProfileContextProvider>
+        <ChannelContextProvider>
+          <CardContextProvider>
+            <AppContextProvider>
+              <AccessView mode={mode} />
+            </AppContextProvider>
+          </CardContextProvider>
+        </ChannelContextProvider>
+      </ProfileContextProvider>
     </AccountContextProvider>
   );
 }
@@ -55,9 +56,13 @@ function MockWebsocket(url) {
   this.url = url;
   this.sent = false;
   this.send = (msg) => { this.sent = true };
+  this.close = () => {};
 };
 
-jest.mock('@react-native-firebase/messaging', () => () => ({ getToken: async () => '##' }));
+jest.mock('@react-native-firebase/messaging', () => () => ({ 
+  deleteToken: async () => {}, 
+  getToken: async () => '##'
+}));
 
 jest.mock('react-native-device-info', () => ({
   getVersion: () => '##',
@@ -84,6 +89,8 @@ beforeEach(() => {
   React.useContext = mockUseContext;
 
   const mockFetch = jest.fn().mockImplementation((url, options) => {
+console.log(url);
+
     return Promise.resolve({
       json: () => Promise.resolve({
         guid: '123',
@@ -105,8 +112,30 @@ afterEach(() => {
   fetchUtil.fetchWithCustomTimeout = realFetchWithCustomTimeout;
 });
 
+test('nav to session after create', async () => {
+    render(<AccessTestApp mode="create" />);
+
+    await waitFor(async () => {
+      expect(screen.getByTestId('session').props.children).toBe(false);
+    });
+
+    await act(async () => {
+      const app = screen.getByTestId('access').props.app;
+      await app.actions.create('test.org', 'testusername', 'testpassword', 'secret');
+    });
+
+    await waitFor(async () => {
+      expect(navPath).toBe('/session');
+    });
+
+    await waitFor(async () => {
+      expect(screen.getByTestId('session').props.children).toBe(true);
+    });
+
+});
+
 test('nav to session after login', async () => {
-    render(<AccessTestApp />);
+    render(<AccessTestApp mode="login" />);
 
     await waitFor(async () => {
       expect(screen.getByTestId('session').props.children).toBe(false);
@@ -124,7 +153,6 @@ test('nav to session after login', async () => {
     await waitFor(async () => {
       expect(screen.getByTestId('session').props.children).toBe(true);
     });
+
 });
-
-
 
