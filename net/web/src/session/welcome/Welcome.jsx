@@ -18,7 +18,7 @@ export function Welcome() {
           <RightOutlined />
           <div>Connect with people</div>
           <RightOutlined />
-          <div>Start a conversation topic</div>
+          <div>Start a conversation</div>
         </Space>
       </div>
     </WelcomeWrapper>

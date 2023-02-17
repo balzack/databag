@@ -10,7 +10,6 @@ import { ProfileContextProvider } from 'context/ProfileContext';
 import { CardContextProvider } from 'context/CardContext';
 import { ChannelContextProvider } from 'context/ChannelContext';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
-import { NavigationContainer } from '@react-navigation/native';
 import { ConversationContextProvider } from 'context/ConversationContext';
 import { LogBox } from 'react-native';
 import { Root } from 'src/root/Root';
@@ -41,7 +40,7 @@ export default function App() {
                           <Route path="/login" element={ <Access mode="login" /> } />
                           <Route path="/reset" element={ <Access mode="reset" /> } />
                           <Route path="/create" element={ <Access mode="create" /> } />
-                          <Route path="/session" element={ <NavigationContainer><Session/></NavigationContainer> } />
+                          <Route path="/session" element={ <Session /> } />
                         </Routes>
                       </NativeRouter>
                     </SafeAreaProvider>
