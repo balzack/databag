@@ -89,8 +89,6 @@ beforeEach(() => {
   React.useContext = mockUseContext;
 
   const mockFetch = jest.fn().mockImplementation((url, options) => {
-console.log(url);
-
     return Promise.resolve({
       json: () => Promise.resolve({
         guid: '123',
