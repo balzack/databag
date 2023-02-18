@@ -11,16 +11,12 @@ import { styles } from './Session.styled';
 import Colors from 'constants/Colors';
 import { Profile } from './profile/Profile';
 import { CardsTitle, CardsBody, Cards } from './cards/Cards';
-import { useCards } from './cards/useCards.hook';
 import { RegistryTitle, RegistryBody, Registry } from './registry/Registry';
-import { useRegistry } from './registry/useRegistry.hook';
 import { Contact, ContactTitle } from './contact/Contact';
 import { Details, DetailsHeader, DetailsBody } from './details/Details';
 import { Conversation, ConversationHeader, ConversationBody } from './conversation/Conversation';
 import { Welcome } from './welcome/Welcome';
 import { ChannelsTitle, ChannelsBody, Channels } from './channels/Channels';
-import { useConversation } from './conversation/useConversation.hook';
-import { useChannels } from './channels/useChannels.hook';
 import { CommonActions } from '@react-navigation/native';
 import { ConversationContext } from 'context/ConversationContext';
 import { ProfileIcon } from './profileIcon/ProfileIcon';
@@ -40,178 +36,111 @@ const Tab = createBottomTabNavigator();
 export function Session() {
 
   const { state, actions } = useSession();
-  const [selectedConversation, setSelectedConversation] = useState(null);
-  const [selectedContact, setSelectedContact] = useState(null);
 
-  // tabbed containers
+  const drawerParams = { drawerPosition: 'right', headerShown: false, swipeEnabled: false, drawerType: 'front' };
+  const stackParams = { headerStyle: { backgroundColor: Colors.titleBackground }, headerBackTitleVisible: false };
+  const screenParams = { headerShown: true, headerTintColor: Colors.primary };
+
   const ConversationStackScreen = () => {
+    const conversation = useContext(ConversationContext);
 
-    const setConversation = (navigation, cardId, channelId, revision) => {
+    const setConversation = (navigation, cardId, channelId) => {
       navigation.navigate('conversation');
-      setSelectedConversation({ cardId, channelId, revision });
+      conversation.actions.setConversation(cardId, channelId);
     }
     const clearConversation = (navigation) => {
       navigation.dispatch(
-        CommonActions.reset({
-          index: 0,
-          routes: [
-            { name: 'channels' },
-          ],
-        })
+        CommonActions.reset({ index: 0, routes: [ { name: 'channels' }, ], })
       );
+      conversation.actions.clearConversation();
     }
     const setDetail = (navigation) => {
       navigation.navigate('details');
     }
-    const clearDetail = (navigation) => {
-      navigation.goBack();
-    }
-
-    const conversation = useConversation();
-    const channels = useChannels();
-    const conversationContext = useContext(ConversationContext);
-
-    useEffect(() => {
-      if (selectedConversation) {
-        const { cardId, channelId } = selectedConversation || {}
-        conversationContext.actions.setConversation(cardId, channelId);
-      }
-      else {
-        conversationContext.actions.clearConversation();
-      }
-    }, [selectedConversation]);      
 
     return (
       <ConversationStack.Navigator
           initialRouteName="channels"
-          screenOptions={({ route }) => ({ headerShown: true, headerTintColor: Colors.primary })}
-          screenListeners={{ state: (e) => { if (e?.data?.state?.index === 0 && selectedConversation) { setSelectedConversation(null); }}, }}>
-        <ConversationStack.Screen name="channels" options={{
-            headerStyle: { backgroundColor: Colors.titleBackground }, 
-            headerBackTitleVisible: false, 
-            headerTitle: (props) => <ChannelsTitle state={channels.state} actions={channels.actions} />
-          }}>
-          {(props) => <ChannelsBody state={channels.state} actions={channels.actions} openConversation={(cardId, channelId, revision) => setConversation(props.navigation, cardId, channelId, revision)} />}
+          screenOptions={({ route }) => (screenParams)}
+          screenListeners={{ state: (e) => { if (e?.data?.state?.index === 0) { conversation.actions.clearConversation() }} }}>
+
+        <ConversationStack.Screen name="channels" options={{ ...stackParams, headerTitle: (props) => <ChannelsTitle /> }}>
+          {(props) => <ChannelsBody openConversation={(cardId, channelId) => setConversation(props.navigation, cardId, channelId)} />}
         </ConversationStack.Screen>
-        <ConversationStack.Screen name="conversation" options={{
-            headerStyle: { backgroundColor: Colors.titleBackground }, 
-            headerBackTitleVisible: false, 
-            headerTitle: (props) => <ConversationHeader channel={selectedConversation} closeConversation={clearConversation} openDetails={setDetail}
-              state={conversation.state} actions={conversation.actions} />
-          }}>
-          {(props) => <ConversationBody channel={selectedConversation} state={conversation.state} actions={conversation.actions} />}
+
+        <ConversationStack.Screen name="conversation" options={{ ...stackParams, headerTitle: (props) => <ConversationHeader closeConversation={clearConversation} openDetails={openDetails} /> }}>
+          {(props) => <ConversationBody />}
         </ConversationStack.Screen>
-        <ConversationStack.Screen name="details" options={{
-            headerStyle: { backgroundColor: Colors.titleBackground }, 
-            headerBackTitleVisible: false, 
-            headerTitle: (props) => <DetailsHeader channel={selectedConversation} />
-          }}>
-          {(props) => <DetailsBody channel={selectedConversation} clearConversation={() => clearConversation(props.navigation)} />}
+
+        <ConversationStack.Screen name="details" options={{ ...stackParams, headerTitle: (props) => <DetailsHeader /> }}>
+          {(props) => <DetailsBody clearConversation={() => clearConversation(props.navigation)} />}
         </ConversationStack.Screen>
+
       </ConversationStack.Navigator>
     );
   }
+
   const ProfileStackScreen = () => {
     return (
-      <ProfileStack.Navigator screenOptions={({ route }) => ({ headerShown: true, headerTintColor: Colors.primary })}>
+      <ProfileStack.Navigator screenOptions={({ route }) => (screenParams)}>
         <ProfileStack.Screen name="profile" component={Profile} options={{ headerStyle: { backgroundColor: Colors.titleBackground }}} />
       </ProfileStack.Navigator>
     );
   }
+
   const ContactStackScreen = () => {
-    const setCardStack = (navigation, contact) => {
-      setSelectedContact(contact);
+    const [contact, setContact] = useState(null);
+
+    const openContact = (navigation, contact) => {
+      setContact(contact);
       navigation.navigate('contact')
     }
-    const clearCardStack = (navigation) => {
-      navigation.goBack();
-    }
-    const setRegistryStack = (navigation) => {
+    const openRegistry = (navigation) => {
       navigation.navigate('registry');
     }
-    const clearRegistryStack = (navigation) => {
-      navigation.goBack();
-    }
-
-    const registry = useRegistry();
-    const cards = useCards();
 
     return (
-      <ContactStack.Navigator screenOptions={({ route }) => ({ headerShow: true, headerTintColor: Colors.primary })}
-          initialRouteName="cards">
-        <ContactStack.Screen name="cards" options={{
-            headerStyle: { backgroundColor: Colors.titleBackground }, 
-            headerBackTitleVisible: false, 
-            headerTitle: (props) => <CardsTitle state={cards.state} actions={cards.actions} openRegistry={setRegistryStack} />
-          }}>
-          {(props) => <CardsBody state={cards.state} actions={cards.actions} openContact={(contact) => setCardStack(props.navigation, contact)} />}
+      <ContactStack.Navigator screenOptions={({ route }) => (screenParams)} initialRouteName="cards">
+
+        <ContactStack.Screen name="cards" options={{ ...stackParams, headerTitle: (props) => <CardsTitle openRegistry={props.navigation} /> }}>
+          {(props) => <CardsBody openContact={(contact) => openContact(props.navigation, contact)} />}
         </ContactStack.Screen>
-        <ContactStack.Screen name="contact" options={{ 
-            headerStyle: { backgroundColor: Colors.titleBackground }, 
-            headerBackTitleVisible: false, 
-            headerTitle: (props) => <ContactTitle contact={selectedContact} {...props} />
-          }}>
-          {(props) => <Contact contact={selectedContact} closeContact={() => clearCardStack(props.navigation)} />}
+
+        <ContactStack.Screen name="contact" options={{ ...stackParams, headerTitle: (props) => <ContactTitle contact={contact} /> }}>
+          {(props) => <ContactBody contact={contact} />}
         </ContactStack.Screen>
-        <ContactStack.Screen name="registry" options={{
-            headerStyle: { backgroundColor: Colors.titleBackground }, 
-            headerBackTitleVisible: false,
-            headerTitle: (props) => <RegistryTitle state={registry.state} actions={registry.actions} contact={selectedContact} {...props} />
-          }}>
-          {(props) => <RegistryBody state={registry.state} actions={registry.actions} openContact={(contact) => setCardStack(props.navigation, contact)} />}
+
+        <ContactStack.Screen name="registry" options={{ ...stackParams, headerTitle: (props) => <RegistryTitle /> }}>
+          {(props) => <RegistryBody openContact={(contact) => openContact(props.navigation, contact)} />}
         </ContactStack.Screen>
+
       </ContactStack.Navigator>
     );
   }
 
-  const HomeScreen = ({ cardNav, registryNav, detailNav, contactNav, profileNav, setDetails, resetConversation, clearReset }) => {
-
-    const [channel, setChannel] = useState(null);
-    const setConversation = (cardId, channelId, revision) => {
-      setChannel({ cardId, channelId, revision });
-    };
-    const clearConversation = () => {
-      setChannel(null);
-    };
-    const setProfile = () => {
-      profileNav.openDrawer();
-    };
-    const setChannelDetails = (channel) => {
-      setDetails(channel);
-      detailNav.openDrawer();
-    };
-
-    const openProfile = () => {
-      profileNav.openDrawer();
-    }
-    const openCards = () => {
-      cardNav.openDrawer();
-    }
-    const isCardOpen = () => {
-      return cardNav.getState().history.length > 1;
-    }
+  const HomeScreen = ({ navParams }) => {
 
     const conversation = useContext(ConversationContext);
+    const [channel, setChannel] = useState(false);
+
+    const setConversation = (cardId, channelId) => {
+      conversation.actions.setConversation(cardId, channelId);
+      setChannel(true);
+    };
+    const openDetails = () => {
+      navParams.detailNav.openDrawer();
+    };
+    const openProfile = () => {
+      navParams.profileNav.openDrawer();
+    }
+    const openCards = () => {
+      navParams.cardNav.openDrawer();
+    }
 
     useEffect(() => {
-      if (resetConversation) {
-        detailNav.closeDrawer();
-        setChannel(null);
-        setDetails(null);
-        clearReset();
-      }
-    }, [resetConversation]);
-
-    useEffect(() => {
-console.log("CHANNEL IS: ", channel);
-      if (channel) {
-        const { cardId, channelId } = channel;
-        conversation.actions.setConversation(cardId, channelId);
-      }
-      else {
-        conversation.actions.clearConversation();
-      }
-    }, [channel]);      
+      navParams.detailNav.closeDrawer();
+      setChannel(false);
+    }, [navParams.closeCount]);
 
     return (
       <View style={styles.home}>
@@ -222,7 +151,7 @@ console.log("CHANNEL IS: ", channel);
               <Text style={styles.profileLabel}>Profile</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.option} onPress={openCards}>
-              <CardsIcon color={Colors.text} size={20} active={isCardOpen()} />
+              <CardsIcon color={Colors.text} size={20} />
               <Text style={styles.profileLabel}>Contacts</Text>
             </TouchableOpacity>
           </SafeAreaView>
@@ -232,7 +161,7 @@ console.log("CHANNEL IS: ", channel);
         </SafeAreaView>
         <View style={styles.conversation}>
           { channel && (
-            <Conversation closeConversation={clearConversation} openDetails={setChannelDetails} />
+            <Conversation closeConversation={clearConversation} openDetails={openDetails} />
           )}
           { !channel && (
             <Welcome />
@@ -242,123 +171,70 @@ console.log("CHANNEL IS: ", channel);
     )
   }
 
-  const CardDrawerScreen = ({ registryNav, detailNav, contactNav, profileNav, setContact, setDetails, clearReset, resetConversation }) => {
-
+  const CardDrawerScreen = ({ navParams }) => {
+    const openContact = (contact) => {
+      navParams.setContact(contact);
+      navParams.contactNav.openDrawer();
+    };
     const openRegistry = () => {
-      registryNav.openDrawer();
-    };
-    setCardContact = (contact) => {
-      setContact(contact);
-      contactNav.openDrawer();
-    };
-
-    const params = {
-      profileNav,
-      registryNav,
-      detailNav,
-      contactNav,
-      setDetails,
-      setContact,
-      clearReset,
-      resetConversation,
+      navParams.registryNav.openDrawer();
     };
 
     return (
-      <CardDrawer.Navigator screenOptions={{ drawerPosition: 'right', headerShown: false, swipeEnabled: false, drawerType: 'front', drawerStyle: { width: '50%' } }}
-        drawerContent={(props) => <Cards openContact={setCardContact} openRegistry={openRegistry} />}>
+      <CardDrawer.Navigator screenOptions={{ ...drawerParams, drawerStyle: { width: '50%' } }}
+        drawerContent={(props) => <Cards openContact={openContact} openRegistry={openRegistry} />}>
         <CardDrawer.Screen name="home">
-          {(props) => <HomeScreen cardNav={props.navigation} {...params} />}
+          {(props) => <HomeScreen navParams={{...navParams, cardNav: props.navigation}} />}
         </CardDrawer.Screen>
       </CardDrawer.Navigator>
     );
   };
 
-  const RegistryDrawerScreen = ({ detailNav, contactNav, profileNav, setContact, setDetails, clearReset, resetConversation }) => {
-
-    const setRegistryContact = (contact) => {
-      setContact(contact);
-      contactNav.openDrawer();
-    };
-
-    const params = {
-      profileNav,
-      detailNav,
-      contactNav,
-      setDetails,
-      setContact,
-      clearReset,
-      resetConversation,
+  const RegistryDrawerScreen = ({ navParams }) => {
+    const openContact = (contact) => {
+      navParams.setContact(contact);
+      navParams.contactNav.openDrawer();
     };
 
     return (
-      <RegistryDrawer.Navigator screenOptions={{ drawerPosition: 'right', headerShown: false, swipeEnabled: false, drawerType: 'front', drawerStyle: { width: '50%' } }}
-        drawerContent={(props) => <Registry openContact={setRegistryContact} />}>
+      <RegistryDrawer.Navigator screenOptions={{ ...drawerParams, drawerStyle: { width: '50%' } }}
+        drawerContent={(props) => <Registry openContact={openContact} />}>
         <RegistryDrawer.Screen name="card">
-          {(props) => <CardDrawerScreen registryNav={props.navigation} {...params} />}
+          {(props) => <CardDrawerScreen navParams={{...navParams, registryNav: props.navigation}} />}
         </RegistryDrawer.Screen>
       </RegistryDrawer.Navigator>
     );
   };
 
-  const ContactDrawerScreen = ({ detailNav, profileNav, setDetails, resetConversation, clearReset }) => {
-
-    const [selected, setSelected] = useState(null);
-    const setContact = (contact) => {
-      setSelected(contact);
-    }
-
-    const params = {
-      profileNav,
-      detailNav,
-      setDetails,
-      setContact,
-      clearReset,
-      resetConversation,
-    };
+  const ContactDrawerScreen = ({ navParams }) => {
+    const [contact, setContact] = useState(null);
 
     return (
-      <ContactDrawer.Navigator screenOptions={{ drawerPosition: 'right', headerShown: false, swipeEnabled: false, drawerType: 'front', drawerStyle: { width: '45%' } }}
-        drawerContent={(props) => <Contact contact={selected} />}>
+      <ContactDrawer.Navigator screenOptions={{ ...drawerParams, drawerStyle: { width: '45%' } }}
+        drawerContent={(props) => <Contact contact={contact} />}>
         <ContactDrawer.Screen name="registry">
-          {(props) => <RegistryDrawerScreen {...params} contactNav={props.navigation} setContact={setContact} />}
+          {(props) => <RegistryDrawerScreen navParams={{...navParams, setContact, contactNav: props.navigation }} />}
         </ContactDrawer.Screen>
       </ContactDrawer.Navigator>
     );
   }
 
-  const DetailDrawerScreen = ({ profileNav }) => {
-
-    const [selected, setSelected] = useState(null);
-    const [resetConversation, setResetConversation] = useState(false);
-    const setDetails = (channel) => {
-      setSelected(channel);
+  const DetailDrawerScreen = ({ navParams }) => {
+    const [closeCount, setCloseCount] = useState(0);
+    const closeConversation = () => {
+      setCloseCount(closeCount+1);
     };
-    const clearConversation = () => {
-      setResetConversation(true);
-    }
-    const clearReset = () => {
-      setResetConversation(false);
-    }
 
-    const params = {
-      profileNav,
-      setDetails,
-      clearReset,
-      resetConversation,
-    };
-  
     return (
-      <DetailDrawer.Navigator screenOptions={{ drawerPosition: 'right', headerShown: false, swipeEnabled: false, drawerType: 'front', drawerStyle: { width: '45%' } }}
-          drawerContent={(props) => <Details channel={selected} clearConversation={clearConversation} />}
+      <DetailDrawer.Navigator screenOptions={{ ...drawerParams, drawerStyle: { width: '45%' } }}
+          drawerContent={(props) => <Details closeConversation={closeConversation} />}
         >
         <DetailDrawer.Screen name="contact">
-          {(props) => <ContactDrawerScreen {...params} detailNav={props.navigation} />}
+          {(props) => <ContactDrawerScreen navParams={{...navParams, detailNav: props.navigation}} />}
         </DetailDrawer.Screen>
       </DetailDrawer.Navigator>
     );
   }
-
-  const [cardsActive, setCardsActive] = useState(false);
 
   return (
     <NavigationContainer>
@@ -392,16 +268,15 @@ console.log("CHANNEL IS: ", channel);
         { state.firstRun == false && (
           <View style={styles.container}>
             { state.tabbed === false && (
-              <ProfileDrawer.Navigator screenOptions={{ drawerPosition: 'right', headerShown: false, swipeEnabled: false, drawerType: 'front', drawerStyle: { width: '45%' } }}
+              <ProfileDrawer.Navigator screenOptions={{ ...drawerParams, drawerStyle: { width: '45%' } }}
                 drawerContent={(props) => <Profile />}>
                 <ProfileDrawer.Screen name="detail">
-                  {(props) => <DetailDrawerScreen profileNav={props.navigation}/>}
+                  {(props) => <DetailDrawerScreen navParams={{ profileNav: props.navigation }} />}
                 </ProfileDrawer.Screen>
               </ProfileDrawer.Navigator>
             )}
             { state.tabbed === true && (
               <Tab.Navigator
-                screenListeners={{ state: (e) => setCardsActive(e?.data?.state?.index === 2) }}
                 screenOptions={({ route }) => ({
                   tabBarStyle: styles.tabBar,
                   headerShown: false,
@@ -413,7 +288,7 @@ console.log("CHANNEL IS: ", channel);
                       return <Ionicons name={'message1'} size={size} color={color} />;
                     }
                     if (route.name === 'Contacts') {
-                      return <CardsIcon size={size} color={color} active={cardsActive} />;
+                      return <CardsIcon size={size} color={color} />;
                     }
                   },
                   tabBarShowLabel: false,
