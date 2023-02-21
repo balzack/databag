@@ -1,0 +1,241 @@
+
+import { StyleSheet } from 'react-native';
+import { Colors } from 'constants/Colors';
+
+export const styles = StyleSheet.create({
+  body: {
+    display: 'flex',
+    flexGrow: 1,
+  },
+  button: {
+    paddingRight: 16,
+  },
+  headerText: {
+    fontSize: 18,
+    overflow: 'hidden',
+    textAlign: 'center',
+  },
+  logo: {
+    marginTop: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    display: 'flex',
+  },
+  alert: {
+    height: 16,
+    width: '100%',
+    alignItems: 'center',
+  },
+  alertText: {
+    color: Colors.alert,
+  },
+  logout: {
+    marginTop: 16,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+  },
+  logoutText: {
+    marginLeft: 8,
+    color: Colors.primary,
+  },
+  delete: {
+    marginTop: 16,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+  },
+  deleteText: {
+    marginLeft: 8,
+    color: Colors.alert,
+  },
+  modalWrapper: {
+    display: 'flex',
+    width: '100%',
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(52, 52, 52, 0.8)'
+  },
+  modalContainer: {
+    backgroundColor: Colors.formBackground,
+    padding: 16,
+    width: '80%',
+    maxWidth: 400,
+  },
+  modalHeader: {
+    fontSize: 18,
+    paddingBottom: 16,
+  },
+  modalList: {
+    width: '100%',
+    borderWidth: 1,
+    borderColor: Colors.lightgrey,
+    borderRadius: 2,
+  },
+  modalControls: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
+  cancel: {
+    borderWidth: 1,
+    borderColor: Colors.lightgrey,
+    borderRadius: 4,
+    padding: 8,
+    marginRight: 8,
+    width: 72,
+    display: 'flex',
+    alignItems: 'center',
+  },
+  unconfirmed: {
+    backgroundColor: Colors.lightgrey,
+    borderRadius: 4,
+    padding: 8,
+    width: 72,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  remove: {
+    backgroundColor: Colors.error,
+    borderRadius: 4,
+    padding: 8,
+    width: 72,
+     display: 'flex',
+     alignItems: 'center',
+     justifyContent: 'center',
+  },
+  removeText: {
+    color: Colors.white,
+  },
+  inputField: {
+    width: '100%',
+    borderWidth: 1,
+    borderColor: Colors.lightgrey,
+    borderRadius: 4,
+    padding: 8,
+    marginBottom: 8,
+    maxHeight: 92,
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  gallery: {
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+    padding: 8,
+    backgroundColor: Colors.lightgrey,
+    borderBottomRightRadius: 8,
+    borderTopLeftRadius: 8,
+  },
+  detail: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    color: Colors.text,
+    paddingLeft: 32,
+    paddingRight: 32,
+    marginTop: 16,
+    marginBottom: 16,
+  },
+  attribute: {
+    display: 'flex',
+    flexDirection: 'row',
+    paddingBottom: 8,
+  },
+  nonametext: {
+    fontSize: 18,
+    paddingRight: 8,
+    fontWeight: 'bold',
+    color: Colors.grey,
+  },
+  nametext: {
+    fontSize: 18,
+    paddingRight: 8,
+    fontWeight: 'bold',
+  },
+  locationtext: {
+    fontSize: 16,
+    paddingLeft: 8,
+    color: Colors.text,
+  },
+  nolocationtext: {
+    fontSize: 16,
+    paddingLeft: 8,
+    color: Colors.grey,
+  },
+  descriptiontext: {
+    fontSize: 16,
+    paddingLeft: 8,
+    color: Colors.text,
+  },
+  nodescriptiontext: {
+    fontSize: 16,
+    paddingLeft: 8,
+    color: Colors.grey,
+  },
+  save: {
+    padding: 8,
+    borderRadius: 4,
+    backgroundColor: Colors.primary,
+    width: 72,
+    display: 'flex',
+    alignItems: 'center',
+  },
+  saveText: {
+    color: Colors.white,
+  },
+  blocked: {
+    alignSelf: 'center',
+    borderColor: Colors.lightgrey,
+    borderWidth: 1,
+    borderRadius: 4,
+    padding: 8,
+    marginBottom: 8,
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  blockedLabel: {
+    marginTop: 24,
+    alignSelf: 'center',
+    color: Colors.grey,
+  },
+  enable: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+  },
+  enableText: {
+    color: Colors.primary,
+  },
+  enableSwitch: {
+    transform: [{ scaleX: .6 }, { scaleY: .6 }],
+  },
+  link: {
+    marginLeft: 8,
+    marginRight: 8,
+  },
+  linkText: {
+    color: Colors.primary,
+  },
+  close: {
+    borderWidth: 1,
+    borderColor: Colors.lightgrey,
+    borderRadius: 4,
+    padding: 8,
+    marginTop: 8,
+    width: 72,
+    display: 'flex',
+    alignItems: 'center',
+  },
+});
+

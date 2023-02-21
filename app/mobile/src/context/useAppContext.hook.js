@@ -16,7 +16,7 @@ import messaging from '@react-native-firebase/messaging';
 export function useAppContext() {
   const [state, setState] = useState({
     session: null,
-    status: 'disconnected',
+    status: null,
     loggingOut: false,
     adminToken: null,
     version: getVersion(),

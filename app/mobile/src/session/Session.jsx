@@ -1,4 +1,4 @@
-import { View, TouchableOpacity, StatusBar, Text, Image } from 'react-native';
+import { View, ScrollView, TouchableOpacity, StatusBar, Text, Image } from 'react-native';
 import { useState, useEffect, useContext } from 'react';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -9,7 +9,7 @@ import Ionicons from 'react-native-vector-icons/AntDesign';
 import { useSession } from './useSession.hook';
 import { styles } from './Session.styled';
 import Colors from 'constants/Colors';
-import { Profile } from './profile/Profile';
+import { Profile, ProfileHeader, ProfileBody } from './profile/Profile';
 import { CardsTitle, CardsBody, Cards } from './cards/Cards';
 import { RegistryTitle, RegistryBody, Registry } from './registry/Registry';
 import { Contact, ContactTitle } from './contact/Contact';
@@ -83,7 +83,9 @@ export function Session() {
   const ProfileStackScreen = () => {
     return (
       <ProfileStack.Navigator screenOptions={({ route }) => (screenParams)}>
-        <ProfileStack.Screen name="profile" component={Profile} options={{ headerStyle: { backgroundColor: Colors.titleBackground }}} />
+        <ProfileStack.Screen name="profile" options={{ ...stackParams, headerTitle: () => <ProfileHeader /> }}>
+          {(props) => <ScrollView><ProfileBody /></ScrollView>}
+        </ProfileStack.Screen>
       </ProfileStack.Navigator>
     );
   }
@@ -268,8 +270,9 @@ export function Session() {
         { state.firstRun == false && (
           <View style={styles.container}>
             { state.tabbed === false && (
-              <ProfileDrawer.Navigator screenOptions={{ ...drawerParams, drawerStyle: { width: '45%' } }}
-                drawerContent={(props) => <Profile />}>
+              <ProfileDrawer.Navigator screenOptions={{ ...drawerParams, drawerStyle: { width: '45%' } }} drawerContent={(props) => (
+                  <ScrollView><SafeAreaView style={styles.drawer} edges={['top', 'bottom', 'right']}><Profile /></SafeAreaView></ScrollView>
+                )}>
                 <ProfileDrawer.Screen name="detail">
                   {(props) => <DetailDrawerScreen navParams={{ profileNav: props.navigation }} />}
                 </ProfileDrawer.Screen>
