@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ProfileContext } from 'context/ProfileContext';
+import { AccountContext } from 'context/AccountContext';
 import { AppContext } from 'context/AppContext';
 
 export function useProfile() {
@@ -27,6 +28,7 @@ export function useProfile() {
   });
 
   const app = useContext(AppContext);
+  const account = useContext(AccountContext);
   const profile = useContext(ProfileContext);
   const navigate = useNavigate();
 
@@ -39,7 +41,12 @@ export function useProfile() {
     const imageSource = image ? profile.state.imageUrl : 'avatar';
     updateState({ name, handle, node, location, description, imageSource, editHandle: handle,
         editName: name, editLocation: location, editDescription: description });
-  }, [profile]);
+  }, [profile.state]);
+
+  useEffect(() => {
+    const { sealable } = account.state.status || {};
+    updateState({ sealable });
+  }, [account.state]);
 
   useEffect(() => {
     const { loggingOut, status } = app.state;

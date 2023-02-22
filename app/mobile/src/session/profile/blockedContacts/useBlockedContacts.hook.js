@@ -40,11 +40,11 @@ export function useBlockedContacts() {
       return 1;
     });
     updateState({ cards: filtered });
-  }, [card]);
+  }, [card.state]);
 
   const actions = {
     unblock: async (cardId) => {
-      await card.actions.clearCardBlocked(cardId);
+      await card.actions.clearCardFlag(cardId);
     }
   };
 

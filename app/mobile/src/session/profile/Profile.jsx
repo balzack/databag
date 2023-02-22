@@ -191,23 +191,24 @@ export function ProfileBody() {
         </TouchableOpacity>
         <Switch style={styles.enableSwitch} value={state.pushEnabled} onValueChange={setNotifications} trackColor={styles.switch}/>
       </View>
-      { state.sealable && (
-        <TouchableOpacity style={styles.link} onPress={actions.showSealEdit}>
-          <Ionicons name="setting" size={14} color={Colors.primary} />
-          <Text style={styles.linkText}>Sealed Topics</Text>
-        </TouchableOpacity>
-      )}
+
+      <TouchableOpacity style={styles.logout} activeOpacity={1} onPress={logout}>
+        <Ionicons name="logout" size={14} color={Colors.primary} />
+        <Text style={styles.logoutText}>Logout</Text>
+      </TouchableOpacity>
 
       <TouchableOpacity style={styles.logout} onPress={actions.showLoginEdit}>
         <Ionicons name="lock" size={16} color={Colors.primary} />
         <Text style={styles.logoutText}>Change Login</Text>
       </TouchableOpacity>
-
-      <TouchableOpacity style={styles.logout} activeOpacity={1} onPress={logout}>
-        <Ionicons name="logout" size={16} color={Colors.primary} />
-        <Text style={styles.logoutText}>Logout</Text>
-      </TouchableOpacity>
  
+      { state.sealable && (
+        <TouchableOpacity style={styles.logout} onPress={actions.showEditSeal}>
+          <Ionicons name="setting" size={14} color={Colors.primary} />
+          <Text style={styles.logoutText}>Sealed Topics</Text>
+        </TouchableOpacity>
+      )}
+
       <TouchableOpacity style={styles.delete} activeOpacity={1} onPress={actions.showDelete}>
         <Ionicons name="delete" size={16} color={Colors.alert} />
         <Text style={styles.deleteText}>Delete Account</Text>
@@ -369,7 +370,7 @@ export function ProfileBody() {
               <TouchableOpacity onPress={() => actions.setSealable(!state.sealable)} activeOpacity={1}>
                 <Text style={styles.sealableText}>Enable Sealed Topics</Text>
               </TouchableOpacity>
-              <Switch style={styles.sealableSwitch} value={state.sealable} onValueChange={actions.setSealable} trackColor={styles.switch}/>
+              <Switch style={styles.enableSwitch} value={state.sealable} onValueChange={actions.setSealable} trackColor={styles.switch}/>
             </View>
             { state.sealMode === 'unlocking' && (
               <>

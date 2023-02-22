@@ -31,7 +31,7 @@ export const styles = StyleSheet.create({
     color: Colors.alert,
   },
   logout: {
-    marginTop: 16,
+    marginTop: 8,
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
@@ -43,7 +43,7 @@ export const styles = StyleSheet.create({
     color: Colors.primary,
   },
   delete: {
-    marginTop: 16,
+    marginTop: 8,
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
@@ -213,6 +213,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
+    marginTop: 8,
   },
   enableText: {
     color: Colors.primary,
