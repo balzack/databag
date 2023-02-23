@@ -283,8 +283,9 @@ export function useProfile() {
           updateState({ saving: false });
         }
         catch(err) {
-          console(err);
+          console.log(err);
           updateState({ saving: false });
+          throw new Error('seal operation failed');
         }
       }
     },
