@@ -16,7 +16,7 @@ export function isUnsealed(seals, sealKey) {
   return false;
 }
 
-export function getContentKey(seals, sealKey) {
+export async function getContentKey(seals, sealKey) {
   for (let i = 0; i < seals?.length; i++) {
     if (seals[i].publicKey === sealKey.public) {
       const seal = seals[i];

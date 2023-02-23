@@ -2938,10 +2938,10 @@ cross-spawn@^7.0.2, cross-spawn@^7.0.3:
     shebang-command "^2.0.0"
     which "^2.0.1"
 
-crypto-js@^4.1.1:
-  version "4.1.1"
-  resolved "https://registry.npmjs.org/crypto-js/-/crypto-js-4.1.1.tgz"
-  integrity sha512-o2JlM7ydqd3Qk9CA0L4NL6mTzU2sdx96a+oOfPu8Mkl/PK51vSyoi8/rQ8NknZtk44vq15lmhAj9CIAGwgeWKw==
+crypto-js@^3.3.0:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/crypto-js/-/crypto-js-3.3.0.tgz#846dd1cce2f68aacfa156c8578f926a609b7976b"
+  integrity sha512-DIT51nX0dCfKltpRiXV+/TVZq+Qq2NgF4644+K7Ttnla7zEzqc+kjJyiB96BHNyUTBxyjzRcZYpUdZa+QAqi6Q==
 
 csstype@^3.0.2:
   version "3.1.1"
@@ -4987,6 +4987,11 @@ jscodeshift@^0.13.1:
     recast "^0.20.4"
     temp "^0.8.4"
     write-file-atomic "^2.3.0"
+
+jsencrypt@^3.3.1:
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/jsencrypt/-/jsencrypt-3.3.1.tgz#5d47e6c1079bb50e714a36d009ba09ea81fbfa18"
+  integrity sha512-dVvV54GdFuJgmEKn+oBiaifDMen4p6o6j/lJh0OVMcouME8sST0bJ7bldIgKBQk4za0zyGn0/pm4vOznR25mLw==
 
 jsesc@^2.5.1:
   version "2.5.2"

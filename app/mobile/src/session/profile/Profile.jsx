@@ -88,7 +88,7 @@ export function ProfileBody() {
   const saveSeal = async () => {
     try {
       await actions.saveSeal();
-      actions.hideSealEdit();
+      actions.hideEditSeal();
     }
     catch (err) {
       console.log(err);
@@ -102,7 +102,7 @@ export function ProfileBody() {
   const saveDetails = async () => {
     try {
       await actions.saveDetails();
-      actions.hideDetailEdit();
+      actions.hideEditDetails();
     }
     catch (err) {
       console.log(err);
@@ -116,7 +116,7 @@ export function ProfileBody() {
   const saveLogin = async () => {
     try {
       await actions.saveLogin();
-      actions.hideLoginEdit();
+      actions.hideEditLogin();
     }
     catch (err) {
       console.log(err);
@@ -179,17 +179,19 @@ export function ProfileBody() {
         </View> 
       </TouchableOpacity>
   
-      <View style={styles.enable}>
-        <TouchableOpacity onPress={() => setVisible(!state.searchable)} activeOpacity={1}>
-          <Text style={styles.enableText}>Visible in Registry</Text>
-        </TouchableOpacity>
-        <Switch style={styles.enableSwitch} value={state.searchable} onValueChange={setVisible} trackColor={styles.switch}/>
-      </View>
-      <View style={styles.enable}>
-        <TouchableOpacity onPress={() => setNotifications(!state.pushEnabled)} activeOpacity={1}>
-          <Text style={styles.enableText}>Enable Notifications</Text>
-        </TouchableOpacity>
-        <Switch style={styles.enableSwitch} value={state.pushEnabled} onValueChange={setNotifications} trackColor={styles.switch}/>
+      <View style={styles.group}>
+        <View style={styles.enable}>
+          <TouchableOpacity onPress={() => setVisible(!state.searchable)} activeOpacity={1}>
+            <Text style={styles.enableText}>Visible in Registry</Text>
+          </TouchableOpacity>
+          <Switch style={styles.enableSwitch} value={state.searchable} onValueChange={setVisible} trackColor={styles.switch}/>
+        </View>
+        <View style={styles.enable}>
+          <TouchableOpacity onPress={() => setNotifications(!state.pushEnabled)} activeOpacity={1}>
+            <Text style={styles.enableText}>Enable Notifications</Text>
+          </TouchableOpacity>
+          <Switch style={styles.enableSwitch} value={state.pushEnabled} onValueChange={setNotifications} trackColor={styles.switch}/>
+        </View>
       </View>
 
       <TouchableOpacity style={styles.logout} activeOpacity={1} onPress={logout}>
@@ -197,7 +199,7 @@ export function ProfileBody() {
         <Text style={styles.logoutText}>Logout</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.logout} onPress={actions.showLoginEdit}>
+      <TouchableOpacity style={styles.logout} onPress={actions.showEditLogin}>
         <Ionicons name="lock" size={16} color={Colors.primary} />
         <Text style={styles.logoutText}>Change Login</Text>
       </TouchableOpacity>
@@ -361,16 +363,16 @@ export function ProfileBody() {
         transparent={true}
         visible={state.editSeal}
         supportedOrientations={['portrait', 'landscape']}
-        onRequestClose={actions.hideSealEdit}
+        onRequestClose={actions.hideEditSeal}
       >
         <KeyboardAvoidingView behavior="height" style={styles.modalWrapper}>
           <View style={styles.modalContainer}>
             <Text style={styles.modalHeader}>Sealed Topics:</Text>
             <View style={styles.sealable}>
-              <TouchableOpacity onPress={() => actions.setSealable(!state.sealable)} activeOpacity={1}>
+              <TouchableOpacity onPress={() => actions.setSealEnable(!state.sealEnabled)} activeOpacity={1}>
                 <Text style={styles.sealableText}>Enable Sealed Topics</Text>
               </TouchableOpacity>
-              <Switch style={styles.enableSwitch} value={state.sealable} onValueChange={actions.setSealable} trackColor={styles.switch}/>
+              <Switch style={styles.enableSwitch} value={state.sealEnabled} onValueChange={actions.setSealEnable} trackColor={styles.switch}/>
             </View>
             { state.sealMode === 'unlocking' && (
               <>
@@ -438,7 +440,7 @@ export function ProfileBody() {
                     </TouchableOpacity>
                   </View>
                 )}
-                <Text style={styles.notice}>saving can take a minute</Text>
+                <Text style={styles.notice}>saving can take a few minutes</Text>
               </>
             )}
             { state.sealMode === 'disabling' && (
@@ -457,23 +459,32 @@ export function ProfileBody() {
               </View>
             )}
             <View style={styles.modalControls}>
-              <TouchableOpacity style={styles.cancel} onPress={actions.hideSealEdit}>
+              <TouchableOpacity style={styles.cancel} onPress={actions.hideEditSeal}>
                 <Text>Cancel</Text>
               </TouchableOpacity>
               { state.canSaveSeal && (
                 <>
                   { state.sealMode !== 'unlocking' && state.sealMode !== 'unlocked' && (
                     <TouchableOpacity style={styles.save} onPress={saveSeal}>
+                      { state.saving && (
+                        <ActivityIndicator style={styles.activity} color={Colors.white} />
+                      )}
                       <Text style={styles.saveText}>Save</Text>
                     </TouchableOpacity>
                   )}
                   { state.sealMode === 'unlocked' && (
                     <TouchableOpacity style={styles.save} onPress={saveSeal}>
+                      { state.saving && (
+                        <ActivityIndicator style={styles.activity} color={Colors.white} />
+                      )}
                       <Text style={styles.saveText}>Forget</Text>
                     </TouchableOpacity>
                   )}
                   { state.sealMode === 'unlocking' && (
                     <TouchableOpacity style={styles.save} onPress={saveSeal}>
+                      { state.saving && (
+                        <ActivityIndicator style={styles.activity} color={Colors.white} />
+                      )}
                       <Text style={styles.saveText}>Unlock</Text>
                     </TouchableOpacity>
                   )}  
@@ -483,11 +494,17 @@ export function ProfileBody() {
                 <>
                   { state.sealMode !== 'unlocking' && (
                     <View style={styles.disabled}>
+                      { state.saving && (
+                        <ActivityIndicator style={styles.activity} color={Colors.white} />
+                      )}
                       <Text style={styles.disabledText}>Save</Text>
                     </View>
                   )}
                   { state.sealMode === 'unlocking' && (
                     <View style={styles.disabled}>
+                      { state.saving && (
+                        <ActivityIndicator style={styles.activity} color={Colors.white} />
+                      )}
                       <Text style={styles.disabledText}>Unlock</Text>
                     </View>
                   )}  
@@ -503,7 +520,7 @@ export function ProfileBody() {
         transparent={true}
         visible={state.editLogin}
         supportedOrientations={['portrait', 'landscape']}
-        onRequestClose={actions.hideLoginEdit}
+        onRequestClose={actions.hideEditLogin}
       >
         <KeyboardAvoidingView behavior="height" style={styles.modalWrapper}>
           <View style={styles.modalContainer}>
@@ -559,7 +576,7 @@ export function ProfileBody() {
               </View>
             )}
             <View style={styles.modalControls}>
-              <TouchableOpacity style={styles.cancel} onPress={actions.hideLoginEdit}>
+              <TouchableOpacity style={styles.cancel} onPress={actions.hideEditLogin}>
                 <Text>Cancel</Text>
               </TouchableOpacity>
               { (state.checked && state.available && state.editConfirm === state.editPassword && state.editPassword) && (

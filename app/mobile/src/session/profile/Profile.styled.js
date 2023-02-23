@@ -10,6 +10,10 @@ export const styles = StyleSheet.create({
   button: {
     paddingRight: 16,
   },
+  switch: {
+    false: Colors.grey,
+    true: Colors.background,
+  },
   headerText: {
     fontSize: 18,
     overflow: 'hidden',
@@ -31,7 +35,7 @@ export const styles = StyleSheet.create({
     color: Colors.alert,
   },
   logout: {
-    marginTop: 8,
+    marginTop: 16,
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
@@ -41,9 +45,10 @@ export const styles = StyleSheet.create({
   logoutText: {
     marginLeft: 8,
     color: Colors.primary,
+    fontSize: 16,
   },
   delete: {
-    marginTop: 8,
+    marginTop: 16,
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
@@ -53,6 +58,7 @@ export const styles = StyleSheet.create({
   deleteText: {
     marginLeft: 8,
     color: Colors.alert,
+    fontSize: 16,
   },
   modalWrapper: {
     display: 'flex',
@@ -89,7 +95,7 @@ export const styles = StyleSheet.create({
     borderRadius: 4,
     padding: 8,
     marginRight: 8,
-    width: 72,
+    width: 88,
     display: 'flex',
     alignItems: 'center',
   },
@@ -113,6 +119,10 @@ export const styles = StyleSheet.create({
   },
   removeText: {
     color: Colors.white,
+  },
+  input: {
+    fontSize: 14,
+    flexGrow: 1,
   },
   inputField: {
     width: '100%',
@@ -184,9 +194,11 @@ export const styles = StyleSheet.create({
     padding: 8,
     borderRadius: 4,
     backgroundColor: Colors.primary,
-    width: 72,
+    width: 88,
     display: 'flex',
+    flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
   },
   saveText: {
     color: Colors.white,
@@ -202,9 +214,13 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   blockedLabel: {
-    marginTop: 24,
+    marginTop: 32,
     alignSelf: 'center',
     color: Colors.grey,
+  },
+  group: {
+    marginTop: 16,
+    marginBottom: 16,
   },
   enable: {
     display: 'flex',
@@ -213,10 +229,11 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
-    marginTop: 8,
+    marginBottom: 4,
   },
   enableText: {
     color: Colors.primary,
+    fontSize: 16,
   },
   enableSwitch: {
     transform: [{ scaleX: .6 }, { scaleY: .6 }],
@@ -237,6 +254,46 @@ export const styles = StyleSheet.create({
     width: 72,
     display: 'flex',
     alignItems: 'center',
+  },
+  sealable: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingBottom: 16,
+  },
+  disabled: {
+    borderWidth: 1,
+    borderColor: Colors.lightgrey,
+    padding: 8,
+    borderRadius: 4,
+    width: 88,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  activity: {
+    paddingRight: 4,
+  },
+  disabledText: {
+    color: Colors.disabled,
+  },
+  sealUpdate: {
+    position: 'absolute',
+    top: 0,
+    height: 36,
+    left: 8,
+    width: '100%',
+  },
+  notice: {
+    color: Colors.grey,
+    fontStyle: 'italic',
+    textAlign: 'center',
+    paddingBottom: 8,
+  },
+  warn: {
+    paddingTop: 2,
+    paddingRight: 8,
   },
 });
 

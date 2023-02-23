@@ -79,8 +79,8 @@ export function useBlockedMessages() {
       });
     });
 
+    const merged = [];
     for(let i = 0; i < channels.length; i++) {
-      const merged = [];
       let topics;
       const { cardId, channelId } = channels[i];
       if (cardId) {
