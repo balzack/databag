@@ -10,7 +10,7 @@ import { useSession } from './useSession.hook';
 import { styles } from './Session.styled';
 import Colors from 'constants/Colors';
 import { Profile, ProfileHeader, ProfileBody } from './profile/Profile';
-import { CardsTitle, CardsBody, Cards } from './cards/Cards';
+import { CardsHeader, CardsBody, Cards } from './cards/Cards';
 import { RegistryTitle, RegistryBody, Registry } from './registry/Registry';
 import { Contact, ContactTitle } from './contact/Contact';
 import { Details, DetailsHeader, DetailsBody } from './details/Details';
@@ -93,6 +93,9 @@ export function Session() {
   const ContactStackScreen = () => {
     const [contact, setContact] = useState(null);
 
+    const [filter, setFilter] = useState(null);
+    const [sort, setSort] = useState(false);
+
     const openContact = (navigation, contact) => {
       setContact(contact);
       navigation.navigate('contact')
@@ -104,8 +107,10 @@ export function Session() {
     return (
       <ContactStack.Navigator screenOptions={({ route }) => (screenParams)} initialRouteName="cards">
 
-        <ContactStack.Screen name="cards" options={{ ...stackParams, headerTitle: (props) => <CardsTitle openRegistry={props.navigation} /> }}>
-          {(props) => <CardsBody openContact={(contact) => openContact(props.navigation, contact)} />}
+        <ContactStack.Screen name="cards" options={{ ...stackParams, headerTitle: (props) => (
+            <CardsHeader filter={filter} setFilter={setFilter} sort={sort} setSort={setSort} openRegistry={() => openRegistry(props.navigation)} />
+          )}}>
+          {(props) => <CardsBody filter={filter} sort={sort} openContact={(contact) => openContact(props.navigation, contact)} />}
         </ContactStack.Screen>
 
         <ContactStack.Screen name="contact" options={{ ...stackParams, headerTitle: (props) => <ContactTitle contact={contact} /> }}>
@@ -183,8 +188,11 @@ export function Session() {
     };
 
     return (
-      <CardDrawer.Navigator screenOptions={{ ...drawerParams, drawerStyle: { width: '50%' } }}
-        drawerContent={(props) => <Cards openContact={openContact} openRegistry={openRegistry} />}>
+      <CardDrawer.Navigator screenOptions={{ ...drawerParams, drawerStyle: { width: '50%' } }} drawerContent={(props) => (
+          <SafeAreaView edges={['top', 'bottom', 'right']} style={styles.drawer}>
+            <Cards openContact={openContact} openRegistry={openRegistry} />
+          </SafeAreaView>
+        )}>
         <CardDrawer.Screen name="home">
           {(props) => <HomeScreen navParams={{...navParams, cardNav: props.navigation}} />}
         </CardDrawer.Screen>
@@ -271,7 +279,7 @@ export function Session() {
           <View style={styles.container}>
             { state.tabbed === false && (
               <ProfileDrawer.Navigator screenOptions={{ ...drawerParams, drawerStyle: { width: '45%' } }} drawerContent={(props) => (
-                  <ScrollView><SafeAreaView style={styles.drawer} edges={['top', 'bottom', 'right']}><Profile /></SafeAreaView></ScrollView>
+                  <ScrollView style={styles.drawer}><SafeAreaView edges={['top', 'bottom', 'right']}><Profile /></SafeAreaView></ScrollView>
                 )}>
                 <ProfileDrawer.Screen name="detail">
                   {(props) => <DetailDrawerScreen navParams={{ profileNav: props.navigation }} />}

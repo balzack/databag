@@ -599,7 +599,7 @@ export function ProfileBody() {
 
 export function Profile() {
   return (
-    <View>
+    <View style={styles.full}>
       <ProfileHeader />
       <ProfileBody />
     </View>

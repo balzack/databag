@@ -150,7 +150,7 @@ export function useCardContext() {
               else {
                 entryCard.profile = await getCardProfile(server, token, card.id);
               }
-              await store.actions.setCardItem(guid, card.id, entryCard);
+              await store.actions.setCardItem(guid, entryCard);
               entry.card = entryCard;
               cards.current.set(card.id, entry);
             }
@@ -360,8 +360,9 @@ export function useCardContext() {
       return await setCardCloseMessage(server, message);
     },
     getCardImageUrl: (cardId) => {
+      const { profileRevision } = cards.current.get(cardId)?.card || { };
       const { server, token } = access.current;
-      return getCardImageUrl(server, token, cardId, revision);
+      return getCardImageUrl(server, token, cardId, profileRevision);
     },
     removeChannel: async (cardId, channelId) => {
       const { detail, profile } = cards.current.get(cardId) || {};

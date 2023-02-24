@@ -87,7 +87,9 @@ export const styles = StyleSheet.create({
   drawer: {
     width: '100%',
     height: '100%',
+    paddingTop: 8,
     paddingLeft: 8,
+    paddingRight: 8,
     backgroundColor: Colors.formBackground,
   },
   options: {
