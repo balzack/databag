@@ -126,7 +126,7 @@ export function Session() {
         <ContactStack.Screen name="contact" options={{ ...stackParams, headerTitle: (props) => (
             <ContactHeader contact={contact} />
           )}}>
-          {(props) => <ContactBody contact={contact} />}
+          {(props) => <ScrollView><ContactBody contact={contact} /></ScrollView>}
         </ContactStack.Screen>
 
         <ContactStack.Screen name="registry" options={{ ...stackParams, headerTitle: (props) => (
@@ -237,8 +237,13 @@ export function Session() {
     const [contact, setContact] = useState(null);
 
     return (
-      <ContactDrawer.Navigator screenOptions={{ ...drawerParams, drawerStyle: { width: '44%' } }}
-        drawerContent={(props) => <Contact contact={contact} />}>
+      <ContactDrawer.Navigator screenOptions={{ ...drawerParams, drawerStyle: { width: '44%' } }} drawerContent={(props) => (
+          <ScrollView style={styles.drawer}>
+            <SafeAreaView edges={['top', 'bottom', 'right']}>
+              <Contact contact={contact} />
+            </SafeAreaView>
+          </ScrollView>
+        )}>
         <ContactDrawer.Screen name="registry">
           {(props) => <RegistryDrawerScreen navParams={{...navParams, setContact, contactNav: props.navigation }} />}
         </ContactDrawer.Screen>

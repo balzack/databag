@@ -201,13 +201,13 @@ export function ProfileBody() {
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.logout} onPress={actions.showEditLogin}>
-        <Ionicons name="lock" size={20} color={Colors.primary} />
+        <Ionicons name="user" size={20} color={Colors.primary} />
         <Text style={styles.logoutText}>Change Login</Text>
       </TouchableOpacity>
  
       { state.sealable && (
         <TouchableOpacity style={styles.logout} onPress={actions.showEditSeal}>
-          <MatIcons name="account-key-outline" size={22} color={Colors.primary} />
+          <Ionicons name="lock" size={22} color={Colors.primary} />
           <Text style={styles.logoutText}>Sealed Topics</Text>
         </TouchableOpacity>
       )}
