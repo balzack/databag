@@ -19,6 +19,7 @@ import { Welcome } from './welcome/Welcome';
 import { ChannelsTitle, ChannelsBody, Channels } from './channels/Channels';
 import { CommonActions } from '@react-navigation/native';
 import { ConversationContext } from 'context/ConversationContext';
+import { ProfileContext } from 'context/ProfileContext';
 import { ProfileIcon } from './profileIcon/ProfileIcon';
 import { CardsIcon } from './cardsIcon/CardsIcon';
 import splash from 'images/session.png';
@@ -91,9 +92,15 @@ export function Session() {
   }
 
   const ContactStackScreen = () => {
+    const profile = useContext(ProfileContext);
+    
     const [contact, setContact] = useState(null);
+    
+    const [search, setSearch] = useState(null);
+    const [handle, setHandle] = useState();
+    const [server, setServer] = useState();
 
-    const [filter, setFilter] = useState(null);
+    const [filter, setFilter] = useState();
     const [sort, setSort] = useState(false);
 
     const openContact = (navigation, contact) => {
@@ -101,6 +108,9 @@ export function Session() {
       navigation.navigate('contact')
     }
     const openRegistry = (navigation) => {
+      setServer(profile.state.identity.node);
+      setHandle(null);
+      setSearch(false);
       navigation.navigate('registry');
     }
 
@@ -119,8 +129,10 @@ export function Session() {
           {(props) => <ContactBody contact={contact} />}
         </ContactStack.Screen>
 
-        <ContactStack.Screen name="registry" options={{ ...stackParams, headerTitle: (props) => <RegistryHeader /> }}>
-          {(props) => <RegistryBody openContact={(contact) => openContact(props.navigation, contact)} />}
+        <ContactStack.Screen name="registry" options={{ ...stackParams, headerTitle: (props) => (
+            <RegistryHeader search={search} setSearch={setSearch} handle={handle} setHandle={setHandle} server={server} setServer={setServer} />
+          )}}>
+          {(props) => <RegistryBody search={search} handle={handle} server={server} openContact={(contact) => openContact(props.navigation, contact)} />}
         </ContactStack.Screen>
 
       </ContactStack.Navigator>
@@ -209,8 +221,11 @@ export function Session() {
     };
 
     return (
-      <RegistryDrawer.Navigator screenOptions={{ ...drawerParams, drawerStyle: { width: '50%' } }}
-        drawerContent={(props) => <Registry openContact={openContact} />}>
+      <RegistryDrawer.Navigator screenOptions={{ ...drawerParams, drawerStyle: { width: '47%' } }} drawerContent={(props) => (
+          <SafeAreaView edges={['top', 'bottom', 'right']} style={styles.drawer}>
+            <Registry openContact={openContact} />
+          </SafeAreaView>
+        )}>
         <RegistryDrawer.Screen name="card">
           {(props) => <CardDrawerScreen navParams={{...navParams, registryNav: props.navigation}} />}
         </RegistryDrawer.Screen>
@@ -222,7 +237,7 @@ export function Session() {
     const [contact, setContact] = useState(null);
 
     return (
-      <ContactDrawer.Navigator screenOptions={{ ...drawerParams, drawerStyle: { width: '45%' } }}
+      <ContactDrawer.Navigator screenOptions={{ ...drawerParams, drawerStyle: { width: '44%' } }}
         drawerContent={(props) => <Contact contact={contact} />}>
         <ContactDrawer.Screen name="registry">
           {(props) => <RegistryDrawerScreen navParams={{...navParams, setContact, contactNav: props.navigation }} />}

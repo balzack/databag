@@ -1,5 +1,6 @@
 import { ActivityIndicator, KeyboardAvoidingView, Modal, View, Switch, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
 import Ionicons from 'react-native-vector-icons/AntDesign';
+import MatIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import ImagePicker from 'react-native-image-crop-picker'
 import { Colors } from 'constants/Colors';
 import { useProfile } from './useProfile.hook';
@@ -200,13 +201,13 @@ export function ProfileBody() {
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.logout} onPress={actions.showEditLogin}>
-        <Ionicons name="lock" size={16} color={Colors.primary} />
+        <Ionicons name="lock" size={20} color={Colors.primary} />
         <Text style={styles.logoutText}>Change Login</Text>
       </TouchableOpacity>
  
       { state.sealable && (
         <TouchableOpacity style={styles.logout} onPress={actions.showEditSeal}>
-          <Ionicons name="setting" size={14} color={Colors.primary} />
+          <MatIcons name="account-key-outline" size={22} color={Colors.primary} />
           <Text style={styles.logoutText}>Sealed Topics</Text>
         </TouchableOpacity>
       )}

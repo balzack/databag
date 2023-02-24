@@ -5,8 +5,8 @@ import { styles } from './CardItem.styled';
 export function CardItem({ item, openContact }) {
   
   const select = () => {
-    const { guid, name, handle, node, location, description } = item;
-    const contact = { guid, name, handle, node, location, description };
+    const { guid, name, handle, node, location, description, imageSet } = item;
+    const contact = { guid, name, handle, node, location, description, imageSet };
     openContact({ contact });
   };
 

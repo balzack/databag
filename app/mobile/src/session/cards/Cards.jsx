@@ -32,7 +32,7 @@ export function CardsHeader({ filter, setFilter, sort, setSort, openRegistry }) 
       </View>
       <TouchableOpacity style={styles.add} onPress={() => openRegistry(navigation)}>
         <AntIcons name={'adduser'} size={16} color={Colors.white} style={[styles.box, { transform: [ { rotateY: "180deg" }, ]} ]}/>
-        <Text style={styles.newtext}>New</Text>
+        <Text style={styles.newtext}>Add</Text>
       </TouchableOpacity>
     </View>
   );
