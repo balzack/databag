@@ -7,9 +7,10 @@ import AntIcons from 'react-native-vector-icons/AntDesign';
 import MatIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Colors } from 'constants/Colors';
 import { CardItem } from './cardItem/CardItem';
+import { useNavigation } from '@react-navigation/native';
 
 export function CardsHeader({ filter, setFilter, sort, setSort, openRegistry }) {
-  const { state, actions } = useCards(filter, sort);
+  const navigation = useNavigation();
 
   return (
     <View style={styles.title}>
@@ -29,7 +30,7 @@ export function CardsHeader({ filter, setFilter, sort, setSort, openRegistry }) 
             autoCapitalize="none" placeholderTextColor={Colors.disabled} placeholder="Contacts" />
         <View style={styles.space} />
       </View>
-      <TouchableOpacity style={styles.add} onPress={openRegistry}>
+      <TouchableOpacity style={styles.add} onPress={() => openRegistry(navigation)}>
         <AntIcons name={'adduser'} size={16} color={Colors.white} style={[styles.box, { transform: [ { rotateY: "180deg" }, ]} ]}/>
         <Text style={styles.newtext}>New</Text>
       </TouchableOpacity>

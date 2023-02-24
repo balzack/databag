@@ -15,17 +15,22 @@ export function useCards(filter, sort) {
 
   const setCardItem = (item) => {
     const { profile, detail, cardId } = item.card || { profile: {}, detail: {} }
+    const { name, handle, node, guid, location, description, imageSet } = profile;
 
     return {
       cardId: cardId,
-      name: profile.name,
-      handle: `${profile.handle}@${profile.node}`,
+      name: name,
+      handle: handle,
+      node: node,
+      guid: guid,
+      location: location,
+      description: description,
       status: detail.status,
       offsync: item.offsync,
       blocked: item.blocked,
       offsync: item.offsync,
       updated: detail.statusUpdated,
-      logo: profile.imageSet ? card.actions.getCardImageUrl(cardId) : 'avatar',
+      logo: imageSet ? card.actions.getCardImageUrl(cardId) : 'avatar',
     }
   };
 

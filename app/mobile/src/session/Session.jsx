@@ -11,8 +11,8 @@ import { styles } from './Session.styled';
 import Colors from 'constants/Colors';
 import { Profile, ProfileHeader, ProfileBody } from './profile/Profile';
 import { CardsHeader, CardsBody, Cards } from './cards/Cards';
-import { RegistryTitle, RegistryBody, Registry } from './registry/Registry';
-import { Contact, ContactTitle } from './contact/Contact';
+import { RegistryHeader, RegistryBody, Registry } from './registry/Registry';
+import { ContactHeader, ContactBody, Contact } from './contact/Contact';
 import { Details, DetailsHeader, DetailsBody } from './details/Details';
 import { Conversation, ConversationHeader, ConversationBody } from './conversation/Conversation';
 import { Welcome } from './welcome/Welcome';
@@ -108,16 +108,18 @@ export function Session() {
       <ContactStack.Navigator screenOptions={({ route }) => (screenParams)} initialRouteName="cards">
 
         <ContactStack.Screen name="cards" options={{ ...stackParams, headerTitle: (props) => (
-            <CardsHeader filter={filter} setFilter={setFilter} sort={sort} setSort={setSort} openRegistry={() => openRegistry(props.navigation)} />
+            <CardsHeader filter={filter} setFilter={setFilter} sort={sort} setSort={setSort} openRegistry={openRegistry} />
           )}}>
           {(props) => <CardsBody filter={filter} sort={sort} openContact={(contact) => openContact(props.navigation, contact)} />}
         </ContactStack.Screen>
 
-        <ContactStack.Screen name="contact" options={{ ...stackParams, headerTitle: (props) => <ContactTitle contact={contact} /> }}>
+        <ContactStack.Screen name="contact" options={{ ...stackParams, headerTitle: (props) => (
+            <ContactHeader contact={contact} />
+          )}}>
           {(props) => <ContactBody contact={contact} />}
         </ContactStack.Screen>
 
-        <ContactStack.Screen name="registry" options={{ ...stackParams, headerTitle: (props) => <RegistryTitle /> }}>
+        <ContactStack.Screen name="registry" options={{ ...stackParams, headerTitle: (props) => <RegistryHeader /> }}>
           {(props) => <RegistryBody openContact={(contact) => openContact(props.navigation, contact)} />}
         </ContactStack.Screen>
 

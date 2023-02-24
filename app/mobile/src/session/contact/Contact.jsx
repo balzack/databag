@@ -1,14 +1,20 @@
 import { Text } from 'react-native';
 
-export function ContactTitle({ contact, closeContact }) {
-  <Text>ContactTitle</Text>
+export function ContactHeader({ contact, closeContact }) {
+  return (
+    <Text>ContactTitle</Text>
+  );
 }
 
 export function ContactBody({ contact }) {
-  <Text>ContactBody</Text>;
+  return (
+    <Text>ContactBody</Text>
+  );
 }
 
 export function Contact({ contact, closeContact }) {
-  <Text>Contact</Text>
+  return (
+    <Text>Contact</Text>
+  );
 }
 

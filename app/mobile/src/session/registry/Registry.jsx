@@ -1,7 +1,7 @@
 import { Text } from 'react-native';
 
-export function RegistryTitle({ state, actions }) {
-  return <Text>RegistryTitle</Text>
+export function RegistryHeader({ state, actions }) {
+  return <Text>RegistryHeader</Text>
 }
 
 export function RegistryBody({ state, actions, openContact }) {
