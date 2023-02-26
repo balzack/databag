@@ -16,7 +16,7 @@ import { ContactHeader, ContactBody, Contact } from './contact/Contact';
 import { Details, DetailsHeader, DetailsBody } from './details/Details';
 import { Conversation, ConversationHeader, ConversationBody } from './conversation/Conversation';
 import { Welcome } from './welcome/Welcome';
-import { ChannelsTitle, ChannelsBody, Channels } from './channels/Channels';
+import { Channels } from './channels/Channels';
 import { CommonActions } from '@react-navigation/native';
 import { ConversationContext } from 'context/ConversationContext';
 import { ProfileContext } from 'context/ProfileContext';
@@ -65,8 +65,8 @@ export function Session() {
           screenOptions={({ route }) => (screenParams)}
           screenListeners={{ state: (e) => { if (e?.data?.state?.index === 0) { conversation.actions.clearConversation() }} }}>
 
-        <ConversationStack.Screen name="channels" options={{ ...stackParams, headerTitle: (props) => <ChannelsTitle /> }}>
-          {(props) => <ChannelsBody openConversation={(cardId, channelId) => setConversation(props.navigation, cardId, channelId)} />}
+        <ConversationStack.Screen name="channels" options={stackParams}>
+          {(props) => <Channels navigation={props.navigation} openConversation={(cardId, channelId) => setConversation(props.navigation, cardId, channelId)} />}
         </ConversationStack.Screen>
 
         <ConversationStack.Screen name="conversation" options={{ ...stackParams, headerTitle: (props) => <ConversationHeader closeConversation={clearConversation} openDetails={openDetails} /> }}>
