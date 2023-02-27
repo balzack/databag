@@ -274,10 +274,12 @@ export function useChannelContext() {
     setUnsealedChannelSubject: async (channelId, revision, unsealed) => {
       const { guid } = access.current;
       await store.actions.setChannelItemUnsealedDetail(guid, channelId, revision, unsealed);
+      setChannelField(channelId, 'unsealedDetail', unsealed);
     },
     setUnsealedChannelSummary: async (channelId, revision, unsealed) => {
       const { guid } = access.current;
       await store.actions.setChannelItemUnsealedSummary(guid, channelId, revision, unsealed);
+      setChannelField(channelId, 'unsealedSummary', unsealed);
     },
     setUnsealedTopicSubject: async (channelId, topicId, revision, unsealed) => {
       const { guid } = access.current;

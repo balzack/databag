@@ -93,6 +93,7 @@ export function useCardContext() {
         }
         card.channels.set(channelId, { ...channel });
         cards.current.set(cardId, { ...card });
+        updateState({ cards: cards.current });
       }
     }
   };
@@ -507,10 +508,12 @@ export function useCardContext() {
     setUnsealedChannelSubject: async (cardId, channelId, revision, unsealed) => {
       const { guid } = access.current;
       await store.actions.setCardChannelItemUnsealedDetail(guid, cardId, channelId, revision, unsealed);
+      setCardChannelField(cardId, channelId, 'unsealedDetail', unsealed);
     },
     setUnsealedChannelSummary: async (cardId, channelId, revision, unsealed) => {
       const { guid } = access.current;
       await store.actions.setCardChannelItemUnsealedSummary(guid, cardId, channelId, revision, unsealed);
+      setCardChannelField(cardId, channelId, 'unsealedSummary', unsealed);
     },
     setUnsealedTopicSubject: async (cardId, channelId, topicId, revision, unsealed) => {
       const { guid } = access.current;

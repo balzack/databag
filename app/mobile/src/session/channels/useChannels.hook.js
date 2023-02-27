@@ -4,7 +4,7 @@ import { CardContext } from 'context/CardContext';
 import { AccountContext } from 'context/AccountContext';
 import { AppContext } from 'context/AppContext';
 import { ProfileContext } from 'context/ProfileContext';
-import { getChannelSeals, isUnsealed, getContentKey, decryptChannelSubject } from 'context/sealUtil';
+import { getChannelSeals, isUnsealed, getContentKey, decryptChannelSubject, decryptTopicSubject } from 'context/sealUtil';
 import { getCardByGuid } from 'context/cardUtil';
 
 export function useChannels() {
@@ -27,8 +27,6 @@ export function useChannels() {
   }
 
   const setChannelItem = async (loginTimestamp, cardId, channelId, item) => {
-console.log('set channel item', cardId, channelId);
-
     const timestamp = item.summary.lastTopic.created;
     const { readRevision, topicRevision } = item;
     
@@ -38,40 +36,46 @@ console.log('set channel item', cardId, channelId);
     let message;
     let subject;
     if (item.detail.dataType === 'sealed') {
-console.log("SEALED TYPE");
       locked = true;
-console.log("CHECK1");
       const seals = getChannelSeals(item.detail.data);
-console.log("CHECK2");
       if (isUnsealed(seals, account.state.sealKey)) {
-console.log("CHECK3");
         unlocked = true;
         if (item.unsealedDetail) {
-          subject = item.detail.unsealedDetail.subject;
+          subject = item.unsealedDetail.subject;
         }
         else {
-console.log("TRYING");
           try {
             const contentKey = await getContentKey(seals, account.state.sealKey);
             const unsealed = decryptChannelSubject(item.detail.data, contentKey);
             if (cardId) {
-              await card.actions.setUnsealedChannelSubject(cardId, channelId, item.revision, unsealed);
+              await card.actions.setUnsealedChannelSubject(cardId, channelId, item.detailRevision, unsealed);
             }
             else {
               await channel.actions.setUnsealedChannelSubject(channelId, item.detailRevision, unsealed);
             }
-            subject = unsealed.subject;
           }
           catch(err) {
             console.log(err);
           }
         }
         if (item.summary.lastTopic.dataType === 'sealedtopic') {
-          if (item.summary.unsealedSummary) {
-            message = item.detail.unsealedSummary.message;
+          if (item.unsealedSummary) {
+            message = item.unsealedSummary.message.text;
           }
           else {
-            // decrypt message
+            try {
+              const contentKey = await getContentKey(seals, account.state.sealKey);
+              const unsealed = decryptTopicSubject(item.summary.lastTopic.data, contentKey);
+              if (cardId) {
+                await card.actions.setUnsealedChannelSummary(cardId, channelId, item.topicRevision, unsealed);
+              }
+              else {
+                await channel.actions.setUnsealedChannelSummary(channelId, item.topicRevision, unsealed);
+              }
+            }
+            catch(err) {
+              console.log(err);
+            }
           }
         }
       }
@@ -142,7 +146,7 @@ console.log("TRYING");
 
     const updated = (loginTimestamp < timestamp) && (readRevision < topicRevision);
 
-    return { cardId, channelId, subject, message, logo, updated, locked, unlocked };
+    return { cardId, channelId, subject, message, logo, timestamp, updated, locked, unlocked };
   }
 
   useEffect(() => {
@@ -150,7 +154,10 @@ console.log("TRYING");
   }, [app.state, card.state, channel.state, state.filter]);
 
   const syncChannels = async () => {
-    if (!syncing.current) {
+    if (syncing.current) {
+      resync.current = true;
+    }
+    else {
       syncing.current = true;
 
       const { loginTimestamp } = app.state;
