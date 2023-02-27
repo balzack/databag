@@ -1,14 +1,18 @@
 import { useEffect } from 'react';
-import { View, FlatList, Text, TextInput, TouchableOpacity } from 'react-native';
+import { Switch, KeyboardAvoidingView, Modal, View, FlatList, Text, TextInput, TouchableOpacity } from 'react-native';
 import Ionicons from 'react-native-vector-icons/AntDesign';
 import { styles } from './Channels.styled';
 import { useChannels } from './useChannels.hook';
 import { Colors } from 'constants/Colors';
 import { ChannelItem } from './channelItem/ChannelItem';
+import { AddMember } from './addMember/AddMember';
 
 export function Channels({ navigation, openConversation }) {
 
   const { state, actions } = useChannels();
+
+  const addTopic = async () => {
+  };
 
   useEffect(() => {
     if (navigation) {
@@ -63,6 +67,54 @@ export function Channels({ navigation, openConversation }) {
           </TouchableOpacity>
         </View>
       )}
+      <Modal
+          animationType="fade"
+          transparent={true}
+          visible={state.adding}
+          supportedOrientations={['portrait', 'landscape']}
+          onRequestClose={actions.hideAdding}
+        >
+        <KeyboardAvoidingView behavior="height" style={styles.addWrapper}>
+          <View style={styles.addContainer}>
+            <Text style={styles.addHeader}>New Topic:</Text>
+            <View style={styles.addField}>
+              <TextInput style={styles.input} value={state.addSubject} onChangeText={actions.setAddSubject}
+                  autoCapitalize="words" placeholder="Subject (optional)" placeholderTextColor={Colors.grey} />
+            </View>
+            <Text style={styles.label}>Members:</Text>
+            { state.contacts.length == 0 && (
+              <View style={styles.emptyMembers}>
+                <Text style={styles.empty}>No Connected Contacts</Text>
+              </View>
+            )}
+            { state.contacts.length > 0 && (
+              <FlatList style={styles.addMembers}
+                data={state.contacts}
+                renderItem={({ item }) => <AddMember members={state.addMembers} item={item}
+                    setCard={actions.setAddMember} clearCard={actions.clearAddMember} />}
+                keyExtractor={item => item.cardId}
+              />
+            )}
+            <View style={styles.addControls}>
+              <View style={styles.sealed}>
+                { state.sealable && (
+                  <>
+                    <Switch style={styles.switch} trackColor={styles.track}
+                      value={state.sealed} onValueChange={actions.setSealed} />
+                    <Text>Sealed</Text>
+                  </>
+                )}
+              </View>
+              <TouchableOpacity style={styles.cancel} onPress={actions.hideAdding}>
+                <Text>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.save} onPress={addTopic}>
+                <Text style={styles.saveText}>Create</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </KeyboardAvoidingView>
+      </Modal>
     </View>
   );
 }

@@ -11,6 +11,12 @@ export function useChannels() {
   const [state, setState] = useState({
     filter: null,
     channels: [],
+    adding: false,
+    contacts: [],
+    addMembers: [],
+    addSubject: null,
+    sealed: false,
+    sealable: false,
   });
 
   const channel = useContext(ChannelContext);
@@ -150,6 +156,45 @@ export function useChannels() {
   }
 
   useEffect(() => {
+    const { status, sealKey } = account.state;
+    if (status?.seal?.publicKey && sealKey?.public && sealKey?.private && sealKey?.public === status.seal.publicKey) {
+      updateState({ sealable: true });
+    }
+    else {
+      updateState({ sealed: false, sealable: false });
+    }
+  }, [account.state]);
+
+  useEffect(() => {
+    const contacts = [];
+    card.state.cards.forEach(entry => {
+      contacts.push(entry.card);
+    });
+    const filtered = contacts.filter(contact => {
+      if (contact.detail.status !== 'connected') {
+        return false;
+      }
+      if (state.sealed && !contact.profile.seal) {
+        return false;
+      }
+      return true;
+    });
+    const sorted = filtered.sort((a, b) => {
+      const aName = a?.profile?.name;
+      const bName = b?.profile?.name;
+      if (aName === bName) {
+        return 0;
+      }
+      if (!aName || (aName < bName)) {
+        return -1;
+      }
+      return 1;
+    });
+    const addMembers = state.addMembers.filter(item => sorted.some(contact => contact.cardId === item));
+    updateState({ contacts: sorted, addMembers });
+  }, [card.state, state.sealed]);
+
+  useEffect(() => {
     syncChannels();
   }, [app.state, card.state, channel.state, state.filter]);
 
@@ -205,8 +250,28 @@ export function useChannels() {
   };
 
   const actions = {
+    setSealed: (sealed) => {
+      updateState({ sealed });
+    },
     setFilter: (filter) => {
       updateState({ filter });
+    },
+    showAdding: () => {
+      updateState({ adding: true });
+    },
+    hideAdding: () => {
+      updateState({ adding: false });
+    },
+    setAddSubject: (addSubject) => {
+      updateState({ addSubject });
+    },
+    setAddMember: (cardId) => {
+      updateState({ addMembers: [ ...state.addMembers, cardId ] });
+    },
+    clearAddMember: (cardId) => {
+      updateState({ addMembers: state.addMembers.filter(item => item !== cardId) });
+    },
+    addTopic: () => {
     },
   };
 
