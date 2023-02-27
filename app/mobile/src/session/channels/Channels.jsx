@@ -1,9 +1,10 @@
 import { useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { View, FlatList, Text, TextInput, TouchableOpacity } from 'react-native';
 import Ionicons from 'react-native-vector-icons/AntDesign';
 import { styles } from './Channels.styled';
 import { useChannels } from './useChannels.hook';
 import { Colors } from 'constants/Colors';
+import { ChannelItem } from './channelItem/ChannelItem';
 
 export function Channels({ navigation, openConversation }) {
 
@@ -40,9 +41,20 @@ export function Channels({ navigation, openConversation }) {
           </View>
         </View>
       )}
-      <View style={styles.content}>
-        <Text>Channels</Text>
-      </View>
+        { state.channels.length == 0 && (
+          <View style={styles.content}>
+            <Text style={styles.notfoundtext}>No Topics Found</Text>
+          </View>
+        )}
+        { state.channels.length != 0 && (
+          <FlatList 
+            style={styles.content}
+            data={state.channels}
+            initialNumToRender={25}
+            renderItem={({ item }) => <ChannelItem item={item} openConversation={openConversation} />}
+            keyExtractor={item => (`${item.cardId}:${item.channelId}`)}
+          />
+        )}
       { !navigation && (
         <View style={styles.columnbottom}>
           <TouchableOpacity style={styles.addbottom} onPress={actions.showAdding}>

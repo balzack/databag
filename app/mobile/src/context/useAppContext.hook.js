@@ -48,7 +48,7 @@ export function useAppContext() {
       }
       access.current = await store.actions.init();
       if (access.current) {
-        await setSession(access.current);
+        await setSession();
       }
       else {
         updateState({ session: false });
@@ -58,7 +58,8 @@ export function useAppContext() {
   }, []);
 
   const setSession = async () => {
-    updateState({ session: true, status: 'connecting' });
+    const { loginTimestamp } = access.current;
+    updateState({ session: true, loginTimestamp, status: 'connecting' });
     await account.actions.setSession(access.current);
     await profile.actions.setSession(access.current);
     await card.actions.setSession(access.current);

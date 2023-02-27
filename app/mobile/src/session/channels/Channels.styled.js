@@ -60,6 +60,8 @@ export const styles = StyleSheet.create({
   },
   content: {
     flexGrow: 1,
+    flexShrink: 1,
+    paddingLeft: 4,
   },
   columnbottom: {
     paddingLeft: 24,

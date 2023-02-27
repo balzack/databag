@@ -148,6 +148,10 @@ export function Session() {
       conversation.actions.setConversation(cardId, channelId);
       setChannel(true);
     };
+    const clearConversation = () => {
+      conversation.actions.clearConversation();
+      setChannel(false);
+    };
     const openDetails = () => {
       navParams.detailNav.openDrawer();
     };
