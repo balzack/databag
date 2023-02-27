@@ -69,7 +69,7 @@ export function decryptChannelSubject(subject, contentKey) {
   if (!str) {
     return null;
   }
-  return JSON.parse(dec.toString(CryptoJS.enc.Utf8));
+  return JSON.parse(str);
 }
 
 export function encryptTopicSubject(subject, contentKey) {
