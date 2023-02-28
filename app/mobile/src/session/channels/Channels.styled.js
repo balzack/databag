@@ -143,15 +143,21 @@ export const styles = StyleSheet.create({
   save: {
     backgroundColor: Colors.primary,
     borderRadius: 4,
-    padding: 4,
+    paddingTop: 4,
+    paddingBottom: 4,
+    paddingLeft: 8,
+    paddingRight: 8,
     marginRight: 8,
-    width: 72,
+    minWidth: 72,
     display: 'flex',
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
   },
   saveText: {
     color: Colors.white,
+    paddingRight: 4,
+    paddingLeft: 4,
   },
   addControls: {
     display: 'flex',

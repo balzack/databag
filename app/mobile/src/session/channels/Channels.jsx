@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Switch, KeyboardAvoidingView, Modal, View, FlatList, Text, TextInput, TouchableOpacity } from 'react-native';
+import { Alert, ActivityIndicator, Switch, KeyboardAvoidingView, Modal, View, FlatList, Text, TextInput, TouchableOpacity } from 'react-native';
 import Ionicons from 'react-native-vector-icons/AntDesign';
 import { styles } from './Channels.styled';
 import { useChannels } from './useChannels.hook';
@@ -11,7 +11,18 @@ export function Channels({ navigation, openConversation }) {
 
   const { state, actions } = useChannels();
 
-  const addTopic = async () => {
+  const addChannel = async () => {
+    try {
+      await actions.addChannel();
+      actions.hideAdding();
+    }
+    catch (err) {
+      console.log(err);
+      Alert.alert(
+        'Failed to Add Topic',
+        'Please try again.'
+      )
+    }
   };
 
   useEffect(() => {
@@ -108,7 +119,10 @@ export function Channels({ navigation, openConversation }) {
               <TouchableOpacity style={styles.cancel} onPress={actions.hideAdding}>
                 <Text>Cancel</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.save} onPress={addTopic}>
+              <TouchableOpacity style={styles.save} onPress={addChannel}>
+                { state.busy && (
+                  <ActivityIndicator color={Colors.white} />
+                )}
                 <Text style={styles.saveText}>Create</Text>
               </TouchableOpacity>
             </View>

@@ -187,7 +187,7 @@ export function useStoreContext() {
       await db.current.executeSql(`UPDATE channel_${guid} set topic_marker=? where channel_id=?`, [marker, channelId]);
     },
     setChannelItemMarkerAndSync: async (guid, channelId, marker, revision) => {
-      await db.current.executeSql(`UPDATE channel_${guid} set sync_revision=?, topic_marker=? where channel_id=?`, [revision, maker, channelId]);
+      await db.current.executeSql(`UPDATE channel_${guid} set sync_revision=?, topic_marker=? where channel_id=?`, [revision, marker, channelId]);
     },
     setChannelItemBlocked: async (guid, channelId) => {
       await db.current.executeSql(`UPDATE channel_${guid} set blocked=? where channel_id=?`, [1, channelId]);
@@ -281,7 +281,7 @@ export function useStoreContext() {
     setCardChannelItemTopicMarker: async (guid, cardId, channelId, marker) => {
       await db.current.executeSql(`UPDATE card_channel_${guid} set topic_marker=? where card_id=? and channel_id=?`, [marker, cardId, channelId]);
     },
-    setCardChannelItemMakerAndSync: async (guid, cardId, channelId, marker, revision) => {
+    setCardChannelItemMarkerAndSync: async (guid, cardId, channelId, marker, revision) => {
       await db.current.executeSql(`UPDATE card_channel_${guid} set topic_marker=?, sync_revision=? where card_id=? and channel_id=?`, [marker, revision, cardId, channelId]);
     },
     setCardChannelItemDetail: async (guid, cardId, channelId, revision, detail) => {

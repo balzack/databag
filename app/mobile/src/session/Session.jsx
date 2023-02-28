@@ -45,9 +45,9 @@ export function Session() {
   const ConversationStackScreen = () => {
     const conversation = useContext(ConversationContext);
 
-    const setConversation = (navigation, cardId, channelId) => {
+    const setConversation = async (navigation, cardId, channelId) => {
       navigation.navigate('conversation');
-      conversation.actions.setConversation(cardId, channelId);
+      await conversation.actions.setConversation(cardId, channelId);
     }
     const clearConversation = (navigation) => {
       navigation.dispatch(
@@ -55,7 +55,7 @@ export function Session() {
       );
       conversation.actions.clearConversation();
     }
-    const setDetail = (navigation) => {
+    const openDetails = (navigation) => {
       navigation.navigate('details');
     }
 

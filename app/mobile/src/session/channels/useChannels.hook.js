@@ -4,7 +4,7 @@ import { CardContext } from 'context/CardContext';
 import { AccountContext } from 'context/AccountContext';
 import { AppContext } from 'context/AppContext';
 import { ProfileContext } from 'context/ProfileContext';
-import { getChannelSeals, isUnsealed, getContentKey, decryptChannelSubject, decryptTopicSubject } from 'context/sealUtil';
+import { getChannelSeals, isUnsealed, getContentKey, encryptChannelSubject, decryptChannelSubject, decryptTopicSubject } from 'context/sealUtil';
 import { getCardByGuid } from 'context/cardUtil';
 
 export function useChannels() {
@@ -17,6 +17,7 @@ export function useChannels() {
     addSubject: null,
     sealed: false,
     sealable: false,
+    busy: false,
   });
 
   const channel = useContext(ChannelContext);
@@ -111,7 +112,7 @@ export function useChannels() {
     }
     item.detail.members.forEach(guid => {
       if (guid !== profile.state.identity.guid) {
-        contacts.push(getCardByGuid(card.state.cards, guid)?.cardId);
+        contacts.push(getCardByGuid(card.state.cards, guid)?.card?.cardId);
       }
     })
 
@@ -257,7 +258,7 @@ export function useChannels() {
       updateState({ filter });
     },
     showAdding: () => {
-      updateState({ adding: true });
+      updateState({ adding: true, addSubject: null, addMembers: [] });
     },
     hideAdding: () => {
       updateState({ adding: false });
@@ -271,7 +272,36 @@ export function useChannels() {
     clearAddMember: (cardId) => {
       updateState({ addMembers: state.addMembers.filter(item => item !== cardId) });
     },
-    addTopic: () => {
+    addChannel: async () => {
+      let conversation;
+      if (!state.busy) {
+        try {
+          updateState({ busy: true });
+          if (state.sealed) {
+            const keys = [ account.state.sealKey.public ];
+            state.addMembers.forEach(id => {
+              const contact = card.state.cards.get(id);
+              keys.push(contact.card.profile.seal);
+            });
+            const sealed = encryptChannelSubject(state.addSubject, keys);
+            conversation = await channel.actions.addChannel('sealed', sealed, state.addMembers);
+          }
+          else {
+            const subject = { subject: state.addSubject };
+            conversation = await channel.actions.addChannel('superbasic', subject, state.addMembers);
+          }
+          updateState({ busy: false });
+        }
+        catch(err) {
+          console.log(err);
+          updateState({ busy: false });
+          throw new Error("failed to create new channel");
+        }
+      }
+      else {
+        throw new Error("operation in progress");
+      }
+      return conversation.id;
     },
   };
 
