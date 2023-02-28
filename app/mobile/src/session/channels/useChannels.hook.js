@@ -197,7 +197,7 @@ export function useChannels() {
 
   useEffect(() => {
     syncChannels();
-  }, [app.state, card.state, channel.state, state.filter]);
+  }, [app.state, card.state, channel.state, state.filter, state.sealable]);
 
   const syncChannels = async () => {
     if (syncing.current) {
