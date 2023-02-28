@@ -78,10 +78,23 @@ export const styles = StyleSheet.create({
     flexShrink: 1,
     paddingLeft: 4,
   },
+  notfound: {
+    flexGrow: 1,
+    flexShrink: 1,
+    display: 'flex',
+    alignItems: 'center',
+    display: 'flex',
+    justifyContent: 'center',
+  },
+  notfoundtext: {
+    fontSize: 18,
+    color: Colors.disabled,
+  },
   columnbottom: {
     paddingLeft: 24,
     paddingRight: 16,
     paddingTop: 8,
+    paddingBottom: 16,
     borderTopWidth: 1,
     borderColor: Colors.divider,
   },

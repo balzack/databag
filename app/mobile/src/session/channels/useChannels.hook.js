@@ -6,6 +6,7 @@ import { AppContext } from 'context/AppContext';
 import { ProfileContext } from 'context/ProfileContext';
 import { getChannelSeals, isUnsealed, getContentKey, encryptChannelSubject, decryptChannelSubject, decryptTopicSubject } from 'context/sealUtil';
 import { getCardByGuid } from 'context/cardUtil';
+import { getChannelSubjectLogo } from 'context/channelUtil';
 
 export function useChannels() {
   const [state, setState] = useState({
@@ -37,20 +38,15 @@ export function useChannels() {
     const timestamp = item.summary.lastTopic.created;
     const { readRevision, topicRevision } = item;
     
-    // extract or decrypt subject
-    let locked;
-    let unlocked;
-    let message;
-    let subject;
+    // decrypt subject and message
+    let locked = false;
+    let unlocked = false;
     if (item.detail.dataType === 'sealed') {
       locked = true;
       const seals = getChannelSeals(item.detail.data);
       if (isUnsealed(seals, account.state.sealKey)) {
         unlocked = true;
-        if (item.unsealedDetail) {
-          subject = item.unsealedDetail.subject;
-        }
-        else {
+        if (!item.unsealedDetail) {
           try {
             const contentKey = await getContentKey(seals, account.state.sealKey);
             const unsealed = decryptChannelSubject(item.detail.data, contentKey);
@@ -66,10 +62,7 @@ export function useChannels() {
           }
         }
         if (item.summary.lastTopic.dataType === 'sealedtopic') {
-          if (item.unsealedSummary) {
-            message = item.unsealedSummary.message.text;
-          }
-          else {
+          if (!item.unsealedSummary) {
             try {
               const contentKey = await getContentKey(seals, account.state.sealKey);
               const unsealed = decryptTopicSubject(item.summary.lastTopic.data, contentKey);
@@ -87,18 +80,20 @@ export function useChannels() {
         }
       }
     }
+
+    let message;
+    if (item?.detail?.dataType === 'sealed') {
+      if (typeof item?.unsealedSummary?.message?.text === 'string') {
+        message = item.unsealedSummary.message.text;
+      }
+    }
     if (item.detail.dataType === 'superbasic') {
-      locked = false;
-      unlocked = false;
-      try {
-        subject = JSON.parse(item.detail.data).subject;
-      }
-      catch(err) {
-        console.log(err);
-      }
       if (item.summary.lastTopic.dataType === 'superbasictopic') {
         try {
-          message = JSON.parse(item.summary.lastTopic.data).text;
+          const data = JSON.parse(item.summary.lastTopic.data);
+          if (typeof data.text === 'string') {
+            message = data.text;
+          }
         }
         catch(err) {
           console.log(err);
@@ -106,50 +101,8 @@ export function useChannels() {
       }
     }
 
-    const contacts = [];
-    if (cardId) {
-      contacts.push(cardId);
-    }
-    item.detail.members.forEach(guid => {
-      if (guid !== profile.state.identity.guid) {
-        contacts.push(getCardByGuid(card.state.cards, guid)?.card?.cardId);
-      }
-    })
-
-    if (!subject) {
-      if (contacts.length === 0) {
-        subject = 'Notes';
-      }
-      else {
-        const names = [];
-        contacts.forEach(id => {
-          const contact = card.state.cards.get(id);
-          if (contact?.card.profile?.name) {
-            names.push(contact.card.profile.name);
-          }
-          else {
-            names.push(contact?.card.profile?.handle);
-          }
-        });
-        subject = names.join(', ');
-      }
-    }
-
-    if (contacts.length === 0) {
-      logo = 'solution';
-    }
-    else if (contacts.length === 1) {
-      const contact = card.state.cards.get(contacts[0]);
-      if (contact?.card?.profile?.imageSet) {
-        logo = card.actions.getCardImageUrl(contacts[0])
-      }
-      else {
-        logo = 'avatar';
-      }
-    }
-    else {
-      logo = 'appstore';
-    }
+    const profileGuid = profile.state?.identity?.guid;
+    const { logo, subject } = getChannelSubjectLogo(cardId, profileGuid, item, card.state.cards, card.actions.getCardImageUrl);
 
     const updated = (loginTimestamp < timestamp) && (readRevision < topicRevision);
 

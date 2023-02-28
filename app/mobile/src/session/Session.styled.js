@@ -80,9 +80,12 @@ export const styles = StyleSheet.create({
     height: '100%',
     width: '33%',
     maxWidth: 500,
+    borderRightWidth: 1,
+    borderColor: Colors.divider,
   },
   conversation: {
     width: '67%',
+    backgroundColor: Colors.formFocus,
   },
   drawer: {
     width: '100%',

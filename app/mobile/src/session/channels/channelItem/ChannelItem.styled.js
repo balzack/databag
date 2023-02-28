@@ -13,6 +13,18 @@ export const styles = StyleSheet.create({
     paddingLeft: 16,
     paddingRight: 16,
   },
+  active: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'row',
+    height: 48,
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderColor: Colors.itemDivider,
+    paddingLeft: 16,
+    paddingRight: 16,
+    backgroundColor: Colors.formFocus,
+  },
   detail: {
     paddingLeft: 12,
     display: 'flex',

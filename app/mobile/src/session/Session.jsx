@@ -43,34 +43,31 @@ export function Session() {
   const screenParams = { headerShown: true, headerTintColor: Colors.primary };
 
   const ConversationStackScreen = () => {
-    const conversation = useContext(ConversationContext);
+    const [cardId, setCardId] = useState();
+    const [channelId, setChannelId] = useState();
 
-    const setConversation = async (navigation, cardId, channelId) => {
+    const openConversation = async (navigation, card, channel) => {
+      setCardId(card);
+      setChannelId(channel);
       navigation.navigate('conversation');
-      await conversation.actions.setConversation(cardId, channelId);
     }
-    const clearConversation = (navigation) => {
-      navigation.dispatch(
-        CommonActions.reset({ index: 0, routes: [ { name: 'channels' }, ], })
-      );
-      conversation.actions.clearConversation();
+    const closeConversation = (navigation) => {
+      setCardId(null);
+      setChannelId(null);
     }
     const openDetails = (navigation) => {
       navigation.navigate('details');
     }
 
     return (
-      <ConversationStack.Navigator
-          initialRouteName="channels"
-          screenOptions={({ route }) => (screenParams)}
-          screenListeners={{ state: (e) => { if (e?.data?.state?.index === 0) { conversation.actions.clearConversation() }} }}>
+      <ConversationStack.Navigator initialRouteName="channels" screenOptions={({ route }) => (screenParams)} >
 
         <ConversationStack.Screen name="channels" options={stackParams}>
-          {(props) => <Channels navigation={props.navigation} openConversation={(cardId, channelId) => setConversation(props.navigation, cardId, channelId)} />}
+          {(props) => <Channels navigation={props.navigation} openConversation={(cardId, channelId) => openConversation(props.navigation, cardId, channelId)} />}
         </ConversationStack.Screen>
 
-        <ConversationStack.Screen name="conversation" options={{ ...stackParams, headerTitle: (props) => <ConversationHeader closeConversation={clearConversation} openDetails={openDetails} /> }}>
-          {(props) => <ConversationBody />}
+        <ConversationStack.Screen name="conversation" options={stackParams}>
+          {(props) => <Conversation navigation={props.navigation} cardId={cardId} channelId={channelId} openDetails={() => openDetails(props.navigation)} closeConversation={closeConversation} /> }
         </ConversationStack.Screen>
 
         <ConversationStack.Screen name="details" options={{ ...stackParams, headerTitle: (props) => <DetailsHeader /> }}>
@@ -143,13 +140,17 @@ export function Session() {
 
     const conversation = useContext(ConversationContext);
     const [channel, setChannel] = useState(false);
+    const [cardId, setCardId] = useState();
+    const [channelId, setChannelId] = useState();
 
-    const setConversation = (cardId, channelId) => {
-      conversation.actions.setConversation(cardId, channelId);
+    const setConversation = (card, channel) => {
+      setCardId(card);
+      setChannelId(channel);
       setChannel(true);
     };
-    const clearConversation = () => {
-      conversation.actions.clearConversation();
+    const closeConversation = () => {
+      setCardId(null);
+      setChannelId(null);
       setChannel(false);
     };
     const openDetails = () => {
@@ -169,8 +170,8 @@ export function Session() {
 
     return (
       <View style={styles.home}>
-        <SafeAreaView edges={['top', 'bottom']} style={styles.sidebar}>
-          <SafeAreaView edges={['left']} style={styles.options}>
+        <SafeAreaView edges={['top', 'bottom', 'left']} style={styles.sidebar}>
+          <View edges={['left']} style={styles.options}>
             <TouchableOpacity style={styles.option} onPress={openProfile}>
               <ProfileIcon color={Colors.text} size={20} />
               <Text style={styles.profileLabel}>Profile</Text>
@@ -179,14 +180,16 @@ export function Session() {
               <CardsIcon color={Colors.text} size={20} />
               <Text style={styles.profileLabel}>Contacts</Text>
             </TouchableOpacity>
-          </SafeAreaView>
+          </View>
           <View style={styles.channels}>
-            <Channels openConversation={setConversation} />
+            <Channels cardId={cardId} channelId={channelId} openConversation={setConversation} />
           </View>
         </SafeAreaView>
         <View style={styles.conversation}>
           { channel && (
-            <Conversation closeConversation={clearConversation} openDetails={openDetails} />
+            <SafeAreaView edges={['top', 'bottom', 'right']}>
+              <Conversation cardId={cardId} channelId={channelId} closeConversation={closeConversation} openDetails={openDetails} />
+            </SafeAreaView>
           )}
           { !channel && (
             <Welcome />
@@ -262,9 +265,13 @@ export function Session() {
     };
 
     return (
-      <DetailDrawer.Navigator screenOptions={{ ...drawerParams, drawerStyle: { width: '45%' } }}
-          drawerContent={(props) => <Details closeConversation={closeConversation} />}
-        >
+      <DetailDrawer.Navigator screenOptions={{ ...drawerParams, drawerStyle: { width: '45%' } }} drawerContent={(props) => (
+          <ScrollView style={styles.drawer}>
+            <SafeAreaView edges={['top', 'bottom', 'right']}>
+              <Details closeConversation={closeConversation} />
+            </SafeAreaView>
+          </ScrollView>
+        )}>
         <DetailDrawer.Screen name="contact">
           {(props) => <ContactDrawerScreen navParams={{...navParams, detailNav: props.navigation}} />}
         </DetailDrawer.Screen>

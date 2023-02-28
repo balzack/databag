@@ -7,14 +7,15 @@ import { Colors } from 'constants/Colors';
 import { ChannelItem } from './channelItem/ChannelItem';
 import { AddMember } from './addMember/AddMember';
 
-export function Channels({ navigation, openConversation }) {
+export function Channels({ cardId, channelId, navigation, openConversation }) {
 
   const { state, actions } = useChannels();
 
   const addChannel = async () => {
     try {
-      await actions.addChannel();
+      const channelId = await actions.addChannel();
       actions.hideAdding();
+      openConversation(null, channelId); 
     }
     catch (err) {
       console.log(err);
@@ -57,7 +58,7 @@ export function Channels({ navigation, openConversation }) {
         </View>
       )}
         { state.channels.length == 0 && (
-          <View style={styles.content}>
+          <View style={styles.notfound}>
             <Text style={styles.notfoundtext}>No Topics Found</Text>
           </View>
         )}
@@ -66,7 +67,7 @@ export function Channels({ navigation, openConversation }) {
             style={styles.content}
             data={state.channels}
             initialNumToRender={25}
-            renderItem={({ item }) => <ChannelItem item={item} openConversation={openConversation} />}
+            renderItem={({ item }) => <ChannelItem cardId={cardId} channelId={channelId} item={item} openConversation={openConversation} />}
             keyExtractor={item => (`${item.cardId}:${item.channelId}`)}
           />
         )}

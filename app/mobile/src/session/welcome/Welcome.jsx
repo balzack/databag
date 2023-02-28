@@ -12,7 +12,7 @@ export function Welcome() {
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.header}>Databag</Text>
-      <Text style={styles.label}>Communication for the decentralized web</Text>
+      <Text style={styles.label}>Communication for the Decentralized Web</Text>
       <Image style={styles.image} source={session} />
       <View style={styles.steps}>
         <Text style={styles.stepstext}>Setup your profile</Text>

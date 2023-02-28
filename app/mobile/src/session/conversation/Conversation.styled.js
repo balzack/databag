@@ -22,7 +22,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingLeft: 16,
-    paddingTop: 16,
+    paddingTop: 8,
     paddingBottom: 8,
   }, 
   titletext: {
