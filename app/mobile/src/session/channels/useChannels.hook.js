@@ -37,7 +37,7 @@ export function useChannels() {
   const setChannelItem = async (loginTimestamp, cardId, channelId, item) => {
     const timestamp = item.summary.lastTopic.created;
     const { readRevision, topicRevision } = item;
-    
+
     // decrypt subject and message
     let locked = false;
     let unlocked = false;
@@ -50,11 +50,13 @@ export function useChannels() {
           try {
             const contentKey = await getContentKey(seals, account.state.sealKey);
             const unsealed = decryptChannelSubject(item.detail.data, contentKey);
-            if (cardId) {
-              await card.actions.setUnsealedChannelSubject(cardId, channelId, item.detailRevision, unsealed);
-            }
-            else {
-              await channel.actions.setUnsealedChannelSubject(channelId, item.detailRevision, unsealed);
+            if (unsealed) {
+              if (cardId) {
+                await card.actions.setUnsealedChannelSubject(cardId, channelId, item.detailRevision, unsealed);
+              }
+              else {
+                await channel.actions.setUnsealedChannelSubject(channelId, item.detailRevision, unsealed);
+              }
             }
           }
           catch(err) {
@@ -66,11 +68,13 @@ export function useChannels() {
             try {
               const contentKey = await getContentKey(seals, account.state.sealKey);
               const unsealed = decryptTopicSubject(item.summary.lastTopic.data, contentKey);
-              if (cardId) {
-                await card.actions.setUnsealedChannelSummary(cardId, channelId, item.topicRevision, unsealed);
-              }
-              else {
-                await channel.actions.setUnsealedChannelSummary(channelId, item.topicRevision, unsealed);
+              if (unsealed) {
+                if (cardId) {
+                  await card.actions.setUnsealedChannelSummary(cardId, channelId, item.topicRevision, unsealed);
+                }
+                else {
+                  await channel.actions.setUnsealedChannelSummary(channelId, item.topicRevision, unsealed);
+                }
               }
             }
             catch(err) {

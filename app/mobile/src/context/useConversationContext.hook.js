@@ -165,7 +165,7 @@ export function useConversationContext() {
         throw new Error("can only set hosted channel subjects");
       }
       else if(channelId) {
-        await channel.actions.setSubject(channelId, type, subject);
+        await channel.actions.setChannelSubject(channelId, type, subject);
       }
     },
     removeChannel: async () => {

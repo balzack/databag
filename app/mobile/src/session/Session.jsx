@@ -54,6 +54,7 @@ export function Session() {
     const closeConversation = (navigation) => {
       setCardId(null);
       setChannelId(null);
+      navigation.popToTop();
     }
     const openDetails = (navigation) => {
       navigation.navigate('details');
@@ -73,7 +74,7 @@ export function Session() {
         <ConversationStack.Screen name="details" options={{ ...stackParams, headerTitle: (props) => (
             <Text style={styles.headertext}>Details</Text>
         )}}>
-          {(props) => <Details clearConversation={() => clearConversation(props.navigation)} />}
+          {(props) => <Details clearConversation={() => closeConversation(props.navigation)} />}
         </ConversationStack.Screen>
 
       </ConversationStack.Navigator>

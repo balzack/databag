@@ -147,7 +147,7 @@ export function useChannelContext() {
     },
     removeChannel: async (channelId) => {
       const { server, token } = access.current;
-      return await removeChannel(access.current, channelId);
+      return await removeChannel(server, token, channelId);
     },
     setChannelSubject: async (channelId, type, subject) => {
       const { server, token } = access.current;

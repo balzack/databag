@@ -5,14 +5,14 @@ import { CardContext } from 'context/CardContext';
 import { AccountContext } from 'context/AccountContext';
 import { ProfileContext } from 'context/ProfileContext';
 import { getChannelSubjectLogo } from 'context/channelUtil';
-import { getChannelSeals, isUnsealed } from 'context/sealUtil';
+import { getChannelSeals, isUnsealed, getContentKey, updateChannelSubject } from 'context/sealUtil';
 import moment from 'moment';
 
 export function useDetails() {
 
   const [state, setState] = useState({
     subject: null,
-    created: null,
+    timestamp: null,
     logo: null,
     hostId: null,
     connected: [],
@@ -24,6 +24,8 @@ export function useDetails() {
     locked: false,
     unlocked: false,
     count: 0,
+    seals: null,
+    sealKey: null,
   });
 
   const card = useContext(CardContext);
@@ -38,12 +40,14 @@ export function useDetails() {
   useEffect(() => {
     let locked;
     let unlocked;
+    let seals;
+    let sealKey;
     const { channel, notification } = conversation.state;
-    if (channel.detail.dataType === 'sealed') {
+    if (channel?.detail?.dataType === 'sealed') {
       locked = true;
       try {
-        const { sealKey } = account.state;
-        const seals = getChannelSeals(channel.detail.data);
+        sealKey = account.state.sealKey;
+        seals = getChannelSeals(channel.detail.data);
         unlocked = isUnsealed(seals, sealKey);
       }
       catch(err) {
@@ -55,7 +59,7 @@ export function useDetails() {
       locked = false;
       unlocked = false;
     }
-    updateState({ locked, unlocked, notification });
+    updateState({ locked, unlocked, seals, sealKey, notification });
   }, [account.state, conversation.state]);
 
   useEffect(() => {
@@ -69,30 +73,42 @@ export function useDetails() {
   }, [card.state]);
 
   useEffect(() => {
-    const cardId = conversation.state.card?.cardId;
+    const hostId = conversation.state.card?.cardId;
     const profileGuid = profile.state.identity?.guid;
     const channel = conversation.state.channel;
     const cards = card.state.cards;
     const cardImageUrl = card.actions.getCardImageUrl;
-    const { logo, subject } = getChannelSubjectLogo(cardId, profileGuid, channel, cards, cardImageUrl);
-    const timestamp = conversation.state.channel?.detail?.created;
+    const { logo, subject } = getChannelSubjectLogo(hostId, profileGuid, channel, cards, cardImageUrl);
 
-    let created;
-    const date = new Date(item.detail.created * 1000);
+    let timestamp;
+    const { created, data, dataType } = conversation.state.channel?.detail || {}
+    const date = new Date(created * 1000);
     const now = new Date();
     const offset = now.getTime() - date.getTime();
     if(offset < 86400000) {
-      created = moment(date).format('h:mma');
+      timestamp = moment(date).format('h:mma');
     }
     else if (offset < 31449600000) {
-      created = moment(date).format('M/DD');
+      timestamp = moment(date).format('M/DD');
     }
     else {
-      created = moment(date).format('M/DD/YYYY');
+      timestamp = moment(date).format('M/DD/YYYY');
     }
 
-    updateState({ logo, subject, created });
-  }, [conversation]);
+    let subjectUpdate;
+    try {
+      if (dataType === 'superbasic') {
+        subjectUpdate = JSON.parse(data).subject;
+      }
+      else if (conversation.state?.channel?.unsealedDetail) {
+        subjectUpdate = conversation.state?.channel?.unsealedDetail?.subject;
+      }
+    }
+    catch(err) {
+      console.log(err);
+    }
+    updateState({ hostId, logo, subject, timestamp, subjectUpdate });
+  }, [conversation.state]);
 
   const actions = {
     showEditMembers: () => {
@@ -112,10 +128,14 @@ export function useDetails() {
     },
     saveSubject: async () => {
       if (state.locked) {
-        await conversation.actions.setSealedSubject(state.subjectUpdate, account.state.sealKey);
+        const contentKey = await getContentKey(state.seals, state.sealKey);
+        const sealed = updateChannelSubject(state.subjectUpdate, contentKey);
+        sealed.seals = state.seals;
+        await conversation.actions.setChannelSubject('sealed', sealed);
       }
       else {
-        await conversation.actions.setSubject(state.subjectUpdate);
+        const subject = { subject: state.subjectUpdate };
+        await conversation.actions.setChannelSubject('superbasic', subject);
       }
     },
     remove: async () => {

@@ -54,7 +54,6 @@ export function updateChannelSubject(subject, contentKey) {
   const encrypted = CryptoJS.AES.encrypt(JSON.stringify({ subject }), key, { iv: iv });
   const subjectEncrypted = encrypted.ciphertext.toString(CryptoJS.enc.Base64)
   const subjectIv = iv.toString();
-
   return { subjectEncrypted, subjectIv };
 }
 
