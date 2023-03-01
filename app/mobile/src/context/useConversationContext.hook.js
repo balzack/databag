@@ -14,6 +14,7 @@ export function useConversationContext() {
     topics: new Map(),
     card: null,
     channel: null,
+    notification: null,
   });
   const card = useContext(CardContext);
   const channel = useContext(ChannelContext);
@@ -48,7 +49,16 @@ export function useConversationContext() {
         reset.current = false;
         loaded.current = false;
         topics.current = new Map();
-        updateState({ offsync: false, channel: null, card: null, topics: topics.current });
+        
+        let notification;
+        try {
+          notification = await getNotifications();
+        }
+        catch(err) {
+          console.log(err);
+        }
+         
+        updateState({ offsync: false, channel: null, card: null, topics: topics.current, notification });
       }
 
       if (conversation) {
@@ -167,23 +177,15 @@ export function useConversationContext() {
         await channel.actions.removeChannel(channelId);
       }
     },
-    getNotifications: async () => {
+    setNotifications: async (notification) => {
       const { cardId, channelId } = conversationId.current || {};
       if (cardId) {
-        await card.actions.getChannelNotifications(cardId, channelId);
+        await card.actions.setChannelNotifications(cardId, channelId, notification);
       }
       else if (channelId) {
-        await channel.actions.getNotifications(channelId);
+        await channel.actions.setNotifications(channelId, notification);
       }
-    },
-    setNotifications: async (notify) => {
-      const { cardId, channelId } = conversationId.current || {};
-      if (cardId) {
-        await card.actions.setChannelNotifications(cardId, channelId);
-      }
-      else if (channelId) {
-        await channel.actions.setNotifications(channelId, notify);
-      }
+      updateState({ notification });
     },
     setChannelCard: async (id) => {
       const { cardId, channelId } = conversationId.current || {};
@@ -379,6 +381,16 @@ export function useConversationContext() {
       return await card.actions.getTopic(cardId, channelId, topicId);
     }
     return await channel.actions.getTopic(channelId, topicId);
+  }
+
+  const getNotifications = async (notification) => {
+    const { cardId, channelId } = conversationId.current || {};
+    if (cardId) {
+      return await card.actions.getChannelNotifications(cardId, channelId);
+    }
+    else if (channelId) {
+      return await channel.actions.getNotifications(channelId);
+    }
   }
 
   const mapTopicEntry = (entry) => {

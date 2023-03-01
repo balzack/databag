@@ -13,7 +13,7 @@ import { Profile, ProfileHeader, ProfileBody } from './profile/Profile';
 import { CardsHeader, CardsBody, Cards } from './cards/Cards';
 import { RegistryHeader, RegistryBody, Registry } from './registry/Registry';
 import { ContactHeader, ContactBody, Contact } from './contact/Contact';
-import { Details, DetailsHeader, DetailsBody } from './details/Details';
+import { Details } from './details/Details';
 import { Conversation, ConversationHeader, ConversationBody } from './conversation/Conversation';
 import { Welcome } from './welcome/Welcome';
 import { Channels } from './channels/Channels';
@@ -70,8 +70,10 @@ export function Session() {
           {(props) => <Conversation navigation={props.navigation} cardId={cardId} channelId={channelId} openDetails={() => openDetails(props.navigation)} closeConversation={closeConversation} /> }
         </ConversationStack.Screen>
 
-        <ConversationStack.Screen name="details" options={{ ...stackParams, headerTitle: (props) => <DetailsHeader /> }}>
-          {(props) => <DetailsBody clearConversation={() => clearConversation(props.navigation)} />}
+        <ConversationStack.Screen name="details" options={{ ...stackParams, headerTitle: (props) => (
+            <Text style={styles.headertext}>Details</Text>
+        )}}>
+          {(props) => <Details clearConversation={() => clearConversation(props.navigation)} />}
         </ConversationStack.Screen>
 
       </ConversationStack.Navigator>

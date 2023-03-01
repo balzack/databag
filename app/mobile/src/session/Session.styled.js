@@ -134,4 +134,8 @@ export const styles = StyleSheet.create({
   profileLabel: {
     paddingLeft: 8,
   },
+  headertext: {
+    fontSize: 18,
+    color: Colors.tetx,
+  },
 });
