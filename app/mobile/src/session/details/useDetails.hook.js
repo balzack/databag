@@ -26,6 +26,8 @@ export function useDetails() {
     count: 0,
     seals: null,
     sealKey: null,
+    deleteBusy: false,
+    blockBusy: false,
   });
 
   const card = useContext(CardContext);
@@ -139,10 +141,32 @@ export function useDetails() {
       }
     },
     remove: async () => {
-      await conversation.actions.removeChannel();
+      if (!state.deleteBusy) {
+        try {
+          updateState({ deleteBusy: true });
+          await conversation.actions.removeChannel();
+          updateState({ deleteBusy: false });
+        }
+        catch(err) {
+          console.log(err);
+          updateState({ deleteBusy: false });
+          throw new Error("delete failed");
+        }
+      }
     },
     block: async() => {
-      await conversation.actions.setChannelFlag();
+      if (!state.deleteBusy) {
+        try {
+          updateState({ blockBusy: true });
+          await conversation.actions.setChannelFlag();
+          updateState({ blockBusy: false });
+        }
+        catch(err) {
+          console.log(err);
+          updateState({ blockBusy: false });
+          throw new Error("block failed");
+        }
+      }
     },
     report: async() => {
       await conversation.actions.addChannelAlert();

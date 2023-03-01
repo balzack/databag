@@ -1,4 +1,4 @@
-import { KeyboardAvoidingView, FlatList, Alert, Modal, View, Text, Switch, TouchableOpacity, TextInput } from 'react-native';
+import { ActivityIndicator, KeyboardAvoidingView, FlatList, Alert, Modal, View, Text, Switch, TouchableOpacity, TextInput } from 'react-native';
 import { styles } from './Details.styled';
 import { useDetails } from './useDetails.hook';
 import { Logo } from 'utils/Logo';
@@ -145,16 +145,31 @@ export function Details({ channel, clearConversation }) {
       <View style={styles.controls}>
         { !state.hostId && (
           <TouchableOpacity style={styles.button} onPress={remove}>
-            <Text style={styles.buttonText}>Delete Topic</Text>
+            { state.deleteBusy && (
+              <ActivityIndicator color={Colors.white} />
+            )}
+            { !state.deleteBusy && (
+              <Text style={styles.buttonText}>Delete Topic</Text>
+            )}
           </TouchableOpacity>
         )}
         { state.hostId && (
           <TouchableOpacity style={styles.button} onPress={remove}>
-            <Text style={styles.buttonText}>Leave Topic</Text>
+            { state.deleteBusy && (
+              <ActivityIndicator color={Colors.white} />
+            )}
+            { !state.deleteBusy && (
+              <Text style={styles.buttonText}>Leave Topic</Text>
+            )}
           </TouchableOpacity>
         )}
         <TouchableOpacity style={styles.button} onPress={block}>
-          <Text style={styles.buttonText}>Block Topic</Text>
+          { state.blockBusy && (
+            <ActivityIndicator color={Colors.white} />
+          )}
+          { !state.blockBusy && (
+            <Text style={styles.buttonText}>Block Topic</Text>
+          )}
         </TouchableOpacity>
         { state.hostId && (
           <TouchableOpacity style={styles.button} onPress={report}>

@@ -124,7 +124,9 @@ export function Channels({ cardId, channelId, navigation, openConversation }) {
                 { state.busy && (
                   <ActivityIndicator color={Colors.white} />
                 )}
-                <Text style={styles.saveText}>Create</Text>
+                { !state.busy && (
+                  <Text style={styles.saveText}>Create</Text>
+                )}
               </TouchableOpacity>
             </View>
           </View>
