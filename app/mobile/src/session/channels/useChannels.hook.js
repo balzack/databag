@@ -26,7 +26,8 @@ export function useChannels() {
   const account = useContext(AccountContext);
   const profile = useContext(ProfileContext);
   const app = useContext(AppContext);
-
+  
+  const filter = useRef();
   const syncing = useRef(false);
   const resync = useRef(false);
 
@@ -154,6 +155,7 @@ export function useChannels() {
 
   useEffect(() => {
     syncChannels();
+    filter.current = state.filter;
   }, [app.state, card.state, channel.state, state.filter, state.sealable]);
 
   const syncChannels = async () => {
@@ -179,10 +181,10 @@ export function useChannels() {
         channels.push(await setChannelItem(loginTimestamp, cardId, channelId, channelItem));
       }
       const filtered = channels.filter(item => {
-        if (!state.filter) {
+        if (!filter.current) {
           return true;
         }
-        const filterCase = state.filter.toUpperCase();
+        const filterCase = filter.current.toUpperCase();
         const subjectCase = item.subject.toUpperCase();
         return subjectCase.includes(filterCase);
       });

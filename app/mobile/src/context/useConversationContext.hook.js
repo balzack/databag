@@ -157,7 +157,6 @@ export function useConversationContext() {
     clearConversation: async () => {
       conversationId.current = null;
       reset.current = true;
-      await sync();
     },
     setChannelSubject: async (type, subject) => {
       const { cardId, channelId } = conversationId.current || {};

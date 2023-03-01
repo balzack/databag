@@ -69,7 +69,7 @@ export function useBlockedTopics() {
     });
     channel.state.channels.forEach((channelItem, channelId, map) => {
       if (channelItem.blocked) {
-        marged.push({ channel: channelItem });
+        merged.push({ channel: channelItem });
       }
     });
     const items = merged.map(setChannelItem);

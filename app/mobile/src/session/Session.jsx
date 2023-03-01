@@ -168,6 +168,8 @@ export function Session() {
 
     useEffect(() => {
       navParams.detailNav.closeDrawer();
+      setChannelId(null);
+      setCardId(null);
       setChannel(false);
     }, [navParams.closeCount]);
 
@@ -263,20 +265,18 @@ export function Session() {
 
   const DetailDrawerScreen = ({ navParams }) => {
     const [closeCount, setCloseCount] = useState(0);
-    const closeConversation = () => {
+    const clearConversation = (navigation) => {
       setCloseCount(closeCount+1);
     };
 
     return (
       <DetailDrawer.Navigator screenOptions={{ ...drawerParams, drawerStyle: { width: '45%' } }} drawerContent={(props) => (
-          <ScrollView style={styles.drawer}>
-            <SafeAreaView edges={['top', 'bottom', 'right']}>
-              <Details closeConversation={closeConversation} />
-            </SafeAreaView>
-          </ScrollView>
+          <SafeAreaView style={styles.drawer} edges={['top', 'bottom', 'right']}>
+            <Details clearConversation={() => clearConversation(props.navigation)} />
+          </SafeAreaView>
         )}>
         <DetailDrawer.Screen name="contact">
-          {(props) => <ContactDrawerScreen navParams={{...navParams, detailNav: props.navigation}} />}
+          {(props) => <ContactDrawerScreen navParams={{...navParams, closeCount: closeCount, detailNav: props.navigation}} />}
         </DetailDrawer.Screen>
       </DetailDrawer.Navigator>
     );

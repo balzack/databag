@@ -16,27 +16,31 @@ export const styles = StyleSheet.create({
     flexGrow: 1,
     borderBottomWidth: 1,
     borderColor: Colors.divider,
+    height: 48,
+    marginLeft: 16,
+    marginRight: 16,
   },
   headertitle: {
     display: 'flex',
+    flexShrink: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingLeft: 16,
+    paddingLeft: 8,
     paddingTop: 8,
     paddingBottom: 8,
   }, 
   titletext: {
     fontSize: 18,
+    flexShrink: 1,
     paddingLeft: 16,
     paddingRight: 16,
   },
   titlebutton: {
-    paddingRight: 16,
+    paddingRight: 8,
   },
   headerclose: {
     flexGrow: 1,
     alignItems: 'flex-end',
-    paddingTop: 8,
   },
 });
 

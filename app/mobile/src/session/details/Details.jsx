@@ -5,10 +5,29 @@ import { Logo } from 'utils/Logo';
 import AntIcons from 'react-native-vector-icons/AntDesign';
 import MatIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Colors from 'constants/Colors';
+import { MemberItem } from './memberItem/MemberItem';
 
 export function Details({ channel, clearConversation }) {
 
   const { state, actions } = useDetails();
+
+  const toggle = async (cardId, selected) => {
+    try {
+      if (selected) {
+        await actions.clearCard(cardId);
+      }
+      else {
+        await actions.setCard(cardId);
+      }
+    }
+    catch (err) {
+      console.log(err);
+      Alert.alert(
+        'Failed to Update Membership',
+        'Please try again.'
+      );
+    }
+  };
 
   const saveSubject = async () => {
     try {
@@ -199,8 +218,8 @@ export function Details({ channel, clearConversation }) {
       </View>
 
       <FlatList style={styles.cards}
-        data={state.contacts}
-        renderItem={({ item }) => <MemberItem hostId={state.hostId} editable={false} members={[]} item={item} />}
+        data={state.members}
+        renderItem={({ item }) => <MemberItem hostId={state.hostId} item={item} />}
         keyExtractor={item => item.cardId}
       />
 
@@ -242,7 +261,7 @@ export function Details({ channel, clearConversation }) {
             <Text style={styles.editHeader}>Channel Members:</Text>
             <FlatList style={styles.editMembers}
               data={state.connected}
-              renderItem={({ item }) => <Text>MEMBER</Text> }
+              renderItem={({ item }) => <MemberItem item={item} toggle={toggle} />}
               keyExtractor={item => item.cardId}
             />
             <View style={styles.editControls}>

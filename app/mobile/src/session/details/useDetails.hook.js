@@ -5,6 +5,7 @@ import { CardContext } from 'context/CardContext';
 import { AccountContext } from 'context/AccountContext';
 import { ProfileContext } from 'context/ProfileContext';
 import { getChannelSubjectLogo } from 'context/channelUtil';
+import { getCardByGuid } from 'context/cardUtil';
 import { getChannelSeals, isUnsealed, getContentKey, updateChannelSubject } from 'context/sealUtil';
 import moment from 'moment';
 
@@ -23,11 +24,11 @@ export function useDetails() {
     pushEnabled: false,
     locked: false,
     unlocked: false,
-    count: 0,
     seals: null,
     sealKey: null,
     deleteBusy: false,
     blockBusy: false,
+    unknown: 0,
   });
 
   const card = useContext(CardContext);
@@ -64,18 +65,49 @@ export function useDetails() {
     updateState({ locked, unlocked, seals, sealKey, notification });
   }, [account.state, conversation.state]);
 
-  useEffect(() => {
-    const connected = [];
-    card.state.cards.forEach(contact => {
-      if (contact?.card?.detail?.status === 'connected') {
-        connected.push(contact.card);
-      }
-    });
-    updateState({ connected });
-  }, [card.state]);
+  const setMemberItem = (contact, guids) => {
+    return {
+      cardId: contact?.cardId,
+      name: contact?.profile?.name,
+      handle: contact?.profile?.handle,
+      node: contact?.profile?.node,
+      logo: contact?.profile?.imageSet ? card.actions.getCardImageUrl(contact.cardId) : 'avatar',
+      selected: guids.includes(contact?.profile?.guid),
+    }
+  };
 
   useEffect(() => {
-    const hostId = conversation.state.card?.cardId;
+    let unknown = 0;
+    let members = new Map();
+    const host = conversation.state.card;
+    if (host) {
+      members.set(host.card?.cardId, setMemberItem(host.card, []));
+    }
+    const guids = conversation.state.channel?.detail?.members || [];
+    guids.forEach(guid => {
+      if (guid !== profile.state.identity?.guid) {
+        const contact = getCardByGuid(card.state.cards, guid);
+        if (contact) {
+          members.set(contact.card?.cardId, setMemberItem(contact.card, []));
+        }
+        else {
+          unknown++;
+        }
+      }
+    });
+
+    const connected = new Map();
+    card.state.cards.forEach(contact => {
+      if (contact?.card?.detail?.status === 'connected') {
+        connected.set(contact.card?.cardId, setMemberItem(contact.card, guids));
+      }
+    });
+
+    updateState({ connected: Array.from(connected.values()), members: Array.from(members.values()), unknown });
+  }, [card.state, conversation.state]);
+
+  useEffect(() => {
+    const hostId = conversation.state.card?.card.cardId;
     const profileGuid = profile.state.identity?.guid;
     const channel = conversation.state.channel;
     const cards = card.state.cards;
@@ -127,6 +159,24 @@ export function useDetails() {
     },
     setSubjectUpdate: (subjectUpdate) => {
       updateState({ subjectUpdate });
+    },
+    setCard: async (cardId) => {
+      updateState({ connected: state.connected.map(contact => {
+        if(contact.cardId === cardId) {
+          return { ...contact, selected: true }
+        }
+        return contact;
+      }) });
+      await conversation.actions.setChannelCard(cardId);
+    },
+    clearCard: async (cardId) => {
+      updateState({ connected: state.connected.map(contact => {
+        if(contact.cardId === cardId) {
+          return { ...contact, selected: false }
+        }
+        return contact;
+      }) });
+      await conversation.actions.clearChannelCard(cardId);
     },
     saveSubject: async () => {
       if (state.locked) {

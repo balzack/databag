@@ -366,7 +366,7 @@ export function useCardContext() {
       return getCardImageUrl(server, token, cardId, profileRevision);
     },
     removeChannel: async (cardId, channelId) => {
-      const { detail, profile } = cards.current.get(cardId) || {};
+      const { detail, profile } = cards.current.get(cardId)?.card || {};
       const cardToken = `${profile?.guid}.${detail?.token}`;
       return await removeContactChannel(profile?.node, cardToken, channelId);
     },
