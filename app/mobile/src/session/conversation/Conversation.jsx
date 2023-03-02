@@ -6,6 +6,7 @@ import { styles } from './Conversation.styled';
 import { Colors } from 'constants/Colors';
 import Ionicons from 'react-native-vector-icons/AntDesign';
 import { Logo } from 'utils/Logo';
+import { AddTopic } from './addTopic/AddTopic';
 
 export function Conversation({ navigation, cardId, channelId, closeConversation, openDetails }) {
 
@@ -40,7 +41,7 @@ export function Conversation({ navigation, cardId, channelId, closeConversation,
   }, [cardId, channelId]);
 
   return (
-    <View>
+    <View style={styles.container}>
       { !navigation && (
         <View style={styles.header}>
           { ready && (
@@ -55,7 +56,12 @@ export function Conversation({ navigation, cardId, channelId, closeConversation,
           </TouchableOpacity>
         </View>
       )}
-      <Text>Conversation</Text>
+      <View style={styles.thread}>
+        <View style={styles.messages}>
+          <Text>Conversation</Text>
+        </View>
+        <AddTopic />
+      </View>
     </View>
   );
 }

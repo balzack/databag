@@ -42,5 +42,20 @@ export const styles = StyleSheet.create({
     flexGrow: 1,
     alignItems: 'flex-end',
   },
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    flexGrow: 1,
+  },
+  thread: {
+    display: 'flex',
+    flexDirection: 'column',
+    flexGrow: 1,
+  },
+  messages: {
+    display: 'flex',
+    flexDirection: 'column',
+    flexGrow: 1,
+  },
 });
 
