@@ -46,16 +46,23 @@ export function Session() {
     const [cardId, setCardId] = useState();
     const [channelId, setChannelId] = useState();
 
-    const openConversation = async (navigation, card, channel) => {
-      setCardId(card);
-      setChannelId(channel);
-      navigation.navigate('conversation');
-    }
-    const closeConversation = (navigation) => {
+
+    const setConversation = (card, channel) => {
+      (async () => {
+        conversation.actions.setConversation(card, channel);
+        setCardId(card);
+        setChannelId(channel);
+        navigation.navigate('conversation');
+      })();
+    };
+    const closeConversation = () => {
+      console.log("CLOSE CALLED!");
+      conversation.actions.clearConversation();
       setCardId(null);
       setChannelId(null);
       navigation.popToTop();
-    }
+    };
+
     const openDetails = (navigation) => {
       navigation.navigate('details');
     }
@@ -68,7 +75,7 @@ export function Session() {
         </ConversationStack.Screen>
 
         <ConversationStack.Screen name="conversation" options={stackParams}>
-          {(props) => <Conversation navigation={props.navigation} cardId={cardId} channelId={channelId} openDetails={() => openDetails(props.navigation)} closeConversation={closeConversation} /> }
+          {(props) => <Conversation navigation={props.navigation} openDetails={() => openDetails(props.navigation)} closeConversation={closeConversation} /> }
         </ConversationStack.Screen>
 
         <ConversationStack.Screen name="details" options={{ ...stackParams, headerTitle: (props) => (
@@ -147,11 +154,16 @@ export function Session() {
     const [channelId, setChannelId] = useState();
 
     const setConversation = (card, channel) => {
-      setCardId(card);
-      setChannelId(channel);
-      setChannel(true);
+      (async () => {
+        conversation.actions.setConversation(card, channel);
+        setCardId(card);
+        setChannelId(channel);
+        setChannel(true);
+      })();
     };
     const closeConversation = () => {
+      console.log("CLOSE CALLED!");
+      conversation.actions.clearConversation();
       setCardId(null);
       setChannelId(null);
       setChannel(false);
@@ -193,7 +205,7 @@ export function Session() {
         <View style={styles.conversation}>
           { channel && (
             <SafeAreaView edges={['top', 'bottom', 'right']}>
-              <Conversation cardId={cardId} channelId={channelId} closeConversation={closeConversation} openDetails={openDetails} />
+              <Conversation closeConversation={closeConversation} openDetails={openDetails} />
             </SafeAreaView>
           )}
           { !channel && (

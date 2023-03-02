@@ -28,18 +28,21 @@ export function useConversationContext() {
   const conversationId = useRef(null);
   const topics = useRef(new Map());
 
+  const curSyncRevision = useRef();
+  const curTopicMarker = useRef();
+
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }))
   }
 
   const sync = async () => {
 
-console.log("SYNCING!");
     if (!syncing.current && (reset.current || update.current || force.current || more.current)) {
+
+console.log("SYNCING!", reset.current, update.current, force.current, more.current);
       const loadMore = more.current;
       const ignoreRevision = force.current;
       const conversation = conversationId.current;
-      let curRevision, setRevision, marker;
 
       syncing.current = true;
       update.current = false;
@@ -50,38 +53,29 @@ console.log("SYNCING!");
         reset.current = false;
         loaded.current = false;
         topics.current = new Map();
-        
-        let notification;
-        try {
-          notification = await getNotifications();
-        }
-        catch(err) {
-          console.log(err);
-        }
-         
-        updateState({ offsync: false, channel: null, card: null, topics: topics.current, notification });
       }
 
       if (conversation) {
         const { cardId, channelId } = conversation;
         const cardValue = cardId ? card.state.cards.get(cardId) : null;
         const channelValue = cardId ? cardValue?.channels.get(channelId) : channel.state.channels.get(channelId);
+        const { topicRevision } = channelValue || {};
 
         if (channelValue) {
-          const { topicRevision, syncRevision, topicMarker } = channelValue;
-
-          curRevision = topicRevision;
-          setRevision = syncRevision;
-          marker = topicMarker;
-          updateState({ card: cardValue, channel: channelValue });
-
           if (!loaded.current) {
             const topicItems = await getTopicItems(cardId, channelId);
             for (let topic of topicItems) {
               topics.current.set(topic.topicId, topic);
             }
-            updateState({ offsync: false, topics: topics.current });
+            updateState({ offsync: false, topics: topics.current, card: cardValue, channel: channelValue });
+
+            const { syncRevision, topicMarker } = channelValue;
+            curSyncRevision.current = syncRevision;
+            curTopicMarker.current = topicMarker;
             loaded.current = true;
+          }
+          else {
+            updateState({ card: cardValue, channel: channelValue });
           }
         }
         else {
@@ -90,33 +84,36 @@ console.log("SYNCING!");
           return;
         }
 
-        if (ignoreRevision || curRevision !== setRevision) {
-          try {
-            if (!marker) {
+        try {
+          if (!curTopicMarker.current) {
 console.log("FIRST GET");
-              const delta = await getTopicDelta(cardId, channelId, null, COUNT, null, null);
-              await setTopicDelta(cardId, channelId, delta.topics);
-              await setMarkerAndSync(cardId, channelId, delta.marker, curRevision);
-            }
-            if (loadMore && marker) {
+            const delta = await getTopicDelta(cardId, channelId, null, COUNT, null, null);
+            await setTopicDelta(cardId, channelId, delta.topics);
+            await setMarkerAndSync(cardId, channelId, delta.marker, topicRevision);
+            curTopicMarker.current = delta.marker;
+console.log("---", delta);
+            curSyncRevision.current = topicRevision;
+          }
+          if (loadMore && marker) {
 console.log("MORE GET");
-              const delta = await getTopicDelta(cardId, channelId, null, COUNT, null, marker);
-              await setTopicDelta(cardId, channelId, delta.topics);
-              await setTopicMarker(cardId, channelId, delta.marker);
-            }
-            if (ignoreRevision || curRevision !== setRevision) {
+            const delta = await getTopicDelta(cardId, channelId, null, COUNT, null, curTopicMarker.current);
+            await setTopicDelta(cardId, channelId, delta.topics);
+            await setTopicMarker(cardId, channelId, delta.marker);
+            curTopicMarker.current = delta.marker;
+          }
+          if (ignoreRevision || topicRevision !== curSyncRevision.current) {
 console.log("UPDATE");
-              const delta = await getTopicDelta(cardId, channelId, setRevision, null, marker, null);
-              await setTopicDelta(cardId, channelId, delta.topics);
-              await setSyncRevision(cardId, channelId, curRevision);
-            }
+            const delta = await getTopicDelta(cardId, channelId, curSyncRevision.currnet, null, curTopicMarker.current, null);
+            await setTopicDelta(cardId, channelId, delta.topics);
+            await setSyncRevision(cardId, channelId, topicRevision);
+            curSyncRevision.current = topicRevision;
           }
-          catch(err) {
-            console.log(err);
-            updateState({ offysnc: true });
-            syncing.current = false;
-            return
-          }
+        }
+        catch(err) {
+          console.log(err);
+          updateState({ offysnc: true });
+          syncing.current = false;
+          return
         }
       }
 
@@ -156,11 +153,13 @@ console.log("UPDATE");
 
   const actions = {
     setConversation: async (cardId, channelId) => {
+console.log(">>> SET");
       conversationId.current = { cardId, channelId };
       reset.current = true;
       await sync();
     },
     clearConversation: async () => {
+console.log(">>> CLEAR");
       conversationId.current = null;
       reset.current = true;
       await sync();
@@ -181,6 +180,15 @@ console.log("UPDATE");
       }
       else if (channelId) {
         await channel.actions.removeChannel(channelId);
+      }
+    },
+    getNotifications: async () => {
+      const { cardId, channelId } = conversationId.current || {};
+      if (cardId) {
+        return await card.actions.getChannelNotifications(cardId, channelId);
+      }
+      else if (channelId) {
+        return await channel.actions.getNotifications(channelId);
       }
     },
     setNotifications: async (notification) => {
@@ -387,16 +395,6 @@ console.log("UPDATE");
       return await card.actions.getTopic(cardId, channelId, topicId);
     }
     return await channel.actions.getTopic(channelId, topicId);
-  }
-
-  const getNotifications = async (notification) => {
-    const { cardId, channelId } = conversationId.current || {};
-    if (cardId) {
-      return await card.actions.getChannelNotifications(cardId, channelId);
-    }
-    else if (channelId) {
-      return await channel.actions.getNotifications(channelId);
-    }
   }
 
   const getTopicAssetUrl = (cardId, channelId, topicId, assetId) => {

@@ -41,6 +41,8 @@ export function useConversation() {
     const filtered = sorted.filter(item => !(item.blocked === 1));
 
     updateState({ logo, subject, topics: filtered });
+
+console.log("UPDATE TOPICS", filtered.length);
   }, [conversation.state, card.state, profile.state]);
     
 

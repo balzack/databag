@@ -411,7 +411,7 @@ export function useCardContext() {
     getTopics: async (cardId, channelId, revision, count, begin, end) => {
       const { detail, profile } = (cards.current.get(cardId) || {}).card;
       const cardToken = `${profile?.guid}.${detail?.token}`;
-      return await getContactChannelTopics(profile?.node, cardToken, channelId);
+      return await getContactChannelTopics(profile?.node, cardToken, channelId, revision, count, begin, end);
     },
     getTopic: async (cardId, channelId, topicId) => {
       const { detail, profile } = (cards.current.get(cardId) || {}).card;

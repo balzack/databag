@@ -11,7 +11,7 @@ import { TopicItem } from './topicItem/TopicItem';
 
 export function Conversation({ navigation, cardId, channelId, closeConversation, openDetails }) {
 
-  const [ready, setReady] = useState(false);
+  const [ready, setReady] = useState(true);
   const conversation = useContext(ConversationContext);
   const { state, actions } = useConversation();
   const ref = useRef();
@@ -57,13 +57,8 @@ export function Conversation({ navigation, cardId, channelId, closeConversation,
   }, [navigation, state.subject]);
 
   useEffect(() => {
-    (async () => {
-      setReady(false);
-      await conversation.actions.setConversation(cardId, channelId);
-      setReady(true);
-    })();
-    return () => { conversation.actions.clearConversation(); };
-  }, [cardId, channelId]);
+    return () => { closeConversation(); };
+  }, []);
 
   return (
     <View style={styles.container}>
