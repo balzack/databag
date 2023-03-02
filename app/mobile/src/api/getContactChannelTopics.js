@@ -2,9 +2,6 @@ import { checkResponse, fetchWithTimeout } from './fetchUtil';
 
 export async function getContactChannelTopics(server, token, channelId, revision, count, begin, end) {
 
-console.log("GETTING:", revision, count, begin, end);
-
-
   let rev = ''
   if (revision != null) {
     rev = `&revision=${revision}`
@@ -24,8 +21,6 @@ console.log("GETTING:", revision, count, begin, end);
   let topics = await fetchWithTimeout(`https://${server}/content/channels/${channelId}/topics?contact=${token}${rev}${cnt}${bgn}${edn}`, 
     { method: 'GET' });
   checkResponse(topics)
-
-console.log(topics.headers);
 
   return {
     marker: topics.headers.get('topic-marker'),

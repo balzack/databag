@@ -43,11 +43,11 @@ export function Session() {
   const screenParams = { headerShown: true, headerTintColor: Colors.primary };
 
   const ConversationStackScreen = () => {
+    const conversation = useContext(ConversationContext);
     const [cardId, setCardId] = useState();
     const [channelId, setChannelId] = useState();
 
-
-    const setConversation = (card, channel) => {
+    const openConversation = (navigation, card, channel) => {
       (async () => {
         conversation.actions.setConversation(card, channel);
         setCardId(card);
@@ -55,13 +55,17 @@ export function Session() {
         navigation.navigate('conversation');
       })();
     };
-    const closeConversation = () => {
-      console.log("CLOSE CALLED!");
+    const clearConversation = (navigation) => {
       conversation.actions.clearConversation();
       setCardId(null);
       setChannelId(null);
       navigation.popToTop();
     };
+    const closeConversation = () => {
+      conversation.actions.clearConversation();
+      setCardId(null);
+      setChannelId(null);
+    }
 
     const openDetails = (navigation) => {
       navigation.navigate('details');
@@ -75,13 +79,13 @@ export function Session() {
         </ConversationStack.Screen>
 
         <ConversationStack.Screen name="conversation" options={stackParams}>
-          {(props) => <Conversation navigation={props.navigation} openDetails={() => openDetails(props.navigation)} closeConversation={closeConversation} /> }
+          {(props) => <Conversation navigation={props.navigation} openDetails={() => openDetails(props.navigation)} closeConversation={(pop) => closeConversation(props.navigation, pop)} /> }
         </ConversationStack.Screen>
 
         <ConversationStack.Screen name="details" options={{ ...stackParams, headerTitle: (props) => (
             <Text style={styles.headertext}>Details</Text>
         )}}>
-          {(props) => <Details clearConversation={() => closeConversation(props.navigation)} />}
+          {(props) => <Details clearConversation={() => clearConversation(props.navigation)} />}
         </ConversationStack.Screen>
 
       </ConversationStack.Navigator>
@@ -162,7 +166,6 @@ export function Session() {
       })();
     };
     const closeConversation = () => {
-      console.log("CLOSE CALLED!");
       conversation.actions.clearConversation();
       setCardId(null);
       setChannelId(null);

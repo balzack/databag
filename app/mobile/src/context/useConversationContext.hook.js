@@ -14,7 +14,6 @@ export function useConversationContext() {
     topics: new Map(),
     card: null,
     channel: null,
-    notification: null,
   });
   const card = useContext(CardContext);
   const channel = useContext(ChannelContext);
@@ -39,7 +38,6 @@ export function useConversationContext() {
 
     if (!syncing.current && (reset.current || update.current || force.current || more.current)) {
 
-console.log("SYNCING!", reset.current, update.current, force.current, more.current);
       const loadMore = more.current;
       const ignoreRevision = force.current;
       const conversation = conversationId.current;
@@ -53,6 +51,9 @@ console.log("SYNCING!", reset.current, update.current, force.current, more.curre
         reset.current = false;
         loaded.current = false;
         topics.current = new Map();
+        if (!conversation) {
+          updateState({ offsync: false, topics: topics.current, card: null, channel: null });
+        }
       }
 
       if (conversation) {
@@ -74,9 +75,6 @@ console.log("SYNCING!", reset.current, update.current, force.current, more.curre
             curTopicMarker.current = topicMarker;
             loaded.current = true;
           }
-          else {
-            updateState({ card: cardValue, channel: channelValue });
-          }
         }
         else {
           console.log("failed to load conversation");
@@ -86,28 +84,25 @@ console.log("SYNCING!", reset.current, update.current, force.current, more.curre
 
         try {
           if (!curTopicMarker.current) {
-console.log("FIRST GET");
             const delta = await getTopicDelta(cardId, channelId, null, COUNT, null, null);
             await setTopicDelta(cardId, channelId, delta.topics);
             await setMarkerAndSync(cardId, channelId, delta.marker, topicRevision);
             curTopicMarker.current = delta.marker;
-console.log("---", delta);
             curSyncRevision.current = topicRevision;
           }
           if (loadMore && marker) {
-console.log("MORE GET");
             const delta = await getTopicDelta(cardId, channelId, null, COUNT, null, curTopicMarker.current);
             await setTopicDelta(cardId, channelId, delta.topics);
             await setTopicMarker(cardId, channelId, delta.marker);
             curTopicMarker.current = delta.marker;
           }
           if (ignoreRevision || topicRevision !== curSyncRevision.current) {
-console.log("UPDATE");
-            const delta = await getTopicDelta(cardId, channelId, curSyncRevision.currnet, null, curTopicMarker.current, null);
+            const delta = await getTopicDelta(cardId, channelId, curSyncRevision.current, null, curTopicMarker.current, null);
             await setTopicDelta(cardId, channelId, delta.topics);
             await setSyncRevision(cardId, channelId, topicRevision);
             curSyncRevision.current = topicRevision;
           }
+          updateState({ offsync: false, topics: topics.current, card: cardValue, channel: channelValue });
         }
         catch(err) {
           console.log(err);
@@ -132,7 +127,7 @@ console.log("UPDATE");
         }
         else {
           const topic = await getTopic(cardId, channelId, entry.id);
-          const item = mapTopicEntry(entry);
+          const item = mapTopicEntry(topic);
           setTopicItem(cardId, channelId, item);
           topics.current.set(item.topicId, item);
         }
@@ -142,7 +137,6 @@ console.log("UPDATE");
         clearTopicItem(entry.id);
       }
     }
-    updateState({ offsync: false, topics: topics.current });
   }
 
   useEffect(() => {
@@ -153,13 +147,11 @@ console.log("UPDATE");
 
   const actions = {
     setConversation: async (cardId, channelId) => {
-console.log(">>> SET");
       conversationId.current = { cardId, channelId };
       reset.current = true;
       await sync();
     },
     clearConversation: async () => {
-console.log(">>> CLEAR");
       conversationId.current = null;
       reset.current = true;
       await sync();
@@ -285,7 +277,7 @@ console.log(">>> CLEAR");
       else if (channelId) {
         await channel.actions.setUnsealedTopicSubject(channelId, topicId, revision, unsealed);
       }
-      setTopicField(topicId, 'unsaledDetail', unsealed);
+      setTopicField(topicId, 'unsealedDetail', unsealed);
     },
     setTopicSubject: async (topicId, type, subject) => {
       const { cardId, channelId } = conversationId.current || {};

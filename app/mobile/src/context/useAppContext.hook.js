@@ -156,7 +156,6 @@ export function useAppContext() {
   const setWebsocket = (session) => {
     ws.current = createWebsocket(`wss://${session.server}/status`);
     ws.current.onmessage = (ev) => {
-console.log("ON MESSAGE!");
       try {
         delay.current = 0;
         const rev = JSON.parse(ev.data);

@@ -1,6 +1,7 @@
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState, useContext, useRef } from 'react';
 import { ProfileContext } from 'context/ProfileContext';
 import { CardContext } from 'context/CardContext';
+import { AccountContext } from 'context/AccountContext';
 import { ConversationContext } from 'context/ConversationContext';
 import { getChannelSubjectLogo } from 'context/channelUtil';
 
@@ -17,6 +18,7 @@ export function useConversation() {
   const profile = useContext(ProfileContext);
   const card = useContext(CardContext);
   const conversation = useContext(ConversationContext);
+  const account = useContext(AccountContext);
 
   useEffect(() => {
     const cardId = conversation.state.card?.cardId;
@@ -41,9 +43,7 @@ export function useConversation() {
     const filtered = sorted.filter(item => !(item.blocked === 1));
 
     updateState({ logo, subject, topics: filtered });
-
-console.log("UPDATE TOPICS", filtered.length);
-  }, [conversation.state, card.state, profile.state]);
+  }, [conversation.state, profile.state]);
     
 
   const actions = {};

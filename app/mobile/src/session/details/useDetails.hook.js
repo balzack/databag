@@ -41,11 +41,18 @@ export function useDetails() {
   }
 
   useEffect(() => {
+    (async () => {
+      const notification = await conversation.actions.getNotifications();
+      updateState({ notification });
+    })();
+  }, []);
+
+  useEffect(() => {
     let locked;
     let unlocked;
     let seals;
     let sealKey;
-    const { channel, notification } = conversation.state;
+    const { channel } = conversation.state;
     if (channel?.detail?.dataType === 'sealed') {
       locked = true;
       try {
@@ -62,7 +69,7 @@ export function useDetails() {
       locked = false;
       unlocked = false;
     }
-    updateState({ locked, unlocked, seals, sealKey, notification });
+    updateState({ locked, unlocked, seals, sealKey });
   }, [account.state, conversation.state]);
 
   const setMemberItem = (contact, guids) => {
@@ -223,6 +230,7 @@ export function useDetails() {
     },
     setNotifications: async (notification) => {
       await conversation.actions.setNotifications(notification);
+      updateState({ notification });
     },
   };
 

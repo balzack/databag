@@ -14,9 +14,9 @@ import { AudioAsset } from './audioAsset/AudioAsset';
 import { VideoAsset } from './videoAsset/VideoAsset';
 import Carousel from 'react-native-reanimated-carousel';
 
-export function TopicItem({ item, focused, focus, hosting, sealed, sealKey, remove, update, block, report }) {
+export function TopicItem({ item, focused, focus, hosting, remove, update, block, report, contentKey }) {
 
-  const { state, actions } = useTopicItem(item, hosting, remove, sealed, sealKey);
+  const { state, actions } = useTopicItem(item, hosting, remove, contentKey);
 
   const erase = () => {
     Alert.alert(
