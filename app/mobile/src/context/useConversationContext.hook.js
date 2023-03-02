@@ -126,11 +126,13 @@ export function useConversationContext() {
       if (entry.data) {
         if (entry.data.detail) {
           const item = mapTopicEntry(entry);
+          setTopicItem(cardId, channelId, item);
           topics.current.set(item.topicId, item);
         }
         else {
           const topic = await getTopic(cardId, channelId, entry.id);
           const item = mapTopicEntry(entry);
+          setTopicItem(cardId, channelId, item);
           topics.current.set(item.topicId, item);
         }
       }

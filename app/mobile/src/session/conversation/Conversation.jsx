@@ -19,7 +19,7 @@ export function Conversation({ navigation, cardId, channelId, closeConversation,
       navigation.setOptions({
         headerTitle: () => (
           <View style={styles.title}>
-            <Text style={styles.titletext}>{ state.subject }</Text>
+            <Text style={styles.titletext} numberOfLines={1} ellipsizeMode={'tail'}>{ state.subject }</Text>
           </View>
         ),
         headerRight: () => (

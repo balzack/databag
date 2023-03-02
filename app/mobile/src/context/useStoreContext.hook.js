@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef, useContext } from 'react';
 import SQLite from "react-native-sqlite-storage";
 
-const DATABAG_DB = 'db_v_110.db';
+const DATABAG_DB = 'db_v_113.db';
 
 export function useStoreContext() {
   const [state, setState] = useState({});
@@ -239,7 +239,7 @@ export function useStoreContext() {
     },
     setChannelTopicItem: async (guid, channelId, topic) => { 
       const { topicId, revision, detailRevision, detail } = topic;
-      await db.current.executeSql(`INSERT OR REPLACE INTO channel_topic_${guid} (channel_id, topic_id, revision, detail_revision, blocked detail, unsealed_detail) values (?, ?, ?, ?, false, ?, null);`, [channelId, topicId, revision, detailRevision, encodeObject(detail)]);
+      await db.current.executeSql(`INSERT OR REPLACE INTO channel_topic_${guid} (channel_id, topic_id, revision, detail_revision, blocked, detail, unsealed_detail) values (?, ?, ?, ?, false, ?, null);`, [channelId, topicId, revision, detailRevision, encodeObject(detail)]);
     },
     setChannelTopicItemUnsealedDetail: async (guid, channelId, topicId, revision, unsealed) => {
       await db.current.executeSql(`UPDATE channel_topic_${guid} set unsealed_detail=? where detail_revision=? AND channel_id=? AND topic_id=?`, [encodeObject(unsealed), revision, channelId, topicId]);
@@ -329,8 +329,8 @@ export function useStoreContext() {
       }));  
     },    
     setCardChannelTopicItem: async (guid, cardId, channelId, topic) => {
-      const { id, revision, data } = topic;
-      await db.current.executeSql(`INSERT OR REPLACE INTO card_channel_topic_${guid} (card_id, channel_id, topic_id, revision, detail_revision, detail, unsealed_detail) values (?, ?, ?, ?, ?, ?, null);`, [cardId, channelId, id, revision, data.detailRevision, encodeObject(data.topicDetail)]);
+      const { topicId, revision, detailRevision, detail } = topic;
+      await db.current.executeSql(`INSERT OR REPLACE INTO card_channel_topic_${guid} (card_id, channel_id, topic_id, revision, detail_revision, detail, unsealed_detail) values (?, ?, ?, ?, ?, ?, null);`, [cardId, channelId, topicId, revision, detailRevision, encodeObject(detail)]);
     },
     setCardChannelTopicItemUnsealedDetail: async (guid, cardId, channelId, topicId, revision, unsealed) => {
       await db.current.executeSql(`UPDATE card_channel_topic_${guid} set unsealed_detail=? where detail_revision=? AND card_id=? AND channel_id=? AND topic_id=?`, [encodeObject(unsealed), revision, cardId, channelId, topicId]);
