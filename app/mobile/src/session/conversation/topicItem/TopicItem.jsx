@@ -12,6 +12,7 @@ import { ImageThumb } from './imageThumb/ImageThumb';
 import { ImageAsset } from './imageAsset/ImageAsset';
 import { AudioAsset } from './audioAsset/AudioAsset';
 import { VideoAsset } from './videoAsset/VideoAsset';
+import Carousel from 'react-native-reanimated-carousel';
 
 export function TopicItem({ item, focused, focus, hosting, sealed, sealKey, remove, update, block, report }) {
 
@@ -207,6 +208,25 @@ export function TopicItem({ item, focused, focus, hosting, sealed, sealKey, remo
         onRequestClose={actions.hideCarousel}
       >
         <View style={styles.modal}>
+          <Carousel
+            loop
+            width={state.width}
+            autoPlay={false}
+            data={state.assets}
+            scrollAnimationDuration={1000}
+            renderItem={({ index }) => (
+              <View style={styles.frame}>
+                { state.assets[index].image && (
+                  <ImageAsset topicId={item.topicId} asset={state.assets[index].image} dismiss={actions.hideCarousel} />
+                )}
+                { state.assets[index].video && (
+                  <VideoAsset topicId={item.topicId} asset={state.assets[index].video} dismiss={actions.hideCarousel} />
+                )}
+                { state.assets[index].audio && (
+                  <AudioAsset topicId={item.topicId} asset={state.assets[index].audio} dismiss={actions.hideCarousel} />
+                )}
+              </View>
+            )} />
         </View>
       </Modal> 
     </View>

@@ -12,9 +12,11 @@ export function VideoAsset({ topicId, asset, dismiss }) {
   return (
     <View style={styles.container}>
       <TouchableOpacity activeOpacity={1} style={styles.container}  onPress={actions.showControls}>
-        <Video source={{ uri: state.url }} style={{ width: state.width, height: state.height }} resizeMode={'cover'} 
-          onReadyForDisplay={(e) => actions.setResolution(e.naturalSize.width, e.naturalSize.height)}
-          onLoad={actions.loaded} isLooping={true} shouldPlay={state.playing} resizeMode="contain" />
+        { state.url && (
+          <Video source={{ uri: state.url }} style={{ width: state.width, height: state.height }} resizeMode={'cover'} 
+            onReadyForDisplay={(e) => { console.log(e) }}
+            onLoad={actions.loaded} isLooping={true} paused={!state.playing} resizeMode="contain" />
+        )}
         { (!state.playing || state.controls) && (
           <View style={{ ...styles.overlay, width: state.width, height: state.height }} />
         )}

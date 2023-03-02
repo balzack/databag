@@ -7,7 +7,7 @@ export function ImageAsset({ topicId, asset, dismiss }) {
   const { state, actions } = useImageAsset(topicId, asset);
 
   return (
-    <TouchableOpacity style={styles.container} activeOpacity={1} onPress={dismiss}>
+    <TouchableOpacity style={styles.container} activeOpacity={1}>
       <Image source={{ uri: state.url }} onLoad={actions.loaded} onError={actions.failed}
           style={{ borderRadius: 4, width: state.imageWidth, height: state.imageHeight }} resizeMode={'cover'} />
       { state.failed && (

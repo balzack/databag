@@ -34,6 +34,7 @@ export function useConversationContext() {
 
   const sync = async () => {
 
+console.log("SYNCING!");
     if (!syncing.current && (reset.current || update.current || force.current || more.current)) {
       const loadMore = more.current;
       const ignoreRevision = force.current;
@@ -92,16 +93,19 @@ export function useConversationContext() {
         if (ignoreRevision || curRevision !== setRevision) {
           try {
             if (!marker) {
+console.log("FIRST GET");
               const delta = await getTopicDelta(cardId, channelId, null, COUNT, null, null);
               await setTopicDelta(cardId, channelId, delta.topics);
               await setMarkerAndSync(cardId, channelId, delta.marker, curRevision);
             }
             if (loadMore && marker) {
+console.log("MORE GET");
               const delta = await getTopicDelta(cardId, channelId, null, COUNT, null, marker);
               await setTopicDelta(cardId, channelId, delta.topics);
               await setTopicMarker(cardId, channelId, delta.marker);
             }
             if (ignoreRevision || curRevision !== setRevision) {
+console.log("UPDATE");
               const delta = await getTopicDelta(cardId, channelId, setRevision, null, marker, null);
               await setTopicDelta(cardId, channelId, delta.topics);
               await setSyncRevision(cardId, channelId, curRevision);
