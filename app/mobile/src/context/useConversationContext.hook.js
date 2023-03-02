@@ -159,6 +159,7 @@ export function useConversationContext() {
     clearConversation: async () => {
       conversationId.current = null;
       reset.current = true;
+      await sync();
     },
     setChannelSubject: async (type, subject) => {
       const { cardId, channelId } = conversationId.current || {};
@@ -392,6 +393,13 @@ export function useConversationContext() {
     else if (channelId) {
       return await channel.actions.getNotifications(channelId);
     }
+  }
+
+  const getTopicAssetUrl = (cardId, channelId, topicId, assetId) => {
+    if (cardId) {
+      return card.actions.getTopicAssetUrl(cardId, channelId, topicId, assetId);
+    }
+    return channel.actions.getTopicAssetUrl(channelId, topicId, assetId);
   }
 
   const mapTopicEntry = (entry) => {

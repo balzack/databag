@@ -25,7 +25,22 @@ export function useConversation() {
     const cards = card.state.cards;
     cardImageUrl = card.actions.getCardImageUrl;
     const { logo, subject } = getChannelSubjectLogo(cardId, profileGuid, channel, cards, cardImageUrl);
-    updateState({ logo, subject });
+
+    const items = Array.from(conversation.state.topics.values());
+    const sorted = items.sort((a, b) => {
+      const aTimestamp = a?.detail?.created;
+      const bTimestamp = b?.detail?.created;
+      if(aTimestamp === bTimestamp) {
+        return 0;
+      }
+      if(aTimestamp == null || aTimestamp < bTimestamp) {
+        return 1;
+      }
+      return -1;
+    });
+    const filtered = sorted.filter(item => !(item.blocked === 1));
+
+    updateState({ logo, subject, topics: filtered });
   }, [conversation.state, card.state, profile.state]);
     
 

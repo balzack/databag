@@ -8,6 +8,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+    flexShrink: 1,
   },
   header: {
     display: 'flex',
@@ -37,6 +38,7 @@ export const styles = StyleSheet.create({
   },
   titlebutton: {
     paddingRight: 8,
+    width: 32,
   },
   headerclose: {
     flexGrow: 1,
@@ -46,16 +48,19 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     flexGrow: 1,
+    height: '100%',
   },
   thread: {
     display: 'flex',
     flexDirection: 'column',
     flexGrow: 1,
+    flexShrink: 1,
   },
   messages: {
     display: 'flex',
     flexDirection: 'column',
     flexGrow: 1,
+    flexShrink: 1,
   },
 });
 

@@ -1,5 +1,5 @@
-import { useEffect, useState, useContext } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { useRef, useEffect, useState, useContext } from 'react';
+import { FlatList, View, Text, TouchableOpacity } from 'react-native';
 import { ConversationContext } from 'context/ConversationContext';
 import { useConversation } from './useConversation.hook';
 import { styles } from './Conversation.styled';
@@ -7,12 +7,37 @@ import { Colors } from 'constants/Colors';
 import Ionicons from 'react-native-vector-icons/AntDesign';
 import { Logo } from 'utils/Logo';
 import { AddTopic } from './addTopic/AddTopic';
+import { TopicItem } from './topicItem/TopicItem';
 
 export function Conversation({ navigation, cardId, channelId, closeConversation, openDetails }) {
 
   const [ready, setReady] = useState(false);
   const conversation = useContext(ConversationContext);
   const { state, actions } = useConversation();
+  const ref = useRef();
+
+  const latch = () => {
+    if (!state.momentum) {
+      actions.latch();
+      ref.current.scrollToIndex({ animated: true, index: 0 });
+    }
+  }
+
+  const updateTopic = async () => {
+    try {
+      await actions.updateTopic();
+      actions.hideEdit();
+    }
+    catch (err) {
+      console.log(err);
+      Alert.alert(
+        'Failed to Update Message',
+        'Please try again.',
+      )
+    }
+  }
+
+  const noop = () => {};
 
   useEffect(() => {
     if (navigation) {
@@ -23,8 +48,8 @@ export function Conversation({ navigation, cardId, channelId, closeConversation,
           </View>
         ),
         headerRight: () => (
-          <TouchableOpacity onPress={openDetails}>
-            <Ionicons name={'setting'} size={24} color={Colors.primary} style={styles.titlebutton} />
+          <TouchableOpacity onPress={openDetails} style={styles.titlebutton}>
+            <Ionicons name={'setting'} size={24} color={Colors.primary} />
           </TouchableOpacity>
         ),
       });
@@ -58,7 +83,18 @@ export function Conversation({ navigation, cardId, channelId, closeConversation,
       )}
       <View style={styles.thread}>
         <View style={styles.messages}>
-          <Text>Conversation</Text>
+          <FlatList style={styles.conversation}
+             contentContainerStyle={styles.topics}
+             data={state.topics}
+             inverted={true}
+             initialNumToRender={16}
+             renderItem={({item}) => <TopicItem item={item} focused={item.topicId === state.focus} 
+               focus={() => actions.setFocus(item.topicId)} hosting={state.host == null}
+               sealed={state.sealed} sealKey={state.sealKey}
+               remove={actions.removeTopic} update={actions.editTopic} block={actions.blockTopic}
+               report={actions.reportTopic} />}
+            keyExtractor={item => item.topicId}
+          />
         </View>
         <AddTopic />
       </View>
