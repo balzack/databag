@@ -87,16 +87,18 @@ export function useConversationContext() {
           if (!curTopicMarker.current) {
             const delta = await getTopicDelta(cardId, channelId, null, COUNT, null, null);
             await setTopicDelta(cardId, channelId, delta.topics);
-            await setMarkerAndSync(cardId, channelId, delta.marker, delta.revision);
-            curTopicMarker.current = delta.marker;
+            const marker = delta.marker ? delta.marker : 1;
+            await setMarkerAndSync(cardId, channelId, marker, delta.revision);
+            curTopicMarker.current = marker;
             curSyncRevision.current = delta.revision;
             updateState({ loaded: true, offsync: false, topics: topics.current, card: cardValue, channel: channelValue });
           }
           else if (loadMore && marker) {
             const delta = await getTopicDelta(cardId, channelId, null, COUNT, null, curTopicMarker.current);
+            const marker = delta.marker ? delta.marker : 1;
             await setTopicDelta(cardId, channelId, delta.topics);
-            await setTopicMarker(cardId, channelId, delta.marker);
-            curTopicMarker.current = delta.marker;
+            await setTopicMarker(cardId, channelId, marker);
+            curTopicMarker.current = marker;
             updateState({ loaded: true, offsync: false, topics: topics.current, card: cardValue, channel: channelValue });
           }
           else if (ignoreRevision || topicRevision > curSyncRevision.current) {
@@ -105,8 +107,6 @@ export function useConversationContext() {
             await setSyncRevision(cardId, channelId, delta.revision);
             curSyncRevision.current = delta.revision;
             updateState({ loaded: true, offsync: false, topics: topics.current, card: cardValue, channel: channelValue });
-
-console.log("HEADER", delta);
           }
           else {
             updateState({ loaded: true, offsync: false, topics: topics.current, card: cardValue, channel: channelValue });
@@ -419,7 +419,6 @@ console.log("HEADER", delta);
       topic[field] = value;
     }
     topics.current.set(topicId, { ...topic });
-    updateState({ topics: topics.current });
   };
 
   return { state, actions }

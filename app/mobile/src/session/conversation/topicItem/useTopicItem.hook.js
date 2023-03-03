@@ -7,7 +7,7 @@ import moment from 'moment';
 import { useWindowDimensions } from 'react-native';
 import Colors from 'constants/Colors';
 import { getCardByGuid } from 'context/cardUtil';
-import { getChannelSeals, isUnsealed, getContentKey, decryptTopicSubject } from 'context/sealUtil';
+import { decryptTopicSubject } from 'context/sealUtil';
 
 export function useTopicItem(item, hosting, remove, contentKey) {
 
@@ -118,9 +118,26 @@ export function useTopicItem(item, hosting, remove, contentKey) {
       }
     }
     else if (dataType === 'sealedtopic') {
-      if (unsealedDetail) {
+      let unsealed = unsealedDetail;
+      if (!unsealed && contentKey) {
+        try {
+          unsealed = decryptTopicSubject(detail?.data, contentKey);
+          (async () => {
+            try {
+              await conversation.actions.unsealTopic(topicId, revision, unsealed);
+            }
+            catch(err) {
+              console.log(err);
+            }
+          })();
+        }
+        catch(err) {
+          console.log(err);
+        }
+      }
+      if (unsealed) {
         sealed = false;
-        parsed = unsealedDetail.message;
+        parsed = unsealed.message;
         message = parsed?.text;
         if (parsed?.textSize === 'small') {
           fontSize = 10;
@@ -140,7 +157,6 @@ export function useTopicItem(item, hosting, remove, contentKey) {
       }
       else {
         sealed = true;
-        unsealTopic(topicId, revision, detail);
       }
     }
 
@@ -162,18 +178,15 @@ export function useTopicItem(item, hosting, remove, contentKey) {
     const deletable = editable || hosting;
 
     updateState({ logo, name, nameSet, known, sealed, message, fontSize, fontColor, timestamp, transform, status, assets, deletable, editable, editData: parsed, editMessage: message });
-  }, [conversation.state, card.state, account.state, item]);
+  }, [conversation.state, card.state, account.state, item, contentKey]);
 
   const unsealTopic = async (topicId, revision, topicDetail) => {
     try {
-console.log("UNSEAL", topicId);
       const channelDetail = conversation.state.channel?.detail;
       const seals = getChannelSeals(channelDetail?.data);
       const sealKey = account.state.sealKey;
       if (isUnsealed(seals, sealKey)) {
         const contentKey = await getContentKey(seals, sealKey);
-        const unsealed = decryptTopicSubject(topicDetail.data, contentKey);
-        await conversation.actions.unsealTopic(topicId, revision, unsealed);
       }
     }
     catch(err) {

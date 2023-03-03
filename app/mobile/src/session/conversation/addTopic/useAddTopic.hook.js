@@ -5,7 +5,7 @@ import Colors from 'constants/Colors';
 import { getChannelSeals, getContentKey, encryptTopicSubject } from 'context/sealUtil';
 import { AccountContext } from 'context/AccountContext';
 
-export function useAddTopic(sealed, sealKey) {
+export function useAddTopic(contentKey) {
 
   const [state, setState] = useState({
     message: null,
@@ -21,6 +21,7 @@ export function useAddTopic(sealed, sealKey) {
     enableImage: false,
     enableAudio: false,
     enableVideo: false,
+    locked: true,
   });
 
   const assetId = useRef(0);
@@ -33,7 +34,8 @@ export function useAddTopic(sealed, sealKey) {
 
   useEffect(() => {
     const { enableVideo, enableAudio, enableImage } = conversation.state.channel?.detail || {};
-    updateState({ enableImage, enableAudio, enableVideo });
+    const locked = conversation.state.channel?.detail?.dataType === 'superbasic' ? false : true;
+    updateState({ enableImage, enableAudio, enableVideo, locked });
   }, [conversation.state]);
 
   const actions = {
@@ -107,20 +109,12 @@ export function useAddTopic(sealed, sealKey) {
       updateState({ color, colorSet: true });
     },
     addTopic: async () => {
-      if (!state.busy) {
+      if (!state.busy && (!state.locked || contentKey)) {
         try {
           updateState({ busy: true });
          
-          let contentKey; 
-          const type = conversation.state.channel?.detail?.dataType === 'superbasic' ? 'superbasictopic' : 'sealedtopic';
-          if (type === 'sealedtopic') {
-            const channelDetail = conversation.state.channel?.detail;
-            const seals = getChannelSeals(channelDetail?.data);
-            const sealKey = account.state.sealKey;
-            contentKey = await getContentKey(seals, sealKey);
-          }
           const assemble = (assets) => {
-            if (type === 'superbasictopic') {
+            if (!state.locked) {
               if (assets?.length) {
                 return {
                   assets,
@@ -146,6 +140,7 @@ export function useAddTopic(sealed, sealKey) {
               return encryptTopicSubject({ message }, contentKey);
             }
           };
+          const type = state.locked ? "sealedtopic" : "superbasictopic";
           await conversation.actions.addTopic(type, assemble, state.assets);
           updateState({ busy: false, assets: [], message: null,
             size: 'medium', sizeSet: false, textSize: 14,

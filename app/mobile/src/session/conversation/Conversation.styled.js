@@ -67,5 +67,15 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  empty: {
+    display: 'flex',
+    flexGrow: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  emptytext: {
+    fontSize: 18,
+    color: Colors.disabled,
+  },
 });
 

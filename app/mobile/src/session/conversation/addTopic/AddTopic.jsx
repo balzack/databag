@@ -13,9 +13,9 @@ import { VideoFile } from './videoFile/VideoFile';
 import { AudioFile } from './audioFile/AudioFile';
 import { ImageFile } from './imageFile/ImageFile';
 
-export function AddTopic({ sealed, sealKey }) {
+export function AddTopic({ contentKey }) {
 
-  const { state, actions } = useAddTopic(sealed, sealKey);
+  const { state, actions } = useAddTopic(contentKey);
   const message = useRef();
 
   const addImage = async () => {
@@ -132,22 +132,22 @@ export function AddTopic({ sealed, sealKey }) {
           onSubmitEditing={sendMessage} returnKeyType="send"
           autoCapitalize="sentences" placeholder="New Message" multiline={true} />
       <View style={styles.addButtons}>
-        { !sealed && state.enableImage && (
+        { !state.locked && state.enableImage && (
           <TouchableOpacity style={styles.addButton} onPress={addImage}>
             <AntIcons name="picture" size={20} color={Colors.text} />
           </TouchableOpacity>
         )}
-        { !sealed && state.enableVideo && (
+        { !state.locked && state.enableVideo && (
           <TouchableOpacity style={styles.addButton} onPress={addVideo}>
             <MatIcons name="video-outline" size={24} color={Colors.text} />
           </TouchableOpacity>
         )}
-        { !sealed && state.enableAudio && (
+        { !state.locked && state.enableAudio && (
           <TouchableOpacity style={styles.addButton} onPress={addAudio}>
             <MatIcons name="music-box-outline" size={20} color={Colors.text} />
           </TouchableOpacity>
         )}
-        { !sealed && (
+        { !state.locked && (
           <View style={styles.divider} />
         )}
         <TouchableOpacity style={styles.addButton} onPress={actions.showFontSize}>
@@ -161,10 +161,13 @@ export function AddTopic({ sealed, sealKey }) {
           { state.busy && (
             <ActivityIndicator color={Colors.primary} />
           )}
-          { !state.busy && (state.message || state.assets.length > 0) && (
+          { state.locked && !contentKey && (
+            <MatIcons name="lock" size={20} color={Colors.lightgrey} />
+          )}
+          { !state.busy && (!state.locked || contentKey) && (state.message || state.assets.length > 0) && (
             <MatIcons name="send-outline" size={20} color={Colors.text} />
           )}
-          { !state.busy && !(state.message || state.assets.length > 0) && (
+          { !state.busy && (!state.locked || contentKey) && !(state.message || state.assets.length > 0) && (
             <MatIcons name="send-outline" size={20} color={Colors.lightgrey} />
           )}
         </TouchableOpacity>

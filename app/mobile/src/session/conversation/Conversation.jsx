@@ -56,7 +56,7 @@ export function Conversation({ navigation, cardId, channelId, closeConversation,
         ),
       });
     }
-  }, [navigation, state.subject]);
+  }, [navigation, state.subject, state.loaded]);
 
   useEffect(() => {
     return () => { closeConversation(); };
@@ -85,7 +85,7 @@ export function Conversation({ navigation, cardId, channelId, closeConversation,
               <ActivityIndicator color={Colors.grey} size="large" />
             </View>
           )}
-          { state.loaded && (
+          { state.loaded && state.topics.length !== 0 && (
             <FlatList style={styles.conversation}
                contentContainerStyle={styles.topics}
                data={state.topics}
@@ -93,14 +93,18 @@ export function Conversation({ navigation, cardId, channelId, closeConversation,
                initialNumToRender={16}
                renderItem={({item}) => <TopicItem item={item} focused={item.topicId === state.focus} 
                  focus={() => actions.setFocus(item.topicId)} hosting={state.host == null}
-                 sealed={state.sealed} sealKey={state.sealKey}
                  remove={actions.removeTopic} update={actions.editTopic} block={actions.blockTopic}
-                 report={actions.reportTopic} />}
+                 report={actions.reportTopic} contentKey={state.contentKey} /> }
               keyExtractor={item => item.topicId}
             />
           )}
+          { state.loaded && state.topics.length === 0 && (
+            <View style={styles.empty}>
+              <Text style={styles.emptytext}>Empty Topic</Text>
+            </View>
+          )}
         </View>
-        <AddTopic />
+        <AddTopic contentKey={state.contentKey} />
       </View>
     </View>
   );
