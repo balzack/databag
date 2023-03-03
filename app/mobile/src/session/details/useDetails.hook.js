@@ -29,6 +29,7 @@ export function useDetails() {
     deleteBusy: false,
     blockBusy: false,
     unknown: 0,
+    notification: null,
   });
 
   const card = useContext(CardContext);

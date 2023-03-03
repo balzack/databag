@@ -2,6 +2,8 @@ import { useState, useRef, useEffect, useContext } from 'react';
 import { ConversationContext } from 'context/ConversationContext';
 import { Image } from 'react-native';
 import Colors from 'constants/Colors';
+import { getChannelSeals, getContentKey, encryptTopicSubject } from 'context/sealUtil';
+import { AccountContext } from 'context/AccountContext';
 
 export function useAddTopic(sealed, sealKey) {
 
@@ -23,6 +25,7 @@ export function useAddTopic(sealed, sealKey) {
 
   const assetId = useRef(0);
   const conversation = useContext(ConversationContext);
+  const account = useContext(AccountContext);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
@@ -107,17 +110,43 @@ export function useAddTopic(sealed, sealKey) {
       if (!state.busy) {
         try {
           updateState({ busy: true });
-          let message = {
-            text: state.message,
-            textColor: state.colorSet ? state.color : null,
-            textSize: state.sizeSet ? state.size : null,
+         
+          let contentKey; 
+          const type = conversation.state.channel?.detail?.dataType === 'superbasic' ? 'superbasictopic' : 'sealedtopic';
+          if (type === 'sealedtopic') {
+            const channelDetail = conversation.state.channel?.detail;
+            const seals = getChannelSeals(channelDetail?.data);
+            const sealKey = account.state.sealKey;
+            contentKey = await getContentKey(seals, sealKey);
+          }
+          const assemble = (assets) => {
+            if (type === 'superbasictopic') {
+              if (assets?.length) {
+                return {
+                  assets,
+                  text: state.message,
+                  textColor: state.colorSet ? state.color : null,
+                  textSize: state.sizeSet ? state.size : null,
+                }
+              }
+              else {
+                return {
+                  text: state.message,
+                  textColor: state.colorSet ? state.color : null,
+                  textSize: state.sizeSet ? state.size : null,
+                }
+              }
+            }
+            else {
+              const message = {
+                text: state.message,
+                textColor: state.textColorSet ? state.textColor : null,
+                textSize: state.textSizeSet ? state.textSize : null,
+              }
+              return encryptTopicSubject({ message }, contentKey);
+            }
           };
-          if (sealed) {
-            await conversation.actions.addSealedTopic(message, sealKey);
-          }
-          else {
-            await conversation.actions.addTopic(message, state.assets);
-          }
+          await conversation.actions.addTopic(type, assemble, state.assets);
           updateState({ busy: false, assets: [], message: null,
             size: 'medium', sizeSet: false, textSize: 14,
             color: Colors.text, colorSet: false,

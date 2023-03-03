@@ -361,7 +361,7 @@ export function useCardContext() {
       return await setCardCloseMessage(server, message);
     },
     getCardImageUrl: (cardId) => {
-      const { profileRevision } = cards.current.get(cardId)?.card || { };
+      const { profileRevision } = cards.current.get(cardId)?.card || {};
       const { server, token } = access.current;
       return getCardImageUrl(server, token, cardId, profileRevision);
     },
@@ -371,17 +371,17 @@ export function useCardContext() {
       return await removeContactChannel(profile?.node, cardToken, channelId);
     },
     addTopic: async (cardId, channelId, type, message, files) => {
-      const { detail, profile } = cards.current.get(cardId) || {};
+      const { detail, profile } = cards.current.get(cardId)?.card || {};
       const cardToken = `${profile?.guid}.${detail?.token}`;
       const node = profile?.node;
       if (files?.length > 0) {
-        const topicId = await addContactChannelTopic(node, token, channelId, null, null, null);
-        upload.actions.addContactTopic(node, token, cardId, channelId, topicId, files, async (assets) => {
+        const topicId = await addContactChannelTopic(node, cardToken, channelId, null, null, null);
+        upload.actions.addContactTopic(node, cardToken, cardId, channelId, topicId, files, async (assets) => {
           const subject = message(assets);
-          await setContactChannelTopicSubject(node, token, channelId, topicId, type, subject);
+          await setContactChannelTopicSubject(node, cardToken, channelId, topicId, type, subject);
         }, async () => {
           try {
-            await removeContactChannelTopic(node, token, channelId, topicId);
+            await removeContactChannelTopic(node, cardToken, channelId, topicId);
           }
           catch (err) {
             console.log(err);
@@ -390,7 +390,7 @@ export function useCardContext() {
       }
       else {
         const subject = message([]);
-        await addContactChannelTopic(node, token, channelId, type, subject, []);
+        await addContactChannelTopic(node, cardToken, channelId, type, subject, []);
       }
     },
     removeTopic: async (cardId, channelId, topicId) => {

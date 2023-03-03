@@ -205,7 +205,9 @@ export function Details({ channel, clearConversation }) {
           <TouchableOpacity onPress={() => setNotifications(!state.notification)} activeOpacity={1}>
             <Text style={styles.notifyText}>Enable Notifications</Text>
           </TouchableOpacity>
-          <Switch style={styles.switch} value={state.notification} onValueChange={setNotifications} trackColor={styles.track}/>
+          { state.notification != null && (
+            <Switch style={styles.switch} value={state.notification} onValueChange={setNotifications} trackColor={styles.track}/>
+          )}
         </View>
 
       </View>

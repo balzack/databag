@@ -159,7 +159,7 @@ export function AddTopic({ sealed, sealKey }) {
         <View style={styles.space} />
         <TouchableOpacity style={styles.addButton} onPress={sendMessage}>
           { state.busy && (
-            <ActivityIndicator color={Colors.white} />
+            <ActivityIndicator color={Colors.primary} />
           )}
           { !state.busy && (state.message || state.assets.length > 0) && (
             <MatIcons name="send-outline" size={20} color={Colors.text} />

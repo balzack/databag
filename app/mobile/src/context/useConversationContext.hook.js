@@ -61,7 +61,6 @@ export function useConversationContext() {
         const cardValue = cardId ? card.state.cards.get(cardId) : null;
         const channelValue = cardId ? cardValue?.channels.get(channelId) : channel.state.channels.get(channelId);
         const { topicRevision } = channelValue || {};
-        let setChannel = false;
 
         if (channelValue) {
           if (!loaded.current) {
@@ -75,9 +74,6 @@ export function useConversationContext() {
             curSyncRevision.current = syncRevision;
             curTopicMarker.current = topicMarker;
             loaded.current = true;
-          }
-          else {
-            setChannel = true;
           }
         }
         else {
@@ -93,25 +89,20 @@ export function useConversationContext() {
             await setMarkerAndSync(cardId, channelId, delta.marker, topicRevision);
             curTopicMarker.current = delta.marker;
             curSyncRevision.current = topicRevision;
-            updateState({ offsync: false, topics: topics.current, card: cardValue, channel: channelValue });
           }
-          else if (loadMore && marker) {
+          if (loadMore && marker) {
             const delta = await getTopicDelta(cardId, channelId, null, COUNT, null, curTopicMarker.current);
             await setTopicDelta(cardId, channelId, delta.topics);
             await setTopicMarker(cardId, channelId, delta.marker);
             curTopicMarker.current = delta.marker;
-            updateState({ offsync: false, topics: topics.current, card: cardValue, channel: channelValue });
           }
-          else if (ignoreRevision || topicRevision !== curSyncRevision.current) {
+          if (ignoreRevision || topicRevision > curSyncRevision.current) {
             const delta = await getTopicDelta(cardId, channelId, curSyncRevision.current, null, curTopicMarker.current, null);
             await setTopicDelta(cardId, channelId, delta.topics);
-            await setSyncRevision(cardId, channelId, topicRevision);
-            curSyncRevision.current = topicRevision;
-            updateState({ offsync: false, topics: topics.current, card: cardValue, channel: channelValue });
+            await setSyncRevision(cardId, channelId, delta.revision);
+            curSyncRevision.current = delta.revision;
           }
-          else if (setChannel) {
-            updateState({ offsync: false, topics: topics.current, card: cardValue, channel: channelValue });
-          }
+          updateState({ offsync: false, topics: topics.current, card: cardValue, channel: channelValue });
         }
         catch(err) {
           console.log(err);

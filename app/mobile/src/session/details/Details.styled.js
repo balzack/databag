@@ -14,6 +14,7 @@ export const styles = StyleSheet.create({
     paddingTop: 16,
     flexShrink: 1,
     minWidth: 0,
+    maxWidth: '80%',
   },
   info: {
     paddingLeft: 8,
