@@ -77,5 +77,15 @@ export const styles = StyleSheet.create({
     fontSize: 18,
     color: Colors.disabled,
   },
+
+  topics: {
+    paddingBottom: 32,
+  },
+  conversation: {
+    flexShrink: 1,
+    flexGrow: 1,
+    minHeight: 0,
+    paddingTop: 8,
+  },
 });
 

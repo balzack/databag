@@ -167,7 +167,7 @@ export function useChannelContext() {
         const topicId = await addChannelTopic(server, token, channelId, null, null, null);
         upload.actions.addTopic(server, token, channelId, topicId, files, async (assets) => {
           const subject = message(assets);
-          await setChannelTopicSubject(server, token, channelId, topicId, type, sbuject);
+          await setChannelTopicSubject(server, token, channelId, topicId, type, subject);
         }, async () => {
           try {
             await removeChannelTopic(server, token, channelId, topicId);
