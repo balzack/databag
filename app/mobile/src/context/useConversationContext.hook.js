@@ -7,7 +7,7 @@ import { ProfileContext } from 'context/ProfileContext';
 import CryptoJS from 'crypto-js';
 
 export function useConversationContext() {
-  const COUNT = 64;
+  const COUNT = 48;
 
   const [state, setState] = useState({
     loaded: false,

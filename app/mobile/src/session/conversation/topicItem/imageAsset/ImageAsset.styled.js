@@ -21,5 +21,14 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: Colors.divider,
   },
+  close: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    borderRadius: 4,
+    backgroundColor: Colors.lightgrey,
+    padding: 8,
+    margin: 16,
+  },
 })
 
