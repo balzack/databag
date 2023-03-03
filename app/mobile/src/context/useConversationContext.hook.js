@@ -10,6 +10,7 @@ export function useConversationContext() {
   const COUNT = 64;
 
   const [state, setState] = useState({
+    loaded: false,
     offsync: false,
     topics: new Map(),
     card: null,
@@ -51,9 +52,7 @@ export function useConversationContext() {
         reset.current = false;
         loaded.current = false;
         topics.current = new Map();
-        if (!conversation) {
-          updateState({ offsync: false, topics: topics.current, card: null, channel: null });
-        }
+        updateState({ loaded: false, offsync: false, topics: topics.current, card: null, channel: null });
       }
 
       if (conversation) {
@@ -68,12 +67,14 @@ export function useConversationContext() {
             for (let topic of topicItems) {
               topics.current.set(topic.topicId, topic);
             }
-            updateState({ offsync: false, topics: topics.current, card: cardValue, channel: channelValue });
 
             const { syncRevision, topicMarker } = channelValue;
             curSyncRevision.current = syncRevision;
             curTopicMarker.current = topicMarker;
             loaded.current = true;
+          }
+          else {
+            setChannel = true;
           }
         }
         else {
@@ -86,27 +87,34 @@ export function useConversationContext() {
           if (!curTopicMarker.current) {
             const delta = await getTopicDelta(cardId, channelId, null, COUNT, null, null);
             await setTopicDelta(cardId, channelId, delta.topics);
-            await setMarkerAndSync(cardId, channelId, delta.marker, topicRevision);
+            await setMarkerAndSync(cardId, channelId, delta.marker, delta.revision);
             curTopicMarker.current = delta.marker;
-            curSyncRevision.current = topicRevision;
+            curSyncRevision.current = delta.revision;
+            updateState({ loaded: true, offsync: false, topics: topics.current, card: cardValue, channel: channelValue });
           }
-          if (loadMore && marker) {
+          else if (loadMore && marker) {
             const delta = await getTopicDelta(cardId, channelId, null, COUNT, null, curTopicMarker.current);
             await setTopicDelta(cardId, channelId, delta.topics);
             await setTopicMarker(cardId, channelId, delta.marker);
             curTopicMarker.current = delta.marker;
+            updateState({ loaded: true, offsync: false, topics: topics.current, card: cardValue, channel: channelValue });
           }
-          if (ignoreRevision || topicRevision > curSyncRevision.current) {
+          else if (ignoreRevision || topicRevision > curSyncRevision.current) {
             const delta = await getTopicDelta(cardId, channelId, curSyncRevision.current, null, curTopicMarker.current, null);
             await setTopicDelta(cardId, channelId, delta.topics);
             await setSyncRevision(cardId, channelId, delta.revision);
             curSyncRevision.current = delta.revision;
+            updateState({ loaded: true, offsync: false, topics: topics.current, card: cardValue, channel: channelValue });
+
+console.log("HEADER", delta);
           }
-          updateState({ offsync: false, topics: topics.current, card: cardValue, channel: channelValue });
+          else {
+            updateState({ loaded: true, offsync: false, topics: topics.current, card: cardValue, channel: channelValue });
+          }
         }
         catch(err) {
           console.log(err);
-          updateState({ offysnc: true });
+          updateState({ loaded: true, offysnc: true });
           syncing.current = false;
           return
         }

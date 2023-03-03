@@ -166,6 +166,7 @@ export function useTopicItem(item, hosting, remove, contentKey) {
 
   const unsealTopic = async (topicId, revision, topicDetail) => {
     try {
+console.log("UNSEAL", topicId);
       const channelDetail = conversation.state.channel?.detail;
       const seals = getChannelSeals(channelDetail?.data);
       const sealKey = account.state.sealKey;

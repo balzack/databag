@@ -9,6 +9,8 @@ export function useConversation() {
   const [state, setState] = useState({
     subject: null,
     logo: null,
+    topic: [],
+    loaded: false,
   });
 
   const updateState = (value) => {
@@ -21,6 +23,7 @@ export function useConversation() {
   const account = useContext(AccountContext);
 
   useEffect(() => {
+    const loaded = conversation.state.loaded;
     const cardId = conversation.state.card?.cardId;
     const profileGuid = profile.state.identity?.guid;
     const channel = conversation.state.channel;
@@ -42,7 +45,7 @@ export function useConversation() {
     });
     const filtered = sorted.filter(item => !(item.blocked === 1));
 
-    updateState({ logo, subject, topics: filtered });
+    updateState({ loaded, logo, subject, topics: filtered });
   }, [conversation.state, profile.state]);
     
 

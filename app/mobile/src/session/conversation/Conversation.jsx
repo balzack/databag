@@ -1,5 +1,5 @@
 import { useRef, useEffect, useState, useContext } from 'react';
-import { FlatList, View, Text, TouchableOpacity } from 'react-native';
+import { ActivityIndicator, FlatList, View, Text, TouchableOpacity } from 'react-native';
 import { ConversationContext } from 'context/ConversationContext';
 import { useConversation } from './useConversation.hook';
 import { styles } from './Conversation.styled';
@@ -44,7 +44,9 @@ export function Conversation({ navigation, cardId, channelId, closeConversation,
       navigation.setOptions({
         headerTitle: () => (
           <View style={styles.title}>
-            <Text style={styles.titletext} numberOfLines={1} ellipsizeMode={'tail'}>{ state.subject }</Text>
+            { state.loaded && (
+              <Text style={styles.titletext} numberOfLines={1} ellipsizeMode={'tail'}>{ state.subject }</Text>
+            )}
           </View>
         ),
         headerRight: () => (
@@ -64,7 +66,7 @@ export function Conversation({ navigation, cardId, channelId, closeConversation,
     <View style={styles.container}>
       { !navigation && (
         <View style={styles.header}>
-          { ready && (
+          { state.loaded && (
             <TouchableOpacity style={styles.headertitle} onPress={openDetails}>
               <Logo src={state.logo} width={32} height={32} radius={2} />
               <Text style={styles.titletext} numberOfLines={1} ellipsizeMode={'tail'}>{ state.subject }</Text>
@@ -78,18 +80,25 @@ export function Conversation({ navigation, cardId, channelId, closeConversation,
       )}
       <View style={styles.thread}>
         <View style={styles.messages}>
-          <FlatList style={styles.conversation}
-             contentContainerStyle={styles.topics}
-             data={state.topics}
-             inverted={true}
-             initialNumToRender={16}
-             renderItem={({item}) => <TopicItem item={item} focused={item.topicId === state.focus} 
-               focus={() => actions.setFocus(item.topicId)} hosting={state.host == null}
-               sealed={state.sealed} sealKey={state.sealKey}
-               remove={actions.removeTopic} update={actions.editTopic} block={actions.blockTopic}
-               report={actions.reportTopic} />}
-            keyExtractor={item => item.topicId}
-          />
+          { !state.loaded && (
+            <View style={styles.loading}>
+              <ActivityIndicator color={Colors.grey} size="large" />
+            </View>
+          )}
+          { state.loaded && (
+            <FlatList style={styles.conversation}
+               contentContainerStyle={styles.topics}
+               data={state.topics}
+               inverted={true}
+               initialNumToRender={16}
+               renderItem={({item}) => <TopicItem item={item} focused={item.topicId === state.focus} 
+                 focus={() => actions.setFocus(item.topicId)} hosting={state.host == null}
+                 sealed={state.sealed} sealKey={state.sealKey}
+                 remove={actions.removeTopic} update={actions.editTopic} block={actions.blockTopic}
+                 report={actions.reportTopic} />}
+              keyExtractor={item => item.topicId}
+            />
+          )}
         </View>
         <AddTopic />
       </View>

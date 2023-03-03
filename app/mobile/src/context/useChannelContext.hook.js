@@ -230,7 +230,7 @@ export function useChannelContext() {
     },
     setMarkerAndSync: async (channelId, marker, revision) => {
       const { guid } = access.current;
-      await store.actions.setChannelItemMarkerAndSync(guid, channelId, revision);
+      await store.actions.setChannelItemMarkerAndSync(guid, channelId, marker, revision);
       setChannelField(channelId, 'topicMarker', marker, 'syncRevision', revision);
     },
     setChannelFlag: async (channelId) => {
