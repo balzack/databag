@@ -107,7 +107,7 @@ export function useBlockedMessages() {
     unblock: async (cardId, channelId, topicId) => {
       const id = `${cardId}:${channelId}:${topicId}`;
       if (cardId) {
-        card.actions.clearChannelTopicFlag(cardId, channelId, topicId);
+        card.actions.clearTopicFlag(cardId, channelId, topicId);
       }
       else {
         channel.actions.clearTopicFlag(channelId, topicId);

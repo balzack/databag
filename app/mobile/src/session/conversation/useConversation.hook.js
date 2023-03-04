@@ -129,6 +129,12 @@ export function useConversation() {
         }
       }    
     },
+    reportTopic: async (topicId) => {
+      await conversation.actions.addTopicAlert(topicId);
+    },
+    blockTopic: async (topicId) => {
+      await conversation.actions.setTopicFlag(topicId);
+    },
     removeTopic: async (topicId) => {
       await conversation.actions.removeTopic(topicId);
     },

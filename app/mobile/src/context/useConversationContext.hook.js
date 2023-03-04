@@ -315,7 +315,8 @@ export function useConversationContext() {
       else if (channelId) {
         channel.actions.setTopicFlag(channelId, topicId);
       }
-      setTopicField(topicId, 'blocked', true);
+      setTopicField(topicId, 'blocked', 1);
+      updateState({ topics: topics.current });
     },
     clearTopicFlag: async (topicId) => {
       const { cardId, channelId } = conversationId.current || {};
@@ -325,7 +326,8 @@ export function useConversationContext() {
       else if (channelId) {
         channel.actions.clearTopicFlag(channelId, topicId);
       }
-      setTopicField(topicId, 'blocked', false);
+      setTopicField(topicId, 'blocked', 0);
+      updateState({ topics: topics.current });
     },
     getTopicAssetUrl: (topicId, assetId) => {
       const { cardId, channelId } = conversationId.current || {};

@@ -245,11 +245,11 @@ export function useChannelContext() {
     },
     setTopicFlag: async (channelId, topicId) => {
       const { guid } = access.current;
-      await store.actions.setChannelTopicBlocked(guid, channelId, topicId, true);
+      await store.actions.setChannelTopicBlocked(guid, channelId, topicId, 1);
     },
     clearTopicFlag: async (channelId, topicId) => {
       const { guid } = access.current;
-      await store.actions.setChannelTopicBlocked(guid, channelId, topicId, false);
+      await store.actions.setChannelTopicBlocked(guid, channelId, topicId, 0);
     },
     addChannelAlert: async (channelId) => {
       const { server, guid } = access.current;
