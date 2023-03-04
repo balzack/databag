@@ -1,5 +1,5 @@
 import { useRef, useEffect, useState, useContext } from 'react';
-import { ActivityIndicator, FlatList, View, Text, TouchableOpacity } from 'react-native';
+import { Alert, Modal, KeyboardAvoidingView, ActivityIndicator, FlatList, View, TextInput, Text, TouchableOpacity } from 'react-native';
 import { ConversationContext } from 'context/ConversationContext';
 import { useConversation } from './useConversation.hook';
 import { styles } from './Conversation.styled';
@@ -11,17 +11,7 @@ import { TopicItem } from './topicItem/TopicItem';
 
 export function Conversation({ navigation, cardId, channelId, closeConversation, openDetails }) {
 
-  const [ready, setReady] = useState(true);
-  const conversation = useContext(ConversationContext);
   const { state, actions } = useConversation();
-  const ref = useRef();
-
-  const latch = () => {
-    if (!state.momentum) {
-      actions.latch();
-      ref.current.scrollToIndex({ animated: true, index: 0 });
-    }
-  }
 
   const updateTopic = async () => {
     try {
@@ -106,6 +96,36 @@ export function Conversation({ navigation, cardId, channelId, closeConversation,
         </View>
         <AddTopic contentKey={state.contentKey} />
       </View>
+      <Modal
+          animationType="fade"
+          transparent={true}
+          visible={state.editing}
+          supportedOrientations={['portrait', 'landscape']}
+          onRequestClose={actions.hideEdit}
+      >
+        <KeyboardAvoidingView behavior="height" style={styles.modal}>
+          <View style={styles.editContainer}>
+            <Text style={styles.editHeader}>Edit Message Text:</Text>
+            <View style={styles.inputField}>
+              <TextInput style={styles.input} value={state.editMessage} onChangeText={actions.setEditMessage}
+                  autoCapitalize="sentences" placeholder="Message Text" multiline={true} />
+            </View>
+            <View style={styles.editControls}>
+              <TouchableOpacity style={styles.cancel} onPress={actions.hideEdit}>
+                <Text>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.save} onPress={updateTopic}>
+                { state.updateBusy && (
+                  <ActivityIndicator size="small" color={Colors.white} />
+                )}
+                { !state.updateBusy && (
+                  <Text style={styles.saveText}>Save</Text>
+                )}
+              </TouchableOpacity>
+            </View>
+          </View>
+        </KeyboardAvoidingView>
+      </Modal>
     </View>
   );
 }

@@ -30,8 +30,10 @@ export function AudioAsset({ topicId, asset, dismiss }) {
       <TouchableOpacity style={styles.close} onPress={dismiss}>
         <Icons name="window-close" size={32} color={Colors.text} />
       </TouchableOpacity>
-      <Video ref={player} source={{ uri: state.url }} isLooping={true}
-        paused={!state.playing} onLoad={actions.loaded} style={styles.player} />
+      { state.url && (
+        <Video ref={player} source={{ uri: state.url }} isLooping={true}
+          paused={!state.playing} onLoad={actions.loaded} style={styles.player} />
+      )}
     </View>
   );
 }

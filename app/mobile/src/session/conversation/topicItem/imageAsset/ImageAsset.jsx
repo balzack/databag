@@ -14,21 +14,21 @@ export function ImageAsset({ topicId, asset, dismiss }) {
             style={{ borderRadius: 4, width: state.imageWidth, height: state.imageHeight }} resizeMode={'cover'} />
       )}
 
-      { state.controls && (
+      { state.loaded && state.controls && (
         <TouchableOpacity style={styles.close} onPress={dismiss}>
           <Ionicons name={'close'} size={32} color={Colors.white} />
         </TouchableOpacity>
       )}
 
       { state.failed && (
-        <View style={styles.loading}>
+        <TouchableOpacity style={styles.loading} onPress={dismiss}>
           <ActivityIndicator color={Colors.alert} size="large" />
-        </View>
+        </TouchableOpacity>
       )}
       { !state.loaded && !state.failed && (
-        <View style={styles.loading}>
+        <TouchableOpacity style={styles.loading} onPress={dismiss}>
           <ActivityIndicator color={Colors.white} size="large" />
-        </View>
+        </TouchableOpacity>
       )}
     </TouchableOpacity>
   );

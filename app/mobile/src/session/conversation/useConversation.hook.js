@@ -4,7 +4,7 @@ import { CardContext } from 'context/CardContext';
 import { AccountContext } from 'context/AccountContext';
 import { ConversationContext } from 'context/ConversationContext';
 import { getChannelSubjectLogo } from 'context/channelUtil';
-import { getChannelSeals, isUnsealed, getContentKey, decryptTopicSubject } from 'context/sealUtil';
+import { getChannelSeals, isUnsealed, getContentKey, encryptTopicSubject, decryptTopicSubject } from 'context/sealUtil';
 
 export function useConversation() {
   const [state, setState] = useState({
@@ -13,6 +13,13 @@ export function useConversation() {
     topic: [],
     loaded: false,
     contentKey: null,
+    focus: null,
+    editing: false,
+    editTopicId: null,
+    editType: null,
+    editMessage: null,
+    editData: null,
+    updateBusy: false,
   });
 
   const updateState = (value) => {
@@ -87,7 +94,45 @@ export function useConversation() {
   }, [conversation.state, profile.state]);
     
 
-  const actions = {};
+  const actions = {
+    setFocus: (focus) => {
+      updateState({ focus });
+    },
+    editTopic: async (topicId, type, data) => {
+      console.log("EDIT:", topicId, type, data);
+      updateState({ editing: true, editTopicId: topicId, editType: type, editMessage: data?.text, editData: data });
+    },
+    hideEdit: () => {
+      updateState({ editing: false });
+    },
+    setEditMessage: (editMessage) => {
+      updateState({ editMessage });
+    },
+    updateTopic: async () => {
+      if (!state.updateBusy) {
+        try {
+          updateState({ updateBusy: true });
+          const message = { ...state.editData, text: state.editMessage };
+          if (state.editType === 'superbasictopic') {
+            await conversation.actions.setTopicSubject(state.editTopicId, state.editType, message);
+          }
+          else {
+            const sealed = encryptTopicSubject({ message }, state.contentKey);
+            await conversation.actions.setTopicSubject(state.editTopicId, state.editType, sealed);
+          }
+          updateState({ updateBusy: false }); 
+        }
+        catch(err) {
+          console.log(err);
+          updateState({ updateBusy: false });
+          throw new Error("failed to update");
+        }
+      }    
+    },
+    removeTopic: async (topicId) => {
+      await conversation.actions.removeTopic(topicId);
+    },
+  };
 
   return { state, actions };
 }

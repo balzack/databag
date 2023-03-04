@@ -177,7 +177,7 @@ export function useTopicItem(item, hosting, remove, contentKey) {
     const editable = guid === identity?.guid && parsed;
     const deletable = editable || hosting;
 
-    updateState({ logo, name, nameSet, known, sealed, message, fontSize, fontColor, timestamp, transform, status, assets, deletable, editable, editData: parsed, editMessage: message });
+    updateState({ logo, name, nameSet, known, sealed, message, fontSize, fontColor, timestamp, transform, status, assets, deletable, editable, editData: parsed, editMessage: message, editType: dataType });
   }, [conversation.state, card.state, account.state, item, contentKey]);
 
   const unsealTopic = async (topicId, revision, topicDetail) => {
