@@ -70,7 +70,7 @@ export function Conversation({ navigation, cardId, channelId, closeConversation,
       )}
       <View style={styles.thread}>
         <View style={styles.messages}>
-          { !state.loaded && (
+          { !state.loaded && state.delayed && (
             <View style={styles.loading}>
               <ActivityIndicator color={Colors.grey} size="large" />
             </View>

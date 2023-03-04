@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useContext } from 'react';
+import { UploadContext } from 'context/UploadContext';
 import { ConversationContext } from 'context/ConversationContext';
 import { Image } from 'react-native';
 import Colors from 'constants/Colors';
@@ -27,10 +28,51 @@ export function useAddTopic(contentKey) {
   const assetId = useRef(0);
   const conversation = useContext(ConversationContext);
   const account = useContext(AccountContext);
+  const upload = useContext(UploadContext);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
   }
+
+  useEffect(() => {
+    const cardId = conversation.state.card?.card?.cardId;
+    const channelId = conversation.state.channel?.channelId;
+    const key = cardId ? `${cardId}:${channelId}` : `:${channelId}`
+
+    const progress = upload.state.progress.get(key);
+    if (progress) {
+      let count = 0;
+      let complete = 0;
+      let active = 0;
+      let loaded = 0;
+      let total = 0;
+      let error = false;
+      progress.forEach(post => {
+        count += post.count;
+        complete += (post.index - 1);
+        if (post.active) {
+          active += 1;
+          loaded += post.active.loaded;
+          total += post.active.total;
+        }
+        if (post.error) {
+          error = true;
+        }
+      });
+      percent = Math.floor(((((loaded / total) * active) + complete) / count) * 100);
+      updateState({ progress: percent, uploadError: error });
+
+      if (error) {
+        setTimeout(() => {
+          upload.actions.clearErrors(cardId, channelId);
+          updateState({ progress: null, uploadError: false });
+        }, 2000);
+      }
+    }
+    else {
+      updateState({ progress: null });
+    }
+  }, [upload.state, conversation.state]);
 
   useEffect(() => {
     const { enableVideo, enableAudio, enableImage } = conversation.state.channel?.detail || {};

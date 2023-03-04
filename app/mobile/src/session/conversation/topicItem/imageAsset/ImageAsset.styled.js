@@ -23,11 +23,12 @@ export const styles = StyleSheet.create({
   },
   close: {
     position: 'absolute',
+    opacity: 0.9,
     top: 0,
     right: 0,
     borderRadius: 4,
-    backgroundColor: Colors.lightgrey,
-    padding: 8,
+    backgroundColor: Colors.grey,
+    padding: 4,
     margin: 16,
   },
 })

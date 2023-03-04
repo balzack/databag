@@ -10,7 +10,7 @@ export function ImageFile({ path, setPosition, remove }) {
 
   return (
     <TouchableOpacity activeOpacity={1} onLongPress={remove}>
-      <Image source={{ uri: path }} onLoad={actions.loaded} style={{ width: 92 * state.ratio, height: 92, marginRight: 16 }} resizeMode={'cover'} />
+      <Image source={{ uri: path }} onLoad={actions.loaded} style={{ opacity: state.loaded ? 1 : 0, width: 92 * state.ratio, height: 92, marginRight: 16 }} resizeMode={'cover'} />
     </TouchableOpacity>
   );
 }

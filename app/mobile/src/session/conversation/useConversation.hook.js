@@ -90,7 +90,12 @@ export function useConversation() {
     });
     const filtered = sorted.filter(item => !(item.blocked === 1));
 
-    updateState({ loaded, logo, subject, topics: filtered });
+    updateState({ loaded, logo, subject, topics: filtered, delayed: false });
+  
+    setTimeout(() => {
+      updateState({ delayed: true });
+    }, 250);
+
   }, [conversation.state, profile.state]);
     
 

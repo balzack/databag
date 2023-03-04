@@ -190,7 +190,7 @@ export function TopicItem({ item, focused, focus, hosting, remove, update, block
           )}
           { !state.editable && (
             <TouchableOpacity style={styles.icon} onPress={reportMessage}>
-              <MatIcons name="flag-outline" size={18} color={Colors.white} />
+              <MatIcons name="flag-outline" size={22} color={Colors.white} />
             </TouchableOpacity>
           )}
           { state.deletable && (
@@ -213,6 +213,7 @@ export function TopicItem({ item, focused, focus, hosting, remove, update, block
             width={state.width}
             autoPlay={false}
             data={state.assets}
+            defaultIndex={state.carouselIndex}
             scrollAnimationDuration={1000}
             renderItem={({ index }) => (
               <View style={styles.frame}>

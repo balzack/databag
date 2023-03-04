@@ -5,6 +5,7 @@ import { Image } from 'react-native';
 export function useImageThumb(topicId, asset) {
 
   const [state, setState] = useState({
+    loaded: false,
     ratio: 1,
     url: null,
   });
@@ -23,7 +24,7 @@ export function useImageThumb(topicId, asset) {
   const actions = {
     loaded: (e) => {
       const { width, height } = e.nativeEvent.source;
-      updateState({ ratio: width / height });
+      updateState({ loaded: true, ratio: width / height });
     },
   };
 
