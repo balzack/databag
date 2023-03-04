@@ -192,7 +192,7 @@ export function useChannelContext() {
     },
     getTopicAssetUrl: (channelId, topicId, assetId) => {
       const { server, token } = access.current;
-      getChannelTopicAssetUrl(server, token, channelId, topicId, assetId);
+      return getChannelTopicAssetUrl(server, token, channelId, topicId, assetId);
     },
     getTopics: async (channelId, revision, count, begin, end) => {
       const { server, token } = access.current;
