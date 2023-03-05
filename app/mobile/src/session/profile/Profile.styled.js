@@ -292,6 +292,9 @@ export const styles = StyleSheet.create({
     left: 8,
     width: '100%',
   },
+  sealableText: {
+    color: Colors.text,
+  },
   notice: {
     color: Colors.grey,
     fontStyle: 'italic',
