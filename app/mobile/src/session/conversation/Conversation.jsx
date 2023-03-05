@@ -49,7 +49,6 @@ export function Conversation({ navigation, cardId, channelId, closeConversation,
   }, [navigation, state.subject, state.loaded]);
 
   useEffect(() => {
-console.log("RESET CONVERSATION!");
     return () => { closeConversation(); };
   }, []);
 
