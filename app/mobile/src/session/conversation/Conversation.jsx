@@ -1,5 +1,5 @@
 import { useRef, useEffect, useState, useContext } from 'react';
-import { Alert, Modal, KeyboardAvoidingView, ActivityIndicator, FlatList, View, TextInput, Text, TouchableOpacity } from 'react-native';
+import { Alert, Platform, Modal, KeyboardAvoidingView, ActivityIndicator, FlatList, View, TextInput, Text, TouchableOpacity } from 'react-native';
 import { ConversationContext } from 'context/ConversationContext';
 import { useConversation } from './useConversation.hook';
 import { styles } from './Conversation.styled';
@@ -49,10 +49,13 @@ export function Conversation({ navigation, cardId, channelId, closeConversation,
   }, [navigation, state.subject, state.loaded]);
 
   useEffect(() => {
+console.log("RESET CONVERSATION!");
     return () => { closeConversation(); };
   }, []);
 
   return (
+<KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={72}
+          enabled={Platform.OS === 'ios' ? state.keyboard : false}>
     <View style={styles.container}>
       { !navigation && (
         <View style={styles.header}>
@@ -127,5 +130,6 @@ export function Conversation({ navigation, cardId, channelId, closeConversation,
         </KeyboardAvoidingView>
       </Modal>
     </View>
+      </KeyboardAvoidingView>
   );
 }

@@ -47,6 +47,7 @@ export function Session() {
     const [cardId, setCardId] = useState();
     const [channelId, setChannelId] = useState();
 
+console.log("REnDER CONVERSATION STACK");
     const openConversation = (navigation, card, channel) => {
       (async () => {
         conversation.actions.setConversation(card, channel);
@@ -72,33 +73,37 @@ export function Session() {
     }
 
     return (
-      <ConversationStack.Navigator initialRouteName="channels" screenOptions={({ route }) => (screenParams)} >
+      <SafeAreaView edges={['left', 'right']} style={styles.body}>
+        <ConversationStack.Navigator initialRouteName="channels" screenOptions={({ route }) => (screenParams)} >
 
-        <ConversationStack.Screen name="channels" options={stackParams}>
-          {(props) => <Channels navigation={props.navigation} openConversation={(cardId, channelId) => openConversation(props.navigation, cardId, channelId)} />}
-        </ConversationStack.Screen>
+          <ConversationStack.Screen name="channels" options={stackParams}>
+            {(props) => <Channels navigation={props.navigation} openConversation={(cardId, channelId) => openConversation(props.navigation, cardId, channelId)} />}
+          </ConversationStack.Screen>
 
-        <ConversationStack.Screen name="conversation" options={stackParams}>
-          {(props) => <Conversation navigation={props.navigation} openDetails={() => openDetails(props.navigation)} closeConversation={(pop) => closeConversation(props.navigation, pop)} /> }
-        </ConversationStack.Screen>
+          <ConversationStack.Screen name="conversation" options={stackParams}>
+            {(props) => <Conversation navigation={props.navigation} openDetails={() => openDetails(props.navigation)} closeConversation={(pop) => closeConversation(props.navigation, pop)} /> }
+          </ConversationStack.Screen>
 
-        <ConversationStack.Screen name="details" options={{ ...stackParams, headerTitle: (props) => (
-            <Text style={styles.headertext}>Details</Text>
-        )}}>
-          {(props) => <Details clearConversation={() => clearConversation(props.navigation)} />}
-        </ConversationStack.Screen>
+          <ConversationStack.Screen name="details" options={{ ...stackParams, headerTitle: (props) => (
+              <Text style={styles.headertext}>Details</Text>
+          )}}>
+            {(props) => <Details clearConversation={() => clearConversation(props.navigation)} />}
+          </ConversationStack.Screen>
 
-      </ConversationStack.Navigator>
+        </ConversationStack.Navigator>
+      </SafeAreaView>
     );
   }
 
   const ProfileStackScreen = () => {
     return (
-      <ProfileStack.Navigator screenOptions={({ route }) => (screenParams)}>
-        <ProfileStack.Screen name="profile" options={{ ...stackParams, headerTitle: () => <ProfileHeader /> }}>
-          {(props) => <ScrollView><ProfileBody /></ScrollView>}
-        </ProfileStack.Screen>
-      </ProfileStack.Navigator>
+      <SafeAreaView edges={['left', 'right']} style={styles.body}>
+        <ProfileStack.Navigator screenOptions={({ route }) => (screenParams)}>
+          <ProfileStack.Screen name="profile" options={{ ...stackParams, headerTitle: () => <ProfileHeader /> }}>
+            {(props) => <ScrollView><ProfileBody /></ScrollView>}
+          </ProfileStack.Screen>
+        </ProfileStack.Navigator>
+      </SafeAreaView>
     );
   }
 
@@ -126,27 +131,29 @@ export function Session() {
     }
 
     return (
-      <ContactStack.Navigator screenOptions={({ route }) => (screenParams)} initialRouteName="cards">
+      <SafeAreaView edges={['left', 'right']} style={styles.body}>
+        <ContactStack.Navigator screenOptions={({ route }) => (screenParams)} initialRouteName="cards">
 
-        <ContactStack.Screen name="cards" options={{ ...stackParams, headerTitle: (props) => (
-            <CardsHeader filter={filter} setFilter={setFilter} sort={sort} setSort={setSort} openRegistry={openRegistry} />
-          )}}>
-          {(props) => <CardsBody filter={filter} sort={sort} openContact={(contact) => openContact(props.navigation, contact)} />}
-        </ContactStack.Screen>
+          <ContactStack.Screen name="cards" options={{ ...stackParams, headerTitle: (props) => (
+              <CardsHeader filter={filter} setFilter={setFilter} sort={sort} setSort={setSort} openRegistry={openRegistry} />
+            )}}>
+            {(props) => <CardsBody filter={filter} sort={sort} openContact={(contact) => openContact(props.navigation, contact)} />}
+          </ContactStack.Screen>
 
-        <ContactStack.Screen name="contact" options={{ ...stackParams, headerTitle: (props) => (
-            <ContactHeader contact={contact} />
-          )}}>
-          {(props) => <ScrollView><ContactBody contact={contact} /></ScrollView>}
-        </ContactStack.Screen>
+          <ContactStack.Screen name="contact" options={{ ...stackParams, headerTitle: (props) => (
+              <ContactHeader contact={contact} />
+            )}}>
+            {(props) => <ScrollView><ContactBody contact={contact} /></ScrollView>}
+          </ContactStack.Screen>
 
-        <ContactStack.Screen name="registry" options={{ ...stackParams, headerTitle: (props) => (
-            <RegistryHeader search={search} setSearch={setSearch} handle={handle} setHandle={setHandle} server={server} setServer={setServer} />
-          )}}>
-          {(props) => <RegistryBody search={search} handle={handle} server={server} openContact={(contact) => openContact(props.navigation, contact)} />}
-        </ContactStack.Screen>
+          <ContactStack.Screen name="registry" options={{ ...stackParams, headerTitle: (props) => (
+              <RegistryHeader search={search} setSearch={setSearch} handle={handle} setHandle={setHandle} server={server} setServer={setServer} />
+            )}}>
+            {(props) => <RegistryBody search={search} handle={handle} server={server} openContact={(contact) => openContact(props.navigation, contact)} />}
+          </ContactStack.Screen>
 
-      </ContactStack.Navigator>
+        </ContactStack.Navigator>
+      </SafeAreaView>
     );
   }
 
@@ -296,6 +303,8 @@ export function Session() {
       </DetailDrawer.Navigator>
     );
   }
+
+console.log("RENDER ROOT", state.tabbed);
 
   return (
     <NavigationContainer>

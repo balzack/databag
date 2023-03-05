@@ -16,7 +16,6 @@ import { ImageFile } from './imageFile/ImageFile';
 export function AddTopic({ contentKey }) {
 
   const { state, actions } = useAddTopic(contentKey);
-  const message = useRef();
 
   const addImage = async () => {
     try {
@@ -31,7 +30,6 @@ export function AddTopic({ contentKey }) {
   const sendMessage = async () => {
     try {
       if (state.message || state.assets.length > 0) {
-        message.current.blur();
         await actions.addTopic();
       }
     }
@@ -127,9 +125,9 @@ export function AddTopic({ contentKey }) {
           renderItem={renderAsset}
         />
       )}
-      <TextInput style={{ ...styles.input, color: state.color, fontSize: state.textSize }} value={state.message} onChangeText={actions.setMessage} ref={message}
+      <TextInput style={{ ...styles.input, color: state.color, fontSize: state.textSize }} value={state.message} onChangeText={actions.setMessage} 
           placeholderTextColor={state.color} cursorColor={state.color}
-          onSubmitEditing={sendMessage} returnKeyType="send"
+          blurOnSubmit={true} onSubmitEditing={sendMessage} returnKeyType="send"
           autoCapitalize="sentences" placeholder="New Message" multiline={true} />
       <View style={styles.addButtons}>
         { !state.locked && state.enableImage && (

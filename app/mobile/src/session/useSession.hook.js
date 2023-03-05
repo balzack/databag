@@ -38,10 +38,12 @@ export function useSession() {
       if (dimensions.width > config.tabbedWidth) {
         const width = Math.floor((dimensions.width * 33) / 100);
         tabbed.current = false;
+console.log("SET TABBED: false");
         updateState({ tabbed: false, baseWidth: width + 50, subWidth: width });
       }
       else {
         tabbed.current = true;
+console.log("SET TABBED: true");
         updateState({ tabbed: true });
       }
     }
