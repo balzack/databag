@@ -18,7 +18,7 @@ export function VideoAsset({ topicId, asset, dismiss }) {
         { state.url && (
           <Video source={{ uri: state.url }} style={{ width: state.width, height: state.height }} resizeMode={'cover'} 
             onReadyForDisplay={(e) => { console.log(e) }}
-            onLoad={actions.loaded} isLooping={true} paused={!state.playing} resizeMode="contain" />
+            onLoad={actions.loaded} repeat={true} paused={!state.playing} resizeMode="contain" />
         )}
         { (!state.playing || state.controls) && (
           <View style={{ ...styles.overlay, width: state.width, height: state.height }} />

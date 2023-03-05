@@ -23,6 +23,7 @@ export const styles = StyleSheet.create({
     top: 0,
     paddingLeft: 48,
     paddingRight: 48,
+    color: Colors.text,
   },
   close: {
     position: 'absolute',
