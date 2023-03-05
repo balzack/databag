@@ -139,6 +139,7 @@ export function useAppContext() {
         console.log(err);
       }
       await clearSession();
+      access.current = null;
       await store.actions.clearSession();
       updateState({ loggingOut: false });
     },

@@ -55,6 +55,7 @@ export const styles = StyleSheet.create({
     fontSize: 18,
     overflow: 'hidden',
     textAlign: 'center',
+    color: Colors.text,
   },
   camera: {
     position: 'absolute',

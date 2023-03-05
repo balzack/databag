@@ -34,6 +34,7 @@ export const styles = StyleSheet.create({
     flexShrink: 1,
     paddingLeft: 16,
     paddingRight: 16,
+    color: Colors.text,
   },
   titlebutton: {
     paddingRight: 8,
