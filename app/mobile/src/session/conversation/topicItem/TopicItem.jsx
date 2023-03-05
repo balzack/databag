@@ -130,7 +130,7 @@ export function TopicItem({ item, focused, focus, hosting, remove, update, block
   }
 
   return (
-    <View style={styles.wrapper}>
+    <View style={{ ...styles.wrapper, transform: [{rotate: '180deg'}]}}>
       <TouchableOpacity activeOpacity={1} style={styles.item} onPress={focus}>
         <View style={styles.header}>
           { state.logo !== 'avatar' && state.logo && (

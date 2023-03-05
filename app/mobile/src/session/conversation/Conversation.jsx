@@ -78,10 +78,9 @@ export function Conversation({ navigation, cardId, channelId, closeConversation,
             </View>
           )}
           { state.loaded && state.topics.length !== 0 && (
-            <FlatList style={styles.conversation}
+            <FlatList style={{ ...styles.conversation, transform: [{rotate: '180deg'}]}}
                contentContainerStyle={styles.topics}
                data={state.topics}
-               inverted={true}
                initialNumToRender={16}
                renderItem={({item}) => <TopicItem item={item} focused={item.topicId === state.focus} 
                  focus={() => actions.setFocus(item.topicId)} hosting={state.host == null}
