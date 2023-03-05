@@ -6,12 +6,15 @@ import { useAudioAsset } from './useAudioAsset.hook';
 import { styles } from './AudioAsset.styled';
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
 import audio from 'images/audio.png';
+import { useKeepAwake } from '@sayem314/react-native-keep-awake';
 
 export function AudioAsset({ topicId, asset, dismiss }) {
 
   const { state, actions } = useAudioAsset(topicId, asset);
 
   const player = useRef(null);
+
+  useKeepAwake();
 
   return (
     <View style={styles.container}>

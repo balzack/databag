@@ -4,10 +4,13 @@ import Video from 'react-native-video';
 import { useVideoAsset } from './useVideoAsset.hook';
 import { styles } from './VideoAsset.styled';
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useKeepAwake } from '@sayem314/react-native-keep-awake';
 
 export function VideoAsset({ topicId, asset, dismiss }) {
 
   const { state, actions } = useVideoAsset(topicId, asset);
+
+  useKeepAwake();
 
   return (
     <View style={styles.container}>
