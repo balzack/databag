@@ -142,27 +142,27 @@ export function useChannelContext() {
       sync();
     },
     addChannel: async (type, subject, cards) => {
-      const { server, token } = access.current;
+      const { server, token } = access.current || {};
       return await addChannel(server, token, type, subject, cards);
     },
     removeChannel: async (channelId) => {
-      const { server, token } = access.current;
+      const { server, token } = access.current || {};
       return await removeChannel(server, token, channelId);
     },
     setChannelSubject: async (channelId, type, subject) => {
-      const { server, token } = access.current;
+      const { server, token } = access.current || {};
       return await setChannelSubject(server, token, channelId, type, subject);
     },
     setChannelCard: async (channelId, cardId) => {
-      const { server, token } = access.current;
+      const { server, token } = access.current || {};
       return await setChannelCard(server, token, channelId, cardId);
     },
     clearChannelCard: async (channelId, cardId) => {
-      const { server, token } = access.current;
+      const { server, token } = access.current || {};
       return await clearChannelCard(server, token, channelId, cardId);
     },
     addTopic: async (channelId, type, message, files) => {
-      const { server, token } = access.current;
+      const { server, token } = access.current || {};
       if (files?.length > 0) {
         const topicId = await addChannelTopic(server, token, channelId, null, null, null);
         upload.actions.addTopic(server, token, channelId, topicId, files, async (assets) => {
@@ -183,106 +183,106 @@ export function useChannelContext() {
       }
     },
     removeTopic: async (channelId, topicId) => {
-      const { server, token } = access.current;
+      const { server, token } = access.current || {};
       await removeChannelTopic(server, token, channelId, topicId);
     },
     setTopicSubject: async (channelId, topicId, type, subject) => {
-      const { server, token } = access.current;
+      const { server, token } = access.current || {};
       await setChannelTopicSubject(server, token, channelId, topicId, type, subject);
     },
     getTopicAssetUrl: (channelId, topicId, assetId) => {
-      const { server, token } = access.current;
+      const { server, token } = access.current || {};
       return getChannelTopicAssetUrl(server, token, channelId, topicId, assetId);
     },
     getTopics: async (channelId, revision, count, begin, end) => {
-      const { server, token } = access.current;
+      const { server, token } = access.current || {};
       return await getChannelTopics(server, token, channelId, revision, count, begin, end);
     },
     getTopic: async (channelId, topicId) => {
-      const { server, token } = access.current;
+      const { server, token } = access.current || {};
       return await getChannelTopic(server, token, channelId, topicId);
     },
     resync: async () => {
       await sync();
     },
     getNotifications: async (channelId) => {
-      const { server, token } = access.current;
+      const { server, token } = access.current || {};
       return await getChannelNotifications(server, token, channelId);
     },
     setNotifications: async (channelId, notify) => {
-      const { server, token } = access.current;
+      const { server, token } = access.current || {};
       return await setChannelNotifications(server, token, channelId, notify);
     },
     setReadRevision: async (channelId, revision) => {
-      const { guid } = access.current;
+      const { guid } = access.current || {};
       await store.actions.setChannelItemReadRevision(guid, channelId, revision);
       setChannelField(channelId, 'readRevision', revision);
     },
     setSyncRevision: async (channelId, revision) => {
-      const { guid } = access.current;
+      const { guid } = access.current || {};
       await store.actions.setChannelItemSyncRevision(guid, channelId, revision);
       setChannelField(channelId, 'syncRevision', revision);
     },
     setTopicMarker: async (channelId, marker) => {
-      const { guid } = access.current;
+      const { guid } = access.current || {};
       await store.actions.setChannelItemTopicMarker(guid, channelId, revision);
       setChannelField(channelId, 'topicMarker', marker);
     },
     setMarkerAndSync: async (channelId, marker, revision) => {
-      const { guid } = access.current;
+      const { guid } = access.current || {};
       await store.actions.setChannelItemMarkerAndSync(guid, channelId, marker, revision);
       setChannelField(channelId, 'topicMarker', marker, 'syncRevision', revision);
     },
     setChannelFlag: async (channelId) => {
-      const { guid } = access.current;
+      const { guid } = access.current || {};
       await store.actions.setChannelItemBlocked(guid, channelId);
       setChannelField(channelId, 'blocked', true);
     },
     clearChannelFlag: async (channelId) => {
-      const { guid } = access.current;
+      const { guid } = access.current || {};
       await store.actions.clearChannelItemBlocked(guid, channelId);
       setChannelField(channelId, 'blocked', false);
     },
     setTopicFlag: async (channelId, topicId) => {
-      const { guid } = access.current;
+      const { guid } = access.current || {};
       await store.actions.setChannelTopicBlocked(guid, channelId, topicId, 1);
     },
     clearTopicFlag: async (channelId, topicId) => {
-      const { guid } = access.current;
+      const { guid } = access.current || {};
       await store.actions.setChannelTopicBlocked(guid, channelId, topicId, 0);
     },
     addChannelAlert: async (channelId) => {
-      const { server, guid } = access.current;
+      const { server, guid } = access.current || {};
       return await addFlag(server, guid, channelId);
     },
     addTopicAlert: async (channelId, topicId) => {
-      const { server, guid } = access.current;
+      const { server, guid } = access.current || {};
       return await addFlag(server, guid, channelId, topicId);
     },
     getTopicItems: async (channelId) => {
-      const { guid } = access.current;
+      const { guid } = access.current || {};
       return await store.actions.getChannelTopicItems(guid, channelId); 
     },
     setTopicItem: async (channelId, topic) => {
-      const { guid } = access.current;
+      const { guid } = access.current || {};
       return await store.actions.setChannelTopicItem(guid, channelId, topic);
     },
     clearTopicItem: async (channelId, topicId) => {
-      const { guid } = access.current;
+      const { guid } = access.current || {};
       return await store.actions.clearChannelTopicItem(guid, channelId, topicId);
     },
     setUnsealedChannelSubject: async (channelId, revision, unsealed) => {
-      const { guid } = access.current;
+      const { guid } = access.current || {};
       await store.actions.setChannelItemUnsealedDetail(guid, channelId, revision, unsealed);
       setChannelField(channelId, 'unsealedDetail', unsealed);
     },
     setUnsealedChannelSummary: async (channelId, revision, unsealed) => {
-      const { guid } = access.current;
+      const { guid } = access.current || {};
       await store.actions.setChannelItemUnsealedSummary(guid, channelId, revision, unsealed);
       setChannelField(channelId, 'unsealedSummary', unsealed);
     },
     setUnsealedTopicSubject: async (channelId, topicId, revision, unsealed) => {
-      const { guid } = access.current;
+      const { guid } = access.current || {};
       await store.actions.setChannelTopicItemUnsealedDetail(guid, channelId, topicId, revision, unsealed);
     },
   };

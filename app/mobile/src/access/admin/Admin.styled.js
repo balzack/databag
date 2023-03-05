@@ -71,6 +71,7 @@ export const styles = StyleSheet.create({
     flex: 1,
     textAlign: 'center',
     padding: 8,
+    color: Colors.text,
   },
   reset: {
     marginTop: 16,

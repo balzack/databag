@@ -27,7 +27,7 @@ export function useAccountContext() {
       syncing.current = true;
       try {
         const revision = curRevision.current;
-        const { server, token, guid } = access.current;
+        const { server, token, guid } = access.current || {};
         const status = await getAccountStatus(server, token);
         await store.actions.setAccountStatus(guid, status);
         await store.actions.setAccountRevision(guid, revision);
@@ -51,7 +51,7 @@ export function useAccountContext() {
         throw new Error('invalid account state');
       }
       access.current = session;
-      const { guid, server, token } = session;
+      const { guid, server, token } = session || {};
       const status = await store.actions.getAccountStatus(guid);
       const sealKey = await store.actions.getAccountSealKey(guid);
       const revision = await store.actions.getAccountRevision(guid);
@@ -68,26 +68,26 @@ export function useAccountContext() {
       sync();
     },
     setNotifications: async (flag) => {
-      const { server, token } = access.current;
+      const { server, token } = access.current || {};
       await setAccountNotifications(server, token, flag);
     },
     setSearchable: async (flag) => {
-      const { server, token } = access.current;
+      const { server, token } = access.current || {};
       await setAccountSearchable(server, token, flag);
     },
     setAccountSeal: async (seal, key) => {
-      const { guid, server, token } = access.current;
+      const { guid, server, token } = access.current || {};
       await setAccountSeal(server, token, seal);
       await store.actions.setAccountSealKey(guid, key);
       updateState({ sealKey: key });
     },
     unlockAccountSeal: async (key) => {
-      const { guid } = access.current;
+      const { guid } = access.current || {};
       await store.actions.setAccountSealKey(guid, key);
       updateState({ sealKey: key });
     },
     setLogin: async (username, password) => {
-      const { server, token } = access.current;
+      const { server, token } = access.current || {};
       await setAccountLogin(server, token, username, password);
     },
     resync: async () => {

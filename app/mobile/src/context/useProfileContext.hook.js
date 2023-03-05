@@ -29,7 +29,7 @@ export function useProfileContext() {
 
       try {
         const revision = curRevision.current;
-        const { server, token, guid } = access.current;
+        const { server, token, guid } = access.current || {};
         const identity = await getProfile(server, token);
         const imageUrl = identity?.image ? getProfileImageUrl(server, token, revision) : null;
         await store.actions.setProfile(guid, identity);
@@ -51,7 +51,7 @@ export function useProfileContext() {
 
   const actions = {
     setSession: async (session) => {
-      const { guid, server, token } = session;
+      const { guid, server, token } = session || {};
       const identity = await store.actions.getProfile(guid);
       const revision = await store.actions.getProfileRevision(guid);
       const imageUrl = identity?.image ? getProfileImageUrl(server, token, revision) : null;
@@ -68,15 +68,15 @@ export function useProfileContext() {
       sync();
     },
     setProfileData: async (name, location, description) => {
-      const { server, token } = access.current;
+      const { server, token } = access.current || {};
       await setProfileData(server, token, name, location, description);
     },
     setProfileImage: async (image) => {
-      const { server, token } = access.current;
+      const { server, token } = access.current || {};
       await setProfileImage(server, token, image);
     },
     getHandleStatus: async (name) => {
-      const { server, token } = access.current;
+      const { server, token } = access.current || {};
       return await getHandle(server, token, name);
     },
   }

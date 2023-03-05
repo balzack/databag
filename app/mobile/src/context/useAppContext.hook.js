@@ -146,7 +146,7 @@ export function useAppContext() {
       if (!access.current) {
         throw new Error('invalid session state');
       }
-      const { server, token } = access.current;
+      const { server, token } = access.current || {};
       await removeProfile(server, token);
       await clearSession();
       await store.actions.clearSession();
