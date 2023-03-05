@@ -13,6 +13,7 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		46D8108CBA031189090AFC14 /* Pods_Databag_DatabagTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1181227D40684F18A9414840 /* Pods_Databag_DatabagTests.framework */; };
 		7B13A774299E21170048D0DD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7B13A773299E21170048D0DD /* GoogleService-Info.plist */; };
+		7B6135A329B439B80094A6E7 /* login.png in Resources */ = {isa = PBXBuildFile; fileRef = 7B6135A229B439B80094A6E7 /* login.png */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		A0B1EC4533FCFC5940B5FD7F /* Pods_Databag.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9462C028F47F083241BB7941 /* Pods_Databag.framework */; };
 /* End PBXBuildFile section */
@@ -42,6 +43,7 @@
 		5709B34CF0A7D63546082F79 /* Pods-Databag.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Databag.release.xcconfig"; path = "Target Support Files/Pods-Databag/Pods-Databag.release.xcconfig"; sourceTree = "<group>"; };
 		5B7EB9410499542E8C5724F5 /* Pods-Databag-DatabagTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Databag-DatabagTests.debug.xcconfig"; path = "Target Support Files/Pods-Databag-DatabagTests/Pods-Databag-DatabagTests.debug.xcconfig"; sourceTree = "<group>"; };
 		7B13A773299E21170048D0DD /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		7B6135A229B439B80094A6E7 /* login.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = login.png; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = Databag/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-Databag-DatabagTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Databag-DatabagTests.release.xcconfig"; path = "Target Support Files/Pods-Databag-DatabagTests/Pods-Databag-DatabagTests.release.xcconfig"; sourceTree = "<group>"; };
 		9462C028F47F083241BB7941 /* Pods_Databag.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Databag.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -93,6 +95,7 @@
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
+				7B6135A229B439B80094A6E7 /* login.png */,
 				13B07FB71A68108700A75B9A /* main.m */,
 			);
 			name = Databag;
@@ -248,6 +251,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
+				7B6135A329B439B80094A6E7 /* login.png in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				7B13A774299E21170048D0DD /* GoogleService-Info.plist in Resources */,
 			);
