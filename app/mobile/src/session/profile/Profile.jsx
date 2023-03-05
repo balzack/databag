@@ -246,7 +246,7 @@ export function ProfileBody() {
             </View>
             <View style={styles.modalControls}>
               <TouchableOpacity style={styles.cancel} onPress={actions.hideDelete}>
-                <Text>Cancel</Text>
+                <Text style={styles.canceltext}>Cancel</Text>
               </TouchableOpacity>
               { state.confirmDelete === 'delete' && (
                 <TouchableOpacity style={styles.remove} onPress={remove}>
@@ -277,7 +277,7 @@ export function ProfileBody() {
             </View>
             <View style={styles.modalControls}>
               <TouchableOpacity style={styles.close} onPress={actions.hideBlockedCards}>
-                <Text>Close</Text>
+                <Text style={styles.canceltext}>Close</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -298,7 +298,7 @@ export function ProfileBody() {
             </View>
             <View style={styles.modalControls}>
               <TouchableOpacity style={styles.close} onPress={actions.hideBlockedChannels}>
-                <Text>Close</Text>
+                <Text style={styles.canceltext}>Close</Text>
               </TouchableOpacity>
             </View>
           </View>

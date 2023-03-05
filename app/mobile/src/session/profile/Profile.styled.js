@@ -128,6 +128,7 @@ export const styles = StyleSheet.create({
   input: {
     fontSize: 14,
     flexGrow: 1,
+    color: Colors.text,
   },
   inputField: {
     width: '100%',

@@ -109,7 +109,7 @@ export function Conversation({ navigation, cardId, channelId, closeConversation,
             <Text style={styles.editHeader}>Edit Message Text:</Text>
             <View style={styles.inputField}>
               <TextInput style={styles.input} value={state.editMessage} onChangeText={actions.setEditMessage}
-                  autoCapitalize="sentences" placeholder="Message Text" multiline={true} />
+                  autoCapitalize="sentences" placeholder="Message Text" multiline={true} placeholderTextColor={Colors.grey} />
             </View>
             <View style={styles.editControls}>
               <TouchableOpacity style={styles.cancel} onPress={actions.hideEdit}>
