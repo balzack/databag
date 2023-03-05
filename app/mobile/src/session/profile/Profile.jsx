@@ -319,7 +319,7 @@ export function ProfileBody() {
             </View>
             <View style={styles.modalControls}>
               <TouchableOpacity style={styles.close} onPress={actions.hideBlockedMessages}>
-                <Text>Close</Text>
+                <Text style={styles.canceltext}>Close</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -350,7 +350,7 @@ export function ProfileBody() {
             </View>
             <View style={styles.modalControls}>
               <TouchableOpacity style={styles.cancel} onPress={actions.hideEditDetails}>
-                <Text>Cancel</Text>
+                <Text style={styles.canceltext}>Cancel</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.save} onPress={saveDetails}>
                 <Text style={styles.saveText}>Save</Text>
@@ -461,7 +461,7 @@ export function ProfileBody() {
             )}
             <View style={styles.modalControls}>
               <TouchableOpacity style={styles.cancel} onPress={actions.hideEditSeal}>
-                <Text>Cancel</Text>
+                <Text style={styles.canceltext}>Cancel</Text>
               </TouchableOpacity>
               { state.canSaveSeal && (
                 <>
@@ -578,7 +578,7 @@ export function ProfileBody() {
             )}
             <View style={styles.modalControls}>
               <TouchableOpacity style={styles.cancel} onPress={actions.hideEditLogin}>
-                <Text>Cancel</Text>
+                <Text style={styles.canceltext}>Cancel</Text>
               </TouchableOpacity>
               { (state.checked && state.available && state.editConfirm === state.editPassword && state.editPassword) && (
                 <TouchableOpacity style={styles.save} onPress={saveLogin}>

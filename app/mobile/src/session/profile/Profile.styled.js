@@ -78,6 +78,10 @@ export const styles = StyleSheet.create({
   modalHeader: {
     fontSize: 18,
     paddingBottom: 16,
+    color: Colors.text,
+  },
+  canceltext: {
+    color: Colors.text,
   },
   modalList: {
     width: '100%',
@@ -170,6 +174,7 @@ export const styles = StyleSheet.create({
     fontSize: 18,
     paddingRight: 8,
     fontWeight: 'bold',
+    color: Colors.text,
   },
   locationtext: {
     fontSize: 16,

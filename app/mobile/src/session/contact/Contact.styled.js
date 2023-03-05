@@ -93,14 +93,17 @@ export const styles = StyleSheet.create({
     fontSize: 18,
     paddingRight: 8,
     fontWeight: 'bold',
+    color: Colors.text,
   },
   locationtext: {
     fontSize: 16,
     paddingLeft: 8,
+    color: Colors.text,
   },
   descriptiontext: {
     fontSize: 16,
-    paddingLeft: 8
+    paddingLeft: 8,
+    color: Colors.text,
   },
   button: {
     width: 192,

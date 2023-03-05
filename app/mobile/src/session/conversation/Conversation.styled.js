@@ -99,6 +99,9 @@ export const styles = StyleSheet.create({
   saveText: {
     color: Colors.white,
   },
+  canceltext: {
+    color: Colors.text,
+  },
   cancel: {
     borderWidth: 1,
     borderColor: Colors.lightgrey,
@@ -125,6 +128,7 @@ export const styles = StyleSheet.create({
   input: {
     fontSize: 14,
     flexGrow: 1,
+    color: Colors.text,
   },
   editControls: {
     display: 'flex',
@@ -148,6 +152,7 @@ export const styles = StyleSheet.create({
   editHeader: {
     fontSize: 18,
     paddingBottom: 16,
+    color: Colors.text,
   },
   modal: {
     width: '100%',

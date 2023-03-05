@@ -113,7 +113,7 @@ export function Conversation({ navigation, cardId, channelId, closeConversation,
             </View>
             <View style={styles.editControls}>
               <TouchableOpacity style={styles.cancel} onPress={actions.hideEdit}>
-                <Text>Cancel</Text>
+                <Text style={styles.canceltext}>Cancel</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.save} onPress={updateTopic}>
                 { state.updateBusy && (
