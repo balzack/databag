@@ -20,6 +20,7 @@ export function useConversation() {
     editMessage: null,
     editData: null,
     updateBusy: false,
+    moreBusy: false,
   });
 
   const updateState = (value) => {
@@ -142,6 +143,20 @@ export function useConversation() {
     },
     removeTopic: async (topicId) => {
       await conversation.actions.removeTopic(topicId);
+    },
+    loadMore: async () => {
+      if (!state.moreBusy) {
+        try {
+          updateState({ moreBusy: true });
+          await conversation.actions.loadMore();
+          updateState({ moreBusy: false });
+        }
+        catch(err) {
+          console.log(err);
+          updateState({ moreBusy: false });
+          throw new Error("failed to load more");
+        }
+      }
     },
   };
 

@@ -225,7 +225,7 @@ export function useChannelContext() {
     },
     setTopicMarker: async (channelId, marker) => {
       const { guid } = access.current || {};
-      await store.actions.setChannelItemTopicMarker(guid, channelId, revision);
+      await store.actions.setChannelItemTopicMarker(guid, channelId, marker);
       setChannelField(channelId, 'topicMarker', marker);
     },
     setMarkerAndSync: async (channelId, marker, revision) => {

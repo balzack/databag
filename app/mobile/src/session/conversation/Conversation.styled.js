@@ -10,6 +10,9 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     flexShrink: 1,
   },
+  more: {
+    marginTop: 8,
+  },
   header: {
     display: 'flex',
     flexDirection: 'row',

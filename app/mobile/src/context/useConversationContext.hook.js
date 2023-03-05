@@ -93,7 +93,7 @@ export function useConversationContext() {
             curSyncRevision.current = delta.revision;
             updateState({ loaded: true, offsync: false, topics: topics.current, card: cardValue, channel: channelValue });
           }
-          else if (loadMore && marker) {
+          else if (loadMore) {
             const delta = await getTopicDelta(cardId, channelId, null, COUNT, null, curTopicMarker.current);
             const marker = delta.marker ? delta.marker : 1;
             await setTopicDelta(cardId, channelId, delta.topics);
@@ -333,9 +333,9 @@ export function useConversationContext() {
       const { cardId, channelId } = conversationId.current || {};
       return getTopicAssetUrl(cardId, channelId, topicId, assetId);
     },
-    loadMore: () => {
+    loadMore: async () => {
       more.current = true;
-      sync();
+      await sync();
     },
     resync: () => {
       force.current = true;

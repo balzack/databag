@@ -13,6 +13,19 @@ export function Conversation({ navigation, cardId, channelId, closeConversation,
 
   const { state, actions } = useConversation();
 
+  const loadMore = async () => {
+    try {
+      await actions.loadMore();
+    }
+    catch (err) {
+      console.log(err);
+      Alert.alert(
+        'Failed to Load More Messages',
+        'Please try again',
+      )
+    }
+  }
+
   const updateTopic = async () => {
     try {
       await actions.updateTopic();
@@ -77,11 +90,16 @@ export function Conversation({ navigation, cardId, channelId, closeConversation,
               <ActivityIndicator color={Colors.grey} size="large" />
             </View>
           )}
+          { state.moreBusy && state.topics.length > 32 && (
+            <ActivityIndicator style={styles.more} color={Colors.primary} />
+          )}
           { state.loaded && state.topics.length !== 0 && (
             <FlatList style={{ ...styles.conversation, transform: [{rotate: '180deg'}]}}
                contentContainerStyle={styles.topics}
                data={state.topics}
                initialNumToRender={16}
+               onEndReached={loadMore}
+               onEndReachedThreshold={0.1}
                renderItem={({item}) => <TopicItem item={item} focused={item.topicId === state.focus} 
                  focus={() => actions.setFocus(item.topicId)} hosting={state.host == null}
                  remove={actions.removeTopic} update={actions.editTopic} block={actions.blockTopic}
