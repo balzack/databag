@@ -4,6 +4,7 @@ These instructions assume you have the following setup:
   - reverse proxy with an assigned hostname and certificate forwarding to your Raspberry Pi
   - micro usb to ethernet adapter
   - address reservation on your router
+  - software tools for writing image (7zip & rufus, or equivalent)
   - reasonably large micro sd card (~16 GB)
 
 ## Step 1: setup the hardware
