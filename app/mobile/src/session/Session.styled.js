@@ -7,6 +7,17 @@ export const styles = StyleSheet.create({
     height: '100%',
     backgroundColor: Colors.formBackground,
   },
+  terms: {
+    borderRadius: 4,
+    maxHeight: '60%',
+    padding: 8,
+    margin: 16,
+    backgroundColor: Colors.formBackground,
+  },
+  termsheader: {
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
   container: {
     width: '100%',
     height: '100%',
@@ -19,16 +30,27 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   splash: {
-    width: '100%',
-    height: '100%',
     maxWidth: '80%',
-    maxHeight: '50%',
+    maxHeight: '30%',
+    opacity: 0.5,
   },
-  steps: {
+  start: {
     flexGrow: 1,
     display: 'flex',
     justifyContent: 'center',
   },
+  steps: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingBottom: 16,
+    flexDirection: 'row',
+  },
+  stepstext: {
+    color: Colors.text,
+    padding: 8,
+  },
+
   step: {
     display: 'flex',
     flexDirection: 'row',

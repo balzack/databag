@@ -22,6 +22,7 @@ import { ConversationContext } from 'context/ConversationContext';
 import { ProfileContext } from 'context/ProfileContext';
 import { ProfileIcon } from './profileIcon/ProfileIcon';
 import { CardsIcon } from './cardsIcon/CardsIcon';
+import { tos } from 'constants/TermsOfService';
 import splash from 'images/session.png';
 
 const ConversationStack = createStackNavigator();
@@ -320,23 +321,26 @@ export function Session() {
               <Text style={styles.tagText}>Communication for the Decentralized Web</Text>
             </View>
             <Image style={styles.splash} source={splash} resizeMode="contain" />
+
+            <ScrollView style={styles.terms}>
+              <Text style={styles.termsheader}>Terms of Use and User Policy</Text>
+              <Text numberOfLines={0}>{ tos.message }</Text>
+            </ScrollView>
+
             <View style={styles.steps} >
-              <View style={styles.step}>
-                <Ionicons name={'user'} size={18} color={Colors.white} />
-                <Text style={styles.stepText}>Setup Your Profile</Text>
-              </View>
-              <View style={styles.step}>
-                <Ionicons name={'contacts'} size={18} color={Colors.white} />
-                <Text style={styles.stepText}>Connect With People</Text>
-              </View>
-              <View style={styles.step}>
-                <Ionicons name={'message1'} size={18} color={Colors.white} />
-                <Text style={styles.stepText}>Start a Conversation</Text>
-              </View>
               <TouchableOpacity style={styles.start} onPress={actions.clearFirstRun}>
                 <Text style={styles.startText}>Get Started</Text>
               </TouchableOpacity>
             </View>
+
+            <View style={styles.steps}>
+              <Text style={styles.stepstext}>Setup your profile</Text>
+              <Ionicons name={'right'} size={18} color={Colors.text} />
+              <Text style={styles.stepstext}>Connect with people</Text>
+              <Ionicons name={'right'} size={18} color={Colors.text} />
+              <Text style={styles.stepstext}>Start a conversation</Text>
+            </View>
+
           </SafeAreaView>
         )}
         { state.firstRun == false && (
