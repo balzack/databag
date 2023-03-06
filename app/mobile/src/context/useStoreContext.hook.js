@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef, useContext } from 'react';
 import SQLite from "react-native-sqlite-storage";
 
-const DATABAG_DB = 'db_v_131.db';
+const DATABAG_DB = 'db_v_132.db';
 
 export function useStoreContext() {
   const [state, setState] = useState({});

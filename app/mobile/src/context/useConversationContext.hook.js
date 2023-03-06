@@ -126,9 +126,10 @@ export function useConversationContext() {
   }
 
   const setTopicDelta = async (cardId, channelId, entries) => {
+
     for (let entry of entries) {
       if (entry.data) {
-        if (entry.data.detail) {
+        if (entry.data.topicDetail) {
           const item = mapTopicEntry(entry);
           setTopicItem(cardId, channelId, item);
           topics.current.set(item.topicId, item);

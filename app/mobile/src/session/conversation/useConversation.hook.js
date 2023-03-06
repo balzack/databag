@@ -95,7 +95,7 @@ export function useConversation() {
   
     setTimeout(() => {
       updateState({ delayed: true });
-    }, 250);
+    }, 100);
 
   }, [conversation.state, profile.state]);
     
