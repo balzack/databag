@@ -376,7 +376,7 @@ export function useCardContext() {
       const node = profile?.node;
       if (files?.length > 0) {
         const topicId = await addContactChannelTopic(node, cardToken, channelId, null, null, null);
-        upload.actions.addContactTopic(node, cardToken, cardId, channelId, topicId, files, async (assets) => {
+        upload.actions.addTopic(node, cardToken, channelId, topicId, files, async (assets) => {
           const subject = message(assets);
           await setContactChannelTopicSubject(node, cardToken, channelId, topicId, type, subject);
         }, async () => {
@@ -386,7 +386,7 @@ export function useCardContext() {
           catch (err) {
             console.log(err);
           }
-        });
+        }, cardId);
       }
       else {
         const subject = message([]);
