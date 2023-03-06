@@ -131,8 +131,7 @@ export function useAppContext() {
       updateState({ loggingOut: true });
       try {
         await messaging().deleteToken();
-        const token = await messaging().getToken();
-        updateState({ deviceToken: token });
+        deviceToken.current = await messaging().getToken();
         await clearLogin(state.server, state.token);
       }
       catch (err) {
