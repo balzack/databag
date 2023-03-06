@@ -20,6 +20,7 @@ function ConversationView() {
     setRenderCount(renderCount + 1);
     const rendered = [];
     conversation.state.topics.forEach((value) => {
+
       rendered.push(<Text key={value.topicId} testID={value.topicId}>{ value.detail.data }</Text>);
     });
     setTopics(rendered);
@@ -45,10 +46,12 @@ function ConversationTestApp() {
   )
 }
 
+let revision;
 let fetchCards;
 let fetchChannels;
 let fetchCardChannels;
 let fetchTopics;
+let fetchTopic;
 
 const realUseContext = React.useContext;
 const realFetchWithTimeout = fetchUtil.fetchWithTimeout;
@@ -58,6 +61,8 @@ beforeEach(() => {
   fetchCards = [];
   fetchChannels = [];
   fetchCardChannels = [];
+  fetchTopic = {};
+  revision = 0;
 
   const mockUseContext = jest.fn().mockImplementation((ctx) => {
     if (ctx === StoreContext) {
@@ -80,15 +85,27 @@ beforeEach(() => {
       });
     }
     else if (url.startsWith('https://test.org/content/channels?contact')) {
+
       return Promise.resolve({
         json: () => Promise.resolve(fetchCardChannels)
       });
     }
+    else if (url.startsWith('https://test.org/content/channels/123/topics/888/detail?agent')) {
+      return Promise.resolve({
+        json: () => Promise.resolve(fetchTopic)
+      });
+    }
+    else if (url.startsWith('https://test.org/content/channels/aabb/topics/888/detail?contact')) {
+      return Promise.resolve({
+        json: () => Promise.resolve(fetchTopic)
+      });
+    }
     else if (url.startsWith('https://test.org/content/channels/aabb/topics?contact') ||
         url.startsWith('https://test.org/content/channels/123/topics?agent')) {
+
       const headers = new Map();
-      headers.set('topic-marker', 48);
-      headers.set('topic-revision', 55);
+      headers.set('topic-marker', 1);
+      headers.set('topic-revision', revision);
       return Promise.resolve({
         url: 'getTopics',
         status: 200,
@@ -113,7 +130,7 @@ afterEach(() => {
 });
 
 test('add, update, remove card channel topic', async () => {
-  
+
   render(<ConversationTestApp />)
 
   await act(async () => {
@@ -167,6 +184,7 @@ test('add, update, remove card channel topic', async () => {
     },
   ];
 
+  revision = 5;
   fetchTopics = [
     { id: '888', revision: 5, data: {
       detailRevision: 3,
@@ -220,6 +238,7 @@ test('add, update, remove card channel topic', async () => {
     },
   ];
 
+  revision = 6;
   fetchTopics = [
     { id: '888', revision: 6, data: {
       detailRevision: 4,
@@ -268,9 +287,26 @@ test('add, update, remove card channel topic', async () => {
     },
   ];
 
+  revision = 6;
   fetchTopics = [
     { id: '888', revision: 6 }
   ];
+
+  fetchTopic = {
+    id: '888', revision: 6, data: {
+      detailRevision: 4,
+      tagRevision: 0,
+      topicDetail: {
+        guid: '0123',
+        dataType: 'topictype',
+        data: 'contacttopicdata2',
+        created: 1,
+        updated: 1,
+        status: 'confirmed',
+        transform: 'complete',
+      },
+    }
+  }
 
   await act(async () => {
     const card = screen.getByTestId('conversation').props.card;
@@ -280,7 +316,6 @@ test('add, update, remove card channel topic', async () => {
   await waitFor(async () => {
     expect(screen.getByTestId('conversation').props.children).toHaveLength(1);
   });
-
 
   fetchCards = [{
     id: '000a',
@@ -295,6 +330,7 @@ test('add, update, remove card channel topic', async () => {
     },
   }];
 
+  revision = 7;
   fetchCardChannels = [
     { id: 'aabb', revision: 5, data: {
         detailRevision: 3,
@@ -312,13 +348,7 @@ test('add, update, remove card channel topic', async () => {
     expect(screen.getByTestId('conversation').props.children).toHaveLength(0);
   });
 
-
-
 });
-
-
-
-
 
 
 test('add, update, remove channel topic', async () => {
@@ -340,6 +370,7 @@ test('add, update, remove channel topic', async () => {
     expect(screen.getByTestId('conversation').props.children).toHaveLength(0);
   });
 
+  revision = 5;
   fetchChannels = [
     { id: '123', revision: 2, data: {
         detailRevision: 3,
@@ -408,6 +439,7 @@ test('add, update, remove channel topic', async () => {
     expect(screen.getByTestId('888').props.children).toBe('contacttopicdata');
   });
 
+  revision = 6;
   fetchChannels = [
     { id: '123', revision: 3, data: {
         detailRevision: 3,
@@ -455,6 +487,22 @@ test('add, update, remove channel topic', async () => {
     { id: '888', revision: 8 }
   ];
 
+  fetchTopic = {
+    id: '888', revision: 7, data: {
+      detailRevision: 5,
+      tagRevision: 0,
+      topicDetail: {
+        guid: '0123',
+        dataType: 'topictype',
+        data: 'contacttopicdata2',
+        created: 1,
+        updated: 1,
+        status: 'confirmed',
+        transform: 'complete',
+      },
+    }
+  };
+
   await act(async () => {
     const channel = screen.getByTestId('conversation').props.channel;
     await channel.actions.setRevision(4);
@@ -464,6 +512,7 @@ test('add, update, remove channel topic', async () => {
     expect(screen.getByTestId('conversation').props.children).toHaveLength(1);
   });
 
+  revision = 7;
   fetchChannels = [
     { id: '123', revision: 5, data: {
         detailRevision: 3,
@@ -481,7 +530,6 @@ test('add, update, remove channel topic', async () => {
     expect(screen.getByTestId('conversation').props.children).toHaveLength(0);
   });
 
-
-
 });
+
 

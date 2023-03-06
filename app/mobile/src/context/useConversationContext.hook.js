@@ -103,6 +103,9 @@ export function useConversationContext() {
           }
           else if (ignoreRevision || topicRevision > curSyncRevision.current) {
             const delta = await getTopicDelta(cardId, channelId, curSyncRevision.current, null, curTopicMarker.current, null);
+            if (topicRevision > delta.revision) {
+              throw new Error("invalid topic revision");
+            }
             await setTopicDelta(cardId, channelId, delta.topics);
             await setSyncRevision(cardId, channelId, delta.revision);
             curSyncRevision.current = delta.revision;
