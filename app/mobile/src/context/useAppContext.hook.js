@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef, useContext } from 'react';
+import { Alert } from 'react-native';
 import { setLogin } from 'api/setLogin';
 import { clearLogin } from 'api/clearLogin';
 import { removeProfile } from 'api/removeProfile';
@@ -40,7 +41,13 @@ export function useAppContext() {
   useEffect(() => {
     (async () => {
       try {
-        deviceToken.current = await messaging().getToken();
+        try {
+          deviceToken.current = await messaging().getToken();
+        }
+        catch (err) {
+          console.log(err);
+          Alert.alert('FCM', err.toString());
+        }
       }
       catch (err) {
         console.log(err);

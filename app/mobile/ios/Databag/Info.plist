@@ -35,12 +35,12 @@
 			</dict>
 		</dict>
 	</dict>
-  <key>NSMicrophoneUsageDescription</key>
-  <string>Required for build but not used</string>
-  <key>NSPhotoLibraryUsageDescription</key>
-  <string>Used to set profile image and post photos</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Required for build but not used</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Used to set profile image and post photos</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>
@@ -59,6 +59,11 @@
 		<string>Octicons.ttf</string>
 		<string>SimpleLineIcons.ttf</string>
 		<string>Zocial.ttf</string>
+	</array>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>remote-notification</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
