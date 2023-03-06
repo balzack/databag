@@ -70,7 +70,7 @@ export function useConversation() {
 
   useEffect(() => {
     const loaded = conversation.state.loaded;
-    const cardId = conversation.state.card?.cardId;
+    const cardId = conversation.state.card?.card?.cardId;
     const profileGuid = profile.state.identity?.guid;
     const channel = conversation.state.channel;
     const cards = card.state.cards;

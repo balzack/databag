@@ -17,7 +17,8 @@ export function getChannelSubjectLogo(cardId, profileGuid, channel, cards, cardI
 
   const contacts = [];
   if (cardId) {
-    contacts.push(cardId);
+    const contact = cards.get(cardId)?.card;
+    contacts.push(contact);
   }
   if (channel?.detail?.members?.length) {
     channel.detail.members.forEach(guid => {
