@@ -8,6 +8,7 @@ import { getChannelSeals, isUnsealed, getContentKey, encryptTopicSubject, decryp
 
 export function useConversation() {
   const [state, setState] = useState({
+    hosted: null,
     subject: null,
     logo: null,
     topic: [],
@@ -73,6 +74,7 @@ export function useConversation() {
     const cardId = conversation.state.card?.card?.cardId;
     const profileGuid = profile.state.identity?.guid;
     const channel = conversation.state.channel;
+    const hosted = conversation.state.card == null;
     const cards = card.state.cards;
     cardImageUrl = card.actions.getCardImageUrl;
     const { logo, subject } = getChannelSubjectLogo(cardId, profileGuid, channel, cards, cardImageUrl);
@@ -91,7 +93,7 @@ export function useConversation() {
     });
     const filtered = sorted.filter(item => !(item.blocked === 1));
 
-    updateState({ loaded, logo, subject, topics: filtered, delayed: false });
+    updateState({ hosted, loaded, logo, subject, topics: filtered, delayed: false });
   
     setTimeout(() => {
       updateState({ delayed: true });
@@ -105,7 +107,6 @@ export function useConversation() {
       updateState({ focus });
     },
     editTopic: async (topicId, type, data) => {
-      console.log("EDIT:", topicId, type, data);
       updateState({ editing: true, editTopicId: topicId, editType: type, editMessage: data?.text, editData: data });
     },
     hideEdit: () => {

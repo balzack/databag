@@ -101,7 +101,7 @@ export function Conversation({ navigation, cardId, channelId, closeConversation,
                onEndReached={loadMore}
                onEndReachedThreshold={0.1}
                renderItem={({item}) => <TopicItem item={item} focused={item.topicId === state.focus} 
-                 focus={() => actions.setFocus(item.topicId)} hosting={state.host == null}
+                 focus={() => actions.setFocus(item.topicId)} hosting={state.hosted}
                  remove={actions.removeTopic} update={actions.editTopic} block={actions.blockTopic}
                  report={actions.reportTopic} contentKey={state.contentKey} /> }
               keyExtractor={item => item.topicId}
