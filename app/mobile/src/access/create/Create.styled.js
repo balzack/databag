@@ -11,6 +11,8 @@ export const styles = StyleSheet.create({
   },
   icon: {
     padding: 8,
+    width: 40,
+    textAlign: 'center',
   },
   demo: {
     alignItems: 'center',
@@ -31,6 +33,11 @@ export const styles = StyleSheet.create({
   required: {
     fontSize: 12,
     color: Colors.grey,
+    width: 32,
+    padding: 8,
+    textAlign: 'center',
+  },
+  requiredtext: {
     textAlignVertical: 'center',
   },
   container: {
@@ -103,7 +110,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
   },
   inputfield: {
-    flex: 1,
+    flexGrow: 1,
     textAlign: 'center',
     padding: 8,
     color: Colors.text,

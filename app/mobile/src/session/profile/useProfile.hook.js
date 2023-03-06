@@ -342,6 +342,9 @@ export function useProfile() {
     saveLogin: async () => {
       await account.actions.setLogin(state.editHandle, state.editPassword);
     },
+    setProfileImage: async (data) => {
+      await profile.actions.setProfileImage(data);
+    },
   };
 
   return { state, actions };

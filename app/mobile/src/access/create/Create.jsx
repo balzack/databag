@@ -41,17 +41,17 @@ export function Create() {
             <Ionicons style={styles.icon} name="database" size={18} color="#888888" />
             <TextInput style={styles.inputfield} value={state.server} onChangeText={actions.setServer}
                 autoCorrect={false} autoCapitalize="none" placeholder="server" placeholderTextColor={Colors.grey} />
-            <View style={styles.space}>
-              { (!state.server || !state.serverChecked) && (
-                <Text style={styles.required}>✻</Text>
-              )}
-              { state.server && state.serverChecked && !state.serverValid && (
-                <Ionicons style={styles.icon} name="exclamationcircleo" size={18} color="#ff8888" />
-              )}
-              { state.server && state.serverChecked && state.serverValid && (
-                <Ionicons style={styles.icon} name="checkcircleo" size={18} color="#448866" />
-              )}
-            </View>
+            { (!state.server || !state.serverChecked) && (
+              <View style={styles.required}>
+                <Text style={styles.requiredtest}>✻</Text>
+              </View>
+            )}
+            { state.server && state.serverChecked && !state.serverValid && (
+              <Ionicons style={styles.icon} name="exclamationcircleo" size={18} color="#ff8888" />
+            )}
+            { state.server && state.serverChecked && state.serverValid && (
+              <Ionicons style={styles.icon} name="checkcircleo" size={18} color="#448866" />
+            )}
           </View>
           <View style={styles.token}>
             { state.tokenRequired && (
@@ -82,17 +82,15 @@ export function Create() {
             <Ionicons style={styles.icon} name="user" size={18} color="#888888" />
             <TextInput style={styles.inputfield} value={state.username} onChangeText={actions.setUsername}
                 autoCorrect={false} autoCapitalize="none" placeholder="username" placeholderTextColor={Colors.grey} />
-            <View style={styles.space}>
-                { (!validServer || !validToken || !state.username || !state.usernameChecked) && (
-                  <Text style={styles.required}>✻</Text>
-                )}
-                { validServer && validToken && state.username && state.usernameChecked && !state.usernameValid && (
-                  <Ionicons style={styles.icon} name="exclamationcircleo" size={18} color="#ff8888" />
-                )}
-                { validServer && validToken && state.username && state.usernameChecked && state.usernameValid && (
-                  <Ionicons style={styles.icon} name="checkcircleo" size={18} color="#448866" />
-                )}
-            </View>
+            { (!validServer || !validToken || !state.username || !state.usernameChecked) && (
+              <Text style={styles.required}>✻</Text>
+            )}
+            { validServer && validToken && state.username && state.usernameChecked && !state.usernameValid && (
+              <Ionicons style={styles.icon} name="exclamationcircleo" size={18} color="#ff8888" />
+            )}
+            { validServer && validToken && state.username && state.usernameChecked && state.usernameValid && (
+              <Ionicons style={styles.icon} name="checkcircleo" size={18} color="#448866" />
+            )}
           </View>
           { state.showPassword && (
             <View style={styles.inputwrapper}>
