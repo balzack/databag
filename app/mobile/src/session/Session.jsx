@@ -6,7 +6,6 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/AntDesign';
-import MatIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useSession } from './useSession.hook';
 import { styles } from './Session.styled';
 import Colors from 'constants/Colors';
@@ -23,7 +22,6 @@ import { ConversationContext } from 'context/ConversationContext';
 import { ProfileContext } from 'context/ProfileContext';
 import { ProfileIcon } from './profileIcon/ProfileIcon';
 import { CardsIcon } from './cardsIcon/CardsIcon';
-import { tos } from 'constants/TermsOfService';
 import splash from 'images/session.png';
 
 const ConversationStack = createStackNavigator();
@@ -322,36 +320,23 @@ export function Session() {
               <Text style={styles.tagText}>Communication for the Decentralized Web</Text>
             </View>
             <Image style={styles.splash} source={splash} resizeMode="contain" />
-
-            <ScrollView style={styles.terms} persistentScrollbar={true}>
-              <Text style={styles.termsheader}>Terms of Use and User Policy</Text>
-              <Text numberOfLines={0}>{ tos.message }</Text>
-            </ScrollView>
-
             <View style={styles.steps} >
-              <TouchableOpacity style={styles.agree} onPress={() => actions.setAgree(!state.agree)}>
-                { state.agree && (
-                  <MatIcons name={'checkbox-outline'} size={20} color={Colors.text} />
-                )}
-                { !state.agree && (
-                  <MatIcons name={'checkbox-blank-outline'} size={20} color={Colors.text} />
-                )}
-                <Text style={styles.agreeText}>I Agree to the Terms and Policy</Text> 
+              <View style={styles.step}>
+                <Ionicons name={'user'} size={18} color={Colors.white} />
+                <Text style={styles.stepText}>Setup Your Profile</Text>
+              </View>
+              <View style={styles.step}>
+                <Ionicons name={'contacts'} size={18} color={Colors.white} />
+                <Text style={styles.stepText}>Connect With People</Text>
+              </View>
+              <View style={styles.step}>
+                <Ionicons name={'message1'} size={18} color={Colors.white} />
+                <Text style={styles.stepText}>Start a Conversation</Text>
+              </View>
+              <TouchableOpacity style={styles.start} onPress={actions.clearFirstRun}>
+                <Text style={styles.startText}>Get Started</Text>
               </TouchableOpacity>
-
-              { !state.agree && (
-                <View style={styles.nostart}>
-                  <Text style={styles.nostartText}>Continue</Text>
-                </View>
-              )}
-
-              { state.agree && (
-                <TouchableOpacity style={styles.start} onPress={actions.clearFirstRun}>
-                  <Text style={styles.startText}>Get Started</Text>
-                </TouchableOpacity>
-              )}
             </View>
-
           </SafeAreaView>
         )}
         { state.firstRun == false && (
@@ -397,5 +382,6 @@ export function Session() {
     </NavigationContainer>
   );
 }
+
 
 

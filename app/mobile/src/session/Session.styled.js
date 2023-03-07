@@ -7,29 +7,6 @@ export const styles = StyleSheet.create({
     height: '100%',
     backgroundColor: Colors.formBackground,
   },
-  agree: {
-    display: 'flex',
-    flexDirection: 'row',
-    marginBottom: 16,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  agreeText: {
-    color: Colors.text,
-    paddingLeft: 8,
-    fontWeight: 'bold',
-  },
-  terms: {
-    borderRadius: 4,
-    maxHeight: '60%',
-    padding: 8,
-    margin: 16,
-    backgroundColor: Colors.formBackground,
-  },
-  termsheader: {
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
   container: {
     width: '100%',
     height: '100%',
@@ -40,13 +17,17 @@ export const styles = StyleSheet.create({
     backgroundColor: Colors.background,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingTop: 16,
-    paddingBottom: 16,
   },
   splash: {
+    width: '100%',
+    height: '100%',
     maxWidth: '80%',
-    maxHeight: '30%',
-    opacity: 0.5,
+    maxHeight: '50%',
+  },
+  steps: {
+    flexGrow: 1,
+    display: 'flex',
+    justifyContent: 'center',
   },
   step: {
     display: 'flex',
@@ -73,17 +54,6 @@ export const styles = StyleSheet.create({
     color: Colors.white,
     paddingLeft: 16,
     fontSize: 16,
-  },
-  nostart: {
-    marginTop: 16,
-    padding: 8,
-    backgroundColor: Colors.disabled,
-    borderRadius: 4,
-    display: 'flex',
-    alignItems: 'center',
-  },
-  nostartText: {
-    color: Colors.white,
   },
   start: {
     marginTop: 16,
@@ -169,3 +139,4 @@ export const styles = StyleSheet.create({
     color: Colors.tetx,
   },
 });
+
