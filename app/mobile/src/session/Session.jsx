@@ -6,6 +6,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/AntDesign';
+import MatIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useSession } from './useSession.hook';
 import { styles } from './Session.styled';
 import Colors from 'constants/Colors';
@@ -322,23 +323,33 @@ export function Session() {
             </View>
             <Image style={styles.splash} source={splash} resizeMode="contain" />
 
-            <ScrollView style={styles.terms}>
+            <ScrollView style={styles.terms} persistentScrollbar={true}>
               <Text style={styles.termsheader}>Terms of Use and User Policy</Text>
               <Text numberOfLines={0}>{ tos.message }</Text>
             </ScrollView>
 
             <View style={styles.steps} >
-              <TouchableOpacity style={styles.start} onPress={actions.clearFirstRun}>
-                <Text style={styles.startText}>Get Started</Text>
+              <TouchableOpacity style={styles.agree} onPress={() => actions.setAgree(!state.agree)}>
+                { state.agree && (
+                  <MatIcons name={'checkbox-outline'} size={20} color={Colors.text} />
+                )}
+                { !state.agree && (
+                  <MatIcons name={'checkbox-blank-outline'} size={20} color={Colors.text} />
+                )}
+                <Text style={styles.agreeText}>I Agree to the Terms and Policy</Text> 
               </TouchableOpacity>
-            </View>
 
-            <View style={styles.steps}>
-              <Text style={styles.stepstext}>Setup your profile</Text>
-              <Ionicons name={'right'} size={18} color={Colors.text} />
-              <Text style={styles.stepstext}>Connect with people</Text>
-              <Ionicons name={'right'} size={18} color={Colors.text} />
-              <Text style={styles.stepstext}>Start a conversation</Text>
+              { !state.agree && (
+                <View style={styles.nostart}>
+                  <Text style={styles.nostartText}>Get Started</Text>
+                </View>
+              )}
+
+              { state.agree && (
+                <TouchableOpacity style={styles.start} onPress={actions.clearFirstRun}>
+                  <Text style={styles.startText}>Get Started</Text>
+                </TouchableOpacity>
+              )}
             </View>
 
           </SafeAreaView>

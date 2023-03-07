@@ -13,6 +13,7 @@ export function useSession() {
     cardId: null,
     converstaionId: null,
     firstRun: null,
+    agree: false,
   });
 
   const store = useContext(StoreContext);
@@ -48,6 +49,9 @@ export function useSession() {
   }, [dimensions]);
 
   const actions = {
+    setAgree: (agree) => {
+      updateState({ agree });
+    },
     setCardId: (cardId) => {
       updateState({ cardId });
     },

@@ -7,6 +7,18 @@ export const styles = StyleSheet.create({
     height: '100%',
     backgroundColor: Colors.formBackground,
   },
+  agree: {
+    display: 'flex',
+    flexDirection: 'row',
+    marginBottom: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  agreeText: {
+    color: Colors.text,
+    paddingLeft: 8,
+    fontWeight: 'bold',
+  },
   terms: {
     borderRadius: 4,
     maxHeight: '60%',
@@ -34,23 +46,6 @@ export const styles = StyleSheet.create({
     maxHeight: '30%',
     opacity: 0.5,
   },
-  start: {
-    flexGrow: 1,
-    display: 'flex',
-    justifyContent: 'center',
-  },
-  steps: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingBottom: 16,
-    flexDirection: 'row',
-  },
-  stepstext: {
-    color: Colors.text,
-    padding: 8,
-  },
-
   step: {
     display: 'flex',
     flexDirection: 'row',
@@ -76,6 +71,17 @@ export const styles = StyleSheet.create({
     color: Colors.white,
     paddingLeft: 16,
     fontSize: 16,
+  },
+  nostart: {
+    marginTop: 16,
+    padding: 8,
+    backgroundColor: Colors.disabled,
+    borderRadius: 4,
+    display: 'flex',
+    alignItems: 'center',
+  },
+  nostartText: {
+    color: Colors.white,
   },
   start: {
     marginTop: 16,
