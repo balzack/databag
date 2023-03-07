@@ -45,7 +45,7 @@ export function useStoreContext() {
       await db.current.executeSql("INSERT OR REPLACE INTO app (key, value) values (?, ?);", [dataId, encodeObject(profile)]);
     },
     getFirstRun: async (guid) => {
-      const firstRun = await getAppValue(db.current, "firstrun", { set: true });
+      const firstRun = await getAppValue(db.current, `${guid}_firstrun`, { set: true });
       return firstRun.set;
     },
     setFirstRun: async () => {
