@@ -40,6 +40,8 @@ export const styles = StyleSheet.create({
     backgroundColor: Colors.background,
     alignItems: 'center',
     justifyContent: 'center',
+    paddingTop: 16,
+    paddingBottom: 16,
   },
   splash: {
     maxWidth: '80%',

@@ -341,7 +341,7 @@ export function Session() {
 
               { !state.agree && (
                 <View style={styles.nostart}>
-                  <Text style={styles.nostartText}>Get Started</Text>
+                  <Text style={styles.nostartText}>Continue</Text>
                 </View>
               )}
 
