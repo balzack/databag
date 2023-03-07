@@ -147,6 +147,7 @@ export function useAppContext() {
       await clearSession();
       access.current = null;
       await store.actions.clearSession();
+      await store.actions.clearFirstRun();
       updateState({ loggingOut: false });
     },
     remove: async () => {
