@@ -1,8 +1,10 @@
-import { KeyboardAvoidingView, ActivityIndicator, Alert, Text, TextInput, View, TouchableOpacity } from 'react-native';
+import { KeyboardAvoidingView, Modal, ScrollView, ActivityIndicator, Alert, Text, TextInput, View, TouchableOpacity } from 'react-native';
 import { styles } from './Admin.styled';
 import Ionicons from 'react-native-vector-icons/AntDesign';
 import { useAdmin } from './useAdmin.hook';
 import Colors from 'constants/Colors';
+import MatIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { tos } from 'constants/TermsOfService';
 
 export function Admin() {
 
@@ -53,7 +55,23 @@ export function Admin() {
               )}
             </TouchableOpacity>
           </View>
-          { state.enabled && (
+
+          <View style={styles.tos}>
+            <TouchableOpacity style={styles.viewterms} onPress={actions.showTerms}>
+              <Text style={styles.viewtermstext}>View Terms of Service</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.agreeterms} onPress={() => actions.agree(!state.agree)}>
+              { state.agree && (
+                <MatIcons name={'checkbox-outline'} size={20} color={Colors.primary} />
+              )}
+              { !state.agree && (
+                <MatIcons name={'checkbox-blank-outline'} size={20} color={Colors.primary} />
+              )}
+              <Text style={styles.agreetermstext}>I agree to Terms of Service</Text>
+            </TouchableOpacity>
+          </View>
+
+          { state.enabled && state.agree && (
             <TouchableOpacity style={styles.reset} onPress={admin}>
               { state.busy && (
                 <ActivityIndicator size="small" color="#ffffff" />
@@ -63,7 +81,7 @@ export function Admin() {
               )}
             </TouchableOpacity>
           )}
-          { !state.enabled && (
+          { (!state.enabled || !state.agree) && (
             <View style={styles.noreset}>
               <Text style={styles.noresettext}>Access</Text>
             </View>
@@ -73,6 +91,23 @@ export function Admin() {
           <Text style={styles.versiontext}>v{ state.version }</Text>
         </View>
       </View>
+            <Modal
+        animationType="fade"
+        transparent={true}
+        visible={state.showTerms}
+        supportedOrientations={['portrait', 'landscape']}
+        onRequestClose={actions.hideTerms}
+      >
+        <View style={styles.modalContainer}>
+          <ScrollView style={styles.terms} persistentScrollbar={true}>
+            <Text style={styles.termsheader}>Terms of Use and User Policy</Text>
+            <Text numberOfLines={0}>{ tos.message }</Text>
+          </ScrollView>
+          <TouchableOpacity style={styles.done} onPress={actions.hideTerms}>
+            <Text style={styles.donetext}>Done</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
     </KeyboardAvoidingView>
   );
 }

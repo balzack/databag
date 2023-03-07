@@ -1,8 +1,10 @@
-import { KeyboardAvoidingView, ActivityIndicator, Alert, Text, TextInput, View, TouchableOpacity } from 'react-native';
+import { KeyboardAvoidingView, ActivityIndicator, Modal, ScrollView, Alert, Text, TextInput, View, TouchableOpacity } from 'react-native';
 import { styles } from './Login.styled';
 import Ionicons from 'react-native-vector-icons/AntDesign';
 import { useLogin } from './useLogin.hook';
 import { Colors } from 'constants/Colors';
+import MatIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { tos } from 'constants/TermsOfService';
 
 export function Login() {
 
@@ -60,7 +62,23 @@ export function Login() {
               </TouchableOpacity>
             </View>
           )}
-          { state.enabled && (
+
+          <View style={styles.tos}>
+            <TouchableOpacity style={styles.viewterms} onPress={actions.showTerms}>
+              <Text style={styles.viewtermstext}>View Terms of Service</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.agreeterms} onPress={() => actions.agree(!state.agree)}>
+              { state.agree && (
+                <MatIcons name={'checkbox-outline'} size={20} color={Colors.primary} />
+              )}
+              { !state.agree && (
+                <MatIcons name={'checkbox-blank-outline'} size={20} color={Colors.primary} />
+              )}
+              <Text style={styles.agreetermstext}>I agree to Terms of Service</Text>
+            </TouchableOpacity>
+          </View>
+
+          { state.enabled && state.agree && (
             <TouchableOpacity style={styles.login} onPress={login}>
               { state.busy && (
                 <ActivityIndicator size="small" color="#ffffff" />
@@ -70,7 +88,7 @@ export function Login() {
               )}
             </TouchableOpacity>
           )}
-          { !state.enabled && (
+          { (!state.enabled || !state.agree) && (
             <View style={styles.nologin}>
               <Text style={styles.nologintext}>Login</Text>
             </View>
@@ -85,6 +103,23 @@ export function Login() {
           </View>
         </View>      
       </View>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={state.showTerms}
+        supportedOrientations={['portrait', 'landscape']}
+        onRequestClose={actions.hideTerms}
+      >
+        <View style={styles.modalContainer}>
+          <ScrollView style={styles.terms} persistentScrollbar={true}>
+            <Text style={styles.termsheader}>Terms of Use and User Policy</Text>
+            <Text numberOfLines={0}>{ tos.message }</Text>
+          </ScrollView>
+          <TouchableOpacity style={styles.done} onPress={actions.hideTerms}>
+            <Text style={styles.donetext}>Done</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
     </KeyboardAvoidingView>
   );
 }

@@ -14,6 +14,8 @@ export function useLogin() {
     login: null,
     password: null,
     showPassword: false,
+    agree: false,
+    showTerms: false,
   });
 
   const updateState = (value) => {
@@ -56,6 +58,15 @@ export function useLogin() {
     },
     hidePassword: () => {
       updateState({ showPassword: false });
+    },
+    showTerms: () => {
+      updateState({ showTerms: true });
+    },
+    hideTerms: () => {
+      updateState({ showTerms: false });
+    },
+    agree: (agree) => {
+      updateState({ agree });
     },
     login: async () => {
       if (!state.busy) {

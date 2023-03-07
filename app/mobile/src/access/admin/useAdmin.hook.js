@@ -18,6 +18,8 @@ export function useAdmin() {
     token: null,
     plainText: false,
     version: null,
+    agree: false,
+    showTerms: false,
   });
 
   const updateState = (value) => {
@@ -61,6 +63,15 @@ export function useAdmin() {
     },
     hidePass: () => {
       updateState({ plainText: false });
+    },
+    showTerms: () => {
+      updateState({ showTerms: true });
+    },
+    hideTerms: () => {
+      updateState({ showTerms: false });
+    },
+    agree: (agree) => {
+      updateState({ agree });
     },
     access: async () => {
       if (!state.busy) {
