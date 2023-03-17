@@ -9,6 +9,12 @@ export const WelcomeWrapper = styled.div`
   justify-content: center;
   color: #555555;
 
+  .video {
+    width: 640px;
+    height: 480px;
+    background-color: yellow;
+  }
+
   .title {
     width: 100%;
     display: flex;

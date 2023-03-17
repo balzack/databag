@@ -796,4 +796,11 @@ var endpoints = routes{
 		"/status",
 		Status,
 	},
+
+  route{
+    "Relay",
+    strings.ToUpper("Get"),
+    "/relay",
+    Relay,
+  },
 }
