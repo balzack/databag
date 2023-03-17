@@ -35,10 +35,12 @@
 			</dict>
 		</dict>
 	</dict>
+  <key>NSCameraUsageDescription</key>
+  <string>Camera permission description</string>
+  <key>NSMicrophoneUsageDescription</key>
+  <string>Microphone permission description</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>Required for build but not used</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Used to set profile image and post photos</string>
 	<key>UIAppFonts</key>
