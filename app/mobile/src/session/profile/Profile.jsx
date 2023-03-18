@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, KeyboardAvoidingView, Modal, View, Switch, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
 import Ionicons from 'react-native-vector-icons/AntDesign';
 import MatIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -10,6 +11,18 @@ import { BlockedTopics } from './blockedTopics/BlockedTopics';
 import { BlockedContacts } from './blockedContacts/BlockedContacts';
 import { BlockedMessages } from './blockedMessages/BlockedMessages';
 
+import {
+	ScreenCapturePickerView,
+	RTCPeerConnection,
+	RTCIceCandidate,
+	RTCSessionDescription,
+	RTCView,
+	MediaStream,
+	MediaStreamTrack,
+	mediaDevices,
+	registerGlobals
+} from 'react-native-webrtc';
+
 export function ProfileHeader() {
   const { state, actions } = useProfile();
 
@@ -20,6 +33,103 @@ export function ProfileHeader() {
 
 export function ProfileBody() {
   const { state, actions } = useProfile();
+  const ws = useRef();
+  const peer = useRef();
+  const stream = useRef();
+  const [streamUrl, setStreamUrl] = useState(null);
+
+  useEffect(() => {
+    ws.current = new WebSocket('wss://balzack.coredb.org/relay');
+    ws.current.onmessage = async (ev) => {
+
+console.log(ev.data);
+
+      const msg = JSON.parse(ev.data);
+      if (msg.candidate) {
+        console.log("> CANDIDATE: ", msg.candidate);
+        const candidate = new RTCIceCandidate( msg.candidate );
+        return peer.current.addIceCandidate(candidate);
+      }
+      else if (msg.offer) {
+        console.log("> OFFER: ", msg.offer);
+        const offerDescription = new RTCSessionDescription(msg.offer );
+	      await peer.current.setRemoteDescription( offerDescription );
+	      const answer = await peer.current.createAnswer();
+	      await peer.current.setLocalDescription( answer );
+        ws.current.send(JSON.stringify({ answer }));
+      }
+      else if (msg.answer) {
+        console.log("> ANSWER: ", msg.answer);
+      }
+    }
+    ws.current.onclose = (e) => {
+      console.log("CLOSED");
+    }
+    ws.current.onopen = () => {
+      console.log("OPENED");
+    }
+    ws.current.error = (e) => {
+      console.log("ERROR");
+    }
+
+
+
+    let peerConstraints = {
+    iceServers: [
+    {
+      urls: 'stun:192.168.13.233:5001?transport=udp',
+      username: 'user',
+      credential: 'pass'
+    },
+    {
+      urls: 'turn:192.168.13.233:5001?transport=udp',
+      username: 'user',
+      credential: 'pass'
+    }]
+    };
+
+    peer.current = new RTCPeerConnection( peerConstraints );
+
+    peer.current.addEventListener( 'connectionstatechange', event => {
+      console.log("CONNECTION STATE");
+    } );
+
+    peer.current.addEventListener( 'icecandidate', event => {
+      if ( !event.candidate ) { return; };
+      ws.current.send(JSON.stringify({ candidate: event.candidate }));
+      console.log("SEND CANDIDATE!!!"); 
+    } );
+
+    peer.current.addEventListener( 'icecandidateerror', event => {
+      console.log("ICE ERROR");
+    } );
+
+    peer.current.addEventListener( 'iceconnectionstatechange', event => {
+      console.log("ICE STATE CHANGE");
+    } );
+
+    peer.current.addEventListener( 'negotiationneeded', event => {
+      console.log("ICE NEGOTIATION");
+    } );
+
+    peer.current.addEventListener( 'signalingstatechange', event => {
+      console.log("ICE SIGNALING");
+    } );
+
+    peer.current.addEventListener( 'track', event => {
+      console.log("ICE TRACK", event.track);
+      // Grab the remote track from the connected participant.
+      //remoteMediaStream = remoteMediaStream || new MediaStream();
+      //remoteMediaStream.addTrack( event.track, remoteMediaStream );
+
+      if (!stream.current) {
+        stream.current = new MediaStream();
+      }
+      stream.current.addTrack(event.track, stream.current);
+      setStreamUrl(stream.current.toURL());
+    } );
+
+  }, []);
 
   const logout = async () => {
     Alert.alert(
@@ -131,104 +241,14 @@ export function ProfileBody() {
   return (
     <View style={styles.body}>
 
-      <View style={styles.logo}>
-        <View>
-          <Logo src={state.imageSource} width={128} height={128} radius={8} />
-          <TouchableOpacity style={styles.gallery} onPress={onGallery}>
-            <Ionicons name="picture" size={14} color={Colors.white} />
-          </TouchableOpacity>
-        </View>
-      </View>
- 
-      <View style={styles.alert}>
-        { state.disconnected && (
-          <Text style={styles.alertText}>Disconnected</Text>
-        )}
-      </View>
-
-      <TouchableOpacity style={styles.detail} onPress={actions.showEditDetails}>
-        <View style={styles.attribute}>
-          { state.name && (
-            <Text style={styles.nametext}>{ state.name }</Text>
-          )}
-          { !state.name && (
-            <Text style={styles.nonametext}>Name</Text>
-          )}
-          <Ionicons name="edit" size={16} color={Colors.text} />
-        </View>
-        <View style={styles.attribute}>
-          <View style={styles.icon}>
-            <Ionicons name="enviromento" size={14} color={Colors.text} />
-          </View>
-          { state.location && (
-            <Text style={styles.locationtext}>{ state.location }</Text>
-          )}
-          { !state.location && (
-            <Text style={styles.nolocationtext}>Location</Text>
-          )}
-        </View> 
-        <View style={styles.attribute}>
-          <View style={styles.icon}>
-            <Ionicons name="book" size={14} color={Colors.text} />
-          </View>
-          { state.description && (
-            <Text style={styles.descriptiontext}>{ state.description }</Text>
-          )}
-          { !state.description && (
-            <Text style={styles.nodescriptiontext}>Description</Text>
-          )}
-        </View> 
-      </TouchableOpacity>
-  
-      <View style={styles.group}>
-        <View style={styles.enable}>
-          <TouchableOpacity onPress={() => setVisible(!state.searchable)} activeOpacity={1}>
-            <Text style={styles.enableText}>Visible in Registry</Text>
-          </TouchableOpacity>
-          <Switch style={styles.enableSwitch} value={state.searchable} onValueChange={setVisible} trackColor={styles.switch}/>
-        </View>
-        <View style={styles.enable}>
-          <TouchableOpacity onPress={() => setNotifications(!state.pushEnabled)} activeOpacity={1}>
-            <Text style={styles.enableText}>Enable Notifications</Text>
-          </TouchableOpacity>
-          <Switch style={styles.enableSwitch} value={state.pushEnabled} onValueChange={setNotifications} trackColor={styles.switch}/>
-        </View>
-      </View>
-
-      <TouchableOpacity style={styles.logout} activeOpacity={1} onPress={logout}>
-        <Ionicons name="logout" size={14} color={Colors.primary} />
-        <Text style={styles.logoutText}>Logout</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.logout} onPress={actions.showEditLogin}>
-        <Ionicons name="user" size={20} color={Colors.primary} />
-        <Text style={styles.logoutText}>Change Login</Text>
-      </TouchableOpacity>
- 
-      { state.sealable && (
-        <TouchableOpacity style={styles.logout} onPress={actions.showEditSeal}>
-          <Ionicons name="lock" size={22} color={Colors.primary} />
-          <Text style={styles.logoutText}>Sealed Topics</Text>
-        </TouchableOpacity>
-      )}
-
-      <TouchableOpacity style={styles.delete} activeOpacity={1} onPress={actions.showDelete}>
-        <Ionicons name="delete" size={16} color={Colors.alert} />
-        <Text style={styles.deleteText}>Delete Account</Text>
-      </TouchableOpacity>
-
-      <Text style={styles.blockedLabel}>Manage Blocked:</Text>
-      <View style={styles.blocked}>
-        <TouchableOpacity style={styles.link} onPress={actions.showBlockedCards}>
-          <Text style={styles.linkText}>Contacts</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.link} onPress={actions.showBlockedChannels}>
-          <Text style={styles.linkText}>Topics</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.link} onPress={actions.showBlockedMessages}>
-          <Text style={styles.linkText}>Messages</Text>
-        </TouchableOpacity>
-      </View>
+      <Text>WEBRTC</Text>
+<RTCView
+  style={{ width: 320, height: 240, backgroundColor: 'yellow' }}
+	mirror={true}
+	objectFit={'cover'}
+	streamURL={streamUrl}
+	zOrder={0}
+/>
 
       <Modal
         animationType="fade"
