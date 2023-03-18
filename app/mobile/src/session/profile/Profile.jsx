@@ -37,12 +37,20 @@ export function ProfileBody() {
   const peer = useRef();
   const stream = useRef();
   const [streamUrl, setStreamUrl] = useState(null);
+  const localMediaStream = useRef();
 
   useEffect(() => {
+
+
+console.log("WS CONNECT!!!");
+console.log("WS CONNECT!!!");
+console.log("WS CONNECT!!!");
+console.log("WS CONNECT!!!");
+console.log("WS CONNECT!!!");
+console.log("WS CONNECT!!!");
+console.log("WS CONNECT!!!");
     ws.current = new WebSocket('wss://balzack.coredb.org/relay');
     ws.current.onmessage = async (ev) => {
-
-console.log(ev.data);
 
       const msg = JSON.parse(ev.data);
       if (msg.candidate) {
@@ -60,6 +68,8 @@ console.log(ev.data);
       }
       else if (msg.answer) {
         console.log("> ANSWER: ", msg.answer);
+        const answer = new RTCSessionDescription( msg.answer );
+        await peer.current.setRemoteDescription( answer );
       }
     }
     ws.current.onclose = (e) => {
@@ -89,6 +99,7 @@ console.log(ev.data);
     };
 
     peer.current = new RTCPeerConnection( peerConstraints );
+    go();
 
     peer.current.addEventListener( 'connectionstatechange', event => {
       console.log("CONNECTION STATE");
@@ -110,6 +121,7 @@ console.log(ev.data);
 
     peer.current.addEventListener( 'negotiationneeded', event => {
       console.log("ICE NEGOTIATION");
+      start();
     } );
 
     peer.current.addEventListener( 'signalingstatechange', event => {
@@ -130,6 +142,46 @@ console.log(ev.data);
     } );
 
   }, []);
+
+  const go = async () => {
+
+
+    let mediaConstraints = {
+      audio: true,
+      video: {
+        frameRate: 4,
+        facingMode: 'user'
+      }
+    };
+
+console.log("GETTING MEDIA DEVICES");
+
+    localMediaStream.current = await mediaDevices.getUserMedia( mediaConstraints );
+ }
+
+const okay = async () => {
+
+  console.log("ADDING TRACKS");
+      localMediaStream.current.getTracks().forEach((track) => {
+        peer.current.addTrack( track, localMediaStream.current )
+  console.log("TRACK ADDED!!!!");
+      });
+};
+ 
+
+  const start = async () => {
+    let sessionConstraints = {
+      mandatory: {
+        OfferToReceiveAudio: false,
+        OfferToReceiveVideo: true,
+        VoiceActivityDetection: false,
+      }
+    };
+
+    const offer = await peer.current.createOffer( sessionConstraints );
+    await peer.current.setLocalDescription( offer );
+    ws.current.send(JSON.stringify({ offer }));
+  };
 
   const logout = async () => {
     Alert.alert(
@@ -241,7 +293,15 @@ console.log(ev.data);
   return (
     <View style={styles.body}>
 
-      <Text>WEBRTC</Text>
+    <TouchableOpacity onPress={okay}>
+      <Text>SEND</Text>
+    </TouchableOpacity>
+
+
+    <TouchableOpacity onPress={start}>
+      <Text>START</Text>
+    </TouchableOpacity>
+
 <RTCView
   style={{ width: 320, height: 240, backgroundColor: 'yellow' }}
 	mirror={true}

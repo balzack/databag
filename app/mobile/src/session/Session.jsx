@@ -370,8 +370,8 @@ export function Session() {
                   tabBarActiveTintColor: Colors.white,
                   tabBarInactiveTintColor: Colors.disabled,
                 })}>
-                <Tab.Screen name="Conversation" component={ConversationStackScreen} />
                 <Tab.Screen name="Profile" component={ProfileStackScreen} />
+                <Tab.Screen name="Conversation" component={ConversationStackScreen} />
                 <Tab.Screen name="Contacts" component={ContactStackScreen} />
               </Tab.Navigator>
             )}
