@@ -11,7 +11,7 @@ info:
     url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
 tags:
   - name: status
-    description: websocket endpoint for receiving module revision events
+    description: websocket endpoint for receiving module events
   - name: admin
     description: account creation for portal backend.
   - name: account
@@ -26,21 +26,30 @@ tags:
     description: card management for referencing contacts
   - name: attribute
     description: article management associated with profile
-  - name: share
-    description: channel and topic management
-    
+  - name: call 
+    description: coordination of webrtc communication
 paths:
 
   /status:
     get:
       tags:
         - status
-      description: Websocket placeholder endpoint for receiving account status updates
+      description: Websocket endpoint for receiving account status updates
       operationId: status
       responses:
         '200':
           description: Awaiting announce
-              
+
+  /status/activity:
+    get:
+      tags:
+        -status
+      description: Websocket endpoint for receiving account status and calling events
+      operationId: activity
+      responses:
+        '200':
+          description: Awaiting announce
+    
   /admin/status:
     get:
       tags:
@@ -3607,7 +3616,115 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Subject'
-              
+
+  /talk/calls:
+   post:
+      tags:
+        - talk
+      description: Add new call entry
+      operationId: add-call
+      parameters:
+        - name: agent
+          in: query
+          description: agent token
+          required: true
+          schema:
+            type: string
+        - name: cardId
+          int: query
+          description: id of card to call
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: entry created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Call'
+        '401':
+          description: permission denied
+        '410':
+          description: account disabled
+        '500':
+          description: internal server error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+
+  /talk/calls/{callId}:
+    put:
+      tags:
+        - talk
+      description: extend keep alive on specified call 
+      operationId: keep-call
+      parameters:
+        - name: agent
+          in: query
+          description: agent token
+          required: true
+          schema:
+            type: string
+        - name: callId
+          in: path
+          description: id of call to keep alive
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+        '401':
+          description: permission denied
+        '404':
+          description: call not found
+        '406':
+          description: call has already expired or closed
+        '410':
+          description: account disabled
+        '500':
+          description: internal server error
+     delete:
+      tags:
+        - talk
+      description: terminte sepecified call
+      operationId: end-call
+      parameters:
+        - name: agent
+          in: query
+          description: agent token
+          required: true
+          schema:
+            type: string
+        - name: callId
+          in: path
+          description: id of call to end
+          required: true
+      responses:
+        '200':
+          description: successful operation
+        '401':
+          description: permission denied
+        '410':
+          description: account disabled
+        '500':
+          description: internal server error
+      
+  /talk/signal:
+    get:
+      tags:
+        -status
+      description: Websocket endpoint for coordinating webrtc conversation
+      operationId: signal
+      responses:
+        '200':
+          description: Awaiting token
+               
           
 externalDocs:
   description: App overview
@@ -4106,7 +4223,7 @@ components:
       required:
         - members
       properties:
-        members:
+        member:
           type: string
         pushEnabled:
           type: boolean
@@ -4429,7 +4546,32 @@ components:
         signatureType:
           type: string
           enum: [PKCS1v15, PSS]
-
+          
+    Call:
+      type: object
+      required:
+        - id
+        - cardId
+        - callerToken
+        - calleeToken
+        - keepAlive
+        - sturnPort
+      properties:
+        id:
+          type: string
+        cardId:
+          type: string
+        callerToken:
+          type: string
+        calleeToken:
+          type: string
+        keepAlive:
+          type: integer
+          format: int32
+        sturnPort:
+          type: integer
+          format: int32
+ 
           
   securitySchemes:
   
