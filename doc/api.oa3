@@ -43,7 +43,7 @@ paths:
   /status/activity:
     get:
       tags:
-        -status
+        - status
       description: Websocket endpoint for receiving account status and calling events
       operationId: activity
       responses:
@@ -3631,7 +3631,7 @@ paths:
           schema:
             type: string
         - name: cardId
-          int: query
+          in: query
           description: id of card to call
           required: true
           schema:
@@ -3689,7 +3689,7 @@ paths:
           description: account disabled
         '500':
           description: internal server error
-     delete:
+    delete:
       tags:
         - talk
       description: terminte sepecified call
@@ -3705,6 +3705,8 @@ paths:
           in: path
           description: id of call to end
           required: true
+          schema:
+            type: string
       responses:
         '200':
           description: successful operation
@@ -3718,7 +3720,7 @@ paths:
   /talk/signal:
     get:
       tags:
-        -status
+        - talk
       description: Websocket endpoint for coordinating webrtc conversation
       operationId: signal
       responses:
