@@ -397,7 +397,7 @@ type ProfileData struct {
 type Activity struct {
   Revision Revision `json:"revision,emitempty"`
 
-  Ring Ring `json:"ring",omitempty"`
+  Phone Phone `json:"ring",omitempty"`
 }
 
 //Revision revision of each account module
@@ -416,7 +416,7 @@ type Revision struct {
 }
 
 //Ring from contact initiating call
-type Ring struct {
+type Phone struct {
   CardID string `json:"cardId"`
 
   CalleeToken string `json:"calleeToken"`
@@ -506,4 +506,26 @@ type TopicDetail struct {
 	Status string `json:"status"`
 
 	Transform string `json:"transform,omitempty"`
+}
+
+type Call struct {
+
+	Id string `json:"id"`
+
+	CardId string `json:"cardId"`
+
+	CallerToken string `json:"callerToken"`
+
+	CalleeToken string `json:"calleeToken"`
+
+	KeepAlive int32 `json:"keepAlive"`
+
+	SturnPort int32 `json:"sturnPort"`
+}
+
+type Ring struct {
+
+	CalleeToken string `json:"calleeToken"`
+
+	Index int32 `json:"index"`
 }

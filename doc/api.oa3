@@ -3745,7 +3745,12 @@ paths:
           description: account disabled
         '500':
           description: internal server error
-                
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Ring' 
+               
   /talk/signal:
     get:
       tags:
@@ -4599,7 +4604,18 @@ components:
           type: integer
           format: int32
  
-          
+    Ring:
+      type: object
+      required:
+        - calleeToken
+        - index
+      properties:
+        calleeToken:
+          type: string
+        index:
+          type: integer
+          format: int32
+            
   securitySchemes:
   
     basicAuth:

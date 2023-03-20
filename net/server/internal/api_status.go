@@ -122,6 +122,34 @@ func ExitStatus() {
 	wsExit <- true
 }
 
+//SetRing sends ring object on all account websockets
+func SetRing(card *store.Card, ring Ring) {
+
+  // serialize ring activity
+  var phone Phone
+  phone.CalleeToken = ring.CalleeToken
+  phone.CardID = card.CardSlot.CardSlotID
+  var a Activity
+  a.Phone = phone;
+  msg, err := json.Marshal(a)
+  if err != nil {
+    ErrMsg(err);
+    return
+  }
+
+  // lock access to statusListener
+  wsSync.Lock()
+  defer wsSync.Unlock()
+
+  // notify all listeners
+  chs, ok := statusListener[card.Account.ID]
+  if ok {
+    for _, ch := range chs {
+      ch <- msg
+    }
+  }
+}
+
 //SetStatus sends revision object on all account websockets
 func SetStatus(account *store.Account) {
 
