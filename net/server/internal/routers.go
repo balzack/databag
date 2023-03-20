@@ -797,13 +797,6 @@ var endpoints = routes{
 		Status,
 	},
 
-  route{
-    "Activity",
-    strings.ToUpper("Get"),
-    "/activity",
-    Activity,
-  },
-
 	route{
 		"AddCall",
 		strings.ToUpper("Post"),

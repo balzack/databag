@@ -393,6 +393,13 @@ type ProfileData struct {
 	Location string `json:"location,omitempty"`
 }
 
+//Activity listener for account
+type Activity struct {
+  Revision Revision `json:"revision,emitempty"`
+
+  Ring Ring `json:"ring",omitempty"`
+}
+
 //Revision revision of each account module
 type Revision struct {
 	Account int64 `json:"account"`
@@ -406,6 +413,13 @@ type Revision struct {
 	Channel int64 `json:"channel"`
 
 	Card int64 `json:"card"`
+}
+
+//Ring from contact initiating call
+type Ring struct {
+  CardID string `json:"cardId"`
+
+  CalleeToken string `json:"calleeToken"`
 }
 
 //Seal key for channel sealing

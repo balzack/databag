@@ -103,7 +103,7 @@ func Status(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func getRevision(account *store.Account) Revision {
+func getRevision(account *store.Account) Activity {
 	var r Revision
 	r.Account = account.AccountRevision
 	r.Profile = account.ProfileRevision
@@ -111,7 +111,10 @@ func getRevision(account *store.Account) Revision {
 	r.Channel = account.ChannelRevision
 	r.Group = account.GroupRevision
 	r.Card = account.CardRevision
-	return r
+
+  var a Activity
+  a.Revision = r
+	return a
 }
 
 //ExitStatus closes websocket handler

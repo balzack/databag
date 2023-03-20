@@ -4586,7 +4586,6 @@ components:
         - callerToken
         - calleeToken
         - keepAlive
-        - sturnPort
       properties:
         id:
           type: string
@@ -4597,9 +4596,6 @@ components:
         calleeToken:
           type: string
         keepAlive:
-          type: integer
-          format: int32
-        sturnPort:
           type: integer
           format: int32
  

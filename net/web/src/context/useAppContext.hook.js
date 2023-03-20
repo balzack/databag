@@ -170,9 +170,11 @@ export function useAppContext(websocket) {
     ws.current = createWebsocket(protocol + window.location.host + "/status");
     ws.current.onmessage = (ev) => {
       try {
-        let rev = JSON.parse(ev.data);
+        let activity = JSON.parse(ev.data);
         updateState({ status: 'connected' });
-        setAppRevision(rev);
+        if (activity.revision) {
+          setAppRevision(activity.revision);
+        }
       }
       catch (err) {
         console.log(err);
