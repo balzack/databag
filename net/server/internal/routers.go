@@ -798,9 +798,45 @@ var endpoints = routes{
 	},
 
   route{
-    "Relay",
+    "Activity",
     strings.ToUpper("Get"),
-    "/relay",
-    Relay,
+    "/activity",
+    Activity,
   },
+
+	route{
+		"AddCall",
+		strings.ToUpper("Post"),
+		"/talk/call",
+		AddCall,
+	},
+
+	route{
+		"KeepCall",
+		strings.ToUpper("Put"),
+		"/talk/call/{callId}",
+		KeepCall,
+	},
+
+	route{
+		"EndCall",
+		strings.ToUpper("Delete"),
+		"/talk/call/{callId}",
+		EndCall,
+	},
+
+	route{
+		"AddRing",
+		strings.ToUpper("Post"),
+		"/talk/ring",
+		AddRing,
+	},
+
+  route{
+    "Signal",
+    strings.ToUpper("Get"),
+    "/signal",
+    Signal,
+  },
+
 }

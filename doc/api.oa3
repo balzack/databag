@@ -3649,13 +3649,6 @@ paths:
           description: account disabled
         '500':
           description: internal server error
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: array
-              items:
-                type: string
 
   /talk/calls/{callId}:
     put:
@@ -3717,6 +3710,42 @@ paths:
         '500':
           description: internal server error
       
+  /talk/ring:
+   post:
+      tags:
+        - talk
+      description: Create a ring event in contact
+      operationId: add-ring
+      parameters:
+        - name: contact
+          in: query
+          description: contact token
+          required: true
+          schema:
+            type: string
+        - name: calleeToken
+          in: query
+          description: token for the contact to connect with
+          required: true
+          schema:
+            type: string
+        - name: index
+          in: query
+          description: index of current ring
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '201':
+          description: entry created
+        '401':
+          description: permission denied
+        '410':
+          description: account disabled
+        '500':
+          description: internal server error
+                
   /talk/signal:
     get:
       tags:
@@ -4588,4 +4617,5 @@ components:
     bearerAuth: 
       type: http
       scheme: bearer
+
 
