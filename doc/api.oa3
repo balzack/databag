@@ -3618,7 +3618,7 @@ paths:
               $ref: '#/components/schemas/Subject'
 
   /talk/calls:
-   post:
+    post:
       tags:
         - talk
       description: Add new call entry
@@ -3649,6 +3649,11 @@ paths:
           description: account disabled
         '500':
           description: internal server error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
 
   /talk/calls/{callId}:
     put:

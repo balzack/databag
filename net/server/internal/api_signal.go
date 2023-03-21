@@ -7,7 +7,6 @@ import (
   "errors"
 )
 
-var bridgeRelay BridgeRelay;
 var relayUpgrader = websocket.Upgrader{}
 
 //Status handler for websocket connection

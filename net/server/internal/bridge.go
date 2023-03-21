@@ -7,14 +7,15 @@ import (
   "time"
 )
 
-const bridgeKeepAlive = 6
+var bridgeRelay BridgeRelay;
+const BridgeKeepAlive = 6
 
 type BridgeStatus struct {
   status string
 }
 
 type Bridge struct {
-  bridgeId string
+  callId string
   expires int64
   callerToken string
   calleeToken string
@@ -27,12 +28,12 @@ type BridgeRelay struct {
   bridges []Bridge
 }
 
-func (s BridgeRelay) AddBridge(bridgeId string, callerToken string, calleeToken string) {
+func (s *BridgeRelay) AddBridge(callId string, callerToken string, calleeToken string) {
   s.sync.Lock()
   defer s.sync.Unlock()
   bridge := Bridge{
-    bridgeId: bridgeId,
-    expires: time.Now().Unix() + (bridgeKeepAlive * 3),
+    callId: callId,
+    expires: time.Now().Unix() + (BridgeKeepAlive * 3),
     callerToken: callerToken,
     calleeToken: calleeToken,
   }
@@ -53,7 +54,7 @@ func setStatus(bridge Bridge, status string) {
   }
 }
 
-func (s BridgeRelay) KeepAlive(bridgeId string) {
+func (s *BridgeRelay) KeepAlive(callId string) {
   s.sync.Lock()
   defer s.sync.Unlock()
   now := time.Now().Unix()
@@ -61,8 +62,8 @@ func (s BridgeRelay) KeepAlive(bridgeId string) {
   for _, bridge := range s.bridges {
     if bridge.expires > now {
       bridges = append(bridges, bridge)
-      if bridge.bridgeId == bridgeId {
-        bridge.expires = now + (bridgeKeepAlive * 3)
+      if bridge.callId == callId {
+        bridge.expires = now + (BridgeKeepAlive * 3)
         if bridge.caller != nil {
           if err := bridge.caller.WriteMessage(websocket.PingMessage, nil); err != nil {
             LogMsg("failed to ping caller signal");
@@ -81,12 +82,12 @@ func (s BridgeRelay) KeepAlive(bridgeId string) {
   s.bridges = bridges
 }
 
-func (s BridgeRelay) RemoveBridge(bridgeId string) {
+func (s *BridgeRelay) RemoveBridge(callId string) {
   s.sync.Lock()
   defer s.sync.Unlock()
   var bridges []Bridge
   for _, bridge := range s.bridges {
-    if bridge.bridgeId == bridgeId {
+    if bridge.callId == callId {
       setStatus(bridge, "closed");
     } else {
       bridges = append(bridges, bridge)
@@ -95,7 +96,7 @@ func (s BridgeRelay) RemoveBridge(bridgeId string) {
   s.bridges = bridges
 }
 
-func (s BridgeRelay) SetConnection(conn *websocket.Conn, token string) {
+func (s *BridgeRelay) SetConnection(conn *websocket.Conn, token string) {
   s.sync.Lock()
   defer s.sync.Unlock()
   for _, bridge := range s.bridges {
@@ -118,7 +119,7 @@ func (s BridgeRelay) SetConnection(conn *websocket.Conn, token string) {
 	}
 }
 
-func (s BridgeRelay) ClearConnection(conn *websocket.Conn) {
+func (s *BridgeRelay) ClearConnection(conn *websocket.Conn) {
   s.sync.Lock()
   defer s.sync.Unlock()
   for _, bridge := range s.bridges {
@@ -133,7 +134,7 @@ func (s BridgeRelay) ClearConnection(conn *websocket.Conn) {
 	}
 }
 
-func (s BridgeRelay) RelayMessage(conn *websocket.Conn, msg []byte) {
+func (s *BridgeRelay) RelayMessage(conn *websocket.Conn, msg []byte) {
   s.sync.Lock()
   defer s.sync.Unlock()
   for _, bridge := range s.bridges {
@@ -149,3 +150,4 @@ func (s BridgeRelay) RelayMessage(conn *websocket.Conn, msg []byte) {
     }
   }
 }
+
