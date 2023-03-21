@@ -127,6 +127,7 @@ func SetRing(card *store.Card, ring Ring) {
 
   // serialize ring activity
   var phone Phone
+  phone.CallID = ring.CallID
   phone.CalleeToken = ring.CalleeToken
   phone.CardID = card.CardSlot.CardSlotID
   var a Activity

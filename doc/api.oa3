@@ -3696,7 +3696,13 @@ paths:
         - name: agent
           in: query
           description: agent token
-          required: true
+          required: false
+          schema:
+            type: string
+        - name: contact
+          in: query
+          description: contact token
+          required: false
           schema:
             type: string
         - name: callId
@@ -4612,9 +4618,12 @@ components:
     Ring:
       type: object
       required:
+        - callId
         - calleeToken
         - index
       properties:
+        callId:
+          type: string
         calleeToken:
           type: string
         index:

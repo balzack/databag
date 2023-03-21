@@ -15,8 +15,11 @@ type BridgeStatus struct {
 }
 
 type Bridge struct {
+  accountId uint
   callId string
+  cardId string
   expires int64
+  closed bool
   callerToken string
   calleeToken string
   caller *websocket.Conn
@@ -28,12 +31,14 @@ type BridgeRelay struct {
   bridges []Bridge
 }
 
-func (s *BridgeRelay) AddBridge(callId string, callerToken string, calleeToken string) {
+func (s *BridgeRelay) AddBridge(accountId uint, callId string, callerToken string, calleeToken string) {
   s.sync.Lock()
   defer s.sync.Unlock()
   bridge := Bridge{
+    accountId: accountId,
     callId: callId,
     expires: time.Now().Unix() + (BridgeKeepAlive * 3),
+    closed: false,
     callerToken: callerToken,
     calleeToken: calleeToken,
   }
@@ -54,7 +59,7 @@ func setStatus(bridge Bridge, status string) {
   }
 }
 
-func (s *BridgeRelay) KeepAlive(callId string) {
+func (s *BridgeRelay) KeepAlive(accountId uint, callId string) {
   s.sync.Lock()
   defer s.sync.Unlock()
   now := time.Now().Unix()
@@ -62,7 +67,7 @@ func (s *BridgeRelay) KeepAlive(callId string) {
   for _, bridge := range s.bridges {
     if bridge.expires > now {
       bridges = append(bridges, bridge)
-      if bridge.callId == callId {
+      if bridge.callId == callId && bridge.accountId == accountId {
         bridge.expires = now + (BridgeKeepAlive * 3)
         if bridge.caller != nil {
           if err := bridge.caller.WriteMessage(websocket.PingMessage, nil); err != nil {
@@ -82,12 +87,12 @@ func (s *BridgeRelay) KeepAlive(callId string) {
   s.bridges = bridges
 }
 
-func (s *BridgeRelay) RemoveBridge(callId string) {
+func (s *BridgeRelay) RemoveBridge(accountId uint, callId string, cardId string) {
   s.sync.Lock()
   defer s.sync.Unlock()
   var bridges []Bridge
   for _, bridge := range s.bridges {
-    if bridge.callId == callId {
+    if bridge.callId == callId && bridge.accountId == accountId && (bridge.cardId == cardId || cardId == "") {
       setStatus(bridge, "closed");
     } else {
       bridges = append(bridges, bridge)

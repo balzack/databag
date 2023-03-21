@@ -25,6 +25,5 @@ func AddRing(w http.ResponseWriter, r *http.Request) {
   }
 
   SetRing(card, ring);
-
 	WriteResponse(w, nil)
 }

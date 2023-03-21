@@ -415,9 +415,11 @@ type Revision struct {
 	Card int64 `json:"card"`
 }
 
-//Ring from contact initiating call
+//Phone call indicator from contact initiating call
 type Phone struct {
   CardID string `json:"cardId"`
+
+  CallID string `json:"callId"`
 
   CalleeToken string `json:"calleeToken"`
 }
@@ -524,6 +526,8 @@ type Call struct {
 }
 
 type Ring struct {
+
+  CallID string `json:"callId"`
 
 	CalleeToken string `json:"calleeToken"`
 
