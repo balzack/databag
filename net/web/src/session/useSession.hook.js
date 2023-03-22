@@ -5,6 +5,7 @@ import { CardContext } from 'context/CardContext';
 import { StoreContext } from 'context/StoreContext';
 import { ViewportContext } from 'context/ViewportContext';
 import { ProfileContext } from 'context/ProfileContext';
+import { RingContext } from 'context/RingContext';
 
 export function useSession() {
 
@@ -27,6 +28,7 @@ export function useSession() {
   const app = useContext(AppContext);
   const card = useContext(CardContext);
   const store = useContext(StoreContext);
+  const ring = useContext(RingContext);
   const viewport = useContext(ViewportContext);
   const profile = useContext(ProfileContext);
 
@@ -38,6 +40,10 @@ export function useSession() {
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
   }
+
+  useEffect(() => {
+    console.log(ring.state);
+  }, [ring.state]);
 
   useEffect(() => {
     if (!profile.state.identity?.guid) {

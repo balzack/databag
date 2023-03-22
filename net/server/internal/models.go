@@ -395,9 +395,9 @@ type ProfileData struct {
 
 //Activity listener for account
 type Activity struct {
-  Revision Revision `json:"revision,emitempty"`
+  Revision *Revision `json:"revision,emitempty"`
 
-  Phone Phone `json:"ring",omitempty"`
+  Phone *Phone `json:"ring",omitempty"`
 }
 
 //Revision revision of each account module

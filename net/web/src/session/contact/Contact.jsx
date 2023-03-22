@@ -9,6 +9,10 @@ export function Contact({ close, guid, listing }) {
   const [ modal, modalContext ] = Modal.useModal();
   const { state, actions } = useContact(guid, listing, close);
 
+  const ring = async () => {
+    actions.ring();
+  };
+
   const updateContact = async (action) => {
     try {
       await action();
@@ -132,6 +136,9 @@ export function Contact({ close, guid, listing }) {
               <div className={ state.buttonStatus } onClick={() => updateContact(actions.saveConnect)}>Save and Request</div>
             </div>
           )}
+
+          <div className={ state.buttonStatus } onClick={ring}>RING</div>
+
         </div>
       </div>
 

@@ -3,6 +3,7 @@ import { CardContext } from 'context/CardContext';
 import { ViewportContext } from 'context/ViewportContext';
 import { getListingMessage } from 'api/getListingMessage';
 import { getCardByGuid } from 'context/cardUtil';
+import { addContactRing } from 'api/addContactRing';
 
 export function useContact(guid, listing, close) {
 
@@ -154,6 +155,14 @@ export function useContact(guid, listing, close) {
         await card.actions.removeCard(state.cardId);
         close();
       });
+    },
+    ring: async () => {
+      console.log("ringing!!");
+      const contact = card.state.cards.get(state.cardId);
+      const { node, guid } = contact.data.cardProfile;
+      const { token } = contact.data.cardDetail;
+      await addContactRing(node, `${guid}.${token}`, { index: 0, callId: 'abc', calleeToken: '123' });
+      console.log(contact);
     },
   };
 

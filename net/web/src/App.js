@@ -12,6 +12,7 @@ import { StoreContextProvider } from 'context/StoreContext';
 import { UploadContextProvider } from 'context/UploadContext';
 import { ViewportContextProvider } from 'context/ViewportContext';
 import { ConversationContextProvider } from 'context/ConversationContext';
+import { RingContextProvider } from 'context/RingContext';
 
 import { AppWrapper } from 'App.styled';
 import { Root } from './root/Root';
@@ -30,33 +31,35 @@ function App() {
           <ProfileContextProvider>
             <StoreContextProvider>
               <AccountContextProvider>
-                <ViewportContextProvider>
-                  <AppContextProvider>
-                    <AppWrapper>
-                      <ConfigProvider theme={{ token: {
-                          colorPrimary: Colors.primary,
-                          colorLink: Colors.primary,
-                          colorLinkHover: Colors.background,
-                        } }}>
-                        <Router>
-                          <Routes>
-                            <Route path="/" element={ <Root /> } />
-                            <Route path="/dashboard" element={ <Dashboard /> } />
-                            <Route path="/admin" element={ <Access mode="admin" /> } />
-                            <Route path="/login" element={ <Access mode="login" /> } />
-                            <Route path="/create" element={ <Access mode="create" /> } />
-                            <Route path="/session" element={
-                              <ConversationContextProvider>
-                                <Session />
-                              </ConversationContextProvider>
-                            }>
-                            </Route>
-                          </Routes>
-                        </Router>
-                      </ConfigProvider>
-                    </AppWrapper>
-                  </AppContextProvider>
-                </ViewportContextProvider>
+                <RingContextProvider>
+                  <ViewportContextProvider>
+                    <AppContextProvider>
+                      <AppWrapper>
+                        <ConfigProvider theme={{ token: {
+                            colorPrimary: Colors.primary,
+                            colorLink: Colors.primary,
+                            colorLinkHover: Colors.background,
+                          } }}>
+                          <Router>
+                            <Routes>
+                              <Route path="/" element={ <Root /> } />
+                              <Route path="/dashboard" element={ <Dashboard /> } />
+                              <Route path="/admin" element={ <Access mode="admin" /> } />
+                              <Route path="/login" element={ <Access mode="login" /> } />
+                              <Route path="/create" element={ <Access mode="create" /> } />
+                              <Route path="/session" element={
+                                <ConversationContextProvider>
+                                  <Session />
+                                </ConversationContextProvider>
+                              }>
+                              </Route>
+                            </Routes>
+                          </Router>
+                        </ConfigProvider>
+                      </AppWrapper>
+                    </AppContextProvider>
+                  </ViewportContextProvider>
+                </RingContextProvider>
               </AccountContextProvider>
             </StoreContextProvider>
           </ProfileContextProvider>

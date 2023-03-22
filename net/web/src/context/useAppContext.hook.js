@@ -9,6 +9,7 @@ import { CardContext } from './CardContext';
 import { ChannelContext } from './ChannelContext';
 import { StoreContext } from './StoreContext';
 import { UploadContext } from './UploadContext';
+import { RingContext } from './RingContext';
 import { createWebsocket } from 'api/fetchUtil';
 
 export function useAppContext(websocket) {
@@ -30,6 +31,7 @@ export function useAppContext(websocket) {
     setState((s) => ({ ...s, ...value }))
   }
 
+  const ringContext = useContext(RingContext);
   const uploadContext = useContext(UploadContext);
   const storeContext = useContext(StoreContext);
   const accountContext = useContext(AccountContext);
@@ -57,6 +59,7 @@ export function useAppContext(websocket) {
   const clearSession = () => {
     uploadContext.actions.clear();
     storeContext.actions.clear();
+    ringContext.actions.clear();
 
     accountContext.actions.clearToken();
     profileContext.actions.clearToken();
@@ -173,7 +176,13 @@ export function useAppContext(websocket) {
         let activity = JSON.parse(ev.data);
         updateState({ status: 'connected' });
         if (activity.revision) {
+console.log("GOR REVISION");
           setAppRevision(activity.revision);
+        }
+        if (activity.ring) {
+console.log("GOT PHONE!");
+          const { cardId, callId, calleeToken } = activity.ring;
+          ringContext.actions.ring(cardId, callId, calleeToken);
         }
       }
       catch (err) {

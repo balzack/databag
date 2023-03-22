@@ -113,7 +113,7 @@ func getRevision(account *store.Account) Activity {
 	r.Card = account.CardRevision
 
   var a Activity
-  a.Revision = r
+  a.Revision = &r
 	return a
 }
 
@@ -131,7 +131,7 @@ func SetRing(card *store.Card, ring Ring) {
   phone.CalleeToken = ring.CalleeToken
   phone.CardID = card.CardSlot.CardSlotID
   var a Activity
-  a.Phone = phone;
+  a.Phone = &phone;
   msg, err := json.Marshal(a)
   if err != nil {
     ErrMsg(err);
