@@ -23,6 +23,7 @@ export function useSession() {
     profile: false,
     account: false,
     loading: false,
+    ringing: [],
   });
 
   const app = useContext(AppContext);
@@ -42,7 +43,18 @@ export function useSession() {
   }
 
   useEffect(() => {
-    console.log(ring.state);
+    const ringing = [];
+    const expired = Date.now(); 
+    ring.state.ringing.forEach(call => {
+      if (call.expires > expired && !call.status) {
+        const { callId, cardId, calleeToken } = call;
+        const contact = card.state.cards.get(cardId);
+        const { imageSet, name, handle, node } = contact.data.cardProfile || {};
+        const img = imageSet ? card.actions.getCardImageUrl(cardId) : 'avatar';
+        ringing.push({ cardId, img, name, handle, node, callId, calleeToken });
+      }
+    });
+    updateState({ ringing });
   }, [ring.state]);
 
   useEffect(() => {
@@ -124,6 +136,15 @@ export function useSession() {
     },
     closeDetails: () => {
       updateState({ details: false });
+    },
+    ignore: (call) => {
+      ring.actions.ignore(call.cardId, call.callId);
+    },
+    decline: (call) => {
+      ring.actions.decline(call.cardId, call.callId);
+    },
+    accept: (call) => {
+      ring.actions.accept(call.cardId, call.callId);
     },
   };
 

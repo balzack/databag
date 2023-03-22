@@ -6,7 +6,7 @@ export function useRingContext() {
   });
   const access = useRef(null);
 
-  const EXPIRE = 3000
+  const EXPIRE = 3000000
   const ringing = useRef(new Map());
 
   const updateState = (value) => {
@@ -20,18 +20,24 @@ export function useRingContext() {
     },
     ring: (cardId, callId, calleeToken) => {
       const key = `${cardId}:${callId}`
-      const call = ringing.current.get(key) || { calleeToken, callId }
+      const call = ringing.current.get(key) || { cardId, calleeToken, callId }
       call.expires = Date.now() + EXPIRE;
       ringing.current.set(key, call);
       updateState({ ringing: ringing.current });
+      setTimeout(() => {
+        updateState({ ringing: ringing.current });
+      }, 3000);
     },
     ignore: (cardId, callId) => {
       const key = `${cardId}:${callId}`
+console.log("IGNORE", key);
       const call = ringing.current.get(key);
       if (call) {
         call.status = 'ignored'
         ringing.current.set(key, call);
         updateState({ ringing: ringing.current });
+console.log(ringing.current);
+
       }
     },
     decline: (cardId, callId) => {

@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { Drawer, Spin } from 'antd';
 import { SessionWrapper } from './Session.styled';
 import { useSession } from './useSession.hook';
@@ -12,10 +13,33 @@ import { Listing } from './listing/Listing';
 import { Account } from './account/Account';
 import { Welcome } from './welcome/Welcome';
 import { BottomNav } from './bottomNav/BottomNav';
+import { Logo } from 'logo/Logo';
+import { EyeInvisibleOutlined, CloseOutlined, PhoneOutlined } from '@ant-design/icons';
 
 export function Session() {
 
   const { state, actions } = useSession();
+  const [ringing, setRinging] = useState([]);
+
+  console.log(state.ringing);
+  useEffect(() => {
+    let incoming = [];
+    for (let i = 0; i < state.ringing.length; i++) {
+      const ring = state.ringing[i];
+      const label = ring.name ? ring.name : `${ring.handle}@${ring.node}`;
+      incoming.push(
+        <div className="ringing-entry">
+          <Logo url={ring.url} width={40} height={40} radius={4} />
+          <div className="ringing-name">{ label }</div>
+          <div onClick={() => actions.ignore(ring)} className="ringing-ignore"><EyeInvisibleOutlined /></div>
+          <div onClick={() => actions.decline(ring)} className="ringing-decline"><PhoneOutlined /></div>
+          <div onClick={() => actions.accept(ring)} className="ringing-accept"><PhoneOutlined /></div>
+        </div>
+      );
+    }
+    setRinging(incoming);
+  }, [state.ringing]);
+
 
   const closeAccount = () => {
     actions.closeProfile();
@@ -76,6 +100,13 @@ export function Session() {
           <div class="center">
             <div class="reframe">
               <Welcome />
+              { ringing.length > 0 && (
+                <div className="ringing">
+                  <div className="ringing-list">
+                    {ringing}
+                  </div>
+                </div>
+              )}
             </div>
             { state.conversation && (
               <div class="reframe">
@@ -174,6 +205,13 @@ export function Session() {
                 <Profile closeProfile={closeAccount}/>
               )}
             </Drawer>
+            { ringing.length > 0 && (
+              <div className="ringing">
+                <div className="ringing-list">
+                  {ringing}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}
@@ -222,6 +260,13 @@ export function Session() {
             { (state.profile || state.account) && (
               <div class="reframe">
                 <Profile />
+              </div>
+            )}
+            { ringing.length > 0 && (
+              <div className="ringing">
+                <div className="ringing-list">
+                  {ringing}
+                </div>
               </div>
             )}
           </div>
