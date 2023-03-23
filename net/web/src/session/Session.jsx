@@ -100,13 +100,6 @@ export function Session() {
           <div class="center">
             <div class="reframe">
               <Welcome />
-              { ringing.length > 0 && (
-                <div className="ringing">
-                  <div className="ringing-list">
-                    {ringing}
-                  </div>
-                </div>
-              )}
             </div>
             { state.conversation && (
               <div class="reframe">
@@ -123,6 +116,13 @@ export function Session() {
             { state.profile && (
               <div class="reframe">
                 <Profile closeProfile={actions.closeProfile} />
+              </div>
+            )}
+            { ringing.length > 0 && (
+              <div className="ringing">
+                <div className="ringing-list">
+                  {ringing}
+                </div>
               </div>
             )}
           </div>
@@ -262,13 +262,13 @@ export function Session() {
                 <Profile />
               </div>
             )}
-            { ringing.length > 0 && (
-              <div className="ringing">
+            <div className="ringing">
+              { ringing.length > 0 && (
                 <div className="ringing-list">
                   {ringing}
                 </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
           <div class="bottom">
             <BottomNav state={state} actions={actions} />

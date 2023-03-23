@@ -25,7 +25,7 @@ export const SessionWrapper = styled.div`
     .ringing-list {
       padding: 4px;
       border-radius: 4px;
-      background-color: rgba(0,0,0,0.3);
+      background-color: rgba(0,0,0,0.6);
       display: flex;
       flex-direction: column;
 
