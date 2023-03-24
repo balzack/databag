@@ -12,9 +12,27 @@ export const SessionWrapper = styled.div`
     z-index: 2;
   }
 
+  .calling {
+    position: absolute;
+    top: 35%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+
+    .calling-screen {
+      width: 256;
+      height: 256;
+      background-color: yellow;
+    }
+  }
+
   .ringing {
     position: absolute;
     top: 20%;
+    max-height: 15%;
     width: 100%;
     display: flex;
     flex-direction: row;

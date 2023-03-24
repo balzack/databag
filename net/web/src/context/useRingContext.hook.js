@@ -10,6 +10,7 @@ export function useRingContext() {
   const [state, setState] = useState({
     ringing: new Map(),
     callStatus: null,
+    stream: null,
   });
   const access = useRef(null);
 
@@ -84,7 +85,7 @@ export function useRingContext() {
         // form peer connection
         pc.current = new RTCPeerConnection();
         pc.current.ontrack = ({streams: [stream]}) => {
-          console.log("ON TRACK");
+          updateState({ stream });
         };
         pc.current.onicecandidate = ({candidate}) => {
           ws.current.send(JSON.stringify({ candidate }));
@@ -211,7 +212,7 @@ export function useRingContext() {
       // form peer connection
       pc.current = new RTCPeerConnection();
       pc.current.ontrack = ({streams: [stream]}) => {
-        console.log("ON TRACK");
+        updateState({ stream });
       };
       pc.current.onicecandidate = ({candidate}) => {
         ws.current.send(JSON.stringify({ candidate }));

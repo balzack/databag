@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { Drawer, Spin } from 'antd';
 import { SessionWrapper } from './Session.styled';
 import { useSession } from './useSession.hook';
@@ -20,8 +20,8 @@ export function Session() {
 
   const { state, actions } = useSession();
   const [ringing, setRinging] = useState([]);
+  const vid = useRef();
 
-  console.log(state.ringing);
   useEffect(() => {
     let incoming = [];
     for (let i = 0; i < state.ringing.length; i++) {
@@ -40,6 +40,11 @@ export function Session() {
     setRinging(incoming);
   }, [state.ringing]);
 
+  useEffect(() => {
+    if (vid.current) {
+      vid.current.srcObject = state.stream;
+    }
+  }, [state.stream]);
 
   const closeAccount = () => {
     actions.closeProfile();
@@ -122,6 +127,16 @@ export function Session() {
               <div className="ringing">
                 <div className="ringing-list">
                   {ringing}
+                </div>
+              </div>
+            )}
+            { state.callStatus && (
+              <div className="calling">
+                <div className="calling-screen">
+                  { state.stream && (
+                    <video ref={vid} autoPlay 
+            complete={() => console.log("VIDEO COMPLETE")} progress={() => console.log("VIDEO PROGRESS")} error={() => console.log("VIDEO ERROR")} waiting={() => console.log("VIDEO WAITING")} />
+                  )}
                 </div>
               </div>
             )}
@@ -212,6 +227,16 @@ export function Session() {
                 </div>
               </div>
             )}
+            { state.callStatus && (
+              <div className="calling">
+                <div className="calling-screen">
+                  { state.stream && (
+                    <video ref={vid} autoPlay 
+            complete={() => console.log("VIDEO COMPLETE")} progress={() => console.log("VIDEO PROGRESS")} error={() => console.log("VIDEO ERROR")} waiting={() => console.log("VIDEO WAITING")} />
+                  )}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}
@@ -262,13 +287,23 @@ export function Session() {
                 <Profile />
               </div>
             )}
-            <div className="ringing">
-              { ringing.length > 0 && (
+            { ringing.length > 0 && (
+              <div className="ringing">
                 <div className="ringing-list">
                   {ringing}
                 </div>
-              )}
-            </div>
+              </div>
+            )}
+            { state.callStatus && (
+              <div className="calling">
+                <div className="calling-screen">
+                  { state.stream && (
+                    <video ref={vid} autoPlay 
+            complete={() => console.log("VIDEO COMPLETE")} progress={() => console.log("VIDEO PROGRESS")} error={() => console.log("VIDEO ERROR")} waiting={() => console.log("VIDEO WAITING")} />
+                  )}
+                </div>
+              </div>
+            )}
           </div>
           <div class="bottom">
             <BottomNav state={state} actions={actions} />

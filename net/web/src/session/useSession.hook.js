@@ -24,6 +24,8 @@ export function useSession() {
     account: false,
     loading: false,
     ringing: [],
+    callStatus: null,
+    stream: null,
   });
 
   const app = useContext(AppContext);
@@ -56,7 +58,7 @@ export function useSession() {
         ringing.push({ cardId, img, name, handle, contactNode: node, callId, contactToken, calleeToken });
       }
     });
-    updateState({ ringing });
+    updateState({ ringing, stream: ring.state.stream, callStatus: ring.state.callStatus });
   }, [ring.state]);
 
   useEffect(() => {
