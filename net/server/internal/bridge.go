@@ -8,7 +8,7 @@ import (
 )
 
 var bridgeRelay BridgeRelay;
-const BridgeKeepAlive = 6
+const BridgeKeepAlive = 15
 
 type BridgeStatus struct {
   status string

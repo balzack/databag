@@ -45,12 +45,14 @@ export function useAppContext(websocket) {
       profileContext.actions.setToken(token);
       cardContext.actions.setToken(token);
       channelContext.actions.setToken(token);
+      ringContext.actions.setToken(token);
     }
     catch (err) {
       accountContext.actions.clearToken();
       profileContext.actions.clearToken();
       cardContext.actions.clearToken();
       channelContext.actions.clearToken();
+      ringContext.actions.clearToken();
       throw err;
     }
     setWebsocket(token);
@@ -59,8 +61,8 @@ export function useAppContext(websocket) {
   const clearSession = () => {
     uploadContext.actions.clear();
     storeContext.actions.clear();
-    ringContext.actions.clear();
 
+    ringContext.actions.clearToken();
     accountContext.actions.clearToken();
     profileContext.actions.clearToken();
     cardContext.actions.clearToken();
@@ -176,11 +178,9 @@ export function useAppContext(websocket) {
         let activity = JSON.parse(ev.data);
         updateState({ status: 'connected' });
         if (activity.revision) {
-console.log("GOR REVISION");
           setAppRevision(activity.revision);
         }
         if (activity.ring) {
-console.log("GOT PHONE!");
           const { cardId, callId, calleeToken } = activity.ring;
           ringContext.actions.ring(cardId, callId, calleeToken);
         }

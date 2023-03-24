@@ -800,28 +800,28 @@ var endpoints = routes{
 	route{
 		"AddCall",
 		strings.ToUpper("Post"),
-		"/talk/call",
+		"/talk/calls",
 		AddCall,
 	},
 
 	route{
 		"KeepCall",
 		strings.ToUpper("Put"),
-		"/talk/call/{callId}",
+		"/talk/calls/{callId}",
 		KeepCall,
 	},
 
 	route{
 		"EndCall",
 		strings.ToUpper("Delete"),
-		"/talk/call/{callId}",
+		"/talk/calls/{callId}",
 		EndCall,
 	},
 
 	route{
 		"AddRing",
 		strings.ToUpper("Post"),
-		"/talk/ring",
+		"/talk/rings",
 		AddRing,
 	},
 

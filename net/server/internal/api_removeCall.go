@@ -3,16 +3,14 @@ package databag
 import (
   "net/http"
   "errors"
+  "github.com/gorilla/mux"
 )
 
 //RemoveCall adds an active call with ice signal and relay
 func RemoveCall(w http.ResponseWriter, r *http.Request) {
 
-  var callId string
-  if err := ParseRequest(r, w, &callId); err != nil {
-    ErrResponse(w, http.StatusBadRequest, err)
-    return
-  }
+  params := mux.Vars(r)
+  callId := params["callId"]
 
   tokenType := ParamTokenType(r)
   if tokenType == APPTokenAgent {
