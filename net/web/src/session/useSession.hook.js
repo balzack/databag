@@ -49,9 +49,11 @@ export function useSession() {
       if (call.expires > expired && !call.status) {
         const { callId, cardId, calleeToken } = call;
         const contact = card.state.cards.get(cardId);
-        const { imageSet, name, handle, node } = contact.data.cardProfile || {};
+        const { imageSet, name, handle, node, guid } = contact.data.cardProfile || {};
+        const { token } = contact.data.cardDetail;
+        const contactToken = `${guid}.${token}`;
         const img = imageSet ? card.actions.getCardImageUrl(cardId) : 'avatar';
-        ringing.push({ cardId, img, name, handle, node, callId, calleeToken });
+        ringing.push({ cardId, img, name, handle, contactNode: node, callId, contactToken, calleeToken });
       }
     });
     updateState({ ringing });
@@ -144,7 +146,8 @@ export function useSession() {
       ring.actions.decline(call.cardId, call.callId);
     },
     accept: (call) => {
-      ring.actions.accept(call.cardId, call.callId);
+      const { cardId, callId, contactNode, contactToken, calleeToken } = call;
+      ring.actions.accept(cardId, callId, contactNode, contactToken, calleeToken);
     },
   };
 

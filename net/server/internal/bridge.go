@@ -11,7 +11,7 @@ var bridgeRelay BridgeRelay;
 const BridgeKeepAlive = 15
 
 type BridgeStatus struct {
-  status string
+  Status string `json:"status"`
 }
 
 type Bridge struct {
@@ -28,13 +28,13 @@ type Bridge struct {
 
 type BridgeRelay struct {
   sync sync.Mutex
-  bridges []Bridge
+  bridges []*Bridge
 }
 
 func (s *BridgeRelay) AddBridge(accountId uint, callId string, callerToken string, calleeToken string) {
   s.sync.Lock()
   defer s.sync.Unlock()
-  bridge := Bridge{
+  bridge := &Bridge{
     accountId: accountId,
     callId: callId,
     expires: time.Now().Unix() + (BridgeKeepAlive * 3),
@@ -45,8 +45,8 @@ func (s *BridgeRelay) AddBridge(accountId uint, callId string, callerToken strin
   s.bridges = append(s.bridges, bridge)
 }
 
-func setStatus(bridge Bridge, status string) {
-  msg, _ := json.Marshal(BridgeStatus{ status: status })
+func setStatus(bridge *Bridge, status string) {
+  msg, _ := json.Marshal(BridgeStatus{ Status: status })
   if bridge.caller != nil {
     if err := bridge.caller.WriteMessage(websocket.TextMessage, msg); err != nil {
       LogMsg("failed to notify bridge status");
@@ -63,7 +63,7 @@ func (s *BridgeRelay) KeepAlive(accountId uint, callId string) {
   s.sync.Lock()
   defer s.sync.Unlock()
   now := time.Now().Unix()
-  var bridges []Bridge
+  var bridges []*Bridge
   for _, bridge := range s.bridges {
     if bridge.expires > now {
       bridges = append(bridges, bridge)
@@ -90,7 +90,7 @@ func (s *BridgeRelay) KeepAlive(accountId uint, callId string) {
 func (s *BridgeRelay) RemoveBridge(accountId uint, callId string, cardId string) {
   s.sync.Lock()
   defer s.sync.Unlock()
-  var bridges []Bridge
+  var bridges []*Bridge
   for _, bridge := range s.bridges {
     if bridge.callId == callId && bridge.accountId == accountId && (bridge.cardId == cardId || cardId == "") {
       setStatus(bridge, "closed");
