@@ -1,6 +1,77 @@
 import styled from 'styled-components';
 import Colors from 'constants/Colors';
 
+export const RingingWrapper = styled.div`
+  .ringing-list {
+    padding: 4px;
+    display: flex;
+    flex-direction: column;
+    background-color: ${Colors.darkBackground};
+
+    .ringing-entry {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      padding-left: 8px;
+
+      .ringing-accept {
+        color: ${Colors.primary};
+        font-size: 18;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: ${Colors.white};
+        border-radius: 16px;
+        margin: 8px;
+        cursor: pointer;
+      }
+
+      .ringing-ignore {
+        color: ${Colors.grey};
+        font-size: 18;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: ${Colors.white};
+        border-radius: 16px;
+        margin: 8px;
+        cursor: pointer;
+      }
+    
+      .ringing-decline {
+        color: ${Colors.alert};
+        font-size: 18;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: ${Colors.white};
+        border-radius: 16px;
+        margin: 8px;
+        transform: rotate(270deg);
+        cursor: pointer;
+      }
+
+      .ringing-name {
+        font-size: 16px;
+        flex-grow: 1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: flex;
+        justify-content: center;
+        color: ${Colors.white};
+      }
+    }
+  }
+}
+`;
+
 export const SessionWrapper = styled.div`
   height: 100%;
   width: 100%;
@@ -28,87 +99,6 @@ export const SessionWrapper = styled.div`
       background-color: yellow;
     }
   }
-
-  .ringing {
-    position: absolute;
-    top: 20%;
-    max-height: 15%;
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    z-index: 2;
-
-    .ringing-list {
-      padding: 4px;
-      border-radius: 4px;
-      background-color: rgba(0,0,0,0.6);
-      display: flex;
-      flex-direction: column;
-
-      .ringing-entry {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        padding-left: 8px;
-
-        .ringing-accept {
-          color: ${Colors.primary};
-          font-size: 18;
-          width: 32px;
-          height: 32px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          background-color: ${Colors.white};
-          border-radius: 16px;
-          margin: 8px;
-          cursor: pointer;
-        }
-
-        .ringing-ignore {
-          color: ${Colors.grey};
-          font-size: 18;
-          width: 32px;
-          height: 32px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          background-color: ${Colors.white};
-          border-radius: 16px;
-          margin: 8px;
-          cursor: pointer;
-        }
-      
-        .ringing-decline {
-          color: ${Colors.alert};
-          font-size: 18;
-          width: 32px;
-          height: 32px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          background-color: ${Colors.white};
-          border-radius: 16px;
-          margin: 8px;
-          transform: rotate(270deg);
-          cursor: pointer;
-        }
-
-        .ringing-name {
-          font-size: 16px;
-          width: 192px;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          display: flex;
-          justify-content: center;
-          color: ${Colors.white};
-        }
-      }
-    }
-  } 
 
   .spinner {
     position: absolute;

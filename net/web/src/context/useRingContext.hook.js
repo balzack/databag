@@ -20,6 +20,7 @@ export function useRingContext() {
   const calling = useRef(null);
   const ws = useRef(null);
   const pc = useRef(null);
+  const stream = useRef(null);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }))
@@ -84,8 +85,14 @@ export function useRingContext() {
 
         // form peer connection
         pc.current = new RTCPeerConnection();
-        pc.current.ontrack = ({streams: [stream]}) => {
-          updateState({ stream });
+        pc.current.ontrack = (ev) => { //{streams: [stream]}) => {
+          console.log("ADD TRACK", ev);
+          if (!stream.current) {
+console.log("ADD STREAM");
+            stream.current = new MediaStream();
+            updateState({ stream: stream.current });
+          }
+          stream.current.addTrack(ev.track);
         };
         pc.current.onicecandidate = ({candidate}) => {
           ws.current.send(JSON.stringify({ candidate }));
@@ -101,8 +108,9 @@ export function useRingContext() {
           }
         };
 
-        const stream = await whiteNoise();
-        pc.current.addTransceiver(stream.getTracks()[0], {streams: [stream]});
+console.log("ADD TRANSCEIVER");
+        const media = await whiteNoise();
+        pc.current.addTransceiver(media.getTracks()[0], {streams: [media]});
 
         ws.current = createWebsocket(`wss://${contactNode}/signal`);
         ws.current.onmessage = async (ev) => {
@@ -211,8 +219,14 @@ export function useRingContext() {
 
       // form peer connection
       pc.current = new RTCPeerConnection();
-      pc.current.ontrack = ({streams: [stream]}) => {
-        updateState({ stream });
+      pc.current.ontrack = (ev) => { //{streams: [stream]}) => {
+        console.log("ADD TRACK", ev);
+        if (!stream.current) {
+          stream.current = new MediaStream();
+console.log("ADD STREAM");
+          updateState({ stream: stream.current });
+        }
+        stream.current.addTrack(ev.track);
       };
       pc.current.onicecandidate = ({candidate}) => {
         ws.current.send(JSON.stringify({ candidate }));
@@ -228,8 +242,16 @@ export function useRingContext() {
         }
       };
 
-      const stream = await whiteNoise();
-      pc.current.addTransceiver(stream.getTracks()[0], {streams: [stream]});
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: true,
+        audio: true,
+      });
+      for (const track of stream.getTracks()) {
+console.log("ADD TRANSCEIVER TRACK");
+        pc.current.addTrack(track);
+      }
+//      const stream = await whiteNoise();
+  //    pc.current.addTransceiver(stream.getTracks()[0], {streams: [stream]});
 
       const protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
       ws.current = createWebsocket(`${protocol}${window.location.host}/signal`);

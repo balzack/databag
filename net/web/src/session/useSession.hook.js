@@ -51,13 +51,17 @@ export function useSession() {
       if (call.expires > expired && !call.status) {
         const { callId, cardId, calleeToken } = call;
         const contact = card.state.cards.get(cardId);
-        const { imageSet, name, handle, node, guid } = contact.data.cardProfile || {};
-        const { token } = contact.data.cardDetail;
-        const contactToken = `${guid}.${token}`;
-        const img = imageSet ? card.actions.getCardImageUrl(cardId) : 'avatar';
-        ringing.push({ cardId, img, name, handle, contactNode: node, callId, contactToken, calleeToken });
+        if (contact) {
+          const { imageSet, name, handle, node, guid } = contact.data.cardProfile || {};
+          const { token } = contact.data.cardDetail;
+          const contactToken = `${guid}.${token}`;
+          const img = imageSet ? card.actions.getCardImageUrl(cardId) : 'avatar';
+          ringing.push({ cardId, img, name, handle, contactNode: node, callId, contactToken, calleeToken });  
+        }
       }
     });
+console.log(ringing, ring.state.callStatus);
+
     updateState({ ringing, stream: ring.state.stream, callStatus: ring.state.callStatus });
   }, [ring.state]);
 

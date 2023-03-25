@@ -2,6 +2,7 @@ const Colors = {
   background: '#8fbea7',
   primary: '#448866',
   formBackground: '#f2f2f2',
+  darkBackground: '#222222',
   formFocus: '#f8f8f8',
   formHover: '#efefef',
   grey: '#888888',

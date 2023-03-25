@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from 'react';
-import { Drawer, Spin } from 'antd';
-import { SessionWrapper } from './Session.styled';
+import { Modal, Drawer, Spin } from 'antd';
+import { RingingWrapper, SessionWrapper } from './Session.styled';
 import { useSession } from './useSession.hook';
 import { Conversation } from './conversation/Conversation';
 import { Details } from './details/Details';
@@ -18,6 +18,8 @@ import { EyeInvisibleOutlined, CloseOutlined, PhoneOutlined } from '@ant-design/
 
 export function Session() {
 
+  const [ showRinging, setShowRinging ] = useState(false);
+  const [ modal, modalContext ] = Modal.useModal();
   const { state, actions } = useSession();
   const [ringing, setRinging] = useState([]);
   const vid = useRef();
@@ -39,6 +41,12 @@ export function Session() {
     }
     setRinging(incoming);
   }, [state.ringing]);
+
+  useEffect(() => {
+console.log("SHOW>>>>>", ringing.length > 0);
+
+    setShowRinging(ringing.length > 0 && state.callStatus == null);
+  }, [state.ringing, state.callStatus]);
 
   useEffect(() => {
     if (vid.current) {
@@ -123,18 +131,11 @@ export function Session() {
                 <Profile closeProfile={actions.closeProfile} />
               </div>
             )}
-            { ringing.length > 0 && (
-              <div className="ringing">
-                <div className="ringing-list">
-                  {ringing}
-                </div>
-              </div>
-            )}
             { state.callStatus && (
               <div className="calling">
                 <div className="calling-screen">
                   { state.stream && (
-                    <video ref={vid} autoPlay 
+                    <video ref={vid} autoPlay controls
             complete={() => console.log("VIDEO COMPLETE")} progress={() => console.log("VIDEO PROGRESS")} error={() => console.log("VIDEO ERROR")} waiting={() => console.log("VIDEO WAITING")} />
                   )}
                 </div>
@@ -220,18 +221,11 @@ export function Session() {
                 <Profile closeProfile={closeAccount}/>
               )}
             </Drawer>
-            { ringing.length > 0 && (
-              <div className="ringing">
-                <div className="ringing-list">
-                  {ringing}
-                </div>
-              </div>
-            )}
             { state.callStatus && (
               <div className="calling">
                 <div className="calling-screen">
                   { state.stream && (
-                    <video ref={vid} autoPlay 
+                    <video ref={vid} autoPlay controls 
             complete={() => console.log("VIDEO COMPLETE")} progress={() => console.log("VIDEO PROGRESS")} error={() => console.log("VIDEO ERROR")} waiting={() => console.log("VIDEO WAITING")} />
                   )}
                 </div>
@@ -287,18 +281,11 @@ export function Session() {
                 <Profile />
               </div>
             )}
-            { ringing.length > 0 && (
-              <div className="ringing">
-                <div className="ringing-list">
-                  {ringing}
-                </div>
-              </div>
-            )}
             { state.callStatus && (
               <div className="calling">
                 <div className="calling-screen">
                   { state.stream && (
-                    <video ref={vid} autoPlay 
+                    <video ref={vid} autoPlay controls 
             complete={() => console.log("VIDEO COMPLETE")} progress={() => console.log("VIDEO PROGRESS")} error={() => console.log("VIDEO ERROR")} waiting={() => console.log("VIDEO WAITING")} />
                   )}
                 </div>
@@ -310,6 +297,13 @@ export function Session() {
           </div>
         </div>
       )}
+      <Modal centered visible={ringing.length > 0 && state.callStatus == null} footer={null} closable={false}> 
+        <RingingWrapper>
+          <div className="ringing-list">
+            {ringing}
+          </div>
+        </RingingWrapper>
+      </Modal>
     </SessionWrapper>
   );
 }
