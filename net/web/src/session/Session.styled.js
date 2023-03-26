@@ -72,6 +72,17 @@ export const RingingWrapper = styled.div`
 }
 `;
 
+export const CallingWrapper = styled.div`
+  .calling-local {
+    width: 33%;
+    height: 33%;
+    bottom: 16px;
+    right: 16px;
+    position: absolute;
+  }
+`;
+
+
 export const SessionWrapper = styled.div`
   height: 100%;
   width: 100%;
@@ -81,23 +92,6 @@ export const SessionWrapper = styled.div`
     width: 100%;
     height: 100%;
     z-index: 2;
-  }
-
-  .calling {
-    position: absolute;
-    top: 35%;
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    z-index: 2;
-
-    .calling-screen {
-      width: 256;
-      height: 256;
-      background-color: yellow;
-    }
   }
 
   .spinner {

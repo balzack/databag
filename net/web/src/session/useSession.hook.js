@@ -25,7 +25,8 @@ export function useSession() {
     loading: false,
     ringing: [],
     callStatus: null,
-    stream: null,
+    localStream: null,
+    remoteStream: null,
   });
 
   const app = useContext(AppContext);
@@ -60,9 +61,8 @@ export function useSession() {
         }
       }
     });
-console.log(ringing, ring.state.callStatus);
 
-    updateState({ ringing, stream: ring.state.stream, callStatus: ring.state.callStatus });
+    updateState({ ringing, localStream: ring.state.localStream, remoteStream: ring.state.remoteStream, callStatus: ring.state.callStatus });
   }, [ring.state]);
 
   useEffect(() => {

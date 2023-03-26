@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from 'react';
 import { Modal, Drawer, Spin } from 'antd';
-import { RingingWrapper, SessionWrapper } from './Session.styled';
+import { CallingWrapper, RingingWrapper, SessionWrapper } from './Session.styled';
 import { useSession } from './useSession.hook';
 import { Conversation } from './conversation/Conversation';
 import { Details } from './details/Details';
@@ -18,11 +18,12 @@ import { EyeInvisibleOutlined, CloseOutlined, PhoneOutlined } from '@ant-design/
 
 export function Session() {
 
-  const [ showRinging, setShowRinging ] = useState(false);
-  const [ modal, modalContext ] = Modal.useModal();
   const { state, actions } = useSession();
   const [ringing, setRinging] = useState([]);
-  const vid = useRef();
+  const [callWidth, setCallWidth] = useState(320);
+  const [callHeight, setCallHeight] = useState(240);
+  const remote = useRef();
+  const local = useRef();
 
   useEffect(() => {
     let incoming = [];
@@ -43,16 +44,48 @@ export function Session() {
   }, [state.ringing]);
 
   useEffect(() => {
-console.log("SHOW>>>>>", ringing.length > 0);
-
-    setShowRinging(ringing.length > 0 && state.callStatus == null);
-  }, [state.ringing, state.callStatus]);
+    if (remote.current) {
+      remote.current.onloadedmetadata = (ev) => {
+        const { videoWidth, videoHeight } = ev.target || { videoWidth: 320, videoHeight: 240 }
+        if ((window.innerWidth * 8) / 10 < videoWidth) {
+          const scaledWidth = window.innerWidth * 8 / 10;
+          const scaledHeight = videoHeight * (scaledWidth / videoWidth)
+          if ((window.innerHeight * 8) / 10 < scaledHeight) {
+            const height = (window.innerHeight * 8) / 10;
+            setCallHeight(height);
+            setCallWidth(videoWidth * (height / videoHeight));
+          }
+          else {
+            setCallHeight(scaledHeight);
+            setCallWidth(scaledWidth);
+          }
+        }
+        else if ((window.innerHeight * 8) / 10 < videoHeight) {
+          const height = (window.innerHeight * 8) / 10;
+          setCallHeight(height);
+          setCallWidth(videoWidth * (height / videoHeight));
+        }
+        else {
+          setCallHeight(videoHeight);
+          setCallWidth(videoWidth);
+        }
+      };
+      remote.current.srcObject = state.remoteStream;
+    }
+    else {
+      console.log("video player not set");
+    }
+  }, [state.remoteStream]);
 
   useEffect(() => {
-    if (vid.current) {
-      vid.current.srcObject = state.stream;
+    if (local.current) {
+      local.current.srcObject = state.localStream;
     }
-  }, [state.stream]);
+  }, [state.localStream]);
+
+  useEffect(() => {
+    console.log("DIM: ", callWidth, callHeight);
+  }, [callWidth, callHeight]);
 
   const closeAccount = () => {
     actions.closeProfile();
@@ -129,16 +162,6 @@ console.log("SHOW>>>>>", ringing.length > 0);
             { state.profile && (
               <div class="reframe">
                 <Profile closeProfile={actions.closeProfile} />
-              </div>
-            )}
-            { state.callStatus && (
-              <div className="calling">
-                <div className="calling-screen">
-                  { state.stream && (
-                    <video ref={vid} autoPlay controls
-            complete={() => console.log("VIDEO COMPLETE")} progress={() => console.log("VIDEO PROGRESS")} error={() => console.log("VIDEO ERROR")} waiting={() => console.log("VIDEO WAITING")} />
-                  )}
-                </div>
               </div>
             )}
           </div>
@@ -221,16 +244,6 @@ console.log("SHOW>>>>>", ringing.length > 0);
                 <Profile closeProfile={closeAccount}/>
               )}
             </Drawer>
-            { state.callStatus && (
-              <div className="calling">
-                <div className="calling-screen">
-                  { state.stream && (
-                    <video ref={vid} autoPlay controls 
-            complete={() => console.log("VIDEO COMPLETE")} progress={() => console.log("VIDEO PROGRESS")} error={() => console.log("VIDEO ERROR")} waiting={() => console.log("VIDEO WAITING")} />
-                  )}
-                </div>
-              </div>
-            )}
           </div>
         </div>
       )}
@@ -281,16 +294,6 @@ console.log("SHOW>>>>>", ringing.length > 0);
                 <Profile />
               </div>
             )}
-            { state.callStatus && (
-              <div className="calling">
-                <div className="calling-screen">
-                  { state.stream && (
-                    <video ref={vid} autoPlay controls 
-            complete={() => console.log("VIDEO COMPLETE")} progress={() => console.log("VIDEO PROGRESS")} error={() => console.log("VIDEO ERROR")} waiting={() => console.log("VIDEO WAITING")} />
-                  )}
-                </div>
-              </div>
-            )}
           </div>
           <div class="bottom">
             <BottomNav state={state} actions={actions} />
@@ -303,6 +306,20 @@ console.log("SHOW>>>>>", ringing.length > 0);
             {ringing}
           </div>
         </RingingWrapper>
+      </Modal>
+      <Modal centered visible={state.callStatus} footer={null} closable={false} width={callWidth + 12} height={callHeight + 12} bodyStyle={{ paddingBottom: 0, paddingTop: 6, paddingLeft: 6, paddingRight: 6 }}>
+        <CallingWrapper>
+          { state.remoteStream && (
+            <video ref={remote} disablepictureinpicture autoPlay style={{ width: '100%', height: '100%' }}
+    complete={() => console.log("VIDEO COMPLETE")} progress={() => console.log("VIDEO PROGRESS")} error={() => console.log("VIDEO ERROR")} waiting={() => console.log("VIDEO WAITING")} />
+          )}
+          { state.localStream && (
+            <div className="calling-local">
+              <video ref={local} disablepictureinpicture autoPlay style={{ width: '100%', height: '100%' }}
+    complete={() => console.log("VIDEO COMPLETE")} progress={() => console.log("VIDEO PROGRESS")} error={() => console.log("VIDEO ERROR")} waiting={() => console.log("VIDEO WAITING")} />
+            </div>
+          )}
+        </CallingWrapper>
       </Modal>
     </SessionWrapper>
   );

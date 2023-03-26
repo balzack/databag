@@ -10,7 +10,8 @@ export function useRingContext() {
   const [state, setState] = useState({
     ringing: new Map(),
     callStatus: null,
-    stream: null,
+    localStream: null,
+    remoteStream: null,
   });
   const access = useRef(null);
 
@@ -90,7 +91,7 @@ export function useRingContext() {
           if (!stream.current) {
 console.log("ADD STREAM");
             stream.current = new MediaStream();
-            updateState({ stream: stream.current });
+            updateState({ remoteStream: stream.current });
           }
           stream.current.addTrack(ev.track);
         };
@@ -108,8 +109,8 @@ console.log("ADD STREAM");
           }
         };
 
-console.log("ADD TRANSCEIVER");
         const media = await whiteNoise();
+        updateState({ localStream: media });
         pc.current.addTransceiver(media.getTracks()[0], {streams: [media]});
 
         ws.current = createWebsocket(`wss://${contactNode}/signal`);
@@ -224,7 +225,7 @@ console.log("ADD TRANSCEIVER");
         if (!stream.current) {
           stream.current = new MediaStream();
 console.log("ADD STREAM");
-          updateState({ stream: stream.current });
+          updateState({ remoteStream: stream.current });
         }
         stream.current.addTrack(ev.track);
       };
@@ -246,6 +247,7 @@ console.log("ADD STREAM");
         video: true,
         audio: true,
       });
+      updateState({ localStream: stream });
       for (const track of stream.getTracks()) {
 console.log("ADD TRANSCEIVER TRACK");
         pc.current.addTrack(track);
