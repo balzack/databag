@@ -150,15 +150,16 @@ export function useSession() {
     ignore: (call) => {
       ring.actions.ignore(call.cardId, call.callId);
     },
-    decline: (call) => {
-      ring.actions.decline(call.cardId, call.callId);
+    decline: async (call) => {
+      const { cardId, contactNode, contactToken, callId } = call;
+      await ring.actions.decline(cardId, contactNode, contactToken, callId);
     },
-    accept: (call) => {
+    accept: async (call) => {
       const { cardId, callId, contactNode, contactToken, calleeToken } = call;
-      ring.actions.accept(cardId, callId, contactNode, contactToken, calleeToken);
+      await ring.actions.accept(cardId, callId, contactNode, contactToken, calleeToken);
     },
     end: async () => {
-      ring.actions.end();
+      await ring.actions.end();
     },
     enableVideo: async () => {
       await ring.actions.enableVideo();

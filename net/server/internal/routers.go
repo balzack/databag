@@ -815,7 +815,7 @@ var endpoints = routes{
 		"EndCall",
 		strings.ToUpper("Delete"),
 		"/talk/calls/{callId}",
-		EndCall,
+		RemoveCall,
 	},
 
 	route{

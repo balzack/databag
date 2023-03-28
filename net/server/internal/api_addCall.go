@@ -56,7 +56,7 @@ func AddCall(w http.ResponseWriter, r *http.Request) {
   // allocate bridge
   callerToken := hex.EncodeToString(callerBin);
   calleeToken := hex.EncodeToString(calleeBin);
-  bridgeRelay.AddBridge(account.ID, callId, callerToken, calleeToken);
+  bridgeRelay.AddBridge(account.ID, callId, cardId, callerToken, calleeToken);
 
   // create response
   call := Call{

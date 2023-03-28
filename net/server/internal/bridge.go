@@ -31,12 +31,13 @@ type BridgeRelay struct {
   bridges []*Bridge
 }
 
-func (s *BridgeRelay) AddBridge(accountId uint, callId string, callerToken string, calleeToken string) {
+func (s *BridgeRelay) AddBridge(accountId uint, callId string, cardId string, callerToken string, calleeToken string) {
   s.sync.Lock()
   defer s.sync.Unlock()
   bridge := &Bridge{
     accountId: accountId,
     callId: callId,
+    cardId: cardId,
     expires: time.Now().Unix() + (BridgeKeepAlive * 3),
     closed: false,
     callerToken: callerToken,

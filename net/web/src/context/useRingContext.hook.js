@@ -64,13 +64,19 @@ export function useRingContext() {
         updateState({ ringing: ringing.current });
       }
     },
-    decline: (cardId, callId) => {
+    decline: async (cardId, contactNode, contactToken, callId) => {
       const key = `${cardId}:${callId}`
       const call = ringing.current.get(key);
       if (call) {
         call.status = 'declined'
         ringing.current.set(key, call);
         updateState({ ringing: ringing.current });
+        try {
+          await removeContactCall(contactNode, contactToken, callId);
+        }
+        catch (err) {
+          console.log(err);
+        }
       }
     },
     accept: async (cardId, callId, contactNode, contactToken, calleeToken) => {
@@ -121,7 +127,10 @@ export function useRingContext() {
           // handle messages [impolite]
           try {
             const signal = JSON.parse(ev.data);
-            if (signal.description) {
+            if (signal.status === 'closed') {
+              ws.current.close();
+            }
+            else if (signal.description) {
               stream.current = null;
               if (signal.description.type === 'offer' && pc.current.signalingState !== 'stable') {
                 return; //rudely ignore
@@ -262,12 +271,14 @@ export function useRingContext() {
         }
       };
 
+      videoTrack.current = false;
+      audioTrack.current = false;
       accessVideo.current = false;
       const stream = await navigator.mediaDevices.getUserMedia({
         video: false,
         audio: true,
       });
-      updateState({ audio: true, localStream: stream });
+      updateState({ video: false, audio: true, localStream: stream });
       for (const track of stream.getTracks()) {
         if (track.kind === 'audio') {
           audioTrack.current = track;
@@ -363,7 +374,9 @@ export function useRingContext() {
       updateState({ video: true });
     },
     disableVideo: async () => {
-      videoTrack.current.enabled = false;
+      if (videoTrack.current) {
+        videoTrack.current.enabled = false;
+      }
       updateState({ video: false });
     },
     enableAudio: async () => {
