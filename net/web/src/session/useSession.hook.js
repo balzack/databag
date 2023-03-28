@@ -27,6 +27,8 @@ export function useSession() {
     callStatus: null,
     localStream: null,
     remoteStream: null,
+    video: false,
+    audio: false,
   });
 
   const app = useContext(AppContext);
@@ -62,7 +64,7 @@ export function useSession() {
       }
     });
 
-    updateState({ ringing, localStream: ring.state.localStream, remoteStream: ring.state.remoteStream, callStatus: ring.state.callStatus });
+    updateState({ ringing, video: ring.state.video, audio: ring.state.audio, localStream: ring.state.localStream, remoteStream: ring.state.remoteStream, callStatus: ring.state.callStatus });
   }, [ring.state]);
 
   useEffect(() => {
@@ -154,6 +156,21 @@ export function useSession() {
     accept: (call) => {
       const { cardId, callId, contactNode, contactToken, calleeToken } = call;
       ring.actions.accept(cardId, callId, contactNode, contactToken, calleeToken);
+    },
+    end: async () => {
+      ring.actions.end();
+    },
+    enableVideo: async () => {
+      await ring.actions.enableVideo();
+    },
+    disableVideo: async () => {
+      await ring.actions.disableVideo();
+    },
+    enableAudio: async () => {
+      await ring.actions.enableAudio();
+    },
+    disableAudio: async () => {
+      await ring.actions.disableAudio();
     },
   };
 

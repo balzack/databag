@@ -15,6 +15,7 @@ import { Welcome } from './welcome/Welcome';
 import { BottomNav } from './bottomNav/BottomNav';
 import { Logo } from 'logo/Logo';
 import { EyeInvisibleOutlined, CloseOutlined, PhoneOutlined } from '@ant-design/icons';
+import { IoVideocamOffOutline, IoVideocamOutline, IoMicOffOutline, IoMicOutline, IoCallOutline } from "react-icons/io5";
 
 export function Session() {
 
@@ -307,7 +308,7 @@ export function Session() {
           </div>
         </RingingWrapper>
       </Modal>
-      <Modal centered visible={state.callStatus} footer={null} closable={false} width={callWidth + 12} height={callHeight + 12} bodyStyle={{ paddingBottom: 0, paddingTop: 6, paddingLeft: 6, paddingRight: 6 }}>
+      <Modal centered visible={state.callStatus} footer={null} closable={false} width={callWidth + 12} height={callHeight + 12} bodyStyle={{ paddingBottom: 0, paddingTop: 6, paddingLeft: 6, paddingRight: 6, paddingBottom: 6 }}>
         <CallingWrapper>
           { state.remoteStream && (
             <video ref={remote} disablepictureinpicture autoPlay style={{ width: '100%', height: '100%' }}
@@ -319,6 +320,31 @@ export function Session() {
     complete={() => console.log("VIDEO COMPLETE")} progress={() => console.log("VIDEO PROGRESS")} error={() => console.log("VIDEO ERROR")} waiting={() => console.log("VIDEO WAITING")} />
             </div>
           )}
+          <div className="calling-options">
+            { state.video && (
+              <div className="calling-option" onClick={actions.disableVideo}>
+                <IoVideocamOutline />
+              </div>
+            )}
+            { !state.video && (
+              <div className="calling-option" onClick={actions.enableVideo}>
+                <IoVideocamOffOutline />
+              </div>
+            )}
+            { state.audio && (
+              <div className="calling-option" onClick={actions.disableAudio}>
+                <IoMicOutline />
+              </div>
+            )}
+            { !state.audio && (
+              <div className="calling-option" onClick={actions.enableAudio}>
+                <IoMicOffOutline />
+              </div>
+            )}
+          </div>
+          <div className="calling-end" onClick={actions.end}>
+            <IoCallOutline />
+          </div>
         </CallingWrapper>
       </Modal>
     </SessionWrapper>

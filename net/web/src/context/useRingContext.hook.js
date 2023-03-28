@@ -12,6 +12,8 @@ export function useRingContext() {
     callStatus: null,
     localStream: null,
     remoteStream: null,
+    video: false,
+    audio: false,
   });
   const access = useRef(null);
 
@@ -22,6 +24,9 @@ export function useRingContext() {
   const ws = useRef(null);
   const pc = useRef(null);
   const stream = useRef(null);
+  const accessVideo = useRef(false);
+  const videoTrack = useRef();
+  const audioTrack = useRef();
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }))
@@ -87,9 +92,7 @@ export function useRingContext() {
         // form peer connection
         pc.current = new RTCPeerConnection();
         pc.current.ontrack = (ev) => { //{streams: [stream]}) => {
-          console.log("ADD TRACK", ev);
           if (!stream.current) {
-console.log("ADD STREAM");
             stream.current = new MediaStream();
             updateState({ remoteStream: stream.current });
           }
@@ -119,6 +122,7 @@ console.log("ADD STREAM");
           try {
             const signal = JSON.parse(ev.data);
             if (signal.description) {
+              stream.current = null;
               if (signal.description.type === 'offer' && pc.current.signalingState !== 'stable') {
                 return; //rudely ignore
               }
@@ -142,7 +146,15 @@ console.log("ADD STREAM");
           // update state to disconnected
           pc.current.close();
           calling.current = null;
-          updateState({ calling: null });
+          if (videoTrack.current) {
+            videoTrack.current.stop();
+            videoTrack.current = null;
+          }
+          if (audioTrack.current) {
+            audioTrack.current.stop();
+            audioTrack.current = null;
+          }
+          updateState({ callStatus: null });
         }
         ws.current.onopen = async () => {
           calling.current.state = "connected"
@@ -181,6 +193,14 @@ console.log("ADD STREAM");
         console.log(err);
       }
       ws.current.close();
+      if (videoTrack.current) {
+        videoTrack.current.stop();
+        videoTrack.current = null;
+      }
+      if (audioTrack.current) {
+        audioTrack.current.stop();
+        audioTrack.current = null;
+      }
     },
     call: async (cardId, contactNode, contactToken) => {
       if (calling.current) {
@@ -224,7 +244,6 @@ console.log("ADD STREAM");
         console.log("ADD TRACK", ev);
         if (!stream.current) {
           stream.current = new MediaStream();
-console.log("ADD STREAM");
           updateState({ remoteStream: stream.current });
         }
         stream.current.addTrack(ev.track);
@@ -243,17 +262,21 @@ console.log("ADD STREAM");
         }
       };
 
+      accessVideo.current = false;
       const stream = await navigator.mediaDevices.getUserMedia({
-        video: true,
+        video: false,
         audio: true,
       });
-      updateState({ localStream: stream });
+      updateState({ audio: true, localStream: stream });
       for (const track of stream.getTracks()) {
-console.log("ADD TRANSCEIVER TRACK");
+        if (track.kind === 'audio') {
+          audioTrack.current = track;
+        }
+        if (track.kind === 'video') {
+          videoTrack.current = track;
+        }
         pc.current.addTrack(track);
       }
-//      const stream = await whiteNoise();
-  //    pc.current.addTransceiver(stream.getTracks()[0], {streams: [stream]});
 
       const protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
       ws.current = createWebsocket(`${protocol}${window.location.host}/signal`);
@@ -266,6 +289,9 @@ console.log("ADD TRANSCEIVER TRACK");
               clearInterval(ringInterval);
               calling.current.state = 'connected';
               updateState({ callStatus: "connected" });
+            }
+            if (signal.status === 'closed') {
+              ws.current.close();
             }
           }
           else if (signal.description) {
@@ -293,6 +319,14 @@ console.log("ADD TRANSCEIVER TRACK");
         clearInterval(ringInterval);
         clearInterval(aliveInterval);
         calling.current = null;
+        if (videoTrack.current) {
+          videoTrack.current.stop();
+          videoTrack.current = null;
+        }
+        if (audioTrack.current) {
+          audioTrack.current.stop();
+          audioTrack.current = null;
+        }
         updateState({ callStatus: null });
       }
       ws.current.onopen = () => {
@@ -304,6 +338,41 @@ console.log("ADD TRANSCEIVER TRACK");
         console.log(e)
         ws.current.close();
       }
+    },
+    enableVideo: async () => {
+      if (!accessVideo.current) {
+        accessVideo.current = true;
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: true,
+          audio: true,
+        });
+        updateState({ localStream: stream });
+        for (const track of stream.getTracks()) {
+          if (track.kind === 'audio') {
+            audioTrack.current = track;
+          }
+          if (track.kind === 'video') {
+            videoTrack.current = track;
+          }
+          pc.current.addTrack(track);
+        }
+      }
+      else {
+        videoTrack.current.enabled = true;
+      }
+      updateState({ video: true });
+    },
+    disableVideo: async () => {
+      videoTrack.current.enabled = false;
+      updateState({ video: false });
+    },
+    enableAudio: async () => {
+      audioTrack.current.enabled = true;
+      updateState({ audio: true });
+    },
+    disableAudio: async () => {
+      audioTrack.current.enabled = false;
+      updateState({ audio: false });
     },
   }
 

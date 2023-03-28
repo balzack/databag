@@ -53,7 +53,7 @@ export const RingingWrapper = styled.div`
         background-color: ${Colors.white};
         border-radius: 16px;
         margin: 8px;
-        transform: rotate(270deg);
+        transform: rotate(135deg);
         cursor: pointer;
       }
 
@@ -73,12 +73,52 @@ export const RingingWrapper = styled.div`
 `;
 
 export const CallingWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
   .calling-local {
     width: 33%;
     height: 33%;
     bottom: 16px;
-    right: 16px;
+    left: 16px;
     position: absolute;
+  }
+
+  .calling-end {
+    position: absolute;
+    bottom: 16px;
+    color: ${Colors.white};
+    font-size: 24px;
+    background-color: ${Colors.alert};
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    border-radius: 20px;
+    cursor: pointer;
+    transform: rotate(270deg);
+  }
+
+  .calling-options {
+    position: absolute;
+    top: 16px;
+    display: flex;
+    flex-direction: row;
+  }
+
+  .calling-option {
+    color: ${Colors.white};
+    font-size: 24px;
+    background-color: ${Colors.primary};
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-left: 8px;
+    margin-right: 8px;
   }
 `;
 
