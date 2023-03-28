@@ -62,11 +62,38 @@ export function useRingContext() {
       access.current = null;
     },
     ring: (cardId, callId, calleeToken) => {
-console.log("RING");
+      const key = `${cardId}:${callId}`
+      const call = ringing.current.get(key) || { cardId, calleeToken, callId }
+      call.expires = Date.now() + EXPIRE;
+      ringing.current.set(key, call);
+      updateState({ ringing: ringing.current });
+      setTimeout(() => {
+        updateState({ ringing: ringing.current });
+      }, EXPIRE);
     },
     ignore: (cardId, callId) => {
+      const key = `${cardId}:${callId}`
+      const call = ringing.current.get(key);
+      if (call) {
+        call.status = 'ignored'
+        ringing.current.set(key, call);
+        updateState({ ringing: ringing.current });
+      }
     },
     decline: async (cardId, contactNode, contactToken, callId) => {
+      const key = `${cardId}:${callId}`
+      const call = ringing.current.get(key);
+      if (call) {
+        call.status = 'declined'
+        ringing.current.set(key, call);
+        updateState({ ringing: ringing.current });
+        try {
+          await removeContactCall(contactNode, contactToken, callId);
+        }
+        catch (err) {
+          console.log(err);
+        }
+      }
     },
     accept: async (cardId, callId, contactNode, contactToken, calleeToken) => {
     },
