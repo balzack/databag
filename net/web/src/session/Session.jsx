@@ -335,7 +335,7 @@ export function Session() {
           )}
           { state.localStream && (
             <div className="calling-local">
-              <video ref={local} disablepictureinpicture playsInline autoPlay style={{ width: '100%', display: 'block' }}
+              <video ref={local} disablepictureinpicture playsInline autoPlay muted style={{ width: '100%', display: 'block' }}
     complete={() => console.log("VIDEO COMPLETE")} progress={() => console.log("VIDEO PROGRESS")} error={() => console.log("VIDEO ERROR")} waiting={() => console.log("VIDEO WAITING")} />
             </div>
           )}

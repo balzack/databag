@@ -28,6 +28,7 @@ export function useRingContext() {
   const pc = useRef(null);
   const stream = useRef(null);
   const accessVideo = useRef(false);
+  const accessAudio = useRef(false);
   const videoTrack = useRef();
   const audioTrack = useRef();
 
@@ -139,9 +140,30 @@ export function useRingContext() {
           }
         };
 
-        const media = await whiteNoise();
-        updateState({ localStream: media });
-        pc.current.addTransceiver(media.getTracks()[0], {streams: [media]});
+        updateState({ localVideo: false, localAudio: false, localStream: null });
+        videoTrack.current = false;
+        audioTrack.current = false;
+        accessVideo.current = false;
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({
+            video: false,
+            audio: true,
+          });
+          accessAudio.current = true;
+          const local = new MediaStream();
+          updateState({ localAudio: true, localStream: stream });
+          for (const track of stream.getTracks()) {
+            if (track.kind === 'audio') {
+              audioTrack.current = track;
+            }
+            pc.current.addTrack(track);
+          }
+        }
+        catch (err) {
+          console.log(err);
+        }
+
+        //pc.current.addTransceiver(media.getTracks()[0], {streams: [media]});
 
         ws.current = createWebsocket(`wss://${contactNode}/signal`);
         ws.current.onmessage = async (ev) => {
@@ -305,6 +327,7 @@ export function useRingContext() {
         video: false,
         audio: true,
       });
+      accessAudio.current = true;
       updateState({ localVideo: false, localAudio: true, localStream: stream });
       for (const track of stream.getTracks()) {
         if (track.kind === 'audio') {
@@ -379,11 +402,12 @@ export function useRingContext() {
     },
     enableVideo: async () => {
       if (!accessVideo.current) {
-        accessVideo.current = true;
         const stream = await navigator.mediaDevices.getUserMedia({
           video: true,
           audio: true,
         });
+        accessVideo.current = true;
+        accessAudio.current = true;
         updateState({ localStream: stream });
         for (const track of stream.getTracks()) {
           if (track.kind === 'audio') {
@@ -407,12 +431,16 @@ export function useRingContext() {
       updateState({ localVideo: false });
     },
     enableAudio: async () => {
-      audioTrack.current.enabled = true;
-      updateState({ localAudio: true });
+      if (accessAudio.current) {
+        audioTrack.current.enabled = true;
+        updateState({ localAudio: true });
+      }
     },
     disableAudio: async () => {
-      audioTrack.current.enabled = false;
-      updateState({ localAudio: false });
+      if (accessAudio.current) {
+        audioTrack.current.enabled = false;
+        updateState({ localAudio: false });
+      }
     },
   }
 
