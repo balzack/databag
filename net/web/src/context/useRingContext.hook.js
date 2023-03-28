@@ -10,6 +10,7 @@ export function useRingContext() {
   const [state, setState] = useState({
     ringing: new Map(),
     callStatus: null,
+    cardId: null,
     localStream: null,
     localVideo: false,
     localAudio: false,
@@ -29,6 +30,18 @@ export function useRingContext() {
   const accessVideo = useRef(false);
   const videoTrack = useRef();
   const audioTrack = useRef();
+
+  const iceServers = [
+    {
+      urls: 'stun:35.165.123.117:5001?transport=udp', 
+      username: 'user', 
+      credential: 'pass'
+    },
+    {
+      urls: 'turn:35.165.123.117:5001?transport=udp', 
+      username: 'user', 
+      credential: 'pass'
+    }];
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }))
@@ -95,10 +108,10 @@ export function useRingContext() {
 
         // connect signal socket
         calling.current = { state: "connecting", callId, contactNode, contactToken, host: false };
-        updateState({ callStatus: "connecting", remoteVideo: false, remoteAudio: false });
+        updateState({ callStatus: "connecting", cardId, remoteVideo: false, remoteAudio: false });
 
         // form peer connection
-        pc.current = new RTCPeerConnection();
+        pc.current = new RTCPeerConnection({ iceServers });
         pc.current.ontrack = (ev) => {
           if (!stream.current) {
             stream.current = new MediaStream();
@@ -253,10 +266,10 @@ export function useRingContext() {
       }, RING);
 
       calling.current = { state: "connecting", callId: id, host: true };
-      updateState({ callStatus: "connecting", remoteVideo: false, remoteAudio: false });
+      updateState({ callStatus: "connecting", cardId, remoteVideo: false, remoteAudio: false });
 
       // form peer connection
-      pc.current = new RTCPeerConnection();
+      pc.current = new RTCPeerConnection({ iceServers });
       pc.current.ontrack = (ev) => { //{streams: [stream]}) => {
         console.log("ADD TRACK", ev);
         if (!stream.current) {
@@ -385,7 +398,7 @@ export function useRingContext() {
       else {
         videoTrack.current.enabled = true;
       }
-      updateState({ localVideo: true });
+      updateState({ localVideo: true, localAudio: true });
     },
     disableVideo: async () => {
       if (videoTrack.current) {
@@ -399,7 +412,7 @@ export function useRingContext() {
     },
     disableAudio: async () => {
       audioTrack.current.enabled = false;
-      updateState({ loaclAudio: false });
+      updateState({ localAudio: false });
     },
   }
 

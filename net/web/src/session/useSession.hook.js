@@ -25,6 +25,7 @@ export function useSession() {
     loading: false,
     ringing: [],
     callStatus: null,
+    callLogo: null,
     localStream: null,
     localVideo: false,
     localAudio: false,
@@ -60,14 +61,21 @@ export function useSession() {
           const { imageSet, name, handle, node, guid } = contact.data.cardProfile || {};
           const { token } = contact.data.cardDetail;
           const contactToken = `${guid}.${token}`;
-          const img = imageSet ? card.actions.getCardImageUrl(cardId) : 'avatar';
+          const img = imageSet ? card.actions.getCardImageUrl(cardId) : null;
           ringing.push({ cardId, img, name, handle, contactNode: node, callId, contactToken, calleeToken });  
         }
       }
     });
 
+    let callLogo = null;
+    const contact = card.state.cards.get(ring.state.cardId);
+    if (contact) {
+      const { imageSet } = contact.data.cardProfile || {};
+      callLogo = imageSet ? card.actions.getCardImageUrl(ring.state.cardId) : null;  
+    }
+
     const { callStatus, localStream, localVideo, localAudio, remoteStream, remoteVideo, remoteAudio } = ring.state;
-    updateState({ ringing, callStatus, localStream, localVideo, localAudio, remoteStream, remoteVideo, remoteAudio });
+    updateState({ ringing, callStatus, callLogo, localStream, localVideo, localAudio, remoteStream, remoteVideo, remoteAudio });
   }, [ring.state]);
 
   useEffect(() => {

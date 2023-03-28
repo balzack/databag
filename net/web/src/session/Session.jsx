@@ -33,7 +33,7 @@ export function Session() {
       const label = ring.name ? ring.name : `${ring.handle}@${ring.node}`;
       incoming.push(
         <div className="ringing-entry">
-          <Logo url={ring.url} width={40} height={40} radius={4} />
+          <Logo url={ring.img} width={40} height={40} radius={4} />
           <div className="ringing-name">{ label }</div>
           <div onClick={() => actions.ignore(ring)} className="ringing-ignore"><EyeInvisibleOutlined /></div>
           <div onClick={() => actions.decline(ring)} className="ringing-decline"><PhoneOutlined /></div>
@@ -86,6 +86,7 @@ export function Session() {
         }
       };
       remote.current.srcObject = state.remoteStream;
+      remote.current.play();
     }
     else {
       console.log("video player not set");
@@ -95,6 +96,7 @@ export function Session() {
   useEffect(() => {
     if (local.current) {
       local.current.srcObject = state.localStream;
+      local.current.play();
     }
   }, [state.localStream]);
 
@@ -325,19 +327,19 @@ export function Session() {
       <Modal centered visible={state.callStatus} footer={null} closable={false} width={getWidth() + 12} height={getHeight() + 12} bodyStyle={{ paddingBottom: 0, paddingTop: 6, paddingLeft: 6, paddingRight: 6, paddingBottom: 6 }}>
         <CallingWrapper>
           { !state.remoteVideo && (
-            <Logo url={null} width={256} height={256} radius={8} />
+            <Logo url={state.callLogo} width={256} height={256} radius={8} />
           )}
           { state.remoteStream && (
-            <video ref={remote} disablepictureinpicture autoPlay style={{ display: state.remoteVideo ? 'block' : 'none', width: '100%', height: '100%' }}
+            <video ref={remote} disablepictureinpicture playsInline autoPlay style={{ display: state.remoteVideo ? 'block' : 'none', width: '100%' }}
     complete={() => console.log("VIDEO COMPLETE")} progress={() => console.log("VIDEO PROGRESS")} error={() => console.log("VIDEO ERROR")} waiting={() => console.log("VIDEO WAITING")} />
           )}
           { state.localStream && (
             <div className="calling-local">
-              <video ref={local} disablepictureinpicture autoPlay style={{ width: '100%', height: '100%' }}
+              <video ref={local} disablepictureinpicture playsInline autoPlay style={{ width: '100%', display: 'block' }}
     complete={() => console.log("VIDEO COMPLETE")} progress={() => console.log("VIDEO PROGRESS")} error={() => console.log("VIDEO ERROR")} waiting={() => console.log("VIDEO WAITING")} />
             </div>
           )}
-          <div className="calling-options">
+          <div className="calling-options calling-hovered">
             { state.localVideo && (
               <div className="calling-option" onClick={actions.disableVideo}>
                 <IoVideocamOutline />
@@ -359,7 +361,7 @@ export function Session() {
               </div>
             )}
           </div>
-          <div className="calling-end" onClick={actions.end}>
+          <div className="calling-end calling-hovered" onClick={actions.end}>
             <IoCallOutline />
           </div>
         </CallingWrapper>

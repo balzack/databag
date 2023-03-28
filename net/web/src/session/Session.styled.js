@@ -53,7 +53,7 @@ export const RingingWrapper = styled.div`
         background-color: ${Colors.white};
         border-radius: 16px;
         margin: 8px;
-        transform: rotate(135deg);
+        transform: rotate(224deg);
         cursor: pointer;
       }
 
@@ -76,10 +76,13 @@ export const CallingWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+
+  &:hover .calling-hovered {
+    display: flex;
+  }
   
   .calling-local {
     width: 33%;
-    height: 33%;
     bottom: 16px;
     left: 16px;
     position: absolute;
@@ -100,19 +103,19 @@ export const CallingWrapper = styled.div`
     color: ${Colors.white};
     font-size: 24px;
     background-color: ${Colors.alert};
-    display: flex;
+    display: none;
     align-items: center;
     justify-content: center;
     padding: 8px;
     border-radius: 20px;
     cursor: pointer;
-    transform: rotate(270deg);
+    transform: rotate(135deg);
   }
 
   .calling-options {
+    display: none;
     position: absolute;
     top: 16px;
-    display: flex;
     flex-direction: row;
   }
 
