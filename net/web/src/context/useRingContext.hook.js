@@ -323,20 +323,25 @@ export function useRingContext() {
       videoTrack.current = false;
       audioTrack.current = false;
       accessVideo.current = false;
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: false,
-        audio: true,
-      });
-      accessAudio.current = true;
-      updateState({ localVideo: false, localAudio: true, localStream: stream });
-      for (const track of stream.getTracks()) {
-        if (track.kind === 'audio') {
-          audioTrack.current = track;
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: false,
+          audio: true,
+        });
+        accessAudio.current = true;
+        updateState({ localVideo: false, localAudio: true, localStream: stream });
+        for (const track of stream.getTracks()) {
+          if (track.kind === 'audio') {
+            audioTrack.current = track;
+          }
+          if (track.kind === 'video') {
+            videoTrack.current = track;
+          }
+          pc.current.addTrack(track);
         }
-        if (track.kind === 'video') {
-          videoTrack.current = track;
-        }
-        pc.current.addTrack(track);
+      }
+      catch (err) {
+        console.log(err);
       }
 
       const protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
