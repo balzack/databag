@@ -11,6 +11,7 @@ import { AccountContext } from 'context/AccountContext';
 import { ProfileContext } from 'context/ProfileContext';
 import { CardContext } from 'context/CardContext';
 import { ChannelContext } from 'context/ChannelContext';
+import { RingContext } from 'context/RingContext';
 import { getVersion, getApplicationName, getDeviceId } from 'react-native-device-info'
 import messaging from '@react-native-firebase/messaging';
 
@@ -27,6 +28,7 @@ export function useAppContext() {
   const profile = useContext(ProfileContext);
   const card = useContext(CardContext);
   const channel = useContext(ChannelContext);
+  const ring = useContext(RingContext);
   const delay = useRef(0);
 
   const ws = useRef(null);
@@ -71,6 +73,7 @@ export function useAppContext() {
     await profile.actions.setSession(access.current);
     await card.actions.setSession(access.current);
     await channel.actions.setSession(access.current);
+    await ring.actions.setSession(access.current);
     setWebsocket(access.current);
   }
 
@@ -79,6 +82,7 @@ export function useAppContext() {
     profile.actions.clearSession();
     card.actions.clearSession();
     channel.actions.clearSession();
+    ring.actions.clearSession();
     updateState({ session: false });
     clearWebsocket();
   }
@@ -166,15 +170,24 @@ export function useAppContext() {
     ws.current.onmessage = (ev) => {
       try {
         delay.current = 0;
-        const rev = JSON.parse(ev.data);
+        let activity = JSON.parse(ev.data);
         updateState({ status: 'connected' });
-        profile.actions.setRevision(rev.profile);
-        account.actions.setRevision(rev.account);
-        channel.actions.setRevision(rev.channel);
-        card.actions.setRevision(rev.card);
+
+        if (activity.revision) {
+          const { profile: profileRev, account: accountRev, channel: channelRev, card: cardRev } = activity.revision;
+          profile.actions.setRevision(profileRev);
+          account.actions.setRevision(accountRev);
+          channel.actions.setRevision(channelRev);
+          card.actions.setRevision(cardRev);
+        }
+        if (activity.ring) {
+          const { cardId, callId, calleeToken } = activity.ring;
+          ring.actions.ring(cardId, callId, calleeToken);
+        }
       }
       catch (err) {
         console.log(err);
+        ws.current.close();
       }
     }
     ws.current.onopen = () => {

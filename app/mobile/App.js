@@ -8,6 +8,7 @@ import { AppContextProvider } from 'context/AppContext';
 import { AccountContextProvider } from 'context/AccountContext';
 import { ProfileContextProvider } from 'context/ProfileContext';
 import { CardContextProvider } from 'context/CardContext';
+import { RingContextProvider } from 'context/RingContext'
 import { ChannelContextProvider } from 'context/ChannelContext';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { ConversationContextProvider } from 'context/ConversationContext';
@@ -25,31 +26,33 @@ export default function App() {
   return (
     <StoreContextProvider>
       <UploadContextProvider>
-        <CardContextProvider>
-          <ChannelContextProvider>
-            <AccountContextProvider>
-              <ProfileContextProvider>
-                <ConversationContextProvider>
-                  <AppContextProvider>
-                    <SafeAreaProvider>
-                      <NativeRouter>
-                        <Routes>
-                          <Route path="/" element={ <Root /> } />
-                          <Route path="/admin" element={ <Access mode="admin" /> } />
-                          <Route path="/dashboard" element={ <Dashboard /> } />
-                          <Route path="/login" element={ <Access mode="login" /> } />
-                          <Route path="/reset" element={ <Access mode="reset" /> } />
-                          <Route path="/create" element={ <Access mode="create" /> } />
-                          <Route path="/session" element={ <Session /> } />
-                        </Routes>
-                      </NativeRouter>
-                    </SafeAreaProvider>
-                  </AppContextProvider>
-                </ConversationContextProvider>
-              </ProfileContextProvider>
-            </AccountContextProvider>
-          </ChannelContextProvider>
-        </CardContextProvider>
+        <RingContextProvider>
+          <CardContextProvider>
+            <ChannelContextProvider>
+              <AccountContextProvider>
+                <ProfileContextProvider>
+                  <ConversationContextProvider>
+                    <AppContextProvider>
+                      <SafeAreaProvider>
+                        <NativeRouter>
+                          <Routes>
+                            <Route path="/" element={ <Root /> } />
+                            <Route path="/admin" element={ <Access mode="admin" /> } />
+                            <Route path="/dashboard" element={ <Dashboard /> } />
+                            <Route path="/login" element={ <Access mode="login" /> } />
+                            <Route path="/reset" element={ <Access mode="reset" /> } />
+                            <Route path="/create" element={ <Access mode="create" /> } />
+                            <Route path="/session" element={ <Session /> } />
+                          </Routes>
+                        </NativeRouter>
+                      </SafeAreaProvider>
+                    </AppContextProvider>
+                  </ConversationContextProvider>
+                </ProfileContextProvider>
+              </AccountContextProvider>
+            </ChannelContextProvider>
+          </CardContextProvider>
+        </RingContextProvider>
       </UploadContextProvider>
     </StoreContextProvider>
   );
