@@ -85,6 +85,15 @@ export const CallingWrapper = styled.div`
     position: absolute;
   }
 
+  .calling-logo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 256px;
+    height: 256px;
+    background-color: yellow;
+  }
+
   .calling-end {
     position: absolute;
     bottom: 16px;

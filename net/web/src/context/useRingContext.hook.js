@@ -11,9 +11,11 @@ export function useRingContext() {
     ringing: new Map(),
     callStatus: null,
     localStream: null,
+    localVideo: false,
+    localAudio: false,
     remoteStream: null,
-    video: false,
-    audio: false,
+    removeVideo: false,
+    removeAudio: false,
   });
   const access = useRef(null);
 
@@ -93,14 +95,20 @@ export function useRingContext() {
 
         // connect signal socket
         calling.current = { state: "connecting", callId, contactNode, contactToken, host: false };
-        updateState({ callStatus: "connecting" });
+        updateState({ callStatus: "connecting", remoteVideo: false, remoteAudio: false });
 
         // form peer connection
         pc.current = new RTCPeerConnection();
-        pc.current.ontrack = (ev) => { //{streams: [stream]}) => {
+        pc.current.ontrack = (ev) => {
           if (!stream.current) {
             stream.current = new MediaStream();
             updateState({ remoteStream: stream.current });
+          }
+          if (ev.track.kind === 'audio') {
+            updateState({ remoteAudio: true });
+          }
+          else if (ev.track.kind === 'video') {
+            updateState({ remoteVideo: true });
           }
           stream.current.addTrack(ev.track);
         };
@@ -245,7 +253,7 @@ export function useRingContext() {
       }, RING);
 
       calling.current = { state: "connecting", callId: id, host: true };
-      updateState({ callStatus: "connecting" });
+      updateState({ callStatus: "connecting", remoteVideo: false, remoteAudio: false });
 
       // form peer connection
       pc.current = new RTCPeerConnection();
@@ -254,6 +262,12 @@ export function useRingContext() {
         if (!stream.current) {
           stream.current = new MediaStream();
           updateState({ remoteStream: stream.current });
+        }
+        if (ev.track.kind === 'audio') {
+          updateState({ remoteAudio: true });
+        }
+        else if (ev.track.kind === 'video') {
+          updateState({ remoteVideo: true });
         }
         stream.current.addTrack(ev.track);
       };
@@ -278,7 +292,7 @@ export function useRingContext() {
         video: false,
         audio: true,
       });
-      updateState({ video: false, audio: true, localStream: stream });
+      updateState({ localVideo: false, localAudio: true, localStream: stream });
       for (const track of stream.getTracks()) {
         if (track.kind === 'audio') {
           audioTrack.current = track;
@@ -371,21 +385,21 @@ export function useRingContext() {
       else {
         videoTrack.current.enabled = true;
       }
-      updateState({ video: true });
+      updateState({ localVideo: true });
     },
     disableVideo: async () => {
       if (videoTrack.current) {
         videoTrack.current.enabled = false;
       }
-      updateState({ video: false });
+      updateState({ localVideo: false });
     },
     enableAudio: async () => {
       audioTrack.current.enabled = true;
-      updateState({ audio: true });
+      updateState({ localAudio: true });
     },
     disableAudio: async () => {
       audioTrack.current.enabled = false;
-      updateState({ audio: false });
+      updateState({ loaclAudio: false });
     },
   }
 

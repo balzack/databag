@@ -26,9 +26,11 @@ export function useSession() {
     ringing: [],
     callStatus: null,
     localStream: null,
+    localVideo: false,
+    localAudio: false,
     remoteStream: null,
-    video: false,
-    audio: false,
+    remoteVideo: false,
+    remoteAudio: false,
   });
 
   const app = useContext(AppContext);
@@ -64,7 +66,8 @@ export function useSession() {
       }
     });
 
-    updateState({ ringing, video: ring.state.video, audio: ring.state.audio, localStream: ring.state.localStream, remoteStream: ring.state.remoteStream, callStatus: ring.state.callStatus });
+    const { callStatus, localStream, localVideo, localAudio, remoteStream, remoteVideo, remoteAudio } = ring.state;
+    updateState({ ringing, callStatus, localStream, localVideo, localAudio, remoteStream, remoteVideo, remoteAudio });
   }, [ring.state]);
 
   useEffect(() => {

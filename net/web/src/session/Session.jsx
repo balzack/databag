@@ -21,8 +21,8 @@ export function Session() {
 
   const { state, actions } = useSession();
   const [ringing, setRinging] = useState([]);
-  const [callWidth, setCallWidth] = useState(320);
-  const [callHeight, setCallHeight] = useState(240);
+  const [callWidth, setCallWidth] = useState(256);
+  const [callHeight, setCallHeight] = useState(256);
   const remote = useRef();
   const local = useRef();
 
@@ -44,10 +44,24 @@ export function Session() {
     setRinging(incoming);
   }, [state.ringing]);
 
+  const getWidth = () => {
+    if (state.remoteVideo) {
+      return callWidth;
+    }
+    return 256;
+  }
+
+  const getHeight = () => {
+    if (state.remoteVideo) {
+      return callHeight;
+    }
+    return 256;
+  }
+
   useEffect(() => {
     if (remote.current) {
       remote.current.onloadedmetadata = (ev) => {
-        const { videoWidth, videoHeight } = ev.target || { videoWidth: 320, videoHeight: 240 }
+        const { videoWidth, videoHeight } = ev.target || { videoWidth: 256, videoHeight: 256 }
         if ((window.innerWidth * 8) / 10 < videoWidth) {
           const scaledWidth = window.innerWidth * 8 / 10;
           const scaledHeight = videoHeight * (scaledWidth / videoWidth)
@@ -308,10 +322,13 @@ export function Session() {
           </div>
         </RingingWrapper>
       </Modal>
-      <Modal centered visible={state.callStatus} footer={null} closable={false} width={callWidth + 12} height={callHeight + 12} bodyStyle={{ paddingBottom: 0, paddingTop: 6, paddingLeft: 6, paddingRight: 6, paddingBottom: 6 }}>
+      <Modal centered visible={state.callStatus} footer={null} closable={false} width={getWidth() + 12} height={getHeight() + 12} bodyStyle={{ paddingBottom: 0, paddingTop: 6, paddingLeft: 6, paddingRight: 6, paddingBottom: 6 }}>
         <CallingWrapper>
+          { !state.remoteVideo && (
+            <Logo url={null} width={256} height={256} radius={8} />
+          )}
           { state.remoteStream && (
-            <video ref={remote} disablepictureinpicture autoPlay style={{ width: '100%', height: '100%' }}
+            <video ref={remote} disablepictureinpicture autoPlay style={{ display: state.remoteVideo ? 'block' : 'none', width: '100%', height: '100%' }}
     complete={() => console.log("VIDEO COMPLETE")} progress={() => console.log("VIDEO PROGRESS")} error={() => console.log("VIDEO ERROR")} waiting={() => console.log("VIDEO WAITING")} />
           )}
           { state.localStream && (
@@ -321,22 +338,22 @@ export function Session() {
             </div>
           )}
           <div className="calling-options">
-            { state.video && (
+            { state.localVideo && (
               <div className="calling-option" onClick={actions.disableVideo}>
                 <IoVideocamOutline />
               </div>
             )}
-            { !state.video && (
+            { !state.localVideo && (
               <div className="calling-option" onClick={actions.enableVideo}>
                 <IoVideocamOffOutline />
               </div>
             )}
-            { state.audio && (
+            { state.localAudio && (
               <div className="calling-option" onClick={actions.disableAudio}>
                 <IoMicOutline />
               </div>
             )}
-            { !state.audio && (
+            { !state.localAudio && (
               <div className="calling-option" onClick={actions.enableAudio}>
                 <IoMicOffOutline />
               </div>
