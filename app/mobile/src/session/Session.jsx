@@ -1,4 +1,4 @@
-import { View, ScrollView, TouchableOpacity, StatusBar, Text, Image } from 'react-native';
+import { View, ScrollView, TouchableOpacity, StatusBar, Text, Image, Modal } from 'react-native';
 import { useState, useEffect, useContext } from 'react';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -6,6 +6,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/AntDesign';
+import MatIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useSession } from './useSession.hook';
 import { styles } from './Session.styled';
 import Colors from 'constants/Colors';
@@ -22,6 +23,7 @@ import { ConversationContext } from 'context/ConversationContext';
 import { ProfileContext } from 'context/ProfileContext';
 import { ProfileIcon } from './profileIcon/ProfileIcon';
 import { CardsIcon } from './cardsIcon/CardsIcon';
+import { Logo } from 'utils/Logo';
 import splash from 'images/session.png';
 
 const ConversationStack = createStackNavigator();
@@ -159,6 +161,7 @@ function ContactStackScreen() {
 
 export function Session() {
 
+  const [ringing, setRinging] = useState([]);
   const { state, actions } = useSession();
 
   const drawerParams = { drawerPosition: 'right', headerShown: false, swipeEnabled: false, drawerType: 'front' };
@@ -310,6 +313,31 @@ export function Session() {
     );
   }
 
+  useEffect(() => {
+    let incoming = [];
+    for (let i = 0; i < state.ringing.length; i++) {
+      const { img, name, handle, callId, cardId, contactNode, contactToken, calleeToken } = state.ringing[i];
+      const label = name ? name : `${handle}@${contactNode}`;
+      const key = `${cardId}:${callId}`
+      incoming.push(
+        <View key={key} style={styles.ringEntry}>
+          <Logo src={img} width={40} height={40} radius={4} />
+          <Text style={styles.ringName} numberOfLines={1} ellipsizeMode={'tail'}>{ label }</Text>
+          <TouchableOpacity style={styles.ringIgnore} onPress={() => actions.ignore(cardId, callId)}>
+            <MatIcons name={'eye-off-outline'} size={20} color={Colors.text} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.ringDecline} onPress={() => actions.decline(cardId, contactNode, contactToken, callId)}>
+            <MatIcons name={'phone-hangup'} size={20} color={Colors.alert} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.ringAccept} onPress={() => actions.accept(cardId, callId, contactNode, contactToken, calleeToken)}>
+            <MatIcons name={'phone'} size={20} color={Colors.primary} />
+          </TouchableOpacity>
+        </View>
+      );
+    }
+    setRinging(incoming);
+  }, [state.ringing]);
+
   return (
     <NavigationContainer>
       <View style={styles.body}>
@@ -379,6 +407,18 @@ export function Session() {
           </View>
         )}
       </View>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={ringing.length > 0}
+        supportedOrientations={['portrait', 'landscape']}
+      >
+        <View style={styles.ringBase}>
+          <View style={styles.ringFrame}>
+            { ringing }
+          </View>
+        </View>
+      </Modal>
     </NavigationContainer>
   );
 }

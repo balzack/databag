@@ -71,7 +71,7 @@ export function useRingContext() {
         updateState({ ringing: ringing.current });
       }, EXPIRE);
     },
-    ignore: (cardId, callId) => {
+    ignore: async (cardId, callId) => {
       const key = `${cardId}:${callId}`
       const call = ringing.current.get(key);
       if (call) {

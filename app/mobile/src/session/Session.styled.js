@@ -138,5 +138,53 @@ export const styles = StyleSheet.create({
     fontSize: 18,
     color: Colors.tetx,
   },
+  ringBase: {
+    display: 'flex',
+    width: '100%',
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(52, 52, 52, 0.8)'
+  },
+  ringFrame: {
+    backgroundColor: Colors.formBackground,
+    padding: 16,
+    width: '90%',
+    maxWidth: 400,
+    borderRadius: 4,
+  },
+  ringEntry: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  ringName: {
+    flexGrow: 1,
+    paddingLeft: 8,
+    paddingRight: 8,
+  },
+  ringIgnore: {
+    borderWidth: 1,
+    borderRadius: 20,
+    borderColor: Colors.text,
+    padding: 6,
+    marginRight: 4,
+  },
+  ringDecline: {
+    borderWidth: 1,
+    borderRadius: 20,
+    borderColor: Colors.alert,
+    padding: 6,
+    marginLeft: 8,
+    marginRight: 8,
+  },
+  ringAccept: {
+    borderWidth: 1,
+    borderRadius: 20,
+    borderColor: Colors.primary,
+    padding: 6,
+    marginLeft: 4,
+  },
 });
 
