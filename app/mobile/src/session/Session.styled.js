@@ -196,15 +196,12 @@ export const styles = StyleSheet.create({
   },
   callFrame: {
     backgroundColor: Colors.formBackground,
-    padding: 16,
-    width: '90%',
-    maxWidth: 400,
+    padding: 8,
     borderRadius: 4,
   },
   callRemote: {
-    width: 256,
-    height: 256,
-    backgroundColor: 'yellow',
+    width: '100%',
+    height: '100%',
   },
 
 });

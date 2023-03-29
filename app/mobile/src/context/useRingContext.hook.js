@@ -44,6 +44,8 @@ export function useRingContext() {
   const videoTrack = useRef();
   const audioTrack = useRef();
   const candidates = useRef([]);
+  const offers = useRef([]);
+  const processing = useRef(false);
 
   const iceServers = [
     {
@@ -140,18 +142,6 @@ export function useRingContext() {
         } );
         pc.current.addEventListener( 'negotiationneeded', event => {
           console.log("ICE NEGOTIATION", event);
-          console.log("ICE NEGOTIATION", event);
-          console.log("ICE NEGOTIATION", event);
-          console.log("ICE NEGOTIATION", event);
-          console.log("ICE NEGOTIATION", event);
-          console.log("ICE NEGOTIATION", event);
-          console.log("ICE NEGOTIATION", event);
-          console.log("ICE NEGOTIATION", event);
-          console.log("ICE NEGOTIATION", event);
-          console.log("ICE NEGOTIATION", event);
-          console.log("ICE NEGOTIATION", event);
-          console.log("ICE NEGOTIATION", event);
-          console.log("ICE NEGOTIATION", event);
         } );
         pc.current.addEventListener( 'signalingstatechange', event => {
           console.log("ICE SIGNALING", event);
@@ -161,21 +151,46 @@ export function useRingContext() {
           console.log("ICE TRACK", event.track);
           if (stream.current == null) {
 console.log("NEW STREAM.");
-console.log("NEW STREAM.");
-console.log("NEW STREAM.");
-console.log("NEW STREAM.");
-console.log("NEW STREAM.");
-console.log("NEW STREAM.");
-console.log("NEW STREAM.");
-console.log("NEW STREAM.");
-console.log("NEW STREAM.");
             stream.current = new MediaStream();
             updateState({ remoteStream: stream.current });
           }
           stream.current.addTrack(event.track, stream.current);
         } );
 
+        const processOffers = async () => {
+          if (processing.current) {
+            return;
+          }
 
+          processing.current = true;
+
+          while (offers.current.length > 0) {
+            descriptions = offers.current;
+            offers.current = [];
+
+            for (let i = 0; i < descriptions.length; i++) {
+              const description = descriptions[i];
+              stream.current = null;
+
+console.log("OFFER:", description);
+              if (description.type === 'offer' && pc.current.signalingState !== 'stable') {
+console.log("IGNORE");
+                continue;
+              }
+
+              const offer = new RTCSessionDescription(description);
+              await pc.current.setRemoteDescription(offer);
+
+              if (description.type === 'offer') {
+                const answer = await pc.current.createAnswer();
+                await pc.current.setLocalDescription(answer);
+                ws.current.send(JSON.stringify({ description: answer }));
+              }
+            }
+          }
+
+          processing.current = false;
+        }
 
 
         ws.current = createWebsocket(`wss://${contactNode}/signal`);
@@ -187,44 +202,12 @@ console.log("NEW STREAM.");
               ws.current.close();
             }
             else if (signal.description) {
-console.log("DESCRIPTION", signal.description);
-
-
-
-              stream.current = null;
-              if (signal.description.type === 'offer' && pc.current.signalingState !== 'stable') {
-console.log("IGNORING OFFER!");
-                return; //rudely ignore
-              }
-
-              const offer = new RTCSessionDescription(signal.description);
-	            await pc.current.setRemoteDescription(offer);
-
-              if (signal.description.type === 'offer') {
-                const answer = await pc.current.createAnswer();
-                await pc.current.setLocalDescription(answer);
-                ws.current.send(JSON.stringify({ description: answer }));
-              }
-
-console.log("STATE:", pc.current.signalingState);
-
-              const adding = candidates.current;
-              candidates.current = [];
-              for (let i = 0; i < adding.length; i++) {
-                try {
-                  const candidate = new RTCIceCandidate(adding[i]);
-                  await pc.current.addIceCandidate(candidate);
-                  console.log("success:", adding[i]);
-                }
-                catch (err) {
-                  console.log(err);
-                  console.log(adding[i]);
-                }
-              };
+              offers.current.push(signal.description);
+              processOffers();
             }
             else if (signal.candidate) {
               if (pc.current.remoteDescription == null) {
-                candidates.current.push(signal.candidate);
+                console.log("IGNOREING CANDIDATE");
                 return;
               }
               const candidate = new RTCIceCandidate(signal.candidate);

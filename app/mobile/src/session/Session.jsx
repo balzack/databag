@@ -1,4 +1,4 @@
-import { View, ScrollView, TouchableOpacity, StatusBar, Text, Image, Modal } from 'react-native';
+import { useWindowDimensions, View, ScrollView, TouchableOpacity, StatusBar, Text, Image, Modal } from 'react-native';
 import { useState, useEffect, useContext } from 'react';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -164,8 +164,28 @@ export function Session() {
 
   const [ringing, setRinging] = useState([]);
   const { state, actions } = useSession();
+  const {height, width} = useWindowDimensions();
+  const [callWidth, setCallWidth] = useState(0);
+  const [callHeight, setCallHeight] = useState(0);
 
   const drawerParams = { drawerPosition: 'right', headerShown: false, swipeEnabled: false, drawerType: 'front' };
+
+  useEffect(() => {
+    console.log(width, height);
+    if (width > height) {
+      setCallWidth((height * 9)/10);
+      setCallHeight((height * 9)/10);
+    }
+    else {
+      setCallWidth((width * 9)/10);
+      setCallHeight((width * 9)/10);
+    }
+  }, [width, height]);
+
+  useEffect(() => {
+    console.log("**** REMOTE ****");
+    console.log(state.remoteStream);
+  }, [state.remoteStream]);
 
   const HomeScreen = ({ navParams }) => {
 
@@ -427,18 +447,16 @@ export function Session() {
         supportedOrientations={['portrait', 'landscape']}
       >
         <View style={styles.callBase}>
-          <View style={styles.callFrame}>
+          <View style={{ ...styles.callFrame, width: callWidth, height: callHeight }}>
             { state.remoteStream && (
-              <View style={styles.callRemote}>
               <RTCView
+                style={styles.callRemote}
                 mirror={true}
-                objectFit={'cover'}
+                objectFit={'contain'}
                 streamURL={state.remoteStream.toURL()}
                 zOrder={0}
               />
-              </View>
             )}
-            <Text>{ JSON.stringify(state.callStatus == null) }</Text>
           </View>
         </View>
       </Modal>
