@@ -147,12 +147,15 @@ export function useRingContext() {
           console.log("ICE SIGNALING", event);
         } );
         pc.current.addEventListener( 'track', event => {
-
-          console.log("ICE TRACK", event.track);
           if (stream.current == null) {
-console.log("NEW STREAM.");
             stream.current = new MediaStream();
             updateState({ remoteStream: stream.current });
+          }
+          if (event.track.kind === 'audio') {
+            updateState({ remoteAudio: true });
+          }
+          if (event.track.kind === 'video') {
+            updateState({ remoteVideo: true });
           }
           stream.current.addTrack(event.track, stream.current);
         } );
@@ -172,9 +175,7 @@ console.log("NEW STREAM.");
               const description = descriptions[i];
               stream.current = null;
 
-console.log("OFFER:", description);
               if (description.type === 'offer' && pc.current.signalingState !== 'stable') {
-console.log("IGNORE");
                 continue;
               }
 
@@ -192,6 +193,27 @@ console.log("IGNORE");
           processing.current = false;
         }
 
+        updateState({ localVideo: false, localAudio: false, localStream: null });
+        videoTrack.current = false;
+        audioTrack.current = false;
+        accessVideo.current = false;
+        try {
+          const stream = await mediaDevices.getUserMedia({
+            video: false,
+            audio: true,
+          });
+          accessAudio.current = true;
+          updateState({ localAudio: true, localStream: stream });
+          for (const track of stream.getTracks()) {
+            if (track.kind === 'audio') {
+              audioTrack.current = track;
+            }
+            pc.current.addTrack(track);
+          }
+        }
+        catch (err) {
+          console.log(err);
+        }
 
         ws.current = createWebsocket(`wss://${contactNode}/signal`);
         ws.current.onmessage = async (ev) => {
@@ -248,15 +270,6 @@ console.log("IGNORE");
             const offer = await pc.current.createOffer(constraints);
             await pc.current.setLocalDescription(offer);
             ws.current.send(JSON.stringify({ description: offer }));
-console.log("OPENING OFFER");
-console.log("OPENING OFFER");
-console.log("OPENING OFFER");
-console.log("OPENING OFFER");
-console.log("OPENING OFFER");
-console.log("OPENING OFFER");
-console.log("OPENING OFFER");
-console.log("OPENING OFFER");
-
           }
           catch(err) {
             console.log(err);
@@ -266,10 +279,33 @@ console.log("OPENING OFFER");
           console.log(e)
           ws.current.close();
         }
-
       }
     },
     end: async () => {
+      if (!calling.current) {
+        throw new Error('inactive session');
+      }
+      try {
+        const { host, callId, contactNode, contactToken } = calling.current;
+        if (host) {
+          await removeCall(access.current, callId);
+        }
+        else {
+          await removeContactCall(contactNode, contactToken, callId);
+        }
+      }
+      catch (err) {
+        console.log(err);
+      }
+      ws.current.close();
+      if (videoTrack.current) {
+        videoTrack.current.stop();
+        videoTrack.current = null;
+      }
+      if (audioTrack.current) {
+        audioTrack.current.stop();
+        audioTrack.current = null;
+      }
     },
     call: async (cardId, contactNode, contactToken) => {
     },

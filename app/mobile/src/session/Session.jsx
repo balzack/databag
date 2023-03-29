@@ -457,6 +457,36 @@ export function Session() {
                 zOrder={0}
               />
             )}
+            { !state.remoteVideo && (
+              <View style={styles.callLogo}>
+                <Logo src={state.callLogo} width={callWidth} height={callHeight} radius={4} />
+              </View>
+            )}
+            <View style={styles.callOptions}>
+              { !state.localVideo && (
+                <TouchableOpacity style={styles.callOption} onPress={actions.enableVideo}>
+                  <MatIcons name={'video-outline'} size={20} color={Colors.white} />
+                </TouchableOpacity>
+              )}
+              { state.localVideo && (
+                <TouchableOpacity style={styles.callOption} onPress={actions.disableVideo}>
+                  <MatIcons name={'video-off-outline'} size={20} color={Colors.white} />
+                </TouchableOpacity>
+              )}
+              { !state.localAudio && (
+                <TouchableOpacity style={styles.callOption} onPress={actions.enableVideo}>
+                  <MatIcons name={'phone'} size={20} color={Colors.white} />
+                </TouchableOpacity>
+              )}
+              { state.localAudio && (
+                <TouchableOpacity style={styles.callOption} onPress={actions.disableVideo}>
+                  <MatIcons name={'phone-off'} size={20} color={Colors.white} />
+                </TouchableOpacity>
+              )}
+            </View>
+            <TouchableOpacity style={styles.callEnd} onPress={actions.end}>
+              <MatIcons name={'phone-hangup'} size={20} color={Colors.white} />
+            </TouchableOpacity>
           </View>
         </View>
       </Modal>

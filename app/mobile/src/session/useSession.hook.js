@@ -111,16 +111,46 @@ export function useSession() {
       await ring.actions.end();
     },
     enableVideo: async () => {
-      await ring.actions.enableVideo();
+      if (!accessVideo.current) {
+        const stream = await mediaDevices.getUserMedia({
+          video: true,
+          audio: true,
+        });
+        accessVideo.current = true;
+        accessAudio.current = true;
+        updateState({ localStream: stream });
+        for (const track of stream.getTracks()) {
+          if (track.kind === 'audio') {
+            audioTrack.current = track;
+          }
+          if (track.kind === 'video') {
+            videoTrack.current = track;
+          }
+          pc.current.addTrack(track);
+        }
+      }
+      else {
+        videoTrack.current.enabled = true;
+      }
+      updateState({ localVideo: true, localAudio: true });
     },
     disableVideo: async () => {
-      await ring.actions.disableVideo();
+      if (videoTrack.current) {
+        videoTrack.current.enabled = false;
+      }
+      updateState({ localVideo: false });
     },
     enableAudio: async () => {
-      await ring.actions.enableAudio();
+      if (accessAudio.current) {
+        audioTrack.current.enabled = true;
+        updateState({ localAudio: true });
+      }
     },
     disableAudio: async () => {
-      await ring.actions.disableAudio();
+      if (accessAudio.current) {
+        audioTrack.current.enabled = false;
+        updateState({ localAudio: false });
+      }
     },
   };
 
