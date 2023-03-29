@@ -65,6 +65,7 @@ export function useRingContext() {
 
   const actions = {
     setSession: (token) => {
+
       if (access.current) {
         throw new Error("invalid ring state");
       }
@@ -160,7 +161,7 @@ export function useRingContext() {
           stream.current.addTrack(event.track, stream.current);
         } );
 
-        const processOffers = async () => {
+        const impolite = async () => {
           if (processing.current) {
             return;
           }
@@ -225,11 +226,10 @@ export function useRingContext() {
             }
             else if (signal.description) {
               offers.current.push(signal.description);
-              processOffers();
+              impolite();
             }
             else if (signal.candidate) {
               if (pc.current.remoteDescription == null) {
-                console.log("IGNOREING CANDIDATE");
                 return;
               }
               const candidate = new RTCIceCandidate(signal.candidate);
@@ -288,7 +288,8 @@ export function useRingContext() {
       try {
         const { host, callId, contactNode, contactToken } = calling.current;
         if (host) {
-          await removeCall(access.current, callId);
+          const { server, token } = access.current;
+          await removeCall(server, token, callId);
         }
         else {
           await removeContactCall(contactNode, contactToken, callId);
@@ -308,14 +309,229 @@ export function useRingContext() {
       }
     },
     call: async (cardId, contactNode, contactToken) => {
+      if (calling.current) {
+        throw new Error("active session");
+      }
+
+      // create call
+      const { server, token } = access.current;
+      const call = await addCall(server, token, cardId);
+      const { id, keepAlive, callerToken, calleeToken } = call;
+      try {
+        await addContactRing(contactNode, contactToken, { index, callId: id, calleeToken });
+      }
+      catch (err) {
+        console.log(err);
+      }
+      const aliveInterval = setInterval(async () => {
+        try {
+          await keepCall(server, token, id);
+        }
+        catch (err) {
+          console.log(err);
+        }
+      }, keepAlive * 1000);
+      let index = 0;
+      const ringInterval = setInterval(async () => {
+        try {
+          await addContactRing(contactNode, contactToken, { index, callId: id, calleeToken });
+          index += 1;
+        }
+        catch (err) {
+          console.log(err);
+        }
+      }, RING);
+
+      calling.current = { state: "connecting", callId: id, host: true };
+      updateState({ callStatus: "connecting", cardId, remoteVideo: false, remoteAudio: false });
+
+      // form peer connection
+      pc.current = new RTCPeerConnection({ iceServers });
+      pc.current.addEventListener( 'connectionstatechange', event => {
+        console.log("CONNECTION STATE", event);
+      } );
+      pc.current.addEventListener( 'icecandidate', event => {
+        ws.current.send(JSON.stringify({ candidate: event.candidate }));
+      } );
+      pc.current.addEventListener( 'icecandidateerror', event => {
+        console.log("ICE ERROR");
+      } );
+      pc.current.addEventListener( 'iceconnectionstatechange', event => {
+        console.log("ICE STATE CHANGE", event);
+      } );
+      pc.current.addEventListener( 'negotiationneeded', event => {
+        console.log("ICE NEGOTIATION", event);
+      } );
+      pc.current.addEventListener( 'signalingstatechange', event => {
+        console.log("ICE SIGNALING", event);
+      } );
+      pc.current.addEventListener( 'track', event => {
+        if (stream.current == null) {
+          stream.current = new MediaStream();
+          updateState({ remoteStream: stream.current });
+        }
+        if (event.track.kind === 'audio') {
+          updateState({ remoteAudio: true });
+        }
+        if (event.track.kind === 'video') {
+          updateState({ remoteVideo: true });
+        }
+        stream.current.addTrack(event.track, stream.current);
+      } );
+
+      videoTrack.current = false;
+      audioTrack.current = false;
+      accessVideo.current = false;
+      try {
+        const stream = await mediaDevices.getUserMedia({
+          video: false,
+          audio: true,
+        });
+        accessAudio.current = true;
+        updateState({ localVideo: false, localAudio: true, localStream: stream });
+        for (const track of stream.getTracks()) {
+          if (track.kind === 'audio') {
+            audioTrack.current = track;
+          }
+          if (track.kind === 'video') {
+            videoTrack.current = track;
+          }
+          pc.current.addTrack(track);
+        }
+      }
+      catch (err) {
+        console.log(err);
+      }
+
+      const polite = async () => {
+        if (processing.current) {
+          return;
+        }
+
+        processing.current = true;
+
+        while (offers.current.length > 0) {
+          descriptions = offers.current;
+          offers.current = [];
+
+          for (let i = 0; i < descriptions.length; i++) {
+            const description = descriptions[i];
+            stream.current = null;
+
+            if (description.type === 'offer' && pc.current.signalingState !== 'stable') {
+              const rollback = new RTCSessionDescription({ type: "rollback" });
+              await pc.current.setLocalDescription(reollback);
+            }
+            const offer = new RTCSessionDescription(description);
+            await pc.current.setRemoteDescription(offer);
+            if (description.type === 'offer') {
+              const answer = await pc.current.createAnswer();
+              await pc.current.setLocalDescription(answer);
+              ws.current.send(JSON.stringify({ description: answer }));
+            }
+          }
+        }
+
+        processing.current = false;
+      }
+
+      ws.current = createWebsocket(`wss://${server}/signal`);
+      ws.current.onmessage = async (ev) => {
+        // handle messages [polite]
+        try {
+          const signal = JSON.parse(ev.data);
+          if (signal.status) {
+            if (calling.current.state !== 'connected' && signal.status === 'connected') {
+              clearInterval(ringInterval);
+              calling.current.state = 'connected';
+              updateState({ callStatus: "connected" });
+            }
+            if (signal.status === 'closed') {
+              ws.current.close();
+            }
+          }
+          else if (signal.description) {
+            offers.current.push(signal.description);
+            polite();
+          }
+          else if (signal.candidate) {
+            if (pc.current.remoteDescription == null) {
+              return;
+            }
+            const candidate = new RTCIceCandidate(signal.candidate);
+            await pc.current.addIceCandidate(candidate);
+          }
+        }
+        catch (err) {
+          console.log(err);
+        }
+      }
+      ws.current.onclose = (e) => {
+        pc.current.close();
+        clearInterval(ringInterval);
+        clearInterval(aliveInterval);
+        calling.current = null;
+        if (videoTrack.current) {
+          videoTrack.current.stop();
+          videoTrack.current = null;
+        }
+        if (audioTrack.current) {
+          audioTrack.current.stop();
+          audioTrack.current = null;
+        }
+        updateState({ callStatus: null });
+      }
+      ws.current.onopen = () => {
+        calling.current.state = "ringing";
+        updateState({ callStatus: "ringing" });
+        ws.current.send(JSON.stringify({ AppToken: callerToken }))
+      }
+      ws.current.error = (e) => {
+        console.log(e)
+        ws.current.close();
+      }
     },
     enableVideo: async () => {
+      if (!accessVideo.current) {
+        const stream = await mediaDevices.getUserMedia({
+          video: true,
+          audio: true,
+        });
+        accessVideo.current = true;
+        accessAudio.current = true;
+        updateState({ localStream: stream });
+        for (const track of stream.getTracks()) {
+          if (track.kind === 'audio') {
+            audioTrack.current = track;
+          }
+          if (track.kind === 'video') {
+            videoTrack.current = track;
+          }
+          pc.current.addTrack(track);
+        }
+      }
+      else {
+        videoTrack.current.enabled = true;
+      }
+      updateState({ localVideo: true, localAudio: true });
     },
     disableVideo: async () => {
+      if (videoTrack.current) {
+        videoTrack.current.enabled = false;
+      }
+      updateState({ localVideo: false });
     },
     enableAudio: async () => {
+      if (accessAudio.current) {
+        audioTrack.current.enabled = true;
+        updateState({ localAudio: true });
+      }
     },
     disableAudio: async () => {
+      if (accessAudio.current) {
+        audioTrack.current.enabled = false;
+        updateState({ localAudio: false });
+      }
     },
   }
 

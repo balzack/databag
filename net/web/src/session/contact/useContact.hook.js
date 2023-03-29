@@ -164,7 +164,6 @@ export function useContact(guid, listing, close) {
       const { node, guid } = contact.data.cardProfile;
       const { token } = contact.data.cardDetail;
       await ring.actions.call(state.cardId, node, `${guid}.${token}`);
-      //await addContactRing(node, `${guid}.${token}`, { index: 0, callId: 'abc', calleeToken: '123' });
     },
   };
 

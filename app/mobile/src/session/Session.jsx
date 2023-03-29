@@ -475,12 +475,12 @@ export function Session() {
               )}
               { !state.localAudio && (
                 <TouchableOpacity style={styles.callOption} onPress={actions.enableVideo}>
-                  <MatIcons name={'phone'} size={20} color={Colors.white} />
+                  <MatIcons name={'microphone'} size={20} color={Colors.white} />
                 </TouchableOpacity>
               )}
               { state.localAudio && (
                 <TouchableOpacity style={styles.callOption} onPress={actions.disableVideo}>
-                  <MatIcons name={'phone-off'} size={20} color={Colors.white} />
+                  <MatIcons name={'microphone-off'} size={20} color={Colors.white} />
                 </TouchableOpacity>
               )}
             </View>
