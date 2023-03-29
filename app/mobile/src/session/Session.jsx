@@ -25,6 +25,7 @@ import { ProfileIcon } from './profileIcon/ProfileIcon';
 import { CardsIcon } from './cardsIcon/CardsIcon';
 import { Logo } from 'utils/Logo';
 import splash from 'images/session.png';
+import { RTCView } from 'react-native-webrtc';
 
 const ConversationStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
@@ -323,13 +324,13 @@ export function Session() {
         <View key={key} style={styles.ringEntry}>
           <Logo src={img} width={40} height={40} radius={4} />
           <Text style={styles.ringName} numberOfLines={1} ellipsizeMode={'tail'}>{ label }</Text>
-          <TouchableOpacity style={styles.ringIgnore} onPress={() => actions.ignore(cardId, callId)}>
+          <TouchableOpacity style={styles.ringIgnore} onPress={() => actions.ignore({ cardId, callId })}>
             <MatIcons name={'eye-off-outline'} size={20} color={Colors.text} />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.ringDecline} onPress={() => actions.decline(cardId, contactNode, contactToken, callId)}>
+          <TouchableOpacity style={styles.ringDecline} onPress={() => actions.decline({ cardId, contactNode, contactToken, callId })}>
             <MatIcons name={'phone-hangup'} size={20} color={Colors.alert} />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.ringAccept} onPress={() => actions.accept(cardId, callId, contactNode, contactToken, calleeToken)}>
+          <TouchableOpacity style={styles.ringAccept} onPress={() => actions.accept({ cardId, callId, contactNode, contactToken, calleeToken })}>
             <MatIcons name={'phone'} size={20} color={Colors.primary} />
           </TouchableOpacity>
         </View>
@@ -410,12 +411,34 @@ export function Session() {
       <Modal
         animationType="fade"
         transparent={true}
-        visible={ringing.length > 0}
+        visible={ringing.length > 0 && state.callStatus == null}
         supportedOrientations={['portrait', 'landscape']}
       >
         <View style={styles.ringBase}>
           <View style={styles.ringFrame}>
             { ringing }
+          </View>
+        </View>
+      </Modal>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={state.callStatus != null}
+        supportedOrientations={['portrait', 'landscape']}
+      >
+        <View style={styles.callBase}>
+          <View style={styles.callFrame}>
+            { state.remoteStream && (
+              <View style={styles.callRemote}>
+              <RTCView
+                mirror={true}
+                objectFit={'cover'}
+                streamURL={state.remoteStream.toURL()}
+                zOrder={0}
+              />
+              </View>
+            )}
+            <Text>{ JSON.stringify(state.callStatus == null) }</Text>
           </View>
         </View>
       </Modal>

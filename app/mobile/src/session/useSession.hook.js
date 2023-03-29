@@ -9,13 +9,21 @@ import { RingContext } from 'context/RingContext';
 export function useSession() {
 
   const [state, setState] = useState({
-    ringing: [],
     tabbled: null,
     subWidth: '50%',
     baseWidth: '50%',
     cardId: null,
     converstaionId: null,
     firstRun: null,
+    ringing: [],
+    callStatus: null,
+    callLogo: null,
+    localStream: null,
+    localVideo: false,
+    localAudio: false,
+    remoteStream: null,
+    remoteVideo: false,
+    remoteAudio: false,
   });
 
   const ring = useContext(RingContext);
@@ -46,8 +54,15 @@ export function useSession() {
       }
     });
 
+    let callLogo = null;
+    const contact = card.state.cards.get(ring.state.cardId);
+    if (contact) {
+      const { imageSet } = contact.card?.profile || {};
+      callLogo = imageSet ? card.actions.getCardImageUrl(ring.state.cardId) : null;
+    }
+
     const { callStatus, localStream, localVideo, localAudio, remoteStream, remoteVideo, remoteAudio } = ring.state;
-    updateState({ ringing, callStatus, localStream, localVideo, localAudio, remoteStream, remoteVideo, remoteAudio });
+    updateState({ ringing, callStatus, callLogo, localStream, localVideo, localAudio, remoteStream, remoteVideo, remoteAudio });
   }, [ring.state]);
 
   useEffect(() => {
@@ -81,16 +96,32 @@ export function useSession() {
       updateState({ firstRun: false });
       store.actions.setFirstRun();
     },
-    ignore: async (cardId, callId) => {
-      await ring.actions.ignore(cardId, callId);
+    ignore: (call) => {
+      ring.actions.ignore(call.cardId, call.callId);
     },
-    decline: async (cardId, contactNode, contactToken, callId) => {
+    decline: async (call) => {
+      const { cardId, contactNode, contactToken, callId } = call;
       await ring.actions.decline(cardId, contactNode, contactToken, callId);
     },
-    accept: async (cardId, callId, contactNode, contactToken, calleeToken) => {
+    accept: async (call) => {
+      const { cardId, callId, contactNode, contactToken, calleeToken } = call;
       await ring.actions.accept(cardId, callId, contactNode, contactToken, calleeToken);
     },
-
+    end: async () => {
+      await ring.actions.end();
+    },
+    enableVideo: async () => {
+      await ring.actions.enableVideo();
+    },
+    disableVideo: async () => {
+      await ring.actions.disableVideo();
+    },
+    enableAudio: async () => {
+      await ring.actions.enableAudio();
+    },
+    disableAudio: async () => {
+      await ring.actions.disableAudio();
+    },
   };
 
   return { state, actions };
