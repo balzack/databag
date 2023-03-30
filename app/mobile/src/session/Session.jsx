@@ -459,7 +459,7 @@ export function Session() {
                 mirror={true}
                 objectFit={'contain'}
                 streamURL={state.remoteStream.toURL()}
-                zOrder={0}
+                zOrder={1}
               />
             )}
             { !state.remoteVideo && (
@@ -473,7 +473,7 @@ export function Session() {
                 mirror={true}
                 objectFit={'contain'}
                 streamURL={state.localStream.toURL()}
-                zOrder={0}
+                zOrder={2}
               />
             )}
             <View style={styles.callOptions}>
