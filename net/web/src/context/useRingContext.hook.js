@@ -34,11 +34,6 @@ export function useRingContext() {
 
   const iceServers = [
     {
-      urls: 'stun:35.165.123.117:5001?transport=udp', 
-      username: 'user', 
-      credential: 'pass'
-    },
-    {
       urls: 'turn:35.165.123.117:5001?transport=udp', 
       username: 'user', 
       credential: 'pass'
@@ -174,6 +169,7 @@ export function useRingContext() {
               ws.current.close();
             }
             else if (signal.description) {
+console.log("NULL STREAM");
               stream.current = null;
               if (signal.description.type === 'offer' && pc.current.signalingState !== 'stable') {
                 return; //rudely ignore
@@ -295,6 +291,7 @@ export function useRingContext() {
       pc.current.ontrack = (ev) => { //{streams: [stream]}) => {
         console.log("ADD TRACK", ev);
         if (!stream.current) {
+console.log("NEW MEDIA!");
           stream.current = new MediaStream();
           updateState({ remoteStream: stream.current });
         }
@@ -361,6 +358,8 @@ export function useRingContext() {
             }
           }
           else if (signal.description) {
+console.log("NEW DESCRIPTION");
+            stream.current = null;
             if (signal.description.type === 'offer' && pc.current.signalingState !== 'stable') {
               await pc.current.setLocalDescription({ type: "rollback" });
             }

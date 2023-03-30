@@ -80,12 +80,18 @@ export function Session() {
           setCallHeight(height);
           setCallWidth(videoWidth * (height / videoHeight));
         }
+        else if (videoHeight < 256 || videoWidth < 256) {
+          setCallHeight(256);
+          setCallWidth(256);
+        }
         else {
           setCallHeight(videoHeight);
           setCallWidth(videoWidth);
         }
       };
+console.log(" SET REMOTE STREAM");
       remote.current.srcObject = state.remoteStream;
+      remote.current.load();
       remote.current.play();
     }
     else {
