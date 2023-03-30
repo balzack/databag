@@ -204,10 +204,10 @@ export const styles = StyleSheet.create({
   callEnd: {
     position: 'absolute',
     bottom: 16,
-    borderRadius: 16,
+    borderRadius: 24,
     borderColor: Colors.white,
     borderWidth: 1,
-    padding: 4,
+    padding: 8,
     backgroundColor: Colors.alert,
   },
   callLogo: {
@@ -222,18 +222,24 @@ export const styles = StyleSheet.create({
     top: 16,
   },
   callOption: {
-    borderRadius: 16,
+    borderRadius: 24,
     borderColor: Colors.white,
     borderWidth: 1,
-    padding: 4,
+    padding: 8,
     backgroundColor: Colors.primary,
-    marginLeft: 8,
-    marginRight: 8,
+    marginLeft: 16,
+    marginRight: 16,
   },
   callRemote: {
     width: '100%',
     height: '100%',
   },
-
+  callLocal: {
+    position: 'absolute',
+    bottom: 16,
+    left: 16,
+    height: '33%',
+    width: '33%',
+  },
 });
 

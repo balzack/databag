@@ -187,6 +187,11 @@ export function Session() {
     console.log(state.remoteStream);
   }, [state.remoteStream]);
 
+  useEffect(() => {
+    console.log("**** LOCAL ****");
+    console.log(state.localStream, state.localVideo);
+  }, [state.localStream, state.localVideo]);
+
   const HomeScreen = ({ navParams }) => {
 
     const conversation = useContext(ConversationContext);
@@ -462,24 +467,33 @@ export function Session() {
                 <Logo src={state.callLogo} width={callWidth} height={callHeight} radius={4} />
               </View>
             )}
+            { state.localStream && (
+              <RTCView
+                style={styles.callLocal}
+                mirror={true}
+                objectFit={'contain'}
+                streamURL={state.localStream.toURL()}
+                zOrder={0}
+              />
+            )}
             <View style={styles.callOptions}>
-              { !state.localVideo && (
-                <TouchableOpacity style={styles.callOption} onPress={actions.enableVideo}>
+              { state.localVideo && (
+                <TouchableOpacity style={styles.callOption} onPress={actions.disableVideo}>
                   <MatIcons name={'video-outline'} size={20} color={Colors.white} />
                 </TouchableOpacity>
               )}
-              { state.localVideo && (
-                <TouchableOpacity style={styles.callOption} onPress={actions.disableVideo}>
+              { !state.localVideo && (
+                <TouchableOpacity style={styles.callOption} onPress={actions.enableVideo}>
                   <MatIcons name={'video-off-outline'} size={20} color={Colors.white} />
                 </TouchableOpacity>
               )}
-              { !state.localAudio && (
-                <TouchableOpacity style={styles.callOption} onPress={actions.enableVideo}>
+              { state.localAudio && (
+                <TouchableOpacity style={styles.callOption} onPress={actions.disableAudio}>
                   <MatIcons name={'microphone'} size={20} color={Colors.white} />
                 </TouchableOpacity>
               )}
-              { state.localAudio && (
-                <TouchableOpacity style={styles.callOption} onPress={actions.disableVideo}>
+              { !state.localAudio && (
+                <TouchableOpacity style={styles.callOption} onPress={actions.enableAudio}>
                   <MatIcons name={'microphone-off'} size={20} color={Colors.white} />
                 </TouchableOpacity>
               )}
