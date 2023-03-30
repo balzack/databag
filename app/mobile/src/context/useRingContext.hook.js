@@ -339,7 +339,7 @@ export function useRingContext() {
             else {
               if (description.type === 'offer' && pc.current.signalingState !== 'stable') {
                 const rollback = new RTCSessionDescription({ type: "rollback" });
-                await pc.current.setLocalDescription(reollback);
+                await pc.current.setLocalDescription(rollback);
               }
               const offer = new RTCSessionDescription(description);
               await pc.current.setRemoteDescription(offer);
