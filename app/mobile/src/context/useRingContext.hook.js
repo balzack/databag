@@ -1,4 +1,5 @@
 import { useEffect, useContext, useState, useRef } from 'react';
+import { Alert } from 'react-native';
 import { createWebsocket } from 'api/fetchUtil';
 import { addContactRing } from 'api/addContactRing';
 import { addCall } from 'api/addCall';
@@ -46,6 +47,7 @@ export function useRingContext() {
   const candidates = useRef([]);
   const offers = useRef([]);
   const processing = useRef(false);
+  const connected = useRef(false);
 
   const iceServers = [
     {
@@ -133,7 +135,7 @@ export function useRingContext() {
         updateState({ ringing: ringing.current });
 
         const impolite = async () => {
-          if (processing.current) {
+          if (processing.current || !connected.current) {
             return;
           }
 
@@ -146,24 +148,29 @@ export function useRingContext() {
               const description = descriptions[i];
               stream.current = null;
 
-              if (description == null) {
-                const offer = await pc.current.createOffer(constraints);
-                await pc.current.setLocalDescription(offer);
-                ws.current.send(JSON.stringify({ description: offer }));
+              try {
+                if (description == null) {
+                  const offer = await pc.current.createOffer(constraints);
+                  await pc.current.setLocalDescription(offer);
+                  ws.current.send(JSON.stringify({ description: offer }));
+                }
+                else {
+                  if (description.type === 'offer' && pc.current.signalingState !== 'stable') {
+                    continue;
+                  }
+
+                  const offer = new RTCSessionDescription(description);
+                  await pc.current.setRemoteDescription(offer);
+
+                  if (description.type === 'offer') {
+                    const answer = await pc.current.createAnswer();
+                    await pc.current.setLocalDescription(answer);
+                    ws.current.send(JSON.stringify({ description: answer }));
+                  }
+                }
               }
-              else {
-                if (description.type === 'offer' && pc.current.signalingState !== 'stable') {
-                  continue;
-                }
-
-                const offer = new RTCSessionDescription(description);
-                await pc.current.setRemoteDescription(offer);
-
-                if (description.type === 'offer') {
-                  const answer = await pc.current.createAnswer();
-                  await pc.current.setLocalDescription(answer);
-                  ws.current.send(JSON.stringify({ description: answer }));
-                }
+              catch (err) {
+                Alert.alert('webrtc error', err.toString());
               }
             }
           }
@@ -172,6 +179,7 @@ export function useRingContext() {
 
         // connect signal socket
         candidates.current = [];
+        connected.current = false;
         calling.current = { state: "connecting", callId, contactNode, contactToken, host: false };
         updateState({ callStatus: "connecting", cardId, remoteVideo: false, remoteAudio: false });
 
@@ -274,8 +282,7 @@ export function useRingContext() {
           calling.current.state = "connected"
           updateState({ callStatus: "connected" });
           ws.current.send(JSON.stringify({ AppToken: calleeToken }))
-
-          offers.current.push(null);
+          connected.current = true;
           impolite();
         }
         ws.current.error = (e) => {
@@ -317,7 +324,7 @@ export function useRingContext() {
       }
 
       const polite = async () => {
-        if (processing.current) {
+        if (processing.current || !connected.current) {
           return;
         }
 
@@ -327,28 +334,33 @@ export function useRingContext() {
           descriptions = offers.current;
           offers.current = [];
 
-          for (let i = 0; i < descriptions.length; i++) {
-            const description = descriptions[i];
-            stream.current = null;
+          try {
+            for (let i = 0; i < descriptions.length; i++) {
+              const description = descriptions[i];
+              stream.current = null;
 
-            if (description == null) {
-              const offer = await pc.current.createOffer(constraints);
-              await pc.current.setLocalDescription(offer);
-              ws.current.send(JSON.stringify({ description: offer }));
-            }
-            else {
-              if (description.type === 'offer' && pc.current.signalingState !== 'stable') {
-                const rollback = new RTCSessionDescription({ type: "rollback" });
-                await pc.current.setLocalDescription(rollback);
+              if (description == null) {
+                const offer = await pc.current.createOffer(constraints);
+                await pc.current.setLocalDescription(offer);
+                ws.current.send(JSON.stringify({ description: offer }));
               }
-              const offer = new RTCSessionDescription(description);
-              await pc.current.setRemoteDescription(offer);
-              if (description.type === 'offer') {
-                const answer = await pc.current.createAnswer();
-                await pc.current.setLocalDescription(answer);
-                ws.current.send(JSON.stringify({ description: answer }));
+              else {
+                if (description.type === 'offer' && pc.current.signalingState !== 'stable') {
+                  const rollback = new RTCSessionDescription({ type: "rollback" });
+                  await pc.current.setLocalDescription(rollback);
+                }
+                const offer = new RTCSessionDescription(description);
+                await pc.current.setRemoteDescription(offer);
+                if (description.type === 'offer') {
+                  const answer = await pc.current.createAnswer();
+                  await pc.current.setLocalDescription(answer);
+                  ws.current.send(JSON.stringify({ description: answer }));
+                }
               }
             }
+          }
+          catch (err) {
+            Alert.alert('webrtc error', err.toString());
           }
         }
 
@@ -384,6 +396,8 @@ export function useRingContext() {
         }
       }, RING);
 
+      candidates.current = [];
+      connected.current = false;
       calling.current = { state: "connecting", callId: id, host: true };
       updateState({ callStatus: "connecting", cardId, remoteVideo: false, remoteAudio: false });
 
@@ -456,6 +470,8 @@ export function useRingContext() {
               clearInterval(ringInterval);
               calling.current.state = 'connected';
               updateState({ callStatus: "connected" });
+              connected.current = true;
+              polite();
             }
             if (signal.status === 'closed') {
               ws.current.close();
