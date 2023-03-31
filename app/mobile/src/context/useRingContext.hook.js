@@ -44,10 +44,10 @@ export function useRingContext() {
   const accessAudio = useRef(false);
   const videoTrack = useRef();
   const audioTrack = useRef();
-  const candidates = useRef([]);
   const offers = useRef([]);
   const processing = useRef(false);
   const connected = useRef(false);
+  const candidates = useRef([]);
 
   const iceServers = [
     {
@@ -82,7 +82,7 @@ export function useRingContext() {
     processing.current = true;
 
     while (offers.current.length > 0) {
-      descriptions = offers.current;
+      const descriptions = offers.current;
       offers.current = [];
 
       try {
@@ -107,6 +107,12 @@ export function useRingContext() {
               await pc.current.setLocalDescription(answer);
               ws.current.send(JSON.stringify({ description: answer }));
             }
+            const servers = candidates.current;
+            candidates.current = [];
+            for (let i = 0; i < servers.length; i++) {
+              const server = servers[i];
+              ws.current.send(JSON.stringify(server));
+            }
           }
         }
       }
@@ -125,7 +131,7 @@ export function useRingContext() {
 
     processing.current = true;
     while (offers.current.length > 0) {
-      descriptions = offers.current;
+      const descriptions = offers.current;
       offers.current = [];
 
       for (let i = 0; i < descriptions.length; i++) {
@@ -151,6 +157,12 @@ export function useRingContext() {
               await pc.current.setLocalDescription(answer);
               ws.current.send(JSON.stringify({ description: answer }));
             }
+            const servers = candidates.current;
+            candidates.current = [];
+            for (let i = 0; i < servers.length; i++) {
+              const server = servers[i];
+              ws.current.send(JSON.stringify(server));
+            }
           }
         }
         catch (err) {
@@ -164,8 +176,8 @@ export function useRingContext() {
   const connect = async (policy, node, token, clearRing, clearAlive) => {
 
     // connect signal socket
-    candidates.current = [];
     connected.current = false;
+    candidates.current = [];
     updateState({ remoteVideo: false, remoteAudio: false, remoteStream: null, localVideo: false, localAudio: false, localStream: null });
 
     pc.current = new RTCPeerConnection({ iceServers });
@@ -173,7 +185,13 @@ export function useRingContext() {
       console.log("CONNECTION STATE", event);
     } );
     pc.current.addEventListener( 'icecandidate', event => {
-      ws.current.send(JSON.stringify({ candidate: event.candidate }));
+      if (pc.current.remoteDescription == null) {
+      console.log("QUEING ICE");
+        candidates.current.push({ candidate: event.candidate });
+      }
+      else {
+        ws.current.send(JSON.stringify({ candidate: event.candidate }));
+      }
     } );
     pc.current.addEventListener( 'icecandidateerror', event => {
       console.log("ICE ERROR");
@@ -238,9 +256,9 @@ export function useRingContext() {
         if (signal.status === 'connected') {
           clearRing();
           updateState({ callStatus: "connected" });
-          if (policy === 'impolite') {
+          if (policy === 'polite') {
             connected.current = true;
-            impolite();
+            polite();
           }
         }
         else if (signal.status === 'closed') {
@@ -285,9 +303,9 @@ export function useRingContext() {
     }
     ws.current.onopen = async () => {
       ws.current.send(JSON.stringify({ AppToken: token }));
-      if (policy === 'polite') {
+      if (policy === 'impolite') {
         connected.current = true;
-        polite();
+        impolite();
       }
     }
     ws.current.error = (e) => {
