@@ -74,6 +74,228 @@ export function useRingContext() {
     setState((s) => ({ ...s, ...value }))
   }
 
+  const polite = async () => {
+    if (processing.current || !connected.current) {
+      return;
+    }
+
+    processing.current = true;
+
+    while (offers.current.length > 0) {
+      descriptions = offers.current;
+      offers.current = [];
+
+      try {
+        for (let i = 0; i < descriptions.length; i++) {
+          const description = descriptions[i];
+          stream.current = null;
+
+          if (description == null) {
+            const offer = await pc.current.createOffer(constraints);
+            await pc.current.setLocalDescription(offer);
+            ws.current.send(JSON.stringify({ description: offer }));
+          }
+          else {
+            if (description.type === 'offer' && pc.current.signalingState !== 'stable') {
+              const rollback = new RTCSessionDescription({ type: "rollback" });
+              await pc.current.setLocalDescription(rollback);
+            }
+            const offer = new RTCSessionDescription(description);
+            await pc.current.setRemoteDescription(offer);
+            if (description.type === 'offer') {
+              const answer = await pc.current.createAnswer();
+              await pc.current.setLocalDescription(answer);
+              ws.current.send(JSON.stringify({ description: answer }));
+            }
+          }
+        }
+      }
+      catch (err) {
+        Alert.alert('webrtc error', err.toString());
+      }
+    }
+
+    processing.current = false;
+  }
+
+  const impolite = async () => {
+    if (processing.current || !connected.current) {
+      return;
+    }
+
+    processing.current = true;
+    while (offers.current.length > 0) {
+      descriptions = offers.current;
+      offers.current = [];
+
+      for (let i = 0; i < descriptions.length; i++) {
+        const description = descriptions[i];
+        stream.current = null;
+
+        try {
+          if (description == null) {
+            const offer = await pc.current.createOffer(constraints);
+            await pc.current.setLocalDescription(offer);
+            ws.current.send(JSON.stringify({ description: offer }));
+          }
+          else {
+            if (description.type === 'offer' && pc.current.signalingState !== 'stable') {
+              continue;
+            }
+
+            const offer = new RTCSessionDescription(description);
+            await pc.current.setRemoteDescription(offer);
+
+            if (description.type === 'offer') {
+              const answer = await pc.current.createAnswer();
+              await pc.current.setLocalDescription(answer);
+              ws.current.send(JSON.stringify({ description: answer }));
+            }
+          }
+        }
+        catch (err) {
+          Alert.alert('webrtc error', err.toString());
+        }
+      }
+    }
+    processing.current = false;
+  }
+
+  const connect = async (policy, node, token, clearRing, clearAlive) => {
+
+    // connect signal socket
+    candidates.current = [];
+    connected.current = false;
+    updateState({ remoteVideo: false, remoteAudio: false, remoteStream: null, localVideo: false, localAudio: false, localStream: null });
+
+    pc.current = new RTCPeerConnection({ iceServers });
+    pc.current.addEventListener( 'connectionstatechange', event => {
+      console.log("CONNECTION STATE", event);
+    } );
+    pc.current.addEventListener( 'icecandidate', event => {
+      ws.current.send(JSON.stringify({ candidate: event.candidate }));
+    } );
+    pc.current.addEventListener( 'icecandidateerror', event => {
+      console.log("ICE ERROR");
+    } );
+    pc.current.addEventListener( 'iceconnectionstatechange', event => {
+      console.log("ICE STATE CHANGE", event);
+    } );
+    pc.current.addEventListener( 'negotiationneeded', async (ev) => {
+      offers.current.push(null);
+      if (policy === 'polite') {
+        polite();
+      }
+      if (policy === 'impolite') {
+        impolite();
+      }
+    } );
+    pc.current.addEventListener( 'signalingstatechange', event => {
+      console.log("ICE SIGNALING", event);
+    } );
+    pc.current.addEventListener( 'track', event => {
+      if (stream.current == null) {
+        stream.current = new MediaStream();
+        updateState({ remoteStream: stream.current });
+      }
+      if (event.track.kind === 'audio') {
+        updateState({ remoteAudio: true });
+      }
+      if (event.track.kind === 'video') {
+        updateState({ remoteVideo: true });
+      }
+      stream.current.addTrack(event.track, stream.current);
+    } );
+
+    videoTrack.current = false;
+    audioTrack.current = false;
+    accessVideo.current = false;
+    accessAudio.current = false;
+    try {
+      const stream = await mediaDevices.getUserMedia({
+        video: false,
+        audio: true,
+      });
+      accessAudio.current = true;
+      updateState({ localAudio: true });
+      for (const track of stream.getTracks()) {
+        if (track.kind === 'audio') {
+          audioTrack.current = track;
+        }
+        pc.current.addTrack(track);
+      }
+    }
+    catch (err) {
+      console.log(err);
+      Alert.alert('Media Access', err.toString());
+    }
+
+    ws.current = createWebsocket(`wss://${node}/signal`);
+    ws.current.onmessage = async (ev) => {
+      // handle messages [impolite]
+      try {
+        const signal = JSON.parse(ev.data);
+        if (signal.status === 'connected') {
+          clearRing();
+          updateState({ callStatus: "connected" });
+          if (policy === 'impolite') {
+            connected.current = true;
+            impolite();
+          }
+        }
+        else if (signal.status === 'closed') {
+          ws.current.close();
+        }
+        else if (signal.description) {
+          offers.current.push(signal.description);
+          if (policy === 'polite') {
+            polite();
+          }
+          if (policy === 'impolite') {
+            impolite();
+          }
+        }
+        else if (signal.candidate) {
+          if (pc.current.remoteDescription == null) {
+            return;
+          }
+          const candidate = new RTCIceCandidate(signal.candidate);
+          await pc.current.addIceCandidate(candidate);
+        }
+      }
+      catch (err) {
+        console.log(err);
+      }
+    }
+    ws.current.onclose = (e) => {
+      // update state to disconnected
+      pc.current.close();
+      clearRing();
+      clearAlive();
+      calling.current = null;
+      if (videoTrack.current) {
+        videoTrack.current.stop();
+        videoTrack.current = null;
+      }
+      if (audioTrack.current) {
+        audioTrack.current.stop();
+        audioTrack.current = null;
+      }
+      updateState({ callStatus: null });
+    }
+    ws.current.onopen = async () => {
+      ws.current.send(JSON.stringify({ AppToken: token }));
+      if (policy === 'polite') {
+        connected.current = true;
+        polite();
+      }
+    }
+    ws.current.error = (e) => {
+      console.log(e)
+      ws.current.close();
+    }
+  }
+
   const actions = {
     setSession: (token) => {
 
@@ -132,163 +354,10 @@ export function useRingContext() {
       if (call) {
         call.status = 'accepted'
         ringing.current.set(key, call);
-        updateState({ ringing: ringing.current });
+        updateState({ ringing: ringing.current, callStatus: "connecting", cardId });
 
-        const impolite = async () => {
-          if (processing.current || !connected.current) {
-            return;
-          }
-
-          processing.current = true;
-          while (offers.current.length > 0) {
-            descriptions = offers.current;
-            offers.current = [];
-
-            for (let i = 0; i < descriptions.length; i++) {
-              const description = descriptions[i];
-              stream.current = null;
-
-              try {
-                if (description == null) {
-                  const offer = await pc.current.createOffer(constraints);
-                  await pc.current.setLocalDescription(offer);
-                  ws.current.send(JSON.stringify({ description: offer }));
-                }
-                else {
-                  if (description.type === 'offer' && pc.current.signalingState !== 'stable') {
-                    continue;
-                  }
-
-                  const offer = new RTCSessionDescription(description);
-                  await pc.current.setRemoteDescription(offer);
-
-                  if (description.type === 'offer') {
-                    const answer = await pc.current.createAnswer();
-                    await pc.current.setLocalDescription(answer);
-                    ws.current.send(JSON.stringify({ description: answer }));
-                  }
-                }
-              }
-              catch (err) {
-                Alert.alert('webrtc error', err.toString());
-              }
-            }
-          }
-          processing.current = false;
-        }
-
-        // connect signal socket
-        candidates.current = [];
-        connected.current = false;
-        calling.current = { state: "connecting", callId, contactNode, contactToken, host: false };
-        updateState({ callStatus: "connecting", cardId, remoteVideo: false, remoteAudio: false });
-
-        pc.current = new RTCPeerConnection({ iceServers });
-        pc.current.addEventListener( 'connectionstatechange', event => {
-          console.log("CONNECTION STATE", event);
-        } );
-        pc.current.addEventListener( 'icecandidate', event => {
-          ws.current.send(JSON.stringify({ candidate: event.candidate }));
-        } );
-        pc.current.addEventListener( 'icecandidateerror', event => {
-          console.log("ICE ERROR");
-        } );
-        pc.current.addEventListener( 'iceconnectionstatechange', event => {
-          console.log("ICE STATE CHANGE", event);
-        } );
-        pc.current.addEventListener( 'negotiationneeded', async (ev) => {
-          offers.current.push(null);
-          impolite();
-        } );
-        pc.current.addEventListener( 'signalingstatechange', event => {
-          console.log("ICE SIGNALING", event);
-        } );
-        pc.current.addEventListener( 'track', event => {
-          if (stream.current == null) {
-            stream.current = new MediaStream();
-            updateState({ remoteStream: stream.current });
-          }
-          if (event.track.kind === 'audio') {
-            updateState({ remoteAudio: true });
-          }
-          if (event.track.kind === 'video') {
-            updateState({ remoteVideo: true });
-          }
-          stream.current.addTrack(event.track, stream.current);
-        } );
-
-
-        updateState({ localVideo: false, localAudio: false, localStream: null });
-        videoTrack.current = false;
-        audioTrack.current = false;
-        accessVideo.current = false;
-        try {
-          const stream = await mediaDevices.getUserMedia({
-            video: false,
-            audio: true,
-          });
-          accessAudio.current = true;
-          updateState({ localAudio: true });
-          for (const track of stream.getTracks()) {
-            if (track.kind === 'audio') {
-              audioTrack.current = track;
-            }
-            pc.current.addTrack(track);
-          }
-        }
-        catch (err) {
-          console.log(err);
-        }
-
-        ws.current = createWebsocket(`wss://${contactNode}/signal`);
-        ws.current.onmessage = async (ev) => {
-          // handle messages [impolite]
-          try {
-            const signal = JSON.parse(ev.data);
-            if (signal.status === 'closed') {
-              ws.current.close();
-            }
-            else if (signal.description) {
-              offers.current.push(signal.description);
-              impolite();
-            }
-            else if (signal.candidate) {
-              if (pc.current.remoteDescription == null) {
-                return;
-              }
-              const candidate = new RTCIceCandidate(signal.candidate);
-              await pc.current.addIceCandidate(candidate);
-            }
-          }
-          catch (err) {
-            console.log(err);
-          }
-        }
-        ws.current.onclose = (e) => {
-          // update state to disconnected
-          pc.current.close();
-          calling.current = null;
-          if (videoTrack.current) {
-            videoTrack.current.stop();
-            videoTrack.current = null;
-          }
-          if (audioTrack.current) {
-            audioTrack.current.stop();
-            audioTrack.current = null;
-          }
-          updateState({ callStatus: null });
-        }
-        ws.current.onopen = async () => {
-          calling.current.state = "connected"
-          updateState({ callStatus: "connected" });
-          ws.current.send(JSON.stringify({ AppToken: calleeToken }))
-          connected.current = true;
-          impolite();
-        }
-        ws.current.error = (e) => {
-          console.log(e)
-          ws.current.close();
-        }
+        calling.current = { callId, contactNode, contactToken, host: false };
+        await connect('impolite', contactNode, calleeToken, () => {}, () => {});
       }
     },
     end: async () => {
@@ -309,62 +378,10 @@ export function useRingContext() {
         console.log(err);
       }
       ws.current.close();
-      if (videoTrack.current) {
-        videoTrack.current.stop();
-        videoTrack.current = null;
-      }
-      if (audioTrack.current) {
-        audioTrack.current.stop();
-        audioTrack.current = null;
-      }
     },
     call: async (cardId, contactNode, contactToken) => {
       if (calling.current) {
         throw new Error("active session");
-      }
-
-      const polite = async () => {
-        if (processing.current || !connected.current) {
-          return;
-        }
-
-        processing.current = true;
-
-        while (offers.current.length > 0) {
-          descriptions = offers.current;
-          offers.current = [];
-
-          try {
-            for (let i = 0; i < descriptions.length; i++) {
-              const description = descriptions[i];
-              stream.current = null;
-
-              if (description == null) {
-                const offer = await pc.current.createOffer(constraints);
-                await pc.current.setLocalDescription(offer);
-                ws.current.send(JSON.stringify({ description: offer }));
-              }
-              else {
-                if (description.type === 'offer' && pc.current.signalingState !== 'stable') {
-                  const rollback = new RTCSessionDescription({ type: "rollback" });
-                  await pc.current.setLocalDescription(rollback);
-                }
-                const offer = new RTCSessionDescription(description);
-                await pc.current.setRemoteDescription(offer);
-                if (description.type === 'offer') {
-                  const answer = await pc.current.createAnswer();
-                  await pc.current.setLocalDescription(answer);
-                  ws.current.send(JSON.stringify({ description: answer }));
-                }
-              }
-            }
-          }
-          catch (err) {
-            Alert.alert('webrtc error', err.toString());
-          }
-        }
-
-        processing.current = false;
       }
 
       // create call
@@ -396,127 +413,9 @@ export function useRingContext() {
         }
       }, RING);
 
-      candidates.current = [];
-      connected.current = false;
-      calling.current = { state: "connecting", callId: id, host: true };
-      updateState({ callStatus: "connecting", cardId, remoteVideo: false, remoteAudio: false });
-
-      // form peer connection
-      pc.current = new RTCPeerConnection({ iceServers });
-      pc.current.addEventListener( 'connectionstatechange', event => {
-        console.log("CONNECTION STATE", event);
-      } );
-      pc.current.addEventListener( 'icecandidate', event => {
-        ws.current.send(JSON.stringify({ candidate: event.candidate }));
-      } );
-      pc.current.addEventListener( 'icecandidateerror', event => {
-        console.log("ICE ERROR");
-      } );
-      pc.current.addEventListener( 'iceconnectionstatechange', event => {
-        console.log("ICE STATE CHANGE", event);
-      } );
-      pc.current.addEventListener( 'negotiationneeded', event => {
-        offers.current.push(null);
-        polite();
-      } );
-      pc.current.addEventListener( 'signalingstatechange', event => {
-        console.log("ICE SIGNALING", event);
-      } );
-      pc.current.addEventListener( 'track', event => {
-        if (stream.current == null) {
-          stream.current = new MediaStream();
-          updateState({ remoteStream: stream.current });
-        }
-        if (event.track.kind === 'audio') {
-          updateState({ remoteAudio: true });
-        }
-        if (event.track.kind === 'video') {
-          updateState({ remoteVideo: true });
-        }
-        stream.current.addTrack(event.track, stream.current);
-      } );
-
-      videoTrack.current = false;
-      audioTrack.current = false;
-      accessVideo.current = false;
-      try {
-        const stream = await mediaDevices.getUserMedia({
-          video: false,
-          audio: true,
-        });
-        accessAudio.current = true;
-        updateState({ localVideo: false, localAudio: true, localStream: stream });
-        for (const track of stream.getTracks()) {
-          if (track.kind === 'audio') {
-            audioTrack.current = track;
-          }
-          if (track.kind === 'video') {
-            videoTrack.current = track;
-          }
-          pc.current.addTrack(track);
-        }
-      }
-      catch (err) {
-        console.log(err);
-      }
-
-      ws.current = createWebsocket(`wss://${server}/signal`);
-      ws.current.onmessage = async (ev) => {
-        // handle messages [polite]
-        try {
-          const signal = JSON.parse(ev.data);
-          if (signal.status) {
-            if (calling.current.state !== 'connected' && signal.status === 'connected') {
-              clearInterval(ringInterval);
-              calling.current.state = 'connected';
-              updateState({ callStatus: "connected" });
-              connected.current = true;
-              polite();
-            }
-            if (signal.status === 'closed') {
-              ws.current.close();
-            }
-          }
-          else if (signal.description) {
-            offers.current.push(signal.description);
-            polite();
-          }
-          else if (signal.candidate) {
-            if (pc.current.remoteDescription == null) {
-              return;
-            }
-            const candidate = new RTCIceCandidate(signal.candidate);
-            await pc.current.addIceCandidate(candidate);
-          }
-        }
-        catch (err) {
-          console.log(err);
-        }
-      }
-      ws.current.onclose = (e) => {
-        pc.current.close();
-        clearInterval(ringInterval);
-        clearInterval(aliveInterval);
-        calling.current = null;
-        if (videoTrack.current) {
-          videoTrack.current.stop();
-          videoTrack.current = null;
-        }
-        if (audioTrack.current) {
-          audioTrack.current.stop();
-          audioTrack.current = null;
-        }
-        updateState({ callStatus: null });
-      }
-      ws.current.onopen = () => {
-        calling.current.state = "ringing";
-        updateState({ callStatus: "ringing" });
-        ws.current.send(JSON.stringify({ AppToken: callerToken }))
-      }
-      ws.current.error = (e) => {
-        console.log(e)
-        ws.current.close();
-      }
+      updateState({ callStatus: "ringing", cardId });
+      calling.current = { callId: id, host: true };
+      await connect('polite', server, callerToken, () => clearInterval(ringInterval), () => clearInterval(aliveInterval));
     },
     enableVideo: async () => {
       if (!accessVideo.current) {
