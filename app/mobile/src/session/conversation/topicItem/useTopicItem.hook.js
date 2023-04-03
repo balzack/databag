@@ -1,13 +1,15 @@
 import { useState, useEffect, useContext } from 'react';
+import { Linking } from 'react-native';
 import { ConversationContext } from 'context/ConversationContext';
 import { CardContext } from 'context/CardContext';
 import { ProfileContext } from 'context/ProfileContext';
 import { AccountContext } from 'context/AccountContext';
 import moment from 'moment';
-import { useWindowDimensions } from 'react-native';
+import { useWindowDimensions, Text } from 'react-native';
 import Colors from 'constants/Colors';
 import { getCardByGuid } from 'context/cardUtil';
 import { decryptTopicSubject } from 'context/sealUtil';
+import * as DOMPurify from 'dompurify';
 
 export function useTopicItem(item, hosting, remove, contentKey) {
 
@@ -95,7 +97,7 @@ export function useTopicItem(item, hosting, remove, contentKey) {
       try {
         sealed = false;
         parsed = JSON.parse(data);
-        message = parsed.text;
+        message = clickableText(parsed.text);
         assets = parsed.assets;
         if (parsed.textSize === 'small') {
           fontSize = 10;
@@ -138,7 +140,7 @@ export function useTopicItem(item, hosting, remove, contentKey) {
       if (unsealed) {
         sealed = false;
         parsed = unsealed.message;
-        message = parsed?.text;
+        message = clickableText(parsed?.text);
         if (parsed?.textSize === 'small') {
           fontSize = 10;
         }
@@ -192,6 +194,31 @@ export function useTopicItem(item, hosting, remove, contentKey) {
     catch(err) {
       console.log(err);
     }
+  };
+
+  const clickableText = (text) => {
+      var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
+    '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+    '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+    '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+
+      let clickable = [];
+      let group = '';
+      const words = text == null ? '' : text.split(' ');
+      words.forEach((word, index) => {
+        if (!!pattern.test(word)) {
+          clickable.push(<Text key={index}>{ group }</Text>);
+          group = '';
+          clickable.push(<Text key={'link-' + index} onPress={() => Linking.openURL(word)} style={{ fontStyle: 'italic' }}>{ word + ' ' }</Text>);
+        }
+        else {
+          group += `${word} `;
+        }
+      })
+      clickable.push(<Text key={words.length}>{ group }</Text>);
+      return <Text>{ clickable }</Text>;
   };
 
   const actions = {
