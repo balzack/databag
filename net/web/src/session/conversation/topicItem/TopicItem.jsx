@@ -7,6 +7,7 @@ import { Space, Skeleton, Button, Modal, Input } from 'antd';
 import { ExclamationCircleOutlined, DeleteOutlined, EditOutlined, FireOutlined, PictureOutlined } from '@ant-design/icons';
 import { Carousel } from 'carousel/Carousel';
 import { useTopicItem } from './useTopicItem.hook';
+import * as DOMPurify from 'dompurify';
 
 export function TopicItem({ host, sealed, topic, update, remove }) {
 
@@ -123,7 +124,7 @@ export function TopicItem({ host, sealed, topic, update, remove }) {
           )}
           { !sealed && !state.editing && (
             <div class="message">
-              <div style={{ color: topic.textColor, fontSize: topic.textSize }}>{ topic.text }</div>
+              <div style={{ color: topic.textColor, fontSize: topic.textSize }} dangerouslySetInnerHTML={{__html: DOMPurify.sanitize(topic.text, { ADD_ATTR: ['target'] })}} />
             </div>
           )}
           { state.editing && (
