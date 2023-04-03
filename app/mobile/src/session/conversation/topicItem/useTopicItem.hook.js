@@ -9,7 +9,7 @@ import { useWindowDimensions, Text } from 'react-native';
 import Colors from 'constants/Colors';
 import { getCardByGuid } from 'context/cardUtil';
 import { decryptTopicSubject } from 'context/sealUtil';
-import * as DOMPurify from 'dompurify';
+import { sanitizeUrl } from '@braintree/sanitize-url';
 
 export function useTopicItem(item, hosting, remove, contentKey) {
 
@@ -214,7 +214,7 @@ export function useTopicItem(item, hosting, remove, contentKey) {
         if (!!pattern.test(word)) {
           clickable.push(<Text key={index}>{ group }</Text>);
           group = '';
-          clickable.push(<Text key={'link-' + index} onPress={() => Linking.openURL(word)} style={{ fontStyle: 'italic' }}>{ word + ' ' }</Text>);
+          clickable.push(<Text key={'link-' + index} onPress={() => Linking.openURL(sanitizeUrl(word))} style={{ fontStyle: 'italic' }}>{ sanitizeUrl(word) + ' ' }</Text>);
         }
         else {
           group += `${word} `;
