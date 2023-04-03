@@ -20,6 +20,7 @@ export function useTopicItem(item, hosting, remove, contentKey) {
     logo: null,
     timestamp: null,
     message: null,
+    clickable: null,
     carousel: false,
     carouselIndex: 0,
     width: null,
@@ -92,12 +93,13 @@ export function useTopicItem(item, hosting, remove, contentKey) {
       }
     }
 
-    let parsed, sealed, message, assets, fontSize, fontColor;
+    let parsed, sealed, message, clickable, assets, fontSize, fontColor;
     if (dataType === 'superbasictopic') {
       try {
         sealed = false;
         parsed = JSON.parse(data);
-        message = clickableText(parsed.text);
+        message = parsed?.text;
+        clickable = clickableText(parsed.text);
         assets = parsed.assets;
         if (parsed.textSize === 'small') {
           fontSize = 10;
@@ -140,7 +142,8 @@ export function useTopicItem(item, hosting, remove, contentKey) {
       if (unsealed) {
         sealed = false;
         parsed = unsealed.message;
-        message = clickableText(parsed?.text);
+        message = parsed?.text;
+        clickable = clickableText(parsed?.text);
         if (parsed?.textSize === 'small') {
           fontSize = 10;
         }
@@ -179,7 +182,7 @@ export function useTopicItem(item, hosting, remove, contentKey) {
     const editable = guid === identity?.guid && parsed;
     const deletable = editable || hosting;
 
-    updateState({ logo, name, nameSet, known, sealed, message, fontSize, fontColor, timestamp, transform, status, assets, deletable, editable, editData: parsed, editMessage: message, editType: dataType });
+    updateState({ logo, name, nameSet, known, sealed, message, clickable, fontSize, fontColor, timestamp, transform, status, assets, deletable, editable, editData: parsed, editMessage: message, editType: dataType });
   }, [conversation.state, card.state, account.state, item, contentKey]);
 
   const unsealTopic = async (topicId, revision, topicDetail) => {
@@ -206,7 +209,7 @@ export function useTopicItem(item, hosting, remove, contentKey) {
 
       let clickable = [];
       let group = '';
-      const words = text == null ? '' : text.split(' ');
+      const words = text == null ? [''] : text.split(' ');
       words.forEach((word, index) => {
         if (!!pattern.test(word)) {
           clickable.push(<Text key={index}>{ group }</Text>);

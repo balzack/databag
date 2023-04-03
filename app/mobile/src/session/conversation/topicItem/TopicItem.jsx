@@ -162,8 +162,8 @@ export function TopicItem({ item, focused, focus, hosting, remove, update, block
                 <MatIcons name="weather-cloudy-alert" size={32} color={Colors.alert} />
               </View>
             )}
-            { state.message && !state.sealed && (
-              <Text style={{ ...styles.message, fontSize: state.fontSize, color: state.fontColor }}>{ state.message }</Text>
+            { state.clickable && !state.sealed && (
+              <Text style={{ ...styles.message, fontSize: state.fontSize, color: state.fontColor }}>{ state.clickable }</Text>
             )}
             { state.sealed && (
               <Text style={ styles.sealed }>sealed message</Text>
