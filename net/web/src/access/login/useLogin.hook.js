@@ -91,6 +91,7 @@ export function useLogin() {
     if (token) {
       access(token);
     }
+    // eslint-disable-next-line
   }, [])
 
   return { state, actions };
