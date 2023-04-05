@@ -200,21 +200,24 @@ export function useTopicItem(item, hosting, remove, contentKey) {
   };
 
   const clickableText = (text) => {
-      var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+      const urlPatternn = new RegExp('^(https?:\\/\\/)?'+ // protocol
     '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
     '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
     '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
     '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
     '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
 
+      const hostPattern = new RegExp('^https?:\\/\\/', 'i');
+
       let clickable = [];
       let group = '';
       const words = text == null ? [''] : text.split(' ');
       words.forEach((word, index) => {
-        if (!!pattern.test(word)) {
+        if (!!urlPatternn.test(word)) {
           clickable.push(<Text key={index}>{ group }</Text>);
           group = '';
-          clickable.push(<Text key={'link-' + index} onPress={() => Linking.openURL(sanitizeUrl(word))} style={{ fontStyle: 'italic' }}>{ sanitizeUrl(word) + ' ' }</Text>);
+          const url = !!hostPattern.test(word) ? word : `https://${word}`;
+          clickable.push(<Text key={'link-' + index} onPress={() => Linking.openURL(sanitizeUrl(url))} style={{ fontStyle: 'italic' }}>{ sanitizeUrl(word) + ' ' }</Text>);
         }
         else {
           group += `${word} `;
