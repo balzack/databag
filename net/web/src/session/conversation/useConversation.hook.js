@@ -9,6 +9,7 @@ import { ProfileContext } from 'context/ProfileContext';
 import { isUnsealed, getChannelSeals, getContentKey, encryptTopicSubject } from 'context/sealUtil';
 import { decryptTopicSubject } from 'context/sealUtil';
 import { getProfileByGuid } from 'context/cardUtil';
+import * as DOMPurify from 'dompurify';
 
 export function useConversation(cardId, channelId) {
 
@@ -132,6 +133,31 @@ export function useConversation(cardId, channelId) {
     // eslint-disable-next-line
   }, [state.contentKey]);
 
+  const clickableText = (text) => {
+      var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
+    '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+    '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+    '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+
+      let group = '';
+      let clickable = [];
+      const words = text == null ? '' : DOMPurify.sanitize(text).split(' ');
+      words.forEach((word, index) => {
+        if (!!pattern.test(word)) {
+          clickable.push(<span key={index}>{ group }</span>);
+          group = '';
+          clickable.push(<a key={'link-'+index} target="_blank" rel="noopener noreferrer" href={word}>{ `${word} ` }</a>);
+        }
+        else {
+          group += `${word} `;
+        }
+      })
+      clickable.push(<span key={words.length}>{ group }</span>);
+      return <p>{ clickable }</p>;
+  };
+
   const syncTopic = (item, value) => {
     const revision = value.data?.detailRevision;
     const detail = value.data?.topicDetail || {};
@@ -190,6 +216,7 @@ export function useConversation(cardId, channelId) {
           const message = JSON.parse(detail.data);
           item.assets = message.assets;
           item.text = message.text;
+          item.clickable = clickableText(message.text);
           item.textColor = message.textColor ? message.textColor : '#444444';
           item.textSize = message.textSize ? message.textSize : 14;
         }
@@ -197,6 +224,7 @@ export function useConversation(cardId, channelId) {
           const subject = decryptTopicSubject(detail.data, state.contentKey);
           item.assets = subject.message.assets;
           item.text = subject.message.text;
+          item.clickable = clickableText(subject.message.text);
           item.textColor = subject.message.textColor ? subject.message.textColor : '#444444';
           item.textSize = subject.message.textSize ? subject.message.textSize : 14;
         }

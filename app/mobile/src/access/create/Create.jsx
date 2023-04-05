@@ -138,23 +138,25 @@ export function Create() {
             </View>
           )}
 
-          <View style={styles.tos}>
-            <TouchableOpacity style={styles.viewterms} onPress={actions.showTerms}>
-              <Text style={styles.viewtermstext}>View Terms of Service</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.agreeterms} onPress={() => actions.agree(!state.agree)}>
-              { state.agree && (
-                <MatIcons name={'checkbox-outline'} size={20} color={Colors.primary} />
-              )}
-              { !state.agree && (
-                <MatIcons name={'checkbox-blank-outline'} size={20} color={Colors.primary} />
-              )}
-              <Text style={styles.agreetermstext}>I agree to Terms of Service</Text>
-            </TouchableOpacity>
-          </View>
+          { Platform.OS !== 'ios' && (
+            <View style={styles.tos}>
+              <TouchableOpacity style={styles.viewterms} onPress={actions.showTerms}>
+                <Text style={styles.viewtermstext}>View Terms of Service</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.agreeterms} onPress={() => actions.agree(!state.agree)}>
+                { state.agree && (
+                  <MatIcons name={'checkbox-outline'} size={20} color={Colors.primary} />
+                )}
+                { !state.agree && (
+                  <MatIcons name={'checkbox-blank-outline'} size={20} color={Colors.primary} />
+                )}
+                <Text style={styles.agreetermstext}>I agree to Terms of Service</Text>
+              </TouchableOpacity>
+            </View>
+          )}
  
           <View style={styles.buttons}>
-            { state.enabled && state.agree && (
+            { state.enabled && (Platform.OS === 'ios' || state.agree) && (
               <TouchableOpacity style={styles.create} onPress={create}>
                 { state.busy && (
                   <ActivityIndicator size="small" color="#ffffff" />
@@ -164,7 +166,7 @@ export function Create() {
                 )}
               </TouchableOpacity>
             )}
-            { (!state.enabled || !state.agree) && (
+            { (!state.enabled || (Platform.OS !== 'ios' && !state.agree)) && (
               <View style={styles.nocreate}>
                 <Text style={styles.nocreatetext}>Create Account</Text>
               </View>

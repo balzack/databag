@@ -123,7 +123,7 @@ export function TopicItem({ host, sealed, topic, update, remove }) {
           )}
           { !sealed && !state.editing && (
             <div class="message">
-              <div style={{ color: topic.textColor, fontSize: topic.textSize }}>{ topic.text }</div>
+              <div style={{ color: topic.textColor, fontSize: topic.textSize }}>{ topic.clickable }</div>
             </div>
           )}
           { state.editing && (

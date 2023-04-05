@@ -1,13 +1,15 @@
 import { useState, useEffect, useContext } from 'react';
+import { Linking } from 'react-native';
 import { ConversationContext } from 'context/ConversationContext';
 import { CardContext } from 'context/CardContext';
 import { ProfileContext } from 'context/ProfileContext';
 import { AccountContext } from 'context/AccountContext';
 import moment from 'moment';
-import { useWindowDimensions } from 'react-native';
+import { useWindowDimensions, Text } from 'react-native';
 import Colors from 'constants/Colors';
 import { getCardByGuid } from 'context/cardUtil';
 import { decryptTopicSubject } from 'context/sealUtil';
+import { sanitizeUrl } from '@braintree/sanitize-url';
 
 export function useTopicItem(item, hosting, remove, contentKey) {
 
@@ -18,6 +20,7 @@ export function useTopicItem(item, hosting, remove, contentKey) {
     logo: null,
     timestamp: null,
     message: null,
+    clickable: null,
     carousel: false,
     carouselIndex: 0,
     width: null,
@@ -90,12 +93,13 @@ export function useTopicItem(item, hosting, remove, contentKey) {
       }
     }
 
-    let parsed, sealed, message, assets, fontSize, fontColor;
+    let parsed, sealed, message, clickable, assets, fontSize, fontColor;
     if (dataType === 'superbasictopic') {
       try {
         sealed = false;
         parsed = JSON.parse(data);
-        message = parsed.text;
+        message = parsed?.text;
+        clickable = clickableText(parsed.text);
         assets = parsed.assets;
         if (parsed.textSize === 'small') {
           fontSize = 10;
@@ -139,6 +143,7 @@ export function useTopicItem(item, hosting, remove, contentKey) {
         sealed = false;
         parsed = unsealed.message;
         message = parsed?.text;
+        clickable = clickableText(parsed?.text);
         if (parsed?.textSize === 'small') {
           fontSize = 10;
         }
@@ -177,7 +182,7 @@ export function useTopicItem(item, hosting, remove, contentKey) {
     const editable = guid === identity?.guid && parsed;
     const deletable = editable || hosting;
 
-    updateState({ logo, name, nameSet, known, sealed, message, fontSize, fontColor, timestamp, transform, status, assets, deletable, editable, editData: parsed, editMessage: message, editType: dataType });
+    updateState({ logo, name, nameSet, known, sealed, message, clickable, fontSize, fontColor, timestamp, transform, status, assets, deletable, editable, editData: parsed, editMessage: message, editType: dataType });
   }, [conversation.state, card.state, account.state, item, contentKey]);
 
   const unsealTopic = async (topicId, revision, topicDetail) => {
@@ -192,6 +197,31 @@ export function useTopicItem(item, hosting, remove, contentKey) {
     catch(err) {
       console.log(err);
     }
+  };
+
+  const clickableText = (text) => {
+      var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
+    '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+    '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+    '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+
+      let clickable = [];
+      let group = '';
+      const words = text == null ? [''] : text.split(' ');
+      words.forEach((word, index) => {
+        if (!!pattern.test(word)) {
+          clickable.push(<Text key={index}>{ group }</Text>);
+          group = '';
+          clickable.push(<Text key={'link-' + index} onPress={() => Linking.openURL(sanitizeUrl(word))} style={{ fontStyle: 'italic' }}>{ sanitizeUrl(word) + ' ' }</Text>);
+        }
+        else {
+          group += `${word} `;
+        }
+      })
+      clickable.push(<Text key={words.length}>{ group }</Text>);
+      return <Text>{ clickable }</Text>;
   };
 
   const actions = {

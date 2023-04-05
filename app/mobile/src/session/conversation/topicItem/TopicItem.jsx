@@ -131,8 +131,8 @@ export function TopicItem({ item, focused, focus, hosting, remove, update, block
 
   return (
     <View style={{ ...styles.wrapper, transform: [{rotate: '180deg'}]}}>
-      <TouchableOpacity activeOpacity={1} style={styles.item} onPress={focus}>
-        <View style={styles.header}>
+      <View style={styles.item}>
+        <TouchableOpacity activeOpacity={1} onPress={focus} style={styles.header}>
           { state.logo !== 'avatar' && state.logo && (
             <Image source={{ uri: state.logo }} style={{ width: 28, height: 28, borderRadius: 6 }} />
           )}
@@ -141,7 +141,7 @@ export function TopicItem({ item, focused, focus, hosting, remove, update, block
           )}
           <Text style={{ ...styles.name, color: state.nameSet ? Colors.text : Colors.grey }}>{ state.name }</Text>
           <Text style={styles.timestamp}>{ state.timestamp }</Text>
-        </View>
+        </TouchableOpacity>
         { state.status === 'confirmed' && (
           <>
             { state.transform === 'complete' && state.assets && (
@@ -162,8 +162,8 @@ export function TopicItem({ item, focused, focus, hosting, remove, update, block
                 <MatIcons name="weather-cloudy-alert" size={32} color={Colors.alert} />
               </View>
             )}
-            { state.message && !state.sealed && (
-              <Text style={{ ...styles.message, fontSize: state.fontSize, color: state.fontColor }}>{ state.message }</Text>
+            { state.clickable && !state.sealed && (
+              <Text style={{ ...styles.message, fontSize: state.fontSize, color: state.fontColor }}>{ state.clickable }</Text>
             )}
             { state.sealed && (
               <Text style={ styles.sealed }>sealed message</Text>
@@ -175,7 +175,7 @@ export function TopicItem({ item, focused, focus, hosting, remove, update, block
             <MatIcons name="cloud-refresh" size={32} color={Colors.divider} />
           </View>
         )}
-      </TouchableOpacity>
+      </View>
       { focused && (
         <View style={styles.focused}>
           { state.editable && (
