@@ -2,6 +2,8 @@ import { useContext, useState, useEffect } from 'react';
 import { CardContext } from 'context/CardContext';
 import { ViewportContext } from 'context/ViewportContext';
 import { StoreContext } from 'context/StoreContext';
+import { ChannelContext } from 'context/ChannelContext';
+import { RingContext } from 'context/RingContext';
 
 export function useCards() {
 
@@ -14,7 +16,9 @@ export function useCards() {
     cards: [],
   });
 
+  const ring = useContext(RingContext);
   const card = useContext(CardContext);
+  const channel = useContext(ChannelContext);
   const store = useContext(StoreContext);
   const viewport = useContext(ViewportContext);
 
@@ -38,9 +42,11 @@ export function useCards() {
       const offsync = item.offsync;
       const guid = profile?.guid;
       const name = profile?.name;
+      const node = profile?.node;
+      const token = detail?.token;
       const handle = profile?.node ? `${profile.handle}@${profile.node}` : profile.handle;
       const logo = profile?.imageSet ? card.actions.getCardImageUrl(item.id) : null;
-      return { cardId, guid, updated, offsync, status, name, handle, logo };
+      return { cardId, guid, updated, offsync, status, name, node, token, handle, logo };
     });
 
     let latest = 0;
@@ -111,6 +117,14 @@ export function useCards() {
     },
     resync: async (cardId) => {
       await card.actions.resyncCard(cardId);
+    },
+    message: async (cardId) => {
+      const conversation = await channel.actions.addChannel('superbasic', { subject: null }, [ cardId ]);
+      return conversation.id;
+    },
+    call: async (contact) => {
+      const { cardId, node, guid, token } = contact;
+      await ring.actions.call(contact.cardId, node, `${guid}.${token}`);
     },
   };
 

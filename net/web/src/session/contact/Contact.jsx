@@ -94,7 +94,6 @@ export function Contact({ close, guid, listing }) {
             <div className="controls">
               <div className={ state.buttonStatus } onClick={() => updateContact(actions.disconnect)}>Disconnect</div>
               <div className={ state.buttonStatus } onClick={() => updateContact(actions.disconnectRemove)}>Delete Contact</div>
-              <div className={ state.buttonStatus } onClick={actions.ring}>Call Contact</div>
             </div>
           )}
 

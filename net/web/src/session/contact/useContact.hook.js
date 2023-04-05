@@ -1,10 +1,8 @@
 import { useContext, useState, useEffect } from 'react';
 import { CardContext } from 'context/CardContext';
-import { RingContext } from 'context/RingContext';
 import { ViewportContext } from 'context/ViewportContext';
 import { getListingMessage } from 'api/getListingMessage';
 import { getCardByGuid } from 'context/cardUtil';
-import { addContactRing } from 'api/addContactRing';
 
 export function useContact(guid, listing, close) {
 
@@ -22,7 +20,6 @@ export function useContact(guid, listing, close) {
   });
 
   const card = useContext(CardContext);
-  const ring = useContext(RingContext);
   const viewport = useContext(ViewportContext);  
 
   const updateState = (value) => {
@@ -157,13 +154,6 @@ export function useContact(guid, listing, close) {
         await card.actions.removeCard(state.cardId);
         close();
       });
-    },
-    ring: async () => {
-      console.log("calling!!");
-      const contact = card.state.cards.get(state.cardId);
-      const { node, guid } = contact.data.cardProfile;
-      const { token } = contact.data.cardDetail;
-      await ring.actions.call(state.cardId, node, `${guid}.${token}`);
     },
   };
 

@@ -1,17 +1,27 @@
 import { CardItemWrapper, StatusError,
         StatusConnected, StatusConnecting, 
         StatusRequested, StatusPending, 
-        StatusConfirmed} from './CardItem.styled';
+        StatusConfirmed, ComOptions } from './CardItem.styled';
 import { Logo } from 'logo/Logo';
 import { Tooltip } from 'antd';
-import { ExclamationCircleOutlined } from '@ant-design/icons';
+import { MessageOutlined, PhoneOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 
-export function CardItem({ item, tooltip, resync, open }) {
+export function CardItem({ item, tooltip, resync, open, call, message }) {
 
   const onResync = (e) => {
     e.stopPropagation();
     resync();
   };
+
+  const onMessage = (e) => {
+    e.stopPropagation();
+    message();
+  }
+
+  const onCall = (e) => {
+    e.stopPropagation();
+    call();
+  }
 
   return (
     <CardItemWrapper onClick={open}>
@@ -32,6 +42,16 @@ export function CardItem({ item, tooltip, resync, open }) {
               <ExclamationCircleOutlined />
             </StatusError>
           </Tooltip>
+        )}
+        { item.status === 'connected' && (
+          <ComOptions>
+            <Tooltip className="option" placement="left" title="start a new topic">
+              <MessageOutlined onClick={onMessage} />
+            </Tooltip>
+            <Tooltip className="option" placement="left" title="start a call">
+              <PhoneOutlined onClick={onCall} />
+            </Tooltip>
+          </ComOptions>
         )}
         { item.status === 'connected' && (
           <Tooltip placement="left" title="connected contact">

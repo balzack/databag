@@ -197,7 +197,7 @@ console.log(" SET REMOTE STREAM");
             )}
             { state.cards && (
               <div class="reframe">
-                <Cards closeCards={closeCards} openContact={actions.openContact} openListing={actions.openListing} />
+                <Cards closeCards={closeCards} openContact={actions.openContact} openChannel={openConversation} openListing={actions.openListing} />
                 <Drawer bodyStyle={{ padding: 0 }} placement="bottom" closable={false} visible={state.listing}
                     onClose={actions.closeListing} getContainer={false} height={'100%'}
                     style={{ position: 'absolute', overflow: 'hidden' }}>
@@ -249,7 +249,7 @@ console.log(" SET REMOTE STREAM");
             </Drawer>
             <Drawer bodyStyle={{ padding: 0 }} width={'33%'} closable={false} onClose={closeCards} visible={state.cards} zIndex={20} push={state.contact}>
               { state.cards && (
-                <Cards closeCards={closeCards} openContact={actions.openContact} openListing={actions.openListing} />
+                <Cards closeCards={closeCards} openContact={actions.openContact} openChannel={openConversation} openListing={actions.openListing} />
               )}
               <Drawer bodyStyle={{ padding: 0 }} placement="bottom" closable={false} visible={state.listing}
                   onClose={actions.closeListing} getContainer={false} height={'100%'}
@@ -294,7 +294,7 @@ console.log(" SET REMOTE STREAM");
             )}
             { state.cards && (
               <div class="reframe">
-                <Cards openContact={actions.openContact} openListing={actions.openListing} />
+                <Cards openContact={actions.openContact} openChannel={openConversation} openListing={actions.openListing} />
               </div>
             )}
             { state.listing && (

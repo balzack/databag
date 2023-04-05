@@ -52,7 +52,19 @@ export const CardItemWrapper = styled.div`
 export const StatusError = styled.div`
   color: ${Colors.error};
   font-size: 14px;
-  padding-right: 8px;
+  padding-right: 12px;
+`
+
+export const ComOptions = styled.div`
+  color: ${Colors.primary};
+  font-size: 16px;
+  display: flex;
+  flex-direction: row;
+
+  .option {
+    padding-right: 12px;
+    cursor: pointer;
+  }
 `
 
 export const StatusConnected = styled.div`

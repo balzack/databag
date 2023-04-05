@@ -10,7 +10,7 @@ export function useViewportContext() {
 
   const SMALL_MEDIUM = 650;
   const MEDIUM_LARGE = 1000;
-  const LARGE_XLARGE = 1400;
+  const LARGE_XLARGE = 1600;
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
