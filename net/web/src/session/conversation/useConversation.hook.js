@@ -134,21 +134,24 @@ export function useConversation(cardId, channelId) {
   }, [state.contentKey]);
 
   const clickableText = (text) => {
-      var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+      const urlPattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
     '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
     '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
     '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
     '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
     '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
 
+      const hostPattern = new RegExp('^https?:\\/\\/', 'i');
+
       let group = '';
       let clickable = [];
       const words = text == null ? '' : DOMPurify.sanitize(text).split(' ');
       words.forEach((word, index) => {
-        if (!!pattern.test(word)) {
+        if (!!urlPattern.test(word)) {
           clickable.push(<span key={index}>{ group }</span>);
           group = '';
-          clickable.push(<a key={'link-'+index} target="_blank" rel="noopener noreferrer" href={word}>{ `${word} ` }</a>);
+          const url = !!hostPattern.test(word) ? word : `https://${word}`;
+          clickable.push(<a key={'link-'+index} target="_blank" rel="noopener noreferrer" href={url}>{ `${word} ` }</a>);
         }
         else {
           group += `${word} `;

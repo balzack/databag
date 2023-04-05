@@ -1,7 +1,7 @@
 import { useContext, useState, useEffect } from 'react';
 import { AppContext } from 'context/AppContext';
 import { getAvailable } from 'api/getAvailable';
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export function useLogin() {
 
@@ -14,6 +14,7 @@ export function useLogin() {
   });
 
   const navigate = useNavigate();
+  const { search } = useLocation();
   const app = useContext(AppContext);
 
   const updateState = (value) => {
@@ -66,6 +67,30 @@ export function useLogin() {
       }
     }
     count();
+    // eslint-disable-next-line
+  }, [])
+
+  const access =  async (token) => {
+    if (!state.busy) {
+      updateState({ busy: true });
+      try {
+        await app.actions.access(token);
+      }
+      catch (err) {
+        console.log(err);
+        updateState({ busy: false });
+        throw new Error('access failed: check your token');
+      }
+      updateState({ busy: false });
+    }
+  }
+ 
+  useEffect(() => {
+    let params = new URLSearchParams(search);
+    let token = params.get("access");
+    if (token) {
+      access(token);
+    }
     // eslint-disable-next-line
   }, [])
 
