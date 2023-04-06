@@ -37,11 +37,21 @@ export function useRingContext() {
   const candidates = useRef([]);
 
   const iceServers = [
-    {
-      urls: 'turn:35.165.123.117:5001?transport=udp', 
+   {
+      //urls: 'turn:98.234.232.221:5001?transport=udp', 
+      urls: 'turn:192.168.13.233:5001?transport=udp', 
+      //urls: 'turn:35.165.123.117:5001?transport=udp', 
       username: 'user', 
       credential: 'pass'
-    }];
+    },
+    {
+      urls: 'turn:98.234.232.221:5001?transport=udp', 
+      //urls: 'turn:192.168.13.233:5001?transport=udp', 
+      //urls: 'turn:35.165.123.117:5001?transport=udp', 
+      username: 'user', 
+      credential: 'pass'
+    },
+];
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }))
@@ -99,11 +109,9 @@ console.log("polite: ", description);
   }
 
   const impolite = async () => {
-console.log("IMPOLITE!", processing.current, connected.current);
     if (processing.current || !connected.current) {
       return;
     }
-console.log("GO");
 
     processing.current = true;
     while (offers.current.length > 0) {
@@ -116,13 +124,11 @@ console.log("GO");
 
         try {
           if (description == null) {
-console.log(" SENDING NEW IMPOLITE OFFER");
             const offer = await pc.current.createOffer();
             await pc.current.setLocalDescription(offer);
             ws.current.send(JSON.stringify({ description: pc.current.localDescription }));
           }
           else {
-console.log("impolite: ", description);
             if (description.type === 'offer' && pc.current.signalingState !== 'stable') {
               continue;
             }
@@ -136,6 +142,7 @@ console.log("impolite: ", description);
             candidates.current = [];
             for (let i = 0; i < servers.length; i++) {
               const server = servers[i];
+console.log("MY ICE2:", server);
               ws.current.send(JSON.stringify(server));
             }
           }
@@ -158,9 +165,7 @@ console.log("impolite: ", description);
 
     pc.current = new RTCPeerConnection({ iceServers });
     pc.current.ontrack = (ev) => {
-console.log("ON TRACK");
       if (!stream.current) {
-console.log("NEW MEDIA STREAM");
         stream.current = new MediaStream();
         updateState({ remoteStream: stream.current });
       }
@@ -174,15 +179,14 @@ console.log("NEW MEDIA STREAM");
     };
     pc.current.onicecandidate = ({candidate}) => {
       if (pc.current.remoteDescription == null) {
-      console.log("QUEING ICE");
         candidates.current.push({ candidate });
       }
       else {
+console.log("MY ICE", candidate);
         ws.current.send(JSON.stringify({ candidate }));
       }
     };
     pc.current.onnegotiationneeded = async () => {
-console.log("NEGOTIATION NEEDED");
       offers.current.push(null);
       if (policy === 'polite') {
         polite();
@@ -220,7 +224,6 @@ console.log("NEGOTIATION NEEDED");
       // handle messages [impolite]
       try {
         const signal = JSON.parse(ev.data);
-console.log("ON MESSAGE", signal);
         if (signal.status === 'connected') {
           clearRing();
           updateState({ callStatus: "connected" });
@@ -246,6 +249,7 @@ console.log("ON MESSAGE", signal);
           //  return;
          // }
           const candidate = new RTCIceCandidate(signal.candidate);
+console.log("THEIR ICE:", candidate);
           await pc.current.addIceCandidate(candidate);
 
         }
