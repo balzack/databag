@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef, useContext } from 'react';
 import { CardContext } from 'context/CardContext';
-import { RingContext } from 'context/RingContext';
 import { getListingMessage } from 'api/getListingMessage';
 import { getListingImageUrl } from 'api/getListingImageUrl';
 import { addFlag } from 'api/addFlag';
@@ -23,7 +22,6 @@ export function useContact(contact) {
   });
 
   const card = useContext(CardContext);
-  const ring = useContext(RingContext);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
@@ -152,13 +150,6 @@ export function useContact(contact) {
     },
     resync: () => {
       card.actions.resync(contact.card);
-    },
-    ring: async () => {
-      console.log("calling!!");
-      const contact = card.state.cards.get(state.cardId);
-      const { node, guid } = contact.card?.profile || {}
-      const { token } = contact.card?.detail || {}
-      await ring.actions.call(state.cardId, node, `${guid}.${token}`);
     },
   };
 

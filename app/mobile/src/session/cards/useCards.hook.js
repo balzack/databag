@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useContext } from 'react';
 import { CardContext } from 'context/CardContext';
+import { RingContext } from 'context/RingContext';
 
 export function useCards(filter, sort) {
 
@@ -8,6 +9,7 @@ export function useCards(filter, sort) {
   });
 
   const card = useContext(CardContext);
+  const ring = useContext(RingContext);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
@@ -26,6 +28,7 @@ export function useCards(filter, sort) {
       location: location,
       description: description,
       status: detail.status,
+      token: detail.token,
       offsync: item.offsync,
       blocked: item.blocked,
       offsync: item.offsync,
@@ -85,6 +88,10 @@ export function useCards(filter, sort) {
   }, [card, filter, sort]);
 
   const actions = {
+    call: async (card) => {
+      const { cardId, guid, node, token } = card || {};
+      await ring.actions.call(cardId, node, `${guid}.${token}`);
+    },
   };
 
   return { state, actions };

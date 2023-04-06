@@ -198,10 +198,6 @@ export function ContactBody({ contact }) {
             <TouchableOpacity style={styles.button} onPress={reportContact}>
               <Text style={styles.buttonText}>Report Contact</Text>
             </TouchableOpacity>
-
-            <TouchableOpacity style={styles.button} onPress={actions.ring}>
-              <Text style={styles.buttonText}>Call Contact</Text>
-            </TouchableOpacity>
           </>
         )}
         { state.status === 'connecting' && (

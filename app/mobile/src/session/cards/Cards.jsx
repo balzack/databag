@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FlatList, ScrollView, View, TextInput, TouchableOpacity, Text } from 'react-native';
+import { Alert, FlatList, ScrollView, View, TextInput, TouchableOpacity, Text } from 'react-native';
 import { styles } from './Cards.styled';
 import { useCards } from './useCards.hook';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -38,8 +38,21 @@ export function CardsHeader({ filter, setFilter, sort, setSort, openRegistry }) 
   );
 }
 
-export function CardsBody({ filter, sort, openContact }) {
+export function CardsBody({ filter, sort, openContact, addChannel }) {
   const { state, actions } = useCards(filter, sort);
+
+  const call = async (contact) => {
+    try {
+      actions.call(contact);
+    }
+    catch (err) {
+      console.log(err);
+      Alert.alert(
+        'Failed to Call Contact',
+        'Please try again.'
+      )
+    }
+  }
 
   return (
     <>
@@ -52,7 +65,8 @@ export function CardsBody({ filter, sort, openContact }) {
         <FlatList style={styles.cards}
           data={state.cards}
           initialNumToRender={25}
-          renderItem={({ item }) => <CardItem item={item} openContact={openContact} />}
+          renderItem={({ item }) => <CardItem item={item} openContact={openContact}
+            call={() => call(item)} message={() => addChannel(item.cardId)} />}
           keyExtractor={item => item.cardId}
         />
       )}
@@ -60,14 +74,14 @@ export function CardsBody({ filter, sort, openContact }) {
   );
 }
 
-export function Cards({ openRegistry, openContact }) {
+export function Cards({ openRegistry, openContact, addChannel }) {
   const [filter, setFilter] = useState();
   const [sort, setSort] = useState(false);
 
   return (
     <View>
       <CardsHeader filter={filter} setFilter={setFilter} sort={sort} setSort={setSort} openRegistry={openRegistry} />
-      <CardsBody filter={filter} sort={sort} openContact={openContact} />
+      <CardsBody filter={filter} sort={sort} openContact={openContact} addChannel={addChannel} />
     </View>
   );
 }

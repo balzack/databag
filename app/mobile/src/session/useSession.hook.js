@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import config from 'constants/Config';
 import { StoreContext } from 'context/StoreContext';
 import { CardContext } from 'context/CardContext';
+import { ChannelContext } from 'context/ChannelContext';
 import { RingContext } from 'context/RingContext';
 
 export function useSession() {
@@ -27,6 +28,7 @@ export function useSession() {
   });
 
   const ring = useContext(RingContext);
+  const channel = useContext(ChannelContext);
   const card = useContext(CardContext);
   const store = useContext(StoreContext);
   const dimensions = useWindowDimensions();
@@ -121,6 +123,22 @@ export function useSession() {
     },
     disableAudio: async () => {
       await ring.actions.disableAudio();
+    },
+    setDmChannel: async (cardId) => {
+      let channelId;
+      channel.state.channels.forEach((entry, id) => {
+        const cards = entry?.detail?.contacts?.cards || [];
+        const subject = entry?.detail?.data || '';
+        const type = entry?.detail?.dataType || '';
+        if (cards.length == 1 && cards[0] === cardId && type === 'superbasic' && subject === '{"subject":null}') {
+          channelId = entry.channelId;
+        }
+      });
+      if (channelId != null) {
+        return channelId;
+      }
+      const conversation = await channel.actions.addChannel('superbasic', { subject: null }, [ cardId ]);
+      return conversation.id;
     },
   };
 

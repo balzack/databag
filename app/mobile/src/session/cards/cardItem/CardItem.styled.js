@@ -66,5 +66,12 @@ export const styles = StyleSheet.create({
     borderRadius: 4,
     backgroundColor: Colors.confirmed,
   },
+  options: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  option: {
+    marginRight: 24,
+  },
 })
 
