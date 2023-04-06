@@ -74,14 +74,11 @@ export function useRingContext() {
           stream.current = null;
 
           if (description == null) {
-console.log("SENDING ENW POLITE OFFER");
             const offer = await pc.current.createOffer();
             await pc.current.setLocalDescription(offer);
             ws.current.send(JSON.stringify({ description: pc.current.localDescription }));
           }
           else {
-
-console.log("polite: ", description);
             if (description.type === 'offer' && pc.current.signalingState !== 'stable') {
               await pc.current.setLocalDescription({ type: "rollback" });
             }
@@ -142,7 +139,6 @@ console.log("polite: ", description);
             candidates.current = [];
             for (let i = 0; i < servers.length; i++) {
               const server = servers[i];
-console.log("MY ICE2:", server);
               ws.current.send(JSON.stringify(server));
             }
           }
@@ -156,12 +152,7 @@ console.log("MY ICE2:", server);
     processing.current = false;
   }
 
-  const connect = async (policy, node, token, clearRing, clearAlive) => {
-
-    // connect signal socket
-    connected.current = false;
-    candidates.current = [];
-    updateState({ remoteVideo: false, remoteAudio: false, remoteStream: null, localVideo: false, localAudio: false, localStream: null });
+  const transmit = async (policy) => {
 
     pc.current = new RTCPeerConnection({ iceServers });
     pc.current.ontrack = (ev) => {
@@ -178,13 +169,7 @@ console.log("MY ICE2:", server);
       stream.current.addTrack(ev.track);
     };
     pc.current.onicecandidate = ({candidate}) => {
-      if (pc.current.remoteDescription == null) {
-        candidates.current.push({ candidate });
-      }
-      else {
-console.log("MY ICE", candidate);
-        ws.current.send(JSON.stringify({ candidate }));
-      }
+      ws.current.send(JSON.stringify({ candidate }));
     };
     pc.current.onnegotiationneeded = async () => {
       offers.current.push(null);
@@ -196,10 +181,6 @@ console.log("MY ICE", candidate);
       }
     };
 
-    videoTrack.current = false;
-    audioTrack.current = false;
-    accessVideo.current = false;
-    accessAudio.current = false;
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
         video: false,
@@ -217,6 +198,19 @@ console.log("MY ICE", candidate);
     catch (err) {
       console.log(err);
     }
+  }
+
+  const connect = async (policy, node, token, clearRing, clearAlive) => {
+
+    // connect signal socket
+    connected.current = false;
+    candidates.current = [];
+    updateState({ remoteVideo: false, remoteAudio: false, remoteStream: null, localVideo: false, localAudio: false, localStream: null });
+
+    videoTrack.current = false;
+    audioTrack.current = false;
+    accessVideo.current = false;
+    accessAudio.current = false;
 
     const protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
     ws.current = createWebsocket(`${protocol}${node}/signal`);
@@ -229,7 +223,8 @@ console.log("MY ICE", candidate);
           updateState({ callStatus: "connected" });
           if (policy === 'polite') {
             connected.current = true;
-            polite();
+            await polite();
+            await transmit('polite');
           }
         }
         else if (signal.status === 'closed') {
@@ -245,13 +240,8 @@ console.log("MY ICE", candidate);
           }
         }
         else if (signal.candidate) {
-          //if (pc.current.remoteDescription == null) {
-          //  return;
-         // }
           const candidate = new RTCIceCandidate(signal.candidate);
-console.log("THEIR ICE:", candidate);
           await pc.current.addIceCandidate(candidate);
-
         }
       }
       catch (err) {
@@ -278,7 +268,8 @@ console.log("THEIR ICE:", candidate);
       ws.current.send(JSON.stringify({ AppToken: token }));
       if (policy === 'impolite') {
         connected.current = true;
-        impolite();
+        await impolite();
+        await transmit('impolite');
       }
     }
     ws.current.error = (e) => {
