@@ -40,8 +40,6 @@ export function useRingContext() {
   const ws = useRef(null);
   const pc = useRef(null);
   const stream = useRef(null);
-  const accessVideo = useRef(false);
-  const accessAudio = useRef(false);
   const videoTrack = useRef();
   const audioTrack = useRef();
   const offers = useRef([]);
@@ -65,7 +63,7 @@ export function useRingContext() {
   const constraints = {
     mandatory: {
       OfferToReceiveAudio: true,
-      OfferToReceiveVideo: true,
+      OfferToReceiveVideo: false,
       VoiceActivityDetection: true
     }
   };
@@ -110,7 +108,6 @@ export function useRingContext() {
             const servers = candidates.current;
             candidates.current = [];
             for (let i = 0; i < servers.length; i++) {
-console.log("FLUSHING:", i);
               const candidate = new RTCIceCandidate(servers[i]);
               await pc.current.addIceCandidate(candidate);
             }
@@ -161,7 +158,6 @@ console.log("FLUSHING:", i);
             const servers = candidates.current;
             candidates.current = [];
             for (let i = 0; i < servers.length; i++) {
-console.log("FLUSHING:", i);
               const candidate = new RTCIceCandidate(servers[i]);
               await pc.current.addIceCandidate(candidate);
             }
@@ -226,16 +222,12 @@ console.log("FLUSHING:", i);
       });
       for (const track of stream.getTracks()) {
         if (track.kind === 'audio') {
-          accessAudio.current = true;
           audioTrack.current = track;
           pc.current.addTrack(track, stream);
           updateState({ localAudio: true });
         }
         if (track.kind === 'video') {
-          accessVideo.current = true;
-          videoTrack.current = track;
-          pc.current.addTrack(track, stream);
-          updateState({ localVideo: true });
+          track.enabled = false;
         }
       }
     }
@@ -253,8 +245,6 @@ console.log("FLUSHING:", i);
 
     videoTrack.current = false;
     audioTrack.current = false;
-    accessVideo.current = false;
-    accessAudio.current = false;
 
     ws.current = createWebsocket(`wss://${node}/signal`);
     ws.current.onmessage = async (ev) => {
@@ -448,14 +438,36 @@ console.log("FLUSHING:", i);
       await connect('polite', server, callerToken, () => clearInterval(ringInterval), () => clearInterval(aliveInterval));
     },
     enableVideo: async () => {
-      if (videoTrack.current) {
-        if (!accessVideo.current) {
-          accessVideo.current = true;
-          pc.current.addTrack(videoTrack.current);
+      if (!videoTrack.current) {
+        try {
+          const stream = await mediaDevices.getUserMedia({
+            audio: true,
+            video: {
+              frameRate: 30,
+              facingMode: 'user'
+            }
+          });
+          for (const track of stream.getTracks()) {
+            if (track.kind === 'audio') {
+              audioTrack.current = track;
+              pc.current.addTrack(track, stream);
+              updateState({ localAudio: true });
+            }
+            if (track.kind === 'video') {
+              videoTrack.current = track;
+              pc.current.addTrack(track, stream);
+              updateState({ localVideo: true });
+            }
+          }
         }
-        videoTrack.current.enabled = true;
+        catch (err) {
+          console.log(err);
+        }
       }
-      updateState({ localVideo: true });
+      else {
+        videoTrack.current.enabled = true;
+        updateState({ localVideo: true });
+      }
     },
     disableVideo: async () => {
       if (videoTrack.current) {
@@ -465,10 +477,6 @@ console.log("FLUSHING:", i);
     },
     enableAudio: async () => {
       if (audioTrack.current) {
-        if (!accessAudio.current) {
-          accessAudio.current = true;
-          pc.current.addTrack(audioTrack.current);
-        }
         audioTrack.current.enabled = true;
         updateState({ localAudio: true });
       }
