@@ -119,6 +119,18 @@ export function useCards() {
       await card.actions.resyncCard(cardId);
     },
     message: async (cardId) => {
+      let channelId = null;
+      channel.state.channels.forEach((entry, id) => {
+        const cards = entry?.data?.channelDetail?.contacts?.cards || [];
+        const subject = entry?.data?.channelDetail?.data || '';
+        const type = entry?.data?.channelDetail?.dataType || '';
+        if (cards.length === 1 && cards[0] === cardId && type === 'superbasic' && subject === '{"subject":null}') {
+          channelId = entry.id;
+        }
+      });
+      if (channelId != null) {
+        return channelId;
+      }
       const conversation = await channel.actions.addChannel('superbasic', { subject: null }, [ cardId ]);
       return conversation.id;
     },

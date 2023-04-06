@@ -45,10 +45,10 @@ export function CardItem({ item, tooltip, resync, open, call, message }) {
         )}
         { item.status === 'connected' && (
           <ComOptions>
-            <Tooltip className="option" placement="left" title="start a new topic">
+            <Tooltip className="option" placement="left" title="message contact">
               <MessageOutlined onClick={onMessage} />
             </Tooltip>
-            <Tooltip className="option" placement="left" title="start a call">
+            <Tooltip className="option" placement="left" title="call contact">
               <PhoneOutlined onClick={onCall} />
             </Tooltip>
           </ComOptions>
