@@ -51,6 +51,11 @@ func AddCall(w http.ResponseWriter, r *http.Request) {
     ErrResponse(w, http.StatusInternalServerError, calleeErr)
     return
   }
+  //turnBin, turnErr := securerandom.Bytes(APPTokenSize)
+  //if turnErr != nil {
+  //  ErrResponse(w, http.StatusInternalServerError, turnErr)
+  //  return
+  //}
   callId := uuid.New().String()
 
   // allocate bridge

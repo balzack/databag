@@ -3,6 +3,7 @@ package main
 import (
 	app "databag/internal"
 	"databag/internal/store"
+  sturn "databag/internal/sturn"
 	"github.com/gorilla/handlers"
 	"log"
 	"net/http"
@@ -18,6 +19,8 @@ func main() {
 	origins := handlers.AllowedOrigins([]string{"*"})
 	methods := handlers.AllowedMethods([]string{"GET", "HEAD", "POST", "PUT", "DELETE", "OPTIONS"})
 
+  sturn.Listen(5001, 5002, 5101)
+
   args := os.Args
   if len(args) == 3 {
     port := ":" + args[2]
@@ -32,4 +35,6 @@ func main() {
     log.Printf("starting server");
     log.Fatal(http.ListenAndServe(":7000", handlers.CORS(origins, methods)(router)))
   }
+
+  sturn.Close();
 }
