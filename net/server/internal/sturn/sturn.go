@@ -1,4 +1,4 @@
-package databag
+package sturn
 
 import (
 //  "encoding/json"
@@ -9,7 +9,7 @@ import (
 )
 
 var sturn *Sturn
-const SturnKeepAlive = 15
+const SturnKeepAlive = 3600
 
 type SturnSession struct {
 }
@@ -68,8 +68,11 @@ func (s *Sturn) serve(conn net.PacketConn) {
       return
 		}
 
-    fmt.Println("GOT STURN MESSAGE: ", n, addr);
+    s.handleMessage(buf[:n], addr);
   }
+
+  // TODO terminate all sessions
+
   s.closed <- true
 }
 

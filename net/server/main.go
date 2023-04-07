@@ -3,7 +3,7 @@ package main
 import (
 	app "databag/internal"
 	"databag/internal/store"
-  sturn "databag/internal/sturn"
+  "databag/internal/sturn"
 	"github.com/gorilla/handlers"
 	"log"
 	"net/http"
