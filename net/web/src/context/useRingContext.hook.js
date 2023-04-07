@@ -91,8 +91,7 @@ export function useRingContext() {
             const servers = candidates.current;
             candidates.current = [];
             for (let i = 0; i < servers.length; i++) {
-              const server = servers[i];
-              ws.current.send(JSON.stringify(server));
+              await pc.current.addIceCandidate(servers[0]);
             }
           }
         }
@@ -138,8 +137,7 @@ export function useRingContext() {
             const servers = candidates.current;
             candidates.current = [];
             for (let i = 0; i < servers.length; i++) {
-              const server = servers[i];
-              ws.current.send(JSON.stringify(server));
+              await pc.current.addIceCandidate(servers[0]);
             }
           }
         }
@@ -223,8 +221,8 @@ export function useRingContext() {
           updateState({ callStatus: "connected" });
           if (policy === 'polite') {
             connected.current = true;
-            await polite();
-            await transmit('polite');
+            transmit('polite');
+            polite();
           }
         }
         else if (signal.status === 'closed') {
@@ -240,8 +238,12 @@ export function useRingContext() {
           }
         }
         else if (signal.candidate) {
-          const candidate = new RTCIceCandidate(signal.candidate);
-          await pc.current.addIceCandidate(candidate);
+          if (pc.current.remoteDescription == null) {
+            candidates.current.push(signal.candidate);
+          }
+          else {
+            await pc.current.addIceCandidate(signal.candidate);
+          }
         }
       }
       catch (err) {
@@ -268,8 +270,8 @@ export function useRingContext() {
       ws.current.send(JSON.stringify({ AppToken: token }));
       if (policy === 'impolite') {
         connected.current = true;
-        await impolite();
-        await transmit('impolite');
+        transmit('impolite');
+        impolite();
       }
     }
     ws.current.error = (e) => {
