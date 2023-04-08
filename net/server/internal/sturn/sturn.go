@@ -29,16 +29,18 @@ type Sturn struct {
   sessionId int
   sessions map[string]*SturnSession
   closing bool
-  port uint
-  relayStart uint
-  relayEnd uint
+  port int
   conn *net.PacketConn
   closed chan bool
   buf []byte
   publicIp string
+  relayStart int
+  relayCount int
+  relayPorts map[int]bool
+  relayIndex int
 }
 
-func Listen(port uint, relayStart uint, relayEnd uint) (error) {
+func Listen(port int, relayStart int, relayCount int) (error) {
 
   if (sturn != nil) {
     (*sturn.conn).Close()
@@ -52,12 +54,18 @@ func Listen(port uint, relayStart uint, relayEnd uint) (error) {
     return err
 	}
 
+  relayPorts := make(map[int]bool)
+  for i := 0; i < relayCount; i++ {
+	  relayPorts[i] = true
+	}
+
   sturn := &Sturn{
     sessionId: 0,
     closing: false,
     port: port,
     relayStart: relayStart,
-    relayEnd: relayEnd,
+    relayCount: relayCount,
+    relayPorts: relayPorts,
     conn: &conn,
     buf: make([]byte, SturnMaxSize),
   }
@@ -135,5 +143,26 @@ func (s *Sturn) addSession() (*SturnSession, error) {
   }
   s.sessions[user] = session
   return session, nil
+}
+
+func (s *Sturn) getRelayPort() (int, error) {
+  s.sync.Lock();
+  defer s.sync.Unlock();
+  s.relayIndex += 1;
+  for i := 0; i < s.relayCount; i++ {
+    key := (i + s.relayIndex) % s.relayCount;
+    if s.relayPorts[key] {
+      s.relayPorts[key] = false
+      return s.relayStart + key, nil
+    }
+  }
+  return 0, errors.New("no available relay port")
+}
+
+func (s *Sturn) setRelayPort(port int) {
+  s.sync.Lock()
+  defer s.sync.Unlock();
+  key := port - s.relayStart
+  s.relayPorts[key] = true
 }
 

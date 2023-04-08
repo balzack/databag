@@ -98,21 +98,15 @@ func (s *Sturn) handleMessage(buf []byte, addr net.Addr) {
   }
 
   if msg.class == CLSRequest && msg.method == MEHBinding {
-    err := s.handleBindingRequest(msg, addr);
-    if err != nil {
-      fmt.Println(err);
-    }
+    s.handleBindingRequest(msg, addr);
   } else if msg.class == CLSRequest && msg.method == MEHAllocate {
-    err := s.handleAllocateRequest(msg, addr);
-    if err != nil {
-      fmt.Println(err);
-    }
+    s.handleAllocateRequest(msg, addr);
   } else {
     fmt.Println("unsupported message", buf);
   }
 }
 
-func (s *Sturn) handleBindingRequest(msg *SturnMessage, addr net.Addr) (error) {
+func (s *Sturn) handleBindingRequest(msg *SturnMessage, addr net.Addr) {
 
   address := strings.Split(addr.String(), ":")
   ip := address[0];
@@ -136,11 +130,61 @@ func (s *Sturn) handleBindingRequest(msg *SturnMessage, addr net.Addr) (error) {
   } else {
     (*s.conn).WriteTo(s.buf[:n], addr);
   }
-  return nil
+  return
 }
 
-func (s *Sturn) handleAllocateRequest(msg *SturnMessage, addr net.Addr) (error) {
-  fmt.Println("ALLOCATE REQUEST");
-  return nil
+func (s *Sturn) sendAllocateError(msg *SturnMessage, addr net.Addr) {
+  var attributes []SturnAttribute
+  attributes = append(attributes, SturnAttribute{
+    atrType: ATRErrorCode,
+    intValue: 400,
+  })
+  attributes = append(attributes, SturnAttribute{
+    atrType: ATRNonce,
+    strValue: "",
+  })
+  attributes = append(attributes, SturnAttribute{
+    atrType: ATRRealm,
+    strValue: "databag",
+  })
+  response := &SturnMessage{
+    class: CLSError,
+    method: MEHAllocate,
+    transaction: msg.transaction,
+    attributes: attributes,
+  };
+  err, n := writeMessage(response, s.buf);
+  if err != nil {
+    fmt.Printf("failed to write stun response");
+  } else {
+    (*s.conn).WriteTo(s.buf[:n], addr);
+  }
 }
 
+func (s *Sturn) handleAllocateRequest(msg *SturnMessage, addr net.Addr) {
+
+  username := getAttribute(msg, ATRUsername);
+  if username == nil {
+    s.sendAllocateError(msg, addr);
+    return;
+  }
+
+  port, err := s.getRelayPort();
+  if err != nil {
+    fmt.Println(err);
+    s.sendAllocateError(msg, addr)
+    return
+  }
+
+  fmt.Println("ALLOCATE REQUEST", msg, port);
+  return
+}
+
+func getAttribute(msg *SturnMessage, atrType int) (attr *SturnAttribute) {
+  for _, attribute := range msg.attributes {
+    if attribute.atrType == ATRUsername {
+      attr = &attribute;
+    }
+  }
+  return
+}
