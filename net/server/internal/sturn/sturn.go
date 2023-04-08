@@ -106,7 +106,7 @@ func TestSession() {
     session := &SturnSession{
       user: "user",
       auth: "pass",
-      nonce: "noncynoncenonce",
+      nonce: "nonceynoncenonce",
     }
     sturn.sessions["user"] = session
   }
