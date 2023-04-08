@@ -20,6 +20,7 @@ func main() {
 	methods := handlers.AllowedMethods([]string{"GET", "HEAD", "POST", "PUT", "DELETE", "OPTIONS"})
 
   sturn.Listen(5001, 5002, 5101)
+  sturn.TestSession()
 
   args := os.Args
   if len(args) == 3 {
