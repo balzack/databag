@@ -145,7 +145,7 @@ func (s *Sturn) sendAllocateError(msg *SturnMessage, addr net.Addr) {
   })
   attributes = append(attributes, SturnAttribute{
     atrType: ATRRealm,
-    strValue: "databag",
+    strValue: "databag.dweb",
   })
   response := &SturnMessage{
     class: CLSError,
@@ -169,14 +169,52 @@ func (s *Sturn) handleAllocateRequest(msg *SturnMessage, addr net.Addr) {
     return;
   }
 
-  port, err := s.getRelayPort();
+  relayPort, err := s.getRelayPort();
   if err != nil {
     fmt.Println(err);
     s.sendAllocateError(msg, addr)
     return
   }
 
-  fmt.Println("ALLOCATE REQUEST", msg, port);
+  address := strings.Split(addr.String(), ":")
+  ip := address[0];
+  port, _ := strconv.Atoi(address[1]);
+  //port := 53046
+  var attributes []SturnAttribute
+  attributes = append(attributes, SturnAttribute{
+    atrType: ATRXorRelayedAddress,
+    byteValue: FAMIPv4,
+    intValue: int32(relayPort),
+//    strValue: "98.234.232.221",
+    strValue: "192.168.13.233",
+  });
+  attributes = append(attributes, SturnAttribute{
+    atrType: ATRLifetime,
+    intValue: int32(600),
+  });
+  attributes = append(attributes, SturnAttribute{
+    atrType: ATRXorMappedAddress,
+    byteValue: FAMIPv4,
+    intValue: int32(port),
+    strValue: ip,
+  });
+  attributes = append(attributes, SturnAttribute{
+    atrType: ATRMessageIntegrity,
+  });
+  response := &SturnMessage{
+    class: CLSResponse,
+    method: MEHAllocate,
+    transaction: msg.transaction,
+    attributes: attributes,
+  };
+
+  err, n := writeMessage(response, s.buf);
+
+  if err != nil {
+    fmt.Printf("failed to write stun response");
+  } else {
+    (*s.conn).WriteTo(s.buf[:n], addr);
+  }
   return
 }
 

@@ -1,6 +1,9 @@
 package sturn
 
 import (
+  "crypto/md5"
+  "crypto/hmac"
+  "crypto/sha1"
   "errors"
   "strings"
   "strconv"
@@ -167,8 +170,35 @@ func writeAttribute(attribute *SturnAttribute, buf []byte, pos int) (error, int)
     buf[pos + 6] = 0x04
     buf[pos + 7] = 0x01
     return nil, 8
+  } else if attribute.atrType == ATRMessageIntegrity {
+    buf[pos + 1], buf[pos + 0] = setAttributeType(ATRMessageIntegrity);
+    buf[pos + 2] = 0;
+    buf[pos + 3] = 0x14;
+    key := md5.Sum([]byte("user:databag.dweb:pass"));
+
+    // set hash size
+    lengthField0 := buf[2]
+    lengthField1 := buf[3]
+    hashLength := pos + 4
+    buf[2] = byte((hashLength >> 8) % 256);
+    buf[3] = byte(hashLength % 256);
+    hash := getHmac(key[:], buf[0:pos]);
+    buf[2] = lengthField0
+    buf[3] = lengthField1
+
+    for i := 0; i < 20; i++ {
+      buf[4 + pos + i] = hash[i];
+    }
+
+    return nil, 24
   } else {
     fmt.Println("UNKNOWN!");
   }
   return nil, 8
+}
+
+func getHmac(key []byte, data []byte) []byte {
+  mac := hmac.New(sha1.New, key)
+	mac.Write(data)
+	return mac.Sum(nil)
 }
