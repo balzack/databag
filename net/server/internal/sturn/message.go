@@ -120,7 +120,6 @@ func (s *Sturn) handleMessage(buf []byte, addr net.Addr) {
 }
 
 func (s *Sturn) handleCreatePermissionRequest(msg *SturnMessage, addr net.Addr) {
-fmt.Println(addr.String(), msg);
 
   var attributes []SturnAttribute
   attributes = append(attributes, SturnAttribute{
@@ -138,13 +137,12 @@ fmt.Println(addr.String(), msg);
     fmt.Printf("failed to write stun response");
   } else {
     (*s.conn).WriteTo(s.buf[:n], addr);
-fmt.Println("PERM>", s.buf[:n]);
   }
   return
 }
 
 func (s *Sturn) handleSendIndication(msg *SturnMessage, addr net.Addr) {
-  //fmt.Println(addr.String(), msg);
+  fmt.Println(addr.String(), msg);
 }
 
 func (s *Sturn) handleBindingRequest(msg *SturnMessage, addr net.Addr) {
@@ -195,7 +193,7 @@ func (s *Sturn) sendAllocateError(msg *SturnMessage, addr net.Addr) {
   var attributes []SturnAttribute
   attributes = append(attributes, SturnAttribute{
     atrType: ATRErrorCode,
-    intValue: 400,
+    intValue: 403,
   })
   attributes = append(attributes, SturnAttribute{
     atrType: ATRNonce,
@@ -219,21 +217,66 @@ func (s *Sturn) sendAllocateError(msg *SturnMessage, addr net.Addr) {
   }
 }
 
+func setAllocation(source string, transaction []byte, response []byte, port int, session *SturnSession) {
+  allocation := &SturnAllocation{}
+  allocation.port = port
+  allocation.source = source
+  allocation.transaction = make([]byte, len(transaction))
+  copy(allocation.transaction, transaction)
+  allocation.response = make([]byte, len(response))
+  copy(allocation.response, response)
+  session.allocations = append(session.allocations, allocation)
+}
+
+func getAllocation(source string, transaction []byte, session *SturnSession) (*SturnAllocation) {
+  for _, allocation := range session.allocations {
+    if allocation.source == source && len(allocation.transaction) == len(transaction) {
+      match := true
+      for i := 0; i < len(transaction); i++ {
+        if transaction[i] != allocation.transaction[i] {
+          match = false
+        }
+      }
+      if match {
+        return allocation
+      }
+    }
+  }
+  return nil
+}
+
 func (s *Sturn) handleAllocateRequest(msg *SturnMessage, addr net.Addr) {
 
-  username := getAttribute(msg, ATRUsername);
+  username := getAttribute(msg, ATRUsername)
   if username == nil {
-    s.sendAllocateError(msg, addr);
-    return;
+    fmt.Println("no username", addr.String(), msg.transaction);
+    s.sendAllocateError(msg, addr)
+    return
   }
 
-  relayPort, err := s.getRelayPort();
+  s.sync.Lock();
+  defer s.sync.Unlock();
+  session, set := sturn.sessions[username.strValue]
+  if !set {
+    fmt.Println("no session", addr.String());
+    s.sendAllocateError(msg, addr)
+    return
+  }
+
+  if allocation := getAllocation(addr.String(), msg.transaction, session); allocation != nil {
+    fmt.Println("dup allocate", addr.String())
+    (*s.conn).WriteTo(allocation.response, addr)
+    return
+  }
+
+  relayPort, err := s.getRelayPort()
   if err != nil {
     fmt.Println(err);
     s.sendAllocateError(msg, addr)
     return
   }
 
+  fmt.Println("> ", relayPort, "< ", addr.String(), msg);
   address := strings.Split(addr.String(), ":")
   ip := address[0];
   port, _ := strconv.Atoi(address[1]);
@@ -242,8 +285,8 @@ func (s *Sturn) handleAllocateRequest(msg *SturnMessage, addr net.Addr) {
     atrType: ATRXorRelayedAddress,
     byteValue: FAMIPv4,
     intValue: int32(relayPort),
-    strValue: "192.168.13.233",
-    //strValue: "98.234.232.221",
+    //strValue: "192.168.13.233",
+    strValue: "98.234.232.221",
   });
   attributes = append(attributes, SturnAttribute{
     atrType: ATRLifetime,
@@ -265,20 +308,20 @@ func (s *Sturn) handleAllocateRequest(msg *SturnMessage, addr net.Addr) {
     attributes: attributes,
   };
 
-  err, n := writeMessage(response, s.buf);
-
+  err, n := writeMessage(response, s.buf)
   if err != nil {
-    fmt.Printf("failed to write stun response");
+    fmt.Printf("failed to write stun response")
   } else {
-    (*s.conn).WriteTo(s.buf[:n], addr);
+    setAllocation(addr.String(), msg.transaction, s.buf[:n], relayPort, session)
+    (*s.conn).WriteTo(s.buf[:n], addr)
   }
   return
 }
 
 func getAttribute(msg *SturnMessage, atrType int) (attr *SturnAttribute) {
-  for _, attribute := range msg.attributes {
-    if attribute.atrType == ATRUsername {
-      attr = &attribute;
+  for i, _ := range msg.attributes {
+    if msg.attributes[i].atrType == atrType {
+      attr = &msg.attributes[i];
     }
   }
   return

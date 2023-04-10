@@ -18,10 +18,17 @@ const SturnMaxBindFail = 16
 const SturnNonceSize = 8
 const SturnPassSize = 8
 
+type SturnAllocation struct {
+  source string
+  transaction []byte
+  response []byte
+  port int
+}
+
 type SturnSession struct {
   user string
   auth string
-  nonce string
+  allocations []*SturnAllocation
 }
 
 type Sturn struct {
@@ -59,7 +66,7 @@ func Listen(port int, relayStart int, relayCount int) (error) {
 	  relayPorts[i] = true
 	}
 
-  sturn := &Sturn{
+  sturn = &Sturn{
     sessionId: 0,
     closing: false,
     port: port,
@@ -68,6 +75,7 @@ func Listen(port int, relayStart int, relayCount int) (error) {
     relayPorts: relayPorts,
     conn: &conn,
     buf: make([]byte, SturnMaxSize),
+    sessions: make(map[string]*SturnSession),
   }
 
   go sturn.serve(conn);
@@ -114,7 +122,6 @@ func TestSession() {
     session := &SturnSession{
       user: "user",
       auth: "pass",
-      nonce: "nonceynoncenonce",
     }
     sturn.sessions["user"] = session
   }
@@ -132,22 +139,15 @@ func (s *Sturn) addSession() (*SturnSession, error) {
   if authErr != nil {
     return nil, authErr
   }
-  nonceBin, nonceErr := securerandom.Bytes(SturnNonceSize)
-  if nonceErr != nil {
-    return nil, nonceErr
-  }
   session := &SturnSession{
     user: user,
     auth: hex.EncodeToString(authBin),
-    nonce: hex.EncodeToString(nonceBin),
   }
   s.sessions[user] = session
   return session, nil
 }
 
 func (s *Sturn) getRelayPort() (int, error) {
-  s.sync.Lock();
-  defer s.sync.Unlock();
   s.relayIndex += 1;
   for i := 0; i < s.relayCount; i++ {
     key := (i + s.relayIndex) % s.relayCount;
@@ -160,8 +160,6 @@ func (s *Sturn) getRelayPort() (int, error) {
 }
 
 func (s *Sturn) setRelayPort(port int) {
-  s.sync.Lock()
-  defer s.sync.Unlock();
   key := port - s.relayStart
   s.relayPorts[key] = true
 }
