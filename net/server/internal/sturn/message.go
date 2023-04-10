@@ -120,11 +120,31 @@ func (s *Sturn) handleMessage(buf []byte, addr net.Addr) {
 }
 
 func (s *Sturn) handleCreatePermissionRequest(msg *SturnMessage, addr net.Addr) {
-  fmt.Println(addr.String(), msg);
+fmt.Println(addr.String(), msg);
+
+  var attributes []SturnAttribute
+  attributes = append(attributes, SturnAttribute{
+    atrType: ATRMessageIntegrity,
+  });
+
+  response := &SturnMessage{
+    class: CLSResponse,
+    method: MEHCreatePermission,
+    transaction: msg.transaction,
+    attributes: attributes,
+  };
+  err, n := writeMessage(response, s.buf);
+  if err != nil {
+    fmt.Printf("failed to write stun response");
+  } else {
+    (*s.conn).WriteTo(s.buf[:n], addr);
+fmt.Println("PERM>", s.buf[:n]);
+  }
+  return
 }
 
 func (s *Sturn) handleSendIndication(msg *SturnMessage, addr net.Addr) {
-  fmt.Println(addr.String(), msg);
+  //fmt.Println(addr.String(), msg);
 }
 
 func (s *Sturn) handleBindingRequest(msg *SturnMessage, addr net.Addr) {
@@ -222,7 +242,8 @@ func (s *Sturn) handleAllocateRequest(msg *SturnMessage, addr net.Addr) {
     atrType: ATRXorRelayedAddress,
     byteValue: FAMIPv4,
     intValue: int32(relayPort),
-    strValue: "98.234.232.221",
+    strValue: "192.168.13.233",
+    //strValue: "98.234.232.221",
   });
   attributes = append(attributes, SturnAttribute{
     atrType: ATRLifetime,

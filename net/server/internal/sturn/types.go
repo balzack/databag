@@ -138,6 +138,12 @@ func setMessageType(class int, method int) (byte, byte) {
   if class == CLSError && method == MEHAllocate {
     return 0x01, 0x13
   }
+  if class == CLSResponse && method == MEHCreatePermission {
+    return 0x01, 0x08
+  }
+  if class == CLSError && method == MEHCreatePermission {
+    return 0x01, 0x18
+  }
   return 0x00, 0x00
 }
 

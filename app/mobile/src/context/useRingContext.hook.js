@@ -241,6 +241,7 @@ export function useRingContext() {
     // connect signal socket
     connected.current = false;
     candidates.current = [];
+    pc.current = null;
     updateState({ remoteVideo: false, remoteAudio: false, remoteStream: null, localVideo: false, localAudio: false, localStream: null });
 
     videoTrack.current = false;
@@ -288,7 +289,9 @@ export function useRingContext() {
     }
     ws.current.onclose = (e) => {
       // update state to disconnected
-      pc.current.close();
+      if (pc.current) {
+        pc.current.close();
+      }
       clearRing();
       clearAlive();
       calling.current = null;
