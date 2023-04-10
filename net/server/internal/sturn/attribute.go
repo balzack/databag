@@ -38,13 +38,32 @@ func readAttribute(buf []byte, pos int) (error, *SturnAttribute, int) {
   } else if atrType == ATRRealm {
     strValue = string(buf[pos + 4:pos + 4+atrLength]);
   } else if atrType == ATRMessageIntegrity {
-    fmt.Println("HANDLE: ATRMessageIntegrity");
+    //fmt.Println("HANDLE: ATRMessageIntegrity");
   } else if atrType == ATRMessageIntegritySha256 {
-    fmt.Println("HANDLE: ATRMessageIntegritySha256");
+    //fmt.Println("HANDLE: ATRMessageIntegritySha256");
   } else if atrType == ATRFingerprint {
-    fmt.Println("HANDLE: ATRFingerprint");
+    //fmt.Println("HANDLE: ATRFingerprint");
+  } else if atrType == ATRXorPeerAddress {
+    if padLength != 8 {
+      return errors.New("invalid attribute size"), nil, 0
+    }
+    if buf[pos + 4] != 0 || buf[pos + 5] != FAMIPv4 {
+      return errors.New("unsupported protocol family"), nil, 0
+    }
+    strValue = ""
+    strValue += strconv.Itoa(int(buf[pos + 8] ^ 0x21))
+    strValue += "."
+    strValue += strconv.Itoa(int(buf[pos + 9] ^ 0x12))
+    strValue += "."
+    strValue += strconv.Itoa(int(buf[pos + 10] ^ 0xA4))
+    strValue += "."
+    strValue += strconv.Itoa(int(buf[pos + 11] ^ 0x42))
+    intValue = int32(buf[pos + 6] ^ 0x21)
+    intValue *= 256
+    intValue += int32(buf[pos + 7] ^ 0x12)
+  } else if atrType == ATRData {
   } else {
-    fmt.Println("UNKNOWN ATTRIBUTE");
+    fmt.Println("UNKNOWN ATTRIBUTE", atrType);
   }
 
   return nil, &SturnAttribute{

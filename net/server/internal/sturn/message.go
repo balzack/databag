@@ -51,6 +51,7 @@ func writeMessage(msg *SturnMessage, buf []byte) (error, int) {
   if len(buf) < 20 {
     return errors.New("invalid buffer length"), 0
   }
+
   // set prefix
   buf[0], buf[1] = setMessageType(msg.class, msg.method)
 
@@ -90,6 +91,7 @@ func (s *Sturn) handleMessage(buf []byte, addr net.Addr) {
 
   err, msg := readMessage(buf);
   if err != nil {
+    fmt.Println(addr.String(), buf);
     fmt.Println(err);
     return
   }
@@ -98,12 +100,31 @@ func (s *Sturn) handleMessage(buf []byte, addr net.Addr) {
   }
 
   if msg.class == CLSRequest && msg.method == MEHBinding {
+    fmt.Println("stun/turn binding request");
     s.handleBindingRequest(msg, addr);
   } else if msg.class == CLSRequest && msg.method == MEHAllocate {
+    fmt.Println("stun/turn allocate request");
     s.handleAllocateRequest(msg, addr);
+  } else if msg.class == CLSRequest && msg.method == MEHRefresh {
+    fmt.Println("stun/turn refresh request");
+    s.handleRefreshRequest(msg, addr);
+  } else if msg.class == CLSRequest && msg.method == MEHCreatePermission {
+    fmt.Println("stun/turn create permission request");
+    s.handleCreatePermissionRequest(msg, addr);
+  } else if msg.class == CLSIndication && msg.method == MEHSend {
+    fmt.Println("stun/turn send");
+    s.handleSendIndication(msg, addr);
   } else {
     fmt.Println("unsupported message", buf);
   }
+}
+
+func (s *Sturn) handleCreatePermissionRequest(msg *SturnMessage, addr net.Addr) {
+  fmt.Println(addr.String(), msg);
+}
+
+func (s *Sturn) handleSendIndication(msg *SturnMessage, addr net.Addr) {
+  fmt.Println(addr.String(), msg);
 }
 
 func (s *Sturn) handleBindingRequest(msg *SturnMessage, addr net.Addr) {
@@ -123,6 +144,23 @@ func (s *Sturn) handleBindingRequest(msg *SturnMessage, addr net.Addr) {
     method: MEHBinding,
     transaction: msg.transaction,
     attributes: attributes,
+  };
+  err, n := writeMessage(response, s.buf);
+  if err != nil {
+    fmt.Printf("failed to write stun response");
+  } else {
+    (*s.conn).WriteTo(s.buf[:n], addr);
+  }
+  return
+}
+
+func (s *Sturn) handleRefreshRequest(msg *SturnMessage, addr net.Addr) {
+
+  response := &SturnMessage{
+    class: CLSResponse,
+    method: MEHRefresh,
+    transaction: msg.transaction,
+    attributes: []SturnAttribute{},
   };
   err, n := writeMessage(response, s.buf);
   if err != nil {
@@ -179,14 +217,12 @@ func (s *Sturn) handleAllocateRequest(msg *SturnMessage, addr net.Addr) {
   address := strings.Split(addr.String(), ":")
   ip := address[0];
   port, _ := strconv.Atoi(address[1]);
-  //port := 53046
   var attributes []SturnAttribute
   attributes = append(attributes, SturnAttribute{
     atrType: ATRXorRelayedAddress,
     byteValue: FAMIPv4,
     intValue: int32(relayPort),
-//    strValue: "98.234.232.221",
-    strValue: "192.168.13.233",
+    strValue: "98.234.232.221",
   });
   attributes = append(attributes, SturnAttribute{
     atrType: ATRLifetime,
