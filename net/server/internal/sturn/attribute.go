@@ -22,21 +22,20 @@ func readAttribute(buf []byte, pos int) (error, *SturnAttribute, int) {
     return errors.New("invalid attribute buffer"), nil, 0
   }
 
-  var intValue int32
-  var strValue string
+  attr := &SturnAttribute{ atrType: atrType }
   if atrType == ATRRequestedTransport {
     if buf[pos + 5] != 0x00 || buf[pos + 6] != 0x00 || buf[pos + 7] != 0x00 {
       return errors.New("invalid attribute"), nil, 0
     }
-    intValue = int32(buf[pos + 4])
+    attr.intValue = int32(buf[pos + 4])
   } else if atrType == ATRLifetime {
-    intValue = 256 * (256 * (256 * int32(buf[pos + 4]) + int32(buf[pos + 5])) + int32(buf[pos + 6])) + int32(buf[pos + 7]);
+    attr.intValue = 256 * (256 * (256 * int32(buf[pos + 4]) + int32(buf[pos + 5])) + int32(buf[pos + 6])) + int32(buf[pos + 7]);
   } else if atrType == ATRNonce {
-    strValue = string(buf[pos + 4:pos + 4+atrLength]);
+    attr.strValue = string(buf[pos + 4:pos + 4+atrLength]);
   } else if atrType == ATRUsername {
-    strValue = string(buf[pos + 4:pos + 4+atrLength]);
+    attr.strValue = string(buf[pos + 4:pos + 4+atrLength]);
   } else if atrType == ATRRealm {
-    strValue = string(buf[pos + 4:pos + 4+atrLength]);
+    attr.strValue = string(buf[pos + 4:pos + 4+atrLength]);
   } else if atrType == ATRMessageIntegrity {
     //fmt.Println("HANDLE: ATRMessageIntegrity");
   } else if atrType == ATRMessageIntegritySha256 {
@@ -50,29 +49,26 @@ func readAttribute(buf []byte, pos int) (error, *SturnAttribute, int) {
     if buf[pos + 4] != 0 || buf[pos + 5] != FAMIPv4 {
       return errors.New("unsupported protocol family"), nil, 0
     }
-    strValue = ""
-    strValue += strconv.Itoa(int(buf[pos + 8] ^ 0x21))
-    strValue += "."
-    strValue += strconv.Itoa(int(buf[pos + 9] ^ 0x12))
-    strValue += "."
-    strValue += strconv.Itoa(int(buf[pos + 10] ^ 0xA4))
-    strValue += "."
-    strValue += strconv.Itoa(int(buf[pos + 11] ^ 0x42))
-    intValue = int32(buf[pos + 6] ^ 0x21)
-    intValue *= 256
-    intValue += int32(buf[pos + 7] ^ 0x12)
+    attr.strValue = ""
+    attr.strValue += strconv.Itoa(int(buf[pos + 8] ^ 0x21))
+    attr.strValue += "."
+    attr.strValue += strconv.Itoa(int(buf[pos + 9] ^ 0x12))
+    attr.strValue += "."
+    attr.strValue += strconv.Itoa(int(buf[pos + 10] ^ 0xA4))
+    attr.strValue += "."
+    attr.strValue += strconv.Itoa(int(buf[pos + 11] ^ 0x42))
+    attr.intValue = int32(buf[pos + 6] ^ 0x21)
+    attr.intValue *= 256
+    attr.intValue += int32(buf[pos + 7] ^ 0x12)
   } else if atrType == ATRData {
+    for i := 0; i < atrLength; i++ {
+      attr.binValue = append(attr.binValue, buf[pos + 4 + i])
+    }
   } else {
     fmt.Println("UNKNOWN ATTRIBUTE", atrType);
   }
 
-  return nil, &SturnAttribute{
-    atrType: atrType,
-    intValue: intValue,
-    strValue: strValue,
-  }, 4 + padLength;
-
-  return nil, nil, 0
+  return nil, attr, 4 + padLength
 }
 
 func writeAttribute(attribute *SturnAttribute, buf []byte, pos int) (error, int) {
@@ -125,6 +121,43 @@ func writeAttribute(attribute *SturnAttribute, buf []byte, pos int) (error, int)
     buf[pos + 10] = byte((ip >> 8) % 256) ^ 0xA4
     buf[pos + 11] = byte(ip % 256) ^ 0x42
     return nil, 12
+  } else if attribute.atrType == ATRXorPeerAddress {
+    if len(buf) - pos < 12 {
+      return errors.New("invalid buffer size"), 0
+    }
+    ip := 0
+    parts := strings.Split(attribute.strValue, ".");
+    for i := 0; i < 4; i++ {
+      val, _ := strconv.Atoi(parts[i]);
+      ip = (ip * 256) + val;
+    }
+    buf[pos + 1], buf[pos + 0] = setAttributeType(ATRXorPeerAddress);
+    buf[pos + 2] = 0x00
+    buf[pos + 3] = 0x08
+    buf[pos + 4] = 0x00
+    buf[pos + 5] = FAMIPv4
+    buf[pos + 6] = byte((attribute.intValue >> 8) % 256) ^ 0x21
+    buf[pos + 7] = byte(attribute.intValue % 256) ^ 0x12
+    buf[pos + 8] = byte((ip >> 24) % 256) ^ 0x21
+    buf[pos + 9] = byte((ip >> 16) % 256) ^ 0x12
+    buf[pos + 10] = byte((ip >> 8) % 256) ^ 0xA4
+    buf[pos + 11] = byte(ip % 256) ^ 0x42
+    return nil, 12
+  } else if attribute.atrType == ATRData {
+    paddedLen := ((len(attribute.binValue) + 3) >> 2) << 2
+    if len(buf) - pos < 4 + paddedLen {
+      return errors.New("invalid buffer size"), 0
+    }
+    buf[pos + 1], buf[pos + 0] = setAttributeType(ATRData)
+    buf[pos + 2] = byte((len(attribute.binValue) >> 8) % 256)
+    buf[pos + 3] = byte(len(attribute.binValue) % 256)
+    for i := 0; i < len(attribute.binValue); i++ {
+      buf[pos + 4 + i] = attribute.binValue[i]
+    }
+    for i := len(attribute.binValue); i < paddedLen; i++ {
+      buf[pos + 4 + i] = 0x00
+    }
+    return nil, 4 + paddedLen
   } else if attribute.atrType == ATRLifetime {
     if len(buf) - pos < 8 {
       return errors.New("invalid buffer size"), 0

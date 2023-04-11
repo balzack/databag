@@ -30,7 +30,7 @@ type SturnAllocation struct {
 type SturnSession struct {
   user string
   auth string
-  allocations map[string]*SturnAllocation
+  relayPorts []int
 }
 
 type Sturn struct {
@@ -47,6 +47,7 @@ type Sturn struct {
   relayCount int
   relayPorts map[int]bool
   relayIndex int
+  allocations map[string]*SturnAllocation
 }
 
 func Listen(port int, relayStart int, relayCount int) (error) {
@@ -78,6 +79,7 @@ func Listen(port int, relayStart int, relayCount int) (error) {
     conn: &conn,
     buf: make([]byte, SturnMaxSize),
     sessions: make(map[string]*SturnSession),
+    allocations: make(map[string]*SturnAllocation),
   }
 
   go sturn.serve(conn);
@@ -124,7 +126,6 @@ func TestSession() {
     session := &SturnSession{
       user: "user",
       auth: "pass",
-      allocations: make(map[string]*SturnAllocation),
     }
     sturn.sessions["user"] = session
   }
@@ -145,7 +146,6 @@ func (s *Sturn) addSession() (*SturnSession, error) {
   session := &SturnSession{
     user: user,
     auth: hex.EncodeToString(authBin),
-    allocations: make(map[string]*SturnAllocation),
   }
   s.sessions[user] = session
   return session, nil

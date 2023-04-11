@@ -54,6 +54,7 @@ type SturnAttribute struct {
   byteValue byte
   strValue string
   intValue int32
+  binValue []byte
 }
 
 type SturnMessage struct {
@@ -143,6 +144,9 @@ func setMessageType(class int, method int) (byte, byte) {
   }
   if class == CLSError && method == MEHCreatePermission {
     return 0x01, 0x18
+  }
+  if class == CLSIndication && method == MEHData {
+    return 0x00, 0x17
   }
   return 0x00, 0x00
 }

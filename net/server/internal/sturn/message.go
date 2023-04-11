@@ -91,8 +91,7 @@ func (s *Sturn) handleMessage(buf []byte, addr net.Addr) {
 
   err, msg := readMessage(buf);
   if err != nil {
-    fmt.Println(addr.String(), buf);
-    fmt.Println(err);
+    fmt.Println(err, addr.String(), buf);
     return
   }
   if msg == nil {
@@ -113,7 +112,7 @@ func (s *Sturn) handleMessage(buf []byte, addr net.Addr) {
     s.handleCreatePermissionRequest(msg, addr);
   } else if msg.class == CLSIndication && msg.method == MEHSend {
     fmt.Println("stun/turn send");
-    s.handleSendIndication(msg, addr);
+    s.handleSendIndication(msg, addr, buf);
   } else {
     fmt.Println("unsupported message", buf);
   }
@@ -164,7 +163,7 @@ func (s *Sturn) handleCreatePermissionRequest(msg *SturnMessage, addr net.Addr) 
 
   s.sync.Lock();
   defer s.sync.Unlock();
-  session, set := sturn.sessions[username.strValue]
+  _, set := sturn.sessions[username.strValue]
   if !set {
     fmt.Println("no session", addr.String());
     s.sendRequestError(msg, addr, 401)
@@ -172,7 +171,7 @@ func (s *Sturn) handleCreatePermissionRequest(msg *SturnMessage, addr net.Addr) 
   }
 
   source := addr.String()
-  allocation, found := session.allocations[source]
+  allocation, found := s.allocations[source]
   if !found {
     fmt.Println("no allocation");
     s.sendRequestError(msg, addr, 400)
@@ -180,7 +179,6 @@ func (s *Sturn) handleCreatePermissionRequest(msg *SturnMessage, addr net.Addr) 
   }
 
   allocation.permissions = append(allocation.permissions, permission.strValue);
-  fmt.Println("---> ", allocation.port, allocation.permissions);
 
   var attributes []SturnAttribute
   attributes = append(attributes, SturnAttribute{
@@ -202,8 +200,44 @@ func (s *Sturn) handleCreatePermissionRequest(msg *SturnMessage, addr net.Addr) 
   return
 }
 
-func (s *Sturn) handleSendIndication(msg *SturnMessage, addr net.Addr) {
-//  fmt.Println(addr.String(), msg);
+func (s *Sturn) handleSendIndication(msg *SturnMessage, addr net.Addr, buf []byte) {
+
+  peer := getAttribute(msg, ATRXorPeerAddress)
+  if peer == nil {
+    fmt.Println("no peer");
+    return
+  }
+
+  data := getAttribute(msg, ATRData)
+  if data == nil {
+    fmt.Println("no data");
+    return
+  }
+
+  s.sync.Lock();
+  defer s.sync.Unlock();
+  source := addr.String()
+  allocation, found := s.allocations[source]
+  if !found {
+    fmt.Println("no allocation");
+    return
+  }
+
+  for _, permission := range allocation.permissions {
+    if permission == peer.strValue {
+      address := fmt.Sprintf("%s:%d", peer.strValue, peer.intValue)
+      dst, err := net.ResolveUDPAddr("udp", address)
+      if err != nil {
+        fmt.Println("no resolve");
+        return
+      }
+
+      _, err = allocation.conn.WriteTo(data.binValue, dst)
+      if err != nil {
+        fmt.Println("write error");
+      }
+    }
+  }
 }
 
 func (s *Sturn) handleBindingRequest(msg *SturnMessage, addr net.Addr) {
@@ -250,7 +284,7 @@ func (s *Sturn) handleRefreshRequest(msg *SturnMessage, addr net.Addr) {
   return
 }
 
-func setAllocation(source string, transaction []byte, response []byte, port int, conn net.PacketConn, session *SturnSession) (*SturnAllocation) {
+func (s *Sturn) setAllocation(source string, transaction []byte, response []byte, port int, conn net.PacketConn, session *SturnSession) (*SturnAllocation) {
   allocation := &SturnAllocation{}
   allocation.port = port
   allocation.conn = conn
@@ -259,12 +293,12 @@ func setAllocation(source string, transaction []byte, response []byte, port int,
   copy(allocation.transaction, transaction)
   allocation.response = make([]byte, len(response))
   copy(allocation.response, response)
-  session.allocations[source] = allocation
+  s.allocations[source] = allocation
   return allocation
 }
 
-func getAllocation(source string, transaction []byte, session *SturnSession) (*SturnAllocation, error) {
-  for _, allocation := range session.allocations {
+func (s *Sturn) getAllocation(source string, transaction []byte, session *SturnSession) (*SturnAllocation, error) {
+  for _, allocation := range s.allocations {
     if allocation.source == source {
       if len(allocation.transaction) == len(transaction) {
         match := true
@@ -301,7 +335,7 @@ func (s *Sturn) handleAllocateRequest(msg *SturnMessage, addr net.Addr) {
     return
   }
 
-  allocation, collision := getAllocation(addr.String(), msg.transaction, session)
+  allocation, collision := s.getAllocation(addr.String(), msg.transaction, session)
   if collision != nil {
     fmt.Println("5tuple collision", addr.String())
     s.sendRequestError(msg, addr, 403)
@@ -327,7 +361,6 @@ func (s *Sturn) handleAllocateRequest(msg *SturnMessage, addr net.Addr) {
     return
   }
 
-  fmt.Println("> ", relayPort, "< ", addr.String(), msg);
   address := strings.Split(addr.String(), ":")
   ip := address[0];
   port, _ := strconv.Atoi(address[1]);
@@ -363,7 +396,7 @@ func (s *Sturn) handleAllocateRequest(msg *SturnMessage, addr net.Addr) {
   if err != nil {
     fmt.Printf("failed to write stun response")
   } else {
-    allocation := setAllocation(addr.String(), msg.transaction, s.buf[:n], relayPort, conn, session)
+    allocation := s.setAllocation(addr.String(), msg.transaction, s.buf[:n], relayPort, conn, session)
     (*s.conn).WriteTo(s.buf[:n], addr)
     go s.relay(allocation);
   }
@@ -380,25 +413,56 @@ func getAttribute(msg *SturnMessage, atrType int) (attr *SturnAttribute) {
 }
 
 func (s *Sturn) relay(allocation *SturnAllocation) {
-fmt.Println("STARTED RELAY");
+  data := make([]byte, SturnMaxSize)
+  buf := make([]byte, SturnMaxSize)
   for {
-    buf := make([]byte, SturnMaxSize)
-    n, addr, err := allocation.conn.ReadFrom(buf)
+    n, addr, err := allocation.conn.ReadFrom(data)
     if err != nil {
       fmt.Println(err)
+      // CLEANUP ALLOCATION
       return
     }
 
-    fmt.Println("GET REPLAY PACKET:", allocation.port, allocation.permissions, addr.String());
+    fmt.Println("stun/turn relay");
 
     s.sync.Lock();
-    defer s.sync.Unlock();
-    ip := strings.Split(addr.String(), ":")
+    split := strings.Split(addr.String(), ":")
+    ip := split[0]
+    port, _ := strconv.Atoi(split[1]);
     for _, permission := range allocation.permissions {
-      if permission == ip[0] {
-        fmt.Println("HANDLE PACKET", allocation.port, n, ip[0]);
+      if permission == ip {
+
+        var attributes []SturnAttribute
+        attributes = append(attributes, SturnAttribute{
+          atrType: ATRXorPeerAddress,
+          strValue: ip,
+          intValue: int32(port),
+        })
+        attributes = append(attributes, SturnAttribute{
+          atrType: ATRData,
+          binValue: data[:n],
+        })
+
+        relay := &SturnMessage{
+          class: CLSIndication,
+          method: MEHData,
+          transaction: []byte{ 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22, 0x22 },
+          attributes: attributes,
+        };
+
+        err, l := writeMessage(relay, buf)
+        dst, err := net.ResolveUDPAddr("udp", allocation.source)
+        if err != nil {
+          fmt.Println("no resolve");
+        } else {
+          _, err := allocation.conn.WriteTo(buf[:l], dst);
+          if err != nil {
+            fmt.Println("writeto failed");
+          }
+        }
       }
     }
+    s.sync.Unlock();
   }
 }
 
