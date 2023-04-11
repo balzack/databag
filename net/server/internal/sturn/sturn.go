@@ -23,12 +23,14 @@ type SturnAllocation struct {
   transaction []byte
   response []byte
   port int
+  permissions []string
+  conn net.PacketConn
 }
 
 type SturnSession struct {
   user string
   auth string
-  allocations []*SturnAllocation
+  allocations map[string]*SturnAllocation
 }
 
 type Sturn struct {
@@ -122,6 +124,7 @@ func TestSession() {
     session := &SturnSession{
       user: "user",
       auth: "pass",
+      allocations: make(map[string]*SturnAllocation),
     }
     sturn.sessions["user"] = session
   }
@@ -142,6 +145,7 @@ func (s *Sturn) addSession() (*SturnSession, error) {
   session := &SturnSession{
     user: user,
     auth: hex.EncodeToString(authBin),
+    allocations: make(map[string]*SturnAllocation),
   }
   s.sessions[user] = session
   return session, nil

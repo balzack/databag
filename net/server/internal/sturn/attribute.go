@@ -186,8 +186,8 @@ func writeAttribute(attribute *SturnAttribute, buf []byte, pos int) (error, int)
     buf[pos + 3] = 0x04
     buf[pos + 4] = 0x00
     buf[pos + 5] = 0x00
-    buf[pos + 6] = 0x04
-    buf[pos + 7] = 0x01
+    buf[pos + 6] = byte(attribute.intValue / 100)
+    buf[pos + 7] = byte(attribute.intValue % 100)
     return nil, 8
   } else if attribute.atrType == ATRMessageIntegrity {
     buf[pos + 1], buf[pos + 0] = setAttributeType(ATRMessageIntegrity);
