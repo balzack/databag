@@ -468,6 +468,7 @@ export function useRingContext() {
             if (track.kind === 'video') {
               videoTrack.current = track;
               pc.current.addTrack(track, stream);
+              InCallManager.setForceSpeakerphoneOn(true);
               const localStream = new MediaStream();
               localStream.addTrack(track, localStream);
               updateState({ localVideo: true, localStream });
