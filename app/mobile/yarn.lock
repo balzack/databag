@@ -6326,6 +6326,11 @@ react-native-image-crop-picker@^0.39.0:
   resolved "https://registry.yarnpkg.com/react-native-image-crop-picker/-/react-native-image-crop-picker-0.39.0.tgz#9cb8e8ffb0e8ab06f7b3227cadf077169e225eba"
   integrity sha512-4aANbQMrmU6zN/4b0rVBA7SbaZ3aa5JESm3Xk751sINybZMt1yz/9h95LkO7U0pbslHDo3ofXjG75PmQRP6a/w==
 
+react-native-incall-manager@^4.0.1:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/react-native-incall-manager/-/react-native-incall-manager-4.0.1.tgz#7dae419433383ed31262d811fd549bba7951b2f2"
+  integrity sha512-Bqq7C+p7vCmCTpM8Xv6l4DJ3UJYzVr60IvkHMw1Ugs0KJswh3veBJrpk+hUPSETPT6J/5oUwxChXlNsymsh7fg==
+
 react-native-reanimated-carousel@^3.3.0:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/react-native-reanimated-carousel/-/react-native-reanimated-carousel-3.3.0.tgz#e71e9441ee6aaae401c5a023b27bf48a54565d16"

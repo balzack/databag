@@ -6,6 +6,7 @@ import { addCall } from 'api/addCall';
 import { keepCall } from 'api/keepCall';
 import { removeCall } from 'api/removeCall';
 import { removeContactCall } from 'api/removeContactCall';
+import InCallManager from 'react-native-incall-manager';
 
 import {
 	ScreenCapturePickerView,
@@ -203,6 +204,7 @@ export function useRingContext() {
       }
       if (event.track.kind === 'video') {
         updateState({ remoteVideo: true });
+        InCallManager.setForceSpeakerphoneOn(true);
       }
       stream.current.addTrack(event.track, stream.current);
     } );
@@ -252,6 +254,7 @@ export function useRingContext() {
           updateState({ callStatus: "connected" });
           if (policy === 'polite') {
             connected.current = true;
+            InCallManager.start({media: 'audio'});
             transmit('polite');
             polite();
           }
@@ -289,6 +292,8 @@ export function useRingContext() {
       }
       clearRing();
       clearAlive();
+      InCallManager.stop();
+      connected.current = false;
       calling.current = null;
       if (videoTrack.current) {
         videoTrack.current.stop();
@@ -304,6 +309,7 @@ export function useRingContext() {
       ws.current.send(JSON.stringify({ AppToken: token }));
       if (policy === 'impolite') {
         connected.current = true;
+        InCallManager.start({media: 'audio'});
         transmit('impolite');
         impolite();
       }
@@ -454,7 +460,9 @@ export function useRingContext() {
             if (track.kind === 'video') {
               videoTrack.current = track;
               pc.current.addTrack(track, stream);
-              updateState({ localVideo: true });
+              const localStream = new MediaStream();
+              localStream.addTrack(track, localStream);
+              updateState({ localVideo: true, localStream });
             }
           }
         }

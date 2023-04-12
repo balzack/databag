@@ -1,4 +1,4 @@
-import { View, ScrollView, TouchableOpacity, StatusBar, Text, Image, Modal } from 'react-native';
+import { Alert, View, ScrollView, TouchableOpacity, StatusBar, Text, Image, Modal } from 'react-native';
 import { useState, useEffect, useContext } from 'react';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -25,6 +25,7 @@ import { ProfileIcon } from './profileIcon/ProfileIcon';
 import { CardsIcon } from './cardsIcon/CardsIcon';
 import { Logo } from 'utils/Logo';
 import { Call } from './call/Call';
+import { DeviceEventEmitter } from 'react-native';
 import splash from 'images/session.png';
 
 const ConversationStack = createStackNavigator();
@@ -325,6 +326,13 @@ export function Session() {
     const id = await actions.setDmChannel(cardId);
     setDmChannel({ id });
   };
+
+  useEffect(() => {
+    const listener = DeviceEventEmitter.addListener('Proximity', function (data) {
+      Alert.alert("proximity");
+    });
+    return () => { listener.remove() }
+  }, []);
 
   useEffect(() => {
     let incoming = [];
