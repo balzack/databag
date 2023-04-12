@@ -25,7 +25,6 @@ import { ProfileIcon } from './profileIcon/ProfileIcon';
 import { CardsIcon } from './cardsIcon/CardsIcon';
 import { Logo } from 'utils/Logo';
 import { Call } from './call/Call';
-import { DeviceEventEmitter } from 'react-native';
 import splash from 'images/session.png';
 
 const ConversationStack = createStackNavigator();
@@ -326,13 +325,6 @@ export function Session() {
     const id = await actions.setDmChannel(cardId);
     setDmChannel({ id });
   };
-
-  useEffect(() => {
-    const listener = DeviceEventEmitter.addListener('Proximity', function (data) {
-      Alert.alert("proximity");
-    });
-    return () => { listener.remove() }
-  }, []);
 
   useEffect(() => {
     let incoming = [];
