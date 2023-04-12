@@ -49,15 +49,10 @@ export function useRingContext() {
 
   const iceServers = [
     {
-      urls: 'turn:192.168.13.233:5001?transport=udp', 
+      urls: 'turn:44.238.207.157:3478?transport=udp', 
       username: 'user', 
       credential: 'pass'
     },
-    {
-      urls: 'turn:98.234.232.221:5001?transport=udp', 
-      username: 'user', 
-      credential: 'pass'
-    }
   ];
 
   const constraints = {

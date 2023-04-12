@@ -223,6 +223,7 @@ func (s *Sturn) handleSendIndication(msg *SturnMessage, addr net.Addr, buf []byt
     return
   }
 
+  set := false
   for _, permission := range allocation.permissions {
     if permission == peer.strValue {
       address := fmt.Sprintf("%s:%d", peer.strValue, peer.intValue)
@@ -232,11 +233,16 @@ func (s *Sturn) handleSendIndication(msg *SturnMessage, addr net.Addr, buf []byt
         return
       }
 
+      set = true
+      fmt.Println("stun/turn data", dst.String());
       _, err = allocation.conn.WriteTo(data.binValue, dst)
       if err != nil {
         fmt.Println("write error");
       }
     }
+  }
+  if !set {
+    fmt.Println("dropped indication");
   }
 }
 
@@ -284,11 +290,13 @@ func (s *Sturn) handleRefreshRequest(msg *SturnMessage, addr net.Addr) {
   return
 }
 
-func (s *Sturn) setAllocation(source string, transaction []byte, response []byte, port int, conn net.PacketConn, session *SturnSession) (*SturnAllocation) {
+func (s *Sturn) setAllocation(addr net.Addr, transaction []byte, response []byte, port int, conn net.PacketConn, session *SturnSession) (*SturnAllocation) {
+  source := addr.String()
   allocation := &SturnAllocation{}
   allocation.port = port
   allocation.conn = conn
   allocation.source = source
+  allocation.addr = addr
   allocation.transaction = make([]byte, len(transaction))
   copy(allocation.transaction, transaction)
   allocation.response = make([]byte, len(response))
@@ -396,8 +404,9 @@ func (s *Sturn) handleAllocateRequest(msg *SturnMessage, addr net.Addr) {
   if err != nil {
     fmt.Printf("failed to write stun response")
   } else {
-    allocation := s.setAllocation(addr.String(), msg.transaction, s.buf[:n], relayPort, conn, session)
+    allocation := s.setAllocation(addr, msg.transaction, s.buf[:n], relayPort, conn, session)
     (*s.conn).WriteTo(s.buf[:n], addr)
+    fmt.Println("allocated: ", addr.String())
     go s.relay(allocation);
   }
   return
@@ -423,12 +432,11 @@ func (s *Sturn) relay(allocation *SturnAllocation) {
       return
     }
 
-    fmt.Println("stun/turn relay");
-
     s.sync.Lock();
     split := strings.Split(addr.String(), ":")
     ip := split[0]
     port, _ := strconv.Atoi(split[1]);
+    set := false
     for _, permission := range allocation.permissions {
       if permission == ip {
 
@@ -451,16 +459,20 @@ func (s *Sturn) relay(allocation *SturnAllocation) {
         };
 
         err, l := writeMessage(relay, buf)
-        dst, err := net.ResolveUDPAddr("udp", allocation.source)
         if err != nil {
           fmt.Println("no resolve");
         } else {
-          _, err := allocation.conn.WriteTo(buf[:l], dst);
+          fmt.Println("---- stun/turn relay", allocation.addr.String());
+          _, err := allocation.conn.WriteTo(buf[:l], allocation.addr);
+          set = true
           if err != nil {
             fmt.Println("writeto failed");
           }
         }
       }
+    }
+    if !set {
+      fmt.Println("dropped relay");
     }
     s.sync.Unlock();
   }

@@ -25,6 +25,7 @@ type SturnAllocation struct {
   port int
   permissions []string
   conn net.PacketConn
+  addr net.Addr
 }
 
 type SturnSession struct {
