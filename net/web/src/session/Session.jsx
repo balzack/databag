@@ -23,6 +23,7 @@ export function Session() {
   const [ringing, setRinging] = useState([]);
   const [callWidth, setCallWidth] = useState(256);
   const [callHeight, setCallHeight] = useState(256);
+  const [callModal, setCallModal] = useState({ width: 256, height: 256, offset: 0 });
   const remote = useRef();
   const local = useRef();
 
@@ -44,23 +45,20 @@ export function Session() {
     setRinging(incoming);
   }, [state.ringing]);
 
-  const getWidth = () => {
-    if (state.remoteVideo) {
-      return callWidth;
+  useEffect(() => {
+    if (!state.remoteVideo) {
+      setCallModal({ width: 256 + 12, height: 256 + 12, offset: 0 });
     }
-    return 256;
-  }
+    else {
+      setCallModal({ width: callWidth + 12, height: callHeight + 12, offset: ((268 - callHeight) / 2) });
+    }
 
-  const getHeight = () => {
-    if (state.remoteVideo) {
-      return callHeight;
-    }
-    return 256;
-  }
+  }, [callWidth, callHeight, state.remoteVideo])
 
   useEffect(() => {
     if (remote.current) {
       remote.current.onloadedmetadata = (ev) => {
+
         const { videoWidth, videoHeight } = ev.target || { videoWidth: 256, videoHeight: 256 }
         if ((window.innerWidth * 8) / 10 < videoWidth) {
           const scaledWidth = window.innerWidth * 8 / 10;
@@ -80,16 +78,15 @@ export function Session() {
           setCallHeight(height);
           setCallWidth(videoWidth * (height / videoHeight));
         }
-        else if (videoHeight < 256 || videoWidth < 256) {
-          setCallHeight(256);
-          setCallWidth(256);
+        else if (videoHeight < 72 || videoWidth < 72) {
+          setCallHeight(72);
+          setCallWidth(72);
         }
         else {
           setCallHeight(videoHeight);
           setCallWidth(videoWidth);
         }
       };
-console.log(" SET REMOTE STREAM");
       remote.current.srcObject = state.remoteStream;
       remote.current.load();
       remote.current.play();
@@ -330,7 +327,7 @@ console.log(" SET REMOTE STREAM");
           </div>
         </RingingWrapper>
       </Modal>
-      <Modal centered visible={state.callStatus} footer={null} closable={false} width={getWidth() + 12} height={getHeight() + 12} bodyStyle={{ paddingBottom: 0, paddingTop: 6, paddingLeft: 6, paddingRight: 6, paddingBottom: 6 }}>
+      <Modal centered visible={state.callStatus} footer={null} closable={false} width={callModal.width} height={callModal.height} bodyStyle={{ paddingBottom: 0, paddingTop: 6, paddingLeft: 6, paddingRight: 6, paddingBottom: 6 }}>
         <CallingWrapper>
           { !state.remoteVideo && (
             <Logo url={state.callLogo} width={256} height={256} radius={8} />

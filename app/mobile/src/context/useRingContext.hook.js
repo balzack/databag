@@ -36,6 +36,7 @@ export function useRingContext() {
 
   const EXPIRE = 3000
   const RING = 2000
+  const RING_COUNT = 10
   const ringing = useRef(new Map());
   const calling = useRef(null);
   const ws = useRef(null);
@@ -429,8 +430,15 @@ export function useRingContext() {
       let index = 0;
       const ringInterval = setInterval(async () => {
         try {
-          await addContactRing(contactNode, contactToken, { index, callId: id, calleeToken });
-          index += 1;
+          if (index > RING_COUNT) {
+            if (ws.current) {
+              ws.current.close();
+            } 
+          }
+          else {
+            await addContactRing(contactNode, contactToken, { index, callId: id, calleeToken });
+            index += 1;
+          }
         }
         catch (err) {
           console.log(err);
