@@ -37,16 +37,6 @@ export function useRingContext() {
   const connected = useRef(false);
   const candidates = useRef([]);
 
-  const iceServers = [
-   {
-      //urls: 'turn:98.234.232.221:5001?transport=udp', 
-      urls: 'turn:44.238.207.157:3478?transport=udp', 
-      //urls: 'turn:35.165.123.117:5001?transport=udp', 
-      username: 'user', 
-      credential: 'pass'
-    },
-];
-
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }))
   }
@@ -144,9 +134,11 @@ export function useRingContext() {
     processing.current = false;
   }
 
-  const transmit = async (policy) => {
+  const transmit = async (policy, ice) => {
 
-    pc.current = new RTCPeerConnection({ iceServers });
+console.log("TRANSMIT:", ice);
+
+    pc.current = new RTCPeerConnection({ iceServers: ice });
     pc.current.ontrack = (ev) => {
       if (!stream.current) {
         stream.current = new MediaStream();
@@ -192,7 +184,9 @@ export function useRingContext() {
     }
   }
 
-  const connect = async (policy, node, token, clearRing, clearAlive) => {
+  const connect = async (policy, node, token, clearRing, clearAlive, ice) => {
+
+    console.log("ICE CONNECT", ice);
 
     // connect signal socket
     connected.current = false;
@@ -216,7 +210,7 @@ export function useRingContext() {
           updateState({ callStatus: "connected" });
           if (policy === 'polite') {
             connected.current = true;
-            transmit('polite');
+            transmit('polite', ice);
             polite();
           }
         }
@@ -267,7 +261,7 @@ export function useRingContext() {
       ws.current.send(JSON.stringify({ AppToken: token }));
       if (policy === 'impolite') {
         connected.current = true;
-        transmit('impolite');
+        transmit('impolite', ice);
         impolite();
       }
     }
@@ -290,9 +284,9 @@ export function useRingContext() {
     clearToken: () => {
       access.current = null;
     },
-    ring: (cardId, callId, calleeToken) => {
+    ring: (cardId, callId, calleeToken, iceUrl, iceUsername, icePassword) => {
       const key = `${cardId}:${callId}`
-      const call = ringing.current.get(key) || { cardId, calleeToken, callId }
+      const call = ringing.current.get(key) || { cardId, calleeToken, callId, iceUrl, iceUsername, icePassword }
       call.expires = Date.now() + EXPIRE;
       ringing.current.set(key, call);
       updateState({ ringing: ringing.current });
@@ -324,10 +318,12 @@ export function useRingContext() {
         }
       }
     },
-    accept: async (cardId, callId, contactNode, contactToken, calleeToken) => {
+    accept: async (cardId, callId, contactNode, contactToken, calleeToken, iceUrl, iceUsername, icePassword) => {
       if (calling.current) {
         throw new Error("active session");
       }
+
+      const ice = [{ urls: iceUrl, username: iceUsername, credential: icePassword }];
 
       const key = `${cardId}:${callId}`
       const call = ringing.current.get(key);
@@ -337,7 +333,7 @@ export function useRingContext() {
         updateState({ ringing: ringing.current, callStatus: "connecting", cardId });
 
         calling.current = { callId, contactNode, contactToken, host: false };
-        await connect('impolite', contactNode, calleeToken, () => {}, () => {});
+        await connect('impolite', contactNode, calleeToken, () => {}, () => {}, ice);
       }
     },
     end: async () => {
@@ -408,7 +404,8 @@ export function useRingContext() {
 
       updateState({ callStatus: "ringing", cardId });
       calling.current = { callId: id, host: true };
-      await connect('polite', window.location.host, callerToken, () => clearInterval(ringInterval), () => clearInterval(aliveInterval));
+      const ice = [{ urls: iceUrl, username: iceUsername, credential: icePassword }];
+      await connect('polite', window.location.host, callerToken, () => clearInterval(ringInterval), () => clearInterval(aliveInterval), ice);
     },
     enableVideo: async () => {
       if (!accessVideo.current) {

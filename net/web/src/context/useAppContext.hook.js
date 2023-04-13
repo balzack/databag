@@ -181,8 +181,8 @@ export function useAppContext(websocket) {
           setAppRevision(activity.revision);
         }
         if (activity.ring) {
-          const { cardId, callId, calleeToken } = activity.ring;
-          ringContext.actions.ring(cardId, callId, calleeToken);
+          const { cardId, callId, calleeToken, iceUrl, iceUsername, icePassword } = activity.ring;
+          ringContext.actions.ring(cardId, callId, calleeToken, iceUrl, iceUsername, icePassword);
         }
       }
       catch (err) {

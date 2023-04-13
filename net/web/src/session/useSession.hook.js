@@ -55,14 +55,14 @@ export function useSession() {
     const expired = Date.now(); 
     ring.state.ringing.forEach(call => {
       if (call.expires > expired && !call.status) {
-        const { callId, cardId, calleeToken } = call;
+        const { callId, cardId, calleeToken, iceUrl, iceUsername, icePassword } = call;
         const contact = card.state.cards.get(cardId);
         if (contact) {
           const { imageSet, name, handle, node, guid } = contact.data.cardProfile || {};
           const { token } = contact.data.cardDetail;
           const contactToken = `${guid}.${token}`;
           const img = imageSet ? card.actions.getCardImageUrl(cardId) : null;
-          ringing.push({ cardId, img, name, handle, contactNode: node, callId, contactToken, calleeToken });  
+          ringing.push({ cardId, img, name, handle, contactNode: node, callId, contactToken, calleeToken, iceUrl, iceUsername, icePassword });  
         }
       }
     });
@@ -166,8 +166,9 @@ export function useSession() {
       await ring.actions.decline(cardId, contactNode, contactToken, callId);
     },
     accept: async (call) => {
-      const { cardId, callId, contactNode, contactToken, calleeToken } = call;
-      await ring.actions.accept(cardId, callId, contactNode, contactToken, calleeToken);
+console.log("ACCEPTING:", call);
+      const { cardId, callId, contactNode, contactToken, calleeToken, iceUrl, iceUsername, icePassword } = call;
+      await ring.actions.accept(cardId, callId, contactNode, contactToken, calleeToken, iceUrl, iceUsername, icePassword);
     },
     end: async () => {
       await ring.actions.end();
