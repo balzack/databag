@@ -4,7 +4,7 @@ import { styles } from './CardItem.styled';
 import MatIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Colors from 'constants/Colors';
 
-export function CardItem({ item, openContact, call, message }) {
+export function CardItem({ item, openContact, enableIce, call, message }) {
   
   const select = () => {
     const { guid, name, handle, node, location, description, imageSet } = item;
@@ -26,9 +26,11 @@ export function CardItem({ item, openContact, call, message }) {
               <TouchableOpacity style={styles.option} onPress={message}>
                 <MatIcons name={'message-outline'} size={20} color={Colors.primary} />
               </TouchableOpacity>
-              <TouchableOpacity style={styles.option} onPress={call}>
-                <MatIcons name={'phone-outline'} size={20} color={Colors.primary} />
-              </TouchableOpacity>
+              { enableIce && (
+                <TouchableOpacity style={styles.option} onPress={call}>
+                  <MatIcons name={'phone-outline'} size={20} color={Colors.primary} />
+                </TouchableOpacity>
+              )}
             </View>
           )}
           { item.status === 'connected' && item.offsync === 1 && (

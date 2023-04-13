@@ -28,6 +28,10 @@ export function useDashboard(config, server, token) {
     enableAudio: true,
     enableVideo: true,
     createToken: null,
+    enableIce: false,
+    iceUrl: null,
+    iceUsername: null,
+    icePassword: null,
   });
 
   const navigate = useNavigate();
@@ -55,8 +59,8 @@ export function useDashboard(config, server, token) {
   };
 
   useEffect(() => {
-    const { keyType, accountStorage, domain, enableImage, enableAudio, enableVideo, pushSupported } = config;
-    updateState({ keyType, storage: accountStorage.toString(), domain, enableImage, enableAudio, enableVideo, pushSupported });
+    const { keyType, accountStorage, domain, enableImage, enableAudio, enableVideo, pushSupported, enableIce, iceUrl, iceUsername, icePassword } = config;
+    updateState({ keyType, storage: accountStorage.toString(), domain, enableImage, enableAudio, enableVideo, pushSupported, enableIce, iceUrl, iceUsername, icePassword });
   }, [config]);
 
   useEffect(() => {
@@ -111,9 +115,21 @@ export function useDashboard(config, server, token) {
     setKeyType: (keyType) => {
       updateState({ keyType });
     },
+    setEnableIce: (enableIce) => {
+      updateState({ enableIce });
+    },
+    setIceUrl: (iceUrl) => {
+      updateState({ iceUrl });
+    },
+    setIceUsername: (iceUsername) => {
+      updateState({ iceUsername });
+    },
+    setIcePassword: (icePassword) => {
+      updateState({ icePassword });
+    },
     saveConfig: async () => {
-      const { storage, domain, keyType, enableImage, enableAudio, enableVideo } = state;
-      const config = { accountStorage: Number(storage), domain, keyType, enableImage, enableAudio, enableVideo };
+      const { storage, domain, keyType, enableImage, enableAudio, enableVideo, enableIce, iceUrl, iceUsername, icePassword } = state;
+      const config = { accountStorage: Number(storage), domain, keyType, enableImage, enableAudio, enableVideo, enableIce, iceUrl, iceUsername, icePassword };
       await setNodeConfig(server, token, config);
     },
     enableUser: async (accountId, enabled) => {

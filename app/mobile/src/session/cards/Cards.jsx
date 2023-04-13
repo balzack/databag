@@ -66,7 +66,7 @@ export function CardsBody({ filter, sort, openContact, addChannel }) {
           data={state.cards}
           initialNumToRender={25}
           renderItem={({ item }) => <CardItem item={item} openContact={openContact}
-            call={() => call(item)} message={() => addChannel(item.cardId)} />}
+            enableIce={state.enableIce} call={() => call(item)} message={() => addChannel(item.cardId)} />}
           keyExtractor={item => item.cardId}
         />
       )}

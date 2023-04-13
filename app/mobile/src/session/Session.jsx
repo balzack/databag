@@ -329,7 +329,8 @@ export function Session() {
   useEffect(() => {
     let incoming = [];
     for (let i = 0; i < state.ringing.length; i++) {
-      const { img, name, handle, callId, cardId, contactNode, contactToken, calleeToken } = state.ringing[i];
+      const call = state.ringing[i];
+      const { img, cardId, callId, name, handle, contactNode } = call || {};
       const label = name ? name : `${handle}@${contactNode}`;
       const key = `${cardId}:${callId}`
       incoming.push(
@@ -339,10 +340,10 @@ export function Session() {
           <TouchableOpacity style={styles.ringIgnore} onPress={() => actions.ignore({ cardId, callId })}>
             <MatIcons name={'eye-off-outline'} size={20} color={Colors.text} />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.ringDecline} onPress={() => actions.decline({ cardId, contactNode, contactToken, callId })}>
+          <TouchableOpacity style={styles.ringDecline} onPress={() => actions.decline(call)}>
             <MatIcons name={'phone-hangup'} size={20} color={Colors.alert} />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.ringAccept} onPress={() => actions.accept({ cardId, callId, contactNode, contactToken, calleeToken })}>
+          <TouchableOpacity style={styles.ringAccept} onPress={() => actions.accept(call)}>
             <MatIcons name={'phone'} size={20} color={Colors.primary} />
           </TouchableOpacity>
         </View>

@@ -181,8 +181,8 @@ export function useAppContext() {
           card.actions.setRevision(cardRev);
         }
         if (activity.ring) {
-          const { cardId, callId, calleeToken } = activity.ring;
-          ring.actions.ring(cardId, callId, calleeToken);
+          const { cardId, callId, calleeToken, iceUrl, iceUsername, icePassword } = activity.ring;
+          ring.actions.ring(cardId, callId, calleeToken, iceUrl, iceUsername, icePassword);
         }
       }
       catch (err) {

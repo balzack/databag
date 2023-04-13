@@ -1,19 +1,27 @@
 import { useState, useEffect, useRef, useContext } from 'react';
 import { CardContext } from 'context/CardContext';
 import { RingContext } from 'context/RingContext';
+import { AccountContext } from 'context/AccountContext';
 
 export function useCards(filter, sort) {
 
   const [state, setState] = useState({
     cards: [],
+    enableIce: false,
   });
 
+  const account = useContext(AccountContext);
   const card = useContext(CardContext);
   const ring = useContext(RingContext);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
   }
+
+  useEffect(() => {
+    const { enableIce } = account.state.status || {};
+    updateState({ enableIce });
+  }, [account.state]);
 
   const setCardItem = (item) => {
     const { profile, detail, cardId } = item.card || { profile: {}, detail: {} }

@@ -191,6 +191,8 @@ export function Dashboard(props) {
                   onValueChange={actions.setPushSupported} trackColor={styles.track}/>
               </TouchableOpacity>
 
+              <View style={styles.label}></View>
+
               <TouchableOpacity style={styles.media} activeOpacity={1}
                   onPress={() => actions.setEnableImage(!state.enableImage)}>
                 <Text style={styles.modalLabel}>Enable Image Queue: </Text>
@@ -209,6 +211,21 @@ export function Dashboard(props) {
                 <Switch style={styles.switch} value={state.enableVideo}
                   onValueChange={actions.setEnableVideo} trackColor={styles.track}/>
               </TouchableOpacity>
+
+              <View style={styles.label}></View>
+              <TouchableOpacity style={styles.ice} activeOpacity={1}
+                  onPress={() => actions.setEnableIce(!state.enableIce)}>
+                <Text style={styles.modalLabel}>Enable WebRTC Calls: </Text>
+                <Switch style={styles.switch} value={state.enableIce}
+                  onValueChange={actions.setEnableIce} trackColor={styles.track}/>
+              </TouchableOpacity>
+              <TextInput style={styles.input} value={state.iceUrl} onChangeText={actions.setIceUrl}
+                  editable={state.enableIce} autoCorrect={false} autoCapitalize="none" placeholder="Relay URL" />
+              <TextInput style={styles.input} value={state.iceUsername} onChangeText={actions.setIceUsername}
+                  editable={state.enableIce} autoCorrect={false} autoCapitalize="none" placeholder="Relay Username" />
+              <TextInput style={styles.input} value={state.icePassword} onChangeText={actions.setIcePassword}
+                  editable={state.enableIce} autoCorrect={false} autoCapitalize="none" placeholder="Relay Password" />
+
             </View>
             <View style={styles.modalControls}>
               <TouchableOpacity style={styles.cancel} onPress={actions.hideEditConfig}>
