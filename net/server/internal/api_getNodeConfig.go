@@ -22,6 +22,10 @@ func GetNodeConfig(w http.ResponseWriter, r *http.Request) {
   config.EnableVideo = getBoolConfigValue(CNFEnableVideo, true)
   config.KeyType = getStrConfigValue(CNFKeyType, APPRSA4096)
   config.PushSupported = getBoolConfigValue(CNFPushSupported, true)
+  config.EnableIce = getBoolConfigValue(CNFEnableIce, false)
+	config.IceUrl = getStrConfigValue(CNFIceUrl, "")
+	config.IceUsername = getStrConfigValue(CNFIceUsername, "")
+	config.IcePassword = getStrConfigValue(CNFIcePassword, "")
 
 	WriteResponse(w, config)
 }

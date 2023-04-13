@@ -373,9 +373,9 @@ export function useRingContext() {
 
       // create call
       const call = await addCall(access.current, cardId);
-      const { id, keepAlive, callerToken, calleeToken } = call;
+      const { id, keepAlive, callerToken, calleeToken, iceUrl, iceUsername, icePassword } = call;
       try {
-        await addContactRing(contactNode, contactToken, { index, callId: id, calleeToken });
+        await addContactRing(contactNode, contactToken, { index, callId: id, calleeToken, iceUrl, iceUsername, icePassword });
       }
       catch (err) {
         console.log(err);
@@ -397,7 +397,7 @@ export function useRingContext() {
             }
           }
           else {
-            await addContactRing(contactNode, contactToken, { index, callId: id, calleeToken });
+            await addContactRing(contactNode, contactToken, { index, callId: id, calleeToken, iceUrl, iceUsername, icePassword });
             index += 1;
           }
         }

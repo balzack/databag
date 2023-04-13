@@ -17,6 +17,10 @@ export function useDashboard() {
     enableImage: null,
     enableAudio: null,
     enableVideo: null,
+    enableIce: null,
+    iceUrl: null,
+    iceUsername: null,
+    icePassword: null,
 
     configError: false,
     accountsError: false,
@@ -87,6 +91,18 @@ export function useDashboard() {
     setEnableVideo: (enableVideo) => {
       updateState({ enableVideo });
     },
+    setEnableIce: (enableIce) => {
+      updateState({ enableIce });
+    },
+    setIceUrl: (iceUrl) => {
+      updateState({ iceUrl });
+    },
+    setIceUsername: (iceUsername) => {
+      updateState({ iceUsername });
+    },
+    setIcePassword: (icePassword) => {
+      updateState({ icePassword });
+    },
     setShowSettings: (value) => {
       updateState({ showSettings: value });
     },
@@ -101,9 +117,9 @@ export function useDashboard() {
       if (!state.busy) {
         updateState({ busy: true });
         try {
-          const { domain, keyType, accountStorage, pushSupported, enableImage, enableAudio, enableVideo } = state;
+          const { domain, keyType, accountStorage, pushSupported, enableImage, enableAudio, enableVideo, enableIce, iceUrl, iceUsername, icePassword } = state;
           const storage = accountStorage * 1073741824;
-          const config = { domain,  accountStorage: storage, keyType, enableImage, enableAudio, enableVideo, pushSupported };
+          const config = { domain,  accountStorage: storage, keyType, enableImage, enableAudio, enableVideo, pushSupported, enableIce, iceUrl, iceUsername, icePassword };
           await setNodeConfig(app.state.adminToken, config);
           updateState({ busy: false, showSettings: false });
         }
@@ -119,9 +135,9 @@ export function useDashboard() {
   const syncConfig = async () => {
     try {
       const config = await getNodeConfig(app.state.adminToken);
-      const { storage, domain, keyType, pushSupported, enableImage, enableAudio, enableVideo } = config;
+      const { storage, domain, keyType, pushSupported, enableImage, enableAudio, enableVideo, enableIce, iceUrl, iceUsername, icePassword } = config;
       const accountStorage = Math.ceil(storage / 1073741824);
-      updateState({ configError: false, domain, accountStorage, keyType, enableImage, enableAudio, enableVideo, pushSupported });
+      updateState({ configError: false, domain, accountStorage, keyType, enableImage, enableAudio, enableVideo, pushSupported, enableIce, iceUrl, iceUsername, icePassword });
     }
     catch(err) {
       console.log(err);

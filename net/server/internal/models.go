@@ -38,6 +38,8 @@ type AccountStatus struct {
   Sealable bool `json:"sealable"`
 
 	Seal *Seal `json:"seal,omitempty"`
+
+  EnableIce bool `json:"enableIce"`
 }
 
 //Announce initial message sent on websocket
@@ -354,6 +356,14 @@ type NodeConfig struct {
 
 	EnableVideo bool `json:"enableVideo"`
 
+	EnableIce bool `json:"enableIce"`
+
+	IceUrl string `json:"iceUrl"`
+
+	IceUsername string `json:"iceUsername"`
+
+	IcePassword string `json:"icePassword"`
+
 	KeyType string `json:"keyType"`
 
 	AccountStorage int64 `json:"accountStorage"`
@@ -422,6 +432,12 @@ type Phone struct {
   CallID string `json:"callId"`
 
   CalleeToken string `json:"calleeToken"`
+
+  IceUrl string `json:"iceUrl"`
+
+  IceUsername string `json:"iceUsername"`
+
+  IcePassword string `json:"icePassword"`
 }
 
 //Seal key for channel sealing
@@ -522,7 +538,11 @@ type Call struct {
 
 	KeepAlive int32 `json:"keepAlive"`
 
-	SturnPort int32 `json:"sturnPort"`
+  IceUrl string `json:"iceUrl"`
+
+  IceUsername string `json:"iceUsername"`
+
+  IcePassword string `json:"icePassword"`
 }
 
 type Ring struct {
@@ -532,4 +552,10 @@ type Ring struct {
 	CalleeToken string `json:"calleeToken"`
 
 	Index int32 `json:"index"`
+
+  IceUrl string `json:"iceUrl"`
+
+  IceUsername string `json:"iceUsername"`
+
+  IcePassword string `json:"icePassword"`
 }

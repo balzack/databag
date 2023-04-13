@@ -72,7 +72,7 @@ export function Cards({ closeCards, openContact, openChannel, openListing }) {
         { state.cards.length > 0 && (
           <List local={{ emptyText: '' }} itemLayout="horizontal" dataSource={state.cards} gutter="0"
             renderItem={item => (
-              <CardItem item={item} tooltip={state.tooltip} resync={() => actions.resync(item.cardId)}
+              <CardItem item={item} enableIce={state.enableIce} tooltip={state.tooltip} resync={() => actions.resync(item.cardId)}
                   open={() => openContact(item.guid)} message={() => message(item.cardId)} 
                   call={() => call(item)} />
             )} />

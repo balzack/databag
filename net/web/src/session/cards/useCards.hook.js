@@ -3,6 +3,7 @@ import { CardContext } from 'context/CardContext';
 import { ViewportContext } from 'context/ViewportContext';
 import { StoreContext } from 'context/StoreContext';
 import { ChannelContext } from 'context/ChannelContext';
+import { AccountContext } from 'context/AccountContext';
 import { RingContext } from 'context/RingContext';
 
 export function useCards() {
@@ -13,10 +14,12 @@ export function useCards() {
     tooltip: false,
     sorted: false,
     display: 'small',
+    enableIce: false,
     cards: [],
   });
 
   const ring = useContext(RingContext);
+  const account = useContext(AccountContext);
   const card = useContext(CardContext);
   const channel = useContext(ChannelContext);
   const store = useContext(StoreContext);
@@ -30,6 +33,11 @@ export function useCards() {
     const { display } = viewport.state;
     updateState({ display });
   }, [viewport.state]);
+
+  useEffect(() => {
+    const { enableIce } = account.state?.status || {};
+    updateState({ enableIce });
+  }, [account.state]);
 
   useEffect(() => {
     const contacts = Array.from(card.state.cards.values()).map(item => {

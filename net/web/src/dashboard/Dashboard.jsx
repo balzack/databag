@@ -127,20 +127,51 @@ export function Dashboard() {
             <Switch onChange={(e) => actions.setPushSupported(e)} size="small"
               defaultChecked={true} checked={state.pushSupported} />
           </div>
+          <div className="field label">
+            <span>Topic Content:</span>
+          </div>
+          <Tooltip placement="topLeft" title="Allows images to be posted and processed in topics">
+            <div className="field">
+              <div>Enable Image Queue:&nbsp;</div>
+              <Switch onChange={(e) => actions.setEnableImage(e)} size="small"
+                defaultChecked={true} checked={state.enableImage} />
+            </div>
+          </Tooltip>
+          <Tooltip placement="topLeft" title="Allows for audio to be posted and processed in topics">
+            <div className="field">
+              <div>Enable Audio Queue:&nbsp;</div>
+              <Switch onChange={(e) => actions.setEnableAudio(e)} size="small"
+                defaultChecked={true} checked={state.enableAudio} />
+            </div>
+          </Tooltip>
+          <Tooltip placement="topLeft" title="Allows videos to be posted and processed in topics">
+            <div className="field">
+              <div>Enable Video Queue:&nbsp;</div>
+              <Switch onChange={(e) => actions.setEnableVideo(e)} size="small"
+                defaultChecked={true} checked={state.enableVideo} />
+            </div>
+          </Tooltip>
+          <Tooltip placement="topLeft" title="Enabled audio and video calls to contacts">
+            <div className="field label">
+              <div>Enable WebRTC calls:&nbsp;</div>
+              <Switch onChange={(e) => actions.setEnableIce(e)} size="small"
+                defaultChecked={false} checked={state.enableIce} />
+            </div>
+          </Tooltip>
           <div className="field">
-            <div>Enable Image Queue:&nbsp;</div>
-            <Switch onChange={(e) => actions.setEnableImage(e)} size="small"
-              defaultChecked={true} checked={state.enableImage} />
+            <div>WebRTC Server URL:&nbsp;</div>
+            <Input placeholder="turn:ip:port?transport=udp" onChange={(e) => actions.setIceUrl(e.target.value)}
+                disabled={!state.enableIce} value={state.iceUrl} />
           </div>
           <div className="field">
-            <div>Enable Audio Queue:&nbsp;</div>
-            <Switch onChange={(e) => actions.setEnableAudio(e)} size="small"
-              defaultChecked={true} checked={state.enableAudio} />
+            <div>WebRTC Username:&nbsp;</div>
+            <Input placeholder="username" onChange={(e) => actions.setIceUsername(e.target.value)}
+                disabled={!state.enableIce} value={state.iceUsername} />
           </div>
           <div className="field">
-            <div>Enable Video Queue:&nbsp;</div>
-            <Switch onChange={(e) => actions.setEnableVideo(e)} size="small"
-              defaultChecked={true} checked={state.enableVideo} />
+            <div>WebRTC Password:&nbsp;</div>
+            <Input placeholder="password" onChange={(e) => actions.setIcePassword(e.target.value)}
+                disabled={!state.enableIce} value={state.icePassword} />
           </div>
         </SettingsLayout>
       </Modal>

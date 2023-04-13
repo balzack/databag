@@ -61,6 +61,9 @@ func AddCall(w http.ResponseWriter, r *http.Request) {
   // allocate bridge
   callerToken := hex.EncodeToString(callerBin);
   calleeToken := hex.EncodeToString(calleeBin);
+  iceUrl := getStrConfigValue(CNFIceUrl, "")
+  iceUsername := getStrConfigValue(CNFIceUsername, "")
+  icePassword := getStrConfigValue(CNFIcePassword, "")
   bridgeRelay.AddBridge(account.ID, callId, cardId, callerToken, calleeToken);
 
   // create response
@@ -69,6 +72,9 @@ func AddCall(w http.ResponseWriter, r *http.Request) {
     CardId: cardId,
     CallerToken: callerToken,
     CalleeToken: calleeToken,
+    IceUrl: iceUrl,
+    IceUsername: iceUsername,
+    IcePassword: icePassword,
     KeepAlive: BridgeKeepAlive,
   }
   WriteResponse(w, call);

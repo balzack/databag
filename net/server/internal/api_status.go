@@ -129,6 +129,9 @@ func SetRing(card *store.Card, ring Ring) {
   var phone Phone
   phone.CallID = ring.CallID
   phone.CalleeToken = ring.CalleeToken
+  phone.IceUrl = ring.IceUrl
+  phone.IceUsername = ring.IceUsername
+  phone.IcePassword = ring.IcePassword
   phone.CardID = card.CardSlot.CardSlotID
   var a Activity
   a.Phone = &phone;

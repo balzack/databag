@@ -86,6 +86,12 @@ export const AlertIcon = styled.div`
 export const SettingsLayout = styled(Space)`
   width: 100%;
 
+  .label {
+    border-top: 1px solid ${Colors.divider};
+    padding-top: 8px;
+    margin-top: 8px;
+  }
+
   .field {
     white-space: nowrap;
     display: flex;
