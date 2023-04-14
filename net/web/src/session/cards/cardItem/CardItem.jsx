@@ -55,7 +55,7 @@ export function CardItem({ item, tooltip, enableIce, resync, open, call, message
             )}
           </ComOptions>
         )}
-        { item.status !== 'connected' && display !== 'small' && (
+        { item.status === 'connected' && display !== 'small' && (
           <ComOptions>
             <Tooltip className="option" placement="left" title="message contact">
               <MessageOutlined onClick={onMessage} />
