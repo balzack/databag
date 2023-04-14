@@ -404,7 +404,7 @@ export function useRingContext() {
       }
 
       calling.current = { };
-      updateState({ callStatus: "dialing" });
+      updateState({ callStatus: "dialing", callId });
 
       // create call
       const { server, token } = access.current;
@@ -451,7 +451,7 @@ export function useRingContext() {
         }
       }, RING);
 
-      updateState({ callStatus: "ringing", cardId });
+      updateState({ callStatus: "ringing" });
       calling.current = { callId: id, host: true };
       const ice = [{ urls: iceUrl, username: iceUsername, credential: icePassword }];
       await connect('polite', server, callerToken, () => clearInterval(ringInterval), () => clearInterval(aliveInterval), ice);

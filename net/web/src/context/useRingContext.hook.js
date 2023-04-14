@@ -136,8 +136,6 @@ export function useRingContext() {
 
   const transmit = async (policy, ice) => {
 
-console.log("TRANSMIT:", ice);
-
     pc.current = new RTCPeerConnection({ iceServers: ice });
     pc.current.ontrack = (ev) => {
       if (!stream.current) {
@@ -185,8 +183,6 @@ console.log("TRANSMIT:", ice);
   }
 
   const connect = async (policy, node, token, clearRing, clearAlive, ice) => {
-
-    console.log("ICE CONNECT", ice);
 
     // connect signal socket
     connected.current = false;
@@ -337,29 +333,30 @@ console.log("TRANSMIT:", ice);
       }
     },
     end: async () => {
-      if (!calling.current) {
-        throw new Error('inactive session');
-      }
-      try {
-        const { host, callId, contactNode, contactToken } = calling.current;
-        if (host) {
-          await removeCall(access.current, callId);
+      if (calling.current?.callId) {
+        try {
+          const { host, callId, contactNode, contactToken } = calling.current;
+          if (host) {
+            await removeCall(access.current, callId);
+          }
+          else {
+            await removeContactCall(contactNode, contactToken, callId);
+          }
         }
-        else {
-          await removeContactCall(contactNode, contactToken, callId);
+        catch (err) {
+          console.log(err);
         }
-      }
-      catch (err) {
-        console.log(err);
-      }
-      ws.current.close();
-      if (videoTrack.current) {
-        videoTrack.current.stop();
-        videoTrack.current = null;
-      }
-      if (audioTrack.current) {
-        audioTrack.current.stop();
-        audioTrack.current = null;
+        if (ws.current) {
+          ws.current.close();
+        }
+        if (videoTrack.current) {
+          videoTrack.current.stop();
+          videoTrack.current = null;
+        }
+        if (audioTrack.current) {
+          audioTrack.current.stop();
+          audioTrack.current = null;
+        }
       }
     },
     call: async (cardId, contactNode, contactToken) => {
@@ -367,8 +364,19 @@ console.log("TRANSMIT:", ice);
         throw new Error("active session");
       }
 
+      calling.current = {};
+      updateState({ callStatus: "dialing", cardId });
+
       // create call
-      const call = await addCall(access.current, cardId);
+      let call;
+      try {
+        call = await addCall(access.current, cardId);
+      }
+      catch (err) {
+        calling.current = null;
+        updateState({ callStatus: null });
+      }
+
       const { id, keepAlive, callerToken, calleeToken, iceUrl, iceUsername, icePassword } = call;
       try {
         await addContactRing(contactNode, contactToken, { index, callId: id, calleeToken, iceUrl, iceUsername, icePassword });
@@ -402,7 +410,7 @@ console.log("TRANSMIT:", ice);
         }
       }, RING);
 
-      updateState({ callStatus: "ringing", cardId });
+      updateState({ callStatus: "ringing" });
       calling.current = { callId: id, host: true };
       const ice = [{ urls: iceUrl, username: iceUsername, credential: icePassword }];
       await connect('polite', window.location.host, callerToken, () => clearInterval(ringInterval), () => clearInterval(aliveInterval), ice);
