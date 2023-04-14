@@ -167,7 +167,7 @@ export function useAppContext() {
   }
 
   const setWebsocket = (session) => {
-    ws.current = createWebsocket(`wss://${session.server}/status`);
+    ws.current = createWebsocket(`wss://${session.server}/status?mode=ring`);
     ws.current.onmessage = (ev) => {
       try {
         delay.current = 0;
@@ -181,9 +181,16 @@ export function useAppContext() {
           channel.actions.setRevision(channelRev);
           card.actions.setRevision(cardRev);
         }
-        if (activity.ring) {
+        else if (activity.ring) {
           const { cardId, callId, calleeToken, iceUrl, iceUsername, icePassword } = activity.ring;
           ring.actions.ring(cardId, callId, calleeToken, iceUrl, iceUsername, icePassword);
+        }
+        else {
+          const { profile: profileRev, account: accountRev, channel: channelRev, card: cardRev } = activity;
+          profile.actions.setRevision(profileRev);
+          account.actions.setRevision(accountRev);
+          channel.actions.setRevision(channelRev);
+          card.actions.setRevision(cardRev);
         }
       }
       catch (err) {
