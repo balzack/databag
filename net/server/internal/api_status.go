@@ -64,7 +64,11 @@ func Status(w http.ResponseWriter, r *http.Request) {
 	// send current version
 	rev := getRevision(&session.Account)
 	var msg []byte
-	msg, err = json.Marshal(rev)
+  if ringMode {
+    msg, err = json.Marshal(rev)
+  } else {
+    msg, err = json.Marshal(rev.Revision)
+  }
 	if err != nil {
 		ErrMsg(err)
 		return
