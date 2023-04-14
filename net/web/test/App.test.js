@@ -10,6 +10,7 @@ import { ChannelContextProvider } from 'context/ChannelContext';
 import { StoreContextProvider } from 'context/StoreContext';
 import { UploadContextProvider } from 'context/UploadContext';
 import { ViewportContextProvider } from 'context/ViewportContext';
+import { RingContextProvider } from 'context/RingContext';
 import { ConversationContextProvider } from 'context/ConversationContext';
 
 let mockWebsocket;
@@ -43,11 +44,13 @@ function AppTestApp() {
           <ProfileContextProvider>
             <StoreContextProvider>
               <AccountContextProvider>
-                <ViewportContextProvider>
-                  <AppContextProvider>
-                    <AppView />
-                  </AppContextProvider>
-                </ViewportContextProvider>
+                <RingContextProvider>
+                  <ViewportContextProvider>
+                    <AppContextProvider>
+                      <AppView />
+                    </AppContextProvider>
+                  </ViewportContextProvider>
+                </RingContextProvider>
               </AccountContextProvider>
             </StoreContextProvider>
           </ProfileContextProvider>

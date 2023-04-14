@@ -6,6 +6,7 @@ import { ProfileContextProvider } from 'context/ProfileContext';
 import { CardContextProvider } from 'context/CardContext';
 import { ChannelContextProvider } from 'context/ChannelContext';
 import { StoreContextProvider } from 'context/StoreContext';
+import { RingContextProvider } from 'context/RingContext';
 import { UploadContextProvider } from 'context/UploadContext';
 import { ViewportContextProvider } from 'context/ViewportContext';
 import { useAccess } from 'access/useAccess.hook';
@@ -34,11 +35,13 @@ function AccessTestApp() {
           <ProfileContextProvider>
             <StoreContextProvider>
               <AccountContextProvider>
-                <ViewportContextProvider>
-                  <AppContextProvider>
-                    <AccessView />
-                  </AppContextProvider>
-                </ViewportContextProvider>
+                <RingContextProvider>
+                  <ViewportContextProvider>
+                    <AppContextProvider>
+                      <AccessView />
+                    </AppContextProvider>
+                  </ViewportContextProvider>
+                </RingContextProvider>
               </AccountContextProvider>
             </StoreContextProvider>
           </ProfileContextProvider>

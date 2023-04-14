@@ -8,6 +8,7 @@ import { AppContext, AppContextProvider } from 'context/AppContext';
 import { AccountContextProvider } from 'context/AccountContext';
 import { ProfileContextProvider } from 'context/ProfileContext';
 import { CardContextProvider } from 'context/CardContext';
+import { RingContextProvider } from 'context/RingContext';
 import { ChannelContextProvider } from 'context/ChannelContext';
 import { StoreContext } from 'context/StoreContext';
 
@@ -34,9 +35,11 @@ function AppTestApp() {
         <ChannelContextProvider>
           <AccountContextProvider>
             <ProfileContextProvider>
-              <AppContextProvider>
-                <AppView />
-              </AppContextProvider>
+              <RingContextProvider>
+                <AppContextProvider>
+                  <AppView />
+                </AppContextProvider>
+              </RingContextProvider>
             </ProfileContextProvider>
           </AccountContextProvider>
         </ChannelContextProvider>
@@ -52,6 +55,8 @@ function MockWebsocket(url) {
   this.send = (msg) => { this.sent = true };
 };
 jest.mock('@react-native-firebase/messaging', () => () => ({ getToken: async () => '##' }));
+
+jest.mock('react-native-webrtc', () => {});
 
 jest.mock('react-native-device-info', () => ({
   getVersion: () => '##',

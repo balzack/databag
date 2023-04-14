@@ -8,6 +8,7 @@ import { ChannelContextProvider } from 'context/ChannelContext';
 import { StoreContext, StoreContextProvider } from 'context/StoreContext';
 import { UploadContextProvider } from 'context/UploadContext';
 import { ViewportContextProvider } from 'context/ViewportContext';
+import { RingContextProvider } from 'context/RingContext';
 import { useSession } from 'session/useSession.hook';
 import * as fetchUtil from 'api/fetchUtil';
 
@@ -37,11 +38,13 @@ function SessionTestApp() {
           <ProfileContextProvider>
             <StoreContextProvider>
               <AccountContextProvider>
-                <ViewportContextProvider>
-                  <AppContextProvider>
-                    <SessionView />
-                  </AppContextProvider>
-                </ViewportContextProvider>
+                <RingContextProvider>
+                  <ViewportContextProvider>
+                    <AppContextProvider>
+                      <SessionView />
+                    </AppContextProvider>
+                  </ViewportContextProvider>
+                </RingContextProvider>
               </AccountContextProvider>
             </StoreContextProvider>
           </ProfileContextProvider>

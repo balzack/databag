@@ -6,6 +6,7 @@ import { AccountContextProvider } from 'context/AccountContext';
 import { ProfileContextProvider } from 'context/ProfileContext';
 import { ChannelContextProvider } from 'context/ChannelContext';
 import { CardContextProvider } from 'context/CardContext';
+import { RingContextProvider } from 'context/RingContext';
 import { StoreContext } from 'context/StoreContext';
 import { useTestStoreContext } from 'context/useTestStoreContext.hook';
 import { useLogin } from 'src/access/login/useLogin.hook';
@@ -41,9 +42,11 @@ function AccessTestApp({ mode }) {
       <ProfileContextProvider>
         <ChannelContextProvider>
           <CardContextProvider>
-            <AppContextProvider>
-              <AccessView mode={mode} />
-            </AppContextProvider>
+            <RingContextProvider>
+              <AppContextProvider>
+                <AccessView mode={mode} />
+              </AppContextProvider>
+            </RingContextProvider>
           </CardContextProvider>
         </ChannelContextProvider>
       </ProfileContextProvider>
@@ -63,6 +66,8 @@ jest.mock('@react-native-firebase/messaging', () => () => ({
   deleteToken: async () => {}, 
   getToken: async () => '##'
 }));
+
+jest.mock('react-native-webrtc', () => {});
 
 jest.mock('react-native-device-info', () => ({
   getVersion: () => '##',
