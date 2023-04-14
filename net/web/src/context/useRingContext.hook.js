@@ -196,7 +196,7 @@ export function useRingContext() {
     accessAudio.current = false;
 
     const protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
-    ws.current = createWebsocket(`${protocol}${node}/signal`);
+    ws.current = createWebsocket(`${protocol}${node}/signal?mode=ring`);
     ws.current.onmessage = async (ev) => {
       // handle messages [impolite]
       try {

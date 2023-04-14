@@ -172,7 +172,7 @@ export function useAppContext(websocket) {
     }
 
     updateState({ status: 'connecting' });
-    ws.current = createWebsocket(protocol + window.location.host + "/status");
+    ws.current = createWebsocket(protocol + window.location.host + "/status?mode=ring");
     ws.current.onmessage = (ev) => {
       try {
         let activity = JSON.parse(ev.data);
@@ -180,9 +180,12 @@ export function useAppContext(websocket) {
         if (activity.revision) {
           setAppRevision(activity.revision);
         }
-        if (activity.ring) {
+        else if (activity.ring) {
           const { cardId, callId, calleeToken, iceUrl, iceUsername, icePassword } = activity.ring;
           ringContext.actions.ring(cardId, callId, calleeToken, iceUrl, iceUsername, icePassword);
+        }
+        else {
+          setAppRevision(activity);
         }
       }
       catch (err) {
