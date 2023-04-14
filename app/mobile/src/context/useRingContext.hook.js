@@ -379,32 +379,45 @@ export function useRingContext() {
       }
     },
     end: async () => {
-      if (!calling.current) {
-        throw new Error('inactive session');
-      }
-      try {
-        const { host, callId, contactNode, contactToken } = calling.current;
-        if (host) {
-          const { server, token } = access.current;
-          await removeCall(server, token, callId);
+      if (calling.current?.callId) {
+        try {
+          const { host, callId, contactNode, contactToken } = calling.current;
+          if (host) {
+            const { server, token } = access.current;
+            await removeCall(server, token, callId);
+          }
+          else {
+            await removeContactCall(contactNode, contactToken, callId);
+          }
         }
-        else {
-          await removeContactCall(contactNode, contactToken, callId);
+        catch (err) {
+          console.log(err);
+        }
+        if (ws.current) {
+          ws.current.close();
         }
       }
-      catch (err) {
-        console.log(err);
-      }
-      ws.current.close();
     },
     call: async (cardId, contactNode, contactToken) => {
       if (calling.current) {
         throw new Error("active session");
       }
 
+      calling.current = { };
+      updateState({ callStatus: "dialing" });
+
       // create call
       const { server, token } = access.current;
-      const call = await addCall(server, token, cardId);
+      let call;
+      try {
+        call = await addCall(server, token, cardId);
+      }
+      catch (err) {
+        calling.current = null;
+        updateState({ callStatus: null });
+        throw err;
+      }
+
       const { id, keepAlive, callerToken, calleeToken, iceUrl, iceUsername, icePassword } = call;
       try {
         await addContactRing(contactNode, contactToken, { index, callId: id, calleeToken, iceUrl, iceUsername, icePassword });
