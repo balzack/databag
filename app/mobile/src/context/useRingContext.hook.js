@@ -404,7 +404,7 @@ export function useRingContext() {
       }
 
       calling.current = { };
-      updateState({ callStatus: "dialing", callId });
+      updateState({ callStatus: "dialing", cardId });
 
       // create call
       const { server, token } = access.current;
