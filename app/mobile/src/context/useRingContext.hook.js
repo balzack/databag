@@ -104,7 +104,8 @@ export function useRingContext() {
         }
       }
       catch (err) {
-        Alert.alert('webrtc error', err.toString());
+        console.log(err);
+        //Alert.alert('webrtc error', err.toString());
       }
     }
 
@@ -153,7 +154,8 @@ export function useRingContext() {
           }
         }
         catch (err) {
-          Alert.alert('webrtc error', err.toString());
+          console.log(err);
+          //Alert.alert('webrtc error', err.toString());
         }
       }
     }
@@ -468,11 +470,17 @@ export function useRingContext() {
           });
           for (const track of stream.getTracks()) {
             if (track.kind === 'audio') {
+              if (audioTrack.current) {
+                audioTrack.current.stop();
+              }
               audioTrack.current = track;
               pc.current.addTrack(track, stream);
               updateState({ localAudio: true });
             }
             if (track.kind === 'video') {
+              if (videoTrack.current) {
+                videoTrack.current.stop();
+              }
               videoTrack.current = track;
               pc.current.addTrack(track, stream);
               InCallManager.setForceSpeakerphoneOn(true);
