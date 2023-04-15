@@ -14,7 +14,7 @@ import { Account } from './account/Account';
 import { Welcome } from './welcome/Welcome';
 import { BottomNav } from './bottomNav/BottomNav';
 import { Logo } from 'logo/Logo';
-import { EyeInvisibleOutlined, CloseOutlined, PhoneOutlined } from '@ant-design/icons';
+import { EyeInvisibleOutlined, PhoneOutlined } from '@ant-design/icons';
 import { IoVideocamOffOutline, IoVideocamOutline, IoMicOffOutline, IoMicOutline, IoCallOutline } from "react-icons/io5";
 
 export function Session() {
@@ -43,6 +43,7 @@ export function Session() {
       );
     }
     setRinging(incoming);
+    // eslint-disable-next-line
   }, [state.ringing]);
 
   useEffect(() => {
@@ -327,7 +328,7 @@ export function Session() {
           </div>
         </RingingWrapper>
       </Modal>
-      <Modal centered visible={state.callStatus} footer={null} closable={false} width={callModal.width} height={callModal.height} bodyStyle={{ paddingBottom: 0, paddingTop: 6, paddingLeft: 6, paddingRight: 6, paddingBottom: 6 }}>
+      <Modal centered visible={state.callStatus} footer={null} closable={false} width={callModal.width} height={callModal.height} bodyStyle={{ paddingBottom: 0, paddingTop: 6, paddingLeft: 6, paddingRight: 6 }}>
         <CallingWrapper>
           { !state.remoteVideo && (
             <Logo url={state.callLogo} width={256} height={256} radius={8} />

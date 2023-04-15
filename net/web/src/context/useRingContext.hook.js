@@ -1,4 +1,4 @@
-import { useEffect, useContext, useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { createWebsocket } from 'api/fetchUtil';
 import { addContactRing } from 'api/addContactRing';
 import { addCall } from 'api/addCall';
@@ -377,6 +377,7 @@ export function useRingContext() {
         updateState({ callStatus: null });
       }
 
+      let index = 0;
       const { id, keepAlive, callerToken, calleeToken, iceUrl, iceUsername, icePassword } = call;
       try {
         await addContactRing(contactNode, contactToken, { index, callId: id, calleeToken, iceUrl, iceUsername, icePassword });
@@ -392,7 +393,6 @@ export function useRingContext() {
           console.log(err);
         }
       }, keepAlive * 1000);
-      let index = 0;
       const ringInterval = setInterval(async () => {
         try {
           if (index > RING_COUNT) {
@@ -461,19 +461,4 @@ export function useRingContext() {
 
   return { state, actions }
 }
-
-function whiteNoise() {
-    const canvas = Object.assign(document.createElement("canvas"), {width: 320, height: 240});
-    const ctx = canvas.getContext('2d');
-    ctx.fillRect(0, 0, 320, 240);
-    const p = ctx.getImageData(0, 0, 320, 240);
-    requestAnimationFrame(function draw(){
-      for (var i = 0; i < p.data.length; i++) {
-        p.data[i++] = p.data[i++] = p.data[i++] = Math.random() * 255;
-      }
-      ctx.putImageData(p, 0, 0);
-      requestAnimationFrame(draw);
-    });
-    return canvas.captureStream();
-  }
 

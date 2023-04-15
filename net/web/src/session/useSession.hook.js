@@ -76,6 +76,7 @@ export function useSession() {
 
     const { callStatus, localStream, localVideo, localAudio, remoteStream, remoteVideo, remoteAudio } = ring.state;
     updateState({ ringing, callStatus, callLogo, localStream, localVideo, localAudio, remoteStream, remoteVideo, remoteAudio });
+    // eslint-disable-next-line
   }, [ring.state]);
 
   useEffect(() => {

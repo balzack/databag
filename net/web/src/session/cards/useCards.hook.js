@@ -144,7 +144,7 @@ export function useCards() {
     },
     call: async (contact) => {
       const { cardId, node, guid, token } = contact;
-      await ring.actions.call(contact.cardId, node, `${guid}.${token}`);
+      await ring.actions.call(cardId, node, `${guid}.${token}`);
     },
   };
 

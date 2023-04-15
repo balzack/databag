@@ -26,7 +26,7 @@ export function Cards({ closeCards, openContact, openChannel, openListing }) {
 
   const call = async (contact) => {
     try {
-      const id = await actions.call(contact);
+      await actions.call(contact);
     }
     catch (err) {
       console.log(err);
@@ -40,6 +40,7 @@ export function Cards({ closeCards, openContact, openChannel, openListing }) {
 
   return (
     <CardsWrapper>
+      { modalContext }
       <div className="search">
         { !state.sorted && (
           <div className="unsorted" onClick={() => actions.setSort(true)}>
