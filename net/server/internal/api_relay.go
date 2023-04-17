@@ -14,6 +14,8 @@ var cur bool = false
 //Status handler for websocket connection
 func Relay(w http.ResponseWriter, r *http.Request) {
 
+  relayer.CheckOrigin = func(r *http.Request) bool { return true }
+
 	// accept websocket connection
 	conn, err := relayer.Upgrade(w, r, nil)
 	if err != nil {

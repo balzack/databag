@@ -12,6 +12,8 @@ var relayUpgrader = websocket.Upgrader{}
 //Status handler for websocket connection
 func Signal(w http.ResponseWriter, r *http.Request) {
 
+  relayUpgrader.CheckOrigin = func(r *http.Request) bool { return true }
+
 	// accept websocket connection
 	conn, err := relayUpgrader.Upgrade(w, r, nil)
 	if err != nil {
