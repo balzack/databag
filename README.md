@@ -91,7 +91,7 @@ Instruction for installing without a container in AWS are [here](/doc/aws.md).
 
 ## Audio and Video Calls
 
-Databag depends on a separate STUN/TURN relay server to provide audio and video calls. We've tested with both [cuturn](https://github.com/coturn/coturn) and [pion](https://github.com/pion/turn), but there are many other implementations. Instruction for installing a coturn server are provided here [here](https://gabrieltanner.org/blog/turn-server/).
+Databag depends on a separate STUN/TURN relay server to provide audio and video calls. We've tested with both [cuturn](https://github.com/coturn/coturn) and [pion](https://github.com/pion/turn), but there are many other implementations. Instruction for installing a coturn server are provided [here](https://gabrieltanner.org/blog/turn-server/).
 
 If you want to enable audio and video calls, you need setup your own relay server. For testing purposes you can however use the demo relay server:
   - WebRTC Server URL: turn:34.210.172.114:3478?transport=udp
