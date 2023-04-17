@@ -24,7 +24,7 @@ Databag is a self-hosted messaging service. Notable features include:
 - Federated (accounts on different nodes can communicate)
 - Public-private key based identity (not bound to any blockchain or hosting domain)
 - End-to-end encryption (the hosting admin cannot view sealed topics)
-- Audio and Video Calls (enabled with separate relay server)
+- Audio and Video Calls (nat tranversal requires separate relay server)
 - Topic based threads (messages organized by topic not contacts)
 - Lightweight (server runs on a raspberry pi zero v1.3)
 - Low latency (use of websockets for push events to avoid polling)
@@ -92,9 +92,9 @@ Instruction for installing without a container in AWS are [here](/doc/aws.md).
 
 ## Audio and Video Calls
 
-Databag depends on a separate STUN/TURN relay server to provide audio and video calls. Testing was done with both [cuturn](https://github.com/coturn/coturn) and [pion](https://github.com/pion/turn) and should work with any implementation. Instruction for installing a coturn server are provided [here](https://gabrieltanner.org/blog/turn-server/).
+Databag provides audio and video calling and relies on a STUN/TURN relay server for NAT traversal. Testing was done with both [cuturn](https://github.com/coturn/coturn) and [pion](https://github.com/pion/turn) and should work with any implementation. Instruction for installing a coturn server are provided [here](https://gabrieltanner.org/blog/turn-server/).
 
-If you want to enable audio and video calls, you need setup your own relay server. For testing purposes you can however use the demo relay server configuration. In the admin page set:
+If you want to enable audio and video calls, you should setup your own relay server. For testing purposes you can however use the demo relay server configuration. In the admin page set:
   - Enable WebRTC Calls: -switch on-
   - WebRTC Server URL: turn:34.210.172.114:3478?transport=udp
   - WebRTC Username: user
