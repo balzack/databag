@@ -59,6 +59,13 @@ func TestContactSync(t *testing.T) {
 	assert.NoError(t, APITestMsg(GetCards, "GET", "/contact/cards?revision="+cardRevision,
 		nil, nil, APPTokenAgent, set.B.Token, cards, &hdr))
 	cardRevision = hdr["Card-Revision"][0]
+  if len(*cards) != 0 {
+    PrintMsg("TEST WILL FAIL");
+    PrintMsg(*cards);
+    PrintMsg("****");
+    PrintMsg(set);
+    PrintMsg("----");
+  }
 	assert.Equal(t, 0, len(*cards)) // ?? actual 1
 
 	// set card notes

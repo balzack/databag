@@ -328,7 +328,7 @@ export function Session() {
           </div>
         </RingingWrapper>
       </Modal>
-      <Modal centered visible={state.callStatus} footer={null} closable={false} width={callModal.width} height={callModal.height} bodyStyle={{ paddingBottom: 0, paddingTop: 6, paddingLeft: 6, paddingRight: 6 }}>
+      <Modal centered visible={state.callStatus} footer={null} closable={false} width={callModal.width} height={callModal.height} bodyStyle={{ padding: 6 }}>
         <CallingWrapper>
           { !state.remoteVideo && (
             <Logo url={state.callLogo} width={256} height={256} radius={8} />
