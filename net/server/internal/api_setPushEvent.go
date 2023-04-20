@@ -11,6 +11,7 @@ import (
 type Payload struct {
   Title string `json:"title"`
   Body string `json:"body"`
+  Sound string `json:"sound"`
 }
 
 type Message struct {
@@ -58,7 +59,7 @@ func SendPushEvent(account store.Account, event string) {
     rows.Scan(&pushToken, &messageTitle, &messageBody)
 
     url := "https://fcm.googleapis.com/fcm/send"
-    payload := Payload{ Title: messageTitle, Body: messageBody };
+    payload := Payload{ Title: messageTitle, Body: messageBody, Sound: "default" };
     message := Message{ Notification: payload, To: pushToken };
 
     body, err := json.Marshal(message)
