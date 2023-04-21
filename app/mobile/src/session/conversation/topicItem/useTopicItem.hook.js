@@ -237,6 +237,9 @@ export function useTopicItem(item, hosting, remove, contentKey) {
     setActive: (activeId) => {
       updateState({ activeId });
     },
+    getTopicAssetUrl: (topicId, assetId) => {
+      return conversation.actions.getTopicAssetUrl(topicId, assetId);
+    }
   };
 
   return { state, actions };

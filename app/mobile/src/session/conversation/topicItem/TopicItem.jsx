@@ -13,6 +13,8 @@ import { ImageAsset } from './imageAsset/ImageAsset';
 import { AudioAsset } from './audioAsset/AudioAsset';
 import { VideoAsset } from './videoAsset/VideoAsset';
 import Carousel from 'react-native-reanimated-carousel';
+import Share from 'react-native-share';
+import RNFetchBlob from "rn-fetch-blob";
 
 export function TopicItem({ item, focused, focus, hosting, remove, update, block, report, contentKey }) {
 
@@ -42,6 +44,38 @@ export function TopicItem({ item, focused, focus, hosting, remove, update, block
         }
       ]
     );
+  }
+
+  const shareMessage = async () => {
+    console.log("SHARING!", item);
+
+    try {
+      const files = []
+      const fs = RNFetchBlob.fs;
+
+      const data = JSON.parse(item.detail.data)
+      const assets = data.assets || []
+      for (let i = 0; i < assets.length; i++) {
+        if (assets[i].image) {
+          const url = actions.getTopicAssetUrl(item.topicId, assets[i].image.full);
+          const blob = await RNFetchBlob.config({ fileCache: true }).fetch("GET", url);
+          const type = blob.respInfo.headers["Content-Type"];
+          const file = await blob.readFile("base64");
+          fs.unlink(blob.path());
+
+          files.push(`data:${type};base64,${file}`)
+        }
+      }
+      
+      Share.open({ urls: files, message: data.text })
+    }
+    catch(err) {
+      console.log(err);
+      Alert.alert(
+        'Failed to Share Message',
+        'Please try again.'
+      )
+    }
   }
 
   const reportMessage = () => {
@@ -178,6 +212,9 @@ export function TopicItem({ item, focused, focus, hosting, remove, update, block
       </View>
       { focused && (
         <View style={styles.focused}>
+           <TouchableOpacity style={styles.icon} onPress={shareMessage}>
+            <MatIcons name="share-variant-outline" size={18} color={Colors.white} />
+          </TouchableOpacity>
           { state.editable && (
             <TouchableOpacity style={styles.icon} onPress={() => update(item.topicId, state.editType, state.editData)}>
               <AntIcons name="edit" size={24} color={Colors.white} />
