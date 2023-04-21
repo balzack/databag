@@ -1,4 +1,4 @@
-import { KeyboardAvoidingView, FlatList, View, Text, TextInput, Modal, Image, Alert } from 'react-native';
+import { Platform, KeyboardAvoidingView, FlatList, View, Text, TextInput, Modal, Image, Alert } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useTopicItem } from './useTopicItem.hook';
 import { styles } from './TopicItem.styled';
@@ -15,6 +15,64 @@ import { VideoAsset } from './videoAsset/VideoAsset';
 import Carousel from 'react-native-reanimated-carousel';
 import Share from 'react-native-share';
 import RNFetchBlob from "rn-fetch-blob";
+
+function getExtension(mime) {
+  if (mime === 'image/gif') {
+    return 'gif';
+  }
+  if (mime === 'image/jpeg') {
+    return 'jpg';
+  }
+  if (mime === 'text/plain') {
+    return 'txt';
+  }
+  if (mime === 'image/png') {
+    return 'png';
+  }
+  if (mime === 'image/bmp') {
+    return 'bmp';
+  }
+  if (mime === 'image/svg+xml') {
+    return 'svg';
+  }
+  if (mime === 'application/msword') {
+    return 'doc';
+  }
+  if (mime === 'application/pdf') {
+    return 'pdf';
+  }
+  if (mime === 'application/vnd.ms-excel') {
+    return 'xls';
+  }
+  if (mime === 'application/vnd.ms-powerpoint') {
+    return 'ppt';
+  }
+  if (mime === 'application/zip') {
+    return 'zip';
+  }
+  if (mime === 'audio/mpeg') {
+    return 'mp3';
+  }
+  if (mime === 'audio/ogg') {
+    return 'ogg';
+  }
+  if (mime === 'video/mpeg') {
+    return 'mpg';
+  }
+  if (mime === 'video/quicktime') {
+    return 'mov';
+  }
+  if (mime === 'video/x-ms-wmv') {
+    return 'wmv';
+  }
+  if (mime === 'video/x-msvideo') {
+    return 'avi';
+  }
+  if (mime === 'video/mp4') {
+    return 'mp4';
+  }
+  return 'bin'
+}
 
 export function TopicItem({ item, focused, focus, hosting, remove, update, block, report, contentKey }) {
 
@@ -51,29 +109,49 @@ export function TopicItem({ item, focused, focus, hosting, remove, update, block
 
     try {
       const files = []
+      const unlink = []
       const fs = RNFetchBlob.fs;
-
       const data = JSON.parse(item.detail.data)
       const assets = data.assets || []
+
       for (let i = 0; i < assets.length; i++) {
         if (assets[i].image) {
           const url = actions.getTopicAssetUrl(item.topicId, assets[i].image.full);
           const blob = await RNFetchBlob.config({ fileCache: true }).fetch("GET", url);
-          const type = blob.respInfo.headers["Content-Type"];
-          const file = await blob.readFile("base64");
-          fs.unlink(blob.path());
+          const type = blob.respInfo.headers["Content-Type"] || blob.respInfo.headers["content-type"]
 
-          files.push(`data:${type};base64,${file}`)
+          if (Platform.OS === 'ios') {
+            const file = await blob.readFile("base64");
+            files.push(`data:${type};base64,${file}`)
+            unlink.push(blob.path());
+          }
+          else {
+            const src = blob.path();
+            const dir = src.split('/').slice(0,-1).join('/')
+            const dst = dir + '/' + assets[i].image.full + '.' + getExtension(type);
+            await RNFetchBlob.fs.mv(src, dst);
+            files.push(`file://${dst}`);
+            unlink.push(dst);
+          }
         }
       }
       
-      Share.open({ urls: files, message: data.text })
+      await Share.open({ urls: files, message: data.text, title: 'Databag', subject: 'Shared from Databag' })
+
+      try {
+        for (let i = 0; i < unlink.length; i++) {
+          await fs.unlink(unlink[i])
+        }
+      }
+      catch(err) {
+        console.log(err);
+      }
     }
     catch(err) {
       console.log(err);
       Alert.alert(
         'Failed to Share Message',
-        'Please try again.'
+        err.toSring()
       )
     }
   }
