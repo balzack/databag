@@ -10,6 +10,8 @@ import Colors from 'constants/Colors';
 import { getCardByGuid } from 'context/cardUtil';
 import { decryptTopicSubject } from 'context/sealUtil';
 import { sanitizeUrl } from '@braintree/sanitize-url';
+import Share from 'react-native-share';
+import RNFetchBlob from "rn-fetch-blob";
 
 export function useTopicItem(item, hosting, remove, contentKey) {
 
@@ -31,6 +33,7 @@ export function useTopicItem(item, hosting, remove, contentKey) {
     editable: false,
     deletable: false,
     assets: [],
+    sharing: false,
   });
 
   const conversation = useContext(ConversationContext);
@@ -239,9 +242,132 @@ export function useTopicItem(item, hosting, remove, contentKey) {
     },
     getTopicAssetUrl: (topicId, assetId) => {
       return conversation.actions.getTopicAssetUrl(topicId, assetId);
-    }
+    },
+    shareMessage: async () => {
+      if (!state.sharing) {
+        updateState({ sharing: true });
+        const files = []
+        const unlink = []
+        const fs = RNFetchBlob.fs;
+        try {
+          const data = JSON.parse(item.detail.data)
+          const assets = data.assets || []
+
+          for (let i = 0; i < assets.length; i++) {
+
+            let asset
+            if (assets[i].image) {
+              asset = assets[i].image.full;
+            }
+            else if (assets[i].video?.hd) {
+              asset = assets[i].video.hd;
+            }
+            else if (assets[i].video?.lq) {
+              asset = assets[i].video.lq;
+            }
+            else if (assets[i].audio?.full) {
+              asset = assets[i].audio.full;
+            }
+
+            if (asset) {
+              const url = actions.getTopicAssetUrl(item.topicId, asset);
+              const blob = await RNFetchBlob.config({ fileCache: true }).fetch("GET", url);
+              const type = blob.respInfo.headers["Content-Type"] || blob.respInfo.headers["content-type"]
+
+              const src = blob.path();
+              const dir = src.split('/').slice(0,-1).join('/')
+              const dst = dir + '/' + asset + '.' + getExtension(type);
+              try {
+                await fs.unlink(dst);
+              }
+              catch(err) {
+                console.log(err);
+              }
+              await RNFetchBlob.fs.mv(src, dst);
+              files.push(`file://${dst}`);
+              unlink.push(dst);
+            }
+          }
+
+          await Share.open({ urls: files, message: data.text, title: 'Databag', subject: 'Shared from Databag' })
+          while (unlink.length > 0) {
+            const file = fs.unlink.shift();
+            await fs.unlink(file);
+          }
+        }
+        catch(err) {
+          console.log(err);
+          for (let i = 0; i < fs.unlink.length; i++) {
+            try {
+              await fs.unlink(unlink[i])
+            }
+            catch(err) {
+              console.log(err);
+            }
+          }
+        }
+        updateState({ sharing: false });
+      }
+    },
   };
 
   return { state, actions };
 }
 
+function getExtension(mime) {
+  if (mime === 'image/gif') {
+    return 'gif';
+  }
+  if (mime === 'image/jpeg') {
+    return 'jpg';
+  }
+  if (mime === 'text/plain') {
+    return 'txt';
+  }
+  if (mime === 'image/png') {
+    return 'png';
+  }
+  if (mime === 'image/bmp') {
+    return 'bmp';
+  }
+  if (mime === 'image/svg+xml') {
+    return 'svg';
+  }
+  if (mime === 'application/msword') {
+    return 'doc';
+  }
+  if (mime === 'application/pdf') {
+    return 'pdf';
+  }
+  if (mime === 'application/vnd.ms-excel') {
+    return 'xls';
+  }
+  if (mime === 'application/vnd.ms-powerpoint') {
+    return 'ppt';
+  }
+  if (mime === 'application/zip') {
+    return 'zip';
+  }
+  if (mime === 'audio/mpeg') {
+    return 'mp3';
+  }
+  if (mime === 'audio/ogg') {
+    return 'ogg';
+  }
+  if (mime === 'video/mpeg') {
+    return 'mpg';
+  }
+  if (mime === 'video/quicktime') {
+    return 'mov';
+  }
+  if (mime === 'video/x-ms-wmv') {
+    return 'wmv';
+  }
+  if (mime === 'video/x-msvideo') {
+    return 'avi';
+  }
+  if (mime === 'video/mp4') {
+    return 'mp4';
+  }
+  return 'bin'
+}

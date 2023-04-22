@@ -1,4 +1,4 @@
-import { Platform, KeyboardAvoidingView, FlatList, View, Text, TextInput, Modal, Image, Alert } from 'react-native';
+import { Platform, KeyboardAvoidingView, FlatList, ActivityIndicator, View, Text, TextInput, Modal, Image, Alert } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useTopicItem } from './useTopicItem.hook';
 import { styles } from './TopicItem.styled';
@@ -13,66 +13,6 @@ import { ImageAsset } from './imageAsset/ImageAsset';
 import { AudioAsset } from './audioAsset/AudioAsset';
 import { VideoAsset } from './videoAsset/VideoAsset';
 import Carousel from 'react-native-reanimated-carousel';
-import Share from 'react-native-share';
-import RNFetchBlob from "rn-fetch-blob";
-
-function getExtension(mime) {
-  if (mime === 'image/gif') {
-    return 'gif';
-  }
-  if (mime === 'image/jpeg') {
-    return 'jpg';
-  }
-  if (mime === 'text/plain') {
-    return 'txt';
-  }
-  if (mime === 'image/png') {
-    return 'png';
-  }
-  if (mime === 'image/bmp') {
-    return 'bmp';
-  }
-  if (mime === 'image/svg+xml') {
-    return 'svg';
-  }
-  if (mime === 'application/msword') {
-    return 'doc';
-  }
-  if (mime === 'application/pdf') {
-    return 'pdf';
-  }
-  if (mime === 'application/vnd.ms-excel') {
-    return 'xls';
-  }
-  if (mime === 'application/vnd.ms-powerpoint') {
-    return 'ppt';
-  }
-  if (mime === 'application/zip') {
-    return 'zip';
-  }
-  if (mime === 'audio/mpeg') {
-    return 'mp3';
-  }
-  if (mime === 'audio/ogg') {
-    return 'ogg';
-  }
-  if (mime === 'video/mpeg') {
-    return 'mpg';
-  }
-  if (mime === 'video/quicktime') {
-    return 'mov';
-  }
-  if (mime === 'video/x-ms-wmv') {
-    return 'wmv';
-  }
-  if (mime === 'video/x-msvideo') {
-    return 'avi';
-  }
-  if (mime === 'video/mp4') {
-    return 'mp4';
-  }
-  return 'bin'
-}
 
 export function TopicItem({ item, focused, focus, hosting, remove, update, block, report, contentKey }) {
 
@@ -105,61 +45,8 @@ export function TopicItem({ item, focused, focus, hosting, remove, update, block
   }
 
   const shareMessage = async () => {
-    console.log("SHARING!", item);
-
     try {
-      const files = []
-      const unlink = []
-      const fs = RNFetchBlob.fs;
-      const data = JSON.parse(item.detail.data)
-      const assets = data.assets || []
-
-      for (let i = 0; i < assets.length; i++) {
-
-        let asset
-        if (assets[i].image) {
-          asset = assets[i].image.full;
-        }
-        else if (assets[i].video?.lq) {
-          asset = assets[i].video.lq;
-        }
-        else if (assets[i].video?.hd) {
-          asset = assets[i].video.hd;
-        }
-        else if (assets[i].audio?.full) {
-          asset = assets[i].audio.full;
-        }
-
-        if (asset) {
-          const url = actions.getTopicAssetUrl(item.topicId, asset);
-          const blob = await RNFetchBlob.config({ fileCache: true }).fetch("GET", url);
-          const type = blob.respInfo.headers["Content-Type"] || blob.respInfo.headers["content-type"]
-
-          const src = blob.path();
-          const dir = src.split('/').slice(0,-1).join('/')
-          const dst = dir + '/' + asset + '.' + getExtension(type);
-          await fs.unlink(dst);
-          await RNFetchBlob.fs.mv(src, dst);
-          files.push(`file://${dst}`);
-          unlink.push(dst);
-        }
-      }
-
-      try { 
-        await Share.open({ urls: files, message: data.text, title: 'Databag', subject: 'Shared from Databag' })
-      }
-      catch(err) {
-        console.log(err);
-      }
-
-      try {
-        for (let i = 0; i < unlink.length; i++) {
-          await fs.unlink(unlink[i])
-        }
-      }
-      catch(err) {
-        console.log(err);
-      }
+      await actions.shareMessage();
     }
     catch(err) {
       console.log(err);
@@ -304,9 +191,14 @@ export function TopicItem({ item, focused, focus, hosting, remove, update, block
       </View>
       { focused && (
         <View style={styles.focused}>
-           <TouchableOpacity style={styles.icon} onPress={shareMessage}>
-            <MatIcons name="share-variant-outline" size={18} color={Colors.white} />
-          </TouchableOpacity>
+          { state.sharing && (
+            <ActivityIndicator style={styles.share} color={Colors.white} size="small" />
+          )}
+          { !state.sharing && (
+            <TouchableOpacity style={styles.share} onPress={shareMessage}>
+              <MatIcons name="share-variant-outline" size={18} color={Colors.white} />
+            </TouchableOpacity>
+          )}
           { state.editable && (
             <TouchableOpacity style={styles.icon} onPress={() => update(item.topicId, state.editType, state.editData)}>
               <AntIcons name="edit" size={24} color={Colors.white} />
