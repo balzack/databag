@@ -13,6 +13,9 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		46D8108CBA031189090AFC14 /* Pods_Databag_DatabagTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1181227D40684F18A9414840 /* Pods_Databag_DatabagTests.framework */; };
 		7B13A774299E21170048D0DD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7B13A773299E21170048D0DD /* GoogleService-Info.plist */; };
+		7B4A533D29F39E250036F3ED /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B4A533C29F39E250036F3ED /* ShareViewController.swift */; };
+		7B4A534029F39E250036F3ED /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7B4A533E29F39E250036F3ED /* MainInterface.storyboard */; };
+		7B4A534429F39E250036F3ED /* Sharing.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 7B4A533A29F39E250036F3ED /* Sharing.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		A0B1EC4533FCFC5940B5FD7F /* Pods_Databag.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9462C028F47F083241BB7941 /* Pods_Databag.framework */; };
 /* End PBXBuildFile section */
@@ -25,7 +28,28 @@
 			remoteGlobalIDString = 13B07F861A680F5B00A75B9A;
 			remoteInfo = Databag;
 		};
+		7B4A534229F39E250036F3ED /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7B4A533929F39E250036F3ED;
+			remoteInfo = Sharing;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		7B4A534529F39E250036F3ED /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				7B4A534429F39E250036F3ED /* Sharing.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		00E356EE1AD99517003FC87E /* DatabagTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DatabagTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -42,6 +66,11 @@
 		5709B34CF0A7D63546082F79 /* Pods-Databag.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Databag.release.xcconfig"; path = "Target Support Files/Pods-Databag/Pods-Databag.release.xcconfig"; sourceTree = "<group>"; };
 		5B7EB9410499542E8C5724F5 /* Pods-Databag-DatabagTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Databag-DatabagTests.debug.xcconfig"; path = "Target Support Files/Pods-Databag-DatabagTests/Pods-Databag-DatabagTests.debug.xcconfig"; sourceTree = "<group>"; };
 		7B13A773299E21170048D0DD /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		7B4A533A29F39E250036F3ED /* Sharing.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = Sharing.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		7B4A533C29F39E250036F3ED /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
+		7B4A533F29F39E250036F3ED /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
+		7B4A534129F39E250036F3ED /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7B4A534929F39ED90036F3ED /* Sharing.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Sharing.entitlements; sourceTree = "<group>"; };
 		7B6135A429B68A7B0094A6E7 /* Databag.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Databag.entitlements; path = Databag/Databag.entitlements; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = Databag/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-Databag-DatabagTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Databag-DatabagTests.release.xcconfig"; path = "Target Support Files/Pods-Databag-DatabagTests/Pods-Databag-DatabagTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -63,6 +92,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				A0B1EC4533FCFC5940B5FD7F /* Pods_Databag.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7B4A533729F39E250036F3ED /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -110,6 +146,17 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		7B4A533B29F39E250036F3ED /* Sharing */ = {
+			isa = PBXGroup;
+			children = (
+				7B4A534929F39ED90036F3ED /* Sharing.entitlements */,
+				7B4A533C29F39E250036F3ED /* ShareViewController.swift */,
+				7B4A533E29F39E250036F3ED /* MainInterface.storyboard */,
+				7B4A534129F39E250036F3ED /* Info.plist */,
+			);
+			path = Sharing;
+			sourceTree = "<group>";
+		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
@@ -124,6 +171,7 @@
 				13B07FAE1A68108700A75B9A /* Databag */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* DatabagTests */,
+				7B4A533B29F39E250036F3ED /* Sharing */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
@@ -138,6 +186,7 @@
 			children = (
 				13B07F961A680F5B00A75B9A /* Databag.app */,
 				00E356EE1AD99517003FC87E /* DatabagTests.xctest */,
+				7B4A533A29F39E250036F3ED /* Sharing.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -190,15 +239,34 @@
 				00EEFC60759A1932668264C0 /* [CP] Embed Pods Frameworks */,
 				E235C05ADACE081382539298 /* [CP] Copy Pods Resources */,
 				D347E695755653CE8D39CFDD /* [CP-User] [RNFB] Core Configuration */,
+				7B4A534529F39E250036F3ED /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				7B4A534329F39E250036F3ED /* PBXTargetDependency */,
 			);
 			name = Databag;
 			productName = Databag;
 			productReference = 13B07F961A680F5B00A75B9A /* Databag.app */;
 			productType = "com.apple.product-type.application";
+		};
+		7B4A533929F39E250036F3ED /* Sharing */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7B4A534829F39E250036F3ED /* Build configuration list for PBXNativeTarget "Sharing" */;
+			buildPhases = (
+				7B4A533629F39E250036F3ED /* Sources */,
+				7B4A533729F39E250036F3ED /* Frameworks */,
+				7B4A533829F39E250036F3ED /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Sharing;
+			productName = Sharing;
+			productReference = 7B4A533A29F39E250036F3ED /* Sharing.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -206,6 +274,7 @@
 		83CBB9F71A601CBA00E9B192 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 1410;
 				LastUpgradeCheck = 1210;
 				ORGANIZATIONNAME = CoreDB;
 				TargetAttributes = {
@@ -215,6 +284,9 @@
 					};
 					13B07F861A680F5B00A75B9A = {
 						LastSwiftMigration = 1120;
+					};
+					7B4A533929F39E250036F3ED = {
+						CreatedOnToolsVersion = 14.1;
 					};
 				};
 			};
@@ -233,6 +305,7 @@
 			targets = (
 				13B07F861A680F5B00A75B9A /* Databag */,
 				00E356ED1AD99517003FC87E /* DatabagTests */,
+				7B4A533929F39E250036F3ED /* Sharing */,
 			);
 		};
 /* End PBXProject section */
@@ -252,6 +325,14 @@
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				7B13A774299E21170048D0DD /* GoogleService-Info.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7B4A533829F39E250036F3ED /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7B4A534029F39E250036F3ED /* MainInterface.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -438,6 +519,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		7B4A533629F39E250036F3ED /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7B4A533D29F39E250036F3ED /* ShareViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -446,7 +535,23 @@
 			target = 13B07F861A680F5B00A75B9A /* Databag */;
 			targetProxy = 00E356F41AD99517003FC87E /* PBXContainerItemProxy */;
 		};
+		7B4A534329F39E250036F3ED /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7B4A533929F39E250036F3ED /* Sharing */;
+			targetProxy = 7B4A534229F39E250036F3ED /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		7B4A533E29F39E250036F3ED /* MainInterface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7B4A533F29F39E250036F3ED /* Base */,
+			);
+			name = MainInterface.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
@@ -504,6 +609,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 3B4392A12AC88292D35C810B /* Pods-Databag.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Databag/Databag.entitlements;
@@ -538,6 +644,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5709B34CF0A7D63546082F79 /* Pods-Databag.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Databag/Databag.entitlements;
@@ -563,6 +670,84 @@
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = Release;
+		};
+		7B4A534629F39E250036F3ED /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = Sharing/Sharing.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 3P65PQ7SUR;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Sharing/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Sharing;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2023 CoreDB. All rights reserved.";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = org.coredb.databag.Sharing;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		7B4A534729F39E250036F3ED /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = Sharing/Sharing.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 3P65PQ7SUR;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Sharing/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Sharing;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2023 CoreDB. All rights reserved.";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = org.coredb.databag.Sharing;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -720,6 +905,15 @@
 			buildConfigurations = (
 				13B07F941A680F5B00A75B9A /* Debug */,
 				13B07F951A680F5B00A75B9A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7B4A534829F39E250036F3ED /* Build configuration list for PBXNativeTarget "Sharing" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7B4A534629F39E250036F3ED /* Debug */,
+				7B4A534729F39E250036F3ED /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

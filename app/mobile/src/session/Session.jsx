@@ -25,7 +25,9 @@ import { ProfileIcon } from './profileIcon/ProfileIcon';
 import { CardsIcon } from './cardsIcon/CardsIcon';
 import { Logo } from 'utils/Logo';
 import { Call } from './call/Call';
+import { Sharing } from './sharing/Sharing';
 import splash from 'images/session.png';
+import { useNavigate } from 'react-router-dom';
 
 const ConversationStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
@@ -314,17 +316,35 @@ function DetailDrawerScreen({ navParams }) {
   );
 }
 
-export function Session() {
+export function Session({ sharing, clearSharing }) {
 
+  const [intent, setIntent] = useState(sharing)
   const [ringing, setRinging] = useState([]);
   const { state, actions } = useSession();
   const drawerParams = { drawerPosition: 'right', headerShown: false, swipeEnabled: false, drawerType: 'front' };
+  const navigate = useNavigate();
 
   const [ dmChannel, setDmChannel ] = useState(null);
   const addChannel = async (cardId) => {
     const id = await actions.setDmChannel(cardId);
     setDmChannel({ id });
   };
+
+  const setShare = async (cardId, channelId) => {
+    console.log("SET SHARE CHANNEL");
+    clearSharing();
+  }
+  const clearShare = async () => {
+    console.log("CLEAR SHARE CHANNEL");
+    clearSharing();
+  }
+
+  useEffect(() => {
+    console.log("COMPARE", sharing, intent);
+    if (sharing != intent && sharing != null) {
+      navigate('/');
+    }
+  }, [sharing, intent, navigate])
 
   useEffect(() => {
     let incoming = [];
@@ -440,7 +460,15 @@ export function Session() {
         supportedOrientations={['portrait', 'landscape']}
       >
         <Call />
-     </Modal>
+      </Modal>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={intent != null}
+        supportedOrientations={['portrait', 'landscape']}
+      >
+        <Sharing select={setShare} cancel={clearShare} />
+      </Modal>
     </NavigationContainer>
   );
 }

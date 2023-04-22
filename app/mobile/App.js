@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import React from 'react';
+import { useEffect, useState } from 'react';
 import { NativeRouter } from "react-router-native";
 import { Routes, Route } from 'react-router-dom';
 import { StoreContextProvider } from 'context/StoreContext';
@@ -17,11 +17,30 @@ import { Root } from 'src/root/Root';
 import { Access } from 'src/access/Access';
 import { Dashboard } from 'src/dashboard/Dashboard';
 import { Session } from 'src/session/Session';
+import ReceiveSharingIntent from 'react-native-receive-sharing-intent';
 
 // silence warning: Sending `onAnimatedValueUpdate` with no listeners registered
 //LogBox.ignoreLogs(['Sending']);
 
 export default function App() {
+
+  const [sharing, setSharing] = useState();
+
+  useEffect(() => {
+    ReceiveSharingIntent.getReceivedFiles(files => {
+      setSharing(files);
+    }, 
+    (error) =>{
+      console.log(error);
+    }, 
+    'org.coredb.databag'
+    );
+  }, []);
+
+  const clearSharing = () => {
+    setSharing(null);
+    ReceiveSharingIntent.clearReceivedFiles();
+  };
 
   return (
     <StoreContextProvider>
@@ -42,7 +61,7 @@ export default function App() {
                             <Route path="/login" element={ <Access mode="login" /> } />
                             <Route path="/reset" element={ <Access mode="reset" /> } />
                             <Route path="/create" element={ <Access mode="create" /> } />
-                            <Route path="/session" element={ <Session /> } />
+                            <Route path="/session" element={ <Session sharing={sharing} clearSharing={clearSharing} /> } />
                           </Routes>
                         </NativeRouter>
                       </SafeAreaProvider>
