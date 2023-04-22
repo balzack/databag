@@ -39,7 +39,7 @@ const CardDrawer = createDrawerNavigator();
 const RegistryDrawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
 
-function ConversationStackScreen({ dmChannel }) {
+function ConversationStackScreen({ dmChannel, shareChannel, shareIntent, setShareIntent }) {
   const stackParams = { headerStyle: { backgroundColor: Colors.titleBackground }, headerBackTitleVisible: false };
   const screenParams = { headerShown: true, headerTintColor: Colors.primary };
 
@@ -76,11 +76,11 @@ function ConversationStackScreen({ dmChannel }) {
       <ConversationStack.Navigator initialRouteName="channels" screenOptions={({ route }) => (screenParams)} >
 
         <ConversationStack.Screen name="channels" options={stackParams}>
-          {(props) => <Channels navigation={props.navigation} dmChannel={dmChannel} openConversation={(cardId, channelId) => openConversation(props.navigation, cardId, channelId)} />}
+          {(props) => <Channels navigation={props.navigation} dmChannel={dmChannel} shareChannel={shareChannel} openConversation={(cardId, channelId) => openConversation(props.navigation, cardId, channelId)} />}
         </ConversationStack.Screen>
 
         <ConversationStack.Screen name="conversation" options={stackParams}>
-          {(props) => <Conversation navigation={props.navigation} openDetails={() => openDetails(props.navigation)} closeConversation={(pop) => closeConversation(props.navigation, pop)} /> }
+          {(props) => <Conversation navigation={props.navigation} openDetails={() => openDetails(props.navigation)} closeConversation={(pop) => closeConversation(props.navigation, pop)} shareIntent={shareIntent} setShareIntent={setShareIntent} /> }
         </ConversationStack.Screen>
 
         <ConversationStack.Screen name="details" options={{ ...stackParams, headerTitle: (props) => (
@@ -216,13 +216,13 @@ function HomeScreen({ navParams }) {
           </TouchableOpacity>
         </View>
         <View style={styles.channels}>
-          <Channels dmChannel={navParams.dmChannel} cardId={cardId} channelId={channelId} openConversation={setConversation} />
+          <Channels dmChannel={navParams.dmChannel} shareChannel={shareChannel} cardId={cardId} channelId={channelId} openConversation={setConversation} />
         </View>
       </SafeAreaView>
       <View style={styles.conversation}>
         { channel && (
           <SafeAreaView edges={['top', 'bottom', 'right']}>
-            <Conversation closeConversation={closeConversation} openDetails={openDetails} />
+            <Conversation closeConversation={closeConversation} openDetails={openDetails} shareIntent={navParams.shareIntent} setShareIntent={navParams.setShareIntent} />
           </SafeAreaView>
         )}
         { !channel && (
@@ -330,17 +330,18 @@ export function Session({ sharing, clearSharing }) {
     setDmChannel({ id });
   };
 
-  const setShare = async (cardId, channelId) => {
-    console.log("SET SHARE CHANNEL");
+  const [shareIntent, setShareIntent] = useState(null);
+  const [shareChannel, setShareChannel] = useState(null);
+  const setShare = async ({ cardId, channelId }) => {
+    setShareIntent(sharing);
+    setShareChannel({ cardId, channelId });
     clearSharing();
   }
   const clearShare = async () => {
-    console.log("CLEAR SHARE CHANNEL");
     clearSharing();
   }
 
   useEffect(() => {
-    console.log("COMPARE", sharing, intent);
     if (sharing != intent && sharing != null) {
       navigate('/');
     }
@@ -408,7 +409,7 @@ export function Session({ sharing, clearSharing }) {
                   <ScrollView style={styles.drawer}><SafeAreaView edges={['top', 'bottom', 'right']}><Profile /></SafeAreaView></ScrollView>
                 )}>
                 <ProfileDrawer.Screen name="detail">
-                  {(props) => <DetailDrawerScreen navParams={{ profileNav: props.navigation, state, actions, addChannel, dmChannel }} />}
+                  {(props) => <DetailDrawerScreen navParams={{ profileNav: props.navigation, state, actions, addChannel, dmChannel, shareChannel, shareIntent, setShareIntent }} />}
                 </ProfileDrawer.Screen>
               </ProfileDrawer.Navigator>
             )}
@@ -432,7 +433,7 @@ export function Session({ sharing, clearSharing }) {
                   tabBarActiveTintColor: Colors.white,
                   tabBarInactiveTintColor: Colors.disabled,
                 })}>
-                <Tab.Screen name="Conversation" children={()=><ConversationStackScreen dmChannel={dmChannel} />} />
+                <Tab.Screen name="Conversation" children={()=><ConversationStackScreen dmChannel={dmChannel} shareChannel={shareChannel} shareIntent={shareIntent} setShareIntent={setShareIntent} />} />
                 <Tab.Screen name="Profile" component={ProfileStackScreen} />
                 <Tab.Screen name="Contacts" children={()=><ContactStackScreen addChannel={addChannel} />} />
               </Tab.Navigator>
@@ -464,7 +465,7 @@ export function Session({ sharing, clearSharing }) {
       <Modal
         animationType="fade"
         transparent={true}
-        visible={intent != null}
+        visible={sharing != null && intent != null}
         supportedOrientations={['portrait', 'landscape']}
       >
         <Sharing select={setShare} cancel={clearShare} />

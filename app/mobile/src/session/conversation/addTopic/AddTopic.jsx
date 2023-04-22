@@ -1,5 +1,5 @@
 import { ActivityIndicator, Modal, Image, FlatList, TextInput, Alert, View, TouchableOpacity, Text, } from 'react-native';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useAddTopic } from './useAddTopic.hook';
 import { styles } from './AddTopic.styled';
 import AntIcons from 'react-native-vector-icons/AntDesign';
@@ -13,9 +13,34 @@ import { VideoFile } from './videoFile/VideoFile';
 import { AudioFile } from './audioFile/AudioFile';
 import { ImageFile } from './imageFile/ImageFile';
 
-export function AddTopic({ contentKey }) {
+export function AddTopic({ contentKey, shareIntent, setShareIntent }) {
 
   const { state, actions } = useAddTopic(contentKey);
+
+  useEffect(() => {
+    if (shareIntent) {
+      Alert.alert('SHARING', JSON.stringify(shareIntent));
+      shareIntent.forEach(share => {
+        if (share.text) {
+          actions.setMessage(share.text);
+        }
+        if (share.weblink) {
+          actions.setMessage(share.weblink);
+        }
+        const mimeType = share.mimeType?.toLowerCase();
+        if (mimeType === '.jpg' || mimeType === '.png') {
+          actions.addImage(share.filePath)
+        }
+        if (mimeType === '.mp4') {
+          actions.addVideo(share.filePath)
+        }
+        if (mimeType === '.mp3') {
+          actions.addAudio(share.filePath)
+        }
+      });
+      setShareIntent(null);
+    }
+  }, [shareIntent]);
 
   const addImage = async () => {
     try {

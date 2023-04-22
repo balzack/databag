@@ -7,7 +7,7 @@ import { Colors } from 'constants/Colors';
 import { ChannelItem } from './channelItem/ChannelItem';
 import { AddMember } from './addMember/AddMember';
 
-export function Channels({ cardId, channelId, navigation, openConversation, dmChannel }) {
+export function Channels({ cardId, channelId, navigation, openConversation, dmChannel, shareChannel }) {
 
   const { state, actions } = useChannels();
 
@@ -31,6 +31,12 @@ export function Channels({ cardId, channelId, navigation, openConversation, dmCh
       openConversation(null, dmChannel.id);
     }
   }, [dmChannel]);
+
+  useEffect(() => {
+    if (shareChannel) {
+      openConversation(shareChannel.cardId, shareChannel.channelId);
+    }
+  }, [shareChannel]);
 
   useEffect(() => {
     if (navigation) {

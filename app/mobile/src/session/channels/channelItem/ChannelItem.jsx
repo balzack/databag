@@ -2,7 +2,6 @@ import { Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Logo } from 'utils/Logo';
 import { styles } from './ChannelItem.styled';
-import { useChannelItem } from './useChannelItem.hook';
 import Colors from 'constants/Colors';
 import Ionicons from 'react-native-vector-icons/MaterialCommunityIcons';
 

@@ -39,7 +39,6 @@ export default function App() {
 
   const clearSharing = () => {
     setSharing(null);
-    ReceiveSharingIntent.clearReceivedFiles();
   };
 
   return (

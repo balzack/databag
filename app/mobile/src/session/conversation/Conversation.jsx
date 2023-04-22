@@ -9,7 +9,7 @@ import { Logo } from 'utils/Logo';
 import { AddTopic } from './addTopic/AddTopic';
 import { TopicItem } from './topicItem/TopicItem';
 
-export function Conversation({ navigation, cardId, channelId, closeConversation, openDetails }) {
+export function Conversation({ navigation, cardId, channelId, closeConversation, openDetails, shareIntent, setShareIntent }) {
 
   const { state, actions } = useConversation();
 
@@ -113,7 +113,7 @@ export function Conversation({ navigation, cardId, channelId, closeConversation,
             </View>
           )}
         </View>
-        <AddTopic contentKey={state.contentKey} />
+        <AddTopic contentKey={state.contentKey} shareIntent={shareIntent} setShareIntent={setShareIntent} />
       </View>
       <Modal
           animationType="fade"

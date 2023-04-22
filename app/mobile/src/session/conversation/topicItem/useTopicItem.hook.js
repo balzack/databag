@@ -289,9 +289,9 @@ export function useTopicItem(item, hosting, remove, contentKey) {
             }
           }
 
-          await Share.open({ urls: files, message: data.text, title: 'Databag', subject: 'Shared from Databag' })
+          await Share.open({ urls: files, message: files.length > 0 ? null : data.text, title: 'Databag', subject: 'Shared from Databag' })
           while (unlink.length > 0) {
-            const file = fs.unlink.shift();
+            const file = unlink.shift();
             await fs.unlink(file);
           }
         }
