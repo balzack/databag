@@ -115,28 +115,42 @@ export function TopicItem({ item, focused, focus, hosting, remove, update, block
       const assets = data.assets || []
 
       for (let i = 0; i < assets.length; i++) {
+
+        let asset
         if (assets[i].image) {
-          const url = actions.getTopicAssetUrl(item.topicId, assets[i].image.full);
+          asset = assets[i].image.full;
+        }
+        else if (assets[i].video?.lq) {
+          asset = assets[i].video.lq;
+        }
+        else if (assets[i].video?.hd) {
+          asset = assets[i].video.hd;
+        }
+        else if (assets[i].audio?.full) {
+          asset = assets[i].audio.full;
+        }
+
+        if (asset) {
+          const url = actions.getTopicAssetUrl(item.topicId, asset);
           const blob = await RNFetchBlob.config({ fileCache: true }).fetch("GET", url);
           const type = blob.respInfo.headers["Content-Type"] || blob.respInfo.headers["content-type"]
 
-          if (Platform.OS === 'ios') {
-            const file = await blob.readFile("base64");
-            files.push(`data:${type};base64,${file}`)
-            unlink.push(blob.path());
-          }
-          else {
-            const src = blob.path();
-            const dir = src.split('/').slice(0,-1).join('/')
-            const dst = dir + '/' + assets[i].image.full + '.' + getExtension(type);
-            await RNFetchBlob.fs.mv(src, dst);
-            files.push(`file://${dst}`);
-            unlink.push(dst);
-          }
+          const src = blob.path();
+          const dir = src.split('/').slice(0,-1).join('/')
+          const dst = dir + '/' + asset + '.' + getExtension(type);
+          await fs.unlink(dst);
+          await RNFetchBlob.fs.mv(src, dst);
+          files.push(`file://${dst}`);
+          unlink.push(dst);
         }
       }
-      
-      await Share.open({ urls: files, message: data.text, title: 'Databag', subject: 'Shared from Databag' })
+
+      try { 
+        await Share.open({ urls: files, message: data.text, title: 'Databag', subject: 'Shared from Databag' })
+      }
+      catch(err) {
+        console.log(err);
+      }
 
       try {
         for (let i = 0; i < unlink.length; i++) {
@@ -151,7 +165,7 @@ export function TopicItem({ item, focused, focus, hosting, remove, update, block
       console.log(err);
       Alert.alert(
         'Failed to Share Message',
-        err.toSring()
+        'Please try again.'
       )
     }
   }
