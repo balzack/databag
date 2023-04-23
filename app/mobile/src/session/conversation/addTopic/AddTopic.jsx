@@ -19,7 +19,6 @@ export function AddTopic({ contentKey, shareIntent, setShareIntent }) {
 
   useEffect(() => {
     if (shareIntent) {
-      Alert.alert('SHARING', JSON.stringify(shareIntent));
       shareIntent.forEach(share => {
         if (share.text) {
           actions.setMessage(share.text);
@@ -27,14 +26,14 @@ export function AddTopic({ contentKey, shareIntent, setShareIntent }) {
         if (share.weblink) {
           actions.setMessage(share.weblink);
         }
-        const mimeType = share.mimeType?.toLowerCase();
-        if (mimeType === '.jpg' || mimeType === '.png') {
+        const mime = share.mimeType?.toLowerCase();
+        if (mime === '.jpg' || mime === '.png' || mime === 'image/jpeg' || mime == 'image/png' ) {
           actions.addImage(share.filePath)
         }
-        if (mimeType === '.mp4') {
+        if (mime === '.mp4' || mime === 'video/mp4' || mime == 'video/mpeg') {
           actions.addVideo(share.filePath)
         }
-        if (mimeType === '.mp3') {
+        if (mime === '.mp3') {
           actions.addAudio(share.filePath)
         }
       });

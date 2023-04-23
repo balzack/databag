@@ -1,5 +1,4 @@
-import { Text, View } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { TouchableOpacity, Alert, Text, View } from 'react-native';
 import { Logo } from 'utils/Logo';
 import { styles } from './SharingItem.styled';
 import Colors from 'constants/Colors';

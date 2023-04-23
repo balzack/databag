@@ -85,20 +85,24 @@ export function useAddTopic(contentKey) {
       updateState({ message });
     },
     addImage: (data) => {
+      const url = data.startsWith('file:') ? data : 'file://' + data;
+
       assetId.current++;
-      Image.getSize(data, (width, height) => {
-        const asset = { key: assetId.current, type: 'image', data: data, ratio: width/height };
+      Image.getSize(url, (width, height) => {
+        const asset = { key: assetId.current, type: 'image', data: url, ratio: width/height };
         updateState({ assets: [ ...state.assets, asset ] });
-      });
+      })
     },
     addVideo: (data) => {
+      const url = data.startsWith('file:') ? data : 'file://' + data
       assetId.current++;
-      const asset = { key: assetId.current, type: 'video', data: data, ratio: 1, duration: 0, position: 0 };
+      const asset = { key: assetId.current, type: 'video', data: url, ratio: 1, duration: 0, position: 0 };
       updateState({ assets: [ ...state.assets, asset ] });
     },
     addAudio: (data, label) => {
+      const url = data.startsWith('file:') ? data : 'file://' + data
       assetId.current++;
-      const asset = { key: assetId.current, type: 'audio', data: data, label };
+      const asset = { key: assetId.current, type: 'audio', data: url, label };
       updateState({ assets: [ ...state.assets, asset ] });
     }, 
     setVideoPosition: (key, position) => {
