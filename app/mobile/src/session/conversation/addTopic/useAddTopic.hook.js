@@ -23,6 +23,7 @@ export function useAddTopic(contentKey) {
     enableAudio: false,
     enableVideo: false,
     locked: true,
+    conflict: false,
   });
 
   const assetId = useRef(0);
@@ -33,6 +34,25 @@ export function useAddTopic(contentKey) {
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
   }
+
+  useEffect(() => {
+    let conflict = false;
+    if (state.locked) {
+      conflict = true;
+    }
+    state.assets.forEach(asset => {
+      if (asset.type === 'image' && !state.enableImage) {
+        conflict = true;
+      }
+      if (asset.video === 'video' && !state.enableVideo) {
+        conflict = true;
+      }
+      if (asset.audio === 'audio' && !state.enableAudio) {
+        conflict = true;
+      }
+    });
+    updateState({ conflict });
+  }, [state.assets, state.locked, state.enableImage, state.enableAudio, state.enableVideo]);
 
   useEffect(() => {
     const cardId = conversation.state.card?.card?.cardId;

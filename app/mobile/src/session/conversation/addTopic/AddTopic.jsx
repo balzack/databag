@@ -53,7 +53,7 @@ export function AddTopic({ contentKey, shareIntent, setShareIntent }) {
 
   const sendMessage = async () => {
     try {
-      if (state.message || state.assets.length > 0) {
+      if (!state.conflict && (state.message || state.assets.length > 0)) {
         await actions.addTopic();
       }
     }
@@ -183,13 +183,16 @@ export function AddTopic({ contentKey, shareIntent, setShareIntent }) {
           { state.busy && (
             <ActivityIndicator color={Colors.primary} />
           )}
-          { state.locked && !contentKey && (
+          { state.conflict && (
+            <MatIcons name="send-outline" size={20} color={Colors.alert} />
+          )}
+          { !state.conflict && state.locked && !contentKey && (
             <MatIcons name="lock" size={20} color={Colors.lightgrey} />
           )}
-          { !state.busy && (!state.locked || contentKey) && (state.message || state.assets.length > 0) && (
+          { !state.conflict && !state.busy && (!state.locked || contentKey) && (state.message || state.assets.length > 0) && (
             <MatIcons name="send-outline" size={20} color={Colors.text} />
           )}
-          { !state.busy && (!state.locked || contentKey) && !(state.message || state.assets.length > 0) && (
+          { !state.conflict && !state.busy && (!state.locked || contentKey) && !(state.message || state.assets.length > 0) && (
             <MatIcons name="send-outline" size={20} color={Colors.lightgrey} />
           )}
         </TouchableOpacity>
