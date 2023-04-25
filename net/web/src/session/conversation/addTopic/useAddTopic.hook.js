@@ -1,8 +1,9 @@
-import { useContext, useState, useEffect } from 'react';
+import { useContext, useState, useRef, useEffect } from 'react';
 import { ConversationContext } from 'context/ConversationContext';
 import { encryptTopicSubject } from 'context/sealUtil';
+import Resizer from "react-image-file-resizer";
 
-export function useAddTopic() {
+export function useAddTopic(contentKey) {
   
   const [state, setState] = useState({
     enableImage: null,
@@ -18,6 +19,7 @@ export function useAddTopic() {
   });
 
   const conversation = useContext(ConversationContext);
+  const objects = useRef([]);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
@@ -45,19 +47,33 @@ export function useAddTopic() {
     });
   }
 
+  const clearObjects = () => {
+    objects.current.forEach(object => {
+      URL.revokeObjectURL(object);
+    });
+    objects.current = [];
+  }
+
+  useEffect(() => {
+    updateState({ assets: [] });
+    return () => { console.log("RETURN CLEAR"); clearObjects() };
+  }, [contentKey]);
+
   useEffect(() => {
     const { enableImage, enableAudio, enableVideo } = conversation.state.channel?.data?.channelDetail || {};
     updateState({ enableImage, enableAudio, enableVideo });
   }, [conversation.state.channel?.data?.channelDetail]);
 
   const actions = {
-    addImage: (image) => {
+    addImage: async (image) => {
       let url = URL.createObjectURL(image);
-      addAsset({ image, url })
+      addAsset({ image, url });
+      objects.current.push(url);
     },
-    addVideo: (video) => {
+    addVideo: async (video) => {
       let url = URL.createObjectURL(video);
       addAsset({ video, url, position: 0 })
+      objects.current.push(url);
     },
     addAudio: (audio) => {
       let url = URL.createObjectURL(audio);
@@ -81,7 +97,7 @@ export function useAddTopic() {
     setTextSize: (value) => {
       updateState({ textSizeSet: true, textSize: value });
     },
-    addTopic: async (contentKey) => {
+    addTopic: async () => {
       if (!state.busy) {
         try {
           updateState({ busy: true });
@@ -119,6 +135,7 @@ export function useAddTopic() {
           await conversation.actions.addTopic(type, message, state.assets);
           updateState({ busy: false, messageText: null, textColor: '#444444', textColorSet: false,
               textSize: 12, textSizeSet: false, assets: [] });
+          clearObjects();
         }
         catch(err) {
           console.log(err);
@@ -135,3 +152,44 @@ export function useAddTopic() {
   return { state, actions };
 }
 
+async function getImageThumb(url) {
+  return new Promise(resolve => {
+    Resizer.imageFileResizer(url, 192, 192, 'JPEG', 50, 0,
+    uri => {
+      resolve(uri);
+    }, 'base64', 128, 128 );
+  });
+}
+
+async function getVideoThumb(url, pos) {
+  return new Promise((resolve, reject) => {
+    var video = document.createElement("video");
+    var timeupdate = function (ev) {
+      video.removeEventListener("timeupdate", timeupdate);
+      video.pause();
+      setTimeout(() => {
+        var canvas = document.createElement("canvas");
+        if (video.videoWidth > video.videoHeight) {
+          canvas.width = 192;
+          canvas.height = Math.floor((192 * video.videoHeight / video.videoWidth));
+        }
+        else {
+          canvas.height  = 192;
+          canvas.width = Math.floor((192 * video.videoWidth / video.videoHeight));
+        }
+        canvas.getContext("2d").drawImage(video, 0, 0, canvas.width, canvas.height);
+        var image = canvas.toDataURL("image/jpeg", 0.75);
+        resolve(image); 
+        canvas.remove();
+        video.remove();
+      }, 1000);
+    };
+    video.addEventListener("timeupdate", timeupdate);
+    video.preload = "metadata";
+    video.src = url;
+    video.muted = true;
+    video.playsInline = true;
+    video.currentTime = pos;
+    video.play();
+  });
+}

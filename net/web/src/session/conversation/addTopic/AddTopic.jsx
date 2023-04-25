@@ -10,7 +10,7 @@ import { Carousel } from 'carousel/Carousel';
 
 export function AddTopic({ contentKey }) {
 
-  const { state, actions } = useAddTopic();
+  const { state, actions } = useAddTopic(contentKey);
 
   const [modal, modalContext] = Modal.useModal();
   const attachImage = useRef(null);
@@ -28,7 +28,7 @@ export function AddTopic({ contentKey }) {
   const addTopic = async () => {
     if (state.messageText || state.assets.length) {
       try {
-        await actions.addTopic(contentKey);
+        await actions.addTopic();
       }
       catch (err) {
         console.log(err);
@@ -108,22 +108,22 @@ export function AddTopic({ contentKey }) {
             value={state.messageText} autocapitalize="none" />
       </div>
       <div class="buttons">
-        { !contentKey && state.enableImage && (
+        { state.enableImage && (
           <div class="button space" onClick={() => attachImage.current.click()}>
             <PictureOutlined />
           </div> 
         )}
-        { !contentKey && state.enableVideo && (
+        { state.enableVideo && (
           <div class="button space" onClick={() => attachVideo.current.click()}>
             <VideoCameraOutlined />
           </div> 
         )}
-        { !contentKey && state.enableAudio && (
+        { state.enableAudio && (
           <div class="button space" onClick={() => attachAudio.current.click()}>
             <SoundOutlined />
           </div> 
         )}
-        { !contentKey && (
+        { (state.enableImage || state.enableVideo || state.enableAudio) && (
           <div class="bar space" />
         )}
         <div class="button space">
