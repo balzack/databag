@@ -37,7 +37,7 @@ export function useAddTopic(contentKey) {
 
   useEffect(() => {
     let conflict = false;
-    if (state.locked) {
+    if (state.locked && state.assets.length > 0) {
       conflict = true;
     }
     state.assets.forEach(asset => {
