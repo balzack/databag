@@ -56,6 +56,27 @@ export function updateChannelSubject(subject, contentKey) {
   return { subjectEncrypted, subjectIv };
 }
 
+export function encryptBlock(block, contentKey) {
+  const key = CryptoJS.enc.Hex.parse(contentKey);
+  const iv = CryptoJS.lib.WordArray.random(128 / 8);
+  const encrypted = CryptoJS.AES.encrypt(block, key, { iv: iv });
+  const blockEncrypted = encrypted.ciphertext.toString(CryptoJS.enc.Base64)
+  const blockIv = iv.toString();
+
+  return { blockEncrypted, blockIv };
+}
+
+export function decryptBlock(blockEncrypted, blockIv, contentKey) {
+  const iv = CryptoJS.enc.Hex.parse(blockIv);
+  const key = CryptoJS.enc.Hex.parse(contentKey);
+  const enc = CryptoJS.enc.Base64.parse(blockEncrypted);
+  const cipher = CryptoJS.lib.CipherParams.create({ ciphertext: enc, iv: iv });
+  const dec = CryptoJS.AES.decrypt(cipher, key, { iv: iv });
+  const block = dec.toString(CryptoJS.enc.Utf8);
+
+  return block;
+}
+
 export function decryptChannelSubject(subject, contentKey) {
   const { subjectEncrypted, subjectIv } = JSON.parse(subject);
   const iv = CryptoJS.enc.Hex.parse(subjectIv);

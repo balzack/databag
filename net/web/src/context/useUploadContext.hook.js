@@ -1,6 +1,8 @@
 import { useState, useRef } from 'react';
 import axios from 'axios';
 
+const ENCRYPTED_BLOCK_SIZE = (128 * 1024); //110k
+
 export function useUploadContext() {
 
   const [state, setState] = useState({
@@ -69,7 +71,8 @@ export function useUploadContext() {
         const controller = new AbortController();
         const entry = {
           index: index.current,
-          url: `${host}/content/channels/${channelId}/topics/${topicId}/assets?contact=${token}`,
+          baseUrl: `${host}/content/channels/${channelId}/topics/${topicId}/`,
+          urlParams: `?contact=${token}`,
           files,
           assets: [],
           current: null,
@@ -91,7 +94,8 @@ export function useUploadContext() {
         const controller = new AbortController();
         const entry = {
           index: index.current,
-          url: `/content/channels/${channelId}/topics/${topicId}/assets?agent=${token}`,
+          baseUrl: `/content/channels/${channelId}/topics/${topicId}/`,
+          urlParams: `?agent=${token}`,
           files,
           assets: [],
           current: null,
@@ -154,11 +158,33 @@ async function upload(entry, update, complete) {
     const file = entry.files.shift();
     entry.active = {};
     try {
-      if (file.image) {
+      if (file.encrypted) {
+        const { size, getThumb, getEncryptedBlock, position } = file;
+        const type = file.image ? 'image' : file.video ? 'video' : file.audio ? 'audio' : '';
+        const thumb = getThumb(position);
+        const parts = [];
+        for (let pos = 0; pos < size; pos += ENCRYPTED_BLOCK_SIZE) {
+          const { blockEncrypted, blockIv } = await getEncryptedBlock(pos, ENCRYPTED_BLOCK_SIZE);
+          const partId = await axios.post(`${entry.baseUrl}block${entry.urlParams}`, blockEncrypted, {
+            signal: entry.cancel.signal,
+            onUploadProgress: (ev) => {
+              const { loaded, total } = ev;
+              const partLoaded = pos + Math.floor(blockEncrypted.length * loaded / total);
+              entry.active = { partLoaded, size }
+              update();
+            }
+          });
+          parts.push({ blockIv, partId });
+        }
+        entry.assets.push({
+          encrypted: { type, thumb, parts }
+        });
+      }
+      else if (file.image) {
         const formData = new FormData();
         formData.append('asset', file.image);
         let transform = encodeURIComponent(JSON.stringify(["ithumb;photo", "ilg;photo"]));
-        let asset = await axios.post(`${entry.url}&transforms=${transform}`, formData, {
+        let asset = await axios.post(`${entry.baseUrl}assets${entry.urlParams}&transforms=${transform}`, formData, {
           signal: entry.cancel.signal,
           onUploadProgress: (ev) => {
             const { loaded, total } = ev;
@@ -178,7 +204,7 @@ async function upload(entry, update, complete) {
         formData.append('asset', file.video);
         let thumb = 'vthumb;video;' + file.position;
         let transform = encodeURIComponent(JSON.stringify(["vlq;video", "vhd;video", thumb]));
-        let asset = await axios.post(`${entry.url}&transforms=${transform}`, formData, {
+        let asset = await axios.post(`${entry.baseUrl}assets${entry.urlParams}&transforms=${transform}`, formData, {
           signal: entry.cancel.signal,
           onUploadProgress: (ev) => {
             const { loaded, total } = ev;
@@ -198,7 +224,7 @@ async function upload(entry, update, complete) {
         const formData = new FormData();
         formData.append('asset', file.audio);
         let transform = encodeURIComponent(JSON.stringify(["acopy;audio"]));
-        let asset = await axios.post(`${entry.url}&transforms=${transform}`, formData, {
+        let asset = await axios.post(`${entry.baseUrl}assets${entry.urlParams}&transforms=${transform}`, formData, {
           signal: entry.cancel.signal,
           onUploadProgress: (ev) => {
             const { loaded, total } = ev;

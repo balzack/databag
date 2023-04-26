@@ -1,6 +1,6 @@
 import { useContext, useState, useRef, useEffect } from 'react';
 import { ConversationContext } from 'context/ConversationContext';
-import { encryptTopicSubject } from 'context/sealUtil';
+import { encryptBlock, encryptTopicSubject } from 'context/sealUtil';
 import Resizer from "react-image-file-resizer";
 
 export function useAddTopic(contentKey) {
@@ -64,20 +64,48 @@ export function useAddTopic(contentKey) {
     updateState({ enableImage, enableAudio, enableVideo });
   }, [conversation.state.channel?.data?.channelDetail]);
 
+  const setUrl = async (url, getThumb) => {
+    if (contentKey) {
+      const buffer = await url.arrayBuffer();
+      const getEncryptedBlock = (pos, len) => {
+        if (pos + len > buffer.byteLen) {
+          return null;
+        }
+        const block = btoa(String.fromCharCode.apply(null, buffer.slice(pos, len)));
+        return getEncryptedBlock(block, contentKey);
+      }
+      return { url, position: 0, label: '', encrypted: true, size: buffer.byteLength, getEncryptedBlock, getThumb };
+    }
+    else {
+      return { url, position: 0, label: '', encrypted: false };
+    }
+  }
+
   const actions = {
     addImage: async (image) => {
-      let url = URL.createObjectURL(image);
-      addAsset({ image, url });
+      const url = URL.createObjectURL(image);
       objects.current.push(url);
+      const getThumb = async () => {
+        return await getImageThumb(url);
+      }
+      const asset = setUrl(url, getThumb);
+      addAsset({ image, ...asset });
     },
     addVideo: async (video) => {
-      let url = URL.createObjectURL(video);
-      addAsset({ video, url, position: 0 })
+      const url = URL.createObjectURL(video);
       objects.current.push(url);
+      const getThumb = async (position) => {
+        return await getVideoThumb(url, position);
+      }
+      const asset = setUrl(url, getThumb);
+      addAsset({ video, ...asset });
     },
-    addAudio: (audio) => {
-      let url = URL.createObjectURL(audio);
-      addAsset({ audio, url, label: '' })
+    addAudio: async (audio) => {
+      const url = URL.createObjectURL(audio);
+      objects.current.push(url);
+      const getThumb = async () => { return null };
+      const asset = setUrl(url, getThumb);
+      addAsset({ audio, ...asset });
     },
     setLabel: (index, label) => {
       updateAsset(index, { label });
@@ -103,32 +131,19 @@ export function useAddTopic(contentKey) {
           updateState({ busy: true });
           const type = contentKey ? 'sealedtopic' : 'superbasictopic';
           const message = (assets) => {
-            if (contentKey) {
-              if (assets?.length) {
-                console.log('assets not yet supported on sealed channels');
-              }
-              const message = { 
+            if (assets?.length) {
+              return {
+                assets,
                 text: state.messageText,
                 textColor: state.textColorSet ? state.textColor : null,
                 textSize: state.textSizeSet ? state.textSize : null,
               }
-              return encryptTopicSubject({ message }, contentKey);
             }
             else {
-              if (assets?.length) {
-                return {
-                  assets,
-                  text: state.messageText,
-                  textColor: state.textColorSet ? state.textColor : null,
-                  textSize: state.textSizeSet ? state.textSize : null,
-                }
-              }
-              else {
-                return {
-                  text: state.messageText,
-                  textColor: state.textColorSet ? state.textColor : null,
-                  textSize: state.textSizeSet ? state.textSize : null,
-                }
+              return {
+                text: state.messageText,
+                textColor: state.textColorSet ? state.textColor : null,
+                textSize: state.textSizeSet ? state.textSize : null,
               }
             }
           };
