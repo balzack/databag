@@ -141,7 +141,7 @@ export function useAddTopic(contentKey) {
               }
             }
           };
-          await conversation.actions.addTopic(type, message, state.assets);
+          await conversation.actions.addTopic(type, message, [ ...state.assets ]);
           updateState({ busy: false, messageText: null, textColor: '#444444', textColorSet: false,
               textSize: 12, textSizeSet: false, assets: [] });
           clearObjects();
