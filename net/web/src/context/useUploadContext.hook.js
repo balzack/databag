@@ -220,7 +220,8 @@ async function upload(entry, update, complete) {
         const thumb = await getThumb(url, type, position);
         const parts = [];
         for (let pos = 0; pos < size; pos += ENCRYPTED_BLOCK_SIZE) {
-          const { blockEncrypted, blockIv } = await getEncryptedBlock(pos, ENCRYPTED_BLOCK_SIZE);
+          const len = pos + ENCRYPTED_BLOCK_SIZE > size ? size - pos : ENCRYPTED_BLOCK_SIZE;
+          const { blockEncrypted, blockIv } = await getEncryptedBlock(pos, len);
           const partId = await axios.post(`${entry.baseUrl}block${entry.urlParams}`, blockEncrypted, {
             signal: entry.cancel.signal,
             onUploadProgress: (ev) => {

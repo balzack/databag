@@ -64,24 +64,34 @@ export function useAddTopic(contentKey) {
     updateState({ enableImage, enableAudio, enableVideo });
   }, [conversation.state.channel?.data?.channelDetail]);
 
-  const loadFile = (file) => {
-    return new Promise((resolve) => {
+  const loadFileData = (file) => {
+    return new Promise(resolve => {
       const reader = new FileReader()
-      reader.onloadend = () => resolve(reader.result)
+      reader.onloadend = (res) => { console.log(reader.result); resolve(reader.result) }
       reader.readAsArrayBuffer(file)
     })
   };
+
+  const arrayBufferToBase64 = (buffer) => {
+    var binary = '';
+    var bytes = new Uint8Array( buffer );
+    var len = bytes.byteLength;
+    for (var i = 0; i < len; i++) {
+        binary += String.fromCharCode( bytes[ i ] );
+    }
+    return window.btoa( binary );
+  }
 
   const setUrl = async (file) => {
     const url = URL.createObjectURL(file);
     objects.current.push(url);
     if (contentKey) {
-      const buffer = await loadFile(file)
+      const buffer = await loadFileData(file)
       const getEncryptedBlock = (pos, len) => {
-        if (pos + len > buffer.byteLen) {
+        if (pos + len > buffer.byteLength) {
           return null;
         }
-        const block = btoa(String.fromCharCode.apply(null, buffer.slice(pos, len)));
+        const block = arrayBufferToBase64(buffer.slice(pos, len));
         return encryptBlock(block, contentKey);
       }
       return { url, encrypted: true, size: buffer.byteLength, getEncryptedBlock };
