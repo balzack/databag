@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react';
 import axios from 'axios';
+import Resizer from "react-image-file-resizer";
 
 const ENCRYPTED_BLOCK_SIZE = (128 * 1024); //110k
 
@@ -149,6 +150,61 @@ export function useUploadContext() {
   return { state, actions }
 }
 
+ function getImageThumb(url) {
+  return new Promise(resolve => {
+    Resizer.imageFileResizer(url, 192, 192, 'JPEG', 50, 0,
+    uri => {
+      resolve(uri);
+    }, 'base64', 128, 128 );
+  });
+}
+
+function getVideoThumb(url, pos) {
+  return new Promise((resolve, reject) => {
+    var video = document.createElement("video");
+    var timeupdate = function (ev) {
+      video.removeEventListener("timeupdate", timeupdate);
+      video.pause();
+      setTimeout(() => {
+        var canvas = document.createElement("canvas");
+        if (video.videoWidth > video.videoHeight) {
+          canvas.width = 192;
+          canvas.height = Math.floor((192 * video.videoHeight / video.videoWidth));
+        }
+        else {
+          canvas.height  = 192;
+          canvas.width = Math.floor((192 * video.videoWidth / video.videoHeight));
+        }
+        canvas.getContext("2d").drawImage(video, 0, 0, canvas.width, canvas.height);
+        var image = canvas.toDataURL("image/jpeg", 0.75);
+        resolve(image);
+        canvas.remove();
+        video.remove();
+      }, 1000);
+    };
+    video.addEventListener("timeupdate", timeupdate);
+    video.preload = "metadata";
+    video.src = url;
+    video.muted = true;
+    video.playsInline = true;
+    video.currentTime = pos;
+    video.play();
+  });
+}
+
+async function getThumb(url, type, position) {
+  
+  if (type === 'image') {
+    return await getImageThumb(url);
+  }
+  else if (type === 'video') {
+    return await getVideoThumb(url, position);
+  }
+  else {
+    return null;
+  }
+}
+
 async function upload(entry, update, complete) {
   if (!entry.files?.length) {
     entry.success(entry.assets);
@@ -159,9 +215,9 @@ async function upload(entry, update, complete) {
     entry.active = {};
     try {
       if (file.encrypted) {
-        const { size, getThumb, getEncryptedBlock, position } = file;
-        const type = file.image ? 'image' : file.video ? 'video' : file.audio ? 'audio' : '';
-        const thumb = getThumb(position);
+        const { size, getEncryptedBlock, position, image, video, audio } = file;
+        const { url, type } = image ? { url: image, type: 'image' } : video ? { url: video, type: 'video' } : audio ? { url: audio, type: 'audio' } : {}
+        const thumb = await getThumb(url, type, position);
         const parts = [];
         for (let pos = 0; pos < size; pos += ENCRYPTED_BLOCK_SIZE) {
           const { blockEncrypted, blockIv } = await getEncryptedBlock(pos, ENCRYPTED_BLOCK_SIZE);

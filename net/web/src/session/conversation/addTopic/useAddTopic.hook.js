@@ -64,7 +64,9 @@ export function useAddTopic(contentKey) {
     updateState({ enableImage, enableAudio, enableVideo });
   }, [conversation.state.channel?.data?.channelDetail]);
 
-  const setUrl = async (url, getThumb) => {
+  const setUrl = async (file) => {
+    const url = URL.createObjectURL(file);
+    objects.current.push(url);
     if (contentKey) {
       const buffer = await url.arrayBuffer();
       const getEncryptedBlock = (pos, len) => {
@@ -74,38 +76,30 @@ export function useAddTopic(contentKey) {
         const block = btoa(String.fromCharCode.apply(null, buffer.slice(pos, len)));
         return getEncryptedBlock(block, contentKey);
       }
-      return { url, position: 0, label: '', encrypted: true, size: buffer.byteLength, getEncryptedBlock, getThumb };
+      return { url, encrypted: true, size: buffer.byteLength, getEncryptedBlock };
     }
     else {
-      return { url, position: 0, label: '', encrypted: false };
+      return { url, encrypted: false };
     }
   }
 
   const actions = {
     addImage: async (image) => {
-      const url = URL.createObjectURL(image);
-      objects.current.push(url);
-      const getThumb = async () => {
-        return await getImageThumb(url);
-      }
-      const asset = setUrl(url, getThumb);
-      addAsset({ image, ...asset });
+      const asset = await setUrl(image);
+      asset.image = image;
+      addAsset(asset);
     },
     addVideo: async (video) => {
-      const url = URL.createObjectURL(video);
-      objects.current.push(url);
-      const getThumb = async (position) => {
-        return await getVideoThumb(url, position);
-      }
-      const asset = setUrl(url, getThumb);
-      addAsset({ video, ...asset });
+      const asset = await setUrl(video);
+      asset.video = video;
+      asset.position = 0;
+      addAsset(asset);
     },
     addAudio: async (audio) => {
-      const url = URL.createObjectURL(audio);
-      objects.current.push(url);
-      const getThumb = async () => { return null };
-      const asset = setUrl(url, getThumb);
-      addAsset({ audio, ...asset });
+      const asset = await setUrl(audio);
+      asset.audio = audio;
+      asset.label = '';
+      addAsset(asset);
     },
     setLabel: (index, label) => {
       updateAsset(index, { label });
@@ -167,44 +161,3 @@ export function useAddTopic(contentKey) {
   return { state, actions };
 }
 
-async function getImageThumb(url) {
-  return new Promise(resolve => {
-    Resizer.imageFileResizer(url, 192, 192, 'JPEG', 50, 0,
-    uri => {
-      resolve(uri);
-    }, 'base64', 128, 128 );
-  });
-}
-
-async function getVideoThumb(url, pos) {
-  return new Promise((resolve, reject) => {
-    var video = document.createElement("video");
-    var timeupdate = function (ev) {
-      video.removeEventListener("timeupdate", timeupdate);
-      video.pause();
-      setTimeout(() => {
-        var canvas = document.createElement("canvas");
-        if (video.videoWidth > video.videoHeight) {
-          canvas.width = 192;
-          canvas.height = Math.floor((192 * video.videoHeight / video.videoWidth));
-        }
-        else {
-          canvas.height  = 192;
-          canvas.width = Math.floor((192 * video.videoWidth / video.videoHeight));
-        }
-        canvas.getContext("2d").drawImage(video, 0, 0, canvas.width, canvas.height);
-        var image = canvas.toDataURL("image/jpeg", 0.75);
-        resolve(image); 
-        canvas.remove();
-        video.remove();
-      }, 1000);
-    };
-    video.addEventListener("timeupdate", timeupdate);
-    video.preload = "metadata";
-    video.src = url;
-    video.muted = true;
-    video.playsInline = true;
-    video.currentTime = pos;
-    video.play();
-  });
-}
