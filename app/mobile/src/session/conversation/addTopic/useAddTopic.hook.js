@@ -5,6 +5,9 @@ import { Image } from 'react-native';
 import Colors from 'constants/Colors';
 import { getChannelSeals, getContentKey, encryptTopicSubject } from 'context/sealUtil';
 import { AccountContext } from 'context/AccountContext';
+import { createThumbnail } from "react-native-create-thumbnail";
+import ImageResizer from '@bam.tech/react-native-image-resizer';
+import RNFS from 'react-native-fs';
 
 export function useAddTopic(contentKey) {
 
@@ -104,7 +107,7 @@ export function useAddTopic(contentKey) {
     setMessage: (message) => {
       updateState({ message });
     },
-    addImage: (data) => {
+    addImage: async (data) => {
       const url = data.startsWith('file:') ? data : 'file://' + data;
 
       assetId.current++;
@@ -113,8 +116,18 @@ export function useAddTopic(contentKey) {
         updateState({ assets: [ ...state.assets, asset ] });
       })
     },
-    addVideo: (data) => {
+    addVideo: async (data) => {
       const url = data.startsWith('file:') ? data : 'file://' + data
+
+      const shot = await createThumbnail({ url: url, timeStamp: 5000, })
+      console.log(shot);
+
+      const thumb = await ImageResizer.createResizedImage('file://' + shot.path, 192, 192, "JPEG", 50, 0, null);
+      console.log(thumb);
+
+      const base = await RNFS.readFile(thumb.path, 'base64')
+      console.log('data:image/jpeg;base64,' + base);
+    
       assetId.current++;
       const asset = { key: assetId.current, type: 'video', data: url, ratio: 1, duration: 0, position: 0 };
       updateState({ assets: [ ...state.assets, asset ] });

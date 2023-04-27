@@ -10,6 +10,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@bam.tech/react-native-image-resizer": "^3.0.5",
     "@braintree/sanitize-url": "^6.0.2",
     "@react-native-clipboard/clipboard": "^1.11.1",
     "@react-native-firebase/app": "^17.2.0",
@@ -27,8 +28,10 @@
     "react": "18.2.0",
     "react-native": "0.71.3",
     "react-native-base64": "^0.2.1",
+    "react-native-create-thumbnail": "^1.6.4",
     "react-native-device-info": "^10.4.0",
     "react-native-document-picker": "^8.1.3",
+    "react-native-fs": "^2.20.0",
     "react-native-gesture-handler": "^2.9.0",
     "react-native-image-crop-picker": "^0.39.0",
     "react-native-incall-manager": "^4.0.1",
