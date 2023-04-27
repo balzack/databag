@@ -3,10 +3,8 @@ import { UploadContext } from 'context/UploadContext';
 import { ConversationContext } from 'context/ConversationContext';
 import { Image } from 'react-native';
 import Colors from 'constants/Colors';
-import { getChannelSeals, getContentKey, encryptTopicSubject } from 'context/sealUtil';
+import { encryptBlock, decryptBlock, getChannelSeals, getContentKey, encryptTopicSubject } from 'context/sealUtil';
 import { AccountContext } from 'context/AccountContext';
-import { createThumbnail } from "react-native-create-thumbnail";
-import ImageResizer from '@bam.tech/react-native-image-resizer';
 import RNFS from 'react-native-fs';
 
 export function useAddTopic(contentKey) {
@@ -58,6 +56,10 @@ export function useAddTopic(contentKey) {
   }, [state.assets, state.locked, state.enableImage, state.enableAudio, state.enableVideo]);
 
   useEffect(() => {
+    updateState({ assets: [] });
+  }, [contentKey]);
+
+  useEffect(() => {
     const cardId = conversation.state.card?.card?.cardId;
     const channelId = conversation.state.channel?.channelId;
     const key = cardId ? `${cardId}:${channelId}` : `:${channelId}`
@@ -103,39 +105,51 @@ export function useAddTopic(contentKey) {
     updateState({ enableImage, enableAudio, enableVideo, locked });
   }, [conversation.state]);
 
+  const setAsset = async (file) => {
+    const url = file.startsWith('file:') ? file : `file://${file}`;
+    if (contentKey) {
+      const stat = await RNFS.stat(url);
+      const getEncryptedBlock = async (pos, len) => {
+        if (pos + len > stat.size) {
+          return null;
+        }
+        const block = await RNFS.read(file, len, pos, 'base64');
+        return getEncryptedBlock(block, contentKey);
+      }
+      return { data: url, encrypted: true, size: stat.size, getEncryptedBlock };
+    }
+    else {
+      return { data: url, encrypted: false };
+    }
+  }
+
   const actions = {
     setMessage: (message) => {
       updateState({ message });
     },
     addImage: async (data) => {
-      const url = data.startsWith('file:') ? data : 'file://' + data;
-
       assetId.current++;
-      Image.getSize(url, (width, height) => {
-        const asset = { key: assetId.current, type: 'image', data: url, ratio: width/height };
-        updateState({ assets: [ ...state.assets, asset ] });
-      })
-    },
-    addVideo: async (data) => {
-      const url = data.startsWith('file:') ? data : 'file://' + data
-
-      const shot = await createThumbnail({ url: url, timeStamp: 5000, })
-      console.log(shot);
-
-      const thumb = await ImageResizer.createResizedImage('file://' + shot.path, 192, 192, "JPEG", 50, 0, null);
-      console.log(thumb);
-
-      const base = await RNFS.readFile(thumb.path, 'base64')
-      console.log('data:image/jpeg;base64,' + base);
-    
-      assetId.current++;
-      const asset = { key: assetId.current, type: 'video', data: url, ratio: 1, duration: 0, position: 0 };
+      const asset = await setAsset(data);
+      asset.key = assetId.current;
+      asset.type = 'image';
+      asset.ratio = 1;
       updateState({ assets: [ ...state.assets, asset ] });
     },
-    addAudio: (data, label) => {
-      const url = data.startsWith('file:') ? data : 'file://' + data
+    addVideo: async (data) => {
       assetId.current++;
-      const asset = { key: assetId.current, type: 'audio', data: url, label };
+      const asset = await setAsset(data);
+      asset.key = assetId.current;
+      asset.type = 'video';
+      asset.position = 0;
+      asset.ratio = 1;
+      updateState({ assets: [ ...state.assets, asset ] });
+    },
+    addAudio: async (data, label) => {
+      assetId.current++;
+      const asset = await setAsset(data);
+      asset.key = assetId.current;
+      asset.type = 'audio';
+      asset.label = label;
       updateState({ assets: [ ...state.assets, asset ] });
     }, 
     setVideoPosition: (key, position) => {

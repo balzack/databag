@@ -1,5 +1,10 @@
 import { useState, useRef } from 'react';
 import axios from 'axios';
+import { createThumbnail } from "react-native-create-thumbnail";
+import ImageResizer from '@bam.tech/react-native-image-resizer';
+import RNFS from 'react-native-fs';
+
+const ENCRYPTED_BLOCK_SIZE = (128 * 1024); //100k
 
 export function useUploadContext() {
 
@@ -116,6 +121,23 @@ export function useUploadContext() {
   return { state, actions }
 }
 
+async function getThumb(file, type, position) {
+  if (type === 'image') {
+    const thumb = await ImageResizer.createResizedImage(file, 192, 192, "JPEG", 50, 0, null);
+    const base = await RNFS.readFile(thumb.path, 'base64')
+    return `data:image/jpeg;base64,${base}`;
+  }
+  else if (type === 'video') {
+    const shot = await createThumbnail({ url: url, timeStamp: position * 1000 })
+    const thumb = await ImageResizer.createResizedImage('file://' + shot.path, 192, 192, "JPEG", 50, 0, null);
+    const base = await RNFS.readFile(thumb.path, 'base64')
+    return `data:image/jpeg;base64,${base}`;
+  }
+  else {
+    return null
+  }
+}
+
 async function upload(entry, update, complete) {
   if (!entry.files?.length) {
     try {
@@ -133,7 +155,28 @@ async function upload(entry, update, complete) {
     const file = entry.files.shift();
     entry.active = {};
     try {
-      if (file.type === 'image') {
+      if (file.encrypted) {
+        const { data, type, size, getEncryptedBlock, position } = file;
+        const thumb = await getThumb(data, type, position);
+        const parts = [];
+        for (let pos = 0; pos < size; pos += ENCRYPTED_BLOCK_SIZE) {
+          const { blockEncrypted, blockIv } = await getEncryptedBlock(pos, ENCRYPTED_BLOCK_SIZE);
+          const partId = await axios.post(`${entry.baseUrl}block${entry.urlParams}`, blockEncrypted, {
+            signal: entry.cancel.signal,
+            onUploadProgress: (ev) => {
+              const { loaded, total } = ev;
+              const partLoaded = pos + Math.floor(blockEncrypted.length * loaded / total);
+              entry.active = { partLoaded, size }
+              update();
+            }
+          });
+          parts.push({ blockIv, partId });
+        }
+        entry.assets.push({
+          encrypted: { type, thumb, parts }
+        });
+      }
+      else if (file.type === 'image') {
         const formData = new FormData();
         if (file.data.startsWith('file:')) {
           formData.append("asset", {uri: file.data, name: 'asset', type: 'application/octent-stream'});

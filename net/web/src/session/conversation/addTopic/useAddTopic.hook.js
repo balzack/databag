@@ -56,7 +56,7 @@ export function useAddTopic(contentKey) {
 
   useEffect(() => {
     updateState({ assets: [] });
-    return () => { console.log("RETURN CLEAR"); clearObjects() };
+    return () => { clearObjects() };
   }, [contentKey]);
 
   useEffect(() => {
