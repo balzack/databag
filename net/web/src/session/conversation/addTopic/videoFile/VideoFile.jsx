@@ -1,5 +1,4 @@
 import React, { useState, useRef } from 'react';
-import ReactPlayer from 'react-player'
 import ReactResizeDetector from 'react-resize-detector';
 import { RightOutlined, LeftOutlined } from '@ant-design/icons';
 import { VideoFileWrapper } from './VideoFile.styled';
@@ -17,22 +16,22 @@ export function VideoFile({ url, onPosition }) {
 
   const onSeek = (offset) => {
     if (player.current) {
-      let len = player.current.getDuration();
-      if (len > 128) {
-        offset *= Math.floor(len / 128);
+      const len = player.current.duration;
+      if (len > 16) {
+        offset *= Math.floor(len / 16);
       } 
       seek.current += offset;
       if (seek.current < 0 || seek.current >= len) {
         seek.current = 0;
       }
       onPosition(seek.current);
-      player.current.seekTo(seek.current, 'seconds');
-      setPlaying(true);
+      player.current.currentTime = seek.current;
+      player.current.play();
     }
   }
 
   const onPause = () => {
-    setPlaying(false);
+    player.current.pause();
   }
 
   return (
@@ -42,8 +41,7 @@ export function VideoFile({ url, onPosition }) {
           if (width !== state.width || height !== state.height) {
             updateState({ width, height });
           }
-          return <ReactPlayer ref={player} playing={playing} playbackRate={0} controls={false} height="100%" width="auto" url={url} 
-              onStart={() => onPause()} onPlay={() => onPause()} />
+          return <video ref={player} muted onPlay={onPause} src={url} width={'auto'} height={'100%'} playsinline="true" />
         }}
       </ReactResizeDetector>
       <div class="overlay" style={{ width: state.width, height: state.height }}>
