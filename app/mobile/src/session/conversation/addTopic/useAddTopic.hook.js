@@ -38,9 +38,6 @@ export function useAddTopic(contentKey) {
 
   useEffect(() => {
     let conflict = false;
-    if (state.locked && state.assets.length > 0) {
-      conflict = true;
-    }
     state.assets.forEach(asset => {
       if (asset.type === 'image' && !state.enableImage) {
         conflict = true;
@@ -114,7 +111,7 @@ export function useAddTopic(contentKey) {
           return null;
         }
         const block = await RNFS.read(file, len, pos, 'base64');
-        return getEncryptedBlock(block, contentKey);
+        return encryptBlock(block, contentKey);
       }
       return { data: url, encrypted: true, size: stat.size, getEncryptedBlock };
     }
