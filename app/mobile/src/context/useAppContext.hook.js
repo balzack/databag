@@ -48,7 +48,7 @@ export function useAppContext() {
         }
         catch (err) {
           console.log(err);
-          Alert.alert('FCM', err.toString());
+          //Alert.alert('FCM', err.toString());
         }
       }
       catch (err) {

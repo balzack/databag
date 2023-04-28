@@ -216,7 +216,7 @@ function HomeScreen({ navParams }) {
           </TouchableOpacity>
         </View>
         <View style={styles.channels}>
-          <Channels dmChannel={navParams.dmChannel} shareChannel={shareChannel} cardId={cardId} channelId={channelId} openConversation={setConversation} />
+          <Channels dmChannel={navParams.dmChannel} shareChannel={navParams.shareChannel} cardId={cardId} channelId={channelId} openConversation={setConversation} />
         </View>
       </SafeAreaView>
       <View style={styles.conversation}>
