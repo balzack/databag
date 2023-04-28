@@ -45,6 +45,19 @@ const CNFEnableVideo = "enable_video"
 //CNFKeyType specifies the type of key to use for identity
 const CNFKeyType = "key_type"
 
+//CNFEnableIce specifies whether webrtc is enabled
+const CNFEnableIce = "enable_ice"
+
+//CNFIceUrl specifies the ice candidate url
+const CNFIceUrl = "ice_url"
+
+//CNFIceUrl specifies the ice candidate username
+const CNFIceUsername = "ice_username"
+
+//CNFIceUrl specifies the ice candidate url
+const CNFIcePassword = "ice_password"
+
+
 func getStrConfigValue(configID string, empty string) string {
 	var config store.Config
 	err := store.DB.Where("config_id = ?", configID).First(&config).Error

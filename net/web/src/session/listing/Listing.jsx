@@ -6,6 +6,7 @@ import { ListingItem } from './listingItem/ListingItem';
 
 export function Listing({ closeListing, openContact }) {
 
+  const [ modal, modalContext ] = Modal.useModal();
   const { state, actions } = useListing();
 
   const getListing = async () => {
@@ -14,15 +15,17 @@ export function Listing({ closeListing, openContact }) {
     }
     catch(err) {
       console.log(err);
-      Modal.error({
+      modal.error({
         title: 'Communication Error',
         content: 'Please confirm your server name.',
+        bodyStyle: { padding: 16 },
       });
     }
   }
     
   return (
     <ListingWrapper>
+      { modalContext }
       <div class="search">
         { !state.showFilter && (
           <div class="showfilter" onClick={actions.showFilter}>
@@ -64,7 +67,7 @@ export function Listing({ closeListing, openContact }) {
         { state.contacts.length > 0 && (
           <List local={{ emptyText: '' }} itemLayout="horizontal" dataSource={state.contacts} gutter="0"
             renderItem={item => (
-              <ListingItem item={item} node={state.node} open={openContact} />
+              <ListingItem item={item} open={() => openContact(item.guid, item)} />
             )} />
         )}
         { state.contacts.length === 0 && (

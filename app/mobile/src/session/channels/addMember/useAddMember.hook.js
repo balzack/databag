@@ -26,12 +26,11 @@ export function useAddMember(item, members) {
     const { cardId, revision, profile } = item;
     const { name, handle, node } = profile;
     updateState({ cardId, name, handle: `${handle}@${node}`,
-      logo: profile.imageSet ? card.actions.getCardLogo(cardId, revision) : 'avatar' });
-  }, [card]);
+      logo: profile.imageSet ? card.actions.getCardImageUrl(cardId) : 'avatar' });
+  }, [card.state]);
 
   const actions = {
   };
 
   return { state, actions };
 }
-

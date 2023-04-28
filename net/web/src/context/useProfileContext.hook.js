@@ -7,6 +7,7 @@ import { getProfileImageUrl } from 'api/getProfileImageUrl';
 
 export function useProfileContext() {
   const [state, setState] = useState({
+    offsync: false,
     identity: {},
     imageUrl: null,
   });
@@ -24,36 +25,41 @@ export function useProfileContext() {
       syncing.current = true;
 
       try {
+        const token = access.current;
         const revision = curRevision.current;
         const identity = await getProfile(access.current);
-        const imageUrl = identity.image ? getProfileImageUrl(access.current, revision) : null;
-        updateState({ identity, imageUrl });
+        const imageUrl = identity.image ? getProfileImageUrl(token, identity.revision) : null;
         setRevision.current = revision;
+        updateState({ offsync: false, identity, imageUrl });
       }
       catch(err) {
         console.log(err);
         syncing.current = false;
+        updateState({ offsync: true });
         return;
       }
 
       syncing.current = false;
-      sync();
+      await sync();
     }
   }
 
   const actions = {
     setToken: (token) => {
+      if (access.current || syncing.current) {
+        throw new Error("invalid profile session state");
+      }
       access.current = token;
+      curRevision.current = null;
+      setRevision.current = null;
+      setState({ offsync: false, identity: {}, imageUrl: null });
     },
     clearToken: () => {
       access.current = null;
-      curRevision.current = null;
-      setRevision.current = null;
-      setState({ identity: {}, imageUrl: null });
     },
-    setRevision: (rev) => {
+    setRevision: async (rev) => {
       curRevision.current = rev;
-      sync();
+      await sync();
     },
     setProfileData: async (name, location, description) => {
       await setProfileData(access.current, name, location, description);
@@ -63,6 +69,9 @@ export function useProfileContext() {
     },
     getHandleStatus: async (name) => {
       return await getUsername(name, access.current);
+    },
+    resync: async () => {
+      await sync();
     },
   }
 

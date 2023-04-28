@@ -3,7 +3,7 @@ import { SelectItemWrapper, Markup } from './SelectItem.styled';
 import { useSelectItem } from './useSelectItem.hook';
 import { Logo } from 'logo/Logo';
 
-export function SelectItem({ item, select, selected, markup }) {
+export function SelectItem({ item, select, selected, markup, setItem, clearItem }) {
 
   const { state } = useSelectItem(item, selected, markup);
   const profile = item?.data?.cardProfile;
@@ -15,10 +15,17 @@ export function SelectItem({ item, select, selected, markup }) {
     return profile?.handle;
   }
 
-  const onSelect = () => {
+  const onSelect = (ev) => {
     if (select) {
       select(item.id);
     }
+    if (setItem && !state.selected) {
+      setItem(item.id);
+    }
+    if (clearItem && state.selected) {
+      clearItem(item.id);
+    }
+    ev.stopPropagation()
   }
 
   return (
@@ -29,9 +36,9 @@ export function SelectItem({ item, select, selected, markup }) {
           <div class="name">{ profile?.name }</div>
           <div class="handle">{ handle() }</div>
         </div>
-        { select && (
+        { (select || setItem || clearItem) && (
           <div class="switch">
-            <Switch checked={state.selected} onChange={onSelect} size="small" />
+            <Switch checked={state.selected} onChange={(flag, ev) => onSelect(ev)} size="small" />
           </div>
         )}
         { state.markup && (

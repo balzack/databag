@@ -1,47 +1,47 @@
 import { useState, useEffect, useRef, useContext } from 'react';
-import { useWindowDimensions } from 'react-native';
-import { useNavigate } from 'react-router-dom';
 import { CardContext } from 'context/CardContext';
-import config from 'constants/Config';
+import { RingContext } from 'context/RingContext';
+import { AccountContext } from 'context/AccountContext';
 
-export function useCards() {
+export function useCards(filter, sort) {
 
   const [state, setState] = useState({
-    tabbed: null,
     cards: [],
-    filter: null,
-    sorting: false,
+    enableIce: false,
   });
 
-  const dimensions = useWindowDimensions();
+  const account = useContext(AccountContext);
   const card = useContext(CardContext);
+  const ring = useContext(RingContext);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
   }
 
   useEffect(() => {
-    if (dimensions.width > config.tabbedWidth) {
-      updateState({ tabbed: false });
-    }
-    else {
-      updateState({ tabbed: true });
-    }
-  }, [dimensions]);
+    const { enableIce } = account.state.status || {};
+    updateState({ enableIce });
+  }, [account.state]);
 
   const setCardItem = (item) => {
-    const { profile, detail } = item;
+    const { profile, detail, cardId } = item.card || { profile: {}, detail: {} }
+    const { name, handle, node, guid, location, description, imageSet } = profile;
 
     return {
-      cardId: item.cardId,
-      name: profile.name,
-      handle: `${profile.handle}@${profile.node}`,
+      cardId: cardId,
+      name: name,
+      handle: handle,
+      node: node,
+      guid: guid,
+      location: location,
+      description: description,
       status: detail.status,
+      token: detail.token,
       offsync: item.offsync,
       blocked: item.blocked,
       offsync: item.offsync,
       updated: detail.statusUpdated,
-      logo: profile.imageSet ? card.actions.getCardLogo(item.cardId, profile.revision) : 'avatar',
+      logo: imageSet ? card.actions.getCardImageUrl(cardId) : 'avatar',
     }
   };
 
@@ -49,10 +49,13 @@ export function useCards() {
     const cards = Array.from(card.state.cards.values());
     const items = cards.map(setCardItem);
     const filtered = items.filter(item => {
-      if (!state.filter) {
-        return !item.blocked;
+      if (item.blocked) {
+        return false;
       }
-      const lower = state.filter.toLowerCase();
+      if (!filter) {
+        return true;
+      }
+      const lower = filter.toLowerCase();
       if (item.name) {
         if (item.name.toLowerCase().includes(lower)) {
           return true;
@@ -65,7 +68,7 @@ export function useCards() {
       }
       return false;
     })
-    if (state.sorting) {
+    if (sort) {
       filtered.sort((a, b) => {
         const aName = a?.name?.toLowerCase();
         const bName = b?.name?.toLowerCase();
@@ -90,20 +93,16 @@ export function useCards() {
       });
     }
     updateState({ cards: filtered }); 
-  }, [card, state.filter, state.sorting]);
+  }, [card, filter, sort]);
 
   const actions = {
-    setFilter: (filter) => {
-      updateState({ filter });
-    },
-    sort: () => {
-      updateState({ sorting: true });
-    },
-    unsort: () => {
-      updateState({ sorting: false });
+    call: async (card) => {
+      const { cardId, guid, node, token } = card || {};
+      await ring.actions.call(cardId, node, `${guid}.${token}`);
     },
   };
 
   return { state, actions };
 }
+
 

@@ -8,11 +8,12 @@ import { setAccountLogin } from 'api/setAccountLogin';
 
 export function useAccountContext() {
   const [state, setState] = useState({
+    offsync: false,
     status: {},
   });
   const store = useContext(StoreContext);
 
-  const session = useRef(null);
+  const access = useRef(null);
   const curRevision = useRef(null);
   const setRevision = useRef(null);
   const syncing = useRef(false);
@@ -22,13 +23,12 @@ export function useAccountContext() {
   }
 
   const sync = async () => {
-    if (!syncing.current && setRevision.current !== curRevision.current) {
+    if (access.current && !syncing.current && setRevision.current !== curRevision.current) {
       syncing.current = true;
-
       try {
         const revision = curRevision.current;
-        const { server, appToken, guid } = session.current;
-        const status = await getAccountStatus(server, appToken);
+        const { server, token, guid } = access.current || {};
+        const status = await getAccountStatus(server, token);
         await store.actions.setAccountStatus(guid, status);
         await store.actions.setAccountRevision(guid, revision);
         updateState({ status });
@@ -46,47 +46,53 @@ export function useAccountContext() {
   };
 
   const actions = {
-    setSession: async (access) => {
-      const { guid, server, appToken } = access;
+    setSession: async (session) => {
+      if (access.current || syncing.current) {
+        throw new Error('invalid account state');
+      }
+      access.current = session;
+      const { guid, server, token } = session || {};
       const status = await store.actions.getAccountStatus(guid);
       const sealKey = await store.actions.getAccountSealKey(guid);
       const revision = await store.actions.getAccountRevision(guid);
       updateState({ status, sealKey });
       setRevision.current = revision;
       curRevision.current = revision;
-      session.current = access;
     },
     clearSession: () => {
-      session.current = {};
-      updateState({ account: null });
+      access.current = null;
+      updateState({ account: {} });
     },
     setRevision: (rev) => {
       curRevision.current = rev;
       sync();
     },
     setNotifications: async (flag) => {
-      const { server, appToken } = session.current;
-      await setAccountNotifications(server, appToken, flag);
+      const { server, token } = access.current || {};
+      await setAccountNotifications(server, token, flag);
     },
     setSearchable: async (flag) => {
-      const { server, appToken } = session.current;
-      await setAccountSearchable(server, appToken, flag);
+      const { server, token } = access.current || {};
+      await setAccountSearchable(server, token, flag);
     },
     setAccountSeal: async (seal, key) => {
-      const { guid, server, appToken } = session.current;
-      await setAccountSeal(server, appToken, seal);
+      const { guid, server, token } = access.current || {};
+      await setAccountSeal(server, token, seal);
       await store.actions.setAccountSealKey(guid, key);
       updateState({ sealKey: key });
     },
     unlockAccountSeal: async (key) => {
-      const { guid } = session.current;
+      const { guid } = access.current || {};
       await store.actions.setAccountSealKey(guid, key);
       updateState({ sealKey: key });
     },
     setLogin: async (username, password) => {
-      const { server, appToken } = session.current;
-      await setAccountLogin(server, appToken, username, password);
+      const { server, token } = access.current || {};
+      await setAccountLogin(server, token, username, password);
     },
+    resync: async () => {
+      await sync();
+    }
   }
 
   return { state, actions }

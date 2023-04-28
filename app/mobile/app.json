@@ -1,11 +1,4 @@
 {
-  "expo": {
-    "name": "Databag",
-    "slug": "Databag",
-    "version": "1.0.0",
-    "assetBundlePatterns": [
-      "**/*"
-    ]
-  },
-  "name": "Databag"
+  "name": "Databag",
+  "displayName": "Databag"
 }

@@ -1,4 +1,139 @@
 import styled from 'styled-components';
+import Colors from 'constants/Colors';
+
+export const RingingWrapper = styled.div`
+  .ringing-list {
+    padding: 4px;
+    display: flex;
+    flex-direction: column;
+    background-color: ${Colors.darkBackground};
+
+    .ringing-entry {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      padding-left: 8px;
+
+      .ringing-accept {
+        color: ${Colors.primary};
+        font-size: 18;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: ${Colors.white};
+        border-radius: 16px;
+        margin: 8px;
+        cursor: pointer;
+      }
+
+      .ringing-ignore {
+        color: ${Colors.grey};
+        font-size: 18;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: ${Colors.white};
+        border-radius: 16px;
+        margin: 8px;
+        cursor: pointer;
+      }
+    
+      .ringing-decline {
+        color: ${Colors.alert};
+        font-size: 18;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: ${Colors.white};
+        border-radius: 16px;
+        margin: 8px;
+        transform: rotate(224deg);
+        cursor: pointer;
+      }
+
+      .ringing-name {
+        font-size: 16px;
+        flex-grow: 1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: flex;
+        justify-content: center;
+        color: ${Colors.white};
+      }
+    }
+  }
+}
+`;
+
+export const CallingWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover .calling-hovered {
+    display: flex;
+  }
+  
+  .calling-local {
+    width: 33%;
+    bottom: 16px;
+    left: 16px;
+    position: absolute;
+  }
+
+  .calling-logo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 256px;
+    height: 256px;
+    background-color: yellow;
+  }
+
+  .calling-end {
+    position: absolute;
+    bottom: 16px;
+    color: ${Colors.white};
+    font-size: 24px;
+    background-color: ${Colors.alert};
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    border-radius: 20px;
+    cursor: pointer;
+    transform: rotate(135deg);
+  }
+
+  .calling-options {
+    display: none;
+    position: absolute;
+    top: 16px;
+    flex-direction: row;
+  }
+
+  .calling-option {
+    color: ${Colors.white};
+    font-size: 24px;
+    background-color: ${Colors.primary};
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-left: 8px;
+    margin-right: 8px;
+  }
+`;
+
 
 export const SessionWrapper = styled.div`
   height: 100%;

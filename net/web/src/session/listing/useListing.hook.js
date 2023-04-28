@@ -2,17 +2,18 @@ import { useContext, useState, useEffect } from 'react';
 import { ProfileContext } from 'context/ProfileContext';
 import { ViewportContext } from 'context/ViewportContext';
 import { getListing } from 'api/getListing';
+import { getListingImageUrl } from 'api/getListingImageUrl';
 
 export function useListing() {
 
   const [state, setState] = useState({
     contacts: [],
+    username: null,
     node: null,
     busy: false,
     disabled: true,
-    display: null,
     showFilter: false,
-    username: null,
+    display: null,
   });
 
   const profile = useContext(ProfileContext);
@@ -42,9 +43,20 @@ export function useListing() {
     getListing: async () => {
       updateState({ busy: true });
       try {
-        let contacts = await getListing(state.node, state.username);
-        let filtered = contacts.filter(contact => (contact.guid !== profile.state.identity.guid));
-        let sorted = filtered.sort((a, b) => {
+        const listing = await getListing(state.node, state.username);
+        const filtered = listing.filter(item => {
+          return item.guid !== profile.state.identity.guid;
+        });
+        const contacts = filtered.map(item => {
+          return {
+            guid: item.guid,
+            logo: item.imageSet ? getListingImageUrl(state.node, item.guid) : null,
+            name: item.name,
+            handle: item.handle,
+            node: item.node,
+          };
+        });
+        const sorted = contacts.sort((a, b) => {
           if (a?.name < b?.name) {
             return -1;
           }
@@ -61,13 +73,13 @@ export function useListing() {
   };
 
   useEffect(() => {
-    let node = profile?.state?.identity?.node;
+    const node = profile?.state?.identity?.node;
     updateState({ disabled: node == null || node === '', node });
-  }, [profile]);
+  }, [profile.state]);
 
   useEffect(() => {
     updateState({ display: viewport.state.display });
-  }, [viewport]);
+  }, [viewport.state]);
 
   return { state, actions };
 }

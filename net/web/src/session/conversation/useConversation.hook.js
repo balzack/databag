@@ -1,34 +1,40 @@
-import { useContext, useState, useEffect } from 'react';
+import { useContext, useRef, useState, useEffect } from 'react';
 import { ViewportContext } from 'context/ViewportContext';
 import { AccountContext } from 'context/AccountContext';
 import { ConversationContext } from 'context/ConversationContext';
 import { UploadContext } from 'context/UploadContext';
 import { StoreContext } from 'context/StoreContext';
-import { JSEncrypt } from 'jsencrypt'
+import { CardContext } from 'context/CardContext';
+import { ProfileContext } from 'context/ProfileContext';
+import { isUnsealed, getChannelSeals, getContentKey, encryptTopicSubject } from 'context/sealUtil';
+import { decryptTopicSubject } from 'context/sealUtil';
+import { getProfileByGuid } from 'context/cardUtil';
+import * as DOMPurify from 'dompurify';
 
 export function useConversation(cardId, channelId) {
 
   const [state, setState] = useState({
     display: null,
-    logo: null,
-    subject: null,
-    topics: [],
-    loadingInit: false,
-    loadingMore: false,
     upload: false,
     uploadError: false,
     uploadPercent: 0,
-    error: false,
+    topics: [],
     sealed: false,
-    sealKey: null,
-    delayed: false,
+    contentKey: null,
+    busy: false,
   });
 
+  const profile = useContext(ProfileContext);
+  const card = useContext(CardContext);
   const account = useContext(AccountContext);
   const viewport = useContext(ViewportContext);  
   const conversation = useContext(ConversationContext);
   const upload = useContext(UploadContext);
   const store = useContext(StoreContext);
+
+  const loading = useRef(false);
+  const conversationId = useRef(null);
+  const topics = useRef(new Map());
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
@@ -39,19 +45,29 @@ export function useConversation(cardId, channelId) {
   }, [viewport]);
 
   useEffect(() => {
-    let sealKey;
-    const seals = conversation.state.seals;
-    if (seals?.length > 0) {
-      seals.forEach(seal => {
-        if (seal.publicKey === account.state.sealKey?.public) {
-          let crypto = new JSEncrypt();
-          crypto.setPrivateKey(account.state.sealKey.private);
-          sealKey = crypto.decrypt(seal.sealedKey);
+    const { dataType, data } = conversation.state.channel?.data?.channelDetail || {};
+    if (dataType === 'sealed') {
+      try {
+        const { sealKey } = account.state;
+        const seals = getChannelSeals(data);
+        if (isUnsealed(seals, sealKey)) {
+          const contentKey = getContentKey(seals, sealKey);
+          updateState({ sealed: true, wtf: true, contentKey });
         }
-      });
+        else {
+          updateState({ sealed: true, contentKey: null });
+        }
+      }
+      catch (err) {
+        console.log(err);
+        updateState({ sealed: true, contentKey: null });
+      }
     }
-    updateState({ sealed: conversation.state.sealed, sealKey });
-  }, [account.state.sealKey, conversation.state.seals, conversation.state.sealed]);
+    else {
+      updateState({ sealed: false, contentKey: null });
+    }
+    // eslint-disable-next-line
+  }, [account.state.sealKey, conversation.state.channel?.data?.channelDetail]);
 
   useEffect(() => {
     let active = false;
@@ -83,46 +99,180 @@ export function useConversation(cardId, channelId) {
     }
 
     updateState({ upload: active, uploadError, uploadPercent });
-  }, [cardId, channelId, upload]);
+  }, [cardId, channelId, upload.state]);
+  
+  const setChannel = async () => {
+    if (!loading.current && conversationId.current) {
+      const { card, channel } = conversationId.current;
+      loading.current = true;
+      conversationId.current = null;
+      await conversation.actions.setChannel(card, channel);
+      loading.current = false;
+      await setChannel();
+    }
+  }
 
   useEffect(() => {
-    updateState({ delayed: false, topics: [] });
-    setTimeout(() => {
-      updateState({ delayed: true });
-    }, 250);
-    conversation.actions.setConversationId(cardId, channelId);
+    conversationId.current = { card: cardId, channel: channelId };
+    setChannel();
     // eslint-disable-next-line
   }, [cardId, channelId]);
 
   useEffect(() => {
-    let topics = Array.from(conversation.state.topics.values()).sort((a, b) => {
-      const aTimestamp = a?.data?.topicDetail?.created;
-      const bTimestamp = b?.data?.topicDetail?.created;
-      if(aTimestamp === bTimestamp) {
+    const key = `${conversation.state.channel?.id}::${conversation.state.card?.id}`
+    const topicRevision = conversation.state.channel?.data?.topicRevision; 
+    store.actions.setValue(key, topicRevision);
+
+    syncChannel();
+    // eslint-disable-next-line
+  }, [conversation.state, profile.state, card.state]);
+ 
+  useEffect(() => {
+    topics.current = new Map();
+    syncChannel();
+    // eslint-disable-next-line
+  }, [state.contentKey]);
+
+  const clickableText = (text) => {
+      const urlPattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
+    '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+    '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+    '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+
+      const hostPattern = new RegExp('^https?:\\/\\/', 'i');
+
+      let group = '';
+      let clickable = [];
+      const words = text == null ? '' : DOMPurify.sanitize(text).split(' ');
+      words.forEach((word, index) => {
+        if (!!urlPattern.test(word)) {
+          clickable.push(<span key={index}>{ group }</span>);
+          group = '';
+          const url = !!hostPattern.test(word) ? word : `https://${word}`;
+          clickable.push(<a key={'link-'+index} target="_blank" rel="noopener noreferrer" href={url}>{ `${word} ` }</a>);
+        }
+        else {
+          group += `${word} `;
+        }
+      })
+      clickable.push(<span key={words.length}>{ group }</span>);
+      return <p>{ clickable }</p>;
+  };
+
+  const syncTopic = (item, value) => {
+    const revision = value.data?.detailRevision;
+    const detail = value.data?.topicDetail || {};
+    const identity = profile.state.identity || {};
+    
+    item.created = detail.created;
+    const date = new Date(detail.created * 1000);
+    const now = new Date();
+    const offset = now.getTime() - date.getTime();
+    if(offset < 86400000) {
+      item.createdStr = date.toLocaleTimeString([], {hour: 'numeric', minute:'2-digit'});
+    }
+    else if (offset < 31449600000) {
+      item.createdStr = date.toLocaleDateString("en-US", {day: 'numeric', month:'numeric'});
+    }
+    else {
+      item.createdStr = date.toLocaleDateString("en-US");
+    }
+
+    if (detail.guid === identity.guid) {
+      item.creator = true;
+      item.imageUrl = profile.state.imageUrl;
+      if (identity.name) {
+        item.name = identity.name;
+        item.nameSet = true;
+      }
+      else {
+        item.name = `${identity.handle}@${identity.node}`;
+        item.nameSet = false;
+      }
+    }
+    else {
+      item.creator = false;
+      const contact = getProfileByGuid(card.state.cards, detail.guid);
+      if (contact) {
+        item.imageUrl = contact.imageSet ? card.actions.getCardImageUrl(contact.cardId) : null;
+        if (contact.name) {
+          item.name = contact.name;
+          item.nameSet = true;
+        }
+        else {
+          item.name = `${contact.handle}@${contact.node}`;
+          item.nameSet = false;
+        }
+      }
+      else {
+        item.imageUrl = null;
+        item.name = 'unknown';
+        item.nameSet = false;
+      }
+    }
+
+    if (item.revision !== revision) {
+      try {
+        if (detail.dataType === 'superbasictopic') {
+          const message = JSON.parse(detail.data);
+          item.assets = message.assets;
+          item.text = message.text;
+          item.clickable = clickableText(message.text);
+          item.textColor = message.textColor ? message.textColor : '#444444';
+          item.textSize = message.textSize ? message.textSize : 14;
+        }
+        if (detail.dataType === 'sealedtopic' && state.contentKey) {
+          const subject = decryptTopicSubject(detail.data, state.contentKey);
+          item.assets = subject.message.assets;
+          item.text = subject.message.text;
+          item.clickable = clickableText(subject.message.text);
+          item.textColor = subject.message.textColor ? subject.message.textColor : '#444444';
+          item.textSize = subject.message.textSize ? subject.message.textSize : 14;
+        }
+      }
+      catch (err) {
+        console.log(err);
+      }
+      item.revision = revision;
+    }
+    item.transform = detail.transform;
+    item.status = detail.status;
+    item.assetUrl = conversation.actions.getTopicAssetUrl;
+  };
+
+  const syncChannel = () => { 
+    const messages = new Map();
+    conversation.state.topics.forEach((value, id) => {
+      const curCardId = conversation.state.card?.id;
+      const curChannelId = conversation.state.channel?.id;
+      const key = `${curCardId}:${curChannelId}:${id}`
+      let item = topics.current.get(key);
+      if (!item) {
+        item = { id };
+      }
+      syncTopic(item, value);
+      messages.set(key, item);
+    });
+    topics.current = messages;
+
+    const sorted = Array.from(messages.values()).sort((a, b) => {
+      if(a.created === b.created) {
         return 0;
       }
-      if(aTimestamp == null || aTimestamp < bTimestamp) {
+      if(a.created == null || a.created < b.created) {
         return -1;
       }
       return 1;
     });
-    if (topics.length) {
-      updateState({ delayed: false });
-    }
-    else {
-      setTimeout(() => {
-        updateState({ delayed: true });
-      }, 250);
-    }
-    const { error, loadingInit, loadingMore, subject, logoUrl, logoImg } = conversation.state;
-    updateState({ topics, error, loadingInit, loadingMore, subject, logoUrl, logoImg });
-    store.actions.setValue(`${channelId}::${cardId}`, Number(conversation.state.revision));
-    // eslint-disable-next-line 
-  }, [conversation]);
+
+    updateState({ topics: sorted });
+  }
 
   const actions = {
     more: () => {
-      conversation.actions.addHistory();
+      conversation.actions.loadMore();
     },
     resync: () => {
       conversation.actions.resync();
@@ -131,6 +281,36 @@ export function useConversation(cardId, channelId) {
       upload.actions.clearErrors(cardId, channelId);
     },
     cancelUpload: () => {
+    },
+    removeTopic: async (topicId) => {
+      await conversation.actions.removeTopic(topicId);
+    },
+    updateTopic: async (topic, text) => {
+      const { assets, textSize, textColor } = topic;
+      const message = { text, textSize, textColor, assets };
+      
+      if (!state.busy) {
+        updateState({ busy: true });
+        try {
+          if (state.sealed) {
+            if (state.contentKey) {
+              const subject = encryptTopicSubject({ message }, state.contentKey);
+              await conversation.actions.setTopicSubject(topic.id, 'sealedtopic', subject);
+            }
+          }
+          else {
+            await conversation.actions.setTopicSubject(topic.id, 'superbasictopic', message);
+          }
+          updateState({ busy: false });
+        }
+        catch(err) {
+          updateState({ busy: false });
+          throw new Error("topic update failed");
+        }
+      }
+      else {
+        throw new Error("operation in progress");
+      }
     },
   };
 

@@ -1,22 +1,45 @@
 import { ActivityIndicator, Modal, Image, FlatList, TextInput, Alert, View, TouchableOpacity, Text, } from 'react-native';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useAddTopic } from './useAddTopic.hook';
 import { styles } from './AddTopic.styled';
-import AntIcons from '@expo/vector-icons/AntDesign';
-import MaterialIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import AntIcons from 'react-native-vector-icons/AntDesign';
+import MatIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Colors from 'constants/Colors';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import ImagePicker from 'react-native-image-crop-picker'
+import DocumentPicker from 'react-native-document-picker'
+import ColorPicker from 'react-native-wheel-color-picker'
 import { VideoFile } from './videoFile/VideoFile';
 import { AudioFile } from './audioFile/AudioFile';
 import { ImageFile } from './imageFile/ImageFile';
-import DocumentPicker from 'react-native-document-picker'
-import ColorPicker from 'react-native-wheel-color-picker'
 
-export function AddTopic({ sealed, sealKey }) {
+export function AddTopic({ contentKey, shareIntent, setShareIntent }) {
 
-  const { state, actions } = useAddTopic(sealed, sealKey);
-  const message = useRef();
+  const { state, actions } = useAddTopic(contentKey);
+
+  useEffect(() => {
+    if (shareIntent) {
+      shareIntent.forEach(share => {
+        if (share.text) {
+          actions.setMessage(share.text);
+        }
+        if (share.weblink) {
+          actions.setMessage(share.weblink);
+        }
+        const mime = share.mimeType?.toLowerCase();
+        if (mime === '.jpg' || mime === '.png' || mime === 'image/jpeg' || mime == 'image/png' ) {
+          actions.addImage(share.filePath)
+        }
+        if (mime === '.mp4' || mime === 'video/mp4' || mime == 'video/mpeg') {
+          actions.addVideo(share.filePath)
+        }
+        if (mime === '.mp3') {
+          actions.addAudio(share.filePath)
+        }
+      });
+      setShareIntent(null);
+    }
+  }, [shareIntent]);
 
   const addImage = async () => {
     try {
@@ -30,8 +53,7 @@ export function AddTopic({ sealed, sealKey }) {
 
   const sendMessage = async () => {
     try {
-      if (state.message || state.assets.length > 0) {
-        message.current.blur();
+      if (!state.conflict && (state.message || state.assets.length > 0)) {
         await actions.addTopic();
       }
     }
@@ -127,45 +149,51 @@ export function AddTopic({ sealed, sealKey }) {
           renderItem={renderAsset}
         />
       )}
-      <TextInput style={{ ...styles.input, color: state.color, fontSize: state.textSize }} value={state.message} onChangeText={actions.setMessage} ref={message}
+      <TextInput style={{ ...styles.input, color: state.color, fontSize: state.textSize }} value={state.message} onChangeText={actions.setMessage} 
           placeholderTextColor={state.color} cursorColor={state.color}
-          onSubmitEditing={sendMessage} returnKeyType="send"
+          blurOnSubmit={true} onSubmitEditing={sendMessage} returnKeyType="send"
           autoCapitalize="sentences" placeholder="New Message" multiline={true} />
       <View style={styles.addButtons}>
-        { !sealed && state.enableImage && (
+        { !state.locked && state.enableImage && (
           <TouchableOpacity style={styles.addButton} onPress={addImage}>
             <AntIcons name="picture" size={20} color={Colors.text} />
           </TouchableOpacity>
         )}
-        { !sealed && state.enableVideo && (
+        { !state.locked && state.enableVideo && (
           <TouchableOpacity style={styles.addButton} onPress={addVideo}>
-            <MaterialIcons name="video-outline" size={24} color={Colors.text} />
+            <MatIcons name="video-outline" size={24} color={Colors.text} />
           </TouchableOpacity>
         )}
-        { !sealed && state.enableAudio && (
+        { !state.locked && state.enableAudio && (
           <TouchableOpacity style={styles.addButton} onPress={addAudio}>
-            <MaterialIcons name="music-box-outline" size={20} color={Colors.text} />
+            <MatIcons name="music-box-outline" size={20} color={Colors.text} />
           </TouchableOpacity>
         )}
-        { !sealed && (
+        { !state.locked && (
           <View style={styles.divider} />
         )}
         <TouchableOpacity style={styles.addButton} onPress={actions.showFontSize}>
-          <MaterialIcons name="format-size" size={20} color={Colors.text} />
+          <MatIcons name="format-size" size={20} color={Colors.text} />
         </TouchableOpacity>
         <TouchableOpacity style={styles.addButton} onPress={actions.showFontColor}>
-          <MaterialIcons name="palette-outline" size={20} color={Colors.text} />
+          <MatIcons name="palette-outline" size={20} color={Colors.text} />
         </TouchableOpacity>
         <View style={styles.space} />
         <TouchableOpacity style={styles.addButton} onPress={sendMessage}>
           { state.busy && (
-            <ActivityIndicator color={Colors.white} />
+            <ActivityIndicator color={Colors.primary} />
           )}
-          { !state.busy && (state.message || state.assets.length > 0) && (
-            <MaterialIcons name="send-outline" size={20} color={Colors.text} />
+          { state.conflict && (
+            <MatIcons name="send-outline" size={20} color={Colors.alert} />
           )}
-          { !state.busy && !(state.message || state.assets.length > 0) && (
-            <MaterialIcons name="send-outline" size={20} color={Colors.lightgrey} />
+          { !state.conflict && state.locked && !contentKey && (
+            <MatIcons name="lock" size={20} color={Colors.lightgrey} />
+          )}
+          { !state.conflict && !state.busy && (!state.locked || contentKey) && (state.message || state.assets.length > 0) && (
+            <MatIcons name="send-outline" size={20} color={Colors.text} />
+          )}
+          { !state.conflict && !state.busy && (!state.locked || contentKey) && !(state.message || state.assets.length > 0) && (
+            <MatIcons name="send-outline" size={20} color={Colors.lightgrey} />
           )}
         </TouchableOpacity>
       </View>
@@ -253,4 +281,5 @@ export function AddTopic({ sealed, sealKey }) {
     </SafeAreaView>
   );
 }
+
 

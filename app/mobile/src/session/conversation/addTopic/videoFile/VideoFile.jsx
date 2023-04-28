@@ -3,7 +3,7 @@ import { TouchableOpacity, View } from 'react-native';
 import Video from 'react-native-video';
 import { useVideoFile } from './useVideoFile.hook';
 import { styles } from './VideoFile.styled';
-import Icons from '@expo/vector-icons/MaterialCommunityIcons';
+import MatIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Colors from 'constants/Colors';
 
 export function VideoFile({ path, setPosition, remove }) {
@@ -32,7 +32,7 @@ export function VideoFile({ path, setPosition, remove }) {
         onLoad={setInfo} ref={(ref) => video.current = ref}
       />
       <View style={styles.overlay}>
-        <Icons name="arrow-right" size={20} color={Colors.white} /> 
+        <MatIcons name="arrow-right" size={20} color={Colors.white} /> 
       </View>  
     </TouchableOpacity>
   );

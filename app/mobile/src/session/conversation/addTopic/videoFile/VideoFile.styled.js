@@ -11,4 +11,3 @@ export const styles = StyleSheet.create({
     borderTopLeftRadius: 4,
   },
 })
-

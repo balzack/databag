@@ -1,71 +1,93 @@
 import { CardItemWrapper, StatusError,
         StatusConnected, StatusConnecting, 
         StatusRequested, StatusPending, 
-        StatusConfirmed} from './CardItem.styled';
-import { useCardItem } from './useCardItem.hook';
+        StatusConfirmed, ComOptions } from './CardItem.styled';
 import { Logo } from 'logo/Logo';
 import { Tooltip } from 'antd';
-import { ExclamationCircleOutlined } from '@ant-design/icons';
+import { MessageOutlined, PhoneOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 
-export function CardItem({ item, open }) {
+export function CardItem({ item, tooltip, enableIce, resync, open, call, message, display }) {
 
-  const { state, actions } = useCardItem(item);  
-  const profile = item?.data?.cardProfile;
-  const detail = item?.data?.cardDetail;
-
-  const handle = () => {
-    if (profile?.node) {
-      return profile.handle + '@' + profile.node;
-    }
-    return profile?.handle;
-  }
-
-  const resync = (e) => {
+  const onResync = (e) => {
     e.stopPropagation();
-    actions.resync();
+    resync();
   };
 
+  const onMessage = (e) => {
+    e.stopPropagation();
+    message();
+  }
+
+  const onCall = (e) => {
+    e.stopPropagation();
+    call();
+  }
+
   return (
-    <CardItemWrapper onClick={() => open(profile.guid)}>
-      <Logo url={state.logo} width={32} height={32} radius={8} />
-      <div class="details">
-        <div class="name">{ profile?.name }</div>
-        <div class="handle">{ handle() }</div>
+    <CardItemWrapper onClick={open}>
+      <Logo url={item.logo} width={32} height={32} radius={4} />
+      <div className="details">
+        <div className="name">{ item.name }</div>
+        <div className="handle">{ item.handle }</div>
       </div>
-      <div class="markup">
-        { !state.resync && item.error && state.display === 'small' && (
-          <StatusError onClick={resync}>
+      <div className="markup">
+        { item.offsync && !item.tooltip && (
+          <StatusError onClick={onResync}>
             <ExclamationCircleOutlined />
           </StatusError>
         )}
-        { !state.resync && item.error && state.display !== 'small' && (
+        { item.offsync && item.tooltip && (
           <Tooltip placement="left" title="sync error">
-            <StatusError onClick={resync}>
+            <StatusError onClick={onResync}>
               <ExclamationCircleOutlined />
             </StatusError>
           </Tooltip>
         )}
-        { detail?.status === 'connected' && (
+        { item.status === 'connected' && display === 'small' && (
+          <ComOptions>
+            <div className="option">
+              <MessageOutlined onClick={onMessage} />
+            </div>
+            { enableIce && (
+              <div className="option">
+                <PhoneOutlined onClick={onCall} />
+              </div>
+            )}
+          </ComOptions>
+        )}
+        { item.status === 'connected' && display !== 'small' && (
+          <ComOptions>
+            <Tooltip className="option" placement="left" title="message contact">
+              <MessageOutlined onClick={onMessage} />
+            </Tooltip>
+            { enableIce && (
+              <Tooltip className="option" placement="left" title="call contact">
+                <PhoneOutlined onClick={onCall} />
+              </Tooltip>
+            )}
+          </ComOptions>
+        )}
+        { item.status === 'connected' && (
           <Tooltip placement="left" title="connected contact">
             <StatusConnected />
           </Tooltip>
         )}
-        { detail?.status === 'requested' && (
+        { item.status === 'requested' && (
           <Tooltip placement="left" title="connection requested by contact">
             <StatusRequested />
           </Tooltip>
         )}
-        { detail?.status === 'connecting' && (
+        { item.status === 'connecting' && (
           <Tooltip placement="left" title="requested contact connection">
             <StatusConnecting />
           </Tooltip>
         )}
-        { detail?.status === 'pending' && (
+        { item.status === 'pending' && (
           <Tooltip placement="left" title="unknwon contact connection request">
             <StatusPending />
           </Tooltip>
         )}
-        { detail?.status === 'confirmed' && (
+        { item.status === 'confirmed' && (
           <Tooltip placement="left" title="disconnected contact">
             <StatusConfirmed />
           </Tooltip>

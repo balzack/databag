@@ -1,3 +1,19 @@
+.ant-modal-content {
+  padding: 0 !important;
+}
+
+.ant-modal-title {
+  padding-top: 16px !important;
+  padding-left: 16px !important;
+  padding-right: 16px !important;
+}
+
+.ant-modal-footer {
+  padding-right: 16px !important;
+  padding-left: 16px !important;
+  padding-bottom: 16px !important;
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',

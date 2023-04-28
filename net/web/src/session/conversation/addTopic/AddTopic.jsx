@@ -8,9 +8,11 @@ import { AudioFile } from './audioFile/AudioFile';
 import { VideoFile } from './videoFile/VideoFile';
 import { Carousel } from 'carousel/Carousel';
 
-export function AddTopic({ cardId, channelId, sealed, sealKey }) {
+export function AddTopic({ contentKey }) {
 
-  const { state, actions } = useAddTopic(cardId, channelId);
+  const { state, actions } = useAddTopic();
+
+  const [modal, modalContext] = Modal.useModal();
   const attachImage = useRef(null);
   const attachAudio = useRef(null);
   const attachVideo = useRef(null);
@@ -26,13 +28,14 @@ export function AddTopic({ cardId, channelId, sealed, sealKey }) {
   const addTopic = async () => {
     if (state.messageText || state.assets.length) {
       try {
-        await actions.addTopic(sealed, sealKey);
+        await actions.addTopic(contentKey);
       }
       catch (err) {
         console.log(err);
-        Modal.error({
+        modal.error({
           title: 'Failed to Post Message',
           content: 'Please try again.',
+          bodyStyle: { padding: 16 },
         });
       }
     }
@@ -90,6 +93,7 @@ export function AddTopic({ cardId, channelId, sealed, sealKey }) {
 
   return (
     <AddTopicWrapper>
+      { modalContext }
       <input type='file' name="asset" accept="image/*" ref={attachImage} onChange={e => onSelectImage(e)} style={{display: 'none'}}/>
       <input type='file' name="asset" accept="audio/*" ref={attachAudio} onChange={e => onSelectAudio(e)} style={{display: 'none'}}/>
       <input type='file' name="asset" accept="video/*" ref={attachVideo} onChange={e => onSelectVideo(e)} style={{display: 'none'}}/>
@@ -104,22 +108,22 @@ export function AddTopic({ cardId, channelId, sealed, sealKey }) {
             value={state.messageText} autocapitalize="none" />
       </div>
       <div class="buttons">
-        { !state.sealed && state.enableImage && (
+        { !contentKey && state.enableImage && (
           <div class="button space" onClick={() => attachImage.current.click()}>
             <PictureOutlined />
           </div> 
         )}
-        { !state.sealed && state.enableVideo && (
+        { !contentKey && state.enableVideo && (
           <div class="button space" onClick={() => attachVideo.current.click()}>
             <VideoCameraOutlined />
           </div> 
         )}
-        { !state.sealed && state.enableAudio && (
+        { !contentKey && state.enableAudio && (
           <div class="button space" onClick={() => attachAudio.current.click()}>
             <SoundOutlined />
           </div> 
         )}
-        { !state.sealed && (
+        { !contentKey && (
           <div class="bar space" />
         )}
         <div class="button space">

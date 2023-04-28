@@ -28,6 +28,8 @@ export function useCreate() {
     tokenValid: false,
     usernameChecked: true,
     usernameValid: false,
+    agree: false,
+    showTerms: false,
   });
 
   const backoff = useRef(false);
@@ -61,6 +63,9 @@ export function useCreate() {
   }, [state]);
 
   useEffect(() => {
+    if (!count) {
+      return;
+    }
     if (checking.current) {
       backoff.current = true;
     }
@@ -170,6 +175,15 @@ export function useCreate() {
     },
     hideConfirm: () => {
       updateState({ showConfirm: false });
+    },
+    showTerms: () => {
+      updateState({ showTerms: true });
+    },
+    hideTerms: () => {
+      updateState({ showTerms: false });
+    },
+    agree: (agree) => {
+      updateState({ agree });
     },
     create: async () => {
       if (!state.busy) {

@@ -1,38 +1,117 @@
-import { useState, useEffect, useRef, useContext } from 'react';
-import { useWindowDimensions } from 'react-native';
-import { useNavigate } from 'react-router-dom';
-import { CardContext } from 'context/CardContext';
+import { useState, useRef, useEffect, useContext } from 'react';
 import { ChannelContext } from 'context/ChannelContext';
+import { CardContext } from 'context/CardContext';
 import { AccountContext } from 'context/AccountContext';
-import { ProfileContext } from 'context/ProfileContext';
 import { AppContext } from 'context/AppContext';
-import config from 'constants/Config';
+import { ProfileContext } from 'context/ProfileContext';
+import { getChannelSeals, isUnsealed, getContentKey, encryptChannelSubject, decryptChannelSubject, decryptTopicSubject } from 'context/sealUtil';
+import { getCardByGuid } from 'context/cardUtil';
+import { getChannelSubjectLogo } from 'context/channelUtil';
 
 export function useChannels() {
-
   const [state, setState] = useState({
-    topic: null,
-    channels: [],
-    tabbed: null,
     filter: null,
+    channels: [],
     adding: false,
     contacts: [],
-    addSubject: null,
     addMembers: [],
+    addSubject: null,
     sealed: false,
     sealable: false,
+    busy: false,
   });
 
-  const items = useRef([]);
-  const account = useContext(AccountContext);
   const channel = useContext(ChannelContext);
   const card = useContext(CardContext);
+  const account = useContext(AccountContext);
   const profile = useContext(ProfileContext);
   const app = useContext(AppContext);
-  const dimensions = useWindowDimensions();
+  
+  const filter = useRef();
+  const syncing = useRef(false);
+  const resync = useRef(false);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
+  }
+
+  const setChannelItem = async (loginTimestamp, cardId, channelId, item) => {
+    const timestamp = item.summary.lastTopic.created;
+    const { readRevision, topicRevision } = item;
+
+    // decrypt subject and message
+    let locked = false;
+    let unlocked = false;
+    if (item.detail.dataType === 'sealed') {
+      locked = true;
+      const seals = getChannelSeals(item.detail.data);
+      if (isUnsealed(seals, account.state.sealKey)) {
+        unlocked = true;
+        if (!item.unsealedDetail) {
+          try {
+            const contentKey = await getContentKey(seals, account.state.sealKey);
+            const unsealed = decryptChannelSubject(item.detail.data, contentKey);
+            if (unsealed) {
+              if (cardId) {
+                await card.actions.setUnsealedChannelSubject(cardId, channelId, item.detailRevision, unsealed);
+              }
+              else {
+                await channel.actions.setUnsealedChannelSubject(channelId, item.detailRevision, unsealed);
+              }
+            }
+          }
+          catch(err) {
+            console.log(err);
+          }
+        }
+        if (item.summary.lastTopic.dataType === 'sealedtopic') {
+          if (!item.unsealedSummary) {
+            try {
+              const contentKey = await getContentKey(seals, account.state.sealKey);
+              const unsealed = decryptTopicSubject(item.summary.lastTopic.data, contentKey);
+              if (unsealed) {
+                if (cardId) {
+                  await card.actions.setUnsealedChannelSummary(cardId, channelId, item.topicRevision, unsealed);
+                }
+                else {
+                  await channel.actions.setUnsealedChannelSummary(channelId, item.topicRevision, unsealed);
+                }
+              }
+            }
+            catch(err) {
+              console.log(err);
+            }
+          }
+        }
+      }
+    }
+
+    let message;
+    if (item?.detail?.dataType === 'sealed') {
+      if (typeof item?.unsealedSummary?.message?.text === 'string') {
+        message = item.unsealedSummary.message.text;
+      }
+    }
+    if (item.detail.dataType === 'superbasic') {
+      if (item.summary.lastTopic.dataType === 'superbasictopic') {
+        try {
+          const data = JSON.parse(item.summary.lastTopic.data);
+          if (typeof data.text === 'string') {
+            message = data.text;
+          }
+        }
+        catch(err) {
+          console.log(err);
+        }
+      }
+    }
+
+    const profileGuid = profile.state?.identity?.guid;
+    const { logo, subject } = getChannelSubjectLogo(cardId, profileGuid, item, card.state.cards, card.actions.getCardImageUrl);
+
+    const updated = (loginTimestamp < timestamp) && (readRevision < topicRevision);
+
+    return { cardId, channelId, subject, message, logo, timestamp, updated, locked, unlocked };
   }
 
   useEffect(() => {
@@ -43,10 +122,13 @@ export function useChannels() {
     else {
       updateState({ sealed: false, sealable: false });
     }
-  }, [account]);
+  }, [account.state]);
 
   useEffect(() => {
-    const contacts = Array.from(card.state.cards.values());
+    const contacts = [];
+    card.state.cards.forEach(entry => {
+      contacts.push(entry.card);
+    });
     const filtered = contacts.filter(contact => {
       if (contact.detail.status !== 'connected') {
         return false;
@@ -69,209 +151,76 @@ export function useChannels() {
     });
     const addMembers = state.addMembers.filter(item => sorted.some(contact => contact.cardId === item));
     updateState({ contacts: sorted, addMembers });
-  }, [card, state.sealed]);
+  }, [card.state, state.sealed]);
 
   useEffect(() => {
-    if (dimensions.width > config.tabbedWidth) {
-      updateState({ tabbed: false });
+    syncChannels();
+    filter.current = state.filter;
+  }, [app.state, card.state, channel.state, state.filter, state.sealable]);
+
+  const syncChannels = async () => {
+    if (syncing.current) {
+      resync.current = true;
     }
     else {
-      updateState({ tabbed: true });
-    }
-  }, [dimensions]);
+      syncing.current = true;
 
-  const getCard = (guid) => {
-    let contact = null
-    card.state.cards.forEach((card, cardId, map) => {
-      if (card?.profile?.guid === guid) {
-        contact = card;
+      const { loginTimestamp } = app.state;
+      const items = [];
+      channel.state.channels.forEach((item, channelId) => {
+        items.push({ loginTimestamp, channelId, channelItem: item });
+      });
+      card.state.cards.forEach((cardItem, cardId) => {
+        cardItem.channels.forEach((channelItem, channelId) => {
+          items.push({ loginTimestamp, cardId, channelId, channelItem });
+        });
+      });
+      const channels = [];
+      for (let i = 0; i < items.length; i++) {
+        const { loginTimestamp, cardId, channelId, channelItem } = items[i];
+        channels.push(await setChannelItem(loginTimestamp, cardId, channelId, channelItem));
       }
-    });
-    return contact;
-  }
-
-  const setChannelEntry = (item) => {
-
-    let updated = false;
-    const login = app.state.loginTimestamp;
-    const created = item?.summary?.lastTopic?.created;
-    const guid = item?.summary?.lastTopic?.guid;
-    if (created && login && login < created) {
-      if (!item.readRevision || item.readRevision < item.revision) {
-        if (profile.state.identity.guid != guid) {
-          updated = true;
-        }
-      }
-    }
-
-    let contacts = [];
-    if (item.cardId) {
-      contacts.push(card.state.cards.get(item.cardId));
-    }
-    if (item?.detail?.members) {
-      
-      item.detail.members.forEach(guid => {
-        const profileGuid = profile.state.identity.guid;
-        if (profileGuid !== guid) { 
-          contacts.push(getCard(guid));
-        }
-      })
-    }
-
-    let logo = null;
-    if (contacts.length === 0) {
-      logo = 'solution';
-    }
-    else if (contacts.length === 1) {
-      if (contacts[0]?.profile?.imageSet) {
-        logo = card.actions.getCardLogo(contacts[0].cardId, contacts[0].profileRevision);
-      }
-      else {
-        logo = 'avatar';
-      }
-    }
-    else {
-      logo = 'appstore';
-    }
-
-    let locked = false;
-    let unlocked = false;
-    let subject = null;
-    if (item?.detail?.dataType === 'sealed') {
-      locked = true;
-      if (state.sealable) {
-        try {
-          if (item.unsealedDetail == null) {
-            if (item.cardId) {
-              card.actions.unsealChannelSubject(item.cardId, item.channelId, item.detailRevision, account.state.sealKey);
-            }
-            else {
-              channel.actions.unsealChannelSubject(item.channelId, item.detailRevision, account.state.sealKey);
-            }
-          }
-          else {
-            unlocked = true;
-            subject = item.unsealedDetail.subject;
-          }
-        }
-        catch (err) {
-          console.log(err)
-        }
-      }
-    }
-    else {
-      try {
-        subject = JSON.parse(item?.detail?.data).subject;
-      }
-      catch (err) {
-        console.log(err);
-      }
-    }
-    if (!subject) {
-      if (contacts.length) {
-        let names = [];
-        for (let contact of contacts) {
-          if (contact?.profile?.name) {
-            names.push(contact.profile.name);
-          }
-          else if (contact?.profile?.handle) {
-            names.push(contact?.profile?.handle);
-          }
-        }
-        subject = names.join(', ');
-      }
-      else {
-        subject = "Notes";
-      }
-    }
-
-    let message;
-    if (item?.summary?.lastTopic?.dataType === 'superbasictopic') {
-      try {
-        message = JSON.parse(item.summary.lastTopic.data).text;
-      }
-      catch (err) {
-        console.log(err);
-      }
-    }
-    if (item?.summary?.lastTopic?.dataType === 'sealedtopic') {
-      if (state.sealable) {
-        try {
-          if (item.unsealedSummary == null) {
-            if (item.cardId) {
-              card.actions.unsealChannelSummary(item.cardId, item.channelId, item.topicRevision, account.state.sealKey);
-            }
-            else {
-              channel.actions.unsealChannelSummary(item.channelId, item.topicRevision, account.state.sealKey);
-            }
-          }
-          else {
-            if (typeof item.unsealedSummary.message.text === 'string') {
-              message = item.unsealedSummary.message.text;
-            }
-          }
-        }
-        catch (err) {
-          console.log(err)
-        }
-      }
-    }
-
-    return { cardId: item.cardId, channelId: item.channelId, contacts, logo, subject, locked, unlocked, message, updated, revision: item.revision, timestamp: created, blocked: item.blocked === 1 };
-  }
-
-  useEffect(() => {
-    let merged = [];
-    card.state.cards.forEach((card, cardId, map) => {
-      if (!card.blocked) {
-        merged.push(...Array.from(card.channels.values()));
-      }
-    });
-    merged.push(...Array.from(channel.state.channels.values()));
-    
-    const items = merged.map(setChannelEntry);
-
-    const filtered  = items.filter(item => {
-      if (item.blocked === true) {
-        return false;
-      }
-
-      if (!state.filter) {
-        return true;
-      }
-      const lower = state.filter.toLowerCase();
-      if (item.subject) {
-        if (item.subject.toLowerCase().includes(lower)) {
+      const filtered = channels.filter(item => {
+        if (!filter.current) {
           return true;
         }
-      }
-      return false;
-    });
+        const filterCase = filter.current.toUpperCase();
+        const subjectCase = item.subject.toUpperCase();
+        return subjectCase.includes(filterCase);
+      });
+      const sorted = filtered.sort((a, b) => {
+        const aCreated = a?.timestamp;
+        const bCreated = b?.timestamp;
+        if (aCreated === bCreated) {
+          return 0;
+        }
+        if (!aCreated || aCreated < bCreated) {
+          return 1;
+        }
+        return -1;
+      });
+      updateState({ channels: sorted });
 
-    const sorted = filtered.sort((a, b) => {
-      const aCreated = a?.timestamp;
-      const bCreated = b?.timestamp;
-      if (aCreated === bCreated) {
-        return 0;
+      syncing.current = false;
+      if(resync.current) {
+        resync.current = false;
+        await syncChannels();
       }
-      if (!aCreated || aCreated < bCreated) {
-        return 1;
-      }
-      return -1;
-    });
-
-    updateState({ channels: sorted });
-  }, [channel, card, state.filter, state.sealable]);
+    }
+  };
 
   const actions = {
     setSealed: (sealed) => {
       updateState({ sealed });
     },
-    setTopic: (topic) => {
-      updateState({ topic });
-    },
     setFilter: (filter) => {
       updateState({ filter });
+    },
+    showAdding: () => {
+      updateState({ adding: true, addSubject: null, addMembers: [] });
+    },
+    hideAdding: () => {
+      updateState({ adding: false });
     },
     setAddSubject: (addSubject) => {
       updateState({ addSubject });
@@ -282,24 +231,37 @@ export function useChannels() {
     clearAddMember: (cardId) => {
       updateState({ addMembers: state.addMembers.filter(item => item !== cardId) });
     },
-    showAdding: () => {
-      updateState({ adding: true, addSubject: null, addMembers: [] });
-    },
-    hideAdding: () => {
-      updateState({ adding: false });
-    },
-    addTopic: async () => {
-      if (state.sealed) {
-        let keys = [ account.state.status.seal.publicKey ];
-        state.contacts.forEach(contact => {
-          if(state.addMembers.includes(contact.cardId)) {
-            keys.push(contact.profile.seal);
+    addChannel: async () => {
+      let conversation;
+      if (!state.busy) {
+        try {
+          updateState({ busy: true });
+          if (state.sealed) {
+            const keys = [ account.state.sealKey.public ];
+            state.addMembers.forEach(id => {
+              const contact = card.state.cards.get(id);
+              keys.push(contact.card.profile.seal);
+            });
+            const sealed = encryptChannelSubject(state.addSubject, keys);
+            conversation = await channel.actions.addChannel('sealed', sealed, state.addMembers);
           }
-        });
-        return await channel.actions.addSealed(state.addSubject, state.addMembers, keys);
+          else {
+            const subject = { subject: state.addSubject };
+            conversation = await channel.actions.addChannel('superbasic', subject, state.addMembers);
+          }
+          updateState({ busy: false });
+        }
+        catch(err) {
+          console.log(err);
+          updateState({ busy: false });
+          throw new Error("failed to create new channel");
+        }
       }
-      return await channel.actions.addBasic(state.addSubject, state.addMembers);
-    }
+      else {
+        throw new Error("operation in progress");
+      }
+      return conversation.id;
+    },
   };
 
   return { state, actions };

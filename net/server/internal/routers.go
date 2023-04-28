@@ -796,4 +796,40 @@ var endpoints = routes{
 		"/status",
 		Status,
 	},
+
+	route{
+		"AddCall",
+		strings.ToUpper("Post"),
+		"/talk/calls",
+		AddCall,
+	},
+
+	route{
+		"KeepCall",
+		strings.ToUpper("Put"),
+		"/talk/calls/{callId}",
+		KeepCall,
+	},
+
+	route{
+		"EndCall",
+		strings.ToUpper("Delete"),
+		"/talk/calls/{callId}",
+		RemoveCall,
+	},
+
+	route{
+		"AddRing",
+		strings.ToUpper("Post"),
+		"/talk/rings",
+		AddRing,
+	},
+
+  route{
+    "Signal",
+    strings.ToUpper("Get"),
+    "/signal",
+    Signal,
+  },
+
 }

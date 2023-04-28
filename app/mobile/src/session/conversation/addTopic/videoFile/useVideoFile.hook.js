@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect, useContext } from 'react';
-import { ConversationContext } from 'context/ConversationContext';
 
 export function useVideoFile() {
 
@@ -28,4 +27,3 @@ export function useVideoFile() {
 
   return { state, actions };
 }
-

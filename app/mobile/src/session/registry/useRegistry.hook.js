@@ -1,62 +1,32 @@
 import { useState, useEffect, useRef, useContext } from 'react';
-import { useWindowDimensions } from 'react-native';
-import { useNavigate } from 'react-router-dom';
 import { ProfileContext } from 'context/ProfileContext';
 import { getListing } from 'api/getListing';
 import { getListingImageUrl } from 'api/getListingImageUrl';
-import config from 'constants/Config';
 
-export function useRegistry() {
+export function useRegistry(search, handle, server) {
 
   const [state, setState] = useState({
-    tabbed: null,
     accounts: [],
-    server: null,
-    filter: false,
-    username: null,
-    searched: false,
-    busy: false,
+    searching: false,
   });
 
-  const dimensions = useWindowDimensions();
   const profile = useContext(ProfileContext);
+  const debounce = useRef();
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
   }
 
   useEffect(() => {
-    if (dimensions.width > config.tabbedWidth) {
-      updateState({ tabbed: false });
+    if (debounce.current) {
+      clearTimeout(debounce.current);
     }
-    else {
-      updateState({ tabbed: true });
-    }
-  }, [dimensions]);
+    updateState({ searching: true });
+    debounce.current = setTimeout(async () => {
+      debounce.current = null;
 
-  useEffect(() => {
-    const server = profile.state.identity.node;
-    updateState({ server });  
-    getAccounts(server, true);
-  }, [profile]);
-
-  const setAccountItem = (item) => {
-    const { guid, name, handle, node, location, description } = item;
-    const logo = item.imageSet ? getListingImageUrl(node, guid) : 'avatar';
-    return { guid, name, handle, node, location, description, guid, logo };
-  };
-
-  const getAccounts = async (server, ignore) => {
-    if (!state.busy) {
       try {
-        updateState({ busy: true });
-        let accounts;
-        if (state.filter && state.username) {
-          accounts = await getListing(server, state.username);
-        }
-        else {
-          accounts = await getListing(server);
-        }
+        const accounts = handle ? await getListing(server, handle) : await getListing(server);
         const filtered = accounts.filter(item => {
           if (item.guid === profile.state.identity.guid) {
             return false;
@@ -64,33 +34,22 @@ export function useRegistry() {
           return true;
         });
         const items = filtered.map(setAccountItem);
-        updateState({ busy: false, searched: true, accounts: items });
+        updateState({ searching: false, accounts: items });
       }
       catch (err) {
         console.log(err);
-        updateState({ busy: false, accounts: [] });
-        if (!ignore) {
-          throw new Error('failed list accounts');
-        }
+        updateState({ searching: false, accounts: [] });
       }
-    }
-  };    
+    }, 1000);
+  }, [handle, server]);
 
-  const actions = {
-    setServer: (server) => {
-      updateState({ server, searched: false, accounts: [] });
-    },
-    search: async () => {
-      await getAccounts(state.server, false);
-    },
-    filter: async () => {
-      updateState({ filter: true });
-    },
-    setUsername: async (username) => {
-      updateState({ username });
-    },
+  const setAccountItem = (item) => {
+    const { guid, name, handle, node, location, description, imageSet } = item;
+    const logo = imageSet ? getListingImageUrl(node, guid) : 'avatar';
+    return { guid, name, handle, node, location, description, guid, imageSet, logo };
   };
+
+  const actions = {};
 
   return { state, actions };
 }
-

@@ -23,4 +23,23 @@ export const AddChannelWrapper = styled.div`
   }
 `;
 
+export const AddFooter = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding-top: 8px;
+
+  .seal {
+    display: flex;
+    flex-grow: 1;
+    flex-direction: row;
+    align-items: center;
+
+    .sealText {
+      padding-left: 8px;
+    }
+  }
+`
 

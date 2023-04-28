@@ -2,17 +2,16 @@ import { Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Logo } from 'utils/Logo';
 import { styles } from './ChannelItem.styled';
-import { useChannelItem } from './useChannelItem.hook';
 import Colors from 'constants/Colors';
-import Ionicons from '@expo/vector-icons/MaterialCommunityIcons';
+import Ionicons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-export function ChannelItem({ item, openConversation }) {
+export function ChannelItem({ cardId, channelId, item, openConversation }) {
 
-  const { state, actions } = useChannelItem(item);
+  const container = (cardId === item.cardId && channelId === item.channelId) ? styles.active : styles.container;
 
   return (
-    <TouchableOpacity style={styles.container} activeOpacity={1} onPress={() => openConversation(item.cardId, item.channelId, item.revision)}>
-      <Logo src={item.logo} width={32} height={32} radius={6} />
+    <TouchableOpacity style={container} activeOpacity={1} onPress={() => openConversation(item.cardId, item.channelId, item.revision)}>
+      <Logo src={item.logo} width={32} height={32} radius={3} />
       <View style={styles.detail}>
         <View style={styles.subject}>
           { item.locked && !item.unlocked && (
@@ -31,4 +30,3 @@ export function ChannelItem({ item, openConversation }) {
     </TouchableOpacity>
   )
 }
-

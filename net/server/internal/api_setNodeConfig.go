@@ -82,12 +82,66 @@ func SetNodeConfig(w http.ResponseWriter, r *http.Request) {
 			return res
 		}
 
+    // upsert push supported
+    if res := tx.Clauses(clause.OnConflict{
+       Columns:   []clause.Column{{Name: "config_id"}},
+       DoUpdates: clause.AssignmentColumns([]string{"bool_value"}),
+    }).Create(&store.Config{ConfigID: CNFEnableIce, BoolValue: config.EnableIce}).Error; res != nil {
+      return res
+    }
+
+		// upsert key type
+		if res := tx.Clauses(clause.OnConflict{
+			Columns:   []clause.Column{{Name: "config_id"}},
+			DoUpdates: clause.AssignmentColumns([]string{"str_value"}),
+		}).Create(&store.Config{ConfigID: CNFIceUrl, StrValue: config.IceUrl}).Error; res != nil {
+			return res
+		}
+
+		// upsert key type
+		if res := tx.Clauses(clause.OnConflict{
+			Columns:   []clause.Column{{Name: "config_id"}},
+			DoUpdates: clause.AssignmentColumns([]string{"str_value"}),
+		}).Create(&store.Config{ConfigID: CNFIceUsername, StrValue: config.IceUsername}).Error; res != nil {
+			return res
+		}
+
+		// upsert key type
+		if res := tx.Clauses(clause.OnConflict{
+			Columns:   []clause.Column{{Name: "config_id"}},
+			DoUpdates: clause.AssignmentColumns([]string{"str_value"}),
+		}).Create(&store.Config{ConfigID: CNFIcePassword, StrValue: config.IcePassword}).Error; res != nil {
+			return res
+		}
+
 		return nil
 	})
 	if err != nil {
 		ErrResponse(w, http.StatusInternalServerError, err)
 		return
 	}
+
+  // increment revision of all account data
+  var accounts []*store.Account
+  if err := store.DB.Find(&accounts).Error; err != nil {
+    ErrMsg(err);
+    return
+  }
+  err = store.DB.Transaction(func(tx *gorm.DB) error {
+    for _, account := range accounts {
+      if res := tx.Model(account).Update("account_revision", account.AccountRevision+1).Error; res != nil {
+        return res
+      }
+    }
+    return nil
+  })
+  if err != nil {
+    ErrMsg(err);
+    return
+  }
+  for _, account := range accounts {
+    SetStatus(account)
+  }
 
 	w.WriteHeader(http.StatusOK)
 }

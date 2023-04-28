@@ -60,7 +60,7 @@ afterEach(() => {
   fetchUtil.fetchWithCustomTimeout = realFetchWithCustomTimeout;
 });
 
-test('testing', async () => {
+test('testing profile sync', async () => {
   render(<ProfileTestApp />);
 
   await waitFor(async () => {
@@ -105,10 +105,6 @@ test('testing', async () => {
 
   await act(async () => {
     await profileContext.actions.clearToken();
-  });
-
-  await waitFor(async () => {
-    expect(screen.getByTestId('name').textContent).toBe("");
   });
 
 });

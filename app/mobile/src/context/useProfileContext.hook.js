@@ -8,12 +8,13 @@ import { StoreContext } from 'context/StoreContext';
 
 export function useProfileContext() {
   const [state, setState] = useState({
+    offsync: false,
     identity: {},
     imageUrl: null,
   });
   const store = useContext(StoreContext);
 
-  const session = useRef(null);
+  const access = useRef(null);
   const curRevision = useRef(null);
   const setRevision = useRef(null);
   const syncing = useRef(false);
@@ -23,21 +24,22 @@ export function useProfileContext() {
   }
 
   const sync = async () => {
-    if (!syncing.current && setRevision.current !== curRevision.current) {
+    if (access.current && !syncing.current && setRevision.current !== curRevision.current) {
       syncing.current = true;
 
       try {
         const revision = curRevision.current;
-        const { server, appToken, guid } = session.current;
-        const identity = await getProfile(server, appToken);
-        const imageUrl = identity?.image ? getProfileImageUrl(server, appToken, revision) : null;
+        const { server, token, guid } = access.current || {};
+        const identity = await getProfile(server, token);
+        const imageUrl = identity?.image ? getProfileImageUrl(server, token, revision) : null;
         await store.actions.setProfile(guid, identity);
         await store.actions.setProfileRevision(guid, revision);
-        updateState({ identity, imageUrl });
+        updateState({ offsync: false, identity, imageUrl });
         setRevision.current = revision;
       }
       catch(err) {
         console.log(err);
+        updateState({ offsync: true });
         syncing.current = false;
         return;
       }
@@ -48,35 +50,34 @@ export function useProfileContext() {
   };
 
   const actions = {
-    setSession: async (access) => {
-      const { guid, server, appToken } = access;
+    setSession: async (session) => {
+      const { guid, server, token } = session || {};
       const identity = await store.actions.getProfile(guid);
       const revision = await store.actions.getProfileRevision(guid);
-      const imageUrl = identity?.image ? getProfileImageUrl(server, appToken, revision) : null;
-      updateState({ identity, imageUrl });
+      const imageUrl = identity?.image ? getProfileImageUrl(server, token, revision) : null;
+      updateState({ offsync: false, identity, imageUrl });
       setRevision.current = revision;
       curRevision.current = revision;
-      session.current = access;
+      access.current = session;
     },
     clearSession: () => {
-      session.current = {};
-      updateState({ identity: {}, imageUrl: null });
+      access.current = null;
     },
     setRevision: (rev) => {
       curRevision.current = rev;
       sync();
     },
     setProfileData: async (name, location, description) => {
-      const { server, appToken } = session.current;
-      await setProfileData(server, appToken, name, location, description);
+      const { server, token } = access.current || {};
+      await setProfileData(server, token, name, location, description);
     },
     setProfileImage: async (image) => {
-      const { server, appToken } = session.current;
-      await setProfileImage(server, appToken, image);
+      const { server, token } = access.current || {};
+      await setProfileImage(server, token, image);
     },
     getHandleStatus: async (name) => {
-      const { server, appToken } = session.current;
-      return await getHandle(server, appToken, name);
+      const { server, token } = access.current || {};
+      return await getHandle(server, token, name);
     },
   }
 

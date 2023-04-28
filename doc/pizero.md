@@ -4,6 +4,7 @@ These instructions assume you have the following setup:
   - reverse proxy with an assigned hostname and certificate forwarding to your Raspberry Pi
   - micro usb to ethernet adapter
   - address reservation on your router
+  - software tools for writing image (7zip & rufus, or equivalent)
   - reasonably large micro sd card (~16 GB)
 
 ## Step 1: setup the hardware
@@ -61,7 +62,7 @@ These instructions assume you have the following setup:
 ## Step 8: download the webapp
   // because the react toolchain isn't available for the pi zero, the webapp is built in a github action<br/>
   Download webapp.zip from the most recent build:<br/>
-    https://github.com/balzack/databag/actions/runs/3758970117<br/>
+    https://github.com/balzack/databag/actions/runs/4033318007<br/>
   SCP webapp.zip into the pi<br/>
   Extract it into the web/build directory<br/>
     mkdir /app/databag/net/web/build<br/>

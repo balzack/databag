@@ -12,7 +12,10 @@ export const styles = StyleSheet.create({
     maxHeight: 50,
   },
   label: {
-    textOverlay: 'center',
+    textAlign: 'center',
+    color: Colors.text,
+    padding: 4,
+    fontSize: 12,
   },
 })
 

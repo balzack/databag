@@ -38,7 +38,6 @@ export const CreateAccountWrapper = styled.div`
 
   .form-form {
     flex: 2;
-    flex-grow: 1;
 
     .form-space {
       height: 8px;

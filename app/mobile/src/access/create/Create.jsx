@@ -1,8 +1,10 @@
-import { KeyboardAvoidingView, ScrollView, ActivityIndicator, Alert, Text, TextInput, View, TouchableOpacity } from 'react-native';
+import { Platform, KeyboardAvoidingView, ScrollView, ActivityIndicator, Alert, Modal, Text, TextInput, View, TouchableOpacity } from 'react-native';
 import { styles } from './Create.styled';
-import Ionicons from '@expo/vector-icons/AntDesign';
+import Ionicons from 'react-native-vector-icons/AntDesign';
 import { useCreate } from './useCreate.hook';
 import Colors from 'constants/Colors';
+import MatIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { tos } from 'constants/TermsOfService';
 
 export function Create() {
 
@@ -41,17 +43,17 @@ export function Create() {
             <Ionicons style={styles.icon} name="database" size={18} color="#888888" />
             <TextInput style={styles.inputfield} value={state.server} onChangeText={actions.setServer}
                 autoCorrect={false} autoCapitalize="none" placeholder="server" placeholderTextColor={Colors.grey} />
-            <View style={styles.space}>
-              { (!state.server || !state.serverChecked) && (
-                <Text style={styles.required}>✻</Text>
-              )}
-              { state.server && state.serverChecked && !state.serverValid && (
-                <Ionicons style={styles.icon} name="exclamationcircleo" size={18} color="#ff8888" />
-              )}
-              { state.server && state.serverChecked && state.serverValid && (
-                <Ionicons style={styles.icon} name="checkcircleo" size={18} color="#448866" />
-              )}
-            </View>
+            { (!state.server || !state.serverChecked) && (
+              <View style={styles.required}>
+                <Text style={styles.requiredtest}>✻</Text>
+              </View>
+            )}
+            { state.server && state.serverChecked && !state.serverValid && (
+              <Ionicons style={styles.icon} name="exclamationcircleo" size={18} color="#ff8888" />
+            )}
+            { state.server && state.serverChecked && state.serverValid && (
+              <Ionicons style={styles.icon} name="checkcircleo" size={18} color="#448866" />
+            )}
           </View>
           <View style={styles.token}>
             { state.tokenRequired && (
@@ -82,17 +84,15 @@ export function Create() {
             <Ionicons style={styles.icon} name="user" size={18} color="#888888" />
             <TextInput style={styles.inputfield} value={state.username} onChangeText={actions.setUsername}
                 autoCorrect={false} autoCapitalize="none" placeholder="username" placeholderTextColor={Colors.grey} />
-            <View style={styles.space}>
-                { (!validServer || !validToken || !state.username || !state.usernameChecked) && (
-                  <Text style={styles.required}>✻</Text>
-                )}
-                { validServer && validToken && state.username && state.usernameChecked && !state.usernameValid && (
-                  <Ionicons style={styles.icon} name="exclamationcircleo" size={18} color="#ff8888" />
-                )}
-                { validServer && validToken && state.username && state.usernameChecked && state.usernameValid && (
-                  <Ionicons style={styles.icon} name="checkcircleo" size={18} color="#448866" />
-                )}
-            </View>
+            { (!validServer || !validToken || !state.username || !state.usernameChecked) && (
+              <Text style={styles.required}>✻</Text>
+            )}
+            { validServer && validToken && state.username && state.usernameChecked && !state.usernameValid && (
+              <Ionicons style={styles.icon} name="exclamationcircleo" size={18} color="#ff8888" />
+            )}
+            { validServer && validToken && state.username && state.usernameChecked && state.usernameValid && (
+              <Ionicons style={styles.icon} name="checkcircleo" size={18} color="#448866" />
+            )}
           </View>
           { state.showPassword && (
             <View style={styles.inputwrapper}>
@@ -137,8 +137,26 @@ export function Create() {
               </TouchableOpacity>
             </View>
           )}
+
+          { Platform.OS !== 'ios' && (
+            <View style={styles.tos}>
+              <TouchableOpacity style={styles.viewterms} onPress={actions.showTerms}>
+                <Text style={styles.viewtermstext}>View Terms of Service</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.agreeterms} onPress={() => actions.agree(!state.agree)}>
+                { state.agree && (
+                  <MatIcons name={'checkbox-outline'} size={20} color={Colors.primary} />
+                )}
+                { !state.agree && (
+                  <MatIcons name={'checkbox-blank-outline'} size={20} color={Colors.primary} />
+                )}
+                <Text style={styles.agreetermstext}>I agree to Terms of Service</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+ 
           <View style={styles.buttons}>
-            { state.enabled && (
+            { state.enabled && (Platform.OS === 'ios' || state.agree) && (
               <TouchableOpacity style={styles.create} onPress={create}>
                 { state.busy && (
                   <ActivityIndicator size="small" color="#ffffff" />
@@ -148,9 +166,9 @@ export function Create() {
                 )}
               </TouchableOpacity>
             )}
-            { !state.enabled && (
+            { (!state.enabled || (Platform.OS !== 'ios' && !state.agree)) && (
               <View style={styles.nocreate}>
-                <Text style={styles.nocreatetext}>Create</Text>
+                <Text style={styles.nocreatetext}>Create Account</Text>
               </View>
             )}
             <TouchableOpacity style={styles.login} onPress={actions.login}>
@@ -159,6 +177,23 @@ export function Create() {
           </View>
         </ScrollView>      
       </View>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={state.showTerms}
+        supportedOrientations={['portrait', 'landscape']}
+        onRequestClose={actions.hideTerms}
+      >
+        <View style={styles.modalContainer}>
+          <ScrollView style={styles.terms} persistentScrollbar={true}>
+            <Text style={styles.termsheader}>Terms of Use and User Policy</Text>
+            <Text numberOfLines={0}>{ tos.message }</Text>
+          </ScrollView>
+          <TouchableOpacity style={styles.done} onPress={actions.hideTerms}>
+            <Text style={styles.donetext}>Done</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
     </KeyboardAvoidingView>
   );
 }

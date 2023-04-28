@@ -32,36 +32,6 @@ export const styles = StyleSheet.create({
     color: Colors.text,
     fontSize: 12,
   },
-  connected: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: Colors.connected,
-  },
-  requested: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: Colors.requested,
-  },
-  connecting: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: Colors.connecting,
-  },
-  pending: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: Colors.pending,
-  },
-  confirmed: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: Colors.confirmed,
-  },
   track: {
     false: Colors.grey,
     true: Colors.background,
@@ -69,6 +39,4 @@ export const styles = StyleSheet.create({
   switch: {
     transform: [{ scaleX: .7 }, { scaleY: .7 }],
   },
-
-})
-
+});

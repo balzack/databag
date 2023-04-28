@@ -8,15 +8,16 @@ export function Root() {
   const app = useContext(AppContext);
 
   useEffect(() => {
-    if (app.state) {
-      if (app.state.access) {
-        navigate('/session');
-      }
-      else {
-        navigate('/login');
-      }
+    if (app.state.adminToken) {
+      navigate('/dashboard');
     }
-  }, [app, navigate]);
+    else if (app.state.status) {
+      navigate('/session');
+    }
+    else {
+      navigate('/login');
+    }
+  }, [app.state, navigate]);
 
   return <></>
 }

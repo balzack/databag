@@ -1,21 +1,20 @@
 import { Image, View, Text, TouchableOpacity } from 'react-native';
 import { useRef } from 'react';
-import { useKeepAwake } from 'expo-keep-awake';
 import Colors from 'constants/Colors';
-import { Video, AVPlaybackStatus } from 'expo-av';
+import Video from 'react-native-video';
 import { useAudioAsset } from './useAudioAsset.hook';
-import GestureRecognizer from 'react-native-swipe-gestures';
 import { styles } from './AudioAsset.styled';
-import Icons from '@expo/vector-icons/MaterialCommunityIcons';
+import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
 import audio from 'images/audio.png';
+import { useKeepAwake } from '@sayem314/react-native-keep-awake';
 
 export function AudioAsset({ topicId, asset, dismiss }) {
 
   const { state, actions } = useAudioAsset(topicId, asset);
 
-  useKeepAwake();
-
   const player = useRef(null);
+
+  useKeepAwake();
 
   return (
     <View style={styles.container}>
@@ -34,8 +33,10 @@ export function AudioAsset({ topicId, asset, dismiss }) {
       <TouchableOpacity style={styles.close} onPress={dismiss}>
         <Icons name="window-close" size={32} color={Colors.text} />
       </TouchableOpacity>
-      <Video ref={player} source={{ uri: state.url }} isLooping={true}
-        shouldPlay={state.playing} onLoad={actions.loaded} style={styles.player} />
+      { state.url && (
+        <Video ref={player} source={{ uri: state.url }} repeat={true}
+          paused={!state.playing} onLoad={actions.loaded} style={styles.player} />
+      )}
     </View>
   );
 }

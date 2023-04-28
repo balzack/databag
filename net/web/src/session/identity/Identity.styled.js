@@ -15,10 +15,10 @@ export const IdentityWrapper = styled.div`
 
   &:hover {
     cursor: pointer;
+    background-color: ${Colors.formFocus};
 
     .drop {
-      border: 1px solid ${Colors.encircle};
-      background-color: ${Colors.formHover};
+      font-weight: bold;
     }
   }
 

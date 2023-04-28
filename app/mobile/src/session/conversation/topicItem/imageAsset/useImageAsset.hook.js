@@ -14,10 +14,12 @@ export function useImageAsset(topicId, asset) {
     url: null,
     loaded: false,
     failed: false,
+    controls: false,
   });
 
   const conversation = useContext(ConversationContext);
   const dimensions = useWindowDimensions();
+  const controls = useRef();
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
@@ -39,6 +41,7 @@ export function useImageAsset(topicId, asset) {
         updateState({ imageWidth: width, imageHeight: height });
       }
     }
+    actions.showControls();
   }, [state.frameWidth, state.frameHeight, state.imageRatio, state.loaded]);
 
   useEffect(() => {
@@ -57,6 +60,13 @@ export function useImageAsset(topicId, asset) {
     },
     failed: () => {
       updateState({ failed: true });
+    },
+    showControls: () => {
+      clearTimeout(controls.current);
+      updateState({ controls: true });
+      controls.current = setTimeout(() => {
+        updateState({ controls: false });
+      }, 2000);
     },
   };
 

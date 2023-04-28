@@ -38,6 +38,8 @@ type AccountStatus struct {
   Sealable bool `json:"sealable"`
 
 	Seal *Seal `json:"seal,omitempty"`
+
+  EnableIce bool `json:"enableIce"`
 }
 
 //Announce initial message sent on websocket
@@ -354,6 +356,14 @@ type NodeConfig struct {
 
 	EnableVideo bool `json:"enableVideo"`
 
+	EnableIce bool `json:"enableIce"`
+
+	IceUrl string `json:"iceUrl"`
+
+	IceUsername string `json:"iceUsername"`
+
+	IcePassword string `json:"icePassword"`
+
 	KeyType string `json:"keyType"`
 
 	AccountStorage int64 `json:"accountStorage"`
@@ -393,6 +403,13 @@ type ProfileData struct {
 	Location string `json:"location,omitempty"`
 }
 
+//Activity listener for account
+type Activity struct {
+  Revision *Revision `json:"revision,emitempty"`
+
+  Phone *Phone `json:"ring",omitempty"`
+}
+
 //Revision revision of each account module
 type Revision struct {
 	Account int64 `json:"account"`
@@ -406,6 +423,21 @@ type Revision struct {
 	Channel int64 `json:"channel"`
 
 	Card int64 `json:"card"`
+}
+
+//Phone call indicator from contact initiating call
+type Phone struct {
+  CardID string `json:"cardId"`
+
+  CallID string `json:"callId"`
+
+  CalleeToken string `json:"calleeToken"`
+
+  IceUrl string `json:"iceUrl"`
+
+  IceUsername string `json:"iceUsername"`
+
+  IcePassword string `json:"icePassword"`
 }
 
 //Seal key for channel sealing
@@ -492,4 +524,38 @@ type TopicDetail struct {
 	Status string `json:"status"`
 
 	Transform string `json:"transform,omitempty"`
+}
+
+type Call struct {
+
+	Id string `json:"id"`
+
+	CardId string `json:"cardId"`
+
+	CallerToken string `json:"callerToken"`
+
+	CalleeToken string `json:"calleeToken"`
+
+	KeepAlive int32 `json:"keepAlive"`
+
+  IceUrl string `json:"iceUrl"`
+
+  IceUsername string `json:"iceUsername"`
+
+  IcePassword string `json:"icePassword"`
+}
+
+type Ring struct {
+
+  CallID string `json:"callId"`
+
+	CalleeToken string `json:"calleeToken"`
+
+	Index int32 `json:"index"`
+
+  IceUrl string `json:"iceUrl"`
+
+  IceUsername string `json:"iceUsername"`
+
+  IcePassword string `json:"icePassword"`
 }

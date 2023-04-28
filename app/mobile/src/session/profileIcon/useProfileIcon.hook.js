@@ -14,12 +14,11 @@ export function useProfileIcon() {
   }
 
   useEffect(() => {
-    const { disconnected } = app.state
-    updateState({ disconnected });
+    const { status } = app.state
+    updateState({ disconnected: status === 'disconnected' });
   }, [app]);
 
   const actions = {};
 
   return { state, actions };
 }
-

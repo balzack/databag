@@ -1,8 +1,6 @@
-import { useEffect, useContext } from 'react';
-import { Drawer, Spin } from 'antd';
-import { useNavigate } from 'react-router-dom';
-import { SessionWrapper } from './Session.styled';
-import { AppContext } from 'context/AppContext';
+import { useRef, useState, useEffect } from 'react';
+import { Modal, Drawer, Spin } from 'antd';
+import { CallingWrapper, RingingWrapper, SessionWrapper } from './Session.styled';
 import { useSession } from './useSession.hook';
 import { Conversation } from './conversation/Conversation';
 import { Details } from './details/Details';
@@ -10,25 +8,105 @@ import { Identity } from './identity/Identity';
 import { Channels } from './channels/Channels';
 import { Cards } from './cards/Cards';
 import { Contact } from './contact/Contact';
-import { Profile } from './profile/Profile';
+import { Profile } from './account/profile/Profile';
 import { Listing } from './listing/Listing';
 import { Account } from './account/Account';
 import { Welcome } from './welcome/Welcome';
 import { BottomNav } from './bottomNav/BottomNav';
+import { Logo } from 'logo/Logo';
+import { EyeInvisibleOutlined, PhoneOutlined } from '@ant-design/icons';
+import { IoVideocamOffOutline, IoVideocamOutline, IoMicOffOutline, IoMicOutline, IoCallOutline } from "react-icons/io5";
 
 export function Session() {
 
   const { state, actions } = useSession();
-  const app = useContext(AppContext);
-  const navigate = useNavigate();
+  const [ringing, setRinging] = useState([]);
+  const [callWidth, setCallWidth] = useState(256);
+  const [callHeight, setCallHeight] = useState(256);
+  const [callModal, setCallModal] = useState({ width: 256, height: 256, offset: 0 });
+  const remote = useRef();
+  const local = useRef();
 
   useEffect(() => {
-    if (app.state) {
-      if (!app.state.access) {
-        navigate('/');
-      }
+    let incoming = [];
+    for (let i = 0; i < state.ringing.length; i++) {
+      const ring = state.ringing[i];
+      const label = ring.name ? ring.name : `${ring.handle}@${ring.node}`;
+      incoming.push(
+        <div className="ringing-entry">
+          <Logo url={ring.img} width={40} height={40} radius={4} />
+          <div className="ringing-name">{ label }</div>
+          <div onClick={() => actions.ignore(ring)} className="ringing-ignore"><EyeInvisibleOutlined /></div>
+          <div onClick={() => actions.decline(ring)} className="ringing-decline"><PhoneOutlined /></div>
+          <div onClick={() => actions.accept(ring)} className="ringing-accept"><PhoneOutlined /></div>
+        </div>
+      );
     }
-  }, [app, navigate]);
+    setRinging(incoming);
+    // eslint-disable-next-line
+  }, [state.ringing]);
+
+  useEffect(() => {
+    if (!state.remoteVideo) {
+      setCallModal({ width: 256 + 12, height: 256 + 12, offset: 0 });
+    }
+    else {
+      setCallModal({ width: callWidth + 12, height: callHeight + 12, offset: ((268 - callHeight) / 2) });
+    }
+
+  }, [callWidth, callHeight, state.remoteVideo])
+
+  useEffect(() => {
+    if (remote.current) {
+      remote.current.onloadedmetadata = (ev) => {
+
+        const { videoWidth, videoHeight } = ev.target || { videoWidth: 256, videoHeight: 256 }
+        if ((window.innerWidth * 8) / 10 < videoWidth) {
+          const scaledWidth = window.innerWidth * 8 / 10;
+          const scaledHeight = videoHeight * (scaledWidth / videoWidth)
+          if ((window.innerHeight * 8) / 10 < scaledHeight) {
+            const height = (window.innerHeight * 8) / 10;
+            setCallHeight(height);
+            setCallWidth(videoWidth * (height / videoHeight));
+          }
+          else {
+            setCallHeight(scaledHeight);
+            setCallWidth(scaledWidth);
+          }
+        }
+        else if ((window.innerHeight * 8) / 10 < videoHeight) {
+          const height = (window.innerHeight * 8) / 10;
+          setCallHeight(height);
+          setCallWidth(videoWidth * (height / videoHeight));
+        }
+        else if (videoHeight < 72 || videoWidth < 72) {
+          setCallHeight(72);
+          setCallWidth(72);
+        }
+        else {
+          setCallHeight(videoHeight);
+          setCallWidth(videoWidth);
+        }
+      };
+      remote.current.srcObject = state.remoteStream;
+      remote.current.load();
+      remote.current.play();
+    }
+    else {
+      console.log("video player not set");
+    }
+  }, [state.remoteStream]);
+
+  useEffect(() => {
+    if (local.current) {
+      local.current.srcObject = state.localStream;
+      local.current.play();
+    }
+  }, [state.localStream]);
+
+  useEffect(() => {
+    console.log("DIM: ", callWidth, callHeight);
+  }, [callWidth, callHeight]);
 
   const closeAccount = () => {
     actions.closeProfile();
@@ -117,7 +195,7 @@ export function Session() {
             )}
             { state.cards && (
               <div class="reframe">
-                <Cards closeCards={closeCards} openContact={actions.openContact} openListing={actions.openListing} />
+                <Cards closeCards={closeCards} openContact={actions.openContact} openChannel={openConversation} openListing={actions.openListing} />
                 <Drawer bodyStyle={{ padding: 0 }} placement="bottom" closable={false} visible={state.listing}
                     onClose={actions.closeListing} getContainer={false} height={'100%'}
                     style={{ position: 'absolute', overflow: 'hidden' }}>
@@ -169,7 +247,7 @@ export function Session() {
             </Drawer>
             <Drawer bodyStyle={{ padding: 0 }} width={'33%'} closable={false} onClose={closeCards} visible={state.cards} zIndex={20} push={state.contact}>
               { state.cards && (
-                <Cards closeCards={closeCards} openContact={actions.openContact} openListing={actions.openListing} />
+                <Cards closeCards={closeCards} openContact={actions.openContact} openChannel={openConversation} openListing={actions.openListing} />
               )}
               <Drawer bodyStyle={{ padding: 0 }} placement="bottom" closable={false} visible={state.listing}
                   onClose={actions.closeListing} getContainer={false} height={'100%'}
@@ -214,7 +292,7 @@ export function Session() {
             )}
             { state.cards && (
               <div class="reframe">
-                <Cards openContact={actions.openContact} openListing={actions.openListing} />
+                <Cards openContact={actions.openContact} openChannel={openConversation} openListing={actions.openListing} />
               </div>
             )}
             { state.listing && (
@@ -243,6 +321,55 @@ export function Session() {
           </div>
         </div>
       )}
+      <Modal centered visible={ringing.length > 0 && state.callStatus == null} footer={null} closable={false}> 
+        <RingingWrapper>
+          <div className="ringing-list">
+            {ringing}
+          </div>
+        </RingingWrapper>
+      </Modal>
+      <Modal centered visible={state.callStatus} footer={null} closable={false} width={callModal.width} height={callModal.height} bodyStyle={{ padding: 6 }}>
+        <CallingWrapper>
+          { !state.remoteVideo && (
+            <Logo url={state.callLogo} width={256} height={256} radius={8} />
+          )}
+          { state.remoteStream && (
+            <video ref={remote} disablepictureinpicture playsInline autoPlay style={{ display: state.remoteVideo ? 'block' : 'none', width: '100%' }}
+    complete={() => console.log("VIDEO COMPLETE")} progress={() => console.log("VIDEO PROGRESS")} error={() => console.log("VIDEO ERROR")} waiting={() => console.log("VIDEO WAITING")} />
+          )}
+          { state.localStream && (
+            <div className="calling-local">
+              <video ref={local} disablepictureinpicture playsInline autoPlay muted style={{ width: '100%', display: 'block' }}
+    complete={() => console.log("VIDEO COMPLETE")} progress={() => console.log("VIDEO PROGRESS")} error={() => console.log("VIDEO ERROR")} waiting={() => console.log("VIDEO WAITING")} />
+            </div>
+          )}
+          <div className="calling-options calling-hovered">
+            { state.localVideo && (
+              <div className="calling-option" onClick={actions.disableVideo}>
+                <IoVideocamOutline />
+              </div>
+            )}
+            { !state.localVideo && (
+              <div className="calling-option" onClick={actions.enableVideo}>
+                <IoVideocamOffOutline />
+              </div>
+            )}
+            { state.localAudio && (
+              <div className="calling-option" onClick={actions.disableAudio}>
+                <IoMicOutline />
+              </div>
+            )}
+            { !state.localAudio && (
+              <div className="calling-option" onClick={actions.enableAudio}>
+                <IoMicOffOutline />
+              </div>
+            )}
+          </div>
+          <div className="calling-end calling-hovered" onClick={actions.end}>
+            <IoCallOutline />
+          </div>
+        </CallingWrapper>
+      </Modal>
     </SessionWrapper>
   );
 }

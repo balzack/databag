@@ -1,6 +1,7 @@
 import { useContext, useState, useEffect } from 'react';
 import { AppContext } from 'context/AppContext';
-import { useNavigate, useLocation } from "react-router-dom";
+import { getAvailable } from 'api/getAvailable';
+import { useLocation, useNavigate } from "react-router-dom";
 
 export function useLogin() {
 
@@ -56,43 +57,42 @@ export function useLogin() {
   };
 
   useEffect(() => {
-    if (app) {
-      if (app.state) {
-        if (app.state.access) {
-          navigate('/session')
-        }
-        else {
-          let params = new URLSearchParams(search);
-          let token = params.get("access");
-          if (token) {
-            const access = async () => {
-              updateState({ busy: true })
-              try {
-                await app.actions.access(token)
-              }
-              catch (err) {
-                console.log(err);
-              }
-              updateState({ busy: false })
-            }
-            access();
-          }
-        }
+    const count = async () => {
+      try {
+        const available = await getAvailable()
+        updateState({ available: available !== 0 })
       }
-      if (app.actions && app.actions.available) {
-        const count = async () => {
-          try {
-            const available = await app.actions.available()
-            updateState({ available: available !== 0 })
-          }
-          catch(err) {
-            console.log(err);
-          }
-        }
-        count();
+      catch(err) {
+        console.log(err);
       }
     }
-  }, [app, navigate, search])
+    count();
+    // eslint-disable-next-line
+  }, [])
+
+  const access =  async (token) => {
+    if (!state.busy) {
+      updateState({ busy: true });
+      try {
+        await app.actions.access(token);
+      }
+      catch (err) {
+        console.log(err);
+        updateState({ busy: false });
+        throw new Error('access failed: check your token');
+      }
+      updateState({ busy: false });
+    }
+  }
+ 
+  useEffect(() => {
+    let params = new URLSearchParams(search);
+    let token = params.get("access");
+    if (token) {
+      access(token);
+    }
+    // eslint-disable-next-line
+  }, [])
 
   return { state, actions };
 }

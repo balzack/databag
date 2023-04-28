@@ -1,9 +1,11 @@
 import { useContext, useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { AppContext } from 'context/AppContext';
 import { CardContext } from 'context/CardContext';
 import { StoreContext } from 'context/StoreContext';
 import { ViewportContext } from 'context/ViewportContext';
 import { ProfileContext } from 'context/ProfileContext';
-import { ChannelContext } from 'context/ChannelContext';
+import { RingContext } from 'context/RingContext';
 
 export function useSession() {
 
@@ -21,13 +23,25 @@ export function useSession() {
     profile: false,
     account: false,
     loading: false,
+    ringing: [],
+    callStatus: null,
+    callLogo: null,
+    localStream: null,
+    localVideo: false,
+    localAudio: false,
+    remoteStream: null,
+    remoteVideo: false,
+    remoteAudio: false,
   });
 
+  const app = useContext(AppContext);
   const card = useContext(CardContext);
   const store = useContext(StoreContext);
+  const ring = useContext(RingContext);
   const viewport = useContext(ViewportContext);
-  const channel = useContext(ChannelContext);
   const profile = useContext(ProfileContext);
+
+  const navigate = useNavigate();
   
   const storeStatus = useRef(null);
   const cardStatus = useRef(0);
@@ -37,13 +51,49 @@ export function useSession() {
   }
 
   useEffect(() => {
-    if (!profile.state.identity?.guid || !card.state.init || !channel.state.init) {
+    const ringing = [];
+    const expired = Date.now(); 
+    ring.state.ringing.forEach(call => {
+      if (call.expires > expired && !call.status) {
+        const { callId, cardId, calleeToken, iceUrl, iceUsername, icePassword } = call;
+        const contact = card.state.cards.get(cardId);
+        if (contact) {
+          const { imageSet, name, handle, node, guid } = contact.data.cardProfile || {};
+          const { token } = contact.data.cardDetail;
+          const contactToken = `${guid}.${token}`;
+          const img = imageSet ? card.actions.getCardImageUrl(cardId) : null;
+          ringing.push({ cardId, img, name, handle, contactNode: node, callId, contactToken, calleeToken, iceUrl, iceUsername, icePassword });  
+        }
+      }
+    });
+
+    let callLogo = null;
+    const contact = card.state.cards.get(ring.state.cardId);
+    if (contact) {
+      const { imageSet } = contact.data.cardProfile || {};
+      callLogo = imageSet ? card.actions.getCardImageUrl(ring.state.cardId) : null;  
+    }
+
+    const { callStatus, localStream, localVideo, localAudio, remoteStream, remoteVideo, remoteAudio } = ring.state;
+    updateState({ ringing, callStatus, callLogo, localStream, localVideo, localAudio, remoteStream, remoteVideo, remoteAudio });
+    // eslint-disable-next-line
+  }, [ring.state]);
+
+  useEffect(() => {
+    if (!profile.state.identity?.guid) {
       updateState({ loading: true });
     }
     else {
       updateState({ loading: false });
     }
-  }, [card, channel, profile]);
+  }, [profile]);
+
+  useEffect(() => {
+    if (!app.state.status) {
+      navigate('/');
+    }
+    // eslint-disable-next-line
+  }, [app.state]);
 
   useEffect(() => {
     updateState({ display: viewport.state.display });
@@ -101,13 +151,40 @@ export function useSession() {
       updateState({ conversation: true, cardId, channelId });
     },
     closeConversation: () => {
-      updateState({ conversation: false });
+      updateState({ conversation: false, cardId: null, channelId: null });
     },
     openDetails: () => {
       updateState({ details: true });
     },
     closeDetails: () => {
       updateState({ details: false });
+    },
+    ignore: (call) => {
+      ring.actions.ignore(call.cardId, call.callId);
+    },
+    decline: async (call) => {
+      const { cardId, contactNode, contactToken, callId } = call;
+      await ring.actions.decline(cardId, contactNode, contactToken, callId);
+    },
+    accept: async (call) => {
+console.log("ACCEPTING:", call);
+      const { cardId, callId, contactNode, contactToken, calleeToken, iceUrl, iceUsername, icePassword } = call;
+      await ring.actions.accept(cardId, callId, contactNode, contactToken, calleeToken, iceUrl, iceUsername, icePassword);
+    },
+    end: async () => {
+      await ring.actions.end();
+    },
+    enableVideo: async () => {
+      await ring.actions.enableVideo();
+    },
+    disableVideo: async () => {
+      await ring.actions.disableVideo();
+    },
+    enableAudio: async () => {
+      await ring.actions.enableAudio();
+    },
+    disableAudio: async () => {
+      await ring.actions.disableAudio();
     },
   };
 

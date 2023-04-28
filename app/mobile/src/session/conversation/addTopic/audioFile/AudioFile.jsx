@@ -11,4 +11,3 @@ export function AudioFile({ path, remove, label, setLabel }) {
     </TouchableOpacity>
   )
 }
-

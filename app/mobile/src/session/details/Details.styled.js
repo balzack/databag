@@ -14,6 +14,7 @@ export const styles = StyleSheet.create({
     paddingTop: 16,
     flexShrink: 1,
     minWidth: 0,
+    maxWidth: '80%',
   },
   info: {
     paddingLeft: 8,
@@ -57,14 +58,18 @@ export const styles = StyleSheet.create({
     paddingTop: 16,
   },
   button: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     width: 128,
+    height: 28,
     backgroundColor: Colors.primary,
     borderRadius: 4,
     margin: 8,
+    padding: 2,
   },
   buttonText: {
-    width: '100%',
-    textAlign: 'center',
     color: Colors.white,
     padding: 4,
   },
@@ -171,8 +176,11 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     color: Colors.text,
   },
-  notifySwitch: {
+  track: {
+    false: Colors.grey,
+    true: Colors.background,
+  },
+  switch: {
     transform: [{ scaleX: .7 }, { scaleY: .7 }],
   },
 })
-

@@ -1,19 +1,33 @@
-import { KeyboardAvoidingView, FlatList, Alert, Modal, View, Text, Switch, TouchableOpacity, TextInput } from 'react-native';
+import { ActivityIndicator, KeyboardAvoidingView, FlatList, Alert, Modal, View, Text, Switch, TouchableOpacity, TextInput } from 'react-native';
 import { styles } from './Details.styled';
 import { useDetails } from './useDetails.hook';
 import { Logo } from 'utils/Logo';
-import AntIcons from '@expo/vector-icons/AntDesign';
-import MatIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import AntIcons from 'react-native-vector-icons/AntDesign';
+import MatIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Colors from 'constants/Colors';
 import { MemberItem } from './memberItem/MemberItem';
 
-export function DetailsHeader() {
-  return <Text style={styles.title}>Topic Settings</Text>
-}
-
-export function DetailsBody({ channel, clearConversation }) {
+export function Details({ channel, clearConversation }) {
 
   const { state, actions } = useDetails();
+
+  const toggle = async (cardId, selected) => {
+    try {
+      if (selected) {
+        await actions.clearCard(cardId);
+      }
+      else {
+        await actions.setCard(cardId);
+      }
+    }
+    catch (err) {
+      console.log(err);
+      Alert.alert(
+        'Failed to Update Membership',
+        'Please try again.'
+      );
+    }
+  };
 
   const saveSubject = async () => {
     try {
@@ -36,7 +50,7 @@ export function DetailsBody({ channel, clearConversation }) {
     catch (err) {
       console.log(err);
       Alert.alert(
-        'Failed to Update Channel',
+        'Failed to Update Notifications',
         'Please try again.',
       )
     }
@@ -136,13 +150,13 @@ export function DetailsBody({ channel, clearConversation }) {
               <MatIcons name="lock-open-variant-outline" style={styles.subjectIcon} size={16} color={Colors.text} />
             )}
             <Text style={styles.subjectText} numberOfLines={1} ellipsizeMode={'tail'}>{ state.subject }</Text>
-            { !state.hostId && (!state.locked || state.sealable) && (
+            { !state.hostId && (!state.locked || state.unlocked) && (
               <TouchableOpacity onPress={actions.showEditSubject}>
                 <AntIcons name="edit" size={16} color={Colors.text} />
               </TouchableOpacity>
             )}
           </View>
-          <Text style={styles.created}>{ state.created }</Text>
+          <Text style={styles.created}>{ state.timestamp }</Text>
           <Text style={styles.mode}>{ state.hostId ? 'guest' : 'host' }</Text>
         </View>  
       </View>
@@ -150,16 +164,31 @@ export function DetailsBody({ channel, clearConversation }) {
       <View style={styles.controls}>
         { !state.hostId && (
           <TouchableOpacity style={styles.button} onPress={remove}>
-            <Text style={styles.buttonText}>Delete Topic</Text>
+            { state.deleteBusy && (
+              <ActivityIndicator color={Colors.white} />
+            )}
+            { !state.deleteBusy && (
+              <Text style={styles.buttonText}>Delete Topic</Text>
+            )}
           </TouchableOpacity>
         )}
         { state.hostId && (
           <TouchableOpacity style={styles.button} onPress={remove}>
-            <Text style={styles.buttonText}>Leave Topic</Text>
+            { state.deleteBusy && (
+              <ActivityIndicator color={Colors.white} />
+            )}
+            { !state.deleteBusy && (
+              <Text style={styles.buttonText}>Leave Topic</Text>
+            )}
           </TouchableOpacity>
         )}
         <TouchableOpacity style={styles.button} onPress={block}>
-          <Text style={styles.buttonText}>Block Topic</Text>
+          { state.blockBusy && (
+            <ActivityIndicator color={Colors.white} />
+          )}
+          { !state.blockBusy && (
+            <Text style={styles.buttonText}>Block Topic</Text>
+          )}
         </TouchableOpacity>
         { state.hostId && (
           <TouchableOpacity style={styles.button} onPress={report}>
@@ -173,24 +202,26 @@ export function DetailsBody({ channel, clearConversation }) {
         )}
 
         <View style={styles.notify}>
-          <TouchableOpacity onPress={() => setNotifications(!state.pushEnabled)} activeOpacity={1}>
+          <TouchableOpacity onPress={() => setNotifications(!state.notification)} activeOpacity={1}>
             <Text style={styles.notifyText}>Enable Notifications</Text>
           </TouchableOpacity>
-          <Switch style={styles.notifySwitch} value={state.pushEnabled} onValueChange={setNotifications} trackColor={styles.switch}/>
+          { state.notification != null && (
+            <Switch style={styles.switch} value={state.notification} onValueChange={setNotifications} trackColor={styles.track}/>
+          )}
         </View>
 
       </View>
 
       <View style={styles.members}>
         <Text style={styles.membersLabel}>Members:</Text>
-        { state.count - state.contacts.length > 0 && (
+        { state.count - state.members.length > 0 && (
           <Text style={styles.unknown}> (+ {state.count - state.contacts.length} unknown)</Text>
         )}
       </View>
 
       <FlatList style={styles.cards}
-        data={state.contacts}
-        renderItem={({ item }) => <MemberItem hostId={state.hostId} editable={false} members={[]} item={item} />}
+        data={state.members}
+        renderItem={({ item }) => <MemberItem hostId={state.hostId} item={item} />}
         keyExtractor={item => item.cardId}
       />
 
@@ -232,7 +263,7 @@ export function DetailsBody({ channel, clearConversation }) {
             <Text style={styles.editHeader}>Channel Members:</Text>
             <FlatList style={styles.editMembers}
               data={state.connected}
-              renderItem={({ item }) => <MemberItem editable={true} members={state.contacts} item={item} />}
+              renderItem={({ item }) => <MemberItem item={item} toggle={toggle} />}
               keyExtractor={item => item.cardId}
             />
             <View style={styles.editControls}>
@@ -248,11 +279,4 @@ export function DetailsBody({ channel, clearConversation }) {
   )
 }
 
-export function Details({ channel, clearConversation }) {
-  return (
-    <View>
-      <DetailsBody channel={channel} clearConversation={clearConversation} />
-    </View>
-  )
-}
 

@@ -51,7 +51,6 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 4,
     paddingBottom: 4,
-    marginLeft: 8,
     width: '25%',
   },
   inputwrapper: {
@@ -90,6 +89,7 @@ export const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    marginTop: 32,
   },
   emptyText: {
     color: Colors.grey,
@@ -132,4 +132,3 @@ export const styles = StyleSheet.create({
     borderColor: Colors.divider,
   }
 })
-

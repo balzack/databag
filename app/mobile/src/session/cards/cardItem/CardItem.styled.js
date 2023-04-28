@@ -11,12 +11,15 @@ export const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: Colors.itemDivider,
   },
+  profile: {
+    flexDirection: 'row',
+    flexGrow: 1,
+  },
   detail: {
     paddingLeft: 12,
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
-    flexGrow: 1,
     flexShrink: 1,
   },
   space: {
@@ -65,6 +68,20 @@ export const styles = StyleSheet.create({
     height: 8,
     borderRadius: 4,
     backgroundColor: Colors.confirmed,
+  },
+  options: {
+    display: 'flex',
+    flexDirection: 'row',
+    height: '100%',
+    marginRight: 8,
+  },
+  option: {
+    paddingLeft: 12,
+    paddingRight: 12,
+    height: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 })
 

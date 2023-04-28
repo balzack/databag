@@ -1,61 +1,87 @@
+
 import { StyleSheet } from 'react-native';
 import { Colors } from 'constants/Colors';
 
 export const styles = StyleSheet.create({
-  container: {
-    width: '100%',
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-    borderLeftWidth: 1,
-    borderColor: Colors.divider,
-  },
-  header: {
-    width: '100%',
-    display: 'flex',
-    flexDirection: 'row',
-    borderBottomWidth: 1,
-    borderColor: Colors.divider,
-    padding: 8,
-  },
-  body: {
-    flexGrow: 1,
-    flexShrink: 1,
-    width: '100%',
-  },
   title: {
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'center',
     justifyContent: 'center',
-  },
-  subject: {
-    width: '100%',
-    flexGrow: 1,
+    alignItems: 'center',
     flexShrink: 1,
-    textAlign: 'center',
-    paddingLeft: 16,
+  },
+  more: {
+    marginTop: 8,
+  },
+  header: {
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'center',
     alignItems: 'center',
+    borderBottomWidth: 1,
+    borderColor: Colors.divider,
+    height: 48,
+    marginLeft: 16,
+    marginRight: 16,
   },
-  icon: {
-    paddingLeft: 4,
+  headertitle: {
+    display: 'flex',
+    flexShrink: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingLeft: 8,
+    paddingTop: 8,
+    paddingBottom: 8,
+  }, 
+  titletext: {
+    fontSize: 18,
+    flexShrink: 1,
+    paddingLeft: 16,
+    paddingRight: 16,
+    color: Colors.text,
+  },
+  titlebutton: {
+    paddingRight: 8,
     width: 32,
   },
-  subjectText: {
-    fontSize: 18,
-    textAlign: 'center',
+  headerclose: {
+    flexGrow: 1,
+    alignItems: 'flex-end',
   },
-  action: {
-    paddingLeft: 8,
-  },
-  thread: {
-    height: '100%',
+  container: {
     display: 'flex',
     flexDirection: 'column',
+    flexGrow: 1,
+    height: '100%',
   },
+  thread: {
+    display: 'flex',
+    flexDirection: 'column',
+    flexGrow: 1,
+    flexShrink: 1,
+  },
+  messages: {
+    display: 'flex',
+    flexDirection: 'column',
+    flexGrow: 1,
+    flexShrink: 1,
+  },
+  loading: {
+    display: 'flex',
+    flexGrow: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  empty: {
+    display: 'flex',
+    flexGrow: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  emptytext: {
+    fontSize: 18,
+    color: Colors.disabled,
+  },
+
   topics: {
     paddingBottom: 32,
   },
@@ -65,72 +91,19 @@ export const styles = StyleSheet.create({
     minHeight: 0,
     paddingTop: 8,
   },
-  empty: {
-    flexGrow: 1,
-    flexShrink: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  emptyText: {
-    fontSize: 16,
-    color: Colors.grey,
-  },
-  close: {
-    flexGrow: 1,
-    justifyContent: 'flex-end',
-    alignItems: 'flex-end',
-  },
-  add: {
-    borderTopWidth: 1,
-    borderColor: Colors.divider,
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  addButtons: {
-    display: 'flex',
-    flexDirection: 'row',
-  },
-  addButton: {
-    width: 24,
-    height: 24,
-  },
-  input: {
-    margin: 8,
-    padding: 8,
-    borderRadius: 4,
-    backgroundColor: Colors.white,
-    maxHeight: 64,
-  },
-  addtopic: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  latchbar: {
-    position: 'absolute',
-    top: -26,
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    width: '100%',
-  },
-  latch: {
-    backgroundColor: Colors.white,
-    borderRadius: 12,
-    borderWidth: 1,
-    padding: 4,
-    borderColor: Colors.primary,
-  },
   save: {
-    padding: 8,
     borderRadius: 4,
     backgroundColor: Colors.primary,
     width: 72,
     display: 'flex',
     alignItems: 'center',
+    justifyContent: 'center',
   },
   saveText: {
     color: Colors.white,
+  },
+  canceltext: {
+    color: Colors.text,
   },
   cancel: {
     borderWidth: 1,
@@ -158,6 +131,7 @@ export const styles = StyleSheet.create({
   input: {
     fontSize: 14,
     flexGrow: 1,
+    color: Colors.text,
   },
   editControls: {
     display: 'flex',
@@ -181,14 +155,7 @@ export const styles = StyleSheet.create({
   editHeader: {
     fontSize: 18,
     paddingBottom: 16,
-  },
-  editMembers: {
-    width: '100%',
-    borderWidth: 1,
-    borderColor: Colors.lightgrey,
-    borderRadius: 4,
-    marginBottom: 8,
-    height: 250,
+    color: Colors.text,
   },
   modal: {
     width: '100%',
@@ -198,12 +165,5 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  loading: {
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-})
+});
 

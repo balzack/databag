@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import Colors from 'constants/Colors';
 
 export const TopicItemWrapper = styled.div`
   display: flex;
@@ -18,10 +19,6 @@ export const TopicItemWrapper = styled.div`
       visibility: visible;
     }
 
-    &:hover .info {
-      text-decoration: underline;
-    }
-
     .topic-options {
       visibility: hidden;
       padding-left: 16px;
@@ -33,7 +30,6 @@ export const TopicItemWrapper = styled.div`
         flex-direction: row;
         border-radius: 4px;
         background-color: #eeeeee;
-        border: 1px solid #555555;
         margin-top: 2px;
 
         .button {
@@ -41,6 +37,14 @@ export const TopicItemWrapper = styled.div`
           margin-left: 8px;
           margin-right: 8px;
           cursor: pointer;
+        }
+
+        .remove {
+          color: ${Colors.warn};
+        }
+
+        .edit {
+          color: ${Colors.primary};
         }
       }
     }
@@ -84,6 +88,7 @@ export const TopicItemWrapper = styled.div`
   .sealed-message {
     font-style: italic;
     color: #aaaaaa;
+    padding-left: 72px;
   }
 
   .asset-placeholder {
@@ -99,6 +104,7 @@ export const TopicItemWrapper = styled.div`
 
   .topic-assets {
     padding-top: 4px;
+    padding-bottom: 4px;
   }
 
   .skeleton {
@@ -112,23 +118,24 @@ export const TopicItemWrapper = styled.div`
     padding-left: 72px;
     white-space: pre-line;
     min-height: 4px;
+  }
 
-    .editing {
+  .editing {
+    display: flex;
+    flex-direction: column;
+    border-radius: 4px;
+    border: 1px solid #aaaaaa;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    margin-right: 16px;
+    margin-left: 72px;
+
+    .controls {
       display: flex;
-      flex-direction: column;
-      border-radius: 4px;
-      border: 1px solid #aaaaaa;
-      width: 100%;
-      margin-top: 8px;
-      margin-bottom: 8px;
-
-      .controls {
-        display: flex;
-        flex-direction: row;
-        justify-content: flex-end;
-        padding-bottom: 8px;
-        padding-right: 8px;
-      }
+      flex-direction: row;
+      justify-content: flex-end;
+      padding-bottom: 8px;
+      padding-right: 8px;
     }
   }
 `;

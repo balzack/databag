@@ -1,7 +1,7 @@
 import { View } from 'react-native';
 import { useProfileIcon } from './useProfileIcon.hook';
 import { styles } from './ProfileIcon.styled';
-import Ionicons from '@expo/vector-icons/AntDesign';
+import Ionicons from 'react-native-vector-icons/AntDesign';
 
 export function ProfileIcon({ size, color }) {
 
@@ -10,7 +10,7 @@ export function ProfileIcon({ size, color }) {
   return (
     <View>
       <Ionicons name={'user'} size={size} color={color} />
-      { state.disconnected > 3 && (
+      { state.disconnected && (
         <View style={styles.disconnected} />
       )}
     </View>

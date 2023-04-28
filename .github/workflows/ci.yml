@@ -48,7 +48,7 @@ jobs:
     - name: Jest ReactJs
       run: |
           cd net/web
-          yarn jest
+          yarn jest --silent
   
     - name: Jest ReactNative
       run: |

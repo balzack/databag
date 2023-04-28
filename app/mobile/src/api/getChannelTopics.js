@@ -1,6 +1,7 @@
 import { checkResponse, fetchWithTimeout } from './fetchUtil';
 
 export async function getChannelTopics(server, token, channelId, revision, count, begin, end) {
+
   let rev = ''
   if (revision != null) {
     rev = `&revision=${revision}`

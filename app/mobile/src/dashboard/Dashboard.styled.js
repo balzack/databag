@@ -194,7 +194,7 @@ export const styles = StyleSheet.create({
     padding: 4,
     borderRadius: 4,
     marginBottom: 16,
-    fontSize: 16,
+    fontSize: 12,
     color: Colors.text,
   },
   switch: {
@@ -224,4 +224,20 @@ export const styles = StyleSheet.create({
     borderRadius: 4,
     borderColor: Colors.divider,
   },
+  label: {
+    borderTopWidth: 1,
+    borderColor: Colors.divider,
+    marginTop: 12,
+  },
+  labelText: {
+    fontSize: 14,
+    color: Colors.text,
+  },
+  ice: {
+    display: 'flex',
+    flexDirection: 'row',
+    marginTop: 8,
+    alignItems: 'center',
+    paddingBottom: 8,
+  }
 });

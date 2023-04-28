@@ -34,15 +34,17 @@ func NotifyChannelRevision(card *store.Card, revision int64) error {
 
 	act := &card.Account
 	err := store.DB.Transaction(func(tx *gorm.DB) error {
-		if res := tx.Model(card).Where("id = ?", card.ID).Update("notified_channel", revision).Error; res != nil {
+    cardRevision := act.CardRevision+1;
+		if res := tx.Model(&store.Card{}).Where("id = ?", card.ID).Update("notified_channel", revision).Error; res != nil {
 			return res
 		}
-		if res := tx.Model(&card.CardSlot).Where("id = ?", card.CardSlot.ID).Update("revision", act.CardRevision+1).Error; res != nil {
+		if res := tx.Model(&store.CardSlot{}).Where("id = ?", card.CardSlot.ID).Update("revision", cardRevision).Error; res != nil {
 			return res
 		}
-		if res := tx.Model(act).Where("id = ?", act.ID).Update("card_revision", act.CardRevision+1).Error; res != nil {
+		if res := tx.Model(&store.Account{}).Where("id = ?", act.ID).Update("card_revision", cardRevision).Error; res != nil {
 			return res
 		}
+    act.CardRevision = cardRevision;
 		return nil
 	})
 	if err != nil {

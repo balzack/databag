@@ -9,6 +9,68 @@ export const styles = StyleSheet.create({
   config: {
     paddingTop: 8,
   },
+  icon: {
+    padding: 8,
+    width: 40,
+    textAlign: 'center',
+  },
+  modalContainer: {
+    width: '100%',
+    height: '100%',
+    backgroundColor: Colors.grey,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  tos: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  agreeterms: {
+    display: 'flex',
+    flexDirection: 'row',
+    padding: 8,
+  },
+  agreetermstext: {
+    color: Colors.primary,
+    paddingLeft: 8,
+    fontSize: 14,
+  },
+  viewterms: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 8,
+  },
+  viewtermstext: {
+    color: Colors.primary,
+    fontSize: 14,
+  },
+  terms: {
+    borderRadius: 4,
+    maxHeight: '80%',
+    padding: 8,
+    margin: 16,
+    backgroundColor: Colors.formBackground,
+  },
+  done: {
+    paddingTop: 8,
+    paddingBottom: 8,
+    paddingLeft: 16,
+    paddingRight: 16,
+    borderRadius: 4,
+    backgroundColor: Colors.white,
+    marginTop: 8,
+  },
+  donetext: {
+    color: Colors.text,
+    fontSize: 16,
+  },
+  termsheader: {
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
   demo: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -28,6 +90,11 @@ export const styles = StyleSheet.create({
   required: {
     fontSize: 12,
     color: Colors.grey,
+    width: 32,
+    padding: 8,
+    textAlign: 'center',
+  },
+  requiredtext: {
     textAlignVertical: 'center',
   },
   container: {
@@ -100,9 +167,10 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
   },
   inputfield: {
-    flex: 1,
+    flexGrow: 1,
     textAlign: 'center',
     padding: 8,
+    color: Colors.text,
   },
   create: {
     marginTop: 16,
@@ -138,7 +206,7 @@ export const styles = StyleSheet.create({
     marginBottom: 16,
   },
   logintext: {
-    fontColor: 'yellow',
+    color: Colors.primary,
   },
   nologintext: {
     color: Colors.disabled,

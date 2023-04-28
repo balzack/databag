@@ -1,151 +1,108 @@
+
 import { StyleSheet } from 'react-native';
 import { Colors } from 'constants/Colors';
 
 export const styles = StyleSheet.create({
-  container: {
-    width: '100%',
-    height: '100%',
+  body: {
     display: 'flex',
-    flexDirection: 'column',
-    paddingBottom: 32,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  icon: {
-    paddingTop: 2,
-  },
-  wrapper: {
-    backgroundColor: Colors.formBackground,
-  },
-  action: {
-    width: 64,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  titleText: {
-    fontSize: 18,
-    overflow: 'hidden',
     flexGrow: 1,
-    textAlign: 'center',
-  }, 
-  title: {
-    display: 'flex',
-    flexDirection: 'row',
-    flexGrow: 1,
-    flex: 1,
-    width: '100%',
-    textAlign: 'start',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
-  header: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'flex-end',
-    justifyContent: 'center',
-    height: 32,
+  button: {
+    paddingRight: 16,
+  },
+  switch: {
+    false: Colors.grey,
+    true: Colors.background,
   },
   headerText: {
-    paddingLeft: 16,
-    fontSize: 14,
-    paddingRight: 8,
+    fontSize: 18,
+    overflow: 'hidden',
+    textAlign: 'center',
     color: Colors.text,
   },
-  camera: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    padding: 8,
-    backgroundColor: Colors.lightgrey,
-    borderBottomLeftRadius: 8,
-    borderTopRightRadius: 8,
-  },
-  gallery: {
-    position: 'absolute',
-    bottom: 0,
-    right: 0,
-    padding: 8,
-    backgroundColor: Colors.lightgrey,
-    borderBottomRightRadius: 8,
-    borderTopLeftRadius: 8,
+  logo: {
+    marginTop: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    display: 'flex',
   },
   alert: {
-    height: 32,
-  },
-  detail: {
-    display: 'flex',
-    flexDirection: 'column',
+    height: 16,
+    width: '100%',
     alignItems: 'center',
-    color: Colors.text,
-    paddingLeft: 32,
-    paddingRight: 32,
   },
-  attribute: {
-    display: 'flex',
-    flexDirection: 'row',
-    paddingBottom: 8,
-  },
-  nonametext: {
-    fontSize: 18,
-    paddingRight: 8,
-    fontWeight: 'bold',
-    color: Colors.grey,
-  },
-  nametext: {
-    fontSize: 18,
-    paddingRight: 8,
-    fontWeight: 'bold',
-  },
-  locationtext: {
-    fontSize: 16,
-    paddingLeft: 8,
-    color: Colors.text,
-  },
-  nolocationtext: {
-    fontSize: 16,
-    paddingLeft: 8,
-    color: Colors.grey,
-  },
-  descriptiontext: {
-    fontSize: 16,
-    paddingLeft: 8,
-    color: Colors.text,
-  },
-  nodescriptiontext: {
-    fontSize: 16,
-    paddingLeft: 8,
-    color: Colors.grey,
-  },
-  visible: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingTop: 16,
-  },
-  visibleText: {
-    fontSize: 16,
-    color: Colors.text,
-  },
-  visibleSwitch: {
-    transform: [{ scaleX: .7 }, { scaleY: .7 }],
+  alertText: {
+    color: Colors.alert,
   },
   logout: {
-    marginTop: 32,
-    borderRadius: 4,
-    backgroundColor: Colors.primary,
+    marginTop: 16,
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    paddingLeft: 8,
-    paddingRight: 8,
-    paddingTop: 8,
-    paddingBottom: 8,
+    justifyContent: 'center',
+    width: '100%',
   },
   logoutText: {
-    color: Colors.white,
-    paddingLeft: 8,
+    marginLeft: 8,
+    color: Colors.primary,
+    fontSize: 16,
+  },
+  delete: {
+    marginTop: 16,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+  },
+  deleteText: {
+    marginLeft: 8,
+    color: Colors.alert,
+    fontSize: 16,
+  },
+  modalWrapper: {
+    display: 'flex',
+    width: '100%',
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(52, 52, 52, 0.8)'
+  },
+  modalContainer: {
+    backgroundColor: Colors.formBackground,
+    padding: 16,
+    width: '80%',
+    maxWidth: 400,
+  },
+  modalHeader: {
+    fontSize: 18,
+    paddingBottom: 16,
+    color: Colors.text,
+  },
+  canceltext: {
+    color: Colors.text,
+  },
+  modalList: {
+    width: '100%',
+    borderWidth: 1,
+    borderColor: Colors.lightgrey,
+    borderRadius: 2,
+  },
+  modalControls: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
+  cancel: {
+    borderWidth: 1,
+    borderColor: Colors.lightgrey,
+    borderRadius: 4,
+    padding: 8,
+    marginRight: 8,
+    width: 88,
+    display: 'flex',
+    alignItems: 'center',
   },
   unconfirmed: {
     backgroundColor: Colors.lightgrey,
@@ -168,39 +125,10 @@ export const styles = StyleSheet.create({
   removeText: {
     color: Colors.white,
   },
-  erase: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '100%',
-  },
-  switch: {
-    false: Colors.grey,
-    true: Colors.background,
-  },
-  editWrapper: {
-    display: 'flex',
-    width: '100%',
-    height: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'rgba(52, 52, 52, 0.8)'
-  },
-  editContainer: {
-    backgroundColor: Colors.formBackground,
-    padding: 16,
-    width: '80%',
-    maxWidth: 400,
-  },
-  editHeader: {
-    fontSize: 18,
-    paddingBottom: 16,
-  },
-  editList: {
-    width: '100%',
-    borderWidth: 1,
-    borderColor: Colors.lightgrey,
-    borderRadius: 2,
+  input: {
+    fontSize: 14,
+    flexGrow: 1,
+    color: Colors.text,
   },
   inputField: {
     width: '100%',
@@ -213,14 +141,116 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
   },
-  input: {
-    fontSize: 14,
-    flexGrow: 1,
+  gallery: {
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+    padding: 8,
+    backgroundColor: Colors.lightgrey,
+    borderBottomRightRadius: 8,
+    borderTopLeftRadius: 8,
   },
-  editControls: {
+  detail: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    color: Colors.text,
+    paddingLeft: 32,
+    paddingRight: 32,
+    marginTop: 16,
+    marginBottom: 16,
+  },
+  attribute: {
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'flex-end',
+    paddingBottom: 8,
+  },
+  nonametext: {
+    fontSize: 18,
+    paddingRight: 8,
+    fontWeight: 'bold',
+    color: Colors.grey,
+  },
+  nametext: {
+    fontSize: 18,
+    paddingRight: 8,
+    fontWeight: 'bold',
+    color: Colors.text,
+  },
+  locationtext: {
+    fontSize: 16,
+    paddingLeft: 8,
+    color: Colors.text,
+  },
+  nolocationtext: {
+    fontSize: 16,
+    paddingLeft: 8,
+    color: Colors.grey,
+  },
+  descriptiontext: {
+    fontSize: 16,
+    paddingLeft: 8,
+    color: Colors.text,
+  },
+  nodescriptiontext: {
+    fontSize: 16,
+    paddingLeft: 8,
+    color: Colors.grey,
+  },
+  save: {
+    padding: 8,
+    borderRadius: 4,
+    backgroundColor: Colors.primary,
+    width: 88,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  saveText: {
+    color: Colors.white,
+  },
+  blocked: {
+    alignSelf: 'center',
+    borderColor: Colors.lightgrey,
+    borderWidth: 1,
+    borderRadius: 4,
+    padding: 8,
+    marginBottom: 8,
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  blockedLabel: {
+    marginTop: 32,
+    alignSelf: 'center',
+    color: Colors.grey,
+  },
+  group: {
+    marginTop: 16,
+    marginBottom: 16,
+  },
+  enable: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    marginBottom: 4,
+  },
+  enableText: {
+    color: Colors.primary,
+    fontSize: 16,
+  },
+  enableSwitch: {
+    transform: [{ scaleX: .6 }, { scaleY: .6 }],
+  },
+  link: {
+    marginLeft: 8,
+    marginRight: 8,
+  },
+  linkText: {
+    color: Colors.primary,
   },
   close: {
     borderWidth: 1,
@@ -232,74 +262,48 @@ export const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
   },
-  cancel: {
-    borderWidth: 1,
-    borderColor: Colors.lightgrey,
-    borderRadius: 4,
-    padding: 8,
-    marginRight: 8,
-    width: 72,
+  sealable: {
     display: 'flex',
+    flexDirection: 'row',
     alignItems: 'center',
+    paddingBottom: 16,
   },
   disabled: {
     borderWidth: 1,
     borderColor: Colors.lightgrey,
     padding: 8,
     borderRadius: 4,
-    width: 72,
+    width: 88,
     display: 'flex',
+    flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
+  },
+  activity: {
+    paddingRight: 4,
   },
   disabledText: {
     color: Colors.disabled,
   },
-  save: {
-    padding: 8,
-    borderRadius: 4,
-    backgroundColor: Colors.primary,
-    width: 72,
-    display: 'flex',
-    alignItems: 'center',
+  sealUpdate: {
+    position: 'absolute',
+    top: 0,
+    height: 36,
+    left: 8,
+    width: '100%',
   },
-  save: {
-    padding: 8,
-    borderRadius: 4,
-    backgroundColor: Colors.primary,
-    width: 72,
-    display: 'flex',
-    alignItems: 'center',
+  sealableText: {
+    color: Colors.text,
   },
-  link: {
-    marginTop: 16,
-  },
-  linkText: {
-    color: Colors.primary,
-  },
-  delete: {
-    backgroundColor: Colors.error,
-    marginTop: 16,
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingLeft: 8,
-    paddingRight: 8,
-    paddingTop: 8,
+  notice: {
+    color: Colors.grey,
+    fontStyle: 'italic',
+    textAlign: 'center',
     paddingBottom: 8,
-    borderRadius: 4,
-  }, 
-  deleteText: {
-    paddingLeft: 8,
-    color: Colors.white,
   },
-  eraseText: {
-    color: Colors.alert,
+  warn: {
+    paddingTop: 2,
+    paddingRight: 8,
   },
-  saveText: {
-    color: Colors.white,
-  },
-  disconnected: {
-    color: Colors.alert,
-  },
-})
+});
 

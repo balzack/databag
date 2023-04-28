@@ -1,5 +1,4 @@
 import { TopicItemWrapper } from './TopicItem.styled';
-import { useTopicItem } from './useTopicItem.hook';
 import { VideoAsset } from './videoAsset/VideoAsset';
 import { AudioAsset } from './audioAsset/AudioAsset';
 import { ImageAsset } from './imageAsset/ImageAsset';
@@ -7,137 +6,136 @@ import { Logo } from 'logo/Logo';
 import { Space, Skeleton, Button, Modal, Input } from 'antd';
 import { ExclamationCircleOutlined, DeleteOutlined, EditOutlined, FireOutlined, PictureOutlined } from '@ant-design/icons';
 import { Carousel } from 'carousel/Carousel';
+import { useTopicItem } from './useTopicItem.hook';
 
-export function TopicItem({ host, topic, sealed, sealKey }) {
+export function TopicItem({ host, sealed, topic, update, remove }) {
 
-  const { state, actions } = useTopicItem(topic, sealed, sealKey);
+  const [ modal, modalContext ] = Modal.useModal();
+  const { state, actions } = useTopicItem();
 
-  let name = state.name ? state.name : state.handle;
-  let nameClass = state.name ? 'set' : 'unset';
-  if (name == null) {
-    name = "unknown contact"
-    nameClass = "unknown"
+  const removeTopic = () => {
+    modal.confirm({
+      title: 'Do you want to delete this message?',
+      icon: <ExclamationCircleOutlined />,
+      bodyStyle: { padding: 16 },
+      okText: 'Yes, Delete',
+      cancelText: 'No, Cancel',
+      onOk:  async () => {
+        try {
+          await remove();
+        }
+        catch(err) {
+          console.log(err);
+          modal.error({
+            title: 'Failed to Delete Message',
+            content: 'Please try again.',
+            bodyStyle: { padding: 16 },
+          });
+        }
+      },
+    });
   }
 
-  const renderAsset = (asset, idx, topicId) => {
+  const updateTopic = async () => {
+    try {
+      await update(state.message);
+      actions.clearEditing();
+    }
+    catch(err) {
+      console.log(err);
+      modal.error({
+        title: 'Failed to Update Message',
+        content: 'Please try again.',
+        bodyStyle: { padding: 16 },
+      });
+    }
+  };
+
+  const renderAsset = (asset, idx) => {
     if (asset.image) {
-      return <ImageAsset thumbUrl={actions.getAssetUrl(asset.image.thumb, topicId)}
-          fullUrl={actions.getAssetUrl(asset.image.full, topicId)} />
+      return <ImageAsset thumbUrl={topic.assetUrl(asset.image.thumb, topic.id)}
+          fullUrl={topic.assetUrl(asset.image.full, topic.id)} />
     }
     if (asset.video) {
-      return <VideoAsset thumbUrl={actions.getAssetUrl(asset.video.thumb, topicId)}
-          lqUrl={actions.getAssetUrl(asset.video.lq, topicId)} hdUrl={actions.getAssetUrl(asset.video.hd, topicId)} />
+      return <VideoAsset thumbUrl={topic.assetUrl(asset.video.thumb, topic.id)}
+          lqUrl={topic.assetUrl(asset.video.lq, topic.id)} hdUrl={topic.assetUrl(asset.video.hd, topic.id)} />
     }
     if (asset.audio) {
-      return <AudioAsset label={asset.audio.label} audioUrl={actions.getAssetUrl(asset.audio.full, topicId)} />
+      return <AudioAsset label={asset.audio.label} audioUrl={topic.assetUrl(asset.audio.full, topic.id)} />
     }
     return <></>
   }
 
-  const removeTopic = () => {
-    Modal.confirm({
-      title: 'Do you want to delete this message?',
-      icon: <ExclamationCircleOutlined />,
-      okText: 'Yes, Delete',
-      cancelText: 'No, Cancel',
-      onOk() { actions.removeTopic() },
-    });
-  }
-
-  const Options = () => {
-    if (state.editing) {
-      return <></>;
-    }
-    if (state.owner) {
-      return (
-        <div class="buttons">
-          <div class="button" onClick={() => actions.setEditing(true)}>
-            <EditOutlined />
-          </div>
-          <div class="button" onClick={() => removeTopic()}>
-            <DeleteOutlined />
-          </div>
-        </div>
-      );
-    }
-    if (host) {
-      return (
-        <div class="buttons">
-          <div class="button" onClick={() => removeTopic()}>
-            <DeleteOutlined />
-          </div>
-        </div>
-      );
-    }
-    return <></>;
-  }
-
-  const Message = () => {
-    if (state.editing) {
-      return (
-        <div class="editing">
-          <Input.TextArea defaultValue={state.text} placeholder="message"
-            style={{ resize: 'none', color: state.textColor, fontSize: state.textSize }}
-            onChange={(e) => actions.setEdit(e.target.value)} rows={3} bordered={false}/>
-          <div class="controls">
-          <Space>
-            <Button onClick={() => actions.setEditing(false)}>Cancel</Button>
-            <Button type="primary" onClick={() => actions.setMessage()} loading={state.body}>Save</Button>
-          </Space>
-          </div>
-        </div>
-      );
-    }
-    return <div style={{ color: state.textColor, fontSize: state.textSize }}>{ state.text }</div>
-  }
-
   return (
     <TopicItemWrapper>
-      { state.init && (
-        <>
-          <div class="topic-header">
-            <div class="avatar">
-              <Logo width={32} height={32} radius={4} url={state.imageUrl} />
-            </div>
-            <div class="info">
-              <div class={nameClass}>{ name }</div>
-              <div>{ state.created }</div>
-            </div>
-            { !state.sealed && (
-              <div class="topic-options">
-                <Options />
+      { modalContext }
+      <div class="topic-header">
+        <div class="avatar">
+          <Logo width={32} height={32} radius={4} url={topic.imageUrl} />
+        </div>
+        <div class="info">
+          <div class={ topic.nameSet ? 'set' : 'unset' }>{ topic.name }</div>
+          <div>{ topic.createdStr }</div>
+        </div>
+        <div class="topic-options">
+          <div class="buttons">
+            { !sealed && topic.creator && (
+              <div class="button edit" onClick={() => actions.setEditing(topic.text)}>
+                <EditOutlined />
+              </div>
+            )}
+            { (host || topic.creator) && (
+              <div class="button remove" onClick={removeTopic}>
+                <DeleteOutlined />
               </div>
             )}
           </div>
-          { !state.confirmed && (
-            <div class="skeleton">
-              <Skeleton size={'small'} active={true} title={false} />
-            </div>
-          )}
-          { state.confirmed && (
-            <div>
-              { state.error && (
+        </div>
+      </div>
+      { topic.status !== 'confirmed' && (
+        <div class="skeleton">
+          <Skeleton size={'small'} active={true} title={false} />
+        </div>
+      )}
+      { topic.status === 'confirmed' && (
+        <>
+          { topic.assets?.length && (
+            <>
+              { topic.transform === 'error' && (
                 <div class="asset-placeholder">
                   <FireOutlined style={{ fontSize: 32, color: '#ff8888' }} />
                 </div>
               )}
-              { !state.error && !state.ready && (
+              { topic.transform === 'incomplete' && (
                 <div class="asset-placeholder">
                   <PictureOutlined style={{ fontSize: 32 }} />
                 </div>
               )}
-              { !state.error && state.ready && state.assets.length > 0 && (
+              { topic.transform === 'complete' && (
                 <div class="topic-assets">
-                  <Carousel pad={40} items={state.assets} itemRenderer={renderAsset} />
+                  <Carousel pad={40} items={topic.assets} itemRenderer={renderAsset} />
                 </div>
               )}
-              <div class="message">
-                { !state.sealed && (
-                  <Message />
-                )}
-                { state.sealed && (
-                  <div class="sealed-message">sealed message</div>
-                )}
+            </>
+          )}
+          { sealed && (
+            <div class="sealed-message">sealed message</div>
+          )}
+          { !sealed && !state.editing && (
+            <div class="message">
+              <div style={{ color: topic.textColor, fontSize: topic.textSize }}>{ topic.clickable }</div>
+            </div>
+          )}
+          { state.editing && (
+            <div class="editing">
+              <Input.TextArea defaultValue={state.message} placeholder="message"
+                style={{ resize: 'none', color: state.textColor, fontSize: state.textSize }}
+                onChange={(e) => actions.setMessage(e.target.value)} rows={3} bordered={false}/>
+              <div class="controls">
+                <Space>
+                  <Button onClick={actions.clearEditing}>Cancel</Button>
+                  <Button type="primary" onClick={updateTopic}>Save</Button>
+                </Space>
               </div>
             </div>
           )}

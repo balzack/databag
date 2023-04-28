@@ -13,10 +13,14 @@ import (
 var wsSync sync.Mutex
 var wsExit = make(chan bool, 1)
 var statusListener = make(map[uint][]chan<- []byte)
+var revisionListener = make(map[uint][]chan<- []byte)
 var upgrader = websocket.Upgrader{}
 
 //Status handler for websocket connection
 func Status(w http.ResponseWriter, r *http.Request) {
+
+  // send ringing updates
+  ringMode := r.FormValue("mode") == "ring"
 
 	// accept websocket connection
 	conn, err := upgrader.Upgrade(w, r, nil)
@@ -60,7 +64,11 @@ func Status(w http.ResponseWriter, r *http.Request) {
 	// send current version
 	rev := getRevision(&session.Account)
 	var msg []byte
-	msg, err = json.Marshal(rev)
+  if ringMode {
+    msg, err = json.Marshal(rev)
+  } else {
+    msg, err = json.Marshal(rev.Revision)
+  }
 	if err != nil {
 		ErrMsg(err)
 		return
@@ -74,9 +82,14 @@ func Status(w http.ResponseWriter, r *http.Request) {
 	c := make(chan []byte)
 	defer close(c)
 
-	// register channel for revisions
-	addStatusListener(session.Account.ID, c)
-	defer removeStatusListener(session.Account.ID, c)
+	// register channel for updates
+  if ringMode {
+    addStatusListener(session.Account.ID, c)
+    defer removeStatusListener(session.Account.ID, c)
+  } else {
+    addRevisionListener(session.Account.ID, c)
+    defer removeRevisionListener(session.Account.ID, c)
+  }
 
 	// start ping pong ticker
 	ticker := time.NewTicker(60 * time.Second)
@@ -103,7 +116,7 @@ func Status(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func getRevision(account *store.Account) Revision {
+func getRevision(account *store.Account) Activity {
 	var r Revision
 	r.Account = account.AccountRevision
 	r.Profile = account.ProfileRevision
@@ -111,7 +124,10 @@ func getRevision(account *store.Account) Revision {
 	r.Channel = account.ChannelRevision
 	r.Group = account.GroupRevision
 	r.Card = account.CardRevision
-	return r
+
+  var a Activity
+  a.Revision = &r
+	return a
 }
 
 //ExitStatus closes websocket handler
@@ -119,14 +135,51 @@ func ExitStatus() {
 	wsExit <- true
 }
 
+//SetRing sends ring object on all account websockets
+func SetRing(card *store.Card, ring Ring) {
+
+  // serialize ring activity
+  var phone Phone
+  phone.CallID = ring.CallID
+  phone.CalleeToken = ring.CalleeToken
+  phone.IceUrl = ring.IceUrl
+  phone.IceUsername = ring.IceUsername
+  phone.IcePassword = ring.IcePassword
+  phone.CardID = card.CardSlot.CardSlotID
+  var a Activity
+  a.Phone = &phone;
+  msg, err := json.Marshal(a)
+  if err != nil {
+    ErrMsg(err);
+    return
+  }
+
+  // lock access to statusListener
+  wsSync.Lock()
+  defer wsSync.Unlock()
+
+  // notify all listeners
+  chs, ok := statusListener[card.Account.ID]
+  if ok {
+    for _, ch := range chs {
+      ch <- msg
+    }
+  }
+}
+
 //SetStatus sends revision object on all account websockets
 func SetStatus(account *store.Account) {
 
 	// get revisions for the account
 	rev := getRevision(account)
-	msg, err := json.Marshal(rev)
-	if err != nil {
-		ErrMsg(err)
+	full, errFull := json.Marshal(rev)
+	if errFull != nil {
+		ErrMsg(errFull)
+		return
+	}
+	base, errBase := json.Marshal(rev.Revision)
+	if errBase != nil {
+		ErrMsg(errBase)
 		return
 	}
 
@@ -134,11 +187,19 @@ func SetStatus(account *store.Account) {
 	wsSync.Lock()
 	defer wsSync.Unlock()
 
-	// notify all listeners
-	chs, ok := statusListener[account.ID]
+	// notify all base listeners
+	chs, ok := revisionListener[account.ID]
 	if ok {
 		for _, ch := range chs {
-			ch <- msg
+			ch <- base
+		}
+	}
+
+	// notify all full listeners
+	chs, ok = statusListener[account.ID]
+	if ok {
+		for _, ch := range chs {
+			ch <- full
 		}
 	}
 }
@@ -174,6 +235,43 @@ func removeStatusListener(act uint, ch chan<- []byte) {
 				} else {
 					chs[i] = chs[len(chs)-1]
 					statusListener[act] = chs[:len(chs)-1]
+				}
+			}
+		}
+	}
+}
+
+func addRevisionListener(act uint, ch chan<- []byte) {
+
+	// lock access to revisionListener
+	wsSync.Lock()
+	defer wsSync.Unlock()
+
+	// add new listener to map
+	chs, ok := revisionListener[act]
+	if ok {
+		revisionListener[act] = append(chs, ch)
+	} else {
+		revisionListener[act] = []chan<- []byte{ch}
+	}
+}
+
+func removeRevisionListener(act uint, ch chan<- []byte) {
+
+	// lock access to revisionListener
+	wsSync.Lock()
+	defer wsSync.Unlock()
+
+	// remove channel from map
+	chs, ok := revisionListener[act]
+	if ok {
+		for i, c := range chs {
+			if ch == c {
+				if len(chs) == 1 {
+					delete(revisionListener, act)
+				} else {
+					chs[i] = chs[len(chs)-1]
+					revisionListener[act] = chs[:len(chs)-1]
 				}
 			}
 		}

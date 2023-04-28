@@ -28,7 +28,13 @@ export function useSelectItem(item, selected, markup) {
   }, [selected, item]);
 
   useEffect(() => {
-    updateState({ logo: card.actions.getImageUrl(item.id) });
+    const contact = card.state.cards.get(item.id);
+    if (contact?.data?.cardProfile?.imageSet) {
+      updateState({ logo: card.actions.getCardImageUrl(item.id) });
+    }
+    else {
+      updateState({ logo: null });
+    }
   }, [card, item]);
 
   const actions = {

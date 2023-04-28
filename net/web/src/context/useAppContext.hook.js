@@ -1,21 +1,21 @@
 import { useEffect, useState, useRef, useContext } from 'react';
-import { getAvailable } from 'api/getAvailable';
 import { setLogin } from 'api/setLogin';
 import { clearLogin } from 'api/clearLogin';
 import { setAccountAccess } from 'api/setAccountAccess';
 import { addAccount } from 'api/addAccount';
-import { getUsername } from 'api/getUsername';
 import { AccountContext } from './AccountContext';
 import { ProfileContext } from './ProfileContext';
-import { ArticleContext } from './ArticleContext';
-import { GroupContext } from './GroupContext';
 import { CardContext } from './CardContext';
 import { ChannelContext } from './ChannelContext';
 import { StoreContext } from './StoreContext';
 import { UploadContext } from './UploadContext';
+import { RingContext } from './RingContext';
+import { createWebsocket } from 'api/fetchUtil';
 
-export function useAppContext() {
+export function useAppContext(websocket) {
   const [state, setState] = useState({
+    status: null,
+    adminToken: null,
   });
   const [appRevision, setAppRevision] = useState();
 
@@ -23,39 +23,56 @@ export function useAppContext() {
   const appVersion = "1.0.0";
   const userAgent = window.navigator.userAgent;
 
+  const checked = useRef(false);
+  const appToken = useRef(null);
   const ws = useRef(null);
-  const revision = useRef(null);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }))
   }
 
+  const ringContext = useContext(RingContext);
   const uploadContext = useContext(UploadContext);
   const storeContext = useContext(StoreContext);
   const accountContext = useContext(AccountContext);
   const profileContext = useContext(ProfileContext);
   const channelContext = useContext(ChannelContext);
   const cardContext = useContext(CardContext);
-  const groupContext = useContext(GroupContext);
-  const articleContext = useContext(ArticleContext);
 
-  const resetData = () => {
-    revision.current = null;
+  const setSession = (token) => {
+    try {
+      accountContext.actions.setToken(token);
+      profileContext.actions.setToken(token);
+      cardContext.actions.setToken(token);
+      channelContext.actions.setToken(token);
+      ringContext.actions.setToken(token);
+    }
+    catch (err) {
+      accountContext.actions.clearToken();
+      profileContext.actions.clearToken();
+      cardContext.actions.clearToken();
+      channelContext.actions.clearToken();
+      ringContext.actions.clearToken();
+      throw err;
+    }
+    setWebsocket(token);
+  }
+
+  const clearSession = () => {
+    uploadContext.actions.clear();
+    storeContext.actions.clear();
+
+    ringContext.actions.clearToken();
     accountContext.actions.clearToken();
     profileContext.actions.clearToken();
-    articleContext.actions.clearToken();
-    groupContext.actions.clearToken();
     cardContext.actions.clearToken();
     channelContext.actions.clearToken();
-    setState({});
+    clearWebsocket();
   }
 
   const actions = {
-    logout: () => {
-      appLogout();
-      storeContext.actions.clear();
-      uploadContext.actions.clear();
-      resetData();
+    logout: async () => {
+      await appLogout();
     },
     access: async (token) => {
       await appAccess(token)
@@ -66,16 +83,24 @@ export function useAppContext() {
     create: async (username, password, token) => {
       await appCreate(username, password, token)
     },
-    username: getUsername,
-    available: getAvailable,
+    setAdmin: (token) => {
+      updateState({ adminToken: token });
+    },
+    clearAdmin: () => {
+      updateState({ adminToken: null });
+    },
   }
 
   const appCreate = async (username, password, token) => {
+    if (appToken.current || !checked.current) {
+      throw new Error('invalid session state');
+    }
     await addAccount(username, password, token);
-    let access = await setLogin(username, password, appName, appVersion, userAgent)
-    updateState({ access: access.appToken });
+    const access = await setLogin(username, password, appName, appVersion, userAgent);
     storeContext.actions.setValue('login:timestamp', access.created);
-    setWebsocket(access.appToken)
+    setSession(access.appToken);
+    appToken.current = access.appToken;
+
     localStorage.setItem("session", JSON.stringify({
       access: access.appToken,
       timestamp: access.created,
@@ -84,10 +109,14 @@ export function useAppContext() {
   } 
 
   const appLogin = async (username, password) => {
-    let access = await setLogin(username, password, appName, appVersion, userAgent)
-    updateState({ access: access.appToken });
+    if (appToken.current || !checked.current) {
+      throw new Error('invalid session state');
+    }
+    const access = await setLogin(username, password, appName, appVersion, userAgent);
     storeContext.actions.setValue('login:timestamp', access.created);
-    setWebsocket(access.appToken)
+    setSession(access.appToken);
+    appToken.current = access.appToken;
+
     localStorage.setItem("session", JSON.stringify({
       access: access.appToken,
       timestamp: access.created,
@@ -96,10 +125,14 @@ export function useAppContext() {
   }
 
   const appAccess = async (token) => {
-    let access = await setAccountAccess(token, appName, appVersion, userAgent)
-    updateState({ access: access.appToken });
+    if (appToken.current || !checked.current) {
+      throw new Error('invalid session state');
+    }
+    const access = await setAccountAccess(token, appName, appVersion, userAgent);
     storeContext.actions.setValue('login:timestamp', access.created);
-    setWebsocket(access.appToken)
+    setSession(access.appToken);
+    appToken.current = access.appToken;
+
     localStorage.setItem("session", JSON.stringify({
       access: access.appToken,
       timestamp: access.created,
@@ -108,23 +141,21 @@ export function useAppContext() {
   }
 
   const appLogout = async () => {
+    clearSession();
     try {
-      await clearLogin(state.access);
+      await clearLogin(appToken.current);
     }
     catch (err) {
       console.log(err);
     }
-    updateState({ access: null });
-    clearWebsocket()
+    appToken.current = null;
     localStorage.removeItem("session");
-  }
+  };
 
   useEffect(() => {
     if (appRevision) {
       accountContext.actions.setRevision(appRevision.account);
       profileContext.actions.setRevision(appRevision.profile);
-      articleContext.actions.setRevision(appRevision.article);
-      groupContext.actions.setRevision(appRevision.group);
       cardContext.actions.setRevision(appRevision.card);
       channelContext.actions.setRevision(appRevision.channel);
     }
@@ -132,14 +163,6 @@ export function useAppContext() {
   }, [appRevision]);
   
   const setWebsocket = (token) => {
-
-    accountContext.actions.setToken(token);
-    profileContext.actions.setToken(token);
-    articleContext.actions.setToken(token);
-    groupContext.actions.setToken(token);
-    cardContext.actions.setToken(token);
-    channelContext.actions.setToken(token);
-
     let protocol;
     if (window.location.protocol === 'http:') {
       protocol = 'ws://';
@@ -148,20 +171,31 @@ export function useAppContext() {
       protocol = 'wss://';
     }
 
-    ws.current = new WebSocket(protocol + window.location.host + "/status");
+    updateState({ status: 'connecting' });
+    ws.current = createWebsocket(protocol + window.location.host + "/status?mode=ring");
     ws.current.onmessage = (ev) => {
       try {
-        let rev = JSON.parse(ev.data);
-        setAppRevision(rev);
-        updateState({ disconnected: false });
+        let activity = JSON.parse(ev.data);
+        updateState({ status: 'connected' });
+        if (activity.revision) {
+          setAppRevision(activity.revision);
+        }
+        else if (activity.ring) {
+          const { cardId, callId, calleeToken, iceUrl, iceUsername, icePassword } = activity.ring;
+          ringContext.actions.ring(cardId, callId, calleeToken, iceUrl, iceUsername, icePassword);
+        }
+        else {
+          setAppRevision(activity);
+        }
       }
       catch (err) {
         console.log(err);
+        ws.current.close();
       }
     }
     ws.current.onclose = (e) => {
-      updateState({ disconnected: true });
       console.log(e)
+      updateState({ status: 'disconnected' });
       setTimeout(() => {
         if (ws.current != null) {
           ws.current.onmessage = () => {}
@@ -170,14 +204,14 @@ export function useAppContext() {
           ws.current.onerror = () => {}
           setWebsocket(token);
         }
-      }, 1000)
+      }, 1000);
     }
     ws.current.onopen = () => {
       ws.current.send(JSON.stringify({ AppToken: token }))
     }
     ws.current.error = (e) => {
-      updateState({ disconnected: true });
       console.log(e)
+      ws.current.close();
     }
   }
  
@@ -185,6 +219,7 @@ export function useAppContext() {
     ws.current.onclose = () => {}
     ws.current.close()
     ws.current = null
+    updateState({ status: null });
   }
 
   useEffect(() => {
@@ -193,25 +228,19 @@ export function useAppContext() {
       try {
         const session = JSON.parse(storage)
         if (session?.access) {
-          setState({ access: session.access })
-          setWebsocket(session.access);   
-        } else {
-          setState({})
+          const access = session.access;
+          setSession(access);
+          appToken.current = access;
         }
       }
       catch(err) {
         console.log(err)
-        setState({})
       }
-    } else {
-      setState({})
     }
+    checked.current = true;
     // eslint-disable-next-line
   }, []);
 
-  if (state == null) {
-    return {};
-  }
   return { state, actions }
 }
 

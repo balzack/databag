@@ -1,31 +1,18 @@
-import { useState, useContext } from 'react';
-import { ScrollView, View, Alert, TouchableOpacity, Text } from 'react-native';
-import { useContact } from './useContact.hook';
+import { Alert, View, Text, TouchableOpacity } from 'react-native';
 import { styles } from './Contact.styled';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useContact } from './useContact.hook';
+import Ionicons from 'react-native-vector-icons/AntDesign';
 import { Logo } from 'utils/Logo';
-import Ionicons from '@expo/vector-icons/AntDesign';
-import Colors from 'constants/Colors';
+import { Colors } from 'constants/Colors';
 
-export function ContactTitle({ contact, closeContact }) {
-  const { state, actions } = useContact(contact, closeContact);
-
+export function ContactHeader({ contact }) {
   return (
-    <TouchableOpacity style={styles.resync} activeOpacity={1} onPress={actions.resync}>
-      <View style={styles.icon} />
-      <Text style={styles.title}>{ `${state.handle}@${state.node}` }</Text>
-      <View style={styles.icon}>
-        { state.offsync === 1 && (
-          <Ionicons name="exclamationcircleo" size={16} color={Colors.alert} />
-        )}
-      </View>
-    </TouchableOpacity>
-  );
+    <Text style={styles.headerText}>{ `${contact?.handle}@${contact?.node}` }</Text>
+  )
 }
 
-export function Contact({ contact, closeContact }) {
-
-  const { state, actions } = useContact(contact, closeContact);
+export function ContactBody({ contact }) {
+  const { state, actions } = useContact(contact);
 
   const getStatusText = (status) => {
     if (status === 'confirmed') {
@@ -173,152 +160,144 @@ export function Contact({ contact, closeContact }) {
     setContact(actions.connectContact);
   }
 
-  const Body = () => {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.status}>{ `[${getStatusText(state.status)}]` }</Text> 
-        <View style={{ width: 128 }}>
-          <Logo src={state.logo} width={128} height={128} radius={8} />
+  return (
+    <View style={styles.container}>
+      <Text style={styles.status}>{ `[${getStatusText(state.status)}]` }</Text> 
+      <View style={{ width: 128 }}>
+        <Logo src={state.logo} width={128} height={128} radius={8} />
+      </View>
+      <View style={styles.detail}>
+        <View style={styles.attribute}>
+          <Text style={styles.nametext}>{ state.name }</Text>
         </View>
-        <View style={styles.detail}>
-          <View style={styles.attribute}>
-            <Text style={styles.nametext}>{ state.name }</Text>
+        <View style={styles.attribute}>
+          <View style={styles.glyph}>
+            <Ionicons name="enviromento" size={14} color={Colors.text} />
           </View>
-          <View style={styles.attribute}>
-            <View style={styles.glyph}>
-              <Ionicons name="enviromento" size={14} color={Colors.text} />
-            </View>
-            <Text style={styles.locationtext}>{ state.location }</Text>
-          </View>
-          <View style={styles.attribute}>
-            <View style={styles.glyph}>
-              <Ionicons name="book" size={14} color={Colors.text} />
-            </View>
-            <Text style={styles.descriptiontext}>{ state.description }</Text>
-          </View>
+          <Text style={styles.locationtext}>{ state.location }</Text>
         </View>
-        <View style={styles.controls}>
-          { state.status === 'connected' && (
-            <>
-              <TouchableOpacity style={styles.button} onPress={disconnectContact}>
-                <Text style={styles.buttonText}>Disconnect</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.button} onPress={closeDelete}>
-                <Text style={styles.buttonText}>Delete Contact</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.button} onPress={blockContact}>
-                <Text style={styles.buttonText}>Block Contact</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.button} onPress={reportContact}>
-                <Text style={styles.buttonText}>Report Contact</Text>
-              </TouchableOpacity>
-            </>
-          )}
-          { state.status === 'connecting' && (
-            <>
-              <TouchableOpacity style={styles.button} onPress={cancelRequest}>
-                <Text style={styles.buttonText}>Close Request</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.button} onPress={closeDelete}>
-                <Text style={styles.buttonText}>Delete Contact</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.button} onPress={blockContact}>
-                <Text style={styles.buttonText}>Block Contact</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.button} onPress={reportContact}>
-                <Text style={styles.buttonText}>Report Contact</Text>
-              </TouchableOpacity>
-            </>
-          )}
-          { state.status === 'confirmed' && (
-            <>
-              <TouchableOpacity style={styles.button} onPress={connectContact}>
-                <Text style={styles.buttonText}>Request Connection</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.button} onPress={deleteContact}>
-                <Text style={styles.buttonText}>Delete Contact</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.button} onPress={blockContact}>
-                <Text style={styles.buttonText}>Block Contact</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.button} onPress={reportContact}>
-                <Text style={styles.buttonText}>Report Contact</Text>
-              </TouchableOpacity>
-            </>
-          )}
-          { state.status === 'pending' && (
-            <>
-              <TouchableOpacity style={styles.button} onPress={confirmAndConnect}>
-                <Text style={styles.buttonText}>Save and Connect</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.button} onPress={confirmContact}>
-                <Text style={styles.buttonText}>Save Contact</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.button} onPress={deleteContact}>
-                <Text style={styles.buttonText}>Ignore Request</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.button} onPress={blockContact}>
-                <Text style={styles.buttonText}>Block Contact</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.button} onPress={reportContact}>
-                <Text style={styles.buttonText}>Report Contact</Text>
-              </TouchableOpacity>
-            </>
-          )}
-          { state.status === 'requested' && (
-            <>
-              <TouchableOpacity style={styles.button} onPress={connectContact}>
-                <Text style={styles.buttonText}>Accept Connection</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.button} onPress={ignoreContact}>
-                <Text style={styles.buttonText}>Ignore Request</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.button} onPress={disconnectContact}>
-                <Text style={styles.buttonText}>Deny Request</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.button} onPress={deleteContact}>
-                <Text style={styles.buttonText}>Delete Contact</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.button} onPress={blockContact}>
-                <Text style={styles.buttonText}>Block Contact</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.button} onPress={reportContact}>
-                <Text style={styles.buttonText}>Report Contact</Text>
-              </TouchableOpacity>
-            </>
-          )}
-          { state.status == null && (
-            <>
-              <TouchableOpacity style={styles.button} onPress={saveAndConnect}>
-                <Text style={styles.buttonText}>Save and Connect</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.button} onPress={saveContact}>
-                <Text style={styles.buttonText}>Save Contact</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.button} onPress={reportContact}>
-                <Text style={styles.buttonText}>Report Contact</Text>
-              </TouchableOpacity>
-            </>
-          )}
+        <View style={styles.attribute}>
+          <View style={styles.glyph}>
+            <Ionicons name="book" size={14} color={Colors.text} />
+          </View>
+          <Text style={styles.descriptiontext}>{ state.description }</Text>
         </View>
       </View>
-    );
-  }
+      <View style={styles.controls}>
+        { state.status === 'connected' && (
+          <>
+            <TouchableOpacity style={styles.button} onPress={disconnectContact}>
+              <Text style={styles.buttonText}>Disconnect</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={closeDelete}>
+              <Text style={styles.buttonText}>Delete Contact</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={blockContact}>
+              <Text style={styles.buttonText}>Block Contact</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={reportContact}>
+              <Text style={styles.buttonText}>Report Contact</Text>
+            </TouchableOpacity>
+          </>
+        )}
+        { state.status === 'connecting' && (
+          <>
+            <TouchableOpacity style={styles.button} onPress={cancelRequest}>
+              <Text style={styles.buttonText}>Close Request</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={closeDelete}>
+              <Text style={styles.buttonText}>Delete Contact</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={blockContact}>
+              <Text style={styles.buttonText}>Block Contact</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={reportContact}>
+              <Text style={styles.buttonText}>Report Contact</Text>
+            </TouchableOpacity>
+          </>
+        )}
+        { state.status === 'confirmed' && (
+          <>
+            <TouchableOpacity style={styles.button} onPress={connectContact}>
+              <Text style={styles.buttonText}>Request Connection</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={deleteContact}>
+              <Text style={styles.buttonText}>Delete Contact</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={blockContact}>
+              <Text style={styles.buttonText}>Block Contact</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={reportContact}>
+              <Text style={styles.buttonText}>Report Contact</Text>
+            </TouchableOpacity>
+          </>
+        )}
+        { state.status === 'pending' && (
+          <>
+            <TouchableOpacity style={styles.button} onPress={confirmAndConnect}>
+              <Text style={styles.buttonText}>Save and Connect</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={confirmContact}>
+              <Text style={styles.buttonText}>Save Contact</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={deleteContact}>
+              <Text style={styles.buttonText}>Ignore Request</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={blockContact}>
+              <Text style={styles.buttonText}>Block Contact</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={reportContact}>
+              <Text style={styles.buttonText}>Report Contact</Text>
+            </TouchableOpacity>
+          </>
+        )}
+        { state.status === 'requested' && (
+          <>
+            <TouchableOpacity style={styles.button} onPress={connectContact}>
+              <Text style={styles.buttonText}>Accept Connection</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={ignoreContact}>
+              <Text style={styles.buttonText}>Ignore Request</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={disconnectContact}>
+              <Text style={styles.buttonText}>Deny Request</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={deleteContact}>
+              <Text style={styles.buttonText}>Delete Contact</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={blockContact}>
+              <Text style={styles.buttonText}>Block Contact</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={reportContact}>
+              <Text style={styles.buttonText}>Report Contact</Text>
+            </TouchableOpacity>
+          </>
+        )}
+        { state.status == null && (
+          <>
+            <TouchableOpacity style={styles.button} onPress={saveAndConnect}>
+              <Text style={styles.buttonText}>Save and Connect</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={saveContact}>
+              <Text style={styles.buttonText}>Save Contact</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={reportContact}>
+              <Text style={styles.buttonText}>Report Contact</Text>
+            </TouchableOpacity>
+          </>
+        )}
+      </View>
+    </View>
+  );
+}
+
+export function Contact({ contact }) {
 
   return (
-    <ScrollView style={styles.wrapper}>
-      { state.tabbed && (
-        <Body />
-      )}
-      { !state.tabbed && (
-        <SafeAreaView style={styles.drawer} edges={['top', 'bottom', 'right']}>
-          <View style={styles.header}>
-            <Text style={styles.headerText}>{ `${state.handle}@${state.node}` }</Text>
-          </View>
-          <Body />
-        </SafeAreaView>
-      )} 
-    </ScrollView>
-  )
+    <View>
+      <ContactHeader contact={contact} />
+      <ContactBody contact={contact} />
+    </View>
+  );
 }
 

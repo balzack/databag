@@ -7,14 +7,16 @@ import { StoreContext } from './StoreContext';
 
 export function useAccountContext() {
   const [state, setState] = useState({
-    init: false,
+    offsync: false,
     status: null,
     seal: null,
-    sealPrivate: null,
+    sealKey: null,
   });
   const access = useRef(null);
-  const revision = useRef(null);
-  const next = useRef(null);
+  const setRevision = useRef(null);
+  const curRevision = useRef(null);
+  const syncing = useRef(false);
+  const force = useRef(false); 
 
   const storeContext = useContext(StoreContext);
 
@@ -24,37 +26,48 @@ export function useAccountContext() {
 
   useEffect(() => {
     updateState({ sealKey: storeContext.state.sealKey });
-  }, [storeContext.state.sealKey]);
+  }, [storeContext.state]);
 
-  const setStatus = async (rev) => {
-    if (next.current == null) {
-      if (revision.current !== rev) {
-        let status = await getAccountStatus(access.current);
-        updateState({ init: true, status, seal: status.seal });
-        revision.current = rev;
+  const sync = async () => {
+    if (!syncing.current && (setRevision.current !== curRevision.current || force.current)) {
+      syncing.current = true;
+      force.current = false;
+
+      try {
+        const token = access.current;
+        const revision = curRevision.current;
+        const status = await getAccountStatus(token);
+        setRevision.current = revision;
+        updateState({ offsync: false, status, seal: status.seal });
       }
-      if (next.current != null) {
-        let r = next.current;
-        next.current = null;
-        setStatus(r);
+      catch (err) {
+        console.log(err);
+        syncing.current = false;
+        updateState({ offsync: true });
+        return;
       }
-    }
-    else {
-      next.current = rev;
+
+      syncing.current = false;
+      await sync();
     }
   }
 
   const actions = {
     setToken: (token) => {
+      if (access.current || syncing.current) {
+        throw new Error("invalid account session state");
+      }
       access.current = token;
+      curRevision.current = null;
+      setRevision.current = null;
+      setState({ offsync: false, status: null, seal: null, sealKey: null });
     },
     clearToken: () => {
       access.current = null;
-      revision.current = 0;
-      setState({ init: false, seal: {}, sealKey: {} });
     },
     setRevision: async (rev) => {
-      setStatus(rev);
+      curRevision.current = rev;
+      await sync();
     },
     setSearchable: async (flag) => {
       await setAccountSearchable(access.current, flag);
@@ -73,6 +86,10 @@ export function useAccountContext() {
     },
     setLogin: async (username, password) => {
       await setAccountLogin(access.current, username, password);
+    },
+    resync: async () => {
+      force.current = true;
+      await sync();
     },
   }
 

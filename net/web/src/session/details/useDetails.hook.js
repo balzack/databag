@@ -1,185 +1,241 @@
-import { useContext, useState, useEffect } from 'react';
+import { useContext, useState, useEffect, useRef } from 'react';
 import { CardContext } from 'context/CardContext';
-import { ChannelContext } from 'context/ChannelContext';
+import { ConversationContext } from 'context/ConversationContext';
 import { AccountContext } from 'context/AccountContext';
+import { ProfileContext } from 'context/ProfileContext';
 import { ViewportContext } from 'context/ViewportContext';
+import { getCardByGuid } from 'context/cardUtil';
+import { decryptChannelSubject, updateChannelSubject, getContentKey, getChannelSeals, isUnsealed } from 'context/sealUtil';
 
-export function useDetails(cardId, channelId) {
+export function useDetails() {
 
   const [state, setState] = useState({
     logo: null,
     img: null,
-    subject: null,
-    server: null,
     started: null,
     host: null,
-    contacts: [],
-    members: new Set(),
-    editSubject: false,
-    editMembers: false,
-    busy: false,
-    subjectUpdate: null,
+    title: null,
+    label: null,
+    members: [],
     unknown: 0,
-    display: null,
-    locked: false,
-    unlocked: false,
-    editable: false,
+
+    showEditMembers: false,
+    editMembers: new Set(),
+
+    showEditSubject: false,
+    editSubject: null,
+
+    display: 'small',
+    sealed: false,
+    contentKey: null,
+    seals: null,
   });
 
+  const conversation = useContext(ConversationContext);
   const card = useContext(CardContext);
   const account = useContext(AccountContext);
-  const channel = useContext(ChannelContext);
-  const viewport = useContext(ViewportContext);  
+  const viewport = useContext(ViewportContext);
+  const profile = useContext(ProfileContext);
+
+  const cardId = useRef();
+  const channelId = useRef();
+  const key = useRef();
+  const detailRevision = useRef();
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
   }
 
   useEffect(() => {
+    const { dataType, data } = conversation.state.channel?.data?.channelDetail || {};
+    if (dataType === 'sealed') {
+      try {
+        const { sealKey } = account.state;
+        const seals = getChannelSeals(data);
+        if (isUnsealed(seals, sealKey)) {
+          const decKey = getContentKey(seals, sealKey);
+          updateState({ sealed: true, contentKey: decKey, seals });
+        }
+        else {
+          updateState({ sealed: true, contentKey: null });
+        }
+      }
+      catch (err) {
+        console.log(err);
+        updateState({ sealed: true, contentKey: null });
+      }
+    }
+    else {
+      updateState({ sealed: false, contentKey: null });
+    }
+    // eslint-disable-next-line
+  }, [account.state.sealKey, conversation.state.channel?.data?.channelDetail]);
+
+  useEffect(() => {
     updateState({ display: viewport.state.display });
   }, [viewport]);
 
   useEffect(() => {
-    let img, subject, subjectUpdate, host, started, contacts, locked, unlocked, editable;
-    let chan;
-    if (cardId) {
-      const cardChan = card.state.cards.get(cardId);
-      if (cardChan) {
-        chan = cardChan.channels.get(channelId);
-      }
+
+    const cardValue = conversation.state.card;
+    const channelValue = conversation.state.channel;
+
+    // extract channel created info
+    let started;
+    let host;
+    const date = new Date(channelValue?.data?.channelDetail?.created * 1000);
+    const now = new Date();
+    if(now.getTime() - date.getTime() < 86400000) {
+      started = date.toLocaleTimeString([], {hour: 'numeric', minute:'2-digit'});
     }
     else {
-      chan = channel.state.channels.get(channelId);
+      started = date.toLocaleDateString("en-US");
     }
-
-    if (chan) {
-      if (chan.contacts?.length === 0) {
-        img = 'solution';
-        subject = 'Notes';
-      }
-      else if (chan.contacts?.length > 1) {
-        img = 'appstore'
-        subject = 'Group';
-      }
-      else {
-        img = 'team';
-        subject = 'Conversation'
-      }
-      if (chan.data.channelDetail.dataType === 'sealed') {
-        editable = false;
-        try {
-          const seals = JSON.parse(chan.data.channelDetail.data).seals;
-          seals.forEach(seal => {
-            if (account.state.sealKey.public === seal.publicKey) {
-              editable = true;
-            }
-          });
-        }
-        catch (err) {
-          console.log(err);
-        }
-        locked = true;
-        unlocked = chan.data.unsealedChannel != null;
-        if (chan.data.unsealedChannel?.subject) {
-          subject = chan.data.unsealedChannel.subject;
-          subjectUpdate = subject;
-        }
-      }
-      else {
-        locked = false;
-        editable = (chan.cardId == null);
-        const parsed = JSON.parse(chan.data.channelDetail.data);
-        if (parsed.subject) {
-          subject = parsed.subject;
-          subjectUpdate = subject;
-        }
-      }
-      const date = new Date(chan.data.channelDetail.created * 1000);
-      const now = new Date();
-      if(now.getTime() - date.getTime() < 86400000) {
-        started = date.toLocaleTimeString([], {hour: 'numeric', minute:'2-digit'});
-      }
-      else {
-        started = date.toLocaleDateString("en-US");
-      }
-      if (chan.cardId) {
-        host = false;
-      }
-      else {
-        host = true;
-      }
-    }
-
-    if (chan?.contacts ) {
-      contacts = chan.contacts.map((contact) => contact?.id);
+    if (cardValue) {
+      host = cardValue.id;
     }
     else {
-      contacts = [];
+      host = null;
     }
-    
-    let members = new Set(contacts);
+
+    // extract member info
+    let memberCount = 0;
+    let names = [];
+    let img;
+    let logo;
+    let members = [];
     let unknown = 0;
-    contacts.forEach(id => {
-      if (id == null) {
-        unknown++;
+    if (cardValue) {
+      members.push(cardValue.id);
+      const profile = cardValue.data?.cardProfile;
+      if (profile?.name) {
+        names.push(profile.name);
       }
-    });
+      if (profile?.imageSet) {
+        img = null;
+        logo = card.actions.getCardImageUrl(cardValue.id);
+      }
+      else {
+        img = 'avatar';
+        logo = null;
+      }
+      memberCount++;
+    }
+    if (channelValue?.data?.channelDetail?.members) {
+      for (let guid of channelValue.data.channelDetail.members) {
+        if (guid !== profile.state.identity.guid) {
+          const contact = getCardByGuid(card.state.cards, guid);
+          if (contact) {
+            members.push(contact.id);
+          }
+          else {
+            unknown++;
+          }
+    
+          const profile = contact?.data?.cardProfile;
+          if (profile?.name) {
+            names.push(profile.name);
+          }
+          if (profile?.imageSet) {
+            img = null;
+            logo = card.actions.getCardImageUrl(contact.id);
+          }
+          else {
+            img = 'avatar';
+            logo = null;
+          }
+          memberCount++;
+        }
+      }
+    }
 
-    updateState({ img, subject, host, started, contacts, members, unknown, subjectUpdate, locked, unlocked, editable });
-  }, [cardId, channelId, card, channel, account]);
+    let label;
+    if (memberCount === 0) {
+      img = 'solution';
+      label = 'Notes';
+    }
+    else if (memberCount === 1) {
+      label = names.join(',');
+    }
+    else {
+      img = 'appstore';
+      label = names.join(',');
+    }
+
+    if (cardId.current !== cardValue?.id || channelId.current !== channelValue?.id ||
+        detailRevision.current !== channelValue?.data?.detailRevision || key.current !== state.contentKey) {
+      let title;
+      try {
+        const detail = channelValue?.data?.channelDetail;
+        if (detail?.dataType === 'sealed') {
+          if (state.contentKey) {
+            const unsealed = decryptChannelSubject(detail.data, state.contentKey);
+            title = unsealed.subject;
+          }
+          else {
+            title = '...';
+          }
+        }
+        else if (detail?.dataType === 'superbasic') {
+          const data = JSON.parse(detail.data);
+          title = data.subject;
+        }
+      }
+      catch(err) {
+        console.log(err);
+      }
+      cardId.current = cardValue?.id;
+      channelId.current = channelValue?.id;
+      detailRevision.current = channelValue?.data?.detailRevision;
+      key.current = state.contentKey;
+      updateState({ started, host, title, label, img, logo, unknown, members,
+        editSubject: title, editMembers: new Set(members) });
+    }
+    else {
+      updateState({ started, host, label, img, logo, unknown, members,
+        editMembers: new Set(members) });
+    }
+    // eslint-disable-next-line
+  }, [conversation.state, card.state, state.contentKey]);
 
   const actions = {
     setEditSubject: () => {
-      updateState({ editSubject: true });
+      updateState({ showEditSubject: true });
     },
     clearEditSubject: () => {
-      updateState({ editSubject: false });
+      updateState({ showEditSubject: false });
     },
-    setSubjectUpdate: (subjectUpdate) => {
-      updateState({ subjectUpdate });
+    setSubjectUpdate: (editSubject) => {
+      updateState({ editSubject });
     },
     setSubject: async () => {
-      if (!state.busy) {
-        try {
-          updateState({ busy: true });
-          if (state.locked) {
-            channel.actions.setChannelSealedSubject(channelId, state.subjectUpdate, account.state.sealKey);
-          }
-          else {
-            channel.actions.setChannelSubject(channelId, state.subjectUpdate);
-          }
-          updateState({ busy: false });
-        }
-        catch(err) {
-          console.log(err);
-          updateState({ busy: false });
-          throw new Error("set channel subject failed");
+      if (state.sealed) {
+        if (state.contentKey) {
+          const updated = updateChannelSubject(state.editSubject, state.contentKey);
+          updated.seals = state.seals;
+          await conversation.actions.setChannelSubject('sealed', updated);
         }
       }
       else {
-        throw new Error('operation in progress');
+        const subject = { subject: state.editSubject };
+        await conversation.actions.setChannelSubject('superbasic', subject);
       }
     },
     setEditMembers: () => {
-      updateState({ editMembers: true });
+      updateState({ editMembers: new Set(state.members), showEditMembers: true });
     },
     clearEditMembers: () => {
-      updateState({ editMembers: false });
+      updateState({ showEditMembers: false });
     },
-    onMember: async (card) => {
-      if (state.members.has(card)) {
-        channel.actions.clearChannelCard(channelId, card);
-      }
-      else {
-        channel.actions.setChannelCard(channelId, card);
-      }
+    setMember: async (id) => {
+      await conversation.actions.setChannelCard(id);
     },
-    deleteChannel: async () => {
-      await channel.actions.removeChannel(channelId);
+    clearMember: async (id) => {
+      await conversation.actions.clearChannelCard(id);
     },
-    leaveChannel: async () => {
-      await card.actions.removeChannel(cardId, channelId);
-    }
+    removeChannel: async () => {
+      await conversation.actions.removeChannel();
+    },
   };
 
   return { state, actions };

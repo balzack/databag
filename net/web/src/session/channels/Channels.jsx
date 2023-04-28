@@ -1,5 +1,5 @@
-import { Modal, Input, List, Button, Switch } from 'antd';
-import { ChannelsWrapper, AddFooter } from './Channels.styled';
+import { Modal, Input, List, Button } from 'antd';
+import { ChannelsWrapper } from './Channels.styled';
 import { CommentOutlined, SearchOutlined } from '@ant-design/icons';
 import { useChannels } from './useChannels.hook';
 import { ChannelItem } from './channelItem/ChannelItem';
@@ -9,34 +9,10 @@ export function Channels({ open, active }) {
 
   const { state, actions } = useChannels();
 
-  const addChannel = async () => {
-    try {
-      const id = await actions.addChannel();
-      actions.clearShowAdd();
-      open(id);
-    }
-    catch(err) {
-      Modal.error({
-        title: 'Failed to Create Topic',
-        content: 'Please try again.',
-      });
-    }
+  const added = (id) => {
+    actions.clearShowAdd();
+    open(id);
   };
-
-  const addFooter = (
-    <AddFooter>
-      <div class="seal">
-        { state.sealable && (
-          <>
-            <Switch checked={state.seal} onChange={actions.setSeal} size="small" />
-            <span class="sealText">Sealed Channel</span>
-          </>
-        )}
-      </div>
-      <Button key="back" onClick={actions.clearShowAdd}>Cancel</Button>
-      <Button key="save" type="primary" loading={state.busy} onClick={addChannel}>Save</Button>
-    </AddFooter>
-  );
 
   return (
     <ChannelsWrapper>
@@ -47,10 +23,7 @@ export function Channels({ open, active }) {
         </div>
         { state.display === 'small' && (
           <div class="inline">
-            <div class="add" onClick={actions.setShowAdd}>
-              <CommentOutlined />
-              <div class="label">New</div>
-            </div> 
+            <Button type="primary" icon={<CommentOutlined />} onClick={actions.setShowAdd}>New</Button>
           </div>
         )}
       </div>
@@ -58,7 +31,8 @@ export function Channels({ open, active }) {
         { state.channels.length > 0 && (
           <List local={{ emptyText: '' }} itemLayout="horizontal" dataSource={state.channels} gutter="0"
             renderItem={item => (
-              <ChannelItem item={item} openChannel={open} active={active} />
+              <ChannelItem item={item} openChannel={open}
+                  active={active.card === item.cardId && active.channel === item.channelId} />
             )}
           />
         )}
@@ -68,15 +42,12 @@ export function Channels({ open, active }) {
       </div>
       { state.display !== 'small' && (
         <div class="bar">
-          <div class="add" onClick={actions.setShowAdd}>
-            <CommentOutlined />
-            <div class="label">New Topic</div>
-          </div>
+          <Button type="primary" icon={<CommentOutlined />} onClick={actions.setShowAdd}>New Topic</Button>
         </div>
       )}
-      <Modal title="New Topic" centered visible={state.showAdd} footer={addFooter}
+      <Modal bodyStyle={{ padding: 16 }} title="New Topic" centered visible={state.showAdd} footer={null} destroyOnClose={true}
           onCancel={actions.clearShowAdd}>
-        <AddChannel state={state} actions={actions} />
+        <AddChannel added={added} cancelled={actions.clearShowAdd} />
       </Modal>
     </ChannelsWrapper>
   );

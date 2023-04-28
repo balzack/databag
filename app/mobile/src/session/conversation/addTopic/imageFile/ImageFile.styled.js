@@ -14,4 +14,3 @@ export const styles = StyleSheet.create({
     borderColor: Colors.divider,
   },
 })
-

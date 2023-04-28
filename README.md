@@ -20,16 +20,16 @@
 <br>
 
 Databag is a self-hosted messaging service. Notable features include:
-- Public-private key based identity (not bound to any blockchain or hosting domain)
-- End-to-end encryption (the hosting admin cannot view sealed topics)
+- Decentralized (direct communication between app and server node)
 - Federated (accounts on different nodes can communicate)
+- Public-Private key based identity (not bound to any blockchain or hosting domain)
+- End-to-End encryption (the hosting admin cannot view sealed topics, deafult unsealed)
+- Audio and Video Calls (nat traversal requires separate relay server)
 - Topic based threads (messages organized by topic not contacts)
-- Lightweight (server runs on a raspberry pi zero v1.3)
-- Decentralized (direct communication between app and contact's node)
+- Lightweight (server can run on a raspberry pi zero v1.3)
 - Low latency (use of websockets for push events to avoid polling)
-- Responsive (renders well in phone, tablet and pc)
 - Unlimited accounts per node (host for your whole family)
-- Mobile alerts (push notifications on new contacts and messages)
+- Mobile alerts (push notifications on new contacts, messages, and calls)
 
 <br>
 <p align="center">
@@ -88,3 +88,13 @@ From Your Browser:
 Instruction for installing without a container on a Raspberry Pi Zero are [here](/doc/pizero.md).
 
 Instruction for installing without a container in AWS are [here](/doc/aws.md).
+
+## Audio and Video Calls
+
+Databag provides audio and video calling and relies on a STUN/TURN relay server for NAT traversal. Testing was done with both [cuturn](https://github.com/coturn/coturn) and [pion](https://github.com/pion/turn) and should work with any implementation. Instructions for installing a coturn server are provided [here](https://gabrieltanner.org/blog/turn-server/).
+
+If you want to enable audio and video calls, you should setup your own relay server. For testing purposes you can however use the demo relay server configuration. In the admin configuration modal, set:
+  - Enable WebRTC Calls: -switch on-
+  - WebRTC Server URL: turn:34.210.172.114:3478?transport=udp
+  - WebRTC Username: user
+  - WebRTC Password: pass

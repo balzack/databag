@@ -1,15 +1,13 @@
 import { useState, useEffect, useRef, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { CardContext } from 'context/CardContext';
-import { useWindowDimensions } from 'react-native'
 import { getListingMessage } from 'api/getListingMessage';
+import { getListingImageUrl } from 'api/getListingImageUrl';
 import { addFlag } from 'api/addFlag';
-import config from 'constants/Config';
+import { getCardByGuid } from 'context/cardUtil';
 
-export function useContact(contact, close) {
+export function useContact(contact) {
 
   const [state, setState] = useState({
-    tabbed: null,
     name: null,
     handle: null,
     node: null,
@@ -23,7 +21,6 @@ export function useContact(contact, close) {
     offsync: false,
   });
 
-  const dimensions = useWindowDimensions();
   const card = useContext(CardContext);
 
   const updateState = (value) => {
@@ -31,46 +28,19 @@ export function useContact(contact, close) {
   }
 
   useEffect(() => {
-    if (dimensions.width > config.tabbedWidth) {
-      updateState({ tabbed: false });
+    const contactCard = getCardByGuid(card.state.cards, contact?.guid);
+    if (contactCard) {
+      const { offsync, profile, detail, cardId } = contactCard.card;
+      const { name, handle, node, location, description, guid, imageSet, revision } = profile;
+      const logo = imageSet ? card.actions.getCardImageUrl(cardId) : 'avatar';
+      updateState({ offsync, name, handle, node, location, description, logo, cardId, guid, status: detail.status });
     }
     else {
-      updateState({ tabbed: true });
-    }
-  }, [dimensions]);
-
-  useEffect(() => {
-    let stateSet = false;
-    if (contact?.card) {
-      const selected = card.state.cards.get(contact.card);
-      if (selected) {
-        const { offsync, profile, detail, cardId } = selected;
-        const { name, handle, node, location, description, guid, imageSet, revision } = profile;
-        const logo = imageSet ? card.actions.getCardLogo(cardId, revision) : 'avatar';
-        updateState({ offsync, name, handle, node, location, description, logo, cardId, guid, status: detail.status });
-        stateSet = true;
-      }
-    }
-    if (!stateSet && contact?.account) {
-      const { handle, name, node, logo, guid } = contact.account;
-      const selected = card.actions.getByGuid(guid);
-      if (selected) {
-        const { offsync, cardId, profile, detail } = selected;
-        const { name, handle, node, location, description, guid, imageSet, revision } = profile;
-        const logo = imageSet ? card.actions.getCardLogo(cardId, revision) : 'avatar';
-        updateState({ offsync, name, handle, node, location, description, logo, cardId, guid, status: detail.status });
-        stateSet = true;
-      }
-      else {
-        const { name, handle, node, location, description, logo, guid } = contact.account;
-        updateState({ offsync: false, name, handle, node, location, description, logo, guid, cardId: null, status: null });
-        stateSet = true;
-      }
-    }
-    if (!stateSet) {
-      setState({});
-    }
-  }, [contact, card]);
+      const { guid, handle, node, name, location, description, imageSet } = contact || {};
+      const logo = imageSet ? getListingImageUrl(node, guid) : 'avatar';
+      updateState({ guid, handle, node, name, location, description, logo, offsync: false, status: null });
+    } 
+  }, [contact, card.state]);
 
   const applyAction = async (action) => {
     if (!state.busy) {
@@ -153,13 +123,11 @@ export function useContact(contact, close) {
           console.log(err);
         }
         await card.actions.removeCard(state.cardId);
-        close();
       });
     },
     deleteContact: async () => {
       await applyAction(async () => {
         await card.actions.removeCard(state.cardId);
-        close();
       });
     },
     connectContact: async () => {
@@ -175,7 +143,6 @@ export function useContact(contact, close) {
     blockContact: async () => {
       await applyAction(async () => {
         await card.actions.setCardBlocked(state.cardId);
-        close();
       });
     },
     reportContact: async () => {
@@ -188,4 +155,5 @@ export function useContact(contact, close) {
 
   return { state, actions };
 }
+
 

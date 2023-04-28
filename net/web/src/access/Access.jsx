@@ -1,52 +1,46 @@
-import React, { useContext, useEffect } from 'react';
-import { useNavigate } from "react-router-dom";
-import { AppContext } from 'context/AppContext';
-import { ViewportContext } from 'context/ViewportContext';
+import { useAccess } from './useAccess.hook';
 import { AccessWrapper } from './Access.styled';
 import { Login } from './login/Login';
+import { Admin } from './admin/Admin';
 import { CreateAccount } from './createAccount/CreateAccount';
 
 import login from 'images/login.png'
 
 export function Access({ mode }) {
 
-  const navigate = useNavigate();
-  const app = useContext(AppContext);
-  const viewport = useContext(ViewportContext);
-
-  useEffect(() => {
-    if (app.state) {
-      if (app.state.access) {
-        navigate('/session');
-      }
-    }
-  }, [app, navigate]);
+  const { state } = useAccess();
 
   return (
     <AccessWrapper>
-      { (viewport.state.display === 'large' || viewport.state.display === 'xlarge') && (
-        <div class="split-layout">
-          <div class="left">
-            <img class="splash" src={login} alt="Databag Splash" />
+      { (state.display === 'large' || state.display === 'xlarge') && (
+        <div className="split-layout">
+          <div className="left">
+            <img className="splash" src={login} alt="Databag Splash" />
           </div>
-          <div class="right">
+          <div className="right">
             { mode === 'login' && (
               <Login />
             )}
             { mode === 'create' && (
               <CreateAccount />
+            )}
+            { mode === 'admin' && (
+              <Admin />
             )}
           </div>
         </div>
       )}
-      { (viewport.state.display === 'medium' || viewport.state.display === 'small') && (
-        <div class="full-layout">
-          <div class="center">
+      { (state.display === 'medium' || state.display === 'small') && (
+        <div className="full-layout">
+          <div className="center">
             { mode === 'login' && (
               <Login />
             )}
             { mode === 'create' && (
               <CreateAccount />
+            )}
+            { mode === 'admin' && (
+              <Admin />
             )}
           </div>
         </div>

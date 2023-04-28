@@ -5,6 +5,7 @@ import (
 	"github.com/google/uuid"
 	"gorm.io/gorm"
 	"net/http"
+  "time"
 )
 
 //AddChannelTopic adds a topic to a channel through either contact or agent query param
@@ -55,17 +56,19 @@ func AddChannelTopic(w http.ResponseWriter, r *http.Request) {
 		}
 
 		topicSlot.Topic = topic
+    revision := act.ChannelRevision + 1;
 
 		// update parent revision
-		if res := tx.Model(&channelSlot.Channel).Update("topic_revision", act.ChannelRevision+1).Error; res != nil {
+		if res := tx.Model(&store.Channel{}).Where("id = ?", channelSlot.Channel.ID).Update("topic_revision", revision).Error; res != nil {
 			return res
 		}
-		if res := tx.Model(&channelSlot).Update("revision", act.ChannelRevision+1).Error; res != nil {
+		if res := tx.Model(&store.ChannelSlot{}).Where("id = ?", channelSlot.ID).Update("revision", revision).Error; res != nil {
 			return res
 		}
-		if res := tx.Model(act).Update("channel_revision", act.ChannelRevision+1).Error; res != nil {
+		if res := tx.Model(&store.Account{}).Where("id = ?", act.ID).Update("channel_revision", revision).Error; res != nil {
 			return res
 		}
+    act.ChannelRevision = revision;
 		return nil
 	})
 	if err != nil {
@@ -88,16 +91,19 @@ func AddChannelTopic(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	SetStatus(act)
-	for _, card := range cards {
-		SetContactChannelNotification(act, &card)
-	}
-  for _, card := range notify {
-    SetContactPushNotification(&card, "content.addChannelTopic." + channelSlot.Channel.DataType)
-  }
-  if act.GUID != guid {
-    go SendPushEvent(*act, "content.addChannelTopic." + channelSlot.Channel.DataType)
-  }
-
 	WriteResponse(w, getTopicModel(topicSlot))
+
+  go func() {
+    time.Sleep(25 * time.Millisecond);
+    SetStatus(act)
+    for _, card := range cards {
+      SetContactChannelNotification(act, &card)
+    }
+    for _, card := range notify {
+      SetContactPushNotification(&card, "content.addChannelTopic." + channelSlot.Channel.DataType)
+    }
+    if act.GUID != guid {
+      go SendPushEvent(*act, "content.addChannelTopic." + channelSlot.Channel.DataType)
+    }
+  }()
 }

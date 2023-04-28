@@ -29,4 +29,3 @@ export function AddMember({ members, item, setCard, clearCard }) {
     </TouchableOpacity>
   );
 }
-

@@ -13,6 +13,8 @@ export function useReset() {
     enabled: false,
     server: null,
     token: null,
+    agree: false,
+    showTerms: false,
   });
 
   const updateState = (value) => {
@@ -46,6 +48,15 @@ export function useReset() {
     },
     login: () => {
       navigate('/login');
+    },
+    showTerms: () => {
+      updateState({ showTerms: true });
+    },
+    hideTerms: () => {
+      updateState({ showTerms: false });
+    },
+    agree: (agree) => {
+      updateState({ agree });
     },
     access: async () => {
       if (!state.busy) {

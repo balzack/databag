@@ -16,6 +16,7 @@ export const Colors = {
   disabled: '#aaaaaa',
   text: '#444444',
   link: '#0077CC',
+  lightText: '#686868',
 
   active: '#222222',
   idle: '#707070',

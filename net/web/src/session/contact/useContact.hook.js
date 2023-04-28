@@ -1,8 +1,8 @@
 import { useContext, useState, useEffect } from 'react';
 import { CardContext } from 'context/CardContext';
 import { ViewportContext } from 'context/ViewportContext';
-import { getListingImageUrl } from 'api/getListingImageUrl';
 import { getListingMessage } from 'api/getListingMessage';
+import { getCardByGuid } from 'context/cardUtil';
 
 export function useContact(guid, listing, close) {
 
@@ -14,8 +14,6 @@ export function useContact(guid, listing, close) {
     description: null,
     handle: null,
     node: null,
-    removed: false,
-    init: false,
     status: null,
     busy: false,
     buttonStatus: 'button idle',
@@ -42,39 +40,30 @@ export function useContact(guid, listing, close) {
   }
 
   useEffect(() => {
-    let logo, name, location, description, handle, node, status, cardId;
-    let contact = card.actions.getCardByGuid(guid);
+    const contact = getCardByGuid(card.state.cards, guid);
     if (contact) {
-      let cardProfile = contact?.data?.cardProfile;
-      let cardDetail = contact?.data?.cardDetail;
-      cardId = contact.id;
-      handle = cardProfile.handle;
-      node = cardProfile.node;
-      logo = card.actions.getImageUrl(contact.id);
-      name = cardProfile.name;
-      location = cardProfile.location;
-      description = cardProfile.description;
-      status = statusMap(cardDetail.status);
+      const profile = contact?.data?.cardProfile;
+      const detail = contact?.data?.cardDetail;
+      const { imageSet, name, location, description, handle, node } = profile;      
+      const status = statusMap(detail.status);
+      const cardId = contact.id;
+      const logo = imageSet ? card.actions.getCardImageUrl(cardId) : null;
+      updateState({ logo, name, location, description, handle, node, status, cardId });
     }
     else if (listing) {
-      handle = listing.handle;
-      cardId = null;
-      node = listing.node;
-      logo = listing.imageSet ? getListingImageUrl(listing.node, listing.guid) : null;
-      name = listing.name;
-      location = listing.location;
-      description = listing.description;
-      status = 'unsaved';
+      const { logo, name, location, description, handle, node } = listing;
+      updateState({ logo, name, location, description, handle, node, status: 'unsaved', cardId: null });
     }
     else {
-      updateState({ removed: true });
+      updateState({ logo: null, name: null, cardId: null, location: null, description: null, handle: null,
+         status: null });
     }
-    updateState({ init: true, logo, name, location, description, handle, node, status, cardId });
-  }, [card, guid, listing]); 
+    // eslint-disable-next-line
+  }, [card.state, guid, listing]); 
 
   useEffect(() => {
     updateState({ display: viewport.state.display });
-  }, [viewport]);
+  }, [viewport.state]);
 
   const applyAction = async (action) => {
     if (!state.busy) {

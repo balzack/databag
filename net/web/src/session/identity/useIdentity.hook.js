@@ -8,7 +8,7 @@ export function useIdentity() {
     url: null,
     name: null,
     handle: null,
-    disconnected: false,
+    status: null,
     init: false,
   });
 
@@ -25,13 +25,12 @@ export function useIdentity() {
       let url = !image ? null : profile.state.imageUrl;
       updateState({ init: true, name, handle, url });
     }
-  }, [profile]);
+  }, [profile.state]);
 
   useEffect(() => {
-    if (app.state) {
-      updateState({ disconnected: app.state.disconnected });
-    }
-  }, [app]);
+    const { status } = app.state;
+    updateState({ status });
+  }, [app.state]);
 
   const actions = {
     logout: app.actions.logout,

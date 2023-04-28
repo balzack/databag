@@ -6,12 +6,14 @@ import { LogoutOutlined, InfoCircleOutlined, ExclamationCircleOutlined, DownOutl
 
 export function Identity({ openAccount, openCards, cardUpdated }) {
 
+  const [modal, modalContext] = Modal.useModal();
   const { state, actions } = useIdentity();
 
   const logout = () => {
-    Modal.confirm({
+    modal.confirm({
       title: 'Are you sure you want to logout?',
       icon: <LogoutOutlined />,
+      bodyStyle: { padding: 16 },
       onOk() {
         actions.logout();
       },
@@ -36,6 +38,7 @@ export function Identity({ openAccount, openCards, cardUpdated }) {
   return (
     <Dropdown overlay={menu} overlayStyle={{ minWidth: 0 }} trigger={['click']} placement="bottomRight">
       <IdentityWrapper>
+        { modalContext }
         { state.init && (
           <Logo url={state.url} width={40} height={40} radius={4} />
         )}
@@ -43,7 +46,7 @@ export function Identity({ openAccount, openCards, cardUpdated }) {
           <div class="name">{state.name}</div>
           <div class="handle">
             <div class="notice">
-              { state.disconnected && ( 
+              { state.status !== 'connected' && ( 
                 <Tooltip placement="right" title="disconnected from server">
                   <ErrorNotice>
                     <ExclamationCircleOutlined />
@@ -70,4 +73,5 @@ export function Identity({ openAccount, openCards, cardUpdated }) {
     </Dropdown>
   );
 }
+
 

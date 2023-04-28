@@ -34,7 +34,7 @@ export const ContactWrapper = styled.div`
     }
   }
 
-  .content {
+  .midContent {
     min-height: 0;
     width: 100%;
     overflow: auto;
@@ -42,61 +42,70 @@ export const ContactWrapper = styled.div`
     flex-direction: row;
     justify-content: center;
     padding-top: 32px;
+  }
 
-    .logo {
-      position: relative;
-      width: 20vw;
-      margin-right: 32px;
+  .rightContent {
+    min-height: 0;
+    width: 100%;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .logo {
+    position: relative;
+    width: 20vw;
+    margin-right: 32px;
+    margin-left: 32px;
+  }
+
+  .details {
+    display: flex;
+    flex-direction: column;
+
+    .notset {
+      font-style: italic;
+      color: ${Colors.grey};
     }
 
-    .details {
+    .name {
       display: flex;
-      flex-direction: column;
-
-      .notset {
-        font-style: italic;
-        color: ${Colors.grey};
+      flex-direction: row;
+      align-items: center;
+ 
+      .data {
+        padding-right: 8px;
+        font-size: 24px;
+        font-weight: bold;
       }
+    }
 
-      .name {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-   
-        .data {
-          padding-right: 8px;
-          font-size: 24px;
-          font-weight: bold;
-        }
+    .location {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      padding-bottom: 8px;
+  
+      .data {
+        padding-left: 8px;
       }
+    }
 
-      .location {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        padding-bottom: 8px;
-    
-        .data {
-          padding-left: 8px;
-        }
-      }
+    .description {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      padding-bottom: 8px;
 
-      .description {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        padding-bottom: 8px;
-
-        .data {
-          padding-left: 8px;
-        }
+      .data {
+        padding-left: 8px;
       }
     }
   }
 
   .view {
     width: 100%;
-    height: 100%;
     overflow: auto;
     display: flex;
     flex-direction: column;
@@ -125,52 +134,6 @@ export const ContactWrapper = styled.div`
         justify-content: center;
         align-items: center;
       }
-    }
-
-    .logo {
-      position: relative;
-      width: 50%;
-      margin-bottom: 16px;
-    }
-
-    .details {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-
-      .name {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-   
-        .data {
-          padding-right: 8px;
-          font-size: 24px;
-          font-weight: bold;
-        }
-      }
-
-      .location {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        padding-bottom: 8px;
-    
-        .data {
-          padding-left: 8px;
-        }
-      }
-
-      .description {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        padding-bottom: 8px;
-
-        .data {
-          padding-left: 8px;
-        }
-      } 
     }
   }
 

@@ -1,71 +1,85 @@
-import { useRef, useState, useEffect, useContext } from 'react';
-import { ConversationContext } from 'context/ConversationContext';
+import { useEffect, useState, useContext, useRef } from 'react';
+import { ProfileContext } from 'context/ProfileContext';
+import { CardContext } from 'context/CardContext';
 import { AccountContext } from 'context/AccountContext';
-import CryptoJS from 'crypto-js';
-import { RSA } from 'react-native-rsa-native';
+import { ConversationContext } from 'context/ConversationContext';
+import { getChannelSubjectLogo } from 'context/channelUtil';
+import { getChannelSeals, isUnsealed, getContentKey, encryptTopicSubject, decryptTopicSubject } from 'context/sealUtil';
 
 export function useConversation() {
-
   const [state, setState] = useState({
-    topics: [],
+    hosted: null,
     subject: null,
     logo: null,
-    latched: true,
-    momentum: false,
+    topic: [],
+    loaded: false,
+    contentKey: null,
     focus: null,
-    host: null,
     editing: false,
     editTopicId: null,
-    editData: null,
+    editType: null,
     editMessage: null,
-    init: false,
-    delayed: false,
-    error: false,
-    keyboard: false,
-    locked: false,
-    sealKey: null,
-    delayed: false,
-    more: false,
+    editData: null,
+    updateBusy: false,
+    moreBusy: false,
   });
-
-  const init = useRef(true);
-  const delay = useRef(null);
-  const conversation = useContext(ConversationContext);
-  const account = useContext(AccountContext);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
   }
 
-  unlockSeal = async () => {
-    const { locked, seals } = conversation.state;
-    try {
-      let sealKey;
-      if (seals?.length) {
-        for (let i = 0; i < seals.length; i++) {
-          const seal = seals[i];
-          if (seal.publicKey === account.state.sealKey?.public) {
-            const key = '-----BEGIN RSA PRIVATE KEY-----\n' + account.state.sealKey.private + '\n-----END RSA PRIVATE KEY-----'
-            const sealKey = await RSA.decrypt(seal.sealedKey, key);
-            return updateState({ locked, sealKey }); 
-          }
+  const profile = useContext(ProfileContext);
+  const card = useContext(CardContext);
+  const conversation = useContext(ConversationContext);
+  const account = useContext(AccountContext);
+
+  const contentKey = useRef();
+  const keyId = useRef();
+
+  useEffect(() => {
+    setContentKey();
+  }, [conversation.state, account.state]);
+
+  const setContentKey = async () => {
+    const type = conversation.state.channel?.detail?.dataType;
+    if (type === 'sealed') {
+      const cardId = conversation.state.card?.card?.cardId;
+      const channelId = conversation.state.channel?.channelId;
+      const contentId = `${cardId}:${channelId}`;
+      if (contentId !== keyId.current) {
+        const channelDetail = conversation.state.channel?.detail;
+        const seals = getChannelSeals(channelDetail?.data);
+        const sealKey = account.state.sealKey;
+        if (isUnsealed(seals, sealKey)) {
+          contentKey.current = await getContentKey(seals, sealKey);
+          keyId.current = contentId;
+          updateState({ contentKey: contentKey.current });
+        }
+        else if (keyId.current != null) {
+          contentKey.current = null;
+          keyId.current = null;
+          updateState({ contentKey: null });
         }
       }
     }
-    catch(err) {
-      console.log(err);
+    else if (keyId.current != null) {
+      contentKey.current = null;
+      keyId.current = null;
+      updateState({ contentKey: null });
     }
-    return updateState({ locked, sealKey: null });
-  }
- 
-  useEffect(() => {
-    unlockSeal();
-  }, [conversation.state.locked, conversation.state.seals, account.state.sealKey])
+  };
 
   useEffect(() => {
-    const { error, subject, logo, topics, host, init } = conversation.state;
+    const loaded = conversation.state.loaded;
+    const cardId = conversation.state.card?.card?.cardId;
+    const profileGuid = profile.state.identity?.guid;
+    const channel = conversation.state.channel;
+    const hosted = conversation.state.card == null;
+    const cards = card.state.cards;
+    cardImageUrl = card.actions.getCardImageUrl;
+    const { logo, subject } = getChannelSubjectLogo(cardId, profileGuid, channel, cards, cardImageUrl);
 
-    const items = Array.from(topics.values());
+    const items = Array.from(conversation.state.topics.values());
     const sorted = items.sort((a, b) => {
       const aTimestamp = a?.detail?.created;
       const bTimestamp = b?.detail?.created;
@@ -79,77 +93,71 @@ export function useConversation() {
     });
     const filtered = sorted.filter(item => !(item.blocked === 1));
 
-    if (!init) {
-      setTimeout(() => {
-        updateState({ delayed: true });
-      }, 500);
-    }
-    else {
-      updateState({ delayed: false });
-    }
+    updateState({ hosted, loaded, logo, subject, topics: filtered, delayed: false });
+  
+    setTimeout(() => {
+      updateState({ delayed: true });
+    }, 100);
 
-    updateState({ init, subject, logo, host, error, topics: filtered });
-  }, [conversation]);
+  }, [conversation.state, profile.state]);
+    
 
   const actions = {
-    latch: () => {
-      updateState({ latched: true });
-    },
-    unlatch: () => {
-      updateState({ latched: false });
-    },
-    setMomentum: () => {
-      updateState({ momentum: true });
-    },
-    clearMomentum: () => {
-      updateState({ momentum: false });
-    },
     setFocus: (focus) => {
       updateState({ focus });
     },
-    removeTopic: async (topicId) => {
-      await conversation.actions.removeTopic(topicId);
-    },
-    editTopic: async (topicId, data) => {
-      updateState({ editing: true, editTopicId: topicId, editMessage: data.text, editData: data });
+    editTopic: async (topicId, type, data) => {
+      updateState({ editing: true, editTopicId: topicId, editType: type, editMessage: data?.text, editData: data });
     },
     hideEdit: () => {
       updateState({ editing: false });
     },
-    updateTopic: async () => {
-      if (state.locked) {
-        await conversation.actions.setSealedTopicSubject(state.editTopicId, { ...state.editData, text: state.editMessage }, state.sealKey);
-      }
-      else {
-        await conversation.actions.setTopicSubject(state.editTopicId, { ...state.editData, text: state.editMessage });
-      }
-    },
     setEditMessage: (editMessage) => {
       updateState({ editMessage });
     },
-    blockTopic: async (topicId) => {
-      await conversation.actions.blockTopic(topicId);
-    },
-    loadMore: async () => {
-      if (!state.more) {
-        updateState({ more: true });
-        setTimeout(() => {
-          updateState({ more: false });
-        }, 1000);    
-        await conversation.actions.loadMore();
-      }
+    updateTopic: async () => {
+      if (!state.updateBusy) {
+        try {
+          updateState({ updateBusy: true });
+          const message = { ...state.editData, text: state.editMessage };
+          if (state.editType === 'superbasictopic') {
+            await conversation.actions.setTopicSubject(state.editTopicId, state.editType, message);
+          }
+          else {
+            const sealed = encryptTopicSubject({ message }, state.contentKey);
+            await conversation.actions.setTopicSubject(state.editTopicId, state.editType, sealed);
+          }
+          updateState({ updateBusy: false }); 
+        }
+        catch(err) {
+          console.log(err);
+          updateState({ updateBusy: false });
+          throw new Error("failed to update");
+        }
+      }    
     },
     reportTopic: async (topicId) => {
-      await conversation.actions.addTopicReport(topicId);
+      await conversation.actions.addTopicAlert(topicId);
     },
-    resync: () => {
-      conversation.actions.resync();
+    blockTopic: async (topicId) => {
+      await conversation.actions.setTopicFlag(topicId);
     },
-    setKeyboard: () => {
-      updateState({ keyboard: true });
+    removeTopic: async (topicId) => {
+      await conversation.actions.removeTopic(topicId);
     },
-    clearKeyboard: () => {
-      updateState({ keyboard: false });
+    loadMore: async () => {
+      if (!state.moreBusy) {
+        try {
+          updateState({ moreBusy: true });
+          await conversation.actions.loadMore();
+          updateState({ moreBusy: false });
+        }
+        catch(err) {
+          console.log(err);
+          updateState({ moreBusy: false });
+          throw new Error("failed to load more");
+        }
+      }
     },
   };
 

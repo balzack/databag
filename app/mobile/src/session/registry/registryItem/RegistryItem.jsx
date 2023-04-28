@@ -8,7 +8,9 @@ export function RegistryItem({ item, openContact }) {
   const { state, actions } = useRegistryItem(item);
 
   const select = () => {
-    openContact({ account: item });
+    const { guid, name, handle, node, location, description, imageSet } = item;
+    const contact = { guid, name, handle, node, location, description, imageSet };
+    openContact(contact);
   }
 
   return (

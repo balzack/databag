@@ -41,6 +41,17 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 4,
     textAlign: 'center',
-  }, 
+  },
+  steps: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingBottom: 16,
+    flexDirection: 'row',
+  },
+  stepstext: {
+    color: Colors.text,
+    padding: 8,
+  },
 });
 
