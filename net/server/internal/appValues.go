@@ -1,5 +1,8 @@
 package databag
 
+//APPCopyTransform reserved tranform code indicating copy
+const APPTransformCopy = "_"
+
 //APPTokenSize config for size of random access token
 const APPTokenSize = 16
 

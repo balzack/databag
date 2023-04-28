@@ -91,7 +91,8 @@ export function useAddTopic(contentKey) {
         if (pos + len > buffer.byteLength) {
           return null;
         }
-        const block = arrayBufferToBase64(buffer.slice(pos, len));
+        const slice = buffer.slice(pos, pos + len);
+        const block = arrayBufferToBase64(slice);
         return encryptBlock(block, contentKey);
       }
       return { url, encrypted: true, size: buffer.byteLength, getEncryptedBlock };

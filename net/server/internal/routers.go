@@ -546,6 +546,13 @@ var endpoints = routes{
 	},
 
 	route{
+		"AddChannelTopicBlock",
+		strings.ToUpper("Post"),
+		"/content/channels/{channelID}/topics/{topicID}/blocks",
+		AddChannelTopicBlock,
+	},
+
+	route{
 		"AddChannelTopicAsset",
 		strings.ToUpper("Post"),
 		"/content/channels/{channelID}/topics/{topicID}/assets",

@@ -4,7 +4,7 @@ import { createThumbnail } from "react-native-create-thumbnail";
 import ImageResizer from '@bam.tech/react-native-image-resizer';
 import RNFS from 'react-native-fs';
 
-const ENCRYPTED_BLOCK_SIZE = (128 * 1024); //100k
+const ENCRYPTED_BLOCK_SIZE = (1024 * 1024);
 
 export function useUploadContext() {
 
@@ -160,17 +160,19 @@ async function upload(entry, update, complete) {
         const thumb = await getThumb(data, type, position);
         const parts = [];
         for (let pos = 0; pos < size; pos += ENCRYPTED_BLOCK_SIZE) {
-          const { blockEncrypted, blockIv } = await getEncryptedBlock(pos, ENCRYPTED_BLOCK_SIZE);
-          const partId = await axios.post(`${entry.baseUrl}block${entry.urlParams}`, blockEncrypted, {
+          const len = pos + ENCRYPTED_BLOCK_SIZE > size ? size - pos : ENCRYPTED_BLOCK_SIZE;
+          const { blockEncrypted, blockIv } = await getEncryptedBlock(pos, len);
+          const part = await axios.post(`${entry.baseUrl}blocks${entry.urlParams}`, blockEncrypted, {
+            headers: {'Content-Type': 'text/plain'},
             signal: entry.cancel.signal,
             onUploadProgress: (ev) => {
               const { loaded, total } = ev;
-              const partLoaded = pos + Math.floor(blockEncrypted.length * loaded / total);
-              entry.active = { partLoaded, size }
+              const partLoaded = pos + Math.floor(len * loaded / total);
+              entry.active = { loaded: partLoaded, total: size }
               update();
             }
           });
-          parts.push({ blockIv, partId });
+          parts.push({ blockIv, partId: part.data.assetId });
         }
         entry.assets.push({
           encrypted: { type, thumb, parts }

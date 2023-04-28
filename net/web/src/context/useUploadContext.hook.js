@@ -2,7 +2,7 @@ import { useState, useRef } from 'react';
 import axios from 'axios';
 import Resizer from "react-image-file-resizer";
 
-const ENCRYPTED_BLOCK_SIZE = (128 * 1024); //110k
+const ENCRYPTED_BLOCK_SIZE = (1024 * 1024); 
 
 export function useUploadContext() {
 
@@ -150,17 +150,18 @@ export function useUploadContext() {
   return { state, actions }
 }
 
- function getImageThumb(url) {
+ function getImageThumb(data) {
   return new Promise(resolve => {
-    Resizer.imageFileResizer(url, 192, 192, 'JPEG', 50, 0,
+    Resizer.imageFileResizer(data, 192, 192, 'JPEG', 50, 0,
     uri => {
       resolve(uri);
     }, 'base64', 128, 128 );
   });
 }
 
-function getVideoThumb(url, pos) {
+function getVideoThumb(data, pos) {
   return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(data);
     var video = document.createElement("video");
     var timeupdate = function (ev) {
       video.removeEventListener("timeupdate", timeupdate);
@@ -180,6 +181,7 @@ function getVideoThumb(url, pos) {
         resolve(image);
         canvas.remove();
         video.remove();
+        URL.revokeObjectURL(url);
       }, 1000);
     };
     video.addEventListener("timeupdate", timeupdate);
@@ -192,13 +194,13 @@ function getVideoThumb(url, pos) {
   });
 }
 
-async function getThumb(url, type, position) {
+async function getThumb(data, type, position) {
   
   if (type === 'image') {
-    return await getImageThumb(url);
+    return await getImageThumb(data);
   }
   else if (type === 'video') {
-    return await getVideoThumb(url, position);
+    return await getVideoThumb(data, position);
   }
   else {
     return null;
@@ -216,22 +218,25 @@ async function upload(entry, update, complete) {
     try {
       if (file.encrypted) {
         const { size, getEncryptedBlock, position, image, video, audio } = file;
-        const { url, type } = image ? { url: image, type: 'image' } : video ? { url: video, type: 'video' } : audio ? { url: audio, type: 'audio' } : {}
-        const thumb = await getThumb(url, type, position);
+        const { data, type } = image ? { data: image, type: 'image' } : video ? { data: video, type: 'video' } : audio ? { data: audio, type: 'audio' } : {}
+        const thumb = await getThumb(data, type, position);
         const parts = [];
         for (let pos = 0; pos < size; pos += ENCRYPTED_BLOCK_SIZE) {
           const len = pos + ENCRYPTED_BLOCK_SIZE > size ? size - pos : ENCRYPTED_BLOCK_SIZE;
           const { blockEncrypted, blockIv } = await getEncryptedBlock(pos, len);
-          const partId = await axios.post(`${entry.baseUrl}block${entry.urlParams}`, blockEncrypted, {
+          const part = await axios.post(`${entry.baseUrl}blocks${entry.urlParams}`, blockEncrypted, {
+            headers: {'Content-Type': 'text/plain'},
             signal: entry.cancel.signal,
             onUploadProgress: (ev) => {
               const { loaded, total } = ev;
-              const partLoaded = pos + Math.floor(blockEncrypted.length * loaded / total);
-              entry.active = { partLoaded, size }
+              const partLoaded = pos + Math.floor(len * loaded / total);
+              entry.active = { loaded: partLoaded, total: size }
               update();
             }
           });
-          parts.push({ blockIv, partId });
+          console.log("PART?", part.data);
+
+          parts.push({ blockIv, partId: part.data.assetId });
         }
         entry.assets.push({
           encrypted: { type, thumb, parts }
