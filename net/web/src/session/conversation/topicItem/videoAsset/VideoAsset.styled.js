@@ -14,3 +14,21 @@ export const VideoAssetWrapper = styled.div`
   }
 `;
 
+export const VideoModalWrapper = styled.div`
+  .frame {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.5;
+  }
+
+  .ant-spin-dot-item {
+    background-color: white;
+  }
+
+  .spinner {
+    position: absolute;
+    color: white;
+    border-radius: 8px;
+  }
+`;

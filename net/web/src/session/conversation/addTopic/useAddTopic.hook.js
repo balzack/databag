@@ -144,16 +144,18 @@ export function useAddTopic(contentKey) {
           updateState({ busy: true });
           const type = contentKey ? 'sealedtopic' : 'superbasictopic';
           const message = (assets) => {
-            if (assets?.length) {
-              return {
-                assets,
+            if (contentKey) {
+              const message = { 
+                assets: assets?.length ? assets : null,
                 text: state.messageText,
                 textColor: state.textColorSet ? state.textColor : null,
                 textSize: state.textSizeSet ? state.textSize : null,
               }
+              return encryptTopicSubject({ message }, contentKey);
             }
             else {
               return {
+                assets: assets?.length ? assets : null,
                 text: state.messageText,
                 textColor: state.textColorSet ? state.textColor : null,
                 textSize: state.textSizeSet ? state.textSize : null,
