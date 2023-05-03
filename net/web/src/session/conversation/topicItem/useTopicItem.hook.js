@@ -10,9 +10,6 @@ export function useTopicItem(topic, contentKey) {
     assets: [],
   });
 
-  console.log(topic);
-  
-
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
   }
@@ -32,13 +29,16 @@ export function useTopicItem(topic, contentKey) {
       topic.assets.forEach(asset => {
         if (asset.encrypted) {
           const encrypted = true;
-          const { type, thumb, parts } = asset.encrypted;
-          const getDecryptedBlob = async () => {
+          const { type, thumb, label, parts } = asset.encrypted;
+          const getDecryptedBlob = async (abort) => {
             let pos = 0;
             let len = 0;
             
             const slices = []
             for (let i = 0; i < parts.length; i++) {
+              if (abort()) {
+                throw new Error("asset unseal aborted");
+              }
               const part = parts[i];
               const url = topic.assetUrl(part.partId, topic.id);
               const response = await fetchWithTimeout(url, { method: 'GET' });
@@ -57,7 +57,7 @@ export function useTopicItem(topic, contentKey) {
             }
             return new Blob([data]); 
           }
-          assets.push({ type, thumb, encrypted, getDecryptedBlob });
+          assets.push({ type, thumb, label, encrypted, getDecryptedBlob });
         }
         else {
           const encrypted = false

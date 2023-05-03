@@ -37,17 +37,22 @@ export function ImageAsset({ asset }) {
             onClick={popout} />
         <Modal centered={true} visible={state.popout} width={state.width + 12} bodyStyle={{ width: '100%', height: 'auto', paddingBottom: 6, paddingTop: 6, paddingLeft: 6, paddingRight: 6, backgroundColor: '#dddddd' }} footer={null} destroyOnClose={true} closable={false} onCancel={actions.clearPopout}>
           <ImageModalWrapper onClick={actions.clearPopout}>
-            { state.loading && (
-              <div class="frame">
-                <img style={{ width: '100%', objectFit: 'contain' }} src={asset.thumb} alt="topic asset" />
-                <div class="spinner">
-                  <Spin color={'white'} size="large" delay={250} />
+            <div class="frame">
+              <img class="thumb" src={asset.thumb} alt="topic asset" />
+              { !state.error && (
+                <div class="loading">
+                  <Spin size="large" delay={250} />
                 </div>
-              </div>
-            )}
-            { !state.loading && (
-              <img style={{ width: '100%', objectFit: 'contain' }} src={state.url} alt="topic asset" />
-            )}
+              )}
+              { state.error && (
+                <div class="failed">
+                  <Spin size="large" delay={250} />
+                </div>
+              )}
+              { !state.loading && (
+                <img class="full" src={state.url} alt="topic asset" />
+              )}
+            </div>
           </ImageModalWrapper>
         </Modal>
       </div>

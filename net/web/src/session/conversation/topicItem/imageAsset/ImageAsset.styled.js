@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import Colors from 'constants/Colors';
 
 export const ImageAssetWrapper = styled.div`
   position: relative;
@@ -45,16 +46,39 @@ export const ImageModalWrapper = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+    background-color: ${Colors.black};
+    position: relative;
+  }
+
+  .thumb {
     opacity: 0.5;
+    width: 100%;
+    object-fit: contain;
   }
 
-  .ant-spin-dot-item {
-    background-color: white;
+  .full {
+    width: 100%;
+    object-fit: contain;
+    position: absolute;
   }
 
-  .spinner {
+  .failed {
     position: absolute;
     color: white;
     border-radius: 8px;
+
+    .ant-spin-dot-item {
+      background-color: ${Colors.alert};
+    }
+  }
+
+  .loading {
+    position: absolute;
+    color: white;
+    border-radius: 8px;
+
+    .ant-spin-dot-item {
+      background-color: ${Colors.white};
+    }
   }
 `;

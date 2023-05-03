@@ -217,7 +217,7 @@ async function upload(entry, update, complete) {
     entry.active = {};
     try {
       if (file.encrypted) {
-        const { size, getEncryptedBlock, position, image, video, audio } = file;
+        const { size, getEncryptedBlock, position, label, image, video, audio } = file;
         const { data, type } = image ? { data: image, type: 'image' } : video ? { data: video, type: 'video' } : audio ? { data: audio, type: 'audio' } : {}
         const thumb = await getThumb(data, type, position);
         const parts = [];
@@ -234,12 +234,10 @@ async function upload(entry, update, complete) {
               update();
             }
           });
-          console.log("PART?", part.data);
-
           parts.push({ blockIv, partId: part.data.assetId });
         }
         entry.assets.push({
-          encrypted: { type, thumb, parts }
+          encrypted: { type, thumb, label, parts }
         });
       }
       else if (file.image) {
