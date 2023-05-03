@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useRef, useState, useEffect, useContext } from 'react';
 import { Linking } from 'react-native';
 import { ConversationContext } from 'context/ConversationContext';
 import { CardContext } from 'context/CardContext';
@@ -8,10 +8,12 @@ import moment from 'moment';
 import { useWindowDimensions, Text } from 'react-native';
 import Colors from 'constants/Colors';
 import { getCardByGuid } from 'context/cardUtil';
-import { decryptTopicSubject } from 'context/sealUtil';
+import { decryptBlock, decryptTopicSubject } from 'context/sealUtil';
 import { sanitizeUrl } from '@braintree/sanitize-url';
 import Share from 'react-native-share';
 import RNFetchBlob from "rn-fetch-blob";
+import RNFS from 'react-native-fs';
+import { checkResponse, fetchWithTimeout } from 'api/fetchUtil';
 
 export function useTopicItem(item, hosting, remove, contentKey) {
 
@@ -42,6 +44,8 @@ export function useTopicItem(item, hosting, remove, contentKey) {
   const account = useContext(AccountContext);
   const dimensions = useWindowDimensions();
 
+  const cancel = useRef(false);
+
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
   }
@@ -49,6 +53,43 @@ export function useTopicItem(item, hosting, remove, contentKey) {
   useEffect(() => {
     updateState({ width: dimensions.width, height: dimensions.height });
   }, [dimensions]);
+
+  const setAssets = (parsed) => {
+    const assets = [];
+    if (parsed?.length) {
+      for (let i = 0; i < parsed.length; i++) {
+        const asset = parsed[i];
+        if (asset.encrypted) {
+          const encrypted = true;
+          const { type, thumb, label, parts } = asset.encrypted;
+          assets.push({ type, thumb, label, encrypted, decrypted: null, parts });
+        }
+        else {
+          const encrypted = false
+          if (asset.image) {
+            const type = 'image';
+            const thumb = conversation.actions.getTopicAssetUrl(item.topicId, asset.image.thumb);
+            const full = conversation.actions.getTopicAssetUrl(item.topicId, asset.image.full);
+            assets.push({ type, thumb, encrypted, full });
+          }
+          else if (asset.video) {
+            const type = 'video';
+            const thumb = conversation.actions.getTopicAssetUrl(item.topicId, asset.video.thumb);
+            const lq = conversation.actions.getTopicAssetUrl(item.topicId, asset.video.lq);
+            const hd = conversation.actions.getTopicAssetUrl(item.topicId, asset.video.hd);
+            assets.push({ type, thumb, encrypted, lq, hd });
+          }
+          else if (asset.audio) {
+            const type = 'audio';
+            const label = asset.audio.label;
+            const full = conversation.actions.getTopicAssetUrl(item.topicId, asset.audio.full);
+            assets.push({ type, label, encrypted, full });
+          }
+        }
+      };
+    }
+    return assets;
+  }
 
   useEffect(() => {
 
@@ -103,7 +144,7 @@ export function useTopicItem(item, hosting, remove, contentKey) {
         parsed = JSON.parse(data);
         message = parsed?.text;
         clickable = clickableText(parsed.text);
-        assets = parsed.assets;
+        assets = setAssets(parsed.assets);
         if (parsed.textSize === 'small') {
           fontSize = 10;
         }
@@ -145,6 +186,7 @@ export function useTopicItem(item, hosting, remove, contentKey) {
       if (unsealed) {
         sealed = false;
         parsed = unsealed.message;
+        assets = setAssets(parsed.assets);
         message = parsed?.text;
         clickable = clickableText(parsed?.text);
         if (parsed?.textSize === 'small') {
@@ -231,11 +273,50 @@ export function useTopicItem(item, hosting, remove, contentKey) {
   };
 
   const actions = {
-    showCarousel: (index) => {
-      updateState({ carousel: true, carouselIndex: index });
+    showCarousel: async (index) => {
+      const assets = state.assets.map((asset) => ({ ...asset, error: false, decrypted: null }));
+      updateState({ assets, carousel: true, carouselIndex: index });
+
+      try {
+        cancel.current = false;
+        const assets = state.assets;
+        for (let i = 0; i < assets.length; i++) {
+          const cur = (i + index) % assets.length
+          const asset = assets[cur];
+          if (asset.encrypted) {
+            const ext = asset.type === 'video' ? '.mp4' : asset.type === 'audio' ? '.mp3' : '';
+            const path = RNFS.TemporaryDirectoryPath + `/${i}.asset${ext}`;
+            const exists = await RNFS.exists(path);
+            if (exists) {
+              RNFS.unlink(path);
+            }
+            for (let j = 0; j < asset.parts.length; j++) {
+              const part = asset.parts[j];
+              const url = conversation.actions.getTopicAssetUrl(item.topicId, part.partId);
+              const response = await fetchWithTimeout(url, { method: 'GET' });
+              const block = await response.text();
+              const decrypted = decryptBlock(block, part.blockIv, contentKey);
+              if (cancel.current) {
+                throw new Error("unseal assets cancelled");
+              }
+              await RNFS.appendFile(path, decrypted, 'base64');
+            };
+
+            asset.decrypted = path;
+            assets[cur] = { ...asset };
+            updateState({ assets: [ ...assets ]});
+          };
+        }
+      }
+      catch (err) {
+        console.log(err);
+        const assets = state.assets.map((asset) => ({ ...asset, error: true }));
+        updateState({ assets: [ ...assets ]});
+      }
     },
     hideCarousel: () => {
       updateState({ carousel: false });
+      cancel.current = true;
     },
     setActive: (activeId) => {
       updateState({ activeId });

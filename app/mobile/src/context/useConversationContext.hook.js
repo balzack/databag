@@ -146,7 +146,7 @@ export function useConversationContext() {
       }
       else {
         topics.current.delete(entry.id);
-        clearTopicItem(entry.id);
+        clearTopicItem(cardId, channelId, entry.id);
       }
     }
   }

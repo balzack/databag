@@ -3,7 +3,7 @@ import { ConversationContext } from 'context/ConversationContext';
 import { Image } from 'react-native';
 import { useWindowDimensions } from 'react-native';
 
-export function useImageAsset(topicId, asset) {
+export function useImageAsset(asset) {
 
   const [state, setState] = useState({
     frameWidth: 1,
@@ -49,9 +49,13 @@ export function useImageAsset(topicId, asset) {
   }, [dimensions]);
 
   useEffect(() => {
-    const url = conversation.actions.getTopicAssetUrl(topicId, asset.full); 
-    updateState({ url });
-  }, [topicId, conversation, asset]);
+    if (asset.encrypted) {
+      updateState({ url: asset.decrypted, failed: asset.error });
+    }
+    else {
+      updateState({ url: asset.full });
+    }
+  }, [asset]);
 
   const actions = {
     loaded: (e) => {

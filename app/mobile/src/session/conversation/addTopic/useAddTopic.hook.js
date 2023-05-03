@@ -205,24 +205,16 @@ export function useAddTopic(contentKey) {
          
           const assemble = (assets) => {
             if (!state.locked) {
-              if (assets?.length) {
-                return {
-                  assets,
-                  text: state.message,
-                  textColor: state.colorSet ? state.color : null,
-                  textSize: state.sizeSet ? state.size : null,
-                }
-              }
-              else {
-                return {
-                  text: state.message,
-                  textColor: state.colorSet ? state.color : null,
-                  textSize: state.sizeSet ? state.size : null,
-                }
+              return {
+                assets: assets?.length ? assets : null,
+                text: state.message,
+                textColor: state.colorSet ? state.color : null,
+                textSize: state.sizeSet ? state.size : null,
               }
             }
             else {
               const message = {
+                assets: assets?.length ? assets : null,
                 text: state.message,
                 textColor: state.textColorSet ? state.textColor : null,
                 textSize: state.textSizeSet ? state.textSize : null,

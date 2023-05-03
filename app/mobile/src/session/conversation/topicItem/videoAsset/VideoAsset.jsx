@@ -6,9 +6,11 @@ import { styles } from './VideoAsset.styled';
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useKeepAwake } from '@sayem314/react-native-keep-awake';
 
-export function VideoAsset({ topicId, asset, dismiss }) {
+import { useEffect } from 'react';
 
-  const { state, actions } = useVideoAsset(topicId, asset);
+export function VideoAsset({ asset, dismiss }) {
+
+  const { state, actions } = useVideoAsset(asset);
 
   useKeepAwake();
 
@@ -16,7 +18,7 @@ export function VideoAsset({ topicId, asset, dismiss }) {
     <View style={styles.container}>
       <TouchableOpacity activeOpacity={1} style={styles.container}  onPress={actions.showControls}>
         { state.url && (
-          <Video source={{ uri: state.url }} style={{ width: state.width, height: state.height }} resizeMode={'cover'} 
+          <Video source={{ uri: state.url, type: 'video/mp4' }} style={{ width: state.width, height: state.height }} resizeMode={'cover'} 
             onReadyForDisplay={(e) => { console.log(e) }}
             onLoad={actions.loaded} repeat={true} paused={!state.playing} resizeMode="contain" />
         )}

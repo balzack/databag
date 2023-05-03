@@ -63,14 +63,12 @@ export function useUploadContext() {
 
   const actions = {
     addTopic: (node, token, channelId, topicId, files, success, failure, cardId) => {
-      const url = cardId ?
-          `https://${node}/content/channels/${channelId}/topics/${topicId}/assets?contact=${token}` : 
-          `https://${node}/content/channels/${channelId}/topics/${topicId}/assets?agent=${token}`;
       const key = cardId ? `${cardId}:${channelId}` : `:${channelId}`; 
       const controller = new AbortController();
       const entry = {
         index: index.current,
-        url: url,
+        baseUrl: cardId ? `https://${node}/content/channels/${channelId}/topics/${topicId}/` : `https://${node}/content/channels/${channelId}/topics/${topicId}/`,
+        urlParams: cardId ? `?contact=${token}` : `?agent=${token}`,
         files,
         assets: [],
         current: null,
@@ -187,7 +185,7 @@ async function upload(entry, update, complete) {
           formData.append("asset", {uri: 'file://' + file.data, name: 'asset', type: 'application/octent-stream'});
         }
         let transform = encodeURIComponent(JSON.stringify(["ithumb;photo", "ilg;photo"]));
-        let asset = await axios.post(`${entry.url}&transforms=${transform}`, formData, {
+        let asset = await axios.post(`${entry.baseUrl}assets${entry.urlParams}&transforms=${transform}`, formData, {
           headers: { 'Content-Type': 'multipart/form-data' },
           signal: entry.cancel.signal,
           onUploadProgress: (ev) => {
@@ -213,7 +211,7 @@ async function upload(entry, update, complete) {
         }
         let thumb = 'vthumb;video;' + file.position;
         let transform = encodeURIComponent(JSON.stringify(["vlq;video", "vhd;video", thumb]));
-        let asset = await axios.post(`${entry.url}&transforms=${transform}`, formData, {
+        let asset = await axios.post(`${entry.baseUrl}assets${entry.urlParams}&transforms=${transform}`, formData, {
           headers: { 'Content-Type': 'multipart/form-data' },
           signal: entry.cancel.signal,
           onUploadProgress: (ev) => {
@@ -239,7 +237,7 @@ async function upload(entry, update, complete) {
           formData.append("asset", {uri: 'file://' + file.data, name: 'asset', type: 'application/octent-stream'});
         }
         let transform = encodeURIComponent(JSON.stringify(["acopy;audio"]));
-        let asset = await axios.post(`${entry.url}&transforms=${transform}`, formData, {
+        let asset = await axios.post(`${entry.baseUrl}assets${entry.urlParams}&transforms=${transform}`, formData, {
           headers: { 'Content-Type': 'multipart/form-data' },
           signal: entry.cancel.signal,
           onUploadProgress: (ev) => {

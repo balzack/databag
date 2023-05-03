@@ -4,8 +4,8 @@ import { styles } from './ImageAsset.styled';
 import Colors from 'constants/Colors';
 import Ionicons from 'react-native-vector-icons/AntDesign';
 
-export function ImageAsset({ topicId, asset, dismiss }) {
-  const { state, actions } = useImageAsset(topicId, asset);
+export function ImageAsset({ asset, dismiss }) {
+  const { state, actions } = useImageAsset(asset);
 
   return (
     <TouchableOpacity style={styles.container} activeOpacity={1} onPress={actions.showControls}>
@@ -33,4 +33,3 @@ export function ImageAsset({ topicId, asset, dismiss }) {
     </TouchableOpacity>
   );
 }
-  
