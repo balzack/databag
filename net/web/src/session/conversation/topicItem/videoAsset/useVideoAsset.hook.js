@@ -13,6 +13,7 @@ export function useVideoAsset(asset) {
     loading: false,
     error: false,
     url: null,
+    loaded: false,
   });
 
   const updateState = (value) => {
@@ -24,11 +25,11 @@ export function useVideoAsset(asset) {
       if (asset.encrypted) {
         try {
           const view = index.current;
-          updateState({ active: true, width, height, error: false, loading: true, url: null });
+          updateState({ active: true, width, height, error: false, loaded: false, loading: true, url: null });
           const blob = await asset.getDecryptedBlob(() => view != index.current);
           const url = URL.createObjectURL(blob);
           revoke.current = url;
-          updateState({ loading: false, url });
+          updateState({ url, loading: false });
         }
         catch (err) {
           console.log(err);
@@ -49,6 +50,9 @@ export function useVideoAsset(asset) {
     },
     setDimension: (dimension) => {
       updateState({ dimension });
+    },
+    setLoaded: () => {
+      updateState({ loaded: true });
     },
   };
 

@@ -39,27 +39,27 @@ export function VideoAsset({ asset }) {
         )}
         <Modal centered={true} style={{ backgroundColor: '#aacc00', padding: 0 }} visible={state.active} width={state.width + 12} bodyStyle={{ paddingBottom: 0, paddingTop: 6, paddingLeft: 6, paddingRight: 6, backgroundColor: '#dddddd', margin: 0 }} footer={null} destroyOnClose={true} closable={false} onCancel={actions.clearActive}>
           <VideoModalWrapper>
-            { state.loading && (
-              <div class="wrapper">
-                <div class="frame">
-                  <img class="thumb" src={asset.thumb} alt="topic asset" />
-                  { state.error && (
-                    <div class="failed">
-                      <Spin size="large" delay={250} />
-                    </div>
-                  )}
-                  { !state.error && (
-                    <div class="loading">
-                      <Spin size="large" delay={250} />
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
-            { !state.loading && (
-              <video autoplay="true" controls src={state.url} width={state.width} height={state.height} 
-                  playsinline="true" />
-            )}
+            <div class="wrapper">
+              { !state.loaded && (
+                  <div class="frame">
+                    <img class="thumb" src={asset.thumb} alt="topic asset" />
+                    { state.error && (
+                      <div class="failed">
+                        <Spin size="large" delay={250} />
+                      </div>
+                    )}
+                    { !state.error && (
+                      <div class="loading">
+                        <Spin size="large" delay={250} />
+                      </div>
+                    )}
+                  </div>
+              )}
+              { !state.loading && (
+                <video style={{display: state.loaded ? 'block' : 'none'}} autoplay="true" controls src={state.url} width={state.width} height={state.height} 
+                    playsinline="true" onLoadedData={actions.setLoaded} />
+              )}
+            </div>
           </VideoModalWrapper>
         </Modal>
       </div>
