@@ -61,7 +61,7 @@ export function useImageAsset(asset) {
 
   const actions = {
     loaded: (e) => {
-      const { width, height } = e.nativeEvent.source;
+      const { width, height } = e.nativeEvent;
       updateState({ loaded: true, imageRatio: width / height });
     },
     failed: () => {

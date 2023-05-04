@@ -285,7 +285,7 @@ export function useTopicItem(item, hosting, remove, contentKey) {
           const asset = assets[cur];
           if (asset.encrypted) {
             const ext = asset.type === 'video' ? '.mp4' : asset.type === 'audio' ? '.mp3' : '';
-            const path = RNFS.TemporaryDirectoryPath + `/${i}.asset${ext}`;
+            const path = RNFS.DocumentDirectoryPath + `/${i}.asset${ext}`;
             const exists = await RNFS.exists(path);
             if (exists) {
               RNFS.unlink(path);

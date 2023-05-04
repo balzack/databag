@@ -3,6 +3,7 @@ import { useImageAsset } from './useImageAsset.hook';
 import { styles } from './ImageAsset.styled';
 import Colors from 'constants/Colors';
 import Ionicons from 'react-native-vector-icons/AntDesign';
+import FastImage from 'react-native-fast-image'
 
 export function ImageAsset({ asset, dismiss }) {
   const { state, actions } = useImageAsset(asset);
@@ -10,8 +11,9 @@ export function ImageAsset({ asset, dismiss }) {
   return (
     <TouchableOpacity style={styles.container} activeOpacity={1} onPress={actions.showControls}>
       { state.url && (
-        <Image source={{ uri: state.url }} onLoad={actions.loaded} onError={actions.failed}
-            style={{ borderRadius: 4, width: state.imageWidth, height: state.imageHeight }} resizeMode={'cover'} />
+        <FastImage source={{ uri: state.url }} onLoad={actions.loaded} onError={actions.failed}
+            style={{ borderRadius: 4, width: state.imageWidth, height: state.imageHeight }}
+            resizeMode={FastImage.resizeMode.contain} />
       )}
 
       { state.loaded && state.controls && (
