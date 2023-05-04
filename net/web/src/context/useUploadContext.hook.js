@@ -150,7 +150,7 @@ export function useUploadContext() {
   return { state, actions }
 }
 
- function getImageThumb(data) {
+function getImageThumb(data) {
   return new Promise(resolve => {
     Resizer.imageFileResizer(data, 192, 192, 'JPEG', 50, 0,
     uri => {

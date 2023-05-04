@@ -67,7 +67,7 @@ export function useAddTopic(contentKey) {
   const loadFileData = (file) => {
     return new Promise(resolve => {
       const reader = new FileReader()
-      reader.onloadend = (res) => { console.log(reader.result); resolve(reader.result) }
+      reader.onloadend = (res) => { resolve(reader.result) }
       reader.readAsArrayBuffer(file)
     })
   };
@@ -104,7 +104,8 @@ export function useAddTopic(contentKey) {
 
   const actions = {
     addImage: async (image) => {
-      const asset = await setUrl(image);
+      const scaled = await getResizedImage(image);
+      const asset = await setUrl(scaled);
       asset.image = image;
       addAsset(asset);
     },
@@ -180,5 +181,20 @@ export function useAddTopic(contentKey) {
   };
 
   return { state, actions };
+}
+
+function getResizedImage(data) {
+  return new Promise(resolve => {
+    Resizer.imageFileResizer(data, 1024, 1024, 'JPEG', 90, 0,
+    uri => {
+      const base64 = uri.split(';base64,').pop();
+      var binaryString = atob(base64);
+      var bytes = new Uint8Array(binaryString.length);
+      for (var i = 0; i < binaryString.length; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
+      }
+      resolve(new Blob([bytes]));
+    }, 'base64', 256, 256 );
+  });
 }
 
