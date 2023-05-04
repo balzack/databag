@@ -129,7 +129,7 @@ export function useAddTopic(contentKey) {
     addImage: async (data) => {
       assetId.current++;
       const asset = await setAsset(data, async (file) => {
-        const scaled = await ImageResizer.createResizedImage(file, 1024, 1024, "JPEG", 50, 0, null);
+        const scaled = await ImageResizer.createResizedImage(file, 512, 512, "JPEG", 90, 0, null);
         return `file://${scaled.path}`;
       });
       asset.key = assetId.current;
