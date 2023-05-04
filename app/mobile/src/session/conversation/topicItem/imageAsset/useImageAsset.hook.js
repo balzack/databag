@@ -50,7 +50,9 @@ export function useImageAsset(asset) {
 
   useEffect(() => {
     if (asset.encrypted) {
-      updateState({ url: asset.decrypted, failed: asset.error });
+      const now = Date.now();
+      const url = asset.decrypted ? `file://${asset.decrypted}?now=${now}` : null
+      updateState({ url, failed: asset.error });
     }
     else {
       updateState({ url: asset.full });
