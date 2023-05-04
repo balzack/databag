@@ -6,6 +6,7 @@ import Colors from 'constants/Colors';
 import { encryptBlock, decryptBlock, getChannelSeals, getContentKey, encryptTopicSubject } from 'context/sealUtil';
 import { AccountContext } from 'context/AccountContext';
 import RNFS from 'react-native-fs';
+import ImageResizer from '@bam.tech/react-native-image-resizer';
 
 export function useAddTopic(contentKey) {
 
@@ -102,15 +103,16 @@ export function useAddTopic(contentKey) {
     updateState({ enableImage, enableAudio, enableVideo, locked });
   }, [conversation.state]);
 
-  const setAsset = async (file) => {
+  const setAsset = async (file, scale) => {
     const url = file.startsWith('file:') ? file : `file://${file}`;
     if (contentKey) {
-      const stat = await RNFS.stat(url);
+      const scaled = scale ? await scale(url) : url;
+      const stat = await RNFS.stat(scaled);
       const getEncryptedBlock = async (pos, len) => {
         if (pos + len > stat.size) {
           return null;
         }
-        const block = await RNFS.read(file, len, pos, 'base64');
+        const block = await RNFS.read(scaled, len, pos, 'base64');
         return encryptBlock(block, contentKey);
       }
       return { data: url, encrypted: true, size: stat.size, getEncryptedBlock };
@@ -126,7 +128,10 @@ export function useAddTopic(contentKey) {
     },
     addImage: async (data) => {
       assetId.current++;
-      const asset = await setAsset(data);
+      const asset = await setAsset(data, async (file) => {
+        const scaled = await ImageResizer.createResizedImage(file, 1024, 1024, "JPEG", 50, 0, null);
+        return `file://${scaled.path}`;
+      });
       asset.key = assetId.current;
       asset.type = 'image';
       asset.ratio = 1;
