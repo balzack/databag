@@ -1,9 +1,10 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Modal, Spin } from 'antd';
+import { Progress, Modal, Spin } from 'antd';
 import ReactResizeDetector from 'react-resize-detector';
 import { PlayCircleOutlined, MinusCircleOutlined, SoundOutlined } from '@ant-design/icons';
 import { AudioAssetWrapper, AudioModalWrapper } from './AudioAsset.styled';
 import { useAudioAsset } from './useAudioAsset.hook';
+import Colors from 'constants/Colors';
 
 import background from 'images/audio.png';
 
@@ -56,6 +57,9 @@ export function AudioAsset({ asset }) {
           { state.loading && !state.error && (
             <div class="loading">
               <Spin size="large" delay={250} />
+              { state.total != 0 && (
+                <Progress percent={Math.floor(100 * state.block / state.total)} size="small" showInfo={false} trailColor={Colors.white} strokeColor={Colors.background} />
+              )}
             </div>
           )}
           { !state.ready && !state.loading && (

@@ -14,6 +14,8 @@ export function useVideoAsset(asset) {
     error: false,
     url: null,
     loaded: false,
+    block: 0,
+    total: 0,
   });
 
   const updateState = (value) => {
@@ -26,7 +28,7 @@ export function useVideoAsset(asset) {
         try {
           const view = index.current;
           updateState({ active: true, width, height, error: false, loaded: false, loading: true, url: null });
-          const blob = await asset.getDecryptedBlob(() => view != index.current);
+          const blob = await asset.getDecryptedBlob(() => view != index.current, (block, total) => updateState({ block, total }));
           const url = URL.createObjectURL(blob);
           revoke.current = url;
           updateState({ url, loading: false });

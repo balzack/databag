@@ -1,8 +1,9 @@
-import { Modal, Spin } from 'antd';
+import { Modal, Spin, Progress } from 'antd';
 import ReactResizeDetector from 'react-resize-detector';
 import { VideoCameraOutlined } from '@ant-design/icons';
 import { VideoAssetWrapper, VideoModalWrapper } from './VideoAsset.styled';
 import { useVideoAsset } from './useVideoAsset.hook';
+import Colors from 'constants/Colors';
 
 export function VideoAsset({ asset }) {
 
@@ -51,6 +52,9 @@ export function VideoAsset({ asset }) {
                     { !state.error && (
                       <div class="loading">
                         <Spin size="large" delay={250} />
+                        { state.total != 0 && (
+                          <Progress percent={Math.floor(100 * state.block / state.total)} size="small" showInfo={false} trailColor={Colors.white} strokeColor={Colors.background} />
+                        )} 
                       </div>
                     )}
                   </div>
