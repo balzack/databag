@@ -43,7 +43,7 @@ export function ImageAsset({ asset }) {
               { !state.error && (
                 <div class="loading">
                   <Spin size="large" delay={250} />
-                  { state.total != 0 && (
+                  { state.total !== 0 && (
                     <Progress percent={Math.floor(100 * state.block / state.total)} size="small" showInfo={false} trailColor={Colors.white} strokeColor={Colors.background} />
                   )}
                 </div>

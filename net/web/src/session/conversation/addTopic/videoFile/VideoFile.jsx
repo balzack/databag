@@ -6,7 +6,6 @@ import { VideoFileWrapper } from './VideoFile.styled';
 export function VideoFile({ url, onPosition }) {
 
   const [state, setState] = useState({ width: 0, height: 0 });
-  const [playing, setPlaying] = useState(false);
   const player = useRef(null);
   const seek = useRef(0);
 

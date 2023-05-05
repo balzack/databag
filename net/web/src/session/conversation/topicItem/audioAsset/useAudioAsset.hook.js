@@ -25,7 +25,7 @@ export function useAudioAsset(asset) {
         try {
           const view = index.current;
           updateState({ active: true, ready: false, error: false, loading: true, url: null });
-          const blob = await asset.getDecryptedBlob(() => view != index.current, (block, total) => updateState({ block, total }));
+          const blob = await asset.getDecryptedBlob(() => view !== index.current, (block, total) => updateState({ block, total }));
           const url = URL.createObjectURL(blob);
           revoke.current = url;
           updateState({ loading: false, url });

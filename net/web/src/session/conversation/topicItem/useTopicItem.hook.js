@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { checkResponse, fetchWithTimeout } from 'api/fetchUtil';
+import { fetchWithTimeout } from 'api/fetchUtil';
 import { decryptBlock } from 'context/sealUtil';
 
 export function useTopicItem(topic, contentKey) {
@@ -86,6 +86,7 @@ export function useTopicItem(topic, contentKey) {
       });
       updateState({ assets });
     }
+    // eslint-disable-next-line
   }, [topic.assets]);
 
   const actions = {

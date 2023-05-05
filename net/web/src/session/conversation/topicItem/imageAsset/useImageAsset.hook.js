@@ -26,7 +26,7 @@ export function useImageAsset(asset) {
         try {
           const view = index.current;
           updateState({ popout: true, width, height, error: false, loading: true, url: null });
-          const blob = await asset.getDecryptedBlob(() => view != index.current, (block, total) => updateState({ block, total }));
+          const blob = await asset.getDecryptedBlob(() => view !== index.current, (block, total) => updateState({ block, total }));
           const url = URL.createObjectURL(blob);
           updateState({ loading: false, url });
           revoke.current = url;
