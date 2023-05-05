@@ -1,17 +1,16 @@
 import { useState, useRef } from 'react';
 
-export function useImageAsset(asset) {
+export function useAudioAsset(asset) {
 
   const revoke = useRef();
   const index = useRef(0);
 
   const [state, setState] = useState({
-    popout: false,
-    width: 0,
-    height: 0,
+    active: false,
     loading: false,
     error: false,
-    url: null, 
+    ready: false,
+    url: null,
   });
 
   const updateState = (value) => {
@@ -19,34 +18,38 @@ export function useImageAsset(asset) {
   }
 
   const actions = {
-    setPopout: async (width, height) => {
+    setActive: async () => {
       if (asset.encrypted) {
         try {
           const view = index.current;
-          updateState({ popout: true, width, height, error: false, loading: true, url: null });
+          updateState({ active: true, ready: false, error: false, loading: true, url: null });
           const blob = await asset.getDecryptedBlob(() => view != index.current);
           const url = URL.createObjectURL(blob);
-          updateState({ loading: false, url });
           revoke.current = url;
+          updateState({ loading: false, url });
         }
-        catch(err) {
+        catch (err) {
           console.log(err);
           updateState({ error: true });
         }
       }
       else {
-        updateState({ popout: true, width, height, loading: false, url: asset.full });
+        updateState({ active: true, loading: false, url: asset.full });
       }
     },
-    clearPopout: () => {
+    clearActive: () => {
       index.current += 1;
-      updateState({ popout: false });
+      updateState({ active: false, url: null });
       if (revoke.current) {
         URL.revokeObjectURL(revoke.current);
         revoke.current = null;
       }
     },
+    ready: () => {
+      updateState({ ready: true });
+    }
   };
 
   return { state, actions };
 }
+

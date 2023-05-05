@@ -13,7 +13,7 @@ import { ImageAsset } from './imageAsset/ImageAsset';
 import { AudioAsset } from './audioAsset/AudioAsset';
 import { VideoAsset } from './videoAsset/VideoAsset';
 import Carousel from 'react-native-reanimated-carousel';
-
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 export function TopicItem({ item, focused, focus, hosting, remove, update, block, report, contentKey }) {
 
   const { state, actions } = useTopicItem(item, hosting, remove, contentKey);
@@ -109,34 +109,17 @@ export function TopicItem({ item, focused, focus, hosting, remove, update, block
     );
   }
 
-
-  const renderAsset = (asset) => {
-    return (
-      <View style={styles.frame}>
-        { asset.item.image && (
-          <ImageAsset topicId={item.topicId} asset={asset.item.image} dismiss={actions.hideCarousel} />
-        )}
-        { asset.item.video && (
-          <VideoAsset topicId={item.topicId} asset={asset.item.video} dismiss={actions.hideCarousel} />
-        )}
-        { asset.item.audio && (
-          <AudioAsset topicId={item.topicId} asset={asset.item.audio} dismiss={actions.hideCarousel} />
-        )}
-      </View>
-    )
-  }
-
   const renderThumb = (thumb) => {
     return (
       <View>
-        { thumb.item.image && (
-          <ImageThumb topicId={item.topicId} asset={thumb.item.image} onAssetView={() => actions.showCarousel(thumb.index)} />
+        { thumb.item.type === 'image' && (
+          <ImageThumb url={thumb.item.thumb} onAssetView={() => actions.showCarousel(thumb.index)} />
         )}
-        { thumb.item.video && (
-          <VideoThumb topicId={item.topicId} asset={thumb.item.video} onAssetView={() => actions.showCarousel(thumb.index)} />
+        { thumb.item.type === 'video' && (
+          <VideoThumb url={thumb.item.thumb} onAssetView={() => actions.showCarousel(thumb.index)} />
         )}
-        { thumb.item.audio && (
-          <AudioThumb topicId={item.topicId} asset={thumb.item.audio} onAssetView={() => actions.showCarousel(thumb.index)} />
+        { thumb.item.type === 'audio' && (
+          <AudioThumb labe={thumb.item.label} onAssetView={() => actions.showCarousel(thumb.index)} />
         )}
       </View>
     );
@@ -194,7 +177,7 @@ export function TopicItem({ item, focused, focus, hosting, remove, update, block
           { state.sharing && (
             <ActivityIndicator style={styles.share} color={Colors.white} size="small" />
           )}
-          { !state.sharing && (
+          { !state.sharing && contentKey == null && (
             <TouchableOpacity style={styles.share} onPress={shareMessage}>
               <MatIcons name="share-variant-outline" size={18} color={Colors.white} />
             </TouchableOpacity>
@@ -229,26 +212,29 @@ export function TopicItem({ item, focused, focus, hosting, remove, update, block
         onRequestClose={actions.hideCarousel}
       >
         <View style={styles.modal}>
-          <Carousel
-            loop
-            width={state.width}
-            autoPlay={false}
-            data={state.assets}
-            defaultIndex={state.carouselIndex}
-            scrollAnimationDuration={1000}
-            renderItem={({ index }) => (
-              <View style={styles.frame}>
-                { state.assets[index].image && (
-                  <ImageAsset topicId={item.topicId} asset={state.assets[index].image} dismiss={actions.hideCarousel} />
-                )}
-                { state.assets[index].video && (
-                  <VideoAsset topicId={item.topicId} asset={state.assets[index].video} dismiss={actions.hideCarousel} />
-                )}
-                { state.assets[index].audio && (
-                  <AudioAsset topicId={item.topicId} asset={state.assets[index].audio} dismiss={actions.hideCarousel} />
-                )}
-              </View>
-            )} />
+          <GestureHandlerRootView>
+            <Carousel
+              loop
+              width={state.width}
+              autoPlay={false}
+              data={state.assets}
+              defaultIndex={state.carouselIndex}
+              scrollAnimationDuration={1000}
+              onSnapToItem={(index) => console.log('current index:', index)}
+              renderItem={({ index }) => (
+                <View style={styles.frame}>
+                  { state.assets[index].type === 'image' && (
+                    <ImageAsset asset={state.assets[index]} dismiss={actions.hideCarousel} />
+                  )}
+                  { state.assets[index].type === 'video' && (
+                    <VideoAsset asset={state.assets[index]} dismiss={actions.hideCarousel} />
+                  )}
+                  { state.assets[index].type === 'audio' && (
+                    <AudioAsset asset={state.assets[index]} dismiss={actions.hideCarousel} />
+                  )}
+                </View>
+              )} />
+            </GestureHandlerRootView>
         </View>
       </Modal> 
     </View>

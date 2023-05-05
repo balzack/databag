@@ -263,6 +263,14 @@ export function useChannelContext() {
       const { guid } = access.current || {};
       return await store.actions.getChannelTopicItems(guid, channelId); 
     },
+    getTopicItemsId: async (channelId) => {
+      const { guid } = access.current || {};
+      return await store.actions.getChannelTopicItemsId(guid, channelId); 
+    },
+    getTopicItemsById: async (channelId, topics) => {
+      const { guid } = access.current || {};
+      return await store.actions.getChannelTopicItemsById(guid, channelId, topics); 
+    },
     setTopicItem: async (channelId, topic) => {
       const { guid } = access.current || {};
       return await store.actions.setChannelTopicItem(guid, channelId, topic);

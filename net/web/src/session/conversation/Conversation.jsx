@@ -14,7 +14,7 @@ export function Conversation({ closeConversation, openDetails, cardId, channelId
   const thread = useRef(null);
 
   const topicRenderer = (topic) => {
-    return (<TopicItem host={cardId == null} topic={topic}
+    return (<TopicItem host={cardId == null} contentKey={state.contentKey} topic={topic}
       remove={() => actions.removeTopic(topic.id)}
       update={(text) => actions.updateTopic(topic, text)}
       sealed={state.sealed && !state.contentKey}

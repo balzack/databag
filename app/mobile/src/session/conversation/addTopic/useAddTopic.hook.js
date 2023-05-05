@@ -3,8 +3,10 @@ import { UploadContext } from 'context/UploadContext';
 import { ConversationContext } from 'context/ConversationContext';
 import { Image } from 'react-native';
 import Colors from 'constants/Colors';
-import { getChannelSeals, getContentKey, encryptTopicSubject } from 'context/sealUtil';
+import { encryptBlock, decryptBlock, getChannelSeals, getContentKey, encryptTopicSubject } from 'context/sealUtil';
 import { AccountContext } from 'context/AccountContext';
+import RNFS from 'react-native-fs';
+import ImageResizer from '@bam.tech/react-native-image-resizer';
 
 export function useAddTopic(contentKey) {
 
@@ -37,9 +39,6 @@ export function useAddTopic(contentKey) {
 
   useEffect(() => {
     let conflict = false;
-    if (state.locked && state.assets.length > 0) {
-      conflict = true;
-    }
     state.assets.forEach(asset => {
       if (asset.type === 'image' && !state.enableImage) {
         conflict = true;
@@ -53,6 +52,10 @@ export function useAddTopic(contentKey) {
     });
     updateState({ conflict });
   }, [state.assets, state.locked, state.enableImage, state.enableAudio, state.enableVideo]);
+
+  useEffect(() => {
+    updateState({ assets: [] });
+  }, [contentKey]);
 
   useEffect(() => {
     const cardId = conversation.state.card?.card?.cardId;
@@ -100,29 +103,55 @@ export function useAddTopic(contentKey) {
     updateState({ enableImage, enableAudio, enableVideo, locked });
   }, [conversation.state]);
 
+  const setAsset = async (file, scale) => {
+    const url = file.startsWith('file:') ? file : `file://${file}`;
+    if (contentKey) {
+      const scaled = scale ? await scale(url) : url;
+      const stat = await RNFS.stat(scaled);
+      const getEncryptedBlock = async (pos, len) => {
+        if (pos + len > stat.size) {
+          return null;
+        }
+        const block = await RNFS.read(scaled, len, pos, 'base64');
+        return encryptBlock(block, contentKey);
+      }
+      return { data: url, encrypted: true, size: stat.size, getEncryptedBlock };
+    }
+    else {
+      return { data: url, encrypted: false };
+    }
+  }
+
   const actions = {
     setMessage: (message) => {
       updateState({ message });
     },
-    addImage: (data) => {
-      const url = data.startsWith('file:') ? data : 'file://' + data;
-
+    addImage: async (data) => {
       assetId.current++;
-      Image.getSize(url, (width, height) => {
-        const asset = { key: assetId.current, type: 'image', data: url, ratio: width/height };
-        updateState({ assets: [ ...state.assets, asset ] });
-      })
-    },
-    addVideo: (data) => {
-      const url = data.startsWith('file:') ? data : 'file://' + data
-      assetId.current++;
-      const asset = { key: assetId.current, type: 'video', data: url, ratio: 1, duration: 0, position: 0 };
+      const asset = await setAsset(data, async (file) => {
+        const scaled = await ImageResizer.createResizedImage(file, 512, 512, "JPEG", 90, 0, null);
+        return `file://${scaled.path}`;
+      });
+      asset.key = assetId.current;
+      asset.type = 'image';
+      asset.ratio = 1;
       updateState({ assets: [ ...state.assets, asset ] });
     },
-    addAudio: (data, label) => {
-      const url = data.startsWith('file:') ? data : 'file://' + data
+    addVideo: async (data) => {
       assetId.current++;
-      const asset = { key: assetId.current, type: 'audio', data: url, label };
+      const asset = await setAsset(data);
+      asset.key = assetId.current;
+      asset.type = 'video';
+      asset.position = 0;
+      asset.ratio = 1;
+      updateState({ assets: [ ...state.assets, asset ] });
+    },
+    addAudio: async (data, label) => {
+      assetId.current++;
+      const asset = await setAsset(data);
+      asset.key = assetId.current;
+      asset.type = 'audio';
+      asset.label = label;
       updateState({ assets: [ ...state.assets, asset ] });
     }, 
     setVideoPosition: (key, position) => {
@@ -181,24 +210,16 @@ export function useAddTopic(contentKey) {
          
           const assemble = (assets) => {
             if (!state.locked) {
-              if (assets?.length) {
-                return {
-                  assets,
-                  text: state.message,
-                  textColor: state.colorSet ? state.color : null,
-                  textSize: state.sizeSet ? state.size : null,
-                }
-              }
-              else {
-                return {
-                  text: state.message,
-                  textColor: state.colorSet ? state.color : null,
-                  textSize: state.sizeSet ? state.size : null,
-                }
+              return {
+                assets: assets?.length ? assets : null,
+                text: state.message,
+                textColor: state.colorSet ? state.color : null,
+                textSize: state.sizeSet ? state.size : null,
               }
             }
             else {
               const message = {
+                assets: assets?.length ? assets : null,
                 text: state.message,
                 textColor: state.textColorSet ? state.textColor : null,
                 textSize: state.textSizeSet ? state.textSize : null,

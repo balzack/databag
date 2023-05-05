@@ -1,3 +1,6 @@
 {
-  "name": "src"
+  "name": "src",
+  "dependencies": {
+    "react-native-fs": "^2.20.0"
+  }
 }

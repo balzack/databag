@@ -29,7 +29,7 @@
     "react-dom": "^18.2.0",
     "react-easy-crop": "^4.1.4",
     "react-icons": "^4.8.0",
-    "react-player": "^2.10.0",
+    "react-image-file-resizer": "^0.4.8",
     "react-resize-detector": "^7.0.0",
     "react-router-dom": "^6.2.2",
     "react-scripts": "5.0.0",

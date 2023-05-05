@@ -1,12 +1,12 @@
-import { Modal } from 'antd';
+import { Modal, Spin } from 'antd';
 import ReactResizeDetector from 'react-resize-detector';
 import { VideoCameraOutlined } from '@ant-design/icons';
-import { VideoAssetWrapper } from './VideoAsset.styled';
+import { VideoAssetWrapper, VideoModalWrapper } from './VideoAsset.styled';
 import { useVideoAsset } from './useVideoAsset.hook';
 
-export function VideoAsset({ thumbUrl, lqUrl, hdUrl }) {
+export function VideoAsset({ asset }) {
 
-  const { state, actions } = useVideoAsset();
+  const { state, actions } = useVideoAsset(asset);
 
   const activate = () => {
     if (state.dimension.width / state.dimension.height > window.innerWidth / window.innerHeight) {
@@ -28,7 +28,7 @@ export function VideoAsset({ thumbUrl, lqUrl, hdUrl }) {
           if (width !== state.dimension.width || height !== state.dimension.height) {
             actions.setDimension({ width, height });
           }
-          return <img style={{ height: '100%', objectFit: 'contain' }} src={thumbUrl} alt="" />
+          return <img style={{ height: '100%', objectFit: 'contain' }} src={asset.thumb} alt="" />
         }}
       </ReactResizeDetector>
       <div class="overlay" style={{ width: state.dimension.width, height: state.dimension.height }}>
@@ -38,8 +38,29 @@ export function VideoAsset({ thumbUrl, lqUrl, hdUrl }) {
           </div>
         )}
         <Modal centered={true} style={{ backgroundColor: '#aacc00', padding: 0 }} visible={state.active} width={state.width + 12} bodyStyle={{ paddingBottom: 0, paddingTop: 6, paddingLeft: 6, paddingRight: 6, backgroundColor: '#dddddd', margin: 0 }} footer={null} destroyOnClose={true} closable={false} onCancel={actions.clearActive}>
-          <video autoplay="true" controls src={hdUrl} width={state.width} height={state.height} 
-              playsinline="true" />
+          <VideoModalWrapper>
+            <div class="wrapper">
+              { !state.loaded && (
+                  <div class="frame">
+                    <img class="thumb" src={asset.thumb} alt="topic asset" />
+                    { state.error && (
+                      <div class="failed">
+                        <Spin size="large" delay={250} />
+                      </div>
+                    )}
+                    { !state.error && (
+                      <div class="loading">
+                        <Spin size="large" delay={250} />
+                      </div>
+                    )}
+                  </div>
+              )}
+              { !state.loading && (
+                <video style={{display: state.loaded ? 'block' : 'none'}} autoplay="true" controls src={state.url} width={state.width} height={state.height} 
+                    playsinline="true" onLoadedData={actions.setLoaded} />
+              )}
+            </div>
+          </VideoModalWrapper>
         </Modal>
       </div>
     </VideoAssetWrapper>

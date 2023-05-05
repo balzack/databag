@@ -154,22 +154,22 @@ export function AddTopic({ contentKey, shareIntent, setShareIntent }) {
           blurOnSubmit={true} onSubmitEditing={sendMessage} returnKeyType="send"
           autoCapitalize="sentences" placeholder="New Message" multiline={true} />
       <View style={styles.addButtons}>
-        { !state.locked && state.enableImage && (
+        { state.enableImage && (
           <TouchableOpacity style={styles.addButton} onPress={addImage}>
             <AntIcons name="picture" size={20} color={Colors.text} />
           </TouchableOpacity>
         )}
-        { !state.locked && state.enableVideo && (
+        { state.enableVideo && (
           <TouchableOpacity style={styles.addButton} onPress={addVideo}>
             <MatIcons name="video-outline" size={24} color={Colors.text} />
           </TouchableOpacity>
         )}
-        { !state.locked && state.enableAudio && (
+        { state.enableAudio && (
           <TouchableOpacity style={styles.addButton} onPress={addAudio}>
             <MatIcons name="music-box-outline" size={20} color={Colors.text} />
           </TouchableOpacity>
         )}
-        { !state.locked && (
+        { (state.enableImage || state.enableVideo || state.enableAudio) && (
           <View style={styles.divider} />
         )}
         <TouchableOpacity style={styles.addButton} onPress={actions.showFontSize}>

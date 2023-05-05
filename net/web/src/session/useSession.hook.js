@@ -167,7 +167,6 @@ export function useSession() {
       await ring.actions.decline(cardId, contactNode, contactToken, callId);
     },
     accept: async (call) => {
-console.log("ACCEPTING:", call);
       const { cardId, callId, contactNode, contactToken, calleeToken, iceUrl, iceUsername, icePassword } = call;
       await ring.actions.accept(cardId, callId, contactNode, contactToken, calleeToken, iceUrl, iceUsername, icePassword);
     },

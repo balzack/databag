@@ -8,10 +8,10 @@ import { ExclamationCircleOutlined, DeleteOutlined, EditOutlined, FireOutlined, 
 import { Carousel } from 'carousel/Carousel';
 import { useTopicItem } from './useTopicItem.hook';
 
-export function TopicItem({ host, sealed, topic, update, remove }) {
+export function TopicItem({ host, contentKey, sealed, topic, update, remove }) {
 
   const [ modal, modalContext ] = Modal.useModal();
-  const { state, actions } = useTopicItem();
+  const { state, actions } = useTopicItem(topic, contentKey);
 
   const removeTopic = () => {
     modal.confirm({
@@ -52,16 +52,14 @@ export function TopicItem({ host, sealed, topic, update, remove }) {
   };
 
   const renderAsset = (asset, idx) => {
-    if (asset.image) {
-      return <ImageAsset thumbUrl={topic.assetUrl(asset.image.thumb, topic.id)}
-          fullUrl={topic.assetUrl(asset.image.full, topic.id)} />
+    if (asset.type === 'image') {
+      return <ImageAsset asset={asset} />
     }
-    if (asset.video) {
-      return <VideoAsset thumbUrl={topic.assetUrl(asset.video.thumb, topic.id)}
-          lqUrl={topic.assetUrl(asset.video.lq, topic.id)} hdUrl={topic.assetUrl(asset.video.hd, topic.id)} />
+    if (asset.type === 'video') {
+      return <VideoAsset asset={asset} />
     }
-    if (asset.audio) {
-      return <AudioAsset label={asset.audio.label} audioUrl={topic.assetUrl(asset.audio.full, topic.id)} />
+    if (asset.type === 'audio') {
+      return <AudioAsset asset={asset} />
     }
     return <></>
   }
@@ -113,7 +111,7 @@ export function TopicItem({ host, sealed, topic, update, remove }) {
               )}
               { topic.transform === 'complete' && (
                 <div class="topic-assets">
-                  <Carousel pad={40} items={topic.assets} itemRenderer={renderAsset} />
+                  <Carousel pad={40} items={state.assets} itemRenderer={renderAsset} />
                 </div>
               )}
             </>

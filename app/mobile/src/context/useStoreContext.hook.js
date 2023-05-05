@@ -13,10 +13,23 @@ export function useStoreContext() {
 
   const initSession = async (guid) => {
     await db.current.executeSql(`CREATE TABLE IF NOT EXISTS channel_${guid} (channel_id text, revision integer, detail_revision integer, topic_revision integer, topic_marker integer, blocked integer, sync_revision integer, detail text, unsealed_detail text, summary text, unsealed_summary text, offsync integer, read_revision integer, unique(channel_id))`);
-    await db.current.executeSql(`CREATE TABLE IF NOT EXISTS channel_topic_${guid} (channel_id text, topic_id text, revision integer, detail_revision integer, blocked integer, detail text, unsealed_detail text, unique(channel_id, topic_id))`);
+    await db.current.executeSql(`CREATE TABLE IF NOT EXISTS channel_topic_${guid} (channel_id text, topic_id text, revision integer, created integer, detail_revision integer, blocked integer, detail text, unsealed_detail text, unique(channel_id, topic_id))`);
     await db.current.executeSql(`CREATE TABLE IF NOT EXISTS card_${guid} (card_id text, revision integer, detail_revision integer, profile_revision integer, detail text, profile text, notified_view integer, notified_article integer, notified_profile integer, notified_channel integer, offsync integer, blocked integer, unique(card_id))`);
     await db.current.executeSql(`CREATE TABLE IF NOT EXISTS card_channel_${guid} (card_id text, channel_id text, revision integer, detail_revision integer, topic_revision integer, topic_marker integer, sync_revision integer, detail text, unsealed_detail text, summary text, unsealed_summary text, offsync integer, blocked integer, read_revision integer, unique(card_id, channel_id))`);
-    await db.current.executeSql(`CREATE TABLE IF NOT EXISTS card_channel_topic_${guid} (card_id text, channel_id text, topic_id text, revision integer, detail_revision integer, blocked integer, detail text, unsealed_detail text, unique(card_id, channel_id, topic_id))`);
+    await db.current.executeSql(`CREATE TABLE IF NOT EXISTS card_channel_topic_${guid} (card_id text, channel_id text, topic_id text, revision integer, created integer, detail_revision integer, blocked integer, detail text, unsealed_detail text, unique(card_id, channel_id, topic_id))`);
+  }
+
+  const hasColumn = async (table, column) => {
+    const pragma = await db.current.executeSql(`PRAGMA table_info(${table})`);
+    if (pragma?.length === 1) {
+      for (let i = 0; i < pragma[0].rows.length; i++) {
+        const col = pragma[0].rows.item(i);
+        if (col.name === column) {
+          return true;
+        }
+      }
+    }
+    return false
   }
 
   const actions = {
@@ -27,6 +40,16 @@ export function useStoreContext() {
       await db.current.executeSql("CREATE TABLE IF NOT EXISTS app (key text, value text, unique(key));");
       await db.current.executeSql("INSERT OR IGNORE INTO app (key, value) values ('session', null);");
       return await getAppValue(db.current, 'session');
+    },
+    updateDb: async (guid) => {
+      const hasChannel = await hasColumn(`channel_topic_${guid}`, 'created');
+      if (!hasChannel) {
+        await db.current.executeSql(`ALTER TABLE channel_topic_${guid} ADD COLUMN created integer default 0`);
+      }
+      const hasCardChannel = await hasColumn(`card_channel_topic_${guid}`, 'created');
+      if (!hasCardChannel) {
+        await db.current.executeSql(`ALTER TABLE card_channel_topic_${guid} ADD COLUMN created integer default 0`);
+      }
     },
     setSession: async (access) => {
       await initSession(access.guid);
@@ -240,9 +263,28 @@ export function useStoreContext() {
         unsealedDetail: decodeObject(topic.unsealed_detail),
       }));  
     },
+    getChannelTopicItemsId: async (guid, channelId) => {
+      const values = await getAppValues(db.current, `SELECT topic_id, created FROM channel_topic_${guid} WHERE channel_id=?`, [channelId]);
+      return values.map(topic => ({
+        topicId: topic.topic_id,
+        created: topic.created,
+      }));
+    },
+    getChannelTopicItemsById: async (guid, channelId, topics) => {
+      const q = topics.map(() => '?');
+      const values = await getAppValues(db.current, `SELECT topic_id, revision, blocked, detail_revision, detail, unsealed_detail FROM channel_topic_${guid} WHERE channel_id=? AND topic_id in (${q.join(',')})`, [channelId, ...topics]);
+      return values.map(topic => ({
+        topicId: topic.topic_id,
+        revision: topic.revision,
+        blocked: topic.blocked,
+        detailRevision: topic.detail_revision,
+        detail: decodeObject(topic.detail),
+        unsealedDetail: decodeObject(topic.unsealed_detail),
+      }));  
+    },
     setChannelTopicItem: async (guid, channelId, topic) => { 
       const { topicId, revision, detailRevision, detail } = topic;
-      await db.current.executeSql(`INSERT OR REPLACE INTO channel_topic_${guid} (channel_id, topic_id, revision, detail_revision, blocked, detail, unsealed_detail) values (?, ?, ?, ?, false, ?, null);`, [channelId, topicId, revision, detailRevision, encodeObject(detail)]);
+      await db.current.executeSql(`INSERT OR REPLACE INTO channel_topic_${guid} (channel_id, topic_id, revision, created, detail_revision, blocked, detail, unsealed_detail) values (?, ?, ?, ?, ?, false, ?, null);`, [channelId, topicId, revision, detail?.created, detailRevision, encodeObject(detail)]);
     },
     setChannelTopicItemUnsealedDetail: async (guid, channelId, topicId, revision, unsealed) => {
       await db.current.executeSql(`UPDATE channel_topic_${guid} set unsealed_detail=? where detail_revision=? AND channel_id=? AND topic_id=?`, [encodeObject(unsealed), revision, channelId, topicId]);
@@ -329,11 +371,30 @@ export function useStoreContext() {
         detailRevision: topic.detail_revision,
         detail: decodeObject(topic.detail),
         unsealedDetail: decodeObject(topic.unsealed_detail),
-      }));  
-    },    
+      })); 
+    },
+    getCardChannelTopicItemsId: async (guid, cardId, channelId) => {
+      const values = await getAppValues(db.current, `SELECT topic_id, created FROM card_channel_topic_${guid} WHERE card_id=? AND channel_id=?`, [cardId, channelId]);
+      return values.map(topic => ({
+        topicId: topic.topic_id,
+        created: topic.created,
+      }));
+    },
+    getCardChannelTopicItemsById: async (guid, cardId, channelId, topics) => {
+      const q = topics.map(() => '?');
+      const values = await getAppValues(db.current, `SELECT topic_id, revision, blocked, detail_revision, detail, unsealed_detail FROM card_channel_topic_${guid} WHERE card_id=? AND channel_id=? AND topic_id in (${q.join(',')})`, [cardId, channelId, ...topics]);
+      return values.map(topic => ({
+        topicId: topic.topic_id,
+        revision: topic.revision,
+        blocked: topic.blocked,
+        detailRevision: topic.detail_revision,
+        detail: decodeObject(topic.detail),
+        unsealedDetail: decodeObject(topic.unsealed_detail),
+      }));
+    },
     setCardChannelTopicItem: async (guid, cardId, channelId, topic) => {
       const { topicId, revision, detailRevision, detail } = topic;
-      await db.current.executeSql(`INSERT OR REPLACE INTO card_channel_topic_${guid} (card_id, channel_id, topic_id, revision, detail_revision, detail, unsealed_detail) values (?, ?, ?, ?, ?, ?, null);`, [cardId, channelId, topicId, revision, detailRevision, encodeObject(detail)]);
+      await db.current.executeSql(`INSERT OR REPLACE INTO card_channel_topic_${guid} (card_id, channel_id, topic_id, revision, created, detail_revision, detail, unsealed_detail) values (?, ?, ?, ?, ?, ?, ?, null);`, [cardId, channelId, topicId, revision, topic?.created, detailRevision, encodeObject(detail)]);
     },
     setCardChannelTopicItemUnsealedDetail: async (guid, cardId, channelId, topicId, revision, unsealed) => {
       await db.current.executeSql(`UPDATE card_channel_topic_${guid} set unsealed_detail=? where detail_revision=? AND card_id=? AND channel_id=? AND topic_id=?`, [encodeObject(unsealed), revision, cardId, channelId, topicId]);

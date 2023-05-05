@@ -3,14 +3,14 @@ import { ConversationContext } from 'context/ConversationContext';
 import { Image } from 'react-native';
 import { useWindowDimensions } from 'react-native';
 
-export function useImageAsset(topicId, asset) {
+export function useImageAsset(asset) {
 
   const [state, setState] = useState({
     frameWidth: 1,
     frameHeight: 1,
     imageRatio: 1,
-    imageWidth: 1,
-    imageHeight: 1,
+    imageWidth: 1024,
+    imageHeight: 1024,
     url: null,
     loaded: false,
     failed: false,
@@ -30,14 +30,15 @@ export function useImageAsset(topicId, asset) {
       const frameRatio = state.frameWidth / state.frameHeight;
       if (frameRatio > state.imageRatio) {
         //height constrained
-        const height = 0.9 * state.frameHeight;
-        const width = height * state.imageRatio;
+        const height = Math.floor(0.9 * state.frameHeight);
+        const width = Math.floor(height * state.imageRatio);
+
         updateState({ imageWidth: width, imageHeight: height }); 
       }
       else {
         //width constrained
-        const width = 0.9 * state.frameWidth;
-        const height = width / state.imageRatio;
+        const width = Math.floor(0.9 * state.frameWidth);
+        const height = Math.floor(width / state.imageRatio);
         updateState({ imageWidth: width, imageHeight: height });
       }
     }
@@ -45,20 +46,32 @@ export function useImageAsset(topicId, asset) {
   }, [state.frameWidth, state.frameHeight, state.imageRatio, state.loaded]);
 
   useEffect(() => {
-    updateState({ frameWidth: dimensions.width, frameHeight: dimensions.height });
+    imageWidth = dimensions.width * 0.9 > state.imageWidth ? state.imageWidth : dimensions.width * 0.9;
+    imageHeight = dimensions.height * 0.9 > state.imageHeight ? state.imageHeight : dimensions.height * 0.9;
+    updateState({ frameWidth: dimensions.width, frameHeight: dimensions.height, imageWidth, imageHeight });
   }, [dimensions]);
 
   useEffect(() => {
-    const url = conversation.actions.getTopicAssetUrl(topicId, asset.full); 
-    updateState({ url });
-  }, [topicId, conversation, asset]);
+    if (asset.encrypted) {
+      const now = Date.now();
+      const url = asset.decrypted ? `file://${asset.decrypted}?now=${now}` : null
+      updateState({ url, failed: asset.error });
+    }
+    else {
+      updateState({ url: asset.full, failed: false });
+    }
+  }, [asset]);
 
   const actions = {
-    loaded: (e) => {
-      const { width, height } = e.nativeEvent.source;
-      updateState({ loaded: true, imageRatio: width / height });
+    setRatio: (e) => {
+      const { width, height } = e.nativeEvent;
+      updateState({ imageRatio: width / height });
     },
-    failed: () => {
+    loaded: () => {
+      updateState({ loaded: true });
+    },
+    failed: (e) => {
+console.log("FAILEE!!!", e);
       updateState({ failed: true });
     },
     showControls: () => {

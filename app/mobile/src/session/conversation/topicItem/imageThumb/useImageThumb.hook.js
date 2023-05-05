@@ -2,7 +2,7 @@ import { useState, useRef, useEffect, useContext } from 'react';
 import { ConversationContext } from 'context/ConversationContext';
 import { Image } from 'react-native';
 
-export function useImageThumb(topicId, asset) {
+export function useImageThumb() {
 
   const [state, setState] = useState({
     loaded: false,
@@ -15,11 +15,6 @@ export function useImageThumb(topicId, asset) {
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
   }
-
-  useEffect(() => {
-    const url = conversation.actions.getTopicAssetUrl(topicId, asset.thumb); 
-    updateState({ url });
-  }, [topicId, conversation, asset]);
 
   const actions = {
     loaded: (e) => {

@@ -16,6 +16,13 @@ export const styles = StyleSheet.create({
     paddingRight: 8,
     paddingTop: 4,
   },
+  thumb: {
+    borderRadius: 4,
+    opacity: 0.6,
+  },
+  main: {
+    position: 'absolute',
+  },
   close: {
     position: 'absolute',
     top: 0,
@@ -27,6 +34,16 @@ export const styles = StyleSheet.create({
   },
   loading: {
     position: 'absolute',
+    display: 'flex',
+    flexAlign: 'center',
+    justifyContent: 'center',
+    flexDirection: 'column',
+  },
+  decrypting: {
+    fontVariant: ["tabular-nums"],
+    paddingTop: 16,
+    fontSize: 12,
+    color: '#dddddd',
   },
 })
 

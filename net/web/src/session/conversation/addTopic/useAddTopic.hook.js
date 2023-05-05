@@ -1,8 +1,9 @@
-import { useContext, useState, useEffect } from 'react';
+import { useContext, useState, useRef, useEffect } from 'react';
 import { ConversationContext } from 'context/ConversationContext';
-import { encryptTopicSubject } from 'context/sealUtil';
+import { encryptBlock, encryptTopicSubject } from 'context/sealUtil';
+import Resizer from "react-image-file-resizer";
 
-export function useAddTopic() {
+export function useAddTopic(contentKey) {
   
   const [state, setState] = useState({
     enableImage: null,
@@ -18,6 +19,7 @@ export function useAddTopic() {
   });
 
   const conversation = useContext(ConversationContext);
+  const objects = useRef([]);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
@@ -45,23 +47,79 @@ export function useAddTopic() {
     });
   }
 
+  const clearObjects = () => {
+    objects.current.forEach(object => {
+      URL.revokeObjectURL(object);
+    });
+    objects.current = [];
+  }
+
+  useEffect(() => {
+    updateState({ assets: [] });
+    return () => { clearObjects() };
+  }, [contentKey]);
+
   useEffect(() => {
     const { enableImage, enableAudio, enableVideo } = conversation.state.channel?.data?.channelDetail || {};
     updateState({ enableImage, enableAudio, enableVideo });
   }, [conversation.state.channel?.data?.channelDetail]);
 
+  const loadFileData = (file) => {
+    return new Promise(resolve => {
+      const reader = new FileReader()
+      reader.onloadend = (res) => { resolve(reader.result) }
+      reader.readAsArrayBuffer(file)
+    })
+  };
+
+  const arrayBufferToBase64 = (buffer) => {
+    var binary = '';
+    var bytes = new Uint8Array( buffer );
+    var len = bytes.byteLength;
+    for (var i = 0; i < len; i++) {
+        binary += String.fromCharCode( bytes[ i ] );
+    }
+    return window.btoa( binary );
+  }
+
+  const setUrl = async (file) => {
+    const url = URL.createObjectURL(file);
+    objects.current.push(url);
+    if (contentKey) {
+      const buffer = await loadFileData(file)
+      const getEncryptedBlock = (pos, len) => {
+        if (pos + len > buffer.byteLength) {
+          return null;
+        }
+        const slice = buffer.slice(pos, pos + len);
+        const block = arrayBufferToBase64(slice);
+        return encryptBlock(block, contentKey);
+      }
+      return { url, encrypted: true, size: buffer.byteLength, getEncryptedBlock };
+    }
+    else {
+      return { url, encrypted: false };
+    }
+  }
+
   const actions = {
-    addImage: (image) => {
-      let url = URL.createObjectURL(image);
-      addAsset({ image, url })
+    addImage: async (image) => {
+      const scaled = await getResizedImage(image);
+      const asset = await setUrl(scaled);
+      asset.image = image;
+      addAsset(asset);
     },
-    addVideo: (video) => {
-      let url = URL.createObjectURL(video);
-      addAsset({ video, url, position: 0 })
+    addVideo: async (video) => {
+      const asset = await setUrl(video);
+      asset.video = video;
+      asset.position = 0;
+      addAsset(asset);
     },
-    addAudio: (audio) => {
-      let url = URL.createObjectURL(audio);
-      addAsset({ audio, url, label: '' })
+    addAudio: async (audio) => {
+      const asset = await setUrl(audio);
+      asset.audio = audio;
+      asset.label = '';
+      addAsset(asset);
     },
     setLabel: (index, label) => {
       updateAsset(index, { label });
@@ -81,17 +139,15 @@ export function useAddTopic() {
     setTextSize: (value) => {
       updateState({ textSizeSet: true, textSize: value });
     },
-    addTopic: async (contentKey) => {
+    addTopic: async () => {
       if (!state.busy) {
         try {
           updateState({ busy: true });
           const type = contentKey ? 'sealedtopic' : 'superbasictopic';
           const message = (assets) => {
             if (contentKey) {
-              if (assets?.length) {
-                console.log('assets not yet supported on sealed channels');
-              }
               const message = { 
+                assets: assets?.length ? assets : null,
                 text: state.messageText,
                 textColor: state.textColorSet ? state.textColor : null,
                 textSize: state.textSizeSet ? state.textSize : null,
@@ -99,26 +155,18 @@ export function useAddTopic() {
               return encryptTopicSubject({ message }, contentKey);
             }
             else {
-              if (assets?.length) {
-                return {
-                  assets,
-                  text: state.messageText,
-                  textColor: state.textColorSet ? state.textColor : null,
-                  textSize: state.textSizeSet ? state.textSize : null,
-                }
-              }
-              else {
-                return {
-                  text: state.messageText,
-                  textColor: state.textColorSet ? state.textColor : null,
-                  textSize: state.textSizeSet ? state.textSize : null,
-                }
+              return {
+                assets: assets?.length ? assets : null,
+                text: state.messageText,
+                textColor: state.textColorSet ? state.textColor : null,
+                textSize: state.textSizeSet ? state.textSize : null,
               }
             }
           };
-          await conversation.actions.addTopic(type, message, state.assets);
+          await conversation.actions.addTopic(type, message, [ ...state.assets ]);
           updateState({ busy: false, messageText: null, textColor: '#444444', textColorSet: false,
               textSize: 12, textSizeSet: false, assets: [] });
+          clearObjects();
         }
         catch(err) {
           console.log(err);
@@ -133,5 +181,20 @@ export function useAddTopic() {
   };
 
   return { state, actions };
+}
+
+function getResizedImage(data) {
+  return new Promise(resolve => {
+    Resizer.imageFileResizer(data, 1024, 1024, 'JPEG', 90, 0,
+    uri => {
+      const base64 = uri.split(';base64,').pop();
+      var binaryString = atob(base64);
+      var bytes = new Uint8Array(binaryString.length);
+      for (var i = 0; i < binaryString.length; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
+      }
+      resolve(new Blob([bytes]));
+    }, 'base64', 256, 256 );
+  });
 }
 
