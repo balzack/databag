@@ -493,6 +493,14 @@ export function useCardContext() {
       const { guid } = access.current || {};
       return await store.actions.getCardChannelTopicItems(guid, cardId, channelId);
     },
+    getTopicItemsId: async (cardId, channelId) => {
+      const { guid } = access.current || {};
+      return await store.actions.getCardChannelTopicItemsId(guid, cardId, channelId);
+    },
+    getTopicItemsById: async (cardId, channelId, topics) => {
+      const { guid } = access.current || {};
+      return await store.actions.getCardChannelTopicItemsById(guid, cardId, channelId, topics);
+    },
     setTopicItem: async (cardId, channelId, topicId, topic) => {
       const { guid } = access.current || {};
       return await store.actions.setCardChannelTopicItem(guid, cardId, channelId, topicId, topic);
