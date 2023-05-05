@@ -13,7 +13,7 @@ import { ImageAsset } from './imageAsset/ImageAsset';
 import { AudioAsset } from './audioAsset/AudioAsset';
 import { VideoAsset } from './videoAsset/VideoAsset';
 import Carousel from 'react-native-reanimated-carousel';
-
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 export function TopicItem({ item, focused, focus, hosting, remove, update, block, report, contentKey }) {
 
   const { state, actions } = useTopicItem(item, hosting, remove, contentKey);
@@ -212,27 +212,29 @@ export function TopicItem({ item, focused, focus, hosting, remove, update, block
         onRequestClose={actions.hideCarousel}
       >
         <View style={styles.modal}>
-          <Carousel
-            loop
-            width={state.width}
-            autoPlay={false}
-            data={state.assets}
-            defaultIndex={state.carouselIndex}
-            scrollAnimationDuration={1000}
-            onSnapToItem={(index) => console.log('current index:', index)}
-            renderItem={({ index }) => (
-              <View style={styles.frame}>
-                { state.assets[index].type === 'image' && (
-                  <ImageAsset asset={state.assets[index]} dismiss={actions.hideCarousel} />
-                )}
-                { state.assets[index].type === 'video' && (
-                  <VideoAsset asset={state.assets[index]} dismiss={actions.hideCarousel} />
-                )}
-                { state.assets[index].type === 'audio' && (
-                  <AudioAsset asset={state.assets[index]} dismiss={actions.hideCarousel} />
-                )}
-              </View>
-            )} />
+          <GestureHandlerRootView>
+            <Carousel
+              loop
+              width={state.width}
+              autoPlay={false}
+              data={state.assets}
+              defaultIndex={state.carouselIndex}
+              scrollAnimationDuration={1000}
+              onSnapToItem={(index) => console.log('current index:', index)}
+              renderItem={({ index }) => (
+                <View style={styles.frame}>
+                  { state.assets[index].type === 'image' && (
+                    <ImageAsset asset={state.assets[index]} dismiss={actions.hideCarousel} />
+                  )}
+                  { state.assets[index].type === 'video' && (
+                    <VideoAsset asset={state.assets[index]} dismiss={actions.hideCarousel} />
+                  )}
+                  { state.assets[index].type === 'audio' && (
+                    <AudioAsset asset={state.assets[index]} dismiss={actions.hideCarousel} />
+                  )}
+                </View>
+              )} />
+            </GestureHandlerRootView>
         </View>
       </Modal> 
     </View>
