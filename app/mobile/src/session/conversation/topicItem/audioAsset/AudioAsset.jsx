@@ -1,4 +1,4 @@
-import { Image, View, Text, TouchableOpacity } from 'react-native';
+import { ActivityIndicator, Image, View, Text, TouchableOpacity } from 'react-native';
 import { useEffect, useRef } from 'react';
 import Colors from 'constants/Colors';
 import Video from 'react-native-video';
@@ -36,6 +36,14 @@ export function AudioAsset({ asset, dismiss }) {
       { state.url && (
         <Video ref={player} source={{ uri: state.url }} repeat={true}
           paused={!state.playing} onLoad={actions.loaded} style={styles.player} />
+      )}
+      { !state.loaded && (
+        <TouchableOpacity style={styles.loading} onPress={dismiss}>
+          <ActivityIndicator color={Colors.black} size="large" />
+          { asset.total > 1 && (
+            <Text style={styles.decrypting}>{ asset.block } / { asset.total }</Text>
+          )}
+        </TouchableOpacity>
       )}
     </View>
   );

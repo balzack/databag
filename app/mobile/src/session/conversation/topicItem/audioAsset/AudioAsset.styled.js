@@ -37,5 +37,18 @@ export const styles = StyleSheet.create({
   player: {
     display: 'none',
   },
+  loading: {
+    position: 'absolute',
+    display: 'flex',
+    flexAlign: 'center',
+    justifyContent: 'center',
+    flexDirection: 'column',
+  },
+  decrypting: {
+    fontVariant: ["tabular-nums"],
+    paddingTop: 16,
+    fontSize: 12,
+    color: '#888888',
+  },
 })
 

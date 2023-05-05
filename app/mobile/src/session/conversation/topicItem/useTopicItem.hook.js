@@ -290,6 +290,8 @@ export function useTopicItem(item, hosting, remove, contentKey) {
             if (exists) {
               RNFS.unlink(path);
             }
+            assets[cur] = { ...asset, block: 0, total: asset.parts.length };
+            updateState({ assets: [ ...assets ]});
             for (let j = 0; j < asset.parts.length; j++) {
               const part = asset.parts[j];
               const url = conversation.actions.getTopicAssetUrl(item.topicId, part.partId);
@@ -300,6 +302,9 @@ export function useTopicItem(item, hosting, remove, contentKey) {
                 throw new Error("unseal assets cancelled");
               }
               await RNFS.appendFile(path, decrypted, 'base64');
+
+              assets[cur] = { ...asset, block: j+1, total: asset.parts.length };
+              updateState({ assets: [ ...assets ]});
             };
 
             asset.decrypted = path;
