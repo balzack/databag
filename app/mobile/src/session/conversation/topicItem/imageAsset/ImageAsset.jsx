@@ -14,7 +14,7 @@ export function ImageAsset({ asset, dismiss }) {
           style={{ ...styles.thumb, width: state.imageWidth, height: state.imageHeight }}
           resizeMode={FastImage.resizeMode.contain} />
       { state.url && (
-        <FastImage source={{ uri: state.url }} onLoad={actions.loaded} onError={actions.failed}
+        <FastImage source={{ uri: state.url }} onLoad={actions.loaded}
             style={{ ...styles.main, width: state.imageWidth, height: state.imageHeight }}
             resizeMode={FastImage.resizeMode.contain} />
       )}

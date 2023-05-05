@@ -58,7 +58,7 @@ export function useImageAsset(asset) {
       updateState({ url, failed: asset.error });
     }
     else {
-      updateState({ url: asset.full });
+      updateState({ url: asset.full, failed: false });
     }
   }, [asset]);
 
@@ -70,7 +70,8 @@ export function useImageAsset(asset) {
     loaded: () => {
       updateState({ loaded: true });
     },
-    failed: () => {
+    failed: (e) => {
+console.log("FAILEE!!!", e);
       updateState({ failed: true });
     },
     showControls: () => {
