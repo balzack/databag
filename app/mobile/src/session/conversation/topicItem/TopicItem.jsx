@@ -177,7 +177,7 @@ export function TopicItem({ item, focused, focus, hosting, remove, update, block
           { state.sharing && (
             <ActivityIndicator style={styles.share} color={Colors.white} size="small" />
           )}
-          { !state.sharing && (
+          { !state.sharing && contentKey == null && (
             <TouchableOpacity style={styles.share} onPress={shareMessage}>
               <MatIcons name="share-variant-outline" size={18} color={Colors.white} />
             </TouchableOpacity>
