@@ -30,7 +30,7 @@ export function useTopicItem(topic, contentKey) {
         if (asset.encrypted) {
           const encrypted = true;
           const { type, thumb, label, parts } = asset.encrypted;
-          const getDecryptedBlob = async (abort) => {
+          const getDecryptedBlob = async (abort, progress) => {
             let pos = 0;
             let len = 0;
             
@@ -39,6 +39,7 @@ export function useTopicItem(topic, contentKey) {
               if (abort()) {
                 throw new Error("asset unseal aborted");
               }
+              progress(i, parts.length);
               const part = parts[i];
               const url = topic.assetUrl(part.partId, topic.id);
               const response = await fetchWithTimeout(url, { method: 'GET' });
@@ -48,6 +49,7 @@ export function useTopicItem(topic, contentKey) {
               slices.push(slice);
               len += slice.byteLength;
             };
+            progress(parts.length, parts.length);
             
             const data = new Uint8Array(len)
             for (let i = 0; i < slices.length; i++) {

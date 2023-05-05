@@ -80,6 +80,8 @@ export const AudioModalWrapper = styled.div`
     position: absolute;
     color: white;
     border-radius: 8px;
+    display: flex;
+    flex-direction: column;
 
     .ant-spin-dot-item {
       background-color: ${Colors.white};

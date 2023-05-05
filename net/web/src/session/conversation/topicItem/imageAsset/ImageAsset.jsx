@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Modal, Spin } from 'antd';
+import { Progress, Modal, Spin } from 'antd';
 import ReactResizeDetector from 'react-resize-detector';
 import { ImageAssetWrapper, ImageModalWrapper } from './ImageAsset.styled';
 import { useImageAsset } from './useImageAsset.hook';
+import Colors from 'constants/Colors';
 
 export function ImageAsset({ asset }) {
 
@@ -42,6 +43,9 @@ export function ImageAsset({ asset }) {
               { !state.error && (
                 <div class="loading">
                   <Spin size="large" delay={250} />
+                  { state.total != 0 && (
+                    <Progress percent={Math.floor(100 * state.block / state.total)} size="small" showInfo={false} trailColor={Colors.white} strokeColor={Colors.background} />
+                  )}
                 </div>
               )}
               { state.error && (
