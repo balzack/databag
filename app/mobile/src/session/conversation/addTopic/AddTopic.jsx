@@ -18,28 +18,30 @@ export function AddTopic({ contentKey, shareIntent, setShareIntent }) {
   const { state, actions } = useAddTopic(contentKey);
 
   useEffect(() => {
-    if (shareIntent) {
-      shareIntent.forEach(share => {
-        if (share.text) {
-          actions.setMessage(share.text);
-        }
-        if (share.weblink) {
-          actions.setMessage(share.weblink);
-        }
-        const mime = share.mimeType?.toLowerCase();
-        if (mime === '.jpg' || mime === '.png' || mime === 'image/jpeg' || mime == 'image/png' ) {
-          actions.addImage(share.filePath)
-        }
-        if (mime === '.mp4' || mime === 'video/mp4' || mime == 'video/mpeg') {
-          actions.addVideo(share.filePath)
-        }
-        if (mime === '.mp3') {
-          actions.addAudio(share.filePath)
-        }
-      });
-      setShareIntent(null);
+    if (shareIntent && state.loaded) {
+      if (!state.locked || contentKey) { 
+        shareIntent.forEach(share => {
+          if (share.text) {
+            actions.setMessage(share.text);
+          }
+          if (share.weblink) {
+            actions.setMessage(share.weblink);
+          }
+          const mime = share.mimeType?.toLowerCase();
+          if (mime === '.jpg' || mime === '.png' || mime === 'image/jpeg' || mime == 'image/png' ) {
+            actions.addImage(share.filePath)
+          }
+          if (mime === '.mp4' || mime === 'video/mp4' || mime == 'video/mpeg') {
+            actions.addVideo(share.filePath)
+          }
+          if (mime === '.mp3') {
+            actions.addAudio(share.filePath)
+          }
+        });
+        setShareIntent(null);
+      }
     }
-  }, [shareIntent]);
+  }, [shareIntent, state.loaded, state.locked, contentKey]);
 
   const addImage = async () => {
     try {

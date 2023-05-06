@@ -25,6 +25,7 @@ export function useAddTopic(contentKey) {
     enableAudio: false,
     enableVideo: false,
     locked: true,
+    loaded: false,
     conflict: false,
   });
 
@@ -100,11 +101,13 @@ export function useAddTopic(contentKey) {
   useEffect(() => {
     const { enableVideo, enableAudio, enableImage } = conversation.state.channel?.detail || {};
     const locked = conversation.state.channel?.detail?.dataType === 'superbasic' ? false : true;
-    updateState({ enableImage, enableAudio, enableVideo, locked });
+    const loaded = conversation.state.loaded;
+    updateState({ enableImage, enableAudio, enableVideo, locked, loaded });
   }, [conversation.state]);
 
   const setAsset = async (file, scale) => {
     const url = file.startsWith('file:') ? file : `file://${file}`;
+
     if (contentKey) {
       const scaled = scale ? await scale(url) : url;
       const stat = await RNFS.stat(scaled);
