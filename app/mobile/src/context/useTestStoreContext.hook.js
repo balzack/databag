@@ -22,6 +22,8 @@ export function useTestStoreContext() {
     init: async () => {
       return null;
     },
+    updateDb: async () => {
+    },
     setSession: async (access) => {
     },
     clearSession: async () => {
@@ -147,6 +149,12 @@ export function useTestStoreContext() {
     getChannelTopicItems: async (guid, channelId) => {
       return [];
     },
+    getChannelTopicItemsId: async (guid, channelId) => {
+      return [];
+    },
+    getChannelTopicItemsById: async (guid, channelId, topcis) => {
+      return [];
+    },
     setChannelTopicItem: async (guid, channelId, topic) => { 
     },
     setChannelTopicItemUnsealedDetail: async (guid, channelId, topicId, revision, unsealed) => {
@@ -196,7 +204,13 @@ export function useTestStoreContext() {
 
     getCardChannelTopicItems: async (guid, cardId, channelId) => {
       return [];
-    },    
+    },
+    getCardChannelTopicItemsId: async (guid, cardId, channelId) => {
+      return [];
+    },
+    getCardChannelTopicItemsById: async (guid, cardId, channelId, topics) => {
+      return [];
+    }, 
     setCardChannelTopicItem: async (guid, cardId, channelId, topic) => {
     },
     setCardChannelTopicItemUnsealedDetail: async (guid, cardId, channelId, topicId, revision, unsealed) => {
