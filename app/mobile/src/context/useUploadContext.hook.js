@@ -126,7 +126,7 @@ async function getThumb(file, type, position) {
     return `data:image/jpeg;base64,${base}`;
   }
   else if (type === 'video') {
-    const shot = await createThumbnail({ url: url, timeStamp: position * 1000 })
+    const shot = await createThumbnail({ url: file, timeStamp: position * 1000 })
     const thumb = await ImageResizer.createResizedImage('file://' + shot.path, 192, 192, "JPEG", 50, 0, null);
     const base = await RNFS.readFile(thumb.path, 'base64')
     return `data:image/jpeg;base64,${base}`;
