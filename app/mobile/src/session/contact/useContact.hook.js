@@ -149,7 +149,7 @@ export function useContact(contact) {
       await addFlag(state.node, state.guid);
     },
     resync: () => {
-      card.actions.resync(contact.card);
+      card.actions.resyncCard(state.cardId);
     },
   };
 

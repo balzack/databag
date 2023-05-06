@@ -286,6 +286,11 @@ export function ContactBody({ contact }) {
             </TouchableOpacity>
           </>
         )}
+        { state.offsync && (
+          <TouchableOpacity style={styles.alert} onPress={actions.resync}>
+            <Text style={styles.alertText}>Resync Contact</Text>
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   );

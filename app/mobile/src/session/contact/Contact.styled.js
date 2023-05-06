@@ -118,4 +118,17 @@ export const styles = StyleSheet.create({
   buttonText: {
     color: Colors.white,
   },
+  alert: {
+    width: 192,
+    padding: 6,
+    backgroundColor: Colors.alert,
+    borderRadius: 4,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 16,
+  },
+  alertText: {
+    color: Colors.white,
+  },
 })

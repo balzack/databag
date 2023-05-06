@@ -110,12 +110,12 @@ export function useCardContext() {
           const { notifiedView, notifiedProfile, notifiedArticle, notifiedChannel } = card.data || {};
           const cardRevision = { view: notifiedView, profile: notifiedProfile, artcile: notifiedArticle, channel: notifiedChannel };
           await syncCard(server, token, guid, entry, cardRevision);
-          await store.action.clearCardItemOffsync(guid, cardId);
+          await store.actions.clearCardItemOffsync(guid, cardId);
           entry.card.offsync = false;
-        }
         
-        cards.current.set(cardId, card);
-        updateState({ cards: cards.current });
+          cards.current.set(cardId, entry);
+          updateState({ cards: cards.current });
+        }
       }
       catch(err) {
         console.log(err);

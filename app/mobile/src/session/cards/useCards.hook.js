@@ -24,7 +24,7 @@ export function useCards(filter, sort) {
   }, [account.state]);
 
   const setCardItem = (item) => {
-    const { profile, detail, cardId } = item.card || { profile: {}, detail: {} }
+    const { profile, detail, cardId, blocked, offsync } = item.card || { profile: {}, detail: {} }
     const { name, handle, node, guid, location, description, imageSet } = profile;
 
     return {
@@ -37,9 +37,8 @@ export function useCards(filter, sort) {
       description: description,
       status: detail.status,
       token: detail.token,
-      offsync: item.offsync,
-      blocked: item.blocked,
-      offsync: item.offsync,
+      offsync: offsync,
+      blocked: blocked,
       updated: detail.statusUpdated,
       logo: imageSet ? card.actions.getCardImageUrl(cardId) : 'avatar',
     }
