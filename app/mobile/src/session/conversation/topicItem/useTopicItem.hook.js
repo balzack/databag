@@ -303,6 +303,9 @@ export function useTopicItem(item, hosting, remove, contentKey) {
               }
               await RNFS.appendFile(path, decrypted, 'base64');
 
+              if (cancel.current) {
+                throw new Error("unseal assets cancelled");
+              }
               assets[cur] = { ...asset, block: j+1, total: asset.parts.length };
               updateState({ assets: [ ...assets ]});
             };
@@ -320,7 +323,8 @@ export function useTopicItem(item, hosting, remove, contentKey) {
       }
     },
     hideCarousel: () => {
-      updateState({ carousel: false });
+      const assets = state.assets.map((asset) => ({ ...asset, error: false, decrypted: null }));
+      updateState({ carousel: false, assets });
       cancel.current = true;
     },
     setActive: (activeId) => {

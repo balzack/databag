@@ -16,9 +16,9 @@ export function useVideoAsset(asset) {
     thumbHeight: 64,
     url: null,
     playing: false,
-    loaded: false,
+    thumbLoaded: false,
+    videoLoaded: false,
     controls: false,
-    display: { display: 'none' },
   });
 
   const controls = useRef(null);
@@ -71,15 +71,13 @@ export function useVideoAsset(asset) {
   }, [asset]);
 
   const actions = {
-    setRatio: (e) => {
-      const { width, height } = e.nativeEvent;
-      updateState({ thumbRatio: width / height });
+    setThumbSize: (e) => {
+      const { width, height } = e.nativeEvent || {};
+      updateState({ thumbLoaded: true, thumbRatio: width / height });
     },
-    setResolution: (width, height) => {
-      updateState({ display: {}, videoRatio: width / height });
-    },
-    loaded: () => {
-      updateState({ loaded: true });
+    setVideoSize: (e) => {
+      const { width, height } = e.naturalSize || {};
+      updateState({ videoLoaded: true, videoRatio: width / height });
     },
     play: () => {
       actions.showControls();

@@ -6,7 +6,7 @@ export const styles = StyleSheet.create({
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: Colors.pending,
+    backgroundColor: Colors.background,
     position: 'absolute',
     left: 0,
     bottom: 0,
