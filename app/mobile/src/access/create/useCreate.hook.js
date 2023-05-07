@@ -72,6 +72,13 @@ export function useCreate() {
     if (debounce.current) {
       clearTimeout(debounce.current);
     }
+
+    const restricted = new RegExp('[!@#$%^&*()\ ,.?":{}|<>]', 'i');
+    if (restricted.test(state.username)) {
+      updateState({ usernameValid: false });
+      return;
+    }
+
     debounce.current = setTimeout(async () => {
       checking.current = true;
       debounce.current = null;
