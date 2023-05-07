@@ -62,7 +62,7 @@ export function useCreateAccount() {
       updateState({ confirm });
     },
     isDisabled: () => {
-      const restricted = new RegExp('[!@#$%^&*()\ ,.?":{}|<>]', 'i');
+      const restricted = new RegExp('[!@#$%^&*() ,.?":{}|<>]', 'i');
       if (state.username === '' || restricted.test(state.username) || state.password === '' ||
           state.password !== state.confirm || !checked || state.validateStatus === 'error') {
         return true
