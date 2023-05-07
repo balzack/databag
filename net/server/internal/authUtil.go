@@ -334,15 +334,15 @@ func BasicCredentials(r *http.Request) (string, []byte, error) {
 		return username, password, err
 	}
 
-	// parse credentials
-	login := strings.Split(string(credentials), ":")
-	if login[0] == "" || login[1] == "" {
-		return username, password, errors.New("invalid credentials")
-	}
-	username = login[0]
+  login := string(credentials)
+  idx := strings.Index(login, ":");
+  if idx <= 0 {
+    return username, password, errors.New("invalid credentials")
+  }
 
 	// hash password
-	password, err = bcrypt.GenerateFromPassword([]byte(login[1]), bcrypt.DefaultCost)
+	username = login[0:idx]
+	password, err = bcrypt.GenerateFromPassword([]byte(login[idx+1:]), bcrypt.DefaultCost)
 	if err != nil {
 		return username, password, err
 	}
