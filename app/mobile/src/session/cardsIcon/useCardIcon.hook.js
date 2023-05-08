@@ -22,7 +22,7 @@ export function useCardIcon() {
       if (status === 'pending' || status === 'requested') {
         requested = true;
       }
-      if (item.card?.offsync) {
+      if (item.card?.offsync && status === 'connected') {
         offsync = true;
       }
     });
