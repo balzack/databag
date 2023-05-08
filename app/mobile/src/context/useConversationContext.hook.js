@@ -354,7 +354,7 @@ export function useConversationContext() {
       else if (channelId) {
         channel.actions.setTopicFlag(channelId, topicId);
       }
-      setTopicField(topicId, 'blocked', 1);
+      setTopicField(topicId, 'blocked', true);
       updateState({ topics: topics.current });
     },
     clearTopicFlag: async (topicId) => {
@@ -365,7 +365,7 @@ export function useConversationContext() {
       else if (channelId) {
         channel.actions.clearTopicFlag(channelId, topicId);
       }
-      setTopicField(topicId, 'blocked', 0);
+      setTopicField(topicId, 'blocked', false);
       updateState({ topics: topics.current });
     },
     getTopicAssetUrl: (topicId, assetId) => {

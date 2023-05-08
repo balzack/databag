@@ -35,10 +35,10 @@ export function CardItem({ item, openContact, enableIce, call, message }) {
               )}
             </View>
           )}
-          { item.status === 'connected' && item.offsync === 1 && (
+          { item.status === 'connected' && item.offsync && (
             <View style={styles.offsync} />
           )}
-          { item.status === 'connected' && item.offsync !== 1 && (
+          { item.status === 'connected' && !item.offsync && (
             <View style={styles.connected} />
           )}
           { item.status === 'requested' && (

@@ -186,7 +186,7 @@ export function useCardContext() {
               }
               catch (err) {
                 console.log(err);
-                entry.offsync = true;
+                entry.card.offsync = true;
                 await store.actions.setCardItemOffsync(guid, card.id);
               }
             }
