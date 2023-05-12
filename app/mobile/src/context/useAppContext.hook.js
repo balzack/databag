@@ -13,7 +13,6 @@ import { CardContext } from 'context/CardContext';
 import { ChannelContext } from 'context/ChannelContext';
 import { RingContext } from 'context/RingContext';
 import { getVersion, getApplicationName, getDeviceId } from 'react-native-device-info'
-import messaging from '@react-native-firebase/messaging';
 
 export function useAppContext() {
   const [state, setState] = useState({
@@ -87,9 +86,6 @@ export function useAppContext() {
       access.current = { server, token: session.appToken, guid: session.guid };
       await store.actions.setSession(access.current);
       await setSession();
-      if (session.pushSupported) {
-        messaging().requestPermission().then(status => {})
-      }
     },
     access: async (server, token) => {
       if (!init.current || access.current) {
@@ -99,9 +95,6 @@ export function useAppContext() {
       access.current = { server, token: session.appToken, guid: session.guid };
       await store.actions.setSession(access.current);
       await setSession();
-      if (session.pushSupported) {
-        messaging().requestPermission().then(status => {})
-      }
     },
     login: async (username, password) => {
       if (!init.current || access.current) {
@@ -112,9 +105,6 @@ export function useAppContext() {
       access.current = { server: acc[1], token: session.appToken, guid: session.guid };
       await store.actions.setSession(access.current);
       await setSession(); 
-      if (session.pushSupported) {
-        messaging().requestPermission().then(status => {})
-      }
     },
     logout: async () => {
       if (!access.current) {
@@ -122,8 +112,6 @@ export function useAppContext() {
       }
       updateState({ loggingOut: true });
       try {
-        await messaging().deleteToken();
-        deviceToken.current = await messaging().getToken();
         await clearLogin(state.server, state.token);
       }
       catch (err) {
