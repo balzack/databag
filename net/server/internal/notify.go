@@ -141,7 +141,7 @@ func sendRemoteNotification(notification *store.Notification) {
     if err != nil {
       ErrMsg(err)
     }
-    if resp.StatusCode != 200 {
+    if resp == nil || resp.StatusCode != 200 {
       LogMsg("failed to notify contact")
     }
   }
