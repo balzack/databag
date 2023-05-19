@@ -36,6 +36,7 @@ export const IdentityWrapper = styled.div`
     align-items: center;
     justify-content: center;
     line-height: 16px;
+    min-width: 0;
 
     .name {
       font-size: 14px;
