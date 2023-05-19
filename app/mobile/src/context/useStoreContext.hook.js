@@ -180,8 +180,8 @@ export function useStoreContext() {
         notifiedProfile: card.notified_profile,
         notifiedArticle: card.notified_article,
         notifiedChannel: card.notified_channel,
-        offsync: card.offsync,
-        blocked: card.blocked,
+        offsync: card.offsync === 1,
+        blocked: card.blocked === 1,
       }));
     },
 

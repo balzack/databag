@@ -91,7 +91,7 @@ export function useConversation() {
       }
       return -1;
     });
-    const filtered = sorted.filter(item => !(item.blocked === 1));
+    const filtered = sorted.filter(item => !(item.blocked));
 
     updateState({ hosted, loaded, logo, subject, topics: filtered, delayed: false });
   

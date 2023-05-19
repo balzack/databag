@@ -12,6 +12,7 @@ export function ContactHeader({ contact }) {
 }
 
 export function ContactBody({ contact }) {
+
   const { state, actions } = useContact(contact);
 
   const getStatusText = (status) => {
@@ -198,6 +199,11 @@ export function ContactBody({ contact }) {
             <TouchableOpacity style={styles.button} onPress={reportContact}>
               <Text style={styles.buttonText}>Report Contact</Text>
             </TouchableOpacity>
+            { state.offsync && (
+              <TouchableOpacity style={styles.alert} onPress={actions.resync}>
+                <Text>Resync Contact</Text>
+              </TouchableOpacity>
+            )}
           </>
         )}
         { state.status === 'connecting' && (
@@ -285,11 +291,6 @@ export function ContactBody({ contact }) {
               <Text style={styles.buttonText}>Report Contact</Text>
             </TouchableOpacity>
           </>
-        )}
-        { state.offsync && (
-          <TouchableOpacity style={styles.alert} onPress={actions.resync}>
-            <Text style={styles.alertText}>Resync Contact</Text>
-          </TouchableOpacity>
         )}
       </View>
     </View>
