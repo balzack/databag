@@ -12,9 +12,10 @@ import { BlockedMessages } from './blockedMessages/BlockedMessages';
 
 export function ProfileHeader() {
   const { state, actions } = useProfile();
+  const handle = state.node ? `${state.handle}@${state.node}` : state.handle;
 
   return (
-    <Text style={styles.headerText}>{ `${state.handle}@${state.node}` }</Text>
+    <Text style={styles.headerText}>{ handle }</Text>
   )
 }
 

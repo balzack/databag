@@ -65,7 +65,7 @@ export function Registry({ closeRegistry, openContact }) {
   useEffect(() => {
     setSearch(false);
     setHandle(null);
-    setServer(profile.state.identity?.node);
+    setServer(profile.state.server);
   }, [profile.state]);
 
   return (

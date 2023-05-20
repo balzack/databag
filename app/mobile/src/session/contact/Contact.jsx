@@ -6,8 +6,9 @@ import { Logo } from 'utils/Logo';
 import { Colors } from 'constants/Colors';
 
 export function ContactHeader({ contact }) {
+  const handle = contact?.node ? `${contact?.handle}@${contact?.node}` : contact?.handle;
   return (
-    <Text style={styles.headerText}>{ `${contact?.handle}@${contact?.node}` }</Text>
+    <Text style={styles.headerText}>{ handle }</Text>
   )
 }
 

@@ -6,6 +6,7 @@ import { StoreContext } from 'context/StoreContext';
 import { CardContext } from 'context/CardContext';
 import { ChannelContext } from 'context/ChannelContext';
 import { RingContext } from 'context/RingContext';
+import { ProfileContext } from 'context/ProfileContext';
 
 export function useSession() {
 
@@ -30,6 +31,7 @@ export function useSession() {
   const ring = useContext(RingContext);
   const channel = useContext(ChannelContext);
   const card = useContext(CardContext);
+  const profile = useContext(ProfileContext);
   const store = useContext(StoreContext);
   const dimensions = useWindowDimensions();
   const navigate = useNavigate();
@@ -50,8 +52,9 @@ export function useSession() {
           const { imageSet, name, handle, node, guid } = contact.card?.profile || {};
           const { token } = contact.card?.detail || {};
           const contactToken = `${guid}.${token}`;
+          const server = node ? node : profile.state.server;
           const img = imageSet ? card.actions.getCardImageUrl(cardId) : null;
-          ringing.push({ cardId, img, name, handle, contactNode: node, callId, contactToken, calleeToken, iceUrl, iceUsername, icePassword });
+          ringing.push({ cardId, img, name, handle, contactNode: server, callId, contactToken, calleeToken, iceUrl, iceUsername, icePassword });
         }
       }
     });

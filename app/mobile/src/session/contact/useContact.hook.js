@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useContext } from 'react';
 import { CardContext } from 'context/CardContext';
+import { ProfileContext } from 'context/ProfileContext';
 import { getListingMessage } from 'api/getListingMessage';
 import { getListingImageUrl } from 'api/getListingImageUrl';
 import { addFlag } from 'api/addFlag';
@@ -22,6 +23,7 @@ export function useContact(contact) {
   });
 
   const card = useContext(CardContext);
+  const profile = useContext(ProfileContext);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
@@ -29,18 +31,21 @@ export function useContact(contact) {
 
   useEffect(() => {
     const contactCard = getCardByGuid(card.state.cards, contact?.guid);
+    const { server } = profile.state;
     if (contactCard) {
       const { offsync, profile, detail, cardId } = contactCard.card;
       const { name, handle, node, location, description, guid, imageSet, revision } = profile;
+      const host = node ? node : server;
       const logo = imageSet ? card.actions.getCardImageUrl(cardId) : 'avatar';
-      updateState({ offsync, name, handle, node, location, description, logo, cardId, guid, status: detail.status });
+      updateState({ offsync, name, handle, node: server, location, description, logo, cardId, guid, status: detail.status });
     }
     else {
       const { guid, handle, node, name, location, description, imageSet } = contact || {};
-      const logo = imageSet ? getListingImageUrl(node, guid) : 'avatar';
-      updateState({ guid, handle, node, name, location, description, logo, offsync: false, status: null });
-    } 
-  }, [contact, card.state]);
+      const host = node ? node : server;
+      const logo = imageSet ? getListingImageUrl(server, guid) : 'avatar';
+      updateState({ guid, handle, node: host, name, location, description, logo, offsync: false, status: null });
+    }
+  }, [contact, card.state, profile.state]);
 
   const applyAction = async (action) => {
     if (!state.busy) {

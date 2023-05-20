@@ -129,7 +129,7 @@ function ContactStackScreen({ addChannel }) {
     navigation.navigate('contact')
   }
   const openRegistry = (navigation) => {
-    setServer(profile.state.identity.node);
+    setServer(profile.state.server);
     setHandle(null);
     setSearch(false);
     navigation.navigate('registry');
@@ -352,7 +352,7 @@ export function Session({ sharing, clearSharing }) {
     for (let i = 0; i < state.ringing.length; i++) {
       const call = state.ringing[i];
       const { img, cardId, callId, name, handle, contactNode } = call || {};
-      const label = name ? name : `${handle}@${contactNode}`;
+      const label = name ? name : contactNode ? `${handle}@${contactNode}` : handle;
       const key = `${cardId}:${callId}`
       incoming.push(
         <View key={key} style={styles.ringEntry}>
