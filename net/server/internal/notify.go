@@ -34,7 +34,7 @@ func SendNotifications() {
 		select {
 		case notification := <-notify:
 			node := getStrConfigValue(CNFDomain, "")
-			if notification.Node == node {
+			if notification.Node == "" || notification.Node == node {
 				sendLocalNotification(notification)
 			} else {
 				sendRemoteNotification(notification)

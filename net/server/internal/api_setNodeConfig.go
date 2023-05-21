@@ -27,12 +27,12 @@ func SetNodeConfig(w http.ResponseWriter, r *http.Request) {
 	err := store.DB.Transaction(func(tx *gorm.DB) error {
 
 		// upsert domain config
-		if res := tx.Clauses(clause.OnConflict{
-			Columns:   []clause.Column{{Name: "config_id"}},
-			DoUpdates: clause.AssignmentColumns([]string{"str_value"}),
-		}).Create(&store.Config{ConfigID: CNFDomain, StrValue: config.Domain}).Error; res != nil {
-			return res
-		}
+    if res := tx.Clauses(clause.OnConflict{
+      Columns:   []clause.Column{{Name: "config_id"}},
+      DoUpdates: clause.AssignmentColumns([]string{"str_value"}),
+    }).Create(&store.Config{ConfigID: CNFDomain, StrValue: config.Domain}).Error; res != nil {
+      return res
+    }
 
 		// upsert account storage config
 		if res := tx.Clauses(clause.OnConflict{
@@ -130,6 +130,9 @@ func SetNodeConfig(w http.ResponseWriter, r *http.Request) {
   err = store.DB.Transaction(func(tx *gorm.DB) error {
     for _, account := range accounts {
       if res := tx.Model(account).Update("account_revision", account.AccountRevision+1).Error; res != nil {
+        return res
+      }
+      if res := tx.Model(account).Update("profile_revision", account.ProfileRevision+1).Error; res != nil {
         return res
       }
     }
