@@ -123,12 +123,6 @@ paths:
           required: true
           schema:
             type: string
-        - name: domain
-          in: query
-          description: if domain should be updated
-          required: false
-          schema:
-            type: boolean
       responses:
         '200':
           description: success

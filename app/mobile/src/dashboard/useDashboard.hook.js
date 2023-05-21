@@ -22,7 +22,6 @@ export function useDashboard(config, server, token) {
     accessUser: false,
     accessId: null,
     domain: null,
-    updated: false,
     storage: null,
     keyType: null,
     enableImage: true,
@@ -61,7 +60,7 @@ export function useDashboard(config, server, token) {
 
   useEffect(() => {
     const { keyType, accountStorage, domain, enableImage, enableAudio, enableVideo, pushSupported, enableIce, iceUrl, iceUsername, icePassword } = config;
-    updateState({ keyType, storage: accountStorage.toString(), domain, enableImage, enableAudio, enableVideo, pushSupported, enableIce, iceUrl, iceUsername, icePassword, updated: false });
+    updateState({ keyType, storage: accountStorage.toString(), domain, enableImage, enableAudio, enableVideo, pushSupported, enableIce, iceUrl, iceUsername, icePassword });
   }, [config]);
 
   useEffect(() => {
@@ -96,7 +95,7 @@ export function useDashboard(config, server, token) {
       updateState({ accessUser: false });
     },
     setDomain: (domain) => {
-      updateState({ domain, updated: true });
+      updateState({ domain });
     },
     setStorage: (storage) => {
       updateState({ storage: Number(storage.replace(/[^0-9]/g, '')) });
@@ -129,9 +128,9 @@ export function useDashboard(config, server, token) {
       updateState({ icePassword });
     },
     saveConfig: async () => {
-      const { storage, domain, updated, keyType, enableImage, enableAudio, enableVideo, enableIce, iceUrl, iceUsername, icePassword } = state;
+      const { storage, domain, keyType, enableImage, enableAudio, enableVideo, enableIce, iceUrl, iceUsername, icePassword } = state;
       const config = { accountStorage: Number(storage), domain, keyType, enableImage, enableAudio, enableVideo, enableIce, iceUrl, iceUsername, icePassword };
-      await setNodeConfig(server, token, config, updated);
+      await setNodeConfig(server, token, config);
     },
     enableUser: async (accountId, enabled) => {
       await setAccountStatus(server, token, accountId, !enabled);
