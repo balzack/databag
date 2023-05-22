@@ -164,11 +164,13 @@ export function useSession() {
     },
     decline: async (call) => {
       const { cardId, contactNode, contactToken, callId } = call;
-      await ring.actions.decline(cardId, contactNode, contactToken, callId);
+      const node = contactNode ? contactNode : window.location.host;
+      await ring.actions.decline(cardId, node, contactToken, callId);
     },
     accept: async (call) => {
       const { cardId, callId, contactNode, contactToken, calleeToken, iceUrl, iceUsername, icePassword } = call;
-      await ring.actions.accept(cardId, callId, contactNode, contactToken, calleeToken, iceUrl, iceUsername, icePassword);
+      const node = contactNode ? contactNode : window.location.host;
+      await ring.actions.accept(cardId, callId, node, contactToken, calleeToken, iceUrl, iceUsername, icePassword);
     },
     end: async () => {
       await ring.actions.end();

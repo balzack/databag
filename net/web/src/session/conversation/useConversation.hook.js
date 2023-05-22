@@ -188,7 +188,7 @@ export function useConversation(cardId, channelId) {
         item.nameSet = true;
       }
       else {
-        item.name = `${identity.handle}@${identity.node}`;
+        item.name = identity.node ? `${identity.handle}@${identity.node}` : identity.handle ? identity.handle : 'unknown';
         item.nameSet = false;
       }
     }
@@ -202,7 +202,7 @@ export function useConversation(cardId, channelId) {
           item.nameSet = true;
         }
         else {
-          item.name = `${contact.handle}@${contact.node}`;
+          item.name = contact.node ? `${contact.handle}@${contact.node}` : contact.handle ? contact.handle : 'unknown';
           item.nameSet = false;
         }
       }
