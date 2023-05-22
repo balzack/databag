@@ -31,7 +31,6 @@ export function Session() {
     let incoming = [];
     for (let i = 0; i < state.ringing.length; i++) {
       const ring = state.ringing[i];
-      const label = ring.name ? ring.name : `${ring.handle}@${ring.node}`;
       incoming.push(
         <div className="ringing-entry">
           <Logo url={ring.img} width={40} height={40} radius={4} />
