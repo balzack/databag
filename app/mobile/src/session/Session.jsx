@@ -352,12 +352,22 @@ export function Session({ sharing, clearSharing }) {
     for (let i = 0; i < state.ringing.length; i++) {
       const call = state.ringing[i];
       const { img, cardId, callId, name, handle, contactNode } = call || {};
-      const label = name ? name : contactNode ? `${handle}@${contactNode}` : handle;
       const key = `${cardId}:${callId}`
       incoming.push(
         <View key={key} style={styles.ringEntry}>
           <Logo src={img} width={40} height={40} radius={4} />
-          <Text style={styles.ringName} numberOfLines={1} ellipsizeMode={'tail'}>{ label }</Text>
+          { name != null && (
+            <Text style={styles.ringName} numberOfLines={2} ellipsizeMode={'tail'}>{ name }</Text>
+          )}
+          { name == null && contactNode != null && (
+            <View style={styles.ringName}>
+              <Text numberOfLines={1} ellipsizeMode={'tail'}>{ handle }</Text>
+              <Text numberOfLines={1} ellipsizeMode={'tail'}>{ contactNode }</Text>
+            </View>
+          )}
+          { name == null && contactNode == null && (
+            <Text style={styles.ringName} numberOfLines={1} ellipsizeMode={'tail'}>{ handle }</Text>
+          )}
           <TouchableOpacity style={styles.ringIgnore} onPress={() => actions.ignore({ cardId, callId })}>
             <MatIcons name={'eye-off-outline'} size={20} color={Colors.text} />
           </TouchableOpacity>

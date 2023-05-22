@@ -104,7 +104,7 @@ export function useTopicItem(item, hosting, remove, contentKey) {
         name = identity.name;
       }
       else {
-        name = `${identity.handle}@${identity.node}`;
+        name = identity.node ? `${identity.handle}@${identity.node}` : identity.handle;
       }
       const img = profile.state.imageUrl;
       if (img) {
@@ -125,7 +125,8 @@ export function useTopicItem(item, hosting, remove, contentKey) {
           nameSet = true;
         }
         else {
-          name = `${contact.profile.handle}@${contact.profile.node}`;
+          const { node, handle } = contact.profile || {};
+          name = node ? `${handle}@${node}` : handle;
           nameSet = false;
         }
       }
