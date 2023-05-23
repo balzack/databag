@@ -31,11 +31,21 @@ export function Session() {
     let incoming = [];
     for (let i = 0; i < state.ringing.length; i++) {
       const ring = state.ringing[i];
-      const label = ring.name ? ring.name : `${ring.handle}@${ring.node}`;
       incoming.push(
         <div className="ringing-entry">
           <Logo url={ring.img} width={40} height={40} radius={4} />
-          <div className="ringing-name">{ label }</div>
+          { ring.name && (
+            <div className="ringing-name">{ ring.name }</div>
+          )}
+          { !ring.name && ring.node && (
+            <div className="ringing-name">
+              <div>{ ring.handle }</div>
+              <div>{ ring.node }</div>
+            </div>
+          )}
+          { !ring.name && !ring.node && (
+            <div className="ringing-name">{ ring.handle }</div>
+          )}
           <div onClick={() => actions.ignore(ring)} className="ringing-ignore"><EyeInvisibleOutlined /></div>
           <div onClick={() => actions.decline(ring)} className="ringing-decline"><PhoneOutlined /></div>
           <div onClick={() => actions.accept(ring)} className="ringing-accept"><PhoneOutlined /></div>

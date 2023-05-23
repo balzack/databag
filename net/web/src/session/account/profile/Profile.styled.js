@@ -38,6 +38,7 @@ export const ProfileWrapper = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    overflow: hidden;
 
     .title {
       font-size: 18px;

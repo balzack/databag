@@ -7,6 +7,7 @@ const Colors = {
   formHover: '#efefef',
   grey: '#888888',
   white: '#ffffff',
+  black: '#000000',
   divider: '#dddddd',
   mask: '#dddddd',
   encircle: '#cccccc',

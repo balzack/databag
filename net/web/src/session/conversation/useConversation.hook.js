@@ -145,7 +145,7 @@ export function useConversation(cardId, channelId) {
 
       let group = '';
       let clickable = [];
-      const words = text == null ? '' : DOMPurify.sanitize(text).split(' ');
+      const words = text === [] ? '' : DOMPurify.sanitize(text).split(' ');
       words.forEach((word, index) => {
         if (!!urlPattern.test(word)) {
           clickable.push(<span key={index}>{ group }</span>);
@@ -188,7 +188,7 @@ export function useConversation(cardId, channelId) {
         item.nameSet = true;
       }
       else {
-        item.name = `${identity.handle}@${identity.node}`;
+        item.name = identity.node ? `${identity.handle}@${identity.node}` : identity.handle ? identity.handle : 'unknown';
         item.nameSet = false;
       }
     }
@@ -202,7 +202,7 @@ export function useConversation(cardId, channelId) {
           item.nameSet = true;
         }
         else {
-          item.name = `${contact.handle}@${contact.node}`;
+          item.name = contact.node ? `${contact.handle}@${contact.node}` : contact.handle ? contact.handle : 'unknown';
           item.nameSet = false;
         }
       }

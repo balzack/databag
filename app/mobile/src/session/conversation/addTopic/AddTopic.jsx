@@ -18,28 +18,30 @@ export function AddTopic({ contentKey, shareIntent, setShareIntent }) {
   const { state, actions } = useAddTopic(contentKey);
 
   useEffect(() => {
-    if (shareIntent) {
-      shareIntent.forEach(share => {
-        if (share.text) {
-          actions.setMessage(share.text);
-        }
-        if (share.weblink) {
-          actions.setMessage(share.weblink);
-        }
-        const mime = share.mimeType?.toLowerCase();
-        if (mime === '.jpg' || mime === '.png' || mime === 'image/jpeg' || mime == 'image/png' ) {
-          actions.addImage(share.filePath)
-        }
-        if (mime === '.mp4' || mime === 'video/mp4' || mime == 'video/mpeg') {
-          actions.addVideo(share.filePath)
-        }
-        if (mime === '.mp3') {
-          actions.addAudio(share.filePath)
-        }
-      });
-      setShareIntent(null);
+    if (shareIntent && state.loaded) {
+      if (!state.locked || contentKey) { 
+        shareIntent.forEach(share => {
+          if (share.text) {
+            actions.setMessage(share.text);
+          }
+          if (share.weblink) {
+            actions.setMessage(share.weblink);
+          }
+          const mime = share.mimeType?.toLowerCase();
+          if (mime === '.jpg' || mime === '.png' || mime === 'image/jpeg' || mime == 'image/png' ) {
+            actions.addImage(share.filePath)
+          }
+          if (mime === '.mp4' || mime === 'video/mp4' || mime == 'video/mpeg') {
+            actions.addVideo(share.filePath)
+          }
+          if (mime === '.mp3') {
+            actions.addAudio(share.filePath)
+          }
+        });
+        setShareIntent(null);
+      }
     }
-  }, [shareIntent]);
+  }, [shareIntent, state.loaded, state.locked, contentKey]);
 
   const addImage = async () => {
     try {
@@ -154,22 +156,22 @@ export function AddTopic({ contentKey, shareIntent, setShareIntent }) {
           blurOnSubmit={true} onSubmitEditing={sendMessage} returnKeyType="send"
           autoCapitalize="sentences" placeholder="New Message" multiline={true} />
       <View style={styles.addButtons}>
-        { !state.locked && state.enableImage && (
+        { state.enableImage && (
           <TouchableOpacity style={styles.addButton} onPress={addImage}>
             <AntIcons name="picture" size={20} color={Colors.text} />
           </TouchableOpacity>
         )}
-        { !state.locked && state.enableVideo && (
+        { state.enableVideo && (
           <TouchableOpacity style={styles.addButton} onPress={addVideo}>
             <MatIcons name="video-outline" size={24} color={Colors.text} />
           </TouchableOpacity>
         )}
-        { !state.locked && state.enableAudio && (
+        { state.enableAudio && (
           <TouchableOpacity style={styles.addButton} onPress={addAudio}>
             <MatIcons name="music-box-outline" size={20} color={Colors.text} />
           </TouchableOpacity>
         )}
-        { !state.locked && (
+        { (state.enableImage || state.enableVideo || state.enableAudio) && (
           <View style={styles.divider} />
         )}
         <TouchableOpacity style={styles.addButton} onPress={actions.showFontSize}>

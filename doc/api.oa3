@@ -3248,6 +3248,52 @@ paths:
                   type: string
                   format: binary
           
+  /content/channels/{channelId}/topics/{topicId}/blocks:
+    post:
+      tags:
+        - content
+      description: Add a asset to the channel. Payload is a file block encoded as bas64 string. This is to support e2e as the client side will encrypt the file block before applying the base64 encoding.
+      operationId: add-channel-topic-block
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: channelId
+          in: path
+          description: specified channel id 
+          required: true
+          schema:
+            type: string
+        - name: topicId
+          in: path
+          description: specified topic id
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Asset'
+        '401':
+          description: permission denied
+        '404':
+          description: channel not found
+        '406':
+          description: storage limit reached
+        '410':
+          description: account disabled
+        '500':
+          description: internal server error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+ 
   /content/channels/{channelId}/topics/{topicId}/assets/{assetId}:
     get:
       tags:

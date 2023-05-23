@@ -1,6 +1,7 @@
 import { useContext, useState, useEffect, useRef } from 'react';
 import { AppContext } from 'context/AppContext';
 import { useNavigate, useLocation } from "react-router-dom";
+import { getUsername } from 'api/getUsername';
 
 export function useCreateAccount() {
 
@@ -27,9 +28,9 @@ export function useCreateAccount() {
     setChecked(false)
     clearTimeout(debounce.current)
     debounce.current = setTimeout(async () => {
-      if (app.actions?.username && name !== '') {
+      if (name !== '') {
         try {
-          let valid = await app.actions.username(name, state.token)
+          let valid = await getUsername(name, state.token)
           if (!valid) {
             updateState({ validateStatus: 'error', help: 'Username is not available' })
           }
@@ -61,8 +62,9 @@ export function useCreateAccount() {
       updateState({ confirm });
     },
     isDisabled: () => {
-      if (state.username === '' || state.password === '' || state.password !== state.confirm || !checked ||
-          state.validateStatus === 'error') {
+      const restricted = new RegExp('[!@#$%^&*() ,.?":{}|<>]', 'i');
+      if (state.username === '' || restricted.test(state.username) || state.password === '' ||
+          state.password !== state.confirm || !checked || state.validateStatus === 'error') {
         return true
       }
       return false

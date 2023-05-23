@@ -1,5 +1,8 @@
 import { useState, useRef } from 'react';
 import axios from 'axios';
+import Resizer from "react-image-file-resizer";
+
+const ENCRYPTED_BLOCK_SIZE = (1024 * 1024); 
 
 export function useUploadContext() {
 
@@ -69,7 +72,8 @@ export function useUploadContext() {
         const controller = new AbortController();
         const entry = {
           index: index.current,
-          url: `${host}/content/channels/${channelId}/topics/${topicId}/assets?contact=${token}`,
+          baseUrl: `${host}/content/channels/${channelId}/topics/${topicId}/`,
+          urlParams: `?contact=${token}`,
           files,
           assets: [],
           current: null,
@@ -91,7 +95,8 @@ export function useUploadContext() {
         const controller = new AbortController();
         const entry = {
           index: index.current,
-          url: `/content/channels/${channelId}/topics/${topicId}/assets?agent=${token}`,
+          baseUrl: `/content/channels/${channelId}/topics/${topicId}/`,
+          urlParams: `?agent=${token}`,
           files,
           assets: [],
           current: null,
@@ -145,6 +150,63 @@ export function useUploadContext() {
   return { state, actions }
 }
 
+function getImageThumb(data) {
+  return new Promise(resolve => {
+    Resizer.imageFileResizer(data, 192, 192, 'JPEG', 50, 0,
+    uri => {
+      resolve(uri);
+    }, 'base64', 128, 128 );
+  });
+}
+
+function getVideoThumb(data, pos) {
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(data);
+    var video = document.createElement("video");
+    var timeupdate = function (ev) {
+      video.removeEventListener("timeupdate", timeupdate);
+      video.pause();
+      setTimeout(() => {
+        var canvas = document.createElement("canvas");
+        if (video.videoWidth > video.videoHeight) {
+          canvas.width = 192;
+          canvas.height = Math.floor((192 * video.videoHeight / video.videoWidth));
+        }
+        else {
+          canvas.height  = 192;
+          canvas.width = Math.floor((192 * video.videoWidth / video.videoHeight));
+        }
+        canvas.getContext("2d").drawImage(video, 0, 0, canvas.width, canvas.height);
+        var image = canvas.toDataURL("image/jpeg", 0.75);
+        resolve(image);
+        canvas.remove();
+        video.remove();
+        URL.revokeObjectURL(url);
+      }, 1000);
+    };
+    video.addEventListener("timeupdate", timeupdate);
+    video.preload = "metadata";
+    video.src = url;
+    video.muted = true;
+    video.playsInline = true;
+    video.currentTime = pos;
+    video.play();
+  });
+}
+
+async function getThumb(data, type, position) {
+  
+  if (type === 'image') {
+    return await getImageThumb(data);
+  }
+  else if (type === 'video') {
+    return await getVideoThumb(data, position);
+  }
+  else {
+    return null;
+  }
+}
+
 async function upload(entry, update, complete) {
   if (!entry.files?.length) {
     entry.success(entry.assets);
@@ -154,11 +216,35 @@ async function upload(entry, update, complete) {
     const file = entry.files.shift();
     entry.active = {};
     try {
-      if (file.image) {
+      if (file.encrypted) {
+        const { size, getEncryptedBlock, position, label, image, video, audio } = file;
+        const { data, type } = image ? { data: image, type: 'image' } : video ? { data: video, type: 'video' } : audio ? { data: audio, type: 'audio' } : {}
+        const thumb = await getThumb(data, type, position);
+        const parts = [];
+        for (let pos = 0; pos < size; pos += ENCRYPTED_BLOCK_SIZE) {
+          const len = pos + ENCRYPTED_BLOCK_SIZE > size ? size - pos : ENCRYPTED_BLOCK_SIZE;
+          const { blockEncrypted, blockIv } = await getEncryptedBlock(pos, len);
+          const part = await axios.post(`${entry.baseUrl}blocks${entry.urlParams}`, blockEncrypted, {
+            headers: {'Content-Type': 'text/plain'},
+            signal: entry.cancel.signal,
+            onUploadProgress: (ev) => {
+              const { loaded, total } = ev;
+              const partLoaded = pos + Math.floor(len * loaded / total);
+              entry.active = { loaded: partLoaded, total: size }
+              update();
+            }
+          });
+          parts.push({ blockIv, partId: part.data.assetId });
+        }
+        entry.assets.push({
+          encrypted: { type, thumb, label, parts }
+        });
+      }
+      else if (file.image) {
         const formData = new FormData();
         formData.append('asset', file.image);
         let transform = encodeURIComponent(JSON.stringify(["ithumb;photo", "ilg;photo"]));
-        let asset = await axios.post(`${entry.url}&transforms=${transform}`, formData, {
+        let asset = await axios.post(`${entry.baseUrl}assets${entry.urlParams}&transforms=${transform}`, formData, {
           signal: entry.cancel.signal,
           onUploadProgress: (ev) => {
             const { loaded, total } = ev;
@@ -178,7 +264,7 @@ async function upload(entry, update, complete) {
         formData.append('asset', file.video);
         let thumb = 'vthumb;video;' + file.position;
         let transform = encodeURIComponent(JSON.stringify(["vlq;video", "vhd;video", thumb]));
-        let asset = await axios.post(`${entry.url}&transforms=${transform}`, formData, {
+        let asset = await axios.post(`${entry.baseUrl}assets${entry.urlParams}&transforms=${transform}`, formData, {
           signal: entry.cancel.signal,
           onUploadProgress: (ev) => {
             const { loaded, total } = ev;
@@ -198,7 +284,7 @@ async function upload(entry, update, complete) {
         const formData = new FormData();
         formData.append('asset', file.audio);
         let transform = encodeURIComponent(JSON.stringify(["acopy;audio"]));
-        let asset = await axios.post(`${entry.url}&transforms=${transform}`, formData, {
+        let asset = await axios.post(`${entry.baseUrl}assets${entry.urlParams}&transforms=${transform}`, formData, {
           signal: entry.cancel.signal,
           onUploadProgress: (ev) => {
             const { loaded, total } = ev;

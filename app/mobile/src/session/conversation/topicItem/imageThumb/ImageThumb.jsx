@@ -4,12 +4,12 @@ import { useImageThumb } from './useImageThumb.hook';
 import { styles } from './ImageThumb.styled';
 import Colors from 'constants/Colors';
 
-export function ImageThumb({ topicId, asset, onAssetView }) {
-  const { state, actions } = useImageThumb(topicId, asset);
+export function ImageThumb({ url, onAssetView }) {
+  const { state, actions } = useImageThumb();
 
   return (
     <TouchableOpacity activeOpacity={1} onPress={onAssetView}>
-      <Image source={{ uri: state.url }} style={{ opacity: state.loaded ? 1 : 0, borderRadius: 4, width: 92 * state.ratio, height: 92, marginRight: 16 }}
+      <Image source={{ uri: url }} style={{ opacity: state.loaded ? 1 : 0, borderRadius: 4, width: 92 * state.ratio, height: 92, marginRight: 16 }}
           onLoad={actions.loaded} resizeMode={'cover'} />
     </TouchableOpacity>
   );

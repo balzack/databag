@@ -110,12 +110,12 @@ export function useCardContext() {
           const { notifiedView, notifiedProfile, notifiedArticle, notifiedChannel } = card.data || {};
           const cardRevision = { view: notifiedView, profile: notifiedProfile, artcile: notifiedArticle, channel: notifiedChannel };
           await syncCard(server, token, guid, entry, cardRevision);
-          await store.action.clearCardItemOffsync(guid, cardId);
+          await store.actions.clearCardItemOffsync(guid, cardId);
           entry.card.offsync = false;
-        }
         
-        cards.current.set(cardId, card);
-        updateState({ cards: cards.current });
+          cards.current.set(cardId, entry);
+          updateState({ cards: cards.current });
+        }
       }
       catch(err) {
         console.log(err);
@@ -186,7 +186,7 @@ export function useCardContext() {
               }
               catch (err) {
                 console.log(err);
-                entry.offsync = true;
+                entry.card.offsync = true;
                 await store.actions.setCardItemOffsync(guid, card.id);
               }
             }
@@ -226,7 +226,7 @@ export function useCardContext() {
 
     const { detail, profile, cardId } = entry.card;
     const { notifiedView, notifiedProfile, notifiedArticle, notifiedChannel } = entry.card;
-    const cardServer = profile?.node;
+    const cardServer = profile?.node ? profile.node : server;
     const cardToken = `${profile?.guid}.${detail?.token}`;
 
     if (entry.card.notifiedProfile !== cardRevision.profile) {
@@ -373,7 +373,7 @@ export function useCardContext() {
     addTopic: async (cardId, channelId, type, message, files) => {
       const { detail, profile } = cards.current.get(cardId)?.card || {};
       const cardToken = `${profile?.guid}.${detail?.token}`;
-      const node = profile?.node;
+      const node = profile?.node ? profile.node : access.current?.server;
       if (files?.length > 0) {
         const topicId = await addContactChannelTopic(node, cardToken, channelId, null, null, null);
         upload.actions.addTopic(node, cardToken, channelId, topicId, files, async (assets) => {
@@ -396,27 +396,32 @@ export function useCardContext() {
     removeTopic: async (cardId, channelId, topicId) => {
       const { detail, profile } = (cards.current.get(cardId) || {}).card;
       const cardToken = `${profile?.guid}.${detail?.token}`;
-      return await removeContactChannelTopic(profile?.node, cardToken, channelId, topicId);
+      const node = profile?.node ? profile.node : access.current.server;
+      return await removeContactChannelTopic(node, cardToken, channelId, topicId);
     },
     setTopicSubject: async (cardId, channelId, topicId, type, subject) => {
       const { detail, profile } = (cards.current.get(cardId) || {}).card;
       const cardToken = `${profile?.guid}.${detail?.token}`;
-      return await setContactChannelTopicSubject(profile?.node, cardToken, channelId, topicId, type, subject);
+      const node = profile?.node ? profile.node : access.current.server;
+      return await setContactChannelTopicSubject(node, cardToken, channelId, topicId, type, subject);
     },
     getTopicAssetUrl: (cardId, channelId, topicId, assetId) => {
       const { detail, profile } = (cards.current.get(cardId) || {}).card;
       const cardToken = `${profile?.guid}.${detail?.token}`;
-      return getContactChannelTopicAssetUrl(profile?.node, cardToken, channelId, topicId, assetId);
+      const node = profile?.node ? profile.node : access.current.server;
+      return getContactChannelTopicAssetUrl(node, cardToken, channelId, topicId, assetId);
     },
     getTopics: async (cardId, channelId, revision, count, begin, end) => {
       const { detail, profile } = (cards.current.get(cardId) || {}).card;
       const cardToken = `${profile?.guid}.${detail?.token}`;
-      return await getContactChannelTopics(profile?.node, cardToken, channelId, revision, count, begin, end);
+      const node = profile?.node ? profile.node : access.current.server;
+      return await getContactChannelTopics(node, cardToken, channelId, revision, count, begin, end);
     },
     getTopic: async (cardId, channelId, topicId) => {
       const { detail, profile } = (cards.current.get(cardId) || {}).card;
       const cardToken = `${profile?.guid}.${detail?.token}`;
-      return await getContactChannelTopic(profile?.node, cardToken, channelId, topicId);
+      const node = profile?.node ? profile.node : access.current.server;
+      return await getContactChannelTopic(node, cardToken, channelId, topicId);
     },
     setContactRevision: async (cardId, revision) => {
       const { guid } = acccess.current || {};
@@ -473,25 +478,37 @@ export function useCardContext() {
     },
     addChannelAlert: async (cardId, channelId) => {
       const { detail, profile } = (cards.current.get(cardId) || {}).card;
-      return await addFlag(profile?.node, profile?.guid, channelId);
+      const node = profile?.node ? profile.node : access.current.server;
+      return await addFlag(node, profile?.guid, channelId);
     },
     addTopicAlert: async (cardId, channelId, topicId) => {
       const { detail, profile } = (cards.current.get(cardId) || {}).card;
-      return await addFlag(profile?.node, profile?.guid, channelId, topicId);
+      const node = profile?.node ? profile.node : access.current.server;
+      return await addFlag(node, profile?.guid, channelId, topicId);
     },
     getChannelNotifications: async (cardId, channelId) => {
       const { detail, profile } = (cards.current.get(cardId) || {}).card;
       const token = `${profile?.guid}.${detail?.token}`;
-      return await getContactChannelNotifications(profile?.node, token, channelId);
+      const node = profile?.node ? profile.node : access.current.server;
+      return await getContactChannelNotifications(node, token, channelId);
     },
     setChannelNotifications: async (cardId, channelId, notify) => {
       const { detail, profile } = (cards.current.get(cardId) || {}).card;
       const token = `${profile?.guid}.${detail?.token}`;
-      return await setContactChannelNotifications(profile?.node, token, channelId, notify);
+      const node = profile?.node ? profile.node : access.current.server;
+      return await setContactChannelNotifications(node, token, channelId, notify);
     },
     getTopicItems: async (cardId, channelId) => {
       const { guid } = access.current || {};
       return await store.actions.getCardChannelTopicItems(guid, cardId, channelId);
+    },
+    getTopicItemsId: async (cardId, channelId) => {
+      const { guid } = access.current || {};
+      return await store.actions.getCardChannelTopicItemsId(guid, cardId, channelId);
+    },
+    getTopicItemsById: async (cardId, channelId, topics) => {
+      const { guid } = access.current || {};
+      return await store.actions.getCardChannelTopicItemsById(guid, cardId, channelId, topics);
     },
     setTopicItem: async (cardId, channelId, topicId, topic) => {
       const { guid } = access.current || {};

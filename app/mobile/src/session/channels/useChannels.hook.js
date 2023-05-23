@@ -130,6 +130,9 @@ export function useChannels() {
       contacts.push(entry.card);
     });
     const filtered = contacts.filter(contact => {
+      if (contact == null) {
+        return false;
+      }
       if (contact.detail.status !== 'connected') {
         return false;
       }
@@ -171,6 +174,7 @@ export function useChannels() {
         items.push({ loginTimestamp, channelId, channelItem: item });
       });
       card.state.cards.forEach((cardItem, cardId) => {
+
         cardItem.channels.forEach((channelItem, channelId) => {
           items.push({ loginTimestamp, cardId, channelId, channelItem });
         });

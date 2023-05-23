@@ -1,5 +1,5 @@
-import { Image, View, Text, TouchableOpacity } from 'react-native';
-import { useRef } from 'react';
+import { ActivityIndicator, Image, View, Text, TouchableOpacity } from 'react-native';
+import { useEffect, useRef } from 'react';
 import Colors from 'constants/Colors';
 import Video from 'react-native-video';
 import { useAudioAsset } from './useAudioAsset.hook';
@@ -8,9 +8,9 @@ import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
 import audio from 'images/audio.png';
 import { useKeepAwake } from '@sayem314/react-native-keep-awake';
 
-export function AudioAsset({ topicId, asset, dismiss }) {
+export function AudioAsset({ asset, dismiss }) {
 
-  const { state, actions } = useAudioAsset(topicId, asset);
+  const { state, actions } = useAudioAsset(asset);
 
   const player = useRef(null);
 
@@ -36,6 +36,14 @@ export function AudioAsset({ topicId, asset, dismiss }) {
       { state.url && (
         <Video ref={player} source={{ uri: state.url }} repeat={true}
           paused={!state.playing} onLoad={actions.loaded} style={styles.player} />
+      )}
+      { !state.loaded && (
+        <TouchableOpacity style={styles.loading} onPress={dismiss}>
+          <ActivityIndicator color={Colors.black} size="large" />
+          { asset.total > 1 && (
+            <Text style={styles.decrypting}>{ asset.block } / { asset.total }</Text>
+          )}
+        </TouchableOpacity>
       )}
     </View>
   );

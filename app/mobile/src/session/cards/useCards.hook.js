@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useContext } from 'react';
 import { CardContext } from 'context/CardContext';
 import { RingContext } from 'context/RingContext';
 import { AccountContext } from 'context/AccountContext';
+import { ProfileContext } from 'context/ProfileContext';
 
 export function useCards(filter, sort) {
 
@@ -10,6 +11,7 @@ export function useCards(filter, sort) {
     enableIce: false,
   });
 
+  const profile = useContext(ProfileContext);
   const account = useContext(AccountContext);
   const card = useContext(CardContext);
   const ring = useContext(RingContext);
@@ -24,7 +26,7 @@ export function useCards(filter, sort) {
   }, [account.state]);
 
   const setCardItem = (item) => {
-    const { profile, detail, cardId } = item.card || { profile: {}, detail: {} }
+    const { profile, detail, cardId, blocked, offsync } = item.card || { profile: {}, detail: {} }
     const { name, handle, node, guid, location, description, imageSet } = profile;
 
     return {
@@ -37,9 +39,8 @@ export function useCards(filter, sort) {
       description: description,
       status: detail.status,
       token: detail.token,
-      offsync: item.offsync,
-      blocked: item.blocked,
-      offsync: item.offsync,
+      offsync: offsync,
+      blocked: blocked,
       updated: detail.statusUpdated,
       logo: imageSet ? card.actions.getCardImageUrl(cardId) : 'avatar',
     }
@@ -98,7 +99,8 @@ export function useCards(filter, sort) {
   const actions = {
     call: async (card) => {
       const { cardId, guid, node, token } = card || {};
-      await ring.actions.call(cardId, node, `${guid}.${token}`);
+      const server = node ? node : profile.state.server;
+      await ring.actions.call(cardId, server, `${guid}.${token}`);
     },
   };
 

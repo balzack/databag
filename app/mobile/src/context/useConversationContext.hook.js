@@ -7,7 +7,7 @@ import { ProfileContext } from 'context/ProfileContext';
 import CryptoJS from 'crypto-js';
 
 export function useConversationContext() {
-  const COUNT = 48;
+  const COUNT = 32;
 
   const [state, setState] = useState({
     loaded: false,
@@ -25,6 +25,7 @@ export function useConversationContext() {
   const syncing = useRef(false);
   const update = useRef(false);
   const loaded = useRef(false);
+  const stored = useRef([]);
   const conversationId = useRef(null);
   const topics = useRef(new Map());
 
@@ -63,7 +64,26 @@ export function useConversationContext() {
 
         if (channelValue) {
           if (!loaded.current) {
-            const topicItems = await getTopicItems(cardId, channelId);
+
+            stored.current = await getTopicItemsId(cardId, channelId);
+            stored.current.sort((a,b) => {
+              if (a.created > b.created) {
+                return -1;
+              }
+              if (a.created < b.created) {
+                return 1;
+              }
+              return 0;
+            });
+
+            const ids = [];
+            for (let i = 0; i < COUNT; i++) {
+              if (stored.current.length > 0) {
+                ids.push(stored.current.shift().topicId);
+              }
+            }
+
+            const topicItems = await getTopicItemsById(cardId, channelId, ids);
             for (let topic of topicItems) {
               topics.current.set(topic.topicId, topic);
             }
@@ -94,12 +114,27 @@ export function useConversationContext() {
             updateState({ loaded: true, offsync: false, topics: topics.current, card: cardValue, channel: channelValue });
           }
           else if (loadMore) {
-            const delta = await getTopicDelta(cardId, channelId, null, COUNT, null, curTopicMarker.current);
-            const marker = delta.marker ? delta.marker : 1;
-            await setTopicDelta(cardId, channelId, delta.topics);
-            await setTopicMarker(cardId, channelId, marker);
-            curTopicMarker.current = marker;
-            updateState({ loaded: true, offsync: false, topics: topics.current, card: cardValue, channel: channelValue });
+            if (stored.current.length > 0) {
+              const ids = [];
+              for (let i = 0; i < COUNT; i++) {
+                if (stored.current.length > 0) {
+                  ids.push(stored.current.shift().topicId);
+                }
+              }
+              const topicItems = await getTopicItemsById(cardId, channelId, ids);
+              for (let topic of topicItems) {
+                topics.current.set(topic.topicId, topic);
+              }
+              updateState({ loaded: true, topics: topics.current, card: cardValue, channel: channelValue });
+            }
+            else {
+              const delta = await getTopicDelta(cardId, channelId, null, COUNT, null, curTopicMarker.current);
+              const marker = delta.marker ? delta.marker : 1;
+              await setTopicDelta(cardId, channelId, delta.topics);
+              await setTopicMarker(cardId, channelId, marker);
+              curTopicMarker.current = marker;
+              updateState({ loaded: true, offsync: false, topics: topics.current, card: cardValue, channel: channelValue });
+            }
           }
           else if (ignoreRevision || topicRevision > curSyncRevision.current) {
             const delta = await getTopicDelta(cardId, channelId, curSyncRevision.current, null, curTopicMarker.current, null);
@@ -134,19 +169,19 @@ export function useConversationContext() {
       if (entry.data) {
         if (entry.data.topicDetail) {
           const item = mapTopicEntry(entry);
-          setTopicItem(cardId, channelId, item);
+          await setTopicItem(cardId, channelId, item);
           topics.current.set(item.topicId, item);
         }
         else {
           const topic = await getTopic(cardId, channelId, entry.id);
           const item = mapTopicEntry(topic);
-          setTopicItem(cardId, channelId, item);
+          await setTopicItem(cardId, channelId, item);
           topics.current.set(item.topicId, item);
         }
       }
       else {
         topics.current.delete(entry.id);
-        clearTopicItem(entry.id);
+        clearTopicItem(cardId, channelId, entry.id);
       }
     }
   }
@@ -319,7 +354,7 @@ export function useConversationContext() {
       else if (channelId) {
         channel.actions.setTopicFlag(channelId, topicId);
       }
-      setTopicField(topicId, 'blocked', 1);
+      setTopicField(topicId, 'blocked', true);
       updateState({ topics: topics.current });
     },
     clearTopicFlag: async (topicId) => {
@@ -330,7 +365,7 @@ export function useConversationContext() {
       else if (channelId) {
         channel.actions.clearTopicFlag(channelId, topicId);
       }
-      setTopicField(topicId, 'blocked', 0);
+      setTopicField(topicId, 'blocked', false);
       updateState({ topics: topics.current });
     },
     getTopicAssetUrl: (topicId, assetId) => {
@@ -345,6 +380,20 @@ export function useConversationContext() {
       force.current = true;
       sync();
     },
+  }
+
+  const getTopicItemsId = async (cardId, channelId) => {
+    if (cardId) {
+      return await card.actions.getTopicItemsId(cardId, channelId);
+    }
+    return await channel.actions.getTopicItemsId(channelId);
+  }
+
+  const getTopicItemsById = async (cardId, channelId, topics) => {
+    if (cardId) {
+      return await card.actions.getTopicItemsById(cardId, channelId, topics);
+    }
+    return await channel.actions.getTopicItemsById(channelId, topics);
   }
 
   const getTopicItems = async (cardId, channelId) => {

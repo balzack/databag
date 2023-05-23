@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import Colors from 'constants/Colors';
 
 export const AudioAssetWrapper = styled.div`
   position: relative;
@@ -40,4 +41,51 @@ export const AudioAssetWrapper = styled.div`
   }
 `;
 
+
+export const AudioModalWrapper = styled.div`
+  width: 256px;
+  height: 256px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #aaaaaa;
+
+  .background {
+    width: 256px;
+    height: 256px;
+  }
+
+  .control {
+    position: absolute;
+  }
+
+  .label {
+    padding-top: 8px;
+    position: absolute;
+    top: 0;
+    font-size: 20px;
+  }
+
+  .failed {
+    position: absolute;
+    color: white;
+    border-radius: 8px;
+
+    .ant-spin-dot-item {
+      background-color: ${Colors.alert};
+    }
+  }
+
+  .loading {
+    position: absolute;
+    color: white;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+
+    .ant-spin-dot-item {
+      background-color: ${Colors.white};
+    }
+  }
+`;
 

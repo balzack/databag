@@ -53,8 +53,9 @@ export function useAppContext() {
   }, []);
 
   const setSession = async () => {
-    const { loginTimestamp } = access.current;
+    const { loginTimestamp, guid } = access.current;
     updateState({ session: true, loginTimestamp, status: 'connecting' });
+    await store.actions.updateDb(guid);
     await account.actions.setSession(access.current);
     await profile.actions.setSession(access.current);
     await card.actions.setSession(access.current);

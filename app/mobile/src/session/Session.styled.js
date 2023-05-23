@@ -160,6 +160,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   ringName: {
+    flexShrink: 1,
     flexGrow: 1,
     paddingLeft: 8,
     paddingRight: 8,
