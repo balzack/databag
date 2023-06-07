@@ -20,3 +20,15 @@ buildscript {
         classpath("com.facebook.react:react-native-gradle-plugin")
     }
 }
+
+allprojects {
+    repositories {
+        maven {
+            url "https://www.jitpack.io"
+            content {
+                includeModule 'com.github.UnifiedPush', 'android-connector'
+            }
+        }
+    }
+}
+
