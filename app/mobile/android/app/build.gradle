@@ -159,6 +159,8 @@ dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
 
+    implementation 'androidx.core:core:1.8.0'
+
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.0.0")
 
     implementation 'com.github.UnifiedPush:android-connector:2.1.1'
