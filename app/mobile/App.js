@@ -12,7 +12,7 @@ import { RingContextProvider } from 'context/RingContext'
 import { ChannelContextProvider } from 'context/ChannelContext';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { ConversationContextProvider } from 'context/ConversationContext';
-import { LogBox } from 'react-native';
+import { LogBox, Alert } from 'react-native';
 import { Root } from 'src/root/Root';
 import { Access } from 'src/access/Access';
 import { Dashboard } from 'src/dashboard/Dashboard';
@@ -29,6 +29,7 @@ export default function App() {
 
   useEffect(() => {
     PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
+
     ReceiveSharingIntent.getReceivedFiles(files => {
       setSharing(files);
     }, 
