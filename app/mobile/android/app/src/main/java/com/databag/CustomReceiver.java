@@ -15,6 +15,13 @@ import android.net.Uri;
 import android.media.RingtoneManager;
 import androidx.core.app.NotificationCompat;
 
+import com.facebook.react.ReactApplication;
+import com.facebook.react.ReactInstanceManager;
+import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.ReactContext;
+import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.modules.core.DeviceEventManagerModule;
+
 public class CustomReceiver extends MessagingReceiver {
     public CustomReceiver() {
         super();
@@ -22,7 +29,18 @@ public class CustomReceiver extends MessagingReceiver {
     @Override
     public void onNewEndpoint(@NotNull Context context, @NotNull String endpoint, @NotNull String instance) {
 
-        Log.i("UNIFIED", "onNewEndpoint:instance=" + instance + " endpoint=" + endpoint);
+      final ReactInstanceManager reactInstanceManager =
+                ((ReactApplication) context.getApplicationContext())
+                    .getReactNativeHost()
+                    .getReactInstanceManager();
+            ReactContext reactContext = reactInstanceManager.getCurrentReactContext();
+
+    WritableMap params = Arguments.createMap();
+    params.putString("instance", instance);
+    params.putString("endpoint", endpoint);
+    reactContext
+        .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+        .emit("unifiedPushURL", params);
 
         // Called when a new endpoint be used for sending push messages
     }

@@ -13,6 +13,7 @@ import { CardContext } from 'context/CardContext';
 import { ChannelContext } from 'context/ChannelContext';
 import { RingContext } from 'context/RingContext';
 import { getVersion, getApplicationName, getDeviceId } from 'react-native-device-info'
+import { DeviceEventEmitter } from 'react-native';
 
 export function useAppContext() {
   const [state, setState] = useState({
@@ -40,6 +41,11 @@ export function useAppContext() {
   }
 
   useEffect(() => {
+ 
+    DeviceEventEmitter.addListener('unifiedPushURL', (e) => {
+      Alert.alert("PUSH ENDPOINT", JSON.stringify(e));
+    });
+
     (async () => {
       access.current = await store.actions.init();
       if (access.current) {

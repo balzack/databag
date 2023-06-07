@@ -11,6 +11,13 @@ import com.facebook.react.defaults.DefaultReactActivityDelegate;
 import org.unifiedpush.android.connector.UnifiedPush;
 import org.unifiedpush.android.connector.RegistrationDialogContent;
 
+import com.facebook.react.ReactApplication;
+import com.facebook.react.ReactInstanceManager;
+import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.ReactContext;
+import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.modules.core.DeviceEventManagerModule;
+
 public class MainActivity extends ReactActivity {
 
   /**
@@ -25,14 +32,22 @@ public class MainActivity extends ReactActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(null);
+    MainActivity activityContext = this;
 
-    UnifiedPush.registerAppWithDialog(
-        this,
-        "default", 
-        new RegistrationDialogContent(),
-        new ArrayList<String>(), 
-        getApplicationContext().getPackageName() 
-    );
+    ReactInstanceManager mReactInstanceManager = getReactNativeHost().getReactInstanceManager();
+        mReactInstanceManager.addReactInstanceEventListener(new ReactInstanceManager.ReactInstanceEventListener() {
+            public void onReactContextInitialized(ReactContext validContext) {
+ 
+              UnifiedPush.registerAppWithDialog(
+                  activityContext,
+                  "default", 
+                  new RegistrationDialogContent(),
+                  new ArrayList<String>(), 
+                  getApplicationContext().getPackageName() 
+              );
+               
+            }
+        });
   }
 
   /**
