@@ -10,6 +10,8 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 
+import android.app.ActivityManager.RunningAppProcessInfo;
+import android.app.ActivityManager;
 import android.os.Build;
 import android.net.Uri;
 import android.media.RingtoneManager;
@@ -26,6 +28,13 @@ public class CustomReceiver extends MessagingReceiver {
     public CustomReceiver() {
         super();
     }
+
+    private boolean forgrounded () {
+      ActivityManager.RunningAppProcessInfo appProcessInfo = new ActivityManager.RunningAppProcessInfo();
+      ActivityManager.getMyMemoryState(appProcessInfo);
+      return (appProcessInfo.importance == RunningAppProcessInfo.IMPORTANCE_FOREGROUND || appProcessInfo.importance == RunningAppProcessInfo.IMPORTANCE_VISIBLE);
+    }
+
     @Override
     public void onNewEndpoint(@NotNull Context context, @NotNull String endpoint, @NotNull String instance) {
 
@@ -57,6 +66,10 @@ public class CustomReceiver extends MessagingReceiver {
 
     @Override
     public void onMessage(@NotNull Context context, @NotNull byte[] message, @NotNull String instance) {
+
+      if (forgrounded()) {
+        return;
+      }
 
         Intent intent = new Intent(context, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
