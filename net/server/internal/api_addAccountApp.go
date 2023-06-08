@@ -22,6 +22,7 @@ func AddAccountApp(w http.ResponseWriter, r *http.Request) {
   appVersion := r.FormValue("appVersion")
   platform := r.FormValue("platform")
   deviceToken := r.FormValue("deviceToken")
+  pushType := r.FormValue("pushType")
 
 	// parse requested notifications
 	var notifications []Notification
@@ -54,6 +55,7 @@ func AddAccountApp(w http.ResponseWriter, r *http.Request) {
     session.AppVersion = appVersion
     session.Platform = platform
     session.PushToken = deviceToken
+    session.PushType = pushType
     session.PushEnabled = true
 		if res := tx.Save(session).Error; res != nil {
 			return res

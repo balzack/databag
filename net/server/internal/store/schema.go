@@ -109,6 +109,7 @@ type Session struct {
   Platform          string
   PushEnabled       bool
   PushToken         string
+  PushType          string
   Created           int64           `gorm:"autoCreateTime"`
   Account           Account         `gorm:"references:GUID"`
   Token             string          `gorm:"not null;index:sessguid,unique"`

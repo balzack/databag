@@ -47,7 +47,7 @@ func SendPushEvent(account store.Account, event string) {
   }
 
   // get all sessions supporting push for specified event
-  rows, err := store.DB.Table("sessions").Select("sessions.push_token, push_events.message_title, push_events.message_body").Joins("left join push_events on push_events.session_id = sessions.id").Where("sessions.account_id = ? AND sessions.push_enabled = ? AND push_events.event = ?", account.GUID, true, event).Rows();
+  rows, err := store.DB.Table("sessions").Select("sessions.push_token, sessions.push_type, push_events.message_title, push_events.message_body").Joins("left join push_events on push_events.session_id = sessions.id").Where("sessions.account_id = ? AND sessions.push_enabled = ? AND push_events.event = ?", account.GUID, true, event).Rows();
   if err != nil {
     ErrMsg(err);
     return
@@ -56,38 +56,57 @@ func SendPushEvent(account store.Account, event string) {
   tokens := make(map[string]bool)
   for rows.Next() {
     var pushToken string
+    var pushType string
     var messageTitle string
     var messageBody string
 
-    rows.Scan(&pushToken, &messageTitle, &messageBody)
+    rows.Scan(&pushToken, &pushType, &messageTitle, &messageBody)
 
     if _, exists := tokens[pushToken]; !exists {
       tokens[pushToken] = true;
 
-      url := "https://fcm.googleapis.com/fcm/send"
-      payload := Payload{ Title: messageTitle, Body: messageBody, Sound: "default" };
-      message := Message{ Notification: payload, To: pushToken };
+      if pushType == "up" {
+        message := []byte(messageTitle);
+        req, err := http.NewRequest(http.MethodPost, pushToken, bytes.NewBuffer(message))
+        if err != nil {
+          ErrMsg(err)
+          continue
+        }
+        client := &http.Client{}
+        resp, err := client.Do(req)
+        if err != nil {
+          ErrMsg(err)
+          continue
+        }
+        if resp.StatusCode != 200 {
+          ErrMsg(errors.New("failed to push notification"));
+        }
+      } else {
+        url := "https://fcm.googleapis.com/fcm/send"
+        payload := Payload{ Title: messageTitle, Body: messageBody, Sound: "default" };
+        message := Message{ Notification: payload, To: pushToken };
 
-      body, err := json.Marshal(message)
-      if err != nil {
-        ErrMsg(err)
-        continue
-      }
-      req, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer(body))
-      if err != nil {
-        ErrMsg(err)
-        continue
-      }
-      req.Header.Set("Content-Type", "application/json; charset=utf-8")
-      req.Header.Set("Authorization", "key=AAAAkgDXt8c:APA91bEjH67QpUWU6uAfCIXLqm0kf6AdPNVICZPCcWbmgW9NGYIErAxMDTy4LEbe4ik93Ho4Z-AJNIhr6nXXKC9qKmyKkkYHJWAEVH47_FXBQV6rsoi9ZB_oiuV66XKKAy1V40GmvfaX")
-      client := &http.Client{}
-      resp, err := client.Do(req)
-      if err != nil {
-        ErrMsg(err)
-        continue
-      }
-      if resp.StatusCode != 200 {
-        ErrMsg(errors.New("failed to push notification"));
+        body, err := json.Marshal(message)
+        if err != nil {
+          ErrMsg(err)
+          continue
+        }
+        req, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer(body))
+        if err != nil {
+          ErrMsg(err)
+          continue
+        }
+        req.Header.Set("Content-Type", "application/json; charset=utf-8")
+        req.Header.Set("Authorization", "key=AAAAkgDXt8c:APA91bEjH67QpUWU6uAfCIXLqm0kf6AdPNVICZPCcWbmgW9NGYIErAxMDTy4LEbe4ik93Ho4Z-AJNIhr6nXXKC9qKmyKkkYHJWAEVH47_FXBQV6rsoi9ZB_oiuV66XKKAy1V40GmvfaX")
+        client := &http.Client{}
+        resp, err := client.Do(req)
+        if err != nil {
+          ErrMsg(err)
+          continue
+        }
+        if resp.StatusCode != 200 {
+          ErrMsg(errors.New("failed to push notification"));
+        }
       }
     }
   }

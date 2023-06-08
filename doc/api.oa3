@@ -867,6 +867,12 @@ paths:
           required: false
           schema:
             type: string
+        - name: pushType
+          in: query
+          description: unifiedpush (up) or firebase (fcm), default fcm
+          required: false
+          schema:
+            type: string
         - name: notifications
           in: query
           description: push notifications to receive
