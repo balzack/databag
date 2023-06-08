@@ -43,7 +43,7 @@ export function useAppContext() {
   useEffect(() => {
  
     DeviceEventEmitter.addListener('unifiedPushURL', (e) => {
-      Alert.alert("PUSH ENDPOINT", JSON.stringify(e));
+      deviceToken.current = e.endpoint;
     });
 
     (async () => {
@@ -81,6 +81,13 @@ export function useAppContext() {
   }
 
   const notifications = [
+    { event: 'contact.addCard', messageTitle: 'New Contact Request' },
+    { event: 'contact.updateCard', messageTitle: 'Contact Update' },
+    { event: 'content.addChannel.superbasic', messageTitle: 'New Topic' },
+    { event: 'content.addChannel.sealed', messageTitle: 'New Topic' },
+    { event: 'content.addChannelTopic.superbasic', messageTitle: 'New Topic Message' },
+    { event: 'content.addChannelTopic.sealed', messageTitle: 'New Topic Message' },
+    { event: 'ring', messageTitle: 'Incoming Call' },
   ];
 
   const actions = {

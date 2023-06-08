@@ -16,6 +16,7 @@ import android.os.Build;
 import android.net.Uri;
 import android.media.RingtoneManager;
 import androidx.core.app.NotificationCompat;
+import java.nio.charset.StandardCharsets;
 
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactInstanceManager;
@@ -71,6 +72,9 @@ public class CustomReceiver extends MessagingReceiver {
         return;
       }
 
+      String strMessage = new String(message, StandardCharsets.UTF_8);
+
+
         Intent intent = new Intent(context, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0 /* Request code */, intent,
@@ -81,21 +85,19 @@ public class CustomReceiver extends MessagingReceiver {
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context,
                                                                                         channelId)
         .setSmallIcon(R.mipmap.ic_launcher)
-        .setContentTitle("FCM Message").setContentText("ROLO?").setAutoCancel(true).setSound(
+        .setContentTitle(strMessage).setAutoCancel(true).setSound(
                 defaultSoundUri).setContentIntent(pendingIntent);
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(
                 Context.NOTIFICATION_SERVICE);
 
-if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(channelId, "Channel human readable title",
                                                                   NotificationManager.IMPORTANCE_DEFAULT);
             notificationManager.createNotificationChannel(channel);
-    }
+        }
 
         notificationManager.notify(0, notificationBuilder.build());
-
-        // Called when a new message is received. The message contains the full POST body of the push message
     }
 }
 
