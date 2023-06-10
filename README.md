@@ -29,7 +29,7 @@ Databag is a self-hosted messaging service. Notable features include:
 - Lightweight (server can run on a raspberry pi zero v1.3)
 - Low latency (use of websockets for push events to avoid polling)
 - Unlimited accounts per node (host for your whole family)
-- Mobile alerts for new contacts, messages, and calls (supports UnifiedPush and Firebase)
+- Mobile alerts for new contacts, messages, and calls (supports UnifiedPush, FCM, APN)
 
 <br>
 <p align="center">
