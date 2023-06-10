@@ -1,11 +1,25 @@
 package com.databag;
 
+import java.util.ArrayList;
 import android.content.Intent;
 import android.os.Bundle;
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint;
 import com.facebook.react.defaults.DefaultReactActivityDelegate;
+
+import org.unifiedpush.android.connector.UnifiedPush;
+
+import android.content.Context;
+
+import org.unifiedpush.android.connector.RegistrationDialogContent;
+
+import com.facebook.react.ReactApplication;
+import com.facebook.react.ReactInstanceManager;
+import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.ReactContext;
+import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.modules.core.DeviceEventManagerModule;
 
 public class MainActivity extends ReactActivity {
 
@@ -21,6 +35,25 @@ public class MainActivity extends ReactActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(null);
+    MainActivity activityContext = this;
+
+    this.getSharedPreferences("unifiedpush.connector", Context.MODE_PRIVATE).edit().putBoolean("unifiedpush.no_distrib_dialog", true).apply();
+
+
+    ReactInstanceManager mReactInstanceManager = getReactNativeHost().getReactInstanceManager();
+        mReactInstanceManager.addReactInstanceEventListener(new ReactInstanceManager.ReactInstanceEventListener() {
+            public void onReactContextInitialized(ReactContext validContext) {
+
+              UnifiedPush.registerAppWithDialog(
+                  activityContext,
+                  "default",
+                  new RegistrationDialogContent(),
+                  new ArrayList<String>(), 
+                  getApplicationContext().getPackageName() 
+              );
+               
+            }
+        });
   }
 
   /**
