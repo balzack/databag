@@ -18,7 +18,7 @@ import { Access } from 'src/access/Access';
 import { Dashboard } from 'src/dashboard/Dashboard';
 import { Session } from 'src/session/Session';
 import ReceiveSharingIntent from 'react-native-receive-sharing-intent';
-import {PermissionsAndroid} from 'react-native';
+import { Platform, PermissionsAndroid } from 'react-native';
 
 // silence warning: Sending `onAnimatedValueUpdate` with no listeners registered
 //LogBox.ignoreLogs(['Sending']);
@@ -28,8 +28,10 @@ export default function App() {
   const [sharing, setSharing] = useState();
 
   useEffect(() => {
-    
-    PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
+   
+    if (Platform.OS !== 'ios') { 
+      PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
+    }
 
     ReceiveSharingIntent.getReceivedFiles(files => {
       setSharing(files);
