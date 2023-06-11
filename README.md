@@ -41,7 +41,7 @@ Databag is a self-hosted messaging service. Notable features include:
   </a>
 </p>
 
-The app is available in the google and apple stores. You can also test out the project [here](https://databag.coredb.org/#/create), but don't post anything important as this server is regularly wiped. Feedback on the UI/UX, bugs or features is greatly appreciated.
+The app is available in the google and apple stores; [F-Droid](https://gitlab.com/fdroid/fdroiddata/-/merge_requests/12183) inclusion is in progress. You can also test out the project [here](https://databag.coredb.org/#/create), but don't post anything important as this server is regularly wiped. Feedback on the UI/UX, bugs or features is greatly appreciated.
 
 ## Installation
 
