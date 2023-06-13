@@ -19,6 +19,7 @@ import { Dashboard } from 'src/dashboard/Dashboard';
 import { Session } from 'src/session/Session';
 import ReceiveSharingIntent from 'react-native-receive-sharing-intent';
 import { Platform, PermissionsAndroid } from 'react-native';
+import { initUnifiedPush } from 'react-native-unifiedpush-connector';
 
 // silence warning: Sending `onAnimatedValueUpdate` with no listeners registered
 //LogBox.ignoreLogs(['Sending']);
@@ -31,6 +32,7 @@ export default function App() {
    
     if (Platform.OS !== 'ios') { 
       PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
+      initUnifiedPush();
     }
 
     ReceiveSharingIntent.getReceivedFiles(files => {
