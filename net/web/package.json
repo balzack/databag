@@ -16,6 +16,7 @@
     }
   },
   "dependencies": {
+    "@charliewilco/gluejar": "^1.0.0",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/user-event": "^13.2.1",
     "antd": "^5.0.4",

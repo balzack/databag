@@ -7,6 +7,7 @@ import { SketchPicker } from "react-color";
 import { AudioFile } from './audioFile/AudioFile';
 import { VideoFile } from './videoFile/VideoFile';
 import { Carousel } from 'carousel/Carousel';
+import { Gluejar } from '@charliewilco/gluejar'
 
 export function AddTopic({ contentKey }) {
 
@@ -40,6 +41,15 @@ export function AddTopic({ contentKey }) {
       }
     }
   };
+
+  const pasteImage = async (e) => {
+    if (e.images.length > 0) {
+      var data = await fetch(e.images[0]);
+      var blob = await data.blob();
+      actions.addImage(blob);
+      e.images.length = 0;
+    }
+  }
 
   const onSelectImage = (e) => {
     actions.addImage(e.target.files[0]);
@@ -94,6 +104,9 @@ export function AddTopic({ contentKey }) {
   return (
     <AddTopicWrapper>
       { modalContext }
+
+      <Gluejar onPaste={files => pasteImage(files)} onError={err => console.error(err)} acceptedFiles={['image/png', 'image/jpeg', 'image/bmp']} />
+
       <input type='file' name="asset" accept="image/*" ref={attachImage} onChange={e => onSelectImage(e)} style={{display: 'none'}}/>
       <input type='file' name="asset" accept="audio/*" ref={attachAudio} onChange={e => onSelectAudio(e)} style={{display: 'none'}}/>
       <input type='file' name="asset" accept="video/*" ref={attachVideo} onChange={e => onSelectVideo(e)} style={{display: 'none'}}/>
