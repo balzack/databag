@@ -1,6 +1,7 @@
-import { Modal, Dropdown, Menu, Tooltip } from 'antd';
+import { useRef } from 'react';
+import { Modal, Switch, Dropdown, Menu, Tooltip } from 'antd';
 import { Logo } from 'logo/Logo';
-import { IdentityWrapper, ErrorNotice, InfoNotice } from './Identity.styled';
+import { IdentityWrapper, LogoutContent, ErrorNotice, InfoNotice } from './Identity.styled';
 import { useIdentity } from './useIdentity.hook';
 import { LogoutOutlined, InfoCircleOutlined, ExclamationCircleOutlined, DownOutlined } from '@ant-design/icons';
 
@@ -8,14 +9,19 @@ export function Identity({ openAccount, openCards, cardUpdated }) {
 
   const [modal, modalContext] = Modal.useModal();
   const { state, actions } = useIdentity();
+  const all = useRef(false);
 
   const logout = () => {
     modal.confirm({
       title: 'Are you sure you want to logout?',
       icon: <LogoutOutlined />,
+      content: <LogoutContent onClick={(e) => e.stopPropagation()}>
+                <span className="logoutMode">Logout of All Devices </span>
+                <Switch onChange={(e) => {all.current = e}} size="small" />
+               </LogoutContent>,
       bodyStyle: { padding: 16 },
       onOk() {
-        actions.logout();
+        actions.logout(all.current);
       },
       onCancel() {},
     });

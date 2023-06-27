@@ -913,30 +913,12 @@ paths:
           required: true
           schema:
             type: string
-        - name: appName
+        - name: all
           in: query
-          description: name of connecting app
+          description: whether all app tokens should be cleared
           required: false
           schema:
-            type: string
-        - name: appVersion
-          in: query
-          description: version of connecting app
-          required: false
-          schema:
-            type: string
-        - name: platform
-          in: query
-          description: device platform
-          required: false
-          schema:
-            type: string
-        - name: deviceToken
-          in: query
-          description: deviceToken for push notification
-          required: false
-          schema:
-            type: string
+            type: boolean
       responses:
         '200':
           description: ok

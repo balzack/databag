@@ -33,7 +33,9 @@ export function useIdentity() {
   }, [app.state]);
 
   const actions = {
-    logout: app.actions.logout,
+    logout: (all) => {
+      app.actions.logout(all);
+    },
   };
 
   return { state, actions };

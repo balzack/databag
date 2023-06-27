@@ -60,6 +60,18 @@ export const IdentityWrapper = styled.div`
   }
 `;
 
+export const LogoutContent = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+
+  .logoutMode {
+    padding-right: 8px;
+    color: ${Colors.text};
+  }
+`
+
 export const ErrorNotice = styled.div`
   color: ${Colors.alert};
 `

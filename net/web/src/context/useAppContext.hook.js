@@ -71,8 +71,8 @@ export function useAppContext(websocket) {
   }
 
   const actions = {
-    logout: async () => {
-      await appLogout();
+    logout: async (all) => {
+      await appLogout(all);
     },
     access: async (token) => {
       await appAccess(token)
@@ -140,10 +140,10 @@ export function useAppContext(websocket) {
     return access.created;
   }
 
-  const appLogout = async () => {
+  const appLogout = async (all) => {
     clearSession();
     try {
-      await clearLogin(appToken.current);
+      await clearLogin(appToken.current, all);
     }
     catch (err) {
       console.log(err);
