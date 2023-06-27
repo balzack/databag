@@ -126,7 +126,8 @@ export function useAppContext() {
       }
       updateState({ loggingOut: true });
       try {
-        await clearLogin(state.server, state.token);
+        const { server, token } = access.current || {};
+        await clearLogin(server, token);
       }
       catch (err) {
         console.log(err);
