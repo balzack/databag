@@ -153,7 +153,8 @@ export function useAppContext() {
           await messaging().deleteToken();
           deviceToken.current = await messaging().getToken();
         }
-        await clearLogin(state.server, state.token);
+        const { server, token } = access.current || {};
+        await clearLogin(server, token);
       }
       catch (err) {
         console.log(err);
