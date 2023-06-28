@@ -73,6 +73,44 @@ From Nginx Proxy Manager:
     - Port '7000'
     - Request new SSL certificate
 
+<details>
+  <summary>From Nginx Proxy config:</summary>
+
+  ```
+server {
+  server_name your.site.tld;
+
+location / {
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "Upgrade";
+    proxy_set_header Host $host;
+    proxy_pass http://localhost:7000;
+    client_max_body_size 0;
+    proxy_max_temp_file_size 0;
+
+}
+
+    listen 443 ssl http2;
+    ssl_certificate /etc/letsencrypt/live/your.site.tld/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/your.site.tld/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+    add_header Strict-Transport-Security "max-age=0";
+
+}
+
+server {
+    if ($host = your.site.tld) {
+        return 301 https://$host$request_uri;
+    }
+  listen 80;
+  server_name your.site.tld;
+    return 404;
+}
+```
+</details>
+
 From Your Browser:
   - Enter your server address in the address bar [hostname.domain]
     - Click the cog icon in the top right
