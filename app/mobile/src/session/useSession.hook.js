@@ -1,6 +1,5 @@
 import { useRef, useState, useEffect, useContext } from 'react';
 import { useWindowDimensions } from 'react-native';
-import { useNavigate } from 'react-router-dom';
 import config from 'constants/Config';
 import { StoreContext } from 'context/StoreContext';
 import { CardContext } from 'context/CardContext';
@@ -34,18 +33,11 @@ export function useSession() {
   const profile = useContext(ProfileContext);
   const store = useContext(StoreContext);
   const dimensions = useWindowDimensions();
-  const navigate = useNavigate();
   const tabbed = useRef(null);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
   }
-
-  useEffect(() => {
-    if (profile.state.loggedOut) {
-      navigate("/");
-    }
-  }, [profile.state]);
 
   useEffect(() => {
     const ringing = [];

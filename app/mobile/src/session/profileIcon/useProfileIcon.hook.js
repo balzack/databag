@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
 import { AppContext } from 'context/AppContext';
+import { useNavigate } from 'react-router-dom';
 
 export function useProfileIcon() {
 
@@ -7,6 +8,7 @@ export function useProfileIcon() {
     disconnected: false,
   });
 
+  const navigate = useNavigate();
   const app = useContext(AppContext);
 
   const updateState = (value) => {
@@ -16,6 +18,9 @@ export function useProfileIcon() {
   useEffect(() => {
     const { status } = app.state
     updateState({ disconnected: status === 'disconnected' });
+    if (app.state.loggedOut) {
+      navigate("/");
+    }
   }, [app]);
 
   const actions = {};
