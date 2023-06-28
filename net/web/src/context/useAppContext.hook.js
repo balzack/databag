@@ -175,7 +175,7 @@ export function useAppContext(websocket) {
     ws.current = createWebsocket(protocol + window.location.host + "/status?mode=ring");
     ws.current.onmessage = (ev) => {
       try {
-        if (ev.data == '') {
+        if (ev.data === '') {
           appLogout(false);
           return;
         }
