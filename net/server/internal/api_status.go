@@ -14,6 +14,7 @@ var wsSync sync.Mutex
 var wsExit = make(chan bool, 1)
 var statusListener = make(map[uint][]chan<- []byte)
 var revisionListener = make(map[uint][]chan<- []byte)
+var disconnectListener = make(map[uint][]chan<- bool)
 var upgrader = websocket.Upgrader{}
 
 //Status handler for websocket connection
@@ -92,6 +93,14 @@ func Status(w http.ResponseWriter, r *http.Request) {
     defer removeRevisionListener(session.Account.ID, c)
   }
 
+  // open channel for disconnection
+  d := make(chan bool)
+  defer close(d)
+
+  // register channel for updates
+  addDisconnectListener(session.Account.ID, d)
+  defer removeDisconnectListener(session.Account.ID, d)
+
 	// start ping pong ticker
 	ticker := time.NewTicker(60 * time.Second)
 	defer ticker.Stop()
@@ -109,6 +118,9 @@ func Status(w http.ResponseWriter, r *http.Request) {
 				ErrMsg(err)
 				return
 			}
+    case <-d:
+      LogMsg("user discconection")
+      return
 		case <-wsExit:
 			LogMsg("exiting server")
 			wsExit <- true
@@ -205,6 +217,22 @@ func SetStatus(account *store.Account) {
 	}
 }
 
+//ClearStatus disconnects websockets from account
+func ClearStatus(account *store.Account) {
+
+  // lock access to statusListener
+  wsSync.Lock()
+  defer wsSync.Unlock();
+
+  // notify all disconnect listeners
+  chs, ok := disconnectListener[account.ID]
+  if ok {
+    for _, ch := range chs {
+      ch <- true
+    }
+  }
+}
+
 func addStatusListener(act uint, ch chan<- []byte) {
 
 	// lock access to statusListener
@@ -278,3 +306,41 @@ func removeRevisionListener(act uint, ch chan<- []byte) {
 		}
 	}
 }
+
+func addDisconnectListener(act uint, ch chan<- bool) {
+
+  // lock access to disconnectListener
+  wsSync.Lock()
+  defer wsSync.Unlock()
+
+  // add new listener to map
+  chs, ok := disconnectListener[act]
+  if ok {
+    disconnectListener[act] = append(chs, ch)
+  } else {
+    disconnectListener[act] = []chan<- bool{ch}
+  }
+}
+
+func removeDisconnectListener(act uint, ch chan<- bool) {
+
+  // lock access to revisionListener
+  wsSync.Lock()
+  defer wsSync.Unlock()
+
+  // remove channel from map
+  chs, ok := disconnectListener[act]
+  if ok {
+    for i, c := range chs {
+      if ch == c {
+        if len(chs) == 1 {
+          delete(disconnectListener, act)
+        } else {
+          chs[i] = chs[len(chs)-1]
+          disconnectListener[act] = chs[:len(chs)-1]
+        }
+      }
+    }
+  }
+}
+
