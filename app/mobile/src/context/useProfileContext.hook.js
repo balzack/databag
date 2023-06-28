@@ -12,6 +12,7 @@ export function useProfileContext() {
     identity: {},
     server: null,
     imageUrl: null,
+    loggedOut: false,
   });
   const store = useContext(StoreContext);
 
@@ -56,13 +57,14 @@ export function useProfileContext() {
       const identity = await store.actions.getProfile(guid);
       const revision = await store.actions.getProfileRevision(guid);
       const imageUrl = identity?.image ? getProfileImageUrl(server, token, revision) : null;
-      updateState({ offsync: false, identity, imageUrl, server });
+      updateState({ loggedOut: false, offsync: false, identity, imageUrl, server });
       setRevision.current = revision;
       curRevision.current = revision;
       access.current = session;
     },
     clearSession: () => {
       access.current = null;
+      updateState({ loggedOut: true });
     },
     setRevision: (rev) => {
       curRevision.current = rev;

@@ -42,6 +42,12 @@ export function useSession() {
   }
 
   useEffect(() => {
+    if (profile.state.loggedOut) {
+      navigate("/");
+    }
+  }, [profile.state]);
+
+  useEffect(() => {
     const ringing = [];
     const expired = Date.now();
     ring.state.ringing.forEach(call => {

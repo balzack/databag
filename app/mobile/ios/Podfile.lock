@@ -350,6 +350,8 @@ PODS:
     - ReactCommon/turbomodule/core
   - react-native-sqlite-storage (6.0.1):
     - React-Core
+  - react-native-unifiedpush-connector (0.1.5):
+    - React-Core
   - react-native-video (5.2.1):
     - React-Core
     - react-native-video/Video (= 5.2.1)
@@ -549,6 +551,7 @@ DEPENDENCIES:
   - react-native-rsa-native (from `../node_modules/react-native-rsa-native`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-sqlite-storage (from `../node_modules/react-native-sqlite-storage`)
+  - react-native-unifiedpush-connector (from `../node_modules/react-native-unifiedpush-connector`)
   - react-native-video (from `../node_modules/react-native-video`)
   - react-native-webrtc (from `../node_modules/react-native-webrtc`)
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
@@ -657,6 +660,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-safe-area-context"
   react-native-sqlite-storage:
     :path: "../node_modules/react-native-sqlite-storage"
+  react-native-unifiedpush-connector:
+    :path: "../node_modules/react-native-unifiedpush-connector"
   react-native-video:
     :path: "../node_modules/react-native-video"
   react-native-webrtc:
@@ -761,6 +766,7 @@ SPEC CHECKSUMS:
   react-native-rsa-native: 12132eb627797529fdb1f0d22fd0f8f9678df64a
   react-native-safe-area-context: 39c2d8be3328df5d437ac1700f4f3a4f75716acc
   react-native-sqlite-storage: f6d515e1c446d1e6d026aa5352908a25d4de3261
+  react-native-unifiedpush-connector: 4a2617507562f177726203bda5dea0a00855ac2b
   react-native-video: c26780b224543c62d5e1b2a7244a5cd1b50e8253
   react-native-webrtc: 0df36747802476e758af6b6dceccdeaed8c826c2
   React-perflogger: af8a3d31546077f42d729b949925cc4549f14def
