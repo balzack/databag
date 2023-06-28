@@ -52,16 +52,20 @@ func SetCloseMessage(w http.ResponseWriter, r *http.Request) {
 
 	slot := card.CardSlot
 	err = store.DB.Transaction(func(tx *gorm.DB) error {
-		if card.Status != APPCardPending {
+    if card.Status == APPCardPending {
+      if res := tx.Delete(&card).Error; res != nil {
+        return res
+      }
+    } else {
 			if res := tx.Model(&card).Update("status", APPCardConfirmed).Error; res != nil {
 				return res
 			}
       if res := tx.Model(&card).Update("status_updated", time.Now().Unix()).Error; res != nil {
         return res
       }
-		}
-		if res := tx.Model(&card).Update("detail_revision", account.CardRevision+1).Error; res != nil {
-			return res
+      if res := tx.Model(&card).Update("detail_revision", account.CardRevision+1).Error; res != nil {
+        return res
+      }
 		}
 		if res := tx.Model(&slot).Update("revision", account.CardRevision+1).Error; res != nil {
 			return res
