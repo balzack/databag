@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Alert } from 'react-native';
 import { setLogin } from 'api/setLogin';
 import { clearLogin } from 'api/clearLogin';
@@ -24,6 +25,9 @@ export function useAppContext() {
     adminToken: null,
     version: getVersion(),
   });
+
+  const navigate = useNavigate();
+
   const store = useContext(StoreContext);
   const account = useContext(AccountContext);
   const profile = useContext(ProfileContext);
@@ -164,6 +168,7 @@ export function useAppContext() {
       await store.actions.clearSession();
       await store.actions.clearFirstRun();
       updateState({ loggingOut: false });
+      navigate('/');
     },
     remove: async () => {
       if (!access.current) {
@@ -179,6 +184,10 @@ export function useAppContext() {
   const setWebsocket = (session) => {
     ws.current = createWebsocket(`wss://${session.server}/status?mode=ring`);
     ws.current.onmessage = (ev) => {
+      if (ev.data == '') {
+        actions.logout();
+        return;
+      }
       try {
         delay.current = 0;
         let activity = JSON.parse(ev.data);

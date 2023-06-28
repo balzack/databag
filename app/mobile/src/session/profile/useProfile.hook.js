@@ -128,7 +128,6 @@ export function useProfile() {
   const actions = {
     logout: async () => {
       await app.actions.logout();
-      navigate('/');
     },
     remove: async () => {
       await app.actions.remove();

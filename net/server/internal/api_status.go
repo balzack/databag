@@ -57,6 +57,7 @@ func Status(w http.ResponseWriter, r *http.Request) {
 	// retrieve reference account
 	var session store.Session
 	if err := store.DB.Preload("Account").Where("account_id = ? AND token = ?", target, access).First(&session).Error; err != nil {
+    conn.WriteMessage(websocket.TextMessage, []byte(""))
 		ErrMsg(err)
 		return
 	}
