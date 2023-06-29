@@ -80,7 +80,6 @@ export function useConversation() {
     const { logo, subject } = getChannelSubjectLogo(cardId, profileGuid, channel, cards, cardImageUrl);
 
     if (channel?.topicRevision && channel.readRevision !== channel.topicRevision) {
-      console.log("READ:", channel.topicRevision);
       conversation.actions.setChannelReadRevision(channel.topicRevision);
     }
 

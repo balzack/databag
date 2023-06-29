@@ -1,6 +1,7 @@
 {
   "name": "src",
   "dependencies": {
+    "react-native-awesome-gallery": "^0.3.5",
     "react-native-fs": "^2.20.0"
   }
 }
