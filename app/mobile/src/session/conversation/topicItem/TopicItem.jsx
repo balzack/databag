@@ -216,7 +216,7 @@ export function TopicItem({ item, focused, focus, hosting, remove, update, block
           <SafeAreaView style={styles.modal} edges={['top','bottom','left','right']}>
             <GestureHandlerRootView>
               <Carousel
-                loop
+                loop={false}
                 width={state.width}
                 autoPlay={false}
                 data={state.assets}

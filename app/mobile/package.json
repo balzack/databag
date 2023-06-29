@@ -27,6 +27,7 @@
     "moment": "^2.29.4",
     "react": "18.2.0",
     "react-native": "0.71.3",
+    "react-native-awesome-gallery": "^0.3.5",
     "react-native-base64": "^0.2.1",
     "react-native-create-thumbnail": "^1.6.4",
     "react-native-device-info": "^10.4.0",
