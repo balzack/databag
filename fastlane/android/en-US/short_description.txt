@@ -1,0 +1,1 @@
+Databag is a federated chat client designed for privacy which runs on a lightweight self-hosting network.
