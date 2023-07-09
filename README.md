@@ -33,6 +33,9 @@ Databag is a self-hosted messaging service. Notable features include:
 
 <br>
 <p align="center">
+  <a href="https://f-droid.org/en/packages/com.databag/">
+    <img src="/doc/fdroid.png" width="18%">
+  </a>
   <a href="https://apps.apple.com/us/app/databag/id6443741428">
     <img src="/doc/astore.png" width="18%">
   </a>
@@ -41,7 +44,7 @@ Databag is a self-hosted messaging service. Notable features include:
   </a>
 </p>
 
-The app is available in the google and apple stores; [F-Droid](https://gitlab.com/fdroid/fdroiddata/-/commit/562e4ee1fd5ebecbb2d755cf3eed0c5b9fc5c95c) inclusion is in progress. You can also test out the project [here](https://databag.coredb.org/#/create), but don't post anything important as this server is regularly wiped. Feedback on the UI/UX, bugs or features is greatly appreciated.
+The app is available on fdroid as well as the google and apple stores. You can test out the project [here](https://databag.coredb.org/#/create), but don't post anything important as this server is regularly wiped. Feedback on the UI/UX, bugs or features is greatly appreciated.
 
 ## Installation
 
