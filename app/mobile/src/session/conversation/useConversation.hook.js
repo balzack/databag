@@ -79,6 +79,10 @@ export function useConversation() {
     cardImageUrl = card.actions.getCardImageUrl;
     const { logo, subject } = getChannelSubjectLogo(cardId, profileGuid, channel, cards, cardImageUrl);
 
+    if (channel?.topicRevision && channel.readRevision !== channel.topicRevision) {
+      conversation.actions.setChannelReadRevision(channel.topicRevision);
+    }
+
     const items = Array.from(conversation.state.topics.values());
     const sorted = items.sort((a, b) => {
       const aTimestamp = a?.detail?.created;
@@ -100,7 +104,6 @@ export function useConversation() {
     }, 100);
 
   }, [conversation.state, profile.state]);
-    
 
   const actions = {
     setFocus: (focus) => {
