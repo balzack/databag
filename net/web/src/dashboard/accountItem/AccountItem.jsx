@@ -75,7 +75,12 @@ export function AccountItem({ item, remove }) {
         <Logo url={state.imageUrl} width={32} height={32} radius={4} />
       </div>
       <div className={state.activeClass}>
-        <div className="handle">{ state.handle }</div>
+        <div className="handle">
+          <span>{ state.handle }</span>
+          { state?.storage > 0 && (
+            <span className="storage">{ state.storage } { state.storageUnit }</span>
+          )}
+        </div>
         <div className="guid">{ state.guid }</div>
       </div>
       <div className="control">

@@ -3975,6 +3975,9 @@ components:
           type: boolean
         seal:
           type: string
+        storageUsed:
+          type: integer
+          format: int64
           
     Profile:
       type: object

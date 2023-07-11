@@ -22,6 +22,7 @@ export function useAccountItem(item, remove) {
   }
 
   useEffect(() => {
+
     updateState({
       disabled: item?.disabled,
       activeClass: item?.disabled ? 'inactive' : 'active',
@@ -29,6 +30,8 @@ export function useAccountItem(item, remove) {
       name: item?.name,
       guid: item?.guid,
       handle: item?.handle,
+      storage: Math.floor(item?.storageUsed > 1073741824 ? item?.storageUsed / 1073741824 : item?.storageUsed / 1048576),
+      storageUnit: item?.storageUsed > 1073741824 ? "GB" : "MB",
       imageUrl: item?.imageSet ? getAccountImageUrl(app.state.adminToken, item?.accountId) : null,
     });
   }, [app.state.adminToken, item]); 

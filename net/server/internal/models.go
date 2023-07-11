@@ -19,6 +19,8 @@ type AccountProfile struct {
   Seal string `json:"seal,emitempty"`
 
 	Disabled bool `json:"disabled"`
+
+	StorageUsed int64 `json:"storageUsed"`
 }
 
 //AccountStatus server settings for account

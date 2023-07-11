@@ -51,6 +51,11 @@ export const AccountItemWrapper = styled.div`
     overflow: hidden;
   }
 
+  .storage {
+    color: #555555;
+    padding-left: 8px;
+  }    
+
   .guid {
     font-size: 0.8em;
     font-weight: bold;

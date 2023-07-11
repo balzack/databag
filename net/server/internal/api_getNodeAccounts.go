@@ -14,13 +14,18 @@ func GetNodeAccounts(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var accounts []store.Account
-	if err := store.DB.Preload("AccountDetail").Find(&accounts).Error; err != nil {
+	if err := store.DB.Preload("Assets").Preload("AccountDetail").Find(&accounts).Error; err != nil {
 		ErrResponse(w, http.StatusInternalServerError, err)
 		return
 	}
 
 	profiles := []AccountProfile{}
 	for _, account := range accounts {
+    var size int64
+    for _, asset := range account.Assets {
+      size += asset.Size
+    }
+
 		profiles = append(profiles, AccountProfile{
 			AccountID:   uint32(account.ID),
 			GUID:        account.GUID,
@@ -30,6 +35,7 @@ func GetNodeAccounts(w http.ResponseWriter, r *http.Request) {
 			Location:    account.AccountDetail.Location,
 			ImageSet:    account.AccountDetail.Image != "",
 			Disabled:    account.Disabled,
+      StorageUsed: size,
 		})
 	}
 

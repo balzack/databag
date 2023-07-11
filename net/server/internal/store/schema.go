@@ -84,6 +84,7 @@ type Account struct {
   Forward           string
   AccountDetail     AccountDetail
   Apps              []App
+  Assets            []Asset
 }
 
 type AccountDetail struct {
