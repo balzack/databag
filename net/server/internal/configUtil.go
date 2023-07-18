@@ -9,11 +9,11 @@ import (
 //CNFPushSupported for allowing push notifications
 const CNFPushSupported = "push_notifications"
 
-//CNFOpenAccess for allowing for public account creation
-const CNFOpenAccess = "open_access"
+//CNFEnableOpenAccess for allowing for public account creation
+const CNFEnableOpenAccess = "open_access"
 
-//CNFAccountLimit for limiting number of accounts for public creation
-const CNFAccountLimit = "account_limit"
+//CNFOpenAccessLimit for limiting number of accounts for public creation
+const CNFOpenAccessLimit = "account_limit"
 
 //CNFConfigured set when admin token has been set
 const CNFConfigured = "configured"

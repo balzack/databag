@@ -92,6 +92,10 @@ export const SettingsLayout = styled(Space)`
     margin-top: 8px;
   }
 
+  .minHeight {
+    min-height: 32px;
+  }
+
   .field {
     white-space: nowrap;
     display: flex;

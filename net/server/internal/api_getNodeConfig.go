@@ -26,6 +26,8 @@ func GetNodeConfig(w http.ResponseWriter, r *http.Request) {
 	config.IceUrl = getStrConfigValue(CNFIceUrl, "")
 	config.IceUsername = getStrConfigValue(CNFIceUsername, "")
 	config.IcePassword = getStrConfigValue(CNFIcePassword, "")
+  config.EnableOpenAccess = getBoolConfigValue(CNFEnableOpenAccess, false);
+  config.OpenAccessLimit = getNumConfigValue(CNFOpenAccessLimit, 0);
 
 	WriteResponse(w, config)
 }

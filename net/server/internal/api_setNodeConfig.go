@@ -16,6 +16,9 @@ func SetNodeConfig(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+  // update open access
+  updateAccess := r.FormValue("update") == "open"
+
 	// parse node config
 	var config NodeConfig
 	if err := ParseRequest(r, w, &config); err != nil {
@@ -113,6 +116,24 @@ func SetNodeConfig(w http.ResponseWriter, r *http.Request) {
 		}).Create(&store.Config{ConfigID: CNFIcePassword, StrValue: config.IcePassword}).Error; res != nil {
 			return res
 		}
+
+    if updateAccess {
+      // upsert enable open access
+      if res := tx.Clauses(clause.OnConflict{
+        Columns:   []clause.Column{{Name: "config_id"}},
+        DoUpdates: clause.AssignmentColumns([]string{"bool_value"}),
+      }).Create(&store.Config{ConfigID: CNFEnableOpenAccess, BoolValue: config.EnableOpenAccess}).Error; res != nil {
+        return res
+      }
+
+      // upsert open access limit
+      if res := tx.Clauses(clause.OnConflict{
+        Columns:   []clause.Column{{Name: "config_id"}},
+        DoUpdates: clause.AssignmentColumns([]string{"num_value"}),
+      }).Create(&store.Config{ConfigID: CNFOpenAccessLimit, NumValue: config.OpenAccessLimit}).Error; res != nil {
+        return res
+      }
+    }
 
 		return nil
 	})

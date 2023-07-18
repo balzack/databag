@@ -371,6 +371,10 @@ type NodeConfig struct {
 	AccountStorage int64 `json:"accountStorage"`
 
   PushSupported bool `json:"pushSupported"`
+
+  EnableOpenAccess bool `json:"enableOpenAccess,omitempty"`
+
+	OpenAccessLimit int64 `json:"openAccessLimit,omitempty"`
 }
 
 //Profile public attributes of account

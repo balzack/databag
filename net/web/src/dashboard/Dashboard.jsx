@@ -1,5 +1,5 @@
 import { AlertIcon, DashboardWrapper, SettingsButton, AddButton, SettingsLayout, CreateLayout } from './Dashboard.styled';
-import { Tooltip, Switch, Select, Button, Modal, Input, InputNumber, List } from 'antd';
+import { Tooltip, Switch, Select, Button, Space, Modal, Input, InputNumber, List } from 'antd';
 import { ExclamationCircleOutlined, SettingOutlined, CopyOutlined, UserAddOutlined, LogoutOutlined, ReloadOutlined } from '@ant-design/icons';
 import { useDashboard } from './useDashboard.hook';
 import { AccountItem } from './accountItem/AccountItem';
@@ -121,6 +121,17 @@ export function Dashboard() {
               <Select.Option value="RSA2048">RSA 2048</Select.Option>
               <Select.Option value="RSA4096">RSA 4096</Select.Option>
             </Select>
+          </div>
+          <div className="field">
+            <Space className="minHeight" size="middle">
+              <div>Open Access:</div>
+              <Switch onChange={(e) => actions.setEnableOpenAccess(e)} size="small"
+                defaultChecked={false} checked={state.enableOpenAccess} />
+              { state.enableOpenAccess && (
+                <InputNumber defaultValue={0} onChange={(e) => actions.setOpenAccessLimit(e)}
+                    placeholder="Account Limit" value={state.openAccessLimit} />
+              )}
+            </Space>
           </div>
           <div className="field">
             <div>Enable Push Notification:&nbsp;</div>
