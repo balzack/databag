@@ -124,12 +124,12 @@ export function Dashboard() {
           </div>
           <div className="field">
             <Space className="minHeight" size="middle">
-              <div>Open Access:</div>
+              <div>Public Account Creation:</div>
               <Switch onChange={(e) => actions.setEnableOpenAccess(e)} size="small"
                 defaultChecked={false} checked={state.enableOpenAccess} />
               { state.enableOpenAccess && (
                 <InputNumber defaultValue={0} onChange={(e) => actions.setOpenAccessLimit(e)}
-                    placeholder="Account Limit" value={state.openAccessLimit} />
+                    placeholder="Limit" value={state.openAccessLimit} />
               )}
             </Space>
           </div>
