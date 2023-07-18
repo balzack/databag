@@ -17,7 +17,7 @@ func SetNodeConfig(w http.ResponseWriter, r *http.Request) {
 	}
 
   // update open access
-  updateAccess := r.FormValue("update") == "open"
+  updateAccess := r.FormValue("setOpenAccess") == "true"
 
 	// parse node config
 	var config NodeConfig

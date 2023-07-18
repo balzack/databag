@@ -123,12 +123,12 @@ paths:
           required: true
           schema:
             type: string
-        - name: update
+        - name: setOpenAccess
           in: query
           description: if open access should be updated
           required: false
           schema:
-            type: string
+            type: boolean
       responses:
         '200':
           description: success
