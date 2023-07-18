@@ -51,13 +51,13 @@ func TestMain(m *testing.M) {
 	}
 
 	// config open access
-	access := &store.Config{ConfigID: CNFOpenAccess, BoolValue: true}
+	access := &store.Config{ConfigID: CNFEnableOpenAccess, BoolValue: true}
 	if err := store.DB.Save(access).Error; err != nil {
 		panic("failed to configure open access")
 	}
 
 	// config account limit
-	limit := &store.Config{ConfigID: CNFAccountLimit, NumValue: 1024}
+	limit := &store.Config{ConfigID: CNFOpenAccessLimit, NumValue: 1024}
 	if err := store.DB.Save(limit).Error; err != nil {
 		panic("failed to configure account limit")
 	}
