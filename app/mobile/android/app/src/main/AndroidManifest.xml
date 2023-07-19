@@ -18,6 +18,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission tools:node="remove" android:name="android.vending.CHECK_LICENSE" />
+    <uses-permission tools:node="remove" android:name="com.android.vending.CHECK_LICENSE" />
 
     <application
       android:name=".MainApplication"
