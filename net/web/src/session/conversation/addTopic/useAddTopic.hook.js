@@ -104,10 +104,17 @@ export function useAddTopic(contentKey) {
 
   const actions = {
     addImage: async (image) => {
-      const scaled = await getResizedImage(image);
-      const asset = await setUrl(scaled);
-      asset.image = image;
-      addAsset(asset);
+      if (image.type === 'image/gif' || image.type === 'image/webp') {
+        const asset = await setUrl(image);
+        asset.image = image;
+        addAsset(asset);
+      }
+      else {
+        const scaled = await getResizedImage(image);
+        const asset = await setUrl(scaled);
+        asset.image = image;
+        addAsset(asset);
+      }
     },
     addVideo: async (video) => {
       const asset = await setUrl(video);

@@ -3,6 +3,9 @@ import axios from 'axios';
 import Resizer from "react-image-file-resizer";
 
 const ENCRYPTED_BLOCK_SIZE = (1024 * 1024); 
+const IMAGE_SCALE_SIZE = (128 * 1024 * 1024);
+const GIF_TYPE = 'image/gif';
+const WEBP_TYPE = 'image/webp';
 
 export function useUploadContext() {
 
@@ -151,11 +154,23 @@ export function useUploadContext() {
 }
 
 function getImageThumb(data) {
-  return new Promise(resolve => {
-    Resizer.imageFileResizer(data, 192, 192, 'JPEG', 50, 0,
-    uri => {
-      resolve(uri);
-    }, 'base64', 128, 128 );
+  return new Promise((resolve, reject) => {
+    if ((data.type === GIF_TYPE || data.type === WEBP_TYPE) && data.size < IMAGE_SCALE_SIZE) {
+      const reader = new FileReader();
+      reader.readAsDataURL(data);
+      reader.onload = function () {
+        resolve(reader.result);
+      };
+      reader.onerror = function (error) {
+        reject();
+      };
+    }
+    else {
+      Resizer.imageFileResizer(data, 192, 192, 'JPEG', 50, 0,
+      uri => {
+        resolve(uri);
+      }, 'base64', 128, 128 );
+    }
   });
 }
 
