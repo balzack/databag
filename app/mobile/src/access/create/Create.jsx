@@ -76,7 +76,7 @@ export function Create() {
             )}
             { !state.tokenRequired && state.server === 'databag.coredb.org' && (
               <View style={styles.demo}>
-                <Text style={styles.demoText}>The default public server is to test out the system. Use a private server othersize.</Text>
+                <Text style={styles.demoText}>The default public server is to test out the system. Use a private server otherwise.</Text>
               </View>
             )}
           </View>
