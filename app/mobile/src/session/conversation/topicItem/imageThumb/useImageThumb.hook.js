@@ -18,7 +18,7 @@ export function useImageThumb() {
 
   const actions = {
     loaded: (e) => {
-      const { width, height } = e.nativeEvent.source;
+      const { width, height } = e.nativeEvent;
       updateState({ loaded: true, ratio: width / height });
     },
   };

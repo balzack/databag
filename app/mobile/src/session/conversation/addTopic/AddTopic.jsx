@@ -46,7 +46,7 @@ export function AddTopic({ contentKey, shareIntent, setShareIntent }) {
   const addImage = async () => {
     try {
       const full = await ImagePicker.openPicker({ mediaType: 'photo' });
-      actions.addImage(full.path);
+      actions.addImage(full.path, full.mime);
     }
     catch (err) {
       console.log(err);

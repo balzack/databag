@@ -5,6 +5,9 @@ import ImageResizer from '@bam.tech/react-native-image-resizer';
 import RNFS from 'react-native-fs';
 
 const ENCRYPTED_BLOCK_SIZE = (1024 * 1024);
+const SCALE_SIZE = (128 * 1024 * 1024);
+const GIF_TYPE = 'image/gif';
+const WEBP_TYPE = 'image/webp';
 
 export function useUploadContext() {
 
@@ -119,11 +122,17 @@ export function useUploadContext() {
   return { state, actions }
 }
 
-async function getThumb(file, type, position) {
+async function getThumb(file, type, mime, size, position) {
   if (type === 'image') {
-    const thumb = await ImageResizer.createResizedImage(file, 192, 192, "JPEG", 50, 0, null);
-    const base = await RNFS.readFile(thumb.path, 'base64')
-    return `data:image/jpeg;base64,${base}`;
+    if ((mime === GIF_TYPE || mime === WEBP_TYPE) && size < SCALE_SIZE) {
+      const base = await RNFS.readFile(file, 'base64')
+      return `data:image/jpeg;base64,${base}`;
+    }
+    else {
+      const thumb = await ImageResizer.createResizedImage(file, 192, 192, "JPEG", 50, 0, null);
+      const base = await RNFS.readFile(thumb.path, 'base64')
+      return `data:image/jpeg;base64,${base}`;
+    }
   }
   else if (type === 'video') {
     const shot = await createThumbnail({ url: file, timeStamp: position * 1000 })
@@ -154,8 +163,8 @@ async function upload(entry, update, complete) {
     entry.active = {};
     try {
       if (file.encrypted) {
-        const { data, type, size, getEncryptedBlock, position } = file;
-        const thumb = await getThumb(data, type, position);
+        const { data, type, mime, size, getEncryptedBlock, position } = file;
+        const thumb = await getThumb(data, type, mime, size, position);
         const parts = [];
         for (let pos = 0; pos < size; pos += ENCRYPTED_BLOCK_SIZE) {
           const len = pos + ENCRYPTED_BLOCK_SIZE > size ? size - pos : ENCRYPTED_BLOCK_SIZE;
