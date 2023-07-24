@@ -19,7 +19,7 @@
 </p>
 <br>
 
-Databag is a self-hosted messaging service. Notable features include:
+Databag is a selfhosted messaging service. Notable features include:
 - Decentralized (direct communication between app and server node)
 - Federated (accounts on different nodes can communicate)
 - Public-Private key based identity (not bound to any blockchain or hosting domain)
