@@ -12,14 +12,12 @@ import { RingContextProvider } from 'context/RingContext'
 import { ChannelContextProvider } from 'context/ChannelContext';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { ConversationContextProvider } from 'context/ConversationContext';
-import { LogBox } from 'react-native';
 import { Root } from 'src/root/Root';
 import { Access } from 'src/access/Access';
 import { Dashboard } from 'src/dashboard/Dashboard';
 import { Session } from 'src/session/Session';
 import ReceiveSharingIntent from 'react-native-receive-sharing-intent';
-import { Platform, PermissionsAndroid } from 'react-native';
-import { initUnifiedPush } from 'react-native-unifiedpush-connector';
+import {PermissionsAndroid} from 'react-native';
 
 // silence warning: Sending `onAnimatedValueUpdate` with no listeners registered
 //LogBox.ignoreLogs(['Sending']);
@@ -29,11 +27,8 @@ export default function App() {
   const [sharing, setSharing] = useState();
 
   useEffect(() => {
-   
-    if (Platform.OS !== 'ios') { 
-      PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
-      initUnifiedPush();
-    }
+
+    PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
 
     ReceiveSharingIntent.getReceivedFiles(files => {
       setSharing(files);
