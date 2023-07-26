@@ -4,8 +4,8 @@ import { createThumbnail } from "react-native-create-thumbnail";
 import ImageResizer from '@bam.tech/react-native-image-resizer';
 import RNFS from 'react-native-fs';
 
-const ENCRYPTED_BLOCK_SIZE = (1024 * 1024);
-const SCALE_SIZE = (128 * 1024 * 1024);
+const ENCRYPTED_BLOCK_SIZE = (256 * 1024);
+const SCALE_SIZE = (128 * 1024);
 const GIF_TYPE = 'image/gif';
 const WEBP_TYPE = 'image/webp';
 

@@ -2,8 +2,8 @@ import { useState, useRef } from 'react';
 import axios from 'axios';
 import Resizer from "react-image-file-resizer";
 
-const ENCRYPTED_BLOCK_SIZE = (1024 * 1024); 
-const IMAGE_SCALE_SIZE = (128 * 1024 * 1024);
+const ENCRYPTED_BLOCK_SIZE = (256 * 1024);
+const IMAGE_SCALE_SIZE = (128 * 1024);
 const GIF_TYPE = 'image/gif';
 const WEBP_TYPE = 'image/webp';
 

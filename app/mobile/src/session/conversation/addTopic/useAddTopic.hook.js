@@ -29,7 +29,10 @@ export function useAddTopic(contentKey) {
     conflict: false,
   });
 
-  const SCALE_SIZE = (128 * 1024 * 1024);
+  const SCALE_SIZE = (128 * 1024);
+  const GIF_TYPE = 'image/gif';
+  const WEBP_TYPE = 'image/webp';
+
   const assetId = useRef(0);
   const conversation = useContext(ConversationContext);
   const account = useContext(AccountContext);
@@ -106,12 +109,12 @@ export function useAddTopic(contentKey) {
     updateState({ enableImage, enableAudio, enableVideo, locked, loaded });
   }, [conversation.state]);
 
-  const setAsset = async (file, scale) => {
+  const setAsset = async (file, mime, scale) => {
     const url = file.startsWith('file:') ? file : `file://${file}`;
 
     if (contentKey) {
       const orig = await RNFS.stat(url);
-      const scaled = (scale && orig.size > SCALE_SIZE) ? await scale(url) : url;
+      const scaled = (scale && orig.size > SCALE_SIZE && (mime !== GIF_TYPE && mime !== WEBP_TYPE)) ? await scale(url) : url;
       const stat = await RNFS.stat(scaled);
       const getEncryptedBlock = async (pos, len) => {
         if (pos + len > stat.size) {
@@ -133,7 +136,7 @@ export function useAddTopic(contentKey) {
     },
     addImage: async (data, mime) => {
       assetId.current++;
-      const asset = await setAsset(data, async (file) => {
+      const asset = await setAsset(data, mime, async (file) => {
         const scaled = await ImageResizer.createResizedImage(file, 512, 512, "JPEG", 90, 0, null);
         return `file://${scaled.path}`;
       });
