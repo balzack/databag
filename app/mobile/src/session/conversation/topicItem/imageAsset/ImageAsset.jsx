@@ -4,20 +4,38 @@ import { styles } from './ImageAsset.styled';
 import Colors from 'constants/Colors';
 import Ionicons from 'react-native-vector-icons/AntDesign';
 import FastImage from 'react-native-fast-image'
-import Gallery from 'react-native-awesome-gallery';
 
 export function ImageAsset({ asset, dismiss }) {
   const { state, actions } = useImageAsset(asset);
 
   return (
-    <TouchableOpacity activeOpacity={1} style={{ display: 'flex', width: '100%', height: '100%' }} onPress={actions.showControls}>
+    <TouchableOpacity style={styles.container} activeOpacity={1} onPress={actions.showControls}>
+      <FastImage source={{ uri: asset.thumb }} onLoad={actions.setRatio} 
+          style={{ ...styles.thumb, width: state.imageWidth, height: state.imageHeight }}
+          resizeMode={FastImage.resizeMode.contain} />
       { state.url && (
-        <Gallery data={[ state.url ]} onIndexChange={actions.loaded}
-            style={{ ...styles.main }} />
+        <FastImage source={{ uri: state.url }} onLoad={actions.loaded}
+            style={{ ...styles.main, width: state.imageWidth, height: state.imageHeight }}
+            resizeMode={FastImage.resizeMode.contain} />
       )}
-      { state.controls && (
+
+      { state.loaded && state.controls && (
         <TouchableOpacity style={styles.close} onPress={dismiss}>
           <Ionicons name={'close'} size={32} color={Colors.white} />
+        </TouchableOpacity>
+      )}
+
+      { state.failed && (
+        <TouchableOpacity style={styles.loading} onPress={dismiss}>
+          <ActivityIndicator color={Colors.alert} size="large" />
+        </TouchableOpacity>
+      )}
+      { !state.loaded && !state.failed && (
+        <TouchableOpacity style={styles.loading} onPress={dismiss}>
+          <ActivityIndicator color={Colors.white} size="large" />
+          { asset.total > 1 && (
+            <Text style={styles.decrypting}>{ asset.block } / { asset.total }</Text>
+          )}
         </TouchableOpacity>
       )}
     </TouchableOpacity>
