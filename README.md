@@ -19,23 +19,20 @@
 </p>
 <br>
 
-Databag is a selfhosted messaging service. Notable features include:
+Databag is a self-hosted messaging service. Notable features include:
 - Decentralized (direct communication between app and server node)
 - Federated (accounts on different nodes can communicate)
 - Public-Private key based identity (not bound to any blockchain or hosting domain)
-- End-to-End encryption (the hosting admin cannot view sealed topics, default unsealed)
+- End-to-End encryption (the hosting admin cannot view sealed topics, deafult unsealed)
 - Audio and Video Calls (nat traversal requires separate relay server)
 - Topic based threads (messages organized by topic not contacts)
 - Lightweight (server can run on a raspberry pi zero v1.3)
 - Low latency (use of websockets for push events to avoid polling)
 - Unlimited accounts per node (host for your whole family)
-- Mobile alerts for new contacts, messages, and calls (supports UnifiedPush, FCM, APN)
+- Mobile alerts (push notifications on new contacts, messages, and calls)
 
 <br>
 <p align="center">
-  <a href="https://f-droid.org/en/packages/com.databag/">
-    <img src="/doc/fdroid.png" width="18%">
-  </a>
   <a href="https://apps.apple.com/us/app/databag/id6443741428">
     <img src="/doc/astore.png" width="18%">
   </a>
@@ -44,7 +41,7 @@ Databag is a selfhosted messaging service. Notable features include:
   </a>
 </p>
 
-The app is available on fdroid as well as the google and apple stores. You can test out the project [here](https://databag.coredb.org/#/create), but don't post anything important as this server is regularly wiped. Feedback on the UI/UX, bugs or features is greatly appreciated.
+The app is available in the google and apple stores. You can also test out the project [here](https://databag.coredb.org/#/create), but don't post anything important as this server is regularly wiped. Feedback on the UI/UX, bugs or features is greatly appreciated.
 
 ## Installation
 
@@ -58,7 +55,7 @@ From the net/container sub directory:
 ### Example with Portainer and Nginx Proxy Manager
 
 From Portainer:
-  - In the volume view, click add volume:
+  - In the volume view, click add volumen:
     - Enter a name, then click 'Create the volume'
   - In the container view, click add container:
     - In the 'Image' field enter 'balzack/databag:latest'
@@ -75,44 +72,6 @@ From Nginx Proxy Manager:
     - Portainer IP address [address]
     - Port '7000'
     - Request new SSL certificate
-
-<details>
-  <summary>From Nginx Proxy config:</summary>
-
-  ```
-server {
-  server_name your.site.tld;
-
-location / {
-    proxy_http_version 1.1;
-    proxy_set_header Upgrade $http_upgrade;
-    proxy_set_header Connection "Upgrade";
-    proxy_set_header Host $host;
-    proxy_pass http://localhost:7000;
-    client_max_body_size 0;
-    proxy_max_temp_file_size 0;
-
-}
-
-    listen 443 ssl http2;
-    ssl_certificate /etc/letsencrypt/live/your.site.tld/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/your.site.tld/privkey.pem;
-    include /etc/letsencrypt/options-ssl-nginx.conf;
-    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
-    add_header Strict-Transport-Security "max-age=0";
-
-}
-
-server {
-    if ($host = your.site.tld) {
-        return 301 https://$host$request_uri;
-    }
-  listen 80;
-  server_name your.site.tld;
-    return 404;
-}
-```
-</details>
 
 From Your Browser:
   - Enter your server address in the address bar [hostname.domain]
@@ -132,7 +91,7 @@ Instructions for installing without a container in AWS are [here](/doc/aws.md).
 
 ## Audio and Video Calls
 
-Databag provides audio and video calling and relies on a STUN/TURN relay server for NAT traversal. Testing was done with both [coturn](https://github.com/coturn/coturn) and [pion](https://github.com/pion/turn) and should work with any implementation. Instructions for installing a coturn server are provided [here](https://gabrieltanner.org/blog/turn-server/).
+Databag provides audio and video calling and relies on a STUN/TURN relay server for NAT traversal. Testing was done with both [cuturn](https://github.com/coturn/coturn) and [pion](https://github.com/pion/turn) and should work with any implementation. Instructions for installing a coturn server are provided [here](https://gabrieltanner.org/blog/turn-server/).
 
 If you want to enable audio and video calls, you should setup your own relay server. For testing purposes you can however use the demo relay server configuration. In the admin configuration modal, set:
   - Enable WebRTC Calls: -switch on-
