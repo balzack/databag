@@ -130,6 +130,8 @@ Instructions for installing without a container on a Raspberry Pi Zero are [here
 
 Instructions for installing without a container in AWS are [here](/doc/aws.md).
 
+1-click installs in [CapRover](https://caprover.com/), [CasaOs](https://casaos.io), [Unraid](https://unraid.net/), [Runtipi](https://www.runtipi.io/)
+
 ## Audio and Video Calls
 
 Databag provides audio and video calling and relies on a STUN/TURN relay server for NAT traversal. Testing was done with both [coturn](https://github.com/coturn/coturn) and [pion](https://github.com/pion/turn) and should work with any implementation. Instructions for installing a coturn server are provided [here](https://gabrieltanner.org/blog/turn-server/).
