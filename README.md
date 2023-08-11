@@ -2,7 +2,7 @@
 [![contribute.design](https://contribute.design/api/shield/balzack/databag)](https://contribute.design/balzack/databag)
 
 <div align="center">
-  <a href="#"><img src="/doc/icon.png" width="8%" style="border-radius:50%"></a>
+  <a href="#"><img src="/doc/icon_v2.png" width="8%" style="border-radius:50%"></a>
   <h3 align="center">Databag</h3>
   <p align="center">Communication for the Decentralized Web</p>
 </div>
@@ -129,6 +129,8 @@ From Your Browser:
 Instructions for installing without a container on a Raspberry Pi Zero are [here](/doc/pizero.md).
 
 Instructions for installing without a container in AWS are [here](/doc/aws.md).
+
+1-click installs in [CapRover](https://caprover.com/), [CasaOS](https://casaos.io), [Unraid](https://unraid.net/), [Runtipi](https://www.runtipi.io/)
 
 ## Audio and Video Calls
 
