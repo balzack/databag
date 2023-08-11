@@ -12,6 +12,7 @@ import ColorPicker from 'react-native-wheel-color-picker'
 import { VideoFile } from './videoFile/VideoFile';
 import { AudioFile } from './audioFile/AudioFile';
 import { ImageFile } from './imageFile/ImageFile';
+import { BinaryFile } from './binaryFile/BinaryFile';
 
 export function AddTopic({ contentKey, shareIntent, setShareIntent }) {
 
@@ -80,15 +81,28 @@ export function AddTopic({ contentKey, shareIntent, setShareIntent }) {
 
   const addAudio = async () => {
     try {
-        const audio = await DocumentPicker.pickSingle({
-          presentationStyle: 'fullScreen',
-          copyTo: 'cachesDirectory',
-          type: DocumentPicker.types.audio,
-        })
-        actions.addAudio(audio.fileCopyUri, audio.name.replace(/\.[^/.]+$/, ""));
-      } catch (err) {
-        console.log(err);
-      }
+      const audio = await DocumentPicker.pickSingle({
+        presentationStyle: 'fullScreen',
+        copyTo: 'cachesDirectory',
+        type: DocumentPicker.types.audio,
+      })
+      actions.addAudio(audio.fileCopyUri, audio.name.replace(/\.[^/.]+$/, ""));
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  const addBinary = async () => {
+    try {
+      const binary = await DocumentPicker.pickSingle({
+        presentationStyle: 'fullScreen',
+        copyTo: 'cachesDirectory',
+        type: DocumentPicker.types.allFiles,
+      })
+      actions.addBinary(binary.fileCopyUri, binary.name);
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   const remove = (item) => {
@@ -123,7 +137,13 @@ export function AddTopic({ contentKey, shareIntent, setShareIntent }) {
     if (item.type === 'audio') {
       return (
         <AudioFile path={item.data} label={item.label} remove={() => remove(item)}
-            setLabel={(label) => actions.setAudioLabel(item.key, label)} />
+            setLabel={(label) => actions.setLabel(item.key, label)} />
+      )
+    }
+    if (item.type === 'binary') {
+      return (
+        <BinaryFile path={item.data} label={item.label} extension={item.extension} remove={() => remove(item)}
+            setLabel={(label) => actions.setLabel(item.key, label)} />
       )
     }
     else {
@@ -171,9 +191,10 @@ export function AddTopic({ contentKey, shareIntent, setShareIntent }) {
             <MatIcons name="music-box-outline" size={20} color={Colors.text} />
           </TouchableOpacity>
         )}
-        { (state.enableImage || state.enableVideo || state.enableAudio) && (
-          <View style={styles.divider} />
-        )}
+        <TouchableOpacity style={styles.addButton} onPress={addBinary}>
+          <MatIcons name="all-inclusive-box-outline" size={20} color={Colors.text} />
+        </TouchableOpacity>
+        <View style={styles.divider} />
         <TouchableOpacity style={styles.addButton} onPress={actions.showFontSize}>
           <MatIcons name="format-size" size={20} color={Colors.text} />
         </TouchableOpacity>
