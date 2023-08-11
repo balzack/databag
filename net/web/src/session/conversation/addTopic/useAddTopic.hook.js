@@ -128,6 +128,13 @@ export function useAddTopic(contentKey) {
       asset.label = '';
       addAsset(asset);
     },
+    addBinary: async (binary) => {
+      const asset = await setUrl(binary);
+      asset.binary = binary;
+      asset.extension = binary.name.split('.').pop().toUpperCase();
+      asset.label = binary.name.slice(0, -1 * (asset.extension.length + 1));
+      addAsset(asset);
+    },
     setLabel: (index, label) => {
       updateAsset(index, { label });
     },
