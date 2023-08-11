@@ -25,7 +25,7 @@ export function useBinaryAsset(asset) {
             const view = index.current;
             updateState({ active: true, ready: false, error: false, loading: true, url: null });
             const blob = await asset.getDecryptedBlob(() => view !== index.current, (block, total) => { 
-              if (!updated.current || block == total) {
+              if (!updated.current || block === total) {
                 updated.current = true;
                 setTimeout(() => {
                   updated.current = false;

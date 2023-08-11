@@ -1,12 +1,10 @@
-import React, { useState, useRef } from 'react';
-import { Progress, Modal, Spin } from 'antd';
+import React, { useState } from 'react';
+import { Progress } from 'antd';
 import ReactResizeDetector from 'react-resize-detector';
 import { DownloadOutlined } from '@ant-design/icons';
 import { BinaryAssetWrapper } from './BinaryAsset.styled';
 import { useBinaryAsset } from './useBinaryAsset.hook';
 import Colors from 'constants/Colors';
-
-import background from 'images/audio.png';
 
 export function BinaryAsset({ asset }) {
 
