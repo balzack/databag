@@ -187,7 +187,7 @@ async function upload(entry, update, complete) {
       }
       else if (file.type === 'image') {
         const formData = new FormData();
-        const uri = file.data.startsWidth('file:') ? file.data : `file://${file.data}`;
+        const uri = file.data.startsWith('file:') ? file.data : `file://${file.data}`;
         formData.append("asset", {uri: uri, name: 'asset', type: 'application/octent-stream'});
         let transform = encodeURIComponent(JSON.stringify(["ithumb;photo", "ilg;photo"]));
         let asset = await axios.post(`${entry.baseUrl}assets${entry.urlParams}&transforms=${transform}`, formData, {
@@ -208,7 +208,7 @@ async function upload(entry, update, complete) {
       }
       else if (file.type === 'video') {
         const formData = new FormData();
-        const uri = file.data.startsWidth('file:') ? file.data : `file://${file.data}`;
+        const uri = file.data.startsWith('file:') ? file.data : `file://${file.data}`;
         formData.append("asset", {uri: uri, name: 'asset', type: 'application/octent-stream'});
         let thumb = 'vthumb;video;' + file.position;
         let transform = encodeURIComponent(JSON.stringify(["vlq;video", "vhd;video", thumb]));
@@ -231,7 +231,7 @@ async function upload(entry, update, complete) {
       }
       else if (file.type === 'audio') {
         const formData = new FormData();
-        const uri = file.data.startsWidth('file:') ? file.data : `file://${file.data}`;
+        const uri = file.data.startsWith('file:') ? file.data : `file://${file.data}`;
         formData.append("asset", {uri: uri, name: 'asset', type: 'application/octent-stream'});
         let transform = encodeURIComponent(JSON.stringify(["acopy;audio"]));
         let asset = await axios.post(`${entry.baseUrl}assets${entry.urlParams}&transforms=${transform}`, formData, {
