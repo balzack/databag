@@ -13,8 +13,9 @@ export function BinaryAsset({ asset, dismiss }) {
 
   const download = async () => {
     try {
-      const url = asset.encrypted ? `file://${asset.decrypted}` : asset.data;
-      await actions.download(asset.label, asset.extension, url);
+      const ext = asset.extension.toLowerCase();
+      const url = asset.encrypted ? asset.decrypted : asset.data;
+      await actions.download(asset.label, ext, asset.encrypted, url);
     }
     catch (err) { 
       Alert.alert(

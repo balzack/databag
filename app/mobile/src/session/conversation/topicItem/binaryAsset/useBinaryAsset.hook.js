@@ -31,37 +31,33 @@ export function useBinaryAsset() {
   }, [dimensions]);
 
   const actions = {
-    download: async (label, extension, url) => {
+    download: async (label, extension, cached, url) => {
       if (!state.downloading) {
         try {
           updateState({ downloading: true });
 
-          const blob = await RNFetchBlob.config({ fileCache: true }).fetch("GET", url);
-          const src = blob.path();
-          if (Platform.OS === 'ios') {
-            const path = `${RNFetchBlob.fs.dirs.DocumentDir}`
-            const dst = `${path}/${label}.${extension.toLowerCase()}`
-            if (RNFetchBlob.fs.exists(dst)) {
-              RNFetchBlob.fs.unlink(dst);
-            }
-            await RNFetchBlob.fs.mv(src, dst);
-            try {
-              await Share.open({ url: dst, message: `${label}.${extension}`, subject: `${label}.${extension}` })
-            }
-            catch (err) {
-              console.log(err);
-            }
-            RNFetchBlob.fs.unlink(dst);
+          let src;
+          if (cached) {
+            src = url
           }
           else {
-            const path = `${RNFetchBlob.fs.dirs.DownloadDir}`
-            const dst = `${path}/${label}.${extension.toLowerCase()}`
-            if (RNFetchBlob.fs.exists(dst)) {
-              RNFetchBlob.fs.unlink(dst);
-            }
-            await RNFetchBlob.fs.mv(src, dst);
+            const blob = await RNFetchBlob.config({ fileCache: true }).fetch("GET", url);
+            src = blob.path();
+          }
+
+          const path = `${RNFetchBlob.fs.dirs.DocumentDir}`
+          const dst = `${path}/${label}.${extension.toLowerCase()}`
+          if (RNFetchBlob.fs.exists(dst)) {
             RNFetchBlob.fs.unlink(dst);
           }
+          await RNFetchBlob.fs.mv(src, dst);
+          try {
+            await Share.open({ url: dst, message: `${label}.${extension}`, subject: `${label}.${extension}` })
+          }
+          catch (err) {
+            console.log(err);
+          }
+          RNFetchBlob.fs.unlink(dst);
 
           updateState({ downloading: false });
         }
