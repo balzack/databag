@@ -1,10 +1,10 @@
 import { useState, useRef, useEffect, useContext } from 'react';
 import { ConversationContext } from 'context/ConversationContext';
 import { Image } from 'react-native';
-import { useWindowDimensions } from 'react-native';
-import { Platform } from 'react-native';
+import { useWindowDimensions, Platform } from 'react-native';
 import RNFetchBlob from "rn-fetch-blob";
 import Share from 'react-native-share';
+import RNFS from 'react-native-fs';
 
 export function useBinaryAsset() {
 
@@ -45,20 +45,25 @@ export function useBinaryAsset() {
             src = blob.path();
           }
 
-          const path = `${RNFetchBlob.fs.dirs.DocumentDir}`
-          const dst = `${path}/${label}.${extension.toLowerCase()}`
-          if (RNFetchBlob.fs.exists(dst)) {
+          if (Platform.OS === 'iOS') {
+            const path = `${RNFetchBlob.fs.dirs.DocumentDir}`
+            const dst = `${path}/${label}.${extension.toLowerCase()}`
+            if (RNFetchBlob.fs.exists(dst)) {
+              RNFetchBlob.fs.unlink(dst);
+            }
+            await RNFetchBlob.fs.mv(src, dst);
+            try {
+              await Share.open({ url: dst })
+            }
+            catch (err) {
+              console.log(err);
+            }
             RNFetchBlob.fs.unlink(dst);
           }
-          await RNFetchBlob.fs.mv(src, dst);
-          try {
-            await Share.open({ url: dst, message: `${label}.${extension}`, subject: `${label}.${extension}` })
+          else {
+            const copy = RNFS.ExternalDirectoryPath + "/" label + "." + extension;
+            RNFS.copyFile(src, copy);
           }
-          catch (err) {
-            console.log(err);
-          }
-          RNFetchBlob.fs.unlink(dst);
-
           updateState({ downloading: false });
         }
         catch (err) {
