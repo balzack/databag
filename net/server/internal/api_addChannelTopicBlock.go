@@ -15,6 +15,7 @@ func AddChannelTopicBlock(w http.ResponseWriter, r *http.Request) {
 	// scan parameters
 	params := mux.Vars(r)
 	topicID := params["topicID"]
+  body := r.FormValue("body")
 
 	channelSlot, guid, code, err := getChannelSlot(r, true)
 	if err != nil {
@@ -57,14 +58,35 @@ func AddChannelTopicBlock(w http.ResponseWriter, r *http.Request) {
 	garbageSync.Lock()
 	defer garbageSync.Unlock()
 
-	// save new file
-	id := uuid.New().String()
-	path := getStrConfigValue(CNFAssetPath, APPDefaultPath) + "/" + channelSlot.Account.GUID + "/" + id
-	crc, size, err := saveAsset(r.Body, path)
-	if err != nil {
-		ErrResponse(w, http.StatusInternalServerError, err)
-		return
-	}
+  // save new file
+  var crc uint32
+  var size int64
+  id := uuid.New().String()
+  path := getStrConfigValue(CNFAssetPath, APPDefaultPath) + "/" + channelSlot.Account.GUID + "/" + id
+  if body == "multipart" {
+    if err := r.ParseMultipartForm(32 << 20); err != nil {
+      ErrResponse(w, http.StatusBadRequest, err)
+      return
+    }
+
+    file, _, err := r.FormFile("asset")
+    if err != nil {
+      ErrResponse(w, http.StatusBadRequest, err)
+      return
+    }
+    defer file.Close()
+    crc, size, err = saveAsset(file, path)
+    if err != nil {
+      ErrResponse(w, http.StatusInternalServerError, err)
+      return
+    }
+  } else {
+    crc, size, err = saveAsset(r.Body, path)
+    if err != nil {
+      ErrResponse(w, http.StatusInternalServerError, err)
+      return
+    }
+  }
 
 	asset := &store.Asset{}
 	asset.AssetID = id

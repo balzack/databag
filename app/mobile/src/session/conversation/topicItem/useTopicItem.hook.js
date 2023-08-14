@@ -61,8 +61,8 @@ export function useTopicItem(item, hosting, remove, contentKey) {
         const asset = parsed[i];
         if (asset.encrypted) {
           const encrypted = true;
-          const { type, thumb, label, parts } = asset.encrypted;
-          assets.push({ type, thumb, label, encrypted, decrypted: null, parts });
+          const { type, thumb, label, extension, parts } = asset.encrypted;
+          assets.push({ type, thumb, label, extension, encrypted, decrypted: null, parts });
         }
         else {
           const encrypted = false
@@ -84,6 +84,12 @@ export function useTopicItem(item, hosting, remove, contentKey) {
             const label = asset.audio.label;
             const full = conversation.actions.getTopicAssetUrl(item.topicId, asset.audio.full);
             assets.push({ type, label, encrypted, full });
+          }
+          else if (asset.binary) {
+            const type = 'binary';  
+            const { label, extension } = asset.binary;
+            const data = conversation.actions.getTopicAssetUrl(item.topicId, asset.binary.data);
+            assets.push({ type, label, extension, data });
           }
         }
       };

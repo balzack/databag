@@ -29,7 +29,7 @@ export function useTopicItem(topic, contentKey) {
       topic.assets.forEach(asset => {
         if (asset.encrypted) {
           const encrypted = true;
-          const { type, thumb, label, parts } = asset.encrypted;
+          const { type, thumb, label, extension, parts } = asset.encrypted;
           const getDecryptedBlob = async (abort, progress) => {
             let pos = 0;
             let len = 0;
@@ -59,7 +59,7 @@ export function useTopicItem(topic, contentKey) {
             }
             return new Blob([data]); 
           }
-          assets.push({ type, thumb, label, encrypted, getDecryptedBlob });
+          assets.push({ type, thumb, label, extension, encrypted, getDecryptedBlob });
         }
         else {
           const encrypted = false
@@ -81,6 +81,13 @@ export function useTopicItem(topic, contentKey) {
             const label = asset.audio.label;
             const full = topic.assetUrl(asset.audio.full, topic.id);
             assets.push({ type, label, encrypted, full });
+          }
+          else if (asset.binary) {
+            const type = 'binary';
+            const label = asset.binary.label;
+            const extension = asset.binary.extension;
+            const data = topic.assetUrl(asset.binary.data, topic.id);
+            assets.push({ type, label, extension, encrypted, data });
           }
         }
       });

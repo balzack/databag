@@ -1,8 +1,9 @@
 import { Logo } from 'logo/Logo';
 import { AccountItemWrapper, AccessLayout, DeleteButton, EnableButton, DisableButton, ResetButton } from './AccountItem.styled';
 import { useAccountItem } from './useAccountItem.hook';
-import { ExclamationCircleOutlined, CopyOutlined, UserDeleteOutlined, UnlockOutlined, CloseCircleOutlined, CheckCircleOutlined } from '@ant-design/icons';
+import { ExclamationCircleOutlined, UserDeleteOutlined, UnlockOutlined, CloseCircleOutlined, CheckCircleOutlined } from '@ant-design/icons';
 import { Modal, Tooltip, Button } from 'antd';
+import { CopyButton } from '../copyButton/CopyButton';
 
 export function AccountItem({ item, remove }) {
 
@@ -132,14 +133,12 @@ export function AccountItem({ item, remove }) {
           <div className="url">
             <div className="label">Browser Link:</div>
             <div className="link">{accessLink()}</div>
-            <Button icon={<CopyOutlined />} size="small"
-              onClick={() => onClipboard(accessLink())}/>
+            <CopyButton onCopy={async () => await onClipboard(accessLink())} />
           </div>
           <div className="url">
             <div className="label">App Token:</div>
             <div className="token">{state.accessToken}</div>
-            <Button icon={<CopyOutlined />} size="small"
-              onClick={() => onClipboard(state.accessToken)} />
+            <CopyButton onCopy={async () => await onClipboard(state.accessToken)} />
           </div>
         </AccessLayout>
       </Modal>  

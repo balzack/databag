@@ -163,7 +163,7 @@ async function upload(entry, update, complete) {
     entry.active = {};
     try {
       if (file.encrypted) {
-        const { data, type, mime, size, getEncryptedBlock, position } = file;
+        const { data, type, mime, size, getEncryptedBlock, position, label, extension } = file;
         const thumb = await getThumb(data, type, mime, size, position);
         const parts = [];
         for (let pos = 0; pos < size; pos += ENCRYPTED_BLOCK_SIZE) {
@@ -182,17 +182,13 @@ async function upload(entry, update, complete) {
           parts.push({ blockIv, partId: part.data.assetId });
         }
         entry.assets.push({
-          encrypted: { type, thumb, parts }
+          encrypted: { type, label, extension, thumb, parts }
         });
       }
       else if (file.type === 'image') {
         const formData = new FormData();
-        if (file.data.startsWith('file:')) {
-          formData.append("asset", {uri: file.data, name: 'asset', type: 'application/octent-stream'});
-        }
-        else {
-          formData.append("asset", {uri: 'file://' + file.data, name: 'asset', type: 'application/octent-stream'});
-        }
+        const uri = file.data.startsWith('file:') ? file.data : `file://${file.data}`;
+        formData.append("asset", {uri: uri, name: 'asset', type: 'application/octent-stream'});
         let transform = encodeURIComponent(JSON.stringify(["ithumb;photo", "ilg;photo"]));
         let asset = await axios.post(`${entry.baseUrl}assets${entry.urlParams}&transforms=${transform}`, formData, {
           headers: { 'Content-Type': 'multipart/form-data' },
@@ -212,12 +208,8 @@ async function upload(entry, update, complete) {
       }
       else if (file.type === 'video') {
         const formData = new FormData();
-        if (file.data.startsWith('file:')) {
-          formData.append("asset", {uri: file.data, name: 'asset', type: 'application/octent-stream'});
-        }
-        else {
-          formData.append("asset", {uri: 'file://' + file.data, name: 'asset', type: 'application/octent-stream'});
-        }
+        const uri = file.data.startsWith('file:') ? file.data : `file://${file.data}`;
+        formData.append("asset", {uri: uri, name: 'asset', type: 'application/octent-stream'});
         let thumb = 'vthumb;video;' + file.position;
         let transform = encodeURIComponent(JSON.stringify(["vlq;video", "vhd;video", thumb]));
         let asset = await axios.post(`${entry.baseUrl}assets${entry.urlParams}&transforms=${transform}`, formData, {
@@ -239,12 +231,8 @@ async function upload(entry, update, complete) {
       }
       else if (file.type === 'audio') {
         const formData = new FormData();
-        if (file.data.startsWith('file:')) {
-          formData.append("asset", {uri: file.data, name: 'asset', type: 'application/octent-stream'});
-        }
-        else {
-          formData.append("asset", {uri: 'file://' + file.data, name: 'asset', type: 'application/octent-stream'});
-        }
+        const uri = file.data.startsWith('file:') ? file.data : `file://${file.data}`;
+        formData.append("asset", {uri: uri, name: 'asset', type: 'application/octent-stream'});
         let transform = encodeURIComponent(JSON.stringify(["acopy;audio"]));
         let asset = await axios.post(`${entry.baseUrl}assets${entry.urlParams}&transforms=${transform}`, formData, {
           headers: { 'Content-Type': 'multipart/form-data' },
@@ -259,6 +247,27 @@ async function upload(entry, update, complete) {
           audio: {
             label: file.label,
             full: asset.data.find(item => item.transform === 'acopy;audio').assetId,
+          }
+        });
+      }
+      else if (file.type === 'binary') {
+        const formData = new FormData();
+        const uri = file.data.startsWith('file:') ? file.data : `file://${file.data}`;
+        formData.append("asset", {uri: uri, name: 'asset', type: 'application/octent-stream'});
+        let asset = await axios.post(`${entry.baseUrl}blocks${entry.urlParams}&body=multipart`, formData, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+          signal: entry.cancel.signal,
+          onUploadProgress: (ev) => {
+            const { loaded, total } = ev;
+            entry.active = { loaded, total }
+            update();
+          },
+        });
+        entry.assets.push({
+          binary: {
+            label: file.label,
+            extension: file.extension,
+            data: asset.data.assetId,
           }
         });
       }

@@ -9,9 +9,11 @@ import avatar from 'images/avatar.png';
 import { VideoThumb } from './videoThumb/VideoThumb';
 import { AudioThumb } from './audioThumb/AudioThumb';
 import { ImageThumb } from './imageThumb/ImageThumb';
+import { BinaryThumb } from './binaryThumb/BinaryThumb';
 import { ImageAsset } from './imageAsset/ImageAsset';
 import { AudioAsset } from './audioAsset/AudioAsset';
 import { VideoAsset } from './videoAsset/VideoAsset';
+import { BinaryAsset } from './binaryAsset/BinaryAsset';
 import Carousel from 'react-native-reanimated-carousel';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
@@ -120,7 +122,10 @@ export function TopicItem({ item, focused, focus, hosting, remove, update, block
           <VideoThumb url={thumb.item.thumb} onAssetView={() => actions.showCarousel(thumb.index)} />
         )}
         { thumb.item.type === 'audio' && (
-          <AudioThumb labe={thumb.item.label} onAssetView={() => actions.showCarousel(thumb.index)} />
+          <AudioThumb label={thumb.item.label} onAssetView={() => actions.showCarousel(thumb.index)} />
+        )}
+        { thumb.item.type === 'binary' && (
+          <BinaryThumb label={thumb.item.label} extension={thumb.item.extension} onAssetView={() => actions.showCarousel(thumb.index)} />
         )}
       </View>
     );
@@ -233,6 +238,9 @@ export function TopicItem({ item, focused, focus, hosting, remove, update, block
                     )}
                     { state.assets[index].type === 'audio' && (
                       <AudioAsset asset={state.assets[index]} dismiss={actions.hideCarousel} />
+                    )}
+                    { state.assets[index].type === 'binary' && (
+                      <BinaryAsset asset={state.assets[index]} dismiss={actions.hideCarousel} />
                     )}
                   </View>
                 )} />

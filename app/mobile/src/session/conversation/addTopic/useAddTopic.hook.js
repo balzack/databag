@@ -162,7 +162,19 @@ export function useAddTopic(contentKey) {
       asset.type = 'audio';
       asset.label = label;
       updateState({ assets: [ ...state.assets, asset ] });
-    }, 
+    },
+    addBinary: async (data, name) => {
+      assetId.current++;
+      const asset = await setAsset(data);
+      asset.key = assetId.current;
+      asset.type = 'binary';
+      asset.extension = name.split('.').pop().toUpperCase();
+      asset.label = name.slice(0, -1 * (asset.extension.length + 1));
+
+console.log(asset);
+
+      updateState({ assets: [ ...state.assets, asset ] });
+    },
     setVideoPosition: (key, position) => {
       updateState({ assets: state.assets.map((item) => {
           if(item.key === key) {
@@ -172,7 +184,7 @@ export function useAddTopic(contentKey) {
         })
       });
     },
-    setAudioLabel: (key, label) => {
+    setLabel: (key, label) => {
       updateState({ assets: state.assets.map((item) => {
           if(item.key === key) {
             return { ...item, label };

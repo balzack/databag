@@ -232,8 +232,8 @@ async function upload(entry, update, complete) {
     entry.active = {};
     try {
       if (file.encrypted) {
-        const { size, getEncryptedBlock, position, label, image, video, audio } = file;
-        const { data, type } = image ? { data: image, type: 'image' } : video ? { data: video, type: 'video' } : audio ? { data: audio, type: 'audio' } : {}
+        const { size, getEncryptedBlock, position, label, extension, image, video, audio, binary } = file;
+        const { data, type } = image ? { data: image, type: 'image' } : video ? { data: video, type: 'video' } : audio ? { data: audio, type: 'audio' } : { data: binary, type: 'binary' }
         const thumb = await getThumb(data, type, position);
         const parts = [];
         for (let pos = 0; pos < size; pos += ENCRYPTED_BLOCK_SIZE) {
@@ -252,7 +252,7 @@ async function upload(entry, update, complete) {
           parts.push({ blockIv, partId: part.data.assetId });
         }
         entry.assets.push({
-          encrypted: { type, thumb, label, parts }
+          encrypted: { type, thumb, label, extension, parts }
         });
       }
       else if (file.image) {
@@ -311,6 +311,25 @@ async function upload(entry, update, complete) {
           audio: {
             label: file.label,
             full: asset.data.find(item => item.transform === 'acopy;audio').assetId,
+          }
+        });
+      }
+      else if (file.binary) {
+        const formData = new FormData();
+        formData.append('asset', file.binary);
+        let asset = await axios.post(`${entry.baseUrl}blocks${entry.urlParams}&body=multipart`, formData, {
+          signal: entry.cancel.signal,
+          onUploadProgress: (ev) => {
+            const { loaded, total } = ev;
+            entry.active = { loaded, total }
+            update();
+          },
+        });
+        entry.assets.push({
+          binary: {
+            label: file.label,
+            extension: file.extension,
+            data: asset.data.assetId,
           }
         });
       }

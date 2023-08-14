@@ -2,6 +2,7 @@ import { TopicItemWrapper } from './TopicItem.styled';
 import { VideoAsset } from './videoAsset/VideoAsset';
 import { AudioAsset } from './audioAsset/AudioAsset';
 import { ImageAsset } from './imageAsset/ImageAsset';
+import { BinaryAsset } from './binaryAsset/BinaryAsset';
 import { Logo } from 'logo/Logo';
 import { Space, Skeleton, Button, Modal, Input } from 'antd';
 import { ExclamationCircleOutlined, DeleteOutlined, EditOutlined, FireOutlined, PictureOutlined } from '@ant-design/icons';
@@ -60,6 +61,9 @@ export function TopicItem({ host, contentKey, sealed, topic, update, remove }) {
     }
     if (asset.type === 'audio') {
       return <AudioAsset asset={asset} />
+    }
+    if (asset.type === 'binary') {
+      return <BinaryAsset asset={asset} />
     }
     return <></>
   }
