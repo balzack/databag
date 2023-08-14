@@ -27,7 +27,7 @@ export function BinaryAsset({ asset, dismiss }) {
 
   return (
     <View style={{ ...styles.container, width: state.width, height: state.height }}>
-      <Text style={styles.label}>{ asset.label }</Text>
+      <Text style={styles.label} ellipsizeMode='tail' numberOfLines={1}>{ asset.label }</Text>
       <TouchableOpacity style={styles.close} onPress={dismiss}>
         <MatIcons name="window-close" size={32} color={Colors.white} />
       </TouchableOpacity>
@@ -48,11 +48,6 @@ export function BinaryAsset({ asset, dismiss }) {
         { state.downloading && (
           <ActivityIndicator color={Colors.white} size="large" />
         )}
-        <View style={styles.copied}>
-          { state.copied && (
-            <Text style={styles.copiedText}>Copied to App Directory</Text>
-          )}
-        </View>
       </View>
       <Text style={styles.extension}>{ asset.extension }</Text>
     </View>

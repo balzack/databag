@@ -12,7 +12,6 @@ export function useBinaryAsset() {
     width: 1,
     height: 1,
     downloading: false,
-    copied: false,
   });
 
   const dimensions = useWindowDimensions();
@@ -46,28 +45,20 @@ export function useBinaryAsset() {
             src = blob.path();
           }
 
-          if (Platform.OS === 'ios') {
-
-            const path = `${RNFetchBlob.fs.dirs.DocumentDir}`
-            const dst = `${path}/${label}.${extension.toLowerCase()}`
-            if (RNFetchBlob.fs.exists(dst)) {
-              RNFetchBlob.fs.unlink(dst);
-            }
-            await RNFetchBlob.fs.mv(src, dst);
-            try {
-              await Share.open({ url: dst })
-            }
-            catch (err) {
-              console.log(err);
-            }
+          const path = `${RNFetchBlob.fs.dirs.DocumentDir}`
+          const dst = `${path}/${label}.${extension.toLowerCase()}`
+          if (RNFetchBlob.fs.exists(dst)) {
             RNFetchBlob.fs.unlink(dst);
           }
-          else {
-            const copy = RNFS.ExternalDirectoryPath + "/" + label + "." + extension;
-            RNFS.copyFile(src, copy);
-            updateState({ copied: true });
-            setTimeout(() => updateState({ copied: false }), 2000);
+          await RNFetchBlob.fs.mv(src, dst);
+          try {
+            await Share.open({ url: `file://${dst}` })
           }
+          catch (err) {
+            console.log(err);
+          }
+          RNFetchBlob.fs.unlink(dst);
+
           updateState({ downloading: false });
         }
         catch (err) {

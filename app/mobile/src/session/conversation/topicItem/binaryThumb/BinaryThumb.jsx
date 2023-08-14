@@ -8,7 +8,7 @@ export function BinaryThumb({ label, extension, onAssetView }) {
 
   return (
     <TouchableOpacity activeOpacity={1} style={styles.canvas} onPress={onAssetView}>
-      <Text style={styles.label}>{ label }</Text>
+      <Text style={styles.label} ellipsizeMode='tail' numberOfLines={1}>{ label }</Text>
       <View style={styles.action}>
         <AntIcons name="download" size={28} color={Colors.white} />
       </View>

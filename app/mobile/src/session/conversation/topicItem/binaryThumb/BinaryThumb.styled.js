@@ -23,7 +23,7 @@ export const styles = StyleSheet.create({
   extension: {
     textAlign: 'center',
     color: Colors.white,
-    fontSize: 20,
+    fontSize: 18,
   }
 })
 
