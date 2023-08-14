@@ -26,6 +26,14 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  copied: {
+    height: 32,
+    paddingTop: 8,
+  },
+  copiedText: {
+    color: Colors.white,
+    fontSize: 18,
+  },
   extension: {
     textAlign: 'center',
     fontSize: 48,

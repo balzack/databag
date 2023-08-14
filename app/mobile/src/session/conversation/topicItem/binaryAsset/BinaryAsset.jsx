@@ -48,6 +48,11 @@ export function BinaryAsset({ asset, dismiss }) {
         { state.downloading && (
           <ActivityIndicator color={Colors.white} size="large" />
         )}
+        <View style={styles.copied}>
+          { state.copied && (
+            <Text style={styles.copiedText}>Copied to App Directory</Text>
+          )}
+        </View>
       </View>
       <Text style={styles.extension}>{ asset.extension }</Text>
     </View>

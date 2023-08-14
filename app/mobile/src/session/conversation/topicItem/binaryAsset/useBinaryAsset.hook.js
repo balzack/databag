@@ -12,6 +12,7 @@ export function useBinaryAsset() {
     width: 1,
     height: 1,
     downloading: false,
+    copied: false,
   });
 
   const dimensions = useWindowDimensions();
@@ -45,7 +46,8 @@ export function useBinaryAsset() {
             src = blob.path();
           }
 
-          if (Platform.OS === 'iOS') {
+          if (Platform.OS === 'ios') {
+
             const path = `${RNFetchBlob.fs.dirs.DocumentDir}`
             const dst = `${path}/${label}.${extension.toLowerCase()}`
             if (RNFetchBlob.fs.exists(dst)) {
@@ -61,8 +63,10 @@ export function useBinaryAsset() {
             RNFetchBlob.fs.unlink(dst);
           }
           else {
-            const copy = RNFS.ExternalDirectoryPath + "/" label + "." + extension;
+            const copy = RNFS.ExternalDirectoryPath + "/" + label + "." + extension;
             RNFS.copyFile(src, copy);
+            updateState({ copied: true });
+            setTimeout(() => updateState({ copied: false }), 2000);
           }
           updateState({ downloading: false });
         }
