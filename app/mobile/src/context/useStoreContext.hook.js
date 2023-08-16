@@ -394,7 +394,7 @@ export function useStoreContext() {
     },
     setCardChannelTopicItem: async (guid, cardId, channelId, topic) => {
       const { topicId, revision, detailRevision, detail } = topic;
-      await db.current.executeSql(`INSERT OR REPLACE INTO card_channel_topic_${guid} (card_id, channel_id, topic_id, revision, created, detail_revision, detail, unsealed_detail) values (?, ?, ?, ?, ?, ?, ?, null);`, [cardId, channelId, topicId, revision, topic?.created, detailRevision, encodeObject(detail)]);
+      await db.current.executeSql(`INSERT OR REPLACE INTO card_channel_topic_${guid} (card_id, channel_id, topic_id, revision, created, detail_revision, detail, unsealed_detail) values (?, ?, ?, ?, ?, ?, ?, null);`, [cardId, channelId, topicId, revision, detail?.created, detailRevision, encodeObject(detail)]);
     },
     setCardChannelTopicItemUnsealedDetail: async (guid, cardId, channelId, topicId, revision, unsealed) => {
       await db.current.executeSql(`UPDATE card_channel_topic_${guid} set unsealed_detail=? where detail_revision=? AND card_id=? AND channel_id=? AND topic_id=?`, [encodeObject(unsealed), revision, cardId, channelId, topicId]);
