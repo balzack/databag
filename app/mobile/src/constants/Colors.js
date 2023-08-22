@@ -1,4 +1,6 @@
-export const LightColors = {
+import { Appearance } from 'react-native'
+
+const LightColors = {
   tabBar: '#448866',
   activeTabIcon: '#ffffff',
   idleTabIcon: '#cccccc',
@@ -23,12 +25,13 @@ export const LightColors = {
   confirmedIndicator: '#88bb00',
   unknownIndicator: '#dddddd',
   errorIndicator: '#ffaaaa',
-  divider: '#eeeeee',
+  horizontalDivider: '#eeeeee',
+  verticalDivider: '#aaaaaa'
   unreadIndicator: '#00aa00',
   disconnectedIndicator: '#aa0000',
 };
 
-export const DarkColors = {
+const DarkColors = {
   tabBar: '#111111',
   activeTabIcon: '#dddddd',
   idleTabIcon: '#aaaaaa',
@@ -53,12 +56,46 @@ export const DarkColors = {
   confirmedIndicator: '#88bb00',
   unknownIndicator: '#dddddd',
   errorIndicator: '#ffaaaa',
-  divider: '#888888',
+  horizonalDivider: '#888888',
+  verticalDivider: '#aaaaaa',
   unreadIndicator: '#00aa00',
   disconnectedIndicator: '#aa0000',
 };
 
+function getColor(label) {
+  return Appearance.getColorsScheme() === 'dark' ? DarkColors[label] : LightColors[label];
+}
+
 export const Colors = {
+  tabBar: getColor('tabBar'),
+  activeTabIcon: getColor('activeTabIcon'),
+  idleTabIcon: getColor('idleTabIcon'),
+  linkText: getColor('linkText'),
+  dangerText: getColor('dangerText'),
+  labelText: getColor('labelText'),
+  iconText: getColor('iconText'),
+  unsetText: getColor('unsetText'),
+  descriptionText: getColor('descriptionText'),
+  text: getColor('text'),
+  screenBase: getColor('screenBase'),
+  areaBase: getColor('areaBase'),
+  headerBar getColor('headerBar'),
+  primaryButton: getColor('primaryButton'),
+  inputBase: getColor('inputBase'),
+  inputPlaceholder: getColor('inputPlaceholder'),
+  inputText: getColor('inputText'),
+  connectedIndicator: getColor('connectedIndicator'),
+  connectingIndicator: getColor('connectingIndicator'),
+  requestedIndicator: getColor('requestedIndicator'),
+  pendingIndicator: getColor('pendingIndicator'),
+  confirmedIndicator: getColor('confirmedIndicator'),
+  unknownIndicator: getColor('unknownIndicator'),
+  errorIndicator: getColor('errorIndicator'),
+  horizonalDivider: getColor('horizontalDivider'),
+  verticalDivider: getColor('verticalDivider'),
+  unreadIndicator: getColor('unreadIndicator'),
+  disconnectedIndicator: getColor('disconnectedIndicator'),
+
   background: '#8fbea7',
   primary: '#448866',
   titleBackground: '#f6f6f6',
