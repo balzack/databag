@@ -14,19 +14,19 @@ const LightColors = {
   screenBase: '#dddddd',
   areaBase: '#ffffff',
   headerBar: '#eeeeee',
-  primaryButton '#448866',
+  primaryButton: '#448866',
   inputBase: '#ffffff',
   inputPlaceholder: '#888888',
   inputText: '#444444',
   connectedIndicator: '#41d041',
   connectingIndicator: '#0000cc',
-  requestedIndicator: '#00bbbb'
+  requestedIndicator: '#00bbbb',
   pendingIndicator: '#bbbb00',
   confirmedIndicator: '#88bb00',
   unknownIndicator: '#dddddd',
   errorIndicator: '#ffaaaa',
   horizontalDivider: '#eeeeee',
-  verticalDivider: '#aaaaaa'
+  verticalDivider: '#aaaaaa',
   unreadIndicator: '#00aa00',
   disconnectedIndicator: '#aa0000',
 };
@@ -37,21 +37,21 @@ const DarkColors = {
   idleTabIcon: '#aaaaaa',
   linkText: '#88eecc',
   dangerText: '#ffaaaa',
-  labelText: "#eeeeee',
+  labelText: '#eeeeee',
   iconText: '#fffff',
   unsetText: '#aaaaaa',
   descriptionText: '#bbbbbb',
   text: '#ffffff',
   screenBase: '#333333',
   areaBase: '#555555',
-  headerBar '#555555',
+  headerBar: '#555555',
   primaryButton: '#448866',
   inputBase: '#ffffff',
   inputPlaceholder: '#888888',
   inputText: '#444444',
   connectedIndicator: '#00cc00',
   connectingIndicator: '#0000cc',
-  requestedIndicator: '#00bbbb'
+  requestedIndicator: '#00bbbb',
   pendingIndicator: '#bbbb00',
   confirmedIndicator: '#88bb00',
   unknownIndicator: '#dddddd',
@@ -63,7 +63,7 @@ const DarkColors = {
 };
 
 function getColor(label) {
-  return Appearance.getColorsScheme() === 'dark' ? DarkColors[label] : LightColors[label];
+  return Appearance.getColorScheme() === 'dark' ? DarkColors[label] : LightColors[label];
 }
 
 export const Colors = {
@@ -79,7 +79,7 @@ export const Colors = {
   text: getColor('text'),
   screenBase: getColor('screenBase'),
   areaBase: getColor('areaBase'),
-  headerBar getColor('headerBar'),
+  headerBar: getColor('headerBar'),
   primaryButton: getColor('primaryButton'),
   inputBase: getColor('inputBase'),
   inputPlaceholder: getColor('inputPlaceholder'),
