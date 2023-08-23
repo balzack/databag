@@ -68,6 +68,7 @@ export const styles = StyleSheet.create({
   },
   tabBar: {
     backgroundColor: Colors.primary,
+    maxHeight: 72,
   },
   home: {
     display: 'flex',

@@ -1,4 +1,4 @@
-export getLanguageId(language) {
+export function getLanguageId(language) {
   if (language === 'english') {
     return 0;
   }
@@ -21,7 +21,7 @@ export const Strings = [
     enableNotifications: 'Enable Notifications',
     sealedTopics: 'Sealed Topics',
     colorMode: 'Color Mode',
-    clockMode: 'Hour Format',
+    hourMode: 'Hour Format',
     language: 'Language',
     logout: 'Logout',
     changeLogin: 'Change Login',
@@ -41,7 +41,7 @@ export const Strings = [
     enableNotifications: 'Activer les Notifications',
     sealedTopics: 'Sujets Sécurisés',
     colorMode: 'Mode de Couleur', 
-    clockMode: 'Format d\'Heure',
+    hourMode: 'Format d\'Heure',
     language: 'Langue',
     logout: 'Se Déconnecter',
     changeLogin: 'Changer le Mot de Passe',
@@ -61,7 +61,7 @@ export const Strings = [
     enableNotifications: 'Permitir Notificaciones', 
     sealedTopics: 'Temas Protegidos', 
     colorMode: 'Modo de Color',
-    clockMode: 'Formato de Hora',
+    hourMode: 'Formato de Hora',
     language: 'Idioma',
     logout: 'Cerrar Sesión',
     changeLogin: 'Cambiar la contraseña',
@@ -72,7 +72,7 @@ export const Strings = [
     support: 'Ayuda',
     blocked: 'Oculto',
     actions: 'Métodos',
-    display: 'Pantalla'
+    display: 'Pantalla',
     settings: 'Configuración',
   },
   {
@@ -81,7 +81,7 @@ export const Strings = [
     enableNotifications: 'Benachrichtigungen aktivieren', 
     sealedTopics: 'Gesicherte Themen',
     colorMode: 'Farmodus',
-    clockMode: 'Stundenformat',
+    hourMode: 'Stundenformat',
     language: 'Sprache',
     logout: 'Ausloggen',
     changeLogin: 'Kennwort Aktualisieren',
@@ -97,3 +97,4 @@ export const Strings = [
   }
 ];
 
+export default Strings;

@@ -17,6 +17,7 @@ import { ContactHeader, ContactBody, Contact } from './contact/Contact';
 import { Details } from './details/Details';
 import { Conversation, ConversationHeader, ConversationBody } from './conversation/Conversation';
 import { Welcome } from './welcome/Welcome';
+import { Settings } from './settings/Settings';
 import { Channels } from './channels/Channels';
 import { CommonActions } from '@react-navigation/native';
 import { ConversationContext } from 'context/ConversationContext';
@@ -31,6 +32,7 @@ import { useNavigate } from 'react-router-dom';
 
 const ConversationStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
+const SettingsStack = createStackNavigator();
 const ContactStack = createStackNavigator();
 const ProfileDrawer = createDrawerNavigator();
 const ContactDrawer = createDrawerNavigator();
@@ -90,6 +92,21 @@ function ConversationStackScreen({ dmChannel, shareChannel, shareIntent, setShar
         </ConversationStack.Screen>
 
       </ConversationStack.Navigator>
+    </SafeAreaView>
+  );
+}
+
+function SettingsStackScreen() {
+  const stackParams = { headerStyle: { backgroundColor: Colors.titleBackground }, headerBackTitleVisible: false };
+  const screenParams = { headerShown: false, headerTintColor: Colors.primary };
+
+  return (
+    <SafeAreaView edges={['left', 'right']} style={styles.body}>
+      <SettingsStack.Navigator screenOptions={({ route }) => (screenParams)}>
+        <SettingsStack.Screen name="settings" options={stackParams}>
+          {(props) => <Settings />}
+        </SettingsStack.Screen>
+      </SettingsStack.Navigator>
     </SafeAreaView>
   );
 }
@@ -435,6 +452,9 @@ export function Session({ sharing, clearSharing }) {
                     if (route.name === 'Conversation') {
                       return <Ionicons name={'message1'} size={size} color={color} />;
                     }
+                    if (route.name === 'Settings') {
+                      return <Ionicons name={'setting'} size={size} color={color} />;
+                    }
                     if (route.name === 'Contacts') {
                       return <CardsIcon size={size} color={color} />;
                     }
@@ -444,8 +464,9 @@ export function Session({ sharing, clearSharing }) {
                   tabBarInactiveTintColor: Colors.disabled,
                 })}>
                 <Tab.Screen name="Conversation" children={()=><ConversationStackScreen dmChannel={dmChannel} shareChannel={shareChannel} shareIntent={shareIntent} setShareIntent={setShareIntent} />} />
-                <Tab.Screen name="Profile" component={ProfileStackScreen} />
                 <Tab.Screen name="Contacts" children={()=><ContactStackScreen addChannel={addChannel} />} />
+                <Tab.Screen name="Profile" component={ProfileStackScreen} />
+                <Tab.Screen name="Settings" component={SettingsStackScreen} />
               </Tab.Navigator>
             )}
             <StatusBar barStyle="dark-content" backgroundColor={Colors.formBackground} /> 

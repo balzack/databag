@@ -28,6 +28,8 @@ const LightColors = {
   horizontalDivider: '#eeeeee',
   verticalDivider: '#aaaaaa',
   unreadIndicator: '#00aa00',
+  enabledIndicator: '#8fbea7',
+  disabledIndicator: '#eeeeee',
   disconnectedIndicator: '#aa0000',
 };
 
@@ -59,6 +61,8 @@ const DarkColors = {
   horizonalDivider: '#888888',
   verticalDivider: '#aaaaaa',
   unreadIndicator: '#00aa00',
+  enabledIndicator: '#8fbea7',
+  disabledIndicator: '#eeeeee',
   disconnectedIndicator: '#aa0000',
 };
 
@@ -94,6 +98,8 @@ export const Colors = {
   horizonalDivider: getColor('horizontalDivider'),
   verticalDivider: getColor('verticalDivider'),
   unreadIndicator: getColor('unreadIndicator'),
+  enabledIndicator: getColor('enabledIndicator'),
+  disabledIndicator: getColor('disabledIndicator'),
   disconnectedIndicator: getColor('disconnectedIndicator'),
 
   background: '#8fbea7',
