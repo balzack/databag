@@ -15,6 +15,7 @@ export const styles = StyleSheet.create({
   label: {
     color: Colors.text,
     padding: 4,
+    fontFamily: 'Roboto',
   },
   group: {
     backgroundColor: Colors.areaBase,
@@ -53,11 +54,19 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     paddingRight: 8,
     color: Colors.text,
+    fontFamily: 'Roboto',
   },
   optionLink: {
     fontSize: 16,
     paddingRight: 8,
     color: Colors.linkText,
+    fontFamily: 'Roboto',
+  },
+  dangerLink: {
+    fontSize: 16,
+    paddingRight: 8,
+    color: Colors.dangerText,
+    fontFamily: 'Roboto',
   },
   track: {
     false: Colors.disabledIndicator,
