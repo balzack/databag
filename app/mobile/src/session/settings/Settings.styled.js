@@ -2,15 +2,13 @@ import { StyleSheet } from 'react-native';
 import { Colors } from 'constants/Colors';
 
 export const styles = StyleSheet.create({
-  container: {
-    backgroundColor: Colors.screenBase,
-  },
   content: {
     width: '100%',
     height: '100%',
     display: 'flex',
     paddingLeft: 16,
     paddingRight: 16,
+    backgroundColor: Colors.screenBase,
   },
   label: {
     color: Colors.text,

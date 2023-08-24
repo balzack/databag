@@ -11,8 +11,8 @@ export function Settings() {
   const { state, actions } = useSettings();
 
   return (
-    <SafeAreaView edges={['top']} style={styles.container}>
       <ScrollView style={styles.content}>
+    <SafeAreaView edges={['top']}>
 
         <Text style={styles.label}>{ Strings[state.lang].messaging }</Text>
         <View style={styles.group}>
@@ -141,7 +141,7 @@ export function Settings() {
           </TouchableOpacity>
         </View>
 
-      </ScrollView>
     </SafeAreaView>
+      </ScrollView>
   );
 }
