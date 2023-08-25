@@ -15,6 +15,23 @@ export const styles = StyleSheet.create({
     padding: 4,
     fontFamily: 'Roboto',
   },
+  radio: {
+    marginLeft: 34,
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  idleRadioCircle: {
+    borderWidth: 1,
+    borderColor: Colors.activeBorder,
+    borderRadius: 8,
+    width: 16,
+    height: 16,
+  },
+  radioLabel: {
+    color: Colors.linkText,
+    paddingLeft: 8,
+    fontFamily: 'Roboto',
+  },
   group: {
     backgroundColor: Colors.areaBase,
     width: '100%',
@@ -40,6 +57,12 @@ export const styles = StyleSheet.create({
   },
   option: {
     flex: 10,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  optionControl: {
+    flex: 12,
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',

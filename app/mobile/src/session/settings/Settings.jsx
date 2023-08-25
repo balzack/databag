@@ -41,24 +41,38 @@ export function Settings() {
 
         <Text style={styles.label}>{ state.strings.display }</Text>
         <View style={styles.group}>
-          <TouchableOpacity style={styles.entry} activeOpacity={1}>
+          <View style={styles.entry}>
             <View style={styles.icon}>
-              <MatIcons name="progress-clock" size={20} color={Colors.linkText} />
+              <MatIcons name="progress-clock" size={20} color={Colors.text} />
             </View>
-            <View style={styles.option}>
-              <Text style={styles.optionLink}>{ state.strings.hourMode }</Text>
+            <View style={styles.optionControl}>
+              <Text style={styles.optionText}>{ state.strings.hourMode }</Text>
+              <TouchableOpacity style={styles.radio} activeOpacity={1}>
+                <View style={styles.idleRadioCircle} />
+                <Text style={styles.radioLabel}>12h</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.radio} activeOpacity={1}>
+                <View style={styles.idleRadioCircle} />
+                <Text style={styles.radioLabel}>24h</Text>
+              </TouchableOpacity>
             </View>
-            <View style={styles.control} />
-          </TouchableOpacity>
+          </View>
           <View style={styles.divider} />
           <TouchableOpacity style={styles.entry} activeOpacity={1}>
             <View style={styles.icon}>
-              <MatIcons name="calendar-month-outline" size={20} color={Colors.linkText} />
+              <MatIcons name="calendar-month-outline" size={20} color={Colors.text} />
             </View>
-            <View style={styles.option}>
-              <Text style={styles.optionLink}>{ state.strings.dateMode }</Text>
+            <View style={styles.optionControl}>
+              <Text style={styles.optionText}>{ state.strings.dateMode }</Text>
+              <TouchableOpacity style={styles.radio} activeOpacity={1}>
+                <View style={styles.idleRadioCircle} />
+                <Text style={styles.radioLabel}>mm/dd</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.radio} activeOpacity={1}>
+                <View style={styles.idleRadioCircle} />
+                <Text style={styles.radioLabel}>dd/mm</Text>
+              </TouchableOpacity>
             </View>
-            <View style={styles.control} />
           </TouchableOpacity>
  
         </View>
@@ -102,30 +116,27 @@ export function Settings() {
             <View style={styles.icon}>
               <MatIcons name="account-multiple-outline" size={20} color={Colors.linkText} />
             </View>
-            <View style={styles.option}>
+            <View style={styles.optionControl}>
               <Text style={styles.optionLink}>{ state.strings.contacts }</Text>
             </View>
-            <View style={styles.control} />
           </TouchableOpacity>
           <View style={styles.divider} />
           <TouchableOpacity style={styles.entry} activeOpacity={1}>
             <View style={styles.icon}>
               <MatIcons name="book-open-outline" size={20} color={Colors.linkText} />
             </View>
-            <View style={styles.option}>
+            <View style={styles.optionControl}>
               <Text style={styles.optionLink}>{ state.strings.topics }</Text>
             </View>
-            <View style={styles.control} />
           </TouchableOpacity>
           <View style={styles.divider} />
           <TouchableOpacity style={styles.entry} activeOpacity={1}>
             <View style={styles.icon}>
               <MatIcons name="comment-text-multiple-outline" size={20} color={Colors.linkText} />
             </View>
-            <View style={styles.option}>
+            <View style={styles.optionControl}>
               <Text style={styles.optionLink}>{ state.strings.messages }</Text>
             </View>
-            <View style={styles.control} />
           </TouchableOpacity>
         </View>
 
@@ -135,10 +146,9 @@ export function Settings() {
             <View style={styles.icon}>
               <MatIcons name="help-network-outline" size={20} color={Colors.linkText} />
             </View>
-            <View style={styles.option}>
+            <View style={styles.optionControl}>
               <Text style={styles.optionLink}>github.com/balzack/databag</Text>
             </View>
-            <View style={styles.control} />
           </TouchableOpacity>
         </View>
 
