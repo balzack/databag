@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef, useContext } from 'react';
+import { getLanguageStrings } from 'constants/Strings';
 
 export function useSettings() {
 
   const [state, setState] = useState({
-    lang: 0,
+    strings: getLanguageStrings(),
   });
 
   const updateState = (value) => {

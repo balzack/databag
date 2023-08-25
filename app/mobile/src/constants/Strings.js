@@ -1,20 +1,6 @@
-export function getLanguageId(language) {
-  if (language === 'english') {
-    return 0;
-  }
-  if (language === 'french') {
-    return 1;
-  }
-  if (language === 'spanish') {
-    return 2;
-  }
-  if (language === 'german') {
-    return 3;
-  }
-  return 0; // default
-};
+import { NativeModules, Platform } from 'react-native'
 
-export const Strings = [
+const Strings = [
   {
     visibleRegistry: 'Visible in Registry',
     edit: 'Edit',
@@ -97,4 +83,22 @@ export const Strings = [
   }
 ];
 
-export default Strings;
+export function getLanguageStrings() {
+  const locale = Platform.OS === 'ios' ? NativeModules.SettingsManager.settings.AppleLocale || NativeModules.SettingsManager.settings.AppleLanguages[0] : NativeModules.I18nManager.localeIdentifier;
+
+  const lang = locale.slice(0, 2) || '';
+
+  if (lang === 'en') {
+    return Strings[0];
+  }
+  if (lang === 'fr') {
+    return Strings[1];
+  }
+  if (lang === 'es') {
+    return Strings[2];
+  }
+  if (lang === 'de') {
+    return Strings[3];
+  }
+  return Strings[0];
+};
