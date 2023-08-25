@@ -50,6 +50,17 @@ export function Settings() {
             </View>
             <View style={styles.control} />
           </TouchableOpacity>
+          <View style={styles.divider} />
+          <TouchableOpacity style={styles.entry} activeOpacity={1}>
+            <View style={styles.icon}>
+              <MatIcons name="calendar-month-outline" size={20} color={Colors.linkText} />
+            </View>
+            <View style={styles.option}>
+              <Text style={styles.optionLink}>{ state.strings.dateMode }</Text>
+            </View>
+            <View style={styles.control} />
+          </TouchableOpacity>
+ 
         </View>
 
         <Text style={styles.label}>{ state.strings.account }</Text>
