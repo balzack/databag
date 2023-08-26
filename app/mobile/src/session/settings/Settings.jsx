@@ -47,13 +47,23 @@ export function Settings() {
             </View>
             <View style={styles.optionControl}>
               <Text style={styles.optionText}>{ state.strings.hourMode }</Text>
-              <TouchableOpacity style={styles.radio} activeOpacity={1}>
-                <View style={styles.idleRadioCircle} />
-                <Text style={styles.radioLabel}>12h</Text>
+              <TouchableOpacity style={styles.radio} activeOpacity={1} onPress={() => actions.setTimeFull(false)}>
+                { !state.timeFull && (
+                  <View style={styles.activeRadioCircle} />
+                )}
+                { state.timeFull && (
+                  <View style={styles.idleRadioCircle} />
+                )}
+                <Text style={styles.radioLabel}>{ state.strings.timeHalf }</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.radio} activeOpacity={1}>
-                <View style={styles.idleRadioCircle} />
-                <Text style={styles.radioLabel}>24h</Text>
+              <TouchableOpacity style={styles.radio} activeOpacity={1} onPress={() => actions.setTimeFull(true)}>
+                { state.timeFull && (
+                  <View style={styles.activeRadioCircle} />
+                )}
+                { !state.timeFull && (
+                  <View style={styles.idleRadioCircle} />
+                )}
+                <Text style={styles.radioLabel}>{ state.strings.timeFull }</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -64,13 +74,23 @@ export function Settings() {
             </View>
             <View style={styles.optionControl}>
               <Text style={styles.optionText}>{ state.strings.dateMode }</Text>
-              <TouchableOpacity style={styles.radio} activeOpacity={1}>
-                <View style={styles.idleRadioCircle} />
-                <Text style={styles.radioLabel}>mm/dd</Text>
+              <TouchableOpacity style={styles.radio} activeOpacity={1} onPress={() => actions.setMonthLast(false)}>
+                { !state.monthLast && (
+                  <View style={styles.activeRadioCircle} />
+                )}
+                { state.monthLast && (
+                  <View style={styles.idleRadioCircle} />
+                )}
+                <Text style={styles.radioLabel}>{ state.strings.monthStart }</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.radio} activeOpacity={1}>
-                <View style={styles.idleRadioCircle} />
-                <Text style={styles.radioLabel}>dd/mm</Text>
+              <TouchableOpacity style={styles.radio} activeOpacity={1} onPress={() => actions.setMonthLast(true)}>
+                { state.monthLast && (
+                  <View style={styles.activeRadioCircle} />
+                )}
+                { !state.monthLast && (
+                  <View style={styles.idleRadioCircle} />
+                )}
+                <Text style={styles.radioLabel}>{ state.strings.monthEnd }</Text>
               </TouchableOpacity>
             </View>
           </TouchableOpacity>

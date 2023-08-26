@@ -15,6 +15,9 @@ export function useProfileContext() {
   });
   const store = useContext(StoreContext);
 
+  const HOUR_KEY = 'hour';
+  const DATE_KEY = 'date';
+
   const access = useRef(null);
   const curRevision = useRef(null);
   const setRevision = useRef(null);
@@ -55,8 +58,10 @@ export function useProfileContext() {
       const { guid, server, token } = session || {};
       const identity = await store.actions.getProfile(guid);
       const revision = await store.actions.getProfileRevision(guid);
+      const timeFull = (await store.actions.getAppValue(guid, HOUR_KEY)).set == true;
+      const monthLast = (await store.actions.getAppValue(guid, DATE_KEY)).set == true;
       const imageUrl = identity?.image ? getProfileImageUrl(server, token, revision) : null;
-      updateState({ offsync: false, identity, imageUrl, server });
+      updateState({ offsync: false, identity, imageUrl, server, timeFull, monthLast });
       setRevision.current = revision;
       curRevision.current = revision;
       access.current = session;
@@ -79,6 +84,16 @@ export function useProfileContext() {
     getHandleStatus: async (name) => {
       const { server, token } = access.current || {};
       return await getHandle(server, token, name);
+    },
+    setTimeFull: async (flag) => {
+      const { guid } = access.current || {};
+      await store.actions.setAppValue(guid, HOUR_KEY, { set: flag });
+      updateState({ timeFull: flag });
+    },
+    setMonthLast: async (flag) => {
+      const { guid } = access.current || {};
+      await store.actions.setAppValue(guid, DATE_KEY, { set: flag });
+      updateState({ monthLast: flag });
     },
   }
 

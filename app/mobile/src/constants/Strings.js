@@ -21,6 +21,10 @@ const Strings = [
     account: 'Account',
     display: 'Format',
     messaging: 'Messaging',
+    timeFull: '24h',
+    timeHalf: '12h',
+    monthStart: 'mm/dd',
+    monthEnd: 'dd/mm',
   },
   {
     visibleRegistry: 'Visible dans le Registre',
@@ -42,6 +46,10 @@ const Strings = [
     account: 'Compte',
     display: 'Format',
     messaging: 'Messagerie',
+    timeFull: '24h',
+    timeHalf: '12h',
+    monthStart: 'mm/jj',
+    monthEnd: 'jj/mm',
   },
   {
     visibleRegistry: 'Visible en el Registro',
@@ -63,6 +71,10 @@ const Strings = [
     account: 'Cuenta',
     display: 'Formato',
     messaging: 'Mensajería',
+    timeFull: '24h',
+    timeHalf: '12h',
+    monthStart: 'mm/dd',
+    monthEnd: 'dd/mm',
   },
   {
     visibleRegistry: 'Sichtbar in der Registrierung',
@@ -84,6 +96,10 @@ const Strings = [
     account: 'Konto',
     display: 'Format',
     messages: 'Nachrichtenübermittlung',
+    timeFull: '24h',
+    timeHalf: '12h',
+    monthStart: 'mm/dd',
+    monthEnd: 'dd/mm',
   }
 ];
 

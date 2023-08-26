@@ -27,6 +27,14 @@ export const styles = StyleSheet.create({
     width: 16,
     height: 16,
   },
+  activeRadioCircle: {
+    borderWidth: 1,
+    borderColor: Colors.activeBorder,
+    backgroundColor: Colors.activeFill,
+    borderRadius: 8,
+    width: 16,
+    height: 16,
+  },
   radioLabel: {
     color: Colors.linkText,
     paddingLeft: 8,
