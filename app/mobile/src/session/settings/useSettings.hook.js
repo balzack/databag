@@ -15,20 +15,12 @@ export function useSettings() {
     monthLast: false,
 
     editSeal: false,
-    sealMode: null,
-    sealUnlock: null,
-    sealPassword: null,
-    sealConfirm: null,
-    sealDelete: null,
-    seal: null,
-    sealKey: null,
     sealEnabled: false,
     sealUnlocked: false,
-    sealable: false,
-    canSaveSeal: false,
-    showSealUnlock: false,
-    showSealConfirm: false,
-    showSealPassword: false,
+    sealPassword: null,
+    sealConfirm: null,
+    hideConfirm: true,
+    hidePassword: true,
   });
 
   const updateState = (value) => {
@@ -45,7 +37,7 @@ export function useSettings() {
     const sealKey = account.state.sealKey;
     const sealEnabled = seal?.publicKey != null;
     const sealUnlocked = seal?.publicKey === sealKey?.public && sealKey?.private && sealKey?.public;
-    updateState({ sealable, seal, sealKey, sealEnabled, sealUnlocked });
+    updateState({ sealable, seal, sealKey, sealEnabled: false, sealUnlocked });
   }, [account.state]);
 
   const unlock = async () => {
@@ -71,25 +63,6 @@ export function useSettings() {
     await account.actions.setAccountSeal({}, {});
   }
 
-  useEffect(() => {
-    if (state.sealMode === 'unlocked') {
-      return updateState({ canSaveSeal: true });
-    }
-    if (state.sealMode === 'unlocking' && state.sealUnlock != null && state.sealUnlock !== '') {
-      return updateState({ canSaveSeal: true });
-    }
-    if (state.sealMode === 'enabling' && state.sealPassword != null && state.sealPassword === state.sealConfirm) {
-      return updateState({ canSaveSeal: true });
-    }
-    if (state.sealMode === 'disabling' && state.sealDelete === 'delete') {
-      return updateState({ canSaveSeal: true });
-    }
-    if (state.sealMode === 'updating' && state.sealPassword != null && state.sealPassword === state.sealConfirm) {
-      return updateState({ canSaveSeal: true });
-    }
-    updateState({ canSaveSeal: false });
-  }, [state.sealMode, state.sealable, state.sealUnlock, state.sealPassword, state.sealConfirm, state.sealDelete]);
-
   const actions = {
     setTimeFull: async (flag) => {
       updateState({ timeFull: flag });
@@ -100,24 +73,10 @@ export function useSettings() {
       await profile.actions.setMonthLast(flag);
     },
     showEditSeal: () => {
-      let sealMode = null;
-      const sealable = state.sealEnabled;
-      if (state.sealEnabled && !state.sealUnlocked) {
-        sealMode = 'unlocking';
-      }
-      else if (state.sealEnabled && state.sealUnlocked) {
-        sealMode = 'unlocked';
-      }
-      else {
-        sealMode = 'disabled';
-      }
-      updateState({ editSeal: true, sealMode, sealUnlock: null, sealPassword: null, sealConfirm: null, sealDelete: null });
+      updateState({ editSeal: true });
     },
     hideEditSeal: () => {
       updateState({ editSeal: false });
-    },
-    setSealUnlock: (sealUnlock) => {
-      updateState({ sealUnlock });
     },
     setSealPassword: (sealPassword) => {
       updateState({ sealPassword });
@@ -125,62 +84,8 @@ export function useSettings() {
     setSealConfirm: (sealConfirm) => {
       updateState({ sealConfirm });
     },
-    setSealDelete: (sealDelete) => {
-      updateState({ sealDelete });
-    },
-    showSealUnlock: () => {
-      updateState({ showSealUnlock: true });
-    },
-    hideSealUnlock: () => {
-      updateState({ showSealUnlock: false });
-    },
-    showSealPassword: () => {
-      updateState({ showSealPassword: true });
-    },
-    hideSealPassword: () => {
-      updateState({ showSealPassword: false });
-    },
-    showSealConfirm: () => {
-      updateState({ showSealConfirm: true });
-    },
-    hideSealConfirm: () => {
-      updateState({ showSealConfirm: false });
-    },
-    updateSeal: () => {
-      updateState({ sealMode: 'updating' });
-    },
-    saveSeal: async () => {
-      if (!state.saving) {
-        try {
-          updateState({ saving: true });
-
-          if (state.sealMode === 'enabling') {
-            await enable();
-          }
-          else if (state.sealMode === 'disabling') {
-            await disable();
-          }
-          else if (state.sealMode === 'unlocking') {
-            await unlock();
-          }
-          else if (state.sealMode === 'unlocked') {
-            await forget();
-          }
-          else if (state.sealMode === 'updating') {
-            await update();
-          }
-          else {
-            console.log(state.sealMode);
-          }
-
-          updateState({ saving: false });
-        }
-        catch(err) {
-          console.log(err);
-          updateState({ saving: false });
-          throw new Error('seal operation failed');
-        }
-      }
+    generateKey: () => {
+      console.log("GENERATE KEY");
     },
   };
 
