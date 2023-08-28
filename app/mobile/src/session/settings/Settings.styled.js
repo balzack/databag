@@ -104,5 +104,127 @@ export const styles = StyleSheet.create({
   notifications: {
     transform: [{ scaleX: .6 }, { scaleY: .6 }],
   },
+
+  modalWrapper: {
+    display: 'flex',
+    width: '100%',
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(52, 52, 52, 0.8)'
+  },
+  modalContainer: {
+    backgroundColor: Colors.formBackground,
+    padding: 16,
+    width: '80%',
+    maxWidth: 400,
+  },
+  modalHeader: {
+    fontSize: 18,
+    paddingBottom: 16,
+    color: Colors.text,
+  },
+  input: {
+    fontSize: 14,
+    flexGrow: 1,
+    color: Colors.text,
+  },
+  inputField: {
+    width: '100%',
+    borderWidth: 1,
+    borderColor: Colors.lightgrey,
+    borderRadius: 4,
+    padding: 8, 
+    marginBottom: 8,
+    maxHeight: 92,
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  canceltext: {
+    color: Colors.text,
+  },
+  modalList: {
+    width: '100%', 
+    borderWidth: 1,
+    borderColor: Colors.lightgrey,
+    borderRadius: 2,
+  },
+  modalControls: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
+  cancel: {
+    borderWidth: 1,
+    borderColor: Colors.lightgrey,
+    borderRadius: 4,
+    padding: 8,
+    marginRight: 8,
+    width: 88,
+    display: 'flex',
+    alignItems: 'center',
+  },
+  save: {
+    padding: 8,
+    borderRadius: 4,
+    backgroundColor: Colors.primary,
+    width: 88,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  saveText: {
+    color: Colors.white,
+  },
+  disabled: {
+    borderWidth: 1,
+    borderColor: Colors.lightgrey,
+    padding: 8,
+    borderRadius: 4,
+    width: 88,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  activity: {
+    paddingRight: 4,
+  },
+  disabledText: {
+    color: Colors.disabled,
+  },
+  sealUpdate: {
+    position: 'absolute',
+    top: 0,
+    height: 36,
+    left: 8,
+    width: '100%',
+  },
+  sealableText: {
+    color: Colors.text,
+  },
+  sealable: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingBottom: 16,
+  },
+  enable: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    marginBottom: 4,
+  },
+  enableText: {
+    color: Colors.primary,
+    fontSize: 16,
+  },
+  enableSwitch: {
+    transform: [{ scaleX: .6 }, { scaleY: .6 }],
+  },
 });
 
