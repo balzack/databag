@@ -73,7 +73,7 @@ export function useSettings() {
       await profile.actions.setMonthLast(flag);
     },
     showEditSeal: () => {
-      updateState({ editSeal: true });
+      updateState({ editSeal: true, sealPassword: null, sealConfirm: null });
     },
     hideEditSeal: () => {
       updateState({ editSeal: false });
@@ -83,6 +83,18 @@ export function useSettings() {
     },
     setSealConfirm: (sealConfirm) => {
       updateState({ sealConfirm });
+    },
+    showPassword: () => {
+      updateState({ hidePassword: false });
+    },
+    hidePassword: () => {
+      updateState({ hidePassword: true });
+    },
+    showConfirm: () => {
+      updateState({ hideConfirm: false });
+    },
+    hideConfirm: () => {
+      updateState({ hideConfirm: true });
     },
     generateKey: () => {
       console.log("GENERATE KEY");

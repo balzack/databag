@@ -211,12 +211,18 @@ export function Settings() {
                   <View style={styles.modalInput}>
                     <TextInput style={styles.inputText} value={state.sealPassword} onChangeText={actions.setSealPassword}
                         autoCapitalize={'none'} secureTextEntry={state.hidePassword} placeholder={state.strings.password}
-                        placeholderTextColor={Colors.placeholderText} />
+                        placeholderTextColor={Colors.inputPlaceholder} />
+                    <TouchableOpacity style={styles.inputVisibility} activeOpacity={1} onPress={actions.showPassword}>
+                      <MatIcons name="eye-outline" size={16} color={Colors.inputPlaceholder} />
+                    </TouchableOpacity>
                   </View>
                   <View style={styles.modalInput}>
                     <TextInput style={styles.inputText} value={state.sealConfirm} onChangeText={actions.setSealConfirm}
                         autoCapitalize={'none'} secureTextEntry={state.hideConfirm} placeholder={state.strings.confirmPassword}
-                        placeholderTextColor={Colors.placeholderText} />
+                        placeholderTextColor={Colors.inputPlaceholder} />
+                    <TouchableOpacity style={styles.inputVisibility} activeOpacity={1} onPress={actions.showConfirm}>
+                      <MatIcons name="eye-outline" size={16} color={Colors.inputPlaceholder} />
+                    </TouchableOpacity>
                   </View>
                   { state.sealPassword === state.sealConfirm && state.sealPassword && (
                     <TouchableOpacity style={styles.enabledButton} activeOpacity={1} onPress={actions.generateKey}>
