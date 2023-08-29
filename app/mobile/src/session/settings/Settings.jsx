@@ -201,7 +201,7 @@ export function Settings() {
             <View style={styles.modalContainer}>
               <View style={styles.modalClose}>
                 <TouchableOpacity activeOpacity={1} onPress={actions.hideEditSeal}>
-                  <MatIcons name="close" size={20} color={Colors.text} />
+                  <MatIcons name="close" size={20} color={Colors.descriptionText} />
                 </TouchableOpacity>
               </View>
               <Text style={styles.modalHeader}>{ state.strings.sealedTopics }</Text>
@@ -212,17 +212,31 @@ export function Settings() {
                     <TextInput style={styles.inputText} value={state.sealPassword} onChangeText={actions.setSealPassword}
                         autoCapitalize={'none'} secureTextEntry={state.hidePassword} placeholder={state.strings.password}
                         placeholderTextColor={Colors.inputPlaceholder} />
-                    <TouchableOpacity style={styles.inputVisibility} activeOpacity={1} onPress={actions.showPassword}>
-                      <MatIcons name="eye-outline" size={16} color={Colors.inputPlaceholder} />
-                    </TouchableOpacity>
+                    { state.hidePassword && (
+                      <TouchableOpacity style={styles.inputVisibility} activeOpacity={1} onPress={actions.showPassword}>
+                        <MatIcons name="eye-outline" size={16} color={Colors.inputPlaceholder} />
+                      </TouchableOpacity>
+                    )}
+                    { !state.hidePassword && (
+                      <TouchableOpacity style={styles.inputVisibility} activeOpacity={1} onPress={actions.hidePassword}>
+                        <MatIcons name="eye-off-outline" size={16} color={Colors.inputPlaceholder} />
+                      </TouchableOpacity>
+                    )}
                   </View>
                   <View style={styles.modalInput}>
                     <TextInput style={styles.inputText} value={state.sealConfirm} onChangeText={actions.setSealConfirm}
                         autoCapitalize={'none'} secureTextEntry={state.hideConfirm} placeholder={state.strings.confirmPassword}
                         placeholderTextColor={Colors.inputPlaceholder} />
-                    <TouchableOpacity style={styles.inputVisibility} activeOpacity={1} onPress={actions.showConfirm}>
-                      <MatIcons name="eye-outline" size={16} color={Colors.inputPlaceholder} />
-                    </TouchableOpacity>
+                    { state.hideConfirm && (
+                      <TouchableOpacity style={styles.inputVisibility} activeOpacity={1} onPress={actions.showConfirm}>
+                        <MatIcons name="eye-outline" size={16} color={Colors.inputPlaceholder} />
+                      </TouchableOpacity>
+                    )}
+                    { !state.hideConfirm && (
+                      <TouchableOpacity style={styles.inputVisibility} activeOpacity={1} onPress={actions.showConfirm}>
+                        <MatIcons name="eye-off-outline" size={16} color={Colors.inputPlaceholder} />
+                      </TouchableOpacity>
+                    )}
                   </View>
                   { state.sealPassword === state.sealConfirm && state.sealPassword && (
                     <TouchableOpacity style={styles.enabledButton} activeOpacity={1} onPress={actions.generateKey}>
@@ -240,7 +254,9 @@ export function Settings() {
                 <Text style={styles.modalDescription}>{ state.strings.sealLocked }</Text>
               )}
               { state.sealEnabled && state.sealUnlocked && (
-                <Text style={styles.modalDescritpion}>{ state.strings.sealUnlocked }</Text>
+                <>
+                  <Text style={styles.modalDescription}>{ state.strings.sealUnlocked }</Text>
+                </>
               )}
             </View>
           </KeyboardAvoidingView>

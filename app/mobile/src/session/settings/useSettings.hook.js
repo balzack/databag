@@ -37,7 +37,7 @@ export function useSettings() {
     const sealKey = account.state.sealKey;
     const sealEnabled = seal?.publicKey != null;
     const sealUnlocked = seal?.publicKey === sealKey?.public && sealKey?.private && sealKey?.public;
-    updateState({ sealable, seal, sealKey, sealEnabled: false, sealUnlocked });
+    updateState({ sealable, seal, sealKey, sealEnabled, sealUnlocked });
   }, [account.state]);
 
   const unlock = async () => {
