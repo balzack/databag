@@ -19,8 +19,11 @@ export function useSettings() {
     sealUnlocked: false,
     sealPassword: null,
     sealConfirm: null,
+    sealDelete: null,
     hideConfirm: true,
     hidePassword: true,
+    sealRemove: false,
+    sealUpdate: false,
   });
 
   const updateState = (value) => {
@@ -40,26 +43,26 @@ export function useSettings() {
     updateState({ sealable, seal, sealKey, sealEnabled, sealUnlocked });
   }, [account.state]);
 
-  const unlock = async () => {
-    const sealKey = unlockSeal(state.seal, state.sealUnlock);
+  const unlockKey = async () => {
+    const sealKey = unlockSeal(state.seal, state.sealPassword);
     await account.actions.unlockAccountSeal(sealKey);
   };
 
-  const forget = async () => {
+  const disableKey = async () => {
     await account.actions.unlockAccountSeal({});
   }
 
-  const update = async () => {
+  const updateKey = async () => {
     const updated = updateSeal(state.seal, state.sealKey, state.sealPassword);
     await account.actions.setAccountSeal(updated.seal, updated.sealKey);
   }
 
-  const enable = async () => {
+  const generateKey = async () => {
     const created = await generateSeal(state.sealPassword);
     await account.actions.setAccountSeal(created.seal, created.sealKey);
   }
 
-  const disable = async () => {
+  const removeKey = async () => {
     await account.actions.setAccountSeal({}, {});
   }
 
@@ -73,16 +76,32 @@ export function useSettings() {
       await profile.actions.setMonthLast(flag);
     },
     showEditSeal: () => {
-      updateState({ editSeal: true, sealPassword: null, sealConfirm: null });
+      updateState({ editSeal: true, sealPassword: null, sealConfirm: null, hidePassword: true, hideConfirm: true,
+          sealDelete: null, sealRemove: false, sealUpdate: false });
     },
     hideEditSeal: () => {
       updateState({ editSeal: false });
+    },
+    showSealRemove: () => {
+      updateState({ sealRemove: true });
+    },
+    hideSealRemove: () => {
+      updateState({ sealRemove: false });
+    },
+    showSealUpdate: () => {
+      updateState({ sealUpdate: true });
+    },
+    hideSealUpdate: () => {
+      updateState({ sealUpdate: false });
     },
     setSealPassword: (sealPassword) => {
       updateState({ sealPassword });
     },
     setSealConfirm: (sealConfirm) => {
       updateState({ sealConfirm });
+    },
+    setSealDelete: (sealDelete) => {
+      updateState({ sealDelete });
     },
     showPassword: () => {
       updateState({ hidePassword: false });
@@ -96,8 +115,20 @@ export function useSettings() {
     hideConfirm: () => {
       updateState({ hideConfirm: true });
     },
-    generateKey: () => {
-      console.log("GENERATE KEY");
+    generateKey: async () => {
+      await generateKey();
+    },
+    disableKey: async () => {
+      await disableKey();
+    },
+    unlockKey: async () => {
+      await unlockKey();
+    },
+    updateKey: async () => {
+      await updateKey();
+    },
+    removeKey: async () => {
+      await removeKey();
     },
   };
 

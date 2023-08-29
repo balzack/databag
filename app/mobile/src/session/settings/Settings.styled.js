@@ -76,8 +76,8 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
   },
   control: {
-    flex: 2,
-    alignItems: 'center',
+    flex: 4,
+    display: 'flex',
   },
   labelText: {
     fontSize: 14,
@@ -129,7 +129,6 @@ export const styles = StyleSheet.create({
   },
   modalHeader: {
     fontSize: 18,
-    paddingBottom: 16,
     paddingTop: 16,
     color: Colors.text,
     fontFamily: 'Roboto',
@@ -139,15 +138,23 @@ export const styles = StyleSheet.create({
     width: '100%',
     display: 'flex',
     alignItems: 'flex-end',
-    paddingRight: 8,
-    paddingTop: 8,
+  },
+  closeButton: {
+    padding: 12,
+  },
+  modalBusy: {
+    padding: 8,
   },
   modalDescription: {
     fontSize: 14,
     color: Colors.descriptionText,
-    paddingTop: 16,
     paddingLeft: 16,
     paddingRight: 16,
+    paddingBottom: 16,
+  },
+  delayMessage: {
+    fontSize: 12,
+    color: Colors.descriptionText,
     paddingBottom: 16,
   },
   modalInput: {
@@ -158,12 +165,21 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     flexDirection: 'row',
   },
+  modeText: {
+    fontSize: 14,
+    paddingBottom: 16,
+    color: Colors.linkText,
+    fontFamily: 'Roboto',
+  },
+  dangerText: {
+    fontSize: 14,
+    paddingBottom: 16,
+    color: Colors.dangerText,
+    fontFamily: 'Roboto',
+  },
   inputText: {
     flex: 1,
-    paddingLeft: 8,
-    paddingRight: 8,
-    paddingTop: 4,
-    paddingBottom: 4,
+    padding: 8,
     borderRadius: 4,
     margin: 4,
     backgroundColor: Colors.inputBase,
@@ -198,6 +214,20 @@ export const styles = StyleSheet.create({
   },
   disabledButtonText: {
     color: Colors.disabledButtonText,
+    fontFamily: 'Roboto',
+  },
+  dangerButton: {
+    marginTop: 32,
+    marginBottom: 16,
+    paddingTop: 8,
+    paddingBottom: 8,
+    paddingLeft: 32,
+    paddingRight: 32,
+    borderRadius: 4,
+    backgroundColor: Colors.dangerButton,
+  },
+  dangerButtonText: {
+    color: Colors.dangerButtonText,
     fontFamily: 'Roboto',
   },
 });

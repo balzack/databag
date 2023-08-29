@@ -4,7 +4,7 @@ const Strings = [
   {
     visibleRegistry: 'Visible in Registry',
     edit: 'Edit',
-    enableNotifications: 'Enable Notifications',
+    enableNotifications: 'Push Notifications',
     sealedTopics: 'Sealed Topics',
     colorMode: 'Color Mode',
     hourMode: 'Hour',
@@ -27,8 +27,8 @@ const Strings = [
     monthEnd: 'dd/mm',
 
     sealUnset: 'Generate a key to enable end-to-end encrypted topics.',
-    sealUnlocked: 'Disabling the sealing key will remove access from all end-to-end encrypted topics until the key is unlocked again.',
-    sealLocked: 'Unlock the sealing key to enable end-to-end encrypted topics on this device.',
+    sealUnlocked: 'Disabling the sealing key will prevent access to all end-to-end encrypted topics from this device until the key is unlocked again.',
+    sealLocked: 'Unlock the sealing key to support end-to-end encrypted topics on this device.',
     sealDelete: 'Deleting the sealing key will premanently remove access to any existing end-to-end encrypted topics for ALL of your devices.',
     password: 'Password',
     confirmPassword: 'Confirm Password',
@@ -46,11 +46,12 @@ const Strings = [
     changePassword: 'Change sealing key password.',
     update: 'Update',
     changeKey: 'Change Key Password',
+    delayMessage: 'Key generation can take several minutes.',
   },
   {
     visibleRegistry: 'Visible dans le Registre',
     edit: 'Modifier',
-    enableNotifications: 'Activer les Notifications',
+    enableNotifications: 'Notifications Push',
     sealedTopics: 'Sujets Sécurisés',
     colorMode: 'Mode de Couleur',
     hourMode: 'Heure',
@@ -92,11 +93,12 @@ const Strings = [
     changePassword: 'Changez le mot de passe de la clé de sécurité.',
     update: 'Mise à jour',
     changeKey: 'Changer le mot de passe clé',
+    delayMessage: 'La génération de clé peut prendre plusieurs minutes.',
   },
   {
     visibleRegistry: 'Visible en el Registro',
     edit: 'Editar',
-    enableNotifications: 'Permitir Notificaciones',
+    enableNotifications: 'Notificaciones Push',
     sealedTopics: 'Temas Protegidos',
     colorMode: 'Modo de Color',
     hourMode: 'Hora',
@@ -138,11 +140,12 @@ const Strings = [
     changePassword: 'Cambiar la contraseña de la clave de seguridad.',
     update: 'Actualizar',
     changeKey: 'Cambiar clave Contraseña',
+    delayMessage: 'La generación de claves puede tardar varios minutos.',
   },
   {
     visibleRegistry: 'Sichtbar in der Registrierung',
     edit: 'Bearbeiten',
-    enableNotifications: 'Benachrichtigungen aktivieren',
+    enableNotifications: 'Mitteilungen',
     sealedTopics: 'Gesicherte Themen',
     colorMode: 'Farmodus',
     hourMode: 'Stunde',
@@ -184,6 +187,7 @@ const Strings = [
     changePassword: 'Ändern Sie das Passwort des Sicherheitsschlüssels',
     update: 'Aktualisieren',
     changeKey: 'Schlüsselpasswort ändern',
+    delayMessage: 'Die Schlüsselgenerierung kann mehrere Minuten dauern.',
   }
 ];
 
