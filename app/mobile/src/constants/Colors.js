@@ -41,15 +41,16 @@ const LightColors = {
   enabledIndicator: '#8fbea7',
   disabledIndicator: '#eeeeee',
   disconnectedIndicator: '#aa0000',
+  sliderGrip: '#888888',
 };
 
 const DarkColors = {
   tabBar: '#111111',
   activeTabIcon: '#dddddd',
   idleTabIcon: '#aaaaaa',
-  activeBorder: '#aa8866',
+  activeBorder: '#aaaaaa',
   idleBorder: '#eeeeee',
-  activeFill: '#66aa88',
+  activeFill: '#559955',
   linkText: '#88eecc',
   dangerText: '#ffaaaa',
   labelText: '#eeeeee',
@@ -59,14 +60,14 @@ const DarkColors = {
   text: '#ffffff',
   screenBase: '#333333',
   areaBase: '#555555',
-  modalBase: '#ffffff',
-  modalOverlay: 'rgba(52,52,52,0.8)',
+  modalBase: '#333333',
+  modalOverlay: 'rgba(88,88,88,0.8)',
   headerBar: '#555555',
   primaryButton: '#448866',
   primaryButtonText: '#ffffff',
-  disabledButton: '#aaaaaa',
-  disabledButtonText: '#888888',
-  dangerButton: '#ff888888',
+  disabledButton: '#888888',
+  disabledButtonText: '#eeeeee',
+  dangerButton: '#ff5555',
   dangerButtonText: '#ffffff',
   inputBase: '#ffffff',
   inputPlaceholder: '#888888',
@@ -84,6 +85,7 @@ const DarkColors = {
   enabledIndicator: '#8fbea7',
   disabledIndicator: '#eeeeee',
   disconnectedIndicator: '#aa0000',
+  sliderGrip: '#eeeeee',
 };
 
 function getColor(label) {
@@ -131,6 +133,7 @@ export const Colors = {
   enabledIndicator: getColor('enabledIndicator'),
   disabledIndicator: getColor('disabledIndicator'),
   disconnectedIndicator: getColor('disconnectedIndicator'),
+  sliderGrip: getColor('sliderGrip'),
 
   background: '#8fbea7',
   primary: '#448866',

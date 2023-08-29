@@ -11,7 +11,7 @@ export const styles = StyleSheet.create({
     backgroundColor: Colors.screenBase,
   },
   label: {
-    color: Colors.text,
+    color: Colors.labelText,
     padding: 4,
     fontFamily: 'Roboto',
   },
@@ -104,8 +104,8 @@ export const styles = StyleSheet.create({
     fontFamily: 'Roboto',
   },
   track: {
-    false: Colors.disabledIndicator,
-    true: Colors.enabledIndicator,
+    false: Colors.idleFill,
+    true: Colors.activeFill,
   },
   notifications: {
     transform: [{ scaleX: .6 }, { scaleY: .6 }],
@@ -130,7 +130,7 @@ export const styles = StyleSheet.create({
   modalHeader: {
     fontSize: 18,
     paddingTop: 16,
-    color: Colors.text,
+    color: Colors.labelText,
     fontFamily: 'Roboto',
   },
   modalClose: {

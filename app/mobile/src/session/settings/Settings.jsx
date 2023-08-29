@@ -41,7 +41,7 @@ export function Settings() {
             </View>
             <View style={styles.optionControl}>
               <Text style={styles.optionLink}>{ state.strings.enableNotifications }</Text>
-              <Switch style={styles.notifications} trackColor={styles.track}/>
+              <Switch value={true} style={styles.notifications} thumbColor={Colors.sliderGrip} ios_backgroundColor={Colors.disabledIndicator} trackColor={styles.track}/>
             </View>
           </TouchableOpacity>
           <View style={styles.divider} />
@@ -64,7 +64,7 @@ export function Settings() {
         <View style={styles.group}>
           <View style={styles.entry}>
             <View style={styles.icon}>
-              <MatIcons name="progress-clock" size={20} color={Colors.text} />
+              <MatIcons name="progress-clock" size={20} color={Colors.labelText} />
             </View>
             <View style={styles.optionControl}>
               <Text style={styles.labelText}>{ state.strings.hourMode }</Text>
@@ -91,7 +91,7 @@ export function Settings() {
           <View style={styles.divider} />
           <TouchableOpacity style={styles.entry} activeOpacity={1}>
             <View style={styles.icon}>
-              <MatIcons name="calendar-month-outline" size={20} color={Colors.text} />
+              <MatIcons name="calendar-month-outline" size={20} color={Colors.labelText} />
             </View>
             <View style={styles.optionControl}>
               <Text style={styles.labelText}>{ state.strings.dateMode }</Text>
