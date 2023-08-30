@@ -26,7 +26,8 @@ func SetAccountSearchable(w http.ResponseWriter, r *http.Request) {
 			ErrResponse(w, http.StatusInternalServerError, res)
 			return res
 		}
-		if res := tx.Model(&account).Update("account_revision", account.AccountRevision+1).Error; res != nil {
+    account.AccountRevision += 1;
+		if res := tx.Model(&account).Update("account_revision", account.AccountRevision).Error; res != nil {
 			return res
 		}
 		return nil

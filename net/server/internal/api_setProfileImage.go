@@ -28,7 +28,8 @@ func SetProfileImage(w http.ResponseWriter, r *http.Request) {
 		if res := store.DB.Save(&account.AccountDetail).Error; res != nil {
 			return res
 		}
-		if res := store.DB.Model(&account).Update("profile_revision", account.ProfileRevision+1).Error; res != nil {
+    account.ProfileRevision += 1;
+		if res := store.DB.Model(&account).Update("profile_revision", account.ProfileRevision).Error; res != nil {
 			return res
 		}
 		return nil
