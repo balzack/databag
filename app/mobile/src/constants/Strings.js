@@ -27,7 +27,7 @@ const Strings = [
     monthEnd: 'dd/mm',
 
     sealUnset: 'Generate a key to enable end-to-end encrypted topics.',
-    sealUnlocked: 'Disabling the sealing key will prevent access to all end-to-end encrypted topics from this device until the key is unlocked again.',
+    sealUnlocked: 'Disabling the sealing key will block access to all end-to-end encrypted topics from this device until the key is unlocked again.',
     sealLocked: 'Unlock the sealing key to support end-to-end encrypted topics on this device.',
     sealDelete: 'Deleting the sealing key will premanently remove access to any existing end-to-end encrypted topics for ALL of your devices.',
     password: 'Password',

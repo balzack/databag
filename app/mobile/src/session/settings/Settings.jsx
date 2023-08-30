@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ActivityIndicator, KeyboardAvoidingView, Modal, ScrollView, View, Switch, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { Linking, ActivityIndicator, KeyboardAvoidingView, Modal, ScrollView, View, Switch, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { styles } from './Settings.styled';
 import { useSettings } from './useSettings.hook';
@@ -29,6 +29,19 @@ export function Settings() {
     }
   };
 
+  const setNotifications = async (notify) => {
+    try {
+      await actions.setNotifications(notify);
+    }
+    catch (err) {
+      console.log(err);
+      Alert.alert(
+        'Failed to update account notifications',
+        'Please try again.',
+      );
+    }
+  }
+
   return (
     <ScrollView style={styles.content}>
       <SafeAreaView edges={['top']}>
@@ -41,7 +54,8 @@ export function Settings() {
             </View>
             <View style={styles.optionControl}>
               <Text style={styles.optionLink}>{ state.strings.enableNotifications }</Text>
-              <Switch value={true} style={styles.notifications} thumbColor={Colors.sliderGrip} ios_backgroundColor={Colors.disabledIndicator} trackColor={styles.track}/>
+              <Switch value={state.pushEnabled} style={styles.notifications} thumbColor={Colors.sliderGrip} ios_backgroundColor={Colors.disabledIndicator}
+                  trackColor={styles.track} onValueChange={setNotifications} />
             </View>
           </TouchableOpacity>
           <View style={styles.divider} />
@@ -183,7 +197,7 @@ export function Settings() {
 
         <Text style={styles.label}>{ state.strings.support }</Text>
         <View style={styles.group}>
-          <TouchableOpacity style={styles.entry} activeOpacity={1}>
+          <TouchableOpacity style={styles.entry} activeOpacity={1} onPress={() => Linking.openURL('https://github.com/balzack/databag/discussions')}>
             <View style={styles.icon}>
               <MatIcons name="help-network-outline" size={20} color={Colors.linkText} />
             </View>

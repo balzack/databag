@@ -13,6 +13,7 @@ export function useSettings() {
     strings: getLanguageStrings(),
     timeFull: false,
     monthLast: false,
+    pushEnabled: null,
 
     editSeal: false,
     sealEnabled: false,
@@ -36,11 +37,12 @@ export function useSettings() {
   }, [profile.state.timeFull, profile.state.monthLast]);
 
   useEffect(() => {
-    const { seal, sealable } = account.state.status;
+    const { seal, sealable, pushEnabled } = account.state.status;
     const sealKey = account.state.sealKey;
     const sealEnabled = seal?.publicKey != null;
     const sealUnlocked = seal?.publicKey === sealKey?.public && sealKey?.private && sealKey?.public;
-    updateState({ sealable, seal, sealKey, sealEnabled, sealUnlocked });
+    updateState({ sealable, seal, sealKey, sealEnabled, sealUnlocked, pushEnabled });
+
   }, [account.state]);
 
   const unlockKey = async () => {
@@ -74,6 +76,9 @@ export function useSettings() {
     setMonthLast: async (flag) => {
       updateState({ monthLast: flag });
       await profile.actions.setMonthLast(flag);
+    },
+    setNotifications: async (flag) => {
+      await account.actions.setNotifications(flag);
     },
     showEditSeal: () => {
       updateState({ editSeal: true, sealPassword: null, sealConfirm: null, hidePassword: true, hideConfirm: true,
