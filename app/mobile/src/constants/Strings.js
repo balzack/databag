@@ -64,7 +64,7 @@ const Strings = [
     topics: 'Sujets',
     messages: 'Messages',
     support: 'Aide',
-    blocked: 'Supprimé',
+    blocked: 'Bloqués',
     account: 'Compte',
     display: 'Format',
     messaging: 'Messagerie',

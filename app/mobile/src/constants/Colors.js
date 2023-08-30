@@ -41,7 +41,7 @@ const LightColors = {
   enabledIndicator: '#8fbea7',
   disabledIndicator: '#eeeeee',
   disconnectedIndicator: '#aa0000',
-  sliderGrip: '#888888',
+  sliderGrip: '#eeeeee',
 };
 
 const DarkColors = {
