@@ -203,8 +203,8 @@ export const styles = StyleSheet.create({
     fontFamily: 'Roboto',
   },
   disabledButton: {
-    marginTop: 32,
-    marginBottom: 16,
+    marginTop: 8,
+    marginBottom: 8,
     paddingTop: 8,
     paddingBottom: 8,
     paddingLeft: 32,
@@ -229,6 +229,29 @@ export const styles = StyleSheet.create({
   dangerButtonText: {
     color: Colors.dangerButtonText,
     fontFamily: 'Roboto',
+  },
+  cancelButton: {
+    margin: 8,
+    paddingTop: 8,
+    paddingBottom: 8,
+    paddingLeft: 32,
+    paddingRight: 32,
+    borderRadius: 4,
+    backgroundColor: Colors.cancelButton,
+  },
+  promptButton: {
+    margin: 8,
+    paddingTop: 8,
+    paddingBottom: 8,
+    paddingLeft: 32,
+    paddingRight: 32,
+    borderRadius: 4,
+    backgroundColor: Colors.primaryButton,
+  },
+  buttons: {
+    display: 'flex',
+    flexDirection: 'row',
+    padding: 8,
   },
 });
 

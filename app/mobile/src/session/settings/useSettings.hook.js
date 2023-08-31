@@ -2,12 +2,17 @@ import { useState, useEffect, useRef, useContext } from 'react';
 import { getLanguageStrings } from 'constants/Strings';
 import { ProfileContext } from 'context/ProfileContext';
 import { AccountContext } from 'context/AccountContext';
+import { AppContext } from 'context/AppContext';
 import { generateSeal, updateSeal, unlockSeal } from 'context/sealUtil';
 
 export function useSettings() {
 
   const profile = useContext(ProfileContext);
   const account = useContext(AccountContext);
+  const app = useContext(AppContext);
+
+  const debounce = useRef(null);
+  const checking = useRef(null);
 
   const [state, setState] = useState({
     strings: getLanguageStrings(),
@@ -15,6 +20,14 @@ export function useSettings() {
     monthLast: false,
     pushEnabled: null,
 
+    login: false,
+    username: null,
+    validated: false,
+    available: true,
+    password: null,
+    confirm: null,
+    
+    logout: false,
     editSeal: false,
     sealEnabled: false,
     sealUnlocked: false,
@@ -33,8 +46,9 @@ export function useSettings() {
 
   useEffect(() => {
     const { timeFull, monthLast } = profile.state;
-    updateState({ timeFull, monthLast });
-  }, [profile.state.timeFull, profile.state.monthLast]);
+    const handle = profile.state.identity.handle;
+    updateState({ timeFull, monthLast, handle });
+  }, [profile.state]);
 
   useEffect(() => {
     const { seal, sealable, pushEnabled } = account.state.status;
@@ -42,7 +56,6 @@ export function useSettings() {
     const sealEnabled = seal?.publicKey != null;
     const sealUnlocked = seal?.publicKey === sealKey?.public && sealKey?.private && sealKey?.public;
     updateState({ sealable, seal, sealKey, sealEnabled, sealUnlocked, pushEnabled });
-
   }, [account.state]);
 
   const unlockKey = async () => {
@@ -79,6 +92,42 @@ export function useSettings() {
     },
     setNotifications: async (flag) => {
       await account.actions.setNotifications(flag);
+    },
+    showLogin: () => {
+      updateState({ login: true, username: state.handle, password: null, confirm: null, validated: true });
+    },
+    hideLogin: () => {
+      updateState({ login: false });
+    },
+    changeLogin: async () => {
+      await account.actions.setLogin(state.username, state.password);
+    },
+    setUsername: (username) => {
+      clearTimeout(debounce.current);
+      checking.current = username;
+      updateState({ username, validated: false });
+      debounce.current = setTimeout(async () => {
+        const cur = JSON.parse(JSON.stringify(username));
+        const available = await profile.actions.getHandleStatus(cur);
+        if (checking.current === cur) {
+          updateState({ available, validated: true });
+        }
+      }, 1000);
+    },
+    setPassword: (password) => {
+      updateState({ password });
+    },
+    setConfirm: (confirm) => {
+      updateState({ confirm });
+    },
+    logout: async () => {
+      await app.actions.logout();
+    },
+    showLogout: () => {
+      updateState({ logout: true });
+    },
+    hideLogout: () => {
+      updateState({ logout: false });
     },
     showEditSeal: () => {
       updateState({ editSeal: true, sealPassword: null, sealConfirm: null, hidePassword: true, hideConfirm: true,

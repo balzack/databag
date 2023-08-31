@@ -2,6 +2,7 @@ import { NativeModules, Platform } from 'react-native'
 
 const Strings = [
   {
+    // settings screen
     visibleRegistry: 'Visible in Registry',
     edit: 'Edit',
     enableNotifications: 'Push Notifications',
@@ -26,6 +27,7 @@ const Strings = [
     monthStart: 'mm/dd',
     monthEnd: 'dd/mm',
 
+    // seal wizard
     sealUnset: 'Generate a key to enable end-to-end encrypted topics.',
     sealUnlocked: 'Disabling the sealing key will block access to all end-to-end encrypted topics from this device until the key is unlocked again.',
     sealLocked: 'Unlock the sealing key to support end-to-end encrypted topics on this device.',
@@ -47,6 +49,13 @@ const Strings = [
     update: 'Update',
     changeKey: 'Change Key Password',
     delayMessage: 'Key generation can take several minutes.',
+
+    // settings modals
+    cancel: 'Cancel',
+    confirmLogout: 'Logout',
+    loggingOut: 'Logging Out',
+    username: 'Username',
+    save: 'Save',
   },
   {
     visibleRegistry: 'Visible dans le Registre',
@@ -57,8 +66,8 @@ const Strings = [
     hourMode: 'Heure',
     dateMode: 'Date',
     language: 'Langue',
-    logout: 'Se Déconnecter',
-    changeLogin: 'Changer le Mot de Passe',
+    logout: 'Déconnecter',
+    changeLogin: 'Modifier l\'Accès',
     deleteAccount: 'Supprimer le Compte',
     contacts: 'Contacts',
     topics: 'Sujets',
@@ -94,6 +103,12 @@ const Strings = [
     update: 'Mise à jour',
     changeKey: 'Changer le mot de passe clé',
     delayMessage: 'La génération de clé peut prendre plusieurs minutes.',
+
+    cancel: 'Annuler',
+    confirmLogout: 'Déconnecter',
+    loggingOut: 'Confirmation de la Déconnexion', 
+    username: 'Nom d\'Utilisateur',
+    save: 'Engegistrer',
   },
   {
     visibleRegistry: 'Visible en el Registro',
@@ -141,6 +156,12 @@ const Strings = [
     update: 'Actualizar',
     changeKey: 'Cambiar clave Contraseña',
     delayMessage: 'La generación de claves puede tardar varios minutos.',
+
+    cancel: 'Cancelar',
+    confirmLogout: 'Cerrar',
+    loggingOut: 'Confirmando cierre de sesión',
+    username: 'Nombre de Usuario',
+    save: 'Guardar',
   },
   {
     visibleRegistry: 'Sichtbar in der Registrierung',
@@ -188,6 +209,12 @@ const Strings = [
     update: 'Aktualisieren',
     changeKey: 'Schlüsselpasswort ändern',
     delayMessage: 'Die Schlüsselgenerierung kann mehrere Minuten dauern.',
+
+    cancel: 'Stornieren',
+    confirmlogout: 'Ausloggen',
+    loggingOut: 'Abmelden bestätigen',
+    username: 'Nutzername',
+    save: 'Speichern',
   }
 ];
 
