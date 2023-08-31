@@ -189,7 +189,7 @@ export function Settings() {
             <View style={styles.control} />
           </TouchableOpacity>
           <View style={styles.divider} />
-          <TouchableOpacity style={styles.entry} activeOpacity={1}>
+          <TouchableOpacity style={styles.entry} activeOpacity={1} onPress={actions.showDelete}>
             <View style={styles.icon}>
               <MatIcons name="trash-can-outline" size={20} color={Colors.dangerText} />
             </View>
@@ -543,6 +543,42 @@ export function Settings() {
           </View>
         </Modal>
  
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={state.delete}
+          supportedOrientations={['portrait', 'landscape']}
+          onRequestClose={actions.hideDelete}
+        >
+          <View style={styles.modalOverlay}>
+            <View style={styles.modalContainer}>
+              <View style={styles.modalClose}>
+                <TouchableOpacity style={styles.closeButton} activeOpacity={1} onPress={actions.hideDelete}>
+                  <MatIcons name="close" size={20} color={Colors.descriptionText} />
+                </TouchableOpacity>
+              </View>
+              <Text style={styles.modalHeader}>{ state.strings.deleteAccount }</Text>
+              <ActivityIndicator style={styles.modalBusy} animating={busy} color={Colors.primary} />
+
+              <View style={styles.modalInput}>
+                <TextInput style={styles.inputText} value={state.sealDelete} onChangeText={actions.setSealDelete}
+                    autoCapitalize={'none'} placeholder={state.strings.typeDelete}
+                    placeholderTextColor={Colors.inputPlaceholder} />
+              </View>
+              { state.sealDelete === state.strings.deleteKey && (
+                <TouchableOpacity style={styles.dangerButton} activeOpacity={1} onPress={() => sealAction(actions.removeKey, 'Remove')}>
+                  <Text style={styles.dangerButtonText}>{ state.strings.delete }</Text>
+                </TouchableOpacity>
+              )}
+              { state.sealDelete !== state.strings.deleteKey && (
+                <View style={styles.disabledButton}>
+                  <Text style={styles.disabledButtonText}>{ state.strings.delete }</Text>
+                </View>
+              )}
+            </View>
+          </View>
+        </Modal>
+        
       </SafeAreaView>
     </ScrollView>
   );

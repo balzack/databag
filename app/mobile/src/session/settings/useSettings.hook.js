@@ -26,6 +26,7 @@ export function useSettings() {
     available: true,
     password: null,
     confirm: null,
+    delete: null,
     
     logout: false,
     editSeal: false,
@@ -106,13 +107,18 @@ export function useSettings() {
       clearTimeout(debounce.current);
       checking.current = username;
       updateState({ username, validated: false });
-      debounce.current = setTimeout(async () => {
-        const cur = JSON.parse(JSON.stringify(username));
-        const available = await profile.actions.getHandleStatus(cur);
-        if (checking.current === cur) {
-          updateState({ available, validated: true });
-        }
-      }, 1000);
+      if (state.handle === username) {
+        updateState({ available: true, validated: true });
+      }
+      else {
+        debounce.current = setTimeout(async () => {
+          const cur = JSON.parse(JSON.stringify(username));
+          const available = await profile.actions.getHandleStatus(cur);
+          if (checking.current === cur) {
+            updateState({ available, validated: true });
+          }
+        }, 1000);
+      }
     },
     setPassword: (password) => {
       updateState({ password });
@@ -122,6 +128,12 @@ export function useSettings() {
     },
     logout: async () => {
       await app.actions.logout();
+    },
+    showDelete: () => {
+      updateState({ delete: true });
+    },
+    hideDelete: () => {
+      updateState({ delete: false });
     },
     showLogout: () => {
       updateState({ logout: true });
