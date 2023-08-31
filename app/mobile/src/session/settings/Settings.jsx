@@ -1,13 +1,15 @@
 import { useState } from 'react';
 import { Linking, ActivityIndicator, KeyboardAvoidingView, Modal, ScrollView, View, Switch, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigate } from 'react-router-dom';
 import { styles } from './Settings.styled';
 import { useSettings } from './useSettings.hook';
 import MatIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Colors from 'constants/Colors';
 
 export function Settings() {
-  
+
+  const navigate = useNavigate();
   const [ busy, setBusy ] = useState(false);
   const { state, actions } = useSettings();
 
@@ -70,6 +72,24 @@ export function Settings() {
         console.log(err);
         Alert.alert(
           'Failed to Change Login',
+          'Please try again.',
+        );
+      }
+      setBusy(false);
+    }
+  }
+
+  const deleteAccount = async () => {
+    if (!busy) {
+      try {
+        setBusy(true);
+        await actions.deleteAccount();
+        navigate('/');
+      }
+      catch (err) {
+        console.log(err);
+        Alert.alert(
+          'Failed to Delete Account',
           'Please try again.',
         );
       }
@@ -561,20 +581,22 @@ export function Settings() {
               <ActivityIndicator style={styles.modalBusy} animating={busy} color={Colors.primary} />
 
               <View style={styles.modalInput}>
-                <TextInput style={styles.inputText} value={state.sealDelete} onChangeText={actions.setSealDelete}
+                <TextInput style={styles.inputText} value={state.confirm} onChangeText={actions.setConfirm}
                     autoCapitalize={'none'} placeholder={state.strings.typeDelete}
                     placeholderTextColor={Colors.inputPlaceholder} />
               </View>
-              { state.sealDelete === state.strings.deleteKey && (
-                <TouchableOpacity style={styles.dangerButton} activeOpacity={1} onPress={() => sealAction(actions.removeKey, 'Remove')}>
-                  <Text style={styles.dangerButtonText}>{ state.strings.delete }</Text>
-                </TouchableOpacity>
-              )}
-              { state.sealDelete !== state.strings.deleteKey && (
-                <View style={styles.disabledButton}>
-                  <Text style={styles.disabledButtonText}>{ state.strings.delete }</Text>
-                </View>
-              )}
+              <View style={styles.buttons}>
+                { state.confirm === state.strings.deleteKey && (
+                  <TouchableOpacity style={styles.dangerButton} activeOpacity={1} onPress={deleteAccount}>
+                    <Text style={styles.dangerButtonText}>{ state.strings.delete }</Text>
+                  </TouchableOpacity>
+                )}
+                { state.confirm !== state.strings.deleteKey && (
+                  <View style={styles.disabledButton}>
+                    <Text style={styles.disabledButtonText}>{ state.strings.delete }</Text>
+                  </View>
+                )}
+              </View>
             </View>
           </View>
         </Modal>

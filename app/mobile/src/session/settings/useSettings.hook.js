@@ -103,6 +103,9 @@ export function useSettings() {
     changeLogin: async () => {
       await account.actions.setLogin(state.username, state.password);
     },
+    deleteAccount: async () => {
+      await app.actions.remove();
+    },
     setUsername: (username) => {
       clearTimeout(debounce.current);
       checking.current = username;
@@ -130,7 +133,7 @@ export function useSettings() {
       await app.actions.logout();
     },
     showDelete: () => {
-      updateState({ delete: true });
+      updateState({ delete: true, confirm: null });
     },
     hideDelete: () => {
       updateState({ delete: false });

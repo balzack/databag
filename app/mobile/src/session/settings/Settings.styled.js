@@ -217,8 +217,8 @@ export const styles = StyleSheet.create({
     fontFamily: 'Roboto',
   },
   dangerButton: {
-    marginTop: 32,
-    marginBottom: 16,
+    marginTop: 8,
+    marginBottom: 8,
     paddingTop: 8,
     paddingBottom: 8,
     paddingLeft: 32,
