@@ -13,7 +13,7 @@ export function Settings() {
   const [ busy, setBusy ] = useState(false);
   const { state, actions } = useSettings();
 
-  const sealAction = async (method, name) => {
+  const sealAction = async (method) => {
     if (!busy) {
       try {
         setBusy(true);
@@ -23,8 +23,8 @@ export function Settings() {
       catch (err) {
         console.log(err);
         Alert.alert(
-          `Failed to ${name} Key`,
-          'Please try again.',
+          state.strings.error,
+          state.strings.tryAgain,
         );
       }
       setBusy(false);
@@ -38,8 +38,8 @@ export function Settings() {
     catch (err) {
       console.log(err);
       Alert.alert(
-        'Failed to update account notifications',
-        'Please try again.',
+        state.strings.error,
+        state.strings.tryAgain,
       );
     }
   }
@@ -53,8 +53,8 @@ export function Settings() {
       catch (err) {
         console.log(err);
         Alert.alert(
-          'Failed to Logout',
-          'Please try again.',
+          state.strings.error,
+          state.strings.tryAgain,
         );
       }
       setBusy(false);
@@ -71,8 +71,8 @@ export function Settings() {
       catch (err) {
         console.log(err);
         Alert.alert(
-          'Failed to Change Login',
-          'Please try again.',
+          state.strings.error,
+          state.strings.tryAgain,
         );
       }
       setBusy(false);
@@ -88,9 +88,9 @@ export function Settings() {
       }
       catch (err) {
         console.log(err);
-        Alert.alert(
-          'Failed to Delete Account',
-          'Please try again.',
+        Alert.alert(  
+          state.strings.error,
+          state.strings.tryAgain,
         );
       }
       setBusy(false);
@@ -312,7 +312,7 @@ export function Settings() {
                     )}
                   </View>
                   { state.sealPassword === state.sealConfirm && state.sealPassword && (
-                    <TouchableOpacity style={styles.enabledButton} activeOpacity={1} onPress={() => sealAction(actions.generateKey, 'Generate')}>
+                    <TouchableOpacity style={styles.enabledButton} activeOpacity={1} onPress={() => sealAction(actions.generateKey)}>
                       <Text style={styles.enabledButtonText}>{ state.strings.generate }</Text>
                     </TouchableOpacity>
                   )}
@@ -343,7 +343,7 @@ export function Settings() {
                     )}
                   </View>
                   { state.sealPassword && (
-                    <TouchableOpacity style={styles.enabledButton} activeOpacity={1} onPress={() => sealAction(actions.unlockKey, 'Unlock')}>
+                    <TouchableOpacity style={styles.enabledButton} activeOpacity={1} onPress={() => sealAction(actions.unlockKey)}>
                       <Text style={styles.enabledButtonText}>{ state.strings.unlock }</Text>
                     </TouchableOpacity>
                   )}
@@ -360,7 +360,7 @@ export function Settings() {
               { state.sealEnabled && state.sealUnlocked && !state.sealRemove && !state.sealUpdate && (
                 <>
                   <Text style={styles.modalDescription}>{ state.strings.sealUnlocked }</Text>
-                  <TouchableOpacity style={styles.enabledButton} activeOpacity={1} onPress={() => sealAction(actions.disableKey, 'Disable')}>
+                  <TouchableOpacity style={styles.enabledButton} activeOpacity={1} onPress={() => sealAction(actions.disableKey)}>
                     <Text style={styles.enabledButtonText}>{ state.strings.disable }</Text>
                   </TouchableOpacity>
                   <TouchableOpacity activeOpacity={1} onPress={actions.showSealUpdate}>
@@ -380,7 +380,7 @@ export function Settings() {
                         placeholderTextColor={Colors.inputPlaceholder} />
                   </View>
                   { state.sealDelete === state.strings.deleteKey && (
-                    <TouchableOpacity style={styles.dangerButton} activeOpacity={1} onPress={() => sealAction(actions.removeKey, 'Remove')}>
+                    <TouchableOpacity style={styles.dangerButton} activeOpacity={1} onPress={() => sealAction(actions.removeKey)}>
                       <Text style={styles.dangerButtonText}>{ state.strings.delete }</Text>
                     </TouchableOpacity>
                   )}
@@ -433,7 +433,7 @@ export function Settings() {
                     )}
                   </View>
                   { state.sealPassword === state.sealConfirm && state.sealPassword && (
-                    <TouchableOpacity style={styles.enabledButton} activeOpacity={1} onPress={() => sealAction(actions.updateKey, 'Update')}>
+                    <TouchableOpacity style={styles.enabledButton} activeOpacity={1} onPress={() => sealAction(actions.updateKey)}>
                       <Text style={styles.enabledButtonText}>{ state.strings.update }</Text>
                     </TouchableOpacity>
                   )}
