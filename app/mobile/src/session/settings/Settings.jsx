@@ -6,6 +6,8 @@ import { styles } from './Settings.styled';
 import { useSettings } from './useSettings.hook';
 import MatIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Colors from 'constants/Colors';
+import { BlurView } from "@react-native-community/blur";
+import { FloatingLabelInput } from 'react-native-floating-label-input';
 
 export function Settings() {
 
@@ -269,7 +271,7 @@ export function Settings() {
           supportedOrientations={['portrait', 'landscape']}
           onRequestClose={actions.hideEditSeal}
         >
-          <KeyboardAvoidingView behavior="height" style={styles.modalOverlay}>
+          <BlurView style={styles.modalOverlay} blurType={Colors.theme} blurAmount={2} reducedTransparencyFallbackColor="black">
             <View style={styles.modalContainer}>
               <View style={styles.modalClose}>
                 <TouchableOpacity style={styles.closeButton} activeOpacity={1} onPress={actions.hideEditSeal}>
@@ -342,16 +344,18 @@ export function Settings() {
                       </TouchableOpacity>
                     )}
                   </View>
-                  { state.sealPassword && (
-                    <TouchableOpacity style={styles.enabledButton} activeOpacity={1} onPress={() => sealAction(actions.unlockKey)}>
-                      <Text style={styles.enabledButtonText}>{ state.strings.unlock }</Text>
-                    </TouchableOpacity>
-                  )}
-                  { !state.sealPassword && (
-                    <View style={styles.disabledButton}>
-                      <Text style={styles.disabledButtonText}>{ state.strings.unlock }</Text>
-                    </View>
-                  )}
+                  <View style={styles.buttons}>
+                    { state.sealPassword && (
+                      <TouchableOpacity style={styles.enabledButton} activeOpacity={1} onPress={() => sealAction(actions.unlockKey)}>
+                        <Text style={styles.enabledButtonText}>{ state.strings.unlock }</Text>
+                      </TouchableOpacity>
+                    )}
+                    { !state.sealPassword && (
+                      <View style={styles.disabledButton}>
+                        <Text style={styles.disabledButtonText}>{ state.strings.unlock }</Text>
+                      </View>
+                    )}
+                  </View>
                   <TouchableOpacity activeOpacity={1} onPress={actions.showSealRemove}>
                     <Text style={styles.dangerText}>{ state.strings.removeSeal }</Text>
                   </TouchableOpacity>
@@ -453,7 +457,7 @@ export function Settings() {
                 </>
               )}
             </View>
-          </KeyboardAvoidingView>
+          </BlurView>
         </Modal>
 
         <Modal
@@ -463,7 +467,7 @@ export function Settings() {
           supportedOrientations={['portrait', 'landscape']}
           onRequestClose={actions.hideLogout}
         >
-          <View style={styles.modalOverlay}>
+          <BlurView style={styles.modalOverlay} blurType={Colors.theme} blurAmount={2} reducedTransparencyFallbackColor="black">
             <View style={styles.modalContainer}>
               <Text style={styles.modalHeader}>{ state.strings.loggingOut }</Text>
               <View style={styles.buttons}>
@@ -475,7 +479,7 @@ export function Settings() {
                 </TouchableOpacity>
               </View>
             </View>
-          </View>
+          </BlurView>
         </Modal>
  
         <Modal
@@ -485,7 +489,7 @@ export function Settings() {
           supportedOrientations={['portrait', 'landscape']}
           onRequestClose={actions.hideLogin}
         >
-          <View style={styles.modalOverlay}>
+          <BlurView style={styles.modalOverlay} blurType={Colors.theme} blurAmount={2} reducedTransparencyFallbackColor="black">
             <View style={styles.modalContainer}>
               <View style={styles.modalClose}>
                 <TouchableOpacity style={styles.closeButton} activeOpacity={1} onPress={actions.hideLogin}>
@@ -496,55 +500,51 @@ export function Settings() {
               <ActivityIndicator style={styles.modalBusy} animating={busy} color={Colors.primary} />
 
               <View style={styles.modalInput}>
-                <TextInput style={styles.inputText} value={state.username} onChangeText={actions.setUsername}
-                    autoCapitalize={'none'} placeholder={state.strings.username}
-                    placeholderTextColor={Colors.inputPlaceholder} />
-                { !state.validated && (
-                  <View style={styles.inputVisibility}>
-                    <MatIcons name="refresh" size={16} color={Colors.inputPlaceholder} />
-                  </View>
-                )}
-                { state.validated && state.available && (
-                  <View style={styles.inputVisibility} activeOpacity={1} onPress={actions.hidePassword}>
-                    <MatIcons name="check" size={16} color={Colors.activeFill} />
-                  </View>
-                )}
-                { state.validated && !state.available && (
-                  <View style={styles.inputVisibility} activeOpacity={1} onPress={actions.hidePassword}>
-                    <MatIcons name="block-helper" size={15} color={Colors.dangerText} />
-                  </View>
-                )}
+                <FloatingLabelInput
+                  label={state.strings.username}
+                  value={state.username}
+
+                  inputStyles={styles.floatingInput}
+                  labelStyles={styles.floatingLable}
+                  customLabelStyles={styles.floatingCustomLabel}
+                  containerStyles={styles.floatingContainer}
+
+                  onChangeText={actions.setUsername}
+                />
               </View>
 
               <View style={styles.modalInput}>
-                <TextInput style={styles.inputText} value={state.password} onChangeText={actions.setPassword}
-                    autoCapitalize={'none'} secureTextEntry={state.hidePassword} placeholder={state.strings.password}
-                    placeholderTextColor={Colors.inputPlaceholder} />
-                { state.hidePassword && (
-                  <TouchableOpacity style={styles.inputVisibility} activeOpacity={1} onPress={actions.showPassword}>
-                    <MatIcons name="eye-outline" size={16} color={Colors.inputPlaceholder} />
-                  </TouchableOpacity>
-                )}
-                { !state.hidePassword && (
-                  <TouchableOpacity style={styles.inputVisibility} activeOpacity={1} onPress={actions.hidePassword}>
-                    <MatIcons name="eye-off-outline" size={16} color={Colors.inputPlaceholder} />
-                  </TouchableOpacity>
-                )}
+                <FloatingLabelInput
+                  label={state.strings.password}
+                  isPassword={true}
+                  value={state.password}
+
+                  inputStyles={styles.floatingInput}
+                  labelStyles={styles.floatingLable}
+                  customLabelStyles={styles.floatingCustomLabel}
+                  containerStyles={styles.floatingContainer}
+
+                  onChangeText={actions.setPassword}
+                  customShowPasswordComponent={<MatIcons name="eye-outline" size={16} color={Colors.inputPlaceholder} />}
+                  customHidePasswordComponent={<MatIcons name="eye-off-outline" size={16} color={Colors.inputPlaceholder} />}
+                />
               </View>
+
               <View style={styles.modalInput}>
-                <TextInput style={styles.inputText} value={state.confirm} onChangeText={actions.setConfirm}
-                    autoCapitalize={'none'} secureTextEntry={state.hideConfirm} placeholder={state.strings.confirmPassword}
-                    placeholderTextColor={Colors.inputPlaceholder} />
-                { state.hideConfirm && (
-                  <TouchableOpacity style={styles.inputVisibility} activeOpacity={1} onPress={actions.showConfirm}>
-                    <MatIcons name="eye-outline" size={16} color={Colors.inputPlaceholder} />
-                  </TouchableOpacity>
-                )}
-                { !state.hideConfirm && (
-                  <TouchableOpacity style={styles.inputVisibility} activeOpacity={1} onPress={actions.showConfirm}>
-                    <MatIcons name="eye-off-outline" size={16} color={Colors.inputPlaceholder} />
-                  </TouchableOpacity>
-                )}
+                <FloatingLabelInput
+                  label={state.strings.confirmPassword}
+                  isPassword={true}
+                  value={state.confirm}
+
+                  inputStyles={styles.floatingInput}
+                  labelStyles={styles.floatingLable}
+                  customLabelStyles={styles.floatingCustomLabel}
+                  containerStyles={styles.floatingContainer}
+
+                  onChangeText={actions.setConfirm}
+                  customShowPasswordComponent={<MatIcons name="eye-outline" size={16} color={Colors.inputPlaceholder} />}
+                  customHidePasswordComponent={<MatIcons name="eye-off-outline" size={16} color={Colors.inputPlaceholder} />}
+                />
               </View>
 
               <View style={styles.buttons}>
@@ -560,7 +560,7 @@ export function Settings() {
                 )}
               </View>
             </View>
-          </View>
+          </BlurView>
         </Modal>
  
         <Modal
@@ -570,7 +570,7 @@ export function Settings() {
           supportedOrientations={['portrait', 'landscape']}
           onRequestClose={actions.hideDelete}
         >
-          <View style={styles.modalOverlay}>
+          <BlurView style={styles.modalOverlay} blurType={Colors.theme} blurAmount={2} reducedTransparencyFallbackColor="black">
             <View style={styles.modalContainer}>
               <View style={styles.modalClose}>
                 <TouchableOpacity style={styles.closeButton} activeOpacity={1} onPress={actions.hideDelete}>
@@ -598,7 +598,7 @@ export function Settings() {
                 )}
               </View>
             </View>
-          </View>
+          </BlurView>
         </Modal>
         
       </SafeAreaView>

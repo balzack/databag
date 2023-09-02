@@ -1,6 +1,7 @@
 import { Appearance } from 'react-native'
 
 const LightColors = {
+  theme: 'light',
   tabBar: '#448866',
   activeTabIcon: '#ffffff',
   idleTabIcon: '#cccccc',
@@ -47,6 +48,7 @@ const LightColors = {
 };
 
 const DarkColors = {
+  theme: 'dark',
   tabBar: '#111111',
   activeTabIcon: '#dddddd',
   idleTabIcon: '#aaaaaa',
@@ -62,7 +64,7 @@ const DarkColors = {
   text: '#ffffff',
   screenBase: '#333333',
   areaBase: '#555555',
-  modalBase: '#333333',
+  modalBase: '#111111',
   modalOverlay: 'rgba(88,88,88,0.8)',
   headerBar: '#555555',
   primaryButton: '#448866',
@@ -73,9 +75,9 @@ const DarkColors = {
   disabledButtonText: '#eeeeee',
   dangerButton: '#ff5555',
   dangerButtonText: '#ffffff',
-  inputBase: '#ffffff',
-  inputPlaceholder: '#888888',
-  inputText: '#444444',
+  inputBase: '#333333',
+  inputPlaceholder: '#aaaaaa',
+  inputText: '#eeeeee',
   connectedIndicator: '#00cc00',
   connectingIndicator: '#0000cc',
   requestedIndicator: '#00bbbb',
@@ -97,6 +99,7 @@ function getColor(label) {
 }
 
 export const Colors = {
+  theme: getColor('theme'),
   tabBar: getColor('tabBar'),
   activeTabIcon: getColor('activeTabIcon'),
   idleTabIcon: getColor('idleTabIcon'),

@@ -95,7 +95,7 @@ export function useSettings() {
       await account.actions.setNotifications(flag);
     },
     showLogin: () => {
-      updateState({ login: true, username: state.handle, password: null, confirm: null, validated: true });
+      updateState({ login: true, username: state.handle, password: '', confirm: '', validated: true });
     },
     hideLogin: () => {
       updateState({ login: false });
@@ -110,7 +110,10 @@ export function useSettings() {
       clearTimeout(debounce.current);
       checking.current = username;
       updateState({ username, validated: false });
-      if (state.handle === username) {
+      if (!username) {
+        updateState({ available: false, validated: false });
+      }
+      else if (state.handle === username) {
         updateState({ available: true, validated: true });
       }
       else {

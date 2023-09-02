@@ -117,7 +117,6 @@ export const styles = StyleSheet.create({
     height: '100%',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: Colors.modalOverlay,
   },
   modalContainer: {
     backgroundColor: Colors.modalBase,
@@ -158,8 +157,10 @@ export const styles = StyleSheet.create({
     paddingBottom: 16,
   },
   modalInput: {
-    marginRight: 32,
-    marginLeft: 32,
+    marginRight: 16,
+    marginLeft: 16,
+    marginTop: 8,
+    marginBottom: 8,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -183,13 +184,14 @@ export const styles = StyleSheet.create({
     borderRadius: 4,
     margin: 4,
     backgroundColor: Colors.inputBase,
+    color: Colors.inputText,
   },
   inputVisibility: {
     position: 'absolute',
     right: 16,
   },
   enabledButton: {
-    marginTop: 32,
+    marginTop: 8,
     marginBottom: 16,
     paddingTop: 8,
     paddingBottom: 8,
@@ -204,7 +206,7 @@ export const styles = StyleSheet.create({
   },
   disabledButton: {
     marginTop: 8,
-    marginBottom: 8,
+    marginBottom: 16,
     paddingTop: 8,
     paddingBottom: 8,
     paddingLeft: 32,
@@ -218,7 +220,7 @@ export const styles = StyleSheet.create({
   },
   dangerButton: {
     marginTop: 8,
-    marginBottom: 8,
+    marginBottom: 16,
     paddingTop: 8,
     paddingBottom: 8,
     paddingLeft: 32,
@@ -231,7 +233,9 @@ export const styles = StyleSheet.create({
     fontFamily: 'Roboto',
   },
   cancelButton: {
-    margin: 8,
+    marginTop: 8,
+    marginBottom: 16,
+    marginRight: 16,
     paddingTop: 8,
     paddingBottom: 8,
     paddingLeft: 32,
@@ -240,7 +244,8 @@ export const styles = StyleSheet.create({
     backgroundColor: Colors.cancelButton,
   },
   promptButton: {
-    margin: 8,
+    marginTop: 8,
+    marginBottom: 16,
     paddingTop: 8,
     paddingBottom: 8,
     paddingLeft: 32,
@@ -252,6 +257,25 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     padding: 8,
+  },
+  floatingInput: {
+    color: Colors.inputText,
+    paddingTop: 12,
+  },
+  floatingLabel: {
+    color: Colors.text,
+  },
+  floatingCustomLabel: {
+    colorFocused: Colors.inputPlaceholder,
+    colorBlurred: Colors.inputPlaceholder,
+    fontSizeFocused: 12,
+    paddingTop: 4,
+  },
+  floatingContainer: {
+    paddingHorizontal: 12,
+    backgroundColor: Colors.inputBase,
+    borderRadius: 8,
+    height: 52,
   },
 });
 
