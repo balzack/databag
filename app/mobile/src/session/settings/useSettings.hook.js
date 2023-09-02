@@ -91,11 +91,12 @@ export function useSettings() {
       updateState({ monthLast: flag });
       await profile.actions.setMonthLast(flag);
     },
-    setNotifications: async (flag) => {
-      await account.actions.setNotifications(flag);
+    setNotifications: async (pushEnabled) => {
+      updateState({ pushEnabled });
+      await account.actions.setNotifications(pushEnabled);
     },
     showLogin: () => {
-      updateState({ login: true, username: state.handle, password: '', confirm: '', validated: true });
+      updateState({ login: true, username: state.handle, password: '', available: true, validated: true });
     },
     hideLogin: () => {
       updateState({ login: false });
