@@ -144,6 +144,7 @@ export const styles = StyleSheet.create({
   modalBusy: {
   },
   modalDescription: {
+    textAlign: 'center',
     fontSize: 14,
     color: Colors.descriptionText,
     paddingLeft: 16,

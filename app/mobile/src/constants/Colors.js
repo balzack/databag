@@ -69,7 +69,7 @@ const DarkColors = {
   headerBar: '#555555',
   primaryButton: '#448866',
   primaryButtonText: '#ffffff',
-  cancelButton: '#888888',
+  cancelButton: '#606060',
   cancelButtonText: '#eeeeee',
   disabledButton: '#888888',
   disabledButtonText: '#aaaaaa',

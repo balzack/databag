@@ -12,7 +12,7 @@ const Strings = [
     dateMode: 'Date',
     language: 'Language',
     logout: 'Logout',
-    changeLogin: 'Username and Password',
+    changeLogin: 'Change Credentials',
     deleteAccount: 'Delete Account',
     contacts: 'Contacts',
     topics: 'Topics',
@@ -51,6 +51,7 @@ const Strings = [
     update: 'Change',
     changeKey: 'Change Key Password',
     delayMessage: 'Key generation can take several minutes.',
+    changeMessage: 'Here you can change the username and/or password for your account.',
 
     // settings modals
     cancel: 'Cancel',
@@ -108,6 +109,7 @@ const Strings = [
     update: 'Mise à jour',
     changeKey: 'Changer le mot de passe clé',
     delayMessage: 'La génération de clé peut prendre plusieurs minutes.',
+    changeMessage: 'Ici, vous pouvez modifier le nom d\'utilisateur et/ou le mot de passe de votre compte.',
 
     cancel: 'Annuler',
     confirmLogout: 'Déconnecter',
@@ -164,6 +166,7 @@ const Strings = [
     update: 'Actualizar',
     changeKey: 'Cambiar clave Contraseña',
     delayMessage: 'La generación de claves puede tardar varios minutos.',
+    changeMessage: 'Aquí puede cambiar el nombre de usuario y/o contraseña de su cuenta.',
 
     cancel: 'Cancelar',
     confirmLogout: 'Cerrar',
@@ -220,6 +223,7 @@ const Strings = [
     update: 'Aktualisieren',
     changeKey: 'Schlüsselpasswort ändern',
     delayMessage: 'Die Schlüsselgenerierung kann mehrere Minuten dauern.',
+    changeMessage: 'Hier können Sie den Benutzernamen und/oder das Passwort für Ihr Konto ändern.',
 
     cancel: 'Stornieren',
     confirmlogout: 'Ausloggen',
