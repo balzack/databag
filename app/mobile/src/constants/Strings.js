@@ -12,7 +12,7 @@ const Strings = [
     dateMode: 'Date',
     language: 'Language',
     logout: 'Logout',
-    changeLogin: 'Change Login',
+    changeLogin: 'Username and Password',
     deleteAccount: 'Delete Account',
     contacts: 'Contacts',
     topics: 'Topics',
@@ -48,7 +48,7 @@ const Strings = [
     enableTopics: 'Enable Sealed Topics',
     manageTopics: 'Manage Sealing Key',
     changePassword: 'Change sealing key password.',
-    update: 'Update',
+    update: 'Change',
     changeKey: 'Change Key Password',
     delayMessage: 'Key generation can take several minutes.',
 
@@ -58,6 +58,7 @@ const Strings = [
     loggingOut: 'Logging Out',
     username: 'Username',
     save: 'Save',
+    notAvailable: 'Username Not Available',
   },
   {
     visibleRegistry: 'Visible dans le Registre',
@@ -113,6 +114,7 @@ const Strings = [
     loggingOut: 'Confirmation de la Déconnexion', 
     username: 'Nom d\'Utilisateur',
     save: 'Engegistrer',
+    notAvailable: 'Nom d\'Utilisateur Indisponible',
   },
   {
     visibleRegistry: 'Visible en el Registro',
@@ -168,6 +170,7 @@ const Strings = [
     loggingOut: 'Confirmando cierre de sesión',
     username: 'Nombre de Usuario',
     save: 'Guardar',
+    notAvailable: 'Nombre de Usuario No Disponible',
   },
   {
     visibleRegistry: 'Sichtbar in der Registrierung',
@@ -223,6 +226,7 @@ const Strings = [
     loggingOut: 'Abmelden bestätigen',
     username: 'Nutzername',
     save: 'Speichern',
+    notAvailable: 'Benutzername Nicht Verfügbar',
   }
 ];
 

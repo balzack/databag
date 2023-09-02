@@ -195,30 +195,27 @@ export function Settings() {
             <View style={styles.icon}>
               <MatIcons name="logout" size={20} color={Colors.linkText} />
             </View>
-            <View style={styles.option}>
+            <View style={styles.optionControl}>
               <Text style={styles.optionLink}>{ state.strings.logout }</Text>
             </View>
-            <View style={styles.control} />
           </TouchableOpacity>
           <View style={styles.divider} />
           <TouchableOpacity style={styles.entry} activeOpacity={1} onPress={actions.showLogin}>
             <View style={styles.icon}>
               <MatIcons name="login" size={20} color={Colors.linkText} />
             </View>
-            <View style={styles.option}>
+            <View style={styles.optionControl}>
               <Text style={styles.optionLink}>{ state.strings.changeLogin }</Text>
             </View>
-            <View style={styles.control} />
           </TouchableOpacity>
           <View style={styles.divider} />
           <TouchableOpacity style={styles.entry} activeOpacity={1} onPress={actions.showDelete}>
             <View style={styles.icon}>
               <MatIcons name="trash-can-outline" size={20} color={Colors.dangerText} />
             </View>
-            <View style={styles.option}>
+            <View style={styles.optionControl}>
               <Text style={styles.dangerLink}>{ state.strings.deleteAccount }</Text>
             </View>
-            <View style={styles.control} />
           </TouchableOpacity>
         </View>
 
@@ -503,6 +500,11 @@ export function Settings() {
                 <FloatingLabelInput
                   label={state.strings.username}
                   value={state.username}
+                  autoCapitalize={'none'} 
+                  spellCheck={false}
+                  staticLabel={false}
+                  autoCorrect={false}
+                  autoComplete={'off'}
 
                   inputStyles={styles.floatingInput}
                   labelStyles={styles.floatingLable}
@@ -518,6 +520,8 @@ export function Settings() {
                   label={state.strings.password}
                   isPassword={true}
                   value={state.password}
+                  autoCapitalize={'none'} 
+                  spellCheck={false}
 
                   inputStyles={styles.floatingInput}
                   labelStyles={styles.floatingLable}
@@ -529,31 +533,21 @@ export function Settings() {
                   customHidePasswordComponent={<MatIcons name="eye-off-outline" size={16} color={Colors.inputPlaceholder} />}
                 />
               </View>
-
-              <View style={styles.modalInput}>
-                <FloatingLabelInput
-                  label={state.strings.confirmPassword}
-                  isPassword={true}
-                  value={state.confirm}
-
-                  inputStyles={styles.floatingInput}
-                  labelStyles={styles.floatingLable}
-                  customLabelStyles={styles.floatingCustomLabel}
-                  containerStyles={styles.floatingContainer}
-
-                  onChangeText={actions.setConfirm}
-                  customShowPasswordComponent={<MatIcons name="eye-outline" size={16} color={Colors.inputPlaceholder} />}
-                  customHidePasswordComponent={<MatIcons name="eye-off-outline" size={16} color={Colors.inputPlaceholder} />}
-                />
+              <View style={styles.availableStatus}>
+                { state.validated && !state.available && (
+                  <Text style={styles.notAvailable}>{ state.strings.notAvailable }</Text>
+                )}
               </View>
-
-              <View style={styles.buttons}>
-                { (state.password !== state.confirm || !state.password || !state.validated || !state.username) && (
+              <View style={styles.hintButtons}>
+                <TouchableOpacity style={styles.cancelButton} activeOpacity={1} onPress={actions.hideLogin}>
+                  <Text style={styles.cancelButtonText}>{ state.strings.cancel }</Text>
+                </TouchableOpacity>
+                { (!state.available || !state.password || !state.validated || !state.username) && (
                   <View style={styles.disabledButton}>
                     <Text style={styles.disabledButtonText}>{ state.strings.update }</Text>
                   </View>
                 )}
-                { state.password === state.confirm && state.password && state.validated && state.username && (
+                { state.available && state.password && state.validated && state.username && (
                   <TouchableOpacity style={styles.promptButton} activeOpacity={1} onPress={changeLogin}>
                     <Text style={styles.enabledButtonText}>{ state.strings.update }</Text>
                   </TouchableOpacity>

@@ -120,6 +120,8 @@ export function useSettings() {
         debounce.current = setTimeout(async () => {
           const cur = JSON.parse(JSON.stringify(username));
           const available = await profile.actions.getHandleStatus(cur);
+console.log("CHECKED:", available);
+
           if (checking.current === cur) {
             updateState({ available, validated: true });
           }

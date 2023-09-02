@@ -60,7 +60,7 @@ export const styles = StyleSheet.create({
     height: 40,
   },
   icon: {
-    flex: 2,
+    flex: 1,
     alignItems: 'center',
   },
   option: {
@@ -70,7 +70,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
   },
   optionControl: {
-    flex: 12,
+    flex: 8,
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
@@ -142,7 +142,6 @@ export const styles = StyleSheet.create({
     padding: 12,
   },
   modalBusy: {
-    padding: 8,
   },
   modalDescription: {
     fontSize: 14,
@@ -243,6 +242,10 @@ export const styles = StyleSheet.create({
     borderRadius: 4,
     backgroundColor: Colors.cancelButton,
   },
+  cancelButtonText: {
+    color: Colors.cancelButtonText,
+    fontFamily: 'Roboto',
+  },
   promptButton: {
     marginTop: 8,
     marginBottom: 16,
@@ -252,6 +255,11 @@ export const styles = StyleSheet.create({
     paddingRight: 32,
     borderRadius: 4,
     backgroundColor: Colors.primaryButton,
+  },
+  hintButtons: {
+    display: 'flex',
+    flexDirection: 'row',
+    paddingBottom: 8,
   },
   buttons: {
     display: 'flex',
@@ -276,6 +284,12 @@ export const styles = StyleSheet.create({
     backgroundColor: Colors.inputBase,
     borderRadius: 8,
     height: 52,
+  },
+  availableStatus: {
+    height: 18,
+  },
+  notAvailable: {
+    color: Colors.dangerText,
   },
 });
 
