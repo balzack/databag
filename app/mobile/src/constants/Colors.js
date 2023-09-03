@@ -1,7 +1,7 @@
 import { Appearance } from 'react-native'
 
 const LightColors = {
-  theme: 'light',
+  overlay: 'dark',
   tabBar: '#448866',
   activeTabIcon: '#ffffff',
   idleTabIcon: '#cccccc',
@@ -23,7 +23,7 @@ const LightColors = {
   primaryButton: '#448866',
   primaryButtonText: '#ffffff',
   cancelButton: '#888888',
-  cancelButtonText: '#aaaaaa',
+  cancelButtonText: '#ffffff',
   disabledButton: '#dddddd',
   disabledButtonText: '#aaaaaa',
   dangerButton: '#ff5555',
@@ -48,7 +48,7 @@ const LightColors = {
 };
 
 const DarkColors = {
-  theme: 'dark',
+  overlay: 'dark',
   tabBar: '#111111',
   activeTabIcon: '#dddddd',
   idleTabIcon: '#aaaaaa',

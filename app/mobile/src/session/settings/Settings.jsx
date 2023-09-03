@@ -268,7 +268,7 @@ export function Settings() {
           supportedOrientations={['portrait', 'landscape']}
           onRequestClose={actions.hideEditSeal}
         >
-          <BlurView style={styles.modalOverlay} blurType={Colors.theme} blurAmount={2} reducedTransparencyFallbackColor="black">
+          <BlurView style={styles.modalOverlay} blurType={Colors.overlay} blurAmount={2} reducedTransparencyFallbackColor="black">
             <View style={styles.modalContainer}>
               <View style={styles.modalClose}>
                 <TouchableOpacity style={styles.closeButton} activeOpacity={1} onPress={actions.hideEditSeal}>
@@ -457,7 +457,7 @@ export function Settings() {
           supportedOrientations={['portrait', 'landscape']}
           onRequestClose={actions.hideLogout}
         >
-          <BlurView style={styles.modalOverlay} blurType={Colors.theme} blurAmount={2} reducedTransparencyFallbackColor="black">
+          <BlurView style={styles.modalOverlay} blurType={Colors.overlay} blurAmount={2} reducedTransparencyFallbackColor="black">
             <View style={styles.modalContainer}>
               <Text style={styles.modalHeader}>{ state.strings.loggingOut }</Text>
               <View style={styles.buttons}>
@@ -479,7 +479,7 @@ export function Settings() {
           supportedOrientations={['portrait', 'landscape']}
           onRequestClose={actions.hideLogin}
         >
-          <BlurView style={styles.modalOverlay} blurType={Colors.theme} blurAmount={2} reducedTransparencyFallbackColor="black">
+          <BlurView style={styles.modalOverlay} blurType={Colors.overlay} blurAmount={2} reducedTransparencyFallbackColor="black">
             <View style={styles.modalContainer}>
               <View style={styles.modalClose}>
                 <TouchableOpacity style={styles.closeButton} activeOpacity={1} onPress={actions.hideLogin}>
@@ -558,7 +558,7 @@ export function Settings() {
           supportedOrientations={['portrait', 'landscape']}
           onRequestClose={actions.hideDelete}
         >
-          <BlurView style={styles.modalOverlay} blurType={Colors.theme} blurAmount={2} reducedTransparencyFallbackColor="black">
+          <BlurView style={styles.modalOverlay} blurType={Colors.overlay} blurAmount={2} reducedTransparencyFallbackColor="black">
             <View style={styles.modalContainer}>
               <View style={styles.modalClose}>
                 <TouchableOpacity style={styles.closeButton} activeOpacity={1} onPress={actions.hideDelete}>
