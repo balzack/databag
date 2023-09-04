@@ -39,6 +39,10 @@ export function useSettings() {
     hidePassword: true,
     sealRemove: false,
     sealUpdate: false,
+
+    blockedContacts: false,
+    blockedTopics: false,
+    blockedMessages: false,
   });
 
   const updateState = (value) => {
@@ -94,6 +98,24 @@ export function useSettings() {
     setNotifications: async (pushEnabled) => {
       updateState({ pushEnabled });
       await account.actions.setNotifications(pushEnabled);
+    },
+    showBlockedContacts: () => {
+      updateState({ blockedContacts: true });
+    },
+    hideBlockedContacts: () => {
+      updateState({ blockedContacts: false });
+    },
+    showBlockedTopics: () => {
+      updateState({ blockedTopics: true });
+    },
+    hideBlockedTopics: () => {
+      updateState({ blockedTopics: false });
+    },
+    showBlockedMessages: () => {
+      updateState({ blockedMessages: true });
+    },
+    hideBlockedMessages: () => {
+      updateState({ blockedMessages: false });
     },
     showLogin: () => {
       updateState({ login: true, username: state.handle, password: '', available: true, validated: true });

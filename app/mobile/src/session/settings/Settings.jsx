@@ -221,7 +221,7 @@ export function Settings() {
 
         <Text style={styles.label}>{ state.strings.blocked }</Text>
         <View style={styles.group}>
-          <TouchableOpacity style={styles.entry} activeOpacity={1}>
+          <TouchableOpacity style={styles.entry} activeOpacity={1} onPress={actions.showBlockedContacts}>
             <View style={styles.icon}>
               <MatIcons name="account-multiple-outline" size={20} color={Colors.linkText} />
             </View>
@@ -230,7 +230,7 @@ export function Settings() {
             </View>
           </TouchableOpacity>
           <View style={styles.divider} />
-          <TouchableOpacity style={styles.entry} activeOpacity={1}>
+          <TouchableOpacity style={styles.entry} activeOpacity={1} onPress={actions.showBlockedTopics}>
             <View style={styles.icon}>
               <MatIcons name="book-open-outline" size={20} color={Colors.linkText} />
             </View>
@@ -239,7 +239,7 @@ export function Settings() {
             </View>
           </TouchableOpacity>
           <View style={styles.divider} />
-          <TouchableOpacity style={styles.entry} activeOpacity={1}>
+          <TouchableOpacity style={styles.entry} activeOpacity={1} onPress={actions.showBlockedMessages}>
             <View style={styles.icon}>
               <MatIcons name="comment-text-multiple-outline" size={20} color={Colors.linkText} />
             </View>
@@ -597,7 +597,69 @@ export function Settings() {
             </View>
           </BlurView>
         </Modal>
-        
+  
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={state.blockedContacts}
+          supportedOrientations={['portrait', 'landscape']}
+          onRequestClose={state.hideBlockedContacts}
+        >
+          <BlurView style={styles.modalOverlay} blurType={Colors.overlay} blurAmount={2} reducedTransparencyFallbackColor="black">
+            <View style={styles.modalContainer}>
+              <View style={styles.modalClose}>
+                <TouchableOpacity style={styles.closeButton} activeOpacity={1} onPress={actions.hideBlockedContacts}>
+                  <MatIcons name="close" size={20} color={Colors.descriptionText} />
+                </TouchableOpacity>
+              </View>
+              <Text style={styles.modalHeader}>{ state.strings.blockedContacts }</Text>
+              <ActivityIndicator style={styles.modalBusy} animating={busy} color={Colors.primary} />
+            </View>
+          </BlurView>
+        </Modal>
+   
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={state.blockedTopics}
+          supportedOrientations={['portrait', 'landscape']}
+          onRequestClose={state.hideBlockedTopics}
+        >
+          <BlurView style={styles.modalOverlay} blurType={Colors.overlay} blurAmount={2} reducedTransparencyFallbackColor="black">
+            <View style={styles.modalContainer}>
+              <View style={styles.modalClose}>
+                <TouchableOpacity style={styles.closeButton} activeOpacity={1} onPress={actions.hideBlockedTopics}>
+                  <MatIcons name="close" size={20} color={Colors.descriptionText} />
+                </TouchableOpacity>
+              </View>
+              <Text style={styles.modalHeader}>{ state.strings.blockedContacts }</Text>
+              <ActivityIndicator style={styles.modalBusy} animating={busy} color={Colors.primary} />
+            </View>
+          </BlurView>
+        </Modal>
+    
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={state.blockedMessages}
+          supportedOrientations={['portrait', 'landscape']}
+          onRequestClose={actions.hideBlockedMessages}
+        >
+          <BlurView style={styles.modalOverlay} blurType={Colors.overlay} blurAmount={2} reducedTransparencyFallbackColor="black">
+            <View style={styles.modalContainer}>
+              <View style={styles.modalClose}>
+                <TouchableOpacity style={styles.closeButton} activeOpacity={1} onPress={actions.hideBlockedMessages}>
+                  <MatIcons name="close" size={20} color={Colors.descriptionText} />
+                </TouchableOpacity>
+              </View>
+              <Text style={styles.modalHeader}>{ state.strings.blockedContacts }</Text>
+              <ActivityIndicator style={styles.modalBusy} animating={busy} color={Colors.primary} />
+            </View>
+          </BlurView>
+        </Modal>
+       
+    
+     
       </SafeAreaView>
     </ScrollView>
   );
