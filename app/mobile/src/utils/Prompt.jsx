@@ -1,5 +1,5 @@
-import { useContext } from 'react';
-import { Modal, View, Text, TouchableOpacity } from 'react-native';
+import { useContext, useState } from 'react';
+import { Modal, View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { DisplayContext } from 'context/DisplayContext';
 import { BlurView } from "@react-native-community/blur";
 import { styles } from './Prompt.styled';
@@ -7,40 +7,81 @@ import { Colors } from 'constants/Colors';
 
 export function Prompt() {
   const display = useContext(DisplayContext);
+  const [busy, setBusy] = useState(false);
 
-  const okModal = () => {
-    if (display.state.modalOk.action) {
-      display.state.modalOk.action();
+  const okPrompt = async () => {
+    if (!busy) {
+      const { action, failed } = display.state.prompt?.ok || {};
+      if (action) {
+        setBusy(true);
+        try {
+          await action();
+          display.actions.hidePrompt();
+        }
+        catch (err) {
+          if (failed) {
+            failed();
+          }
+        }
+        setBusy(false);
+      }
+      else {
+        display.actions.hidePrompt();
+      }
     }
-    display.actions.hideModal();
   }
 
   return (
-    <Modal
-      animationType="fade"
-      transparent={true}
-      visible={display.state.modal}
-      supportedOrientations={['portrait', 'landscape']}
-      onRequestClose={display.actions.hideModal}
-    >
-      <BlurView style={styles.modalOverlay} blurType={Colors.overlay} blurAmount={2} reducedTransparencyFallbackColor="black">
-        <View style={styles.modalContainer}>
-          <Text style={styles.modalHeader}>{ display.state.modalTitle }</Text>
-          <View style={styles.modalButtons}>
-            { display.state.modalCancel && (
-              <TouchableOpacity style={styles.cancelButton} activeOpacity={1} onPress={display.actions.hideModal}>
-                <Text style={styles.cancelButtonText}>{ display.state.modalCancel.label }</Text>
-              </TouchableOpacity>
-            )}
-            { display.state.modalOk && (
-              <TouchableOpacity style={styles.okButton} activeOpacity={1} onPress={okModal}>
-                <Text style={styles.okButtonText}>{ display.state.modalOk.label }</Text>
-              </TouchableOpacity>
-            )}
+    <>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={display.state.prompt != null}
+        supportedOrientations={['portrait', 'landscape']}
+        onRequestClose={display.actions.hidePrompt}
+      >
+        <BlurView style={styles.modalOverlay} blurType={Colors.overlay} blurAmount={2} reducedTransparencyFallbackColor="black">
+          <View style={styles.modalContainer}>
+            <Text style={styles.modalHeader}>{ display.state.prompt?.title }</Text>
+            <View style={styles.modalButtons}>
+              { display.state.prompt?.cancel && (
+                <TouchableOpacity style={styles.cancelButton} activeOpacity={1} onPress={display.actions.hidePrompt}>
+                  <Text style={styles.cancelButtonText}>{ display.state.prompt?.cancel?.label }</Text>
+                </TouchableOpacity>
+              )}
+              { display.state.prompt?.ok && (
+                <TouchableOpacity style={styles.okButton} activeOpacity={1} onPress={okPrompt}>
+                  { !busy && (
+                    <Text style={styles.okButtonText}>{ display.state.prompt?.ok?.label }</Text>
+                  )}
+                  { busy && (
+                    <ActivityIndicator animating={true} color={Colors.primaryButtonText} />
+                  )}
+                </TouchableOpacity>
+              )}
+            </View>
           </View>
-        </View>
-      </BlurView>
-    </Modal>
+        </BlurView>
+      </Modal>
+
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={display.state.alert != null}
+        supportedOrientations={['portrait', 'landscape']}
+        onRequestClose={display.actions.hideAlert}
+      >
+        <BlurView style={styles.modalOverlay} blurType={Colors.overlay} blurAmount={2} reducedTransparencyFallbackColor="black">
+          <View style={styles.modalContainer}>
+            <Text style={styles.modalHeader}>{ display.state.alert?.title }</Text>
+            <Text style={styles.modalMessage}>{ display.state.alert?.message }</Text>
+            <TouchableOpacity style={styles.okButton} activeOpacity={1} onPress={display.actions.hideAlert}>
+              <Text style={styles.okButtonText}>{ display.state.alert?.ok }</Text>
+            </TouchableOpacity>
+          </View>
+        </BlurView>
+      </Modal>
+    </>
   );
 }
 

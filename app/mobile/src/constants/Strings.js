@@ -67,9 +67,11 @@ const Strings = [
     blockedMessages: 'Blocked Messages',
     restoreMessage: 'Restore Message?',
     close: 'Close',
+    ok: 'OK',
     noBlockedContacts: 'No Blocked Contacts',
     noBlockedTopics: 'No Blocked Topics',
     noBlockedMessages: 'No Blocked Messages',
+    restore: 'Restore',
   },
   {
     visibleRegistry: 'Visible dans le Registre',
@@ -134,9 +136,11 @@ const Strings = [
     blockedMessages: 'Messages Bloqués',
     restoreMessage: 'Restaurer le Message?',
     close: 'Fermer',
+    ok: 'OK',
     noBlockedContacts: 'Aucun Contacts Bloqués',
     noBlockedTopics: 'Aucun Sujet Bloqué',
     noBlockedMessages: 'Aucun Message Bloqué',
+    restore: 'Restaurer',
   },
   {
     visibleRegistry: 'Visible en el Registro',
@@ -201,9 +205,11 @@ const Strings = [
     blockedMessages: 'Mensajes Bloqueados',
     restoreMessage: 'Restaurar Mensaje?',
     close: 'Cerrar',
+    ok: 'OK',
     noBlockedContacts: 'No Hay ContactosBbloqueados',
     noBlockedTopics: 'No Hay Temas Bloqueados ',
     noBlockedMessages: 'No Hay Mensajes Bloqueados',
+    restore: 'Restaurar',
   },
   {
     visibleRegistry: 'Sichtbar in der Registrierung',
@@ -268,9 +274,11 @@ const Strings = [
     blockedMessages: 'Blockierte Nachrichten',
     restoreMessage: 'Nachricht Wiederherstellen?',
     close: 'Schließen',
+    ok: 'OK',
     noBlockedContacts: 'Keine Blockierten Kontakte',
     noBlockedTopics: 'Keine Blockierten Themen',
     noBlockedMessages: 'Keine Blockierten Nachrichten',
+    restore: 'Wiederherstellen',
   }
 ];
 

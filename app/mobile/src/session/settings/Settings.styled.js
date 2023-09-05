@@ -330,9 +330,10 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     height: 48,
     paddingLeft: 16,
+    paddingRight: 16,
     alignItems: 'center',
-    borderBottomWidth: 1,
     borderColor: Colors.itemDivider,
+    borderBottomWidth: 1,
   },
   detail: {
     paddingLeft: 12,
@@ -341,6 +342,9 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     flexGrow: 1,
     flexShrink: 1,
+  },
+  restore: {
+    color: Colors.linkText,
   },
   name: {
     color: Colors.text,

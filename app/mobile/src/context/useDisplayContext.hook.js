@@ -2,10 +2,8 @@ import { useEffect, useContext, useState, useRef } from 'react';
 
 export function useDisplayContext() {
   const [state, setState] = useState({
-    modal: false,
-    modalTitle: null,
-    modalCancel: null,
-    modalOk: null,
+    prompt: null,
+    alert: null,
   });
 
   const updateState = (value) => {
@@ -13,11 +11,17 @@ export function useDisplayContext() {
   }
 
   const actions = {
-    showModal: (modalTitle, modalCancel, modalOk) => {
-      updateState({ modal: true, modalTitle, modalCancel, modalOk });
+    showPrompt: (prompt) => {
+      updateState({ prompt });
     },
-    hideModal: () => {
-      updateState({ modal: false });
+    hidePrompt: () => {
+      updateState({ prompt: null });
+    },
+    showAlert: (alert) => {
+      updateState({ alert });
+    },
+    hideAlert: () => {
+      updateState({ alert: null });
     },
   };
 

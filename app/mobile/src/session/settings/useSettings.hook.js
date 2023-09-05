@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useContext } from 'react';
+import { Alert } from 'react-native';
 import { getLanguageStrings } from 'constants/Strings';
 import { ProfileContext } from 'context/ProfileContext';
 import { AccountContext } from 'context/AccountContext';
@@ -201,11 +202,16 @@ export function useSettings() {
       updateState({ delete: false });
     },
     promptLogout: () => {
-      display.actions.showModal(
-        state.strings.loggingOut,
-        { label: state.strings.cancel },
-        { label: state.strings.confirmLogout, action: app.actions.logout }
-      );
+      display.actions.showPrompt({
+        title: state.strings.loggingOut,
+        ok: { label: state.strings.confirmLogout, action: app.actions.logout, failed: () => {
+          Alert.alert(
+            state.strings.error,
+            state.strings.tryAgain,
+          );
+        }},
+        cancel: { label: state.strings.cancel },
+      });
     },
     showEditSeal: () => {
       updateState({ editSeal: true, sealPassword: '', hidePassword: true, hideConfirm: true,

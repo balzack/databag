@@ -92,7 +92,7 @@ const DarkColors = {
   errorIndicator: '#ffaaaa',
   horizontalDivider: '#888888',
   verticalDivider: '#aaaaaa',
-  itemDivider: '#eeeeee',
+  itemDivider: '#555555',
   unreadIndicator: '#00aa00',
   enabledIndicator: '#8fbea7',
   disabledIndicator: '#eeeeee',

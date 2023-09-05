@@ -111,6 +111,7 @@ export function Settings() {
           <Text style={styles.name} numberOfLines={1} ellipsizeMode={'tail'}>{ item.name }</Text>
           <Text style={styles.handle} numberOfLines={1} ellipsizeMode={'tail'}>{ item.handle }</Text>
         </View>
+        <Text style={styles.restore}>{ state.strings.restore }</Text>
       </TouchableOpacity>
     )
   }
@@ -643,7 +644,7 @@ export function Settings() {
                   <MatIcons name="close" size={20} color={Colors.descriptionText} />
                 </TouchableOpacity>
               </View>
-              <Text style={styles.modalHeader}>{ state.strings.blockedContacts }</Text>
+              <Text style={styles.modalHeader}>{ state.strings.blockedTopics }</Text>
               <ActivityIndicator style={styles.modalBusy} animating={busy} color={Colors.primary} />
               <View style={styles.modalList}></View>
               <View style={styles.rightButton}>
@@ -669,7 +670,7 @@ export function Settings() {
                   <MatIcons name="close" size={20} color={Colors.descriptionText} />
                 </TouchableOpacity>
               </View>
-              <Text style={styles.modalHeader}>{ state.strings.blockedContacts }</Text>
+              <Text style={styles.modalHeader}>{ state.strings.blockedMessages }</Text>
               <ActivityIndicator style={styles.modalBusy} animating={busy} color={Colors.primary} />
               <View style={styles.modalList}></View>
               <View style={styles.rightButton}>

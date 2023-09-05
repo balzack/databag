@@ -23,7 +23,7 @@ export const styles = StyleSheet.create({
     color: Colors.labelText,
     fontFamily: 'Roboto',
   },
-  modalDescription: {
+  modalMessage: {
     textAlign: 'center',
     fontSize: 14,
     color: Colors.descriptionText,
@@ -54,9 +54,11 @@ export const styles = StyleSheet.create({
     marginRight: 16,
     paddingTop: 8,
     paddingBottom: 8,
-    paddingLeft: 32,
-    paddingRight: 32,
+    display: 'flex',
+    alignItems: 'center',
     borderRadius: 4,
+    width: 128,
+    height: 32,
     backgroundColor: Colors.cancelButton,
   },
   cancelButtonText: {
@@ -68,9 +70,11 @@ export const styles = StyleSheet.create({
     marginBottom: 16,
     paddingTop: 8,
     paddingBottom: 8,
-    paddingLeft: 32,
-    paddingRight: 32,
+    display: 'flex',
+    alignItems: 'center',
     borderRadius: 4,
+    width: 128,
+    height: 32,
     backgroundColor: Colors.primaryButton,
   },
   okButtonText: {
