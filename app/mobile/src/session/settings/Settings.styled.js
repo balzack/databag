@@ -20,6 +20,9 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
   },
+  dismissButton: {
+    padding: 12,
+  },
   idleRadioCircle: {
     borderWidth: 1,
     borderColor: Colors.activeBorder,
@@ -138,9 +141,6 @@ export const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'flex-end',
   },
-  closeButton: {
-    padding: 12,
-  },
   modalBusy: {
   },
   modalDescription: {
@@ -232,6 +232,23 @@ export const styles = StyleSheet.create({
     color: Colors.dangerButtonText,
     fontFamily: 'Roboto',
   },
+  closeButton: {
+    marginTop: 8,
+    marginBottom: 16,
+    marginRight: 16,
+    paddingTop: 8,
+    paddingBottom: 8,
+    paddingLeft: 32,
+    paddingRight: 32,
+    borderRadius: 4,
+    borderWidth: 1,
+    borderColor: Colors.cancelButton,
+    backgroundColor: Colors.closeButton,
+  },
+  closeButtonText: {
+    color: Colors.closeButtonText,
+    fontFamily: 'Roboto',
+  },
   cancelButton: {
     marginTop: 8,
     marginBottom: 16,
@@ -291,6 +308,21 @@ export const styles = StyleSheet.create({
   },
   notAvailable: {
     color: Colors.dangerText,
+  },
+  rightButton: {
+    width: '100%',
+    display: 'flex',
+    alignItems: 'flex-end',
+  },
+  modalList: {
+    width: '100%',
+    minHeight: 128,
+    maxHeight: 256,
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    marginBottom: 8,
+    borderColor: Colors.horizontalDivider,
+    display: 'flex'
   },
 });
 

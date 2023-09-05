@@ -271,7 +271,7 @@ export function Settings() {
           <BlurView style={styles.modalOverlay} blurType={Colors.overlay} blurAmount={2} reducedTransparencyFallbackColor="black">
             <View style={styles.modalContainer}>
               <View style={styles.modalClose}>
-                <TouchableOpacity style={styles.closeButton} activeOpacity={1} onPress={actions.hideEditSeal}>
+                <TouchableOpacity style={styles.dismissButton} activeOpacity={1} onPress={actions.hideEditSeal}>
                   <MatIcons name="close" size={20} color={Colors.descriptionText} />
                 </TouchableOpacity>
               </View>
@@ -482,7 +482,7 @@ export function Settings() {
           <BlurView style={styles.modalOverlay} blurType={Colors.overlay} blurAmount={2} reducedTransparencyFallbackColor="black">
             <View style={styles.modalContainer}>
               <View style={styles.modalClose}>
-                <TouchableOpacity style={styles.closeButton} activeOpacity={1} onPress={actions.hideLogin}>
+                <TouchableOpacity style={styles.dismissButton} activeOpacity={1} onPress={actions.hideLogin}>
                   <MatIcons name="close" size={20} color={Colors.descriptionText} />
                 </TouchableOpacity>
               </View>
@@ -561,7 +561,7 @@ export function Settings() {
           <BlurView style={styles.modalOverlay} blurType={Colors.overlay} blurAmount={2} reducedTransparencyFallbackColor="black">
             <View style={styles.modalContainer}>
               <View style={styles.modalClose}>
-                <TouchableOpacity style={styles.closeButton} activeOpacity={1} onPress={actions.hideDelete}>
+                <TouchableOpacity style={styles.dismissButton} activeOpacity={1} onPress={actions.hideDelete}>
                   <MatIcons name="close" size={20} color={Colors.descriptionText} />
                 </TouchableOpacity>
               </View>
@@ -608,12 +608,18 @@ export function Settings() {
           <BlurView style={styles.modalOverlay} blurType={Colors.overlay} blurAmount={2} reducedTransparencyFallbackColor="black">
             <View style={styles.modalContainer}>
               <View style={styles.modalClose}>
-                <TouchableOpacity style={styles.closeButton} activeOpacity={1} onPress={actions.hideBlockedContacts}>
+                <TouchableOpacity style={styles.dismissButton} activeOpacity={1} onPress={actions.hideBlockedContacts}>
                   <MatIcons name="close" size={20} color={Colors.descriptionText} />
                 </TouchableOpacity>
               </View>
               <Text style={styles.modalHeader}>{ state.strings.blockedContacts }</Text>
               <ActivityIndicator style={styles.modalBusy} animating={busy} color={Colors.primary} />
+              <View style={styles.modalList}></View>
+              <View style={styles.rightButton}>
+                <TouchableOpacity style={styles.closeButton} activeOpacity={1} onPress={actions.hideBlockedContacts}>
+                  <Text style={styles.closeButtonText}>{ state.strings.close }</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </BlurView>
         </Modal>
@@ -628,12 +634,18 @@ export function Settings() {
           <BlurView style={styles.modalOverlay} blurType={Colors.overlay} blurAmount={2} reducedTransparencyFallbackColor="black">
             <View style={styles.modalContainer}>
               <View style={styles.modalClose}>
-                <TouchableOpacity style={styles.closeButton} activeOpacity={1} onPress={actions.hideBlockedTopics}>
+                <TouchableOpacity style={styles.dismissButton} activeOpacity={1} onPress={actions.hideBlockedTopics}>
                   <MatIcons name="close" size={20} color={Colors.descriptionText} />
                 </TouchableOpacity>
               </View>
               <Text style={styles.modalHeader}>{ state.strings.blockedContacts }</Text>
               <ActivityIndicator style={styles.modalBusy} animating={busy} color={Colors.primary} />
+              <View style={styles.modalList}></View>
+              <View style={styles.rightButton}>
+                <TouchableOpacity style={styles.closeButton} activeOpacity={1} onPress={actions.hideBlockedTopics}>
+                  <Text style={styles.closeButtonText}>{ state.strings.close }</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </BlurView>
         </Modal>
@@ -648,17 +660,21 @@ export function Settings() {
           <BlurView style={styles.modalOverlay} blurType={Colors.overlay} blurAmount={2} reducedTransparencyFallbackColor="black">
             <View style={styles.modalContainer}>
               <View style={styles.modalClose}>
-                <TouchableOpacity style={styles.closeButton} activeOpacity={1} onPress={actions.hideBlockedMessages}>
+                <TouchableOpacity style={styles.dismissButton} activeOpacity={1} onPress={actions.hideBlockedMessages}>
                   <MatIcons name="close" size={20} color={Colors.descriptionText} />
                 </TouchableOpacity>
               </View>
               <Text style={styles.modalHeader}>{ state.strings.blockedContacts }</Text>
               <ActivityIndicator style={styles.modalBusy} animating={busy} color={Colors.primary} />
+              <View style={styles.modalList}></View>
+              <View style={styles.rightButton}>
+                <TouchableOpacity style={styles.closeButton} activeOpacity={1} onPress={actions.hideBlockedMessages}>
+                  <Text style={styles.closeButtonText}>{ state.strings.close }</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </BlurView>
         </Modal>
-       
-    
      
       </SafeAreaView>
     </ScrollView>
