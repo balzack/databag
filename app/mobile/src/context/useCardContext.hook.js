@@ -424,7 +424,7 @@ export function useCardContext() {
       return await getContactChannelTopic(node, cardToken, channelId, topicId);
     },
     setContactRevision: async (cardId, revision) => {
-      const { guid } = acccess.current || {};
+      const { guid } = access.current || {};
       await store.actions.setCardRequestStatus(guid, { revision });
       updateState({ viewRevision: revision });
     },
@@ -449,12 +449,12 @@ export function useCardContext() {
       setCardChannelField(cardId, channelId, 'topicMarker', marker, 'syncRevision', revision);
     },
     setCardFlag: async (cardId) => {
-      const { guid } = acccess.current || {};
+      const { guid } = access.current || {};
       await store.actions.setCardItemBlocked(guid, cardId);
       setCardField(cardId, 'blocked', true);
     },
     clearCardFlag: async (cardId) => {
-      const { guid } = acccess.current || {};
+      const { guid } = access.current || {};
       await store.actions.clearCardItemBlocked(guid, cardId);
       setCardField(cardId, 'blocked', false);
     },

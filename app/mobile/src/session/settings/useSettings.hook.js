@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useContext } from 'react';
 import { getLanguageStrings } from 'constants/Strings';
 import { ProfileContext } from 'context/ProfileContext';
 import { AccountContext } from 'context/AccountContext';
+import { CardContext } from 'context/CardContext';
 import { AppContext } from 'context/AppContext';
 import { generateSeal, updateSeal, unlockSeal } from 'context/sealUtil';
 
@@ -10,6 +11,7 @@ export function useSettings() {
   const profile = useContext(ProfileContext);
   const account = useContext(AccountContext);
   const app = useContext(AppContext);
+  const card = useContext(CardContext);
 
   const debounce = useRef(null);
   const checking = useRef(null);
@@ -43,6 +45,10 @@ export function useSettings() {
     blockedContacts: false,
     blockedTopics: false,
     blockedMessages: false,
+
+    contacts: [],
+    topics: [],
+    messages: [],
   });
 
   const updateState = (value) => {
@@ -62,6 +68,35 @@ export function useSettings() {
     const sealUnlocked = seal?.publicKey === sealKey?.public && sealKey?.private && sealKey?.public;
     updateState({ sealable, seal, sealKey, sealEnabled, sealUnlocked, pushEnabled });
   }, [account.state]);
+
+  const setCardItem = (item) => {
+    const { profile, cardId } = item?.card || {};
+    return {
+      cardId: cardId,
+      name: profile?.name,
+      handle: `${profile?.handle} / ${profile?.node}`,
+      blocked: item.card.blocked,
+      logo: profile?.imageSet ? card.actions.getCardImageUrl(cardId) : 'avatar',
+    }
+  };
+
+  useEffect(() => {
+    const cards = Array.from(card.state.cards.values());
+    const items = cards.map(setCardItem);
+    const filtered = items.filter(item => {
+      return item.blocked;
+    });
+    filtered.sort((a, b) => {
+      if (a.name === b.name) {
+        return 0;
+      }
+      if (!a.name || (a.name < b.name)) {
+        return -1;
+      }
+      return 1;
+    });
+    updateState({ contacts: filtered });
+  }, [card.state]);
 
   const unlockKey = async () => {
     const sealKey = unlockSeal(state.seal, state.sealPassword);

@@ -147,7 +147,7 @@ export function useContact(contact) {
     },
     blockContact: async () => {
       await applyAction(async () => {
-        await card.actions.setCardBlocked(state.cardId);
+        await card.actions.setCardFlag(state.cardId);
       });
     },
     reportContact: async () => {

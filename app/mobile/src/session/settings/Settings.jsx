@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Linking, ActivityIndicator, KeyboardAvoidingView, Modal, ScrollView, View, Switch, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { Linking, ActivityIndicator, FlatList, KeyboardAvoidingView, Modal, ScrollView, View, Switch, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigate } from 'react-router-dom';
 import { styles } from './Settings.styled';
@@ -8,6 +8,7 @@ import MatIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Colors from 'constants/Colors';
 import { BlurView } from "@react-native-community/blur";
 import { FloatingLabelInput } from 'react-native-floating-label-input';
+import { Logo } from 'utils/Logo';
 
 export function Settings() {
 
@@ -45,6 +46,9 @@ export function Settings() {
       );
     }
   }
+
+  const unblockContact = (cardId) => {
+  };
 
   const logout = async () => {
     if (!busy) {
@@ -97,6 +101,18 @@ export function Settings() {
       }
       setBusy(false);
     }
+  }
+
+  const BlockedContact = ({ item }) => {
+    return (
+      <TouchableOpacity style={styles.item} onPress={() => unblockContact(item.cardId)}>
+        <Logo src={item.logo} width={32} height={32} radius={6} />
+        <View style={styles.detail}>
+          <Text style={styles.name} numberOfLines={1} ellipsizeMode={'tail'}>{ item.name }</Text>
+          <Text style={styles.handle} numberOfLines={1} ellipsizeMode={'tail'}>{ item.handle }</Text>
+        </View>
+      </TouchableOpacity>
+    )
   }
 
   return (
@@ -614,7 +630,18 @@ export function Settings() {
               </View>
               <Text style={styles.modalHeader}>{ state.strings.blockedContacts }</Text>
               <ActivityIndicator style={styles.modalBusy} animating={busy} color={Colors.primary} />
-              <View style={styles.modalList}></View>
+              <View style={styles.modalList}>
+                { state.contacts.length === 0 && (
+                  <Text style={styles.emptyLabel}>{ state.strings.noBlockContacts }</Text>
+                )}
+                { state.contacts.length !== 0 && (
+                  <FlatList
+                    data={state.contacts}
+                    renderItem={BlockedContact}
+                    keyExtractor={item => item.cardId}
+                  />
+                )}
+              </View>
               <View style={styles.rightButton}>
                 <TouchableOpacity style={styles.closeButton} activeOpacity={1} onPress={actions.hideBlockedContacts}>
                   <Text style={styles.closeButtonText}>{ state.strings.close }</Text>

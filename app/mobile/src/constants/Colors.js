@@ -42,6 +42,7 @@ const LightColors = {
   errorIndicator: '#ffaaaa',
   horizontalDivider: '#bbbbbb',
   verticalDivider: '#aaaaaa',
+  itemDivider: '#eeeeee',
   unreadIndicator: '#00aa00',
   enabledIndicator: '#8fbea7',
   disabledIndicator: '#eeeeee',
@@ -91,6 +92,7 @@ const DarkColors = {
   errorIndicator: '#ffaaaa',
   horizontalDivider: '#888888',
   verticalDivider: '#aaaaaa',
+  itemDivider: '#eeeeee',
   unreadIndicator: '#00aa00',
   enabledIndicator: '#8fbea7',
   disabledIndicator: '#eeeeee',
@@ -144,6 +146,7 @@ export const Colors = {
   errorIndicator: getColor('errorIndicator'),
   horizontalDivider: getColor('horizontalDivider'),
   verticalDivider: getColor('verticalDivider'),
+  itemDivider: getColor('itemDivider'),
   unreadIndicator: getColor('unreadIndicator'),
   enabledIndicator: getColor('enabledIndicator'),
   disabledIndicator: getColor('disabledIndicator'),
@@ -165,14 +168,12 @@ export const Colors = {
   enabled: '#444444',
   lightgrey: '#bbbbbb',
   disabled: '#aaaaaa',
-  text: '#444444',
   link: '#0077CC',
   lightText: '#686868',
 
   active: '#222222',
   idle: '#707070',
 
-  itemDivider: '#eeeeee',
   
   connected: '#4488FF',
   connecting: '#dd88ff',
