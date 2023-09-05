@@ -5,6 +5,7 @@ import { AccountContext } from 'context/AccountContext';
 import { CardContext } from 'context/CardContext';
 import { AppContext } from 'context/AppContext';
 import { generateSeal, updateSeal, unlockSeal } from 'context/sealUtil';
+import { DisplayContext } from 'context/DisplayContext';
 
 export function useSettings() {
 
@@ -12,6 +13,7 @@ export function useSettings() {
   const account = useContext(AccountContext);
   const app = useContext(AppContext);
   const card = useContext(CardContext);
+  const display = useContext(DisplayContext);
 
   const debounce = useRef(null);
   const checking = useRef(null);
@@ -30,7 +32,6 @@ export function useSettings() {
     confirm: null,
     delete: null,
     
-    logout: false,
     editSeal: false,
     sealEnabled: false,
     sealUnlocked: false,
@@ -199,11 +200,12 @@ export function useSettings() {
     hideDelete: () => {
       updateState({ delete: false });
     },
-    showLogout: () => {
-      updateState({ logout: true });
-    },
-    hideLogout: () => {
-      updateState({ logout: false });
+    promptLogout: () => {
+      display.actions.showModal(
+        state.strings.loggingOut,
+        { label: state.strings.cancel },
+        { label: state.strings.confirmLogout, action: app.actions.logout }
+      );
     },
     showEditSeal: () => {
       updateState({ editSeal: true, sealPassword: '', hidePassword: true, hideConfirm: true,

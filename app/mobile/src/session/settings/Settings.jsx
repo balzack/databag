@@ -207,7 +207,7 @@ export function Settings() {
 
         <Text style={styles.label}>{ state.strings.account }</Text>
         <View style={styles.group}>
-          <TouchableOpacity style={styles.entry} activeOpacity={1} onPress={actions.showLogout}>
+          <TouchableOpacity style={styles.entry} activeOpacity={1} onPress={actions.promptLogout}>
             <View style={styles.icon}>
               <MatIcons name="logout" size={20} color={Colors.linkText} />
             </View>
@@ -466,28 +466,6 @@ export function Settings() {
           </BlurView>
         </Modal>
 
-        <Modal
-          animationType="fade"
-          transparent={true}
-          visible={state.logout}
-          supportedOrientations={['portrait', 'landscape']}
-          onRequestClose={actions.hideLogout}
-        >
-          <BlurView style={styles.modalOverlay} blurType={Colors.overlay} blurAmount={2} reducedTransparencyFallbackColor="black">
-            <View style={styles.modalContainer}>
-              <Text style={styles.modalHeader}>{ state.strings.loggingOut }</Text>
-              <View style={styles.buttons}>
-                <TouchableOpacity style={styles.cancelButton} activeOpacity={1} onPress={actions.hideLogout}>
-                  <Text style={styles.enabledButtonText}>{ state.strings.cancel }</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.promptButton} activeOpacity={1} onPress={logout}>
-                  <Text style={styles.enabledButtonText}>{ state.strings.confirmLogout }</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </BlurView>
-        </Modal>
- 
         <Modal
           animationType="fade"
           transparent={true}

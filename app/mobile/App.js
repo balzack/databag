@@ -12,14 +12,17 @@ import { RingContextProvider } from 'context/RingContext'
 import { ChannelContextProvider } from 'context/ChannelContext';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { ConversationContextProvider } from 'context/ConversationContext';
+import { DisplayContextProvider } from 'context/DisplayContext';
 import { LogBox } from 'react-native';
 import { Root } from 'src/root/Root';
 import { Access } from 'src/access/Access';
 import { Dashboard } from 'src/dashboard/Dashboard';
 import { Session } from 'src/session/Session';
+import { Prompt } from 'utils/Prompt';
 import ReceiveSharingIntent from 'react-native-receive-sharing-intent';
 import { Platform, PermissionsAndroid } from 'react-native';
 import { initUnifiedPush } from 'react-native-unifiedpush-connector';
+
 
 // silence warning: Sending `onAnimatedValueUpdate` with no listeners registered
 //LogBox.ignoreLogs(['Sending']);
@@ -58,21 +61,24 @@ export default function App() {
               <AccountContextProvider>
                 <ProfileContextProvider>
                   <ConversationContextProvider>
-                    <AppContextProvider>
-                      <SafeAreaProvider>
-                        <NativeRouter>
-                          <Routes>
-                            <Route path="/" element={ <Root /> } />
-                            <Route path="/admin" element={ <Access mode="admin" /> } />
-                            <Route path="/dashboard" element={ <Dashboard /> } />
-                            <Route path="/login" element={ <Access mode="login" /> } />
-                            <Route path="/reset" element={ <Access mode="reset" /> } />
-                            <Route path="/create" element={ <Access mode="create" /> } />
-                            <Route path="/session" element={ <Session sharing={sharing} clearSharing={clearSharing} /> } />
-                          </Routes>
-                        </NativeRouter>
-                      </SafeAreaProvider>
-                    </AppContextProvider>
+                    <DisplayContextProvider>
+                      <AppContextProvider>
+                        <SafeAreaProvider>
+                          <NativeRouter>
+                            <Routes>
+                              <Route path="/" element={ <Root /> } />
+                              <Route path="/admin" element={ <Access mode="admin" /> } />
+                              <Route path="/dashboard" element={ <Dashboard /> } />
+                              <Route path="/login" element={ <Access mode="login" /> } />
+                              <Route path="/reset" element={ <Access mode="reset" /> } />
+                              <Route path="/create" element={ <Access mode="create" /> } />
+                              <Route path="/session" element={ <Session sharing={sharing} clearSharing={clearSharing} /> } />
+                            </Routes>
+                            <Prompt />
+                          </NativeRouter>
+                        </SafeAreaProvider>
+                      </AppContextProvider>
+                    </DisplayContextProvider>
                   </ConversationContextProvider>
                 </ProfileContextProvider>
               </AccountContextProvider>
