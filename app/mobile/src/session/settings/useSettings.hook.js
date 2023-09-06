@@ -8,6 +8,7 @@ import { ChannelContext } from 'context/ChannelContext';
 import { AppContext } from 'context/AppContext';
 import { generateSeal, updateSeal, unlockSeal } from 'context/sealUtil';
 import { DisplayContext } from 'context/DisplayContext';
+import { getChannelSubjectLogo } from 'context/channelUtil';
 
 export function useSettings() {
 
@@ -20,6 +21,8 @@ export function useSettings() {
 
   const debounce = useRef(null);
   const checking = useRef(null);
+  const channels = useRef([]);
+  const cardChannels = useRef([]);
 
   const [state, setState] = useState({
     strings: getLanguageStrings(),
@@ -79,18 +82,26 @@ export function useSettings() {
       cardId: cardId,
       name: profile?.name,
       handle: `${profile?.handle} / ${profile?.node}`,
-      blocked: item.card.blocked,
       logo: profile?.imageSet ? card.actions.getCardImageUrl(cardId) : 'avatar',
     }
   };
 
+  const setChannelItem = (item) => {
+    const profileGuid = profile.state?.identity?.guid;
+    const { logo, subject } = getChannelSubjectLogo(null, profileGuid, item, card.state.cards, card.actions.getCardImageUrl);
+    return {
+      cardId: null,
+      channelId: item.channelId,
+      created: item.detail.created,
+      logo: logo,
+      subject: subject,
+    }
+  };
+
   useEffect(() => {
-    const cards = Array.from(card.state.cards.values());
-    const items = cards.map(setCardItem);
-    const filtered = items.filter(item => {
-      return item.blocked;
-    });
-    filtered.sort((a, b) => {
+    const contacts = Array.from(card.state.cards.values());
+    const filtered = contacts.filter(contact => contact.card.blocked);
+    const sorted = filtered.map(setCardItem).sort((a, b) => {
       if (a.name === b.name) {
         return 0;
       }
@@ -99,21 +110,41 @@ export function useSettings() {
       }
       return 1;
     });
-    updateState({ contacts: filtered });
+    updateState({ contacts: sorted });
 
-    cards.forEach(contact => {
-      const channels = Array.from(contact.channels);
-      channels.forEach(item => {
-        console.log(item.blocked);
-      });
+    contacts.current = [];
+    contacts.forEach(contact => {
+      const filtered = Array.from(contact.channels.values()).filter(topic => topic.blocked);
+      const mapped = filtered.map(setChannelItem).map(item => ({ ...item, cardId: contact.card.cardId }));
+      cardChannels.current = cardChannels.current.concat(mapped);
     });
+    const merged = cardChannels.current.concat(channels.current);
+    const sortedMerge = merged.sort((a, b) => {
+      if (a.created === b.created) {
+        return 0;
+      }
+      if (a.created < b.created) {
+        return -1;
+      }
+      return 1;
+    });
+    updateState({ topics: sortedMerge });
   }, [card.state]);
 
   useEffect(() => {
-    const channels = Array.from(channel.state.channels);
-    channels.forEach(item => {
-      console.log(item.blocked);
+    const filtered = Array.from(channel.state.channels.values()).filter(topic => topic.blocked);
+    channels.current = filtered.map(setChannelItem);
+    const merged = cardChannels.current.concat(channels.current);
+    const sortedMerge = merged.sort((a, b) => {
+      if (a.created === b.created) {
+        return 0;
+      }
+      if (a.created < b.created) {
+        return -1;
+      }
+      return 1;
     });
+    updateState({ topics: sortedMerge });
   }, [channel.state]);
 
   const unlockKey = async () => {

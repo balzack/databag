@@ -133,6 +133,17 @@ export function Settings() {
   };
 
   const BlockedTopic = ({ item }) => {
+    return (
+      <View style={styles.item}>
+        <Logo src={item.logo} width={32} height={32} radius={6} />
+        <View style={styles.detail}>
+          <Text style={styles.name} numberOfLines={1} ellipsizeMode={'tail'}>{ item.subject }</Text>
+        </View>
+        <TouchableOpacity onPress={() => unblock(actions.unblockTopic, item.cardId, item.channelId)}>
+          <Text style={styles.restore}>{ state.strings.restore }</Text>
+        </TouchableOpacity>
+      </View>
+    )
   };
 
   const BlockedMessage = ({ item }) => {
@@ -676,9 +687,9 @@ export function Settings() {
                     <Text style={styles.emptyLabelText}>{ state.strings.noBlockedTopics }</Text>
                   </View>
                 )}
-                { state.contacts.length !== 0 && (
+                { state.topics.length !== 0 && (
                   <FlatList
-                    data={state.contacts}
+                    data={state.topics}
                     renderItem={BlockedTopic}
                     keyExtractor={item => item.topicId}
                   />
