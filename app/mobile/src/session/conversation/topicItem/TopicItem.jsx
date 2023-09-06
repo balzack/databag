@@ -193,11 +193,9 @@ export function TopicItem({ item, focused, focus, hosting, remove, update, block
               <AntIcons name="edit" size={24} color={Colors.white} />
             </TouchableOpacity>
           )}
-          { !state.editable && (
-            <TouchableOpacity style={styles.icon} onPress={hideMessage}>
-              <MatIcons name="block-helper" size={18} color={Colors.white} />
-            </TouchableOpacity>
-          )}
+          <TouchableOpacity style={styles.icon} onPress={hideMessage}>
+            <MatIcons name="block-helper" size={18} color={Colors.white} />
+          </TouchableOpacity>
           { !state.editable && (
             <TouchableOpacity style={styles.icon} onPress={reportMessage}>
               <MatIcons name="flag-outline" size={22} color={Colors.white} />

@@ -473,8 +473,12 @@ export function useCardContext() {
       await store.actions.setCardChannelTopicBlocked(guid, cardId, channelId, topicId, true);
     },
     clearTopicFlag: async (cardId, channelId, topicId) => {
-      const { guid } = access.current;
+      const { guid } = access.current || {};
       await store.actions.setCardChannelTopicBlocked(guid, cardId, channelId, topicId, false);
+    },
+    getFlaggedTopics: async () => {
+      const { guid } = access.current || {};
+      return await store.actions.getCardChannelTopicBlocked(guid);
     },
     addChannelAlert: async (cardId, channelId) => {
       const { detail, profile } = (cards.current.get(cardId) || {}).card;

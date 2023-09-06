@@ -147,6 +147,17 @@ export function Settings() {
   };
 
   const BlockedMessage = ({ item }) => {
+    return (
+      <View style={styles.item}>
+        <Logo src={item.logo} width={32} height={32} radius={6} />
+        <View style={styles.detail}>
+          <Text style={styles.name} numberOfLines={1} ellipsizeMode={'tail'}>{ item.handle }</Text>
+        </View>
+        <TouchableOpacity onPress={() => unblock(actions.unblockMessage, { cardId: item.cardId, channelId: item.channelId, topicId: item.topicId })}>
+          <Text style={styles.restore}>{ state.strings.restore }</Text>
+        </TouchableOpacity>
+      </View>
+    )
   };
 
   return (
@@ -726,11 +737,11 @@ export function Settings() {
                     <Text style={styles.emptyLabelText}>{ state.strings.noBlockedMessages }</Text>
                   </View>
                 )}
-                { state.contacts.length !== 0 && (
+                { state.messages.length !== 0 && (
                   <FlatList
-                    data={state.contacts}
+                    data={state.messages}
                     renderItem={BlockedMessage}
-                    keyExtractor={item => item.messageId}
+                    keyExtractor={item => `${item.cardId}.${item.channelId}.${item.topicId}`}
                   />
                 )}
               </View>

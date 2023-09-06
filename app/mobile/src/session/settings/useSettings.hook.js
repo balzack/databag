@@ -98,6 +98,32 @@ export function useSettings() {
     }
   };
 
+  const setTopicItem = (item) => {
+    const { cardId, channelId, topicId, detail } = item;
+    if (cardId) {
+      const contact = card.state.cards.get(cardId);
+      const { handle, node, imageSet } = contact?.card?.profile || {};
+      return {
+        cardId: cardId,
+        channelId: channelId,
+        topicId: topicId,
+        handle: `${handle} / ${node}`,
+        logo: imageSet ? card.actions.getCardImageUrl(cardId) : 'avatar',
+        created: detail?.created,
+      }
+    }
+    else {
+      const { handle, node } = profile?.state.identity || {};
+      return {
+        channelId: channelId,
+        topicId: topicId,
+        handle: `${handle} / ${node}`,
+        logo: profile?.state?.imageUrl ? profile.state.imageUrl : 'avatar',
+        created: detail?.created,
+      }
+    }
+  };
+
   useEffect(() => {
     const contacts = Array.from(card.state.cards.values());
     const filtered = contacts.filter(contact => contact.card.blocked);
@@ -195,8 +221,20 @@ export function useSettings() {
     hideBlockedTopics: () => {
       updateState({ blockedTopics: false });
     },
-    showBlockedMessages: () => {
-      updateState({ blockedMessages: true });
+    showBlockedMessages: async () => {
+      const cardMessages = await card.actions.getFlaggedTopics();
+      const channelMessages = await channel.actions.getFlaggedTopics();
+      const merged = cardMessages.map(setTopicItem).concat(channelMessages.map(setTopicItem));
+      const sortedMerge = merged.sort((a, b) => {
+        if (a.created === b.created) {
+          return 0;
+        }
+        if (a.created < b.created) {
+          return -1;
+        }
+        return 1;
+      });
+      updateState({ blockedMessages: true, messages: sortedMerge });
     },
     hideBlockedMessages: () => {
       updateState({ blockedMessages: false });
@@ -324,6 +362,16 @@ export function useSettings() {
       }
       else {
         await channel.actions.clearChannelFlag(channelId);
+      }
+    },
+    unblockMessage: async ({ cardId, channelId, topicId }) => {
+      if (cardId) {
+        await card.actions.clearTopicFlag(cardId, channelId, topicId);
+        updateState({ messages: state.messages.filter(item => item.cardId !== cardId || item.channelId !== channelId || item.topicId !== topicId) });
+      }
+      else {
+        await channel.actions.clearTopicFlag(channelId, topicId);
+        updateState({ messages: state.messages.filter(item => item.channelId !== channelId || item.topicId !== topicId) });
       }
     },
   };
