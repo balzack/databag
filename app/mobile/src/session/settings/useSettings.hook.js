@@ -4,6 +4,7 @@ import { getLanguageStrings } from 'constants/Strings';
 import { ProfileContext } from 'context/ProfileContext';
 import { AccountContext } from 'context/AccountContext';
 import { CardContext } from 'context/CardContext';
+import { ChannelContext } from 'context/ChannelContext';
 import { AppContext } from 'context/AppContext';
 import { generateSeal, updateSeal, unlockSeal } from 'context/sealUtil';
 import { DisplayContext } from 'context/DisplayContext';
@@ -14,6 +15,7 @@ export function useSettings() {
   const account = useContext(AccountContext);
   const app = useContext(AppContext);
   const card = useContext(CardContext);
+  const channel = useContext(ChannelContext);
   const display = useContext(DisplayContext);
 
   const debounce = useRef(null);
@@ -98,7 +100,21 @@ export function useSettings() {
       return 1;
     });
     updateState({ contacts: filtered });
+
+    cards.forEach(contact => {
+      const channels = Array.from(contact.channels);
+      channels.forEach(item => {
+        console.log(item.blocked);
+      });
+    });
   }, [card.state]);
+
+  useEffect(() => {
+    const channels = Array.from(channel.state.channels);
+    channels.forEach(item => {
+      console.log(item.blocked);
+    });
+  }, [channel.state]);
 
   const unlockKey = async () => {
     const sealKey = unlockSeal(state.seal, state.sealPassword);
@@ -267,6 +283,9 @@ export function useSettings() {
     },
     removeKey: async () => {
       await removeKey();
+    },
+    unblockContact: async (cardId) => {
+      await card.actions.clearCardFlag(cardId);
     },
   };
 

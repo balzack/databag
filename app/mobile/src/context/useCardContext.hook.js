@@ -63,13 +63,13 @@ export function useCardContext() {
   }
 
   const setCardField = (cardId, field, value) => {
-    const card = cards.current.get(cardId);
-    if (card) {
-      card[field] = value;
-      cards.current.set(cardId, { ...card });
+    const item = cards.current.get(cardId);
+    if (item?.card) {
+      item.card[field] = value;
+      cards.current.set(cardId, { ...item });
       updateState({ cards: cards.current });
     }
-  };
+  }
 
   const setCardChannelItem = (cardChannel) => {
     return {

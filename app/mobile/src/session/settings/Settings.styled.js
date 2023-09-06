@@ -350,6 +350,17 @@ export const styles = StyleSheet.create({
     color: Colors.text,
     fontSize: 14,
   },
+  emptyLabel: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 128,
+  },
+  emptyLabelText: {
+    fontFamily: 'roboto',
+    fontSize: 16,
+    color: Colors.inputPlaceholder,
+  },
   handle: {
     color: Colors.text,
     fontSize: 12,

@@ -47,7 +47,21 @@ export function Settings() {
     }
   }
 
-  const unblockContact = (cardId) => {
+  const unblock = async (action, id) => {
+    if (!busy) {
+      try {
+        setBusy(true);
+        await action(id);
+      }
+      catch (err) {
+        console.log(err);
+        Alert.alert(
+          state.strings.error,
+          state.strings.tryAgain,
+        );
+      }
+      setBusy(false);
+    }
   };
 
   const logout = async () => {
@@ -105,16 +119,24 @@ export function Settings() {
 
   const BlockedContact = ({ item }) => {
     return (
-      <TouchableOpacity style={styles.item} onPress={() => unblockContact(item.cardId)}>
+      <View style={styles.item}>
         <Logo src={item.logo} width={32} height={32} radius={6} />
         <View style={styles.detail}>
           <Text style={styles.name} numberOfLines={1} ellipsizeMode={'tail'}>{ item.name }</Text>
           <Text style={styles.handle} numberOfLines={1} ellipsizeMode={'tail'}>{ item.handle }</Text>
         </View>
-        <Text style={styles.restore}>{ state.strings.restore }</Text>
-      </TouchableOpacity>
+        <TouchableOpacity onPress={() => unblock(actions.unblockContact, item.cardId)}>
+          <Text style={styles.restore}>{ state.strings.restore }</Text>
+        </TouchableOpacity>
+      </View>
     )
-  }
+  };
+
+  const BlockedTopic = ({ item }) => {
+  };
+
+  const BlockedMessage = ({ item }) => {
+  };
 
   return (
     <ScrollView style={styles.content}>
@@ -611,7 +633,9 @@ export function Settings() {
               <ActivityIndicator style={styles.modalBusy} animating={busy} color={Colors.primary} />
               <View style={styles.modalList}>
                 { state.contacts.length === 0 && (
-                  <Text style={styles.emptyLabel}>{ state.strings.noBlockContacts }</Text>
+                  <View style={styles.emptyLabel}>
+                    <Text style={styles.emptyLabelText}>{ state.strings.noBlockedContacts }</Text>
+                  </View>
                 )}
                 { state.contacts.length !== 0 && (
                   <FlatList
@@ -646,7 +670,20 @@ export function Settings() {
               </View>
               <Text style={styles.modalHeader}>{ state.strings.blockedTopics }</Text>
               <ActivityIndicator style={styles.modalBusy} animating={busy} color={Colors.primary} />
-              <View style={styles.modalList}></View>
+              <View style={styles.modalList}>
+                { state.topics.length === 0 && (
+                  <View style={styles.emptyLabel}>
+                    <Text style={styles.emptyLabelText}>{ state.strings.noBlockedTopics }</Text>
+                  </View>
+                )}
+                { state.contacts.length !== 0 && (
+                  <FlatList
+                    data={state.contacts}
+                    renderItem={BlockedTopic}
+                    keyExtractor={item => item.topicId}
+                  />
+                )}
+              </View>
               <View style={styles.rightButton}>
                 <TouchableOpacity style={styles.closeButton} activeOpacity={1} onPress={actions.hideBlockedTopics}>
                   <Text style={styles.closeButtonText}>{ state.strings.close }</Text>
@@ -672,7 +709,20 @@ export function Settings() {
               </View>
               <Text style={styles.modalHeader}>{ state.strings.blockedMessages }</Text>
               <ActivityIndicator style={styles.modalBusy} animating={busy} color={Colors.primary} />
-              <View style={styles.modalList}></View>
+              <View style={styles.modalList}>
+                { state.messages.length === 0 && (
+                  <View style={styles.emptyLabel}>
+                    <Text style={styles.emptyLabelText}>{ state.strings.noBlockedMessages }</Text>
+                  </View>
+                )}
+                { state.contacts.length !== 0 && (
+                  <FlatList
+                    data={state.contacts}
+                    renderItem={BlockedMessage}
+                    keyExtractor={item => item.messageId}
+                  />
+                )}
+              </View>
               <View style={styles.rightButton}>
                 <TouchableOpacity style={styles.closeButton} activeOpacity={1} onPress={actions.hideBlockedMessages}>
                   <Text style={styles.closeButtonText}>{ state.strings.close }</Text>
