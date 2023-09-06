@@ -88,9 +88,9 @@ export function useSettings() {
 
   const setChannelItem = (item) => {
     const profileGuid = profile.state?.identity?.guid;
-    const { logo, subject } = getChannelSubjectLogo(null, profileGuid, item, card.state.cards, card.actions.getCardImageUrl);
+    const { logo, subject } = getChannelSubjectLogo(item.cardId, profileGuid, item, card.state.cards, card.actions.getCardImageUrl);
     return {
-      cardId: null,
+      cardId: item.cardId,
       channelId: item.channelId,
       created: item.detail.created,
       logo: logo,
@@ -112,10 +112,10 @@ export function useSettings() {
     });
     updateState({ contacts: sorted });
 
-    contacts.current = [];
+    cardChannels.current = [];
     contacts.forEach(contact => {
       const filtered = Array.from(contact.channels.values()).filter(topic => topic.blocked);
-      const mapped = filtered.map(setChannelItem).map(item => ({ ...item, cardId: contact.card.cardId }));
+      const mapped = filtered.map(item => setChannelItem({ ...item, cardId: contact.card.cardId }));
       cardChannels.current = cardChannels.current.concat(mapped);
     });
     const merged = cardChannels.current.concat(channels.current);
@@ -315,8 +315,16 @@ export function useSettings() {
     removeKey: async () => {
       await removeKey();
     },
-    unblockContact: async (cardId) => {
+    unblockContact: async ({ cardId }) => {
       await card.actions.clearCardFlag(cardId);
+    },
+    unblockTopic: async ({ cardId, channelId }) => {
+      if (cardId) {
+        await card.actions.clearChannelFlag(cardId, channelId);
+      }
+      else {
+        await channel.actions.clearChannelFlag(channelId);
+      }
     },
   };
 

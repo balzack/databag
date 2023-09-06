@@ -125,7 +125,7 @@ export function Settings() {
           <Text style={styles.name} numberOfLines={1} ellipsizeMode={'tail'}>{ item.name }</Text>
           <Text style={styles.handle} numberOfLines={1} ellipsizeMode={'tail'}>{ item.handle }</Text>
         </View>
-        <TouchableOpacity onPress={() => unblock(actions.unblockContact, item.cardId)}>
+        <TouchableOpacity onPress={() => unblock(actions.unblockContact, { cardId: item.cardId })}>
           <Text style={styles.restore}>{ state.strings.restore }</Text>
         </TouchableOpacity>
       </View>
@@ -139,7 +139,7 @@ export function Settings() {
         <View style={styles.detail}>
           <Text style={styles.name} numberOfLines={1} ellipsizeMode={'tail'}>{ item.subject }</Text>
         </View>
-        <TouchableOpacity onPress={() => unblock(actions.unblockTopic, item.cardId, item.channelId)}>
+        <TouchableOpacity onPress={() => unblock(actions.unblockTopic, { cardId: item.cardId, channelId: item.channelId })}>
           <Text style={styles.restore}>{ state.strings.restore }</Text>
         </TouchableOpacity>
       </View>
@@ -691,7 +691,7 @@ export function Settings() {
                   <FlatList
                     data={state.topics}
                     renderItem={BlockedTopic}
-                    keyExtractor={item => item.topicId}
+                    keyExtractor={item => `${item.cardId}.${item.channelId}`}
                   />
                 )}
               </View>

@@ -465,7 +465,7 @@ export function useCardContext() {
     },
     clearChannelFlag: async (cardId, channelId) => {
       const { guid } = access.current || {};
-      await store.actions.setCardChannelItemBlocked(guid, cardId, channelId);
+      await store.actions.clearCardChannelItemBlocked(guid, cardId, channelId);
       setCardChannelField(cardId, channelId, 'blocked', false);
     },
     setTopicFlag: async (cardId, channelId, topicId) => {
