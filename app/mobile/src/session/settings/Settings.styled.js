@@ -8,7 +8,7 @@ export const styles = StyleSheet.create({
     display: 'flex',
     paddingLeft: 16,
     paddingRight: 16,
-    paddingTop: 16,
+    paddingTop: 8,
     backgroundColor: Colors.screenBase,
   },
   label: {

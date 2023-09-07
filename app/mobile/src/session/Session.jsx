@@ -10,7 +10,7 @@ import MatIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useSession } from './useSession.hook';
 import { styles } from './Session.styled';
 import Colors from 'constants/Colors';
-import { Profile, ProfileHeader, ProfileBody } from './profile/Profile';
+import { Profile } from './profile/Profile';
 import { CardsHeader, CardsBody, Cards } from './cards/Cards';
 import { RegistryHeader, RegistryBody, Registry } from './registry/Registry';
 import { ContactHeader, ContactBody, Contact } from './contact/Contact';
@@ -113,13 +113,13 @@ function SettingsStackScreen() {
 
 function ProfileStackScreen() {
   const stackParams = { headerStyle: { backgroundColor: Colors.titleBackground }, headerBackTitleVisible: false };
-  const screenParams = { headerShown: true, headerTintColor: Colors.primary };
+  const screenParams = { headerShown: false, headerTintColor: Colors.primary };
 
   return (
     <SafeAreaView edges={['left', 'right']} style={styles.body}>
       <ProfileStack.Navigator screenOptions={({ route }) => (screenParams)}>
-        <ProfileStack.Screen name="profile" options={{ ...stackParams, headerTitle: () => <ProfileHeader /> }}>
-          {(props) => <ScrollView><ProfileBody /></ScrollView>}
+        <ProfileStack.Screen name="profile" options={stackParams}>
+          {(props) => <Profile />}
         </ProfileStack.Screen>
       </ProfileStack.Navigator>
     </SafeAreaView>
