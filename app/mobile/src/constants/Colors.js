@@ -23,7 +23,7 @@ const LightColors = {
   primaryButton: '#448866',
   primaryButtonText: '#ffffff',
   cancelButton: '#888888',
-  cancelButtonText: '#ffffff',
+  cancelButtonText: '#bbbbbb',
   disabledButton: '#dddddd',
   disabledButtonText: '#aaaaaa',
   dangerButton: '#ff5555',
