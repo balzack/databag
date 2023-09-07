@@ -242,7 +242,7 @@ export const styles = StyleSheet.create({
     paddingRight: 32,
     borderRadius: 4,
     borderWidth: 1,
-    borderColor: Colors.cancelButtonText,
+    borderColor: Colors.closeButton,
   },
   closeButtonText: {
     color: Colors.closeButtonText,
