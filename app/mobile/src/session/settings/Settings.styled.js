@@ -8,6 +8,7 @@ export const styles = StyleSheet.create({
     display: 'flex',
     paddingLeft: 16,
     paddingRight: 16,
+    paddingTop: 16,
     backgroundColor: Colors.screenBase,
   },
   label: {
@@ -60,7 +61,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     padding: 4,
-    height: 40,
+    height: 48,
   },
   icon: {
     flex: 1,
