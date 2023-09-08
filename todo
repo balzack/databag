@@ -1,0 +1,4 @@
+login after delete fails
+registry showing stale handle for unknown contact
+show disabled notifications if node disabled
+warn if federated hostname fails
