@@ -1,5 +1,5 @@
 import { ActivityIndicator, KeyboardAvoidingView, Image, Modal, View, Switch, Text, ScrollView, TextInput, TouchableOpacity, Alert } from 'react-native';
-import Ionicons from 'react-native-vector-icons/AntDesign';
+import AntIcons from 'react-native-vector-icons/AntDesign';
 import MatIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import ImagePicker from 'react-native-image-crop-picker'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
@@ -30,8 +30,8 @@ export function Profile() {
     catch (err) {
       console.log(err);
       Alert.alert(
-        'Account Update Failed',
-        'Please try again.'
+        state.strings.error,
+        state.strings.tryAgain,
       );
     }
   }
@@ -44,29 +44,66 @@ export function Profile() {
     catch (err) {
       console.log(err);
       Alert.alert(
-        'Failed to Save Details',
-        'Please try again.'
+        state.strings.error,
+        state.strings.tryAgain,
       )
     }
   }
 
-  console.log(state.imageSource);
-  
-
   return (
     <ScrollView style={styles.content}>
 
-      <Image source={state.imageSource} style={{ width: state.width, height: state.height }} resizeMode={'contain'} />
+      <Image source={state.imageSource} style={{ width: state.width, height: state.height, alignSelf: 'center' }} resizeMode={'contain'} />
 
       <View style={styles.details}>
         <View style={styles.control}>
           <TouchableOpacity style={styles.edit}>
-            <Text style={styles.editLabel}>Edit</Text>
-            <MatIcons name="square-edit-outline" size={14} color={Colors.text} />
+            <Text style={styles.editLabel}>{ state.strings.edit }</Text>
+            <MatIcons name="square-edit-outline" size={14} color={Colors.linkText} />
           </TouchableOpacity>
         </View>
-      </View>
 
+        { state.name && (
+          <Text style={styles.nameSet} numberOfLines={1} adjustsFontSizeToFit={true}>{ state.name }</Text>
+        )}
+        { !state.name && (
+          <Text style={styles.nameUnset}>{ state.strings.name }</Text>
+        )}
+
+        <Text style={styles.username} numberOfLines={1}>{ state.username }</Text>
+
+        <View style={styles.group}>
+          <View style={styles.entry}>
+            <AntIcons name="enviromento" style={styles.icon} size={20} color={Colors.text} />
+            { state.location && (
+              <Text style={styles.locationSet}>{ state.location }</Text>
+            )}
+            { !state.location && (
+              <Text style={styles.locationUnset}>Location</Text>
+            )}
+          </View>
+          <View style={styles.divider} />
+          <View style={styles.entry}>
+            <MatIcons name="book-open-outline" style={styles.icon} size={20} color={Colors.text} />
+            { state.location && (
+              <Text style={styles.descriptionSet}>{ state.description }</Text>
+            )}
+            { !state.description && (
+              <Text style={styles.descriptionUnset}>Description</Text>
+            )}
+          </View>
+        </View>
+
+        <View style={styles.group}>
+          <TouchableOpacity style={styles.entry} activeOpacity={1}>
+            <MatIcons name="eye-outline" style={styles.icon} size={20} color={Colors.text} />
+            <Text style={styles.visibleLabel}>{ state.strings.visibleRegistry }</Text>
+            <Switch value={state.searchable} style={styles.visibleSwitch} thumbColor={Colors.sliderGrip} ios_backgroundColor={Colors.disabledIndicator}
+                trackColor={styles.track} onValueChange={setVisible} />
+          </TouchableOpacity>
+        </View>
+
+      </View>
     </ScrollView>
   );
 }

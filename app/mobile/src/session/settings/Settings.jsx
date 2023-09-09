@@ -322,6 +322,8 @@ export function Settings() {
           </TouchableOpacity>
         </View>
 
+        <View style={styles.verticalPad} />
+
         <Modal
           animationType="fade"
           transparent={true}

@@ -72,6 +72,15 @@ const Strings = [
     noBlockedTopics: 'No Blocked Topics',
     noBlockedMessages: 'No Blocked Messages',
     restore: 'Restore',
+
+    //profile page
+    edit: 'Edit',
+    name: 'Name',
+    location: 'Location',
+    description: 'Description',
+    registryVisible: 'Visible in Registry',
+    editImage: 'Edit Image',
+    editDetails: 'Edit Details', 
   },
   {
     visibleRegistry: 'Visible dans le Registre',
@@ -141,6 +150,15 @@ const Strings = [
     noBlockedTopics: 'Aucun Sujet Bloqué',
     noBlockedMessages: 'Aucun Message Bloqué',
     restore: 'Restaurer',
+
+    //profile page
+    edit: 'Modifier',
+    name: 'Nom',
+    location: 'Emplacement',
+    description: 'Description',
+    registryVisible: 'Visible dans le Registre',
+    editImage: 'Éditer l\'Image',
+    editDetails: 'Modifier les Détails', 
   },
   {
     visibleRegistry: 'Visible en el Registro',
@@ -210,6 +228,15 @@ const Strings = [
     noBlockedTopics: 'No Hay Temas Bloqueados ',
     noBlockedMessages: 'No Hay Mensajes Bloqueados',
     restore: 'Restaurar',
+
+    //profile page
+    edit: 'Editar',
+    name: 'Nombre',
+    location: 'Ubicación',
+    description: 'Descripción',
+    registryVisible: 'Visible en el Registro',
+    editImage: 'Editar Imagen',
+    editDetails: 'Editar Detalles', 
   },
   {
     visibleRegistry: 'Sichtbar in der Registrierung',
@@ -279,6 +306,15 @@ const Strings = [
     noBlockedTopics: 'Keine Blockierten Themen',
     noBlockedMessages: 'Keine Blockierten Nachrichten',
     restore: 'Wiederherstellen',
+
+    //profile page
+    edit: 'Bearbeiten',
+    name: 'Name',
+    location: 'Standort',
+    description: 'Beschreibung',
+    registryVisible: 'Sichtbar in der Registrierung',
+    editImage: 'Bild Bearbeiten',
+    editDetails: 'Details bearbeiten', 
   }
 ];
 

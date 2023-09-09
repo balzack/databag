@@ -48,6 +48,7 @@ const LightColors = {
   disabledIndicator: '#eeeeee',
   disconnectedIndicator: '#aa0000',
   sliderGrip: '#eeeeee',
+  areaBorder: '#ffffff',
 };
 
 const DarkColors = {
@@ -98,6 +99,7 @@ const DarkColors = {
   disabledIndicator: '#eeeeee',
   disconnectedIndicator: '#aa0000',
   sliderGrip: '#eeeeee',
+  areaBorder: '#ffffff',
 };
 
 function getColor(label) {
@@ -152,6 +154,7 @@ export const Colors = {
   disabledIndicator: getColor('disabledIndicator'),
   disconnectedIndicator: getColor('disconnectedIndicator'),
   sliderGrip: getColor('sliderGrip'),
+  areaBorder: getColor('areaBorder'),
 
   background: '#8fbea7',
   primary: '#448866',

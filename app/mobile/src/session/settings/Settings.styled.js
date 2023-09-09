@@ -365,6 +365,10 @@ export const styles = StyleSheet.create({
     color: Colors.text,
     fontSize: 12,
   },
+  verticalPad: {
+    width: '100%',
+    height: 32,
+  },
 
 });
 
