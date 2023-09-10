@@ -22,7 +22,7 @@ import { Prompt } from 'utils/Prompt';
 import ReceiveSharingIntent from 'react-native-receive-sharing-intent';
 import { Platform, PermissionsAndroid } from 'react-native';
 import { initUnifiedPush } from 'react-native-unifiedpush-connector';
-
+import { MenuProvider } from 'react-native-popup-menu';
 
 // silence warning: Sending `onAnimatedValueUpdate` with no listeners registered
 //LogBox.ignoreLogs(['Sending']);
@@ -64,18 +64,20 @@ export default function App() {
                     <DisplayContextProvider>
                       <AppContextProvider>
                         <SafeAreaProvider>
-                          <NativeRouter>
-                            <Routes>
-                              <Route path="/" element={ <Root /> } />
-                              <Route path="/admin" element={ <Access mode="admin" /> } />
-                              <Route path="/dashboard" element={ <Dashboard /> } />
-                              <Route path="/login" element={ <Access mode="login" /> } />
-                              <Route path="/reset" element={ <Access mode="reset" /> } />
-                              <Route path="/create" element={ <Access mode="create" /> } />
-                              <Route path="/session" element={ <Session sharing={sharing} clearSharing={clearSharing} /> } />
-                            </Routes>
-                            <Prompt />
-                          </NativeRouter>
+                          <MenuProvider>
+                            <NativeRouter>
+                              <Routes>
+                                <Route path="/" element={ <Root /> } />
+                                <Route path="/admin" element={ <Access mode="admin" /> } />
+                                <Route path="/dashboard" element={ <Dashboard /> } />
+                                <Route path="/login" element={ <Access mode="login" /> } />
+                                <Route path="/reset" element={ <Access mode="reset" /> } />
+                                <Route path="/create" element={ <Access mode="create" /> } />
+                                <Route path="/session" element={ <Session sharing={sharing} clearSharing={clearSharing} /> } />
+                              </Routes>
+                              <Prompt />
+                            </NativeRouter>
+                          </MenuProvider>
                         </SafeAreaProvider>
                       </AppContextProvider>
                     </DisplayContextProvider>

@@ -17,9 +17,7 @@ export const styles = StyleSheet.create({
     borderTopRightRadius: 32,
     borderTopLeftRadius: 32,
     backgroundColor: Colors.screenBase,
-    borderLeftWidth: 1,
-    borderRightWidth: 1,
-    borderTopWidth: 2,
+    borderTopWidth: 1,
     borderColor: Colors.areaBorder,
   },
   control: {
@@ -42,7 +40,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     borderLeftWidth: 1,
     borderRightWidth: 1,
-    borderTopWidth: 2,
+    borderTopWidth: 1,
     borderColor: Colors.areaBorder,
   },
   editLabel: {
@@ -134,6 +132,21 @@ export const styles = StyleSheet.create({
   },
   visibleSwitch: {
     transform: [{ scaleX: .6 }, { scaleY: .6 }],
+  },
+  trigger: {
+    triggerTouchable: {
+      activeOpacity: 70,
+    },
+  },
+  options: {
+    backgroundColor: Colors.areaBase, 
+  },
+  option: {
+    padding: 4,
+    color: Colors.text,
+    backgroundColor: Colors.areaBase,
+    fontFamily: 'roboto',
+    fontSize: 16,
   },
 });
 

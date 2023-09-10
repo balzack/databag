@@ -3,6 +3,7 @@ import AntIcons from 'react-native-vector-icons/AntDesign';
 import MatIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import ImagePicker from 'react-native-image-crop-picker'
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { Menu, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-menu';
 import { Colors } from 'constants/Colors';
 import { useProfile } from './useProfile.hook';
 import { styles } from './Profile.styled';
@@ -50,6 +51,13 @@ export function Profile() {
     }
   }
 
+const triggerStyles = {
+  triggerTouchable: {
+    activeOpacity: 70,
+  },
+};
+
+
   return (
     <ScrollView style={styles.content}>
 
@@ -57,10 +65,24 @@ export function Profile() {
 
       <View style={styles.details}>
         <View style={styles.control}>
-          <TouchableOpacity style={styles.edit}>
+
+    <Menu>
+      <MenuTrigger customStyles={styles.trigger}>
+          <View style={styles.edit}>
             <Text style={styles.editLabel}>{ state.strings.edit }</Text>
             <MatIcons name="square-edit-outline" size={14} color={Colors.linkText} />
-          </TouchableOpacity>
+          </View>
+      </MenuTrigger>
+      <MenuOptions style={styles.options}>
+        <MenuOption onSelect={() => alert(`image`)}>
+          <Text style={styles.option}>{ state.strings.editImage }</Text>
+        </MenuOption>
+        <MenuOption onSelect={() => alert(`details`)}>
+          <Text style={styles.option}>{ state.strings.editDetails }</Text>
+        </MenuOption>
+      </MenuOptions>
+    </Menu>
+
         </View>
 
         { state.name && (

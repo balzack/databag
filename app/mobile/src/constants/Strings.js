@@ -157,7 +157,7 @@ const Strings = [
     location: 'Emplacement',
     description: 'Description',
     registryVisible: 'Visible dans le Registre',
-    editImage: 'Éditer l\'Image',
+    editImage: 'Modifier l\'Image',
     editDetails: 'Modifier les Détails', 
   },
   {

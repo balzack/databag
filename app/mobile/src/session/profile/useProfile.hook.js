@@ -51,6 +51,7 @@ export function useProfile() {
   const actions = {
     setVisible: async (searchable) => {
       await account.actions.setSearchable(searchable);
+      updateState({ searchable });
     },
   };
 
