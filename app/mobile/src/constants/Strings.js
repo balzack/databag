@@ -80,7 +80,7 @@ const Strings = [
     description: 'Description',
     registryVisible: 'Visible in Registry',
     editImage: 'Edit Image',
-    editDetails: 'Edit Details', 
+    editDetails: 'Edit Details',
   },
   {
     visibleRegistry: 'Visible dans le Registre',

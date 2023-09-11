@@ -16,6 +16,11 @@ export function useProfile() {
     username: null,
     location: null,
     description: null,
+    imageWidth: null,
+    imageHeight: null,
+    detailWidth: null,
+    details: false,
+    detailName: '',
   });
 
   const dimensions = useWindowDimensions();
@@ -29,10 +34,10 @@ export function useProfile() {
   useEffect(() => {
     const { width, height } = dimensions;
     if (height > width) {
-      updateState({ width, height: width });
+      updateState({ imageWidth: width, imageHeight: width, detailWidth: width + 2 });
     }
     else {
-      updateState({ width: height, height });
+      updateState({ imageWidth: height, imageHeight, detailWidth: width + 2 });
     }
   }, [dimensions]);
 
@@ -50,8 +55,33 @@ export function useProfile() {
 
   const actions = {
     setVisible: async (searchable) => {
-      await account.actions.setSearchable(searchable);
-      updateState({ searchable });
+      const cur = state.searchable;
+      try {
+        updateState({ searchable });
+        await account.actions.setSearchable(searchable);
+      }
+      catch(err) {
+        updateState({ searchable: cur });
+        throw err;
+      }
+    },
+    setProfileImage: async (data) => {
+      await profile.actions.setProfileImage(data);
+    },
+    showDetails: () => {
+      updateState({ details: true, detailName: '', detailLocation: '', detailDescription: '' });
+    },
+    hideDetails: () => {
+      updateState({ details: false });
+    },
+    setDetailName: (detailName) => {
+      updateState({ detailName });
+    },
+    setDetailLocation: (detailLocation) => {
+      updateState({ detailLocation });
+    },
+    setDetailDescription: (detailDescription) => {
+      updateState({ detailDescription });
     },
   };
 

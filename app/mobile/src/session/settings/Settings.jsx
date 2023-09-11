@@ -440,7 +440,7 @@ export function Settings() {
                       autoCapitalize={'none'}
                       spellCheck={false}
                       inputStyles={styles.floatingInput}
-                      labelStyles={styles.floatingLable}
+                      labelStyles={styles.floatingLabel}
                       customLabelStyles={styles.floatingCustomLabel}
                       containerStyles={styles.floatingContainer}
                       onChangeText={actions.setSealDelete}
@@ -542,7 +542,7 @@ export function Settings() {
                   autoComplete={'off'}
 
                   inputStyles={styles.floatingInput}
-                  labelStyles={styles.floatingLable}
+                  labelStyles={styles.floatingLabel}
                   customLabelStyles={styles.floatingCustomLabel}
                   containerStyles={styles.floatingContainer}
 
@@ -559,7 +559,7 @@ export function Settings() {
                   spellCheck={false}
 
                   inputStyles={styles.floatingInput}
-                  labelStyles={styles.floatingLable}
+                  labelStyles={styles.floatingLabel}
                   customLabelStyles={styles.floatingCustomLabel}
                   containerStyles={styles.floatingContainer}
 
@@ -616,7 +616,7 @@ export function Settings() {
                   autoCapitalize={'none'} 
                   spellCheck={false}
                   inputStyles={styles.floatingInput}
-                  labelStyles={styles.floatingLable}
+                  labelStyles={styles.floatingLabel}
                   customLabelStyles={styles.floatingCustomLabel}
                   containerStyles={styles.floatingContainer}
                   onChangeText={actions.setConfirm}

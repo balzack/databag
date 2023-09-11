@@ -2,6 +2,8 @@ import { ActivityIndicator, KeyboardAvoidingView, Image, Modal, View, Switch, Te
 import AntIcons from 'react-native-vector-icons/AntDesign';
 import MatIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import ImagePicker from 'react-native-image-crop-picker'
+import { BlurView } from "@react-native-community/blur";
+import { FloatingLabelInput } from 'react-native-floating-label-input';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { Menu, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-menu';
 import { Colors } from 'constants/Colors';
@@ -17,7 +19,16 @@ export function Profile() {
     try {
       const full = await ImagePicker.openPicker({ mediaType: 'photo', width: 256, height: 256 });
       const crop = await ImagePicker.openCropper({ path: full.path, width: 256, height: 256, cropperCircleOverlay: true, includeBase64: true });
-      await actions.setProfileImage(crop.data);
+      try {
+        await actions.setProfileImage(crop.data);
+      }
+      catch (err) {
+        console.log(err);
+        Alert.alert(
+          state.strings.error,
+          state.strings.tryAgain,
+        );
+      }
     }
     catch (err) {
       console.log(err);
@@ -59,25 +70,25 @@ const triggerStyles = {
 
 
   return (
-    <ScrollView style={styles.content}>
+    <ScrollView style={styles.content} contentContainerStyle={{ display: 'flex', alignItems: 'center' }}>
 
-      <Image source={state.imageSource} style={{ width: state.width, height: state.height, alignSelf: 'center' }} resizeMode={'contain'} />
+      <Image source={state.imageSource} style={{ width: state.imageWidth, height: state.imageHeight, alignSelf: 'center' }} resizeMode={'contain'} />
 
-      <View style={styles.details}>
+      <View style={{ ...styles.details, width: state.detailWidth }}>
         <View style={styles.control}>
 
     <Menu>
       <MenuTrigger customStyles={styles.trigger}>
-          <View style={styles.edit}>
-            <Text style={styles.editLabel}>{ state.strings.edit }</Text>
-            <MatIcons name="square-edit-outline" size={14} color={Colors.linkText} />
-          </View>
+        <View style={styles.edit}>
+          <Text style={styles.editLabel}>{ state.strings.edit }</Text>
+          <MatIcons name="square-edit-outline" size={14} color={Colors.linkText} />
+        </View>
       </MenuTrigger>
-      <MenuOptions style={styles.options}>
-        <MenuOption onSelect={() => alert(`image`)}>
+      <MenuOptions optionsContainerStyle={{ width: 'auto' }} style={styles.options}>
+        <MenuOption onSelect={onGallery}>
           <Text style={styles.option}>{ state.strings.editImage }</Text>
         </MenuOption>
-        <MenuOption onSelect={() => alert(`details`)}>
+        <MenuOption onSelect={actions.showDetails}>
           <Text style={styles.option}>{ state.strings.editDetails }</Text>
         </MenuOption>
       </MenuOptions>
@@ -126,6 +137,70 @@ const triggerStyles = {
         </View>
 
       </View>
+
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={state.details}
+        supportedOrientations={['portrait', 'landscape']}
+        onRequestClose={actions.hideDetails}
+      >
+        <BlurView style={styles.modalOverlay} blurType={Colors.overlay} blurAmount={2} reducedTransparencyFallbackColor="black">
+          <View style={styles.modalContainer}>
+            <View style={styles.modalClose}>
+              <TouchableOpacity style={styles.dismissButton} activeOpacity={1} onPress={actions.hideDetails}>
+                <MatIcons name="close" size={20} color={Colors.descriptionText} />
+              </TouchableOpacity>
+            </View>
+            <Text style={styles.modalHeader}>{ state.strings.editDetails }</Text>
+
+            <View style={styles.modalInput}>
+              <FloatingLabelInput
+                label={state.strings.name}
+                value={state.detailName}
+                autoCapitalize={'none'}
+                spellCheck={false}
+                inputStyles={styles.floatingInput}
+                labelStyles={styles.floatingLabel}
+                customLabelStyles={styles.floatingCustomLabel}
+                containerStyles={styles.floatingContainer}
+                onChangeText={actions.setDetailName}
+              />
+            </View>
+
+            <View style={styles.modalInput}>
+              <FloatingLabelInput
+                label={state.strings.location}
+                value={state.detailLocation}
+                autoCapitalize={'none'}
+                spellCheck={false}
+                inputStyles={styles.floatingInput}
+                labelStyles={styles.floatingLabel}
+                customLabelStyles={styles.floatingCustomLabel}
+                containerStyles={styles.floatingContainer}
+                onChangeText={actions.setDetailLocation}
+              />
+            </View>
+
+            <View style={styles.modalInput}>
+              <FloatingLabelInput
+                label={state.strings.description}
+                value={state.detailDescription}
+                autoCapitalize={'none'}
+                spellCheck={false}
+                multiline={true}
+                inputStyles={styles.floatingInput}
+                labelStyles={styles.floatingLabel}
+                customLabelStyles={styles.floatingCustomLabel}
+                containerStyles={styles.floatingContainer}
+                onChangeText={actions.setDetailDescription}
+              />
+            </View>
+
+          </View>
+        </BlurView>
+      </Modal>
+
     </ScrollView>
   );
 }
