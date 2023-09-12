@@ -1,4 +1,5 @@
 import { ActivityIndicator, KeyboardAvoidingView, Image, Modal, View, Switch, Text, ScrollView, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { useState } from 'react';
 import AntIcons from 'react-native-vector-icons/AntDesign';
 import MatIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import ImagePicker from 'react-native-image-crop-picker'
@@ -13,6 +14,7 @@ import avatar from 'images/avatar.png';
 
 export function Profile() {
 
+  const [busyDetail, setBusyDetail] = useState(false);
   const { state, actions } = useProfile();
 
   const onGallery = async () => {
@@ -49,25 +51,22 @@ export function Profile() {
   }
 
   const saveDetails = async () => {
-    try {
-      await actions.saveDetails();
-      actions.hideEditDetails();
-    }
-    catch (err) {
-      console.log(err);
-      Alert.alert(
-        state.strings.error,
-        state.strings.tryAgain,
-      )
+    if (!busyDetail) {
+      setBusyDetail(true);
+      try {
+        await actions.saveDetails();
+        actions.hideDetails();
+      }
+      catch (err) {
+        console.log(err);
+        Alert.alert(
+          state.strings.error,
+          state.strings.tryAgain,
+        )
+      }
+      setBusyDetail(false);
     }
   }
-
-const triggerStyles = {
-  triggerTouchable: {
-    activeOpacity: 70,
-  },
-};
-
 
   return (
     <ScrollView style={styles.content} contentContainerStyle={{ display: 'flex', alignItems: 'center' }}>
@@ -76,24 +75,22 @@ const triggerStyles = {
 
       <View style={{ ...styles.details, width: state.detailWidth }}>
         <View style={styles.control}>
-
-    <Menu>
-      <MenuTrigger customStyles={styles.trigger}>
-        <View style={styles.edit}>
-          <Text style={styles.editLabel}>{ state.strings.edit }</Text>
-          <MatIcons name="square-edit-outline" size={14} color={Colors.linkText} />
-        </View>
-      </MenuTrigger>
-      <MenuOptions optionsContainerStyle={{ width: 'auto' }} style={styles.options}>
-        <MenuOption onSelect={onGallery}>
-          <Text style={styles.option}>{ state.strings.editImage }</Text>
-        </MenuOption>
-        <MenuOption onSelect={actions.showDetails}>
-          <Text style={styles.option}>{ state.strings.editDetails }</Text>
-        </MenuOption>
-      </MenuOptions>
-    </Menu>
-
+          <Menu>
+            <MenuTrigger customStyles={styles.trigger}>
+              <View style={styles.edit}>
+                <Text style={styles.editLabel}>{ state.strings.edit }</Text>
+                <MatIcons name="square-edit-outline" size={14} color={Colors.linkText} />
+              </View>
+            </MenuTrigger>
+            <MenuOptions optionsContainerStyle={{ width: 'auto' }} style={styles.options}>
+              <MenuOption onSelect={onGallery}>
+                <Text style={styles.option}>{ state.strings.editImage }</Text>
+              </MenuOption>
+              <MenuOption onSelect={actions.showDetails}>
+                <Text style={styles.option}>{ state.strings.editDetails }</Text>
+              </MenuOption>
+            </MenuOptions>
+          </Menu>
         </View>
 
         { state.name && (
@@ -195,6 +192,20 @@ const triggerStyles = {
                 containerStyles={styles.floatingContainer}
                 onChangeText={actions.setDetailDescription}
               />
+            </View>
+
+            <View style={styles.buttons}>
+              <TouchableOpacity style={styles.cancelButton} activeOpacity={1} onPress={actions.hideDetails}>
+                <Text style={styles.cancelButtonText}>{ state.strings.cancel }</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.saveButton} activeOpacity={1} onPress={saveDetails}>
+                { busyDetail && (
+                  <ActivityIndicator animating={true} color={Colors.primaryButtonText} />
+                )}
+                { !busyDetail && (
+                  <Text style={styles.saveButtonText}>{ state.strings.save }</Text>
+                )}
+              </TouchableOpacity>
             </View>
 
           </View>

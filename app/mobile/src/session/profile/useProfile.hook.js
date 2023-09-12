@@ -69,7 +69,10 @@ export function useProfile() {
       await profile.actions.setProfileImage(data);
     },
     showDetails: () => {
-      updateState({ details: true, detailName: '', detailLocation: '', detailDescription: '' });
+      const detailName = state.name ? state.name : '';
+      const detailLocation = state.location ? state.location : '';
+      const detailDescription = state.description ? state.description : '';
+      updateState({ details: true, detailName, detailLocation, detailDescription });
     },
     hideDetails: () => {
       updateState({ details: false });
@@ -82,6 +85,9 @@ export function useProfile() {
     },
     setDetailDescription: (detailDescription) => {
       updateState({ detailDescription });
+    },
+    saveDetails: async () => {
+      await profile.actions.setProfileData(state.detailName, state.detailLocation, state.detailDescription);
     },
   };
 
