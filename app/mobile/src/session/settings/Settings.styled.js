@@ -269,7 +269,7 @@ export const styles = StyleSheet.create({
     fontFamily: 'Roboto',
   },
   promptButton: {
-    marginTop: 8,
+    marginTop: 24,
     marginBottom: 16,
     borderRadius: 4,
     backgroundColor: Colors.primaryButton,

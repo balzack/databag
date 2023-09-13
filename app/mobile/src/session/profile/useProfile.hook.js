@@ -37,7 +37,7 @@ export function useProfile() {
       updateState({ imageWidth: width, imageHeight: width, detailWidth: width + 2 });
     }
     else {
-      updateState({ imageWidth: height, imageHeight, detailWidth: width + 2 });
+      updateState({ imageWidth: height, imageHeight: height, detailWidth: width + 2 });
     }
   }, [dimensions]);
 
