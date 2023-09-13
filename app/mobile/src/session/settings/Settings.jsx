@@ -383,23 +383,21 @@ export function Settings() {
                     onChangeText={actions.setSealPassword}
                   />
 
-                  <View style={styles.buttons}>
-                    { state.sealPassword && (
-                      <TouchableOpacity style={styles.enabledButton} activeOpacity={1} onPress={() => sealAction(actions.unlockKey)}>
-                        { busy && (
-                          <ActivityIndicator style={styles.modalBusy} animating={true} color={Colors.primaryButtonText} />
-                        )}
-                        { !busy && (
-                          <Text style={styles.enabledButtonText}>{ state.strings.unlock }</Text>
-                        )}
-                      </TouchableOpacity>
-                    )}
-                    { !state.sealPassword && (
-                      <View style={styles.disabledButton}>
-                        <Text style={styles.disabledButtonText}>{ state.strings.unlock }</Text>
-                      </View>
-                    )}
-                  </View>
+                  { state.sealPassword && (
+                    <TouchableOpacity style={styles.enabledButton} activeOpacity={1} onPress={() => sealAction(actions.unlockKey)}>
+                      { busy && (
+                        <ActivityIndicator style={styles.modalBusy} animating={true} color={Colors.primaryButtonText} />
+                      )}
+                      { !busy && (
+                        <Text style={styles.enabledButtonText}>{ state.strings.unlock }</Text>
+                      )}
+                    </TouchableOpacity>
+                  )}
+                  { !state.sealPassword && (
+                    <View style={styles.disabledButton}>
+                      <Text style={styles.disabledButtonText}>{ state.strings.unlock }</Text>
+                    </View>
+                  )}
                   <TouchableOpacity activeOpacity={1} onPress={actions.showSealRemove}>
                     <Text style={styles.dangerText}>{ state.strings.removeSeal }</Text>
                   </TouchableOpacity>

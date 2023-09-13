@@ -192,7 +192,7 @@ export const styles = StyleSheet.create({
     right: 16,
   },
   enabledButton: {
-    marginTop: 8,
+    marginTop: 24,
     marginBottom: 16,
     borderRadius: 4,
     backgroundColor: Colors.primaryButton,
@@ -207,7 +207,7 @@ export const styles = StyleSheet.create({
     fontFamily: 'Roboto',
   },
   disabledButton: {
-    marginTop: 8,
+    marginTop: 24,
     marginBottom: 16,
     borderRadius: 4,
     backgroundColor: Colors.disabledButton,
@@ -222,7 +222,7 @@ export const styles = StyleSheet.create({
     fontFamily: 'Roboto',
   },
   dangerButton: {
-    marginTop: 8,
+    marginTop: 24,
     marginBottom: 16,
     borderRadius: 4,
     backgroundColor: Colors.dangerButton,
@@ -253,7 +253,7 @@ export const styles = StyleSheet.create({
     fontFamily: 'Roboto',
   },
   cancelButton: {
-    marginTop: 8,
+    marginTop: 24,
     marginBottom: 16,
     marginRight: 16,
     borderRadius: 4,
