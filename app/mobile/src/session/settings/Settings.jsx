@@ -339,7 +339,6 @@ export function Settings() {
                 </TouchableOpacity>
               </View>
               <Text style={styles.modalHeader}>{ state.strings.sealedTopics }</Text>
-              <ActivityIndicator style={styles.modalBusy} animating={busy} color={Colors.primary} />
               { !state.sealEnabled && (
                 <>
                   <Text style={styles.modalDescription}>{ state.strings.sealUnset }</Text>
@@ -355,7 +354,12 @@ export function Settings() {
      
                   { state.sealPassword && (
                     <TouchableOpacity style={styles.enabledButton} activeOpacity={1} onPress={() => sealAction(actions.generateKey)}>
-                      <Text style={styles.enabledButtonText}>{ state.strings.generate }</Text>
+                      { busy && (
+                        <ActivityIndicator style={styles.modalBusy} animating={true} color={Colors.primaryButtonText} />
+                      )}
+                      { !busy && (
+                        <Text style={styles.enabledButtonText}>{ state.strings.generate }</Text>
+                      )}
                     </TouchableOpacity>
                   )}
                   { !state.sealPassword && (
@@ -382,7 +386,12 @@ export function Settings() {
                   <View style={styles.buttons}>
                     { state.sealPassword && (
                       <TouchableOpacity style={styles.enabledButton} activeOpacity={1} onPress={() => sealAction(actions.unlockKey)}>
-                        <Text style={styles.enabledButtonText}>{ state.strings.unlock }</Text>
+                        { busy && (
+                          <ActivityIndicator style={styles.modalBusy} animating={true} color={Colors.primaryButtonText} />
+                        )}
+                        { !busy && (
+                          <Text style={styles.enabledButtonText}>{ state.strings.unlock }</Text>
+                        )}
                       </TouchableOpacity>
                     )}
                     { !state.sealPassword && (
@@ -400,7 +409,12 @@ export function Settings() {
                 <>
                   <Text style={styles.modalDescription}>{ state.strings.sealUnlocked }</Text>
                   <TouchableOpacity style={styles.enabledButton} activeOpacity={1} onPress={() => sealAction(actions.disableKey)}>
-                    <Text style={styles.enabledButtonText}>{ state.strings.disable }</Text>
+                    { busy && (
+                      <ActivityIndicator style={styles.modalBusy} animating={true} color={Colors.primaryButtonText} />
+                    )}
+                    { !busy && (
+                      <Text style={styles.enabledButtonText}>{ state.strings.disable }</Text>
+                    )}
                   </TouchableOpacity>
                   <TouchableOpacity activeOpacity={1} onPress={actions.showSealUpdate}>
                     <Text style={styles.modeText}>{ state.strings.changeKey }</Text>
@@ -422,7 +436,12 @@ export function Settings() {
                   />
                   { state.sealDelete === state.strings.deleteKey && (
                     <TouchableOpacity style={styles.dangerButton} activeOpacity={1} onPress={() => sealAction(actions.removeKey)}>
-                      <Text style={styles.dangerButtonText}>{ state.strings.delete }</Text>
+                      { busy && (
+                        <ActivityIndicator style={styles.modalBusy} animating={true} color={Colors.primaryButtonText} />
+                      )}
+                      { !busy && (
+                        <Text style={styles.dangerButtonText}>{ state.strings.delete }</Text>
+                      )}
                     </TouchableOpacity>
                   )}
                   { state.sealDelete !== state.strings.deleteKey && (
@@ -455,7 +474,12 @@ export function Settings() {
 
                   { state.sealPassword && (
                     <TouchableOpacity style={styles.enabledButton} activeOpacity={1} onPress={() => sealAction(actions.updateKey)}>
-                      <Text style={styles.enabledButtonText}>{ state.strings.update }</Text>
+                      { busy && (
+                        <ActivityIndicator style={styles.modalBusy} animating={true} color={Colors.primaryButtonText} />
+                      )}
+                      { !busy && (
+                        <Text style={styles.enabledButtonText}>{ state.strings.update }</Text>
+                      )}
                     </TouchableOpacity>
                   )}
                   { !state.sealPassword && (
