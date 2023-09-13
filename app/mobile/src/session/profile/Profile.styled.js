@@ -92,17 +92,17 @@ export const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     flexDirection: 'row',
-    padding: 4,
-    height: 48,
+    padding: 8,
   },
   icon: {
     paddingLeft: 8,
-    paddingRight: 8,
+    paddingRight: 16,
   },
   locationSet: {
     fontSize: 16,
     color: Colors.text,
     fontFamily: 'roboto',
+    flex: 1,
   },
   locationUnset: {
     fontSize: 16,
@@ -114,6 +114,7 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     color: Colors.text,
     fontFamily: 'roboto',
+    flex: 1,
   },
   descriptionUnset: {
     fontSize: 16,
@@ -144,7 +145,7 @@ export const styles = StyleSheet.create({
     borderColor: Colors.areaBorder,
   },
   option: {
-    padding: 4,
+    padding: 6,
     color: Colors.text,
     backgroundColor: Colors.areaBase,
     fontFamily: 'roboto',
@@ -192,6 +193,30 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     flexDirection: 'row',
   },
+  field: {
+    input: {
+      backgroundColor: Colors.inputBase,
+      color: Colors.inputText,
+      borderRadius: 8,
+      minHeight: 48,
+      maxHeight: 128,
+      paddingLeft: 8,
+    },
+    label: {
+      height: 16,
+      paddingLeft: 8,
+    },
+    labelText: {
+      color: Colors.inputPlaceholder,
+      fontSize: 12,
+    },
+    container: {
+      width: '100%',
+      paddingLeft: 16,
+      paddingRight: 16,
+      paddingTop: 8,
+    },
+  },
   floatingInput: {
     color: Colors.inputText,
     paddingTop: 20,
@@ -208,6 +233,7 @@ export const styles = StyleSheet.create({
   floatingContainer: {
     paddingHorizontal: 12,
     backgroundColor: Colors.inputBase,
+    width: '100%',
     borderRadius: 8,
     minHeight: 48,
     maxHeight: 128,

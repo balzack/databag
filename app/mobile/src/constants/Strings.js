@@ -81,6 +81,9 @@ const Strings = [
     registryVisible: 'Visible in Registry',
     editImage: 'Edit Image',
     editDetails: 'Edit Details',
+
+    // contacts page
+    add: 'Add',
   },
   {
     visibleRegistry: 'Visible dans le Registre',
@@ -158,7 +161,10 @@ const Strings = [
     description: 'Description',
     registryVisible: 'Visible dans le Registre',
     editImage: 'Modifier l\'Image',
-    editDetails: 'Modifier les Détails', 
+    editDetails: 'Modifier les Détails',
+
+    //constacts page
+    add: 'Ajouter',
   },
   {
     visibleRegistry: 'Visible en el Registro',
@@ -236,7 +242,10 @@ const Strings = [
     description: 'Descripción',
     registryVisible: 'Visible en el Registro',
     editImage: 'Editar Imagen',
-    editDetails: 'Editar Detalles', 
+    editDetails: 'Editar Detalles',
+
+    // contacts page
+    add: 'Agregar', 
   },
   {
     visibleRegistry: 'Sichtbar in der Registrierung',
@@ -314,7 +323,10 @@ const Strings = [
     description: 'Beschreibung',
     registryVisible: 'Sichtbar in der Registrierung',
     editImage: 'Bild Bearbeiten',
-    editDetails: 'Details bearbeiten', 
+    editDetails: 'Details Bearbeiten',
+    
+    //contacts page
+    add: 'Hinzufügen',
   }
 ];
 

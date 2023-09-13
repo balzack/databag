@@ -66,8 +66,8 @@ const DarkColors = {
   unsetText: '#aaaaaa',
   descriptionText: '#bbbbbb',
   text: '#ffffff',
-  screenBase: '#333333',
-  areaBase: '#555555',
+  screenBase: '#222222',
+  areaBase: '#444444',
   modalBase: '#111111',
   modalOverlay: 'rgba(88,88,88,0.8)',
   headerBar: '#555555',
@@ -99,7 +99,7 @@ const DarkColors = {
   disabledIndicator: '#eeeeee',
   disconnectedIndicator: '#aa0000',
   sliderGrip: '#eeeeee',
-  areaBorder: '#ffffff',
+  areaBorder: '#aaaaaa',
 };
 
 function getColor(label) {

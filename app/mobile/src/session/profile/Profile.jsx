@@ -1,4 +1,4 @@
-import { ActivityIndicator, KeyboardAvoidingView, Image, Modal, View, Switch, Text, ScrollView, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { ActivityIndicator, KeyboardAvoidingView, Image, Modal, View, Switch, Text, Platform, ScrollView, TextInput, TouchableOpacity, Alert } from 'react-native';
 import { useState } from 'react';
 import AntIcons from 'react-native-vector-icons/AntDesign';
 import MatIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -8,6 +8,7 @@ import { FloatingLabelInput } from 'react-native-floating-label-input';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { Menu, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-menu';
 import { Colors } from 'constants/Colors';
+import { InputField } from 'utils/InputField';
 import { useProfile } from './useProfile.hook';
 import { styles } from './Profile.styled';
 import avatar from 'images/avatar.png';
@@ -142,74 +143,63 @@ export function Profile() {
         supportedOrientations={['portrait', 'landscape']}
         onRequestClose={actions.hideDetails}
       >
-        <BlurView style={styles.modalOverlay} blurType={Colors.overlay} blurAmount={2} reducedTransparencyFallbackColor="black">
-          <View style={styles.modalContainer}>
-            <View style={styles.modalClose}>
-              <TouchableOpacity style={styles.dismissButton} activeOpacity={1} onPress={actions.hideDetails}>
-                <MatIcons name="close" size={20} color={Colors.descriptionText} />
-              </TouchableOpacity>
-            </View>
-            <Text style={styles.modalHeader}>{ state.strings.editDetails }</Text>
+          <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+          <BlurView style={styles.modalOverlay} blurType={Colors.overlay} blurAmount={2} reducedTransparencyFallbackColor="black">
+            <View style={styles.modalContainer}>
+              <View style={styles.modalClose}>
+                <TouchableOpacity style={styles.dismissButton} activeOpacity={1} onPress={actions.hideDetails}>
+                  <MatIcons name="close" size={20} color={Colors.descriptionText} />
+                </TouchableOpacity>
+              </View>
+              <Text style={styles.modalHeader}>{ state.strings.editDetails }</Text>
 
-            <View style={styles.modalInput}>
-              <FloatingLabelInput
+              <InputField
                 label={state.strings.name}
                 value={state.detailName}
                 autoCapitalize={'none'}
                 spellCheck={false}
-                inputStyles={styles.floatingInput}
-                labelStyles={styles.floatingLabel}
-                customLabelStyles={styles.floatingCustomLabel}
-                containerStyles={styles.floatingContainer}
+                multiline={false}
+                style={styles.field}
                 onChangeText={actions.setDetailName}
               />
-            </View>
 
-            <View style={styles.modalInput}>
-              <FloatingLabelInput
+              <InputField
                 label={state.strings.location}
                 value={state.detailLocation}
                 autoCapitalize={'none'}
                 spellCheck={false}
-                inputStyles={styles.floatingInput}
-                labelStyles={styles.floatingLabel}
-                customLabelStyles={styles.floatingCustomLabel}
-                containerStyles={styles.floatingContainer}
+                multiline={false}
+                style={styles.field}
                 onChangeText={actions.setDetailLocation}
               />
-            </View>
 
-            <View style={styles.modalInput}>
-              <FloatingLabelInput
+              <InputField
                 label={state.strings.description}
                 value={state.detailDescription}
                 autoCapitalize={'none'}
                 spellCheck={false}
                 multiline={true}
-                inputStyles={styles.floatingInput}
-                labelStyles={styles.floatingLabel}
-                customLabelStyles={styles.floatingCustomLabel}
-                containerStyles={styles.floatingContainer}
+                style={styles.field}
                 onChangeText={actions.setDetailDescription}
               />
-            </View>
 
-            <View style={styles.buttons}>
-              <TouchableOpacity style={styles.cancelButton} activeOpacity={1} onPress={actions.hideDetails}>
-                <Text style={styles.cancelButtonText}>{ state.strings.cancel }</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.saveButton} activeOpacity={1} onPress={saveDetails}>
-                { busyDetail && (
-                  <ActivityIndicator animating={true} color={Colors.primaryButtonText} />
-                )}
-                { !busyDetail && (
-                  <Text style={styles.saveButtonText}>{ state.strings.save }</Text>
-                )}
-              </TouchableOpacity>
-            </View>
+              <View style={styles.buttons}>
+                <TouchableOpacity style={styles.cancelButton} activeOpacity={1} onPress={actions.hideDetails}>
+                  <Text style={styles.cancelButtonText}>{ state.strings.cancel }</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.saveButton} activeOpacity={1} onPress={saveDetails}>
+                  { busyDetail && (
+                    <ActivityIndicator animating={true} color={Colors.primaryButtonText} />
+                  )}
+                  { !busyDetail && (
+                    <Text style={styles.saveButtonText}>{ state.strings.save }</Text>
+                  )}
+                </TouchableOpacity>
+              </View>
 
-          </View>
-        </BlurView>
+            </View>
+          </BlurView>
+        </KeyboardAvoidingView>
       </Modal>
 
     </ScrollView>
