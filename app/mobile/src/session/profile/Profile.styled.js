@@ -2,14 +2,22 @@ import { StyleSheet } from 'react-native';
 import { Colors } from 'constants/Colors';
 
 export const styles = StyleSheet.create({
+  container: {
+    width: '100%',
+    height: '100%',
+  },
   content: {
     width: '100%',
     height: '100%',
-    backgroundColor: Colors.screenBase,
+    position: 'absolute',
+    top: 0,
+    display: 'flex',
+    alignItems: 'center',
+  },
+  logo: {
+    alignSelf: 'center',
   },
   details: {
-    position: 'relative',
-    top: -32,
     minHeight: 32,
     borderTopRightRadius: 32,
     borderTopLeftRadius: 32,
@@ -20,11 +28,13 @@ export const styles = StyleSheet.create({
     borderRightWidth: 0.2,
     paddingLeft: 1,
     paddingRight: 1,
+    display: 'flex',
+    flexShrink: 1,
+    flexGrow: 1,
+    paddingBottom: 16,
   },
   control: {
-    position: 'absolute',
     width: '100%',
-    top: -24,
     display: 'flex',
     alignItems: 'center',
   },
@@ -81,6 +91,8 @@ export const styles = StyleSheet.create({
     backgroundColor: Colors.areaBase,
     borderRadius: 8,
     marginTop: 16,
+    display: 'flex',
+    flexShrink: 1,
   },
   divider: {
     width: '100%',
@@ -93,6 +105,15 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     padding: 8,
+  },
+  description: {
+    display: 'flex',
+    flexShrink: 1,
+  },
+  descriptionIcon: {
+    alignSelf: 'flex-start',
+    paddingLeft: 8,
+    paddingRight: 16,
   },
   icon: {
     paddingLeft: 8,
@@ -109,6 +130,7 @@ export const styles = StyleSheet.create({
     color: Colors.inputPlaceholder,
     fontFamily: 'roboto',
     fontStyle: 'italic',
+    flex: 1,
   },
   descriptionSet: {
     fontSize: 16,
@@ -121,6 +143,7 @@ export const styles = StyleSheet.create({
     color: Colors.inputPlaceholder,
     fontFamily: 'roboto',
     fontStyle: 'italic',
+    flex: 1,
   },
   visibleLabel: {
     fontSize: 16,

@@ -17,6 +17,7 @@ export function Profile() {
 
   const [busyDetail, setBusyDetail] = useState(false);
   const { state, actions } = useProfile();
+  const OVERLAP = 56;
 
   const onGallery = async () => {
     try {
@@ -70,11 +71,12 @@ export function Profile() {
   }
 
   return (
-    <ScrollView style={styles.content} contentContainerStyle={{ display: 'flex', alignItems: 'center' }}>
+    <View style={styles.container}>
+      <Image source={state.imageSource} style={{ ...styles.logo, width: state.imageWidth, height: state.imageHeight }} resizeMode={'contain'} />
 
-      <Image source={state.imageSource} style={{ width: state.imageWidth, height: state.imageHeight, alignSelf: 'center' }} resizeMode={'contain'} />
+    <View style={styles.content}>
+      <View style={{ width: state.imageWidth, height: state.imageHeight - OVERLAP }} />
 
-      <View style={{ ...styles.details, width: state.detailWidth }}>
         <View style={styles.control}>
           <Menu>
             <MenuTrigger customStyles={styles.trigger}>
@@ -93,6 +95,9 @@ export function Profile() {
             </MenuOptions>
           </Menu>
         </View>
+
+
+      <View style={{ ...styles.details, width: state.detailWidth }}>
 
         { state.name && (
           <Text style={styles.nameSet} numberOfLines={1} adjustsFontSizeToFit={true}>{ state.name }</Text>
@@ -114,15 +119,17 @@ export function Profile() {
             )}
           </View>
           <View style={styles.divider} />
-          <View style={styles.entry}>
-            <MatIcons name="book-open-outline" style={styles.icon} size={20} color={Colors.text} />
-            { state.location && (
+          <ScrollView style={styles.description}>
+            <View style={styles.entry}>
+            <MatIcons name="book-open-outline" style={styles.descriptionIcon} size={20} color={Colors.text} />
+            { state.description && (
               <Text style={styles.descriptionSet}>{ state.description }</Text>
             )}
             { !state.description && (
               <Text style={styles.descriptionUnset}>Description</Text>
             )}
-          </View>
+            </View>
+          </ScrollView>
         </View>
 
         <View style={styles.group}>
@@ -202,7 +209,8 @@ export function Profile() {
         </KeyboardAvoidingView>
       </Modal>
 
-    </ScrollView>
+    </View>
+    </View>
   );
 }
 
