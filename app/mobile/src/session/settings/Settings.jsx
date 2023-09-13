@@ -7,7 +7,7 @@ import { useSettings } from './useSettings.hook';
 import MatIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Colors from 'constants/Colors';
 import { BlurView } from "@react-native-community/blur";
-import { FloatingLabelInput } from 'react-native-floating-label-input';
+import { InputField } from 'utils/InputField';
 import { Logo } from 'utils/Logo';
 
 export function Settings() {
@@ -344,24 +344,14 @@ export function Settings() {
                 <>
                   <Text style={styles.modalDescription}>{ state.strings.sealUnset }</Text>
 
-                  <View style={styles.modalInput}>
-                    <FloatingLabelInput
-                      label={state.strings.password}
-                      isPassword={true}
-                      value={state.sealPassword}
-                      autoCapitalize={'none'} 
-                      spellCheck={false}
-
-                      inputStyles={styles.floatingInput}
-                      labelStyles={styles.floatingLabel}
-                      customLabelStyles={styles.floatingCustomLabel}
-                      containerStyles={styles.floatingContainer}
-
-                      onChangeText={actions.setSealPassword}
-                      customShowPasswordComponent={<MatIcons name="eye-outline" size={16} color={Colors.inputPlaceholder} />}
-                      customHidePasswordComponent={<MatIcons name="eye-off-outline" size={16} color={Colors.inputPlaceholder} />}
-                    />
-                  </View>
+                  <InputField style={styles.field}
+                    label={state.strings.password}
+                    secret={true}
+                    value={state.sealPassword}
+                    autoCapitalize={'none'} 
+                    spellCheck={false}
+                    onChangeText={actions.setSealPassword}
+                  />
      
                   { state.sealPassword && (
                     <TouchableOpacity style={styles.enabledButton} activeOpacity={1} onPress={() => sealAction(actions.generateKey)}>
@@ -380,24 +370,14 @@ export function Settings() {
                 <>
                   <Text style={styles.modalDescription}>{ state.strings.sealLocked }</Text>
 
-                  <View style={styles.modalInput}>
-                    <FloatingLabelInput
-                      label={state.strings.password}
-                      isPassword={true}
-                      value={state.sealPassword}
-                      autoCapitalize={'none'}
-                      spellCheck={false}
-
-                      inputStyles={styles.floatingInput}
-                      labelStyles={styles.floatingLabel}
-                      customLabelStyles={styles.floatingCustomLabel}
-                      containerStyles={styles.floatingContainer}
-
-                      onChangeText={actions.setSealPassword}
-                      customShowPasswordComponent={<MatIcons name="eye-outline" size={16} color={Colors.inputPlaceholder} />}
-                      customHidePasswordComponent={<MatIcons name="eye-off-outline" size={16} color={Colors.inputPlaceholder} />}
-                    />
-                  </View>
+                  <InputField style={styles.field}
+                    label={state.strings.password}
+                    secret={true}
+                    value={state.sealPassword}
+                    autoCapitalize={'none'}
+                    spellCheck={false}
+                    onChangeText={actions.setSealPassword}
+                  />
 
                   <View style={styles.buttons}>
                     { state.sealPassword && (
@@ -433,19 +413,13 @@ export function Settings() {
               { state.sealEnabled && state.sealRemove && (
                 <>
                   <Text style={styles.modalDescription}>{ state.strings.sealDelete }</Text>
-                  <View style={styles.modalInput}>
-                    <FloatingLabelInput
-                      label={state.strings.typeDelete}
-                      value={state.sealDelete}
-                      autoCapitalize={'none'}
-                      spellCheck={false}
-                      inputStyles={styles.floatingInput}
-                      labelStyles={styles.floatingLabel}
-                      customLabelStyles={styles.floatingCustomLabel}
-                      containerStyles={styles.floatingContainer}
-                      onChangeText={actions.setSealDelete}
-                    />
-                  </View>
+                  <InputField style={styles.field}
+                    label={state.strings.typeDelete}
+                    value={state.sealDelete}
+                    autoCapitalize={'none'}
+                    spellCheck={false}
+                    onChangeText={actions.setSealDelete}
+                  />
                   { state.sealDelete === state.strings.deleteKey && (
                     <TouchableOpacity style={styles.dangerButton} activeOpacity={1} onPress={() => sealAction(actions.removeKey)}>
                       <Text style={styles.dangerButtonText}>{ state.strings.delete }</Text>
@@ -470,24 +444,14 @@ export function Settings() {
                 <>
                   <Text style={styles.modalDescription}>{ state.strings.changePassword }</Text>
 
-                  <View style={styles.modalInput}>
-                    <FloatingLabelInput
-                      label={state.strings.password}
-                      isPassword={true}
-                      value={state.sealPassword}
-                      autoCapitalize={'none'} 
-                      spellCheck={false}
-
-                      inputStyles={styles.floatingInput}
-                      labelStyles={styles.floatingLabel}
-                      customLabelStyles={styles.floatingCustomLabel}
-                      containerStyles={styles.floatingContainer}
-
-                      onChangeText={actions.setSealPassword}
-                      customShowPasswordComponent={<MatIcons name="eye-outline" size={16} color={Colors.inputPlaceholder} />}
-                      customHidePasswordComponent={<MatIcons name="eye-off-outline" size={16} color={Colors.inputPlaceholder} />}
-                    />
-                  </View>
+                  <InputField style={styles.field}
+                    label={state.strings.password}
+                    isPassword={true}
+                    value={state.sealPassword}
+                    autoCapitalize={'none'} 
+                    spellCheck={false}
+                    onChangeText={actions.setSealPassword}
+                  />
 
                   { state.sealPassword && (
                     <TouchableOpacity style={styles.enabledButton} activeOpacity={1} onPress={() => sealAction(actions.updateKey)}>
@@ -531,43 +495,26 @@ export function Settings() {
               <ActivityIndicator style={styles.modalBusy} animating={busy} color={Colors.primary} />
 
               <Text textAlign={'center'} style={styles.modalDescription}>{ state.strings.changeMessage }</Text>
-              <View style={styles.modalInput}>
-                <FloatingLabelInput
-                  label={state.strings.username}
-                  value={state.username}
-                  autoCapitalize={'none'} 
-                  spellCheck={false}
-                  staticLabel={false}
-                  autoCorrect={false}
-                  autoComplete={'off'}
 
-                  inputStyles={styles.floatingInput}
-                  labelStyles={styles.floatingLabel}
-                  customLabelStyles={styles.floatingCustomLabel}
-                  containerStyles={styles.floatingContainer}
+              <InputField
+                label={state.strings.username}
+                value={state.username}
+                autoCapitalize={'none'}
+                spellCheck={false}
+                style={styles.field}
+                onChangeText={actions.setUsername}
+              /> 
 
-                  onChangeText={actions.setUsername}
-                />
-              </View>
+              <InputField
+                label={state.strings.password}
+                value={state.password}
+                autoCapitalize={'none'}
+                spellCheck={false}
+                style={styles.field}
+                onChangeText={actions.setPassword}
+                secret={true}
+              /> 
 
-              <View style={styles.modalInput}>
-                <FloatingLabelInput
-                  label={state.strings.password}
-                  isPassword={true}
-                  value={state.password}
-                  autoCapitalize={'none'} 
-                  spellCheck={false}
-
-                  inputStyles={styles.floatingInput}
-                  labelStyles={styles.floatingLabel}
-                  customLabelStyles={styles.floatingCustomLabel}
-                  containerStyles={styles.floatingContainer}
-
-                  onChangeText={actions.setPassword}
-                  customShowPasswordComponent={<MatIcons name="eye-outline" size={16} color={Colors.inputPlaceholder} />}
-                  customHidePasswordComponent={<MatIcons name="eye-off-outline" size={16} color={Colors.inputPlaceholder} />}
-                />
-              </View>
               <View style={styles.availableStatus}>
                 { state.validated && !state.available && (
                   <Text style={styles.notAvailable}>{ state.strings.notAvailable }</Text>
@@ -609,19 +556,13 @@ export function Settings() {
               <Text style={styles.modalHeader}>{ state.strings.deleteAccount }</Text>
               <ActivityIndicator style={styles.modalBusy} animating={busy} color={Colors.primary} />
 
-              <View style={styles.modalInput}>
-                <FloatingLabelInput
-                  label={state.strings.typeDelete}
-                  value={state.confirm}
-                  autoCapitalize={'none'} 
-                  spellCheck={false}
-                  inputStyles={styles.floatingInput}
-                  labelStyles={styles.floatingLabel}
-                  customLabelStyles={styles.floatingCustomLabel}
-                  containerStyles={styles.floatingContainer}
-                  onChangeText={actions.setConfirm}
-                />
-              </View>
+              <InputField style={styles.field}
+                label={state.strings.typeDelete}
+                value={state.confirm}
+                autoCapitalize={'none'} 
+                spellCheck={false}
+                onChangeText={actions.setConfirm}
+              />
  
               <View style={styles.buttons}>
                 { state.confirm === state.strings.deleteKey && (

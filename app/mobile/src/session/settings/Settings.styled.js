@@ -369,6 +369,30 @@ export const styles = StyleSheet.create({
     width: '100%',
     height: 32,
   },
-
+  field: {
+    input: {
+      backgroundColor: Colors.inputBase,
+      borderRadius: 8,
+      minHeight: 48,
+      maxHeight: 128,
+    },
+    inputText: {
+      color: Colors.inputText,
+    },
+    label: {
+      height: 16,
+      paddingLeft: 8,
+    },
+    labelText: {
+      color: Colors.inputPlaceholder,
+      fontSize: 12,
+    },
+    container: { 
+      width: '100%', 
+      paddingLeft: 16,
+      paddingRight: 16,
+      paddingTop: 8,
+    },
+  },
 });
 

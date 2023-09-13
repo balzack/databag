@@ -196,11 +196,13 @@ export const styles = StyleSheet.create({
   field: {
     input: {
       backgroundColor: Colors.inputBase,
-      color: Colors.inputText,
       borderRadius: 8,
       minHeight: 48,
       maxHeight: 128,
       paddingLeft: 8,
+    },
+    inputText: {
+      color: Colors.inputText,
     },
     label: {
       height: 16,
@@ -216,27 +218,6 @@ export const styles = StyleSheet.create({
       paddingRight: 16,
       paddingTop: 8,
     },
-  },
-  floatingInput: {
-    color: Colors.inputText,
-    paddingTop: 20,
-    paddingBottom: 4,
-  },
-  floatingLabel: {
-    color: Colors.text,
-  },
-  floatingCustomLabel: {
-    colorFocused: Colors.inputPlaceholder,
-    colorBlurred: Colors.inputPlaceholder,
-    fontSizeFocused: 12,
-  },
-  floatingContainer: {
-    paddingHorizontal: 12,
-    backgroundColor: Colors.inputBase,
-    width: '100%',
-    borderRadius: 8,
-    minHeight: 48,
-    maxHeight: 128,
   },
   buttons: {
     display: 'flex',

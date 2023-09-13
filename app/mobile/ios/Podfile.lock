@@ -336,8 +336,6 @@ PODS:
     - React-Core
   - react-native-document-picker (8.2.1):
     - React-Core
-  - react-native-floating-label-input (1.4.2):
-    - React-Core
   - react-native-image-resizer (3.0.5):
     - React-Core
   - react-native-keep-awake (1.2.0):
@@ -550,7 +548,6 @@ DEPENDENCIES:
   - "react-native-blur (from `../node_modules/@react-native-community/blur`)"
   - react-native-create-thumbnail (from `../node_modules/react-native-create-thumbnail`)
   - react-native-document-picker (from `../node_modules/react-native-document-picker`)
-  - react-native-floating-label-input (from `../node_modules/react-native-floating-label-input`)
   - "react-native-image-resizer (from `../node_modules/@bam.tech/react-native-image-resizer`)"
   - "react-native-keep-awake (from `../node_modules/@sayem314/react-native-keep-awake`)"
   - react-native-receive-sharing-intent (from `../node_modules/react-native-receive-sharing-intent`)
@@ -656,8 +653,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-create-thumbnail"
   react-native-document-picker:
     :path: "../node_modules/react-native-document-picker"
-  react-native-floating-label-input:
-    :path: "../node_modules/react-native-floating-label-input"
   react-native-image-resizer:
     :path: "../node_modules/@bam.tech/react-native-image-resizer"
   react-native-keep-awake:
@@ -771,7 +766,6 @@ SPEC CHECKSUMS:
   react-native-blur: cfdad7b3c01d725ab62a8a729f42ea463998afa2
   react-native-create-thumbnail: e022bcdcba8a0b4529a50d3fa1a832ec921be39d
   react-native-document-picker: 69ca2094d8780cfc1e7e613894d15290fdc54bba
-  react-native-floating-label-input: 70b2864337fa690c6d71d75dad66d8ec1d6bf162
   react-native-image-resizer: 00ceb0e05586c7aadf061eea676957a6c2ec60fa
   react-native-keep-awake: caee3ff89eaa21dfe29010f0d143566874a04441
   react-native-receive-sharing-intent: 62ab28c50e6ae56d32b9e841d7452091312a0bc7
