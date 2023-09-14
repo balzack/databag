@@ -152,8 +152,9 @@ export function Profile() {
         supportedOrientations={['portrait', 'landscape']}
         onRequestClose={actions.hideDetails}
       >
-        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-          <BlurView style={styles.modalOverlay} blurType={Colors.overlay} blurAmount={2} reducedTransparencyFallbackColor="black">
+        <View style={styles.modalOverlay}>
+          <BlurView style={styles.modalOverlay} blurType={Colors.overlay} blurAmount={2} reducedTransparencyFallbackColor="black" />
+          <KeyboardAvoidingView style={style.modalBase} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
             <View style={styles.modalContainer}>
               <View style={styles.modalClose}>
                 <TouchableOpacity style={styles.dismissButton} activeOpacity={1} onPress={actions.hideDetails}>
@@ -207,8 +208,8 @@ export function Profile() {
               </View>
 
             </View>
-          </BlurView>
         </KeyboardAvoidingView>
+        </View>
       </Modal>
 
     </View>
