@@ -138,7 +138,7 @@ export function Profile() {
             <TouchableOpacity activeOpacity={1} onPress={() => setVisible(!state.searchable)}>
               <Text style={styles.visibleLabel}>{ state.strings.visibleRegistry }</Text>
             </TouchableOpacity>
-            <Switch value={state.searchable} style={styles.visibleSwitch} thumbColor={Colors.sliderGrip} ios_backgroundColor={Colors.disabledIndicator}
+            <Switch value={state.searchable} style={Platform.OS==='ios' ? styles.visibleSwitch : {}} thumbColor={Colors.sliderGrip} ios_backgroundColor={Colors.disabledIndicator}
                 trackColor={styles.track} onValueChange={setVisible} />
           </TouchableOpacity>
         </View>
@@ -208,7 +208,7 @@ export function Profile() {
               </View>
 
             </View>
-        </KeyboardAvoidingView>
+          </KeyboardAvoidingView>
         </View>
       </Modal>
 

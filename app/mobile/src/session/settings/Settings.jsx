@@ -171,8 +171,10 @@ export function Settings() {
               <MatIcons name="bell-outline" size={20} color={Colors.linkText} />
             </View>
             <View style={styles.optionControl}>
-              <Text style={styles.optionLink}>{ state.strings.enableNotifications }</Text>
-              <Switch value={state.pushEnabled} style={styles.notifications} thumbColor={Colors.sliderGrip} ios_backgroundColor={Colors.disabledIndicator}
+              <TouchableOpacity activeOpacity={1} onPress={() => setNotifications(!state.pushEnabled)}>
+                <Text style={styles.optionLink}>{ state.strings.enableNotifications }</Text>
+              </TouchableOpacity>
+              <Switch value={state.pushEnabled} style={Platform.OS==='ios' ? styles.notifications : {}} thumbColor={Colors.sliderGrip} ios_backgroundColor={Colors.disabledIndicator}
                   trackColor={styles.track} onValueChange={setNotifications} />
             </View>
           </TouchableOpacity>
@@ -331,8 +333,9 @@ export function Settings() {
           supportedOrientations={['portrait', 'landscape']}
           onRequestClose={actions.hideEditSeal}
         >
-          <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-            <BlurView style={styles.modalOverlay} blurType={Colors.overlay} blurAmount={2} reducedTransparencyFallbackColor="black">
+          <View style={styles.modalOverlay}>
+            <BlurView style={styles.modalOverlay} blurType={Colors.overlay} blurAmount={2} reducedTransparencyFallbackColor="black" />
+            <KeyboardAvoidingView style={styles.modalBase} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
               <View style={styles.modalContainer}>
                 <View style={styles.modalClose}>
                   <TouchableOpacity style={styles.dismissButton} activeOpacity={1} onPress={actions.hideEditSeal}>
@@ -497,8 +500,8 @@ export function Settings() {
                   </>
                 )}
               </View>
-            </BlurView>
-          </KeyboardAvoidingView>
+            </KeyboardAvoidingView>
+          </View>
         </Modal>
 
         <Modal
@@ -508,8 +511,9 @@ export function Settings() {
           supportedOrientations={['portrait', 'landscape']}
           onRequestClose={actions.hideLogin}
         >
-          <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-            <BlurView style={styles.modalOverlay} blurType={Colors.overlay} blurAmount={2} reducedTransparencyFallbackColor="black">
+          <View style={styles.modalOverlay}>
+            <BlurView style={styles.modalOverlay} blurType={Colors.overlay} blurAmount={2} reducedTransparencyFallbackColor="black" />
+            <KeyboardAvoidingView style={styles.modalBase} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
               <View style={styles.modalContainer}>
                 <View style={styles.modalClose}>
                   <TouchableOpacity style={styles.dismissButton} activeOpacity={1} onPress={actions.hideLogin}>
@@ -561,8 +565,8 @@ export function Settings() {
                   )}
                 </View>
               </View>
-            </BlurView>
-          </KeyboardAvoidingView>
+            </KeyboardAvoidingView>
+          </View>
         </Modal>
  
         <Modal
@@ -572,38 +576,41 @@ export function Settings() {
           supportedOrientations={['portrait', 'landscape']}
           onRequestClose={actions.hideDelete}
         >
-          <BlurView style={styles.modalOverlay} blurType={Colors.overlay} blurAmount={2} reducedTransparencyFallbackColor="black">
-            <View style={styles.modalContainer}>
-              <View style={styles.modalClose}>
-                <TouchableOpacity style={styles.dismissButton} activeOpacity={1} onPress={actions.hideDelete}>
-                  <MatIcons name="close" size={20} color={Colors.descriptionText} />
-                </TouchableOpacity>
-              </View>
-              <Text style={styles.modalHeader}>{ state.strings.deleteAccount }</Text>
-              <ActivityIndicator style={styles.modalBusy} animating={busy} color={Colors.primary} />
-
-              <InputField style={styles.field}
-                label={state.strings.typeDelete}
-                value={state.confirm}
-                autoCapitalize={'none'} 
-                spellCheck={false}
-                onChangeText={actions.setConfirm}
-              />
- 
-              <View style={styles.buttons}>
-                { state.confirm === state.strings.deleteKey && (
-                  <TouchableOpacity style={styles.dangerButton} activeOpacity={1} onPress={deleteAccount}>
-                    <Text style={styles.dangerButtonText}>{ state.strings.delete }</Text>
+          <View style={styles.modalOverlay}>
+            <BlurView style={styles.modalOverlay} blurType={Colors.overlay} blurAmount={2} reducedTransparencyFallbackColor="black" />
+            <KeyboardAvoidingView style={styles.modalBase} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+              <View style={styles.modalContainer}>
+                <View style={styles.modalClose}>
+                  <TouchableOpacity style={styles.dismissButton} activeOpacity={1} onPress={actions.hideDelete}>
+                    <MatIcons name="close" size={20} color={Colors.descriptionText} />
                   </TouchableOpacity>
-                )}
-                { state.confirm !== state.strings.deleteKey && (
-                  <View style={styles.disabledButton}>
-                    <Text style={styles.disabledButtonText}>{ state.strings.delete }</Text>
-                  </View>
-                )}
+                </View>
+                <Text style={styles.modalHeader}>{ state.strings.deleteAccount }</Text>
+                <ActivityIndicator style={styles.modalBusy} animating={busy} color={Colors.primary} />
+
+                <InputField style={styles.field}
+                  label={state.strings.typeDelete}
+                  value={state.confirm}
+                  autoCapitalize={'none'} 
+                  spellCheck={false}
+                  onChangeText={actions.setConfirm}
+                />
+   
+                <View style={styles.buttons}>
+                  { state.confirm === state.strings.deleteKey && (
+                    <TouchableOpacity style={styles.dangerButton} activeOpacity={1} onPress={deleteAccount}>
+                      <Text style={styles.dangerButtonText}>{ state.strings.delete }</Text>
+                    </TouchableOpacity>
+                  )}
+                  { state.confirm !== state.strings.deleteKey && (
+                    <View style={styles.disabledButton}>
+                      <Text style={styles.disabledButtonText}>{ state.strings.delete }</Text>
+                    </View>
+                  )}
+                </View>
               </View>
-            </View>
-          </BlurView>
+            </KeyboardAvoidingView>
+          </View>
         </Modal>
   
         <Modal
@@ -613,36 +620,39 @@ export function Settings() {
           supportedOrientations={['portrait', 'landscape']}
           onRequestClose={state.hideBlockedContacts}
         >
-          <BlurView style={styles.modalOverlay} blurType={Colors.overlay} blurAmount={2} reducedTransparencyFallbackColor="black">
-            <View style={styles.modalContainer}>
-              <View style={styles.modalClose}>
-                <TouchableOpacity style={styles.dismissButton} activeOpacity={1} onPress={actions.hideBlockedContacts}>
-                  <MatIcons name="close" size={20} color={Colors.descriptionText} />
-                </TouchableOpacity>
-              </View>
-              <Text style={styles.modalHeader}>{ state.strings.blockedContacts }</Text>
-              <ActivityIndicator style={styles.modalBusy} animating={busy} color={Colors.primary} />
-              <View style={styles.modalList}>
-                { state.contacts.length === 0 && (
-                  <View style={styles.emptyLabel}>
-                    <Text style={styles.emptyLabelText}>{ state.strings.noBlockedContacts }</Text>
-                  </View>
-                )}
-                { state.contacts.length !== 0 && (
-                  <FlatList
-                    data={state.contacts}
-                    renderItem={BlockedContact}
-                    keyExtractor={item => item.cardId}
-                  />
-                )}
-              </View>
-              <View style={styles.rightButton}>
-                <TouchableOpacity style={styles.closeButton} activeOpacity={1} onPress={actions.hideBlockedContacts}>
-                  <Text style={styles.closeButtonText}>{ state.strings.close }</Text>
-                </TouchableOpacity>
+          <View style={styles.modalOverlay}>
+            <BlurView style={styles.modalOverlay} blurType={Colors.overlay} blurAmount={2} reducedTransparencyFallbackColor="black" />
+            <View style={styles.modalBase}>
+              <View style={styles.modalContainer}>
+                <View style={styles.modalClose}>
+                  <TouchableOpacity style={styles.dismissButton} activeOpacity={1} onPress={actions.hideBlockedContacts}>
+                    <MatIcons name="close" size={20} color={Colors.descriptionText} />
+                  </TouchableOpacity>
+                </View>
+                <Text style={styles.modalHeader}>{ state.strings.blockedContacts }</Text>
+                <ActivityIndicator style={styles.modalBusy} animating={busy} color={Colors.primary} />
+                <View style={styles.modalList}>
+                  { state.contacts.length === 0 && (
+                    <View style={styles.emptyLabel}>
+                      <Text style={styles.emptyLabelText}>{ state.strings.noBlockedContacts }</Text>
+                    </View>
+                  )}
+                  { state.contacts.length !== 0 && (
+                    <FlatList
+                      data={state.contacts}
+                      renderItem={BlockedContact}
+                      keyExtractor={item => item.cardId}
+                    />
+                  )}
+                </View>
+                <View style={styles.rightButton}>
+                  <TouchableOpacity style={styles.closeButton} activeOpacity={1} onPress={actions.hideBlockedContacts}>
+                    <Text style={styles.closeButtonText}>{ state.strings.close }</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
-          </BlurView>
+          </View>
         </Modal>
    
         <Modal
@@ -652,36 +662,39 @@ export function Settings() {
           supportedOrientations={['portrait', 'landscape']}
           onRequestClose={state.hideBlockedTopics}
         >
-          <BlurView style={styles.modalOverlay} blurType={Colors.overlay} blurAmount={2} reducedTransparencyFallbackColor="black">
-            <View style={styles.modalContainer}>
-              <View style={styles.modalClose}>
-                <TouchableOpacity style={styles.dismissButton} activeOpacity={1} onPress={actions.hideBlockedTopics}>
-                  <MatIcons name="close" size={20} color={Colors.descriptionText} />
-                </TouchableOpacity>
-              </View>
-              <Text style={styles.modalHeader}>{ state.strings.blockedTopics }</Text>
-              <ActivityIndicator style={styles.modalBusy} animating={busy} color={Colors.primary} />
-              <View style={styles.modalList}>
-                { state.topics.length === 0 && (
-                  <View style={styles.emptyLabel}>
-                    <Text style={styles.emptyLabelText}>{ state.strings.noBlockedTopics }</Text>
-                  </View>
-                )}
-                { state.topics.length !== 0 && (
-                  <FlatList
-                    data={state.topics}
-                    renderItem={BlockedTopic}
-                    keyExtractor={item => `${item.cardId}.${item.channelId}`}
-                  />
-                )}
-              </View>
-              <View style={styles.rightButton}>
-                <TouchableOpacity style={styles.closeButton} activeOpacity={1} onPress={actions.hideBlockedTopics}>
-                  <Text style={styles.closeButtonText}>{ state.strings.close }</Text>
-                </TouchableOpacity>
+          <View style={styles.modalOverlay}>
+            <BlurView style={styles.modalOverlay} blurType={Colors.overlay} blurAmount={2} reducedTransparencyFallbackColor="black" />
+            <View style={styles.modalBase}>
+              <View style={styles.modalContainer}>
+                <View style={styles.modalClose}>
+                  <TouchableOpacity style={styles.dismissButton} activeOpacity={1} onPress={actions.hideBlockedTopics}>
+                    <MatIcons name="close" size={20} color={Colors.descriptionText} />
+                  </TouchableOpacity>
+                </View>
+                <Text style={styles.modalHeader}>{ state.strings.blockedTopics }</Text>
+                <ActivityIndicator style={styles.modalBusy} animating={busy} color={Colors.primary} />
+                <View style={styles.modalList}>
+                  { state.topics.length === 0 && (
+                    <View style={styles.emptyLabel}>
+                      <Text style={styles.emptyLabelText}>{ state.strings.noBlockedTopics }</Text>
+                    </View>
+                  )}
+                  { state.topics.length !== 0 && (
+                    <FlatList
+                      data={state.topics}
+                      renderItem={BlockedTopic}
+                      keyExtractor={item => `${item.cardId}.${item.channelId}`}
+                    />
+                  )}
+                </View>
+                <View style={styles.rightButton}>
+                  <TouchableOpacity style={styles.closeButton} activeOpacity={1} onPress={actions.hideBlockedTopics}>
+                    <Text style={styles.closeButtonText}>{ state.strings.close }</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
-          </BlurView>
+          </View>
         </Modal>
     
         <Modal
@@ -691,36 +704,39 @@ export function Settings() {
           supportedOrientations={['portrait', 'landscape']}
           onRequestClose={actions.hideBlockedMessages}
         >
-          <BlurView style={styles.modalOverlay} blurType={Colors.overlay} blurAmount={2} reducedTransparencyFallbackColor="black">
-            <View style={styles.modalContainer}>
-              <View style={styles.modalClose}>
-                <TouchableOpacity style={styles.dismissButton} activeOpacity={1} onPress={actions.hideBlockedMessages}>
-                  <MatIcons name="close" size={20} color={Colors.descriptionText} />
-                </TouchableOpacity>
-              </View>
-              <Text style={styles.modalHeader}>{ state.strings.blockedMessages }</Text>
-              <ActivityIndicator style={styles.modalBusy} animating={busy} color={Colors.primary} />
-              <View style={styles.modalList}>
-                { state.messages.length === 0 && (
-                  <View style={styles.emptyLabel}>
-                    <Text style={styles.emptyLabelText}>{ state.strings.noBlockedMessages }</Text>
-                  </View>
-                )}
-                { state.messages.length !== 0 && (
-                  <FlatList
-                    data={state.messages}
-                    renderItem={BlockedMessage}
-                    keyExtractor={item => `${item.cardId}.${item.channelId}.${item.topicId}`}
-                  />
-                )}
-              </View>
-              <View style={styles.rightButton}>
-                <TouchableOpacity style={styles.closeButton} activeOpacity={1} onPress={actions.hideBlockedMessages}>
-                  <Text style={styles.closeButtonText}>{ state.strings.close }</Text>
-                </TouchableOpacity>
+          <View style={styles.modalOverlay}>
+            <BlurView style={styles.modalOverlay} blurType={Colors.overlay} blurAmount={2} reducedTransparencyFallbackColor="black" />
+            <View style={styles.modalBase}>
+              <View style={styles.modalContainer}>
+                <View style={styles.modalClose}>
+                  <TouchableOpacity style={styles.dismissButton} activeOpacity={1} onPress={actions.hideBlockedMessages}>
+                    <MatIcons name="close" size={20} color={Colors.descriptionText} />
+                  </TouchableOpacity>
+                </View>
+                <Text style={styles.modalHeader}>{ state.strings.blockedMessages }</Text>
+                <ActivityIndicator style={styles.modalBusy} animating={busy} color={Colors.primary} />
+                <View style={styles.modalList}>
+                  { state.messages.length === 0 && (
+                    <View style={styles.emptyLabel}>
+                      <Text style={styles.emptyLabelText}>{ state.strings.noBlockedMessages }</Text>
+                    </View>
+                  )}
+                  { state.messages.length !== 0 && (
+                    <FlatList
+                      data={state.messages}
+                      renderItem={BlockedMessage}
+                      keyExtractor={item => `${item.cardId}.${item.channelId}.${item.topicId}`}
+                    />
+                  )}
+                </View>
+                <View style={styles.rightButton}>
+                  <TouchableOpacity style={styles.closeButton} activeOpacity={1} onPress={actions.hideBlockedMessages}>
+                    <Text style={styles.closeButtonText}>{ state.strings.close }</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
-          </BlurView>
+          </View>
         </Modal>
      
       </SafeAreaView>

@@ -115,11 +115,18 @@ export const styles = StyleSheet.create({
     transform: [{ scaleX: .6 }, { scaleY: .6 }],
   },
   modalOverlay: {
+    width: '100%',
+    height: '100%',
+  },
+  modalBase: {
     display: 'flex',
     width: '100%',
     height: '100%',
     alignItems: 'center',
     justifyContent: 'center',
+    position: 'absolute',
+    top: 0,
+    left: 0,
   },
   modalContainer: {
     backgroundColor: Colors.modalBase,
