@@ -108,7 +108,7 @@ export function Profile() {
 
         <Text style={styles.username} numberOfLines={1}>{ state.username }</Text>
 
-        <View style={styles.group}>
+        <View style={styles.attributes}>
           <View style={styles.entry}>
             <AntIcons name="enviromento" style={styles.icon} size={20} color={Colors.text} />
             { state.location && (
@@ -135,7 +135,9 @@ export function Profile() {
         <View style={styles.group}>
           <TouchableOpacity style={styles.entry} activeOpacity={1}>
             <MatIcons name="eye-outline" style={styles.icon} size={20} color={Colors.text} />
-            <Text style={styles.visibleLabel}>{ state.strings.visibleRegistry }</Text>
+            <TouchableOpacity activeOpacity={1} onPress={() => setVisible(!state.searchable)}>
+              <Text style={styles.visibleLabel}>{ state.strings.visibleRegistry }</Text>
+            </TouchableOpacity>
             <Switch value={state.searchable} style={styles.visibleSwitch} thumbColor={Colors.sliderGrip} ios_backgroundColor={Colors.disabledIndicator}
                 trackColor={styles.track} onValueChange={setVisible} />
           </TouchableOpacity>

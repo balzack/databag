@@ -92,6 +92,14 @@ export const styles = StyleSheet.create({
     borderRadius: 8,
     marginTop: 16,
     display: 'flex',
+  },
+  attributes: {
+    marginLeft: 16,
+    marginRight: 16,
+    backgroundColor: Colors.areaBase,
+    borderRadius: 8,
+    marginTop: 16,
+    display: 'flex',
     flexShrink: 1,
   },
   divider: {
