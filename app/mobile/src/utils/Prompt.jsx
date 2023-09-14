@@ -40,28 +40,31 @@ export function Prompt() {
         supportedOrientations={['portrait', 'landscape']}
         onRequestClose={display.actions.hidePrompt}
       >
-        <BlurView style={styles.modalOverlay} blurType={Colors.overlay} blurAmount={2} reducedTransparencyFallbackColor="black">
-          <View style={styles.modalContainer}>
-            <Text style={styles.modalHeader}>{ display.state.prompt?.title }</Text>
-            <View style={styles.modalButtons}>
-              { display.state.prompt?.cancel && (
-                <TouchableOpacity style={styles.cancelButton} activeOpacity={1} onPress={display.actions.hidePrompt}>
-                  <Text style={styles.cancelButtonText}>{ display.state.prompt?.cancel?.label }</Text>
-                </TouchableOpacity>
-              )}
-              { display.state.prompt?.ok && (
-                <TouchableOpacity style={styles.okButton} activeOpacity={1} onPress={okPrompt}>
-                  { !busy && (
-                    <Text style={styles.okButtonText}>{ display.state.prompt?.ok?.label }</Text>
-                  )}
-                  { busy && (
-                    <ActivityIndicator animating={true} color={Colors.primaryButtonText} />
-                  )}
-                </TouchableOpacity>
-              )}
+        <View style={styles.modalOverlay}>
+          <BlurView style={styles.modalOverlay} blurType={Colors.overlay} blurAmount={2} reducedTransparencyFallbackColor="black" />
+          <View style={styles.modalBase}>
+            <View style={styles.modalContainer}>
+              <Text style={styles.modalHeader}>{ display.state.prompt?.title }</Text>
+              <View style={styles.modalButtons}>
+                { display.state.prompt?.cancel && (
+                  <TouchableOpacity style={styles.cancelButton} activeOpacity={1} onPress={display.actions.hidePrompt}>
+                    <Text style={styles.cancelButtonText}>{ display.state.prompt?.cancel?.label }</Text>
+                  </TouchableOpacity>
+                )}
+                { display.state.prompt?.ok && (
+                  <TouchableOpacity style={styles.okButton} activeOpacity={1} onPress={okPrompt}>
+                    { !busy && (
+                      <Text style={styles.okButtonText}>{ display.state.prompt?.ok?.label }</Text>
+                    )}
+                    { busy && (
+                      <ActivityIndicator animating={true} color={Colors.primaryButtonText} />
+                    )}
+                  </TouchableOpacity>
+                )}
+              </View>
             </View>
           </View>
-        </BlurView>
+        </View>
       </Modal>
 
       <Modal

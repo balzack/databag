@@ -157,6 +157,7 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     color: Colors.text,
     fontFamily: 'roboto',
+    paddingRight: 8,
   },
   track: {
     false: Colors.idleFill,
