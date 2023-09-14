@@ -2,6 +2,43 @@ import { StyleSheet } from 'react-native';
 import { Colors } from 'constants/Colors';
 
 export const styles = StyleSheet.create({
+  drawerContainer: {
+    width: '100%',
+    display: 'flex',
+    alignItems: 'center',
+  },
+  drawerHeader: {
+    fontFamily: 'roboto',
+    color: Colors.text,
+    fontSize: 20,
+    padding: 16,
+  },
+  drawerFrame: {
+    width: '50%',
+    maxWidth: 400,
+    paddingBottom: 16,
+  },
+  drawerLogo: {
+    aspectRatio: 1,
+    resizeMode: 'contain',
+    borderRadius: 8,
+    width: null,
+    height: null,
+  },
+  drawerLogoEdit: {
+    position: 'absolute',
+    top: 0,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignSelf: 'center',
+    backgroundColor: 'rgba(255,255,255,0.6)',
+    paddingLeft: 8,
+    paddingRight: 8,
+    borderBottomLeftRadius: 6,
+    borderBottomRightRadius: 6,
+  },
+
   container: {
     width: '100%',
     height: '100%',

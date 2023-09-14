@@ -11,6 +11,7 @@ import { useSession } from './useSession.hook';
 import { styles } from './Session.styled';
 import Colors from 'constants/Colors';
 import { Profile } from './profile/Profile';
+import { ProfileSettings } from './profileSettings/ProfileSettings';
 import { CardsHeader, CardsBody, Cards } from './cards/Cards';
 import { RegistryHeader, RegistryBody, Registry } from './registry/Registry';
 import { ContactHeader, ContactBody, Contact } from './contact/Contact';
@@ -433,7 +434,7 @@ export function Session({ sharing, clearSharing }) {
           <View style={styles.container}>
             { state.tabbed === false && (
               <ProfileDrawer.Navigator screenOptions={{ ...drawerParams, drawerStyle: { width: '45%' } }} drawerContent={(props) => (
-                  <ScrollView style={styles.drawer}><SafeAreaView edges={['top', 'bottom', 'right']}><Profile /></SafeAreaView></ScrollView>
+                  <ProfileSettings />
                 )}>
                 <ProfileDrawer.Screen name="detail">
                   {(props) => <DetailDrawerScreen navParams={{ profileNav: props.navigation, state, actions, addChannel, dmChannel, shareChannel, shareIntent, setShareIntent }} />}

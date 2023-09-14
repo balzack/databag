@@ -49,7 +49,7 @@ export function useProfile() {
   useEffect(() => {
     const { name, handle, node, location, description, image } = profile.state.identity;
     const imageSource = image ? { uri: profile.state.imageUrl } : avatar;
-    const username = `${handle} / ${node}`
+    const username = `${handle}/${node}`
     updateState({ name, username, location, description, imageSource });
   }, [profile.state]);
 

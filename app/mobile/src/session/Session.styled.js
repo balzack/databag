@@ -95,7 +95,7 @@ export const styles = StyleSheet.create({
     paddingTop: 8,
     paddingLeft: 8,
     paddingRight: 8,
-    backgroundColor: Colors.formBackground,
+    backgroundColor: Colors.drawerBase,
   },
   options: {
     display: 'flex',
