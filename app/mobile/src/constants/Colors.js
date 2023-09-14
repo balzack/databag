@@ -2,6 +2,7 @@ import { Appearance } from 'react-native'
 
 const LightColors = {
   overlay: 'dark',
+  statusBar: 'dark-content',
   tabBar: '#448866',
   activeTabIcon: '#ffffff',
   idleTabIcon: '#cccccc',
@@ -53,6 +54,7 @@ const LightColors = {
 
 const DarkColors = {
   overlay: 'dark',
+  statusBar: 'light-content',
   tabBar: '#111111',
   activeTabIcon: '#dddddd',
   idleTabIcon: '#aaaaaa',

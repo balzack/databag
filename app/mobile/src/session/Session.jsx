@@ -469,7 +469,7 @@ export function Session({ sharing, clearSharing }) {
                 <Tab.Screen name="Settings" component={SettingsStackScreen} />
               </Tab.Navigator>
             )}
-            <StatusBar barStyle="dark-content" backgroundColor={Colors.formBackground} /> 
+            <StatusBar barStyle={Colors.statusBar} backgroundColor={Colors.screenBase} /> 
           </View>
         )}
       </View>
