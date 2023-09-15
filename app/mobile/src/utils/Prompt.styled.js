@@ -98,5 +98,15 @@ export const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     flexDirection: 'row',
   },
+  centerModalButtons: {
+    width: '100%',
+    paddingLeft: 16,
+    paddingRight: 16,
+    paddingTop: 16,
+    display: 'flex',
+    alignItems: 'flex-end',
+    justifyContent: 'center',
+    flexDirection: 'row',
+  },
 });
 

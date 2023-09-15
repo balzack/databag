@@ -289,6 +289,7 @@ export function useSettings() {
     promptLogout: () => {
       display.actions.showPrompt({
         title: state.strings.loggingOut,
+        centerButtons: true,
         ok: { label: state.strings.confirmLogout, action: app.actions.logout, failed: () => {
           Alert.alert(
             state.strings.error,

@@ -163,7 +163,93 @@ export function Settings({ drawer }) {
   return (
     <>
       { drawer && (
-        <Text>SETTINGS DRAWER</Text>
+        <>
+          <View style={styles.drawerDivider} />
+          <TouchableOpacity style={styles.drawerEntry} activeOpacity={1}>
+            <View style={styles.icon}>
+              <MatIcons name="bell-outline" size={20} color={Colors.text} />
+            </View>
+            <View style={styles.optionControl}>
+              <TouchableOpacity activeOpacity={1} onPress={() => setNotifications(!state.pushEnabled)}>
+                <Text style={styles.optionText}>{ state.strings.enableNotifications }</Text>
+              </TouchableOpacity>
+              <Switch value={state.pushEnabled} style={Platform.OS==='ios' ? styles.notifications : {}} thumbColor={Colors.sliderGrip} ios_backgroundColor={Colors.disabledIndicator}
+                  trackColor={styles.track} onValueChange={setNotifications} />
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.drawerEntry} activeOpacity={1} onPress={actions.showEditSeal}>
+            <View style={styles.icon}>
+              <MatIcons name="lock-outline" size={20} color={Colors.text} />
+            </View>
+            <View style={styles.optionControl}>
+              { state.sealEnabled && (
+                <Text style={styles.optionLink}>{ state.strings.manageTopics }</Text>
+              )}
+              { !state.sealEnabled && (
+                <Text style={styles.optionLink}>{ state.strings.enableTopics }</Text>
+              )}
+            </View>
+          </TouchableOpacity>
+          <View style={styles.drawerDivider} />
+          <TouchableOpacity style={styles.drawerEntry} activeOpacity={1} onPress={actions.promptLogout}>
+            <View style={styles.icon}>
+              <MatIcons name="logout" size={20} color={Colors.text} />
+            </View>
+            <View style={styles.optionControl}>
+              <Text style={styles.optionLink}>{ state.strings.logout }</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.drawerEntry} activeOpacity={1} onPress={actions.showLogin}>
+            <View style={styles.icon}>
+              <MatIcons name="login" size={20} color={Colors.text} />
+            </View>
+            <View style={styles.optionControl}>
+              <Text style={styles.optionLink}>{ state.strings.changeLogin }</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.drawerEntry} activeOpacity={1} onPress={actions.showDelete}>
+            <View style={styles.icon}>
+              <MatIcons name="trash-can-outline" size={20} color={Colors.text} />
+            </View>
+            <View style={styles.optionControl}>
+              <Text style={styles.dangerLink}>{ state.strings.deleteAccount }</Text>
+            </View>
+          </TouchableOpacity>
+          <View style={styles.drawerDivider} />
+          <TouchableOpacity style={styles.drawerEntry} activeOpacity={1} onPress={actions.showBlockedContacts}>
+            <View style={styles.icon}>
+              <MatIcons name="account-multiple-outline" size={24} color={Colors.text} />
+            </View>
+            <View style={styles.optionControl}>
+              <Text style={styles.optionLink}>{ state.strings.blockedContacts }</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.drawerEntry} activeOpacity={1} onPress={actions.showBlockedTopics}>
+            <View style={styles.icon}>
+              <MatIcons name="book-open-outline" size={20} color={Colors.text} />
+            </View>
+            <View style={styles.optionControl}>
+              <Text style={styles.optionLink}>{ state.strings.blockedTopics }</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.drawerEntry} activeOpacity={1} onPress={actions.showBlockedMessages}>
+            <View style={styles.icon}>
+              <MatIcons name="comment-text-multiple-outline" size={20} color={Colors.text} />
+            </View>
+            <View style={styles.optionControl}>
+              <Text style={styles.optionLink}>{ state.strings.blockedMessages }</Text>
+            </View>
+          </TouchableOpacity>
+          <View style={styles.drawerDivider} />
+          <TouchableOpacity style={styles.drawerEntry} activeOpacity={1} onPress={() => Linking.openURL('https://github.com/balzack/databag/discussions')}>
+            <View style={styles.icon}>
+              <MatIcons name="help-network-outline" size={24} color={Colors.text} />
+            </View>
+            <View style={styles.optionControl}>
+              <Text style={styles.optionLink}>{ state.strings.support }</Text>
+            </View>
+          </TouchableOpacity>
+        </>
       )}
       { !drawer && (
         <ScrollView style={styles.content}>
@@ -254,7 +340,7 @@ export function Settings({ drawer }) {
                   </TouchableOpacity>
                 </View>
               </TouchableOpacity>
-     
+           
             </View>
 
             <Text style={styles.label}>{ state.strings.account }</Text>

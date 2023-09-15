@@ -45,7 +45,7 @@ export function Prompt() {
           <View style={styles.modalBase}>
             <View style={styles.modalContainer}>
               <Text style={styles.modalHeader}>{ display.state.prompt?.title }</Text>
-              <View style={styles.modalButtons}>
+              <View style={display.state.prompt?.centerButtons ? styles.centerModalButtons : styles.modalButtons}>
                 { display.state.prompt?.cancel && (
                   <TouchableOpacity style={styles.cancelButton} activeOpacity={1} onPress={display.actions.hidePrompt}>
                     <Text style={styles.cancelButtonText}>{ display.state.prompt?.cancel?.label }</Text>

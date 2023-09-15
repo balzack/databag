@@ -77,10 +77,10 @@ export function Profile({ drawer }) {
           <Text style={styles.drawerHeader} adjustsFontSizeToFit={true}>{ state.username }</Text>
           <View style={styles.drawerFrame}>
             <Image source={state.imageSource} style={styles.drawerLogo} resizeMode={'contain'} />
-            <View style={styles.drawerLogoEdit}>
+            <TouchableOpacity activeOpacity={1} style={styles.drawerLogoEdit} onPress={onGallery}>
               <Text style={styles.editLabel}>{ state.strings.edit }</Text>
               <MatIcons name="square-edit-outline" size={14} color={Colors.linkText} />
-            </View>
+            </TouchableOpacity>
           </View>
           <View style={styles.drawerEditDivider}>
             <View style={styles.drawerLine} />
@@ -98,7 +98,7 @@ export function Profile({ drawer }) {
             )}
           </View>
           <View style={styles.drawerEntry}>
-            <AntIcons name="enviromento" style={styles.icon} size={20} color={Colors.text} />
+            <AntIcons name="enviromento" style={styles.drawerIcon} size={20} color={Colors.text} />
             { state.location && (
               <Text style={styles.locationSet}>{ state.location }</Text>
             )}
@@ -107,7 +107,7 @@ export function Profile({ drawer }) {
             )}
           </View>
           <View style={styles.drawerEntry}>
-            <MatIcons name="book-open-outline" style={styles.descriptionIcon} size={20} color={Colors.text} />
+            <MatIcons name="book-open-outline" style={styles.drawerDescriptionIcon} size={20} color={Colors.text} />
             { state.description && (
               <Text style={styles.descriptionSet}>{ state.description }</Text>
             )}
@@ -115,7 +115,14 @@ export function Profile({ drawer }) {
               <Text style={styles.descriptionUnset}>Description</Text>
             )}
           </View>
-          <View style={styles.drawerDivider} />
+          <TouchableOpacity style={styles.drawerEntry} activeOpacity={1}>
+            <MatIcons name="eye-outline" style={styles.drawerIcon} size={20} color={Colors.text} />
+            <TouchableOpacity activeOpacity={1} onPress={() => setVisible(!state.searchable)}>
+              <Text style={styles.visibleLabel}>{ state.strings.visibleRegistry }</Text>
+            </TouchableOpacity>
+            <Switch value={state.searchable} style={Platform.OS==='ios' ? styles.visibleSwitch : {}} thumbColor={Colors.sliderGrip} ios_backgroundColor={Colors.disabledIndicator}
+                trackColor={styles.track} onValueChange={setVisible} />
+          </TouchableOpacity>
         </View>
       )}
       { !drawer && (

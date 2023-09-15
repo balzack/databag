@@ -2,6 +2,19 @@ import { StyleSheet } from 'react-native';
 import { Colors } from 'constants/Colors';
 
 export const styles = StyleSheet.create({
+  drawerDivider: {
+    width: '80%',
+    borderWidth: 1,
+    borderColor: Colors.areaBase,
+    marginTop: 16,
+  },
+  drawerEntry: {
+    width: '80%',
+    display: 'flex',
+    alignItems: 'center',
+    flexDirection: 'row',
+    padding: 8,
+  },
   content: {
     width: '100%',
     height: '100%',

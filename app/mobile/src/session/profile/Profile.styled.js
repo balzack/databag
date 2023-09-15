@@ -209,9 +209,18 @@ export const styles = StyleSheet.create({
     paddingLeft: 8,
     paddingRight: 16,
   },
+  drawerDescriptionIcon: {
+    alignSelf: 'flex-start',
+    paddingLeft: 8,
+    paddingRight: 8,
+  },
   icon: {
     paddingLeft: 8,
     paddingRight: 16,
+  },
+  drawerIcon: {
+    paddingLeft: 8,
+    paddingRight: 8,
   },
   locationSet: {
     fontSize: 16,
