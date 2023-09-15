@@ -82,6 +82,40 @@ export function Profile({ drawer }) {
               <MatIcons name="square-edit-outline" size={14} color={Colors.linkText} />
             </View>
           </View>
+          <View style={styles.drawerEditDivider}>
+            <View style={styles.drawerLine} />
+            <TouchableOpacity style={styles.drawerNameEdit} activeOpacity={1} onPress={actions.showDetails}>
+              <Text style={styles.editLabel}>{ state.strings.edit }</Text>
+              <MatIcons name="square-edit-outline" size={14} color={Colors.linkText} />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.drawerName}>
+            { state.name && (
+              <Text style={styles.drawerNameSet} numberOfLines={1} adjustsFontSizeToFit={true}>{ state.name }</Text>
+            )}
+            { !state.name && (
+              <Text style={styles.drawerNameUnset}>{ state.strings.name }</Text>
+            )}
+          </View>
+          <View style={styles.drawerEntry}>
+            <AntIcons name="enviromento" style={styles.icon} size={20} color={Colors.text} />
+            { state.location && (
+              <Text style={styles.locationSet}>{ state.location }</Text>
+            )}
+            { !state.location && (
+              <Text style={styles.locationUnset}>Location</Text>
+            )}
+          </View>
+          <View style={styles.drawerEntry}>
+            <MatIcons name="book-open-outline" style={styles.descriptionIcon} size={20} color={Colors.text} />
+            { state.description && (
+              <Text style={styles.descriptionSet}>{ state.description }</Text>
+            )}
+            { !state.description && (
+              <Text style={styles.descriptionUnset}>Description</Text>
+            )}
+          </View>
+          <View style={styles.drawerDivider} />
         </View>
       )}
       { !drawer && (
