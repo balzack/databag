@@ -14,7 +14,7 @@ import { Profile } from './profile/Profile';
 import { ProfileSettings } from './profileSettings/ProfileSettings';
 import { CardsHeader, CardsBody, Cards } from './cards/Cards';
 import { RegistryHeader, RegistryBody, Registry } from './registry/Registry';
-import { ContactHeader, ContactBody, Contact } from './contact/Contact';
+import { Contact } from './contact/Contact';
 import { Details } from './details/Details';
 import { Conversation, ConversationHeader, ConversationBody } from './conversation/Conversation';
 import { Welcome } from './welcome/Welcome';
@@ -163,10 +163,8 @@ function ContactStackScreen({ addChannel }) {
           {(props) => <CardsBody filter={filter} sort={sort} openContact={(contact) => openContact(props.navigation, contact)} addChannel={addChannel} />}
         </ContactStack.Screen>
 
-        <ContactStack.Screen name="contact" options={{ ...stackParams, headerTitle: (props) => (
-            <ContactHeader contact={contact} />
-          )}}>
-          {(props) => <ScrollView><ContactBody contact={contact} /></ScrollView>}
+        <ContactStack.Screen name="contact" options={{ headerShown: false }}>
+          {(props) => <Contact contact={contact} back={props.navigation.goBack} />}
         </ContactStack.Screen>
 
         <ContactStack.Screen name="registry" options={{ ...stackParams, headerTitle: (props) => (

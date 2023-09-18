@@ -1,10 +1,13 @@
 import { useState, useEffect, useRef, useContext } from 'react';
+import { useWindowDimensions } from 'react-native';
 import { CardContext } from 'context/CardContext';
 import { ProfileContext } from 'context/ProfileContext';
 import { getListingMessage } from 'api/getListingMessage';
 import { getListingImageUrl } from 'api/getListingImageUrl';
 import { addFlag } from 'api/addFlag';
 import { getCardByGuid } from 'context/cardUtil';
+import { getLanguageStrings } from 'constants/Strings';
+import avatar from 'images/avatar.png';
 
 export function useContact(contact) {
 
@@ -14,14 +17,22 @@ export function useContact(contact) {
     node: null,
     location: null,
     description: null,
-    logo: null,
     status: null,
     cardId: null,
     guid: null,
     busy: false,
     offsync: false,
+
+    
+    strings: getLanguageStrings(),
+    imageSource: null,
+    imageWidth: null,
+    imageHeight: null,
+    detailWidth: null,
+    username: null,
   });
 
+  const dimensions = useWindowDimensions();
   const card = useContext(CardContext);
   const profile = useContext(ProfileContext);
 
@@ -30,20 +41,34 @@ export function useContact(contact) {
   }
 
   useEffect(() => {
+    const { width, height } = dimensions;
+    if (height > width) {
+      updateState({ imageWidth: width, imageHeight: width, detailWidth: width + 2 });
+    }
+    else {
+      updateState({ imageWidth: height, imageHeight: height, detailWidth: width + 2 });
+    }
+  }, [dimensions]);
+
+  useEffect(() => {
     const contactCard = getCardByGuid(card.state.cards, contact?.guid);
     const { server } = profile.state;
     if (contactCard) {
       const { offsync, profile, detail, cardId } = contactCard.card;
       const { name, handle, node, location, description, guid, imageSet, revision } = profile;
       const host = node ? node : server;
-      const logo = imageSet ? card.actions.getCardImageUrl(cardId) : 'avatar';
-      updateState({ offsync, name, handle, node: server, location, description, logo, cardId, guid, status: detail.status });
+      
+      const username = `${handle}/${node}`
+      const imageSource = imageSet ? { uri: card.actions.getCardImageUrl(cardId) } : avatar;
+      updateState({ offsync, name, handle, node: server, location, description, imageSource, username, cardId, guid, status: detail.status });
     }
     else {
       const { guid, handle, node, name, location, description, imageSet } = contact || {};
       const host = node ? node : server;
-      const logo = imageSet ? getListingImageUrl(server, guid) : 'avatar';
-      updateState({ guid, handle, node: host, name, location, description, logo, offsync: false, status: null });
+      
+      const username = `${handle}/${node}`
+      const imageSource = imageSet ? { uri: getListingImageUrl(server, guid) } : avatar;
+      updateState({ guid, handle, node: host, name, location, description, imageSource, username, offsync: false, status: null });
     }
   }, [contact, card.state, profile.state]);
 

@@ -84,6 +84,7 @@ const Strings = [
 
     // contacts page
     add: 'Add',
+    back: 'Back',
   },
   {
     visibleRegistry: 'Visible dans le Registre',
@@ -165,6 +166,7 @@ const Strings = [
 
     //constacts page
     add: 'Ajouter',
+    back: 'Arrière',
   },
   {
     visibleRegistry: 'Visible en el Registro',
@@ -246,6 +248,7 @@ const Strings = [
 
     // contacts page
     add: 'Agregar', 
+    back: 'Atrás',
   },
   {
     visibleRegistry: 'Sichtbar in der Registrierung',
@@ -327,6 +330,7 @@ const Strings = [
     
     //contacts page
     add: 'Hinzufügen',
+    back: 'Rückwärts',
   }
 ];
 

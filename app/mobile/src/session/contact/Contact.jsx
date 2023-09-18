@@ -1,9 +1,11 @@
-import { Alert, View, Text, TouchableOpacity } from 'react-native';
+import { Alert, View, Text, TouchableOpacity, ScrollView, Image } from 'react-native';
 import { styles } from './Contact.styled';
 import { useContact } from './useContact.hook';
 import Ionicons from 'react-native-vector-icons/AntDesign';
 import { Logo } from 'utils/Logo';
 import { Colors } from 'constants/Colors';
+import AntIcons from 'react-native-vector-icons/AntDesign';
+import MatIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 export function ContactHeader({ contact }) {
   const handle = contact?.node ? `${contact?.handle}@${contact?.node}` : contact?.handle;
@@ -298,13 +300,62 @@ export function ContactBody({ contact }) {
   );
 }
 
-export function Contact({ contact }) {
+export function Contact({ contact, drawer, back }) {
+
+  const { state, actions } = useContact(contact);
+  const OVERLAP = 32;
 
   return (
-    <View>
-      <ContactHeader contact={contact} />
-      <ContactBody contact={contact} />
-    </View>
+    <>
+      { drawer && (
+        <Text>CONTACT DRAWER</Text>
+      )}
+      { !drawer && (
+        <View style={styles.container}>
+          <Image style={{ ...styles.logo, width: state.imageWidth, height: state.imageHeight }}
+            source={state.imageSource} resizeMode={'contain'} />
+          <View style={styles.content}>
+            <View style={{ ...styles.space, width: state.imageWidth, height: state.imageHeight - OVERLAP }}>
+              <TouchableOpacity style={styles.back} onPress={back}>
+                <Text style={styles.backLabel}>{ state.strings.back }</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={{ ...styles.details, width: state.detailWidth }}>
+              { state.name && (
+                <Text style={styles.nameSet} numberOfLines={1} adjustsFontSizeToFit={true}>{ state.name }</Text>
+              )}
+              { !state.name && (
+                <Text style={styles.nameUnset}>{ state.strings.name }</Text>
+              )}
+              <Text style={styles.username} numberOfLines={1}>{ state.username }</Text>
+              <View style={styles.attributes}>
+                <View style={styles.entry}>
+                  <AntIcons name="enviromento" style={styles.icon} size={20} color={Colors.text} />
+                  { state.location && (
+                    <Text style={styles.locationSet}>{ state.location }</Text>
+                  )}
+                  { !state.location && (
+                    <Text style={styles.locationUnset}>Location</Text>
+                  )}
+                </View>
+                <View style={styles.divider} />
+                <ScrollView style={styles.description}>
+                  <View style={styles.entry}>
+                  <MatIcons name="book-open-outline" style={styles.descriptionIcon} size={20} color={Colors.text} />
+                  { state.description && (
+                    <Text style={styles.descriptionSet}>{ state.description }</Text>
+                  )}
+                  { !state.description && (
+                    <Text style={styles.descriptionUnset}>Description</Text>
+                  )}
+                  </View>
+                </ScrollView>
+              </View>
+            </View>
+          </View>
+        </View>
+      )}
+    </>
   );
 }
 

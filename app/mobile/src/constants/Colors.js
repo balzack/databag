@@ -56,7 +56,7 @@ const LightColors = {
 const DarkColors = {
   overlay: 'dark',
   statusBar: 'light-content',
-  tabBar: '#111111',
+  tabBar: '#118811',
   activeTabIcon: '#dddddd',
   idleTabIcon: '#aaaaaa',
   activeBorder: '#aaaaaa',
@@ -103,7 +103,7 @@ const DarkColors = {
   disabledIndicator: '#eeeeee',
   disconnectedIndicator: '#aa0000',
   sliderGrip: '#eeeeee',
-  areaBorder: '#aaaaaa',
+  areaBorder: '#777777',
 };
 
 function getColor(label) {

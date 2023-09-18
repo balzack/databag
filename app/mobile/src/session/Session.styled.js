@@ -67,8 +67,8 @@ export const styles = StyleSheet.create({
     color: Colors.white,
   },
   tabBar: {
-    borderTopWidth: 0,
-    backgroundColor: Colors.primary,
+    borderColor: Colors.tabBar,
+    backgroundColor: Colors.screenBase,
     maxHeight: 72,
   },
   home: {
