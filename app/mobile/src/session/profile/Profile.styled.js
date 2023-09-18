@@ -104,7 +104,6 @@ export const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   details: {
-    minHeight: 32,
     borderTopRightRadius: 32,
     borderTopLeftRadius: 32,
     backgroundColor: Colors.screenBase,
