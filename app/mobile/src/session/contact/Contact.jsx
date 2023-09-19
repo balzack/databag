@@ -332,12 +332,42 @@ export function Contact({ contact, drawer, back }) {
                 <View style={styles.status}>
                   { state.status === 'connected' && (
                     <View style={styles.statusConnected}>
-                      <Text style={styles.statusLabel}>Connected</Text>
+                      <Text numberOfLines={1} style={styles.statusLabel}>{ state.strings.connected }</Text>
                     </View>
                   )}
-                  { state.status !== 'connected' && (
-                    <View style={styles.statusConnected}>
-                      <Text style={styles.statusLabel}>Connected</Text>
+                  { state.status === 'connecting' && (
+                    <View style={styles.statusConnecting}>
+                      <Text numberOfLines={1} style={styles.statusLabel}>{ state.strings.connecting }</Text>
+                    </View>
+                  )}
+                  { state.status === 'requested' && (
+                    <View style={styles.statusRequested}>
+                      <Text numberOfLines={1} style={styles.statusLabel}>{ state.strings.requested }</Text>
+                    </View>
+                  )}
+                  { state.status === 'offsync' && (
+                    <View style={styles.statusOffsync}>
+                      <Text numberOfLines={1} style={styles.statusLabel}>{ state.strings.offsync }</Text>
+                    </View>
+                  )}
+                  { state.status === 'received' && (
+                    <View style={styles.statusReceived}>
+                      <Text numberOfLines={1} style={styles.statusLabel}>{ state.strings.received }</Text>
+                    </View>
+                  )}
+                  { state.status === 'pending' && (
+                    <View style={styles.statusPending}>
+                      <Text numberOfLines={1} style={styles.statusLabel}>{ state.strings.pending }</Text>
+                    </View>
+                  )}
+                  { state.status === 'saved' && (
+                    <View style={styles.statusSaved}>
+                      <Text numberOfLines={1} style={styles.statusLabel}>{ state.strings.saved }</Text>
+                    </View>
+                  )}
+                  { state.status === 'unsaved' && (
+                    <View style={styles.statusUnsaved}>
+                      <Text numberOfLines={1} style={styles.statusLabel}>{ state.strings.unsaved }</Text>
                     </View>
                   )}
                 </View>

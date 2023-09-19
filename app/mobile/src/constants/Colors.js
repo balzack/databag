@@ -51,6 +51,13 @@ const LightColors = {
   disconnectedIndicator: '#aa0000',
   sliderGrip: '#eeeeee',
   areaBorder: '#ffffff',
+  connected: '#4488FF',
+  connecting: '#dd88ff',
+  requested: '#448844',
+  pending: '#ffaa22',
+  confirmed: '#aaaaaa',
+  offsync: '#ff4444',
+  unsaved: '#888888',
 };
 
 const DarkColors = {
@@ -104,6 +111,13 @@ const DarkColors = {
   disconnectedIndicator: '#aa0000',
   sliderGrip: '#eeeeee',
   areaBorder: '#777777',
+  connected: '#4488FF',
+  connecting: '#dd88ff',
+  requested: '#448844',
+  pending: '#ffaa22',
+  confirmed: '#aaaaaa',
+  offsync: '#ff4444',
+  unsaved: '#888888',
 };
 
 function getColor(label) {
@@ -160,6 +174,13 @@ export const Colors = {
   disconnectedIndicator: getColor('disconnectedIndicator'),
   sliderGrip: getColor('sliderGrip'),
   areaBorder: getColor('areaBorder'),
+  connected: getColor('connected'),
+  connecting: getColor('connecting'),
+  requested: getColor('requested'),
+  pending: getColor('pending'),
+  confirmed: getColor('confirmed'),
+  offsync: getColor('offsync'),
+  unsaved: getColor('unsaved'),
 
   background: '#8fbea7',
   primary: '#448866',
@@ -182,12 +203,6 @@ export const Colors = {
   active: '#222222',
   idle: '#707070',
 
-  
-  connected: '#4488FF',
-  connecting: '#dd88ff',
-  requested: '#448844',
-  pending: '#ffaa22',
-  confirmed: '#aaaaaa',
   error: '#ff4444',
 
   profileForm: '#e8e8e8',

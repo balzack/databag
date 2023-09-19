@@ -60,7 +60,8 @@ export function useContact(contact) {
       
       const username = `${handle}/${node}`
       const imageSource = imageSet ? { uri: card.actions.getCardImageUrl(cardId) } : avatar;
-      updateState({ offsync, name, handle, node: server, location, description, imageSource, username, cardId, guid, status: detail.status });
+      const status = offsync ? 'offsync' : detail.status;
+      updateState({ name, handle, node: server, location, description, imageSource, username, cardId, guid, status });
     }
     else {
       const { guid, handle, node, name, location, description, imageSet } = contact || {};
@@ -68,7 +69,7 @@ export function useContact(contact) {
       
       const username = `${handle}/${node}`
       const imageSource = imageSet ? { uri: getListingImageUrl(server, guid) } : avatar;
-      updateState({ guid, handle, node: host, name, location, description, imageSource, username, offsync: false, status: null });
+      updateState({ guid, handle, node: host, name, location, description, imageSource, username, offsync: false, status: 'unsaved' });
     }
   }, [contact, card.state, profile.state]);
 
