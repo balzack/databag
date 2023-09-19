@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useContext } from 'react';
 import { useWindowDimensions } from 'react-native';
 import { CardContext } from 'context/CardContext';
 import { ProfileContext } from 'context/ProfileContext';
+import { DisplayContext } from 'context/DisplayContext';
 import { getListingMessage } from 'api/getListingMessage';
 import { getListingImageUrl } from 'api/getListingImageUrl';
 import { addFlag } from 'api/addFlag';
@@ -35,6 +36,7 @@ export function useContact(contact) {
   const dimensions = useWindowDimensions();
   const card = useContext(CardContext);
   const profile = useContext(ProfileContext);
+  const display = useContext(DisplayContext);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
@@ -141,6 +143,19 @@ export function useContact(contact) {
     ignoreContact: async () => {
       await applyAction(async () => {
         await card.actions.setCardConfirmed(state.cardId);
+      });
+    },
+    deletePrompt: (action) => {
+      display.actions.showPrompt({
+        title: state.strings.loggingOut,
+        centerButtons: true,
+        ok: { label: state.strings.confirmLogout, action, failed: () => {
+          Alert.alert(
+            state.strings.error,
+            state.strings.tryAgain,
+          );
+        }},
+        cancel: { label: state.strings.cancel },
       });
     },
     closeDelete: async () => {

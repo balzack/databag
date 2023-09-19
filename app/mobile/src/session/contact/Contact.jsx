@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Alert, View, Text, TouchableOpacity, ScrollView, Image } from 'react-native';
 import { styles } from './Contact.styled';
 import { useContact } from './useContact.hook';
@@ -5,7 +6,10 @@ import Ionicons from 'react-native-vector-icons/AntDesign';
 import { Logo } from 'utils/Logo';
 import { Colors } from 'constants/Colors';
 import AntIcons from 'react-native-vector-icons/AntDesign';
-import MatIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import IonIcons from 'react-native-vector-icons/Ionicons';
+import FntIcons from 'react-native-vector-icons/FontAwesome5';
+import MatIcons from 'react-native-vector-icons/MaterialCommunityIcons'; 
+import MtrIcons from 'react-native-vector-icons/MaterialIcons'; 
 
 export function ContactHeader({ contact }) {
   const handle = contact?.node ? `${contact?.handle}@${contact?.node}` : contact?.handle;
@@ -302,8 +306,44 @@ export function ContactBody({ contact }) {
 
 export function Contact({ contact, drawer, back }) {
 
+  const [busy, setBusy] = useState(false);
   const { state, actions } = useContact(contact);
   const OVERLAP = 32;
+
+
+  const promptDelete = (action) => {
+    actions.deletePrompt(async () => {
+      if (!busy) {
+        try {
+          setBusy(true);
+          await action();
+          setBusy(false);
+        }
+        catch (err) {
+          console.log(err);
+          setBusy(false);
+          throw err;
+        }
+      }
+    });
+  }
+
+  const action = async (method) => {
+    if (!busy) {
+      try {
+        setBusy(true);
+        await method();
+      }
+      catch (err) {
+        console.log(err);
+        Alert.alert(
+          state.strings.error,
+          state.strings.tryAgain,
+        );
+      }
+      setBusy(false);
+    }
+  };
 
   return (
     <>
@@ -330,6 +370,11 @@ export function Contact({ contact, drawer, back }) {
               <View style={styles.usernameStatus}>
                 <Text style={styles.username} numberOfLines={1}>{ state.username }</Text>
                 <View style={styles.status}>
+                  { state.status === 'offsync' && (
+                    <View style={styles.statusOffsync}>
+                      <Text numberOfLines={1} style={styles.statusLabel}>{ state.strings.offsync }</Text>
+                    </View>
+                  )}
                   { state.status === 'connected' && (
                     <View style={styles.statusConnected}>
                       <Text numberOfLines={1} style={styles.statusLabel}>{ state.strings.connected }</Text>
@@ -343,11 +388,6 @@ export function Contact({ contact, drawer, back }) {
                   { state.status === 'requested' && (
                     <View style={styles.statusRequested}>
                       <Text numberOfLines={1} style={styles.statusLabel}>{ state.strings.requested }</Text>
-                    </View>
-                  )}
-                  { state.status === 'offsync' && (
-                    <View style={styles.statusOffsync}>
-                      <Text numberOfLines={1} style={styles.statusLabel}>{ state.strings.offsync }</Text>
                     </View>
                   )}
                   { state.status === 'received' && (
@@ -393,6 +433,76 @@ export function Contact({ contact, drawer, back }) {
                     <Text style={styles.descriptionUnset}>Description</Text>
                   )}
                   </View>
+                </ScrollView>
+              </View>
+              <View style={styles.actions}>
+                <ScrollView horizontal={true} contentContainerStyle={styles.actionList}>
+                  { state.status === 'offsync' && (
+                    <TouchableOpacity style={styles.action} activeOpacity={1}>
+                      <MatIcons name="sync" style={styles.actionIcon} size={44} color={Colors.linkText} />
+                      <Text style={styles.actionLabel}>{ state.strings.actionResync }</Text>
+                    </TouchableOpacity>
+                  )}
+                  { (state.status === 'unsaved' || state.status === 'confirmed') && (
+                    <TouchableOpacity style={styles.action} activeOpacity={1}>
+                      <FntIcons name="people-arrows" style={{ ...styles.actionIcon, paddingBottom: 8 }} size={32} color={Colors.linkText} />
+                      <Text style={styles.actionLabel}>{ state.strings.actionConnect }</Text>
+                    </TouchableOpacity>
+                  )}
+                  { (state.status === 'received' || state.status === 'pending') && (
+                    <TouchableOpacity style={styles.action} activeOpacity={1}>
+                      <MatIcons name="account-check-outline" style={{ ...styles.actionIcon, paddingBottom: 2 }} size={42} color={Colors.linkText} />
+                      <Text style={styles.actionLabel}>{ state.strings.actionAccept }</Text>
+                    </TouchableOpacity>
+                  )}
+                  { (state.status === 'received' || state.status === 'pending') && (
+                    <TouchableOpacity style={styles.action} activeOpacity={1}>
+                      <MatIcons name="account-remove-outline" style={{ ...styles.actionIcon, paddingBottom: 2 }} size={42} color={Colors.linkText} />
+                      <Text style={styles.actionLabel}>{ state.strings.actionIgnore }</Text>
+                    </TouchableOpacity>
+                  )}
+                  { state.status === 'connected' && (
+                    <TouchableOpacity style={styles.action} activeOpacity={1}>
+                      <MatIcons name="account-cancel-outline" style={{ ...styles.actionIcon, paddingBottom: 4 }} size={42} color={Colors.linkText} />
+                      <Text style={styles.actionLabel}>{ state.strings.actionDisconnect }</Text>
+                    </TouchableOpacity>
+                  )}
+                  { state.status === 'connecting' && (
+                    <TouchableOpacity style={styles.action} activeOpacity={1}>
+                      <MtrIcons name="cancel-schedule-send" style={{ ...styles.actionIcon, paddingBottom: 4 }} size={40} color={Colors.linkText} />
+                      <Text style={styles.actionLabel}>{ state.strings.actionCancel }</Text>
+                    </TouchableOpacity>
+                  )}
+                  { (state.status === 'pending' || state.status === 'unsaved') && (
+                    <TouchableOpacity style={styles.action} activeOpacity={1}>
+                      <IonIcons name="save-outline" style={{ ...styles.actionIcon, paddingBottom: 4 }} size={38} color={Colors.linkText} />
+                      <Text style={styles.actionLabel}>{ state.strings.actionSave }</Text>
+                    </TouchableOpacity>
+                  )}
+                  { (state.status === 'connected' || state.status === 'connecting' || state.status === 'received') && (
+                    <TouchableOpacity style={styles.action} activeOpacity={1} onPress={() => promptDelete(actions.closeDelete)}>
+                      <MatIcons name="trash-can-outline" style={{ ...styles.actionIcon, paddingBottom: 4 }} size={40} color={Colors.linkText} />
+                      <Text style={styles.actionLabel}>{ state.strings.actionDelete }</Text>
+                    </TouchableOpacity>
+                  )}
+                  { state.status === 'confirmed' && (
+                    <TouchableOpacity style={styles.action} activeOpacity={1} onPress={() => promptDelete(actions.deleteContact)}>
+                      <MatIcons name="trash-can-outline" style={{ ...styles.actionIcon, paddingBottom: 4 }} size={40} color={Colors.linkText} />
+                      <Text style={styles.actionLabel}>{ state.strings.actionDelete }</Text>
+                    </TouchableOpacity>
+                  )}
+                  { state.status !== 'unsaved' && state.status !== 'pending' && (
+                    <TouchableOpacity style={styles.action} activeOpacity={1}>
+                      <MatIcons name="block-helper" style={{ ...styles.actionIcon, paddingBottom: 4 }} size={34} color={Colors.linkText} />
+                      <Text style={styles.actionLabel}>{ state.strings.actionBlock }</Text>
+                    </TouchableOpacity>
+                  )}
+                  { true && (
+                    <TouchableOpacity style={styles.action} activeOpacity={1}>
+                      <MatIcons name="account-alert-outline" style={{ ...styles.actionIcon, paddingBottom: 4 }} size={40} color={Colors.linkText} />
+                      <Text style={styles.actionLabel}>{ state.strings.actionReport }</Text>
+                    </TouchableOpacity>
+                  )}
                 </ScrollView>
               </View>
             </View>

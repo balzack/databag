@@ -163,6 +163,31 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexShrink: 1,
   },
+  actions: {
+    marginLeft: 16,
+    marginRight: 16,
+    paddingLeft: 16,
+    paddingRight: 16,
+    backgroundColor: Colors.areaBase,
+    borderRadius: 8,
+    marginTop: 24,
+    height: 80,
+  },
+  actionList: {
+    alignItems: 'flex-end',
+  },
+  action: {
+    display: 'flex',
+    alignItems: 'center',
+    paddingRight: 24,
+    paddingBottom: 12,
+  },
+  actionIcon: {
+  },
+  actionLabel: {
+    color: Colors.linkText,
+    fontSize: 10,
+  },
   divider: {
     width: '100%',
     height: 2, 
