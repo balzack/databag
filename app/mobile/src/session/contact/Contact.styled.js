@@ -83,6 +83,28 @@ export const styles = StyleSheet.create({
     paddingLeft: 16,
     paddingRight: 16,
   },
+  usernameStatus: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  status: {
+    display: 'flex',
+    flexGrow: 1,
+    paddingRight: 32,
+    alignItems: 'flex-end',
+  },
+  statusConnected: {
+    paddingLeft: 8,
+    paddingRight: 8,
+    paddingTop: 2,
+    paddingBottom: 2,
+    borderRadius: 8,
+    backgroundColor: 'yellow',
+  },
+  statusLabel: {
+    color: Colors.text,
+  },
   attributes: {
     marginLeft: 16,
     marginRight: 16,

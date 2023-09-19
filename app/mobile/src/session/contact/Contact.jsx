@@ -327,7 +327,21 @@ export function Contact({ contact, drawer, back }) {
               { !state.name && (
                 <Text style={styles.nameUnset}>{ state.strings.name }</Text>
               )}
-              <Text style={styles.username} numberOfLines={1}>{ state.username }</Text>
+              <View style={styles.usernameStatus}>
+                <Text style={styles.username} numberOfLines={1}>{ state.username }</Text>
+                <View style={styles.status}>
+                  { state.status === 'connected' && (
+                    <View style={styles.statusConnected}>
+                      <Text style={styles.statusLabel}>Connected</Text>
+                    </View>
+                  )}
+                  { state.status !== 'connected' && (
+                    <View style={styles.statusConnected}>
+                      <Text style={styles.statusLabel}>Connected</Text>
+                    </View>
+                  )}
+                </View>
+              </View>
               <View style={styles.attributes}>
                 <View style={styles.entry}>
                   <AntIcons name="enviromento" style={styles.icon} size={20} color={Colors.text} />

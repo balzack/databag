@@ -85,6 +85,24 @@ const Strings = [
     // contacts page
     add: 'Add',
     back: 'Back',
+
+    confirmed: 'Saved',
+    pending: 'Unknown Contact',
+    connecting: 'Request Sent',
+    connected: 'Connected',
+    requested: 'Request Received',
+    unsaved: 'Unsaved Contact',
+    offsync: 'Offsync',
+
+    saveContact: 'Save Contact',
+    requestConnection: 'Request Connection',
+    deleteContact: 'Delete Contact',
+    blockContact: 'Block Contact',
+    reportContact: 'Report Contact',
+    cancelRequest: 'Cancel Request',
+    acceptConnection: 'Accept Connection',
+    ignoreContact: 'Ignore Contact',
+    resyncContact: 'Resync Contact',
   },
   {
     visibleRegistry: 'Visible dans le Registre',
