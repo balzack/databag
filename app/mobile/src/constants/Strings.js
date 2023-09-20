@@ -85,7 +85,7 @@ const Strings = [
     // contacts page
     add: 'Add',
     back: 'Back',
-    deleteContact: 'Deleting Contact',
+    deleteContact: 'Delete Contact',
     confirmDelete: 'Delete',
     disconnectContact: 'Disconnect from Contact',
     confirmDisconnect: 'Disconnect',

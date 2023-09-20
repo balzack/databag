@@ -17,6 +17,13 @@ export const styles = StyleSheet.create({
   logo: {
     alignSelf: 'center',
   },
+  busy: {
+    width: '100%',
+    display: 'flex',
+    alignItems: 'flex-start',
+    justifyContent: 'center',
+    flex: 1,
+  },
   details: {
     minHeight: 32,
     borderTopRightRadius: 32,
