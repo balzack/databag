@@ -311,8 +311,8 @@ export function Contact({ contact, drawer, back }) {
   const OVERLAP = 32;
 
 
-  const promptDelete = (action) => {
-    actions.deletePrompt(async () => {
+  const promptAction = (prompt, action) => {
+    prompt(async () => {
       if (!busy) {
         try {
           setBusy(true);
@@ -327,23 +327,6 @@ export function Contact({ contact, drawer, back }) {
       }
     });
   }
-
-  const action = async (method) => {
-    if (!busy) {
-      try {
-        setBusy(true);
-        await method();
-      }
-      catch (err) {
-        console.log(err);
-        Alert.alert(
-          state.strings.error,
-          state.strings.tryAgain,
-        );
-      }
-      setBusy(false);
-    }
-  };
 
   return (
     <>
@@ -462,7 +445,7 @@ export function Contact({ contact, drawer, back }) {
                     </TouchableOpacity>
                   )}
                   { state.status === 'connected' && (
-                    <TouchableOpacity style={styles.action} activeOpacity={1}>
+                    <TouchableOpacity style={styles.action} activeOpacity={1} onPress={() => promptAction(actions.disconnectPrompt, actions.disconnectContact)}>
                       <MatIcons name="account-cancel-outline" style={{ ...styles.actionIcon, paddingBottom: 4 }} size={42} color={Colors.linkText} />
                       <Text style={styles.actionLabel}>{ state.strings.actionDisconnect }</Text>
                     </TouchableOpacity>
@@ -480,25 +463,25 @@ export function Contact({ contact, drawer, back }) {
                     </TouchableOpacity>
                   )}
                   { (state.status === 'connected' || state.status === 'connecting' || state.status === 'received') && (
-                    <TouchableOpacity style={styles.action} activeOpacity={1} onPress={() => promptDelete(actions.closeDelete)}>
+                    <TouchableOpacity style={styles.action} activeOpacity={1} onPress={() => promptAction(actions.deletePrompt, actions.closeDelete)}>
                       <MatIcons name="trash-can-outline" style={{ ...styles.actionIcon, paddingBottom: 4 }} size={40} color={Colors.linkText} />
                       <Text style={styles.actionLabel}>{ state.strings.actionDelete }</Text>
                     </TouchableOpacity>
                   )}
                   { state.status === 'confirmed' && (
-                    <TouchableOpacity style={styles.action} activeOpacity={1} onPress={() => promptDelete(actions.deleteContact)}>
+                    <TouchableOpacity style={styles.action} activeOpacity={1} onPress={() => promptAction(actions.deletePrompt, actions.deleteContact)}>
                       <MatIcons name="trash-can-outline" style={{ ...styles.actionIcon, paddingBottom: 4 }} size={40} color={Colors.linkText} />
                       <Text style={styles.actionLabel}>{ state.strings.actionDelete }</Text>
                     </TouchableOpacity>
                   )}
                   { state.status !== 'unsaved' && state.status !== 'pending' && (
-                    <TouchableOpacity style={styles.action} activeOpacity={1}>
+                    <TouchableOpacity style={styles.action} activeOpacity={1} onPress={() => promptAction(actions.blockPrompt, actions.blockContact)}>
                       <MatIcons name="block-helper" style={{ ...styles.actionIcon, paddingBottom: 4 }} size={34} color={Colors.linkText} />
                       <Text style={styles.actionLabel}>{ state.strings.actionBlock }</Text>
                     </TouchableOpacity>
                   )}
                   { true && (
-                    <TouchableOpacity style={styles.action} activeOpacity={1}>
+                    <TouchableOpacity style={styles.action} activeOpacity={1} onPress={() => promptAction(actions.reportPrompt, actions.reportContact)}>
                       <MatIcons name="account-alert-outline" style={{ ...styles.actionIcon, paddingBottom: 4 }} size={40} color={Colors.linkText} />
                       <Text style={styles.actionLabel}>{ state.strings.actionReport }</Text>
                     </TouchableOpacity>

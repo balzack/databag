@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useContext } from 'react';
-import { useWindowDimensions } from 'react-native';
+import { Alert, useWindowDimensions } from 'react-native';
 import { CardContext } from 'context/CardContext';
 import { ProfileContext } from 'context/ProfileContext';
 import { DisplayContext } from 'context/DisplayContext';
@@ -147,9 +147,48 @@ export function useContact(contact) {
     },
     deletePrompt: (action) => {
       display.actions.showPrompt({
-        title: state.strings.loggingOut,
+        title: state.strings.deleteContact,
         centerButtons: true,
-        ok: { label: state.strings.confirmLogout, action, failed: () => {
+        ok: { label: state.strings.confirmDelete, action, failed: () => {
+          Alert.alert(
+            state.strings.error,
+            state.strings.tryAgain,
+          );
+        }},
+        cancel: { label: state.strings.cancel },
+      });
+    },
+    disconnectPrompt: (action) => {
+      display.actions.showPrompt({
+        title: state.strings.disconnectContact,
+        centerButtons: true,
+        ok: { label: state.strings.confirmDisconnect, action, failed: () => {
+          Alert.alert(
+            state.strings.error,
+            state.strings.tryAgain,
+          );
+        }},
+        cancel: { label: state.strings.cancel },
+      });
+    },
+    blockPrompt: (action) => {
+      display.actions.showPrompt({
+        title: state.strings.blockContact,
+        centerButtons: true,
+        ok: { label: state.strings.confirmBlock, action, failed: () => {
+          Alert.alert(
+            state.strings.error,
+            state.strings.tryAgain,
+          );
+        }},
+        cancel: { label: state.strings.cancel },
+      });
+    },
+    reportPrompt: (action) => {
+      display.actions.showPrompt({
+        title: state.strings.reportContact,
+        centerButtons: true,
+        ok: { label: state.strings.confirmReport, action, failed: () => {
           Alert.alert(
             state.strings.error,
             state.strings.tryAgain,

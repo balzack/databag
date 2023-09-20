@@ -85,6 +85,14 @@ const Strings = [
     // contacts page
     add: 'Add',
     back: 'Back',
+    deleteContact: 'Deleting Contact',
+    confirmDelete: 'Delete',
+    disconnectContact: 'Disconnect from Contact',
+    confirmDisconnect: 'Disconnect',
+    blockContact: 'Block Contact',
+    confirmBlock: 'Block',
+    reportContact: 'Report Contact',
+    confirmReport: 'Report',
 
     confirmed: 'Saved',
     pending: 'Unknown',
@@ -186,6 +194,14 @@ const Strings = [
     //constacts page
     add: 'Ajouter',
     back: 'Arrière',
+    deleteContact: 'Supprimer le Contact',
+    confirmDelete: 'Supprimer',
+    disconnectContact: 'Déconnecter le Contact',
+    confirmDisconnect: 'Déconnecter',
+    blockContact: 'Bloquer le Contact',
+    confirmBlock: 'Bloquer',
+    reportContact: 'Signaler le Contact',
+    confirmReport: 'Signaler',
 
     confirmed: 'Enregistré',
     pending: 'Inconnu',
@@ -196,7 +212,7 @@ const Strings = [
     offsync: 'Hors Sync',
 
     actionResync: 'Resync',
-    actionConnect: 'Connexion',
+    actionConnect: 'Connecter',
     actionAccept: 'Accepter',
     actionSave: 'Enregistrer',
     actionCancel: 'Annuler',
@@ -287,7 +303,15 @@ const Strings = [
     // contacts page
     add: 'Agregar', 
     back: 'Atrás',
-
+    deleteContact: 'Borrar Contacto',
+    confirmDelete: 'Borrar',
+    disconnectContact: 'Desconectar Contacto',
+    confirmDisconnect: 'Desconectar',
+    blockContact: 'Bloquear el Contacto',
+    confirmBlock: 'Bloquear',
+    reportContact: 'Reportar el Contacto',
+    confirmReport: 'Reportar',
+  
     confirmed: 'Guardado',
     pending: 'Desconocido',
     connecting: 'Conectando',
@@ -305,7 +329,7 @@ const Strings = [
     actionIgnore: 'Ignorar',
     actionDelete: 'Borrar',
     actionBlock: 'Bloquear',
-    actionReport: 'Informe',
+    actionReport: 'Reportar',
   },
   {
     visibleRegistry: 'Sichtbar in der Registrierung',
@@ -388,6 +412,14 @@ const Strings = [
     //contacts page
     add: 'Hinzufügen',
     back: 'Rückwärts',
+    deleteContact: 'Kontakt Löschen',
+    confirmDelete: 'Löschen',
+    disconnectContact: 'Kontakt Trennen',
+    confirmDisconnect: 'Trennen',
+    blockContact: 'Kontakt Ausblenden',
+    confirmBlock: 'Verstecken',
+    reportContact: 'Kontakt Melden',
+    confirmReport: 'Bericht',
 
     confirmed: 'Gerettet',
     pending: 'Unbekannt',
