@@ -42,7 +42,7 @@ export function Contact({ contact, drawer, back }) {
     if (!busy) {
       try {
         setBusy(true);
-        await new Promise(r => setTimeout(r, 100));
+        await new Promise(r => setTimeout(r, 200));
         await action();
         setBusy(false);
       }
@@ -62,9 +62,6 @@ export function Contact({ contact, drawer, back }) {
       { drawer && (
         <View style={styles.drawerContainer}>
           <Text style={styles.drawerHeader} adjustsFontSizeToFit={true} numberOfLines={1}>{ state.username }</Text>
-          <View style={styles.drawerFrame}>
-            <Image source={state.imageSource} style={styles.drawerLogo} resizeMode={'contain'} />
-          </View>
           <View style={styles.drawerStatus}>
             { state.status === 'offsync' && (
               <View style={styles.statusOffsync}>
@@ -107,6 +104,9 @@ export function Contact({ contact, drawer, back }) {
               </View>
             )}
           </View>
+          <View style={styles.drawerFrame}>
+            <Image source={state.imageSource} style={styles.drawerLogo} resizeMode={'contain'} />
+          </View>
           <View style={styles.drawerName}>
             { state.name && (
               <Text style={styles.drawerNameSet} numberOfLines={1} adjustsFontSizeToFit={true}>{ state.name }</Text>
@@ -140,7 +140,7 @@ export function Contact({ contact, drawer, back }) {
           { !busy && (
             <View style={styles.drawerActions}>
               { state.status === 'offsync' && (
-                <TouchableOpacity style={styles.action} activeOpacity={1} onPress={actions.resync}>
+                <TouchableOpacity style={styles.action} activeOpacity={1} onPress={() => setAction(actions.resync)}>
                   <MatIcons name="sync" style={styles.actionIcon} size={44} color={Colors.linkText} />
                   <Text style={styles.actionLabel}>{ state.strings.actionResync }</Text>
                 </TouchableOpacity>
@@ -325,7 +325,7 @@ export function Contact({ contact, drawer, back }) {
                 { !busy && (
                   <ScrollView horizontal={true} contentContainerStyle={styles.actionList}>
                     { state.status === 'offsync' && (
-                      <TouchableOpacity style={styles.action} activeOpacity={1} onPress={actions.resync}>
+                      <TouchableOpacity style={styles.action} activeOpacity={1} onPress={() => setAction(actions.resync)}>
                         <MatIcons name="sync" style={styles.actionIcon} size={40} color={Colors.linkText} />
                         <Text style={styles.actionLabel}>{ state.strings.actionResync }</Text>
                       </TouchableOpacity>

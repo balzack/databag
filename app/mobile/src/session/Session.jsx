@@ -254,7 +254,9 @@ function CardDrawerScreen({ navParams }) {
   const [dmChannel, setDmChannel] = useState(null);
   const openContact = (contact) => {
     navParams.setContact(contact);
-    navParams.contactNav.openDrawer();
+    setTimeout(() => {
+      navParams.contactNav.openDrawer();
+    });
   };
   const openRegistry = () => {
     navParams.registryNav.openDrawer();
@@ -277,7 +279,9 @@ function RegistryDrawerScreen({ navParams }) {
   const drawerParams = { drawerPosition: 'right', headerShown: false, swipeEnabled: false, drawerType: 'front' };
   const openContact = (contact) => {
     navParams.setContact(contact);
-    navParams.contactNav.openDrawer();
+    setTimeout(() => {
+      navParams.contactNav.openDrawer();
+    });
   };
 
   return (
