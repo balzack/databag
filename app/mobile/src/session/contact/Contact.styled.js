@@ -2,6 +2,102 @@ import { StyleSheet } from 'react-native';
 import { Colors } from 'constants/Colors';
 
 export const styles = StyleSheet.create({
+  drawerContainer: {
+    width: '100%',
+    display: 'flex',
+    alignItems: 'center',
+  },
+  drawerHeader: {
+    fontFamily: 'roboto',
+    color: Colors.text,
+    fontSize: 20,
+    padding: 16,
+  },
+  drawerFrame: {
+    width: '80%',
+    maxWidth: 400,
+    paddingBottom: 32,
+  },
+  drawerLogo: {
+    aspectRatio: 1,
+    resizeMode: 'contain',
+    borderRadius: 8,
+    width: null,
+    height: null,
+  },
+  drawerLogoEdit: {
+    position: 'absolute',
+    top: 0,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignSelf: 'center',
+    backgroundColor: Colors.drawerBase,
+    paddingLeft: 8,
+    paddingRight: 8,
+    borderBottomLeftRadius: 6,
+    borderBottomRightRadius: 6,
+  },
+  drawerEditDivider: {
+    width: '80%',
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  drawerLine: {
+    borderWidth: 1,
+    borderColor: Colors.areaBase,
+    flexGrow: 1,
+  },
+  drawerDivider: {
+    width: '80%',
+    borderWidth: 1,
+    borderColor: Colors.areaBase,
+    marginTop: 16,
+    marginBottom: 32,
+  },
+  drawerName: {
+    width: '80%',
+    paddingLeft: 8,
+    paddingRight: 8,
+  },
+  drawerNameSet: {
+    color: Colors.text,
+    fontFamily: 'roboto',
+    fontSize: 48,
+    flexGrow: 1,
+    flexShrink: 1,
+  },
+  drawerNameUnset: {
+    color: Colors.inputPlaceholder,
+    fontFamily: 'roboto',
+    fontSize: 48,
+    fontStyle: 'italic',
+    flexGrow: 1,
+  },
+  drawerNameEdit: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingLeft: 8,
+    paddingRight: 8,
+  },
+  drawerEntry: {
+    width: '80%',
+    display: 'flex',
+    alignItems: 'center',
+    flexDirection: 'row',
+    padding: 8,
+  },
+  drawerActions: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'center',
+  },
+  drawerStatus: {
+    paddingBottom: 8,
+  },
   container: { 
     width: '100%',
     height: '100%',
@@ -150,7 +246,7 @@ export const styles = StyleSheet.create({
     borderRadius: 8,
     backgroundColor: Colors.unsaved,
   },
-  statusOffysnc: {
+  statusOffsync: {
     paddingLeft: 8,
     paddingRight: 8,
     paddingTop: 2,
@@ -160,6 +256,7 @@ export const styles = StyleSheet.create({
   },
   statusLabel: {
     color: Colors.text,
+    fontSize: 16,
   },
   attributes: {
     marginLeft: 16,
@@ -173,12 +270,12 @@ export const styles = StyleSheet.create({
   actions: {
     marginLeft: 16,
     marginRight: 16,
-    paddingLeft: 16,
+    paddingLeft: 4,
     paddingRight: 16,
     backgroundColor: Colors.areaBase,
     borderRadius: 8,
     marginTop: 24,
-    height: 80,
+    height: 72,
   },
   actionList: {
     alignItems: 'flex-end',
@@ -186,7 +283,8 @@ export const styles = StyleSheet.create({
   action: {
     display: 'flex',
     alignItems: 'center',
-    paddingRight: 24,
+    paddingRight: 12,
+    paddingLeft: 12,
     paddingBottom: 12,
   },
   actionIcon: {

@@ -301,7 +301,7 @@ function ContactDrawerScreen({ navParams }) {
     <ContactDrawer.Navigator screenOptions={{ ...drawerParams, drawerStyle: { width: '44%' } }} drawerContent={(props) => (
         <ScrollView style={styles.drawer}>
           <SafeAreaView edges={['top', 'bottom', 'right']}>
-            <Contact contact={contact} />
+            <Contact contact={contact} drawer={true} back={props.navigation.goBack} />
           </SafeAreaView>
         </ScrollView>
       )}>

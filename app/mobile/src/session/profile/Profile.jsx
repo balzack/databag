@@ -74,7 +74,7 @@ export function Profile({ drawer }) {
     <>
       { drawer && (
         <View style={styles.drawerContainer}>
-          <Text style={styles.drawerHeader} adjustsFontSizeToFit={true}>{ state.username }</Text>
+          <Text style={styles.drawerHeader} adjustsFontSizeToFit={true} numberOfLines={1}>{ state.username }</Text>
           <View style={styles.drawerFrame}>
             <Image source={state.imageSource} style={styles.drawerLogo} resizeMode={'contain'} />
             <TouchableOpacity activeOpacity={1} style={styles.drawerLogoEdit} onPress={onGallery}>
@@ -120,8 +120,8 @@ export function Profile({ drawer }) {
             <TouchableOpacity activeOpacity={1} onPress={() => setVisible(!state.searchable)}>
               <Text style={styles.visibleLabel}>{ state.strings.visibleRegistry }</Text>
             </TouchableOpacity>
-            <Switch value={state.searchable} style={Platform.OS==='ios' ? styles.visibleSwitch : {}} thumbColor={Colors.sliderGrip} ios_backgroundColor={Colors.disabledIndicator}
-                trackColor={styles.track} onValueChange={setVisible} />
+            <Switch value={state.searchable} style={Platform.OS==='ios' ? styles.visibleSwitch : {}} thumbColor={Colors.sliderGrip}
+                ios_backgroundColor={Colors.disabledIndicator} trackColor={styles.track} onValueChange={setVisible} />
           </TouchableOpacity>
         </View>
       )}
