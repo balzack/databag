@@ -43,8 +43,8 @@ const RegistryDrawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
 
 function ConversationStackScreen({ dmChannel, shareChannel, shareIntent, setShareIntent }) {
-  const stackParams = { headerStyle: { backgroundColor: Colors.titleBackground }, headerBackTitleVisible: false };
-  const screenParams = { headerShown: true, headerTintColor: Colors.primary };
+  const stackParams = { headerStyle: { backgroundColor: Colors.areaBase }, headerBackTitleVisible: false };
+  const screenParams = { headerShown: true };
 
   const conversation = useContext(ConversationContext);
   const [cardId, setCardId] = useState();
@@ -98,8 +98,8 @@ function ConversationStackScreen({ dmChannel, shareChannel, shareIntent, setShar
 }
 
 function SettingsStackScreen() {
-  const stackParams = { headerStyle: { backgroundColor: Colors.titleBackground }, headerBackTitleVisible: false };
-  const screenParams = { headerShown: false, headerTintColor: Colors.primary };
+  const stackParams = { headerBackTitleVisible: false };
+  const screenParams = { headerShown: false };
 
   return (
     <SafeAreaView edges={['left', 'right']} style={styles.body}>
@@ -113,8 +113,8 @@ function SettingsStackScreen() {
 }
 
 function ProfileStackScreen() {
-  const stackParams = { headerStyle: { backgroundColor: Colors.titleBackground }, headerBackTitleVisible: false };
-  const screenParams = { headerShown: false, headerTintColor: Colors.primary };
+  const stackParams = { headerBackTitleVisible: false };
+  const screenParams = { headerShown: false };
 
   return (
     <SafeAreaView edges={['left', 'right']} style={styles.body}>
@@ -128,8 +128,8 @@ function ProfileStackScreen() {
 }
 
 function ContactStackScreen({ addChannel }) {
-  const stackParams = { headerStyle: { backgroundColor: Colors.titleBackground }, headerBackTitleVisible: false };
-  const screenParams = { headerShown: true, headerTintColor: Colors.primary };
+  const stackParams = { headerStyle: { backgroundColor: Colors.screenBase }, headerBackTitleVisible: false };
+  const screenParams = { headerShown: true };
 
   const profile = useContext(ProfileContext);
   

@@ -5,7 +5,7 @@ export const styles = StyleSheet.create({
   body: {
     width: '100%',
     height: '100%',
-    backgroundColor: Colors.formBackground,
+    backgroundColor: Colors.screenBase,
   },
   container: {
     width: '100%',
@@ -14,7 +14,7 @@ export const styles = StyleSheet.create({
   firstRun: {
     width: '100%',
     height: '100%',
-    backgroundColor: Colors.background,
+    backgroundColor: Colors.screenBase,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -58,13 +58,13 @@ export const styles = StyleSheet.create({
   start: {
     marginTop: 16,
     padding: 8,
-    backgroundColor: Colors.primary,
+    backgroundColor: Colors.primaryButton,
     borderRadius: 4,
     display: 'flex',
     alignItems: 'center',
   },
   startText: {
-    color: Colors.white,
+    color: Colors.primaryButtonText,
   },
   tabBar: {
     borderColor: Colors.tabBar,
@@ -83,11 +83,11 @@ export const styles = StyleSheet.create({
     width: '33%',
     maxWidth: 500,
     borderRightWidth: 1,
-    borderColor: Colors.divider,
+    borderColor: Colors.verticalDivider,
   },
   conversation: {
     width: '67%',
-    backgroundColor: Colors.formFocus,
+    backgroundColor: Colors.areaBase,
   },
   drawer: {
     width: '100%',
@@ -138,7 +138,7 @@ export const styles = StyleSheet.create({
   },
   headertext: {
     fontSize: 18,
-    color: Colors.tetx,
+    color: Colors.text,
   },
   ringBase: {
     display: 'flex',
@@ -149,7 +149,7 @@ export const styles = StyleSheet.create({
     backgroundColor: 'rgba(52, 52, 52, 0.8)'
   },
   ringFrame: {
-    backgroundColor: Colors.formBackground,
+    backgroundColor: Colors.areaBase,
     padding: 16,
     width: '90%',
     maxWidth: 400,
@@ -185,7 +185,7 @@ export const styles = StyleSheet.create({
   ringAccept: {
     borderWidth: 1,
     borderRadius: 20,
-    borderColor: Colors.primary,
+    borderColor: Colors.primaryButton,
     padding: 6,
     marginLeft: 4,
   },

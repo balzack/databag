@@ -83,7 +83,6 @@ const Strings = [
     editDetails: 'Edit Details',
 
     // contacts page
-    add: 'Add',
     back: 'Back',
     deleteContact: 'Delete Contact',
     confirmDelete: 'Delete',
@@ -93,7 +92,6 @@ const Strings = [
     confirmBlock: 'Block',
     reportContact: 'Report Contact',
     confirmReport: 'Report',
-
     confirmed: 'Saved',
     pending: 'Unknown',
     connecting: 'Requested',
@@ -101,7 +99,6 @@ const Strings = [
     requested: 'Received',
     unsaved: 'Unsaved',
     offsync: 'Offsync',
-
     actionResync: 'Resync',
     actionConnect: 'Connect',
     actionAccept: 'Accept',
@@ -112,6 +109,16 @@ const Strings = [
     actionDelete: 'Delete',
     actionBlock: 'Block',
     actionReport: 'Report',
+
+    // contact list page
+    add: 'Add',
+    contactFilter: 'Contacts',
+    serverFilter: 'Server',
+    usernameFilter: 'Username',
+    viewProfile: 'View Profile',
+    messageContact: 'Message Contact',
+    callContact: 'Call Contact',
+    noContacts: 'No Contacts Found',
   },
   {
     visibleRegistry: 'Visible dans le Registre',
@@ -192,7 +199,6 @@ const Strings = [
     editDetails: 'Modifier les Détails',
 
     //constacts page
-    add: 'Ajouter',
     back: 'Arrière',
     deleteContact: 'Supprimer le Contact',
     confirmDelete: 'Supprimer',
@@ -202,7 +208,6 @@ const Strings = [
     confirmBlock: 'Bloquer',
     reportContact: 'Signaler le Contact',
     confirmReport: 'Signaler',
-
     confirmed: 'Enregistré',
     pending: 'Inconnu',
     connecting: 'Demandé',
@@ -210,7 +215,6 @@ const Strings = [
     requested: 'Reçue',
     unsaved: 'Non Enregistré',
     offsync: 'Hors Sync',
-
     actionResync: 'Resync',
     actionConnect: 'Connecter',
     actionAccept: 'Accepter',
@@ -221,6 +225,16 @@ const Strings = [
     actionDelete: 'Supprimer',
     actionBlock: 'Bloquer',
     actionReport: 'Signaler',
+
+    //constact list page
+    add: 'Ajouter',
+    contactFilter: 'Contacts',
+    serverFilter: 'Serveur',
+    usernameFilter: 'Nom d\'Utilisateur',
+    viewProfile: 'Voir le Profil',
+    messageContact: 'Envoyer un Message',
+    callContact: 'Appeler le Contact',
+    noContacts: 'Aucun Contact Trouvé',
   },
   {
     visibleRegistry: 'Visible en el Registro',
@@ -301,7 +315,6 @@ const Strings = [
     editDetails: 'Editar Detalles',
 
     // contacts page
-    add: 'Agregar', 
     back: 'Atrás',
     deleteContact: 'Borrar Contacto',
     confirmDelete: 'Borrar',
@@ -311,7 +324,6 @@ const Strings = [
     confirmBlock: 'Bloquear',
     reportContact: 'Reportar el Contacto',
     confirmReport: 'Reportar',
-  
     confirmed: 'Guardado',
     pending: 'Desconocido',
     connecting: 'Conectando',
@@ -319,7 +331,6 @@ const Strings = [
     requested: 'Solicitado',
     unsaved: 'No Guardado',
     offsync: 'Fuera de Sync',
-
     actionResync: 'Resinc',
     actionConnect: 'Conectar',
     actionAccept: 'Aceptar',
@@ -330,6 +341,16 @@ const Strings = [
     actionDelete: 'Borrar',
     actionBlock: 'Bloquear',
     actionReport: 'Reportar',
+
+    // contact list page
+    add: 'Agregar', 
+    contactFilter: 'Contactos',
+    serverFilter: 'Servidor',
+    usernameFilter: 'Nombre de Usuario',
+    viewProfile: 'Ver Perfil',
+    messageContact: 'Enviar Mensaje',
+    callContact: 'Llamar Contacto',
+    noContacts: 'No Encontraron Contactos',
   },
   {
     visibleRegistry: 'Sichtbar in der Registrierung',
@@ -410,7 +431,6 @@ const Strings = [
     editDetails: 'Details Bearbeiten',
     
     //contacts page
-    add: 'Hinzufügen',
     back: 'Rückwärts',
     deleteContact: 'Kontakt Löschen',
     confirmDelete: 'Löschen',
@@ -420,7 +440,6 @@ const Strings = [
     confirmBlock: 'Verstecken',
     reportContact: 'Kontakt Melden',
     confirmReport: 'Bericht',
-
     confirmed: 'Gerettet',
     pending: 'Unbekannt',
     connecting: 'Verbinden',
@@ -428,7 +447,6 @@ const Strings = [
     requested: 'Angefordert',
     unsaved: 'Nicht Gespeichert',
     offsync: 'Nicht Sync',
-
     actionResync: 'Neu Sync',
     actionConnect: 'Verbinden',
     actionAccept: 'Akzeptieren',
@@ -439,6 +457,16 @@ const Strings = [
     actionDelete: 'Löschen',
     actionBlock: 'Verstecken',
     actionReport: 'Bericht',
+
+    // contact list page
+    add: 'Hinzufügen',
+    contactFilter: 'Kontakte',
+    serverFilter: 'Server',
+    usernameFilter: 'Benutzername',
+    viewProfile: 'Profil Anzeigen',
+    messageContact: 'Nachricht Senden',
+    callContact: 'Kontakt Anrufen',
+    noContacts: 'Keine Kontakte Gefunden',
   }
 ];
 

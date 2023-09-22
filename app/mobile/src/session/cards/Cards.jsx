@@ -8,31 +8,35 @@ import MatIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Colors } from 'constants/Colors';
 import { CardItem } from './cardItem/CardItem';
 import { useNavigation } from '@react-navigation/native';
+import { getLanguageStrings } from 'constants/Strings';
 
 export function CardsHeader({ filter, setFilter, sort, setSort, openRegistry }) {
   const navigation = useNavigation();
+  const strings = getLanguageStrings();
 
   return (
     <View style={styles.title}>
       { sort && (
         <TouchableOpacity style={styles.sort} onPress={() => setSort(false)}>
-          <MatIcons style={styles.icon} name="sort-alphabetical-ascending" size={18} color={Colors.text} />
+          <MatIcons style={styles.icon} name="sort-ascending" size={18} color={Colors.text} />
         </TouchableOpacity>
       )}
       { !sort && (
         <TouchableOpacity style={styles.sort} onPress={() => setSort(true)}>
-          <MatIcons style={styles.icon} name="sort-alphabetical-ascending" size={18} color={Colors.disabled} />
+          <MatIcons style={styles.icon} name="sort-ascending" size={18} color={Colors.unsetText} />
         </TouchableOpacity>
       )}
       <View style={styles.inputwrapper}>
-        <AntIcons style={styles.icon} name="search1" size={16} color={Colors.disabled} />
-        <TextInput style={styles.inputfield} value={filter} onChangeText={setFilter}
-            autoCapitalize="none" placeholderTextColor={Colors.disabled} placeholder="Contacts" />
+        <AntIcons style={styles.icon} name="search1" size={16} color={Colors.inputPlaceholder} />
+
+        <TextInput placeholder={ strings.contactFilter } placeholderTextColor={Colors.inputPlaceholder} value={filter}
+            style={styles.inputfield} autoCapitalize={'none'} spellCheck={false} onChangeText={setFilter} />
+
         <View style={styles.space} />
       </View>
       <TouchableOpacity style={styles.add} onPress={() => openRegistry(navigation)}>
-        <AntIcons name={'adduser'} size={16} color={Colors.white} style={[styles.box, { transform: [ { rotateY: "180deg" }, ]} ]}/>
-        <Text style={styles.newtext}>Add</Text>
+        <AntIcons name={'adduser'} size={16} color={Colors.primaryButtonText} style={[styles.box, { transform: [ { rotateY: "180deg" }, ]} ]}/>
+        <Text style={styles.newtext}>{ strings.add }</Text>
       </TouchableOpacity>
     </View>
   );
@@ -48,9 +52,9 @@ export function CardsBody({ filter, sort, openContact, addChannel }) {
     catch (err) {
       console.log(err);
       Alert.alert(
-        'Failed to Call Contact',
-        'Please try again.'
-      )
+        state.strings.error,
+        state.strings.tryAgain,
+      );
     }
   }
 
@@ -58,7 +62,7 @@ export function CardsBody({ filter, sort, openContact, addChannel }) {
     <>
       { state.cards.length == 0 && (
         <View style={styles.notfound}>
-          <Text style={styles.notfoundtext}>No Contacts Found</Text>
+          <Text style={styles.notfoundtext}>{ state.strings.noContacts }</Text>
         </View>
       )}
       { state.cards.length != 0 && (

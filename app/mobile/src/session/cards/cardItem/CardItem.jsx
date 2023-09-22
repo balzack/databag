@@ -3,8 +3,12 @@ import { Logo } from 'utils/Logo';
 import { styles } from './CardItem.styled';
 import MatIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Colors from 'constants/Colors';
+import { Menu, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-menu';
+import { getLanguageStrings } from 'constants/Strings';
 
 export function CardItem({ item, openContact, enableIce, call, message }) {
+
+  const strings = getLanguageStrings();
   
   const select = () => {
     const { guid, name, handle, node, location, description, imageSet } = item;
@@ -16,42 +20,47 @@ export function CardItem({ item, openContact, enableIce, call, message }) {
     <View>
       { item.cardId && (
         <View style={styles.container}>
-          <TouchableOpacity style={styles.profile} activeOpacity={1} onPress={select}>
-            <Logo src={item.logo} width={32} height={32} radius={6} />
+          <View style={styles.profile}>
+            <Logo src={item.logo} width={48} height={48} radius={6} />
             <View style={styles.detail}>
-              <Text style={styles.name} numberOfLines={1} ellipsizeMode={'tail'}>{ item.name }</Text>
-              <Text style={styles.handle} numberOfLines={1} ellipsizeMode={'tail'}>{ item.handle }</Text>
+              <Text style={styles.name} numberOfLines={1} adjustsFontSizeToFit={true}>{ item.name }</Text>
+              <Text style={styles.handle} numberOfLines={1} adjustsFontSizeToFit={true}>{ item.username }</Text>
             </View>
-          </TouchableOpacity>
+          </View>
           { item.status === 'connected' && (
-            <View style={styles.options}>
-              <TouchableOpacity style={styles.option} onPress={message}>
-                <MatIcons name={'message-outline'} size={20} color={Colors.primary} />
-              </TouchableOpacity>
-              { enableIce && (
-                <TouchableOpacity style={styles.option} onPress={call}>
-                  <MatIcons name={'phone-outline'} size={20} color={Colors.primary} />
-                </TouchableOpacity>
-              )}
-            </View>
-          )}
-          { item.status === 'connected' && item.offsync && (
-            <View style={styles.offsync} />
-          )}
-          { item.status === 'connected' && !item.offsync && (
-            <View style={styles.connected} />
+            <Menu>
+              <MenuTrigger customStyles={styles.trigger}>
+                { item.status === 'connected' && item.offsync && (
+                  <MatIcons name={'dots-horizontal'} size={32} color={Colors.offysnc} />
+                )}
+                { item.status === 'connected' && !item.offsync && (
+                  <MatIcons name={'dots-horizontal'} size={32} color={Colors.connected} />
+                )}
+              </MenuTrigger>
+              <MenuOptions optionsContainerStyle={{ width: 'auto' }} style={styles.options}>
+                <MenuOption onSelect={() => {}}>
+                  <Text style={styles.option}>{ strings.viewProfile }</Text>
+                </MenuOption>
+                <MenuOption onSelect={() => {}}>
+                  <Text style={styles.option}>{ strings.messageContact }</Text>
+                </MenuOption>
+                <MenuOption onSelect={() => {}}>
+                  <Text style={styles.option}>{ strings.callContact }</Text>
+                </MenuOption>
+              </MenuOptions>
+            </Menu>
           )}
           { item.status === 'requested' && (
-            <View style={styles.requested} />
+            <MatIcons name={'dots-horizontal'} size={32} color={Colors.requested} />
           )}
           { item.status === 'connecting' && (
-            <View style={styles.connecting} />
+            <MatIcons name={'dots-horizontal'} size={32} color={Colors.connecting} />
           )}
           { item.status === 'pending' && (
-            <View style={styles.pending} />
+            <MatIcons name={'dots-horizontal'} size={32} color={Colors.pending} />
           )}
           { item.status === 'confirmed' && (
-            <View style={styles.confirmed} />
+            <MatIcons name={'dots-horizontal'} size={32} color={Colors.confirmed} />
           )}
         </View>
       )}

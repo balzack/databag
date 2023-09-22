@@ -6,14 +6,16 @@ export const styles = StyleSheet.create({
     width: '100%',
     display: 'flex',
     flexDirection: 'row',
-    height: 48,
+    height: 64,
     alignItems: 'center',
     borderBottomWidth: 1,
     borderColor: Colors.itemDivider,
+    flex: 1,
   },
   profile: {
     flexDirection: 'row',
-    flexGrow: 1,
+    flexShrink: 1,
+    display: 'flex',
   },
   detail: {
     paddingLeft: 12,
@@ -21,17 +23,20 @@ export const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     flexShrink: 1,
+    flexGrow: 1,
   },
   space: {
     height: 64,
   },
   name: {
     color: Colors.text,
-    fontSize: 14,
+    fontSize: 18,
+    flexShrink: 1,
   },
   handle: {
     color: Colors.text,
-    fontSize: 12,
+    fontSize: 16,
+    flexShrink: 1,
   },
   connected: {
     width: 8,
@@ -69,19 +74,23 @@ export const styles = StyleSheet.create({
     borderRadius: 4,
     backgroundColor: Colors.confirmed,
   },
+  trigger: {
+    triggerTouchable: {
+      activeOpacity: 70,
+    },
+  },
   options: {
-    display: 'flex',
-    flexDirection: 'row',
-    height: '100%',
-    marginRight: 8,
+    backgroundColor: Colors.areaBase,
+    borderWidth: 0.2,
+    borderColor: Colors.areaBorder,
   },
   option: {
-    paddingLeft: 12,
-    paddingRight: 12,
-    height: '100%',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
+    padding: 6,
+    color: Colors.text,
+    backgroundColor: Colors.areaBase,
+    fontFamily: 'roboto',
+    fontSize: 16,
+    textAlign: 'center',
   },
 })
 
