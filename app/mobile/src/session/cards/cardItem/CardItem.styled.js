@@ -25,6 +25,9 @@ export const styles = StyleSheet.create({
     flexShrink: 1,
     flexGrow: 1,
   },
+  more: {
+    paddingLeft: 16,
+  },
   space: {
     height: 64,
   },

@@ -7,7 +7,7 @@ export const styles = StyleSheet.create({
     height: '100%',
     display: 'flex',
     flexDirection: 'column',
-    backgroundColor: Colors.formBackground,
+    backgroundColor: Colors.screenBase,
     paddingLeft: 16,
     paddingRight: 16,
     paddingTop: 8,
@@ -18,10 +18,16 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  header: {
+    width: '100%',
+    paddingBottom: 8,
+    borderBottomWidth: 1,
+    borderColor: Colors.itemDivider,
+  },
   topbar: {
     borderTopWidth: 1,
     borderBottomWidth: 1,
-    borderColor: Colors.divider,
+    borderColor: Colors.itemDivider,
     paddingTop: 6,
     paddingBottom: 6,
     paddingLeft: 16,
@@ -33,7 +39,7 @@ export const styles = StyleSheet.create({
   },
   searcharea: {
     borderBottomWidth: 1,
-    borderColor: Colors.divider,
+    borderColor: Colors.itemDivider,
   },
   searchbar: {
     display: 'flex',
@@ -47,7 +53,7 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     borderRadius: 4,
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.inputBase,
     alignItems: 'center',
     paddingTop: 4,
     paddingBottom: 4,
@@ -57,20 +63,20 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     borderRadius: 4,
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.inputBase,
     alignItems: 'center',
     flexGrow: 1,
     flexShrink: 1,
     marginRight: 8,
+    marginLeft: 8,
     paddingTop: 4,
     paddingBottom: 4,
-    marginLeft: 8,
   },
   inputfield: {
     flex: 1,
     textAlign: 'center',
     padding: 4,
-    color: Colors.text,
+    color: Colors.inputText,
     fontSize: 14,
   },
   icon: {
@@ -82,6 +88,7 @@ export const styles = StyleSheet.create({
     width: '100%',
     paddingLeft: 16,
     minHeight: 0,
+    backgroundColor: Colors.screenBase,
   },
   empty: {
     flexGrow: 1,
@@ -92,7 +99,7 @@ export const styles = StyleSheet.create({
     marginTop: 32,
   },
   emptyText: {
-    color: Colors.grey,
+    color: Colors.unsetText,
     fontSize: 18,
   },
   addbottom: {
@@ -105,11 +112,11 @@ export const styles = StyleSheet.create({
     borderRadius: 4,
   },
   bottomText: {
-    color: Colors.primary,
+    color: Colors.primaryButtonText,
     paddingLeft: 8,
   },
   search: {
-    backgroundColor: Colors.primary,
+    backgroundColor: Colors.primaryButton,
     marginLeft: 8,
     display: 'flex',
     flexDirection: 'row',
@@ -125,10 +132,10 @@ export const styles = StyleSheet.create({
     padding: 8,
     borderRadius: 4,
     paddingLeft: 8,
-    color: Colors.white,
+    color: Colors.text,
   },
   findarea: {
     borderTopWidth: 1,
-    borderColor: Colors.divider,
+    borderColor: Colors.itemDivider,
   }
 })

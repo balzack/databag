@@ -18,6 +18,12 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  header: {
+    width: '100%',
+    paddingBottom: 8,
+    borderBottomWidth: 1,
+    borderColor: Colors.itemDivider,
+  },
   topbar: {
     borderTopWidth: 1,
     borderBottomWidth: 1,
@@ -75,6 +81,7 @@ export const styles = StyleSheet.create({
     width: '100%',
     paddingLeft: 16,
     paddingRight: 16,
+    paddingTop: 8,
     backgroundColor: Colors.screenBase,
   },
   addbottom: {

@@ -18,20 +18,18 @@ export function CardsHeader({ filter, setFilter, sort, setSort, openRegistry }) 
     <View style={styles.title}>
       { sort && (
         <TouchableOpacity style={styles.sort} onPress={() => setSort(false)}>
-          <MatIcons style={styles.icon} name="sort-ascending" size={18} color={Colors.text} />
+          <MatIcons style={styles.icon} name="sort-ascending" size={24} color={Colors.text} />
         </TouchableOpacity>
       )}
       { !sort && (
         <TouchableOpacity style={styles.sort} onPress={() => setSort(true)}>
-          <MatIcons style={styles.icon} name="sort-ascending" size={18} color={Colors.unsetText} />
+          <MatIcons style={styles.icon} name="sort-ascending" size={24} color={Colors.unsetText} />
         </TouchableOpacity>
       )}
       <View style={styles.inputwrapper}>
         <AntIcons style={styles.icon} name="search1" size={16} color={Colors.inputPlaceholder} />
-
         <TextInput placeholder={ strings.contactFilter } placeholderTextColor={Colors.inputPlaceholder} value={filter}
             style={styles.inputfield} autoCapitalize={'none'} spellCheck={false} onChangeText={setFilter} />
-
         <View style={styles.space} />
       </View>
       <TouchableOpacity style={styles.add} onPress={() => openRegistry(navigation)}>
@@ -84,7 +82,9 @@ export function Cards({ openRegistry, openContact, addChannel }) {
 
   return (
     <View>
-      <CardsHeader filter={filter} setFilter={setFilter} sort={sort} setSort={setSort} openRegistry={openRegistry} />
+      <View style={styles.header}>
+        <CardsHeader filter={filter} setFilter={setFilter} sort={sort} setSort={setSort} openRegistry={openRegistry} />
+      </View>
       <CardsBody filter={filter} sort={sort} openContact={openContact} addChannel={addChannel} />
     </View>
   );

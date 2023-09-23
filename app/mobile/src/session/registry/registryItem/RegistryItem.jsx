@@ -18,10 +18,10 @@ export function RegistryItem({ item, openContact }) {
     <View>
       { item.guid && (
         <TouchableOpacity style={styles.container} activeOpacity={1} onPress={select}>
-          <Logo src={item.logo} width={32} height={32} radius={6} />
+          <Logo src={item.logo} width={48} height={48} radius={6} />
           <View style={styles.detail}>
-            <Text style={styles.name} numberOfLines={1} ellipsizeMode={'tail'}>{ item.name }</Text>
-            <Text style={styles.handle} numberOfLines={1} ellipsizeMode={'tail'}>{ handle }</Text>
+            <Text style={styles.name} numberOfLines={1} adjustsFontSizeToFit={true}>{ item.name }</Text>
+            <Text style={styles.handle} numberOfLines={1} adjustsFontSizeToFit={true}>{ item.username }</Text>
           </View>
         </TouchableOpacity>
       )}

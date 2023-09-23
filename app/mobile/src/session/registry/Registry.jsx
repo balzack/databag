@@ -37,7 +37,7 @@ export function RegistryBody({ search, handle, server, openContact }) {
     <View style={styles.accounts}>
       { state.searching && (
         <View style={styles.empty}>
-          <ActivityIndicator size={'large'} color={Colors.backgrougd} />
+          <ActivityIndicator size={'large'} color={Colors.text} />
         </View>
       )}
       { !state.searching && state.accounts.length === 0 && (
@@ -70,7 +70,9 @@ export function Registry({ closeRegistry, openContact }) {
 
   return (
     <View>
-      <RegistryHeader search={search} setSearch={setSearch} handle={handle} setHandle={setHandle} server={server} setServer={setServer} />
+      <View style={styles.header}>
+        <RegistryHeader search={search} setSearch={setSearch} handle={handle} setHandle={setHandle} server={server} setServer={setServer} />
+      </View>
       <RegistryBody search={search} handle={handle} server={server} openContact={openContact} />
     </View>
   );

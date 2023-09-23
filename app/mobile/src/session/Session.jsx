@@ -129,7 +129,7 @@ function ProfileStackScreen() {
 
 function ContactStackScreen({ addChannel }) {
   const stackParams = { headerStyle: { backgroundColor: Colors.screenBase }, headerBackTitleVisible: false };
-  const screenParams = { headerShown: true };
+  const screenParams = { headerShown: true, headerTintColor: Colors.primary };
 
   const profile = useContext(ProfileContext);
   
