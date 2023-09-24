@@ -7,6 +7,7 @@ export const styles = StyleSheet.create({
     height: '100%',
     display: 'flex',
     flexDirection: 'column',
+    backgroundColor: Colors.screenBase,
   },
   title: {
     display: 'flex',
@@ -18,10 +19,11 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     borderRadius: 4,
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.inputBase,
     alignItems: 'center',
     flexGrow: 1,
     flexShrink: 1,
+    marginRight: 8,
     paddingTop: 4,
     paddingBottom: 4,
   },
@@ -30,7 +32,7 @@ export const styles = StyleSheet.create({
     flexGrow: 1,
     textAlign: 'center',
     padding: 4,
-    color: Colors.text,
+    color: Colors.inputText,
     fontSize: 14,
   },
   addField: {
@@ -113,15 +115,10 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: 'rgba(52, 52, 52, 0.8)'
   },
-  addContainer: {
-    backgroundColor: Colors.formBackground,
-    padding: 16,
-    width: '80%',
-    maxWidth: 400,
-  },
   addHeader: {
     fontSize: 18,
-    paddingBottom: 16,
+    paddingBottom: 8,
+    color: Colors.text,
   },
   addMembers: {
     width: '100%',
@@ -168,9 +165,15 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   saveText: {
-    color: Colors.white,
+    color: Colors.primaryButtonText,
     paddingRight: 4,
     paddingLeft: 4,
+  },
+  cancelText: {
+    color: Colors.cancelButtonText,
+  },
+  sealedText: {
+    color: Colors.text,
   },
   addControls: {
     display: 'flex',
@@ -191,6 +194,52 @@ export const styles = StyleSheet.create({
   },
   switch: {
     transform: [{ scaleX: .7 }, { scaleY: .7 }],
+  },
+  modalOverlay: { 
+    width: '100%',
+    height: '100%',
+  },
+  modalBase: {
+    position: 'absolute',
+    top: 0,
+    left: 0, 
+    width: '100%', 
+    height: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  modalContainer: {
+    backgroundColor: Colors.modalBase,
+    width: '80%',
+    maxWidth: 400,
+    display: 'flex',
+    alignItems: 'center',
+    borderRadius: 8,
+    padding: 16,
+  },
+  field: {
+    input: {
+      backgroundColor: Colors.inputBase,
+      borderRadius: 8,
+      minHeight: 48,
+      maxHeight: 128,
+      paddingLeft: 8,
+    },
+    inputText: {
+      color: Colors.inputText,
+    },
+    label: {
+      height: 16,
+      paddingLeft: 8,
+    },
+    labelText: {
+      color: Colors.inputPlaceholder,
+      fontSize: 12,
+    },
+    container: { 
+      width: '100%',
+    },
   },
 });
 

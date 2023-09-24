@@ -6,6 +6,8 @@ import { useChannels } from './useChannels.hook';
 import { Colors } from 'constants/Colors';
 import { ChannelItem } from './channelItem/ChannelItem';
 import { AddMember } from './addMember/AddMember';
+import { BlurView } from '@react-native-community/blur';
+import { InputField } from 'utils/InputField';
 
 export function Channels({ cardId, channelId, navigation, openConversation, dmChannel, shareChannel }) {
 
@@ -69,25 +71,25 @@ export function Channels({ cardId, channelId, navigation, openConversation, dmCh
           </View>
         </View>
       )}
-        { state.channels.length == 0 && (
-          <View style={styles.notfound}>
-            <Text style={styles.notfoundtext}>No Topics Found</Text>
-          </View>
-        )}
-        { state.channels.length != 0 && (
-          <FlatList 
-            style={styles.content}
-            data={state.channels}
-            initialNumToRender={25}
-            renderItem={({ item }) => <ChannelItem cardId={cardId} channelId={channelId} item={item} openConversation={openConversation} />}
-            keyExtractor={item => (`${item.cardId}:${item.channelId}`)}
-          />
-        )}
+      { state.channels.length == 0 && (
+        <View style={styles.notfound}>
+          <Text style={styles.notfoundtext}>No Topics Found</Text>
+        </View>
+      )}
+      { state.channels.length != 0 && (
+        <FlatList 
+          style={styles.content}
+          data={state.channels}
+          initialNumToRender={25}
+          renderItem={({ item }) => <ChannelItem cardId={cardId} channelId={channelId} item={item} openConversation={openConversation} />}
+          keyExtractor={item => (`${item.cardId}:${item.channelId}`)}
+        />
+      )}
       { !navigation && (
         <View style={styles.columnbottom}>
           <TouchableOpacity style={styles.addbottom} onPress={actions.showAdding}>
             <Ionicons name={'message1'} size={16} color={Colors.white} />
-            <Text style={styles.addtext}>New Topic</Text>
+            <Text style={styles.addtext}>{ state.strings.newTopic }</Text>
           </TouchableOpacity>
         </View>
       )}
@@ -98,51 +100,61 @@ export function Channels({ cardId, channelId, navigation, openConversation, dmCh
           supportedOrientations={['portrait', 'landscape']}
           onRequestClose={actions.hideAdding}
         >
-        <KeyboardAvoidingView behavior="height" style={styles.addWrapper}>
-          <View style={styles.addContainer}>
-            <Text style={styles.addHeader}>New Topic:</Text>
-            <View style={styles.addField}>
-              <TextInput style={styles.input} value={state.addSubject} onChangeText={actions.setAddSubject}
-                  autoCapitalize="words" placeholder="Subject (optional)" placeholderTextColor={Colors.grey} />
-            </View>
-            <Text style={styles.label}>Members:</Text>
-            { state.contacts.length == 0 && (
-              <View style={styles.emptyMembers}>
-                <Text style={styles.empty}>No Connected Contacts</Text>
-              </View>
-            )}
-            { state.contacts.length > 0 && (
-              <FlatList style={styles.addMembers}
-                data={state.contacts}
-                renderItem={({ item }) => <AddMember members={state.addMembers} item={item}
-                    setCard={actions.setAddMember} clearCard={actions.clearAddMember} />}
-                keyExtractor={item => item.cardId}
+        <View style={styles.modalOverlay}>
+          <BlurView style={styles.modalOverlay} blurType={Colors.overlay} blurAmount={2} reducedTransparencyFallbackColor="black" />
+          <KeyboardAvoidingView style={styles.modalBase} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+
+            <View style={styles.modalContainer}>
+              <Text style={styles.addHeader}>{ state.strings.newTopic }</Text>
+
+              <InputField
+                label={state.strings.subject}
+                value={state.addSubject}
+                autoCapitalize={'words'}
+                spellCheck={false}
+                style={styles.field}
+                onChangeText={actions.setAddSubject}
               />
-            )}
-            <View style={styles.addControls}>
-              <View style={styles.sealed}>
-                { state.sealable && (
-                  <>
-                    <Switch style={styles.switch} trackColor={styles.track}
-                      value={state.sealed} onValueChange={actions.setSealed} />
-                    <Text>Sealed</Text>
-                  </>
-                )}
+
+              <Text style={styles.label}>Members:</Text>
+              { state.contacts.length == 0 && (
+                <View style={styles.emptyMembers}>
+                  <Text style={styles.empty}>No Connected Contacts</Text>
+                </View>
+              )}
+              { state.contacts.length > 0 && (
+                <FlatList style={styles.addMembers}
+                  data={state.contacts}
+                  renderItem={({ item }) => <AddMember members={state.addMembers} item={item}
+                      setCard={actions.setAddMember} clearCard={actions.clearAddMember} />}
+                  keyExtractor={item => item.cardId}
+                />
+              )}
+              <View style={styles.addControls}>
+                <View style={styles.sealed}>
+                  { state.sealable && (
+                    <>
+                      <Switch style={styles.switch} trackColor={styles.track}
+                        value={state.sealed} onValueChange={actions.setSealed} />
+                      <Text style={styles.sealedText}>{ state.strings.sealed }</Text>
+                    </>
+                  )}
+                </View>
+                <TouchableOpacity style={styles.cancel} onPress={actions.hideAdding}>
+                  <Text style={styles.cancelText}>{ state.strings.cancel }</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.save} onPress={addChannel}>
+                  { state.busy && (
+                    <ActivityIndicator color={Colors.text} />
+                  )}
+                  { !state.busy && (
+                    <Text style={styles.saveText}>{ state.strings.create }</Text>
+                  )}
+                </TouchableOpacity>
               </View>
-              <TouchableOpacity style={styles.cancel} onPress={actions.hideAdding}>
-                <Text>Cancel</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.save} onPress={addChannel}>
-                { state.busy && (
-                  <ActivityIndicator color={Colors.white} />
-                )}
-                { !state.busy && (
-                  <Text style={styles.saveText}>Create</Text>
-                )}
-              </TouchableOpacity>
             </View>
-          </View>
-        </KeyboardAvoidingView>
+          </KeyboardAvoidingView>
+        </View>
       </Modal>
     </View>
   );

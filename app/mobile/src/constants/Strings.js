@@ -119,6 +119,15 @@ const Strings = [
     messageContact: 'Message Contact',
     callContact: 'Call Contact',
     noContacts: 'No Contacts Found',
+
+    // channels list
+    profile: 'Profile',
+    contacts: 'Contacts',
+    topics: 'Topics',
+    subject: 'Subject (optional)',
+    create: 'Create',
+    sealed: 'Sealed',
+    newTopic: 'New Topic',
   },
   {
     visibleRegistry: 'Visible dans le Registre',
@@ -235,6 +244,15 @@ const Strings = [
     messageContact: 'Envoyer un Message',
     callContact: 'Appeler le Contact',
     noContacts: 'Aucun Contact Trouvé',
+
+    // channels list
+    profile: 'Profil',
+    contacts: 'Contacts',
+    topics: 'Sujets',
+    subject: 'Titre (optionnel)',
+    create: 'Créer',
+    sealed: 'Protégé', 
+    newTopic: 'Nourveau Sujet',
   },
   {
     visibleRegistry: 'Visible en el Registro',
@@ -351,6 +369,15 @@ const Strings = [
     messageContact: 'Enviar Mensaje',
     callContact: 'Llamar Contacto',
     noContacts: 'No Encontraron Contactos',
+
+    // channels list
+    profile: 'Perfil',
+    contacts: 'Contactos',
+    topics: 'Temas',
+    subject: 'Título (opcional)',
+    create: 'Crear',
+    sealed: 'Protegida',
+    newTopic: 'Nuevo Tema',
   },
   {
     visibleRegistry: 'Sichtbar in der Registrierung',
@@ -467,6 +494,15 @@ const Strings = [
     messageContact: 'Nachricht Senden',
     callContact: 'Kontakt Anrufen',
     noContacts: 'Keine Kontakte Gefunden',
+    
+    // channels list
+    profile: 'Profil',
+    contacts: 'Kontakte',
+    topics: 'Themen',
+    subject: 'Titel (optional)',
+    create: 'Erstellen',
+    sealed: 'Gesichert',
+    newTopic: 'Neues Thema',
   }
 ];
 

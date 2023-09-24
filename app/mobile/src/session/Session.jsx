@@ -43,8 +43,8 @@ const RegistryDrawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
 
 function ConversationStackScreen({ dmChannel, shareChannel, shareIntent, setShareIntent }) {
-  const stackParams = { headerStyle: { backgroundColor: Colors.areaBase }, headerBackTitleVisible: false };
-  const screenParams = { headerShown: true };
+  const stackParams = { headerStyle: { backgroundColor: Colors.screenBase }, headerBackTitleVisible: false };
+  const screenParams = { headerShown: true, headerTintColor: Colors.primary };
 
   const conversation = useContext(ConversationContext);
   const [cardId, setCardId] = useState();
@@ -223,11 +223,11 @@ function HomeScreen({ navParams }) {
       <SafeAreaView edges={['top', 'bottom', 'left']} style={styles.sidebar}>
         <View edges={['left']} style={styles.options}>
           <TouchableOpacity style={styles.option} onPress={openProfile}>
-            <ProfileIcon color={Colors.text} size={20} />
+            <ProfileIcon color={Colors.text} size={24} />
             <Text style={styles.profileLabel}>Profile</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.option} onPress={openCards}>
-            <CardsIcon color={Colors.text} size={20} />
+            <CardsIcon color={Colors.text} size={24} />
             <Text style={styles.profileLabel}>Contacts</Text>
           </TouchableOpacity>
         </View>

@@ -82,7 +82,7 @@ export const styles = StyleSheet.create({
     height: '100%',
     width: '33%',
     maxWidth: 500,
-    borderRightWidth: 1,
+    backgroundColor: Colors.screenBase,
     borderColor: Colors.verticalDivider,
   },
   conversation: {
@@ -135,6 +135,7 @@ export const styles = StyleSheet.create({
   },
   profileLabel: {
     paddingLeft: 8,
+    color: Colors.text,
   },
   headertext: {
     fontSize: 18,

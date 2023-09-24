@@ -11,7 +11,7 @@ export function ChannelItem({ cardId, channelId, item, openConversation }) {
 
   return (
     <TouchableOpacity style={container} activeOpacity={1} onPress={() => openConversation(item.cardId, item.channelId, item.revision)}>
-      <Logo src={item.logo} width={32} height={32} radius={3} />
+      <Logo src={item.logo} width={48} height={48} radius={6} />
       <View style={styles.detail}>
         <View style={styles.subject}>
           { item.locked && !item.unlocked && (
