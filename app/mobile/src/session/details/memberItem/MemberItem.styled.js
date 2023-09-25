@@ -6,7 +6,7 @@ export const styles = StyleSheet.create({
     width: '100%',
     display: 'flex',
     flexDirection: 'row',
-    height: 48,
+    height: 64,
     alignItems: 'center',
     borderBottomWidth: 1,
     borderColor: Colors.itemDivider,

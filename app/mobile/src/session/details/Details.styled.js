@@ -249,4 +249,38 @@ export const styles = StyleSheet.create({
       width: '100%',
     },
   },
+  control: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingTop: 12,
+  },
+  drawerActions: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'center',
+    width: '80%',
+    borderRadius: 8,
+    paddingTop: 8,
+    paddingBottom: 8,
+  },
+  actionList: {
+    alignItems: 'flex-end',
+  },
+  action: {
+    display: 'flex',
+    alignItems: 'center',
+    paddingRight: 12,
+    paddingLeft: 12,
+    paddingBottom: 12,
+  },
+  actionIcon: {
+  },
+  actionLabel: {
+    color: Colors.linkText,
+    fontSize: 10,
+  },
 })

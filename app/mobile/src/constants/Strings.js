@@ -109,6 +109,7 @@ const Strings = [
     actionDelete: 'Delete',
     actionBlock: 'Block',
     actionReport: 'Report',
+    actionLeave: 'Leave',
 
     // contact list page
     add: 'Add',
@@ -137,6 +138,10 @@ const Strings = [
     members: 'Members',
     editSubject: 'Edit Subject',
     topicMembers: 'Topic Members',
+    leaveTopic: 'Leave Topic',
+    deleteTopic: 'Delete Topic',
+    blockTopic: 'Block Topic',
+    reportTopic: 'Report Topic',
   },
   {
     visibleRegistry: 'Visible dans le Registre',
@@ -271,6 +276,10 @@ const Strings = [
     members: 'Membres',
     editSubject: 'Modifier le Title',
     topicMembers: 'Membres du Sujet',
+    leaveTopic: 'Quitter le Sujet',
+    deleteTopic: 'Supprimer le Sujet',
+    blockTopic: 'Bloquer le Sujet',
+    reportTopic: 'Signaler le Sujet',
   },
   {
     visibleRegistry: 'Visible en el Registro',
@@ -405,6 +414,10 @@ const Strings = [
     members: 'Miembros',
     editSubject: 'Editar Título',
     topicMembers: 'Miembros del Tema',
+    leaveTopic: 'Dejar el Tema',
+    deleteTopic: 'Borrar el Tema',
+    blockTopic: 'Bloquer el Tema',
+    reportTopic: 'Reportar el Tema',
   },
   {
     visibleRegistry: 'Sichtbar in der Registrierung',
@@ -539,6 +552,10 @@ const Strings = [
     members: 'Mitglieder',
     editSubject: 'Titel bearbeiten',
     topicMembers: 'Themenmitglieder',
+    leaveTopic: 'Verlasse das Thema',
+    deleteTopic: 'Das Thema Löschen',
+    blockTopic: 'Blockiere das Thema',
+    reportTopic: 'Das Thema Melden',
   }
 ];
 

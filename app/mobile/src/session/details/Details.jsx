@@ -1,4 +1,5 @@
 import { ActivityIndicator, KeyboardAvoidingView, FlatList, Alert, Modal, View, Text, Switch, TouchableOpacity, TextInput } from 'react-native';
+import { useState } from 'react';
 import { styles } from './Details.styled';
 import { useDetails } from './useDetails.hook';
 import { Logo } from 'utils/Logo';
@@ -11,7 +12,8 @@ import { InputField } from 'utils/InputField';
 
 export function Details({ channel, clearConversation }) {
 
-  const { state, actions } = useDetails();
+  const [busy, setBusy] = useState(false);
+  const { state, actions } = useDetails(clearConversation);
 
   const toggle = async (cardId, selected) => {
     try {
@@ -56,6 +58,27 @@ export function Details({ channel, clearConversation }) {
         state.strings.tryAgain,
       );
     }
+  }
+
+  const promptAction = (prompt, action) => {
+    prompt(async () => {
+      if (!busy) {
+        try {
+          setBusy(true);
+          await action();
+          setBusy(false);
+        }
+        catch (err) {
+          console.log(err);
+          setBusy(false);
+          Alert.alert(
+            state.strings.error,
+            state.strings.tryAgain,
+          );
+          throw err;
+        }
+      }
+    });
   }
 
   const remove = () => {
@@ -164,45 +187,6 @@ export function Details({ channel, clearConversation }) {
       </View>
 
       <View style={styles.controls}>
-        { !state.hostId && (
-          <TouchableOpacity style={styles.button} onPress={remove}>
-            { state.deleteBusy && (
-              <ActivityIndicator color={Colors.white} />
-            )}
-            { !state.deleteBusy && (
-              <Text style={styles.buttonText}>Delete Topic</Text>
-            )}
-          </TouchableOpacity>
-        )}
-        { state.hostId && (
-          <TouchableOpacity style={styles.button} onPress={remove}>
-            { state.deleteBusy && (
-              <ActivityIndicator color={Colors.white} />
-            )}
-            { !state.deleteBusy && (
-              <Text style={styles.buttonText}>Leave Topic</Text>
-            )}
-          </TouchableOpacity>
-        )}
-        <TouchableOpacity style={styles.button} onPress={block}>
-          { state.blockBusy && (
-            <ActivityIndicator color={Colors.white} />
-          )}
-          { !state.blockBusy && (
-            <Text style={styles.buttonText}>Block Topic</Text>
-          )}
-        </TouchableOpacity>
-        { state.hostId && (
-          <TouchableOpacity style={styles.button} onPress={report}>
-            <Text style={styles.buttonText}>Report Topic</Text>
-          </TouchableOpacity>
-        )}
-        { !state.hostId && !state.locked && (
-          <TouchableOpacity style={styles.button} onPress={actions.showEditMembers}>
-            <Text style={styles.buttonText}>Edit Membership</Text>
-          </TouchableOpacity>
-        )}
-
         <View style={styles.notify}>
           <TouchableOpacity onPress={() => setNotifications(!state.notification)} activeOpacity={1}>
             <Text style={styles.notifyText}>{ state.strings.enableNotifications }</Text>
@@ -211,7 +195,42 @@ export function Details({ channel, clearConversation }) {
             <Switch style={styles.switch} value={state.notification} onValueChange={setNotifications} trackColor={styles.track}/>
           )}
         </View>
+      </View>
 
+      <View style={styles.control}>
+        { busy && (
+          <ActivityIndicator animating={true} color={Colors.text} size={'large'} />
+        )}
+        { !busy && (
+          <View style={styles.drawerActions}>
+            { !state.hostId && !state.locked && (
+              <TouchableOpacity style={styles.action} activeOpacity={1} onPress={actions.showEditMembers}>
+                <MatIcons name="account-group-outline" style={styles.actionIcon} size={44} color={Colors.linkText} />
+                <Text style={styles.actionLabel}>{ state.strings.members }</Text>
+              </TouchableOpacity>
+            )}
+            { !state.hostId && (
+              <TouchableOpacity style={styles.action} activeOpacity={1} onPress={() => promptAction(actions.deletePrompt, actions.removeTopic)}>
+                <MatIcons name="text-box-remove-outline" style={styles.actionIcon} size={44} color={Colors.linkText} />
+                <Text style={styles.actionLabel}>{ state.strings.delete }</Text>
+              </TouchableOpacity>
+            )}
+            { state.hostId && (
+              <TouchableOpacity style={styles.action} activeOpacity={1} onPress={() => promptAction(actions.leavePrompt, actions.removeTopic)}>
+                <MatIcons name="text-box-minus-outline" style={styles.actionIcon} size={44} color={Colors.linkText} />
+                <Text style={styles.actionLabel}>{ state.strings.leave }</Text>
+              </TouchableOpacity>
+            )}
+            <TouchableOpacity style={styles.action} activeOpacity={1} onPress={() => promptAction(actions.blockPrompt, actions.blockTopic)}>
+              <MatIcons name="comment-remove-outline" style={styles.actionIcon} size={44} color={Colors.linkText} />
+              <Text style={styles.actionLabel}>{ state.strings.actionBlock }</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.action} activeOpacity={1} onPress={() => promptAction(actions.reportPrompt, actions.reportTopic)}>
+              <MatIcons name="comment-alert-outline" style={styles.actionIcon} size={44} color={Colors.linkText} />
+              <Text style={styles.actionLabel}>{ state.strings.actionReport }</Text>
+            </TouchableOpacity>
+          </View>
+        )}
       </View>
 
       <View style={styles.members}>
