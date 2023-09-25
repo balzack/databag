@@ -30,6 +30,7 @@ import { Call } from './call/Call';
 import { Sharing } from './sharing/Sharing';
 import splash from 'images/session.png';
 import { useNavigate } from 'react-router-dom';
+import { getLanguageStrings } from 'constants/Strings';
 
 const ConversationStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
@@ -180,6 +181,7 @@ function ContactStackScreen({ addChannel }) {
 
 function HomeScreen({ navParams }) {
 
+  const strings = getLanguageStrings();
   const drawerParams = { drawerPosition: 'right', headerShown: false, swipeEnabled: false, drawerType: 'front' };
   const conversation = useContext(ConversationContext);
   const [channel, setChannel] = useState(false);
@@ -222,13 +224,13 @@ function HomeScreen({ navParams }) {
     <View style={styles.home}>
       <SafeAreaView edges={['top', 'bottom', 'left']} style={styles.sidebar}>
         <View edges={['left']} style={styles.options}>
-          <TouchableOpacity style={styles.option} onPress={openProfile}>
+          <TouchableOpacity style={styles.option} onPress={openProfile} activeOpacity={1}>
             <ProfileIcon color={Colors.text} size={24} />
-            <Text style={styles.profileLabel}>Profile</Text>
+            <Text style={styles.profileLabel}>{ strings.account }</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.option} onPress={openCards}>
+          <TouchableOpacity style={styles.option} onPress={openCards} activeOpacity={1}>
             <CardsIcon color={Colors.text} size={24} />
-            <Text style={styles.profileLabel}>Contacts</Text>
+            <Text style={styles.profileLabel}>{ strings.contacts }</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.channels}>

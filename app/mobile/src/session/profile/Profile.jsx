@@ -121,7 +121,7 @@ export function Profile({ drawer }) {
               <Text style={styles.visibleLabel}>{ state.strings.visibleRegistry }</Text>
             </TouchableOpacity>
             <Switch value={state.searchable} style={Platform.OS==='ios' ? styles.visibleSwitch : {}} thumbColor={Colors.sliderGrip}
-                ios_backgroundColor={Colors.disabledIndicator} trackColor={styles.track} onValueChange={setVisible} />
+                ios_backgroundColor={Colors.idleFill} trackColor={styles.track} onValueChange={setVisible} />
           </TouchableOpacity>
         </View>
       )}

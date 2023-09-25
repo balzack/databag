@@ -80,7 +80,7 @@ export const styles = StyleSheet.create({
     paddingTop: 24,
     width: '100%',
     borderBottomWidth: 1,
-    borderColor: Colors.divider,
+    borderColor: Colors.itemDivider,
     display: 'flex',
     flexDirection: 'row',
     backgroundColor: Colors.screenBase,
@@ -183,13 +183,6 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     color: Colors.text,
   },
-  track: {
-    false: Colors.grey,
-    true: Colors.background,
-  },
-  switch: {
-    transform: [{ scaleX: .7 }, { scaleY: .7 }],
-  },
   modalOverlay: {
     width: '100%',
     height: '100%',
@@ -215,7 +208,7 @@ export const styles = StyleSheet.create({
   },
   close: {
     borderWidth: 1,
-    borderColor: Colors.lightgrey,
+    borderColor: Colors.closeButton,
     borderRadius: 4,
     padding: 8,
     marginRight: 8,
@@ -224,7 +217,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
   },
   closeText: {
-    color: Colors.cancelButtonText,
+    color: Colors.closeButtonText,
   }, 
   field: {
     input: {
@@ -282,5 +275,12 @@ export const styles = StyleSheet.create({
   actionLabel: {
     color: Colors.linkText,
     fontSize: 10,
+  },
+  track: {
+    false: Colors.idleFill,
+    true: Colors.activeFill,
+  },
+  visibleSwitch: {
+    transform: [{ scaleX: .6 }, { scaleY: .6 }],
   },
 })

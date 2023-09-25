@@ -80,6 +80,7 @@ export const styles = StyleSheet.create({
   trigger: {
     triggerTouchable: {
       activeOpacity: 70,
+      underlayColor: Colors.screenBase,
     },
   },
   options: {

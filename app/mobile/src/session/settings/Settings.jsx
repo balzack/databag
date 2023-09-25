@@ -173,7 +173,7 @@ export function Settings({ drawer }) {
               <TouchableOpacity activeOpacity={1} onPress={() => setNotifications(!state.pushEnabled)}>
                 <Text style={styles.optionText}>{ state.strings.enableNotifications }</Text>
               </TouchableOpacity>
-              <Switch value={state.pushEnabled} style={Platform.OS==='ios' ? styles.notifications : {}} thumbColor={Colors.sliderGrip} ios_backgroundColor={Colors.disabledIndicator}
+              <Switch value={state.pushEnabled} style={Platform.OS==='ios' ? styles.notifications : {}} thumbColor={Colors.sliderGrip} ios_backgroundColor={Colors.idleFill}
                   trackColor={styles.track} onValueChange={setNotifications} />
             </View>
           </TouchableOpacity>

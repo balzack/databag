@@ -50,7 +50,7 @@ export function useDetails(clear) {
       const notification = await conversation.actions.getNotifications();
       updateState({ notification });
     })();
-  }, []);
+  }, [conversation.state.card, conversation.state.channel]);
 
   useEffect(() => {
     let locked;

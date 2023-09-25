@@ -81,91 +81,10 @@ export function Details({ channel, clearConversation }) {
     });
   }
 
-  const remove = () => {
-    Alert.alert(
-      "Removing Topic",
-      "Confirm?",
-      [
-        { text: "Cancel",
-          onPress: () => {},
-        },
-        { text: "Remove",
-          onPress: async () => {
-            try {
-              await actions.remove(); 
-              clearConversation();
-            }
-            catch (err) {
-              console.log(err);
-              Alert.alert(
-                'Failed to Delete Topic',
-                'Please try again.'
-              )
-            }
-          },
-        }
-      ]
-    );
-  }
-
-  const block = () => {
-    Alert.alert(
-      "Blocking Topic",
-      "Confirm?",
-      [
-        { text: "Cancel",
-          onPress: () => {},
-        },
-        { text: "Block",
-          onPress: async () => {
-            try {
-              await actions.block();
-              clearConversation();
-            }
-            catch (err) {
-              console.log(err);
-              Alert.alert(
-                'Failed to Block Topic',
-                'Please try again.'
-              )
-            }
-          },
-        }
-      ]
-    );
-  }
-
-
-  const report = () => {
-    Alert.alert(
-      "Report Topic",
-      "Confirm?",
-      [
-        { text: "Cancel",
-          onPress: () => {},
-        },
-        { text: "Report",
-          onPress: async () => {
-            try {
-              await actions.report();
-            }
-            catch (err) {
-              console.log(err);
-              Alert.alert(
-                'Failed to Report Topic',
-                'Please try again.'
-              )
-            }
-          },
-        }
-      ]
-    );
-  }
-
   return (
     <View style={styles.body}>
       <View style={styles.details}>
-        <Logo src={state.logo} width={72} height={72} radius={8} />
+        <Logo src={state.logo} width={92} height={92} radius={8} />
         <View style={styles.info}>
           <View style={styles.subject}>
             { state.locked && !state.unlocked && (
@@ -192,7 +111,8 @@ export function Details({ channel, clearConversation }) {
             <Text style={styles.notifyText}>{ state.strings.enableNotifications }</Text>
           </TouchableOpacity>
           { state.notification != null && (
-            <Switch style={styles.switch} value={state.notification} onValueChange={setNotifications} trackColor={styles.track}/>
+            <Switch value={state.notification} style={Platform.OS==='ios' ? styles.visibleSwitch : {}} thumbColor={Colors.sliderGrip}
+                ios_backgroundColor={Colors.idleFill} trackColor={styles.track} onValueChange={setNotifications} />
           )}
         </View>
       </View>
@@ -236,7 +156,7 @@ export function Details({ channel, clearConversation }) {
       <View style={styles.members}>
         <Text style={styles.membersLabel}>{ state.strings.members }</Text>
         { state.count - state.members.length > 0 && (
-          <Text style={styles.unknown}> (+ {state.count - state.contacts.length} unknown)</Text>
+          <Text style={styles.unknown}> (+ {state.count - state.contacts.length}) { state.strings.unknown }</Text>
         )}
       </View>
 

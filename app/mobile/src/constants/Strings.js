@@ -142,6 +142,7 @@ const Strings = [
     deleteTopic: 'Delete Topic',
     blockTopic: 'Block Topic',
     reportTopic: 'Report Topic',
+    unknown: 'unknown',
   },
   {
     visibleRegistry: 'Visible dans le Registre',
@@ -280,6 +281,7 @@ const Strings = [
     deleteTopic: 'Supprimer le Sujet',
     blockTopic: 'Bloquer le Sujet',
     reportTopic: 'Signaler le Sujet',
+    unknown: 'Inconnu',
   },
   {
     visibleRegistry: 'Visible en el Registro',
@@ -418,6 +420,7 @@ const Strings = [
     deleteTopic: 'Borrar el Tema',
     blockTopic: 'Bloquer el Tema',
     reportTopic: 'Reportar el Tema',
+    unknown: 'Desconocido',
   },
   {
     visibleRegistry: 'Sichtbar in der Registrierung',
@@ -556,6 +559,7 @@ const Strings = [
     deleteTopic: 'Das Thema Löschen',
     blockTopic: 'Blockiere das Thema',
     reportTopic: 'Das Thema Melden',
+    unknown: 'Unbekannt',
   }
 ];
 
