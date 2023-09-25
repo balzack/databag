@@ -87,7 +87,7 @@ function ConversationStackScreen({ dmChannel, shareChannel, shareIntent, setShar
         </ConversationStack.Screen>
 
         <ConversationStack.Screen name="details" options={{ ...stackParams, headerTitle: (props) => (
-            <Text style={styles.headertext}>Details</Text>
+            <Text style={styles.headertext}></Text>
         )}}>
           {(props) => <Details clearConversation={() => clearConversation(props.navigation)} />}
         </ConversationStack.Screen>

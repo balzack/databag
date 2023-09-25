@@ -7,11 +7,13 @@ import { ProfileContext } from 'context/ProfileContext';
 import { getChannelSubjectLogo } from 'context/channelUtil';
 import { getCardByGuid } from 'context/cardUtil';
 import { getChannelSeals, isUnsealed, getContentKey, updateChannelSubject } from 'context/sealUtil';
+import { getLanguageStrings } from 'constants/Strings';
 import moment from 'moment';
 
 export function useDetails() {
 
   const [state, setState] = useState({
+    strings: getLanguageStrings(),
     subject: null,
     timestamp: null,
     logo: null,

@@ -128,6 +128,15 @@ const Strings = [
     create: 'Create',
     sealed: 'Sealed',
     newTopic: 'New Topic',
+
+    // details
+    topic: 'Topic',
+    host: 'host',
+    guest: 'guest',
+    leave: 'Leave',
+    members: 'Members',
+    editSubject: 'Edit Subject',
+    topicMembers: 'Topic Members',
   },
   {
     visibleRegistry: 'Visible dans le Registre',
@@ -253,6 +262,15 @@ const Strings = [
     create: 'Créer',
     sealed: 'Protégé', 
     newTopic: 'Nourveau Sujet',
+
+    // details
+    topic: 'Sujet',
+    host: 'Hôte',
+    guest: 'Invité',
+    leave: 'Partir',
+    members: 'Membres',
+    editSubject: 'Modifier le Title',
+    topicMembers: 'Membres du Sujet',
   },
   {
     visibleRegistry: 'Visible en el Registro',
@@ -378,6 +396,15 @@ const Strings = [
     create: 'Crear',
     sealed: 'Protegida',
     newTopic: 'Nuevo Tema',
+
+    // details
+    topic: 'Tema',
+    host: 'Anfitrión',
+    guest: 'Invitado',
+    leave: 'Dejar',
+    members: 'Miembros',
+    editSubject: 'Editar Título',
+    topicMembers: 'Miembros del Tema',
   },
   {
     visibleRegistry: 'Sichtbar in der Registrierung',
@@ -503,6 +530,15 @@ const Strings = [
     create: 'Erstellen',
     sealed: 'Gesichert',
     newTopic: 'Neues Thema',
+
+    // details
+    topic: 'Thema',
+    host: 'Gastgeber',
+    guest: 'Gast',
+    leave: 'Verlassen',
+    members: 'Mitglieder',
+    editSubject: 'Titel bearbeiten',
+    topicMembers: 'Themenmitglieder',
   }
 ];
 

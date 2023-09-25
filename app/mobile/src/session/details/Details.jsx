@@ -6,6 +6,8 @@ import AntIcons from 'react-native-vector-icons/AntDesign';
 import MatIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Colors from 'constants/Colors';
 import { MemberItem } from './memberItem/MemberItem';
+import { BlurView } from '@react-native-community/blur';
+import { InputField } from 'utils/InputField';
 
 export function Details({ channel, clearConversation }) {
 
@@ -23,8 +25,8 @@ export function Details({ channel, clearConversation }) {
     catch (err) {
       console.log(err);
       Alert.alert(
-        'Failed to Update Membership',
-        'Please try again.'
+        state.strings.error,
+        state.strings.tryAgain,
       );
     }
   };
@@ -37,9 +39,9 @@ export function Details({ channel, clearConversation }) {
     catch (err) {
       console.log(err);
       Alert.alert(
-        'Failed to Save Subject',
-        'Please try again.'
-      )
+        state.strings.error,
+        state.strings.tryAgain,
+      );
     }
   }
 
@@ -50,9 +52,9 @@ export function Details({ channel, clearConversation }) {
     catch (err) {
       console.log(err);
       Alert.alert(
-        'Failed to Update Notifications',
-        'Please try again.',
-      )
+        state.strings.error,
+        state.strings.tryAgain,
+      );
     }
   }
 
@@ -157,7 +159,7 @@ export function Details({ channel, clearConversation }) {
             )}
           </View>
           <Text style={styles.created}>{ state.timestamp }</Text>
-          <Text style={styles.mode}>{ state.hostId ? 'guest' : 'host' }</Text>
+          <Text style={styles.mode}>{ state.hostId ? state.strings.guest : state.strings.host }</Text>
         </View>  
       </View>
 
@@ -203,7 +205,7 @@ export function Details({ channel, clearConversation }) {
 
         <View style={styles.notify}>
           <TouchableOpacity onPress={() => setNotifications(!state.notification)} activeOpacity={1}>
-            <Text style={styles.notifyText}>Enable Notifications</Text>
+            <Text style={styles.notifyText}>{ state.strings.enableNotifications }</Text>
           </TouchableOpacity>
           { state.notification != null && (
             <Switch style={styles.switch} value={state.notification} onValueChange={setNotifications} trackColor={styles.track}/>
@@ -213,7 +215,7 @@ export function Details({ channel, clearConversation }) {
       </View>
 
       <View style={styles.members}>
-        <Text style={styles.membersLabel}>Members:</Text>
+        <Text style={styles.membersLabel}>{ state.strings.members }</Text>
         { state.count - state.members.length > 0 && (
           <Text style={styles.unknown}> (+ {state.count - state.contacts.length} unknown)</Text>
         )}
@@ -232,23 +234,32 @@ export function Details({ channel, clearConversation }) {
         supportedOrientations={['portrait', 'landscape']}
         onRequestClose={actions.hideEditSubject}
       >
-        <KeyboardAvoidingView behavior="height" style={styles.editWrapper}>
-          <View style={styles.editContainer}>
-            <Text style={styles.editHeader}>Edit Subject:</Text>
-            <View style={styles.inputField}>
-              <TextInput style={styles.input} value={state.subjectUpdate} onChangeText={actions.setSubjectUpdate}
-                  autoCapitalize="words" placeholder="Subject" placeholderTextColor={Colors.grey} />
+        <View style={styles.modalOverlay}>
+          <BlurView style={styles.modalOverlay} blurType={Colors.overlay} blurAmount={2} reducedTransparencyFallbackColor="black" />
+          <KeyboardAvoidingView style={styles.modalBase} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+            <View style={styles.modalContainer}>
+              <Text style={styles.editHeader}>{ state.strings.editSubject }</Text>
+
+              <InputField
+                label={state.strings.subject}
+                value={state.subjectUpdate}
+                autoCapitalize={'words'}
+                spellCheck={false}
+                style={styles.field}
+                onChangeText={actions.setSubjectUpdate}
+              />
+
+              <View style={styles.editControls}>
+                <TouchableOpacity style={styles.close} onPress={actions.hideEditSubject}>
+                  <Text style={styles.closeText}>Cancel</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.save} onPress={saveSubject}>
+                  <Text style={styles.saveText}>Save</Text>
+                </TouchableOpacity>
+              </View>
             </View>
-            <View style={styles.editControls}>
-              <TouchableOpacity style={styles.cancel} onPress={actions.hideEditSubject}>
-                <Text>Cancel</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.save} onPress={saveSubject}>
-                <Text style={styles.saveText}>Save</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </KeyboardAvoidingView>
+          </KeyboardAvoidingView>
+        </View>
       </Modal>
 
       <Modal
@@ -258,21 +269,24 @@ export function Details({ channel, clearConversation }) {
         supportedOrientations={['portrait', 'landscape']}
         onRequestClose={actions.hideEditMembers}
       >
-        <KeyboardAvoidingView behavior="height" style={styles.editWrapper}>
-          <View style={styles.editContainer}>
-            <Text style={styles.editHeader}>Channel Members:</Text>
-            <FlatList style={styles.editMembers}
-              data={state.connected}
-              renderItem={({ item }) => <MemberItem item={item} toggle={toggle} />}
-              keyExtractor={item => item.cardId}
-            />
-            <View style={styles.editControls}>
-              <TouchableOpacity style={styles.cancel} onPress={actions.hideEditMembers}>
-                <Text>Done</Text>
-              </TouchableOpacity>
+        <View style={styles.modalOverlay}>
+          <BlurView style={styles.modalOverlay} blurType={Colors.overlay} blurAmount={2} reducedTransparencyFallbackColor="black" />
+          <KeyboardAvoidingView style={styles.modalBase} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+            <View style={styles.modalContainer}>
+              <Text style={styles.editHeader}>{ state.strings.topicMembers }</Text>
+              <FlatList style={styles.editMembers}
+                data={state.connected}
+                renderItem={({ item }) => <MemberItem item={item} toggle={toggle} />}
+                keyExtractor={item => item.cardId}
+              />
+              <View style={styles.editControls}>
+                <TouchableOpacity style={styles.close} onPress={actions.hideEditMembers}>
+                  <Text style={styles.closeText}>{ state.strings.close }</Text>
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
-        </KeyboardAvoidingView>
+          </KeyboardAvoidingView>
+        </View>
       </Modal>
 
     </View>

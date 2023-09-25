@@ -22,9 +22,9 @@ export function Channels({ cardId, channelId, navigation, openConversation, dmCh
     catch (err) {
       console.log(err);
       Alert.alert(
-        'Failed to Add Topic',
-        'Please try again.'
-      )
+        state.strings.error,
+        state.strings.tryAgain,
+      );
     }
   };
 

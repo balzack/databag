@@ -122,10 +122,10 @@ export const styles = StyleSheet.create({
   },
   addMembers: {
     width: '100%',
-    borderWidth: 1,
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
     borderColor: Colors.lightgrey,
-    borderRadius: 4,
-    marginBottom: 8,
+    marginBottom: 16,
     height: 200,
   },
   emptyMembers: {

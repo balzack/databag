@@ -6,6 +6,8 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+    backgroundColor: Colors.screenBase,
+    height: '100%',
   },
   details: {
     display: 'flex',
@@ -64,13 +66,13 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     width: 128,
     height: 28,
-    backgroundColor: Colors.primary,
+    backgroundColor: Colors.primaryButton,
     borderRadius: 4,
     margin: 8,
     padding: 2,
   },
   buttonText: {
-    color: Colors.white,
+    color: Colors.primaryButtonText,
     padding: 4,
   },
   members: {
@@ -81,9 +83,11 @@ export const styles = StyleSheet.create({
     borderColor: Colors.divider,
     display: 'flex',
     flexDirection: 'row',
+    backgroundColor: Colors.screenBase,
   },
   membersLabel: {
     paddingLeft: 16,
+    color: Colors.text,
   },
   unknown: {
     color: Colors.grey,
@@ -91,6 +95,7 @@ export const styles = StyleSheet.create({
   },
   cards: {
     width: '100%',
+    backgroundColor: Colors.screenBase,
   },
   save: {
     padding: 8,
@@ -138,6 +143,7 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'flex-end',
+    paddingTop: 16,
   },
   editWrapper: {
     display: 'flex',
@@ -148,19 +154,20 @@ export const styles = StyleSheet.create({
     backgroundColor: 'rgba(52, 52, 52, 0.8)'
   },
   editContainer: {
-    backgroundColor: Colors.formBackground,
+    backgroundColor: Colors.screenBase,
     padding: 16,
     width: '80%',
     maxWidth: 400,
   },
   editHeader: {
     fontSize: 18,
-    paddingBottom: 16,
+    paddingBottom: 8,
+    color: Colors.text,
   },
   editMembers: {
     width: '100%',
     borderWidth: 1,
-    borderColor: Colors.lightgrey,
+    borderColor: Colors.itemDivider,
     borderRadius: 4,
     marginBottom: 8,
     height: 250,
@@ -182,5 +189,64 @@ export const styles = StyleSheet.create({
   },
   switch: {
     transform: [{ scaleX: .7 }, { scaleY: .7 }],
+  },
+  modalOverlay: {
+    width: '100%',
+    height: '100%',
+  },
+  modalBase: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  modalContainer: {
+    backgroundColor: Colors.modalBase,
+    width: '80%',
+    maxWidth: 400,
+    display: 'flex',
+    alignItems: 'center',
+    borderRadius: 8,
+    padding: 16,
+  },
+  close: {
+    borderWidth: 1,
+    borderColor: Colors.lightgrey,
+    borderRadius: 4,
+    padding: 8,
+    marginRight: 8,
+    width: 72,
+    display: 'flex',
+    alignItems: 'center',
+  },
+  closeText: {
+    color: Colors.cancelButtonText,
+  }, 
+  field: {
+    input: {
+      backgroundColor: Colors.inputBase,
+      borderRadius: 8,
+      minHeight: 48,
+      maxHeight: 128,
+      paddingLeft: 8,
+    },
+    inputText: {
+      color: Colors.inputText,
+    },
+    label: {
+      height: 16,
+      paddingLeft: 8,
+    },
+    labelText: {
+      color: Colors.inputPlaceholder,
+      fontSize: 12,
+    },
+    container: {
+      width: '100%',
+    },
   },
 })
