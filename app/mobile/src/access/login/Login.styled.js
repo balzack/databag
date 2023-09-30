@@ -18,7 +18,7 @@ export const styles = StyleSheet.create({
   modalContainer: {
     width: '100%',
     height: '100%',
-    backgroundColor: Colors.grey,
+    backgroundColor: Colors.modalBase,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -53,7 +53,7 @@ export const styles = StyleSheet.create({
     maxHeight: '80%',
     padding: 8,
     margin: 16,
-    backgroundColor: Colors.formBackground,
+    backgroundColor: Colors.modalBase,
   },
   done: {
     paddingTop: 8,

@@ -1,4 +1,4 @@
-import { TextInput, Alert, Switch, TouchableOpacity, View, Text, Modal, FlatList, KeyboardAvoidingView } from 'react-native';
+import { ScrollView, TextInput, Alert, Switch, TouchableOpacity, View, Text, Modal, FlatList, KeyboardAvoidingView } from 'react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import AntIcon from 'react-native-vector-icons/AntDesign';
@@ -7,6 +7,8 @@ import { styles } from './Dashboard.styled';
 import { useLocation } from 'react-router-dom';
 import { useDashboard } from './useDashboard.hook';
 import { Logo } from 'utils/Logo';
+import { BlurView } from "@react-native-community/blur";
+import { InputField } from 'utils/InputField';
 
 export function Dashboard(props) {
 
@@ -55,25 +57,7 @@ export function Dashboard(props) {
   }
 
   const removeUser = (accountId) => {
-    Alert.alert(
-      "Deleting Account",
-      "Confirm?",
-      [
-        { text: "Cancel", onPress: () => {}, },
-        { text: "Delete", onPress: async() => {
-          try {
-            await actions.removeUser(accountId);
-          }
-          catch (err) {
-            console.log(err);
-            Alert.alert(
-              "Failed to Delete Account",
-              "Please try again.",
-            );
-          }
-        }}
-      ]
-    )
+    actions.promptRemove(accountId);
   }
 
   const enableUser = async (accountId, enabled) => {
@@ -149,94 +133,134 @@ export function Dashboard(props) {
         supportedOrientations={['portrait', 'landscape']}
         onRequestClose={actions.hideEditConfig}
       >
-        <KeyboardAvoidingView behavior="height" style={styles.modalBackground}>
-          <View style={styles.modalContainer}>
-            <View style={styles.modalHeader}>
-              <Text style={styles.modalHeaderText}>Settings:</Text>
-            </View>
-            <View style={styles.modalBody}>
-              <TextInput style={styles.input} value={state.domain} onChangeText={actions.setDomain}
-                  autoCorrect={false} autoCapitalize="none" placeholder="Federated Host" />
-              <TextInput style={styles.input} value={state.storage}
+        <View style={styles.modalOverlay}>
+          <BlurView style={styles.modalOverlay} blurType={'dark'} blurAmount={2} reducedTransparencyFallbackColor='black' />
+          <KeyboardAvoidingView style={styles.modalBase} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+            <View style={styles.modalContainer}>
+
+              <View style={styles.modalHeader}>
+                <Text style={styles.modalHeaderText}>Settings:</Text>
+              </View>
+              <ScrollView style={styles.modalBody}>
+
+                <InputField style={styles.field}
+                  label={'Federated Host'}
+                  value={state.domain}
+                  autoCapitalize={'none'}
+                  spellCheck={false}
+                  onChangeText={actions.setDomain}
+                />
+
+                <InputField style={styles.field}
+                  label={'Storage Limit (GB) / Account'}
+                  value={state.storage}
+                  autoCapitalize={'none'}
+                  spellCheck={false}
+                  keyboardType={'numeric'}
                   onChangeText={actions.setStorage}
-                  keyboardType='numeric' placeholder="Storage Limit (GB) / Account" />
-              <Text style={styles.modalLabel}>Account Key Type:</Text>
-              <View style={styles.keyType}>
-                <TouchableOpacity style={styles.optionLeft} activeOpacity={1}
-                    onPress={() => actions.setKeyType('RSA2048')}>
-                  { state.keyType === 'RSA2048' && (
-                    <View style={styles.selected} />
-                  )}
-                  { state.keyType === 'RSA4096' && (
-                    <View style={styles.radio} />
-                  )}
-                  <Text style={styles.option}>RSA 2048</Text>
+                />
+
+                <Text style={styles.modalLabel}>Account Key Type:</Text>
+                <View style={styles.keyType}>
+                  <TouchableOpacity style={styles.optionLeft} activeOpacity={1}
+                      onPress={() => actions.setKeyType('RSA2048')}>
+                    { state.keyType === 'RSA2048' && (
+                      <View style={styles.selected} />
+                    )}
+                    { state.keyType === 'RSA4096' && (
+                      <View style={styles.radio} />
+                    )}
+                    <Text style={styles.option}>RSA 2048</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.optionRight} activeOpacity={1}
+                      onPress={() => actions.setKeyType('RSA4096')}>
+                    { state.keyType === 'RSA2048' && (
+                      <View style={styles.radio} />
+                    )}
+                    { state.keyType === 'RSA4096' && (
+                      <View style={styles.selected} />
+                    )}
+                    <Text style={styles.option}>RSA 4096</Text>
+                  </TouchableOpacity>
+                </View>
+
+                <TouchableOpacity style={styles.media} activeOpacity={1}
+                    onPress={() => actions.setPushSupported(!state.pushSupported)}>
+                  <Text style={styles.modalLabel}>Enable Push Notifications: </Text>
+                  <Switch style={styles.switch} value={state.pushSupported}
+                    onValueChange={actions.setPushSupported} trackColor={styles.track}/>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.optionRight} activeOpacity={1}
-                    onPress={() => actions.setKeyType('RSA4096')}>
-                  { state.keyType === 'RSA2048' && (
-                    <View style={styles.radio} />
-                  )}
-                  { state.keyType === 'RSA4096' && (
-                    <View style={styles.selected} />
-                  )}
-                  <Text style={styles.option}>RSA 4096</Text>
+
+                <View style={styles.label}></View>
+
+                <TouchableOpacity style={styles.media} activeOpacity={1}
+                    onPress={() => actions.setEnableImage(!state.enableImage)}>
+                  <Text style={styles.modalLabel}>Enable Image Queue: </Text>
+                  <Switch style={styles.switch} value={state.enableImage}
+                    onValueChange={actions.setEnableImage} trackColor={styles.track}/>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.media} activeOpacity={1}
+                    onPress={() => actions.setEnableAudio(!state.enableAudio)}>
+                  <Text style={styles.modalLabel}>Enable Audio Queue: </Text>
+                  <Switch style={styles.switch} value={state.enableAudio}
+                    onValueChange={actions.setEnableAudio} trackColor={styles.track}/>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.media} activeOpacity={1}
+                    onPress={() => actions.setEnableVideo(!state.enableVideo)}>
+                  <Text style={styles.modalLabel}>Enable Video Queue: </Text>
+                  <Switch style={styles.switch} value={state.enableVideo}
+                    onValueChange={actions.setEnableVideo} trackColor={styles.track}/>
+                </TouchableOpacity>
+
+                <View style={styles.label}></View>
+                <TouchableOpacity style={styles.ice} activeOpacity={1}
+                    onPress={() => actions.setEnableIce(!state.enableIce)}>
+                  <Text style={styles.modalLabel}>Enable WebRTC Calls: </Text>
+                  <Switch style={styles.switch} value={state.enableIce}
+                    onValueChange={actions.setEnableIce} trackColor={styles.track}/>
+                </TouchableOpacity>
+
+                <InputField style={styles.field}
+                  label={'Relay URL'}
+                  value={state.iceUrl}
+                  autoCapitalize={'none'}
+                  spellCheck={false}
+                  disabled={!state.enableIce}
+                  onChangeText={actions.setIceUrl}
+                />
+
+                <InputField style={styles.field}
+                  label={'Relay Username'}
+                  value={state.iceUsername}
+                  autoCapitalize={'none'}
+                  spellCheck={false}
+                  disabled={!state.enableIce}
+                  onChangeText={actions.setIceUsername}
+                />
+
+                <InputField style={styles.field}
+                  label={'Relay Password'}
+                  value={state.icePassword}
+                  autoCapitalize={'none'}
+                  spellCheck={false}
+                  disabled={!state.enableIce}
+                  onChangeText={actions.setIcePassword}
+                />
+  
+                <View style={styles.pad} />
+
+              </ScrollView>
+              <View style={styles.modalControls}>
+                <TouchableOpacity style={styles.cancel} onPress={actions.hideEditConfig}>
+                  <Text style={styles.cancelText}>Cancel</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.save} onPress={saveConfig}>
+                  <Text style={styles.saveText}>Save</Text>
                 </TouchableOpacity>
               </View>
-
-              <TouchableOpacity style={styles.media} activeOpacity={1}
-                  onPress={() => actions.setPushSupported(!state.pushSupported)}>
-                <Text style={styles.modalLabel}>Enable Push Notifications: </Text>
-                <Switch style={styles.switch} value={state.pushSupported}
-                  onValueChange={actions.setPushSupported} trackColor={styles.track}/>
-              </TouchableOpacity>
-
-              <View style={styles.label}></View>
-
-              <TouchableOpacity style={styles.media} activeOpacity={1}
-                  onPress={() => actions.setEnableImage(!state.enableImage)}>
-                <Text style={styles.modalLabel}>Enable Image Queue: </Text>
-                <Switch style={styles.switch} value={state.enableImage}
-                  onValueChange={actions.setEnableImage} trackColor={styles.track}/>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.media} activeOpacity={1}
-                  onPress={() => actions.setEnableAudio(!state.enableAudio)}>
-                <Text style={styles.modalLabel}>Enable Audio Queue: </Text>
-                <Switch style={styles.switch} value={state.enableAudio}
-                  onValueChange={actions.setEnableAudio} trackColor={styles.track}/>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.media} activeOpacity={1}
-                  onPress={() => actions.setEnableVideo(!state.enableVideo)}>
-                <Text style={styles.modalLabel}>Enable Video Queue: </Text>
-                <Switch style={styles.switch} value={state.enableVideo}
-                  onValueChange={actions.setEnableVideo} trackColor={styles.track}/>
-              </TouchableOpacity>
-
-              <View style={styles.label}></View>
-              <TouchableOpacity style={styles.ice} activeOpacity={1}
-                  onPress={() => actions.setEnableIce(!state.enableIce)}>
-                <Text style={styles.modalLabel}>Enable WebRTC Calls: </Text>
-                <Switch style={styles.switch} value={state.enableIce}
-                  onValueChange={actions.setEnableIce} trackColor={styles.track}/>
-              </TouchableOpacity>
-              <TextInput style={styles.input} value={state.iceUrl} onChangeText={actions.setIceUrl}
-                  editable={state.enableIce} autoCorrect={false} autoCapitalize="none" placeholder="Relay URL" />
-              <TextInput style={styles.input} value={state.iceUsername} onChangeText={actions.setIceUsername}
-                  editable={state.enableIce} autoCorrect={false} autoCapitalize="none" placeholder="Relay Username" />
-              <TextInput style={styles.input} value={state.icePassword} onChangeText={actions.setIcePassword}
-                  editable={state.enableIce} autoCorrect={false} autoCapitalize="none" placeholder="Relay Password" />
-
             </View>
-            <View style={styles.modalControls}>
-              <TouchableOpacity style={styles.cancel} onPress={actions.hideEditConfig}>
-                <Text>Cancel</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.save} onPress={saveConfig}>
-                <Text style={styles.saveText}>Save</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </KeyboardAvoidingView>
+          </KeyboardAvoidingView>
+        </View>
       </Modal>
 
       <Modal
@@ -246,25 +270,28 @@ export function Dashboard(props) {
         supportedOrientations={['portrait', 'landscape']}
         onRequestClose={actions.hideAddUser}
       >
-        <KeyboardAvoidingView behavior="height" style={styles.modalBackground}>
-          <View style={styles.modalContainer}>
-            <View style={styles.modalHeader}>
-              <Text style={styles.modalHeaderText}>Create Account:</Text>
-            </View>
-            <View style={styles.accessToken}>
-              <Text style={styles.tokenLabel}>Token:</Text>
-              <TouchableOpacity style={styles.copy} onPress={() => Clipboard.setString(state.createToken)}>
-                <Text style={styles.token}>{ state.createToken }</Text>
-                <AntIcon style={styles.icon} name={'copy1'} size={20} /> 
-              </TouchableOpacity>
-            </View>
-            <View style={styles.modalControls}>
-              <TouchableOpacity style={styles.cancel} onPress={actions.hideAddUser}>
-                <Text>Done</Text>
-              </TouchableOpacity>
+        <View style={styles.modalOverlay}>
+          <BlurView style={styles.modalOverlay} blurType={'dark'} blurAmount={2} reducedTransparencyFallbackColor='black' />
+          <View style={styles.modalBase}>
+            <View style={styles.modalContainer}>
+              <View style={styles.modalHeader}>
+                <Text style={styles.modalHeaderText}>Create Account:</Text>
+              </View>
+              <View style={styles.accessToken}>
+                <Text style={styles.tokenLabel}>Token:</Text>
+                <TouchableOpacity style={styles.copy} onPress={() => Clipboard.setString(state.createToken)}>
+                  <Text style={styles.token}>{ state.createToken }</Text>
+                  <AntIcon style={styles.icon} name={'copy1'} size={20} /> 
+                </TouchableOpacity>
+              </View>
+              <View style={styles.modalControls}>
+                <TouchableOpacity style={styles.cancel} onPress={actions.hideAddUser}>
+                  <Text style={styles.cancelText}>Done</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
-        </KeyboardAvoidingView>
+        </View>
       </Modal>
 
       <Modal
@@ -274,25 +301,28 @@ export function Dashboard(props) {
         supportedOrientations={['portrait', 'landscape']}
         onRequestClose={actions.hideAccessUser}
       >
-        <KeyboardAvoidingView behavior="height" style={styles.modalBackground}>
-          <View style={styles.modalContainer}>
-            <View style={styles.modalHeader}>
-              <Text style={styles.modalHeaderText}>Access Account:</Text>
-            </View>
-            <View style={styles.accessToken}>
-              <Text style={styles.tokenLabel}>Token:</Text>
-              <TouchableOpacity style={styles.copy} onPress={() => Clipboard.setString(state.accessToken)}>
-                <Text style={styles.token}>{ state.accessToken }</Text>
-                <AntIcon style={styles.icon} name={'copy1'} size={20} />  
-              </TouchableOpacity>
-            </View>
-            <View style={styles.modalControls}>
-              <TouchableOpacity style={styles.cancel} onPress={actions.hideAccessUser}>
-                <Text>Done</Text>
-              </TouchableOpacity>
+        <View style={styles.modalOverlay}>
+          <BlurView style={styles.modalOverlay} blurType={'dark'} blurAmount={2} reducedTransparencyFallbackColor='black' />
+          <View style={styles.modalBase}>
+            <View style={styles.modalContainer}>
+              <View style={styles.modalHeader}>
+                <Text style={styles.modalHeaderText}>Access Account:</Text>
+              </View>
+              <View style={styles.accessToken}>
+                <Text style={styles.tokenLabel}>Token:</Text>
+                <TouchableOpacity style={styles.copy} onPress={() => Clipboard.setString(state.accessToken)}>
+                  <Text style={styles.token}>{ state.accessToken }</Text>
+                  <AntIcon style={styles.icon} name={'copy1'} size={20} />  
+                </TouchableOpacity>
+              </View>
+              <View style={styles.modalControls}>
+                <TouchableOpacity style={styles.cancel} onPress={actions.hideAccessUser}>
+                  <Text style={styles.cancelText}>Done</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
-        </KeyboardAvoidingView>
+        </View>
       </Modal>
 
     </SafeAreaView>
