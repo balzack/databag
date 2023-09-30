@@ -68,7 +68,6 @@ export const styles = StyleSheet.create({
     flexGrow: 1,
     flexShrink: 1,
     marginRight: 8,
-    marginLeft: 8,
     paddingTop: 4,
     paddingBottom: 4,
   },
@@ -88,7 +87,6 @@ export const styles = StyleSheet.create({
     width: '100%',
     paddingLeft: 16,
     minHeight: 0,
-    backgroundColor: Colors.screenBase,
   },
   empty: {
     flexGrow: 1,

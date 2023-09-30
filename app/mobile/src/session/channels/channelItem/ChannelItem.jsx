@@ -15,10 +15,10 @@ export function ChannelItem({ cardId, channelId, item, openConversation }) {
       <View style={styles.detail}>
         <View style={styles.subject}>
           { item.locked && !item.unlocked && (
-            <Ionicons name="lock" style={styles.subjectIcon} size={16} color={Colors.text} />
+            <Ionicons name="lock-outline" style={styles.subjectIcon} size={20} color={Colors.text} />
           )}
           { item.locked && item.unlocked && (
-            <Ionicons name="lock-open-variant-outline" style={styles.subjectIcon} size={16} color={Colors.grey} />
+            <Ionicons name="shield-outline" style={styles.subjectIcon} size={20} color={Colors.text} />
           )}
           <Text style={styles.subjectText} numberOfLines={1} ellipsizeMode={'tail'}>{ item.subject }</Text>
         </View>

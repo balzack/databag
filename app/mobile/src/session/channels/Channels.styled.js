@@ -126,6 +126,7 @@ export const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: Colors.lightgrey,
     marginBottom: 16,
+    marginTop: 16,
     height: 200,
   },
   emptyMembers: {
@@ -134,6 +135,7 @@ export const styles = StyleSheet.create({
     borderColor: Colors.lightgrey,
     borderRadius: 4,
     marginBottom: 8,
+    marginTop: 16,
     height: 200,
     display: 'flex',
     alignItems: 'center',

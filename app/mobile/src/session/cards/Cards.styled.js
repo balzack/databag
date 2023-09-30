@@ -69,6 +69,7 @@ export const styles = StyleSheet.create({
   },
   inputfield: {
     flex: 1,
+    flexGrow: 1,
     textAlign: 'center',
     padding: 4,
     color: Colors.inputText,
@@ -82,7 +83,6 @@ export const styles = StyleSheet.create({
     paddingLeft: 16,
     paddingRight: 16,
     paddingTop: 8,
-    backgroundColor: Colors.screenBase,
   },
   addbottom: {
     marginRight: 8,

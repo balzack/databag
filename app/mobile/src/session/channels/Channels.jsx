@@ -48,7 +48,7 @@ export function Channels({ cardId, channelId, navigation, openConversation, dmCh
             <View style={styles.inputwrapper}>
               <Ionicons style={styles.icon} name="search1" size={16} color={Colors.disabled} />
               <TextInput style={styles.inputfield} value={state.filter} onChangeText={actions.setFilter}
-                  autoCapitalize="none" placeholderTextColor={Colors.disabled}  placeholder="Topics" />
+                  autoCapitalize="none" placeholderTextColor={Colors.disabled}  placeholder={ state.strings.topics} />
             </View>
             <TouchableOpacity style={styles.addtop} onPress={actions.showAdding}>
               <Ionicons name={'message1'} size={16} color={Colors.white} style={[styles.box, { transform: [ { rotateY: "180deg" }, ]} ]}/>
@@ -116,10 +116,9 @@ export function Channels({ cardId, channelId, navigation, openConversation, dmCh
                 onChangeText={actions.setAddSubject}
               />
 
-              <Text style={styles.label}>Members:</Text>
               { state.contacts.length == 0 && (
                 <View style={styles.emptyMembers}>
-                  <Text style={styles.empty}>No Connected Contacts</Text>
+                  <Text style={styles.empty}>{ state.strings.noContacts }</Text>
                 </View>
               )}
               { state.contacts.length > 0 && (
