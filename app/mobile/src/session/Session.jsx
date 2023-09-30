@@ -158,7 +158,7 @@ function ContactStackScreen({ addChannel }) {
     <SafeAreaView edges={['left', 'right']} style={styles.body}>
       <ContactStack.Navigator screenOptions={({ route }) => (screenParams)} initialRouteName="cards">
 
-        <ContactStack.Screen name="cards" options={{ ...stackParams, headerTitle: (props) => (
+        <ContactStack.Screen name="cards" options={{ ...stackParams, cardStyle: {backgroundColor: Colors.screenBase}, headerTitle: (props) => (
             <CardsHeader filter={filter} setFilter={setFilter} sort={sort} setSort={setSort} openRegistry={openRegistry} />
           )}}>
           {(props) => <CardsBody filter={filter} sort={sort} openContact={(contact) => openContact(props.navigation, contact)} addChannel={addChannel} />}
@@ -168,7 +168,7 @@ function ContactStackScreen({ addChannel }) {
           {(props) => <Contact contact={contact} back={props.navigation.goBack} />}
         </ContactStack.Screen>
 
-        <ContactStack.Screen name="registry" options={{ ...stackParams, headerTitle: (props) => (
+        <ContactStack.Screen name="registry" options={{ ...stackParams, cardStyle: {backgroundColor: Colors.screenBase}, headerTitle: (props) => (
             <RegistryHeader search={search} setSearch={setSearch} handle={handle} setHandle={setHandle} server={server} setServer={setServer} />
           )}}>
           {(props) => <RegistryBody search={search} handle={handle} server={server} openContact={(contact) => openContact(props.navigation, contact)} />}

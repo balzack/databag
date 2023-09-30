@@ -129,6 +129,7 @@ const Strings = [
     create: 'Create',
     sealed: 'Sealed',
     newTopic: 'New Topic',
+    new: 'New',
 
     // details
     topic: 'Topic',
@@ -267,7 +268,8 @@ const Strings = [
     subject: 'Titre (optionnel)',
     create: 'Créer',
     sealed: 'Protégé', 
-    newTopic: 'Nourveau Sujet',
+    newTopic: 'Nouveau Sujet',
+    new: 'Nouveau',
 
     // details
     topic: 'Sujet',
@@ -407,6 +409,7 @@ const Strings = [
     create: 'Crear',
     sealed: 'Protegida',
     newTopic: 'Nuevo Tema',
+    new: 'Nuevo',
 
     // details
     topic: 'Tema',
@@ -546,6 +549,7 @@ const Strings = [
     create: 'Erstellen',
     sealed: 'Gesichert',
     newTopic: 'Neues Thema',
+    new: 'Neu',
 
     // details
     topic: 'Thema',

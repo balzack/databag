@@ -52,7 +52,7 @@ export function Channels({ cardId, channelId, navigation, openConversation, dmCh
             </View>
             <TouchableOpacity style={styles.addtop} onPress={actions.showAdding}>
               <Ionicons name={'message1'} size={16} color={Colors.white} style={[styles.box, { transform: [ { rotateY: "180deg" }, ]} ]}/>
-              <Text style={styles.addtext}>New</Text>
+              <Text style={styles.addtext}>{ state.strings.new }</Text>
             </TouchableOpacity>
           </View>
         ),

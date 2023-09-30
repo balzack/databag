@@ -119,6 +119,7 @@ export const styles = StyleSheet.create({
     alignItems: 'flex-start',
     justifyContent: 'center',
     flex: 1,
+    paddingLeft: 16,
   },
   details: {
     minHeight: 32,

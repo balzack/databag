@@ -23,6 +23,8 @@ export const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     borderRadius: 8,
+    borderWidth: 1,
+    borderColor: Colors.modalBorder,
   },
   modalHeader: {
     fontSize: 18,
