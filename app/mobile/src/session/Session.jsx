@@ -44,8 +44,8 @@ const RegistryDrawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
 
 function ConversationStackScreen({ dmChannel, shareChannel, shareIntent, setShareIntent }) {
-  const stackParams = { headerStyle: { backgroundColor: Colors.screenBase }, headerBackTitleVisible: false };
-  const screenParams = { headerShown: true, headerTintColor: Colors.primary };
+  const stackParams = { headerStyle: { backgroundColor: Colors.screenBase }, headerBackTitleVisible: false, cardStyle: {backgroundColor: Colors.screenBase }};
+const screenParams = { headerShown: true, headerTintColor: Colors.primary };
 
   const conversation = useContext(ConversationContext);
   const [cardId, setCardId] = useState();

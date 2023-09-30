@@ -6,7 +6,6 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    backgroundColor: Colors.drawerBase,
     height: '100%',
   },
   details: {
@@ -83,7 +82,6 @@ export const styles = StyleSheet.create({
     borderColor: Colors.itemDivider,
     display: 'flex',
     flexDirection: 'row',
-    backgroundColor: Colors.drawerBase,
   },
   membersLabel: {
     paddingLeft: 16,
@@ -95,7 +93,6 @@ export const styles = StyleSheet.create({
   },
   cards: {
     width: '100%',
-    backgroundColor: Colors.drawerBase,
   },
   save: {
     padding: 8,
@@ -154,7 +151,7 @@ export const styles = StyleSheet.create({
     backgroundColor: 'rgba(52, 52, 52, 0.8)'
   },
   editContainer: {
-    backgroundColor: Colors.drawerBase,
+    backgroundColor: Colors.modalBaseBase,
     padding: 16,
     width: '80%',
     maxWidth: 400,
