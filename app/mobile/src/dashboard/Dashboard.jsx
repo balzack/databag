@@ -76,7 +76,7 @@ export function Dashboard(props) {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerLabel}>Accounts</Text>
+        <Text style={styles.headerLabel}>{ state.strings.accounts }</Text>
         <TouchableOpacity onPress={actions.refresh}>
           <AntIcon style={styles.icon} name={'reload1'} size={20} />
         </TouchableOpacity>
@@ -139,12 +139,12 @@ export function Dashboard(props) {
             <View style={styles.modalContainer}>
 
               <View style={styles.modalHeader}>
-                <Text style={styles.modalHeaderText}>Settings:</Text>
+                <Text style={styles.modalHeaderText}>{ state.strings.settings }</Text>
               </View>
               <ScrollView style={styles.modalBody}>
 
                 <InputField style={styles.field}
-                  label={'Federated Host'}
+                  label={state.strings.federatedHost}
                   value={state.domain}
                   autoCapitalize={'none'}
                   spellCheck={false}
@@ -152,7 +152,7 @@ export function Dashboard(props) {
                 />
 
                 <InputField style={styles.field}
-                  label={'Storage Limit (GB) / Account'}
+                  label={state.strings.storageLimit}
                   value={state.storage}
                   autoCapitalize={'none'}
                   spellCheck={false}
@@ -160,7 +160,7 @@ export function Dashboard(props) {
                   onChangeText={actions.setStorage}
                 />
 
-                <Text style={styles.modalLabel}>Account Key Type:</Text>
+                <Text style={styles.modalLabel}>{ state.strings.keyType }</Text>
                 <View style={styles.keyType}>
                   <TouchableOpacity style={styles.optionLeft} activeOpacity={1}
                       onPress={() => actions.setKeyType('RSA2048')}>
@@ -186,7 +186,7 @@ export function Dashboard(props) {
 
                 <TouchableOpacity style={styles.media} activeOpacity={1}
                     onPress={() => actions.setPushSupported(!state.pushSupported)}>
-                  <Text style={styles.modalLabel}>Enable Push Notifications: </Text>
+                  <Text style={styles.modalLabel}>{ state.strings.enableNotifications }</Text>
                   <Switch style={styles.switch} value={state.pushSupported}
                     onValueChange={actions.setPushSupported} trackColor={styles.track}/>
                 </TouchableOpacity>
@@ -195,19 +195,19 @@ export function Dashboard(props) {
 
                 <TouchableOpacity style={styles.media} activeOpacity={1}
                     onPress={() => actions.setEnableImage(!state.enableImage)}>
-                  <Text style={styles.modalLabel}>Enable Image Queue: </Text>
+                  <Text style={styles.modalLabel}>{ state.strings.enableImage }</Text>
                   <Switch style={styles.switch} value={state.enableImage}
                     onValueChange={actions.setEnableImage} trackColor={styles.track}/>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.media} activeOpacity={1}
                     onPress={() => actions.setEnableAudio(!state.enableAudio)}>
-                  <Text style={styles.modalLabel}>Enable Audio Queue: </Text>
+                  <Text style={styles.modalLabel}>{ state.strings.enableAudio }</Text>
                   <Switch style={styles.switch} value={state.enableAudio}
                     onValueChange={actions.setEnableAudio} trackColor={styles.track}/>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.media} activeOpacity={1}
                     onPress={() => actions.setEnableVideo(!state.enableVideo)}>
-                  <Text style={styles.modalLabel}>Enable Video Queue: </Text>
+                  <Text style={styles.modalLabel}>{ state.strings.enableVideo }</Text>
                   <Switch style={styles.switch} value={state.enableVideo}
                     onValueChange={actions.setEnableVideo} trackColor={styles.track}/>
                 </TouchableOpacity>
@@ -215,13 +215,13 @@ export function Dashboard(props) {
                 <View style={styles.label}></View>
                 <TouchableOpacity style={styles.ice} activeOpacity={1}
                     onPress={() => actions.setEnableIce(!state.enableIce)}>
-                  <Text style={styles.modalLabel}>Enable WebRTC Calls: </Text>
+                  <Text style={styles.modalLabel}>{ state.strings.enableCalls }</Text>
                   <Switch style={styles.switch} value={state.enableIce}
                     onValueChange={actions.setEnableIce} trackColor={styles.track}/>
                 </TouchableOpacity>
 
                 <InputField style={styles.field}
-                  label={'Relay URL'}
+                  label={state.strings.relayUrl}
                   value={state.iceUrl}
                   autoCapitalize={'none'}
                   spellCheck={false}
@@ -230,7 +230,7 @@ export function Dashboard(props) {
                 />
 
                 <InputField style={styles.field}
-                  label={'Relay Username'}
+                  label={state.strings.relayUsername}
                   value={state.iceUsername}
                   autoCapitalize={'none'}
                   spellCheck={false}
@@ -239,7 +239,7 @@ export function Dashboard(props) {
                 />
 
                 <InputField style={styles.field}
-                  label={'Relay Password'}
+                  label={state.strings.relayPassword}
                   value={state.icePassword}
                   autoCapitalize={'none'}
                   spellCheck={false}
@@ -252,10 +252,10 @@ export function Dashboard(props) {
               </ScrollView>
               <View style={styles.modalControls}>
                 <TouchableOpacity style={styles.cancel} onPress={actions.hideEditConfig}>
-                  <Text style={styles.cancelText}>Cancel</Text>
+                  <Text style={styles.cancelText}>{ state.strings.cancel }</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.save} onPress={saveConfig}>
-                  <Text style={styles.saveText}>Save</Text>
+                  <Text style={styles.saveText}>{ state.strings.save }</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -275,10 +275,10 @@ export function Dashboard(props) {
           <View style={styles.modalBase}>
             <View style={styles.modalContainer}>
               <View style={styles.modalHeader}>
-                <Text style={styles.modalHeaderText}>Create Account:</Text>
+                <Text style={styles.modalHeaderText}>{ state.strings.createAccount }</Text>
               </View>
               <View style={styles.accessToken}>
-                <Text style={styles.tokenLabel}>Token:</Text>
+                <Text style={styles.tokenLabel}>{ state.strings.token }</Text>
                 <TouchableOpacity style={styles.copy} onPress={() => Clipboard.setString(state.createToken)}>
                   <Text style={styles.token}>{ state.createToken }</Text>
                   <AntIcon style={styles.icon} name={'copy1'} size={20} /> 
@@ -286,7 +286,7 @@ export function Dashboard(props) {
               </View>
               <View style={styles.modalControls}>
                 <TouchableOpacity style={styles.cancel} onPress={actions.hideAddUser}>
-                  <Text style={styles.cancelText}>Done</Text>
+                  <Text style={styles.cancelText}>{ state.strings.close }</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -306,10 +306,10 @@ export function Dashboard(props) {
           <View style={styles.modalBase}>
             <View style={styles.modalContainer}>
               <View style={styles.modalHeader}>
-                <Text style={styles.modalHeaderText}>Access Account:</Text>
+                <Text style={styles.modalHeaderText}>{ state.strings.accessAccount }</Text>
               </View>
               <View style={styles.accessToken}>
-                <Text style={styles.tokenLabel}>Token:</Text>
+                <Text style={styles.tokenLabel}>{ state.strings.token }</Text>
                 <TouchableOpacity style={styles.copy} onPress={() => Clipboard.setString(state.accessToken)}>
                   <Text style={styles.token}>{ state.accessToken }</Text>
                   <AntIcon style={styles.icon} name={'copy1'} size={20} />  
@@ -317,7 +317,7 @@ export function Dashboard(props) {
               </View>
               <View style={styles.modalControls}>
                 <TouchableOpacity style={styles.cancel} onPress={actions.hideAccessUser}>
-                  <Text style={styles.cancelText}>Done</Text>
+                  <Text style={styles.cancelText}>{ state.strings.close }</Text>
                 </TouchableOpacity>
               </View>
             </View>
