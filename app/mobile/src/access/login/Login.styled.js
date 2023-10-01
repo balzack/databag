@@ -74,7 +74,7 @@ export const styles = StyleSheet.create({
   },
   container: {
     flexDirection: 'column',
-    backgroundColor: Colors.formBackground,
+    backgroundColor: Colors.modalBase,
     borderRadius: 4,
     width: '100%',
     height: '100%',
@@ -92,7 +92,7 @@ export const styles = StyleSheet.create({
     width: '100%',
     textAlign: 'center',
     fontSize: 24,
-    color: Colors.grey,
+    color: Colors.descriptionText,
   },
   spacemid: {
     flexGrow: 1,
@@ -119,8 +119,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     width: '100%',
     borderRadius: 4,
-    borderColor: Colors.divider,
-    borderWidth: 1,
+    backgroundColor: Colors.inputBase,
     marginBottom: 16,
     alignItems: 'center',
   },
@@ -128,7 +127,8 @@ export const styles = StyleSheet.create({
     flex: 1,
     textAlign: 'center',
     padding: 8,
-    color: Colors.text,
+    flexGrow: 1,
+    color: Colors.inputText,
   },
   login: {
     marginTop: 16,
@@ -137,11 +137,11 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     width: 128,
     height: 28,
-    backgroundColor: Colors.primary,
+    backgroundColor: Colors.primaryButton,
     borderRadius: 4,
   },
   logintext: {
-    color: Colors.formFocus,
+    color: Colors.primaryButtonText,
   },
   nologin: {
     marginTop: 16,
@@ -151,17 +151,16 @@ export const styles = StyleSheet.create({
     width: 128,
     height: 28,
     borderRadius: 4,
-    borderColor: Colors.divider,
-    borderWidth: 1,
+    backgroundColor: Colors.disabledButton,
   },
   nologintext: {
-    color: Colors.grey,
+    color: Colors.disabledButtonText,
   },
   create: {
     marginTop: 16,
   },
   createtext: {
-    color: Colors.primary,
+    color: Colors.linkText,
   },
   nocreatetext: {
     color: Colors.disabled,

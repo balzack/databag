@@ -80,8 +80,6 @@ export const styles = StyleSheet.create({
   },
   cards: {
     width: '100%',
-    paddingLeft: 16,
-    paddingRight: 16,
     paddingTop: 8,
   },
   addbottom: {

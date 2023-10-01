@@ -28,7 +28,8 @@ import { CardsIcon } from './cardsIcon/CardsIcon';
 import { Logo } from 'utils/Logo';
 import { Call } from './call/Call';
 import { Sharing } from './sharing/Sharing';
-import splash from 'images/session.png';
+import lightSplash from 'images/session.png';
+import darkSplash from 'images/darksess.png';
 import { useNavigate } from 'react-router-dom';
 import { getLanguageStrings } from 'constants/Strings';
 
@@ -414,7 +415,12 @@ export function Session({ sharing, clearSharing }) {
               <Text style={styles.titleText}>Welcome To Databag</Text>
               <Text style={styles.tagText}>Communication for the Decentralized Web</Text>
             </View>
-            <Image style={styles.splash} source={splash} resizeMode="contain" />
+            { Colors.theme === 'dark' && (
+              <Image style={styles.splash} source={darkSplash} resizeMode="contain" />
+            )}
+            { Colors.theme !== 'dark' && (
+              <Image style={styles.splash} source={lightSplash} resizeMode="contain" />
+            )}
             <View style={styles.steps} >
               <View style={styles.step}>
                 <Ionicons name={'user'} size={18} color={Colors.white} />

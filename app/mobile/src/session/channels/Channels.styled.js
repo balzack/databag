@@ -78,7 +78,7 @@ export const styles = StyleSheet.create({
   content: {
     flexGrow: 1,
     flexShrink: 1,
-    paddingLeft: 4,
+    paddingTop: 8,
   },
   notfound: {
     flexGrow: 1,
@@ -219,6 +219,8 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 8,
     padding: 16,
+    borderWidth: 1,
+    borderColor: Colors.modalBorder,
   },
   field: {
     input: {

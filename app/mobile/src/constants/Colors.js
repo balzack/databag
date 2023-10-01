@@ -1,6 +1,7 @@
 import { Appearance } from 'react-native'
 
 const LightColors = {
+  theme: 'light',
   overlay: 'dark',
   statusBar: 'dark-content',
   tabBar: '#448866',
@@ -63,6 +64,7 @@ const LightColors = {
 };
 
 const DarkColors = {
+  theme: 'dark',
   overlay: 'dark',
   statusBar: 'light-content',
   tabBar: '#118811',

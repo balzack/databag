@@ -18,7 +18,7 @@ export const styles = StyleSheet.create({
   modalContainer: {
     width: '100%',
     height: '100%',
-    backgroundColor: Colors.grey,
+    backgroundColor: Colors.modalBase,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -53,7 +53,7 @@ export const styles = StyleSheet.create({
     maxHeight: '80%',
     padding: 8,
     margin: 16,
-    backgroundColor: Colors.formBackground,
+    backgroundColor: Colors.modalBase,
   },
   done: {
     paddingTop: 8,
@@ -74,7 +74,7 @@ export const styles = StyleSheet.create({
   },
   container: {
     flexDirection: 'column',
-    backgroundColor: Colors.formBackground,
+    backgroundColor: Colors.modalBase,
     borderRadius: 4,
     width: '100%',
     height: '100%',
@@ -119,8 +119,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     width: '100%',
     borderRadius: 4,
-    borderColor: Colors.divider,
-    borderWidth: 1,
+    backgroundColor: Colors.inputBase,
     marginBottom: 16,
     alignItems: 'center',
   },
@@ -128,7 +127,8 @@ export const styles = StyleSheet.create({
     flex: 1,
     textAlign: 'center',
     padding: 8,
-    color: Colors.text,
+    flexGrow: 1,
+    color: Colors.inputText,
   },
   reset: {
     marginTop: 16,
@@ -137,11 +137,11 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     width: 128,
     height: 28,
-    backgroundColor: Colors.primary,
+    backgroundColor: Colors.primaryButton,
     borderRadius: 4,
   },
   resettext: {
-    color: Colors.formFocus,
+    color: Colors.primaryButtonText,
   },
   noreset: {
     marginTop: 16,
@@ -151,11 +151,10 @@ export const styles = StyleSheet.create({
     width: 128,
     height: 28,
     borderRadius: 4,
-    borderColor: Colors.divider,
-    borderWidth: 1,
+    backgroundColor: Colors.disabledButton,
   },
   noresettext: {
-    color: Colors.grey,
+    color: Colors.disabledButtonText,
   },
   login: {
     marginTop: 16,

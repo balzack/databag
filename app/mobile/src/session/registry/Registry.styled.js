@@ -85,8 +85,8 @@ export const styles = StyleSheet.create({
     flexGrow: 1,
     flexShrink: 1,
     width: '100%',
-    paddingLeft: 16,
     minHeight: 0,
+    paddingTop: 8,
   },
   empty: {
     flexGrow: 1,

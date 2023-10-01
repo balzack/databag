@@ -11,6 +11,8 @@ export const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: Colors.itemDivider,
     flex: 1,
+    paddingLeft: 16,
+    paddingRight: 16,
   },
   profile: {
     flexDirection: 'row',
