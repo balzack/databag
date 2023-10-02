@@ -66,20 +66,20 @@ export function Conversation({ navigation, cardId, channelId, closeConversation,
   }, []);
 
   return (
-<KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={72}
-          enabled={Platform.OS === 'ios' ? state.keyboard : false}>
+    
+  <KeyboardAvoidingView style={styles.modalBase} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
     <View style={styles.container}>
       { !navigation && (
         <View style={styles.header}>
           { state.loaded && (
-            <TouchableOpacity style={styles.headertitle} onPress={openDetails}>
+            <TouchableOpacity style={styles.headertitle} onPress={openDetails} activeOpacity={1}>
               <Logo src={state.logo} width={32} height={32} radius={2} />
               <Text style={styles.titletext} numberOfLines={1} ellipsizeMode={'tail'}>{ state.subject }</Text>
-              <Ionicons name={'setting'} size={24} color={Colors.primary} style={styles.titlebutton} />
+              <Ionicons name={'setting'} size={24} color={Colors.linkText} style={styles.titlebutton} />
             </TouchableOpacity>
           )}
           <TouchableOpacity style={styles.headerclose} onPress={closeConversation}>
-            <Ionicons name={'close'} size={22} color={Colors.grey} style={styles.titlebutton} />
+            <Ionicons name={'close'} size={22} color={Colors.descriptionText} style={styles.titlebutton} />
           </TouchableOpacity>
         </View>
       )}

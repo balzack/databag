@@ -98,14 +98,14 @@ export const styles = StyleSheet.create({
     paddingTop: 8,
     paddingBottom: 16,
     borderTopWidth: 1,
-    borderColor: Colors.divider,
+    borderColor: Colors.horizontalDivider,
   },
   columntop: {
     paddingLeft: 24,
     paddingRight: 16,
     paddingBottom: 8,
     borderBottomWidth: 1,
-    borderColor: Colors.divider,
+    borderColor: Colors.horizontalDivider,
   },
   addWrapper: {
     display: 'flex',
@@ -143,7 +143,7 @@ export const styles = StyleSheet.create({
   },
   cancel: {
     borderWidth: 1,
-    borderColor: Colors.lightgrey,
+    borderColor: Colors.cancelButton,
     borderRadius: 4,
     padding: 4,
     marginRight: 8,

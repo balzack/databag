@@ -141,7 +141,7 @@ export function TopicItem({ item, focused, focus, hosting, remove, update, block
           { (state.logo === 'avatar' || !state.logo) && (
             <Image source={avatar} style={{ width: 28, height: 28, borderRadius: 6 }} />
           )}
-          <Text style={{ ...styles.name, color: state.nameSet ? Colors.text : Colors.grey }}>{ state.name }</Text>
+          <Text style={{ ...styles.name, fontStyle: state.nameSet ? 'normal' : 'italic' }}>{ state.name }</Text>
           <Text style={styles.timestamp}>{ state.timestamp }</Text>
         </TouchableOpacity>
         { state.status === 'confirmed' && (

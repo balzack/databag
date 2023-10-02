@@ -66,7 +66,7 @@ export const styles = StyleSheet.create({
   divider: {
     width: '100%',
     height: 2,
-    backgroundColor: Colors.screenBase,
+    backgroundColor: Colors.areaBase,
   },
   entry: {
     width: '100%',

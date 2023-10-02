@@ -10,8 +10,6 @@ import dark from 'images/darksess.png';
 
 export function Welcome() {
 
-console.log(Colors.theme);
-
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.header}>Databag</Text>

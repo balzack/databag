@@ -4,7 +4,7 @@ import { Colors } from 'constants/Colors';
 export const styles = StyleSheet.create({
   add: {
     borderTopWidth: 1,
-    borderColor: Colors.divider,
+    borderColor: Colors.itemDivider,
     display: 'flex',
     flexDirection: 'column',
   },
@@ -18,15 +18,12 @@ export const styles = StyleSheet.create({
   addButton: {
     width: 36,
     height: 36,
-    backgroundColor: Colors.white,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: Colors.divider,
-    borderRadius: 2,
-    marginLeft: 4,
-    marginRight: 4,
+    borderRadius: 4,
+    marginLeft: 8,
+    marginRight: 8,
   },
   input: {
     marginLeft: 16,
@@ -36,8 +33,8 @@ export const styles = StyleSheet.create({
     padding: 8,
     borderRadius: 4,
     borderWidth: 1,
-    borderColor: Colors.divider,
-    backgroundColor: Colors.white,
+    borderColor: Colors.itemDivider,
+    backgroundColor: Colors.inputBase,
     maxHeight: 96,
     minHeight: 52,
   },
@@ -45,9 +42,9 @@ export const styles = StyleSheet.create({
     height: 32,
     flexGrow: 1,
   },
-  divider: {
+  itemDivider: {
     borderWidth: 1,
-    borderColor: Colors.divider,
+    borderColor: Colors.itemDivider,
     height: 32,
     marginLeft: 8,
     marginRight: 8,
