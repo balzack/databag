@@ -294,6 +294,8 @@ export const styles = StyleSheet.create({
   },
   modalContainer: {
     backgroundColor: Colors.modalBase,
+    borderColor: Colors.modalBorder,
+    borderWidth: 1,
     width: '80%',
     maxWidth: 400,
     display: 'flex',

@@ -63,19 +63,15 @@ export const styles = StyleSheet.create({
   editHeader: {
     fontSize: 18,
     paddingBottom: 16,
+    color: Colors.text,
   },
   editSize: {
     width: '100%',
-    borderWidth: 1,
-    borderColor: Colors.lightgrey,
     borderRadius: 2,
   },
   editColor: {
     width: '100%',
     height: 300,
-    borderWidth: 1,
-    borderColor: Colors.lightgrey,
-    borderRadius: 2,
   },
   editControls: {
     display: 'flex',
@@ -120,7 +116,7 @@ export const styles = StyleSheet.create({
   },
   close: {
     borderWidth: 1,
-    borderColor: Colors.lightgrey,
+    borderColor: Colors.closeButton,
     borderRadius: 4,
     padding: 8,
     marginTop: 8,
@@ -128,12 +124,44 @@ export const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
   },
+  closeText: {
+    color: Colors.closeButtonText,
+  },
   selection: {
     flexGrow: 1,
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
   },
+  selectionText: {
+    color: Colors.text,
+  },
+  modalOverlay: { 
+    width: '100%',
+    height: '100%',
+  },
+  modalBase: {
+    position: 'absolute',
+    top: 0,
+    left: 0, 
+    width: '100%', 
+    height: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  modalContainer: {
+    backgroundColor: Colors.modalBase,
+    borderColor: Colors.modalBorder,
+    borderWidth: 1,
+    width: '80%',
+    maxWidth: 400,
+    display: 'flex',
+    alignItems: 'center',
+    borderRadius: 8,
+    padding: 8,
+  },
+
 })
 
 
