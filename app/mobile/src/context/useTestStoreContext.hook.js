@@ -41,7 +41,7 @@ export function useTestStoreContext() {
     },
     getAppValue: async (guid, key, unset) => {
       return unset;
-    }
+    },
     setAppValue: async (guid, key, value) => {
     },
     getCardRequestStatus: async (guid) => {
