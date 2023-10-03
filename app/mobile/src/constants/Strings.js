@@ -160,6 +160,14 @@ const Strings = [
     relayUrl: 'Relay URL',
     relayUsername: 'Relay Username',
     relayPassword: 'Relay Password',
+
+    newMessage: 'New Message',
+    fontSize: 'Font Size',
+    small: 'Small',
+    medium: 'Medium',
+    large: 'Large',
+    fontColor: 'Font Color',
+    selectedColor: 'Selected Color',
   },
   {
     visibleRegistry: 'Visible dans le Registre',
@@ -316,6 +324,14 @@ const Strings = [
     relayUrl: 'URL de Relais',
     relayUsername: 'Nom d\'Utilisateur du Relais',
     relayPassword: 'Mot de Passe du Relais',
+
+    newMessage: 'Nouveau Message',
+    fontSize: 'Taille du Texte',
+    small: 'Petit',
+    medium: 'Moyen',
+    large: 'Grand',
+    fontColor: 'Couleur du Texte',
+    selectedColor: 'Couleur Sélectionnée',
   },
   {
     visibleRegistry: 'Visible en el Registro',
@@ -472,6 +488,14 @@ const Strings = [
     relayUrl: 'URL para Llamadas',
     relayUsername: 'Nombre de Usuario para Llamadas',
     relayPassword: 'Contraseña para Llamadas',
+
+    newMessage: 'Nuevo Mensaje',
+    fontSize: 'Tamano del Texto',
+    small: 'Pequeño',
+    medium: 'Medio',
+    large: 'Grande',
+    fontColor: 'Color de Texto',
+    selectedColor: 'Color Seleccionado',
   },
   {
     visibleRegistry: 'Sichtbar in der Registrierung',
@@ -628,6 +652,14 @@ const Strings = [
     relayUrl: 'URL für Anrufe',
     relayUsername: 'Benutzername für Anrufe',
     relayPassword: 'Passwort für Anrufe',
+
+    newMessage: 'Neue Nachricht',
+    fontSize: 'Textgröße',
+    small: 'Klein',
+    medium: 'Mittel',
+    large: 'Groß',
+    fontColor: 'Textfarbe',
+    selectedColor: 'Ausgewählte Farbe',
   }
 ];
 

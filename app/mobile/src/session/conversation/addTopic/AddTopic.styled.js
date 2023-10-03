@@ -22,8 +22,8 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 4,
-    marginLeft: 8,
-    marginRight: 8,
+    marginLeft: 4,
+    marginRight: 4,
   },
   input: {
     marginLeft: 16,
