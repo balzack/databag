@@ -159,7 +159,7 @@ export function AddTopic({ contentKey, shareIntent, setShareIntent }) {
         <View style={{ height: 0, width: `${state.progress}%`, borderColor: Colors.background, borderWidth: 1 }} />
       )}
       { !state.uploadError && !state.progress && (
-        <View style={{ height: 0, width: '100%', borderColor: Colors.formBackground, borderWidth: 1 }} />
+        <View style={{ height: 0, width: '100%', borderColor: Colors.horizontalDivider, borderWidth: 1 }} />
       )}
       { state.uploadError && (
         <View style={{ height: 0, width: '100%', borderColor: Colors.alert, borderWidth: 1 }} />
@@ -178,28 +178,28 @@ export function AddTopic({ contentKey, shareIntent, setShareIntent }) {
       <View style={styles.addButtons}>
         { state.enableImage && (
           <TouchableOpacity style={styles.addButton} onPress={addImage}>
-            <AntIcons name="picture" size={20} color={Colors.text} />
+            <AntIcons name="picture" size={24} color={Colors.text} />
           </TouchableOpacity>
         )}
         { state.enableVideo && (
           <TouchableOpacity style={styles.addButton} onPress={addVideo}>
-            <MatIcons name="video-outline" size={24} color={Colors.text} />
+            <MatIcons name="video-outline" size={26} color={Colors.text} />
           </TouchableOpacity>
         )}
         { state.enableAudio && (
           <TouchableOpacity style={styles.addButton} onPress={addAudio}>
-            <MatIcons name="music-box-outline" size={20} color={Colors.text} />
+            <MatIcons name="music-note" size={24} color={Colors.text} />
           </TouchableOpacity>
         )}
         <TouchableOpacity style={styles.addButton} onPress={addBinary}>
-          <MatIcons name="all-inclusive-box-outline" size={20} color={Colors.text} />
+          <MatIcons name="file-outline" size={24} color={Colors.text} />
         </TouchableOpacity>
         <View style={styles.divider} />
         <TouchableOpacity style={styles.addButton} onPress={actions.showFontSize}>
-          <MatIcons name="format-size" size={20} color={Colors.text} />
+          <MatIcons name="format-size" size={24} color={Colors.text} />
         </TouchableOpacity>
         <TouchableOpacity style={styles.addButton} onPress={actions.showFontColor}>
-          <MatIcons name="palette-outline" size={20} color={Colors.text} />
+          <MatIcons name="palette-outline" size={24} color={Colors.text} />
         </TouchableOpacity>
         <View style={styles.space} />
         <TouchableOpacity style={styles.addButton} onPress={sendMessage}>
@@ -210,13 +210,13 @@ export function AddTopic({ contentKey, shareIntent, setShareIntent }) {
             <MatIcons name="send-outline" size={20} color={Colors.alert} />
           )}
           { !state.conflict && state.locked && !contentKey && (
-            <MatIcons name="lock" size={20} color={Colors.lightgrey} />
+            <MatIcons name="lock" size={20} color={Colors.disabledButtonText} />
           )}
           { !state.conflict && !state.busy && (!state.locked || contentKey) && (state.message || state.assets.length > 0) && (
             <MatIcons name="send-outline" size={20} color={Colors.text} />
           )}
           { !state.conflict && !state.busy && (!state.locked || contentKey) && !(state.message || state.assets.length > 0) && (
-            <MatIcons name="send-outline" size={20} color={Colors.lightgrey} />
+            <MatIcons name="send-outline" size={20} color={Colors.disabledButtonText} />
           )}
         </TouchableOpacity>
       </View>

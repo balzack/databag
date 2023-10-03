@@ -3,12 +3,14 @@ import { CardContext } from 'context/CardContext';
 import { RingContext } from 'context/RingContext';
 import { AccountContext } from 'context/AccountContext';
 import { ProfileContext } from 'context/ProfileContext';
+import { getLanguageStrings } from 'constants/Strings';
 
 export function useCards(filter, sort) {
 
   const [state, setState] = useState({
     cards: [],
     enableIce: false,
+    strings: getLanguageStrings(),
   });
 
   const profile = useContext(ProfileContext);
@@ -33,6 +35,7 @@ export function useCards(filter, sort) {
       cardId: cardId,
       name: name,
       handle: handle,
+      username: `${handle}/${node}`,
       node: node,
       guid: guid,
       location: location,

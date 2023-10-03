@@ -251,6 +251,10 @@ export function useChannelContext() {
       const { guid } = access.current || {};
       await store.actions.setChannelTopicBlocked(guid, channelId, topicId, 0);
     },
+    getFlaggedTopics: async () => {
+      const { guid } = access.current || {};
+      return await store.actions.getChannelTopicBlocked(guid);
+    },
     addChannelAlert: async (channelId) => {
       const { server, guid } = access.current || {};
       return await addFlag(server, guid, channelId);

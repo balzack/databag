@@ -6,7 +6,7 @@ export const styles = StyleSheet.create({
     width: '100%',
     display: 'flex',
     flexDirection: 'row',
-    height: 48,
+    height: 64,
     alignItems: 'center',
     borderBottomWidth: 1,
     borderColor: Colors.itemDivider,
@@ -17,13 +17,13 @@ export const styles = StyleSheet.create({
     width: '100%',
     display: 'flex',
     flexDirection: 'row',
-    height: 48,
+    height: 64,
     alignItems: 'center',
     borderBottomWidth: 1,
     borderColor: Colors.itemDivider,
     paddingLeft: 16,
     paddingRight: 16,
-    backgroundColor: Colors.formFocus,
+    backgroundColor: Colors.areaBase,
   },
   detail: {
     paddingLeft: 12,
@@ -42,11 +42,11 @@ export const styles = StyleSheet.create({
   },
   subjectText: {
     color: Colors.text,
-    fontSize: 14,
+    fontSize: 16,
   },
   message: {
     color: Colors.disabled,
-    fontSize: 12,
+    fontSize: 14,
   },
   dot: {
     width: 8,

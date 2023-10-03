@@ -7,9 +7,11 @@ import { ProfileContext } from 'context/ProfileContext';
 import { getChannelSeals, isUnsealed, getContentKey, encryptChannelSubject, decryptChannelSubject, decryptTopicSubject } from 'context/sealUtil';
 import { getCardByGuid } from 'context/cardUtil';
 import { getChannelSubjectLogo } from 'context/channelUtil';
+import { getLanguageStrings } from 'constants/Strings';
 
 export function useChannels() {
   const [state, setState] = useState({
+    strings: getLanguageStrings(),
     filter: null,
     channels: [],
     adding: false,
@@ -37,7 +39,7 @@ export function useChannels() {
 
   const setChannelItem = async (loginTimestamp, cardId, channelId, item) => {
     const timestamp = item.summary.lastTopic.created;
-    const { readRevision, topicRevision } = item;
+    const { readRevision, topicRevision, blocked } = item;
 
     // decrypt subject and message
     let locked = false;
@@ -111,7 +113,7 @@ export function useChannels() {
 
     const updated = (loginTimestamp < timestamp) && (readRevision < topicRevision);
 
-    return { cardId, channelId, subject, message, logo, timestamp, updated, locked, unlocked };
+    return { cardId, channelId, subject, message, logo, timestamp, updated, locked, unlocked, blocked };
   }
 
   useEffect(() => {
@@ -174,7 +176,6 @@ export function useChannels() {
         items.push({ loginTimestamp, channelId, channelItem: item });
       });
       card.state.cards.forEach((cardItem, cardId) => {
-
         cardItem.channels.forEach((channelItem, channelId) => {
           items.push({ loginTimestamp, cardId, channelId, channelItem });
         });
@@ -185,6 +186,9 @@ export function useChannels() {
         channels.push(await setChannelItem(loginTimestamp, cardId, channelId, channelItem));
       }
       const filtered = channels.filter(item => {
+        if (item.blocked) {
+          return false;
+        }
         if (!filter.current) {
           return true;
         }

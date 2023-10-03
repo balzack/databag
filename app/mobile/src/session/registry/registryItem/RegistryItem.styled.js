@@ -6,10 +6,12 @@ export const styles = StyleSheet.create({
     width: '100%',
     display: 'flex',
     flexDirection: 'row',
-    height: 48,
+    height: 64,
     alignItems: 'center',
     borderBottomWidth: 1,
     borderColor: Colors.itemDivider,
+    paddingLeft: 16,
+    paddingRight: 16,
   },
   space: {
     height: 64
@@ -24,41 +26,13 @@ export const styles = StyleSheet.create({
   },
   name: {
     color: Colors.text,
-    fontSize: 14,
+    fontSize: 18,
+    flexShrink: 1,
   },
   handle: {
     color: Colors.text,
-    fontSize: 12,
-  },
-  connected: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: Colors.connected,
-  },
-  requested: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: Colors.requested,
-  },
-  connecting: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: Colors.connecting,
-  },
-  pending: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: Colors.pending,
-  },
-  confirmed: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: Colors.confirmed,
+    fontSize: 16,
+    flexShrink: 1,
   },
 })
 

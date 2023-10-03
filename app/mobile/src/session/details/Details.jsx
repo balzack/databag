@@ -1,4 +1,5 @@
 import { ActivityIndicator, KeyboardAvoidingView, FlatList, Alert, Modal, View, Text, Switch, TouchableOpacity, TextInput } from 'react-native';
+import { useState } from 'react';
 import { styles } from './Details.styled';
 import { useDetails } from './useDetails.hook';
 import { Logo } from 'utils/Logo';
@@ -6,10 +7,13 @@ import AntIcons from 'react-native-vector-icons/AntDesign';
 import MatIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Colors from 'constants/Colors';
 import { MemberItem } from './memberItem/MemberItem';
+import { BlurView } from '@react-native-community/blur';
+import { InputField } from 'utils/InputField';
 
 export function Details({ channel, clearConversation }) {
 
-  const { state, actions } = useDetails();
+  const [busy, setBusy] = useState(false);
+  const { state, actions } = useDetails(clearConversation);
 
   const toggle = async (cardId, selected) => {
     try {
@@ -23,8 +27,8 @@ export function Details({ channel, clearConversation }) {
     catch (err) {
       console.log(err);
       Alert.alert(
-        'Failed to Update Membership',
-        'Please try again.'
+        state.strings.error,
+        state.strings.tryAgain,
       );
     }
   };
@@ -37,9 +41,9 @@ export function Details({ channel, clearConversation }) {
     catch (err) {
       console.log(err);
       Alert.alert(
-        'Failed to Save Subject',
-        'Please try again.'
-      )
+        state.strings.error,
+        state.strings.tryAgain,
+      );
     }
   }
 
@@ -50,97 +54,37 @@ export function Details({ channel, clearConversation }) {
     catch (err) {
       console.log(err);
       Alert.alert(
-        'Failed to Update Notifications',
-        'Please try again.',
-      )
+        state.strings.error,
+        state.strings.tryAgain,
+      );
     }
   }
 
-  const remove = () => {
-    Alert.alert(
-      "Removing Topic",
-      "Confirm?",
-      [
-        { text: "Cancel",
-          onPress: () => {},
-        },
-        { text: "Remove",
-          onPress: async () => {
-            try {
-              await actions.remove(); 
-              clearConversation();
-            }
-            catch (err) {
-              console.log(err);
-              Alert.alert(
-                'Failed to Delete Topic',
-                'Please try again.'
-              )
-            }
-          },
+  const promptAction = (prompt, action) => {
+    prompt(async () => {
+      if (!busy) {
+        try {
+          setBusy(true);
+          await action();
+          setBusy(false);
         }
-      ]
-    );
-  }
-
-  const block = () => {
-    Alert.alert(
-      "Blocking Topic",
-      "Confirm?",
-      [
-        { text: "Cancel",
-          onPress: () => {},
-        },
-        { text: "Block",
-          onPress: async () => {
-            try {
-              await actions.block();
-              clearConversation();
-            }
-            catch (err) {
-              console.log(err);
-              Alert.alert(
-                'Failed to Block Topic',
-                'Please try again.'
-              )
-            }
-          },
+        catch (err) {
+          console.log(err);
+          setBusy(false);
+          Alert.alert(
+            state.strings.error,
+            state.strings.tryAgain,
+          );
+          throw err;
         }
-      ]
-    );
-  }
-
-
-  const report = () => {
-    Alert.alert(
-      "Report Topic",
-      "Confirm?",
-      [
-        { text: "Cancel",
-          onPress: () => {},
-        },
-        { text: "Report",
-          onPress: async () => {
-            try {
-              await actions.report();
-            }
-            catch (err) {
-              console.log(err);
-              Alert.alert(
-                'Failed to Report Topic',
-                'Please try again.'
-              )
-            }
-          },
-        }
-      ]
-    );
+      }
+    });
   }
 
   return (
     <View style={styles.body}>
       <View style={styles.details}>
-        <Logo src={state.logo} width={72} height={72} radius={8} />
+        <Logo src={state.logo} width={92} height={92} radius={8} />
         <View style={styles.info}>
           <View style={styles.subject}>
             { state.locked && !state.unlocked && (
@@ -157,65 +101,62 @@ export function Details({ channel, clearConversation }) {
             )}
           </View>
           <Text style={styles.created}>{ state.timestamp }</Text>
-          <Text style={styles.mode}>{ state.hostId ? 'guest' : 'host' }</Text>
+          <Text style={styles.mode}>{ state.hostId ? state.strings.guest : state.strings.host }</Text>
         </View>  
       </View>
 
       <View style={styles.controls}>
-        { !state.hostId && (
-          <TouchableOpacity style={styles.button} onPress={remove}>
-            { state.deleteBusy && (
-              <ActivityIndicator color={Colors.white} />
-            )}
-            { !state.deleteBusy && (
-              <Text style={styles.buttonText}>Delete Topic</Text>
-            )}
-          </TouchableOpacity>
-        )}
-        { state.hostId && (
-          <TouchableOpacity style={styles.button} onPress={remove}>
-            { state.deleteBusy && (
-              <ActivityIndicator color={Colors.white} />
-            )}
-            { !state.deleteBusy && (
-              <Text style={styles.buttonText}>Leave Topic</Text>
-            )}
-          </TouchableOpacity>
-        )}
-        <TouchableOpacity style={styles.button} onPress={block}>
-          { state.blockBusy && (
-            <ActivityIndicator color={Colors.white} />
-          )}
-          { !state.blockBusy && (
-            <Text style={styles.buttonText}>Block Topic</Text>
-          )}
-        </TouchableOpacity>
-        { state.hostId && (
-          <TouchableOpacity style={styles.button} onPress={report}>
-            <Text style={styles.buttonText}>Report Topic</Text>
-          </TouchableOpacity>
-        )}
-        { !state.hostId && !state.locked && (
-          <TouchableOpacity style={styles.button} onPress={actions.showEditMembers}>
-            <Text style={styles.buttonText}>Edit Membership</Text>
-          </TouchableOpacity>
-        )}
-
         <View style={styles.notify}>
           <TouchableOpacity onPress={() => setNotifications(!state.notification)} activeOpacity={1}>
-            <Text style={styles.notifyText}>Enable Notifications</Text>
+            <Text style={styles.notifyText}>{ state.strings.enableNotifications }</Text>
           </TouchableOpacity>
           { state.notification != null && (
-            <Switch style={styles.switch} value={state.notification} onValueChange={setNotifications} trackColor={styles.track}/>
+            <Switch value={state.notification} style={Platform.OS==='ios' ? styles.visibleSwitch : {}} thumbColor={Colors.sliderGrip}
+                ios_backgroundColor={Colors.idleFill} trackColor={styles.track} onValueChange={setNotifications} />
           )}
         </View>
+      </View>
 
+      <View style={styles.control}>
+        { busy && (
+          <ActivityIndicator animating={true} color={Colors.text} size={'large'} />
+        )}
+        { !busy && (
+          <View style={styles.drawerActions}>
+            { !state.hostId && !state.locked && (
+              <TouchableOpacity style={styles.action} activeOpacity={1} onPress={actions.showEditMembers}>
+                <MatIcons name="account-group-outline" style={styles.actionIcon} size={44} color={Colors.linkText} />
+                <Text style={styles.actionLabel}>{ state.strings.members }</Text>
+              </TouchableOpacity>
+            )}
+            { !state.hostId && (
+              <TouchableOpacity style={styles.action} activeOpacity={1} onPress={() => promptAction(actions.deletePrompt, actions.removeTopic)}>
+                <MatIcons name="text-box-remove-outline" style={styles.actionIcon} size={44} color={Colors.linkText} />
+                <Text style={styles.actionLabel}>{ state.strings.delete }</Text>
+              </TouchableOpacity>
+            )}
+            { state.hostId && (
+              <TouchableOpacity style={styles.action} activeOpacity={1} onPress={() => promptAction(actions.leavePrompt, actions.removeTopic)}>
+                <MatIcons name="text-box-minus-outline" style={styles.actionIcon} size={44} color={Colors.linkText} />
+                <Text style={styles.actionLabel}>{ state.strings.leave }</Text>
+              </TouchableOpacity>
+            )}
+            <TouchableOpacity style={styles.action} activeOpacity={1} onPress={() => promptAction(actions.blockPrompt, actions.blockTopic)}>
+              <MatIcons name="comment-remove-outline" style={styles.actionIcon} size={44} color={Colors.linkText} />
+              <Text style={styles.actionLabel}>{ state.strings.actionBlock }</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.action} activeOpacity={1} onPress={() => promptAction(actions.reportPrompt, actions.reportTopic)}>
+              <MatIcons name="comment-alert-outline" style={styles.actionIcon} size={44} color={Colors.linkText} />
+              <Text style={styles.actionLabel}>{ state.strings.actionReport }</Text>
+            </TouchableOpacity>
+          </View>
+        )}
       </View>
 
       <View style={styles.members}>
-        <Text style={styles.membersLabel}>Members:</Text>
+        <Text style={styles.membersLabel}>{ state.strings.members }</Text>
         { state.count - state.members.length > 0 && (
-          <Text style={styles.unknown}> (+ {state.count - state.contacts.length} unknown)</Text>
+          <Text style={styles.unknown}> (+ {state.count - state.contacts.length}) { state.strings.unknown }</Text>
         )}
       </View>
 
@@ -232,23 +173,32 @@ export function Details({ channel, clearConversation }) {
         supportedOrientations={['portrait', 'landscape']}
         onRequestClose={actions.hideEditSubject}
       >
-        <KeyboardAvoidingView behavior="height" style={styles.editWrapper}>
-          <View style={styles.editContainer}>
-            <Text style={styles.editHeader}>Edit Subject:</Text>
-            <View style={styles.inputField}>
-              <TextInput style={styles.input} value={state.subjectUpdate} onChangeText={actions.setSubjectUpdate}
-                  autoCapitalize="words" placeholder="Subject" placeholderTextColor={Colors.grey} />
+        <View style={styles.modalOverlay}>
+          <BlurView style={styles.modalOverlay} blurType={Colors.overlay} blurAmount={2} reducedTransparencyFallbackColor="black" />
+          <KeyboardAvoidingView style={styles.modalBase} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+            <View style={styles.modalContainer}>
+              <Text style={styles.editHeader}>{ state.strings.editSubject }</Text>
+
+              <InputField
+                label={state.strings.subject}
+                value={state.subjectUpdate}
+                autoCapitalize={'words'}
+                spellCheck={false}
+                style={styles.field}
+                onChangeText={actions.setSubjectUpdate}
+              />
+
+              <View style={styles.editControls}>
+                <TouchableOpacity style={styles.close} onPress={actions.hideEditSubject}>
+                  <Text style={styles.closeText}>Cancel</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.save} onPress={saveSubject}>
+                  <Text style={styles.saveText}>Save</Text>
+                </TouchableOpacity>
+              </View>
             </View>
-            <View style={styles.editControls}>
-              <TouchableOpacity style={styles.cancel} onPress={actions.hideEditSubject}>
-                <Text>Cancel</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.save} onPress={saveSubject}>
-                <Text style={styles.saveText}>Save</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </KeyboardAvoidingView>
+          </KeyboardAvoidingView>
+        </View>
       </Modal>
 
       <Modal
@@ -258,21 +208,24 @@ export function Details({ channel, clearConversation }) {
         supportedOrientations={['portrait', 'landscape']}
         onRequestClose={actions.hideEditMembers}
       >
-        <KeyboardAvoidingView behavior="height" style={styles.editWrapper}>
-          <View style={styles.editContainer}>
-            <Text style={styles.editHeader}>Channel Members:</Text>
-            <FlatList style={styles.editMembers}
-              data={state.connected}
-              renderItem={({ item }) => <MemberItem item={item} toggle={toggle} />}
-              keyExtractor={item => item.cardId}
-            />
-            <View style={styles.editControls}>
-              <TouchableOpacity style={styles.cancel} onPress={actions.hideEditMembers}>
-                <Text>Done</Text>
-              </TouchableOpacity>
+        <View style={styles.modalOverlay}>
+          <BlurView style={styles.modalOverlay} blurType={Colors.overlay} blurAmount={2} reducedTransparencyFallbackColor="black" />
+          <KeyboardAvoidingView style={styles.modalBase} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+            <View style={styles.modalContainer}>
+              <Text style={styles.editHeader}>{ state.strings.topicMembers }</Text>
+              <FlatList style={styles.editMembers}
+                data={state.connected}
+                renderItem={({ item }) => <MemberItem item={item} toggle={toggle} />}
+                keyExtractor={item => item.cardId}
+              />
+              <View style={styles.editControls}>
+                <TouchableOpacity style={styles.close} onPress={actions.hideEditMembers}>
+                  <Text style={styles.closeText}>{ state.strings.close }</Text>
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
-        </KeyboardAvoidingView>
+          </KeyboardAvoidingView>
+        </View>
       </Modal>
 
     </View>

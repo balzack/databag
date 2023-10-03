@@ -5,7 +5,8 @@ import { styles } from './Welcome.styled';
 import { Colors } from 'constants/Colors';
 import Ionicons from 'react-native-vector-icons/AntDesign';
 
-import session from 'images/session.png';
+import light from 'images/session.png';
+import dark from 'images/darksess.png';
 
 export function Welcome() {
 
@@ -13,7 +14,12 @@ export function Welcome() {
     <SafeAreaView style={styles.container}>
       <Text style={styles.header}>Databag</Text>
       <Text style={styles.label}>Communication for the Decentralized Web</Text>
-      <Image style={styles.image} source={session} />
+      { Colors.theme === 'dark' && (
+        <Image style={styles.image} source={dark} />
+      )}
+      { Colors.theme !== 'dark' && (
+        <Image style={styles.image} source={light} />
+      )}
       <View style={styles.steps}>
         <Text style={styles.stepstext}>Setup your profile</Text>
         <Ionicons name={'right'} size={18} color={Colors.text} />

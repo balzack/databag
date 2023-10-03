@@ -7,7 +7,7 @@ export const styles = StyleSheet.create({
     height: '100%',
     display: 'flex',
     flexDirection: 'column',
-    backgroundColor: Colors.formBackground,
+    backgroundColor: Colors.screenBase,
   },
   header: {
     paddingTop: 24,
@@ -16,15 +16,18 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderBottomWidth: 1,
-    borderColor: Colors.grey,
+    borderColor: Colors.horizontalDivider,
   },
   headerLabel: {
     paddingLeft: 16,
     fontSize: 20,
     color: Colors.text,
   },
+  pad: {
+    height: 32,
+  },
   icon: {
-    color: Colors.primary,
+    color: Colors.linkText,
     paddingLeft: 16,
   },
   end: {
@@ -36,7 +39,7 @@ export const styles = StyleSheet.create({
   },
   accounts: {
     borderBottomWidth: 1,
-    borderColor: Colors.grey,
+    borderColor: Colors.itemDivider,
     flexGrow: 1,
     flexShrink: 1,
     minHeight: 0,
@@ -50,7 +53,7 @@ export const styles = StyleSheet.create({
     paddingRight: 24,
     alignItems: 'center',
     borderBottomWidth: 1,
-    borderColor: Colors.divider,
+    borderColor: Colors.itemDivider,
   },
   details: {
     paddingLeft: 16,
@@ -87,14 +90,14 @@ export const styles = StyleSheet.create({
     paddingLeft: 16,
   },
   saveText: {
-    color: Colors.white,
+    color: Colors.primaryButtonText,
   },
   save: {
     backgroundColor: Colors.primary,
     borderRadius: 4,
     padding: 6,
     marginRight: 8,
-    width: 72,
+    width: 92,
     display: 'flex',
     alignItems: 'center',
   },
@@ -104,9 +107,12 @@ export const styles = StyleSheet.create({
     borderRadius: 4,
     padding: 6,
     marginRight: 8,
-    width: 72,
+    width: 92,
     display: 'flex',
     alignItems: 'center',
+  },
+  cancelText: {
+    color: Colors.cancelButtonText,
   },
   modalBackground: {
     display: 'flex',
@@ -120,33 +126,54 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'flex-end',
-    paddingTop: 16,
+    padding: 16,
     borderTopWidth: 1,
     borderColor: Colors.divider,
   },
   modalContainer: {
-    backgroundColor: Colors.formBackground,
-    padding: 16,
+    backgroundColor: Colors.modalBase,
     width: '80%',
     maxWidth: 400,
+    maxHeight: '80%',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: Colors.modalBorder,
   },
   modalHeader: {
     paddingBottom: 4,
     borderBottomWidth: 1,
     borderColor: Colors.divider,
-    paddingLeft: 8,
+    padding: 16,
   },
   modalHeaderText: {
     fontSize: 18,
+    color: Colors.text,
+  },
+  modalBase: {
+    display: 'flex', 
+    width: '100%',
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+  },
+  modalOverlay: {
+    width: '100%',
+    height: '100%',
   },
   modalBody: {
-    padding: 8,
+    padding: 16,
   },
   accessToken: {
     padding: 16,
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  token: {
+    color: Colors.text,
   },
   modalLabel: {
     paddingTop: 8,
@@ -239,5 +266,28 @@ export const styles = StyleSheet.create({
     marginTop: 8,
     alignItems: 'center',
     paddingBottom: 8,
-  }
+  },
+  field: {
+    input: {
+      backgroundColor: Colors.inputBase,
+      borderRadius: 8,
+      minHeight: 32,
+      maxHeight: 128,
+    },
+    inputText: {
+      color: Colors.inputText,
+    },
+    label: {
+      height: 16,
+      paddingLeft: 8,
+    },
+    labelText: {
+      color: Colors.inputPlaceholder,
+      fontSize: 12,
+    },
+    container: {
+      width: '100%',
+      marginBottom: 8,
+    },
+  },
 });

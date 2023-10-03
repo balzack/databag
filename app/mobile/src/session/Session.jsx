@@ -10,13 +10,15 @@ import MatIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useSession } from './useSession.hook';
 import { styles } from './Session.styled';
 import Colors from 'constants/Colors';
-import { Profile, ProfileHeader, ProfileBody } from './profile/Profile';
+import { Profile } from './profile/Profile';
+import { ProfileSettings } from './profileSettings/ProfileSettings';
 import { CardsHeader, CardsBody, Cards } from './cards/Cards';
 import { RegistryHeader, RegistryBody, Registry } from './registry/Registry';
-import { ContactHeader, ContactBody, Contact } from './contact/Contact';
+import { Contact } from './contact/Contact';
 import { Details } from './details/Details';
 import { Conversation, ConversationHeader, ConversationBody } from './conversation/Conversation';
 import { Welcome } from './welcome/Welcome';
+import { Settings } from './settings/Settings';
 import { Channels } from './channels/Channels';
 import { CommonActions } from '@react-navigation/native';
 import { ConversationContext } from 'context/ConversationContext';
@@ -26,11 +28,14 @@ import { CardsIcon } from './cardsIcon/CardsIcon';
 import { Logo } from 'utils/Logo';
 import { Call } from './call/Call';
 import { Sharing } from './sharing/Sharing';
-import splash from 'images/session.png';
+import lightSplash from 'images/session.png';
+import darkSplash from 'images/darksess.png';
 import { useNavigate } from 'react-router-dom';
+import { getLanguageStrings } from 'constants/Strings';
 
 const ConversationStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
+const SettingsStack = createStackNavigator();
 const ContactStack = createStackNavigator();
 const ProfileDrawer = createDrawerNavigator();
 const ContactDrawer = createDrawerNavigator();
@@ -40,8 +45,8 @@ const RegistryDrawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
 
 function ConversationStackScreen({ dmChannel, shareChannel, shareIntent, setShareIntent }) {
-  const stackParams = { headerStyle: { backgroundColor: Colors.titleBackground }, headerBackTitleVisible: false };
-  const screenParams = { headerShown: true, headerTintColor: Colors.primary };
+  const stackParams = { headerStyle: { backgroundColor: Colors.screenBase }, headerBackTitleVisible: false, cardStyle: {backgroundColor: Colors.screenBase }};
+const screenParams = { headerShown: true, headerTintColor: Colors.primary };
 
   const conversation = useContext(ConversationContext);
   const [cardId, setCardId] = useState();
@@ -84,7 +89,7 @@ function ConversationStackScreen({ dmChannel, shareChannel, shareIntent, setShar
         </ConversationStack.Screen>
 
         <ConversationStack.Screen name="details" options={{ ...stackParams, headerTitle: (props) => (
-            <Text style={styles.headertext}>Details</Text>
+            <Text style={styles.headertext}></Text>
         )}}>
           {(props) => <Details clearConversation={() => clearConversation(props.navigation)} />}
         </ConversationStack.Screen>
@@ -94,15 +99,30 @@ function ConversationStackScreen({ dmChannel, shareChannel, shareIntent, setShar
   );
 }
 
+function SettingsStackScreen() {
+  const stackParams = { headerBackTitleVisible: false };
+  const screenParams = { headerShown: false };
+
+  return (
+    <SafeAreaView edges={['left', 'right']} style={styles.body}>
+      <SettingsStack.Navigator screenOptions={({ route }) => (screenParams)}>
+        <SettingsStack.Screen name="settings" options={stackParams}>
+          {(props) => <Settings />}
+        </SettingsStack.Screen>
+      </SettingsStack.Navigator>
+    </SafeAreaView>
+  );
+}
+
 function ProfileStackScreen() {
-  const stackParams = { headerStyle: { backgroundColor: Colors.titleBackground }, headerBackTitleVisible: false };
-  const screenParams = { headerShown: true, headerTintColor: Colors.primary };
+  const stackParams = { headerBackTitleVisible: false };
+  const screenParams = { headerShown: false };
 
   return (
     <SafeAreaView edges={['left', 'right']} style={styles.body}>
       <ProfileStack.Navigator screenOptions={({ route }) => (screenParams)}>
-        <ProfileStack.Screen name="profile" options={{ ...stackParams, headerTitle: () => <ProfileHeader /> }}>
-          {(props) => <ScrollView><ProfileBody /></ScrollView>}
+        <ProfileStack.Screen name="profile" options={stackParams}>
+          {(props) => <Profile />}
         </ProfileStack.Screen>
       </ProfileStack.Navigator>
     </SafeAreaView>
@@ -110,7 +130,7 @@ function ProfileStackScreen() {
 }
 
 function ContactStackScreen({ addChannel }) {
-  const stackParams = { headerStyle: { backgroundColor: Colors.titleBackground }, headerBackTitleVisible: false };
+  const stackParams = { headerStyle: { backgroundColor: Colors.screenBase }, headerBackTitleVisible: false };
   const screenParams = { headerShown: true, headerTintColor: Colors.primary };
 
   const profile = useContext(ProfileContext);
@@ -139,19 +159,17 @@ function ContactStackScreen({ addChannel }) {
     <SafeAreaView edges={['left', 'right']} style={styles.body}>
       <ContactStack.Navigator screenOptions={({ route }) => (screenParams)} initialRouteName="cards">
 
-        <ContactStack.Screen name="cards" options={{ ...stackParams, headerTitle: (props) => (
+        <ContactStack.Screen name="cards" options={{ ...stackParams, cardStyle: {backgroundColor: Colors.screenBase}, headerTitle: (props) => (
             <CardsHeader filter={filter} setFilter={setFilter} sort={sort} setSort={setSort} openRegistry={openRegistry} />
           )}}>
           {(props) => <CardsBody filter={filter} sort={sort} openContact={(contact) => openContact(props.navigation, contact)} addChannel={addChannel} />}
         </ContactStack.Screen>
 
-        <ContactStack.Screen name="contact" options={{ ...stackParams, headerTitle: (props) => (
-            <ContactHeader contact={contact} />
-          )}}>
-          {(props) => <ScrollView><ContactBody contact={contact} /></ScrollView>}
+        <ContactStack.Screen name="contact" options={{ headerShown: false }}>
+          {(props) => <Contact contact={contact} back={props.navigation.goBack} />}
         </ContactStack.Screen>
 
-        <ContactStack.Screen name="registry" options={{ ...stackParams, headerTitle: (props) => (
+        <ContactStack.Screen name="registry" options={{ ...stackParams, cardStyle: {backgroundColor: Colors.screenBase}, headerTitle: (props) => (
             <RegistryHeader search={search} setSearch={setSearch} handle={handle} setHandle={setHandle} server={server} setServer={setServer} />
           )}}>
           {(props) => <RegistryBody search={search} handle={handle} server={server} openContact={(contact) => openContact(props.navigation, contact)} />}
@@ -164,6 +182,7 @@ function ContactStackScreen({ addChannel }) {
 
 function HomeScreen({ navParams }) {
 
+  const strings = getLanguageStrings();
   const drawerParams = { drawerPosition: 'right', headerShown: false, swipeEnabled: false, drawerType: 'front' };
   const conversation = useContext(ConversationContext);
   const [channel, setChannel] = useState(false);
@@ -206,13 +225,13 @@ function HomeScreen({ navParams }) {
     <View style={styles.home}>
       <SafeAreaView edges={['top', 'bottom', 'left']} style={styles.sidebar}>
         <View edges={['left']} style={styles.options}>
-          <TouchableOpacity style={styles.option} onPress={openProfile}>
-            <ProfileIcon color={Colors.text} size={20} />
-            <Text style={styles.profileLabel}>Profile</Text>
+          <TouchableOpacity style={styles.option} onPress={openProfile} activeOpacity={1}>
+            <ProfileIcon color={Colors.text} size={24} />
+            <Text style={styles.profileLabel}>{ strings.account }</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.option} onPress={openCards}>
-            <CardsIcon color={Colors.text} size={20} />
-            <Text style={styles.profileLabel}>Contacts</Text>
+          <TouchableOpacity style={styles.option} onPress={openCards} activeOpacity={1}>
+            <CardsIcon color={Colors.text} size={24} />
+            <Text style={styles.profileLabel}>{ strings.contacts }</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.channels}>
@@ -238,7 +257,9 @@ function CardDrawerScreen({ navParams }) {
   const [dmChannel, setDmChannel] = useState(null);
   const openContact = (contact) => {
     navParams.setContact(contact);
-    navParams.contactNav.openDrawer();
+    setTimeout(() => {
+      navParams.contactNav.openDrawer();
+    });
   };
   const openRegistry = () => {
     navParams.registryNav.openDrawer();
@@ -261,7 +282,9 @@ function RegistryDrawerScreen({ navParams }) {
   const drawerParams = { drawerPosition: 'right', headerShown: false, swipeEnabled: false, drawerType: 'front' };
   const openContact = (contact) => {
     navParams.setContact(contact);
-    navParams.contactNav.openDrawer();
+    setTimeout(() => {
+      navParams.contactNav.openDrawer();
+    });
   };
 
   return (
@@ -285,7 +308,7 @@ function ContactDrawerScreen({ navParams }) {
     <ContactDrawer.Navigator screenOptions={{ ...drawerParams, drawerStyle: { width: '44%' } }} drawerContent={(props) => (
         <ScrollView style={styles.drawer}>
           <SafeAreaView edges={['top', 'bottom', 'right']}>
-            <Contact contact={contact} />
+            <Contact contact={contact} drawer={true} back={props.navigation.goBack} />
           </SafeAreaView>
         </ScrollView>
       )}>
@@ -392,7 +415,12 @@ export function Session({ sharing, clearSharing }) {
               <Text style={styles.titleText}>Welcome To Databag</Text>
               <Text style={styles.tagText}>Communication for the Decentralized Web</Text>
             </View>
-            <Image style={styles.splash} source={splash} resizeMode="contain" />
+            { Colors.theme === 'dark' && (
+              <Image style={styles.splash} source={darkSplash} resizeMode="contain" />
+            )}
+            { Colors.theme !== 'dark' && (
+              <Image style={styles.splash} source={lightSplash} resizeMode="contain" />
+            )}
             <View style={styles.steps} >
               <View style={styles.step}>
                 <Ionicons name={'user'} size={18} color={Colors.white} />
@@ -416,7 +444,7 @@ export function Session({ sharing, clearSharing }) {
           <View style={styles.container}>
             { state.tabbed === false && (
               <ProfileDrawer.Navigator screenOptions={{ ...drawerParams, drawerStyle: { width: '45%' } }} drawerContent={(props) => (
-                  <ScrollView style={styles.drawer}><SafeAreaView edges={['top', 'bottom', 'right']}><Profile /></SafeAreaView></ScrollView>
+                  <ProfileSettings />
                 )}>
                 <ProfileDrawer.Screen name="detail">
                   {(props) => <DetailDrawerScreen navParams={{ profileNav: props.navigation, state, actions, addChannel, dmChannel, shareChannel, shareIntent, setShareIntent }} />}
@@ -435,6 +463,9 @@ export function Session({ sharing, clearSharing }) {
                     if (route.name === 'Conversation') {
                       return <Ionicons name={'message1'} size={size} color={color} />;
                     }
+                    if (route.name === 'Settings') {
+                      return <Ionicons name={'setting'} size={size} color={color} />;
+                    }
                     if (route.name === 'Contacts') {
                       return <CardsIcon size={size} color={color} />;
                     }
@@ -444,11 +475,12 @@ export function Session({ sharing, clearSharing }) {
                   tabBarInactiveTintColor: Colors.disabled,
                 })}>
                 <Tab.Screen name="Conversation" children={()=><ConversationStackScreen dmChannel={dmChannel} shareChannel={shareChannel} shareIntent={shareIntent} setShareIntent={setShareIntent} />} />
-                <Tab.Screen name="Profile" component={ProfileStackScreen} />
                 <Tab.Screen name="Contacts" children={()=><ContactStackScreen addChannel={addChannel} />} />
+                <Tab.Screen name="Profile" component={ProfileStackScreen} />
+                <Tab.Screen name="Settings" component={SettingsStackScreen} />
               </Tab.Navigator>
             )}
-            <StatusBar barStyle="dark-content" backgroundColor={Colors.formBackground} /> 
+            <StatusBar barStyle={Colors.statusBar} backgroundColor={Colors.screenBase} /> 
           </View>
         )}
       </View>

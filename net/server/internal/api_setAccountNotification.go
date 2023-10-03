@@ -25,7 +25,8 @@ func SetAccountNotification(w http.ResponseWriter, r *http.Request) {
 		if res := tx.Model(session).Update("push_enabled", flag).Error; res != nil {
 			return res
 		}
-		if res := tx.Model(session.Account).Update("account_revision", session.Account.AccountRevision+1).Error; res != nil {
+    session.Account.AccountRevision += 1;
+		if res := tx.Model(session.Account).Update("account_revision", session.Account.AccountRevision).Error; res != nil {
 			return res
 		}
 		return nil

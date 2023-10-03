@@ -7,7 +7,7 @@ export const styles = StyleSheet.create({
   },
   item: {
     borderTopWidth: 1,
-    borderColor: Colors.white,
+    borderColor: Colors.itemDivider,
     paddingTop: 8,
   },
   header: {
@@ -17,12 +17,13 @@ export const styles = StyleSheet.create({
   },
   name: {
     paddingLeft: 8,
+    color: Colors.descriptionText,
   },
   timestamp: {
     paddingLeft: 8,
     fontSize: 11,
     paddingTop: 2,
-    color: Colors.grey,
+    color: Colors.descriptionText,
   },
   carousel: {
     paddingLeft: 52,

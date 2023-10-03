@@ -18,7 +18,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderBottomWidth: 1,
-    borderColor: Colors.divider,
+    borderColor: Colors.horizontalDivider,
     height: 48,
     marginLeft: 16,
     marginRight: 16,

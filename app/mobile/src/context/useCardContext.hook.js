@@ -63,13 +63,13 @@ export function useCardContext() {
   }
 
   const setCardField = (cardId, field, value) => {
-    const card = cards.current.get(cardId);
-    if (card) {
-      card[field] = value;
-      cards.current.set(cardId, { ...card });
+    const item = cards.current.get(cardId);
+    if (item?.card) {
+      item.card[field] = value;
+      cards.current.set(cardId, { ...item });
       updateState({ cards: cards.current });
     }
-  };
+  }
 
   const setCardChannelItem = (cardChannel) => {
     return {
@@ -424,7 +424,7 @@ export function useCardContext() {
       return await getContactChannelTopic(node, cardToken, channelId, topicId);
     },
     setContactRevision: async (cardId, revision) => {
-      const { guid } = acccess.current || {};
+      const { guid } = access.current || {};
       await store.actions.setCardRequestStatus(guid, { revision });
       updateState({ viewRevision: revision });
     },
@@ -449,12 +449,12 @@ export function useCardContext() {
       setCardChannelField(cardId, channelId, 'topicMarker', marker, 'syncRevision', revision);
     },
     setCardFlag: async (cardId) => {
-      const { guid } = acccess.current || {};
+      const { guid } = access.current || {};
       await store.actions.setCardItemBlocked(guid, cardId);
       setCardField(cardId, 'blocked', true);
     },
     clearCardFlag: async (cardId) => {
-      const { guid } = acccess.current || {};
+      const { guid } = access.current || {};
       await store.actions.clearCardItemBlocked(guid, cardId);
       setCardField(cardId, 'blocked', false);
     },
@@ -465,7 +465,7 @@ export function useCardContext() {
     },
     clearChannelFlag: async (cardId, channelId) => {
       const { guid } = access.current || {};
-      await store.actions.setCardChannelItemBlocked(guid, cardId, channelId);
+      await store.actions.clearCardChannelItemBlocked(guid, cardId, channelId);
       setCardChannelField(cardId, channelId, 'blocked', false);
     },
     setTopicFlag: async (cardId, channelId, topicId) => {
@@ -473,8 +473,12 @@ export function useCardContext() {
       await store.actions.setCardChannelTopicBlocked(guid, cardId, channelId, topicId, true);
     },
     clearTopicFlag: async (cardId, channelId, topicId) => {
-      const { guid } = access.current;
+      const { guid } = access.current || {};
       await store.actions.setCardChannelTopicBlocked(guid, cardId, channelId, topicId, false);
+    },
+    getFlaggedTopics: async () => {
+      const { guid } = access.current || {};
+      return await store.actions.getCardChannelTopicBlocked(guid);
     },
     addChannelAlert: async (cardId, channelId) => {
       const { detail, profile } = (cards.current.get(cardId) || {}).card;

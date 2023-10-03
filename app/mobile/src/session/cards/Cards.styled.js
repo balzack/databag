@@ -7,7 +7,7 @@ export const styles = StyleSheet.create({
     height: '100%',
     display: 'flex',
     flexDirection: 'column',
-    backgroundColor: Colors.formBackground,
+    backgroundColor: Colors.screenBase,
   },
   drawer: {
     flexGrow: 1,
@@ -18,10 +18,16 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  header: {
+    width: '100%',
+    paddingBottom: 8,
+    borderBottomWidth: 1,
+    borderColor: Colors.itemDivider,
+  },
   topbar: {
     borderTopWidth: 1,
     borderBottomWidth: 1,
-    borderColor: Colors.divider,
+    borderColor: Colors.itemDivider,
     paddingTop: 32,
     paddingBottom: 6,
     paddingLeft: 16,
@@ -34,11 +40,11 @@ export const styles = StyleSheet.create({
   cardlist: {
     flexGrow: 1,
     borderBottomWidth: 1,
-    borderColor: Colors.divider,
+    borderColor: Colors.itemDivider,
   },
   searcharea: {
     borderBottomWidth: 1,
-    borderColor: Colors.divider,
+    borderColor: Colors.itemDivider,
   },
   searchbar: {
     display: 'flex',
@@ -53,7 +59,7 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     borderRadius: 4,
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.inputBase,
     alignItems: 'center',
     flexGrow: 1,
     flexShrink: 1,
@@ -63,9 +69,10 @@ export const styles = StyleSheet.create({
   },
   inputfield: {
     flex: 1,
+    flexGrow: 1,
     textAlign: 'center',
     padding: 4,
-    color: Colors.text,
+    color: Colors.inputText,
     fontSize: 14,
   },
   icon: {
@@ -73,8 +80,7 @@ export const styles = StyleSheet.create({
   },
   cards: {
     width: '100%',
-    paddingLeft: 16,
-    paddingRight: 16,
+    paddingTop: 8,
   },
   addbottom: {
     marginRight: 8,
@@ -90,7 +96,7 @@ export const styles = StyleSheet.create({
     paddingLeft: 8,
   },
   add: {
-    backgroundColor: Colors.primary,
+    backgroundColor: Colors.primaryButton,
     marginLeft: 8,
     display: 'flex',
     flexDirection: 'row',
@@ -100,7 +106,7 @@ export const styles = StyleSheet.create({
   },
   newtext: {
     paddingLeft: 8,
-    color: Colors.white,
+    color: Colors.primaryButtonText,
   },
   up: {
     marginRight: 8,
@@ -110,7 +116,7 @@ export const styles = StyleSheet.create({
   },
   findarea: {
     borderTopWidth: 1,
-    borderColor: Colors.divider,
+    borderColor: Colors.itemDivider,
   },
   notfound: {
     width: '100%',
@@ -120,7 +126,7 @@ export const styles = StyleSheet.create({
   },
   notfoundtext: {
     fontSize: 20,
-    color: Colors.grey,
+    color: Colors.unsetText,
   }
 })
 

@@ -7,11 +7,14 @@ import { ProfileContext } from 'context/ProfileContext';
 import { getChannelSubjectLogo } from 'context/channelUtil';
 import { getCardByGuid } from 'context/cardUtil';
 import { getChannelSeals, isUnsealed, getContentKey, updateChannelSubject } from 'context/sealUtil';
+import { getLanguageStrings } from 'constants/Strings';
+import { DisplayContext } from 'context/DisplayContext';
 import moment from 'moment';
 
-export function useDetails() {
+export function useDetails(clear) {
 
   const [state, setState] = useState({
+    strings: getLanguageStrings(),
     subject: null,
     timestamp: null,
     logo: null,
@@ -36,6 +39,7 @@ export function useDetails() {
   const account = useContext(AccountContext);
   const conversation = useContext(ConversationContext);
   const profile = useContext(ProfileContext);
+  const display = useContext(DisplayContext);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
@@ -46,7 +50,7 @@ export function useDetails() {
       const notification = await conversation.actions.getNotifications();
       updateState({ notification });
     })();
-  }, []);
+  }, [conversation.state.card, conversation.state.channel]);
 
   useEffect(() => {
     let locked;
@@ -198,40 +202,52 @@ export function useDetails() {
         await conversation.actions.setChannelSubject('superbasic', subject);
       }
     },
-    remove: async () => {
-      if (!state.deleteBusy) {
-        try {
-          updateState({ deleteBusy: true });
-          await conversation.actions.removeChannel();
-          updateState({ deleteBusy: false });
-        }
-        catch(err) {
-          console.log(err);
-          updateState({ deleteBusy: false });
-          throw new Error("delete failed");
-        }
-      }
+    removeTopic: async () => {
+      await conversation.actions.removeChannel();
+      clear();
     },
-    block: async() => {
-      if (!state.deleteBusy) {
-        try {
-          updateState({ blockBusy: true });
-          await conversation.actions.setChannelFlag();
-          updateState({ blockBusy: false });
-        }
-        catch(err) {
-          console.log(err);
-          updateState({ blockBusy: false });
-          throw new Error("block failed");
-        }
-      }
+    blockTopic: async() => {
+      await conversation.actions.setChannelFlag();
+      clear();
     },
-    report: async() => {
+    reportTopic: async() => {
       await conversation.actions.addChannelAlert();
     },
     setNotifications: async (notification) => {
       await conversation.actions.setNotifications(notification);
       updateState({ notification });
+    },
+    deletePrompt: (action) => {
+      display.actions.showPrompt({
+        title: state.strings.deleteTopic,
+        centerButtons: true,
+        ok: { label: state.strings.confirmDelete, action, failed: () => {}},
+        cancel: { label: state.strings.cancel },
+      });
+    },
+    leavePrompt: (action) => {
+      display.actions.showPrompt({
+        title: state.strings.leaveTopic,
+        centerButtons: true,
+        ok: { label: state.strings.leave, action, failed: () => {}},
+        cancel: { label: state.strings.cancel },
+      });
+    },
+    blockPrompt: (action) => {
+      display.actions.showPrompt({
+        title: state.strings.blockTopic,
+        centerButtons: true,
+        ok: { label: state.strings.confirmBlock, action, failed: () => {}},
+        cancel: { label: state.strings.cancel },
+      });
+    },
+    reportPrompt: (action) => {
+      display.actions.showPrompt({
+        title: state.strings.reportTopic,
+        centerButtons: true,
+        ok: { label: state.strings.confirmReport, action, failed: () => {}},
+        cancel: { label: state.strings.cancel },
+      });
     },
   };
 

@@ -1,4 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
+import { Alert } from 'react-native';
 import { useNavigate } from 'react-router-dom';
 import { AppContext } from 'context/AppContext';
 import { getNodeStatus } from 'api/getNodeStatus';
@@ -11,10 +12,13 @@ import { removeAccount } from 'api/removeAccount';
 import { addAccountCreate } from 'api/addAccountCreate';
 import { setAccountStatus } from 'api/setAccountStatus';
 import { addAccountAccess } from 'api/addAccountAccess';
+import { DisplayContext } from 'context/DisplayContext';
+import { getLanguageStrings } from 'constants/Strings';
 
 export function useDashboard(config, server, token) {
 
   const [state, setState] = useState({
+    strings: getLanguageStrings(),
     config: null,
     accounts: [],
     editConfig: false,
@@ -35,6 +39,7 @@ export function useDashboard(config, server, token) {
   });
 
   const navigate = useNavigate();
+  const display = useContext(DisplayContext);
   
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
@@ -98,7 +103,7 @@ export function useDashboard(config, server, token) {
       updateState({ domain });
     },
     setStorage: (storage) => {
-      updateState({ storage: Number(storage.replace(/[^0-9]/g, '')) });
+      updateState({ storage: storage.replace(/[^0-9]/g, '') });
     },
     setPushSupported: (pushSupported) => {
       updateState({ pushSupported });
@@ -136,9 +141,20 @@ export function useDashboard(config, server, token) {
       await setAccountStatus(server, token, accountId, !enabled);
       await refreshAccounts();
     },
-    removeUser: async (accountId) => {
-      await removeAccount(server, token, accountId);
-      await refreshAccounts();
+    promptRemove: (accountId) => {
+      display.actions.showPrompt({
+        title: 'Delete User',
+        ok: { label: 'Delete', action: async () => {
+            await removeAccount(server, token, accountId);
+            await refreshAccounts();
+          } , failed: () => {
+          Alert.alert(
+            state.strings.error,
+            state.strings.tryAgain,
+          );
+        }},
+        cancel: { label: state.strings.cancel },
+      });
     },
   };
 

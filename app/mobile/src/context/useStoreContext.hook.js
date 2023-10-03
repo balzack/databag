@@ -77,6 +77,14 @@ export function useStoreContext() {
     clearFirstRun: async () => {
       await db.current.executeSql("INSERT OR REPLACE INTO app (key, value) values (?, ?);", [`firstrun`, encodeObject({ set: true })]);
     },
+    getAppValue: async(guid, key) => {
+      const dataId = `${guid}_user_${key}`;
+      return await getAppValue(db.current, dataId, {});
+    },
+    setAppValue: async(guid, key, value) => {
+      const dataId = `${guid}_user_${key}`;
+      await db.current.executeSql("INSERT OR REPLACE INTO app (key, value) values (?, ?);", [dataId, encodeObject(value)]);
+    },
     getCardRequestStatus: async (guid) => {
       const dataId = `${guid}_card_status`;
       return await getAppValue(db.current, dataId, {});
@@ -243,7 +251,7 @@ export function useStoreContext() {
         topicRevision: channel.topic_revision,
         topicMarker: channel.topic_marker,
         syncRevision: channel.sync_revision,
-        blocked: channel.blocked,
+        blocked: channel.blocked === 1,
         detail: decodeObject(channel.detail),
         unsealedDetail: decodeObject(channel.unsealed_detail),
         summary: decodeObject(channel.summary),
@@ -257,7 +265,7 @@ export function useStoreContext() {
       return values.map(topic => ({
         topicId: topic.topic_id,
         revision: topic.revision,
-        blocked: topic.blocked,
+        blocked: topic.blocked === 1,
         detailRevision: topic.detail_revision,
         detail: decodeObject(topic.detail),
         unsealedDetail: decodeObject(topic.unsealed_detail),
@@ -276,7 +284,7 @@ export function useStoreContext() {
       return values.map(topic => ({
         topicId: topic.topic_id,
         revision: topic.revision,
-        blocked: topic.blocked,
+        blocked: topic.blocked === 1,
         detailRevision: topic.detail_revision,
         detail: decodeObject(topic.detail),
         unsealedDetail: decodeObject(topic.unsealed_detail),
@@ -329,6 +337,12 @@ export function useStoreContext() {
     setCardChannelItemMarkerAndSync: async (guid, cardId, channelId, marker, revision) => {
       await db.current.executeSql(`UPDATE card_channel_${guid} set topic_marker=?, sync_revision=? where card_id=? and channel_id=?`, [marker, revision, cardId, channelId]);
     },
+    setCardChannelItemBlocked: async (guid, cardId, channelId) => {
+      await db.current.executeSql(`UPDATE card_channel_${guid} set blocked=? where card_id=? and channel_id=?`, [1, cardId, channelId]);
+    },
+    clearCardChannelItemBlocked: async (guid, cardId, channelId) => {
+      await db.current.executeSql(`UPDATE card_channel_${guid} set blocked=? where card_id=? and channel_id=?`, [0, cardId, channelId]);
+    },
     setCardChannelItemDetail: async (guid, cardId, channelId, revision, detail) => {
       await db.current.executeSql(`UPDATE card_channel_${guid} set detail_revision=?, detail=?, unsealed_detail=null where card_id=? and channel_id=?`, [revision, encodeObject(detail), cardId, channelId]);
     },
@@ -355,7 +369,7 @@ export function useStoreContext() {
         unsealedDetail: decodeObject(channel.unsealed_detail),
         summary: decodeObject(channel.summary),
         unsealedSummary: decodeObject(channel.unsealed_summary),
-        blocked: channel.blocked,
+        blocked: channel.blocked === 1,
       }));
     },
     clearCardChannelItems: async (guid, cardId) => {
@@ -367,7 +381,7 @@ export function useStoreContext() {
       return values.map(topic => ({
         topicId: topic.topic_id,
         revision: topic.revision,
-        blocked: topic.blocked,
+        blocked: topic.blocked === 1,
         detailRevision: topic.detail_revision,
         detail: decodeObject(topic.detail),
         unsealedDetail: decodeObject(topic.unsealed_detail),
@@ -386,7 +400,7 @@ export function useStoreContext() {
       return values.map(topic => ({
         topicId: topic.topic_id,
         revision: topic.revision,
-        blocked: topic.blocked,
+        blocked: topic.blocked === 1,
         detailRevision: topic.detail_revision,
         detail: decodeObject(topic.detail),
         unsealedDetail: decodeObject(topic.unsealed_detail),
