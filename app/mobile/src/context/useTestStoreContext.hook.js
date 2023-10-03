@@ -39,8 +39,8 @@ export function useTestStoreContext() {
     },
     setFirstRun: async () => {
     },
-    getAppValue: async (guid, key, unset) => {
-      return unset;
+    getAppValue: async (guid, key) => {
+      return {};
     },
     setAppValue: async (guid, key, value) => {
     },
