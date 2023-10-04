@@ -142,8 +142,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   cancel: {
-    borderWidth: 1,
-    borderColor: Colors.cancelButton,
+    backgroundColor: Colors.cancelButton,
     borderRadius: 4,
     padding: 4,
     marginRight: 8,

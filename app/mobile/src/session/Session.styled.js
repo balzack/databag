@@ -67,7 +67,7 @@ export const styles = StyleSheet.create({
     color: Colors.primaryButtonText,
   },
   tabBar: {
-    borderColor: Colors.tabBar,
+    borderTopColor: Colors.tabBar,
     backgroundColor: Colors.screenBase,
     maxHeight: 72,
   },

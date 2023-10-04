@@ -189,7 +189,7 @@ export const styles = StyleSheet.create({
   },
   divider: {
     width: '100%',
-    height: 2, 
+    height: 3, 
     backgroundColor: Colors.screenBase,
   },
   entry: {

@@ -211,7 +211,7 @@ const Strings = [
     unlockSeal: 'Déverrouiller la clé de sécurité',
     typeDelete: 'Tapez [supprimer]',
     deleteKey: 'supprimer',
-    enableTopics: 'Activer les sujets sécurisés',
+    enableTopics: 'Activer les Sujets Sécurisés',
     manageTopics: 'Gérer la clé de sécurité',
     changePassword: 'Changez le mot de passe de la clé de sécurité.',
     update: 'Mise à jour',
