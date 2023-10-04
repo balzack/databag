@@ -16,8 +16,8 @@ export function Create() {
     }
     catch (err) {
       Alert.alert(
-        "Create Failed",
-        "Please check your server and token.",
+        state.strings.error,
+        state.strings.tryAgain,
       );
     }
   }
@@ -36,13 +36,14 @@ export function Create() {
         </View>
         <Text style={styles.title}>Databag</Text>
         <View style={styles.spacemid}>
-          <Text style={styles.header}>Create Account</Text>
+          <Text style={styles.header}>{ state.strings.createAccount }</Text>
         </View>
         <ScrollView style={styles.spacetop}>
           <View style={styles.inputwrapper}>
-            <Ionicons style={styles.icon} name="database" size={18} color="#888888" />
+            <Ionicons style={styles.icon} name="database" size={18} color={Colors.inputPlaceholder} />
             <TextInput style={styles.inputfield} value={state.server} onChangeText={actions.setServer}
-                autoCorrect={false} autoCapitalize="none" placeholder="server" placeholderTextColor={Colors.grey} />
+                autoCorrect={false} autoCapitalize="none" placeholder={state.strings.server}
+                placeholderTextColor={Colors.inputPlaceholder} />
             { (!state.server || !state.serverChecked) && (
               <View style={styles.required}>
                 <Text style={styles.requiredtest}>✻</Text>
@@ -58,9 +59,10 @@ export function Create() {
           <View style={styles.token}>
             { state.tokenRequired && (
               <View style={styles.inputwrapper}>
-                <Ionicons style={styles.icon} name="key" size={18} color="#888888" />
+                <Ionicons style={styles.icon} name="key" size={18} color={Colors.inputPlaceholder} />
                 <TextInput style={styles.inputfield} value={state.token} onChangeText={actions.setToken}
-                    autoCorrect={false} autoCapitalize="none" placeholder="token" placeholderTextColor={Colors.grey} />
+                    autoCorrect={false} autoCapitalize="none" placeholder={state.strings.token}
+                    placeholderTextColor={Colors.inputPlaceholder} />
                 <View style={styles.space}>
                   { (!validServer || !state.token || !state.tokenChecked) && (
                     <Text style={styles.required}>✻</Text>
@@ -76,14 +78,15 @@ export function Create() {
             )}
             { !state.tokenRequired && state.server === 'databag.coredb.org' && (
               <View style={styles.demo}>
-                <Text style={styles.demoText}>The default public server is to test out the system. Use a private server otherwise.</Text>
+                <Text style={styles.demoText}>{state.strings.defaultPublic}</Text>
               </View>
             )}
           </View>
           <View style={styles.inputwrapper}>
-            <Ionicons style={styles.icon} name="user" size={18} color="#888888" />
+            <Ionicons style={styles.icon} name="user" size={18} color={Colors.inputPlaceholder} />
             <TextInput style={styles.inputfield} value={state.username} onChangeText={actions.setUsername}
-                autoCorrect={false} autoCapitalize="none" placeholder="username" placeholderTextColor={Colors.grey} />
+                autoCorrect={false} autoCapitalize="none" placeholder={state.strings.username}
+                placeholderTextColor={Colors.inputPlaceholder} />
             { (!validServer || !validToken || !state.username || !state.usernameChecked) && (
               <Text style={styles.required}>✻</Text>
             )}
@@ -96,48 +99,48 @@ export function Create() {
           </View>
           { state.showPassword && (
             <View style={styles.inputwrapper}>
-              <Ionicons style={styles.icon} name="lock" size={18} color="#888888" />
+              <Ionicons style={styles.icon} name="lock" size={18} color={Colors.inputPlaceholder} />
               <TextInput style={styles.inputfield} value={state.password} onChangeText={actions.setPassword}
-                  autoCorrect={false} autoCapitalize="none" placeholder="password" placeholderTextColor={Colors.grey} />
+                  autoCorrect={false} autoCapitalize="none" placeholder={state.strings.password}
+                  placeholderTextColor={Colors.inputPlaceholder} />
               <TouchableOpacity onPress={actions.hidePassword}>
-                <Ionicons style={styles.icon} name="eye" size={18} color="#888888" />
+                <Ionicons style={styles.icon} name="eye" size={18} color={Colors.inputPlaceholder} />
               </TouchableOpacity>
             </View>
           )}
           { !state.showPassword && (
             <View style={styles.inputwrapper}>
-              <Ionicons style={styles.icon} name="lock" size={18} color="#888888" />
+              <Ionicons style={styles.icon} name="lock" size={18} color={Colors.inputPlaceholder} />
               <TextInput style={styles.inputfield} value={state.password} onChangeText={actions.setPassword}
-                  autoCorrect={false} secureTextEntry={true} autoCapitalize="none" placeholder="password" 
-                  placeholderTextColor={Colors.grey} />
+                  autoCorrect={false} secureTextEntry={true} autoCapitalize="none" placeholder={state.strings.password} 
+                  placeholderTextColor={Colors.inputPlaceholder} />
               <TouchableOpacity onPress={actions.showPassword}>
-                <Ionicons style={styles.icon} name="eyeo" size={18} color="#888888" />
+                <Ionicons style={styles.icon} name="eyeo" size={18} color={Colors.inputPlaceholder} />
               </TouchableOpacity>
             </View>
           )}
           { state.showConfirm && (
             <View style={styles.inputwrapper}>
-              <Ionicons style={styles.icon} name="lock" size={18} color="#888888" />
+              <Ionicons style={styles.icon} name="lock" size={18} color={Colors.inputPlaceholder} />
               <TextInput style={styles.inputfield} value={state.confirm} onChangeText={actions.setConfirm}
-                  autoCorrect={false} autoCapitalize="none" placeholder="confirm password"
-                  placeholderTextColor={Colors.grey} />
+                  autoCorrect={false} autoCapitalize="none" placeholder={state.strings.confirmPassword}
+                  placeholderTextColor={Colors.inputPlaceholder} />
               <TouchableOpacity onPress={actions.hideConfirm}>
-                <Ionicons style={styles.icon} name="eye" size={18} color="#888888" />
+                <Ionicons style={styles.icon} name="eye" size={18} color={Colors.inputPlaceholder} />
               </TouchableOpacity>
             </View>
           )}
           { !state.showConfirm && (
             <View style={styles.inputwrapper}>
-              <Ionicons style={styles.icon} name="lock" size={18} color="#888888" />
+              <Ionicons style={styles.icon} name="lock" size={18} color={Colors.inputPlaceholder} />
               <TextInput style={styles.inputfield} value={state.confirm} onChangeText={actions.setConfirm}
-                  autoCorrect={false} secureTextEntry={true} autoCapitalize="none" placeholder="confirm password"
-                  placeholderTextColor={Colors.grey} />
+                  autoCorrect={false} secureTextEntry={true} autoCapitalize="none" placeholder={state.strings.confirmPassword}
+                  placeholderTextColor={Colors.inputPlaceholder} />
               <TouchableOpacity onPress={actions.showConfirm}>
-                <Ionicons style={styles.icon} name="eyeo" size={18} color="#888888" />
+                <Ionicons style={styles.icon} name="eyeo" size={18} color={Colors.inputPlaceholder} />
               </TouchableOpacity>
             </View>
           )}
-
           <View style={styles.buttons}>
             { state.enabled && (
               <TouchableOpacity style={styles.create} onPress={create}>
@@ -145,17 +148,17 @@ export function Create() {
                   <ActivityIndicator size="small" color="#ffffff" />
                 )}
                 { !state.busy && (
-                  <Text style={styles.createtext}>Create Account</Text>
+                  <Text style={styles.createtext}>{ state.strings.create }</Text>
                 )}
               </TouchableOpacity>
             )}
             { !state.enabled && (
               <View style={styles.nocreate}>
-                <Text style={styles.nocreatetext}>Create Account</Text>
+                <Text style={styles.nocreatetext}>{ state.strings.create }</Text>
               </View>
             )}
             <TouchableOpacity style={styles.login} onPress={actions.login}>
-              <Text style={styles.logintext}>Account Login</Text>
+              <Text style={styles.logintext}>{ state.strings.accountLogin }</Text>
             </TouchableOpacity>
           </View>
         </ScrollView>      
@@ -169,11 +172,11 @@ export function Create() {
       >
         <View style={styles.modalContainer}>
           <ScrollView style={styles.terms} persistentScrollbar={true}>
-            <Text style={styles.termsheader}>Terms of Use and User Policy</Text>
-            <Text numberOfLines={0}>{ tos.message }</Text>
+            <Text style={styles.termsheader}>{ state.strings.policy }</Text>
+            <Text numberOfLines={0}>{ tos[state.strings.languageCode] }</Text>
           </ScrollView>
           <TouchableOpacity style={styles.done} onPress={actions.hideTerms}>
-            <Text style={styles.donetext}>Done</Text>
+            <Text style={styles.donetext}>{ state.strings.close }</Text>
           </TouchableOpacity>
         </View>
       </Modal>

@@ -16,8 +16,8 @@ export function Admin() {
     }
     catch (err) {
       Alert.alert(
-        "Access Failed",
-        "Please check your server and token.",
+        state.strings.error,
+        state.strings.tryAgain,
       );
     }
   }
@@ -32,20 +32,21 @@ export function Admin() {
         </View>
         <Text style={styles.title}>Databag</Text>
         <View style={styles.spacemid}>
-          <Text style={styles.header}>Admin Acess</Text>
+          <Text style={styles.header}>{ state.strings.adminAccess }</Text>
         </View>
         <View style={styles.spacetop}>
           <View style={styles.inputwrapper}>
             <Ionicons style={styles.icon} name="database" size={18} color="#aaaaaa" />
             <TextInput style={styles.inputfield} value={state.server} onChangeText={actions.setServer}
-                autoCorrect={false} autoCapitalize="none" placeholder="server" placeholderTextColor={Colors.grey} />
+                autoCorrect={false} autoCapitalize="none" placeholder={state.strings.server}
+                placeholderTextColor={Colors.inputPlaceholder} />
             <View style={styles.space} />
           </View>
           <View style={styles.inputwrapper}>
             <Ionicons style={styles.icon} name="key" size={18} color="#aaaaaa" />
             <TextInput style={styles.inputfield} value={state.token} onChangeText={actions.setToken}
-                secureTextEntry={!state.plainText} autoCapitalize="none" placeholder="token"
-                placeholderTextColor={Colors.grey} />
+                secureTextEntry={!state.plainText} autoCapitalize="none" placeholder={state.strings.token}
+                placeholderTextColor={Colors.inputPlaceholder} />
             <TouchableOpacity>
               { state.plainText && (
                 <Ionicons style={styles.icon} name="eye" size={18} color="#aaaaaa" onPress={actions.hidePass}/>
@@ -68,7 +69,7 @@ export function Admin() {
           )}
           { !state.enabled && (
             <View style={styles.noreset}>
-              <Text style={styles.noresettext}>Access</Text>
+              <Text style={styles.noresettext}>{ state.strings.access }</Text>
             </View>
           )}
         </View>      
@@ -76,7 +77,7 @@ export function Admin() {
           <Text style={styles.versiontext}>v{ state.version }</Text>
         </View>
       </View>
-            <Modal
+      <Modal
         animationType="fade"
         transparent={true}
         visible={state.showTerms}
@@ -85,11 +86,11 @@ export function Admin() {
       >
         <View style={styles.modalContainer}>
           <ScrollView style={styles.terms} persistentScrollbar={true}>
-            <Text style={styles.termsheader}>Terms of Use and User Policy</Text>
-            <Text numberOfLines={0}>{ tos.message }</Text>
+            <Text style={styles.termsheader}>{ state.strings.policy }</Text>
+            <Text numberOfLines={0}>{ tos[state.strings.languageCode] }</Text>
           </ScrollView>
           <TouchableOpacity style={styles.done} onPress={actions.hideTerms}>
-            <Text style={styles.donetext}>Done</Text>
+            <Text style={styles.donetext}>{ state.strings.close }</Text>
           </TouchableOpacity>
         </View>
       </Modal>
