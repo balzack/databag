@@ -36,6 +36,8 @@ export function useTopicItem(item, hosting, remove, contentKey) {
     deletable: false,
     assets: [],
     sharing: false,
+    monthLast: false,
+    timeFull: false,
   });
 
   const conversation = useContext(ConversationContext);
@@ -103,7 +105,7 @@ export function useTopicItem(item, hosting, remove, contentKey) {
     const { guid, created, dataType, data, status, transform } = detail || {};
 
     let name, nameSet, known, logo;
-    const identity = profile.state?.identity;
+    const { identity, imageUrl, monthLast, timeFull } = profile.state || {};
     if (guid === identity.guid) {
       known = true;
       if (identity.name) {
@@ -114,7 +116,7 @@ export function useTopicItem(item, hosting, remove, contentKey) {
         name = identity.node ? `${identity.handle}/${identity.node}` : identity.handle;
         nameSet = false;
       }
-      const img = profile.state.imageUrl;
+      const img = imageUrl;
       if (img) {
         logo = img;
       }
@@ -224,20 +226,35 @@ export function useTopicItem(item, hosting, remove, contentKey) {
     const now = new Date();
     const offset = now.getTime() - date.getTime();
     if(offset < 86400000) {
-      timestamp = moment(date).format('h:mma');
+      if (timeFull) { 
+        timestamp = moment(date).format('H:mm');
+      }
+      else {
+        timestamp = moment(date).format('h:mma');
+      }
     }
     else if (offset < 31449600000) {
-      timestamp = moment(date).format('M/DD');
+      if (monthLast) {
+        timestamp = moment(date).format('DD/M');
+      }
+      else {
+        timestamp = moment(date).format('M/DD');
+      }
     }
     else {
-      timestamp = moment(date).format('M/DD/YYYY');
+      if (monthLast) {
+        timestamp = moment(date).format('DD/M/YYYY');
+      }
+      else {
+        timestamp = moment(date).format('M/DD/YYYY');
+      }
     }
 
     const editable = guid === identity?.guid && parsed;
     const deletable = editable || hosting;
 
     updateState({ logo, name, nameSet, known, sealed, message, clickable, fontSize, fontColor, timestamp, transform, status, assets, deletable, editable, editData: parsed, editMessage: message, editType: dataType });
-  }, [conversation.state, card.state, account.state, item, contentKey]);
+  }, [conversation.state, card.state, account.state, profile.state, item, contentKey]);
 
   const unsealTopic = async (topicId, revision, topicDetail) => {
     try {

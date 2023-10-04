@@ -12,6 +12,8 @@ export function useProfileContext() {
     identity: {},
     server: null,
     imageUrl: null,
+    monthLast: false,
+    timeFull: false,
   });
   const store = useContext(StoreContext);
 

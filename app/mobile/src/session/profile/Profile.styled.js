@@ -332,7 +332,7 @@ export const styles = StyleSheet.create({
     input: {
       backgroundColor: Colors.inputBase,
       borderRadius: 8,
-      minHeight: 48,
+      minHeight: 40,
       maxHeight: 128,
       paddingLeft: 8,
     },
