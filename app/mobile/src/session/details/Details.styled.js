@@ -201,6 +201,8 @@ export const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     borderRadius: 8,
+    borderColor: Colors.modalBorder,
+    borderWidth: 1,
     padding: 16,
   },
   close: {

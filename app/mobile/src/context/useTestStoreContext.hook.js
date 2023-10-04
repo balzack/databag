@@ -39,6 +39,11 @@ export function useTestStoreContext() {
     },
     setFirstRun: async () => {
     },
+    getAppValue: async (guid, key) => {
+      return {};
+    },
+    setAppValue: async (guid, key, value) => {
+    },
     getCardRequestStatus: async (guid) => {
     },
     setCardRequestStatus: async (guid, status) => {

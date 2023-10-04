@@ -45,7 +45,7 @@ const RegistryDrawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
 
 function ConversationStackScreen({ dmChannel, shareChannel, shareIntent, setShareIntent }) {
-  const stackParams = { headerStyle: { backgroundColor: Colors.screenBase }, headerBackTitleVisible: false, cardStyle: {backgroundColor: Colors.screenBase }};
+  const stackParams = { headerStyle: { backgroundColor: Colors.screenBase, borderBottomWidth: 0.5, borderBottomColor: Colors.horizontalDivider }, headerBackTitleVisible: false, cardStyle: {backgroundColor: Colors.screenBase }};
 const screenParams = { headerShown: true, headerTintColor: Colors.primary };
 
   const conversation = useContext(ConversationContext);
@@ -130,7 +130,7 @@ function ProfileStackScreen() {
 }
 
 function ContactStackScreen({ addChannel }) {
-  const stackParams = { headerStyle: { backgroundColor: Colors.screenBase }, headerBackTitleVisible: false };
+  const stackParams = { headerStyle: { backgroundColor: Colors.screenBase, borderBottomWidth: 0.2, borderBottomColor: Colors.horizontalDivider }, headerBackTitleVisible: false };
   const screenParams = { headerShown: true, headerTintColor: Colors.primary };
 
   const profile = useContext(ProfileContext);

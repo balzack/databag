@@ -189,7 +189,7 @@ export const styles = StyleSheet.create({
   },
   divider: {
     width: '100%',
-    height: 2, 
+    height: 3, 
     backgroundColor: Colors.screenBase,
   },
   entry: {
@@ -294,6 +294,8 @@ export const styles = StyleSheet.create({
   },
   modalContainer: {
     backgroundColor: Colors.modalBase,
+    borderColor: Colors.modalBorder,
+    borderWidth: 1,
     width: '80%',
     maxWidth: 400,
     display: 'flex',
@@ -330,7 +332,7 @@ export const styles = StyleSheet.create({
     input: {
       backgroundColor: Colors.inputBase,
       borderRadius: 8,
-      minHeight: 48,
+      minHeight: 40,
       maxHeight: 128,
       paddingLeft: 8,
     },

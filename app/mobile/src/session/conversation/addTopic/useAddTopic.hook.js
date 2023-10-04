@@ -7,10 +7,12 @@ import { encryptBlock, decryptBlock, getChannelSeals, getContentKey, encryptTopi
 import { AccountContext } from 'context/AccountContext';
 import RNFS from 'react-native-fs';
 import ImageResizer from '@bam.tech/react-native-image-resizer';
+import { getLanguageStrings } from 'constants/Strings';
 
 export function useAddTopic(contentKey) {
 
   const [state, setState] = useState({
+    strings: getLanguageStrings(),
     message: null,
     assets: [],
     fontSize: false,
