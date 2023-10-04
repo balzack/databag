@@ -16,8 +16,8 @@ export function Login() {
     }
     catch (err) {
       Alert.alert(
-        "Login Failed",
-        "Please check your login and password.",
+        state.strings.error,
+        state.strings.tryAgain,
       );
     }
   }
@@ -32,20 +32,22 @@ export function Login() {
         </View>
         <Text style={styles.title}>Databag</Text>
         <View style={styles.spacemid}>
-          <Text style={styles.header}>Login</Text>
+          <Text style={styles.header}>{ state.strings.login }</Text>
         </View>
         <View style={styles.spacetop}>
           <View style={styles.inputwrapper}>
             <Ionicons style={styles.icon} name="user" size={18} color="#aaaaaa" />
             <TextInput style={styles.inputfield} value={state.login} onChangeText={actions.setLogin}
-                autoCorrect={false} autoCapitalize="none" placeholder="username@server" placeholderTextColor={Colors.grey} />
+                autoCorrect={false} autoCapitalize="none" placeholder={`${state.strings.username} / ${state.strings.server}`}
+                placeholderTextColor={Colors.inputPlaceholder} />
             <View style={styles.space} />
           </View>
           { state.showPassword && (
             <View style={styles.inputwrapper}>
               <Ionicons style={styles.icon} name="lock" size={18} color="#aaaaaa" />
               <TextInput style={styles.inputfield} value={state.password} onChangeText={actions.setPassword}
-                  autoCorrect={false} autoCapitalize="none" placeholder="password" placeholderTextColor={Colors.grey} />
+                  autoCorrect={false} autoCapitalize="none" placeholder={state.strings.password}
+                  placeholderTextColor={Colors.inputPlaceholder} />
               <TouchableOpacity onPress={actions.hidePassword}>
                 <Ionicons style={styles.icon} name="eye" size={18} color="#aaaaaa" />
               </TouchableOpacity>
@@ -55,8 +57,8 @@ export function Login() {
             <View style={styles.inputwrapper}>
               <Ionicons style={styles.icon} name="lock" size={18} color="#aaaaaa" />
               <TextInput style={styles.inputfield} value={state.password} onChangeText={actions.setPassword}
-                  autoCorrect={false} secureTextEntry={true} autoCapitalize="none" placeholder="password" 
-                  placeholderTextColor={Colors.grey} />
+                  autoCorrect={false} secureTextEntry={true} autoCapitalize="none" placeholder={state.strings.password} 
+                  placeholderTextColor={Colors.inputPlaceholder} />
               <TouchableOpacity onPress={actions.showPassword}>
                 <Ionicons style={styles.icon} name="eyeo" size={18} color="#aaaaaa" />
               </TouchableOpacity>
@@ -66,7 +68,7 @@ export function Login() {
           { Platform.OS !== 'ios' && (
             <View style={styles.tos}>
               <TouchableOpacity style={styles.viewterms} onPress={actions.showTerms}>
-                <Text style={styles.viewtermstext}>View Terms of Service</Text>
+                <Text style={styles.viewtermstext}>{ state.strings.terms }</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.agreeterms} onPress={() => actions.agree(!state.agree)}>
                 { state.agree && (
@@ -75,7 +77,7 @@ export function Login() {
                 { !state.agree && (
                   <MatIcons name={'checkbox-blank-outline'} size={20} color={Colors.primary} />
                 )}
-                <Text style={styles.agreetermstext}>I agree to Terms of Service</Text>
+                <Text style={styles.agreetermstext}>{ state.strigs.agree }</Text>
               </TouchableOpacity>
             </View>
           )}
@@ -92,15 +94,15 @@ export function Login() {
           )}
           { (!state.enabled || (Platform.OS !== 'ios' && !state.agree)) && (
             <View style={styles.nologin}>
-              <Text style={styles.nologintext}>Login</Text>
+              <Text style={styles.nologintext}>{ state.strings.login }</Text>
             </View>
           )}
           <TouchableOpacity style={styles.create} onPress={actions.create}>
-            <Text style={styles.createtext}>Create Account</Text>
+            <Text style={styles.createtext}>{ state.strings.createAccount }</Text>
           </TouchableOpacity>
           <View style={styles.bottom}>
             <TouchableOpacity style={styles.create} onPress={actions.reset}>
-              <Text style={styles.createtext}>Forgot Password</Text>
+              <Text style={styles.createtext}>{ state.strings.forgotPassword }</Text>
             </TouchableOpacity>
           </View>
         </View>      
@@ -114,11 +116,11 @@ export function Login() {
       >
         <View style={styles.modalContainer}>
           <ScrollView style={styles.terms} persistentScrollbar={true}>
-            <Text style={styles.termsheader}>Terms of Use and User Policy</Text>
-            <Text numberOfLines={0}>{ tos.message }</Text>
+            <Text style={styles.termsheader}>{ state.strings.policy }</Text>
+            <Text numberOfLines={0}>{ tos[state.strings.languageCode] }</Text>
           </ScrollView>
           <TouchableOpacity style={styles.done} onPress={actions.hideTerms}>
-            <Text style={styles.donetext}>Done</Text>
+            <Text style={styles.donetext}>{ state.strings.done }</Text>
           </TouchableOpacity>
         </View>
       </Modal>
