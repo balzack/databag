@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { AppContext } from 'context/AppContext';
 import { getAvailable } from 'api/getAvailable';
 import { getUsername } from 'api/getUsername';
+import { getLanguageStrings } from 'constants/Strings';
 
 export function useCreate() {
 
@@ -12,6 +13,7 @@ export function useCreate() {
   const app = useContext(AppContext);
 
   const [state, setState] = useState({
+    strings: getLanguageStrings(),
     busy: false,
     enabled: false,
     server: "databag.coredb.org",

@@ -5,6 +5,7 @@ import { AppContext } from 'context/AppContext';
 import { getNodeStatus } from 'api/getNodeStatus';
 import { setNodeStatus } from 'api/setNodeStatus';
 import { getNodeConfig } from 'api/getNodeConfig';
+import { getLanguageStrings } from 'constants/Strings';
 
 export function useAdmin() {
 
@@ -12,6 +13,7 @@ export function useAdmin() {
   const app = useContext(AppContext);
 
   const [state, setState] = useState({
+    strings: getLanguageStrings(),
     busy: false,
     enabled: false,
     server: null,
