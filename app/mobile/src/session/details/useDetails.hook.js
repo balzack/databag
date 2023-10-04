@@ -116,7 +116,7 @@ export function useDetails(clear) {
     });
 
     updateState({ connected: Array.from(connected.values()), members: Array.from(members.values()), unknown });
-  }, [card.state, conversation.state]);
+  }, [card.state, conversation.state, profile.state]);
 
   useEffect(() => {
     const hostId = conversation.state.card?.card.cardId;
@@ -127,18 +127,34 @@ export function useDetails(clear) {
     const { logo, subject } = getChannelSubjectLogo(hostId, profileGuid, channel, cards, cardImageUrl);
 
     let timestamp;
+    const { timeFull, monthLast } = profile.state || {};
     const { created, data, dataType } = conversation.state.channel?.detail || {}
     const date = new Date(created * 1000);
     const now = new Date();
     const offset = now.getTime() - date.getTime();
     if(offset < 86400000) {
-      timestamp = moment(date).format('h:mma');
+      if (timeFull) {
+        timestamp = moment(date).format('H:mm');
+      }
+      else {
+        timestamp = moment(date).format('h:mma');
+      }
     }
     else if (offset < 31449600000) {
-      timestamp = moment(date).format('M/DD');
+      if (monthLast) {
+        timestamp = moment(date).format('DD/M');
+      }
+      else {
+        timestamp = moment(date).format('M/DD');
+      }
     }
     else {
-      timestamp = moment(date).format('M/DD/YYYY');
+      if (monthLast) {
+        timestamp = moment(date).format('DD/M/YYYY');
+      }
+      else {
+        timestamp = moment(date).format('M/DD/YYYY');
+      }
     }
 
     let subjectUpdate;
@@ -154,7 +170,7 @@ export function useDetails(clear) {
       console.log(err);
     }
     updateState({ hostId, logo, subject, timestamp, subjectUpdate });
-  }, [conversation.state]);
+  }, [conversation.state, profile.state]);
 
   const actions = {
     showEditMembers: () => {
