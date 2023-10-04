@@ -10,7 +10,7 @@ export function useReset() {
   const app = useContext(AppContext);
 
   const [state, setState] = useState({
-    stirngs: getLanguageStrings(),
+    strings: getLanguageStrings(),
     busy: false,
     enabled: false,
     server: null,

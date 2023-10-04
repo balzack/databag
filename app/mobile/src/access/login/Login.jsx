@@ -120,7 +120,7 @@ export function Login() {
             <Text numberOfLines={0}>{ tos[state.strings.languageCode] }</Text>
           </ScrollView>
           <TouchableOpacity style={styles.done} onPress={actions.hideTerms}>
-            <Text style={styles.donetext}>{ state.strings.done }</Text>
+            <Text style={styles.donetext}>{ state.strings.close }</Text>
           </TouchableOpacity>
         </View>
       </Modal>
