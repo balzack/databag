@@ -73,7 +73,7 @@ export function Prompt() {
         supportedOrientations={['portrait', 'landscape']}
         onRequestClose={display.actions.hideAlert}
       >
-        <View styles={styles.blur} />
+        <View styles={styles.blur}>
           <View style={styles.modalContainer}>
             <Text style={styles.modalHeader}>{ display.state.alert?.title }</Text>
             <Text style={styles.modalMessage}>{ display.state.alert?.message }</Text>
@@ -81,7 +81,7 @@ export function Prompt() {
               <Text style={styles.okButtonText}>{ display.state.alert?.ok }</Text>
             </TouchableOpacity>
           </View>
-        </BlurView>
+        </View>
       </Modal>
     </>
   );
