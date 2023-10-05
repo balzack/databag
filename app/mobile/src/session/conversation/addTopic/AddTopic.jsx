@@ -13,7 +13,6 @@ import { VideoFile } from './videoFile/VideoFile';
 import { AudioFile } from './audioFile/AudioFile';
 import { ImageFile } from './imageFile/ImageFile';
 import { BinaryFile } from './binaryFile/BinaryFile';
-import { BlurView } from "@react-native-community/blur";
 
 export function AddTopic({ contentKey, shareIntent, setShareIntent }) {
 
@@ -229,7 +228,7 @@ export function AddTopic({ contentKey, shareIntent, setShareIntent }) {
         onRequestClose={actions.hideFontSize}
       >
         <View style={styles.modalOverlay}>
-          <BlurView style={styles.modalOverlay} blurType={Colors.overlay} blurAmount={2} reducedTransparencyFallbackColor="black" />
+          <View style={styles.blur} />
           <View style={styles.modalBase} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
             <View style={styles.modalContainer}>
               <Text style={styles.editHeader}>{ state.strings.fontSize }</Text>
@@ -283,7 +282,7 @@ export function AddTopic({ contentKey, shareIntent, setShareIntent }) {
         onRequestClose={actions.hideFontColor}
       >
         <View style={styles.modalOverlay}>
-          <BlurView style={styles.modalOverlay} blurType={Colors.overlay} blurAmount={2} reducedTransparencyFallbackColor="black" />
+          <View style={styles.blur} />
           <View style={styles.modalBase} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
             <View style={styles.modalContainer}>
               <Text style={styles.editHeader}>{ state.strings.fontColor }</Text>

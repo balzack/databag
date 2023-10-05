@@ -7,7 +7,6 @@ import AntIcons from 'react-native-vector-icons/AntDesign';
 import MatIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Colors from 'constants/Colors';
 import { MemberItem } from './memberItem/MemberItem';
-import { BlurView } from '@react-native-community/blur';
 import { InputField } from 'utils/InputField';
 
 export function Details({ channel, clearConversation }) {
@@ -174,7 +173,7 @@ export function Details({ channel, clearConversation }) {
         onRequestClose={actions.hideEditSubject}
       >
         <View style={styles.modalOverlay}>
-          <BlurView style={styles.modalOverlay} blurType={Colors.overlay} blurAmount={2} reducedTransparencyFallbackColor="black" />
+          <View style={styles.blur} />
           <KeyboardAvoidingView style={styles.modalBase} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
             <View style={styles.modalContainer}>
               <Text style={styles.editHeader}>{ state.strings.editSubject }</Text>
@@ -209,7 +208,7 @@ export function Details({ channel, clearConversation }) {
         onRequestClose={actions.hideEditMembers}
       >
         <View style={styles.modalOverlay}>
-          <BlurView style={styles.modalOverlay} blurType={Colors.overlay} blurAmount={2} reducedTransparencyFallbackColor="black" />
+          <View style={styles.blur} />
           <KeyboardAvoidingView style={styles.modalBase} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
             <View style={styles.modalContainer}>
               <Text style={styles.editHeader}>{ state.strings.topicMembers }</Text>

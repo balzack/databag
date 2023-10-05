@@ -6,7 +6,6 @@ import { styles } from './Settings.styled';
 import { useSettings } from './useSettings.hook';
 import MatIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Colors from 'constants/Colors';
-import { BlurView } from "@react-native-community/blur";
 import { InputField } from 'utils/InputField';
 import { Logo } from 'utils/Logo';
 
@@ -428,7 +427,7 @@ export function Settings({ drawer }) {
         onRequestClose={actions.hideEditSeal}
       >
         <View style={styles.modalOverlay}>
-          <BlurView style={styles.modalOverlay} blurType={Colors.overlay} blurAmount={2} reducedTransparencyFallbackColor="black" />
+          <View style={styles.blur} />
           <KeyboardAvoidingView style={styles.modalBase} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
             <View style={styles.modalContainer}>
               <View style={styles.modalClose}>
@@ -606,7 +605,7 @@ export function Settings({ drawer }) {
         onRequestClose={actions.hideLogin}
       >
         <View style={styles.modalOverlay}>
-          <BlurView style={styles.modalOverlay} blurType={Colors.overlay} blurAmount={2} reducedTransparencyFallbackColor="black" />
+          <View style={styles.blur} />
           <KeyboardAvoidingView style={styles.modalBase} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
             <View style={styles.modalContainer}>
               <View style={styles.modalClose}>
@@ -671,7 +670,7 @@ export function Settings({ drawer }) {
         onRequestClose={actions.hideDelete}
       >
         <View style={styles.modalOverlay}>
-          <BlurView style={styles.modalOverlay} blurType={Colors.overlay} blurAmount={2} reducedTransparencyFallbackColor="black" />
+          <View style={styles.blur} />
           <KeyboardAvoidingView style={styles.modalBase} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
             <View style={styles.modalContainer}>
               <View style={styles.modalClose}>
@@ -715,7 +714,7 @@ export function Settings({ drawer }) {
         onRequestClose={state.hideBlockedContacts}
       >
         <View style={styles.modalOverlay}>
-          <BlurView style={styles.modalOverlay} blurType={Colors.overlay} blurAmount={2} reducedTransparencyFallbackColor="black" />
+          <View style={styles.blur} />
           <View style={styles.modalBase}>
             <View style={styles.modalContainer}>
               <View style={styles.modalClose}>
@@ -757,7 +756,7 @@ export function Settings({ drawer }) {
         onRequestClose={state.hideBlockedTopics}
       >
         <View style={styles.modalOverlay}>
-          <BlurView style={styles.modalOverlay} blurType={Colors.overlay} blurAmount={2} reducedTransparencyFallbackColor="black" />
+          <View style={styles.blur} />
           <View style={styles.modalBase}>
             <View style={styles.modalContainer}>
               <View style={styles.modalClose}>
@@ -799,7 +798,7 @@ export function Settings({ drawer }) {
         onRequestClose={actions.hideBlockedMessages}
       >
         <View style={styles.modalOverlay}>
-          <BlurView style={styles.modalOverlay} blurType={Colors.overlay} blurAmount={2} reducedTransparencyFallbackColor="black" />
+          <View style={styles.blur} />
           <View style={styles.modalBase}>
             <View style={styles.modalContainer}>
               <View style={styles.modalClose}>

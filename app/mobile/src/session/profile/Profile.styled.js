@@ -100,6 +100,11 @@ export const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
   },
+  blur: {
+    width: '100%',
+    height: '100%',
+    backgroundColor: Colors.modalOverlay,
+  },
   logo: {
     alignSelf: 'center',
   },

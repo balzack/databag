@@ -6,7 +6,6 @@ import { useChannels } from './useChannels.hook';
 import { Colors } from 'constants/Colors';
 import { ChannelItem } from './channelItem/ChannelItem';
 import { AddMember } from './addMember/AddMember';
-import { BlurView } from '@react-native-community/blur';
 import { InputField } from 'utils/InputField';
 
 export function Channels({ cardId, channelId, navigation, openConversation, dmChannel, shareChannel }) {
@@ -101,7 +100,7 @@ export function Channels({ cardId, channelId, navigation, openConversation, dmCh
           onRequestClose={actions.hideAdding}
         >
         <View style={styles.modalOverlay}>
-          <BlurView style={styles.modalOverlay} blurType={Colors.overlay} blurAmount={2} reducedTransparencyFallbackColor="black" />
+          <View style={styles.blur} />
           <KeyboardAvoidingView style={styles.modalBase} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
 
             <View style={styles.modalContainer}>

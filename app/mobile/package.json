@@ -13,7 +13,6 @@
     "@bam.tech/react-native-image-resizer": "^3.0.5",
     "@braintree/sanitize-url": "^6.0.2",
     "@react-native-clipboard/clipboard": "^1.11.1",
-    "@react-native-community/blur": "^4.3.2",
     "@react-navigation/bottom-tabs": "^6.5.5",
     "@react-navigation/drawer": "^6.6.0",
     "@react-navigation/native": "^6.1.4",

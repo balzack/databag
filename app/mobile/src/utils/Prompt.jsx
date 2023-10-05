@@ -1,7 +1,6 @@
 import { useContext, useState } from 'react';
 import { Modal, View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { DisplayContext } from 'context/DisplayContext';
-import { BlurView } from "@react-native-community/blur";
 import { styles } from './Prompt.styled';
 import { Colors } from 'constants/Colors';
 
@@ -41,7 +40,7 @@ export function Prompt() {
         onRequestClose={display.actions.hidePrompt}
       >
         <View style={styles.modalOverlay}>
-          <BlurView style={styles.modalOverlay} blurType={Colors.overlay} blurAmount={2} reducedTransparencyFallbackColor="black" />
+          <View style={styles.blur} />
           <View style={styles.modalBase}>
             <View style={styles.modalContainer}>
               <Text style={styles.modalHeader}>{ display.state.prompt?.title }</Text>
@@ -74,7 +73,7 @@ export function Prompt() {
         supportedOrientations={['portrait', 'landscape']}
         onRequestClose={display.actions.hideAlert}
       >
-        <BlurView style={styles.modalOverlay} blurType={Colors.overlay} blurAmount={2} reducedTransparencyFallbackColor="black">
+        <View styles={styles.blur} />
           <View style={styles.modalContainer}>
             <Text style={styles.modalHeader}>{ display.state.alert?.title }</Text>
             <Text style={styles.modalMessage}>{ display.state.alert?.message }</Text>

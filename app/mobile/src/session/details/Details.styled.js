@@ -8,6 +8,11 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     height: '100%',
   },
+  blur: {
+    width: '100%',
+    height: '100%',
+    backgroundColor: Colors.modalOverlay,
+  },
   details: {
     display: 'flex',
     flexDirection: 'row',

@@ -15,6 +15,11 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  blur: {
+    width: '100%',
+    height: '100%',
+    backgroundColor: Colors.modalOverlay,
+  },
   inputwrapper: {
     display: 'flex',
     flexDirection: 'row',

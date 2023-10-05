@@ -8,6 +8,11 @@ export const styles = StyleSheet.create({
     borderColor: Colors.areaBase,
     marginTop: 16,
   },
+  blur: {
+    width: '100%',
+    height: '100%',
+    backgroundColor: Colors.modalOverlay,
+  },
   drawerEntry: {
     width: '80%',
     display: 'flex',

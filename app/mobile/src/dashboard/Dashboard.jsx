@@ -7,7 +7,6 @@ import { styles } from './Dashboard.styled';
 import { useLocation } from 'react-router-dom';
 import { useDashboard } from './useDashboard.hook';
 import { Logo } from 'utils/Logo';
-import { BlurView } from "@react-native-community/blur";
 import { InputField } from 'utils/InputField';
 
 export function Dashboard(props) {
@@ -134,7 +133,7 @@ export function Dashboard(props) {
         onRequestClose={actions.hideEditConfig}
       >
         <View style={styles.modalOverlay}>
-          <BlurView style={styles.modalOverlay} blurType={'dark'} blurAmount={2} reducedTransparencyFallbackColor='black' />
+          <View styles={styles.blur} />
           <KeyboardAvoidingView style={styles.modalBase} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
             <View style={styles.modalContainer}>
 
@@ -271,7 +270,7 @@ export function Dashboard(props) {
         onRequestClose={actions.hideAddUser}
       >
         <View style={styles.modalOverlay}>
-          <BlurView style={styles.modalOverlay} blurType={'dark'} blurAmount={2} reducedTransparencyFallbackColor='black' />
+          <View styles={styles.blur} />
           <View style={styles.modalBase}>
             <View style={styles.modalContainer}>
               <View style={styles.modalHeader}>
@@ -302,7 +301,7 @@ export function Dashboard(props) {
         onRequestClose={actions.hideAccessUser}
       >
         <View style={styles.modalOverlay}>
-          <BlurView style={styles.modalOverlay} blurType={'dark'} blurAmount={2} reducedTransparencyFallbackColor='black' />
+          <View styles={styles.blur} />
           <View style={styles.modalBase}>
             <View style={styles.modalContainer}>
               <View style={styles.modalHeader}>

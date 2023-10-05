@@ -9,6 +9,11 @@ export const styles = StyleSheet.create({
     flexDirection: 'column',
     backgroundColor: Colors.screenBase,
   },
+  blur: {
+    width: '100%',
+    height: '100%',
+    backgroundColor: Colors.modalOverlay,
+  },
   header: {
     paddingTop: 24,
     paddingBottom: 4,
