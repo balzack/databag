@@ -77,7 +77,7 @@ export function Login() {
                 { !state.agree && (
                   <MatIcons name={'checkbox-blank-outline'} size={20} color={Colors.primary} />
                 )}
-                <Text style={styles.agreetermstext}>{ state.strigs.agree }</Text>
+                <Text style={styles.agreetermstext}>{ state.strings.agree }</Text>
               </TouchableOpacity>
             </View>
           )}

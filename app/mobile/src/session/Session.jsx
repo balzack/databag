@@ -1,10 +1,10 @@
-import { Alert, View, ScrollView, TouchableOpacity, StatusBar, Text, Image, Modal } from 'react-native';
+import { Alert, View, ScrollView, TouchableOpacity, StatusBar, Text, Image, Modal, Appearance } from 'react-native';
 import { useState, useEffect, useContext } from 'react';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, DarkTheme, LightTheme } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/AntDesign';
 import MatIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useSession } from './useSession.hook';
@@ -407,7 +407,7 @@ export function Session({ sharing, clearSharing }) {
   }, [state.ringing]);
 
   return (
-    <NavigationContainer>
+    <NavigationContainer theme={Appearance.getColorScheme() === 'dark' ? DarkTheme : LightTheme}>
       <View style={styles.body}>
         { state.firstRun == true && (
           <SafeAreaView edges={['top', 'bottom']}  style={styles.firstRun}>

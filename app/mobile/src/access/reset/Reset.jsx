@@ -60,7 +60,7 @@ export function Reset() {
                 { !state.agree && (
                   <MatIcons name={'checkbox-blank-outline'} size={20} color={Colors.primary} />
                 )}
-                <Text style={styles.agreetermstext}>{state.string.agree}</Text>
+                <Text style={styles.agreetermstext}>{state.strings.agree}</Text>
               </TouchableOpacity>
             </View>
           )}
