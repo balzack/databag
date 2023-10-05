@@ -12,7 +12,7 @@ import { styles } from './Session.styled';
 import Colors from 'constants/Colors';
 import { Profile } from './profile/Profile';
 import { ProfileSettings } from './profileSettings/ProfileSettings';
-import { CardsHeader, CardsBody, Cards } from './cards/Cards';
+import { Cards } from './cards/Cards';
 import { RegistryHeader, RegistryBody, Registry } from './registry/Registry';
 import { Contact } from './contact/Contact';
 import { Details } from './details/Details';
@@ -141,9 +141,6 @@ function ContactStackScreen({ addChannel }) {
   const [handle, setHandle] = useState();
   const [server, setServer] = useState();
 
-  const [filter, setFilter] = useState();
-  const [sort, setSort] = useState(false);
-
   const openContact = (navigation, contact) => {
     setContact(contact);
     navigation.navigate('contact')
@@ -159,10 +156,8 @@ function ContactStackScreen({ addChannel }) {
     <SafeAreaView edges={['left', 'right']} style={styles.body}>
       <ContactStack.Navigator screenOptions={({ route }) => (screenParams)} initialRouteName="cards">
 
-        <ContactStack.Screen name="cards" options={{ ...stackParams, cardStyle: {backgroundColor: Colors.screenBase}, headerTitle: (props) => (
-            <CardsHeader filter={filter} setFilter={setFilter} sort={sort} setSort={setSort} openRegistry={openRegistry} />
-          )}}>
-          {(props) => <CardsBody filter={filter} sort={sort} openContact={(contact) => openContact(props.navigation, contact)} addChannel={addChannel} />}
+        <ContactStack.Screen name="cards" options={stackParams}>
+          {(props) => <Cards navigation={props.navigation} openContact={(contact) => openContact(props.navigation, contact)} openRegistry={openRegistry} addChannel={addChannel} />}
         </ContactStack.Screen>
 
         <ContactStack.Screen name="contact" options={{ headerShown: false }}>

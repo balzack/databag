@@ -106,7 +106,7 @@ export const styles = StyleSheet.create({
   details: {
     borderTopRightRadius: 32,
     borderTopLeftRadius: 32,
-    backgroundColor: Colors.screenBase,
+    backgroundColor: Colors.contentBase,
     borderTopWidth: 1,
     borderColor: Colors.areaBorder,
     borderLeftWidth: 0.2,
@@ -126,7 +126,7 @@ export const styles = StyleSheet.create({
   edit: {
     borderTopLeftRadius: 8,
     borderTopRightRadius: 8,
-    backgroundColor: Colors.screenBase,
+    backgroundColor: Colors.contentBase,
     paddingLeft: 16,
     paddingRight: 16,
     paddingTop: 2,
@@ -190,7 +190,7 @@ export const styles = StyleSheet.create({
   divider: {
     width: '100%',
     height: 3, 
-    backgroundColor: Colors.screenBase,
+    backgroundColor: Colors.contentBase,
   },
   entry: {
     width: '100%',

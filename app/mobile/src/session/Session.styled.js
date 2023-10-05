@@ -82,12 +82,12 @@ export const styles = StyleSheet.create({
     height: '100%',
     width: '33%',
     maxWidth: 500,
-    backgroundColor: Colors.screenBase,
+    borderRightWidth: 1,
     borderColor: Colors.verticalDivider,
   },
   conversation: {
     width: '67%',
-    backgroundColor: Colors.areaBase,
+    backgroundColor: Colors.contentBase,
   },
   drawer: {
     width: '100%',
@@ -95,7 +95,7 @@ export const styles = StyleSheet.create({
     paddingTop: 8,
     paddingLeft: 8,
     paddingRight: 8,
-    backgroundColor: Colors.drawerBase,
+    backgroundColor: Colors.contentBase,
   },
   options: {
     display: 'flex',

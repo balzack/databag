@@ -22,7 +22,7 @@ export const styles = StyleSheet.create({
     paddingLeft: 16,
     paddingRight: 16,
     paddingTop: 8,
-    backgroundColor: Colors.screenBase,
+    backgroundColor: Colors.contentBase,
   },
   label: {
     color: Colors.labelText,
@@ -66,7 +66,7 @@ export const styles = StyleSheet.create({
   divider: {
     width: '100%',
     height: 3,
-    backgroundColor: Colors.screenBase,
+    backgroundColor: Colors.contentBase,
   },
   entry: {
     width: '100%',

@@ -52,6 +52,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'column',
     flexGrow: 1,
     height: '100%',
+    backgroundColor: Colors.contentBase,
   },
   thread: {
     display: 'flex',

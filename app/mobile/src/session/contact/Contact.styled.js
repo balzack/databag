@@ -125,7 +125,7 @@ export const styles = StyleSheet.create({
     minHeight: 32,
     borderTopRightRadius: 32,
     borderTopLeftRadius: 32,
-    backgroundColor: Colors.screenBase,
+    backgroundColor: Colors.contentBase,
     borderTopWidth: 1,
     borderColor: Colors.areaBorder,
     borderLeftWidth: 0.2,

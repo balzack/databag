@@ -11,6 +11,8 @@ export function useCards(filter, sort) {
     cards: [],
     enableIce: false,
     strings: getLanguageStrings(),
+    sort: false,
+    filter: null,
   });
 
   const profile = useContext(ProfileContext);
@@ -104,6 +106,12 @@ export function useCards(filter, sort) {
       const { cardId, guid, node, token } = card || {};
       const server = node ? node : profile.state.server;
       await ring.actions.call(cardId, server, `${guid}.${token}`);
+    },
+    setFilter: (filter) => {
+      updateState({ filter });
+    },
+    setSort: (sort) => {
+      updateState({ sort });
     },
   };
 

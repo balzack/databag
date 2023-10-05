@@ -7,7 +7,7 @@ export const styles = StyleSheet.create({
     height: '100%',
     display: 'flex',
     flexDirection: 'column',
-    backgroundColor: Colors.screenBase,
+    backgroundColor: Colors.contentBase,
   },
   title: {
     display: 'flex',
