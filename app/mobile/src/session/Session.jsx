@@ -471,8 +471,8 @@ export function Session({ sharing, clearSharing }) {
                     }
                   },
                   tabBarShowLabel: false,
-                  tabBarActiveTintColor: Colors.white,
-                  tabBarInactiveTintColor: Colors.disabled,
+                  tabBarActiveTintColor: Colors.activeTabIcon,
+                  tabBarInactiveTintColor: Colors.idleTabIcon,
                 })}>
                 <Tab.Screen name="Conversation" children={()=><ConversationStackScreen dmChannel={dmChannel} shareChannel={shareChannel} shareIntent={shareIntent} setShareIntent={setShareIntent} />} />
                 <Tab.Screen name="Contacts" children={()=><ContactStackScreen addChannel={addChannel} />} />
