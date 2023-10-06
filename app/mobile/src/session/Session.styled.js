@@ -148,10 +148,15 @@ export const styles = StyleSheet.create({
     height: '100%',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'rgba(52, 52, 52, 0.8)'
+  },
+  ringText: {
+    color: Colors.text,
   },
   ringFrame: {
-    backgroundColor: Colors.areaBase,
+    position: 'absolute',
+    backgroundColor: Colors.modalBase,
+    borderColor: Colors.modalBorder,
+    borderWidth: 1,
     padding: 16,
     width: '90%',
     maxWidth: 400,
@@ -168,6 +173,7 @@ export const styles = StyleSheet.create({
     flexGrow: 1,
     paddingLeft: 8,
     paddingRight: 8,
+    color: Colors.text,
   },
   ringIgnore: {
     borderWidth: 1,
