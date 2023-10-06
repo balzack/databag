@@ -32,7 +32,6 @@ import lightSplash from 'images/session.png';
 import darkSplash from 'images/darksess.png';
 import { useNavigate } from 'react-router-dom';
 import { getLanguageStrings } from 'constants/Strings';
-import { BlurView } from "@react-native-community/blur";
 
 const ConversationStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
@@ -487,7 +486,7 @@ export function Session({ sharing, clearSharing }) {
         supportedOrientations={['portrait', 'landscape']}
       >
         <View style={styles.ringBase}>
-          <BlurView style={styles.ringBase} blurType={Colors.overlay} blurAmount={2} reducedTransparencyFallbackColor="black" />
+          <View style={styles.blur} />
           <View style={styles.ringFrame}>
             { ringing }
           </View>
