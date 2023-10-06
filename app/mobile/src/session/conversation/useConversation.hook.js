@@ -79,7 +79,7 @@ export function useConversation() {
     const hosted = conversation.state.card == null;
     const cards = card.state.cards;
     cardImageUrl = card.actions.getCardImageUrl;
-    const { logo, subject } = getChannelSubjectLogo(cardId, profileGuid, channel, cards, cardImageUrl);
+    const { logo, subject } = getChannelSubjectLogo(cardId, profileGuid, channel, cards, cardImageUrl, state.strings);
 
     if (channel?.topicRevision && channel.readRevision !== channel.topicRevision) {
       conversation.actions.setChannelReadRevision(channel.topicRevision);

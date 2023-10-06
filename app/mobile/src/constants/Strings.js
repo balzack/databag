@@ -185,6 +185,8 @@ const Strings = [
     policy: 'Terms of Use and User Policy',
 
     editMessage: 'Edit Message Text',
+    emptyTopic: 'Empty Topic',
+    notes: 'Notes',
   },
   {
     languageCode: 'fr',
@@ -366,6 +368,8 @@ const Strings = [
     policy: 'Conditions d\'Utilisation et Politique d\'Utilisation',
 
     editMessage: 'Modifier le Texte du Message',
+    emptyTopic: 'Pas de Messages',
+    notes: 'Notes',
   },
   {
     languageCode: 'es',
@@ -547,6 +551,8 @@ const Strings = [
     policy: 'Términos de Uso y Política de Usuario',
 
     editMessage: 'Editar Texto del Mensaje',
+    emptyTopic: 'Ningún Mensaje',
+    notes: 'Notas',
   },
   {
     languageCode: 'de',
@@ -728,6 +734,8 @@ const Strings = [
     policy: 'Nutzungsbedingungen und Benutzerrichtlinien',
 
     editMessage: 'Nachrichtentext Bearbeiten',
+    emptyTopic: 'Keine Nachrichten',
+    notes: 'Anmerkungen',
   },
   {
     languageCode: 'pt',
@@ -894,6 +902,8 @@ const Strings = [
     terms: 'Ver Termos de Serviço',
     policy: 'Termos de Uso e Política do Usuário',
     editMessage: 'Editar Texto da Mensagem',
+    emptyTopic: 'Sem Mensagens',
+    notes: 'Notas',
   },
 ];
 

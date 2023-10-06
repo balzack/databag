@@ -124,7 +124,7 @@ export function useDetails(clear) {
     const channel = conversation.state.channel;
     const cards = card.state.cards;
     const cardImageUrl = card.actions.getCardImageUrl;
-    const { logo, subject } = getChannelSubjectLogo(hostId, profileGuid, channel, cards, cardImageUrl);
+    const { logo, subject } = getChannelSubjectLogo(hostId, profileGuid, channel, cards, cardImageUrl, state.strings);
 
     let timestamp;
     const { timeFull, monthLast } = profile.state || {};

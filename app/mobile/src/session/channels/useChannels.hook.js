@@ -109,7 +109,7 @@ export function useChannels() {
     }
 
     const profileGuid = profile.state?.identity?.guid;
-    const { logo, subject } = getChannelSubjectLogo(cardId, profileGuid, item, card.state.cards, card.actions.getCardImageUrl);
+    const { logo, subject } = getChannelSubjectLogo(cardId, profileGuid, item, card.state.cards, card.actions.getCardImageUrl, state.strings);
 
     const updated = (loginTimestamp < timestamp) && (readRevision < topicRevision);
 
