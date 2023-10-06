@@ -5,16 +5,10 @@ export const styles = StyleSheet.create({
   modalOverlay: {
     width: '100%',
     height: '100%',
-  },
-  modalBase: {
+    backgroundColor: '#333333',
     display: 'flex',
-    width: '100%',
-    height: '100%',
     alignItems: 'center',
     justifyContent: 'center',
-    position: 'absolute',
-    top: 0,
-    left: 0,
   },
   modalContainer: {
     backgroundColor: Colors.modalBase,
@@ -111,12 +105,6 @@ export const styles = StyleSheet.create({
     alignItems: 'flex-end',
     justifyContent: 'center',
     flexDirection: 'row',
-  },
-  blur: {
-    width: '100%',
-    height: '100%',
-    backgroundColor: '#333333',
-    opacity: 0.8,
   },
 });
 
