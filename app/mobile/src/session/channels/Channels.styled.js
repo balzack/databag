@@ -201,7 +201,7 @@ export const styles = StyleSheet.create({
     height: '100%',
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
     backgroundColor: Colors.modalOverlay,
     opacity: 0.8,
   },
