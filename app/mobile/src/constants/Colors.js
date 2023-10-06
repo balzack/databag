@@ -89,7 +89,7 @@ const DarkColors = {
   contentBase: '#000000',
   modalBase: '#1b1b1b',
   modalBorder: '#555555',
-  modalOverlay: 'rgba(0,0,0,0,0.8)',
+  modalOverlay: '#333333',
   headerBar: '#555555',
   primaryButton: '#448866',
   primaryButtonText: '#ffffff',

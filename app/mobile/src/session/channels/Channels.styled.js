@@ -15,11 +15,6 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  blur: {
-    width: '100%',
-    height: '100%',
-    backgroundColor: Colors.modalOverlay,
-  },
   inputwrapper: {
     display: 'flex',
     flexDirection: 'row',
@@ -202,18 +197,13 @@ export const styles = StyleSheet.create({
     transform: [{ scaleX: .7 }, { scaleY: .7 }],
   },
   modalOverlay: { 
-    width: '100%',
-    height: '100%',
-  },
-  modalBase: {
-    position: 'absolute',
-    top: 0,
-    left: 0, 
     width: '100%', 
     height: '100%',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center'
+    backgroundColor: Colors.modalOverlay,
+    opacity: 0.8,
   },
   modalContainer: {
     backgroundColor: Colors.modalBase,

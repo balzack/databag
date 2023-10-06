@@ -278,10 +278,6 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: 'center',
   },
-  modalOverlay: {
-    width: '100%',
-    height: '100%',
-  },
   modalBase: {
     width: '100%',
     height: '100%',
@@ -289,6 +285,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: Colors.modalOverlay,
+    opacity: 0.8,
   },
   modalContainer: {
     backgroundColor: Colors.modalBase,

@@ -5,7 +5,7 @@ export const styles = StyleSheet.create({
   modalOverlay: {
     width: '100%',
     height: '100%',
-    backgroundColor: '#333333',
+    backgroundColor: Colors.modalOverlay,
     opacity: 0.8,
     display: 'flex',
     alignItems: 'center',
