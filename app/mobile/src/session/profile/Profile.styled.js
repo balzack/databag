@@ -278,7 +278,7 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: 'center',
   },
-  modalBase: {
+  modalOverlay: {
     width: '100%',
     height: '100%',
     display: 'flex',

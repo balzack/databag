@@ -426,175 +426,172 @@ export function Settings({ drawer }) {
         supportedOrientations={['portrait', 'landscape']}
         onRequestClose={actions.hideEditSeal}
       >
-        <View style={styles.modalOverlay}>
-          <View style={styles.blur} />
-          <KeyboardAvoidingView style={styles.modalBase} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-            <View style={styles.modalContainer}>
-              <View style={styles.modalClose}>
-                <TouchableOpacity style={styles.dismissButton} activeOpacity={1} onPress={actions.hideEditSeal}>
-                  <MatIcons name="close" size={20} color={Colors.descriptionText} />
-                </TouchableOpacity>
-              </View>
-              <Text style={styles.modalHeader}>{ state.strings.sealedTopics }</Text>
-              { !state.sealEnabled && (
-                <>
-                  <Text style={styles.modalDescription}>{ state.strings.sealUnset }</Text>
+        <KeyboardAvoidingView style={styles.modalOverlay} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+          <View style={styles.modalContainer}>
+            <View style={styles.modalClose}>
+              <TouchableOpacity style={styles.dismissButton} activeOpacity={1} onPress={actions.hideEditSeal}>
+                <MatIcons name="close" size={20} color={Colors.descriptionText} />
+              </TouchableOpacity>
+            </View>
+            <Text style={styles.modalHeader}>{ state.strings.sealedTopics }</Text>
+            { !state.sealEnabled && (
+              <>
+                <Text style={styles.modalDescription}>{ state.strings.sealUnset }</Text>
 
-                  <InputField style={styles.field}
-                    label={state.strings.password}
-                    secret={true}
-                    value={state.sealPassword}
-                    autoCapitalize={'none'} 
-                    spellCheck={false}
-                    onChangeText={actions.setSealPassword}
-                  />
-     
-                  { state.sealPassword && (
-                    <TouchableOpacity style={styles.enabledButton} activeOpacity={1} onPress={() => sealAction(actions.generateKey)}>
-                      { busy && (
-                        <ActivityIndicator style={styles.modalBusy} animating={true} color={Colors.primaryButtonText} />
-                      )}
-                      { !busy && (
-                        <Text style={styles.enabledButtonText}>{ state.strings.generate }</Text>
-                      )}
-                    </TouchableOpacity>
-                  )}
-                  { !state.sealPassword && (
-                    <View style={styles.disabledButton}>
-                      <Text style={styles.disabledButtonText}>{ state.strings.generate }</Text>
-                    </View>
-                  )}
-                  <Text style={styles.delayMessage}>{ state.strings.delayMessage }</Text>
-                </>
-              )}
-              { state.sealEnabled && !state.sealUnlocked && !state.sealRemove && (
-                <>
-                  <Text style={styles.modalDescription}>{ state.strings.sealLocked }</Text>
-
-                  <InputField style={styles.field}
-                    label={state.strings.password}
-                    secret={true}
-                    value={state.sealPassword}
-                    autoCapitalize={'none'}
-                    spellCheck={false}
-                    onChangeText={actions.setSealPassword}
-                  />
-
-                  { state.sealPassword && (
-                    <TouchableOpacity style={styles.enabledButton} activeOpacity={1} onPress={() => sealAction(actions.unlockKey)}>
-                      { busy && (
-                        <ActivityIndicator style={styles.modalBusy} animating={true} color={Colors.primaryButtonText} />
-                      )}
-                      { !busy && (
-                        <Text style={styles.enabledButtonText}>{ state.strings.unlock }</Text>
-                      )}
-                    </TouchableOpacity>
-                  )}
-                  { !state.sealPassword && (
-                    <View style={styles.disabledButton}>
-                      <Text style={styles.disabledButtonText}>{ state.strings.unlock }</Text>
-                    </View>
-                  )}
-                  <TouchableOpacity activeOpacity={1} onPress={actions.showSealRemove}>
-                    <Text style={styles.dangerText}>{ state.strings.removeSeal }</Text>
-                  </TouchableOpacity>
-                </>
-              )}
-              { state.sealEnabled && state.sealUnlocked && !state.sealRemove && !state.sealUpdate && (
-                <>
-                  <Text style={styles.modalDescription}>{ state.strings.sealUnlocked }</Text>
-                  <TouchableOpacity style={styles.enabledButton} activeOpacity={1} onPress={() => sealAction(actions.disableKey)}>
+                <InputField style={styles.field}
+                  label={state.strings.password}
+                  secret={true}
+                  value={state.sealPassword}
+                  autoCapitalize={'none'} 
+                  spellCheck={false}
+                  onChangeText={actions.setSealPassword}
+                />
+   
+                { state.sealPassword && (
+                  <TouchableOpacity style={styles.enabledButton} activeOpacity={1} onPress={() => sealAction(actions.generateKey)}>
                     { busy && (
                       <ActivityIndicator style={styles.modalBusy} animating={true} color={Colors.primaryButtonText} />
                     )}
                     { !busy && (
-                      <Text style={styles.enabledButtonText}>{ state.strings.disable }</Text>
+                      <Text style={styles.enabledButtonText}>{ state.strings.generate }</Text>
                     )}
                   </TouchableOpacity>
-                  <TouchableOpacity activeOpacity={1} onPress={actions.showSealUpdate}>
-                    <Text style={styles.modeText}>{ state.strings.changeKey }</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity activeOpacity={1} onPress={actions.showSealRemove}>
-                    <Text style={styles.dangerText}>{ state.strings.removeSeal }</Text>
-                  </TouchableOpacity>
-                </>
-              )}
-              { state.sealEnabled && state.sealRemove && (
-                <>
-                  <Text style={styles.modalDescription}>{ state.strings.sealDelete }</Text>
-                  <InputField style={styles.field}
-                    label={state.strings.typeDelete}
-                    value={state.sealDelete}
-                    autoCapitalize={'none'}
-                    spellCheck={false}
-                    onChangeText={actions.setSealDelete}
-                  />
-                  { state.sealDelete === state.strings.deleteKey && (
-                    <TouchableOpacity style={styles.dangerButton} activeOpacity={1} onPress={() => sealAction(actions.removeKey)}>
-                      { busy && (
-                        <ActivityIndicator style={styles.modalBusy} animating={true} color={Colors.primaryButtonText} />
-                      )}
-                      { !busy && (
-                        <Text style={styles.dangerButtonText}>{ state.strings.delete }</Text>
-                      )}
-                    </TouchableOpacity>
-                  )}
-                  { state.sealDelete !== state.strings.deleteKey && (
-                    <View style={styles.disabledButton}>
-                      <Text style={styles.disabledButtonText}>{ state.strings.delete }</Text>
-                    </View>
-                  )}
-                  <TouchableOpacity activeOpacity={1} onPress={actions.hideSealRemove}>
-                    { state.sealUnlocked && (
-                      <Text style={styles.modeText}>{ state.strings.disableSeal }</Text>
-                    )}
-                    { !state.sealUnlocked && (
-                      <Text style={styles.modeText}>{ state.strings.unlockSeal }</Text>
-                    )}
-                  </TouchableOpacity>
-                </>
-              )}
-              { state.sealEnabled && state.sealUnlocked && state.sealUpdate && (
-                <>
-                  <Text style={styles.modalDescription}>{ state.strings.changePassword }</Text>
+                )}
+                { !state.sealPassword && (
+                  <View style={styles.disabledButton}>
+                    <Text style={styles.disabledButtonText}>{ state.strings.generate }</Text>
+                  </View>
+                )}
+                <Text style={styles.delayMessage}>{ state.strings.delayMessage }</Text>
+              </>
+            )}
+            { state.sealEnabled && !state.sealUnlocked && !state.sealRemove && (
+              <>
+                <Text style={styles.modalDescription}>{ state.strings.sealLocked }</Text>
 
-                  <InputField style={styles.field}
-                    label={state.strings.password}
-                    isPassword={true}
-                    value={state.sealPassword}
-                    autoCapitalize={'none'} 
-                    spellCheck={false}
-                    onChangeText={actions.setSealPassword}
-                  />
+                <InputField style={styles.field}
+                  label={state.strings.password}
+                  secret={true}
+                  value={state.sealPassword}
+                  autoCapitalize={'none'}
+                  spellCheck={false}
+                  onChangeText={actions.setSealPassword}
+                />
 
-                  { state.sealPassword && (
-                    <TouchableOpacity style={styles.enabledButton} activeOpacity={1} onPress={() => sealAction(actions.updateKey)}>
-                      { busy && (
-                        <ActivityIndicator style={styles.modalBusy} animating={true} color={Colors.primaryButtonText} />
-                      )}
-                      { !busy && (
-                        <Text style={styles.enabledButtonText}>{ state.strings.update }</Text>
-                      )}
-                    </TouchableOpacity>
-                  )}
-                  { !state.sealPassword && (
-                    <View style={styles.disabledButton}>
-                      <Text style={styles.disabledButtonText}>{ state.strings.update }</Text>
-                    </View>
-                  )}
-                  <TouchableOpacity activeOpacity={1} onPress={actions.hideSealUpdate}>
-                    { state.sealUnlocked && (
-                      <Text style={styles.modeText}>{ state.strings.disableSeal }</Text>
+                { state.sealPassword && (
+                  <TouchableOpacity style={styles.enabledButton} activeOpacity={1} onPress={() => sealAction(actions.unlockKey)}>
+                    { busy && (
+                      <ActivityIndicator style={styles.modalBusy} animating={true} color={Colors.primaryButtonText} />
                     )}
-                    { !state.sealUnlocked && (
-                      <Text style={styles.modeText}>{ state.strings.unlockSeal }</Text>
+                    { !busy && (
+                      <Text style={styles.enabledButtonText}>{ state.strings.unlock }</Text>
                     )}
                   </TouchableOpacity>
-                </>
-              )}
-            </View>
-          </KeyboardAvoidingView>
-        </View>
+                )}
+                { !state.sealPassword && (
+                  <View style={styles.disabledButton}>
+                    <Text style={styles.disabledButtonText}>{ state.strings.unlock }</Text>
+                  </View>
+                )}
+                <TouchableOpacity activeOpacity={1} onPress={actions.showSealRemove}>
+                  <Text style={styles.dangerText}>{ state.strings.removeSeal }</Text>
+                </TouchableOpacity>
+              </>
+            )}
+            { state.sealEnabled && state.sealUnlocked && !state.sealRemove && !state.sealUpdate && (
+              <>
+                <Text style={styles.modalDescription}>{ state.strings.sealUnlocked }</Text>
+                <TouchableOpacity style={styles.enabledButton} activeOpacity={1} onPress={() => sealAction(actions.disableKey)}>
+                  { busy && (
+                    <ActivityIndicator style={styles.modalBusy} animating={true} color={Colors.primaryButtonText} />
+                  )}
+                  { !busy && (
+                    <Text style={styles.enabledButtonText}>{ state.strings.disable }</Text>
+                  )}
+                </TouchableOpacity>
+                <TouchableOpacity activeOpacity={1} onPress={actions.showSealUpdate}>
+                  <Text style={styles.modeText}>{ state.strings.changeKey }</Text>
+                </TouchableOpacity>
+                <TouchableOpacity activeOpacity={1} onPress={actions.showSealRemove}>
+                  <Text style={styles.dangerText}>{ state.strings.removeSeal }</Text>
+                </TouchableOpacity>
+              </>
+            )}
+            { state.sealEnabled && state.sealRemove && (
+              <>
+                <Text style={styles.modalDescription}>{ state.strings.sealDelete }</Text>
+                <InputField style={styles.field}
+                  label={state.strings.typeDelete}
+                  value={state.sealDelete}
+                  autoCapitalize={'none'}
+                  spellCheck={false}
+                  onChangeText={actions.setSealDelete}
+                />
+                { state.sealDelete === state.strings.deleteKey && (
+                  <TouchableOpacity style={styles.dangerButton} activeOpacity={1} onPress={() => sealAction(actions.removeKey)}>
+                    { busy && (
+                      <ActivityIndicator style={styles.modalBusy} animating={true} color={Colors.primaryButtonText} />
+                    )}
+                    { !busy && (
+                      <Text style={styles.dangerButtonText}>{ state.strings.delete }</Text>
+                    )}
+                  </TouchableOpacity>
+                )}
+                { state.sealDelete !== state.strings.deleteKey && (
+                  <View style={styles.disabledButton}>
+                    <Text style={styles.disabledButtonText}>{ state.strings.delete }</Text>
+                  </View>
+                )}
+                <TouchableOpacity activeOpacity={1} onPress={actions.hideSealRemove}>
+                  { state.sealUnlocked && (
+                    <Text style={styles.modeText}>{ state.strings.disableSeal }</Text>
+                  )}
+                  { !state.sealUnlocked && (
+                    <Text style={styles.modeText}>{ state.strings.unlockSeal }</Text>
+                  )}
+                </TouchableOpacity>
+              </>
+            )}
+            { state.sealEnabled && state.sealUnlocked && state.sealUpdate && (
+              <>
+                <Text style={styles.modalDescription}>{ state.strings.changePassword }</Text>
+
+                <InputField style={styles.field}
+                  label={state.strings.password}
+                  isPassword={true}
+                  value={state.sealPassword}
+                  autoCapitalize={'none'} 
+                  spellCheck={false}
+                  onChangeText={actions.setSealPassword}
+                />
+
+                { state.sealPassword && (
+                  <TouchableOpacity style={styles.enabledButton} activeOpacity={1} onPress={() => sealAction(actions.updateKey)}>
+                    { busy && (
+                      <ActivityIndicator style={styles.modalBusy} animating={true} color={Colors.primaryButtonText} />
+                    )}
+                    { !busy && (
+                      <Text style={styles.enabledButtonText}>{ state.strings.update }</Text>
+                    )}
+                  </TouchableOpacity>
+                )}
+                { !state.sealPassword && (
+                  <View style={styles.disabledButton}>
+                    <Text style={styles.disabledButtonText}>{ state.strings.update }</Text>
+                  </View>
+                )}
+                <TouchableOpacity activeOpacity={1} onPress={actions.hideSealUpdate}>
+                  { state.sealUnlocked && (
+                    <Text style={styles.modeText}>{ state.strings.disableSeal }</Text>
+                  )}
+                  { !state.sealUnlocked && (
+                    <Text style={styles.modeText}>{ state.strings.unlockSeal }</Text>
+                  )}
+                </TouchableOpacity>
+              </>
+            )}
+          </View>
+        </KeyboardAvoidingView>
       </Modal>
 
       <Modal
@@ -604,62 +601,59 @@ export function Settings({ drawer }) {
         supportedOrientations={['portrait', 'landscape']}
         onRequestClose={actions.hideLogin}
       >
-        <View style={styles.modalOverlay}>
-          <View style={styles.blur} />
-          <KeyboardAvoidingView style={styles.modalBase} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-            <View style={styles.modalContainer}>
-              <View style={styles.modalClose}>
-                <TouchableOpacity style={styles.dismissButton} activeOpacity={1} onPress={actions.hideLogin}>
-                  <MatIcons name="close" size={20} color={Colors.descriptionText} />
-                </TouchableOpacity>
-              </View>
-              <Text style={styles.modalHeader}>{ state.strings.changeLogin }</Text>
-              <ActivityIndicator style={styles.modalBusy} animating={busy} color={Colors.primary} />
-
-              <Text textAlign={'center'} style={styles.modalDescription}>{ state.strings.changeMessage }</Text>
-
-              <InputField
-                label={state.strings.username}
-                value={state.username}
-                autoCapitalize={'none'}
-                spellCheck={false}
-                style={styles.field}
-                onChangeText={actions.setUsername}
-              /> 
-
-              <InputField
-                label={state.strings.password}
-                value={state.password}
-                autoCapitalize={'none'}
-                spellCheck={false}
-                style={styles.field}
-                onChangeText={actions.setPassword}
-                secret={true}
-              /> 
-
-              <View style={styles.availableStatus}>
-                { state.validated && !state.available && (
-                  <Text style={styles.notAvailable}>{ state.strings.notAvailable }</Text>
-                )}
-              </View>
-              <View style={styles.hintButtons}>
-                <TouchableOpacity style={styles.cancelButton} activeOpacity={1} onPress={actions.hideLogin}>
-                  <Text style={styles.cancelButtonText}>{ state.strings.cancel }</Text>
-                </TouchableOpacity>
-                { (!state.available || !state.password || !state.validated || !state.username) && (
-                  <View style={styles.disabledButton}>
-                    <Text style={styles.disabledButtonText}>{ state.strings.update }</Text>
-                  </View>
-                )}
-                { state.available && state.password && state.validated && state.username && (
-                  <TouchableOpacity style={styles.promptButton} activeOpacity={1} onPress={changeLogin}>
-                    <Text style={styles.enabledButtonText}>{ state.strings.update }</Text>
-                  </TouchableOpacity>
-                )}
-              </View>
+        <KeyboardAvoidingView style={styles.modalOverlay} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+          <View style={styles.modalContainer}>
+            <View style={styles.modalClose}>
+              <TouchableOpacity style={styles.dismissButton} activeOpacity={1} onPress={actions.hideLogin}>
+                <MatIcons name="close" size={20} color={Colors.descriptionText} />
+              </TouchableOpacity>
             </View>
-          </KeyboardAvoidingView>
-        </View>
+            <Text style={styles.modalHeader}>{ state.strings.changeLogin }</Text>
+            <ActivityIndicator style={styles.modalBusy} animating={busy} color={Colors.primary} />
+
+            <Text textAlign={'center'} style={styles.modalDescription}>{ state.strings.changeMessage }</Text>
+
+            <InputField
+              label={state.strings.username}
+              value={state.username}
+              autoCapitalize={'none'}
+              spellCheck={false}
+              style={styles.field}
+              onChangeText={actions.setUsername}
+            /> 
+
+            <InputField
+              label={state.strings.password}
+              value={state.password}
+              autoCapitalize={'none'}
+              spellCheck={false}
+              style={styles.field}
+              onChangeText={actions.setPassword}
+              secret={true}
+            /> 
+
+            <View style={styles.availableStatus}>
+              { state.validated && !state.available && (
+                <Text style={styles.notAvailable}>{ state.strings.notAvailable }</Text>
+              )}
+            </View>
+            <View style={styles.hintButtons}>
+              <TouchableOpacity style={styles.cancelButton} activeOpacity={1} onPress={actions.hideLogin}>
+                <Text style={styles.cancelButtonText}>{ state.strings.cancel }</Text>
+              </TouchableOpacity>
+              { (!state.available || !state.password || !state.validated || !state.username) && (
+                <View style={styles.disabledButton}>
+                  <Text style={styles.disabledButtonText}>{ state.strings.update }</Text>
+                </View>
+              )}
+              { state.available && state.password && state.validated && state.username && (
+                <TouchableOpacity style={styles.promptButton} activeOpacity={1} onPress={changeLogin}>
+                  <Text style={styles.enabledButtonText}>{ state.strings.update }</Text>
+                </TouchableOpacity>
+              )}
+            </View>
+          </View>
+        </KeyboardAvoidingView>
       </Modal>
 
       <Modal
@@ -669,41 +663,38 @@ export function Settings({ drawer }) {
         supportedOrientations={['portrait', 'landscape']}
         onRequestClose={actions.hideDelete}
       >
-        <View style={styles.modalOverlay}>
-          <View style={styles.blur} />
-          <KeyboardAvoidingView style={styles.modalBase} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-            <View style={styles.modalContainer}>
-              <View style={styles.modalClose}>
-                <TouchableOpacity style={styles.dismissButton} activeOpacity={1} onPress={actions.hideDelete}>
-                  <MatIcons name="close" size={20} color={Colors.descriptionText} />
-                </TouchableOpacity>
-              </View>
-              <Text style={styles.modalHeader}>{ state.strings.deleteAccount }</Text>
-              <ActivityIndicator style={styles.modalBusy} animating={busy} color={Colors.primary} />
-
-              <InputField style={styles.field}
-                label={state.strings.typeDelete}
-                value={state.confirm}
-                autoCapitalize={'none'} 
-                spellCheck={false}
-                onChangeText={actions.setConfirm}
-              />
-
-              <View style={styles.buttons}>
-                { state.confirm === state.strings.deleteKey && (
-                  <TouchableOpacity style={styles.dangerButton} activeOpacity={1} onPress={deleteAccount}>
-                    <Text style={styles.dangerButtonText}>{ state.strings.delete }</Text>
-                  </TouchableOpacity>
-                )}
-                { state.confirm !== state.strings.deleteKey && (
-                  <View style={styles.disabledButton}>
-                    <Text style={styles.disabledButtonText}>{ state.strings.delete }</Text>
-                  </View>
-                )}
-              </View>
+        <KeyboardAvoidingView style={styles.modalOverlay} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+          <View style={styles.modalContainer}>
+            <View style={styles.modalClose}>
+              <TouchableOpacity style={styles.dismissButton} activeOpacity={1} onPress={actions.hideDelete}>
+                <MatIcons name="close" size={20} color={Colors.descriptionText} />
+              </TouchableOpacity>
             </View>
-          </KeyboardAvoidingView>
-        </View>
+            <Text style={styles.modalHeader}>{ state.strings.deleteAccount }</Text>
+            <ActivityIndicator style={styles.modalBusy} animating={busy} color={Colors.primary} />
+
+            <InputField style={styles.field}
+              label={state.strings.typeDelete}
+              value={state.confirm}
+              autoCapitalize={'none'} 
+              spellCheck={false}
+              onChangeText={actions.setConfirm}
+            />
+
+            <View style={styles.buttons}>
+              { state.confirm === state.strings.deleteKey && (
+                <TouchableOpacity style={styles.dangerButton} activeOpacity={1} onPress={deleteAccount}>
+                  <Text style={styles.dangerButtonText}>{ state.strings.delete }</Text>
+                </TouchableOpacity>
+              )}
+              { state.confirm !== state.strings.deleteKey && (
+                <View style={styles.disabledButton}>
+                  <Text style={styles.disabledButtonText}>{ state.strings.delete }</Text>
+                </View>
+              )}
+            </View>
+          </View>
+        </KeyboardAvoidingView>
       </Modal>
 
       <Modal
@@ -714,35 +705,32 @@ export function Settings({ drawer }) {
         onRequestClose={state.hideBlockedContacts}
       >
         <View style={styles.modalOverlay}>
-          <View style={styles.blur} />
-          <View style={styles.modalBase}>
-            <View style={styles.modalContainer}>
-              <View style={styles.modalClose}>
-                <TouchableOpacity style={styles.dismissButton} activeOpacity={1} onPress={actions.hideBlockedContacts}>
-                  <MatIcons name="close" size={20} color={Colors.descriptionText} />
-                </TouchableOpacity>
-              </View>
-              <Text style={styles.modalHeader}>{ state.strings.blockedContacts }</Text>
-              <ActivityIndicator style={styles.modalBusy} animating={busy} color={Colors.primary} />
-              <View style={styles.modalList}>
-                { state.contacts.length === 0 && (
-                  <View style={styles.emptyLabel}>
-                    <Text style={styles.emptyLabelText}>{ state.strings.noBlockedContacts }</Text>
-                  </View>
-                )}
-                { state.contacts.length !== 0 && (
-                  <FlatList
-                    data={state.contacts}
-                    renderItem={BlockedContact}
-                    keyExtractor={item => item.cardId}
-                  />
-                )}
-              </View>
-              <View style={styles.rightButton}>
-                <TouchableOpacity style={styles.closeButton} activeOpacity={1} onPress={actions.hideBlockedContacts}>
-                  <Text style={styles.closeButtonText}>{ state.strings.close }</Text>
-                </TouchableOpacity>
-              </View>
+          <View style={styles.modalContainer}>
+            <View style={styles.modalClose}>
+              <TouchableOpacity style={styles.dismissButton} activeOpacity={1} onPress={actions.hideBlockedContacts}>
+                <MatIcons name="close" size={20} color={Colors.descriptionText} />
+              </TouchableOpacity>
+            </View>
+            <Text style={styles.modalHeader}>{ state.strings.blockedContacts }</Text>
+            <ActivityIndicator style={styles.modalBusy} animating={busy} color={Colors.primary} />
+            <View style={styles.modalList}>
+              { state.contacts.length === 0 && (
+                <View style={styles.emptyLabel}>
+                  <Text style={styles.emptyLabelText}>{ state.strings.noBlockedContacts }</Text>
+                </View>
+              )}
+              { state.contacts.length !== 0 && (
+                <FlatList
+                  data={state.contacts}
+                  renderItem={BlockedContact}
+                  keyExtractor={item => item.cardId}
+                />
+              )}
+            </View>
+            <View style={styles.rightButton}>
+              <TouchableOpacity style={styles.closeButton} activeOpacity={1} onPress={actions.hideBlockedContacts}>
+                <Text style={styles.closeButtonText}>{ state.strings.close }</Text>
+              </TouchableOpacity>
             </View>
           </View>
         </View>
@@ -756,35 +744,32 @@ export function Settings({ drawer }) {
         onRequestClose={state.hideBlockedTopics}
       >
         <View style={styles.modalOverlay}>
-          <View style={styles.blur} />
-          <View style={styles.modalBase}>
-            <View style={styles.modalContainer}>
-              <View style={styles.modalClose}>
-                <TouchableOpacity style={styles.dismissButton} activeOpacity={1} onPress={actions.hideBlockedTopics}>
-                  <MatIcons name="close" size={20} color={Colors.descriptionText} />
-                </TouchableOpacity>
-              </View>
-              <Text style={styles.modalHeader}>{ state.strings.blockedTopics }</Text>
-              <ActivityIndicator style={styles.modalBusy} animating={busy} color={Colors.primary} />
-              <View style={styles.modalList}>
-                { state.topics.length === 0 && (
-                  <View style={styles.emptyLabel}>
-                    <Text style={styles.emptyLabelText}>{ state.strings.noBlockedTopics }</Text>
-                  </View>
-                )}
-                { state.topics.length !== 0 && (
-                  <FlatList
-                    data={state.topics}
-                    renderItem={BlockedTopic}
-                    keyExtractor={item => `${item.cardId}.${item.channelId}`}
-                  />
-                )}
-              </View>
-              <View style={styles.rightButton}>
-                <TouchableOpacity style={styles.closeButton} activeOpacity={1} onPress={actions.hideBlockedTopics}>
-                  <Text style={styles.closeButtonText}>{ state.strings.close }</Text>
-                </TouchableOpacity>
-              </View>
+          <View style={styles.modalContainer}>
+            <View style={styles.modalClose}>
+              <TouchableOpacity style={styles.dismissButton} activeOpacity={1} onPress={actions.hideBlockedTopics}>
+                <MatIcons name="close" size={20} color={Colors.descriptionText} />
+              </TouchableOpacity>
+            </View>
+            <Text style={styles.modalHeader}>{ state.strings.blockedTopics }</Text>
+            <ActivityIndicator style={styles.modalBusy} animating={busy} color={Colors.primary} />
+            <View style={styles.modalList}>
+              { state.topics.length === 0 && (
+                <View style={styles.emptyLabel}>
+                  <Text style={styles.emptyLabelText}>{ state.strings.noBlockedTopics }</Text>
+                </View>
+              )}
+              { state.topics.length !== 0 && (
+                <FlatList
+                  data={state.topics}
+                  renderItem={BlockedTopic}
+                  keyExtractor={item => `${item.cardId}.${item.channelId}`}
+                />
+              )}
+            </View>
+            <View style={styles.rightButton}>
+              <TouchableOpacity style={styles.closeButton} activeOpacity={1} onPress={actions.hideBlockedTopics}>
+                <Text style={styles.closeButtonText}>{ state.strings.close }</Text>
+              </TouchableOpacity>
             </View>
           </View>
         </View>
@@ -798,35 +783,32 @@ export function Settings({ drawer }) {
         onRequestClose={actions.hideBlockedMessages}
       >
         <View style={styles.modalOverlay}>
-          <View style={styles.blur} />
-          <View style={styles.modalBase}>
-            <View style={styles.modalContainer}>
-              <View style={styles.modalClose}>
-                <TouchableOpacity style={styles.dismissButton} activeOpacity={1} onPress={actions.hideBlockedMessages}>
-                  <MatIcons name="close" size={20} color={Colors.descriptionText} />
-                </TouchableOpacity>
-              </View>
-              <Text style={styles.modalHeader}>{ state.strings.blockedMessages }</Text>
-              <ActivityIndicator style={styles.modalBusy} animating={busy} color={Colors.primary} />
-              <View style={styles.modalList}>
-                { state.messages.length === 0 && (
-                  <View style={styles.emptyLabel}>
-                    <Text style={styles.emptyLabelText}>{ state.strings.noBlockedMessages }</Text>
-                  </View>
-                )}
-                { state.messages.length !== 0 && (
-                  <FlatList
-                    data={state.messages}
-                    renderItem={BlockedMessage}
-                    keyExtractor={item => `${item.cardId}.${item.channelId}.${item.topicId}`}
-                  />
-                )}
-              </View>
-              <View style={styles.rightButton}>
-                <TouchableOpacity style={styles.closeButton} activeOpacity={1} onPress={actions.hideBlockedMessages}>
-                  <Text style={styles.closeButtonText}>{ state.strings.close }</Text>
-                </TouchableOpacity>
-              </View>
+          <View style={styles.modalContainer}>
+            <View style={styles.modalClose}>
+              <TouchableOpacity style={styles.dismissButton} activeOpacity={1} onPress={actions.hideBlockedMessages}>
+                <MatIcons name="close" size={20} color={Colors.descriptionText} />
+              </TouchableOpacity>
+            </View>
+            <Text style={styles.modalHeader}>{ state.strings.blockedMessages }</Text>
+            <ActivityIndicator style={styles.modalBusy} animating={busy} color={Colors.primary} />
+            <View style={styles.modalList}>
+              { state.messages.length === 0 && (
+                <View style={styles.emptyLabel}>
+                  <Text style={styles.emptyLabelText}>{ state.strings.noBlockedMessages }</Text>
+                </View>
+              )}
+              { state.messages.length !== 0 && (
+                <FlatList
+                  data={state.messages}
+                  renderItem={BlockedMessage}
+                  keyExtractor={item => `${item.cardId}.${item.channelId}.${item.topicId}`}
+                />
+              )}
+            </View>
+            <View style={styles.rightButton}>
+              <TouchableOpacity style={styles.closeButton} activeOpacity={1} onPress={actions.hideBlockedMessages}>
+                <Text style={styles.closeButtonText}>{ state.strings.close }</Text>
+              </TouchableOpacity>
             </View>
           </View>
         </View>

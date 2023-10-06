@@ -9,11 +9,6 @@ export const styles = StyleSheet.create({
     flexDirection: 'column',
     backgroundColor: Colors.screenBase,
   },
-  blur: {
-    width: '100%',
-    height: '100%',
-    backgroundColor: Colors.modalOverlay,
-  },
   header: {
     paddingTop: 24,
     paddingBottom: 4,
@@ -167,6 +162,11 @@ export const styles = StyleSheet.create({
   modalOverlay: {
     width: '100%',
     height: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: Colors.modalOverlay,
+    opacity: 0.8,
   },
   modalBody: {
     padding: 16,

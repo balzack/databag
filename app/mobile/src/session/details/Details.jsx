@@ -207,24 +207,21 @@ export function Details({ channel, clearConversation }) {
         supportedOrientations={['portrait', 'landscape']}
         onRequestClose={actions.hideEditMembers}
       >
-        <View style={styles.modalOverlay}>
-          <View style={styles.blur} />
-          <KeyboardAvoidingView style={styles.modalBase} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-            <View style={styles.modalContainer}>
-              <Text style={styles.editHeader}>{ state.strings.topicMembers }</Text>
-              <FlatList style={styles.editMembers}
-                data={state.connected}
-                renderItem={({ item }) => <MemberItem item={item} toggle={toggle} />}
-                keyExtractor={item => item.cardId}
-              />
-              <View style={styles.editControls}>
-                <TouchableOpacity style={styles.close} onPress={actions.hideEditMembers}>
-                  <Text style={styles.closeText}>{ state.strings.close }</Text>
-                </TouchableOpacity>
-              </View>
+        <KeyboardAvoidingView style={styles.modalOverlay} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+          <View style={styles.modalContainer}>
+            <Text style={styles.editHeader}>{ state.strings.topicMembers }</Text>
+            <FlatList style={styles.editMembers}
+              data={state.connected}
+              renderItem={({ item }) => <MemberItem item={item} toggle={toggle} />}
+              keyExtractor={item => item.cardId}
+            />
+            <View style={styles.editControls}>
+              <TouchableOpacity style={styles.close} onPress={actions.hideEditMembers}>
+                <Text style={styles.closeText}>{ state.strings.close }</Text>
+              </TouchableOpacity>
             </View>
-          </KeyboardAvoidingView>
-        </View>
+          </View>
+        </KeyboardAvoidingView>
       </Modal>
 
     </View>
