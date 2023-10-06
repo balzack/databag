@@ -83,6 +83,7 @@ export const styles = StyleSheet.create({
     width: '33%',
     maxWidth: 500,
     borderRightWidth: 1,
+    backgroundColor: Colors.contentBase,
     borderColor: Colors.verticalDivider,
   },
   conversation: {

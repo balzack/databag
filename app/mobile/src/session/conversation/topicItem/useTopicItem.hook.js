@@ -3,6 +3,7 @@ import { Linking } from 'react-native';
 import { ConversationContext } from 'context/ConversationContext';
 import { CardContext } from 'context/CardContext';
 import { ProfileContext } from 'context/ProfileContext';
+import { DisplayContext } from 'context/DisplayContext';
 import { AccountContext } from 'context/AccountContext';
 import moment from 'moment';
 import { useWindowDimensions, Text } from 'react-native';
@@ -14,10 +15,12 @@ import Share from 'react-native-share';
 import RNFetchBlob from "rn-fetch-blob";
 import RNFS from 'react-native-fs';
 import { checkResponse, fetchWithTimeout } from 'api/fetchUtil';
+import { getLanguageStrings } from 'constants/Strings';
 
 export function useTopicItem(item, hosting, remove, contentKey) {
 
   const [state, setState] = useState({
+    strings: getLanguageStrings(), 
     name: null,
     nameSet: null,
     known: null,
@@ -42,6 +45,7 @@ export function useTopicItem(item, hosting, remove, contentKey) {
 
   const conversation = useContext(ConversationContext);
   const profile = useContext(ProfileContext);
+  const display = useContext(DisplayContext);
   const card = useContext(CardContext);
   const account = useContext(AccountContext);
   const dimensions = useWindowDimensions();
@@ -424,6 +428,45 @@ export function useTopicItem(item, hosting, remove, contentKey) {
         }
         updateState({ sharing: false });
       }
+    },
+    promptBlock: (block) => {
+      display.actions.showPrompt({
+        title: state.strings.blockTopic,
+        centerButtons: true,
+        ok: { label: state.strings.confirmBlock, action: async () => await block(item.topicId), failed: () => {
+          Alert.alert(
+            state.strings.error,
+            state.strings.tryAgain,
+          );
+        }},
+        cancel: { label: state.strings.cancel },
+      }); 
+    },
+    promptReport: (report) => {
+      display.actions.showPrompt({
+        title: state.strings.reportTopic,
+        centerButtons: true,
+        ok: { label: state.strings.confirmReport, action: async () => await report(item.topicId), failed: () => {
+          Alert.alert(
+            state.strings.error,
+            state.strings.tryAgain,
+          );
+        }},
+        cancel: { label: state.strings.cancel },
+      }); 
+    },
+    promptRemove: (remove) => {
+      display.actions.showPrompt({
+        title: state.strings.deleteTopic,
+        centerButtons: true,
+        ok: { label: state.strings.confirmDelete, action: async () => await remove(item.topicId), failed: () => {
+          Alert.alert(
+            state.strings.error,
+            state.strings.tryAgain,
+          );
+        }},
+        cancel: { label: state.strings.cancel },
+      }); 
     },
   };
 

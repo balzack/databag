@@ -193,16 +193,16 @@ export function TopicItem({ item, focused, focus, hosting, remove, update, block
               <AntIcons name="edit" size={24} color={Colors.white} />
             </TouchableOpacity>
           )}
-          <TouchableOpacity style={styles.icon} onPress={hideMessage}>
+          <TouchableOpacity style={styles.icon} onPress={() => actions.promptBlock(block)}>
             <MatIcons name="block-helper" size={18} color={Colors.white} />
           </TouchableOpacity>
           { !state.editable && (
-            <TouchableOpacity style={styles.icon} onPress={reportMessage}>
+            <TouchableOpacity style={styles.icon} onPress={() => actions.promptReport(report)}>
               <MatIcons name="flag-outline" size={22} color={Colors.white} />
             </TouchableOpacity>
           )}
           { state.deletable && (
-            <TouchableOpacity style={styles.icon} onPress={erase}>
+            <TouchableOpacity style={styles.icon} onPress={() => actions.promptRemove(remove)}>
               <MatIcons name="delete-outline" size={24} color={Colors.white} />
             </TouchableOpacity>
           )}

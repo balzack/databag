@@ -45,7 +45,7 @@ export const styles = StyleSheet.create({
     fontSize: 16,
   },
   message: {
-    color: Colors.disabled,
+    color: Colors.descriptionText,
     fontSize: 14,
   },
   dot: {

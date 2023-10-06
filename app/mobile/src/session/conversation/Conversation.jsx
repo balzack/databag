@@ -67,7 +67,7 @@ export function Conversation({ navigation, cardId, channelId, closeConversation,
 
   return (
     
-  <KeyboardAvoidingView style={styles.modalBase} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+  <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} keyboardVerticalOffset={navigation ? 72 : 0}>
     <View style={styles.container}>
       { !navigation && (
         <View style={styles.header}>

@@ -51,6 +51,7 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     flexGrow: 1,
+    flexShrink: 1,
     height: '100%',
     backgroundColor: Colors.contentBase,
   },

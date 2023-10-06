@@ -79,7 +79,7 @@ export const styles = StyleSheet.create({
     paddingTop: 24,
     width: '100%',
     borderBottomWidth: 1,
-    borderColor: Colors.itemDivider,
+    borderColor: Colors.horizontalDivider,
     display: 'flex',
     flexDirection: 'row',
   },
