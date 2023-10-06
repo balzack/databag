@@ -1,10 +1,10 @@
-import { Alert, View, ScrollView, TouchableOpacity, StatusBar, Text, Image, Modal } from 'react-native';
+import { Alert, View, ScrollView, TouchableOpacity, StatusBar, Text, Image, Modal, Appearance } from 'react-native';
 import { useState, useEffect, useContext } from 'react';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, DarkTheme, LightTheme } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/AntDesign';
 import MatIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useSession } from './useSession.hook';
@@ -12,7 +12,7 @@ import { styles } from './Session.styled';
 import Colors from 'constants/Colors';
 import { Profile } from './profile/Profile';
 import { ProfileSettings } from './profileSettings/ProfileSettings';
-import { CardsHeader, CardsBody, Cards } from './cards/Cards';
+import { Cards } from './cards/Cards';
 import { RegistryHeader, RegistryBody, Registry } from './registry/Registry';
 import { Contact } from './contact/Contact';
 import { Details } from './details/Details';
@@ -32,6 +32,7 @@ import lightSplash from 'images/session.png';
 import darkSplash from 'images/darksess.png';
 import { useNavigate } from 'react-router-dom';
 import { getLanguageStrings } from 'constants/Strings';
+import { BlurView } from "@react-native-community/blur";
 
 const ConversationStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
@@ -141,9 +142,6 @@ function ContactStackScreen({ addChannel }) {
   const [handle, setHandle] = useState();
   const [server, setServer] = useState();
 
-  const [filter, setFilter] = useState();
-  const [sort, setSort] = useState(false);
-
   const openContact = (navigation, contact) => {
     setContact(contact);
     navigation.navigate('contact')
@@ -159,10 +157,8 @@ function ContactStackScreen({ addChannel }) {
     <SafeAreaView edges={['left', 'right']} style={styles.body}>
       <ContactStack.Navigator screenOptions={({ route }) => (screenParams)} initialRouteName="cards">
 
-        <ContactStack.Screen name="cards" options={{ ...stackParams, cardStyle: {backgroundColor: Colors.screenBase}, headerTitle: (props) => (
-            <CardsHeader filter={filter} setFilter={setFilter} sort={sort} setSort={setSort} openRegistry={openRegistry} />
-          )}}>
-          {(props) => <CardsBody filter={filter} sort={sort} openContact={(contact) => openContact(props.navigation, contact)} addChannel={addChannel} />}
+        <ContactStack.Screen name="cards" options={stackParams}>
+          {(props) => <Cards navigation={props.navigation} openContact={(contact) => openContact(props.navigation, contact)} openRegistry={openRegistry} addChannel={addChannel} />}
         </ContactStack.Screen>
 
         <ContactStack.Screen name="contact" options={{ headerShown: false }}>
@@ -384,8 +380,8 @@ export function Session({ sharing, clearSharing }) {
           )}
           { name == null && contactNode != null && (
             <View style={styles.ringName}>
-              <Text numberOfLines={1} ellipsizeMode={'tail'}>{ handle }</Text>
-              <Text numberOfLines={1} ellipsizeMode={'tail'}>{ contactNode }</Text>
+              <Text style={styles.ringText} numberOfLines={1} ellipsizeMode={'tail'}>{ handle }</Text>
+              <Text styles={styles.ringText} numberOfLines={1} ellipsizeMode={'tail'}>{ contactNode }</Text>
             </View>
           )}
           { name == null && contactNode == null && (
@@ -407,7 +403,7 @@ export function Session({ sharing, clearSharing }) {
   }, [state.ringing]);
 
   return (
-    <NavigationContainer>
+    <NavigationContainer theme={Appearance.getColorScheme() === 'dark' ? DarkTheme : LightTheme}>
       <View style={styles.body}>
         { state.firstRun == true && (
           <SafeAreaView edges={['top', 'bottom']}  style={styles.firstRun}>
@@ -471,8 +467,8 @@ export function Session({ sharing, clearSharing }) {
                     }
                   },
                   tabBarShowLabel: false,
-                  tabBarActiveTintColor: Colors.white,
-                  tabBarInactiveTintColor: Colors.disabled,
+                  tabBarActiveTintColor: Colors.activeTabIcon,
+                  tabBarInactiveTintColor: Colors.idleTabIcon,
                 })}>
                 <Tab.Screen name="Conversation" children={()=><ConversationStackScreen dmChannel={dmChannel} shareChannel={shareChannel} shareIntent={shareIntent} setShareIntent={setShareIntent} />} />
                 <Tab.Screen name="Contacts" children={()=><ContactStackScreen addChannel={addChannel} />} />
@@ -491,6 +487,7 @@ export function Session({ sharing, clearSharing }) {
         supportedOrientations={['portrait', 'landscape']}
       >
         <View style={styles.ringBase}>
+          <BlurView style={styles.ringBase} blurType={Colors.overlay} blurAmount={2} reducedTransparencyFallbackColor="black" />
           <View style={styles.ringFrame}>
             { ringing }
           </View>

@@ -45,12 +45,12 @@ export function Channels({ cardId, channelId, navigation, openConversation, dmCh
         headerTitle: () => (
           <View style={styles.title}>
             <View style={styles.inputwrapper}>
-              <Ionicons style={styles.icon} name="search1" size={16} color={Colors.disabled} />
+              <Ionicons style={styles.icon} name="search1" size={16} color={Colors.inputPlaceholder} />
               <TextInput style={styles.inputfield} value={state.filter} onChangeText={actions.setFilter}
-                  autoCapitalize="none" placeholderTextColor={Colors.disabled}  placeholder={ state.strings.topics} />
+                  autoCapitalize="none" placeholderTextColor={Colors.inputPlaceholder}  placeholder={ state.strings.topics} />
             </View>
             <TouchableOpacity style={styles.addtop} onPress={actions.showAdding}>
-              <Ionicons name={'message1'} size={16} color={Colors.white} style={[styles.box, { transform: [ { rotateY: "180deg" }, ]} ]}/>
+              <Ionicons name={'message1'} size={16} color={Colors.primaryButtonText} style={[styles.box, { transform: [ { rotateY: "180deg" }, ]} ]}/>
               <Text style={styles.addtext}>{ state.strings.new }</Text>
             </TouchableOpacity>
           </View>

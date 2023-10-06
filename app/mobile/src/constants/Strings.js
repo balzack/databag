@@ -183,6 +183,8 @@ const Strings = [
     agree: 'I agree to Terms of Service',
     terms: 'View Terms of Service',
     policy: 'Terms of Use and User Policy',
+
+    editMessage: 'Edit Message Text',
   },
   {
     languageCode: 'fr',
@@ -362,6 +364,8 @@ const Strings = [
     agree: 'J\'accepte les Conditions d\'Utilisation',
     terms: 'Afficher les Conditions d\'Utilisation',
     policy: 'Conditions d\'Utilisation et Politique d\'Utilisation',
+
+    editMessage: 'Modifier le Texte du Message',
   },
   {
     languageCode: 'es',
@@ -541,6 +545,8 @@ const Strings = [
     agree: 'Acepto los Términos de Servicio',
     terms: 'Ver Términos de Servicio',
     policy: 'Términos de Uso y Política de Usuario',
+
+    editMessage: 'Editar Texto del Mensaje',
   },
   {
     languageCode: 'de',
@@ -720,6 +726,8 @@ const Strings = [
     agree: 'Ich akzeptiere die Nutzungsbedingungen',
     terms: 'Nutzungsbedingungen anzeigen',
     policy: 'Nutzungsbedingungen und Benutzerrichtlinien',
+
+    editMessage: 'Nachrichtentext Bearbeiten',
   },
   {
     languageCode: 'pt',
@@ -885,6 +893,7 @@ const Strings = [
     agree: 'Eu concordo com os Termos de Serviço',
     terms: 'Ver Termos de Serviço',
     policy: 'Termos de Uso e Política do Usuário',
+    editMessage: 'Editar Texto da Mensagem',
   },
 ];
 

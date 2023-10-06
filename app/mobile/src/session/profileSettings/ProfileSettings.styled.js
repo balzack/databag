@@ -5,7 +5,7 @@ export const styles = StyleSheet.create({
   drawer: {
     width: '100%',
     height: '100%',
-    backgroundColor: Colors.drawerBase,
+    backgroundColor: Colors.contentBase,
   },
   container: {
     display: 'flex',

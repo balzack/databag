@@ -10,6 +10,11 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     flexShrink: 1,
   },
+  blur: {
+    width: '100%',
+    height: '100%',
+    backgroundColor: Colors.modalOverlay,
+  },
   more: {
     marginTop: 8,
   },
@@ -51,7 +56,9 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     flexGrow: 1,
+    flexShrink: 1,
     height: '100%',
+    backgroundColor: Colors.contentBase,
   },
   thread: {
     display: 'flex',
@@ -103,11 +110,10 @@ export const styles = StyleSheet.create({
     color: Colors.white,
   },
   canceltext: {
-    color: Colors.text,
+    color: Colors.cancelButtonText,
   },
   cancel: {
-    borderWidth: 1,
-    borderColor: Colors.lightgrey,
+    backgroundColor: Colors.cancelButton,
     borderRadius: 4,
     padding: 8,
     marginRight: 8,
@@ -164,6 +170,31 @@ export const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  modalOverlay: {
+    width: '100%',
+    height: '100%',
+  },
+  modalBase: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  modalContainer: {
+    backgroundColor: Colors.modalBase,
+    borderColor: Colors.modalBorder,
+    borderWidth: 1,
+    width: '80%', 
+    maxWidth: 400,
+    display: 'flex',
+    alignItems: 'center',
+    borderRadius: 8,
+    padding: 16,
   },
 });
 

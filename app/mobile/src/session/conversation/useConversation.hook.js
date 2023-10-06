@@ -5,9 +5,11 @@ import { AccountContext } from 'context/AccountContext';
 import { ConversationContext } from 'context/ConversationContext';
 import { getChannelSubjectLogo } from 'context/channelUtil';
 import { getChannelSeals, isUnsealed, getContentKey, encryptTopicSubject, decryptTopicSubject } from 'context/sealUtil';
+import { getLanguageStrings } from 'constants/Strings';
 
 export function useConversation() {
   const [state, setState] = useState({
+    strings: getLanguageStrings(),
     hosted: null,
     subject: null,
     logo: null,

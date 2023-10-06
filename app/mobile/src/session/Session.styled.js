@@ -82,12 +82,13 @@ export const styles = StyleSheet.create({
     height: '100%',
     width: '33%',
     maxWidth: 500,
-    backgroundColor: Colors.screenBase,
+    borderRightWidth: 1,
+    backgroundColor: Colors.contentBase,
     borderColor: Colors.verticalDivider,
   },
   conversation: {
     width: '67%',
-    backgroundColor: Colors.areaBase,
+    backgroundColor: Colors.contentBase,
   },
   drawer: {
     width: '100%',
@@ -95,7 +96,7 @@ export const styles = StyleSheet.create({
     paddingTop: 8,
     paddingLeft: 8,
     paddingRight: 8,
-    backgroundColor: Colors.drawerBase,
+    backgroundColor: Colors.contentBase,
   },
   options: {
     display: 'flex',
@@ -147,10 +148,15 @@ export const styles = StyleSheet.create({
     height: '100%',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'rgba(52, 52, 52, 0.8)'
+  },
+  ringText: {
+    color: Colors.text,
   },
   ringFrame: {
-    backgroundColor: Colors.areaBase,
+    position: 'absolute',
+    backgroundColor: Colors.modalBase,
+    borderColor: Colors.modalBorder,
+    borderWidth: 1,
     padding: 16,
     width: '90%',
     maxWidth: 400,
@@ -167,6 +173,7 @@ export const styles = StyleSheet.create({
     flexGrow: 1,
     paddingLeft: 8,
     paddingRight: 8,
+    color: Colors.text,
   },
   ringIgnore: {
     borderWidth: 1,

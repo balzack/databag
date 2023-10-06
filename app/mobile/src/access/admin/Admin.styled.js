@@ -61,16 +61,20 @@ export const styles = StyleSheet.create({
     paddingLeft: 16,
     paddingRight: 16,
     borderRadius: 4,
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.closeButton,
     marginTop: 8,
   },
   donetext: {
-    color: Colors.text,
+    color: Colors.closeButtonText,
     fontSize: 16,
   },
   termsheader: {
     fontWeight: 'bold',
     textAlign: 'center',
+    color: Colors.text,
+  },
+  termstext: {
+    color: Colors.text,
   },
   container: {
     flexDirection: 'column',
@@ -92,7 +96,7 @@ export const styles = StyleSheet.create({
     width: '100%',
     textAlign: 'center',
     fontSize: 24,
-    color: Colors.grey,
+    color: Colors.descriptionText,
   },
   spacemid: {
     flexGrow: 1,
