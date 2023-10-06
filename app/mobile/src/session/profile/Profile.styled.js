@@ -100,11 +100,6 @@ export const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
   },
-  blur: {
-    width: '100%',
-    height: '100%',
-    backgroundColor: Colors.modalOverlay,
-  },
   logo: {
     alignSelf: 'center',
   },
@@ -288,14 +283,12 @@ export const styles = StyleSheet.create({
     height: '100%',
   },
   modalBase: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
     width: '100%',
     height: '100%',
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center' 
+    justifyContent: 'center',
+    backgroundColor: Colors.modalOverlay,
   },
   modalContainer: {
     backgroundColor: Colors.modalBase,

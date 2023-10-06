@@ -201,7 +201,6 @@ export function Profile({ drawer }) {
         onRequestClose={actions.hideDetails}
       >
         <View style={styles.modalOverlay}>
-          <View style={styles.blur} />
           <KeyboardAvoidingView style={styles.modalBase} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
             <View style={styles.modalContainer}>
               <View style={styles.modalClose}>
