@@ -5,7 +5,7 @@ import { AccountContext } from 'context/AccountContext';
 import { ProfileContext } from 'context/ProfileContext';
 import { getLanguageStrings } from 'constants/Strings';
 
-export function useCards(filter, sort) {
+export function useCards() {
 
   const [state, setState] = useState({
     cards: [],
@@ -58,10 +58,10 @@ export function useCards(filter, sort) {
       if (item.blocked) {
         return false;
       }
-      if (!filter) {
+      if (!state.filter) {
         return true;
       }
-      const lower = filter.toLowerCase();
+      const lower = state.filter.toLowerCase();
       if (item.name) {
         if (item.name.toLowerCase().includes(lower)) {
           return true;
@@ -74,7 +74,7 @@ export function useCards(filter, sort) {
       }
       return false;
     })
-    if (sort) {
+    if (state.sort) {
       filtered.sort((a, b) => {
         const aName = a?.name?.toLowerCase();
         const bName = b?.name?.toLowerCase();
@@ -99,7 +99,7 @@ export function useCards(filter, sort) {
       });
     }
     updateState({ cards: filtered }); 
-  }, [card, filter, sort]);
+  }, [card, state.filter, state.sort]);
 
   const actions = {
     call: async (card) => {
