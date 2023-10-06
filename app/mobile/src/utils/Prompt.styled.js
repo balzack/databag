@@ -115,7 +115,8 @@ export const styles = StyleSheet.create({
   blur: {
     width: '100%',
     height: '100%',
-    backgroundColor: Colors.modalOverlay,
+    backgroundColor: '#333333',
+    opacity: 0.8,
   },
 });
 
