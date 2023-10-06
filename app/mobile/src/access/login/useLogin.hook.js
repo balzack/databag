@@ -31,10 +31,10 @@ export function useLogin() {
   }, [app.state.session]);
 
   useEffect(() => {
-    if (state.password && state.login && !state.enabled && state.login.includes('@')) {
+    if (state.password && state.login && !state.enabled && (state.login.includes('@') || state.login.includes('/'))) {
       updateState({ enabled: true });
     }
-    if ((!state.password || !state.login || !state.login.includes('@')) && state.enabled) {
+    if ((!state.password || !state.login || (!state.login.includes('@') && !state.login.includes('/'))) && state.enabled) {
       updateState({ enabled: false });
     }
   }, [state.login, state.password]);

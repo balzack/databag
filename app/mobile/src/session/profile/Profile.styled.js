@@ -369,6 +369,7 @@ export const styles = StyleSheet.create({
     height: 32,
     display: 'flex',
     alignItems: 'center',
+    justifyContent: 'center',
   },
   cancelButtonText: {
     color: Colors.cancelButtonText,
@@ -386,6 +387,7 @@ export const styles = StyleSheet.create({
     height: 32,
     display: 'flex',
     alignItems: 'center',
+    justifyContent: 'center',
   },
   saveButtonText: {
     color: Colors.primaryButtonText,

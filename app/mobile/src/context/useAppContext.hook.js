@@ -120,7 +120,7 @@ export function useAppContext() {
         throw new Error('invalid session state');
       }
       updateState({ loggedOut: false });
-      const acc = username.split('@');
+      const acc = username.includes('/') ? username.split('/') : username.split('@');
       const session = await setLogin(acc[0], acc[1], password, getApplicationName(), getVersion(), getDeviceId(), deviceToken.current, notifications)
       access.current = { loginTimestamp: session.created, server: acc[1], token: session.appToken, guid: session.guid };
       await store.actions.setSession(access.current);
