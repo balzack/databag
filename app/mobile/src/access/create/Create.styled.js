@@ -17,9 +17,9 @@ export const styles = StyleSheet.create({
   modalContainer: {
     width: '100%',
     height: '100%',
-    backgroundColor: Colors.grey,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: Colors.modalBase,
   },
   tos: {
     display: 'flex',
@@ -60,16 +60,21 @@ export const styles = StyleSheet.create({
     paddingLeft: 16,
     paddingRight: 16,
     borderRadius: 4,
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.closeButton,
     marginTop: 8,
   },
   donetext: {
     color: Colors.text,
     fontSize: 16,
+    color: Colors.closeButtonText,
   },
   termsheader: {
     fontWeight: 'bold',
     textAlign: 'center',
+    color: Colors.text,
+  },
+  termstext: {
+    color: Colors.text,
   },
   demo: {
     alignItems: 'center',
@@ -119,7 +124,7 @@ export const styles = StyleSheet.create({
     width: '100%',
     textAlign: 'center',
     fontSize: 24,
-    color: Colors.grey,
+    color: Colors.descriptionText,
   },
   spacemid: {
     flexGrow: 1,

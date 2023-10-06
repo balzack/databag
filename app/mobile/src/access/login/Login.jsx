@@ -117,7 +117,7 @@ export function Login() {
         <View style={styles.modalContainer}>
           <ScrollView style={styles.terms} persistentScrollbar={true}>
             <Text style={styles.termsheader}>{ state.strings.policy }</Text>
-            <Text numberOfLines={0}>{ tos[state.strings.languageCode] }</Text>
+            <Text numberOfLines={0} style={styles.termstext}>{ tos[state.strings.languageCode] }</Text>
           </ScrollView>
           <TouchableOpacity style={styles.done} onPress={actions.hideTerms}>
             <Text style={styles.donetext}>{ state.strings.close }</Text>
