@@ -32,7 +32,7 @@ export function Admin() {
         </View>
         <Text style={styles.title}>Databag</Text>
         <View style={styles.spacemid}>
-          <Text style={styles.header}>{ state.strings.adminAccess }</Text>
+          <Text style={styles.header} adjustsFontSizeToFit={true} numberOfLines={1}>{ state.strings.adminAccess }</Text>
         </View>
         <View style={styles.spacetop}>
           <View style={styles.inputwrapper}>

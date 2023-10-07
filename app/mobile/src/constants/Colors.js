@@ -101,7 +101,7 @@ const DarkColors = {
   dangerButtonText: '#ffffff',
   closeButton: '#777777',
   closeButtonText: '#ffffff',
-  inputBase: '#777777',
+  inputBase: '#555555',
   inputPlaceholder: '#cccccc',
   inputText: '#eeeeee',
   statusText: '#ffffff',
