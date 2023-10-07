@@ -381,7 +381,7 @@ const Strings = [
     welcome: 'Bienvenue Sur Databag',
     communication: 'Communication Pour l\'Internet Décentralisé',
     setup: 'Configurez Votre Profil',
-    connect: 'Se Connecter Avec d'Autres',
+    connect: 'Se Connecter Avec d\'Autres',
     start: 'Créer une Conversation',
     started: 'Commencer',
   },
