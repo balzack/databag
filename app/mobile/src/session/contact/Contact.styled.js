@@ -188,10 +188,15 @@ export const styles = StyleSheet.create({
     paddingLeft: 16,
     paddingRight: 16,
   },
+  name: {
+    display: 'flex',
+    flexShrink: 0,
+  },
   usernameStatus: {
     display: 'flex',
     flexDirection: 'row',
     marginTop: 4,
+    flexShrink: 0,
   },
   status: {
     display: 'flex',

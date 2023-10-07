@@ -242,12 +242,14 @@ export function Contact({ contact, drawer, back }) {
               </TouchableOpacity>
             </View>
             <View style={{ ...styles.details, width: state.detailWidth }}>
-              { state.name && (
-                <Text style={styles.nameSet} numberOfLines={1} adjustsFontSizeToFit={true}>{ state.name }</Text>
-              )}
-              { !state.name && (
-                <Text style={styles.nameUnset}>{ state.strings.name }</Text>
-              )}
+              <View style={styles.name}>
+                { state.name && (
+                  <Text style={styles.nameSet} numberOfLines={1} adjustsFontSizeToFit={true}>{ state.name }</Text>
+                )}
+                { !state.name && (
+                  <Text style={styles.nameUnset}>{ state.strings.name }</Text>
+                )}
+              </View>
               <View style={styles.usernameStatus}>
                 <Text style={styles.username} numberOfLines={1} adjustsFontSizeToFit={true}>{ state.username }</Text>
                 <View style={styles.status}>
