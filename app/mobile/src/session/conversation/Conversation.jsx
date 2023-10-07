@@ -109,7 +109,7 @@ export function Conversation({ navigation, cardId, channelId, closeConversation,
             )}
             { state.loaded && state.topics.length === 0 && (
               <View style={styles.empty}>
-                <Text style={styles.emptytext}>Empty Topic</Text>
+                <Text style={styles.emptytext}>{ state.strings.emptyTopic }</Text>
               </View>
             )}
           </View>
