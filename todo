@@ -4,8 +4,12 @@ registry showing stale handle for unknown contact
 show disabled notifications if node disabled
 warn if federated hostname fails
 
-fdroid modal blur
+channel detail notifications
 block restore activity
-fdroid keyboard overlap
-contact sort
-fdroid edit profile detail button text center
+use apn for ios
+add more language support
+stylize splash screen
+
+guest member show as unknown in chat
+create new topic increases size on activity
+duplicate contact entry in abeam account
