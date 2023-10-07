@@ -67,13 +67,13 @@ export function Channels({ cardId, channelId, navigation, openConversation, dmCh
           <View style={styles.inputwrapper}>
             <Ionicons style={styles.icon} name="search1" size={16} color={Colors.disabled} />
             <TextInput style={styles.inputfield} value={state.filter} onChangeText={actions.setFilter}
-                autoCapitalize="none" placeholderTextColor={Colors.disabled}  placeholder="Topics" />
+                autoCapitalize="none" placeholderTextColor={Colors.disabled}  placeholder={state.strings.topics} />
           </View>
         </View>
       )}
       { state.channels.length == 0 && (
         <View style={styles.notfound}>
-          <Text style={styles.notfoundtext}>No Topics Found</Text>
+          <Text style={styles.notfoundtext}>{ state.strings.noTopics }</Text>
         </View>
       )}
       { state.channels.length != 0 && (

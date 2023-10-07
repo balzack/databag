@@ -186,6 +186,7 @@ const Strings = [
 
     editMessage: 'Edit Message Text',
     emptyTopic: 'Empty Topic',
+    noTopics: 'No Topics',
     notes: 'Notes',
 
     welcome: 'Welcome To Databag',
@@ -377,6 +378,7 @@ const Strings = [
     editMessage: 'Modifier le Texte du Message',
     emptyTopic: 'Pas de Messages',
     notes: 'Notes',
+    noTopics: 'Pas de Sujets',
 
     welcome: 'Bienvenue Sur Databag',
     communication: 'Communication Pour l\'Internet Décentralisé',
@@ -567,6 +569,7 @@ const Strings = [
     editMessage: 'Editar Texto del Mensaje',
     emptyTopic: 'Ningún Mensaje',
     notes: 'Notas',
+    noTopics: 'No Hay Temas',
 
     welcome: 'Bienvenido a Databag',
     communication: 'Comunicación para Internet Descentralizada',
@@ -757,6 +760,7 @@ const Strings = [
     editMessage: 'Nachrichtentext Bearbeiten',
     emptyTopic: 'Keine Nachrichten',
     notes: 'Anmerkungen',
+    noTopics: 'Keine Themen',
 
     welcome: 'Willkommen bei Databag',
     communication: 'Kommunikation für das dezentrale Internet',
@@ -932,6 +936,7 @@ const Strings = [
     editMessage: 'Editar Texto da Mensagem',
     emptyTopic: 'Sem Mensagens',
     notes: 'Notas',
+    noTopics: 'Sem Tópicos',
 
     welcome: 'Bem-vindo ao DataBag',
     communication: 'Comunicação para a Internet Descentralizada',
