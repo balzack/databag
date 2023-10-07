@@ -6,10 +6,12 @@ import { CardContext } from 'context/CardContext';
 import { ChannelContext } from 'context/ChannelContext';
 import { RingContext } from 'context/RingContext';
 import { ProfileContext } from 'context/ProfileContext';
+import { getLanguageStrings } from 'constants/Strings';
 
 export function useSession() {
 
   const [state, setState] = useState({
+    strings: getLanguageStrings(),
     tabbled: null,
     subWidth: '50%',
     baseWidth: '50%',
