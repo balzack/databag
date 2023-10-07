@@ -408,8 +408,8 @@ export function Session({ sharing, clearSharing }) {
         { state.firstRun == true && (
           <SafeAreaView edges={['top', 'bottom']}  style={styles.firstRun}>
             <View style={styles.title}>
-              <Text style={styles.titleText}>Welcome To Databag</Text>
-              <Text style={styles.tagText}>Communication for the Decentralized Web</Text>
+              <Text style={styles.titleText}>{ state.strings.welcome }</Text>
+              <Text style={styles.tagText}>{ state.strings.communication }</Text>
             </View>
             { Colors.theme === 'dark' && (
               <Image style={styles.splash} source={darkSplash} resizeMode="contain" />
@@ -420,18 +420,18 @@ export function Session({ sharing, clearSharing }) {
             <View style={styles.steps} >
               <View style={styles.step}>
                 <Ionicons name={'user'} size={18} color={Colors.white} />
-                <Text style={styles.stepText}>Setup Your Profile</Text>
+                <Text style={styles.stepText}>{ state.strings.setup }</Text>
               </View>
               <View style={styles.step}>
                 <Ionicons name={'contacts'} size={18} color={Colors.white} />
-                <Text style={styles.stepText}>Connect With People</Text>
+                <Text style={styles.stepText}>{ state.strings.connect }</Text>
               </View>
               <View style={styles.step}>
                 <Ionicons name={'message1'} size={18} color={Colors.white} />
-                <Text style={styles.stepText}>Start a Conversation</Text>
+                <Text style={styles.stepText}>{ state.strings.start }</Text>
               </View>
               <TouchableOpacity style={styles.start} onPress={actions.clearFirstRun}>
-                <Text style={styles.startText}>Get Started</Text>
+                <Text style={styles.startText}>{ state.strings.started }</Text>
               </TouchableOpacity>
             </View>
           </SafeAreaView>

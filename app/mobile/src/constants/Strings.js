@@ -187,6 +187,13 @@ const Strings = [
     editMessage: 'Edit Message Text',
     emptyTopic: 'Empty Topic',
     notes: 'Notes',
+
+    welcome: 'Welcome To Databag',
+    communication: 'Communication for the Decentralized Web',
+    setup: 'Setup Your Profile',
+    connect: 'Connect With People',
+    start: 'Start a Conversation',
+    started: 'Get Started',
   },
   {
     languageCode: 'fr',
@@ -370,6 +377,13 @@ const Strings = [
     editMessage: 'Modifier le Texte du Message',
     emptyTopic: 'Pas de Messages',
     notes: 'Notes',
+
+    welcome: 'Bienvenue Sur Databag',
+    communication: 'Communication Pour l\'Internet Décentralisé',
+    setup: 'Configurez Votre Profil',
+    connect: 'Se Connecter Avec d'Autres',
+    start: 'Créer une Conversation',
+    started: 'Commencer',
   },
   {
     languageCode: 'es',
@@ -553,6 +567,13 @@ const Strings = [
     editMessage: 'Editar Texto del Mensaje',
     emptyTopic: 'Ningún Mensaje',
     notes: 'Notas',
+
+    welcome: 'Bienvenido a Databag',
+    communication: 'Comunicación para Internet Descentralizada',
+    setup: 'Configura Tu Perfil',
+    connect: 'Conéctate Con Gente',
+    start: 'Iniciar una Conversación',
+    started: 'Empezar',
   },
   {
     languageCode: 'de',
@@ -736,6 +757,13 @@ const Strings = [
     editMessage: 'Nachrichtentext Bearbeiten',
     emptyTopic: 'Keine Nachrichten',
     notes: 'Anmerkungen',
+
+    welcome: 'Willkommen bei Databag',
+    communication: 'Kommunikation für das dezentrale Internet',
+    setup: 'Richten Sie Ihr Profil ein',
+    connect: 'Verbinde dich mit Menschen',
+    start: 'Eine Konversation Beginnen',
+    started: 'Loslegen',
   },
   {
     languageCode: 'pt',
@@ -904,6 +932,13 @@ const Strings = [
     editMessage: 'Editar Texto da Mensagem',
     emptyTopic: 'Sem Mensagens',
     notes: 'Notas',
+
+    welcome: 'Bem-vindo ao DataBag',
+    communication: 'Comunicação para a Internet Descentralizada',
+    setup: 'Configure Seu Perfil',
+    connect: 'Conecte-se Com As Pessoas',
+    start: 'Crie Uma Conversa',
+    started: 'Iniciar',
   },
 ];
 
