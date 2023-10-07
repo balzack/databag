@@ -103,7 +103,7 @@ export function Profile({ drawer }) {
               <Text style={styles.locationSet}>{ state.location }</Text>
             )}
             { !state.location && (
-              <Text style={styles.locationUnset}>Location</Text>
+              <Text style={styles.locationUnset}>{ state.strings.location }</Text>
             )}
           </View>
           <View style={styles.drawerEntry}>
@@ -112,7 +112,7 @@ export function Profile({ drawer }) {
               <Text style={styles.descriptionSet}>{ state.description }</Text>
             )}
             { !state.description && (
-              <Text style={styles.descriptionUnset}>Description</Text>
+              <Text style={styles.descriptionUnset}>{ state.strings.description }</Text>
             )}
           </View>
           <TouchableOpacity style={styles.drawerEntry} activeOpacity={1}>
