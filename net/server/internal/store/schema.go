@@ -173,13 +173,13 @@ type CardSlot struct {
   CardSlotID        string          `gorm:"not null;index:cardslot,unique"`
   AccountID         uint            `gorm:"not null;index:cardslot,unique"`
   Revision          int64           `gorm:"not null"`
-  CardID            uint            `gorm:"not null;default:0"`
+  CardID            int             `gorm:"not null;default:0"`
   Card              *Card
   Account           Account
 }
 
 type Card struct {
-  ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
+  ID                int             `gorm:"primaryKey;not null;unique;autoIncrement"`
   AccountID         string          `gorm:"not null;index:cardguid,unique"`
   GUID              string          `gorm:"not null;index:cardguid,unique"`
   Username          string
@@ -236,13 +236,13 @@ type ChannelSlot struct {
   ChannelSlotID     string          `gorm:"not null;index:channelslot,unique"`
   AccountID         uint            `gorm:"not null;index:channelslot,unique"`
   Revision          int64           `gorm:"not null"`
-  ChannelID         uint            `gorm:"not null;default:0"`
+  ChannelID         int             `gorm:"not null;default:0"`
   Channel           *Channel
   Account           Account
 }
 
 type Channel struct {
-  ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
+  ID                int             `gorm:"primaryKey;not null;unique;autoIncrement"`
   AccountID         uint
   TopicRevision     int64           `gorm:"not null"`
   DetailRevision    int64           `gorm:"not null"`
@@ -259,8 +259,8 @@ type Channel struct {
 
 type Member struct {
   ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
-  ChannelID         uint
-  CardID            uint
+  ChannelID         int
+  CardID            int
   PushEnabled       bool
   Card              Card
   Channel           *Channel
@@ -270,7 +270,7 @@ type TopicSlot struct {
   ID                uint
   TopicSlotID       string          `gorm:"not null;index:topicaccount,unique;index:topicchannel,unique"`
   AccountID         uint            `gorm:"not null;index:topicaccount,unique"`
-  ChannelID         uint            `gorm:"not null;index:topicchannel,unique"`
+  ChannelID         int             `gorm:"not null;index:topicchannel,unique"`
   Revision          int64           `gorm:"not null"`
   Topic             *Topic
   Channel           *Channel
@@ -281,7 +281,7 @@ type Topic struct {
   ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
   DetailRevision    int64           `gorm:"not null"`
   AccountID         uint
-  ChannelID         uint
+  ChannelID         int
   TopicSlotID       uint            `gorm:"not null;index:topictopicslot,unique"`
   GUID              string
   DataType          string          `gorm:"index"`
@@ -301,7 +301,7 @@ type Asset struct {
   ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
   AssetID           string          `gorm:"not null;index:asset,unique"`
   AccountID         uint            `gorm:"not null;index:asset,unique"`
-  ChannelID         uint
+  ChannelID         int
   TopicID           uint
   Status            string          `gorm:"not null;index"`
   Size              int64
@@ -321,7 +321,7 @@ type TagSlot struct {
   ID                uint
   TagSlotID         string          `gorm:"not null;index:tagslot,unique"`
   AccountID         uint            `gorm:"not null;index:tagslot,unique"`
-  ChannelID         uint            `gorm:"not null"`
+  ChannelID         int             `gorm:"not null"`
   TopicID           uint            `gorm:"not null;index:tagtopic"`
   Revision          int64           `gorm:"not null"`
   Tag               *Tag
@@ -334,7 +334,7 @@ type Tag struct {
   ID                uint            `gorm:"primaryKey;not null;unique;autoIncrement"`
   TagSlotID         uint            `gorm:"not null;index:tagtagslot,unique"`
   AccountID         uint
-  ChannelID         uint            `gorm:"not null;index:channeltag"`
+  ChannelID         int             `gorm:"not null;index:channeltag"`
   TopicID           uint            `gorm:"not null;index:topictag"`
   GUID              string          `gorm:"not null"`
   DataType          string          `gorm:"index"`

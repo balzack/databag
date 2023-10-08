@@ -67,6 +67,9 @@ func SetCloseMessage(w http.ResponseWriter, r *http.Request) {
         return res
       }
 		}
+		if res := tx.Model(&slot).Update("card_id", -1).Error; res != nil {
+			return res
+		}
 		if res := tx.Model(&slot).Update("revision", account.CardRevision+1).Error; res != nil {
 			return res
 		}
