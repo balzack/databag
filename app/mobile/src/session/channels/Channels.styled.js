@@ -160,6 +160,7 @@ export const styles = StyleSheet.create({
     paddingRight: 8,
     marginRight: 8,
     minWidth: 72,
+    height: 32,
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
