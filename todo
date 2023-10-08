@@ -7,9 +7,5 @@ warn if federated hostname fails
 channel detail notifications
 block restore activity
 use apn for ios
-add more language support
 stylize splash screen
 
-guest member show as unknown in chat
-create new topic increases size on activity
-duplicate contact entry in abeam account
