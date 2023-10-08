@@ -285,8 +285,8 @@ export function Dashboard(props) {
                 </TouchableOpacity>
               </View>
               <View style={styles.modalControls}>
-                <TouchableOpacity style={styles.cancel} onPress={actions.hideAddUser}>
-                  <Text style={styles.cancelText}>{ state.strings.close }</Text>
+                <TouchableOpacity style={styles.close} onPress={actions.hideAddUser}>
+                  <Text style={styles.closeText}>{ state.strings.close }</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -316,8 +316,8 @@ export function Dashboard(props) {
                 </TouchableOpacity>
               </View>
               <View style={styles.modalControls}>
-                <TouchableOpacity style={styles.cancel} onPress={actions.hideAccessUser}>
-                  <Text style={styles.cancelText}>{ state.strings.close }</Text>
+                <TouchableOpacity style={styles.close} onPress={actions.hideAccessUser}>
+                  <Text style={styles.closeText}>{ state.strings.close }</Text>
                 </TouchableOpacity>
               </View>
             </View>

@@ -118,7 +118,7 @@ export function Channels({ cardId, channelId, navigation, openConversation, dmCh
 
               { state.contacts.length == 0 && (
                 <View style={styles.emptyMembers}>
-                  <Text style={styles.empty}>{ state.strings.noContacts }</Text>
+                  <Text style={styles.notfoundtext}>{ state.strings.noContacts }</Text>
                 </View>
               )}
               { state.contacts.length > 0 && (
