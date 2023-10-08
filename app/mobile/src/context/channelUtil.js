@@ -1,6 +1,6 @@
 import { getCardByGuid } from 'context/cardUtil';
 
-export function getChannelSubjectLogo(cardId, profileGuid, channel, cards, cardImageUrl) {
+export function getChannelSubjectLogo(cardId, profileGuid, channel, cards, cardImageUrl, strings) {
 
   let subject;
   try {
@@ -31,7 +31,7 @@ export function getChannelSubjectLogo(cardId, profileGuid, channel, cards, cardI
 
   if (!subject) {
     if (contacts.length === 0) {
-      subject = 'Notes';
+      subject = strings?.notes;
     }
     else {
       const names = [];

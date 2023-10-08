@@ -56,6 +56,9 @@ func SetCloseMessage(w http.ResponseWriter, r *http.Request) {
       if res := tx.Delete(&card).Error; res != nil {
         return res
       }
+      if res := tx.Model(&slot).Update("card_id", -1).Error; res != nil {
+        return res
+      }
     } else {
 			if res := tx.Model(&card).Update("status", APPCardConfirmed).Error; res != nil {
 				return res

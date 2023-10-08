@@ -97,7 +97,7 @@ func RemoveChannel(w http.ResponseWriter, r *http.Request) {
 				return res
 			}
 			slot.Channel = nil
-			if res := tx.Model(&slot).Update("channel_id", 0).Error; res != nil {
+			if res := tx.Model(&slot).Update("channel_id", -1).Error; res != nil {
 				return res
 			}
 			if res := tx.Model(&slot).Update("revision", account.ChannelRevision+1).Error; res != nil {

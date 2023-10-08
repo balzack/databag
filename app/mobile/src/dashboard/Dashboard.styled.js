@@ -101,9 +101,21 @@ export const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
   },
-  cancel: {
+  close: {
     borderWidth: 1,
-    borderColor: Colors.lightgrey,
+    borderColor: Colors.closeButton,
+    borderRadius: 4,
+    padding: 6,
+    marginRight: 8,
+    width: 92,
+    display: 'flex',
+    alignItems: 'center',
+  },
+  closeText: {
+    color: Colors.closeButtonText,
+  },
+  cancel: {
+    backgroundColor: Colors.cancelButton,
     borderRadius: 4,
     padding: 6,
     marginRight: 8,

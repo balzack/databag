@@ -111,6 +111,8 @@ export function useCards() {
       updateState({ filter });
     },
     setSort: (sort) => {
+console.log("SETTTING : ", sort);
+
       updateState({ sort });
     },
   };

@@ -3,3 +3,9 @@ rotate screen mangles profile
 registry showing stale handle for unknown contact
 show disabled notifications if node disabled
 warn if federated hostname fails
+
+channel detail notifications
+block restore activity
+use apn for ios
+stylize splash screen
+

@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect, useContext } from 'react';
-import { Linking } from 'react-native';
+import { Linking, Alert } from 'react-native';
 import { ConversationContext } from 'context/ConversationContext';
 import { CardContext } from 'context/CardContext';
 import { ProfileContext } from 'context/ProfileContext';

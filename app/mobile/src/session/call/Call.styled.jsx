@@ -11,7 +11,7 @@ export const styles = StyleSheet.create({
     backgroundColor: 'rgba(52, 52, 52, 0.8)'
   },
   callFrame: {
-    backgroundColor: Colors.formBackground,
+    backgroundColor: Colors.contentBase,
     padding: 8,
     borderRadius: 4,
     display: 'flex',

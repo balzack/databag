@@ -89,8 +89,8 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   notfoundtext: {
-    fontSize: 18,
-    color: Colors.disabled,
+    fontSize: 20,
+    color: Colors.unsetText,
   },
   columnbottom: {
     paddingLeft: 24,
@@ -129,6 +129,9 @@ export const styles = StyleSheet.create({
     marginTop: 16,
     height: 200,
   },
+  empty: {
+    color: Colors.descriptionText,
+  },
   emptyMembers: {
     width: '100%',
     borderWidth: 1,
@@ -160,6 +163,7 @@ export const styles = StyleSheet.create({
     paddingRight: 8,
     marginRight: 8,
     minWidth: 72,
+    height: 32,
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',

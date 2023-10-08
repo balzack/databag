@@ -23,7 +23,6 @@ export function useContact(contact, back) {
     guid: null,
     busy: false,
     offsync: false,
-
     
     strings: getLanguageStrings(),
     imageSource: null,
@@ -63,7 +62,7 @@ export function useContact(contact, back) {
       const username = `${handle}/${node}`
       const imageSource = imageSet ? { uri: card.actions.getCardImageUrl(cardId) } : avatar;
       const status = offsync ? 'offsync' : detail.status;
-      updateState({ name, handle, node: server, location, description, imageSource, username, cardId, guid, status });
+      updateState({ name, handle, node: host, location, description, imageSource, username, cardId, guid, status });
     }
     else {
       const { guid, handle, node, name, location, description, imageSet } = contact || {};

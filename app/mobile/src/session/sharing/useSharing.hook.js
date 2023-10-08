@@ -6,9 +6,11 @@ import { ProfileContext } from 'context/ProfileContext';
 import { getChannelSeals, isUnsealed, getContentKey, encryptChannelSubject, decryptChannelSubject, decryptTopicSubject } from 'context/sealUtil';
 import { getCardByGuid } from 'context/cardUtil';
 import { getChannelSubjectLogo } from 'context/channelUtil';
+import { getLanguageStrings } from 'constants/Strings';
 
 export function useSharing() {
   const [state, setState] = useState({
+    strings: getLanguageStrings(),
     channels: [],
   });
 
@@ -59,7 +61,7 @@ export function useSharing() {
     }
 
     const profileGuid = profile.state?.identity?.guid;
-    const { logo, subject } = getChannelSubjectLogo(cardId, profileGuid, item, card.state.cards, card.actions.getCardImageUrl);
+    const { logo, subject } = getChannelSubjectLogo(cardId, profileGuid, item, card.state.cards, card.actions.getCardImageUrl, state.strings);
 
     return { cardId, channelId, subject, message, logo, timestamp, locked, unlocked };
   }
