@@ -69,7 +69,7 @@ export function useContact(contact, back) {
       const host = node ? node : server;
       
       const username = `${handle}/${node}`
-      const imageSource = imageSet ? { uri: getListingImageUrl(server, guid) } : avatar;
+      const imageSource = imageSet ? { uri: getListingImageUrl(host, guid) } : avatar;
       updateState({ guid, handle, node: host, name, location, description, imageSource, username, offsync: false, status: 'unsaved' });
     }
   }, [contact, card.state, profile.state]);

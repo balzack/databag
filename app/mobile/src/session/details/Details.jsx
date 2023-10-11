@@ -104,18 +104,6 @@ export function Details({ channel, clearConversation }) {
         </View>  
       </View>
 
-      <View style={styles.controls}>
-        <View style={styles.notify}>
-          <TouchableOpacity onPress={() => setNotifications(!state.notification)} activeOpacity={1}>
-            <Text style={styles.notifyText}>{ state.strings.enableNotifications }</Text>
-          </TouchableOpacity>
-          { state.notification != null && (
-            <Switch value={state.notification} style={Platform.OS==='ios' ? styles.visibleSwitch : {}} thumbColor={Colors.sliderGrip}
-                ios_backgroundColor={Colors.idleFill} trackColor={styles.track} onValueChange={setNotifications} />
-          )}
-        </View>
-      </View>
-
       <View style={styles.control}>
         { busy && (
           <ActivityIndicator animating={true} color={Colors.text} size={'large'} />

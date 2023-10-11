@@ -55,16 +55,16 @@ export function CardItem({ item, openContact, enableIce, call, message }) {
           { item.status !== 'connected' && (
             <TouchableOpacity style={styles.more} onPress={select}>
               { item.status === 'requested' && (
-                <MatIcons name={'dots-horizontal'} size={32} color={Colors.requested} />
+                <MatIcons name={'circle-medium'} size={24} color={Colors.requested} />
               )}
               { item.status === 'connecting' && (
-                <MatIcons name={'dots-horizontal'} size={32} color={Colors.connecting} />
+                <MatIcons name={'circle-medium'} size={24} color={Colors.connecting} />
               )}
               { item.status === 'pending' && (
-                <MatIcons name={'dots-horizontal'} size={32} color={Colors.pending} />
+                <MatIcons name={'circle-medium'} size={24} color={Colors.pending} />
               )}
               { item.status === 'confirmed' && (
-                <MatIcons name={'dots-horizontal'} size={32} color={Colors.confirmed} />
+                <MatIcons name={'circle-medium'} size={24} color={Colors.confirmed} />
               )}
             </TouchableOpacity>
           )}
