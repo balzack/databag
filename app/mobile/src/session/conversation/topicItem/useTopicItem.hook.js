@@ -431,7 +431,7 @@ export function useTopicItem(item, hosting, remove, contentKey) {
     },
     promptBlock: (block) => {
       display.actions.showPrompt({
-        title: state.strings.blockTopic,
+        title: state.strings.blockMessage,
         centerButtons: true,
         ok: { label: state.strings.confirmBlock, action: async () => await block(item.topicId), failed: () => {
           Alert.alert(
@@ -444,7 +444,7 @@ export function useTopicItem(item, hosting, remove, contentKey) {
     },
     promptReport: (report) => {
       display.actions.showPrompt({
-        title: state.strings.reportTopic,
+        title: state.strings.reportMessage,
         centerButtons: true,
         ok: { label: state.strings.confirmReport, action: async () => await report(item.topicId), failed: () => {
           Alert.alert(
@@ -457,7 +457,7 @@ export function useTopicItem(item, hosting, remove, contentKey) {
     },
     promptRemove: (remove) => {
       display.actions.showPrompt({
-        title: state.strings.deleteTopic,
+        title: state.strings.deleteMessage,
         centerButtons: true,
         ok: { label: state.strings.confirmDelete, action: async () => await remove(item.topicId), failed: () => {
           Alert.alert(

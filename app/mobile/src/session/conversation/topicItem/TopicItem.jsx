@@ -21,31 +21,6 @@ import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 export function TopicItem({ item, focused, focus, hosting, remove, update, block, report, contentKey }) {
   const { state, actions } = useTopicItem(item, hosting, remove, contentKey);
 
-  const erase = () => {
-    Alert.alert(
-      "Removing Message",
-      "Confirm?",
-      [
-        { text: "Cancel",
-          onPress: () => {},
-        },
-        { text: "Remove",
-          onPress: async () => {
-            try {
-              await remove(item.topicId);
-            }
-            catch (err) {
-              console.log(err);
-              Alert.alert(
-                'Failed to Remove Message',
-                'Please try again.'
-              )
-            }
-          },
-        }
-      ]
-    );
-  }
 
   const shareMessage = async () => {
     try {
@@ -54,62 +29,10 @@ export function TopicItem({ item, focused, focus, hosting, remove, update, block
     catch(err) {
       console.log(err);
       Alert.alert(
-        'Failed to Share Message',
-        'Please try again.'
+        state.strings.error,
+        state.strings.tryAgain,
       )
     }
-  }
-
-  const reportMessage = () => {
-    Alert.alert(
-      "Report Message",
-      "Confirm?",
-      [
-        { text: "Cancel",
-          onPress: () => {},
-        },
-        { text: "Report",
-          onPress: async () => {
-            try {
-              await report(item.topicId);
-            }
-            catch (err) {
-              console.log(err);
-              Alert.alert(
-                'Failed to Report Message',
-                'Please try again.'
-              )
-            }
-          },
-        }
-      ]
-    );
-  }
-
-  const hideMessage = () => {
-    Alert.alert(
-      "Blocking Message",
-      "Confirm?",
-      [
-        { text: "Cancel",
-          onPress: () => {},
-        },
-        { text: "Block",
-          onPress: async () => {
-            try {
-              await block(item.topicId);
-            }
-            catch (err) {
-              console.log(err);
-              Alert.alert(
-                'Failed to Block Message',
-                'Please try again.'
-              )
-            }
-          },
-        }
-      ]
-    );
   }
 
   const renderThumb = (thumb) => {
