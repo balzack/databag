@@ -1138,7 +1138,7 @@ const Strings = [
     setup: 'Настройте свой профиль',
     connect: 'Свяжитесь с людьми',
     start: 'Начните разговор',
-    started: 'Начало'
+    started: 'Начало',
     deleteMessage: 'Удаленное сообщение',
     blockMessage: 'Заблокировать сообщение',
     reportMessage: 'Пожаловаться на сообщение',
