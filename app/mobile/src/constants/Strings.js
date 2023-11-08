@@ -195,6 +195,10 @@ const Strings = [
     connect: 'Connect With People',
     start: 'Start a Conversation',
     started: 'Get Started',
+
+    deleteMessage: 'Delete Message',
+    blockMessage: 'Block Message',
+    reportMessage: 'Report Message',
   },
   {
     languageCode: 'fr',
@@ -386,6 +390,10 @@ const Strings = [
     connect: 'Se Connecter Avec d\'Autres',
     start: 'Créer une Conversation',
     started: 'Commencer',
+
+    deleteMessage: 'Supprimer le Message',
+    blockMessage: 'Bloquer le Message',
+    reportMessage: 'Signaler le Message',
   },
   {
     languageCode: 'es',
@@ -577,6 +585,10 @@ const Strings = [
     connect: 'Conéctate Con Gente',
     start: 'Iniciar una Conversación',
     started: 'Empezar',
+
+    deleteMessage: 'Borrar Mensaje',
+    blockMessage: 'Bloquear Mensaje',
+    reportMessage: 'Reportar Mensaje',
   },
   {
     languageCode: 'de',
@@ -768,6 +780,10 @@ const Strings = [
     connect: 'Verbinde dich mit Menschen',
     start: 'Eine Konversation Beginnen',
     started: 'Loslegen',
+
+    deleteMessage: 'Nachricht Löschen',
+    blockMessage: 'Blockieren Sie die Nachricht',
+    reportMessage: 'Melden Sie die Nachricht',
   },
   {
     languageCode: 'pt',
@@ -944,6 +960,10 @@ const Strings = [
     connect: 'Conecte-se Com As Pessoas',
     start: 'Crie Uma Conversa',
     started: 'Iniciar',
+
+    deleteMessage: 'Apagar Mensagem',
+    blockMessage: 'Bloquear Mensagem',
+    reportMessage: 'Denunciar Mensagem',
   },
   {
     languageCode: 'ru',
@@ -1118,7 +1138,10 @@ const Strings = [
     setup: 'Настройте свой профиль',
     connect: 'Свяжитесь с людьми',
     start: 'Начните разговор',
-    started: 'Начало'
+    started: 'Начало',
+    deleteMessage: 'Удаленное сообщение',
+    blockMessage: 'Заблокировать сообщение',
+    reportMessage: 'Пожаловаться на сообщение',
   }
 ];
 

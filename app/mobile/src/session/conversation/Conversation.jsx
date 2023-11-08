@@ -20,8 +20,8 @@ export function Conversation({ navigation, cardId, channelId, closeConversation,
     catch (err) {
       console.log(err);
       Alert.alert(
-        'Failed to Load More Messages',
-        'Please try again',
+        state.strings.error,
+        state.strings.tryAgain,
       )
     }
   }
@@ -34,8 +34,8 @@ export function Conversation({ navigation, cardId, channelId, closeConversation,
     catch (err) {
       console.log(err);
       Alert.alert(
-        'Failed to Update Message',
-        'Please try again.',
+        state.strings.error,
+        state.strings.tryAgain,
       )
     }
   }
