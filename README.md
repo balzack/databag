@@ -77,7 +77,9 @@ From Nginx Proxy Manager:
     - Request new SSL certificate
 
 <details>
-  <summary>From Nginx Proxy config:</summary>
+  <summary>Nginx Proxy config
+➡️ Click to expand ⬅️
+  </summary>
 
   ```
 server {
@@ -88,7 +90,7 @@ location / {
     proxy_set_header Upgrade $http_upgrade;
     proxy_set_header Connection "Upgrade";
     proxy_set_header Host $host;
-    proxy_pass http://localhost:7000;
+    proxy_pass http://127.0.0.1:7000;
     client_max_body_size 0;
     proxy_max_temp_file_size 0;
 
