@@ -1,9 +1,10 @@
 package store
 
 import (
+  "fmt"
   "gorm.io/gorm"
   "gorm.io/gorm/logger"
-  "gorm.io/driver/sqlite"
+  "github.com/glebarez/sqlite"
 )
 
 var DB *gorm.DB;
@@ -13,6 +14,7 @@ func SetPath(path string) {
     Logger: logger.Default.LogMode(logger.Silent),
   })
   if err != nil {
+    fmt.Println(err);
     panic("failed to connect database")
   }
   AutoMigrate(db)
