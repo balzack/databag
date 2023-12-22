@@ -17,6 +17,7 @@ func GetNodeConfig(w http.ResponseWriter, r *http.Request) {
 	var config NodeConfig
 	config.Domain = getStrConfigValue(CNFDomain, "")
 	config.AccountStorage = getNumConfigValue(CNFStorage, 0)
+  config.AllowUnsealed = getBoolConfigValue(CNFAllowUnsealed, false)
   config.EnableImage = getBoolConfigValue(CNFEnableImage, true)
   config.EnableAudio = getBoolConfigValue(CNFEnableAudio, true)
   config.EnableVideo = getBoolConfigValue(CNFEnableVideo, true)

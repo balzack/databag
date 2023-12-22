@@ -10,6 +10,7 @@ export function useAddChannel() {
     sealable: false,
     busy: false,
     showAdd: false,
+    allowUnsealed: false,
     subject: null,
     members: new Set(),
     seal: false,
@@ -25,11 +26,12 @@ export function useAddChannel() {
 
   useEffect(() => {
     const { seal, sealKey } = account.state;
+    const allowUnsealed = account.state.status?.allowUnsealed;
     if (seal?.publicKey && sealKey?.public && sealKey?.private && seal.publicKey === sealKey.public) {
-      updateState({ seal: false, sealable: true });
+      updateState({ seal: false, sealable: true, allowUnsealed });
     }
     else {
-      updateState({ seal: false, sealable: false });
+      updateState({ seal: false, sealable: false, allowUnsealed });
     }
   }, [account.state]);
 
@@ -94,7 +96,7 @@ export function useAddChannel() {
       updateState({ subject });
     },
     cardFilter: (card) => {
-      if (state.seal) {
+      if (state.seal || !state.allowUnsealed) {
         return card?.data?.cardDetail?.status === 'connected' && card?.data?.cardProfile?.seal;
       }
       return card?.data?.cardDetail?.status === 'connected';

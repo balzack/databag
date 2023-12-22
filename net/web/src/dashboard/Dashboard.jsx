@@ -139,6 +139,11 @@ export function Dashboard() {
             <Switch onChange={(e) => actions.setPushSupported(e)} size="small"
               defaultChecked={true} checked={state.pushSupported} />
           </div>
+          <div className="field">
+            <div>Allow Unsealed Topics:&nbsp;</div>
+            <Switch onChange={(e) => actions.setAllowUnsealed(e)} size="small"
+              defaultChecked={true} checked={state.allowUnsealed} />
+          </div>
           <div className="field label">
             <span>Topic Content:</span>
           </div>

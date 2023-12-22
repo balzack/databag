@@ -69,6 +69,14 @@ func SetNodeConfig(w http.ResponseWriter, r *http.Request) {
 			return res
 		}
 
+    // upsert allow unsealed channels
+		if res := tx.Clauses(clause.OnConflict{
+			Columns:   []clause.Column{{Name: "config_id"}},
+			DoUpdates: clause.AssignmentColumns([]string{"bool_value"}),
+		}).Create(&store.Config{ConfigID: CNFAllowUnsealed, BoolValue: config.AllowUnsealed}).Error; res != nil {
+			return res
+		}
+
     // upsert push supported
     if res := tx.Clauses(clause.OnConflict{
        Columns:   []clause.Column{{Name: "config_id"}},

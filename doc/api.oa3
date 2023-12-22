@@ -3895,6 +3895,8 @@ components:
           type: string
         pushSupported:
           type: boolean
+        allowUnsealed:
+          type: boolean
         enableIce:
           type: boolean
         iceUrl:
@@ -4289,6 +4291,8 @@ components:
         updated:
           type: integer
           format: int64
+        allowUnsealed:
+          type: boolean
         enableImage:
           type: boolean
         enableAudio:

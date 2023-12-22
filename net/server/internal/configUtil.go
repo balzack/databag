@@ -33,6 +33,9 @@ const CNFAssetPath = "asset_path"
 //CNFScriptPath specifies the path where transform scripts are found
 const CNFScriptPath = "script_path"
 
+//CNFEnableVideo specifies whether node can process video assets
+const CNFAllowUnsealed = "allow_unsealed"
+
 //CNFEnableImage specifies whether node can process image assets
 const CNFEnableImage = "enable_image"
 

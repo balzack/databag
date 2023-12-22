@@ -16,6 +16,7 @@ export function useChannels() {
     display: null,
     channels: [],
     showAdd: false,
+    allowAdd: false,
   });
 
   const profile = useContext(ProfileContext);
@@ -253,7 +254,11 @@ export function useChannels() {
       }
     });
 
-    updateState({ channels: filtered });
+    const sealKey = account.state.sealKey?.public && account.state.sealKey?.private;
+    const allowUnsealed = account.state.status?.allowUnsealed;
+    const allowAdd = allowUnsealed || sealKey;
+
+    updateState({ channels: filtered, allowAdd });
 
     // eslint-disable-next-line
   }, [account.state, store.state, card.state, channel.state, filter]);
