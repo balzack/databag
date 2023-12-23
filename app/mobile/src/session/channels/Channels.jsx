@@ -50,15 +50,17 @@ export function Channels({ cardId, channelId, navigation, openConversation, dmCh
               <TextInput style={styles.inputfield} value={state.filter} onChangeText={actions.setFilter}
                   autoCapitalize="none" placeholderTextColor={Colors.inputPlaceholder}  placeholder={ state.strings.topics} />
             </View>
-            <TouchableOpacity style={styles.addtop} onPress={actions.showAdding}>
-              <Ionicons name={'message1'} size={16} color={Colors.primaryButtonText} style={[styles.box, { transform: [ { rotateY: "180deg" }, ]} ]}/>
-              <Text style={styles.addtext}>{ state.strings.new }</Text>
-            </TouchableOpacity>
+            { (state.sealable || state.allowUnsealed) && (
+              <TouchableOpacity style={styles.addtop} onPress={actions.showAdding}>
+                <Ionicons name={'message1'} size={16} color={Colors.primaryButtonText} style={[styles.box, { transform: [ { rotateY: "180deg" }, ]} ]}/>
+                <Text style={styles.addtext}>{ state.strings.new }</Text>
+              </TouchableOpacity>
+            )}
           </View>
         ),
       });
     }
-  }, [navigation]);
+  }, [navigation, state.allowUnsealed]);
 
   return (
     <View style={styles.container}>
@@ -85,7 +87,7 @@ export function Channels({ cardId, channelId, navigation, openConversation, dmCh
           keyExtractor={item => (`${item.cardId}:${item.channelId}`)}
         />
       )}
-      { !navigation && (
+      { !navigation && (state.sealable || state.allowUnsealed) && (
         <View style={styles.columnbottom}>
           <TouchableOpacity style={styles.addbottom} onPress={actions.showAdding}>
             <Ionicons name={'message1'} size={16} color={Colors.white} />
@@ -131,7 +133,7 @@ export function Channels({ cardId, channelId, navigation, openConversation, dmCh
               )}
               <View style={styles.addControls}>
                 <View style={styles.sealed}>
-                  { state.sealable && (
+                  { state.sealable && state.allowUnsealed && (
                     <>
                       <Switch style={styles.switch} trackColor={styles.track}
                         value={state.sealed} onValueChange={actions.setSealed} />
