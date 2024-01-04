@@ -42,7 +42,7 @@ export function useAddChannel() {
         try {
           updateState({ busy: true });
           const cards = Array.from(state.members.values());
-          if (state.seal) {
+          if (state.seal || !state.allowUnsealed) {
             const keys = [ account.state.sealKey.public ];
             cards.forEach(id => {
               keys.push(card.state.cards.get(id).data.cardProfile.seal);
