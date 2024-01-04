@@ -23,7 +23,6 @@ export function AddTopic({ contentKey }) {
 
   const keyDown = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
-      msg.current.blur();
       addTopic();
     }
   }
