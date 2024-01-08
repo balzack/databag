@@ -5,6 +5,7 @@ import { StoreContext } from 'context/StoreContext';
 import { ChannelContext } from 'context/ChannelContext';
 import { AccountContext } from 'context/AccountContext';
 import { RingContext } from 'context/RingContext';
+import { encryptChannelSubject } from 'context/sealUtil';
 
 export function useCards() {
 
@@ -15,6 +16,8 @@ export function useCards() {
     sorted: false,
     display: 'small',
     enableIce: false,
+    sealable: false,
+    allowUnsealed: false,
     cards: [],
   });
 
@@ -35,8 +38,14 @@ export function useCards() {
   }, [viewport.state]);
 
   useEffect(() => {
-    const { enableIce } = account.state?.status || {};
-    updateState({ enableIce });
+    const { seal, sealKey, status } = account.state;
+    const allowUnsealed = account.state.status?.allowUnsealed;
+    if (seal?.publicKey && sealKey?.public && sealKey?.private && seal.publicKey === sealKey.public) {
+      updateState({ sealable: true, allowUnsealed, enableIce: status?.enableIce });
+    }
+    else {
+      updateState({ sealable: false, allowUnsealed, enableIce: status?.enableIce });
+    }
   }, [account.state]);
 
   useEffect(() => {
@@ -51,10 +60,11 @@ export function useCards() {
       const guid = profile?.guid;
       const name = profile?.name;
       const node = profile?.node;
+      const seal = profile?.seal;
       const token = detail?.token;
       const handle = profile?.node ? `${profile.handle}@${profile.node}` : profile.handle;
       const logo = profile?.imageSet ? card.actions.getCardImageUrl(item.id) : null;
-      return { cardId, guid, updated, offsync, status, name, node, token, handle, logo };
+      return { cardId, guid, updated, offsync, status, name, node, token, handle, logo, seal };
     });
 
     let latest = 0;
@@ -132,15 +142,25 @@ export function useCards() {
         const cards = entry?.data?.channelDetail?.contacts?.cards || [];
         const subject = entry?.data?.channelDetail?.data || '';
         const type = entry?.data?.channelDetail?.dataType || '';
-        if (cards.length === 1 && cards[0] === cardId && type === 'superbasic' && subject === '{"subject":null}') {
+        
+        if (cards.length === 1 && cards[0] === cardId && subject === '{"subject":null}') {
           channelId = entry.id;
         }
       });
       if (channelId != null) {
         return channelId;
       }
-      const conversation = await channel.actions.addChannel('superbasic', { subject: null }, [ cardId ]);
-      return conversation.id;
+      if (state.sealable && !state.allowUnsealed) {
+        const keys = [ account.state.sealKey.public ];
+        keys.push(card.state.cards.get(cardId).data.cardProfile.seal);
+        const sealed = encryptChannelSubject(state.subject, keys);
+        const conversation = await channel.actions.addChannel('sealed', sealed, [ cardId ]);
+        return conversation.id;
+      }
+      else {
+        const conversation = await channel.actions.addChannel('superbasic', { subject: null }, [ cardId ]);
+        return conversation.id;
+      }
     },
     call: async (contact) => {
       const { cardId, node, guid, token } = contact;
