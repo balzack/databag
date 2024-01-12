@@ -1,0 +1,85 @@
+name: CI
+
+on:
+  push:
+    branches: [ "openwrt" ]
+  pull_request:
+    branches: [ "openwrt" ]
+
+jobs:
+
+  CI:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Node
+      uses: actions/setup-node@v3
+      with:
+        node-version: 16
+
+    - name: Build React
+      run: |
+          npm install --global yarn
+          cd web
+          yarn install
+          yarn build
+
+    - name: Bundle Webapp
+      uses: a7ul/tar-action@v1.1.0
+      id: compress_webapp
+      with:
+        command: c
+        cwd: web
+        files: |
+          build
+        outPath: webapp.tar.gz
+          
+    - name: Bundle Server
+      uses: a7ul/tar-action@v1.1.0
+      id: compress_server
+      with:
+        command: c
+        cwd: .
+        files: |
+          LICENSE
+          databag.db
+          go.mod
+          go.sum
+          main.go
+          internal
+        outPath: server.tar.gz
+        
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.PUB_TOKEN }}
+      with:
+        tag_name: v1.0.1
+        release_name: WebApp & Server Bundle
+        draft: false
+        prerelease: false
+        
+    - name: Upload Webapp Asset
+      id: upload-webapp 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.PUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }} 
+        asset_path: webapp.tar.gz
+        asset_name: webapp.tar.gz
+        asset_content_type: application/zip
+        
+    - name: Upload Server Asset
+      id: upload-server
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.PUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+        asset_path: server.tar.gz
+        asset_name: server.tar.gz
+        asset_content_type: application/zip
+          
