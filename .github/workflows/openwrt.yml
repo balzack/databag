@@ -50,36 +50,21 @@ jobs:
           internal
         outPath: server.tar.gz
         
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.PUB_TOKEN }}
+    - name: Upload Webapp to Tag
+      uses: svenstaro/upload-release-action@v2
       with:
-        tag_name: v1.0.1
-        release_name: WebApp & Server Bundle
-        draft: false
-        prerelease: false
+        repo_token: ${{ secrets.PUB_TOKEN }}
+        file: webapp.tar.gz
+        tag: v1.1.11
+        overwrite: true
+        file_glob: true
         
-    - name: Upload Webapp Asset
-      id: upload-webapp 
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.PUB_TOKEN }}
+    - name: Upload Server to Tag
+      uses: svenstaro/upload-release-action@v2
       with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }} 
-        asset_path: webapp.tar.gz
-        asset_name: webapp.tar.gz
-        asset_content_type: application/zip
-        
-    - name: Upload Server Asset
-      id: upload-server
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.PUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-        asset_path: server.tar.gz
-        asset_name: server.tar.gz
-        asset_content_type: application/zip
+        repo_token: ${{ secrets.PUB_TOKEN }}
+        file: server.tar.gz
+        tag: v1.1.11
+        overwrite: true
+        file_glob: true
           
