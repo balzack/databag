@@ -17,11 +17,11 @@ func GetNodeConfig(w http.ResponseWriter, r *http.Request) {
 	var config NodeConfig
 	config.Domain = getStrConfigValue(CNFDomain, "")
 	config.AccountStorage = getNumConfigValue(CNFStorage, 0)
-  config.AllowUnsealed = getBoolConfigValue(CNFAllowUnsealed, true)
+  config.AllowUnsealed = getBoolConfigValue(CNFAllowUnsealed, false)
   config.EnableImage = getBoolConfigValue(CNFEnableImage, true)
   config.EnableAudio = getBoolConfigValue(CNFEnableAudio, true)
   config.EnableVideo = getBoolConfigValue(CNFEnableVideo, true)
-  config.KeyType = getStrConfigValue(CNFKeyType, APPRSA4096)
+  config.KeyType = getStrConfigValue(CNFKeyType, APPRSA2048)
   config.PushSupported = getBoolConfigValue(CNFPushSupported, true)
   config.EnableIce = getBoolConfigValue(CNFEnableIce, false)
 	config.IceUrl = getStrConfigValue(CNFIceUrl, "")

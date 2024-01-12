@@ -16,7 +16,7 @@ type route struct {
 type routes []route
 
 //NewRouter allocate router for databag API
-func NewRouter() *mux.Router {
+func NewRouter(path string) *mux.Router {
 
 	go SendNotifications()
 
@@ -33,7 +33,7 @@ func NewRouter() *mux.Router {
 			Handler(handler)
 	}
 
-	fs := http.FileServer(http.Dir("/app/databag/net/web/build/"))
+	fs := http.FileServer(http.Dir(path));
 	router.PathPrefix("/").Handler(http.StripPrefix("/", fs))
 
 	return router

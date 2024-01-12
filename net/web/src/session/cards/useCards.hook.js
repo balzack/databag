@@ -141,8 +141,6 @@ export function useCards() {
       channel.state.channels.forEach((entry, id) => {
         const cards = entry?.data?.channelDetail?.contacts?.cards || [];
         const subject = entry?.data?.channelDetail?.data || '';
-        const type = entry?.data?.channelDetail?.dataType || '';
-        
         if (cards.length === 1 && cards[0] === cardId && subject === '{"subject":null}') {
           channelId = entry.id;
         }

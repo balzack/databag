@@ -10,7 +10,7 @@ import (
 
 //GenerateRsaKeyPair creates a public/private key for a new account
 func GenerateRsaKeyPair() (*rsa.PrivateKey, *rsa.PublicKey, string, error) {
-  keyType := getStrConfigValue(CNFKeyType, "RSA4096");
+  keyType := getStrConfigValue(CNFKeyType, "RSA2048");
 	if keyType == "RSA2048" {
 		privkey, _ := rsa.GenerateKey(rand.Reader, 2048)
 		return privkey, &privkey.PublicKey, "RSA2048", nil

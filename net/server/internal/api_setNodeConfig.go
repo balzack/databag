@@ -73,7 +73,7 @@ func SetNodeConfig(w http.ResponseWriter, r *http.Request) {
 		if res := tx.Clauses(clause.OnConflict{
 			Columns:   []clause.Column{{Name: "config_id"}},
 			DoUpdates: clause.AssignmentColumns([]string{"bool_value"}),
-		}).Create(&store.Config{ConfigID: CNFAllowUnsealed, BoolValue: config.AllowUnsealed}).Error; res != nil {
+		}).Create(&store.Config{ConfigID: CNFAllowUnsealed, BoolValue: false}).Error; res != nil {
 			return res
 		}
 
