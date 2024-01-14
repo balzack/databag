@@ -3897,6 +3897,8 @@ components:
           type: boolean
         allowUnsealed:
           type: boolean
+        transformSupported:
+          type: boolean
         enableIce:
           type: boolean
         iceUrl:
@@ -3952,6 +3954,8 @@ components:
         forwardingAddress:
           type: string
         searchable:
+          type: boolean
+        allowUnsealed:
           type: boolean
         pushEnabled:
           type: boolean
@@ -4291,8 +4295,6 @@ components:
         updated:
           type: integer
           format: int64
-        allowUnsealed:
-          type: boolean
         enableImage:
           type: boolean
         enableAudio:

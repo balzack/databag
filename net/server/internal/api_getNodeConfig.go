@@ -29,6 +29,7 @@ func GetNodeConfig(w http.ResponseWriter, r *http.Request) {
 	config.IcePassword = getStrConfigValue(CNFIcePassword, "")
   config.EnableOpenAccess = getBoolConfigValue(CNFEnableOpenAccess, false);
   config.OpenAccessLimit = getNumConfigValue(CNFOpenAccessLimit, 0);
+  config.TransformSupported = getStrConfigValue(CNFScriptPath, "") != "";
 
 	WriteResponse(w, config)
 }

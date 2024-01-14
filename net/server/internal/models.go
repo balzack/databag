@@ -372,6 +372,8 @@ type NodeConfig struct {
 
 	AccountStorage int64 `json:"accountStorage"`
 
+  TransformSupported bool `json:"transformSupported"`
+
   AllowUnsealed bool `json:"allowUnsealed"`
 
   PushSupported bool `json:"pushSupported"`
