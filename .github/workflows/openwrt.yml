@@ -1,0 +1,70 @@
+name: OpenWrt
+
+on:
+  push:
+    branches: [ "openwrt" ]
+  pull_request:
+    branches: [ "openwrt" ]
+
+jobs:
+
+  CI:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Node
+      uses: actions/setup-node@v3
+      with:
+        node-version: 16
+
+    - name: Build React
+      run: |
+          npm install --global yarn
+          cd web
+          yarn install
+          yarn build
+
+    - name: Bundle Webapp
+      uses: a7ul/tar-action@v1.1.0
+      id: compress_webapp
+      with:
+        command: c
+        cwd: web
+        files: |
+          build
+        outPath: webapp.tar.gz
+          
+    - name: Bundle Server
+      uses: a7ul/tar-action@v1.1.0
+      id: compress_server
+      with:
+        command: c
+        cwd: .
+        files: |
+          LICENSE
+          databag.db
+          go.mod
+          go.sum
+          main.go
+          internal
+        outPath: server.tar.gz
+        
+    - name: Upload Webapp to Tag
+      uses: svenstaro/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.PUB_TOKEN }}
+        file: webapp.tar.gz
+        tag: v1.1.11
+        overwrite: true
+        file_glob: true
+        
+    - name: Upload Server to Tag
+      uses: svenstaro/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.PUB_TOKEN }}
+        file: server.tar.gz
+        tag: v1.1.11
+        overwrite: true
+        file_glob: true
+          
