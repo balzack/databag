@@ -25,7 +25,7 @@ func SetPath(storePath string, transformPath string) {
     if res := tx.Clauses(clause.OnConflict{
       Columns:   []clause.Column{{Name: "config_id"}},
       DoUpdates: clause.AssignmentColumns([]string{"str_value"}),
-    }).Create(&Config{ConfigID: "asset_path", StrValue: storePath + "/assets"}).Error; res != nil {
+    }).Create(&Config{ConfigID: "asset_path", StrValue: storePath}).Error; res != nil {
       return res
     }
     return nil
