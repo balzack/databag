@@ -60,7 +60,7 @@ export function Channels({ cardId, channelId, navigation, openConversation, dmCh
         ),
       });
     }
-  }, [navigation, state.allowUnsealed]);
+  }, [navigation, state.sealable, state.allowUnsealed]);
 
   return (
     <View style={styles.container}>
