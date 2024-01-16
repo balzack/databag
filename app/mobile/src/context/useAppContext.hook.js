@@ -44,6 +44,26 @@ export function useAppContext() {
     setState((s) => ({ ...s, ...value }))
   }
 
+  const setFcmToken = async () => {
+    if (!deviceToken.current) {
+      try {
+        const token = await messaging().getToken();
+        if (!token) {
+          throw new Error('null push token');
+        }
+        deviceToken.current = token;
+        pushType.current = "fcm";
+      }
+      catch (err) {
+        console.log(err);
+        await new Promise(r => setTimeout(r, 2000));
+        const token = await messaging().getToken();
+        deviceToken.current = token;
+        pushType.current = "fcm";
+      }
+    }
+  }
+
   useEffect(() => {
 
     // select the unified token if available
@@ -54,11 +74,7 @@ export function useAppContext() {
 
     (async () => {
       try {
-        const token = await messaging().getToken();
-        if (!deviceToken.current) {
-          deviceToken.current = token;
-          pushType.current = "fcm";
-        }
+        await setFcmToken();
       }
       catch (err) {
         console.log(err);
