@@ -118,7 +118,7 @@ export function useAppContext() {
       if (!init.current || access.current) {
         throw new Error('invalid session state');
       }
-      setDeviceToken();
+      await setDeviceToken();
       updateState({ loggedOut: false });
       await addAccount(server, username, password, token);
       const session = await setLogin(username, server, password, getApplicationName(), getVersion(), getDeviceId(), deviceToken.current, pushType.current, notifications)
@@ -133,7 +133,7 @@ export function useAppContext() {
       if (!init.current || access.current) {
         throw new Error('invalid session state');
       }
-      setDeviceToken();
+      await setDeviceToken();
       updateState({ loggedOut: false });
       const session = await setAccountAccess(server, token, getApplicationName(), getVersion(), getDeviceId(), deviceToken.current, pushType.current, notifications);
       access.current = { loginTimestamp: session.created, server, token: session.appToken, guid: session.guid };
@@ -147,7 +147,7 @@ export function useAppContext() {
       if (!init.current || access.current) {
         throw new Error('invalid session state');
       }
-      setDeviceToken();
+      await setDeviceToken();
       updateState({ loggedOut: false });
       const acc = username.includes('/') ? username.split('/') : username.split('@');
       const session = await setLogin(acc[0], acc[1], password, getApplicationName(), getVersion(), getDeviceId(), deviceToken.current, pushType.current, notifications)
