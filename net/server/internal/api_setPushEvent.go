@@ -61,6 +61,9 @@ func SendPushEvent(account store.Account, event string) {
     var messageBody string
 
     rows.Scan(&pushToken, &pushType, &messageTitle, &messageBody)
+    if pushToken == "" || pushToken == "null" {
+      continue;
+    }
 
     if _, exists := tokens[pushToken]; !exists {
       tokens[pushToken] = true;
