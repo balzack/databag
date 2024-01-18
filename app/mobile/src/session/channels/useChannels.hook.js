@@ -20,6 +20,7 @@ export function useChannels() {
     addSubject: null,
     sealed: false,
     sealable: false,
+    allowUnsealed: false,
     busy: false,
   });
 
@@ -117,12 +118,13 @@ export function useChannels() {
   }
 
   useEffect(() => {
+    const allowUnsealed = account.state.status?.allowUnsealed;
     const { status, sealKey } = account.state;
     if (status?.seal?.publicKey && sealKey?.public && sealKey?.private && sealKey?.public === status.seal.publicKey) {
-      updateState({ sealable: true });
+      updateState({ sealable: true, allowUnsealed });
     }
     else {
-      updateState({ sealed: false, sealable: false });
+      updateState({ sealed: false, sealable: false, allowUnsealed });
     }
   }, [account.state]);
 
@@ -138,7 +140,7 @@ export function useChannels() {
       if (contact.detail.status !== 'connected') {
         return false;
       }
-      if (state.sealed && !contact.profile.seal) {
+      if ((!state.allowUnsealed || state.sealed) && !contact.profile.seal) {
         return false;
       }
       return true;
@@ -156,7 +158,7 @@ export function useChannels() {
     });
     const addMembers = state.addMembers.filter(item => sorted.some(contact => contact.cardId === item));
     updateState({ contacts: sorted, addMembers });
-  }, [card.state, state.sealed]);
+  }, [card.state, state.sealed, state.allowUnsealed]);
 
   useEffect(() => {
     syncChannels();
@@ -244,7 +246,7 @@ export function useChannels() {
       if (!state.busy) {
         try {
           updateState({ busy: true });
-          if (state.sealed) {
+          if (state.sealed || !state.allowUnsealed) {
             const keys = [ account.state.sealKey.public ];
             state.addMembers.forEach(id => {
               const contact = card.state.cards.get(id);

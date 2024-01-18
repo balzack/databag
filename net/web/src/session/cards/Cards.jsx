@@ -75,7 +75,7 @@ export function Cards({ closeCards, openContact, openChannel, openListing }) {
             renderItem={item => (
               <CardItem item={item} enableIce={state.enableIce} tooltip={state.tooltip} resync={() => actions.resync(item.cardId)}
                   open={() => openContact(item.guid)} message={() => message(item.cardId)} 
-                  call={() => call(item)} display={state.display} />
+                  call={() => call(item)} display={state.display} canMessage={state.allowUnsealed || (item.seal && state.sealable)} />
             )} />
         )}
         { state.cards.length === 0 && (

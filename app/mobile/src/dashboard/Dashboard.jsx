@@ -188,6 +188,15 @@ export function Dashboard(props) {
                   onValueChange={actions.setPushSupported} trackColor={styles.track}/>
               </TouchableOpacity>
 
+              { state.transformSupported && (
+                <TouchableOpacity style={styles.media} activeOpacity={1}
+                    onPress={() => actions.setAllowUnsealed(!state.allowUnsealed)}>
+                  <Text style={styles.modalLabel}>{ state.strings.allowUnsealed }</Text>
+                  <Switch style={styles.switch} value={state.allowUnsealed}
+                    onValueChange={actions.setAllowUnsealed} trackColor={styles.track}/>
+                </TouchableOpacity>
+              )}
+
               <View style={styles.label}></View>
 
               <TouchableOpacity style={styles.media} activeOpacity={1}

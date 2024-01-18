@@ -1,4 +1,4 @@
-import { Modal, Input, List, Button } from 'antd';
+import { Modal, Input, List, Button, Tooltip } from 'antd';
 import { ChannelsWrapper } from './Channels.styled';
 import { CommentOutlined, SearchOutlined } from '@ant-design/icons';
 import { useChannels } from './useChannels.hook';
@@ -23,7 +23,7 @@ export function Channels({ open, active }) {
         </div>
         { state.display === 'small' && (
           <div class="inline">
-            <Button type="primary" icon={<CommentOutlined />} onClick={actions.setShowAdd}>New</Button>
+            <Button type="primary" disabled={!state.allowAdd} icon={<CommentOutlined />} onClick={actions.setShowAdd}>New</Button>
           </div>
         )}
       </div>
@@ -42,10 +42,12 @@ export function Channels({ open, active }) {
       </div>
       { state.display !== 'small' && (
         <div class="bar">
-          <Button type="primary" icon={<CommentOutlined />} onClick={actions.setShowAdd}>New Topic</Button>
+          <Tooltip placement="right" title={ state.allowAdd ? '' : 'Account Sealing Key Required' }>
+            <Button type="primary" disabled={!state.allowAdd} icon={<CommentOutlined />} onClick={actions.setShowAdd}>New Topic</Button>
+          </Tooltip>
         </div>
       )}
-      <Modal bodyStyle={{ padding: 16 }} title="New Topic" centered visible={state.showAdd} footer={null} destroyOnClose={true}
+      <Modal bodyStyle={{ padding: 16 }} title="New Topic" centered visible={state.showAdd && state.allowAdd} footer={null} destroyOnClose={true}
           onCancel={actions.clearShowAdd}>
         <AddChannel added={added} cancelled={actions.clearShowAdd} />
       </Modal>

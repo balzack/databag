@@ -10,26 +10,41 @@ import (
 )
 
 func main() {
+  var cert string
+  var key string
+  var transformPath string
 
-	store.SetPath("/var/lib/databag/databag.db")
+  port := ":443"
+  storePath := "/var/lib/databag"
+  webApp := "/opt/databag/"
 
-	router := app.NewRouter()
+  args := os.Args[1:];
+  for i := 0; i + 1 < len(args); i += 2 {
+    if args[i] == "-s" {
+      storePath = args[i + 1]
+    } else if args[i] == "-w" {
+      webApp = args[i + 1]
+    } else if args[i] == "-p" {
+      port = ":" + args[i + 1]
+    } else if args[i] == "-c" {
+      cert = args[i + 1]
+    } else if args[i] == "-k" {
+      key = args[i + 1]
+    } else if args[i] == "-t" {
+      transformPath = args[i + 1]
+    }
+  }
 
-	origins := handlers.AllowedOrigins([]string{"*"})
-	methods := handlers.AllowedMethods([]string{"GET", "HEAD", "POST", "PUT", "DELETE", "OPTIONS"})
+  store.SetPath(storePath, transformPath);
+  router := app.NewRouter(webApp)
+  origins := handlers.AllowedOrigins([]string{"*"})
+  methods := handlers.AllowedMethods([]string{"GET", "HEAD", "POST", "PUT", "DELETE", "OPTIONS"})
 
-  args := os.Args
-  if len(args) == 3 {
-    port := ":" + args[2]
-    path := "/etc/letsencrypt/live/" + args[1]
-    log.Printf("starting server at: " + path + " " + port);
-    log.Fatal(http.ListenAndServeTLS(port, path + "/fullchain.pem", path + "/privkey.pem", handlers.CORS(origins, methods)(router)))
-  } else if len(args) == 2 {
-    path := "/etc/letsencrypt/live/" + args[1]
-    log.Printf("starting server at: " + path);
-    log.Fatal(http.ListenAndServeTLS(":443", path + "/fullchain.pem", path + "/privkey.pem", handlers.CORS(origins, methods)(router)))
+  if cert != "" && key != "" {
+    log.Printf("using args:" + " -s " + storePath + " -w " + webApp + " -p " + port[1:] + " -c " + cert + " -k " + key + " -t " + transformPath)
+    log.Fatal(http.ListenAndServeTLS(port, cert, key, handlers.CORS(origins, methods)(router)))
   } else {
-    log.Printf("starting server");
-    log.Fatal(http.ListenAndServe(":7000", handlers.CORS(origins, methods)(router)))
+    log.Printf("using args:" + " -s " + storePath + " -w " + webApp + " -p " + port[1:] + " -t " + transformPath)
+    log.Fatal(http.ListenAndServe(port, handlers.CORS(origins, methods)(router)))
   }
 }

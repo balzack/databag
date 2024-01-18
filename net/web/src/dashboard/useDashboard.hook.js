@@ -14,6 +14,8 @@ export function useDashboard() {
     accountStorage: null,
     keyType: null,
     pushSupported: null,
+    allowUnsealed: null,
+    transformSupported: false,
     enableImage: null,
     enableAudio: null,
     enableVideo: null,
@@ -84,6 +86,9 @@ export function useDashboard() {
     setPushSupported: (pushSupported) => {
       updateState({ pushSupported });
     },
+    setAllowUnsealed: (allowUnsealed) => {
+      updateState({ allowUnsealed });
+    },
     setEnableImage: (enableImage) => {
       updateState({ enableImage });
     },
@@ -125,9 +130,9 @@ export function useDashboard() {
       if (!state.busy) {
         updateState({ busy: true });
         try {
-          const { domain, keyType, accountStorage, pushSupported, enableImage, enableAudio, enableVideo, enableIce, iceUrl, iceUsername, icePassword, enableOpenAccess, openAccessLimit } = state;
+          const { domain, keyType, accountStorage, pushSupported, transformSupported, allowUnsealed, enableImage, enableAudio, enableVideo, enableIce, iceUrl, iceUsername, icePassword, enableOpenAccess, openAccessLimit } = state;
           const storage = accountStorage * 1073741824;
-          const config = { domain,  accountStorage: storage, keyType, enableImage, enableAudio, enableVideo, pushSupported, enableIce, iceUrl, iceUsername, icePassword, enableOpenAccess, openAccessLimit };
+          const config = { domain,  accountStorage: storage, keyType, enableImage, enableAudio, enableVideo, pushSupported, transformSupported, allowUnsealed, enableIce, iceUrl, iceUsername, icePassword, enableOpenAccess, openAccessLimit };
           await setNodeConfig(app.state.adminToken, config);
           updateState({ busy: false, showSettings: false });
         }
@@ -143,9 +148,9 @@ export function useDashboard() {
   const syncConfig = async () => {
     try {
       const config = await getNodeConfig(app.state.adminToken);
-      const { storage, domain, keyType, pushSupported, enableImage, enableAudio, enableVideo, enableIce, iceUrl, iceUsername, icePassword, enableOpenAccess, openAccessLimit } = config;
+      const { storage, domain, keyType, pushSupported, transformSupported, allowUnsealed, enableImage, enableAudio, enableVideo, enableIce, iceUrl, iceUsername, icePassword, enableOpenAccess, openAccessLimit } = config;
       const accountStorage = Math.ceil(storage / 1073741824);
-      updateState({ configError: false, domain, accountStorage, keyType, enableImage, enableAudio, enableVideo, pushSupported, enableIce, iceUrl, iceUsername, icePassword, enableOpenAccess, openAccessLimit });
+      updateState({ configError: false, domain, accountStorage, keyType, enableImage, enableAudio, enableVideo, pushSupported, transformSupported, allowUnsealed, enableIce, iceUrl, iceUsername, icePassword, enableOpenAccess, openAccessLimit });
     }
     catch(err) {
       console.log(err);

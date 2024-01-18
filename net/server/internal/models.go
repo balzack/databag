@@ -42,6 +42,8 @@ type AccountStatus struct {
 	Seal *Seal `json:"seal,omitempty"`
 
   EnableIce bool `json:"enableIce"`
+
+  AllowUnsealed bool `json:"allowUnsealed"`
 }
 
 //Announce initial message sent on websocket
@@ -369,6 +371,10 @@ type NodeConfig struct {
 	KeyType string `json:"keyType"`
 
 	AccountStorage int64 `json:"accountStorage"`
+
+  TransformSupported bool `json:"transformSupported"`
+
+  AllowUnsealed bool `json:"allowUnsealed"`
 
   PushSupported bool `json:"pushSupported"`
 

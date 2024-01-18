@@ -145,7 +145,7 @@ const APPQueuePhoto = "photo"
 const APPQueueDefault = ""
 
 //APPDefaultPath config for default path to store assets
-const APPDefaultPath = "./asset"
+const APPDefaultPath = "/tmp/databag/assets"
 
 //AppCardStatus compares cards status with string
 func AppCardStatus(status string) bool {

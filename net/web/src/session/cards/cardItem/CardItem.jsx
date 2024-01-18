@@ -6,7 +6,7 @@ import { Logo } from 'logo/Logo';
 import { Tooltip } from 'antd';
 import { MessageOutlined, PhoneOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 
-export function CardItem({ item, tooltip, enableIce, resync, open, call, message, display }) {
+export function CardItem({ item, tooltip, enableIce, resync, open, call, message, display, canMessage }) {
 
   const onResync = (e) => {
     e.stopPropagation();
@@ -45,9 +45,11 @@ export function CardItem({ item, tooltip, enableIce, resync, open, call, message
         )}
         { item.status === 'connected' && display === 'small' && (
           <ComOptions>
-            <div className="option">
-              <MessageOutlined onClick={onMessage} />
-            </div>
+            { canMessage && (
+              <div className="option">
+                <MessageOutlined onClick={onMessage} />
+              </div>
+            )}
             { enableIce && (
               <div className="option">
                 <PhoneOutlined onClick={onCall} />
@@ -57,9 +59,11 @@ export function CardItem({ item, tooltip, enableIce, resync, open, call, message
         )}
         { item.status === 'connected' && display !== 'small' && (
           <ComOptions>
-            <Tooltip className="option" placement="left" title="message contact">
-              <MessageOutlined onClick={onMessage} />
-            </Tooltip>
+            { canMessage && (
+              <Tooltip className="option" placement="left" title="message contact">
+                <MessageOutlined onClick={onMessage} />
+              </Tooltip>
+            )}
             { enableIce && (
               <Tooltip className="option" placement="left" title="call contact">
                 <PhoneOutlined onClick={onCall} />

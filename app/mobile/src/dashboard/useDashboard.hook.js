@@ -28,6 +28,9 @@ export function useDashboard(config, server, token) {
     domain: null,
     storage: null,
     keyType: null,
+    pushSupported: true,
+    allowUnsealed: false,
+    tranformSupported: false,
     enableImage: true,
     enableAudio: true,
     enableVideo: true,
@@ -64,8 +67,8 @@ export function useDashboard(config, server, token) {
   };
 
   useEffect(() => {
-    const { keyType, accountStorage, domain, enableImage, enableAudio, enableVideo, pushSupported, enableIce, iceUrl, iceUsername, icePassword } = config;
-    updateState({ keyType, storage: accountStorage.toString(), domain, enableImage, enableAudio, enableVideo, pushSupported, enableIce, iceUrl, iceUsername, icePassword });
+    const { keyType, accountStorage, domain, enableImage, enableAudio, enableVideo, transformSupported, allowUnsealed, pushSupported, enableIce, iceUrl, iceUsername, icePassword } = config;
+    updateState({ keyType, storage: accountStorage.toString(), domain, enableImage, enableAudio, enableVideo, transformSupported, allowUnsealed, pushSupported, enableIce, iceUrl, iceUsername, icePassword });
   }, [config]);
 
   useEffect(() => {
@@ -108,6 +111,9 @@ export function useDashboard(config, server, token) {
     setPushSupported: (pushSupported) => {
       updateState({ pushSupported });
     },
+    setAllowUnsealed: (allowUnsealed) => {
+      updateState({ allowUnsealed });
+    },
     setEnableImage: (enableImage) => {
       updateState({ enableImage });
     },
@@ -133,8 +139,8 @@ export function useDashboard(config, server, token) {
       updateState({ icePassword });
     },
     saveConfig: async () => {
-      const { storage, domain, keyType, enableImage, enableAudio, enableVideo, enableIce, iceUrl, iceUsername, icePassword } = state;
-      const config = { accountStorage: Number(storage), domain, keyType, enableImage, enableAudio, enableVideo, enableIce, iceUrl, iceUsername, icePassword };
+      const { storage, domain, keyType, enableImage, pushSupported, allowUnsealed, transformSupported, enableAudio, enableVideo, enableIce, iceUrl, iceUsername, icePassword } = state;
+      const config = { accountStorage: Number(storage), domain, keyType, enableImage, pushSupported, allowUnsealed, transformSupported, enableAudio, enableVideo, enableIce, iceUrl, iceUsername, icePassword };
       await setNodeConfig(server, token, config);
     },
     enableUser: async (accountId, enabled) => {

@@ -8,13 +8,14 @@ import (
 
 func TestMain(m *testing.M) {
 
-	os.Remove("databag.db")
 	os.RemoveAll("testdata")
 	os.RemoveAll("testscripts")
 
-	store.SetPath("databag.db")
 	if err := os.Mkdir("testdata", os.ModePerm); err != nil {
 		panic("failed to create testdata path")
+	}
+	if err := os.Mkdir("testdata/assets", os.ModePerm); err != nil {
+		panic("failed to create assets path")
 	}
 	if err := os.Mkdir("testscripts", os.ModePerm); err != nil {
 		panic("failed to create testscripts path")
@@ -23,6 +24,8 @@ func TestMain(m *testing.M) {
 	if err := os.WriteFile("testscripts/transform_copy.sh", script, 0555); err != nil {
 		panic("failed to create P01 script")
 	}
+
+	store.SetPath("./testdata", "./testscripts")
 
 	r, w, _ := NewRequest("GET", "/admin/status", nil)
 	GetNodeStatus(w, r)
@@ -36,18 +39,6 @@ func TestMain(m *testing.M) {
 	SetNodeStatus(w, r)
 	if ReadResponse(w, nil) != nil {
 		panic("failed to claim server")
-	}
-
-	// config data path
-	scripts := &store.Config{ConfigID: CNFScriptPath, StrValue: "./testscripts"}
-	if err := store.DB.Save(scripts).Error; err != nil {
-		panic("failed to configure scripts path")
-	}
-
-	// config data path
-	path := &store.Config{ConfigID: CNFAssetPath, StrValue: "./testdata"}
-	if err := store.DB.Save(path).Error; err != nil {
-		panic("failed to configure data path")
 	}
 
 	// config open access

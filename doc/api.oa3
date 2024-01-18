@@ -3895,6 +3895,10 @@ components:
           type: string
         pushSupported:
           type: boolean
+        allowUnsealed:
+          type: boolean
+        transformSupported:
+          type: boolean
         enableIce:
           type: boolean
         iceUrl:
@@ -3950,6 +3954,8 @@ components:
         forwardingAddress:
           type: string
         searchable:
+          type: boolean
+        allowUnsealed:
           type: boolean
         pushEnabled:
           type: boolean

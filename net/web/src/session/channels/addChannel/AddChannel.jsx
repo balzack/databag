@@ -45,7 +45,7 @@ export function AddChannel({ added, cancelled }) {
       </div>
         <AddFooter>
         <div class="seal">
-          { state.sealable && (
+          { state.sealable && state.allowUnsealed && (
             <>
               <Switch checked={state.seal} onChange={actions.setSeal} size="small" />
               <span class="sealText">Sealed Channel</span>
