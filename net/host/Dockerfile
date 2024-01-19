@@ -7,7 +7,7 @@ EXPOSE 7000
 ENV TZ=America/Los_Angeles
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-RUN apt-get update
+RUN  apt-get  update
 
 RUN apt-get -y install curl
 RUN apt-get -y install net-tools
@@ -36,7 +36,7 @@ RUN if [ "$TARGETPLATFORM" = "linux/amd64" ]; then ARCHITECTURE=amd64; elif [ "$
     && wget -P /app https://go.dev/dl/go1.18.10.linux-${ARCHITECTURE}.tar.gz \
     && tar -C /usr/local -xzf /app/go1.18.10.linux-${ARCHITECTURE}.tar.gz 
 
-RUN git             clone       https://github.com/balzack/databag.git  -b openwrt   /app/databag
+RUN git         clone      https://github.com/balzack/databag.git     /app/databag
 
 RUN yarn config set network-timeout 300000
 RUN yarn --cwd /app/databag/net/web install

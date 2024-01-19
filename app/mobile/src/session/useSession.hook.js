@@ -3,10 +3,12 @@ import { useWindowDimensions } from 'react-native';
 import config from 'constants/Config';
 import { StoreContext } from 'context/StoreContext';
 import { CardContext } from 'context/CardContext';
+import { AccountContext } from 'context/AccountContext';
 import { ChannelContext } from 'context/ChannelContext';
 import { RingContext } from 'context/RingContext';
 import { ProfileContext } from 'context/ProfileContext';
 import { getLanguageStrings } from 'constants/Strings';
+import { encryptChannelSubject } from 'context/sealUtil';
 
 export function useSession() {
 
@@ -30,6 +32,7 @@ export function useSession() {
   });
 
   const ring = useContext(RingContext);
+  const account = useContext(AccountContext);
   const channel = useContext(ChannelContext);
   const card = useContext(CardContext);
   const profile = useContext(ProfileContext);
@@ -69,6 +72,18 @@ export function useSession() {
     const { callStatus, localStream, localVideo, localAudio, remoteStream, remoteVideo, remoteAudio } = ring.state;
     updateState({ ringing, callStatus, callLogo, localStream, localVideo, localAudio, remoteStream, remoteVideo, remoteAudio });
   }, [ring.state]);
+
+  useEffect(() => {
+    const { allowUnsealed } = account.state.status || {};
+    const { status, sealKey } = account.state;
+    if (status?.seal?.publicKey && sealKey?.public && sealKey?.private && sealKey?.public === status.seal.publicKey) {
+      updateState({ sealable: true, allowUnsealed });
+    }
+    else {
+      updateState({ sealable: false, allowUnsealed });
+    }
+  }, [account.state]);
+
 
   useEffect(() => {
     checkFirstRun();
@@ -140,8 +155,17 @@ export function useSession() {
       if (channelId != null) {
         return channelId;
       }
-      const conversation = await channel.actions.addChannel('superbasic', { subject: null }, [ cardId ]);
-      return conversation.id;
+      if (state.sealable && !state.allowUnsealed) {
+        const keys = [ account.state.sealKey.public ];
+        keys.push(card.state.cards.get(cardId).card.profile.seal);
+        const sealed = encryptChannelSubject(state.subject, keys);
+        const conversation = await channel.actions.addChannel('sealed', sealed, [ cardId ]);
+        return conversation.id;
+      }
+      else {
+        const conversation = await channel.actions.addChannel('superbasic', { subject: null }, [ cardId ]);
+        return conversation.id;
+      }
     },
   };
 

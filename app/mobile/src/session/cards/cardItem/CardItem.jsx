@@ -6,7 +6,7 @@ import Colors from 'constants/Colors';
 import { Menu, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-menu';
 import { getLanguageStrings } from 'constants/Strings';
 
-export function CardItem({ item, openContact, enableIce, call, message }) {
+export function CardItem({ item, openContact, enableIce, call, message, canMessage }) {
 
   const strings = getLanguageStrings();
   
@@ -43,12 +43,16 @@ export function CardItem({ item, openContact, enableIce, call, message }) {
                 <MenuOption onSelect={select}>
                   <Text style={styles.option}>{ strings.viewProfile }</Text>
                 </MenuOption>
-                <MenuOption onSelect={message}>
-                  <Text style={styles.option}>{ strings.messageContact }</Text>
-                </MenuOption>
-                <MenuOption onSelect={call}>
-                  <Text style={styles.option}>{ strings.callContact }</Text>
-                </MenuOption>
+                { canMessage && (
+                  <MenuOption onSelect={message}>
+                    <Text style={styles.option}>{ strings.messageContact }</Text>
+                  </MenuOption>
+                )}
+                { enableIce && (
+                  <MenuOption onSelect={call}>
+                    <Text style={styles.option}>{ strings.callContact }</Text>
+                  </MenuOption>
+                )}
               </MenuOptions>
             </Menu>
           )}
