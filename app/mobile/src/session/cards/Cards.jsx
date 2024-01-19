@@ -91,7 +91,8 @@ export function Cards({ navigation, openContact, openRegistry, addChannel }) {
           data={state.cards}
           initialNumToRender={25}
           renderItem={({ item }) => <CardItem item={item} openContact={openContact}
-            enableIce={state.enableIce} call={() => call(item)} message={() => addChannel(item.cardId)} />}
+            enableIce={state.enableIce} call={() => call(item)} message={() => addChannel(item.cardId)} 
+            canMessage={(item.seal && state.sealable) || state.allowUnsealed} />}
           keyExtractor={item => item.cardId}
         />
       )}

@@ -46,12 +46,17 @@ export function useAppContext() {
 
   const setDeviceToken = async () => {
     if (!deviceToken.current) {
-      const token = await messaging().getToken();
-      if (!token) {
-        throw new Error('null push token');
+      try {
+        const token = await messaging().getToken();
+        if (!token) {
+          throw new Error('null push token');
+        }
+        deviceToken.current = token;
+        pushType.current = "fcm";
       }
-      deviceToken.current = token;
-      pushType.current = "fcm";
+      catch(err) {
+        console.log(err);
+      }
     }
   }
 
@@ -64,12 +69,7 @@ export function useAppContext() {
     });
 
     (async () => {
-      try {
-        await setDeviceToken();
-      }
-      catch (err) {
-        console.log(err);
-      }
+      await setDeviceToken();
       access.current = await store.actions.init();
       if (access.current) {
         await setSession();
