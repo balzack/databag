@@ -57,18 +57,16 @@ These instructions assume you have the following setup:
   cd efs-utils<br/>
   ./build-deb.sh<br/>
   sudo apt-get -y install ./build/amazon-efs-utils*deb<br/>
-  sudo mount -t efs file-system-id /var/lib/databag/assets<br/>
+  sudo mount -t efs file-system-id /var/lib/databag<br/>
 
 ## Step 7: initialize the internal datbase
   sqlite3 /var/lib/databag/databag.db "VACUUM;"<br/>
   sqlite3 /var/lib/databag/databag.db "CREATE TABLE IF NOT EXISTS 'configs' ('id' integer NOT NULL UNIQUE,'config_id' text NOT NULL,'str_value' text,'num_value' integer,'bool_value' numeric,'bin_value' blob,PRIMARY KEY ('id'));"<br/>
   sqlite3 /var/lib/databag/databag.db "CREATE UNIQUE INDEX IF NOT EXISTS 'idx_configs_config_id' ON 'configs'('config_id');"<br/>
-  sqlite3 /var/lib/databag/databag.db "insert into configs (config_id, str_value) values ('asset_path', '/var/lib/databag/assets');"<br/>
-  sqlite3 /var/lib/databag/databag.db "insert into configs (config_id, str_value) values ('script_path', '/opt/databag/transform/');"<br/>
 
 ## Step 8: launch the server
   cd /app/databag/net/server<br/>
-  nohup nice -n -5 /usr/local/go/bin/go run databag [dns name] &<br/>
+  nohup nice -n -5 /usr/local/go/bin/go run databag -p 443 -s /var/lib/databag -w /app/databag/net/web/build -t /opt/databag/transform -c /etc/letsencrypt/live/<dns name>/fullchain.pem -k /etc/letsencrypt/live/<dns name>/privkey.pem &<br/>
 
 ## Step 9: configure the server
   Open your brower to https://[dns name]<br/>
