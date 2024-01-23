@@ -132,7 +132,7 @@ Instructions for installing without a container on a Raspberry Pi Zero are [here
 
 Instructions for installing without a container in AWS are [here](/doc/aws.md).
 
-1-click installs in [CapRover](https://caprover.com/), [CasaOS](https://casaos.io), [Unraid](https://unraid.net/), [Runtipi](https://www.runtipi.io/)
+1-click installs in [CapRover](https://caprover.com/), [CasaOS](https://casaos.io), [Unraid](https://unraid.net/), [Runtipi](https://www.runtipi.io/), [Kubero](https://www.kubero.dev/)
 
 ## Audio and Video Calls
 
