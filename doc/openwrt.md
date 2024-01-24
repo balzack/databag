@@ -23,3 +23,4 @@ These instructions assume can build an OpenWrt firmware for your hardware:
   -     uci set databag.@databag[0].service_port='<port>'
   - change the storage path to your mounted USB path
   -     uci set databag.@databag[0].store_path='<path>'
+  - reboot the device
