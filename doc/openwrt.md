@@ -2,7 +2,7 @@
 
 These instructions assume can build an OpenWrt firmware for your hardware:
   - guide: [https://openwrt.org/docs/guide-developer/start](https://openwrt.org/docs/guide-developer/toolchain/use-buildsystem)
-  - you will likely also want to install nginx and configure it as a reverse proxy to the databag service
+  - you will likely also want to install nginx from the main feed and configure it as a reverse proxy to the databag service
 
 ## Databag is currently included as a custom feed
   - in feed.conf at the root of the repository add:
