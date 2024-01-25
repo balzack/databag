@@ -5,7 +5,7 @@ These instructions assume can build an OpenWrt firmware for your hardware:
   - you will likely also want to install nginx from the main feed and configure it as a reverse proxy to the databag service
 
 ## Databag is currently included as a custom feed
-  - in feed.conf at the root of the repository add:
+  - in feeds.conf at the root of the repository add:
   -     src-git databag https://github.com/balzack/databag.git
   - update the package list by running:
   -     scripts/feeds update databag
