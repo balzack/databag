@@ -128,11 +128,11 @@ From Your Browser:
 
 ### Other installation options
 
-Instructions for installing without a container on a Raspberry Pi Zero are [here](/doc/pizero.md).
+Install without a container on a Raspberry Pi Zero [here](/doc/pizero.md).
 
-Instructions for installing without a container in AWS are [here](/doc/aws.md).
+Install without a container in AWS [here](/doc/aws.md).
 
-Instructions for integrating Databag in an OpenWrt firmware are [here](/doc/openwrt.md).
+Integrate Databag in an OpenWrt firmware [here](/doc/openwrt.md).
 
 1-click installs in [CapRover](https://caprover.com/), [CasaOS](https://casaos.io), [Unraid](https://unraid.net/), [Runtipi](https://www.runtipi.io/), [Kubero](https://www.kubero.dev/)
 
