@@ -6,7 +6,7 @@ These instructions assume can build an OpenWrt firmware for your hardware:
 
 ## Databag is currently included as a custom feed
   - in feeds.conf at the root of the repository add:
-  -     src-git databag https://github.com/balzack/databag.git
+  -     src-git databag https://github.com/balzack/openwrt-databag.git
   - update the package list by running:
   -     scripts/feeds update databag
   - install the pacakge by running:
