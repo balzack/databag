@@ -17,7 +17,7 @@ These instructions assume can build an OpenWrt firmware for your hardware:
   -     make menuconfig
   - enable databag under net/instant messaging/databag
   - build the firmware by running:
-  -     make -j1 V=s package/databag/compile
+  -     make -j$(nproc) defconfig download clean world
   - flash and boot the resulting image
 
 ## Configure the Databag service
