@@ -48,7 +48,7 @@ The app is available on fdroid as well as the google and apple stores. You can t
 
 ## Project Vision
 
-Imagine an internet where the services prioritized creating value over collecting data. Currently these services exist primarily to subject us to advertisement. Triggering our fears drives engagement, fueling their revenue egine at our detriment. On top of this these services make us more susceptible to surveillance and censorship.
+Imagine an internet where the services prioritized creating value over collecting data. Currently these services exist primarily to subject us to advertisement. Triggering our fears drives engagement, fueling their revenue engine at our detriment. On top of this these services make us more susceptible to surveillance and censorship.
 
 It doesn't have to be this way. A data model in which we hosted and were responsible for our own data would force internet services to prioritize their value all while protecting us from surveillance and censorship. There is hope in the growing self-hosting community, and in order for it to be truly transformational, it will need to reach the average non-technical population.
 
