@@ -46,6 +46,14 @@ Databag is a selfhosted messaging service. Notable features include:
 
 The app is available on fdroid as well as the google and apple stores. You can test out the project [here](https://databag.coredb.org/#/create), but don't post anything important as this server is regularly wiped. Feedback on the UI/UX, bugs or features is greatly appreciated.
 
+## Project Vision
+
+Imagine an internet where the services prioritized creating value over collecting data. Currently these services exist primarily to subject us to advertisement. Triggering our fears drives engagement, fueling their revenue model at our detriment. On top of this we become more susceptible to surveillance and censorship.
+
+It doesn't have to be this way. It may seem far fetched, but a data model in which we hosted our own data, and became responsible for our own data would force internet services to prioritize their value all while protecting us from surveillance and censorship. There is hope in the growing self-hosting community, but in order for it to be truly transformational, it would need to reach the average non-technical population.
+
+Databag aims to bridge that gap by targeting consumor electronics. The hope is to one day be able to buy an inexpensive device like a router from a store and start self-hosting without any other technical knowledge. This data model could be supplemented by cloud hosting services for those that choose to do so, but this would come with a trade off of control and legal protections.
+
 ## Installation
 
 To use databag, you will need a DNS name pointing to your node with a certificate. You can deploy a node manually, but you will have a much easier time using a container service. Containers for arm64 and amd64 are available [here](https://hub.docker.com/r/balzack/databag/tags). 
