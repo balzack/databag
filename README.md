@@ -52,7 +52,7 @@ Imagine an internet where the services prioritized creating value over collectin
 
 It doesn't have to be this way. It may seem far fetched, but a data model in which we hosted our own data, and became responsible for our own data would force internet services to prioritize their value all while protecting us from surveillance and censorship. There is hope in the growing self-hosting community, but in order for it to be truly transformational, it would need to reach the average non-technical population.
 
-Databag aims to bridge that gap by targeting consumor electronics. The hope is to one day be able to buy an inexpensive device like a router from a store and start self-hosting without any other technical knowledge. This data model could be supplemented by cloud hosting services for those that choose to do so, but this would come with a trade off of control and legal protections.
+Databag aims to bridge that gap by supporting consumor electronics. The hope is to one day be able to buy an inexpensive device like a router from a store and start self-hosting without any other technical knowledge. This data model could be supplemented by cloud hosting services for those that choose to do so, but this would come with a trade off of control and legal protections.
 
 ## Installation
 
