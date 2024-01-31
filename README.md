@@ -50,7 +50,7 @@ The app is available on fdroid as well as the google and apple stores. You can t
 
 Imagine an internet where the services prioritized creating value over collecting data. Currently these services exist primarily to subject us to advertisement. Triggering our fears drives engagement, fueling their revenue engine at our detriment. On top of this these services make us more susceptible to surveillance and censorship.
 
-It doesn't have to be this way. A data model in which we hosted and were responsible for our own data would force internet services to prioritize their value all while protecting us from surveillance and censorship. There is hope in the growing self-hosting community, and in order for it to be truly transformational, it will need to reach the average non-technical population.
+It doesn't have to be this way. A data model in which we hosted and were responsible for our own data would force internet services to prioritize their actual value, all while protecting us from surveillance and censorship. There is hope in the growing self-hosting community, and in order for it to be truly transformational, it will need to reach the average non-technical population.
 
 Databag aims to bridge that gap by supporting consumer electronics. The hope is to one day be able to buy an inexpensive device like a router from a store and start self-hosting without any other technical knowledge. This data model could be supplemented by cloud hosting services for those that choose to do so, but this would come with a trade off of control and legal protections.
 
