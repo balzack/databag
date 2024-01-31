@@ -48,9 +48,9 @@ The app is available on fdroid as well as the google and apple stores. You can t
 
 ## Project Vision
 
-Imagine an internet where the services prioritized creating value over collecting data. Currently these services exist primarily to subject us to advertisement. Triggering our fears drives engagement, fueling their revenue engine at our detriment. On top of this these services make us more susceptible to surveillance and censorship.
+Imagine an internet where the services prioritized creating value over collecting data. Currently, these services exist primarily to subject us to advertisement. Triggering our fears drives engagement, fueling their revenue engine to our detriment. On top of this, these services make us more susceptible to surveillance and censorship.
 
-It doesn't have to be this way. A data model in which we host and are responsible for our own data would force internet services to prioritize their actual value, all while protecting us from surveillance and censorship. There is hope in the growing self-hosting community, and in order for it to be truly transformational, it will need to reach the average non-technical population.
+It doesn't have to be this way. A data model in which we host and are responsible for our data would force internet services to prioritize their actual value, all while protecting us from surveillance and censorship. There is hope in the growing self-hosting community, and for it to be truly transformational, it will need to reach the average non-technical person.
 
 Databag aims to bridge that gap by supporting consumer electronics. The hope is to one day be able to buy an inexpensive device like a router from a store and start self-hosting without any other technical knowledge. While self-hosting provides the most control and legal protections, people could choose to use cloud hosting services for their data when otherwise not possible.
 
