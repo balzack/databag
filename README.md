@@ -48,7 +48,7 @@ The app is available on fdroid as well as the google and apple stores. You can t
 
 ## Project Goal
 
-Databag aims to bridge the knowlage gap in the self-hosting community by supporting consumer electronics and thereby making it available to the average non-technical person. The hope is to one day be able to buy an inexpensive device like a router from a store and start self-hosting without any other technical knowledge. While self-hosting provides the most control and legal protections, people could choose to use cloud hosting services for their data when otherwise not possible.
+Databag aims to bridge the knowledge gap in the self-hosting community by supporting consumer electronics and thereby making it available to the average non-technical person. The hope is to one day be able to buy an inexpensive device like a router from a store and start self-hosting without any other technical knowledge. While self-hosting provides the most control and legal protections, people could choose to use cloud hosting services for their data when otherwise not possible.
 
 ## Installation
 
