@@ -46,13 +46,9 @@ Databag is a selfhosted messaging service. Notable features include:
 
 The app is available on fdroid as well as the google and apple stores. You can test out the project [here](https://databag.coredb.org/#/create), but don't post anything important as this server is regularly wiped. Feedback on the UI/UX, bugs or features is greatly appreciated.
 
-## Project Vision
+## Project Goal
 
-Imagine an internet where the dominant services prioritized creating value over collecting data. Currently, these services exist primarily to subject us to advertisement. Triggering our fears drives engagement, fueling their revenue engine to our detriment. On top of this, these services make us more susceptible to surveillance and censorship.
-
-It doesn't have to be this way. A data model in which we host and are responsible for our data would force internet services to prioritize their actual value, all while protecting us from surveillance and censorship. There is hope in the growing self-hosting community, and for it to be truly transformational, it will need to reach the average non-technical person.
-
-Databag aims to bridge that gap by enabling self-hosting on consumer electronics. The hope is to one day be able to buy an inexpensive device like a router from a store and start self-hosting without any other technical knowledge. While self-hosting provides the most control and legal protections, people could choose to use cloud hosting services for their data when otherwise not possible.
+Databag aims to bridge the knowlage gap in the self-hosting community by supporting consumer electronics and thereby making it available to the average non-technical person. The hope is to one day be able to buy an inexpensive device like a router from a store and start self-hosting without any other technical knowledge. While self-hosting provides the most control and legal protections, people could choose to use cloud hosting services for their data when otherwise not possible.
 
 ## Installation
 
