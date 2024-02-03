@@ -4,7 +4,7 @@
 <div align="center">
   <a href="#"><img src="/doc/icon_v2.png" width="8%" style="border-radius:50%"></a>
   <h3 align="center">Databag</h3>
-  <p align="center">Communication for the Decentralized Web</p>
+  <p align="center">A tiny federated messenger for self-hosting</p>
 </div>
 
 <br>
@@ -19,7 +19,7 @@
 </p>
 <br>
 
-Databag is a selfhosted messaging service designed to consume minimal resources on the host system and network. Notable features include:
+Databag is designed to consume minimal resources on the host system and network. Notable features include:
 - Decentralized (direct communication between app and server node)
 - Federated (accounts on different nodes can communicate)
 - Public-Private key based identity (not bound to any blockchain or hosting domain)
