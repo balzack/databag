@@ -4,7 +4,7 @@
 <div align="center">
   <a href="#"><img src="/doc/icon_v2.png" width="8%" style="border-radius:50%"></a>
   <h3 align="center">Databag</h3>
-  <p align="center">A tiny federated messenger for self-hosting</p>
+  <p align="center">A federated messenger for self-hosting</p>
 </div>
 
 <br>
