@@ -19,7 +19,7 @@
 </p>
 <br>
 
-Databag is a selfhosted messaging service. Notable features include:
+Databag is a selfhosted messaging service designed to consume minimal resources on the host system and network. Notable features include:
 - Decentralized (direct communication between app and server node)
 - Federated (accounts on different nodes can communicate)
 - Public-Private key based identity (not bound to any blockchain or hosting domain)
@@ -45,10 +45,6 @@ Databag is a selfhosted messaging service. Notable features include:
 </p>
 
 The app is available on fdroid as well as the google and apple stores. You can test out the project [here](https://databag.coredb.org/#/create), but don't post anything important as this server is regularly wiped. Feedback on the UI/UX, bugs or features is greatly appreciated.
-
-## Project Goal
-
-Databag is a decentralized communication platform for everyone. It aims to bridge the knowledge gap in the self-hosting community by supporting any homelab setup as well as consumer electronics and thereby making it available to the average non-technical person. The hope is to one day be able to buy an inexpensive device like a router from a store and start self-hosting your communication without any other technical knowledge. While self-hosting provides the most control and legal protections for your data, people may also choose to use cloud hosting services when otherwise not possible and participate in the same federated network.
 
 ## Installation
 
