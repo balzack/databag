@@ -19,7 +19,7 @@
 </p>
 <br>
 
-Databag is designed to consume minimal resources on the host system and network. Notable features include:
+Databag is designed for efficiency, consuming minimal resources on the host system and network. Notable features include:
 - Decentralized (direct communication between app and server node)
 - Federated (accounts on different nodes can communicate)
 - Public-Private key based identity (not bound to any blockchain or hosting domain)
