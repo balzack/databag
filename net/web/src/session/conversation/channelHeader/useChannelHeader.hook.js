@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect, useRef } from 'react';
-import { ViewportContext } from 'context/ViewportContext';
+import { SettingsContext } from 'context/SettingsContext';
 import { ConversationContext } from 'context/ConversationContext';
 import { CardContext } from 'context/CardContext';
 import { ProfileContext } from 'context/ProfileContext';
@@ -17,7 +17,7 @@ export function useChannelHeader(contentKey) {
     display: null,
   });
 
-  const viewport = useContext(ViewportContext);
+  const settings = useContext(SettingsContext);
   const card = useContext(CardContext);
   const conversation = useContext(ConversationContext);
   const profile = useContext(ProfileContext);
@@ -32,8 +32,8 @@ export function useChannelHeader(contentKey) {
   }
 
   useEffect(() => {
-    updateState({ display: viewport.state.display });
-  }, [viewport.state]);
+    updateState({ display: settings.state.display });
+  }, [settings.state]);
 
   useEffect(() => {
 

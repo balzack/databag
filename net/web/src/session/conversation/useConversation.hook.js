@@ -1,5 +1,5 @@
 import { useContext, useRef, useState, useEffect } from 'react';
-import { ViewportContext } from 'context/ViewportContext';
+import { SettingsContext } from 'context/SettingsContext';
 import { AccountContext } from 'context/AccountContext';
 import { ConversationContext } from 'context/ConversationContext';
 import { UploadContext } from 'context/UploadContext';
@@ -27,7 +27,7 @@ export function useConversation(cardId, channelId) {
   const profile = useContext(ProfileContext);
   const card = useContext(CardContext);
   const account = useContext(AccountContext);
-  const viewport = useContext(ViewportContext);  
+  const settings = useContext(SettingsContext);  
   const conversation = useContext(ConversationContext);
   const upload = useContext(UploadContext);
   const store = useContext(StoreContext);
@@ -41,8 +41,8 @@ export function useConversation(cardId, channelId) {
   }
 
   useEffect(() => {
-    updateState({ display: viewport.state.display });
-  }, [viewport]);
+    updateState({ display: settings.state.display });
+  }, [settings]);
 
   useEffect(() => {
     const { dataType, data } = conversation.state.channel?.data?.channelDetail || {};

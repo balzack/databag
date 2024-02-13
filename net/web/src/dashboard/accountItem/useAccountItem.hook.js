@@ -2,7 +2,7 @@ import { useContext, useState, useEffect } from 'react';
 import { getAccountImageUrl } from 'api/getAccountImageUrl';
 import { setAccountStatus } from 'api/setAccountStatus';
 import { addAccountAccess } from 'api/addAccountAccess';
-import { ViewportContext } from 'context/ViewportContext';
+import { SettingsContext } from 'context/SettingsContext';
 import { AppContext } from 'context/AppContext';
 
 export function useAccountItem(item, remove) {
@@ -15,7 +15,7 @@ export function useAccountItem(item, remove) {
   });
  
   const app = useContext(AppContext);
-  const viewport = useContext(ViewportContext); 
+  const settings = useContext(SettingsContext); 
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
@@ -37,8 +37,8 @@ export function useAccountItem(item, remove) {
   }, [app.state.adminToken, item]); 
 
   useEffect(() => {
-    updateState({ display: viewport.state.display });
-  }, [viewport]);
+    updateState({ display: settings.state.display });
+  }, [settings]);
 
   const actions = {
     setAccessLink: async () => {

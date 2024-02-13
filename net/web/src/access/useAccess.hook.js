@@ -1,7 +1,7 @@
 import { useContext, useState, useEffect } from 'react';
 import { useNavigate, useLocation } from "react-router-dom";
 import { AppContext } from 'context/AppContext';
-import { ViewportContext } from 'context/ViewportContext';
+import { SettingsContext } from 'context/SettingsContext';
 
 export function useAccess() {
 
@@ -12,7 +12,7 @@ export function useAccess() {
   const navigate = useNavigate();
   const location = useLocation();
   const app = useContext(AppContext);
-  const viewport = useContext(ViewportContext);
+  const settings = useContext(SettingsContext);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
@@ -43,9 +43,9 @@ export function useAccess() {
 
 
   useEffect(() => {
-    const { display } = viewport.state;
+    const { display } = settings.state;
     updateState({ display });
-  }, [viewport.state]);
+  }, [settings.state]);
 
   const actions = {};
 

@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect } from 'react';
 import { CardContext } from 'context/CardContext';
-import { ViewportContext } from 'context/ViewportContext';
+import { SettingsContext } from 'context/SettingsContext';
 import { StoreContext } from 'context/StoreContext';
 import { ChannelContext } from 'context/ChannelContext';
 import { AccountContext } from 'context/AccountContext';
@@ -26,16 +26,16 @@ export function useCards() {
   const card = useContext(CardContext);
   const channel = useContext(ChannelContext);
   const store = useContext(StoreContext);
-  const viewport = useContext(ViewportContext);
+  const settings = useContext(SettingsContext);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
   }
 
   useEffect(() => {
-    const { display } = viewport.state;
+    const { display } = settings.state;
     updateState({ display });
-  }, [viewport.state]);
+  }, [settings.state]);
 
   useEffect(() => {
     const { seal, sealKey, status } = account.state;
@@ -118,13 +118,13 @@ export function useCards() {
   }, [card.state, state.sorted, filter]);
 
   useEffect(() => {
-    if (viewport.state.display === 'small') {
+    if (settings.state.display === 'small') {
       updateState({ tooltip: false });
     }
     else {
       updateState({ tooltip: true });
     }
-  }, [viewport.state]);
+  }, [settings.state]);
 
   const actions = {
     onFilter: (value) => {

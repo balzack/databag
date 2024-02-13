@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, useContext } from 'react';
 import { Modal, Drawer, Spin } from 'antd';
 import { CallingWrapper, RingingWrapper, SessionWrapper } from './Session.styled';
 import { useSession } from './useSession.hook';
@@ -16,10 +16,13 @@ import { BottomNav } from './bottomNav/BottomNav';
 import { Logo } from 'logo/Logo';
 import { EyeInvisibleOutlined, PhoneOutlined } from '@ant-design/icons';
 import { IoVideocamOffOutline, IoVideocamOutline, IoMicOffOutline, IoMicOutline, IoCallOutline } from "react-icons/io5";
+import { ThemeProvider } from "styled-components";
+import { SettingsContext } from 'context/SettingsContext';
 
 export function Session() {
 
   const { state, actions } = useSession();
+  const settings = useContext(SettingsContext);
   const [ringing, setRinging] = useState([]);
   const [callWidth, setCallWidth] = useState(256);
   const [callHeight, setCallHeight] = useState(256);
@@ -156,231 +159,233 @@ export function Session() {
   }
 
   return (
-    <SessionWrapper>
-      { (state.display === 'xlarge') && (
-        <div class="desktop-layout noselect">
-          <div class="left">
-            <Identity openAccount={openAccount} openCards={openCards} cardUpdated={state.cardUpdated} />
-            <div class="bottom">
-              <Channels open={openConversation} active={{
-                  set: state.conversation,
-                  card: state.cardId,
-                  channel: state.channelId,
-                }} />
-            </div>
-            { state.loading && (
-              <div class="spinner">
-                <Spin size="large" />
+    <ThemeProvider theme={{ light: settings.state.lightTheme, dark: settings.state.darkTheme }}>
+      <SessionWrapper>
+        { (state.display === 'xlarge') && (
+          <div class="desktop-layout noselect">
+            <div class="left">
+              <Identity openAccount={openAccount} openCards={openCards} cardUpdated={state.cardUpdated} />
+              <div class="bottom">
+                <Channels open={openConversation} active={{
+                    set: state.conversation,
+                    card: state.cardId,
+                    channel: state.channelId,
+                  }} />
               </div>
-            )}
-          </div>
-          <div class="center">
-            <div class="reframe">
-              <Welcome />
-            </div>
-            { state.conversation && (
-              <div class="reframe">
-                <Conversation closeConversation={actions.closeConversation}
-                    openDetails={actions.openDetails}
-                    cardId={state.cardId} channelId={state.channelId} />
-              </div>
-            )}
-            { state.contact && (
-              <div class="reframe">
-                <Contact close={actions.closeContact} guid={state.contactGuid} listing={state.contactListing} />
-              </div>
-            )}
-            { state.profile && (
-              <div class="reframe">
-                <Profile closeProfile={actions.closeProfile} />
-              </div>
-            )}
-          </div>
-          <div class="right">
-            { (state.conversation || state.details) && (
-              <div class="reframe">
-                <Details closeDetails={actions.closeDetails} closeConversation={closeConversation} openContact={actions.openContact}
-                    cardId={state.cardId} channelId={state.channelId} />
-              </div>
-            )}
-            { state.cards && (
-              <div class="reframe">
-                <Cards closeCards={closeCards} openContact={actions.openContact} openChannel={openConversation} openListing={actions.openListing} />
-                <Drawer bodyStyle={{ padding: 0 }} placement="bottom" closable={false} visible={state.listing}
-                    onClose={actions.closeListing} getContainer={false} height={'100%'}
-                    style={{ position: 'absolute', overflow: 'hidden' }}>
-                  <Listing closeListing={actions.closeListing} openContact={actions.openContact} />
-                </Drawer>
-              </div>
-            )}
-            { (state.profile || state.account) && (
-              <div class="reframe">
-                <Account closeAccount={closeAccount} openProfile={actions.openProfile} />
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-      { (state.display === 'large' || state.display === 'medium') && (
-        <div class="tablet-layout noselect">
-          <div class="left">
-            <Identity openAccount={actions.openProfile} openCards={actions.openCards} cardUpdated={state.cardUpdated} />
-            <div class="bottom">
-              <Channels open={actions.openConversation} active={{
-                  set: state.conversation,
-                  card: state.cardId,
-                  channel: state.channelId,
-                }} />
-            </div>
-            { state.loading && (
-              <div class="spinner">
-                <Spin size="large" />
-              </div>
-            )}
-          </div>
-          <div class="right">
-            <div class="reframe">
-              <Welcome />
-            </div>
-            { state.conversation && (
-              <div class="reframe">
-                <Conversation closeConversation={actions.closeConversation}
-                    openDetails={actions.openDetails}
-                    cardId={state.cardId} channelId={state.channelId} />
-              </div>
-            )}
-            <Drawer bodyStyle={{ padding: 0 }} width={'33%'} closable={false} onClose={actions.closeDetails} visible={state.details} zIndex={10}>
-              { state.details && (
-                <Details closeDetails={actions.closeDetails} closeConversation={closeConversation} openContact={actions.openContact}
-                    cardId={state.cardId} channelId={state.channelId} />
+              { state.loading && (
+                <div class="spinner">
+                  <Spin size="large" />
+                </div>
               )}
-            </Drawer>
-            <Drawer bodyStyle={{ padding: 0 }} width={'33%'} closable={false} onClose={closeCards} visible={state.cards} zIndex={20} push={state.contact}>
-              { state.cards && (
-                <Cards closeCards={closeCards} openContact={actions.openContact} openChannel={openConversation} openListing={actions.openListing} />
+            </div>
+            <div class="center">
+              <div class="reframe">
+                <Welcome />
+              </div>
+              { state.conversation && (
+                <div class="reframe">
+                  <Conversation closeConversation={actions.closeConversation}
+                      openDetails={actions.openDetails}
+                      cardId={state.cardId} channelId={state.channelId} />
+                </div>
               )}
-              <Drawer bodyStyle={{ padding: 0 }} placement="bottom" closable={false} visible={state.listing}
-                  onClose={actions.closeListing} getContainer={false} height={'100%'}
-                  style={{ overflow: 'hidden', position: 'absolute' }}>
-                <Listing closeListing={actions.closeListing} openContact={actions.openContact} />
-              </Drawer>
-              <Drawer bodyStyle={{ padding: 0 }} width={'33%'} closable={false} onClose={actions.closeContact} visible={state.contact} zIndex={30}>
-                { state.contact && (
+              { state.contact && (
+                <div class="reframe">
                   <Contact close={actions.closeContact} guid={state.contactGuid} listing={state.contactListing} />
+                </div>
+              )}
+              { state.profile && (
+                <div class="reframe">
+                  <Profile closeProfile={actions.closeProfile} />
+                </div>
+              )}
+            </div>
+            <div class="right">
+              { (state.conversation || state.details) && (
+                <div class="reframe">
+                  <Details closeDetails={actions.closeDetails} closeConversation={closeConversation} openContact={actions.openContact}
+                      cardId={state.cardId} channelId={state.channelId} />
+                </div>
+              )}
+              { state.cards && (
+                <div class="reframe">
+                  <Cards closeCards={closeCards} openContact={actions.openContact} openChannel={openConversation} openListing={actions.openListing} />
+                  <Drawer bodyStyle={{ padding: 0 }} placement="bottom" closable={false} visible={state.listing}
+                      onClose={actions.closeListing} getContainer={false} height={'100%'}
+                      style={{ position: 'absolute', overflow: 'hidden' }}>
+                    <Listing closeListing={actions.closeListing} openContact={actions.openContact} />
+                  </Drawer>
+                </div>
+              )}
+              { (state.profile || state.account) && (
+                <div class="reframe">
+                  <Account closeAccount={closeAccount} openProfile={actions.openProfile} />
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+        { (state.display === 'large' || state.display === 'medium') && (
+          <div class="tablet-layout noselect">
+            <div class="left">
+              <Identity openAccount={actions.openProfile} openCards={actions.openCards} cardUpdated={state.cardUpdated} />
+              <div class="bottom">
+                <Channels open={actions.openConversation} active={{
+                    set: state.conversation,
+                    card: state.cardId,
+                    channel: state.channelId,
+                  }} />
+              </div>
+              { state.loading && (
+                <div class="spinner">
+                  <Spin size="large" />
+                </div>
+              )}
+            </div>
+            <div class="right">
+              <div class="reframe">
+                <Welcome />
+              </div>
+              { state.conversation && (
+                <div class="reframe">
+                  <Conversation closeConversation={actions.closeConversation}
+                      openDetails={actions.openDetails}
+                      cardId={state.cardId} channelId={state.channelId} />
+                </div>
+              )}
+              <Drawer bodyStyle={{ padding: 0 }} width={'33%'} closable={false} onClose={actions.closeDetails} visible={state.details} zIndex={10}>
+                { state.details && (
+                  <Details closeDetails={actions.closeDetails} closeConversation={closeConversation} openContact={actions.openContact}
+                      cardId={state.cardId} channelId={state.channelId} />
                 )}
               </Drawer>
-            </Drawer>
-            <Drawer bodyStyle={{ padding: 0 }} width={'33%'} closable={false} onClose={closeAccount} visible={state.profile || state.account} zIndex={40}>
-              { (state.profile || state.account) && (
-                <Profile closeProfile={closeAccount}/>
+              <Drawer bodyStyle={{ padding: 0 }} width={'33%'} closable={false} onClose={closeCards} visible={state.cards} zIndex={20} push={state.contact}>
+                { state.cards && (
+                  <Cards closeCards={closeCards} openContact={actions.openContact} openChannel={openConversation} openListing={actions.openListing} />
+                )}
+                <Drawer bodyStyle={{ padding: 0 }} placement="bottom" closable={false} visible={state.listing}
+                    onClose={actions.closeListing} getContainer={false} height={'100%'}
+                    style={{ overflow: 'hidden', position: 'absolute' }}>
+                  <Listing closeListing={actions.closeListing} openContact={actions.openContact} />
+                </Drawer>
+                <Drawer bodyStyle={{ padding: 0 }} width={'33%'} closable={false} onClose={actions.closeContact} visible={state.contact} zIndex={30}>
+                  { state.contact && (
+                    <Contact close={actions.closeContact} guid={state.contactGuid} listing={state.contactListing} />
+                  )}
+                </Drawer>
+              </Drawer>
+              <Drawer bodyStyle={{ padding: 0 }} width={'33%'} closable={false} onClose={closeAccount} visible={state.profile || state.account} zIndex={40}>
+                { (state.profile || state.account) && (
+                  <Profile closeProfile={closeAccount}/>
+                )}
+              </Drawer>
+            </div>
+          </div>
+        )}
+        { (state.display === 'small') && (
+          <div class="mobile-layout noselect">
+            <div class="top">
+              <div class="reframe">
+                <Channels open={actions.openConversation} active={{ 
+                    set: state.conversation,
+                    card: state.cardId,
+                    channel: state.channelId,
+                  }} />
+              </div>
+              { state.conversation && (
+                <div class="reframe">
+                  <Conversation closeConversation={actions.closeConversation} openDetails={actions.openDetails}
+                      cardId={state.cardId} channelId={state.channelId} />
+                </div>
               )}
-            </Drawer>
-          </div>
-        </div>
-      )}
-      { (state.display === 'small') && (
-        <div class="mobile-layout noselect">
-          <div class="top">
-            <div class="reframe">
-              <Channels open={actions.openConversation} active={{ 
-                  set: state.conversation,
-                  card: state.cardId,
-                  channel: state.channelId,
-                }} />
+              { state.details && (
+                <div class="reframe">
+                  <Details closeDetails={actions.closeDetails} closeConversation={closeConversation} openContact={actions.openContact} 
+                      cardId={state.cardId} channelId={state.channelId} />
+                </div>
+              )}
+              { state.cards && (
+                <div class="reframe">
+                  <Cards openContact={actions.openContact} openChannel={openConversation} openListing={actions.openListing} />
+                </div>
+              )}
+              { state.listing && (
+                <div class="reframe">
+                  <Listing closeListing={actions.closeListing} openContact={actions.openContact} />
+                </div>
+              )}
+              { state.contact && (
+                <div class="reframe">
+                  <Contact close={actions.closeContact} guid={state.contactGuid} listing={state.contactListing} />
+                </div>
+              )}
+              { state.loading && (
+                <div class="spinner">
+                  <Spin size="large" />
+                </div>
+              )}
+              { (state.profile || state.account) && (
+                <div class="reframe">
+                  <Profile />
+                </div>
+              )}
             </div>
-            { state.conversation && (
-              <div class="reframe">
-                <Conversation closeConversation={actions.closeConversation} openDetails={actions.openDetails}
-                    cardId={state.cardId} channelId={state.channelId} />
-              </div>
-            )}
-            { state.details && (
-              <div class="reframe">
-                <Details closeDetails={actions.closeDetails} closeConversation={closeConversation} openContact={actions.openContact} 
-                    cardId={state.cardId} channelId={state.channelId} />
-              </div>
-            )}
-            { state.cards && (
-              <div class="reframe">
-                <Cards openContact={actions.openContact} openChannel={openConversation} openListing={actions.openListing} />
-              </div>
-            )}
-            { state.listing && (
-              <div class="reframe">
-                <Listing closeListing={actions.closeListing} openContact={actions.openContact} />
-              </div>
-            )}
-            { state.contact && (
-              <div class="reframe">
-                <Contact close={actions.closeContact} guid={state.contactGuid} listing={state.contactListing} />
-              </div>
-            )}
-            { state.loading && (
-              <div class="spinner">
-                <Spin size="large" />
-              </div>
-            )}
-            { (state.profile || state.account) && (
-              <div class="reframe">
-                <Profile />
-              </div>
-            )}
-          </div>
-          <div class="bottom">
-            <BottomNav state={state} actions={actions} />
-          </div>
-        </div>
-      )}
-      <Modal centered visible={ringing.length > 0 && state.callStatus == null} footer={null} closable={false}> 
-        <RingingWrapper>
-          <div className="ringing-list">
-            {ringing}
-          </div>
-        </RingingWrapper>
-      </Modal>
-      <Modal centered visible={state.callStatus} footer={null} closable={false} width={callModal.width} height={callModal.height} bodyStyle={{ padding: 6 }}>
-        <CallingWrapper>
-          { !state.remoteVideo && (
-            <Logo url={state.callLogo} width={256} height={256} radius={8} />
-          )}
-          { state.remoteStream && (
-            <video ref={remote} disablepictureinpicture playsInline autoPlay style={{ display: state.remoteVideo ? 'block' : 'none', width: '100%' }}
-    complete={() => console.log("VIDEO COMPLETE")} progress={() => console.log("VIDEO PROGRESS")} error={() => console.log("VIDEO ERROR")} waiting={() => console.log("VIDEO WAITING")} />
-          )}
-          { state.localStream && (
-            <div className="calling-local">
-              <video ref={local} disablepictureinpicture playsInline autoPlay muted style={{ width: '100%', display: 'block' }}
-    complete={() => console.log("VIDEO COMPLETE")} progress={() => console.log("VIDEO PROGRESS")} error={() => console.log("VIDEO ERROR")} waiting={() => console.log("VIDEO WAITING")} />
+            <div class="bottom">
+              <BottomNav state={state} actions={actions} />
             </div>
-          )}
-          <div className="calling-options calling-hovered">
-            { state.localVideo && (
-              <div className="calling-option" onClick={actions.disableVideo}>
-                <IoVideocamOutline />
-              </div>
-            )}
-            { !state.localVideo && (
-              <div className="calling-option" onClick={actions.enableVideo}>
-                <IoVideocamOffOutline />
-              </div>
-            )}
-            { state.localAudio && (
-              <div className="calling-option" onClick={actions.disableAudio}>
-                <IoMicOutline />
-              </div>
-            )}
-            { !state.localAudio && (
-              <div className="calling-option" onClick={actions.enableAudio}>
-                <IoMicOffOutline />
-              </div>
-            )}
           </div>
-          <div className="calling-end calling-hovered" onClick={actions.end}>
-            <IoCallOutline />
-          </div>
-        </CallingWrapper>
-      </Modal>
-    </SessionWrapper>
+        )}
+        <Modal centered visible={ringing.length > 0 && state.callStatus == null} footer={null} closable={false}> 
+          <RingingWrapper>
+            <div className="ringing-list">
+              {ringing}
+            </div>
+          </RingingWrapper>
+        </Modal>
+        <Modal centered visible={state.callStatus} footer={null} closable={false} width={callModal.width} height={callModal.height} bodyStyle={{ padding: 6 }}>
+          <CallingWrapper>
+            { !state.remoteVideo && (
+              <Logo url={state.callLogo} width={256} height={256} radius={8} />
+            )}
+            { state.remoteStream && (
+              <video ref={remote} disablepictureinpicture playsInline autoPlay style={{ display: state.remoteVideo ? 'block' : 'none', width: '100%' }}
+      complete={() => console.log("VIDEO COMPLETE")} progress={() => console.log("VIDEO PROGRESS")} error={() => console.log("VIDEO ERROR")} waiting={() => console.log("VIDEO WAITING")} />
+            )}
+            { state.localStream && (
+              <div className="calling-local">
+                <video ref={local} disablepictureinpicture playsInline autoPlay muted style={{ width: '100%', display: 'block' }}
+      complete={() => console.log("VIDEO COMPLETE")} progress={() => console.log("VIDEO PROGRESS")} error={() => console.log("VIDEO ERROR")} waiting={() => console.log("VIDEO WAITING")} />
+              </div>
+            )}
+            <div className="calling-options calling-hovered">
+              { state.localVideo && (
+                <div className="calling-option" onClick={actions.disableVideo}>
+                  <IoVideocamOutline />
+                </div>
+              )}
+              { !state.localVideo && (
+                <div className="calling-option" onClick={actions.enableVideo}>
+                  <IoVideocamOffOutline />
+                </div>
+              )}
+              { state.localAudio && (
+                <div className="calling-option" onClick={actions.disableAudio}>
+                  <IoMicOutline />
+                </div>
+              )}
+              { !state.localAudio && (
+                <div className="calling-option" onClick={actions.enableAudio}>
+                  <IoMicOffOutline />
+                </div>
+              )}
+            </div>
+            <div className="calling-end calling-hovered" onClick={actions.end}>
+              <IoCallOutline />
+            </div>
+          </CallingWrapper>
+        </Modal>
+      </SessionWrapper>
+    </ThemeProvider>
   );
 }
 

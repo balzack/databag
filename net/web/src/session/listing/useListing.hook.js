@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect } from 'react';
 import { ProfileContext } from 'context/ProfileContext';
-import { ViewportContext } from 'context/ViewportContext';
+import { SettingsContext } from 'context/SettingsContext';
 import { getListing } from 'api/getListing';
 import { getListingImageUrl } from 'api/getListingImageUrl';
 
@@ -17,7 +17,7 @@ export function useListing() {
   });
 
   const profile = useContext(ProfileContext);
-  const viewport = useContext(ViewportContext);
+  const settings = useContext(SettingsContext);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
@@ -78,8 +78,8 @@ export function useListing() {
   }, [profile.state]);
 
   useEffect(() => {
-    updateState({ display: viewport.state.display });
-  }, [viewport.state]);
+    updateState({ display: settings.state.display });
+  }, [settings.state]);
 
   return { state, actions };
 }

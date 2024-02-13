@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect } from 'react';
 import { CardContext } from 'context/CardContext';
-import { ViewportContext } from 'context/ViewportContext';
+import { SettingsContext } from 'context/SettingsContext';
 import { getListingMessage } from 'api/getListingMessage';
 import { getCardByGuid } from 'context/cardUtil';
 
@@ -20,7 +20,7 @@ export function useContact(guid, listing, close) {
   });
 
   const card = useContext(CardContext);
-  const viewport = useContext(ViewportContext);  
+  const settings = useContext(SettingsContext);  
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
@@ -62,8 +62,8 @@ export function useContact(guid, listing, close) {
   }, [card.state, guid, listing]); 
 
   useEffect(() => {
-    updateState({ display: viewport.state.display });
-  }, [viewport.state]);
+    updateState({ display: settings.state.display });
+  }, [settings.state]);
 
   const applyAction = async (action) => {
     if (!state.busy) {

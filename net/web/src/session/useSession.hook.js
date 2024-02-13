@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { AppContext } from 'context/AppContext';
 import { CardContext } from 'context/CardContext';
 import { StoreContext } from 'context/StoreContext';
-import { ViewportContext } from 'context/ViewportContext';
+import { SettingsContext } from 'context/SettingsContext';
 import { ProfileContext } from 'context/ProfileContext';
 import { RingContext } from 'context/RingContext';
 
@@ -38,7 +38,7 @@ export function useSession() {
   const card = useContext(CardContext);
   const store = useContext(StoreContext);
   const ring = useContext(RingContext);
-  const viewport = useContext(ViewportContext);
+  const settings = useContext(SettingsContext);
   const profile = useContext(ProfileContext);
 
   const navigate = useNavigate();
@@ -96,8 +96,8 @@ export function useSession() {
   }, [app.state]);
 
   useEffect(() => {
-    updateState({ display: viewport.state.display });
-  }, [viewport]);
+    updateState({ display: settings.state.display });
+  }, [settings]);
 
   useEffect(() => {
     let updated;

@@ -10,7 +10,12 @@ export const IdentityWrapper = styled.div`
   padding-left: 16px;
   padding-right: 16px;
   border-bottom: 1px solid ${Colors.divider};
-  background-color: ${Colors.formBackground};
+  @media (prefers-color-scheme: light) {
+    background-color: ${props => props.theme.light.formBackground};
+  }
+  @media (prefers-color-scheme: dark) {
+    background-color: ${props => props.theme.dark.formBackground};
+  }
   flex-shrink: 0;
 
   &:hover {

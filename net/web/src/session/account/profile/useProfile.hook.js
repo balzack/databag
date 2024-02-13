@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from 'react';
 import { ProfileContext } from 'context/ProfileContext';
 import { AppContext } from 'context/AppContext';
-import { ViewportContext } from 'context/ViewportContext';
+import { SettingsContext } from 'context/SettingsContext';
 import avatar from 'images/avatar.png';
 
 export function useProfile() {
@@ -25,7 +25,7 @@ export function useProfile() {
 
   const IMAGE_DIM = 256;
   const app = useContext(AppContext);
-  const viewport = useContext(ViewportContext);
+  const settings = useContext(SettingsContext);
   const profile = useContext(ProfileContext);
 
   const updateState = (value) => {
@@ -41,8 +41,8 @@ export function useProfile() {
   }, [profile.state]);
 
   useEffect(() => {
-    updateState({ display: viewport.state.display });
-  }, [viewport.state]);
+    updateState({ display: settings.state.display });
+  }, [settings.state]);
 
   const actions = {
     logout: app.actions.logout,

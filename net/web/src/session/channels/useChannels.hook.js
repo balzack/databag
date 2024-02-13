@@ -3,7 +3,7 @@ import { StoreContext } from 'context/StoreContext';
 import { ChannelContext } from 'context/ChannelContext';
 import { CardContext } from 'context/CardContext';
 import { AccountContext } from 'context/AccountContext';
-import { ViewportContext } from 'context/ViewportContext';
+import { SettingsContext } from 'context/SettingsContext';
 import { ProfileContext } from 'context/ProfileContext';
 import { getCardByGuid } from 'context/cardUtil';
 import { isUnsealed, getChannelSeals, getContentKey, decryptChannelSubject, decryptTopicSubject } from 'context/sealUtil';
@@ -24,7 +24,7 @@ export function useChannels() {
   const channel = useContext(ChannelContext);
   const account = useContext(AccountContext);
   const store = useContext(StoreContext);
-  const viewport = useContext(ViewportContext);
+  const settings = useContext(SettingsContext);
 
   const channels = useRef(new Map());
 
@@ -264,8 +264,8 @@ export function useChannels() {
   }, [account.state, store.state, card.state, channel.state, filter]);
 
   useEffect(() => {
-    updateState({ display: viewport.state.display });
-  }, [viewport]);
+    updateState({ display: settings.state.display });
+  }, [settings]);
 
   const actions = {
     onFilter: (value) => {

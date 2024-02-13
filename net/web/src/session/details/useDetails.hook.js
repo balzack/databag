@@ -3,7 +3,7 @@ import { CardContext } from 'context/CardContext';
 import { ConversationContext } from 'context/ConversationContext';
 import { AccountContext } from 'context/AccountContext';
 import { ProfileContext } from 'context/ProfileContext';
-import { ViewportContext } from 'context/ViewportContext';
+import { SettingsContext } from 'context/SettingsContext';
 import { getCardByGuid } from 'context/cardUtil';
 import { decryptChannelSubject, updateChannelSubject, getContentKey, getChannelSeals, isUnsealed } from 'context/sealUtil';
 
@@ -34,7 +34,7 @@ export function useDetails() {
   const conversation = useContext(ConversationContext);
   const card = useContext(CardContext);
   const account = useContext(AccountContext);
-  const viewport = useContext(ViewportContext);
+  const settings = useContext(SettingsContext);
   const profile = useContext(ProfileContext);
 
   const cardId = useRef();
@@ -72,8 +72,8 @@ export function useDetails() {
   }, [account.state.sealKey, conversation.state.channel?.data?.channelDetail]);
 
   useEffect(() => {
-    updateState({ display: viewport.state.display });
-  }, [viewport]);
+    updateState({ display: settings.state.display });
+  }, [settings]);
 
   useEffect(() => {
 
