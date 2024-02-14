@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import Colors from 'constants/Colors';
+import { Colors } from 'constants/Colors';
 
 export const ContactWrapper = styled.div`
   height: 100%;

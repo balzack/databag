@@ -4,7 +4,7 @@ import ReactResizeDetector from 'react-resize-detector';
 import { DownloadOutlined } from '@ant-design/icons';
 import { BinaryAssetWrapper } from './BinaryAsset.styled';
 import { useBinaryAsset } from './useBinaryAsset.hook';
-import Colors from 'constants/Colors';
+import { Colors } from 'constants/Colors';
 
 export function BinaryAsset({ asset }) {
 

@@ -1,6 +1,6 @@
 import { Button, Space } from 'antd';
 import styled from 'styled-components';
-import Colors from 'constants/Colors';
+import { Colors } from 'constants/Colors';
 
 export const DashboardWrapper = styled.div`
   display: flex;

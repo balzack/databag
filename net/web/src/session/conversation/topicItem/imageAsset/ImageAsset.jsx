@@ -3,7 +3,7 @@ import { Progress, Modal, Spin } from 'antd';
 import ReactResizeDetector from 'react-resize-detector';
 import { ImageAssetWrapper, ImageModalWrapper } from './ImageAsset.styled';
 import { useImageAsset } from './useImageAsset.hook';
-import Colors from 'constants/Colors';
+import { Colors } from 'constants/Colors';
 
 export function ImageAsset({ asset }) {
 

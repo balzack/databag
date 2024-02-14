@@ -1,6 +1,6 @@
 
 import 'antd/dist/reset.css';
-import Colors from 'constants/Colors';
+import { Colors } from 'constants/Colors';
 import { HashRouter as Router, Routes, Route } from "react-router-dom";
 
 import { AppContextProvider } from 'context/AppContext';

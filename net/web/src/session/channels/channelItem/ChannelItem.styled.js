@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import Colors from 'constants/Colors';
+import { Colors } from 'constants/Colors';
 
 export const ChannelItemWrapper = styled.div`
   height: 48px;

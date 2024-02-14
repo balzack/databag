@@ -3,7 +3,7 @@ import ReactResizeDetector from 'react-resize-detector';
 import { VideoCameraOutlined } from '@ant-design/icons';
 import { VideoAssetWrapper, VideoModalWrapper } from './VideoAsset.styled';
 import { useVideoAsset } from './useVideoAsset.hook';
-import Colors from 'constants/Colors';
+import { Colors } from 'constants/Colors';
 
 export function VideoAsset({ asset }) {
 

@@ -4,7 +4,7 @@ import ReactResizeDetector from 'react-resize-detector';
 import { PlayCircleOutlined, MinusCircleOutlined, SoundOutlined } from '@ant-design/icons';
 import { AudioAssetWrapper, AudioModalWrapper } from './AudioAsset.styled';
 import { useAudioAsset } from './useAudioAsset.hook';
-import Colors from 'constants/Colors';
+import { Colors } from 'constants/Colors';
 
 import background from 'images/audio.png';
 

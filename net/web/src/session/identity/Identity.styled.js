@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import Colors from 'constants/Colors';
+import { Colors } from 'constants/Colors';
 
 export const IdentityWrapper = styled.div`
   width: 100%;
@@ -9,18 +9,26 @@ export const IdentityWrapper = styled.div`
   align-items: center;
   padding-left: 16px;
   padding-right: 16px;
-  border-bottom: 1px solid ${Colors.divider};
   @media (prefers-color-scheme: light) {
-    background-color: ${props => props.theme.light.formBackground};
+    background-color: ${props => props.theme.light.headerArea};
+    border-bottom: 1px solid ${props => props.theme.light.sectionLine};
+    color: ${props => props.theme.light.mainText};
   }
   @media (prefers-color-scheme: dark) {
-    background-color: ${props => props.theme.dark.formBackground};
+    background-color: ${props => props.theme.dark.headerArea};
+    border-bottom: 1px solid ${props => props.theme.dark.sectionLine};
+    color: ${props => props.theme.dark.mainText};
   }
   flex-shrink: 0;
 
   &:hover {
     cursor: pointer;
-    background-color: ${Colors.formFocus};
+    @media (prefers-color-scheme: light) {
+      background-color: ${props => props.theme.light.hoverArea};
+    }
+    @media (prefers-color-scheme: dark) {
+      background-color: ${props => props.theme.dark.hoverArea};
+    }
 
     .drop {
       font-weight: bold;
@@ -31,7 +39,14 @@ export const IdentityWrapper = styled.div`
     padding-left: 4px;
     padding-right: 4px;
     border-radius: 8px;
-    border: 1px solid ${Colors.formBackground};
+    @media (prefers-color-scheme: light) {
+      border: 1px solid ${props => props.theme.light.sectionLine};
+      color: ${props => props.theme.light.mainText};
+    }
+    @media (prefers-color-scheme: dark) {
+      border: 1px solid ${props => props.theme.dark.sectionLine};
+      color: ${props => props.theme.dark.mainText};
+    }
   }
 
   .label {
@@ -73,15 +88,30 @@ export const LogoutContent = styled.div`
 
   .logoutMode {
     padding-right: 8px;
-    color: ${Colors.text};
+    @media (prefers-color-scheme: light) {
+      color: ${props => props.theme.light.mainText};
+    }
+    @media (prefers-color-scheme: dark) {
+      color: ${props => props.theme.dark.mainText};
+    }
   }
 `
 
 export const ErrorNotice = styled.div`
-  color: ${Colors.alert};
+  @media (prefers-color-scheme: light) {
+    color: ${props => props.theme.light.alertText};
+  }
+  @media (prefers-color-scheme: dark) {
+    color: ${props => props.theme.dark.alertText};
+  }
 `
 
 export const InfoNotice = styled.div`
-  color: ${Colors.primary};
+  @media (prefers-color-scheme: light) {
+    color: ${props => props.theme.light.linkText};
+  }
+  @media (prefers-color-scheme: dark) {
+    color: ${props => props.theme.dark.linkText};
+  }
 `
 

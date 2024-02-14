@@ -1,4 +1,4 @@
-const Colors = {
+export const Colors = {
   background: '#8fbea7',
   primary: '#448866',
   formBackground: '#f2f2f2',
@@ -37,4 +37,45 @@ const Colors = {
   selectHover: '#fafafa',
 };
 
-export default Colors;
+export const LightTheme = {
+  headerArea: '#f2f2f2',
+  footerArea: '#f2f2f2',
+  itemArea: '#f8f8f8',
+  hoverArea: '#efefef',
+  selectedArea: '#e8e8e8',
+  enabledArea: '#448866',
+  disabledArea: '#cccccc',
+  mainText: '#444444',
+  hintText: '#777777',
+  activeText: '#ffffff',
+  idleText: '#aaaaaa',
+  placeholderText: '#777777',
+  linkText: '#448866',
+  labelText: '#888888',
+  alertText: '#ff8888',
+  itemLine: '#eeeeee',
+  sectionLine: '#dddddd',
+  headerLine: '#aaaaaa',
+};
+
+export const DarkTheme = {
+  headerArea: '#111111',
+  footerArea: '#111111',
+  itemArea: '#222222',
+  hoverArea: '#444444',
+  selectedArea: '#333333',
+  enabledArea: '#448866',
+  disabledArea: '#888888',
+  mainText: '#ffffff',
+  hintText: '#aaaaaa',
+  activeText: '#ffffff',
+  idleText: '#aaaaaa',
+  placeholderText: '#cccccc',
+  linkText: '#448866',
+  labelText: '#dddddd',
+  alertText: '#ff8888',
+  itemLine: '#555555',
+  sectionLine: '#777777',
+  headerLine: '#aaaaaa',
+};
+
