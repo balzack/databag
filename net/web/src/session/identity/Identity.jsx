@@ -13,30 +13,32 @@ export function Identity({ openAccount, openCards, cardUpdated }) {
 
   const logout = () => {
     modal.confirm({
-      title: 'Are you sure you want to logout?',
+      title: <span style={state.menuStyle}>{state.strings.confirmLogout}</span>,
       icon: <LogoutOutlined />,
       content: <LogoutContent onClick={(e) => e.stopPropagation()}>
-                <span className="logoutMode">Logout of All Devices </span>
-                <Switch onChange={(e) => {all.current = e}} size="small" />
+                <span className="logoutMode">{ state.strings.allDevices }</span>
+                <Switch onChange={(e) => all.current = e} size="small" />
                </LogoutContent>,
-      bodyStyle: { padding: 16 },
+      bodyStyle: { padding: 16, ...state.menuStyle },
+      okText: state.strings.ok,
       onOk() {
         actions.logout(all.current);
       },
+      cancelText: state.strings.cancel,
       onCancel() {},
     });
   }
 
   const menu = (
-    <Menu>
-      <Menu.Item key="0">
-        <div onClick={openAccount}>Account</div>
+    <Menu style={state.menuStyle}>
+      <Menu.Item style={state.menuStyle} key="0">
+        <div onClick={openAccount}>{ state.strings.account }</div>
       </Menu.Item>
-      <Menu.Item key="1">
-        <div onClick={openCards}>Contacts</div>
+      <Menu.Item style={state.menuStyle} key="1">
+        <div onClick={openCards}>{ state.strings.contacts }</div>
       </Menu.Item>
-      <Menu.Item key="2">
-        <div onClick={logout}>Logout</div>
+      <Menu.Item style={state.menuStyle} key="2">
+        <div onClick={logout}>{ state.strings.logout }</div>
       </Menu.Item>
     </Menu>
   );
@@ -48,12 +50,12 @@ export function Identity({ openAccount, openCards, cardUpdated }) {
         { state.init && (
           <Logo url={state.url} width={40} height={40} radius={4} />
         )}
-        <div class="label">
-          <div class="name">{state.name}</div>
-          <div class="handle">
-            <div class="notice">
+        <div className="label">
+          <div className="name">{state.name}</div>
+          <div className="handle">
+            <div className="notice">
               { state.status !== 'connected' && ( 
-                <Tooltip placement="right" title="disconnected from server">
+                <Tooltip placement="right" title={state.strings.disconnected}>
                   <ErrorNotice>
                     <ExclamationCircleOutlined />
                   </ErrorNotice>
@@ -61,9 +63,9 @@ export function Identity({ openAccount, openCards, cardUpdated }) {
               )}
             </div>
             <div>{state.handle}</div>
-            <div class="notice">
+            <div className="notice">
               { cardUpdated && (
-                <Tooltip placement="right" title="contacts have updated">
+                <Tooltip placement="right" title={state.strings.contactsUpdated}>
                   <InfoNotice>
                     <InfoCircleOutlined />
                   </InfoNotice>
@@ -72,7 +74,7 @@ export function Identity({ openAccount, openCards, cardUpdated }) {
             </div>
           </div>
         </div>
-        <div class="drop">
+        <div className="drop">
           <DownOutlined />
         </div>
       </IdentityWrapper>

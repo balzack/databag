@@ -62,7 +62,7 @@ export const DarkTheme = {
   headerArea: '#111111',
   footerArea: '#111111',
   itemArea: '#222222',
-  hoverArea: '#444444',
+  hoverArea: '#2f2f2f',
   selectedArea: '#333333',
   enabledArea: '#448866',
   disabledArea: '#888888',

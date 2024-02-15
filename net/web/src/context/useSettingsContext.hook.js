@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { LightTheme, DarkTheme } from 'constants/Colors';
+import { en, fr } from 'constants/Strings';
 
 export function useSettingsContext() {
 
@@ -7,8 +8,11 @@ export function useSettingsContext() {
     display: null,
     width: null,
     height: null,
-    darkTheme: DarkTheme,
-    lightTheme: LightTheme,
+    theme: null,
+    colors: {},
+    menuStyle: {},
+    language: 'en',
+    strings: en,
   });
 
   const SMALL_MEDIUM = 650;
@@ -44,13 +48,26 @@ export function useSettingsContext() {
 
     const scheme = localStorage.getItem('color_scheme');
     if (scheme === 'dark') {
-      updateState({ darkTheme: DarkTheme, lightTheme: DarkTheme });
+      updateState({ theme: scheme, colors: DarkTheme, menuStyle: { backgroundColor: DarkTheme.headerArea, color: DarkTheme.mainText } });
     }
     else if (scheme === 'light') {
-      updateState({ darkTheme: LightTheme, lightTheme: LightTheme });
+      updateState({ theme: scheme, colors: LightTheme, menuStyle: { backgroundColor: LightTheme.headerArea, color: LightTheme.mainText } })
     }
     else {
-      updateState({ darkTheme: DarkTheme, lightTheme: LightTheme });
+      if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        updateState({ theme: null, colors: DarkTheme, menuStyle: { backgroundColor: DarkTheme.headerArea, color: DarkTheme.mainText } });
+      }
+      else {
+        updateState({ theme: null, colors: LightTheme, menuStyle: { backgroundColor: LightTheme.headerArea, color: LightTheme.mainText } });
+      }
+    }
+
+    const language = localStorage.getItem('language');
+    if (language && language.startsWith('fr')) {
+      updateState({ language: 'fr', strings: fr });
+    }
+    else {
+      updateState({ language: 'en', strings: en });
     }
 
     return () => {
@@ -61,18 +78,32 @@ export function useSettingsContext() {
   }, []);
 
   const actions = {
-    setDarkTheme() {
+    setDarkTheme: () => {
       localStorage.setItem('color_scheme', 'dark');
-      updateState({ darkTheme: DarkTheme, lightTheme: DarkTheme });
+      updateState({ theme: 'dark', colors: DarkTheme, menuStyle: { backgroundColor: DarkTheme.headerArea, color: DarkTheme.mainText } });
     },
-    setLightTheme() {
+    setLightTheme : () => {
       localStorage.setItem('color_scheme', 'light');
-      updateState({ darkTheme: LightTheme, lightTheme: LightTheme });
+      updateState({ theme: 'light', colors: LightTheme, menuStyle: { backgroundColor: LightTheme.headerArea, color: LightTheme.mainText } });
     },
-    steDefaultTheme() {
+    setDefaultTheme: () => {
       localStorage.clearItem('color_scheme');
-      updateState({ darkTheme: DarkTheme, lightTheme: LightTheme });
-    }
+      if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        updateState({ theme: null, colors: DarkTheme, menuStyle: { backgroundColor: DarkTheme.headerArea, color: DarkTheme.mainText } });
+      }
+      else {
+        updateState({ theme: null, colors: LightTheme, menuStyle: { backgroundColor: LightTheme.headerArea, color: LightTheme.mainText } });
+      }
+    },
+    setLanguage: (code: string) => {
+      localStorage.setItem('language', code);
+      if (code && code.startsWith('fr')) {
+        updateState({ language: 'fr', strings: fr });
+      }
+      else {
+        updateState({ language: 'en', strings: en });
+      }
+    },
   }
 
   return { state, actions }

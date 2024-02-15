@@ -159,7 +159,7 @@ export function Session() {
   }
 
   return (
-    <ThemeProvider theme={{ light: settings.state.lightTheme, dark: settings.state.darkTheme }}>
+    <ThemeProvider theme={settings.state.colors}>
       <SessionWrapper>
         { (state.display === 'xlarge') && (
           <div class="desktop-layout noselect">
