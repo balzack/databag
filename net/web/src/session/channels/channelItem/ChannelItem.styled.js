@@ -6,17 +6,18 @@ export const ChannelItemWrapper = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
-  border-bottom: 1px solid ${Colors.itemDivider};
+  border-bottom: 1px solid ${props => props.theme.itemBorder};
+  color: ${props => props.theme.mainText};
   line-height: 16px;
   cursor: pointer;
   overflow: hidden;
 
   &:hover {
-    background-color: ${Colors.formHover};
+    background-color: ${props => props.theme.hoverArea};
   }
 
   .active {
-    background-color: ${Colors.profileForm};
+    background-color: ${props => props.theme.selectedArea};
     width: 100%;
     height: 100%;
     display: flex;
@@ -48,7 +49,7 @@ export const ChannelItemWrapper = styled.div`
       display: flex;
       align-items: center;
       justify-content: center;
-      border: 1px solid ${Colors.grey};
+      border: 1px solid ${props => props.theme.itemBorder};
       width: 32px;
       height: 32px;
       border-radius: 4px;
@@ -74,7 +75,7 @@ export const ChannelItemWrapper = styled.div`
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-        color: ${Colors.disabled};
+        color: ${props => props.theme.hintText};
       }
     }
   }
@@ -84,7 +85,7 @@ export const Markup = styled.div`
   position: absolute;
   right: 0;
   border-radius: 8px;
-  background-color: ${Colors.background};
+  background-color: ${props => props.theme.noticeArea};
   width: 8px;
   height: 8px;
   margin-right: 8px;

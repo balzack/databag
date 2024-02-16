@@ -9,7 +9,7 @@ export const IdentityWrapper = styled.div`
   padding-left: 16px;
   padding-right: 16px;
   background-color: ${props => props.theme.headerArea};
-  border-bottom: 1px solid ${props => props.theme.sectionLine};
+  border-bottom: 1px solid ${props => props.theme.sectionBorder};
   color: ${props => props.theme.mainText};
   flex-shrink: 0;
 
@@ -26,7 +26,7 @@ export const IdentityWrapper = styled.div`
     padding-left: 4px;
     padding-right: 4px;
     border-radius: 8px;
-    border: 1px solid ${props => props.theme.sectionLine};
+    border: 2px solid ${props => props.theme.sectionBorder};
     color: ${props => props.theme.mainText};
   }
 

@@ -3,7 +3,7 @@ import { ChannelItemWrapper, Markup } from './ChannelItem.styled';
 import { Logo } from 'logo/Logo';
 import { UnlockOutlined, LockFilled } from '@ant-design/icons';
 
-export function ChannelItem({ item, openChannel, active }) {
+export function ChannelItem({ item, openChannel, active, tip }) {
 
   return (
     <ChannelItemWrapper onClick={() => openChannel(item.channelId, item.cardId)}>
@@ -25,7 +25,7 @@ export function ChannelItem({ item, openChannel, active }) {
             <div class="message">{ item.message }</div>
           </div>
           { item.updatedFlag && (
-            <Tooltip placement="topRight" title="New Message">
+            <Tooltip placement="topRight" title={tip}>
               <Markup />
             </Tooltip>
           )}

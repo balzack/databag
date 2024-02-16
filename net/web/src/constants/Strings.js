@@ -9,6 +9,11 @@ export const en = {
   allDevices: 'Logout of all devices',
   ok: 'OK',
   cancel: 'Cancel',
+
+  newMessage: 'New Message',
+  topics: 'Topics',
+  unsetSealing: 'Unset Sealing Key',
+  newTopic: 'New Topic',  
 };
 
 export const fr = {
@@ -22,5 +27,10 @@ export const fr = {
   allDevices: 'Déconnexion de tous les appareils',
   ok: 'OK',
   cancel: 'Annuler',
+
+  newMessage: 'Nouveau Message',
+  topics: 'Sujets',
+  unsetSealing: 'Clé de sécurité non définie',
+  newTopic: 'Nouveau Sujet',
 };
 
