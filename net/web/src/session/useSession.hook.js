@@ -32,6 +32,7 @@ export function useSession() {
     remoteStream: null,
     remoteVideo: false,
     remoteAudio: false,
+    theme: null,
   });
 
   const app = useContext(AppContext);
@@ -96,8 +97,12 @@ export function useSession() {
   }, [app.state]);
 
   useEffect(() => {
-    updateState({ display: settings.state.display });
-  }, [settings]);
+    const { display, theme } = settings.state;
+    updateState({ display, theme });
+
+console.log("SET THEME: ", theme);
+
+  }, [settings.state]);
 
   useEffect(() => {
     let updated;

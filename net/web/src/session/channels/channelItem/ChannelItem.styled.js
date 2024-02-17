@@ -88,5 +88,5 @@ export const Markup = styled.div`
   background-color: ${props => props.theme.noticeArea};
   width: 8px;
   height: 8px;
-  margin-right: 8px;
+  margin-right: 16px;
 `;

@@ -29,6 +29,12 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  @media (prefers-color-scheme: light) {
+    background-color:#8fbea7;
+  }
+  @media (prefers-color-scheme: dark) {
+    background-color:#000000;
+  }
 }
 
 code {

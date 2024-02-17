@@ -7,7 +7,8 @@ export const WelcomeWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  color: #555555;
+  color: ${props => props.theme.hintColor};
+  background-color: ${props => props.theme.baseArea};
 
   .video {
     width: 640px;
@@ -24,10 +25,12 @@ export const WelcomeWrapper = styled.div`
     align-items: center;
     flex-grow: 1;
     padding: 16px;
+    color: ${props => props.theme.hintText};
 
     .header {
       font-weight: bold;
       font-size: 20px;
+      color: ${props => props.theme.hintText};
     }
   }
 
@@ -49,6 +52,7 @@ export const WelcomeWrapper = styled.div`
     align-items: center;
     flex-grow: 1;
     padding: 16px;
+    color: ${props => props.theme.hintText};
   }
 `
 

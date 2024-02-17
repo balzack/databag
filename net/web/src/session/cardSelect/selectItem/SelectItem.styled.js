@@ -53,6 +53,7 @@ export const SelectItemWrapper = styled.div`
 
   .switch {
     flex-shrink: 0;
+    padding-right: 8px;
   }
 `
 

@@ -20,6 +20,8 @@ export function useSettingsContext() {
   const LARGE_XLARGE = 1600;
 
   const updateState = (value) => {
+console.log("VALUE: ", value);
+
     setState((s) => ({ ...s, ...value }));
   };
 
@@ -55,10 +57,10 @@ export function useSettingsContext() {
     }
     else {
       if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        updateState({ theme: null, colors: DarkTheme, menuStyle: { backgroundColor: DarkTheme.modalArea, color: DarkTheme.mainText } });
+        updateState({ theme: 'dark', colors: DarkTheme, menuStyle: { backgroundColor: DarkTheme.modalArea, color: DarkTheme.mainText } });
       }
       else {
-        updateState({ theme: null, colors: LightTheme, menuStyle: { backgroundColor: LightTheme.modalArea, color: LightTheme.mainText } });
+        updateState({ theme: 'light', colors: LightTheme, menuStyle: { backgroundColor: LightTheme.modalArea, color: LightTheme.mainText } });
       }
     }
 
@@ -89,10 +91,10 @@ export function useSettingsContext() {
     setDefaultTheme: () => {
       localStorage.clearItem('color_scheme');
       if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        updateState({ theme: null, colors: DarkTheme, menuStyle: { backgroundColor: DarkTheme.modalArea, color: DarkTheme.mainText } });
+        updateState({ theme: 'dark', colors: DarkTheme, menuStyle: { backgroundColor: DarkTheme.modalArea, color: DarkTheme.mainText } });
       }
       else {
-        updateState({ theme: null, colors: LightTheme, menuStyle: { backgroundColor: LightTheme.modalArea, color: LightTheme.mainText } });
+        updateState({ theme: 'light', colors: LightTheme, menuStyle: { backgroundColor: LightTheme.modalArea, color: LightTheme.mainText } });
       }
     },
     setLanguage: (code: string) => {

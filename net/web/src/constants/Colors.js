@@ -38,6 +38,7 @@ export const Colors = {
 };
 
 export const LightTheme = {
+  baseArea: '#8fbea7',
   headerArea: '#f0f0f0',
   footerArea: '#f0f0f0',
   modalArea: '#eeeeee',
@@ -63,6 +64,7 @@ export const LightTheme = {
 };
 
 export const DarkTheme = {
+  baseArea: '#080808',
   headerArea: '#111111',
   footerArea: '#111111',
   modalArea: '#444444',

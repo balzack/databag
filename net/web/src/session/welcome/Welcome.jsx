@@ -2,17 +2,23 @@ import { WelcomeWrapper } from './Welcome.styled';
 import { RightOutlined } from '@ant-design/icons';
 import { Space } from 'antd';
 
-import session from 'images/session.png';
+import light from 'images/session.png';
+import dark from 'images/darksess.png';
 
-export function Welcome() {
+export function Welcome({ theme }) {
   return (
     <WelcomeWrapper>
-      <div class="title">
-        <div class="header">Databag</div>
+      <div className="title">
+        <div className="header">Databag</div>
         <div>Communication for the decentralized web</div>
       </div>
-      <img class="session" src={session} alt="Session Background" />
-      <div class="message">
+      { theme === 'light' && (
+        <img className="session" src={light} alt="Session Background" />
+      )}
+      { theme === 'dark' && (
+        <img className="session" src={dark} alt="Session Background" />
+      )}
+      <div className="message">
         <Space>
           <div>Setup your profile</div>
           <RightOutlined />

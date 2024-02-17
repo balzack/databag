@@ -180,7 +180,7 @@ export function Session() {
             </div>
             <div class="center">
               <div class="reframe">
-                <Welcome />
+                <Welcome theme={state.theme} />
               </div>
               { state.conversation && (
                 <div class="reframe">
@@ -244,7 +244,7 @@ export function Session() {
             </div>
             <div class="right">
               <div class="reframe">
-                <Welcome />
+                <Welcome theme={state.theme} />
               </div>
               { state.conversation && (
                 <div class="reframe">
