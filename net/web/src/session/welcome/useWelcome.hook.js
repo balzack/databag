@@ -1,0 +1,26 @@
+import { useContext, useState, useEffect } from 'react';
+import { SettingsContext } from 'context/SettingsContext';
+
+export function useWelcome() {
+
+  const [state, setState] = useState({
+    theme: null,
+    strings: {},
+  });
+
+  const settings = useContext(SettingsContext);
+
+  const updateState = (value) => {
+    setState((s) => ({ ...s, ...value }));
+  }
+
+  useEffect(() => {
+    const { theme, strings } = settings.state;
+    updateState({ theme, strings });
+  }, [settings.state]);
+
+  const actions = {};
+
+  return { state, actions };
+}
+

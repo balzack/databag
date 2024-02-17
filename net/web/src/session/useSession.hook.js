@@ -32,7 +32,6 @@ export function useSession() {
     remoteStream: null,
     remoteVideo: false,
     remoteAudio: false,
-    theme: null,
   });
 
   const app = useContext(AppContext);

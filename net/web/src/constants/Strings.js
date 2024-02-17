@@ -19,7 +19,12 @@ export const en = {
   subjectOptional: 'Subject (optional)',
   members: 'Members',
   sealedTopic: 'Sealed Topic',
-  start: 'Start', 
+  start: 'Start',
+
+  communication: 'Communication for the decentralized web',
+  setupProfile: 'Setup your profile',
+  connectPeople: 'Connect with people',
+  startConversation: 'Start a conversation',
 };
 
 export const fr = {
@@ -44,5 +49,10 @@ export const fr = {
   members: 'Membres',
   sealedTopic: 'Sujet Sécurisé',
   start: 'Commencer',
+
+  communication: 'Communication pour le web décentralisé',
+  setupProfile: 'Configurez votre profil',
+  connectPeople: 'Connectez avec les gens',
+  startConversation: 'Commencez une conversation',
 };
 
