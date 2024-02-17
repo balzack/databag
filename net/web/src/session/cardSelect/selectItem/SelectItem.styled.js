@@ -2,6 +2,8 @@ import styled from 'styled-components';
 import { Colors } from 'constants/Colors';
 
 export const SelectItemWrapper = styled.div`
+  color: ${props => props.theme.mainText};
+
   .active {
     cursor: pointer;
     height: 48px;
@@ -12,7 +14,7 @@ export const SelectItemWrapper = styled.div`
     align-items: center;
 
     &:hover {
-      background-color: ${Colors.selectHover};
+      background-color: ${props => props.theme.hoverArea};
     }
   }
 
@@ -45,6 +47,7 @@ export const SelectItemWrapper = styled.div`
       overflow: hidden;
       text-overflow: ellipsis;
       font-size: 12px;
+      color: ${props => props.theme.hintText};
     }
   }
 

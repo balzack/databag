@@ -1,6 +1,7 @@
 import { useContext, useState, useEffect } from 'react';
 import { ChannelContext } from 'context/ChannelContext';
 import { CardContext } from 'context/CardContext';
+import { SettingsContext } from 'context/SettingsContext';
 import { AccountContext } from 'context/AccountContext';
 import { encryptChannelSubject } from 'context/sealUtil';
 
@@ -14,11 +15,13 @@ export function useAddChannel() {
     subject: null,
     members: new Set(),
     seal: false,
+    strings: {},
   });
 
   const card = useContext(CardContext);
   const channel = useContext(ChannelContext);
   const account = useContext(AccountContext);
+  const settings = useContext(SettingsContext);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
@@ -34,6 +37,11 @@ export function useAddChannel() {
       updateState({ seal: false, sealable: false, allowUnsealed });
     }
   }, [account.state]);
+
+  useEffect(() => {
+    const { strings } = settings.state;
+    updateState({ strings });
+  }, [settings.state]);
 
   const actions = {
     addChannel: async () => {

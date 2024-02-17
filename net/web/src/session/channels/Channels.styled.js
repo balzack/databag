@@ -50,7 +50,6 @@ export const ChannelsWrapper = styled.div`
         input::placeholder {
           color: ${props => props.theme.placeholderText};
         }
-      
       }
     }
 

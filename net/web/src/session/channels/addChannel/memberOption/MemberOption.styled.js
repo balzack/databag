@@ -5,6 +5,7 @@ export const MemberOptionWrapper = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
+  color: ${props => props.theme.mainText};
 
   .details {
     flex-grow: 1;

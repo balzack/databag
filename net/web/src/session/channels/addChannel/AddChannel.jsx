@@ -26,35 +26,37 @@ export function AddChannel({ added, cancelled }) {
   return (
     <AddChannelWrapper>
       { modalContext }
-      <Input placeholder="Subject (optional)" spellCheck="false" autocapitalize="word"
-          value={state.subject} onChange={(e) => actions.setSubject(e.target.value)} />
-      <div class="members">
-        <span>Channel Members: </span>
+      <div className="subject">
+        <Input placeholder={state.strings.subjectOptional} spellCheck="false" autocapitalize="word"
+            value={state.subject} onChange={(e) => actions.setSubject(e.target.value)} />
+      </div>
+      <div className="members">
+        <span>{state.strings.members}:</span>
         { state.members.size !== 0 && (
-          <span>{ state.members.size }</span>
+          <span className="count">{ state.members.size }</span>
         )}
       </div>
-      <div class="list">
+      <div className="list">
         <CardSelect
           select={actions.onMember}
           selected={state.members}
-          emptyMessage={'No Connected Contacts'}
+          emptyMessage={state.strings.noConnected}
           filter={actions.cardFilter} 
           unknown={0}
         />
       </div>
         <AddFooter>
-        <div class="seal">
+        <div className="seal">
           { state.sealable && state.allowUnsealed && (
             <>
               <Switch checked={state.seal} onChange={actions.setSeal} size="small" />
-              <span class="sealText">Sealed Channel</span>
+              <span className="sealText">{ state.strings.sealedTopic }</span>
             </>
           )}
         </div>
         <Space>
-          <Button key="back" onClick={cancelled}>Cancel</Button>
-          <Button key="save" type="primary" loading={state.busy} onClick={addChannel}>Save</Button>
+          <Button key="back" onClick={cancelled}>{ state.strings.cancel }</Button>
+          <Button key="save" type="primary" loading={state.busy} onClick={addChannel}>{ state.strings.start }</Button>
         </Space>
       </AddFooter>
     </AddChannelWrapper>

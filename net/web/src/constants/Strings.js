@@ -13,7 +13,13 @@ export const en = {
   newMessage: 'New Message',
   topics: 'Topics',
   unsetSealing: 'Unset Sealing Key',
-  newTopic: 'New Topic',  
+  newTopic: 'New Topic', 
+
+  noConnected: 'No Connected Contacts',
+  subjectOptional: 'Subject (optional)',
+  members: 'Members',
+  sealedTopic: 'Sealed Topic',
+  start: 'Start', 
 };
 
 export const fr = {
@@ -32,5 +38,11 @@ export const fr = {
   topics: 'Sujets',
   unsetSealing: 'Clé de sécurité non définie',
   newTopic: 'Nouveau Sujet',
+
+  noConnected: 'Pas de Contacts Connecter',
+  subjectOptional: 'Sujet (optionnel)',
+  members: 'Membres',
+  sealedTopic: 'Sujet Sécurisé',
+  start: 'Commencer',
 };
 

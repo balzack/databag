@@ -47,8 +47,7 @@ export function Channels({ open, active }) {
           </Tooltip>
         </div>
       )}
-      <Modal bodyStyle={{ padding: 16 }} title={state.strings.newTopic} centered visible={state.showAdd && state.allowAdd} footer={null} destroyOnClose={true}
-          onCancel={actions.clearShowAdd}>
+      <Modal bodyStyle={{ padding: 16, ...state.menuStyle }} closable={false} centered visible={state.showAdd && state.allowAdd} footer={null} destroyOnClose={true} onCancel={actions.clearShowAdd}>
         <AddChannel added={added} cancelled={actions.clearShowAdd} />
       </Modal>
     </ChannelsWrapper>

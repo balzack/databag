@@ -18,6 +18,7 @@ export function useChannels() {
     showAdd: false,
     allowAdd: false,
     strings: {},
+    menuStyle: {},
   });
 
   const profile = useContext(ProfileContext);
@@ -265,8 +266,8 @@ export function useChannels() {
   }, [account.state, store.state, card.state, channel.state, filter]);
 
   useEffect(() => {
-    const { display, strings } = settings.state;
-    updateState({ display, strings });
+    const { display, strings, menuStyle } = settings.state;
+    updateState({ display, strings, menuStyle });
   }, [settings.state]);
 
   const actions = {

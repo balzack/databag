@@ -48,17 +48,17 @@ export function useSettingsContext() {
 
     const scheme = localStorage.getItem('color_scheme');
     if (scheme === 'dark') {
-      updateState({ theme: scheme, colors: DarkTheme, menuStyle: { backgroundColor: DarkTheme.headerArea, color: DarkTheme.mainText } });
+      updateState({ theme: scheme, colors: DarkTheme, menuStyle: { backgroundColor: DarkTheme.modalArea, color: DarkTheme.mainText } });
     }
     else if (scheme === 'light') {
-      updateState({ theme: scheme, colors: LightTheme, menuStyle: { backgroundColor: LightTheme.headerArea, color: LightTheme.mainText } })
+      updateState({ theme: scheme, colors: LightTheme, menuStyle: { backgroundColor: LightTheme.modalArea, color: LightTheme.mainText } })
     }
     else {
       if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        updateState({ theme: null, colors: DarkTheme, menuStyle: { backgroundColor: DarkTheme.headerArea, color: DarkTheme.mainText } });
+        updateState({ theme: null, colors: DarkTheme, menuStyle: { backgroundColor: DarkTheme.modalArea, color: DarkTheme.mainText } });
       }
       else {
-        updateState({ theme: null, colors: LightTheme, menuStyle: { backgroundColor: LightTheme.headerArea, color: LightTheme.mainText } });
+        updateState({ theme: null, colors: LightTheme, menuStyle: { backgroundColor: LightTheme.modalArea, color: LightTheme.mainText } });
       }
     }
 
@@ -80,19 +80,19 @@ export function useSettingsContext() {
   const actions = {
     setDarkTheme: () => {
       localStorage.setItem('color_scheme', 'dark');
-      updateState({ theme: 'dark', colors: DarkTheme, menuStyle: { backgroundColor: DarkTheme.headerArea, color: DarkTheme.mainText } });
+      updateState({ theme: 'dark', colors: DarkTheme, menuStyle: { backgroundColor: DarkTheme.modalArea, color: DarkTheme.mainText } });
     },
     setLightTheme : () => {
       localStorage.setItem('color_scheme', 'light');
-      updateState({ theme: 'light', colors: LightTheme, menuStyle: { backgroundColor: LightTheme.headerArea, color: LightTheme.mainText } });
+      updateState({ theme: 'light', colors: LightTheme, menuStyle: { backgroundColor: LightTheme.modalArea, color: LightTheme.mainText } });
     },
     setDefaultTheme: () => {
       localStorage.clearItem('color_scheme');
       if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        updateState({ theme: null, colors: DarkTheme, menuStyle: { backgroundColor: DarkTheme.headerArea, color: DarkTheme.mainText } });
+        updateState({ theme: null, colors: DarkTheme, menuStyle: { backgroundColor: DarkTheme.modalArea, color: DarkTheme.mainText } });
       }
       else {
-        updateState({ theme: null, colors: LightTheme, menuStyle: { backgroundColor: LightTheme.headerArea, color: LightTheme.mainText } });
+        updateState({ theme: null, colors: LightTheme, menuStyle: { backgroundColor: LightTheme.modalArea, color: LightTheme.mainText } });
       }
     },
     setLanguage: (code: string) => {

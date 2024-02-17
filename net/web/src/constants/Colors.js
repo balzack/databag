@@ -38,9 +38,10 @@ export const Colors = {
 };
 
 export const LightTheme = {
-  headerArea: '#f2f2f2',
-  footerArea: '#f2f2f2',
-  itemArea: '#f8f8f8',
+  headerArea: '#f0f0f0',
+  footerArea: '#f0f0f0',
+  modalArea: '#eeeeee',
+  itemArea: '#f4f4f4',
   inputArea: '#ffffff',
   hoverArea: '#efefef',
   noticeArea: '#8fbea7',
@@ -64,6 +65,7 @@ export const LightTheme = {
 export const DarkTheme = {
   headerArea: '#111111',
   footerArea: '#111111',
+  modalArea: '#444444',
   itemArea: '#222222',
   inputArea: '#000000',
   hoverArea: '#2f2f2f',
