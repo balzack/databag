@@ -210,7 +210,7 @@ export function Session() {
               { state.cards && (
                 <div class="reframe">
                   <Cards closeCards={closeCards} openContact={actions.openContact} openChannel={openConversation} openListing={actions.openListing} />
-                  <Drawer bodyStyle={{ padding: 0 }} placement="bottom" closable={false} visible={state.listing}
+                  <Drawer bodyStyle={{ padding: 0 }} visible={state.listing} closable={false}
                       onClose={actions.closeListing} getContainer={false} height={'100%'}
                       style={{ position: 'absolute', overflow: 'hidden' }}>
                     <Listing closeListing={actions.closeListing} openContact={actions.openContact} />
@@ -263,7 +263,7 @@ export function Session() {
                 { state.cards && (
                   <Cards closeCards={closeCards} openContact={actions.openContact} openChannel={openConversation} openListing={actions.openListing} />
                 )}
-                <Drawer bodyStyle={{ padding: 0 }} placement="bottom" closable={false} visible={state.listing}
+                <Drawer bodyStyle={{ padding: 0 }} visible={state.listing} closable={false}
                     onClose={actions.closeListing} getContainer={false} height={'100%'}
                     style={{ overflow: 'hidden', position: 'absolute' }}>
                   <Listing closeListing={actions.closeListing} openContact={actions.openContact} />

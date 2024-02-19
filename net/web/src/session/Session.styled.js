@@ -185,8 +185,8 @@ export const SessionWrapper = styled.div`
     }
     .right {
       min-width: 256px;
-      max-width: 384px;
-      width: 20%;
+      max-width: 400px;
+      width: 24%;
       height: 100%;
       display: flex;
       flex-direction: column;

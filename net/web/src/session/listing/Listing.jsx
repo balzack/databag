@@ -1,6 +1,6 @@
 import { Modal, Button, Input, List } from 'antd';
 import { ListingWrapper } from './Listing.styled';
-import { UserOutlined, FilterOutlined, DownOutlined, CloseOutlined, DatabaseOutlined, SearchOutlined } from '@ant-design/icons';
+import { UserOutlined, FilterOutlined, RightOutlined, CloseOutlined, DatabaseOutlined, SearchOutlined } from '@ant-design/icons';
 import { useListing } from './useListing.hook';
 import { ListingItem } from './listingItem/ListingItem';
 
@@ -56,7 +56,7 @@ export function Listing({ closeListing, openContact }) {
         </div>
         <div class="inline">
           { state.display !== 'small' && (
-            <Button type="text" icon={<DownOutlined />} onClick={closeListing}></Button>
+            <Button type="text" icon={<RightOutlined />} onClick={closeListing}></Button>
           )}
           { state.display === 'small' && (
             <Button type="text" icon={<CloseOutlined />} onClick={closeListing}></Button>
