@@ -1,9 +1,50 @@
-login after delete fails
-rotate screen mangles profile
-registry showing stale handle for unknown contact
-show disabled notifications if node disabled
-warn if federated hostname fails
+profile:
+  - details layout
+  - detail edit icon style
+  - image edit icon layout
+  - style modals
+  - add app settings
+    - hour format
+    - date format
+    - color theme
+    - language
 
-block restore activity
-use apn for ios
-stylize splash screen
+contact:
+  - dark style
+  - detail layout
+  - action buttons
+
+cards: 
+  - dark style
+  - alert name overlay
+  - @ symbol
+  - remove back
+
+listing:
+  - dark style
+  - remove back
+  - match widtch
+
+thread:
+  - dark style
+  - button tool tip
+
+details:
+  - back button
+  - dark style
+  - action buttons
+
+calling:
+  - dark style
+  - layout
+  - fullscreen
+  - device selection
+
+access:
+  - dark style
+  - language
+  - color theme
+
+admin:
+  - dark style
+  
