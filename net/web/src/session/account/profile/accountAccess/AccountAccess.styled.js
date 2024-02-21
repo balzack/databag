@@ -15,12 +15,12 @@ export const AccountAccessWrapper = styled.div`
     padding-bottom: 8px;
 
     .switchEnabled {
-      color: ${Colors.primary};
+      color: ${props => props.theme.activeArea};
       cursor: pointer;
     }
 
     .switchDisabled {
-      color: ${Colors.grey};
+      color: ${props => props.theme.idleArea};
     }
 
     .switchLabel {
@@ -34,7 +34,7 @@ export const AccountAccessWrapper = styled.div`
     flex-direction: row;
     align-items: center;
     cursor: pointer;
-    color: ${Colors.primary};
+    color: ${props => props.theme.linkText};
     padding-top: 8px;
     padding-bottom: 8px;
   
@@ -58,7 +58,7 @@ export const SealModal = styled.div`
     justify-content: center;
 
     .switchLabel {
-      color: ${Colors.text};
+      color: ${props => props.theme.mainText};
       padding-left: 8px;
       padding-right: 8px;
     }

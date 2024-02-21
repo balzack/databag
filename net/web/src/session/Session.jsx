@@ -158,6 +158,8 @@ export function Session() {
     actions.closeDetails();
   }
 
+  const drawerStyle = { padding: 0, backgroundColor: settings.state.colors.baseArea };
+
   return (
     <ThemeProvider theme={settings.state.colors}>
       <SessionWrapper>
@@ -210,7 +212,7 @@ export function Session() {
               { state.cards && (
                 <div class="reframe">
                   <Cards closeCards={closeCards} openContact={actions.openContact} openChannel={openConversation} openListing={actions.openListing} />
-                  <Drawer bodyStyle={{ padding: 0 }} visible={state.listing} closable={false}
+                  <Drawer bodyStyle={drawerStyle} visible={state.listing} closable={false}
                       onClose={actions.closeListing} getContainer={false} height={'100%'}
                       style={{ position: 'absolute', overflow: 'hidden' }}>
                     <Listing closeListing={actions.closeListing} openContact={actions.openContact} />
@@ -253,28 +255,29 @@ export function Session() {
                       cardId={state.cardId} channelId={state.channelId} />
                 </div>
               )}
-              <Drawer bodyStyle={{ padding: 0 }} width={'33%'} closable={false} onClose={actions.closeDetails} visible={state.details} zIndex={10}>
+              <Drawer bodyStyle={drawerStyle} width={'33%'} closable={false}
+                  onClose={actions.closeDetails} visible={state.details} zIndex={10}>
                 { state.details && (
                   <Details closeDetails={actions.closeDetails} closeConversation={closeConversation} openContact={actions.openContact}
                       cardId={state.cardId} channelId={state.channelId} />
                 )}
               </Drawer>
-              <Drawer bodyStyle={{ padding: 0 }} width={'33%'} closable={false} onClose={closeCards} visible={state.cards} zIndex={20} push={state.contact}>
+              <Drawer bodyStyle={drawerStyle} width={'33%'} closable={false} onClose={closeCards} visible={state.cards} zIndex={20} push={state.contact}>
                 { state.cards && (
                   <Cards closeCards={closeCards} openContact={actions.openContact} openChannel={openConversation} openListing={actions.openListing} />
                 )}
-                <Drawer bodyStyle={{ padding: 0 }} visible={state.listing} closable={false}
+                <Drawer bodyStyle={drawerStyle} visible={state.listing} closable={false}
                     onClose={actions.closeListing} getContainer={false} height={'100%'}
                     style={{ overflow: 'hidden', position: 'absolute' }}>
                   <Listing closeListing={actions.closeListing} openContact={actions.openContact} />
                 </Drawer>
-                <Drawer bodyStyle={{ padding: 0 }} width={'33%'} closable={false} onClose={actions.closeContact} visible={state.contact} zIndex={30}>
+                <Drawer bodyStyle={drawerStyle} width={'33%'} closable={false} onClose={actions.closeContact} visible={state.contact} zIndex={30}>
                   { state.contact && (
                     <Contact close={actions.closeContact} guid={state.contactGuid} listing={state.contactListing} />
                   )}
                 </Drawer>
               </Drawer>
-              <Drawer bodyStyle={{ padding: 0 }} width={'33%'} closable={false} onClose={closeAccount} visible={state.profile || state.account} zIndex={40}>
+              <Drawer bodyStyle={drawerStyle} width={'33%'} closable={false} onClose={closeAccount} visible={state.profile || state.account} zIndex={40}>
                 { (state.profile || state.account) && (
                   <Profile closeProfile={closeAccount}/>
                 )}

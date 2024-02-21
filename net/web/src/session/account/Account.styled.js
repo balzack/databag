@@ -2,16 +2,16 @@ import styled from 'styled-components';
 import { Colors } from 'constants/Colors';
 
 export const AccountWrapper = styled.div`
-  height: 100%;
+  min-height: 100%;
   width: 100%;
   display: flex;
   flex-direction: column;
-  background-color: ${Colors.statsForm};
+  background-color: ${props => props.theme.itemArea};;
 
   .header {
     width: 100%;
     height: 48px;
-    border-bottom: 1px solid ${Colors.statsDivider};
+    border-bottom: 1px solid ${props => props.theme.sectionBorder};
     display: flex;
     flex-shrink: 0;
     align-items: center;
@@ -27,7 +27,7 @@ export const AccountWrapper = styled.div`
 
     .dismiss {
       font-size: 18px;
-      color: ${Colors.text};
+      color: ${props => props.theme.hintText};
       cursor: pointer;
     }
   }
@@ -50,7 +50,7 @@ export const AccountWrapper = styled.div`
       padding-bottom: 16px;
 
       .link {
-        color: ${Colors.primary};
+        color: ${props => props.theme.linkText};
         padding-top: 16px;
         padding-bottom: 8px;
         display: flex;

@@ -2,17 +2,18 @@ import styled from 'styled-components';
 import { Colors } from 'constants/Colors';
 
 export const ProfileWrapper = styled.div`
-  height: 100%;
+  min-height: 100%;
   width: 100%;
   display: flex;
   flex-direction: column;
-  background-color: ${Colors.profileForm};
+  background-color: ${props => props.theme.selectedArea};
+  color: ${props => props.theme.mainText};
 
   .middleHeader {
     margin-left: 16px;
     margin-right: 16px;
     height: 48px;
-    border-bottom: 1px solid ${Colors.profileDivider};
+    border-bottom: 1px solid ${props => props.theme.sectionBorder};
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -27,7 +28,7 @@ export const ProfileWrapper = styled.div`
 
     .close {
       font-size: 16px;
-      color: ${Colors.primary};
+      color: ${props => props.theme.hintText};
       cursor: pointer;
       padding-right: 16px;
     }
@@ -43,18 +44,19 @@ export const ProfileWrapper = styled.div`
     .title {
       font-size: 18px;
       font-weight: bold;
+      padding-top: 16px;
     }
   }
 
   .section {
     width: 100%;
-    color: ${Colors.grey};
+    color: ${props => props.theme.hintText};
     padding-top: 24px;
     font-size: 12px;
     display: flex;
     widtH: 75%;
     justify-content: center;
-    border-bottom: 1px solid ${Colors.divider};
+    border-bottom: 1px solid ${props => props.theme.sectionBorder};
   }
 
   .logo {
@@ -65,7 +67,8 @@ export const ProfileWrapper = styled.div`
     margin-right: 32px;
 
     &:hover .edit {
-      opacity: 1;
+      color: ${props => props.theme.linkText};
+      background-color: ${props => props.theme.iconArea};
     }
 
     .edit {
@@ -79,9 +82,8 @@ export const ProfileWrapper = styled.div`
       height: 24px;
       bottom: 0;
       right: 0;
-      color: ${Colors.link};
-      background-color: ${Colors.white};
-      opacity: 0.7;
+      color: ${props => props.theme.hintText};
+      background-color: ${props => props.theme.disabledArea};
     }
   }
 
@@ -109,28 +111,30 @@ export const ProfileWrapper = styled.div`
   .details {
     display: flex;
     flex-direction: column;
+    padding-top: 16px;
+    padding-left: 16px;
+    padding-right: 16px;
 
     .notset {
       font-style: italic;
-      color: ${Colors.grey};
+      color: ${props => props.theme.hintText};
     }
 
     .name {
       display: flex;
       flex-direction: row;
-      align-items: center;
+      align-items: baseline;
       cursor: pointer;
+      justify-content: center;
 
       &:hover .icon {
-        border: 1px solid ${Colors.grey};
-        background-color: ${Colors.white};
+        color: ${props => props.theme.linkText};
       }  
 
       .icon {
         padding-left: 4px;
         padding-right: 4px;
-        border: 1px solid ${Colors.profileForm};
-        border-raidus: 4px;
+        color: ${props => props.theme.hintText};
       }
 
       .data {
@@ -143,8 +147,9 @@ export const ProfileWrapper = styled.div`
     .location {
       display: flex;
       flex-direction: row;
-      align-items: center;
+      align-items: flex-start;
       padding-bottom: 8px;
+      padding-top: 8px;
   
       .data {
         padding-left: 8px;
@@ -154,8 +159,8 @@ export const ProfileWrapper = styled.div`
     .description {
       display: flex;
       flex-direction: row;
-      align-items: center;
-      padding-bottom: 8px;
+      align-items: flex-start;
+      padding-top: 8px;
 
       .data {
         padding-left: 8px;
@@ -183,8 +188,8 @@ export const ProfileWrapper = styled.div`
     flex-direction: row;
     align-items: center;
     cursor: pointer;
-    color: ${Colors.white};
-    background-color: ${Colors.primary};
+    color: ${props => props.theme.mainText};
+    background-color: ${props => props.theme.modalArea};
     margin-top: 8px;
     padding: 8px;
     border-radius: 4px;
