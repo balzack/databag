@@ -101,7 +101,7 @@ export function Profile({ closeProfile }) {
       { state.display !== 'xlarge' && (
         <div className="rightHeader">
           <div className="title">{ state.handle }</div>
-          <div className="section">Profile Settings</div>
+          <div className="section">Profile</div>
         </div>
       )}
       <div className={ state.display === 'xlarge' ? 'midContent' : 'rightContent' }>
@@ -144,17 +144,14 @@ export function Profile({ closeProfile }) {
         </div>
       </div>
       { state.display !== 'xlarge' && (
-        <div className="account">
-          <div className="section">Account Settings</div>
-          <div className="controls">
-            <AccountAccess />
-            { state.display === 'small' && (
-              <div className="logout" onClick={logout}>
-                <LogoutOutlined />
-                <div className="label">Logout</div>
-              </div>
-            )}
-          </div>
+        <div>
+          <AccountAccess />
+          { state.display === 'small' && (
+            <div className="logout" onClick={logout}>
+              <LogoutOutlined />
+              <div className="label">Logout</div>
+            </div>
+          )}
         </div>
       )}
       <Modal title="Profile Image" centered visible={state.editProfileImage} footer={editImageFooter}

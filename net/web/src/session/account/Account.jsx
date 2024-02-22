@@ -8,7 +8,7 @@ export function Account({ closeAccount, openProfile }) {
   return (
     <AccountWrapper>
       <div className="header">
-        <div className="label">Account</div>
+        <div className="label">Settings</div>
         <div className="dismiss" onClick={closeAccount}>
           <DoubleRightOutlined />
         </div>

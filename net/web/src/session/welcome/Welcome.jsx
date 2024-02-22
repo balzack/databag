@@ -16,10 +16,10 @@ export function Welcome() {
         <div className="header">Databag</div>
         <div>{ state.strings.communication }</div>
       </div>
-      { state.theme === 'light' && (
+      { state.scheme === 'light' && (
         <img className="session" src={light} alt="Session Background" />
       )}
-      { state.theme === 'dark' && (
+      { state.scheme === 'dark' && (
         <img className="session" src={dark} alt="Session Background" />
       )}
       <div className="message">

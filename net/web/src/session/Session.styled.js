@@ -191,6 +191,7 @@ export const SessionWrapper = styled.div`
       display: flex;
       flex-direction: column;
       position: relative;
+      background-color: ${props => props.theme.baseArea};
     }
   }
 
@@ -217,6 +218,7 @@ export const SessionWrapper = styled.div`
     .right {
       flex-grow: 1;
       position: relative;
+      background-color: ${props => props.theme.baseArea};
 
       .drawer {
         padding: 0px;

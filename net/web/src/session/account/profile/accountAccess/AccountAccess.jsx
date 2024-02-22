@@ -1,6 +1,6 @@
 import { AccountAccessWrapper, SealModal, EditFooter } from './AccountAccess.styled';
 import { useAccountAccess } from './useAccountAccess.hook';
-import { Button, Modal, Switch, Form, Input } from 'antd';
+import { Button, Modal, Switch, Form, Input, Radio, Select } from 'antd';
 import { SettingOutlined, UserOutlined, LockOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 
 export function AccountAccess() {
@@ -79,17 +79,65 @@ export function AccountAccess() {
   return (
     <AccountAccessWrapper>
       { modalContext }
-      <div className="switch">
-        <Switch size="small" checked={state.searchable} onChange={enable => saveSearchable(enable)} />
-        <div className="switchLabel">Visible in Registry &nbsp;&nbsp;</div>
+      <div className="account">
+        <div className="section">Application</div>
+        <div className="controls">
+          <div className="option">
+            <div className="label">Time Format</div>
+            <Radio.Group onChange={actions.setTimeFormat} value={state.timeFormat}>
+              <Radio value={'12h'}>12h</Radio>
+              <Radio value={'24h'}>24h</Radio>
+            </Radio.Group>
+          </div>
+          <div className="option">
+            <div className="label">Date Format</div>
+            <Radio.Group onChange={actions.setDateFormat} value={state.dateFormat}>
+              <Radio value={'mm/dd'}>mm/dd</Radio>
+              <Radio value={'dd/mm'}>dd/mm</Radio>
+            </Radio.Group>
+          </div>
+          <div className="option">
+            <div className="label">Theme</div>
+            <Select
+                defaultValue={null}
+                style={{ width: 128 }}
+                value={state.theme}
+                onChange={actions.setTheme}
+                options={[
+                  { value: null, label: 'Default' },
+                  { value: 'light', label: 'Light' },
+                  { value: 'dark', label: 'Dark' },
+                ]}
+              />
+          </div>
+          <div className="option">
+            <div className="label">Language</div>
+            <Select
+                defaultValue={null}
+                style={{ width: 128 }}
+                value={state.language}
+                onChange={actions.setLanguage}
+                options={state.languages}
+              />
+          </div>
+        </div>
       </div>
-      <div className="link" onClick={actions.setEditSeal}>
-        <SettingOutlined />
-        <div className="label">Sealed Topics</div>
-      </div>
-      <div className="link" onClick={actions.setEditLogin}>
-        <LockOutlined />
-        <div className="label">Change Login</div>
+      <div className="account">
+        <div className="section">Account</div>
+        <div className="controls">
+          <div className="switch">
+            <Switch size="small" checked={state.searchable} onChange={enable => saveSearchable(enable)} />
+            <div className="switchLabel">Visible in Registry &nbsp;&nbsp;</div>
+          </div>
+          <div className="link" onClick={actions.setEditSeal}>
+            <SettingOutlined />
+            <div className="label">Sealed Topics</div>
+          </div>
+          <div className="link" onClick={actions.setEditLogin}>
+            <LockOutlined />
+            <div className="label">Change Login</div>
+          </div>
+        </div>
       </div>
       <Modal title="Topic Sealing Key" centered visible={state.editSeal} footer={editSealFooter} onCancel={actions.clearEditSeal} bodyStyle={{ padding: 16 }}>
         <SealModal>

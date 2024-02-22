@@ -32,10 +32,10 @@ export function Identity({ openAccount, openCards, cardUpdated }) {
   const menu = (
     <Menu style={state.menuStyle}>
       <Menu.Item style={state.menuStyle} key="0">
-        <div onClick={openAccount}>{ state.strings.account }</div>
+        <div onClick={openCards}>{ state.strings.contacts }</div>
       </Menu.Item>
       <Menu.Item style={state.menuStyle} key="1">
-        <div onClick={openCards}>{ state.strings.contacts }</div>
+        <div onClick={openAccount}>{ state.strings.settings }</div>
       </Menu.Item>
       <Menu.Item style={state.menuStyle} key="2">
         <div onClick={logout}>{ state.strings.logout }</div>

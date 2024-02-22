@@ -39,7 +39,7 @@ export const AccountWrapper = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding-top: 32px;
+    padding-top: 16px;
     align-items: center;
     flex-grow: 1;
 

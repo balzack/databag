@@ -7,6 +7,45 @@ export const AccountAccessWrapper = styled.div`
   align-items: center;
   justify-content: center;
   padding-bottom: 8px;
+  width: 100%;
+
+  .account {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .controls {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 8px;
+    width: fit-content;
+
+    .option {
+      display: flex;
+      padding-top: 8px;
+      align-items: center;
+
+      .label {
+        padding-right: 16px;
+        min-width: 110px;
+      }
+    }
+  }
+
+  .section {
+    width: 100%;
+    color: ${props => props.theme.hintText};
+    padding-top: 24px;
+    font-size: 12px;
+    display: flex;
+    widtH: 75%;
+    justify-content: center;
+    border-bottom: 1px solid ${props => props.theme.sectionBorder};
+  }
 
   .switch {
     display: flex;

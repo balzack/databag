@@ -61,7 +61,9 @@ export const ProfileWrapper = styled.div`
 
   .logo {
     position: relative;
-    width: 20vw;
+    width: 256px;
+    height: 256px;
+    flex-shrink: 0;
     cursor: pointer;
     margin-left: 32px;
     margin-right: 32px;
@@ -94,7 +96,9 @@ export const ProfileWrapper = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: center;
-    padding-top: 32px;
+    padding-top: 64px;
+    padding-left: 32px;
+    align-items: center;
   }
 
   .rightContent {
@@ -153,6 +157,7 @@ export const ProfileWrapper = styled.div`
   
       .data {
         padding-left: 8px;
+        margin-top: -4px;
       }
     }
 
@@ -164,6 +169,7 @@ export const ProfileWrapper = styled.div`
 
       .data {
         padding-left: 8px;
+        margin-top: -4px;
       }
     } 
   }

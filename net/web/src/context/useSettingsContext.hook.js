@@ -9,10 +9,14 @@ export function useSettingsContext() {
     width: null,
     height: null,
     theme: null,
+    setTheme: null,
     colors: {},
     menuStyle: {},
-    language: 'en',
+    languages: [{ value: null, label: 'Default' }, { value: 'en', label: 'English' }, { value: 'fr', label: 'Français' }],
+    language: null,
     strings: en,
+    dateFormat: 'mm/dd',
+    timeFormat: '12h',
   });
 
   const SMALL_MEDIUM = 650;
@@ -20,8 +24,6 @@ export function useSettingsContext() {
   const LARGE_XLARGE = 1600;
 
   const updateState = (value) => {
-console.log("VALUE: ", value);
-
     setState((s) => ({ ...s, ...value }));
   };
 
@@ -50,26 +52,51 @@ console.log("VALUE: ", value);
 
     const scheme = localStorage.getItem('color_scheme');
     if (scheme === 'dark') {
-      updateState({ theme: scheme, colors: DarkTheme, menuStyle: { backgroundColor: DarkTheme.modalArea, color: DarkTheme.mainText } });
+      updateState({ theme: scheme, scheme: 'dark', colors: DarkTheme, menuStyle: { backgroundColor: DarkTheme.modalArea, color: DarkTheme.mainText } });
     }
     else if (scheme === 'light') {
-      updateState({ theme: scheme, colors: LightTheme, menuStyle: { backgroundColor: LightTheme.modalArea, color: LightTheme.mainText } })
+      updateState({ theme: scheme, scheme: 'light', colors: LightTheme, menuStyle: { backgroundColor: LightTheme.modalArea, color: LightTheme.mainText } })
     }
     else {
       if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        updateState({ theme: 'dark', colors: DarkTheme, menuStyle: { backgroundColor: DarkTheme.modalArea, color: DarkTheme.mainText } });
+        updateState({ theme: null, scheme: 'dark', colors: DarkTheme, menuStyle: { backgroundColor: DarkTheme.modalArea, color: DarkTheme.mainText } });
       }
       else {
-        updateState({ theme: 'light', colors: LightTheme, menuStyle: { backgroundColor: LightTheme.modalArea, color: LightTheme.mainText } });
+        updateState({ theme: null, scheme: 'light', colors: LightTheme, menuStyle: { backgroundColor: LightTheme.modalArea, color: LightTheme.mainText } });
       }
+    }
+
+    const timeFormat = localStorage.getItem('time_format');
+    if (timeFormat == '24h') {
+      updateState({ timeFormat });
+    }
+    else {
+      updateState({ timeFormat: '12h' });
+    }
+
+    const dateFormat = localStorage.getItem('date_format');
+    if (dateFormat == 'dd/mm') {
+      updateState({ dateFormat });
+    }
+    else {
+      updateState({ dateFormat: 'mm/dd' });
     }
 
     const language = localStorage.getItem('language');
     if (language && language.startsWith('fr')) {
       updateState({ language: 'fr', strings: fr });
     }
-    else {
+    else if (language && language.startWith('en')) {
       updateState({ language: 'en', strings: en });
+    }
+    else {
+      const browser = navigator.language;
+      if (browser && browser.startsWith('fr')) {
+        updateState({ language: null, strings: fr });
+      }
+      else {
+        updateState({ language: null, strings: en });
+      }
     }
 
     return () => {
@@ -80,31 +107,52 @@ console.log("VALUE: ", value);
   }, []);
 
   const actions = {
-    setDarkTheme: () => {
-      localStorage.setItem('color_scheme', 'dark');
-      updateState({ theme: 'dark', colors: DarkTheme, menuStyle: { backgroundColor: DarkTheme.modalArea, color: DarkTheme.mainText } });
-    },
-    setLightTheme : () => {
-      localStorage.setItem('color_scheme', 'light');
-      updateState({ theme: 'light', colors: LightTheme, menuStyle: { backgroundColor: LightTheme.modalArea, color: LightTheme.mainText } });
-    },
-    setDefaultTheme: () => {
-      localStorage.clearItem('color_scheme');
-      if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        updateState({ theme: 'dark', colors: DarkTheme, menuStyle: { backgroundColor: DarkTheme.modalArea, color: DarkTheme.mainText } });
+    setTheme: (theme) => {
+      if (theme === 'dark') {
+        localStorage.setItem('color_scheme', 'dark');
+        updateState({ theme: 'dark', scheme: 'dark', colors: DarkTheme, menuStyle: { backgroundColor: DarkTheme.modalArea, color: DarkTheme.mainText } });
+      }
+      else if (theme === 'light') {
+        localStorage.setItem('color_scheme', 'light');
+        updateState({ theme: 'light', scheme: 'light', colors: LightTheme, menuStyle: { backgroundColor: LightTheme.modalArea, color: LightTheme.mainText } });
       }
       else {
-        updateState({ theme: 'light', colors: LightTheme, menuStyle: { backgroundColor: LightTheme.modalArea, color: LightTheme.mainText } });
+        localStorage.removeItem('color_scheme');
+        if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          updateState({ theme: null, scheme: 'dark', colors: DarkTheme, menuStyle: { backgroundColor: DarkTheme.modalArea, color: DarkTheme.mainText } });
+        }
+        else {
+          updateState({ theme: null, scheme: 'ligth', colors: LightTheme, menuStyle: { backgroundColor: LightTheme.modalArea, color: LightTheme.mainText } });
+        }
       }
     },
     setLanguage: (code: string) => {
-      localStorage.setItem('language', code);
       if (code && code.startsWith('fr')) {
+        localStorage.setItem('language', 'fr');
         updateState({ language: 'fr', strings: fr });
       }
-      else {
+      else if (code && code.startsWith('en')) {
+        localStorage.setItem('language', 'en');
         updateState({ language: 'en', strings: en });
       }
+      else {
+        localStorage.removeItem('language');
+        const browser = navigator.language;
+        if (browser && browser.startsWith('fr')) {
+          updateState({ language: null, strings: fr });
+        }
+        else {
+          updateState({ language: null, strings: en });
+        }
+      }
+    },
+    setDateFormat: (dateFormat) => {
+      localStorage.setItem('date_format', dateFormat);
+      updateState({ dateFormat });
+    },
+    setTimeFormat: (timeFormat) => {
+      localStorage.setItem('time_format', timeFormat);
+      updateState({ timeFormat });
     },
   }
 

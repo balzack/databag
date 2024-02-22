@@ -1,6 +1,6 @@
 export const en = {
   code: 'en',
-  account: 'Account',
+  settings: 'Settings',
   contacts: 'Contacts',
   logout: 'Logout',
   confirmLogout: 'Are you sure you want to logout?',
@@ -29,7 +29,7 @@ export const en = {
 
 export const fr = {
   code: 'fr',
-  account: 'Compte',
+  settings: 'Paramètres',
   contacts: 'Contacts',
   logout: 'Déconnexion',
   confirmLogout: 'Êtes-vous sûr de vouloir vous déconnecter?',

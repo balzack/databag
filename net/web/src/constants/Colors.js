@@ -61,7 +61,7 @@ export const LightTheme = {
   alertText: '#ff8888',
   itemBorder: '#eeeeee',
   inputBorder: '#888888',
-  sectionBorder: '#dddddd',
+  sectionBorder: '#bbbbbb',
   headerBorder: '#aaaaaa',
 };
 

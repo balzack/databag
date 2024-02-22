@@ -4,7 +4,7 @@ import { SettingsContext } from 'context/SettingsContext';
 export function useWelcome() {
 
   const [state, setState] = useState({
-    theme: null,
+    scheme: null,
     strings: {},
   });
 
@@ -15,8 +15,8 @@ export function useWelcome() {
   }
 
   useEffect(() => {
-    const { theme, strings } = settings.state;
-    updateState({ theme, strings });
+    const { scheme, strings } = settings.state;
+    updateState({ scheme, strings });
   }, [settings.state]);
 
   const actions = {};
