@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { Colors } from 'constants/Colors';
 
 export const AccountWrapper = styled.div`
   min-height: 100%;

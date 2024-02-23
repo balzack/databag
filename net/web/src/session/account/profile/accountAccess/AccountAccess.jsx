@@ -1,6 +1,6 @@
-import { AccountAccessWrapper, LoginModal, SealModal, EditFooter } from './AccountAccess.styled';
+import { AccountAccessWrapper, LoginModal, SealModal } from './AccountAccess.styled';
 import { useAccountAccess } from './useAccountAccess.hook';
-import { Button, Modal, Switch, Form, Input, Radio, Select } from 'antd';
+import { Button, Modal, Switch, Input, Radio, Select } from 'antd';
 import { SettingOutlined, UserOutlined, LockOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 
 export function AccountAccess() {
@@ -53,7 +53,7 @@ export function AccountAccess() {
   }
 
   const editSealFooter = (
-    <EditFooter>
+    <div>
       <div className="select"></div>
       <Button key="back" onClick={actions.clearEditSeal}>Cancel</Button>
       { state.sealMode === 'enabled' && (
@@ -65,7 +65,7 @@ export function AccountAccess() {
       { state.sealMode !== 'unlocking' && state.sealMode !== 'enabled' && (
         <Button key="save" type="primary" onClick={saveSeal} disabled={!actions.canSaveSeal()} loading={state.busy}>Save</Button>
       )}
-    </EditFooter>
+    </div>
   );
         
   return (
@@ -167,28 +167,20 @@ export function AccountAccess() {
       </Modal>
       <Modal centered closable={false} footer={null} visible={state.editLogin} bodyStyle={{ padding: 16, ...state.menuStyle }} onCancel={actions.clearEditLogin}>
         <LoginModal>
-          <Form name="basic" wrapperCol={{ span: 24, }}>
-              <Form.Item name="username" validateStatus={state.editStatus} help={state.editMessage}>
-                <Input className="loginValue" placeholder="Username" spellCheck="false" onChange={(e) => actions.setEditHandle(e.target.value)}
-                    defaultValue={state.editHandle} autocomplete="username" autocapitalize="none" prefix={<UserOutlined />} />
-              </Form.Item>
+          <Input className="loginValue" placeholder="Username" spellCheck="false" onChange={(e) => actions.setEditHandle(e.target.value)}
+              defaultValue={state.editHandle} autocomplete="username" autocapitalize="none" prefix={<UserOutlined />} />
 
-              <Form.Item name="password">
-                <Input.Password className="loginValue" placeholder="Password" spellCheck="false" onChange={(e) => actions.setEditPassword(e.target.value)}
-                    autocomplete="new-password" prefix={<LockOutlined />} />
-              </Form.Item>
+          <Input.Password className="loginValue" placeholder="Password" spellCheck="false" onChange={(e) => actions.setEditPassword(e.target.value)}
+              autocomplete="new-password" prefix={<LockOutlined />} />
 
-              <Form.Item name="confirm">
-                <Input.Password className="loginValue" placeholder="Confirm Password" spellCheck="false" onChange={(e) => actions.setEditConfirm(e.target.value)}
-                    autocomplete="new-password" prefix={<LockOutlined />} />
-              </Form.Item>
-          </Form>
+          <Input.Password className="loginValue" placeholder="Confirm Password" spellCheck="false" onChange={(e) => actions.setEditConfirm(e.target.value)}
+              autocomplete="new-password" prefix={<LockOutlined />} />
+          <div className="controls">
+            <Button key="back" onClick={actions.clearEditLogin}>Cancel</Button>
+            <Button key="save" type="primary" className={actions.canSaveLogin() ? 'saveEnabled' : 'saveDisabled'} onClick={saveLogin}
+                disabled={!actions.canSaveLogin()} loading={state.busy}>Save</Button>
+          </div>
         </LoginModal>
-        <EditFooter>
-          <Button key="back" onClick={actions.clearEditLogin}>Cancel</Button>
-          <Button key="save" type="primary" className={actions.canSaveLogin() ? 'saveEnabled' : 'saveDisabled'} onClick={saveLogin}
-              disabled={!actions.canSaveLogin()} loading={state.busy}>Save</Button>
-        </EditFooter>
       </Modal>
     </AccountAccessWrapper>
   );

@@ -39,6 +39,7 @@ function App() {
                             colorPrimary: Colors.primary,
                             colorLink: Colors.primary,
                             colorLinkHover: Colors.background,
+                            colorBgBase: Colors.cancel,
                           } }}>
                           <Router>
                             <Routes>

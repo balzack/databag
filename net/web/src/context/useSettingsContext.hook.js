@@ -68,7 +68,7 @@ export function useSettingsContext() {
     }
 
     const timeFormat = localStorage.getItem('time_format');
-    if (timeFormat == '24h') {
+    if (timeFormat === '24h') {
       updateState({ timeFormat });
     }
     else {
@@ -76,7 +76,7 @@ export function useSettingsContext() {
     }
 
     const dateFormat = localStorage.getItem('date_format');
-    if (dateFormat == 'dd/mm') {
+    if (dateFormat === 'dd/mm') {
       updateState({ dateFormat });
     }
     else {

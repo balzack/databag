@@ -1,6 +1,6 @@
 import { Input, Modal, List, Button } from 'antd';
 import { CardsWrapper } from './Cards.styled';
-import { SortAscendingOutlined, UpOutlined, RightOutlined, UserOutlined, SearchOutlined } from '@ant-design/icons';
+import { SortAscendingOutlined, RightOutlined, UserOutlined, SearchOutlined } from '@ant-design/icons';
 import { useCards } from './useCards.hook';
 import { CardItem } from './cardItem/CardItem';
 

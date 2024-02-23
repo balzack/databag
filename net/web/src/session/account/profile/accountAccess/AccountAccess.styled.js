@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { Colors } from 'constants/Colors';
 
 export const AccountAccessWrapper = styled.div`
   display: flex;
@@ -127,10 +126,22 @@ export const SealModal = styled.div`
 `
 
 export const LoginModal = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 
   .loginValue {
     background-color: ${props => props.theme.inputArea};
     color: ${props => props.theme.mainText};
+    border: 1px solid ${props => props.theme.sectionBorder};
+
+    .anticon {
+      color: ${props => props.theme.placeholderText};
+
+      &:hover {
+        color: ${props => props.theme.linkText};
+      }
+    }
   }
 
   input {
@@ -143,33 +154,33 @@ export const LoginModal = styled.div`
   input::placeholder {
     color: ${props => props.theme.placeholderText};
   }
-`
 
-export const EditFooter = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: flex-end;
-  gap: 16px;
-
-  .saveDisabled {
-    background-color: ${props => props.theme.disabledArea};
-
-    button {
-      color: ${props => props.theme.idleText};
-    }
-  }
-
-  .saveEnabled {
-    background-color: ${props => props.theme.enabledArea};
-
-    button {
-      color: ${props => props.theme.activeText};
-    }
-  }
-
-  .select {
+  .controls {
+    width: 100%;
     display: flex;
-    flex-grow: 1;
+    justify-content: flex-end;
+    gap: 16px;
+
+    .saveDisabled {
+      background-color: ${props => props.theme.disabledArea};
+
+      button {
+        color: ${props => props.theme.idleText};
+      }
+    }
+
+    .saveEnabled {
+      background-color: ${props => props.theme.enabledArea};
+
+      button {
+        color: ${props => props.theme.activeText};
+      }
+    }
+
+    .select {
+      display: flex;
+      flex-grow: 1;
+    }
   }
 `
 
