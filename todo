@@ -1,13 +1,10 @@
 profile:
-  - details layout
-  - detail edit icon style
-  - image edit icon layout
+  - add translations
   - style modals
-  - add app settings
-    - hour format
-    - date format
-    - color theme
-    - language
+    - image edit
+    - details edit
+    - sealed topics
+    - change login
 
 contact:
   - dark style

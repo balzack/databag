@@ -1,6 +1,6 @@
 import { useRef, useCallback } from 'react';
-import { Modal, Input, Button } from 'antd';
-import { ProfileWrapper, ProfileDetailsWrapper, ProfileImageWrapper, EditFooter } from './Profile.styled';
+import { Modal, Input, Button, Switch } from 'antd';
+import { LogoutContent, ProfileWrapper, ProfileDetailsWrapper, ProfileImageWrapper, EditFooter } from './Profile.styled';
 import { useProfile } from './useProfile.hook';
 import { Logo } from 'logo/Logo';
 import { AccountAccess } from './accountAccess/AccountAccess';
@@ -12,6 +12,7 @@ export function Profile({ closeProfile }) {
   const [ modal, modalContext ] = Modal.useModal();
   const { state, actions } = useProfile();
   const imageFile = useRef(null);
+  const all = useRef(false);
 
   const selected = (e) => {
     var reader = new FileReader();
@@ -53,12 +54,18 @@ export function Profile({ closeProfile }) {
 
   const logout = () => {
     modal.confirm({
-      title: 'Are you sure you want to logout?',
+      title: <span style={state.menuStyle}>{state.strings.confirmLogout}</span>,
       icon: <LogoutOutlined />,
-      bodyStyle: { padding: 16 },
+      content: <LogoutContent onClick={(e) => e.stopPropagation()}>
+                <span className="logoutMode">{ state.strings.allDevices }</span>
+                <Switch onChange={(e) => all.current = e} size="small" />
+               </LogoutContent>,
+      bodyStyle: { padding: 16, ...state.menuStyle },
+      okText: state.strings.ok,
       onOk() {
-        actions.logout();
+        actions.logout(all.current);
       },
+      cancelText: state.strings.cancel,
       onCancel() {},
     });
   }

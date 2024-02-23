@@ -217,6 +217,19 @@ export const ProfileWrapper = styled.div`
     }
   }
 `
+
+export const LogoutContent = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+
+  .logoutMode {
+    padding-right: 8px;
+    color: ${props => props.theme.mainText};
+  }
+`
+
 export const EditFooter = styled.div`
   width: 100%;
   display: flex;

@@ -25,6 +25,8 @@ export function useProfile() {
     crop: { x: 0, y: 0},
     zoom: 1,
     busy: false,
+    strings: {},
+    menuStyle: {},
   });
 
   const IMAGE_DIM = 192;
@@ -45,7 +47,8 @@ export function useProfile() {
   }, [profile.state]);
 
   useEffect(() => {
-    updateState({ displaySet: true, display: settings.state.display });
+    const { display, strings, menuStyle } = settings.state;
+    updateState({ displaySet: true, display, strings, menuStyle });
   }, [settings.state]);
 
   const actions = {
