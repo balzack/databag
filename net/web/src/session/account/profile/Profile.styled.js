@@ -6,7 +6,6 @@ export const ProfileWrapper = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  background-color: ${props => props.theme.selectedArea};
   color: ${props => props.theme.mainText};
 
   .middleHeader {
@@ -40,6 +39,7 @@ export const ProfileWrapper = styled.div`
     flex-direction: column;
     align-items: center;
     overflow: hidden;
+    background-color: ${props => props.theme.selectedArea};
 
     .title {
       font-size: 18px;
@@ -61,8 +61,8 @@ export const ProfileWrapper = styled.div`
 
   .logo {
     position: relative;
-    width: 256px;
-    height: 256px;
+    width: 192px;
+    height: 192px;
     flex-shrink: 0;
     cursor: pointer;
     margin-left: 32px;
@@ -110,6 +110,18 @@ export const ProfileWrapper = styled.div`
     align-items: center;
     border-radius: 4px;
     padding: 8px;
+    background-color: ${props => props.theme.selectedArea};
+  }
+
+  .rightAccess {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; 
+
+    .contentFill {
+      flex-grow: 1;
+      background-color: ${props => props.theme.selectedArea};
+    }
   }
 
   .details {
@@ -196,9 +208,9 @@ export const ProfileWrapper = styled.div`
     cursor: pointer;
     color: ${props => props.theme.mainText};
     background-color: ${props => props.theme.modalArea};
-    margin-top: 8px;
     padding: 8px;
     border-radius: 4px;
+    justify-content: center;
 
     .label {
       padding-left: 8px;

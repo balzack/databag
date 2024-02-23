@@ -6,7 +6,8 @@ export const AccountWrapper = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  background-color: ${props => props.theme.itemArea};;
+  background-color: ${props => props.theme.selectedArea};
+  color: ${props => props.theme.mainText};
 
   .header {
     width: 100%;

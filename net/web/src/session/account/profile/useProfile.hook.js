@@ -9,6 +9,10 @@ export function useProfile() {
   const [state, setState] = useState({
     handle: null,
     name: null,
+    url: null,
+    urlSet: false,
+    display: null,
+    displaySet: false,
     location: null,
     description: null,
     editImage: null,
@@ -23,7 +27,7 @@ export function useProfile() {
     busy: false,
   });
 
-  const IMAGE_DIM = 256;
+  const IMAGE_DIM = 192;
   const app = useContext(AppContext);
   const settings = useContext(SettingsContext);
   const profile = useContext(ProfileContext);
@@ -36,12 +40,12 @@ export function useProfile() {
     const { node, name, handle, location, description, image } = profile.state.identity;
     let url = !image ? null : profile.state.imageUrl;
     let editImage = !image ? avatar : url;
-    updateState({ name, location, description, node, handle, url, 
+    updateState({ name, location, description, node, handle, url, urlSet: true,
         editName: name, editLocation: location, editDescription: description, editHandle: handle, editImage });
   }, [profile.state]);
 
   useEffect(() => {
-    updateState({ display: settings.state.display });
+    updateState({ displaySet: true, display: settings.state.display });
   }, [settings.state]);
 
   const actions = {

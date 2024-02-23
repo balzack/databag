@@ -8,6 +8,8 @@ export const AccountAccessWrapper = styled.div`
   justify-content: center;
   padding-bottom: 8px;
   width: 100%;
+  background-color: ${props => props.theme.selectedArea};
+  color: ${props => props.theme.mainText};
 
   .account {
     width: 100%;
@@ -32,6 +34,9 @@ export const AccountAccessWrapper = styled.div`
       .label {
         padding-right: 16px;
         min-width: 110px;
+        height: 28px;
+        display: flex;
+        align-items: center;
       }
     }
   }
@@ -52,6 +57,7 @@ export const AccountAccessWrapper = styled.div`
     flex-direction: row;
     align-items: center;
     padding-bottom: 8px;
+    padding-top: 8px;
 
     .switchEnabled {
       color: ${props => props.theme.activeArea};
@@ -95,6 +101,7 @@ export const SealModal = styled.div`
     padding-bottom: 8px;
     align-items: center;
     justify-content: center;
+    padding-top: 8px;
 
     .switchLabel {
       color: ${props => props.theme.mainText};

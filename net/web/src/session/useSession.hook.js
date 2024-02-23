@@ -98,9 +98,6 @@ export function useSession() {
   useEffect(() => {
     const { display, theme } = settings.state;
     updateState({ display, theme });
-
-console.log("SET THEME: ", theme);
-
   }, [settings.state]);
 
   useEffect(() => {

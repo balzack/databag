@@ -197,7 +197,7 @@ export function Session() {
                 </div>
               )}
               { state.profile && (
-                <div class="reframe">
+                <div class="reframe base">
                   <Profile closeProfile={actions.closeProfile} />
                 </div>
               )}

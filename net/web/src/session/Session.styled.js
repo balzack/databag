@@ -182,6 +182,10 @@ export const SessionWrapper = styled.div`
     .center {
       flex-grow: 1;
       position: relative;
+
+      .base {
+        background-color: ${props => props.theme.frameArea};
+      }
     }
     .right {
       min-width: 256px;

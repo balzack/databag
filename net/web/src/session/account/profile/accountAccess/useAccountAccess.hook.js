@@ -26,9 +26,11 @@ export function useAccountAccess() {
     sealDelete: null,
     sealUnlock: null,
 
+    menuStyle: {},
     timeFormat: '12h',
     dateFormat: 'mm/dd',
     theme: null,
+    themes: [],
     language: null,
     languages: [],
 
@@ -52,12 +54,12 @@ export function useAccountAccess() {
 
   useEffect(() => {
     const { seal, sealKey, status } = account.state;
-    updateState({ searchable: status.searchable, seal, sealKey });
+    updateState({ searchable: status?.searchable, seal, sealKey });
   }, [account.state]);
 
   useEffect(() => {
-    const { timeFormat, dateFormat, theme, language, languages } = settings.state;
-    updateState({ timeFormat, dateFormat, theme, language, languages });
+    const { menuStyle, timeFormat, dateFormat, theme, themes, language, languages } = settings.state;
+    updateState({ menuStyle, timeFormat, dateFormat, theme, themes, language, languages });
   }, [settings.state]);
 
   const sealUnlock = async () => {
@@ -99,8 +101,6 @@ export function useAccountAccess() {
 
   const actions = {
     setTimeFormat: (timeFormat) => {
-console.log("TIME", timeFormat);
-
       settings.actions.setTimeFormat(timeFormat.target.value);
     },
     setDateFormat: (dateFormat) => {

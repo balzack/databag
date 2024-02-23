@@ -105,12 +105,14 @@ export function Profile({ closeProfile }) {
         </div>
       )}
       <div className={ state.display === 'xlarge' ? 'midContent' : 'rightContent' }>
-        <div className="logo" onClick={actions.setEditProfileImage}>
-          <Logo url={state.url} width={'100%'} radius={4} />
-          <div className="edit">
-            <EditOutlined />
+        { state.urlSet && (
+          <div className="logo" onClick={actions.setEditProfileImage}>
+            <Logo url={state.url} width={'100%'} radius={4} />
+            <div className="edit">
+              <EditOutlined />
+            </div>
           </div>
-        </div>
+        )}
         <div className="details">
           <div className="name" onClick={actions.setEditProfileDetails}>
             { state.name && (
@@ -143,8 +145,8 @@ export function Profile({ closeProfile }) {
           </div>
         </div>
       </div>
-      { state.display !== 'xlarge' && (
-        <div>
+      { state.display !== 'xlarge' && state.displaySet && (
+        <div className="rightAccess">
           <AccountAccess />
           { state.display === 'small' && (
             <div className="logout" onClick={logout}>
@@ -152,6 +154,7 @@ export function Profile({ closeProfile }) {
               <div className="label">Logout</div>
             </div>
           )}
+          <div className="contentFill" />
         </div>
       )}
       <Modal title="Profile Image" centered visible={state.editProfileImage} footer={editImageFooter}

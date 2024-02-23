@@ -39,6 +39,7 @@ export const Colors = {
 
 export const LightTheme = {
   baseArea: '#8fbea7',
+  frameArea: '#dddddd',
   iconArea: '#ffffff',
   headerArea: '#f0f0f0',
   footerArea: '#f0f0f0',
@@ -67,6 +68,7 @@ export const LightTheme = {
 
 export const DarkTheme = {
   baseArea: '#080808',
+  frameArea: '#0a0a0a',
   iconArea: '#ffffff',
   headerArea: '#111111',
   footerArea: '#111111',

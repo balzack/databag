@@ -8,6 +8,7 @@ export function useSettingsContext() {
     display: null,
     width: null,
     height: null,
+    themes: [{ value: null, label: 'Default' }, { value: 'dark', label: 'Dark' }, { value: 'light', label: 'Light' }],
     theme: null,
     setTheme: null,
     colors: {},

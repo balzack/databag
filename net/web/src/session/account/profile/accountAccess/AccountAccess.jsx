@@ -85,15 +85,15 @@ export function AccountAccess() {
           <div className="option">
             <div className="label">Time Format</div>
             <Radio.Group onChange={actions.setTimeFormat} value={state.timeFormat}>
-              <Radio value={'12h'}>12h</Radio>
-              <Radio value={'24h'}>24h</Radio>
+              <Radio style={state.menuStyle} value={'12h'}>12h</Radio>
+              <Radio style={state.menuStyle} value={'24h'}>24h</Radio>
             </Radio.Group>
           </div>
           <div className="option">
             <div className="label">Date Format</div>
             <Radio.Group onChange={actions.setDateFormat} value={state.dateFormat}>
-              <Radio value={'mm/dd'}>mm/dd</Radio>
-              <Radio value={'dd/mm'}>dd/mm</Radio>
+              <Radio style={state.menuStyle} value={'mm/dd'}>mm/dd</Radio>
+              <Radio style={state.menuStyle} value={'dd/mm'}>dd/mm</Radio>
             </Radio.Group>
           </div>
           <div className="option">
@@ -103,11 +103,7 @@ export function AccountAccess() {
                 style={{ width: 128 }}
                 value={state.theme}
                 onChange={actions.setTheme}
-                options={[
-                  { value: null, label: 'Default' },
-                  { value: 'light', label: 'Light' },
-                  { value: 'dark', label: 'Dark' },
-                ]}
+                options={state.themes}
               />
           </div>
           <div className="option">
