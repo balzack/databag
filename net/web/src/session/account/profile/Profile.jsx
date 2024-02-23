@@ -81,14 +81,6 @@ export function Profile({ closeProfile }) {
     </EditFooter>
   );
 
-  const editDetailsFooter = (
-    <EditFooter>
-      <div className="select"></div>
-      <Button key="back" onClick={actions.clearEditProfileDetails}>Cancel</Button>
-      <Button key="save" type="primary" onClick={saveDetails} loading={state.busy}>Save</Button>
-    </EditFooter>
-  );
-
   const onCropComplete = useCallback((area, crop) => {
     actions.setEditImageCrop(crop.width, crop.height, crop.x, crop.y)
     // eslint-disable-next-line
@@ -173,8 +165,8 @@ export function Profile({ closeProfile }) {
         </ProfileImageWrapper>
 
       </Modal>
-      <Modal title="Profile Details" centered visible={state.editProfileDetails} footer={editDetailsFooter}
-          bodyStyle={{ padding: 16 }} onCancel={actions.clearEditProfileDetails}>
+      <Modal centered closable={false} visible={state.editProfileDetails} footer={null}
+          bodyStyle={{ padding: 16, ...state.menuStyle }} onCancel={actions.clearEditProfileDetails}>
 
         <ProfileDetailsWrapper>
           <div class="info">
@@ -188,6 +180,11 @@ export function Profile({ closeProfile }) {
           <div class="info">
             <Input.TextArea placeholder="Description" onChange={(e) => actions.setEditDescription(e.target.value)}
                 spellCheck="false" defaultValue={state.editDescription} autoSize={{ minRows: 2, maxRows: 6 }} />
+          </div>
+
+          <div className="controls">
+            <Button key="back" onClick={actions.clearEditProfileDetails}>Cancel</Button>
+            <Button key="save" type="primary" onClick={saveDetails} loading={state.busy}>Save</Button>
           </div>
         </ProfileDetailsWrapper>
 

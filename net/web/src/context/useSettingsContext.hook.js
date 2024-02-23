@@ -87,7 +87,7 @@ export function useSettingsContext() {
     if (language && language.startsWith('fr')) {
       updateState({ language: 'fr', strings: fr });
     }
-    else if (language && language.startWith('en')) {
+    else if (language && language.startsWith('en')) {
       updateState({ language: 'en', strings: en });
     }
     else {

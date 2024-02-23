@@ -52,14 +52,6 @@ export function AccountAccess() {
     }
   }
 
-  const editLoginFooter = (
-    <EditFooter>
-      <div className="select"></div>
-      <Button key="back" onClick={actions.clearEditLogin}>Cancel</Button>
-      <Button key="save" type="primary" onClick={saveLogin} disabled={!actions.canSaveLogin()} loading={state.busy}>Save</Button>
-    </EditFooter>
-  );
-
   const editSealFooter = (
     <EditFooter>
       <div className="select"></div>

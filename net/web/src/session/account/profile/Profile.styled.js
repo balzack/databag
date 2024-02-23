@@ -242,12 +242,42 @@ export const EditFooter = styled.div`
 export const ProfileDetailsWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
+  gap: 16px;
 
   .info {
     width: 100%;
-    padding: 8px;
+    background-color: ${props => props.theme.inputArea};
+    color: ${props => props.theme.mainText};
+    border-radius: 8px;
+
+    textarea {
+      padding-left: 8px;
+      background-color: ${props => props.theme.inputArea};
+      border: 1px solid ${props => props.theme.sectionBorder};
+      color: ${props => props.theme.mainText};
+    }
+
+    textarea::placeholder {
+      color: ${props => props.theme.placeholderText};
+    }
+
+    input {
+      padding-left: 8px;
+      background-color: ${props => props.theme.inputArea};
+      border: 1px solid ${props => props.theme.sectionBorder};
+      color: ${props => props.theme.mainText};
+    }
+
+    input::placeholder {
+      color: ${props => props.theme.placeholderText};
+    }
+  }
+
+  .controls {
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
   }
 `;
 
