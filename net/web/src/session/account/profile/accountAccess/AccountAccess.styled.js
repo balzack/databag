@@ -126,9 +126,46 @@ export const SealModal = styled.div`
   }
 `
 
+export const LoginModal = styled.div`
+
+  .loginValue {
+    background-color: ${props => props.theme.inputArea};
+    color: ${props => props.theme.mainText};
+  }
+
+  input {
+    padding-left: 8px;
+    background-color: ${props => props.theme.inputArea};
+    border: 1px solid ${props => props.theme.sectionBorder};
+    color: ${props => props.theme.mainText};
+  }
+
+  input::placeholder {
+    color: ${props => props.theme.placeholderText};
+  }
+`
+
 export const EditFooter = styled.div`
   width: 100%;
   display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+
+  .saveDisabled {
+    background-color: ${props => props.theme.disabledArea};
+
+    button {
+      color: ${props => props.theme.idleText};
+    }
+  }
+
+  .saveEnabled {
+    background-color: ${props => props.theme.enabledArea};
+
+    button {
+      color: ${props => props.theme.activeText};
+    }
+  }
 
   .select {
     display: flex;
