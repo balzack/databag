@@ -25,6 +25,10 @@ export const en = {
   setupProfile: 'Setup your profile',
   connectPeople: 'Connect with people',
   startConversation: 'Start a conversation',
+
+  default: 'Default',
+  dark: 'Dark',
+  light: 'Light',
 };
 
 export const fr = {
@@ -54,5 +58,9 @@ export const fr = {
   setupProfile: 'Configurez votre profil',
   connectPeople: 'Connectez avec les gens',
   startConversation: 'Commencez une conversation',
+
+  default: 'Défaut',
+  dark: 'Sombre',
+  light: 'Lumineux',
 };
 

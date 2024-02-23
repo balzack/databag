@@ -85,10 +85,10 @@ export function useSettingsContext() {
 
     const language = localStorage.getItem('language');
     if (language && language.startsWith('fr')) {
-      updateState({ language: 'fr', strings: fr });
+      updateState({ language: 'fr', strings: fr, themes: [{ value: null, label: fr.default }, { value: 'dark', label: fr.dark }, { value: 'light', label: fr.light }]});
     }
     else if (language && language.startsWith('en')) {
-      updateState({ language: 'en', strings: en });
+      updateState({ language: 'en', strings: en, themes: [{ value: null, label: en.default }, { value: 'dark', label: en.dark }, { value: 'light', label: en.light }]});
     }
     else {
       const browser = navigator.language;
@@ -130,20 +130,20 @@ export function useSettingsContext() {
     setLanguage: (code: string) => {
       if (code && code.startsWith('fr')) {
         localStorage.setItem('language', 'fr');
-        updateState({ language: 'fr', strings: fr });
+        updateState({ language: 'fr', strings: fr, themes: [{ value: null, label: fr.default }, { value: 'dark', label: fr.dark }, { value: 'light', label: fr.light }]});
       }
       else if (code && code.startsWith('en')) {
         localStorage.setItem('language', 'en');
-        updateState({ language: 'en', strings: en });
+        updateState({ language: 'en', strings: en, themes: [{ value: null, label: fr.default }, { value: 'dark', label: en.dark }, { value: 'light', label: en.light }]});
       }
       else {
         localStorage.removeItem('language');
         const browser = navigator.language;
         if (browser && browser.startsWith('fr')) {
-          updateState({ language: null, strings: fr });
+          updateState({ language: null, strings: fr, themes: [{ value: null, label: fr.default }, { value: 'dark', label: fr.dark }, { value: 'light', label: fr.light }]});
         }
         else {
-          updateState({ language: null, strings: en });
+          updateState({ language: null, strings: en, themes: [{ value: null, label: en.default }, { value: 'dark', label: en.dark }, { value: 'light', label: en.light }]});
         }
       }
     },
