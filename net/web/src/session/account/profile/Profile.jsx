@@ -1,6 +1,6 @@
 import { useRef, useCallback } from 'react';
 import { Modal, Input, Button, Switch } from 'antd';
-import { LogoutContent, ProfileWrapper, ProfileDetailsWrapper, ProfileImageWrapper, EditFooter } from './Profile.styled';
+import { LogoutContent, ProfileWrapper, ProfileDetailsWrapper, ProfileImageWrapper } from './Profile.styled';
 import { useProfile } from './useProfile.hook';
 import { Logo } from 'logo/Logo';
 import { AccountAccess } from './accountAccess/AccountAccess';
@@ -69,17 +69,6 @@ export function Profile({ closeProfile }) {
       onCancel() {},
     });
   }
-
-  const editImageFooter = (
-    <EditFooter>
-      <input type='file' id='file' accept="image/*" ref={imageFile} onChange={e => selected(e)} style={{display: 'none'}}/>
-      <div className="select">
-        <Button key="select" className="pic" onClick={() => imageFile.current.click()}>Select Image</Button>
-      </div>
-      <Button key="back" onClick={actions.clearEditProfileImage}>Cancel</Button>
-      <Button key="save" type="primary" onClick={saveImage} loading={state.busy}>Save</Button>
-    </EditFooter>
-  );
 
   const onCropComplete = useCallback((area, crop) => {
     actions.setEditImageCrop(crop.width, crop.height, crop.x, crop.y)
@@ -156,12 +145,23 @@ export function Profile({ closeProfile }) {
           <div className="contentFill" />
         </div>
       )}
-      <Modal title="Profile Image" centered visible={state.editProfileImage} footer={editImageFooter}
-          bodyStyle={{ padding: 16 }} onCancel={actions.clearEditProfileImage}>
+      <Modal centered closable={false} visible={state.editProfileImage} footer={null}
+          bodyStyle={{ borderRadius: 8, padding: 16, ...state.menuStyle }} onCancel={actions.clearEditProfileImage}>
 
         <ProfileImageWrapper>
-          <Cropper image={state.editImage} crop={state.crop} zoom={state.zoom} aspect={1}
-              onCropChange={actions.setCrop} onCropComplete={onCropComplete} onZoomChange={actions.setZoom} />
+          <div className="title">Profile Image</div>
+          <div className="cropper">
+            <Cropper image={state.editImage} crop={state.crop} zoom={state.zoom} aspect={1}
+                onCropChange={actions.setCrop} onCropComplete={onCropComplete} onZoomChange={actions.setZoom} />
+            </div>
+          <div className="controls">
+            <input type='file' id='file' accept="image/*" ref={imageFile} onChange={e => selected(e)} style={{display: 'none'}}/>
+            <div className="select">
+              <Button key="select" className="pic" onClick={() => imageFile.current.click()}>Select Image</Button>
+            </div>
+            <Button key="back" onClick={actions.clearEditProfileImage}>Cancel</Button>
+            <Button key="save" type="primary" onClick={saveImage} loading={state.busy}>Save</Button>
+          </div>
         </ProfileImageWrapper>
 
       </Modal>

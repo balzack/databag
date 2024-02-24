@@ -52,22 +52,6 @@ export function AccountAccess() {
     }
   }
 
-  const editSealFooter = (
-    <div>
-      <div className="select"></div>
-      <Button key="back" onClick={actions.clearEditSeal}>Cancel</Button>
-      { state.sealMode === 'enabled' && (
-        <Button key="save" type="primary" onClick={saveSeal} loading={state.busy}>Forget</Button>
-      )}
-      { state.sealMode === 'unlocking' && (
-        <Button key="save" type="primary" onClick={saveSeal} disabled={!actions.canSaveSeal()} loading={state.busy}>Unlock</Button>
-      )}
-      { state.sealMode !== 'unlocking' && state.sealMode !== 'enabled' && (
-        <Button key="save" type="primary" onClick={saveSeal} disabled={!actions.canSaveSeal()} loading={state.busy}>Save</Button>
-      )}
-    </div>
-  );
-        
   return (
     <AccountAccessWrapper>
       { modalContext }
@@ -127,42 +111,55 @@ export function AccountAccess() {
           </div>
         </div>
       </div>
-      <Modal title="Topic Sealing Key" centered visible={state.editSeal} footer={editSealFooter} onCancel={actions.clearEditSeal} bodyStyle={{ padding: 16 }}>
+      <Modal centered closable={false} visible={state.editSeal} footer={null} onCancel={actions.clearEditSeal} bodyStyle={{ borderRadius: 8, padding: 16, ...state.menuStyle }}>
         <SealModal>
+          <div className="title">Topic Sealing Key</div>
           <div className="switch">
             <Switch size="small" checked={state.sealEnabled} onChange={enable => actions.enableSeal(enable)} />
             <div className="switchLabel">Enable Sealed Topics</div>
           </div>
           { (state.sealMode === 'updating' || state.sealMode === 'enabling') && (
-            <div className="sealPassword">
+            <div className="sealChange">
               <Input.Password placeholder="New Password" spellCheck="false" onChange={(e) => actions.setSealPassword(e.target.value)}
                 autocomplete="new-password" prefix={<LockOutlined />} />
             </div>
           )}
           { (state.sealMode === 'updating' || state.sealMode === 'enabling') && (
-            <div className="sealPassword">
+            <div className="sealChange">
               <Input.Password placeholder="Confirm Password" spellCheck="false" onChange={(e) => actions.setSealConfirm(e.target.value)}
                 autocomplete="new-password" prefix={<LockOutlined />} />
             </div>
           )}
           { state.sealMode === 'disabling' && (
-            <div className="sealPassword">
+            <div className="sealChange">
               <Input placeholder="Type 'delete' to remove key" spellCheck="false" onChange={(e) => actions.setSealDelete(e.target.value)}
                 prefix={<ExclamationCircleOutlined />} />
             </div>
           )}
           { state.sealMode === 'enabled' && (
-            <div className="sealPassword" onClick={() => actions.updateSeal()}>
+            <div className="sealChange" onClick={() => actions.updateSeal()}>
               <Input.Password defaultValue="xxxxxxxxxx" disabled={true} prefix={<LockOutlined />} />
               <div className="editPassword" />
             </div>
           )}
           { state.sealMode === 'unlocking' && (
-            <div className="sealPassword">
+            <div className="sealChange">
               <Input.Password placeholder="Password" spellCheck="false" onChange={(e) => actions.setSealUnlock(e.target.value)}
                 prefix={<LockOutlined />} />
             </div>
           )}
+          <div className="controls">
+            <Button key="back" onClick={actions.clearEditSeal}>Cancel</Button>
+            { state.sealMode === 'enabled' && (
+              <Button key="save" type="primary" onClick={saveSeal} loading={state.busy}>Forget</Button>
+            )}
+            { state.sealMode === 'unlocking' && (
+              <Button key="save" type="primary" onClick={saveSeal} className={actions.canSaveSeal() ? 'saveEnabled' : 'saveDisabled'} disabled={!actions.canSaveSeal()} loading={state.busy}>Unlock</Button>
+            )}
+            { state.sealMode !== 'unlocking' && state.sealMode !== 'enabled' && (
+              <Button key="save" type="primary" onClick={saveSeal} className={actions.canSaveSeal() ? 'saveEnabled' : 'saveDisabled'} disabled={!actions.canSaveSeal()} loading={state.busy}>Save</Button>
+            )}
+          </div>
         </SealModal>
       </Modal>
       <Modal centered closable={false} footer={null} visible={state.editLogin} bodyStyle={{ borderRadius: 8, padding: 16, ...state.menuStyle }} onCancel={actions.clearEditLogin}>

@@ -91,16 +91,17 @@ export const AccountAccessWrapper = styled.div`
 export const SealModal = styled.div`
   display: flex;
   flex-direction: column;
-  padding-bottom: 8px;
+  gap: 16px;
+
+  .title {
+    font-size: 1.2rem;
+    display: flex;
+    justify-content: center;
+  }
 
   .switch {
     display: flex;
-    flex-direction: row;
     align-items: center;
-    padding-bottom: 8px;
-    align-items: center;
-    justify-content: center;
-    padding-top: 8px;
 
     .switchLabel {
       color: ${props => props.theme.mainText};
@@ -109,19 +110,65 @@ export const SealModal = styled.div`
     }
   }
 
-  .sealPassword {
-    padding-top: 4px;
-    padding-bottom: 4px;
-    position: relative;
+  .controls {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
 
-    .editPassword {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      cursor: pointer;
+    .saveDisabled {
+      background-color: ${props => props.theme.disabledArea};
+
+      button {
+        color: ${props => props.theme.idleText};
+      }
     }
+
+    .saveEnabled {
+      background-color: ${props => props.theme.enabledArea};
+
+      button {
+        color: ${props => props.theme.activeText};
+      }
+    }
+  }
+
+  .sealChange {
+    width: 100%;
+    background-color: ${props => props.theme.inputArea};
+    color: ${props => props.theme.mainText};
+    border-radius: 8px;
+
+    .ant-input-affix-wrapper {
+      background-color: ${props => props.theme.inputArea};
+    }
+
+    .anticon {
+      color: ${props => props.theme.placeholderText};
+
+      &:hover {
+        color: ${props => props.theme.linkText};
+      }
+    }
+
+    input {
+      padding-left: 8px;
+      background-color: ${props => props.theme.inputArea};
+      color: ${props => props.theme.mainText};
+    }
+
+    input::placeholder {
+      color: ${props => props.theme.placeholderText};
+    }
+  }
+
+  .editPassword {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
   }
 `
 

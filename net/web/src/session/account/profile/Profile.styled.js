@@ -229,15 +229,6 @@ export const LogoutContent = styled.div`
   }
 `
 
-export const EditFooter = styled.div`
-  width: 100%;
-  display: flex;
-
-  .select {
-    display: flex;
-    flex-grow: 1;
-  }
-`
 export const ProfileDetailsWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -287,11 +278,34 @@ export const ProfileDetailsWrapper = styled.div`
 `;
 
 export const ProfileImageWrapper = styled.div`
-  position: relative;
-  height: 256px;
-  width: 100%;
   display: flex;
-  align-items: center;
+  flex-direction: column;
   justify-content: center;
+  gap: 16px;
+
+  .cropper {
+    position: relative;
+    height: 256px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .title {
+    font-size: 1.2rem;
+    display: flex;
+    justify-content: center;
+  }
+
+  .controls {
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+
+    .select {
+      flex-grow: 1;
+    }
+  }
 `;
 
