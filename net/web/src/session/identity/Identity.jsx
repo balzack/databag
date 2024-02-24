@@ -19,7 +19,7 @@ export function Identity({ openAccount, openCards, cardUpdated }) {
                 <span className="logoutMode">{ state.strings.allDevices }</span>
                 <Switch onChange={(e) => all.current = e} size="small" />
                </LogoutContent>,
-      bodyStyle: { padding: 16, ...state.menuStyle },
+      bodyStyle: { borderRadius: 8, padding: 16, ...state.menuStyle },
       okText: state.strings.ok,
       onOk() {
         actions.logout(all.current);

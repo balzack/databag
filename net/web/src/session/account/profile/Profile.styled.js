@@ -244,6 +244,12 @@ export const ProfileDetailsWrapper = styled.div`
   justify-content: center;
   gap: 16px;
 
+  .title {
+    font-size: 1.2rem;
+    display: flex;
+    justify-content: center;
+  }
+
   .info {
     width: 100%;
     background-color: ${props => props.theme.inputArea};

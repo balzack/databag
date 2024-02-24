@@ -13,6 +13,7 @@ export function useSettingsContext() {
     setTheme: null,
     colors: {},
     menuStyle: {},
+    textStyle: {},
     languages: [{ value: null, label: 'Default' }, { value: 'en', label: 'English' }, { value: 'fr', label: 'Français' }],
     language: null,
     strings: en,

@@ -60,7 +60,7 @@ export function Profile({ closeProfile }) {
                 <span className="logoutMode">{ state.strings.allDevices }</span>
                 <Switch onChange={(e) => all.current = e} size="small" />
                </LogoutContent>,
-      bodyStyle: { padding: 16, ...state.menuStyle },
+      bodyStyle: { borderRadius: 8, padding: 16, ...state.menuStyle },
       okText: state.strings.ok,
       onOk() {
         actions.logout(all.current);
@@ -166,9 +166,10 @@ export function Profile({ closeProfile }) {
 
       </Modal>
       <Modal centered closable={false} visible={state.editProfileDetails} footer={null}
-          bodyStyle={{ padding: 16, ...state.menuStyle }} onCancel={actions.clearEditProfileDetails}>
+          bodyStyle={{ borderRadius: 8, padding: 16, ...state.menuStyle }} onCancel={actions.clearEditProfileDetails}>
 
         <ProfileDetailsWrapper>
+          <div className="title">Profile Details</div>
           <div class="info">
             <Input placeholder="Name" spellCheck="false" onChange={(e) => actions.setEditName(e.target.value)}
                 defaultValue={state.editName} autocapitalize="word" />

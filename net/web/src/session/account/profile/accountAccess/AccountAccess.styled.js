@@ -130,6 +130,12 @@ export const LoginModal = styled.div`
   flex-direction: column;
   gap: 16px;
 
+  .title {
+    font-size: 1.2rem;
+    display: flex;
+    justify-content: center;
+  }
+
   .loginValue {
     background-color: ${props => props.theme.inputArea};
     color: ${props => props.theme.mainText};

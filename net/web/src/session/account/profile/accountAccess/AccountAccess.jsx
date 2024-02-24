@@ -165,8 +165,9 @@ export function AccountAccess() {
           )}
         </SealModal>
       </Modal>
-      <Modal centered closable={false} footer={null} visible={state.editLogin} bodyStyle={{ padding: 16, ...state.menuStyle }} onCancel={actions.clearEditLogin}>
+      <Modal centered closable={false} footer={null} visible={state.editLogin} bodyStyle={{ borderRadius: 8, padding: 16, ...state.menuStyle }} onCancel={actions.clearEditLogin}>
         <LoginModal>
+          <div className="title">Change Login</div>
           <Input className="loginValue" placeholder="Username" spellCheck="false" onChange={(e) => actions.setEditHandle(e.target.value)}
               defaultValue={state.editHandle} autocomplete="username" autocapitalize="none" prefix={<UserOutlined />} />
 
