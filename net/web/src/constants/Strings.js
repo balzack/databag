@@ -30,6 +30,9 @@ export const en = {
   dark: 'Dark',
   light: 'Light',
 
+  operationFailed: 'Operation Failed',
+  tryAgain: 'Please try again.',
+
   save: 'Save',
   forget: 'Forget',
   unlock: 'Unlock',
@@ -94,6 +97,9 @@ export const fr = {
   default: 'Défaut',
   dark: 'Sombre',
   light: 'Lumineux',
+
+  operationFailed: 'Opération Échouée',
+  tryAgain: 'Veuillez réessayer.',
 
   save: 'Enregistrer',
   forget: 'Oublier',

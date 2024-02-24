@@ -1,47 +1,47 @@
-profile:
-  - add translations
-  - style modals
-    - image edit
-    - details edit
-    - sealed topics
-    - change login
-
 contact:
   - dark style
+  - translation
   - detail layout
   - action buttons
 
 cards: 
   - dark style
+  - translation
   - alert name overlay
   - @ symbol
   - remove back
 
 listing:
   - dark style
+  - translation
   - remove back
   - match widtch
 
 thread:
   - dark style
+  - translation
   - button tool tip
 
 details:
   - back button
   - dark style
+  - translation
   - action buttons
 
 calling:
   - dark style
+  - translation
   - layout
   - fullscreen
   - device selection
 
 access:
   - dark style
+  - translation
   - language
   - color theme
 
 admin:
   - dark style
+  - translation
   

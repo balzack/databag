@@ -30,9 +30,9 @@ export function Profile({ closeProfile }) {
     catch(err) {
       console.log(err);
       modal.error({
-        title: 'Failed to Save',
-        content: 'Please try again.',
-        bodyStyle: { padding: 16 },
+        title: <span style={state.menuStyle}>{state.strings.operationFailed}</span>,
+        content: <span style={state.menuStyle}>{state.strings.tryAgain}</span>,
+        bodyStyle: { borderRadius: 8, padding: 16, ...state.menuStyle },
       });
     }
   }
@@ -45,9 +45,9 @@ export function Profile({ closeProfile }) {
     catch(err) {
       console.log(err);
       modal.error({
-        title: 'Failed to Save',
-        content: 'Please try again.',
-        bodyStyle: { padding: 16 },
+        title: <span style={state.menuStyle}>{state.strings.operationFailed}</span>,
+        content: <span style={state.menuStyle}>{state.strings.tryAgain}</span>,
+        bodyStyle: { borderRadius: 8, padding: 16, ...state.menuStyle },
       });
     }
   }
