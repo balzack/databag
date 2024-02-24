@@ -26,6 +26,7 @@ export function useAccountAccess() {
     sealDelete: null,
     sealUnlock: null,
 
+    strings: {},
     menuStyle: {},
     timeFormat: '12h',
     dateFormat: 'mm/dd',
@@ -58,8 +59,8 @@ export function useAccountAccess() {
   }, [account.state]);
 
   useEffect(() => {
-    const { menuStyle, timeFormat, dateFormat, theme, themes, language, languages } = settings.state;
-    updateState({ menuStyle, timeFormat, dateFormat, theme, themes, language, languages });
+    const { strings, menuStyle, timeFormat, dateFormat, theme, themes, language, languages } = settings.state;
+    updateState({ strings, menuStyle, timeFormat, dateFormat, theme, themes, language, languages });
   }, [settings.state]);
 
   const sealUnlock = async () => {
@@ -173,7 +174,7 @@ export function useAccountAccess() {
       updateState({ sealEnabled: enable, sealMode });
     },
     canSaveSeal: () => {
-      if (state.sealMode === 'disabling' && state.sealDelete === 'delete') {
+      if (state.sealMode === 'disabling' && state.sealDelete === state.strings.delete) {
         return true;
       }
       if (state.sealMode === 'enabling' && state.sealPassword && state.sealPassword === state.sealConfirm) {

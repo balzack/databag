@@ -32,10 +32,12 @@ export const AccountAccessWrapper = styled.div`
 
       .label {
         padding-right: 16px;
-        min-width: 110px;
+        min-width: 130px;
         height: 28px;
         display: flex;
         align-items: center;
+        display: flex;
+        justify-content: flex-end;
       }
     }
   }
@@ -138,6 +140,7 @@ export const SealModal = styled.div`
     background-color: ${props => props.theme.inputArea};
     color: ${props => props.theme.mainText};
     border-radius: 8px;
+    position: relative;
 
     .ant-input-affix-wrapper {
       background-color: ${props => props.theme.inputArea};

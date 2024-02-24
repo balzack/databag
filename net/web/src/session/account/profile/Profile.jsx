@@ -89,7 +89,7 @@ export function Profile({ closeProfile }) {
       { state.display !== 'xlarge' && (
         <div className="rightHeader">
           <div className="title">{ state.handle }</div>
-          <div className="section">Profile</div>
+          <div className="section">{ state.strings.profile }</div>
         </div>
       )}
       <div className={ state.display === 'xlarge' ? 'midContent' : 'rightContent' }>
@@ -107,7 +107,7 @@ export function Profile({ closeProfile }) {
               <div className="data">{ state.name }</div>
             )}
             { !state.name && (
-              <div className="data notset">name</div>
+              <div className="data notset">{ state.strings.name }</div>
             )}
             <div className="icon">
               <EditOutlined />
@@ -119,7 +119,7 @@ export function Profile({ closeProfile }) {
                 <div className="data">{ state.location }</div>
               )}
               { !state.location && (
-                <div className="data notset">location</div>
+                <div className="data notset">{ state.strings.location }</div>
               )}
           </div>
           <div className="description">
@@ -128,7 +128,7 @@ export function Profile({ closeProfile }) {
               <div className="data">{ state.description }</div>
             )}
             { !state.description && (
-              <div className="data notset">description</div>
+              <div className="data notset">{ state.strings.description }</div>
             )}
           </div>
         </div>
@@ -139,7 +139,7 @@ export function Profile({ closeProfile }) {
           { state.display === 'small' && (
             <div className="logout" onClick={logout}>
               <LogoutOutlined />
-              <div className="label">Logout</div>
+              <div className="label">{ state.strings.logout }</div>
             </div>
           )}
           <div className="contentFill" />
@@ -149,7 +149,7 @@ export function Profile({ closeProfile }) {
           bodyStyle={{ borderRadius: 8, padding: 16, ...state.menuStyle }} onCancel={actions.clearEditProfileImage}>
 
         <ProfileImageWrapper>
-          <div className="title">Profile Image</div>
+          <div className="title">{ state.strings.profileImage }</div>
           <div className="cropper">
             <Cropper image={state.editImage} crop={state.crop} zoom={state.zoom} aspect={1}
                 onCropChange={actions.setCrop} onCropComplete={onCropComplete} onZoomChange={actions.setZoom} />
@@ -157,10 +157,10 @@ export function Profile({ closeProfile }) {
           <div className="controls">
             <input type='file' id='file' accept="image/*" ref={imageFile} onChange={e => selected(e)} style={{display: 'none'}}/>
             <div className="select">
-              <Button key="select" className="pic" onClick={() => imageFile.current.click()}>Select Image</Button>
+              <Button key="select" className="pic" onClick={() => imageFile.current.click()}>{ state.strings.selectImage }</Button>
             </div>
-            <Button key="back" onClick={actions.clearEditProfileImage}>Cancel</Button>
-            <Button key="save" type="primary" onClick={saveImage} loading={state.busy}>Save</Button>
+            <Button key="back" onClick={actions.clearEditProfileImage}>{ state.strings.cancel }</Button>
+            <Button key="save" type="primary" onClick={saveImage} loading={state.busy}>{ state.strings.save }</Button>
           </div>
         </ProfileImageWrapper>
 
@@ -169,23 +169,23 @@ export function Profile({ closeProfile }) {
           bodyStyle={{ borderRadius: 8, padding: 16, ...state.menuStyle }} onCancel={actions.clearEditProfileDetails}>
 
         <ProfileDetailsWrapper>
-          <div className="title">Profile Details</div>
+          <div className="title">{ state.strings.profileDetails }</div>
           <div class="info">
-            <Input placeholder="Name" spellCheck="false" onChange={(e) => actions.setEditName(e.target.value)}
+            <Input placeholder={state.strings.name} spellCheck="false" onChange={(e) => actions.setEditName(e.target.value)}
                 defaultValue={state.editName} autocapitalize="word" />
           </div>
           <div class="info">
-            <Input placeholder="Location" spellCheck="false" onChange={(e) => actions.setEditLocation(e.target.value)}
+            <Input placeholder={state.strings.location} spellCheck="false" onChange={(e) => actions.setEditLocation(e.target.value)}
                 defaultValue={state.editLocation} autocapitalize="word" />
           </div>
           <div class="info">
-            <Input.TextArea placeholder="Description" onChange={(e) => actions.setEditDescription(e.target.value)}
+            <Input.TextArea placeholder={state.strings.description} onChange={(e) => actions.setEditDescription(e.target.value)}
                 spellCheck="false" defaultValue={state.editDescription} autoSize={{ minRows: 2, maxRows: 6 }} />
           </div>
 
           <div className="controls">
-            <Button key="back" onClick={actions.clearEditProfileDetails}>Cancel</Button>
-            <Button key="save" type="primary" onClick={saveDetails} loading={state.busy}>Save</Button>
+            <Button key="back" onClick={actions.clearEditProfileDetails}>{state.strings.cancel}</Button>
+            <Button key="save" type="primary" onClick={saveDetails} loading={state.busy}>{state.strings.save}</Button>
           </div>
         </ProfileDetailsWrapper>
 

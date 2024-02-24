@@ -56,24 +56,24 @@ export function AccountAccess() {
     <AccountAccessWrapper>
       { modalContext }
       <div className="account">
-        <div className="section">Application</div>
+        <div className="section">{state.strings.application}</div>
         <div className="controls">
           <div className="option">
-            <div className="label">Time Format</div>
+            <div className="label">{state.strings.timeFormat}</div>
             <Radio.Group onChange={actions.setTimeFormat} value={state.timeFormat}>
-              <Radio style={{borderRadius: 3, paddingLeft: 6, ...state.menuStyle}} value={'12h'}>12h</Radio>
-              <Radio style={{borderRadius: 3, paddingLeft: 6, ...state.menuStyle}} value={'24h'}>24h</Radio>
+              <Radio style={{borderRadius: 3, paddingLeft: 6, ...state.menuStyle}} value={'12h'}>{state.strings.timeUs}</Radio>
+              <Radio style={{borderRadius: 3, paddingLeft: 6, ...state.menuStyle}} value={'24h'}>{state.strings.timeEu}</Radio>
             </Radio.Group>
           </div>
           <div className="option">
-            <div className="label">Date Format</div>
+            <div className="label">{state.strings.dateFormat}</div>
             <Radio.Group onChange={actions.setDateFormat} value={state.dateFormat}>
-              <Radio style={{borderRadius: 3, paddingLeft: 6, ...state.menuStyle}} value={'mm/dd'}>mm/dd</Radio>
-              <Radio style={{borderRadius: 3, paddingLeft: 6, ...state.menuStyle}} value={'dd/mm'}>dd/mm</Radio>
+              <Radio style={{borderRadius: 3, paddingLeft: 6, ...state.menuStyle}} value={'mm/dd'}>{state.strings.dateUs}</Radio>
+              <Radio style={{borderRadius: 3, paddingLeft: 6, ...state.menuStyle}} value={'dd/mm'}>{state.strings.dateEu}</Radio>
             </Radio.Group>
           </div>
           <div className="option">
-            <div className="label">Theme</div>
+            <div className="label">{state.strings.theme}</div>
             <Select
                 defaultValue={null}
                 style={{ width: 128 }}
@@ -83,7 +83,7 @@ export function AccountAccess() {
               />
           </div>
           <div className="option">
-            <div className="label">Language</div>
+            <div className="label">{state.strings.language}</div>
             <Select
                 defaultValue={null}
                 style={{ width: 128 }}
@@ -95,44 +95,44 @@ export function AccountAccess() {
         </div>
       </div>
       <div className="account">
-        <div className="section">Account</div>
+        <div className="section">{state.strings.account}</div>
         <div className="controls">
           <div className="switch">
             <Switch size="small" checked={state.searchable} onChange={enable => saveSearchable(enable)} />
-            <div className="switchLabel">Visible in Registry &nbsp;&nbsp;</div>
+            <div className="switchLabel">{state.strings.registry}</div>
           </div>
           <div className="link" onClick={actions.setEditSeal}>
             <SettingOutlined />
-            <div className="label">Sealed Topics</div>
+            <div className="label">{state.strings.sealedTopics}</div>
           </div>
           <div className="link" onClick={actions.setEditLogin}>
             <LockOutlined />
-            <div className="label">Change Login</div>
+            <div className="label">{state.strings.changeLogin}</div>
           </div>
         </div>
       </div>
       <Modal centered closable={false} visible={state.editSeal} footer={null} onCancel={actions.clearEditSeal} bodyStyle={{ borderRadius: 8, padding: 16, ...state.menuStyle }}>
         <SealModal>
-          <div className="title">Topic Sealing Key</div>
+          <div className="title">{state.strings.sealedTopics}</div>
           <div className="switch">
             <Switch size="small" checked={state.sealEnabled} onChange={enable => actions.enableSeal(enable)} />
-            <div className="switchLabel">Enable Sealed Topics</div>
+            <div className="switchLabel">{state.strings.enableSealed}</div>
           </div>
           { (state.sealMode === 'updating' || state.sealMode === 'enabling') && (
             <div className="sealChange">
-              <Input.Password placeholder="New Password" spellCheck="false" onChange={(e) => actions.setSealPassword(e.target.value)}
+              <Input.Password placeholder={state.strings.newPassword} spellCheck="false" onChange={(e) => actions.setSealPassword(e.target.value)}
                 autocomplete="new-password" prefix={<LockOutlined />} />
             </div>
           )}
           { (state.sealMode === 'updating' || state.sealMode === 'enabling') && (
             <div className="sealChange">
-              <Input.Password placeholder="Confirm Password" spellCheck="false" onChange={(e) => actions.setSealConfirm(e.target.value)}
+              <Input.Password placeholder={state.strings.confirmPassword} spellCheck="false" onChange={(e) => actions.setSealConfirm(e.target.value)}
                 autocomplete="new-password" prefix={<LockOutlined />} />
             </div>
           )}
           { state.sealMode === 'disabling' && (
             <div className="sealChange">
-              <Input placeholder="Type 'delete' to remove key" spellCheck="false" onChange={(e) => actions.setSealDelete(e.target.value)}
+              <Input placeholder={state.strings.deleteKey} spellCheck="false" onChange={(e) => actions.setSealDelete(e.target.value)}
                 prefix={<ExclamationCircleOutlined />} />
             </div>
           )}
@@ -144,39 +144,39 @@ export function AccountAccess() {
           )}
           { state.sealMode === 'unlocking' && (
             <div className="sealChange">
-              <Input.Password placeholder="Password" spellCheck="false" onChange={(e) => actions.setSealUnlock(e.target.value)}
+              <Input.Password placeholder={state.strings.password} spellCheck="false" onChange={(e) => actions.setSealUnlock(e.target.value)}
                 prefix={<LockOutlined />} />
             </div>
           )}
           <div className="controls">
-            <Button key="back" onClick={actions.clearEditSeal}>Cancel</Button>
+            <Button key="back" onClick={actions.clearEditSeal}>{state.strings.cancel}</Button>
             { state.sealMode === 'enabled' && (
-              <Button key="save" type="primary" onClick={saveSeal} loading={state.busy}>Forget</Button>
+              <Button key="save" type="primary" onClick={saveSeal} loading={state.busy}>{state.strings.forget}</Button>
             )}
             { state.sealMode === 'unlocking' && (
-              <Button key="save" type="primary" onClick={saveSeal} className={actions.canSaveSeal() ? 'saveEnabled' : 'saveDisabled'} disabled={!actions.canSaveSeal()} loading={state.busy}>Unlock</Button>
+              <Button key="save" type="primary" onClick={saveSeal} className={actions.canSaveSeal() ? 'saveEnabled' : 'saveDisabled'} disabled={!actions.canSaveSeal()} loading={state.busy}>{state.strings.unlock}</Button>
             )}
             { state.sealMode !== 'unlocking' && state.sealMode !== 'enabled' && (
-              <Button key="save" type="primary" onClick={saveSeal} className={actions.canSaveSeal() ? 'saveEnabled' : 'saveDisabled'} disabled={!actions.canSaveSeal()} loading={state.busy}>Save</Button>
+              <Button key="save" type="primary" onClick={saveSeal} className={actions.canSaveSeal() ? 'saveEnabled' : 'saveDisabled'} disabled={!actions.canSaveSeal()} loading={state.busy}>{state.strings.save}</Button>
             )}
           </div>
         </SealModal>
       </Modal>
       <Modal centered closable={false} footer={null} visible={state.editLogin} bodyStyle={{ borderRadius: 8, padding: 16, ...state.menuStyle }} onCancel={actions.clearEditLogin}>
         <LoginModal>
-          <div className="title">Change Login</div>
-          <Input className="loginValue" placeholder="Username" spellCheck="false" onChange={(e) => actions.setEditHandle(e.target.value)}
+          <div className="title">{state.strings.changeLogin}</div>
+          <Input className="loginValue" placeholder={state.strings.username} spellCheck="false" onChange={(e) => actions.setEditHandle(e.target.value)}
               defaultValue={state.editHandle} autocomplete="username" autocapitalize="none" prefix={<UserOutlined />} />
 
-          <Input.Password className="loginValue" placeholder="Password" spellCheck="false" onChange={(e) => actions.setEditPassword(e.target.value)}
+          <Input.Password className="loginValue" placeholder={state.strings.newPassword} spellCheck="false" onChange={(e) => actions.setEditPassword(e.target.value)}
               autocomplete="new-password" prefix={<LockOutlined />} />
 
-          <Input.Password className="loginValue" placeholder="Confirm Password" spellCheck="false" onChange={(e) => actions.setEditConfirm(e.target.value)}
+          <Input.Password className="loginValue" placeholder={state.strings.confirmPassword} spellCheck="false" onChange={(e) => actions.setEditConfirm(e.target.value)}
               autocomplete="new-password" prefix={<LockOutlined />} />
           <div className="controls">
-            <Button key="back" onClick={actions.clearEditLogin}>Cancel</Button>
+            <Button key="back" onClick={actions.clearEditLogin}>{state.strings.cancel}</Button>
             <Button key="save" type="primary" className={actions.canSaveLogin() ? 'saveEnabled' : 'saveDisabled'} onClick={saveLogin}
-                disabled={!actions.canSaveLogin()} loading={state.busy}>Save</Button>
+                disabled={!actions.canSaveLogin()} loading={state.busy}>{state.strings.save}</Button>
           </div>
         </LoginModal>
       </Modal>
