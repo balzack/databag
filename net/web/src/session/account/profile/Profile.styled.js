@@ -133,7 +133,6 @@ export const ProfileWrapper = styled.div`
     .notset {
       font-style: italic;
       color: ${props => props.theme.hintText};
-      padding-top: 4px;
     }
 
     .name {
@@ -169,7 +168,6 @@ export const ProfileWrapper = styled.div`
   
       .data {
         padding-left: 8px;
-        margin-top: -4px;
       }
     }
 

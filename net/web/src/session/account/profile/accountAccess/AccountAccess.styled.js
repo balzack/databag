@@ -25,6 +25,12 @@ export const AccountAccessWrapper = styled.div`
     padding: 8px;
     width: fit-content;
 
+    .control {
+      min-width: 32px;
+      display: flex;
+      justify-content: flex-end;
+    }
+
     .option {
       display: flex;
       padding-top: 8px;

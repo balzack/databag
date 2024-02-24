@@ -98,15 +98,21 @@ export function AccountAccess() {
         <div className="section">{state.strings.account}</div>
         <div className="controls">
           <div className="switch">
-            <Switch size="small" checked={state.searchable} onChange={enable => saveSearchable(enable)} />
+            <div className="control">
+              <Switch size="small" checked={state.searchable} onChange={enable => saveSearchable(enable)} />
+            </div>
             <div className="switchLabel">{state.strings.registry}</div>
           </div>
           <div className="link" onClick={actions.setEditSeal}>
-            <SettingOutlined />
+            <div className="control">
+              <SettingOutlined />
+            </div>
             <div className="label">{state.strings.sealedTopics}</div>
           </div>
           <div className="link" onClick={actions.setEditLogin}>
-            <LockOutlined />
+            <div className="control">
+              <LockOutlined />
+            </div>
             <div className="label">{state.strings.changeLogin}</div>
           </div>
         </div>

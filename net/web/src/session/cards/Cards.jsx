@@ -59,7 +59,7 @@ export function Cards({ closeCards, openContact, openChannel, openListing }) {
         <div className="inline">
           <Button type="primary" icon={<UserOutlined />} onClick={openListing}>Add</Button>
         </div>
-        { state.display !== 'small' && (
+        { state.display === 'xlarge' && (
           <div className="inline">
             <div className="dismiss" onClick={closeCards} >
               <RightOutlined />
