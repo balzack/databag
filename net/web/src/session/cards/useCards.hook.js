@@ -64,7 +64,7 @@ export function useCards() {
       const node = profile?.node;
       const seal = profile?.seal;
       const token = detail?.token;
-      const handle = profile?.node ? `${profile.handle}@${profile.node}` : profile.handle;
+      const handle = profile?.node ? `${profile.handle}/${profile.node}` : profile.handle;
       const logo = profile?.imageSet ? card.actions.getCardImageUrl(item.id) : null;
       return { cardId, guid, updated, offsync, status, name, node, token, handle, logo, seal };
     });

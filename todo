@@ -3,13 +3,7 @@ contact:
   - translation
   - detail layout
   - action buttons
-
-cards: 
-  - dark style
-  - translation
-  - alert name overlay
-  - @ symbol
-  - remove back
+  - show sync error message
 
 listing:
   - dark style
