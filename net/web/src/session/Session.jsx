@@ -158,7 +158,7 @@ export function Session() {
     actions.closeDetails();
   }
 
-  const drawerStyle = { padding: 0, backgroundColor: settings.state.colors.baseArea };
+  const drawerStyle = { overscrollBehavior: 'none', padding: 0, backgroundColor: settings.state.colors.baseArea };
 
   return (
     <ThemeProvider theme={settings.state.colors}>

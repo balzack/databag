@@ -18,12 +18,12 @@ export function Channels({ open, active }) {
     <ChannelsWrapper>
       <div className="search">
         <div className="filter">
-          <Input className="filterControl" bordered={false} allowClear={true} placeholder={state.strings.topics} prefix={<SearchOutlined />}
+          <Input className="filterControl" bordered={false} placeholder={state.strings.topics} prefix={<SearchOutlined />}
               spellCheck="false" onChange={(e) => actions.onFilter(e.target.value)} />
         </div>
         { state.display === 'small' && (
           <div className="inline">
-            <Button type="primary" disabled={!state.allowAdd} icon={<CommentOutlined />} onClick={actions.setShowAdd}>New</Button>
+            <Button type="primary" disabled={!state.allowAdd} icon={<CommentOutlined />} onClick={actions.setShowAdd}>{state.strings.new}</Button>
           </div>
         )}
       </div>

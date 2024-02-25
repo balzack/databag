@@ -10,6 +10,7 @@ export const en = {
   ok: 'OK',
   cancel: 'Cancel',
 
+  new: 'New',
   newMessage: 'New Message',
   topics: 'Topics',
   unsetSealing: 'Unset Sealing Key',
@@ -33,6 +34,7 @@ export const en = {
   operationFailed: 'Operation Failed',
   tryAgain: 'Please try again.',
 
+  add: 'Add',
   save: 'Save',
   forget: 'Forget',
   unlock: 'Unlock',
@@ -53,7 +55,7 @@ export const en = {
   registry: 'Visible in Registry',
   sealedTopics: 'Sealed Topics',
   changeLogin: 'Change Login',
-  selectImage: 'Select Image',
+  selectImage: 'Select',
   profileImage: 'Profile Image',
   profileDetails: 'Profile Details',
   enableSealed: 'Enabled Sealed Topics',
@@ -64,6 +66,15 @@ export const en = {
   delete: 'delete',
   username: 'Username',
   updateProfile: 'Update Profile',
+
+  syncError: 'Sync Error',
+  callTip: 'Call Contact',
+  messageTip: 'Message Contact',
+  connectedTip: 'Connected Contact',
+  requestedTip: 'Connection Requested by Contact',
+  connectingTip: 'Connection Requested',
+  pendingTip: 'Connection Requested by Unknown Contact',
+  confirmedTip: 'Disconnected Contact',
 };
 
 export const fr = {
@@ -78,6 +89,7 @@ export const fr = {
   ok: 'OK',
   cancel: 'Annuler',
 
+  new: 'Nouveau',
   newMessage: 'Nouveau Message',
   topics: 'Sujets',
   unsetSealing: 'Clé de sécurité non définie',
@@ -101,6 +113,7 @@ export const fr = {
   operationFailed: 'Opération Échouée',
   tryAgain: 'Veuillez réessayer.',
 
+  add: 'Ajouter',
   save: 'Enregistrer',
   forget: 'Oublier',
   unlock: 'Déverrouiller',
@@ -121,7 +134,7 @@ export const fr = {
   registry: 'Visible dans le Registre',
   sealedTopics: 'Sujets Sécurisé',
   changeLogin: 'Changer Identifiants',
-  selectImage: 'Sélectionner une Image',
+  selectImage: 'Sélectionner',
   profileImage: 'Image de Profil',
   profileDetails: 'Détails du Profil',
   enableSealed: 'Activer les Sujets Sécurisé',
@@ -132,5 +145,14 @@ export const fr = {
   delete: 'supprimer',
   username: 'Nom d\'Utilisateur',
   updateProfile: 'Mettre à Jour le Profil',
+
+  syncError: 'Erreur de synchronisation',
+  callTip: 'Appeler le Contact',
+  messageTip: 'Envoyer un message au contact',
+  connectedTip: 'Contact connecté',
+  requestedTip: 'Demande de connexion envoyée par le contact',
+  connectingTip: 'Demande de connexion en cours',
+  pendingTip: 'Demande de connexion envoyée par un contact inconnu',
+  confirmedTip: 'Contact déconnecté'
 };
 

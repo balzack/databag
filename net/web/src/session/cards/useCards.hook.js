@@ -17,6 +17,8 @@ export function useCards() {
     display: 'small',
     enableIce: false,
     sealable: false,
+    strings: {},
+    menuStyle: {},
     allowUnsealed: false,
     cards: [],
   });
@@ -33,8 +35,8 @@ export function useCards() {
   }
 
   useEffect(() => {
-    const { display } = settings.state;
-    updateState({ display });
+    const { display, strings, menuStyle } = settings.state;
+    updateState({ display, strings, menuStyle });
   }, [settings.state]);
 
   useEffect(() => {

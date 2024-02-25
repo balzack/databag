@@ -38,6 +38,7 @@ export const ChannelsWrapper = styled.div`
       border-radius: 8px;
       flex-grow: 1;
 
+
       .filterControl {
         color: ${props => props.theme.mainText};
 

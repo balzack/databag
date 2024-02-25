@@ -6,7 +6,7 @@ import { useAccount } from './useAccount.hook';
 
 export function Account({ closeAccount, openProfile }) {
 
-  const { state, actions } = useAccount();
+  const { state } = useAccount();
 
   return (
     <AccountWrapper>

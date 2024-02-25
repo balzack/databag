@@ -6,12 +6,13 @@ export const CardItemWrapper = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
-  border-bottom: 1px solid ${Colors.divider};
+  border-bottom: 1px solid ${props => props.theme.itemBorder};
+  color: ${props => props.theme.mainText};
   padding-left: 16px;
   padding-right: 16px;
 
   &:hover {
-    background-color: ${Colors.formHover};
+    background-color: ${props => props.theme.hoverArea};
     cursor: pointer;
   }
 
@@ -50,13 +51,13 @@ export const CardItemWrapper = styled.div`
 `;
 
 export const StatusError = styled.div`
-  color: ${Colors.error};
+  color: ${props => props.theme.alertText};
   font-size: 14px;
   padding-right: 12px;
 `
 
 export const ComOptions = styled.div`
-  color: ${Colors.primary};
+  color: ${props => props.theme.linkText};
   font-size: 16px;
   display: flex;
   flex-direction: row;
