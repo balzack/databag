@@ -214,7 +214,7 @@ export function Session() {
                   <Cards closeCards={closeCards} openContact={actions.openContact} openChannel={openConversation} openListing={actions.openListing} />
                   <Drawer bodyStyle={drawerStyle} visible={state.listing} closable={false}
                       onClose={actions.closeListing} getContainer={false} height={'100%'}
-                      style={{ position: 'absolute', overflow: 'hidden' }}>
+                      style={{ width: '80%', position: 'absolute', overflow: 'hidden' }}>
                     <Listing closeListing={actions.closeListing} openContact={actions.openContact} />
                   </Drawer>
                 </div>
@@ -266,12 +266,12 @@ export function Session() {
                 { state.cards && (
                   <Cards closeCards={closeCards} openContact={actions.openContact} openChannel={openConversation} openListing={actions.openListing} />
                 )}
-                <Drawer bodyStyle={drawerStyle} visible={state.listing} closable={false}
+                <Drawer bodyStyle={drawerStyle} visible={state.listing} closable={false} width={'80%'}
                     onClose={actions.closeListing} getContainer={false} height={'100%'}
                     style={{ overflow: 'hidden', position: 'absolute' }}>
                   <Listing closeListing={actions.closeListing} openContact={actions.openContact} />
                 </Drawer>
-                <Drawer bodyStyle={drawerStyle} width={'33%'} closable={false} onClose={actions.closeContact} visible={state.contact} zIndex={30}>
+                <Drawer bodyStyle={drawerStyle} width={'35%'} closable={false} onClose={actions.closeContact} visible={state.contact} zIndex={30}>
                   { state.contact && (
                     <Contact close={actions.closeContact} guid={state.contactGuid} listing={state.contactListing} />
                   )}

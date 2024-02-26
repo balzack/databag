@@ -14,6 +14,8 @@ export function useListing() {
     disabled: true,
     showFilter: false,
     display: null,
+    strings: {},
+    menuStyle: {},
   });
 
   const profile = useContext(ProfileContext);
@@ -78,7 +80,8 @@ export function useListing() {
   }, [profile.state]);
 
   useEffect(() => {
-    updateState({ display: settings.state.display });
+    const { display, strings, menuStyle } = settings.state;
+    updateState({ display, strings, menuStyle });
   }, [settings.state]);
 
   return { state, actions };

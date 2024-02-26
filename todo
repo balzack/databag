@@ -5,12 +5,6 @@ contact:
   - action buttons
   - show sync error message
 
-listing:
-  - dark style
-  - translation
-  - remove back
-  - match widtch
-
 thread:
   - dark style
   - translation
