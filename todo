@@ -1,9 +1,9 @@
-contact:
+
+access:
   - dark style
   - translation
-  - detail layout
-  - action buttons
-  - show sync error message
+  - language
+  - color theme
 
 thread:
   - dark style
@@ -22,12 +22,6 @@ calling:
   - layout
   - fullscreen
   - device selection
-
-access:
-  - dark style
-  - translation
-  - language
-  - color theme
 
 admin:
   - dark style
