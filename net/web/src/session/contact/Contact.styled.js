@@ -208,6 +208,8 @@ export const ContactWrapper = styled.div`
     display: flex;
     flex-direction: row;
     gap: 16px;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
 
     .button {
       display: flex;
@@ -241,6 +243,51 @@ export const ContactWrapper = styled.div`
     justify-content: center;
     padding-bottom: 16px;
     color: ${props => props.theme.hintText};
+    align-items: center;
+    gap: 8px;
   }
 `
+
+export const StatusConnected = styled.div`
+  background-color: ${props => props.theme.connected};
+  border-radius: 8px;
+  width: 8px;
+  height: 8px;
+`;
+
+export const StatusConnecting = styled.div`
+  background-color: ${props => props.theme.connecting};
+  border-radius: 8px;
+  width: 8px;
+  height: 8px;
+`;
+
+export const StatusRequested = styled.div`
+  background-color: ${props => props.theme.requested};
+  border-radius: 8px;
+  width: 8px;
+  height: 8px;
+`;
+
+export const StatusPending = styled.div`
+  background-color: ${props => props.theme.pending};
+  border-radius: 8px;
+  width: 8px;
+  height: 8px;
+`;
+
+export const StatusConfirmed = styled.div`
+  background-color: ${props => props.theme.confirmed};
+  border-radius: 8px;
+  width: 8px;
+  height: 8px;
+`;
+
+export const StatusUnsaved = styled.div`
+  background-color: ${props => props.theme.unsaved};
+  border-radius: 8px;
+  width: 8px;
+  height: 8px;
+`;
+
 

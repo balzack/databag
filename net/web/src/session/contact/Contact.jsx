@@ -1,5 +1,5 @@
 import { Modal, Button, Tooltip } from 'antd';
-import { ContactWrapper } from './Contact.styled';
+import { StatusConnected, StatusRequested, StatusConnecting, StatusPending, StatusConfirmed, StatusUnsaved, ContactWrapper } from './Contact.styled';
 import { useContact } from './useContact.hook';
 import { Logo } from 'logo/Logo';
 import { SyncOutlined, UserAddOutlined, UserDeleteOutlined, UserSwitchOutlined, StopOutlined, DeleteOutlined, DatabaseOutlined, CloseOutlined, BookOutlined, EnvironmentOutlined } from '@ant-design/icons';
@@ -8,9 +8,6 @@ export function Contact({ close, guid, listing }) {
 
   const [ modal, modalContext ] = Modal.useModal();
   const { state, actions } = useContact(guid, listing, close);
-
-console.log(state.busy);
-
 
   const updateContact = async (action) => {
     try {
@@ -54,7 +51,7 @@ console.log(state.busy);
                 <div className="data">{ state.name }</div>
               )}
               { !state.name && (
-                <div className="data notset">Name</div>
+                <div className="data notset">{ state.strings.name }</div>
               )}
             </div>
             { state.node && (
@@ -69,7 +66,7 @@ console.log(state.busy);
                 <div className="data">{ state.location }</div>
               )}
               { !state.location && (
-                <div className="data notset">Location</div>
+                <div className="data notset">{ state.strings.location }</div>
               )}
             </div>
             <div className="description">
@@ -78,91 +75,124 @@ console.log(state.busy);
                 <div className="data">{ state.description }</div>
               )}
               { !state.description && (
-                <div className="data notset">Description</div>
+                <div className="data notset">{ state.strings.description }</div>
               )}
             </div>
           </div>
         </div>
 
         <div className="actions">
-          <div className="label">Actions</div>
+          <div className="label">{ state.strings.actions }</div>
           <div className="controls">
             { state.status === 'connected' && (
-              <Tooltip placement="top" title="Disconnect Contact">
-                <Button className="button" type="primary" loading={state.busy} icon={<UserDeleteOutlined />} size="medium"  onClick={() => updateContact(actions.disconnect)}>Disconnect</Button>
+              <Tooltip placement="top" title={state.strings.disconnectContact}>
+                <Button className="button" type="primary" loading={state.busy} icon={<UserDeleteOutlined />} size="medium"  onClick={() => updateContact(actions.disconnect)}>{ state.strings.disconnect }</Button>
               </Tooltip>
             )}
             { state.status === 'connected' && (
-              <Tooltip placement="top" title="Delete Contact">
-                <Button className="button" type="primary" loading={state.busy} icon={<DeleteOutlined />} size="medium"  onClick={() => updateContact(actions.disconnectRemove)}>Delete</Button>
+              <Tooltip placement="top" title={state.strings.deleteContact}>
+                <Button className="button" type="primary" loading={state.busy} icon={<DeleteOutlined />} size="medium"  onClick={() => updateContact(actions.disconnectRemove)}>{ state.strings.remove }</Button>
               </Tooltip>
             )}
             { state.status === 'pending' && (
-              <Tooltip placement="top" title="Save Contact">
-                <Button className="button" type="primary" loading={state.busy} icon={<UserAddOutlined />} size="medium"  onClick={() => updateContact(actions.confirmContact)}>Save</Button>
+              <Tooltip placement="top" title={state.strings.saveContact}>
+                <Button className="button" type="primary" loading={state.busy} icon={<UserAddOutlined />} size="medium"  onClick={() => updateContact(actions.confirmContact)}>{ state.strings.save }</Button>
               </Tooltip>
             )}
             { state.status === 'pending' && (
-              <Tooltip placement="top" title="Save and Accept">
-                <Button className="button" type="primary" loading={state.busy} icon={<UserSwitchOutlined />} size="medium"  onClick={() => updateContact(actions.connect)}>Connect</Button>
+              <Tooltip placement="top" title={state.strings.saveAccept}>
+                <Button className="button" type="primary" loading={state.busy} icon={<UserSwitchOutlined />} size="medium"  onClick={() => updateContact(actions.connect)}>{ state.strings.connect }</Button>
               </Tooltip>
             )}
             { state.status === 'pending' && (
-              <Tooltip placement="top" title="Ignore Request">
-                <Button className="button" type="primary" loading={state.busy} icon={<StopOutlined />} size="medium"  onClick={() => updateContact(actions.remove)}>Cancel</Button>
+              <Tooltip placement="top" title={state.strings.ignoreRequest}>
+                <Button className="button" type="primary" loading={state.busy} icon={<StopOutlined />} size="medium"  onClick={() => updateContact(actions.remove)}>{ state.strings.cancel }</Button>
               </Tooltip>
             )}
-            { state.status === 'request received' && (
-              <Tooltip placement="top" title="Accept Connection">
-                <Button className="button" type="primary" loading={state.busy} icon={<UserSwitchOutlined />} size="medium"  onClick={() => updateContact(actions.saveConnect)}>Connect</Button>
+            { state.status === 'requested' && (
+              <Tooltip placement="top" title={state.strings.acceptConnection}>
+                <Button className="button" type="primary" loading={state.busy} icon={<UserSwitchOutlined />} size="medium"  onClick={() => updateContact(actions.saveConnect)}>{ state.strings.cancel }</Button>
               </Tooltip>
             )}
-            { state.status === 'request received' && (
-              <Tooltip placement="top" title="Ignore Request">
-                <Button className="button" type="primary" loading={state.busy} icon={<StopOutlined />} size="medium"  onClick={() => updateContact(actions.disconnect)}>Cancel</Button>
+            { state.status === 'requested' && (
+              <Tooltip placement="top" title={state.strings.ignoreRequest}>
+                <Button className="button" type="primary" loading={state.busy} icon={<StopOutlined />} size="medium"  onClick={() => updateContact(actions.disconnect)}>{ state.strings.cancel }</Button>
               </Tooltip>
             )}
-            { state.status === 'request sent' && (
+            { state.status === 'connecting' && (
               <Tooltip placement="top" title="Cancel Request">
-                <Button className="button" type="primary" loading={state.busy} icon={<StopOutlined />} size="medium"  onClick={() => updateContact(actions.disconnect)}>Cancel</Button>
+                <Button className="button" type="primary" loading={state.busy} icon={<StopOutlined />} size="medium"  onClick={() => updateContact(actions.disconnect)}>{ state.strings.cancel }</Button>
               </Tooltip>
             )}
-            { state.status === 'request sent' && (
-              <Tooltip placement="top" title="Delete Contact">
-                <Button className="button" type="primary" loading={state.busy} icon={<DeleteOutlined />} size="medium"  onClick={() => updateContact(actions.disconnectRemove)}>Delete</Button>
+            { state.status === 'connecting' && (
+              <Tooltip placement="top" title={state.strings.deleteContact}>
+                <Button className="button" type="primary" loading={state.busy} icon={<DeleteOutlined />} size="medium"  onClick={() => updateContact(actions.disconnectRemove)}>{ state.strings.remove }</Button>
               </Tooltip>
             )}
-            { state.status === 'saved' && (
-              <Tooltip placement="top" title="Request Connection">
-                <Button className="button" type="primary" loading={state.busy} icon={<UserSwitchOutlined />} size="medium"  onClick={() => updateContact(actions.connect)}>Connect</Button>
+            { state.status === 'confirmed' && (
+              <Tooltip placement="top" title={state.strings.requestConnection}>
+                <Button className="button" type="primary" loading={state.busy} icon={<UserSwitchOutlined />} size="medium"  onClick={() => updateContact(actions.connect)}>{ state.strings.connect }</Button>
               </Tooltip>
             )}
-            { state.status === 'saved' && (
-              <Tooltip placement="top" title="Delete Contact">
-                <Button className="button" type="primary" loading={state.busy} icon={<DeleteOutlined />} size="medium"  onClick={() => updateContact(actions.remove)}>Delete</Button>
-              </Tooltip>
-            )}
-            { state.status === 'unsaved' && (
-              <Tooltip placement="top" title="Save Contact">
-                <Button className="button" type="primary" loading={state.busy} icon={<UserAddOutlined />} size="medium"  onClick={() => updateContact(actions.saveContact)}>Save</Button>
+            { state.status === 'confirmed' && (
+              <Tooltip placement="top" title={state.strings.deleteContact}>
+                <Button className="button" type="primary" loading={state.busy} icon={<DeleteOutlined />} size="medium"  onClick={() => updateContact(actions.remove)}>{ state.strings.remove }</Button>
               </Tooltip>
             )}
             { state.status === 'unsaved' && (
-              <Tooltip placement="top" title="Save and Request">
-                <Button className="button" type="primary" loading={state.busy} icon={<UserSwitchOutlined />} size="medium"  onClick={() => updateContact(actions.saveConnect)}>Connect</Button>
+              <Tooltip placement="top" title={state.strings.saveContact}>
+                <Button className="button" type="primary" loading={state.busy} icon={<UserAddOutlined />} size="medium"  onClick={() => updateContact(actions.saveContact)}>{ state.strings.save }</Button>
+              </Tooltip>
+            )}
+            { state.status === 'unsaved' && (
+              <Tooltip placement="top" title={state.strings.saveRequest}>
+                <Button className="button" type="primary" loading={state.busy} icon={<UserSwitchOutlined />} size="medium"  onClick={() => updateContact(actions.saveConnect)}>{ state.strings.connect }</Button>
               </Tooltip>
             )}
             { state.offsync && (
-              <Tooltip placement="top" title="Resync Contact">
-                <Button className="button" type="primary" loading={state.busy} icon={<SyncOutlined />} size="medium"  onClick={() => updateContact(actions.resync)}>Resync</Button>
+              <Tooltip placement="top" title={state.strings.resyncContact}>
+                <Button className="button" type="primary" loading={state.busy} icon={<SyncOutlined />} size="medium"  onClick={() => updateContact(actions.resync)}>{ state.strings.resync }</Button>
               </Tooltip>
             )}
           </div>
         </div>
 
-        <div className="footer">
-          <div className="status">Status: { state.status }</div>
-        </div>
+        { state.status === 'connected' && (
+          <div className="footer">
+            <StatusConnected />
+            <div className="status">{state.strings.connectedTip}</div>
+          </div>
+        )}
+        { state.status === 'requested' && (
+          <div className="footer">
+            <StatusRequested />
+            <div className="status">{state.strings.requestedTip}</div>
+          </div>
+        )}
+        { state.status === 'connecting' && (
+          <div className="footer">
+            <StatusConnecting />
+            <div className="status">{state.strings.connectingTip}</div>
+          </div>
+        )}
+        { state.status === 'pending' && (
+          <div className="footer">
+            <StatusPending />
+            <div className="status">{state.strings.pendingTip}</div>
+          </div>
+        )}
+        { state.status === 'confirmed' && (
+          <div className="footer">
+            <StatusConfirmed />
+            <div className="status">{state.strings.confirmedTip}</div>
+          </div>
+        )}
+        { state.status === 'unsaved' && (
+          <div className="footer">
+            <StatusUnsaved />
+            <div className="status">{state.strings.unsavedTip}</div>
+          </div>
+        )}
       </div>
     </ContactWrapper>
   );
