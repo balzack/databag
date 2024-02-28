@@ -97,7 +97,6 @@ export const ProfileWrapper = styled.div`
     justify-content: center;
     padding-top: 64px;
     padding-left: 32px;
-    align-items: center;
   }
 
   .rightContent {
@@ -110,6 +109,10 @@ export const ProfileWrapper = styled.div`
     border-radius: 4px;
     padding: 8px;
     background-color: ${props => props.theme.selectedArea};
+
+    .details {
+      align-items: center;
+    }
   }
 
   .rightAccess {
@@ -126,7 +129,6 @@ export const ProfileWrapper = styled.div`
   .details {
     display: flex;
     flex-direction: column;
-    padding-top: 16px;
     padding-left: 16px;
     padding-right: 16px;
 
@@ -140,7 +142,6 @@ export const ProfileWrapper = styled.div`
       flex-direction: row;
       align-items: baseline;
       cursor: pointer;
-      justify-content: center;
 
       &:hover .icon {
         color: ${props => props.theme.linkText};
@@ -176,6 +177,7 @@ export const ProfileWrapper = styled.div`
       flex-direction: row;
       align-items: flex-start;
       padding-top: 8px;
+      max-width: 500px;
 
       .data {
         padding-left: 8px;

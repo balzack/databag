@@ -52,6 +52,7 @@ export function useCardContext() {
   };
 
   const resyncCard = async (cardId) => {
+    let success = true;
     if (!syncing.current) {
       syncing.current = true;
 
@@ -68,10 +69,12 @@ export function useCardContext() {
       }
       catch(err) {
         console.log(err);
+        success = false;
       }
       syncing.current = false;
       await sync();
     }
+    return success;
   }
 
   const sync = async () => {
@@ -359,7 +362,7 @@ export function useCardContext() {
       await resync();
     },
     resyncCard: async (cardId) => {
-      await resyncCard(cardId);
+      return await resyncCard(cardId);
     },
   }
 

@@ -4,7 +4,7 @@ import { LogoutContent, ProfileWrapper, ProfileDetailsWrapper, ProfileImageWrapp
 import { useProfile } from './useProfile.hook';
 import { Logo } from 'logo/Logo';
 import { AccountAccess } from './accountAccess/AccountAccess';
-import { LogoutOutlined, RightOutlined, EditOutlined, BookOutlined, EnvironmentOutlined } from '@ant-design/icons';
+import { LogoutOutlined, CloseOutlined, EditOutlined, BookOutlined, EnvironmentOutlined } from '@ant-design/icons';
 import Cropper from 'react-easy-crop';
 
 export function Profile({ closeProfile }) {
@@ -82,7 +82,7 @@ export function Profile({ closeProfile }) {
         <div className="middleHeader">
           <div className="handle">{ state.handle }</div>
           <div className="close" onClick={closeProfile}>
-            <RightOutlined />
+            <CloseOutlined />
           </div>
         </div>
       )}

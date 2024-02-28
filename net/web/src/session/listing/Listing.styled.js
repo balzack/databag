@@ -1,23 +1,26 @@
 import styled from 'styled-components';
-import { Colors } from 'constants/Colors';
 
 export const ListingWrapper = styled.div`
   height: 100%;
   width: 100%;
-  display: flex;
-  flex-direction: column;
-  background-color: ${props => props.theme.itemArea};
-  color: ${props => props.theme.mainText};
 
   .drawer {
     width: 100%;
     height: 100%;
-    border-left: 1px solid ${props => props.theme.sectionBorder};
+    display: flex;
+    border-left: 1px solid ${props => props.theme.drawerBorder};
+    flex-direction: column;
+    background-color: ${props => props.theme.itemArea};
+    color: ${props => props.theme.mainText};
   }
 
-  .screen {
+  .frame {
     width: 100%;
     height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: ${props => props.theme.itemArea};
+    color: ${props => props.theme.mainText};
   }
 
   .view {

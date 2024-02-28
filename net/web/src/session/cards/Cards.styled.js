@@ -31,6 +31,7 @@ export const CardsWrapper = styled.div`
     border-bottom: 1px solid ${props => props.theme.sectionBorder};
     display: flex;
     flex-direction: row;
+    height: 48px;
 
     .filter { 
       border: 1px solid ${props => props.theme.sectionBorder};

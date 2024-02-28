@@ -1,6 +1,6 @@
 import { Input, Modal, List, Button } from 'antd';
 import { CardsWrapper } from './Cards.styled';
-import { SortAscendingOutlined, RightOutlined, UserOutlined, SearchOutlined } from '@ant-design/icons';
+import { SortAscendingOutlined, CloseOutlined, UserOutlined, SearchOutlined } from '@ant-design/icons';
 import { useCards } from './useCards.hook';
 import { CardItem } from './cardItem/CardItem';
 
@@ -62,7 +62,7 @@ export function Cards({ closeCards, openContact, openChannel, openListing }) {
         { state.display === 'xlarge' && (
           <div className="inline">
             <div className="dismiss" onClick={closeCards} >
-              <RightOutlined />
+              <CloseOutlined />
             </div>
           </div>
         )}

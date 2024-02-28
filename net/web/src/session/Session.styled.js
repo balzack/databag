@@ -239,10 +239,15 @@ export const SessionWrapper = styled.div`
     display: flex;
     flex-direction: column;
 
+    .base {
+      background-color: ${props => props.theme.frameArea};
+    }
+
     .top {
       flex-grow: 1;
       position: relative;
     }
+
     .bottom {
       height: 40px;
       position: relative;

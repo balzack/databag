@@ -1,5 +1,5 @@
 import { AccountWrapper } from './Account.styled';
-import { RightOutlined } from '@ant-design/icons';
+import { CloseOutlined } from '@ant-design/icons';
 import { SettingOutlined } from '@ant-design/icons';
 import { AccountAccess } from './profile/accountAccess/AccountAccess';
 import { useAccount } from './useAccount.hook';
@@ -13,7 +13,7 @@ export function Account({ closeAccount, openProfile }) {
       <div className="header">
         <div className="label">{state.strings.settings}</div>
         <div className="dismiss" onClick={closeAccount}>
-          <RightOutlined />
+          <CloseOutlined />
         </div>
       </div>
       <div className="content">

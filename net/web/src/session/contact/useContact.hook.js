@@ -7,7 +7,9 @@ import { getCardByGuid } from 'context/cardUtil';
 export function useContact(guid, listing, close) {
 
   const [state, setState] = useState({
+    offsync: false,
     logo: null,
+    logoSet: false,
     name: null,
     cardId: null,
     location: null,
@@ -17,6 +19,8 @@ export function useContact(guid, listing, close) {
     status: null,
     busy: false,
     buttonStatus: 'button idle',
+    strings: {},
+    menuStyle: {},
   });
 
   const card = useContext(CardContext);
@@ -47,22 +51,24 @@ export function useContact(guid, listing, close) {
       const { imageSet, name, location, description, handle, node } = profile;      
       const status = statusMap(detail.status);
       const cardId = contact.id;
+      const offsync = contact.offsync;
       const logo = imageSet ? card.actions.getCardImageUrl(cardId) : null;
-      updateState({ logo, name, location, description, handle, node, status, cardId });
+      updateState({ logoSet: true, offsync, logo, name, location, description, handle, node, status, cardId });
     }
     else if (listing) {
       const { logo, name, location, description, handle, node } = listing;
-      updateState({ logo, name, location, description, handle, node, status: 'unsaved', cardId: null });
+      updateState({ logoSet: true, logo, name, location, description, handle, node, status: 'unsaved', cardId: null });
     }
     else {
-      updateState({ logo: null, name: null, cardId: null, location: null, description: null, handle: null,
+      updateState({ logoSet: true, logo: null, name: null, cardId: null, location: null, description: null, handle: null,
          status: null });
     }
     // eslint-disable-next-line
   }, [card.state, guid, listing]); 
 
   useEffect(() => {
-    updateState({ display: settings.state.display });
+    const { display, strings, menuStyle } = settings.state;
+    updateState({ display, strings, menuStyle });
   }, [settings.state]);
 
   const applyAction = async (action) => {
@@ -147,6 +153,14 @@ export function useContact(guid, listing, close) {
         }
         await card.actions.removeCard(state.cardId);
         close();
+      });
+    },
+    resync: async () => {
+      await applyAction(async () => {
+        const success = await card.actions.resyncCard(state.cardId);
+        if (!success) {
+          throw new Error("resync failed");
+        }
       });
     },
     remove: async () => {

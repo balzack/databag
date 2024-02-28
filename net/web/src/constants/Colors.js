@@ -65,6 +65,7 @@ export const LightTheme = {
   inputBorder: '#888888',
   sectionBorder: '#bbbbbb',
   headerBorder: '#aaaaaa',
+  drawerBorder: '#cccccc',
 };
 
 export const DarkTheme = {
@@ -94,5 +95,6 @@ export const DarkTheme = {
   inputBorder: '#aaaaaa',
   sectionBorder: '#777777',
   headerBorder: '#aaaaaa',
+  drawerBorder: '#444444',
 };
 

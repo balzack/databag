@@ -1,34 +1,84 @@
 import styled from 'styled-components';
-import { Colors } from 'constants/Colors';
 
 export const ContactWrapper = styled.div`
   height: 100%;
   width: 100%;
-  display: flex;
-  flex-direction: column;
-  background-color: ${Colors.profileForm};
 
+  .frame {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    color: ${props => props.theme.mainText};
+  }
+
+  .drawer {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    border-left: 1px solid ${props => props.theme.drawerBorder};
+    background-color: ${props => props.theme.selectedArea};
+    color: ${props => props.theme.mainText};
+  }
+
+  .actions {
+    display: flex;
+    flex-grow: 1;
+    justify-content: center;
+    padding-top: 16px;
+    flex-direction: column;
+    align-items: center;
+
+    .label {
+      padding-top: 16px;
+      border-bottom: 1px solid ${props => props.theme.sectionBorder};
+      color: ${props => props.theme.hintText};
+      font-size: 12px;
+      width: 50%;
+      max-width: 300px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
+  .top {
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: bold;
+  }
 
   .header {
     margin-left: 16px;
     margin-right: 16px;
     height: 48px;
-    border-bottom: 1px solid ${Colors.profileDivider};
     display: flex;
+    border-bottom: 1px solid ${props => props.theme.headerBorder};
     flex-direction: row;
     align-items: center;
+    justify-content: center;
     flex-shrink: 0;
+ 
+     .handle {
+       font-size: 20px;
+       font-weight: bold;
+       flex-grow: 1;
+       padding-left: 16px;
+     }
+
 
     .handle {
       font-size: 20px;
       font-weight: bold;
-      flex-grow: 1;
-      padding-left: 16px;
     }
 
     .close {
       font-size: 18px;
-      color: ${Colors.primary};
+      color: ${props => props.theme.hintText};
       cursor: pointer;
       padding-right: 16px;
     }
@@ -51,6 +101,18 @@ export const ContactWrapper = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+
+    .details {
+      align-items: center;
+      padding-left: 16px;
+      padding-right: 16px;
+      max-width: 400px;
+    }
+
+    .logo {
+      margin-top: 16px;
+      margin-bottom: 8px;
+    }
   }
 
   .logo {
@@ -58,6 +120,8 @@ export const ContactWrapper = styled.div`
     width: 20vw;
     margin-right: 32px;
     margin-left: 32px;
+    width: 192px;
+    height: 192px;
   }
 
   .details {
@@ -66,13 +130,14 @@ export const ContactWrapper = styled.div`
 
     .notset {
       font-style: italic;
-      color: ${Colors.grey};
+      color: ${props => props.theme.hintText};
     }
 
     .name {
       display: flex;
       flex-direction: row;
       align-items: center;
+      padding-bottom: 8px;
  
       .data {
         padding-right: 8px;
@@ -127,7 +192,7 @@ export const ContactWrapper = styled.div`
       }
 
       .close {
-        color: ${Colors.primary};
+        color: ${props => props.theme.mainText};
         cursor: pointer;
         width: 64px;
         display: flex;
@@ -140,19 +205,17 @@ export const ContactWrapper = styled.div`
   .controls {
     padding-top: 16px;
     padding-bottom: 16px;
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
 
     .button {
-      width: 192px;
-      padding-top: 2px;
-      padding-bottom: 2px;
-      margin-top: 16px;
       display: flex;
-      flex-direction: row;
-      align-items: center;
-      justify-content: center;
-      border-radius: 2px;
-      color: ${Colors.white};
-      background-color: ${Colors.primary};
+    }
+
+    .anticon {
+      font-size: 18px;
+      padding-top: 2px;
     }
 
     .label {
@@ -173,12 +236,11 @@ export const ContactWrapper = styled.div`
   }
 
   .footer {
-    flex-grow: 1;
     display: flex;
     align-items: flex-end;
     justify-content: center;
     padding-bottom: 16px;
-    color: ${Colors.grey};
+    color: ${props => props.theme.hintText};
   }
 `
 
