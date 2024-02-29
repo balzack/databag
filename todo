@@ -4,6 +4,7 @@ access:
   - translation
   - language
   - color theme
+  - more text hints
 
 thread:
   - dark style
