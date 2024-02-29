@@ -4,13 +4,14 @@ import { Login } from './login/Login';
 import { Admin } from './admin/Admin';
 import { CreateAccount } from './createAccount/CreateAccount';
 import { ThemeProvider } from "styled-components";
+import { Select } from 'antd';
 
-import login from 'images/login.png';
 import dogin from 'images/dogin.png';
+import bogin from 'images/bogin.png';
 
 export function Access({ mode }) {
 
-  const { state } = useAccess();
+  const { state, actions } = useAccess();
 
   return (
     <ThemeProvider theme={state.colors}>
@@ -22,7 +23,7 @@ export function Access({ mode }) {
                 <img className="splash" src={dogin} alt="Databag Splash" />
               )}
               { state.scheme === 'light' && (
-                <img className="splash" src={login} alt="Databag Splash" />
+                <img className="splash" src={bogin} alt="Databag Splash" />
               )}
             </div>
             <div className="right">
@@ -35,6 +36,30 @@ export function Access({ mode }) {
               { mode === 'admin' && (
                 <Admin />
               )}
+              <div className="footer">
+                <div className="option">
+                  <div className="label">{state.strings.theme}</div>
+                  <Select
+                      defaultValue={null}
+                      size="small"
+                      style={{ width: 128 }}
+                      value={state.theme}
+                      onChange={actions.setTheme}
+                      options={state.themes}
+                    />
+                </div>
+                <div className="option">
+                  <div className="label">{state.strings.language}</div>
+                  <Select
+                      defaultValue={null}
+                      size="small"
+                      style={{ width: 128 }}
+                      value={state.language}
+                      onChange={actions.setLanguage}
+                      options={state.languages}
+                    />
+                </div>
+              </div>
             </div>
           </div>
         )}
@@ -50,6 +75,32 @@ export function Access({ mode }) {
               { mode === 'admin' && (
                 <Admin />
               )}
+
+              <div className="footer">
+                <div className="option">
+                  <div className="label">{state.strings.theme}</div>
+                  <Select
+                      defaultValue={null}
+                      size="small"
+                      style={{ width: 128 }}
+                      value={state.theme}
+                      onChange={actions.setTheme}
+                      options={state.themes}
+                    />
+                </div>
+                <div className="option">
+                  <div className="label">{state.strings.language}</div>
+                  <Select
+                      defaultValue={null}
+                      size="small"
+                      style={{ width: 128 }}
+                      value={state.language}
+                      onChange={actions.setLanguage}
+                      options={state.languages}
+                    />
+                </div>
+              </div>
+
             </div>
           </div>
         )}

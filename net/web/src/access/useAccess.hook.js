@@ -9,6 +9,11 @@ export function useAccess() {
     display: null,
     scheme: null,
     colors: {},
+    theme: null,
+    themes: [],
+    language: null,
+    languages: [],
+    strings: {},
   });
 
   const navigate = useNavigate();
@@ -45,11 +50,18 @@ export function useAccess() {
 
 
   useEffect(() => {
-    const { colors, display, scheme } = settings.state;
-    updateState({ colors, display, scheme });
+    const { theme, themes, strings, language, languages, colors, display, scheme } = settings.state;
+    updateState({ theme, themes, language, languages, strings, colors, display, scheme });
   }, [settings.state]);
 
-  const actions = {};
+  const actions = {
+    setTheme: (theme) => {
+      settings.actions.setTheme(theme);
+    },
+    setLanguage: (language) => {
+      settings.actions.setLanguage(language);
+    },
+  };
 
   return { state, actions };
 }

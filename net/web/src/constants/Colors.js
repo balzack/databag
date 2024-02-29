@@ -42,7 +42,7 @@ export const Colors = {
 export const LightTheme = {
   splashArea: '#8fbea7',
   baseArea: '#8fbea7',
-  frameArea: '#dddddd',
+  frameArea: '#e4e4e4',
   iconArea: '#ffffff',
   headerArea: '#f0f0f0',
   footerArea: '#f0f0f0',

@@ -77,6 +77,7 @@ export function AccountAccess() {
             <Select
                 defaultValue={null}
                 style={{ width: 128 }}
+                size="small"
                 value={state.theme}
                 onChange={actions.setTheme}
                 options={state.themes}
@@ -87,6 +88,7 @@ export function AccountAccess() {
             <Select
                 defaultValue={null}
                 style={{ width: 128 }}
+                size="small"
                 value={state.language}
                 onChange={actions.setLanguage}
                 options={state.languages}

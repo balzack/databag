@@ -94,6 +94,19 @@ export const en = {
   requestConnection: 'Request Connection',
   cancelRequest: 'Cancel Request',
   resyncContact: 'Resync Contact',
+
+  login: 'Login',
+  create: 'Create',
+  createAccount: 'Create Account',
+  accountLogin: 'Account Login',
+  toCreate: 'Accounts are created through a link generated from the admin dashboard.',
+  admin: 'Admin',  
+  loginError: 'Login Error',
+  loginMessage: 'Please confirm your username and password.',
+  createError: 'Create Account Error',
+  createMessage: 'Please check with your administrator.',
+  adminError: 'Admin Access Error',
+  adminMessage: 'Please confirm your password.',
 };
 
 export const fr = {
@@ -192,5 +205,18 @@ export const fr = {
   requestConnection: 'Demander une Connexion',
   cancelRequest: 'Annuler la Demande',
   resyncContact: 'Resynchroniser le Contact',
+
+  login: 'Connecter',
+  create: 'Créer',
+  createAccount: 'Créer un Compte',
+  accountLogin: 'Connexion au Compte',
+  toCreate: 'Les comptes sont créés via un lien généré depuis le tableau de bord d\'administration.',
+  admin: 'Administrateur',
+  loginError: 'Erreur de connexion',
+  loginMessage: 'Veuillez confirmer votre nom d\'utilisateur et votre mot de passe.',
+  createError: 'Erreur de création de compte',
+  createMessage: 'Veuillez vérifier auprès de votre administrateur.',
+  adminError: 'Erreur d\'Accès',
+  adminMessage: 'Veuillez confirmer votre mot de passe',
 };
 

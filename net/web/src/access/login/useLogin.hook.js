@@ -1,5 +1,6 @@
 import { useContext, useState, useEffect } from 'react';
 import { AppContext } from 'context/AppContext';
+import { SettingsContext } from 'context/SettingsContext';
 import { getAvailable } from 'api/getAvailable';
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -9,13 +10,17 @@ export function useLogin() {
     username: '',
     password: '',
     available: false,
+    availableSet: false,
     disabled: true,
     busy: false,
+    strings: {},
+    menuStyle: {},
   });
 
   const navigate = useNavigate();
   const { search } = useLocation();
   const app = useContext(AppContext);
+  const settings = useContext(SettingsContext);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
@@ -60,7 +65,7 @@ export function useLogin() {
     const count = async () => {
       try {
         const available = await getAvailable()
-        updateState({ available: available !== 0 })
+        updateState({ availableSet: true, available: available !== 0 })
       }
       catch(err) {
         console.log(err);
@@ -69,6 +74,11 @@ export function useLogin() {
     count();
     // eslint-disable-next-line
   }, [])
+
+  useEffect(() => {
+    const { strings, menuStyle } = settings.state;
+    updateState({ strings, menuStyle });
+  }, [settings.state]);
 
   const access =  async (token) => {
     if (!state.busy) {

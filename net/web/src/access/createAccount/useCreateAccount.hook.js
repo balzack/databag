@@ -1,5 +1,6 @@
 import { useContext, useState, useEffect, useRef } from 'react';
 import { AppContext } from 'context/AppContext';
+import { SettingsContext } from 'context/SettingsContext';
 import { useNavigate, useLocation } from "react-router-dom";
 import { getUsername } from 'api/getUsername';
 
@@ -13,11 +14,14 @@ export function useCreateAccount() {
     busy: false,
     validatetatus: 'success',
     help: '',
+    strings: {},
+    menuStyle: {},
   });
 
   const navigate = useNavigate();
   const { search } = useLocation();
   const app = useContext(AppContext);
+  const settings = useContext(SettingsContext);
   const debounce = useRef(null);
 
   const updateState = (value) => {
@@ -90,6 +94,11 @@ export function useCreateAccount() {
       navigate('/login');
     },
   };
+
+  useEffect(() => {
+    const { strings, menuStyle } = settings.state;
+    updateState({ strings, menuStyle });
+  }, [settings.state]);
 
   useEffect(() => {
     let params = new URLSearchParams(search);
