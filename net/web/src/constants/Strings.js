@@ -16,6 +16,7 @@ export const en = {
   unsetSealing: 'Unset Sealing Key',
   newTopic: 'New Topic', 
 
+  noTopics: 'No Topics',
   noConnected: 'No Connected Contacts',
   subjectOptional: 'Subject (optional)',
   members: 'Members',
@@ -113,6 +114,7 @@ export const fr = {
   unsetSealing: 'Clé de sécurité non définie',
   newTopic: 'Nouveau Sujet',
 
+  noTopics: 'Pas de Sujets',
   noConnected: 'Pas de Contacts Connecter',
   subjectOptional: 'Sujet (optionnel)',
   members: 'Membres',

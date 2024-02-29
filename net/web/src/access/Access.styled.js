@@ -29,6 +29,7 @@ export const AccessWrapper = styled.div`
       width: 50%;
       height: 100%;
       padding: 32px;
+      background-color: ${props => props.theme.splashArea};
 
       .splash {
         width: 100%;

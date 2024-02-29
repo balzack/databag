@@ -37,7 +37,7 @@ export function Channels({ open, active }) {
           />
         )}
         { state.channels.length === 0 && (
-          <div className="empty">No Topics</div>
+          <div className="empty">{ state.strings.noTopics }</div>
         )}
       </div>
       { state.display !== 'small' && (

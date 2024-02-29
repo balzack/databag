@@ -7,6 +7,8 @@ export function useAccess() {
 
   const [state, setState] = useState({
     display: null,
+    scheme: null,
+    colors: {},
   });
 
   const navigate = useNavigate();
@@ -43,8 +45,8 @@ export function useAccess() {
 
 
   useEffect(() => {
-    const { display } = settings.state;
-    updateState({ display });
+    const { colors, display, scheme } = settings.state;
+    updateState({ colors, display, scheme });
   }, [settings.state]);
 
   const actions = {};
