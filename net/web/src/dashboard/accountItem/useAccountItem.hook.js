@@ -12,6 +12,9 @@ export function useAccountItem(item, remove) {
     removeBusy: false,
     accessBusy: false,
     showAccess: false,
+    display: null,
+    menuStyle: {},
+    strings: {},
   });
  
   const app = useContext(AppContext);
@@ -31,14 +34,15 @@ export function useAccountItem(item, remove) {
       guid: item?.guid,
       handle: item?.handle,
       storage: Math.floor(item?.storageUsed > 1073741824 ? item?.storageUsed / 1073741824 : item?.storageUsed / 1048576),
-      storageUnit: item?.storageUsed > 1073741824 ? "GB" : "MB",
+      storageUnit: item?.storageUsed > 1073741824 ? state.strings.gb : state.strings.mb,
       imageUrl: item?.imageSet ? getAccountImageUrl(app.state.adminToken, item?.accountId) : null,
     });
-  }, [app.state.adminToken, item]); 
+  }, [app.state.adminToken, item, state.strings]); 
 
   useEffect(() => {
-    updateState({ display: settings.state.display });
-  }, [settings]);
+    const { display, menuStyle, strings } = settings.state;
+    updateState({ display, menuStyle, strings });
+  }, [settings.state]);
 
   const actions = {
     setAccessLink: async () => {

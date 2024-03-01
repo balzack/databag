@@ -1,11 +1,4 @@
 
-access:
-  - dark style
-  - translation
-  - language
-  - color theme
-  - more text hints
-
 thread:
   - dark style
   - translation
@@ -24,7 +17,3 @@ calling:
   - fullscreen
   - device selection
 
-admin:
-  - dark style
-  - translation
-  
