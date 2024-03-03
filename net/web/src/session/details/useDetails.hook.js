@@ -25,6 +25,7 @@ export function useDetails() {
     showEditSubject: false,
     editSubject: null,
 
+    strings: {},
     display: 'small',
     sealed: false,
     contentKey: null,
@@ -72,8 +73,9 @@ export function useDetails() {
   }, [account.state.sealKey, conversation.state.channel?.data?.channelDetail]);
 
   useEffect(() => {
-    updateState({ display: settings.state.display });
-  }, [settings]);
+    const { strings, display } = settings.state;
+    updateState({ strings, display });
+  }, [settings.state]);
 
   useEffect(() => {
 

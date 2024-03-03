@@ -16,6 +16,7 @@ export const en = {
   unsetSealing: 'Unset Sealing Key',
   newTopic: 'New Topic', 
 
+  noContacts: 'No Contacts',
   noTopics: 'No Topics',
   noConnected: 'No Connected Contacts',
   subjectOptional: 'Subject (optional)',
@@ -160,6 +161,8 @@ export const en = {
   fontColor: 'Change Font Color',
   fontSize: 'Change Font Size',
   postMessage: 'Post Message',
+
+  leave: 'Leave',
 };
 
 export const fr = {
@@ -180,6 +183,7 @@ export const fr = {
   unsetSealing: 'Clé de sécurité non définie',
   newTopic: 'Nouveau Sujet',
 
+  noContacts: 'Pas de Contacts',
   noTopics: 'Pas de Sujets',
   noConnected: 'Pas de Contacts Connecter',
   subjectOptional: 'Sujet (optionnel)',
@@ -324,5 +328,7 @@ export const fr = {
   fontColor: 'Changer la Couleur du Message',
   fontSize: 'Changer la Taille du Message',
   postMessage: 'Publier le Message',
+
+  leave: 'Partir',
 };
 

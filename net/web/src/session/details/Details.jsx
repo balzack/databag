@@ -1,9 +1,9 @@
-import { Button, Modal } from 'antd';
+import { Button, Modal, Tooltip } from 'antd';
 import { DetailsWrapper, ModalFooter } from './Details.styled';
-import { DoubleRightOutlined, RightOutlined, CloseOutlined } from '@ant-design/icons';
+import { CloseOutlined } from '@ant-design/icons';
 import { useDetails } from './useDetails.hook';
 import { Logo } from 'logo/Logo';
-import { EditOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
+import { EditOutlined, CloseCircleOutlined, UserSwitchOutlined, DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import { CardSelect } from '../cardSelect/CardSelect';
 import { EditSubject } from './editSubject/EditSubject';
 import { EditMembers } from './editMembers/EditMembers';
@@ -128,32 +128,27 @@ export function Details({ closeDetails, closeConversation, openContact }) {
   return (
     <DetailsWrapper>
       { modalContext }
-      <div class="header">
-        <div class="label">Topic Details</div>
+      <div className="header">
+        <div className="label">Topic Details</div>
         { state.display === 'xlarge' && (
-          <div class="dismiss" onClick={closeConversation}>
-            <DoubleRightOutlined />
-          </div>
-        )}
-        { state.display === 'small' && (
-          <div class="dismiss" onClick={closeDetails}>
+          <div className="dismiss" onClick={closeConversation}>
             <CloseOutlined />
           </div>
         )}
-        { state.display !== 'small' && state.display !== 'xlarge' && (
-          <div class="dismiss" onClick={closeDetails}>
-            <RightOutlined />
+        { state.display === 'small' && (
+          <div className="dismiss" onClick={closeDetails}>
+            <CloseOutlined />
           </div>
         )}
       </div>
-      <div class="content">
-        <div class="description">
-          <div class="logo">
+      <div className="content">
+        <div className="description">
+          <div className="logo">
             <Logo src={state.logo} width={72} height={72} radius={4} img={state.img} />
           </div>
-          <div class="stats">
+          <div className="stats">
             { !state.host && (
-              <div class="subject" onClick={actions.setEditSubject}>
+              <div className="subject" onClick={actions.setEditSubject}>
                 { state.sealed && !state.contentKey && (
                   <LockFilled style={{ paddingRight: 4 }} />
                 )}
@@ -167,14 +162,14 @@ export function Details({ closeDetails, closeConversation, openContact }) {
                   <span>{ state.label }</span>
                 )}
                 { (!state.sealed || state.contentKey) && (
-                  <span class="edit" onClick={actions.setEditSubject}>
+                  <span className="edit" onClick={actions.setEditSubject}>
                     <EditOutlined style={{ paddingLeft: 4 }}/>
                   </span>
                 )}
               </div>
             )}
             { state.host && (
-              <div class="subject">
+              <div className="subject">
                 { state.sealed && !state.contentKey && (
                   <LockFilled style={{ paddingRight: 4 }} />
                 )}
@@ -190,25 +185,36 @@ export function Details({ closeDetails, closeConversation, openContact }) {
               </div>
             )}
             { !state.host && (
-              <div class="host">host</div>
+              <div className="host">host</div>
             )}
             { state.host && (
-              <div class="host">guest</div>
+              <div className="host">guest</div>
             )}
-            <div class="created">{ state.started }</div>
+            <div className="created">{ state.started }</div>
           </div>
         </div>
-        { !state.host && (
-          <div class="button" onClick={deleteChannel}>Delete Topic</div>
-        )}
-        { !state.host && !state.sealed && (
-          <div class="button" onClick={actions.setEditMembers}>Edit Membership</div>
-        )}
-        { state.host && (
-          <div class="button" onClick={leaveChannel}>Leave Topic</div>
-        )}
-        <div class="label">Members</div>
-        <div class="members">
+        <div className="actions">
+          <div className="label">{ state.strings.actions }</div>
+          <div className="controls">
+            { !state.host && (
+              <Tooltip placement="top" title="Delete Topic">
+                <Button className="button" type="primary" icon={<DeleteOutlined />} size="medium"  onClick={deleteChannel}>{ state.strings.remove }</Button>
+              </Tooltip>
+            )}
+            { !state.host && !state.sealed && (
+              <Tooltip placement="top" title="Edit Membership">
+                <Button className="button" type="primary" icon={<UserSwitchOutlined />} size="medium"  onClick={actions.setEditMembers}>{state.strings.members}</Button>
+              </Tooltip>
+            )}
+            { state.host && (
+              <Tooltip placement="top" title="Leave Channel">
+                <Button className="button" type="primary" icon={<CloseCircleOutlined />} size="medium"  onClick={leaveChannel}>{state.strings.leave}</Button>
+              </Tooltip>
+            )}
+          </div>
+        </div>
+        <div className="label">Members</div>
+        <div className="members">
           <CardSelect filter={(item) => {
             if(state.members.includes(item.id)) {
               return true;

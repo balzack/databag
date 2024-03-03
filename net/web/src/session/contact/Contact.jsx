@@ -120,7 +120,7 @@ export function Contact({ close, guid, listing }) {
               </Tooltip>
             )}
             { state.status === 'connecting' && (
-              <Tooltip placement="top" title="Cancel Request">
+              <Tooltip placement="top" title={state.strings.cancelRequest}>
                 <Button className="button" type="primary" loading={state.busy} icon={<StopOutlined />} size="medium"  onClick={() => updateContact(actions.disconnect)}>{ state.strings.cancel }</Button>
               </Tooltip>
             )}

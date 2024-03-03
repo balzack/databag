@@ -77,7 +77,7 @@ export function Cards({ closeCards, openContact, openChannel, openListing }) {
             )} />
         )}
         { state.cards.length === 0 && (
-          <div className="empty">No Contacts</div>
+          <div className="empty">{ state.strings.noContacts }</div>
         )}
       </div>
     </CardsWrapper>

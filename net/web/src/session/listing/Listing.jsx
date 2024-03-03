@@ -69,7 +69,7 @@ export function Listing({ closeListing, openContact }) {
               )} />
           )}
           { state.contacts.length === 0 && (
-            <div className="empty">No Contacts</div>
+            <div className="empty">{ state.strings.noContacts }</div>
           )}
         </div>
       </div>
