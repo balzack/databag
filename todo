@@ -1,9 +1,4 @@
 
-thread:
-  - dark style
-  - translation
-  - button tool tip
-
 details:
   - back button
   - dark style

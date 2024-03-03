@@ -1,10 +1,10 @@
 import styled from 'styled-components';
-import { Colors } from 'constants/Colors';
 
 export const TopicItemWrapper = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
+  color: ${props => props.theme.mainText};
 
   .topic-header {
     display: flex;
@@ -13,7 +13,7 @@ export const TopicItemWrapper = styled.div`
     padding-left: 16px;
     margin-right: 16px;
     padding-top: 8px;
-    border-top: 1px solid #dddddd;
+    border-top: 1px solid ${props => props.theme.itemBorder};
 
     &:hover .topic-options {
       visibility: visible;
@@ -29,7 +29,7 @@ export const TopicItemWrapper = styled.div`
         display: flex;
         flex-direction: row;
         border-radius: 4px;
-        background-color: #eeeeee;
+        background-color: ${props => props.theme.modalArea};
         margin-top: 2px;
 
         .button {
@@ -40,11 +40,11 @@ export const TopicItemWrapper = styled.div`
         }
 
         .remove {
-          color: ${Colors.warn};
+          color: ${props => props.theme.alertText};
         }
 
         .edit {
-          color: ${Colors.primary};
+          color: ${props => props.theme.linkText};
         }
       }
     }
@@ -63,18 +63,18 @@ export const TopicItemWrapper = styled.div`
       .comments {
         padding-left: 8px;
         cursor: pointer;
-        color: #888888;
+        color: ${props => props.theme.descriptionText};
       }
 
       .set {
         font-weight: bold;
-        color: #444444;
+        color: ${props => props.theme.mainText};
         padding-right: 8px;
       }
       .unset {
         font-weight: bold;
         font-style: italic;
-        color: #888888;
+        color: ${props => props.theme.descriptionText};
         padding-right: 8px;
       }
       .unknown {
@@ -87,7 +87,7 @@ export const TopicItemWrapper = styled.div`
 
   .sealed-message {
     font-style: italic;
-    color: #aaaaaa;
+    color: ${props => props.theme.placeholderText};
     padding-left: 72px;
   }
 
@@ -97,8 +97,8 @@ export const TopicItemWrapper = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #eeeeee;
-    color: #888888;
+    background-color: ${props => props.theme.frameArea};
+    color: ${props => props.theme.placeholderText};
     margin-left: 72px;
   }
 
@@ -118,17 +118,29 @@ export const TopicItemWrapper = styled.div`
     padding-left: 72px;
     white-space: pre-line;
     min-height: 4px;
+    color: ${props => props.theme.mainText};
   }
 
   .editing {
     display: flex;
     flex-direction: column;
     border-radius: 4px;
-    border: 1px solid #aaaaaa;
+    border: 1px solid ${props => props.theme.sectionBorder};
+    background-color: ${props => props.theme.inputArea};
     margin-top: 8px;
     margin-bottom: 8px;
     margin-right: 16px;
     margin-left: 72px;
+
+    textarea {
+      padding-left: 8px;
+      background-color: ${props => props.theme.inputArea};
+      color: ${props => props.theme.mainText};
+    }
+
+    textarea::placeholder {
+      color: ${props => props.theme.placeholderText};
+    }
 
     .controls {
       display: flex;

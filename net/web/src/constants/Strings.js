@@ -149,6 +149,17 @@ export const en = {
   webPassword: 'WebRTC Password',
   failedLoad: 'Failed to Load',
   limit: 'Limit',
+
+  deleteMessage: 'Deleting Message',
+  messageHint: 'Are you sure you want to delete the message?',
+  newMessage: 'New Message',
+  attachImage: 'Attach Image',
+  attachVideo: 'Attach Video',
+  attachAudio: 'Attach Audio',
+  attachFile: 'Attach File',
+  fontColor: 'Change Font Color',
+  fontSize: 'Change Font Size',
+  postMessage: 'Post Message',
 };
 
 export const fr = {
@@ -302,5 +313,16 @@ export const fr = {
   webPassword: 'Mot de Passe WebRTC',
   failedLoad: 'Échec du Chargement',
   limit: 'Limite',
+
+  deleteMessage: 'Suppression du Message',
+  messageHint: 'Êtes-vous Sûr de Vouloir Supprimer le Message?',
+  newMessage: 'Nouveau Message',
+  attachImage: 'Joindre une Image',
+  attachVideo: 'Joindre une Vidéo',
+  attachAudio: 'Joindre un Audio',
+  attachFile: 'Joindre un Fichier',
+  fontColor: 'Changer la Couleur du Message',
+  fontSize: 'Changer la Taille du Message',
+  postMessage: 'Publier le Message',
 };
 

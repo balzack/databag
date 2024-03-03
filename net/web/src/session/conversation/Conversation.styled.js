@@ -1,18 +1,17 @@
 import styled from 'styled-components';
-import { Colors } from 'constants/Colors';
 
 export const ConversationWrapper = styled.div`
   height: 100%;
   width: 100%;
   display: flex;
   flex-direction: column;
-  background-color: ${Colors.profileForm};
+  background-color: ${props => props.theme.selectedArea};
 
   .header {
     margin-left: 16px;
     margin-right: 16px;
     height: 48px;
-    border-bottom: 1px solid ${Colors.profileDivider};
+    border-bottom: 1px solid ${props => props.theme.headerBorder};
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -27,6 +26,7 @@ export const ConversationWrapper = styled.div`
       flex-direction: row;
       align-items: center;
       min-width: 0;
+      color: ${props => props.theme.mainText};
 
       .label {
         padding-left: 8px;
@@ -43,7 +43,7 @@ export const ConversationWrapper = styled.div`
 
     .button {
       font-size: 18px;
-      color: ${Colors.grey};
+      color: ${props => props.theme.hintText};
       cursor: pointer;
       padding-right: 16px;
       padding-left: 16px;
@@ -65,7 +65,7 @@ export const ConversationWrapper = styled.div`
       align-items: center;
       justify-content: center;
       font-size: 20;
-      color: ${Colors.grey};
+      color: ${props => props.theme.hintText};
     }
 
     .loading {
@@ -85,21 +85,21 @@ export const ConversationWrapper = styled.div`
     padding-right: 16px;
     
     .line {
-      border-top: 1px solid ${Colors.divider};
+      border-top: 1px solid ${props => props.theme.itemBorder};
     }
 
     .progress-idle {
-      border-top: 1px solid ${Colors.divider};
+      border-top: 1px solid ${props => props.theme.itemBorder};
       height: 1px;
     }
 
     .progress-active {
-      border-top: 1px solid ${Colors.primary};
+      border-top: 1px solid ${props => props.theme.linkText};
       height: 1px;
     }
 
     .progress-error {
-      border-top: 1px solid ${Colors.alert};
+      border-top: 1px solid ${props => props.theme.alertText};
       width: 100%;
       height: 1px;
       display: flex;
@@ -122,7 +122,7 @@ export const ConversationWrapper = styled.div`
 `
 
 export const StatusError = styled.div`
-  color: ${Colors.error};
+  color: ${props => props.theme.alertText};
   font-size: 14px;
   padding-left: 8px;
   cursor: pointer;

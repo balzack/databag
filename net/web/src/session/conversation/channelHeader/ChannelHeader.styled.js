@@ -1,11 +1,10 @@
 import styled from 'styled-components';
-import { Colors } from 'constants/Colors';
 
 export const ChannelHeaderWrapper = styled.div`
   margin-left: 16px;
   margin-right: 16px;
   height: 48px;
-  border-bottom: 1px solid ${Colors.profileDivider};
+  border-bottom: 1px solid ${props => props.theme.headerBorder};
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -22,6 +21,7 @@ export const ChannelHeaderWrapper = styled.div`
     min-width: 0;
 
     .label {
+      color: ${props => props.theme.mainText};
       padding-left: 8px;
       white-space: nowrap;
       text-overflow: ellipsis;
@@ -36,7 +36,7 @@ export const ChannelHeaderWrapper = styled.div`
 
   .button {
     font-size: 18px;
-    color: ${Colors.grey};
+    color: ${props => props.theme.hintText};
     cursor: pointer;
     padding-right: 16px;
     padding-left: 16px;
@@ -44,7 +44,7 @@ export const ChannelHeaderWrapper = styled.div`
 `
 
 export const StatusError = styled.div`
-  color: ${Colors.error};
+  color: ${props => props.theme.alertText};
   font-size: 14px;
   padding-left: 8px;
   cursor: pointer;
