@@ -239,7 +239,7 @@ export function useConversation(cardId, channelId) {
           item.assets = message.assets;
           item.text = message.text;
           item.clickable = clickableText(message.text);
-          item.textColor = message.textColor ? message.textColor : state.colors.mainText;
+          item.textColor = message.textColor ? message.textColor : null;
           item.textSize = message.textSize ? message.textSize : 14;
         }
         if (detail.dataType === 'sealedtopic' && state.contentKey) {
@@ -247,7 +247,7 @@ export function useConversation(cardId, channelId) {
           item.assets = subject.message.assets;
           item.text = subject.message.text;
           item.clickable = clickableText(subject.message.text);
-          item.textColor = subject.message.textColor ? subject.message.textColor : state.colors.mainText;
+          item.textColor = subject.message.textColor ? subject.message.textColor : null;
           item.textSize = subject.message.textSize ? subject.message.textSize : 14;
         }
       }

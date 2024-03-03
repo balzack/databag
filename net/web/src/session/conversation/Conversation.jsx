@@ -19,6 +19,7 @@ export function Conversation({ closeConversation, openDetails, cardId, channelId
       update={(text) => actions.updateTopic(topic, text)}
       sealed={state.sealed && !state.contentKey}
       strings={state.strings}
+      colors={state.colors}
       menuStyle={state.menuStyle}
     />)
   }

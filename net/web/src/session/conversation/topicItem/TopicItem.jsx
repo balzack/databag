@@ -9,7 +9,7 @@ import { ExclamationCircleOutlined, DeleteOutlined, EditOutlined, FireOutlined, 
 import { Carousel } from 'carousel/Carousel';
 import { useTopicItem } from './useTopicItem.hook';
 
-export function TopicItem({ host, contentKey, sealed, topic, update, remove, strings, menuStyle }) {
+export function TopicItem({ host, contentKey, sealed, topic, update, remove, strings, colors, menuStyle }) {
 
   const [ modal, modalContext ] = Modal.useModal();
   const { state, actions } = useTopicItem(topic, contentKey);
@@ -106,7 +106,7 @@ export function TopicItem({ host, contentKey, sealed, topic, update, remove, str
             <>
               { topic.transform === 'error' && (
                 <div className="asset-placeholder">
-                  <FireOutlined style={{ fontSize: 32, color: '#ff8888' }} />
+                  <FireOutlined style={{ fontSize: 32, color: colors.alertText }} />
                 </div>
               )}
               { topic.transform === 'incomplete' && (
@@ -126,7 +126,7 @@ export function TopicItem({ host, contentKey, sealed, topic, update, remove, str
           )}
           { !sealed && !state.editing && (
             <div className="message">
-              <div style={{ color: topic.textColor, fontSize: topic.textSize }}>{ topic.clickable }</div>
+              <div style={{ color: topic.textColor ? topic.textColor : colors.mainText, fontSize: topic.textSize }}>{ topic.clickable }</div>
             </div>
           )}
           { state.editing && (
