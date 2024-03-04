@@ -21,9 +21,9 @@ export function Details({ closeDetails, closeConversation, openContact }) {
     catch(err) {
       console.log(err);
       modal.error({
-        title: 'Failed to Set Conversation Member',
-        content: 'Please try again.',
-        bodyStyle: { padding: 16 },
+        title: <span style={state.menuStyle}>{state.strings.operationFailed}</span>,
+        content: <span style={state.menuStyle}>{state.strings.tryAgain}</span>,
+        bodyStyle: { borderRadius: 8, padding: 16, ...state.menuStyle },
       });
     }
   }
@@ -35,9 +35,9 @@ export function Details({ closeDetails, closeConversation, openContact }) {
     catch(err) {
       console.log(err);
       modal.error({
-        title: 'Failed to Clear Conversation Member',
-        content: 'Please try again.',
-        bodyStyle: { padding: 16 },
+        title: <span style={state.menuStyle}>{state.strings.operationFailed}</span>,
+        content: <span style={state.menuStyle}>{state.strings.tryAgain}</span>,
+        bodyStyle: { borderRadius: 8, padding: 16, ...state.menuStyle },
       });
     }
   }
@@ -63,9 +63,9 @@ export function Details({ closeDetails, closeConversation, openContact }) {
     }
     catch(err) {
       modal.error({
-        title: 'Failed to Delete Topic',
-        content: 'Please try again.',
-        bodyStyle: { padding: 16 },
+        title: <span style={state.menuStyle}>{state.strings.operationFailed}</span>,
+        content: <span style={state.menuStyle}>{state.strings.tryAgain}</span>,
+        bodyStyle: { borderRadius: 8, padding: 16, ...state.menuStyle },
       });
     }
   }
@@ -91,9 +91,9 @@ export function Details({ closeDetails, closeConversation, openContact }) {
     }
     catch(err) {
       modal.error({
-        title: 'Failed to Leave Topic',
-        content: 'Please try again.',
-        bodyStyle: { padding: 16 },
+        title: <span style={state.menuStyle}>{state.strings.operationFailed}</span>,
+        content: <span style={state.menuStyle}>{state.strings.tryAgain}</span>,
+        bodyStyle: { borderRadius: 8, padding: 16, ...state.menuStyle },
       });
     }
   }
@@ -105,9 +105,9 @@ export function Details({ closeDetails, closeConversation, openContact }) {
     }
     catch(err) {
       modal.error({
-        title: 'Failed to Update Subject',
-        content: 'Please try again.',
-        bodyStyle: { padding: 16 },
+        title: <span style={state.menuStyle}>{state.strings.operationFailed}</span>,
+        content: <span style={state.menuStyle}>{state.strings.tryAgain}</span>,
+        bodyStyle: { borderRadius: 8, padding: 16, ...state.menuStyle },
       });
     }
   };
@@ -224,9 +224,9 @@ export function Details({ closeDetails, closeConversation, openContact }) {
           markup={state.host} />
         </div>
       </div>
-      <Modal title="Edit Subject" centered visible={state.showEditSubject} footer={editSubjectFooter}
-          bodyStyle={{ padding: 16 }} onCancel={actions.clearEditSubject}>
-        <EditSubject subject={state.editSubject} setSubject={actions.setSubjectUpdate} />
+      <Modal centered visible={state.showEditSubject} closable={false} footer={null} bodyStyle={{borderRadius: 8, padding: 16, ...state.menuStyle}}>
+        <EditSubject subject={state.editSubject} cancelSubject={actions.clearEditSubject} saveSubject={saveSubject} setSubject={actions.setSubjectUpdate}
+            strings={state.strings} />
       </Modal>
       <Modal title="Edit Members" centered visible={state.showEditMembers} footer={editMembersFooter}
           bodyStyle={{ padding: 16 }} onCancel={actions.clearEditMembers}>

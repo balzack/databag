@@ -170,15 +170,15 @@ export function Profile({ closeProfile }) {
 
         <ProfileDetailsWrapper>
           <div className="title">{ state.strings.profileDetails }</div>
-          <div class="info">
+          <div className="info">
             <Input placeholder={state.strings.name} spellCheck="false" onChange={(e) => actions.setEditName(e.target.value)}
                 defaultValue={state.editName} autocapitalize="word" />
           </div>
-          <div class="info">
+          <div className="info">
             <Input placeholder={state.strings.location} spellCheck="false" onChange={(e) => actions.setEditLocation(e.target.value)}
                 defaultValue={state.editLocation} autocapitalize="word" />
           </div>
-          <div class="info">
+          <div className="info">
             <Input.TextArea placeholder={state.strings.description} onChange={(e) => actions.setEditDescription(e.target.value)}
                 spellCheck="false" defaultValue={state.editDescription} autoSize={{ minRows: 2, maxRows: 6 }} />
           </div>

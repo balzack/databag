@@ -27,6 +27,7 @@ export function useDetails() {
 
     strings: {},
     display: 'small',
+    menuStyle: {},
     sealed: false,
     contentKey: null,
     seals: null,
@@ -73,8 +74,8 @@ export function useDetails() {
   }, [account.state.sealKey, conversation.state.channel?.data?.channelDetail]);
 
   useEffect(() => {
-    const { strings, display } = settings.state;
-    updateState({ strings, display });
+    const { menuStyle, strings, display } = settings.state;
+    updateState({ menuStyle, strings, display });
   }, [settings.state]);
 
   useEffect(() => {

@@ -10,7 +10,7 @@ import { BinaryFile } from './binaryFile/BinaryFile';
 import { Carousel } from 'carousel/Carousel';
 import { Gluejar } from '@charliewilco/gluejar'
 
-export function AddTopic({ contentKey, strings, menuStyle }) {
+export function AddTopic({ contentKey }) {
 
   const { state, actions } = useAddTopic(contentKey);
 
@@ -35,9 +35,9 @@ export function AddTopic({ contentKey, strings, menuStyle }) {
       catch (err) {
         console.log(err);
         modal.error({
-          title: <span style={menuStyle}>{strings.operationFailed}</span>,
-          content: <span style={menuStyle}>{strings.tryAgain}</span>,
-          bodyStyle: { borderRadius: 8, padding: 16, ...menuStyle },
+          title: <span style={state.menuStyle}>{state.strings.operationFailed}</span>,
+          content: <span style={state.menuStyle}>{state.strings.tryAgain}</span>,
+          bodyStyle: { borderRadius: 8, padding: 16, ...state.menuStyle },
         });
       }
     }
@@ -126,63 +126,61 @@ export function AddTopic({ contentKey, strings, menuStyle }) {
         </div>
       )}
       <div className="message">
-        <Input.TextArea ref={msg} placeholder={strings.newMessage} spellCheck="true" autoSize={{ minRows: 2, maxRows: 6 }}
+        <Input.TextArea ref={msg} placeholder={state.strings.newMessage} spellCheck="true" autoSize={{ minRows: 2, maxRows: 6 }}
             enterkeyhint="send" onKeyDown={(e) => keyDown(e)} onChange={(e) => actions.setMessageText(e.target.value)}
             value={state.messageText} autocapitalize="none" />
       </div>
       <div className="buttons">
         { state.enableImage && (
-          <Tooltip placement="top" title={strings.attachImage}>
+          <Tooltip placement="top" title={state.display === 'small' ? null : state.strings.attachImage}>
             <div className="button space" onClick={() => attachImage.current.click()}>
               <PictureOutlined />
             </div> 
           </Tooltip>
         )}
         { state.enableVideo && (
-          <Tooltip placement="top" title={strings.attachVideo}>
+          <Tooltip placement="top" title={state.display === 'small' ? null : state.strings.attachVideo}>
             <div className="button space" onClick={() => attachVideo.current.click()}>
               <VideoCameraOutlined />
             </div> 
           </Tooltip>
         )}
         { state.enableAudio && (
-          <Tooltip placement="top" title={strings.attachAudio}>
+          <Tooltip placement="top" title={state.display === 'small' ? null : state.strings.attachAudio}>
             <div className="button space" onClick={() => attachAudio.current.click()}>
               <SoundOutlined />
             </div> 
           </Tooltip>
         )}
-        <Tooltip placement="top" title={strings.attachFile}>
+        <Tooltip placement="top" title={state.display === 'small' ? null : state.strings.attachFile}>
           <div className="button space" onClick={() => attachBinary.current.click()}>
             <FieldBinaryOutlined />
           </div> 
         </Tooltip>
         <div className="bar space" />
         <div className="button space">
-          <Tooltip placement="top" title={strings.fontColor}>
+          <Tooltip placement="top" title={state.display === 'small' ? null : state.strings.fontColor}>
             <Dropdown overlay={picker} overlayStyle={{ minWidth: 0 }} trigger={['click']} placement="top">
               <FontColorsOutlined />
             </Dropdown>
           </Tooltip>
         </div>
         <div className="button space">
-          <Tooltip placement="top" title={strings.fontSize}>
+          <Tooltip placement="top" title={state.display === 'small' ? null : state.strings.fontSize}>
             <Dropdown overlay={sizer} overlayStyle={{ minWidth: 0 }} trigger={['click']} placement="top">
               <FontSizeOutlined />
             </Dropdown>
           </Tooltip>
         </div>
         <div className="end">
-          <Tooltip placement="top" title={strings.postMessage}>
-            <div className="button" onClick={addTopic}>
-              { state.busy && (
-                <Spin size="small" />
-              )}
-              { !state.busy && (
-                <SendOutlined />
-              )}
-            </div>
-          </Tooltip>
+          <div className="button" onClick={addTopic}>
+            { state.busy && (
+              <Spin size="small" />
+            )}
+            { !state.busy && (
+              <SendOutlined />
+            )}
+          </div>
         </div>
       </div>
     </AddTopicWrapper>

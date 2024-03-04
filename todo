@@ -1,9 +1,12 @@
 
 details:
-  - back button
   - dark style
   - translation
-  - action buttons
+  - action hints
+  - delete modal
+  - members modal
+  - leave modal
+  - subject modal
 
 calling:
   - dark style
