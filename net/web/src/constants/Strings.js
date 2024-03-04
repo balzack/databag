@@ -325,8 +325,8 @@ export const fr = {
   attachVideo: 'Joindre une Vidéo',
   attachAudio: 'Joindre un Audio',
   attachFile: 'Joindre un Fichier',
-  fontColor: 'Changer la Couleur du Message',
-  fontSize: 'Changer la Taille du Message',
+  fontColor: 'Changer la Couleur du Text',
+  fontSize: 'Changer la Taille du Text',
   postMessage: 'Publier le Message',
 
   leave: 'Partir',
