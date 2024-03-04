@@ -6,7 +6,7 @@ export function EditMembers({ members, setMember, clearMember, onClose, strings 
 
   return (
     <EditMembersWrapper>
-      <div className="title">Edit Membership</div>
+      <div className="title">{strings.editMembership}</div>
 
       <div className="list">
         <CardSelect

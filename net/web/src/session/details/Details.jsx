@@ -131,7 +131,7 @@ export function Details({ closeDetails, closeConversation, openContact }) {
     <DetailsWrapper>
       { modalContext }
       <div className="header">
-        <div className="label">Topic Details</div>
+        <div className="label">{state.strings.details}</div>
         { state.display === 'xlarge' && (
           <div className="dismiss" onClick={closeConversation}>
             <CloseOutlined />
@@ -187,10 +187,10 @@ export function Details({ closeDetails, closeConversation, openContact }) {
               </div>
             )}
             { !state.host && (
-              <div className="host">host</div>
+              <div className="host">{ state.strings.host }</div>
             )}
             { state.host && (
-              <div className="host">guest</div>
+              <div className="host">{ state.strings.guest }</div>
             )}
             <div className="created">{ state.started }</div>
           </div>
@@ -199,23 +199,23 @@ export function Details({ closeDetails, closeConversation, openContact }) {
           <div className="label">{ state.strings.actions }</div>
           <div className="controls">
             { !state.host && (
-              <Tooltip placement="top" title="Delete Topic">
+              <Tooltip placement="top" title={state.strings.deleteTopic}>
                 <Button className="button" type="primary" icon={<DeleteOutlined />} size="medium"  onClick={deleteChannel}>{ state.strings.remove }</Button>
               </Tooltip>
             )}
             { !state.host && !state.sealed && (
-              <Tooltip placement="top" title="Edit Membership">
+              <Tooltip placement="top" title={state.strings.editMembership}>
                 <Button className="button" type="primary" icon={<UserSwitchOutlined />} size="medium"  onClick={actions.setEditMembers}>{state.strings.members}</Button>
               </Tooltip>
             )}
             { state.host && (
-              <Tooltip placement="top" title="Leave Channel">
+              <Tooltip placement="top" title={state.strings.leaveTopic}>
                 <Button className="button" type="primary" icon={<CloseCircleOutlined />} size="medium"  onClick={leaveChannel}>{state.strings.leave}</Button>
               </Tooltip>
             )}
           </div>
         </div>
-        <div className="label">Members</div>
+        <div className="label">{state.strings.members}</div>
         <div className="members">
           <CardSelect filter={(item) => {
             if(state.members.includes(item.id)) {

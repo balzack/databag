@@ -89,10 +89,20 @@ export function useDetails() {
     const date = new Date(channelValue?.data?.channelDetail?.created * 1000);
     const now = new Date();
     if(now.getTime() - date.getTime() < 86400000) {
-      started = date.toLocaleTimeString([], {hour: 'numeric', minute:'2-digit'});
+      if (settings.state.timeFormat === '12h') {
+        started = date.toLocaleTimeString("en-US", {hour: 'numeric', minute:'2-digit'});
+      }
+      else {
+        started = date.toLocaleTimeString("en-GB", {hour: 'numeric', minute:'2-digit'});
+      }
     }
     else {
-      started = date.toLocaleDateString("en-US");
+      if (settings.state.dateFormat === 'mm/dd') {
+        started = date.toLocaleDateString("en-US");
+      }
+      else {
+        started = date.toLocaleDateString("en-GB");
+      }
     }
     if (cardValue) {
       host = cardValue.id;

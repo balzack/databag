@@ -168,6 +168,14 @@ export const en = {
   sureTopic: 'Are you sure you want to delete this topic?',
   confirmLeave: 'Leaving Topic',
   sureLeave: 'Are you sure you want to leave this topic?',
+
+  details: 'Details',
+  host: 'Host',
+  guest: 'Guest',
+  editSubject: 'Edit Subject',
+  editMembership: 'Edit Membership', 
+  deleteTopic: 'Delete Topic',
+  leaveTopic: 'Leave Topic',
 };
 
 export const fr = {
@@ -340,5 +348,13 @@ export const fr = {
   sureTopic: 'Êtes-Vous Sûr de Vouloir Supprimer ce Sujet?',
   confirmLeave: 'Quitter le Suject',
   sureLeave: 'Êtes-Vous Sûr de Vouloir Quitter ce Sujet?',
+
+  details: 'Détails',
+  host: 'Hôte',
+  guest: 'Invité',
+  editSubject: 'Modifier le Sujet',
+  editMembership: 'Modifier Membres du Suject',
+  deleteTopic: 'Supprimer le Sujet',
+  leaveTopic: 'Quitter le Suject',
 };
 
