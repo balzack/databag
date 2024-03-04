@@ -3,7 +3,7 @@ import { RightOutlined } from '@ant-design/icons';
 import { Space } from 'antd';
 import { useWelcome } from './useWelcome.hook';
 
-import light from 'images/session.png';
+import light from 'images/lightsess.png';
 import dark from 'images/darksess.png';
 
 export function Welcome() {
