@@ -44,11 +44,12 @@ export function Details({ closeDetails, closeConversation, openContact }) {
 
   const deleteChannel = async () => {
     modal.confirm({
-      title: 'Are you sure you want to delete the topic?',
+      title: <span style={state.menuStyle}>{state.strings.confirmTopic}</span>,
+      content: <span style={state.menuStyle}>{state.strings.sureTopic}</span>,
       icon: <ExclamationCircleOutlined />,
-      bodyStyle: { padding: 16 },
-      okText: "Yes, Delete",
-      cancelText: "No, Cancel",
+      bodyStyle: { borderRadius: 8, padding: 16, ...state.menuStyle },
+      okText: state.strings.remove,
+      cancelText: state.strings.cancel,
       onOk() {
         applyDeleteChannel();
       },
@@ -72,11 +73,12 @@ export function Details({ closeDetails, closeConversation, openContact }) {
 
   const leaveChannel = async () => {
     modal.confirm({
-      title: 'Are you sure you want to leave the topic?',
+      title: <span style={state.menuStyle}>{state.strings.confirmLeave}</span>,
+      content: <span style={state.menuStyle}>{state.strings.sureLeave}</span>,
       icon: <ExclamationCircleOutlined />,
-      bodyStyle: { padding: 16 },
-      okText: "Yes, Leave",
-      cancelText: "No, Cancel",
+      bodyStyle: { borderRadius: 8, padding: 16, ...state.menuStyle },
+      okText: state.strings.leave,
+      cancelText: state.strings.cancel,
       onOk() {
         applyLeaveChannel();
       },
@@ -228,9 +230,8 @@ export function Details({ closeDetails, closeConversation, openContact }) {
         <EditSubject subject={state.editSubject} cancelSubject={actions.clearEditSubject} saveSubject={saveSubject} setSubject={actions.setSubjectUpdate}
             strings={state.strings} />
       </Modal>
-      <Modal title="Edit Members" centered visible={state.showEditMembers} footer={editMembersFooter}
-          bodyStyle={{ padding: 16 }} onCancel={actions.clearEditMembers}>
-        <EditMembers members={state.editMembers} setMember={setMember} clearMember={clearMember} />
+      <Modal centered visible={state.showEditMembers} closable={false} footer={null} bodyStyle={{borderRadius: 8, padding: 16, ...state.menuStyle}}>
+        <EditMembers members={state.editMembers} setMember={setMember} clearMember={clearMember} onClose={actions.clearEditMembers} strings={state.strings} />
       </Modal>
     </DetailsWrapper>
   );

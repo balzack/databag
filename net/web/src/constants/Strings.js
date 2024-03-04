@@ -162,7 +162,12 @@ export const en = {
   fontSize: 'Change Font Size',
   postMessage: 'Post Message',
 
+  close: 'Close',
   leave: 'Leave',
+  confirmTopic: 'Deleting Topic',
+  sureTopic: 'Are you sure you want to delete this topic?',
+  confirmLeave: 'Leaving Topic',
+  sureLeave: 'Are you sure you want to leave this topic?',
 };
 
 export const fr = {
@@ -329,6 +334,11 @@ export const fr = {
   fontSize: 'Changer la Taille du Text',
   postMessage: 'Publier le Message',
 
-  leave: 'Partir',
+  close: 'Fermer',
+  leave: 'Quitter',
+  confirmTopic: 'Suppression du Sujet',
+  sureTopic: 'Êtes-Vous Sûr de Vouloir Supprimer ce Sujet?',
+  confirmLeave: 'Quitter le Suject',
+  sureLeave: 'Êtes-Vous Sûr de Vouloir Quitter ce Sujet?',
 };
 

@@ -16,7 +16,7 @@ export function AccountItem({ item, remove }) {
       content: <span style={state.menuStyle}>{state.strings.areSure}</span>,
       icon: <ExclamationCircleOutlined />,
       bodyStyle: { borderRadius: 8, padding: 16, ...state.menuStyle },
-      okText: state.strings.ok,
+      okText: state.strings.remove,
       cancelText: state.strings.cancel,
       onOk() {
         applyRemoveAccount();
