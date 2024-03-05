@@ -176,6 +176,10 @@ export const en = {
   editMembership: 'Edit Membership', 
   deleteTopic: 'Delete Topic',
   leaveTopic: 'Leave Topic',
+
+  integrated: 'Integrated',
+  microphone: 'Microphone',
+  camera: 'Camera'
 };
 
 export const fr = {
@@ -356,5 +360,9 @@ export const fr = {
   editMembership: 'Modifier Membres du Suject',
   deleteTopic: 'Supprimer le Sujet',
   leaveTopic: 'Quitter le Suject',
+
+  integrated: 'Intégré',
+  microphone: 'Microphone',
+  camera: 'Caméra'
 };
 

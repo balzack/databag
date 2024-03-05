@@ -9,7 +9,7 @@ export const SelectItemWrapper = styled.div`
     height: 48px;
     width: 100%;
     padding-left: 8px;
-    padding-right: 8px;
+    padding-right: 16px;
     display: flex;
     align-items: center;
 

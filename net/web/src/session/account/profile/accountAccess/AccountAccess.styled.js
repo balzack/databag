@@ -35,6 +35,7 @@ export const AccountAccessWrapper = styled.div`
       display: flex;
       padding-top: 8px;
       align-items: center;
+      width: 100%;
 
       .label {
         padding-right: 16px;

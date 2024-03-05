@@ -2,6 +2,7 @@ import { useRef, useState, useEffect, useContext } from 'react';
 import { AccountContext } from 'context/AccountContext';
 import { ProfileContext } from 'context/ProfileContext';
 import { SettingsContext } from 'context/SettingsContext';
+import { RingContext } from 'context/RingContext';
 import { generateSeal, unlockSeal, updateSeal } from 'context/sealUtil';
 import { getUsername } from 'api/getUsername';
 export function useAccountAccess() {
@@ -34,6 +35,10 @@ export function useAccountAccess() {
     themes: [],
     language: null,
     languages: [],
+    audioInput: null,
+    audioInputs: [],
+    videoInput: null,
+    videoInputs: [],
 
     seal: null,
     sealKey: null,
@@ -42,6 +47,7 @@ export function useAccountAccess() {
   const profile = useContext(ProfileContext);
   const account = useContext(AccountContext);  
   const settings = useContext(SettingsContext);
+  const ring = useContext(RingContext);
   const debounce = useRef(null);
 
   const updateState = (value) => {
@@ -59,9 +65,20 @@ export function useAccountAccess() {
   }, [account.state]);
 
   useEffect(() => {
-    const { strings, menuStyle, timeFormat, dateFormat, theme, themes, language, languages } = settings.state;
-    updateState({ strings, menuStyle, timeFormat, dateFormat, theme, themes, language, languages });
+    const { audioInput, audioInputs, videoInput, videoInputs, strings, menuStyle, timeFormat, dateFormat, theme, themes, language, languages } = settings.state;
+    updateState({ audioInput, audioInputs, videoInput, videoInputs, strings, menuStyle, timeFormat, dateFormat, theme, themes, language, languages });
   }, [settings.state]);
+
+  const showDevices = async () => {
+    const audio = await ring.actions.getDevices('audio');
+    const video = await ring.actions.getDevices('video');
+    
+    console.log('devices', audio, video);
+  };
+
+  useEffect(() => {
+    showDevices();
+  }, []);
 
   const sealUnlock = async () => {
     const unlocked = unlockSeal(state.seal, state.sealUnlock);
@@ -112,6 +129,12 @@ export function useAccountAccess() {
     },
     setLanguage: (language) => {
       settings.actions.setLanguage(language);
+    },
+    setAudio: (device) => {
+      settings.actions.setAudioInput(device);
+    },
+    setVideo: (device) => {
+      settings.actions.setVideoInput(device);
     },
     setEditSeal: () => {
       let sealMode;

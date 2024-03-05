@@ -56,6 +56,29 @@ export function AccountAccess() {
     <AccountAccessWrapper>
       { modalContext }
       <div className="account">
+        <div className="section">{state.strings.account}</div>
+        <div className="controls">
+          <div className="switch">
+            <div className="control">
+              <Switch size="small" checked={state.searchable} onChange={enable => saveSearchable(enable)} />
+            </div>
+            <div className="switchLabel">{state.strings.registry}</div>
+          </div>
+          <div className="link" onClick={actions.setEditSeal}>
+            <div className="control">
+              <SettingOutlined />
+            </div>
+            <div className="label">{state.strings.sealedTopics}</div>
+          </div>
+          <div className="link" onClick={actions.setEditLogin}>
+            <div className="control">
+              <LockOutlined />
+            </div>
+            <div className="label">{state.strings.changeLogin}</div>
+          </div>
+        </div>
+      </div>
+      <div className="account">
         <div className="section">{state.strings.application}</div>
         <div className="controls">
           <div className="option">
@@ -94,28 +117,27 @@ export function AccountAccess() {
                 options={state.languages}
               />
           </div>
-        </div>
-      </div>
-      <div className="account">
-        <div className="section">{state.strings.account}</div>
-        <div className="controls">
-          <div className="switch">
-            <div className="control">
-              <Switch size="small" checked={state.searchable} onChange={enable => saveSearchable(enable)} />
-            </div>
-            <div className="switchLabel">{state.strings.registry}</div>
+          <div className="option">
+            <div className="label">{state.strings.microphone}</div>
+            <Select
+               defaultValue={null}
+                style={{ width: '60%' }}
+                size="small"
+                value={state.audioInput}
+                onChange={actions.setAudio}
+                options={[ { value: null, label: 'Default' }, ...state.audioInputs ]}
+              />
           </div>
-          <div className="link" onClick={actions.setEditSeal}>
-            <div className="control">
-              <SettingOutlined />
-            </div>
-            <div className="label">{state.strings.sealedTopics}</div>
-          </div>
-          <div className="link" onClick={actions.setEditLogin}>
-            <div className="control">
-              <LockOutlined />
-            </div>
-            <div className="label">{state.strings.changeLogin}</div>
+          <div className="option">
+            <div className="label">{state.strings.camera}</div>
+            <Select
+               defaultValue={null}
+                style={{ width: '60%' }}
+                size="small"
+                value={state.videoInput}
+                onChange={actions.setVideo}
+                options={[ { value: null, label: 'Default' }, ...state.videoInputs ]}
+              />
           </div>
         </div>
       </div>

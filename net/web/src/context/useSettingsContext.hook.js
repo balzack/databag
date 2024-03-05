@@ -18,6 +18,10 @@ export function useSettingsContext() {
     strings: en,
     dateFormat: 'mm/dd',
     timeFormat: '12h',
+    audioInput: null,
+    audioInputs: [],
+    videoInput: null,
+    videoInputs: [],
   });
 
   const SMALL_MEDIUM = 650;
@@ -42,6 +46,36 @@ export function useSettingsContext() {
       updateState({ display: 'xlarge', width: window.innerWidth, height: window.innerHeight });
     }
   };
+
+  const getDevices = async (type) => {
+    const filtered = new Map();
+    const devices = await navigator.mediaDevices.enumerateDevices();
+
+    devices.filter(item => item.kind === type + 'input').forEach(item => {
+      if (item) {
+        const label = item.label ? item.label : state.strings.integrated;
+        const entry = filtered.get(item.groupId);
+        if (entry) {
+          if (item.label && label.length < entry.label.length) {
+            filtered.set(item.groupId, { value: item.deviceId, label });
+          }
+        }
+        else {
+          filtered.set(item.groupId, { value: item.deviceId, label });
+        }
+      }
+    });
+    return Array.from(filtered.values());
+  }
+
+  useEffect(() => {
+    getDevices('audio').then(audio => {
+      updateState({ audioInputs: audio });
+    });
+    getDevices('video').then(video => {
+      updateState({ videoInputs: video });
+    });
+  }, [state.strings]);
 
   useEffect(() => {
     for (let i = 0; i < 10; i++) {
@@ -100,6 +134,10 @@ export function useSettingsContext() {
       }
     }
 
+    const audioInput = localStorage.getItem('audio_input');
+    const videoInput = localStorage.getItem('video_input');
+    updateState({ audioInput, videoInput });
+
     return () => {
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('orientationchange', handleResize);
@@ -154,6 +192,14 @@ export function useSettingsContext() {
     setTimeFormat: (timeFormat) => {
       localStorage.setItem('time_format', timeFormat);
       updateState({ timeFormat });
+    },
+    setAudioInput: (audioInput) => {
+      localStorage.setItem('audio_input', audioInput);
+      updateState({ audioInput });
+    },
+    setVideoInput: (videoInput) => {
+      localStorage.setItem('video_input', videoInput);
+      updateState({ videoInput });
     },
   }
 

@@ -164,6 +164,9 @@ export function useRingContext() {
     };
 
     try {
+      const devices = await navigator.mediaDevices.enumerateDevices();
+      console.log('>> ', devices);
+
       const stream = await navigator.mediaDevices.getUserMedia({
         video: false,
         audio: true,
@@ -417,6 +420,9 @@ export function useRingContext() {
     },
     enableVideo: async () => {
       if (!accessVideo.current) {
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        console.log('>> ', devices);
+
         const stream = await navigator.mediaDevices.getUserMedia({
           video: true,
           audio: true,
@@ -456,6 +462,24 @@ export function useRingContext() {
         audioTrack.current.enabled = false;
         updateState({ localAudio: false });
       }
+    },
+    getDevices: async (type) => {
+      const filtered = new Map();
+      const devices = await navigator.mediaDevices.enumerateDevices();
+      devices.filter(item => item.kind === type + 'input').forEach(item => {
+        if (item && item.label) {
+          const entry = filtered.get(item.groupId);
+          if (entry) {
+            if (item.label && item.label.length < entry.label.length) {
+              filtered.set(item.groupId, item);
+            }
+          }
+          else {
+            filtered.set(item.groupId, item);
+          }
+        }
+      });
+      return Array.from(filtered.values());
     },
   }
 

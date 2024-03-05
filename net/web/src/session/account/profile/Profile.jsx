@@ -135,13 +135,13 @@ export function Profile({ closeProfile }) {
       </div>
       { state.display !== 'xlarge' && state.displaySet && (
         <div className="rightAccess">
-          <AccountAccess />
           { state.display === 'small' && (
-            <div className="logout" onClick={logout}>
-              <LogoutOutlined />
-              <div className="label">{ state.strings.logout }</div>
+            <div className="logout">
+              <LogoutOutlined className="icon" onClick={logout} />
+              <div className="label" onClick={logout}>{ state.strings.logout }</div>
             </div>
           )}
+          <AccountAccess />
           <div className="contentFill" />
         </div>
       )}

@@ -5,3 +5,11 @@ calling:
   - fullscreen
   - device selection
 
+add languages:
+spanish
+portugues
+german
+russian
+
+trim docker image
+

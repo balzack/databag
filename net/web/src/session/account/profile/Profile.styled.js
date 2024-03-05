@@ -205,14 +205,18 @@ export const ProfileWrapper = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
-    cursor: pointer;
-    color: ${props => props.theme.mainText};
-    background-color: ${props => props.theme.modalArea};
+    background-color: ${props => props.theme.selectedArea};
     padding: 8px;
     border-radius: 4px;
     justify-content: center;
 
+    .icon {
+      color: ${props => props.theme.alertText};
+      cursor: pointer;
+    }
+
     .label {
+      cursor: pointer;
       padding-left: 8px;
     }
   }
