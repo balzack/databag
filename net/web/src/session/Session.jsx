@@ -14,10 +14,12 @@ import { Account } from './account/Account';
 import { Welcome } from './welcome/Welcome';
 import { BottomNav } from './bottomNav/BottomNav';
 import { Logo } from 'logo/Logo';
-import { EyeInvisibleOutlined, PhoneOutlined } from '@ant-design/icons';
+import { EyeInvisibleOutlined, PhoneOutlined, ShrinkOutlined, ArrowsAltOutlined } from '@ant-design/icons';
 import { IoVideocamOffOutline, IoVideocamOutline, IoMicOffOutline, IoMicOutline, IoCallOutline } from "react-icons/io5";
 import { ThemeProvider } from "styled-components";
 import { SettingsContext } from 'context/SettingsContext';
+
+import avatar from 'images/avatar.png';
 
 export function Session() {
 
@@ -347,43 +349,64 @@ export function Session() {
         </Modal>
         <Modal centered visible={state.callStatus} footer={null} closable={false} width={callModal.width} height={callModal.height} bodyStyle={{ padding: 6 }}>
           <CallingWrapper>
-            { !state.remoteVideo && (
-              <Logo url={state.callLogo} width={256} height={256} radius={8} />
-            )}
-            { state.remoteStream && (
-              <video ref={remote} disablepictureinpicture playsInline autoPlay style={{ display: state.remoteVideo ? 'block' : 'none', width: '100%' }}
-      complete={() => console.log("VIDEO COMPLETE")} progress={() => console.log("VIDEO PROGRESS")} error={() => console.log("VIDEO ERROR")} waiting={() => console.log("VIDEO WAITING")} />
-            )}
-            { state.localStream && (
-              <div className="calling-local">
-                <video ref={local} disablepictureinpicture playsInline autoPlay muted style={{ width: '100%', display: 'block' }}
-      complete={() => console.log("VIDEO COMPLETE")} progress={() => console.log("VIDEO PROGRESS")} error={() => console.log("VIDEO ERROR")} waiting={() => console.log("VIDEO WAITING")} />
+            <div className={ state.fullscreen ? 'fullscreen' : 'modal' }>
+              <div className="window">
+                { !state.remoteVideo && (
+                  <div className="logo">
+                    { state.callLogo && (
+                      <img className="image" src={state.callLogo} alt="logo" width="100%" height="100%" />
+                    )}
+                    { !state.callLogo && (
+                      <img className="image" src={avatar} alt="default logo" width="100%" height="100%" />
+                    )}
+                  </div>
+                )}
+                { state.remoteStream && (
+                  <video ref={remote} disablepictureinpicture playsInline autoPlay style={{ display: state.remoteVideo ? 'block' : 'none', width: '100%', height: '100%' }}
+          complete={() => console.log("VIDEO COMPLETE")} progress={() => console.log("VIDEO PROGRESS")} error={() => console.log("VIDEO ERROR")} waiting={() => console.log("VIDEO WAITING")} />
+                )}
+                { state.localStream && (
+                  <div className="calling-local">
+                    <video ref={local} disablepictureinpicture playsInline autoPlay muted style={{ width: '100%', height: '100%', display: 'block' }}
+          complete={() => console.log("VIDEO COMPLETE")} progress={() => console.log("VIDEO PROGRESS")} error={() => console.log("VIDEO ERROR")} waiting={() => console.log("VIDEO WAITING")} />
+                  </div>
+                )}
+                <div className="calling-options calling-hovered">
+                  { state.localVideo && (
+                    <div className="calling-option" onClick={actions.disableVideo}>
+                      <IoVideocamOutline />
+                    </div>
+                  )}
+                  { !state.localVideo && (
+                    <div className="calling-option" onClick={actions.enableVideo}>
+                      <IoVideocamOffOutline />
+                    </div>
+                  )}
+                  { state.localAudio && (
+                    <div className="calling-option" onClick={actions.disableAudio}>
+                      <IoMicOutline />
+                    </div>
+                  )}
+                  { !state.localAudio && (
+                    <div className="calling-option" onClick={actions.enableAudio}>
+                      <IoMicOffOutline />
+                    </div>
+                  )}
+                  { state.fullscreen && (
+                    <div className="calling-option" onClick={() => actions.setFullscreen(false)}>
+                      <ShrinkOutlined />
+                    </div>
+                  )}
+                  { !state.fullscreen && (
+                    <div className="calling-option" onClick={() => actions.setFullscreen(true)}>
+                      <ArrowsAltOutlined />
+                    </div>
+                  )}
+                  <div className="calling-end" onClick={actions.end}>
+                    <IoCallOutline />
+                  </div>
+                </div>
               </div>
-            )}
-            <div className="calling-options calling-hovered">
-              { state.localVideo && (
-                <div className="calling-option" onClick={actions.disableVideo}>
-                  <IoVideocamOutline />
-                </div>
-              )}
-              { !state.localVideo && (
-                <div className="calling-option" onClick={actions.enableVideo}>
-                  <IoVideocamOffOutline />
-                </div>
-              )}
-              { state.localAudio && (
-                <div className="calling-option" onClick={actions.disableAudio}>
-                  <IoMicOutline />
-                </div>
-              )}
-              { !state.localAudio && (
-                <div className="calling-option" onClick={actions.enableAudio}>
-                  <IoMicOffOutline />
-                </div>
-              )}
-            </div>
-            <div className="calling-end calling-hovered" onClick={actions.end}>
-              <IoCallOutline />
             </div>
           </CallingWrapper>
         </Modal>

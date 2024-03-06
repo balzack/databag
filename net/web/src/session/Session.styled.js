@@ -73,66 +73,94 @@ export const RingingWrapper = styled.div`
 `;
 
 export const CallingWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
 
-  &:hover .calling-hovered {
-    display: flex;
-  }
-  
-  .calling-local {
-    width: 33%;
-    bottom: 16px;
-    left: 16px;
-    position: absolute;
-  }
-
-  .calling-logo {
-    position: absolute;
+  .fullscreen {
+    position: fixed;
     top: 0;
     left: 0;
-    width: 256px;
-    height: 256px;
-    background-color: yellow;
+    width: 100vw;
+    height: 100vh;
+    background-color: ${props => props.theme.frameArea};
   }
 
-  .calling-end {
-    position: absolute;
-    bottom: 16px;
-    color: ${Colors.white};
-    font-size: 24px;
-    background-color: ${Colors.alert};
-    display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 8px;
-    border-radius: 20px;
-    cursor: pointer;
-    transform: rotate(135deg);
+  .modal {
+    background-color: ${props => props.theme.frameArea};
   }
 
-  .calling-options {
-    display: none;
-    position: absolute;
-    top: 16px;
-    flex-direction: row;
-  }
-
-  .calling-option {
-    color: ${Colors.white};
-    font-size: 24px;
-    background-color: ${Colors.primary};
+  .window {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 8px;
-    border-radius: 20px;
-    cursor: pointer;
-    margin-left: 8px;
-    margin-right: 8px;
-  }
-`;
+    position: relative;
+    width: 100%;
+    height: 100%;
+
+    &:hover .calling-hovered {
+      display: flex;
+    }
+
+    .logo {
+      width: 100%;
+      height: 100%;
+      border-radius: 4px;
+    }   
+
+    .image {
+      object-fit: contain;
+    } 
+
+    .calling-local {
+      width: 33%;
+      bottom: 16px;
+      left: 16px;
+      position: absolute;
+    }
+
+    .calling-logo {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 256px;
+      height: 256px;
+      background-color: yellow;
+    }
+
+    .calling-options {
+      display: none;
+      position: absolute;
+      bottom: 16px;
+      flex-direction: row;
+    }
+
+    .calling-option {
+      color: ${Colors.white};
+      background-color: ${Colors.primary};
+      font-size: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px;
+      border-radius: 20px;
+      cursor: pointer;
+      margin-left: 8px;
+      margin-right: 8px;
+    }
+
+    .calling-end {
+      color: ${Colors.white};
+      background-color: ${Colors.alert};
+      transform: rotate(135deg);
+      font-size: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px;
+      border-radius: 20px;
+      cursor: pointer;
+      margin-left: 8px;
+      margin-right: 8px;
+    }
+  `;
 
 
 export const SessionWrapper = styled.div`

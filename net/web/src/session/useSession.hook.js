@@ -34,6 +34,7 @@ export function useSession() {
     remoteAudio: false,
     audioId: null,
     videoId: null,
+    fullscreen: false,
   });
 
   const app = useContext(AppContext);
@@ -78,6 +79,11 @@ export function useSession() {
 
     const { callStatus, localStream, localVideo, localAudio, remoteStream, remoteVideo, remoteAudio } = ring.state;
     updateState({ ringing, callStatus, callLogo, localStream, localVideo, localAudio, remoteStream, remoteVideo, remoteAudio });
+
+    if (!callStatus && state.fullscreen) {
+      updateState({ fullscreen: false });
+    }
+
     // eslint-disable-next-line
   }, [ring.state]);
 
@@ -120,6 +126,9 @@ export function useSession() {
   }, [store]);
 
   const actions = {
+    setFullscreen: (fullscreen) => {
+      updateState({ fullscreen });
+    },
     openCards: () => {
       updateState({ cards: true });
     },
