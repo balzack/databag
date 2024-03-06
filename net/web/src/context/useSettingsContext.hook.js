@@ -18,9 +18,9 @@ export function useSettingsContext() {
     strings: en,
     dateFormat: 'mm/dd',
     timeFormat: '12h',
-    audioInput: null,
+    audioId: null,
     audioInputs: [],
-    videoInput: null,
+    videoId: null,
     videoInputs: [],
   });
 
@@ -75,6 +75,7 @@ export function useSettingsContext() {
     getDevices('video').then(video => {
       updateState({ videoInputs: video });
     });
+    // eslint-disable-next-line
   }, [state.strings]);
 
   useEffect(() => {
@@ -134,9 +135,9 @@ export function useSettingsContext() {
       }
     }
 
-    const audioInput = localStorage.getItem('audio_input');
-    const videoInput = localStorage.getItem('video_input');
-    updateState({ audioInput, videoInput });
+    const audioId = localStorage.getItem('audio_input');
+    const videoId = localStorage.getItem('video_input');
+    updateState({ audioId, videoId });
 
     return () => {
       window.removeEventListener('resize', handleResize);
@@ -193,13 +194,13 @@ export function useSettingsContext() {
       localStorage.setItem('time_format', timeFormat);
       updateState({ timeFormat });
     },
-    setAudioInput: (audioInput) => {
-      localStorage.setItem('audio_input', audioInput);
-      updateState({ audioInput });
+    setAudioInput: (audioId) => {
+      localStorage.setItem('audio_input', audioId);
+      updateState({ audioId });
     },
-    setVideoInput: (videoInput) => {
-      localStorage.setItem('video_input', videoInput);
-      updateState({ videoInput });
+    setVideoInput: (videoId) => {
+      localStorage.setItem('video_input', videoId);
+      updateState({ videoId });
     },
   }
 

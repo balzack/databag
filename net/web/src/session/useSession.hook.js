@@ -32,6 +32,8 @@ export function useSession() {
     remoteStream: null,
     remoteVideo: false,
     remoteAudio: false,
+    audioId: null,
+    videoId: null,
   });
 
   const app = useContext(AppContext);
@@ -96,8 +98,8 @@ export function useSession() {
   }, [app.state]);
 
   useEffect(() => {
-    const { display, theme } = settings.state;
-    updateState({ display, theme });
+    const { display, theme, audioId } = settings.state;
+    updateState({ display, theme, audioId });
   }, [settings.state]);
 
   useEffect(() => {
@@ -171,13 +173,13 @@ export function useSession() {
     accept: async (call) => {
       const { cardId, callId, contactNode, contactToken, calleeToken, iceUrl, iceUsername, icePassword } = call;
       const node = contactNode ? contactNode : window.location.host;
-      await ring.actions.accept(cardId, callId, node, contactToken, calleeToken, iceUrl, iceUsername, icePassword);
+      await ring.actions.accept(cardId, callId, node, contactToken, calleeToken, iceUrl, iceUsername, icePassword, state.audioId);
     },
     end: async () => {
       await ring.actions.end();
     },
     enableVideo: async () => {
-      await ring.actions.enableVideo();
+      await ring.actions.enableVideo(state.videoId, state.audioId);
     },
     disableVideo: async () => {
       await ring.actions.disableVideo();

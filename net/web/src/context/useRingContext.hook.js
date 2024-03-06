@@ -134,8 +134,31 @@ export function useRingContext() {
     processing.current = false;
   }
 
-  const transmit = async (policy, ice) => {
+  const getAudioStream = async (audioId) => {
+    try {
+      if (audioId) {
+        return await navigator.mediaDevices.getUserMedia({ video: false, audio: { deviceId: audioId } });
+      }
+    }
+    catch (err) {
+      console.log(err);
+    }
+    return await navigator.mediaDevices.getUserMedia({ video: false, audio: true });
+  }
 
+  const getVideoStream = async (videoId) => {
+    try {
+      if (videoId) {
+        return await navigator.mediaDevices.getUserMedia({ video: { deviceId: videoId }, audio: false });
+      }
+    }
+    catch (err) {
+      console.log(err);
+    }
+    return await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+  }
+
+  const transmit = async (policy, ice, audioId) => {
     pc.current = new RTCPeerConnection({ iceServers: ice });
     pc.current.ontrack = (ev) => {
       if (!stream.current) {
@@ -164,13 +187,7 @@ export function useRingContext() {
     };
 
     try {
-      const devices = await navigator.mediaDevices.enumerateDevices();
-      console.log('>> ', devices);
-
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: false,
-        audio: true,
-      });
+      const stream = await getAudioStream(audioId);
       accessAudio.current = true;
       updateState({ localAudio: true });
       for (const track of stream.getTracks()) {
@@ -185,7 +202,7 @@ export function useRingContext() {
     }
   }
 
-  const connect = async (policy, node, token, clearRing, clearAlive, ice) => {
+  const connect = async (policy, audioId, node, token, clearRing, clearAlive, ice) => {
 
     // connect signal socket
     connected.current = false;
@@ -209,7 +226,7 @@ export function useRingContext() {
           updateState({ callStatus: "connected" });
           if (policy === 'polite') {
             connected.current = true;
-            transmit('polite', ice);
+            transmit('polite', ice, audioId);
             polite();
           }
         }
@@ -260,7 +277,7 @@ export function useRingContext() {
       ws.current.send(JSON.stringify({ AppToken: token }));
       if (policy === 'impolite') {
         connected.current = true;
-        transmit('impolite', ice);
+        transmit('impolite', ice, audioId);
         impolite();
       }
     }
@@ -317,7 +334,7 @@ export function useRingContext() {
         }
       }
     },
-    accept: async (cardId, callId, contactNode, contactToken, calleeToken, iceUrl, iceUsername, icePassword) => {
+    accept: async (cardId, callId, contactNode, contactToken, calleeToken, iceUrl, iceUsername, icePassword, audioId) => {
       if (calling.current) {
         throw new Error("active session");
       }
@@ -332,7 +349,7 @@ export function useRingContext() {
         updateState({ ringing: ringing.current, callStatus: "connecting", cardId });
 
         calling.current = { callId, contactNode, contactToken, host: false };
-        await connect('impolite', contactNode, calleeToken, () => {}, () => {}, ice);
+        await connect('impolite', audioId, contactNode, calleeToken, () => {}, () => {}, ice);
       }
     },
     end: async () => {
@@ -362,7 +379,7 @@ export function useRingContext() {
         }
       }
     },
-    call: async (cardId, contactNode, contactToken) => {
+    call: async (cardId, contactNode, contactToken, audioId) => {
       if (calling.current) {
         throw new Error("active session");
       }
@@ -416,17 +433,11 @@ export function useRingContext() {
       updateState({ callStatus: "ringing" });
       calling.current = { callId: id, host: true };
       const ice = [{ urls: iceUrl, username: iceUsername, credential: icePassword }];
-      await connect('polite', window.location.host, callerToken, () => clearInterval(ringInterval), () => clearInterval(aliveInterval), ice);
+      await connect('polite', audioId, window.location.host, callerToken, () => clearInterval(ringInterval), () => clearInterval(aliveInterval), ice);
     },
-    enableVideo: async () => {
+    enableVideo: async (videoId) => {
       if (!accessVideo.current) {
-        const devices = await navigator.mediaDevices.enumerateDevices();
-        console.log('>> ', devices);
-
-        const stream = await navigator.mediaDevices.getUserMedia({
-          video: true,
-          audio: true,
-        });
+        const stream = await getVideoStream(videoId);
         accessVideo.current = true;
         accessAudio.current = true;
         updateState({ localStream: stream });

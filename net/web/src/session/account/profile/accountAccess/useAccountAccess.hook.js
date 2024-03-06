@@ -27,6 +27,7 @@ export function useAccountAccess() {
     sealDelete: null,
     sealUnlock: null,
 
+    display: null,
     strings: {},
     menuStyle: {},
     timeFormat: '12h',
@@ -35,9 +36,9 @@ export function useAccountAccess() {
     themes: [],
     language: null,
     languages: [],
-    audioInput: null,
+    audioId: null,
     audioInputs: [],
-    videoInput: null,
+    videoId: null,
     videoInputs: [],
 
     seal: null,
@@ -65,20 +66,9 @@ export function useAccountAccess() {
   }, [account.state]);
 
   useEffect(() => {
-    const { audioInput, audioInputs, videoInput, videoInputs, strings, menuStyle, timeFormat, dateFormat, theme, themes, language, languages } = settings.state;
-    updateState({ audioInput, audioInputs, videoInput, videoInputs, strings, menuStyle, timeFormat, dateFormat, theme, themes, language, languages });
+    const { display, audioId, audioInputs, videoId, videoInputs, strings, menuStyle, timeFormat, dateFormat, theme, themes, language, languages } = settings.state;
+    updateState({ display, audioId, audioInputs, videoId, videoInputs, strings, menuStyle, timeFormat, dateFormat, theme, themes, language, languages });
   }, [settings.state]);
-
-  const showDevices = async () => {
-    const audio = await ring.actions.getDevices('audio');
-    const video = await ring.actions.getDevices('video');
-    
-    console.log('devices', audio, video);
-  };
-
-  useEffect(() => {
-    showDevices();
-  }, []);
 
   const sealUnlock = async () => {
     const unlocked = unlockSeal(state.seal, state.sealUnlock);

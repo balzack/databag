@@ -21,6 +21,7 @@ export function useCards() {
     menuStyle: {},
     allowUnsealed: false,
     cards: [],
+    audioId: null,
   });
 
   const ring = useContext(RingContext);
@@ -35,8 +36,9 @@ export function useCards() {
   }
 
   useEffect(() => {
-    const { display, strings, menuStyle } = settings.state;
-    updateState({ display, strings, menuStyle });
+    const { display, strings, menuStyle, audioId } = settings.state;
+console.log("AUDIO ID: ", audioId);
+    updateState({ display, strings, menuStyle, audioId });
   }, [settings.state]);
 
   useEffect(() => {
@@ -164,7 +166,7 @@ export function useCards() {
     },
     call: async (contact) => {
       const { cardId, node, guid, token } = contact;
-      await ring.actions.call(cardId, node, `${guid}.${token}`);
+      await ring.actions.call(cardId, node, `${guid}.${token}`, state.audioId);
     },
   };
 

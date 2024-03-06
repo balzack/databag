@@ -1,12 +1,14 @@
-import { AccountAccessWrapper, LoginModal, SealModal } from './AccountAccess.styled';
+import { AccountAccessWrapper, LoginModal, SealModal, LogoutContent } from './AccountAccess.styled';
 import { useAccountAccess } from './useAccountAccess.hook';
 import { Button, Modal, Switch, Input, Radio, Select } from 'antd';
-import { SettingOutlined, UserOutlined, LockOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
+import { LogoutOutlined, SettingOutlined, UserOutlined, LockOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
+import { useRef } from 'react';
 
 export function AccountAccess() {
 
   const [ modal, modalContext ] = Modal.useModal();
   const { state, actions } = useAccountAccess();
+  const all = useRef(false);
 
   const saveSeal = async () => {
     try {
@@ -52,6 +54,24 @@ export function AccountAccess() {
     }
   }
 
+  const logout = () => {
+    modal.confirm({
+      title: <span style={state.menuStyle}>{state.strings.confirmLogout}</span>,
+      icon: <LogoutOutlined />,
+      content: <LogoutContent onClick={(e) => e.stopPropagation()}>
+                <span className="logoutMode">{ state.strings.allDevices }</span>
+                <Switch onChange={(e) => all.current = e} size="small" />
+               </LogoutContent>,
+      bodyStyle: { borderRadius: 8, padding: 16, ...state.menuStyle },
+      okText: state.strings.ok,
+      onOk() {
+        actions.logout(all.current);
+      },
+      cancelText: state.strings.cancel,
+      onCancel() {},
+    });
+  }
+
   return (
     <AccountAccessWrapper>
       { modalContext }
@@ -76,6 +96,14 @@ export function AccountAccess() {
             </div>
             <div className="label">{state.strings.changeLogin}</div>
           </div>
+          { state.display === 'small' && (
+            <div className="link" onClick={logout}>
+              <div className="control">
+                <LogoutOutlined className="icon" />
+              </div>
+              <div className="label">{ state.strings.logout }</div>
+            </div>
+          )}
         </div>
       </div>
       <div className="account">
@@ -123,7 +151,7 @@ export function AccountAccess() {
                defaultValue={null}
                 style={{ width: '60%' }}
                 size="small"
-                value={state.audioInput}
+                value={state.audioId}
                 onChange={actions.setAudio}
                 options={[ { value: null, label: 'Default' }, ...state.audioInputs ]}
               />
@@ -134,7 +162,7 @@ export function AccountAccess() {
                defaultValue={null}
                 style={{ width: '60%' }}
                 size="small"
-                value={state.videoInput}
+                value={state.videoId}
                 onChange={actions.setVideo}
                 options={[ { value: null, label: 'Default' }, ...state.videoInputs ]}
               />

@@ -1,6 +1,6 @@
 import { useRef, useCallback } from 'react';
 import { Modal, Input, Button, Switch } from 'antd';
-import { LogoutContent, ProfileWrapper, ProfileDetailsWrapper, ProfileImageWrapper } from './Profile.styled';
+import { ProfileWrapper, ProfileDetailsWrapper, ProfileImageWrapper } from './Profile.styled';
 import { useProfile } from './useProfile.hook';
 import { Logo } from 'logo/Logo';
 import { AccountAccess } from './accountAccess/AccountAccess';
@@ -50,24 +50,6 @@ export function Profile({ closeProfile }) {
         bodyStyle: { borderRadius: 8, padding: 16, ...state.menuStyle },
       });
     }
-  }
-
-  const logout = () => {
-    modal.confirm({
-      title: <span style={state.menuStyle}>{state.strings.confirmLogout}</span>,
-      icon: <LogoutOutlined />,
-      content: <LogoutContent onClick={(e) => e.stopPropagation()}>
-                <span className="logoutMode">{ state.strings.allDevices }</span>
-                <Switch onChange={(e) => all.current = e} size="small" />
-               </LogoutContent>,
-      bodyStyle: { borderRadius: 8, padding: 16, ...state.menuStyle },
-      okText: state.strings.ok,
-      onOk() {
-        actions.logout(all.current);
-      },
-      cancelText: state.strings.cancel,
-      onCancel() {},
-    });
   }
 
   const onCropComplete = useCallback((area, crop) => {
@@ -135,12 +117,6 @@ export function Profile({ closeProfile }) {
       </div>
       { state.display !== 'xlarge' && state.displaySet && (
         <div className="rightAccess">
-          { state.display === 'small' && (
-            <div className="logout">
-              <LogoutOutlined className="icon" onClick={logout} />
-              <div className="label" onClick={logout}>{ state.strings.logout }</div>
-            </div>
-          )}
           <AccountAccess />
           <div className="contentFill" />
         </div>

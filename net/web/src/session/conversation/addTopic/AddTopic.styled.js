@@ -53,8 +53,8 @@ export const AddTopicWrapper = styled.div`
       flex-align: center;
       justify-content: center;
       align-items: center;
-      width: 36px;
-      height: 36px;
+      width: 32px;
+      height: 32px;
       cursor: pointer;
       border: 1px solid ${props => props.theme.sectionBorder};
       background-color: ${props => props.theme.inputArea};
@@ -63,7 +63,7 @@ export const AddTopicWrapper = styled.div`
     }
 
     .space {
-      margin-right: 8px;
+      margin-right: 12px;
     }
 
     .end {

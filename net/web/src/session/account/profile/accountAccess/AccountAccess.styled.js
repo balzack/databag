@@ -39,7 +39,7 @@ export const AccountAccessWrapper = styled.div`
 
       .label {
         padding-right: 16px;
-        min-width: 130px;
+        min-width: 33%;
         height: 28px;
         display: flex;
         align-items: center;
@@ -247,3 +247,14 @@ export const LoginModal = styled.div`
   }
 `
 
+export const LogoutContent = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+
+  .logoutMode {
+    padding-right: 8px;
+    color: ${props => props.theme.mainText};
+  }
+`

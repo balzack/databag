@@ -200,38 +200,6 @@ export const ProfileWrapper = styled.div`
     padding: 8px;
     width: 75%;
   }
-
-  .logout {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    background-color: ${props => props.theme.selectedArea};
-    padding: 8px;
-    border-radius: 4px;
-    justify-content: center;
-
-    .icon {
-      color: ${props => props.theme.alertText};
-      cursor: pointer;
-    }
-
-    .label {
-      cursor: pointer;
-      padding-left: 8px;
-    }
-  }
-`
-
-export const LogoutContent = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 8px;
-
-  .logoutMode {
-    padding-right: 8px;
-    color: ${props => props.theme.mainText};
-  }
 `
 
 export const ProfileDetailsWrapper = styled.div`
