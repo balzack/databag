@@ -80,11 +80,11 @@ export const CallingWrapper = styled.div`
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: ${props => props.theme.frameArea};
+    background-color: ${props => props.theme.remoteArea};
   }
 
   .modal {
-    background-color: ${props => props.theme.frameArea};
+    background-color: ${props => props.theme.remoteArea};
   }
 
   .window {
@@ -110,10 +110,27 @@ export const CallingWrapper = styled.div`
     } 
 
     .calling-local {
-      width: 33%;
       bottom: 16px;
       left: 16px;
       position: absolute;
+      border-radius: 4px;
+      width: 33%;
+      height: 33%;
+
+      .local-position {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: flex-end;
+        justify-content: flex-start;
+
+        .local-frame {
+          padding: 4px;
+          border-radius: 2px;
+          background-color: ${props => props.theme.localArea};
+        }
+      }
     }
 
     .calling-logo {
@@ -128,7 +145,7 @@ export const CallingWrapper = styled.div`
     .calling-options {
       display: none;
       position: absolute;
-      bottom: 16px;
+      top: 16px;
       flex-direction: row;
     }
 

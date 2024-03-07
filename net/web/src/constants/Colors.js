@@ -40,6 +40,8 @@ export const Colors = {
 };
 
 export const LightTheme = {
+  remoteArea: '#080808',
+  localArea: '#888888',
   splashArea: '#8fbea7',
   baseArea: '#8fbea7',
   frameArea: '#e4e4e4',
@@ -77,6 +79,8 @@ export const LightTheme = {
 };
 
 export const DarkTheme = {
+  remoteArea: '#080808',
+  localArea: '#888888',
   splashArea: '#4c4c4c',
   baseArea: '#080808',
   frameArea: '#0a0a0a',

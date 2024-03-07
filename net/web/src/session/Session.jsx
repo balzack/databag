@@ -21,14 +21,18 @@ import { SettingsContext } from 'context/SettingsContext';
 
 import avatar from 'images/avatar.png';
 
+function getDim() {
+  if (window.innerWidth > window.innerHeight) {
+    return window.innerHeight / 2;
+  }
+  return window.innerWidth / 2;
+}
+
 export function Session() {
 
   const { state, actions } = useSession();
   const settings = useContext(SettingsContext);
   const [ringing, setRinging] = useState([]);
-  const [callWidth, setCallWidth] = useState(256);
-  const [callHeight, setCallHeight] = useState(256);
-  const [callModal, setCallModal] = useState({ width: 256, height: 256, offset: 0 });
   const remote = useRef();
   const local = useRef();
 
@@ -62,47 +66,7 @@ export function Session() {
   }, [state.ringing]);
 
   useEffect(() => {
-    if (!state.remoteVideo) {
-      setCallModal({ width: 256 + 12, height: 256 + 12, offset: 0 });
-    }
-    else {
-      setCallModal({ width: callWidth + 12, height: callHeight + 12, offset: ((268 - callHeight) / 2) });
-    }
-
-  }, [callWidth, callHeight, state.remoteVideo])
-
-  useEffect(() => {
     if (remote.current) {
-      remote.current.onloadedmetadata = (ev) => {
-
-        const { videoWidth, videoHeight } = ev.target || { videoWidth: 256, videoHeight: 256 }
-        if ((window.innerWidth * 8) / 10 < videoWidth) {
-          const scaledWidth = window.innerWidth * 8 / 10;
-          const scaledHeight = videoHeight * (scaledWidth / videoWidth)
-          if ((window.innerHeight * 8) / 10 < scaledHeight) {
-            const height = (window.innerHeight * 8) / 10;
-            setCallHeight(height);
-            setCallWidth(videoWidth * (height / videoHeight));
-          }
-          else {
-            setCallHeight(scaledHeight);
-            setCallWidth(scaledWidth);
-          }
-        }
-        else if ((window.innerHeight * 8) / 10 < videoHeight) {
-          const height = (window.innerHeight * 8) / 10;
-          setCallHeight(height);
-          setCallWidth(videoWidth * (height / videoHeight));
-        }
-        else if (videoHeight < 72 || videoWidth < 72) {
-          setCallHeight(72);
-          setCallWidth(72);
-        }
-        else {
-          setCallHeight(videoHeight);
-          setCallWidth(videoWidth);
-        }
-      };
       remote.current.srcObject = state.remoteStream;
       remote.current.load();
       remote.current.play();
@@ -118,10 +82,6 @@ export function Session() {
       local.current.play();
     }
   }, [state.localStream]);
-
-  useEffect(() => {
-    console.log("DIM: ", callWidth, callHeight);
-  }, [callWidth, callHeight]);
 
   const closeAccount = () => {
     actions.closeProfile();
@@ -347,7 +307,7 @@ export function Session() {
             </div>
           </RingingWrapper>
         </Modal>
-        <Modal centered visible={state.callStatus} footer={null} closable={false} width={callModal.width} height={callModal.height} bodyStyle={{ padding: 6 }}>
+        <Modal centered visible={state.callStatus} footer={null} closable={false} width={getDim() + 12} height={getDim()} bodyStyle={{ padding: 6 }}>
           <CallingWrapper>
             <div className={ state.fullscreen ? 'fullscreen' : 'modal' }>
               <div className="window">
@@ -362,13 +322,17 @@ export function Session() {
                   </div>
                 )}
                 { state.remoteStream && (
-                  <video ref={remote} disablepictureinpicture playsInline autoPlay style={{ display: state.remoteVideo ? 'block' : 'none', width: '100%', height: '100%' }}
+                  <video ref={remote} disablepictureinpicture playsInline autoPlay style={{ display: state.remoteVideo ? 'block' : 'none', width: state.fullscreen ? '100%' : getDim(), height: state.fullscreen ? '100%' : getDim() }}
           complete={() => console.log("VIDEO COMPLETE")} progress={() => console.log("VIDEO PROGRESS")} error={() => console.log("VIDEO ERROR")} waiting={() => console.log("VIDEO WAITING")} />
                 )}
                 { state.localStream && (
                   <div className="calling-local">
-                    <video ref={local} disablepictureinpicture playsInline autoPlay muted style={{ width: '100%', height: '100%', display: 'block' }}
-          complete={() => console.log("VIDEO COMPLETE")} progress={() => console.log("VIDEO PROGRESS")} error={() => console.log("VIDEO ERROR")} waiting={() => console.log("VIDEO WAITING")} />
+                    <div className="local-position">
+                      <div className="local-frame">
+                        <video ref={local} disablepictureinpicture playsInline autoPlay muted style={{ maxWidth: '100%', maxHeight: '100%', display: 'block' }}
+              complete={() => console.log("VIDEO COMPLETE")} progress={() => console.log("VIDEO PROGRESS")} error={() => console.log("VIDEO ERROR")} waiting={() => console.log("VIDEO WAITING")} />
+                      </div>
+                    </div>
                   </div>
                 )}
                 <div className="calling-options calling-hovered">
