@@ -176,7 +176,9 @@ export const en = {
 
   integrated: 'Integrated',
   microphone: 'Microphone',
-  camera: 'Camera'
+  camera: 'Camera',
+
+  notes: 'Notes',
 };
 
 export const fr = {
@@ -357,7 +359,9 @@ export const fr = {
 
   integrated: 'Intégré',
   microphone: 'Microphone',
-  camera: 'Caméra'
+  camera: 'Caméra',
+
+  notes: 'Notes',
 };
 
 export const sp = {
@@ -538,5 +542,7 @@ export const sp = {
 
   integrated: 'Integrado',
   microphone: 'Micrófono',
-  camera: 'Cámara'
+  camera: 'Cámara',
+
+  notes: 'Notas',
 }

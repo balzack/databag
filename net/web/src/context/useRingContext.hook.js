@@ -271,7 +271,7 @@ export function useRingContext() {
         audioTrack.current.stop();
         audioTrack.current = null;
       }
-      updateState({ callStatus: null });
+      updateState({ callStatus: null, remoteVideo: false, remoteAudio: false });
     }
     ws.current.onopen = async () => {
       ws.current.send(JSON.stringify({ AppToken: token }));
@@ -394,7 +394,7 @@ export function useRingContext() {
       }
       catch (err) {
         calling.current = null;
-        updateState({ callStatus: null });
+        updateState({ callStatus: null, remoteVideo: false, remoteAudio: false });
       }
 
       let index = 0;

@@ -78,7 +78,7 @@ export function useChannels() {
     // set logo and label
     if (memberCount === 0) {
       item.img = 'solution';
-      item.label = 'Notes';
+      item.label = state.strings.notes;
     }
     else if (memberCount === 1) {
       item.logo = logo;

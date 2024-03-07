@@ -1,15 +1,10 @@
-calling:
-  - dark style
-  - translation
-  - layout
-  - fullscreen
-  - device selection
 
 add languages:
-spanish
 portugues
 german
 russian
+
+fix lint warnings
 
 trim docker image
 

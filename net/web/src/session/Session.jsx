@@ -37,6 +37,11 @@ export function Session() {
   const local = useRef();
 
   useEffect(() => {
+    console.log(">> ", state.remoteVideo);
+  }, [state.remoteVideo]);
+
+
+  useEffect(() => {
     let incoming = [];
     for (let i = 0; i < state.ringing.length; i++) {
       const ring = state.ringing[i];
@@ -70,9 +75,6 @@ export function Session() {
       remote.current.srcObject = state.remoteStream;
       remote.current.load();
       remote.current.play();
-    }
-    else {
-      console.log("video player not set");
     }
   }, [state.remoteStream]);
 

@@ -165,7 +165,7 @@ export function useDetails() {
     let label;
     if (memberCount === 0) {
       img = 'solution';
-      label = 'Notes';
+      label = state.strings.notes;
     }
     else if (memberCount === 1) {
       label = names.join(',');
@@ -209,7 +209,7 @@ export function useDetails() {
         editMembers: new Set(members) });
     }
     // eslint-disable-next-line
-  }, [conversation.state, card.state, state.contentKey]);
+  }, [conversation.state, card.state, state.strings, state.contentKey]);
 
   const actions = {
     setEditSubject: () => {
