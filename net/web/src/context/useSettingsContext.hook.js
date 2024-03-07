@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { LightTheme, DarkTheme } from 'constants/Colors';
-import { en, fr } from 'constants/Strings';
+import { en, fr, sp } from 'constants/Strings';
 
 export function useSettingsContext() {
 
@@ -13,7 +13,7 @@ export function useSettingsContext() {
     scheme: null,
     colors: {},
     menuStyle: {},
-    languages: [{ value: null, label: 'Default' }, { value: 'en', label: 'English' }, { value: 'fr', label: 'Français' }],
+    languages: [{ value: null, label: 'Default' }, { value: 'en', label: 'English' }, { value: 'fr', label: 'Français' }, { value: 'sp', label: 'Español' }],
     language: null,
     strings: en,
     dateFormat: 'mm/dd',
@@ -122,16 +122,22 @@ export function useSettingsContext() {
     if (language && language.startsWith('fr')) {
       updateState({ language: 'fr', strings: fr, themes: [{ value: null, label: fr.default }, { value: 'dark', label: fr.dark }, { value: 'light', label: fr.light }]});
     }
+    else if (language && language.startsWith('sp')) {
+      updateState({ language: 'sp', strings: sp, themes: [{ value: null, label: sp.default }, { value: 'dark', label: sp.dark }, { value: 'light', label: sp.light }]});
+    }
     else if (language && language.startsWith('en')) {
       updateState({ language: 'en', strings: en, themes: [{ value: null, label: en.default }, { value: 'dark', label: en.dark }, { value: 'light', label: en.light }]});
     }
     else {
       const browser = navigator.language;
       if (browser && browser.startsWith('fr')) {
-        updateState({ language: null, strings: fr });
+        updateState({ language: null, strings: fr, themes: [{ value: null, label: fr.default }, { value: 'dark', label: fr.dark }, { value: 'light', label: fr.light }]});
+      }
+      else if (browser && browser.startsWith('sp')) {
+        updateState({ language: null, strings: sp, themes: [{ value: null, label: sp.default }, { value: 'dark', label: sp.dark }, { value: 'light', label: sp.light }]});
       }
       else {
-        updateState({ language: null, strings: en });
+        updateState({ language: null, strings: en, themes: [{ value: null, label: en.default }, { value: 'dark', label: en.dark }, { value: 'light', label: en.light }]});
       }
     }
 
@@ -171,6 +177,10 @@ export function useSettingsContext() {
         localStorage.setItem('language', 'fr');
         updateState({ language: 'fr', strings: fr, themes: [{ value: null, label: fr.default }, { value: 'dark', label: fr.dark }, { value: 'light', label: fr.light }]});
       }
+      else if (code && code.startsWith('sp')) {
+        localStorage.setItem('language', 'sp');
+        updateState({ language: 'sp', strings: sp, themes: [{ value: null, label: sp.default }, { value: 'dark', label: sp.dark }, { value: 'light', label: sp.light }]});
+      }
       else if (code && code.startsWith('en')) {
         localStorage.setItem('language', 'en');
         updateState({ language: 'en', strings: en, themes: [{ value: null, label: fr.default }, { value: 'dark', label: en.dark }, { value: 'light', label: en.light }]});
@@ -180,6 +190,9 @@ export function useSettingsContext() {
         const browser = navigator.language;
         if (browser && browser.startsWith('fr')) {
           updateState({ language: null, strings: fr, themes: [{ value: null, label: fr.default }, { value: 'dark', label: fr.dark }, { value: 'light', label: fr.light }]});
+        }
+        if (browser && browser.startsWith('sp')) {
+          updateState({ language: null, strings: sp, themes: [{ value: null, label: sp.default }, { value: 'dark', label: sp.dark }, { value: 'light', label: sp.light }]});
         }
         else {
           updateState({ language: null, strings: en, themes: [{ value: null, label: en.default }, { value: 'dark', label: en.dark }, { value: 'light', label: en.light }]});
