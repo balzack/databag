@@ -45,7 +45,7 @@ export function Access({ mode }) {
                       style={{ width: 128 }}
                       value={state.theme}
                       onChange={actions.setTheme}
-                      options={state.themes}
+                      options={[{value: null, label: state.strings.default}, ...state.themes]}
                     />
                 </div>
                 <div className="option">
@@ -56,7 +56,7 @@ export function Access({ mode }) {
                       style={{ width: 128 }}
                       value={state.language}
                       onChange={actions.setLanguage}
-                      options={state.languages}
+                      options={[{value: null, label: state.strings.default}, ...state.languages]}
                     />
                 </div>
               </div>
@@ -85,7 +85,7 @@ export function Access({ mode }) {
                       style={{ width: 128 }}
                       value={state.theme}
                       onChange={actions.setTheme}
-                      options={state.themes}
+                      options={[{value: null, label: state.strings.default}, ...state.themes]}
                     />
                 </div>
                 <div className="option">
@@ -96,7 +96,7 @@ export function Access({ mode }) {
                       style={{ width: 128 }}
                       value={state.language}
                       onChange={actions.setLanguage}
-                      options={state.languages}
+                      options={[{value: null, label: state.strings.default}, ...state.languages]}
                     />
                 </div>
               </div>
