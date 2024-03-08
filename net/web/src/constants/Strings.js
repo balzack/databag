@@ -184,6 +184,8 @@ export const en = {
   confirmDisconnect: 'Are you sure you want to disconnect the contact?',
   removing: 'Deleting Contact',
   confirmRemove: 'Are you sure you want to delete the contact?',
+  message: 'Message',
+  securedMessage: 'Sealed Message',
 };
 
 export const fr = {
@@ -372,6 +374,9 @@ export const fr = {
   confirmDisconnect: 'Êtes-vous sûr de vouloir déconnecter le contact?',
   removing: 'Suppression du contact',
   confirmRemove: 'Êtes-vous sûr de vouloir supprimer le contact?',
+
+  message: 'Message',
+  sealedMessage: 'Message Sécurisé',
 };
 
 export const sp = {
@@ -560,6 +565,8 @@ export const sp = {
   confirmDisconnect: '¿Estás seguro de que quieres desconectar el contacto?',
   removing: 'Eliminando contacto',
   confirmRemove: '¿Estás seguro de que quieres eliminar el contacto?',
+  message: 'Mensaje',
+  sealedMessage: 'Mensaje Seguro',
 }
 
 export const pt = {
@@ -748,6 +755,8 @@ export const pt = {
   confirmDisconnect: 'Tem certeza de que deseja desconectar o contato?',
   removing: 'Removendo Contato',
   confirmRemove: 'Tem certeza de que deseja remover o contato?',
+  message: 'Mensagem',
+  sealedMessage: 'Mensagem Segura',
 }
 
 export const de = {
@@ -936,6 +945,8 @@ export const de = {
   confirmDisconnect: 'Sind Sie sicher, dass Sie den Kontakt trennen möchten?',
   removing: 'Kontakt wird gelöscht',
   confirmRemove: 'Sind Sie sicher, dass Sie den Kontakt löschen möchten?',
+  message: 'Nachricht',
+  sealedMessage: 'Gesicherte Nachricht',
 }
 
 export const ru = {
@@ -1124,4 +1135,6 @@ export const ru = {
   confirmDisconnect: 'Вы уверены, что хотите отключить контакт?',
   removing: 'Удаление контакта',
   confirmRemove: 'Вы уверены, что хотите удалить контакт?',
+  message: 'Cообщение',
+  sealedMessage: 'Защищенное Cообщение',
 }

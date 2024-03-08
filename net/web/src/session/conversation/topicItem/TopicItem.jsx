@@ -122,7 +122,7 @@ export function TopicItem({ host, contentKey, sealed, topic, update, remove, str
             </>
           )}
           { sealed && (
-            <div className="sealed-message">sealed message</div>
+            <div className="sealed-message">{ strings.sealedMessage }</div>
           )}
           { !sealed && !state.editing && (
             <div className="message">
@@ -131,13 +131,13 @@ export function TopicItem({ host, contentKey, sealed, topic, update, remove, str
           )}
           { state.editing && (
             <div className="editing">
-              <Input.TextArea defaultValue={state.message} placeholder="message"
+              <Input.TextArea defaultValue={state.message} placeholder={strings.message}
                 style={{ resize: 'none', color: state.textColor, fontSize: state.textSize }}
                 onChange={(e) => actions.setMessage(e.target.value)} rows={3} bordered={false}/>
               <div className="controls">
                 <Space>
-                  <Button onClick={actions.clearEditing}>Cancel</Button>
-                  <Button type="primary" onClick={updateTopic}>Save</Button>
+                  <Button onClick={actions.clearEditing}>{ strings.cancel }</Button>
+                  <Button type="primary" onClick={updateTopic}>{ strings.save }</Button>
                 </Space>
               </div>
             </div>
