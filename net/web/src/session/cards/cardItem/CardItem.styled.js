@@ -42,7 +42,7 @@ export const CardItemWrapper = styled.div`
   .markup {
     position: absolute;
     right: 0;
-    margin-right: 16px;
+    margin-right: 24px;
     display: flex;
     flex-direction: row;
     align-items: center;

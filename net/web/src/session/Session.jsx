@@ -309,7 +309,7 @@ export function Session() {
             </div>
           </RingingWrapper>
         </Modal>
-        <Modal centered visible={state.callStatus} footer={null} closable={false} width={getDim() + 12} height={getDim()} bodyStyle={{ padding: 6 }}>
+        <Modal centered visible={state.callStatus} footer={null} closable={false} width={getDim() + 12} height={getDim()} bodyStyle={{ padding: 6, backgroundColor: '#888888', borderRadius: 3 }}>
           <CallingWrapper>
             <div className={ state.fullscreen ? 'fullscreen' : 'modal' }>
               <div className="window">

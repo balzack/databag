@@ -15,42 +15,42 @@ export const RingingWrapper = styled.div`
       padding-left: 8px;
 
       .ringing-accept {
-        color: ${Colors.primary};
+        color: ${Colors.white};
         font-size: 18;
         width: 32px;
         height: 32px;
         display: flex;
         align-items: center;
         justify-content: center;
-        background-color: ${Colors.white};
+        background-color: ${Colors.primary};
         border-radius: 16px;
         margin: 8px;
         cursor: pointer;
       }
 
       .ringing-ignore {
-        color: ${Colors.grey};
+        color: ${Colors.white};
         font-size: 18;
         width: 32px;
         height: 32px;
         display: flex;
         align-items: center;
         justify-content: center;
-        background-color: ${Colors.white};
+        background-color: ${Colors.grey};
         border-radius: 16px;
         margin: 8px;
         cursor: pointer;
       }
     
       .ringing-decline {
-        color: ${Colors.alert};
+        color: ${Colors.white};
         font-size: 18;
         width: 32px;
         height: 32px;
         display: flex;
         align-items: center;
         justify-content: center;
-        background-color: ${Colors.white};
+        background-color: ${Colors.alert};
         border-radius: 16px;
         margin: 8px;
         transform: rotate(224deg);

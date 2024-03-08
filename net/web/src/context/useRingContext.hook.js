@@ -15,8 +15,8 @@ export function useRingContext() {
     localVideo: false,
     localAudio: false,
     remoteStream: null,
-    removeVideo: false,
-    removeAudio: false,
+    remoteVideo: false,
+    remoteAudio: false,
   });
   const access = useRef(null);
 
@@ -271,7 +271,7 @@ export function useRingContext() {
         audioTrack.current.stop();
         audioTrack.current = null;
       }
-      updateState({ callStatus: null, remoteVideo: false, remoteAudio: false });
+      updateState({ callStatus: null, removeStream: null, localStream: null, remoteVideo: false, remoteAudio: false, localVideo: false, localAudio: false });
     }
     ws.current.onopen = async () => {
       ws.current.send(JSON.stringify({ AppToken: token }));
@@ -394,7 +394,7 @@ export function useRingContext() {
       }
       catch (err) {
         calling.current = null;
-        updateState({ callStatus: null, remoteVideo: false, remoteAudio: false });
+        updateState({ callStatus: null, remoteStream: null, localStream: null, remoteVideo: false, remoteAudio: false, localVideo: false, localAudio: false });
       }
 
       let index = 0;
