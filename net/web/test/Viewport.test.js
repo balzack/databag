@@ -1,31 +1,31 @@
 import React, { useState, useEffect, useContext } from 'react';
 import {render, act, screen, waitFor, fireEvent} from '@testing-library/react'
 
-import { ViewportContext, ViewportContextProvider } from 'context/ViewportContext';
+import { SettingsContext, SettingsContextProvider } from 'context/SettingsContext';
 
 function ViewportView() {
   const [renderCount, setRenderCount] = useState(0);
-  const viewport = useContext(ViewportContext);
+  const settings = useContext(SettingsContext);
 
   useEffect(() => {
     setRenderCount(renderCount + 1);
-  }, [viewport.state]);
+  }, [settings.state]);
 
   return (
     <div>
       <span data-testid="count">{ renderCount }</span>
-      <span data-testid="display">{ viewport.state.display }</span>
-      <span data-testid="width">{ viewport.state.width }</span>
-      <span data-testid="height">{ viewport.state.height }</span>
+      <span data-testid="display">{ settings.state.display }</span>
+      <span data-testid="width">{ settings.state.width }</span>
+      <span data-testid="height">{ settings.state.height }</span>
     </div>
   );
 }
 
 function ViewportTestApp() {
   return (
-    <ViewportContextProvider>
+    <SettingsContextProvider>
       <ViewportView />
-    </ViewportContextProvider>
+    </SettingsContextProvider>
   );
 }
 

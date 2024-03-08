@@ -7,7 +7,7 @@ import { CardContext, CardContextProvider } from 'context/CardContext';
 import { ChannelContext, ChannelContextProvider } from 'context/ChannelContext';
 import { StoreContextProvider } from 'context/StoreContext';
 import { UploadContextProvider } from 'context/UploadContext';
-import { ViewportContextProvider } from 'context/ViewportContext';
+import { SettingsContextProvider } from 'context/SettingsContext';
 import { useChannels } from 'session/channels/useChannels.hook';
 import * as fetchUtil from 'api/fetchUtil';
 
@@ -51,9 +51,9 @@ function TopicsTestApp() {
           <ProfileContextProvider>
             <StoreContextProvider>
               <AccountContextProvider>
-                <ViewportContextProvider>
+                <SettingsContextProvider>
                   <TopicsView />
-                </ViewportContextProvider>
+                </SettingsContextProvider>
               </AccountContextProvider>
             </StoreContextProvider>
           </ProfileContextProvider>

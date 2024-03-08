@@ -8,7 +8,7 @@ import { ChannelContextProvider } from 'context/ChannelContext';
 import { StoreContextProvider } from 'context/StoreContext';
 import { RingContextProvider } from 'context/RingContext';
 import { UploadContextProvider } from 'context/UploadContext';
-import { ViewportContextProvider } from 'context/ViewportContext';
+import { SettingsContextProvider } from 'context/SettingsContext';
 import { useAccess } from 'access/useAccess.hook';
 import * as fetchUtil from 'api/fetchUtil';
 
@@ -36,11 +36,11 @@ function AccessTestApp() {
             <StoreContextProvider>
               <AccountContextProvider>
                 <RingContextProvider>
-                  <ViewportContextProvider>
+                  <SettingsContextProvider>
                     <AppContextProvider>
                       <AccessView />
                     </AppContextProvider>
-                  </ViewportContextProvider>
+                  </SettingsContextProvider>
                 </RingContextProvider>
               </AccountContextProvider>
             </StoreContextProvider>

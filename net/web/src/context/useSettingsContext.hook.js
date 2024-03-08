@@ -48,6 +48,10 @@ export function useSettingsContext() {
   };
 
   const getDevices = async (type) => {
+    if (!navigator || !navigator.mediaDevices) {
+      return [];
+    }
+
     const filtered = new Map();
     const devices = await navigator.mediaDevices.enumerateDevices();
 
@@ -190,7 +194,7 @@ export function useSettingsContext() {
         }
       }
     },
-    setLanguage: (code: string) => {
+    setLanguage: (code) => {
       if (code && code.startsWith('fr')) {
         localStorage.setItem('language', 'fr');
         updateState({ language: 'fr', strings: fr, themes: [{ value: 'dark', label: fr.dark }, { value: 'light', label: fr.light }]});
