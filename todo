@@ -1,10 +1,2 @@
-
-add languages:
-portugues
-german
-russian
-
-fix lint warnings
-
 trim docker image
 

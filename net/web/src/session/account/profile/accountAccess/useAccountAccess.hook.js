@@ -2,7 +2,6 @@ import { useRef, useState, useEffect, useContext } from 'react';
 import { AccountContext } from 'context/AccountContext';
 import { ProfileContext } from 'context/ProfileContext';
 import { SettingsContext } from 'context/SettingsContext';
-import { RingContext } from 'context/RingContext';
 import { generateSeal, unlockSeal, updateSeal } from 'context/sealUtil';
 import { getUsername } from 'api/getUsername';
 export function useAccountAccess() {
@@ -48,7 +47,6 @@ export function useAccountAccess() {
   const profile = useContext(ProfileContext);
   const account = useContext(AccountContext);  
   const settings = useContext(SettingsContext);
-  const ring = useContext(RingContext);
   const debounce = useRef(null);
 
   const updateState = (value) => {

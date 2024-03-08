@@ -1,10 +1,10 @@
 import { useRef, useCallback } from 'react';
-import { Modal, Input, Button, Switch } from 'antd';
+import { Modal, Input, Button } from 'antd';
 import { ProfileWrapper, ProfileDetailsWrapper, ProfileImageWrapper } from './Profile.styled';
 import { useProfile } from './useProfile.hook';
 import { Logo } from 'logo/Logo';
 import { AccountAccess } from './accountAccess/AccountAccess';
-import { LogoutOutlined, CloseOutlined, EditOutlined, BookOutlined, EnvironmentOutlined } from '@ant-design/icons';
+import { CloseOutlined, EditOutlined, BookOutlined, EnvironmentOutlined } from '@ant-design/icons';
 import Cropper from 'react-easy-crop';
 
 export function Profile({ closeProfile }) {
@@ -12,7 +12,6 @@ export function Profile({ closeProfile }) {
   const [ modal, modalContext ] = Modal.useModal();
   const { state, actions } = useProfile();
   const imageFile = useRef(null);
-  const all = useRef(false);
 
   const selected = (e) => {
     var reader = new FileReader();

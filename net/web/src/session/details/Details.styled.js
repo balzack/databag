@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { Colors } from 'constants/Colors';
 
 export const DetailsWrapper = styled.div`
   height: 100%;
@@ -168,10 +167,3 @@ export const DetailsWrapper = styled.div`
   }
 `
 
-export const ModalFooter = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  align-items: center;
-`

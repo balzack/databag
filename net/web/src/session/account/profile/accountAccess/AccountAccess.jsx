@@ -131,7 +131,7 @@ export function AccountAccess() {
                 size="small"
                 value={state.theme}
                 onChange={actions.setTheme}
-                options={state.themes}
+                options={[ { value: null, label: state.strings.default }, ...state.themes ]}
               />
           </div>
           <div className="option">
@@ -142,7 +142,7 @@ export function AccountAccess() {
                 size="small"
                 value={state.language}
                 onChange={actions.setLanguage}
-                options={state.languages}
+                options={[ { value: null, label: state.strings.default }, ...state.languages ]}
               />
           </div>
           <div className="option">
@@ -153,7 +153,7 @@ export function AccountAccess() {
                 size="small"
                 value={state.audioId}
                 onChange={actions.setAudio}
-                options={[ { value: null, label: 'Default' }, ...state.audioInputs ]}
+                options={[ { value: null, label: state.strings.default }, ...state.audioInputs ]}
               />
           </div>
           <div className="option">
@@ -164,7 +164,7 @@ export function AccountAccess() {
                 size="small"
                 value={state.videoId}
                 onChange={actions.setVideo}
-                options={[ { value: null, label: 'Default' }, ...state.videoInputs ]}
+                options={[ { value: null, label: state.strings.default }, ...state.videoInputs ]}
               />
           </div>
         </div>

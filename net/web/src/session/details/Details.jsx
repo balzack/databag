@@ -1,5 +1,5 @@
 import { Button, Modal, Tooltip } from 'antd';
-import { DetailsWrapper, ModalFooter } from './Details.styled';
+import { DetailsWrapper } from './Details.styled';
 import { CloseOutlined } from '@ant-design/icons';
 import { useDetails } from './useDetails.hook';
 import { Logo } from 'logo/Logo';
@@ -113,19 +113,6 @@ export function Details({ closeDetails, closeConversation, openContact }) {
       });
     }
   };
-
-  const editSubjectFooter = (
-    <ModalFooter>
-      <Button key="back" onClick={actions.clearEditSubject}>Cancel</Button>
-      <Button key="save" type="primary" onClick={saveSubject} loading={state.busy}>Save</Button>
-    </ModalFooter>
-  );
-
-  const editMembersFooter = (
-    <ModalFooter>
-      <Button key="back" onClick={actions.clearEditMembers}>Done</Button>
-    </ModalFooter>
-  );
 
   return (
     <DetailsWrapper>
