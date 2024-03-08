@@ -23,6 +23,36 @@ export function Contact({ close, guid, listing }) {
     }
   }
 
+  const disconnect = (action) => {
+    modal.confirm({
+      title: <span style={state.menuStyle}>{state.strings.disconnecting}</span>,
+      icon: <UserDeleteOutlined />,
+      content: <span style={state.menuStyle}>{state.strings.confirmDisconnect}</span>,
+      bodyStyle: { borderRadius: 8, padding: 16, ...state.menuStyle },
+      okText: state.strings.disconnect,
+      onOk() {
+        updateContact(action);
+      },
+      cancelText: state.strings.cancel,
+      onCancel() {},
+    });
+  }
+
+  const remove = (action) => {
+    modal.confirm({
+      title: <span style={state.menuStyle}>{state.strings.removing}</span>,
+      icon: <UserDeleteOutlined />,
+      content: <span style={state.menuStyle}>{state.strings.confirmRemove}</span>,
+      bodyStyle: { borderRadius: 8, padding: 16, ...state.menuStyle },
+      okText: state.strings.remove,
+      onOk() {
+        updateContact(action);
+      },
+      cancelText: state.strings.cancel,
+      onCancel() {},
+    });
+  }
+
   return (
     <ContactWrapper>
       { modalContext }
@@ -86,12 +116,12 @@ export function Contact({ close, guid, listing }) {
           <div className="controls">
             { state.status === 'connected' && (
               <Tooltip placement="top" title={state.strings.disconnectContact}>
-                <Button className="button" type="primary" loading={state.busy} icon={<UserDeleteOutlined />} size="medium"  onClick={() => updateContact(actions.disconnect)}>{ state.strings.disconnect }</Button>
+                <Button className="button" type="primary" loading={state.busy} icon={<UserDeleteOutlined />} size="medium"  onClick={() => disconnect(actions.disconnect)}>{ state.strings.disconnect }</Button>
               </Tooltip>
             )}
             { state.status === 'connected' && (
               <Tooltip placement="top" title={state.strings.deleteContact}>
-                <Button className="button" type="primary" loading={state.busy} icon={<DeleteOutlined />} size="medium"  onClick={() => updateContact(actions.disconnectRemove)}>{ state.strings.remove }</Button>
+                <Button className="button" type="primary" loading={state.busy} icon={<DeleteOutlined />} size="medium"  onClick={() => remove(actions.disconnectRemove)}>{ state.strings.remove }</Button>
               </Tooltip>
             )}
             { state.status === 'pending' && (
@@ -106,7 +136,7 @@ export function Contact({ close, guid, listing }) {
             )}
             { state.status === 'pending' && (
               <Tooltip placement="top" title={state.strings.ignoreRequest}>
-                <Button className="button" type="primary" loading={state.busy} icon={<StopOutlined />} size="medium"  onClick={() => updateContact(actions.remove)}>{ state.strings.cancel }</Button>
+                <Button className="button" type="primary" loading={state.busy} icon={<StopOutlined />} size="medium"  onClick={() => remove(actions.remove)}>{ state.strings.cancel }</Button>
               </Tooltip>
             )}
             { state.status === 'requested' && (
@@ -116,17 +146,17 @@ export function Contact({ close, guid, listing }) {
             )}
             { state.status === 'requested' && (
               <Tooltip placement="top" title={state.strings.ignoreRequest}>
-                <Button className="button" type="primary" loading={state.busy} icon={<StopOutlined />} size="medium"  onClick={() => updateContact(actions.disconnect)}>{ state.strings.cancel }</Button>
+                <Button className="button" type="primary" loading={state.busy} icon={<StopOutlined />} size="medium"  onClick={() => disconnect(actions.disconnect)}>{ state.strings.cancel }</Button>
               </Tooltip>
             )}
             { state.status === 'connecting' && (
               <Tooltip placement="top" title={state.strings.cancelRequest}>
-                <Button className="button" type="primary" loading={state.busy} icon={<StopOutlined />} size="medium"  onClick={() => updateContact(actions.disconnect)}>{ state.strings.cancel }</Button>
+                <Button className="button" type="primary" loading={state.busy} icon={<StopOutlined />} size="medium"  onClick={() => disconnect(actions.disconnect)}>{ state.strings.cancel }</Button>
               </Tooltip>
             )}
             { state.status === 'connecting' && (
               <Tooltip placement="top" title={state.strings.deleteContact}>
-                <Button className="button" type="primary" loading={state.busy} icon={<DeleteOutlined />} size="medium"  onClick={() => updateContact(actions.disconnectRemove)}>{ state.strings.remove }</Button>
+                <Button className="button" type="primary" loading={state.busy} icon={<DeleteOutlined />} size="medium"  onClick={() => remove(actions.disconnectRemove)}>{ state.strings.remove }</Button>
               </Tooltip>
             )}
             { state.status === 'confirmed' && (
@@ -136,7 +166,7 @@ export function Contact({ close, guid, listing }) {
             )}
             { state.status === 'confirmed' && (
               <Tooltip placement="top" title={state.strings.deleteContact}>
-                <Button className="button" type="primary" loading={state.busy} icon={<DeleteOutlined />} size="medium"  onClick={() => updateContact(actions.remove)}>{ state.strings.remove }</Button>
+                <Button className="button" type="primary" loading={state.busy} icon={<DeleteOutlined />} size="medium"  onClick={() => remove(actions.remove)}>{ state.strings.remove }</Button>
               </Tooltip>
             )}
             { state.status === 'unsaved' && (

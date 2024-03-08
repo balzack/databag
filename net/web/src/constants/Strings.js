@@ -179,6 +179,11 @@ export const en = {
   camera: 'Camera',
 
   notes: 'Notes',
+
+  disconnecting: 'Disconnecting Contact',
+  confirmDisconnect: 'Are you sure you want to disconnect the contact?',
+  removing: 'Deleting Contact',
+  confirmRemove: 'Are you sure you want to delete the contact?',
 };
 
 export const fr = {
@@ -362,6 +367,11 @@ export const fr = {
   camera: 'Caméra',
 
   notes: 'Notes',
+
+  disconnecting: 'Déconnexion du contact',
+  confirmDisconnect: 'Êtes-vous sûr de vouloir déconnecter le contact?',
+  removing: 'Suppression du contact',
+  confirmRemove: 'Êtes-vous sûr de vouloir supprimer le contact?',
 };
 
 export const sp = {
@@ -545,6 +555,11 @@ export const sp = {
   camera: 'Cámara',
 
   notes: 'Notas',
+
+  disconnecting: 'Desconexión de contacto',
+  confirmDisconnect: '¿Estás seguro de que quieres desconectar el contacto?',
+  removing: 'Eliminando contacto',
+  confirmRemove: '¿Estás seguro de que quieres eliminar el contacto?',
 }
 
 export const pt = {
@@ -727,7 +742,12 @@ export const pt = {
   microphone: 'Microfone',
   camera: 'Câmera',
 
-  notes: 'Notas'
+  notes: 'Notas',
+
+  disconnecting: 'Desconectando Contato',
+  confirmDisconnect: 'Tem certeza de que deseja desconectar o contato?',
+  removing: 'Removendo Contato',
+  confirmRemove: 'Tem certeza de que deseja remover o contato?',
 }
 
 export const de = {
@@ -910,7 +930,12 @@ export const de = {
   microphone: 'Mikrofon',
   camera: 'Kamera',
 
-  notes: 'Notizen'
+  notes: 'Notizen',
+
+  disconnecting: 'Kontakt wird getrennt',
+  confirmDisconnect: 'Sind Sie sicher, dass Sie den Kontakt trennen möchten?',
+  removing: 'Kontakt wird gelöscht',
+  confirmRemove: 'Sind Sie sicher, dass Sie den Kontakt löschen möchten?',
 }
 
 export const ru = {
@@ -1093,5 +1118,10 @@ export const ru = {
   microphone: 'Микрофон',
   camera: 'Камера',
 
-  notes: 'Заметки'
+  notes: 'Заметки',
+
+  disconnecting: 'Отключение контакта',
+  confirmDisconnect: 'Вы уверены, что хотите отключить контакт?',
+  removing: 'Удаление контакта',
+  confirmRemove: 'Вы уверены, что хотите удалить контакт?',
 }
