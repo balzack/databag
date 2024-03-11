@@ -282,8 +282,8 @@
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				00EEFC60759A1932668264C0 /* [CP] Embed Pods Frameworks */,
 				E235C05ADACE081382539298 /* [CP] Copy Pods Resources */,
-				D347E695755653CE8D39CFDD /* [CP-User] [RNFB] Core Configuration */,
 				7B4A534529F39E250036F3ED /* Embed Foundation Extensions */,
+				D347E695755653CE8D39CFDD /* [CP-User] [RNFB] Core Configuration */,
 			);
 			buildRules = (
 			);
@@ -674,11 +674,12 @@
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Databag/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Databag;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.22;
+				MARKETING_VERSION = 1.25;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -708,11 +709,12 @@
 				DEVELOPMENT_TEAM = 3P65PQ7SUR;
 				INFOPLIST_FILE = Databag/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Databag;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.22;
+				MARKETING_VERSION = 1.25;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
