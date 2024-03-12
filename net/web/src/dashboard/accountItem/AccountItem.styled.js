@@ -10,11 +10,12 @@ export const AccountItemWrapper = styled.div`
   padding-right: 16px;
   padding-top: 2px;
   padding-bottom: 2px;
-  border-bottom: 1px solid #eeeeee;
+  border-bottom: 1px solid ${props => props.theme.itemBorder};
   align-items: center;
+  color: ${props => props.theme.mainText};
 
   &:hover {
-    background-color: #eeeeee;
+    background-color: ${props => props.theme.hoverArea};
   }
 
   .avatar {
@@ -52,7 +53,7 @@ export const AccountItemWrapper = styled.div`
   }
 
   .storage {
-    color: #555555;
+    color: ${props => props.theme.hintText};
     padding-left: 8px;
   }    
 
@@ -89,6 +90,18 @@ export const DeleteButton = styled(Button)`
 `
 
 export const AccessLayout = styled.div`
+  .control {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 16px;
+  }
+
+  .header {
+    display: flex;
+    justify-content: center;
+    font-size: 1.2rem;
+  }
+
   .url {
     display: flex;
     flex-direction: row;
@@ -97,7 +110,7 @@ export const AccessLayout = styled.div`
 
     .label {
       padding-right: 16px;
-      width: 112px;
+      min-width: 145px;
     }
 
     .token {

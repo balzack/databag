@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import Colors from 'constants/Colors';
 
 export const EditMembersWrapper = styled.div`
   display: flex;
@@ -12,7 +11,22 @@ export const EditMembersWrapper = styled.div`
     min-height: 100px;
     max-height: 200px;
     overflow: auto;
-    border: 1px solid ${Colors.divider};
+    border: 1px solid ${props => props.theme.sectionBorder};
+    background-color: ${props => props.theme.itemArea};
   }
 
+  .title {
+    font-size: 1.2rem;
+    display: flex;
+    justify-content: center;
+    padding-bottom: 16px;
+  }
+
+  .controls {
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+    padding-top: 16px;
+    width: 100%;
+  }
 `

@@ -5,7 +5,7 @@ import (
   "gorm.io/gorm"
   "gorm.io/gorm/logger"
   "gorm.io/gorm/clause"
-  "github.com/glebarez/sqlite"
+  "gorm.io/driver/sqlite"
 )
 
 var DB *gorm.DB;

@@ -1,13 +1,15 @@
 import { useContext, useState, useEffect } from 'react';
 import { CardContext } from 'context/CardContext';
-import { ViewportContext } from 'context/ViewportContext';
+import { SettingsContext } from 'context/SettingsContext';
 import { getListingMessage } from 'api/getListingMessage';
 import { getCardByGuid } from 'context/cardUtil';
 
 export function useContact(guid, listing, close) {
 
   const [state, setState] = useState({
+    offsync: false,
     logo: null,
+    logoSet: false,
     name: null,
     cardId: null,
     location: null,
@@ -17,26 +19,15 @@ export function useContact(guid, listing, close) {
     status: null,
     busy: false,
     buttonStatus: 'button idle',
+    strings: {},
+    menuStyle: {},
   });
 
   const card = useContext(CardContext);
-  const viewport = useContext(ViewportContext);  
+  const settings = useContext(SettingsContext);  
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
-  }
-
-  const statusMap = (status) => {
-    if (status === 'confirmed') {
-      return 'saved';
-    }
-    if (status === 'requested') {
-      return 'request received';
-    }
-    if (status === 'connecting') {
-      return 'request sent';
-    }
-    return status;
   }
 
   useEffect(() => {
@@ -45,25 +36,27 @@ export function useContact(guid, listing, close) {
       const profile = contact?.data?.cardProfile;
       const detail = contact?.data?.cardDetail;
       const { imageSet, name, location, description, handle, node } = profile;      
-      const status = statusMap(detail.status);
+      const status = detail.status;
       const cardId = contact.id;
+      const offsync = contact.offsync;
       const logo = imageSet ? card.actions.getCardImageUrl(cardId) : null;
-      updateState({ logo, name, location, description, handle, node, status, cardId });
+      updateState({ logoSet: true, offsync, logo, name, location, description, handle, node, status, cardId });
     }
     else if (listing) {
       const { logo, name, location, description, handle, node } = listing;
-      updateState({ logo, name, location, description, handle, node, status: 'unsaved', cardId: null });
+      updateState({ logoSet: true, logo, name, location, description, handle, node, status: 'unsaved', cardId: null });
     }
     else {
-      updateState({ logo: null, name: null, cardId: null, location: null, description: null, handle: null,
+      updateState({ logoSet: true, logo: null, name: null, cardId: null, location: null, description: null, handle: null,
          status: null });
     }
     // eslint-disable-next-line
   }, [card.state, guid, listing]); 
 
   useEffect(() => {
-    updateState({ display: viewport.state.display });
-  }, [viewport.state]);
+    const { display, strings, menuStyle } = settings.state;
+    updateState({ display, strings, menuStyle });
+  }, [settings.state]);
 
   const applyAction = async (action) => {
     if (!state.busy) {
@@ -147,6 +140,14 @@ export function useContact(guid, listing, close) {
         }
         await card.actions.removeCard(state.cardId);
         close();
+      });
+    },
+    resync: async () => {
+      await applyAction(async () => {
+        const success = await card.actions.resyncCard(state.cardId);
+        if (!success) {
+          throw new Error("resync failed");
+        }
       });
     },
     remove: async () => {

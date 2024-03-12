@@ -1,17 +1,17 @@
 import styled from 'styled-components';
-import Colors from 'constants/Colors';
 
 export const ListingItemWrapper = styled.div`
   height: 48px;
   width: 100%;
   display: flex;
   align-items: center;
-  border-bottom: 1px solid ${Colors.divider};
+  border-bottom: 1px solid ${params => params.theme.itemBorder};
+  color: ${params => params.theme.mainText};
   padding-left: 16px;
   padding-right: 16px;
 
   &:hover {
-    background-color: ${Colors.formHover};
+    background-color: ${params => params.theme.hoverArea};
     cursor: pointer;
   }
 

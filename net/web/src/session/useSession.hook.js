@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { AppContext } from 'context/AppContext';
 import { CardContext } from 'context/CardContext';
 import { StoreContext } from 'context/StoreContext';
-import { ViewportContext } from 'context/ViewportContext';
+import { SettingsContext } from 'context/SettingsContext';
 import { ProfileContext } from 'context/ProfileContext';
 import { RingContext } from 'context/RingContext';
 
@@ -32,13 +32,16 @@ export function useSession() {
     remoteStream: null,
     remoteVideo: false,
     remoteAudio: false,
+    audioId: null,
+    videoId: null,
+    fullscreen: false,
   });
 
   const app = useContext(AppContext);
   const card = useContext(CardContext);
   const store = useContext(StoreContext);
   const ring = useContext(RingContext);
-  const viewport = useContext(ViewportContext);
+  const settings = useContext(SettingsContext);
   const profile = useContext(ProfileContext);
 
   const navigate = useNavigate();
@@ -76,6 +79,11 @@ export function useSession() {
 
     const { callStatus, localStream, localVideo, localAudio, remoteStream, remoteVideo, remoteAudio } = ring.state;
     updateState({ ringing, callStatus, callLogo, localStream, localVideo, localAudio, remoteStream, remoteVideo, remoteAudio });
+
+    if (!callStatus && state.fullscreen) {
+      updateState({ fullscreen: false });
+    }
+
     // eslint-disable-next-line
   }, [ring.state]);
 
@@ -96,8 +104,9 @@ export function useSession() {
   }, [app.state]);
 
   useEffect(() => {
-    updateState({ display: viewport.state.display });
-  }, [viewport]);
+    const { display, theme, audioId } = settings.state;
+    updateState({ display, theme, audioId });
+  }, [settings.state]);
 
   useEffect(() => {
     let updated;
@@ -117,6 +126,9 @@ export function useSession() {
   }, [store]);
 
   const actions = {
+    setFullscreen: (fullscreen) => {
+      updateState({ fullscreen });
+    },
     openCards: () => {
       updateState({ cards: true });
     },
@@ -170,13 +182,13 @@ export function useSession() {
     accept: async (call) => {
       const { cardId, callId, contactNode, contactToken, calleeToken, iceUrl, iceUsername, icePassword } = call;
       const node = contactNode ? contactNode : window.location.host;
-      await ring.actions.accept(cardId, callId, node, contactToken, calleeToken, iceUrl, iceUsername, icePassword);
+      await ring.actions.accept(cardId, callId, node, contactToken, calleeToken, iceUrl, iceUsername, icePassword, state.audioId);
     },
     end: async () => {
       await ring.actions.end();
     },
     enableVideo: async () => {
-      await ring.actions.enableVideo();
+      await ring.actions.enableVideo(state.videoId, state.audioId);
     },
     disableVideo: async () => {
       await ring.actions.disableVideo();

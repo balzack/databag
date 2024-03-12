@@ -9,7 +9,7 @@ import { CardContextProvider } from 'context/CardContext';
 import { ChannelContextProvider } from 'context/ChannelContext';
 import { StoreContextProvider } from 'context/StoreContext';
 import { UploadContextProvider } from 'context/UploadContext';
-import { ViewportContextProvider } from 'context/ViewportContext';
+import { SettingsContextProvider } from 'context/SettingsContext';
 import { RingContextProvider } from 'context/RingContext';
 import { ConversationContextProvider } from 'context/ConversationContext';
 
@@ -45,11 +45,11 @@ function AppTestApp() {
             <StoreContextProvider>
               <AccountContextProvider>
                 <RingContextProvider>
-                  <ViewportContextProvider>
+                  <SettingsContextProvider>
                     <AppContextProvider>
                       <AppView />
                     </AppContextProvider>
-                  </ViewportContextProvider>
+                  </SettingsContextProvider>
                 </RingContextProvider>
               </AccountContextProvider>
             </StoreContextProvider>

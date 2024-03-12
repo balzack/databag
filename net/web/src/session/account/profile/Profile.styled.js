@@ -1,18 +1,17 @@
 import styled from 'styled-components';
-import Colors from 'constants/Colors';
 
 export const ProfileWrapper = styled.div`
-  height: 100%;
+  min-height: 100%;
   width: 100%;
   display: flex;
   flex-direction: column;
-  background-color: ${Colors.profileForm};
+  color: ${props => props.theme.mainText};
 
   .middleHeader {
     margin-left: 16px;
     margin-right: 16px;
     height: 48px;
-    border-bottom: 1px solid ${Colors.profileDivider};
+    border-bottom: 1px solid ${props => props.theme.sectionBorder};
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -27,7 +26,7 @@ export const ProfileWrapper = styled.div`
 
     .close {
       font-size: 16px;
-      color: ${Colors.primary};
+      color: ${props => props.theme.hintText};
       cursor: pointer;
       padding-right: 16px;
     }
@@ -39,33 +38,38 @@ export const ProfileWrapper = styled.div`
     flex-direction: column;
     align-items: center;
     overflow: hidden;
+    background-color: ${props => props.theme.selectedArea};
 
     .title {
       font-size: 18px;
       font-weight: bold;
+      padding-top: 16px;
     }
   }
 
   .section {
     width: 100%;
-    color: ${Colors.grey};
+    color: ${props => props.theme.hintText};
     padding-top: 24px;
     font-size: 12px;
     display: flex;
     widtH: 75%;
     justify-content: center;
-    border-bottom: 1px solid ${Colors.divider};
+    border-bottom: 1px solid ${props => props.theme.sectionBorder};
   }
 
   .logo {
     position: relative;
-    width: 20vw;
+    width: 192px;
+    height: 192px;
+    flex-shrink: 0;
     cursor: pointer;
     margin-left: 32px;
     margin-right: 32px;
 
     &:hover .edit {
-      opacity: 1;
+      color: ${props => props.theme.linkText};
+      background-color: ${props => props.theme.iconArea};
     }
 
     .edit {
@@ -79,9 +83,8 @@ export const ProfileWrapper = styled.div`
       height: 24px;
       bottom: 0;
       right: 0;
-      color: ${Colors.link};
-      background-color: ${Colors.white};
-      opacity: 0.7;
+      color: ${props => props.theme.hintText};
+      background-color: ${props => props.theme.disabledArea};
     }
   }
 
@@ -92,7 +95,8 @@ export const ProfileWrapper = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: center;
-    padding-top: 32px;
+    padding-top: 64px;
+    padding-left: 32px;
   }
 
   .rightContent {
@@ -104,33 +108,49 @@ export const ProfileWrapper = styled.div`
     align-items: center;
     border-radius: 4px;
     padding: 8px;
+    background-color: ${props => props.theme.selectedArea};
+
+    .details {
+      align-items: center;
+    }
+  }
+
+  .rightAccess {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; 
+
+    .contentFill {
+      flex-grow: 1;
+      background-color: ${props => props.theme.selectedArea};
+    }
   }
 
   .details {
     display: flex;
     flex-direction: column;
+    padding-left: 16px;
+    padding-right: 16px;
 
     .notset {
       font-style: italic;
-      color: ${Colors.grey};
+      color: ${props => props.theme.hintText};
     }
 
     .name {
       display: flex;
       flex-direction: row;
-      align-items: center;
+      align-items: baseline;
       cursor: pointer;
 
       &:hover .icon {
-        border: 1px solid ${Colors.grey};
-        background-color: ${Colors.white};
+        color: ${props => props.theme.linkText};
       }  
 
       .icon {
         padding-left: 4px;
         padding-right: 4px;
-        border: 1px solid ${Colors.profileForm};
-        border-raidus: 4px;
+        color: ${props => props.theme.hintText};
       }
 
       .data {
@@ -143,8 +163,9 @@ export const ProfileWrapper = styled.div`
     .location {
       display: flex;
       flex-direction: row;
-      align-items: center;
+      align-items: flex-start;
       padding-bottom: 8px;
+      padding-top: 8px;
   
       .data {
         padding-left: 8px;
@@ -154,11 +175,13 @@ export const ProfileWrapper = styled.div`
     .description {
       display: flex;
       flex-direction: row;
-      align-items: center;
-      padding-bottom: 8px;
+      align-items: flex-start;
+      padding-top: 8px;
+      max-width: 500px;
 
       .data {
         padding-left: 8px;
+        margin-top: -4px;
       }
     } 
   }
@@ -177,50 +200,85 @@ export const ProfileWrapper = styled.div`
     padding: 8px;
     width: 75%;
   }
-
-  .logout {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    cursor: pointer;
-    color: ${Colors.white};
-    background-color: ${Colors.primary};
-    margin-top: 8px;
-    padding: 8px;
-    border-radius: 4px;
-
-    .label {
-      padding-left: 8px;
-    }
-  }
 `
-export const EditFooter = styled.div`
-  width: 100%;
-  display: flex;
 
-  .select {
-    display: flex;
-    flex-grow: 1;
-  }
-`
 export const ProfileDetailsWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
+  gap: 16px;
+
+  .title {
+    font-size: 1.2rem;
+    display: flex;
+    justify-content: center;
+  }
 
   .info {
     width: 100%;
-    padding: 8px;
+    background-color: ${props => props.theme.inputArea};
+    color: ${props => props.theme.mainText};
+    border-radius: 8px;
+
+    textarea {
+      padding-left: 8px;
+      background-color: ${props => props.theme.inputArea};
+      border: 1px solid ${props => props.theme.sectionBorder};
+      color: ${props => props.theme.mainText};
+    }
+
+    textarea::placeholder {
+      color: ${props => props.theme.placeholderText};
+    }
+
+    input {
+      padding-left: 8px;
+      background-color: ${props => props.theme.inputArea};
+      border: 1px solid ${props => props.theme.sectionBorder};
+      color: ${props => props.theme.mainText};
+    }
+
+    input::placeholder {
+      color: ${props => props.theme.placeholderText};
+    }
+  }
+
+  .controls {
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
   }
 `;
 
 export const ProfileImageWrapper = styled.div`
-  position: relative;
-  height: 256px;
-  width: 100%;
   display: flex;
-  align-items: center;
+  flex-direction: column;
   justify-content: center;
+  gap: 16px;
+
+  .cropper {
+    position: relative;
+    height: 256px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .title {
+    font-size: 1.2rem;
+    display: flex;
+    justify-content: center;
+  }
+
+  .controls {
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+
+    .select {
+      flex-grow: 1;
+    }
+  }
 `;
 

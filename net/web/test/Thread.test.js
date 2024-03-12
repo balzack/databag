@@ -4,7 +4,7 @@ import { AppContextProvider } from 'context/AppContext';
 import { AccountContextProvider } from 'context/AccountContext';
 import { ProfileContext, ProfileContextProvider } from 'context/ProfileContext';
 import { StoreContextProvider } from 'context/StoreContext';
-import { ViewportContextProvider } from 'context/ViewportContext';
+import { SettingsContextProvider } from 'context/SettingsContext';
 import { ConversationContextProvider } from 'context/ConversationContext';
 import { CardContext, CardContextProvider } from 'context/CardContext';
 import { UploadContextProvider } from 'context/UploadContext';
@@ -46,13 +46,13 @@ function ThreadTestApp() {
         <CardContextProvider>
           <ProfileContextProvider>
             <AccountContextProvider>
-              <ViewportContextProvider>
+              <SettingsContextProvider>
                 <ConversationContextProvider>
                   <AppContextProvider>
                     <ThreadView />
                   </AppContextProvider>
                 </ConversationContextProvider>
-              </ViewportContextProvider>
+              </SettingsContextProvider>
             </AccountContextProvider>
           </ProfileContextProvider>
         </CardContextProvider>

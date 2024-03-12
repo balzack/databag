@@ -1,8 +1,22 @@
 import styled from 'styled-components';
-import Colors from 'constants/Colors';
 
 export const AccessWrapper = styled.div`
   height: 100%;
+  color: ${props => props.theme.hintText};
+
+  .footer {
+    display: flex;
+    gap: 32px;
+
+    .option {
+      gap: 8px;
+
+      .label {
+        font-size: 12px;
+        padding: 4px;
+      }
+    }
+  }
 
   .full-layout {
     width: 100%;
@@ -13,8 +27,9 @@ export const AccessWrapper = styled.div`
       width: 100%;
       height: 100%;
       border-radius: 4px;
-      background: ${Colors.formBackground};
+      background: ${props => props.theme.frameArea};
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
     }
@@ -29,6 +44,7 @@ export const AccessWrapper = styled.div`
       width: 50%;
       height: 100%;
       padding: 32px;
+      background-color: ${props => props.theme.splashArea};
 
       .splash {
         width: 100%;
@@ -40,8 +56,9 @@ export const AccessWrapper = styled.div`
     .right {
       width: 50%;
       height: 100%;
-      background: ${Colors.formBackground};
+      background: ${props => props.theme.frameArea};
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
     }

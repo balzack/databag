@@ -1,6 +1,6 @@
 import { Button, Space } from 'antd';
 import styled from 'styled-components';
-import Colors from 'constants/Colors';
+import { Colors } from 'constants/Colors';
 
 export const DashboardWrapper = styled.div`
   display: flex;
@@ -11,6 +11,8 @@ export const DashboardWrapper = styled.div`
   height: 100%;
   padding-left: 8px;
   padding-right: 8px;
+  background-color: ${props => props.theme.baseArea};
+  color: ${props => props.theme.hintText};
   
   .container {
     display: flex;
@@ -21,21 +23,21 @@ export const DashboardWrapper = styled.div`
     border-radius: 4px;
     max-width: 100%;
     max-height: 80%;
-    background-color: ${Colors.formBackground};
+    background-color: ${props => props.theme.itemArea};
 
     .header {
-      color: #444444;
+      color: ${props => props.theme.hintText};
       display: flex;
       flex-direction: row;
       font-size: 20px;
-      border-bottom: 1px solid #aaaaaa;
+      border-bottom: 1px solid ${props => props.theme.headerBorder};
     }
 
     .body {
       padding-top: 8px;
       min-height: 0;
       overflow: auto;
-      border-bottom: 1px solid #aaaaaa;
+      border-bottom: 1px solid ${props => props.theme.headerBorder};
       margin-bottom: 16px;
     }
 
@@ -86,6 +88,19 @@ export const AlertIcon = styled.div`
 export const SettingsLayout = styled(Space)`
   width: 100%;
 
+  .header {
+    display: flex;
+    justify-content: center;
+    font-size: 1.2rem;
+  }
+
+  .control {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 16px;
+    gap: 16px;
+  }
+
   .label {
     border-top: 1px solid ${Colors.divider};
     padding-top: 8px;
@@ -101,10 +116,24 @@ export const SettingsLayout = styled(Space)`
     display: flex;
     flex-direction: row;
     align-items: center;
+    gap: 16px;
   }
 `;
 
 export const CreateLayout = styled.div`
+  .header {
+    display: flex;
+    justify-content: center;
+    font-size: 1.2rem;
+  }
+
+  .control {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 16px;
+    gap: 16px;
+  }
+
   .url {
     display: flex;
     flex-direction: row;
@@ -113,7 +142,7 @@ export const CreateLayout = styled.div`
 
     .label {
       padding-right: 16px;
-      width: 112px;
+      width: 145px;
     }
 
     .token {

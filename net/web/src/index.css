@@ -14,13 +14,28 @@
   padding-bottom: 16px !important;
 }
 
+.ant-switch {
+  background: #888888 !important;
+}
+
+.ant-switch-checked {
+  background: #448866 !important;
+}
+
 body {
   margin: 0;
+  background-color: #888888;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  @media (prefers-color-scheme: light) {
+    background-color:#8fbea7;
+  }
+  @media (prefers-color-scheme: dark) {
+    background-color:#000000;
+  }
 }
 
 code {

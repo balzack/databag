@@ -1,10 +1,10 @@
 import { useRef, useCallback } from 'react';
 import { Modal, Input, Button } from 'antd';
-import { ProfileWrapper, ProfileDetailsWrapper, ProfileImageWrapper, EditFooter } from './Profile.styled';
+import { ProfileWrapper, ProfileDetailsWrapper, ProfileImageWrapper } from './Profile.styled';
 import { useProfile } from './useProfile.hook';
 import { Logo } from 'logo/Logo';
 import { AccountAccess } from './accountAccess/AccountAccess';
-import { LogoutOutlined, RightOutlined, EditOutlined, BookOutlined, EnvironmentOutlined } from '@ant-design/icons';
+import { CloseOutlined, EditOutlined, BookOutlined, EnvironmentOutlined } from '@ant-design/icons';
 import Cropper from 'react-easy-crop';
 
 export function Profile({ closeProfile }) {
@@ -29,9 +29,9 @@ export function Profile({ closeProfile }) {
     catch(err) {
       console.log(err);
       modal.error({
-        title: 'Failed to Save',
-        content: 'Please try again.',
-        bodyStyle: { padding: 16 },
+        title: <span style={state.menuStyle}>{state.strings.operationFailed}</span>,
+        content: <span style={state.menuStyle}>{state.strings.tryAgain}</span>,
+        bodyStyle: { borderRadius: 8, padding: 16, ...state.menuStyle },
       });
     }
   }
@@ -44,43 +44,12 @@ export function Profile({ closeProfile }) {
     catch(err) {
       console.log(err);
       modal.error({
-        title: 'Failed to Save',
-        content: 'Please try again.',
-        bodyStyle: { padding: 16 },
+        title: <span style={state.menuStyle}>{state.strings.operationFailed}</span>,
+        content: <span style={state.menuStyle}>{state.strings.tryAgain}</span>,
+        bodyStyle: { borderRadius: 8, padding: 16, ...state.menuStyle },
       });
     }
   }
-
-  const logout = () => {
-    modal.confirm({
-      title: 'Are you sure you want to logout?',
-      icon: <LogoutOutlined />,
-      bodyStyle: { padding: 16 },
-      onOk() {
-        actions.logout();
-      },
-      onCancel() {},
-    });
-  }
-
-  const editImageFooter = (
-    <EditFooter>
-      <input type='file' id='file' accept="image/*" ref={imageFile} onChange={e => selected(e)} style={{display: 'none'}}/>
-      <div className="select">
-        <Button key="select" className="pic" onClick={() => imageFile.current.click()}>Select Image</Button>
-      </div>
-      <Button key="back" onClick={actions.clearEditProfileImage}>Cancel</Button>
-      <Button key="save" type="primary" onClick={saveImage} loading={state.busy}>Save</Button>
-    </EditFooter>
-  );
-
-  const editDetailsFooter = (
-    <EditFooter>
-      <div className="select"></div>
-      <Button key="back" onClick={actions.clearEditProfileDetails}>Cancel</Button>
-      <Button key="save" type="primary" onClick={saveDetails} loading={state.busy}>Save</Button>
-    </EditFooter>
-  );
 
   const onCropComplete = useCallback((area, crop) => {
     actions.setEditImageCrop(crop.width, crop.height, crop.x, crop.y)
@@ -94,30 +63,32 @@ export function Profile({ closeProfile }) {
         <div className="middleHeader">
           <div className="handle">{ state.handle }</div>
           <div className="close" onClick={closeProfile}>
-            <RightOutlined />
+            <CloseOutlined />
           </div>
         </div>
       )}
       { state.display !== 'xlarge' && (
         <div className="rightHeader">
           <div className="title">{ state.handle }</div>
-          <div className="section">Profile Settings</div>
+          <div className="section">{ state.strings.profile }</div>
         </div>
       )}
       <div className={ state.display === 'xlarge' ? 'midContent' : 'rightContent' }>
-        <div className="logo" onClick={actions.setEditProfileImage}>
-          <Logo url={state.url} width={'100%'} radius={4} />
-          <div className="edit">
-            <EditOutlined />
+        { state.urlSet && (
+          <div className="logo" onClick={actions.setEditProfileImage}>
+            <Logo url={state.url} width={'100%'} radius={4} />
+            <div className="edit">
+              <EditOutlined />
+            </div>
           </div>
-        </div>
+        )}
         <div className="details">
           <div className="name" onClick={actions.setEditProfileDetails}>
             { state.name && (
               <div className="data">{ state.name }</div>
             )}
             { !state.name && (
-              <div className="data notset">name</div>
+              <div className="data notset">{ state.strings.name }</div>
             )}
             <div className="icon">
               <EditOutlined />
@@ -129,7 +100,7 @@ export function Profile({ closeProfile }) {
                 <div className="data">{ state.location }</div>
               )}
               { !state.location && (
-                <div className="data notset">location</div>
+                <div className="data notset">{ state.strings.location }</div>
               )}
           </div>
           <div className="description">
@@ -138,49 +109,58 @@ export function Profile({ closeProfile }) {
               <div className="data">{ state.description }</div>
             )}
             { !state.description && (
-              <div className="data notset">description</div>
+              <div className="data notset">{ state.strings.description }</div>
             )}
           </div>
         </div>
       </div>
-      { state.display !== 'xlarge' && (
-        <div className="account">
-          <div className="section">Account Settings</div>
-          <div className="controls">
-            <AccountAccess />
-            { state.display === 'small' && (
-              <div className="logout" onClick={logout}>
-                <LogoutOutlined />
-                <div className="label">Logout</div>
-              </div>
-            )}
-          </div>
+      { state.display !== 'xlarge' && state.displaySet && (
+        <div className="rightAccess">
+          <AccountAccess />
+          <div className="contentFill" />
         </div>
       )}
-      <Modal title="Profile Image" centered visible={state.editProfileImage} footer={editImageFooter}
-          bodyStyle={{ padding: 16 }} onCancel={actions.clearEditProfileImage}>
+      <Modal centered closable={false} visible={state.editProfileImage} footer={null}
+          bodyStyle={{ borderRadius: 8, padding: 16, ...state.menuStyle }} onCancel={actions.clearEditProfileImage}>
 
         <ProfileImageWrapper>
-          <Cropper image={state.editImage} crop={state.crop} zoom={state.zoom} aspect={1}
-              onCropChange={actions.setCrop} onCropComplete={onCropComplete} onZoomChange={actions.setZoom} />
+          <div className="title">{ state.strings.profileImage }</div>
+          <div className="cropper">
+            <Cropper image={state.editImage} crop={state.crop} zoom={state.zoom} aspect={1}
+                onCropChange={actions.setCrop} onCropComplete={onCropComplete} onZoomChange={actions.setZoom} />
+            </div>
+          <div className="controls">
+            <input type='file' id='file' accept="image/*" ref={imageFile} onChange={e => selected(e)} style={{display: 'none'}}/>
+            <div className="select">
+              <Button key="select" className="pic" onClick={() => imageFile.current.click()}>{ state.strings.selectImage }</Button>
+            </div>
+            <Button key="back" onClick={actions.clearEditProfileImage}>{ state.strings.cancel }</Button>
+            <Button key="save" type="primary" onClick={saveImage} loading={state.busy}>{ state.strings.save }</Button>
+          </div>
         </ProfileImageWrapper>
 
       </Modal>
-      <Modal title="Profile Details" centered visible={state.editProfileDetails} footer={editDetailsFooter}
-          bodyStyle={{ padding: 16 }} onCancel={actions.clearEditProfileDetails}>
+      <Modal centered closable={false} visible={state.editProfileDetails} footer={null}
+          bodyStyle={{ borderRadius: 8, padding: 16, ...state.menuStyle }} onCancel={actions.clearEditProfileDetails}>
 
         <ProfileDetailsWrapper>
-          <div class="info">
-            <Input placeholder="Name" spellCheck="false" onChange={(e) => actions.setEditName(e.target.value)}
+          <div className="title">{ state.strings.profileDetails }</div>
+          <div className="info">
+            <Input placeholder={state.strings.name} spellCheck="false" onChange={(e) => actions.setEditName(e.target.value)}
                 defaultValue={state.editName} autocapitalize="word" />
           </div>
-          <div class="info">
-            <Input placeholder="Location" spellCheck="false" onChange={(e) => actions.setEditLocation(e.target.value)}
+          <div className="info">
+            <Input placeholder={state.strings.location} spellCheck="false" onChange={(e) => actions.setEditLocation(e.target.value)}
                 defaultValue={state.editLocation} autocapitalize="word" />
           </div>
-          <div class="info">
-            <Input.TextArea placeholder="Description" onChange={(e) => actions.setEditDescription(e.target.value)}
+          <div className="info">
+            <Input.TextArea placeholder={state.strings.description} onChange={(e) => actions.setEditDescription(e.target.value)}
                 spellCheck="false" defaultValue={state.editDescription} autoSize={{ minRows: 2, maxRows: 6 }} />
+          </div>
+
+          <div className="controls">
+            <Button key="back" onClick={actions.clearEditProfileDetails}>{state.strings.cancel}</Button>
+            <Button key="save" type="primary" onClick={saveDetails} loading={state.busy}>{state.strings.save}</Button>
           </div>
         </ProfileDetailsWrapper>
 

@@ -1,6 +1,6 @@
 
 import 'antd/dist/reset.css';
-import Colors from 'constants/Colors';
+import { Colors } from 'constants/Colors';
 import { HashRouter as Router, Routes, Route } from "react-router-dom";
 
 import { AppContextProvider } from 'context/AppContext';
@@ -10,7 +10,7 @@ import { CardContextProvider } from 'context/CardContext';
 import { ChannelContextProvider } from 'context/ChannelContext';
 import { StoreContextProvider } from 'context/StoreContext';
 import { UploadContextProvider } from 'context/UploadContext';
-import { ViewportContextProvider } from 'context/ViewportContext';
+import { SettingsContextProvider } from 'context/SettingsContext';
 import { ConversationContextProvider } from 'context/ConversationContext';
 import { RingContextProvider } from 'context/RingContext';
 
@@ -32,13 +32,14 @@ function App() {
             <StoreContextProvider>
               <AccountContextProvider>
                 <RingContextProvider>
-                  <ViewportContextProvider>
+                  <SettingsContextProvider>
                     <AppContextProvider>
                       <AppWrapper>
                         <ConfigProvider theme={{ token: {
                             colorPrimary: Colors.primary,
                             colorLink: Colors.primary,
                             colorLinkHover: Colors.background,
+                            colorBgBase: Colors.cancel,
                           } }}>
                           <Router>
                             <Routes>
@@ -58,7 +59,7 @@ function App() {
                         </ConfigProvider>
                       </AppWrapper>
                     </AppContextProvider>
-                  </ViewportContextProvider>
+                  </SettingsContextProvider>
                 </RingContextProvider>
               </AccountContextProvider>
             </StoreContextProvider>

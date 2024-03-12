@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import Colors from 'constants/Colors';
+import { Colors } from 'constants/Colors';
 
 export const RingingWrapper = styled.div`
   .ringing-list {
@@ -15,42 +15,42 @@ export const RingingWrapper = styled.div`
       padding-left: 8px;
 
       .ringing-accept {
-        color: ${Colors.primary};
+        color: ${Colors.white};
         font-size: 18;
         width: 32px;
         height: 32px;
         display: flex;
         align-items: center;
         justify-content: center;
-        background-color: ${Colors.white};
+        background-color: ${Colors.primary};
         border-radius: 16px;
         margin: 8px;
         cursor: pointer;
       }
 
       .ringing-ignore {
-        color: ${Colors.grey};
+        color: ${Colors.white};
         font-size: 18;
         width: 32px;
         height: 32px;
         display: flex;
         align-items: center;
         justify-content: center;
-        background-color: ${Colors.white};
+        background-color: ${Colors.grey};
         border-radius: 16px;
         margin: 8px;
         cursor: pointer;
       }
     
       .ringing-decline {
-        color: ${Colors.alert};
+        color: ${Colors.white};
         font-size: 18;
         width: 32px;
         height: 32px;
         display: flex;
         align-items: center;
         justify-content: center;
-        background-color: ${Colors.white};
+        background-color: ${Colors.alert};
         border-radius: 16px;
         margin: 8px;
         transform: rotate(224deg);
@@ -73,66 +73,111 @@ export const RingingWrapper = styled.div`
 `;
 
 export const CallingWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
 
-  &:hover .calling-hovered {
-    display: flex;
-  }
-  
-  .calling-local {
-    width: 33%;
-    bottom: 16px;
-    left: 16px;
-    position: absolute;
-  }
-
-  .calling-logo {
-    position: absolute;
+  .fullscreen {
+    position: fixed;
     top: 0;
     left: 0;
-    width: 256px;
-    height: 256px;
-    background-color: yellow;
+    width: 100vw;
+    height: 100vh;
+    background-color: ${props => props.theme.remoteArea};
   }
 
-  .calling-end {
-    position: absolute;
-    bottom: 16px;
-    color: ${Colors.white};
-    font-size: 24px;
-    background-color: ${Colors.alert};
-    display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 8px;
-    border-radius: 20px;
-    cursor: pointer;
-    transform: rotate(135deg);
+  .modal {
+    background-color: ${props => props.theme.remoteArea};
   }
 
-  .calling-options {
-    display: none;
-    position: absolute;
-    top: 16px;
-    flex-direction: row;
-  }
-
-  .calling-option {
-    color: ${Colors.white};
-    font-size: 24px;
-    background-color: ${Colors.primary};
+  .window {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 8px;
-    border-radius: 20px;
-    cursor: pointer;
-    margin-left: 8px;
-    margin-right: 8px;
-  }
-`;
+    position: relative;
+    width: 100%;
+    height: 100%;
+
+    &:hover .calling-hovered {
+      display: flex;
+    }
+
+    .logo {
+      width: 100%;
+      height: 100%;
+      border-radius: 4px;
+    }   
+
+    .image {
+      object-fit: contain;
+    } 
+
+    .calling-local {
+      bottom: 16px;
+      left: 16px;
+      position: absolute;
+      border-radius: 4px;
+      width: 33%;
+      height: 33%;
+
+      .local-position {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: flex-end;
+        justify-content: flex-start;
+
+        .local-frame {
+          padding: 4px;
+          border-radius: 2px;
+          background-color: ${props => props.theme.localArea};
+        }
+      }
+    }
+
+    .calling-logo {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 256px;
+      height: 256px;
+      background-color: yellow;
+    }
+
+    .calling-options {
+      display: none;
+      position: absolute;
+      top: 16px;
+      flex-direction: row;
+    }
+
+    .calling-option {
+      color: ${Colors.white};
+      background-color: ${Colors.primary};
+      font-size: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px;
+      border-radius: 20px;
+      cursor: pointer;
+      margin-left: 8px;
+      margin-right: 8px;
+    }
+
+    .calling-end {
+      color: ${Colors.white};
+      background-color: ${Colors.alert};
+      transform: rotate(135deg);
+      font-size: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px;
+      border-radius: 20px;
+      cursor: pointer;
+      margin-left: 8px;
+      margin-right: 8px;
+    }
+  `;
 
 
 export const SessionWrapper = styled.div`
@@ -143,7 +188,10 @@ export const SessionWrapper = styled.div`
     position: absolute;
     width: 100%;
     height: 100%;
+    overflow: auto;
+    overscroll-behavior: none;
     z-index: 2;
+    background-color: ${props => props.theme.baseColor};
   }
 
   .spinner {
@@ -182,15 +230,20 @@ export const SessionWrapper = styled.div`
     .center {
       flex-grow: 1;
       position: relative;
+
+      .base {
+        background-color: ${props => props.theme.frameArea};
+      }
     }
     .right {
       min-width: 256px;
-      max-width: 384px;
-      width: 20%;
+      max-width: 400px;
+      width: 24%;
       height: 100%;
       display: flex;
       flex-direction: column;
       position: relative;
+      background-color: ${props => props.theme.baseArea};
     }
   }
 
@@ -217,6 +270,7 @@ export const SessionWrapper = styled.div`
     .right {
       flex-grow: 1;
       position: relative;
+      background-color: ${props => props.theme.baseArea};
 
       .drawer {
         padding: 0px;
@@ -230,12 +284,17 @@ export const SessionWrapper = styled.div`
     display: flex;
     flex-direction: column;
 
+    .base {
+      background-color: ${props => props.theme.frameArea};
+    }
+
     .top {
       flex-grow: 1;
       position: relative;
     }
+
     .bottom {
-      height: 48px;
+      height: 40px;
       position: relative;
       box-shadow: 0px 0px 8px 0px rgba(0,0,0,0.3);
     }

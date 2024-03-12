@@ -1,16 +1,19 @@
 import { AccountWrapper } from './Account.styled';
-import { DoubleRightOutlined } from '@ant-design/icons';
+import { CloseOutlined } from '@ant-design/icons';
 import { SettingOutlined } from '@ant-design/icons';
 import { AccountAccess } from './profile/accountAccess/AccountAccess';
+import { useAccount } from './useAccount.hook';
 
 export function Account({ closeAccount, openProfile }) {
+
+  const { state } = useAccount();
 
   return (
     <AccountWrapper>
       <div className="header">
-        <div className="label">Account</div>
+        <div className="label">{state.strings.settings}</div>
         <div className="dismiss" onClick={closeAccount}>
-          <DoubleRightOutlined />
+          <CloseOutlined />
         </div>
       </div>
       <div className="content">
@@ -18,7 +21,7 @@ export function Account({ closeAccount, openProfile }) {
         <div className="bottom">
           <div className="link" onClick={openProfile}>
             <SettingOutlined />
-            <div className="label">Update Profile</div>
+            <div className="label">{state.strings.updateProfile}</div>
           </div>
         </div>
       </div>

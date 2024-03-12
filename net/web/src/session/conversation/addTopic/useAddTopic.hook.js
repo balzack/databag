@@ -1,5 +1,6 @@
 import { useContext, useState, useRef, useEffect } from 'react';
 import { ConversationContext } from 'context/ConversationContext';
+import { SettingsContext } from 'context/SettingsContext';
 import { encryptBlock, encryptTopicSubject } from 'context/sealUtil';
 import Resizer from "react-image-file-resizer";
 
@@ -16,9 +17,13 @@ export function useAddTopic(contentKey) {
     textSize: 14,
     textSizeSet: false,
     busy: false,
+    display: null,
+    strings: {},
+    menuStyle: {},
   });
 
   const conversation = useContext(ConversationContext);
+  const settings = useContext(SettingsContext);
   const objects = useRef([]);
 
   const updateState = (value) => {
@@ -58,6 +63,11 @@ export function useAddTopic(contentKey) {
     updateState({ assets: [] });
     return () => { clearObjects() };
   }, [contentKey]);
+
+  useEffect(() => {
+    const { display, strings, menuStyle } = settings.state;
+    updateState({ display, strings, menuStyle });
+  }, [settings.state]);
 
   useEffect(() => {
     const { enableImage, enableAudio, enableVideo } = conversation.state.channel?.data?.channelDetail || {};

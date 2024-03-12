@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import Colors from 'constants/Colors';
+import { Colors } from 'constants/Colors';
 
 export function useCopyButton() {
 

@@ -16,39 +16,38 @@ export function Channels({ open, active }) {
 
   return (
     <ChannelsWrapper>
-      <div class="search">
-        <div class="filter">
-          <Input bordered={false} allowClear={true} placeholder="Topics" prefix={<SearchOutlined />}
+      <div className="search">
+        <div className="filter">
+          <Input className="filterControl" bordered={false} placeholder={state.strings.topics} prefix={<SearchOutlined />}
               spellCheck="false" onChange={(e) => actions.onFilter(e.target.value)} />
         </div>
         { state.display === 'small' && (
-          <div class="inline">
-            <Button type="primary" disabled={!state.allowAdd} icon={<CommentOutlined />} onClick={actions.setShowAdd}>New</Button>
+          <div className="inline">
+            <Button type="primary" disabled={!state.allowAdd} icon={<CommentOutlined />} onClick={actions.setShowAdd}>{state.strings.new}</Button>
           </div>
         )}
       </div>
-      <div class="view">
+      <div className="view">
         { state.channels.length > 0 && (
           <List local={{ emptyText: '' }} itemLayout="horizontal" dataSource={state.channels} gutter="0"
             renderItem={item => (
-              <ChannelItem item={item} openChannel={open}
+              <ChannelItem item={item} openChannel={open} tip={state.strings.newMessage}
                   active={active.card === item.cardId && active.channel === item.channelId} />
             )}
           />
         )}
         { state.channels.length === 0 && (
-          <div class="empty">No Topics</div>
+          <div className="empty">{ state.strings.noTopics }</div>
         )}
       </div>
       { state.display !== 'small' && (
-        <div class="bar">
-          <Tooltip placement="right" title={ state.allowAdd ? '' : 'Account Sealing Key Required' }>
-            <Button type="primary" disabled={!state.allowAdd} icon={<CommentOutlined />} onClick={actions.setShowAdd}>New Topic</Button>
+        <div className="bar">
+          <Tooltip placement="right" title={ state.allowAdd ? '' : state.strings.unsetSealing }>
+            <Button className={state.allowAdd ? 'addEnabled' : 'addDisabled'} type="primary" disabled={!state.allowAdd} icon={<CommentOutlined />} onClick={actions.setShowAdd}>{state.strings.newTopic}</Button>
           </Tooltip>
         </div>
       )}
-      <Modal bodyStyle={{ padding: 16 }} title="New Topic" centered visible={state.showAdd && state.allowAdd} footer={null} destroyOnClose={true}
-          onCancel={actions.clearShowAdd}>
+      <Modal bodyStyle={{ padding: 16, ...state.menuStyle }} closable={false} centered visible={state.showAdd && state.allowAdd} footer={null} destroyOnClose={true} onCancel={actions.clearShowAdd}>
         <AddChannel added={added} cancelled={actions.clearShowAdd} />
       </Modal>
     </ChannelsWrapper>

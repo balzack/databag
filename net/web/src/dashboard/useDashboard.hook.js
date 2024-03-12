@@ -6,6 +6,7 @@ import { removeAccount } from 'api/removeAccount';
 import { addAccountCreate } from 'api/addAccountCreate';
 import { useNavigate } from 'react-router-dom';
 import { AppContext } from 'context/AppContext';
+import { SettingsContext } from 'context/SettingsContext';
 
 export function useDashboard() {
 
@@ -33,10 +34,14 @@ export function useDashboard() {
     showCreate: false,
     busy: false,
     accounts: [],
+    colors: {},
+    menuStyle: {},
+    strings: {},
   });
 
   const navigate = useNavigate();
   const app = useContext(AppContext);
+  const settings = useContext(SettingsContext);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
@@ -52,6 +57,11 @@ export function useDashboard() {
     }
     // eslint-disable-next-line
   }, [app]);
+
+  useEffect(() => {
+    const { strings, colors, menuStyle } = settings.state;
+    updateState({ strings, colors, menuStyle });
+  }, [settings.state]);
 
   const actions = {
     setCreateLink: async () => {

@@ -7,7 +7,7 @@ import { CardContext, CardContextProvider } from 'context/CardContext';
 import { ChannelContextProvider } from 'context/ChannelContext';
 import { StoreContext, StoreContextProvider } from 'context/StoreContext';
 import { UploadContextProvider } from 'context/UploadContext';
-import { ViewportContextProvider } from 'context/ViewportContext';
+import { SettingsContextProvider } from 'context/SettingsContext';
 import { RingContextProvider } from 'context/RingContext';
 import { useSession } from 'session/useSession.hook';
 import * as fetchUtil from 'api/fetchUtil';
@@ -39,11 +39,11 @@ function SessionTestApp() {
             <StoreContextProvider>
               <AccountContextProvider>
                 <RingContextProvider>
-                  <ViewportContextProvider>
+                  <SettingsContextProvider>
                     <AppContextProvider>
                       <SessionView />
                     </AppContextProvider>
-                  </ViewportContextProvider>
+                  </SettingsContextProvider>
                 </RingContextProvider>
               </AccountContextProvider>
             </StoreContextProvider>

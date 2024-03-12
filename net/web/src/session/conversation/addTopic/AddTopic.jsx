@@ -1,6 +1,6 @@
 import { AddTopicWrapper } from './AddTopic.styled';
 import { useAddTopic } from './useAddTopic.hook';
-import { Modal, Input, Menu, Dropdown, Spin } from 'antd';
+import { Modal, Tooltip, Input, Menu, Dropdown, Spin } from 'antd';
 import { useRef } from 'react';
 import { FieldBinaryOutlined, SoundOutlined, VideoCameraOutlined, PictureOutlined, FontColorsOutlined, FontSizeOutlined, SendOutlined } from '@ant-design/icons';
 import { SketchPicker } from "react-color";
@@ -35,9 +35,9 @@ export function AddTopic({ contentKey }) {
       catch (err) {
         console.log(err);
         modal.error({
-          title: 'Failed to Post Message',
-          content: 'Please try again.',
-          bodyStyle: { padding: 16 },
+          title: <span style={state.menuStyle}>{state.strings.operationFailed}</span>,
+          content: <span style={state.menuStyle}>{state.strings.tryAgain}</span>,
+          bodyStyle: { borderRadius: 8, padding: 16, ...state.menuStyle },
         });
       }
     }
@@ -121,47 +121,59 @@ export function AddTopic({ contentKey }) {
       <input type='file' name="asset" accept="video/*" ref={attachVideo} onChange={e => onSelectVideo(e)} style={{display: 'none'}}/>
       <input type='file' name="asset" accept="*/*" ref={attachBinary} onChange={e => onSelectBinary(e)} style={{display: 'none'}}/>
       { state.assets.length > 0 && (
-        <div class="assets">
+        <div className="assets">
           <Carousel pad={32} items={state.assets} itemRenderer={renderItem} itemRemove={removeItem} />
         </div>
       )}
-      <div class="message">
-        <Input.TextArea ref={msg} placeholder="New Message" spellCheck="true" autoSize={{ minRows: 2, maxRows: 6 }}
+      <div className="message">
+        <Input.TextArea ref={msg} placeholder={state.strings.newMessage} spellCheck="true" autoSize={{ minRows: 2, maxRows: 6 }}
             enterkeyhint="send" onKeyDown={(e) => keyDown(e)} onChange={(e) => actions.setMessageText(e.target.value)}
             value={state.messageText} autocapitalize="none" />
       </div>
-      <div class="buttons">
+      <div className="buttons">
         { state.enableImage && (
-          <div class="button space" onClick={() => attachImage.current.click()}>
-            <PictureOutlined />
-          </div> 
+          <Tooltip placement="top" title={state.display === 'small' ? null : state.strings.attachImage}>
+            <div className="button space" onClick={() => attachImage.current.click()}>
+              <PictureOutlined />
+            </div> 
+          </Tooltip>
         )}
         { state.enableVideo && (
-          <div class="button space" onClick={() => attachVideo.current.click()}>
-            <VideoCameraOutlined />
-          </div> 
+          <Tooltip placement="top" title={state.display === 'small' ? null : state.strings.attachVideo}>
+            <div className="button space" onClick={() => attachVideo.current.click()}>
+              <VideoCameraOutlined />
+            </div> 
+          </Tooltip>
         )}
         { state.enableAudio && (
-          <div class="button space" onClick={() => attachAudio.current.click()}>
-            <SoundOutlined />
-          </div> 
+          <Tooltip placement="top" title={state.display === 'small' ? null : state.strings.attachAudio}>
+            <div className="button space" onClick={() => attachAudio.current.click()}>
+              <SoundOutlined />
+            </div> 
+          </Tooltip>
         )}
-        <div class="button space" onClick={() => attachBinary.current.click()}>
-          <FieldBinaryOutlined />
-        </div> 
-        <div class="bar space" />
-        <div class="button space">
-          <Dropdown overlay={picker} overlayStyle={{ minWidth: 0 }} trigger={['click']} placement="top">
-            <FontColorsOutlined />
-          </Dropdown>
+        <Tooltip placement="top" title={state.display === 'small' ? null : state.strings.attachFile}>
+          <div className="button space" onClick={() => attachBinary.current.click()}>
+            <FieldBinaryOutlined />
+          </div> 
+        </Tooltip>
+        <div className="bar space" />
+        <div className="button space">
+          <Tooltip placement="top" title={state.display === 'small' ? null : state.strings.fontColor}>
+            <Dropdown overlay={picker} overlayStyle={{ minWidth: 0 }} trigger={['click']} placement="top">
+              <FontColorsOutlined />
+            </Dropdown>
+          </Tooltip>
         </div>
-        <div class="button space">
-          <Dropdown overlay={sizer} overlayStyle={{ minWidth: 0 }} trigger={['click']} placement="top">
-            <FontSizeOutlined />
-          </Dropdown>
+        <div className="button space">
+          <Tooltip placement="top" title={state.display === 'small' ? null : state.strings.fontSize}>
+            <Dropdown overlay={sizer} overlayStyle={{ minWidth: 0 }} trigger={['click']} placement="top">
+              <FontSizeOutlined />
+            </Dropdown>
+          </Tooltip>
         </div>
-        <div class="end">
-          <div class="button" onClick={addTopic}>
+        <div className="end">
+          <div className="button" onClick={addTopic}>
             { state.busy && (
               <Spin size="small" />
             )}

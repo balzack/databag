@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import {render, act, screen, waitFor, fireEvent} from '@testing-library/react'
 import { CardContext, CardContextProvider } from 'context/CardContext';
-import { ViewportContextProvider } from 'context/ViewportContext';
+import { SettingsContextProvider } from 'context/SettingsContext';
 import { useContact } from 'session/contact/useContact.hook';
 import * as fetchUtil from 'api/fetchUtil';
 
@@ -34,9 +34,9 @@ function ContactView() {
 function ContactTestApp() {
   return (
     <CardContextProvider>
-      <ViewportContextProvider>
+      <SettingsContextProvider>
         <ContactView />
-      </ViewportContextProvider>
+      </SettingsContextProvider>
     </CardContextProvider>
   );
 }
@@ -188,7 +188,7 @@ test('update contact name', async () => {
 
   await waitFor(async () => {
     expect(screen.getByTestId('name').textContent).toBe('tested');
-    expect(screen.getByTestId('status').textContent).toBe('saved');
+    expect(screen.getByTestId('status').textContent).toBe('confirmed');
   });
 
   fetchCards = [{

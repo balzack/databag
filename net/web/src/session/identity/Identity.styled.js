@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import Colors from 'constants/Colors';
 
 export const IdentityWrapper = styled.div`
   width: 100%;
@@ -9,13 +8,14 @@ export const IdentityWrapper = styled.div`
   align-items: center;
   padding-left: 16px;
   padding-right: 16px;
-  border-bottom: 1px solid ${Colors.divider};
-  background-color: ${Colors.formBackground};
+  background-color: ${props => props.theme.headerArea};
+  border-bottom: 1px solid ${props => props.theme.sectionBorder};
+  color: ${props => props.theme.mainText};
   flex-shrink: 0;
 
   &:hover {
     cursor: pointer;
-    background-color: ${Colors.formFocus};
+    background-color: ${props => props.theme.hoverArea};
 
     .drop {
       font-weight: bold;
@@ -26,7 +26,8 @@ export const IdentityWrapper = styled.div`
     padding-left: 4px;
     padding-right: 4px;
     border-radius: 8px;
-    border: 1px solid ${Colors.formBackground};
+    border: 2px solid ${props => props.theme.sectionBorder};
+    color: ${props => props.theme.mainText};
   }
 
   .label {
@@ -68,15 +69,15 @@ export const LogoutContent = styled.div`
 
   .logoutMode {
     padding-right: 8px;
-    color: ${Colors.text};
+    color: ${props => props.theme.mainText};
   }
 `
 
 export const ErrorNotice = styled.div`
-  color: ${Colors.alert};
+  color: ${props => props.theme.alertText};
 `
 
 export const InfoNotice = styled.div`
-  color: ${Colors.primary};
+  color: ${props => props.theme.linkText};
 `
 

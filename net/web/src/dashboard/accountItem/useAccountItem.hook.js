@@ -2,7 +2,7 @@ import { useContext, useState, useEffect } from 'react';
 import { getAccountImageUrl } from 'api/getAccountImageUrl';
 import { setAccountStatus } from 'api/setAccountStatus';
 import { addAccountAccess } from 'api/addAccountAccess';
-import { ViewportContext } from 'context/ViewportContext';
+import { SettingsContext } from 'context/SettingsContext';
 import { AppContext } from 'context/AppContext';
 
 export function useAccountItem(item, remove) {
@@ -12,10 +12,13 @@ export function useAccountItem(item, remove) {
     removeBusy: false,
     accessBusy: false,
     showAccess: false,
+    display: null,
+    menuStyle: {},
+    strings: {},
   });
  
   const app = useContext(AppContext);
-  const viewport = useContext(ViewportContext); 
+  const settings = useContext(SettingsContext); 
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
@@ -31,14 +34,15 @@ export function useAccountItem(item, remove) {
       guid: item?.guid,
       handle: item?.handle,
       storage: Math.floor(item?.storageUsed > 1073741824 ? item?.storageUsed / 1073741824 : item?.storageUsed / 1048576),
-      storageUnit: item?.storageUsed > 1073741824 ? "GB" : "MB",
+      storageUnit: item?.storageUsed > 1073741824 ? state.strings.gb : state.strings.mb,
       imageUrl: item?.imageSet ? getAccountImageUrl(app.state.adminToken, item?.accountId) : null,
     });
-  }, [app.state.adminToken, item]); 
+  }, [app.state.adminToken, item, state.strings]); 
 
   useEffect(() => {
-    updateState({ display: viewport.state.display });
-  }, [viewport]);
+    const { display, menuStyle, strings } = settings.state;
+    updateState({ display, menuStyle, strings });
+  }, [settings.state]);
 
   const actions = {
     setAccessLink: async () => {

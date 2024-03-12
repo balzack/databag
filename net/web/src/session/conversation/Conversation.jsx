@@ -18,6 +18,9 @@ export function Conversation({ closeConversation, openDetails, cardId, channelId
       remove={() => actions.removeTopic(topic.id)}
       update={(text) => actions.updateTopic(topic, text)}
       sealed={state.sealed && !state.contentKey}
+      strings={state.strings}
+      colors={state.colors}
+      menuStyle={state.menuStyle}
     />)
   }
 
@@ -43,9 +46,9 @@ export function Conversation({ closeConversation, openDetails, cardId, channelId
   return (
     <ConversationWrapper>
       <ChannelHeader openDetails={openDetails} closeConversation={closeConversation} contentKey={state.contentKey}/>
-      <div class="thread" ref={thread} onScroll={scrollThread}>
+      <div className="thread" ref={thread} onScroll={scrollThread}>
         { state.delayed && state.topics.length === 0 && (
-          <div class="empty">This Topic Has No Messages</div>
+          <div className="empty">This Topic Has No Messages</div>
         )}
         { state.topics.length !== 0 && (
           <ReactResizeDetector handleHeight={true}>
@@ -59,34 +62,34 @@ export function Conversation({ closeConversation, openDetails, cardId, channelId
           </ReactResizeDetector>
         )}
         { state.loadingInit && (
-          <div class="loading">
+          <div className="loading">
             <Spin size="large" delay={250} />
           </div>
         )}
         { state.loadingMore && (
-          <div class="loading">
+          <div className="loading">
             <Spin size="large" delay={500} />
           </div>
         )}
       </div>
-      <div class="divider">
-        <div class="line" />
+      <div className="divider">
+        <div className="line" />
         { state.uploadError && (
-          <div class="progress-error" />
+          <div className="progress-error" />
         )}
         { state.upload && !state.uploadError && (
-          <div class="progress-active" style={{ width: state.uploadPercent + '%' }} />
+          <div className="progress-active" style={{ width: state.uploadPercent + '%' }} />
         )}
         { !state.upload && (
-          <div class="progress-idle" />
+          <div className="progress-idle" />
         )}
       </div>
-      <div class="topic"> 
+      <div className="topic"> 
         { (!state.sealed || state.contentKey) && (
-          <AddTopic contentKey={state.contentKey} />
+          <AddTopic contentKey={state.contentKey} strings={state.strings} menuStyle={state.menuStyle} />
         )}
         { state.uploadError && (
-          <div class="upload-error">
+          <div className="upload-error">
             { state.display === 'small' && (
               <StatusError>
                 <div onClick={() => actions.clearUploadErrors(cardId, channelId)}>

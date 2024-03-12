@@ -4,6 +4,7 @@ import { getNodeStatus } from 'api/getNodeStatus';
 import { setNodeStatus } from 'api/setNodeStatus';
 import { getNodeConfig } from 'api/getNodeConfig';
 import { AppContext } from 'context/AppContext';
+import { SettingsContext } from 'context/SettingsContext';
 
 export function useAdmin() {
 
@@ -12,10 +13,13 @@ export function useAdmin() {
     placeholder: '',
     unclaimed: null,
     busy: false,
+    strings: {},
+    menuStyle: {},
   });
 
   const navigate = useNavigate();
   const app = useContext(AppContext);
+  const settings = useContext(SettingsContext);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
@@ -60,6 +64,11 @@ export function useAdmin() {
       }
     },
   }
+
+  useEffect(() => {
+    const { strings, menuStyle } = settings.state;
+    updateState({ strings, menuStyle });
+  }, [settings.state]);
 
   return { state, actions };
 }

@@ -7,7 +7,7 @@ import { CardContext, CardContextProvider } from 'context/CardContext';
 import { ChannelContextProvider } from 'context/ChannelContext';
 import { StoreContextProvider } from 'context/StoreContext';
 import { UploadContextProvider } from 'context/UploadContext';
-import { ViewportContextProvider } from 'context/ViewportContext';
+import { SettingsContextProvider } from 'context/SettingsContext';
 import { useCards } from 'session/cards/useCards.hook';
 import * as fetchUtil from 'api/fetchUtil';
 
@@ -48,9 +48,9 @@ function ContactsTestApp() {
           <ProfileContextProvider>
             <StoreContextProvider>
               <AccountContextProvider>
-                <ViewportContextProvider>
+                <SettingsContextProvider>
                   <ContactsView />
-                </ViewportContextProvider>
+                </SettingsContextProvider>
               </AccountContextProvider>
             </StoreContextProvider>
           </ProfileContextProvider>

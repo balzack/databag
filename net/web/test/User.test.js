@@ -4,7 +4,7 @@ import { AppContextProvider } from 'context/AppContext';
 import { AccountContextProvider } from 'context/AccountContext';
 import { ProfileContext, ProfileContextProvider } from 'context/ProfileContext';
 import { StoreContextProvider } from 'context/StoreContext';
-import { ViewportContextProvider } from 'context/ViewportContext';
+import { SettingsContextProvider } from 'context/SettingsContext';
 import { useProfile } from 'session/account/profile/useProfile.hook';
 import * as fetchUtil from 'api/fetchUtil';
 
@@ -35,11 +35,11 @@ function ProfileTestApp() {
     <StoreContextProvider>
       <ProfileContextProvider>
         <AccountContextProvider>
-          <ViewportContextProvider>
+          <SettingsContextProvider>
             <AppContextProvider>
               <ProfileView />
             </AppContextProvider>
-          </ViewportContextProvider>
+          </SettingsContextProvider>
         </AccountContextProvider>
       </ProfileContextProvider>
     </StoreContextProvider>

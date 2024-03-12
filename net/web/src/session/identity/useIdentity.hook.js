@@ -1,6 +1,7 @@
 import { useState, useEffect, useContext } from 'react';
 import { ProfileContext } from 'context/ProfileContext';
 import { AppContext } from 'context/AppContext';
+import { SettingsContext } from 'context/SettingsContext';
 
 export function useIdentity() {
 
@@ -10,10 +11,14 @@ export function useIdentity() {
     handle: null,
     status: null,
     init: false,
+    strings: {},
+    colors: {},
+    menuStyle: {},
   });
 
   const app = useContext(AppContext);
   const profile = useContext(ProfileContext);
+  const settings = useContext(SettingsContext);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
@@ -31,6 +36,11 @@ export function useIdentity() {
     const { status } = app.state;
     updateState({ status });
   }, [app.state]);
+
+  useEffect(() => {
+    const { colors, strings, menuStyle } = settings.state;
+    updateState({ colors, strings, menuStyle });
+  }, [settings.state]);
 
   const actions = {
     logout: (all) => {

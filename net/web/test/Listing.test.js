@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import {render, act, screen, waitFor, fireEvent} from '@testing-library/react'
 import { ProfileContextProvider } from 'context/ProfileContext';
-import { ViewportContextProvider } from 'context/ViewportContext';
+import { SettingsContextProvider } from 'context/SettingsContext';
 import { useListing } from 'session/listing/useListing.hook';
 import * as fetchUtil from 'api/fetchUtil';
 
@@ -36,9 +36,9 @@ function ListingView() {
 function ListingTestApp() {
   return (
     <ProfileContextProvider>
-      <ViewportContextProvider>
+      <SettingsContextProvider>
         <ListingView />
-      </ViewportContextProvider>
+      </SettingsContextProvider>
     </ProfileContextProvider>
   );
 }

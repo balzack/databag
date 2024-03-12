@@ -12,9 +12,12 @@ export function AccountItem({ item, remove }) {
 
   const removeAccount = () => {
     modal.confirm({
-      title: 'Are you sure you want to delete the account?',
+      title: <span style={state.menuStyle}>{state.strings.confirmDelete}</span>,
+      content: <span style={state.menuStyle}>{state.strings.areSure}</span>,
       icon: <ExclamationCircleOutlined />,
-      bodyStyle: { padding: 16 },
+      bodyStyle: { borderRadius: 8, padding: 16, ...state.menuStyle },
+      okText: state.strings.remove,
+      cancelText: state.strings.cancel,
       onOk() {
         applyRemoveAccount();
       },
@@ -27,10 +30,10 @@ export function AccountItem({ item, remove }) {
       await actions.remove();
     }
     catch(err) {
-      modal.error({ 
-        title: 'Failed to Remove Account',
-        content: 'Please try again.',
-        bodyStyle: { padding: 16 },
+      modal.error({
+        title: <span style={state.menuStyle}>{state.strings.operationFailed}</span>,
+        content: <span style={state.menuStyle}>{state.strings.tryAgain}</span>,
+        bodyStyle: { borderRadius: 8, padding: 16, ...state.menuStyle },
       });
     }
   }
@@ -41,9 +44,9 @@ export function AccountItem({ item, remove }) {
     }
     catch(err) {
       modal.error({
-        title: 'Failed to Set Account Status',
-        content: 'Please try again.',
-        bodyStyle: { padding: 16 },
+        title: <span style={state.menuStyle}>{state.strings.operationFailed}</span>,
+        content: <span style={state.menuStyle}>{state.strings.tryAgain}</span>,
+        bodyStyle: { borderRadius: 8, padding: 16, ...state.menuStyle },
       });
     }
   }
@@ -54,9 +57,9 @@ export function AccountItem({ item, remove }) {
     }
     catch(err) {
       modal.error({
-        title: 'Failed to Set Account Access',
-        content: 'Please try again.',
-        bodyStyle: { padding: 16 },
+        title: <span style={state.menuStyle}>{state.strings.operationFailed}</span>,
+        content: <span style={state.menuStyle}>{state.strings.tryAgain}</span>,
+        bodyStyle: { borderRadius: 8, padding: 16, ...state.menuStyle },
       });
     }
   }
@@ -103,42 +106,45 @@ export function AccountItem({ item, remove }) {
         )}
         { state.display !== 'small' && (
           <>
-            <Tooltip placement="topLeft" title="Account Login Link">
+            <Tooltip placement="topLeft" title={state.strings.accessAccount}>
               <ResetButton type="text" size="large" icon={<UnlockOutlined />}
                   loading={state.accessBusy} onClick={setAccountAccess}></ResetButton>
             </Tooltip>
             { state.disabled && (
-              <Tooltip placement="topLeft" title="Enable Account">
+              <Tooltip placement="topLeft" title={state.strings.enableAccount}>
                 <EnableButton type="text" size="large" icon={<CheckCircleOutlined />}
                     loading={state.statusBusy} onClick={() => applyAccountStatus(false)}></EnableButton>
               </Tooltip>
             )}
             { !state.disabled && (
-              <Tooltip placement="topLeft" title="Disable Account">
+              <Tooltip placement="topLeft" title={state.strings.disableAccount}>
                 <DisableButton type="text" size="large" icon={<CloseCircleOutlined />}
                       loading={state.statusBusy} onClick={() => applyAccountStatus(true)}></DisableButton>
               </Tooltip>
             )}
-            <Tooltip placement="topLeft" title="Delete Account">
+            <Tooltip placement="topLeft" title={state.strings.deleteAccount}>
               <DeleteButton type="text" size="large" icon={<UserDeleteOutlined />}
                   loading={state.removeBusy} onClick={removeAccount}></DeleteButton>
             </Tooltip>
           </>
         )}
       </div>
-      <Modal title="Access Account" visible={state.showAccess} centered width="fitContent"
-          footer={[ <Button type="primary" onClick={() => actions.setShowAccess(false)}>OK</Button> ]}
-          bodyStyle={{ padding: 16 }} onCancel={() => actions.setShowAccess(false)}>
+      <Modal bodyStyle={{ borderRadius: 8, padding: 16, ...state.menuStyle }} closable={false} visible={state.showAccess} centered width="fitContent"
+          footer={null} onCancel={() => actions.setShowAccess(false)}>
         <AccessLayout>
+          <div className="header">{ state.strings.accessAccount }</div>
           <div className="url">
-            <div className="label">Browser Link:</div>
+            <div className="label">{ state.strings.browserLink }</div>
             <div className="link">{accessLink()}</div>
             <CopyButton onCopy={async () => await onClipboard(accessLink())} />
           </div>
           <div className="url">
-            <div className="label">App Token:</div>
+            <div className="label">{ state.strings.mobileToken }</div>
             <div className="token">{state.accessToken}</div>
             <CopyButton onCopy={async () => await onClipboard(state.accessToken)} />
+          </div>
+          <div className="control">
+            <Button type="primary" onClick={() => actions.setShowAccess(false)}>{state.strings.ok}</Button>
           </div>
         </AccessLayout>
       </Modal>  

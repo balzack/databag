@@ -1,18 +1,25 @@
 import { useContext, useState, useEffect } from 'react';
 import { useNavigate, useLocation } from "react-router-dom";
 import { AppContext } from 'context/AppContext';
-import { ViewportContext } from 'context/ViewportContext';
+import { SettingsContext } from 'context/SettingsContext';
 
 export function useAccess() {
 
   const [state, setState] = useState({
     display: null,
+    scheme: null,
+    colors: {},
+    theme: null,
+    themes: [],
+    language: null,
+    languages: [],
+    strings: {},
   });
 
   const navigate = useNavigate();
   const location = useLocation();
   const app = useContext(AppContext);
-  const viewport = useContext(ViewportContext);
+  const settings = useContext(SettingsContext);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
@@ -43,11 +50,18 @@ export function useAccess() {
 
 
   useEffect(() => {
-    const { display } = viewport.state;
-    updateState({ display });
-  }, [viewport.state]);
+    const { theme, themes, strings, language, languages, colors, display, scheme } = settings.state;
+    updateState({ theme, themes, language, languages, strings, colors, display, scheme });
+  }, [settings.state]);
 
-  const actions = {};
+  const actions = {
+    setTheme: (theme) => {
+      settings.actions.setTheme(theme);
+    },
+    setLanguage: (language) => {
+      settings.actions.setLanguage(language);
+    },
+  };
 
   return { state, actions };
 }

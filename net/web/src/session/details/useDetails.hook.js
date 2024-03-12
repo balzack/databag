@@ -3,7 +3,7 @@ import { CardContext } from 'context/CardContext';
 import { ConversationContext } from 'context/ConversationContext';
 import { AccountContext } from 'context/AccountContext';
 import { ProfileContext } from 'context/ProfileContext';
-import { ViewportContext } from 'context/ViewportContext';
+import { SettingsContext } from 'context/SettingsContext';
 import { getCardByGuid } from 'context/cardUtil';
 import { decryptChannelSubject, updateChannelSubject, getContentKey, getChannelSeals, isUnsealed } from 'context/sealUtil';
 
@@ -25,7 +25,9 @@ export function useDetails() {
     showEditSubject: false,
     editSubject: null,
 
+    strings: {},
     display: 'small',
+    menuStyle: {},
     sealed: false,
     contentKey: null,
     seals: null,
@@ -34,7 +36,7 @@ export function useDetails() {
   const conversation = useContext(ConversationContext);
   const card = useContext(CardContext);
   const account = useContext(AccountContext);
-  const viewport = useContext(ViewportContext);
+  const settings = useContext(SettingsContext);
   const profile = useContext(ProfileContext);
 
   const cardId = useRef();
@@ -72,8 +74,9 @@ export function useDetails() {
   }, [account.state.sealKey, conversation.state.channel?.data?.channelDetail]);
 
   useEffect(() => {
-    updateState({ display: viewport.state.display });
-  }, [viewport]);
+    const { menuStyle, strings, display } = settings.state;
+    updateState({ menuStyle, strings, display });
+  }, [settings.state]);
 
   useEffect(() => {
 
@@ -86,10 +89,20 @@ export function useDetails() {
     const date = new Date(channelValue?.data?.channelDetail?.created * 1000);
     const now = new Date();
     if(now.getTime() - date.getTime() < 86400000) {
-      started = date.toLocaleTimeString([], {hour: 'numeric', minute:'2-digit'});
+      if (settings.state.timeFormat === '12h') {
+        started = date.toLocaleTimeString("en-US", {hour: 'numeric', minute:'2-digit'});
+      }
+      else {
+        started = date.toLocaleTimeString("en-GB", {hour: 'numeric', minute:'2-digit'});
+      }
     }
     else {
-      started = date.toLocaleDateString("en-US");
+      if (settings.state.dateFormat === 'mm/dd') {
+        started = date.toLocaleDateString("en-US");
+      }
+      else {
+        started = date.toLocaleDateString("en-GB");
+      }
     }
     if (cardValue) {
       host = cardValue.id;
@@ -152,7 +165,7 @@ export function useDetails() {
     let label;
     if (memberCount === 0) {
       img = 'solution';
-      label = 'Notes';
+      label = state.strings.notes;
     }
     else if (memberCount === 1) {
       label = names.join(',');
@@ -196,7 +209,7 @@ export function useDetails() {
         editMembers: new Set(members) });
     }
     // eslint-disable-next-line
-  }, [conversation.state, card.state, state.contentKey]);
+  }, [conversation.state, card.state, state.strings, state.contentKey]);
 
   const actions = {
     setEditSubject: () => {

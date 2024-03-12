@@ -1,9 +1,9 @@
-import { Button, Modal } from 'antd';
-import { DetailsWrapper, ModalFooter } from './Details.styled';
-import { DoubleRightOutlined, RightOutlined, CloseOutlined } from '@ant-design/icons';
+import { Button, Modal, Tooltip } from 'antd';
+import { DetailsWrapper } from './Details.styled';
+import { CloseOutlined } from '@ant-design/icons';
 import { useDetails } from './useDetails.hook';
 import { Logo } from 'logo/Logo';
-import { EditOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
+import { EditOutlined, CloseCircleOutlined, UserSwitchOutlined, DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import { CardSelect } from '../cardSelect/CardSelect';
 import { EditSubject } from './editSubject/EditSubject';
 import { EditMembers } from './editMembers/EditMembers';
@@ -21,9 +21,9 @@ export function Details({ closeDetails, closeConversation, openContact }) {
     catch(err) {
       console.log(err);
       modal.error({
-        title: 'Failed to Set Conversation Member',
-        content: 'Please try again.',
-        bodyStyle: { padding: 16 },
+        title: <span style={state.menuStyle}>{state.strings.operationFailed}</span>,
+        content: <span style={state.menuStyle}>{state.strings.tryAgain}</span>,
+        bodyStyle: { borderRadius: 8, padding: 16, ...state.menuStyle },
       });
     }
   }
@@ -35,20 +35,21 @@ export function Details({ closeDetails, closeConversation, openContact }) {
     catch(err) {
       console.log(err);
       modal.error({
-        title: 'Failed to Clear Conversation Member',
-        content: 'Please try again.',
-        bodyStyle: { padding: 16 },
+        title: <span style={state.menuStyle}>{state.strings.operationFailed}</span>,
+        content: <span style={state.menuStyle}>{state.strings.tryAgain}</span>,
+        bodyStyle: { borderRadius: 8, padding: 16, ...state.menuStyle },
       });
     }
   }
 
   const deleteChannel = async () => {
     modal.confirm({
-      title: 'Are you sure you want to delete the topic?',
+      title: <span style={state.menuStyle}>{state.strings.confirmTopic}</span>,
+      content: <span style={state.menuStyle}>{state.strings.sureTopic}</span>,
       icon: <ExclamationCircleOutlined />,
-      bodyStyle: { padding: 16 },
-      okText: "Yes, Delete",
-      cancelText: "No, Cancel",
+      bodyStyle: { borderRadius: 8, padding: 16, ...state.menuStyle },
+      okText: state.strings.remove,
+      cancelText: state.strings.cancel,
       onOk() {
         applyDeleteChannel();
       },
@@ -63,20 +64,21 @@ export function Details({ closeDetails, closeConversation, openContact }) {
     }
     catch(err) {
       modal.error({
-        title: 'Failed to Delete Topic',
-        content: 'Please try again.',
-        bodyStyle: { padding: 16 },
+        title: <span style={state.menuStyle}>{state.strings.operationFailed}</span>,
+        content: <span style={state.menuStyle}>{state.strings.tryAgain}</span>,
+        bodyStyle: { borderRadius: 8, padding: 16, ...state.menuStyle },
       });
     }
   }
 
   const leaveChannel = async () => {
     modal.confirm({
-      title: 'Are you sure you want to leave the topic?',
+      title: <span style={state.menuStyle}>{state.strings.confirmLeave}</span>,
+      content: <span style={state.menuStyle}>{state.strings.sureLeave}</span>,
       icon: <ExclamationCircleOutlined />,
-      bodyStyle: { padding: 16 },
-      okText: "Yes, Leave",
-      cancelText: "No, Cancel",
+      bodyStyle: { borderRadius: 8, padding: 16, ...state.menuStyle },
+      okText: state.strings.leave,
+      cancelText: state.strings.cancel,
       onOk() {
         applyLeaveChannel();
       },
@@ -91,9 +93,9 @@ export function Details({ closeDetails, closeConversation, openContact }) {
     }
     catch(err) {
       modal.error({
-        title: 'Failed to Leave Topic',
-        content: 'Please try again.',
-        bodyStyle: { padding: 16 },
+        title: <span style={state.menuStyle}>{state.strings.operationFailed}</span>,
+        content: <span style={state.menuStyle}>{state.strings.tryAgain}</span>,
+        bodyStyle: { borderRadius: 8, padding: 16, ...state.menuStyle },
       });
     }
   }
@@ -105,55 +107,37 @@ export function Details({ closeDetails, closeConversation, openContact }) {
     }
     catch(err) {
       modal.error({
-        title: 'Failed to Update Subject',
-        content: 'Please try again.',
-        bodyStyle: { padding: 16 },
+        title: <span style={state.menuStyle}>{state.strings.operationFailed}</span>,
+        content: <span style={state.menuStyle}>{state.strings.tryAgain}</span>,
+        bodyStyle: { borderRadius: 8, padding: 16, ...state.menuStyle },
       });
     }
   };
 
-  const editSubjectFooter = (
-    <ModalFooter>
-      <Button key="back" onClick={actions.clearEditSubject}>Cancel</Button>
-      <Button key="save" type="primary" onClick={saveSubject} loading={state.busy}>Save</Button>
-    </ModalFooter>
-  );
-
-  const editMembersFooter = (
-    <ModalFooter>
-      <Button key="back" onClick={actions.clearEditMembers}>Done</Button>
-    </ModalFooter>
-  );
-
   return (
     <DetailsWrapper>
       { modalContext }
-      <div class="header">
-        <div class="label">Topic Details</div>
+      <div className="header">
+        <div className="label">{state.strings.details}</div>
         { state.display === 'xlarge' && (
-          <div class="dismiss" onClick={closeConversation}>
-            <DoubleRightOutlined />
-          </div>
-        )}
-        { state.display === 'small' && (
-          <div class="dismiss" onClick={closeDetails}>
+          <div className="dismiss" onClick={closeConversation}>
             <CloseOutlined />
           </div>
         )}
-        { state.display !== 'small' && state.display !== 'xlarge' && (
-          <div class="dismiss" onClick={closeDetails}>
-            <RightOutlined />
+        { state.display === 'small' && (
+          <div className="dismiss" onClick={closeDetails}>
+            <CloseOutlined />
           </div>
         )}
       </div>
-      <div class="content">
-        <div class="description">
-          <div class="logo">
+      <div className="content">
+        <div className="description">
+          <div className="logo">
             <Logo src={state.logo} width={72} height={72} radius={4} img={state.img} />
           </div>
-          <div class="stats">
+          <div className="stats">
             { !state.host && (
-              <div class="subject" onClick={actions.setEditSubject}>
+              <div className="subject" onClick={actions.setEditSubject}>
                 { state.sealed && !state.contentKey && (
                   <LockFilled style={{ paddingRight: 4 }} />
                 )}
@@ -167,14 +151,14 @@ export function Details({ closeDetails, closeConversation, openContact }) {
                   <span>{ state.label }</span>
                 )}
                 { (!state.sealed || state.contentKey) && (
-                  <span class="edit" onClick={actions.setEditSubject}>
+                  <span className="edit" onClick={actions.setEditSubject}>
                     <EditOutlined style={{ paddingLeft: 4 }}/>
                   </span>
                 )}
               </div>
             )}
             { state.host && (
-              <div class="subject">
+              <div className="subject">
                 { state.sealed && !state.contentKey && (
                   <LockFilled style={{ paddingRight: 4 }} />
                 )}
@@ -190,25 +174,36 @@ export function Details({ closeDetails, closeConversation, openContact }) {
               </div>
             )}
             { !state.host && (
-              <div class="host">host</div>
+              <div className="host">{ state.strings.host }</div>
             )}
             { state.host && (
-              <div class="host">guest</div>
+              <div className="host">{ state.strings.guest }</div>
             )}
-            <div class="created">{ state.started }</div>
+            <div className="created">{ state.started }</div>
           </div>
         </div>
-        { !state.host && (
-          <div class="button" onClick={deleteChannel}>Delete Topic</div>
-        )}
-        { !state.host && !state.sealed && (
-          <div class="button" onClick={actions.setEditMembers}>Edit Membership</div>
-        )}
-        { state.host && (
-          <div class="button" onClick={leaveChannel}>Leave Topic</div>
-        )}
-        <div class="label">Members</div>
-        <div class="members">
+        <div className="actions">
+          <div className="label">{ state.strings.actions }</div>
+          <div className="controls">
+            { !state.host && (
+              <Tooltip placement="top" title={state.strings.deleteTopic}>
+                <Button className="button" type="primary" icon={<DeleteOutlined />} size="medium"  onClick={deleteChannel}>{ state.strings.remove }</Button>
+              </Tooltip>
+            )}
+            { !state.host && !state.sealed && (
+              <Tooltip placement="top" title={state.strings.editMembership}>
+                <Button className="button" type="primary" icon={<UserSwitchOutlined />} size="medium"  onClick={actions.setEditMembers}>{state.strings.members}</Button>
+              </Tooltip>
+            )}
+            { state.host && (
+              <Tooltip placement="top" title={state.strings.leaveTopic}>
+                <Button className="button" type="primary" icon={<CloseCircleOutlined />} size="medium"  onClick={leaveChannel}>{state.strings.leave}</Button>
+              </Tooltip>
+            )}
+          </div>
+        </div>
+        <div className="label">{state.strings.members}</div>
+        <div className="members">
           <CardSelect filter={(item) => {
             if(state.members.includes(item.id)) {
               return true;
@@ -218,13 +213,12 @@ export function Details({ closeDetails, closeConversation, openContact }) {
           markup={state.host} />
         </div>
       </div>
-      <Modal title="Edit Subject" centered visible={state.showEditSubject} footer={editSubjectFooter}
-          bodyStyle={{ padding: 16 }} onCancel={actions.clearEditSubject}>
-        <EditSubject subject={state.editSubject} setSubject={actions.setSubjectUpdate} />
+      <Modal centered visible={state.showEditSubject} closable={false} footer={null} bodyStyle={{borderRadius: 8, padding: 16, ...state.menuStyle}}>
+        <EditSubject subject={state.editSubject} cancelSubject={actions.clearEditSubject} saveSubject={saveSubject} setSubject={actions.setSubjectUpdate}
+            strings={state.strings} />
       </Modal>
-      <Modal title="Edit Members" centered visible={state.showEditMembers} footer={editMembersFooter}
-          bodyStyle={{ padding: 16 }} onCancel={actions.clearEditMembers}>
-        <EditMembers members={state.editMembers} setMember={setMember} clearMember={clearMember} />
+      <Modal centered visible={state.showEditMembers} closable={false} footer={null} bodyStyle={{borderRadius: 8, padding: 16, ...state.menuStyle}}>
+        <EditMembers members={state.editMembers} setMember={setMember} clearMember={clearMember} onClose={actions.clearEditMembers} strings={state.strings} />
       </Modal>
     </DetailsWrapper>
   );

@@ -47,30 +47,26 @@ These instructions assume you have the following setup:
   cd /app/databag/net/server<br/>
   /usr/local/go/bin/go build databag<br/>
   
-## Step 6: setup databag paths
+## Step 6: setup databag store path
   mkdir -p /var/lib/databag<br/>
-  mkdir -p /opt/databag/transform<br/>
-  cp /app/databag/net/container/transform/* /opt/databag/transform/<br/>
 
 ## Step 7: initialize the internal datbase
   sqlite3 /var/lib/databag/databag.db "VACUUM;"<br/>
   sqlite3 /var/lib/databag/databag.db "CREATE TABLE IF NOT EXISTS 'configs' ('id' integer NOT NULL UNIQUE,'config_id' text NOT NULL,'str_value' text,'num_value' integer,'bool_value' numeric,'bin_value' blob,PRIMARY KEY ('id'));"<br/>
   sqlite3 /var/lib/databag/databag.db "CREATE UNIQUE INDEX IF NOT EXISTS 'idx_configs_config_id' ON 'configs'('config_id');"<br/>
-  sqlite3 /var/lib/databag/databag.db "insert into configs (config_id, str_value) values ('asset_path', '/var/lib/databag/');"<br/>
-  sqlite3 /var/lib/databag/databag.db "insert into configs (config_id, str_value) values ('script_path', '/opt/databag/transform/');"<br/>
 
 ## Step 8: download the webapp
   // because the react toolchain isn't available for the pi zero, the webapp is built in a github action<br/>
-  Download webapp.zip from the most recent build:<br/>
-    https://github.com/balzack/databag/actions/runs/4033318007<br/>
-  SCP webapp.zip into the pi<br/>
+  Download webapp.tar.gz from the most recent release:<br/>
+    https://github.com/balzack/databag/releases/download/v1.1.11/webapp.tar.gz<br/>
+  SCP webapp.tar.gz into the pi<br/>
   Extract it into the web/build directory<br/>
     mkdir /app/databag/net/web/build<br/>
-    unzip webapp.zip -d /app/databag/net/web/build/<br/>
+    tar xf webapp.tar.gz -C /app/databag/net/web/build/<br/>
 
 ## Step 9: launch the server
   cd /app/databag/net/server<br/>
-  nohup nice -n -5 /usr/local/go/bin/go run databag<br/>
+  nohup nice -n -5 /usr/local/go/bin/go run databag -p 443 -s /var/lib/databag -w /app/databag/net/web/build &<br/>
 
 ## Step 10: configure the server
   Open your brower to the pi hostname<br/>
@@ -79,9 +75,6 @@ These instructions assume you have the following setup:
   Select the 'cog' to bring up the settings modal<br/>
     - set your hostname<br/>
     - set the key to RSA 2048<br/>
-    - enable images<br/>
-    - disable audio<br/>
-    - disable video<br/>
 
 ## Step 11: create accounts
   Still in the admin dashboard<br/>

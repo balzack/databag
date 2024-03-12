@@ -1,6 +1,6 @@
 import { Input, Modal, List, Button } from 'antd';
 import { CardsWrapper } from './Cards.styled';
-import { SortAscendingOutlined, UpOutlined, DoubleRightOutlined, UserOutlined, SearchOutlined } from '@ant-design/icons';
+import { SortAscendingOutlined, CloseOutlined, UserOutlined, SearchOutlined } from '@ant-design/icons';
 import { useCards } from './useCards.hook';
 import { CardItem } from './cardItem/CardItem';
 
@@ -17,9 +17,9 @@ export function Cards({ closeCards, openContact, openChannel, openListing }) {
     catch (err) {
       console.log(err);
       modal.error({
-        title: 'Failed to Create Topic',
-        content: 'Please try again.',
-        bodyStyle: { padding: 16 },
+        title: <span style={state.menuStyle}>{state.strings.operationFailed}</span>,
+        content: <span style={state.menuStyle}>{state.strings.tryAgain}</span>,
+        bodyStyle: { borderRadius: 8, padding: 16, ...state.menuStyle },
       });
     };
   };
@@ -31,9 +31,9 @@ export function Cards({ closeCards, openContact, openChannel, openListing }) {
     catch (err) {
       console.log(err);
       modal.error({
-        title: 'Failed to Start Call',
-        content: 'Please try again.',
-        bodyStyle: { padding: 16 },
+        title: <span style={state.menuStyle}>{state.strings.operationFailed}</span>,
+        content: <span style={state.menuStyle}>{state.strings.tryAgain}</span>,
+        bodyStyle: { borderRadius: 8, padding: 16, ...state.menuStyle },
       });
     };
   };
@@ -53,18 +53,16 @@ export function Cards({ closeCards, openContact, openChannel, openListing }) {
           </div>
         )}
         <div className="filter">
-          <Input bordered={false} allowClear={true} placeholder="Contacts" prefix={<SearchOutlined />}
+          <Input className="filterControl" bordered={false} placeholder={state.strings.contacts} prefix={<SearchOutlined />}
               spellCheck="false" onChange={(e) => actions.onFilter(e.target.value)} />
         </div>
-        { state.display === 'small' && (
-          <div className="inline">
-            <Button type="primary" icon={<UserOutlined />} onClick={openListing}>Add</Button>
-          </div>
-        )}
-        { state.display !== 'small' && (
+        <div className="inline">
+          <Button type="primary" icon={<UserOutlined />} onClick={openListing}>{state.strings.add}</Button>
+        </div>
+        { state.display === 'xlarge' && (
           <div className="inline">
             <div className="dismiss" onClick={closeCards} >
-              <DoubleRightOutlined />
+              <CloseOutlined />
             </div>
           </div>
         )}
@@ -74,23 +72,15 @@ export function Cards({ closeCards, openContact, openChannel, openListing }) {
           <List local={{ emptyText: '' }} itemLayout="horizontal" dataSource={state.cards} gutter="0"
             renderItem={item => (
               <CardItem item={item} enableIce={state.enableIce} tooltip={state.tooltip} resync={() => actions.resync(item.cardId)}
-                  open={() => openContact(item.guid)} message={() => message(item.cardId)} 
+                  open={() => openContact(item.guid)} message={() => message(item.cardId)} strings={state.strings} 
                   call={() => call(item)} display={state.display} canMessage={state.allowUnsealed || (item.seal && state.sealable)} />
             )} />
         )}
         { state.cards.length === 0 && (
-          <div className="empty">No Contacts</div>
+          <div className="empty">{ state.strings.noContacts }</div>
         )}
       </div>
-      { state.display !== 'small' && (
-        <div className="bar">
-          <div className="add" onClick={openListing}>
-            <UpOutlined />
-            <div className="label">Find New Contact</div>
-          </div>
-        </div>
-      )}
-      </CardsWrapper>
+    </CardsWrapper>
   );
 }
 

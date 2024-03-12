@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import Colors from 'constants/Colors';
+import { Colors } from 'constants/Colors';
 
 export const CreateAccountWrapper = styled.div`
   max-width: 400px;
@@ -7,6 +7,22 @@ export const CreateAccountWrapper = styled.div`
   height: 90%;
   display: flex;
   flex-direction: column;
+
+  .disabled {
+    background-color: ${props => props.theme.disabledArea};
+
+    button {
+      color: ${props => props.theme.idleText};
+    }
+  }
+
+  .enabled {
+    background-color: ${props => props.theme.enabledArea};
+
+    button {
+      color: ${props => props.theme.activeText};
+    }
+  }
 
   .app-title {
     font-size: 24px;

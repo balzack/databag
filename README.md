@@ -4,7 +4,7 @@
 <div align="center">
   <a href="#"><img src="/doc/icon_v2.png" width="8%" style="border-radius:50%"></a>
   <h3 align="center">Databag</h3>
-  <p align="center">Communication for the Decentralized Web</p>
+  <p align="center">A federated messenger for self-hosting</p>
 </div>
 
 <br>
@@ -19,11 +19,11 @@
 </p>
 <br>
 
-Databag is a self-hosted messaging service. Notable features include:
+Databag is designed for efficiency, consuming minimal resources on the host system and network. Notable features include:
 - Decentralized (direct communication between app and server node)
 - Federated (accounts on different nodes can communicate)
 - Public-Private key based identity (not bound to any blockchain or hosting domain)
-- End-to-End encryption (the hosting admin cannot view sealed topics, deafult unsealed)
+- End-to-End encryption (the hosting admin cannot view topics if sealed)
 - Audio and Video Calls (nat traversal requires separate relay server)
 - Topic based threads (messages organized by topic not contacts)
 - Lightweight (server can run on a raspberry pi zero v1.3)
@@ -125,11 +125,13 @@ From Your Browser:
 
 ### Other installation options
 
-Instructions for installing without a container on a Raspberry Pi Zero are [here](/doc/pizero.md).
+Install without a container on a Raspberry Pi Zero [here](/doc/pizero.md).
 
-Instructions for installing without a container in AWS are [here](/doc/aws.md).
+Install without a container in AWS [here](/doc/aws.md).
 
-1-click installs in [CapRover](https://caprover.com/), [CasaOS](https://casaos.io), [Unraid](https://unraid.net/), [Runtipi](https://www.runtipi.io/)
+Integrate Databag in an OpenWrt firmware [here](/doc/openwrt.md).
+
+1-click installs in [CapRover](https://caprover.com/), [CasaOS](https://casaos.io), [Unraid](https://unraid.net/), [Runtipi](https://www.runtipi.io/), [Kubero](https://www.kubero.dev/)
 
 ## Audio and Video Calls
 

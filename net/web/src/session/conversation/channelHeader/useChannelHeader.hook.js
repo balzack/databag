@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect, useRef } from 'react';
-import { ViewportContext } from 'context/ViewportContext';
+import { SettingsContext } from 'context/SettingsContext';
 import { ConversationContext } from 'context/ConversationContext';
 import { CardContext } from 'context/CardContext';
 import { ProfileContext } from 'context/ProfileContext';
@@ -15,9 +15,10 @@ export function useChannelHeader(contentKey) {
     title: null,
     offsync: false,
     display: null,
+    strings: {},
   });
 
-  const viewport = useContext(ViewportContext);
+  const settings = useContext(SettingsContext);
   const card = useContext(CardContext);
   const conversation = useContext(ConversationContext);
   const profile = useContext(ProfileContext);
@@ -32,8 +33,9 @@ export function useChannelHeader(contentKey) {
   }
 
   useEffect(() => {
-    updateState({ display: viewport.state.display });
-  }, [viewport.state]);
+    const { display, strings } = settings.state;
+    updateState({ display, strings });
+  }, [settings.state]);
 
   useEffect(() => {
 
@@ -84,7 +86,7 @@ export function useChannelHeader(contentKey) {
     let label;
     if (memberCount === 0) {
       img = 'solution';
-      label = 'Notes';
+      label = state.strings.notes;
     }
     else if (memberCount === 1) {
       label = names.join(',');
@@ -126,7 +128,7 @@ export function useChannelHeader(contentKey) {
       updateState({ label, img, logo });
     }
     // eslint-disable-next-line
-  }, [conversation.state, card.state, contentKey]);
+  }, [conversation.state, card.state, state.strings, contentKey]);
 
   const actions = {
     resync: () => {

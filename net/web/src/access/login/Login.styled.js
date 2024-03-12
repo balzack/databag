@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import Colors from 'constants/Colors';
 
 export const LoginWrapper = styled.div`
   max-width: 400px;
@@ -8,16 +7,32 @@ export const LoginWrapper = styled.div`
   display: flex;
   flex-direction: column;
 
+  .disabled {
+    background-color: ${props => props.theme.disabledArea};
+
+    button {
+      color: ${props => props.theme.idleText};
+    }
+  }
+
+  .enabled {
+    background-color: ${props => props.theme.enabledArea};
+
+    button {
+      color: ${props => props.theme.activeText};
+    }
+  }
+
   .app-title {
     font-size: 24px;
     display: flex;
     align-items: flex-start;
     justify-content: center;
     flex: 1;
-    color: ${Colors.grey};
+    color: ${props => props.theme.hintText};
 
     .settings {
-      color: ${Colors.grey};
+      color: ${props => props.theme.hintText};
       position: absolute;
       top: 0px;
       right: 0px;
@@ -34,6 +49,16 @@ export const LoginWrapper = styled.div`
     align-items: center;
     justify-content: center;
     flex: 1;
+    flex-direction: column;
+  }
+
+  .form-message {
+    font-size: 14px;
+    padding-top: 8px;
+    align-items: center;
+    justify-content: center;
+    font-weight: normal;
+    text-align: center;
   }
 
   .form-form {

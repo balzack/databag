@@ -6,7 +6,7 @@ import { Logo } from 'logo/Logo';
 import { Tooltip } from 'antd';
 import { MessageOutlined, PhoneOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 
-export function CardItem({ item, tooltip, enableIce, resync, open, call, message, display, canMessage }) {
+export function CardItem({ item, tooltip, enableIce, resync, open, call, message, display, canMessage, strings }) {
 
   const onResync = (e) => {
     e.stopPropagation();
@@ -31,13 +31,8 @@ export function CardItem({ item, tooltip, enableIce, resync, open, call, message
         <div className="handle">{ item.handle }</div>
       </div>
       <div className="markup">
-        { item.offsync && !item.tooltip && (
-          <StatusError onClick={onResync}>
-            <ExclamationCircleOutlined />
-          </StatusError>
-        )}
-        { item.offsync && item.tooltip && (
-          <Tooltip placement="left" title="sync error">
+        { item.offsync && (
+          <Tooltip placement="left" title={strings.syncError}>
             <StatusError onClick={onResync}>
               <ExclamationCircleOutlined />
             </StatusError>
@@ -60,39 +55,39 @@ export function CardItem({ item, tooltip, enableIce, resync, open, call, message
         { item.status === 'connected' && display !== 'small' && (
           <ComOptions>
             { canMessage && (
-              <Tooltip className="option" placement="left" title="message contact">
+              <Tooltip className="option" placement="left" title={strings.messageTip}>
                 <MessageOutlined onClick={onMessage} />
               </Tooltip>
             )}
             { enableIce && (
-              <Tooltip className="option" placement="left" title="call contact">
+              <Tooltip className="option" placement="left" title={strings.callTip}>
                 <PhoneOutlined onClick={onCall} />
               </Tooltip>
             )}
           </ComOptions>
         )}
         { item.status === 'connected' && (
-          <Tooltip placement="left" title="connected contact">
+          <Tooltip placement="left" title={strings.connectedTip}>
             <StatusConnected />
           </Tooltip>
         )}
         { item.status === 'requested' && (
-          <Tooltip placement="left" title="connection requested by contact">
+          <Tooltip placement="left" title={strings.requestedTip}>
             <StatusRequested />
           </Tooltip>
         )}
         { item.status === 'connecting' && (
-          <Tooltip placement="left" title="requested contact connection">
+          <Tooltip placement="left" title={strings.connectingTip}>
             <StatusConnecting />
           </Tooltip>
         )}
         { item.status === 'pending' && (
-          <Tooltip placement="left" title="unknwon contact connection request">
+          <Tooltip placement="left" title={strings.pendingTip}>
             <StatusPending />
           </Tooltip>
         )}
         { item.status === 'confirmed' && (
-          <Tooltip placement="left" title="disconnected contact">
+          <Tooltip placement="left" title={strings.confirmedTip}>
             <StatusConfirmed />
           </Tooltip>
         )}

@@ -5,6 +5,7 @@ export function useSelectItem(item, selected, markup) {
 
   const [state, setState] = useState({
     logo: null,
+    logoSet: false,
     selected: false,
     busy: false,
     className: 'passive',
@@ -30,10 +31,10 @@ export function useSelectItem(item, selected, markup) {
   useEffect(() => {
     const contact = card.state.cards.get(item.id);
     if (contact?.data?.cardProfile?.imageSet) {
-      updateState({ logo: card.actions.getCardImageUrl(item.id) });
+      updateState({ logoSet: true, logo: card.actions.getCardImageUrl(item.id) });
     }
     else {
-      updateState({ logo: null });
+      updateState({ logoSet: true, logo: null });
     }
   }, [card, item]);
 
