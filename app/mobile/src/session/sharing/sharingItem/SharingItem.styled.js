@@ -23,7 +23,7 @@ export const styles = StyleSheet.create({
     borderColor: Colors.itemDivider,
     paddingLeft: 16,
     paddingRight: 16,
-    backgroundColor: Colors.background,
+    backgroundColor: Colors.areaBase,
   },
   detail: {
     paddingLeft: 12,
@@ -45,7 +45,7 @@ export const styles = StyleSheet.create({
     fontSize: 14,
   },
   message: {
-    color: Colors.lightText,
+    color: Colors.descriptionText,
     fontSize: 12,
   },
 })
