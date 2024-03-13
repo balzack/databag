@@ -32,9 +32,9 @@ These instructions assume you have the following setup:
   sudo /usr/local/go/bin/go build databag<br/>
   
 ## Step 5: setup databag paths
-  mkdir -p /var/lib/databag/assets<br/>
-  mkdir -p /opt/databag/transform<br/>
-  cp /app/databag/net/container/transform/* /opt/databag/transform/<br/>
+  sudo mkdir -p /var/lib/databag<br/>
+  sudo mkdir -p /opt/databag/transform<br/>
+  sudo cp /app/databag/net/container/transform/* /opt/databag/transform/<br/>
 
 ## Step 6: mount EFS to store assets
   sudo apt-get update<br/>
