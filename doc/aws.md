@@ -10,21 +10,7 @@ These instructions assume you have the following setup:
   sudo certbot certonly --standalone -d [dns name]<br/>
 
 ## Step 2: install databag dependencies
-  sudo apt-get -y install ffmpeg<br/>
-  sudo apt-get -y install curl<br/>
-  sudo apt-get -y install net-tools<br/>
-  sudo apt-get -y install jq<br/>
-  sudo apt-get -y install netcat<br/>
-  sudo apt-get -y install unzip<br/>
-  sudo apt-get -y install wget<br/>
-  sudo apt-get -y install git<br/>
-  sudo apt-get -y install vim<br/>
-  sudo apt-get -y install fail2ban<br/>
-  sudo apt-get -y install imagemagick-6.q16<br/>
-  sudo apt-get -y install build-essential<br/>
-  sudo apt-get -y install sqlite3<br/>
-  sudo apt-get -y install openssh-client<br/>
-  apt-get -y install npm<br/>
+  sudo apt-get -y install ffmpeg curl net-tools jq netcat unzip wget git vim fail2ban imagemagick-6.q16 build-essential sqlite3 openssh-client npm<br/>
   apt-get -y upgrade<br/>
   npm install --global yarn<br/>
   npm install -g n<br/>
