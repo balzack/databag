@@ -21,15 +21,15 @@ These instructions assume you have the following setup:
   sudo tar -C /usr/local -xzf go1.19.3.linux-amd64.tar.gz<br/>
 
 ## Step 4: clone and build the server
-  mkdir /app<br/>
+  sudo mkdir /app<br/>
   cd /app<br/>
-  git clone https://github.com/balzack/databag.git<br/>
+  sudo git clone https://github.com/balzack/databag.git<br/>
   cd /app/databag/net/web<br/>
-  yarn config set network-timeout 300000<br/>
-  yarn --cwd /app/databag/net/web install<br/>
-  yarn --cwd /app/databag/net/web build<br/>
+  sudo yarn config set network-timeout 300000<br/>
+  sudo yarn --cwd /app/databag/net/web install<br/>
+  sudo yarn --cwd /app/databag/net/web build<br/>
   cd /app/databag/net/server<br/>
-  /usr/local/go/bin/go build databag<br/>
+  sudo /usr/local/go/bin/go build databag<br/>
   
 ## Step 5: setup databag paths
   mkdir -p /var/lib/databag/assets<br/>
