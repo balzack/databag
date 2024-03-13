@@ -4,6 +4,7 @@ These instructions assume you have the following setup:
   - an AMD64 Ubuntu EC2 instance with incoming ports 443 and 80<br/>
   - an EFS instance<br/>
   - a domain name pointing the the IP of your EC2 instance<br/>
+  - security group of EFS must have security group of EC2 as incomping
 
 ## Step 1: obtain cert
   sudo apt-get install certbot<br/>
