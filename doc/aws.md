@@ -43,7 +43,7 @@ These instructions assume you have the following setup:
   cd efs-utils<br/>
   ./build-deb.sh<br/>
   sudo apt-get -y install ./build/amazon-efs-utils*deb<br/>
-  sudo mount -t efs file-system-id /var/lib/databag<br/>
+  sudo mount -t efs <file-system-id> /var/lib/databag<br/>
 
 ## Step 7: initialize the internal datbase
   sqlite3 /var/lib/databag/databag.db "VACUUM;"<br/>
