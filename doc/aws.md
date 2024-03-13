@@ -11,10 +11,10 @@ These instructions assume you have the following setup:
 
 ## Step 2: install databag dependencies
   sudo apt-get -y install ffmpeg curl net-tools jq netcat unzip wget git vim fail2ban imagemagick-6.q16 build-essential sqlite3 openssh-client npm<br/>
-  apt-get -y upgrade<br/>
-  npm install --global yarn<br/>
-  npm install -g n<br/>
-  n stable<br/>
+  sudo apt-get -y upgrade<br/>
+  sudo npm install --global yarn<br/>
+  sudo npm install -g n<br/>
+  sudo n stable<br/>
 
 ## Step 3: download and install golang
   wget https://go.dev/dl/go1.19.3.linux-amd64.tar.gz<br/>
