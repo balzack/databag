@@ -7,7 +7,7 @@ export const AccountAccessWrapper = styled.div`
   justify-content: center;
   padding-bottom: 8px;
   width: 100%;
-  background-color: ${props => props.theme.selectedArea};
+  background-color: ${props => props.theme.itemArea};
   color: ${props => props.theme.mainText};
 
   .account {
@@ -39,7 +39,7 @@ export const AccountAccessWrapper = styled.div`
 
       .label {
         padding-right: 16px;
-        min-width: 33%;
+        min-width: 35%;
         height: 28px;
         display: flex;
         align-items: center;

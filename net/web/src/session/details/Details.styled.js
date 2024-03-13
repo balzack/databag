@@ -5,7 +5,7 @@ export const DetailsWrapper = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  background-color: ${props => props.theme.selectedArea};
+  background-color: ${props => props.theme.itemArea};
   color: ${props => props.theme.mainText};
 
   .actions {
