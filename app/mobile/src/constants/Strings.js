@@ -200,6 +200,8 @@ const Strings = [
     deleteMessage: 'Delete Message',
     blockMessage: 'Block Message',
     reportMessage: 'Report Message',
+    select: 'Select',
+    selectTopic: 'Select Topic for Sharing',
   },
   {
     languageCode: 'fr',
@@ -396,6 +398,8 @@ const Strings = [
     deleteMessage: 'Supprimer le Message',
     blockMessage: 'Bloquer le Message',
     reportMessage: 'Signaler le Message',
+    select: 'Choisir',
+    selectTopic: 'Choisissez le sujet à partager',
   },
   {
     languageCode: 'es',
@@ -592,6 +596,9 @@ const Strings = [
     deleteMessage: 'Borrar Mensaje',
     blockMessage: 'Bloquear Mensaje',
     reportMessage: 'Reportar Mensaje',
+
+    select: 'Elegir',
+    selectTopic: 'Elija un tema para compartir',
   },
   {
     languageCode: 'de',
@@ -788,6 +795,9 @@ const Strings = [
     deleteMessage: 'Nachricht Löschen',
     blockMessage: 'Blockieren Sie die Nachricht',
     reportMessage: 'Melden Sie die Nachricht',
+
+    select: 'Wählen',
+    selectTopic: 'Wählen Sie ein Thema zum Teilen aus',
   },
   {
     languageCode: 'pt',
@@ -969,6 +979,9 @@ const Strings = [
     deleteMessage: 'Apagar Mensagem',
     blockMessage: 'Bloquear Mensagem',
     reportMessage: 'Denunciar Mensagem',
+
+    select: 'Escolher',
+    selectTopic: 'Escolha o tópico para compartilhar',
   },
   {
     languageCode: 'ru',
@@ -1148,6 +1161,9 @@ const Strings = [
     deleteMessage: 'Удаленное сообщение',
     blockMessage: 'Заблокировать сообщение',
     reportMessage: 'Пожаловаться на сообщение',
+
+    select: 'выбирать',
+    selectTopic: 'Выберите тему для обмена',
   }
 ];
 

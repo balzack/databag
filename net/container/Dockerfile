@@ -41,12 +41,24 @@ RUN echo "set expandtab\nset tabstop=2\nset softtabstop=2\nset shiftwidth=2\nset
 RUN echo "bind 'set mark-symlinked-directories on'" >> /root/.bashrc
 
 ADD entrypoint.sh /app
+ADD dev_setup.sh /app
+
+RUN rm -rf /usr/local/go
+RUN rm -rf /root/go
+RUN rm -rf /app/go*
+RUN rm -rf /root/.cache/go*
 
 RUN yarn cache clean
+RUN rm -rf /app/databag/app
 RUN rm -rf /app/databag/net/web/node_modules
-RUN rm -rf /var/lib/apt/lists
 
-RUN apt-get -y remove git build-essential npm
+RUN n prune
+RUN npm uninstall -g n
+RUN rm -rf /usr/local/n
+RUN rm -rf /usr/local/bin/node 
+
+RUN apt-get -y remove git build-essential npm vim nodejs
+RUN rm -rf /var/lib/apt/lists
 
 FROM scratch
 COPY --from=build / /

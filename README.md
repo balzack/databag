@@ -134,7 +134,7 @@ Install without a container in AWS [here](/doc/aws.md).
 
 Integrate Databag in an OpenWrt firmware [here](/doc/openwrt.md).
 
-1-click installs in [CapRover](https://caprover.com/), [CasaOS](https://casaos.io), [Unraid](https://unraid.net/), [Runtipi](https://www.runtipi.io/), [Kubero](https://www.kubero.dev/)
+1-click installs in [CapRover](https://caprover.com/), [CasaOS](https://casaos.io), [Unraid](https://unraid.net/), [Runtipi](https://www.runtipi.io/), [Kubero](https://www.kubero.dev/), [Umbrel](https://umbrel.com/)
 
 ## Audio and Video Calls
 

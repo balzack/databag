@@ -18,5 +18,5 @@ if [ "$DEV" == "1" ]; then
   done
 else
   cd /app/databag/net/server
-  /usr/local/go/bin/go run databag -p 7000 -w /app/databag/net/web/build -s /var/lib/databag -t /opt/databag/transform
+  ./databag -p 7000 -w /app/databag/net/web/build -s /var/lib/databag -t /opt/databag/transform
 fi

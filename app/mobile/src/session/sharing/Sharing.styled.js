@@ -8,10 +8,10 @@ export const styles = StyleSheet.create({
     height: '100%',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'rgba(52, 52, 52, 0.8)'
+    backgroundColor: 'rgba(0,0,0, 0.8)'
   },
   sharingFrame: {
-    backgroundColor: Colors.formBackground,
+    backgroundColor: Colors.drawerBase,
     width: '80%',
     height: '80%',
     maxWidth: 400,
@@ -29,6 +29,7 @@ export const styles = StyleSheet.create({
   },
   headerText: {
     fontSize: 18,
+    color: Colors.text,
   },
   content: {
     width: '100%',

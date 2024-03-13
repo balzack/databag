@@ -143,8 +143,8 @@ export function Details({ channel, clearConversation }) {
 
       <View style={styles.members}>
         <Text style={styles.membersLabel}>{ state.strings.members }</Text>
-        { state.count - state.members.length > 0 && (
-          <Text style={styles.unknown}> (+ {state.count - state.contacts.length}) { state.strings.unknown }</Text>
+        { state.unknown > 0 && (
+          <Text style={styles.unknown}> (+ {state.unknown}) { state.strings.unknown }</Text>
         )}
       </View>
 
