@@ -1,6 +1,6 @@
-(note: this backlong is left unprioritiezed)
+(note: this backlog is left unprioritiezed)
 
-# Features
+# Backlog
 
 **Browser Notifications:** firefox and chrome push notifications for contact updates and communication events
 
@@ -37,3 +37,14 @@
 **Customizable Push:** allow for push notifications to be customizable in terms of content and sound effects
 
 **DB:** add support for other databases, specifically PostgreSQL
+
+**Contacts:** support selective sharing of details like phone number and address
+
+**Albums:** support sharing of photo albums and allow for commenting
+
+**Desktop Apps:** destop app versions of the databag client
+
+**Modularlise:** refactor so databag instance can be embedded as part of another project like a virtual classroom
+
+**Arch Document:** software design and API document for contributors
+
