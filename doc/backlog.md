@@ -40,7 +40,7 @@
 
 **Contacts:** support selective sharing of details like phone number and address
 
-**Albums:** support sharing of photo albums and allow for commenting
+**Albums:** support selective sharing of photo albums and allow for commenting
 
 **Desktop Apps:** destop app versions of the databag client
 
