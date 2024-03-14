@@ -48,3 +48,5 @@
 
 **Arch Document:** software design and API document for contributors
 
+**APN:** avoid firebase for iOS and use APN directly
+
