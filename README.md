@@ -145,3 +145,7 @@ If you want to enable audio and video calls, you should setup your own relay ser
   - WebRTC Server URL: turn:34.210.172.114:3478?transport=udp
   - WebRTC Username: user
   - WebRTC Password: pass
+
+### Roadmap
+
+Please let me know any missing features; [here](/doc/backlog.md) is the current backlog. I will prioritize features based on interest from the community.
