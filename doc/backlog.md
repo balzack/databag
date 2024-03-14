@@ -44,7 +44,7 @@
 
 **Desktop Apps:** destop app versions of the databag client
 
-**Modularlise:** refactor so databag instance can be embedded as part of another project like a virtual classroom
+**Modularlize:** refactor so databag instance can be embedded as part of another project like a virtual classroom
 
 **Arch Document:** software design and API document for contributors
 
