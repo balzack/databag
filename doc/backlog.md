@@ -16,3 +16,24 @@
 
 **Bots:** add support for bots
 
+**Preferred Nodes:** add an admin managed list of other nodes and present the nodes in a select box when searching for contacts
+
+**2-Factor Auth:** add 2-factor auth capabilities
+
+**SSO:** support single sign on
+
+**Audio & Video Message:** support recording and sending audio and video messages
+
+**Account Migration:** provide tools for account migration to other nodes
+
+**Pinch Zoom:** support pinch zoom on images
+
+**Read Receipt:** indicate to sender when recipients have viewed the message
+
+**Reactions:** allow for messages to be tagged with reactions
+
+**Compress Images:** provide option to compress image when posting
+
+**Customizable Push:** allow for push notifications to be customizable in terms of content and sound effects
+
+**DB:** add support for other databases, specifically PostgreSQL
