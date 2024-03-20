@@ -148,4 +148,4 @@ If you want to enable audio and video calls, you should setup your own relay ser
 
 ### Roadmap
 
-Please let me know any missing features; [here](/doc/backlog.md) is the current backlog. I will prioritize features based on interest from the community.
+Please let me know any missing features; [here](/doc/backlog.md) is the current backlog. Features are prioritiezed based on interest from the community.
