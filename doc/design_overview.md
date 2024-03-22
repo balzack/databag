@@ -59,7 +59,7 @@ The discovery of other contacts in the system is achieved through a signed profi
 Databag clients are used to access a subject’s account. When a client authenticates on behalf of the subject, a unique token is generated at the server and returned to the client. Internally this token is referred to as the agent token, and is included on all communication between the client and the account hosted on the subject’s node. Any account may have multiple clients actively connected.
 
 <div align="center">
-  <a href="#"><img src="/doc/overview_fig5.png" width="50%" style="border-radius:50%"></a>
+  <a href="#"><img src="/doc/overview_fig5.png" width="60%" style="border-radius:50%"></a>
 </div>
 
 Connected contacts also have access to shared attributes and channels, but this is done through a different contact token. Contact connection is established through a mutual exchange of signed connect messages. The connect message contains the profile details, but also a token for incoming requests from that contact. The token is stored in the card for all future interactions with that contact.
