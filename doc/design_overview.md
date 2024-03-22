@@ -49,7 +49,7 @@ The revision mechanism allows for the efficient synchronization for both new and
 While the profile describes the account holder, the identity is determined by a public/private key. Regardless of what may be stored in the profile, a fingerprint of the public key uniquely identifies the account. At account creation time a key pair is generated which becomes the identity of the account for its lifetime. The private key never leaves the server and all signing of data happens within the server.
 
 <div align="center">
-  <a href="#"><img src="/doc/overview_fig4.png" width="50%" style="border-radius:50%"></a>
+  <a href="#"><img src="/doc/overview_fig4.png" width="40%" style="border-radius:50%"></a>
 </div>
 
 The discovery of other contacts in the system is achieved through a signed profile message. When enabled the profile message can be accessed through a public endpoint on the node. One of the fields in the profile is the public key fingerprint so the receiving client and server can verify the integrity of the profile. When a new profile message is received at the node, a new card object is created with the profile contents for future reference.
