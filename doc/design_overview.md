@@ -51,7 +51,7 @@ The revision mechanism allows for the efficient synchronization for both new and
 While the profile describes the account holder, the identity is determined by a public/private key. Regardless of what may be stored in the profile, a fingerprint of the public key uniquely identifies the account. At account creation time a key pair is generated which becomes the identity of the account for its lifetime. The private key never leaves the server and all signing of data happens within the server.
 
 <div align="center">
-  <a href="#"><img src="/doc/overview_fig4.png" width="50%" style="border-radius:50%"></a>
+  <a href="#"><img src="/doc/overview_fig4.png" width="50%" style="border-radius:40%"></a>
 </div>
 
 The discovery of other contacts in the system is achieved through a signed profile message. When enabled the profile message can be accessed through a public endpoint on the node. One of the fields in the profile is the public key fingerprint so the receiving client and server can verify the integrity of the profile. When a new profile message is received at the node, a new card object is created with the profile contents for future reference.
@@ -61,7 +61,7 @@ The discovery of other contacts in the system is achieved through a signed profi
 Databag clients are used to access a subject’s account. When a client authenticates on behalf of the subject, a unique token is generated at the server and returned to the client. Internally this token is referred to as the agent token, and is included on all communication between the client and the account hosted on the subject’s node. Any account may have multiple clients actively connected.
 
 <div align="center">
-  <a href="#"><img src="/doc/overview_fig5.png" width="50%" style="border-radius:50%"></a>
+  <a href="#"><img src="/doc/overview_fig5.png" width="50%" style="border-radius:60%"></a>
 </div>
 
 Connected contacts also have access to shared attributes and channels, but this is done through a different contact token. Contact connection is established through a mutual exchange of signed connect messages. The connect message contains the profile details, but also a token for incoming requests from that contact. The token is stored in the card for all future interactions with that contact.
@@ -75,7 +75,7 @@ The E2E algorithm implemented in Databag follows the approach of web servers, wh
 E2E encryption keys are generated within the client as a public/private key pair, referred to as the sealing key. The public key is published as part of the account profile and is thereby shared with all contacts in the system. The private key is encrypted with a key derived from a pbkdf2 function and stored within the account node. Other clients connecting to the same account can retrieve the encrypted key and restore the private key using the pbkdf2 function. Multiple clients for one account can then access the same E2E encrypted content.
 
 <div align="center">
-  <a href="#"><img src="/doc/overview_fig6.png" width="60%" style="border-radius:50%"></a>
+  <a href="#"><img src="/doc/overview_fig6.png" width="60%" style="border-radius:40%"></a>
 </div>
 
 When using E2E encryption, each channel is independently encrypted. The channel object will contain a list of the symmetric key encrypted with the public key of each participating account. Each client can unwrap their copy of the symmetric key with the account sealing key and view the contents of the channel. 
