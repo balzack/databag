@@ -12,6 +12,10 @@ Databag hopes to break the technological barrier by supporting consumer electron
 
 Within the Databag system, clients connect to nodes with both a websocket and a REST API. The websocket is used to communicate events while the REST API transfers the content. The nodes also communicate events between each other over a notification connection. However, importantly no content is synchronized between nodes.
 
+<div align="center">
+  <a href="#"><img src="/doc/overview_fig1.png" width="50%" style="border-radius:50%"></a>
+</div>
+
 When a subject posts data that is shared with another contact to the subject’s node:
 1. Subject’s node receives the data from the subject’s client over the REST API.
 2. Subject’s node notifies the contact’s node over the Notification Endpoint.
