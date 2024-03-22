@@ -7,6 +7,10 @@
   <p align="center">A federated messenger for self-hosting</p>
 </div>
 
+<p align="center">
+  <a href="/doc/design_overview.md">-> Design Overview <-</a>
+</p>
+
 <br>
 
 <p align="center">
