@@ -26,6 +26,10 @@ When a subject posts data that is shared with another contact to the subject’s
 
 The Databag service only defines a relationship structure which determines how data is synchronized and shared. The format of the data is left abstract to be defined by the applications. Below the core data objects and their sharing relationships are illustrated.
 
+<div align="center">
+  <a href="#"><img src="/doc/overview_fig2.png" width="50%" style="border-radius:50%"></a>
+</div>
+
 - Profile: describes the account holder and can be publicly shared
 - Card: a reference to another account in the network
 - Alias: a list of cards to facilitate sharing
@@ -35,6 +39,10 @@ The Databag service only defines a relationship structure which determines how d
 - Attribute: data posted by the account holder and shared with a list of aliases
 
 The data objects all maintain revisions that allow for efficient synchronization between client and server. For a given account, all channels and their data are governed by the same revision counter. If the current channel revision counter has a value of X, and a new topic is posted. The new topic will have a revision of X+1, and the associated channel will get the value of X+1. A client, who was synchronized to a revision of X can then request all channels with a revision greater than X, and retrieve the updated channel. Then the client can request all topics of the given channel with a revision greater than X and retrieve the new topic. This concept of a revision counter is maintained for the profile, cards, aliases, and attributes as well.
+
+<div align="center">
+  <a href="#"><img src="/doc/overview_fig3.png" width="50%" style="border-radius:50%"></a>
+</div>
 
 The revision mechanism allows for the efficient synchronization for both new and updated data. Deleting data however requires an additional concept to indicate the data is no longer present. This is done by composing any data record as both a slot and value. Records store the revision as part of the slot and can have empty values when the data is deleted. When this happens, the client will synchronize the updated record according to the revisions, and seeing an empty value will determine the data was deleted.
 
