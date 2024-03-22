@@ -1,7 +1,5 @@
  # Databag Design Overview
 
-## Introduction
-
 With all the wonderful things technology provides, it also has its darker side. Technology is increasingly used to violate our privacy and manipulate our beliefs and actions. End-to-end encryption has become standard and restores some of that privacy, but only addresses part of the problem. Self-hosting goes much further in providing true self-sovereignty while allowing technology to grow in a way that is beneficial to everyone. 
 
 Self-hosting involves running your own server to host a variety of services. These services can also be made available to friends and family. While self-hosting is gaining traction, it still remains mostly limited to those that are very technical. Without reaching the average person the impact and benefit of self-hosting also remains limited.
