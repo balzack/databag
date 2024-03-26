@@ -30,6 +30,7 @@ Databag is designed for efficiency, consuming minimal resources on the host syst
 - End-to-End encryption (the hosting admin cannot view topics if sealed)
 - Audio and Video Calls (nat traversal requires separate relay server)
 - Topic based threads (messages organized by topic not contacts)
+- Unlimited participants (no limit on group thread members)
 - Lightweight (server can run on a raspberry pi zero v1.3)
 - Low latency (use of websockets for push events to avoid polling)
 - Unlimited accounts per node (host for your whole family)
