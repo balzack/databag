@@ -2,6 +2,8 @@
 
 # Backlog
 
+**Shade Messages:** apply different shade to each conversation member
+
 **Browser Notifications:** firefox and chrome push notifications for contact updates and communication events
 
 **Group Call:** support calls with a list of contacts
@@ -30,7 +32,7 @@
 
 **Read Receipt:** indicate to sender when recipients have viewed the message
 
-**Reactions:** allow for messages to be tagged with reactions
+**Reactions:** allow for messages to be tagged with reactions or replied to
 
 **Compress Images:** provide option to compress image when posting
 
