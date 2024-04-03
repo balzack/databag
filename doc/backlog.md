@@ -52,4 +52,6 @@
 
 **APN:** avoid firebase for iOS and use APN directly
 
+**Auto Archive:** add ability to auto delete old data
+
 **1-1 Sealed:** admin config for defaulting to sealed topic when starting a 1-1 topic from the contact list
