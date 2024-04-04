@@ -1,6 +1,6 @@
 cd /root
-wget -P /app https://go.dev/dl/go1.18.10.linux-amd64.tar.gz
-tar -C /usr/local -xzf /app/go1.18.10.linux-amd64.tar.gz 
+wget -P /app https://go.dev/dl/go1.22.2.linux-amd64.tar.gz
+tar -C /usr/local -xzf /app/go1.22.2.linux-amd64.tar.gz 
 
 apt-get update
 apt-get -y install git build-essential npm vim
