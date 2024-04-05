@@ -7,7 +7,7 @@ EXPOSE 7000
 ENV TZ=America/Los_Angeles
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-RUN   apt-get  update
+RUN        apt-get   update
 
 RUN apt-get -y install curl net-tools jq netcat unzip wget git vim fail2ban imagemagick-6.q16 ffmpeg build-essential sqlite3 npm
 
@@ -57,7 +57,7 @@ RUN npm uninstall -g n
 RUN rm -rf /usr/local/n
 RUN rm -rf /usr/local/bin/node 
 
-RUN apt-get -y remove git build-essential npm vim nodejs
+RUN apt-get -y remove git build-essential npm vim nodejs linux-libc-dev
 RUN rm -rf /var/lib/apt/lists
 
 FROM scratch
