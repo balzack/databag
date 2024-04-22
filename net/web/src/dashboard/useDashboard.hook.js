@@ -158,9 +158,9 @@ export function useDashboard() {
   const syncConfig = async () => {
     try {
       const config = await getNodeConfig(app.state.adminToken);
-      const { storage, domain, keyType, pushSupported, transformSupported, allowUnsealed, enableImage, enableAudio, enableVideo, enableIce, iceUrl, iceUsername, icePassword, enableOpenAccess, openAccessLimit } = config;
-      const accountStorage = Math.ceil(storage / 1073741824);
-      updateState({ configError: false, domain, accountStorage, keyType, enableImage, enableAudio, enableVideo, pushSupported, transformSupported, allowUnsealed, enableIce, iceUrl, iceUsername, icePassword, enableOpenAccess, openAccessLimit });
+      const { accountStorage, domain, keyType, pushSupported, transformSupported, allowUnsealed, enableImage, enableAudio, enableVideo, enableIce, iceUrl, iceUsername, icePassword, enableOpenAccess, openAccessLimit } = config;
+      const storage = Math.ceil(accountStorage / 1073741824);
+      updateState({ configError: false, domain, accountStorage: storage, keyType, enableImage, enableAudio, enableVideo, pushSupported, transformSupported, allowUnsealed, enableIce, iceUrl, iceUsername, icePassword, enableOpenAccess, openAccessLimit });
     }
     catch(err) {
       console.log(err);
