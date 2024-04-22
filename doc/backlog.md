@@ -2,6 +2,8 @@
 
 # Backlog
 
+**Typescript:** refactor mobile and browser apps to use typescript
+
 **Shade Messages:** apply different shade to each conversation member
 
 **Browser Notifications:** firefox and chrome push notifications for contact updates and communication events
