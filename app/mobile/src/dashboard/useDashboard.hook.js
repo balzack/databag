@@ -68,7 +68,8 @@ export function useDashboard(config, server, token) {
 
   useEffect(() => {
     const { keyType, accountStorage, domain, enableImage, enableAudio, enableVideo, transformSupported, allowUnsealed, pushSupported, enableIce, iceUrl, iceUsername, icePassword } = config;
-    updateState({ keyType, storage: accountStorage.toString(), domain, enableImage, enableAudio, enableVideo, transformSupported, allowUnsealed, pushSupported, enableIce, iceUrl, iceUsername, icePassword });
+    const storage = Math.ceil(accountStorage / 1073741824);
+    updateState({ keyType, storage: storage.toString(), domain, enableImage, enableAudio, enableVideo, transformSupported, allowUnsealed, pushSupported, enableIce, iceUrl, iceUsername, icePassword });
   }, [config]);
 
   useEffect(() => {
@@ -140,7 +141,8 @@ export function useDashboard(config, server, token) {
     },
     saveConfig: async () => {
       const { storage, domain, keyType, enableImage, pushSupported, allowUnsealed, transformSupported, enableAudio, enableVideo, enableIce, iceUrl, iceUsername, icePassword } = state;
-      const config = { accountStorage: Number(storage), domain, keyType, enableImage, pushSupported, allowUnsealed, transformSupported, enableAudio, enableVideo, enableIce, iceUrl, iceUsername, icePassword };
+      const accountStorage = Number(storage) * 1073741824;
+      const config = { accountStorage, domain, keyType, enableImage, pushSupported, allowUnsealed, transformSupported, enableAudio, enableVideo, enableIce, iceUrl, iceUsername, icePassword };
       await setNodeConfig(server, token, config);
     },
     enableUser: async (accountId, enabled) => {
