@@ -2,15 +2,21 @@ import React, { useState, useEffect, useRef } from 'react';
 import { CarouselWrapper } from './Carousel.styled';
 import { CloseOutlined } from '@ant-design/icons';
 import ReactResizeDetector from 'react-resize-detector';
+interface Props {
+  pad?:any
+   items?:any
+   itemRenderer?:any
+   itemRemove?:any
 
-export function Carousel({ pad, items, itemRenderer, itemRemove }) {
+}
+export function Carousel({ pad, items, itemRenderer, itemRemove }:Props) {
   const [slots, setSlots] = useState([]);
 
-  let carousel = useRef();
+  let carousel = useRef<any>();
 
   const RemoveItem = ({ index }) => {
     if (itemRemove) {
-      return <div class="delitem" onClick={() => itemRemove(index)}><CloseOutlined /></div>
+      return <div className="delitem" onClick={() => itemRemove(index)}><CloseOutlined /></div>
     }
     return <></>
   }
@@ -22,8 +28,8 @@ export function Carousel({ pad, items, itemRenderer, itemRemove }) {
         <ReactResizeDetector handleWidth={true} handleHeight={false}>
           {({ width, height }) => {
             return (
-              <div class="item noselect">
-                <div class="asset">{ itemRenderer(items[i], i) }</div>
+              <div className="item noselect">
+                <div className="asset">{ itemRenderer(items[i], i) }</div>
                 <RemoveItem index={i} />
               </div>
             );
@@ -32,14 +38,14 @@ export function Carousel({ pad, items, itemRenderer, itemRemove }) {
       ));
     }
     if (items.length > 0) {
-      assets.push(<div class="space"></div>)
+      assets.push(<div className="space"></div>)
     }
     setSlots(assets);
   }, [items, itemRenderer]);
 
   return (
     <CarouselWrapper>
-      <div class="carousel" style={{ paddingLeft: pad + 32 }} ref={carousel}>
+      <div className="carousel" style={{ paddingLeft: pad + 32 }} ref={carousel}>
         {slots}
       </div>
     </CarouselWrapper>

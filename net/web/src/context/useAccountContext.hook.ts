@@ -5,13 +5,28 @@ import { getAccountStatus } from 'api/getAccountStatus';
 import { setAccountLogin } from 'api/setAccountLogin';
 import { StoreContext } from './StoreContext';
 
-export function useAccountContext() {
-  const [state, setState] = useState({
+export const defaultAccountContext = {
+  state: {
     offsync: false,
     status: null,
     seal: null,
     sealKey: null,
-  });
+  },
+  actions: {
+    setToken: (token: any) => {},
+    clearToken: () => {},
+    setRevision: (rev: any) => Promise.reject<void>(),
+    setSearchable: (flag: any) => Promise.reject<void>(),
+    setSeal: (seal: any, sealKey: any) => Promise.reject<void>(),
+    updateSeal: (seal: any) => Promise.reject<void>(),
+    unlockSeal: (sealKey: any) => Promise.reject<void>(),
+    setLogin: (username: any, password: any) => Promise.reject<void>(),
+    resync: () => Promise.reject<void>(),
+}
+}
+
+export function useAccountContext(): typeof defaultAccountContext {
+  const [state, setState] = useState(defaultAccountContext.state);
   const access = useRef(null);
   const setRevision = useRef(null);
   const curRevision = useRef(null);

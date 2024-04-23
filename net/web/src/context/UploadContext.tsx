@@ -1,7 +1,7 @@
 import { createContext } from 'react';
-import { useUploadContext } from './useUploadContext.hook';
+import { defaultUploadContext, useUploadContext } from './useUploadContext.hook';
 
-export const UploadContext = createContext({});
+export const UploadContext = createContext(defaultUploadContext);
 
 export function UploadContextProvider({ children }) {
   const { state, actions } = useUploadContext();

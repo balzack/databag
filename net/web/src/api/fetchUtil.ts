@@ -12,17 +12,17 @@ export function checkResponse(response) {
   }
 }
 
-export async function fetchWithTimeout(url, options) {
+export async function fetchWithTimeout(url, options):Promise<Response> {
   return Promise.race([
     fetch(url, options).catch(err => { throw new Error(url + ' failed'); }),
-    new Promise((_, reject) => setTimeout(() => reject(new Error(url + ' timeout')), TIMEOUT))
+    new Promise<Response>((_, reject) => setTimeout(() => reject(new Error(url + ' timeout')), TIMEOUT))
   ]);
 }
 
-export async function fetchWithCustomTimeout(url, options, timeout) {
+export async function fetchWithCustomTimeout(url, options, timeout):Promise<Response> {
   return Promise.race([
     fetch(url, options).catch(err => { throw new Error(url + ' failed'); }),
-    new Promise((_, reject) => setTimeout(() => reject(new Error(url + ' timeout')), timeout))
+    new Promise<Response>((_, reject) => setTimeout(() => reject(new Error(url + ' timeout')), timeout))
   ]);
 }
 

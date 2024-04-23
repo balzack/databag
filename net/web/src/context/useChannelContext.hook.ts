@@ -15,11 +15,19 @@ import { setChannelCard } from 'api/setChannelCard';
 import { clearChannelCard } from 'api/clearChannelCard';
 import { UploadContext } from 'context/UploadContext';
 
+const defaultState = {
+  offsync: false,
+  channels: new Map(),
+}
+export const defaultChannelContext = {
+
+state: defaultState,
+actions: {} as ReturnType<typeof useChannelContext>["actions"]
+
+}
+
 export function useChannelContext() {
-  const [state, setState] = useState({
-    offsync: false,
-    channels: new Map(),
-  });
+  const [state, setState] = useState(defaultState);
   const upload = useContext(UploadContext);
   const access = useRef(null);
   const setRevision = useRef(null);
@@ -151,7 +159,7 @@ export function useChannelContext() {
       }
       else {
         const subject = message([]);
-        await addChannelTopic(access.current, channelId, type, subject);
+        await addChannelTopic(access.current, channelId, type, subject, undefined);
       }
       //await resync();
     },

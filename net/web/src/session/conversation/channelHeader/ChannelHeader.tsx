@@ -10,15 +10,15 @@ export function ChannelHeader({ closeConversation, openDetails, contentKey }) {
 
   return (
     <ChannelHeaderWrapper>
-      <div class="title">
-        <div class="logo">
+      <div className="title">
+        <div className="logo">
           <Logo img={state.img} url={state.logo} width={32} height={32} radius={4} />
         </div>
         { state.title && (
-          <div class="label">{ state.title }</div>
+          <div className="label">{ state.title }</div>
         )}
         { !state.title && (
-          <div class="label">{ state.label }</div>
+          <div className="label">{ state.label }</div>
         )}
         { state.error && state.display === 'small' && (
           <StatusError onClick={actions.resync}>
@@ -33,13 +33,13 @@ export function ChannelHeader({ closeConversation, openDetails, contentKey }) {
           </Tooltip>
         )}
         { state.display !== 'xlarge' && (
-          <div class="button" onClick={openDetails}>
+          <div className="button" onClick={openDetails}>
             <SettingOutlined />
           </div>
         )}
       </div>
       { state.display !== 'xlarge' && (
-        <div class="button" onClick={closeConversation}>
+        <div className="button" onClick={closeConversation}>
           <CloseOutlined />
         </div>
       )}

@@ -1,7 +1,7 @@
 import { createContext } from 'react';
-import { useAccountContext } from './useAccountContext.hook';
+import { defaultAccountContext, useAccountContext } from './useAccountContext.hook';
 
-export const AccountContext = createContext({});
+export const AccountContext = createContext(defaultAccountContext);
 
 export function AccountContextProvider({ children }) {
   const { state, actions } = useAccountContext();

@@ -18,9 +18,9 @@ export function MemberOption({ item, close }) {
   return (
     <MemberOptionWrapper onClick={close}>
       <Logo url={state.logo} width={32} height={32} radius={8} />
-      <div class="details">
-        <div class="name">{ profile?.name }</div>
-        <div class="handle">{ handle() }</div>
+      <div className="details">
+        <div className="name">{ profile?.name }</div>
+        <div className="handle">{ handle() }</div>
       </div>
     </MemberOptionWrapper>
   );

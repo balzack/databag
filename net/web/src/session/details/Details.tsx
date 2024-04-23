@@ -133,7 +133,7 @@ export function Details({ closeDetails, closeConversation, openContact }) {
       <div className="content">
         <div className="description">
           <div className="logo">
-            <Logo src={state.logo} width={72} height={72} radius={4} img={state.img} />
+            <Logo width={72} height={72} radius={4} img={state.img} />
           </div>
           <div className="stats">
             { !state.host && (
@@ -187,17 +187,26 @@ export function Details({ closeDetails, closeConversation, openContact }) {
           <div className="controls">
             { !state.host && (
               <Tooltip placement="top" title={state.strings.deleteTopic}>
-                <Button className="button" type="primary" icon={<DeleteOutlined />} size="medium"  onClick={deleteChannel}>{ state.strings.remove }</Button>
+                <Button className="button" type="primary" icon={<DeleteOutlined />} 
+                 //@ts-ignore
+                 size="medium"
+                   onClick={deleteChannel}>{ state.strings.remove }</Button>
               </Tooltip>
             )}
             { !state.host && !state.sealed && (
               <Tooltip placement="top" title={state.strings.editMembership}>
-                <Button className="button" type="primary" icon={<UserSwitchOutlined />} size="medium"  onClick={actions.setEditMembers}>{state.strings.members}</Button>
+                <Button className="button" type="primary" icon={<UserSwitchOutlined />}
+                 //@ts-ignore
+                 size="medium"
+                   onClick={actions.setEditMembers}>{state.strings.members}</Button>
               </Tooltip>
             )}
             { state.host && (
               <Tooltip placement="top" title={state.strings.leaveTopic}>
-                <Button className="button" type="primary" icon={<CloseCircleOutlined />} size="medium"  onClick={leaveChannel}>{state.strings.leave}</Button>
+                <Button className="button" type="primary" icon={<CloseCircleOutlined />}
+                 //@ts-ignore
+                 size="medium"
+                   onClick={leaveChannel}>{state.strings.leave}</Button>
               </Tooltip>
             )}
           </div>

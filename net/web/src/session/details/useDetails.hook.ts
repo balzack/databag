@@ -25,7 +25,7 @@ export function useDetails() {
     showEditSubject: false,
     editSubject: null,
 
-    strings: {},
+    strings: {} as Record<string,string>,
     display: 'small',
     menuStyle: {},
     sealed: false,
@@ -39,10 +39,10 @@ export function useDetails() {
   const settings = useContext(SettingsContext);
   const profile = useContext(ProfileContext);
 
-  const cardId = useRef();
-  const channelId = useRef();
-  const key = useRef();
-  const detailRevision = useRef();
+  const cardId = useRef<any>();
+  const channelId = useRef<any>();
+  const key = useRef<any>();
+  const detailRevision = useRef<any>();
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
@@ -225,8 +225,11 @@ export function useDetails() {
       if (state.sealed) {
         if (state.contentKey) {
           const updated = updateChannelSubject(state.editSubject, state.contentKey);
-          updated.seals = state.seals;
-          await conversation.actions.setChannelSubject('sealed', updated);
+          await conversation.actions.setChannelSubject('sealed', {
+            seals: state.seals
+            ,...updated,
+
+          });
         }
       }
       else {

@@ -27,7 +27,7 @@ export function useAccountAccess() {
     sealUnlock: null,
 
     display: null,
-    strings: {},
+    strings: {} as Record<string,string>,
     menuStyle: {},
     timeFormat: '12h',
     dateFormat: 'mm/dd',

@@ -1,7 +1,7 @@
 import { createContext } from 'react';
-import { useChannelContext } from './useChannelContext.hook';
+import { defaultChannelContext, useChannelContext } from './useChannelContext.hook';
 
-export const ChannelContext = createContext({});
+export const ChannelContext = createContext(defaultChannelContext);
 
 export function ChannelContextProvider({ children }) {
   const { state, actions } = useChannelContext();

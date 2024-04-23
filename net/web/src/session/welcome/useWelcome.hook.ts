@@ -5,7 +5,7 @@ export function useWelcome() {
 
   const [state, setState] = useState({
     scheme: null,
-    strings: {},
+    strings: {} as Record<string, string>
   });
 
   const settings = useContext(SettingsContext);

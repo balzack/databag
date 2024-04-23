@@ -1,7 +1,7 @@
 import { createContext } from 'react';
-import { useStoreContext } from './useStoreContext.hook';
+import { defaultStoreContext, useStoreContext } from './useStoreContext.hook';
 
-export const StoreContext = createContext({});
+export const StoreContext = createContext(defaultStoreContext);
 
 export function StoreContextProvider({ children }) {
   const { state, actions } = useStoreContext();

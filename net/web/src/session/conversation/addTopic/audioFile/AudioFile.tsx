@@ -31,8 +31,8 @@ export function AudioFile({ url, onLabel }) {
           return <div style={{ height: '100%', width: width }} />
         }}
       </ReactResizeDetector>
-      <div class="player" style={{ width: width, height: width }}>
-        <div class="control">
+      <div className="player" style={{ width: width, height: width }}>
+        <div className="control">
           { playing && (
             <div onClick={() => play(false)}>
               <MinusCircleOutlined style={{ fontSize: 32, color: '#eeeeee', cursor: 'pointer' }} />
@@ -45,7 +45,7 @@ export function AudioFile({ url, onLabel }) {
           )}
           <audio style={{ position: 'absolute', top: 0, visibility: 'hidden' }} src={url} ref={audio} />
         </div>
-        <div class="label">
+        <div className="label">
           <Input bordered={false} size="small" onChange={(e) => onLabel(e.target.value)} />
         </div>
       </div>

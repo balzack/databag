@@ -1,7 +1,7 @@
 import { createContext } from 'react';
-import { useProfileContext } from './useProfileContext.hook';
+import { defaultProfileContext, useProfileContext } from './useProfileContext.hook';
 
-export const ProfileContext = createContext({});
+export const ProfileContext = createContext(defaultProfileContext);
 
 export function ProfileContextProvider({ children }) {
   const { state, actions } = useProfileContext();

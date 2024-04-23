@@ -35,6 +35,7 @@ function ConversationView() {
   }, [conversation.state])
 
   return (
+    //@ts-ignore
     <div data-testid="topics" count={renderCount} offsync={card.state.offsync.toString()}>
       { topics }
     </div>
@@ -141,12 +142,16 @@ beforeEach(() => {
     }
 
   });
+  //@ts-ignore
   fetchUtil.fetchWithTimeout = mockFetch;
+  //@ts-ignore
   fetchUtil.fetchWithCustomTimeout = mockFetch;
 });
 
 afterEach(() => {
+  //@ts-ignore
   fetchUtil.fetchWithTimeout = realFetchWithTimeout;
+  //@ts-ignore
   fetchUtil.fetchWithCustomTimeout = realFetchWithCustomTimeout;
 });
 

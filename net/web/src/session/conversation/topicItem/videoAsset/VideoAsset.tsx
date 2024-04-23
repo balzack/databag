@@ -32,7 +32,7 @@ export function VideoAsset({ asset }) {
           return <img style={{ height: '100%', objectFit: 'contain' }} src={asset.thumb} alt="" />
         }}
       </ReactResizeDetector>
-      <div class="overlay" style={{ width: state.dimension.width, height: state.dimension.height }}>
+      <div className="overlay" style={{ width: state.dimension.width, height: state.dimension.height }}>
         { !state.active && (
           <div onClick={activate}>
             <VideoCameraOutlined style={{ fontSize: 32, color: '#eeeeee', cursor: 'pointer' }} />
@@ -40,17 +40,17 @@ export function VideoAsset({ asset }) {
         )}
         <Modal centered={true} style={{ backgroundColor: '#aacc00', padding: 0 }} visible={state.active} width={state.width + 12} bodyStyle={{ paddingBottom: 0, paddingTop: 6, paddingLeft: 6, paddingRight: 6, backgroundColor: '#dddddd', margin: 0 }} footer={null} destroyOnClose={true} closable={false} onCancel={actions.clearActive}>
           <VideoModalWrapper>
-            <div class="wrapper">
+            <div className="wrapper">
               { !state.loaded && (
-                  <div class="frame">
-                    <img class="thumb" src={asset.thumb} alt="topic asset" />
+                  <div className="frame">
+                    <img className="thumb" src={asset.thumb} alt="topic asset" />
                     { state.error && (
-                      <div class="failed">
+                      <div className="failed">
                         <Spin size="large" delay={250} />
                       </div>
                     )}
                     { !state.error && (
-                      <div class="loading">
+                      <div className="loading">
                         <Spin size="large" delay={250} />
                         { state.total !== 0 && (
                           <Progress percent={Math.floor(100 * state.block / state.total)} size="small" showInfo={false} trailColor={Colors.white} strokeColor={Colors.background} />
@@ -60,8 +60,8 @@ export function VideoAsset({ asset }) {
                   </div>
               )}
               { !state.loading && (
-                <video style={{display: state.loaded ? 'block' : 'none'}} autoplay="true" controls src={state.url} width={state.width} height={state.height} 
-                    playsinline="true" onLoadedData={actions.setLoaded} />
+                <video style={{display: state.loaded ? 'block' : 'none'}} autoPlay controls src={state.url} width={state.width} height={state.height} 
+                    playsInline onLoadedData={actions.setLoaded} />
               )}
             </div>
           </VideoModalWrapper>

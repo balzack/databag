@@ -2,16 +2,21 @@ import { useEffect, useState, useRef, useContext } from 'react';
 import { CardContext } from 'context/CardContext';
 import { ChannelContext } from 'context/ChannelContext';
 
+const defaultState ={
+  offsync: false,
+  topics: new Map(),
+  card: null,
+  channel: null,
+  topicRevision: null,
+}
+export const defaultConversionContext = {
+  state: defaultState,
+  actions: {}as ReturnType<typeof useConversationContext>["actions"]
+}
 export function useConversationContext() {
   const COUNT = 32;
 
-  const [state, setState] = useState({
-    offsync: false,
-    topics: new Map(),
-    card: null,
-    channel: null,
-    topicRevision: null,
-  });
+  const [state, setState] = useState(defaultState);
 
   const card = useContext(CardContext);
   const channel = useContext(ChannelContext);

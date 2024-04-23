@@ -14,7 +14,7 @@ export function useListing() {
     disabled: true,
     showFilter: false,
     display: null,
-    strings: {},
+    strings: {} as Record<string, string>,
     menuStyle: {},
   });
 

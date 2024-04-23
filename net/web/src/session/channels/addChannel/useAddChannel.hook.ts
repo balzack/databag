@@ -15,7 +15,7 @@ export function useAddChannel() {
     subject: null,
     members: new Set(),
     seal: false,
-    strings: {},
+    strings: {} as Record<string,string>,
   });
 
   const card = useContext(CardContext);

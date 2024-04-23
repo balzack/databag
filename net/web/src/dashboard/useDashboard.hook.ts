@@ -36,7 +36,7 @@ export function useDashboard() {
     accounts: [],
     colors: {},
     menuStyle: {},
-    strings: {},
+    strings: {} as Record<string,string>,
   });
 
   const navigate = useNavigate();

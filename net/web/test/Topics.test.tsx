@@ -4,43 +4,47 @@ import { AppContextProvider } from 'context/AppContext';
 import { AccountContextProvider } from 'context/AccountContext';
 import { ProfileContextProvider } from 'context/ProfileContext';
 import { CardContext, CardContextProvider } from 'context/CardContext';
-import { ChannelContextProvider } from 'context/ChannelContext';
+import { ChannelContext, ChannelContextProvider } from 'context/ChannelContext';
 import { StoreContextProvider } from 'context/StoreContext';
 import { UploadContextProvider } from 'context/UploadContext';
 import { SettingsContextProvider } from 'context/SettingsContext';
-import { useCards } from 'session/cards/useCards.hook';
+import { useChannels } from 'session/channels/useChannels.hook';
 import * as fetchUtil from 'api/fetchUtil';
 
 let cardContext;
-function ContactsView() {
-  const { state, actions } = useCards();
+let channelContext;
+function TopicsView() {
+  const { state, actions } = useChannels();
 
   const [renderCount, setRenderCount] = useState(0);
-  const [cards, setCards] = useState([]);
+  const [channels, setChannels] = useState([]);
   const card = useContext(CardContext);
+  const channel = useContext(ChannelContext);
   cardContext = card;
+  channelContext = channel;
 
   useEffect(() => {
     const rendered = [];
-    state.cards.forEach(c => {
+    state.channels.forEach(chan => {
       rendered.push(
-        <div key={c.cardId} data-testid="card">
-          <span key={c.cardId} data-testid={'cardid-' + c.cardId}>{ c.name }</span>
+        <div key={chan.channelId} data-testid="channel">
+          <span key={chan.channelId} data-testid={'channelId-' + chan.channelId}>{ chan.subject }</span>
         </div>
       );
     });
-    setCards(rendered);
+    setChannels(rendered);
     setRenderCount(renderCount + 1);
   }, [state]);
 
   return (
-    <div data-testid="cards" count={renderCount}>
-      { cards }
+    //@ts-ignore
+    <div data-testid="channels" count={renderCount}>
+      { channels }
     </div>
   );
 }
 
-function ContactsTestApp() {
+function TopicsTestApp() {
   return (
     <UploadContextProvider>
       <ChannelContextProvider>
@@ -49,7 +53,7 @@ function ContactsTestApp() {
             <StoreContextProvider>
               <AccountContextProvider>
                 <SettingsContextProvider>
-                  <ContactsView />
+                  <TopicsView />
                 </SettingsContextProvider>
               </AccountContextProvider>
             </StoreContextProvider>
@@ -61,13 +65,15 @@ function ContactsTestApp() {
 }
 
 let fetchCards;
-let fetchProfile;
+let fetchChannels;
+let fetchCardChannels;
 const realFetchWithTimeout = fetchUtil.fetchWithTimeout;
 const realFetchWithCustomTimeout = fetchUtil.fetchWithCustomTimeout;
 beforeEach(() => {
 
-  fetchCards = [];
-  fetchProfile = {};
+  fetchCards = []
+  fetchChannels = [];
+  fetchCardChannels = [];
 
   const mockFetch = jest.fn().mockImplementation((url, options) => {
 
@@ -76,9 +82,14 @@ beforeEach(() => {
         json: () => Promise.resolve(fetchCards)
       });
     }
-    else if (url.startsWith('/contact/cards/000a/profile?agent')) {
+    else if (url.startsWith('/content/channels?agent')) {
       return Promise.resolve({
-        json: () => Promise.resolve(fetchProfile)
+        json: () => Promise.resolve(fetchChannels)
+      });
+    }
+    else if (url.startsWith('https://test.org/content/channels?contact')) {
+      return Promise.resolve({
+        json: () => Promise.resolve(fetchCardChannels)
       });
     }
     else {
@@ -87,21 +98,35 @@ beforeEach(() => {
       });
     }
   });
+  //@ts-ignore
   fetchUtil.fetchWithTimeout = mockFetch;
+  //@ts-ignore
   fetchUtil.fetchWithCustomTimeout = mockFetch;
 });
 
 afterEach(() => {
+  //@ts-ignore
   fetchUtil.fetchWithTimeout = realFetchWithTimeout;
+  //@ts-ignore
   fetchUtil.fetchWithCustomTimeout = realFetchWithCustomTimeout;
 });
 
-test('add, update and remove contact', async () => {
-  render(<ContactsTestApp />);
+test('view merged channels', async () => {
+  render(<TopicsTestApp />);
 
   await waitFor(async () => {
     expect(cardContext).not.toBe(null);
+    expect(channelContext).not.toBe(null);
   });
+
+  fetchChannels = [
+    { id: '123', revision: 3, data: {
+        detailRevision: 4,
+        topicRevision: 5,
+        channelDetail: { dataType: 'superbasic', data: JSON.stringify({ subject: 'channelsubject' }), members: [] },
+      }
+    },
+  ];
 
   fetchCards = [{
     id: '000a',
@@ -119,51 +144,26 @@ test('add, update and remove contact', async () => {
     },
   }];
 
+  fetchCardChannels = [
+    { id: '2123', revision: 3, data: {
+        detailRevision: 4,
+        topicRevision: 5,
+        channelDetail: { dataType: 'superbasic', data: JSON.stringify({ subject: 'cardchannelsubject' }), members: [] },
+      }
+    },
+  ];
+
   await act(async () => {
     cardContext.actions.setToken('abc123');
+    channelContext.actions.setToken('abc123');
     cardContext.actions.setRevision(1);
+    channelContext.actions.setRevision(1);
   });
 
   await waitFor(async () => {
-    expect(screen.getByTestId('cards').children).toHaveLength(1);
-    expect(screen.getByTestId('cardid-000a').textContent).toBe('tester');
-  });
-
-  fetchCards = [{
-    id: '000a',
-    revision: 2,
-    data: {
-      detailRevision: 2,
-      profileRevision: 4,
-      notifiedProfile: 3,
-      notifiedArticle: 5,
-      notifiedChannel: 6,
-      notifiedView: 7,
-    }
-  }];
-
-  fetchProfile = { guid: '01ab23', handle: 'test1', name: 'tested', imageSet: false,
-        seal: 'abc', version: '1.1.1', node: 'test.org' };
-
-  await act(async () => {
-    cardContext.actions.setRevision(2);
-  });
-
-  await waitFor(async () => {
-    expect(screen.getByTestId('cardid-000a').textContent).toBe('tested');
-  });
-
-  fetchCards = [{
-    id: '000a',
-    revision: 3,
-  }];
-
-  await act(async () => {
-    cardContext.actions.setRevision(3);
-  });
-
-  await waitFor(async () => {
-    expect(screen.getByTestId('cards').children).toHaveLength(0);
+    expect(screen.getByTestId('channels').children).toHaveLength(2);
+    expect(screen.getByTestId('channelId-2123').textContent).toBe('cardchannelsubject');
+    expect(screen.getByTestId('channelId-123').textContent).toBe('channelsubject');
   });
 
 });

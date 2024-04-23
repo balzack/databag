@@ -26,6 +26,7 @@ function ProfileView() {
   }, [state]);
 
   return (
+    //@ts-ignore
     <div data-testid="name" count={renderCount}>{ name }</div>
   );
 }
@@ -59,12 +60,16 @@ beforeEach(() => {
       json: () => Promise.resolve({ name: updated ? 'tested' : 'tester' })
     });
   });
+  //@ts-ignore
   fetchUtil.fetchWithTimeout = mockFetch;
+  //@ts-ignore
   fetchUtil.fetchWithCustomTimeout = mockFetch;
 });
 
 afterEach(() => {
+  //@ts-ignore
   fetchUtil.fetchWithTimeout = realFetchWithTimeout;
+  //@ts-ignore
   fetchUtil.fetchWithCustomTimeout = realFetchWithCustomTimeout;
 });
 

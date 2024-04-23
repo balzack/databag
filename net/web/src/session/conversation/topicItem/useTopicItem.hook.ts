@@ -2,11 +2,13 @@ import { useState, useEffect } from 'react';
 import { fetchWithTimeout } from 'api/fetchUtil';
 import { decryptBlock } from 'context/sealUtil';
 
-export function useTopicItem(topic, contentKey, strings, menuStyle) {
+export function useTopicItem(topic, contentKey, strings?, menuStyle?) {
 
   const [state, setState] = useState({
     editing: false,
     message: null,
+    textSize: null,
+    textColor: null,
     assets: [],
   });
 

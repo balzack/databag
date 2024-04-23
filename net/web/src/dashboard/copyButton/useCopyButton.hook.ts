@@ -9,7 +9,7 @@ export function useCopyButton() {
     show: false,
   });
 
-  const timeout = useRef();
+  const timeout = useRef<any>();
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));

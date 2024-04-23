@@ -13,7 +13,7 @@ export function useLogin() {
     availableSet: false,
     disabled: true,
     busy: false,
-    strings: {},
+    strings: {} as Record<string,string>,
     menuStyle: {},
   });
 

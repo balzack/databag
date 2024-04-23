@@ -6,8 +6,10 @@ import { Logo } from 'logo/Logo';
 import { AccountAccess } from './accountAccess/AccountAccess';
 import { CloseOutlined, EditOutlined, BookOutlined, EnvironmentOutlined } from '@ant-design/icons';
 import Cropper from 'react-easy-crop';
-
-export function Profile({ closeProfile }) {
+interface Props {
+  closeProfile?:any
+}
+export function Profile({ closeProfile }:Props) {
 
   const [ modal, modalContext ] = Modal.useModal();
   const { state, actions } = useProfile();
@@ -147,11 +149,11 @@ export function Profile({ closeProfile }) {
           <div className="title">{ state.strings.profileDetails }</div>
           <div className="info">
             <Input placeholder={state.strings.name} spellCheck="false" onChange={(e) => actions.setEditName(e.target.value)}
-                defaultValue={state.editName} autocapitalize="word" />
+                defaultValue={state.editName} autoCapitalize="word" />
           </div>
           <div className="info">
             <Input placeholder={state.strings.location} spellCheck="false" onChange={(e) => actions.setEditLocation(e.target.value)}
-                defaultValue={state.editLocation} autocapitalize="word" />
+                defaultValue={state.editLocation} autoCapitalize="word" />
           </div>
           <div className="info">
             <Input.TextArea placeholder={state.strings.description} onChange={(e) => actions.setEditDescription(e.target.value)}

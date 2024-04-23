@@ -7,11 +7,17 @@ const IMAGE_SCALE_SIZE = (128 * 1024);
 const GIF_TYPE = 'image/gif';
 const WEBP_TYPE = 'image/webp';
 
+const defaultState = {
+  progress: new Map(),
+}
+export const defaultUploadContext = {
+  state:defaultState,
+  actions: {} as ReturnType<typeof useUploadContext>["actions"]
+}
+
 export function useUploadContext() {
 
-  const [state, setState] = useState({
-    progress: new Map(),
-  });
+  const [state, setState] = useState(defaultState);
   const channels = useRef(new Map());
   const index = useRef(0);
 
@@ -63,7 +69,7 @@ export function useUploadContext() {
   }
 
   const actions = {
-    addTopic: (token, channelId, topicId, files, success, failure, contact) => {
+    addTopic: (token, channelId, topicId, files, success, failure, contact?) => {
       if (contact) {
         const { server, cardId } = contact;
 

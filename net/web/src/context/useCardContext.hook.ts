@@ -24,11 +24,17 @@ import { addCard } from 'api/addCard';
 import { removeCard } from 'api/removeCard';
 import { UploadContext } from 'context/UploadContext';
 
+const defaultState =  {
+  offsync: false,
+  cards: new Map(),
+}
+export const defaultCardContext = {
+ state:defaultState,
+  actions: {} as  ReturnType<typeof useCardContext>["actions"],
+}
+
 export function useCardContext() {
-  const [state, setState] = useState({
-    offsync: false,
-    cards: new Map(),
-  });
+  const [state, setState] = useState(defaultState);
   const upload = useContext(UploadContext);
   const access = useRef(null);
   const syncing = useRef(false);

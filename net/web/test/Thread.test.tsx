@@ -5,30 +5,42 @@ import { AccountContextProvider } from 'context/AccountContext';
 import { ProfileContext, ProfileContextProvider } from 'context/ProfileContext';
 import { StoreContextProvider } from 'context/StoreContext';
 import { SettingsContextProvider } from 'context/SettingsContext';
-import { ConversationContext, ConversationContextProvider } from 'context/ConversationContext';
+import { ConversationContextProvider } from 'context/ConversationContext';
 import { CardContext, CardContextProvider } from 'context/CardContext';
 import { UploadContextProvider } from 'context/UploadContext';
-import { useDetails } from 'session/details/useDetails.hook';
+import { useConversation } from 'session/conversation/useConversation.hook';
 
 import * as fetchUtil from 'api/fetchUtil';
 
-let details = null;
-let card = null;
 let conversation = null;
-function InfoView() {
-  const { state, actions } = useDetails();
+let card = null;
+function ThreadView() {
+  const { state, actions } = useConversation('card01', 'channel01');
   const [renderCount, setRenderCount] = useState(0);
+  const [topics, setTopics] = useState([]);
 
-  details = actions;
+  conversation = actions;
   card = useContext(CardContext);
-  conversation = useContext(ConversationContext);
+
+  useEffect(() => {
+    const rendered = [];
+    const entries = Array.from(state.topics.values());
+    entries.forEach(entry => {
+      rendered.push(
+        <div key={entry.id} data-testid={entry.id}>{ entry.text }</div>
+      )
+    });
+    setTopics(rendered);
+    setRenderCount(renderCount + 1);
+  }, [state]);
 
   return (
-    <div data-testid="info" count={renderCount}>{ state.title }</div>
+    //@ts-ignore
+    <div data-testid="thread" count={renderCount}>{ topics }</div>
   );
 }
 
-function InfoTestApp() {
+function ThreadTestApp() {
   return (
     <StoreContextProvider>
       <UploadContextProvider>
@@ -38,7 +50,7 @@ function InfoTestApp() {
               <SettingsContextProvider>
                 <ConversationContextProvider>
                   <AppContextProvider>
-                    <InfoView />
+                    <ThreadView />
                   </AppContextProvider>
                 </ConversationContextProvider>
               </SettingsContextProvider>
@@ -85,7 +97,7 @@ beforeEach(() => {
         json: () => Promise.resolve(fetchTopics),
       });
     }
-    if (url.startsWith('https://test.org/content/channels/channel01/detail')) {
+    if (url.startsWith('https://test.org/content/channels/channel01/topics/topic01/detail?contact')) {
       return Promise.resolve({
         json: () => Promise.resolve(fetchDetail)
       });
@@ -96,27 +108,26 @@ beforeEach(() => {
       });
     }
   });
+  //@ts-ignore
   fetchUtil.fetchWithTimeout = mockFetch;
+  //@ts-ignore
   fetchUtil.fetchWithCustomTimeout = mockFetch;
 });
 
 afterEach(() => {
+  //@ts-ignore
   fetchUtil.fetchWithTimeout = realFetchWithTimeout;
+  //@ts-ignore
   fetchUtil.fetchWithCustomTimeout = realFetchWithCustomTimeout;
 });
 
-test('conversation selection', async () => {
+test('add, update, remove topic', async () => {
 
-  render(<InfoTestApp />);
+  render(<ThreadTestApp />);
 
   await waitFor(async () => {
     expect(card).not.toBe(null);
-    expect(details).not.toBe(null);
     expect(conversation).not.toBe(null);
-  });
-
-  await act(async () => {
-    conversation.actions.setChannel('card01', 'channel01');
   });
 
   fetchCards = [{
@@ -139,8 +150,8 @@ test('conversation selection', async () => {
     { id: 'channel01', revision: 2, data: {
         detailRevision: 3,
         topicRevision: 5,
-        channelSummary: { guid: 'guid01', dataType: 'superbasictopic', data: JSON.stringify({ text: 'testing' }) },
-        channelDetail: { dataType: 'superbasic', data: '{}', },
+        channelSummary: { guid: 'guid01', dataType: 'superbasictopic', data: 'testcardtopic' },
+        channelDetail: { dataType: 'superbasic', data: 'testcardchannel' },
       }
     },
   ];
@@ -167,7 +178,8 @@ test('conversation selection', async () => {
   });
 
   await waitFor(async () => {
-    expect(screen.getByTestId('info').textContent).toBe('');
+    expect(screen.getByTestId('thread').children).toHaveLength(1);
+    expect(screen.getByTestId('topic01').textContent).toBe('message');
   });  
 
   fetchCards = [{
@@ -180,28 +192,81 @@ test('conversation selection', async () => {
       notifiedArticle: 5,
       notifiedChannel: 7,
       notifiedView: 7,
-      cardDetail: { status: 'connected', statusUpdate: 136, token: '01ab', },
-      cardProfile: { guid: 'guid01', handle: 'test1', name: 'tester', imageSet: false,
-        seal: 'abc', version: '1.1.1', node: 'test.org' },
     },
   }];
 
   fetchChannels = [
     { id: 'channel01', revision: 3, data: {
-        detailRevision: 4,
-        topicRevision: 5,
+        detailRevision: 3,
+        topicRevision: 6,
+        channelSummary: { guid: 'guid01', dataType: 'superbasictopic', data: 'testcardtopic' },
+        channelDetail: { dataType: 'superbasic', data: 'testcardchannel' },
       }
     },
   ];
 
-  fetchDetail = { dataType: 'superbasic', data: JSON.stringify({ subject: 'testing' }), },
+  fetchTopics = [
+    { id: 'topic01', revision: 2, data: {
+      detailRevision: 2,
+      tagRevision: 1,
+    }},
+  ];
+
+  fetchDetail = { id: 'topic01', revision: 2, data: {
+    detailRevision: 2,
+    tagRevision: 1,
+    topicDetail: {
+      guid: 'guid01',
+      dataType: 'superbasictopic',
+      data: JSON.stringify({ text: 'message2' }),
+      created: 1,
+      updated: 1,
+      status: 'confirmed',
+      transform: 'complete',
+    }
+  }}
 
   await act(async () => {
     card.actions.setRevision(2);
   });
 
   await waitFor(async () => {
-    expect(screen.getByTestId('info').textContent).toBe('testing');
+    expect(screen.getByTestId('topic01').textContent).toBe('message2');
+  });  
+
+  fetchCards = [{
+    id: 'card01',
+    revision: 3,
+    data: {
+      detailRevision: 2,
+      profileRevision: 3,
+      notifiedProfile: 3,
+      notifiedArticle: 5,
+      notifiedChannel: 8,
+      notifiedView: 7,
+    },
+  }];
+
+  fetchChannels = [
+    { id: 'channel01', revision: 4, data: {
+        detailRevision: 3,
+        topicRevision: 7,
+        channelSummary: { guid: 'guid01', dataType: 'superbasictopic', data: 'testcardtopic' },
+        channelDetail: { dataType: 'superbasic', data: 'testcardchannel' },
+      }
+    },
+  ];
+
+  fetchTopics = [
+    { id: 'topic01', revision: 2 },
+  ];
+
+  await act(async () => {
+    card.actions.setRevision(3);
+  });
+
+  await waitFor(async () => {
+    expect(screen.getByTestId('thread').children).toHaveLength(0);
   });  
 
 });

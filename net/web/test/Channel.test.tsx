@@ -27,6 +27,7 @@ function ChannelView() {
   }, [channel.state])
 
   return (
+    //@ts-ignore
     <div data-testid="channels" count={renderCount} offsync={channel.state.offsync.toString()}>
       { channels }
     </div>
@@ -124,12 +125,16 @@ beforeEach(() => {
       });
     }
   });
+  //@ts-ignore
   fetchUtil.fetchWithTimeout = mockFetch;
+  //@ts-ignore
   fetchUtil.fetchWithCustomTimeout = mockFetch;
 });
 
 afterEach(() => {
+  //@ts-ignore
   fetchUtil.fetchWithTimeout = realFetchWithTimeout;
+  //@ts-ignore
   fetchUtil.fetchWithCustomTimeout = realFetchWithCustomTimeout;
 });
 
@@ -209,6 +214,7 @@ test('add, update and remove channel', async () => {
     expect(screen.getByTestId('summary').textContent).toBe('testdata');
   });
 
+  //@ts-ignore
   const count = parseInt(screen.getByTestId('channels').attributes.count.value) + 1;
 
   fetchChannels = [
@@ -227,6 +233,7 @@ test('add, update and remove channel', async () => {
   await waitFor(async () => {
     expect(screen.getByTestId('channels').children).toHaveLength(1);
     expect(screen.getByTestId('detail').textContent).toBe('testdata2');
+    //@ts-ignore
     expect(screen.getByTestId('channels').attributes.count.value).toBe(count.toString());
   });
 
@@ -249,6 +256,7 @@ test('add, update and remove channel', async () => {
   });
 
   await waitFor(async () => {
+    //@ts-ignore
     expect(screen.getByTestId('channels').attributes.offsync.value).toBe("false");
   });
 
@@ -276,6 +284,7 @@ test('resync', async () => {
   });
 
   await waitFor(async () => {
+    //@ts-ignore
     expect(screen.getByTestId('channels').attributes.offsync.value).toBe("true");
   });
 
@@ -285,6 +294,7 @@ test('resync', async () => {
   });
 
   await waitFor(async () => {
+    //@ts-ignore
     expect(screen.getByTestId('channels').attributes.offsync.value).toBe("false");
   });
 });

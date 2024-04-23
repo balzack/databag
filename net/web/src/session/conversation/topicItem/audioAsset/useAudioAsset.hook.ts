@@ -2,7 +2,7 @@ import { useState, useRef } from 'react';
 
 export function useAudioAsset(asset) {
 
-  const revoke = useRef();
+  const revoke = useRef<any>();
   const index = useRef(0);
 
   const [state, setState] = useState({

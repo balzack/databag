@@ -11,13 +11,18 @@ import { StoreContext } from './StoreContext';
 import { UploadContext } from './UploadContext';
 import { RingContext } from './RingContext';
 import { createWebsocket } from 'api/fetchUtil';
+const defaultState ={
+  status: null,
+  adminToken: null,
+}
+export const defaultAppContext = {
+state:defaultState,
+actions: {}as ReturnType<typeof useAppContext>["actions"],
+}
 
-export function useAppContext(websocket) {
-  const [state, setState] = useState({
-    status: null,
-    adminToken: null,
-  });
-  const [appRevision, setAppRevision] = useState();
+export function useAppContext() {
+  const [state, setState] = useState(defaultState);
+  const [appRevision, setAppRevision] = useState<any>();
 
   const appName = "Databag";
   const appVersion = "1.0.0";

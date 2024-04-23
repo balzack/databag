@@ -15,7 +15,7 @@ export function useChannelHeader(contentKey) {
     title: null,
     offsync: false,
     display: null,
-    strings: {},
+    strings: {} as Record<string,string>,
   });
 
   const settings = useContext(SettingsContext);
@@ -23,10 +23,10 @@ export function useChannelHeader(contentKey) {
   const conversation = useContext(ConversationContext);
   const profile = useContext(ProfileContext);
   
-  const cardId = useRef();
-  const channelId = useRef();
-  const detailRevision = useRef();
-  const key = useRef();
+  const cardId = useRef<any>();
+  const channelId = useRef<any>();
+  const detailRevision = useRef<any>();
+  const key = useRef<any>();
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));

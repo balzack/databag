@@ -63,7 +63,8 @@ export function Listing({ closeListing, openContact }) {
         </div>
         <div className="view">
           { state.contacts.length > 0 && (
-            <List local={{ emptyText: '' }} itemLayout="horizontal" dataSource={state.contacts} gutter="0"
+            <List locale={{ emptyText: '' }} itemLayout="horizontal" dataSource={state.contacts} 
+            // gutter="0"
               renderItem={item => (
                 <ListingItem item={item} open={() => openContact(item.guid, item)} />
               )} />

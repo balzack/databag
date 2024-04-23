@@ -34,54 +34,54 @@ export function BottomNav({ state, actions }) {
   return (
     <BottomNavWrapper>
       { !state.cards && !state.contact && !state.profile && (
-        <div class="nav-item">
-          <div class="nav-active">
-            <div class="nav-div-right">
+        <div className="nav-item">
+          <div className="nav-active">
+            <div className="nav-div-right">
               <CommentOutlined />
             </div>
           </div>
         </div>
       )}
       { (state.cards || state.contact || state.profile) && (
-        <div class="nav-item" onClick={() => setChannels()}>
-          <div class="nav-inactive">
-            <div class="nav-div-right">
+        <div className="nav-item" onClick={() => setChannels()}>
+          <div className="nav-inactive">
+            <div className="nav-div-right">
               <CommentOutlined />
             </div>
           </div>
         </div>
       )}
       { state.profile && (
-        <div class="nav-item">
-          <div class="nav-active">
-            <div class="nav-div-right nav-div-left">
+        <div className="nav-item">
+          <div className="nav-active">
+            <div className="nav-div-right nav-div-left">
               <UserOutlined />
             </div>
           </div>
         </div>
       )}
       { !state.profile && (
-        <div class="nav-item" onClick={() => setProfile()}>
-          <div class="nav-inactive">
-            <div class="nav-div-right nav-div-left">
+        <div className="nav-item" onClick={() => setProfile()}>
+          <div className="nav-inactive">
+            <div className="nav-div-right nav-div-left">
               <UserOutlined />
             </div>
           </div>
         </div>
       )}
       { (state.cards || state.contact) && !state.profile && (
-        <div class="nav-item">
-          <div class="nav-active">
-            <div class="nav-div-left bump">
+        <div className="nav-item">
+          <div className="nav-active">
+            <div className="nav-div-left bump">
               <ContactsOutlined />
             </div>
           </div>
         </div>
       )}
       { ((!state.cards && !state.contact) || state.profile) && (
-        <div class="nav-item" onClick={() => setCards()}>
-          <div class="nav-inactive">
-            <div class="nav-div-left bump">
+        <div className="nav-item" onClick={() => setCards()}>
+          <div className="nav-inactive">
+            <div className="nav-div-left bump">
               <ContactsOutlined />
             </div>
           </div>

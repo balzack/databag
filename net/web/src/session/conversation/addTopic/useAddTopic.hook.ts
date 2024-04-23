@@ -4,7 +4,7 @@ import { SettingsContext } from 'context/SettingsContext';
 import { encryptBlock, encryptTopicSubject } from 'context/sealUtil';
 import Resizer from "react-image-file-resizer";
 
-export function useAddTopic(contentKey) {
+export function useAddTopic(contentKey?: string) {
   
   const [state, setState] = useState({
     enableImage: null,
@@ -18,7 +18,7 @@ export function useAddTopic(contentKey) {
     textSizeSet: false,
     busy: false,
     display: null,
-    strings: {},
+    strings: {} as Record<string,string>,
     menuStyle: {},
   });
 
@@ -75,9 +75,9 @@ export function useAddTopic(contentKey) {
   }, [conversation.state.channel?.data?.channelDetail]);
 
   const loadFileData = (file) => {
-    return new Promise(resolve => {
+    return new Promise< ArrayBuffer>(resolve => {
       const reader = new FileReader()
-      reader.onloadend = (res) => { resolve(reader.result) }
+      reader.onloadend = (res) => { resolve(reader.result as any) }
       reader.readAsArrayBuffer(file)
     })
   };

@@ -33,8 +33,8 @@ export function Session() {
   const { state, actions } = useSession();
   const settings = useContext(SettingsContext);
   const [ringing, setRinging] = useState([]);
-  const remote = useRef();
-  const local = useRef();
+  const remote = useRef<any>();
+  const local = useRef<any>();
 
   useEffect(() => {
     console.log(">> ", state.remoteVideo);
@@ -128,10 +128,10 @@ export function Session() {
     <ThemeProvider theme={settings.state.colors}>
       <SessionWrapper>
         { (state.display === 'xlarge') && (
-          <div class="desktop-layout noselect">
-            <div class="left">
+          <div className="desktop-layout noselect">
+            <div className="left">
               <Identity openAccount={openAccount} openCards={openCards} cardUpdated={state.cardUpdated} />
-              <div class="bottom">
+              <div className="bottom">
                 <Channels open={openConversation} active={{
                     set: state.conversation,
                     card: state.cardId,
@@ -139,42 +139,43 @@ export function Session() {
                   }} />
               </div>
               { state.loading && (
-                <div class="spinner">
+                <div className="spinner">
                   <Spin size="large" />
                 </div>
               )}
             </div>
-            <div class="center">
-              <div class="reframe">
+            <div className="center">
+              <div className="reframe">
                 <Welcome />
               </div>
               { state.conversation && (
-                <div class="reframe">
+                <div className="reframe">
                   <Conversation closeConversation={actions.closeConversation}
                       openDetails={actions.openDetails}
                       cardId={state.cardId} channelId={state.channelId} />
                 </div>
               )}
               { state.contact && (
-                <div class="reframe base">
+                <div className="reframe base">
                   <Contact close={actions.closeContact} guid={state.contactGuid} listing={state.contactListing} />
                 </div>
               )}
               { state.profile && (
-                <div class="reframe base">
+                <div className="reframe base">
                   <Profile closeProfile={actions.closeProfile} />
                 </div>
               )}
             </div>
-            <div class="right">
+            <div className="right">
               { (state.conversation || state.details) && (
-                <div class="reframe">
+                <div className="reframe">
                   <Details closeDetails={actions.closeDetails} closeConversation={closeConversation} openContact={actions.openContact}
-                      cardId={state.cardId} channelId={state.channelId} />
+                      // cardId={state.cardId} channelId={state.channelId}
+                       />
                 </div>
               )}
               { state.cards && (
-                <div class="reframe">
+                <div className="reframe">
                   <Cards closeCards={closeCards} openContact={actions.openContact} openChannel={openConversation} openListing={actions.openListing} />
                   <Drawer bodyStyle={drawerStyle} visible={state.listing} closable={false} getContainer={false}
                       onClose={actions.closeListing} height={'100%'} width={'80%'}
@@ -184,7 +185,7 @@ export function Session() {
                 </div>
               )}
               { (state.profile || state.account) && (
-                <div class="reframe">
+                <div className="reframe">
                   <Account closeAccount={closeAccount} openProfile={actions.openProfile} />
                 </div>
               )}
@@ -192,10 +193,10 @@ export function Session() {
           </div>
         )}
         { (state.display === 'large' || state.display === 'medium') && (
-          <div class="tablet-layout noselect">
-            <div class="left">
+          <div className="tablet-layout noselect">
+            <div className="left">
               <Identity openAccount={actions.openProfile} openCards={actions.openCards} cardUpdated={state.cardUpdated} />
-              <div class="bottom">
+              <div className="bottom">
                 <Channels open={actions.openConversation} active={{
                     set: state.conversation,
                     card: state.cardId,
@@ -203,17 +204,17 @@ export function Session() {
                   }} />
               </div>
               { state.loading && (
-                <div class="spinner">
+                <div className="spinner">
                   <Spin size="large" />
                 </div>
               )}
             </div>
-            <div class="right">
-              <div class="reframe">
+            <div className="right">
+              <div className="reframe">
                 <Welcome />
               </div>
               { state.conversation && (
-                <div class="reframe">
+                <div className="reframe">
                   <Conversation closeConversation={actions.closeConversation}
                       openDetails={actions.openDetails}
                       cardId={state.cardId} channelId={state.channelId} />
@@ -223,7 +224,9 @@ export function Session() {
                   onClose={actions.closeDetails} visible={state.details} zIndex={10}>
                 { state.details && (
                   <Details closeDetails={actions.closeDetails} closeConversation={closeConversation} openContact={actions.openContact}
-                      cardId={state.cardId} channelId={state.channelId} />
+                      // cardId={state.cardId} 
+                      // channelId={state.channelId} 
+                      />
                 )}
               </Drawer>
               <Drawer bodyStyle={drawerStyle} width={'33%'} closable={false} onClose={closeCards} visible={state.cards} zIndex={20} push={state.contact}>
@@ -250,9 +253,9 @@ export function Session() {
           </div>
         )}
         { (state.display === 'small') && (
-          <div class="mobile-layout noselect">
-            <div class="top">
-              <div class="reframe">
+          <div className="mobile-layout noselect">
+            <div className="top">
+              <div className="reframe">
                 <Channels open={actions.openConversation} active={{ 
                     set: state.conversation,
                     card: state.cardId,
@@ -260,44 +263,45 @@ export function Session() {
                   }} />
               </div>
               { state.conversation && (
-                <div class="reframe">
+                <div className="reframe">
                   <Conversation closeConversation={actions.closeConversation} openDetails={actions.openDetails}
                       cardId={state.cardId} channelId={state.channelId} />
                 </div>
               )}
               { state.details && (
-                <div class="reframe">
+                <div className="reframe">
                   <Details closeDetails={actions.closeDetails} closeConversation={closeConversation} openContact={actions.openContact} 
-                      cardId={state.cardId} channelId={state.channelId} />
+                      // cardId={state.cardId} channelId={state.channelId} 
+                      />
                 </div>
               )}
               { state.cards && (
-                <div class="reframe">
+                <div className="reframe">
                   <Cards openContact={actions.openContact} openChannel={openConversation} openListing={actions.openListing} />
                 </div>
               )}
               { state.listing && (
-                <div class="reframe">
+                <div className="reframe">
                   <Listing closeListing={actions.closeListing} openContact={actions.openContact} />
                 </div>
               )}
               { state.contact && (
-                <div class="reframe base">
+                <div className="reframe base">
                   <Contact close={actions.closeContact} guid={state.contactGuid} listing={state.contactListing} />
                 </div>
               )}
               { state.loading && (
-                <div class="spinner">
+                <div className="spinner">
                   <Spin size="large" />
                 </div>
               )}
               { (state.profile || state.account) && (
-                <div class="reframe">
+                <div className="reframe">
                   <Profile />
                 </div>
               )}
             </div>
-            <div class="bottom">
+            <div className="bottom">
               <BottomNav state={state} actions={actions} />
             </div>
           </div>
@@ -309,7 +313,10 @@ export function Session() {
             </div>
           </RingingWrapper>
         </Modal>
-        <Modal centered visible={state.callStatus} footer={null} closable={false} width={getDim() + 12} height={getDim()} bodyStyle={{ padding: 6, backgroundColor: '#888888', borderRadius: 3 }}>
+        <Modal centered visible={state.callStatus} footer={null} closable={false} width={getDim() + 12}
+        //@ts-ignore
+        height={getDim()} 
+        bodyStyle={{ padding: 6, backgroundColor: '#888888', borderRadius: 3 }}>
           <CallingWrapper>
             <div className={ state.fullscreen ? 'fullscreen' : 'modal' }>
               <div className="window">
@@ -324,15 +331,15 @@ export function Session() {
                   </div>
                 )}
                 { state.remoteStream && (
-                  <video ref={remote} disablepictureinpicture playsInline autoPlay style={{ display: state.remoteVideo ? 'block' : 'none', width: state.fullscreen ? '100%' : getDim(), height: state.fullscreen ? '100%' : getDim() }}
-          complete={() => console.log("VIDEO COMPLETE")} progress={() => console.log("VIDEO PROGRESS")} error={() => console.log("VIDEO ERROR")} waiting={() => console.log("VIDEO WAITING")} />
+                  <video ref={remote} disablePictureInPicture playsInline autoPlay style={{ display: state.remoteVideo ? 'block' : 'none', width: state.fullscreen ? '100%' : getDim(), height: state.fullscreen ? '100%' : getDim() }}
+          onCompositionEnd={() => console.log("VIDEO COMPLETE")} onProgress={() => console.log("VIDEO PROGRESS")} onError={() => console.log("VIDEO ERROR")} onWaiting={() => console.log("VIDEO WAITING")} />
                 )}
                 { state.localStream && (
                   <div className="calling-local">
                     <div className="local-position">
                       <div className="local-frame">
-                        <video ref={local} disablepictureinpicture playsInline autoPlay muted style={{ maxWidth: '100%', maxHeight: '100%', display: 'block' }}
-              complete={() => console.log("VIDEO COMPLETE")} progress={() => console.log("VIDEO PROGRESS")} error={() => console.log("VIDEO ERROR")} waiting={() => console.log("VIDEO WAITING")} />
+                        <video ref={local} disablePictureInPicture playsInline autoPlay muted style={{ maxWidth: '100%', maxHeight: '100%', display: 'block' }}
+              onCompositionEnd={() => console.log("VIDEO COMPLETE")} onProgress={() => console.log("VIDEO PROGRESS")} onError={() => console.log("VIDEO ERROR")} onWaiting={() => console.log("VIDEO WAITING")} />
                       </div>
                     </div>
                   </div>

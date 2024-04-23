@@ -83,14 +83,20 @@ beforeEach(() => {
       });
     }
   });
+  //@ts-ignore
   fetchUtil.createWebsocket = mockCreateWebsocket;
+  //@ts-ignore
   fetchUtil.fetchWithTimeout = mockFetch;
+  //@ts-ignore
   fetchUtil.fetchWithCustomTimeout = mockFetch;
 });
 
 afterEach(() => {
+  //@ts-ignore
   fetchUtil.createWebsocket = realCreateWebsocket;
+  //@ts-ignore
   fetchUtil.fetchWithTimeout = realFetchWithTimeout;
+  //@ts-ignore
   fetchUtil.fetchWithCustomTimeout = realFetchWithCustomTimeout;
 });
 

@@ -25,7 +25,7 @@ export function useProfile() {
     crop: { x: 0, y: 0},
     zoom: 1,
     busy: false,
-    strings: {},
+    strings: {} as Record<string, string>,
     menuStyle: {},
   });
 
@@ -91,7 +91,7 @@ export function useProfile() {
         updateState({ busy: true });
         try {
           const processImg = () => {
-            return new Promise((resolve, reject) => {
+            return new Promise<string>((resolve, reject) => {
               let img = new Image();
               img.onload = () => {
                 var canvas = document.createElement("canvas");

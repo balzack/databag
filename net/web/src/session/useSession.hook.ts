@@ -32,9 +32,10 @@ export function useSession() {
     remoteStream: null,
     remoteVideo: false,
     remoteAudio: false,
-    audioId: null,
+    audioId: null as null|string,
     videoId: null,
     fullscreen: false,
+    display:null,
   });
 
   const app = useContext(AppContext);
@@ -188,7 +189,7 @@ export function useSession() {
       await ring.actions.end();
     },
     enableVideo: async () => {
-      await ring.actions.enableVideo(state.videoId, state.audioId);
+      await ring.actions.enableVideo(state.videoId);
     },
     disableVideo: async () => {
       await ring.actions.disableVideo();

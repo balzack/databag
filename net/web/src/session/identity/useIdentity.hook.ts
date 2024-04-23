@@ -11,7 +11,7 @@ export function useIdentity() {
     handle: null,
     status: null,
     init: false,
-    strings: {},
+    strings: {}as Record<string,string>,
     colors: {},
     menuStyle: {},
   });

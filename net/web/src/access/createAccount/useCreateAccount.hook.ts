@@ -14,7 +14,7 @@ export function useCreateAccount() {
     busy: false,
     validatetatus: 'success',
     help: '',
-    strings: {},
+    strings: {} as Record<string,string>,
     menuStyle: {},
   });
 

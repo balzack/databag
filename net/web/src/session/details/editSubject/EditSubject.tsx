@@ -7,7 +7,7 @@ export function EditSubject({ subject, setSubject, saveSubject, cancelSubject, s
     <EditSubjectWrapper>
       <div className="title">{strings.editSubject}</div>
 
-      <Input placeholder={strings.subjectOptional} spellCheck="false" autocapitalize="word"
+      <Input placeholder={strings.subjectOptional} spellCheck="false" autoCapitalize="word"
           value={subject} onChange={(e) => setSubject(e.target.value)} />
 
       <div className="controls">

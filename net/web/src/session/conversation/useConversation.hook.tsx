@@ -23,7 +23,7 @@ export function useConversation(cardId, channelId) {
     contentKey: null,
     busy: false,
     colors: {},
-    strings: {},
+    strings: {} as Record<string,string>,
     menuStyle: {},
   });
 
@@ -149,7 +149,7 @@ export function useConversation(cardId, channelId) {
 
       let group = '';
       let clickable = [];
-      const words = text === [] ? '' : DOMPurify.sanitize(text).split(' ');
+      const words = (text) === "" ? '' : DOMPurify.sanitize(text).split(' ');
       words.forEach((word, index) => {
         if (!!urlPattern.test(word)) {
           clickable.push(<span key={index}>{ group }</span>);

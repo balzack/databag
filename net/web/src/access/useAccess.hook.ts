@@ -13,7 +13,7 @@ export function useAccess() {
     themes: [],
     language: null,
     languages: [],
-    strings: {},
+    strings: {} as Record<string,string>,
   });
 
   const navigate = useNavigate();

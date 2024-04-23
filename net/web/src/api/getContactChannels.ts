@@ -1,6 +1,6 @@
 import { checkResponse, fetchWithTimeout } from './fetchUtil';
 
-export async function getContactChannels(server, token, viewRevision, channelRevision) {
+export async function getContactChannels(server, token, viewRevision?, channelRevision?) {
   let host = "";
   if (server) {
     host = `https://${server}`;

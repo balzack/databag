@@ -13,7 +13,7 @@ export function useAdmin() {
     placeholder: '',
     unclaimed: null,
     busy: false,
-    strings: {},
+    strings: {} as Record<string, string>,
     menuStyle: {},
   });
 

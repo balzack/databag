@@ -1,7 +1,7 @@
 import { createContext } from 'react';
-import { useSettingsContext } from './useSettingsContext.hook';
+import { defaultSettingsContext, useSettingsContext } from './useSettingsContext.hook';
 
-export const SettingsContext = createContext({});
+export const SettingsContext = createContext(defaultSettingsContext);
 
 export function SettingsContextProvider({ children }) {
   const { state, actions } = useSettingsContext();

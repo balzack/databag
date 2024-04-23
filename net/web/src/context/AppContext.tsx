@@ -1,7 +1,7 @@
 import { createContext } from 'react';
-import { useAppContext } from './useAppContext.hook';
+import { defaultAppContext, useAppContext } from './useAppContext.hook';
 
-export const AppContext = createContext({});
+export const AppContext = createContext(defaultAppContext);
 
 export function AppContextProvider({ children }) {
   const { state, actions } = useAppContext();

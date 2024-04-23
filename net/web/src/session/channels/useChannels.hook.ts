@@ -17,7 +17,7 @@ export function useChannels() {
     channels: [],
     showAdd: false,
     allowAdd: false,
-    strings: {},
+    strings: {} as Record<string,string>,
     menuStyle: {},
   });
 

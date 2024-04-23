@@ -7,13 +7,13 @@ export function ChannelItem({ item, openChannel, active, tip }) {
 
   return (
     <ChannelItemWrapper onClick={() => openChannel(item.channelId, item.cardId)}>
-      <div class={active ? 'active' : 'idle'}>
-        <div class="item">
-          <div class="avatar">
+      <div className={active ? 'active' : 'idle'}>
+        <div className="item">
+          <div className="avatar">
             <Logo url={item.logo} img={item.img} width={32} height={32} radius={4} />
           </div>
-          <div class="details">
-            <div class="subject">
+          <div className="details">
+            <div className="subject">
               { item.locked && !item.unlocked && (
                 <LockFilled style={{ paddingRight: 8 }}/>
               )}
@@ -22,7 +22,7 @@ export function ChannelItem({ item, openChannel, active, tip }) {
               )}
               <span>{ item.subject }</span>
             </div>
-            <div class="message">{ item.message }</div>
+            <div className="message">{ item.message }</div>
           </div>
           { item.updatedFlag && (
             <Tooltip placement="topRight" title={tip}>

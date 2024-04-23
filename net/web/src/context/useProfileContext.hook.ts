@@ -5,12 +5,37 @@ import { setProfileData } from 'api/setProfileData';
 import { setProfileImage } from 'api/setProfileImage';
 import { getProfileImageUrl } from 'api/getProfileImageUrl';
 
-export function useProfileContext() {
-  const [state, setState] = useState({
-    offsync: false,
-    identity: {},
-    imageUrl: null,
-  });
+interface Identity  {
+  guid: string;
+  name: string;
+  handle: string;
+  node: any;
+  revision: string;
+  seal: string
+  version: string;
+  image: string;
+  location: string;
+  description: string;
+  
+}
+export const defaultProfileContext = {
+state:{
+  offsync: false,
+  identity: {} as Partial<Identity>,
+  imageUrl: null,
+},
+actions: {
+    setToken: (token: any) => {},
+    clearToken: () => {},
+    setRevision: (rev: any) => Promise.reject<void>(),
+    setProfileData: (name: any, location: any, description: any) => Promise.reject<void>(),
+    setProfileImage: (image: any) => Promise.reject<void>(),
+    getHandleStatus: (name: any) => Promise.reject<void>(),
+    resync: () => Promise.reject<void>(),
+}
+}
+export function useProfileContext(): typeof defaultProfileContext {
+  const [state, setState] = useState(defaultProfileContext.state);
   const access = useRef(null);
   const curRevision = useRef(null);
   const setRevision = useRef(null);

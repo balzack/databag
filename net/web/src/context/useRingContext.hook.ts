@@ -5,19 +5,25 @@ import { addCall } from 'api/addCall';
 import { keepCall } from 'api/keepCall';
 import { removeCall } from 'api/removeCall';
 import { removeContactCall } from 'api/removeContactCall';
+type Actions = ReturnType<typeof useRingContext>["actions"]
+const defaultState = {
+  ringing: new Map(),
+  callStatus: null,
+  cardId: null,
+  localStream: null,
+  localVideo: false,
+  localAudio: false,
+  remoteStream: null,
+  remoteVideo: false,
+  remoteAudio: false,
+}
+export const defaultRingContext={
+  state:defaultState,
+  actions: {} as Actions
+}
 
 export function useRingContext() {
-  const [state, setState] = useState({
-    ringing: new Map(),
-    callStatus: null,
-    cardId: null,
-    localStream: null,
-    localVideo: false,
-    localAudio: false,
-    remoteStream: null,
-    remoteVideo: false,
-    remoteAudio: false,
-  });
+  const [state, setState] = useState(defaultState);
   const access = useRef(null);
 
   const EXPIRE = 3000
@@ -30,8 +36,8 @@ export function useRingContext() {
   const stream = useRef(null);
   const accessVideo = useRef(false);
   const accessAudio = useRef(false);
-  const videoTrack = useRef();
-  const audioTrack = useRef();
+  const videoTrack = useRef<any>();
+  const audioTrack = useRef<any>();
   const offers = useRef([]);
   const processing = useRef(false);
   const connected = useRef(false);

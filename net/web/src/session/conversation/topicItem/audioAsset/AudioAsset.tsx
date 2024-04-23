@@ -37,25 +37,25 @@ export function AudioAsset({ asset }) {
           return <div style={{ height: '100%', width: width }} />
         }}
       </ReactResizeDetector>
-      <div class="player" style={{ width: width, height: width }}>
-        <img class="background" src={background} alt="audio background" />
-        <div class="control" onClick={actions.setActive}>
+      <div className="player" style={{ width: width, height: width }}>
+        <img className="background" src={background} alt="audio background" />
+        <div className="control" onClick={actions.setActive}>
           <SoundOutlined style={{ fontSize: 32, color: '#eeeeee', cursor: 'pointer' }} />
         </div>
-        <div class="label">{ asset.label }</div>
+        <div className="label">{ asset.label }</div>
       </div>
       <Modal centered={true} visible={state.active} width={256 + 12} bodyStyle={{ width: '100%', height: 'auto', paddingBottom: 6, paddingTop: 6, paddingLeft: 6, paddingRight: 6, backgroundColor: '#dddddd' }} footer={null} destroyOnClose={true} closable={false} onCancel={actions.clearActive}>
-        <audio style={{ position: 'absolute', top: 0, visibility: 'hidden' }} autoplay="true"
-          src={state.url} type="audio/mpeg" ref={audio} onPlay={actions.ready} />
+        <audio style={{ position: 'absolute', top: 0, visibility: 'hidden' }} autoPlay
+          src={state.url} itemType="audio/mpeg" ref={audio} onPlay={actions.ready} />
         <AudioModalWrapper>
-          <img class="background" src={background} alt="audio background" />
+          <img className="background" src={background} alt="audio background" />
           { state.loading && state.error && (
-            <div class="failed">
+            <div className="failed">
               <Spin size="large" delay={250} />
             </div>
           )}
           { state.loading && !state.error && (
-            <div class="loading">
+            <div className="loading">
               <Spin size="large" delay={250} />
               { state.total !== 0 && (
                 <Progress percent={Math.floor(100 * state.block / state.total)} size="small" showInfo={false} trailColor={Colors.white} strokeColor={Colors.background} />
@@ -63,21 +63,21 @@ export function AudioAsset({ asset }) {
             </div>
           )}
           { !state.ready && !state.loading && (
-            <div class="loading">
+            <div className="loading">
               <Spin size="large" delay={250} />
             </div>
           )}
           { state.ready && !state.loading && playing && (
-            <div class="control" onClick={() => play(false)}>
+            <div className="control" onClick={() => play(false)}>
               <MinusCircleOutlined style={{ fontSize: 64, color: '#eeeeee', cursor: 'pointer' }} />
             </div>
           )}
           { state.ready && !state.loading && !playing && (
-            <div class="control" onClick={() => play(true)}>
+            <div className="control" onClick={() => play(true)}>
               <PlayCircleOutlined style={{ fontSize: 64, color: '#eeeeee', cursor: 'pointer' }} />
             </div>
           )}
-          <div class="label">{ asset.label }</div>
+          <div className="label">{ asset.label }</div>
         </AudioModalWrapper>
       </Modal>
     </AudioAssetWrapper>

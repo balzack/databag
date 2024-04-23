@@ -4,7 +4,7 @@ import { SettingsContext } from 'context/SettingsContext';
 import { getListingMessage } from 'api/getListingMessage';
 import { getCardByGuid } from 'context/cardUtil';
 
-export function useContact(guid, listing, close) {
+export function useContact(guid, listing?, close?) {
 
   const [state, setState] = useState({
     offsync: false,
@@ -19,7 +19,7 @@ export function useContact(guid, listing, close) {
     status: null,
     busy: false,
     buttonStatus: 'button idle',
-    strings: {},
+    strings: {} as Record<string,string>,
     menuStyle: {},
   });
 

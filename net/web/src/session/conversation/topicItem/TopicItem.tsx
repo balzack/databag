@@ -97,7 +97,7 @@ export function TopicItem({ host, contentKey, sealed, topic, update, remove, str
       </div>
       { topic.status !== 'confirmed' && (
         <div className="skeleton">
-          <Skeleton size={'small'} active={true} title={false} />
+          <Skeleton active={true} title={false} />
         </div>
       )}
       { topic.status === 'confirmed' && (

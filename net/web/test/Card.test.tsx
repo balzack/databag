@@ -17,6 +17,7 @@ function CardView() {
     entries.forEach(entry => {
 
       rendered.push(
+        //@ts-ignore
         <div key={entry.id} data-testid="card" offsync={entry.offsync.toString()}>
           <span data-testid="name">{ entry.data.cardProfile.name }</span>
           <span data-testid="status">{ entry.data.cardDetail.status }</span>
@@ -28,6 +29,7 @@ function CardView() {
   }, [card.state])
 
   return (
+    //@ts-ignore
     <div data-testid="cards" count={renderCount} offsync={card.state.offsync.toString()}>
       { cards }
     </div>
@@ -103,12 +105,16 @@ beforeEach(() => {
       });
     }
   });
+  //@ts-ignore
   fetchUtil.fetchWithTimeout = mockFetch;
+  //@ts-ignore
   fetchUtil.fetchWithCustomTimeout = mockFetch;
 });
 
 afterEach(() => {
+  //@ts-ignore
   fetchUtil.fetchWithTimeout = realFetchWithTimeout;
+  //@ts-ignore
   fetchUtil.fetchWithCustomTimeout = realFetchWithCustomTimeout;
 });
 
@@ -131,6 +137,7 @@ test('resync cards', async() => {
   });
 
   await waitFor(async () => {
+    //@ts-ignore
     expect(screen.getByTestId('cards').attributes.offsync.value).toBe('true');
   });
 
@@ -141,6 +148,7 @@ test('resync cards', async() => {
   });
  
   await waitFor(async () => {
+    //@ts-ignore
     expect(screen.getByTestId('cards').attributes.offsync.value).toBe('false');
   });
 
@@ -199,6 +207,7 @@ test('resync contact', async () => {
   });
  
   await waitFor(async () => {
+    //@ts-ignore
     expect(screen.getByTestId('card').attributes.offsync.value).toBe('true');
   });
 
@@ -209,6 +218,7 @@ test('resync contact', async () => {
   });
  
   await waitFor(async () => {
+    //@ts-ignore
     expect(screen.getByTestId('card').attributes.offsync.value).toBe('false');
   });
 

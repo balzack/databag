@@ -24,6 +24,7 @@ function ContactView() {
   }, [state]);
 
   return (
+    //@ts-ignore
     <div count={renderCount}>
       <div data-testid="name">{ name }</div>
       <div data-testid="status">{ status }</div>
@@ -74,12 +75,16 @@ beforeEach(() => {
       });
     }
   });
+  //@ts-ignore
   fetchUtil.fetchWithTimeout = mockFetch;
+  //@ts-ignore
   fetchUtil.fetchWithCustomTimeout = mockFetch;
 });
 
 afterEach(() => {
+  //@ts-ignore
   fetchUtil.fetchWithTimeout = realFetchWithTimeout;
+  //@ts-ignore
   fetchUtil.fetchWithCustomTimeout = realFetchWithCustomTimeout;
 });
 

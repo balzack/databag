@@ -1,5 +1,13 @@
 import { useEffect, useState } from 'react';
 
+export const defaultStoreContext =  {
+  state: {} as Record<string, any>,
+  actions: {
+      clear: () => {},
+      setValue: (key: any, value: any) => {},
+      getValue: (key: any) => undefined as any,
+  }
+}
 export function useStoreContext() {
 
   const [state, setState] = useState({});

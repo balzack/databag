@@ -43,15 +43,15 @@ export function VideoFile({ url, onPosition }) {
           return <video ref={player} muted onPlay={onPause} src={url} width={'auto'} height={'100%'} playsinline="true" />
         }}
       </ReactResizeDetector>
-      <div class="overlay" style={{ width: state.width, height: state.height }}>
-        <div class="seek">
-          <div class="left-seek">
-            <div class="icon" onClick={() => onSeek(-1)}>
+      <div className="overlay" style={{ width: state.width, height: state.height }}>
+        <div className="seek">
+          <div className="left-seek">
+            <div className="icon" onClick={() => onSeek(-1)}>
               <LeftOutlined style={{ fontSize: 32, color: '#eeeeee' }} />
             </div>
           </div>
-          <div class="right-seek">
-            <div class="icon" onClick={() => onSeek(1)}>
+          <div className="right-seek">
+            <div className="icon" onClick={() => onSeek(1)}>
               <RightOutlined style={{ fontSize: 32, color: '#eeeeee' }} />
             </div>
           </div>

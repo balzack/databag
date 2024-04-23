@@ -27,6 +27,7 @@ function ListingView() {
   }, [state]);
 
   return (
+    //@ts-ignore
     <div data-testid="contacts" count={renderCount}>
       { contacts }
     </div>
@@ -55,12 +56,16 @@ beforeEach(() => {
       json: () => Promise.resolve(fetchListing)
     });
   });
+  //@ts-ignore
   fetchUtil.fetchWithTimeout = mockFetch;
+  //@ts-ignore
   fetchUtil.fetchWithCustomTimeout = mockFetch;
 });
 
 afterEach(() => {
+  //@ts-ignore
   fetchUtil.fetchWithTimeout = realFetchWithTimeout;
+  //@ts-ignore
   fetchUtil.fetchWithCustomTimeout = realFetchWithCustomTimeout;
 });
 

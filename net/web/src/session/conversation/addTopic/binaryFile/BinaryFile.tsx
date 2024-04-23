@@ -17,9 +17,9 @@ export function BinaryFile({ url, extension, label, onLabel }) {
           return <div style={{ height: '100%', width: width }} />
         }}
       </ReactResizeDetector>
-      <div class="player" style={{ width: width, height: width }}>
-        <div class="extension">{ extension }</div>
-        <div class="label">
+      <div className="player" style={{ width: width, height: width }}>
+        <div className="extension">{ extension }</div>
+        <div className="label">
           <Input bordered={false} size="small" defaultValue={label} onChange={(e) => onLabel(e.target.value)} />
         </div>
       </div>

@@ -14,7 +14,7 @@ export function useAccountItem(item, remove) {
     showAccess: false,
     display: null,
     menuStyle: {},
-    strings: {},
+    strings: {} as Record<string,string>,
   });
  
   const app = useContext(AppContext);

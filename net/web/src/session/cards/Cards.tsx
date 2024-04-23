@@ -3,11 +3,17 @@ import { CardsWrapper } from './Cards.styled';
 import { SortAscendingOutlined, CloseOutlined, UserOutlined, SearchOutlined } from '@ant-design/icons';
 import { useCards } from './useCards.hook';
 import { CardItem } from './cardItem/CardItem';
+interface Props {
+  closeCards?: any
+   openContact: any
+   openChannel: any
+   openListing: any
 
-export function Cards({ closeCards, openContact, openChannel, openListing }) {
+}
+export function Cards({ closeCards, openContact, openChannel, openListing }:Props) {
 
   const [ modal, modalContext ] = Modal.useModal();
-  const { state, actions } = useCards(openChannel);
+  const { state, actions } = useCards();
 
   const message = async (cardId) => {
     try {
@@ -69,7 +75,8 @@ export function Cards({ closeCards, openContact, openChannel, openListing }) {
       </div>
       <div className="view">
         { state.cards.length > 0 && (
-          <List local={{ emptyText: '' }} itemLayout="horizontal" dataSource={state.cards} gutter="0"
+          <List locale={{ emptyText: '' }} itemLayout="horizontal" dataSource={state.cards}
+          //  gutter={0}
             renderItem={item => (
               <CardItem item={item} enableIce={state.enableIce} tooltip={state.tooltip} resync={() => actions.resync(item.cardId)}
                   open={() => openContact(item.guid)} message={() => message(item.cardId)} strings={state.strings} 

@@ -2,27 +2,32 @@ import { useEffect, useState } from 'react';
 import { LightTheme, DarkTheme } from 'constants/Colors';
 import { en, fr, sp, pt, de, ru } from 'constants/Strings';
 
+const defaultState = { 
+  display: null,
+  width: null,
+  height: null,
+  themes: [{ value: 'dark', label: 'Dark' }, { value: 'light', label: 'Light' }],
+  theme: null,
+  scheme: null,
+  colors: {} as Record<string,string>,
+  menuStyle: {},
+  languages: [{ value: 'en', label: 'English' }, { value: 'fr', label: 'Français' }, { value: 'sp', label: 'Español' }, { value: 'pt', label: 'Português' }, { value: 'de', label: 'Deutsch' }, { value: 'ru', label: 'Русский' }],
+  language: null,
+  strings: en,
+  dateFormat: 'mm/dd',
+  timeFormat: '12h',
+  audioId: null,
+  audioInputs: [],
+  videoId: null,
+  videoInputs: [],
+}
+export const defaultSettingsContext = {
+  state: defaultState,
+  actions: {} as ReturnType<typeof useSettingsContext>["actions"]
+}
 export function useSettingsContext() {
 
-  const [state, setState] = useState({ 
-    display: null,
-    width: null,
-    height: null,
-    themes: [{ value: 'dark', label: 'Dark' }, { value: 'light', label: 'Light' }],
-    theme: null,
-    scheme: null,
-    colors: {},
-    menuStyle: {},
-    languages: [{ value: 'en', label: 'English' }, { value: 'fr', label: 'Français' }, { value: 'sp', label: 'Español' }, { value: 'pt', label: 'Português' }, { value: 'de', label: 'Deutsch' }, { value: 'ru', label: 'Русский' }],
-    language: null,
-    strings: en,
-    dateFormat: 'mm/dd',
-    timeFormat: '12h',
-    audioId: null,
-    audioInputs: [],
-    videoId: null,
-    videoInputs: [],
-  });
+  const [state, setState] = useState(defaultState);
 
   const SMALL_MEDIUM = 650;
   const MEDIUM_LARGE = 1000;

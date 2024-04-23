@@ -19,7 +19,7 @@ export function AddTopic({ contentKey }) {
   const attachAudio = useRef(null);
   const attachVideo = useRef(null);
   const attachBinary = useRef(null);
-  const msg = useRef();
+  const msg = useRef<any>();
 
   const keyDown = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {

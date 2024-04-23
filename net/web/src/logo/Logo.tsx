@@ -2,8 +2,15 @@ import avatar from 'images/avatar.png';
 import appstore from 'images/appstore.png';
 import solution from 'images/solution.png';
 import team from 'images/team.png';
+interface Props {
+  url?:string
+     width?:number|string
+     height?:number|string
+     radius?:number
+     img?:string
 
-export function Logo({ url, width, height, radius, img }) {
+}
+export function Logo({ url, width, height, radius, img }: Props) {
   return (
     <div style={{ borderRadius: radius, overflow: 'hidden' }}>
       { img === 'team' && (

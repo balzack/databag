@@ -4,7 +4,7 @@ import { SettingsContext } from 'context/SettingsContext';
 export function useAccount() {
   
   const [state, setState] = useState({
-    strings: {},
+    strings: {} as Record<string,string>,
   });
 
   const settings = useContext(SettingsContext);

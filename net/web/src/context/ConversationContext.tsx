@@ -1,7 +1,7 @@
 import { createContext } from 'react';
-import { useConversationContext } from './useConversationContext.hook';
+import { defaultConversionContext, useConversationContext } from './useConversationContext.hook';
 
-export const ConversationContext = createContext({});
+export const ConversationContext = createContext(defaultConversionContext);
 
 export function ConversationContextProvider({ children }) {
   const { state, actions } = useConversationContext();
