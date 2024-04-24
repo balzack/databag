@@ -27,24 +27,24 @@ export function Dashboard() {
             { state.display === 'small' && (
               <>
                 <div className="settings">
-                    <SettingsButton type="text" size="small" icon={<ReloadOutlined />}
+                    <SettingsButton type="text" size="small" icon={<ReloadOutlined onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}  />}
                         onClick={() => actions.reload()}></SettingsButton>
                 </div>
                 <div className="settings">
-                    <SettingsButton type="text" size="small" icon={<SettingOutlined />}
+                    <SettingsButton type="text" size="small" icon={<SettingOutlined onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />}
                         onClick={() => actions.setShowSettings(true)}></SettingsButton>
                 </div>
                 <div className="settings">
-                    <SettingsButton type="text" size="small" icon={<LogoutOutlined />}
+                    <SettingsButton type="text" size="small" icon={<LogoutOutlined onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />}
                         onClick={() => actions.logout()}></SettingsButton>
                 </div>
                 { (state.configError || state.accountsError) && (
                   <AlertIcon>
-                      <ExclamationCircleOutlined />
+                      <ExclamationCircleOutlined onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />
                   </AlertIcon>
                 )}
                 <div className="add">
-                    <AddButton type="text" size="large" icon={<UserAddOutlined />}
+                    <AddButton type="text" size="large" icon={<UserAddOutlined onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />}
                         loading={state.createBusy} onClick={() => actions.setCreateLink()}></AddButton>
                 </div>
               </>
@@ -53,32 +53,32 @@ export function Dashboard() {
               <>
                 <div className="settings">
                   <Tooltip placement="topRight" title={state.strings.reloadAccounts}> 
-                    <SettingsButton type="text" size="small" icon={<ReloadOutlined />}
+                    <SettingsButton type="text" size="small" icon={<ReloadOutlined onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />}
                         onClick={() => actions.reload()}></SettingsButton>
                   </Tooltip>
                 </div>
                 <div className="settings">
                   <Tooltip placement="topRight" title={state.strings.configureServer}> 
-                    <SettingsButton type="text" size="small" icon={<SettingOutlined />}
+                    <SettingsButton type="text" size="small" icon={<SettingOutlined onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />}
                         onClick={() => actions.setShowSettings(true)}></SettingsButton>
                   </Tooltip>
                 </div>
                 <div className="settings">
                   <Tooltip placement="topRight" title={state.strings.logout}> 
-                    <SettingsButton type="text" size="small" icon={<LogoutOutlined />}
+                    <SettingsButton type="text" size="small" icon={<LogoutOutlined onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />}
                         onClick={() => actions.logout()}></SettingsButton>
                   </Tooltip>
                 </div>
                 { (state.configError || state.accountsError) && (
                   <Tooltip placement="topRight" title={state.strings.failedLoad}>
                     <AlertIcon className="alert">
-                      <ExclamationCircleOutlined />
+                      <ExclamationCircleOutlined onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />
                     </AlertIcon>
                   </Tooltip>
                 )}
                 <div className="add">
                   <Tooltip placement="topRight" title={state.strings.createAccount}> 
-                    <AddButton type="text" size="large" icon={<UserAddOutlined />}
+                    <AddButton type="text" size="large" icon={<UserAddOutlined onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined} />}
                         loading={state.createBusy} onClick={() => actions.setCreateLink()}></AddButton>
                   </Tooltip>
                 </div>
