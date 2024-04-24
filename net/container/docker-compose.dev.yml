@@ -1,0 +1,12 @@
+version: "3.9"
+services:
+ databag:
+   environment:
+     - DEV=1
+   container_name: databag
+   image: balzack/databag:dev
+   ports:
+     - "7000:7000"
+   volumes:
+     - ./databag-data:/var/lib/databag
+
