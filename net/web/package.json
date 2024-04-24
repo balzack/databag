@@ -13,6 +13,7 @@
     "crypto-js": "^4.1.1",
     "dompurify": "^3.0.1",
     "jsencrypt": "^2.3.1",
+    "prettier": "^3.2.5",
     "react": "^18.2.0",
     "react-color": "^2.19.3",
     "react-dom": "^18.2.0",
@@ -27,6 +28,8 @@
   "scripts": {
     "start": "vite",
     "build": "vite build",
+    "lint": "prettier -c .",
+    "lint:write": "prettier -w .",
     "test": "jest"
   },
   "eslintConfig": {
