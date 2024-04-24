@@ -3,11 +3,14 @@
     "jsx": "react-jsx",
     "target": "es2016",  
     "module": "commonjs",  
-    "baseUrl": "src",
+    "baseUrl": ".",
     "esModuleInterop": true,    
     "forceConsistentCasingInFileNames": true, 
     "strict": false,       
-    "skipLibCheck": true         
+    "skipLibCheck": true     ,
+    "paths": {
+      "*": ["src/*"]
+    }  
   },
-  "include": ["src"]
+  "include": ["src", "test"]
 }

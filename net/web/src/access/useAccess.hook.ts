@@ -32,7 +32,7 @@ export function useAccess() {
   }, [app.state, navigate]);
 
   useEffect(() => {
-    let params = new URLSearchParams(location);
+    let params = new URLSearchParams(location+"");
     let token = params.get("access");
     if (token) {
       const access = async () => {

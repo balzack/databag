@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from 'react';
 import { ProfileContext } from 'context/ProfileContext';
 import { AppContext } from 'context/AppContext';
 import { SettingsContext } from 'context/SettingsContext';
+//@ts-ignore
 import avatar from 'images/avatar.png';
 
 export function useProfile() {
