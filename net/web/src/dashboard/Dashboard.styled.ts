@@ -11,9 +11,9 @@ export const DashboardWrapper = styled.div`
   height: 100%;
   padding-left: 8px;
   padding-right: 8px;
-  background-color: ${props => props.theme.baseArea};
-  color: ${props => props.theme.hintText};
-  
+  background-color: ${(props) => props.theme.baseArea};
+  color: ${(props) => props.theme.hintText};
+
   .container {
     display: flex;
     flex-direction: column;
@@ -23,21 +23,21 @@ export const DashboardWrapper = styled.div`
     border-radius: 4px;
     max-width: 100%;
     max-height: 80%;
-    background-color: ${props => props.theme.itemArea};
+    background-color: ${(props) => props.theme.itemArea};
 
     .header {
-      color: ${props => props.theme.hintText};
+      color: ${(props) => props.theme.hintText};
       display: flex;
       flex-direction: row;
       font-size: 20px;
-      border-bottom: 1px solid ${props => props.theme.headerBorder};
+      border-bottom: 1px solid ${(props) => props.theme.headerBorder};
     }
 
     .body {
       padding-top: 8px;
       min-height: 0;
       overflow: auto;
-      border-bottom: 1px solid ${props => props.theme.headerBorder};
+      border-bottom: 1px solid ${(props) => props.theme.headerBorder};
       margin-bottom: 16px;
     }
 
@@ -83,7 +83,7 @@ export const AlertIcon = styled.div`
   align-items: center;
   color: ${Colors.alert};
   padding-left: 8px;
-`
+`;
 
 export const SettingsLayout = styled(Space)`
   width: 100%;
@@ -151,8 +151,8 @@ export const CreateLayout = styled.div`
       white-space: nowrap;
       min-width: 0;
       padding-right: 8px;
-    }  
- 
+    }
+
     .link {
       text-overflow: ellipsis;
       overflow: hidden;
@@ -162,4 +162,4 @@ export const CreateLayout = styled.div`
       padding-right: 8px;
     }
   }
-`
+`;

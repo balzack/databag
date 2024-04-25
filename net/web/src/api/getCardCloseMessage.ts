@@ -5,4 +5,3 @@ export async function getCardCloseMessage(token, cardId) {
   checkResponse(message);
   return await message.json();
 }
-

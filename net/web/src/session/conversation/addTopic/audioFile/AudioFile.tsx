@@ -5,7 +5,6 @@ import { PlayCircleOutlined, MinusCircleOutlined } from '@ant-design/icons';
 import { AudioFileWrapper } from './AudioFile.styled';
 
 export function AudioFile({ url, onLabel }) {
-
   const [width, setWidth] = useState(0);
   const [playing, setPlaying] = useState(false);
 
@@ -15,41 +14,53 @@ export function AudioFile({ url, onLabel }) {
     setPlaying(on);
     if (on) {
       audio.current.play();
-    }
-    else {
+    } else {
       audio.current.pause();
     }
-  }
+  };
 
   return (
     <AudioFileWrapper>
-      <ReactResizeDetector handleWidth={false} handleHeight={true}>
+      <ReactResizeDetector
+        handleWidth={false}
+        handleHeight={true}
+      >
         {({ height }) => {
           if (height !== width) {
             setWidth(height);
           }
-          return <div style={{ height: '100%', width: width }} />
+          return <div style={{ height: '100%', width: width }} />;
         }}
       </ReactResizeDetector>
-      <div className="player" style={{ width: width, height: width }}>
+      <div
+        className="player"
+        style={{ width: width, height: width }}
+      >
         <div className="control">
-          { playing && (
+          {playing && (
             <div onClick={() => play(false)}>
               <MinusCircleOutlined style={{ fontSize: 32, color: '#eeeeee', cursor: 'pointer' }} />
             </div>
           )}
-          { !playing && (
+          {!playing && (
             <div onClick={() => play(true)}>
               <PlayCircleOutlined style={{ fontSize: 32, color: '#eeeeee', cursor: 'pointer' }} />
             </div>
           )}
-          <audio style={{ position: 'absolute', top: 0, visibility: 'hidden' }} src={url} ref={audio} />
+          <audio
+            style={{ position: 'absolute', top: 0, visibility: 'hidden' }}
+            src={url}
+            ref={audio}
+          />
         </div>
         <div className="label">
-          <Input bordered={false} size="small" onChange={(e) => onLabel(e.target.value)} />
+          <Input
+            bordered={false}
+            size="small"
+            onChange={(e) => onLabel(e.target.value)}
+          />
         </div>
       </div>
     </AudioFileWrapper>
-  )
+  );
 }
-

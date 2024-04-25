@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { prettyDOM } from '@testing-library/dom'
-import {render, act, screen, waitFor, fireEvent} from '@testing-library/react'
+import { prettyDOM } from '@testing-library/dom';
+import { render, act, screen, waitFor, fireEvent } from '@testing-library/react';
 import { ChannelContextProvider, ChannelContext } from 'context/ChannelContext';
 import * as fetchUtil from 'api/fetchUtil';
 
@@ -12,24 +12,31 @@ function ChannelView() {
   channelContext = channel;
 
   useEffect(() => {
-    const rendered = []
+    const rendered = [];
     const entries = Array.from(channel.state.channels.values());
-    entries.forEach(entry => {
-
+    entries.forEach((entry) => {
       rendered.push(
-        <div key={entry.id} data-testid="channel">
-          <span data-testid="detail">{ entry.data.channelDetail.data }</span>
-          <span data-testid="summary">{ entry.data.channelSummary.data }</span>
-        </div>);
+        <div
+          key={entry.id}
+          data-testid="channel"
+        >
+          <span data-testid="detail">{entry.data.channelDetail.data}</span>
+          <span data-testid="summary">{entry.data.channelSummary.data}</span>
+        </div>,
+      );
     });
     setChannels(rendered);
     setRenderCount(renderCount + 1);
-  }, [channel.state])
+  }, [channel.state]);
 
   return (
     //@ts-ignore
-    <div data-testid="channels" count={renderCount} offsync={channel.state.offsync.toString()}>
-      { channels }
+    <div
+      data-testid="channels"
+      count={renderCount}
+      offsync={channel.state.offsync.toString()}
+    >
+      {channels}
     </div>
   );
 }
@@ -39,7 +46,7 @@ function ChannelTestApp() {
     <ChannelContextProvider>
       <ChannelView />
     </ChannelContextProvider>
-  )
+  );
 }
 
 const realFetchWithTimeout = fetchUtil.fetchWithTimeout;
@@ -57,13 +64,12 @@ let updatedChannel;
 let addedCard;
 let removedCard;
 beforeEach(() => {
-
   statusDetail = 200;
   statusSummary = 200;
   statusChannels = 200;
   fetchDetail = {};
   fetchSummary = {};
-  fetchChannels =[];
+  fetchChannels = [];
   addedChannel = [];
   updatedChannel = [];
   removedChannel = [];
@@ -76,48 +82,41 @@ beforeEach(() => {
         status: 200,
         json: () => Promise.resolve({ id: 'id1' }),
       });
-    }
-    else if (options.method === 'PUT') {
+    } else if (options.method === 'PUT') {
       const params = url.split('/');
       if (params[4] === 'cards') {
         addedCard.push(params[5].split('?')[0]);
-      }
-      else {
+      } else {
         updatedChannel.push({ id: params[3], body: options.body });
       }
       return Promise.resolve({
         status: 200,
         json: () => Promise.resolve({}),
       });
-    }
-    else if (options.method === 'DELETE') {
+    } else if (options.method === 'DELETE') {
       const params = url.split('/');
       if (params[4] === 'cards') {
         removedCard.push(params[5].split('?')[0]);
-      }
-      else {
+      } else {
         removedChannel.push(params[3].split('?')[0]);
       }
       return Promise.resolve({
         status: 200,
         json: () => Promise.resolve(),
       });
-    }
-    else if (url.includes('detail')) {
+    } else if (url.includes('detail')) {
       return Promise.resolve({
         url: 'getDetail',
         status: statusDetail,
         json: () => Promise.resolve(fetchDetail),
       });
-    }
-    else if (url.includes('summary')) {
+    } else if (url.includes('summary')) {
       return Promise.resolve({
         url: 'getSummary',
         status: statusSummary,
         json: () => Promise.resolve(fetchSummary),
       });
-    }
-    else {
+    } else {
       return Promise.resolve({
         url: 'getChannels',
         status: statusChannels,
@@ -139,14 +138,13 @@ afterEach(() => {
 });
 
 test('api invocation', async () => {
-
   render(<ChannelTestApp />);
 
   await waitFor(async () => {
     expect(channelContext).not.toBe(null);
   });
 
-  await act( async () => {
+  await act(async () => {
     channelContext.actions.setToken('abc123');
   });
 
@@ -171,25 +169,26 @@ test('api invocation', async () => {
     expect(addedCard[0]).toBe('newcard');
   });
 
-  await act( async () => {
+  await act(async () => {
     channelContext.actions.clearToken();
   });
-
 });
 
 test('add, update and remove channel', async () => {
-
   render(<ChannelTestApp />);
 
   fetchDetail = { dataType: 'superbasic', data: 'testdata' };
   fetchSummary = { guid: '11', dataType: 'superbasictopic', data: 'testdata' };
   fetchChannels = [
-    { id: '123', revision: 2, data: {
+    {
+      id: '123',
+      revision: 2,
+      data: {
         detailRevision: 3,
         topicRevision: 5,
         channelSummary: { guid: '11', dataType: 'superbasictopic', data: 'testdata' },
         channelDetail: { dataType: 'superbasic', data: 'testdata' },
-      }
+      },
     },
   ];
 
@@ -197,11 +196,11 @@ test('add, update and remove channel', async () => {
     expect(channelContext).not.toBe(null);
   });
 
-  await act( async () => {
+  await act(async () => {
     channelContext.actions.setToken('abc123');
   });
 
-  await act( async () => {
+  await act(async () => {
     await channelContext.actions.setRevision(1);
   });
 
@@ -218,15 +217,18 @@ test('add, update and remove channel', async () => {
   const count = parseInt(screen.getByTestId('channels').attributes.count.value) + 1;
 
   fetchChannels = [
-    { id: '123', revision: 3, data: {
+    {
+      id: '123',
+      revision: 3,
+      data: {
         detailRevision: 4,
         topicRevision: 5,
         channelDetail: { dataType: 'superbasic', data: 'testdata2' },
-      }
+      },
     },
   ];
 
-  await act( async () => {
+  await act(async () => {
     await channelContext.actions.setRevision(2);
   });
 
@@ -237,9 +239,9 @@ test('add, update and remove channel', async () => {
     expect(screen.getByTestId('channels').attributes.count.value).toBe(count.toString());
   });
 
-  fetchChannels = [ { id: '123', revision: 3 } ];
+  fetchChannels = [{ id: '123', revision: 3 }];
 
-  await act( async () => {
+  await act(async () => {
     await channelContext.actions.setRevision(2);
   });
 
@@ -247,7 +249,7 @@ test('add, update and remove channel', async () => {
     expect(screen.getByTestId('channels').children).toHaveLength(1);
   });
 
-  await act( async () => {
+  await act(async () => {
     await channelContext.actions.setRevision(3);
   });
 
@@ -257,45 +259,42 @@ test('add, update and remove channel', async () => {
 
   await waitFor(async () => {
     //@ts-ignore
-    expect(screen.getByTestId('channels').attributes.offsync.value).toBe("false");
+    expect(screen.getByTestId('channels').attributes.offsync.value).toBe('false');
   });
 
-  await act( async () => {
+  await act(async () => {
     channelContext.actions.clearToken();
   });
-
 });
 
 test('resync', async () => {
-
   render(<ChannelTestApp />);
 
   await waitFor(async () => {
     expect(channelContext).not.toBe(null);
   });
 
-  await act( async () => {
+  await act(async () => {
     channelContext.actions.setToken('abc123');
   });
 
-  await act( async () => {
+  await act(async () => {
     statusChannels = 500;
     await channelContext.actions.setRevision(1);
   });
 
   await waitFor(async () => {
     //@ts-ignore
-    expect(screen.getByTestId('channels').attributes.offsync.value).toBe("true");
+    expect(screen.getByTestId('channels').attributes.offsync.value).toBe('true');
   });
 
-  await act( async () => {
+  await act(async () => {
     statusChannels = 200;
     await channelContext.actions.resync();
   });
 
   await waitFor(async () => {
     //@ts-ignore
-    expect(screen.getByTestId('channels').attributes.offsync.value).toBe("false");
+    expect(screen.getByTestId('channels').attributes.offsync.value).toBe('false');
   });
 });
-

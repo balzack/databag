@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import {render, act, screen, waitFor, fireEvent} from '@testing-library/react'
+import { render, act, screen, waitFor, fireEvent } from '@testing-library/react';
 import { AppContextProvider } from 'context/AppContext';
 import { AccountContextProvider } from 'context/AccountContext';
 import { ProfileContext, ProfileContextProvider } from 'context/ProfileContext';
@@ -25,7 +25,12 @@ function InfoView() {
 
   return (
     //@ts-ignore
-    <div data-testid="info" count={renderCount}>{ state.title }</div>
+    <div
+      data-testid="info"
+      count={renderCount}
+    >
+      {state.title}
+    </div>
   );
 }
 
@@ -64,15 +69,14 @@ beforeEach(() => {
   fetchDetail = {};
 
   const mockFetch = jest.fn().mockImplementation((url, options) => {
-
     if (url.startsWith('/contact/cards?agent')) {
       return Promise.resolve({
-        json: () => Promise.resolve(fetchCards)
+        json: () => Promise.resolve(fetchCards),
       });
     }
     if (url.startsWith('https://test.org/content/channels?contact')) {
       return Promise.resolve({
-        json: () => Promise.resolve(fetchChannels)
+        json: () => Promise.resolve(fetchChannels),
       });
     }
     if (url.startsWith('https://test.org/content/channels/channel01/topics?contact')) {
@@ -88,12 +92,11 @@ beforeEach(() => {
     }
     if (url.startsWith('https://test.org/content/channels/channel01/detail')) {
       return Promise.resolve({
-        json: () => Promise.resolve(fetchDetail)
+        json: () => Promise.resolve(fetchDetail),
       });
-    }
-    else {
+    } else {
       return Promise.resolve({
-        json: () => Promise.resolve([])
+        json: () => Promise.resolve([]),
       });
     }
   });
@@ -111,7 +114,6 @@ afterEach(() => {
 });
 
 test('conversation selection', async () => {
-
   render(<InfoTestApp />);
 
   await waitFor(async () => {
@@ -124,46 +126,62 @@ test('conversation selection', async () => {
     conversation.actions.setChannel('card01', 'channel01');
   });
 
-  fetchCards = [{
-    id: 'card01',
-    revision: 1,
-    data: {
-      detailRevision: 2,
-      profileRevision: 3,
-      notifiedProfile: 3,
-      notifiedArticle: 5,
-      notifiedChannel: 6,
-      notifiedView: 7,
-      cardDetail: { status: 'connected', statusUpdate: 136, token: '01ab', },
-      cardProfile: { guid: 'guid01', handle: 'test1', name: 'tester', imageSet: false,
-        seal: 'abc', version: '1.1.1', node: 'test.org' },
+  fetchCards = [
+    {
+      id: 'card01',
+      revision: 1,
+      data: {
+        detailRevision: 2,
+        profileRevision: 3,
+        notifiedProfile: 3,
+        notifiedArticle: 5,
+        notifiedChannel: 6,
+        notifiedView: 7,
+        cardDetail: { status: 'connected', statusUpdate: 136, token: '01ab' },
+        cardProfile: {
+          guid: 'guid01',
+          handle: 'test1',
+          name: 'tester',
+          imageSet: false,
+          seal: 'abc',
+          version: '1.1.1',
+          node: 'test.org',
+        },
+      },
     },
-  }];
+  ];
 
   fetchChannels = [
-    { id: 'channel01', revision: 2, data: {
+    {
+      id: 'channel01',
+      revision: 2,
+      data: {
         detailRevision: 3,
         topicRevision: 5,
         channelSummary: { guid: 'guid01', dataType: 'superbasictopic', data: JSON.stringify({ text: 'testing' }) },
-        channelDetail: { dataType: 'superbasic', data: '{}', },
-      }
+        channelDetail: { dataType: 'superbasic', data: '{}' },
+      },
     },
   ];
 
   fetchTopics = [
-    { id: 'topic01', revision: 1, data: {
-      detailRevision: 1,
-      tagRevision: 1,
-      topicDetail: {
-        guid: 'guid01',
-        dataType: 'superbasictopic',
-        data: JSON.stringify({ text: 'message' }),
-        created: 1,
-        updated: 1,
-        status: 'confirmed',
-        transform: 'complete',
+    {
+      id: 'topic01',
+      revision: 1,
+      data: {
+        detailRevision: 1,
+        tagRevision: 1,
+        topicDetail: {
+          guid: 'guid01',
+          dataType: 'superbasictopic',
+          data: JSON.stringify({ text: 'message' }),
+          created: 1,
+          updated: 1,
+          status: 'confirmed',
+          transform: 'complete',
+        },
       },
-    }},
+    },
   ];
 
   await act(async () => {
@@ -173,41 +191,50 @@ test('conversation selection', async () => {
 
   await waitFor(async () => {
     expect(screen.getByTestId('info').textContent).toBe('');
-  });  
+  });
 
-  fetchCards = [{
-    id: 'card01',
-    revision: 2,
-    data: {
-      detailRevision: 2,
-      profileRevision: 3,
-      notifiedProfile: 3,
-      notifiedArticle: 5,
-      notifiedChannel: 7,
-      notifiedView: 7,
-      cardDetail: { status: 'connected', statusUpdate: 136, token: '01ab', },
-      cardProfile: { guid: 'guid01', handle: 'test1', name: 'tester', imageSet: false,
-        seal: 'abc', version: '1.1.1', node: 'test.org' },
-    },
-  }];
-
-  fetchChannels = [
-    { id: 'channel01', revision: 3, data: {
-        detailRevision: 4,
-        topicRevision: 5,
-      }
+  fetchCards = [
+    {
+      id: 'card01',
+      revision: 2,
+      data: {
+        detailRevision: 2,
+        profileRevision: 3,
+        notifiedProfile: 3,
+        notifiedArticle: 5,
+        notifiedChannel: 7,
+        notifiedView: 7,
+        cardDetail: { status: 'connected', statusUpdate: 136, token: '01ab' },
+        cardProfile: {
+          guid: 'guid01',
+          handle: 'test1',
+          name: 'tester',
+          imageSet: false,
+          seal: 'abc',
+          version: '1.1.1',
+          node: 'test.org',
+        },
+      },
     },
   ];
 
-  fetchDetail = { dataType: 'superbasic', data: JSON.stringify({ subject: 'testing' }), },
+  fetchChannels = [
+    {
+      id: 'channel01',
+      revision: 3,
+      data: {
+        detailRevision: 4,
+        topicRevision: 5,
+      },
+    },
+  ];
 
-  await act(async () => {
-    card.actions.setRevision(2);
-  });
+  (fetchDetail = { dataType: 'superbasic', data: JSON.stringify({ subject: 'testing' }) }),
+    await act(async () => {
+      card.actions.setRevision(2);
+    });
 
   await waitFor(async () => {
     expect(screen.getByTestId('info').textContent).toBe('testing');
-  });  
-
+  });
 });
-

@@ -22,8 +22,8 @@ export const defaultAccountContext = {
     unlockSeal: (sealKey: any) => Promise.reject<void>(),
     setLogin: (username: any, password: any) => Promise.reject<void>(),
     resync: () => Promise.reject<void>(),
-}
-}
+  },
+};
 
 export function useAccountContext(): typeof defaultAccountContext {
   const [state, setState] = useState(defaultAccountContext.state);
@@ -31,13 +31,13 @@ export function useAccountContext(): typeof defaultAccountContext {
   const setRevision = useRef(null);
   const curRevision = useRef(null);
   const syncing = useRef(false);
-  const force = useRef(false); 
+  const force = useRef(false);
 
   const storeContext = useContext(StoreContext);
 
   const updateState = (value) => {
-    setState((s) => ({ ...s, ...value }))
-  }
+    setState((s) => ({ ...s, ...value }));
+  };
 
   useEffect(() => {
     updateState({ sealKey: storeContext.state.sealKey });
@@ -54,8 +54,7 @@ export function useAccountContext(): typeof defaultAccountContext {
         const status = await getAccountStatus(token);
         setRevision.current = revision;
         updateState({ offsync: false, status, seal: status.seal });
-      }
-      catch (err) {
+      } catch (err) {
         console.log(err);
         syncing.current = false;
         updateState({ offsync: true });
@@ -65,12 +64,12 @@ export function useAccountContext(): typeof defaultAccountContext {
       syncing.current = false;
       await sync();
     }
-  }
+  };
 
   const actions = {
     setToken: (token) => {
       if (access.current || syncing.current) {
-        throw new Error("invalid account session state");
+        throw new Error('invalid account session state');
       }
       access.current = token;
       curRevision.current = null;
@@ -89,14 +88,14 @@ export function useAccountContext(): typeof defaultAccountContext {
     },
     setSeal: async (seal, sealKey) => {
       await setAccountSeal(access.current, seal);
-      await storeContext.actions.setValue("sealKey", sealKey);
+      await storeContext.actions.setValue('sealKey', sealKey);
       updateState({ sealKey });
     },
     updateSeal: async (seal) => {
       await setAccountSeal(access.current, seal);
     },
     unlockSeal: async (sealKey) => {
-      await storeContext.actions.setValue("sealKey", sealKey);
+      await storeContext.actions.setValue('sealKey', sealKey);
       updateState({ sealKey });
     },
     setLogin: async (username, password) => {
@@ -106,9 +105,7 @@ export function useAccountContext(): typeof defaultAccountContext {
       force.current = true;
       await sync();
     },
-  }
+  };
 
-  return { state, actions }
+  return { state, actions };
 }
-
-

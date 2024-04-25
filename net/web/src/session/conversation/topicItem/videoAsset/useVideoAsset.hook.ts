@@ -1,7 +1,6 @@
 import { useState, useRef } from 'react';
 
 export function useVideoAsset(asset) {
-
   const revoke = useRef<any>();
   const index = useRef(0);
 
@@ -20,7 +19,7 @@ export function useVideoAsset(asset) {
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
-  }
+  };
 
   const actions = {
     setActive: async (width, height) => {
@@ -28,17 +27,18 @@ export function useVideoAsset(asset) {
         try {
           const view = index.current;
           updateState({ active: true, width, height, error: false, loaded: false, loading: true, url: null });
-          const blob = await asset.getDecryptedBlob(() => view !== index.current, (block, total) => updateState({ block, total }));
+          const blob = await asset.getDecryptedBlob(
+            () => view !== index.current,
+            (block, total) => updateState({ block, total }),
+          );
           const url = URL.createObjectURL(blob);
           revoke.current = url;
           updateState({ url, loading: false });
-        }
-        catch (err) {
+        } catch (err) {
           console.log(err);
           updateState({ error: true });
         }
-      }
-      else {
+      } else {
         updateState({ active: true, width, height, loading: false, url: asset.hd });
       }
     },
@@ -60,4 +60,3 @@ export function useVideoAsset(asset) {
 
   return { state, actions };
 }
-

@@ -5,4 +5,3 @@ export async function getNodeConfig(token) {
   checkResponse(config);
   return await config.json();
 }
-

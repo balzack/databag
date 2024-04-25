@@ -5,7 +5,6 @@ import { getListingMessage } from 'api/getListingMessage';
 import { getCardByGuid } from 'context/cardUtil';
 
 export function useContact(guid, listing?, close?) {
-
   const [state, setState] = useState({
     offsync: false,
     logo: null,
@@ -19,39 +18,45 @@ export function useContact(guid, listing?, close?) {
     status: null,
     busy: false,
     buttonStatus: 'button idle',
-    strings: {} as Record<string,string>,
+    strings: {} as Record<string, string>,
     menuStyle: {},
   });
 
   const card = useContext(CardContext);
-  const settings = useContext(SettingsContext);  
+  const settings = useContext(SettingsContext);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
-  }
+  };
 
   useEffect(() => {
     const contact = getCardByGuid(card.state.cards, guid);
     if (contact) {
       const profile = contact?.data?.cardProfile;
       const detail = contact?.data?.cardDetail;
-      const { imageSet, name, location, description, handle, node } = profile;      
+      const { imageSet, name, location, description, handle, node } = profile;
       const status = detail.status;
       const cardId = contact.id;
       const offsync = contact.offsync;
       const logo = imageSet ? card.actions.getCardImageUrl(cardId) : null;
       updateState({ logoSet: true, offsync, logo, name, location, description, handle, node, status, cardId });
-    }
-    else if (listing) {
+    } else if (listing) {
       const { logo, name, location, description, handle, node } = listing;
       updateState({ logoSet: true, logo, name, location, description, handle, node, status: 'unsaved', cardId: null });
-    }
-    else {
-      updateState({ logoSet: true, logo: null, name: null, cardId: null, location: null, description: null, handle: null,
-         status: null });
+    } else {
+      updateState({
+        logoSet: true,
+        logo: null,
+        name: null,
+        cardId: null,
+        location: null,
+        description: null,
+        handle: null,
+        status: null,
+      });
     }
     // eslint-disable-next-line
-  }, [card.state, guid, listing]); 
+  }, [card.state, guid, listing]);
 
   useEffect(() => {
     const { display, strings, menuStyle } = settings.state;
@@ -64,17 +69,15 @@ export function useContact(guid, listing?, close?) {
         updateState({ busy: true, buttonStatus: 'button busy', action });
         await action();
         updateState({ busy: false, buttonStatus: 'button idle' });
-      }
-      catch (err) {
+      } catch (err) {
         console.log(err);
         updateState({ busy: false, buttonStatus: 'button idle' });
-        throw new Error("failed to update contact");
+        throw new Error('failed to update contact');
       }
+    } else {
+      throw new Error('operation in progress');
     }
-    else {
-      throw new Error("operation in progress");
-    }
-  }
+  };
 
   const actions = {
     saveContact: async () => {
@@ -83,7 +86,7 @@ export function useContact(guid, listing?, close?) {
         await card.actions.addCard(message);
       });
     },
-    confirmContact: async() => {
+    confirmContact: async () => {
       await applyAction(async () => {
         await card.actions.setCardConfirmed(state.cardId);
       });
@@ -122,8 +125,7 @@ export function useContact(guid, listing?, close?) {
         try {
           let message = await card.actions.getCardCloseMessage(state.cardId);
           await card.actions.setCardCloseMessage(state.node, message);
-        }
-        catch (err) {
+        } catch (err) {
           console.log(err);
         }
       });
@@ -134,8 +136,7 @@ export function useContact(guid, listing?, close?) {
         try {
           let message = await card.actions.getCardCloseMessage(state.cardId);
           await card.actions.setCardCloseMessage(state.node, message);
-        }
-        catch (err) {
+        } catch (err) {
           console.log(err);
         }
         await card.actions.removeCard(state.cardId);
@@ -146,7 +147,7 @@ export function useContact(guid, listing?, close?) {
       await applyAction(async () => {
         const success = await card.actions.resyncCard(state.cardId);
         if (!success) {
-          throw new Error("resync failed");
+          throw new Error('resync failed');
         }
       });
     },
@@ -160,4 +161,3 @@ export function useContact(guid, listing?, close?) {
 
   return { state, actions };
 }
-

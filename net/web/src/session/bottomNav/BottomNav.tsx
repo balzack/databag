@@ -2,7 +2,6 @@ import { BottomNavWrapper } from './BottomNav.styled';
 import { CommentOutlined, ContactsOutlined, UserOutlined } from '@ant-design/icons';
 
 export function BottomNav({ state, actions }) {
-
   const setChannels = () => {
     actions.closeDetails();
     actions.closeCards();
@@ -11,7 +10,7 @@ export function BottomNav({ state, actions }) {
     actions.closeProfile();
     actions.closeAccount();
     actions.closeConversation();
-  }
+  };
 
   const setProfile = () => {
     actions.closeDetails();
@@ -20,7 +19,7 @@ export function BottomNav({ state, actions }) {
     actions.closeContact();
     actions.openProfile();
     actions.closeConversation();
-  }
+  };
 
   const setCards = () => {
     actions.closeDetails();
@@ -29,11 +28,11 @@ export function BottomNav({ state, actions }) {
     actions.closeProfile();
     actions.closeAccount();
     actions.closeConversation();
-  }
+  };
 
   return (
     <BottomNavWrapper>
-      { !state.cards && !state.contact && !state.profile && (
+      {!state.cards && !state.contact && !state.profile && (
         <div className="nav-item">
           <div className="nav-active">
             <div className="nav-div-right">
@@ -42,8 +41,11 @@ export function BottomNav({ state, actions }) {
           </div>
         </div>
       )}
-      { (state.cards || state.contact || state.profile) && (
-        <div className="nav-item" onClick={() => setChannels()}>
+      {(state.cards || state.contact || state.profile) && (
+        <div
+          className="nav-item"
+          onClick={() => setChannels()}
+        >
           <div className="nav-inactive">
             <div className="nav-div-right">
               <CommentOutlined />
@@ -51,7 +53,7 @@ export function BottomNav({ state, actions }) {
           </div>
         </div>
       )}
-      { state.profile && (
+      {state.profile && (
         <div className="nav-item">
           <div className="nav-active">
             <div className="nav-div-right nav-div-left">
@@ -60,8 +62,11 @@ export function BottomNav({ state, actions }) {
           </div>
         </div>
       )}
-      { !state.profile && (
-        <div className="nav-item" onClick={() => setProfile()}>
+      {!state.profile && (
+        <div
+          className="nav-item"
+          onClick={() => setProfile()}
+        >
           <div className="nav-inactive">
             <div className="nav-div-right nav-div-left">
               <UserOutlined />
@@ -69,7 +74,7 @@ export function BottomNav({ state, actions }) {
           </div>
         </div>
       )}
-      { (state.cards || state.contact) && !state.profile && (
+      {(state.cards || state.contact) && !state.profile && (
         <div className="nav-item">
           <div className="nav-active">
             <div className="nav-div-left bump">
@@ -78,8 +83,11 @@ export function BottomNav({ state, actions }) {
           </div>
         </div>
       )}
-      { ((!state.cards && !state.contact) || state.profile) && (
-        <div className="nav-item" onClick={() => setCards()}>
+      {((!state.cards && !state.contact) || state.profile) && (
+        <div
+          className="nav-item"
+          onClick={() => setCards()}
+        >
           <div className="nav-inactive">
             <div className="nav-div-left bump">
               <ContactsOutlined />
@@ -90,4 +98,3 @@ export function BottomNav({ state, actions }) {
     </BottomNavWrapper>
   );
 }
-

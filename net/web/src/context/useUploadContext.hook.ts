@@ -1,22 +1,21 @@
 import { useState, useRef } from 'react';
 import axios from 'axios';
-import Resizer from "react-image-file-resizer";
+import Resizer from 'react-image-file-resizer';
 
-const ENCRYPTED_BLOCK_SIZE = (256 * 1024);
-const IMAGE_SCALE_SIZE = (128 * 1024);
+const ENCRYPTED_BLOCK_SIZE = 256 * 1024;
+const IMAGE_SCALE_SIZE = 128 * 1024;
 const GIF_TYPE = 'image/gif';
 const WEBP_TYPE = 'image/webp';
 
 const defaultState = {
   progress: new Map(),
-}
+};
 export const defaultUploadContext = {
-  state:defaultState,
-  actions: {} as ReturnType<typeof useUploadContext>["actions"]
-}
+  state: defaultState,
+  actions: {} as ReturnType<typeof useUploadContext>['actions'],
+};
 
 export function useUploadContext() {
-
   const [state, setState] = useState(defaultState);
   const channels = useRef(new Map());
   const index = useRef(0);
@@ -31,7 +30,7 @@ export function useUploadContext() {
       topics.delete(topic);
     }
     updateProgress();
-  }
+  };
 
   const updateProgress = () => {
     let progress = new Map();
@@ -50,11 +49,14 @@ export function useUploadContext() {
         });
       });
       if (assets.length) {
-        progress.set(channel, assets.sort((a, b) => (a.upload < b.upload) ? 1 : -1));
+        progress.set(
+          channel,
+          assets.sort((a, b) => (a.upload < b.upload ? 1 : -1)),
+        );
       }
     });
     updateState({ progress });
-  }
+  };
 
   const abort = (channelId, topicId) => {
     const channel = channels.current.get(channelId);
@@ -66,16 +68,16 @@ export function useUploadContext() {
         updateProgress();
       }
     }
-  }
+  };
 
   const actions = {
     addTopic: (token, channelId, topicId, files, success, failure, contact?) => {
       if (contact) {
         const { server, cardId } = contact;
 
-        let host = "";
+        let host = '';
         if (server) {
-          host = `https://${server}`
+          host = `https://${server}`;
         }
 
         const controller = new AbortController();
@@ -90,7 +92,7 @@ export function useUploadContext() {
           success,
           failure,
           cancel: controller,
-        }
+        };
         index.current += 1;
         const key = `${cardId}:${channelId}`;
         if (!channels.current.has(key)) {
@@ -98,9 +100,10 @@ export function useUploadContext() {
         }
         const topics = channels.current.get(key);
         topics.set(topicId, entry);
-        upload(entry, updateProgress, () => { updateComplete(key, topicId) });
-      }
-      else {
+        upload(entry, updateProgress, () => {
+          updateComplete(key, topicId);
+        });
+      } else {
         const controller = new AbortController();
         const entry = {
           index: index.current,
@@ -113,7 +116,7 @@ export function useUploadContext() {
           success,
           failure,
           cancel: controller,
-        }
+        };
         index.current += 1;
         const key = `:${channelId}`;
         if (!channels.current.has(key)) {
@@ -121,14 +124,15 @@ export function useUploadContext() {
         }
         const topics = channels.current.get(key);
         topics.set(topicId, entry);
-        upload(entry, updateProgress, () => { updateComplete(key, topicId) } );
+        upload(entry, updateProgress, () => {
+          updateComplete(key, topicId);
+        });
       }
     },
     cancelTopic: (channelId, topicId, cardId) => {
       if (cardId) {
         abort(`${cardId}:${channelId}`, topicId);
-      }
-      else {
+      } else {
         abort(`:${channelId}`, topicId);
       }
     },
@@ -153,10 +157,10 @@ export function useUploadContext() {
       });
       channels.current.clear();
       updateProgress();
-    }
-  }
+    },
+  };
 
-  return { state, actions }
+  return { state, actions };
 }
 
 function getImageThumb(data) {
@@ -170,12 +174,21 @@ function getImageThumb(data) {
       reader.onerror = function (error) {
         reject();
       };
-    }
-    else {
-      Resizer.imageFileResizer(data, 192, 192, 'JPEG', 50, 0,
-      uri => {
-        resolve(uri);
-      }, 'base64', 128, 128 );
+    } else {
+      Resizer.imageFileResizer(
+        data,
+        192,
+        192,
+        'JPEG',
+        50,
+        0,
+        (uri) => {
+          resolve(uri);
+        },
+        'base64',
+        128,
+        128,
+      );
     }
   });
 }
@@ -183,30 +196,29 @@ function getImageThumb(data) {
 function getVideoThumb(data, pos) {
   return new Promise((resolve, reject) => {
     const url = URL.createObjectURL(data);
-    var video = document.createElement("video");
+    var video = document.createElement('video');
     var timeupdate = function (ev) {
-      video.removeEventListener("timeupdate", timeupdate);
+      video.removeEventListener('timeupdate', timeupdate);
       video.pause();
       setTimeout(() => {
-        var canvas = document.createElement("canvas");
+        var canvas = document.createElement('canvas');
         if (video.videoWidth > video.videoHeight) {
           canvas.width = 192;
-          canvas.height = Math.floor((192 * video.videoHeight / video.videoWidth));
+          canvas.height = Math.floor((192 * video.videoHeight) / video.videoWidth);
+        } else {
+          canvas.height = 192;
+          canvas.width = Math.floor((192 * video.videoWidth) / video.videoHeight);
         }
-        else {
-          canvas.height  = 192;
-          canvas.width = Math.floor((192 * video.videoWidth / video.videoHeight));
-        }
-        canvas.getContext("2d").drawImage(video, 0, 0, canvas.width, canvas.height);
-        var image = canvas.toDataURL("image/jpeg", 0.75);
+        canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+        var image = canvas.toDataURL('image/jpeg', 0.75);
         resolve(image);
         canvas.remove();
         video.remove();
         URL.revokeObjectURL(url);
       }, 1000);
     };
-    video.addEventListener("timeupdate", timeupdate);
-    video.preload = "metadata";
+    video.addEventListener('timeupdate', timeupdate);
+    video.preload = 'metadata';
     video.src = url;
     video.muted = true;
     video.playsInline = true;
@@ -216,14 +228,11 @@ function getVideoThumb(data, pos) {
 }
 
 async function getThumb(data, type, position) {
-  
   if (type === 'image') {
     return await getImageThumb(data);
-  }
-  else if (type === 'video') {
+  } else if (type === 'video') {
     return await getVideoThumb(data, position);
-  }
-  else {
+  } else {
     return null;
   }
 }
@@ -232,102 +241,103 @@ async function upload(entry, update, complete) {
   if (!entry.files?.length) {
     entry.success(entry.assets);
     complete();
-  }
-  else {
+  } else {
     const file = entry.files.shift();
     entry.active = {};
     try {
       if (file.encrypted) {
         const { size, getEncryptedBlock, position, label, extension, image, video, audio, binary } = file;
-        const { data, type } = image ? { data: image, type: 'image' } : video ? { data: video, type: 'video' } : audio ? { data: audio, type: 'audio' } : { data: binary, type: 'binary' }
+        const { data, type } = image
+          ? { data: image, type: 'image' }
+          : video
+            ? { data: video, type: 'video' }
+            : audio
+              ? { data: audio, type: 'audio' }
+              : { data: binary, type: 'binary' };
         const thumb = await getThumb(data, type, position);
         const parts = [];
         for (let pos = 0; pos < size; pos += ENCRYPTED_BLOCK_SIZE) {
           const len = pos + ENCRYPTED_BLOCK_SIZE > size ? size - pos : ENCRYPTED_BLOCK_SIZE;
           const { blockEncrypted, blockIv } = await getEncryptedBlock(pos, len);
           const part = await axios.post(`${entry.baseUrl}blocks${entry.urlParams}`, blockEncrypted, {
-            headers: {'Content-Type': 'text/plain'},
+            headers: { 'Content-Type': 'text/plain' },
             signal: entry.cancel.signal,
             onUploadProgress: (ev) => {
               const { loaded, total } = ev;
-              const partLoaded = pos + Math.floor(len * loaded / total);
-              entry.active = { loaded: partLoaded, total: size }
+              const partLoaded = pos + Math.floor((len * loaded) / total);
+              entry.active = { loaded: partLoaded, total: size };
               update();
-            }
+            },
           });
           parts.push({ blockIv, partId: part.data.assetId });
         }
         entry.assets.push({
-          encrypted: { type, thumb, label, extension, parts }
+          encrypted: { type, thumb, label, extension, parts },
         });
-      }
-      else if (file.image) {
+      } else if (file.image) {
         const formData = new FormData();
         formData.append('asset', file.image);
-        let transform = encodeURIComponent(JSON.stringify(["ithumb;photo", "ilg;photo"]));
+        let transform = encodeURIComponent(JSON.stringify(['ithumb;photo', 'ilg;photo']));
         let asset = await axios.post(`${entry.baseUrl}assets${entry.urlParams}&transforms=${transform}`, formData, {
           signal: entry.cancel.signal,
           onUploadProgress: (ev) => {
             const { loaded, total } = ev;
-            entry.active = { loaded, total }
+            entry.active = { loaded, total };
             update();
           },
         });
         entry.assets.push({
           image: {
-            thumb: asset.data.find(item => item.transform === 'ithumb;photo').assetId,
-            full: asset.data.find(item => item.transform === 'ilg;photo').assetId, 
-          }
+            thumb: asset.data.find((item) => item.transform === 'ithumb;photo').assetId,
+            full: asset.data.find((item) => item.transform === 'ilg;photo').assetId,
+          },
         });
-      }
-      else if (file.video) {
+      } else if (file.video) {
         const formData = new FormData();
         formData.append('asset', file.video);
         let thumb = 'vthumb;video;' + file.position;
-        let transform = encodeURIComponent(JSON.stringify(["vlq;video", "vhd;video", thumb]));
+        let transform = encodeURIComponent(JSON.stringify(['vlq;video', 'vhd;video', thumb]));
         let asset = await axios.post(`${entry.baseUrl}assets${entry.urlParams}&transforms=${transform}`, formData, {
           signal: entry.cancel.signal,
           onUploadProgress: (ev) => {
             const { loaded, total } = ev;
-            entry.active = { loaded, total }
+            entry.active = { loaded, total };
             update();
           },
         });
         entry.assets.push({
           video: {
-            thumb: asset.data.find(item => item.transform === thumb).assetId,
-            lq: asset.data.find(item => item.transform === 'vlq;video').assetId,
-            hd: asset.data.find(item => item.transform === 'vhd;video').assetId,
-          }
+            thumb: asset.data.find((item) => item.transform === thumb).assetId,
+            lq: asset.data.find((item) => item.transform === 'vlq;video').assetId,
+            hd: asset.data.find((item) => item.transform === 'vhd;video').assetId,
+          },
         });
-      }
-      else if (file.audio) {
+      } else if (file.audio) {
         const formData = new FormData();
         formData.append('asset', file.audio);
-        let transform = encodeURIComponent(JSON.stringify(["acopy;audio"]));
+        let transform = encodeURIComponent(JSON.stringify(['acopy;audio']));
         let asset = await axios.post(`${entry.baseUrl}assets${entry.urlParams}&transforms=${transform}`, formData, {
           signal: entry.cancel.signal,
           onUploadProgress: (ev) => {
             const { loaded, total } = ev;
-            entry.active = { loaded, total }
+            entry.active = { loaded, total };
             update();
           },
         });
         entry.assets.push({
           audio: {
             label: file.label,
-            full: asset.data.find(item => item.transform === 'acopy;audio').assetId,
-          }
+            full: asset.data.find((item) => item.transform === 'acopy;audio').assetId,
+          },
         });
-      }
-      else if (file.binary) {
+      } else if (file.binary) {
         const formData = new FormData();
         formData.append('asset', file.binary);
         let asset = await axios.post(`${entry.baseUrl}blocks${entry.urlParams}&body=multipart`, formData, {
           signal: entry.cancel.signal,
           onUploadProgress: (ev) => {
             const { loaded, total } = ev;
-            entry.active = { loaded, total }
+            entry.active = { loaded, total };
             update();
           },
         });
@@ -336,13 +346,12 @@ async function upload(entry, update, complete) {
             label: file.label,
             extension: file.extension,
             data: asset.data.assetId,
-          }
+          },
         });
       }
       entry.active = null;
       upload(entry, update, complete);
-    }
-    catch (err) {
+    } catch (err) {
       console.log(err);
       entry.failure();
       entry.error = true;
@@ -350,4 +359,3 @@ async function upload(entry, update, complete) {
     }
   }
 }
-

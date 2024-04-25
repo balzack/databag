@@ -1,7 +1,6 @@
-
 import 'antd/dist/reset.css';
 import { Colors } from 'constants/Colors';
-import { HashRouter as Router, Routes, Route } from "react-router-dom";
+import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 
 import { AppContextProvider } from 'context/AppContext';
 import { AccountContextProvider } from 'context/AccountContext';
@@ -23,7 +22,6 @@ import { Dashboard } from './dashboard/Dashboard';
 import { ConfigProvider } from 'antd';
 
 function App() {
-
   return (
     <UploadContextProvider>
       <ChannelContextProvider>
@@ -35,25 +33,46 @@ function App() {
                   <SettingsContextProvider>
                     <AppContextProvider>
                       <AppWrapper>
-                        <ConfigProvider theme={{ token: {
-                            colorPrimary: Colors.primary,
-                            colorLink: Colors.primary,
-                            colorLinkHover: Colors.background,
-                            colorBgBase: Colors.cancel,
-                          } }}>
+                        <ConfigProvider
+                          theme={{
+                            token: {
+                              colorPrimary: Colors.primary,
+                              colorLink: Colors.primary,
+                              colorLinkHover: Colors.background,
+                              colorBgBase: Colors.cancel,
+                            },
+                          }}
+                        >
                           <Router>
                             <Routes>
-                              <Route path="/" element={ <Root /> } />
-                              <Route path="/dashboard" element={ <Dashboard /> } />
-                              <Route path="/admin" element={ <Access mode="admin" /> } />
-                              <Route path="/login" element={ <Access mode="login" /> } />
-                              <Route path="/create" element={ <Access mode="create" /> } />
-                              <Route path="/session" element={
-                                <ConversationContextProvider>
-                                  <Session />
-                                </ConversationContextProvider>
-                              }>
-                              </Route>
+                              <Route
+                                path="/"
+                                element={<Root />}
+                              />
+                              <Route
+                                path="/dashboard"
+                                element={<Dashboard />}
+                              />
+                              <Route
+                                path="/admin"
+                                element={<Access mode="admin" />}
+                              />
+                              <Route
+                                path="/login"
+                                element={<Access mode="login" />}
+                              />
+                              <Route
+                                path="/create"
+                                element={<Access mode="create" />}
+                              />
+                              <Route
+                                path="/session"
+                                element={
+                                  <ConversationContextProvider>
+                                    <Session />
+                                  </ConversationContextProvider>
+                                }
+                              ></Route>
                             </Routes>
                           </Router>
                         </ConfigProvider>

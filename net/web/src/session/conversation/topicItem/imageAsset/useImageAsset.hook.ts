@@ -1,7 +1,6 @@
 import { useState, useRef } from 'react';
 
 export function useImageAsset(asset) {
-
   const revoke = useRef<any>();
   const index = useRef(0);
 
@@ -18,7 +17,7 @@ export function useImageAsset(asset) {
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
-  }
+  };
 
   const actions = {
     setPopout: async (width, height) => {
@@ -26,17 +25,18 @@ export function useImageAsset(asset) {
         try {
           const view = index.current;
           updateState({ popout: true, width, height, error: false, loading: true, url: null });
-          const blob = await asset.getDecryptedBlob(() => view !== index.current, (block, total) => updateState({ block, total }));
+          const blob = await asset.getDecryptedBlob(
+            () => view !== index.current,
+            (block, total) => updateState({ block, total }),
+          );
           const url = URL.createObjectURL(blob);
           updateState({ loading: false, url });
           revoke.current = url;
-        }
-        catch(err) {
+        } catch (err) {
           console.log(err);
           updateState({ error: true });
         }
-      }
-      else {
+      } else {
         updateState({ popout: true, width, height, loading: false, url: asset.full });
       }
     },

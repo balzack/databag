@@ -11,8 +11,8 @@ export const EditMembersWrapper = styled.div`
     min-height: 100px;
     max-height: 200px;
     overflow: auto;
-    border: 1px solid ${props => props.theme.sectionBorder};
-    background-color: ${props => props.theme.itemArea};
+    border: 1px solid ${(props) => props.theme.sectionBorder};
+    background-color: ${(props) => props.theme.itemArea};
   }
 
   .title {
@@ -29,4 +29,4 @@ export const EditMembersWrapper = styled.div`
     padding-top: 16px;
     width: 100%;
   }
-`
+`;

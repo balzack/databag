@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const AccessWrapper = styled.div`
   height: 100%;
-  color: ${props => props.theme.hintText};
+  color: ${(props) => props.theme.hintText};
 
   .footer {
     display: flex;
@@ -22,12 +22,12 @@ export const AccessWrapper = styled.div`
     width: 100%;
     height: 100%;
     padding: 8px;
-    
+
     .center {
       width: 100%;
       height: 100%;
       border-radius: 4px;
-      background: ${props => props.theme.frameArea};
+      background: ${(props) => props.theme.frameArea};
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -44,7 +44,7 @@ export const AccessWrapper = styled.div`
       width: 50%;
       height: 100%;
       padding: 32px;
-      background-color: ${props => props.theme.splashArea};
+      background-color: ${(props) => props.theme.splashArea};
 
       .splash {
         width: 100%;
@@ -56,7 +56,7 @@ export const AccessWrapper = styled.div`
     .right {
       width: 50%;
       height: 100%;
-      background: ${props => props.theme.frameArea};
+      background: ${(props) => props.theme.frameArea};
       display: flex;
       flex-direction: column;
       align-items: center;

@@ -5,10 +5,5 @@ export const SettingsContext = createContext(defaultSettingsContext);
 
 export function SettingsContextProvider({ children }) {
   const { state, actions } = useSettingsContext();
-  return (
-    <SettingsContext.Provider value={{ state, actions }}>
-      {children}
-    </SettingsContext.Provider>
-  );
+  return <SettingsContext.Provider value={{ state, actions }}>{children}</SettingsContext.Provider>;
 }
-

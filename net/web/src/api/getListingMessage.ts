@@ -1,7 +1,7 @@
 import { checkResponse, fetchWithTimeout } from './fetchUtil';
 
 export async function getListingMessage(server, guid) {
-  let host = "";
+  let host = '';
   if (server) {
     host = `https://${server}`;
   }
@@ -10,4 +10,3 @@ export async function getListingMessage(server, guid) {
   checkResponse(listing);
   return await listing.json();
 }
-

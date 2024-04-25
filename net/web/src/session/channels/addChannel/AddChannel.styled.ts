@@ -5,21 +5,21 @@ export const AddChannelWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: ${props => props.theme.modalArea};
-  color: ${props => props.theme.mainText};
+  background-color: ${(props) => props.theme.modalArea};
+  color: ${(props) => props.theme.mainText};
 
-  .subject { 
+  .subject {
     width: 100%;
 
     input {
       padding-left: 8px;
-      background-color: ${props => props.theme.inputArea};
-      border: 1px solid ${props => props.theme.sectionBorder};
-      color: ${props => props.theme.mainText};
+      background-color: ${(props) => props.theme.inputArea};
+      border: 1px solid ${(props) => props.theme.sectionBorder};
+      color: ${(props) => props.theme.mainText};
     }
 
     input::placeholder {
-      color: ${props => props.theme.placeholderText};
+      color: ${(props) => props.theme.placeholderText};
     }
   }
 
@@ -27,7 +27,7 @@ export const AddChannelWrapper = styled.div`
     margin-top: 16px;
     width: 100%;
     padding-left: 8px;
-    color: ${props => props.theme.labelText};
+    color: ${(props) => props.theme.labelText};
 
     .count {
       padding-left: 8px;
@@ -39,7 +39,7 @@ export const AddChannelWrapper = styled.div`
     min-height: 100px;
     max-height: 200px;
     overflow: auto;
-    border: 1px solid ${props => props.theme.sectionBorder};
+    border: 1px solid ${(props) => props.theme.sectionBorder};
   }
 `;
 
@@ -61,5 +61,4 @@ export const AddFooter = styled.div`
       padding-left: 8px;
     }
   }
-`
-
+`;

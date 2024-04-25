@@ -5,13 +5,13 @@ export const ProfileWrapper = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  color: ${props => props.theme.mainText};
+  color: ${(props) => props.theme.mainText};
 
   .middleHeader {
     margin-left: 16px;
     margin-right: 16px;
     height: 48px;
-    border-bottom: 1px solid ${props => props.theme.sectionBorder};
+    border-bottom: 1px solid ${(props) => props.theme.sectionBorder};
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -26,7 +26,7 @@ export const ProfileWrapper = styled.div`
 
     .close {
       font-size: 16px;
-      color: ${props => props.theme.hintText};
+      color: ${(props) => props.theme.hintText};
       cursor: pointer;
       padding-right: 16px;
     }
@@ -38,7 +38,7 @@ export const ProfileWrapper = styled.div`
     flex-direction: column;
     align-items: center;
     overflow: hidden;
-    background-color: ${props => props.theme.itemArea};
+    background-color: ${(props) => props.theme.itemArea};
 
     .title {
       font-size: 18px;
@@ -49,13 +49,13 @@ export const ProfileWrapper = styled.div`
 
   .section {
     width: 100%;
-    color: ${props => props.theme.hintText};
+    color: ${(props) => props.theme.hintText};
     padding-top: 24px;
     font-size: 12px;
     display: flex;
-    widtH: 75%;
+    width: 75%;
     justify-content: center;
-    border-bottom: 1px solid ${props => props.theme.sectionBorder};
+    border-bottom: 1px solid ${(props) => props.theme.sectionBorder};
   }
 
   .logo {
@@ -68,8 +68,8 @@ export const ProfileWrapper = styled.div`
     margin-right: 32px;
 
     &:hover .edit {
-      color: ${props => props.theme.linkText};
-      background-color: ${props => props.theme.iconArea};
+      color: ${(props) => props.theme.linkText};
+      background-color: ${(props) => props.theme.iconArea};
     }
 
     .edit {
@@ -83,8 +83,8 @@ export const ProfileWrapper = styled.div`
       height: 24px;
       bottom: 0;
       right: 0;
-      color: ${props => props.theme.hintText};
-      background-color: ${props => props.theme.disabledArea};
+      color: ${(props) => props.theme.hintText};
+      background-color: ${(props) => props.theme.disabledArea};
     }
   }
 
@@ -108,7 +108,7 @@ export const ProfileWrapper = styled.div`
     align-items: center;
     border-radius: 4px;
     padding: 8px;
-    background-color: ${props => props.theme.itemArea};
+    background-color: ${(props) => props.theme.itemArea};
 
     .details {
       align-items: center;
@@ -118,11 +118,11 @@ export const ProfileWrapper = styled.div`
   .rightAccess {
     display: flex;
     flex-direction: column;
-    flex-grow: 1; 
+    flex-grow: 1;
 
     .contentFill {
       flex-grow: 1;
-      background-color: ${props => props.theme.itemArea};
+      background-color: ${(props) => props.theme.itemArea};
     }
   }
 
@@ -134,7 +134,7 @@ export const ProfileWrapper = styled.div`
 
     .notset {
       font-style: italic;
-      color: ${props => props.theme.hintText};
+      color: ${(props) => props.theme.hintText};
     }
 
     .name {
@@ -144,13 +144,13 @@ export const ProfileWrapper = styled.div`
       cursor: pointer;
 
       &:hover .icon {
-        color: ${props => props.theme.linkText};
-      }  
+        color: ${(props) => props.theme.linkText};
+      }
 
       .icon {
         padding-left: 4px;
         padding-right: 4px;
-        color: ${props => props.theme.hintText};
+        color: ${(props) => props.theme.hintText};
       }
 
       .data {
@@ -166,7 +166,7 @@ export const ProfileWrapper = styled.div`
       align-items: flex-start;
       padding-bottom: 8px;
       padding-top: 8px;
-  
+
       .data {
         padding-left: 8px;
       }
@@ -183,7 +183,7 @@ export const ProfileWrapper = styled.div`
         padding-left: 8px;
         margin-top: -4px;
       }
-    } 
+    }
   }
 
   .account {
@@ -200,7 +200,7 @@ export const ProfileWrapper = styled.div`
     padding: 8px;
     width: 75%;
   }
-`
+`;
 
 export const ProfileDetailsWrapper = styled.div`
   display: flex;
@@ -216,30 +216,30 @@ export const ProfileDetailsWrapper = styled.div`
 
   .info {
     width: 100%;
-    background-color: ${props => props.theme.inputArea};
-    color: ${props => props.theme.mainText};
+    background-color: ${(props) => props.theme.inputArea};
+    color: ${(props) => props.theme.mainText};
     border-radius: 8px;
 
     textarea {
       padding-left: 8px;
-      background-color: ${props => props.theme.inputArea};
-      border: 1px solid ${props => props.theme.sectionBorder};
-      color: ${props => props.theme.mainText};
+      background-color: ${(props) => props.theme.inputArea};
+      border: 1px solid ${(props) => props.theme.sectionBorder};
+      color: ${(props) => props.theme.mainText};
     }
 
     textarea::placeholder {
-      color: ${props => props.theme.placeholderText};
+      color: ${(props) => props.theme.placeholderText};
     }
 
     input {
       padding-left: 8px;
-      background-color: ${props => props.theme.inputArea};
-      border: 1px solid ${props => props.theme.sectionBorder};
-      color: ${props => props.theme.mainText};
+      background-color: ${(props) => props.theme.inputArea};
+      border: 1px solid ${(props) => props.theme.sectionBorder};
+      color: ${(props) => props.theme.mainText};
     }
 
     input::placeholder {
-      color: ${props => props.theme.placeholderText};
+      color: ${(props) => props.theme.placeholderText};
     }
   }
 
@@ -281,4 +281,3 @@ export const ProfileImageWrapper = styled.div`
     }
   }
 `;
-

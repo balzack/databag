@@ -1,21 +1,20 @@
 import { useEffect, useState } from 'react';
 
-export const defaultStoreContext =  {
+export const defaultStoreContext = {
   state: {} as Record<string, any>,
   actions: {
-      clear: () => {},
-      setValue: (key: any, value: any) => {},
-      getValue: (key: any) => undefined as any,
-  }
-}
+    clear: () => {},
+    setValue: (key: any, value: any) => {},
+    getValue: (key: any) => undefined as any,
+  },
+};
 export function useStoreContext() {
-
   const [state, setState] = useState({});
 
   const resetState = () => {
     setState((s) => {
       localStorage.setItem('store', JSON.stringify({}));
-      return {}
+      return {};
     });
   };
 
@@ -43,10 +42,8 @@ export function useStoreContext() {
     },
     getValue: (key) => {
       return state[key];
-    }
-  }
+    },
+  };
 
-  return { state, actions }
+  return { state, actions };
 }
-
-

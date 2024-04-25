@@ -7,32 +7,37 @@ import light from 'images/lightsess.png';
 import dark from 'images/darksess.png';
 
 export function Welcome() {
-
   const { state } = useWelcome();
 
   return (
     <WelcomeWrapper>
       <div className="title">
         <div className="header">Databag</div>
-        <div>{ state.strings.communication }</div>
+        <div>{state.strings.communication}</div>
       </div>
-      { state.scheme === 'light' && (
-        <img className="session" src={light} alt="Session Background" />
+      {state.scheme === 'light' && (
+        <img
+          className="session"
+          src={light}
+          alt="Session Background"
+        />
       )}
-      { state.scheme === 'dark' && (
-        <img className="session" src={dark} alt="Session Background" />
+      {state.scheme === 'dark' && (
+        <img
+          className="session"
+          src={dark}
+          alt="Session Background"
+        />
       )}
       <div className="message">
         <Space>
-          <div>{ state.strings.setupProfile }</div>
+          <div>{state.strings.setupProfile}</div>
           <RightOutlined />
-          <div>{ state.strings.connectPeople }</div>
+          <div>{state.strings.connectPeople}</div>
           <RightOutlined />
-          <div>{ state.strings.startConversation }</div>
+          <div>{state.strings.startConversation}</div>
         </Space>
       </div>
     </WelcomeWrapper>
   );
 }
-
-

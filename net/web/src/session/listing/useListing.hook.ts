@@ -5,7 +5,6 @@ import { getListing } from 'api/getListing';
 import { getListingImageUrl } from 'api/getListingImageUrl';
 
 export function useListing() {
-
   const [state, setState] = useState({
     contacts: [],
     username: null,
@@ -23,7 +22,7 @@ export function useListing() {
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
-  }
+  };
 
   useEffect(() => {
     updateState({ contacts: [] });
@@ -46,10 +45,10 @@ export function useListing() {
       updateState({ busy: true });
       try {
         const listing = await getListing(state.node, state.username);
-        const filtered = listing.filter(item => {
+        const filtered = listing.filter((item) => {
           return item.guid !== profile.state.identity.guid;
         });
-        const contacts = filtered.map(item => {
+        const contacts = filtered.map((item) => {
           return {
             guid: item.guid,
             logo: item.imageSet ? getListingImageUrl(state.node, item.guid) : null,
@@ -65,11 +64,10 @@ export function useListing() {
           return 1;
         });
         updateState({ busy: false, contacts: sorted });
-      }
-      catch (err) {
+      } catch (err) {
         console.log(err);
         updateState({ busy: false });
-        throw new Error("failed to list contacts");
+        throw new Error('failed to list contacts');
       }
     },
   };

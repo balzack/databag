@@ -6,10 +6,15 @@ import { AccountContext } from 'context/AccountContext';
 import { SettingsContext } from 'context/SettingsContext';
 import { ProfileContext } from 'context/ProfileContext';
 import { getCardByGuid } from 'context/cardUtil';
-import { isUnsealed, getChannelSeals, getContentKey, decryptChannelSubject, decryptTopicSubject } from 'context/sealUtil';
+import {
+  isUnsealed,
+  getChannelSeals,
+  getContentKey,
+  decryptChannelSubject,
+  decryptTopicSubject,
+} from 'context/sealUtil';
 
 export function useChannels() {
-
   const [filter, setFilter] = useState();
 
   const [state, setState] = useState({
@@ -17,7 +22,7 @@ export function useChannels() {
     channels: [],
     showAdd: false,
     allowAdd: false,
-    strings: {} as Record<string,string>,
+    strings: {} as Record<string, string>,
     menuStyle: {},
   });
 
@@ -32,10 +37,9 @@ export function useChannels() {
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
-  }
+  };
 
   const syncChannelDetail = (item, cardValue, channelValue) => {
-
     // extract member info
     let memberCount = 0;
     let names = [];
@@ -49,8 +53,7 @@ export function useChannels() {
       if (profile?.imageSet) {
         img = null;
         logo = card.actions.getCardImageUrl(cardValue.id);
-      }
-      else {
+      } else {
         img = 'avatar';
         logo = null;
       }
@@ -66,8 +69,7 @@ export function useChannels() {
         if (profile?.imageSet) {
           img = null;
           logo = card.actions.getCardImageUrl(contact.id);
-        }
-        else {
+        } else {
           img = 'avatar';
           logo = null;
         }
@@ -79,13 +81,11 @@ export function useChannels() {
     if (memberCount === 0) {
       item.img = 'solution';
       item.label = state.strings.notes;
-    }
-    else if (memberCount === 1) {
+    } else if (memberCount === 1) {
       item.logo = logo;
       item.img = img;
       item.label = names.join(',');
-    }
-    else {
+    } else {
       item.img = 'appstore';
       item.label = names.join(',');
     }
@@ -107,26 +107,22 @@ export function useChannels() {
             }
             const unsealed = decryptChannelSubject(detail.data, item.contentKey);
             item.title = unsealed?.subject;
-          }
-          else {
+          } else {
             item.unlocked = false;
             item.contentKey = null;
             item.title = null;
           }
-        }
-        catch(err) {
+        } catch (err) {
           console.log(err);
           item.unlocked = false;
         }
-      }
-      else if (detail?.dataType === 'superbasic') {
+      } else if (detail?.dataType === 'superbasic') {
         item.locked = false;
         item.unlocked = true;
         try {
           const data = JSON.parse(detail.data);
           item.title = data.subject;
-        }
-        catch(err) {
+        } catch (err) {
           console.log(err);
           item.title = null;
         }
@@ -137,15 +133,12 @@ export function useChannels() {
 
     if (item.title == null || item.title === '' || typeof item.title !== 'string') {
       item.subject = item.label;
-    }
-    else {
+    } else {
       item.subject = item.title;
     }
-  }
-
+  };
 
   const syncChannelSummary = (item, channelValue) => {
-
     const sealKey = account.state.sealKey;
     const topicRevision = channelValue?.data?.topicRevision;
     if (item.topicRevision !== topicRevision || item.sealKey !== sealKey) {
@@ -155,22 +148,18 @@ export function useChannels() {
         try {
           const data = JSON.parse(topic.data);
           item.message = data.text;
-        }
-        catch (err) {
+        } catch (err) {
           console.log(err);
         }
-      }
-      else if (topic?.dataType === 'sealedtopic') {
+      } else if (topic?.dataType === 'sealedtopic') {
         try {
           if (item.contentKey) {
             const unsealed = decryptTopicSubject(topic.data, item.contentKey);
             item.message = unsealed?.message?.text;
-          }
-          else {
+          } else {
             item.message = null;
           }
-        }
-        catch(err) {
+        } catch (err) {
           console.log(err);
           item.message = null;
         }
@@ -200,8 +189,7 @@ export function useChannels() {
         const topicRevision = channelValue.data?.topicRevision;
         if (login && item.updated && item.updated > login && topicRevision !== revision) {
           item.updatedFlag = true;
-        }
-        else {
+        } else {
           item.updatedFlag = false;
         }
         conversations.set(key, item);
@@ -220,8 +208,7 @@ export function useChannels() {
       const topicRevision = channelValue.data?.topicRevision;
       if (login && item.updated && item.updated > login && topicRevision !== revision) {
         item.updatedFlag = true;
-      }
-      else {
+      } else {
         item.updatedFlag = false;
       }
       conversations.set(key, item);
@@ -246,12 +233,10 @@ export function useChannels() {
         const subject = item.subject?.toUpperCase();
         if (subject) {
           return subject.includes(filter);
-        }
-        else {
+        } else {
           return false;
         }
-      }
-      else {
+      } else {
         return true;
       }
     });

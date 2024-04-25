@@ -5,13 +5,13 @@ export const ListingItemWrapper = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
-  border-bottom: 1px solid ${params => params.theme.itemBorder};
-  color: ${params => params.theme.mainText};
+  border-bottom: 1px solid ${(params) => params.theme.itemBorder};
+  color: ${(params) => params.theme.mainText};
   padding-left: 16px;
   padding-right: 16px;
 
   &:hover {
-    background-color: ${params => params.theme.hoverArea};
+    background-color: ${(params) => params.theme.hoverArea};
     cursor: pointer;
   }
 
@@ -37,5 +37,4 @@ export const ListingItemWrapper = styled.div`
       font-size: 12px;
     }
   }
-`
-
+`;

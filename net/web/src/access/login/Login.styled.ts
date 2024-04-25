@@ -8,18 +8,18 @@ export const LoginWrapper = styled.div`
   flex-direction: column;
 
   .disabled {
-    background-color: ${props => props.theme.disabledArea};
+    background-color: ${(props) => props.theme.disabledArea};
 
     button {
-      color: ${props => props.theme.idleText};
+      color: ${(props) => props.theme.idleText};
     }
   }
 
   .enabled {
-    background-color: ${props => props.theme.enabledArea};
+    background-color: ${(props) => props.theme.enabledArea};
 
     button {
-      color: ${props => props.theme.activeText};
+      color: ${(props) => props.theme.activeText};
     }
   }
 
@@ -29,10 +29,10 @@ export const LoginWrapper = styled.div`
     align-items: flex-start;
     justify-content: center;
     flex: 1;
-    color: ${props => props.theme.hintText};
+    color: ${(props) => props.theme.hintText};
 
     .settings {
-      color: ${props => props.theme.hintText};
+      color: ${(props) => props.theme.hintText};
       position: absolute;
       top: 0px;
       right: 0px;
@@ -63,7 +63,7 @@ export const LoginWrapper = styled.div`
 
   .form-form {
     flex: 2;
-  
+
     .form-button {
       display: flex;
       align-items: center;
@@ -79,5 +79,3 @@ export const LoginWrapper = styled.div`
     background-color: #444444;
   }
 `;
-
-

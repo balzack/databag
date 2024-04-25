@@ -7,22 +7,25 @@ export function createWebsocket(url) {
 }
 
 export function checkResponse(response) {
-  if(response.status >= 400 && response.status < 600) {
-    throw new Error(response.url + " failed");
+  if (response.status >= 400 && response.status < 600) {
+    throw new Error(response.url + ' failed');
   }
 }
 
-export async function fetchWithTimeout(url, options):Promise<Response> {
+export async function fetchWithTimeout(url, options): Promise<Response> {
   return Promise.race([
-    fetch(url, options).catch(err => { throw new Error(url + ' failed'); }),
-    new Promise<Response>((_, reject) => setTimeout(() => reject(new Error(url + ' timeout')), TIMEOUT))
+    fetch(url, options).catch((err) => {
+      throw new Error(url + ' failed');
+    }),
+    new Promise<Response>((_, reject) => setTimeout(() => reject(new Error(url + ' timeout')), TIMEOUT)),
   ]);
 }
 
-export async function fetchWithCustomTimeout(url, options, timeout):Promise<Response> {
+export async function fetchWithCustomTimeout(url, options, timeout): Promise<Response> {
   return Promise.race([
-    fetch(url, options).catch(err => { throw new Error(url + ' failed'); }),
-    new Promise<Response>((_, reject) => setTimeout(() => reject(new Error(url + ' timeout')), timeout))
+    fetch(url, options).catch((err) => {
+      throw new Error(url + ' failed');
+    }),
+    new Promise<Response>((_, reject) => setTimeout(() => reject(new Error(url + ' timeout')), timeout)),
   ]);
 }
-

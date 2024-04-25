@@ -24,14 +24,14 @@ import { addCard } from 'api/addCard';
 import { removeCard } from 'api/removeCard';
 import { UploadContext } from 'context/UploadContext';
 
-const defaultState =  {
+const defaultState = {
   offsync: false,
   cards: new Map(),
-}
+};
 export const defaultCardContext = {
- state:defaultState,
-  actions: {} as  ReturnType<typeof useCardContext>["actions"],
-}
+  state: defaultState,
+  actions: {} as ReturnType<typeof useCardContext>['actions'],
+};
 
 export function useCardContext() {
   const [state, setState] = useState(defaultState);
@@ -44,15 +44,14 @@ export function useCardContext() {
   const force = useRef(false);
 
   const updateState = (value) => {
-    setState((s) => ({ ...s, ...value }))
-  }
+    setState((s) => ({ ...s, ...value }));
+  };
 
   const resync = async () => {
     try {
       force.current = true;
       await sync();
-    }
-    catch (err) {
+    } catch (err) {
       console.log(err);
     }
   };
@@ -72,8 +71,7 @@ export function useCardContext() {
         card.offsync = false;
         cards.current.set(cardId, card);
         updateState({ cards: cards.current });
-      }
-      catch(err) {
+      } catch (err) {
         console.log(err);
         success = false;
       }
@@ -81,7 +79,7 @@ export function useCardContext() {
       await sync();
     }
     return success;
-  }
+  };
 
   const sync = async () => {
     if (!syncing.current && (setRevision.current !== curRevision.current || force.current)) {
@@ -96,14 +94,13 @@ export function useCardContext() {
           if (card.data) {
             let cur = cards.current.get(card.id);
             if (cur == null) {
-              cur = { id: card.id, data: { articles: new Map() }, offsync: false, channels: new Map() }
+              cur = { id: card.id, data: { articles: new Map() }, offsync: false, channels: new Map() };
             }
             if (cur.revision !== card.revision) {
               if (cur.data.detailRevision !== card.data.detailRevision) {
                 if (card.data.cardDetail != null) {
                   cur.data.cardDetail = card.data.cardDetail;
-                }
-                else {
+                } else {
                   cur.data.cardDetail = await getCardDetail(access.current, card.id);
                 }
                 cur.data.detailRevision = card.data.detailRevision;
@@ -111,8 +108,7 @@ export function useCardContext() {
               if (cur.data.profileRevision !== card.data.profileRevision) {
                 if (card.data.cardProfile != null) {
                   cur.data.cardProfile = card.data.cardProfile;
-                }
-                else {
+                } else {
                   cur.data.cardProfile = await getCardProfile(access.current, card.id);
                 }
                 cur.data.profileRevision = card.data.profileRevision;
@@ -125,8 +121,7 @@ export function useCardContext() {
                 cur.data.curNotifiedChannel = card.data.notifiedChannel;
                 try {
                   await syncCard(token, cur);
-                }
-                catch (err) {
+                } catch (err) {
                   console.log(err);
                   cur.offsync = true;
                 }
@@ -134,16 +129,14 @@ export function useCardContext() {
               cur.revision = card.revision;
               cards.current.set(card.id, cur);
             }
-          }
-          else {
+          } else {
             cards.current.delete(card.id);
           }
         }
 
         setRevision.current = revision;
         updateState({ offsync: false, cards: cards.current });
-      }
-      catch (err) {
+      } catch (err) {
         console.log(err);
         syncing.current = false;
         updateState({ offsync: true });
@@ -154,7 +147,7 @@ export function useCardContext() {
       await sync();
     }
   };
- 
+
   const syncCard = async (token, card) => {
     const { cardProfile, cardDetail } = card.data;
     // sync profile
@@ -168,19 +161,25 @@ export function useCardContext() {
     card.data.setNotifiedProfile = card.data.curNotifiedProfile;
 
     // sync channels & articles
-    if (card.data.setNotifiedArticle !== card.data.curNotifiedArticle || card.data.setNotifiedView !== card.data.curNotifiedView) {
+    if (
+      card.data.setNotifiedArticle !== card.data.curNotifiedArticle ||
+      card.data.setNotifiedView !== card.data.curNotifiedView
+    ) {
       await syncCardArticles(card);
     }
-    if (card.data.setNotifiedChannel !== card.data.curNotifiedChannel || card.data.setNotifiedView !== card.data.curNotifiedView) {
+    if (
+      card.data.setNotifiedChannel !== card.data.curNotifiedChannel ||
+      card.data.setNotifiedView !== card.data.curNotifiedView
+    ) {
       await syncCardChannels(card);
     }
     card.data.setNotifiedArticle = card.data.curNotifiedArticle;
     card.data.setNotifiedChannel = card.data.curNotifiedChannel;
     card.data.setNotifiedView = card.data.curNotifiedView;
     card.offsync = false;
-  }
+  };
 
-  const syncCardArticles = async (card) => {}
+  const syncCardArticles = async (card) => {};
 
   const syncCardChannels = async (card) => {
     const { cardProfile, cardDetail, setNotifiedView, setNotifiedChannel } = card.data;
@@ -190,8 +189,7 @@ export function useCardContext() {
     if (card.data.setNotifiedView !== card.data.curNotifiedView) {
       card.channels = new Map();
       delta = await getContactChannels(node, token);
-    }
-    else {
+    } else {
       delta = await getContactChannels(node, token, setNotifiedView, setNotifiedChannel);
     }
 
@@ -204,8 +202,7 @@ export function useCardContext() {
         if (cur.data.detailRevision !== channel.data.detailRevision) {
           if (channel.data.channelDetail != null) {
             cur.data.channelDetail = channel.data.channelDetail;
-          }
-          else { 
+          } else {
             cur.data.channelDetail = await getContactChannelDetail(node, token, channel.id);
           }
           cur.data.detailRevision = channel.data.detailRevision;
@@ -213,25 +210,23 @@ export function useCardContext() {
         if (cur.data.topicRevision !== channel.data.topicRevision) {
           if (channel.data.channelSummary != null) {
             cur.data.channelSummary = channel.data.channelSummary;
-          }
-          else {
+          } else {
             cur.data.channelSummary = await getContactChannelSummary(node, token, channel.id);
           }
           cur.data.topicRevision = channel.data.topicRevision;
         }
         cur.revision = channel.revision;
         card.channels.set(channel.id, cur);
-      }
-      else {  
+      } else {
         card.channels.delete(channel.id);
       }
     }
-  }
+  };
 
   const actions = {
     setToken: (token) => {
       if (access.current || syncing.current) {
-        throw new Error("invalid card session state");
+        throw new Error('invalid card session state');
       }
       access.current = token;
       cards.current = new Map();
@@ -256,8 +251,15 @@ export function useCardContext() {
       return await setCardConnecting(access.current, cardId);
     },
     setCardConnected: async (cardId, token, rev) => {
-      return await setCardConnected(access.current, cardId, token,
-          rev.viewRevision, rev.articleRevision, rev.channelRevision, rev.profileRevision);
+      return await setCardConnected(
+        access.current,
+        cardId,
+        token,
+        rev.viewRevision,
+        rev.articleRevision,
+        rev.channelRevision,
+        rev.profileRevision,
+      );
     },
     setCardConfirmed: async (cardId) => {
       return await setCardConfirmed(access.current, cardId);
@@ -278,7 +280,7 @@ export function useCardContext() {
       const card = cards.current.get(cardId);
       if (card) {
         const revision = card.data.profileRevision;
-        return getCardImageUrl(access.current, cardId, revision)
+        return getCardImageUrl(access.current, cardId, revision);
       }
     },
     removeChannel: async (cardId, channelId) => {
@@ -294,19 +296,25 @@ export function useCardContext() {
       if (files?.length) {
         const topicId = await addContactChannelTopic(node, token, channelId, null, null, null);
         const contact = { server: node, cardId };
-        upload.actions.addTopic(token, channelId, topicId, files, async (assets) => {
-          const subject = message(assets);
-          await setContactChannelTopicSubject(node, token, channelId, topicId, type, subject);
-        }, async () => {
-          try {
-            await removeContactChannelTopic(node, token, channelId, topicId);
-          }
-          catch(err) {
-            console.log(err);
-          }
-        }, contact);
-      }
-      else {
+        upload.actions.addTopic(
+          token,
+          channelId,
+          topicId,
+          files,
+          async (assets) => {
+            const subject = message(assets);
+            await setContactChannelTopicSubject(node, token, channelId, topicId, type, subject);
+          },
+          async () => {
+            try {
+              await removeContactChannelTopic(node, token, channelId, topicId);
+            } catch (err) {
+              console.log(err);
+            }
+          },
+          contact,
+        );
+      } else {
         const subject = message([]);
         await addContactChannelTopic(node, token, channelId, type, subject, files);
       }
@@ -370,9 +378,7 @@ export function useCardContext() {
     resyncCard: async (cardId) => {
       return await resyncCard(cardId);
     },
-  }
+  };
 
-  return { state, actions }
+  return { state, actions };
 }
-
-

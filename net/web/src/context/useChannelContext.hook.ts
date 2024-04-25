@@ -18,13 +18,11 @@ import { UploadContext } from 'context/UploadContext';
 const defaultState = {
   offsync: false,
   channels: new Map(),
-}
+};
 export const defaultChannelContext = {
-
-state: defaultState,
-actions: {} as ReturnType<typeof useChannelContext>["actions"]
-
-}
+  state: defaultState,
+  actions: {} as ReturnType<typeof useChannelContext>['actions'],
+};
 
 export function useChannelContext() {
   const [state, setState] = useState(defaultState);
@@ -37,15 +35,14 @@ export function useChannelContext() {
   const force = useRef(false);
 
   const updateState = (value) => {
-    setState((s) => ({ ...s, ...value }))
-  }
+    setState((s) => ({ ...s, ...value }));
+  };
 
   const resync = async () => {
     try {
       force.current = true;
       await sync();
-    }
-    catch (err) {
+    } catch (err) {
       console.log(err);
     }
   };
@@ -63,14 +60,13 @@ export function useChannelContext() {
           if (channel.data) {
             let cur = channels.current.get(channel.id);
             if (cur == null) {
-              cur = { id: channel.id, data: { } }
+              cur = { id: channel.id, data: {} };
             }
             if (cur.revision !== channel.revision) {
               if (cur.data.detailRevision !== channel.data.detailRevision) {
                 if (channel.data.channelDetail != null) {
                   cur.data.channelDetail = channel.data.channelDetail;
-                }
-                else {
+                } else {
                   let detail = await getChannelDetail(token, channel.id);
                   cur.data.channelDetail = detail;
                 }
@@ -79,8 +75,7 @@ export function useChannelContext() {
               if (cur.data.topicRevision !== channel.data.topicRevision) {
                 if (channel.data.channelSummary != null) {
                   cur.data.channelSummary = channel.data.channelSummary;
-                }
-                else {
+                } else {
                   let summary = await getChannelSummary(token, channel.id);
                   cur.data.channelSummary = summary;
                 }
@@ -89,15 +84,13 @@ export function useChannelContext() {
               cur.revision = channel.revision;
               channels.current.set(channel.id, cur);
             }
-          }
-          else {
+          } else {
             channels.current.delete(channel.id);
           }
         }
         setRevision.current = revision;
         updateState({ offsync: false, channels: channels.current });
-      }
-      catch(err) {
+      } catch (err) {
         console.log(err);
         syncing.current = false;
         updateState({ offsync: true });
@@ -107,12 +100,12 @@ export function useChannelContext() {
       syncing.current = false;
       await sync();
     }
-  }
+  };
 
   const actions = {
     setToken: (token) => {
       if (access.current || syncing.current) {
-        throw new Error("invalid channel session state");
+        throw new Error('invalid channel session state');
       }
       access.current = token;
       channels.current = new Map();
@@ -145,19 +138,24 @@ export function useChannelContext() {
     addTopic: async (channelId, type, message, files) => {
       if (files?.length) {
         const topicId = await addChannelTopic(access.current, channelId, null, null, null);
-        upload.actions.addTopic(access.current, channelId, topicId, files, async (assets) => {
-          const subject = message(assets);
-          await setChannelTopicSubject(access.current, channelId, topicId, type, subject);
-        }, async () => {
-          try {
-            await removeChannelTopic(access.current, channelId, topicId);
-          }
-          catch(err) {
-            console.log(err);
-          }
-        });
-      }
-      else {
+        upload.actions.addTopic(
+          access.current,
+          channelId,
+          topicId,
+          files,
+          async (assets) => {
+            const subject = message(assets);
+            await setChannelTopicSubject(access.current, channelId, topicId, type, subject);
+          },
+          async () => {
+            try {
+              await removeChannelTopic(access.current, channelId, topicId);
+            } catch (err) {
+              console.log(err);
+            }
+          },
+        );
+      } else {
         const subject = message([]);
         await addChannelTopic(access.current, channelId, type, subject, undefined);
       }
@@ -185,7 +183,5 @@ export function useChannelContext() {
     },
   };
 
-  return { state, actions }
+  return { state, actions };
 }
-
-

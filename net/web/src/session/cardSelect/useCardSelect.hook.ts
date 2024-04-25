@@ -2,7 +2,6 @@ import { useContext, useState, useEffect } from 'react';
 import { CardContext } from 'context/CardContext';
 
 export function useCardSelect(filter) {
-
   const [state, setState] = useState({
     cards: [],
   });
@@ -11,7 +10,7 @@ export function useCardSelect(filter) {
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
-  }
+  };
 
   useEffect(() => {
     let contacts = Array.from(card.state.cards.values());
@@ -19,9 +18,7 @@ export function useCardSelect(filter) {
     updateState({ cards: filtered });
   }, [card, filter]);
 
-  const actions = {
-  };
+  const actions = {};
 
   return { state, actions };
 }
-

@@ -5,4 +5,3 @@ export async function getNodeAccounts(token) {
   checkResponse(accounts);
   return await accounts.json();
 }
-

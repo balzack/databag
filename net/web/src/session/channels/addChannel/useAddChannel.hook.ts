@@ -6,7 +6,6 @@ import { AccountContext } from 'context/AccountContext';
 import { encryptChannelSubject } from 'context/sealUtil';
 
 export function useAddChannel() {
-
   const [state, setState] = useState({
     sealable: false,
     busy: false,
@@ -15,7 +14,7 @@ export function useAddChannel() {
     subject: null,
     members: new Set(),
     seal: false,
-    strings: {} as Record<string,string>,
+    strings: {} as Record<string, string>,
   });
 
   const card = useContext(CardContext);
@@ -25,15 +24,14 @@ export function useAddChannel() {
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
-  }
+  };
 
   useEffect(() => {
     const { seal, sealKey } = account.state;
     const allowUnsealed = account.state.status?.allowUnsealed;
     if (seal?.publicKey && sealKey?.public && sealKey?.private && seal.publicKey === sealKey.public) {
       updateState({ seal: false, sealable: true, allowUnsealed });
-    }
-    else {
+    } else {
       updateState({ seal: false, sealable: false, allowUnsealed });
     }
   }, [account.state]);
@@ -51,27 +49,24 @@ export function useAddChannel() {
           updateState({ busy: true });
           const cards = Array.from(state.members.values());
           if (state.seal || !state.allowUnsealed) {
-            const keys = [ account.state.sealKey.public ];
-            cards.forEach(id => {
+            const keys = [account.state.sealKey.public];
+            cards.forEach((id) => {
               keys.push(card.state.cards.get(id).data.cardProfile.seal);
             });
             const sealed = encryptChannelSubject(state.subject, keys);
             conversation = await channel.actions.addChannel('sealed', sealed, cards);
-          }
-          else {
+          } else {
             const subject = { subject: state.subject };
             conversation = await channel.actions.addChannel('superbasic', subject, cards);
           }
           updateState({ busy: false });
-        }
-        catch(err) {
+        } catch (err) {
           console.log(err);
           updateState({ busy: false });
-          throw new Error("failed to create new channel");
+          throw new Error('failed to create new channel');
         }
-      }
-      else {
-        throw new Error("operation in progress");
+      } else {
+        throw new Error('operation in progress');
       }
       return conversation.id;
     },
@@ -79,14 +74,13 @@ export function useAddChannel() {
       if (seal) {
         const cards = Array.from(state.members.values());
         const members = new Set(state.members);
-        cards.forEach(id => {
-          if (!(card.state.cards.get(id)?.data?.cardProfile?.seal)) {
+        cards.forEach((id) => {
+          if (!card.state.cards.get(id)?.data?.cardProfile?.seal) {
             members.delete(id);
           }
         });
         updateState({ seal: true, members });
-      }
-      else {
+      } else {
         updateState({ seal: false });
       }
     },
@@ -94,8 +88,7 @@ export function useAddChannel() {
       const members = new Set(state.members);
       if (members.has(string)) {
         members.delete(string);
-      }
-      else {
+      } else {
         members.add(string);
       }
       updateState({ members });
@@ -113,4 +106,3 @@ export function useAddChannel() {
 
   return { state, actions };
 }
-

@@ -5,18 +5,18 @@ export const ChannelItemWrapper = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
-  border-bottom: 1px solid ${props => props.theme.itemBorder};
-  color: ${props => props.theme.mainText};
+  border-bottom: 1px solid ${(props) => props.theme.itemBorder};
+  color: ${(props) => props.theme.mainText};
   line-height: 16px;
   cursor: pointer;
   overflow: hidden;
 
   &:hover {
-    background-color: ${props => props.theme.hoverArea};
+    background-color: ${(props) => props.theme.hoverArea};
   }
 
   .active {
-    background-color: ${props => props.theme.selectedArea};
+    background-color: ${(props) => props.theme.selectedArea};
     width: 100%;
     height: 100%;
     display: flex;
@@ -35,7 +35,7 @@ export const ChannelItemWrapper = styled.div`
     padding-left: 16px;
     padding-right: 16px;
 
-    .avatar{
+    .avatar {
       display: flex;
       align-items: center;
       justify-content: center;
@@ -48,7 +48,7 @@ export const ChannelItemWrapper = styled.div`
       display: flex;
       align-items: center;
       justify-content: center;
-      border: 1px solid ${props => props.theme.itemBorder};
+      border: 1px solid ${(props) => props.theme.itemBorder};
       width: 32px;
       height: 32px;
       border-radius: 4px;
@@ -74,17 +74,17 @@ export const ChannelItemWrapper = styled.div`
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-        color: ${props => props.theme.hintText};
+        color: ${(props) => props.theme.hintText};
       }
     }
   }
-`
+`;
 
 export const Markup = styled.div`
   position: absolute;
   right: 0;
   border-radius: 8px;
-  background-color: ${props => props.theme.noticeArea};
+  background-color: ${(props) => props.theme.noticeArea};
   width: 8px;
   height: 8px;
   margin-right: 16px;

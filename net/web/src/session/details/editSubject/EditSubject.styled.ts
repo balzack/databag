@@ -23,12 +23,12 @@ export const EditSubjectWrapper = styled.div`
 
   input {
     padding-left: 8px;
-    background-color: ${props => props.theme.inputArea};
-    border: 1px solid ${props => props.theme.sectionBorder};
-    color: ${props => props.theme.mainText};
+    background-color: ${(props) => props.theme.inputArea};
+    border: 1px solid ${(props) => props.theme.sectionBorder};
+    color: ${(props) => props.theme.mainText};
   }
 
   input::placeholder {
-    color: ${props => props.theme.placeholderText};
+    color: ${(props) => props.theme.placeholderText};
   }
-`
+`;

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import {render, act, screen, waitFor, fireEvent} from '@testing-library/react'
+import { render, act, screen, waitFor, fireEvent } from '@testing-library/react';
 import { ProfileContextProvider } from 'context/ProfileContext';
 import { SettingsContextProvider } from 'context/SettingsContext';
 import { useListing } from 'session/listing/useListing.hook';
@@ -13,13 +13,20 @@ function ListingView() {
 
   listing = actions;
   useEffect(() => {
-
     const rendered = [];
-    state.contacts.forEach(item => {
+    state.contacts.forEach((item) => {
       rendered.push(
-        <div key={item.guid} data-testid="contact">
-          <span key={item.guid} data-testid={'contact-' + item.guid}>{ item.name }</span>
-        </div>
+        <div
+          key={item.guid}
+          data-testid="contact"
+        >
+          <span
+            key={item.guid}
+            data-testid={'contact-' + item.guid}
+          >
+            {item.name}
+          </span>
+        </div>,
       );
     });
     setContacts(rendered);
@@ -28,8 +35,11 @@ function ListingView() {
 
   return (
     //@ts-ignore
-    <div data-testid="contacts" count={renderCount}>
-      { contacts }
+    <div
+      data-testid="contacts"
+      count={renderCount}
+    >
+      {contacts}
     </div>
   );
 }
@@ -51,9 +61,8 @@ beforeEach(() => {
   fetchListing = [];
 
   const mockFetch = jest.fn().mockImplementation((url, options) => {
-
     return Promise.resolve({
-      json: () => Promise.resolve(fetchListing)
+      json: () => Promise.resolve(fetchListing),
     });
   });
   //@ts-ignore
@@ -96,8 +105,4 @@ test('retrieve listing', async () => {
   await waitFor(async () => {
     expect(screen.getByTestId('contact-abc123').textContent).toBe('mr. tester');
   });
-
 });
-
-
-

@@ -40,5 +40,3 @@ export const AudioFileWrapper = styled.div`
     justify-content: center;
   }
 `;
-
-

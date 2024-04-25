@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import {render, act, screen, waitFor, fireEvent} from '@testing-library/react'
+import { render, act, screen, waitFor, fireEvent } from '@testing-library/react';
 import { AccountContextProvider, AccountContext } from 'context/AccountContext';
 import { StoreContextProvider } from 'context/StoreContext';
 import * as fetchUtil from 'api/fetchUtil';
@@ -16,10 +16,10 @@ function AccountView() {
 
   return (
     <div>
-      <span data-testid="count">{ renderCount }</span>
-      <span data-testid="seal">{ account.state.seal }</span>
-      <span data-testid="sealKey">{ account.state.sealKey }</span>
-      <span data-testid="searchable">{ account.state.status?.searchable.toString() }</span>
+      <span data-testid="count">{renderCount}</span>
+      <span data-testid="seal">{account.state.seal}</span>
+      <span data-testid="sealKey">{account.state.sealKey}</span>
+      <span data-testid="searchable">{account.state.status?.searchable.toString()}</span>
     </div>
   );
 }
@@ -31,7 +31,7 @@ function AccountTestApp() {
         <AccountView />
       </AccountContextProvider>
     </StoreContextProvider>
-  )
+  );
 }
 
 const realFetchWithTimeout = fetchUtil.fetchWithTimeout;
@@ -47,17 +47,15 @@ beforeEach(() => {
     if (url === '/account/seal?agent=abc123') {
       sealSet = true;
       return Promise.resolve({
-        json: () => Promise.resolve({})
+        json: () => Promise.resolve({}),
       });
-    }
-    else if (url === '/account/status?agent=abc123') {
+    } else if (url === '/account/status?agent=abc123') {
       return Promise.resolve({
-        json: () => Promise.resolve(fetchStatus)
+        json: () => Promise.resolve(fetchStatus),
       });
-    }
-    else {
+    } else {
       return Promise.resolve({
-        json: () => Promise.resolve({})
+        json: () => Promise.resolve({}),
       });
     }
   });
@@ -82,7 +80,7 @@ test('testing account sync', async () => {
   });
 
   fetchStatus = { disabled: false, storageUsed: 1, searchable: true, pushEnabled: false, sealable: true };
-  
+
   await act(async () => {
     accountContext.actions.setToken('abc123');
     await accountContext.actions.setRevision(1);
@@ -99,8 +97,15 @@ test('testing account sync', async () => {
     await accountContext.actions.setSeal('testeal', 'testsealkey');
   });
 
-  fetchStatus = { disabled: false, storageUsed: 1, searchable: true, pushEnabled: false, sealable: true, seal: 'testseal' };
- 
+  fetchStatus = {
+    disabled: false,
+    storageUsed: 1,
+    searchable: true,
+    pushEnabled: false,
+    sealable: true,
+    seal: 'testseal',
+  };
+
   await act(async () => {
     await accountContext.actions.setRevision(2);
   });
@@ -111,6 +116,3 @@ test('testing account sync', async () => {
     expect(screen.getByTestId('sealKey').textContent).toBe('testsealkey');
   });
 });
-
-
-

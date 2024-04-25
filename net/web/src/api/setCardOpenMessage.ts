@@ -1,7 +1,7 @@
 import { checkResponse, fetchWithTimeout } from './fetchUtil';
 
 export async function setCardOpenMessage(server, message) {
-  let host = "";
+  let host = '';
   if (server) {
     host = `https://${server}`;
   }
@@ -10,4 +10,3 @@ export async function setCardOpenMessage(server, message) {
   checkResponse(status);
   return await status.json();
 }
-

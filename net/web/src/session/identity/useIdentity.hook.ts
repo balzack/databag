@@ -4,14 +4,13 @@ import { AppContext } from 'context/AppContext';
 import { SettingsContext } from 'context/SettingsContext';
 
 export function useIdentity() {
-
   const [state, setState] = useState({
     url: null,
     name: null,
     handle: null,
     status: null,
     init: false,
-    strings: {}as Record<string,string>,
+    strings: {} as Record<string, string>,
     colors: {},
     menuStyle: {},
   });
@@ -22,7 +21,7 @@ export function useIdentity() {
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
-  }
+  };
 
   useEffect(() => {
     if (profile.state.identity?.guid) {
@@ -50,4 +49,3 @@ export function useIdentity() {
 
   return { state, actions };
 }
-

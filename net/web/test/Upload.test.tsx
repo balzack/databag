@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import {render, act, screen, waitFor, fireEvent} from '@testing-library/react'
+import { render, act, screen, waitFor, fireEvent } from '@testing-library/react';
 import { UploadContextProvider, UploadContext } from 'context/UploadContext';
 import axios from 'axios';
 
@@ -15,21 +15,20 @@ function UploadView() {
     setRenderCount(renderCount + 1);
 
     upload.state.progress.forEach((value, key) => {
-      value.forEach(topic => {
+      value.forEach((topic) => {
         if (topic.active?.total > total) {
           setTotal(topic.active?.total);
-        };
+        }
       });
       setChannel(key);
     });
-
   }, [upload.state]);
 
   return (
     <div>
-      <span data-testid="count">{ renderCount }</span>
-      <span data-testid="channel">{ channel }</span>
-      <span data-testid="total">{ total }</span>
+      <span data-testid="count">{renderCount}</span>
+      <span data-testid="channel">{channel}</span>
+      <span data-testid="total">{total}</span>
     </div>
   );
 }
@@ -39,7 +38,7 @@ function UploadTestApp() {
     <UploadContextProvider>
       <UploadView />
     </UploadContextProvider>
-  )
+  );
 }
 
 const realPost = axios.post;
@@ -50,7 +49,7 @@ beforeEach(() => {
 
   const mockPost = jest.fn().mockImplementation(async (url, data, options) => {
     for (let i = 0; i < 10; i++) {
-      await new Promise(r => setTimeout(r, 10));
+      await new Promise((r) => setTimeout(r, 10));
       options.onUploadProgress({ loaded: i * 11, total: 111 });
     }
 
@@ -71,11 +70,20 @@ test('uploading assets', async () => {
     expect(uploadContext).not.toBe(null);
   });
 
-  asset = [ { assetId: '3', transform: 'acopy;audio', status: 'pending' } ];
+  asset = [{ assetId: '3', transform: 'acopy;audio', status: 'pending' }];
 
   setComplete = false;
   await act(async () => {
-    uploadContext.actions.addTopic('asdf', '123', '1', [{audio: 'asdf'}], ()=>{setComplete=true}, ()=>{});
+    uploadContext.actions.addTopic(
+      'asdf',
+      '123',
+      '1',
+      [{ audio: 'asdf' }],
+      () => {
+        setComplete = true;
+      },
+      () => {},
+    );
   });
 
   await waitFor(async () => {
@@ -86,15 +94,21 @@ test('uploading assets', async () => {
 
   setComplete = false;
   await act(async () => {
-    uploadContext.actions.addTopic('asdf', '123', '1', [{audio: 'asdf'}], ()=>{setComplete=true}, ()=>{}, { server: 'test.org', token: '0011', cardId: '96' });
+    uploadContext.actions.addTopic(
+      'asdf',
+      '123',
+      '1',
+      [{ audio: 'asdf' }],
+      () => {
+        setComplete = true;
+      },
+      () => {},
+      { server: 'test.org', token: '0011', cardId: '96' },
+    );
   });
 
   await waitFor(async () => {
     expect(setComplete).toBe(true);
     expect(screen.getByTestId('channel').textContent).toBe('96:123');
   });
-
 });
-
-
-

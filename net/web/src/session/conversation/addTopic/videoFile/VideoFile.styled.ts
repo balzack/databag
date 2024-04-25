@@ -35,5 +35,3 @@ export const VideoFileWrapper = styled.div`
     }
   }
 `;
-
-

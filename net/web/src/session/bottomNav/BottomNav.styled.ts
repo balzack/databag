@@ -60,4 +60,3 @@ export const BottomNavWrapper = styled.div`
     }
   }
 `;
-

@@ -5,4 +5,3 @@ export async function getNodeStatus() {
   checkResponse(status);
   return await status.json();
 }
-

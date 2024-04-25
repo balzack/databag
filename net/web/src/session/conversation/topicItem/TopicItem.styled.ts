@@ -4,7 +4,7 @@ export const TopicItemWrapper = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  color: ${props => props.theme.mainText};
+  color: ${(props) => props.theme.mainText};
 
   .topic-header {
     display: flex;
@@ -13,7 +13,7 @@ export const TopicItemWrapper = styled.div`
     padding-left: 16px;
     margin-right: 16px;
     padding-top: 8px;
-    border-top: 1px solid ${props => props.theme.itemBorder};
+    border-top: 1px solid ${(props) => props.theme.itemBorder};
 
     &:hover .topic-options {
       visibility: visible;
@@ -29,7 +29,7 @@ export const TopicItemWrapper = styled.div`
         display: flex;
         flex-direction: row;
         border-radius: 4px;
-        background-color: ${props => props.theme.modalArea};
+        background-color: ${(props) => props.theme.modalArea};
         margin-top: 2px;
 
         .button {
@@ -40,11 +40,11 @@ export const TopicItemWrapper = styled.div`
         }
 
         .remove {
-          color: ${props => props.theme.alertText};
+          color: ${(props) => props.theme.alertText};
         }
 
         .edit {
-          color: ${props => props.theme.linkText};
+          color: ${(props) => props.theme.linkText};
         }
       }
     }
@@ -63,18 +63,18 @@ export const TopicItemWrapper = styled.div`
       .comments {
         padding-left: 8px;
         cursor: pointer;
-        color: ${props => props.theme.descriptionText};
+        color: ${(props) => props.theme.descriptionText};
       }
 
       .set {
         font-weight: bold;
-        color: ${props => props.theme.mainText};
+        color: ${(props) => props.theme.mainText};
         padding-right: 8px;
       }
       .unset {
         font-weight: bold;
         font-style: italic;
-        color: ${props => props.theme.descriptionText};
+        color: ${(props) => props.theme.descriptionText};
         padding-right: 8px;
       }
       .unknown {
@@ -87,7 +87,7 @@ export const TopicItemWrapper = styled.div`
 
   .sealed-message {
     font-style: italic;
-    color: ${props => props.theme.placeholderText};
+    color: ${(props) => props.theme.placeholderText};
     padding-left: 72px;
   }
 
@@ -97,8 +97,8 @@ export const TopicItemWrapper = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: ${props => props.theme.frameArea};
-    color: ${props => props.theme.placeholderText};
+    background-color: ${(props) => props.theme.frameArea};
+    color: ${(props) => props.theme.placeholderText};
     margin-left: 72px;
   }
 
@@ -118,15 +118,15 @@ export const TopicItemWrapper = styled.div`
     padding-left: 72px;
     white-space: pre-line;
     min-height: 4px;
-    color: ${props => props.theme.mainText};
+    color: ${(props) => props.theme.mainText};
   }
 
   .editing {
     display: flex;
     flex-direction: column;
     border-radius: 4px;
-    border: 1px solid ${props => props.theme.sectionBorder};
-    background-color: ${props => props.theme.inputArea};
+    border: 1px solid ${(props) => props.theme.sectionBorder};
+    background-color: ${(props) => props.theme.inputArea};
     margin-top: 8px;
     margin-bottom: 8px;
     margin-right: 16px;
@@ -134,12 +134,12 @@ export const TopicItemWrapper = styled.div`
 
     textarea {
       padding-left: 8px;
-      background-color: ${props => props.theme.inputArea};
-      color: ${props => props.theme.mainText};
+      background-color: ${(props) => props.theme.inputArea};
+      color: ${(props) => props.theme.mainText};
     }
 
     textarea::placeholder {
-      color: ${props => props.theme.placeholderText};
+      color: ${(props) => props.theme.placeholderText};
     }
 
     .controls {
@@ -151,5 +151,3 @@ export const TopicItemWrapper = styled.div`
     }
   }
 `;
-
-

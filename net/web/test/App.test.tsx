@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import {render, act, screen, waitFor, fireEvent} from '@testing-library/react'
+import { render, act, screen, waitFor, fireEvent } from '@testing-library/react';
 import * as fetchUtil from 'api/fetchUtil';
 
 import { AppContext, AppContextProvider } from 'context/AppContext';
@@ -16,7 +16,7 @@ import { ConversationContextProvider } from 'context/ConversationContext';
 let mockWebsocket;
 function MockWebsocket(url) {
   this.url = url;
-};
+}
 
 let appContext = null;
 function AppView() {
@@ -30,8 +30,8 @@ function AppView() {
 
   return (
     <div>
-      <span data-testid="count">{ renderCount }</span>
-      <span data-testid="status">{ app.state.status }</span>
+      <span data-testid="count">{renderCount}</span>
+      <span data-testid="status">{app.state.status}</span>
     </div>
   );
 }
@@ -64,7 +64,6 @@ const realCreateWebsocket = fetchUtil.createWebsocket;
 const realFetchWithTimeout = fetchUtil.fetchWithTimeout;
 const realFetchWithCustomTimeout = fetchUtil.fetchWithCustomTimeout;
 beforeEach(() => {
-
   const mockCreateWebsocket = jest.fn().mockImplementation((url) => {
     mockWebsocket = new MockWebsocket(url);
     return mockWebsocket;
@@ -74,12 +73,11 @@ beforeEach(() => {
     const params = url.split('/');
     if (params[1] === 'account' && options.method === 'POST') {
       return Promise.resolve({
-        json: () => Promise.resolve({ guid: '01ab', appToken: 'aacc', created: 2, pushSupported: false })
+        json: () => Promise.resolve({ guid: '01ab', appToken: 'aacc', created: 2, pushSupported: false }),
       });
-    }
-    else {
+    } else {
       return Promise.resolve({
-        json: () => Promise.resolve([])
+        json: () => Promise.resolve([]),
       });
     }
   });
@@ -127,14 +125,10 @@ test('testing app sync', async () => {
 
   await act(async () => {
     mockWebsocket.onclose('test close');
-    await new Promise(r => setTimeout(r, 1000));
+    await new Promise((r) => setTimeout(r, 1000));
   });
 
   await waitFor(async () => {
     expect(screen.getByTestId('status').textContent).toBe('connecting');
   });
-
 });
-
-
-

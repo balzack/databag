@@ -6,7 +6,6 @@ import { SettingsContext } from 'context/SettingsContext';
 import { AppContext } from 'context/AppContext';
 
 export function useAccountItem(item, remove) {
-  
   const [state, setState] = useState({
     statusBusy: false,
     removeBusy: false,
@@ -14,18 +13,17 @@ export function useAccountItem(item, remove) {
     showAccess: false,
     display: null,
     menuStyle: {},
-    strings: {} as Record<string,string>,
+    strings: {} as Record<string, string>,
   });
- 
+
   const app = useContext(AppContext);
-  const settings = useContext(SettingsContext); 
+  const settings = useContext(SettingsContext);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
-  }
+  };
 
   useEffect(() => {
-
     updateState({
       disabled: item?.disabled,
       activeClass: item?.disabled ? 'inactive' : 'active',
@@ -33,11 +31,13 @@ export function useAccountItem(item, remove) {
       name: item?.name,
       guid: item?.guid,
       handle: item?.handle,
-      storage: Math.floor(item?.storageUsed > 1073741824 ? item?.storageUsed / 1073741824 : item?.storageUsed / 1048576),
+      storage: Math.floor(
+        item?.storageUsed > 1073741824 ? item?.storageUsed / 1073741824 : item?.storageUsed / 1048576,
+      ),
       storageUnit: item?.storageUsed > 1073741824 ? state.strings.gb : state.strings.mb,
       imageUrl: item?.imageSet ? getAccountImageUrl(app.state.adminToken, item?.accountId) : null,
     });
-  }, [app.state.adminToken, item, state.strings]); 
+  }, [app.state.adminToken, item, state.strings]);
 
   useEffect(() => {
     const { display, menuStyle, strings } = settings.state;
@@ -51,8 +51,7 @@ export function useAccountItem(item, remove) {
         try {
           const access = await addAccountAccess(app.state.adminToken, item.accountId);
           updateState({ accessToken: access, showAccess: true, accessBusy: false });
-        }
-        catch (err) {
+        } catch (err) {
           console.log(err);
           updateState({ accessBusy: false });
           throw new Error('failed to generate token');
@@ -68,8 +67,7 @@ export function useAccountItem(item, remove) {
         try {
           await remove(state.accountId);
           updateState({ removeBusy: false });
-        }
-        catch(err) {
+        } catch (err) {
           console.log(err);
           updateState({ removeBusy: false });
           throw new Error('failed to remove account');
@@ -82,11 +80,10 @@ export function useAccountItem(item, remove) {
         try {
           await setAccountStatus(app.state.adminToken, item.accountId, disabled);
           updateState({ statusBusy: false, disabled, activeClass: disabled ? 'inactive' : 'active' });
-        }
-        catch(err) {
+        } catch (err) {
           console.log(err);
           updateState({ statusBusy: false });
-          throw new Error('failed to set account status'); 
+          throw new Error('failed to set account status');
         }
       }
     },

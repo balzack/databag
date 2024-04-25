@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import {render, act, screen, waitFor, fireEvent} from '@testing-library/react'
+import { render, act, screen, waitFor, fireEvent } from '@testing-library/react';
 import { AppContextProvider } from 'context/AppContext';
 import { AccountContextProvider } from 'context/AccountContext';
 import { ProfileContextProvider } from 'context/ProfileContext';
@@ -14,9 +14,15 @@ import * as fetchUtil from 'api/fetchUtil';
 
 let navPath;
 jest.mock('react-router-dom', () => ({
-   ...jest.requireActual('react-router-dom'),
-  useNavigate: () => { return (path) => { navPath = path } },
-  useLocation: () => { return 'path' },
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => {
+    return (path) => {
+      navPath = path;
+    };
+  },
+  useLocation: () => {
+    return 'path';
+  },
 }));
 
 let cardContext;
@@ -27,7 +33,7 @@ function SessionView() {
   const store = useContext(StoreContext);
   cardContext = card;
   storeContext = store;
-  return (<div data-testid="updated">{ state.cardUpdated.toString() }</div>);
+  return <div data-testid="updated">{state.cardUpdated.toString()}</div>;
 }
 
 function SessionTestApp() {
@@ -64,12 +70,11 @@ beforeEach(() => {
   const mockFetch = jest.fn().mockImplementation((url, options) => {
     if (url === '/contact/cards?agent=123') {
       return Promise.resolve({
-        json: () => Promise.resolve(fetchCards)
+        json: () => Promise.resolve(fetchCards),
       });
-    }
-    else {
+    } else {
       return Promise.resolve({
-        json: () => Promise.resolve([])
+        json: () => Promise.resolve([]),
       });
     }
   });
@@ -87,14 +92,15 @@ afterEach(() => {
 });
 
 test('card update indicator', async () => {
-    render(<SessionTestApp />);
+  render(<SessionTestApp />);
 
-    await waitFor(async () => {
-      expect(cardContext).not.toBe(null);
-      expect(storeContext).not.toBe(null);
-    });
+  await waitFor(async () => {
+    expect(cardContext).not.toBe(null);
+    expect(storeContext).not.toBe(null);
+  });
 
-    fetchCards = [{
+  fetchCards = [
+    {
       id: '000a',
       revision: 1,
       data: {
@@ -104,30 +110,35 @@ test('card update indicator', async () => {
         notifiedArticle: 5,
         notifiedChannel: 6,
         notifiedView: 7,
-        cardDetail: { status: 'connected', statusUpdated: 136, token: '01ab', },
-        cardProfile: { guid: '01ab23', handle: 'test1', name: 'tester', imageSet: false,
-          seal: 'abc', version: '1.1.1', node: 'test.org' },
+        cardDetail: { status: 'connected', statusUpdated: 136, token: '01ab' },
+        cardProfile: {
+          guid: '01ab23',
+          handle: 'test1',
+          name: 'tester',
+          imageSet: false,
+          seal: 'abc',
+          version: '1.1.1',
+          node: 'test.org',
+        },
       },
-    }];
+    },
+  ];
 
-    await act(async () => {
-      cardContext.actions.setToken('123');
-      storeContext.actions.setValue('cards:updated', 133);
-      cardContext.actions.setRevision(1);
-    });
+  await act(async () => {
+    cardContext.actions.setToken('123');
+    storeContext.actions.setValue('cards:updated', 133);
+    cardContext.actions.setRevision(1);
+  });
 
-    await waitFor(async () => {
-      expect(screen.getByTestId('updated').textContent).toBe('true');
-    });
+  await waitFor(async () => {
+    expect(screen.getByTestId('updated').textContent).toBe('true');
+  });
 
-    await act(async () => {
-      storeContext.actions.setValue('cards:updated', 136);
-    });
+  await act(async () => {
+    storeContext.actions.setValue('cards:updated', 136);
+  });
 
-    await waitFor(async () => {
-      expect(screen.getByTestId('updated').textContent).toBe('false');
-    });
+  await waitFor(async () => {
+    expect(screen.getByTestId('updated').textContent).toBe('false');
+  });
 });
-
-
-

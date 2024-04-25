@@ -80,11 +80,11 @@ export const CallingWrapper = styled.div`
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: ${props => props.theme.remoteArea};
+    background-color: ${(props) => props.theme.remoteArea};
   }
 
   .modal {
-    background-color: ${props => props.theme.remoteArea};
+    background-color: ${(props) => props.theme.remoteArea};
   }
 
   .window {
@@ -128,7 +128,7 @@ export const CallingWrapper = styled.div`
         .local-frame {
           padding: 4px;
           border-radius: 2px;
-          background-color: ${props => props.theme.localArea};
+          background-color: ${(props) => props.theme.localArea};
         }
       }
     }
@@ -179,7 +179,6 @@ export const CallingWrapper = styled.div`
     }
   `;
 
-
 export const SessionWrapper = styled.div`
   height: 100%;
   width: 100%;
@@ -191,7 +190,7 @@ export const SessionWrapper = styled.div`
     overflow: auto;
     overscroll-behavior: none;
     z-index: 2;
-    background-color: ${props => props.theme.baseColor};
+    background-color: ${(props) => props.theme.baseColor};
   }
 
   .spinner {
@@ -203,8 +202,8 @@ export const SessionWrapper = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: rgba(0,0,0,0.1);
-    widtH: 100%;
+    background-color: rgba(0, 0, 0, 0.1);
+    width: 100%;
   }
 
   .desktop-layout {
@@ -232,7 +231,7 @@ export const SessionWrapper = styled.div`
       position: relative;
 
       .base {
-        background-color: ${props => props.theme.frameArea};
+        background-color: ${(props) => props.theme.frameArea};
       }
     }
     .right {
@@ -243,7 +242,7 @@ export const SessionWrapper = styled.div`
       display: flex;
       flex-direction: column;
       position: relative;
-      background-color: ${props => props.theme.baseArea};
+      background-color: ${(props) => props.theme.baseArea};
     }
   }
 
@@ -270,7 +269,7 @@ export const SessionWrapper = styled.div`
     .right {
       flex-grow: 1;
       position: relative;
-      background-color: ${props => props.theme.baseArea};
+      background-color: ${(props) => props.theme.baseArea};
 
       .drawer {
         padding: 0px;
@@ -285,7 +284,7 @@ export const SessionWrapper = styled.div`
     flex-direction: column;
 
     .base {
-      background-color: ${props => props.theme.frameArea};
+      background-color: ${(props) => props.theme.frameArea};
     }
 
     .top {
@@ -296,7 +295,7 @@ export const SessionWrapper = styled.div`
     .bottom {
       height: 40px;
       position: relative;
-      box-shadow: 0px 0px 8px 0px rgba(0,0,0,0.3);
+      box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.3);
     }
   }
 `;
