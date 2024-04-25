@@ -37,7 +37,7 @@ function ListingView() {
     //@ts-ignore
     <div
       data-testid="contacts"
-      count={renderCount}
+      data-count={renderCount}
     >
       {contacts}
     </div>

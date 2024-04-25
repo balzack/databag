@@ -48,7 +48,7 @@ function TopicsView() {
     //@ts-ignore
     <div
       data-testid="channels"
-      count={renderCount}
+      data-count={renderCount}
     >
       {channels}
     </div>

@@ -20,7 +20,7 @@ function CardView() {
         <div
           key={entry.id}
           data-testid="card"
-          offsync={entry.offsync.toString()}
+          data-offsync={entry.offsync.toString()}
         >
           <span data-testid="name">{entry.data.cardProfile.name}</span>
           <span data-testid="status">{entry.data.cardDetail.status}</span>
@@ -36,8 +36,8 @@ function CardView() {
     //@ts-ignore
     <div
       data-testid="cards"
-      count={renderCount}
-      offsync={card.state.offsync.toString()}
+      data-count={renderCount}
+      data-offsync={card.state.offsync.toString()}
     >
       {cards}
     </div>
@@ -137,7 +137,7 @@ test('resync cards', async () => {
 
   await waitFor(async () => {
     //@ts-ignore
-    expect(screen.getByTestId('cards').attributes.offsync.value).toBe('true');
+    expect(screen.getByTestId('cards').attributes['data-offsync'].value).toBe('true');
   });
 
   statusCards = 200;
@@ -148,7 +148,7 @@ test('resync cards', async () => {
 
   await waitFor(async () => {
     //@ts-ignore
-    expect(screen.getByTestId('cards').attributes.offsync.value).toBe('false');
+    expect(screen.getByTestId('cards').attributes['data-offsync'].value).toBe('false');
   });
 
   act(() => {
@@ -216,7 +216,7 @@ test('resync contact', async () => {
 
   await waitFor(async () => {
     //@ts-ignore
-    expect(screen.getByTestId('card').attributes.offsync.value).toBe('true');
+    expect(screen.getByTestId('card').attributes['data-offsync'].value).toBe('true');
   });
 
   statusMessage = 200;
@@ -227,7 +227,7 @@ test('resync contact', async () => {
 
   await waitFor(async () => {
     //@ts-ignore
-    expect(screen.getByTestId('card').attributes.offsync.value).toBe('false');
+    expect(screen.getByTestId('card').attributes['data-offsync'].value).toBe('false');
   });
 
   act(() => {

@@ -29,7 +29,7 @@ function ProfileView() {
     //@ts-ignore
     <div
       data-testid="name"
-      count={renderCount}
+      data-count={renderCount}
     >
       {name}
     </div>

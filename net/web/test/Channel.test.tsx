@@ -33,8 +33,8 @@ function ChannelView() {
     //@ts-ignore
     <div
       data-testid="channels"
-      count={renderCount}
-      offsync={channel.state.offsync.toString()}
+      data-count={renderCount}
+      data-offsync={channel.state.offsync.toString()}
     >
       {channels}
     </div>
@@ -204,7 +204,7 @@ test('add, update and remove channel', async () => {
     await channelContext.actions.setRevision(1);
   });
 
-  //screen.getByTestId('count').attributes.count.value
+  //screen.getByTestId('count').attributes['data-count'].value
   //console.log(prettyDOM(screen.getByTestId('channels')));
 
   await waitFor(async () => {
@@ -213,8 +213,11 @@ test('add, update and remove channel', async () => {
     expect(screen.getByTestId('summary').textContent).toBe('testdata');
   });
 
+console.log("GET CHANNELS");
+console.log(screen.getByTestId('channels'));
+
   //@ts-ignore
-  const count = parseInt(screen.getByTestId('channels').attributes.count.value) + 1;
+  const count = parseInt(screen.getByTestId('channels').attributes['data-count'].value) + 1;
 
   fetchChannels = [
     {
@@ -236,7 +239,7 @@ test('add, update and remove channel', async () => {
     expect(screen.getByTestId('channels').children).toHaveLength(1);
     expect(screen.getByTestId('detail').textContent).toBe('testdata2');
     //@ts-ignore
-    expect(screen.getByTestId('channels').attributes.count.value).toBe(count.toString());
+    expect(screen.getByTestId('channels').attributes['data-count'].value).toBe(count.toString());
   });
 
   fetchChannels = [{ id: '123', revision: 3 }];
@@ -259,7 +262,7 @@ test('add, update and remove channel', async () => {
 
   await waitFor(async () => {
     //@ts-ignore
-    expect(screen.getByTestId('channels').attributes.offsync.value).toBe('false');
+    expect(screen.getByTestId('channels').attributes['data-offsync'].value).toBe('false');
   });
 
   await act(async () => {
@@ -285,7 +288,7 @@ test('resync', async () => {
 
   await waitFor(async () => {
     //@ts-ignore
-    expect(screen.getByTestId('channels').attributes.offsync.value).toBe('true');
+    expect(screen.getByTestId('channels').attributes['data-offsync'].value).toBe('true');
   });
 
   await act(async () => {
@@ -295,6 +298,6 @@ test('resync', async () => {
 
   await waitFor(async () => {
     //@ts-ignore
-    expect(screen.getByTestId('channels').attributes.offsync.value).toBe('false');
+    expect(screen.getByTestId('channels').attributes['data-offsync'].value).toBe('false');
   });
 });

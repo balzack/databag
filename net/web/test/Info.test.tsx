@@ -27,7 +27,7 @@ function InfoView() {
     //@ts-ignore
     <div
       data-testid="info"
-      count={renderCount}
+      data-count={renderCount}
     >
       {state.title}
     </div>
