@@ -37,6 +37,9 @@ export function useDashboard() {
     colors: {},
     menuStyle: {},
     strings: {} as Record<string,string>,
+    loading: null,
+    display: null,
+    createBusy: null,
   });
 
   const navigate = useNavigate();
