@@ -2,6 +2,8 @@
 
 # Backlog
 
+**SDK:** refactor mobile and browser code into an SDK and app
+
 **Typescript:** refactor mobile and browser apps to use typescript
 
 **redaxios:** refactor api calls with redaxios
