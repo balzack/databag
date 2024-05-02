@@ -43,7 +43,7 @@ function ThreadView() {
     //@ts-ignore
     <div
       data-testid="thread"
-      data-count={renderCount}
+      count={renderCount}
     >
       {topics}
     </div>

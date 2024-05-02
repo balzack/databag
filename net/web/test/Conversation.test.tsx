@@ -42,8 +42,8 @@ function ConversationView() {
     //@ts-ignore
     <div
       data-testid="topics"
-      data-count={renderCount}
-      data-offsync={card.state.offsync.toString()}
+      count={renderCount}
+      offsync={card.state.offsync.toString()}
     >
       {topics}
     </div>

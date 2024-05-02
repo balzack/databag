@@ -45,7 +45,7 @@ function ContactsView() {
     //@ts-ignore
     <div
       data-testid="cards"
-      data-count={renderCount}
+      count={renderCount}
     >
       {cards}
     </div>
