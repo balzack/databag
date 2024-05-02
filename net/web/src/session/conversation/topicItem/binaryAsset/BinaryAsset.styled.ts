@@ -53,3 +53,4 @@ export const BinaryAssetWrapper = styled.div`
     font-size: 24px;
   }
 `;
+

@@ -9,7 +9,7 @@ export const ContactWrapper = styled.div`
     width: 100%;
     display: flex;
     flex-direction: column;
-    color: ${(props) => props.theme.mainText};
+    color: ${props => props.theme.mainText};
   }
 
   .drawer {
@@ -17,9 +17,9 @@ export const ContactWrapper = styled.div`
     width: 100%;
     display: flex;
     flex-direction: column;
-    border-left: 1px solid ${(props) => props.theme.drawerBorder};
-    background-color: ${(props) => props.theme.selectedArea};
-    color: ${(props) => props.theme.mainText};
+    border-left: 1px solid ${props => props.theme.drawerBorder};
+    background-color: ${props => props.theme.selectedArea};
+    color: ${props => props.theme.mainText};
   }
 
   .actions {
@@ -32,8 +32,8 @@ export const ContactWrapper = styled.div`
 
     .label {
       padding-top: 16px;
-      border-bottom: 1px solid ${(props) => props.theme.sectionBorder};
-      color: ${(props) => props.theme.hintText};
+      border-bottom: 1px solid ${props => props.theme.sectionBorder};
+      color: ${props => props.theme.hintText};
       font-size: 12px;
       width: 50%;
       max-width: 300px;
@@ -57,18 +57,19 @@ export const ContactWrapper = styled.div`
     margin-right: 16px;
     height: 48px;
     display: flex;
-    border-bottom: 1px solid ${(props) => props.theme.headerBorder};
+    border-bottom: 1px solid ${props => props.theme.headerBorder};
     flex-direction: row;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+ 
+     .handle {
+       font-size: 20px;
+       font-weight: bold;
+       flex-grow: 1;
+       padding-left: 16px;
+     }
 
-    .handle {
-      font-size: 20px;
-      font-weight: bold;
-      flex-grow: 1;
-      padding-left: 16px;
-    }
 
     .handle {
       font-size: 20px;
@@ -77,7 +78,7 @@ export const ContactWrapper = styled.div`
 
     .close {
       font-size: 18px;
-      color: ${(props) => props.theme.hintText};
+      color: ${props => props.theme.hintText};
       cursor: pointer;
       padding-right: 16px;
     }
@@ -129,7 +130,7 @@ export const ContactWrapper = styled.div`
 
     .notset {
       font-style: italic;
-      color: ${(props) => props.theme.hintText};
+      color: ${props => props.theme.hintText};
     }
 
     .name {
@@ -137,7 +138,7 @@ export const ContactWrapper = styled.div`
       flex-direction: row;
       align-items: center;
       padding-bottom: 8px;
-
+ 
       .data {
         padding-right: 8px;
         font-size: 24px;
@@ -150,7 +151,7 @@ export const ContactWrapper = styled.div`
       flex-direction: row;
       align-items: center;
       padding-bottom: 8px;
-
+  
       .data {
         padding-left: 8px;
       }
@@ -191,7 +192,7 @@ export const ContactWrapper = styled.div`
       }
 
       .close {
-        color: ${(props) => props.theme.mainText};
+        color: ${props => props.theme.mainText};
         cursor: pointer;
         width: 64px;
         display: flex;
@@ -241,50 +242,52 @@ export const ContactWrapper = styled.div`
     align-items: flex-end;
     justify-content: center;
     padding-bottom: 16px;
-    color: ${(props) => props.theme.hintText};
+    color: ${props => props.theme.hintText};
     align-items: center;
     gap: 8px;
   }
-`;
+`
 
 export const StatusConnected = styled.div`
-  background-color: ${(props) => props.theme.connected};
+  background-color: ${props => props.theme.connected};
   border-radius: 8px;
   width: 8px;
   height: 8px;
 `;
 
 export const StatusConnecting = styled.div`
-  background-color: ${(props) => props.theme.connecting};
+  background-color: ${props => props.theme.connecting};
   border-radius: 8px;
   width: 8px;
   height: 8px;
 `;
 
 export const StatusRequested = styled.div`
-  background-color: ${(props) => props.theme.requested};
+  background-color: ${props => props.theme.requested};
   border-radius: 8px;
   width: 8px;
   height: 8px;
 `;
 
 export const StatusPending = styled.div`
-  background-color: ${(props) => props.theme.pending};
+  background-color: ${props => props.theme.pending};
   border-radius: 8px;
   width: 8px;
   height: 8px;
 `;
 
 export const StatusConfirmed = styled.div`
-  background-color: ${(props) => props.theme.confirmed};
+  background-color: ${props => props.theme.confirmed};
   border-radius: 8px;
   width: 8px;
   height: 8px;
 `;
 
 export const StatusUnsaved = styled.div`
-  background-color: ${(props) => props.theme.unsaved};
+  background-color: ${props => props.theme.unsaved};
   border-radius: 8px;
   width: 8px;
   height: 8px;
 `;
+
+

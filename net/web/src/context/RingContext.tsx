@@ -5,5 +5,10 @@ export const RingContext = createContext(defaultRingContext);
 
 export function RingContextProvider({ children }) {
   const { state, actions } = useRingContext();
-  return <RingContext.Provider value={{ state, actions }}>{children}</RingContext.Provider>;
+  return (
+    <RingContext.Provider value={{ state, actions }}>
+      {children}
+    </RingContext.Provider>
+  );
 }
+

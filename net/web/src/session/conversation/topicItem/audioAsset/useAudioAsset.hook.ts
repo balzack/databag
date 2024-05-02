@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react';
 
 export function useAudioAsset(asset) {
+
   const revoke = useRef<any>();
   const index = useRef(0);
 
@@ -16,7 +17,7 @@ export function useAudioAsset(asset) {
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
-  };
+  }
 
   const actions = {
     setActive: async () => {
@@ -24,18 +25,17 @@ export function useAudioAsset(asset) {
         try {
           const view = index.current;
           updateState({ active: true, ready: false, error: false, loading: true, url: null });
-          const blob = await asset.getDecryptedBlob(
-            () => view !== index.current,
-            (block, total) => updateState({ block, total }),
-          );
+          const blob = await asset.getDecryptedBlob(() => view !== index.current, (block, total) => updateState({ block, total }));
           const url = URL.createObjectURL(blob);
           revoke.current = url;
           updateState({ loading: false, url });
-        } catch (err) {
+        }
+        catch (err) {
           console.log(err);
           updateState({ error: true });
         }
-      } else {
+      }
+      else {
         updateState({ active: true, loading: false, url: asset.full });
       }
     },
@@ -49,8 +49,9 @@ export function useAudioAsset(asset) {
     },
     ready: () => {
       updateState({ ready: true });
-    },
+    }
   };
 
   return { state, actions };
 }
+

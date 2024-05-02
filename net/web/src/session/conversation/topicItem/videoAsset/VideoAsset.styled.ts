@@ -16,6 +16,7 @@ export const VideoAssetWrapper = styled.div`
 `;
 
 export const VideoModalWrapper = styled.div`
+
   .wrapper {
     padding-bottom: 6px;
   }

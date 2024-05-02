@@ -21,7 +21,7 @@ export const Colors = {
 
   itemDivider: '#eeeeee',
 
-  unsaved: '#ffff00',
+  unsaved: '#ffff00',  
   connected: '#44cc44',
   connecting: '#dd88ff',
   requested: '#4488ff',
@@ -70,7 +70,7 @@ export const LightTheme = {
   sectionBorder: '#bbbbbb',
   headerBorder: '#aaaaaa',
   drawerBorder: '#cccccc',
-  unsaved: '#ffff00',
+  unsaved: '#ffff00',  
   connected: '#44cc44',
   connecting: '#dd88ff',
   requested: '#4488ff',
@@ -109,10 +109,11 @@ export const DarkTheme = {
   sectionBorder: '#777777',
   headerBorder: '#aaaaaa',
   drawerBorder: '#444444',
-  unsaved: '#ffff00',
+  unsaved: '#ffff00',  
   connected: '#44cc44',
   connecting: '#dd88ff',
   requested: '#4488ff',
   pending: '#22aaaa',
   confirmed: '#aaaaaa',
 };
+

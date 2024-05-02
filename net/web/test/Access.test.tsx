@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { render, act, screen, waitFor, fireEvent } from '@testing-library/react';
+import {render, act, screen, waitFor, fireEvent} from '@testing-library/react'
 import { AppContext, AppContextProvider } from 'context/AppContext';
 import { AccountContextProvider } from 'context/AccountContext';
 import { ProfileContextProvider } from 'context/ProfileContext';
@@ -14,15 +14,9 @@ import * as fetchUtil from 'api/fetchUtil';
 
 let navPath;
 jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => {
-    return (path) => {
-      navPath = path;
-    };
-  },
-  useLocation: () => {
-    return 'path';
-  },
+   ...jest.requireActual('react-router-dom'),
+  useNavigate: () => { return (path) => { navPath = path } },
+  useLocation: () => { return 'path' },
 }));
 
 let appContext;
@@ -30,7 +24,7 @@ function AccessView() {
   const { state, actions } = useAccess();
   const app = useContext(AppContext);
   appContext = app;
-  return <div></div>;
+  return (<div></div>);
 }
 
 function AccessTestApp() {
@@ -62,13 +56,12 @@ const realFetchWithCustomTimeout = fetchUtil.fetchWithCustomTimeout;
 beforeEach(() => {
   const mockFetch = jest.fn().mockImplementation((url, options) => {
     return Promise.resolve({
-      json: () =>
-        Promise.resolve({
-          guid: '123',
-          appToken: 'aacc',
-          created: 2,
-          pushSupported: false,
-        }),
+      json: () => Promise.resolve({
+        guid: '123',
+        appToken: 'aacc',
+        created: 2,
+        pushSupported: false,
+      })
     });
   });
   //@ts-ignore
@@ -85,17 +78,20 @@ afterEach(() => {
 });
 
 test('nav to session after login', async () => {
-  render(<AccessTestApp />);
+    render(<AccessTestApp />);
 
-  await waitFor(async () => {
-    expect(appContext).not.toBe(null);
-  });
+    await waitFor(async () => {
+      expect(appContext).not.toBe(null);
+    });
 
-  await act(async () => {
-    await appContext.actions.login('testusername', 'testpassword');
-  });
+    await act(async () => {
+      await appContext.actions.login('testusername', 'testpassword');
+    });
 
-  await waitFor(async () => {
-    expect(navPath).toBe('/');
-  });
+    await waitFor(async () => {
+      expect(navPath).toBe('/');
+    });
 });
+
+
+

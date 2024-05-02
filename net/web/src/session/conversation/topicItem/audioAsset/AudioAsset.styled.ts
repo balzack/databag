@@ -41,6 +41,7 @@ export const AudioAssetWrapper = styled.div`
   }
 `;
 
+
 export const AudioModalWrapper = styled.div`
   width: 256px;
   height: 256px;
@@ -87,3 +88,4 @@ export const AudioModalWrapper = styled.div`
     }
   }
 `;
+

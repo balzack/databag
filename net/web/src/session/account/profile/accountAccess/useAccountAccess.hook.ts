@@ -5,6 +5,7 @@ import { SettingsContext } from 'context/SettingsContext';
 import { generateSeal, unlockSeal, updateSeal } from 'context/sealUtil';
 import { getUsername } from 'api/getUsername';
 export function useAccountAccess() {
+  
   const [state, setState] = useState({
     editLogin: false,
     editSeal: false,
@@ -26,7 +27,7 @@ export function useAccountAccess() {
     sealUnlock: null,
 
     display: null,
-    strings: {} as Record<string, string>,
+    strings: {} as Record<string,string>,
     menuStyle: {},
     timeFormat: '12h',
     dateFormat: 'mm/dd',
@@ -44,13 +45,13 @@ export function useAccountAccess() {
   });
 
   const profile = useContext(ProfileContext);
-  const account = useContext(AccountContext);
+  const account = useContext(AccountContext);  
   const settings = useContext(SettingsContext);
   const debounce = useRef(null);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
-  };
+  }
 
   useEffect(() => {
     const { handle } = profile.state.identity;
@@ -63,36 +64,8 @@ export function useAccountAccess() {
   }, [account.state]);
 
   useEffect(() => {
-    const {
-      display,
-      audioId,
-      audioInputs,
-      videoId,
-      videoInputs,
-      strings,
-      menuStyle,
-      timeFormat,
-      dateFormat,
-      theme,
-      themes,
-      language,
-      languages,
-    } = settings.state;
-    updateState({
-      display,
-      audioId,
-      audioInputs,
-      videoId,
-      videoInputs,
-      strings,
-      menuStyle,
-      timeFormat,
-      dateFormat,
-      theme,
-      themes,
-      language,
-      languages,
-    });
+    const { display, audioId, audioInputs, videoId, videoInputs, strings, menuStyle, timeFormat, dateFormat, theme, themes, language, languages } = settings.state;
+    updateState({ display, audioId, audioInputs, videoId, videoInputs, strings, menuStyle, timeFormat, dateFormat, theme, themes, language, languages });
   }, [settings.state]);
 
   const sealUnlock = async () => {
@@ -123,14 +96,14 @@ export function useAccountAccess() {
       return true;
     }
     return false;
-  };
+  }
 
   const isUnlocked = () => {
     if (state.sealKey?.public && state.sealKey?.private && state.sealKey.public === state.seal.publicKey) {
       return true;
     }
     return false;
-  };
+  }
 
   const actions = {
     setTimeFormat: (timeFormat) => {
@@ -157,10 +130,12 @@ export function useAccountAccess() {
       if (sealEnabled) {
         if (isUnlocked()) {
           sealMode = 'enabled';
-        } else {
+        }
+        else {
           sealMode = 'unlocking';
         }
-      } else {
+      }
+      else {
         sealMode = 'disabled';
       }
       const editSeal = true;
@@ -193,7 +168,8 @@ export function useAccountAccess() {
       if (enable && isEnabled()) {
         if (isUnlocked()) {
           sealMode = 'enabled';
-        } else {
+        }
+        else {
           sealMode = 'unlocking';
         }
       }
@@ -225,26 +201,31 @@ export function useAccountAccess() {
     },
     saveSeal: async () => {
       if (state.busy) {
-        throw new Error('operation in progress');
+        throw new Error("operation in progress");
       }
       updateState({ busy: true });
       try {
         if (state.sealMode === 'enabling') {
           await sealEnable();
-        } else if (state.sealMode === 'disabling') {
+        }
+        else if (state.sealMode === 'disabling') {
           await sealRemove();
-        } else if (state.sealMode === 'updating') {
+        }
+        else if (state.sealMode === 'updating') {
           await sealUpdate();
-        } else if (state.sealMode === 'unlocking') {
+        }
+        else if (state.sealMode === 'unlocking') {
           await sealUnlock();
-        } else if (state.sealMode === 'enabled') {
+        }
+        else if (state.sealMode === 'enabled') {
           await sealForget();
         }
         updateState({ busy: false });
-      } catch (err) {
+      }
+      catch (err) {
         updateState({ busy: false });
         console.log(err);
-        throw new Error('failed to save seal');
+        throw new Error("failed to save seal");
       }
     },
     setEditLogin: () => {
@@ -259,15 +240,18 @@ export function useAccountAccess() {
       debounce.current = setTimeout(async () => {
         if (editHandle.toLowerCase() === state.handle.toLowerCase()) {
           updateState({ checked: true, editStatus: 'success', editMessage: '' });
-        } else {
+        }
+        else {
           try {
             let valid = await getUsername(editHandle);
             if (valid) {
               updateState({ checked: true, editStatus: 'success', editMessage: '' });
-            } else {
+            }
+            else {
               updateState({ checked: true, editStatus: 'error', editMessage: 'Username is not available' });
             }
-          } catch (err) {
+          }
+          catch(err) {
             console.log(err);
             updateState({ checked: true, editStatus: 'success', editMessage: '' });
           }
@@ -281,30 +265,32 @@ export function useAccountAccess() {
       updateState({ editConfirm });
     },
     canSaveLogin: () => {
-      if (state.editStatus === 'error' || !state.checked) {
+      if(state.editStatus === 'error' || !state.checked) {
         return false;
       }
-      if (state.editHandle && state.editPassword && state.editPassword === state.editConfirm) {
+      if(state.editHandle && state.editPassword && state.editPassword === state.editConfirm) {
         return true;
       }
       return false;
     },
     setLogin: async () => {
       if (!state.editHandle || !state.editPassword || state.editPassword !== state.editConfirm) {
-        throw new Error('Invalid login credentials');
+        throw new Error("Invalid login credentials");
       }
       if (!state.busy) {
         try {
           updateState({ busy: true });
           await account.actions.setLogin(state.editHandle, state.editPassword);
           updateState({ busy: false });
-        } catch (err) {
+        }
+        catch(err) {
           console.log(err);
           updateState({ busy: false });
-          throw new Error('failed to update login');
+          throw new Error("failed to update login");
         }
-      } else {
-        throw new Error('save in progress');
+      }
+      else {
+        throw new Error("save in progress");
       }
     },
     setSearchable: async (flag) => {
@@ -313,7 +299,8 @@ export function useAccountAccess() {
           updateState({ busy: true });
           await account.actions.setSearchable(flag);
           updateState({ busy: false });
-        } catch (err) {
+        }
+        catch (err) {
           console.log(err);
           updateState({ busy: false });
           throw new Error('failed to set searchable');
@@ -324,3 +311,4 @@ export function useAccountAccess() {
 
   return { state, actions };
 }
+

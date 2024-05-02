@@ -8,6 +8,7 @@ import { RingContext } from 'context/RingContext';
 import { encryptChannelSubject } from 'context/sealUtil';
 
 export function useCards() {
+
   const [filter, setFilter] = useState(null);
 
   const [state, setState] = useState({
@@ -33,11 +34,11 @@ export function useCards() {
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
-  };
+  }
 
   useEffect(() => {
     const { display, strings, menuStyle, audioId } = settings.state;
-    console.log('AUDIO ID: ', audioId);
+console.log("AUDIO ID: ", audioId);
     updateState({ display, strings, menuStyle, audioId });
   }, [settings.state]);
 
@@ -46,13 +47,14 @@ export function useCards() {
     const allowUnsealed = account.state.status?.allowUnsealed;
     if (seal?.publicKey && sealKey?.public && sealKey?.private && seal.publicKey === sealKey.public) {
       updateState({ sealable: true, allowUnsealed, enableIce: status?.enableIce });
-    } else {
+    }
+    else {
       updateState({ sealable: false, allowUnsealed, enableIce: status?.enableIce });
     }
   }, [account.state]);
 
   useEffect(() => {
-    const contacts = Array.from(card.state.cards.values()).map((item) => {
+    const contacts = Array.from(card.state.cards.values()).map(item => {
       const profile = item?.data?.cardProfile;
       const detail = item?.data?.cardDetail;
 
@@ -71,14 +73,14 @@ export function useCards() {
     });
 
     let latest = 0;
-    contacts.forEach((contact) => {
+    contacts.forEach(contact => {
       if (latest < contact.updated) {
         latest = contact.updated;
       }
     });
     store.actions.setValue('cards:updated', latest);
-
-    let filtered = contacts.filter((contact) => {
+ 
+    let filtered = contacts.filter(contact => {
       if (!filter) {
         return true;
       }
@@ -95,19 +97,20 @@ export function useCards() {
         if (aName === bName) {
           return 0;
         }
-        if (!aName || aName < bName) {
+        if (!aName || (aName < bName)) {
           return -1;
         }
         return 1;
       });
-    } else {
+    }
+    else {
       filtered.sort((a, b) => {
         const aUpdated = a?.updated;
         const bUpdated = b?.updated;
         if (aUpdated === bUpdated) {
           return 0;
         }
-        if (!aUpdated || aUpdated < bUpdated) {
+        if (!aUpdated || (aUpdated < bUpdated)) {
           return 1;
         }
         return -1;
@@ -122,7 +125,8 @@ export function useCards() {
   useEffect(() => {
     if (settings.state.display === 'small') {
       updateState({ tooltip: false });
-    } else {
+    }
+    else {
       updateState({ tooltip: true });
     }
   }, [settings.state]);
@@ -150,13 +154,14 @@ export function useCards() {
         return channelId;
       }
       if (state.sealable && !state.allowUnsealed) {
-        const keys = [account.state.sealKey.public];
+        const keys = [ account.state.sealKey.public ];
         keys.push(card.state.cards.get(cardId).data.cardProfile.seal);
         const sealed = encryptChannelSubject(state.subject, keys);
-        const conversation = await channel.actions.addChannel('sealed', sealed, [cardId]);
+        const conversation = await channel.actions.addChannel('sealed', sealed, [ cardId ]);
         return conversation.id;
-      } else {
-        const conversation = await channel.actions.addChannel('superbasic', { subject: null }, [cardId]);
+      }
+      else {
+        const conversation = await channel.actions.addChannel('superbasic', { subject: null }, [ cardId ]);
         return conversation.id;
       }
     },

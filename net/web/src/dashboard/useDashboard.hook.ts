@@ -9,8 +9,9 @@ import { AppContext } from 'context/AppContext';
 import { SettingsContext } from 'context/SettingsContext';
 
 export function useDashboard() {
+
   const [state, setState] = useState({
-    domain: '',
+    domain: "",
     accountStorage: null,
     keyType: null,
     pushSupported: null,
@@ -35,7 +36,7 @@ export function useDashboard() {
     accounts: [],
     colors: {},
     menuStyle: {},
-    strings: {} as Record<string, string>,
+    strings: {} as Record<string,string>,
     loading: null,
     display: null,
     createBusy: null,
@@ -47,12 +48,13 @@ export function useDashboard() {
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
-  };
+  }
 
   useEffect(() => {
     if (!app.state.adminToken) {
       navigate('/');
-    } else {
+    }
+    else {
       syncConfig();
       syncAccounts();
     }
@@ -69,9 +71,10 @@ export function useDashboard() {
       if (!state.createBusy) {
         updateState({ busy: true });
         try {
-          const create = await addAccountCreate(app.state.adminToken);
+          const create = await addAccountCreate(app.state.adminToken)
           updateState({ createToken: create, showCreate: true });
-        } catch (err) {
+        }
+        catch (err) {
           window.alert(err);
         }
         updateState({ busy: false });
@@ -140,47 +143,16 @@ export function useDashboard() {
       if (!state.busy) {
         updateState({ busy: true });
         try {
-          const {
-            domain,
-            keyType,
-            accountStorage,
-            pushSupported,
-            transformSupported,
-            allowUnsealed,
-            enableImage,
-            enableAudio,
-            enableVideo,
-            enableIce,
-            iceUrl,
-            iceUsername,
-            icePassword,
-            enableOpenAccess,
-            openAccessLimit,
-          } = state;
+          const { domain, keyType, accountStorage, pushSupported, transformSupported, allowUnsealed, enableImage, enableAudio, enableVideo, enableIce, iceUrl, iceUsername, icePassword, enableOpenAccess, openAccessLimit } = state;
           const storage = accountStorage * 1073741824;
-          const config = {
-            domain,
-            accountStorage: storage,
-            keyType,
-            enableImage,
-            enableAudio,
-            enableVideo,
-            pushSupported,
-            transformSupported,
-            allowUnsealed,
-            enableIce,
-            iceUrl,
-            iceUsername,
-            icePassword,
-            enableOpenAccess,
-            openAccessLimit,
-          };
+          const config = { domain,  accountStorage: storage, keyType, enableImage, enableAudio, enableVideo, pushSupported, transformSupported, allowUnsealed, enableIce, iceUrl, iceUsername, icePassword, enableOpenAccess, openAccessLimit };
           await setNodeConfig(app.state.adminToken, config);
           updateState({ busy: false, showSettings: false });
-        } catch (err) {
+        }
+        catch(err) {
           console.log(err);
           updateState({ busy: false });
-          throw new Error('failed to set settings');
+          throw new Error("failed to set settings");
         }
       }
     },
@@ -189,43 +161,11 @@ export function useDashboard() {
   const syncConfig = async () => {
     try {
       const config = await getNodeConfig(app.state.adminToken);
-      const {
-        accountStorage,
-        domain,
-        keyType,
-        pushSupported,
-        transformSupported,
-        allowUnsealed,
-        enableImage,
-        enableAudio,
-        enableVideo,
-        enableIce,
-        iceUrl,
-        iceUsername,
-        icePassword,
-        enableOpenAccess,
-        openAccessLimit,
-      } = config;
+      const { accountStorage, domain, keyType, pushSupported, transformSupported, allowUnsealed, enableImage, enableAudio, enableVideo, enableIce, iceUrl, iceUsername, icePassword, enableOpenAccess, openAccessLimit } = config;
       const storage = Math.ceil(accountStorage / 1073741824);
-      updateState({
-        configError: false,
-        domain,
-        accountStorage: storage,
-        keyType,
-        enableImage,
-        enableAudio,
-        enableVideo,
-        pushSupported,
-        transformSupported,
-        allowUnsealed,
-        enableIce,
-        iceUrl,
-        iceUsername,
-        icePassword,
-        enableOpenAccess,
-        openAccessLimit,
-      });
-    } catch (err) {
+      updateState({ configError: false, domain, accountStorage: storage, keyType, enableImage, enableAudio, enableVideo, pushSupported, transformSupported, allowUnsealed, enableIce, iceUrl, iceUsername, icePassword, enableOpenAccess, openAccessLimit });
+    }
+    catch(err) {
       console.log(err);
       updateState({ configError: true });
     }
@@ -244,7 +184,8 @@ export function useDashboard() {
         return 0;
       });
       updateState({ accounstError: false, accounts });
-    } catch (err) {
+    }
+    catch(err) {
       console.log(err);
       updateState({ accountsError: true });
     }
@@ -252,3 +193,4 @@ export function useDashboard() {
 
   return { state, actions };
 }
+

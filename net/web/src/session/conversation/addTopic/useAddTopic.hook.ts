@@ -2,9 +2,10 @@ import { useContext, useState, useRef, useEffect } from 'react';
 import { ConversationContext } from 'context/ConversationContext';
 import { SettingsContext } from 'context/SettingsContext';
 import { encryptBlock, encryptTopicSubject } from 'context/sealUtil';
-import Resizer from 'react-image-file-resizer';
+import Resizer from "react-image-file-resizer";
 
 export function useAddTopic(contentKey?: string) {
+  
   const [state, setState] = useState({
     enableImage: null,
     enableAudio: null,
@@ -17,7 +18,7 @@ export function useAddTopic(contentKey?: string) {
     textSizeSet: false,
     busy: false,
     display: null,
-    strings: {} as Record<string, string>,
+    strings: {} as Record<string,string>,
     menuStyle: {},
   });
 
@@ -34,14 +35,14 @@ export function useAddTopic(contentKey?: string) {
       let assets = [...s.assets, value];
       return { ...s, assets };
     });
-  };
+  }
 
   const updateAsset = (index, value) => {
     setState((s) => {
       s.assets[index] = { ...s.assets[index], ...value };
       return { ...s };
     });
-  };
+  }
 
   const removeAsset = (index) => {
     setState((s) => {
@@ -49,20 +50,18 @@ export function useAddTopic(contentKey?: string) {
       let assets = [...s.assets];
       return { ...s, assets };
     });
-  };
+  }
 
   const clearObjects = () => {
-    objects.current.forEach((object) => {
+    objects.current.forEach(object => {
       URL.revokeObjectURL(object);
     });
     objects.current = [];
-  };
+  }
 
   useEffect(() => {
     updateState({ assets: [] });
-    return () => {
-      clearObjects();
-    };
+    return () => { clearObjects() };
   }, [contentKey]);
 
   useEffect(() => {
@@ -76,30 +75,28 @@ export function useAddTopic(contentKey?: string) {
   }, [conversation.state.channel?.data?.channelDetail]);
 
   const loadFileData = (file) => {
-    return new Promise<ArrayBuffer>((resolve) => {
-      const reader = new FileReader();
-      reader.onloadend = (res) => {
-        resolve(reader.result as any);
-      };
-      reader.readAsArrayBuffer(file);
-    });
+    return new Promise< ArrayBuffer>(resolve => {
+      const reader = new FileReader()
+      reader.onloadend = (res) => { resolve(reader.result as any) }
+      reader.readAsArrayBuffer(file)
+    })
   };
 
   const arrayBufferToBase64 = (buffer) => {
     var binary = '';
-    var bytes = new Uint8Array(buffer);
+    var bytes = new Uint8Array( buffer );
     var len = bytes.byteLength;
     for (var i = 0; i < len; i++) {
-      binary += String.fromCharCode(bytes[i]);
+        binary += String.fromCharCode( bytes[ i ] );
     }
-    return window.btoa(binary);
-  };
+    return window.btoa( binary );
+  }
 
   const setUrl = async (file) => {
     const url = URL.createObjectURL(file);
     objects.current.push(url);
     if (contentKey) {
-      const buffer = await loadFileData(file);
+      const buffer = await loadFileData(file)
       const getEncryptedBlock = (pos, len) => {
         if (pos + len > buffer.byteLength) {
           return null;
@@ -107,12 +104,13 @@ export function useAddTopic(contentKey?: string) {
         const slice = buffer.slice(pos, pos + len);
         const block = arrayBufferToBase64(slice);
         return encryptBlock(block, contentKey);
-      };
+      }
       return { url, encrypted: true, size: buffer.byteLength, getEncryptedBlock };
-    } else {
+    }
+    else {
       return { url, encrypted: false };
     }
-  };
+  }
 
   const actions = {
     addImage: async (image) => {
@@ -120,7 +118,8 @@ export function useAddTopic(contentKey?: string) {
         const asset = await setUrl(image);
         asset.image = image;
         addAsset(asset);
-      } else {
+      }
+      else {
         const scaled = await getResizedImage(image);
         const asset = await setUrl(scaled);
         asset.image = image;
@@ -153,7 +152,7 @@ export function useAddTopic(contentKey?: string) {
       updateAsset(index, { position });
     },
     removeAsset: (idx) => {
-      removeAsset(idx);
+      removeAsset(idx) 
     },
     setTextColor: (value) => {
       updateState({ textColorSet: true, textColor: value });
@@ -171,40 +170,36 @@ export function useAddTopic(contentKey?: string) {
           const type = contentKey ? 'sealedtopic' : 'superbasictopic';
           const message = (assets) => {
             if (contentKey) {
-              const message = {
+              const message = { 
                 assets: assets?.length ? assets : null,
                 text: state.messageText,
                 textColor: state.textColorSet ? state.textColor : null,
                 textSize: state.textSizeSet ? state.textSize : null,
-              };
+              }
               return encryptTopicSubject({ message }, contentKey);
-            } else {
+            }
+            else {
               return {
                 assets: assets?.length ? assets : null,
                 text: state.messageText,
                 textColor: state.textColorSet ? state.textColor : null,
                 textSize: state.textSizeSet ? state.textSize : null,
-              };
+              }
             }
           };
-          await conversation.actions.addTopic(type, message, [...state.assets]);
-          updateState({
-            busy: false,
-            messageText: null,
-            textColor: '#444444',
-            textColorSet: false,
-            textSize: 12,
-            textSizeSet: false,
-            assets: [],
-          });
+          await conversation.actions.addTopic(type, message, [ ...state.assets ]);
+          updateState({ busy: false, messageText: null, textColor: '#444444', textColorSet: false,
+              textSize: 12, textSizeSet: false, assets: [] });
           clearObjects();
-        } catch (err) {
+        }
+        catch(err) {
           console.log(err);
           updateState({ busy: false });
-          throw new Error('failed to post topic');
+          throw new Error("failed to post topic");
         }
-      } else {
-        throw new Error('operation in progress');
+      }
+      else {
+        throw new Error("operation in progress");
       }
     },
   };
@@ -213,26 +208,17 @@ export function useAddTopic(contentKey?: string) {
 }
 
 function getResizedImage(data) {
-  return new Promise((resolve) => {
-    Resizer.imageFileResizer(
-      data,
-      1024,
-      1024,
-      'JPEG',
-      90,
-      0,
-      (uri) => {
-        const base64 = uri.split(';base64,').pop();
-        var binaryString = atob(base64);
-        var bytes = new Uint8Array(binaryString.length);
-        for (var i = 0; i < binaryString.length; i++) {
-          bytes[i] = binaryString.charCodeAt(i);
-        }
-        resolve(new Blob([bytes]));
-      },
-      'base64',
-      256,
-      256,
-    );
+  return new Promise(resolve => {
+    Resizer.imageFileResizer(data, 1024, 1024, 'JPEG', 90, 0,
+    uri => {
+      const base64 = uri.split(';base64,').pop();
+      var binaryString = atob(base64);
+      var bytes = new Uint8Array(binaryString.length);
+      for (var i = 0; i < binaryString.length; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
+      }
+      resolve(new Blob([bytes]));
+    }, 'base64', 256, 256 );
   });
 }
+

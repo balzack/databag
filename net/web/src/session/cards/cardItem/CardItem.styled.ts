@@ -6,13 +6,13 @@ export const CardItemWrapper = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
-  border-bottom: 1px solid ${(props) => props.theme.itemBorder};
-  color: ${(props) => props.theme.mainText};
+  border-bottom: 1px solid ${props => props.theme.itemBorder};
+  color: ${props => props.theme.mainText};
   padding-left: 16px;
   padding-right: 16px;
 
   &:hover {
-    background-color: ${(props) => props.theme.hoverArea};
+    background-color: ${props => props.theme.hoverArea};
     cursor: pointer;
   }
 
@@ -51,13 +51,13 @@ export const CardItemWrapper = styled.div`
 `;
 
 export const StatusError = styled.div`
-  color: ${(props) => props.theme.alertText};
+  color: ${props => props.theme.alertText};
   font-size: 14px;
   padding-right: 12px;
-`;
+`
 
 export const ComOptions = styled.div`
-  color: ${(props) => props.theme.linkText};
+  color: ${props => props.theme.linkText};
   font-size: 16px;
   display: flex;
   flex-direction: row;
@@ -66,7 +66,7 @@ export const ComOptions = styled.div`
     padding-right: 12px;
     cursor: pointer;
   }
-`;
+`
 
 export const StatusConnected = styled.div`
   background-color: ${Colors.connected};
@@ -102,3 +102,5 @@ export const StatusConfirmed = styled.div`
   width: 8px;
   height: 8px;
 `;
+
+

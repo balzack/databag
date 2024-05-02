@@ -24,7 +24,7 @@ export const CarouselWrapper = styled.div`
     height: 128px;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: center; 
     color: #888888;
     background-color: #eeeeee;
     margin-left: 72px;
@@ -71,8 +71,8 @@ export const CarouselWrapper = styled.div`
   }
 
   .arrow:hover {
-    opacity: 1;
-  }
+      opacity: 1;
+    }
 
   .item {
     margin-right: 32px;
@@ -113,3 +113,4 @@ export const CarouselWrapper = styled.div`
     object-fit: contain;
   }
 `;
+

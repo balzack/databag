@@ -7,8 +7,8 @@ export const AccountAccessWrapper = styled.div`
   justify-content: center;
   padding-bottom: 8px;
   width: 100%;
-  background-color: ${(props) => props.theme.itemArea};
-  color: ${(props) => props.theme.mainText};
+  background-color: ${props => props.theme.itemArea};
+  color: ${props => props.theme.mainText};
 
   .account {
     width: 100%;
@@ -51,13 +51,13 @@ export const AccountAccessWrapper = styled.div`
 
   .section {
     width: 100%;
-    color: ${(props) => props.theme.hintText};
+    color: ${props => props.theme.hintText};
     padding-top: 24px;
     font-size: 12px;
     display: flex;
-    width: 75%;
+    widtH: 75%;
     justify-content: center;
-    border-bottom: 1px solid ${(props) => props.theme.sectionBorder};
+    border-bottom: 1px solid ${props => props.theme.sectionBorder};
   }
 
   .switch {
@@ -68,12 +68,12 @@ export const AccountAccessWrapper = styled.div`
     padding-top: 8px;
 
     .switchEnabled {
-      color: ${(props) => props.theme.activeArea};
+      color: ${props => props.theme.activeArea};
       cursor: pointer;
     }
 
     .switchDisabled {
-      color: ${(props) => props.theme.idleArea};
+      color: ${props => props.theme.idleArea};
     }
 
     .switchLabel {
@@ -87,10 +87,10 @@ export const AccountAccessWrapper = styled.div`
     flex-direction: row;
     align-items: center;
     cursor: pointer;
-    color: ${(props) => props.theme.linkText};
+    color: ${props => props.theme.linkText};
     padding-top: 8px;
     padding-bottom: 8px;
-
+  
     .label {
       padding-left: 8px;
     }
@@ -113,7 +113,7 @@ export const SealModal = styled.div`
     align-items: center;
 
     .switchLabel {
-      color: ${(props) => props.theme.mainText};
+      color: ${props => props.theme.mainText};
       padding-left: 8px;
       padding-right: 8px;
     }
@@ -126,49 +126,49 @@ export const SealModal = styled.div`
     gap: 16px;
 
     .saveDisabled {
-      background-color: ${(props) => props.theme.disabledArea};
+      background-color: ${props => props.theme.disabledArea};
 
       button {
-        color: ${(props) => props.theme.idleText};
+        color: ${props => props.theme.idleText};
       }
     }
 
     .saveEnabled {
-      background-color: ${(props) => props.theme.enabledArea};
+      background-color: ${props => props.theme.enabledArea};
 
       button {
-        color: ${(props) => props.theme.activeText};
+        color: ${props => props.theme.activeText};
       }
     }
   }
 
   .sealChange {
     width: 100%;
-    background-color: ${(props) => props.theme.inputArea};
-    color: ${(props) => props.theme.mainText};
+    background-color: ${props => props.theme.inputArea};
+    color: ${props => props.theme.mainText};
     border-radius: 8px;
     position: relative;
 
     .ant-input-affix-wrapper {
-      background-color: ${(props) => props.theme.inputArea};
+      background-color: ${props => props.theme.inputArea};
     }
 
     .anticon {
-      color: ${(props) => props.theme.placeholderText};
+      color: ${props => props.theme.placeholderText};
 
       &:hover {
-        color: ${(props) => props.theme.linkText};
+        color: ${props => props.theme.linkText};
       }
     }
 
     input {
       padding-left: 8px;
-      background-color: ${(props) => props.theme.inputArea};
-      color: ${(props) => props.theme.mainText};
+      background-color: ${props => props.theme.inputArea};
+      color: ${props => props.theme.mainText};
     }
 
     input::placeholder {
-      color: ${(props) => props.theme.placeholderText};
+      color: ${props => props.theme.placeholderText};
     }
   }
 
@@ -180,7 +180,7 @@ export const SealModal = styled.div`
     height: 100%;
     cursor: pointer;
   }
-`;
+`
 
 export const LoginModal = styled.div`
   display: flex;
@@ -194,28 +194,28 @@ export const LoginModal = styled.div`
   }
 
   .loginValue {
-    background-color: ${(props) => props.theme.inputArea};
-    color: ${(props) => props.theme.mainText};
-    border: 1px solid ${(props) => props.theme.sectionBorder};
+    background-color: ${props => props.theme.inputArea};
+    color: ${props => props.theme.mainText};
+    border: 1px solid ${props => props.theme.sectionBorder};
 
     .anticon {
-      color: ${(props) => props.theme.placeholderText};
+      color: ${props => props.theme.placeholderText};
 
       &:hover {
-        color: ${(props) => props.theme.linkText};
+        color: ${props => props.theme.linkText};
       }
     }
   }
 
   input {
     padding-left: 8px;
-    background-color: ${(props) => props.theme.inputArea};
-    border: 1px solid ${(props) => props.theme.sectionBorder};
-    color: ${(props) => props.theme.mainText};
+    background-color: ${props => props.theme.inputArea};
+    border: 1px solid ${props => props.theme.sectionBorder};
+    color: ${props => props.theme.mainText};
   }
 
   input::placeholder {
-    color: ${(props) => props.theme.placeholderText};
+    color: ${props => props.theme.placeholderText};
   }
 
   .controls {
@@ -225,18 +225,18 @@ export const LoginModal = styled.div`
     gap: 16px;
 
     .saveDisabled {
-      background-color: ${(props) => props.theme.disabledArea};
+      background-color: ${props => props.theme.disabledArea};
 
       button {
-        color: ${(props) => props.theme.idleText};
+        color: ${props => props.theme.idleText};
       }
     }
 
     .saveEnabled {
-      background-color: ${(props) => props.theme.enabledArea};
+      background-color: ${props => props.theme.enabledArea};
 
       button {
-        color: ${(props) => props.theme.activeText};
+        color: ${props => props.theme.activeText};
       }
     }
 
@@ -245,7 +245,7 @@ export const LoginModal = styled.div`
       flex-grow: 1;
     }
   }
-`;
+`
 
 export const LogoutContent = styled.div`
   display: flex;
@@ -255,6 +255,6 @@ export const LogoutContent = styled.div`
 
   .logoutMode {
     padding-right: 8px;
-    color: ${(props) => props.theme.mainText};
+    color: ${props => props.theme.mainText};
   }
-`;
+`

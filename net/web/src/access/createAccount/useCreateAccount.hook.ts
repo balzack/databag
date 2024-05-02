@@ -1,10 +1,11 @@
 import { useContext, useState, useEffect, useRef } from 'react';
 import { AppContext } from 'context/AppContext';
 import { SettingsContext } from 'context/SettingsContext';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from "react-router-dom";
 import { getUsername } from 'api/getUsername';
 
 export function useCreateAccount() {
+
   const [checked, setChecked] = useState(true);
   const [state, setState] = useState({
     username: '',
@@ -13,7 +14,7 @@ export function useCreateAccount() {
     busy: false,
     validatetatus: 'success',
     help: '',
-    strings: {} as Record<string, string>,
+    strings: {} as Record<string,string>,
     menuStyle: {},
   });
 
@@ -25,30 +26,33 @@ export function useCreateAccount() {
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
-  };
+  }
 
   const usernameSet = (name) => {
-    setChecked(false);
-    clearTimeout(debounce.current);
+    setChecked(false)
+    clearTimeout(debounce.current)
     debounce.current = setTimeout(async () => {
       if (name !== '') {
         try {
-          let valid = await getUsername(name, state.token);
+          let valid = await getUsername(name, state.token)
           if (!valid) {
-            updateState({ validateStatus: 'error', help: 'Username is not available' });
-          } else {
-            updateState({ validateStatus: 'success', help: '' });
+            updateState({ validateStatus: 'error', help: 'Username is not available' })
           }
-          setChecked(true);
-        } catch (err) {
+          else {
+            updateState({ validateStatus: 'success', help: '' })
+          }
+          setChecked(true)
+        }
+        catch(err) {
           console.log(err);
         }
-      } else {
+      }
+      else {
         updateState({ validateStatus: 'success', help: '' });
         setChecked(true);
       }
-    }, 500);
-  };
+    }, 500)
+  }
 
   const actions = {
     setUsername: (username) => {
@@ -63,32 +67,27 @@ export function useCreateAccount() {
     },
     isDisabled: () => {
       const restricted = new RegExp('[!@#$%^&*() ,.?":{}|<>]', 'i');
-      if (
-        state.username === '' ||
-        restricted.test(state.username) ||
-        state.password === '' ||
-        state.password !== state.confirm ||
-        !checked ||
-        state.validateStatus === 'error'
-      ) {
-        return true;
+      if (state.username === '' || restricted.test(state.username) || state.password === '' ||
+          state.password !== state.confirm || !checked || state.validateStatus === 'error') {
+        return true
       }
-      return false;
+      return false
     },
     onSettings: () => {
       navigate('/admin');
     },
     onCreateAccount: async () => {
       if (!state.busy && state.username !== '' && state.password !== '' && state.password === state.confirm) {
-        updateState({ busy: true });
+        updateState({ busy: true })
         try {
-          await app.actions.create(state.username, state.password, state.token);
-        } catch (err) {
+          await app.actions.create(state.username, state.password, state.token)
+        }
+        catch (err) {
           console.log(err);
-          updateState({ busy: false });
+          updateState({ busy: false })
           throw new Error('create failed: check with your admin');
         }
-        updateState({ busy: false });
+        updateState({ busy: false })
       }
     },
     onLogin: () => {
@@ -103,11 +102,12 @@ export function useCreateAccount() {
 
   useEffect(() => {
     let params = new URLSearchParams(search);
-    let token = params.get('add');
+    let token = params.get("add");
     if (token) {
       updateState({ token });
     }
-  }, [app, navigate, search]);
+  }, [app, navigate, search])
 
   return { state, actions };
 }
+

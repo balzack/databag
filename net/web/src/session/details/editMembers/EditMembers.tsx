@@ -3,6 +3,7 @@ import { CardSelect } from '../../cardSelect/CardSelect';
 import { Button } from 'antd';
 
 export function EditMembers({ members, setMember, clearMember, onClose, strings }) {
+
   return (
     <EditMembersWrapper>
       <div className="title">{strings.editMembership}</div>
@@ -16,13 +17,9 @@ export function EditMembers({ members, setMember, clearMember, onClose, strings 
         />
       </div>
       <div className="controls">
-        <Button
-          key="back"
-          onClick={onClose}
-        >
-          {strings.close}
-        </Button>
+        <Button key="back" onClick={onClose}>{strings.close}</Button>
       </div>
     </EditMembersWrapper>
   );
 }
+

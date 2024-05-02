@@ -8,3 +8,4 @@ export async function getListing(server, filter) {
   checkResponse(listing);
   return await listing.json();
 }
+

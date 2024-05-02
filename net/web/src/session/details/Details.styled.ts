@@ -5,8 +5,8 @@ export const DetailsWrapper = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  background-color: ${(props) => props.theme.itemArea};
-  color: ${(props) => props.theme.mainText};
+  background-color: ${props => props.theme.itemArea};
+  color: ${props => props.theme.mainText};
 
   .actions {
     display: flex;
@@ -18,8 +18,8 @@ export const DetailsWrapper = styled.div`
 
     .label {
       padding-top: 16px;
-      border-bottom: 1px solid ${(props) => props.theme.sectionBorder};
-      color: ${(props) => props.theme.hintText};
+      border-bottom: 1px solid ${props => props.theme.sectionBorder};
+      color: ${props => props.theme.hintText};
       font-size: 12px;
       width: 50%;
       max-width: 300px;
@@ -67,7 +67,7 @@ export const DetailsWrapper = styled.div`
   .header {
     width: 100%;
     height: 48px;
-    border-bottom: 1px solid ${(props) => props.theme.headerBorder};
+    border-bottom: 1px solid ${props => props.theme.headerBorder};
     display: flex;
     flex-shrink: 0;
     align-items: center;
@@ -83,7 +83,7 @@ export const DetailsWrapper = styled.div`
 
     .dismiss {
       font-size: 18px;
-      color: ${(props) => props.theme.hintText};
+      color: ${props => props.theme.hintText};
       cursor: pointer;
     }
   }
@@ -102,7 +102,7 @@ export const DetailsWrapper = styled.div`
     .label {
       padding-top: 16px;
       width: 100%;
-      border-bottom: 1px solid ${(props) => props.theme.sectionBorder};
+      border-bottom: 1px solid ${props => props.theme.sectionBorder};
       padding-left: 16px;
     }
 
@@ -113,8 +113,8 @@ export const DetailsWrapper = styled.div`
 
     .button {
       border-radius: 4px;
-      color: ${(props) => props.theme.activeText};
-      background-color: ${(props) => props.theme.enabledArea};
+      color: ${props => props.theme.activeText};
+      background-color: ${props => props.theme.enabledArea};
       cursor: pointer;
       margin-bottom: 8px;
       display: flex;
@@ -147,7 +147,7 @@ export const DetailsWrapper = styled.div`
         }
 
         .edit:hover {
-          color: ${(props) => props.theme.linkText};
+          color: ${props => props.theme.linkText};
         }
 
         .subject {
@@ -165,4 +165,5 @@ export const DetailsWrapper = styled.div`
         }
     }
   }
-`;
+`
+

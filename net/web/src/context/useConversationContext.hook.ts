@@ -2,17 +2,17 @@ import { useEffect, useState, useRef, useContext } from 'react';
 import { CardContext } from 'context/CardContext';
 import { ChannelContext } from 'context/ChannelContext';
 
-const defaultState = {
+const defaultState ={
   offsync: false,
   topics: new Map(),
   card: null,
   channel: null,
   topicRevision: null,
-};
+}
 export const defaultConversionContext = {
   state: defaultState,
-  actions: {} as ReturnType<typeof useConversationContext>['actions'],
-};
+  actions: {}as ReturnType<typeof useConversationContext>["actions"]
+}
 export function useConversationContext() {
   const COUNT = 32;
 
@@ -34,28 +34,29 @@ export function useConversationContext() {
   const topics = useRef(new Map());
 
   const updateState = (value) => {
-    setState((s) => ({ ...s, ...value }));
-  };
+    setState((s) => ({ ...s, ...value }))
+  }
 
   const getTopicDelta = async (cardId, channelId, revision, count, begin, end) => {
     if (cardId) {
       return await card.actions.getTopics(cardId, channelId, revision, count, begin, end);
     }
     return await channel.actions.getTopics(channelId, revision, count, begin, end);
-  };
+  }
 
   const getTopic = async (cardId, channelId, topicId) => {
     if (cardId) {
       return await card.actions.getTopic(cardId, channelId, topicId);
     }
     return await channel.actions.getTopic(channelId, topicId);
-  };
+  }
 
   const removeChannel = async (cardId, channelId) => {
     if (cardId) {
       await card.actions.removeChannel(cardId, channelId);
-      await card.actions.resync();
-    } else {
+      await card.actions.resync();      
+    }
+    else {
       await channel.actions.removeChannel(channelId);
       await channel.actions.resync();
     }
@@ -64,24 +65,27 @@ export function useConversationContext() {
   const setChannelSubject = async (cardId, channelId, type, subject) => {
     if (cardId) {
       console.log('cannot update channel subject');
-    } else {
+    }
+    else {
       await channel.actions.setChannelSubject(channelId, type, subject);
     }
-  };
+  }
 
   const setChannelCard = async (cardId, channelId, id) => {
     if (cardId) {
       console.log('cannot update channel card');
-    } else {
+    }
+    else {
       await channel.actions.setChannelCard(channelId, id);
       await channel.actions.resync();
     }
-  };
+  }
 
   const clearChannelCard = async (cardId, channelId, id) => {
     if (cardId) {
       console.log('cannot update channel card');
-    } else {
+    }
+    else {
       await channel.actions.clearChannelCard(channelId, id);
       await channel.actions.resync();
     }
@@ -90,7 +94,8 @@ export function useConversationContext() {
   const addTopic = async (cardId, channelId, type, message, files) => {
     if (cardId) {
       await card.actions.addTopic(cardId, channelId, type, message, files);
-    } else {
+    }
+    else {
       await channel.actions.addTopic(channelId, type, message, files);
     }
     resync();
@@ -99,7 +104,8 @@ export function useConversationContext() {
   const removeTopic = async (cardId, channelId, topicId) => {
     if (cardId) {
       await card.actions.removeTopic(cardId, channelId, topicId);
-    } else {
+    }
+    else {
       await channel.actions.removeTopic(channelId, topicId);
     }
     await resync();
@@ -108,7 +114,8 @@ export function useConversationContext() {
   const setTopicSubject = async (cardId, channelId, topicId, type, subject) => {
     if (cardId) {
       await card.actions.setTopicSubject(cardId, channelId, topicId, type, subject);
-    } else {
+    }
+    else {
       await channel.actions.setTopicSubject(channelId, topicId, type, subject);
     }
     await resync();
@@ -117,7 +124,8 @@ export function useConversationContext() {
   const getTopicAssetUrl = (cardId, channelId, topicId, assetId) => {
     if (cardId) {
       return card.actions.getTopicAssetUrl(cardId, channelId, topicId, assetId);
-    } else {
+    }
+    else {
       return channel.actions.getTopicAssetUrl(channelId, topicId, assetId);
     }
   };
@@ -127,7 +135,8 @@ export function useConversationContext() {
     if (cardId) {
       const setCard = card.state.cards.get(cardId);
       setChannel = setCard?.channels.get(channelId);
-    } else {
+    }
+    else {
       setChannel = channel.state.channels.get(channelId);
     }
     if (setChannel) {
@@ -136,29 +145,26 @@ export function useConversationContext() {
         curTopicRevision.current = topicRevision;
         curDetailRevision.current = detailRevision;
       }
-    } else {
+    }
+    else {
       console.log('conversation not found');
     }
-  };
+  }
 
   const resync = async () => {
     try {
       force.current = true;
       await sync();
-    } catch (err) {
+    }
+    catch (err) {
       console.log(err);
     }
   };
 
   const sync = async () => {
-    if (
-      !syncing.current &&
-      (reset.current ||
-        force.current ||
-        loadMore.current ||
-        setDetailRevision.current !== curDetailRevision.current ||
-        setTopicRevision.current !== curTopicRevision.current)
-    ) {
+    if (!syncing.current && (reset.current || force.current || loadMore.current || 
+        setDetailRevision.current !== curDetailRevision.current || setTopicRevision.current !== curTopicRevision.current)) {
+
       const more = loadMore.current;
       const update = force.current;
       const topicRevision = more ? setTopicRevision.current : curTopicRevision.current;
@@ -174,7 +180,7 @@ export function useConversationContext() {
         setTopicRevision.current = null;
         setDetailRevision.current = null;
         topics.current = new Map();
-        updateState({ offsync: false, channel: null, topics: new Map() });
+        updateState({ offsync: false, channel: null, topics: new Map() }); 
       }
 
       if (conversationId.current) {
@@ -187,15 +193,17 @@ export function useConversationContext() {
           if (cardId) {
             cardSync = card.state.cards.get(cardId);
             channelSync = cardSync?.channels.get(channelId);
-          } else {
+          }
+          else {
             channelSync = channel.state.channels.get(channelId);
           }
           if (channelSync) {
             setDetailRevision.current = detailRevision;
             updateState({ card: cardSync, channel: channelSync });
-          } else {
+          }
+          else {
             syncing.current = false;
-            console.log('converstaion not found');
+            console.log("converstaion not found");
             return;
           }
         }
@@ -206,25 +214,29 @@ export function useConversationContext() {
             let delta;
             if (!marker.current) {
               delta = await getTopicDelta(cardId, channelId, null, COUNT, null, null);
-            } else if (more) {
+            }
+            else if (more) {
               delta = await getTopicDelta(cardId, channelId, null, COUNT, null, marker.current);
-            } else {
+            }
+            else {
               delta = await getTopicDelta(cardId, channelId, setTopicRevision.current, null, marker.current, null);
             }
 
             for (let topic of delta?.topics) {
               if (topic.data == null) {
                 topics.current.delete(topic.id);
-              } else {
+              }
+              else {
                 let cur = topics.current.get(topic.id);
                 if (cur == null) {
                   cur = { id: topic.id, data: {} };
                 }
                 if (topic.data.detailRevision !== cur.data.detailRevision) {
-                  if (topic.data.topicDetail) {
+                  if(topic.data.topicDetail) {
                     cur.data.topicDetail = topic.data.topicDetail;
                     cur.data.detailRevision = topic.data.detailRevision;
-                  } else {
+                  }
+                  else {
                     const slot = await getTopic(cardId, channelId, topic.id);
                     cur.data.topicDetail = slot.data.topicDetail;
                     cur.data.detailRevision = slot.data.detailRevision;
@@ -240,7 +252,8 @@ export function useConversationContext() {
 
             updateState({ offsync: false, topicRevision: topicRevision, topics: topics.current });
           }
-        } catch (err) {
+        }
+        catch (err) {
           console.log(err);
           updateState({ offsync: true });
           syncing.current = false;
@@ -316,7 +329,9 @@ export function useConversationContext() {
       force.current = true;
       await sync();
     },
-  };
+  }
 
-  return { state, actions };
+  return { state, actions }
 }
+
+

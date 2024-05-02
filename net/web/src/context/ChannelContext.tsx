@@ -5,5 +5,10 @@ export const ChannelContext = createContext(defaultChannelContext);
 
 export function ChannelContextProvider({ children }) {
   const { state, actions } = useChannelContext();
-  return <ChannelContext.Provider value={{ state, actions }}>{children}</ChannelContext.Provider>;
+  return (
+    <ChannelContext.Provider value={{ state, actions }}>
+      {children}
+    </ChannelContext.Provider>
+  );
 }
+

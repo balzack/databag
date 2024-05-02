@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { Colors } from 'constants/Colors';
 
 export const SelectItemWrapper = styled.div`
-  color: ${(props) => props.theme.mainText};
+  color: ${props => props.theme.mainText};
 
   .active {
     cursor: pointer;
@@ -14,7 +14,7 @@ export const SelectItemWrapper = styled.div`
     align-items: center;
 
     &:hover {
-      background-color: ${(props) => props.theme.hoverArea};
+      background-color: ${props => props.theme.hoverArea};
     }
   }
 
@@ -47,7 +47,7 @@ export const SelectItemWrapper = styled.div`
       overflow: hidden;
       text-overflow: ellipsis;
       font-size: 12px;
-      color: ${(props) => props.theme.hintText};
+      color: ${props => props.theme.hintText};
     }
   }
 
@@ -55,7 +55,7 @@ export const SelectItemWrapper = styled.div`
     flex-shrink: 0;
     padding-right: 8px;
   }
-`;
+`
 
 export const Markup = styled.div`
   background-color: ${Colors.connected};
@@ -64,3 +64,4 @@ export const Markup = styled.div`
   height: 8px;
   margin-right: 8px;
 `;
+

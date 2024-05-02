@@ -5,5 +5,10 @@ export const UploadContext = createContext(defaultUploadContext);
 
 export function UploadContextProvider({ children }) {
   const { state, actions } = useUploadContext();
-  return <UploadContext.Provider value={{ state, actions }}>{children}</UploadContext.Provider>;
+  return (
+    <UploadContext.Provider value={{ state, actions }}>
+      {children}
+    </UploadContext.Provider>
+  );
 }
+

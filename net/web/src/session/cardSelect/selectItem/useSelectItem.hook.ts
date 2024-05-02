@@ -2,6 +2,7 @@ import { useContext, useState, useEffect } from 'react';
 import { CardContext } from 'context/CardContext';
 
 export function useSelectItem(item, selected, markup) {
+
   const [state, setState] = useState({
     logo: null,
     logoSet: false,
@@ -15,12 +16,13 @@ export function useSelectItem(item, selected, markup) {
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
-  };
+  }
 
   useEffect(() => {
     if (selected) {
       updateState({ className: 'active', selected: selected.has(item.id) });
-    } else {
+    }
+    else {
       updateState({ className: 'passive', markup: item.id === markup });
     }
     // eslint-disable-next-line
@@ -30,12 +32,15 @@ export function useSelectItem(item, selected, markup) {
     const contact = card.state.cards.get(item.id);
     if (contact?.data?.cardProfile?.imageSet) {
       updateState({ logoSet: true, logo: card.actions.getCardImageUrl(item.id) });
-    } else {
+    }
+    else {
       updateState({ logoSet: true, logo: null });
     }
   }, [card, item]);
 
-  const actions = {};
+  const actions = {
+  };
 
   return { state, actions };
 }
+

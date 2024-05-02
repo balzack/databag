@@ -7,6 +7,7 @@ import { getCardByGuid } from 'context/cardUtil';
 import { decryptChannelSubject } from 'context/sealUtil';
 
 export function useChannelHeader(contentKey) {
+
   const [state, setState] = useState({
     logoImg: null,
     logoUrl: null,
@@ -14,14 +15,14 @@ export function useChannelHeader(contentKey) {
     title: null,
     offsync: false,
     display: null,
-    strings: {} as Record<string, string>,
+    strings: {} as Record<string,string>,
   });
 
   const settings = useContext(SettingsContext);
   const card = useContext(CardContext);
   const conversation = useContext(ConversationContext);
   const profile = useContext(ProfileContext);
-
+  
   const cardId = useRef<any>();
   const channelId = useRef<any>();
   const detailRevision = useRef<any>();
@@ -29,7 +30,7 @@ export function useChannelHeader(contentKey) {
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
-  };
+  }
 
   useEffect(() => {
     const { display, strings } = settings.state;
@@ -37,6 +38,7 @@ export function useChannelHeader(contentKey) {
   }, [settings.state]);
 
   useEffect(() => {
+
     const cardValue = conversation.state.card;
     const channelValue = conversation.state.channel;
 
@@ -53,7 +55,8 @@ export function useChannelHeader(contentKey) {
       if (profile?.imageSet) {
         img = null;
         logo = card.actions.getCardImageUrl(cardValue.id);
-      } else {
+      }
+      else {
         img = 'avatar';
         logo = null;
       }
@@ -70,7 +73,8 @@ export function useChannelHeader(contentKey) {
           if (profile?.imageSet) {
             img = null;
             logo = card.actions.getCardImageUrl(contact.id);
-          } else {
+          }
+          else {
             img = 'avatar';
             logo = null;
           }
@@ -83,19 +87,17 @@ export function useChannelHeader(contentKey) {
     if (memberCount === 0) {
       img = 'solution';
       label = state.strings.notes;
-    } else if (memberCount === 1) {
+    }
+    else if (memberCount === 1) {
       label = names.join(',');
-    } else {
+    }
+    else {
       img = 'appstore';
       label = names.join(',');
     }
 
-    if (
-      cardId.current !== cardValue?.id ||
-      channelId.current !== channelValue?.id ||
-      detailRevision.current !== channelValue?.data?.detailRevision ||
-      key.current !== contentKey
-    ) {
+    if (cardId.current !== cardValue?.id || channelId.current !== channelValue?.id ||
+        detailRevision.current !== channelValue?.data?.detailRevision || key.current !== contentKey) {
       let title;
       try {
         const detail = channelValue?.data?.channelDetail;
@@ -103,14 +105,17 @@ export function useChannelHeader(contentKey) {
           if (contentKey) {
             const unsealed = decryptChannelSubject(detail.data, contentKey);
             title = unsealed.subject;
-          } else {
+          }
+          else {
             title = '...';
           }
-        } else if (detail?.dataType === 'superbasic') {
+        }
+        else if (detail?.dataType === 'superbasic') {
           const data = JSON.parse(detail.data);
           title = data.subject;
         }
-      } catch (err) {
+      }
+      catch(err) {
         console.log(err);
       }
       cardId.current = cardValue?.id;
@@ -118,14 +123,16 @@ export function useChannelHeader(contentKey) {
       detailRevision.current = channelValue?.data?.detailRevision;
       key.current = contentKey;
       updateState({ title, label, img, logo });
-    } else {
+    }
+    else {
       updateState({ label, img, logo });
     }
     // eslint-disable-next-line
   }, [conversation.state, card.state, state.strings, contentKey]);
 
   const actions = {
-    resync: () => {},
+    resync: () => {
+    },
   };
 
   return { state, actions };

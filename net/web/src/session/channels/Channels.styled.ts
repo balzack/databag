@@ -5,7 +5,7 @@ export const ChannelsWrapper = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  background-color: ${(props) => props.theme.itemArea};
+  background-color: ${props => props.theme.itemArea};
 
   .view {
     min-height: 0;
@@ -17,37 +17,38 @@ export const ChannelsWrapper = styled.div`
       align-items: center;
       justify-content: center;
       font-style: italic;
-      color: ${(props) => props.theme.hintText};
+      color: ${props => props.theme.hintText};
       height: 100%;
     }
   }
-
+ 
   .search {
     padding-top: 8px;
     padding-bottom: 8px;
     padding-left: 16px;
     padding-right: 16px;
-    border-bottom: 1px solid ${(props) => props.theme.sectionBorder};
+    border-bottom: 1px solid ${props => props.theme.sectionBorder};
     display: flex;
     flex-direction: row;
     height: 48px;
 
-    .filter {
-      border: 1px solid ${(props) => props.theme.sectionBorder};
-      background-color: ${(props) => props.theme.inputArea};
+    .filter { 
+      border: 1px solid ${props => props.theme.sectionBorder};
+      background-color: ${props => props.theme.inputArea};
       border-radius: 8px;
       flex-grow: 1;
 
+
       .filterControl {
-        color: ${(props) => props.theme.mainText};
+        color: ${props => props.theme.mainText};
 
         input {
           padding-left: 4px;
-          color: ${(props) => props.theme.mainText};
+          color: ${props => props.theme.mainText};
         }
 
         input::placeholder {
-          color: ${(props) => props.theme.placeholderText};
+          color: ${props => props.theme.placeholderText};
         }
       }
     }
@@ -72,34 +73,34 @@ export const ChannelsWrapper = styled.div`
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    background-color: ${(props) => props.theme.headerArea};
-    border-top: 1px solid ${(props) => props.theme.sectionBorder};
+    background-color: ${props => props.theme.headerArea};
+    border-top: 1px solid ${props => props.theme.sectionBorder};
     padding-bottom: 10px;
     padding-top: 10px;
     position: relative;
   }
 
   .addDisabled {
-    background-color: ${(props) => props.theme.disabledArea};
+    background-color: ${props => props.theme.disabledArea};
 
     button {
-      color: ${(props) => props.theme.idleText};
+      color: ${props => props.theme.idleText};
     }
   }
 
   .addEnabled {
-    background-color: ${(props) => props.theme.enabledArea};
+    background-color: ${props => props.theme.enabledArea};
 
     button {
-      color: ${(props) => props.theme.activeText};
+      color: ${props => props.theme.activeText};
     }
   }
 
   .adding {
     display: flex;
     flex-direction: row;
-    background-color: ${(props) => props.theme.enabledArea};
-    color: ${(props) => props.theme.activeText};
+    background-color: ${props => props.theme.enabledArea};
+    color: ${props => props.theme.activeText};
     align-items: center;
     justify-content: center;
     padding-left: 16px;
@@ -114,3 +115,4 @@ export const ChannelsWrapper = styled.div`
     }
   }
 `;
+

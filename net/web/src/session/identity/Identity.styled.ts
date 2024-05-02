@@ -8,14 +8,14 @@ export const IdentityWrapper = styled.div`
   align-items: center;
   padding-left: 16px;
   padding-right: 16px;
-  background-color: ${(props) => props.theme.headerArea};
-  border-bottom: 1px solid ${(props) => props.theme.sectionBorder};
-  color: ${(props) => props.theme.mainText};
+  background-color: ${props => props.theme.headerArea};
+  border-bottom: 1px solid ${props => props.theme.sectionBorder};
+  color: ${props => props.theme.mainText};
   flex-shrink: 0;
 
   &:hover {
     cursor: pointer;
-    background-color: ${(props) => props.theme.hoverArea};
+    background-color: ${props => props.theme.hoverArea};
 
     .drop {
       font-weight: bold;
@@ -26,8 +26,8 @@ export const IdentityWrapper = styled.div`
     padding-left: 4px;
     padding-right: 4px;
     border-radius: 8px;
-    border: 2px solid ${(props) => props.theme.sectionBorder};
-    color: ${(props) => props.theme.mainText};
+    border: 2px solid ${props => props.theme.sectionBorder};
+    color: ${props => props.theme.mainText};
   }
 
   .label {
@@ -69,14 +69,15 @@ export const LogoutContent = styled.div`
 
   .logoutMode {
     padding-right: 8px;
-    color: ${(props) => props.theme.mainText};
+    color: ${props => props.theme.mainText};
   }
-`;
+`
 
 export const ErrorNotice = styled.div`
-  color: ${(props) => props.theme.alertText};
-`;
+  color: ${props => props.theme.alertText};
+`
 
 export const InfoNotice = styled.div`
-  color: ${(props) => props.theme.linkText};
-`;
+  color: ${props => props.theme.linkText};
+`
+

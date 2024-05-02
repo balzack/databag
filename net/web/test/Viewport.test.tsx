@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { render, act, screen, waitFor, fireEvent } from '@testing-library/react';
+import {render, act, screen, waitFor, fireEvent} from '@testing-library/react'
 
 import { SettingsContext, SettingsContextProvider } from 'context/SettingsContext';
 
@@ -13,10 +13,10 @@ function ViewportView() {
 
   return (
     <div>
-      <span data-testid="count">{renderCount}</span>
-      <span data-testid="display">{settings.state.display}</span>
-      <span data-testid="width">{settings.state.width}</span>
-      <span data-testid="height">{settings.state.height}</span>
+      <span data-testid="count">{ renderCount }</span>
+      <span data-testid="display">{ settings.state.display }</span>
+      <span data-testid="width">{ settings.state.width }</span>
+      <span data-testid="height">{ settings.state.height }</span>
     </div>
   );
 }
@@ -37,4 +37,8 @@ test('display size', async () => {
     expect(screen.getByTestId('width').textContent).toBe('1024');
     expect(screen.getByTestId('height').textContent).toBe('768');
   });
+
 });
+
+
+

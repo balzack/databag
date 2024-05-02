@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { render, act, screen, waitFor, fireEvent } from '@testing-library/react';
+import {render, act, screen, waitFor, fireEvent} from '@testing-library/react'
 import { CardContext, CardContextProvider } from 'context/CardContext';
 import { SettingsContextProvider } from 'context/SettingsContext';
 import { useContact } from 'session/contact/useContact.hook';
@@ -26,8 +26,8 @@ function ContactView() {
   return (
     //@ts-ignore
     <div count={renderCount}>
-      <div data-testid="name">{name}</div>
-      <div data-testid="status">{status}</div>
+      <div data-testid="name">{ name }</div>
+      <div data-testid="status">{ status }</div>
     </div>
   );
 }
@@ -53,21 +53,25 @@ beforeEach(() => {
   fetchProfile = {};
 
   const mockFetch = jest.fn().mockImplementation((url, options) => {
+
     if (url.startsWith('/contact/cards?agent')) {
       return Promise.resolve({
-        json: () => Promise.resolve(fetchCards),
+        json: () => Promise.resolve(fetchCards)
       });
-    } else if (url.startsWith('/contact/cards/000a/profile?agent')) {
+    }
+    else if (url.startsWith('/contact/cards/000a/profile?agent')) {
       return Promise.resolve({
-        json: () => Promise.resolve(fetchProfile),
+        json: () => Promise.resolve(fetchProfile)
       });
-    } else if (url.startsWith('/contact/cards/000a/detail?agent')) {
+    }
+    else if (url.startsWith('/contact/cards/000a/detail?agent')) {
       return Promise.resolve({
-        json: () => Promise.resolve(fetchDetail),
+        json: () => Promise.resolve(fetchDetail)
       });
-    } else {
+    }
+    else {
       return Promise.resolve({
-        json: () => Promise.resolve([]),
+        json: () => Promise.resolve([])
       });
     }
   });
@@ -85,6 +89,7 @@ afterEach(() => {
 });
 
 test('update contact name', async () => {
+
   render(<ContactTestApp />);
 
   await waitFor(async () => {
@@ -92,30 +97,21 @@ test('update contact name', async () => {
     expect(contactHook).not.toBe(null);
   });
 
-  fetchCards = [
-    {
-      id: '000a',
-      revision: 1,
-      data: {
-        detailRevision: 2,
-        profileRevision: 3,
-        notifiedProfile: 3,
-        notifiedArticle: 5,
-        notifiedChannel: 6,
-        notifiedView: 7,
-        cardDetail: { status: 'connected', statusUpdate: 136, token: '01ab' },
-        cardProfile: {
-          guid: '01ab23',
-          handle: 'test1',
-          name: 'tester',
-          imageSet: false,
-          seal: 'abc',
-          version: '1.1.1',
-          node: 'test.org',
-        },
-      },
+  fetchCards = [{
+    id: '000a',
+    revision: 1,
+    data: {
+      detailRevision: 2,
+      profileRevision: 3,
+      notifiedProfile: 3,
+      notifiedArticle: 5,
+      notifiedChannel: 6,
+      notifiedView: 7,
+      cardDetail: { status: 'connected', statusUpdate: 136, token: '01ab', },
+      cardProfile: { guid: '01ab23', handle: 'test1', name: 'tester', imageSet: false,
+        seal: 'abc', version: '1.1.1', node: 'test.org' },
     },
-  ];
+  }];
 
   await act(async () => {
     cardContext.actions.setToken('abc123');
@@ -127,95 +123,83 @@ test('update contact name', async () => {
     expect(screen.getByTestId('status').textContent).toBe('connected');
   });
 
-  fetchCards = [
-    {
-      id: '000a',
-      revision: 2,
-      data: {
-        detailRevision: 2,
-        profileRevision: 4,
-        notifiedProfile: 3,
-        notifiedArticle: 5,
-        notifiedChannel: 6,
-        notifiedView: 7,
-      },
+  fetchCards = [{
+    id: '000a',
+    revision: 2,
+    data: {
+      detailRevision: 2,
+      profileRevision: 4,
+      notifiedProfile: 3,
+      notifiedArticle: 5,
+      notifiedChannel: 6,
+      notifiedView: 7,
     },
-  ];
+  }];
 
-  (fetchProfile = {
-    guid: '01ab23',
-    handle: 'test1',
-    name: 'tested',
-    imageSet: false,
-    seal: 'abc',
-    version: '1.1.1',
-    node: 'test.org',
-  }),
-    await act(async () => {
-      cardContext.actions.setRevision(2);
-    });
+  fetchProfile = { guid: '01ab23', handle: 'test1', name: 'tested', imageSet: false,
+        seal: 'abc', version: '1.1.1', node: 'test.org' },
+
+  await act(async () => {
+    cardContext.actions.setRevision(2);
+  });
 
   await waitFor(async () => {
     expect(screen.getByTestId('name').textContent).toBe('tested');
     expect(screen.getByTestId('status').textContent).toBe('connected');
   });
 
-  fetchCards = [
-    {
-      id: '000a',
-      revision: 2,
-      data: {
-        detailRevision: 3,
-        profileRevision: 4,
-        notifiedProfile: 3,
-        notifiedArticle: 5,
-        notifiedChannel: 6,
-        notifiedView: 7,
-      },
+  fetchCards = [{
+    id: '000a',
+    revision: 2,
+    data: {
+      detailRevision: 3,
+      profileRevision: 4,
+      notifiedProfile: 3,
+      notifiedArticle: 5,
+      notifiedChannel: 6,
+      notifiedView: 7,
     },
-  ];
+  }];
 
-  (fetchDetail = { status: 'confirmed', statusUpdate: 137 }),
-    await act(async () => {
-      cardContext.actions.setRevision(3);
-    });
+  fetchDetail = { status: 'confirmed', statusUpdate: 137 },
+
+  await act(async () => {
+    cardContext.actions.setRevision(3);
+  });
 
   await waitFor(async () => {
     expect(screen.getByTestId('name').textContent).toBe('tested');
     expect(screen.getByTestId('status').textContent).toBe('connected');
   });
 
-  fetchCards = [
-    {
-      id: '000a',
-      revision: 3,
-      data: {
-        detailRevision: 3,
-        profileRevision: 4,
-        notifiedProfile: 3,
-        notifiedArticle: 5,
-        notifiedChannel: 6,
-        notifiedView: 7,
-      },
+  fetchCards = [{
+    id: '000a',
+    revision: 3,
+    data: {
+      detailRevision: 3,
+      profileRevision: 4,
+      notifiedProfile: 3,
+      notifiedArticle: 5,
+      notifiedChannel: 6,
+      notifiedView: 7,
     },
-  ];
+  }];
 
-  (fetchDetail = { status: 'confirmed', statusUpdate: 137 }),
-    await act(async () => {
-      cardContext.actions.setRevision(4);
-    });
+  fetchDetail = { status: 'confirmed', statusUpdate: 137 },
+
+  await act(async () => {
+    cardContext.actions.setRevision(4);
+  });
 
   await waitFor(async () => {
     expect(screen.getByTestId('name').textContent).toBe('tested');
     expect(screen.getByTestId('status').textContent).toBe('confirmed');
   });
 
-  fetchCards = [
-    {
-      id: '000a',
-      revision: 4,
-    },
-  ];
+  fetchCards = [{
+    id: '000a',
+    revision: 4,
+  }];
 
   await act(async () => {
     cardContext.actions.setRevision(5);
@@ -225,4 +209,7 @@ test('update contact name', async () => {
     expect(screen.getByTestId('name').textContent).toBe('');
     expect(screen.getByTestId('status').textContent).toBe('');
   });
+
+
 });
+

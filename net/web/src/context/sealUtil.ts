@@ -1,5 +1,5 @@
 import CryptoJS from 'crypto-js';
-import { JSEncrypt } from 'jsencrypt';
+import { JSEncrypt } from 'jsencrypt'
 
 export function getChannelSeals(subject) {
   const { seals } = JSON.parse(subject);
@@ -21,22 +21,23 @@ export function getContentKey(seals, sealKey) {
       let crypto = new JSEncrypt();
       crypto.setPrivateKey(sealKey.private);
       return crypto.decrypt(seals[i].sealedKey);
+      
     }
   }
-  throw new Error('unsealKey not available');
+  throw new Error("unsealKey not available");
 }
 
 export function encryptChannelSubject(subject, publicKeys) {
   const key = CryptoJS.lib.WordArray.random(256 / 8);
   const iv = CryptoJS.lib.WordArray.random(128 / 8);
   const encrypted = CryptoJS.AES.encrypt(JSON.stringify({ subject }), key, { iv: iv });
-  const subjectEncrypted = encrypted.ciphertext.toString(CryptoJS.enc.Base64);
+  const subjectEncrypted = encrypted.ciphertext.toString(CryptoJS.enc.Base64)
   const subjectIv = iv.toString();
   const keyHex = key.toString();
 
   let seals = [];
   let crypto = new JSEncrypt();
-  publicKeys.forEach((publicKey) => {
+  publicKeys.forEach(publicKey => {
     crypto.setPublicKey(publicKey);
     const sealedKey = crypto.encrypt(keyHex);
     seals.push({ publicKey, sealedKey });
@@ -49,7 +50,7 @@ export function updateChannelSubject(subject, contentKey) {
   const key = CryptoJS.enc.Hex.parse(contentKey);
   const iv = CryptoJS.lib.WordArray.random(128 / 8);
   const encrypted = CryptoJS.AES.encrypt(JSON.stringify({ subject }), key, { iv: iv });
-  const subjectEncrypted = encrypted.ciphertext.toString(CryptoJS.enc.Base64);
+  const subjectEncrypted = encrypted.ciphertext.toString(CryptoJS.enc.Base64)
   const subjectIv = iv.toString();
 
   return { subjectEncrypted, subjectIv };
@@ -59,7 +60,7 @@ export function encryptBlock(block, contentKey) {
   const key = CryptoJS.enc.Hex.parse(contentKey);
   const iv = CryptoJS.lib.WordArray.random(128 / 8);
   const encrypted = CryptoJS.AES.encrypt(block, key, { iv: iv });
-  const blockEncrypted = encrypted.ciphertext.toString(CryptoJS.enc.Base64);
+  const blockEncrypted = encrypted.ciphertext.toString(CryptoJS.enc.Base64)
   const blockIv = iv.toString();
 
   return { blockEncrypted, blockIv };
@@ -94,7 +95,7 @@ export function encryptTopicSubject(subject, contentKey) {
   const iv = CryptoJS.lib.WordArray.random(128 / 8);
   const key = CryptoJS.enc.Hex.parse(contentKey);
   const encrypted = CryptoJS.AES.encrypt(JSON.stringify(subject), key, { iv: iv });
-  const messageEncrypted = encrypted.ciphertext.toString(CryptoJS.enc.Base64);
+  const messageEncrypted = encrypted.ciphertext.toString(CryptoJS.enc.Base64)
   const messageIv = iv.toString();
   return { messageEncrypted, messageIv };
 }
@@ -112,23 +113,22 @@ export function decryptTopicSubject(subject, contentKey) {
 function convertPem(pem) {
   var lines = pem.split('\n');
   var encoded = '';
-  for (var i = 0; i < lines.length; i++) {
-    if (
-      lines[i].trim().length > 0 &&
-      lines[i].indexOf('-BEGIN RSA PRIVATE KEY-') < 0 &&
-      lines[i].indexOf('-BEGIN RSA PUBLIC KEY-') < 0 &&
-      lines[i].indexOf('-BEGIN PUBLIC KEY-') < 0 &&
-      lines[i].indexOf('-END PUBLIC KEY-') < 0 &&
-      lines[i].indexOf('-END RSA PRIVATE KEY-') < 0 &&
-      lines[i].indexOf('-END RSA PUBLIC KEY-') < 0
-    ) {
+  for(var i = 0;i < lines.length;i++){
+    if (lines[i].trim().length > 0 &&
+        lines[i].indexOf('-BEGIN RSA PRIVATE KEY-') < 0 &&
+        lines[i].indexOf('-BEGIN RSA PUBLIC KEY-') < 0 &&
+        lines[i].indexOf('-BEGIN PUBLIC KEY-') < 0 &&
+        lines[i].indexOf('-END PUBLIC KEY-') < 0 &&
+        lines[i].indexOf('-END RSA PRIVATE KEY-') < 0 &&
+        lines[i].indexOf('-END RSA PUBLIC KEY-') < 0) {
       encoded += lines[i].trim();
     }
   }
-  return encoded;
-}
+  return encoded
+};
 
 export async function generateSeal(password) {
+
   // generate key to encrypt private key
   const salt = CryptoJS.lib.WordArray.random(128 / 8);
   const aes = CryptoJS.PBKDF2(password, salt, {
@@ -137,7 +137,7 @@ export async function generateSeal(password) {
   });
 
   // generate rsa key for sealing channel, delay for activity indicators
-  await new Promise((r) => setTimeout(r, 1000));
+  await new Promise(r => setTimeout(r, 1000));
   const crypto = new JSEncrypt({ default_key_size: 2048 });
   crypto.getKey();
 
@@ -153,16 +153,17 @@ export async function generateSeal(password) {
     privateKeyIv: iv.toString(),
     privateKeyEncrypted: enc.ciphertext.toString(CryptoJS.enc.Base64),
     publicKey: publicKey,
-  };
+  }
   const sealKey = {
     public: publicKey,
     private: privateKey,
-  };
+  }
 
   return { seal, sealKey };
 }
 
 export function unlockSeal(seal, password) {
+
   // generate key to encrypt private key
   const salt = CryptoJS.enc.Hex.parse(seal.passwordSalt);
   const aes = CryptoJS.PBKDF2(password, salt, {
@@ -172,25 +173,26 @@ export function unlockSeal(seal, password) {
 
   // decrypt private key
   const iv = CryptoJS.enc.Hex.parse(seal.privateKeyIv);
-  const enc = CryptoJS.enc.Base64.parse(seal.privateKeyEncrypted);
+  const enc = CryptoJS.enc.Base64.parse(seal.privateKeyEncrypted)
 
   let cipherParams = CryptoJS.lib.CipherParams.create({
     ciphertext: enc,
-    iv: iv,
+    iv: iv
   });
   const dec = CryptoJS.AES.decrypt(cipherParams, aes, { iv: iv });
-  const privateKey = dec.toString(CryptoJS.enc.Utf8);
+  const privateKey = dec.toString(CryptoJS.enc.Utf8)
 
   // store ke
   const sealKey = {
     public: seal.publicKey,
     private: privateKey,
-  };
+  }
 
   return sealKey;
 }
 
 export function updateSeal(seal, sealKey, password) {
+
   // generate key to encrypt private key
   const salt = CryptoJS.lib.WordArray.random(128 / 8);
   const aes = CryptoJS.PBKDF2(password, salt, {
@@ -208,7 +210,7 @@ export function updateSeal(seal, sealKey, password) {
     privateKeyIv: iv.toString(),
     privateKeyEncrypted: enc.ciphertext.toString(CryptoJS.enc.Base64),
     publicKey: seal.publicKey,
-  };
+  }
 
   return { seal: updated, sealKey };
 }

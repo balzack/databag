@@ -5,7 +5,7 @@ export const MemberOptionWrapper = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
-  color: ${(props) => props.theme.mainText};
+  color: ${props => props.theme.mainText};
 
   .details {
     flex-grow: 1;
@@ -29,4 +29,4 @@ export const MemberOptionWrapper = styled.div`
       font-size: 12px;
     }
   }
-`;
+`

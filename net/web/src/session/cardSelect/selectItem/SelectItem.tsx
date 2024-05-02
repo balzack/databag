@@ -4,6 +4,7 @@ import { useSelectItem } from './useSelectItem.hook';
 import { Logo } from 'logo/Logo';
 
 export function SelectItem({ item, select, selected, markup, setItem, clearItem }) {
+
   const { state } = useSelectItem(item, selected, markup);
   const profile = item?.data?.cardProfile;
 
@@ -12,7 +13,7 @@ export function SelectItem({ item, select, selected, markup, setItem, clearItem 
       return profile.handle + '@' + profile.node;
     }
     return profile?.handle;
-  };
+  }
 
   const onSelect = (ev) => {
     if (select) {
@@ -24,37 +25,25 @@ export function SelectItem({ item, select, selected, markup, setItem, clearItem 
     if (clearItem && state.selected) {
       clearItem(item.id);
     }
-    ev.stopPropagation();
-  };
+    ev.stopPropagation()
+  }
 
   return (
     <SelectItemWrapper onClick={onSelect}>
-      {state.logoSet && (
-        <div className={state.className}>
-          <Logo
-            url={state.logo}
-            width={32}
-            height={32}
-            radius={8}
-          />
+      { state.logoSet && (
+        <div className={ state.className }>
+          <Logo url={state.logo} width={32} height={32} radius={8} />
           <div className="details">
-            <div className="name">{profile?.name}</div>
-            <div className="handle">{handle()}</div>
+            <div className="name">{ profile?.name }</div>
+            <div className="handle">{ handle() }</div>
           </div>
-          {(select || setItem || clearItem) && (
+          { (select || setItem || clearItem) && (
             <div className="switch">
-              <Switch
-                checked={state.selected}
-                onChange={(flag, ev) => onSelect(ev)}
-                size="small"
-              />
+              <Switch checked={state.selected} onChange={(flag, ev) => onSelect(ev)} size="small" />
             </div>
           )}
-          {state.markup && (
-            <Tooltip
-              placement="left"
-              title="channel host"
-            >
+          { state.markup && (
+            <Tooltip placement="left" title="channel host">
               <Markup />
             </Tooltip>
           )}
@@ -63,3 +52,4 @@ export function SelectItem({ item, select, selected, markup, setItem, clearItem 
     </SelectItemWrapper>
   );
 }
+

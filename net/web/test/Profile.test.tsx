@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { render, act, screen, waitFor, fireEvent } from '@testing-library/react';
+import {render, act, screen, waitFor, fireEvent} from '@testing-library/react'
 import { ProfileContextProvider, ProfileContext } from 'context/ProfileContext';
 import * as fetchUtil from 'api/fetchUtil';
 
@@ -15,17 +15,17 @@ function ProfileView() {
 
   return (
     <div>
-      <span data-testid="count">{renderCount}</span>
-      <span data-testid="guid">{profile.state.identity?.guid}</span>
-      <span data-testid="handle">{profile.state.identity?.handle}</span>
-      <span data-testid="name">{profile.state.identity?.name}</span>
-      <span data-testid="description">{profile.state.identity?.description}</span>
-      <span data-testid="location">{profile.state.identity?.location}</span>
-      <span data-testid="image">{profile.state.identity?.image}</span>
-      <span data-testid="revision">{profile.state.identity?.revision}</span>
-      <span data-testid="seal">{profile.state.identity?.seal}</span>
-      <span data-testid="version">{profile.state.identity?.version}</span>
-      <span data-testid="node">{profile.state.identity?.node}</span>
+      <span data-testid="count">{ renderCount }</span>
+      <span data-testid="guid">{ profile.state.identity?.guid }</span>
+      <span data-testid="handle">{ profile.state.identity?.handle }</span>
+      <span data-testid="name">{ profile.state.identity?.name }</span>
+      <span data-testid="description">{ profile.state.identity?.description }</span>
+      <span data-testid="location">{ profile.state.identity?.location }</span>
+      <span data-testid="image">{ profile.state.identity?.image }</span>
+      <span data-testid="revision">{ profile.state.identity?.revision }</span>
+      <span data-testid="seal">{ profile.state.identity?.seal }</span>
+      <span data-testid="version">{ profile.state.identity?.version }</span>
+      <span data-testid="node">{ profile.state.identity?.node }</span>
     </div>
   );
 }
@@ -35,12 +35,12 @@ function ProfileTestApp() {
     <ProfileContextProvider>
       <ProfileView />
     </ProfileContextProvider>
-  );
+  )
 }
 
 const realFetchWithTimeout = fetchUtil.fetchWithTimeout;
 const realFetchWithCustomTimeout = fetchUtil.fetchWithCustomTimeout;
-let identity = {};
+let identity = { };
 
 beforeEach(() => {
   const mockFetch = jest.fn().mockImplementation((url, options) => {
@@ -48,7 +48,7 @@ beforeEach(() => {
       identity = JSON.parse(options.body);
     }
     return Promise.resolve({
-      json: () => Promise.resolve(identity),
+      json: () => Promise.resolve(identity)
     });
   });
   //@ts-ignore
@@ -72,7 +72,7 @@ test('testing profile sync', async () => {
   });
 
   await waitFor(async () => {
-    expect(screen.getByTestId('name').textContent).toBe('');
+    expect(screen.getByTestId('name').textContent).toBe("");
   });
 
   await act(async () => {
@@ -82,8 +82,8 @@ test('testing profile sync', async () => {
   });
 
   await waitFor(async () => {
-    expect(screen.getByTestId('name').textContent).toBe('jester');
-  });
+    expect(screen.getByTestId('name').textContent).toBe("jester");
+  }); 
 
   await act(async () => {
     identity = { name: 'tester' };
@@ -91,8 +91,8 @@ test('testing profile sync', async () => {
   });
 
   await waitFor(async () => {
-    expect(screen.getByTestId('name').textContent).toBe('tester');
-  });
+    expect(screen.getByTestId('name').textContent).toBe("tester");
+  }); 
 
   const count = screen.getByTestId('count').textContent;
 
@@ -110,4 +110,8 @@ test('testing profile sync', async () => {
   await act(async () => {
     await profileContext.actions.clearToken();
   });
+
 });
+
+
+

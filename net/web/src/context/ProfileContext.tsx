@@ -5,5 +5,10 @@ export const ProfileContext = createContext(defaultProfileContext);
 
 export function ProfileContextProvider({ children }) {
   const { state, actions } = useProfileContext();
-  return <ProfileContext.Provider value={{ state, actions }}>{children}</ProfileContext.Provider>;
+  return (
+    <ProfileContext.Provider value={{ state, actions }}>
+      {children}
+    </ProfileContext.Provider>
+  );
 }
+

@@ -5,5 +5,10 @@ export const AccountContext = createContext(defaultAccountContext);
 
 export function AccountContextProvider({ children }) {
   const { state, actions } = useAccountContext();
-  return <AccountContext.Provider value={{ state, actions }}>{children}</AccountContext.Provider>;
+  return (
+    <AccountContext.Provider value={{ state, actions }}>
+      {children}
+    </AccountContext.Provider>
+  );
 }
+

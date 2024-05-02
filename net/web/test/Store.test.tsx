@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { render, act, screen, waitFor, fireEvent } from '@testing-library/react';
+import {render, act, screen, waitFor, fireEvent} from '@testing-library/react'
 
 import { StoreContext, StoreContextProvider } from 'context/StoreContext';
 
@@ -15,8 +15,8 @@ function StoreView() {
 
   return (
     <div>
-      <span data-testid="count">{renderCount}</span>
-      <span data-testid="config">{store.state.config}</span>
+      <span data-testid="count">{ renderCount }</span>
+      <span data-testid="config">{ store.state.config }</span>
     </div>
   );
 }
@@ -63,4 +63,8 @@ test('get, set and clear', async () => {
   await waitFor(async () => {
     expect(screen.getByTestId('config').textContent).toBe('');
   });
+
 });
+
+
+

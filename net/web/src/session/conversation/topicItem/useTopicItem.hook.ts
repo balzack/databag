@@ -3,6 +3,7 @@ import { fetchWithTimeout } from 'api/fetchUtil';
 import { decryptBlock } from 'context/sealUtil';
 
 export function useTopicItem(topic, contentKey, strings?, menuStyle?) {
+
   const [state, setState] = useState({
     editing: false,
     message: null,
@@ -13,7 +14,7 @@ export function useTopicItem(topic, contentKey, strings?, menuStyle?) {
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
-  };
+  }
 
   const base64ToUint8Array = (base64) => {
     var binaryString = atob(base64);
@@ -22,23 +23,23 @@ export function useTopicItem(topic, contentKey, strings?, menuStyle?) {
       bytes[i] = binaryString.charCodeAt(i);
     }
     return bytes;
-  };
+  }
 
   useEffect(() => {
     const assets = [];
     if (topic.assets?.length) {
-      topic.assets.forEach((asset) => {
+      topic.assets.forEach(asset => {
         if (asset.encrypted) {
           const encrypted = true;
           const { type, thumb, label, extension, parts } = asset.encrypted;
           const getDecryptedBlob = async (abort, progress) => {
             let pos = 0;
             let len = 0;
-
-            const slices = [];
+            
+            const slices = []
             for (let i = 0; i < parts.length; i++) {
               if (abort()) {
-                throw new Error('asset unseal aborted');
+                throw new Error("asset unseal aborted");
               }
               progress(i, parts.length);
               const part = parts[i];
@@ -49,37 +50,41 @@ export function useTopicItem(topic, contentKey, strings?, menuStyle?) {
               const slice = base64ToUint8Array(decrypted);
               slices.push(slice);
               len += slice.byteLength;
-            }
+            };
             progress(parts.length, parts.length);
-
-            const data = new Uint8Array(len);
+            
+            const data = new Uint8Array(len)
             for (let i = 0; i < slices.length; i++) {
               const slice = slices[i];
               data.set(slice, pos);
-              pos += slice.byteLength;
+              pos += slice.byteLength
             }
-            return new Blob([data]);
-          };
+            return new Blob([data]); 
+          }
           assets.push({ type, thumb, label, extension, encrypted, getDecryptedBlob });
-        } else {
-          const encrypted = false;
+        }
+        else {
+          const encrypted = false
           if (asset.image) {
             const type = 'image';
             const thumb = topic.assetUrl(asset.image.thumb, topic.id);
             const full = topic.assetUrl(asset.image.full, topic.id);
             assets.push({ type, thumb, encrypted, full });
-          } else if (asset.video) {
+          }
+          else if (asset.video) {
             const type = 'video';
             const thumb = topic.assetUrl(asset.video.thumb, topic.id);
             const lq = topic.assetUrl(asset.video.lq, topic.id);
             const hd = topic.assetUrl(asset.video.hd, topic.id);
             assets.push({ type, thumb, encrypted, lq, hd });
-          } else if (asset.audio) {
+          }
+          else if (asset.audio) {
             const type = 'audio';
             const label = asset.audio.label;
             const full = topic.assetUrl(asset.audio.full, topic.id);
             assets.push({ type, label, encrypted, full });
-          } else if (asset.binary) {
+          }
+          else if (asset.binary) {
             const type = 'binary';
             const label = asset.binary.label;
             const extension = asset.binary.extension;
@@ -107,3 +112,4 @@ export function useTopicItem(topic, contentKey, strings?, menuStyle?) {
 
   return { state, actions };
 }
+

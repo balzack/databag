@@ -5,5 +5,10 @@ export const AppContext = createContext(defaultAppContext);
 
 export function AppContextProvider({ children }) {
   const { state, actions } = useAppContext();
-  return <AppContext.Provider value={{ state, actions }}>{children}</AppContext.Provider>;
+  return (
+    <AppContext.Provider value={{ state, actions }}>
+      {children}
+    </AppContext.Provider>
+  );
 }
+

@@ -10,12 +10,12 @@ export const AccountItemWrapper = styled.div`
   padding-right: 16px;
   padding-top: 2px;
   padding-bottom: 2px;
-  border-bottom: 1px solid ${(props) => props.theme.itemBorder};
+  border-bottom: 1px solid ${props => props.theme.itemBorder};
   align-items: center;
-  color: ${(props) => props.theme.mainText};
+  color: ${props => props.theme.mainText};
 
   &:hover {
-    background-color: ${(props) => props.theme.hoverArea};
+    background-color: ${props => props.theme.hoverArea};
   }
 
   .avatar {
@@ -53,9 +53,9 @@ export const AccountItemWrapper = styled.div`
   }
 
   .storage {
-    color: ${(props) => props.theme.hintText};
+    color: ${props => props.theme.hintText};
     padding-left: 8px;
-  }
+  }    
 
   .guid {
     font-size: 0.8em;
@@ -87,7 +87,7 @@ export const ResetButton = styled(Button)`
 
 export const DeleteButton = styled(Button)`
   color: red;
-`;
+`
 
 export const AccessLayout = styled.div`
   .control {
@@ -119,8 +119,8 @@ export const AccessLayout = styled.div`
       white-space: nowrap;
       min-width: 0;
       padding-right: 8px;
-    }
-
+    }  
+ 
     .link {
       text-overflow: ellipsis;
       overflow: hidden;
@@ -130,4 +130,4 @@ export const AccessLayout = styled.div`
       padding-right: 8px;
     }
   }
-`;
+`

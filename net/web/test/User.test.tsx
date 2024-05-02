@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { render, act, screen, waitFor, fireEvent } from '@testing-library/react';
+import {render, act, screen, waitFor, fireEvent} from '@testing-library/react'
 import { AppContextProvider } from 'context/AppContext';
 import { AccountContextProvider } from 'context/AccountContext';
 import { ProfileContext, ProfileContextProvider } from 'context/ProfileContext';
@@ -27,12 +27,7 @@ function ProfileView() {
 
   return (
     //@ts-ignore
-    <div
-      data-testid="name"
-      count={renderCount}
-    >
-      {name}
-    </div>
+    <div data-testid="name" count={renderCount}>{ name }</div>
   );
 }
 
@@ -56,13 +51,13 @@ let updated;
 const realFetchWithTimeout = fetchUtil.fetchWithTimeout;
 const realFetchWithCustomTimeout = fetchUtil.fetchWithCustomTimeout;
 beforeEach(() => {
-  let updated = false;
+  let updated = false; 
   const mockFetch = jest.fn().mockImplementation((url, options) => {
     if (options.method === 'PUT') {
       updated = true;
     }
     return Promise.resolve({
-      json: () => Promise.resolve({ name: updated ? 'tested' : 'tester' }),
+      json: () => Promise.resolve({ name: updated ? 'tested' : 'tester' })
     });
   });
   //@ts-ignore
@@ -79,6 +74,7 @@ afterEach(() => {
 });
 
 test('update profile name', async () => {
+
   render(<ProfileTestApp />);
 
   await waitFor(async () => {
@@ -110,4 +106,6 @@ test('update profile name', async () => {
   await waitFor(async () => {
     expect(screen.getByTestId('name').textContent).toBe('tested');
   });
+
 });
+

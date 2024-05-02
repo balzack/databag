@@ -4,18 +4,18 @@ export const AddTopicWrapper = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  background-color: ${(props) => props.theme.selectedArea};
-  color: ${(props) => props.theme.mainText};
+  background-color: ${props => props.theme.selectedArea};
+  color: ${props => props.theme.mainText};
 
   textarea {
     padding-left: 8px;
-    background-color: ${(props) => props.theme.inputArea};
-    border: 1px solid ${(props) => props.theme.sectionBorder};
-    color: ${(props) => props.theme.mainText};
+    background-color: ${props => props.theme.inputArea};
+    border: 1px solid ${props => props.theme.sectionBorder};
+    color: ${props => props.theme.mainText};
   }
 
   textarea::placeholder {
-    color: ${(props) => props.theme.placeholderText};
+    color: ${props => props.theme.placeholderText};
   }
 
   .message {
@@ -42,7 +42,7 @@ export const AddTopicWrapper = styled.div`
     align-items: center;
     
     .bar {
-      border-left: 1px solid ${(props) => props.theme.sectionBorder};
+      border-left: 1px solid ${props => props.theme.sectionBorder};
       height: 36px;
       padding-right 8px;
       margin-left: 8px;
@@ -56,10 +56,10 @@ export const AddTopicWrapper = styled.div`
       width: 32px;
       height: 32px;
       cursor: pointer;
-      border: 1px solid ${(props) => props.theme.sectionBorder};
-      background-color: ${(props) => props.theme.inputArea};
+      border: 1px solid ${props => props.theme.sectionBorder};
+      background-color: ${props => props.theme.inputArea};
       font-size: 18px;
-      color: ${(props) => props.theme.descriptionText};
+      color: ${props => props.theme.descriptionText};
     }
 
     .space {
@@ -73,4 +73,4 @@ export const AddTopicWrapper = styled.div`
       justify-content: flex-end;
     }
   }
-`;
+`

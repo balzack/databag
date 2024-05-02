@@ -8,6 +8,7 @@ import { ProfileContext } from 'context/ProfileContext';
 import { RingContext } from 'context/RingContext';
 
 export function useSession() {
+
   const [state, setState] = useState({
     cardUpdated: false,
     contactGuid: null,
@@ -31,10 +32,10 @@ export function useSession() {
     remoteStream: null,
     remoteVideo: false,
     remoteAudio: false,
-    audioId: null as null | string,
+    audioId: null as null|string,
     videoId: null,
     fullscreen: false,
-    display: null,
+    display:null,
   });
 
   const app = useContext(AppContext);
@@ -45,18 +46,18 @@ export function useSession() {
   const profile = useContext(ProfileContext);
 
   const navigate = useNavigate();
-
+  
   const storeStatus = useRef(null);
   const cardStatus = useRef(0);
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
-  };
+  }
 
   useEffect(() => {
     const ringing = [];
-    const expired = Date.now();
-    ring.state.ringing.forEach((call) => {
+    const expired = Date.now(); 
+    ring.state.ringing.forEach(call => {
       if (call.expires > expired && !call.status) {
         const { callId, cardId, calleeToken, iceUrl, iceUsername, icePassword } = call;
         const contact = card.state.cards.get(cardId);
@@ -65,19 +66,7 @@ export function useSession() {
           const { token } = contact.data.cardDetail;
           const contactToken = `${guid}.${token}`;
           const img = imageSet ? card.actions.getCardImageUrl(cardId) : null;
-          ringing.push({
-            cardId,
-            img,
-            name,
-            handle,
-            contactNode: node,
-            callId,
-            contactToken,
-            calleeToken,
-            iceUrl,
-            iceUsername,
-            icePassword,
-          });
+          ringing.push({ cardId, img, name, handle, contactNode: node, callId, contactToken, calleeToken, iceUrl, iceUsername, icePassword });  
         }
       }
     });
@@ -86,21 +75,11 @@ export function useSession() {
     const contact = card.state.cards.get(ring.state.cardId);
     if (contact) {
       const { imageSet } = contact.data.cardProfile || {};
-      callLogo = imageSet ? card.actions.getCardImageUrl(ring.state.cardId) : null;
+      callLogo = imageSet ? card.actions.getCardImageUrl(ring.state.cardId) : null;  
     }
 
     const { callStatus, localStream, localVideo, localAudio, remoteStream, remoteVideo, remoteAudio } = ring.state;
-    updateState({
-      ringing,
-      callStatus,
-      callLogo,
-      localStream,
-      localVideo,
-      localAudio,
-      remoteStream,
-      remoteVideo,
-      remoteAudio,
-    });
+    updateState({ ringing, callStatus, callLogo, localStream, localVideo, localAudio, remoteStream, remoteVideo, remoteAudio });
 
     if (!callStatus && state.fullscreen) {
       updateState({ fullscreen: false });
@@ -112,7 +91,8 @@ export function useSession() {
   useEffect(() => {
     if (!profile.state.identity?.guid) {
       updateState({ loading: true });
-    } else {
+    }
+    else {
       updateState({ loading: false });
     }
   }, [profile]);
@@ -132,7 +112,7 @@ export function useSession() {
   useEffect(() => {
     let updated;
     const contacts = Array.from(card.state.cards.values());
-    contacts.forEach((contact) => {
+    contacts.forEach(contact => {
       if (!updated || updated < contact?.data?.cardDetail?.statusUpdated) {
         updated = contact?.data?.cardDetail?.statusUpdated;
       }
@@ -203,17 +183,7 @@ export function useSession() {
     accept: async (call) => {
       const { cardId, callId, contactNode, contactToken, calleeToken, iceUrl, iceUsername, icePassword } = call;
       const node = contactNode ? contactNode : window.location.host;
-      await ring.actions.accept(
-        cardId,
-        callId,
-        node,
-        contactToken,
-        calleeToken,
-        iceUrl,
-        iceUsername,
-        icePassword,
-        state.audioId,
-      );
+      await ring.actions.accept(cardId, callId, node, contactToken, calleeToken, iceUrl, iceUsername, icePassword, state.audioId);
     },
     end: async () => {
       await ring.actions.end();
@@ -234,3 +204,4 @@ export function useSession() {
 
   return { state, actions };
 }
+

@@ -14,7 +14,7 @@ export const en = {
   newMessage: 'New Message',
   topics: 'Topics',
   unsetSealing: 'Unset Sealing Key',
-  newTopic: 'New Topic',
+  newTopic: 'New Topic', 
 
   noContacts: 'No Contacts',
   noTopics: 'No Topics',
@@ -65,7 +65,7 @@ export const en = {
   password: 'Password',
   newPassword: 'New Password',
   confirmPassword: 'Confirm Password',
-  deleteKey: "Type 'delete' to remove key",
+  deleteKey: 'Type \'delete\' to remove key',
   delete: 'delete',
   remove: 'Delete',
   username: 'Username',
@@ -101,7 +101,7 @@ export const en = {
   createAccount: 'Create Account',
   accountLogin: 'Account Login',
   toCreate: 'Accounts are created through a link generated from the admin dashboard.',
-  admin: 'Admin',
+  admin: 'Admin',  
   loginError: 'Login Error',
   loginMessage: 'Please confirm your username and password.',
   createError: 'Create Account Error',
@@ -170,7 +170,7 @@ export const en = {
   host: 'Host',
   guest: 'Guest',
   editSubject: 'Edit Subject',
-  editMembership: 'Edit Membership',
+  editMembership: 'Edit Membership', 
   deleteTopic: 'Delete Topic',
   leaveTopic: 'Leave Topic',
 
@@ -237,7 +237,7 @@ export const fr = {
   node: 'Serveur',
   location: 'Emplacement',
   description: 'Description',
-  timeFormat: "Format de l'heure",
+  timeFormat: 'Format de l\'heure',
   dateFormat: 'Format de la date',
   theme: 'Thème',
   language: 'Langue',
@@ -255,10 +255,10 @@ export const fr = {
   password: 'Mot de Passe',
   newPassword: 'Nouveau Mot de Passe',
   confirmPassword: 'Confirmer le Mot de Passe',
-  deleteKey: "Tapez 'supprimer' pour supprimer la clé",
+  deleteKey: 'Tapez \'supprimer\' pour supprimer la clé',
   delete: 'supprimer',
   remove: 'Supprimer',
-  username: "Nom d'Utilisateur",
+  username: 'Nom d\'Utilisateur',
   updateProfile: 'Mettre à Jour le Profil',
 
   syncError: 'Erreur de Synchronisation',
@@ -290,13 +290,13 @@ export const fr = {
   create: 'Créer',
   createAccount: 'Créer un Compte',
   accountLogin: 'Connexion au Compte',
-  toCreate: "Les comptes sont créés via un lien généré depuis le tableau de bord d'administration.",
+  toCreate: 'Les comptes sont créés via un lien généré depuis le tableau de bord d\'administration.',
   admin: 'Administrateur',
   loginError: 'Erreur de connexion',
-  loginMessage: "Veuillez confirmer votre nom d'utilisateur et votre mot de passe.",
+  loginMessage: 'Veuillez confirmer votre nom d\'utilisateur et votre mot de passe.',
   createError: 'Erreur de création de compte',
   createMessage: 'Veuillez vérifier auprès de votre administrateur.',
-  adminError: "Erreur d'Accès",
+  adminError: 'Erreur d\'Accès',
   adminMessage: 'Veuillez confirmer votre mot de passe',
 
   confirmDelete: 'Suppression de Compte',
@@ -325,16 +325,16 @@ export const fr = {
   allowUnsealed: 'Autoriser les Sujets non Sécurisés',
   topicContent: 'Contenu du Sujet:',
   enableImage: 'Activer les Images du Sujet',
-  imageHint: "Autoriser la publication d'images dans des sujets",
-  enableAudio: "Activer l'Audio du Suject",
-  audioHint: "Autoriser la publication d'audio dans des sujets",
+  imageHint: 'Autoriser la publication d\'images dans des sujets',
+  enableAudio: 'Activer l\'Audio du Suject',
+  audioHint: 'Autoriser la publication d\'audio dans des sujets',
   enableVideo: 'Activer les Videos du Sujet',
   videoHint: 'Autoriser la publication de video dans des sujets',
   enableWeb: 'Activer les Appels WebRTC',
   webHint: 'Autoriser les appels audio et vidéo aux contacts',
   serverUrl: 'URL du Serveur WebRTC',
   urlHint: 'turn:ip:port?transport=udp',
-  webUsername: "Nom d'Utilisateur WebRTC",
+  webUsername: 'Nom d\'Utilisateur WebRTC',
   webPassword: 'Mot de Passe WebRTC',
   failedLoad: 'Échec du Chargement',
   limit: 'Limite',
@@ -446,7 +446,7 @@ export const sp = {
   password: 'Contraseña',
   newPassword: 'Nueva Contraseña',
   confirmPassword: 'Confirmar Contraseña',
-  deleteKey: "Escribe 'borrar' para Eliminar la Clave",
+  deleteKey: 'Escribe \'borrar\' para Eliminar la Clave',
   delete: 'borrar',
   remove: 'Eliminar',
   username: 'Nombre de usuario',
@@ -567,7 +567,7 @@ export const sp = {
   confirmRemove: '¿Estás seguro de que quieres eliminar el contacto?',
   message: 'Mensaje',
   sealedMessage: 'Mensaje Seguro',
-};
+}
 
 export const pt = {
   code: 'pt',
@@ -636,7 +636,7 @@ export const pt = {
   password: 'Senha',
   newPassword: 'Nova senha',
   confirmPassword: 'Confirmar senha',
-  deleteKey: "Digite 'excluir' para deletar a chave",
+  deleteKey: 'Digite \'excluir\' para deletar a chave',
   delete: 'excluir',
   remove: 'Remover',
   username: 'Nome de usuário',
@@ -757,7 +757,7 @@ export const pt = {
   confirmRemove: 'Tem certeza de que deseja remover o contato?',
   message: 'Mensagem',
   sealedMessage: 'Mensagem Segura',
-};
+}
 
 export const de = {
   code: 'de',
@@ -826,7 +826,7 @@ export const de = {
   password: 'Passwort',
   newPassword: 'Neues Passwort',
   confirmPassword: 'Passwort bestätigen',
-  deleteKey: "'löschen' eingeben, um den Schlüssel zu löschen",
+  deleteKey: '\'löschen\' eingeben, um den Schlüssel zu löschen',
   delete: 'löschen',
   remove: 'Entfernen',
   username: 'Benutzername',
@@ -947,7 +947,7 @@ export const de = {
   confirmRemove: 'Sind Sie sicher, dass Sie den Kontakt löschen möchten?',
   message: 'Nachricht',
   sealedMessage: 'Gesicherte Nachricht',
-};
+}
 
 export const ru = {
   code: 'ru',
@@ -1016,7 +1016,7 @@ export const ru = {
   password: 'Пароль',
   newPassword: 'Новый пароль',
   confirmPassword: 'Подтвердите пароль',
-  deleteKey: "Введите 'удалить', чтобы удалить ключ",
+  deleteKey: 'Введите \'удалить\', чтобы удалить ключ',
   delete: 'удалить',
   remove: 'Удалить',
   username: 'Имя пользователя',
@@ -1137,4 +1137,4 @@ export const ru = {
   confirmRemove: 'Вы уверены, что хотите удалить контакт?',
   message: 'Cообщение',
   sealedMessage: 'Защищенное Cообщение',
-};
+}

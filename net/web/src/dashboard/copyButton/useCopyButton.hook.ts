@@ -2,6 +2,7 @@ import { useState, useRef } from 'react';
 import { Colors } from 'constants/Colors';
 
 export function useCopyButton() {
+
   const [state, setState] = useState({
     color: Colors.background,
     message: 'copeid',
@@ -12,14 +13,15 @@ export function useCopyButton() {
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
-  };
+  }
 
   const actions = {
     copy: async (onCopy) => {
       try {
         await onCopy();
         updateState({ show: true, message: 'copied', color: Colors.background });
-      } catch {
+      }
+      catch {
         updateState({ show: true, message: 'failed to copy', color: Colors.alert });
       }
 
@@ -28,8 +30,9 @@ export function useCopyButton() {
         updateState({ show: false });
       }, 1500);
       updateState({ show: true });
-    },
-  };
+    }
+  }
 
   return { state, actions };
 }
+

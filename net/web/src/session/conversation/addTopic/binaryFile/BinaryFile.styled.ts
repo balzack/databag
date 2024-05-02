@@ -23,7 +23,7 @@ export const BinaryFileWrapper = styled.div`
   .extension {
     font-size: 32px;
     color: ${Colors.white};
-  }
+  }    
 
   .label {
     bottom: 0;
@@ -46,3 +46,5 @@ export const BinaryFileWrapper = styled.div`
     justify-content: center;
   }
 `;
+
+

@@ -11,21 +11,21 @@ import { StoreContext } from './StoreContext';
 import { UploadContext } from './UploadContext';
 import { RingContext } from './RingContext';
 import { createWebsocket } from 'api/fetchUtil';
-const defaultState = {
+const defaultState ={
   status: null,
   adminToken: null,
-};
+}
 export const defaultAppContext = {
-  state: defaultState,
-  actions: {} as ReturnType<typeof useAppContext>['actions'],
-};
+state:defaultState,
+actions: {}as ReturnType<typeof useAppContext>["actions"],
+}
 
 export function useAppContext() {
   const [state, setState] = useState(defaultState);
   const [appRevision, setAppRevision] = useState<any>();
 
-  const appName = 'Databag';
-  const appVersion = '1.0.0';
+  const appName = "Databag";
+  const appVersion = "1.0.0";
   const userAgent = window.navigator.userAgent;
 
   const checked = useRef(false);
@@ -33,8 +33,8 @@ export function useAppContext() {
   const ws = useRef(null);
 
   const updateState = (value) => {
-    setState((s) => ({ ...s, ...value }));
-  };
+    setState((s) => ({ ...s, ...value }))
+  }
 
   const ringContext = useContext(RingContext);
   const uploadContext = useContext(UploadContext);
@@ -51,7 +51,8 @@ export function useAppContext() {
       cardContext.actions.setToken(token);
       channelContext.actions.setToken(token);
       ringContext.actions.setToken(token);
-    } catch (err) {
+    }
+    catch (err) {
       accountContext.actions.clearToken();
       profileContext.actions.clearToken();
       cardContext.actions.clearToken();
@@ -60,7 +61,7 @@ export function useAppContext() {
       throw err;
     }
     setWebsocket(token);
-  };
+  }
 
   const clearSession = () => {
     uploadContext.actions.clear();
@@ -72,20 +73,20 @@ export function useAppContext() {
     cardContext.actions.clearToken();
     channelContext.actions.clearToken();
     clearWebsocket();
-  };
+  }
 
   const actions = {
     logout: async (all) => {
       await appLogout(all);
     },
     access: async (token) => {
-      await appAccess(token);
+      await appAccess(token)
     },
     login: async (username, password) => {
-      await appLogin(username, password);
+      await appLogin(username, password)
     },
     create: async (username, password, token) => {
-      await appCreate(username, password, token);
+      await appCreate(username, password, token)
     },
     setAdmin: (token) => {
       updateState({ adminToken: token });
@@ -93,7 +94,7 @@ export function useAppContext() {
     clearAdmin: () => {
       updateState({ adminToken: null });
     },
-  };
+  }
 
   const appCreate = async (username, password, token) => {
     if (appToken.current || !checked.current) {
@@ -105,15 +106,12 @@ export function useAppContext() {
     setSession(access.appToken);
     appToken.current = access.appToken;
 
-    localStorage.setItem(
-      'session',
-      JSON.stringify({
-        access: access.appToken,
-        timestamp: access.created,
-      }),
-    );
+    localStorage.setItem("session", JSON.stringify({
+      access: access.appToken,
+      timestamp: access.created,
+    }));
     return access.created;
-  };
+  } 
 
   const appLogin = async (username, password) => {
     if (appToken.current || !checked.current) {
@@ -124,15 +122,12 @@ export function useAppContext() {
     setSession(access.appToken);
     appToken.current = access.appToken;
 
-    localStorage.setItem(
-      'session',
-      JSON.stringify({
-        access: access.appToken,
-        timestamp: access.created,
-      }),
-    );
+    localStorage.setItem("session", JSON.stringify({
+      access: access.appToken,
+      timestamp: access.created,
+    }));
     return access.created;
-  };
+  }
 
   const appAccess = async (token) => {
     if (appToken.current || !checked.current) {
@@ -143,25 +138,23 @@ export function useAppContext() {
     setSession(access.appToken);
     appToken.current = access.appToken;
 
-    localStorage.setItem(
-      'session',
-      JSON.stringify({
-        access: access.appToken,
-        timestamp: access.created,
-      }),
-    );
+    localStorage.setItem("session", JSON.stringify({
+      access: access.appToken,
+      timestamp: access.created,
+    }));
     return access.created;
-  };
+  }
 
   const appLogout = async (all) => {
     clearSession();
     try {
       await clearLogin(appToken.current, all);
-    } catch (err) {
+    }
+    catch (err) {
       console.log(err);
     }
     appToken.current = null;
-    localStorage.removeItem('session');
+    localStorage.removeItem("session");
   };
 
   useEffect(() => {
@@ -173,17 +166,18 @@ export function useAppContext() {
     }
     // eslint-disable-next-line
   }, [appRevision]);
-
+  
   const setWebsocket = (token) => {
     let protocol;
     if (window.location.protocol === 'http:') {
       protocol = 'ws://';
-    } else {
+    }
+    else {
       protocol = 'wss://';
     }
 
     updateState({ status: 'connecting' });
-    ws.current = createWebsocket(protocol + window.location.host + '/status?mode=ring');
+    ws.current = createWebsocket(protocol + window.location.host + "/status?mode=ring");
     ws.current.onmessage = (ev) => {
       try {
         if (ev.data === '') {
@@ -194,63 +188,69 @@ export function useAppContext() {
         updateState({ status: 'connected' });
         if (activity.revision) {
           setAppRevision(activity.revision);
-        } else if (activity.ring) {
+        }
+        else if (activity.ring) {
           const { cardId, callId, calleeToken, iceUrl, iceUsername, icePassword } = activity.ring;
           ringContext.actions.ring(cardId, callId, calleeToken, iceUrl, iceUsername, icePassword);
-        } else {
+        }
+        else {
           setAppRevision(activity);
         }
-      } catch (err) {
+      }
+      catch (err) {
         console.log(err);
         ws.current.close();
       }
-    };
+    }
     ws.current.onclose = (e) => {
-      console.log(e);
+      console.log(e)
       updateState({ status: 'disconnected' });
       setTimeout(() => {
         if (ws.current != null) {
-          ws.current.onmessage = () => {};
-          ws.current.onclose = () => {};
-          ws.current.onopen = () => {};
-          ws.current.onerror = () => {};
+          ws.current.onmessage = () => {}
+          ws.current.onclose = () => {}
+          ws.current.onopen = () => {}
+          ws.current.onerror = () => {}
           setWebsocket(token);
         }
       }, 1000);
-    };
+    }
     ws.current.onopen = () => {
-      ws.current.send(JSON.stringify({ AppToken: token }));
-    };
+      ws.current.send(JSON.stringify({ AppToken: token }))
+    }
     ws.current.error = (e) => {
-      console.log(e);
+      console.log(e)
       ws.current.close();
-    };
-  };
-
-  const clearWebsocket = () => {
-    ws.current.onclose = () => {};
-    ws.current.close();
-    ws.current = null;
+    }
+  }
+ 
+  const clearWebsocket = ()  => {
+    ws.current.onclose = () => {}
+    ws.current.close()
+    ws.current = null
     updateState({ status: null });
-  };
+  }
 
   useEffect(() => {
     const storage = localStorage.getItem('session');
     if (storage != null) {
       try {
-        const session = JSON.parse(storage);
+        const session = JSON.parse(storage)
         if (session?.access) {
           const access = session.access;
           setSession(access);
           appToken.current = access;
         }
-      } catch (err) {
-        console.log(err);
+      }
+      catch(err) {
+        console.log(err)
       }
     }
     checked.current = true;
     // eslint-disable-next-line
   }, []);
 
-  return { state, actions };
+  return { state, actions }
 }
+
+

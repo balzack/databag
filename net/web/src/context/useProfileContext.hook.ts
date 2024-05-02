@@ -5,25 +5,26 @@ import { setProfileData } from 'api/setProfileData';
 import { setProfileImage } from 'api/setProfileImage';
 import { getProfileImageUrl } from 'api/getProfileImageUrl';
 
-interface Identity {
+interface Identity  {
   guid: string;
   name: string;
   handle: string;
   node: any;
   revision: string;
-  seal: string;
+  seal: string
   version: string;
   image: string;
   location: string;
   description: string;
+  
 }
 export const defaultProfileContext = {
-  state: {
-    offsync: false,
-    identity: {} as Partial<Identity>,
-    imageUrl: null,
-  },
-  actions: {
+state:{
+  offsync: false,
+  identity: {} as Partial<Identity>,
+  imageUrl: null,
+},
+actions: {
     setToken: (token: any) => {},
     clearToken: () => {},
     setRevision: (rev: any) => Promise.reject<void>(),
@@ -31,8 +32,8 @@ export const defaultProfileContext = {
     setProfileImage: (image: any) => Promise.reject<void>(),
     getHandleStatus: (name: any) => Promise.reject<void>(),
     resync: () => Promise.reject<void>(),
-  },
-};
+}
+}
 export function useProfileContext(): typeof defaultProfileContext {
   const [state, setState] = useState(defaultProfileContext.state);
   const access = useRef(null);
@@ -41,8 +42,8 @@ export function useProfileContext(): typeof defaultProfileContext {
   const syncing = useRef(false);
 
   const updateState = (value) => {
-    setState((s) => ({ ...s, ...value }));
-  };
+    setState((s) => ({ ...s, ...value }))
+  }
 
   const sync = async () => {
     if (!syncing.current && setRevision.current !== curRevision.current) {
@@ -55,7 +56,8 @@ export function useProfileContext(): typeof defaultProfileContext {
         const imageUrl = identity.image ? getProfileImageUrl(token, identity.revision) : null;
         setRevision.current = revision;
         updateState({ offsync: false, identity, imageUrl });
-      } catch (err) {
+      }
+      catch(err) {
         console.log(err);
         syncing.current = false;
         updateState({ offsync: true });
@@ -65,12 +67,12 @@ export function useProfileContext(): typeof defaultProfileContext {
       syncing.current = false;
       await sync();
     }
-  };
+  }
 
   const actions = {
     setToken: (token) => {
       if (access.current || syncing.current) {
-        throw new Error('invalid profile session state');
+        throw new Error("invalid profile session state");
       }
       access.current = token;
       curRevision.current = null;
@@ -96,7 +98,9 @@ export function useProfileContext(): typeof defaultProfileContext {
     resync: async () => {
       await sync();
     },
-  };
+  }
 
-  return { state, actions };
+  return { state, actions }
 }
+
+

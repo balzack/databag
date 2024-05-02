@@ -7,20 +7,20 @@ export const AdminWrapper = styled.div`
   height: 90%;
   display: flex;
   flex-direction: column;
-
+  
   .disabled {
-    background-color: ${(props) => props.theme.disabledArea};
+    background-color: ${props => props.theme.disabledArea};
 
     button {
-      color: ${(props) => props.theme.idleText};
+      color: ${props => props.theme.idleText};
     }
   }
 
   .enabled {
-    background-color: ${(props) => props.theme.enabledArea};
+    background-color: ${props => props.theme.enabledArea};
 
     button {
-      color: ${(props) => props.theme.activeText};
+      color: ${props => props.theme.activeText};
     }
   }
 
@@ -54,7 +54,7 @@ export const AdminWrapper = styled.div`
 
   .form-form {
     flex: 2;
-
+  
     .form-button {
       display: flex;
       align-items: center;
@@ -70,3 +70,5 @@ export const AdminWrapper = styled.div`
     background-color: #444444;
   }
 `;
+
+

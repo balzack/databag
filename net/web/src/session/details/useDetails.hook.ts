@@ -5,15 +5,10 @@ import { AccountContext } from 'context/AccountContext';
 import { ProfileContext } from 'context/ProfileContext';
 import { SettingsContext } from 'context/SettingsContext';
 import { getCardByGuid } from 'context/cardUtil';
-import {
-  decryptChannelSubject,
-  updateChannelSubject,
-  getContentKey,
-  getChannelSeals,
-  isUnsealed,
-} from 'context/sealUtil';
+import { decryptChannelSubject, updateChannelSubject, getContentKey, getChannelSeals, isUnsealed } from 'context/sealUtil';
 
 export function useDetails() {
+
   const [state, setState] = useState({
     logo: null,
     img: null,
@@ -30,7 +25,7 @@ export function useDetails() {
     showEditSubject: false,
     editSubject: null,
 
-    strings: {} as Record<string, string>,
+    strings: {} as Record<string,string>,
     display: 'small',
     menuStyle: {},
     sealed: false,
@@ -51,7 +46,7 @@ export function useDetails() {
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
-  };
+  }
 
   useEffect(() => {
     const { dataType, data } = conversation.state.channel?.data?.channelDetail || {};
@@ -62,14 +57,17 @@ export function useDetails() {
         if (isUnsealed(seals, sealKey)) {
           const decKey = getContentKey(seals, sealKey);
           updateState({ sealed: true, contentKey: decKey, seals });
-        } else {
+        }
+        else {
           updateState({ sealed: true, contentKey: null });
         }
-      } catch (err) {
+      }
+      catch (err) {
         console.log(err);
         updateState({ sealed: true, contentKey: null });
       }
-    } else {
+    }
+    else {
       updateState({ sealed: false, contentKey: null });
     }
     // eslint-disable-next-line
@@ -81,6 +79,7 @@ export function useDetails() {
   }, [settings.state]);
 
   useEffect(() => {
+
     const cardValue = conversation.state.card;
     const channelValue = conversation.state.channel;
 
@@ -89,22 +88,26 @@ export function useDetails() {
     let host;
     const date = new Date(channelValue?.data?.channelDetail?.created * 1000);
     const now = new Date();
-    if (now.getTime() - date.getTime() < 86400000) {
+    if(now.getTime() - date.getTime() < 86400000) {
       if (settings.state.timeFormat === '12h') {
-        started = date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
-      } else {
-        started = date.toLocaleTimeString('en-GB', { hour: 'numeric', minute: '2-digit' });
+        started = date.toLocaleTimeString("en-US", {hour: 'numeric', minute:'2-digit'});
       }
-    } else {
+      else {
+        started = date.toLocaleTimeString("en-GB", {hour: 'numeric', minute:'2-digit'});
+      }
+    }
+    else {
       if (settings.state.dateFormat === 'mm/dd') {
-        started = date.toLocaleDateString('en-US');
-      } else {
-        started = date.toLocaleDateString('en-GB');
+        started = date.toLocaleDateString("en-US");
+      }
+      else {
+        started = date.toLocaleDateString("en-GB");
       }
     }
     if (cardValue) {
       host = cardValue.id;
-    } else {
+    }
+    else {
       host = null;
     }
 
@@ -124,7 +127,8 @@ export function useDetails() {
       if (profile?.imageSet) {
         img = null;
         logo = card.actions.getCardImageUrl(cardValue.id);
-      } else {
+      }
+      else {
         img = 'avatar';
         logo = null;
       }
@@ -136,10 +140,11 @@ export function useDetails() {
           const contact = getCardByGuid(card.state.cards, guid);
           if (contact) {
             members.push(contact.id);
-          } else {
+          }
+          else {
             unknown++;
           }
-
+    
           const profile = contact?.data?.cardProfile;
           if (profile?.name) {
             names.push(profile.name);
@@ -147,7 +152,8 @@ export function useDetails() {
           if (profile?.imageSet) {
             img = null;
             logo = card.actions.getCardImageUrl(contact.id);
-          } else {
+          }
+          else {
             img = 'avatar';
             logo = null;
           }
@@ -160,19 +166,17 @@ export function useDetails() {
     if (memberCount === 0) {
       img = 'solution';
       label = state.strings.notes;
-    } else if (memberCount === 1) {
+    }
+    else if (memberCount === 1) {
       label = names.join(',');
-    } else {
+    }
+    else {
       img = 'appstore';
       label = names.join(',');
     }
 
-    if (
-      cardId.current !== cardValue?.id ||
-      channelId.current !== channelValue?.id ||
-      detailRevision.current !== channelValue?.data?.detailRevision ||
-      key.current !== state.contentKey
-    ) {
+    if (cardId.current !== cardValue?.id || channelId.current !== channelValue?.id ||
+        detailRevision.current !== channelValue?.data?.detailRevision || key.current !== state.contentKey) {
       let title;
       try {
         const detail = channelValue?.data?.channelDetail;
@@ -180,34 +184,29 @@ export function useDetails() {
           if (state.contentKey) {
             const unsealed = decryptChannelSubject(detail.data, state.contentKey);
             title = unsealed.subject;
-          } else {
+          }
+          else {
             title = '...';
           }
-        } else if (detail?.dataType === 'superbasic') {
+        }
+        else if (detail?.dataType === 'superbasic') {
           const data = JSON.parse(detail.data);
           title = data.subject;
         }
-      } catch (err) {
+      }
+      catch(err) {
         console.log(err);
       }
       cardId.current = cardValue?.id;
       channelId.current = channelValue?.id;
       detailRevision.current = channelValue?.data?.detailRevision;
       key.current = state.contentKey;
-      updateState({
-        started,
-        host,
-        title,
-        label,
-        img,
-        logo,
-        unknown,
-        members,
-        editSubject: title,
-        editMembers: new Set(members),
-      });
-    } else {
-      updateState({ started, host, label, img, logo, unknown, members, editMembers: new Set(members) });
+      updateState({ started, host, title, label, img, logo, unknown, members,
+        editSubject: title, editMembers: new Set(members) });
+    }
+    else {
+      updateState({ started, host, label, img, logo, unknown, members,
+        editMembers: new Set(members) });
     }
     // eslint-disable-next-line
   }, [conversation.state, card.state, state.strings, state.contentKey]);
@@ -227,11 +226,13 @@ export function useDetails() {
         if (state.contentKey) {
           const updated = updateChannelSubject(state.editSubject, state.contentKey);
           await conversation.actions.setChannelSubject('sealed', {
-            seals: state.seals,
-            ...updated,
+            seals: state.seals
+            ,...updated,
+
           });
         }
-      } else {
+      }
+      else {
         const subject = { subject: state.editSubject };
         await conversation.actions.setChannelSubject('superbasic', subject);
       }
@@ -255,3 +256,4 @@ export function useDetails() {
 
   return { state, actions };
 }
+

@@ -9,18 +9,18 @@ export const CreateAccountWrapper = styled.div`
   flex-direction: column;
 
   .disabled {
-    background-color: ${(props) => props.theme.disabledArea};
+    background-color: ${props => props.theme.disabledArea};
 
     button {
-      color: ${(props) => props.theme.idleText};
+      color: ${props => props.theme.idleText};
     }
   }
 
   .enabled {
-    background-color: ${(props) => props.theme.enabledArea};
+    background-color: ${props => props.theme.enabledArea};
 
     button {
-      color: ${(props) => props.theme.activeText};
+      color: ${props => props.theme.activeText};
     }
   }
 
@@ -58,7 +58,7 @@ export const CreateAccountWrapper = styled.div`
     .form-space {
       height: 8px;
     }
-
+  
     .form-button {
       display: flex;
       align-items: center;
@@ -78,3 +78,5 @@ export const CreateAccountWrapper = styled.div`
     background-color: #444444;
   }
 `;
+
+
