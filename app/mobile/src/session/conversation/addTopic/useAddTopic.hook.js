@@ -26,6 +26,7 @@ export function useAddTopic(contentKey) {
     enableImage: false,
     enableAudio: false,
     enableVideo: false,
+    enableBinary: false,
     locked: true,
     loaded: false,
     conflict: false,
@@ -50,15 +51,18 @@ export function useAddTopic(contentKey) {
       if (asset.type === 'image' && !state.enableImage) {
         conflict = true;
       }
-      if (asset.video === 'video' && !state.enableVideo) {
+      if (asset.type === 'video' && !state.enableVideo) {
         conflict = true;
       }
-      if (asset.audio === 'audio' && !state.enableAudio) {
+      if (asset.type === 'audio' && !state.enableAudio) {
+        conflict = true;
+      }
+      if (asset.type === 'binary' && !state.enableBinary) {
         conflict = true;
       }
     });
     updateState({ conflict });
-  }, [state.assets, state.locked, state.enableImage, state.enableAudio, state.enableVideo]);
+  }, [state.assets, state.locked, state.enableImage, state.enableAudio, state.enableVideo, state.enableBinary]);
 
   useEffect(() => {
     updateState({ assets: [] });
@@ -105,10 +109,10 @@ export function useAddTopic(contentKey) {
   }, [upload.state, conversation.state]);
 
   useEffect(() => {
-    const { enableVideo, enableAudio, enableImage } = conversation.state.channel?.detail || {};
+    const { enableVideo, enableAudio, enableImage, enableBinary } = conversation.state.channel?.detail || {};
     const locked = conversation.state.channel?.detail?.dataType === 'superbasic' ? false : true;
     const loaded = conversation.state.loaded;
-    updateState({ enableImage, enableAudio, enableVideo, locked, loaded });
+    updateState({ enableImage, enableAudio, enableVideo, enableBinary, locked, loaded });
   }, [conversation.state]);
 
   const setAsset = async (file, mime, scale) => {
@@ -172,9 +176,6 @@ export function useAddTopic(contentKey) {
       asset.type = 'binary';
       asset.extension = name.split('.').pop().toUpperCase();
       asset.label = name.slice(0, -1 * (asset.extension.length + 1));
-
-console.log(asset);
-
       updateState({ assets: [ ...state.assets, asset ] });
     },
     setVideoPosition: (key, position) => {

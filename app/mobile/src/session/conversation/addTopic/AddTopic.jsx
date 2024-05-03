@@ -192,9 +192,11 @@ export function AddTopic({ contentKey, shareIntent, setShareIntent }) {
             <MatIcons name="music-note" size={24} color={Colors.text} />
           </TouchableOpacity>
         )}
-        <TouchableOpacity style={styles.addButton} onPress={addBinary}>
-          <MatIcons name="file-outline" size={24} color={Colors.text} />
-        </TouchableOpacity>
+        { state.enableBinary && (
+          <TouchableOpacity style={styles.addButton} onPress={addBinary}>
+            <MatIcons name="file-outline" size={24} color={Colors.text} />
+          </TouchableOpacity>
+        )}
         <View style={styles.divider} />
         <TouchableOpacity style={styles.addButton} onPress={actions.showFontSize}>
           <MatIcons name="format-size" size={24} color={Colors.text} />
