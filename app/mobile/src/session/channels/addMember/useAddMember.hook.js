@@ -25,7 +25,7 @@ export function useAddMember(item, members) {
   useEffect(() => {
     const { cardId, revision, profile } = item;
     const { name, handle, node } = profile;
-    updateState({ cardId, name, handle: `${handle}@${node}`,
+    updateState({ cardId, name, handle: `${handle}/${node}`,
       logo: profile.imageSet ? card.actions.getCardImageUrl(cardId) : 'avatar' });
   }, [card.state]);
 
