@@ -47,7 +47,7 @@ export function useRegistry(search, handle, server) {
     const { guid, name, handle, node, location, description, imageSet } = item;
     const server = node ? node : profile.state.server;
     const logo = imageSet ? getListingImageUrl(server, guid) : 'avatar';
-    const username = `${handle}/${node}`;
+    const username = node ? `${handle}/${node}` : handle;
     return { guid, name, handle, username, node: server, location, description, guid, imageSet, logo };
   };
 

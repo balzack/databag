@@ -7,12 +7,12 @@ import { ProfileContext } from 'context/ProfileContext';
 import Colors from 'constants/Colors';
 import Ionicons from 'react-native-vector-icons/AntDesign';
 
-export function RegistryHeader({ search, setSearch, handle, setHandle, server, setServer }) {
+export function RegistryHeader({ search, setSearch, handle, setHandle, server, setServer, editable }) {
 
   return (
     <View style={styles.title}>
       <View style={styles.inputwrapper}>
-        <TextInput style={styles.inputfield} value={server} onChangeText={setServer}
+        <TextInput style={styles.inputfield} value={server} onChangeText={setServer} editable={editable}
             autoCorrect={false} autoCapitalize="none" placeholderTextColor={Colors.disabled} placeholder="Server" />
       </View>
       { !search && (
@@ -60,9 +60,16 @@ export function Registry({ closeRegistry, openContact }) {
   const [search, setSearch] = useState(false);
   const [handle, setHandle] = useState();
   const [server, setServer] = useState();
+  const [editable, setEditable] = useState(false);
   const profile = useContext(ProfileContext);
 
   useEffect(() => {
+    if (profile.state.identity?.node) {
+      setEditable(true);
+    }
+    else {
+      setEditable(false);
+    }
     setSearch(false);
     setHandle(null);
     setServer(profile.state.server);
@@ -71,7 +78,7 @@ export function Registry({ closeRegistry, openContact }) {
   return (
     <View>
       <View style={styles.header}>
-        <RegistryHeader search={search} setSearch={setSearch} handle={handle} setHandle={setHandle} server={server} setServer={setServer} />
+        <RegistryHeader search={search} editable={editable} setSearch={setSearch} handle={handle} setHandle={setHandle} server={server} setServer={setServer} />
       </View>
       <RegistryBody search={search} handle={handle} server={server} openContact={openContact} />
     </View>
