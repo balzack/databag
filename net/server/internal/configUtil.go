@@ -33,7 +33,7 @@ const CNFAssetPath = "asset_path"
 //CNFScriptPath specifies the path where transform scripts are found
 const CNFScriptPath = "script_path"
 
-//CNFEnableVideo specifies whether node can process video assets
+//CNFAllowUnsealed specified if plantext channels can be created
 const CNFAllowUnsealed = "allow_unsealed"
 
 //CNFEnableImage specifies whether node can process image assets
@@ -44,6 +44,9 @@ const CNFEnableAudio = "enable_audio"
 
 //CNFEnableVideo specifies whether node can process video assets
 const CNFEnableVideo = "enable_video"
+
+//CNFEnableBinary specifies whether node can attach binary asset
+const CNFEnableBinary = "enable_binary"
 
 //CNFKeyType specifies the type of key to use for identity
 const CNFKeyType = "key_type"

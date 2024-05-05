@@ -168,7 +168,7 @@ func getChannelRevisionModel(slot *store.ChannelSlot, showData bool) *Channel {
 	}
 }
 
-func getChannelDetailModel(slot *store.ChannelSlot, showList bool, image bool, audio bool, video bool) *ChannelDetail {
+func getChannelDetailModel(slot *store.ChannelSlot, showList bool, image bool, audio bool, video bool, binary bool) *ChannelDetail {
 
 	if slot.Channel == nil {
 		return nil
@@ -200,6 +200,7 @@ func getChannelDetailModel(slot *store.ChannelSlot, showList bool, image bool, a
     EnableImage: image,
     EnableAudio: audio,
     EnableVideo: video,
+    EnableBinary: binary,
 		Contacts: contacts,
 		Members:  members,
 	}
@@ -226,7 +227,7 @@ func getChannelSummaryModel(slot *store.ChannelSlot) *ChannelSummary {
 	}
 }
 
-func getChannelModel(slot *store.ChannelSlot, showData bool, showList bool, image bool, audio bool, video bool) *Channel {
+func getChannelModel(slot *store.ChannelSlot, showData bool, showList bool, image bool, audio bool, video bool, binary bool) *Channel {
 
 	if !showData || slot.Channel == nil {
 		return &Channel{
@@ -241,7 +242,7 @@ func getChannelModel(slot *store.ChannelSlot, showData bool, showList bool, imag
 		Data: &ChannelData{
 			DetailRevision: slot.Channel.DetailRevision,
 			TopicRevision:  slot.Channel.TopicRevision,
-			ChannelDetail:  getChannelDetailModel(slot, showList, image, audio, video),
+			ChannelDetail:  getChannelDetailModel(slot, showList, image, audio, video, binary),
 			ChannelSummary: getChannelSummaryModel(slot),
 		},
 	}

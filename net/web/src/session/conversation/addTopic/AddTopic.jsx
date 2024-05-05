@@ -152,12 +152,16 @@ export function AddTopic({ contentKey }) {
             </div> 
           </Tooltip>
         )}
-        <Tooltip placement="top" title={state.display === 'small' ? null : state.strings.attachFile}>
-          <div className="button space" onClick={() => attachBinary.current.click()}>
-            <FieldBinaryOutlined />
-          </div> 
-        </Tooltip>
-        <div className="bar space" />
+        { state.enableBinary && (
+          <Tooltip placement="top" title={state.display === 'small' ? null : state.strings.attachFile}>
+            <div className="button space" onClick={() => attachBinary.current.click()}>
+              <FieldBinaryOutlined />
+            </div> 
+          </Tooltip>
+        )}
+        { (state.enableImage || state.enableAudio || state.enableVideo || state.enableBinary) && (
+          <div className="bar space" />
+        )}
         <div className="button space">
           <Tooltip placement="top" title={state.display === 'small' ? null : state.strings.fontColor}>
             <Dropdown overlay={picker} overlayStyle={{ minWidth: 0 }} trigger={['click']} placement="top">

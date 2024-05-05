@@ -164,6 +164,13 @@ export function Dashboard() {
                   defaultChecked={true} checked={state.enableVideo} />
               </div>
             </Tooltip>
+            <Tooltip placement="topLeft" title={state.strings.binaryHint}>
+              <div className="field">
+                <div>{state.strings.enableBinary}</div>
+                <Switch onChange={(e) => actions.setEnableBinary(e)} size="small"
+                  defaultChecked={true} checked={state.enableBinary} />
+              </div>
+            </Tooltip>
             <Tooltip placement="topLeft" title={state.strings.webHint}>
               <div className="field label">
                 <div>{state.strings.enableWeb}</div>
