@@ -7,6 +7,10 @@
   <p align="center">A federated messenger for self-hosting</p>
 </div>
 
+<p align="center">
+  <a href="/doc/design_overview.md">-> Design Overview <-</a>
+</p>
+
 <br>
 
 <p align="center">
@@ -19,13 +23,14 @@
 </p>
 <br>
 
-Databag is designed for efficiency, consuming minimal resources on the host system and network. Notable features include:
+Databag is designed for efficiency, consuming minimal hosting resources. Notable features include:
 - Decentralized (direct communication between app and server node)
 - Federated (accounts on different nodes can communicate)
 - Public-Private key based identity (not bound to any blockchain or hosting domain)
 - End-to-End encryption (the hosting admin cannot view topics if sealed)
 - Audio and Video Calls (nat traversal requires separate relay server)
 - Topic based threads (messages organized by topic not contacts)
+- Unlimited participants (no limit on group thread members)
 - Lightweight (server can run on a raspberry pi zero v1.3)
 - Low latency (use of websockets for push events to avoid polling)
 - Unlimited accounts per node (host for your whole family)
@@ -131,7 +136,7 @@ Install without a container in AWS [here](/doc/aws.md).
 
 Integrate Databag in an OpenWrt firmware [here](/doc/openwrt.md).
 
-1-click installs in [CapRover](https://caprover.com/), [CasaOS](https://casaos.io), [Unraid](https://unraid.net/), [Runtipi](https://www.runtipi.io/), [Kubero](https://www.kubero.dev/)
+1-click installs in [CapRover](https://caprover.com/), [CasaOS](https://casaos.io), [Unraid](https://unraid.net/), [Runtipi](https://www.runtipi.io/), [Kubero](https://www.kubero.dev/), [Umbrel](https://umbrel.com/)
 
 ## Audio and Video Calls
 
@@ -142,3 +147,7 @@ If you want to enable audio and video calls, you should setup your own relay ser
   - WebRTC Server URL: turn:34.210.172.114:3478?transport=udp
   - WebRTC Username: user
   - WebRTC Password: pass
+
+### Roadmap
+
+Please let me know any missing features; [here](/doc/backlog.md) is the current backlog. Features are prioritized based on interest from the community.

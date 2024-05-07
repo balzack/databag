@@ -196,6 +196,8 @@ type ChannelDetail struct {
 
   EnableVideo bool `json:"enableVideo"`
 
+  EnableBinary bool `json:"enableBinary"`
+
 	Contacts *ChannelContacts `json:"contacts,omitempty"`
 
 	Members []string `json:"members"`
@@ -359,6 +361,8 @@ type NodeConfig struct {
 	EnableAudio bool `json:"enableAudio"`
 
 	EnableVideo bool `json:"enableVideo"`
+
+	EnableBinary bool `json:"enableBinary"`
 
 	EnableIce bool `json:"enableIce"`
 

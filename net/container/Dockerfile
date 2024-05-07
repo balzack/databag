@@ -7,7 +7,7 @@ EXPOSE 7000
 ENV TZ=America/Los_Angeles
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-RUN   apt-get  update
+RUN        apt-get   update
 
 RUN apt-get -y install curl net-tools jq netcat unzip wget git vim fail2ban imagemagick-6.q16 ffmpeg build-essential sqlite3 npm
 
@@ -20,8 +20,8 @@ RUN n stable
 RUN mkdir /app
 
 RUN if [ "$TARGETPLATFORM" = "linux/amd64" ]; then ARCHITECTURE=amd64; elif [ "$TARGETPLATFORM" = "linux/arm64" ]; then ARCHITECTURE=arm64; elif [ "$TARGETPLATFORM" = "linux/arm64" ]; then ARCHITECTURE=aarch64; else ARCHITECTURE=unsupported; fi \
-    && wget -P /app https://go.dev/dl/go1.18.10.linux-${ARCHITECTURE}.tar.gz \
-    && tar -C /usr/local -xzf /app/go1.18.10.linux-${ARCHITECTURE}.tar.gz 
+    && wget -P /app https://go.dev/dl/go1.22.2.linux-${ARCHITECTURE}.tar.gz \
+    && tar -C /usr/local -xzf /app/go1.22.2.linux-${ARCHITECTURE}.tar.gz 
 
 RUN git            clone          https://github.com/balzack/databag.git     /app/databag
 
@@ -57,7 +57,7 @@ RUN npm uninstall -g n
 RUN rm -rf /usr/local/n
 RUN rm -rf /usr/local/bin/node 
 
-RUN apt-get -y remove git build-essential npm vim nodejs
+RUN apt-get -y remove git build-essential npm vim nodejs linux-libc-dev
 RUN rm -rf /var/lib/apt/lists
 
 FROM scratch

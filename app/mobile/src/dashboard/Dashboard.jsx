@@ -217,6 +217,12 @@ export function Dashboard(props) {
                 <Switch style={styles.switch} value={state.enableVideo}
                   onValueChange={actions.setEnableVideo} trackColor={styles.track}/>
               </TouchableOpacity>
+              <TouchableOpacity style={styles.media} activeOpacity={1}
+                  onPress={() => actions.setEnableBinary(!state.enableBinary)}>
+                <Text style={styles.modalLabel}>{ state.strings.enableBinary }</Text>
+                <Switch style={styles.switch} value={state.enableBinary}
+                  onValueChange={actions.setEnableBinary} trackColor={styles.track}/>
+              </TouchableOpacity>
 
               <View style={styles.label}></View>
               <TouchableOpacity style={styles.ice} activeOpacity={1}

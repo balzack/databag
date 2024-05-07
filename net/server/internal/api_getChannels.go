@@ -83,7 +83,8 @@ func GetChannels(w http.ResponseWriter, r *http.Request) {
           video := getBoolConfigValue(CNFEnableVideo, true);
           audio := getBoolConfigValue(CNFEnableAudio, true);
           image := getBoolConfigValue(CNFEnableImage, true);
-					response = append(response, getChannelModel(&slot, true, true, image, audio, video))
+          binary := getBoolConfigValue(CNFEnableBinary, true);
+					response = append(response, getChannelModel(&slot, true, true, image, audio, video, binary))
 				}
 			}
 		}
@@ -130,7 +131,8 @@ func GetChannels(w http.ResponseWriter, r *http.Request) {
           video := getBoolConfigValue(CNFEnableVideo, true);
           audio := getBoolConfigValue(CNFEnableAudio, true);
           image := getBoolConfigValue(CNFEnableImage, true);
-					response = append(response, getChannelModel(&slot, true, false, image, audio, video))
+          binary := getBoolConfigValue(CNFEnableBinary, true);
+					response = append(response, getChannelModel(&slot, true, false, image, audio, video, binary))
 				}
 			}
 		}

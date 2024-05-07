@@ -38,7 +38,7 @@ export const ProfileWrapper = styled.div`
     flex-direction: column;
     align-items: center;
     overflow: hidden;
-    background-color: ${props => props.theme.selectedArea};
+    background-color: ${props => props.theme.itemArea};
 
     .title {
       font-size: 18px;
@@ -108,7 +108,7 @@ export const ProfileWrapper = styled.div`
     align-items: center;
     border-radius: 4px;
     padding: 8px;
-    background-color: ${props => props.theme.selectedArea};
+    background-color: ${props => props.theme.itemArea};
 
     .details {
       align-items: center;
@@ -122,7 +122,7 @@ export const ProfileWrapper = styled.div`
 
     .contentFill {
       flex-grow: 1;
-      background-color: ${props => props.theme.selectedArea};
+      background-color: ${props => props.theme.itemArea};
     }
   }
 

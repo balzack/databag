@@ -101,5 +101,6 @@ func SetChannelCard(w http.ResponseWriter, r *http.Request) {
   video := getBoolConfigValue(CNFEnableVideo, true);
   audio := getBoolConfigValue(CNFEnableAudio, true);
   image := getBoolConfigValue(CNFEnableImage, true);
-	WriteResponse(w, getChannelModel(&channelSlot, true, true, image, audio, video))
+  binary := getBoolConfigValue(CNFEnableBinary, true);
+	WriteResponse(w, getChannelModel(&channelSlot, true, true, image, audio, video, binary))
 }

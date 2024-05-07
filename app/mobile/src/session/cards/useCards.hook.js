@@ -45,7 +45,7 @@ export function useCards() {
       cardId: cardId,
       name: name,
       handle: handle,
-      username: `${handle}/${node}`,
+      username: node ? `${handle}/${node}` : handle,
       node: node,
       guid: guid,
       location: location,

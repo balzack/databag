@@ -157,7 +157,9 @@ export function useAppContext() {
   }
 
   const setWebsocket = (session) => {
-    ws.current = createWebsocket(`wss://${session.server}/status?mode=ring`);
+    const insecure = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(session.server);
+    const protocol = insecure ? 'ws' : 'wss';
+    ws.current = createWebsocket(`${protocol}://${session.server}/status?mode=ring`);
     ws.current.onmessage = (ev) => {
       if (ev.data == '') {
         actions.logout();

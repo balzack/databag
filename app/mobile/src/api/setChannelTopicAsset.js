@@ -1,6 +1,9 @@
 import { checkResponse, fetchWithTimeout } from './fetchUtil';
 
 export async function setChannelTopicSubject(token, channelId, topicId, asset) {
+  const insecure = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(server);
+  const protocol = insecure ? 'http' : 'https';
+
   if (asset.image) {
     const formData = new FormData();
     formData.append('asset', asset.image);

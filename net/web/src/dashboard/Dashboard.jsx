@@ -106,7 +106,7 @@ export function Dashboard() {
             </div>
             <div className="field">
               <div>{state.strings.storageLimit}</div>
-              <InputNumber defaultValue={0} onChange={(e) => actions.setStorage(e)}
+              <InputNumber defaultValue={0} min={0} onChange={(e) => actions.setStorage(e)}
                   placeholder={state.strings.storageHint} value={state.accountStorage} />
             </div>
             <div className="field">
@@ -123,7 +123,7 @@ export function Dashboard() {
                 <Switch onChange={(e) => actions.setEnableOpenAccess(e)} size="small"
                   defaultChecked={false} checked={state.enableOpenAccess} />
                 { state.enableOpenAccess && (
-                  <InputNumber defaultValue={0} onChange={(e) => actions.setOpenAccessLimit(e)}
+                  <InputNumber defaultValue={0} min={0} onChange={(e) => actions.setOpenAccessLimit(e)}
                       placeholder={state.strings.limit} value={state.openAccessLimit} />
                 )}
               </Space>
@@ -162,6 +162,13 @@ export function Dashboard() {
                 <div>{state.strings.enableVideo}</div>
                 <Switch onChange={(e) => actions.setEnableVideo(e)} size="small"
                   defaultChecked={true} checked={state.enableVideo} />
+              </div>
+            </Tooltip>
+            <Tooltip placement="topLeft" title={state.strings.binaryHint}>
+              <div className="field">
+                <div>{state.strings.enableBinary}</div>
+                <Switch onChange={(e) => actions.setEnableBinary(e)} size="small"
+                  defaultChecked={true} checked={state.enableBinary} />
               </div>
             </Tooltip>
             <Tooltip placement="topLeft" title={state.strings.webHint}>

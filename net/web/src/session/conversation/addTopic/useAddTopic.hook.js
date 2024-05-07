@@ -10,6 +10,7 @@ export function useAddTopic(contentKey) {
     enableImage: null,
     enableAudio: null,
     enableVideo: null,
+    enableBinary: null,
     assets: [],
     messageText: null,
     textColor: '#444444',
@@ -70,8 +71,8 @@ export function useAddTopic(contentKey) {
   }, [settings.state]);
 
   useEffect(() => {
-    const { enableImage, enableAudio, enableVideo } = conversation.state.channel?.data?.channelDetail || {};
-    updateState({ enableImage, enableAudio, enableVideo });
+    const { enableImage, enableAudio, enableVideo, enableBinary } = conversation.state.channel?.data?.channelDetail || {};
+    updateState({ enableImage, enableAudio, enableVideo, enableBinary });
   }, [conversation.state.channel?.data?.channelDetail]);
 
   const loadFileData = (file) => {

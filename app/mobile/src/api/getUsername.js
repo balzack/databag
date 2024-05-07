@@ -1,6 +1,9 @@
 import { checkResponse, fetchWithTimeout } from './fetchUtil';
 
 export async function getUsername(name, server, token) {
+  const insecure = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(server);
+  const protocol = insecure ? 'http' : 'https';
+
   let query = "";
   if (token && name) {
     query = `?name=${encodeURIComponent(name)}&token=${token}`;
@@ -12,7 +15,7 @@ export async function getUsername(name, server, token) {
     query = `?token=${token}`;
   }
     
-  let available = await fetchWithTimeout(`https://${server}/account/username${query}`, { method: 'GET' })
+  let available = await fetchWithTimeout(`${protocol}://${server}/account/username${query}`, { method: 'GET' })
   checkResponse(available)
   return await available.json()
 }
