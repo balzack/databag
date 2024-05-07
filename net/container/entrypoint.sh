@@ -13,6 +13,7 @@ if [[ -v ADMIN ]]; then
 fi
 
 if [ "$DEV" == "1" ]; then
+  /app/dev_setup.sh || true
   while true; do
     sleep 1;
   done
