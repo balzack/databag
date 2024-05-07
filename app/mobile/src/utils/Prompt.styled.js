@@ -5,16 +5,11 @@ export const styles = StyleSheet.create({
   modalOverlay: {
     width: '100%',
     height: '100%',
-  },
-  modalBase: {
+    backgroundColor: Colors.modalOverlay,
+    opacity: 0.8,
     display: 'flex',
-    width: '100%',
-    height: '100%',
     alignItems: 'center',
     justifyContent: 'center',
-    position: 'absolute',
-    top: 0,
-    left: 0,
   },
   modalContainer: {
     backgroundColor: Colors.modalBase,

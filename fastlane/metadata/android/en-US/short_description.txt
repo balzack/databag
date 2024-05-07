@@ -1,0 +1,1 @@
+A federated chat client designed for privacy and selfhosting.

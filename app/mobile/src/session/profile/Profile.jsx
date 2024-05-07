@@ -3,7 +3,6 @@ import { useState } from 'react';
 import AntIcons from 'react-native-vector-icons/AntDesign';
 import MatIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import ImagePicker from 'react-native-image-crop-picker'
-import { BlurView } from "@react-native-community/blur";
 import { FloatingLabelInput } from 'react-native-floating-label-input';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { Menu, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-menu';
@@ -201,64 +200,61 @@ export function Profile({ drawer }) {
         supportedOrientations={['portrait', 'landscape']}
         onRequestClose={actions.hideDetails}
       >
-        <View style={styles.modalOverlay}>
-          <BlurView style={styles.modalOverlay} blurType={Colors.overlay} blurAmount={2} reducedTransparencyFallbackColor="black" />
-          <KeyboardAvoidingView style={styles.modalBase} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-            <View style={styles.modalContainer}>
-              <View style={styles.modalClose}>
-                <TouchableOpacity style={styles.dismissButton} activeOpacity={1} onPress={actions.hideDetails}>
-                  <MatIcons name="close" size={20} color={Colors.descriptionText} />
-                </TouchableOpacity>
-              </View>
-              <Text style={styles.modalHeader}>{ state.strings.editDetails }</Text>
-
-              <InputField
-                label={state.strings.name}
-                value={state.detailName}
-                autoCapitalize={'none'}
-                spellCheck={false}
-                multiline={false}
-                style={styles.field}
-                onChangeText={actions.setDetailName}
-              />
-
-              <InputField
-                label={state.strings.location}
-                value={state.detailLocation}
-                autoCapitalize={'none'}
-                spellCheck={false}
-                multiline={false}
-                style={styles.field}
-                onChangeText={actions.setDetailLocation}
-              />
-
-              <InputField
-                label={state.strings.description}
-                value={state.detailDescription}
-                autoCapitalize={'none'}
-                spellCheck={false}
-                multiline={true}
-                style={styles.field}
-                onChangeText={actions.setDetailDescription}
-              />
-
-              <View style={styles.buttons}>
-                <TouchableOpacity style={styles.cancelButton} activeOpacity={1} onPress={actions.hideDetails}>
-                  <Text style={styles.cancelButtonText}>{ state.strings.cancel }</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.saveButton} activeOpacity={1} onPress={saveDetails}>
-                  { busyDetail && (
-                    <ActivityIndicator animating={true} color={Colors.primaryButtonText} />
-                  )}
-                  { !busyDetail && (
-                    <Text style={styles.saveButtonText}>{ state.strings.save }</Text>
-                  )}
-                </TouchableOpacity>
-              </View>
-
+        <KeyboardAvoidingView style={styles.modalOverlay} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+          <View style={styles.modalContainer}>
+            <View style={styles.modalClose}>
+              <TouchableOpacity style={styles.dismissButton} activeOpacity={1} onPress={actions.hideDetails}>
+                <MatIcons name="close" size={20} color={Colors.descriptionText} />
+              </TouchableOpacity>
             </View>
-          </KeyboardAvoidingView>
-        </View>
+            <Text style={styles.modalHeader}>{ state.strings.editDetails }</Text>
+
+            <InputField
+              label={state.strings.name}
+              value={state.detailName}
+              autoCapitalize={'none'}
+              spellCheck={false}
+              multiline={false}
+              style={styles.field}
+              onChangeText={actions.setDetailName}
+            />
+
+            <InputField
+              label={state.strings.location}
+              value={state.detailLocation}
+              autoCapitalize={'none'}
+              spellCheck={false}
+              multiline={false}
+              style={styles.field}
+              onChangeText={actions.setDetailLocation}
+            />
+
+            <InputField
+              label={state.strings.description}
+              value={state.detailDescription}
+              autoCapitalize={'none'}
+              spellCheck={false}
+              multiline={true}
+              style={styles.field}
+              onChangeText={actions.setDetailDescription}
+            />
+
+            <View style={styles.buttons}>
+              <TouchableOpacity style={styles.cancelButton} activeOpacity={1} onPress={actions.hideDetails}>
+                <Text style={styles.cancelButtonText}>{ state.strings.cancel }</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.saveButton} activeOpacity={1} onPress={saveDetails}>
+                { busyDetail && (
+                  <ActivityIndicator animating={true} color={Colors.primaryButtonText} />
+                )}
+                { !busyDetail && (
+                  <Text style={styles.saveButtonText}>{ state.strings.save }</Text>
+                )}
+              </TouchableOpacity>
+            </View>
+
+          </View>
+        </KeyboardAvoidingView>
       </Modal>
 
     </>

@@ -136,19 +136,14 @@ export const styles = StyleSheet.create({
   selectionText: {
     color: Colors.text,
   },
-  modalOverlay: { 
+  modalOverlay: {
     width: '100%',
-    height: '100%',
-  },
-  modalBase: {
-    position: 'absolute',
-    top: 0,
-    left: 0, 
-    width: '100%', 
     height: '100%',
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    backgroundColor: Colors.modalOverlay,
+    opacity: 0.8,
   },
   modalContainer: {
     backgroundColor: Colors.modalBase,

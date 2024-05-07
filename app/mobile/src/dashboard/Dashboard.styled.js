@@ -174,6 +174,11 @@ export const styles = StyleSheet.create({
   modalOverlay: {
     width: '100%',
     height: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: Colors.modalOverlay,
+    opacity: 0.8,
   },
   modalBody: {
     padding: 16,

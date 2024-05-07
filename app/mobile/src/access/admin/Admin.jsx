@@ -57,24 +57,7 @@ export function Admin() {
             </TouchableOpacity>
           </View>
 
-          { Platform.OS !== 'ios' && (
-            <View style={styles.tos}>
-              <TouchableOpacity style={styles.viewterms} onPress={actions.showTerms}>
-                <Text style={styles.viewtermstext}>{ state.strings.terms }</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.agreeterms} onPress={() => actions.agree(!state.agree)}>
-                { state.agree && (
-                  <MatIcons name={'checkbox-outline'} size={20} color={Colors.primary} />
-                )}
-                { !state.agree && (
-                  <MatIcons name={'checkbox-blank-outline'} size={20} color={Colors.primary} />
-                )}
-                <Text style={styles.agreetermstext}>{ state.strings.agree }</Text>
-              </TouchableOpacity>
-            </View>
-          )}
-
-          { state.enabled && (Platform.OS === 'ios' || state.agree) && (
+          { state.enabled && (
             <TouchableOpacity style={styles.reset} onPress={admin}>
               { state.busy && (
                 <ActivityIndicator size="small" color="#ffffff" />
@@ -84,7 +67,7 @@ export function Admin() {
               )}
             </TouchableOpacity>
           )}
-          { (!state.enabled || (Platform.OS !== 'ios' && !state.agree)) && (
+          { !state.enabled && (
             <View style={styles.noreset}>
               <Text style={styles.noresettext}>{ state.strings.access }</Text>
             </View>

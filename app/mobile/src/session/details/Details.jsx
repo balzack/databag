@@ -7,7 +7,6 @@ import AntIcons from 'react-native-vector-icons/AntDesign';
 import MatIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Colors from 'constants/Colors';
 import { MemberItem } from './memberItem/MemberItem';
-import { BlurView } from '@react-native-community/blur';
 import { InputField } from 'utils/InputField';
 
 export function Details({ channel, clearConversation }) {
@@ -162,7 +161,7 @@ export function Details({ channel, clearConversation }) {
         onRequestClose={actions.hideEditSubject}
       >
         <View style={styles.modalOverlay}>
-          <BlurView style={styles.modalOverlay} blurType={Colors.overlay} blurAmount={2} reducedTransparencyFallbackColor="black" />
+          <View style={styles.blur} />
           <KeyboardAvoidingView style={styles.modalBase} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
             <View style={styles.modalContainer}>
               <Text style={styles.editHeader}>{ state.strings.editSubject }</Text>
@@ -196,24 +195,21 @@ export function Details({ channel, clearConversation }) {
         supportedOrientations={['portrait', 'landscape']}
         onRequestClose={actions.hideEditMembers}
       >
-        <View style={styles.modalOverlay}>
-          <BlurView style={styles.modalOverlay} blurType={Colors.overlay} blurAmount={2} reducedTransparencyFallbackColor="black" />
-          <KeyboardAvoidingView style={styles.modalBase} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-            <View style={styles.modalContainer}>
-              <Text style={styles.editHeader}>{ state.strings.topicMembers }</Text>
-              <FlatList style={styles.editMembers}
-                data={state.connected}
-                renderItem={({ item }) => <MemberItem item={item} toggle={toggle} />}
-                keyExtractor={item => item.cardId}
-              />
-              <View style={styles.editControls}>
-                <TouchableOpacity style={styles.close} onPress={actions.hideEditMembers}>
-                  <Text style={styles.closeText}>{ state.strings.close }</Text>
-                </TouchableOpacity>
-              </View>
+        <KeyboardAvoidingView style={styles.modalOverlay} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+          <View style={styles.modalContainer}>
+            <Text style={styles.editHeader}>{ state.strings.topicMembers }</Text>
+            <FlatList style={styles.editMembers}
+              data={state.connected}
+              renderItem={({ item }) => <MemberItem item={item} toggle={toggle} />}
+              keyExtractor={item => item.cardId}
+            />
+            <View style={styles.editControls}>
+              <TouchableOpacity style={styles.close} onPress={actions.hideEditMembers}>
+                <Text style={styles.closeText}>{ state.strings.close }</Text>
+              </TouchableOpacity>
             </View>
-          </KeyboardAvoidingView>
-        </View>
+          </View>
+        </KeyboardAvoidingView>
       </Modal>
 
     </View>

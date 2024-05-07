@@ -34,13 +34,10 @@ Databag is designed for efficiency, consuming minimal hosting resources. Notable
 - Lightweight (server can run on a raspberry pi zero v1.3)
 - Low latency (use of websockets for push events to avoid polling)
 - Unlimited accounts per node (host for your whole family)
-- Mobile alerts for new contacts, messages, and calls (supports UnifiedPush, FCM, APN)
+- Mobile alerts (push notifications on new contacts, messages, and calls)
 
 <br>
 <p align="center">
-  <a href="https://f-droid.org/en/packages/com.databag/">
-    <img src="/doc/fdroid.png" width="18%">
-  </a>
   <a href="https://apps.apple.com/us/app/databag/id6443741428">
     <img src="/doc/astore.png" width="18%">
   </a>
@@ -49,7 +46,7 @@ Databag is designed for efficiency, consuming minimal hosting resources. Notable
   </a>
 </p>
 
-The app is available on fdroid as well as the google and apple stores. You can test out the project [here](https://databag.coredb.org/#/create), but don't post anything important as this server is regularly wiped. Feedback on the UI/UX, bugs or features is greatly appreciated.
+The app is available in the google and apple stores. You can also test out the project [here](https://databag.coredb.org/#/create), but don't post anything important as this server is regularly wiped. Feedback on the UI/UX, bugs or features is greatly appreciated.
 
 ## Installation
 
@@ -63,7 +60,7 @@ From the net/container sub directory:
 ### Example with Portainer and Nginx Proxy Manager
 
 From Portainer:
-  - In the volume view, click add volume:
+  - In the volume view, click add volumen:
     - Enter a name, then click 'Create the volume'
   - In the container view, click add container:
     - In the 'Image' field enter 'balzack/databag:latest'
@@ -143,7 +140,7 @@ Integrate Databag in an OpenWrt firmware [here](/doc/openwrt.md).
 
 ## Audio and Video Calls
 
-Databag provides audio and video calling and relies on a STUN/TURN relay server for NAT traversal. Testing was done with both [coturn](https://github.com/coturn/coturn) and [pion](https://github.com/pion/turn) and should work with any implementation. Instructions for installing a coturn server are provided [here](https://gabrieltanner.org/blog/turn-server/).
+Databag provides audio and video calling and relies on a STUN/TURN relay server for NAT traversal. Testing was done with both [cuturn](https://github.com/coturn/coturn) and [pion](https://github.com/pion/turn) and should work with any implementation. Instructions for installing a coturn server are provided [here](https://gabrieltanner.org/blog/turn-server/).
 
 If you want to enable audio and video calls, you should setup your own relay server. For testing purposes you can however use the demo relay server configuration. In the admin configuration modal, set:
   - Enable WebRTC Calls: -switch on-
