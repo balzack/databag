@@ -1,6 +1,8 @@
 import { checkResponse, fetchWithTimeout } from './fetchUtil';
 
 export async function getChannelTopics(server, token, channelId, revision, count, begin, end) {
+  const insecure = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(server);
+  const protocol = insecure ? 'http' : 'https';
 
   let rev = ''
   if (revision != null) {
@@ -18,7 +20,7 @@ export async function getChannelTopics(server, token, channelId, revision, count
   if (end != null) {
     edn = `&end=${end}`
   }
-  let topics = await fetchWithTimeout(`https://${server}/content/channels/${channelId}/topics?agent=${token}${rev}${cnt}${bgn}${edn}`, 
+  let topics = await fetchWithTimeout(`${protocol}://${server}/content/channels/${channelId}/topics?agent=${token}${rev}${cnt}${bgn}${edn}`, 
     { method: 'GET' });
   checkResponse(topics)
   return { 

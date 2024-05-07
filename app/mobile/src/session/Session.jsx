@@ -138,6 +138,7 @@ function ContactStackScreen({ addChannel }) {
   
   const [contact, setContact] = useState(null);
   
+  const [editable, setEditable] = useState(false);
   const [search, setSearch] = useState(null);
   const [handle, setHandle] = useState();
   const [server, setServer] = useState();
@@ -147,6 +148,12 @@ function ContactStackScreen({ addChannel }) {
     navigation.navigate('contact')
   }
   const openRegistry = (navigation) => {
+    if (profile.state.identity?.node) {
+      setEditable(true);
+    }
+    else {
+      setEditable(false);
+    }
     setServer(profile.state.server);
     setHandle(null);
     setSearch(false);
@@ -166,7 +173,7 @@ function ContactStackScreen({ addChannel }) {
         </ContactStack.Screen>
 
         <ContactStack.Screen name="registry" options={{ ...stackParams, cardStyle: {backgroundColor: Colors.screenBase}, headerTitle: (props) => (
-            <RegistryHeader search={search} setSearch={setSearch} handle={handle} setHandle={setHandle} server={server} setServer={setServer} />
+            <RegistryHeader search={search} editable={editable} setSearch={setSearch} handle={handle} setHandle={setHandle} server={server} setServer={setServer} />
           )}}>
           {(props) => <RegistryBody search={search} handle={handle} server={server} openContact={(contact) => openContact(props.navigation, contact)} />}
         </ContactStack.Screen>

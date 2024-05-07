@@ -239,7 +239,9 @@ export function useRingContext() {
     videoTrack.current = false;
     audioTrack.current = false;
 
-    ws.current = createWebsocket(`wss://${node}/signal`);
+    const insecure = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(node);
+    const protocol = insecure ? 'ws' : 'wss';
+    ws.current = createWebsocket(`${protocol}://${node}/signal`);
     ws.current.onmessage = async (ev) => {
       // handle messages [impolite]
       try {

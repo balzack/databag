@@ -1,9 +1,11 @@
 import { checkResponse, fetchWithTimeout } from './fetchUtil';
 
 export async function addChannelTopic(server, token, channelId, messageType, message, assets ): string {
+  const insecure = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(server);
+  const protocol = insecure ? 'http' : 'https';
 
   if (message == null && (assets == null || assets.length === 0)) {
-    let topic = await fetchWithTimeout(`https://${server}/content/channels/${channelId}/topics?agent=${token}`,
+    let topic = await fetchWithTimeout(`${protocol}://${server}/content/channels/${channelId}/topics?agent=${token}`,
       { method: 'POST', body: JSON.stringify({}) });
     checkResponse(topic);
     let slot = await topic.json();
@@ -14,7 +16,7 @@ export async function addChannelTopic(server, token, channelId, messageType, mes
       if (value !== null) return value
     }), datatype: messageType };
     
-    let topic = await fetchWithTimeout(`https://${server}/content/channels/${channelId}/topics?agent=${token}&confirm=true`,
+    let topic = await fetchWithTimeout(`${protocol}://${server}/content/channels/${channelId}/topics?agent=${token}&confirm=true`,
       { method: 'POST', body: JSON.stringify(subject) });
     checkResponse(topic);
     let slot = await topic.json();
@@ -22,7 +24,7 @@ export async function addChannelTopic(server, token, channelId, messageType, mes
   }
   else {
    
-    let topic = await fetchWithTimeout(`https://${server}/content/channels/${channelId}/topics?agent=${token}`,
+    let topic = await fetchWithTimeout(`${protocol}://${server}/content/channels/${channelId}/topics?agent=${token}`,
       { method: 'POST', body: JSON.stringify({}) });
     checkResponse(topic);
     let slot = await topic.json();
@@ -34,7 +36,7 @@ export async function addChannelTopic(server, token, channelId, messageType, mes
         const formData = new FormData();
         formData.append('asset', asset.image);
         let transform = encodeURIComponent(JSON.stringify(["ithumb;photo", "icopy;photo"]));
-        let topicAsset = await fetch(`https://${server}/content/channels/${channelId}/topics/${slot.id}/assets?transforms=${transform}&agent=${token}`, { method: 'POST', body: formData });
+        let topicAsset = await fetch(`${protocol}://${server}/content/channels/${channelId}/topics/${slot.id}/assets?transforms=${transform}&agent=${token}`, { method: 'POST', body: formData });
         checkResponse(topicAsset);
         let assetEntry = await topicAsset.json();
         message.assets.push({
@@ -49,7 +51,7 @@ export async function addChannelTopic(server, token, channelId, messageType, mes
         formData.append('asset', asset.video);
         let thumb = 'vthumb;video;' + asset.position;
         let transform = encodeURIComponent(JSON.stringify(["vlq;video", "vhd;video", thumb]));
-        let topicAsset = await fetch(`https://${server}/content/channels/${channelId}/topics/${slot.id}/assets?transforms=${transform}&agent=${token}`, { method: 'POST', body: formData });
+        let topicAsset = await fetch(`${protocol}://${server}/content/channels/${channelId}/topics/${slot.id}/assets?transforms=${transform}&agent=${token}`, { method: 'POST', body: formData });
         checkResponse(topicAsset);
         let assetEntry = await topicAsset.json();
         message.assets.push({
@@ -64,7 +66,7 @@ export async function addChannelTopic(server, token, channelId, messageType, mes
         const formData = new FormData();
         formData.append('asset', asset.audio);
         let transform = encodeURIComponent(JSON.stringify(["acopy;audio"]));
-        let topicAsset = await fetch(`https://${server}/content/channels/${channelId}/topics/${slot.id}/assets?transforms=${transform}&agent=${token}`, { method: 'POST', body: formData });
+        let topicAsset = await fetch(`${protocol}://${server}/content/channels/${channelId}/topics/${slot.id}/assets?transforms=${transform}&agent=${token}`, { method: 'POST', body: formData });
         checkResponse(topicAsset);
         let assetEntry = await topicAsset.json();
         message.assets.push({
@@ -80,11 +82,11 @@ export async function addChannelTopic(server, token, channelId, messageType, mes
       if (value !== null) return value
     }), datatype: messageType };
  
-    let unconfirmed = await fetchWithTimeout(`https://${server}/content/channels/${channelId}/topics/${slot.id}/subject?agent=${token}`, 
+    let unconfirmed = await fetchWithTimeout(`${protocol}://${server}/content/channels/${channelId}/topics/${slot.id}/subject?agent=${token}`, 
       { method: 'PUT', body: JSON.stringify(subject) });
     checkResponse(unconfirmed);
 
-    let confirmed = await fetchWithTimeout(`https://${server}/content/channels/${channelId}/topics/${slot.id}/confirmed?agent=${token}`,
+    let confirmed = await fetchWithTimeout(`${protocol}://${server}/content/channels/${channelId}/topics/${slot.id}/confirmed?agent=${token}`,
       { method: 'PUT', body: JSON.stringify('confirmed') });
     checkResponse(confirmed);
     return slot.id;
