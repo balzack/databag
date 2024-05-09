@@ -302,6 +302,12 @@ export function useTopicItem(item, hosting, remove, contentKey) {
       return <Text>{ clickable }</Text>;
   };
 
+  const getExtension = async (path, type) => {
+    if (type === 'video') {
+        return 'mp4';
+      }
+  }
+
   const actions = {
     showCarousel: async (index) => {
       const assets = state.assets.map((asset) => ({ ...asset, error: false, decrypted: null }));
@@ -340,7 +346,20 @@ export function useTopicItem(item, hosting, remove, contentKey) {
               updateState({ assets: [ ...assets ]});
             };
 
-            asset.decrypted = path;
+            if (asset.type === 'image') {
+              const prefix = await RNFS.read(path, 64, 0, "base64");
+              const ext = prefix.startsWith('R0lGODlh') ? '.gif' : '.jpg';
+              const exists = await RNFS.exists(path + ext);
+              if (exists) {
+                RNFS.unlink(path + ext);
+              }
+              await RNFS.moveFile(path, path + ext);
+              asset.decrypted = path + ext;
+            }
+            else {
+              asset.decrypted = path;
+            }
+            
             assets[cur] = { ...asset };
             updateState({ assets: [ ...assets ]});
           };
@@ -397,6 +416,7 @@ export function useTopicItem(item, hosting, remove, contentKey) {
               const src = blob.path();
               const dir = src.split('/').slice(0,-1).join('/')
               const dst = dir + '/' + asset + '.' + getExtension(type);
+
               try {
                 await fs.unlink(dst);
               }

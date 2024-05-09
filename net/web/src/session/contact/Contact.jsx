@@ -141,7 +141,7 @@ export function Contact({ close, guid, listing }) {
             )}
             { state.status === 'requested' && (
               <Tooltip placement="top" title={state.strings.acceptConnection}>
-                <Button className="button" type="primary" loading={state.busy} icon={<UserSwitchOutlined />} size="medium"  onClick={() => updateContact(actions.saveConnect)}>{ state.strings.cancel }</Button>
+                <Button className="button" type="primary" loading={state.busy} icon={<UserSwitchOutlined />} size="medium"  onClick={() => updateContact(actions.saveConnect)}>{ state.strings.connect }</Button>
               </Tooltip>
             )}
             { state.status === 'requested' && (

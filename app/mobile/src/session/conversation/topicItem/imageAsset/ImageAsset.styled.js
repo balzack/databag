@@ -41,15 +41,25 @@ export const styles = StyleSheet.create({
     top: 0,
     left: 0,
   },
+  share: {
+    position: 'absolute',
+    opacity: 0.9,
+    top: 0,
+    left: 0,
+    margin: 16,
+    padding: 4,
+    borderRadius: 4,
+    backgroundColor: Colors.grey,
+  },
   close: {
     position: 'absolute',
     opacity: 0.9,
     top: 0,
     right: 0,
+    margin: 16,
+    padding: 4,
     borderRadius: 4,
     backgroundColor: Colors.grey,
-    padding: 4,
-    margin: 16,
-  },
+  }
 })
 

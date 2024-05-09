@@ -25,14 +25,23 @@ export const styles = StyleSheet.create({
     paddingRight: 48,
     color: Colors.text,
   },
-  close: {
-    position: 'absolute',
-    top: 0,
-    right: 0,
+  share: {
     paddingTop: 4,
     paddingBottom: 4,
     paddingLeft: 8,
     paddingRight: 8,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+  },
+  close: {
+    paddingTop: 4,
+    paddingBottom: 4,
+    paddingLeft: 8,
+    paddingRight: 8,
+    position: 'absolute',
+    top: 0,
+    right: 0,
   },
   player: {
     display: 'none',

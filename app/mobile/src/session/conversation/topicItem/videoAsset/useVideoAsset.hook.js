@@ -2,6 +2,7 @@ import { useState, useRef, useEffect, useContext } from 'react';
 import { ConversationContext } from 'context/ConversationContext';
 import { Image } from 'react-native';
 import { useWindowDimensions } from 'react-native';
+import Share from 'react-native-share';
 
 export function useVideoAsset(asset) {
 
@@ -71,6 +72,9 @@ export function useVideoAsset(asset) {
   }, [asset]);
 
   const actions = {
+    download: () => {
+      Share.open({ url: state.url });
+    },
     setThumbSize: (e) => {
       const { width, height } = e.nativeEvent || {};
       updateState({ thumbLoaded: true, thumbRatio: width / height });
