@@ -7,8 +7,7 @@ import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useKeepAwake } from '@sayem314/react-native-keep-awake';
 import FastImage from 'react-native-fast-image'
 import { SafeAreaView } from 'react-native-safe-area-context';
-
-import { useEffect } from 'react';
+import MatIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 export function VideoAsset({ asset, dismiss }) {
 
@@ -39,8 +38,13 @@ export function VideoAsset({ asset, dismiss }) {
           </TouchableOpacity>
         )}
         { (state.controls || !state.playing) && state.videoLoaded && (
+          <TouchableOpacity style={styles.share} onPress={actions.download}>
+            <MatIcons name="share-variant-outline" size={32} color={Colors.white} />
+          </TouchableOpacity>
+        )}
+        { (state.controls || !state.playing) && state.videoLoaded && (
           <TouchableOpacity style={styles.close} onPress={dismiss}>
-            <Icons name="window-close" size={32} color={Colors.white} />
+             <Icons name="window-close" size={32} color={Colors.white} />
           </TouchableOpacity>
         )}
       </TouchableOpacity>

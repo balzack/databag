@@ -7,6 +7,7 @@ import { styles } from './AudioAsset.styled';
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
 import audio from 'images/audio.png';
 import { useKeepAwake } from '@sayem314/react-native-keep-awake';
+import MatIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 export function AudioAsset({ asset, dismiss }) {
 
@@ -30,9 +31,15 @@ export function AudioAsset({ asset, dismiss }) {
           <Icons name="pause-circle-outline" size={92} color={Colors.text} />
         </TouchableOpacity>
       )}
+      { state.url && (
+        <TouchableOpacity style={styles.share} onPress={actions.download}>
+          <MatIcons name="share-variant-outline" size={32} color={Colors.text} />
+        </TouchableOpacity>
+      )}
       <TouchableOpacity style={styles.close} onPress={dismiss}>
         <Icons name="window-close" size={32} color={Colors.text} />
       </TouchableOpacity>
+
       { state.url && (
         <Video ref={player} source={{ uri: state.url }} repeat={true}
           paused={!state.playing} onLoad={actions.loaded} style={styles.player} />

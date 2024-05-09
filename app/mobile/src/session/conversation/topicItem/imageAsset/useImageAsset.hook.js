@@ -2,6 +2,7 @@ import { useState, useRef, useEffect, useContext } from 'react';
 import { ConversationContext } from 'context/ConversationContext';
 import { Image } from 'react-native';
 import { useWindowDimensions } from 'react-native';
+import Share from 'react-native-share';
 
 export function useImageAsset(asset) {
 
@@ -67,11 +68,13 @@ export function useImageAsset(asset) {
       const { width, height } = e.nativeEvent;
       updateState({ imageRatio: width / height });
     },
+    download: () => {
+      Share.open({ url: state.url })
+    },
     loaded: () => {
       updateState({ loaded: true });
     },
     failed: (e) => {
-console.log("FAILEE!!!", e);
       updateState({ failed: true });
     },
     showControls: () => {

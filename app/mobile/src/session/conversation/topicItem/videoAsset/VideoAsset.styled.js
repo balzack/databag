@@ -47,6 +47,13 @@ export const styles = StyleSheet.create({
     paddingRight: 16,
     paddingTop: 16,
   },
+  share: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    paddingLeft: 16,
+    paddingTop: 16,
+  },
   loading: {
     position: 'absolute',
     display: 'flex',

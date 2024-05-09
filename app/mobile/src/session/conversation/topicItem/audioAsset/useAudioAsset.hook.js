@@ -2,6 +2,7 @@ import { useState, useRef, useEffect, useContext } from 'react';
 import { ConversationContext } from 'context/ConversationContext';
 import { Image } from 'react-native';
 import { useWindowDimensions } from 'react-native';
+import Share from 'react-native-share';
 
 export function useAudioAsset(asset) {
 
@@ -47,6 +48,9 @@ export function useAudioAsset(asset) {
   }, [asset]);
 
   const actions = {
+    download: () => {
+      Share.open({ url: state.url });
+    },
     play: () => {
       updateState({ playing: true });
     },

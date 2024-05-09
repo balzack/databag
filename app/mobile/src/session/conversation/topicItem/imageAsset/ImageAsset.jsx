@@ -4,6 +4,7 @@ import { styles } from './ImageAsset.styled';
 import Colors from 'constants/Colors';
 import Ionicons from 'react-native-vector-icons/AntDesign';
 import FastImage from 'react-native-fast-image'
+import MatIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 export function ImageAsset({ asset, dismiss }) {
   const { state, actions } = useImageAsset(asset);
@@ -19,6 +20,11 @@ export function ImageAsset({ asset, dismiss }) {
             resizeMode={FastImage.resizeMode.contain} />
       )}
 
+      { state.loaded && state.controls && (
+        <TouchableOpacity style={styles.share} onPress={actions.download}>
+          <MatIcons name="share-variant-outline" size={32} color={Colors.white} />
+        </TouchableOpacity>
+      )}
       { state.loaded && state.controls && (
         <TouchableOpacity style={styles.close} onPress={dismiss}>
           <Ionicons name={'close'} size={32} color={Colors.white} />
