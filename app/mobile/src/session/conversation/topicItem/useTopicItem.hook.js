@@ -302,12 +302,6 @@ export function useTopicItem(item, hosting, remove, contentKey) {
       return <Text>{ clickable }</Text>;
   };
 
-  const getExtension = async (path, type) => {
-    if (type === 'video') {
-        return 'mp4';
-      }
-  }
-
   const actions = {
     showCarousel: async (index) => {
       const assets = state.assets.map((asset) => ({ ...asset, error: false, decrypted: null }));
