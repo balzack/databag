@@ -106,7 +106,7 @@ export function TopicItem({ item, focused, focus, hosting, remove, update, block
           { state.sharing && (
             <ActivityIndicator style={styles.share} color={Colors.white} size="small" />
           )}
-          { !state.sharing && contentKey == null && (
+          { state.shareable && !state.sharing && contentKey == null && (
             <TouchableOpacity style={styles.share} onPress={shareMessage}>
               <MatIcons name="share-variant-outline" size={18} color={Colors.white} />
             </TouchableOpacity>
@@ -119,7 +119,7 @@ export function TopicItem({ item, focused, focus, hosting, remove, update, block
           <TouchableOpacity style={styles.icon} onPress={() => actions.promptBlock(block)}>
             <MatIcons name="block-helper" size={18} color={Colors.white} />
           </TouchableOpacity>
-          { !state.editable && (
+          { state.flagable && (
             <TouchableOpacity style={styles.icon} onPress={() => actions.promptReport(report)}>
               <MatIcons name="flag-outline" size={22} color={Colors.white} />
             </TouchableOpacity>

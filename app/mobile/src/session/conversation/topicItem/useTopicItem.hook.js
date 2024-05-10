@@ -35,8 +35,10 @@ export function useTopicItem(item, hosting, remove, contentKey) {
     activeId: null,
     fontSize: 14,
     fontColor: Colors.text,
+    shareable: false,
     editable: false,
     deletable: false,
+    flagable: false,
     assets: [],
     sharing: false,
     monthLast: false,
@@ -254,10 +256,12 @@ export function useTopicItem(item, hosting, remove, contentKey) {
       }
     }
 
+    const shareable = parsed;
     const editable = guid === identity?.guid && parsed;
-    const deletable = editable || hosting;
+    const flagable = guid !== identity?.guid;
+    const deletable = guid === identity?.guid || hosting;
 
-    updateState({ logo, name, nameSet, known, sealed, message, clickable, fontSize, fontColor, timestamp, transform, status, assets, deletable, editable, editData: parsed, editMessage: message, editType: dataType });
+    updateState({ logo, name, nameSet, known, sealed, message, clickable, fontSize, fontColor, timestamp, transform, status, assets, deletable, shareable, editable, flagable, editData: parsed, editMessage: message, editType: dataType });
   }, [conversation.state, card.state, account.state, profile.state, item, contentKey]);
 
   const unsealTopic = async (topicId, revision, topicDetail) => {
