@@ -81,6 +81,11 @@ type Account struct {
   Updated           int64           `gorm:"autoUpdateTime"`
   Disabled          bool            `gorm:"not null;default:false"`
   Searchable        bool            `gorm:"not null;default:false"`
+  MFAEnabled        bool            `gorm:"not null;default:false"`
+  MFAConfirmed      bool            `gorm:"not null;default:false"`
+  MFASecret         string
+  MFAFailedTime     int64
+  MFAFailedCount    uint
   Forward           string
   AccountDetail     AccountDetail
   Apps              []App

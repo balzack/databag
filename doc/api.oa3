@@ -634,7 +634,7 @@ paths:
             schema:
               type: boolean
 
-  /account/authentication:
+  /account/mfauth:
     post:
       tags:
         - account
@@ -681,6 +681,10 @@ paths:
           description: success
         '401':
           description: permission denied
+        '405':
+          description: totp code required but not set
+        '429':
+          description: temporarily locked due to too many failures
         '500':
           description: internal server error
     delete:
@@ -973,7 +977,7 @@ paths:
           description: invalid token
         '406':
           description: app limit reached
-        '409':
+        '405':
           description: totp code required but not set
         '410':
           description: account disabled
