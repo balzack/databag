@@ -43,7 +43,10 @@ export function useAccountAccess() {
     mfaModal: false,
     mfaEnabled: null,
     mfaSecret: null,
+    mfaImage: null,
     mfaCode: null,
+    mfaError: false,
+    mfaErrorCode: null,
 
     seal: null,
     sealKey: null,
@@ -319,8 +322,8 @@ export function useAccountAccess() {
       if (!state.busy) {
         try {
           updateState({ busy: true });
-          const secret = await account.actions.enableMFA();
-          updateState({ busy: false, mfaModal: true, mfaSecret: secret, mfaCode: '' });
+          const mfa = await account.actions.enableMFA();
+          updateState({ busy: false, mfaModal: true, mfaError: false, mfaSecret: mfa.secretText, mfaImage: mfa.secretImage, mfaCode: '' });
         }
         catch (err) {
           console.log(err);
@@ -347,12 +350,12 @@ export function useAccountAccess() {
       if (!state.busy) {
         try {
           updateState({ busy: true });
-          await account.actions.confirmMFA(state.code);
-          updateState({ busy: false });
+          await account.actions.confirmMFA(state.mfaCode);
+          updateState({ busy: false, mfaModal: false });
         }
         catch (err) {
-          console.log(err);
-          updateState({ busy: false });
+          console.log("error code: ", err);
+          updateState({ busy: false, mfaError: true, mfaErrorCode: err });
           throw new Error('failed to confirm mfa');
         }
       }

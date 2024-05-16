@@ -1,7 +1,10 @@
-import { AccountAccessWrapper, LoginModal, SealModal, LogoutContent } from './AccountAccess.styled';
+import { AccountAccessWrapper, LoginModal, MFAModal, SealModal, LogoutContent } from './AccountAccess.styled';
 import { useAccountAccess } from './useAccountAccess.hook';
-import { Button, Modal, Switch, Input, Radio, Select } from 'antd';
-import { LogoutOutlined, SettingOutlined, UserOutlined, LockOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
+import { Button, Modal, Switch, Input, Radio, Select, Flex, Typography } from 'antd';
+import type { GetProp } from 'antd';
+import type { OTPProps } from 'antd/es/input/OTP';
+import { LogoutOutlined, SettingOutlined, UserOutlined, LockOutlined, ExclamationCircleOutlined, KeyOutlined } from '@ant-design/icons';
+import { CopyButton } from '../../../../copyButton/CopyButton';
 import { useRef } from 'react';
 
 export function AccountAccess() {
@@ -40,7 +43,6 @@ export function AccountAccess() {
   };
 
   const enableMFA = async (enable) => {
-console.log("ENABLE: ", enable);
     try {
       if (enable) {
         await actions.enableMFA();
@@ -264,8 +266,30 @@ console.log("ENABLE: ", enable);
           </div>
         </LoginModal>
       </Modal>
-      <Modal centerd closable={false} footer={null} visible={state.mfaModal} bodyStyle={{ borderRadius: 8, padding: 16, ...state.menuStyle }} onCancel={actions.dismissMFA}>
-        <div>{ state.mfaSecret }</div>
+      <Modal centerd closable={false} footer={null} visible={state.mfaModal} destroyOnClose={true} bodyStyle={{ borderRadius: 8, padding: 16, ...state.menuStyle }} onCancel={actions.dismissMFA}>
+        <MFAModal>
+          <div className="title">Multi-Factor Authentication</div>
+          <div className="description">Store the secret and confirm the verification code</div>
+          <img src={state.mfaImage} alt="QRCode" />
+          <div className="secret">
+            <div className="label">{ state.mfaSecret }</div>
+            <CopyButton onCopy={async () => await navigator.clipboard.writeText(state.mfaSecret)} />
+          </div>
+          <Input.OTP onChange={actions.setCode} />
+          <div className="alert">
+            { state.mfaError && state.mfaErrorCode == 'Error: 401' && (
+              <span>verification code error</span>
+            )}
+            { state.mfaError && state.mfaErrorCode == 'Error: 429' && (
+              <span>verification temporarily disabled</span>
+            )}
+          </div>
+          <div className="controls">
+            <Button key="back" onClick={actions.dismissMFA}>{state.strings.cancel}</Button>
+            <Button key="save" type="primary" className={state.mfaCode ? 'saveEnabled' : 'saveDisabled'} onClick={actions.confirmMFA}
+                disabled={!state.mfaCode} loading={state.busy}>Confirm</Button>
+          </div>
+        </MFAModal>
       </Modal>
     </AccountAccessWrapper>
   );

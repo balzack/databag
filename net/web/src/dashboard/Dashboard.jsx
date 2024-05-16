@@ -4,7 +4,7 @@ import { ExclamationCircleOutlined, SettingOutlined, UserAddOutlined, LogoutOutl
 import { ThemeProvider } from "styled-components";
 import { useDashboard } from './useDashboard.hook';
 import { AccountItem } from './accountItem/AccountItem';
-import { CopyButton } from './copyButton/CopyButton';
+import { CopyButton } from '../copyButton/CopyButton';
 
 export function Dashboard() {
 

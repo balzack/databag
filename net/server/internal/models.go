@@ -53,6 +53,13 @@ type Announce struct {
 	AppToken string `json:"appToken"`
 }
 
+//MFASecret values for configuring TOTP
+type MFASecret struct {
+  Image string `json:"secretImage"`
+
+  Text string `json:"secretText"`
+}
+
 //Notification describes type of notifications to receive
 type Notification struct {
 	Event string `json:"event,omitempty"`

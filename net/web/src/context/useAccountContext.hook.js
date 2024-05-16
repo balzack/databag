@@ -84,6 +84,8 @@ export function useAccountContext() {
       await removeAccountMFA(access.current);
     },
     confirmMFA: async (code) => {
+console.log("CONFIRMING: ", code);
+
       await setAccountMFA(access.current, code);
     },
     setSeal: async (seal, sealKey) => {

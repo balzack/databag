@@ -148,7 +148,7 @@ const APPQueueDefault = ""
 const APPDefaultPath = "/tmp/databag/assets"
 
 //APPMFAIssuer name servive
-const APPMFAIssuer = "databag"
+const APPMFAIssuer = "Databag"
 
 //APPMFAFailPeriod time window login failures can occur
 const APPMFAFailPeriod = 300

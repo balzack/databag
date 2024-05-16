@@ -2,6 +2,7 @@ package databag
 
 import (
   "databag/internal/store"
+  "github.com/pquerna/otp"
   "github.com/pquerna/otp/totp"
   "gorm.io/gorm"
 	"net/http"
@@ -34,7 +35,8 @@ func SetMultiFactorAuth(w http.ResponseWriter, r *http.Request) {
     return;
   }
 
-  if !totp.Validate(account.MFASecret, code) {
+  opts := totp.ValidateOpts{Period: 30, Skew: 1, Digits: otp.DigitsSix, Algorithm: otp.AlgorithmSHA256}
+  if valid, _ := totp.ValidateCustom(code, account.MFASecret, time.Now(), opts); !valid {
     err := store.DB.Transaction(func(tx *gorm.DB) error {
       if account.MFAFailedTime + APPMFAFailPeriod > curTime {
         account.MFAFailedCount += 1
@@ -58,6 +60,23 @@ func SetMultiFactorAuth(w http.ResponseWriter, r *http.Request) {
     }
 
     ErrResponse(w, http.StatusUnauthorized, errors.New("invalid code"))
+    return
+  }
+
+  err = store.DB.Transaction(func(tx *gorm.DB) error {
+    account.MFAConfirmed = true
+    if res := tx.Model(account).Update("mfa_confirmed", account.MFAConfirmed).Error; res != nil {
+      ErrResponse(w, http.StatusInternalServerError, res)
+      return res
+    }
+    account.AccountRevision += 1;
+    if res := tx.Model(&account).Update("account_revision", account.AccountRevision).Error; res != nil {
+      return res
+    }
+    return nil
+  })
+  if err != nil {
+    ErrResponse(w, http.StatusInternalServerError, err)
     return
   }
 

@@ -1,10 +1,13 @@
 package databag
 
 import (
+  "bytes"
 	"net/http"
+	"image/png"
   "github.com/pquerna/otp"
   "github.com/pquerna/otp/totp"
   "databag/internal/store"
+  "encoding/base64"
   "gorm.io/gorm"
 )
 
@@ -51,6 +54,14 @@ func AddMultiFactorAuth(w http.ResponseWriter, r *http.Request) {
     return
   }
 
+  var buf bytes.Buffer
+	img, err := key.Image(200, 200)
+	if err != nil {
+		panic(err)
+	}
+	png.Encode(&buf, img)
+  enc := base64.StdEncoding.EncodeToString(buf.Bytes())
+
 	SetStatus(account)
-	WriteResponse(w, account.MFASecret)
+	WriteResponse(w, MFASecret{ Image: "data:image/png;base64," + enc, Text: account.MFASecret })
 }
