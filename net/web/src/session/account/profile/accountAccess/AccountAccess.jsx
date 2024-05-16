@@ -39,6 +39,26 @@ export function AccountAccess() {
     }
   };
 
+  const enableMFA = async (enable) => {
+console.log("ENABLE: ", enable);
+    try {
+      if (enable) {
+        await actions.enableMFA();
+      }
+      else {
+        await actions.disableMFA();
+      }
+    }
+    catch (err) {
+      console.log(err);
+      modal.error({
+        title: <span style={state.menuStyle}>{state.strings.operationFailed}</span>,
+        content: <span style={state.menuStyle}>{state.strings.tryAgain}</span>,
+        bodyStyle: { borderRadius: 8, padding: 16, ...state.menuStyle },
+      });
+    }
+  }
+
   const saveLogin = async () => {
     try {
       await actions.setLogin();
@@ -83,6 +103,12 @@ export function AccountAccess() {
               <Switch size="small" checked={state.searchable} onChange={enable => saveSearchable(enable)} />
             </div>
             <div className="switchLabel">{state.strings.registry}</div>
+          </div>
+          <div className="switch">
+            <div className="control">
+              <Switch size="small" checked={state.mfaEnabled} onChange={enable => enableMFA(enable)} />
+            </div>
+            <div className="switchLabel">Multi-Factor Authentication</div>
           </div>
           <div className="link" onClick={actions.setEditSeal}>
             <div className="control">
@@ -237,6 +263,9 @@ export function AccountAccess() {
                 disabled={!actions.canSaveLogin()} loading={state.busy}>{state.strings.save}</Button>
           </div>
         </LoginModal>
+      </Modal>
+      <Modal centerd closable={false} footer={null} visible={state.mfaModal} bodyStyle={{ borderRadius: 8, padding: 16, ...state.menuStyle }} onCancel={actions.dismissMFA}>
+        <div>{ state.mfaSecret }</div>
       </Modal>
     </AccountAccessWrapper>
   );

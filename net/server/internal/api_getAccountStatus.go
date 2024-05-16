@@ -35,6 +35,7 @@ func GetAccountStatus(w http.ResponseWriter, r *http.Request) {
 	status.Disabled = account.Disabled
 	status.ForwardingAddress = account.Forward
 	status.Searchable = account.Searchable
+  status.MFAEnabled = account.MFAEnabled && account.MFAConfirmed
   status.Sealable = true
   status.EnableIce = getBoolConfigValue(CNFEnableIce, false)
   status.AllowUnsealed = getBoolConfigValue(CNFAllowUnsealed, false)

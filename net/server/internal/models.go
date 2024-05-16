@@ -35,6 +35,8 @@ type AccountStatus struct {
 
 	Searchable bool `json:"searchable"`
 
+  MFAEnabled bool `json:"mfaEnabled"`
+
 	PushEnabled bool `json:"pushEnabled"`
 
   Sealable bool `json:"sealable"`
