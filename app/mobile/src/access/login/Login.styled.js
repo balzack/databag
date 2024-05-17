@@ -22,6 +22,38 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  mfaOverlay: {
+    width: '100%',
+    height: '100%',
+  },
+  mfaBase: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  mfaContainer: {
+    backgroundColor: Colors.modalBase,
+    borderColor: Colors.modalBorder,
+    borderWidth: 1,
+    width: '80%',
+    maxWidth: 400, 
+    display: 'flex',
+    gap: 16,
+    alignItems: 'center',
+    borderRadius: 8,
+    padding: 16,
+  },
+  mfaTitle: {
+    fontSize: 20,
+  },
+  mfaDescription: {
+    fontSize: 16,
+  },
   tos: {
     display: 'flex',
     flexDirection: 'column',

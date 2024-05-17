@@ -5,6 +5,7 @@ import { useLogin } from './useLogin.hook';
 import { Colors } from 'constants/Colors';
 import MatIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { tos } from 'constants/TermsOfService';
+import { BlurView } from "@react-native-community/blur";
 
 export function Login() {
 
@@ -124,6 +125,24 @@ export function Login() {
           </TouchableOpacity>
         </View>
       </Modal>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={state.mfaModal}
+        supportedOrientations={['portrait', 'landscape']}
+        onRequestClose={actions.dismissMFA}
+      >
+        <View style={styles.mfaOverlay}>
+          <BlurView style={styles.mfaOverlay} blurType={Colors.overlay} blurAmount={2} reducedTransparencyFallbackColor="black" />
+          <KeyboardAvoidingView style={styles.mfaBase} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+            <View style={styles.mfaContainer}>
+              <Text style={styles.mfaTitle}>Multi-Factor Authentication</Text>
+              <Text style={styles.mfaDescription}>Enter your verification code</Text>
+            </View>
+          </KeyboardAvoidingView>
+        </View>
+      </Modal>
+
     </KeyboardAvoidingView>
   );
 }
