@@ -15,6 +15,9 @@ export function useLogin() {
     busy: false,
     strings: {},
     menuStyle: {},
+    mfaModal: false,
+    mfaCode: null,
+    mfaError: null,
   });
 
   const navigate = useNavigate();
@@ -46,18 +49,29 @@ export function useLogin() {
       if (!state.busy && state.username !== '' && state.password !== '') {
         updateState({ busy: true })
         try {
-          await app.actions.login(state.username, state.password)
+          await app.actions.login(state.username, state.password, state.mfaCode)
         }
         catch (err) {
-          console.log(err);
-          updateState({ busy: false })
-          throw new Error('login failed: check your username and password');
+          if (err == 'Error: 405' || err == 'Error: 403' || err == 'Error: 429') {
+            updateState({ busy: false, mfaModal: true, mfaError: err.toString() });
+          }
+          else {
+            console.log(err);
+            updateState({ busy: false })
+            throw new Error('login failed: check your username and password');
+          }
         }
         updateState({ busy: false })
       }
     },
     onCreate: () => {
       navigate('/create');
+    },
+    setCode: (mfaCode) => {
+      updateState({ mfaCode });
+    },
+    dismissMFA: () => {
+      updateState({ mfaModal: false, mfaCode: null });
     },
   };
 

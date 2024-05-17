@@ -77,8 +77,8 @@ export function useAppContext(websocket) {
     access: async (token) => {
       await appAccess(token)
     },
-    login: async (username, password) => {
-      await appLogin(username, password)
+    login: async (username, password, code) => {
+      await appLogin(username, password, code)
     },
     create: async (username, password, token) => {
       await appCreate(username, password, token)
@@ -96,7 +96,7 @@ export function useAppContext(websocket) {
       throw new Error('invalid session state');
     }
     await addAccount(username, password, token);
-    const access = await setLogin(username, password, appName, appVersion, userAgent);
+    const access = await setLogin(username, password, null, appName, appVersion, userAgent);
     storeContext.actions.setValue('login:timestamp', access.created);
     setSession(access.appToken);
     appToken.current = access.appToken;
@@ -108,11 +108,11 @@ export function useAppContext(websocket) {
     return access.created;
   } 
 
-  const appLogin = async (username, password) => {
+  const appLogin = async (username, password, code) => {
     if (appToken.current || !checked.current) {
       throw new Error('invalid session state');
     }
-    const access = await setLogin(username, password, appName, appVersion, userAgent);
+    const access = await setLogin(username, password, code, appName, appVersion, userAgent);
     storeContext.actions.setValue('login:timestamp', access.created);
     setSession(access.appToken);
     appToken.current = access.appToken;

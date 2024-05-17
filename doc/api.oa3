@@ -681,6 +681,8 @@ paths:
           description: success
         '401':
           description: permission denied
+        '403':
+          description: totp code not correct
         '405':
           description: totp code required but not set
         '429':

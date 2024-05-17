@@ -5,6 +5,7 @@ import (
 	"encoding/hex"
 	"github.com/theckman/go-securerandom"
   "github.com/pquerna/otp/totp"
+  "github.com/pquerna/otp"
 	"gorm.io/gorm"
 	"net/http"
   "errors"
@@ -33,7 +34,8 @@ func AddAccountApp(w http.ResponseWriter, r *http.Request) {
       return;
     }
 
-    if !totp.Validate(account.MFASecret, code) {
+    opts := totp.ValidateOpts{Period: 30, Skew: 1, Digits: otp.DigitsSix, Algorithm: otp.AlgorithmSHA256}
+    if valid, _ := totp.ValidateCustom(code, account.MFASecret, time.Now(), opts); !valid {
       err := store.DB.Transaction(func(tx *gorm.DB) error {
         if account.MFAFailedTime + APPMFAFailPeriod > curTime {
           account.MFAFailedCount += 1;
@@ -56,7 +58,7 @@ func AddAccountApp(w http.ResponseWriter, r *http.Request) {
         LogMsg("failed to increment fail count");
       }
 
-      ErrResponse(w, http.StatusUnauthorized, errors.New("invalid code"))
+      ErrResponse(w, http.StatusForbidden, errors.New("invalid code"))
       return
     }
   }
