@@ -19,7 +19,7 @@ export function useLogin() {
     agree: false,
     showTerms: false,
     mfaModal: false,
-    mfaCode: null,
+    mfaCode: '',
     mfaError: null,
   });
 
@@ -77,11 +77,12 @@ export function useLogin() {
       if (!state.busy) {
         updateState({ busy: true });
         try {
-          await app.actions.login(state.login.trim(), state.password);
+          await app.actions.login(state.login.trim(), state.password, state.mfaCode);
         }
         catch (err) {
+console.log(err);
           if (err.message == '405' || err.message == '403' || err.message == '429') {
-            updateState({ mfaModal: true, mfaError: err.message, mfaCode: '' });
+            updateState({ mfaModal: true, mfaError: err.message });
           }
           else {
             console.log(err.message);
@@ -91,6 +92,9 @@ export function useLogin() {
         }
         updateState({ busy: false });
       }
+    },
+    setCode: (mfaCode) => {
+      updateState({ mfaCode });
     },
     dismissMFA: () => {
       updateState({ mfaModal: false });

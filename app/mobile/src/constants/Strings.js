@@ -203,6 +203,13 @@ const Strings = [
     reportMessage: 'Report Message',
     select: 'Select',
     selectTopic: 'Select Topic for Sharing',
+
+    mfaTitle: 'Multi-Factor Authentication',
+    mfaSteps: 'Store the secret and confirm the verification code',
+    mfaError: 'verification code error',
+    mfaDisabled: 'verification temporarily disabled',
+    mfaConfirm: 'Confirm',
+    mfaEnter: 'Enter your verification code',
   },
   {
     languageCode: 'fr',
@@ -402,6 +409,13 @@ const Strings = [
     reportMessage: 'Signaler le Message',
     select: 'Choisir',
     selectTopic: 'Choisissez le sujet à partager',
+
+    mfaTitle: 'Authentification Multi-Factor',
+    mfaSteps: 'Enregistrez le secret et confirmez le code de vérification',
+    mfaEnter: 'Entrez votre code de vérification',
+    mfaError: 'erreur de code de vérification',
+    mfaDisabled: 'vérification temporairement désactivée',
+    mfaConfirm: 'Confirmer',
   },
   {
     languageCode: 'es',
@@ -602,6 +616,13 @@ const Strings = [
 
     select: 'Elegir',
     selectTopic: 'Elija un tema para compartir',
+
+    mfaTitle: 'Autenticación de Dos Factores',
+    mfaSteps: 'Guarde el secreto y confirme el código de verificación',
+    mfaEnter: 'Ingresa tu código de verificación',
+    mfaError: 'error de código de verificación',
+    mfaDisabled: 'verificación temporalmente deshabilitada',
+    mfaConfirm: 'Confirmar',
   },
   {
     languageCode: 'de',
@@ -802,6 +823,13 @@ const Strings = [
 
     select: 'Wählen',
     selectTopic: 'Wählen Sie ein Thema zum Teilen aus',
+
+    mfaTitle: 'Zwei-Faktor-Authentifizierung',
+    mfaSteps: 'Speichern Sie das Geheimnis und bestätigen Sie den Verifizierungscode',
+    mfaEnter: 'Geben Sie Ihren Bestätigungs-Code ein',
+    mfaError: 'Verifizierungscodefehler',
+    mfaDisabled: 'Verifizierung vorübergehend deaktiviert',
+    mfaConfirm: 'Bestätigen',
   },
   {
     languageCode: 'pt',
@@ -987,6 +1015,13 @@ const Strings = [
 
     select: 'Escolher',
     selectTopic: 'Escolha o tópico para compartilhar',
+
+    mfaTitle: 'Autenticação de Dois Fatores',
+    mfaSteps: 'Salve o segredo e confirme o código de verificação',
+    mfaEnter: 'Digite seu código de verificação',
+    mfaError: 'erro de código de verificação',
+    mfaDisabled: 'verificação temporariamente desativada',
+    mfaConfirm: 'Confirmar',
   },
   {
     languageCode: 'ru',
@@ -1170,6 +1205,13 @@ const Strings = [
 
     select: 'выбирать',
     selectTopic: 'Выберите тему для обмена',
+
+    mfaTitle: 'Двухфакторная аутентификация',
+    mfaSteps: 'Сохраните секрет и подтвердите проверочный код',
+    mfaEnter: 'Введите Ваш верификационный код',
+    mfaError: 'ошибка проверочного кода',
+    mfaDisabled: 'проверка временно отключена',
+    mfaConfirm: 'Подтвердить',
   }
 ];
 
