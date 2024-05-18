@@ -52,8 +52,9 @@ export function useLogin() {
           await app.actions.login(state.username, state.password, state.mfaCode)
         }
         catch (err) {
-          if (err == 'Error: 405' || err == 'Error: 403' || err == 'Error: 429') {
-            updateState({ busy: false, mfaModal: true, mfaError: err.toString() });
+          const msg = err?.message;
+          if (msg === '405' || msg === '403' || msg === '429') {
+            updateState({ busy: false, mfaModal: true, mfaError: msg });
           }
           else {
             console.log(err);

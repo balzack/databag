@@ -354,8 +354,8 @@ export function useAccountAccess() {
           updateState({ busy: false, mfaModal: false });
         }
         catch (err) {
-          console.log("error code: ", err);
-          updateState({ busy: false, mfaError: true, mfaErrorCode: err });
+          const msg = err?.message;
+          updateState({ busy: false, mfaError: true, mfaErrorCode: msg });
           throw new Error('failed to confirm mfa');
         }
       }

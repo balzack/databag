@@ -1,9 +1,7 @@
 import { AccountAccessWrapper, LoginModal, MFAModal, SealModal, LogoutContent } from './AccountAccess.styled';
 import { useAccountAccess } from './useAccountAccess.hook';
-import { Button, Modal, Switch, Input, Radio, Select, Flex, Typography } from 'antd';
-import type { GetProp } from 'antd';
-import type { OTPProps } from 'antd/es/input/OTP';
-import { LogoutOutlined, SettingOutlined, UserOutlined, LockOutlined, ExclamationCircleOutlined, KeyOutlined } from '@ant-design/icons';
+import { Button, Modal, Switch, Input, Radio, Select } from 'antd';
+import { LogoutOutlined, SettingOutlined, UserOutlined, LockOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import { CopyButton } from '../../../../copyButton/CopyButton';
 import { useRef } from 'react';
 
@@ -110,7 +108,7 @@ export function AccountAccess() {
             <div className="control">
               <Switch size="small" checked={state.mfaEnabled} onChange={enable => enableMFA(enable)} />
             </div>
-            <div className="switchLabel">Multi-Factor Authentication</div>
+            <div className="switchLabel">{state.strings.mfaTitle}</div>
           </div>
           <div className="link" onClick={actions.setEditSeal}>
             <div className="control">
@@ -277,10 +275,10 @@ export function AccountAccess() {
           </div>
           <Input.OTP onChange={actions.setCode} />
           <div className="alert">
-            { state.mfaError && state.mfaErrorCode == 'Error: 401' && (
+            { state.mfaError && state.mfaErrorCode === '401' && (
               <span>{state.strings.mfaError}</span>
             )}
-            { state.mfaError && state.mfaErrorCode == 'Error: 429' && (
+            { state.mfaError && state.mfaErrorCode === '429' && (
               <span>{state.strings.mfaDisabled}</span>
             )}
           </div>

@@ -81,10 +81,10 @@ console.log(state.mfaError);
           <div className="description">{state.strings.mfaEnter}</div>
           <Input.OTP onChange={actions.setCode} />
           <div className="alert">
-            { state.mfaError == 'Error: 403' && (
+            { state.mfaError === '403' && (
               <span>{state.strings.mfaError}</span>
             )}
-            { state.mfaError == 'Error: 429' && (
+            { state.mfaError === '429' && (
               <span>{state.strings.mfaDisabled}</span>
             )}
           </div>
