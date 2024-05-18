@@ -59,7 +59,6 @@ export function useSettings() {
 
     mfaModal: false,
     mfaEnabled: false,
-    mfaSecret: false,
     mfaError: null,
     mfaCode: '',
     mfaText: null,
@@ -384,7 +383,7 @@ export function useSettings() {
       }
     },
     enableMFA: async () => {
-      updateState({ mfaModal: true, mfaSecret: false, mfaCode: '' });
+      updateState({ mfaModal: true, mfaImage: null, mfaText: null, mfaCode: '' });
       const mfa = await account.actions.enableMFA();
       updateState({ mfaImage: mfa.secretImage, mfaText: mfa.secretText });
     },
