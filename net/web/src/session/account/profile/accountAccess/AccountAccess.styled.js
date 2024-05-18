@@ -198,7 +198,7 @@ export const MFAModal = styled.div`
   .description {
     font-size: 1.0rem;
     padding-bottom: 8px;
-    text-aling: center;
+    text-align: center;
   }
 
   .secret {
