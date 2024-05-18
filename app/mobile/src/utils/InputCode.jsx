@@ -1,13 +1,17 @@
 import { TextInput, Text, View, TouchableOpacity } from 'react-native';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 
 export function InputCode({ onChangeText, style }) {
 
   const [code, setCode] = useState('');
+  const ref = useRef();
 
   const updateCode = (value) => {
     if (value.length >= 6) {
       onChangeText(value.slice(0, 6));
+      if (ref.current) {
+        ref.current.blur();
+      }
     }
     else {
       onChangeText('');
@@ -38,7 +42,7 @@ export function InputCode({ onChangeText, style }) {
             <Text style={{ fontSize: 20 }}>{ code.charAt(5) }</Text>
           </View>
         </View>
-        <TextInput style={{ width: '100%', height: '100%', opacity: 0, position: 'absolute', top: 0, left: 0 }} onChangeText={updateCode} autoCorrect={false} autoCapitalize="none" maxLength={6} />
+        <TextInput style={{ width: '100%', height: '100%', opacity: 0, position: 'absolute', top: 0, left: 0 }} keyboardType={Platform.OS === 'ios' ? 'numeric' : 'number-pad'} onChangeText={updateCode} autoCorrect={false} autoCapitalize="none" maxLength={6} ref={ref} />
       </View>
     </View>
   );

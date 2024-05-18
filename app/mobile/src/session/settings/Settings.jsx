@@ -234,7 +234,7 @@ export function Settings({ drawer }) {
                 <Text style={styles.optionText}>{ state.strings.mfaTitle }</Text>
               </TouchableOpacity>
               <Switch value={state.mfaEnabled} style={Platform.OS==='ios' ? styles.notifications : {}} thumbColor={Colors.sliderGrip} ios_backgroundColor={Colors.idleFill}
-                  trackColor={styles.track} onValueChange={actions.toggleMFA} />
+                  trackColor={styles.track} onValueChange={toggleMFA} />
             </View>
           </TouchableOpacity>
 
@@ -894,7 +894,7 @@ export function Settings({ drawer }) {
       >
         <View>
           <BlurView style={styles.mfaOverlay} blurType={Colors.overlay} blurAmount={2} reducedTransparencyFallbackColor="black" />
-          <View style={styles.mfaBase}>
+          <KeyboardAvoidingView style={styles.mfaBase} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
             <View style={styles.mfaContainer}>
               <Text style={styles.mfaTitle}>{ state.strings.mfaTitle }</Text>
               <Text style={styles.mfaDescription}>{ state.strings.mfaSteps }</Text>
@@ -935,7 +935,7 @@ export function Settings({ drawer }) {
                 )}
               </View>
             </View>
-          </View>
+          </KeyboardAvoidingView>
         </View>
       </Modal>
 
