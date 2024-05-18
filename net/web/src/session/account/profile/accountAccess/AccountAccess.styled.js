@@ -192,11 +192,13 @@ export const MFAModal = styled.div`
     font-size: 1.2rem;
     display: flex;
     justify-content: center;
+    text-aling: center;
   }
 
   .description {
     font-size: 1.0rem;
     padding-bottom: 8px;
+    text-aling: center;
   }
 
   .secret {

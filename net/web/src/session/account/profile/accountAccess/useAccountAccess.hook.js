@@ -321,7 +321,7 @@ export function useAccountAccess() {
     enableMFA: async () => {
       if (!state.busy) {
         try {
-          updateState({ busy: true });
+          updateState({ busy: true, mfaSecret: null, mfaImage: null, mfaCode: '' });
           const mfa = await account.actions.enableMFA();
           updateState({ busy: false, mfaModal: true, mfaError: false, mfaSecret: mfa.secretText, mfaImage: mfa.secretImage, mfaCode: '' });
         }
