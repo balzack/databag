@@ -26,7 +26,7 @@ export const styles = StyleSheet.create({
   },
   mfaText: {
     fontSize: 11,
-    color: Colors.mainText,
+    color: Colors.labelText,
   },
   mfaIcon: {
     fontSize: 14,
@@ -211,7 +211,7 @@ export const styles = StyleSheet.create({
   optionText: {
     fontSize: 16,
     paddingRight: 8,
-    color: Colors.text,
+    color: Colors.linkText,
     fontFamily: 'Roboto',
   },
   optionLink: {

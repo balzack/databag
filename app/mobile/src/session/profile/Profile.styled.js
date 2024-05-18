@@ -249,7 +249,7 @@ export const styles = StyleSheet.create({
   },
   visibleLabel: {
     fontSize: 16,
-    color: Colors.text,
+    color: Colors.linkText,
     fontFamily: 'roboto',
     paddingRight: 8,
   },

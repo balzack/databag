@@ -190,7 +190,7 @@ export const en = {
   securedMessage: 'Sealed Message',
 
   mfaTitle: 'Multi-Factor Authentication',
-  mfaSteps: 'Store the secret and confirm the verification code',
+  mfaSteps: 'Store the SHA256 secret and confirm the verification code',
   mfaError: 'verification code error',
   mfaDisabled: 'verification temporarily disabled',
   mfaConfirm: 'Confirm',
@@ -390,7 +390,7 @@ export const fr = {
   sealedMessage: 'Message Sécurisé',
 
   mfaTitle: 'Authentification Multi-Factor',
-  mfaSteps: 'Enregistrez le secret et confirmez le code de vérification',
+  mfaSteps: 'Enregistrez le secret SHA256 et confirmez le code de vérification',
   mfaEnter: 'Entrez votre code de vérification',
   mfaError: 'erreur de code de vérification',
   mfaDisabled: 'vérification temporairement désactivée',
@@ -589,7 +589,7 @@ export const sp = {
   sealedMessage: 'Mensaje Seguro',
 
   mfaTitle: 'Autenticación de Dos Factores',
-  mfaSteps: 'Guarde el secreto y confirme el código de verificación',
+  mfaSteps: 'Guarde el secreto SHA256 y confirme el código de verificación',
   mfaEnter: 'Ingresa tu código de verificación',
   mfaError: 'error de código de verificación',
   mfaDisabled: 'verificación temporalmente deshabilitada',
@@ -788,7 +788,7 @@ export const pt = {
   sealedMessage: 'Mensagem Segura',
 
   mfaTitle: 'Autenticação de Dois Fatores',
-  mfaSteps: 'Salve o segredo e confirme o código de verificação',
+  mfaSteps: 'Salve o segredo SHA256 e confirme o código de verificação',
   mfaEnter: 'Digite seu código de verificação',
   mfaError: 'erro de código de verificação',
   mfaDisabled: 'verificação temporariamente desativada',
@@ -987,7 +987,7 @@ export const de = {
   sealedMessage: 'Gesicherte Nachricht',
 
   mfaTitle: 'Zwei-Faktor-Authentifizierung',
-  mfaSteps: 'Speichern Sie das Geheimnis und bestätigen Sie den Verifizierungscode',
+  mfaSteps: 'Speichern Sie das SHA256-Geheimnis und bestätigen Sie den Bestätigungscode',
   mfaEnter: 'Geben Sie Ihren Bestätigungs-Code ein',
   mfaError: 'Verifizierungscodefehler',
   mfaDisabled: 'Verifizierung vorübergehend deaktiviert',
@@ -1186,7 +1186,7 @@ export const ru = {
   sealedMessage: 'Защищенное Cообщение',
 
   mfaTitle: 'Двухфакторная аутентификация',
-  mfaSteps: 'Сохраните секрет и подтвердите проверочный код',
+  mfaSteps: 'Сохраните секрет SHA256 и подтвердите код подтверждения',
   mfaEnter: 'Введите Ваш верификационный код',
   mfaError: 'ошибка проверочного кода',
   mfaDisabled: 'проверка временно отключена',
