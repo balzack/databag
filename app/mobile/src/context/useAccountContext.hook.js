@@ -5,6 +5,9 @@ import { setAccountSearchable } from 'api/setAccountSearchable';
 import { setAccountNotifications } from 'api/setAccountNotifications';
 import { getAccountStatus } from 'api/getAccountStatus';
 import { setAccountLogin } from 'api/setAccountLogin';
+import { addAccountMFA } from 'api/addAccountMFA';
+import { setAccountMFA } from 'api/setAccountMFA';
+import { removeAccountMFA } from 'api/removeAccountMFA';
 
 export function useAccountContext() {
   const [state, setState] = useState({
@@ -74,6 +77,19 @@ export function useAccountContext() {
     setSearchable: async (flag) => {
       const { server, token } = access.current || {};
       await setAccountSearchable(server, token, flag);
+    },
+    enableMFA: async () => {
+      const { server, token } = access.current || {};
+      const secret = await addAccountMFA(server, token);
+      return secret;
+    },
+    disableMFA: async () => {
+      const { server, token } = access.current || {};
+      await removeAccountMFA(server, token);
+    },
+    confirmMFA: async (code) => {
+      const { server, token } = access.current || {};
+      await setAccountMFA(server, token, code);
     },
     setAccountSeal: async (seal, key) => {
       const { guid, server, token } = access.current || {};

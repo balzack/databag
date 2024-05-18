@@ -56,6 +56,14 @@ export function useSettings() {
     contacts: [],
     topics: [],
     messages: [],
+
+    mfaModal: false,
+    mfaEnabled: false,
+    mfaSecret: false,
+    mfaError: null,
+    mfaCode: '',
+    mfaText: null,
+    mfaImage: null,
   });
 
   const updateState = (value) => {
@@ -69,11 +77,11 @@ export function useSettings() {
   }, [profile.state]);
 
   useEffect(() => {
-    const { seal, sealable, pushEnabled } = account.state.status;
+    const { seal, sealable, pushEnabled, mfaEnabled } = account.state.status;
     const sealKey = account.state.sealKey;
     const sealEnabled = seal?.publicKey != null;
     const sealUnlocked = seal?.publicKey === sealKey?.public && sealKey?.private && sealKey?.public;
-    updateState({ sealable, seal, sealKey, sealEnabled, sealUnlocked, pushEnabled });
+    updateState({ sealable, seal, sealKey, sealEnabled, sealUnlocked, pushEnabled, mfaEnabled });
   }, [account.state]);
 
   const setCardItem = (item) => {
@@ -374,6 +382,37 @@ export function useSettings() {
         await channel.actions.clearTopicFlag(channelId, topicId);
         updateState({ messages: state.messages.filter(item => item.channelId !== channelId || item.topicId !== topicId) });
       }
+    },
+    enableMFA: async () => {
+      updateState({ mfaModal: true, mfaSecret: false, mfaCode: '' });
+      const mfa = await account.actions.enableMFA();
+      updateState({ mfaImage: mfa.secretImage, mfaText: mfa.secretText });
+    },
+    disableMFA: async () => {
+      updateState({ mfaEnabled: false });
+      try {
+        await account.actions.disableMFA();
+      }
+      catch (err) {
+        updateState({ mfaEnabled: true });
+        throw err;
+      }
+    },
+    confirmMFA: async () => {
+      try {
+        updateState({ mfaEnabled: true });
+        await account.actions.confirmMFA(state.mfaCode);
+        updateState({ mfaModal: false });
+      }
+      catch (err) {
+        updateState({ mfaEnabled: false, mfaError: err.message});
+      }
+    },
+    dismissMFA: () => {
+      updateState({ mfaModal: false });
+    },
+    setCode: (mfaCode) => {
+      updateState({ mfaCode });
     },
   };
 

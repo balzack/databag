@@ -77,15 +77,12 @@ export function useAccountContext() {
     },
     enableMFA: async () => {
       const secret = await addAccountMFA(access.current);
-      console.log("SECRET ", secret);
       return secret;
     },
     disableMFA: async () => {
       await removeAccountMFA(access.current);
     },
     confirmMFA: async (code) => {
-console.log("CONFIRMING: ", code);
-
       await setAccountMFA(access.current, code);
     },
     setSeal: async (seal, sealKey) => {
