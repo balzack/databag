@@ -1,7 +1,8 @@
-import { AccountAccessWrapper, LoginModal, SealModal, LogoutContent } from './AccountAccess.styled';
+import { AccountAccessWrapper, LoginModal, MFAModal, SealModal, LogoutContent } from './AccountAccess.styled';
 import { useAccountAccess } from './useAccountAccess.hook';
 import { Button, Modal, Switch, Input, Radio, Select } from 'antd';
 import { LogoutOutlined, SettingOutlined, UserOutlined, LockOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
+import { CopyButton } from '../../../../copyButton/CopyButton';
 import { useRef } from 'react';
 
 export function AccountAccess() {
@@ -38,6 +39,25 @@ export function AccountAccess() {
       });
     }
   };
+
+  const enableMFA = async (enable) => {
+    try {
+      if (enable) {
+        await actions.enableMFA();
+      }
+      else {
+        await actions.disableMFA();
+      }
+    }
+    catch (err) {
+      console.log(err);
+      modal.error({
+        title: <span style={state.menuStyle}>{state.strings.operationFailed}</span>,
+        content: <span style={state.menuStyle}>{state.strings.tryAgain}</span>,
+        bodyStyle: { borderRadius: 8, padding: 16, ...state.menuStyle },
+      });
+    }
+  }
 
   const saveLogin = async () => {
     try {
@@ -83,6 +103,12 @@ export function AccountAccess() {
               <Switch size="small" checked={state.searchable} onChange={enable => saveSearchable(enable)} />
             </div>
             <div className="switchLabel">{state.strings.registry}</div>
+          </div>
+          <div className="switch">
+            <div className="control">
+              <Switch size="small" checked={state.mfaEnabled} onChange={enable => enableMFA(enable)} />
+            </div>
+            <div className="switchLabel">{state.strings.mfaTitle}</div>
           </div>
           <div className="link" onClick={actions.setEditSeal}>
             <div className="control">
@@ -237,6 +263,31 @@ export function AccountAccess() {
                 disabled={!actions.canSaveLogin()} loading={state.busy}>{state.strings.save}</Button>
           </div>
         </LoginModal>
+      </Modal>
+      <Modal centerd closable={false} footer={null} visible={state.mfaModal} destroyOnClose={true} bodyStyle={{ borderRadius: 8, padding: 16, ...state.menuStyle }} onCancel={actions.dismissMFA}>
+        <MFAModal>
+          <div className="title">{state.strings.mfaTitle}</div>
+          <div className="description">{state.strings.mfaSteps}</div>
+          <img src={state.mfaImage} alt="QRCode" />
+          <div className="secret">
+            <div className="label">{ state.mfaSecret }</div>
+            <CopyButton onCopy={async () => await navigator.clipboard.writeText(state.mfaSecret)} />
+          </div>
+          <Input.OTP onChange={actions.setCode} />
+          <div className="alert">
+            { state.mfaError && state.mfaErrorCode === '401' && (
+              <span>{state.strings.mfaError}</span>
+            )}
+            { state.mfaError && state.mfaErrorCode === '429' && (
+              <span>{state.strings.mfaDisabled}</span>
+            )}
+          </div>
+          <div className="controls">
+            <Button key="back" onClick={actions.dismissMFA}>{state.strings.cancel}</Button>
+            <Button key="save" type="primary" className={state.mfaCode ? 'saveEnabled' : 'saveDisabled'} onClick={actions.confirmMFA}
+                disabled={!state.mfaCode} loading={state.busy}>{state.strings.mfaConfirm}</Button>
+          </div>
+        </MFAModal>
       </Modal>
     </AccountAccessWrapper>
   );

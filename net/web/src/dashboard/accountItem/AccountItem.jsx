@@ -3,7 +3,7 @@ import { AccountItemWrapper, AccessLayout, DeleteButton, EnableButton, DisableBu
 import { useAccountItem } from './useAccountItem.hook';
 import { ExclamationCircleOutlined, UserDeleteOutlined, UnlockOutlined, CloseCircleOutlined, CheckCircleOutlined } from '@ant-design/icons';
 import { Modal, Tooltip, Button } from 'antd';
-import { CopyButton } from '../copyButton/CopyButton';
+import { CopyButton } from '../../copyButton/CopyButton';
 
 export function AccountItem({ item, remove }) {
 

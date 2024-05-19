@@ -202,6 +202,27 @@ var endpoints = routes{
 		SetAccountSearchable,
 	},
 
+  route{
+    "AddMultiFactorAuth",
+    strings.ToUpper("Post"),
+    "/account/mfauth",
+    AddMultiFactorAuth,
+  },
+
+  route{
+    "SetMultiFactorAuth",
+    strings.ToUpper("Put"),
+    "/account/mfauth",
+    SetMultiFactorAuth,
+  },
+
+  route{
+    "RemoveMultiFactorAuth",
+    strings.ToUpper("Delete"),
+    "/account/mfauth",
+    RemoveMultiFactorAuth,
+  },
+
 	route{
 		"AddNodeAccount",
 		strings.ToUpper("Post"),

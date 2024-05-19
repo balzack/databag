@@ -35,6 +35,7 @@ Databag is designed for efficiency, consuming minimal hosting resources. Notable
 - Low latency (use of websockets for push events to avoid polling)
 - Unlimited accounts per node (host for your whole family)
 - Mobile alerts (push notifications on new contacts, messages, and calls)
+- Multi-Factor Authentication (integrates with TOTP apps)
 
 <br>
 <p align="center">

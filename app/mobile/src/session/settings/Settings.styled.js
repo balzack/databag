@@ -15,6 +15,112 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     padding: 8,
   },
+  mfaOverlay: {
+    width: '100%',
+    height: '100%',
+  },
+  mfaSecret: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 4,
+  },
+  mfaText: {
+    fontSize: 11,
+    color: Colors.labelText,
+  },
+  mfaIcon: {
+    fontSize: 14,
+    color: Colors.primaryButton,
+  },
+  mfaError: {
+    width: '100%',
+    height: 24,
+    display: 'flex',
+    alignItems: 'center',
+  },
+  mfaErrorLabel: {
+    color: Colors.dangerText,
+  },
+  mfaControl: {
+    height: 32,
+    display: 'flex',
+    flexDirection: 'row',
+    width: '100%',
+    justifyContent: 'flex-end',
+    gap: 16,
+  },
+  mfaCancel: {
+    width: 72,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: Colors.cancelButton,
+    borderRadius: 4,
+  },
+  mfaCancelLabel: {
+    color: Colors.cancelButtonText,
+  },
+  mfaConfirm: {
+    width: 72,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: Colors.primaryButton,
+    borderRadius: 4,
+  },
+  mfaConfirmLabel: {
+    color: Colors.primaryButtonText,
+  },
+  mfaDisabled: {
+    width: 72,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: Colors.disabledButton,
+    borderRadius: 4,
+  },
+  mfaDisabledLabel: {
+    color: Colors.disabledButtonText,
+  },
+  mfaBase: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  mfaContainer: {
+    backgroundColor: Colors.modalBase,
+    borderColor: Colors.modalBorder,
+    borderWidth: 1,
+    width: '80%',
+    maxWidth: 400,
+    display: 'flex',
+    gap: 8,
+    alignItems: 'center',
+    borderRadius: 8,
+    padding: 16,
+  },
+  mfaTitle: {
+    fontSize: 20,
+    color: Colors.descriptionText,
+    paddingBottom: 8,
+  },
+  mfaDescription: {
+    fontSize: 14,
+    color: Colors.descriptionText,
+    textAlign: 'center',
+  },
+  mfaCode: {
+    width: 400,
+    borderWidth: 1,
+    borderColor: '#333333',
+    width: '100%',
+    opacity: 0,
+  },
   content: {
     width: '100%',
     height: '100%',
@@ -105,7 +211,7 @@ export const styles = StyleSheet.create({
   optionText: {
     fontSize: 16,
     paddingRight: 8,
-    color: Colors.text,
+    color: Colors.linkText,
     fontFamily: 'Roboto',
   },
   optionLink: {

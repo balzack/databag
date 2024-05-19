@@ -147,6 +147,15 @@ const APPQueueDefault = ""
 //APPDefaultPath config for default path to store assets
 const APPDefaultPath = "/tmp/databag/assets"
 
+//APPMFAIssuer name servive
+const APPMFAIssuer = "Databag"
+
+//APPMFAFailPeriod time window login failures can occur
+const APPMFAFailPeriod = 300
+
+//APPMFAFailCount limit of login failures in period
+const APPMFAFailCount = 4
+
 //AppCardStatus compares cards status with string
 func AppCardStatus(status string) bool {
 	if status == APPCardPending {

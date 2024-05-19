@@ -188,6 +188,13 @@ export const en = {
   confirmRemove: 'Are you sure you want to delete the contact?',
   message: 'Message',
   securedMessage: 'Sealed Message',
+
+  mfaTitle: 'Multi-Factor Authentication',
+  mfaSteps: 'Store the SHA256 secret and confirm the verification code',
+  mfaError: 'verification code error',
+  mfaDisabled: 'verification temporarily disabled',
+  mfaConfirm: 'Confirm',
+  mfaEnter: 'Enter your verification code',
 };
 
 export const fr = {
@@ -381,6 +388,13 @@ export const fr = {
 
   message: 'Message',
   sealedMessage: 'Message Sécurisé',
+
+  mfaTitle: 'Authentification Multi-Factor',
+  mfaSteps: 'Enregistrez le secret SHA256 et confirmez le code de vérification',
+  mfaEnter: 'Entrez votre code de vérification',
+  mfaError: 'erreur de code de vérification',
+  mfaDisabled: 'vérification temporairement désactivée',
+  mfaConfirm: 'Confirmer',
 };
 
 export const sp = {
@@ -573,6 +587,13 @@ export const sp = {
   confirmRemove: '¿Estás seguro de que quieres eliminar el contacto?',
   message: 'Mensaje',
   sealedMessage: 'Mensaje Seguro',
+
+  mfaTitle: 'Autenticación de Dos Factores',
+  mfaSteps: 'Guarde el secreto SHA256 y confirme el código de verificación',
+  mfaEnter: 'Ingresa tu código de verificación',
+  mfaError: 'error de código de verificación',
+  mfaDisabled: 'verificación temporalmente deshabilitada',
+  mfaConfirm: 'Confirmar',
 };
 
 export const pt = {
@@ -765,6 +786,13 @@ export const pt = {
   confirmRemove: 'Tem certeza de que deseja remover o contato?',
   message: 'Mensagem',
   sealedMessage: 'Mensagem Segura',
+
+  mfaTitle: 'Autenticação de Dois Fatores',
+  mfaSteps: 'Salve o segredo SHA256 e confirme o código de verificação',
+  mfaEnter: 'Digite seu código de verificação',
+  mfaError: 'erro de código de verificação',
+  mfaDisabled: 'verificação temporariamente desativada',
+  mfaConfirm: 'Confirmar',
 };
 
 export const de = {
@@ -957,6 +985,13 @@ export const de = {
   confirmRemove: 'Sind Sie sicher, dass Sie den Kontakt löschen möchten?',
   message: 'Nachricht',
   sealedMessage: 'Gesicherte Nachricht',
+
+  mfaTitle: 'Zwei-Faktor-Authentifizierung',
+  mfaSteps: 'Speichern Sie das SHA256-Geheimnis und bestätigen Sie den Bestätigungscode',
+  mfaEnter: 'Geben Sie Ihren Bestätigungs-Code ein',
+  mfaError: 'Verifizierungscodefehler',
+  mfaDisabled: 'Verifizierung vorübergehend deaktiviert',
+  mfaConfirm: 'Bestätigen',
 };
 
 export const ru = {
@@ -1149,4 +1184,11 @@ export const ru = {
   confirmRemove: 'Вы уверены, что хотите удалить контакт?',
   message: 'Cообщение',
   sealedMessage: 'Защищенное Cообщение',
+
+  mfaTitle: 'Двухфакторная аутентификация',
+  mfaSteps: 'Сохраните секрет SHA256 и подтвердите код подтверждения',
+  mfaEnter: 'Введите Ваш верификационный код',
+  mfaError: 'ошибка проверочного кода',
+  mfaDisabled: 'проверка временно отключена',
+  mfaConfirm: 'Подтвердить',
 };

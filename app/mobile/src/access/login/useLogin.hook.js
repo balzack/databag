@@ -18,6 +18,9 @@ export function useLogin() {
     showPassword: false,
     agree: false,
     showTerms: false,
+    mfaModal: false,
+    mfaCode: '',
+    mfaError: null,
   });
 
   const updateState = (value) => {
@@ -74,18 +77,29 @@ export function useLogin() {
       if (!state.busy) {
         updateState({ busy: true });
         try {
-          await app.actions.login(state.login.trim(), state.password);
+          await app.actions.login(state.login.trim(), state.password, state.mfaCode);
         }
         catch (err) {
-          console.log(err);
-          updateState({ busy: false, showAlert: true });
-          throw new Error('login failed');
+console.log(err);
+          if (err.message == '405' || err.message == '403' || err.message == '429') {
+            updateState({ mfaModal: true, mfaError: err.message });
+          }
+          else {
+            console.log(err.message);
+            updateState({ busy: false, showAlert: true });
+            throw new Error('login failed');
+          }
         }
         updateState({ busy: false });
       }
-    }
+    },
+    setCode: (mfaCode) => {
+      updateState({ mfaCode });
+    },
+    dismissMFA: () => {
+      updateState({ mfaModal: false });
+    },
   };
 
   return { state, actions };
 }
-

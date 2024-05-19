@@ -8,7 +8,8 @@ export function createWebsocket(url) {
 
 export function checkResponse(response) {
   if(response.status >= 400 && response.status < 600) {
-    throw new Error(response.url + " failed");
+    console.log(`${response.url} failed [${response?.status}]`);
+    throw new Error(response.status);
   }
 }
 

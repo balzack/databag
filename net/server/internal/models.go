@@ -35,6 +35,8 @@ type AccountStatus struct {
 
 	Searchable bool `json:"searchable"`
 
+  MFAEnabled bool `json:"mfaEnabled"`
+
 	PushEnabled bool `json:"pushEnabled"`
 
   Sealable bool `json:"sealable"`
@@ -49,6 +51,13 @@ type AccountStatus struct {
 //Announce initial message sent on websocket
 type Announce struct {
 	AppToken string `json:"appToken"`
+}
+
+//MFASecret values for configuring TOTP
+type MFASecret struct {
+  Image string `json:"secretImage"`
+
+  Text string `json:"secretText"`
 }
 
 //Notification describes type of notifications to receive

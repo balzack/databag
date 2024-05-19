@@ -3,6 +3,9 @@ import { setAccountSearchable } from 'api/setAccountSearchable';
 import { setAccountSeal } from 'api/setAccountSeal';
 import { getAccountStatus } from 'api/getAccountStatus';
 import { setAccountLogin } from 'api/setAccountLogin';
+import { addAccountMFA } from 'api/addAccountMFA';
+import { setAccountMFA } from 'api/setAccountMFA';
+import { removeAccountMFA } from 'api/removeAccountMFA';
 import { StoreContext } from './StoreContext';
 
 export function useAccountContext() {
@@ -71,6 +74,16 @@ export function useAccountContext() {
     },
     setSearchable: async (flag) => {
       await setAccountSearchable(access.current, flag);
+    },
+    enableMFA: async () => {
+      const secret = await addAccountMFA(access.current);
+      return secret;
+    },
+    disableMFA: async () => {
+      await removeAccountMFA(access.current);
+    },
+    confirmMFA: async (code) => {
+      await setAccountMFA(access.current, code);
     },
     setSeal: async (seal, sealKey) => {
       await setAccountSeal(access.current, seal);

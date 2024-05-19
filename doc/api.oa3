@@ -633,7 +633,82 @@ paths:
           application/json:
             schema:
               type: boolean
-   
+
+  /account/mfauth:
+    post:
+      tags:
+        - account
+      description: Enable multi-factor authentication
+      operationId: add-mfa
+      parameters:
+        - name: agent
+          in: query
+          description: agent token
+          required: false
+          schema:
+            type: string
+      responses:
+        '201':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: string
+        '401':
+          description: permission denied
+        '500':
+          description: internal server error
+    put:
+      tags:
+        - account
+      description: Confirm multi-factor authentication
+      operationId: confirm-mfa
+      parameters:
+        - name: agent
+          in: query
+          description: agent token
+          required: false
+          schema:
+            type: string
+        - name: code
+          in: query
+          description: totp code generated from secret
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success
+        '401':
+          description: permission denied
+        '403':
+          description: totp code not correct
+        '405':
+          description: totp code required but not set
+        '429':
+          description: temporarily locked due to too many failures
+        '500':
+          description: internal server error
+    delete:
+      tags:
+        - account
+      description: Disable multi-factor authentication
+      operationId: remove-mfa
+      parameters:
+        - name: agent
+          in: query
+          description: agent token  
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success
+        '401':
+          description: permission denied
+        '500':
+          description: internal server error
+
   /account/login:
     put:
       tags:
@@ -849,6 +924,12 @@ paths:
       security:
         - basicAuth: []
       parameters:
+        - name: code
+          in: query
+          description: totp code
+          required: false
+          schema:
+            type: string
         - name: appName
           in: query
           description: name of connecting app
@@ -898,8 +979,12 @@ paths:
           description: invalid token
         '406':
           description: app limit reached
+        '405':
+          description: totp code required but not set
         '410':
           description: account disabled
+        '429':
+          description: temporarily locked due to too many failures
         '500':
           description: internal server error
       requestBody:
@@ -3942,6 +4027,7 @@ components:
         - forwardingAddress
         - searchable
         - pushEnabled
+        - multiFactorAuth
       properties:
         disabled:
           type: boolean
@@ -3964,6 +4050,8 @@ components:
         seal:
           $ref: '#/components/schemas/Seal'
         enableIce:
+          type: boolean
+        multiFactorAuth:
           type: boolean
  
     AccountProfile:

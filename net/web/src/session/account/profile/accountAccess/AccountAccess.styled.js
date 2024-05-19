@@ -182,6 +182,75 @@ export const SealModal = styled.div`
   }
 `
 
+export const MFAModal = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+
+  .title {
+    font-size: 1.2rem;
+    display: flex;
+    justify-content: center;
+    text-aling: center;
+  }
+
+  .description {
+    font-size: 1.0rem;
+    padding-bottom: 8px;
+    text-align: center;
+  }
+
+  .secret {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+
+    .label {
+      font-weight: bold;
+    }
+  }
+
+  .code {
+    padding-top: 4px;
+    border-bottom: 1px solid ${props => props.theme.sectionBorder};
+  }
+
+  .codeLabel {
+    padding-top: 4px;
+    font-size: 0.9.rem;
+    color: ${props => props.theme.mainText};
+  }
+
+  .alert {
+    height: 24px;
+    color: ${props => props.theme.alertText};
+  }
+
+  .controls {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+
+    .saveDisabled {
+      background-color: ${props => props.theme.disabledArea};
+
+      button {
+        color: ${props => props.theme.idleText};
+      }
+    }
+
+    .saveEnabled {
+      background-color: ${props => props.theme.enabledArea};
+
+      button {
+        color: ${props => props.theme.activeText};
+      }
+    }
+  }
+`
+
 export const LoginModal = styled.div`
   display: flex;
   flex-direction: column;

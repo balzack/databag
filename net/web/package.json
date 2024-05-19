@@ -19,7 +19,7 @@
     "@charliewilco/gluejar": "^1.0.0",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/user-event": "^13.2.1",
-    "antd": "^5.0.4",
+    "antd": "^5.17.2",
     "axios": "^0.27.2",
     "base-64": "^1.0.0",
     "crypto-js": "^4.1.1",

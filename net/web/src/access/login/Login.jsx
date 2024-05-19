@@ -1,6 +1,6 @@
 import { Button, Modal, Form, Input } from 'antd';
 import { SettingOutlined, LockOutlined, UserOutlined } from '@ant-design/icons';
-import { LoginWrapper } from './Login.styled';
+import { LoginWrapper, MFAModal } from './Login.styled';
 import { useLogin } from './useLogin.hook';
 
 export  function Login() {
@@ -26,6 +26,8 @@ export  function Login() {
       login()
     }
   }
+
+console.log(state.mfaError);
 
   return (
     <LoginWrapper>
@@ -73,6 +75,27 @@ export  function Login() {
 
         </Form>
       </div>
+      <Modal centerd closable={false} footer={null} visible={state.mfaModal} destroyOnClose={true} bodyStyle={{ borderRadius: 8, padding: 16, ...state.menuStyle }} onCancel={actions.dismissMFA}>
+        <MFAModal>
+          <div className="title">{state.strings.mfaTitle}</div>
+          <div className="description">{state.strings.mfaEnter}</div>
+          <Input.OTP onChange={actions.setCode} />
+          <div className="alert">
+            { state.mfaError === '403' && (
+              <span>{state.strings.mfaError}</span>
+            )}
+            { state.mfaError === '429' && (
+              <span>{state.strings.mfaDisabled}</span>
+            )}
+          </div>
+          <div className="controls">
+            <Button key="back" onClick={actions.dismissMFA}>{state.strings.cancel}</Button>
+            <Button key="save" type="primary" className={state.mfaCode ? 'saveEnabled' : 'saveDisabled'} onClick={login}
+                disabled={!state.mfaCode} loading={state.busy}>{state.strings.login}</Button>
+          </div>
+
+        </MFAModal>
+      </Modal>
     </LoginWrapper>
   );
 };

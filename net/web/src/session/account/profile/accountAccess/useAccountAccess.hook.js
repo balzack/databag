@@ -40,6 +40,14 @@ export function useAccountAccess() {
     videoId: null,
     videoInputs: [],
 
+    mfaModal: false,
+    mfaEnabled: null,
+    mfaSecret: null,
+    mfaImage: null,
+    mfaCode: null,
+    mfaError: false,
+    mfaErrorCode: null,
+
     seal: null,
     sealKey: null,
   });
@@ -60,7 +68,7 @@ export function useAccountAccess() {
 
   useEffect(() => {
     const { seal, sealKey, status } = account.state;
-    updateState({ searchable: status?.searchable, seal, sealKey });
+    updateState({ searchable: status?.searchable, mfaEnabled: status?.mfaEnabled, seal, sealKey });
   }, [account.state]);
 
   useEffect(() => {
@@ -306,6 +314,54 @@ export function useAccountAccess() {
           throw new Error('failed to set searchable');
         }
       }
+    },
+    setCode: async (code) => {
+      updateState({ mfaCode: code });
+    },
+    enableMFA: async () => {
+      if (!state.busy) {
+        try {
+          updateState({ busy: true, mfaSecret: null, mfaImage: null, mfaCode: '' });
+          const mfa = await account.actions.enableMFA();
+          updateState({ busy: false, mfaModal: true, mfaError: false, mfaSecret: mfa.secretText, mfaImage: mfa.secretImage, mfaCode: '' });
+        }
+        catch (err) {
+          console.log(err);
+          updateState({ busy: false });
+          throw new Error('faild to enable mfa');
+        }
+      }   
+    },
+    disableMFA: async () => {
+      if (!state.busy) {
+        try {
+          updateState({ busy: true });
+          await account.actions.disableMFA();
+          updateState({ busy: false });
+        }
+        catch (err) {
+          console.log(err);
+          updateState({ busy: false });
+          throw new Error('failed to disable mfa');
+        }
+      }
+    },
+    confirmMFA: async () => {
+      if (!state.busy) {
+        try {
+          updateState({ busy: true });
+          await account.actions.confirmMFA(state.mfaCode);
+          updateState({ busy: false, mfaModal: false });
+        }
+        catch (err) {
+          const msg = err?.message;
+          updateState({ busy: false, mfaError: true, mfaErrorCode: msg });
+          throw new Error('failed to confirm mfa');
+        }
+      }
+    },
+    dismissMFA: async () => {
+      updateState({ mfaModal: false });
     },
   };
 

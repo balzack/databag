@@ -1,13 +1,16 @@
 import { useState } from 'react';
-import { Linking, ActivityIndicator, FlatList, KeyboardAvoidingView, Modal, ScrollView, View, Switch, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { Linking, ActivityIndicator, FlatList, Image, KeyboardAvoidingView, Modal, ScrollView, View, Switch, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigate } from 'react-router-dom';
 import { styles } from './Settings.styled';
 import { useSettings } from './useSettings.hook';
+import AntIcon from 'react-native-vector-icons/AntDesign';
 import MatIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Colors from 'constants/Colors';
 import { InputField } from 'utils/InputField';
 import { Logo } from 'utils/Logo';
+import { InputCode } from 'utils/InputCode';
+import Clipboard from '@react-native-clipboard/clipboard';
 
 export function Settings({ drawer }) {
 
@@ -86,6 +89,28 @@ export function Settings({ drawer }) {
         setBusy(true);
         await actions.changeLogin();
         actions.hideLogin();
+      }
+      catch (err) {
+        console.log(err);
+        Alert.alert(
+          state.strings.error,
+          state.strings.tryAgain,
+        );
+      }
+      setBusy(false);
+    }
+  }
+
+  const toggleMFA = async () => {
+    if (!busy) {
+      try {
+        setBusy(true);
+        if (state.mfaEnabled) {
+          await actions.disableMFA();
+        }
+        else {
+          await actions.enableMFA();
+        }
       }
       catch (err) {
         console.log(err);
@@ -198,6 +223,20 @@ export function Settings({ drawer }) {
               <Text style={styles.optionLink}>{ state.strings.logout }</Text>
             </View>
           </TouchableOpacity>
+
+          <TouchableOpacity style={styles.drawerEntry} activeOpacity={1}>
+            <View style={styles.icon}>
+              <MatIcons name="ticket-confirmation-outline" size={20} color={Colors.text} />
+            </View>
+            <View style={styles.optionControl}>
+              <TouchableOpacity activeOpacity={1} onPress={actions.toggleMFA}>
+                <Text style={styles.optionText}>{ state.strings.mfaTitle }</Text>
+              </TouchableOpacity>
+              <Switch value={state.mfaEnabled} style={Platform.OS==='ios' ? styles.notifications : {}} thumbColor={Colors.sliderGrip} ios_backgroundColor={Colors.idleFill}
+                  trackColor={styles.track} onValueChange={toggleMFA} />
+            </View>
+          </TouchableOpacity>
+
           <TouchableOpacity style={styles.drawerEntry} activeOpacity={1} onPress={actions.showLogin}>
             <View style={styles.icon}>
               <MatIcons name="login" size={20} color={Colors.text} />
@@ -350,6 +389,19 @@ export function Settings({ drawer }) {
                 </View>
                 <View style={styles.optionControl}>
                   <Text style={styles.optionLink}>{ state.strings.logout }</Text>
+                </View>
+              </TouchableOpacity>
+              <View style={styles.divider} />
+              <TouchableOpacity style={styles.entry} activeOpacity={1}>
+                <View style={styles.icon}>
+                  <MatIcons name="ticket-confirmation-outline" size={20} color={Colors.linkText} />
+                </View>
+                <View style={styles.optionControl}>
+                  <TouchableOpacity activeOpacity={1} onPress={toggleMFA}>
+                    <Text style={styles.optionLink}>{ state.strings.mfaTitle }</Text>
+                  </TouchableOpacity>
+                  <Switch value={state.mfaEnabled} style={Platform.OS==='ios' ? styles.notifications : {}} thumbColor={Colors.sliderGrip} ios_backgroundColor={Colors.disabledIndicator}
+                      trackColor={styles.track} onValueChange={toggleMFA} />
                 </View>
               </TouchableOpacity>
               <View style={styles.divider} />
@@ -811,6 +863,59 @@ export function Settings({ drawer }) {
               </TouchableOpacity>
             </View>
           </View>
+        </View>
+      </Modal>
+
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={state.mfaModal}
+        supportedOrientations={['portrait', 'landscape']}
+        onRequestClose={actions.dismissMFA}
+      >
+        <View>
+          <KeyboardAvoidingView style={styles.modalOverlay} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+            <View style={styles.mfaContainer}>
+              <Text style={styles.mfaTitle}>{ state.strings.mfaTitle }</Text>
+              <Text style={styles.mfaDescription}>{ state.strings.mfaSteps }</Text>
+              { state.mfaImage && (
+                <Image source={{ uri: state.mfaImage }} style={{ width: 128, height: 128 }} />
+              )}
+              { !state.mfaImage && !state.mfaText && (
+                <ActivityIndicator style={styles.modalBusy} animating={true} color={Colors.primaryButton} />
+              )}
+              { state.mfaText && (
+                <TouchableOpacity style={styles.mfaSecret} onPress={() => Clipboard.setString(state.mfaText)}>
+                  <Text style={styles.mfaText}>{ state.mfaText }</Text>
+                  <AntIcon style={styles.mfaIcon} name={'copy1'} size={20} />
+                </TouchableOpacity>
+              )}
+              <InputCode style={{ width: '100%' }} onChangeText={actions.setCode} />
+              <View style={styles.mfaError}>
+                { state.mfaError == '401' && (
+                  <Text style={styles.mfaErrorLabel}>{ state.strings.mfaError }</Text>
+                )}
+                { state.mfaError == '429' && (
+                  <Text style={styles.mfaErrorLabel}>{ state.strings.mfaDisabled }</Text>
+                )}
+              </View>
+              <View style={styles.mfaControl}>
+                <TouchableOpacity style={styles.mfaCancel} onPress={actions.dismissMFA}>
+                  <Text style={styles.mfaCancelLabel}>{ state.strings.cancel }</Text>
+                </TouchableOpacity>
+                { state.mfaCode != '' && (
+                  <TouchableOpacity style={styles.mfaConfirm} onPress={actions.confirmMFA}>
+                    <Text style={styles.mfaConfirmLabel}>{ state.strings.mfaConfirm }</Text>
+                  </TouchableOpacity>
+                )}
+                { state.mfaCode == '' && (
+                  <View style={styles.mfaDisabled}>
+                    <Text style={styles.mfaDisabledLabel}>{ state.strings.mfaConfirm }</Text>
+                  </View>
+                )}
+              </View>
+            </View>
+          </KeyboardAvoidingView>
         </View>
       </Modal>
 
