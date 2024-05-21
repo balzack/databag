@@ -93,7 +93,6 @@ console.log(state.mfaError);
             <Button key="save" type="primary" className={state.mfaCode ? 'saveEnabled' : 'saveDisabled'} onClick={login}
                 disabled={!state.mfaCode} loading={state.busy}>{state.strings.login}</Button>
           </div>
-
         </MFAModal>
       </Modal>
     </LoginWrapper>

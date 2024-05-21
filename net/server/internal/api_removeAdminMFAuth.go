@@ -19,13 +19,13 @@ func RemoveAdminMFAuth(w http.ResponseWriter, r *http.Request) {
   err := store.DB.Transaction(func(tx *gorm.DB) error {
     if res := tx.Clauses(clause.OnConflict{
       Columns:   []clause.Column{{Name: "config_id"}},
-      DoUpdates: clause.AssignmentColumns([]string{"str_value"}),
+      DoUpdates: clause.AssignmentColumns([]string{"bool_value"}),
     }).Create(&store.Config{ConfigID: CNFMFAConfirmed, BoolValue: false}).Error; res != nil {
       return res
     }
     if res := tx.Clauses(clause.OnConflict{
       Columns:   []clause.Column{{Name: "config_id"}},
-      DoUpdates: clause.AssignmentColumns([]string{"str_value"}),
+      DoUpdates: clause.AssignmentColumns([]string{"bool_value"}),
     }).Create(&store.Config{ConfigID: CNFMFAEnabled, BoolValue: false}).Error; res != nil {
       return res
     }

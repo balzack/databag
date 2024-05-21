@@ -1,4 +1,4 @@
-import { AlertIcon, DashboardWrapper, SettingsButton, AddButton, SettingsLayout, CreateLayout } from './Dashboard.styled';
+import { AlertIcon, MFAModal, DashboardWrapper, SettingsButton, AddButton, SettingsLayout, CreateLayout } from './Dashboard.styled';
 import { Tooltip, Switch, Select, Button, Space, Modal, Input, InputNumber, List } from 'antd';
 import { ExclamationCircleOutlined, SettingOutlined, UserAddOutlined, LogoutOutlined, ReloadOutlined, LockOutlined, UnlockOutlined } from '@ant-design/icons';
 import { ThemeProvider } from "styled-components";
@@ -19,7 +19,7 @@ export function Dashboard() {
     return window.location.origin + '/#/create?add=' + state.createToken;
   };
 
-  const disableMFA = () => {
+  const confirmDisableMFA = () => {
     modal.confirm({
       title: <span style={state.menuStyle}>{state.strings.confirmDisable}</span>,
       content: <span style={state.menuStyle}>{state.strings.disablePrompt}</span>,
@@ -28,12 +28,53 @@ export function Dashboard() {
       okText: state.strings.disable,
       cancelText: state.strings.cancel,
       onOk() {
-        actions.disableMFA();
+        disableMFA();
       },
       onCancel() {},
     });
   }
 
+  const disableMFA = async () => {
+    try {
+      await actions.disableMFA();
+    }
+    catch(err) {
+      console.log(err);
+      modal.error({
+        title: <span style={state.menuStyle}>{state.strings.operationFailed}</span>,
+        content: <span style={state.menuStyle}>{state.strings.tryAgain}</span>,
+        bodyStyle: { borderRadius: 8, padding: 16, ...state.menuStyle },
+      });
+    }
+  }
+
+  const enableMFA = async () => {
+    try {
+      await actions.enableMFA();
+    }
+    catch(err) {
+      console.log(err);
+      modal.error({
+        title: <span style={state.menuStyle}>{state.strings.operationFailed}</span>,
+        content: <span style={state.menuStyle}>{state.strings.tryAgain}</span>,
+        bodyStyle: { borderRadius: 8, padding: 16, ...state.menuStyle },
+      });
+    }
+  }
+
+  const confirmMFA = async () => {
+    try {
+      await actions.confirmMFA();
+    }
+    catch(err) {
+      console.log(err);
+      modal.error({
+        title: <span style={state.menuStyle}>{state.strings.operationFailed}</span>,
+        content: <span style={state.menuStyle}>{state.strings.tryAgain}</span>,
+        bodyStyle: { borderRadius: 8, padding: 16, ...state.menuStyle },
+      });
+    }
+  }
 
   return (
     <ThemeProvider theme={state.colors}>
@@ -55,13 +96,13 @@ export function Dashboard() {
                 { (state.mfAuthSet && state.mfaAuthEnabled) && (
                   <div className="settings">
                       <SettingsButton type="text" size="small" icon={<UnlockOutlined />}
-                        onClick={disableMFA}></SettingsButton> 
+                        onClick={confirmDisableMFA}></SettingsButton> 
                   </div>
                 )}
                 { (state.mfAuthSet && !state.mfaAuthEnabled) && (
                   <div className="settings">
                       <SettingsButton type="text" size="small" icon={<LockOutlined />}
-                        onClick={actions.enableMFA}></SettingsButton> 
+                        onClick={enableMFA}></SettingsButton> 
                   </div>
                 )}
                 <div className="settings">
@@ -97,7 +138,7 @@ export function Dashboard() {
                   <div className="settings">
                     <Tooltip placement="topRight" title={state.strings.disableMultifactor}>
                       <SettingsButton type="text" size="small" icon={<LockOutlined />}
-                        onClick={disableMFA}></SettingsButton> 
+                        onClick={confirmDisableMFA}></SettingsButton> 
                     </Tooltip>
                   </div>
                 )}
@@ -105,7 +146,7 @@ export function Dashboard() {
                   <div className="settings">
                     <Tooltip placement="topRight" title={state.strings.enableMultifactor}>
                       <SettingsButton type="text" size="small" icon={<UnlockOutlined />}
-                        onClick={actions.enableMFA}></SettingsButton> 
+                        onClick={enableMFA}></SettingsButton> 
                     </Tooltip>
                   </div>
                 )}
@@ -263,6 +304,32 @@ export function Dashboard() {
               <Button type="primary" onClick={() => actions.setShowCreate(false)}>{state.strings.ok}</Button>
             </div>
           </CreateLayout>
+        </Modal>    
+        <Modal bodyStyle={{ borderRadius: 8, padding: 16, ...state.menuStyle }} closable={false} visible={state.mfaModal} centered width="fitContent"
+            destroyOnClose={true} footer={null} onCancel={actions.dismissMFA}>
+          <MFAModal>
+            <div className="title">{state.strings.mfaTitle}</div>
+            <div className="description">{state.strings.mfaSteps}</div>
+            <img src={state.mfaImage} alt="QRCode" />
+            <div className="secret">
+              <div className="label">{ state.mfaText }</div>
+              <CopyButton onCopy={async () => await navigator.clipboard.writeText(state.mfaText)} />
+            </div>
+            <Input.OTP onChange={actions.setCode} />
+            <div className="alert">
+              { state.mfaError === '401' && (
+                <span>{state.strings.mfaError}</span>
+              )}
+              { state.mfaError === '429' && (
+                <span>{state.strings.mfaDisabled}</span>
+              )}
+            </div>
+            <div className="controls">
+              <Button key="back" onClick={actions.dismissMFA}>{state.strings.cancel}</Button>
+              <Button key="save" type="primary" className={state.mfaCode ? 'saveEnabled' : 'saveDisabled'} onClick={confirmMFA}
+                  disabled={!state.mfaCode} loading={state.busy}>{state.strings.mfaConfirm}</Button>
+            </div>
+          </MFAModal>
         </Modal>    
       </DashboardWrapper>
     </ThemeProvider>

@@ -16,6 +16,9 @@ export function useAdmin() {
     busy: false,
     strings: {},
     menuStyle: {},
+    mfaModal: false,
+    mfaCode: null,
+    mfaError: null,
   });
 
   const navigate = useNavigate();
@@ -53,10 +56,22 @@ export function useAdmin() {
           if (state.unclaimed === true) {
             await setNodeStatus(state.password);
           }
-          const session = await setNodeAccess(state.password);
-
+          try {
+            const session = await setNodeAccess(state.password, state.mfaCode);
+            app.actions.setAdmin(session);          
+          }
+          catch (err) {
+            const msg = err?.message;
+            if (msg === '405' || msg === '403' || msg === '429') {
+              updateState({ busy: false, mfaModal: true, mfaError: msg });
+            }
+            else {
+              console.log(err);
+              updateState({ busy: false })
+              throw new Error('login failed: check your username and password');
+            }
+          }
           updateState({ busy: false });
-          app.actions.setAdmin(session);          
         }
         catch(err) {
           console.log(err);
@@ -64,6 +79,12 @@ export function useAdmin() {
           throw new Error("login failed");
         }
       }
+    },
+    setCode: (mfaCode) => {
+      updateState({ mfaCode });
+    },
+    dismissMFA: () => {
+      updateState({ mfaModal: false, mfaCode: null });
     },
   }
 

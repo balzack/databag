@@ -77,7 +77,7 @@ func SetAdminMFAuth(w http.ResponseWriter, r *http.Request) {
     // upsert mfa confirmed
     if res := tx.Clauses(clause.OnConflict{
       Columns:   []clause.Column{{Name: "config_id"}},
-      DoUpdates: clause.AssignmentColumns([]string{"str_value"}),
+      DoUpdates: clause.AssignmentColumns([]string{"bool_value"}),
     }).Create(&store.Config{ConfigID: CNFMFAConfirmed, BoolValue: true}).Error; res != nil {
       return res
     }

@@ -9,7 +9,9 @@ import { AppContext } from 'context/AppContext';
 import { SettingsContext } from 'context/SettingsContext';
 
 import { getAdminMFAuth } from 'api/getAdminMFAuth';
-
+import { addAdminMFAuth } from 'api/addAdminMFAuth';
+import { setAdminMFAuth } from 'api/setAdminMFAuth';
+import { removeAdminMFAuth } from 'api/removeAdminMFAuth';
 
 export function useDashboard(token) {
 
@@ -42,11 +44,13 @@ export function useDashboard(token) {
     menuStyle: {},
     strings: {},
 
+    mfaModal: false,
     mfAuthSet: false,
     mfAuthEnabled: false,
     mfAuthSecretText: null,
     mfAuthSecretImage: null,
     mfaAuthError: null,
+    mfaCode: '',
   });
 
   const navigate = useNavigate();
@@ -149,9 +153,29 @@ export function useDashboard(token) {
       await syncConfig();
       await syncAccounts();
     },
+    setCode: async (code) => {
+      updateState({ mfaCode: code });
+    },
     enableMFA: async () => {
+      const mfa = await addAdminMFAuth(app.state.adminToken);
+      updateState({ mfaModal: true, mfaError: false, mfaText: mfa.secretText, mfaImage: mfa.secretImage, mfaCode: '' });
     },
     disableMFA: async () => {
+      const mfa = await removeAdminMFAuth(app.state.adminToken);
+      updateState({ mfaAuthEnabled: false });
+    },
+    confirmMFA: async () => {
+      try {
+        await setAdminMFAuth(app.state.adminToken, state.mfaCode);
+        updateState({ mfaAuthEnabled: true, mfaModal: false });
+      }
+      catch (err) {
+        const msg = err?.message;
+        updateState({ mfaError: msg });
+      }
+    },
+    dismissMFA: async () => {
+      updateState({ mfaModal: false });
     },
     setSettings: async () => {
       if (!state.busy) {
