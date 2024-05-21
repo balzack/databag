@@ -8,7 +8,10 @@ import { useNavigate } from 'react-router-dom';
 import { AppContext } from 'context/AppContext';
 import { SettingsContext } from 'context/SettingsContext';
 
-export function useDashboard() {
+import { getAdminMFAuth } from 'api/getAdminMFAuth';
+
+
+export function useDashboard(token) {
 
   const [state, setState] = useState({
     domain: "",
@@ -38,6 +41,12 @@ export function useDashboard() {
     colors: {},
     menuStyle: {},
     strings: {},
+
+    mfAuthSet: false,
+    mfAuthEnabled: false,
+    mfAuthSecretText: null,
+    mfAuthSecretImage: null,
+    mfaAuthError: null,
   });
 
   const navigate = useNavigate();
@@ -140,6 +149,10 @@ export function useDashboard() {
       await syncConfig();
       await syncAccounts();
     },
+    enableMFA: async () => {
+    },
+    disableMFA: async () => {
+    },
     setSettings: async () => {
       if (!state.busy) {
         updateState({ busy: true });
@@ -161,10 +174,11 @@ export function useDashboard() {
 
   const syncConfig = async () => {
     try {
+      const enabled = await getAdminMFAuth(app.state.adminToken);
       const config = await getNodeConfig(app.state.adminToken);
       const { accountStorage, domain, keyType, pushSupported, transformSupported, allowUnsealed, enableImage, enableAudio, enableVideo, enableBinary, enableIce, iceUrl, iceUsername, icePassword, enableOpenAccess, openAccessLimit } = config;
       const storage = Math.ceil(accountStorage / 1073741824);
-      updateState({ configError: false, domain, accountStorage: storage, keyType, enableImage, enableAudio, enableVideo, enableBinary, pushSupported, transformSupported, allowUnsealed, enableIce, iceUrl, iceUsername, icePassword, enableOpenAccess, openAccessLimit });
+      updateState({ mfAuthSet: true, mfaAuthEnabled: enabled, configError: false, domain, accountStorage: storage, keyType, enableImage, enableAudio, enableVideo, enableBinary, pushSupported, transformSupported, allowUnsealed, enableIce, iceUrl, iceUsername, icePassword, enableOpenAccess, openAccessLimit });
     }
     catch(err) {
       console.log(err);

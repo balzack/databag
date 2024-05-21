@@ -1,6 +1,6 @@
 import { AlertIcon, DashboardWrapper, SettingsButton, AddButton, SettingsLayout, CreateLayout } from './Dashboard.styled';
 import { Tooltip, Switch, Select, Button, Space, Modal, Input, InputNumber, List } from 'antd';
-import { ExclamationCircleOutlined, SettingOutlined, UserAddOutlined, LogoutOutlined, ReloadOutlined } from '@ant-design/icons';
+import { ExclamationCircleOutlined, SettingOutlined, UserAddOutlined, LogoutOutlined, ReloadOutlined, LockOutlined, UnlockOutlined } from '@ant-design/icons';
 import { ThemeProvider } from "styled-components";
 import { useDashboard } from './useDashboard.hook';
 import { AccountItem } from './accountItem/AccountItem';
@@ -8,6 +8,7 @@ import { CopyButton } from '../copyButton/CopyButton';
 
 export function Dashboard() {
 
+  const [ modal, modalContext ] = Modal.useModal();
   const { state, actions } = useDashboard();
 
   const onClipboard = async (value) => {
@@ -18,9 +19,26 @@ export function Dashboard() {
     return window.location.origin + '/#/create?add=' + state.createToken;
   };
 
+  const disableMFA = () => {
+    modal.confirm({
+      title: <span style={state.menuStyle}>{state.strings.confirmDisable}</span>,
+      content: <span style={state.menuStyle}>{state.strings.disablePrompt}</span>,
+      icon: <ExclamationCircleOutlined />,
+      bodyStyle: { borderRadius: 8, padding: 16, ...state.menuStyle },
+      okText: state.strings.disable,
+      cancelText: state.strings.cancel,
+      onOk() {
+        actions.disableMFA();
+      },
+      onCancel() {},
+    });
+  }
+
+
   return (
     <ThemeProvider theme={state.colors}>
       <DashboardWrapper>
+        { modalContext }
         <div className="container">
           <div className="header">
             <div className="label">{ state.strings.accounts }</div>
@@ -34,6 +52,18 @@ export function Dashboard() {
                     <SettingsButton type="text" size="small" icon={<SettingOutlined />}
                         onClick={() => actions.setShowSettings(true)}></SettingsButton>
                 </div>
+                { (state.mfAuthSet && state.mfaAuthEnabled) && (
+                  <div className="settings">
+                      <SettingsButton type="text" size="small" icon={<UnlockOutlined />}
+                        onClick={disableMFA}></SettingsButton> 
+                  </div>
+                )}
+                { (state.mfAuthSet && !state.mfaAuthEnabled) && (
+                  <div className="settings">
+                      <SettingsButton type="text" size="small" icon={<LockOutlined />}
+                        onClick={actions.enableMFA}></SettingsButton> 
+                  </div>
+                )}
                 <div className="settings">
                     <SettingsButton type="text" size="small" icon={<LogoutOutlined />}
                         onClick={() => actions.logout()}></SettingsButton>
@@ -63,6 +93,22 @@ export function Dashboard() {
                         onClick={() => actions.setShowSettings(true)}></SettingsButton>
                   </Tooltip>
                 </div>
+                { (state.mfAuthSet && state.mfaAuthEnabled) && (
+                  <div className="settings">
+                    <Tooltip placement="topRight" title={state.strings.disableMultifactor}>
+                      <SettingsButton type="text" size="small" icon={<LockOutlined />}
+                        onClick={disableMFA}></SettingsButton> 
+                    </Tooltip>
+                  </div>
+                )}
+                { (state.mfAuthSet && !state.mfaAuthEnabled) && (
+                  <div className="settings">
+                    <Tooltip placement="topRight" title={state.strings.enableMultifactor}>
+                      <SettingsButton type="text" size="small" icon={<UnlockOutlined />}
+                        onClick={actions.enableMFA}></SettingsButton> 
+                    </Tooltip>
+                  </div>
+                )}
                 <div className="settings">
                   <Tooltip placement="topRight" title={state.strings.logout}> 
                     <SettingsButton type="text" size="small" icon={<LogoutOutlined />}

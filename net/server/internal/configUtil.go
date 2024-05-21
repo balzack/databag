@@ -63,6 +63,23 @@ const CNFIceUsername = "ice_username"
 //CNFIceUrl specifies the ice candidate url
 const CNFIcePassword = "ice_password"
 
+//CNFMFAFailedTime start of mfa failure window
+const CNFMFAFailedTime = "mfa_failed_time"
+
+//CNFMFAFailedCount number of failures in window
+const CNFMFAFailedCount = "mfa_failed_count"
+
+//CNFMFARequired specified if mfa enabled for admin
+const CNFMFAEnabled = "mfa_enabled"
+
+//CNFMFAConfirmed specified if mfa has been confirmed for admin
+const CNFMFAConfirmed = "mfa_confirmed"
+
+//CNFMFASecret specified the mfa secret
+const CNFMFASecret = "mfa_secret"
+
+//CNFAdminSession sepcifies the admin session token
+const CNFAdminSession = "admin_session"
 
 func getStrConfigValue(configID string, empty string) string {
 	var config store.Config

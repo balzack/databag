@@ -86,7 +86,140 @@ paths:
           description: permission denied
         '500':
           description: internal server error
-          
+
+  /admin/access:        
+    put:
+      tags:
+        - admin
+      description: Acquire new session token for admin endpoints
+      operationId: set-admin-session
+      parameters:
+        - name: token
+          in: query
+          description: access token
+          required: true
+          schema:
+            type: string
+        - name: code
+          in: query
+          description: totp code
+          required: false
+          schema:
+            type: string
+      responses:
+        '201':
+          description: generated
+          content:
+            application/json:
+              schema:
+                type: string
+        '401':
+          description: invalid token
+        '405':
+          description: totp code required but not set
+        '429':
+          description: temporarily locked due to too many failures
+        '500':
+          description: internal server error
+
+  /admin/mfauth:
+    get:
+      tags:
+        - admin
+      description: check if multi-factor authentication enabled
+      operationId: get-admin-mfa
+      parameters:
+        - name: token
+          in: query
+          description: session token
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: boolean
+        '401':
+          description: permission denied
+        '500':
+          description: internal server error
+    post:
+      tags:
+        - admin
+      description: Enable multi-factor authentication
+      operationId: add-admin-mfa
+      parameters:
+        - name: token
+          in: query
+          description: session token
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: string
+        '401':
+          description: permission denied
+        '500':
+          description: internal server error
+    put:
+      tags:
+        - admin
+      description: Confirm multi-factor authentication
+      operationId: confirm-admin-mfa
+      parameters:
+        - name: token
+          in: query
+          description: session token
+          required: false
+          schema:
+            type: string
+        - name: code
+          in: query
+          description: totp code generated from secret
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success
+        '401':
+          description: permission denied
+        '403':
+          description: totp code not correct
+        '405':
+          description: totp code required but not set
+        '429':
+          description: temporarily locked due to too many failures
+        '500':
+          description: internal server error
+    delete:
+      tags:
+        - admin
+      description: Disable multi-factor authentication
+      operationId: remove-admin-mfa
+      parameters:
+        - name: token
+          in: query
+          description: session token
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success
+        '401':
+          description: permission denied
+        '500':
+          description: internal server error
+  
   /admin/config:
     get:
       tags:
@@ -96,7 +229,7 @@ paths:
       parameters:
         - name: token
           in: query
-          description: token for admin access
+          description: session token for admin access
           required: true
           schema:
             type: string
@@ -119,7 +252,7 @@ paths:
       parameters:
         - name: token
           in: query
-          description: token for admin access
+          description: session token for admin access
           required: true
           schema:
             type: string
@@ -146,7 +279,7 @@ paths:
       parameters:
         - name: token
           in: query
-          description: token for admin access
+          description: session token for admin access
           required: true
           schema:
             type: string
@@ -173,7 +306,7 @@ paths:
       parameters:
         - name: token
           in: query
-          description: token for admin access
+          description: session token for admin access
           required: true
           schema:
             type: string
@@ -204,7 +337,7 @@ paths:
             type: string
         - name: token
           in: query
-          description: token for admin access
+          description: session token for admin access
           required: true
           schema:
             type: string
@@ -238,7 +371,7 @@ paths:
             type: string
         - name: token
           in: query
-          description: token for admin access
+          description: session token for admin access
           required: true
           schema:
             type: string
@@ -261,7 +394,7 @@ paths:
       parameters:
         - name: token
           in: query
-          description: token for admin access
+          description: session token for admin access
           required: true
           schema:
             type: string
@@ -298,7 +431,7 @@ paths:
             type: string
         - name: token
           in: query
-          description: token for admin access
+          description: session token for admin access
           required: true
           schema:
             type: string

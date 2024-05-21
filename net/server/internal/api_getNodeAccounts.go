@@ -8,7 +8,7 @@ import (
 //GetNodeAccounts retrieves profiles of hosted accounts for the admin
 func GetNodeAccounts(w http.ResponseWriter, r *http.Request) {
 
-	if code, err := ParamAdminToken(r); err != nil {
+	if code, err := ParamSessionToken(r); err != nil {
 		ErrResponse(w, code, err)
 		return
 	}

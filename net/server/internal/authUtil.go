@@ -95,6 +95,30 @@ func ParamAdminToken(r *http.Request) (int, error) {
 	return http.StatusOK, nil
 }
 
+//ParamSessionToken compares session token with token query param
+func ParamSessionToken(r *http.Request) (int, error) {
+
+	// parse authentication token
+	token := r.FormValue("token")
+	if token == "" {
+		return http.StatusUnauthorized, errors.New("token not set")
+	}
+
+	// nothing to do if not configured
+	if !getBoolConfigValue(CNFConfigured, false) {
+		return http.StatusUnauthorized, errors.New("node not configured")
+	}
+
+	// compare password
+	value := getStrConfigValue(CNFAdminSession, "")
+	if value != token {
+		return http.StatusUnauthorized, errors.New("invalid session token")
+	}
+
+	return http.StatusOK, nil
+}
+
+
 //GetSessionDetail retrieves account detail specified by agent query param
 func GetSessionDetail(r *http.Request) (*store.Session, int, error) {
 

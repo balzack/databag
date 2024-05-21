@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { getNodeStatus } from 'api/getNodeStatus';
 import { setNodeStatus } from 'api/setNodeStatus';
 import { getNodeConfig } from 'api/getNodeConfig';
+import { setNodeAccess } from 'api/setNodeAccess';
 import { AppContext } from 'context/AppContext';
 import { SettingsContext } from 'context/SettingsContext';
 
@@ -52,9 +53,10 @@ export function useAdmin() {
           if (state.unclaimed === true) {
             await setNodeStatus(state.password);
           }
-          await getNodeConfig(state.password);
+          const session = await setNodeAccess(state.password);
+
           updateState({ busy: false });
-          app.actions.setAdmin(state.password);          
+          app.actions.setAdmin(session);          
         }
         catch(err) {
           console.log(err);

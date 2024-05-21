@@ -21,7 +21,7 @@ func RemoveNodeAccount(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if code, err := ParamAdminToken(r); err != nil {
+	if code, err := ParamSessionToken(r); err != nil {
 		ErrResponse(w, code, err)
 		return
 	}
