@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { AppContext } from 'context/AppContext';
 import { getNodeStatus } from 'api/getNodeStatus';
 import { setNodeStatus } from 'api/setNodeStatus';
-import { getNodeConfig } from 'api/getNodeConfig';
+import { setNodeAccess } from 'api/setNodeAccess';
 import { getLanguageStrings } from 'constants/Strings';
 
 export function useAdmin() {
@@ -22,6 +22,8 @@ export function useAdmin() {
     version: null,
     agree: false,
     showTerms: false,
+
+    mfaCode: '',
   });
 
   const updateState = (value) => {
@@ -80,14 +82,13 @@ export function useAdmin() {
         try {
           updateState({ busy: true });
           const node = state.server.trim();
-          const token = state.token;
           const unclaimed = await getNodeStatus(node);
           if (unclaimed) {
-            await setNodeStatus(node, token);
+            await setNodeStatus(node, state.token);
           } 
-          const config = await getNodeConfig(node, token);
+          const session = await setNodeAccess(node, state.token, state.mfaCode);
           updateState({ server: node, busy: false });
-          navigate('/dashboard', { state: { config, server: node, token }});
+          navigate('/dashboard', { state: { server: node, token: session }});
         }
         catch (err) {
           console.log(err);
