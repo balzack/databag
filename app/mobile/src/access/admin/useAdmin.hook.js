@@ -23,7 +23,9 @@ export function useAdmin() {
     agree: false,
     showTerms: false,
 
+    mfaModal: false,
     mfaCode: '',
+    mfaError: null,
   });
 
   const updateState = (value) => {
@@ -85,10 +87,22 @@ export function useAdmin() {
           const unclaimed = await getNodeStatus(node);
           if (unclaimed) {
             await setNodeStatus(node, state.token);
-          } 
-          const session = await setNodeAccess(node, state.token, state.mfaCode);
-          updateState({ server: node, busy: false });
-          navigate('/dashboard', { state: { server: node, token: session }});
+          }
+          try { 
+            const session = await setNodeAccess(node, state.token, state.mfaCode);
+            updateState({ server: node, busy: false });
+            navigate('/dashboard', { state: { server: node, token: session }});
+          }
+          catch (err) {
+            if (err.message == '405' || err.message == '403' || err.message == '429') {
+              updateState({ mfaModal: true, mfaError: err.message });
+            }
+            else {
+              console.log(err.message);
+              updateState({ busy: false, showAlert: true });
+              throw new Error('login failed');
+            }
+          }
         }
         catch (err) {
           console.log(err);
@@ -96,7 +110,13 @@ export function useAdmin() {
           throw new Error("access failed");
         }
       }
-    }
+    },
+    setCode: (mfaCode) => {
+      updateState({ mfaCode });
+    },
+    dismissMFA: () => {
+      updateState({ mfaModal: false });
+    },
   };
 
   return { state, actions };
