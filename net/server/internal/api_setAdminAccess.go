@@ -26,14 +26,14 @@ func SetAdminAccess(w http.ResponseWriter, r *http.Request) {
   curTime := time.Now().Unix()
   failedTime := getNumConfigValue(CNFMFAFailedTime, 0);
   failedCount := getNumConfigValue(CNFMFAFailedCount, 0);
-  if failedTime + APPMFAFailPeriod > curTime && failedCount > APPMFAFailCount {
-    ErrResponse(w, http.StatusTooManyRequests, errors.New("temporarily locked"))
-    return;
-  }
-
   mfaEnabled := getBoolConfigValue(CNFMFAEnabled, false);
   mfaConfirmed := getBoolConfigValue(CNFMFAConfirmed, false);
   if mfaEnabled && mfaConfirmed {
+    if failedTime + APPMFAFailPeriod > curTime && failedCount > APPMFAFailCount {
+      ErrResponse(w, http.StatusTooManyRequests, errors.New("temporarily locked"))
+      return;
+    }
+
     code := r.FormValue("code")
     if code == "" {
       ErrResponse(w, http.StatusMethodNotAllowed, errors.New("totp code required"))
