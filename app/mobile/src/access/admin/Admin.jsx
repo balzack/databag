@@ -140,7 +140,7 @@ export function Admin() {
                   <Text style={styles.mfaCancelLabel}>{ state.strings.cancel }</Text>
                 </TouchableOpacity>
                 { state.mfaCode != '' && (
-                  <TouchableOpacity style={styles.mfaConfirm} onPress={actions.login}>
+                  <TouchableOpacity style={styles.mfaConfirm} onPress={actions.access}>
                     <Text style={styles.mfaConfirmLabel}>{ state.strings.mfaConfirm }</Text>
                   </TouchableOpacity>
                 )}

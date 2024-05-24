@@ -88,7 +88,7 @@ export function useAdmin() {
           if (unclaimed) {
             await setNodeStatus(node, state.token);
           }
-          try { 
+          try {
             const session = await setNodeAccess(node, state.token, state.mfaCode);
             updateState({ server: node, busy: false });
             navigate('/dashboard', { state: { server: node, token: session }});
@@ -109,6 +109,7 @@ export function useAdmin() {
           updateState({ busy: false });
           throw new Error("access failed");
         }
+        updateState({ busy: false });
       }
     },
     setCode: (mfaCode) => {
