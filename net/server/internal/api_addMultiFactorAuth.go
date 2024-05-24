@@ -22,7 +22,7 @@ func AddMultiFactorAuth(w http.ResponseWriter, r *http.Request) {
 
   key, err := totp.Generate(totp.GenerateOpts{
     Issuer: APPMFAIssuer,
-    AccountName: account.GUID,
+    AccountName: account.Handle,
     Digits: otp.DigitsSix,
     Algorithm: otp.AlgorithmSHA256,
   })

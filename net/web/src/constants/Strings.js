@@ -195,6 +195,13 @@ export const en = {
   mfaDisabled: 'verification temporarily disabled',
   mfaConfirm: 'Confirm',
   mfaEnter: 'Enter your verification code',
+
+  enableMultifactor: 'Enable multi-factor authentication',
+  disableMultifactor: 'Disable multi-factor authentication',
+
+  disable: 'Disable',
+  confirmDisable: 'Disabling Multi-Factor Authentication',
+  disablePrompt: 'Are you sure you want to disable multi-factor authentication',
 };
 
 export const fr = {
@@ -395,6 +402,13 @@ export const fr = {
   mfaError: 'erreur de code de vérification',
   mfaDisabled: 'vérification temporairement désactivée',
   mfaConfirm: 'Confirmer',
+
+  enableMultifactor: 'Activer l\'authentification multifacteur',
+  disableMultifactor: 'Désactiver l\'authentification multifacteur',
+
+  disable: 'Désactiver',
+  confirmDisable: 'Désactivation de l\'authentification multi-facteurs',
+  disablePrompt: 'Êtes-vous sûr de vouloir désactiver l\'authentification multi-facteurs',
 };
 
 export const sp = {
@@ -594,6 +608,13 @@ export const sp = {
   mfaError: 'error de código de verificación',
   mfaDisabled: 'verificación temporalmente deshabilitada',
   mfaConfirm: 'Confirmar',
+
+  enableMultifactor: 'Habilitar la autenticación multifactor',
+  disableMultifactor: 'Deshabilitar la autenticación multifactor',
+
+  disable: 'Desactivar',
+  confirmDisable: 'Desactivación de la autenticación de dos factores',
+  disablePrompt: '¿Estás seguro de que quieres desactivar la autenticación de dos factores?',
 };
 
 export const pt = {
@@ -793,6 +814,13 @@ export const pt = {
   mfaError: 'erro de código de verificação',
   mfaDisabled: 'verificação temporariamente desativada',
   mfaConfirm: 'Confirmar',
+
+  enableMultifactor: 'Habilitar autenticação multifator',
+  disableMultifactor: 'Desativar autenticação multifator',
+
+  disable: 'Desativar',
+  confirmDisable: 'Desativando Autenticação de Dois Fatores',
+  disablePrompt: 'Tem certeza de que deseja desativar a autenticação de dois fatores?',
 };
 
 export const de = {
@@ -992,6 +1020,13 @@ export const de = {
   mfaError: 'Verifizierungscodefehler',
   mfaDisabled: 'Verifizierung vorübergehend deaktiviert',
   mfaConfirm: 'Bestätigen',
+
+  enableMultifactor: 'Aktivieren Sie die Multi-Faktor-Authentifizierung',
+  disableMultifactor: 'Deaktivieren Sie die Multi-Faktor-Authentifizierung',
+
+  disable: 'Deaktivieren',
+  confirmDisable: 'Deaktivierung der Zwei-Faktor-Authentifizierung',
+  disablePrompt: 'Sind Sie sicher, dass Sie die Zwei-Faktor-Authentifizierung deaktivieren möchten?',
 };
 
 export const ru = {
@@ -1191,4 +1226,11 @@ export const ru = {
   mfaError: 'ошибка проверочного кода',
   mfaDisabled: 'проверка временно отключена',
   mfaConfirm: 'Подтвердить',
+
+  enableMultifactor: 'Включить многофакторную аутентификацию',
+  disableMultifactor: 'Отключить многофакторную аутентификацию',
+
+  disable: 'Отключить',
+  confirmDisable: 'Отключение двухфакторной аутентификации',
+  disablePrompt: 'Вы уверены, что хотите отключить двухфакторную аутентификацию?',
 };

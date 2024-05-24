@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { AppContext } from 'context/AppContext';
 import { getNodeStatus } from 'api/getNodeStatus';
 import { setNodeStatus } from 'api/setNodeStatus';
+import { setNodeAccess } from 'api/setNodeAccess';
 import { getNodeConfig } from 'api/getNodeConfig';
 import { getLanguageStrings } from 'constants/Strings';
 
@@ -22,6 +23,10 @@ export function useAdmin() {
     version: null,
     agree: false,
     showTerms: false,
+
+    mfaModal: false,
+    mfaCode: '',
+    mfaError: null,
   });
 
   const updateState = (value) => {
@@ -80,22 +85,47 @@ export function useAdmin() {
         try {
           updateState({ busy: true });
           const node = state.server.trim();
-          const token = state.token;
           const unclaimed = await getNodeStatus(node);
           if (unclaimed) {
-            await setNodeStatus(node, token);
-          } 
-          const config = await getNodeConfig(node, token);
-          updateState({ server: node, busy: false });
-          navigate('/dashboard', { state: { config, server: node, token }});
+            await setNodeStatus(node, state.token);
+          }
+          try {
+            const session = await setNodeAccess(node, state.token, state.mfaCode);
+            updateState({ server: node, busy: false });
+            navigate('/dashboard', { state: { server: node, token: session, mfa: true }});
+          }
+          catch (err) {
+            if (err.message == '405' || err.message == '403' || err.message == '429') {
+              updateState({ mfaModal: true, mfaError: err.message });
+            }
+            else {
+              try {
+                await getNodeConfig(node, state.token);
+                updateState({ server: node, busy: false });
+                navigate('/dashboard', { state: { server: node, token: state.token, mfa: false }});
+              }
+              catch (err) {
+                console.log(err.message);
+                updateState({ busy: false, showAlert: true });
+                throw new Error('login failed');
+              }
+            }
+          }
         }
         catch (err) {
           console.log(err);
           updateState({ busy: false });
           throw new Error("access failed");
         }
+        updateState({ busy: false });
       }
-    }
+    },
+    setCode: (mfaCode) => {
+      updateState({ mfaCode });
+    },
+    dismissMFA: () => {
+      updateState({ mfaModal: false });
+    },
   };
 
   return { state, actions };

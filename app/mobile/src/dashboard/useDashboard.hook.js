@@ -15,11 +15,15 @@ import { addAccountAccess } from 'api/addAccountAccess';
 import { DisplayContext } from 'context/DisplayContext';
 import { getLanguageStrings } from 'constants/Strings';
 
-export function useDashboard(config, server, token) {
+import { getAdminMFAuth } from 'api/getAdminMFAuth';
+import { addAdminMFAuth } from 'api/addAdminMFAuth';
+import { setAdminMFAuth } from 'api/setAdminMFAuth';
+import { removeAdminMFAuth } from 'api/removeAdminMFAuth';
+
+export function useDashboard(server, token, mfa) {
 
   const [state, setState] = useState({
     strings: getLanguageStrings(),
-    config: null,
     accounts: [],
     editConfig: false,
     addUser: false,
@@ -40,6 +44,13 @@ export function useDashboard(config, server, token) {
     iceUrl: null,
     iceUsername: null,
     icePassword: null,
+
+    mfaModal: false,
+    mfaImage: null,
+    mfaText: null,
+    mfaCode: '',
+    mfaError: null,
+    mfaEnabled: false,
   });
 
   const navigate = useNavigate();
@@ -62,19 +73,24 @@ export function useDashboard(config, server, token) {
     return { logo, name, handle, accountId, disabled };
   }
 
-  const refreshAccounts = async () => {
-    const accounts = await getNodeAccounts(server, token);
-    updateState({ accounts: accounts.map(setAccountItem) });
-  };
-
-  useEffect(() => {
-    const { keyType, accountStorage, domain, enableImage, enableAudio, enableVideo, enableBinary, transformSupported, allowUnsealed, pushSupported, enableIce, iceUrl, iceUsername, icePassword } = config;
+  const syncNode = async () => {
+    const mfaEnabled = mfa ? await getAdminMFAuth(server, token) : false;
+    const config = await getNodeConfig(server, token);
+    const nodeAccounts = await getNodeAccounts(server, token);
+    const accounts = nodeAccounts.map(setAccountItem);
+    const { keyType, accountStorage, domain, enableImage, enableAudio, enableVideo, enableBinary, transformSupported, allowUnsealed, pushSupported, enableIce, iceUrl, iceUsername, icePassword } = config || {};
     const storage = Math.ceil(accountStorage / 1073741824);
-    updateState({ keyType, storage: storage.toString(), domain, enableImage, enableAudio, enableVideo, enableBinary, transformSupported, allowUnsealed, pushSupported, enableIce, iceUrl, iceUsername, icePassword });
-  }, [config]);
+    updateState({ keyType, storage: storage.toString(), domain, enableImage, enableAudio, enableVideo, enableBinary, transformSupported, allowUnsealed, pushSupported, enableIce, iceUrl, iceUsername, icePassword, accounts, mfaEnabled });
+  }
+
+  const refreshAccounts = async () => {
+    const nodeAccounts = await getNodeAccounts(server, token);
+    const accounts = nodeAccounts.map(setAccountItem);
+    updateState({ accounts });
+  }
 
   useEffect(() => {
-    refreshAccounts();
+    syncNode();
   }, []);
 
   const actions = {
@@ -155,8 +171,8 @@ export function useDashboard(config, server, token) {
     },
     promptRemove: (accountId) => {
       display.actions.showPrompt({
-        title: 'Delete User',
-        ok: { label: 'Delete', action: async () => {
+        title: state.strings.deleteAccount,
+        ok: { label: state.strings.delete, action: async () => {
             await removeAccount(server, token, accountId);
             await refreshAccounts();
           } , failed: () => {
@@ -167,6 +183,41 @@ export function useDashboard(config, server, token) {
         }},
         cancel: { label: state.strings.cancel },
       });
+    },
+    enableMFA: async () => {
+      updateState({ mfaModal: true, mfaImage: null, mfaText: null, mfaCode: '', mfaError: '' });
+      const mfa = await addAdminMFAuth(server, token);
+      updateState({ mfaImage: mfa.secretImage, mfaText: mfa.secretText });
+    },
+    disableMFA: async () => {
+      display.actions.showPrompt({
+        title: state.strings.confirmDisable,
+        ok: { label: state.strings.disable, action: async () => {
+            await removeAdminMFAuth(server, token);
+            updateState({ mfaEnabled: false });
+          } , failed: () => {
+          Alert.alert(
+            state.strings.error,
+            state.strings.tryAgain,
+          );
+        }},
+        cancel: { label: state.strings.cancel },
+      });
+    },
+    confirmMFA: async () => {
+      try {
+        await setAdminMFAuth(server, token, state.mfaCode);
+        updateState({ mfaEnabled: true, mfaModal: false });
+      }
+      catch (err) {
+        updateState({ mfaError: err.message});
+      }
+    },
+    dismissMFA: () => {
+      updateState({ mfaModal: false });
+    },
+    setCode: (mfaCode) => {
+      updateState({ mfaCode });
     },
   };
 

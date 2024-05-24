@@ -210,6 +210,10 @@ const Strings = [
     mfaDisabled: 'verification temporarily disabled',
     mfaConfirm: 'Confirm',
     mfaEnter: 'Enter your verification code',
+
+    disable: 'Disable',
+    confirmDisable: 'Disabling Multi-Factor Authentication',
+    disablePrompt: 'Are you sure you want to disable multi-factor authentication',
   },
   {
     languageCode: 'fr',
@@ -416,6 +420,10 @@ const Strings = [
     mfaError: 'erreur de code de vérification',
     mfaDisabled: 'vérification temporairement désactivée',
     mfaConfirm: 'Confirmer',
+
+    disable: 'Désactiver',
+    confirmDisable: 'Désactivation de l\'authentification multi-facteurs',
+    disablePrompt: 'Êtes-vous sûr de vouloir désactiver l\'authentification multi-facteurs',
   },
   {
     languageCode: 'es',
@@ -623,6 +631,10 @@ const Strings = [
     mfaError: 'error de código de verificación',
     mfaDisabled: 'verificación temporalmente deshabilitada',
     mfaConfirm: 'Confirmar',
+
+    disable: 'Desactivar',
+    confirmDisable: 'Desactivación de la autenticación de dos factores',
+    disablePrompt: '¿Estás seguro de que quieres desactivar la autenticación de dos factores?',
   },
   {
     languageCode: 'de',
@@ -830,6 +842,10 @@ const Strings = [
     mfaError: 'Verifizierungscodefehler',
     mfaDisabled: 'Verifizierung vorübergehend deaktiviert',
     mfaConfirm: 'Bestätigen',
+
+    disable: 'Deaktivieren',
+    confirmDisable: 'Deaktivierung der Zwei-Faktor-Authentifizierung',
+    disablePrompt: 'Sind Sie sicher, dass Sie die Zwei-Faktor-Authentifizierung deaktivieren möchten?',
   },
   {
     languageCode: 'pt',
@@ -1022,6 +1038,10 @@ const Strings = [
     mfaError: 'erro de código de verificação',
     mfaDisabled: 'verificação temporariamente desativada',
     mfaConfirm: 'Confirmar',
+
+    disable: 'Desativar',
+    confirmDisable: 'Desativando Autenticação de Dois Fatores',
+    disablePrompt: 'Tem certeza de que deseja desativar a autenticação de dois fatores?',
   },
   {
     languageCode: 'ru',
@@ -1212,6 +1232,10 @@ const Strings = [
     mfaError: 'ошибка проверочного кода',
     mfaDisabled: 'проверка временно отключена',
     mfaConfirm: 'Подтвердить',
+
+    disable: 'Отключить',
+    confirmDisable: 'Отключение двухфакторной аутентификации',
+    disablePrompt: 'Вы уверены, что хотите отключить двухфакторную аутентификацию?',
   }
 ];
 

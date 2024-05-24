@@ -279,6 +279,41 @@ var endpoints = routes{
 		ImportAccount,
 	},
 
+  route{
+    "SetAdminAccess",
+    strings.ToUpper("Put"),
+    "/admin/access",
+    SetAdminAccess,
+  },
+
+  route{
+    "GetAdminMFAuth",
+    strings.ToUpper("Get"),
+    "/admin/mfauth",
+    GetAdminMFAuth,
+  },
+
+  route{
+    "AddAdminMFAuth",
+    strings.ToUpper("Post"),
+    "/admin/mfauth",
+    AddAdminMFAuth,
+  },
+
+  route{
+    "SetAdminMFAuth",
+    strings.ToUpper("Put"),
+    "/admin/mfauth",
+    SetAdminMFAuth,
+  },
+
+  route{
+    "RemoveAdminMFAuth",
+    strings.ToUpper("Delete"),
+    "/admin/mfauth",
+    RemoveAdminMFAuth,
+  },
+
 	route{
 		"RemoveNodeAccount",
 		strings.ToUpper("Delete"),

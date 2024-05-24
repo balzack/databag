@@ -8,7 +8,12 @@ import { useNavigate } from 'react-router-dom';
 import { AppContext } from 'context/AppContext';
 import { SettingsContext } from 'context/SettingsContext';
 
-export function useDashboard() {
+import { getAdminMFAuth } from 'api/getAdminMFAuth';
+import { addAdminMFAuth } from 'api/addAdminMFAuth';
+import { setAdminMFAuth } from 'api/setAdminMFAuth';
+import { removeAdminMFAuth } from 'api/removeAdminMFAuth';
+
+export function useDashboard(token) {
 
   const [state, setState] = useState({
     domain: "",
@@ -38,6 +43,14 @@ export function useDashboard() {
     colors: {},
     menuStyle: {},
     strings: {},
+
+    mfaModal: false,
+    mfAuthSet: false,
+    mfAuthEnabled: false,
+    mfAuthSecretText: null,
+    mfAuthSecretImage: null,
+    mfaAuthError: null,
+    mfaCode: '',
   });
 
   const navigate = useNavigate();
@@ -140,6 +153,30 @@ export function useDashboard() {
       await syncConfig();
       await syncAccounts();
     },
+    setCode: async (code) => {
+      updateState({ mfaCode: code });
+    },
+    enableMFA: async () => {
+      const mfa = await addAdminMFAuth(app.state.adminToken);
+      updateState({ mfaModal: true, mfaError: false, mfaText: mfa.secretText, mfaImage: mfa.secretImage, mfaCode: '' });
+    },
+    disableMFA: async () => {
+      await removeAdminMFAuth(app.state.adminToken);
+      updateState({ mfaAuthEnabled: false });
+    },
+    confirmMFA: async () => {
+      try {
+        await setAdminMFAuth(app.state.adminToken, state.mfaCode);
+        updateState({ mfaAuthEnabled: true, mfaModal: false });
+      }
+      catch (err) {
+        const msg = err?.message;
+        updateState({ mfaError: msg });
+      }
+    },
+    dismissMFA: async () => {
+      updateState({ mfaModal: false });
+    },
     setSettings: async () => {
       if (!state.busy) {
         updateState({ busy: true });
@@ -161,10 +198,11 @@ export function useDashboard() {
 
   const syncConfig = async () => {
     try {
+      const enabled = await getAdminMFAuth(app.state.adminToken);
       const config = await getNodeConfig(app.state.adminToken);
       const { accountStorage, domain, keyType, pushSupported, transformSupported, allowUnsealed, enableImage, enableAudio, enableVideo, enableBinary, enableIce, iceUrl, iceUsername, icePassword, enableOpenAccess, openAccessLimit } = config;
       const storage = Math.ceil(accountStorage / 1073741824);
-      updateState({ configError: false, domain, accountStorage: storage, keyType, enableImage, enableAudio, enableVideo, enableBinary, pushSupported, transformSupported, allowUnsealed, enableIce, iceUrl, iceUsername, icePassword, enableOpenAccess, openAccessLimit });
+      updateState({ mfAuthSet: true, mfaAuthEnabled: enabled, configError: false, domain, accountStorage: storage, keyType, enableImage, enableAudio, enableVideo, enableBinary, pushSupported, transformSupported, allowUnsealed, enableIce, iceUrl, iceUsername, icePassword, enableOpenAccess, openAccessLimit });
     }
     catch(err) {
       console.log(err);

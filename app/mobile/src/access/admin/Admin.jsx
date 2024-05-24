@@ -5,6 +5,8 @@ import { useAdmin } from './useAdmin.hook';
 import Colors from 'constants/Colors';
 import MatIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { tos } from 'constants/TermsOfService';
+import { BlurView } from "@react-native-community/blur";
+import { InputCode } from 'utils/InputCode';
 
 export function Admin() {
 
@@ -92,6 +94,47 @@ export function Admin() {
           <TouchableOpacity style={styles.done} onPress={actions.hideTerms}>
             <Text style={styles.donetext}>{ state.strings.close }</Text>
           </TouchableOpacity>
+        </View>
+      </Modal>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={state.mfaModal}
+        supportedOrientations={['portrait', 'landscape']}
+        onRequestClose={actions.dismissMFA}
+      >
+        <View>
+          <BlurView style={styles.mfaOverlay} blurType={Colors.overlay} blurAmount={2} reducedTransparencyFallbackColor="black" />
+          <View style={styles.mfaBase}>
+            <View style={styles.mfaContainer}>
+              <Text style={styles.mfaTitle}>{ state.strings.mfaTitle }</Text>
+              <Text style={styles.mfaDescription}>{ state.strings.mfaEnter }</Text>
+              <InputCode style={{ width: '100%' }} onChangeText={actions.setCode} />
+              <View style={styles.mfaError}>
+                { state.mfaError == '403' && (
+                  <Text style={styles.mfaErrorLabel}>{ state.strings.mfaError }</Text>
+                )}
+                { state.mfaError == '429' && (
+                  <Text style={styles.mfaErrorLabel}>{ state.strings.mfaDisabled }</Text>
+                )}
+              </View>
+              <View style={styles.mfaControl}>
+                <TouchableOpacity style={styles.mfaCancel} onPress={actions.dismissMFA}>
+                  <Text style={styles.mfaCancelLabel}>{ state.strings.cancel }</Text>
+                </TouchableOpacity>
+                { state.mfaCode != '' && (
+                  <TouchableOpacity style={styles.mfaConfirm} onPress={actions.access}>
+                    <Text style={styles.mfaConfirmLabel}>{ state.strings.mfaConfirm }</Text>
+                  </TouchableOpacity>
+                )}
+                { state.mfaCode == '' && (
+                  <View style={styles.mfaDisabled}>
+                    <Text style={styles.mfaDisabledLabel}>{ state.strings.mfaConfirm }</Text>
+                  </View>
+                )}
+              </View>
+            </View>
+          </View>
         </View>
       </Modal>
     </KeyboardAvoidingView>

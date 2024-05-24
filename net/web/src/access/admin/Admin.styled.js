@@ -72,3 +72,53 @@ export const AdminWrapper = styled.div`
 `;
 
 
+export const MFAModal = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+
+  .title {
+    font-size: 1.2rem;
+    display: flex;
+    justify-content: center;
+  }
+
+  .description {
+    font-size: 1.0rem;
+    padding-bottom: 8px;
+  }
+
+  .code {
+    padding-top: 4px;
+    border-bottom: 1px solid ${props => props.theme.sectionBorder};
+  }
+
+  .alert {
+    height: 24px;
+    color: ${props => props.theme.alertText};
+  }
+
+  .controls {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+
+    .saveDisabled {
+      background-color: ${props => props.theme.disabledArea};
+
+      button {
+        color: ${props => props.theme.idleText};
+      }
+    }
+
+    .saveEnabled {
+      background-color: ${props => props.theme.enabledArea};
+
+      button {
+        color: ${props => props.theme.activeText};
+      }
+    }
+  }
+`
