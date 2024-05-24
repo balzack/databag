@@ -5,7 +5,6 @@ import { useAdmin } from './useAdmin.hook';
 import Colors from 'constants/Colors';
 import MatIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { tos } from 'constants/TermsOfService';
-import { BlurView } from "@react-native-community/blur";
 import { InputCode } from 'utils/InputCode';
 
 export function Admin() {
@@ -104,8 +103,7 @@ export function Admin() {
         onRequestClose={actions.dismissMFA}
       >
         <View>
-          <BlurView style={styles.mfaOverlay} blurType={Colors.overlay} blurAmount={2} reducedTransparencyFallbackColor="black" />
-          <View style={styles.mfaBase}>
+          <View style={styles.modalContainer}>
             <View style={styles.mfaContainer}>
               <Text style={styles.mfaTitle}>{ state.strings.mfaTitle }</Text>
               <Text style={styles.mfaDescription}>{ state.strings.mfaEnter }</Text>

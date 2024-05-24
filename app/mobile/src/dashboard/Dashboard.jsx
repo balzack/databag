@@ -386,8 +386,7 @@ export function Dashboard(props) {
         onRequestClose={actions.dismissMFA}
       >
         <View>
-          <BlurView style={styles.mfaOverlay} blurType={Colors.overlay} blurAmount={2} reducedTransparencyFallbackColor="black" />
-          <KeyboardAvoidingView style={styles.mfaBase} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+          <KeyboardAvoidingView style={styles.modalOverlay} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
             <View style={styles.mfaContainer}>
               <Text style={styles.mfaTitle}>{ state.strings.mfaTitle }</Text>
               <Text style={styles.mfaDescription}>{ state.strings.mfaSteps }</Text>
