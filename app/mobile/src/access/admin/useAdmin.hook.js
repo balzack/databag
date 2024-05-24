@@ -2,8 +2,10 @@ import { useState, useEffect, useContext } from 'react';
 import { useWindowDimensions } from 'react-native';
 import { useNavigate } from 'react-router-dom';
 import { AppContext } from 'context/AppContext';
+import { getNodeStatus } from 'api/getNodeStatus';
 import { setNodeStatus } from 'api/setNodeStatus';
 import { setNodeAccess } from 'api/setNodeAccess';
+import { getNodeConfig } from 'api/getNodeConfig';
 import { getLanguageStrings } from 'constants/Strings';
 
 export function useAdmin() {
@@ -90,16 +92,23 @@ export function useAdmin() {
           try {
             const session = await setNodeAccess(node, state.token, state.mfaCode);
             updateState({ server: node, busy: false });
-            navigate('/dashboard', { state: { server: node, token: session }});
+            navigate('/dashboard', { state: { server: node, token: session, mfa: true }});
           }
           catch (err) {
             if (err.message == '405' || err.message == '403' || err.message == '429') {
               updateState({ mfaModal: true, mfaError: err.message });
             }
             else {
-              console.log(err.message);
-              updateState({ busy: false, showAlert: true });
-              throw new Error('login failed');
+              try {
+                await getNodeConfig(node, state.token);
+                updateState({ server: node, busy: false });
+                navigate('/dashboard', { state: { server: node, token: state.token, mfa: false }});
+              }
+              catch (err) {
+                console.log(err.message);
+                updateState({ busy: false, showAlert: true });
+                throw new Error('login failed');
+              }
             }
           }
         }

@@ -15,8 +15,8 @@ import { InputCode } from 'utils/InputCode';
 export function Dashboard(props) {
 
   const location = useLocation();
-  const { server, token } = location.state;
-  const { state, actions } = useDashboard(server, token); 
+  const { server, token, mfa } = location.state;
+  const { state, actions } = useDashboard(server, token, mfa); 
 
   const enableMFA = async () => {
     try {
@@ -121,12 +121,12 @@ export function Dashboard(props) {
         <TouchableOpacity onPress={actions.showEditConfig}>
           <AntIcon style={styles.icon} name={'setting'} size={20} />
         </TouchableOpacity>
-        { !state.mfaEnabled && (
+        { !state.mfaEnabled && mfa && (
           <TouchableOpacity onPress={enableMFA}>
             <MatIcon style={styles.icon} name={'shield-lock-open-outline'} size={20} />
           </TouchableOpacity>
           )}
-        { state.mfaEnabled && (
+        { state.mfaEnabled && mfa && (
           <TouchableOpacity onPress={disableMFA}>
             <MatIcon style={styles.icon} name={'shield-lock-outline'} size={20} />
           </TouchableOpacity>

@@ -20,7 +20,7 @@ import { addAdminMFAuth } from 'api/addAdminMFAuth';
 import { setAdminMFAuth } from 'api/setAdminMFAuth';
 import { removeAdminMFAuth } from 'api/removeAdminMFAuth';
 
-export function useDashboard(server, token) {
+export function useDashboard(server, token, mfa) {
 
   const [state, setState] = useState({
     strings: getLanguageStrings(),
@@ -74,7 +74,7 @@ export function useDashboard(server, token) {
   }
 
   const syncNode = async () => {
-    const mfaEnabled = await getAdminMFAuth(server, token);
+    const mfaEnabled = mfa ? await getAdminMFAuth(server, token) : false;
     const config = await getNodeConfig(server, token);
     const nodeAccounts = await getNodeAccounts(server, token);
     const accounts = nodeAccounts.map(setAccountItem);
