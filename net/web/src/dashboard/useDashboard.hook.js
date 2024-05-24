@@ -161,7 +161,7 @@ export function useDashboard(token) {
       updateState({ mfaModal: true, mfaError: false, mfaText: mfa.secretText, mfaImage: mfa.secretImage, mfaCode: '' });
     },
     disableMFA: async () => {
-      const mfa = await removeAdminMFAuth(app.state.adminToken);
+      await removeAdminMFAuth(app.state.adminToken);
       updateState({ mfaAuthEnabled: false });
     },
     confirmMFA: async () => {

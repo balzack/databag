@@ -2,7 +2,6 @@ import { useContext, useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import { getNodeStatus } from 'api/getNodeStatus';
 import { setNodeStatus } from 'api/setNodeStatus';
-import { getNodeConfig } from 'api/getNodeConfig';
 import { setNodeAccess } from 'api/setNodeAccess';
 import { AppContext } from 'context/AppContext';
 import { SettingsContext } from 'context/SettingsContext';
