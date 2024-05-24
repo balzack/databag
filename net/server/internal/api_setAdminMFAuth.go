@@ -59,7 +59,7 @@ func SetAdminMFAuth(w http.ResponseWriter, r *http.Request) {
         if res := tx.Clauses(clause.OnConflict{
           Columns:   []clause.Column{{Name: "config_id"}},
           DoUpdates: clause.AssignmentColumns([]string{"num_value"}),
-        }).Create(&store.Config{ConfigID: CNFMFAFailedCount, NumValue: failedCount + 1}).Error; res != nil {
+        }).Create(&store.Config{ConfigID: CNFMFAFailedCount, NumValue: 1}).Error; res != nil {
           return res
         }
       }

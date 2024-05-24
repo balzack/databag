@@ -224,18 +224,20 @@ export function Settings({ drawer }) {
             </View>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.drawerEntry} activeOpacity={1}>
-            <View style={styles.icon}>
-              <MatIcons name="ticket-confirmation-outline" size={20} color={Colors.text} />
-            </View>
-            <View style={styles.optionControl}>
-              <TouchableOpacity activeOpacity={1} onPress={actions.toggleMFA}>
-                <Text style={styles.optionText}>{ state.strings.mfaTitle }</Text>
-              </TouchableOpacity>
-              <Switch value={state.mfaEnabled} style={Platform.OS==='ios' ? styles.notifications : {}} thumbColor={Colors.sliderGrip} ios_backgroundColor={Colors.idleFill}
-                  trackColor={styles.track} onValueChange={toggleMFA} />
-            </View>
-          </TouchableOpacity>
+          { state.mfaEnabled != null && (
+            <TouchableOpacity style={styles.drawerEntry} activeOpacity={1}>
+              <View style={styles.icon}>
+                <MatIcons name="ticket-confirmation-outline" size={20} color={Colors.text} />
+              </View>
+              <View style={styles.optionControl}>
+                <TouchableOpacity activeOpacity={1} onPress={actions.toggleMFA}>
+                  <Text style={styles.optionText}>{ state.strings.mfaTitle }</Text>
+                </TouchableOpacity>
+                <Switch value={state.mfaEnabled} style={Platform.OS==='ios' ? styles.notifications : {}} thumbColor={Colors.sliderGrip} ios_backgroundColor={Colors.idleFill}
+                    trackColor={styles.track} onValueChange={toggleMFA} />
+              </View>
+            </TouchableOpacity>
+          )}
 
           <TouchableOpacity style={styles.drawerEntry} activeOpacity={1} onPress={actions.showLogin}>
             <View style={styles.icon}>
@@ -391,19 +393,23 @@ export function Settings({ drawer }) {
                   <Text style={styles.optionLink}>{ state.strings.logout }</Text>
                 </View>
               </TouchableOpacity>
-              <View style={styles.divider} />
-              <TouchableOpacity style={styles.entry} activeOpacity={1}>
-                <View style={styles.icon}>
-                  <MatIcons name="ticket-confirmation-outline" size={20} color={Colors.linkText} />
-                </View>
-                <View style={styles.optionControl}>
-                  <TouchableOpacity activeOpacity={1} onPress={toggleMFA}>
-                    <Text style={styles.optionLink}>{ state.strings.mfaTitle }</Text>
-                  </TouchableOpacity>
-                  <Switch value={state.mfaEnabled} style={Platform.OS==='ios' ? styles.notifications : {}} thumbColor={Colors.sliderGrip} ios_backgroundColor={Colors.disabledIndicator}
-                      trackColor={styles.track} onValueChange={toggleMFA} />
-                </View>
-              </TouchableOpacity>
+              { state.mfaEnabled != null && (
+                <View style={styles.divider} />
+              )}
+              { state.mfaEnabled != null && (
+                <TouchableOpacity style={styles.entry} activeOpacity={1}>
+                  <View style={styles.icon}>
+                    <MatIcons name="ticket-confirmation-outline" size={20} color={Colors.linkText} />
+                  </View>
+                  <View style={styles.optionControl}>
+                    <TouchableOpacity activeOpacity={1} onPress={toggleMFA}>
+                      <Text style={styles.optionLink}>{ state.strings.mfaTitle }</Text>
+                    </TouchableOpacity>
+                    <Switch value={state.mfaEnabled} style={Platform.OS==='ios' ? styles.notifications : {}} thumbColor={Colors.sliderGrip} ios_backgroundColor={Colors.disabledIndicator}
+                        trackColor={styles.track} onValueChange={toggleMFA} />
+                  </View>
+                </TouchableOpacity>
+              )}
               <View style={styles.divider} />
               <TouchableOpacity style={styles.entry} activeOpacity={1} onPress={actions.showLogin}>
                 <View style={styles.icon}>
