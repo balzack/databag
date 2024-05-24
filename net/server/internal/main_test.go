@@ -53,16 +53,24 @@ func TestMain(m *testing.M) {
 		panic("failed to configure account limit")
 	}
 
+  // admin login
+  r, w, _ = NewRequest("PUT", "/admin/access?token=pass", nil);
+  SetAdminAccess(w, r)
+  var session string
+  if ReadResponse(w, &session) != nil {
+    panic("failed to login as admin")
+  }
+
 	// config server
 	config := NodeConfig{Domain: "databag.coredb.org", AccountStorage: 4096, KeyType: "RSA2048"}
-	r, w, _ = NewRequest("PUT", "/admin/config?token=pass", &config)
+	r, w, _ = NewRequest("PUT", "/admin/config?token=" + session, &config)
 	SetNodeConfig(w, r)
 	if ReadResponse(w, nil) != nil {
 		panic("failed to set config")
 	}
 
 	// check config
-	r, w, _ = NewRequest("GET", "/admin/config?token=pass", nil)
+	r, w, _ = NewRequest("GET", "/admin/config?token=" + session, nil)
 	GetNodeConfig(w, r)
 	var check NodeConfig
 	if ReadResponse(w, &check) != nil {
