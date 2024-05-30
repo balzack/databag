@@ -61,6 +61,7 @@ func AddCall(w http.ResponseWriter, r *http.Request) {
   // allocate bridge
   callerToken := hex.EncodeToString(callerBin);
   calleeToken := hex.EncodeToString(calleeBin);
+  iceService := getBoolConfigValue(CNFIceService, false);
   iceUrl := getStrConfigValue(CNFIceUrl, "")
   iceUsername := getStrConfigValue(CNFIceUsername, "")
   icePassword := getStrConfigValue(CNFIcePassword, "")
@@ -72,6 +73,7 @@ func AddCall(w http.ResponseWriter, r *http.Request) {
     CardId: cardId,
     CallerToken: callerToken,
     CalleeToken: calleeToken,
+    IceService: iceService,
     IceUrl: iceUrl,
     IceUsername: iceUsername,
     IcePassword: icePassword,

@@ -101,11 +101,19 @@ func SetNodeConfig(w http.ResponseWriter, r *http.Request) {
 			return res
 		}
 
-    // upsert push supported
+    // upsert ice supported
     if res := tx.Clauses(clause.OnConflict{
        Columns:   []clause.Column{{Name: "config_id"}},
        DoUpdates: clause.AssignmentColumns([]string{"bool_value"}),
     }).Create(&store.Config{ConfigID: CNFEnableIce, BoolValue: config.EnableIce}).Error; res != nil {
+      return res
+    }
+
+    // upsert ice service used
+    if res := tx.Clauses(clause.OnConflict{
+       Columns:   []clause.Column{{Name: "config_id"}},
+       DoUpdates: clause.AssignmentColumns([]string{"bool_value"}),
+    }).Create(&store.Config{ConfigID: CNFIceService, BoolValue: config.IceService}).Error; res != nil {
       return res
     }
 

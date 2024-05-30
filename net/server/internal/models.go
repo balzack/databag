@@ -375,6 +375,8 @@ type NodeConfig struct {
 
 	EnableIce bool `json:"enableIce"`
 
+	IceService bool `json:"iceService"`
+
 	IceUrl string `json:"iceUrl"`
 
 	IceUsername string `json:"iceUsername"`
@@ -457,6 +459,8 @@ type Phone struct {
   CallID string `json:"callId"`
 
   CalleeToken string `json:"calleeToken"`
+
+  Ice []IceUrl `json:"ice,omitEmpty"`
 
   IceUrl string `json:"iceUrl"`
 
@@ -563,11 +567,22 @@ type Call struct {
 
 	KeepAlive int32 `json:"keepAlive"`
 
+  IceService bool `json:"iceService"`
+
   IceUrl string `json:"iceUrl"`
 
   IceUsername string `json:"iceUsername"`
 
   IcePassword string `json:"icePassword"`
+}
+
+type IceUrl struct {
+
+  URLs string `json:"urls"`
+
+  Username string `json:"username"`
+
+  Credential string `json:"credential"`
 }
 
 type Ring struct {
@@ -577,6 +592,8 @@ type Ring struct {
 	CalleeToken string `json:"calleeToken"`
 
 	Index int32 `json:"index"`
+
+  Ice []IceUrl `json:"ice,omitEmpty"`
 
   IceUrl string `json:"iceUrl"`
 

@@ -265,21 +265,34 @@ export function Dashboard() {
                   defaultChecked={false} checked={state.enableIce} />
               </div>
             </Tooltip>
-            <div className="field">
-              <div>{state.strings.serverUrl}</div>
-              <Input placeholder={state.strings.urlHint} onChange={(e) => actions.setIceUrl(e.target.value)}
-                  disabled={!state.enableIce} value={state.iceUrl} />
-            </div>
-            <div className="field">
-              <div>{state.strings.webUsername}</div>
-              <Input placeholder={state.strings.username} onChange={(e) => actions.setIceUsername(e.target.value)}
-                  disabled={!state.enableIce} value={state.iceUsername} />
-            </div>
-            <div className="field">
-              <div>{state.strings.webPassword}</div>
-              <Input placeholder={state.strings.password} onChange={(e) => actions.setIcePassword(e.target.value)}
-                  disabled={!state.enableIce} value={state.icePassword} />
-            </div>
+            { state.enableIce && (
+              <div className="iceInput">
+                <Tooltip placement="topLeft" title={state.strings.serviceHint}>
+                  <div className="field">
+                    <div>{state.strings.enableService}</div>
+                    <Switch onChange={(e) => actions.setIceService(e)} size="small"
+                      defaultChecked={false} checked={state.iceService} />
+                  </div>
+                </Tooltip>
+                { !state.iceService && (
+                  <div className="field">
+                    <div>{state.strings.serverUrl}</div>
+                    <Input placeholder={state.strings.urlHint} onChange={(e) => actions.setIceUrl(e.target.value)}
+                        value={state.iceUrl} />
+                  </div>
+                )}
+                <div className="field">
+                  <div>{state.strings.webUsername}</div>
+                  <Input placeholder={state.strings.username} onChange={(e) => actions.setIceUsername(e.target.value)}
+                      value={state.iceUsername} />
+                </div>
+                <div className="field">
+                  <div>{state.strings.webPassword}</div>
+                  <Input placeholder={state.strings.password} onChange={(e) => actions.setIcePassword(e.target.value)}
+                      value={state.icePassword} />
+                </div>
+              </div>
+            )}
             <div className="control">
               <Button key="back" onClick={() => actions.setShowSettings(false)}>{state.strings.cancel}</Button>
               <Button key="save" type="primary" onClick={() => actions.setSettings()} loading={state.busy}>{state.strings.save}</Button>

@@ -111,6 +111,12 @@ export const SettingsLayout = styled(Space)`
     min-height: 32px;
   }
 
+  .iceInput {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
   .field {
     white-space: nowrap;
     display: flex;

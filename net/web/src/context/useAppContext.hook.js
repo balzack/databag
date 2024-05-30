@@ -185,8 +185,9 @@ export function useAppContext(websocket) {
           setAppRevision(activity.revision);
         }
         else if (activity.ring) {
-          const { cardId, callId, calleeToken, iceUrl, iceUsername, icePassword } = activity.ring;
-          ringContext.actions.ring(cardId, callId, calleeToken, iceUrl, iceUsername, icePassword);
+          const { cardId, callId, calleeToken, ice, iceUrl, iceUsername, icePassword } = activity.ring;
+          const config = ice ? ice : [{ urls: iceUrl, username: iceUsername, credential: icePassword }];
+          ringContext.actions.ring(cardId, callId, calleeToken, ice);
         }
         else {
           setAppRevision(activity);
