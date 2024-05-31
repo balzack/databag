@@ -121,7 +121,7 @@ func SetNodeConfig(w http.ResponseWriter, r *http.Request) {
 		if res := tx.Clauses(clause.OnConflict{
 			Columns:   []clause.Column{{Name: "config_id"}},
 			DoUpdates: clause.AssignmentColumns([]string{"str_value"}),
-		}).Create(&store.Config{ConfigID: CNFIceUrl, StrValue: config.IceUrl}).Error; res != nil {
+		}).Create(&store.Config{ConfigID: CNFIceUrl, StrValue: config.IceURL}).Error; res != nil {
 			return res
 		}
 

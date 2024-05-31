@@ -156,7 +156,7 @@ func SetRing(card *store.Card, ring Ring) {
   phone.CallID = ring.CallID
   phone.CalleeToken = ring.CalleeToken
   phone.Ice = ring.Ice
-  phone.IceUrl = ring.IceUrl
+  phone.IceURL = ring.IceURL
   phone.IceUsername = ring.IceUsername
   phone.IcePassword = ring.IcePassword
   phone.CardID = card.CardSlot.CardSlotID

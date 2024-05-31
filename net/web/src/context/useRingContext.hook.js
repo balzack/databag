@@ -134,28 +134,6 @@ export function useRingContext() {
     processing.current = false;
   }
 
-  const getIce = async (service, urls, username, credential) => {
-    if (!service) {
-      return [{ urls, username, credential }];
-    }
-
-    const params = await fetch(urls.replace('%%TURN_KEY_ID%%', username), { 
-      method: 'POST', 
-      body: '{"ttl": 86400}',
-      headers: new Headers({
-          'Authorization': `Bearer ${credential}`,
-          'Content-Type': 'application/json'
-      })
-    });
-    const server = await params.json();
-    const ice = [];
-    server.iceServers.urls.forEach(urls => {
-      const { username, credential } = server.iceServers;
-      ice.push({ urls, username, credential });
-    });
-    return ice;
-  }
-
   const getAudioStream = async (audioId) => {
     try {
       if (audioId) {
@@ -357,6 +335,8 @@ export function useRingContext() {
       }
     },
     accept: async (cardId, callId, contactNode, contactToken, calleeToken, ice, audioId) => {
+console.log("ACCEPT", ice);
+
       if (calling.current) {
         throw new Error("active session");
       }
@@ -409,7 +389,6 @@ export function useRingContext() {
 
       // create call
       let call;
-      let ice;
       try {
         call = await addCall(access.current, cardId);
       }
@@ -419,10 +398,9 @@ export function useRingContext() {
       }
 
       let index = 0;
-      const { id, keepAlive, callerToken, calleeToken, iceService, iceUrl, iceUsername, icePassword } = call;
+      const { id, keepAlive, callerToken, calleeToken, ice } = call;
       try {
-        ice = await getIce(iceService, iceUrl, iceUsername, icePassword);
-        const turn = ice[ice.length - 1];
+        const turn = ice[ice.length - 1]; //backwards compatibility
         await addContactRing(contactNode, contactToken, { index, callId: id, calleeToken, ice, iceUrl: turn.urls, iceUsername: turn.username, icePassword: turn.credential });
       }
       catch (err) {
