@@ -69,6 +69,8 @@ func AddCall(w http.ResponseWriter, r *http.Request) {
   calleeToken := hex.EncodeToString(calleeBin);
   bridgeRelay.AddBridge(account.ID, callId, cardId, callerToken, calleeToken);
 
+  turn := getDefaultIce(ice);
+
   // create response
   call := Call{
     Id: callId,
@@ -77,10 +79,11 @@ func AddCall(w http.ResponseWriter, r *http.Request) {
     CalleeToken: calleeToken,
     Ice: ice,
     IceService: iceService,
-    IceURL: ice[len(ice)-1].URLs,
-    IceUsername: ice[len(ice)-1].Username,
-    IcePassword: ice[len(ice)-1].Credential,
+    IceURL: turn.URLs,
+    IceUsername: turn.Username,
+    IcePassword: turn.Credential,
     KeepAlive: BridgeKeepAlive,
   }
+
   WriteResponse(w, call);
 }

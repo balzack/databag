@@ -5,6 +5,7 @@ import (
   "net/http"
   "errors"
   "bytes"
+  "strings"
 )
 
 func getIce(service bool, urls string, username string, credential string) ([]IceURL, error) {
@@ -43,5 +44,14 @@ func getIce(service bool, urls string, username string, credential string) ([]Ic
       Credential: credential,
     },
   }, nil
+}
+
+func getDefaultIce(ice []IceURL) IceURL, error {
+  for _, url := range ice {
+    if strings.HasSuffix(url.URLs, "?transport=udp") {
+      return url
+    }
+  }
+  return ice[0];
 }
 
