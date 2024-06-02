@@ -283,33 +283,70 @@ export function Dashboard(props) {
                     onValueChange={actions.setEnableIce} trackColor={styles.track}/>
                 </TouchableOpacity>
 
-                <InputField style={styles.field}
-                  label={state.strings.relayUrl}
-                  value={state.iceUrl}
-                  autoCapitalize={'none'}
-                  spellCheck={false}
-                  disabled={!state.enableIce}
-                  onChangeText={actions.setIceUrl}
-                />
+                { state.enableIce && (
+                  <>
+                    <TouchableOpacity style={styles.ice} activeOpacity={1}
+                        onPress={() => actions.setEnableIce(!state.iceService)}>
+                      <Text style={styles.modalLabel}>{ state.strings.iceService }</Text>
+                      <Switch style={styles.switch} value={state.iceService}
+                        onValueChange={actions.setIceService} trackColor={styles.track}/>
+                    </TouchableOpacity>
 
-                <InputField style={styles.field}
-                  label={state.strings.relayUsername}
-                  value={state.iceUsername}
-                  autoCapitalize={'none'}
-                  spellCheck={false}
-                  disabled={!state.enableIce}
-                  onChangeText={actions.setIceUsername}
-                />
+                    { !state.iceService && (
+                      <>
+                        <InputField style={styles.field}
+                          label={state.strings.relayUrl}
+                          value={state.iceUrl}
+                          autoCapitalize={'none'}
+                          spellCheck={false}
+                          disabled={!state.enableIce}
+                          onChangeText={actions.setIceUrl}
+                        />
 
-                <InputField style={styles.field}
-                  label={state.strings.relayPassword}
-                  value={state.icePassword}
-                  autoCapitalize={'none'}
-                  spellCheck={false}
-                  disabled={!state.enableIce}
-                  onChangeText={actions.setIcePassword}
-                />
-  
+                        <InputField style={styles.field}
+                          label={state.strings.relayUsername}
+                          value={state.iceUsername}
+                          autoCapitalize={'none'}
+                          spellCheck={false}
+                          disabled={!state.enableIce}
+                          onChangeText={actions.setIceUsername}
+                        />
+
+                        <InputField style={styles.field}
+                          label={state.strings.relayPassword}
+                          value={state.icePassword}
+                          autoCapitalize={'none'}
+                          spellCheck={false}
+                          disabled={!state.enableIce}
+                          onChangeText={actions.setIcePassword}
+                        />
+                      </>
+                    )}
+
+                    { state.iceService && (
+                      <>
+                        <InputField style={styles.field}
+                          label={'TURN_KEY_ID'}
+                          value={state.iceUsername}
+                          autoCapitalize={'none'}
+                          spellCheck={false}
+                          disabled={!state.enableIce}
+                          onChangeText={actions.setIceUsername}
+                        />
+
+                        <InputField style={styles.field}
+                          label={'TURN_KEY_API_TOKEN'}
+                          value={state.icePassword}
+                          autoCapitalize={'none'}
+                          spellCheck={false}
+                          disabled={!state.enableIce}
+                          onChangeText={actions.setIcePassword}
+                        />
+                      </>
+                    )}
+                  </>
+                )}
+
                 <View style={styles.pad} />
 
               </ScrollView>
