@@ -282,12 +282,12 @@ export function Dashboard() {
                   </div>
                 )}
                 <div className="field">
-                  <div>{state.strings.webUsername}</div>
+                  <div>{state.iceService ? 'TURN_KEY_ID' : state.strings.webUsername}</div>
                   <Input placeholder={state.strings.username} onChange={(e) => actions.setIceUsername(e.target.value)}
                       value={state.iceUsername} />
                 </div>
                 <div className="field">
-                  <div>{state.strings.webPassword}</div>
+                  <div>{state.iceService ? 'TURN_KEY_API_TOKEN' : state.strings.webPassword}</div>
                   <Input placeholder={state.strings.password} onChange={(e) => actions.setIcePassword(e.target.value)}
                       value={state.icePassword} />
                 </div>
