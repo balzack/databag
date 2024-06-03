@@ -285,65 +285,43 @@ export function Dashboard(props) {
 
                 { state.enableIce && (
                   <>
-                    <TouchableOpacity style={styles.ice} activeOpacity={1}
-                        onPress={() => actions.setEnableIce(!state.iceService)}>
-                      <Text style={styles.modalLabel}>{ state.strings.iceService }</Text>
-                      <Switch style={styles.switch} value={state.iceService}
-                        onValueChange={actions.setIceService} trackColor={styles.track}/>
-                    </TouchableOpacity>
-
-                    { !state.iceService && (
-                      <>
-                        <InputField style={styles.field}
-                          label={state.strings.relayUrl}
-                          value={state.iceUrl}
-                          autoCapitalize={'none'}
-                          spellCheck={false}
-                          disabled={!state.enableIce}
-                          onChangeText={actions.setIceUrl}
-                        />
-
-                        <InputField style={styles.field}
-                          label={state.strings.relayUsername}
-                          value={state.iceUsername}
-                          autoCapitalize={'none'}
-                          spellCheck={false}
-                          disabled={!state.enableIce}
-                          onChangeText={actions.setIceUsername}
-                        />
-
-                        <InputField style={styles.field}
-                          label={state.strings.relayPassword}
-                          value={state.icePassword}
-                          autoCapitalize={'none'}
-                          spellCheck={false}
-                          disabled={!state.enableIce}
-                          onChangeText={actions.setIcePassword}
-                        />
-                      </>
+                    { state.iceServiceFlag != null && (
+                      <TouchableOpacity style={styles.ice} activeOpacity={1}
+                          onPress={() => actions.setIceServiceFlag(!state.iceServiceFlag)}>
+                        <Text style={styles.modalLabel}>{ state.strings.iceService }</Text>
+                        <Switch style={styles.switch} value={state.iceServiceFlag}
+                          onValueChange={actions.setIceServiceFlag} trackColor={styles.track}/>
+                      </TouchableOpacity>
                     )}
 
-                    { state.iceService && (
-                      <>
-                        <InputField style={styles.field}
-                          label={'TURN_KEY_ID'}
-                          value={state.iceUsername}
-                          autoCapitalize={'none'}
-                          spellCheck={false}
-                          disabled={!state.enableIce}
-                          onChangeText={actions.setIceUsername}
-                        />
-
-                        <InputField style={styles.field}
-                          label={'TURN_KEY_API_TOKEN'}
-                          value={state.icePassword}
-                          autoCapitalize={'none'}
-                          spellCheck={false}
-                          disabled={!state.enableIce}
-                          onChangeText={actions.setIcePassword}
-                        />
-                      </>
+                    { !state.iceServiceFlag && (
+                      <InputField style={styles.field}
+                        label={state.strings.relayUrl}
+                        value={state.iceUrl}
+                        autoCapitalize={'none'}
+                        spellCheck={false}
+                        disabled={!state.enableIce}
+                        onChangeText={actions.setIceUrl}
+                      />
                     )}
+
+                    <InputField style={styles.field}
+                      label={state.iceServiceFlag ? 'TURN_KEY_ID' : state.strings.relayUsername}
+                      value={state.iceUsername}
+                      autoCapitalize={'none'}
+                      spellCheck={false}
+                      disabled={!state.enableIce}
+                      onChangeText={actions.setIceUsername}
+                    />
+
+                    <InputField style={styles.field}
+                      label={state.iceServiceFlag ? 'TURN_KEY_API_TOKEN' : state.strings.relayPassword}
+                      value={state.icePassword}
+                      autoCapitalize={'none'}
+                      spellCheck={false}
+                      disabled={!state.enableIce}
+                      onChangeText={actions.setIcePassword}
+                    />
                   </>
                 )}
 
