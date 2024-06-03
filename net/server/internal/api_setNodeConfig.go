@@ -109,11 +109,11 @@ func SetNodeConfig(w http.ResponseWriter, r *http.Request) {
       return res
     }
 
-    // upsert ice service used
+    // upsert ice service name
     if res := tx.Clauses(clause.OnConflict{
        Columns:   []clause.Column{{Name: "config_id"}},
-       DoUpdates: clause.AssignmentColumns([]string{"bool_value"}),
-    }).Create(&store.Config{ConfigID: CNFIceService, BoolValue: config.IceService}).Error; res != nil {
+       DoUpdates: clause.AssignmentColumns([]string{"str_value"}),
+    }).Create(&store.Config{ConfigID: CNFIceService, StrValue: config.IceService}).Error; res != nil {
       return res
     }
 

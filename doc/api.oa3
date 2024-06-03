@@ -4120,7 +4120,7 @@ components:
         enableIce:
           type: boolean
         iceService:
-          type: boolean
+          type: string
         iceUrl:
           type: string
         iceUsername:
@@ -4903,7 +4903,7 @@ components:
           type: integer
           format: int32
         iceService:
-          type: boolean
+          type: string
         iceUrl:
           type: string
         iceUsername:

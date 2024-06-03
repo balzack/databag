@@ -8,9 +8,9 @@ import (
   "strings"
 )
 
-func getIce(service bool, urls string, username string, credential string) ([]IceURL, error) {
+func getIce(service string, urls string, username string, credential string) ([]IceURL, error) {
 
-  if service {
+  if service != "" {
     gen := "https://rtc.live.cloudflare.com/v1/turn/keys/" + username + "/credentials/generate"
     req, err := http.NewRequest(http.MethodPost, gen, bytes.NewBuffer([]byte("{\"ttl\": 86400}")))
     if err != nil {
@@ -46,7 +46,7 @@ func getIce(service bool, urls string, username string, credential string) ([]Ic
   }, nil
 }
 
-func getDefaultIce(ice []IceURL) IceURL, error {
+func getDefaultIce(ice []IceURL) IceURL {
   for _, url := range ice {
     if strings.HasSuffix(url.URLs, "?transport=udp") {
       return url

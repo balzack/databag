@@ -375,7 +375,7 @@ type NodeConfig struct {
 
 	EnableIce bool `json:"enableIce"`
 
-	IceService bool `json:"iceService"`
+	IceService string `json:"iceService"`
 
 	IceURL string `json:"iceUrl"`
 
@@ -567,7 +567,7 @@ type Call struct {
 
 	KeepAlive int32 `json:"keepAlive"`
 
-  IceService bool `json:"iceService"`
+  IceService string `json:"iceService"`
 
   Ice []IceURL `json:"ice,omitEmpty"`
 

@@ -40,7 +40,7 @@ func AddCall(w http.ResponseWriter, r *http.Request) {
     return
   }
 
-  iceService := getBoolConfigValue(CNFIceService, false);
+  iceService := getStrConfigValue(CNFIceService, "");
   iceURL := getStrConfigValue(CNFIceUrl, "")
   iceUsername := getStrConfigValue(CNFIceUsername, "")
   icePassword := getStrConfigValue(CNFIcePassword, "")
