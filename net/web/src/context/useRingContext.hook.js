@@ -300,9 +300,9 @@ export function useRingContext() {
     clearToken: () => {
       access.current = null;
     },
-    ring: (cardId, callId, calleeToken, iceUrl, iceUsername, icePassword) => {
+    ring: (cardId, callId, calleeToken, ice) => {
       const key = `${cardId}:${callId}`
-      const call = ringing.current.get(key) || { cardId, calleeToken, callId, iceUrl, iceUsername, icePassword }
+      const call = ringing.current.get(key) || { cardId, calleeToken, callId, ice }
       call.expires = Date.now() + EXPIRE;
       ringing.current.set(key, call);
       updateState({ ringing: ringing.current });
@@ -334,12 +334,12 @@ export function useRingContext() {
         }
       }
     },
-    accept: async (cardId, callId, contactNode, contactToken, calleeToken, iceUrl, iceUsername, icePassword, audioId) => {
+    accept: async (cardId, callId, contactNode, contactToken, calleeToken, ice, audioId) => {
+console.log("ACCEPT", ice);
+
       if (calling.current) {
         throw new Error("active session");
       }
-
-      const ice = [{ urls: iceUrl, username: iceUsername, credential: icePassword }];
 
       const key = `${cardId}:${callId}`
       const call = ringing.current.get(key);
@@ -398,9 +398,10 @@ export function useRingContext() {
       }
 
       let index = 0;
-      const { id, keepAlive, callerToken, calleeToken, iceUrl, iceUsername, icePassword } = call;
+      const { id, keepAlive, callerToken, calleeToken, ice } = call;
       try {
-        await addContactRing(contactNode, contactToken, { index, callId: id, calleeToken, iceUrl, iceUsername, icePassword });
+        const turn = ice[ice.length - 1]; //backwards compatibility
+        await addContactRing(contactNode, contactToken, { index, callId: id, calleeToken, ice, iceUrl: turn.urls, iceUsername: turn.username, icePassword: turn.credential });
       }
       catch (err) {
         console.log(err);
@@ -421,7 +422,8 @@ export function useRingContext() {
             }
           }
           else {
-            await addContactRing(contactNode, contactToken, { index, callId: id, calleeToken, iceUrl, iceUsername, icePassword });
+            const turn = ice[ice.length - 1];
+            await addContactRing(contactNode, contactToken, { index, callId: id, calleeToken, ice, iceUrl: turn.urls, iceUsername: turn.username, icePassword: turn.credential });
             index += 1;
           }
         }
@@ -432,7 +434,6 @@ export function useRingContext() {
 
       updateState({ callStatus: "ringing" });
       calling.current = { callId: id, host: true };
-      const ice = [{ urls: iceUrl, username: iceUsername, credential: icePassword }];
       await connect('polite', audioId, window.location.host, callerToken, () => clearInterval(ringInterval), () => clearInterval(aliveInterval), ice);
     },
     enableVideo: async (videoId) => {

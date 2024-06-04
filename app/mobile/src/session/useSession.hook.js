@@ -49,7 +49,7 @@ export function useSession() {
     const expired = Date.now();
     ring.state.ringing.forEach(call => {
       if (call.expires > expired && !call.status) {
-        const { callId, cardId, calleeToken, iceUrl, iceUsername, icePassword } = call;
+        const { callId, cardId, calleeToken, ice } = call;
         const contact = card.state.cards.get(cardId);
         if (contact) {
           const { imageSet, name, handle, node, guid } = contact.card?.profile || {};
@@ -57,7 +57,7 @@ export function useSession() {
           const contactToken = `${guid}.${token}`;
           const server = node ? node : profile.state.server;
           const img = imageSet ? card.actions.getCardImageUrl(cardId) : null;
-          ringing.push({ cardId, img, name, handle, contactNode: server, callId, contactToken, calleeToken, iceUrl, iceUsername, icePassword });
+          ringing.push({ cardId, img, name, handle, contactNode: server, callId, contactToken, calleeToken, ice });
         }
       }
     });
@@ -124,8 +124,8 @@ export function useSession() {
       await ring.actions.decline(cardId, contactNode, contactToken, callId);
     },
     accept: async (call) => {
-      const { cardId, callId, contactNode, contactToken, calleeToken, iceUrl, iceUsername, icePassword } = call;
-      await ring.actions.accept(cardId, callId, contactNode, contactToken, calleeToken, iceUrl, iceUsername, icePassword);
+      const { cardId, callId, contactNode, contactToken, calleeToken, ice } = call;
+      await ring.actions.accept(cardId, callId, contactNode, contactToken, calleeToken, ice);
     },
     end: async () => {
       await ring.actions.end();
