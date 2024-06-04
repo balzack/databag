@@ -27,6 +27,7 @@ export function useDashboard(token) {
     enableVideo: null,
     enableBinary: null,
     enableIce: null,
+    iceServiceFlag: null,
     iceUrl: null,
     iceUsername: null,
     icePassword: null,
@@ -128,6 +129,10 @@ export function useDashboard(token) {
     setEnableIce: (enableIce) => {
       updateState({ enableIce });
     },
+    setIceServiceFlag: (iceServiceFlag) => {
+      const iceUrl = iceServiceFlag ? 'https://rtc.live.cloudflare.com/v1/turn/keys/%%TURN_KEY_ID%%/credentials/generate' : '';
+      updateState({ iceServiceFlag, iceUrl });
+    },
     setIceUrl: (iceUrl) => {
       updateState({ iceUrl });
     },
@@ -181,9 +186,10 @@ export function useDashboard(token) {
       if (!state.busy) {
         updateState({ busy: true });
         try {
-          const { domain, keyType, accountStorage, pushSupported, transformSupported, allowUnsealed, enableImage, enableAudio, enableVideo, enableBinary, enableIce, iceUrl, iceUsername, icePassword, enableOpenAccess, openAccessLimit } = state;
+          const { domain, keyType, accountStorage, pushSupported, transformSupported, allowUnsealed, enableImage, enableAudio, enableVideo, enableBinary, enableIce, iceServiceFlag, iceUrl, iceUsername, icePassword, enableOpenAccess, openAccessLimit } = state;
           const storage = accountStorage * 1073741824;
-          const config = { domain,  accountStorage: storage, keyType, enableImage, enableAudio, enableVideo, enableBinary, pushSupported, transformSupported, allowUnsealed, enableIce, iceUrl, iceUsername, icePassword, enableOpenAccess, openAccessLimit };
+          const iceService = iceServiceFlag ? 'cloudflare' : '';
+          const config = { domain,  accountStorage: storage, keyType, enableImage, enableAudio, enableVideo, enableBinary, pushSupported, transformSupported, allowUnsealed, enableIce, iceService, iceUrl, iceUsername, icePassword, enableOpenAccess, openAccessLimit };
           await setNodeConfig(app.state.adminToken, config);
           updateState({ busy: false, showSettings: false });
         }
@@ -200,9 +206,10 @@ export function useDashboard(token) {
     try {
       const enabled = await getAdminMFAuth(app.state.adminToken);
       const config = await getNodeConfig(app.state.adminToken);
-      const { accountStorage, domain, keyType, pushSupported, transformSupported, allowUnsealed, enableImage, enableAudio, enableVideo, enableBinary, enableIce, iceUrl, iceUsername, icePassword, enableOpenAccess, openAccessLimit } = config;
+      const { accountStorage, domain, keyType, pushSupported, transformSupported, allowUnsealed, enableImage, enableAudio, enableVideo, enableBinary, enableIce, iceService, iceUrl, iceUsername, icePassword, enableOpenAccess, openAccessLimit } = config;
+      const iceServiceFlag = iceService === 'cloudflare';
       const storage = Math.ceil(accountStorage / 1073741824);
-      updateState({ mfAuthSet: true, mfaAuthEnabled: enabled, configError: false, domain, accountStorage: storage, keyType, enableImage, enableAudio, enableVideo, enableBinary, pushSupported, transformSupported, allowUnsealed, enableIce, iceUrl, iceUsername, icePassword, enableOpenAccess, openAccessLimit });
+      updateState({ mfAuthSet: true, mfaAuthEnabled: enabled, configError: false, domain, accountStorage: storage, keyType, enableImage, enableAudio, enableVideo, enableBinary, pushSupported, transformSupported, allowUnsealed, enableIce, iceServiceFlag, iceUrl, iceUsername, icePassword, enableOpenAccess, openAccessLimit });
     }
     catch(err) {
       console.log(err);

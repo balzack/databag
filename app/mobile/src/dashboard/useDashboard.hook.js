@@ -41,6 +41,7 @@ export function useDashboard(server, token, mfa) {
     enableBinary: true,
     createToken: null,
     enableIce: false,
+    iceServiceFlag: false,
     iceUrl: null,
     iceUsername: null,
     icePassword: null,
@@ -78,9 +79,12 @@ export function useDashboard(server, token, mfa) {
     const config = await getNodeConfig(server, token);
     const nodeAccounts = await getNodeAccounts(server, token);
     const accounts = nodeAccounts.map(setAccountItem);
-    const { keyType, accountStorage, domain, enableImage, enableAudio, enableVideo, enableBinary, transformSupported, allowUnsealed, pushSupported, enableIce, iceUrl, iceUsername, icePassword } = config || {};
+    const { keyType, accountStorage, domain, enableImage, enableAudio, enableVideo, enableBinary, transformSupported, allowUnsealed, pushSupported, enableIce, iceService, iceUrl, iceUsername, icePassword } = config || {};
     const storage = Math.ceil(accountStorage / 1073741824);
-    updateState({ keyType, storage: storage.toString(), domain, enableImage, enableAudio, enableVideo, enableBinary, transformSupported, allowUnsealed, pushSupported, enableIce, iceUrl, iceUsername, icePassword, accounts, mfaEnabled });
+    const iceServiceFlag = iceService === 'cloudflare' ? true : iceService == null ? null : true;
+console.log("ICE:", iceService, iceServiceFlag);
+
+    updateState({ keyType, storage: storage.toString(), domain, enableImage, enableAudio, enableVideo, enableBinary, transformSupported, allowUnsealed, pushSupported, enableIce, iceServiceFlag, iceUrl, iceUsername, icePassword, accounts, mfaEnabled });
   }
 
   const refreshAccounts = async () => {
@@ -150,6 +154,9 @@ export function useDashboard(server, token, mfa) {
     setEnableIce: (enableIce) => {
       updateState({ enableIce });
     },
+    setIceServiceFlag: (iceServiceFlag) => {
+      updateState({ iceServiceFlag });
+    },
     setIceUrl: (iceUrl) => {
       updateState({ iceUrl });
     },
@@ -160,9 +167,10 @@ export function useDashboard(server, token, mfa) {
       updateState({ icePassword });
     },
     saveConfig: async () => {
-      const { storage, domain, keyType, enableImage, pushSupported, allowUnsealed, transformSupported, enableAudio, enableVideo, enableBinary, enableIce, iceUrl, iceUsername, icePassword } = state;
+      const { storage, domain, keyType, enableImage, pushSupported, allowUnsealed, transformSupported, enableAudio, enableVideo, enableBinary, enableIce, iceServiceFlag, iceUrl, iceUsername, icePassword } = state;
+      const iceService = iceServiceFlag ? 'cloudflare' : '';
       const accountStorage = Number(storage) * 1073741824;
-      const config = { accountStorage, domain, keyType, enableImage, pushSupported, allowUnsealed, transformSupported, enableAudio, enableVideo, enableBinary, enableIce, iceUrl, iceUsername, icePassword };
+      const config = { accountStorage, domain, keyType, enableImage, pushSupported, allowUnsealed, transformSupported, enableAudio, enableVideo, enableBinary, enableIce, iceService, iceUrl, iceUsername, icePassword };
       await setNodeConfig(server, token, config);
     },
     enableUser: async (accountId, enabled) => {

@@ -25,7 +25,8 @@ func GetNodeConfig(w http.ResponseWriter, r *http.Request) {
   config.KeyType = getStrConfigValue(CNFKeyType, APPRSA2048)
   config.PushSupported = getBoolConfigValue(CNFPushSupported, true)
   config.EnableIce = getBoolConfigValue(CNFEnableIce, false)
-	config.IceUrl = getStrConfigValue(CNFIceUrl, "")
+  config.IceService = getStrConfigValue(CNFIceService, "")
+	config.IceURL = getStrConfigValue(CNFIceUrl, "")
 	config.IceUsername = getStrConfigValue(CNFIceUsername, "")
 	config.IcePassword = getStrConfigValue(CNFIcePassword, "")
   config.EnableOpenAccess = getBoolConfigValue(CNFEnableOpenAccess, false);

@@ -54,6 +54,9 @@ const CNFKeyType = "key_type"
 //CNFEnableIce specifies whether webrtc is enabled
 const CNFEnableIce = "enable_ice"
 
+//CNFIceMode specifies if turn service is used
+const CNFIceService = "ice_service"
+
 //CNFIceUrl specifies the ice candidate url
 const CNFIceUrl = "ice_url"
 

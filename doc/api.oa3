@@ -4119,6 +4119,8 @@ components:
           type: boolean
         enableIce:
           type: boolean
+        iceService:
+          type: string
         iceUrl:
           type: string
         iceUsername:
@@ -4130,6 +4132,7 @@ components:
         openAccessLimit:
           type: integer
           format: int64
+        
  
     Seal:
       type: object
@@ -4899,11 +4902,27 @@ components:
         keepAlive:
           type: integer
           format: int32
+        iceService:
+          type: string
         iceUrl:
           type: string
         iceUsername:
           type: string
         icePassword:
+          type: string
+
+    IceUrl:
+      tyle: object
+      required:
+        - urls
+        - username
+        - credential
+      properties:
+        urls:
+          type: string
+        username:
+          type: string
+        credential:
           type: string
  
     Ring:
@@ -4920,6 +4939,10 @@ components:
         index:
           type: integer
           format: int32
+        ice:
+          type: array
+            items:
+              $ref: '#/components/schemas/IceUrl'
         iceUrl:
           type: string
         iceUsername:

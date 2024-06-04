@@ -40,6 +40,17 @@ func AddCall(w http.ResponseWriter, r *http.Request) {
     return
   }
 
+  iceService := getStrConfigValue(CNFIceService, "");
+  iceURL := getStrConfigValue(CNFIceUrl, "")
+  iceUsername := getStrConfigValue(CNFIceUsername, "")
+  icePassword := getStrConfigValue(CNFIcePassword, "")
+
+  ice, err := getIce(iceService, iceURL, iceUsername, icePassword);
+  if err != nil || len(ice) == 0 {
+    ErrResponse(w, http.StatusServiceUnavailable, err)
+    return
+  }
+
   // generate call params
   callerBin, callerErr := securerandom.Bytes(APPTokenSize)
   if callerErr != nil {
@@ -51,20 +62,14 @@ func AddCall(w http.ResponseWriter, r *http.Request) {
     ErrResponse(w, http.StatusInternalServerError, calleeErr)
     return
   }
-  //turnBin, turnErr := securerandom.Bytes(APPTokenSize)
-  //if turnErr != nil {
-  //  ErrResponse(w, http.StatusInternalServerError, turnErr)
-  //  return
-  //}
   callId := uuid.New().String()
 
   // allocate bridge
   callerToken := hex.EncodeToString(callerBin);
   calleeToken := hex.EncodeToString(calleeBin);
-  iceUrl := getStrConfigValue(CNFIceUrl, "")
-  iceUsername := getStrConfigValue(CNFIceUsername, "")
-  icePassword := getStrConfigValue(CNFIcePassword, "")
   bridgeRelay.AddBridge(account.ID, callId, cardId, callerToken, calleeToken);
+
+  turn := getDefaultIce(ice);
 
   // create response
   call := Call{
@@ -72,10 +77,13 @@ func AddCall(w http.ResponseWriter, r *http.Request) {
     CardId: cardId,
     CallerToken: callerToken,
     CalleeToken: calleeToken,
-    IceUrl: iceUrl,
-    IceUsername: iceUsername,
-    IcePassword: icePassword,
+    Ice: ice,
+    IceService: iceService,
+    IceURL: turn.URLs,
+    IceUsername: turn.Username,
+    IcePassword: turn.Credential,
     KeepAlive: BridgeKeepAlive,
   }
+
   WriteResponse(w, call);
 }
