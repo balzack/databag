@@ -97,7 +97,7 @@ export function useAccountContext() {
     setPushEnabled: async (flag) => {
       if (flag) {
         const status = await Notification.requestPermission();
-        if (status == 'granted') {
+        if (status === 'granted') {
           const registration = await navigator.serviceWorker.register('push.js');
           await navigator.serviceWorker.ready;
           const params = { userVisibleOnly: true, applicationServerKey: urlB64ToUint8Array(state.webPushKey) };
