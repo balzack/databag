@@ -10,8 +10,6 @@
 
 **Shade Messages:** apply different shade to each conversation member
 
-**Browser Notifications:** firefox and chrome push notifications for contact updates and communication events
-
 **Group Call:** support calls with a list of contacts
 
 **Embed STUN/TURN:** directly support nat translation for webrtc as part of the server
