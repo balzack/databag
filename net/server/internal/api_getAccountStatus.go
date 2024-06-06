@@ -39,6 +39,7 @@ func GetAccountStatus(w http.ResponseWriter, r *http.Request) {
   status.Sealable = true
   status.EnableIce = getBoolConfigValue(CNFEnableIce, false)
   status.AllowUnsealed = getBoolConfigValue(CNFAllowUnsealed, false)
+  status.WebPushKey = getStrConfigValue(CNFWebPublicKey, "");
   status.PushEnabled = session.PushEnabled
   status.Seal = seal
 	WriteResponse(w, status)

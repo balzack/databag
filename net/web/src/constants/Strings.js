@@ -9,6 +9,7 @@ export const en = {
   allDevices: 'Logout of all devices',
   ok: 'OK',
   cancel: 'Cancel',
+  enableNotifications: 'Push Notifications',
 
   new: 'New',
   newMessage: 'New Message',
@@ -217,6 +218,7 @@ export const fr = {
   allDevices: 'Déconnexion de tous les appareils',
   ok: 'OK',
   cancel: 'Annuler',
+  enableNotifications: 'Notifications Push',
 
   new: 'Nouveau',
   newMessage: 'Nouveau Message',
@@ -426,6 +428,7 @@ export const sp = {
   allDevices: 'Cerrar sesión en todos los dispositivos',
   ok: 'Aceptar',
   cancel: 'Cancelar',
+  enableNotifications: 'Notificaciones Push',
 
   new: 'Nuevo',
   newMessage: 'Nuevo mensaje',
@@ -634,6 +637,7 @@ export const pt = {
   allDevices: 'Desconectar de todos os dispositivos',
   ok: 'OK',
   cancel: 'Cancelar',
+  enableNotifications: 'Notificações Push',
 
   new: 'Novo',
   newMessage: 'Nova mensagem',
@@ -842,6 +846,7 @@ export const de = {
   allDevices: 'Alle Geräte abmelden',
   ok: 'OK',
   cancel: 'Abbrechen',
+  enableNotifications: 'Mitteilungen',
 
   new: 'Neu',
   newMessage: 'Neue Nachricht',
@@ -1050,6 +1055,7 @@ export const ru = {
   allDevices: 'Выйти со всех устройств',
   ok: 'OK',
   cancel: 'Отмена',
+  enableNotifications: 'Уведомления',
 
   new: 'Новый',
   newMessage: 'Новое сообщение',

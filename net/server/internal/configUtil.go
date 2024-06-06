@@ -84,6 +84,12 @@ const CNFMFASecret = "mfa_secret"
 //CNFAdminSession sepcifies the admin session token
 const CNFAdminSession = "admin_session"
 
+//CNFWebPrivateKey specifies private key for webpush notifications
+const CNFWebPrivateKey = "web_private_key"
+
+//CNFWebPublicKey specifies public key for webpush notifications
+const CNFWebPublicKey = "web_public_key"
+
 func getStrConfigValue(configID string, empty string) string {
 	var config store.Config
 	err := store.DB.Where("config_id = ?", configID).First(&config).Error

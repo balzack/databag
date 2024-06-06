@@ -4,6 +4,10 @@ import (
 	app "databag/internal"
 	"databag/internal/store"
 	"github.com/gorilla/handlers"
+	webpush "github.com/SherClockHolmes/webpush-go"
+  "gorm.io/gorm"
+  "gorm.io/gorm/clause"
+  "errors"
 	"log"
 	"net/http"
   "os"
@@ -36,6 +40,42 @@ func main() {
   }
 
   store.SetPath(storePath, transformPath);
+
+  // setup vapid keys
+  var config store.Config
+  err := store.DB.Where("config_id = ?", app.CNFWebPrivateKey).First(&config).Error
+  if errors.Is(err, gorm.ErrRecordNotFound) {
+    privateKey, publicKey, err := webpush.GenerateVAPIDKeys()
+    if err != nil {
+      log.Fatal(err)
+    } else {
+      err = store.DB.Transaction(func(tx *gorm.DB) error {
+        if res := tx.Clauses(clause.OnConflict{
+          Columns:   []clause.Column{{Name: "config_id"}},
+          DoUpdates: clause.AssignmentColumns([]string{"str_value"}),
+        }).Create(&store.Config{ConfigID: app.CNFWebPublicKey, StrValue: publicKey}).Error; res != nil {
+          return res
+        }
+        return nil
+      })
+      if err != nil {
+        log.Fatal(err);
+      }
+      err = store.DB.Transaction(func(tx *gorm.DB) error {
+        if res := tx.Clauses(clause.OnConflict{
+          Columns:   []clause.Column{{Name: "config_id"}},
+          DoUpdates: clause.AssignmentColumns([]string{"str_value"}),
+        }).Create(&store.Config{ConfigID: app.CNFWebPrivateKey, StrValue: privateKey}).Error; res != nil {
+          return res
+        }
+        return nil
+      })
+      if err != nil {
+        log.Fatal(err);
+      }
+    }
+  }
+
   router := app.NewRouter(webApp)
   origins := handlers.AllowedOrigins([]string{"*"})
   methods := handlers.AllowedMethods([]string{"GET", "HEAD", "POST", "PUT", "DELETE", "OPTIONS"})
