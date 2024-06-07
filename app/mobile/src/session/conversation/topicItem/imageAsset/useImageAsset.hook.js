@@ -1,8 +1,9 @@
 import { useState, useRef, useEffect, useContext } from 'react';
 import { ConversationContext } from 'context/ConversationContext';
-import { Image } from 'react-native';
+import { Image, Platform } from 'react-native';
 import { useWindowDimensions } from 'react-native';
 import Share from 'react-native-share';
+import RNFetchBlob from "rn-fetch-blob";
 
 export function useImageAsset(asset) {
 
@@ -68,8 +69,13 @@ export function useImageAsset(asset) {
       const { width, height } = e.nativeEvent;
       updateState({ imageRatio: width / height });
     },
-    download: () => {
+    share: () => {
       Share.open({ url: state.url })
+    },
+    download: async () => {
+      const epoch = Math.ceil(Date.now() / 1000);
+      const dir = Platform.OS === 'ios' ? RNFetchBlob.fs.dirs.DocumentDir : RNFetchBlob.fs.dirs.PictureDir;
+      const res = await RNFetchBlob.config({path: `${dir}/databag_${epoch}.jpg`}).fetch("GET", state.url, {});
     },
     loaded: () => {
       updateState({ loaded: true });
