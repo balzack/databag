@@ -19,6 +19,8 @@ export function useAccountAccess() {
     searchable: null,
     checked: true,
 
+    pushEnabled: false,
+    webPushKey: null,
     sealEnabled: false,
     sealMode: null,
     sealPassword: null,
@@ -67,8 +69,9 @@ export function useAccountAccess() {
   }, [profile.state]);
 
   useEffect(() => {
-    const { seal, sealKey, status } = account.state;
-    updateState({ searchable: status?.searchable, mfaEnabled: status?.mfaEnabled, seal, sealKey });
+    const { seal, sealKey, status, webPushKey } = account.state;
+    const { searchable, mfaEnabled, pushEnabled } = status || {};
+    updateState({ searchable, mfaEnabled, seal, sealKey, webPushKey, pushEnabled });
   }, [account.state]);
 
   useEffect(() => {
@@ -315,6 +318,20 @@ export function useAccountAccess() {
         }
       }
     },
+    setPushEnabled: async (flag) => {
+      if (!state.busy) {
+        try {
+          updateState({ busy: true });
+          await account.actions.setPushEnabled(flag);
+          updateState({ busy: false });
+        }
+        catch (err) {
+          console.log(err);
+          updateState({ busy: false });
+          throw new Error('failed to set searchable');
+        }
+      }
+    }, 
     setCode: async (code) => {
       updateState({ mfaCode: code });
     },

@@ -40,6 +40,20 @@ export function AccountAccess() {
     }
   };
 
+  const savePushEnabled = async (enable) => {
+    try {
+      await actions.setPushEnabled(enable);
+    }
+    catch (err) {
+      console.log(err);
+      modal.error({
+        title: <span style={state.menuStyle}>{state.strings.operationFailed}</span>,
+        content: <span style={state.menuStyle}>{state.strings.tryAgain}</span>,
+        bodyStyle: { borderRadius: 8, padding: 16, ...state.menuStyle },
+      });
+    }
+  };
+
   const enableMFA = async (enable) => {
     try {
       if (enable) {
@@ -103,6 +117,12 @@ export function AccountAccess() {
               <Switch size="small" checked={state.searchable} onChange={enable => saveSearchable(enable)} />
             </div>
             <div className="switchLabel">{state.strings.registry}</div>
+          </div>
+          <div className="switch">
+            <div className="control">
+              <Switch size="small" checked={state.pushEnabled} onChange={enable => savePushEnabled(enable)} />
+            </div>
+            <div className="switchLabel">{state.strings.enableNotifications}</div>
           </div>
           <div className="switch">
             <div className="control">

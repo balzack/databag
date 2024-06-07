@@ -141,9 +141,9 @@ Integrate Databag in an OpenWrt firmware [here](/doc/openwrt.md).
 
 ## Audio and Video Calls
 
-Databag provides audio and video calling and relies on a STUN/TURN relay server for NAT traversal. Testing was done with both [cuturn](https://github.com/coturn/coturn) and [pion](https://github.com/pion/turn) and should work with any implementation. Instructions for installing a coturn server are provided [here](https://gabrieltanner.org/blog/turn-server/).
+Databag provides audio and video calling and relies on a STUN/TURN relay server for NAT traversal. Testing was done with both [coturn](https://github.com/coturn/coturn) and [cloudflare](https://developers.cloudflare.com/calls/turn/) and should work with any implementation. Instructions for installing a coturn server are provided [here](https://gabrieltanner.org/blog/turn-server/).
 
-If you want to enable audio and video calls, you should setup your own relay server. For testing purposes you can however use the demo relay server configuration. In the admin configuration modal, set:
+If you want to enable audio and video calls, you should setup your own relay server or use the cloudflare [turn service](https://developers.cloudflare.com/calls/turn/). For testing purposes you can however use the demo relay server configuration. In the admin configuration modal, set:
   - Enable WebRTC Calls: -switch on-
   - WebRTC Server URL: turn:34.210.172.114:3478?transport=udp
   - WebRTC Username: user

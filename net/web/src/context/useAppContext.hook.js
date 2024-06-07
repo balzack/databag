@@ -70,6 +70,16 @@ export function useAppContext(websocket) {
     clearWebsocket();
   }
 
+  const notifications = [
+    { event: 'contact.addCard', messageTitle: 'New Contact Request' },
+    { event: 'contact.updateCard', messageTitle: 'Contact Update' },
+    { event: 'content.addChannel.superbasic', messageTitle: 'New Topic' },
+    { event: 'content.addChannel.sealed', messageTitle: 'New Topic' },
+    { event: 'content.addChannelTopic.superbasic', messageTitle: 'New Topic Message' },
+    { event: 'content.addChannelTopic.sealed', messageTitle: 'New Topic Message' },
+    { event: 'ring', messageTitle: 'Incoming Call' },
+  ];
+
   const actions = {
     logout: async (all) => {
       await appLogout(all);
@@ -96,7 +106,7 @@ export function useAppContext(websocket) {
       throw new Error('invalid session state');
     }
     await addAccount(username, password, token);
-    const access = await setLogin(username, password, null, appName, appVersion, userAgent);
+    const access = await setLogin(username, password, null, appName, appVersion, userAgent, notifications);
     storeContext.actions.setValue('login:timestamp', access.created);
     setSession(access.appToken);
     appToken.current = access.appToken;
@@ -112,7 +122,7 @@ export function useAppContext(websocket) {
     if (appToken.current || !checked.current) {
       throw new Error('invalid session state');
     }
-    const access = await setLogin(username, password, code, appName, appVersion, userAgent);
+    const access = await setLogin(username, password, code, appName, appVersion, userAgent, notifications);
     storeContext.actions.setValue('login:timestamp', access.created);
     setSession(access.appToken);
     appToken.current = access.appToken;
@@ -128,7 +138,7 @@ export function useAppContext(websocket) {
     if (appToken.current || !checked.current) {
       throw new Error('invalid session state');
     }
-    const access = await setAccountAccess(token, appName, appVersion, userAgent);
+    const access = await setAccountAccess(token, appName, appVersion, userAgent, notifications);
     storeContext.actions.setValue('login:timestamp', access.created);
     setSession(access.appToken);
     appToken.current = access.appToken;

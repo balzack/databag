@@ -116,6 +116,9 @@ type Session struct {
   PushEnabled       bool
   PushToken         string
   PushType          string
+  WebEndpoint       string
+  WebPublicKey      string
+  WebAuth           string
   Created           int64           `gorm:"autoCreateTime"`
   Account           Account         `gorm:"references:GUID"`
   Token             string          `gorm:"not null;index:sessguid,unique"`

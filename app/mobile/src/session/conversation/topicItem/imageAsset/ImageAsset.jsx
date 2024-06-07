@@ -1,4 +1,4 @@
-import { Text, View, Image, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { Text, View, Image, ActivityIndicator, TouchableOpacity, Platform } from 'react-native';
 import { useImageAsset } from './useImageAsset.hook';
 import { styles } from './ImageAsset.styled';
 import Colors from 'constants/Colors';
@@ -19,10 +19,19 @@ export function ImageAsset({ asset, dismiss }) {
             style={{ ...styles.main, width: state.imageWidth, height: state.imageHeight }}
             resizeMode={FastImage.resizeMode.contain} />
       )}
-
-      { state.loaded && state.controls && (
-        <TouchableOpacity style={styles.share} onPress={actions.download}>
+      { state.loaded && state.controls && Platform.OS === 'ios' && (
+        <TouchableOpacity style={styles.share} onPress={actions.share}>
           <MatIcons name="share-variant-outline" size={32} color={Colors.white} />
+        </TouchableOpacity>
+      )}
+      { state.loaded && state.controls && Platform.OS !== 'ios' && (
+        <TouchableOpacity style={styles.share} onPress={actions.download}>
+          { state.downloaded && (
+            <MatIcons name="download-outline" size={32} color={Colors.white} />
+          )}
+          { !state.downloaded && (
+            <MatIcons name="download" size={32} color={Colors.white} />
+          )}
         </TouchableOpacity>
       )}
       { state.loaded && state.controls && (

@@ -46,6 +46,8 @@ type AccountStatus struct {
   EnableIce bool `json:"enableIce"`
 
   AllowUnsealed bool `json:"allowUnsealed"`
+
+	WebPushKey string `json:"webPushKey"`
 }
 
 //Announce initial message sent on websocket

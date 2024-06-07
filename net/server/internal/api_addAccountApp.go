@@ -102,7 +102,7 @@ func AddAccountApp(w http.ResponseWriter, r *http.Request) {
     session.Platform = platform
     session.PushToken = deviceToken
     session.PushType = pushType
-    session.PushEnabled = true
+    session.PushEnabled = pushType != ""
 		if res := tx.Save(session).Error; res != nil {
 			return res
 		}

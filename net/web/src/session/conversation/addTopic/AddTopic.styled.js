@@ -26,6 +26,10 @@ export const AddTopicWrapper = styled.div`
     padding-bottom: 8px;
   }
 
+  .messageInput {
+    background-color: ${props => props.theme.inputArea};
+  }
+
   .assets {
     margin-top: 8px;
     height: 128px;

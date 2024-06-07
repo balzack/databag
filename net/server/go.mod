@@ -11,15 +11,17 @@ require (
 	github.com/stretchr/testify v1.7.0
 	github.com/theckman/go-securerandom v0.1.1
 	github.com/valyala/fastjson v1.6.4
-	golang.org/x/crypto v0.21.0
+	golang.org/x/crypto v0.24.0
 	gorm.io/driver/sqlite v1.5.5
 	gorm.io/gorm v1.25.9
 )
 
 require (
+	github.com/SherClockHolmes/webpush-go v1.3.0 // indirect
 	github.com/boombuler/barcode v1.0.1-0.20190219062509-6c824513bacc // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/felixge/httpsnoop v1.0.4 // indirect
+	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/kr/text v0.2.0 // indirect

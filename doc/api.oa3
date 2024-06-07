@@ -696,6 +696,36 @@ paths:
           required: false
           schema:
             type: string
+        - name: deviceToken
+          in: query
+          description: deviceToken for push notification
+          required: false
+          schema:
+            type: string
+        - name: webEndpoint
+          in: query
+          description: webpush endpoint
+          required: false
+          schema:
+            type: string
+        - name: webPublicKey
+          in: query
+          description: webpush public key
+          required: false
+          schema:
+            type: string
+        - name: webAuth
+          in: query
+          description: webpush authorization
+          required: false
+          schema:
+            type: string
+        - name: pushType
+          in: query
+          description: unifiedpush (up) or firebase (fcm), or webpush (web)
+          required: false
+          schema:
+            type: string
       responses:
         '201':
           description: success
@@ -4164,6 +4194,7 @@ components:
         - searchable
         - pushEnabled
         - multiFactorAuth
+        - webServerKey
       properties:
         disabled:
           type: boolean
@@ -4189,6 +4220,8 @@ components:
           type: boolean
         multiFactorAuth:
           type: boolean
+        webPushKey:
+          type: string
  
     AccountProfile:
       type: object
