@@ -78,7 +78,7 @@ export function useImageAsset(asset) {
       if (!state.downloaded) {
         updateState({ downloaded: true });
         const epoch = Math.ceil(Date.now() / 1000);
-        const dir = Platform.OS === 'ios' ? RNFetchBlob.fs.dirs.DocumentDir : RNFetchBlob.fs.dirs.DownloadDir;
+        const dir = Platform.OS === 'ios' ? RNFetchBlob.fs.dirs.DocumentDir : RNFetchBlob.fs.dirs.PictureDir;
         const path = `${dir}/databag_${epoch}.jpg`
         if (state.url.substring(0, 7) === 'file://') {
           await RNFS.copyFile(state.url.substring(7).split('?')[0], path);
