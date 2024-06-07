@@ -4,6 +4,7 @@ import { Image, Platform } from 'react-native';
 import { useWindowDimensions } from 'react-native';
 import Share from 'react-native-share';
 import RNFetchBlob from "rn-fetch-blob";
+import RNFS from "react-native-fs";
 
 export function useImageAsset(asset) {
 
@@ -17,6 +18,7 @@ export function useImageAsset(asset) {
     loaded: false,
     failed: false,
     controls: false,
+    downloaded: false,
   });
 
   const conversation = useContext(ConversationContext);
@@ -73,9 +75,22 @@ export function useImageAsset(asset) {
       Share.open({ url: state.url })
     },
     download: async () => {
-      const epoch = Math.ceil(Date.now() / 1000);
-      const dir = Platform.OS === 'ios' ? RNFetchBlob.fs.dirs.DocumentDir : RNFetchBlob.fs.dirs.PictureDir;
-      const res = await RNFetchBlob.config({path: `${dir}/databag_${epoch}.jpg`}).fetch("GET", state.url, {});
+      if (!state.downloaded) {
+        updateState({ downloaded: true });
+        const epoch = Math.ceil(Date.now() / 1000);
+        const dir = Platform.OS === 'ios' ? RNFetchBlob.fs.dirs.DocumentDir : RNFetchBlob.fs.dirs.PictureDir;
+        const path = `${dir}/databag_${epoch}.jpg`
+        if (state.url.substring(0, 7) === 'file://') {
+          await RNFS.copyFile(state.url.substring(7).split('?')[0], path);
+        }
+        else {
+          const res = await RNFetchBlob.config({path: path}).fetch("GET", state.url, {});
+        }
+        const block = await RNFS.read(path, 8, 0, 'base64');
+        if (block === '/9j/4AAQSkY=') {
+          await RNFS.scanFile(jpg);
+        }
+      }
     },
     loaded: () => {
       updateState({ loaded: true });

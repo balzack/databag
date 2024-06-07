@@ -26,7 +26,12 @@ export function ImageAsset({ asset, dismiss }) {
       )}
       { state.loaded && state.controls && Platform.OS !== 'ios' && (
         <TouchableOpacity style={styles.share} onPress={actions.download}>
-          <MatIcons name="download" size={32} color={Colors.white} />
+          { state.downloaded && (
+            <MatIcons name="download-outline" size={32} color={Colors.white} />
+          )}
+          { !state.downloaded && (
+            <MatIcons name="download" size={32} color={Colors.white} />
+          )}
         </TouchableOpacity>
       )}
       { state.loaded && state.controls && (
