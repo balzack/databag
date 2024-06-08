@@ -88,7 +88,7 @@ export function useImageAsset(asset) {
         }
         const block = await RNFS.read(path, 8, 0, 'base64');
         if (block === '/9j/4AAQSkY=') {
-          await RNFS.scanFile(jpg);
+          await RNFS.scanFile(path);
         }
       }
     },
