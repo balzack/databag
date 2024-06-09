@@ -79,7 +79,7 @@ export function useImageAsset(asset) {
         updateState({ downloaded: true });
         const epoch = Math.ceil(Date.now() / 1000);
         const dir = Platform.OS === 'ios' ? RNFS.DocumentDirectoryPath : RNFS.DownloadDirectoryPath;
-        const path = `${dir}/databag_${epoch}.dat`
+        const path = `${dir}/databag_${epoch}`
         if (state.url.substring(0, 7) === 'file://') {
           await RNFS.copyFile(state.url.substring(7).split('?')[0], path);
         }
@@ -88,7 +88,8 @@ export function useImageAsset(asset) {
         }
         const block = await RNFS.read(path, 8, 0, 'base64');
         if (block === '/9j/4AAQSkY=') {
-          await RNFS.scanFile(path);
+          await RNFS.moveFile(path, `${path}.jpg}`);
+          await RNFS.scanFile(`${path}.jpg}`);
         }
       }
     },
