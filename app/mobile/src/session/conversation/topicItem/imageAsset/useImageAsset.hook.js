@@ -3,7 +3,7 @@ import { ConversationContext } from 'context/ConversationContext';
 import { Image, Platform } from 'react-native';
 import { useWindowDimensions } from 'react-native';
 import Share from 'react-native-share';
-import RNFetchBlob from "rn-fetch-blob";
+import { checkResponse, fetchWithTimeout } from 'api/fetchUtil';
 import RNFS from "react-native-fs";
 
 export function useImageAsset(asset) {
@@ -78,13 +78,13 @@ export function useImageAsset(asset) {
       if (!state.downloaded) {
         updateState({ downloaded: true });
         const epoch = Math.ceil(Date.now() / 1000);
-        const dir = Platform.OS === 'ios' ? RNFetchBlob.fs.dirs.DocumentDir : RNFetchBlob.fs.dirs.PictureDir;
-        const path = `${dir}/databag_${epoch}.jpg`
+        const dir = Platform.OS === 'ios' ? RNFS.DocumentDirectoryPath : RNFS.DownloadDirectoryPath;
+        const path = `${dir}/databag_${epoch}.dat`
         if (state.url.substring(0, 7) === 'file://') {
           await RNFS.copyFile(state.url.substring(7).split('?')[0], path);
         }
         else {
-          const res = await RNFetchBlob.config({path: path}).fetch("GET", state.url, {});
+          await RNFS.downloadFile({ fromUrl: state.url, toFile: path }).promise;
         }
         const block = await RNFS.read(path, 8, 0, 'base64');
         if (block === '/9j/4AAQSkY=') {
