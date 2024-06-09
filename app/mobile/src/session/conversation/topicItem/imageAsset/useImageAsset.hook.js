@@ -91,6 +91,22 @@ export function useImageAsset(asset) {
           await RNFS.moveFile(path, `${path}.jpg`);
           await RNFS.scanFile(`${path}.jpg`);
         }
+        if (block === 'iVBORw0KGgo=') {
+          await RNFS.moveFile(path, `${path}.png`);
+          await RNFS.scanFile(`${path}.png`);
+        }
+        if (block === 'UklGRphXAQA=') {
+          await RNFS.moveFile(path, `${path}.webp`);
+          await RNFS.scanFile(`${path}.webp`);
+        }
+        if (block === 'R0lGODlhIAM=') {
+          await RNFS.moveFile(path, `${path}.gif`);
+          await RNFS.scanFile(`${path}.gif`);
+        }
+        else if (block.startsWith('Qk')) {
+          await RNFS.moveFile(path, `${path}.bmp`);
+          await RNFS.scanFile(`${path}.bmp`);
+        }
       }
     },
     loaded: () => {
