@@ -659,6 +659,13 @@ func addTestAccount(username string) (guid string, token string, err error) {
 	}
 	token = access.AppToken
 
+  // set to searchable
+  searchable := false
+  if r, w, err = NewRequest("PUT", "/account/searchable?agent="+token, &searchable); err != nil {
+    return
+  }
+  SetAccountSearchable(w, r);
+
 	// authorize claim
 	if r, w, err = NewRequest("PUT", "/authorize?agent="+token, "1234abcd"); err != nil {
 		return

@@ -27,6 +27,17 @@ export function VideoAsset({ asset, dismiss }) {
         { (!state.playing || state.controls) && (
           <View style={styles.overlay} />
         )}
+        { state.showDownloaded && (
+          <View style={styles.downloaded}>
+            <MatIcons name="folder-download-outline" size={22} color={Colors.white} />
+            { Platform.OS === 'ios' && (
+              <Text style={styles.downloadedLabel}>Documents</Text>
+            )}
+            { Platform.OS !== 'ios' && (
+              <Text style={styles.downloadedLabel}>Download</Text>
+            )}
+          </View>
+        )}
         { !state.playing && state.videoLoaded && (
           <TouchableOpacity style={styles.control} onPress={actions.play}>
             <Icons name="play-circle-outline" size={92} color={Colors.white} />
@@ -39,7 +50,12 @@ export function VideoAsset({ asset, dismiss }) {
         )}
         { (state.controls || !state.playing) && state.videoLoaded && (
           <TouchableOpacity style={styles.share} onPress={actions.download}>
-            <MatIcons name="share-variant-outline" size={32} color={Colors.white} />
+            { state.downloaded && (
+              <MatIcons name="download-outline" size={32} color={Colors.white} />
+            )}
+            { !state.downloaded && (
+              <MatIcons name="download" size={32} color={Colors.white} />
+            )}
           </TouchableOpacity>
         )}
         { (state.controls || !state.playing) && state.videoLoaded && (

@@ -2,8 +2,6 @@ import { useState, useRef, useEffect, useContext } from 'react';
 import { ConversationContext } from 'context/ConversationContext';
 import { Image, Platform } from 'react-native';
 import { useWindowDimensions } from 'react-native';
-import Share from 'react-native-share';
-import RNFetchBlob from "rn-fetch-blob";
 import RNFS from "react-native-fs";
 
 export function useImageAsset(asset) {
@@ -19,6 +17,7 @@ export function useImageAsset(asset) {
     failed: false,
     controls: false,
     downloaded: false,
+    showDownloaded: false,
   });
 
   const conversation = useContext(ConversationContext);
@@ -71,25 +70,41 @@ export function useImageAsset(asset) {
       const { width, height } = e.nativeEvent;
       updateState({ imageRatio: width / height });
     },
-    share: () => {
-      Share.open({ url: state.url })
-    },
     download: async () => {
       if (!state.downloaded) {
         updateState({ downloaded: true });
         const epoch = Math.ceil(Date.now() / 1000);
-        const dir = Platform.OS === 'ios' ? RNFetchBlob.fs.dirs.DocumentDir : RNFetchBlob.fs.dirs.PictureDir;
-        const path = `${dir}/databag_${epoch}.jpg`
+        const dir = Platform.OS === 'ios' ? RNFS.DocumentDirectoryPath : RNFS.DownloadDirectoryPath;
+        const path = `${dir}/databag_${epoch}`
         if (state.url.substring(0, 7) === 'file://') {
           await RNFS.copyFile(state.url.substring(7).split('?')[0], path);
         }
         else {
-          const res = await RNFetchBlob.config({path: path}).fetch("GET", state.url, {});
+          await RNFS.downloadFile({ fromUrl: state.url, toFile: path }).promise;
         }
+        let ext = 'dat';
         const block = await RNFS.read(path, 8, 0, 'base64');
         if (block === '/9j/4AAQSkY=') {
-          await RNFS.scanFile(jpg);
+          ext = 'jpg';
         }
+        if (block === 'iVBORw0KGgo=') {
+          ext = 'png';
+        }
+        if (block === 'UklGRphXAQA=') {
+          ext = 'webp';
+        }
+        if (block === 'R0lGODlhIAM=') {
+          ext = 'gif';
+        }
+        else if (block.startsWith('Qk')) {
+          ext = 'bmp';
+        }
+        await RNFS.moveFile(path, `${path}.${ext}`);
+        if (Platform.OS !== 'ios') {
+          await RNFS.scanFile(`${path}.${ext}`);
+        }
+        updateState({ showDownloaded: true });
+        setTimeout(() => { updateState({ showDownloaded: false }) }, 2000);
       }
     },
     loaded: () => {
