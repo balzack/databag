@@ -33,7 +33,7 @@ export function AudioAsset({ asset, dismiss }) {
             <Text style={styles.downloadedLabel}>Documents</Text>
           )}
           { Platform.OS !== 'ios' && (
-            <Text style={styles.downloadedLabel}>Downloads</Text>
+            <Text style={styles.downloadedLabel}>Download</Text>
           )}
         </View>
       )}
