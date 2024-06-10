@@ -33,7 +33,12 @@ export function AudioAsset({ asset, dismiss }) {
       )}
       { state.url && (
         <TouchableOpacity style={styles.share} onPress={actions.download}>
-          <MatIcons name="share-variant-outline" size={32} color={Colors.text} />
+          { state.downloaded && (
+            <MatIcons name="download-outline" size={32} color={Colors.white} />
+          )}
+          { !state.downloaded && (
+            <MatIcons name="download" size={32} color={Colors.white} />
+          )}
         </TouchableOpacity>
       )}
       <TouchableOpacity style={styles.close} onPress={dismiss}>

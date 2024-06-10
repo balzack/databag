@@ -2,7 +2,7 @@ import { useState, useRef, useEffect, useContext } from 'react';
 import { ConversationContext } from 'context/ConversationContext';
 import { Image } from 'react-native';
 import { useWindowDimensions } from 'react-native';
-import Share from 'react-native-share';
+import RNFS from "react-native-fs";
 
 export function useVideoAsset(asset) {
 
@@ -20,6 +20,7 @@ export function useVideoAsset(asset) {
     thumbLoaded: false,
     videoLoaded: false,
     controls: false,
+    downloaded: false,
   });
 
   const controls = useRef(null);
@@ -72,8 +73,23 @@ export function useVideoAsset(asset) {
   }, [asset]);
 
   const actions = {
-    download: () => {
-      Share.open({ url: state.url });
+    download: async () => {
+      if (!state.downloaded) {
+        updateState({ downloaded: true });
+        const epoch = Math.ceil(Date.now() / 1000);
+        const dir = Platform.OS === 'ios' ? RNFS.DocumentDirectoryPath : RNFS.DownloadDirectoryPath;
+        const path = `${dir}/databag_${epoch}.mp4`
+        if (state.url.substring(0, 7) === 'file://') {
+          await RNFS.copyFile(state.url.substring(7).split('?')[0], path);
+        }
+        else {
+          await RNFS.downloadFile({ fromUrl: state.url, toFile: path }).promise;
+        }
+        await RNFS.moveFile(path, `${path}`);
+        if (Platform.OS !== 'ios') {
+          await RNFS.scanFile(`${path}`);
+        }
+      }
     },
     setThumbSize: (e) => {
       const { width, height } = e.nativeEvent || {};

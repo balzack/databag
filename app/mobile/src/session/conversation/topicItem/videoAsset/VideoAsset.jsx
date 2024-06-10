@@ -39,7 +39,12 @@ export function VideoAsset({ asset, dismiss }) {
         )}
         { (state.controls || !state.playing) && state.videoLoaded && (
           <TouchableOpacity style={styles.share} onPress={actions.download}>
-            <MatIcons name="share-variant-outline" size={32} color={Colors.white} />
+            { state.downloaded && (
+              <MatIcons name="download-outline" size={32} color={Colors.white} />
+            )}
+            { !state.downloaded && (
+              <MatIcons name="download" size={32} color={Colors.white} />
+            )}
           </TouchableOpacity>
         )}
         { (state.controls || !state.playing) && state.videoLoaded && (
