@@ -85,10 +85,11 @@ export function useVideoAsset(asset) {
         else {
           await RNFS.downloadFile({ fromUrl: state.url, toFile: path }).promise;
         }
-        await RNFS.moveFile(path, `${path}`);
         if (Platform.OS !== 'ios') {
           await RNFS.scanFile(`${path}`);
         }
+        updateState({ showDownloaded: true });
+        setTimeout(() => { updateState({ showDownloaded: false }) }, 2000);
       }
     },
     setThumbSize: (e) => {

@@ -17,6 +17,7 @@ export function useImageAsset(asset) {
     failed: false,
     controls: false,
     downloaded: false,
+    showDownloaded: false,
   });
 
   const conversation = useContext(ConversationContext);
@@ -102,6 +103,8 @@ export function useImageAsset(asset) {
         if (Platform.OS !== 'ios') {
           await RNFS.scanFile(`${path}.${ext}`);
         }
+        updateState({ showDownloaded: true });
+        setTimeout(() => { updateState({ showDownloaded: false }) }, 2000);
       }
     },
     loaded: () => {

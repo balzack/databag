@@ -19,6 +19,18 @@ export function ImageAsset({ asset, dismiss }) {
             style={{ ...styles.main, width: state.imageWidth, height: state.imageHeight }}
             resizeMode={FastImage.resizeMode.contain} />
       )}
+      { state.showDownloaded && (
+        <View style={styles.downloaded}>
+          <MatIcons name="folder-download-outline" size={22} color={Colors.white} />
+          { Platform.OS === 'ios' && (
+            <Text style={styles.downloadedLabel}>Documents</Text>
+          )}
+          { Platform.OS !== 'ios' && (
+            <Text style={styles.downloadedLabel}>Downloads</Text>
+          )}
+        </View>
+      )}
+
       { state.loaded && state.controls && (
         <TouchableOpacity style={styles.share} onPress={actions.download}>
           { state.downloaded && (

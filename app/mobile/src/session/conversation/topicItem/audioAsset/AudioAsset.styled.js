@@ -59,5 +59,23 @@ export const styles = StyleSheet.create({
     fontSize: 12,
     color: '#888888',
   },
+  downloaded: {
+    top: 0,
+    position: 'absolute',
+    marginTop: 8,
+    display: 'flex',
+    backgroundColor: Colors.grey,
+    borderRadius: 4,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingLeft: 8,
+    paddingRight: 8,
+    paddingTop: 2,
+    paddingBottom: 2,
+  },
+  downloadedLabel: {
+    color: Colors.white,
+    paddingLeft: 8,
+  },
 })
 

@@ -27,6 +27,17 @@ export function VideoAsset({ asset, dismiss }) {
         { (!state.playing || state.controls) && (
           <View style={styles.overlay} />
         )}
+        { state.showDownloaded && (
+          <View style={styles.downloaded}>
+            <MatIcons name="folder-download-outline" size={22} color={Colors.white} />
+            { Platform.OS === 'ios' && (
+              <Text style={styles.downloadedLabel}>Documents</Text>
+            )}
+            { Platform.OS !== 'ios' && (
+              <Text style={styles.downloadedLabel}>Downloads</Text>
+            )}
+          </View>
+        )}
         { !state.playing && state.videoLoaded && (
           <TouchableOpacity style={styles.control} onPress={actions.play}>
             <Icons name="play-circle-outline" size={92} color={Colors.white} />

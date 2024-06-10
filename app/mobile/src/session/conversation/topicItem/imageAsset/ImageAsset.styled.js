@@ -60,6 +60,24 @@ export const styles = StyleSheet.create({
     padding: 4,
     borderRadius: 4,
     backgroundColor: Colors.grey,
-  }
+  },
+  downloaded: {
+    top: 0,
+    position: 'absolute',
+    marginTop: 8,
+    display: 'flex',
+    backgroundColor: Colors.grey,
+    borderRadius: 4,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingLeft: 8,
+    paddingRight: 8,
+    paddingTop: 2,
+    paddingBottom: 2,
+  },
+  downloadedLabel: {
+    color: Colors.white,
+    paddingLeft: 8,
+  },
 })
 

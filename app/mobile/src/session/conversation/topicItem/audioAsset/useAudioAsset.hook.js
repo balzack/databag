@@ -13,6 +13,7 @@ export function useAudioAsset(asset) {
     playing: false,
     loaded: false,
     downloaded: false,
+    showDownloaded: false,
   });
 
   const closing = useRef(null);
@@ -61,7 +62,8 @@ export function useAudioAsset(asset) {
         else {
           await RNFS.downloadFile({ fromUrl: state.url, toFile: path }).promise;
         }
-        await RNFS.moveFile(path, `${path}`);
+        updateState({ showDownloaded: true });
+        setTimeout(() => { updateState({ showDownloaded: false }) }, 2000);
       }
     },
     play: () => {

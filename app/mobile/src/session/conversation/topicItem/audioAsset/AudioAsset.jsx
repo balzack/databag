@@ -26,6 +26,17 @@ export function AudioAsset({ asset, dismiss }) {
           <Icons name="play-circle-outline" size={92} color={Colors.text} />
         </TouchableOpacity>
       )}
+      { state.showDownloaded && (
+        <View style={styles.downloaded}>
+          <MatIcons name="folder-download-outline" size={22} color={Colors.white} />
+          { Platform.OS === 'ios' && (
+            <Text style={styles.downloadedLabel}>Documents</Text>
+          )}
+          { Platform.OS !== 'ios' && (
+            <Text style={styles.downloadedLabel}>Downloads</Text>
+          )}
+        </View>
+      )}
       { state.playing && state.loaded && (
         <TouchableOpacity style={styles.control} onPress={actions.pause}>
           <Icons name="pause-circle-outline" size={92} color={Colors.text} />
