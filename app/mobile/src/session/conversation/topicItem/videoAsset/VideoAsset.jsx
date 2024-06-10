@@ -1,4 +1,4 @@
-import { ActivityIndicator, Image, Text, View, TouchableOpacity } from 'react-native';
+import { ActivityIndicator, Image, Text, View, TouchableOpacity, Platform } from 'react-native';
 import Colors from 'constants/Colors';
 import Video from 'react-native-video';
 import { useVideoAsset } from './useVideoAsset.hook';
@@ -48,7 +48,12 @@ export function VideoAsset({ asset, dismiss }) {
             <Icons name="pause-circle-outline" size={92} color={Colors.white} />
           </TouchableOpacity>
         )}
-        { (state.controls || !state.playing) && state.videoLoaded && (
+        { (state.controls || !state.playing) && state.videoLoaded && Platform.OS === 'ios' && (
+          <TouchableOpacity style={styles.share} onPress={actions.share}>
+            <MatIcons name="share-variant-outline" size={32} color={Colors.white} />
+          </TouchableOpacity>
+        )}
+        { (state.controls || !state.playing) && state.videoLoaded && Platform.OS !== 'ios' && (
           <TouchableOpacity style={styles.share} onPress={actions.download}>
             { state.downloaded && (
               <MatIcons name="download-outline" size={32} color={Colors.white} />

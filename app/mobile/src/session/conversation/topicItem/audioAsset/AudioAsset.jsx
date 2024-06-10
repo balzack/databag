@@ -1,4 +1,4 @@
-import { ActivityIndicator, Image, View, Text, TouchableOpacity } from 'react-native';
+import { ActivityIndicator, Platform, Image, View, Text, TouchableOpacity } from 'react-native';
 import { useEffect, useRef } from 'react';
 import Colors from 'constants/Colors';
 import Video from 'react-native-video';
@@ -42,7 +42,12 @@ export function AudioAsset({ asset, dismiss }) {
           <Icons name="pause-circle-outline" size={92} color={Colors.text} />
         </TouchableOpacity>
       )}
-      { state.url && (
+      { state.url && Platform.OS === 'ios' && (
+        <TouchableOpacity style={styles.share} onPress={actions.share}>
+          <MatIcons name="share-variant-outline" size={32} color={Colors.white} />
+        </TouchableOpacity>
+      )}
+      { state.url && Platform.OS !== 'ios' && (
         <TouchableOpacity style={styles.share} onPress={actions.download}>
           { state.downloaded && (
             <MatIcons name="download-outline" size={32} color={Colors.white} />
