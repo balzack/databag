@@ -52,7 +52,8 @@ export function useAudioAsset(asset) {
 
   const actions = {
     share: async () => {
-      const path = RNFS.TemporaryDirectoryPath + "/databag.mp3";
+      const epoch = Math.ceil(Date.now() / 1000);
+      const path = RNFS.TemporaryDirectoryPath + epoch + '.mp3';
       if (await RNFS.exists(path)) {
         await RNFS.unlink(path);
       }

@@ -93,7 +93,8 @@ export function useImageAsset(asset) {
       updateState({ imageRatio: width / height });
     },
     share: async () => {
-      const path = RNFS.TemporaryDirectoryPath + "/databag";
+      const epoch = Math.ceil(Date.now() / 1000);
+      const path = RNFS.TemporaryDirectoryPath + epoch;
       if (await RNFS.exists(path)) {
         await RNFS.unlink(path);
       }
@@ -109,7 +110,6 @@ export function useImageAsset(asset) {
         await RNFS.unlink(fullPath);
       }
       await RNFS.moveFile(path, fullPath)
-
       Share.open({ url: fullPath });
     },
     download: async () => {
