@@ -31,7 +31,12 @@ export function ImageAsset({ asset, dismiss }) {
         </View>
       )}
 
-      { state.loaded && state.controls && (
+      { state.loaded && state.controls && Platform.OS === 'ios' && (
+        <TouchableOpacity style={styles.share} onPress={actions.share}>
+          <MatIcons name="share-variant-outline" size={32} color={Colors.white} />
+        </TouchableOpacity>
+      )}
+      { state.loaded && state.controls && Platform.OS !== 'ios' && (
         <TouchableOpacity style={styles.share} onPress={actions.download}>
           { state.downloaded && (
             <MatIcons name="download-outline" size={32} color={Colors.white} />

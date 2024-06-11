@@ -1,8 +1,9 @@
 import { useState, useRef, useEffect, useContext } from 'react';
 import { ConversationContext } from 'context/ConversationContext';
 import { Image } from 'react-native';
-import { useWindowDimensions } from 'react-native';
+import { useWindowDimensions, Platform } from 'react-native';
 import RNFS from "react-native-fs";
+import Share from 'react-native-share';
 
 export function useVideoAsset(asset) {
 
@@ -73,6 +74,19 @@ export function useVideoAsset(asset) {
   }, [asset]);
 
   const actions = {
+    share: async () => {
+      const path = RNFS.TemporaryDirectoryPath + "/databag.mp4";
+      if (await RNFS.exists(path)) {
+        await RNFS.unlink(path);
+      }
+      if (state.url.substring(0, 7) === 'file://') {
+        await RNFS.copyFile(state.url.split('?')[0], path);
+      }
+      else {
+        await RNFS.downloadFile({ fromUrl: state.url, toFile: path }).promise;
+      }
+      Share.open({ url: path });
+    },
     download: async () => {
       if (!state.downloaded) {
         updateState({ downloaded: true });

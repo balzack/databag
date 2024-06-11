@@ -3,6 +3,7 @@ import { ConversationContext } from 'context/ConversationContext';
 import { Image, Platform } from 'react-native';
 import { useWindowDimensions } from 'react-native';
 import RNFS from "react-native-fs";
+import Share from 'react-native-share';
 
 export function useImageAsset(asset) {
 
@@ -26,6 +27,27 @@ export function useImageAsset(asset) {
 
   const updateState = (value) => {
     setState((s) => ({ ...s, ...value }));
+  }
+
+  const getExtension = async (path) => {
+    const block = await RNFS.read(path, 8, 0, 'base64');
+    if (block === '/9j/4AAQSkY=') {
+      return 'jpg';
+    }
+    if (block === 'iVBORw0KGgo=') {
+      return 'png';
+    }
+    if (block === 'R0lGODlhIAM=') {
+      return 'gif';
+    }
+    if (block.startsWith('UklGR')) {
+      return 'webp';
+    }
+    else if (block.startsWith('Qk')) {
+      return 'bmp';
+    }
+    console.log("unknown prefix: ", block);
+    return 'dat';
   }
 
   useEffect(() => {
@@ -70,6 +92,26 @@ export function useImageAsset(asset) {
       const { width, height } = e.nativeEvent;
       updateState({ imageRatio: width / height });
     },
+    share: async () => {
+      const path = RNFS.TemporaryDirectoryPath + "/databag";
+      if (await RNFS.exists(path)) {
+        await RNFS.unlink(path);
+      }
+      if (state.url.substring(0, 7) === 'file://') {
+        await RNFS.copyFile(state.url.split('?')[0], path);
+      }
+      else {
+        await RNFS.downloadFile({ fromUrl: state.url, toFile: path }).promise;
+      }
+      const ext = await getExtension(path);
+      const fullPath = `${path}.${ext}`
+      if (await RNFS.exists(fullPath)) {
+        await RNFS.unlink(fullPath);
+      }
+      await RNFS.moveFile(path, fullPath)
+
+      Share.open({ url: fullPath });
+    },
     download: async () => {
       if (!state.downloaded) {
         updateState({ downloaded: true });
@@ -82,23 +124,7 @@ export function useImageAsset(asset) {
         else {
           await RNFS.downloadFile({ fromUrl: state.url, toFile: path }).promise;
         }
-        let ext = 'dat';
-        const block = await RNFS.read(path, 8, 0, 'base64');
-        if (block === '/9j/4AAQSkY=') {
-          ext = 'jpg';
-        }
-        if (block === 'iVBORw0KGgo=') {
-          ext = 'png';
-        }
-        if (block === 'UklGRphXAQA=') {
-          ext = 'webp';
-        }
-        if (block === 'R0lGODlhIAM=') {
-          ext = 'gif';
-        }
-        else if (block.startsWith('Qk')) {
-          ext = 'bmp';
-        }
+        const ext = await getExtension(path);
         await RNFS.moveFile(path, `${path}.${ext}`);
         if (Platform.OS !== 'ios') {
           await RNFS.scanFile(`${path}.${ext}`);
