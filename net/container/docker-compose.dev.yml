@@ -4,7 +4,7 @@ services:
    environment:
      - DEV=1
    container_name: databag
-   image: balzack/databag:dev
+   image: balzack/databag:latest
    ports:
      - "7000:7000"
    volumes:
