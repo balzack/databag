@@ -22,8 +22,6 @@
 
 **Preferred Nodes:** add an admin managed list of other nodes and present the nodes in a select box when searching for contacts
 
-**2-Factor Auth:** add 2-factor auth capabilities
-
 **SSO:** support single sign on
 
 **Audio & Video Message:** support recording and sending audio and video messages
