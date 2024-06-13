@@ -14,8 +14,6 @@
 
 **Embed STUN/TURN:** directly support nat translation for webrtc as part of the server
 
-**Mobile HTTP:** support plaintext communcation with server from mobile app
-
 **More Languages:** add any additional language requests
 
 **CLI:** create a CLI client for automation
