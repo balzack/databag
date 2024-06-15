@@ -156,6 +156,12 @@ const APPMFAFailPeriod = 300
 //APPMFAFailCount limit of login failures in period
 const APPMFAFailCount = 4
 
+//APPMFASHA256 internal mfa algorithm sha256
+const APPMFASHA256 = "sha256"
+
+//APPMFASHA1 internal mfa alogirthm sha1
+const APPMFASHA1 = "sha1"
+
 //AppCardStatus compares cards status with string
 func AppCardStatus(status string) bool {
 	if status == APPCardPending {
