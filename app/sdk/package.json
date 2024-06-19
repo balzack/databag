@@ -1,47 +1,37 @@
 {
   "name": "databag-client-sdk",
-  "version": "0.0.1",
-  "description": "Client SDK for Databag Applications",
-  "author": "Roland Osborne <roland.osborne@gmail.com>",
-  "repository": "https://github.com/balzac/databag/app/sdk",
-  "license": "Apache-2.0",
-  "keywords": [
-    "typescript",
-    "databag"
+  "version": "0.0.3",
+  "description": "an SDK for developing Databag applications",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
   ],
-  "main": "./dist/tsc/main.js",
-  "types": "./dist/tsc/main.d.ts",
-  "browser": "./dist/esbuild/browser.js",
-  "bin": {
-    "my-cli-tool": "./dist/esbuild/cli.js"
-  },
   "scripts": {
-    "cli": "ts-node src/cli.ts",
-    "lint": "eslint src/ --ext .js,.jsx,.ts,.tsx",
-    "test": "jest",
-    "clean": "rm -rf dist build package",
-    "ts-node": "ts-node",
-    "docs": "typedoc --entryPoints src/main.ts",
-    "build": "tsc -p tsconfig.json",
-    "build-all": "yarn clean && yarn build && yarn esbuild-node && yarn esbuild-browser",
-    "esbuild-browser": "esbuild src/browser.ts --bundle --minify --sourcemap=external --outfile=dist/esbuild/browser.js",
-    "esbuild-browser:dev": "esbuild src/browser.ts --bundle --outfile=dist/esbuild/browser.js",
-    "esbuild-browser:watch": "esbuild src/browser.ts --bundle --watch --outfile=dist/esbuild/browser.js",
-    "esbuild-node": "esbuild src/cli.ts --bundle --platform=node --minify --sourcemap=external --outfile=dist/esbuild/cli.js",
-    "esbuild-node:dev": "esbuild src/cli.ts --bundle --platform=node --sourcemap=external --outfile=dist/esbuild/cli.js",
-    "esbuild-node:watch": "esbuild src/cli.ts --bundle --platform=node --watch --sourcemap=external --outfile=dist/esbuild/cli.js"
+    "build": "tsup",
+    "test": "jest"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/balzack/databag.git"
+  },
+  "keywords": [
+    "databag",
+    "sdk"
+  ],
+  "author": "Roland Osborne <roland.osborne@gmail.com>",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/balzack/databag/issues"
+  },
+  "homepage": "https://github.com/balzack/databag#readme",
   "devDependencies": {
-    "@types/jest": "^27.4.1",
-    "@types/node": "^17.0.26",
-    "@typescript-eslint/eslint-plugin": "^5.20.0",
-    "@typescript-eslint/parser": "^5.20.0",
-    "esbuild": "^0.14.38",
-    "eslint": "^8.14.0",
-    "jest": "27.0.0",
-    "ts-jest": "^27.1.4",
-    "ts-node": "^10.7.0",
-    "typedoc": "^0.22.15",
-    "typescript": "^4.6.3"
+    "@types/jest": "^29.5.12",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.5",
+    "ts-node": "^10.9.2",
+    "tsup": "^8.1.0",
+    "typescript": "^5.4.5"
   }
 }
