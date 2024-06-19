@@ -12,6 +12,8 @@ import { UploadContext } from './UploadContext';
 import { RingContext } from './RingContext';
 import { createWebsocket } from 'api/fetchUtil';
 
+import { foo } from 'databag-client-sdk';
+
 export function useAppContext(websocket) {
   const [state, setState] = useState({
     status: null,
@@ -169,6 +171,10 @@ export function useAppContext(websocket) {
       cardContext.actions.setRevision(appRevision.card);
       channelContext.actions.setRevision(appRevision.channel);
     }
+
+    console.log("EVENT");
+    foo();
+
     // eslint-disable-next-line
   }, [appRevision]);
   
