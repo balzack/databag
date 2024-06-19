@@ -4192,10 +4192,10 @@ data-urls@^3.0.2:
     whatwg-mimetype "^3.0.0"
     whatwg-url "^11.0.0"
 
-databag-client-sdk@^0.0.1:
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/databag-client-sdk/-/databag-client-sdk-0.0.1.tgz#047099cf5c4607fb40a3df4f3896dc62ea342721"
-  integrity sha512-/LVSqxl2y9A70G3jzJgEqchISM2gBDWHBIOVhEnu1CVzZ/0KzI2LAT5YCHZzy520kmciIyQfUVAQ64Pk1g9TGQ==
+databag-client-sdk@^0.0.5:
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/databag-client-sdk/-/databag-client-sdk-0.0.5.tgz#fc6ddfa3c47541ac37aabd51e5e9d202b6ddfd8f"
+  integrity sha512-yv1/6FB3eQrcZAzfHR4McE1YMVwhwh0jUNFVYeP6yRYQF7VZ0WVUsieJxnBKPPV4rN8RzG/vJMzyPxVx1yUJZA==
 
 dateformat@^2.0.0:
   version "2.2.0"

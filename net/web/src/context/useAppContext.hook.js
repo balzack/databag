@@ -12,7 +12,7 @@ import { UploadContext } from './UploadContext';
 import { RingContext } from './RingContext';
 import { createWebsocket } from 'api/fetchUtil';
 
-import { foo } from 'databag-client-sdk';
+import { DatabagSDK } from 'databag-client-sdk';
 
 export function useAppContext(websocket) {
   const [state, setState] = useState({
@@ -173,7 +173,7 @@ export function useAppContext(websocket) {
     }
 
     console.log("EVENT");
-    foo();
+    const sdk = new DatabagSDK();
 
     // eslint-disable-next-line
   }, [appRevision]);

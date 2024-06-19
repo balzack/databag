@@ -16,6 +16,8 @@ import { getVersion, getApplicationName, getDeviceId } from 'react-native-device
 import messaging from '@react-native-firebase/messaging';
 import { DeviceEventEmitter } from 'react-native';
 
+import { DatabagSDK } from 'databag-client-sdk';
+
 export function useAppContext() {
   const [state, setState] = useState({
     session: null,
@@ -79,6 +81,8 @@ export function useAppContext() {
       }
       init.current = true;
     })();
+
+    const sdk = new DatabagSDK();
   }, []);
 
   const setSession = async () => {

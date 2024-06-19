@@ -3042,6 +3042,11 @@ csstype@^3.0.2:
   resolved "https://registry.yarnpkg.com/csstype/-/csstype-3.1.2.tgz#1d4bf9d572f11c14031f0436e1c10bc1f571f50b"
   integrity sha512-I7K1Uu0MBPzaFKg4nI5Q7Vs2t+3gWWW648spaF+Rg7pI9ds18Ugn+lvg4SHczUdKlHI5LWBXyqfS8+DufyBsgQ==
 
+databag-client-sdk@^0.0.5:
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/databag-client-sdk/-/databag-client-sdk-0.0.5.tgz#fc6ddfa3c47541ac37aabd51e5e9d202b6ddfd8f"
+  integrity sha512-yv1/6FB3eQrcZAzfHR4McE1YMVwhwh0jUNFVYeP6yRYQF7VZ0WVUsieJxnBKPPV4rN8RzG/vJMzyPxVx1yUJZA==
+
 dayjs@^1.8.15:
   version "1.11.8"
   resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.11.8.tgz#4282f139c8c19dd6d0c7bd571e30c2d0ba7698ea"
