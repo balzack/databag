@@ -20,8 +20,8 @@ RUN n stable
 RUN mkdir /app
 
 RUN if [ "$TARGETPLATFORM" = "linux/amd64" ]; then ARCHITECTURE=amd64; elif [ "$TARGETPLATFORM" = "linux/arm64" ]; then ARCHITECTURE=arm64; elif [ "$TARGETPLATFORM" = "linux/arm64" ]; then ARCHITECTURE=aarch64; else ARCHITECTURE=unsupported; fi \
-    && wget -P /app https://go.dev/dl/go1.22.2.linux-${ARCHITECTURE}.tar.gz \
-    && tar -C /usr/local -xzf /app/go1.22.2.linux-${ARCHITECTURE}.tar.gz 
+    && wget -P /app https://go.dev/dl/go1.22.4.linux-${ARCHITECTURE}.tar.gz \
+    && tar -C /usr/local -xzf /app/go1.22.4.linux-${ARCHITECTURE}.tar.gz 
 
 RUN git            clone          https://github.com/balzack/databag.git     /app/databag
 

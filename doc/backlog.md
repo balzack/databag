@@ -14,8 +14,6 @@
 
 **Embed STUN/TURN:** directly support nat translation for webrtc as part of the server
 
-**Mobile HTTP:** support plaintext communcation with server from mobile app
-
 **More Languages:** add any additional language requests
 
 **CLI:** create a CLI client for automation
@@ -23,8 +21,6 @@
 **Bots:** add support for bots
 
 **Preferred Nodes:** add an admin managed list of other nodes and present the nodes in a select box when searching for contacts
-
-**2-Factor Auth:** add 2-factor auth capabilities
 
 **SSO:** support single sign on
 

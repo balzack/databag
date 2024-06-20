@@ -25,7 +25,7 @@ func AddAdminMFAuth(w http.ResponseWriter, r *http.Request) {
     Issuer: APPMFAIssuer,
     AccountName: "admin",
     Digits: otp.DigitsSix,
-    Algorithm: otp.AlgorithmSHA256,
+    Algorithm: otp.AlgorithmSHA1,
   })
 
   err = store.DB.Transaction(func(tx *gorm.DB) error {
