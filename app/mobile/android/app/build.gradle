@@ -103,7 +103,7 @@ android {
         applicationId "com.databag"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1020
+        versionCode 1021
         versionName "1.1"
     }
 
