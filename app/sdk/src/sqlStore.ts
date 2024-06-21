@@ -1,3 +1,4 @@
 export interface SqlStore {
-  query(stmt: string, params: (string | number)[]): any[];
+  set(stmt: string, params: (string | number)[]): Promise<void>;
+  get(stmt: string, params: (string | number)[]): Promise<any[]>;
 }
