@@ -1,5 +1,7 @@
 import { AccountSession } from './accountSession';
 import { AdminSession } from './adminSession';
+import { SqlStore } from './sqlStore';
+import { WebStore } from './webStore';
 
 export class DatabagSDK {
   
@@ -7,15 +9,11 @@ export class DatabagSDK {
     console.log("databag sdk");
   }
 
-  public async initSqlStore(path: string): Promise<AccountSession | null> {
+  public async initOfflineStore(store: SqlStore): Promise<AccountSession | null> {
     return new AccountSession();
   }
 
-  public async initWebStore(): Promise<AccountSession | null> {
-    return new AccountSession();
-  }
-
-  public async initMemStore(): Promise<AccountSession | null> {
+  public async initOnlineStore(store: WebStore): Promise<AccountSession | null> {
     return new AccountSession();
   }
 
@@ -38,7 +36,7 @@ export class DatabagSDK {
     return new AdminSession();
   }
 
-  public async adminLogout(): Promise<void> {
+  public async adminLogout(session: AdminSession): Promise<void> {
   }
 }
 
