@@ -1,5 +1,5 @@
-import { SqlStore } from './databagSdk';
-import { WebStore } from './databagSdk';
+import { SqlStore } from './index';
+import { WebStore } from './index';
 
 export class AccountSession {
 

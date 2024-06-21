@@ -34,6 +34,10 @@ export class DatabagSDK {
     return new AccountSession(this.sqlStore, this.webStore);
   }
 
+  public async accountLogin(): Promise<AccountSession> {
+    return new AccountSession(this.sqlStore, this.webStore);
+  }
+
   public async accountAccess(): Promise<AccountSession> {
     return new AccountSession(this.sqlStore, this.webStore);
   }
