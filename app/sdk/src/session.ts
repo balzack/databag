@@ -11,6 +11,7 @@ import { type Session, type SqlStore, type WebStore, type Account, type Profile,
 
 export class SessionModule implements Session {
 
+  private statusEmitter: EventEmitter;
   private store: SqlStore | WebStore | null;
   private token: string;
   private url: string;
@@ -26,12 +27,21 @@ export class SessionModule implements Session {
     this.store = store;
     this.token = token;
     this.url = url;
+    this.statusEmitter = new EventEmitter();
     this.account = new AccountModule(token, url);
     this.profile = new ProfileModule(token, url);
     this.contact = new ContactModule(token, url);
     this.group = new GroupModule(token, url);
     this.attribute = new AttributeModule(token, url);
     this.channel = new ChannelModule(token, url);
+  }
+
+  public addStatusListener(ev: (status: string) => void): void {
+    this.statusEmitter.on('status', ev);
+  }
+
+  public removeStatusListener(ev: (status: string) => void): void {
+    this.statusEmitter.off('status', ev);
   }
 
   public getAccount(): Account {

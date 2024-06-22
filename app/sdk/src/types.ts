@@ -1,3 +1,5 @@
+import { EventEmitter } from 'events';
+
 export interface SqlStore {
   set(stmt: string, params: (string | number)[]): Promise<void>;
   get(stmt: string, params: (string | number)[]): Promise<any[]>;
@@ -17,6 +19,9 @@ export interface Session {
   getGroup(): Group;
   getAttribute(): Attribute;
   getChannel(): Channel;
+
+  addStatusListener(ev: (status: string) => void): void;
+  removeStatusListener(ev: (status: string) => void): void;
 }
 
 export interface Node {
