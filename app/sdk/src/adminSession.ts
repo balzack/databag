@@ -1,5 +1,0 @@
-export class AdminSession {
-
-  constructor() { }
-
-}

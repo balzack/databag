@@ -1,5 +1,5 @@
-import { AccountSession } from './accountSession';
-import { AdminSession } from './adminSession';
+import { type User, UserModule } from './user';
+import { type Admin, AdminModule } from './admin';
 
 export interface SqlStore {
   set(stmt: string, params: (string | number)[]): Promise<void>;
@@ -15,44 +15,43 @@ export interface WebStore {
 
 export class DatabagSDK {
 
-  private sqlStore: SqlStore | null = null;
-  private webStore: WebStore | null = null;  
+  private store: SqlStore | WebStore | null = null;
 
   constructor() {
     console.log("databag sdk");
   }
 
-  public async initOfflineStore(sql: SqlStore): Promise<AccountSession | null> {
-    this.sqlStore = sql;
+  public async initOfflineStore(sql: SqlStore): Promise<User | null> {
+    this.store = sql;
     // initialize
-    return new AccountSession(this.sqlStore, this.webStore);
+    return new UserModule(this.store, '', '');
   }
 
-  public async initOnlineStore(web: WebStore): Promise<AccountSession | null> {
-    this.webStore = web;
+  public async initOnlineStore(web: WebStore): Promise<User | null> {
+    this.store = web;
     // initialize
-    return new AccountSession(this.sqlStore, this.webStore);
+    return new UserModule(this.store, '', '');
   }
 
-  public async accountLogin(): Promise<AccountSession> {
-    return new AccountSession(this.sqlStore, this.webStore);
+  public async userLogin(handle: string, password: string, url: string): Promise<User> {
+    return new UserModule(this.store, '', '');
   }
 
-  public async accountAccess(): Promise<AccountSession> {
-    return new AccountSession(this.sqlStore, this.webStore);
+  public async userAccess(token: string, url: string): Promise<User> {
+    return new UserModule(this.store, '', '');
   }
 
-  public async accountCreate(): Promise<AccountSession> {
-    return new AccountSession(this.sqlStore, this.webStore);
+  public async userCreate(handle: string, password: string, url: string, token: string): Promise<User> {
+    return new UserModule(this.store, '', '');
   }
 
-  public async accountLogout(session: AccountSession): Promise<void> {
+  public async userLogout(session: User): Promise<void> {
   }
 
-  public async adminLogin(): Promise<AdminSession> {
-    return new AdminSession();
+  public async adminLogin(token: string, url: string): Promise<Admin> {
+    return new AdminModule('', '');
   }
 
-  public async adminLogout(session: AdminSession): Promise<void> {
+  public async adminLogout(session: Admin): Promise<void> {
   }
 }
