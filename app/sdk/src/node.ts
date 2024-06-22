@@ -1,7 +1,7 @@
-export interface Admin {
+export interface Node {
 }
 
-export class AdminModule implements Admin {
+export class NodeModule implements Node {
 
   private token: string;
   private url: string;

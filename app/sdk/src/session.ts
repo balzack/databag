@@ -1,36 +1,26 @@
 import { EventEmitter } from 'events';
 
-import { SqlStore } from './index';
-import { WebStore } from './index';
+import { AccountModule } from './account';
+import { ProfileModule } from './profile';
+import { ContactModule } from './contact';
+import { GroupModule } from './group';
+import { AttributeModule } from './attribute';
+import { ChannelModule } from './channel';
 
-import { type Account, AccountModule } from './account';
-import { type Profile, ProfileModule } from './profile';
-import { type Contact, ContactModule } from './contact';
-import { type Group, GroupModule } from './group';
-import { type Attribute, AttributeModule } from './attribute';
-import { type Channel, ChannelModule } from './channel';
+import { type Session, type SqlStore, type WebStore, type Account, type Profile, type Contact, type Group, type Attribute, type Channel } from './types';
 
-export interface User {
-  getAccount(): Account;
-  getProfile(): Profile;
-  getContact(): Contact;
-  getGroup(): Group;
-  getAttribute(): Attribute;
-  getChannel(): Channel;
-}
-
-export class UserModule implements User {
+export class SessionModule implements Session {
 
   private store: SqlStore | WebStore | null;
   private token: string;
   private url: string;
 
-  private account: AccountModule; 
-  private profile: ProfileModule;
-  private contact: ContactModule;
-  private group: GroupModule;
-  private attribute: AttributeModule;
-  private channel: ChannelModule; 
+  public account: AccountModule; 
+  public profile: ProfileModule;
+  public contact: ContactModule;
+  public group: GroupModule;
+  public attribute: AttributeModule;
+  public channel: ChannelModule; 
 
   constructor(store: SqlStore | WebStore | null, token: string, url: string) {
     this.store = store;
