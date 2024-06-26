@@ -20,6 +20,7 @@ export interface Session {
   getAttribute(): Attribute;
   getChannel(): Channel;
 
+  resync(): void;
   addStatusListener(ev: (status: string) => void): void;
   removeStatusListener(ev: (status: string) => void): void;
 }
@@ -28,6 +29,17 @@ export interface Node {
 }
 
 export interface Account {
+  setNotifications(flag: boolean): Promise<void>;
+  setSearchable(flag: boolean): Promise<void>;
+  enableMFA(): Promise<void>;
+  disableMFA(): Promise<void>;
+  confirmMFA(): Promise<void>;
+  setAccountSeal(seal: Seal, key: SealKey): Promise<void>
+  unlockAccountSeal(key: SealKey): Promise<void>
+  setLogin(username: string, password: string): Promise<void>
+
+  addStatusListener(ev: (status: AccountStatus) => void): void;
+  removeStatusListener(ev: (status: AccountStatus) => void): void;
 }
 
 export interface Profile {
@@ -45,4 +57,30 @@ export interface Attribute {
 export interface Channel {
 }
 
+export interface SealKey {
+  publicKey: string;
+  privateKey: string;
+}
+
+export interface Seal {
+  passwordSalt: string;
+  privateKeyIv: string;
+  privateKeyEncrypted: string;
+  publicKey: string;
+}
+
+export interface AccountStatus {
+  disabled: boolean;
+  storageUsed: number;
+  storageAvailable: number;
+  forwardingAddress: string;
+  searchable: boolean;
+  allowUnsealed: boolean;
+  pushEnabled: boolean;
+  sealable: boolean;
+  seal: Seal;
+  enableIce: boolean;
+  multiFactorAuth: boolean;
+  webPushKey: string;
+}
 

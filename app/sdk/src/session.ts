@@ -15,6 +15,7 @@ export class SessionModule implements Session {
   private store: SqlStore | WebStore | null;
   private token: string;
   private url: string;
+  private sync: boolean;
 
   public account: AccountModule; 
   public profile: ProfileModule;
@@ -27,13 +28,14 @@ export class SessionModule implements Session {
     this.store = store;
     this.token = token;
     this.url = url;
+    this.sync = true;
     this.statusEmitter = new EventEmitter();
-    this.account = new AccountModule(token, url);
-    this.profile = new ProfileModule(token, url);
-    this.contact = new ContactModule(token, url);
-    this.group = new GroupModule(token, url);
-    this.attribute = new AttributeModule(token, url);
-    this.channel = new ChannelModule(token, url);
+    this.account = new AccountModule(token, url, this.setSync);
+    this.profile = new ProfileModule(token, url, this.setSync);
+    this.contact = new ContactModule(token, url, this.setSync);
+    this.group = new GroupModule(token, url, this.setSync);
+    this.attribute = new AttributeModule(token, url, this.setSync);
+    this.channel = new ChannelModule(token, url, this.setSync);
   }
 
   public addStatusListener(ev: (status: string) => void): void {
@@ -42,6 +44,14 @@ export class SessionModule implements Session {
 
   public removeStatusListener(ev: (status: string) => void): void {
     this.statusEmitter.off('status', ev);
+  }
+
+  public setSync(sync: boolean) {
+    this.sync = sync;
+    // update status
+  }
+
+  public resync() {
   }
 
   public getAccount(): Account {
