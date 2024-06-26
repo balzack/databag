@@ -1,13 +1,13 @@
 import { EventEmitter } from 'events';
 
 import { AccountModule } from './account';
-import { ProfileModule } from './profile';
+import { IdentityModule } from './identity';
 import { ContactModule } from './contact';
 import { GroupModule } from './group';
 import { AttributeModule } from './attribute';
 import { ChannelModule } from './channel';
 
-import { type Session, type SqlStore, type WebStore, type Account, type Profile, type Contact, type Group, type Attribute, type Channel } from './types';
+import { type Session, type SqlStore, type WebStore, type Account, type Identity, type Contact, type Group, type Attribute, type Channel } from './types';
 
 export class SessionModule implements Session {
 
@@ -18,7 +18,7 @@ export class SessionModule implements Session {
   private sync: boolean;
 
   public account: AccountModule; 
-  public profile: ProfileModule;
+  public identity: IdentityModule;
   public contact: ContactModule;
   public group: GroupModule;
   public attribute: AttributeModule;
@@ -31,7 +31,7 @@ export class SessionModule implements Session {
     this.sync = true;
     this.statusEmitter = new EventEmitter();
     this.account = new AccountModule(token, url, this.setSync);
-    this.profile = new ProfileModule(token, url, this.setSync);
+    this.identity = new IdentityModule(token, url, this.setSync);
     this.contact = new ContactModule(token, url, this.setSync);
     this.group = new GroupModule(token, url, this.setSync);
     this.attribute = new AttributeModule(token, url, this.setSync);
@@ -58,8 +58,8 @@ export class SessionModule implements Session {
     return this.account;
   }
 
-  public getProfile(): Profile {
-    return this.profile;
+  public getIdentity(): Identity {
+    return this.identity;
   }
 
   public getContact(): Contact {

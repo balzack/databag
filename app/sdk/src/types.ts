@@ -14,7 +14,7 @@ export interface WebStore {
 
 export interface Session {
   getAccount(): Account;
-  getProfile(): Profile;
+  getIdentity(): Identity;
   getContact(): Contact;
   getGroup(): Group;
   getAttribute(): Attribute;
@@ -42,7 +42,13 @@ export interface Account {
   removeStatusListener(ev: (status: AccountStatus) => void): void;
 }
 
-export interface Profile {
+export interface Identity {
+  setProfileData(name: string, location: string, description: string): Promise<void>;
+  setProfileImage(image: string): Promise<void>;
+  getHandleStatus(handle: string): Promise<void>;
+
+  addProfileListener(ev: (profile: Profile) => void): void;
+  removeProfileListener(ev: (profile: Profile) => void): void;
 }
 
 export interface Contact {
@@ -84,3 +90,15 @@ export interface AccountStatus {
   webPushKey: string;
 }
 
+export interface Profile {
+  guid: string;
+  handle: string;
+  name: string;
+  description: string;
+  location: string;
+  image: string;
+  revision: number;
+  seal: string;
+  version: string;
+  node: string;
+}
