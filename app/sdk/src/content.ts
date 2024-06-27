@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events';
-import { type Content, type Channel, type Topic, type Asset } from './types';
+import { type Content, type Channel, type Topic, type Asset } from './api';
 
 export class ContentModule implements Content {
 

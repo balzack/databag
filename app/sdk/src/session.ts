@@ -7,7 +7,7 @@ import { GroupModule } from './group';
 import { AttributeModule } from './attribute';
 import { ContentModule } from './content';
 
-import { type Session, type SqlStore, type WebStore, type Account, type Identity, type Contact, type Group, type Attribute, type Content } from './types';
+import { type Session, type SqlStore, type WebStore, type Account, type Identity, type Contact, type Group, type Attribute, type Content } from './api';
 
 export class SessionModule implements Session {
 

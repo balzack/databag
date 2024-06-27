@@ -1,7 +1,7 @@
 import { SessionModule } from './session';
 import { NodeModule } from './node';
 
-import { type Session, type Node, type SqlStore, type WebStore } from './types';
+import { type Session, type Node, type SqlStore, type WebStore } from './api';
 
 export class DatabagSDK {
 

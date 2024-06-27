@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events';
-import { type Account, type Seal, type SealKey, type AccountStatus } from './types';
+import { type Account, type Seal, type SealKey, type AccountStatus } from './api';
 
 export class AccountModule implements Account {
 

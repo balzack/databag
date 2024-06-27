@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events';
-import { type Identity, type Profile } from './types';
+import { type Identity, type Profile } from './api';
 
 export class IdentityModule implements Identity {
 
