@@ -18,7 +18,7 @@ export interface Session {
   getContact(): Contact;
   getGroup(): Group;
   getAttribute(): Attribute;
-  getChannel(): Channel;
+  getContent(): Content;
 
   resync(): void;
   addStatusListener(ev: (status: string) => void): void;
@@ -60,7 +60,21 @@ export interface Group {
 export interface Attribute {
 }
 
-export interface Channel {
+export interface Content {
+  addChannel(type: string, subject: string, cardIds: string[]): Promise<string>;
+  removeChannel(channelId: string): Promise<void>;
+  setChannelSubject(channelId: string, type: string, subject: string): Promise<void>;
+  setChannelCard(channelId: string, cardId: string): Promise<void>;
+  clearChannelCard(channelId: string, cardId: string): Promise<void>;
+  addTopic(channelId: string, type: string, message: string, assets: Asset[]): Promise<string>;
+  removeTopic(channelId: string, topicId: string): Promise<void>;
+  setTopicSubject(channelId: string, topicId: string, type: string, subject: string): Promise<void>;
+  getTopicAssetUrl(channelId: string, topicId: string, assetId: string): string;
+  getTopics(channelId: string, revision: number, count: number, begin: number, end: number): Promise<Topic[]>;
+  getTopic(channelId: string, topicId: string): Promise<Topic>;
+
+  addChannelListener(ev: (channels: Channel[]) => void): void;
+  removeChannelListener(ev: (channels: Channel[]) => void): void;
 }
 
 export interface SealKey {
@@ -101,4 +115,16 @@ export interface Profile {
   seal: string;
   version: string;
   node: string;
+}
+
+export interface Card {
+}
+
+export interface Channel {
+}
+
+export interface Topic {
+}
+
+export interface Asset {
 }

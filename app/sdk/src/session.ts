@@ -5,9 +5,9 @@ import { IdentityModule } from './identity';
 import { ContactModule } from './contact';
 import { GroupModule } from './group';
 import { AttributeModule } from './attribute';
-import { ChannelModule } from './channel';
+import { ContentModule } from './content';
 
-import { type Session, type SqlStore, type WebStore, type Account, type Identity, type Contact, type Group, type Attribute, type Channel } from './types';
+import { type Session, type SqlStore, type WebStore, type Account, type Identity, type Contact, type Group, type Attribute, type Content } from './types';
 
 export class SessionModule implements Session {
 
@@ -22,7 +22,7 @@ export class SessionModule implements Session {
   public contact: ContactModule;
   public group: GroupModule;
   public attribute: AttributeModule;
-  public channel: ChannelModule; 
+  public content: ContentModule; 
 
   constructor(store: SqlStore | WebStore | null, token: string, url: string) {
     this.store = store;
@@ -35,7 +35,7 @@ export class SessionModule implements Session {
     this.contact = new ContactModule(token, url, this.setSync);
     this.group = new GroupModule(token, url, this.setSync);
     this.attribute = new AttributeModule(token, url, this.setSync);
-    this.channel = new ChannelModule(token, url, this.setSync);
+    this.content = new ContentModule(token, url, this.setSync);
   }
 
   public addStatusListener(ev: (status: string) => void): void {
@@ -74,7 +74,7 @@ export class SessionModule implements Session {
     return this.attribute;
   }
 
-  public getChannel(): Channel {
-    return this.channel;
+  public getContent(): Content {
+    return this.content;
   }
 }
