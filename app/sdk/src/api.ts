@@ -25,6 +25,13 @@ export interface Session {
 }
 
 export interface Node {
+  getAccounts(): Promise<NodeAccount[]>;
+  createAccountAccess(): Promise<string>;
+  resetAccountAccess(): Promise<string>;
+  blockAccount(flag: boolean): Promise<void>;
+  removeAccount(accountId: number): Promise<void>;
+  getConfig(): Promise<NodeConfig>;
+  setConfig(config: NodeConfig): Promise<void>;
 }
 
 export interface Account {
@@ -165,6 +172,17 @@ export interface Alias {
 export interface Article {
 }
 
+export interface NodeAccount {
+  accountId: number;
+  guid: string;
+  handle: string;
+  name: string;
+  description: string;
+  location: string;
+  imageSet: boolean;
+  disabled: boolean;
+}
+
 export interface SignedMessage {
   message: string;
   keyType: string;
@@ -182,3 +200,22 @@ export interface ContactStatus {
   status: string; 
 }
 
+export interface NodeConfig {
+  domain: string;
+  accountStorage: string;
+  enableImage: boolean;
+  enableAudio: boolean;
+  enableVideo: boolean;
+  enableBinary: boolean;
+  keyType: string;
+  pushSupported: boolean;
+  allowUnsealed: boolean;
+  transformSupported: boolean;
+  enableIce: boolean;
+  iceService: string;
+  iceUrl: string;
+  iceUsername: string;
+  icePassword: string;
+  enableOpenAccess: boolean;
+  openAccessLimit: number;
+}
