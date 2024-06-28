@@ -29,7 +29,7 @@ export class ContentModule implements Content {
   public async resync(): Promise<void> {
   }
 
-  public async addChannel(type: string, subject: string, cardIds: string[]): Promise<string> {
+  public async addChannel(type: string, subject: string, cardIds: string[], groupIds: string[]): Promise<string> {
     return '';
   }
 
@@ -43,6 +43,12 @@ export class ContentModule implements Content {
   }
 
   public async clearChannelCard(channelId: string, cardId: string): Promise<void> {
+  }
+
+  public async setChannelGroup(channelId: string, groupId: string): Promise<void> {
+  }
+
+  public async clearChannelGroup(channelId: string, groupId: string): Promise<void> {
   }
 
   public async addTopic(channelId: string, type: string, message: string, assets: Asset[]): Promise<string> {

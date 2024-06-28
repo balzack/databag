@@ -3,11 +3,11 @@ import { EventEmitter } from 'events';
 import { AccountModule } from './account';
 import { IdentityModule } from './identity';
 import { ContactModule } from './contact';
-import { GroupModule } from './group';
+import { AliasModule } from './alias';
 import { AttributeModule } from './attribute';
 import { ContentModule } from './content';
 
-import { type Session, type SqlStore, type WebStore, type Account, type Identity, type Contact, type Group, type Attribute, type Content } from './api';
+import { type Session, type SqlStore, type WebStore, type Account, type Identity, type Contact, type Alias, type Attribute, type Content } from './api';
 
 export class SessionModule implements Session {
 
@@ -20,7 +20,7 @@ export class SessionModule implements Session {
   public account: AccountModule; 
   public identity: IdentityModule;
   public contact: ContactModule;
-  public group: GroupModule;
+  public alias: AliasModule;
   public attribute: AttributeModule;
   public content: ContentModule; 
 
@@ -33,7 +33,7 @@ export class SessionModule implements Session {
     this.account = new AccountModule(token, url, this.setSync);
     this.identity = new IdentityModule(token, url, this.setSync);
     this.contact = new ContactModule(token, url, this.setSync);
-    this.group = new GroupModule(token, url, this.setSync);
+    this.alias = new AliasModule(token, url, this.setSync);
     this.attribute = new AttributeModule(token, url, this.setSync);
     this.content = new ContentModule(token, url, this.setSync);
   }
@@ -66,8 +66,8 @@ export class SessionModule implements Session {
     return this.contact;
   }
 
-  public getGroup(): Group {
-    return this.group;
+  public getAlias(): Alias {
+    return this.alias;
   }
 
   public getAttribute(): Attribute {

@@ -1,3 +1,7 @@
+// how is group assingned and compared
+// remove viewRevision
+// add bot api
+// replace delete channel membership with block
 
 export interface SqlStore {
   set(stmt: string, params: (string | number)[]): Promise<void>;
@@ -15,7 +19,7 @@ export interface Session {
   getAccount(): Account;
   getIdentity(): Identity;
   getContact(): Contact;
-  getGroup(): Group;
+  getAlias(): Alias;
   getAttribute(): Attribute;
   getContent(): Content;
 
@@ -74,7 +78,6 @@ export interface Contact {
   getTopics(cardId: string, channelId: string, revision: number, count: number, begin: number, end: number): Promise<void>;
   getTopic(cardId: string, channelId: string, topicId: string): Promise<Topic>;
   resyncCard(cardId: string): Promise<void>;
-
   getTopicAssetUrl(cardId: string, channelId: string, topicId: string, assetId: string): string;
   getCardImageUrl(cardId: string): string;
 
@@ -82,32 +85,44 @@ export interface Contact {
   removeCardListener(ev: (cards: Card[]) => void): void;
 }
 
-export interface Group {
+export interface Alias {
+  addGroup(name: string, cardIds: string[]): Promise<string>;
+  removeGroup(groupId: string): Promise<void>;
+  setGroupName(groupId: string, name: string): Promise<void>;
+  setGroupCard(groupId: string, cardId: string): Promise<void>;
+  clearGroupCard(groupId: string, cardId: string): Promise<void>;
+  compare(groupIds: string[], cardIds: string[]): Promise<Map<string, string[]>>;
+  
+  addGroupListener(ev: (groups: Group[]) => void): void;
+  removeGroupListener(ev: (groups: Group[]) => void): void;
 }
 
 export interface Attribute {
-  addArticle(type: string, subject: string, cardIds: string[]): Promise<string>;
+  addArticle(type: string, subject: string, cardIds: string[], groupIds: string[]): Promise<string>;
   removeArticle(articleId: string): Promise<void>;
   setArticleSubject(articleId: string, type: string, subject: string): Promise<void>;
   setArticleCard(articleId: string, cardId: string): Promise<void>;
   clearArticleCard(articleId: string, cardId: string): Promise<void>;
+  setArticleGroup(articleId: string, groupId: string): Promise<void>;
+  clearArticleGroup(articleId: string, groupId: string): Promise<void>;
 
   addArticleListener(ev: (articles: Article[]) => void): void;
   removeArticleListener(ev: (articles: Article[]) => void): void;
 }
 
 export interface Content {
-  addChannel(type: string, subject: string, cardIds: string[]): Promise<string>;
+  addChannel(type: string, subject: string, cardIds: string[], groupIds: string[]): Promise<string>;
   removeChannel(channelId: string): Promise<void>;
   setChannelSubject(channelId: string, type: string, subject: string): Promise<void>;
   setChannelCard(channelId: string, cardId: string): Promise<void>;
   clearChannelCard(channelId: string, cardId: string): Promise<void>;
+  setChannelGroup(channelId: string, cardId: string): Promise<void>;
+  clearChannelGroup(channelId: string, cardId: string): Promise<void>;
   addTopic(channelId: string, type: string, message: string, assets: Asset[]): Promise<string>;
   removeTopic(channelId: string, topicId: string): Promise<void>;
   setTopicSubject(channelId: string, topicId: string, type: string, subject: string): Promise<void>;
   getTopics(channelId: string, revision: number, count: number, begin: number, end: number): Promise<Topic[]>;
   getTopic(channelId: string, topicId: string): Promise<Topic>;
-
   getTopicAssetUrl(channelId: string, topicId: string, assetId: string): string;
 
   addChannelListener(ev: (channels: Channel[]) => void): void;
@@ -166,7 +181,7 @@ export interface Topic {
 export interface Asset {
 }
 
-export interface Alias {
+export interface Group {
 }
 
 export interface Article {

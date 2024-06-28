@@ -29,7 +29,7 @@ export class AttributeModule implements Attribute {
   public async resync(): Promise<void> {
   }
 
-  public async addArticle(type: string, subject: string, cardIds: string[]): Promise<string> {
+  public async addArticle(type: string, subject: string, cardIds: string[], groupIds: string[]): Promise<string> {
     return '';
   }
 
@@ -43,6 +43,12 @@ export class AttributeModule implements Attribute {
   }
 
   public async clearArticleCard(articleId: string, cardId: string): Promise<void> {
+  }
+
+  public async setArticleGroup(articleId: string, groupId: string): Promise<void> {
+  }
+
+  public async clearArticleGroup(articleId: string, groupId: string): Promise<void> {
   }
 
   public addArticleListener(ev: (articles: Article[]) => void): void {

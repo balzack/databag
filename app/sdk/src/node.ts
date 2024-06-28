@@ -29,9 +29,9 @@ export class NodeModule implements Node {
   }
 
   public async getConfig(): Promise<NodeConfig> {
-    return { domain: '', accountStorage: '', enableImage: true, enableAudio: true, enableVideo: true, enableBinary: true, keyType: string,
+    return { domain: '', accountStorage: '', enableImage: true, enableAudio: true, enableVideo: true, enableBinary: true, keyType: '',
       pushSupported: true, allowUnsealed: true, transformSupported: true, enableIce: true, iceService: '', iceUrl: '', iceUsername: '', 
-      enableOpenAcess: true, openAccessLimit: 0 };
+      icePassword: '', enableOpenAccess: true, openAccessLimit: 0 };
   }
 
   public async setConfig(config: NodeConfig): Promise<void> {
