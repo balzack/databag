@@ -51,12 +51,42 @@ export interface Identity {
 }
 
 export interface Contact {
+  addCard(message: SignedMessage): Promise<string>;
+  removeCard(cardId: string): Promise<void>;
+  setCardConnecting(cardId: string): Promise<void>;
+  setCardConnected(cardId: string, token: string, rev: number): Promise<void>;
+  setCardConfirmed(cardId: string): Promise<void>;
+  getCardOpenMessage(cardId: string): Promise<SignedMessage>;
+  setCardOpenMessage(server: string, message: SignedMessage): Promise<ContactStatus>;
+  getCardCloseMessage(cardId: string): Promise<SignedMessage>;
+  setCardCloseMessage(server: string, message: SignedMessage): Promise<void>;
+  removeChannel(cardId: string, channelId: string): Promise<void>;
+  addTopic(cardId: string, channelId: string, type: string, message: string, assets: Asset[]): Promise<string>;
+  removeTopic(cardId: string, channelId: string, topicId: string): Promise<void>;
+  setTopicSubject(cardId: string, channelId: string, topicId: string, type: string, subject: string): Promise<void>;
+  getTopics(cardId: string, channelId: string, revision: number, count: number, begin: number, end: number): Promise<void>;
+  getTopic(cardId: string, channelId: string, topicId: string): Promise<Topic>;
+  resyncCard(cardId: string): Promise<void>;
+
+  getTopicAssetUrl(cardId: string, channelId: string, topicId: string, assetId: string): string;
+  getCardImageUrl(cardId: string): string;
+
+  addCardListener(ev: (cards: Card[]) => void): void;
+  removeCardListener(ev: (cards: Card[]) => void): void;
 }
 
 export interface Group {
 }
 
 export interface Attribute {
+  addArticle(type: string, subject: string, cardIds: string[]): Promise<string>;
+  removeArticle(articleId: string): Promise<void>;
+  setArticleSubject(articleId: string, type: string, subject: string): Promise<void>;
+  setArticleCard(articleId: string, cardId: string): Promise<void>;
+  clearArticleCard(articleId: string, cardId: string): Promise<void>;
+
+  addArticleListener(ev: (articles: Article[]) => void): void;
+  removeArticleListener(ev: (articles: Article[]) => void): void;
 }
 
 export interface Content {
@@ -68,9 +98,10 @@ export interface Content {
   addTopic(channelId: string, type: string, message: string, assets: Asset[]): Promise<string>;
   removeTopic(channelId: string, topicId: string): Promise<void>;
   setTopicSubject(channelId: string, topicId: string, type: string, subject: string): Promise<void>;
-  getTopicAssetUrl(channelId: string, topicId: string, assetId: string): string;
   getTopics(channelId: string, revision: number, count: number, begin: number, end: number): Promise<Topic[]>;
   getTopic(channelId: string, topicId: string): Promise<Topic>;
+
+  getTopicAssetUrl(channelId: string, topicId: string, assetId: string): string;
 
   addChannelListener(ev: (channels: Channel[]) => void): void;
   removeChannelListener(ev: (channels: Channel[]) => void): void;
@@ -127,3 +158,27 @@ export interface Topic {
 
 export interface Asset {
 }
+
+export interface Alias {
+}
+
+export interface Article {
+}
+
+export interface SignedMessage {
+  message: string;
+  keyType: string;
+  publicKey: string;
+  signature: string;
+  signatureType: string;
+}
+
+export interface ContactStatus {
+  token: string;
+  profileRevision: number;
+  articleRevision: number;
+  channelRevision: number;
+  viewRevision: number;
+  status: string; 
+}
+
