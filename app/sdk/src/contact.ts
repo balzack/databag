@@ -1,5 +1,6 @@
 import { EventEmitter } from 'events';
-import { type Contact, type Card, type Topic, type SignedMessage, type ContactStatus, type Asset} from './api';
+import { type Contact } from './api';
+import { type Card, type Topic, type SignedMessage, type ContactStatus, type Asset} from './types';
 
 export class ContactModule implements Contact {
 

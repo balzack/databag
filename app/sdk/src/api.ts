@@ -1,7 +1,9 @@
-// how is group assingned and compared
+// show group card comparison
 // remove viewRevision
 // add bot api
-// replace delete channel membership with block
+// formaize delete vs block remote channel
+
+import type { Channel, Article, Group, Card, Profile, AccountStatus, NodeConfig, NodeAccount, Seal, SealKey, SignedMessage, ContactStatus, Asset, Topic } from './types';
 
 export interface SqlStore {
   set(stmt: string, params: (string | number)[]): Promise<void>;
@@ -129,108 +131,3 @@ export interface Content {
   removeChannelListener(ev: (channels: Channel[]) => void): void;
 }
 
-export interface SealKey {
-  publicKey: string;
-  privateKey: string;
-}
-
-export interface Seal {
-  passwordSalt: string;
-  privateKeyIv: string;
-  privateKeyEncrypted: string;
-  publicKey: string;
-}
-
-export interface AccountStatus {
-  disabled: boolean;
-  storageUsed: number;
-  storageAvailable: number;
-  forwardingAddress: string;
-  searchable: boolean;
-  allowUnsealed: boolean;
-  pushEnabled: boolean;
-  sealable: boolean;
-  seal: Seal;
-  enableIce: boolean;
-  multiFactorAuth: boolean;
-  webPushKey: string;
-}
-
-export interface Profile {
-  guid: string;
-  handle: string;
-  name: string;
-  description: string;
-  location: string;
-  image: string;
-  revision: number;
-  seal: string;
-  version: string;
-  node: string;
-}
-
-export interface Card {
-}
-
-export interface Channel {
-}
-
-export interface Topic {
-}
-
-export interface Asset {
-}
-
-export interface Group {
-}
-
-export interface Article {
-}
-
-export interface NodeAccount {
-  accountId: number;
-  guid: string;
-  handle: string;
-  name: string;
-  description: string;
-  location: string;
-  imageSet: boolean;
-  disabled: boolean;
-}
-
-export interface SignedMessage {
-  message: string;
-  keyType: string;
-  publicKey: string;
-  signature: string;
-  signatureType: string;
-}
-
-export interface ContactStatus {
-  token: string;
-  profileRevision: number;
-  articleRevision: number;
-  channelRevision: number;
-  viewRevision: number;
-  status: string; 
-}
-
-export interface NodeConfig {
-  domain: string;
-  accountStorage: string;
-  enableImage: boolean;
-  enableAudio: boolean;
-  enableVideo: boolean;
-  enableBinary: boolean;
-  keyType: string;
-  pushSupported: boolean;
-  allowUnsealed: boolean;
-  transformSupported: boolean;
-  enableIce: boolean;
-  iceService: string;
-  iceUrl: string;
-  iceUsername: string;
-  icePassword: string;
-  enableOpenAccess: boolean;
-  openAccessLimit: number;
-}

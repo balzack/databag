@@ -1,5 +1,6 @@
 import { EventEmitter } from 'events';
-import { type Attribute, type Article } from './api';
+import { type Attribute } from './api';
+import type { Article } from './types';
 
 export class AttributeModule implements Attribute {
 

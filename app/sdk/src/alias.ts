@@ -1,5 +1,6 @@
 import { EventEmitter } from 'events';
-import { type Alias, type Group } from './api';
+import { type Alias } from './api';
+import type { Group } from './types';
 
 export class AliasModule implements Alias {
 
