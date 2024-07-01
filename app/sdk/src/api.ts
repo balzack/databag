@@ -64,8 +64,8 @@ export interface Contact {
   disconnectCard(cardId: string): Promise<void>;
   rejectCard(cardId: string): Promise<void>;
   ignoreCard(cardId: string): Promise<void>;
-
   resyncCard(cardId: string): Promise<void>;
+
   flagCard(cardId: string): Promise<void>;
   flagArticle(cardId: string, articleId: string): Promise<void>;
   flagChannel(cardId: string, channelId: string): Promise<void>;
@@ -94,6 +94,13 @@ export interface Contact {
   setTopicSubject(cardId: string, channelId: string, topicId: string, type: string, value: string): Promise<void>;
   addTag(cardId: string, channelId: string, topicId: string, type: string, value: string): Promise<string>;
   removeTag(cardId: string, tagId: string): Promise<void>;
+
+  viewMoreTopics(cardId: string, channelId: string): Promise<number>;
+  setUnreadChannel(cardId: string, channelId: string): Promise<void>;
+  clearUnreadChannel(cardId: string, channelId: string): Promise<void>;
+
+  getRegistry(server: string): Promise<Profile[]>;
+  getRegistryImageUrl(server: string, string: guid): string;
 
   getCardImageUrl(cardId: string): string;
   getTopicAssetUrl(cardId: string, channelId: string, topicId: string, assetId: string): string;
@@ -153,6 +160,10 @@ export interface Content {
   clearBlockTag(channelId: string, topicId: string, tagId: string): Promise<void>;
   getBlockedTopics(): Promise<{ channelId: string, topicId: string }[]>;
   getBlockedTags(): Promise<{ channelId: string, topicId: string, tagId: string }[]>;
+
+  viewMoreTopics(channelId: string): Promise<number>;
+  setUnreadChannel(channelId: string): Promise<void>;
+  clearUnreadChannel(channelId: string): Promise<void>;
 
   addRepeaterAccess(channelId: string, name: string): Promise<Repeater>;
   removeRepeaterAccess(channelId: string, repeaterId: string): Promise<void>;

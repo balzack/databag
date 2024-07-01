@@ -99,6 +99,16 @@ export class ContentModule implements Content {
     return '';
   }
 
+  public async viewMoreTopics(cardId: string, channelId: string): Promise<number> {
+    return 0;
+  }
+
+  public async setUnreadChannel(cardId: string, channelId: string): Promise<void> {
+  }
+
+  public async clearUnreadChannel(cardId: string, channelId: string): Promise<void> {
+  }
+
   public async addRepeaterAccess(channelId: string, name: string): Promise<Repeater> {
     return { id: '', guid: '', name: '', server: '', token: '' };
   }

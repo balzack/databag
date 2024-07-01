@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events';
 import { type Contact } from './api';
-import { type Card, type Topic, type Asset, type Repeater} from './types';
+import { type Card, type Topic, type Asset, type Profile, type Repeater} from './types';
 
 export class ContactModule implements Contact {
 
@@ -141,7 +141,24 @@ export class ContactModule implements Contact {
   }
 
   public async removeTag(cardId: string, tagId: string): Promise<void> {
-    return;
+  }
+
+  public async viewMoreTopics(cardId: string, channelId: string): Promise<number> {
+    return 0;
+  }
+
+  public async setUnreadChannel(cardId: string, channelId: string): Promise<void> {
+  }
+
+  public async clearUnreadChannel(cardId: string, channelId: string): Promise<void> {
+  }  
+
+  public getRegistry(server: string): Promise<Profile[]> {
+    return [];
+  }
+
+  public getRegistryImageUrl(server: string, string: guid): string {
+    return '';
   }
 
   public getTopicAssetUrl(cardId: string, channelId: string, topicId: string, assetId: string): string {

@@ -26,6 +26,7 @@ export type Channel = {
     status: string,
     transform: string
   }
+  unread: boolean,
   dataType: string,
   data: string,
   created: number,
@@ -158,4 +159,10 @@ export type NodeConfig = {
   openAccessLimit: number,
 }
 
+export type SessionParams = {
+  initialTopicCount: number,
+  channelTypes: string[],
+  topicTypes: string[],
+  tagTypes: string[],
+}
 

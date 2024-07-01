@@ -2,7 +2,8 @@ import { SessionModule } from './session';
 import { NodeModule } from './node';
 import { BotModule } from './bot';
 
-import { type Session, type Node, type Bot, type SqlStore, type WebStore } from './api';
+import type { Session, Node, Bot, SqlStore, WebStore } from './api';
+import type { SessionParams } from './types';
 
 export class DatabagSDK {
 
@@ -24,15 +25,15 @@ export class DatabagSDK {
     return new SessionModule(this.store, '', '');
   }
 
-  public async login(handle: string, password: string, url: string): Promise<Session> {
+  public async login(handle: string, password: string, url: string, params: SessionParams): Promise<Session> {
     return new SessionModule(this.store, '', '');
   }
 
-  public async access(token: string, url: string): Promise<Session> {
+  public async access(token: string, url: string, params: SessionParams): Promise<Session> {
     return new SessionModule(this.store, '', '');
   }
 
-  public async create(handle: string, password: string, url: string, token: string): Promise<Session> {
+  public async create(handle: string, password: string, url: string, token: string, params: SessionParams): Promise<Session> {
     return new SessionModule(this.store, '', '');
   }
 
