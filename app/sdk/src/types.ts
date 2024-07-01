@@ -158,32 +158,4 @@ export type NodeConfig = {
   openAccessLimit: number,
 }
 
-export type SealKey = {
-  publicKey: string,
-  privateKey: string,
-}
-
-export type Seal = {
-  passwordSalt: string,
-  privateKeyIv: string,
-  privateKeyEncrypted: string,
-  publicKey: string,
-}
-
-export type SignedMessage = {
-  message: string,
-  keyType: string,
-  publicKey: string,
-  signature: string,
-  signatureType: string,
-}
-
-export type ContactStatus = {
-  token: string,
-  profileRevision: number,
-  articleRevision: number,
-  channelRevision: number,
-  viewRevision: number,
-  status: string, 
-}
 

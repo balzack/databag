@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events';
 import { type Contact } from './api';
-import { type Card, type Topic, type SignedMessage, type ContactStatus, type Asset, type Repeater} from './types';
+import { type Card, type Topic, type Asset, type Repeater} from './types';
 
 export class ContactModule implements Contact {
 
@@ -30,35 +30,97 @@ export class ContactModule implements Contact {
   public async resync(): Promise<void> {
   }
 
-  public async addCard(message: SignedMessage): Promise<string> {
+  public async addCard(server: string, guid: string): Promise<string> {
     return '';
   }
 
   public async removeCard(cardId: string): Promise<void> {
   }
 
-  public async setCardConnecting(cardId: string): Promise<void> {
+  public async confirmCard(cardId: string): Promise<void> {
   }
 
-  public async setCardConnected(cardId: string, token: string, rev: number): Promise<void> {
+  public async connectCard(cardId: string): Promise<void> {
   }
 
-  public async setCardConfirmed(cardId: string): Promise<void> {
+  public async disconnectCard(cardId: string): Promise<void> {
   }
 
-  public async getCardOpenMessage(cardId: string): Promise<SignedMessage> {
-    return { message: '', keyType: '', publicKey: '', signature: '', signatureType: '' };
+  public async rejectCard(cardId: string): Promise<void> {
   }
 
-  public async setCardOpenMessage(server: string, message: SignedMessage): Promise<ContactStatus> {
-    return { token: '', profileRevision: 0, articleRevision: 0, channelRevision: 0, viewRevision: 0, status: '' };
-  }
- 
-  public async getCardCloseMessage(cardId: string): Promise<SignedMessage> {
-    return { message: '', keyType: '', publicKey: '', signature: '', signatureType: '' };
+  public async ignoreCard(cardId: string): Promise<void> {
   }
 
-  public async setCardCloseMessage(server: string, message: SignedMessage): Promise<void> {
+  public async resyncCard(cardId: string): Promise<void> {
+  }
+
+  public async flagCard(cardId: string): Promise<void> {
+  }
+
+  public async flagArticle(cardId: string, articleId: string): Promise<void> {
+  }
+
+  public async flagChannel(cardId: string, channelId: string): Promise<void> {
+  }
+
+  public async flagTopic(cardId: string, channelId: string, topicId: string): Promise<void> {
+  }
+
+  public async flagTag(cardId: string, channelId: string, topicId: string, tagId: string): Promise<void> {
+  }
+
+  public async setBlockCard(cardId: string): Promise<void> {
+  }
+
+  public async setBlockArticle(cardId: string, articleId: string): Promise<void> {
+  }
+
+  public async setBlockChannel(cardId: string, channelId: string): Promise<void> {
+  }
+
+  public async setBlockTopic(cardId: string, channelId: string, topicId: string): Promise<void> {
+  }
+
+  public async setBlockTag(cardId: string, channelId: string, topicId: string, tagId: string): Promise<void> {
+  }
+
+  public async clearBlockCard(cardId: string): Promise<void> {
+  }
+
+  public async clearBlockArticle(cardId: string, articleId: string): Promise<void> {
+  }
+
+  public async clearBlockChannel(cardId: string, channelId: string): Promise<void> {
+  }
+
+  public async clearBlockTopic(cardId: string, channelId: string, topicId: string): Promise<void> {
+  }
+
+  public async clearBlockTag(cardId: string, channelId: string, topicId: string, tagId: string): Promise<void> {
+  }
+
+  public async getBlockedCards(): Promise<{ cardId: string }[]> {
+    return [];
+  }
+
+  public async getBlockedChannels(): Promise<{ cardId: string, channelId: string }[]> {
+    return [];
+  }
+
+  public async getBlockedTopics(): Promise<{ cardId: string, channelId: string, topicId: string }[]> {
+    return [];
+  }
+
+  public async getBlockedTags(): Promise<{ cardId: string, channelId: string, topicId: string, tagId: string }[]> {
+    return [];
+  }
+
+  public async getBlockedArticles(): Promise<{ cardId: string, articleId: string }[]> {
+    return [];
+  }
+
+  public async removeArticle(cardId: string, articleId: string): Promise<void> {
   }
 
   public async removeChannel(cardId: string, channelId: string): Promise<void> {
@@ -80,9 +142,6 @@ export class ContactModule implements Contact {
 
   public async removeTag(cardId: string, tagId: string): Promise<void> {
     return;
-  }
-
-  public async resyncCard(cardId: string): Promise<void> {
   }
 
   public getTopicAssetUrl(cardId: string, channelId: string, topicId: string, assetId: string): string {

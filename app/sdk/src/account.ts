@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events';
 import { type Account } from './api';
-import type { Seal, SealKey, AccountStatus } from './types';
+import type { AccountStatus } from './types';
 
 export class AccountModule implements Account {
 
@@ -36,19 +36,23 @@ export class AccountModule implements Account {
   public async setSearchable(flag: boolean): Promise<void> {
   }
 
-  public async enableMFA(): Promise<void> {
+  public async enableMFA(): Promise<{ secretImage: string, secretText: string }> {
+    return { secretImage: '', secretText: '' };
   }
 
   public async disableMFA(): Promise<void> {
   }
 
-  public async confirmMFA(): Promise<void> {
+  public async confirmMFA(code: string): Promise<void> {
   }
 
-  public async setAccountSeal(seal: Seal, key: SealKey): Promise<void> {
+  public async setAccountSeal(password: string): Promise<void> {
   }
 
-  public async unlockAccountSeal(key: SealKey): Promise<void> {
+  public async clearAccountSeal(): Promise<void> {
+  }
+
+  public async unlockAccountSeal(password: string): Promise<void> {
   }
 
   public async setLogin(username: string, password: string): Promise<void> {

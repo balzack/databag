@@ -5,7 +5,6 @@
 // articles share by cards now
 
 import type { Channel, Topic, Asset, Tag, Article, Group, Card, Profile, AccountStatus, NodeConfig, NodeAccount, Repeater } from './types';
-import type { Seal, SealKey, SignedMessage, ContactStatus } from './types'; 
 
 export interface SqlStore {
   set(stmt: string, params: (string | number)[]): Promise<void>;
@@ -28,29 +27,21 @@ export interface Session {
   getContent(): Content;
 
   resync(): void;
+
   addStatusListener(ev: (status: string) => void): void;
   removeStatusListener(ev: (status: string) => void): void;
 }
 
-export interface Node {
-  getAccounts(): Promise<NodeAccount[]>;
-  createAccountAccess(): Promise<string>;
-  resetAccountAccess(): Promise<string>;
-  blockAccount(flag: boolean): Promise<void>;
-  removeAccount(accountId: number): Promise<void>;
-  getConfig(): Promise<NodeConfig>;
-  setConfig(config: NodeConfig): Promise<void>;
-}
-
 export interface Account {
+  setLogin(username: string, password: string): Promise<void>;
   setNotifications(flag: boolean): Promise<void>;
   setSearchable(flag: boolean): Promise<void>;
-  enableMFA(): Promise<void>;
+  enableMFA(): Promise<{ secretImage: string, secretText: string }>;
   disableMFA(): Promise<void>;
-  confirmMFA(): Promise<void>;
-  setAccountSeal(seal: Seal, key: SealKey): Promise<void>
-  unlockAccountSeal(key: SealKey): Promise<void>
-  setLogin(username: string, password: string): Promise<void>
+  confirmMFA(code: string): Promise<void>;
+  setAccountSeal(password: string): Promise<void>;
+  clearAccountSeal(): Promise<void>;
+  unlockAccountSeal(password: string): Promise<void>;
 
   addStatusListener(ev: (status: AccountStatus) => void): void;
   removeStatusListener(ev: (status: AccountStatus) => void): void;
@@ -66,24 +57,46 @@ export interface Identity {
 }
 
 export interface Contact {
-  addCard(message: SignedMessage): Promise<string>;
+  addCard(server: string, guid: string): Promise<string>;
   removeCard(cardId: string): Promise<void>;
-  setCardConnecting(cardId: string): Promise<void>;
-  setCardConnected(cardId: string, token: string, rev: number): Promise<void>;
-  setCardConfirmed(cardId: string): Promise<void>;
-  getCardOpenMessage(cardId: string): Promise<SignedMessage>;
-  setCardOpenMessage(server: string, message: SignedMessage): Promise<ContactStatus>;
-  getCardCloseMessage(cardId: string): Promise<SignedMessage>;
-  setCardCloseMessage(server: string, message: SignedMessage): Promise<void>;
+  confirmCard(cardId: string): Promise<void>;
+  connectCard(cardId: string): Promise<void>;
+  disconnectCard(cardId: string): Promise<void>;
+  rejectCard(cardId: string): Promise<void>;
+  ignoreCard(cardId: string): Promise<void>;
+
+  resyncCard(cardId: string): Promise<void>;
+  flagCard(cardId: string): Promise<void>;
+  flagArticle(cardId: string, articleId: string): Promise<void>;
+  flagChannel(cardId: string, channelId: string): Promise<void>;
+  flagTopic(cardId: string, channelId: string, topicId: string): Promise<void>;
+  flagTag(cardId: string, channelId: string, topicId: string, tagId: string): Promise<void>;
+  setBlockCard(cardId: string): Promise<void>;
+  setBlockArticle(cardId: string, articleId: string): Promise<void>;
+  setBlockChannel(cardId: string, channelId: string): Promise<void>;
+  setBlockTopic(cardId: string, channelId: string, topicId: string): Promise<void>;
+  setBlockTag(cardId: string, channelId: string, topicId: string, tagId: string): Promise<void>;
+  clearBlockCard(cardId: string): Promise<void>;
+  clearBlockArticle(cardId: string, articleId: string): Promise<void>;
+  clearBlockChannel(cardId: string, channelId: string): Promise<void>;
+  clearBlockTopic(cardId: string, channelId: string, topicId: string): Promise<void>;
+  clearBlockTag(cardId: string, channelId: string, topicId: string, tagId: string): Promise<void>;
+  getBlockedCards(): Promise<{ cardId: string }[]>;
+  getBlockedChannels(): Promise<{ cardId: string, channelId: string }[]>;
+  getBlockedTopics(): Promise<{ cardId: string, channelId: string, topicId: string }[]>;
+  getBlockedTags(): Promise<{ cardId: string, channelId: string, topicId: string, tagId: string }[]>;
+  getBlockedArticles(): Promise<{ cardId: string, articleId: string }[]>;
+
+  removeArticle(cardId: string, articleId: string): Promise<void>;
   removeChannel(cardId: string, channelId: string): Promise<void>;
   addTopic(cardId: string, channelId: string, type: string, message: string, assets: Asset[]): Promise<string>;
   removeTopic(cardId: string, channelId: string, topicId: string): Promise<void>;
+  setTopicSubject(cardId: string, channelId: string, topicId: string, type: string, value: string): Promise<void>;
   addTag(cardId: string, channelId: string, topicId: string, type: string, value: string): Promise<string>;
   removeTag(cardId: string, tagId: string): Promise<void>;
-  setTopicSubject(cardId: string, channelId: string, topicId: string, type: string, subject: string): Promise<void>;
-  resyncCard(cardId: string): Promise<void>;
-  getTopicAssetUrl(cardId: string, channelId: string, topicId: string, assetId: string): string;
+
   getCardImageUrl(cardId: string): string;
+  getTopicAssetUrl(cardId: string, channelId: string, topicId: string, assetId: string): string;
 
   addRepeaterAccess(cardId: string, channelId: string, name: string): Promise<Repeater>;
   removeRepeaterAccess(cardId: string, channelId: string, repeaterId: string): Promise<void>;
@@ -132,11 +145,30 @@ export interface Content {
   removeTag(channelId: string, topicId: string, tagId: string): Promise<void>;
   getTopicAssetUrl(channelId: string, topicId: string, assetId: string): string;
 
+  flagTopic(channelId: string, topicId: string): Promise<void>;
+  flagTag(channelId: string, topicId: string, tagId: string): Promise<void>;
+  setBlockTopic(channelId: string, topicId: string): Promise<void>;
+  setBlockTag(channelId: string, topicId: string, tagId: string): Promise<void>;
+  clearBlockTopic(channelId: string, topicId: string): Promise<void>;
+  clearBlockTag(channelId: string, topicId: string, tagId: string): Promise<void>;
+  getBlockedTopics(): Promise<{ channelId: string, topicId: string }[]>;
+  getBlockedTags(): Promise<{ channelId: string, topicId: string, tagId: string }[]>;
+
   addRepeaterAccess(channelId: string, name: string): Promise<Repeater>;
   removeRepeaterAccess(channelId: string, repeaterId: string): Promise<void>;
 
   addChannelListener(ev: (channels: Channel[]) => void): void;
   removeChannelListener(ev: (channels: Channel[]) => void): void;
+}
+
+export interface Node {
+  getAccounts(): Promise<NodeAccount[]>;
+  createAccountAccess(): Promise<string>;
+  resetAccountAccess(): Promise<string>;
+  blockAccount(flag: boolean): Promise<void>;
+  removeAccount(accountId: number): Promise<void>;
+  getConfig(): Promise<NodeConfig>;
+  setConfig(config: NodeConfig): Promise<void>;
 }
 
 export interface Bot {

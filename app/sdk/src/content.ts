@@ -59,15 +59,40 @@ export class ContentModule implements Content {
   public async removeTopic(channelId: string, topicId: string): Promise<void> {
   }
 
-  public async setTopicSubject(channelId: string, topicId: string, type: string, subject: string): Promise<void> {
+  public async flagTopic(channelId: string, topicId: string): Promise<void> {
   }
 
+  public async setTopicSubject(channelId: string, topicId: string, type: string, subject: string): Promise<void> {
+  }
 
   public async addTag(channelId: string, topicId: string, type: string, value: string): Promise<string> {
     return '';
   }
 
   public async removeTag(channelId: string, topicId: string, tagId: string): Promise<void> {
+  }
+
+  public async flagTag(channelId: string, topicId: string, tagId: string): Promise<void> {
+  }
+
+  public async setBlockTopic(channelId: string, topicId: string): Promise<void> {
+  }
+
+  public async setBlockTag(channelId: string, topicId: string, tagId: string): Promise<void> {
+  }
+
+  public async clearBlockTopic(channelId: string, topicId: string): Promise<void> {
+  }
+
+  public async clearBlockTag(channelId: string, topicId: string, tagId: string): Promise<void> {
+  }
+
+  public async getBlockedTopics(): Promise<{ channelId: string, topicId: string }[]> {
+    return [];
+  }
+
+  public async getBlockedTags(): Promise<{ channelId: string, topicId: string, tagId: string }[]> {
+    return [];
   }
 
   public getTopicAssetUrl(channelId: string, topicId: string, assetId: string): string {
