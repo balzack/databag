@@ -2,8 +2,10 @@
 // remove viewRevision
 // add bot api
 // formaize delete vs block remote channel
+// articles share by cards now
 
-import type { Channel, Article, Group, Card, Profile, AccountStatus, NodeConfig, NodeAccount, Seal, SealKey, SignedMessage, ContactStatus, Asset, Topic } from './types';
+import type { Channel, Topic, Asset, Tag, Article, Group, Card, Profile, AccountStatus, NodeConfig, NodeAccount, Repeater } from './types';
+import type { Seal, SealKey, SignedMessage, ContactStatus } from './types'; 
 
 export interface SqlStore {
   set(stmt: string, params: (string | number)[]): Promise<void>;
@@ -76,12 +78,15 @@ export interface Contact {
   removeChannel(cardId: string, channelId: string): Promise<void>;
   addTopic(cardId: string, channelId: string, type: string, message: string, assets: Asset[]): Promise<string>;
   removeTopic(cardId: string, channelId: string, topicId: string): Promise<void>;
+  addTag(cardId: string, channelId: string, topicId: string, type: string, value: string): Promise<string>;
+  removeTag(cardId: string, tagId: string): Promise<void>;
   setTopicSubject(cardId: string, channelId: string, topicId: string, type: string, subject: string): Promise<void>;
-  getTopics(cardId: string, channelId: string, revision: number, count: number, begin: number, end: number): Promise<void>;
-  getTopic(cardId: string, channelId: string, topicId: string): Promise<Topic>;
   resyncCard(cardId: string): Promise<void>;
   getTopicAssetUrl(cardId: string, channelId: string, topicId: string, assetId: string): string;
   getCardImageUrl(cardId: string): string;
+
+  addRepeaterAccess(cardId: string, channelId: string, name: string): Promise<Repeater>;
+  removeRepeaterAccess(cardId: string, channelId: string, repeaterId: string): Promise<void>;
 
   addCardListener(ev: (cards: Card[]) => void): void;
   removeCardListener(ev: (cards: Card[]) => void): void;
@@ -123,11 +128,21 @@ export interface Content {
   addTopic(channelId: string, type: string, message: string, assets: Asset[]): Promise<string>;
   removeTopic(channelId: string, topicId: string): Promise<void>;
   setTopicSubject(channelId: string, topicId: string, type: string, subject: string): Promise<void>;
-  getTopics(channelId: string, revision: number, count: number, begin: number, end: number): Promise<Topic[]>;
-  getTopic(channelId: string, topicId: string): Promise<Topic>;
+  addTag(channelId: string, topicId: string, type: string, value: string): Promise<string>;
+  removeTag(channelId: string, topicId: string, tagId: string): Promise<void>;
   getTopicAssetUrl(channelId: string, topicId: string, assetId: string): string;
+
+  addRepeaterAccess(channelId: string, name: string): Promise<Repeater>;
+  removeRepeaterAccess(channelId: string, repeaterId: string): Promise<void>;
 
   addChannelListener(ev: (channels: Channel[]) => void): void;
   removeChannelListener(ev: (channels: Channel[]) => void): void;
+}
+
+export interface Bot {
+  addTopic(server: string, token: string, type: string, message: string, assets: Asset[]): Promise<string>;
+  removeTopic(server: string, token: string, topicId: string): Promise<void>;
+  addTag(server: string, token: string, topicId: string, type: string, value: string): Promise<string>;
+  removeTag(server: string, token: string, topicId: string, tagId: string): Promise<void>;
 }
 

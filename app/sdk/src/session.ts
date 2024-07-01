@@ -22,7 +22,7 @@ export class SessionModule implements Session {
   public contact: ContactModule;
   public alias: AliasModule;
   public attribute: AttributeModule;
-  public content: ContentModule; 
+  public content: ContentModule;
 
   constructor(store: SqlStore | WebStore | null, token: string, url: string) {
     this.store = store;

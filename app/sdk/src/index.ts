@@ -1,7 +1,8 @@
 import { SessionModule } from './session';
 import { NodeModule } from './node';
+import { BotModule } from './bot';
 
-import { type Session, type Node, type SqlStore, type WebStore } from './api';
+import { type Session, type Node, type Bot, type SqlStore, type WebStore } from './api';
 
 export class DatabagSDK {
 
@@ -40,5 +41,9 @@ export class DatabagSDK {
 
   public async configure(token: string, url: string): Promise<Node> {
     return new NodeModule('', '');
+  }
+
+  public async automate() {
+    return new BotModule();
   }
 }

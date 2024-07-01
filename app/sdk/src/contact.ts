@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events';
 import { type Contact } from './api';
-import { type Card, type Topic, type SignedMessage, type ContactStatus, type Asset} from './types';
+import { type Card, type Topic, type SignedMessage, type ContactStatus, type Asset, type Repeater} from './types';
 
 export class ContactModule implements Contact {
 
@@ -74,11 +74,12 @@ export class ContactModule implements Contact {
   public async setTopicSubject(cardId: string, channelId: string, topicId: string, type: string, subject: string): Promise<void> {
   }
 
-  public async getTopics(cardId: string, channelId: string, revision: number, count: number, begin: number, end: number): Promise<void> {
+  public async addTag(cardId: string, channelId: string, topicId: string, type: string, value: string): Promise<string> {
+    return '';
   }
 
-  public async getTopic(cardId: string, channelId: string, topicId: string): Promise<Topic> {
-    return {}
+  public async removeTag(cardId: string, tagId: string): Promise<void> {
+    return;
   }
 
   public async resyncCard(cardId: string): Promise<void> {
@@ -91,5 +92,13 @@ export class ContactModule implements Contact {
   public getCardImageUrl(cardId: string): string {
     return '';
   }
+
+  public async addRepeaterAccess(cardId: string, channelId: string, name: string): Promise<Repeater> {
+    return { id: '', guid: '', name: '', server: '', token: '' };
+  }
+
+  public async removeRepeaterAccess(cardId: string, channelId: string, repeaterId: string): Promise<void> {
+  }
+
 }
 

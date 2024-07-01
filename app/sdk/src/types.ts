@@ -1,13 +1,103 @@
-export type SealKey = {
-  publicKey: string,
-  privateKey: string,
+export type Card = {
+  id: string,
+  status: string,
+  statusUpdated: number,
+  notes: string,
+  groups: string[],
+  guid: string,
+  handle: string,
+  name: string,
+  description: string,
+  location: string,
+  imageSet: boolean,
+  version: string,
+  node: string,
 }
 
-export type Seal = {
-  passwordSalt: string,
-  privateKeyIv: string,
-  privateKeyEncrypted: string,
-  publicKey: string,
+export type Channel = {
+  id: string,
+  guid: string,
+  lastTopic: {
+    guid: string,
+    dataType: string,
+    data: string,
+    created: number,
+    updated: number,
+    status: string,
+    transform: string
+  }
+  dataType: string,
+  data: string,
+  created: number,
+  updated: number,
+  enableImage: boolean,
+  enableAudio: boolean,
+  enableVideo: boolean,
+  enableBinary: boolean,
+  contacts?: {
+    groups: string[],
+    cards: string[],
+  },
+  members: {
+    member: string,
+    pushEnabled: boolean,
+  },
+  repeaters: Repeater[];
+}
+
+export type Topic = {
+  id: string,
+  guid: string,
+  dataType: string,
+  data: string,
+  created: number,
+  updated: number,
+  status: string,
+  transform: string,
+  tags: [ Tag ]
+}
+
+export type Tag = {
+  id: string,
+  guid: string,
+  dataType: string,
+  data: string,
+  created: number,
+  updated: number,
+}
+
+export type Asset = {
+  path: string,
+  fileType: string,
+}
+
+export type Group = {
+  id: string,
+  dataType: string,
+  data: string,
+  created: number,
+  updated: number,
+  cards: [ string ]
+}
+
+export type Article = {
+  id: string,
+  dataType: string,
+  data: string,
+  created: number,
+  updated: number,
+  contacts?: {
+    cards: [ string ],
+    groups: [ string ],
+  }
+}
+
+export type Repeater = {
+  id: string,
+  guid: string,
+  name: string,
+  token: string,
+  server: string,
 }
 
 export type AccountStatus = {
@@ -19,7 +109,7 @@ export type AccountStatus = {
   allowUnsealed: boolean,
   pushEnabled: boolean,
   sealable: boolean,
-  seal: Seal,
+  sealSet: boolean,
   enableIce: boolean,
   multiFactorAuth: boolean,
   webPushKey: string,
@@ -32,63 +122,9 @@ export type Profile = {
   description: string,
   location: string,
   image: string,
-  revision: number,
-  seal: string,
+  sealSet: string,
   version: string,
   node: string,
-}
-
-export type Card = {
-}
-
-export type Channel = {
-  id: string,
-  revision: number,
-  data: {
-    detailRevision: number,
-    topicRevision: number,
-    channelSummary?: {
-      lastTopic: {
-        guid: string,
-        dataType: string,
-        data: string,
-        created: number,
-        updated: number,
-        status: string,
-        transform: string
-      }
-    },
-    channelDetail?: {
-      dataType: string,
-      data: string,
-      created: number,
-      updated: number,
-      enableImage: boolean,
-      enableAudio: boolean,
-      enableVideo: boolean,
-      enableBinary: boolean,
-      contacts: {
-        groups: [ string ],
-        cards: [ string ],
-      },
-      members: {
-        member: string,
-        pushEnabled: boolean,
-      },
-    },
-  }
-}
-
-export type Topic = {
-}
-
-export type Asset = {
-}
-
-export type Group = {
-}
-
-export type Article = {
 }
 
 export type NodeAccount = {
@@ -100,23 +136,6 @@ export type NodeAccount = {
   location: string,
   imageSet: boolean,
   disabled: boolean,
-}
-
-export type SignedMessage = {
-  message: string,
-  keyType: string,
-  publicKey: string,
-  signature: string,
-  signatureType: string,
-}
-
-export type ContactStatus = {
-  token: string,
-  profileRevision: number,
-  articleRevision: number,
-  channelRevision: number,
-  viewRevision: number,
-  status: string, 
 }
 
 export type NodeConfig = {
@@ -137,5 +156,34 @@ export type NodeConfig = {
   icePassword: string,
   enableOpenAccess: boolean,
   openAccessLimit: number,
+}
+
+export type SealKey = {
+  publicKey: string,
+  privateKey: string,
+}
+
+export type Seal = {
+  passwordSalt: string,
+  privateKeyIv: string,
+  privateKeyEncrypted: string,
+  publicKey: string,
+}
+
+export type SignedMessage = {
+  message: string,
+  keyType: string,
+  publicKey: string,
+  signature: string,
+  signatureType: string,
+}
+
+export type ContactStatus = {
+  token: string,
+  profileRevision: number,
+  articleRevision: number,
+  channelRevision: number,
+  viewRevision: number,
+  status: string, 
 }
 

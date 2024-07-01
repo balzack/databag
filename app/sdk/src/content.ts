@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events';
 import { type Content } from './api';
-import type { Channel, Topic, Asset } from './types';
+import type { Channel, Topic, Asset, Repeater } from './types';
 
 export class ContentModule implements Content {
 
@@ -62,16 +62,23 @@ export class ContentModule implements Content {
   public async setTopicSubject(channelId: string, topicId: string, type: string, subject: string): Promise<void> {
   }
 
-  public async getTopics(channelId: string, revision: number, count: number, begin: number, end: number): Promise<Topic[]> {
-    return [];
+
+  public async addTag(channelId: string, topicId: string, type: string, value: string): Promise<string> {
+    return '';
   }
 
-  public async getTopic(channelId: string, topicId: string): Promise<Topic> {
-    return {};
+  public async removeTag(channelId: string, topicId: string, tagId: string): Promise<void> {
   }
 
   public getTopicAssetUrl(channelId: string, topicId: string, assetId: string): string {
     return '';
+  }
+
+  public async addRepeaterAccess(channelId: string, name: string): Promise<Repeater> {
+    return { id: '', guid: '', name: '', server: '', token: '' };
+  }
+
+  public async removeRepeaterAccess(channelId: string, repeaterId: string): Promise<void> {
   }
 }
 
