@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events';
-import { type Attribute } from './api';
+import type { Attribute, Account } from './api';
 import type { Article } from './types';
 
 export class AttributeModule implements Attribute {
@@ -7,12 +7,14 @@ export class AttributeModule implements Attribute {
   private token: string;
   private url: string;
   private sync: (flag: boolean) => void;
+  private account: Account;
   private emitter: EventEmitter;
 
-  constructor(token: string, url: string, sync: (flag: boolean) => void) {
+  constructor(token: string, url: string, sync: (flag: boolean) => void, account: Account) {
     this.token = token;
     this.url = url;
     this.sync = sync;
+    this.account = account;
     this.emitter = new EventEmitter();
   }
 
@@ -30,14 +32,14 @@ export class AttributeModule implements Attribute {
   public async resync(): Promise<void> {
   }
 
-  public async addArticle(type: string, subject: string, cardIds: string[], groupIds: string[]): Promise<string> {
+  public async addArticle(sealed: boolean, type: string, subject: string, cardIds: string[], groupIds: string[]): Promise<string> {
     return '';
   }
 
   public async removeArticle(articleId: string): Promise<void> {
   }
 
-  public async setArticleSubject(articleId: string, type: string, subject: string): Promise<void> {
+  public async setArticleSubject(articleId: string, subject: string): Promise<void> {
   }
 
   public async setArticleCard(articleId: string, cardId: string): Promise<void> {

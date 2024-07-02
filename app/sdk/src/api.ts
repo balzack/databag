@@ -91,16 +91,21 @@ export interface Contact {
   removeChannel(cardId: string, channelId: string): Promise<void>;
   addTopic(cardId: string, channelId: string, type: string, message: string, assets: Asset[]): Promise<string>;
   removeTopic(cardId: string, channelId: string, topicId: string): Promise<void>;
-  setTopicSubject(cardId: string, channelId: string, topicId: string, type: string, value: string): Promise<void>;
-  addTag(cardId: string, channelId: string, topicId: string, type: string, value: string): Promise<string>;
-  removeTag(cardId: string, tagId: string): Promise<void>;
+  setTopicSubject(cardId: string, channelId: string, topicId: string, subject: string): Promise<void>;
+  addTag(cardId: string, channelId: string, topicId: string, type: string, subject: string): Promise<string>;
+  removeTag(cardId: string, topicId: string, tagId: string): Promise<void>;
+  setTagSubject(cardId: string, topicId: string, tagId: string, subject: string): Promise<void>;
 
-  viewMoreTopics(cardId: string, channelId: string): Promise<number>;
+  getTopics(cardId: string, channelId: string): Promise<Topic[]>;
+  getMoreTopics(cardId: string, channelId: string): Promise<Topic[]>;
+  getTags(cardId: string, channelId: string, topicId: string): Promise<Tag[]>;
+  getMoreTags(cardId: string, channelId: string, topicId: string): Promise<Tag[]>;
+
   setUnreadChannel(cardId: string, channelId: string): Promise<void>;
   clearUnreadChannel(cardId: string, channelId: string): Promise<void>;
 
   getRegistry(server: string): Promise<Profile[]>;
-  getRegistryImageUrl(server: string, string: guid): string;
+  getRegistryImageUrl(server: string, guid: string): string;
 
   getCardImageUrl(cardId: string): string;
   getTopicAssetUrl(cardId: string, channelId: string, topicId: string, assetId: string): string;
@@ -125,9 +130,9 @@ export interface Alias {
 }
 
 export interface Attribute {
-  addArticle(type: string, subject: string, cardIds: string[], groupIds: string[]): Promise<string>;
+  addArticle(sealed: boolean, type: string, subject: string, cardIds: string[], groupIds: string[]): Promise<string>;
   removeArticle(articleId: string): Promise<void>;
-  setArticleSubject(articleId: string, type: string, subject: string): Promise<void>;
+  setArticleSubject(articleId: string, subject: string): Promise<void>;
   setArticleCard(articleId: string, cardId: string): Promise<void>;
   clearArticleCard(articleId: string, cardId: string): Promise<void>;
   setArticleGroup(articleId: string, groupId: string): Promise<void>;
@@ -138,18 +143,19 @@ export interface Attribute {
 }
 
 export interface Content {
-  addChannel(type: string, subject: string, cardIds: string[], groupIds: string[]): Promise<string>;
+  addChannel(sealed: boolean, type: string, subject: string, cardIds: string[], groupIds: string[]): Promise<string>;
   removeChannel(channelId: string): Promise<void>;
-  setChannelSubject(channelId: string, type: string, subject: string): Promise<void>;
+  setChannelSubject(channelId: string, subject: string): Promise<void>;
   setChannelCard(channelId: string, cardId: string): Promise<void>;
   clearChannelCard(channelId: string, cardId: string): Promise<void>;
   setChannelGroup(channelId: string, cardId: string): Promise<void>;
   clearChannelGroup(channelId: string, cardId: string): Promise<void>;
   addTopic(channelId: string, type: string, message: string, assets: Asset[]): Promise<string>;
   removeTopic(channelId: string, topicId: string): Promise<void>;
-  setTopicSubject(channelId: string, topicId: string, type: string, subject: string): Promise<void>;
+  setTopicSubject(channelId: string, topicId: string, subject: string): Promise<void>;
   addTag(channelId: string, topicId: string, type: string, value: string): Promise<string>;
   removeTag(channelId: string, topicId: string, tagId: string): Promise<void>;
+  setTagSubject(channelId: string, topicId: string, tagId: string, subject: string): Promise<void>;
   getTopicAssetUrl(channelId: string, topicId: string, assetId: string): string;
 
   flagTopic(channelId: string, topicId: string): Promise<void>;
@@ -161,7 +167,11 @@ export interface Content {
   getBlockedTopics(): Promise<{ channelId: string, topicId: string }[]>;
   getBlockedTags(): Promise<{ channelId: string, topicId: string, tagId: string }[]>;
 
-  viewMoreTopics(channelId: string): Promise<number>;
+  getTopics(channelId: string): Promise<Topic[]>;
+  getMoreTopics(channelId: string): Promise<Topic[]>;
+  getTags(channelId: string, topicId: string): Promise<Tag[]>;
+  getMoreTags(channelId: string, topicId: string): Promise<Tag[]>;
+
   setUnreadChannel(channelId: string): Promise<void>;
   clearUnreadChannel(channelId: string): Promise<void>;
 
@@ -170,6 +180,43 @@ export interface Content {
 
   addChannelListener(ev: (channels: Channel[]) => void): void;
   removeChannelListener(ev: (channels: Channel[]) => void): void;
+}
+
+export interface Stream {
+  addChannelListener(ev: (channels: Channel[]) => void): void;
+  removeChannelListener(ev: (channels: Channel[]) => void): void;
+}
+
+export interface Focus {
+  blur(): void;
+
+  addTopic(type: string, message: string, assets: Asset[]): Promise<string>;
+  removeTopic(topicId: string): Promise<void>;
+  setTopicSubject(topicId: string, subject: string): Promise<void>;
+  addTag(topicId: string, type: string, subject: string): Promise<string>;
+  removeTag(cardId: string, tagId: string): Promise<void>;
+  setTagSubject(topicId: string, tagId: string, subject: string): Promise<void>;
+
+  viewMoreTopics(): Promise<void>;
+  viewMoreTags(topicId: string): Promise<void>;
+
+  setUnreadChannel(cardId: string, channelId: string): Promise<void>;
+  clearUnreadChannel(cardId: string, channelId: string): Promise<void>;
+
+  getTopicAssetUrl(topicId: string, assetId: string): string;
+
+  addRepeaterAccess(name: string): Promise<Repeater>;
+  removeRepeaterAccess(repeaterId: string): Promise<void>;
+
+  flagTopic(topicId: string): Promise<void>;
+  flagTag(topicId: string, tagId: string): Promise<void>;
+  setBlockTopic(topicId: string): Promise<void>;
+  setBlockTag(topicId: string, tagId: string): Promise<void>;
+  clearBlockTopic(topicId: string): Promise<void>;
+  clearBlockTag(topicId: string, tagId: string): Promise<void>;
+
+  addTopicListener(ev: (topics: Topic[]) => void): void;
+  removeTopicListener(ev: (topics: Topic[]) => void): void;
 }
 
 export interface Node {

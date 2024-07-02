@@ -16,7 +16,7 @@ export type Card = {
 
 export type Channel = {
   id: string,
-  guid: string,
+  cardId?: string,
   lastTopic: {
     guid: string,
     dataType: string,
@@ -27,6 +27,7 @@ export type Channel = {
     transform: string
   }
   unread: boolean,
+  sealed: boolean,
   dataType: string,
   data: string,
   created: number,
@@ -55,7 +56,7 @@ export type Topic = {
   updated: number,
   status: string,
   transform: string,
-  tags: [ Tag ]
+  tags: Tag[]
 }
 
 export type Tag = {
@@ -78,7 +79,7 @@ export type Group = {
   data: string,
   created: number,
   updated: number,
-  cards: [ string ]
+  cards: string[]
 }
 
 export type Article = {
@@ -88,8 +89,8 @@ export type Article = {
   created: number,
   updated: number,
   contacts?: {
-    cards: [ string ],
-    groups: [ string ],
+    cards: string[],
+    groups: string[],
   }
 }
 

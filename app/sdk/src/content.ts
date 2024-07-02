@@ -1,18 +1,20 @@
 import { EventEmitter } from 'events';
-import { type Content } from './api';
-import type { Channel, Topic, Asset, Repeater } from './types';
+import type { Content, Account } from './api';
+import type { Channel, Topic, Asset, Tag, Repeater } from './types';
 
 export class ContentModule implements Content {
 
   private token: string;
   private url: string;
   private sync: (flag: boolean) => void;
+  private account: Account;
   private emitter: EventEmitter;
 
-  constructor(token: string, url: string, sync: (flag: boolean) => void) {
+  constructor(token: string, url: string, sync: (flag: boolean) => void, account: Account) {
     this.token = token;
     this.url = url;
     this.sync = sync;
+    this.account = account;
     this.emitter = new EventEmitter();
   }
 
@@ -30,14 +32,14 @@ export class ContentModule implements Content {
   public async resync(): Promise<void> {
   }
 
-  public async addChannel(type: string, subject: string, cardIds: string[], groupIds: string[]): Promise<string> {
+  public async addChannel(sealed: boolean, type: string, subject: string, cardIds: string[], groupIds: string[]): Promise<string> {
     return '';
   }
 
   public async removeChannel(channelId: string): Promise<void> {
   }
 
-  public async setChannelSubject(channelId: string, type: string, subject: string): Promise<void> {
+  public async setChannelSubject(channelId: string, subject: string): Promise<void> {
   }
 
   public async setChannelCard(channelId: string, cardId: string): Promise<void> {
@@ -52,7 +54,7 @@ export class ContentModule implements Content {
   public async clearChannelGroup(channelId: string, groupId: string): Promise<void> {
   }
 
-  public async addTopic(channelId: string, type: string, message: string, assets: Asset[]): Promise<string> {
+  public async addTopic(channelId: string, type: string, subject: string, assets: Asset[]): Promise<string> {
     return '';
   }
 
@@ -62,7 +64,7 @@ export class ContentModule implements Content {
   public async flagTopic(channelId: string, topicId: string): Promise<void> {
   }
 
-  public async setTopicSubject(channelId: string, topicId: string, type: string, subject: string): Promise<void> {
+  public async setTopicSubject(channelId: string, topicId: string, subject: string): Promise<void> {
   }
 
   public async addTag(channelId: string, topicId: string, type: string, value: string): Promise<string> {
@@ -70,6 +72,9 @@ export class ContentModule implements Content {
   }
 
   public async removeTag(channelId: string, topicId: string, tagId: string): Promise<void> {
+  }
+
+  public async setTagSubject(channelId: string, topicId: string, tagId: string, subject: string): Promise<void> {
   }
 
   public async flagTag(channelId: string, topicId: string, tagId: string): Promise<void> {
@@ -99,14 +104,26 @@ export class ContentModule implements Content {
     return '';
   }
 
-  public async viewMoreTopics(cardId: string, channelId: string): Promise<number> {
-    return 0;
+  public async getTopics(channelId: string): Promise<Topic[]> {
+    return [];
   }
 
-  public async setUnreadChannel(cardId: string, channelId: string): Promise<void> {
+  public async getMoreTopics(channelId: string): Promise<Topic[]> {
+    return [];
   }
 
-  public async clearUnreadChannel(cardId: string, channelId: string): Promise<void> {
+  public async getTags(channelId: string, topicId: string): Promise<Tag[]> {
+    return [];
+  }
+
+  public async getMoreTags(channelId: string, topicId: string): Promise<Tag[]> {
+    return [];
+  }
+
+  public async setUnreadChannel(channelId: string): Promise<void> {
+  }
+
+  public async clearUnreadChannel(channelId: string): Promise<void> {
   }
 
   public async addRepeaterAccess(channelId: string, name: string): Promise<Repeater> {

@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events';
-import { type Contact } from './api';
-import { type Card, type Topic, type Asset, type Profile, type Repeater} from './types';
+import type { Contact } from './api';
+import type { Card, Topic, Asset, Tag, Profile, Repeater} from './types';
 
 export class ContactModule implements Contact {
 
@@ -133,18 +133,33 @@ export class ContactModule implements Contact {
   public async removeTopic(cardId: string, channelId: string, topicId: string): Promise<void> {
   }
 
-  public async setTopicSubject(cardId: string, channelId: string, topicId: string, type: string, subject: string): Promise<void> {
+  public async setTopicSubject(cardId: string, channelId: string, topicId: string, subject: string): Promise<void> {
   }
 
   public async addTag(cardId: string, channelId: string, topicId: string, type: string, value: string): Promise<string> {
     return '';
   }
 
-  public async removeTag(cardId: string, tagId: string): Promise<void> {
+  public async removeTag(cardId: string, topicId: string, tagId: string): Promise<void> {
   }
 
-  public async viewMoreTopics(cardId: string, channelId: string): Promise<number> {
-    return 0;
+  public async setTagSubject(cardId: string, topicId: string, tagId: string, subject: string): Promise<void> {
+  }
+
+  public async getTopics(cardId: string, channelId: string): Promise<Topic[]> {
+    return [];
+  }
+
+  public async getMoreTopics(cardId: string, channelId: string): Promise<Topic[]> {
+    return [];
+  }
+
+  public async getTags(cardId: string, channelId: string, topicId: string): Promise<Tag[]> {
+    return [];
+  }
+
+  public async getMoreTags(cardId: string, channelId: string, topicId: string): Promise<Tag[]> {
+    return [];
   }
 
   public async setUnreadChannel(cardId: string, channelId: string): Promise<void> {
@@ -153,11 +168,11 @@ export class ContactModule implements Contact {
   public async clearUnreadChannel(cardId: string, channelId: string): Promise<void> {
   }  
 
-  public getRegistry(server: string): Promise<Profile[]> {
+  public async getRegistry(server: string): Promise<Profile[]> {
     return [];
   }
 
-  public getRegistryImageUrl(server: string, string: guid): string {
+  public getRegistryImageUrl(server: string, guid: string): string {
     return '';
   }
 

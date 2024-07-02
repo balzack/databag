@@ -6,8 +6,10 @@ import { ContactModule } from './contact';
 import { AliasModule } from './alias';
 import { AttributeModule } from './attribute';
 import { ContentModule } from './content';
+import { StreamModule } from './stream';
+import { FocusModule } from './focus';
 
-import { type Session, type SqlStore, type WebStore, type Account, type Identity, type Contact, type Alias, type Attribute, type Content } from './api';
+import type { Session, SqlStore, WebStore, Account, Identity, Contact, Alias, Attribute, Content, Stream, Focus } from './api';
 
 export class SessionModule implements Session {
 
@@ -23,6 +25,7 @@ export class SessionModule implements Session {
   public alias: AliasModule;
   public attribute: AttributeModule;
   public content: ContentModule;
+  public stream: StreamModule;
 
   constructor(store: SqlStore | WebStore | null, token: string, url: string) {
     this.store = store;
@@ -34,8 +37,9 @@ export class SessionModule implements Session {
     this.identity = new IdentityModule(token, url, this.setSync);
     this.contact = new ContactModule(token, url, this.setSync);
     this.alias = new AliasModule(token, url, this.setSync);
-    this.attribute = new AttributeModule(token, url, this.setSync);
-    this.content = new ContentModule(token, url, this.setSync);
+    this.attribute = new AttributeModule(token, url, this.setSync, this.account);
+    this.content = new ContentModule(token, url, this.setSync, this.account);
+    this.stream = new StreamModule(this.contact, this.content);
   }
 
   public addStatusListener(ev: (status: string) => void): void {
@@ -76,5 +80,13 @@ export class SessionModule implements Session {
 
   public getContent(): Content {
     return this.content;
+  }
+
+  public getStream(): Stream {
+    return this.stream;
+  }
+
+  public getFocus(channelId: string, cardId?: string): Focus {
+    return new FocusModule(this.identity, this.contact, this.content, channelId, cardId);
   }
 }
