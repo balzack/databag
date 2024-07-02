@@ -25,6 +25,8 @@ export interface Session {
   getAlias(): Alias;
   getAttribute(): Attribute;
   getContent(): Content;
+  getStream(): Stream;
+  getFocus(channelId: string, cardId: string): Focus;
 
   resync(): void;
 
