@@ -2,7 +2,6 @@ export type Card = {
   id: string,
   status: string,
   statusUpdated: number,
-  notes: string,
   groups: string[],
   guid: string,
   handle: string,
@@ -16,7 +15,7 @@ export type Card = {
 
 export type Channel = {
   id: string,
-  cardId?: string,
+  cardId: string | null,
   lastTopic: {
     guid: string,
     dataType: string,
@@ -28,6 +27,7 @@ export type Channel = {
   }
   unread: boolean,
   sealed: boolean,
+  unsealed: boolean;
   dataType: string,
   data: string,
   created: number,
@@ -50,17 +50,23 @@ export type Channel = {
 export type Topic = {
   id: string,
   guid: string,
+  sealed: boolean,
+  unsealed: boolean,
   dataType: string,
   data: string,
   created: number,
   updated: number,
   status: string,
   transform: string,
+  tagCount: number,
+  tagComplete: boolean,
   tags: Tag[]
 }
 
 export type Tag = {
   id: string,
+  sealed: boolean,
+  unsealed: boolean,
   guid: string,
   dataType: string,
   data: string,
@@ -75,6 +81,8 @@ export type Asset = {
 
 export type Group = {
   id: string,
+  sealed: boolean,
+  unsealed: boolean,
   dataType: string,
   data: string,
   created: number,
@@ -84,6 +92,8 @@ export type Group = {
 
 export type Article = {
   id: string,
+  sealed: boolean,
+  unsealed: boolean,
   dataType: string,
   data: string,
   created: number,
@@ -161,9 +171,8 @@ export type NodeConfig = {
 }
 
 export type SessionParams = {
-  initialTopicCount: number,
+  topicBatch: number,
+  tagBatch: number,
   channelTypes: string[],
-  topicTypes: string[],
-  tagTypes: string[],
 }
 

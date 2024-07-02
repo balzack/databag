@@ -18,6 +18,9 @@ export interface WebStore {
   clearAll(): Promise<void>;
 }
 
+export interface Crypto {
+}
+
 export interface Session {
   getAccount(): Account;
   getIdentity(): Identity;
@@ -120,9 +123,9 @@ export interface Contact {
 }
 
 export interface Alias {
-  addGroup(name: string, cardIds: string[]): Promise<string>;
+  addGroup(sealed: boolean, type: string, subject: string, cardIds: string[]): Promise<string>;
   removeGroup(groupId: string): Promise<void>;
-  setGroupName(groupId: string, name: string): Promise<void>;
+  setGroupSubject(groupId: string, string: string): Promise<void>;
   setGroupCard(groupId: string, cardId: string): Promise<void>;
   clearGroupCard(groupId: string, cardId: string): Promise<void>;
   compare(groupIds: string[], cardIds: string[]): Promise<Map<string, string[]>>;

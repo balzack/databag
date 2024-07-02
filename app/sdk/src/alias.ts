@@ -30,14 +30,14 @@ export class AliasModule implements Alias {
   public async resync(): Promise<void> {
   }
 
-  public async addGroup(name: string, cardIds: string[]): Promise<string> {
+  public async addGroup(sealed: boolean, dataType: string, subject: string, cardIds: string[]): Promise<string> {
     return '';
   }
 
   public async removeGroup(groupId: string): Promise<void> {
   }
 
-  public async setGroupName(groupId: string, name: string): Promise<void> {
+  public async setGroupSubject(groupId: string, subject: string): Promise<void> {
   }
 
   public async setGroupCard(groupId: string, cardId: string): Promise<void> {

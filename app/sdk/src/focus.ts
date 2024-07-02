@@ -7,11 +7,11 @@ export class FocusModule implements Focus {
   private identity: Identity;
   private contact: Contact;
   private content: Content;
-  private cardId?: string;
+  private cardId: string | null;
   private channelId: string;
   private emitter: EventEmitter;
 
-  constructor(identity: Identity, contact: Contact, content: Content, channelId: string, cardId?: string) {
+  constructor(identity: Identity, contact: Contact, content: Content, cardId: string | null, channelId: string) {
     this.identity = identity;
     this.contact = contact;
     this.content = content;
