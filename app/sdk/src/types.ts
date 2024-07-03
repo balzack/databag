@@ -16,7 +16,13 @@ export type Card = {
 }
 
 export type Call = {
-  id: string,
+  cardId: string,
+  callId: string,
+  calleeToken: string,
+  ice: { urls: string, username: string, credential: string}[],
+  iceUrl: string, // deprecated
+  iceUsername: string, // deprecated
+  icePassword: string, // deprecated
 }
 
 export type Channel = {
