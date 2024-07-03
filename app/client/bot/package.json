@@ -1,0 +1,36 @@
+{
+  "name": "bot",
+  "version": "0.0.1",
+  "description": "Bot sample for Databag network",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm run build && node build/index.js",
+    "start:dev": "npx nodemon",
+    "build": "rimraf ./build && tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/balzack/databag.git"
+  },
+  "keywords": [
+    "bot",
+    "databag",
+    "decentralized"
+  ],
+  "author": "Roland Osborne <roland.osborne@gmail.com>",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/balzack/databag/issues"
+  },
+  "homepage": "https://github.com/balzack/databag#readme",
+  "devDependencies": {
+    "@types/node": "^20.14.9",
+    "nodemon": "^3.1.4",
+    "rimraf": "^5.0.7",
+    "ts-node": "^10.9.2"
+  },
+  "dependencies": {
+    "typescript": "^5.5.3"
+  }
+}
