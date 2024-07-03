@@ -15,6 +15,10 @@ export type Card = {
   channels: Channel[],
 }
 
+export type Call = {
+  id: string,
+}
+
 export type Channel = {
   id: string,
   cardId: string | null,
@@ -176,5 +180,13 @@ export type SessionParams = {
   topicBatch: number,
   tagBatch: number,
   channelTypes: string[],
+
+  pushType: string,
+  deviceToken: string,
+  notifications: { event: string, messageTitle: string}[],
+
+  deviceId: string,
+  version: string,
+  appName: string,
 }
 

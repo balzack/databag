@@ -8,8 +8,9 @@ import { AttributeModule } from './attribute';
 import { ContentModule } from './content';
 import { StreamModule } from './stream';
 import { FocusModule } from './focus';
+import { RingModule } from './ring';
 
-import type { Session, SqlStore, WebStore, Crypto, Account, Identity, Contact, Alias, Attribute, Content, Stream, Focus } from './api';
+import type { Session, SqlStore, WebStore, Crypto, Account, Identity, Contact, Ring, Alias, Attribute, Content, Stream, Focus } from './api';
 
 export class SessionModule implements Session {
 
@@ -27,6 +28,7 @@ export class SessionModule implements Session {
   public attribute: AttributeModule;
   public content: ContentModule;
   public stream: StreamModule;
+  public ring: RingModule;
 
   constructor(store: SqlStore | WebStore | null, crypto: Crypto | null, token: string, url: string) {
     this.store = store;
@@ -42,6 +44,7 @@ export class SessionModule implements Session {
     this.attribute = new AttributeModule(token, url, this.setSync, this.account);
     this.content = new ContentModule(token, url, this.setSync, this.account);
     this.stream = new StreamModule(this.contact, this.content);
+    this.ring = new RingModule();
   }
 
   public addStatusListener(ev: (status: string) => void): void {
@@ -96,6 +99,10 @@ export class SessionModule implements Session {
 
   public getStream(): Stream {
     return this.stream;
+  }
+
+  public getRing(): Ring {
+    return this.ring;
   }
 
   public addFocus(cardId: string | null, channelId: string): Focus {

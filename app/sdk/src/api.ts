@@ -4,7 +4,7 @@
 // formaize delete vs block remote channel
 // articles share by cards now
 
-import type { Channel, Topic, Asset, Tag, Article, Group, Card, Profile, AccountStatus, NodeConfig, NodeAccount, Repeater } from './types';
+import type { Channel, Topic, Asset, Tag, Article, Group, Card, Profile, Call, AccountStatus, NodeConfig, NodeAccount, Repeater } from './types';
 
 export interface SqlStore {
   set(stmt: string, params: (string | number)[]): Promise<void>;
@@ -31,6 +31,7 @@ export interface Session {
   getAttribute(): Attribute;
   getContent(): Content;
   getStream(): Stream;
+  getRing(): Ring;
 
   addFocus(cardId: string | null, channelId: string): Focus;
   removeFocus(focus: Focus): void;
@@ -39,6 +40,19 @@ export interface Session {
 
   addStatusListener(ev: (status: string) => void): void;
   removeStatusListener(ev: (status: string) => void): void;
+}
+
+export interface Ring {
+
+  addCallingListener(ev: (calls: Call[]) => void): void;
+  removeCallingListener(ev: (calls: Call[]) => void): void;
+
+  addCallListener(ev: (call: Call | null) => void): void;
+  removeCallListener(ev: (call: Call | null) => void): void;
+
+  accept(callId: string): void;
+  ignore(callId: string): void;
+  decline(callId: string): void;
 }
 
 export interface Account {
