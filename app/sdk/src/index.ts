@@ -5,6 +5,9 @@ import { BotModule } from './bot';
 import type { Session, Node, Bot, SqlStore, WebStore } from './api';
 import type { SessionParams } from './types';
 
+export * from './api';
+export * from './types';
+
 export class DatabagSDK {
 
   private crypto: Crypto | null;

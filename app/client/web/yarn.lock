@@ -5171,6 +5171,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"databag-client-sdk@npm:^0.0.18":
+  version: 0.0.18
+  resolution: "databag-client-sdk@npm:0.0.18"
+  dependencies:
+    eventemitter3: ^5.0.1
+  checksum: d7afa318a9f0b4474d3d9df247f9ee8ed3f473d2163560b93d62716069650306286413b2d83cb4946fc3cf07575291e45c025475aec7a9e428c4a6318f4c29ec
+  languageName: node
+  linkType: hard
+
 "databag@workspace:.":
   version: 0.0.0-use.local
   resolution: "databag@workspace:."
@@ -5182,6 +5191,7 @@ __metadata:
     "@types/node": ^16.18.101
     "@types/react": ^18.3.3
     "@types/react-dom": ^18.3.0
+    databag-client-sdk: ^0.0.18
     react: ^18.3.1
     react-dom: ^18.3.1
     react-scripts: 5.0.1
@@ -6291,6 +6301,13 @@ __metadata:
   version: 4.0.7
   resolution: "eventemitter3@npm:4.0.7"
   checksum: 1875311c42fcfe9c707b2712c32664a245629b42bb0a5a84439762dd0fd637fc54d078155ea83c2af9e0323c9ac13687e03cfba79b03af9f40c89b4960099374
+  languageName: node
+  linkType: hard
+
+"eventemitter3@npm:^5.0.1":
+  version: 5.0.1
+  resolution: "eventemitter3@npm:5.0.1"
+  checksum: 543d6c858ab699303c3c32e0f0f47fc64d360bf73c3daf0ac0b5079710e340d6fe9f15487f94e66c629f5f82cd1a8678d692f3dbb6f6fcd1190e1b97fcad36f8
   languageName: node
   linkType: hard
 
