@@ -1,4 +1,4 @@
-import { EventEmitter } from 'events';
+import { EventEmitter } from 'eventemitter3';
 import type { Content, Account } from './api';
 import type { Channel, Topic, Asset, Tag, Repeater } from './types';
 

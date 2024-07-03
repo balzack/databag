@@ -3010,6 +3010,7 @@ __metadata:
     "@types/react": ^18.2.6
     "@types/react-test-renderer": ^18.0.0
     babel-jest: ^29.6.3
+    databag-client-sdk: ^0.0.17
     eslint: ^8.19.0
     jest: ^29.6.3
     prettier: 2.8.8
@@ -4033,6 +4034,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"databag-client-sdk@npm:^0.0.17":
+  version: 0.0.17
+  resolution: "databag-client-sdk@npm:0.0.17"
+  dependencies:
+    eventemitter3: ^5.0.1
+  checksum: 65961dbb1098e6d0ffb31e4bde1fce4e7f778e85abeabfdceae1af7a6f4620e714e81b035881fb214122baaccce0c84d6a59604df006e34baaec40ba78cfe9e7
+  languageName: node
+  linkType: hard
+
 "dayjs@npm:^1.8.15":
   version: 1.11.11
   resolution: "dayjs@npm:1.11.11"
@@ -4740,6 +4750,13 @@ __metadata:
   version: 5.0.1
   resolution: "event-target-shim@npm:5.0.1"
   checksum: 1ffe3bb22a6d51bdeb6bf6f7cf97d2ff4a74b017ad12284cc9e6a279e727dc30a5de6bb613e5596ff4dc3e517841339ad09a7eec44266eccb1aa201a30448166
+  languageName: node
+  linkType: hard
+
+"eventemitter3@npm:^5.0.1":
+  version: 5.0.1
+  resolution: "eventemitter3@npm:5.0.1"
+  checksum: 543d6c858ab699303c3c32e0f0f47fc64d360bf73c3daf0ac0b5079710e340d6fe9f15487f94e66c629f5f82cd1a8678d692f3dbb6f6fcd1190e1b97fcad36f8
   languageName: node
   linkType: hard
 

@@ -1,4 +1,4 @@
-import { EventEmitter } from 'events';
+import { EventEmitter } from 'eventemitter3';
 import type { Ring } from './api';
 import type { Call } from './types';
 

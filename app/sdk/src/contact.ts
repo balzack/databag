@@ -1,4 +1,4 @@
-import { EventEmitter } from 'events';
+import { EventEmitter } from 'eventemitter3';
 import type { Contact } from './api';
 import type { Card, Topic, Asset, Tag, Profile, Repeater} from './types';
 

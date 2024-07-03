@@ -1,4 +1,4 @@
-import { EventEmitter } from 'events';
+import { EventEmitter } from 'eventemitter3';
 import type { Identity, Contact, Content, Focus } from './api';
 import type { Topic, Asset, Repeater } from './types';
 

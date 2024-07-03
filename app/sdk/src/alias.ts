@@ -1,4 +1,4 @@
-import { EventEmitter } from 'events';
+import { EventEmitter } from 'eventemitter3';
 import type { Alias, Account } from './api';
 import type { Group } from './types';
 

@@ -1,4 +1,4 @@
-import { EventEmitter } from 'events';
+import { EventEmitter } from 'eventemitter3';
 import type { Contact, Content, Stream } from './api';
 import type { Channel } from './types';
 

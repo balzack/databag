@@ -1,4 +1,4 @@
-import { EventEmitter } from 'events';
+import { EventEmitter } from 'eventemitter3';
 import { type Identity } from './api';
 import { type Profile } from './types';
 
