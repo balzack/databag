@@ -40,6 +40,7 @@ export class DatabagSDK {
   }
 
   public async logout(session: Session): Promise<void> {
+    session.close();
   }
 
   public async configure(token: string, url: string): Promise<Node> {

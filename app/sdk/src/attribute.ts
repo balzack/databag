@@ -26,6 +26,9 @@ export class AttributeModule implements Attribute {
     this.emitter.off('article', ev);
   }
 
+  public close(): void {
+  }
+
   public async setRevision(rev: number): Promise<void> {
   }
 

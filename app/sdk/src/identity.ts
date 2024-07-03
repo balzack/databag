@@ -24,6 +24,9 @@ export class IdentityModule implements Identity {
     this.emitter.off('profile', ev);
   }
 
+  public close(): void {
+  }
+
   public async setRevision(rev: number): Promise<void> {
   }
 
@@ -37,6 +40,10 @@ export class IdentityModule implements Identity {
   }
 
   public async getHandleStatus(handle: string): Promise<void> {
+  }
+
+  public getProfileImageUrl(): string {
+    return '';
   }
 }
 

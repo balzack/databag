@@ -38,7 +38,7 @@ export class SessionModule implements Session {
     this.account = new AccountModule(token, url, this.setSync);
     this.identity = new IdentityModule(token, url, this.setSync);
     this.contact = new ContactModule(token, url, this.setSync);
-    this.alias = new AliasModule(token, url, this.setSync);
+    this.alias = new AliasModule(token, url, this.setSync, this.account);
     this.attribute = new AttributeModule(token, url, this.setSync, this.account);
     this.content = new ContentModule(token, url, this.setSync, this.account);
     this.stream = new StreamModule(this.contact, this.content);
@@ -58,6 +58,16 @@ export class SessionModule implements Session {
   }
 
   public resync() {
+  }
+
+  public close() {
+    this.stream.close();
+    this.content.close();
+    this.attribute.close();
+    this.alias.close();
+    this.contact.close();
+    this.identity.close();
+    this.account.close();
   }
 
   public getAccount(): Account {
@@ -88,7 +98,11 @@ export class SessionModule implements Session {
     return this.stream;
   }
 
-  public getFocus(cardId: string | null, channelId: string): Focus {
+  public addFocus(cardId: string | null, channelId: string): Focus {
     return new FocusModule(this.identity, this.contact, this.content, cardId, channelId);
+  }
+
+  public removeFocus(focus: Focus): void {
+    focus.blur();
   }
 }

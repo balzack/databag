@@ -24,6 +24,9 @@ export class ContactModule implements Contact {
     this.emitter.off('card', ev);
   }
 
+  public close(): void {
+  }
+
   public async setRevision(rev: number): Promise<void> {
   }
 

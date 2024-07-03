@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events';
-import { type Alias } from './api';
+import type { Alias, Account } from './api';
 import type { Group } from './types';
 
 export class AliasModule implements Alias {
@@ -7,12 +7,14 @@ export class AliasModule implements Alias {
   private token: string;
   private url: string;
   private sync: (flag: boolean) => void;
+  private account: Account;
   private emitter: EventEmitter;
 
-  constructor(token: string, url: string, sync: (flag: boolean) => void) {
+  constructor(token: string, url: string, sync: (flag: boolean) => void, account: Account) {
     this.token = token;
     this.url = url;
     this.sync = sync;
+    this.account = account;
     this.emitter = new EventEmitter();
   }
 
@@ -22,6 +24,9 @@ export class AliasModule implements Alias {
 
   public removeGroupListener(ev: (groups: Group[]) => void): void {
     this.emitter.off('group', ev);
+  }
+
+  public close(): void {
   }
 
   public async setRevision(rev: number): Promise<void> {

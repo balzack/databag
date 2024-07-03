@@ -22,4 +22,6 @@ export class StreamModule implements Stream {
     this.emitter.off('channel', ev);
   }
 
+  public close(): void {
+  }
 }

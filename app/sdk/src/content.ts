@@ -26,6 +26,9 @@ export class ContentModule implements Content {
     this.emitter.off('channel', ev);
   }
 
+  public close(): void {
+  }
+
   public async setRevision(rev: number): Promise<void> {
   }
 

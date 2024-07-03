@@ -24,16 +24,25 @@ export class AccountModule implements Account {
     this.emitter.off('status', ev);
   }
 
+  public close(): void {
+  }
+
   public async setRevision(rev: number): Promise<void> {
   }
 
   public async resync(): Promise<void> {
   }
 
-  public async setNotifications(flag: boolean): Promise<void> {
+  public async enableNotifications(): Promise<void> {
   }
 
-  public async setSearchable(flag: boolean): Promise<void> {
+  public async disableNotifications(): Promise<void> {
+  }
+
+  public async enableRegistry(): Promise<void> {
+  }
+
+  public async disableRegistry(): Promise<void> {
   }
 
   public async enableMFA(): Promise<{ secretImage: string, secretText: string }> {

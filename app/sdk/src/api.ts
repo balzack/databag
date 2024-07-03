@@ -22,6 +22,8 @@ export interface Crypto {
 }
 
 export interface Session {
+  close(): void;
+
   getAccount(): Account;
   getIdentity(): Identity;
   getContact(): Contact;
@@ -29,7 +31,9 @@ export interface Session {
   getAttribute(): Attribute;
   getContent(): Content;
   getStream(): Stream;
-  getFocus(channelId: string, cardId: string): Focus;
+
+  addFocus(cardId: string | null, channelId: string): Focus;
+  removeFocus(focus: Focus): void;
 
   resync(): void;
 
@@ -39,8 +43,10 @@ export interface Session {
 
 export interface Account {
   setLogin(username: string, password: string): Promise<void>;
-  setNotifications(flag: boolean): Promise<void>;
-  setSearchable(flag: boolean): Promise<void>;
+  enableNotifications(): Promise<void>;
+  disableNotifications(): Promise<void>;
+  enableRegistry(): Promise<void>;
+  disableRegistry(): Promise<void>;
   enableMFA(): Promise<{ secretImage: string, secretText: string }>;
   disableMFA(): Promise<void>;
   confirmMFA(code: string): Promise<void>;
@@ -57,6 +63,8 @@ export interface Identity {
   setProfileImage(image: string): Promise<void>;
   getHandleStatus(handle: string): Promise<void>;
 
+  getProfileImageUrl(): string;
+
   addProfileListener(ev: (profile: Profile) => void): void;
   removeProfileListener(ev: (profile: Profile) => void): void;
 }
@@ -70,6 +78,20 @@ export interface Contact {
   rejectCard(cardId: string): Promise<void>;
   ignoreCard(cardId: string): Promise<void>;
   resyncCard(cardId: string): Promise<void>;
+
+  removeArticle(cardId: string, articleId: string): Promise<void>;
+  removeChannel(cardId: string, channelId: string): Promise<void>;
+  addTopic(cardId: string, channelId: string, type: string, subject: string, assets: Asset[]): Promise<string>;
+  removeTopic(cardId: string, channelId: string, topicId: string): Promise<void>;
+  setTopicSubject(cardId: string, channelId: string, topicId: string, subject: string): Promise<void>;
+  addTag(cardId: string, channelId: string, topicId: string, type: string, subject: string): Promise<string>;
+  removeTag(cardId: string, topicId: string, tagId: string): Promise<void>;
+  setTagSubject(cardId: string, topicId: string, tagId: string, subject: string): Promise<void>;
+
+  getTopics(cardId: string, channelId: string): Promise<Topic[]>;
+  getMoreTopics(cardId: string, channelId: string): Promise<Topic[]>;
+  getTags(cardId: string, channelId: string, topicId: string): Promise<Tag[]>;
+  getMoreTags(cardId: string, channelId: string, topicId: string): Promise<Tag[]>;
 
   flagCard(cardId: string): Promise<void>;
   flagArticle(cardId: string, articleId: string): Promise<void>;
@@ -92,20 +114,6 @@ export interface Contact {
   getBlockedTags(): Promise<{ cardId: string, channelId: string, topicId: string, tagId: string }[]>;
   getBlockedArticles(): Promise<{ cardId: string, articleId: string }[]>;
 
-  removeArticle(cardId: string, articleId: string): Promise<void>;
-  removeChannel(cardId: string, channelId: string): Promise<void>;
-  addTopic(cardId: string, channelId: string, type: string, message: string, assets: Asset[]): Promise<string>;
-  removeTopic(cardId: string, channelId: string, topicId: string): Promise<void>;
-  setTopicSubject(cardId: string, channelId: string, topicId: string, subject: string): Promise<void>;
-  addTag(cardId: string, channelId: string, topicId: string, type: string, subject: string): Promise<string>;
-  removeTag(cardId: string, topicId: string, tagId: string): Promise<void>;
-  setTagSubject(cardId: string, topicId: string, tagId: string, subject: string): Promise<void>;
-
-  getTopics(cardId: string, channelId: string): Promise<Topic[]>;
-  getMoreTopics(cardId: string, channelId: string): Promise<Topic[]>;
-  getTags(cardId: string, channelId: string, topicId: string): Promise<Tag[]>;
-  getMoreTags(cardId: string, channelId: string, topicId: string): Promise<Tag[]>;
-
   setUnreadChannel(cardId: string, channelId: string): Promise<void>;
   clearUnreadChannel(cardId: string, channelId: string): Promise<void>;
 
@@ -125,7 +133,7 @@ export interface Contact {
 export interface Alias {
   addGroup(sealed: boolean, type: string, subject: string, cardIds: string[]): Promise<string>;
   removeGroup(groupId: string): Promise<void>;
-  setGroupSubject(groupId: string, string: string): Promise<void>;
+  setGroupSubject(groupId: string, subject: string): Promise<void>;
   setGroupCard(groupId: string, cardId: string): Promise<void>;
   clearGroupCard(groupId: string, cardId: string): Promise<void>;
   compare(groupIds: string[], cardIds: string[]): Promise<Map<string, string[]>>;

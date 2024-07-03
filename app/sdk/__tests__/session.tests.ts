@@ -6,6 +6,6 @@ test('allocates session correctly', async () => {
   const params: SessionParams = { topicBatch: 0, tagBatch: 0, channelTypes: [] };
   const session = await sdk.login('handle', 'password', 'url', params);
   const account = session.getAccount();
-  account.setNotifications(true);
+  account.enableNotifications();
   //expect(r).toBe(5);
 });

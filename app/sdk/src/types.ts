@@ -11,6 +11,8 @@ export type Card = {
   imageSet: boolean,
   version: string,
   node: string,
+  articles: Article[],
+  channels: Channel[],
 }
 
 export type Channel = {
