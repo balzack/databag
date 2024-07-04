@@ -12,12 +12,9 @@ class Store implements SqlStore {
 };
 
 export function useAppContext() {
-  const [state, setState] = useState({
-    sdk: DatabagSDK,
-    session: Session | null,
-  });
+  const [state, setState] = useState({});
 
-  const updateState = (value) => {
+  const updateState = (value: any) => {
     setState((s) => ({ ...s, ...value }))
   }
 
@@ -27,8 +24,7 @@ export function useAppContext() {
     const sdk = new DatabagSDK(null);
     const store = new Store();
     const session = await sdk.initOfflineStore(store);
-    console.log(session);
-    updateState({ sdk, session });
+    updateState('databag sdk');
   };
 
   const actions = {
