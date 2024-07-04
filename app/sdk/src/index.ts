@@ -30,7 +30,7 @@ export class DatabagSDK {
     return new SessionModule(this.store, this.crypto, '', '');
   }
 
-  public async login(handle: string, password: string, url: string, params: SessionParams): Promise<Session> {
+  public async login(handle: string, password: string, url: string, mfaCode: string | null, params: SessionParams): Promise<Session> {
     return new SessionModule(this.store, this.crypto, '', '');
   }
 
@@ -46,7 +46,7 @@ export class DatabagSDK {
     session.close();
   }
 
-  public async configure(token: string, url: string): Promise<Node> {
+  public async configure(token: string, url: string, mfaCode: string | null): Promise<Node> {
     return new NodeModule('', '');
   }
 
