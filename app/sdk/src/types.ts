@@ -19,12 +19,26 @@ export type Call = {
   cardId: string,
   callId: string,
   calleeToken: string,
-  ice: { urls: string, username: string, credential: string}[],
+  ice?: { urls: string, username: string, credential: string}[],
   iceUrl: string, // deprecated
   iceUsername: string, // deprecated
   icePassword: string, // deprecated
 }
 
+export type Revision = {
+  account: number,
+  profile: number,
+  article: number,
+  group: number,
+  channel: number,
+  card: number
+}
+
+export type Activity = {
+  revision?: Revision,
+  phone?: Call,
+}
+  
 export type Channel = {
   id: string,
   cardId: string | null,

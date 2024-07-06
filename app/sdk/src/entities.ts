@@ -170,3 +170,19 @@ export type ProfileEntity = {
   node: string,
 }
 
+export type Ringing = {
+  cardId: string,
+  callId: string,
+  calleeToken: string,
+  ice: { urls: string, username: string, credential: string }[],
+}
+
+export type Revision = {
+  account: number,
+  profile: number,
+  article: number,
+  group: number,
+  channel: number,
+  card: number
+}
+

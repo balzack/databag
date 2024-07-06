@@ -34,11 +34,11 @@ export class DatabagSDK {
     return new SessionModule(this.store, this.crypto, '', '');
   }
 
-  public async access(token: string, url: string, params: SessionParams): Promise<Session> {
+  public async access(url: string, token: string, params: SessionParams): Promise<Session> {
     return new SessionModule(this.store, this.crypto, '', '');
   }
 
-  public async create(handle: string, password: string, url: string, token: string, params: SessionParams): Promise<Session> {
+  public async create(handle: string, password: string, url: string, token: string | null, params: SessionParams): Promise<Session> {
     return new SessionModule(this.store, this.crypto, '', '');
   }
 

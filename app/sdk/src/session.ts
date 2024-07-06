@@ -10,6 +10,8 @@ import { StreamModule } from './stream';
 import { FocusModule } from './focus';
 import { RingModule } from './ring';
 
+import { Connection } from './connection';
+
 import type { Session, SqlStore, WebStore, Crypto, Account, Identity, Contact, Ring, Alias, Attribute, Content, Stream, Focus } from './api';
 
 export class SessionModule implements Session {
@@ -20,15 +22,15 @@ export class SessionModule implements Session {
   private token: string;
   private url: string;
   private sync: boolean;
-
-  public account: AccountModule; 
-  public identity: IdentityModule;
-  public contact: ContactModule;
-  public alias: AliasModule;
-  public attribute: AttributeModule;
-  public content: ContentModule;
-  public stream: StreamModule;
-  public ring: RingModule;
+  private account: AccountModule; 
+  private identity: IdentityModule;
+  private contact: ContactModule;
+  private alias: AliasModule;
+  private attribute: AttributeModule;
+  private content: ContentModule;
+  private stream: StreamModule;
+  private ring: RingModule;
+  private connection: Connection;
 
   constructor(store: SqlStore | WebStore | null, crypto: Crypto | null, token: string, url: string) {
     this.store = store;
@@ -45,6 +47,7 @@ export class SessionModule implements Session {
     this.content = new ContentModule(token, url, this.setSync, this.account);
     this.stream = new StreamModule(this.contact, this.content);
     this.ring = new RingModule();
+    this.connection = new Connection(token, url);
   }
 
   public addStatusListener(ev: (status: string) => void): void {
@@ -64,6 +67,7 @@ export class SessionModule implements Session {
   }
 
   public close() {
+    this.connection.close();
     this.stream.close();
     this.content.close();
     this.attribute.close();
