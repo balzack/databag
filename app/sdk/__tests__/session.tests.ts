@@ -22,5 +22,6 @@ test('allocates session correctly', async () => {
   const account = session.getAccount();
   account.enableNotifications();
   mock.emitStatus('connected');
+  mock.emitRevision({ account: 0, profile: 0, article: 0, group: 0, channel: 0, card: 0});
   expect(status).toBe('connected');
 });

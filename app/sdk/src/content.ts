@@ -6,14 +6,12 @@ export class ContentModule implements Content {
 
   private token: string;
   private url: string;
-  private sync: (flag: boolean) => void;
   private account: Account;
   private emitter: EventEmitter;
 
-  constructor(token: string, url: string, sync: (flag: boolean) => void, account: Account) {
+  constructor(token: string, url: string, account: Account) {
     this.token = token;
     this.url = url;
-    this.sync = sync;
     this.account = account;
     this.emitter = new EventEmitter();
   }
@@ -30,9 +28,7 @@ export class ContentModule implements Content {
   }
 
   public async setRevision(rev: number): Promise<void> {
-  }
-
-  public async resync(): Promise<void> {
+    console.log('set content revision:', rev);
   }
 
   public async addChannel(sealed: boolean, type: string, subject: string, cardIds: string[], groupIds: string[]): Promise<string> {

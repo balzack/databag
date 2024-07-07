@@ -5,15 +5,13 @@ import type { AccountStatus } from './types';
 export class AccountModule implements Account {
 
   private emitter: EventEmitter;
-  private sync: (flag: boolean) => void;
   private token: string;
   private url: string;
 
-  constructor(token: string, url: string, sync: (flag: boolean) => void) {
+  constructor(token: string, url: string) {
     this.emitter = new EventEmitter();
     this.token = token;
     this.url = url;
-    this.sync = sync;
   }
 
   public addStatusListener(ev: (status: AccountStatus) => void): void {
@@ -28,9 +26,7 @@ export class AccountModule implements Account {
   }
 
   public async setRevision(rev: number): Promise<void> {
-  }
-
-  public async resync(): Promise<void> {
+    console.log('set account revision:', rev);
   }
 
   public async enableNotifications(): Promise<void> {

@@ -22,7 +22,8 @@ export class SessionModule implements Session {
   private crypto: Crypto | null;
   private token: string;
   private url: string;
-  private sync: boolean;
+  private syncRevision: Revision | null;
+  private status: string;
   private account: AccountModule; 
   private identity: IdentityModule;
   private contact: ContactModule;
@@ -32,35 +33,57 @@ export class SessionModule implements Session {
   private stream: StreamModule;
   private ring: RingModule;
   private connection: Connection;
-
+   
   constructor(store: SqlStore | WebStore | null, crypto: Crypto | null, token: string, url: string) {
+
     this.store = store;
     this.crypto = crypto;
     this.token = token;
     this.url = url;
-    this.sync = true;
+    this.syncRevision = null;
+    this.status = 'connecting'
     this.emitter = new EventEmitter();
-    this.account = new AccountModule(token, url, this.setSync);
-    this.identity = new IdentityModule(token, url, this.setSync);
-    this.contact = new ContactModule(token, url, this.setSync);
-    this.alias = new AliasModule(token, url, this.setSync, this.account);
-    this.attribute = new AttributeModule(token, url, this.setSync, this.account);
-    this.content = new ContentModule(token, url, this.setSync, this.account);
+ 
+    this.account = new AccountModule(token, url);
+    this.identity = new IdentityModule(token, url);
+    this.contact = new ContactModule(token, url);
+    this.alias = new AliasModule(token, url, this.account);
+    this.attribute = new AttributeModule(token, url, this.account);
+    this.content = new ContentModule(token, url, this.account);
     this.stream = new StreamModule(this.contact, this.content);
     this.ring = new RingModule();
+
+    const onStatus = (ev: string) => {
+      this.status = ev;
+      this.emitter.emit('status', this.getStatus());
+    }
+
+    const onRevision = async (ev: Revision) => {
+      try {
+        await this.identity.setRevision(ev.profile);
+        await this.account.setRevision(ev.account);
+        await this.contact.setRevision(ev.card);
+        await this.attribute.setRevision(ev.article);
+        await this.alias.setRevision(ev.group);
+        await this.content.setRevision(ev.channel);
+        if (this.syncRevision) {
+          this.syncRevision = null
+          this.emitter.emit('status', this.getStatus());
+        }
+      }
+      catch(err) {
+        this.syncRevision = ev;
+        this.emitter.emit('status', this.getStatus());
+      }
+    }
+
+    const onRing = (ev: Ringing) => {
+    }
+
     this.connection = new Connection(token, url);
-
-    this.connection.addStatusListener((ev: string) => {
-      this.emitter.emit('status', ev);
-    });
-
-    this.connection.addRevisionListener((ev: Revision) => {
-      // handle revision
-    });
-
-    this.connection.addRingListener((ev: Ringing) => {
-      // handle ringing
-    });
+    this.connection.addStatusListener(onStatus);
+    this.connection.addRevisionListener(onRevision);
+    this.connection.addRingListener(onRing);
   }
 
   public addStatusListener(ev: (status: string) => void): void {
@@ -71,11 +94,13 @@ export class SessionModule implements Session {
     this.emitter.off('status', ev);
   }
 
-  public setSync(sync: boolean) {
-    this.sync = sync;
-    // update status
+  private getStatus(): string {
+    if (this.status === 'connected' && this.syncRevision) {
+      return 'offsync';
+    }
+    return this.status;
   }
-
+ 
   public resync() {
   }
 

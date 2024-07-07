@@ -6,13 +6,11 @@ export class ContactModule implements Contact {
 
   private token: string;
   private url: string;
-  private sync: (flag: boolean) => void;
   private emitter: EventEmitter;
 
-  constructor(token: string, url: string, sync: (flag: boolean) => void) {
+  constructor(token: string, url: string) {
     this.token = token;
     this.url = url;
-    this.sync = sync;
     this.emitter = new EventEmitter();
   }
 
@@ -28,9 +26,7 @@ export class ContactModule implements Contact {
   }
 
   public async setRevision(rev: number): Promise<void> {
-  }
-
-  public async resync(): Promise<void> {
+    console.log('set contact revision:', rev);
   }
 
   public async addCard(server: string, guid: string): Promise<string> {
