@@ -3,7 +3,14 @@ import { type SessionParams } from '../src/types';
 
 import { Connection } from '../src/connection';
 
-jest.mock('../src/connection');
+let mockClose = jest.fn();
+jest.mock('../src/connection', () => {
+  return {
+    Connection: jest.fn().mockImplementation(() => {
+      return { close: mockClose };
+    })
+  }
+})
 
 test('allocates session correctly', async () => {
   const sdk = new DatabagSDK(null);
