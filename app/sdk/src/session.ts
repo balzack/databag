@@ -13,10 +13,11 @@ import { RingModule } from './ring';
 import { Connection } from './connection';
 
 import type { Session, SqlStore, WebStore, Crypto, Account, Identity, Contact, Ring, Alias, Attribute, Content, Stream, Focus } from './api';
+import { Revision, Ringing } from './entities';
 
 export class SessionModule implements Session {
 
-  private statusEmitter: EventEmitter;
+  private emitter: EventEmitter;
   private store: SqlStore | WebStore | null;
   private crypto: Crypto | null;
   private token: string;
@@ -38,7 +39,7 @@ export class SessionModule implements Session {
     this.token = token;
     this.url = url;
     this.sync = true;
-    this.statusEmitter = new EventEmitter();
+    this.emitter = new EventEmitter();
     this.account = new AccountModule(token, url, this.setSync);
     this.identity = new IdentityModule(token, url, this.setSync);
     this.contact = new ContactModule(token, url, this.setSync);
@@ -48,14 +49,26 @@ export class SessionModule implements Session {
     this.stream = new StreamModule(this.contact, this.content);
     this.ring = new RingModule();
     this.connection = new Connection(token, url);
+
+    this.connection.addStatusListener((ev: string) => {
+      this.emitter.emit('status', ev);
+    });
+
+    this.connection.addRevisionListener((ev: Revision) => {
+      // handle revision
+    });
+
+    this.connection.addRingListener((ev: Ringing) => {
+      // handle ringing
+    });
   }
 
   public addStatusListener(ev: (status: string) => void): void {
-    this.statusEmitter.on('status', ev);
+    this.emitter.on('status', ev);
   }
 
   public removeStatusListener(ev: (status: string) => void): void {
-    this.statusEmitter.off('status', ev);
+    this.emitter.off('status', ev);
   }
 
   public setSync(sync: boolean) {
