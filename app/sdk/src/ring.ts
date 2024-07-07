@@ -26,6 +26,9 @@ export class RingModule implements Ring {
     this.emitter.off('call', ev);
   }
 
+  public ring(call: Call): void {
+  }
+
   public accept(callId: string): void {
   }
 

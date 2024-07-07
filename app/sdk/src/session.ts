@@ -13,7 +13,8 @@ import { RingModule } from './ring';
 import { Connection } from './connection';
 
 import type { Session, SqlStore, WebStore, Crypto, Account, Identity, Contact, Ring, Alias, Attribute, Content, Stream, Focus } from './api';
-import { Revision, Ringing } from './entities';
+import { Revision } from './entities';
+import { Call } from './types';
 
 export class SessionModule implements Session {
 
@@ -52,6 +53,7 @@ export class SessionModule implements Session {
     this.content = new ContentModule(token, url, this.account);
     this.stream = new StreamModule(this.contact, this.content);
     this.ring = new RingModule();
+    this.connection = new Connection(token, url);
 
     const onStatus = (ev: string) => {
       this.status = ev;
@@ -77,10 +79,10 @@ export class SessionModule implements Session {
       }
     }
 
-    const onRing = (ev: Ringing) => {
+    const onRing = (ev: Call) => {
+      this.ring.ring(ev);
     }
 
-    this.connection = new Connection(token, url);
     this.connection.addStatusListener(onStatus);
     this.connection.addRevisionListener(onRevision);
     this.connection.addRingListener(onRing);

@@ -1,5 +1,6 @@
 import { EventEmitter } from 'eventemitter3';
-import { Revision, Ringing } from './entities';
+import { Revision } from './entities';
+import { Call } from './types';
 
 export class Connection {
 
@@ -28,12 +29,12 @@ export class Connection {
     this.emitter.off('revision', ev);
   }
 
-  public addRingListener(ev: (ringing: Ringing) => void): void {
-    this.emitter.on('ringing', ev);
+  public addRingListener(ev: (call: Call) => void): void {
+    this.emitter.on('call', ev);
   }
 
-  public removeRingListener(ev: (ringing: Ringing) => void): void {
-    this.emitter.off('ringing', ev);
+  public removeRingListener(ev: (call: Call) => void): void {
+    this.emitter.off('call', ev);
   }
 
   public addStatusListener(ev: (status: string) => void): void {
@@ -65,8 +66,8 @@ export class Connection {
         }
         else if (activity.ring) {
           const { cardId, callId, calleeToken, ice, iceUrl, iceUsername, icePassword } = activity.ring;
-          const ringing: Ringing = { cardId, callId, calleeToken, ice: ice ? ice : [{ urls: iceUrl, username: iceUsername, credential: icePassword }] };
-          this.emitter.emit('ring', ringing);
+          const call: Call = { cardId, callId, calleeToken, ice: ice ? ice : [{ urls: iceUrl, username: iceUsername, credential: icePassword }] };
+          this.emitter.emit('call', call);
         }
         else {
           this.emitter.emit('revision', activity as Revision);

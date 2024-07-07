@@ -1,5 +1,6 @@
 import { EventEmitter } from 'eventemitter3';
-import { Revision, Ringing } from '../src/entities';
+import { Revision } from '../src/entities';
+import { Call } from '../src/types';
 
 export class MockConnection {
   private emitter: EventEmitter;
@@ -19,11 +20,11 @@ export class MockConnection {
     this.emitter.off('revision', ev);
   }
 
-  public addRingListener(ev: (ringing: Ringing) => void): void {
+  public addRingListener(ev: (ringing: Call) => void): void {
     this.emitter.on('ringing', ev);
   }
 
-  public removeRingListener(ev: (ringing: Ringing) => void): void {
+  public removeRingListener(ev: (ringing: Call) => void): void {
     this.emitter.off('ringing', ev);
   }
 
@@ -39,7 +40,7 @@ export class MockConnection {
     this.emitter.emit('revision', revision);
   }
 
-  public emitRing(ring: Ringing): void {
+  public emitRing(ring: Call): void {
     this.emitter.emit('ringing', ring);
   }
 
