@@ -8,6 +8,7 @@ import { MockAliasModule } from '../__mocks__/alias';
 import { MockContentModule } from '../__mocks__/content';
 import { MockContactModule } from '../__mocks__/contact';
 import { MockAttributeModule } from '../__mocks__/attribute';
+import { MockRingModule } from '../__mocks__/ring';
 import { waitFor } from '../__mocks__/waitFor';
 
 const mockConnection = new MockConnection();
@@ -73,6 +74,15 @@ jest.mock('../src/alias', () => {
   }
 })
 
+const mockRing = new MockRingModule();
+jest.mock('../src/ring', () => {
+  return {
+    RingModule: jest.fn().mockImplementation(() => {
+      return mockRing;
+    })
+  }
+})
+
 test('allocates session correctly', async () => {
 
   let status: string = '';
@@ -84,7 +94,9 @@ test('allocates session correctly', async () => {
   account.enableNotifications();
   mockConnection.emitStatus('connected');
   mockConnection.emitRevision({ account: 3, profile: 3, article: 3, group: 3, channel: 3, card: 3});
+  mockConnection.emitRing({ cardId: '', callId: 'test', calleeToken: '', ice: []});
   await waitFor(() => (status === 'connected'));
+  await waitFor(() => (mockRing.call?.callId === 'test'));
   await waitFor(() => (mockAccount.revision == 3));
   await waitFor(() => (mockIdentity.revision == 3));
   await waitFor(() => (mockContent.revision == 3));

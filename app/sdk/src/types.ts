@@ -19,7 +19,7 @@ export type Call = {
   cardId: string,
   callId: string,
   calleeToken: string,
-  ice?: { urls: string, username: string, credential: string}[],
+  ice: { urls: string, username: string, credential: string}[],
 }
 
 export type Revision = {
