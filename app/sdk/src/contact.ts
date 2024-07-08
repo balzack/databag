@@ -1,16 +1,18 @@
 import { EventEmitter } from 'eventemitter3';
-import type { Contact } from './api';
+import type { Contact, Logging } from './api';
 import type { Card, Topic, Asset, Tag, Profile, Repeater} from './types';
 
 export class ContactModule implements Contact {
 
+  private log: Logging;
   private token: string;
   private url: string;
   private emitter: EventEmitter;
 
-  constructor(token: string, url: string) {
+  constructor(log: Logging, token: string, url: string) {
     this.token = token;
     this.url = url;
+    this.log = log;
     this.emitter = new EventEmitter();
   }
 

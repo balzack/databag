@@ -1,5 +1,5 @@
 import { EventEmitter } from 'eventemitter3';
-import type { Identity, Contact, Content, Focus } from './api';
+import type { Identity, Contact, Content, Focus, Logging } from './api';
 import type { Topic, Asset, Repeater } from './types';
 
 export class FocusModule implements Focus {
@@ -9,14 +9,16 @@ export class FocusModule implements Focus {
   private content: Content;
   private cardId: string | null;
   private channelId: string;
+  private log: Logging;
   private emitter: EventEmitter;
 
-  constructor(identity: Identity, contact: Contact, content: Content, cardId: string | null, channelId: string) {
+  constructor(log: Logging, identity: Identity, contact: Contact, content: Content, cardId: string | null, channelId: string) {
     this.identity = identity;
     this.contact = contact;
     this.content = content;
     this.cardId = cardId;
     this.channelId = channelId;
+    this.log = log;
     this.emitter = new EventEmitter();
   }
 

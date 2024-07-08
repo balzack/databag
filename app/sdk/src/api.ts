@@ -21,6 +21,12 @@ export interface WebStore {
 export interface Crypto {
 }
 
+export interface Logging {
+  error(m: any): void;
+  warn(m: any): void;
+  info(m: any): void;
+}
+
 export interface Session {
   close(): void;
 

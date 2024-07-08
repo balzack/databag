@@ -1,15 +1,18 @@
 import { EventEmitter } from 'eventemitter3';
+import { Logging } from './api';
 import { Revision } from './entities';
 import { Call } from './types';
 
 export class Connection {
 
+  private log: Logging;
   private closed: boolean;
   private emitter: EventEmitter;
   private websocket: WebSocket;
 
-  constructor(token: string, url: string) {
+  constructor(log: Logging, token: string, url: string) {
     this.closed = false;
+    this.log = log;
     this.emitter = new EventEmitter();
     this.websocket = this.setWebSocket(token, url);
   }

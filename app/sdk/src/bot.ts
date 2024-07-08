@@ -1,9 +1,12 @@
-import { type Bot } from './api';
+import type { Bot, Logging } from './api';
 import type { Asset } from './types';
 
 export class BotModule implements Bot {
 
-  constructor() {
+  private log: Logging;
+
+  constructor(log: Logging) {
+    this.log = log;
   }
 
   public async addTopic(server: string, token: string, type: string, message: string, assets: Asset[]): Promise<string> {

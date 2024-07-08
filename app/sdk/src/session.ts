@@ -12,7 +12,7 @@ import { RingModule } from './ring';
 
 import { Connection } from './connection';
 
-import type { Session, SqlStore, WebStore, Crypto, Account, Identity, Contact, Ring, Alias, Attribute, Content, Stream, Focus } from './api';
+import type { Session, SqlStore, WebStore, Account, Identity, Contact, Ring, Alias, Attribute, Content, Stream, Focus, Crypto, Logging } from './api';
 import { Revision } from './entities';
 import { Call } from './types';
 
@@ -21,6 +21,7 @@ export class SessionModule implements Session {
   private emitter: EventEmitter;
   private store: SqlStore | WebStore | null;
   private crypto: Crypto | null;
+  private log: Logging;
   private token: string;
   private url: string;
   private syncRevision: Revision | null;
@@ -35,25 +36,26 @@ export class SessionModule implements Session {
   private ring: RingModule;
   private connection: Connection;
    
-  constructor(store: SqlStore | WebStore | null, crypto: Crypto | null, token: string, url: string) {
+  constructor(store: SqlStore | WebStore | null, crypto: Crypto | null, log: Logging, token: string, url: string) {
 
     this.store = store;
     this.crypto = crypto;
+    this.log = log;
     this.token = token;
     this.url = url;
     this.syncRevision = null;
     this.status = 'connecting'
     this.emitter = new EventEmitter();
  
-    this.account = new AccountModule(token, url);
-    this.identity = new IdentityModule(token, url);
-    this.contact = new ContactModule(token, url);
-    this.alias = new AliasModule(token, url, this.account);
-    this.attribute = new AttributeModule(token, url, this.account);
-    this.content = new ContentModule(token, url, this.account);
-    this.stream = new StreamModule(this.contact, this.content);
-    this.ring = new RingModule();
-    this.connection = new Connection(token, url);
+    this.account = new AccountModule(log, token, url);
+    this.identity = new IdentityModule(log, token, url);
+    this.contact = new ContactModule(log, token, url);
+    this.alias = new AliasModule(log, token, url, this.account);
+    this.attribute = new AttributeModule(log, token, url, this.account);
+    this.content = new ContentModule(log, token, url, this.account);
+    this.stream = new StreamModule(log, this.contact, this.content);
+    this.ring = new RingModule(log);
+    this.connection = new Connection(log, token, url);
 
     const onStatus = (ev: string) => {
       this.status = ev;
@@ -74,6 +76,7 @@ export class SessionModule implements Session {
         }
       }
       catch(err) {
+        this.log.warn(err);
         this.syncRevision = ev;
         this.emitter.emit('status', this.getStatus());
       }
@@ -103,7 +106,22 @@ export class SessionModule implements Session {
     return this.status;
   }
  
-  public resync() {
+  public async resync() {
+    if (this.syncRevision) {
+      try {
+        await this.identity.setRevision(this.syncRevision.profile);
+        await this.account.setRevision(this.syncRevision.account);
+        await this.contact.setRevision(this.syncRevision.card);
+        await this.attribute.setRevision(this.syncRevision.article);
+        await this.alias.setRevision(this.syncRevision.group);
+        await this.content.setRevision(this.syncRevision.channel);
+        this.syncRevision = null
+        this.emitter.emit('status', this.getStatus());
+      }
+      catch(err) {
+        this.log.warn(err);
+      }
+    }
   }
 
   public close() {
@@ -150,7 +168,7 @@ export class SessionModule implements Session {
   }
 
   public addFocus(cardId: string | null, channelId: string): Focus {
-    return new FocusModule(this.identity, this.contact, this.content, cardId, channelId);
+    return new FocusModule(this.log, this.identity, this.contact, this.content, cardId, channelId);
   }
 
   public removeFocus(focus: Focus): void {

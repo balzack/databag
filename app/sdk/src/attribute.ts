@@ -1,17 +1,19 @@
 import { EventEmitter } from 'eventemitter3';
-import type { Attribute, Account } from './api';
+import type { Attribute, Account, Logging } from './api';
 import type { Article } from './types';
 
 export class AttributeModule implements Attribute {
 
+  private log: Logging;
   private token: string;
   private url: string;
   private account: Account;
   private emitter: EventEmitter;
 
-  constructor(token: string, url: string, account: Account) {
+  constructor(log: Logging, token: string, url: string, account: Account) {
     this.token = token;
     this.url = url;
+    this.log = log;
     this.account = account;
     this.emitter = new EventEmitter();
   }

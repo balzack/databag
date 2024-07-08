@@ -1,16 +1,18 @@
 import { EventEmitter } from 'eventemitter3';
-import { type Identity } from './api';
-import { type Profile } from './types';
+import type { Identity, Logging } from './api';
+import type { Profile } from './types';
 
 export class IdentityModule implements Identity {
 
   private token: string;
   private url: string;
+  private log: Logging;
   private emitter: EventEmitter;
 
-  constructor(token: string, url: string) {
+  constructor(log: Logging, token: string, url: string) {
     this.token = token;
     this.url = url;
+    this.log = log;
     this.emitter = new EventEmitter();
   }
 

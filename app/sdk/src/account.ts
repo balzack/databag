@@ -1,5 +1,5 @@
 import { EventEmitter } from 'eventemitter3';
-import { type Account } from './api';
+import type { Account, Logging } from './api';
 import type { AccountStatus } from './types';
 
 export class AccountModule implements Account {
@@ -7,8 +7,10 @@ export class AccountModule implements Account {
   private emitter: EventEmitter;
   private token: string;
   private url: string;
+  private log: Logging;
 
-  constructor(token: string, url: string) {
+  constructor(log: Logging, token: string, url: string) {
+    this.log = log;
     this.emitter = new EventEmitter();
     this.token = token;
     this.url = url;

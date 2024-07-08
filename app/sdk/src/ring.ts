@@ -1,12 +1,14 @@
 import { EventEmitter } from 'eventemitter3';
-import type { Ring } from './api';
+import type { Ring, Logging } from './api';
 import type { Call } from './types';
 
 export class RingModule implements Ring {
 
+  private log: Logging;
   private emitter: EventEmitter;
 
-  constructor() {
+  constructor(log: Logging) {
+    this.log = log;
     this.emitter = new EventEmitter();
   }
 

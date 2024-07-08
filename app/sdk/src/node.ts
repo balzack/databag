@@ -1,14 +1,16 @@
-import { type Node } from './api';
+import type { Node, Logging } from './api';
 import type { NodeAccount, NodeConfig } from './types';
 
 export class NodeModule implements Node {
 
+  private log: Logging;
   private token: string;
   private url: string;
 
-  constructor(token: string, url: string) {
+  constructor(log: Logging, token: string, url: string) {
     this.token = token;
     this.url = url;
+    this.log = log;
   }
 
   public async createAccountAccess(): Promise<string> {
