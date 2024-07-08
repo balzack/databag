@@ -11,38 +11,38 @@ export * from './types';
 
 export class DatabagSDK {
 
-  private logging: Logging;
+  private log: Logging;
   private crypto: Crypto | null;
   private store: SqlStore | WebStore | null = null;
 
-  constructor(crypto: Crypto | null, logging: Logging | null) {
+  constructor(crypto: Crypto | null, log: Logging | null) {
     this.crypto = crypto;
-    this.logging = logging ? logging : new ConsoleLogging();
-    this.logging.info("databag sdk");
+    this.log = log ? log : new ConsoleLogging();
+    this.log.info("databag sdk");
   }
 
   public async initOfflineStore(sql: SqlStore): Promise<Session | null> {
     this.store = sql;
     // initialize
-    return new SessionModule(this.store, this.crypto, this.logging, '', '');
+    return new SessionModule(this.store, this.crypto, this.log, '', '');
   }
 
   public async initOnlineStore(web: WebStore): Promise<Session | null> {
     this.store = web;
     // initialize
-    return new SessionModule(this.store, this.crypto, this.logging, '', '');
+    return new SessionModule(this.store, this.crypto, this.log, '', '');
   }
 
   public async login(handle: string, password: string, url: string, mfaCode: string | null, params: SessionParams): Promise<Session> {
-    return new SessionModule(this.store, this.crypto, this.logging, '', '');
+    return new SessionModule(this.store, this.crypto, this.log, '', '');
   }
 
   public async access(url: string, token: string, params: SessionParams): Promise<Session> {
-    return new SessionModule(this.store, this.crypto, this.logging, '', '');
+    return new SessionModule(this.store, this.crypto, this.log, '', '');
   }
 
   public async create(handle: string, password: string, url: string, token: string | null, params: SessionParams): Promise<Session> {
-    return new SessionModule(this.store, this.crypto, this.logging, '', '');
+    return new SessionModule(this.store, this.crypto, this.log, '', '');
   }
 
   public async logout(session: Session): Promise<void> {
@@ -50,10 +50,10 @@ export class DatabagSDK {
   }
 
   public async configure(token: string, url: string, mfaCode: string | null): Promise<Node> {
-    return new NodeModule(this.logging, '', '');
+    return new NodeModule(this.log, '', '');
   }
 
   public async automate() {
-    return new BotModule(this.logging);
+    return new BotModule(this.log);
   }
 }
