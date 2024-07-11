@@ -12,18 +12,20 @@ import { RingModule } from './ring';
 
 import { Connection } from './connection';
 
-import type { Session, SqlStore, WebStore, Account, Identity, Contact, Ring, Alias, Attribute, Content, Stream, Focus, Crypto, Logging } from './api';
+import type { Session, Account, Identity, Contact, Ring, Alias, Attribute, Content, Stream, Focus, Crypto, Logging } from './api';
 import { Revision } from './entities';
 import { Call } from './types';
+import { Store } from './store';
 
 export class SessionModule implements Session {
 
   private emitter: EventEmitter;
-  private store: SqlStore | WebStore | null;
+  private store: Store;
   private crypto: Crypto | null;
   private log: Logging;
   private token: string;
   private url: string;
+  private loginTimestamp: number;
   private syncRevision: Revision | null;
   private status: string;
   private account: AccountModule; 
@@ -36,24 +38,27 @@ export class SessionModule implements Session {
   private ring: RingModule;
   private connection: Connection;
    
-  constructor(store: SqlStore | WebStore | null, crypto: Crypto | null, log: Logging, token: string, url: string) {
+  constructor(store: Store, crypto: Crypto | null, log: Logging, token: string, url: string, loginTimestamp: number) {
+
+    log.info('new databag session');
 
     this.store = store;
     this.crypto = crypto;
     this.log = log;
     this.token = token;
     this.url = url;
+    this.loginTimestamp = loginTimestamp;
     this.syncRevision = null;
     this.status = 'connecting'
     this.emitter = new EventEmitter();
  
-    this.account = new AccountModule(log, token, url);
-    this.identity = new IdentityModule(log, token, url);
-    this.contact = new ContactModule(log, token, url);
-    this.alias = new AliasModule(log, token, url, this.account);
-    this.attribute = new AttributeModule(log, token, url, this.account);
-    this.content = new ContentModule(log, token, url, this.account);
-    this.stream = new StreamModule(log, this.contact, this.content);
+    this.account = new AccountModule(log, token, url, this.store);
+    this.identity = new IdentityModule(log, token, url, this.store);
+    this.contact = new ContactModule(log, token, url, this.store);
+    this.alias = new AliasModule(log, token, url, this.account, this.store);
+    this.attribute = new AttributeModule(log, token, url, this.account, this.store);
+    this.content = new ContentModule(log, token, url, this.account, this.store);
+    this.stream = new StreamModule(log, this.contact, this.content, this.store);
     this.ring = new RingModule(log);
     this.connection = new Connection(log, token, url);
 
@@ -168,7 +173,7 @@ export class SessionModule implements Session {
   }
 
   public addFocus(cardId: string | null, channelId: string): Focus {
-    return new FocusModule(this.log, this.identity, this.contact, this.content, cardId, channelId);
+    return new FocusModule(this.log, this.identity, this.contact, this.content, this.store, cardId, channelId);
   }
 
   public removeFocus(focus: Focus): void {

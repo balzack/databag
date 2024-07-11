@@ -1,6 +1,7 @@
 import { EventEmitter } from 'eventemitter3';
 import type { Content, Account, Logging } from './api';
 import type { Channel, Topic, Asset, Tag, Repeater } from './types';
+import { Store } from './store';
 
 export class ContentModule implements Content {
 
@@ -10,7 +11,7 @@ export class ContentModule implements Content {
   private account: Account;
   private emitter: EventEmitter;
 
-  constructor(log: Logging, token: string, url: string, account: Account) {
+  constructor(log: Logging, token: string, url: string, account: Account, store: Store) {
     this.token = token;
     this.url = url;
     this.log = log;

@@ -1,6 +1,7 @@
 import { EventEmitter } from 'eventemitter3';
 import type { Contact, Logging } from './api';
 import type { Card, Topic, Asset, Tag, Profile, Repeater} from './types';
+import { Store } from './store';
 
 export class ContactModule implements Contact {
 
@@ -9,7 +10,7 @@ export class ContactModule implements Contact {
   private url: string;
   private emitter: EventEmitter;
 
-  constructor(log: Logging, token: string, url: string) {
+  constructor(log: Logging, token: string, url: string, store: Store) {
     this.token = token;
     this.url = url;
     this.log = log;

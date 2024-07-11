@@ -7,8 +7,8 @@
 import type { Channel, Topic, Asset, Tag, Article, Group, Card, Profile, Call, AccountStatus, NodeConfig, NodeAccount, Repeater } from './types';
 
 export interface SqlStore {
-  set(stmt: string, params: (string | number)[]): Promise<void>;
-  get(stmt: string, params: (string | number)[]): Promise<any[]>;
+  set(stmt: string, params?: (string | number)[]): Promise<void>;
+  get(stmt: string, params?: (string | number)[]): Promise<any[]>;
 }
 
 export interface WebStore {
@@ -263,9 +263,9 @@ export interface Node {
 }
 
 export interface Bot {
-  addTopic(server: string, token: string, type: string, message: string, assets: Asset[]): Promise<string>;
-  removeTopic(server: string, token: string, topicId: string): Promise<void>;
-  addTag(server: string, token: string, topicId: string, type: string, value: string): Promise<string>;
-  removeTag(server: string, token: string, topicId: string, tagId: string): Promise<void>;
+  addTopic(type: string, message: string, assets: Asset[]): Promise<string>;
+  removeTopic(topicId: string): Promise<void>;
+  addTag(topicId: string, type: string, value: string): Promise<string>;
+  removeTag(topicId: string, tagId: string): Promise<void>;
 }
 

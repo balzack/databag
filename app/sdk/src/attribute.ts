@@ -1,6 +1,7 @@
 import { EventEmitter } from 'eventemitter3';
 import type { Attribute, Account, Logging } from './api';
 import type { Article } from './types';
+import { Store } from './store';
 
 export class AttributeModule implements Attribute {
 
@@ -10,7 +11,7 @@ export class AttributeModule implements Attribute {
   private account: Account;
   private emitter: EventEmitter;
 
-  constructor(log: Logging, token: string, url: string, account: Account) {
+  constructor(log: Logging, token: string, url: string, account: Account, store: Store) {
     this.token = token;
     this.url = url;
     this.log = log;

@@ -1,6 +1,7 @@
 import { EventEmitter } from 'eventemitter3';
 import type { Alias, Account, Logging } from './api';
 import type { Group } from './types';
+import { Store } from './store';
 
 export class AliasModule implements Alias {
 
@@ -10,7 +11,7 @@ export class AliasModule implements Alias {
   private account: Account;
   private emitter: EventEmitter;
 
-  constructor(log: Logging, token: string, url: string, account: Account) {
+  constructor(log: Logging, token: string, url: string, account: Account, store: Store) {
     this.token = token;
     this.url = url;
     this.log = log;

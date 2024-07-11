@@ -186,3 +186,9 @@ export type Revision = {
   card: number
 }
 
+export type Login = {
+  url: string,
+  token: string,
+  timestamp: number,
+}
+
