@@ -3010,12 +3010,13 @@ __metadata:
     "@types/react": ^18.2.6
     "@types/react-test-renderer": ^18.0.0
     babel-jest: ^29.6.3
-    databag-client-sdk: ^0.0.18
+    databag-client-sdk: ^0.0.21
     eslint: ^8.19.0
     jest: ^29.6.3
     prettier: 2.8.8
     react: 18.2.0
     react-native: 0.74.3
+    react-native-sqlite-storage: ^6.0.1
     react-test-renderer: 18.2.0
     typescript: 5.0.4
   languageName: unknown
@@ -4034,12 +4035,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"databag-client-sdk@npm:^0.0.18":
-  version: 0.0.18
-  resolution: "databag-client-sdk@npm:0.0.18"
+"databag-client-sdk@npm:^0.0.21":
+  version: 0.0.21
+  resolution: "databag-client-sdk@npm:0.0.21"
   dependencies:
     eventemitter3: ^5.0.1
-  checksum: d7afa318a9f0b4474d3d9df247f9ee8ed3f473d2163560b93d62716069650306286413b2d83cb4946fc3cf07575291e45c025475aec7a9e428c4a6318f4c29ec
+  checksum: 5046d90531119554a8787e7f0e79c2dc420372bfe15edd8e6dfcf49e134aac328c84e2f990dcf448e8832e198d2340b7f2e7fdab5cf3b35b79e1e919dc05e0d5
   languageName: node
   linkType: hard
 
@@ -7966,6 +7967,15 @@ __metadata:
   version: 17.0.2
   resolution: "react-is@npm:17.0.2"
   checksum: 9d6d111d8990dc98bc5402c1266a808b0459b5d54830bbea24c12d908b536df7883f268a7868cfaedde3dd9d4e0d574db456f84d2e6df9c4526f99bb4b5344d8
+  languageName: node
+  linkType: hard
+
+"react-native-sqlite-storage@npm:^6.0.1":
+  version: 6.0.1
+  resolution: "react-native-sqlite-storage@npm:6.0.1"
+  peerDependencies:
+    react-native: ">=0.14.0"
+  checksum: 79bd454682beb22cdfb5a234b9d52b454d0451dccf03a3c15b70b9c331b32cf0066703652b0d23707bda9b9b4c8063e92d31084171af3ea647855b5d727746e0
   languageName: node
   linkType: hard
 
