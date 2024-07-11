@@ -11,7 +11,7 @@ export class AttributeModule implements Attribute {
   private account: Account;
   private emitter: EventEmitter;
 
-  constructor(log: Logging, token: string, url: string, account: Account, store: Store) {
+  constructor(log: Logging, account: Account, store: Store, token: string, url: string) {
     this.token = token;
     this.url = url;
     this.log = log;

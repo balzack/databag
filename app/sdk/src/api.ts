@@ -7,8 +7,8 @@
 import type { Channel, Topic, Asset, Tag, Article, Group, Card, Profile, Call, AccountStatus, NodeConfig, NodeAccount, Repeater } from './types';
 
 export interface SqlStore {
-  set(stmt: string, params?: (string | number)[]): Promise<void>;
-  get(stmt: string, params?: (string | number)[]): Promise<any[]>;
+  set(stmt: string, params?: (string | number | null)[]): Promise<void>;
+  get(stmt: string, params?: (string | number | null)[]): Promise<any[]>;
 }
 
 export interface WebStore {

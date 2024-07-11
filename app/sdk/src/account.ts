@@ -10,7 +10,7 @@ export class AccountModule implements Account {
   private url: string;
   private log: Logging;
 
-  constructor(log: Logging, token: string, url: string, store: Store) {
+  constructor(log: Logging, store: Store, token: string, url: string) {
     this.log = log;
     this.emitter = new EventEmitter();
     this.token = token;

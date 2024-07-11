@@ -52,12 +52,12 @@ export class SessionModule implements Session {
     this.status = 'connecting'
     this.emitter = new EventEmitter();
  
-    this.account = new AccountModule(log, token, url, this.store);
-    this.identity = new IdentityModule(log, token, url, this.store);
-    this.contact = new ContactModule(log, token, url, this.store);
-    this.alias = new AliasModule(log, token, url, this.account, this.store);
-    this.attribute = new AttributeModule(log, token, url, this.account, this.store);
-    this.content = new ContentModule(log, token, url, this.account, this.store);
+    this.account = new AccountModule(log, this.store, token, url);
+    this.identity = new IdentityModule(log, this.store, token, url);
+    this.contact = new ContactModule(log, this.store, token, url);
+    this.alias = new AliasModule(log, this.account, this.store, token, url);
+    this.attribute = new AttributeModule(log, this.account, this.store, token, url);
+    this.content = new ContentModule(log, this.account, this.store, token, url);
     this.stream = new StreamModule(log, this.contact, this.content, this.store);
     this.ring = new RingModule(log);
     this.connection = new Connection(log, token, url);

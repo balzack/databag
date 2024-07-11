@@ -10,7 +10,7 @@ export class IdentityModule implements Identity {
   private log: Logging;
   private emitter: EventEmitter;
 
-  constructor(log: Logging, token: string, url: string, store: Store) {
+  constructor(log: Logging, store: Store, token: string, url: string) {
     this.token = token;
     this.url = url;
     this.log = log;

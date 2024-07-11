@@ -10,7 +10,7 @@ export class ContactModule implements Contact {
   private url: string;
   private emitter: EventEmitter;
 
-  constructor(log: Logging, token: string, url: string, store: Store) {
+  constructor(log: Logging, store: Store, token: string, url: string) {
     this.token = token;
     this.url = url;
     this.log = log;

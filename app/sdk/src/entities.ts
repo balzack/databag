@@ -187,8 +187,10 @@ export type Revision = {
 }
 
 export type Login = {
+  guid: string,
   url: string,
   token: string,
   timestamp: number,
+  pushSupported: boolean,
 }
 
