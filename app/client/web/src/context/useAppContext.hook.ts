@@ -41,7 +41,25 @@ export function useAppContext () {
     const store = new Store()
     const session: Session | null = await sdk.initOnlineStore(store)
     console.log(session)
-    updateState({ sdk, session })
+    if (session) {
+      updateState({ sdk, session })
+    } else {
+      const params = {
+        topicBatch: 16,
+        tagBatch: 16,
+        channelTypes: ['test'],
+        pushType: 'fcm',
+        deviceToken: 'aabbcc',
+        notifications: [{ event: 'msg', messageTitle: 'msgd' }],
+        deviceId: '0011',
+        version: '0.0.1',
+        appName: 'databag',
+      }
+      console.log('-----> SDK LOGIN')
+      const login = await sdk.login('asdf', 'asdf', 'https://balzack.coredb.org', null, params)
+      console.log(login)
+      updateState({ sdk, session: login })
+    }
   }
 
   const actions = {

@@ -1,6 +1,6 @@
 {
   "name": "databag-client-sdk",
-  "version": "0.0.21",
+  "version": "0.0.22",
   "description": "an SDK for developing Databag applications",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -35,6 +35,7 @@
     "typescript": "^5.4.5"
   },
   "dependencies": {
-    "eventemitter3": "^5.0.1"
+    "eventemitter3": "^5.0.1",
+    "redaxios": "^0.5.1"
   }
 }

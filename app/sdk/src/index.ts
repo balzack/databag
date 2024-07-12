@@ -3,9 +3,10 @@ import { NodeModule } from './node';
 import { BotModule } from './bot';
 import { ConsoleLogging } from './logging';
 import { type Store, OfflineStore, OnlineStore, NoStore } from './store';
-
+import { setLogin } from './net/setLogin';
 import type { Session, Node, Bot, SqlStore, WebStore, Crypto, Logging } from './api';
 import type { SessionParams } from './types';
+import type { Login } from './entities';
 
 export * from './api';
 export * from './types';
@@ -20,7 +21,7 @@ export class DatabagSDK {
     this.crypto = crypto;
     this.store = new NoStore();
     this.log = log ? log : new ConsoleLogging();
-    this.log.info("databag sdk");
+    this.log.info("new new databag sdk");
   }
 
   public async initOfflineStore(sql: SqlStore): Promise<Session | null> {
@@ -42,7 +43,11 @@ export class DatabagSDK {
   }
 
   public async login(handle: string, password: string, url: string, mfaCode: string | null, params: SessionParams): Promise<Session> {
-    return new SessionModule(this.store, this.crypto, this.log, '', '', 0);
+    const { appName, version, deviceId, deviceToken, pushType, notifications } = params;
+    const { guid, appToken, created, pushSupported } = await setLogin(url, handle, password, mfaCode, appName, version, deviceId, deviceToken, pushType, notifications);
+    const login: Login = { guid, url, token: appToken, timestamp: created, pushSupported };
+    this.store.setLogin(login);
+    return new SessionModule(this.store, this.crypto, this.log, appToken, url, created);
   }
 
   public async access(url: string, token: string, params: SessionParams): Promise<Session> {

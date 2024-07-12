@@ -51,8 +51,31 @@ export function useAppContext() {
     const store = new Store();
     await store.open(DATABAG_DB);
     const session = await sdk.initOfflineStore(store);
-    const accountSet = (session != null);
-    updateState({ accountSet, sdk, session });
+    if (session) {
+      console.log("init session");
+      updateState({ accountSet: true, sdk, session });
+    } else {
+      const params = {
+        topicBatch: 16,
+        tagBatch: 16,
+        channelTypes: ['test'],
+        pushType: 'fcm',
+        deviceToken: 'aabbcc',
+        notifications: [{ event: 'msg', messageTitle: 'msgd' }],
+        deviceId: '0011',
+        version: '0.0.1',
+        appName: 'databag',
+      }
+      console.log('-----> SDK LOGIN')
+      try {
+        const login = await sdk.login('asdf', 'asdf', 'https://balzack.coredb.org', null, params)
+        console.log(login)
+        updateState({ accountSet: true, sdk, session: login })
+      }
+      catch (err) {
+        console.log("ERR:", err);
+      }
+    }
   };
 
   const actions = {

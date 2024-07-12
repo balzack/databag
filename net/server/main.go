@@ -17,6 +17,7 @@ func main() {
   var cert string
   var key string
   var transformPath string
+  var mode string
 
   port := ":443"
   storePath := "/var/lib/databag"
@@ -36,6 +37,8 @@ func main() {
       key = args[i + 1]
     } else if args[i] == "-t" {
       transformPath = args[i + 1]
+    } else if args[i] == "-m" {
+      mode = args[i + 1]
     }
   }
 
@@ -78,13 +81,22 @@ func main() {
 
   router := app.NewRouter(webApp)
   origins := handlers.AllowedOrigins([]string{"*"})
+  headers := handlers.AllowedHeaders([]string{"content-type", "authorization"})
   methods := handlers.AllowedMethods([]string{"GET", "HEAD", "POST", "PUT", "DELETE", "OPTIONS"})
 
   if cert != "" && key != "" {
     log.Printf("using args:" + " -s " + storePath + " -w " + webApp + " -p " + port[1:] + " -c " + cert + " -k " + key + " -t " + transformPath)
-    log.Fatal(http.ListenAndServeTLS(port, cert, key, handlers.CORS(origins, methods)(router)))
+    if mode != "dev" {
+      log.Fatal(http.ListenAndServeTLS(port, cert, key, handlers.CORS(origins, methods)(router)))
+    } else {
+      log.Fatal(http.ListenAndServeTLS(port, cert, key, handlers.CORS(origins, headers, methods)(router)))
+    }
   } else {
     log.Printf("using args:" + " -s " + storePath + " -w " + webApp + " -p " + port[1:] + " -t " + transformPath)
-    log.Fatal(http.ListenAndServe(port, handlers.CORS(origins, methods)(router)))
+    if mode != "dev" {
+      log.Fatal(http.ListenAndServe(port, handlers.CORS(origins, methods)(router)))
+    } else {
+      log.Fatal(http.ListenAndServe(port, handlers.CORS(origins, headers, methods)(router)))
+    }
   }
 }

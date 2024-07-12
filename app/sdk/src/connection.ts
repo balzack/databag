@@ -56,7 +56,7 @@ export class Connection {
 
     this.emitter.emit('status', 'connecting');
     const wsUrl = `ws${url.split('http')?.[1]}/status?mode=ring`;
-    const ws = new WebSocket(url);
+    const ws = new WebSocket(wsUrl);
     ws.onmessage = (e) => {
       try {
         if (e.data === '') {

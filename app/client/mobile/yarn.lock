@@ -3010,7 +3010,7 @@ __metadata:
     "@types/react": ^18.2.6
     "@types/react-test-renderer": ^18.0.0
     babel-jest: ^29.6.3
-    databag-client-sdk: ^0.0.21
+    databag-client-sdk: ^0.0.22
     eslint: ^8.19.0
     jest: ^29.6.3
     prettier: 2.8.8
@@ -4035,12 +4035,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"databag-client-sdk@npm:^0.0.21":
-  version: 0.0.21
-  resolution: "databag-client-sdk@npm:0.0.21"
+"databag-client-sdk@npm:^0.0.22":
+  version: 0.0.22
+  resolution: "databag-client-sdk@npm:0.0.22"
   dependencies:
     eventemitter3: ^5.0.1
-  checksum: 5046d90531119554a8787e7f0e79c2dc420372bfe15edd8e6dfcf49e134aac328c84e2f990dcf448e8832e198d2340b7f2e7fdab5cf3b35b79e1e919dc05e0d5
+    redaxios: ^0.5.1
+  checksum: a988944adf4a23e82554e6e50feed6b1c9acec36840021f005a8d3042fdcc6d7017c4b47c13f4863c5179ed661012df048e9cdb163f7c3a600cbd4bae67c31d4
   languageName: node
   linkType: hard
 
@@ -8115,6 +8116,13 @@ __metadata:
     source-map: ~0.6.1
     tslib: ^2.0.1
   checksum: 03cc7f57562238ba258d468be67bf7446ce7a707bc87a087891dad15afead46c36e9aaeedf2130e2ab5a465244a9c62bfd4127849761cf8f4085abe2f3e5f485
+  languageName: node
+  linkType: hard
+
+"redaxios@npm:^0.5.1":
+  version: 0.5.1
+  resolution: "redaxios@npm:0.5.1"
+  checksum: 0ccd38610d2d0769fb72205151ee90aa2a929be66c6056b3eba0784e32e76618d5a9314bbb0d35d5d3a6197a032a411532437ade5bf0f350abbc1b631b1d0d17
   languageName: node
   linkType: hard
 

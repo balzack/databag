@@ -10,6 +10,15 @@ import { MockContactModule } from '../__mocks__/contact';
 import { MockAttributeModule } from '../__mocks__/attribute';
 import { MockRingModule } from '../__mocks__/ring';
 import { waitFor } from '../__mocks__/waitFor';
+import axios from 'redaxios';
+
+jest.mock('redaxios', () => {
+  return {
+    post: jest.fn().mockImplementation(() => {
+      return Promise.resolve({ status: 200, data: { guid: 'guid', appToken: 'token', created: 3, pushSupported: false }});
+    })
+  }
+})
 
 const mockConnection = new MockConnection();
 jest.mock('../src/connection', () => {
@@ -88,7 +97,7 @@ test('allocates session correctly', async () => {
   let status: string = '';
   const sdk = new DatabagSDK(null, null);
   const params: SessionParams = { topicBatch: 0, tagBatch: 0, channelTypes: [], pushType: '', deviceToken: '', notifications: [], deviceId: '', version: '', appName: '' };
-  const session = await sdk.login('handle', 'password', 'url', null, params);
+  const session = await sdk.login('handle', 'password', 'https://jest.test', null, params);
   session.addStatusListener((ev: string) => { status = ev; });
   const account = session.getAccount();
   account.enableNotifications();
