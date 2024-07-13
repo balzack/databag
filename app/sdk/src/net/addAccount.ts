@@ -6,8 +6,6 @@ export async function addAccount(url: string, username: string, password: string
   const endpoint = `${url}/account/profile${access}`
   const auth = encode(`${username}:${password}`)
 
-console.log("ADD ACCOUNT: ", endpoint);
-
   const response = await Promise.race<{ status: number }>([
     axios.post(endpoint, null, { headers: { 'Credentials' : `Basic ${auth}` } }).catch(err => { throw new Error('addAccount failed') }),
     new Promise((_, reject) => setTimeout(() => reject(new Error('addAccount timeout')), 60000))
