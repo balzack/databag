@@ -165,7 +165,7 @@ export type ProfileEntity = {
   location: string,
   image: string,
   revision: number,
-  seal: string,
+  seal?: string,
   version: string,
   node: string,
 }
@@ -188,7 +188,8 @@ export type Revision = {
 
 export type Login = {
   guid: string,
-  url: string,
+  node: string,
+  secure: boolean,
   token: string,
   timestamp: number,
   pushSupported: boolean,

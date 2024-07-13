@@ -10,11 +10,11 @@ export class Connection {
   private emitter: EventEmitter;
   private websocket: WebSocket;
 
-  constructor(log: Logging, token: string, url: string) {
+  constructor(log: Logging, token: string, node: string, secure: boolean) {
     this.closed = false;
     this.log = log;
     this.emitter = new EventEmitter();
-    this.websocket = this.setWebSocket(token, url);
+    this.websocket = this.setWebSocket(token, node, secure);
   }
 
   public close() {
@@ -48,14 +48,14 @@ export class Connection {
     this.emitter.off('status', ev);
   }
 
-  private setWebSocket(token: string, url: string): WebSocket {
+  private setWebSocket(token: string, node: string, secure: boolean): WebSocket {
     if (this.closed) {
       this.emitter.emit('status', 'closed');
       return this.websocket;
     }
 
     this.emitter.emit('status', 'connecting');
-    const wsUrl = `ws${url.split('http')?.[1]}/status?mode=ring`;
+    const wsUrl = `ws${secure ? 's' : ''}://${node}/status?mode=ring`;
     const ws = new WebSocket(wsUrl);
     ws.onmessage = (e) => {
       try {
@@ -90,7 +90,7 @@ export class Connection {
           ws.onclose = () => {}
           ws.onopen = () => {}
           ws.onerror = () => {}
-          this.websocket = this.setWebSocket(token, url);
+          this.websocket = this.setWebSocket(token, node, secure);
         }
       }, 1000);
     }

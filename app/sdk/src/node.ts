@@ -5,11 +5,13 @@ export class NodeModule implements Node {
 
   private log: Logging;
   private token: string;
-  private url: string;
+  private node: string;
+  private secure: boolean;
 
-  constructor(log: Logging, token: string, url: string) {
+  constructor(log: Logging, node: string, secure: boolean, token: string) {
     this.token = token;
-    this.url = url;
+    this.node = node;
+    this.secure = secure;
     this.log = log;
   }
 

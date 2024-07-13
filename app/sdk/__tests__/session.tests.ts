@@ -97,7 +97,7 @@ test('allocates session correctly', async () => {
   let status: string = '';
   const sdk = new DatabagSDK(null, null);
   const params: SessionParams = { topicBatch: 0, tagBatch: 0, channelTypes: [], pushType: '', deviceToken: '', notifications: [], deviceId: '', version: '', appName: '' };
-  const session = await sdk.login('handle', 'password', 'https://jest.test', null, params);
+  const session = await sdk.login('handle', 'password', 'jest.test', true, null, params);
   session.addStatusListener((ev: string) => { status = ev; });
   const account = session.getAccount();
   account.enableNotifications();

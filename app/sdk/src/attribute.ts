@@ -7,13 +7,15 @@ export class AttributeModule implements Attribute {
 
   private log: Logging;
   private token: string;
-  private url: string;
+  private node: string;
+  private secure: boolean;
   private account: Account;
   private emitter: EventEmitter;
 
-  constructor(log: Logging, account: Account, store: Store, token: string, url: string) {
+  constructor(log: Logging, account: Account, store: Store, token: string, node: string, secure: boolean) {
     this.token = token;
-    this.url = url;
+    this.node = node;
+    this.secure = secure;
     this.log = log;
     this.account = account;
     this.emitter = new EventEmitter();

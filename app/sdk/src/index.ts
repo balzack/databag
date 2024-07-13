@@ -30,50 +30,50 @@ export class DatabagSDK {
   public async initOfflineStore(sql: SqlStore): Promise<Session | null> {
     this.store = new OfflineStore(this.log, sql);
     const login = await this.store.init();
-    return login ? new SessionModule(this.store, this.crypto, this.log, login.token, login.url, login.timestamp) : null
+    return login ? new SessionModule(this.store, this.crypto, this.log, login.token, login.node, login.secure, login.timestamp) : null
   }
 
   public async initOnlineStore(web: WebStore): Promise<Session | null> {
     this.store = new OnlineStore(this.log, web);
     const login = await this.store.init();
-    return login ? new SessionModule(this.store, this.crypto, this.log, login.token, login.url, login.timestamp) : null
+    return login ? new SessionModule(this.store, this.crypto, this.log, login.token, login.node, login.secure, login.timestamp) : null
   }
 
-  public async login(handle: string, password: string, url: string, mfaCode: string | null, params: SessionParams): Promise<Session> {
+  public async login(handle: string, password: string, node: string, secure: boolean, mfaCode: string | null, params: SessionParams): Promise<Session> {
     const { appName, version, deviceId, deviceToken, pushType, notifications } = params;
-    const { guid, appToken, created, pushSupported } = await setLogin(url, handle, password, mfaCode, appName, version, deviceId, deviceToken, pushType, notifications);
-    const login: Login = { guid, url, token: appToken, timestamp: created, pushSupported };
+    const { guid, appToken, created, pushSupported } = await setLogin(node, secure, handle, password, mfaCode, appName, version, deviceId, deviceToken, pushType, notifications);
+    const login: Login = { guid, node, secure, token: appToken, timestamp: created, pushSupported };
     await this.store.setLogin(login);
-    return new SessionModule(this.store, this.crypto, this.log, appToken, url, created);
+    return new SessionModule(this.store, this.crypto, this.log, appToken, node, secure, created);
   }
 
-  public async access(url: string, token: string, params: SessionParams): Promise<Session> {
+  public async access(node: string, secure: boolean, token: string, params: SessionParams): Promise<Session> {
     const { appName, version, deviceId, deviceToken, pushType, notifications } = params;
-    const { guid, appToken, created, pushSupported } = await setAccess(url, token, appName, version, deviceId, deviceToken, pushType, notifications);
-    const login: Login = { guid, url, token: appToken, timestamp: created, pushSupported };
+    const { guid, appToken, created, pushSupported } = await setAccess(node, secure, token, appName, version, deviceId, deviceToken, pushType, notifications);
+    const login: Login = { guid, node, secure, token: appToken, timestamp: created, pushSupported };
     await this.store.setLogin(login);
-    return new SessionModule(this.store, this.crypto, this.log, appToken, url, created);
+    return new SessionModule(this.store, this.crypto, this.log, appToken, node, secure, created);
   }
 
-  public async create(handle: string, password: string, url: string, token: string | null, params: SessionParams): Promise<Session> {
-    await addAccount(url, handle, password, token);
+  public async create(handle: string, password: string, node: string, secure: boolean, token: string | null, params: SessionParams): Promise<Session> {
+    await addAccount(node, secure, handle, password, token);
     const { appName, version, deviceId, deviceToken, pushType, notifications } = params;
-    const { guid, appToken, created, pushSupported } = await setLogin(url, handle, password, null, appName, version, deviceId, deviceToken, pushType, notifications);
-    const login: Login = { guid, url, token: appToken, timestamp: created, pushSupported };
+    const { guid, appToken, created, pushSupported } = await setLogin(node, secure, handle, password, null, appName, version, deviceId, deviceToken, pushType, notifications);
+    const login: Login = { guid, node, secure, token: appToken, timestamp: created, pushSupported };
     await this.store.setLogin(login);
-    return new SessionModule(this.store, this.crypto, this.log, appToken, url, created);
+    return new SessionModule(this.store, this.crypto, this.log, appToken, node, secure, created);
   }
 
   public async logout(session: Session): Promise<void> {
     session.close();
   }
 
-  public async configure(url: string, token: string, mfaCode: string | null): Promise<Node> {
-    const access = await setAdmin(url, token, mfaCode);
-    return new NodeModule(this.log, token, url);
+  public async configure(node: string, secure: boolean, token: string, mfaCode: string | null): Promise<Node> {
+    const access = await setAdmin(node, secure, token, mfaCode);
+    return new NodeModule(this.log, node, secure, token);
   }
 
-  public async automate(url: string, token: string) {
-    return new BotModule(this.log, token, url);
+  public async automate(node: string, secure: boolean, token: string) {
+    return new BotModule(this.log, node, secure, token);
   }
 }

@@ -7,14 +7,16 @@ export class AccountModule implements Account {
 
   private emitter: EventEmitter;
   private token: string;
-  private url: string;
+  private node: string;
+  private secure: boolean;
   private log: Logging;
 
-  constructor(log: Logging, store: Store, token: string, url: string) {
+  constructor(log: Logging, store: Store, token: string, node: string, secure: boolean) {
     this.log = log;
     this.emitter = new EventEmitter();
     this.token = token;
-    this.url = url;
+    this.node = node;
+    this.secure = secure;
   }
 
   public addStatusListener(ev: (status: AccountStatus) => void): void {

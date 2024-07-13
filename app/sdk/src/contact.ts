@@ -7,12 +7,14 @@ export class ContactModule implements Contact {
 
   private log: Logging;
   private token: string;
-  private url: string;
+  private node: string;
+  private secure: boolean;
   private emitter: EventEmitter;
 
-  constructor(log: Logging, store: Store, token: string, url: string) {
+  constructor(log: Logging, store: Store, token: string, node: string, secure: boolean) {
     this.token = token;
-    this.url = url;
+    this.node = node;
+    this.secure = secure;
     this.log = log;
     this.emitter = new EventEmitter();
   }

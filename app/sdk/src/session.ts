@@ -24,7 +24,8 @@ export class SessionModule implements Session {
   private crypto: Crypto | null;
   private log: Logging;
   private token: string;
-  private url: string;
+  private node: string;
+  private secure: boolean;
   private loginTimestamp: number;
   private syncRevision: Revision | null;
   private status: string;
@@ -38,7 +39,7 @@ export class SessionModule implements Session {
   private ring: RingModule;
   private connection: Connection;
    
-  constructor(store: Store, crypto: Crypto | null, log: Logging, token: string, url: string, loginTimestamp: number) {
+  constructor(store: Store, crypto: Crypto | null, log: Logging, token: string, node: string, secure: boolean, loginTimestamp: number) {
 
     log.info('new databag session');
 
@@ -46,21 +47,22 @@ export class SessionModule implements Session {
     this.crypto = crypto;
     this.log = log;
     this.token = token;
-    this.url = url;
+    this.node = node;
+    this.secure = secure;
     this.loginTimestamp = loginTimestamp;
     this.syncRevision = null;
     this.status = 'connecting'
     this.emitter = new EventEmitter();
  
-    this.account = new AccountModule(log, this.store, token, url);
-    this.identity = new IdentityModule(log, this.store, token, url);
-    this.contact = new ContactModule(log, this.store, token, url);
-    this.alias = new AliasModule(log, this.account, this.store, token, url);
-    this.attribute = new AttributeModule(log, this.account, this.store, token, url);
-    this.content = new ContentModule(log, this.account, this.store, token, url);
+    this.account = new AccountModule(log, this.store, token, node, secure);
+    this.identity = new IdentityModule(log, this.store, token, node, secure);
+    this.contact = new ContactModule(log, this.store, token, node, secure);
+    this.alias = new AliasModule(log, this.account, this.store, token, node, secure);
+    this.attribute = new AttributeModule(log, this.account, this.store, token, node, secure);
+    this.content = new ContentModule(log, this.account, this.store, token, node, secure);
     this.stream = new StreamModule(log, this.contact, this.content, this.store);
     this.ring = new RingModule(log);
-    this.connection = new Connection(log, token, url);
+    this.connection = new Connection(log, token, node, secure);
 
     const onStatus = (ev: string) => {
       this.status = ev;

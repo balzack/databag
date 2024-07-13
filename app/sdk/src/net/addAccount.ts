@@ -1,9 +1,9 @@
 import axios from 'redaxios';
 import { encode } from './base64';
 
-export async function addAccount(url: string, username: string, password: string, token: string | null): Promise<void> {
+export async function addAccount(node: string, secure: boolean, username: string, password: string, token: string | null): Promise<void> {
   const access = token ? `?token=${token}` : ''
-  const endpoint = `${url}/account/profile${access}`
+  const endpoint = `http${secure ? 's' : ''}://${node}/account/profile${access}`
   const auth = encode(`${username}:${password}`)
 
   const response = await Promise.race<{ status: number }>([

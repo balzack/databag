@@ -4,12 +4,14 @@ import type { Asset } from './types';
 export class BotModule implements Bot {
 
   private log: Logging;
-  private server: string;
+  private node: string;
+  private secure: boolean;
   private token: string;
 
-  constructor(log: Logging, server: string, token: string) {
+  constructor(log: Logging, node: string, secure: boolean, token: string) {
     this.log = log;
-    this.server = server;
+    this.node = node;
+    this.secure = secure;
     this.token = token;
   }
 
