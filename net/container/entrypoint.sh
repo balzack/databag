@@ -13,9 +13,9 @@ if [[ -v ADMIN ]]; then
 fi
 
 if [ "$DEV" == "1" ]; then
-  /app/dev_setup.sh || true
   cd /app/databag/net/server
   ./databag -m dev -p 7000 -w /app/databag/net/web/build -s /var/lib/databag -t /opt/databag/transform &
+  /app/dev_setup.sh || true
   while true; do
     sleep 1;
   done
