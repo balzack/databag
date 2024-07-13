@@ -79,6 +79,7 @@ func main() {
     }
   }
 
+  app.APPMode = mode
   router := app.NewRouter(webApp)
   origins := handlers.AllowedOrigins([]string{"*"})
   headers := handlers.AllowedHeaders([]string{"content-type", "authorization"})
