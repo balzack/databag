@@ -82,7 +82,7 @@ func main() {
   app.APPMode = mode
   router := app.NewRouter(webApp)
   origins := handlers.AllowedOrigins([]string{"*"})
-  headers := handlers.AllowedHeaders([]string{"content-type", "authorization"})
+  headers := handlers.AllowedHeaders([]string{"content-type", "authorization", "credentials"})
   methods := handlers.AllowedMethods([]string{"GET", "HEAD", "POST", "PUT", "DELETE", "OPTIONS"})
 
   if cert != "" && key != "" {
