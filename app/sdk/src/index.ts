@@ -20,7 +20,7 @@ export class DatabagSDK {
   private crypto: Crypto | null;
   private store: Store;
 
-  constructor(crypto: Crypto | null, log: Logging | null) {
+  constructor(crypto: Crypto | null, log?: Logging) {
     this.crypto = crypto;
     this.store = new NoStore();
     this.log = log ? log : new ConsoleLogging();
