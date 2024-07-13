@@ -6,6 +6,7 @@ import { type Store, OfflineStore, OnlineStore, NoStore } from './store';
 import { setLogin } from './net/setLogin';
 import { setAccess } from './net/setAccess';
 import { addAccount } from './net/addAccount';
+import { setAdmin } from './net/setAdmin';
 import type { Session, Node, Bot, SqlStore, WebStore, Crypto, Logging } from './api';
 import type { SessionParams } from './types';
 import type { Login } from './entities';
@@ -67,11 +68,12 @@ export class DatabagSDK {
     session.close();
   }
 
-  public async configure(token: string, url: string, mfaCode: string | null): Promise<Node> {
-    return new NodeModule(this.log, '', '');
+  public async configure(url: string, token: string, mfaCode: string | null): Promise<Node> {
+    const access = await setAdmin(url, token, mfaCode);
+    return new NodeModule(this.log, token, url);
   }
 
-  public async automate(token: string, url: string) {
+  public async automate(url: string, token: string) {
     return new BotModule(this.log, token, url);
   }
 }
