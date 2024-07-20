@@ -24,10 +24,8 @@ func Status(w http.ResponseWriter, r *http.Request) {
   ringMode := r.FormValue("mode") == "ring"
 
   // allows cross origin websocket in dev mode
-  if APPMode == "dev" {
-    upgrader.CheckOrigin = func(r *http.Request) bool {
-      return true
-    }
+  upgrader.CheckOrigin = func(r *http.Request) bool {
+    return true
   }
 
 	// accept websocket connection

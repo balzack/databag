@@ -37,7 +37,7 @@ export function useAppContext () {
   }, [])
 
   const init = async () => {
-    const sdk = new DatabagSDK(null, null)
+    const sdk = new DatabagSDK(null)
     const store = new Store()
     const session: Session | null = await sdk.initOnlineStore(store)
     console.log(session)
@@ -56,7 +56,7 @@ export function useAppContext () {
         appName: 'databag',
       }
       console.log('-----> SDK LOGIN')
-      const login = await sdk.login('asdf', 'asdf', 'https://balzack.coredb.org', null, params)
+      const login = await sdk.login('asdf', 'asdf', 'balzack.coredb.org', true, null, params)
       console.log(login)
       updateState({ sdk, session: login })
     }

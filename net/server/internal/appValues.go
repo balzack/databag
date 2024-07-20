@@ -1,8 +1,5 @@
 package databag
 
-//APPMode for development mode
-var APPMode = "prod"
-
 //APPCopyTransform reserved tranform code indicating copy
 const APPTransformCopy = "_"
 
