@@ -5,8 +5,6 @@ import { en, fr, sp, pt, de, ru } from '../constants/Strings'
 export function useSettingsContext () {
   const [state, setState] = useState({
     display: null,
-    width: null,
-    height: null,
     themes: [{ value: 'dark', label: 'Dark' }, { value: 'light', label: 'Light' }],
     theme: null,
     scheme: null,
@@ -25,7 +23,6 @@ export function useSettingsContext () {
 
   const SMALL_MEDIUM = 650
   const MEDIUM_LARGE = 1000
-  const LARGE_XLARGE = 1600
 
   const updateState = (value: any) => {
     setState((s) => ({ ...s, ...value }))
@@ -36,8 +33,6 @@ export function useSettingsContext () {
       updateState({ display: 'small', width: window.innerWidth, height: window.innerHeight })
     } else if (window.innerWidth < MEDIUM_LARGE) {
       updateState({ display: 'medium', width: window.innerWidth, height: window.innerHeight })
-    } else if (window.innerWidth < LARGE_XLARGE) {
-      updateState({ display: 'large', width: window.innerWidth, height: window.innerHeight })
     } else {
       updateState({ display: 'xlarge', width: window.innerWidth, height: window.innerHeight })
     }
@@ -75,7 +70,7 @@ export function useSettingsContext () {
       updateState({ videoInputs: video })
     })
     // eslint-disable-next-line
-  }, [state.strings]);
+  }, [state.strings])
 
   useEffect(() => {
     for (let i = 0; i < 10; i++) {
