@@ -1,4 +1,4 @@
-import { ReactNode, createContext } from 'react'
+import React, { ReactNode, createContext } from 'react'
 import { useAppContext } from './useAppContext.hook'
 
 export const AppContext = createContext({})

@@ -24,6 +24,7 @@ export function useSettingsContext () {
   const SMALL_MEDIUM = 650
   const MEDIUM_LARGE = 1000
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const updateState = (value: any) => {
     setState((s) => ({ ...s, ...value }))
   }
@@ -34,7 +35,7 @@ export function useSettingsContext () {
     } else if (window.innerWidth < MEDIUM_LARGE) {
       updateState({ display: 'medium', width: window.innerWidth, height: window.innerHeight })
     } else {
-      updateState({ display: 'xlarge', width: window.innerWidth, height: window.innerHeight })
+      updateState({ display: 'large', width: window.innerWidth, height: window.innerHeight })
     }
   }
 
@@ -69,7 +70,6 @@ export function useSettingsContext () {
     getDevices('video').then(video => {
       updateState({ videoInputs: video })
     })
-    // eslint-disable-next-line
   }, [state.strings])
 
   useEffect(() => {
@@ -145,7 +145,6 @@ export function useSettingsContext () {
       window.removeEventListener('resize', handleResize)
       window.removeEventListener('orientationchange', handleResize)
     }
-    // eslint-disable-next-line
   }, []);
 
   const actions = {

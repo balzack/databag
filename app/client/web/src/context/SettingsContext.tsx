@@ -1,4 +1,4 @@
-import { ReactNode, createContext } from 'react'
+import React, { ReactNode, createContext } from 'react'
 import { useSettingsContext } from './useSettingsContext.hook'
 
 export const SettingsContext = createContext({})

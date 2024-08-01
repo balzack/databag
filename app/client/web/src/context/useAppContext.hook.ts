@@ -5,13 +5,13 @@ import { SessionStore } from '../SessionStore'
 export function useAppContext () {
   const [state, setState] = useState({})
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const updateState = (value: any) => {
     setState((s) => ({ ...s, ...value }))
   }
 
   useEffect(() => {
     init()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const init = async () => {

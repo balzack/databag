@@ -1,14 +1,18 @@
-import { useState } from 'react'
-import { ReactComponent as Logo } from './logo.svg'
-
+import React from 'react'
 import { Root } from './root/Root'
+import { createTheme, MantineProvider } from '@mantine/core'
+import './App.css'
 
-import './app.css'
+const theme = createTheme({
+  /** Your theme override here */
+});
 
 export function App () {
   return (
-    <div className='App'>
-      <Root />
-    </div>
+    <MantineProvider theme={theme}>
+      <div className='App'>
+        <Root />
+      </div>
+    </MantineProvider>
   )
 }
