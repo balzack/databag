@@ -8,6 +8,7 @@
     "test": "jest",
     "test:watch": "yarn test --watch",
     "lint": "eslint .",
+    "format": "prettier --write src",
     "lint:fix": "yarn lint --fix",
     "type-check": "tsc --project tsconfig.json --pretty --noEmit",
     "prepare": "husky install",
@@ -42,6 +43,7 @@
     "eslint": "9.x",
     "eslint-plugin-react": "^7.35.0",
     "globals": "^15.9.0",
+    "prettier": "3.3.3",
     "typescript-eslint": "^8.0.0"
   }
 }

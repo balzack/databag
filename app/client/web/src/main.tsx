@@ -19,5 +19,5 @@ root.render(
         <App />
       </StrictMode>
     </AppContextProvider>
-  </SettingsContextProvider>,
+  </SettingsContextProvider>
 )

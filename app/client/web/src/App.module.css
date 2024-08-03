@@ -6,9 +6,9 @@
   }
 }
 
-  &:focus-within {
-    border-color: red;
-  }
+&:focus-within {
+  border-color: red;
+}
 
 /* Use `&:focus-visible` when you want focus ring to be visible
    only when user navigates with keyboard, for example by pressing Tab key */

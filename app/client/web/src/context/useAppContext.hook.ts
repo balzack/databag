@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { DatabagSDK, Session } from 'databag-client-sdk'
 import { SessionStore } from '../SessionStore'
 
-export function useAppContext () {
+export function useAppContext() {
   const [state, setState] = useState({})
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -34,14 +34,20 @@ export function useAppContext () {
         appName: 'databag',
       }
       console.log('-----> SDK LOGIN')
-      const login = await sdk.login('asdf', 'asdf', 'balzack.coredb.org', true, null, params)
+      const login = await sdk.login(
+        'asdf',
+        'asdf',
+        'balzack.coredb.org',
+        true,
+        null,
+        params
+      )
       console.log(login)
       updateState({ sdk, session: login })
     }
   }
 
-  const actions = {
-  }
+  const actions = {}
 
   return { state, actions }
 }
