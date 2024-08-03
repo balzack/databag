@@ -2,11 +2,11 @@ import React, { useContext } from 'react'
 import { SettingsContext } from '../context/SettingsContext'
 import { ContextType } from '../context/ContextType'
 import { TextInput, Button } from '@mantine/core'
-import '@mantine/core/styles.css';
-import classes from './Root.module.css'
+import { useMantineTheme } from '@mantine/core';
 
 export function Root () {
-  const settings = useContext(SettingsContext) as ContextType;
+  const theme = useMantineTheme();
+  const settings = useContext(SettingsContext);
 
   const press = () => {
     console.log("PRESSED");
@@ -21,9 +21,7 @@ export function Root () {
       label="Input label"
       description="Input description"
       placeholder="Input placeholder"
-      classNames={{
-        input: classes.focus
-      }}
     />
+    <div style={{ width: 100, height: 100, backgroundColor: theme.colors.surface[8], }} />
     </div>
 }
