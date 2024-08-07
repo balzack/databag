@@ -1,6 +1,7 @@
 import React from 'react'
 import { Root } from './root/Root'
 import { Access } from './access/Access'
+import { Node } from './node/Node'
 import { Session } from './session/Session'
 import { useColorScheme } from '@mantine/hooks'
 import { createTheme, MantineProvider, virtualColor } from '@mantine/core'
@@ -57,9 +58,15 @@ const theme = createTheme({
 })
 
 const router = createBrowserRouter([
-  { path: '/', element: <Root /> },
-  { path: 'access', element: <Access /> },
-  { path: 'session', element: <Session /> },
+  {
+    element: <Root />,
+    children: [
+      { path: '/', element: <></> },
+      { path: 'access', element: <Access /> },
+      { path: 'session', element: <Session /> },
+      { path: 'node', element: <Node /> },
+    ],
+  }
 ])
 
 export function App() {
@@ -67,7 +74,7 @@ export function App() {
   const defaultScheme = useColorScheme('light', {
     getInitialValueInEffect: false,
   })
-  const scheme = selectedScheme ? selectedScheme : defaultScheme
+  const scheme = selectedScheme === 'light' ? 'light' : selectedScheme === 'dark' ? 'dark' : defaultScheme
 
   return (
     <MantineProvider forceColorScheme={scheme} theme={theme}>

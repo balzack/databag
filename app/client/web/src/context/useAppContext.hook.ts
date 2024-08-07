@@ -18,7 +18,6 @@ export function useAppContext() {
     const sdk = new DatabagSDK(null)
     const store = new SessionStore()
     const session: Session | null = await sdk.initOnlineStore(store)
-    console.log(session)
     if (session) {
       updateState({ sdk, session })
     } else {
