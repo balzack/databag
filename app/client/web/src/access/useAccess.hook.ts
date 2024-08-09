@@ -10,6 +10,7 @@ export function useAccess() {
     mode: 'login',
     username: '',
     password: '',
+    confirm: '',
     theme: '',
     language: '',
     themes: settings.state.themes,
@@ -43,6 +44,9 @@ export function useAccess() {
     },
     setPassword: (password: string) => {
       updateState({ password })
+    },
+    setConfirm: (confirm: string) => {
+      updateState({ confirm })
     },
     setLanguage: (code: string) => {
       settings.actions.setLanguage(code)

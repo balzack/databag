@@ -24,7 +24,7 @@
 
     .submit {
       width: 20%;
-      min-width: 92px;
+      min-width: fit-content;
     }
 
     .float {

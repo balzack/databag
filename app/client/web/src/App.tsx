@@ -1,14 +1,15 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Root } from './root/Root'
 import { Access } from './access/Access'
 import { Node } from './node/Node'
 import { Session } from './session/Session'
-import { useColorScheme } from '@mantine/hooks'
 import { createTheme, MantineProvider, virtualColor } from '@mantine/core'
 import './App.css'
 import '@mantine/core/styles.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import classes from './App.module.css'
+import { SettingsContext } from './context/SettingsContext'
+import { ContextType } from './context/ContextType'
 
 const theme = createTheme({
   primaryColor: 'databag-green',
@@ -71,20 +72,11 @@ const router = createBrowserRouter([
 ])
 
 export function App() {
-  const selectedScheme = localStorage.getItem('scheme')
-  const defaultScheme = useColorScheme('light', {
-    getInitialValueInEffect: false,
-  })
-  const scheme =
-    selectedScheme === 'light'
-      ? 'light'
-      : selectedScheme === 'dark'
-        ? 'dark'
-        : defaultScheme
+  const settings = useContext(SettingsContext) as ContextType
 
   return (
     <div className={classes.app}>
-      <MantineProvider forceColorScheme={scheme} theme={theme}>
+      <MantineProvider forceColorScheme={settings.state.theme} theme={theme}>
         <RouterProvider router={router} />
       </MantineProvider>
     </div>

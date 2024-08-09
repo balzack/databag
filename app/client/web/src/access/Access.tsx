@@ -79,8 +79,66 @@ export function Access() {
               </Button>
             </>
           )}
-          {state.mode === 'create' && <></>}
-          {state.mode === 'admin' && <></>}
+          {state.mode === 'create' && (
+            <>
+              <Title order={3}>{state.strings.createAccount}</Title>
+              <Space h="md" />
+              <TextInput
+                className={classes.input}
+                size="md"
+                leftSectionPointerEvents="none"
+                leftSection={<IconUser />}
+                placeholder={state.strings.username}
+                onChange={(event) =>
+                  actions.setUsername(event.currentTarget.value)
+                }
+              />
+              <PasswordInput
+                className={classes.input}
+                size="md"
+                leftSection={<IconLock />}
+                placeholder={state.strings.password}
+                onChange={(event) =>
+                  actions.setPassword(event.currentTarget.value)
+                }
+              />
+              <PasswordInput
+                className={classes.input}
+                size="md"
+                leftSection={<IconLock />}
+                placeholder={state.strings.confirmPassword}
+                onChange={(event) =>
+                  actions.setConfirm(event.currentTarget.value)
+                }
+              />
+              <Space h="md" />
+              <Button variant="filled" className={classes.submit}>
+                {state.strings.create}
+              </Button>
+              <Button variant="subtle" onClick={() => actions.setMode('login')}>
+                {state.strings.accountLogin}
+              </Button>
+            </>
+          )}
+          {state.mode === 'admin' && (
+            <>
+              <Title order={3}>{state.strings.admin}</Title>
+              <Space h="md" />
+              <PasswordInput
+                className={classes.input}
+                size="md"
+                leftSection={<IconLock />}
+                placeholder={state.strings.password}
+                onChange={(event) =>
+                  actions.setPassword(event.currentTarget.value)
+                }
+              />
+              <Space h="md" />
+              <Button variant="filled" className={classes.submit}>
+                {state.strings.login}
+              </Button>
+            </>
+          )}
           <div className={classes.settings}>
             <Select
               label={state.strings.theme}
