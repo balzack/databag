@@ -1,0 +1,47 @@
+.split {
+  display: flex;
+  height: 100%;
+
+  .right {
+    flex: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 16px;
+    gap: 16px;
+
+    .input {
+      width: 50%;
+    }
+
+    .submit {
+      width: 20%;
+      min-width: 92px;
+    }
+
+    .float {
+      position: absolute;
+      right: 0;
+      top: 0;
+      margin-top: 8px;
+    }
+
+    .settings {
+      display: flex;
+      flex-direction: row;
+      gap: 16px;
+    }
+  }
+
+  .left {
+    flex: 1;
+    height: 100%;
+    background-color: #90bea7;
+
+    .splash {
+      height: 100%;
+    }
+  }
+}

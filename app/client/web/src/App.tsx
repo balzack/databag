@@ -8,6 +8,7 @@ import { createTheme, MantineProvider, virtualColor } from '@mantine/core'
 import './App.css'
 import '@mantine/core/styles.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import classes from './App.module.css'
 
 const theme = createTheme({
   primaryColor: 'databag-green',
@@ -77,8 +78,10 @@ export function App() {
   const scheme = selectedScheme === 'light' ? 'light' : selectedScheme === 'dark' ? 'dark' : defaultScheme
 
   return (
-    <MantineProvider forceColorScheme={scheme} theme={theme}>
-      <RouterProvider router={router} />
-    </MantineProvider>
+    <div className={classes.app}>
+      <MantineProvider forceColorScheme={scheme} theme={theme}>
+        <RouterProvider router={router} />
+      </MantineProvider>
+    </div>
   )
 }

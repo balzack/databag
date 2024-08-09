@@ -1,3 +1,10 @@
+.app {
+  background-color: var(--mantine-color-surface-1);
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
 .focus {
   &:focus {
     border-color: red;

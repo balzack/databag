@@ -11,7 +11,7 @@ export function useAppContext() {
   }
 
   useEffect(() => {
-    init()
+    //init()
   }, [])
 
   const init = async () => {
