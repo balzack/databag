@@ -16,6 +16,12 @@
       width: 50%;
     }
 
+    .title {
+      position: absolute;
+      top: 0;
+      margin: 64px;
+    }
+
     .submit {
       width: 20%;
       min-width: 92px;
@@ -32,6 +38,9 @@
       display: flex;
       flex-direction: row;
       gap: 16px;
+      position: absolute;
+      margin: 16px;
+      bottom: 0;
     }
   }
 

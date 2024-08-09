@@ -67,7 +67,7 @@ const router = createBrowserRouter([
       { path: 'session', element: <Session /> },
       { path: 'node', element: <Node /> },
     ],
-  }
+  },
 ])
 
 export function App() {
@@ -75,7 +75,12 @@ export function App() {
   const defaultScheme = useColorScheme('light', {
     getInitialValueInEffect: false,
   })
-  const scheme = selectedScheme === 'light' ? 'light' : selectedScheme === 'dark' ? 'dark' : defaultScheme
+  const scheme =
+    selectedScheme === 'light'
+      ? 'light'
+      : selectedScheme === 'dark'
+        ? 'dark'
+        : defaultScheme
 
   return (
     <div className={classes.app}>
