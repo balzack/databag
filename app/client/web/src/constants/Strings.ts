@@ -222,7 +222,7 @@ export const fr = {
   ok: 'OK',
   cancel: 'Annuler',
   enableNotifications: 'Notifications Push',
-  accessCode: 'Code d\'Accès',
+  accessCode: "Code d'Accès",
   forgotPassword: 'Mot de Passe Oublié',
 
   new: 'Nouveau',

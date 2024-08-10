@@ -50,17 +50,15 @@ export function useAppContext() {
     },
     accountLogout: async () => {
       if (state.session) {
-        await sdk.current.logout(state.session, false);
+        await sdk.current.logout(state.session, false)
         updateState({ session: null })
       }
     },
     getAvailable: async (node: string, secure: boolean) => {
-      return await sdk.current.available(node, secure);
+      return await sdk.current.available(node, secure)
     },
-    adminLogin: async () => {
-    },
-    adminLogout: async () => {
-    },
+    adminLogin: async () => {},
+    adminLogout: async () => {},
   }
 
   return { state, actions }

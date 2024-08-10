@@ -11,15 +11,21 @@ import {
   PasswordInput,
   TextInput,
 } from '@mantine/core'
-import { useDisclosure } from '@mantine/hooks';
+import { useDisclosure } from '@mantine/hooks'
 import login from '../images/login.png'
-import { IconLock, IconUser, IconSettings, IconServer, IconKey } from '@tabler/icons-react'
+import {
+  IconLock,
+  IconUser,
+  IconSettings,
+  IconServer,
+  IconKey,
+} from '@tabler/icons-react'
 
 export function Access() {
   const { state, actions } = useAccess()
-  const [opened, { open, close }] = useDisclosure(false);
+  const [opened, { open, close }] = useDisclosure(false)
 
-console.log("AVAILABLE: ", state.availableSet);
+  console.log('AVAILABLE: ', state.availableSet)
 
   return (
     <div className={classes.split}>
@@ -53,11 +59,9 @@ console.log("AVAILABLE: ", state.availableSet);
             <>
               <Title order={3}>{state.strings.login}</Title>
               <Space h="md" />
-              <Button
-                size="compact-sm"
-                variant="transparent"
-                onClick={open}
-              >{ state.hostname }</Button>
+              <Button size="compact-sm" variant="transparent" onClick={open}>
+                {state.hostname}
+              </Button>
               <TextInput
                 className={classes.input}
                 size="md"
@@ -101,21 +105,19 @@ console.log("AVAILABLE: ", state.availableSet);
             <>
               <Title order={3}>{state.strings.accessAccount}</Title>
               <Space h="md" />
-              <Button
-                size="compact-sm"
-                variant="transparent"
-                onClick={open}
-              >{ state.hostname }</Button>
-                <TextInput
-                  className={classes.input}
-                  size="md"
-                  leftSectionPointerEvents="none"
-                  leftSection={<IconKey />}
-                  placeholder={state.strings.accessCode}
-                  onChange={(event) =>
-                    actions.setToken(event.currentTarget.value)
-                  }
-                />
+              <Button size="compact-sm" variant="transparent" onClick={open}>
+                {state.hostname}
+              </Button>
+              <TextInput
+                className={classes.input}
+                size="md"
+                leftSectionPointerEvents="none"
+                leftSection={<IconKey />}
+                placeholder={state.strings.accessCode}
+                onChange={(event) =>
+                  actions.setToken(event.currentTarget.value)
+                }
+              />
               <Space h="md" />
               <Button variant="filled" className={classes.submit}>
                 {state.strings.login}
@@ -129,18 +131,14 @@ console.log("AVAILABLE: ", state.availableSet);
               </Button>
             </>
           )}
-
-
           {state.mode === 'create' && (
             <>
               <Title order={3}>{state.strings.createAccount}</Title>
               <Space h="md" />
-              <Button
-                size="compact-sm"
-                variant="transparent"
-                onClick={open}
-              >{ state.hostname }</Button>
-              { (state.available === 0 || !state.availableSet) && (
+              <Button size="compact-sm" variant="transparent" onClick={open}>
+                {state.hostname}
+              </Button>
+              {(state.available === 0 || !state.availableSet) && (
                 <TextInput
                   className={classes.input}
                   size="md"
@@ -185,7 +183,11 @@ console.log("AVAILABLE: ", state.availableSet);
               <Button variant="filled" className={classes.submit}>
                 {state.strings.create}
               </Button>
-              <Button variant="subtle" onClick={() => actions.setMode('login')} size="compact-sm">
+              <Button
+                variant="subtle"
+                onClick={() => actions.setMode('login')}
+                size="compact-sm"
+              >
                 {state.strings.accountLogin}
               </Button>
             </>
@@ -194,11 +196,9 @@ console.log("AVAILABLE: ", state.availableSet);
             <>
               <Title order={3}>{state.strings.admin}</Title>
               <Space h="md" />
-              <Button
-                size="compact-sm"
-                variant="transparent"
-                onClick={open}
-              >{ state.hostname }</Button>
+              <Button size="compact-sm" variant="transparent" onClick={open}>
+                {state.hostname}
+              </Button>
               <PasswordInput
                 className={classes.input}
                 size="md"
@@ -237,9 +237,7 @@ console.log("AVAILABLE: ", state.availableSet);
           leftSection={<IconServer />}
           placeholder={state.strings.host}
           value={state.node}
-          onChange={(event) =>
-            actions.setNode(event.currentTarget.value)
-          }
+          onChange={(event) => actions.setNode(event.currentTarget.value)}
         />
       </Modal>
     </div>
