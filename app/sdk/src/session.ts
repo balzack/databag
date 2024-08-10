@@ -131,7 +131,7 @@ export class SessionModule implements Session {
     }
   }
 
-  public close() {
+  public close(): { node: string, secure: boolean, token: string } {
     this.connection.close();
     this.stream.close();
     this.content.close();
@@ -140,6 +140,7 @@ export class SessionModule implements Session {
     this.contact.close();
     this.identity.close();
     this.account.close();
+    return { node: this.node, secure: this.secure, token: this.token };
   }
 
   public getAccount(): Account {

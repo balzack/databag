@@ -28,7 +28,7 @@ export interface Logging {
 }
 
 export interface Session {
-  close(): void;
+  close(): { node: string, secure: boolean, token: string };
 
   getAccount(): Account;
   getIdentity(): Identity;

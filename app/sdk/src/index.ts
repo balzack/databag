@@ -4,6 +4,7 @@ import { BotModule } from './bot';
 import { ConsoleLogging } from './logging';
 import { type Store, OfflineStore, OnlineStore, NoStore } from './store';
 import { setLogin } from './net/setLogin';
+import { clearLogin } from './net/clearLogin';
 import { setAccess } from './net/setAccess';
 import { addAccount } from './net/addAccount';
 import { setAdmin } from './net/setAdmin';
@@ -64,8 +65,21 @@ export class DatabagSDK {
     return new SessionModule(this.store, this.crypto, this.log, appToken, node, secure, created);
   }
 
-  public async logout(session: Session): Promise<void> {
-    session.close();
+  public async logout(session: Session, all: boolean): Promise<void> {
+    const params = session.close();
+    try {
+      const { node, secure, token } = params;
+      await clearLogin(node, secure, token, all);
+    }
+    catch(err) {
+      console.log(err);
+    }
+    try {
+      await this.store.clearLogin();
+    }
+    catch(err) {
+      console.log(err);
+    }
   }
 
   public async configure(node: string, secure: boolean, token: string, mfaCode: string | null): Promise<Node> {
