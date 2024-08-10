@@ -8,6 +8,7 @@ import { clearLogin } from './net/clearLogin';
 import { setAccess } from './net/setAccess';
 import { addAccount } from './net/addAccount';
 import { setAdmin } from './net/setAdmin';
+import { getAvailable } from './net/getAvailable';
 import type { Session, Node, Bot, SqlStore, WebStore, Crypto, Logging } from './api';
 import type { SessionParams } from './types';
 import type { Login } from './entities';
@@ -38,6 +39,10 @@ export class DatabagSDK {
     this.store = new OnlineStore(this.log, web);
     const login = await this.store.init();
     return login ? new SessionModule(this.store, this.crypto, this.log, login.token, login.node, login.secure, login.timestamp) : null
+  }
+
+  public async available(node: string, secure: boolean): Promise<number> {
+    return await getAvailable(node, secure);
   }
 
   public async login(handle: string, password: string, node: string, secure: boolean, mfaCode: string | null, params: SessionParams): Promise<Session> {

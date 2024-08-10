@@ -7,14 +7,19 @@ import {
   Title,
   Image,
   Button,
+  Modal,
   PasswordInput,
   TextInput,
 } from '@mantine/core'
+import { useDisclosure } from '@mantine/hooks';
 import login from '../images/login.png'
-import { IconLock, IconUser, IconSettings } from '@tabler/icons-react'
+import { IconLock, IconUser, IconSettings, IconServer, IconKey } from '@tabler/icons-react'
 
 export function Access() {
   const { state, actions } = useAccess()
+  const [opened, { open, close }] = useDisclosure(false);
+
+console.log("AVAILABLE: ", state.availableSet);
 
   return (
     <div className={classes.split}>
@@ -48,6 +53,11 @@ export function Access() {
             <>
               <Title order={3}>{state.strings.login}</Title>
               <Space h="md" />
+              <Button
+                size="compact-sm"
+                variant="transparent"
+                onClick={open}
+              >{ state.hostname }</Button>
               <TextInput
                 className={classes.input}
                 size="md"
@@ -72,17 +82,77 @@ export function Access() {
                 {state.strings.login}
               </Button>
               <Button
+                size="compact-sm"
                 variant="subtle"
                 onClick={() => actions.setMode('create')}
               >
                 {state.strings.createAccount}
               </Button>
+              <Button
+                size="compact-sm"
+                variant="subtle"
+                onClick={() => actions.setMode('access')}
+              >
+                {state.strings.forgotPassword}
+              </Button>
             </>
           )}
+          {state.mode === 'access' && (
+            <>
+              <Title order={3}>{state.strings.accessAccount}</Title>
+              <Space h="md" />
+              <Button
+                size="compact-sm"
+                variant="transparent"
+                onClick={open}
+              >{ state.hostname }</Button>
+                <TextInput
+                  className={classes.input}
+                  size="md"
+                  leftSectionPointerEvents="none"
+                  leftSection={<IconKey />}
+                  placeholder={state.strings.accessCode}
+                  onChange={(event) =>
+                    actions.setToken(event.currentTarget.value)
+                  }
+                />
+              <Space h="md" />
+              <Button variant="filled" className={classes.submit}>
+                {state.strings.login}
+              </Button>
+              <Button
+                size="compact-sm"
+                variant="subtle"
+                onClick={() => actions.setMode('login')}
+              >
+                {state.strings.accountLogin}
+              </Button>
+            </>
+          )}
+
+
           {state.mode === 'create' && (
             <>
               <Title order={3}>{state.strings.createAccount}</Title>
               <Space h="md" />
+              <Button
+                size="compact-sm"
+                variant="transparent"
+                onClick={open}
+              >{ state.hostname }</Button>
+              { (state.available === 0 || !state.availableSet) && (
+                <TextInput
+                  className={classes.input}
+                  size="md"
+                  disabled={!state.availableSet}
+                  leftSectionPointerEvents="none"
+                  leftSection={<IconKey />}
+                  placeholder={state.strings.accessCode}
+                  onChange={(event) =>
+                    actions.setToken(event.currentTarget.value)
+                  }
+                />
+              )}
               <TextInput
                 className={classes.input}
                 size="md"
@@ -115,7 +185,7 @@ export function Access() {
               <Button variant="filled" className={classes.submit}>
                 {state.strings.create}
               </Button>
-              <Button variant="subtle" onClick={() => actions.setMode('login')}>
+              <Button variant="subtle" onClick={() => actions.setMode('login')} size="compact-sm">
                 {state.strings.accountLogin}
               </Button>
             </>
@@ -124,6 +194,11 @@ export function Access() {
             <>
               <Title order={3}>{state.strings.admin}</Title>
               <Space h="md" />
+              <Button
+                size="compact-sm"
+                variant="transparent"
+                onClick={open}
+              >{ state.hostname }</Button>
               <PasswordInput
                 className={classes.input}
                 size="md"
@@ -155,6 +230,18 @@ export function Access() {
           </div>
         </div>
       )}
+      <Modal opened={opened} onClose={close} withCloseButton={false} centered>
+        <TextInput
+          size="md"
+          leftSectionPointerEvents="none"
+          leftSection={<IconServer />}
+          placeholder={state.strings.host}
+          value={state.node}
+          onChange={(event) =>
+            actions.setNode(event.currentTarget.value)
+          }
+        />
+      </Modal>
     </div>
   )
 }

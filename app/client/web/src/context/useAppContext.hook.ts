@@ -1,9 +1,12 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { DatabagSDK, Session } from 'databag-client-sdk'
 import { SessionStore } from '../SessionStore'
 
 export function useAppContext() {
-  const [state, setState] = useState({})
+  const sdk = useRef(new DatabagSDK(null))
+  const [state, setState] = useState({
+    session: null as null | Session,
+  })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const updateState = (value: any) => {
@@ -11,16 +14,19 @@ export function useAppContext() {
   }
 
   useEffect(() => {
-    //init()
+    init()
   }, [])
 
   const init = async () => {
-    const sdk = new DatabagSDK(null)
     const store = new SessionStore()
-    const session: Session | null = await sdk.initOnlineStore(store)
+    const session: Session | null = await sdk.current.initOnlineStore(store)
     if (session) {
-      updateState({ sdk, session })
-    } else {
+      updateState({ session })
+    }
+  }
+
+  const actions = {
+    accountLogin: async () => {
       const params = {
         topicBatch: 16,
         tagBatch: 16,
@@ -32,8 +38,7 @@ export function useAppContext() {
         version: '0.0.1',
         appName: 'databag',
       }
-      console.log('-----> SDK LOGIN')
-      const login = await sdk.login(
+      const login = await sdk.current.login(
         'asdf',
         'asdf',
         'balzack.coredb.org',
@@ -41,12 +46,22 @@ export function useAppContext() {
         null,
         params
       )
-      console.log(login)
-      updateState({ sdk, session: login })
-    }
+      updateState({ session: login })
+    },
+    accountLogout: async () => {
+      if (state.session) {
+        await sdk.current.logout(state.session, false);
+        updateState({ session: null })
+      }
+    },
+    getAvailable: async (node: string, secure: boolean) => {
+      return await sdk.current.available(node, secure);
+    },
+    adminLogin: async () => {
+    },
+    adminLogout: async () => {
+    },
   }
-
-  const actions = {}
 
   return { state, actions }
 }

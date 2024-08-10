@@ -1,9 +1,12 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import { Button } from '@mantine/core'
+import { AppContext } from '../context/AppContext';
+import { ContextType } from '../context/ContextType';
 
 export function Session() {
+  const app = useContext(AppContext) as ContextType;
+
   return (
-    <div>
-      <span>Session</span>
-    </div>
+    <Button onClick={app.actions.accountLogout}>Session Logout</Button>
   )
 }

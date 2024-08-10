@@ -10,6 +10,8 @@ export const en = {
   ok: 'OK',
   cancel: 'Cancel',
   enableNotifications: 'Push Notifications',
+  accessCode: 'Access Code',
+  forgotPassword: 'Forgot Password',
 
   new: 'New',
   newMessage: 'New Message',
@@ -220,6 +222,8 @@ export const fr = {
   ok: 'OK',
   cancel: 'Annuler',
   enableNotifications: 'Notifications Push',
+  accessCode: 'Code d\'Accès',
+  forgotPassword: 'Mot de Passe Oublié',
 
   new: 'Nouveau',
   newMessage: 'Nouveau Message',
@@ -433,6 +437,8 @@ export const sp = {
   ok: 'Aceptar',
   cancel: 'Cancelar',
   enableNotifications: 'Notificaciones Push',
+  accessCode: 'Código de Acceso',
+  forgotPassword: 'Contraseña Olvidada',
 
   new: 'Nuevo',
   newMessage: 'Nuevo mensaje',
@@ -644,6 +650,8 @@ export const pt = {
   ok: 'OK',
   cancel: 'Cancelar',
   enableNotifications: 'Notificações Push',
+  accessCode: 'Código de Acesso',
+  forgotPassword: 'Senha Esquecida',
 
   new: 'Novo',
   newMessage: 'Nova mensagem',
@@ -855,6 +863,8 @@ export const de = {
   ok: 'OK',
   cancel: 'Abbrechen',
   enableNotifications: 'Mitteilungen',
+  accessCode: 'Zugangscode',
+  forgotPassword: 'Passwort Vergessen',
 
   new: 'Neu',
   newMessage: 'Neue Nachricht',
@@ -1067,6 +1077,8 @@ export const ru = {
   ok: 'OK',
   cancel: 'Отмена',
   enableNotifications: 'Уведомления',
+  accessCode: 'Код доступа',
+  forgotPassword: 'Пароль забыт',
 
   new: 'Новый',
   newMessage: 'Новое сообщение',
