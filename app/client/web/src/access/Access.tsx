@@ -12,7 +12,7 @@ import {
   TextInput,
 } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
-import login from '../images/login.png'
+import left from '../images/login.png'
 import {
   IconLock,
   IconUser,
@@ -23,15 +23,24 @@ import {
 
 export function Access() {
   const { state, actions } = useAccess()
-  const [opened, { open, close }] = useDisclosure(false)
+  const [alertOpened, { open: alertOpen, close: alertClose }] =
+    useDisclosure(false)
+  const [urlOpened, { open: urlOpen, close: urlClose }] = useDisclosure(false)
 
-  console.log('AVAILABLE: ', state.availableSet)
+  const login = async () => {
+    try {
+      await actions.accountLogin()
+    } catch (err) {
+      console.log(err)
+      alertOpen()
+    }
+  }
 
   return (
     <div className={classes.split}>
       {(state.display === 'medium' || state.display === 'large') && (
         <div className={classes.left}>
-          <Image className={classes.splash} src={login} fit="contain" />
+          <Image className={classes.splash} src={left} fit="contain" />
         </div>
       )}
       {state.display != null && (
@@ -60,8 +69,12 @@ export function Access() {
               <>
                 <Title order={3}>{state.strings.login}</Title>
                 <Space h="md" />
-                <Button size="compact-sm" variant="transparent" onClick={open}>
-                  {state.hostname}
+                <Button
+                  size="compact-sm"
+                  variant="transparent"
+                  onClick={urlOpen}
+                >
+                  {state.host}
                 </Button>
                 <TextInput
                   className={classes.input}
@@ -81,9 +94,18 @@ export function Access() {
                   onChange={(event) =>
                     actions.setPassword(event.currentTarget.value)
                   }
+                  onKeyDown={(ev) => {
+                    if (ev.code === 'Enter' && state.password && state.username)
+                      login()
+                  }}
                 />
                 <Space h="md" />
-                <Button variant="filled" className={classes.submit}>
+                <Button
+                  variant="filled"
+                  className={classes.submit}
+                  onClick={login}
+                  disabled={!state.username || !state.password}
+                >
                   {state.strings.login}
                 </Button>
                 <Button
@@ -106,8 +128,12 @@ export function Access() {
               <>
                 <Title order={3}>{state.strings.accessAccount}</Title>
                 <Space h="md" />
-                <Button size="compact-sm" variant="transparent" onClick={open}>
-                  {state.hostname}
+                <Button
+                  size="compact-sm"
+                  variant="transparent"
+                  onClick={urlOpen}
+                >
+                  {state.host}
                 </Button>
                 <TextInput
                   className={classes.input}
@@ -136,8 +162,12 @@ export function Access() {
               <>
                 <Title order={3}>{state.strings.createAccount}</Title>
                 <Space h="md" />
-                <Button size="compact-sm" variant="transparent" onClick={open}>
-                  {state.hostname}
+                <Button
+                  size="compact-sm"
+                  variant="transparent"
+                  onClick={urlOpen}
+                >
+                  {state.host}
                 </Button>
                 {(state.available === 0 || !state.availableSet) && (
                   <TextInput
@@ -197,8 +227,12 @@ export function Access() {
               <>
                 <Title order={3}>{state.strings.admin}</Title>
                 <Space h="md" />
-                <Button size="compact-sm" variant="transparent" onClick={open}>
-                  {state.hostname}
+                <Button
+                  size="compact-sm"
+                  variant="transparent"
+                  onClick={urlOpen}
+                >
+                  {state.host}
                 </Button>
                 <PasswordInput
                   className={classes.input}
@@ -232,15 +266,31 @@ export function Access() {
           </div>
         </div>
       )}
-      <Modal opened={opened} onClose={close} withCloseButton={false} centered>
+      <Modal
+        opened={urlOpened}
+        onClose={urlClose}
+        withCloseButton={false}
+        centered
+      >
         <TextInput
+          className={classes.urlInput}
           size="md"
           leftSectionPointerEvents="none"
           leftSection={<IconServer />}
           placeholder={state.strings.host}
           value={state.node}
+          onKeyDown={(ev) => {
+            if (ev.code === 'Enter') urlClose()
+          }}
           onChange={(event) => actions.setNode(event.currentTarget.value)}
         />
+      </Modal>
+      <Modal
+        opened={alertOpened}
+        onClose={alertClose}
+        title={state.strings.operationFailed}
+      >
+        {state.strings.tryAgain}
       </Modal>
     </div>
   )

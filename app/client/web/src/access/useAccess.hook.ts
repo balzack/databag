@@ -18,7 +18,8 @@ export function useAccess() {
     theme: '',
     language: '',
     node: '',
-    hostname: '',
+    secure: false,
+    host: '',
     available: 0,
     availableSet: false,
     themes: settings.state.themes,
@@ -31,21 +32,21 @@ export function useAccess() {
   }
 
   useEffect(() => {
-    const { protocol, hostname, port } = location
-    setUrl(`${protocol}//${hostname}:${port}`)
+    const { protocol, host } = location
+    setUrl(`${protocol}//${host}`)
   }, [])
 
   const setUrl = (node: string) => {
     try {
       const url = new URL(node)
-      const { protocol, hostname, port } = url
-      getAvailable(`${hostname}:${port}`, protocol === 'https:')
-      updateState({ node, hostname: hostname })
+      const { protocol, host } = url
+      getAvailable(host, protocol === 'https:')
+      updateState({ node, host, secure: protocol === 'https:' })
     } catch (err) {
       console.log(err)
-      const { protocol, hostname, port } = location
-      getAvailable(`${hostname}:${port}`, protocol === 'https:')
-      updateState({ node, hostname: location.hostname })
+      const { protocol, host } = location
+      getAvailable(host, protocol === 'https:')
+      updateState({ node, host, secure: protocol === 'https:' })
     }
   }
 
@@ -55,9 +56,6 @@ export function useAccess() {
     debounce.current = setTimeout(async () => {
       try {
         const available = await app.actions.getAvailable(node, secure)
-
-        console.log('AVAILABLE: ', available)
-
         updateState({ available, availableSet: true })
       } catch (err) {
         console.log(err)
@@ -103,7 +101,10 @@ export function useAccess() {
     setTheme: (theme: string) => {
       settings.actions.setTheme(theme)
     },
-    login: () => {},
+    accountLogin: async () => {
+      const { username, password, host, secure } = state
+      await app.actions.accountLogin(username, password, host, secure)
+    },
   }
 
   return { state, actions }

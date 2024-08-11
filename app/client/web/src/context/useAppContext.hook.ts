@@ -26,7 +26,14 @@ export function useAppContext() {
   }
 
   const actions = {
-    accountLogin: async () => {
+    accountLogin: async (
+      username: string,
+      password: string,
+      node: string,
+      secure: boolean
+    ) => {
+      console.log('LOGIN:', username, password, node, secure)
+
       const params = {
         topicBatch: 16,
         tagBatch: 16,
@@ -39,10 +46,10 @@ export function useAppContext() {
         appName: 'databag',
       }
       const login = await sdk.current.login(
-        'asdf',
-        'asdf',
-        'balzack.coredb.org',
-        true,
+        username,
+        password,
+        node,
+        secure,
         null,
         params
       )
