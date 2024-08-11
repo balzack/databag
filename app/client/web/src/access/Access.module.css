@@ -5,6 +5,13 @@
   .right {
     flex: 1;
     height: 100%;
+    overflow: scroll;
+  }
+
+  .frame {
+    position: relative;
+    height: 100%;
+    min-height: 650px;
     display: flex;
     flex-direction: column;
     justify-content: center;
