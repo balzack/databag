@@ -34,14 +34,14 @@ export function useAccess() {
   }
 
   useEffect(() => {
-    const params = new URLSearchParams(location)
+    const params = new URLSearchParams(location.href)
     const search = params.get('search')
     if (search && search.startsWith('?create=')) {
       updateState({ mode: 'create', token: search.substring(8) })
     } else if (search && search.startsWith('?reset=')) {
       updateState({ mode: 'reset', token: search.substring(7) })
     } else {
-      updateState({ mode: 'login' })
+      updateState({ mode: 'account' })
     }
 
     const { protocol, host } = location
@@ -120,8 +120,20 @@ export function useAccess() {
       updateState({ loading })
     },
     accountLogin: async () => {
-      const { username, password, host, secure } = state
-      await app.actions.accountLogin(username, password, host, secure)
+      const { username, password, host, secure, code } = state
+      await app.actions.accountLogin(username, password, host, secure, code)
+    },
+    accountCreate: async () => {
+      const { username, password, host, secure, token } = state
+      await app.actions.accountCreate(username, password, host, secure, token)
+    },
+    accountAccess: async () => {
+      const { host, secure, token } = state
+      await app.actions.accountAccess(host, secure, token)
+    },
+    adminLogin: async () => {
+      const { password, host, secure, code } = state
+      await app.actions.adminLogin(host, secure, password, code)
     },
   }
 

@@ -30,7 +30,8 @@ export function useAppContext() {
       username: string,
       password: string,
       node: string,
-      secure: boolean
+      secure: boolean,
+      code: string
     ) => {
       const params = {
         topicBatch: 16,
@@ -59,11 +60,64 @@ export function useAppContext() {
         updateState({ session: null })
       }
     },
+    accountCreate: async (
+      handle: string,
+      password: string,
+      node: string,
+      secure: boolean,
+      token: string
+    ) => {
+      const params = {
+        topicBatch: 16,
+        tagBatch: 16,
+        channelTypes: ['test'],
+        pushType: 'fcm',
+        deviceToken: 'aabbcc',
+        notifications: [{ event: 'msg', messageTitle: 'msgd' }],
+        deviceId: '0011',
+        version: '0.0.1',
+        appName: 'databag',
+      }
+      const session = sdk.current.create(
+        handle,
+        password,
+        node,
+        secure,
+        token,
+        params
+      )
+      updateState({ session })
+    },
+    accountAccess: async (node: string, secure: boolean, token: string) => {
+      const params = {
+        topicBatch: 16,
+        tagBatch: 16,
+        channelTypes: ['test'],
+        pushType: 'fcm',
+        deviceToken: 'aabbcc',
+        notifications: [{ event: 'msg', messageTitle: 'msgd' }],
+        deviceId: '0011',
+        version: '0.0.1',
+        appName: 'databag',
+      }
+      const session = sdk.current.access(node, secure, token, params)
+      updateState({ session })
+    },
     getAvailable: async (node: string, secure: boolean) => {
       return await sdk.current.available(node, secure)
     },
-    adminLogin: async () => {},
-    adminLogout: async () => {},
+    adminLogin: async (
+      token: string,
+      node: string,
+      secure: boolean,
+      code: string
+    ) => {
+      const login = await sdk.current.configure(node, secure, token, code)
+      updateState({ node: login })
+    },
+    adminLogout: async () => {
+      updateState({ node: null })
+    },
   }
 
   return { state, actions }

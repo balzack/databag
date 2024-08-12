@@ -35,7 +35,15 @@ export function Access() {
       otpClose()
       try {
         await new Promise((r) => setTimeout(r, 2000))
-        await actions.accountLogin()
+        if (state.mode === 'account') {
+          await actions.accountLogin()
+        } else if (state.mode === 'create') {
+          await actions.accountCreate()
+        } else if (state.mode === 'reset') {
+          await actions.accountAccess()
+        } else if (state.mode === 'admin') {
+          await actions.adminLogin()
+        }
       } catch (err) {
         console.log(err)
         alertOpen()
@@ -67,13 +75,13 @@ export function Access() {
                 variant="transparent"
                 className={classes.float}
                 leftSection={<IconUser size={28} />}
-                onClick={() => actions.setMode('login')}
+                onClick={() => actions.setMode('account')}
               />
             )}
             <Title className={classes.title} order={1}>
               Databag
             </Title>
-            {state.mode === 'login' && (
+            {state.mode === 'account' && (
               <>
                 <Title order={3}>{state.strings.login}</Title>
                 <Space h="md" />
@@ -150,19 +158,25 @@ export function Access() {
                   value={state.token}
                   leftSectionPointerEvents="none"
                   leftSection={<IconKey />}
-                  placeholder={state.strings.resetCode}
+                  placeholder={state.strings.accessCode}
                   onChange={(event) =>
                     actions.setToken(event.currentTarget.value)
                   }
                 />
                 <Space h="md" />
-                <Button variant="filled" className={classes.submit}>
+                <Button
+                  variant="filled"
+                  className={classes.submit}
+                  disabled={!state.token}
+                  onClick={login}
+                  loading={state.loading}
+                >
                   {state.strings.login}
                 </Button>
                 <Button
                   size="compact-sm"
                   variant="subtle"
-                  onClick={() => actions.setMode('login')}
+                  onClick={() => actions.setMode('account')}
                 >
                   {state.strings.accountLogin}
                 </Button>
@@ -227,7 +241,7 @@ export function Access() {
                 </Button>
                 <Button
                   variant="subtle"
-                  onClick={() => actions.setMode('login')}
+                  onClick={() => actions.setMode('account')}
                   size="compact-sm"
                 >
                   {state.strings.accountLogin}
@@ -255,7 +269,13 @@ export function Access() {
                   }
                 />
                 <Space h="md" />
-                <Button variant="filled" className={classes.submit}>
+                <Button
+                  variant="filled"
+                  className={classes.submit}
+                  disabled={!state.password}
+                  onClick={login}
+                  loading={state.loading}
+                >
                   {state.strings.login}
                 </Button>
               </>
@@ -315,7 +335,7 @@ export function Access() {
           <PinInput
             length={6}
             className={classes.mfaPin}
-            onChange={(event) => actions.setCode(event.currentTarget.value)}
+            onChange={(event) => actions.setCode(event)}
           />
           <div className={classes.mfaControl}>
             <Button variant="outline" onClick={otpClose}>
