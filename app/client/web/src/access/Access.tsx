@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useAccess } from './useAccess.hook'
 import classes from './Access.module.css'
 import {
@@ -28,13 +28,11 @@ export function Access() {
     useDisclosure(false)
   const [urlOpened, { open: urlOpen, close: urlClose }] = useDisclosure(false)
   const [otpOpened, { open: otpOpen, close: otpClose }] = useDisclosure(false)
-
-console.log("LANG: ", state.language);
+  const [disabled, setDisabled] = useState(false)
 
   const login = async () => {
     if (!state.loading) {
       actions.setLoading(true)
-      otpClose()
       try {
         if (state.mode === 'account') {
           await actions.accountLogin()
@@ -45,9 +43,23 @@ console.log("LANG: ", state.language);
         } else if (state.mode === 'admin') {
           await actions.adminLogin()
         }
+        otpClose()
       } catch (err) {
-        console.log(err)
-        alertOpen()
+        console.log(err.message)
+        if (
+          err.message === '405' ||
+          err.message === '403' ||
+          err.message === '429'
+        ) {
+          if (err.message === '429') {
+            setDisabled(true)
+          } else {
+            setDisabled(false)
+          }
+          otpOpen()
+        } else {
+          alertOpen()
+        }
       }
       actions.setLoading(false)
     }
@@ -351,15 +363,24 @@ console.log("LANG: ", state.language);
           <div className={classes.mfaTitle}>{state.strings.mfaTitle}</div>
           <div className={classes.mfaDescription}>{state.strings.mfaEnter}</div>
           <PinInput
+            value={state.code}
             length={6}
             className={classes.mfaPin}
             onChange={(event) => actions.setCode(event)}
           />
+          <div className={classes.mfaDisabled}>
+            {disabled ? state.strings.mfaDisabled : ''}
+          </div>
           <div className={classes.mfaControl}>
             <Button variant="outline" onClick={otpClose}>
               {state.strings.cancel}
             </Button>
-            <Button variant="filled" onClick={login}>
+            <Button
+              variant="filled"
+              onClick={login}
+              loading={state.loading}
+              disabled={state.code.length !== 6}
+            >
               {state.strings.login}
             </Button>
           </div>

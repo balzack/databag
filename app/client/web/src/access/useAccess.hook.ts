@@ -98,8 +98,6 @@ export function useAccess() {
         secure
       )
       updateState({ taken: !available })
-
-      console.log('TAKEN: ', taken)
     }, 2000)
   }
 

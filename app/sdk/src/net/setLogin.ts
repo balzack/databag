@@ -5,9 +5,11 @@ export async function setLogin(node: string, secure: boolean, username: string, 
   const mfa = code ? `&code=${code}` : '';
   const endpoint = `http${secure ? 's' : ''}://${node}/account/apps?appName=${appName}&appVersion=${appVersion}&platform=${platform}&deviceToken=${deviceToken}&pushType=${pushType}${mfa}`;
   const auth = encode(`${username}:${password}`);
-  const response = await axios.post(endpoint, notifications, { auth: `Basic ${auth}` });
-  if (response.status >= 400 && response.status < 600) {
-    throw new Error('setLogin fetch failed');
+  try {
+    const response = await axios.post(endpoint, notifications, { auth: `Basic ${auth}` });
+    return response.data;
   }
-  return response.data;
+  catch(err) {
+    throw new Error(err.status);
+  }
 }
