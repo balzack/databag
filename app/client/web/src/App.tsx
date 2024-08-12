@@ -105,7 +105,7 @@ export function App() {
 
   return (
     <div className={classes.app}>
-      <MantineProvider forceColorScheme={settings.state.theme} theme={theme}>
+      <MantineProvider forceColorScheme={settings.state.scheme} theme={theme}>
         <RouterProvider router={router} />
       </MantineProvider>
     </div>

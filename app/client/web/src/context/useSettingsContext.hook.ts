@@ -231,7 +231,7 @@ export function useSettingsContext() {
       const browser = navigator.language
       if (browser && browser.startsWith('fr')) {
         updateState({
-          language: null,
+          language: 'fr',
           strings: fr,
           themes: [
             { value: 'dark', label: fr.dark },
@@ -240,7 +240,7 @@ export function useSettingsContext() {
         })
       } else if (browser && browser.startsWith('sp')) {
         updateState({
-          language: null,
+          language: 'sp',
           strings: sp,
           themes: [
             { value: 'dark', label: sp.dark },
@@ -249,7 +249,7 @@ export function useSettingsContext() {
         })
       } else if (browser && browser.startsWith('pt')) {
         updateState({
-          language: null,
+          language: 'pt',
           strings: pt,
           themes: [
             { value: 'dark', label: pt.dark },
@@ -258,7 +258,7 @@ export function useSettingsContext() {
         })
       } else if (browser && browser.startsWith('de')) {
         updateState({
-          language: null,
+          language: 'de',
           strings: de,
           themes: [
             { value: 'dark', label: de.dark },
@@ -267,7 +267,7 @@ export function useSettingsContext() {
         })
       } else if (browser && browser.startsWith('ru')) {
         updateState({
-          language: null,
+          language: 'ru',
           strings: ru,
           themes: [
             { value: 'dark', label: ru.dark },
@@ -276,7 +276,7 @@ export function useSettingsContext() {
         })
       } else {
         updateState({
-          language: null,
+          language: 'en',
           strings: en,
           themes: [
             { value: 'dark', label: en.dark },
@@ -338,7 +338,7 @@ export function useSettingsContext() {
         } else {
           updateState({
             theme: null,
-            scheme: 'ligth',
+            scheme: 'light',
             colors: LightTheme,
             menuStyle: {
               backgroundColor: LightTheme.modalArea,
@@ -414,7 +414,7 @@ export function useSettingsContext() {
         const browser = navigator.language
         if (browser && browser.startsWith('fr')) {
           updateState({
-            language: null,
+            language: 'fr',
             strings: fr,
             themes: [
               { value: 'dark', label: fr.dark },
@@ -423,7 +423,7 @@ export function useSettingsContext() {
           })
         } else if (browser && browser.startsWith('sp')) {
           updateState({
-            language: null,
+            language: 'sp',
             strings: sp,
             themes: [
               { value: 'dark', label: sp.dark },
@@ -432,7 +432,7 @@ export function useSettingsContext() {
           })
         } else if (browser && browser.startsWith('pt')) {
           updateState({
-            language: null,
+            language: 'pt',
             strings: pt,
             themes: [
               { value: 'dark', label: pt.dark },
@@ -441,7 +441,7 @@ export function useSettingsContext() {
           })
         } else if (browser && browser.startsWith('de')) {
           updateState({
-            language: null,
+            language: 'de',
             strings: de,
             themes: [
               { value: 'dark', label: de.dark },
@@ -450,7 +450,7 @@ export function useSettingsContext() {
           })
         } else if (browser && browser.startsWith('ru')) {
           updateState({
-            language: null,
+            language: 'ru',
             strings: ru,
             themes: [
               { value: 'dark', label: ru.dark },
@@ -459,7 +459,7 @@ export function useSettingsContext() {
           })
         } else {
           updateState({
-            language: null,
+            language: 'en',
             strings: en,
             themes: [
               { value: 'dark', label: en.dark },

@@ -17,7 +17,7 @@ export function useAccess() {
     confirm: '',
     token: '',
     code: '',
-    theme: '',
+    scheme: '',
     language: '',
     node: '',
     loading: false,
@@ -104,13 +104,13 @@ export function useAccess() {
   }
 
   useEffect(() => {
-    const { display, strings, themes, theme, languages, language } =
+    const { display, strings, themes, scheme, languages, language } =
       settings.state
     updateState({
       display,
       strings,
       themes: [...themes],
-      theme,
+      scheme,
       languages,
       language,
     })

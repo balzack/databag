@@ -29,6 +29,8 @@ export function Access() {
   const [urlOpened, { open: urlOpen, close: urlClose }] = useDisclosure(false)
   const [otpOpened, { open: otpOpen, close: otpClose }] = useDisclosure(false)
 
+console.log("LANG: ", state.language);
+
   const login = async () => {
     if (!state.loading) {
       actions.setLoading(true)
@@ -300,7 +302,7 @@ export function Access() {
               <Select
                 label={state.strings.theme}
                 data={state.themes}
-                value={state.theme}
+                value={state.scheme}
                 onChange={(theme) => actions.setTheme(theme as string)}
               />
               <Select
