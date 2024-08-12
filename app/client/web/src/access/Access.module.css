@@ -58,6 +58,7 @@
       width: 50%;
       margin: 4px;
       opacity: 0;
+      z-index: -10;
     }
 
     .title {
