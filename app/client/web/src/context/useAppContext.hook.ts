@@ -78,7 +78,7 @@ export function useAppContext() {
         version: '0.0.1',
         appName: 'databag',
       }
-      const session = sdk.current.create(
+      const session = await sdk.current.create(
         handle,
         password,
         node,
@@ -100,11 +100,19 @@ export function useAppContext() {
         version: '0.0.1',
         appName: 'databag',
       }
-      const session = sdk.current.access(node, secure, token, params)
+      const session = await sdk.current.access(node, secure, token, params)
       updateState({ session })
     },
     getAvailable: async (node: string, secure: boolean) => {
       return await sdk.current.available(node, secure)
+    },
+    getUsername: async (
+      username: string,
+      token: string,
+      node: string,
+      secure: boolean
+    ) => {
+      return await sdk.current.username(username, token, node, secure)
     },
     adminLogin: async (
       token: string,

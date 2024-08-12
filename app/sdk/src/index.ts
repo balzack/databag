@@ -9,6 +9,7 @@ import { setAccess } from './net/setAccess';
 import { addAccount } from './net/addAccount';
 import { setAdmin } from './net/setAdmin';
 import { getAvailable } from './net/getAvailable';
+import { getUsername } from './net/getUsername';
 import type { Session, Node, Bot, SqlStore, WebStore, Crypto, Logging } from './api';
 import type { SessionParams } from './types';
 import type { Login } from './entities';
@@ -43,6 +44,10 @@ export class DatabagSDK {
 
   public async available(node: string, secure: boolean): Promise<number> {
     return await getAvailable(node, secure);
+  }
+
+  public async username(name: string, token: string, node: string, secure: boolean): Promise<boolean> {
+    return await getUsername(name, token, node, secure);
   }
 
   public async login(handle: string, password: string, node: string, secure: boolean, mfaCode: string | null, params: SessionParams): Promise<Session> {

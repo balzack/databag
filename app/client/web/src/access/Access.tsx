@@ -84,7 +84,6 @@ export function Access() {
             {state.mode === 'account' && (
               <>
                 <Title order={3}>{state.strings.login}</Title>
-                <Space h="md" />
                 <Button
                   size="compact-sm"
                   variant="transparent"
@@ -92,6 +91,7 @@ export function Access() {
                 >
                   {state.host}
                 </Button>
+                <Space h="md" />
                 <TextInput
                   className={classes.input}
                   size="md"
@@ -144,7 +144,6 @@ export function Access() {
             {state.mode === 'reset' && (
               <>
                 <Title order={3}>{state.strings.accessAccount}</Title>
-                <Space h="md" />
                 <Button
                   size="compact-sm"
                   variant="transparent"
@@ -152,6 +151,7 @@ export function Access() {
                 >
                   {state.host}
                 </Button>
+                <Space h="md" />
                 <TextInput
                   className={classes.input}
                   size="md"
@@ -184,8 +184,8 @@ export function Access() {
             )}
             {state.mode === 'create' && (
               <>
-                <Title order={3}>{state.strings.createAccount}</Title>
                 <Space h="md" />
+                <Title order={3}>{state.strings.createAccount}</Title>
                 <Button
                   size="compact-sm"
                   variant="transparent"
@@ -193,20 +193,20 @@ export function Access() {
                 >
                   {state.host}
                 </Button>
-                {(state.available === 0 || !state.availableSet) && (
-                  <TextInput
-                    className={classes.input}
-                    size="md"
-                    value={state.token}
-                    disabled={!state.availableSet}
-                    leftSectionPointerEvents="none"
-                    leftSection={<IconKey />}
-                    placeholder={state.strings.resetCode}
-                    onChange={(event) =>
-                      actions.setToken(event.currentTarget.value)
-                    }
-                  />
-                )}
+                <Space h="md" />
+                <TextInput
+                  className={
+                    state.available === 0 ? classes.input : classes.hidden
+                  }
+                  size="md"
+                  value={state.token}
+                  leftSectionPointerEvents="none"
+                  leftSection={<IconKey />}
+                  placeholder={state.strings.accessCode}
+                  onChange={(event) =>
+                    actions.setToken(event.currentTarget.value)
+                  }
+                />
                 <TextInput
                   className={classes.input}
                   size="md"
@@ -216,6 +216,7 @@ export function Access() {
                   onChange={(event) =>
                     actions.setUsername(event.currentTarget.value)
                   }
+                  error={state.taken ? true : false}
                 />
                 <PasswordInput
                   className={classes.input}
@@ -236,7 +237,17 @@ export function Access() {
                   }
                 />
                 <Space h="md" />
-                <Button variant="filled" className={classes.submit}>
+                <Button
+                  variant="filled"
+                  className={classes.submit}
+                  onClick={login}
+                  disabled={
+                    state.taken ||
+                    !state.username ||
+                    !state.password ||
+                    state.password !== state.confirm
+                  }
+                >
                   {state.strings.create}
                 </Button>
                 <Button
@@ -251,7 +262,6 @@ export function Access() {
             {state.mode === 'admin' && (
               <>
                 <Title order={3}>{state.strings.admin}</Title>
-                <Space h="md" />
                 <Button
                   size="compact-sm"
                   variant="transparent"
@@ -259,6 +269,7 @@ export function Access() {
                 >
                   {state.host}
                 </Button>
+                <Space h="md" />
                 <PasswordInput
                   className={classes.input}
                   size="md"

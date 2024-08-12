@@ -4,7 +4,8 @@ import { AppContext } from '../context/AppContext'
 import { ContextType } from '../context/ContextType'
 
 export function useAccess() {
-  const debounce = useRef(setTimeout(() => {}, 0))
+  const debounceAvailable = useRef(setTimeout(() => {}, 0))
+  const debounceTaken = useRef(setTimeout(() => {}, 0))
   const app = useContext(AppContext) as ContextType
   const settings = useContext(SettingsContext) as ContextType
   const [state, setState] = useState({
@@ -23,7 +24,7 @@ export function useAccess() {
     secure: false,
     host: '',
     available: 0,
-    availableSet: false,
+    taken: false,
     themes: settings.state.themes,
     languages: settings.state.languages,
   })
@@ -48,31 +49,58 @@ export function useAccess() {
     setUrl(`${protocol}//${host}`)
   }, [])
 
+  useEffect(() => {
+    const { username, token, host, secure, mode } = state
+    if (mode === 'create') {
+      checkTaken(username, token, host, secure)
+      getAvailable(host, secure)
+    }
+  }, [state.mode, state.username, state.token, state.host, state.secure])
+
   const setUrl = (node: string) => {
     try {
       const url = new URL(node)
       const { protocol, host } = url
-      getAvailable(host, protocol === 'https:')
       updateState({ node, host, secure: protocol === 'https:' })
     } catch (err) {
       console.log(err)
       const { protocol, host } = location
-      getAvailable(host, protocol === 'https:')
       updateState({ node, host, secure: protocol === 'https:' })
     }
   }
 
   const getAvailable = (node: string, secure: boolean) => {
-    updateState({ availableSet: false })
-    clearTimeout(debounce.current)
-    debounce.current = setTimeout(async () => {
+    clearTimeout(debounceAvailable.current)
+    debounceAvailable.current = setTimeout(async () => {
       try {
         const available = await app.actions.getAvailable(node, secure)
-        updateState({ available, availableSet: true })
+        updateState({ available })
       } catch (err) {
         console.log(err)
+        updateState({ available: 0 })
       }
-    }, 1000)
+    }, 2000)
+  }
+
+  const checkTaken = (
+    username: string,
+    token: string,
+    node: string,
+    secure: boolean
+  ) => {
+    updateState({ taken: false })
+    clearTimeout(debounceTaken.current)
+    debounceTaken.current = setTimeout(async () => {
+      const available = await app.actions.getUsername(
+        username,
+        token,
+        node,
+        secure
+      )
+      updateState({ taken: !available })
+
+      console.log('TAKEN: ', taken)
+    }, 2000)
   }
 
   useEffect(() => {
@@ -94,6 +122,8 @@ export function useAccess() {
     },
     setUsername: (username: string) => {
       updateState({ username })
+      const { token, host, secure } = state
+      checkTaken(username, token, host, secure)
     },
     setPassword: (password: string) => {
       updateState({ password })
@@ -133,7 +163,7 @@ export function useAccess() {
     },
     adminLogin: async () => {
       const { password, host, secure, code } = state
-      await app.actions.adminLogin(host, secure, password, code)
+      await app.actions.adminLogin(password, host, secure, code)
     },
   }
 
