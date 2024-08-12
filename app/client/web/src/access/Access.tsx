@@ -34,7 +34,6 @@ export function Access() {
       actions.setLoading(true)
       otpClose()
       try {
-        await new Promise((r) => setTimeout(r, 2000))
         if (state.mode === 'account') {
           await actions.accountLogin()
         } else if (state.mode === 'create') {
@@ -95,6 +94,7 @@ export function Access() {
                 <TextInput
                   className={classes.input}
                   size="md"
+                  value={state.username}
                   leftSectionPointerEvents="none"
                   leftSection={<IconUser />}
                   placeholder={state.strings.username}
@@ -105,6 +105,7 @@ export function Access() {
                 <PasswordInput
                   className={classes.input}
                   size="md"
+                  value={state.password}
                   leftSection={<IconLock />}
                   placeholder={state.strings.password}
                   onChange={(event) =>
@@ -210,6 +211,7 @@ export function Access() {
                 <TextInput
                   className={classes.input}
                   size="md"
+                  value={state.username}
                   leftSectionPointerEvents="none"
                   leftSection={<IconUser />}
                   placeholder={state.strings.username}
@@ -221,6 +223,7 @@ export function Access() {
                 <PasswordInput
                   className={classes.input}
                   size="md"
+                  value={state.password}
                   leftSection={<IconLock />}
                   placeholder={state.strings.password}
                   onChange={(event) =>
@@ -230,6 +233,7 @@ export function Access() {
                 <PasswordInput
                   className={classes.input}
                   size="md"
+                  value={state.confirm}
                   leftSection={<IconLock />}
                   placeholder={state.strings.confirmPassword}
                   onChange={(event) =>
@@ -273,6 +277,7 @@ export function Access() {
                 <PasswordInput
                   className={classes.input}
                   size="md"
+                  value={state.password}
                   leftSection={<IconLock />}
                   placeholder={state.strings.password}
                   onChange={(event) =>
