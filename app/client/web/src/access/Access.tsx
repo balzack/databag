@@ -10,6 +10,7 @@ import {
   Modal,
   PasswordInput,
   TextInput,
+  PinInput,
 } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import left from '../images/login.png'
@@ -26,13 +27,20 @@ export function Access() {
   const [alertOpened, { open: alertOpen, close: alertClose }] =
     useDisclosure(false)
   const [urlOpened, { open: urlOpen, close: urlClose }] = useDisclosure(false)
+  const [otpOpened, { open: otpOpen, close: otpClose }] = useDisclosure(false)
 
   const login = async () => {
-    try {
-      await actions.accountLogin()
-    } catch (err) {
-      console.log(err)
-      alertOpen()
+    if (!state.loading) {
+      actions.setLoading(true)
+      otpClose()
+      try {
+        await new Promise((r) => setTimeout(r, 2000))
+        await actions.accountLogin()
+      } catch (err) {
+        console.log(err)
+        alertOpen()
+      }
+      actions.setLoading(false)
     }
   }
 
@@ -104,6 +112,7 @@ export function Access() {
                   variant="filled"
                   className={classes.submit}
                   onClick={login}
+                  loading={state.loading}
                   disabled={!state.username || !state.password}
                 >
                   {state.strings.login}
@@ -118,13 +127,13 @@ export function Access() {
                 <Button
                   size="compact-sm"
                   variant="subtle"
-                  onClick={() => actions.setMode('access')}
+                  onClick={() => actions.setMode('reset')}
                 >
                   {state.strings.forgotPassword}
                 </Button>
               </>
             )}
-            {state.mode === 'access' && (
+            {state.mode === 'reset' && (
               <>
                 <Title order={3}>{state.strings.accessAccount}</Title>
                 <Space h="md" />
@@ -138,9 +147,10 @@ export function Access() {
                 <TextInput
                   className={classes.input}
                   size="md"
+                  value={state.token}
                   leftSectionPointerEvents="none"
                   leftSection={<IconKey />}
-                  placeholder={state.strings.accessCode}
+                  placeholder={state.strings.resetCode}
                   onChange={(event) =>
                     actions.setToken(event.currentTarget.value)
                   }
@@ -173,10 +183,11 @@ export function Access() {
                   <TextInput
                     className={classes.input}
                     size="md"
+                    value={state.token}
                     disabled={!state.availableSet}
                     leftSectionPointerEvents="none"
                     leftSection={<IconKey />}
-                    placeholder={state.strings.accessCode}
+                    placeholder={state.strings.resetCode}
                     onChange={(event) =>
                       actions.setToken(event.currentTarget.value)
                     }
@@ -291,6 +302,30 @@ export function Access() {
         title={state.strings.operationFailed}
       >
         {state.strings.tryAgain}
+      </Modal>
+      <Modal
+        opened={otpOpened}
+        onClose={otpClose}
+        withCloseButton={false}
+        centered
+      >
+        <div className={classes.mfa}>
+          <div className={classes.mfaTitle}>{state.strings.mfaTitle}</div>
+          <div className={classes.mfaDescription}>{state.strings.mfaEnter}</div>
+          <PinInput
+            length={6}
+            className={classes.mfaPin}
+            onChange={(event) => actions.setCode(event.currentTarget.value)}
+          />
+          <div className={classes.mfaControl}>
+            <Button variant="outline" onClick={otpClose}>
+              {state.strings.cancel}
+            </Button>
+            <Button variant="filled" onClick={login}>
+              {state.strings.login}
+            </Button>
+          </div>
+        </div>
       </Modal>
     </div>
   )

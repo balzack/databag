@@ -10,14 +10,16 @@ export function useAccess() {
   const [state, setState] = useState({
     display: null,
     strings: settings.state.strings,
-    mode: 'login',
+    mode: '',
     username: '',
     password: '',
     confirm: '',
     token: '',
+    code: '',
     theme: '',
     language: '',
     node: '',
+    loading: false,
     secure: false,
     host: '',
     available: 0,
@@ -32,6 +34,16 @@ export function useAccess() {
   }
 
   useEffect(() => {
+    const params = new URLSearchParams(location)
+    const search = params.get('search')
+    if (search && search.startsWith('?create=')) {
+      updateState({ mode: 'create', token: search.substring(8) })
+    } else if (search && search.startsWith('?reset=')) {
+      updateState({ mode: 'reset', token: search.substring(7) })
+    } else {
+      updateState({ mode: 'login' })
+    }
+
     const { protocol, host } = location
     setUrl(`${protocol}//${host}`)
   }, [])
@@ -92,6 +104,9 @@ export function useAccess() {
     setToken: (token: string) => {
       updateState({ token })
     },
+    setCode: (code: string) => {
+      updateState({ code })
+    },
     setNode: (node: string) => {
       setUrl(node)
     },
@@ -100,6 +115,9 @@ export function useAccess() {
     },
     setTheme: (theme: string) => {
       settings.actions.setTheme(theme)
+    },
+    setLoading: (loading: boolean) => {
+      updateState({ loading })
     },
     accountLogin: async () => {
       const { username, password, host, secure } = state

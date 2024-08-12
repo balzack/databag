@@ -32,8 +32,6 @@ export function useAppContext() {
       node: string,
       secure: boolean
     ) => {
-      console.log('LOGIN:', username, password, node, secure)
-
       const params = {
         topicBatch: 16,
         tagBatch: 16,
@@ -50,7 +48,7 @@ export function useAppContext() {
         password,
         node,
         secure,
-        null,
+        code,
         params
       )
       updateState({ session: login })

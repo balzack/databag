@@ -1,3 +1,26 @@
+.mfa {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .mfaTitle {
+    font-size: 1.5rem;
+  }
+
+  .mfaPin {
+    padding: 32px;
+  }
+
+  .mfaDescription {
+    font-size: 1.1rem;
+  }
+
+  .mfaControl {
+    display: flex;
+    gap: 8px;
+  }
+}
+
 .split {
   display: flex;
   height: 100%;
