@@ -1,6 +1,6 @@
-import { useEffect, useContext, useState, useRef } from 'react';
-import { getLanguageStrings } from '../constants/Strings';
-import { useWindowDimensions } from 'react-native';
+import {useEffect, useContext, useState, useRef} from 'react';
+import {getLanguageStrings} from '../constants/Strings';
+import {useWindowDimensions} from 'react-native';
 
 export function useSettingsContext() {
   const dim = useWindowDimensions();
@@ -10,20 +10,18 @@ export function useSettingsContext() {
     splt: null,
   });
 
-  const updateState = (value) => {
-    setState((s) => ({ ...s, ...value }))
-  }
+  const updateState = value => {
+    setState(s => ({...s, ...value}));
+  };
 
   useEffect(() => {
     const strings = getLanguageStrings();
     const wide = dim.width > dim.height;
     const split = dim.width > 650;
-    updateState({ strings, wide, split });
+    updateState({strings, wide, split});
   }, []);
 
-  const actions = {
-  };
+  const actions = {};
 
-  return { state, actions }
+  return {state, actions};
 }
-

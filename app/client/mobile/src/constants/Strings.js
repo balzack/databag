@@ -1,11 +1,10 @@
-import { NativeModules, Platform } from 'react-native'
+import {NativeModules, Platform} from 'react-native';
 
 const Strings = [
   {
     // settings screen
     languageCode: 'en',
     visibleRegistry: 'Visible in Registry',
-    edit: 'Edit',
     enableNotifications: 'Push Notifications',
     allowUnsealed: 'Allow Unsealed',
     sealedTopics: 'Sealed Topics',
@@ -33,9 +32,12 @@ const Strings = [
 
     // seal wizard
     sealUnset: 'Generate a key to enable end-to-end encrypted topics.',
-    sealUnlocked: 'Disabling the sealing key will block access to all end-to-end encrypted topics from this device until the key is unlocked again.',
-    sealLocked: 'Unlock the sealing key to support end-to-end encrypted topics on this device.',
-    sealDelete: 'Deleting the sealing key will premanently remove access to any existing end-to-end encrypted topics for ALL of your devices.',
+    sealUnlocked:
+      'Disabling the sealing key will block access to all end-to-end encrypted topics from this device until the key is unlocked again.',
+    sealLocked:
+      'Unlock the sealing key to support end-to-end encrypted topics on this device.',
+    sealDelete:
+      'Deleting the sealing key will premanently remove access to any existing end-to-end encrypted topics for ALL of your devices.',
     password: 'Password',
     confirmPassword: 'Confirm Password',
     generate: 'Generate',
@@ -53,7 +55,8 @@ const Strings = [
     update: 'Change',
     changeKey: 'Change Key Password',
     delayMessage: 'Key generation can take several minutes.',
-    changeMessage: 'Here you can change the username and/or password for your account.',
+    changeMessage:
+      'Here you can change the username and/or password for your account.',
 
     // settings modals
     cancel: 'Cancel',
@@ -125,8 +128,6 @@ const Strings = [
 
     // channels list
     profile: 'Profile',
-    contacts: 'Contacts',
-    topics: 'Topics',
     subject: 'Subject (optional)',
     create: 'Create',
     sealed: 'Sealed',
@@ -174,15 +175,13 @@ const Strings = [
     selectedColor: 'Selected Color',
 
     login: 'Login',
-    createAccount: 'Create Account',
     forgotPassword: 'Forgot Password',
     adminAccess: 'Admin Access',
     server: 'Server',
     access: 'Access',
-    defaultPublic: 'The default public server is to test out the system. Use a private server otherwise.',
-    confirmPassword: 'Confirm Password',
+    defaultPublic:
+      'The default public server is to test out the system. Use a private server otherwise.',
     accountLogin: 'Account Login',
-    accessAccount: 'Access Account',
     agree: 'I agree to Terms of Service',
     terms: 'View Terms of Service',
     policy: 'Terms of Use and User Policy',
@@ -212,9 +211,9 @@ const Strings = [
     mfaConfirm: 'Confirm',
     mfaEnter: 'Enter your verification code',
 
-    disable: 'Disable',
     confirmDisable: 'Disabling Multi-Factor Authentication',
-    disablePrompt: 'Are you sure you want to disable multi-factor authentication',
+    disablePrompt:
+      'Are you sure you want to disable multi-factor authentication',
   },
   {
     languageCode: 'fr',
@@ -228,11 +227,10 @@ const Strings = [
     dateMode: 'Date',
     language: 'Langue',
     logout: 'Déconnecter',
-    changeLogin: 'Modifier l\'Accès',
+    changeLogin: "Modifier l'Accès",
     deleteAccount: 'Supprimer le Compte',
     contacts: 'Contacts',
     topics: 'Sujets',
-    messages: 'Messages',
     support: 'Aide',
     blocked: 'Bloqués',
     account: 'Compte',
@@ -245,10 +243,15 @@ const Strings = [
     error: 'Erreur',
     tryAgain: 'Veuillez réessayer.',
 
-    sealUnset: 'Générez une clé pour activer les sujets chiffrés de bout en bout.',
-    sealUnlocked: 'La désactivation de la clé de scellement supprimera l\'accès à tous les sujets chiffrés de bout en bout jusqu\'à ce que la clé soit à nouveau déverrouillée.',
-    sealLocked: 'Déverrouillez la clé de scellement pour activer les sujets chiffrés de bout en bout sur cet appareil.',
-    sealDelete: 'La suppression de la clé de scellement supprimera définitivement l’accès à tous les sujets cryptés de bout en bout existants pour TOUS vos appareils.',
+    messages: 'Messages',
+    sealUnset:
+      'Générez une clé pour activer les sujets chiffrés de bout en bout.',
+    sealUnlocked:
+      "La désactivation de la clé de scellement supprimera l'accès à tous les sujets chiffrés de bout en bout jusqu'à ce que la clé soit à nouveau déverrouillée.",
+    sealLocked:
+      'Déverrouillez la clé de scellement pour activer les sujets chiffrés de bout en bout sur cet appareil.',
+    sealDelete:
+      'La suppression de la clé de scellement supprimera définitivement l’accès à tous les sujets cryptés de bout en bout existants pour TOUS vos appareils.',
     password: 'Mot de passe',
     confirmPassword: 'Confirmez le mot de passe',
     generate: 'Générer',
@@ -266,14 +269,15 @@ const Strings = [
     update: 'Mise à jour',
     changeKey: 'Changer le mot de passe clé',
     delayMessage: 'La génération de clé peut prendre plusieurs minutes.',
-    changeMessage: 'Ici, vous pouvez modifier le nom d\'utilisateur et/ou le mot de passe de votre compte.',
+    changeMessage:
+      "Ici, vous pouvez modifier le nom d'utilisateur et/ou le mot de passe de votre compte.",
 
     cancel: 'Annuler',
     confirmLogout: 'Déconnecter',
-    loggingOut: 'Confirmation de la Déconnexion', 
-    username: 'Nom d\'Utilisateur',
+    loggingOut: 'Confirmation de la Déconnexion',
+    username: "Nom d'Utilisateur",
     save: 'Engegistrer',
-    notAvailable: 'Nom d\'Utilisateur Indisponible',
+    notAvailable: "Nom d'Utilisateur Indisponible",
     blockedContacts: 'Contacts Bloqués',
     restoreContact: 'Restaurer le Contact?',
     blockedTopics: 'Sujets Bloqués',
@@ -288,12 +292,11 @@ const Strings = [
     restore: 'Restaurer',
 
     //profile page
-    edit: 'Modifier',
     name: 'Nom',
     location: 'Emplacement',
     description: 'Description',
     registryVisible: 'Visible dans le Registre',
-    editImage: 'Modifier l\'Image',
+    editImage: "Modifier l'Image",
     editDetails: 'Modifier les Détails',
 
     //constacts page
@@ -328,7 +331,7 @@ const Strings = [
     add: 'Ajouter',
     contactFilter: 'Contacts',
     serverFilter: 'Serveur',
-    usernameFilter: 'Nom d\'Utilisateur',
+    usernameFilter: "Nom d'Utilisateur",
     viewProfile: 'Voir le Profil',
     messageContact: 'Envoyer un Message',
     callContact: 'Appeler le Contact',
@@ -336,11 +339,9 @@ const Strings = [
 
     // channels list
     profile: 'Profil',
-    contacts: 'Contacts',
-    topics: 'Sujets',
     subject: 'Titre (optionnel)',
     create: 'Créer',
-    sealed: 'Protégé', 
+    sealed: 'Protégé',
     newTopic: 'Nouveau Sujet',
     new: 'Nouveau',
 
@@ -373,7 +374,7 @@ const Strings = [
     enableCalls: 'Activer les Appels',
     iceService: 'Service Cloudflare',
     relayUrl: 'URL de Relais',
-    relayUsername: 'Nom d\'Utilisateur du Relais',
+    relayUsername: "Nom d'Utilisateur du Relais",
     relayPassword: 'Mot de Passe du Relais',
 
     newMessage: 'Nouveau Message',
@@ -385,18 +386,16 @@ const Strings = [
     selectedColor: 'Couleur Sélectionnée',
 
     login: 'Connexion',
-    createAccount: 'Créer un Compte',
     forgotPassword: 'Mot de Passe Oublié',
     adminAccess: 'Accès Administrateur',
     server: 'Serveur',
     access: 'Accès',
-    defaultPublic: 'Le serveur public par défaut est destiné à tester le système. Utilisez un serveur privé sinon.',
-    confirmPassword: 'Confirmer le Mot de Passe',
+    defaultPublic:
+      'Le serveur public par défaut est destiné à tester le système. Utilisez un serveur privé sinon.',
     accountLogin: 'Connexion au Compte',
-    accessAccount: 'Accéder au Compte',
-    agree: 'J\'accepte les Conditions d\'Utilisation',
-    terms: 'Afficher les Conditions d\'Utilisation',
-    policy: 'Conditions d\'Utilisation et Politique d\'Utilisation',
+    agree: "J'accepte les Conditions d'Utilisation",
+    terms: "Afficher les Conditions d'Utilisation",
+    policy: "Conditions d'Utilisation et Politique d'Utilisation",
 
     editMessage: 'Modifier le Texte du Message',
     emptyTopic: 'Pas de Messages',
@@ -404,9 +403,9 @@ const Strings = [
     noTopics: 'Pas de Sujets',
 
     welcome: 'Bienvenue Sur Databag',
-    communication: 'Communication Pour l\'Internet Décentralisé',
+    communication: "Communication Pour l'Internet Décentralisé",
     setup: 'Configurez Votre Profil',
-    connect: 'Se Connecter Avec d\'Autres',
+    connect: "Se Connecter Avec d'Autres",
     start: 'Créer une Conversation',
     started: 'Commencer',
 
@@ -417,15 +416,16 @@ const Strings = [
     selectTopic: 'Choisissez le sujet à partager',
 
     mfaTitle: 'Authentification Multi-Factor',
-    mfaSteps: 'Enregistrez le secret SHA256 et confirmez le code de vérification',
+    mfaSteps:
+      'Enregistrez le secret SHA256 et confirmez le code de vérification',
     mfaEnter: 'Entrez votre code de vérification',
     mfaError: 'erreur de code de vérification',
     mfaDisabled: 'vérification temporairement désactivée',
     mfaConfirm: 'Confirmer',
 
-    disable: 'Désactiver',
-    confirmDisable: 'Désactivation de l\'authentification multi-facteurs',
-    disablePrompt: 'Êtes-vous sûr de vouloir désactiver l\'authentification multi-facteurs',
+    confirmDisable: "Désactivation de l'authentification multi-facteurs",
+    disablePrompt:
+      "Êtes-vous sûr de vouloir désactiver l'authentification multi-facteurs",
   },
   {
     languageCode: 'es',
@@ -456,14 +456,17 @@ const Strings = [
     error: 'Error',
     tryAgain: 'Inténtalo de nuevo.',
 
-    sealUnset: 'Genere una clave para habilitar temas cifrados de un extremo a otro.',
-    sealUnlocked: 'Al desactivar la clave de sellado se eliminará el acceso a todos los temas cifrados de extremo a extremo hasta que la clave se desbloquee nuevamente.',
-    sealLocked: 'Desbloquee la clave de sellado para habilitar temas cifrados de extremo a extremo en este dispositivo.',
-    sealDelete: 'Al eliminar la clave de sellado, se eliminará de forma permanente el acceso a cualquier tema cifrado de extremo a extremo existente para TODOS sus dispositivos.',
+    sealUnset:
+      'Genere una clave para habilitar temas cifrados de un extremo a otro.',
+    sealUnlocked:
+      'Al desactivar la clave de sellado se eliminará el acceso a todos los temas cifrados de extremo a extremo hasta que la clave se desbloquee nuevamente.',
+    sealLocked:
+      'Desbloquee la clave de sellado para habilitar temas cifrados de extremo a extremo en este dispositivo.',
+    sealDelete:
+      'Al eliminar la clave de sellado, se eliminará de forma permanente el acceso a cualquier tema cifrado de extremo a extremo existente para TODOS sus dispositivos.',
     password: 'Contraseña',
     confirmPassword: 'Confirmar Contraseña',
     generate: 'Generar',
-    disable: 'Desactivar',
     delete: 'Borrar',
     unlock: 'Desbloquear',
     removeSeal: 'Borrar clave de seguridad',
@@ -477,7 +480,8 @@ const Strings = [
     update: 'Actualizar',
     changeKey: 'Cambiar clave Contraseña',
     delayMessage: 'La generación de claves puede tardar varios minutos.',
-    changeMessage: 'Aquí puede cambiar el nombre de usuario y/o contraseña de su cuenta.',
+    changeMessage:
+      'Aquí puede cambiar el nombre de usuario y/o contraseña de su cuenta.',
 
     cancel: 'Cancelar',
     confirmLogout: 'Cerrar',
@@ -499,7 +503,6 @@ const Strings = [
     restore: 'Restaurar',
 
     //profile page
-    edit: 'Editar',
     name: 'Nombre',
     location: 'Ubicación',
     description: 'Descripción',
@@ -536,7 +539,7 @@ const Strings = [
     actionReport: 'Reportar',
 
     // contact list page
-    add: 'Agregar', 
+    add: 'Agregar',
     contactFilter: 'Contactos',
     serverFilter: 'Servidor',
     usernameFilter: 'Nombre de Usuario',
@@ -547,8 +550,6 @@ const Strings = [
 
     // channels list
     profile: 'Perfil',
-    contacts: 'Contactos',
-    topics: 'Temas',
     subject: 'Título (opcional)',
     create: 'Crear',
     sealed: 'Protegida',
@@ -570,8 +571,6 @@ const Strings = [
     unknown: 'Desconocido',
 
     accounts: 'Cuentas',
-    createAccount: 'Crear',
-    accessAccount: 'Acceso',
     token: 'Código',
     settings: 'Ajustes',
     federatedHost: 'Servidor Federado',
@@ -601,8 +600,8 @@ const Strings = [
     adminAccess: 'Acceso de administrador',
     server: 'Servidor',
     access: 'Acceso',
-    defaultPublic: 'El servidor público predeterminado es para probar el sistema. Utilice un servidor privado en caso contrario.',
-    confirmPassword: 'Confirmar contraseña',
+    defaultPublic:
+      'El servidor público predeterminado es para probar el sistema. Utilice un servidor privado en caso contrario.',
     accountLogin: 'Iniciar sesión en la cuenta',
     accessAccount: 'Acceder a la cuenta',
     agree: 'Acepto los Términos de Servicio',
@@ -635,9 +634,9 @@ const Strings = [
     mfaDisabled: 'verificación temporalmente deshabilitada',
     mfaConfirm: 'Confirmar',
 
-    disable: 'Desactivar',
     confirmDisable: 'Desactivación de la autenticación de dos factores',
-    disablePrompt: '¿Estás seguro de que quieres desactivar la autenticación de dos factores?',
+    disablePrompt:
+      '¿Estás seguro de que quieres desactivar la autenticación de dos factores?',
   },
   {
     languageCode: 'de',
@@ -660,7 +659,6 @@ const Strings = [
     blocked: 'Versteckt',
     account: 'Konto',
     display: 'Format',
-    messages: 'Nachrichtenübermittlung',
     timeFull: '24h',
     timeHalf: '12h',
     monthStart: 'mm/dd',
@@ -668,10 +666,14 @@ const Strings = [
     error: 'Fehler',
     tryAgain: 'Bitte versuche es erneut.',
 
-    sealUnset: 'Generieren Sie einen Schlüssel, um Ende-zu-Ende-verschlüsselte Themen zu ermöglichen.',
-    sealUnlocked: 'Durch das Deaktivieren des Versiegelungsschlüssels wird der Zugriff auf alle Ende-zu-Ende-verschlüsselten Themen entfernt, bis der Schlüssel wieder entsperrt wird.',
-    sealLocked: 'Entsperren Sie den Versiegelungsschlüssel, um Ende-zu-Ende-verschlüsselte Themen auf diesem Gerät zu aktivieren.',
-    sealDelete: 'Durch das Löschen des Siegelschlüssels wird der Zugriff auf alle vorhandenen Ende-zu-Ende-verschlüsselten Themen für ALLE Ihre Geräte dauerhaft entfernt.',
+    sealUnset:
+      'Generieren Sie einen Schlüssel, um Ende-zu-Ende-verschlüsselte Themen zu ermöglichen.',
+    sealUnlocked:
+      'Durch das Deaktivieren des Versiegelungsschlüssels wird der Zugriff auf alle Ende-zu-Ende-verschlüsselten Themen entfernt, bis der Schlüssel wieder entsperrt wird.',
+    sealLocked:
+      'Entsperren Sie den Versiegelungsschlüssel, um Ende-zu-Ende-verschlüsselte Themen auf diesem Gerät zu aktivieren.',
+    sealDelete:
+      'Durch das Löschen des Siegelschlüssels wird der Zugriff auf alle vorhandenen Ende-zu-Ende-verschlüsselten Themen für ALLE Ihre Geräte dauerhaft entfernt.',
     password: 'Passwort',
     confirmPassword: 'Bestätige das Passwort',
     generate: 'Generieren',
@@ -689,7 +691,8 @@ const Strings = [
     update: 'Aktualisieren',
     changeKey: 'Schlüsselpasswort ändern',
     delayMessage: 'Die Schlüsselgenerierung kann mehrere Minuten dauern.',
-    changeMessage: 'Hier können Sie den Benutzernamen und/oder das Passwort für Ihr Konto ändern.',
+    changeMessage:
+      'Hier können Sie den Benutzernamen und/oder das Passwort für Ihr Konto ändern.',
 
     cancel: 'Stornieren',
     confirmlogout: 'Ausloggen',
@@ -711,14 +714,13 @@ const Strings = [
     restore: 'Wiederherstellen',
 
     //profile page
-    edit: 'Bearbeiten',
     name: 'Name',
     location: 'Standort',
     description: 'Beschreibung',
     registryVisible: 'Sichtbar in der Registrierung',
     editImage: 'Bild Bearbeiten',
     editDetails: 'Details Bearbeiten',
-    
+
     //contacts page
     back: 'Rückwärts',
     deleteContact: 'Kontakt Löschen',
@@ -756,11 +758,9 @@ const Strings = [
     messageContact: 'Nachricht Senden',
     callContact: 'Kontakt Anrufen',
     noContacts: 'Keine Kontakte Gefunden',
-    
+
     // channels list
     profile: 'Profil',
-    contacts: 'Kontakte',
-    topics: 'Themen',
     subject: 'Titel (optional)',
     create: 'Erstellen',
     sealed: 'Gesichert',
@@ -782,8 +782,6 @@ const Strings = [
     unknown: 'Unbekannt',
 
     accounts: 'Konten',
-    createAccount: 'Erstellen',
-    accessAccount: 'Zugang',
     token: 'Code',
     settings: 'Einstellungen',
     federatedHost: 'Verbundname',
@@ -813,8 +811,8 @@ const Strings = [
     adminAccess: 'Administratorzugang',
     server: 'Server',
     access: 'Zugang',
-    defaultPublic: 'Der Standard-Public-Server dient dazu, das System zu testen. Verwenden Sie andernfalls einen privaten Server.',
-    confirmPassword: 'Passwort bestätigen',
+    defaultPublic:
+      'Der Standard-Public-Server dient dazu, das System zu testen. Verwenden Sie andernfalls einen privaten Server.',
     accountLogin: 'Kontoanmeldung',
     accessAccount: 'Zugang zum Konto',
     agree: 'Ich akzeptiere die Nutzungsbedingungen',
@@ -841,15 +839,16 @@ const Strings = [
     selectTopic: 'Wählen Sie ein Thema zum Teilen aus',
 
     mfaTitle: 'Zwei-Faktor-Authentifizierung',
-    mfaSteps: 'Speichern Sie das SHA256-Geheimnis und bestätigen Sie den Bestätigungscode',
+    mfaSteps:
+      'Speichern Sie das SHA256-Geheimnis und bestätigen Sie den Bestätigungscode',
     mfaEnter: 'Geben Sie Ihren Bestätigungs-Code ein',
     mfaError: 'Verifizierungscodefehler',
     mfaDisabled: 'Verifizierung vorübergehend deaktiviert',
     mfaConfirm: 'Bestätigen',
 
-    disable: 'Deaktivieren',
     confirmDisable: 'Deaktivierung der Zwei-Faktor-Authentifizierung',
-    disablePrompt: 'Sind Sie sicher, dass Sie die Zwei-Faktor-Authentifizierung deaktivieren möchten?',
+    disablePrompt:
+      'Sind Sie sicher, dass Sie die Zwei-Faktor-Authentifizierung deaktivieren möchten?',
   },
   {
     languageCode: 'pt',
@@ -879,14 +878,17 @@ const Strings = [
     monthEnd: 'dd/mm',
     error: 'Erro',
     tryAgain: 'Por favor, tente novamente.',
-    sealUnset: 'Gerar uma chave para habilitar tópicos com criptografia de ponta a ponta.',
-    sealUnlocked: 'Desabilitar a chave de selagem bloqueará o acesso a todos os tópicos com criptografia de ponta a ponta deste dispositivo até que a chave seja desbloqueada novamente.',
-    sealLocked: 'Desbloqueie a chave de selagem para suportar tópicos com criptografia de ponta a ponta neste dispositivo.',
-    sealDelete: 'Excluir a chave de selagem removerá permanentemente o acesso a todos os tópicos com criptografia de ponta a ponta existentes para TODOS os seus dispositivos.',
+    sealUnset:
+      'Gerar uma chave para habilitar tópicos com criptografia de ponta a ponta.',
+    sealUnlocked:
+      'Desabilitar a chave de selagem bloqueará o acesso a todos os tópicos com criptografia de ponta a ponta deste dispositivo até que a chave seja desbloqueada novamente.',
+    sealLocked:
+      'Desbloqueie a chave de selagem para suportar tópicos com criptografia de ponta a ponta neste dispositivo.',
+    sealDelete:
+      'Excluir a chave de selagem removerá permanentemente o acesso a todos os tópicos com criptografia de ponta a ponta existentes para TODOS os seus dispositivos.',
     password: 'Senha',
     confirmPassword: 'Confirmar Senha',
     generate: 'Gerar',
-    disable: 'Desabilitar',
     delete: 'Excluir',
     unlock: 'Desbloquear',
     removeSeal: 'Remover Chave de Selagem',
@@ -900,7 +902,8 @@ const Strings = [
     update: 'Alterar',
     changeKey: 'Alterar Senha da Chave',
     delayMessage: 'A geração da chave pode levar vários minutos.',
-    changeMessage: 'Aqui você pode alterar o nome de usuário e/ou senha da sua conta.',
+    changeMessage:
+      'Aqui você pode alterar o nome de usuário e/ou senha da sua conta.',
     cancel: 'Cancelar',
     confirmLogout: 'Sair',
     loggingOut: 'Saindo',
@@ -919,7 +922,6 @@ const Strings = [
     noBlockedTopics: 'Nenhum Tópico Bloqueado',
     noBlockedMessages: 'Nenhuma Mensagem Bloqueada',
     restore: 'Restaurar',
-    edit: 'Editar',
     name: 'Nome',
     location: 'Localização',
     description: 'Descrição',
@@ -962,8 +964,6 @@ const Strings = [
     callContact: 'Chamar Contato',
     noContacts: 'Nenhum Contato Encontrado',
     profile: 'Perfil',
-    contacts: 'Contatos',
-    topics: 'Tópicos',
     subject: 'Assunto (opcional)',
     create: 'Criar',
     sealed: 'Selado',
@@ -1006,15 +1006,13 @@ const Strings = [
     fontColor: 'Cor da Fonte',
     selectedColor: 'Cor Selecionada',
     login: 'Login',
-    createAccount: 'Criar Conta',
     forgotPassword: 'Esqueci a Senha',
     adminAccess: 'Acesso de Administrador',
     server: 'Servidor',
     access: 'Acesso',
-    defaultPublic: 'O servidor público padrão serve para testar o sistema. Use um servidor privado, caso contrário.',
-    confirmPassword: 'Confirmar Senha',
+    defaultPublic:
+      'O servidor público padrão serve para testar o sistema. Use um servidor privado, caso contrário.',
     accountLogin: 'Login da Conta',
-    accessAccount: 'Acessar Conta',
     agree: 'Eu concordo com os Termos de Serviço',
     terms: 'Ver Termos de Serviço',
     policy: 'Termos de Uso e Política do Usuário',
@@ -1046,7 +1044,8 @@ const Strings = [
 
     disable: 'Desativar',
     confirmDisable: 'Desativando Autenticação de Dois Fatores',
-    disablePrompt: 'Tem certeza de que deseja desativar a autenticação de dois fatores?',
+    disablePrompt:
+      'Tem certeza de que deseja desativar a autenticação de dois fatores?',
   },
   {
     languageCode: 'ru',
@@ -1077,9 +1076,12 @@ const Strings = [
     error: 'Ошибка',
     tryAgain: 'Пожалуйста, попробуйте снова',
     sealUnset: 'Создайте ключ, чтобы включить конечное шифрование для тем',
-    sealUnlocked: 'Отключение ключа запечатывания заблокирует доступ ко всем темам с конечным шифрованием с этого устройства до разблокировки ключа.',
-    sealLocked: 'Разблокируйте ключ запечатывания, чтобы поддерживать темы с конечным шифрованием на этом устройстве.',
-    sealDelete: 'Удаление ключа запечатывания навсегда удалит доступ к любым существующим темам с конечным шифрованием для ВСЕХ ваших устройств.',
+    sealUnlocked:
+      'Отключение ключа запечатывания заблокирует доступ ко всем темам с конечным шифрованием с этого устройства до разблокировки ключа.',
+    sealLocked:
+      'Разблокируйте ключ запечатывания, чтобы поддерживать темы с конечным шифрованием на этом устройстве.',
+    sealDelete:
+      'Удаление ключа запечатывания навсегда удалит доступ к любым существующим темам с конечным шифрованием для ВСЕХ ваших устройств.',
     password: 'Пароль',
     confirmPassword: 'Подтвердите пароль',
     generate: 'Создать',
@@ -1097,7 +1099,8 @@ const Strings = [
     update: 'Изменить',
     changeKey: 'Изменить пароль ключа',
     delayMessage: 'Генерация ключа может занять несколько минут.',
-    changeMessage: 'Здесь вы можете изменить имя пользователя и/или пароль для вашей учетной записи.',
+    changeMessage:
+      'Здесь вы можете изменить имя пользователя и/или пароль для вашей учетной записи.',
     cancel: 'Отмена',
     confirmLogout: 'Выйти',
     loggingOut: 'Выход',
@@ -1116,7 +1119,6 @@ const Strings = [
     noBlockedTopics: 'Нет заблокированных тем',
     noBlockedMessages: 'Нет заблокированных сообщений',
     restore: 'Восстановить',
-    edit: 'Редактировать',
     name: 'Имя',
     location: 'Местоположение',
     description: 'Описание',
@@ -1159,8 +1161,6 @@ const Strings = [
     callContact: 'Позвонить контакту',
     noContacts: 'Контакты не найдены',
     profile: 'Профиль',
-    contacts: 'Контакты',
-    topics: 'Темы',
     subject: 'Тема (необязательно)',
     create: 'Создать',
     sealed: 'Запечатано',
@@ -1203,15 +1203,13 @@ const Strings = [
     fontColor: 'Цвет шрифта',
     selectedColor: 'Выбранный цвет',
     login: 'Войти',
-    createAccount: 'Создать аккаунт',
     forgotPassword: 'Забыли пароль',
     adminAccess: 'Доступ администратора',
     server: 'Сервер',
     access: 'Доступ',
-    defaultPublic: 'Общедоступный сервер предназначен для тестирования системы. Используйте частный сервер в противном случае.',
-    confirmPassword: 'Подтвердите пароль',
+    defaultPublic:
+      'Общедоступный сервер предназначен для тестирования системы. Используйте частный сервер в противном случае.',
     accountLogin: 'Вход в аккаунт',
-    accessAccount: 'Доступ к аккаунту',
     agree: 'Я согласен с Правилами обслуживания',
     terms: 'Просмотреть Правила обслуживания',
     policy: 'Пользовательское соглашение и политика конфиденциальности',
@@ -1239,14 +1237,18 @@ const Strings = [
     mfaDisabled: 'проверка временно отключена',
     mfaConfirm: 'Подтвердить',
 
-    disable: 'Отключить',
     confirmDisable: 'Отключение двухфакторной аутентификации',
-    disablePrompt: 'Вы уверены, что хотите отключить двухфакторную аутентификацию?',
-  }
+    disablePrompt:
+      'Вы уверены, что хотите отключить двухфакторную аутентификацию?',
+  },
 ];
 
 export function getLanguageStrings() {
-  const locale = Platform.OS === 'ios' ? NativeModules.SettingsManager?.settings.AppleLocale || NativeModules.SettingsManager?.settings.AppleLanguages[0] : NativeModules.I18nManager?.localeIdentifier;
+  const locale =
+    Platform.OS === 'ios'
+      ? NativeModules.SettingsManager?.settings.AppleLocale ||
+        NativeModules.SettingsManager?.settings.AppleLanguages[0]
+      : NativeModules.I18nManager?.localeIdentifier;
 
   const lang = locale?.slice(0, 2) || '';
 
@@ -1269,4 +1271,4 @@ export function getLanguageStrings() {
     return Strings[5];
   }
   return Strings[0];
-};
+}
