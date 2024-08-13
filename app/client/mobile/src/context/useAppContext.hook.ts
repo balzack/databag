@@ -1,117 +1,132 @@
-import {useState, useEffect} from 'react';
-import {DatabagSDK, SqlStore, Session} from 'databag-client-sdk';
-import SQLite from 'react-native-sqlite-storage';
-const DATABAG_DB = 'db_v200.db';
-
-class Store implements SqlStore {
-  private db: any = null;
-
-  constructor() {
-    SQLite.DEBUG(false);
-    SQLite.enablePromise(true);
-  }
-
-  public async open(path: string) {
-    this.db = await SQLite.openDatabase({name: path, location: 'default'});
-  }
-
-  public async set(
-    stmt: string,
-    params: (string | number | null)[],
-  ): Promise<void> {
-    await this.db.executeSql(stmt, params);
-  }
-
-  public async get(
-    stmt: string,
-    params: (string | number | null)[],
-  ): Promise<any[]> {
-    const res = await this.db.executeSql(stmt, params);
-    const rows = [];
-    if (res[0] && res[0].rows && res[0].rows > 1) {
-      for (let i = 0; i < res[0].rows.length; i++) {
-        rows.push(res[0].rows.item(i));
-      }
-    }
-    return rows;
-  }
-}
+import { useState, useEffect, useRef } from 'react'
+import { DatabagSDK, Session } from 'databag-client-sdk'
+import { SessionStore } from '../SessionStore'
 
 export function useAppContext() {
+  const sdk = useRef(new DatabagSDK(null))
   const [state, setState] = useState({
-    accountMfa: (boolean = false),
-    accountSet: (boolean = false),
-    adminMfa: (boolean = false),
-    adminSet: (boolean = false),
-  });
+    session: null as null | Session,
+  })
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const updateState = (value: any) => {
-    setState(s => ({...s, ...value}));
-  };
+    setState((s) => ({ ...s, ...value }))
+  }
 
   useEffect(() => {
-    init();
-  }, []);
+    init()
+  }, [])
 
   const init = async () => {
-    const sdk = new DatabagSDK(null);
-    const store = new Store();
-    await store.open(DATABAG_DB);
-    const session = await sdk.initOfflineStore(store);
+    const store = new SessionStore()
+    const session: Session | null = await sdk.current.initOnlineStore(store)
     if (session) {
-      console.log('init session');
-      updateState({accountSet: true, sdk, session});
-    } else {
+      updateState({ session })
+    }
+  }
+
+  const actions = {
+    accountLogin: async (
+      username: string,
+      password: string,
+      node: string,
+      secure: boolean,
+      code: string
+    ) => {
       const params = {
         topicBatch: 16,
         tagBatch: 16,
         channelTypes: ['test'],
         pushType: 'fcm',
         deviceToken: 'aabbcc',
-        notifications: [{event: 'msg', messageTitle: 'msgd'}],
+        notifications: [{ event: 'msg', messageTitle: 'msgd' }],
         deviceId: '0011',
         version: '0.0.1',
         appName: 'databag',
-      };
-      console.log('-----> SDK LOGIN');
-      try {
-        const login = await sdk.login(
-          'asdf',
-          'asdf',
-          'https://balzack.coredb.org',
-          null,
-          params,
-        );
-        console.log(login);
-        updateState({accountSet: true, sdk, session: login});
-      } catch (err) {
-        console.log('ERR:', err);
       }
-    }
-  };
-
-  const actions = {
-    loginAccount: async (
+      const login = await sdk.current.login(
+        username,
+        password,
+        node,
+        secure,
+        code,
+        params
+      )
+      updateState({ session: login })
+    },
+    accountLogout: async () => {
+      if (state.session) {
+        await sdk.current.logout(state.session, false)
+        updateState({ session: null })
+      }
+    },
+    accountCreate: async (
       handle: string,
       password: string,
-      url: string,
-      mfaCode: string | null,
-    ) => {},
-    accessAccount: async (url: string, token: string) => {},
-    createAccount: async (
-      handle: string,
-      password: string,
-      url: string,
-      token: string | null,
-    ) => {},
-    logoutAccount: async () => {},
-    loginAdmin: async (
+      node: string,
+      secure: boolean,
+      token: string
+    ) => {
+      const params = {
+        topicBatch: 16,
+        tagBatch: 16,
+        channelTypes: ['test'],
+        pushType: 'fcm',
+        deviceToken: 'aabbcc',
+        notifications: [{ event: 'msg', messageTitle: 'msgd' }],
+        deviceId: '0011',
+        version: '0.0.1',
+        appName: 'databag',
+      }
+      const session = await sdk.current.create(
+        handle,
+        password,
+        node,
+        secure,
+        token,
+        params
+      )
+      updateState({ session })
+    },
+    accountAccess: async (node: string, secure: boolean, token: string) => {
+      const params = {
+        topicBatch: 16,
+        tagBatch: 16,
+        channelTypes: ['test'],
+        pushType: 'fcm',
+        deviceToken: 'aabbcc',
+        notifications: [{ event: 'msg', messageTitle: 'msgd' }],
+        deviceId: '0011',
+        version: '0.0.1',
+        appName: 'databag',
+      }
+      const session = await sdk.current.access(node, secure, token, params)
+      updateState({ session })
+    },
+    getAvailable: async (node: string, secure: boolean) => {
+      return await sdk.current.available(node, secure)
+    },
+    getUsername: async (
+      username: string,
       token: string,
-      url: string,
-      mfaCode: string | null,
-    ) => {},
-    logoutAdmin: async () => {},
-  };
+      node: string,
+      secure: boolean
+    ) => {
+      return await sdk.current.username(username, token, node, secure)
+    },
+    adminLogin: async (
+      token: string,
+      node: string,
+      secure: boolean,
+      code: string
+    ) => {
+      const login = await sdk.current.configure(node, secure, token, code)
+      updateState({ node: login })
+    },
+    adminLogout: async () => {
+      updateState({ node: null })
+    },
+  }
 
-  return {state, actions};
+  return { state, actions }
 }

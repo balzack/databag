@@ -19,7 +19,7 @@ export function useSettingsContext() {
     const wide = dim.width > dim.height;
     const split = dim.width > 650;
     updateState({strings, wide, split});
-  }, []);
+  }, [dim.width]);
 
   const actions = {};
 
