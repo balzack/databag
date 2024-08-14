@@ -118,17 +118,15 @@ function App(): React.JSX.Element {
     <AppContextProvider>
       <SettingsContextProvider>
         <PaperProvider theme={theme}>
-
-                            <NativeRouter>
-                              <Root />
-                              <Routes>
-                                <Route path="/" element={ <Text>EMPTY</Text> } />
-                                <Route path="/access" element={ <Access /> } />
-                                <Route path="/node" element={ <Node /> } />
-                                <Route path="/session" element={ <Session /> } />
-                              </Routes>
-                            </NativeRouter>
- 
+          <NativeRouter>
+            <Root />
+            <Routes>
+              <Route path="/" element={ <Text>EMPTY</Text> } />
+              <Route path="/access" element={ <Access /> } />
+              <Route path="/node" element={ <Node /> } />
+              <Route path="/session" element={ <Session /> } />
+            </Routes>
+          </NativeRouter>
         </PaperProvider>
       </SettingsContextProvider>
     </AppContextProvider>

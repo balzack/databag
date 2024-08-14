@@ -15,14 +15,14 @@ export function useAccess() {
     strings: settings.state.strings,
     mode: '',
     username: '',
+    handle: '',
     password: '',
     confirm: '',
     token: '',
     code: '',
-    node: '',
     loading: false,
     secure: false,
-    host: '',
+    node: '',
     available: 0,
     taken: false,
   })
@@ -33,29 +33,12 @@ export function useAccess() {
   }
 
   useEffect(() => {
-    updateState({ mode: 'account' })
-    const { protocol, host } = { protocol: 'https:', host: 'balzack.coredb.org' };
-    setUrl(`${protocol}//${host}`)
-  }, [])
-
-  useEffect(() => {
-    const { username, token, host, secure, mode } = state
+    const { username, token, node, secure, mode } = state
     if (mode === 'create') {
-      checkTaken(username, token, host, secure)
-      getAvailable(host, secure)
+      checkTaken(username, token, node, secure)
+      getAvailable(node, secure)
     }
-  }, [state.mode, state.username, state.token, state.host, state.secure])
-
-  const setUrl = (node: string) => {
-    try {
-      const { protocol, host } = { protocol: 'https:', host: 'balzack.coredb.org' };
-      updateState({ node, host, secure: protocol === 'https:' })
-    } catch (err) {
-      console.log(err)
-      const { protocol, host } = location
-      updateState({ node, host, secure: protocol === 'https:' })
-    }
-  }
+  }, [state.mode, state.username, state.token, state.node, state.secure])
 
   const getAvailable = (node: string, secure: boolean) => {
     clearTimeout(debounceAvailable.current)
@@ -100,8 +83,6 @@ export function useAccess() {
     },
     setUsername: (username: string) => {
       updateState({ username })
-      const { token, host, secure } = state
-      checkTaken(username, token, host, secure)
     },
     setPassword: (password: string) => {
       updateState({ password })
@@ -116,32 +97,27 @@ export function useAccess() {
       updateState({ code })
     },
     setNode: (node: string) => {
-      setUrl(node)
-    },
-    setLanguage: (code: string) => {
-      settings.actions.setLanguage(code)
-    },
-    setTheme: (theme: string) => {
-      settings.actions.setTheme(theme)
+      const insecure = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(node);
+      updateState({ node, secure: !insecure })
     },
     setLoading: (loading: boolean) => {
       updateState({ loading })
     },
     accountLogin: async () => {
-      const { username, password, host, secure, code } = state
-      await app.actions.accountLogin(username, password, host, secure, code)
+      const { username, password, node, secure, code } = state
+      await app.actions.accountLogin(username, password, node, secure, code)
     },
     accountCreate: async () => {
-      const { username, password, host, secure, token } = state
-      await app.actions.accountCreate(username, password, host, secure, token)
+      const { username, password, node, secure, token } = state
+      await app.actions.accountCreate(username, password, node, secure, token)
     },
     accountAccess: async () => {
-      const { host, secure, token } = state
-      await app.actions.accountAccess(host, secure, token)
+      const { node, secure, token } = state
+      await app.actions.accountAccess(node, secure, token)
     },
     adminLogin: async () => {
-      const { password, host, secure, code } = state
-      await app.actions.adminLogin(password, host, secure, code)
+      const { password, node, secure, code } = state
+      await app.actions.adminLogin(password, node, secure, code)
     },
   }
 

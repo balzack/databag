@@ -120,8 +120,6 @@ export function useAccess() {
     },
     setUsername: (username: string) => {
       updateState({ username })
-      const { token, host, secure } = state
-      checkTaken(username, token, host, secure)
     },
     setPassword: (password: string) => {
       updateState({ password })

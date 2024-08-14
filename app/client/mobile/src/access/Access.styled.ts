@@ -27,6 +27,17 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     color: 'red',
   },
+  label: {
+    flexGrow: 1,
+    textAlign: 'center',
+    paddingTop: 64,
+  },
+  admin: {
+    width: 64,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   split: {
     display: 'flex',
     flexDirection: 'row',
@@ -48,7 +59,6 @@ export const styles = StyleSheet.create({
   frame: {
     position: 'relative',
     height: '100%',
-    minHeight: 650,
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
@@ -56,8 +66,23 @@ export const styles = StyleSheet.create({
     padding: 16,
     gap: 8,
   },
+  header: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+  },
+  body: {
+    display: 'flex',
+    flexDirection: 'column',
+    flexGrow: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    gap: 16,
+  },
   input: {
-    width: '50%',
+    maxWidth: 300,
+    width: '80%',
     margin: 4,
   },
   hidden: {
@@ -72,7 +97,7 @@ export const styles = StyleSheet.create({
     margin: 64,
   },
   submit: {
-    width: '20%',
+    width: '50%',
     minWidth: 'fit-content',
   },
   float: {
