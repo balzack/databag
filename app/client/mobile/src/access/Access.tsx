@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
-import { Text, View, Image } from 'react-native';
+import { View, Image } from 'react-native';
 import { useAccess } from './useAccess.hook'
 import { styles } from './Access.styled'
 import left from '../images/login.png'
+import { IconButton, Text } from 'react-native-paper';
 
 export function Access() {
   const { state, actions } = useAccess()
@@ -48,7 +49,19 @@ export function Access() {
       {state.wide && (
         <Image style={styles.left} source={left} resizeMode="contain" />
       )}
-      <View style={styles.right}><Text>RIGHT</Text></View>
+      <View style={styles.right}>
+        <View style={styles.frame}>
+          {state.mode !== 'admin' && (
+            <IconButton icon="camera" size={20}
+            />
+          )}
+          {state.mode === 'admin' && (
+            <IconButton icon="camera" size={20}
+            />
+          )}
+          <Text variant="headlineLarge">Databag</Text>
+        </View>
+      </View>
     </View>
   )
 }

@@ -48,7 +48,7 @@ export const styles = StyleSheet.create({
   frame: {
     position: 'relative',
     height: '100%',
-    minHeight: '650',
+    minHeight: 650,
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
