@@ -78,12 +78,12 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
-    gap: 16,
   },
   input: {
     maxWidth: 300,
     width: '80%',
     margin: 4,
+    marginTop: 24,
   },
   hidden: {
     width: '50%',
@@ -97,8 +97,8 @@ export const styles = StyleSheet.create({
     margin: 64,
   },
   submit: {
-    width: '50%',
-    minWidth: 'fit-content',
+    marginTop: 32,
+    width: 'auto',
   },
   float: {
     position: 'absolute',

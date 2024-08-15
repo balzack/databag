@@ -76,6 +76,8 @@ export function Access() {
                 style={styles.input}
                 mode="outlined"
                 autoCapitalize="none"
+                autoComplete="off"
+                autoCorrect={false}
                 label={state.strings.server}
                 value={state.node}
                 left={<TextInput.Icon icon="server" />}
@@ -85,6 +87,8 @@ export function Access() {
                 style={styles.input}
                 mode="outlined"
                 autoCapitalize="none"
+                autoComplete="off"
+                autoCorrect={false}
                 label={state.strings.username}
                 value={state.username}
                 left={<TextInput.Icon icon="account" />}
@@ -94,6 +98,8 @@ export function Access() {
                 style={styles.input}
                 mode="outlined"
                 autoCapitalize="none"
+                autoComplete="off"
+                autoCorrect={false}
                 label="Password"
                 secureTextEntry
                 left={<TextInput.Icon icon="lock" />}
@@ -109,6 +115,21 @@ export function Access() {
               >
                 {state.strings.login}
               </Button>
+
+                <Button
+                  mode="text"
+                  onClick={() => actions.setMode('create')}
+                >
+                  {state.strings.createAccount}
+                </Button>
+                <Button
+                  mode="text"
+                  onClick={() => actions.setMode('reset')}
+                >
+                  {state.strings.forgotPassword}
+                </Button>
+
+
             </View>
           )}
         </View>
