@@ -1,15 +1,15 @@
-import { useRef, useState, useContext, useEffect } from 'react'
-import { SettingsContext } from '../context/SettingsContext'
-import { AppContext } from '../context/AppContext'
-import { ContextType } from '../context/ContextType'
+import {useRef, useState, useContext, useEffect} from 'react';
+import {SettingsContext} from '../context/SettingsContext';
+import {AppContext} from '../context/AppContext';
+import {ContextType} from '../context/ContextType';
 
 const location = 'https://balzack.coredb.org';
 
 export function useAccess() {
-  const debounceAvailable = useRef(setTimeout(() => {}, 0))
-  const debounceTaken = useRef(setTimeout(() => {}, 0))
-  const app = useContext(AppContext) as ContextType
-  const settings = useContext(SettingsContext) as ContextType
+  const debounceAvailable = useRef(setTimeout(() => {}, 0));
+  const debounceTaken = useRef(setTimeout(() => {}, 0));
+  const app = useContext(AppContext) as ContextType;
+  const settings = useContext(SettingsContext) as ContextType;
   const [state, setState] = useState({
     wide: null,
     strings: settings.state.strings,
@@ -25,103 +25,106 @@ export function useAccess() {
     node: '',
     available: 0,
     taken: false,
-  })
+  });
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const updateState = (value: any) => {
-    setState((s) => ({ ...s, ...value }))
-  }
+    setState(s => ({...s, ...value}));
+  };
 
   useEffect(() => {
-    const { username, token, node, secure, mode } = state
+    const {username, token, node, secure, mode} = state;
     if (mode === 'create') {
-      checkTaken(username, token, node, secure)
-      getAvailable(node, secure)
+      checkTaken(username, token, node, secure);
+      getAvailable(node, secure);
     }
-  }, [state.mode, state.username, state.token, state.node, state.secure])
+  }, [state.mode, state.username, state.token, state.node, state.secure]);
 
   const getAvailable = (node: string, secure: boolean) => {
-    clearTimeout(debounceAvailable.current)
+    clearTimeout(debounceAvailable.current);
     debounceAvailable.current = setTimeout(async () => {
       try {
-        const available = await app.actions.getAvailable(node, secure)
-        updateState({ available })
+        const available = await app.actions.getAvailable(node, secure);
+        updateState({available});
       } catch (err) {
-        console.log(err)
-        updateState({ available: 0 })
+        console.log(err);
+        updateState({available: 0});
       }
-    }, 2000)
-  }
+    }, 2000);
+  };
 
   const checkTaken = (
     username: string,
     token: string,
     node: string,
-    secure: boolean
+    secure: boolean,
   ) => {
-    updateState({ taken: false })
-    clearTimeout(debounceTaken.current)
+    updateState({taken: false});
+    clearTimeout(debounceTaken.current);
     debounceTaken.current = setTimeout(async () => {
       const available = await app.actions.getUsername(
         username,
         token,
         node,
-        secure
-      )
-      updateState({ taken: !available })
-    }, 2000)
-  }
+        secure,
+      );
+      updateState({taken: !available});
+    }, 2000);
+  };
 
   useEffect(() => {
-    const { wide } = settings.state;
-    updateState({ wide });
-  }, [settings.state])
+    const {wide} = settings.state;
+    updateState({wide});
+  }, [settings.state]);
 
   const actions = {
     setMode: (mode: string) => {
-      updateState({ mode })
+      updateState({mode});
     },
     setUsername: (username: string) => {
-      updateState({ username })
+      updateState({username});
     },
     setPassword: (password: string) => {
-      updateState({ password })
+      updateState({password});
     },
     setConfirm: (confirm: string) => {
-      updateState({ confirm })
+      updateState({confirm});
     },
     setToken: (token: string) => {
-      updateState({ token })
+      updateState({token});
     },
     setCode: (code: string) => {
-      updateState({ code })
+      updateState({code});
     },
     setNode: (node: string) => {
-      const insecure = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(node);
-      updateState({ node, secure: !insecure })
+      const insecure =
+        /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(
+          node,
+        );
+      updateState({node, secure: !insecure});
     },
     setLoading: (loading: boolean) => {
-      updateState({ loading })
+      updateState({loading});
     },
     accountLogin: async () => {
-      const { username, password, node, secure, code } = state
-console.log("LOGIN:", username, password, node, secure, code);
+      const {username, password, node, secure, code} = state;
+      console.log('LOGIN:', username, password, node, secure, code);
 
-      await app.actions.accountLogin(username, password, node, secure, code)
+      await app.actions.accountLogin(username, password, node, secure, code);
     },
     accountCreate: async () => {
-      const { username, password, node, secure, token } = state
-      await app.actions.accountCreate(username, password, node, secure, token)
+      const {username, password, node, secure, token} = state;
+      await app.actions.accountCreate(username, password, node, secure, token);
     },
     accountAccess: async () => {
-      const { node, secure, token } = state
-      await app.actions.accountAccess(node, secure, token)
+      const {node, secure, token} = state;
+      await app.actions.accountAccess(node, secure, token);
     },
     adminLogin: async () => {
-      const { password, node, secure, code } = state
-      await app.actions.adminLogin(password, node, secure, code)
+      const {password, node, secure, code} = state;
+      await app.actions.adminLogin(password, node, secure, code);
     },
-  }
+  };
 
-  return { state, actions }
+  return {state, actions};
 }

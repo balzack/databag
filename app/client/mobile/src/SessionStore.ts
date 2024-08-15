@@ -1,4 +1,4 @@
-import { SqlStore} from 'databag-client-sdk';
+import {SqlStore} from 'databag-client-sdk';
 import SQLite from 'react-native-sqlite-storage';
 
 export class SessionStore implements SqlStore {
@@ -17,7 +17,7 @@ export class SessionStore implements SqlStore {
     stmt: string,
     params: (string | number | null)[],
   ): Promise<void> {
-    console.log("SET: ", stmt);
+    console.log('SET: ', stmt);
     await this.db.executeSql(stmt, params);
   }
 
@@ -35,5 +35,3 @@ export class SessionStore implements SqlStore {
     return rows;
   }
 }
-
-

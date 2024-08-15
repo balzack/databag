@@ -1,51 +1,51 @@
-import React, { useState } from 'react'
-import { ScrollView, View, Image } from 'react-native';
-import { useAccess } from './useAccess.hook'
-import { styles } from './Access.styled'
-import left from '../images/login.png'
-import { IconButton, Text, TextInput, Button } from 'react-native-paper';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import React, {useState} from 'react';
+import {ScrollView, View, Image} from 'react-native';
+import {useAccess} from './useAccess.hook';
+import {styles} from './Access.styled';
+import left from '../images/login.png';
+import {IconButton, Text, TextInput, Button} from 'react-native-paper';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 export function Access() {
-  const [ text, setText ] = useState('');
-  const { state, actions } = useAccess()
-  const [disabled, setDisabled] = useState(false)
+  const [text, setText] = useState('');
+  const {state, actions} = useAccess();
+  const [disabled, setDisabled] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
   const login = async () => {
     if (!state.loading) {
-      actions.setLoading(true)
+      actions.setLoading(true);
       try {
         if (state.mode === 'account') {
-          await actions.accountLogin()
+          await actions.accountLogin();
         } else if (state.mode === 'create') {
-          await actions.accountCreate()
+          await actions.accountCreate();
         } else if (state.mode === 'reset') {
-          await actions.accountAccess()
+          await actions.accountAccess();
         } else if (state.mode === 'admin') {
-          await actions.adminLogin()
+          await actions.adminLogin();
         }
-        console.log("OTP CLOSE");
+        console.log('OTP CLOSE');
       } catch (err) {
-        console.log(err.message)
+        console.log(err.message);
         if (
           err.message === '405' ||
           err.message === '403' ||
           err.message === '429'
         ) {
           if (err.message === '429') {
-            setDisabled(true)
+            setDisabled(true);
           } else {
-            setDisabled(false)
+            setDisabled(false);
           }
-          console.log("DONE LOGIN");
+          console.log('DONE LOGIN');
         } else {
-          console.log("ALERT ERROR");
+          console.log('ALERT ERROR');
         }
       }
-      actions.setLoading(false)
+      actions.setLoading(false);
     }
-  }
+  };
 
   return (
     <View style={styles.split}>
@@ -56,15 +56,23 @@ export function Access() {
         <ScrollView style={styles.frame} contentContainerStyle={styles.scroll}>
           <View style={styles.header}>
             <View style={styles.admin} />
-            <Text style={styles.label} variant="headlineLarge">Databag</Text>
+            <Text style={styles.label} variant="headlineLarge">
+              Databag
+            </Text>
             <View style={styles.admin}>
               {state.mode !== 'admin' && (
-                <IconButton style={styles.admin} icon="cog-outline" size={28}
+                <IconButton
+                  style={styles.admin}
+                  icon="cog-outline"
+                  size={28}
                   onPress={() => actions.setMode('admin')}
                 />
               )}
               {state.mode === 'admin' && (
-                <IconButton style={styles.admin} icon="account-outline" size={28}
+                <IconButton
+                  style={styles.admin}
+                  icon="account-outline"
+                  size={28}
                   onPress={() => actions.setMode('account')}
                 />
               )}
@@ -104,7 +112,19 @@ export function Access() {
                 label="Password"
                 secureTextEntry={!showPassword}
                 left={<TextInput.Icon icon="lock" />}
-                right={showPassword ? <TextInput.Icon icon="eye-off" onPress={() => setShowPassword(false)} /> : <TextInput.Icon icon="eye" onPress={() => setShowPassword(true)} />}
+                right={
+                  showPassword ? (
+                    <TextInput.Icon
+                      icon="eye-off"
+                      onPress={() => setShowPassword(false)}
+                    />
+                  ) : (
+                    <TextInput.Icon
+                      icon="eye"
+                      onPress={() => setShowPassword(true)}
+                    />
+                  )
+                }
                 onChangeText={value => actions.setPassword(value)}
               />
               <Button
@@ -112,29 +132,20 @@ export function Access() {
                 style={styles.submit}
                 onPress={login}
                 loading={state.loading}
-                disabled={!state.username || !state.password || !state.node}
-              >
+                disabled={!state.username || !state.password || !state.node}>
                 {state.strings.login}
               </Button>
 
-                <Button
-                  mode="text"
-                  onPress={() => actions.setMode('create')}
-                >
-                  {state.strings.createAccount}
-                </Button>
-                <Button
-                  mode="text"
-                  onPress={() => actions.setMode('reset')}
-                >
-                  {state.strings.forgotPassword}
-                </Button>
-
-
+              <Button mode="text" onPress={() => actions.setMode('create')}>
+                {state.strings.createAccount}
+              </Button>
+              <Button mode="text" onPress={() => actions.setMode('reset')}>
+                {state.strings.forgotPassword}
+              </Button>
             </View>
           )}
         </ScrollView>
       </SafeAreaView>
     </View>
-  )
+  );
 }

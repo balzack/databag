@@ -1,6 +1,4 @@
-import {
-  StyleSheet,
-} from 'react-native';
+import {StyleSheet} from 'react-native';
 
 export const styles = StyleSheet.create({
   mfa: {
@@ -115,4 +113,4 @@ export const styles = StyleSheet.create({
     margin: 16,
     bottom: 0,
   },
-})
+});

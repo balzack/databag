@@ -1,5 +1,5 @@
-import { Text } from 'react-native';
+import {Text} from 'react-native';
 
 export function Node() {
-  return <Text>NODE</Text>
+  return <Text>NODE</Text>;
 }
