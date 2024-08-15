@@ -46,7 +46,6 @@ export const styles = StyleSheet.create({
   right: {
     flex: 1,
     height: '100%',
-    overflow: 'scroll',
   },
   left: {
     flex: 1,
@@ -61,10 +60,11 @@ export const styles = StyleSheet.create({
     height: '100%',
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 16,
     gap: 8,
+  },
+  scroll: {
+    flexGrow: 1,
+    justifyContent: 'space-between',
   },
   header: {
     display: 'flex',
@@ -98,6 +98,7 @@ export const styles = StyleSheet.create({
   },
   submit: {
     marginTop: 32,
+    marginBottom: 8,
     width: 'auto',
   },
   float: {

@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { DatabagSDK, Session } from 'databag-client-sdk'
 import { SessionStore } from '../SessionStore'
+const DATABAG_DB = 'db_v200.db';
 
 export function useAppContext() {
   const sdk = useRef(new DatabagSDK(null))
@@ -13,17 +14,18 @@ export function useAppContext() {
     setState((s) => ({ ...s, ...value }))
   }
 
-  useEffect(() => {
-    init()
-  }, [])
-
-  const init = async () => {
+  const setup = async () => {
     const store = new SessionStore()
-    const session: Session | null = await sdk.current.initOnlineStore(store)
+    await store.open(DATABAG_DB);
+    const session: Session | null = await sdk.current.initOfflineStore(store)
     if (session) {
       updateState({ session })
     }
   }
+
+  useEffect(() => {
+    setup()
+  }, [])
 
   const actions = {
     accountLogin: async (

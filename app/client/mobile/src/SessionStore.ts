@@ -1,8 +1,7 @@
 import { SqlStore} from 'databag-client-sdk';
 import SQLite from 'react-native-sqlite-storage';
-const DATABAG_DB = 'db_v200.db';
 
-class SessionStore implements SqlStore {
+export class SessionStore implements SqlStore {
   private db: any = null;
 
   constructor() {
@@ -18,6 +17,7 @@ class SessionStore implements SqlStore {
     stmt: string,
     params: (string | number | null)[],
   ): Promise<void> {
+    console.log("SET: ", stmt);
     await this.db.executeSql(stmt, params);
   }
 
@@ -25,6 +25,7 @@ class SessionStore implements SqlStore {
     stmt: string,
     params: (string | number | null)[],
   ): Promise<any[]> {
+    console.log("GET: ", stmt);
     const res = await this.db.executeSql(stmt, params);
     const rows = [];
     if (res[0] && res[0].rows && res[0].rows > 1) {

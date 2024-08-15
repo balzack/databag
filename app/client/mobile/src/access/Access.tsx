@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, Image } from 'react-native';
+import { ScrollView, View, Image } from 'react-native';
 import { useAccess } from './useAccess.hook'
 import { styles } from './Access.styled'
 import left from '../images/login.png'
@@ -24,7 +24,7 @@ export function Access() {
         } else if (state.mode === 'admin') {
           await actions.adminLogin()
         }
-        otpClose()
+        console.log("OTP CLOSE");
       } catch (err) {
         console.log(err.message)
         if (
@@ -37,9 +37,9 @@ export function Access() {
           } else {
             setDisabled(false)
           }
-          otpOpen()
+          console.log("DONE LOGIN");
         } else {
-          alertOpen()
+          console.log("ALERT ERROR");
         }
       }
       actions.setLoading(false)
@@ -52,7 +52,7 @@ export function Access() {
         <Image style={styles.left} source={left} resizeMode="contain" />
       )}
       <SafeAreaView style={styles.right} edges={['top', 'bottom']}>
-        <View style={styles.frame}>
+        <ScrollView style={styles.frame} contentContainerStyle={styles.scroll}>
           <View style={styles.header}>
             <View style={styles.admin} />
             <Text style={styles.label} variant="headlineLarge">Databag</Text>
@@ -109,7 +109,7 @@ export function Access() {
               <Button
                 mode="contained"
                 style={styles.submit}
-                onClick={login}
+                onPress={login}
                 loading={state.loading}
                 disabled={!state.username || !state.password}
               >
@@ -118,13 +118,13 @@ export function Access() {
 
                 <Button
                   mode="text"
-                  onClick={() => actions.setMode('create')}
+                  onPress={() => actions.setMode('create')}
                 >
                   {state.strings.createAccount}
                 </Button>
                 <Button
                   mode="text"
-                  onClick={() => actions.setMode('reset')}
+                  onPress={() => actions.setMode('reset')}
                 >
                   {state.strings.forgotPassword}
                 </Button>
@@ -132,7 +132,7 @@ export function Access() {
 
             </View>
           )}
-        </View>
+        </ScrollView>
       </SafeAreaView>
     </View>
   )
