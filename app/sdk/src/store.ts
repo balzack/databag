@@ -35,7 +35,7 @@ export class OfflineStore implements Store {
 
   public async init(): Promise<Login | null> {
     await this.sql.set("CREATE TABLE IF NOT EXISTS app (key text, value text, unique(key));");
-    await this.sql.set("INSERT OR IGNORE INTO app (key, value) values ('session', null);");
+    await this.sql.set("INSERT OR IGNORE INTO app (key, value) values ('login', null);");
     return await this.getAppValue('login', null);
   }
 

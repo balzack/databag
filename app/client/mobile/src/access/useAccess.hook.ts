@@ -13,7 +13,7 @@ export function useAccess() {
   const [state, setState] = useState({
     wide: null,
     strings: settings.state.strings,
-    mode: '',
+    mode: 'account',
     username: '',
     handle: '',
     password: '',

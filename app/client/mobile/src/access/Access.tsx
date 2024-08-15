@@ -10,6 +10,7 @@ export function Access() {
   const [ text, setText ] = useState('');
   const { state, actions } = useAccess()
   const [disabled, setDisabled] = useState(false)
+  const [showPassword, setShowPassword] = useState(false);
 
   const login = async () => {
     if (!state.loading) {
@@ -101,9 +102,9 @@ export function Access() {
                 autoComplete="off"
                 autoCorrect={false}
                 label="Password"
-                secureTextEntry
+                secureTextEntry={!showPassword}
                 left={<TextInput.Icon icon="lock" />}
-                right={<TextInput.Icon icon="eye" />}
+                right={showPassword ? <TextInput.Icon icon="eye-off" onPress={() => setShowPassword(false)} /> : <TextInput.Icon icon="eye" onPress={() => setShowPassword(true)} />}
                 onChangeText={value => actions.setPassword(value)}
               />
               <Button
@@ -111,7 +112,7 @@ export function Access() {
                 style={styles.submit}
                 onPress={login}
                 loading={state.loading}
-                disabled={!state.username || !state.password}
+                disabled={!state.username || !state.password || !state.node}
               >
                 {state.strings.login}
               </Button>

@@ -83,7 +83,7 @@ export const styles = StyleSheet.create({
     maxWidth: 300,
     width: '80%',
     margin: 4,
-    marginTop: 24,
+    marginTop: 16,
   },
   hidden: {
     width: '50%',
