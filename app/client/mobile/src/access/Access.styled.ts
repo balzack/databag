@@ -1,6 +1,10 @@
 import {StyleSheet} from 'react-native';
 
 export const styles = StyleSheet.create({
+  avoid: {
+    flex: 1,
+    backgroundColor: '#90bea7',
+  },
   mfa: {
     display: 'flex',
     flexDirection: 'column',
@@ -44,6 +48,7 @@ export const styles = StyleSheet.create({
   right: {
     flex: 1,
     height: '100%',
+    backgroundColor: '#90bea7',
   },
   left: {
     flex: 1,
