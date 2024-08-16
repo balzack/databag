@@ -44,8 +44,13 @@ export function useAccess() {
     clearTimeout(debounceAvailable.current);
     debounceAvailable.current = setTimeout(async () => {
       try {
-        const available = await app.actions.getAvailable(node, secure);
-        updateState({available});
+        if (node) {
+          const available = await app.actions.getAvailable(node, secure);
+          updateState({available});
+        }
+        else {
+          updateState({available: 0});
+        }
       } catch (err) {
         console.log(err);
         updateState({available: 0});
@@ -63,13 +68,18 @@ export function useAccess() {
     clearTimeout(debounceTaken.current);
     debounceTaken.current = setTimeout(async () => {
       try {
-        const available = await app.actions.getUsername(
-          username,
-          token,
-          node,
-          secure,
-        );
-        updateState({taken: !available});
+        if (node && username) {
+          const available = await app.actions.getUsername(
+            username,
+            token,
+            node,
+            secure,
+          );
+          updateState({taken: !available});
+        }
+        else {
+          updateState({ taken: false });
+        }
       } catch (err) {
         console.log(err);
         updateState({taken: false});

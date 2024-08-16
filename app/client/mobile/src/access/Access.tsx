@@ -55,8 +55,6 @@ export function Access() {
     }
   };
 
-  console.log(Platform.OS);
-
   return (
     <View style={styles.split}>
       {state.wide && (
