@@ -11,6 +11,7 @@ import {styles} from './Access.styled';
 import left from '../images/login.png';
 import {IconButton, Modal, Text, TextInput, Button} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import { BlurView } from "@react-native-community/blur";
 
 export function Access() {
   const [text, setText] = useState('');
@@ -365,6 +366,9 @@ export function Access() {
             )}
           </SafeAreaView>
         </ScrollView>
+        {alert && (
+          <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="black" />
+        )}
       </KeyboardAvoidingView>
       <Modal
         visible={alert}

@@ -125,9 +125,18 @@ export const styles = StyleSheet.create({
     bottom: 0,
   },
   modal: {
-    diwplay: 'flex',
+    display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    width: '100%',
+    height: '100%',
+  },
+  blur: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
   },
   content: {
     width: '50%',
