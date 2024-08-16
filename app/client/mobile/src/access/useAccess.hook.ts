@@ -70,8 +70,7 @@ export function useAccess() {
           secure,
         );
         updateState({taken: !available});
-      }
-      catch (err) {
+      } catch (err) {
         console.log(err);
         updateState({taken: false});
       }

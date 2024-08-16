@@ -1,5 +1,11 @@
 import React, {useState} from 'react';
-import {Platform, KeyboardAvoidingView, ScrollView, View, Image} from 'react-native';
+import {
+  Platform,
+  KeyboardAvoidingView,
+  ScrollView,
+  View,
+  Image,
+} from 'react-native';
 import {useAccess} from './useAccess.hook';
 import {styles} from './Access.styled';
 import left from '../images/login.png';
@@ -49,16 +55,19 @@ export function Access() {
     }
   };
 
-console.log(Platform.OS);
+  console.log(Platform.OS);
 
   return (
     <View style={styles.split}>
       {state.wide && (
         <Image style={styles.left} source={left} resizeMode="contain" />
       )}
-          <KeyboardAvoidingView style={styles.avoid} behavior="padding" enabled={Platform.OS === 'ios' ? true : false}>
-      <ScrollView style={styles.frame} contentContainerStyle={styles.scroll}>
-        <SafeAreaView style={styles.right} edges={['top', 'bottom']}>
+      <KeyboardAvoidingView
+        style={styles.avoid}
+        behavior="padding"
+        enabled={Platform.OS === 'ios' ? true : false}>
+        <ScrollView style={styles.frame} contentContainerStyle={styles.scroll}>
+          <SafeAreaView style={styles.right} edges={['top', 'bottom']}>
             <View style={styles.header}>
               <View style={styles.admin} />
               <Text style={styles.label} variant="headlineLarge">
@@ -85,7 +94,9 @@ console.log(Platform.OS);
             </View>
             {state.mode === 'account' && (
               <View style={styles.body}>
-                <Text variant="headlineSmall">{state.strings.accountLogin}</Text>
+                <Text variant="headlineSmall">
+                  {state.strings.accountLogin}
+                </Text>
                 <TextInput
                   style={styles.input}
                   mode="flat"
@@ -152,7 +163,9 @@ console.log(Platform.OS);
             )}
             {state.mode === 'reset' && (
               <View style={styles.body}>
-                <Text variant="headlineSmall">{state.strings.accessAccount}</Text>
+                <Text variant="headlineSmall">
+                  {state.strings.accessAccount}
+                </Text>
                 <TextInput
                   style={styles.input}
                   mode="flat"
@@ -192,7 +205,9 @@ console.log(Platform.OS);
             )}
             {state.mode === 'create' && (
               <View style={styles.body}>
-                <Text variant="headlineSmall">{state.strings.createAccount}</Text>
+                <Text variant="headlineSmall">
+                  {state.strings.createAccount}
+                </Text>
                 <View style={styles.spacer}>
                   {!state.available && (
                     <TextInput
@@ -285,7 +300,12 @@ console.log(Platform.OS);
                   style={styles.submit}
                   onPress={login}
                   loading={state.loading}
-                  disabled={!state.username || !state.password || state.password !== state.confirm || !state.node}>
+                  disabled={
+                    !state.username ||
+                    !state.password ||
+                    state.password !== state.confirm ||
+                    !state.node
+                  }>
                   {state.strings.create}
                 </Button>
                 <Button mode="text" onPress={() => actions.setMode('account')}>
@@ -345,19 +365,22 @@ console.log(Platform.OS);
                 </Button>
               </View>
             )}
-        </SafeAreaView>
-      </ScrollView>
-          </KeyboardAvoidingView>
-      <Modal visible={alert} onDismiss={() => setAlert(false)} contentContainerStyle={styles.modal}>
+          </SafeAreaView>
+        </ScrollView>
+      </KeyboardAvoidingView>
+      <Modal
+        visible={alert}
+        onDismiss={() => setAlert(false)}
+        contentContainerStyle={styles.modal}>
         <View style={styles.content}>
           <Text variant="titleLarge">{state.strings.error}</Text>
           <Text variant="titleSmall">{state.strings.tryAgain}</Text>
           <Button
-              mode="text"
-              style={styles.close}
-              onPress={() => setAlert(false)}>
-              {state.strings.close}
-            </Button>
+            mode="text"
+            style={styles.close}
+            onPress={() => setAlert(false)}>
+            {state.strings.close}
+          </Button>
         </View>
       </Modal>
     </View>
