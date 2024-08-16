@@ -83,6 +83,12 @@ export const styles = StyleSheet.create({
     margin: 4,
     marginTop: 16,
   },
+  spacer: {
+    width: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    height: 76,
+  },
   hidden: {
     width: '50%',
     margin: 4,
@@ -112,5 +118,18 @@ export const styles = StyleSheet.create({
     position: 'absolute',
     margin: 16,
     bottom: 0,
+  },
+  modal: {
+    diwplay: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  content: {
+    width: '50%',
+    padding: 16,
+    backgroundColor: 'white',
+  },
+  close: {
+    paddingTop: 8,
   },
 });

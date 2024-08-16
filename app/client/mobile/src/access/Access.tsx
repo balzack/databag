@@ -3,14 +3,16 @@ import {ScrollView, View, Image} from 'react-native';
 import {useAccess} from './useAccess.hook';
 import {styles} from './Access.styled';
 import left from '../images/login.png';
-import {IconButton, Text, TextInput, Button} from 'react-native-paper';
+import {IconButton, Modal, Text, TextInput, Button} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
 export function Access() {
   const [text, setText] = useState('');
   const {state, actions} = useAccess();
   const [disabled, setDisabled] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [alert, setAlert] = useState(false);
 
   const login = async () => {
     if (!state.loading) {
@@ -40,7 +42,7 @@ export function Access() {
           }
           console.log('DONE LOGIN');
         } else {
-          console.log('ALERT ERROR');
+          setAlert(true);
         }
       }
       actions.setLoading(false);
@@ -109,7 +111,8 @@ export function Access() {
                 autoCapitalize="none"
                 autoComplete="off"
                 autoCorrect={false}
-                label="Password"
+                value={state.password}
+                label={state.strings.password}
                 secureTextEntry={!showPassword}
                 left={<TextInput.Icon icon="lock" />}
                 right={
@@ -144,8 +147,215 @@ export function Access() {
               </Button>
             </View>
           )}
+          {state.mode === 'reset' && (
+            <View style={styles.body}>
+              <Text variant="headlineSmall">{state.strings.accessAccount}</Text>
+              <TextInput
+                style={styles.input}
+                mode="outlined"
+                autoCapitalize="none"
+                autoComplete="off"
+                autoCorrect={false}
+                label={state.strings.token}
+                left={<TextInput.Icon icon="key" />}
+                onChangeText={value => actions.setToken(value)}
+              />
+              <TextInput
+                style={styles.input}
+                mode="outlined"
+                autoCapitalize="none"
+                autoComplete="off"
+                autoCorrect={false}
+                label={state.strings.server}
+                value={state.node}
+                left={<TextInput.Icon icon="server" />}
+                onChangeText={value => actions.setNode(value)}
+              />
+              <Button
+                mode="contained"
+                style={styles.submit}
+                onPress={login}
+                loading={state.loading}
+                disabled={!state.username || !state.password || !state.node}>
+                {state.strings.access}
+              </Button>
+              <Button mode="text" onPress={() => actions.setMode('create')}>
+                {state.strings.createAccount}
+              </Button>
+              <Button mode="text" onPress={() => actions.setMode('account')}>
+                {state.strings.accountLogin}
+              </Button>
+            </View>
+          )}
+          {state.mode === 'create' && (
+            <View style={styles.body}>
+              <Text variant="headlineSmall">{state.strings.createAccount}</Text>
+              <View style={styles.spacer}>
+                {!state.available && (
+                  <TextInput
+                    style={styles.input}
+                    mode="outlined"
+                    autoCapitalize="none"
+                    autoComplete="off"
+                    autoCorrect={false}
+                    label={state.strings.token}
+                    left={<TextInput.Icon icon="key" />}
+                    onChangeText={value => actions.setToken(value)}
+                  />
+                )}
+              </View>
+              <TextInput
+                style={styles.input}
+                mode="outlined"
+                autoCapitalize="none"
+                autoComplete="off"
+                autoCorrect={false}
+                label={state.strings.server}
+                value={state.node}
+                left={<TextInput.Icon icon="server" />}
+                onChangeText={value => actions.setNode(value)}
+              />
+              <TextInput
+                style={styles.input}
+                mode="outlined"
+                autoCapitalize="none"
+                autoComplete="off"
+                autoCorrect={false}
+                error={state.taken}
+                label={state.strings.username}
+                value={state.username}
+                left={<TextInput.Icon icon="account" />}
+                onChangeText={value => actions.setUsername(value)}
+              />
+              <TextInput
+                style={styles.input}
+                mode="outlined"
+                autoCapitalize="none"
+                autoComplete="off"
+                autoCorrect={false}
+                value={state.password}
+                label={state.strings.password}
+                secureTextEntry={!showPassword}
+                left={<TextInput.Icon icon="lock" />}
+                right={
+                  showPassword ? (
+                    <TextInput.Icon
+                      icon="eye-off"
+                      onPress={() => setShowPassword(false)}
+                    />
+                  ) : (
+                    <TextInput.Icon
+                      icon="eye"
+                      onPress={() => setShowPassword(true)}
+                    />
+                  )
+                }
+                onChangeText={value => actions.setPassword(value)}
+              />
+              <TextInput
+                style={styles.input}
+                mode="outlined"
+                autoCapitalize="none"
+                autoComplete="off"
+                autoCorrect={false}
+                value={state.confirm}
+                label={state.strings.confirmPassword}
+                secureTextEntry={!showConfirm}
+                left={<TextInput.Icon icon="lock" />}
+                right={
+                  showPassword ? (
+                    <TextInput.Icon
+                      icon="eye-off"
+                      onPress={() => setShowConfirm(false)}
+                    />
+                  ) : (
+                    <TextInput.Icon
+                      icon="eye"
+                      onPress={() => setShowConfirm(true)}
+                    />
+                  )
+                }
+                onChangeText={value => actions.setConfirm(value)}
+              />
+              <Button
+                mode="contained"
+                style={styles.submit}
+                onPress={login}
+                loading={state.loading}
+                disabled={!state.username || !state.password || state.password !== state.confirm || !state.node}>
+                {state.strings.create}
+              </Button>
+              <Button mode="text" onPress={() => actions.setMode('account')}>
+                {state.strings.accountLogin}
+              </Button>
+              <Button mode="text" onPress={() => actions.setMode('reset')}>
+                {state.strings.forgotPassword}
+              </Button>
+            </View>
+          )}
+          {state.mode === 'admin' && (
+            <View style={styles.body}>
+              <Text variant="headlineSmall">{state.strings.adminAccess}</Text>
+              <TextInput
+                style={styles.input}
+                mode="outlined"
+                autoCapitalize="none"
+                autoComplete="off"
+                autoCorrect={false}
+                label={state.strings.server}
+                value={state.node}
+                left={<TextInput.Icon icon="server" />}
+                onChangeText={value => actions.setNode(value)}
+              />
+              <TextInput
+                style={styles.input}
+                mode="outlined"
+                autoCapitalize="none"
+                autoComplete="off"
+                autoCorrect={false}
+                label="Password"
+                value={state.password}
+                secureTextEntry={!showPassword}
+                left={<TextInput.Icon icon="lock" />}
+                right={
+                  showPassword ? (
+                    <TextInput.Icon
+                      icon="eye-off"
+                      onPress={() => setShowPassword(false)}
+                    />
+                  ) : (
+                    <TextInput.Icon
+                      icon="eye"
+                      onPress={() => setShowPassword(true)}
+                    />
+                  )
+                }
+                onChangeText={value => actions.setPassword(value)}
+              />
+              <Button
+                mode="contained"
+                style={styles.submit}
+                onPress={login}
+                loading={state.loading}
+                disabled={!state.password || !state.node}>
+                {state.strings.login}
+              </Button>
+            </View>
+          )}
         </ScrollView>
       </SafeAreaView>
+      <Modal visible={alert} onDismiss={() => setAlert(false)} contentContainerStyle={styles.modal}>
+        <View style={styles.content}>
+          <Text variant="headlineSmall">{state.strings.error}</Text>
+          <Text variant="titleSmall">{state.strings.tryAgain}</Text>
+          <Button
+              mode="text"
+              style={styles.close}
+              onPress={() => setAlert(false)}>
+              {state.strings.close}
+            </Button>
+        </View>
+      </Modal>
     </View>
   );
 }
