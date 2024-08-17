@@ -62,7 +62,7 @@ const databagColors = {
     backdrop: 'rgba(42, 50, 45, 0.4)',
   },
   dark: {
-    primary: 'rgb(113, 218, 166)',
+    primary: 'rgb(9, 178, 99)',
     onPrimary: 'rgb(0, 56, 35)',
     primaryContainer: 'rgb(0, 82, 52)',
     onPrimaryContainer: 'rgb(142, 247, 193)',

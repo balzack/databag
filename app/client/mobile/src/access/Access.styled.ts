@@ -3,7 +3,6 @@ import {StyleSheet} from 'react-native';
 export const styles = StyleSheet.create({
   avoid: {
     flex: 1,
-    backgroundColor: '#90bea7',
   },
   mfa: {
     display: 'flex',
@@ -48,7 +47,6 @@ export const styles = StyleSheet.create({
   right: {
     flex: 1,
     height: '100%',
-    backgroundColor: '#90bea7',
   },
   left: {
     flex: 1,
@@ -56,6 +54,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     overflow: 'hidden',
+    height: '100%',
     backgroundColor: '#90bea7',
   },
   frame: {
@@ -139,9 +138,8 @@ export const styles = StyleSheet.create({
     height: '100%',
   },
   content: {
-    width: '50%',
+    width: 300,
     padding: 16,
-    backgroundColor: 'white',
   },
   close: {
     paddingTop: 8,

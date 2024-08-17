@@ -9,7 +9,7 @@ import {
 import {useAccess} from './useAccess.hook';
 import {styles} from './Access.styled';
 import left from '../images/login.png';
-import {IconButton, Modal, Text, TextInput, Button} from 'react-native-paper';
+import {IconButton, Modal, Surface, Text, TextInput, Button} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import { BlurView } from "@react-native-community/blur";
 
@@ -57,7 +57,7 @@ export function Access() {
   };
 
   return (
-    <View style={styles.split}>
+    <Surface style={styles.split}>
       {state.wide && (
         <Image style={styles.left} source={left} resizeMode="contain" />
       )}
@@ -151,7 +151,6 @@ export function Access() {
                   disabled={!state.username || !state.password || !state.node}>
                   {state.strings.login}
                 </Button>
-
                 <Button mode="text" onPress={() => actions.setMode('create')}>
                   {state.strings.createAccount}
                 </Button>
@@ -366,15 +365,15 @@ export function Access() {
             )}
           </SafeAreaView>
         </ScrollView>
-        {alert && (
-          <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="black" />
-        )}
       </KeyboardAvoidingView>
+      {alert && (
+        <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
+      )}
       <Modal
         visible={alert}
         onDismiss={() => setAlert(false)}
         contentContainerStyle={styles.modal}>
-        <View style={styles.content}>
+        <Surface elevation={5} mode="flat" style={styles.content}>
           <Text variant="titleLarge">{state.strings.error}</Text>
           <Text variant="titleSmall">{state.strings.tryAgain}</Text>
           <Button
@@ -383,8 +382,8 @@ export function Access() {
             onPress={() => setAlert(false)}>
             {state.strings.close}
           </Button>
-        </View>
+        </Surface>
       </Modal>
-    </View>
+    </Surface>
   );
 }
