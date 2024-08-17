@@ -1,7 +1,7 @@
 import { useWindowDimensions, View, TouchableOpacity } from 'react-native';
 import { useState, useEffect } from 'react';
-import { Logo } from 'utils/Logo';
-import Colors from 'constants/Colors';
+import { Logo } from '../../utils/Logo';
+import Colors from '../../constants/Colors';
 import MatIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useKeepAwake } from '@sayem314/react-native-keep-awake';
 import { RTCView } from 'react-native-webrtc';

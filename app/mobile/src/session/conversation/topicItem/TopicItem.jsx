@@ -2,10 +2,10 @@ import { Platform, KeyboardAvoidingView, FlatList, ActivityIndicator, View, Text
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useTopicItem } from './useTopicItem.hook';
 import { styles } from './TopicItem.styled';
-import Colors from 'constants/Colors';
+import Colors from '../../../constants/Colors';
 import AntIcons from 'react-native-vector-icons/AntDesign';
 import MatIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import avatar from 'images/avatar.png';
+import avatar from '../../../../images/avatar.png';
 import { VideoThumb } from './videoThumb/VideoThumb';
 import { AudioThumb } from './audioThumb/AudioThumb';
 import { ImageThumb } from './imageThumb/ImageThumb';

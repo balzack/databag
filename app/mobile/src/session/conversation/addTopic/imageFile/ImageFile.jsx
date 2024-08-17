@@ -2,7 +2,7 @@ import { useRef, useEffect } from 'react';
 import { TouchableOpacity, View, Image } from 'react-native';
 import { useImageFile } from './useImageFile.hook';
 import { styles } from './ImageFile.styled';
-import Colors from 'constants/Colors';
+import Colors from '../../../../constants/Colors';
 
 export function ImageFile({ path, setPosition, remove }) {
 

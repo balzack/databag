@@ -3,8 +3,8 @@ import { ActivityIndicator, Alert, FlatList, ScrollView, View, TextInput, Toucha
 import { styles } from './Registry.styled';
 import { useRegistry } from './useRegistry.hook';
 import { RegistryItem } from './registryItem/RegistryItem';
-import { ProfileContext } from 'context/ProfileContext';
-import Colors from 'constants/Colors';
+import { ProfileContext } from '../../context/ProfileContext';
+import Colors from '../../constants/Colors';
 import Ionicons from 'react-native-vector-icons/AntDesign';
 
 export function RegistryHeader({ search, setSearch, handle, setHandle, server, setServer, editable }) {

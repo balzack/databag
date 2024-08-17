@@ -3,8 +3,8 @@ import { ActivityIndicator, Alert, View, Text, TouchableOpacity, ScrollView, Ima
 import { styles } from './Contact.styled';
 import { useContact } from './useContact.hook';
 import Ionicons from 'react-native-vector-icons/AntDesign';
-import { Logo } from 'utils/Logo';
-import { Colors } from 'constants/Colors';
+import { Logo } from '../../utils/Logo';
+import { Colors } from '../../constants/Colors';
 import AntIcons from 'react-native-vector-icons/AntDesign';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 import FntIcons from 'react-native-vector-icons/FontAwesome5';

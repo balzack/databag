@@ -2,7 +2,7 @@ import { View, Image } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useVideoThumb } from './useVideoThumb.hook';
 import { styles } from './VideoThumb.styled';
-import Colors from 'constants/Colors';
+import Colors from '../../../../constants/Colors';
 import AntIcons from 'react-native-vector-icons/AntDesign';
 
 export function VideoThumb({ url, onAssetView }) {

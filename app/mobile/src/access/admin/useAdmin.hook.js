@@ -1,12 +1,12 @@
 import { useState, useEffect, useContext } from 'react';
 import { useWindowDimensions } from 'react-native';
 import { useNavigate } from 'react-router-dom';
-import { AppContext } from 'context/AppContext';
-import { getNodeStatus } from 'api/getNodeStatus';
-import { setNodeStatus } from 'api/setNodeStatus';
-import { setNodeAccess } from 'api/setNodeAccess';
-import { getNodeConfig } from 'api/getNodeConfig';
-import { getLanguageStrings } from 'constants/Strings';
+import { AppContext } from '../../context/AppContext';
+import { getNodeStatus } from '../../api/getNodeStatus';
+import { setNodeStatus } from '../../api/setNodeStatus';
+import { setNodeAccess } from '../../api/setNodeAccess';
+import { getNodeConfig } from '../../api/getNodeConfig';
+import { getLanguageStrings } from '../../constants/Strings';
 
 export function useAdmin() {
 

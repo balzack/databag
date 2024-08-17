@@ -4,7 +4,7 @@ import { useAddTopic } from './useAddTopic.hook';
 import { styles } from './AddTopic.styled';
 import AntIcons from 'react-native-vector-icons/AntDesign';
 import MatIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Colors from 'constants/Colors';
+import Colors from '../../../constants/Colors';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import ImagePicker from 'react-native-image-crop-picker'
 import DocumentPicker from 'react-native-document-picker'

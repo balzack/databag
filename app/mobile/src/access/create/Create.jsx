@@ -2,9 +2,9 @@ import { Platform, KeyboardAvoidingView, ScrollView, ActivityIndicator, Alert, M
 import { styles } from './Create.styled';
 import Ionicons from 'react-native-vector-icons/AntDesign';
 import { useCreate } from './useCreate.hook';
-import Colors from 'constants/Colors';
+import Colors from '../../constants/Colors';
 import MatIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { tos } from 'constants/TermsOfService';
+import { tos } from '../../constants/TermsOfService';
 
 export function Create() {
 

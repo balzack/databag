@@ -1,10 +1,10 @@
 import { useState, useEffect, useContext, useRef } from 'react';
 import { useWindowDimensions } from 'react-native';
 import { useNavigate } from 'react-router-dom';
-import { AppContext } from 'context/AppContext';
-import { getAvailable } from 'api/getAvailable';
-import { getUsername } from 'api/getUsername';
-import { getLanguageStrings } from 'constants/Strings';
+import { AppContext } from '../../context/AppContext';
+import { getAvailable } from '../../api/getAvailable';
+import { getUsername } from '../../api/getUsername';
+import { getLanguageStrings } from '../../constants/Strings';
 
 export function useCreate() {
 

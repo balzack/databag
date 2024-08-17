@@ -1,8 +1,8 @@
 import { Alert, Text, Switch, TouchableOpacity, View } from 'react-native';
-import { Logo } from 'utils/Logo';
+import { Logo } from '../../../utils/Logo';
 import { styles } from './AddMember.styled';
 import { useAddMember } from './useAddMember.hook';
-import Colors from 'constants/Colors';
+import Colors from '../../../constants/Colors';
 
 export function AddMember({ members, item, setCard, clearCard }) {
 

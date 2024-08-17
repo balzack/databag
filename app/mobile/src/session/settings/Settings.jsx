@@ -6,11 +6,11 @@ import { styles } from './Settings.styled';
 import { useSettings } from './useSettings.hook';
 import AntIcon from 'react-native-vector-icons/AntDesign';
 import MatIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Colors from 'constants/Colors';
+import Colors from '../../constants/Colors';
 import { BlurView } from "@react-native-community/blur";
-import { InputField } from 'utils/InputField';
-import { Logo } from 'utils/Logo';
-import { InputCode } from 'utils/InputCode';
+import { InputField } from '../../utils/InputField';
+import { Logo } from '../../utils/Logo';
+import { InputCode } from '../../utils/InputCode';
 import Clipboard from '@react-native-clipboard/clipboard';
 
 export function Settings({ drawer }) {

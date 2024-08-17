@@ -1,14 +1,14 @@
 import { useRef, useState, useEffect, useContext } from 'react';
 import { useWindowDimensions } from 'react-native';
-import config from 'constants/Config';
-import { StoreContext } from 'context/StoreContext';
-import { CardContext } from 'context/CardContext';
-import { AccountContext } from 'context/AccountContext';
-import { ChannelContext } from 'context/ChannelContext';
-import { RingContext } from 'context/RingContext';
-import { ProfileContext } from 'context/ProfileContext';
-import { getLanguageStrings } from 'constants/Strings';
-import { encryptChannelSubject } from 'context/sealUtil';
+import config from '../constants/Config';
+import { StoreContext } from '../context/StoreContext';
+import { CardContext } from '../context/CardContext';
+import { AccountContext } from '../context/AccountContext';
+import { ChannelContext } from '../context/ChannelContext';
+import { RingContext } from '../context/RingContext';
+import { ProfileContext } from '../context/ProfileContext';
+import { getLanguageStrings } from '../constants/Strings';
+import { encryptChannelSubject } from '../context/sealUtil';
 
 export function useSession() {
 

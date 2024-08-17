@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect, useContext } from 'react';
-import { CardContext } from 'context/CardContext';
-import { RingContext } from 'context/RingContext';
+import { CardContext } from '../../context/CardContext';
+import { RingContext } from '../../context/RingContext';
 
 export function useCall() {
   const [state, setState] = useState({

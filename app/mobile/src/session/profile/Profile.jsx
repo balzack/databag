@@ -7,11 +7,11 @@ import { BlurView } from "@react-native-community/blur";
 import { FloatingLabelInput } from 'react-native-floating-label-input';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { Menu, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-menu';
-import { Colors } from 'constants/Colors';
-import { InputField } from 'utils/InputField';
+import { Colors } from '../../constants/Colors';
+import { InputField } from '../../utils/InputField';
 import { useProfile } from './useProfile.hook';
 import { styles } from './Profile.styled';
-import avatar from 'images/avatar.png';
+import avatar from '../../../images/avatar.png';
 
 export function Profile({ drawer }) {
 

@@ -4,7 +4,7 @@ import Video from 'react-native-video';
 import { useVideoFile } from './useVideoFile.hook';
 import { styles } from './VideoFile.styled';
 import MatIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Colors from 'constants/Colors';
+import Colors from '../../../../constants/Colors';
 
 export function VideoFile({ path, setPosition, remove }) {
 

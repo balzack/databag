@@ -6,10 +6,25 @@
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "lint": "eslint .",
+    "format": "prettier --write src",
     "start": "react-native start",
     "test": "jest"
   },
   "dependencies": {
+    "@react-native-community/blur": "^4.4.0",
+    "@react-navigation/native": "^6.1.18",
+    "@react-navigation/native-stack": "^6.11.0",
+    "databag-client-sdk": "^0.0.22",
+    "react": "18.2.0",
+    "react-dom": "^18.3.1",
+    "react-native": "0.74.3",
+    "react-native-paper": "^5.12.5",
+    "react-native-safe-area-context": "^4.10.8",
+    "react-native-screens": "^3.34.0",
+    "react-native-sqlite-storage": "^6.0.1",
+    "react-native-vector-icons": "^10.1.0",
+    "react-router-dom": "^6.26.0",
+    "react-router-native": "^6.26.0",
     "@bam.tech/react-native-image-resizer": "^3.0.5",
     "@braintree/sanitize-url": "^6.0.2",
     "@react-native-clipboard/clipboard": "^1.11.1",
@@ -28,7 +43,6 @@
     "jsencrypt": "^3.3.1",
     "moment": "^2.29.4",
     "react": "18.2.0",
-    "react-native": "0.71.3",
     "react-native-base64": "^0.2.1",
     "react-native-create-thumbnail": "^1.6.4",
     "react-native-device-info": "^10.4.0",
@@ -46,42 +60,31 @@
     "react-native-safe-area-context": "^4.5.0",
     "react-native-screens": "^3.20.0",
     "react-native-share": "^8.2.2",
-    "react-native-sqlite-storage": "^6.0.1",
     "react-native-unifiedpush-connector": "^0.1.5",
     "react-native-vector-icons": "^9.2.0",
     "react-native-video": "^5.2.1",
     "react-native-webrtc": "^118.0.2",
     "react-native-wheel-color-picker": "^1.2.0",
-    "react-router-dom": "^6.8.1",
-    "react-router-native": "^6.8.1",
     "rn-fetch-blob": "^0.12.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "@babel/preset-env": "^7.20.0",
     "@babel/runtime": "^7.20.0",
-    "@react-native-community/eslint-config": "^3.2.0",
-    "@testing-library/dom": "^8.20.0",
-    "@testing-library/react-native": "^11.5.2",
-    "@tsconfig/react-native": "^2.0.2",
-    "@types/jest": "^29.2.1",
-    "@types/react": "^18.0.24",
+    "@react-native/babel-preset": "0.74.85",
+    "@react-native/eslint-config": "0.74.85",
+    "@react-native/metro-config": "0.74.85",
+    "@react-native/typescript-config": "0.74.85",
+    "@types/react": "^18.2.6",
     "@types/react-test-renderer": "^18.0.0",
-    "babel-jest": "^29.2.1",
+    "babel-jest": "^29.6.3",
     "eslint": "^8.19.0",
-    "jest": "^29.2.1",
-    "metro-react-native-babel-preset": "0.73.7",
-    "prettier": "^2.4.1",
+    "jest": "^29.6.3",
+    "prettier": "2.8.8",
     "react-test-renderer": "18.2.0",
-    "typescript": "4.8.4"
+    "typescript": "5.0.4"
   },
-  "jest": {
-    "preset": "react-native",
-    "setupFiles": [
-      "<rootDir>/__mocks__/react-native-fs.js"
-    ],
-    "transformIgnorePatterns": [
-      "node_modules/(?!((jest-)?react-native(-.*)?|@react-native(-community)?)/)"
-    ]
+  "engines": {
+    "node": ">=18"
   }
 }

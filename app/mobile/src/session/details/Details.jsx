@@ -2,13 +2,13 @@ import { ActivityIndicator, KeyboardAvoidingView, FlatList, Alert, Modal, View, 
 import { useState } from 'react';
 import { styles } from './Details.styled';
 import { useDetails } from './useDetails.hook';
-import { Logo } from 'utils/Logo';
+import { Logo } from '../../utils/Logo';
 import AntIcons from 'react-native-vector-icons/AntDesign';
 import MatIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Colors from 'constants/Colors';
+import Colors from '../../constants/Colors';
 import { MemberItem } from './memberItem/MemberItem';
 import { BlurView } from '@react-native-community/blur';
-import { InputField } from 'utils/InputField';
+import { InputField } from '../../utils/InputField';
 
 export function Details({ channel, clearConversation }) {
 

@@ -1,7 +1,7 @@
 import { Text, View, Image, ActivityIndicator, TouchableOpacity, Platform } from 'react-native';
 import { useImageAsset } from './useImageAsset.hook';
 import { styles } from './ImageAsset.styled';
-import Colors from 'constants/Colors';
+import Colors from '../../../../constants/Colors';
 import Ionicons from 'react-native-vector-icons/AntDesign';
 import FastImage from 'react-native-fast-image'
 import MatIcons from 'react-native-vector-icons/MaterialCommunityIcons';

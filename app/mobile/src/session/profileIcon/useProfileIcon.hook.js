@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
-import { AppContext } from 'context/AppContext';
+import { AppContext } from '../../context/AppContext';
 import { useNavigate } from 'react-router-dom';
 
 export function useProfileIcon() {

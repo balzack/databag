@@ -1,10 +1,10 @@
 import { useState, useEffect, useRef, useContext } from 'react';
 import { useWindowDimensions } from 'react-native';
 import { useNavigate } from 'react-router-dom';
-import { getLanguageStrings } from 'constants/Strings';
-import { ProfileContext } from 'context/ProfileContext';
-import { AccountContext } from 'context/AccountContext';
-import avatar from 'images/avatar.png';
+import { getLanguageStrings } from '../../constants/Strings';
+import { ProfileContext } from '../../context/ProfileContext';
+import { AccountContext } from '../../context/AccountContext';
+import avatar from '../../../images/avatar.png';
 
 export function useProfile() {
 

@@ -3,11 +3,11 @@ import { Alert, ActivityIndicator, Switch, KeyboardAvoidingView, Modal, View, Fl
 import Ionicons from 'react-native-vector-icons/AntDesign';
 import { styles } from './Channels.styled';
 import { useChannels } from './useChannels.hook';
-import { Colors } from 'constants/Colors';
+import { Colors } from '../../constants/Colors';
 import { ChannelItem } from './channelItem/ChannelItem';
 import { AddMember } from './addMember/AddMember';
 import { BlurView } from '@react-native-community/blur';
-import { InputField } from 'utils/InputField';
+import { InputField } from '../../utils/InputField';
 
 export function Channels({ cardId, channelId, navigation, openConversation, dmChannel, shareChannel }) {
 

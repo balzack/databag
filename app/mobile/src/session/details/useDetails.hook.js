@@ -1,14 +1,14 @@
 import { useState, useEffect, useRef, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ConversationContext } from 'context/ConversationContext';
-import { CardContext } from 'context/CardContext';
-import { AccountContext } from 'context/AccountContext';
-import { ProfileContext } from 'context/ProfileContext';
-import { getChannelSubjectLogo } from 'context/channelUtil';
-import { getCardByGuid } from 'context/cardUtil';
-import { getChannelSeals, isUnsealed, getContentKey, updateChannelSubject } from 'context/sealUtil';
-import { getLanguageStrings } from 'constants/Strings';
-import { DisplayContext } from 'context/DisplayContext';
+import { ConversationContext } from '../../context/ConversationContext';
+import { CardContext } from '../../context/CardContext';
+import { AccountContext } from '../../context/AccountContext';
+import { ProfileContext } from '../../context/ProfileContext';
+import { getChannelSubjectLogo } from '../../context/channelUtil';
+import { getCardByGuid } from '../../context/cardUtil';
+import { getChannelSeals, isUnsealed, getContentKey, updateChannelSubject } from '../../context/sealUtil';
+import { getLanguageStrings } from '../../constants/Strings';
+import { DisplayContext } from '../../context/DisplayContext';
 import moment from 'moment';
 
 export function useDetails(clear) {

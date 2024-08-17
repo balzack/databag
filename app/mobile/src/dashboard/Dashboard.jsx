@@ -6,11 +6,11 @@ import MatIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { styles } from './Dashboard.styled';
 import { useLocation } from 'react-router-dom';
 import { useDashboard } from './useDashboard.hook';
-import { Logo } from 'utils/Logo';
+import { Logo } from '../utils/Logo';
 import { BlurView } from "@react-native-community/blur";
-import { InputField } from 'utils/InputField';
-import Colors from 'constants/Colors';
-import { InputCode } from 'utils/InputCode';
+import { InputField } from '../utils/InputField';
+import Colors from '../constants/Colors';
+import { InputCode } from '../utils/InputCode';
 
 export function Dashboard(props) {
 

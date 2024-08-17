@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
-import { CardContext } from 'context/CardContext';
+import { CardContext } from '../../context/CardContext';
 
 export function useCardIcon() {
 

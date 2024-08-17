@@ -1,11 +1,11 @@
 import { ActivityIndicator, Platform, Image, View, Text, TouchableOpacity } from 'react-native';
 import { useEffect, useRef } from 'react';
-import Colors from 'constants/Colors';
+import Colors from '../../../../constants/Colors';
 import Video from 'react-native-video';
 import { useAudioAsset } from './useAudioAsset.hook';
 import { styles } from './AudioAsset.styled';
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
-import audio from 'images/audio.png';
+import audio from '../../../../../images/audio.png';
 import { useKeepAwake } from '@sayem314/react-native-keep-awake';
 import MatIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 

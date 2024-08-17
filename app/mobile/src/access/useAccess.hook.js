@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useWindowDimensions } from 'react-native';
-import config from 'constants/Config';
+import config from '../constants/Config';
 
 export function useAccess() {
 

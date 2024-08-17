@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef, useContext } from 'react';
-import { StoreContext } from 'context/StoreContext';
-import { UploadContext } from 'context/UploadContext';
-import { CardContext } from 'context/CardContext';
-import { ChannelContext } from 'context/ChannelContext';
-import { ProfileContext } from 'context/ProfileContext';
+import { StoreContext } from '../context/StoreContext';
+import { UploadContext } from '../context/UploadContext';
+import { CardContext } from '../context/CardContext';
+import { ChannelContext } from '../context/ChannelContext';
+import { ProfileContext } from '../context/ProfileContext';
 import CryptoJS from 'crypto-js';
 
 export function useConversationContext() {

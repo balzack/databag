@@ -1,5 +1,5 @@
 import { ActivityIndicator, Image, Text, View, TouchableOpacity, Platform } from 'react-native';
-import Colors from 'constants/Colors';
+import Colors from '../../../../constants/Colors';
 import Video from 'react-native-video';
 import { useVideoAsset } from './useVideoAsset.hook';
 import { styles } from './VideoAsset.styled';

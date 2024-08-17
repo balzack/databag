@@ -2,11 +2,11 @@ import { Platform, KeyboardAvoidingView, ActivityIndicator, Modal, ScrollView, A
 import { styles } from './Login.styled';
 import Ionicons from 'react-native-vector-icons/AntDesign';
 import { useLogin } from './useLogin.hook';
-import { Colors } from 'constants/Colors';
+import { Colors } from '../../constants/Colors';
 import MatIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { tos } from 'constants/TermsOfService';
+import { tos } from '../../constants/TermsOfService';
 import { BlurView } from "@react-native-community/blur";
-import { InputCode } from 'utils/InputCode';
+import { InputCode } from '../../utils/InputCode';
 
 export function Login() {
 
@@ -32,7 +32,7 @@ export function Login() {
             <Ionicons style={styles.config} name="setting" size={24} color="#aaaaaa" />
           </TouchableOpacity>
         </View>
-        <Text style={styles.title}>Databag</Text>
+        <Text style={styles.title}>Databag!</Text>
         <View style={styles.spacemid}>
           <Text style={styles.header}>{ state.strings.login }</Text>
         </View>

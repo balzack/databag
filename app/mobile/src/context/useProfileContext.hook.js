@@ -1,10 +1,10 @@
 import { useState, useRef, useContext } from 'react';
-import { getProfile } from 'api/getProfile';
-import { setProfileData } from 'api/setProfileData';
-import { setProfileImage } from 'api/setProfileImage';
-import { getProfileImageUrl } from 'api/getProfileImageUrl';
-import { getHandle } from 'api/getHandle';
-import { StoreContext } from 'context/StoreContext';
+import { getProfile } from '../api/getProfile';
+import { setProfileData } from '../api/setProfileData';
+import { setProfileImage } from '../api/setProfileImage';
+import { getProfileImageUrl } from '../api/getProfileImageUrl';
+import { getHandle } from '../api/getHandle';
+import { StoreContext } from '../context/StoreContext';
 
 export function useProfileContext() {
   const [state, setState] = useState({

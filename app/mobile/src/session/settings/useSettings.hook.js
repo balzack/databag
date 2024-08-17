@@ -1,14 +1,14 @@
 import { useState, useEffect, useRef, useContext } from 'react';
 import { Alert } from 'react-native';
-import { getLanguageStrings } from 'constants/Strings';
-import { ProfileContext } from 'context/ProfileContext';
-import { AccountContext } from 'context/AccountContext';
-import { CardContext } from 'context/CardContext';
-import { ChannelContext } from 'context/ChannelContext';
-import { AppContext } from 'context/AppContext';
-import { generateSeal, updateSeal, unlockSeal } from 'context/sealUtil';
-import { DisplayContext } from 'context/DisplayContext';
-import { getChannelSubjectLogo } from 'context/channelUtil';
+import { getLanguageStrings } from '../../constants/Strings';
+import { ProfileContext } from '../../context/ProfileContext';
+import { AccountContext } from '../../context/AccountContext';
+import { CardContext } from '../../context/CardContext';
+import { ChannelContext } from '../../context/ChannelContext';
+import { AppContext } from '../../context/AppContext';
+import { generateSeal, updateSeal, unlockSeal } from '../../context/sealUtil';
+import { DisplayContext } from '../../context/DisplayContext';
+import { getChannelSubjectLogo } from '../../context/channelUtil';
 
 export function useSettings() {
 

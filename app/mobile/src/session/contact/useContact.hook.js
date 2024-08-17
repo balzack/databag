@@ -1,14 +1,14 @@
 import { useState, useEffect, useRef, useContext } from 'react';
 import { Alert, useWindowDimensions } from 'react-native';
-import { CardContext } from 'context/CardContext';
-import { ProfileContext } from 'context/ProfileContext';
-import { DisplayContext } from 'context/DisplayContext';
-import { getListingMessage } from 'api/getListingMessage';
-import { getListingImageUrl } from 'api/getListingImageUrl';
-import { addFlag } from 'api/addFlag';
-import { getCardByGuid } from 'context/cardUtil';
-import { getLanguageStrings } from 'constants/Strings';
-import avatar from 'images/avatar.png';
+import { CardContext } from '../../context/CardContext';
+import { ProfileContext } from '../../context/ProfileContext';
+import { DisplayContext } from '../../context/DisplayContext';
+import { getListingMessage } from '../../api/getListingMessage';
+import { getListingImageUrl } from '../../api/getListingImageUrl';
+import { addFlag } from '../../api/addFlag';
+import { getCardByGuid } from '../../context/cardUtil';
+import { getLanguageStrings } from '../../constants/Strings';
+import avatar from '../../../images/avatar.png';
 
 export function useContact(contact, back) {
 

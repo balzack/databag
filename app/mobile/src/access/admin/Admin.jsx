@@ -2,11 +2,11 @@ import { KeyboardAvoidingView, Modal, ScrollView, ActivityIndicator, Alert, Text
 import { styles } from './Admin.styled';
 import Ionicons from 'react-native-vector-icons/AntDesign';
 import { useAdmin } from './useAdmin.hook';
-import Colors from 'constants/Colors';
+import Colors from '../../constants/Colors';
 import MatIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { tos } from 'constants/TermsOfService';
+import { tos } from '../../constants/TermsOfService';
 import { BlurView } from "@react-native-community/blur";
-import { InputCode } from 'utils/InputCode';
+import { InputCode } from '../../utils/InputCode';
 
 export function Admin() {
 

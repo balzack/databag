@@ -1,11 +1,11 @@
 import { useEffect, useState, useContext, useRef } from 'react';
-import { ProfileContext } from 'context/ProfileContext';
-import { CardContext } from 'context/CardContext';
-import { AccountContext } from 'context/AccountContext';
-import { ConversationContext } from 'context/ConversationContext';
-import { getChannelSubjectLogo } from 'context/channelUtil';
-import { getChannelSeals, isUnsealed, getContentKey, encryptTopicSubject, decryptTopicSubject } from 'context/sealUtil';
-import { getLanguageStrings } from 'constants/Strings';
+import { ProfileContext } from '../../context/ProfileContext';
+import { CardContext } from '../../context/CardContext';
+import { AccountContext } from '../../context/AccountContext';
+import { ConversationContext } from '../../context/ConversationContext';
+import { getChannelSubjectLogo } from '../../context/channelUtil';
+import { getChannelSeals, isUnsealed, getContentKey, encryptTopicSubject, decryptTopicSubject } from '../../context/sealUtil';
+import { getLanguageStrings } from '../../constants/Strings';
 
 export function useConversation() {
   const [state, setState] = useState({

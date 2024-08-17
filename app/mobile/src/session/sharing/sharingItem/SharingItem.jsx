@@ -1,7 +1,7 @@
 import { TouchableOpacity, Alert, Text, View } from 'react-native';
-import { Logo } from 'utils/Logo';
+import { Logo } from '../../../utils/Logo';
 import { styles } from './SharingItem.styled';
-import Colors from 'constants/Colors';
+import Colors from '../../../constants/Colors';
 
 export function SharingItem({ item, selection, select }) {
 

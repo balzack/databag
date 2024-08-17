@@ -1,11 +1,11 @@
 import { useEffect, useContext, useState, useRef } from 'react';
 import { Alert } from 'react-native';
-import { createWebsocket } from 'api/fetchUtil';
-import { addContactRing } from 'api/addContactRing';
-import { addCall } from 'api/addCall';
-import { keepCall } from 'api/keepCall';
-import { removeCall } from 'api/removeCall';
-import { removeContactCall } from 'api/removeContactCall';
+import { createWebsocket } from '../api/fetchUtil';
+import { addContactRing } from '../api/addContactRing';
+import { addCall } from '../api/addCall';
+import { keepCall } from '../api/keepCall';
+import { removeCall } from '../api/removeCall';
+import { removeContactCall } from '../api/removeContactCall';
 import InCallManager from 'react-native-incall-manager';
 
 import {

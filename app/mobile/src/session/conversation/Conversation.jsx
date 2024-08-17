@@ -1,11 +1,11 @@
 import { useRef, useEffect, useState, useContext } from 'react';
 import { Alert, Platform, Modal, KeyboardAvoidingView, ActivityIndicator, FlatList, View, TextInput, Text, TouchableOpacity } from 'react-native';
-import { ConversationContext } from 'context/ConversationContext';
+import { ConversationContext } from '../../context/ConversationContext';
 import { useConversation } from './useConversation.hook';
 import { styles } from './Conversation.styled';
-import { Colors } from 'constants/Colors';
+import { Colors } from '../../constants/Colors';
 import Ionicons from 'react-native-vector-icons/AntDesign';
-import { Logo } from 'utils/Logo';
+import { Logo } from '../../utils/Logo';
 import { AddTopic } from './addTopic/AddTopic';
 import { TopicItem } from './topicItem/TopicItem';
 import { BlurView } from "@react-native-community/blur";

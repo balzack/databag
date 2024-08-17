@@ -1,6 +1,6 @@
 import { ActivityIndicator, Alert, View, Text, TouchableOpacity } from 'react-native';
 import { useEffect, useRef } from 'react';
-import Colors from 'constants/Colors';
+import Colors from '../../../../constants/Colors';
 import { useBinaryAsset } from './useBinaryAsset.hook';
 import { styles } from './BinaryAsset.styled';
 import MatIcons from 'react-native-vector-icons/MaterialCommunityIcons';

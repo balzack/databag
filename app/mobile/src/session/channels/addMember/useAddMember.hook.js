@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useContext } from 'react';
-import { CardContext } from 'context/CardContext';
+import { CardContext } from '../../../context/CardContext';
 
 export function useAddMember(item, members) {
 

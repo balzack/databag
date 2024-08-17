@@ -1,13 +1,13 @@
 import { useState, useRef, useEffect, useContext } from 'react';
-import { UploadContext } from 'context/UploadContext';
-import { ConversationContext } from 'context/ConversationContext';
+import { UploadContext } from '../../../context/UploadContext';
+import { ConversationContext } from '../../../context/ConversationContext';
 import { Image } from 'react-native';
-import Colors from 'constants/Colors';
-import { encryptBlock, decryptBlock, getChannelSeals, getContentKey, encryptTopicSubject } from 'context/sealUtil';
-import { AccountContext } from 'context/AccountContext';
+import Colors from '../../../constants/Colors';
+import { encryptBlock, decryptBlock, getChannelSeals, getContentKey, encryptTopicSubject } from '../../../context/sealUtil';
+import { AccountContext } from '../../../context/AccountContext';
 import RNFS from 'react-native-fs';
 import ImageResizer from '@bam.tech/react-native-image-resizer';
-import { getLanguageStrings } from 'constants/Strings';
+import { getLanguageStrings } from '../../../constants/Strings';
 
 export function useAddTopic(contentKey) {
 

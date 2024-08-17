@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useContext } from 'react';
-import { ConversationContext } from 'context/ConversationContext';
+import { ConversationContext } from '../../../../context/ConversationContext';
 import { Image } from 'react-native';
 import { useWindowDimensions, Platform } from 'react-native';
 import RNFetchBlob from "rn-fetch-blob";

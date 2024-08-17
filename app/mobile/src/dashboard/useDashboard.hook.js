@@ -1,24 +1,24 @@
 import { useState, useEffect, useContext } from 'react';
 import { Alert } from 'react-native';
 import { useNavigate } from 'react-router-dom';
-import { AppContext } from 'context/AppContext';
-import { getNodeStatus } from 'api/getNodeStatus';
-import { setNodeStatus } from 'api/setNodeStatus';
-import { getNodeConfig } from 'api/getNodeConfig';
-import { setNodeConfig } from 'api/setNodeConfig';
-import { getNodeAccounts } from 'api/getNodeAccounts';
-import { getAccountImageUrl } from 'api/getAccountImageUrl';
-import { removeAccount } from 'api/removeAccount';
-import { addAccountCreate } from 'api/addAccountCreate';
-import { setAccountStatus } from 'api/setAccountStatus';
-import { addAccountAccess } from 'api/addAccountAccess';
-import { DisplayContext } from 'context/DisplayContext';
-import { getLanguageStrings } from 'constants/Strings';
+import { AppContext } from '../context/AppContext';
+import { getNodeStatus } from '../api/getNodeStatus';
+import { setNodeStatus } from '../api/setNodeStatus';
+import { getNodeConfig } from '../api/getNodeConfig';
+import { setNodeConfig } from '../api/setNodeConfig';
+import { getNodeAccounts } from '../api/getNodeAccounts';
+import { getAccountImageUrl } from '../api/getAccountImageUrl';
+import { removeAccount } from '../api/removeAccount';
+import { addAccountCreate } from '../api/addAccountCreate';
+import { setAccountStatus } from '../api/setAccountStatus';
+import { addAccountAccess } from '../api/addAccountAccess';
+import { DisplayContext } from '../context/DisplayContext';
+import { getLanguageStrings } from '../constants/Strings';
 
-import { getAdminMFAuth } from 'api/getAdminMFAuth';
-import { addAdminMFAuth } from 'api/addAdminMFAuth';
-import { setAdminMFAuth } from 'api/setAdminMFAuth';
-import { removeAdminMFAuth } from 'api/removeAdminMFAuth';
+import { getAdminMFAuth } from '../api/getAdminMFAuth';
+import { addAdminMFAuth } from '../api/addAdminMFAuth';
+import { setAdminMFAuth } from '../api/setAdminMFAuth';
+import { removeAdminMFAuth } from '../api/removeAdminMFAuth';
 
 export function useDashboard(server, token, mfa) {
 

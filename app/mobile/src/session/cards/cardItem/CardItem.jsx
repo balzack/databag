@@ -1,10 +1,10 @@
 import { Text, TouchableOpacity, View } from 'react-native';
-import { Logo } from 'utils/Logo';
+import { Logo } from '../../../utils/Logo';
 import { styles } from './CardItem.styled';
 import MatIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Colors from 'constants/Colors';
+import Colors from '../../../constants/Colors';
 import { Menu, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-menu';
-import { getLanguageStrings } from 'constants/Strings';
+import { getLanguageStrings } from '../../../constants/Strings';
 
 export function CardItem({ item, openContact, enableIce, call, message, canMessage }) {
 

@@ -1,22 +1,20 @@
 import { useEffect, useState, useRef, useContext } from 'react';
 import { Alert } from 'react-native';
-import { setLogin } from 'api/setLogin';
-import { clearLogin } from 'api/clearLogin';
-import { removeProfile } from 'api/removeProfile';
-import { setAccountAccess } from 'api/setAccountAccess';
-import { addAccount } from 'api/addAccount';
-import { createWebsocket } from 'api/fetchUtil';
-import { StoreContext } from 'context/StoreContext';
-import { AccountContext } from 'context/AccountContext';
-import { ProfileContext } from 'context/ProfileContext';
-import { CardContext } from 'context/CardContext';
-import { ChannelContext } from 'context/ChannelContext';
-import { RingContext } from 'context/RingContext';
+import { setLogin } from '../api/setLogin';
+import { clearLogin } from '../api/clearLogin';
+import { removeProfile } from '../api/removeProfile';
+import { setAccountAccess } from '../api/setAccountAccess';
+import { addAccount } from '../api/addAccount';
+import { createWebsocket } from '../api/fetchUtil';
+import { StoreContext } from '../context/StoreContext';
+import { AccountContext } from '../context/AccountContext';
+import { ProfileContext } from '../context/ProfileContext';
+import { CardContext } from '../context/CardContext';
+import { ChannelContext } from '../context/ChannelContext';
+import { RingContext } from '../context/RingContext';
 import { getVersion, getApplicationName, getDeviceId } from 'react-native-device-info'
 import messaging from '@react-native-firebase/messaging';
 import { DeviceEventEmitter } from 'react-native';
-
-import { DatabagSDK } from 'databag-client-sdk';
 
 export function useAppContext() {
   const [state, setState] = useState({
@@ -81,8 +79,6 @@ export function useAppContext() {
       }
       init.current = true;
     })();
-
-    const sdk = new DatabagSDK();
   }, []);
 
   const setSession = async () => {

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useContext } from 'react';
-import { ProfileContext } from 'context/ProfileContext';
-import { getListing } from 'api/getListing';
-import { getListingImageUrl } from 'api/getListingImageUrl';
+import { ProfileContext } from '../../context/ProfileContext';
+import { getListing } from '../../api/getListing';
+import { getListingImageUrl } from '../../api/getListingImageUrl';
 
 export function useRegistry(search, handle, server) {
 

@@ -1,5 +1,5 @@
 import { Text, TouchableOpacity, View } from 'react-native';
-import { Logo } from 'utils/Logo';
+import { Logo } from '../../../utils/Logo';
 import { styles } from './RegistryItem.styled';
 import { useRegistryItem } from './useRegistryItem.hook';
 

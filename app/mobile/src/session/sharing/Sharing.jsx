@@ -3,7 +3,7 @@ import { TouchableOpacity, Text, View, FlatList } from 'react-native';
 import { useSharing } from './useSharing.hook';
 import { styles } from './Sharing.styled';
 import { SharingItem } from './sharingItem/SharingItem';
-import { getLanguageStrings } from 'constants/Strings';
+import { getLanguageStrings } from '../../constants/Strings';
 
 export function Sharing({ select, cancel }) {
 

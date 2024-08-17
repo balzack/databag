@@ -1,23 +1,23 @@
 import { useState, useRef, useContext } from 'react';
-import { StoreContext } from 'context/StoreContext';
-import { UploadContext } from 'context/UploadContext';
-import { getChannels } from 'api/getChannels';
-import { getChannelDetail } from 'api/getChannelDetail';
-import { getChannelSummary } from 'api/getChannelSummary';
-import { addChannel } from 'api/addChannel';
-import { removeChannel } from 'api/removeChannel';
-import { removeChannelTopic } from 'api/removeChannelTopic';
-import { setChannelTopicSubject } from 'api/setChannelTopicSubject';
-import { addChannelTopic } from 'api/addChannelTopic';
-import { getChannelTopics } from 'api/getChannelTopics';
-import { getChannelTopic } from 'api/getChannelTopic';
-import { getChannelTopicAssetUrl } from 'api/getChannelTopicAssetUrl';
-import { setChannelSubject } from 'api/setChannelSubject';
-import { setChannelCard } from 'api/setChannelCard';
-import { clearChannelCard } from 'api/clearChannelCard';
-import { addFlag } from 'api/addFlag';
-import { setChannelNotifications } from 'api/setChannelNotifications';
-import { getChannelNotifications } from 'api/getChannelNotifications';
+import { StoreContext } from '../context/StoreContext';
+import { UploadContext } from '../context/UploadContext';
+import { getChannels } from '../api/getChannels';
+import { getChannelDetail } from '../api/getChannelDetail';
+import { getChannelSummary } from '../api/getChannelSummary';
+import { addChannel } from '../api/addChannel';
+import { removeChannel } from '../api/removeChannel';
+import { removeChannelTopic } from '../api/removeChannelTopic';
+import { setChannelTopicSubject } from '../api/setChannelTopicSubject';
+import { addChannelTopic } from '../api/addChannelTopic';
+import { getChannelTopics } from '../api/getChannelTopics';
+import { getChannelTopic } from '../api/getChannelTopic';
+import { getChannelTopicAssetUrl } from '../api/getChannelTopicAssetUrl';
+import { setChannelSubject } from '../api/setChannelSubject';
+import { setChannelCard } from '../api/setChannelCard';
+import { clearChannelCard } from '../api/clearChannelCard';
+import { addFlag } from '../api/addFlag';
+import { setChannelNotifications } from '../api/setChannelNotifications';
+import { getChannelNotifications } from '../api/getChannelNotifications';
 
 export function useChannelContext() {
   const [state, setState] = useState({

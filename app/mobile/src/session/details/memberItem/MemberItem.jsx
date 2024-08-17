@@ -1,8 +1,8 @@
 import { TouchableOpacity, Switch, Text, View } from 'react-native';
 import MatIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { styles } from './MemberItem.styled';
-import { Logo } from 'utils/Logo';
-import { Colors } from 'constants/Colors';
+import { Logo } from '../../../utils/Logo';
+import { Colors } from '../../../constants/Colors';
 
 export function MemberItem({ item, hostId, toggle }) {
 

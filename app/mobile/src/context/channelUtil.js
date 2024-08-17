@@ -1,4 +1,4 @@
-import { getCardByGuid } from 'context/cardUtil';
+import { getCardByGuid } from '../context/cardUtil';
 
 export function getChannelSubjectLogo(cardId, profileGuid, channel, cards, cardImageUrl, strings) {
 

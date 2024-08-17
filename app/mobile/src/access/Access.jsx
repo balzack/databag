@@ -5,7 +5,7 @@ import { Login } from './login/Login';
 import { Create } from './create/Create';
 import { Reset } from './reset/Reset';
 import { Admin } from './admin/Admin';
-import logo from 'images/login.png'; 
+import logo from '../../images/login.png'; 
 
 export function Access({ mode }) {
 

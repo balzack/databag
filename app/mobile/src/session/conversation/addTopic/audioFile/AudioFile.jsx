@@ -1,5 +1,5 @@
 import { Image, View, TextInput, TouchableOpacity } from 'react-native';
-import audio from 'images/audio.png';
+import audio from '../../../../../images/audio.png';
 import { styles } from './AudioFile.styled';
 
 export function AudioFile({ path, remove, label, setLabel }) {

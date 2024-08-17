@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { Image, View } from 'react-native';
-import avatar from 'images/avatar.png';
-import appstore from 'images/appstore.png';
-import solution from 'images/solution.png';
-import team from 'images/team.png';
+import avatar from '../../images/avatar.png';
+import appstore from '../../images/appstore.png';
+import solution from '../../images/solution.png';
+import team from '../../images/team.png';
 
 export function Logo({ src, width, height, radius }) {
 

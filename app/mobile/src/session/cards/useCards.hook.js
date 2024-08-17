@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef, useContext } from 'react';
-import { CardContext } from 'context/CardContext';
-import { RingContext } from 'context/RingContext';
-import { AccountContext } from 'context/AccountContext';
-import { ProfileContext } from 'context/ProfileContext';
-import { getLanguageStrings } from 'constants/Strings';
+import { CardContext } from '../../context/CardContext';
+import { RingContext } from '../../context/RingContext';
+import { AccountContext } from '../../context/AccountContext';
+import { ProfileContext } from '../../context/ProfileContext';
+import { getLanguageStrings } from '../../constants/Strings';
 
 export function useCards() {
 

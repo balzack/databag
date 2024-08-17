@@ -2,9 +2,9 @@ import { KeyboardAvoidingView, ActivityIndicator, Modal, ScrollView, Alert, Text
 import { styles } from './Reset.styled';
 import Ionicons from 'react-native-vector-icons/AntDesign';
 import { useReset } from './useReset.hook';
-import Colors from 'constants/Colors';
+import Colors from '../../constants/Colors';
 import MatIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { tos } from 'constants/TermsOfService';
+import { tos } from '../../constants/TermsOfService';
 
 export function Reset() {
 

@@ -1,13 +1,13 @@
 import { useState, useRef, useContext } from 'react';
-import { StoreContext } from 'context/StoreContext';
-import { setAccountSeal } from 'api/setAccountSeal';
-import { setAccountSearchable } from 'api/setAccountSearchable';
-import { setAccountNotifications } from 'api/setAccountNotifications';
-import { getAccountStatus } from 'api/getAccountStatus';
-import { setAccountLogin } from 'api/setAccountLogin';
-import { addAccountMFA } from 'api/addAccountMFA';
-import { setAccountMFA } from 'api/setAccountMFA';
-import { removeAccountMFA } from 'api/removeAccountMFA';
+import { StoreContext } from '../context/StoreContext';
+import { setAccountSeal } from '../api/setAccountSeal';
+import { setAccountSearchable } from '../api/setAccountSearchable';
+import { setAccountNotifications } from '../api/setAccountNotifications';
+import { getAccountStatus } from '../api/getAccountStatus';
+import { setAccountLogin } from '../api/setAccountLogin';
+import { addAccountMFA } from '../api/addAccountMFA';
+import { setAccountMFA } from '../api/setAccountMFA';
+import { removeAccountMFA } from '../api/removeAccountMFA';
 
 export function useAccountContext() {
   const [state, setState] = useState({

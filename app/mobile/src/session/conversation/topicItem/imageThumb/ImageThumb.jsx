@@ -2,7 +2,7 @@ import { Image } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useImageThumb } from './useImageThumb.hook';
 import { styles } from './ImageThumb.styled';
-import Colors from 'constants/Colors';
+import Colors from '../../../../constants/Colors';
 import FastImage from 'react-native-fast-image'
 
 export function ImageThumb({ url, onAssetView }) {

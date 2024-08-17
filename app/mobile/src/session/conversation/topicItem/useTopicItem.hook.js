@@ -1,21 +1,21 @@
 import { useRef, useState, useEffect, useContext } from 'react';
 import { Linking, Alert } from 'react-native';
-import { ConversationContext } from 'context/ConversationContext';
-import { CardContext } from 'context/CardContext';
-import { ProfileContext } from 'context/ProfileContext';
-import { DisplayContext } from 'context/DisplayContext';
-import { AccountContext } from 'context/AccountContext';
+import { ConversationContext } from '../../../context/ConversationContext';
+import { CardContext } from '../../../context/CardContext';
+import { ProfileContext } from '../../../context/ProfileContext';
+import { DisplayContext } from '../../../context/DisplayContext';
+import { AccountContext } from '../../../context/AccountContext';
 import moment from 'moment';
 import { useWindowDimensions, Text } from 'react-native';
-import Colors from 'constants/Colors';
-import { getCardByGuid } from 'context/cardUtil';
-import { decryptBlock, decryptTopicSubject } from 'context/sealUtil';
+import Colors from '../../../constants/Colors';
+import { getCardByGuid } from '../../../context/cardUtil';
+import { decryptBlock, decryptTopicSubject } from '../../../context/sealUtil';
 import { sanitizeUrl } from '@braintree/sanitize-url';
 import Share from 'react-native-share';
 import RNFetchBlob from "rn-fetch-blob";
 import RNFS from 'react-native-fs';
-import { checkResponse, fetchWithTimeout } from 'api/fetchUtil';
-import { getLanguageStrings } from 'constants/Strings';
+import { checkResponse, fetchWithTimeout } from '../../../api/fetchUtil';
+import { getLanguageStrings } from '../../../constants/Strings';
 
 export function useTopicItem(item, hosting, remove, contentKey) {
 

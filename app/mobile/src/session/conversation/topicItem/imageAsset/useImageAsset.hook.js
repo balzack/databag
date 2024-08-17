@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useContext } from 'react';
-import { ConversationContext } from 'context/ConversationContext';
+import { ConversationContext } from '../../../../context/ConversationContext';
 import { Image, Platform } from 'react-native';
 import { useWindowDimensions } from 'react-native';
 import RNFS from "react-native-fs";

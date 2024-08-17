@@ -1,9 +1,9 @@
 import { useContext, useState } from 'react';
 import { Modal, View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { DisplayContext } from 'context/DisplayContext';
+import { DisplayContext } from '../context/DisplayContext';
 import { BlurView } from "@react-native-community/blur";
 import { styles } from './Prompt.styled';
-import { Colors } from 'constants/Colors';
+import { Colors } from '../constants/Colors';
 
 export function Prompt() {
   const display = useContext(DisplayContext);

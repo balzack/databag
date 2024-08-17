@@ -1,12 +1,12 @@
 import { useState, useRef, useEffect, useContext } from 'react';
-import { ChannelContext } from 'context/ChannelContext';
-import { CardContext } from 'context/CardContext';
-import { AccountContext } from 'context/AccountContext';
-import { ProfileContext } from 'context/ProfileContext';
-import { getChannelSeals, isUnsealed, getContentKey, encryptChannelSubject, decryptChannelSubject, decryptTopicSubject } from 'context/sealUtil';
-import { getCardByGuid } from 'context/cardUtil';
-import { getChannelSubjectLogo } from 'context/channelUtil';
-import { getLanguageStrings } from 'constants/Strings';
+import { ChannelContext } from '../../context/ChannelContext';
+import { CardContext } from '../../context/CardContext';
+import { AccountContext } from '../../context/AccountContext';
+import { ProfileContext } from '../../context/ProfileContext';
+import { getChannelSeals, isUnsealed, getContentKey, encryptChannelSubject, decryptChannelSubject, decryptTopicSubject } from '../../context/sealUtil';
+import { getCardByGuid } from '../../context/cardUtil';
+import { getChannelSubjectLogo } from '../../context/channelUtil';
+import { getLanguageStrings } from '../../constants/Strings';
 
 export function useSharing() {
   const [state, setState] = useState({

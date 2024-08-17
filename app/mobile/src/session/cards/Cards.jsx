@@ -5,7 +5,7 @@ import { useCards } from './useCards.hook';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AntIcons from 'react-native-vector-icons/AntDesign';
 import MatIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { Colors } from 'constants/Colors';
+import { Colors } from '../../constants/Colors';
 import { CardItem } from './cardItem/CardItem';
 
 export function Cards({ navigation, openContact, openRegistry, addChannel }) {
