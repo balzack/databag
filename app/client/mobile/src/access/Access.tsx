@@ -12,6 +12,7 @@ import left from '../images/login.png';
 import {IconButton, Modal, Surface, Text, TextInput, Button} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import { BlurView } from "@react-native-community/blur";
+import { InputCode } from '../utils/InputCode';
 
 export function Access() {
   const [text, setText] = useState('');
@@ -20,6 +21,7 @@ export function Access() {
   const [showConfirm, setShowConfirm] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [alert, setAlert] = useState(false);
+  const [otp, setOtp] = useState(false);
 
   const login = async () => {
     if (!state.loading) {
@@ -34,7 +36,7 @@ export function Access() {
         } else if (state.mode === 'admin') {
           await actions.adminLogin();
         }
-        console.log('OTP CLOSE');
+        setOtp(false);
       } catch (err) {
         console.log(err.message);
         if (
@@ -47,7 +49,7 @@ export function Access() {
           } else {
             setDisabled(false);
           }
-          console.log('DONE LOGIN');
+          setOtp(true);
         } else {
           setAlert(true);
         }
@@ -382,6 +384,32 @@ export function Access() {
             onPress={() => setAlert(false)}>
             {state.strings.close}
           </Button>
+        </Surface>
+      </Modal>
+      <Modal
+        visible={otp}
+        onDismiss={() => setOtp(false)}
+        contentContainerStyle={styles.modal}>
+        <Surface elevation={5} mode="flat" style={styles.content}>
+          <Text variant="titleLarge">{state.strings.mfaTitle}</Text>
+          <Text variant="titleSmall">{state.strings.mfaEnter}</Text>
+          <InputCode onChangeText={actions.setCode} />
+          <View style={styles.controls}>
+            <Button
+              mode="outlined"
+              style={styles.submit}
+              onPress={() => setOtp(false)}>
+                {state.strings.cancel}
+            </Button>
+            <Button
+              mode="contained"
+              style={styles.submit}
+              onPress={login}
+              loading={state.loading}
+              disabled={state.code.length !== 6}>
+              {state.strings.login}
+            </Button>
+          </View> 
         </Surface>
       </Modal>
     </Surface>

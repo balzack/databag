@@ -140,8 +140,17 @@ export const styles = StyleSheet.create({
   content: {
     width: 300,
     padding: 16,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 16,
   },
   close: {
     paddingTop: 8,
+  },
+  controls: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 16,
   },
 });
