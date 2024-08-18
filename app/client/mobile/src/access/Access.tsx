@@ -192,7 +192,7 @@ export function Access() {
                   style={styles.submit}
                   onPress={login}
                   loading={state.loading}
-                  disabled={!state.username || !state.password || !state.node}>
+                  disabled={!state.token || !state.node}>
                   {state.strings.access}
                 </Button>
                 <Button mode="text" onPress={() => actions.setMode('create')}>
@@ -368,7 +368,7 @@ export function Access() {
           </SafeAreaView>
         </ScrollView>
       </KeyboardAvoidingView>
-      {alert && (
+      {(alert || otp) && (
         <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
       )}
       <Modal
