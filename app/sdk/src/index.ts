@@ -97,7 +97,7 @@ export class DatabagSDK {
     return new NodeModule(this.log, node, secure, token);
   }
 
-  public async automate(node: string, secure: boolean, token: string) {
+  public async automate(node: string, secure: boolean, token: string): Promise<Bot> {
     return new BotModule(this.log, node, secure, token);
   }
 }
