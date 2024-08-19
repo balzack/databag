@@ -9,6 +9,8 @@ export function useRoot() {
   const navigate = useNavigate()
   const [state, setState] = useState({
     pathname: '',
+    session: null,
+    node: null,
   })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -22,22 +24,23 @@ export function useRoot() {
   }, [location.pathname])
 
   useEffect(() => {
-    if (state.pathname === '/session' && !app.state.session) {
+    const state = app.state || {}
+    if (state.pathname === '/session' && !state.session) {
       navigate('/')
-    } else if (state.pathname === '/node' && !app.state.node) {
+    } else if (state.pathname === '/node' && !state.node) {
       navigate('/')
     } else if (
       state.pathname === '/' &&
-      !app.state.session &&
-      !app.state.node
+      !state.session &&
+      !state.node
     ) {
       navigate('/access')
-    } else if (state.pathname !== '/node' && app.state.node) {
+    } else if (state.pathname !== '/node' && state.node) {
       navigate('/node')
-    } else if (state.pathname !== '/session' && app.state.session) {
+    } else if (state.pathname !== '/session' && state.session) {
       navigate('/session')
     }
-  }, [state.pathname, app.state.session, app.state.node])
+  }, [state?.pathname, app.state?.session, app.state?.node])
 
   const actions = {}
 

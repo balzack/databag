@@ -44,7 +44,7 @@ export function Access() {
           await actions.adminLogin()
         }
         otpClose()
-      } catch (err) {
+      } catch (err: any) {
         console.log(err.message)
         if (
           err.message === '405' ||

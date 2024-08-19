@@ -102,10 +102,11 @@ const router = createBrowserRouter([
 
 export function App() {
   const settings = useContext(SettingsContext) as ContextType
+  const scheme = settings.state ? settings.state.scheme : undefined
 
   return (
     <div className={classes.app}>
-      <MantineProvider forceColorScheme={settings.state.scheme} theme={theme}>
+      <MantineProvider forceColorScheme={scheme} theme={theme}>
         <RouterProvider router={router} />
       </MantineProvider>
     </div>
