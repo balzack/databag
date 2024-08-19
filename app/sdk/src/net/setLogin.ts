@@ -9,7 +9,7 @@ export async function setLogin(node: string, secure: boolean, username: string, 
     const response = await axios.post(endpoint, notifications, { auth: `Basic ${auth}` });
     return response.data;
   }
-  catch(err) {
+  catch(err: any) {
     throw new Error(err.status);
   }
 }

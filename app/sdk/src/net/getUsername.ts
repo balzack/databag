@@ -1,6 +1,6 @@
 import axios from 'redaxios';
 
-export async function getUsername(name: string, token: string, node: string, secure: boolean): boolean {
+export async function getUsername(name: string, token: string, node: string, secure: boolean): Promise<boolean> {
   const param = token ? `&token=${token}` : '';
   const username = encodeURIComponent(name)
   const endpoint = `http${secure ? 's' : ''}://${node}/account/username?name=${username}${param}`;

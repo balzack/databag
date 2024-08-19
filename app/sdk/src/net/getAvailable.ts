@@ -1,6 +1,6 @@
 import axios from 'redaxios';
 
-export async function getAvailable(node: string, secure: boolean): number {
+export async function getAvailable(node: string, secure: boolean): Promise<number> {
   const endpoint = `http${secure ? 's' : ''}://${node}/account/available`;
   const response = await axios.get(endpoint);
   if (response.status >= 400 && response.status < 600) {
