@@ -1,4 +1,4 @@
-The API for the Databag package is provided through a set of typescript interfaces. Each interface groups methods by their fonctionality and only need to be allocated as needed. The platform specific implementations of storage and cryptography are defined externally and provided to the SDK through separate interfaces.
+The API for the Databag package is provided through a set of typescript interfaces. Each interface groups methods by their functionality and are only allocated as needed. The platform specific implementations of storage and cryptography are defined externally and are also provided to the SDK through interfaces.
 
 ## Initialization
 
