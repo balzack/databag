@@ -23,6 +23,7 @@ export class SessionModule implements Session {
   private store: Store;
   private crypto: Crypto | null;
   private log: Logging;
+  private guid: string;
   private token: string;
   private node: string;
   private secure: boolean;
@@ -39,13 +40,14 @@ export class SessionModule implements Session {
   private ring: RingModule;
   private connection: Connection;
    
-  constructor(store: Store, crypto: Crypto | null, log: Logging, token: string, node: string, secure: boolean, loginTimestamp: number) {
+  constructor(store: Store, crypto: Crypto | null, log: Logging, guid: string, token: string, node: string, secure: boolean, loginTimestamp: number) {
 
     log.info('new databag session');
 
     this.store = store;
     this.crypto = crypto;
     this.log = log;
+    this.guid = guid;
     this.token = token;
     this.node = node;
     this.secure = secure;
@@ -54,13 +56,13 @@ export class SessionModule implements Session {
     this.status = 'connecting'
     this.emitter = new EventEmitter();
  
-    this.account = new AccountModule(log, this.store, token, node, secure);
-    this.identity = new IdentityModule(log, this.store, token, node, secure);
-    this.contact = new ContactModule(log, this.store, token, node, secure);
-    this.alias = new AliasModule(log, this.account, this.store, token, node, secure);
-    this.attribute = new AttributeModule(log, this.account, this.store, token, node, secure);
-    this.content = new ContentModule(log, this.account, this.store, token, node, secure);
-    this.stream = new StreamModule(log, this.contact, this.content, this.store);
+    this.identity = new IdentityModule(log, this.store, guid, token, node, secure);
+    this.account = new AccountModule(log, this.store, guid, token, node, secure);
+    this.contact = new ContactModule(log, this.store, guid, token, node, secure);
+    this.alias = new AliasModule(log, this.account, this.store, guid, token, node, secure);
+    this.attribute = new AttributeModule(log, this.account, this.store, guid, token, node, secure);
+    this.content = new ContentModule(log, this.account, this.store, guid, token, node, secure);
+    this.stream = new StreamModule(log, this.contact, this.content, this.store, guid);
     this.ring = new RingModule(log);
     this.connection = new Connection(log, token, node, secure);
 
@@ -131,15 +133,15 @@ export class SessionModule implements Session {
     }
   }
 
-  public close(): { node: string, secure: boolean, token: string } {
+  public async close(): { node: string, secure: boolean, token: string } {
+    await this.content.close();
+    await this.attribute.close();
+    await this.alias.close();
+    await this.contact.close();
+    await this.identity.close();
+    await this.account.close();
+    await this.stream.close();
     this.connection.close();
-    this.stream.close();
-    this.content.close();
-    this.attribute.close();
-    this.alias.close();
-    this.contact.close();
-    this.identity.close();
-    this.account.close();
     return { node: this.node, secure: this.secure, token: this.token };
   }
 

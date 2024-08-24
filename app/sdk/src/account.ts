@@ -6,14 +6,16 @@ import { Store } from './store';
 export class AccountModule implements Account {
 
   private emitter: EventEmitter;
+  private guid: string;
   private token: string;
   private node: string;
   private secure: boolean;
   private log: Logging;
 
-  constructor(log: Logging, store: Store, token: string, node: string, secure: boolean) {
+  constructor(log: Logging, store: Store, guid: string, token: string, node: string, secure: boolean) {
     this.log = log;
     this.emitter = new EventEmitter();
+    this.guid = guid;
     this.token = token;
     this.node = node;
     this.secure = secure;
@@ -27,7 +29,7 @@ export class AccountModule implements Account {
     this.emitter.off('status', ev);
   }
 
-  public close(): void {
+  public async close(): void {
   }
 
   public async setRevision(rev: number): Promise<void> {

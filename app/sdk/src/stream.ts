@@ -6,14 +6,16 @@ import { Store } from './store';
 export class StreamModule implements Stream {
 
   private log: Logging;
+  private guid: string;
   private contact: Contact;
   private content: Content;
   private emitter: EventEmitter;
 
-  constructor(log: Logging, contact: Contact, content: Content, store: Store) {
+  constructor(log: Logging, contact: Contact, content: Content, store: Store, guid: string) {
     this.contact = contact;
     this.content = content;
     this.log = log;
+    this.guid = guid;
     this.emitter = new EventEmitter();
   }
 
@@ -25,6 +27,6 @@ export class StreamModule implements Stream {
     this.emitter.off('channel', ev);
   }
 
-  public close(): void {
+  public async close(): void {
   }
 }

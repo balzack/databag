@@ -157,7 +157,7 @@ export type Profile = {
   description: string,
   location: string,
   image: string,
-  sealSet: string,
+  sealSet: boolean,
   version: string,
   node: string,
 }

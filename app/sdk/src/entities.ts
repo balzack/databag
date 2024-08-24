@@ -1,4 +1,4 @@
-import type { Seal } from './types';
+import type { Seal, Profile } from './types';
 
 export type CardEntity = {
   id: string,
@@ -169,6 +169,8 @@ export type ProfileEntity = {
   version: string,
   node: string,
 }
+
+export const defaultProfileEntity = { guid: '', handle: '', name: '', description: '', location: '', image: '', revision: 0, version: '', node: '' };
 
 export type Ringing = {
   cardId: string,

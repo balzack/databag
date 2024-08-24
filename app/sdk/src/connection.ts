@@ -17,7 +17,7 @@ export class Connection {
     this.websocket = this.setWebSocket(token, node, secure);
   }
 
-  public close() {
+  public async close() {
     this.closed = true;
     if (this.websocket) {
       this.websocket.close();

@@ -1,10 +1,15 @@
 import { WebStore, SqlStore, Logging } from './api';
-import { Login } from './entities';
+import { Login, ProfileEntity, defaultProfileEntity } from './entities';
 
 export interface Store {
   init(): Promise<Login | null>;
   setLogin(login: Login): Promise<void>;
   clearLogin(): Promise<void>;
+
+  getProfileRevision(guid: string): Promise<number>;
+  setProfileRevision(guid: string, revision: number): Promise<void>;
+  getProfileData(guid: string): Promise<ProfileEntity>;
+  setProfileData(guid: string, data: ProfileEntity): Promise<void>;
 }
 
 export class OfflineStore implements Store {
@@ -17,12 +22,25 @@ export class OfflineStore implements Store {
     this.log = log;
   }
 
-  private async getAppValue(id: string, unset: any): Promise<any> {
-    const rows = await this.sql.get(`SELECT * FROM app WHERE key='${id}';`);
-    if (rows.length == 1 && rows[0].value != null) {
-      return JSON.parse(rows[0].value);
+  private async getAppValue(guid: string, id: string, unset: any): Promise<any> {
+    try {
+      const rows = await this.sql.get(`SELECT * FROM app WHERE key='${guid}::${id}';`);
+      if (rows.length == 1 && rows[0].value != null) {
+        return JSON.parse(rows[0].value);
+      }
+    }
+    catch(err) {
+      console.log(err);
     }
     return unset;
+  }
+
+  private async setAppValue(guid: string, id: string, value: string): Promise<void> {
+    await this.sql.set('INSERT OR REPLACE INTO app (key, value) values (?, ?)', [`${guid}::${id}`, value]);
+  }
+
+  private async clearAppValue(guid: string, id: string): Promise<void> {
+    await this.sql.set('INSERT OR REPLACE INTO app (key, value) values (?, null)', [`${guid}::${id}`]);
   }
 
   private async initLogin(guid: string): Promise<void> {
@@ -35,17 +53,33 @@ export class OfflineStore implements Store {
 
   public async init(): Promise<Login | null> {
     await this.sql.set("CREATE TABLE IF NOT EXISTS app (key text, value text, unique(key));");
-    await this.sql.set("INSERT OR IGNORE INTO app (key, value) values ('login', null);");
-    return await this.getAppValue('login', null);
+    return await this.getAppValue('', 'login', null) as Login | null;
   }
 
   public async setLogin(login: Login): Promise<void> {
     await this.initLogin(login.guid);
-    await this.sql.set("UPDATE app SET value=? WHERE key='login';", [JSON.stringify(login)]);
+    await this.setAppValue('', 'login', JSON.stringify(login));
   }
 
   public async clearLogin(): Promise<void> {
-    await this.sql.set("UPDATE app set value=? WHERE key='login';", [null]);
+    await this.clearAppValue('', 'login');
+  }
+
+  public async getProfileRevision(guid: string): Promise<number> {
+    return await this.getAppValue(guid, 'profile_revision', 0) as number;
+  }
+
+  public async setProfileRevision(guid: string, revision: number): Promise<void> {
+console.log(">> SET PROFILE REVISION: ", revision);
+    await this.setAppValue(guid, 'profile_revision', revision.toString());
+  } 
+  
+  public async getProfileData(guid: string): Promise<ProfileEntity> {
+    return await this.getAppValue(guid, 'profile_data', defaultProfileEntity) as ProfileEntity;
+  }
+  
+  public async setProfileData(guid: string, data: ProfileEntity): Promise<void> {
+    await this.setAppValue(guid, 'profile_data', JSON.stringify(data));
   }
 }
 
@@ -78,6 +112,20 @@ export class OnlineStore implements Store {
   public async clearLogin(): Promise<void> {
     return await this.web.clearValue('login');
   }
+
+  public async getProfileRevision(guid: string): Promise<number> {
+    return 0;
+  }
+
+  public async setProfileRevision(guid: string, revision: number): Promise<void> {
+  } 
+  
+  public async getProfileData(guid: string): Promise<ProfileEntity> {
+    return defaultProfileEntity;
+  }
+  
+  public async setProfileData(guid: string, data: ProfileEntity): Promise<void> {
+  } 
 }
 
 export class NoStore implements Store {
@@ -92,6 +140,20 @@ export class NoStore implements Store {
   }
 
   public async clearLogin(): Promise<void> {
+  }
+
+  public async getProfileRevision(guid: string): Promise<number> {
+    return 0;
+  }
+
+  public async setProfileRevision(guid: string, revision: number): Promise<void> {
+  }
+
+  public async getProfileData(guid: string): Promise<ProfileEntity> {
+    return defaultProfileEntity;
+  }
+
+  public async setProfileData(guid: string, data: ProfileEntity): Promise<void> {
   }
 }
 

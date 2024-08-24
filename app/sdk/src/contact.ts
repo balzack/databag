@@ -6,12 +6,14 @@ import { Store } from './store';
 export class ContactModule implements Contact {
 
   private log: Logging;
+  private guid: string;
   private token: string;
   private node: string;
   private secure: boolean;
   private emitter: EventEmitter;
 
-  constructor(log: Logging, store: Store, token: string, node: string, secure: boolean) {
+  constructor(log: Logging, store: Store, guid: string, token: string, node: string, secure: boolean) {
+    this.guid = guid;
     this.token = token;
     this.node = node;
     this.secure = secure;
@@ -27,7 +29,7 @@ export class ContactModule implements Contact {
     this.emitter.off('card', ev);
   }
 
-  public close(): void {
+  public async close(): void {
   }
 
   public async setRevision(rev: number): Promise<void> {

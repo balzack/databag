@@ -6,13 +6,15 @@ import { Store } from './store';
 export class AttributeModule implements Attribute {
 
   private log: Logging;
+  private guid: string;
   private token: string;
   private node: string;
   private secure: boolean;
   private account: Account;
   private emitter: EventEmitter;
 
-  constructor(log: Logging, account: Account, store: Store, token: string, node: string, secure: boolean) {
+  constructor(log: Logging, account: Account, store: Store, guid: string, token: string, node: string, secure: boolean) {
+    this.guid = guid;
     this.token = token;
     this.node = node;
     this.secure = secure;
@@ -29,7 +31,7 @@ export class AttributeModule implements Attribute {
     this.emitter.off('article', ev);
   }
 
-  public close(): void {
+  public async close(): void {
   }
 
   public async setRevision(rev: number): Promise<void> {
