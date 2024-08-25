@@ -6,6 +6,7 @@ import { getProfile } from './net/getProfile';
 import { getProfileImageUrl } from './net/getProfileImageUrl';
 import { setProfileData } from './net/setProfileData';
 import { setProfileImage } from './net/setProfileImage';
+import { getUsername } from './net/getUsername';
 import { ProfileEntity, defaultProfileEntity } from './entities';
 
 const CLOSE_POLL_MS = 100;
@@ -63,6 +64,7 @@ export class IdentityModule implements Identity {
             const profile = await getProfile(node, secure, token);
             await this.store.setProfileData(guid, profile);
             await this.store.setProfileRevision(guid, nextRev);
+            this.profile = profile;
             this.emitter.emit('profile', this.getProfile());
             this.revision = nextRev;
             if (this.nextRevision === nextRev) {
@@ -94,7 +96,7 @@ export class IdentityModule implements Identity {
     this.emitter.off('profile', ev);
   }
 
-  public async close(): void {
+  public async close(): Promise<void> {
     this.closing = true;
     while(this.syncing) {
       await new Promise(r => setTimeout(r, CLOSE_POLL_MS));
@@ -107,16 +109,23 @@ export class IdentityModule implements Identity {
   }
 
   public async setProfileData(name: string, location: string, description: string): Promise<void> {
+    const { node, secure, token } = this;
+    await setProfileData(node, secure, token, name, location, description);
   }
 
   public async setProfileImage(image: string): Promise<void> {
+    const { node, secure, token } = this;
+    await setProfileImage(node, secure, token, image);
   }
 
-  public async getHandleStatus(handle: string): Promise<void> {
+  public async getHandleStatus(handle: string): Promise<boolean> {
+    const { node, secure, token } = this;
+    return await getUsername(handle, token, node, secure);
   }
 
   public getProfileImageUrl(): string {
-    return getProfileImageUrl(this.node, this.secure, this.token, this.revision);
+    const { node, secure, token, revision } = this;
+    return getProfileImageUrl(node, secure, token, revision);
   }
 }
 

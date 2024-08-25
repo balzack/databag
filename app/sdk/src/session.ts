@@ -133,7 +133,7 @@ export class SessionModule implements Session {
     }
   }
 
-  public async close(): { node: string, secure: boolean, token: string } {
+  public async close(): Promise<{ node: string, secure: boolean, token: string }> {
     await this.content.close();
     await this.attribute.close();
     await this.alias.close();
@@ -142,7 +142,8 @@ export class SessionModule implements Session {
     await this.account.close();
     await this.stream.close();
     this.connection.close();
-    return { node: this.node, secure: this.secure, token: this.token };
+    const { node, secure, token } = this;
+    return { node: node, secure: secure, token: token };
   }
 
   public getAccount(): Account {

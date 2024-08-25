@@ -76,7 +76,7 @@ export class DatabagSDK {
   }
 
   public async logout(session: Session, all: boolean): Promise<void> {
-    const params = session.close();
+    const params = await session.close();
     try {
       const { node, secure, token } = params;
       await clearLogin(node, secure, token, all);

@@ -1,4 +1,4 @@
-import type { Seal, Profile } from './types';
+import type { Profile } from './types';
 
 export type CardEntity = {
   id: string,
@@ -142,6 +142,13 @@ export type ArticleEntity = {
   }
 }
 
+export type SealEntity = {
+  passwordSalt: string,
+  privateKeyIv: string,
+  privateKeyEncrypted: string,
+  publicKey: string,
+}
+
 export type AccountEntity = {
   disabled: boolean,
   storageUsed: number,
@@ -151,7 +158,7 @@ export type AccountEntity = {
   allowUnsealed: boolean,
   pushEnabled: boolean,
   sealable: boolean,
-  seal: Seal,
+  seal: SealEntity,
   enableIce: boolean,
   multiFactorAuth: boolean,
   webPushKey: string,

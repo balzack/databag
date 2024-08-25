@@ -28,7 +28,7 @@ export interface Logging {
 }
 
 export interface Session {
-  close(): { node: string, secure: boolean, token: string };
+  close(): Promise<{ node: string, secure: boolean, token: string }>;
 
   getAccount(): Account;
   getIdentity(): Identity;
@@ -81,7 +81,7 @@ export interface Account {
 export interface Identity {
   setProfileData(name: string, location: string, description: string): Promise<void>;
   setProfileImage(image: string): Promise<void>;
-  getHandleStatus(handle: string): Promise<void>;
+  getHandleStatus(handle: string): Promise<boolean>;
 
   getProfileImageUrl(): string;
 

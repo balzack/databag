@@ -20,7 +20,7 @@ export class MockIdentityModule implements Identity {
     this.emitter.off('profile', ev);
   }
 
-  public close(): void {
+  public async close(): Promise<void> {
   }
 
   public async setRevision(rev: number): Promise<void> {
@@ -33,7 +33,8 @@ export class MockIdentityModule implements Identity {
   public async setProfileImage(image: string): Promise<void> {
   }
 
-  public async getHandleStatus(handle: string): Promise<void> {
+  public async getHandleStatus(handle: string): Promise<boolean> {
+    return false;
   }
 
   public getProfileImageUrl(): string {

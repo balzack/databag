@@ -27,6 +27,6 @@ export class StreamModule implements Stream {
     this.emitter.off('channel', ev);
   }
 
-  public async close(): void {
+  public async close(): Promise<void> {
   }
 }
