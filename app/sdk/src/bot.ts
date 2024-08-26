@@ -1,15 +1,19 @@
-import type { Bot, Logging } from './api';
+import type { Bot } from './api';
 import type { Asset } from './types';
+import type { Crypto } from './crypto';
+import type { Logging } from './logging';
 
 export class BotModule implements Bot {
 
   private log: Logging;
+  private crypto: Crypto | null;
   private node: string;
   private secure: boolean;
   private token: string;
 
-  constructor(log: Logging, node: string, secure: boolean, token: string) {
+  constructor(log: Logging, crypto: Crypto | null, node: string, secure: boolean, token: string) {
     this.log = log;
+    this.crypto = crypto;
     this.node = node;
     this.secure = secure;
     this.token = token;

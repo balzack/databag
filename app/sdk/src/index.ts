@@ -1,7 +1,7 @@
 import { SessionModule } from './session';
 import { NodeModule } from './node';
 import { BotModule } from './bot';
-import { ConsoleLogging } from './logging';
+import { type Logging, ConsoleLogging } from './logging';
 import { type Store, OfflineStore, OnlineStore, NoStore } from './store';
 import { setLogin } from './net/setLogin';
 import { clearLogin } from './net/clearLogin';
@@ -10,9 +10,10 @@ import { addAccount } from './net/addAccount';
 import { setAdmin } from './net/setAdmin';
 import { getAvailable } from './net/getAvailable';
 import { getUsername } from './net/getUsername';
-import type { Session, Node, Bot, SqlStore, WebStore, Crypto, Logging } from './api';
+import type { Session, Node, Bot, SqlStore, WebStore } from './api';
 import type { SessionParams } from './types';
 import type { Login } from './entities';
+import type { Crypto } from './crypto';
 
 export * from './api';
 export * from './types';
@@ -23,9 +24,9 @@ export class DatabagSDK {
   private crypto: Crypto | null;
   private store: Store;
 
-  constructor(crypto: Crypto | null, log?: Logging) {
-    this.crypto = crypto;
+  constructor(crypto?: Crypto, log?: Logging) {
     this.store = new NoStore();
+    this.crypto = crypto ? crypto : null;
     this.log = log ? log : new ConsoleLogging();
     this.log.info("databag sdk");
   }
@@ -98,6 +99,6 @@ export class DatabagSDK {
   }
 
   public async automate(node: string, secure: boolean, token: string): Promise<Bot> {
-    return new BotModule(this.log, node, secure, token);
+    return new BotModule(this.log, this.crypto, node, secure, token);
   }
 }

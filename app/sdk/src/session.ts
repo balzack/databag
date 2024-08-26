@@ -12,10 +12,12 @@ import { RingModule } from './ring';
 
 import { Connection } from './connection';
 
-import type { Session, Account, Identity, Contact, Ring, Alias, Attribute, Content, Stream, Focus, Crypto, Logging } from './api';
+import type { Session, Account, Identity, Contact, Ring, Alias, Attribute, Content, Stream, Focus } from './api';
 import { Revision } from './entities';
 import { Call } from './types';
 import { Store } from './store';
+import type { Logging } from './logging';
+import type { Crypto } from './crypto';
 
 export class SessionModule implements Session {
 

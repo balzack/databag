@@ -1,7 +1,8 @@
 import { EventEmitter } from 'eventemitter3';
-import type { Contact, Content, Stream, Logging } from './api';
+import type { Contact, Content, Stream } from './api';
 import type { Channel } from './types';
 import { Store } from './store';
+import { Logging } from './logging';
 
 export class StreamModule implements Stream {
 

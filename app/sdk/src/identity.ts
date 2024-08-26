@@ -1,5 +1,6 @@
 import { EventEmitter } from 'eventemitter3';
-import type { Identity, Logging } from './api';
+import type { Identity } from './api';
+import type { Logging } from './logging';
 import type { Profile } from './types';
 import { Store } from './store';
 import { getProfile } from './net/getProfile';

@@ -1,5 +1,6 @@
-import { WebStore, SqlStore, Logging } from './api';
+import { WebStore, SqlStore } from './api';
 import { Login, ProfileEntity, defaultProfileEntity } from './entities';
+import type { Logging } from './logging';
 
 export interface Store {
   init(): Promise<Login | null>;

@@ -1,6 +1,7 @@
 import { EventEmitter } from 'eventemitter3';
-import type { Identity, Contact, Content, Focus, Logging } from './api';
+import type { Identity, Contact, Content, Focus } from './api';
 import type { Topic, Asset, Repeater } from './types';
+import type { Logging } from './logging';
 import { Store } from './store';
 
 export class FocusModule implements Focus {

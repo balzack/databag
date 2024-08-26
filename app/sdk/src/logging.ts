@@ -1,4 +1,8 @@
-import { Logging } from './api';
+export interface Logging {
+  error(m: any): void;
+  warn(m: any): void;
+  info(m: any): void;
+}
 
 export class ConsoleLogging implements Logging {
   public error(m: any): void {

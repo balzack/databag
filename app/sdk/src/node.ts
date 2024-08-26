@@ -1,5 +1,6 @@
-import type { Node, Logging } from './api';
+import type { Node } from './api';
 import type { NodeAccount, NodeConfig } from './types';
+import type { Logging } from './logging';
 
 export class NodeModule implements Node {
 
