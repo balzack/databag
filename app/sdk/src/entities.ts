@@ -164,6 +164,21 @@ export type AccountEntity = {
   webPushKey: string,
 }
 
+export const defaultAccountEntity = {
+  disabled: false,
+  storageUsed: 0,
+  storageAvailable: 0,
+  forwardingAddress: '',
+  searchable: false,
+  allowUnsealed: false,
+  pushEnabled: false,
+  seal: { passwordSalt: '', privateKeyIv: '', privateKeyEncrypted: '', publicKey: '' },
+  sealable: false,
+  enableIce: false,
+  multiFactorAuth: false,
+  webPushKey: '',
+};
+
 export type ProfileEntity = {
   guid: string,
   handle: string,

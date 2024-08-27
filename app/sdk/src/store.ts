@@ -1,5 +1,5 @@
 import { WebStore, SqlStore } from './api';
-import { Login, ProfileEntity, defaultProfileEntity } from './entities';
+import { Login, ProfileEntity, defaultProfileEntity, AccountEntity, defaultAccountEntity } from './entities';
 import type { Logging } from './logging';
 
 export interface Store {
@@ -11,6 +11,11 @@ export interface Store {
   setProfileRevision(guid: string, revision: number): Promise<void>;
   getProfileData(guid: string): Promise<ProfileEntity>;
   setProfileData(guid: string, data: ProfileEntity): Promise<void>;
+
+  getAccountRevision(guid: string): Promise<number>;
+  setAccountRevision(guid: string, revision: number): Promise<void>;
+  getAccountData(guid: string): Promise<AccountEntity>;
+  setAccountData(guid: string, data: AccountEntity): Promise<void>;
 }
 
 export class OfflineStore implements Store {
@@ -71,7 +76,6 @@ export class OfflineStore implements Store {
   }
 
   public async setProfileRevision(guid: string, revision: number): Promise<void> {
-console.log(">> SET PROFILE REVISION: ", revision);
     await this.setAppValue(guid, 'profile_revision', revision.toString());
   } 
   
@@ -82,6 +86,23 @@ console.log(">> SET PROFILE REVISION: ", revision);
   public async setProfileData(guid: string, data: ProfileEntity): Promise<void> {
     await this.setAppValue(guid, 'profile_data', JSON.stringify(data));
   }
+
+  public async getAccountRevision(guid: string): Promise<number> {
+    return await this.getAppValue(guid, 'account_revision', 0) as number;
+  }
+
+  public async setAccountRevision(guid: string, revision: number): Promise<void> {
+    await this.setAppValue(guid, 'account_revision', revision.toString());
+  } 
+  
+  public async getAccountData(guid: string): Promise<AccountEntity> {
+    return await this.getAppValue(guid, 'account_data', defaultAccountEntity) as AccountEntity;
+  }
+  
+  public async setAccountData(guid: string, data: AccountEntity): Promise<void> {
+    await this.setAppValue(guid, 'account_data', JSON.stringify(data));
+  }
+
 }
 
 export class OnlineStore implements Store {
@@ -127,6 +148,21 @@ export class OnlineStore implements Store {
   
   public async setProfileData(guid: string, data: ProfileEntity): Promise<void> {
   } 
+
+  public async getAccountRevision(guid: string): Promise<number> {
+    return 0;
+  }
+
+  public async setAccountRevision(guid: string, revision: number): Promise<void> {
+  } 
+  
+  public async getAccountData(guid: string): Promise<AccountEntity> {
+    return defaultAccountEntity;
+  }
+  
+  public async setAccountData(guid: string, data: AccountEntity): Promise<void> {
+  } 
+
 }
 
 export class NoStore implements Store {
@@ -156,5 +192,20 @@ export class NoStore implements Store {
 
   public async setProfileData(guid: string, data: ProfileEntity): Promise<void> {
   }
+
+  public async getAccountRevision(guid: string): Promise<number> {
+    return 0;
+  }
+
+  public async setAccountRevision(guid: string, revision: number): Promise<void> {
+  }
+
+  public async getAccountData(guid: string): Promise<AccountEntity> {
+    return defaultAccountEntity;
+  }
+
+  public async setAccountData(guid: string, data: AccountEntity): Promise<void> {
+  }
+
 }
 
