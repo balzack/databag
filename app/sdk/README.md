@@ -15,7 +15,7 @@ The crypto and log params are provided by implementing the [Crypto](https://gith
 </details>
 
 <details>
-  <summary>Persistent storage can then be provided to the SDK</summary><br>
+  <summary>Persistent storage can then be provided to the SDK for user communication</summary><br>
   
 Mobile apps typically use the offline store where most of the relational data is saved. The sql param is provided by implementing the [SqlStore](https://github.com/balzack/databag/blob/sdk/app/sdk/src/store.ts) interface.
 
