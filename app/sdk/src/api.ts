@@ -91,9 +91,10 @@ export interface Account {
   enableMFA(): Promise<{ secretImage: string, secretText: string }>;
   disableMFA(): Promise<void>;
   confirmMFA(code: string): Promise<void>;
-  setAccountSeal(password: string): Promise<void>;
-  clearAccountSeal(): Promise<void>;
-  unlockAccountSeal(password: string): Promise<void>;
+  setSeal(password: string): Promise<void>;
+  clearSeal(): Promise<void>;
+  unlockSeal(password: string): Promise<void>;
+  forgetSeal(): Promise<void>;
 
   addStatusListener(ev: (status: AccountStatus) => void): void;
   removeStatusListener(ev: (status: AccountStatus) => void): void;

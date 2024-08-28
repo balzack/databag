@@ -1,7 +1,9 @@
 import { EventEmitter } from 'eventemitter3';
-import type { Account, Logging } from './api';
+import type { Account } from './api';
 import type { AccountStatus } from './types';
 import { Store } from './store';
+import { Crypto } from './crypto';
+import { Logging } from './logging';
 import { defaultAccountEntity, AccountEntity } from './entities';
 import { getAccountStatus } from './net/getAccountStatus';
 import { addAccountMFAuth } from './net/addAccountMFAuth';
@@ -12,7 +14,6 @@ import { setAccountNotifications } from './net/setAccountNotifications';
 import { setAccountSearchable } from './net/setAccountSearchable';
 import { setAccountSeal } from './net/setAccountSeal';
 import { clearAccountSeal } from './net/clearAccountSeal';
-import { Crypto } from './crypto';
 
 const CLOSE_POLL_MS = 100;
 const RETRY_POLL_MS = 2000;
@@ -25,6 +26,7 @@ export class AccountModule implements Account {
   private node: string;
   private secure: boolean;
   private log: Logging;
+  private store: Store;
   private crypto: Crypto | null;
   private syncing: boolean;
   private closing: boolean;
@@ -35,11 +37,13 @@ export class AccountModule implements Account {
 
   constructor(log: Logging, store: Store, crypto: Crypto | null, guid: string, token: string, node: string, secure: boolean) {
     this.log = log;
+    this.store = store;
+    this.crypto = crypto;
     this.emitter = new EventEmitter();
     this.guid = guid;
     this.token = token;
     this.node = node;
-    this.seal = null;
+    this.sealKey = null;
     this.secure = secure;
     this.revision = 0;
     this.entity = defaultAccountEntity;
@@ -52,7 +56,7 @@ export class AccountModule implements Account {
   private async init() {
     this.revision = await this.store.getAccountRevision(this.guid);
     this.entity = await this.store.getAccountData(this.guid);
-    this.seal = await this.store.getSeal(this.guid);
+    this.sealKey = await this.store.getSeal(this.guid);
     this.syncing = false;
     await this.sync();
   }
@@ -69,7 +73,7 @@ export class AccountModule implements Account {
           try {
             const { guid, node, secure, token } = this;
             const status = await getAccountStatus(node, secure, token);
-            await this.store.setAccountStatus(guid, status);
+            await this.store.setAccountData(guid, status);
             await this.store.setAccountRevision(guid, nextRev);
             this.entity = status;
             this.emitter.emit('status', this.getStatus());
@@ -90,9 +94,11 @@ export class AccountModule implements Account {
   }
 
   public getStatus() {
-    const { storageUsed, storageAvailable, forwardingAddress, searchable, allowUnseaed, pushEnabled, sealable, seal, enableIce, multiFactorAuth, webPushKey } = this.entity;
-    const sealSet = this.seal && seal && this.seal.publicKey == seal.publicKey && this.seal.privateKey
-    return { storageUsed, storageAvailable, forwardingAddress, searchable, allowUnsealed, pushEnabled, sealable, sealSet, enableIce, multiFactorAuth, webPushKey };
+    const { storageUsed, storageAvailable, forwardingAddress, searchable, allowUnsealed, pushEnabled, sealable, seal, enableIce, multiFactorAuth, webPushKey } = this.entity;
+    const { passwordSalt, privateKeyIv, privateKeyEncrypted, publicKey } = seal || {};
+    const sealSet = Boolean(passwordSalt && privateKeyIv && privateKeyEncrypted && publicKey);
+    const sealUnlocked = Boolean(sealSet && this.sealKey?.privateKey && this.sealKey?.publicKey == publicKey)
+    return { storageUsed, storageAvailable, forwardingAddress, searchable, allowUnsealed, pushEnabled, sealable, sealSet, sealUnlocked, enableIce, multiFactorAuth, webPushKey };
   }
 
   public addStatusListener(ev: (status: AccountStatus) => void): void {
@@ -104,7 +110,7 @@ export class AccountModule implements Account {
     this.emitter.off('status', ev);
   }
 
-  public async close(): void {
+  public async close(): Promise<void> {
     this.closing = true;
     while(this.syncing) {
       await new Promise(r => setTimeout(r, CLOSE_POLL_MS));
@@ -152,7 +158,7 @@ export class AccountModule implements Account {
     await setAccountMFAuth(node, secure, token, code);
   }
 
-  public async setAccountSeal(password: string): Promise<void> {
+  public async setSeal(password: string): Promise<void> {
     const { crypto, guid, node, secure, token } = this;
     if (!crypto) {
       throw new Error('crypto not enabled');
@@ -168,19 +174,20 @@ export class AccountModule implements Account {
 
     const seal = { publicKey: publicKeyB64, privateKey: privateKeyB64 };
     this.store.setSeal(guid, seal);
-    this.seal = seal;
+    this.sealKey = seal;
     
     this.emitter.emit('status', this.getStatus());
   }
 
-  public async clearAccountSeal(): Promise<void> {
+  public async clearSeal(): Promise<void> {
     const { guid, node, secure, token } = this;
-    await this.store.clearAccountSeal(guid, node, secure, token);
-    this.seal = null;
+    await clearAccountSeal(node, secure, token);
+    await this.store.clearSeal(guid);
+    this.sealKey = null;
     this.emitter.emit('status', this.getStatus());
   }
 
-  public async unlockAccountSeal(password: string): Promise<void> {
+  public async unlockSeal(password: string): Promise<void> {
     const { guid, entity, crypto } = this;
     const { passwordSalt, privateKeyIv, privateKeyEncrypted, publicKey } = entity.seal;
     if (!passwordSalt || !privateKeyIv || !privateKeyEncrypted || !publicKey) {
@@ -194,8 +201,15 @@ export class AccountModule implements Account {
 
     const seal = { publicKey: publicKey, privateKey: data };
     this.store.setSeal(guid, seal);
-    this.seal = seal;
+    this.sealKey = seal;
 
+    this.emitter.emit('status', this.getStatus());
+  }
+
+  public async forgetSeal(): Promise<void> {
+    const { guid } = this;
+    await this.store.clearSeal(guid);
+    this.sealKey = null;
     this.emitter.emit('status', this.getStatus());
   }
 

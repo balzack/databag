@@ -49,13 +49,16 @@ export class MockAccountModule implements Account {
   public async confirmMFA(code: string): Promise<void> {
   }
 
-  public async setAccountSeal(password: string): Promise<void> {
+  public async setSeal(password: string): Promise<void> {
   }
 
-  public async clearAccountSeal(): Promise<void> {
+  public async clearSeal(): Promise<void> {
   }
 
-  public async unlockAccountSeal(password: string): Promise<void> {
+  public async unlockSeal(password: string): Promise<void> {
+  }
+
+  public async forgetSeal(): Promise<void> {
   }
 
   public async setLogin(username: string, password: string): Promise<void> {

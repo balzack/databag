@@ -1,6 +1,6 @@
 import axios from 'redaxios';
 
-export async function setAccountSeal(node: string, secure: boolean, token: string) {
+export async function clearAccountSeal(node: string, secure: boolean, token: string) {
   const endpoint = `http${secure ? 's' : ''}://${node}/account/seal?agent=${token}`;
   const response = await axios.delete(endpoint);
   if (response.status >= 400 && response.status < 600) {
