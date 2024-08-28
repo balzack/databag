@@ -29,27 +29,27 @@ Browser apps typically the online store where minimal session data is saved. The
 <details>
   <summary>User communcation is provided through the Session interface</summary><br>
 
-login provides a Session through an account login
+Login provides a Session through an account login
 
 ```login(handle: string, password: string, node: string, secure: boolean, mfaCode: string | null, params: SessionParams): Promise<Session>```
 
-access provides a Session through token access to an account when password is forgotten
+Access provides a Session through token access to an account when password is forgotten
 
 ```access(node: string, secure: boolean, token: string, params: SessionParams): Promise<Session>```
 
-create provides a Session to a newly created account
+Create provides a Session to a newly created account
 
 ```create(handle: string, password: string, node: string, secure: boolean, token: string | null, params: SessionParams): Promise<Session>```
 
-available returns the number of accounts that can be publically created
+Available returns the number of accounts that can be publically created
 
 ```available(node: string, secure: boolean): Promise<number>```
 
-username returns whether the username is available for account creation
+Username returns whether the username is available for account creation
 
 ```username(name: string, token: string, node: string, secure: boolean): Promise<boolean>```
 
-logout releases the Session interface
+Logout releases the Session interface
 
 ```logout(session: Session, all: boolean): Promise<void>```
 </details>
@@ -57,7 +57,7 @@ logout releases the Session interface
 <details>
   <summary>Admin communcation is provided through the Node interface</summary><br>
 
-configure allocates the Node interface for the server
+Configure allocates the Node interface for the server
 
 ```configure(node: string, secure: boolean, token: string, mfaCode: string | null): Promise<Node>```
 </details>
@@ -65,7 +65,7 @@ configure allocates the Node interface for the server
 <details>
   <summary>Bot communication is provided through the Bot interface</summary><br>
 
-automate allocates the Bot interface for ia specific communication channel
+Automate allocates the Bot interface for ia specific communication channel
 
 ```automate(node: string, secure: boolean, token: string): Promise<Bot>```
 </details>
