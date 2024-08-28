@@ -2387,7 +2387,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-firebase/app@npm:^17.2.0":
+"@react-native-firebase/app@npm:^17.5.0":
   version: 17.5.0
   resolution: "@react-native-firebase/app@npm:17.5.0"
   dependencies:
@@ -2404,7 +2404,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-firebase/messaging@npm:^17.2.0":
+"@react-native-firebase/messaging@npm:^17.5.0":
   version: 17.5.0
   resolution: "@react-native-firebase/messaging@npm:17.5.0"
   peerDependencies:
@@ -3241,8 +3241,8 @@ __metadata:
     "@braintree/sanitize-url": ^6.0.2
     "@react-native-clipboard/clipboard": ^1.11.1
     "@react-native-community/blur": ^4.3.2
-    "@react-native-firebase/app": ^17.2.0
-    "@react-native-firebase/messaging": ^17.2.0
+    "@react-native-firebase/app": ^17.5.0
+    "@react-native-firebase/messaging": ^17.5.0
     "@react-native/babel-preset": 0.74.85
     "@react-native/eslint-config": 0.74.85
     "@react-native/metro-config": 0.74.85

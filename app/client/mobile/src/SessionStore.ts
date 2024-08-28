@@ -25,6 +25,7 @@ export class SessionStore implements SqlStore {
     stmt: string,
     params: (string | number | null)[],
   ): Promise<any[]> {
+    console.log('GET: ', stmt);
     const res = await this.db.executeSql(stmt, params);
     const rows = [];
     if (res[0] && res[0].rows && res[0].rows.length > 0) {

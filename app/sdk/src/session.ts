@@ -59,7 +59,7 @@ export class SessionModule implements Session {
     this.emitter = new EventEmitter();
  
     this.identity = new IdentityModule(log, this.store, guid, token, node, secure);
-    this.account = new AccountModule(log, this.store, guid, token, node, secure);
+    this.account = new AccountModule(log, this.store, this.crypto, guid, token, node, secure);
     this.contact = new ContactModule(log, this.store, guid, token, node, secure);
     this.alias = new AliasModule(log, this.account, this.store, guid, token, node, secure);
     this.attribute = new AttributeModule(log, this.account, this.store, guid, token, node, secure);

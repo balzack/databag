@@ -1,7 +1,7 @@
 export interface Crypto {
 
   // generate salt for pbk function
-  pkdkfSalt(): { saltHex: string };
+  pbkdfSalt(): { saltHex: string };
 
   // generate aes key with pbkdf2
   pbkdfKey(saltHex: string, password: string): { aesKeyHex: string };

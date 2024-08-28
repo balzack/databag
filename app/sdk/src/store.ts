@@ -6,6 +6,9 @@ export interface Store {
   init(): Promise<Login | null>;
   setLogin(login: Login): Promise<void>;
   clearLogin(): Promise<void>;
+  getSeal(guid: string): Promise<{ publicKey: string, privateKey: string } | null>;
+  setSeal(guid: string, seal: { publicKey: string, privateKey: string }): Promise<void>;
+  clearSeal(guid: string): Promise<void>;
 
   getProfileRevision(guid: string): Promise<number>;
   setProfileRevision(guid: string, revision: number): Promise<void>;
@@ -41,8 +44,8 @@ export class OfflineStore implements Store {
     return unset;
   }
 
-  private async setAppValue(guid: string, id: string, value: string): Promise<void> {
-    await this.sql.set('INSERT OR REPLACE INTO app (key, value) values (?, ?)', [`${guid}::${id}`, value]);
+  private async setAppValue(guid: string, id: string, value: any): Promise<void> {
+    await this.sql.set('INSERT OR REPLACE INTO app (key, value) values (?, ?)', [`${guid}::${id}`, JSON.stringify(value)]);
   }
 
   private async clearAppValue(guid: string, id: string): Promise<void> {
@@ -64,11 +67,23 @@ export class OfflineStore implements Store {
 
   public async setLogin(login: Login): Promise<void> {
     await this.initLogin(login.guid);
-    await this.setAppValue('', 'login', JSON.stringify(login));
+    await this.setAppValue('', 'login', login);
   }
 
   public async clearLogin(): Promise<void> {
     await this.clearAppValue('', 'login');
+  }
+
+  public async getSeal(guid: string): Promise<{ publicKey: string, privateKey: string } | null> {
+    return await this.getAppValue(guid, 'seal', null) as { publicKey: string, privateKey: string } | null;
+  }
+
+  public async setSeal(guid: string, seal: { publicKey: string, privateKey: string }): Promise<void> {
+    await this.setAppValue(guid, 'seal', seal);
+  }
+
+  public async clearSeal(guid: string): Promise<void> {
+    await this.clearAppValue(guid, 'seal');
   }
 
   public async getProfileRevision(guid: string): Promise<number> {
@@ -115,24 +130,44 @@ export class OnlineStore implements Store {
     this.log = log;
   }
 
-  private async getAppValue(id: string, unset: any): Promise<any> {
-    const value =  await this.web.getValue(id);
+  private async getAppValue(guid: string, id: string, unset: any): Promise<any> {
+    const value =  await this.web.getValue(`${guid}::${id}`);
     if (value != null) {
       return JSON.parse(value);
     }
     return unset;
   }
 
+  private async setAppValue(guid: string, id: string, value: any): Promise<void> {
+    await this.web.setValue(`${guid}::${id}`, JSON.stringify(value));
+  }
+
+  private async clearAppValue(guid: string, id: string): Promise<void> {
+    await this.web.clearValue(`${guid}::${id}`);
+  } 
+
   public async init(): Promise<Login | null> {
-    return this.getAppValue('login', null);
+    return await this.getAppValue('', 'login', null) as Login | null;
   }
 
   public async setLogin(login: Login): Promise<void> {
-    return await this.web.setValue('login', JSON.stringify(login));
+    await this.setAppValue('', 'login', login);
   }
 
   public async clearLogin(): Promise<void> {
-    return await this.web.clearValue('login');
+    await this.clearAppValue('', 'login');
+  }
+
+  public async getSeal(guid: string): Promise<{ publicKey: string, privateKey: string } | null> {
+    return await this.getAppValue(guid, 'seal', null) as { publicKey: string, privateKey: string } | null;
+  }
+
+  public async setSeal(guid: string, seal: { publicKey: string, privateKey: string }): Promise<void> {
+    await this.setAppValue(guid, 'seal', seal);
+  }
+
+  public async clearSeal(guid: string): Promise<void> {
+    await this.clearAppValue(guid, 'seal');
   }
 
   public async getProfileRevision(guid: string): Promise<number> {
@@ -179,6 +214,16 @@ export class NoStore implements Store {
   public async clearLogin(): Promise<void> {
   }
 
+  public async getSeal(guid: string): Promise<{ publicKey: string, privateKey: string } | null> {
+    return null;
+  }
+
+  public async setSeal(guid: string, seal: { publicKey: string, privateKey: string }): Promise<void> {
+  }
+
+  public async clearSeal(guid: string): Promise<void> {
+  }
+  
   public async getProfileRevision(guid: string): Promise<number> {
     return 0;
   }

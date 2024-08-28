@@ -1,7 +1,7 @@
 import {useState, useEffect, useRef} from 'react';
 import {DatabagSDK, Session} from 'databag-client-sdk';
 import {SessionStore} from '../SessionStore';
-const DATABAG_DB = 'db_v201.db';
+const DATABAG_DB = 'db_v202.db';
 
 export function useAppContext() {
   const sdk = useRef(new DatabagSDK(null));
