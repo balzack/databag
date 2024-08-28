@@ -15,7 +15,10 @@ The crypto and log params are provided by implementing the [Crypto](https://gith
 </details>
 
 <details>
-  <summary>Persistent storage can then be provided to the SDK for user communication</summary><br>
+  <summary>User communcation is provided through the Session interface</summary><br>
+
+<details>
+  <summary>Storage can then be provided to the SDK to persist sessions</summary><br>
   
 Mobile apps typically use the offline store where most of the relational data is saved. The sql param is provided by implementing the [SqlStore](https://github.com/balzack/databag/blob/sdk/app/sdk/src/store.ts) interface.
 
@@ -25,9 +28,6 @@ Browser apps typically the online store where minimal session data is saved. The
 
 ```initOnlineStore(web: WebStore): Promise<Session | null>```
 </details>
-
-<details>
-  <summary>User communcation is provided through the Session interface</summary><br>
 
 Login provides a Session through an account login
 
