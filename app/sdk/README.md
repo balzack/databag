@@ -9,7 +9,7 @@ The API is provided through a set of typescript interfaces. Each interface group
 <details>
   <summary>The SDK must first be allocated</summary><br>
   
-```DatabacgClientSDK(crypto: Crypto | null, log?: Logging)```
+```DatabacgClientSDK(crypto?: Crypto, log?: Logging)```
 </details>
 
 <details>
@@ -25,7 +25,7 @@ Browser apps typically use the WebStore interface where minimal session data is 
 </details>
 
 <details>
-  <summary>Account communcation is provided through the Session interface</summary><br>
+  <summary>User communcation is provided through the Session interface</summary><br>
 
 login provides a Session through an account login
 
