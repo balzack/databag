@@ -8,6 +8,8 @@ The API is provided through a set of typescript interfaces. Each interface group
 
 <details>
   <summary>The SDK must first be allocated</summary><br>
+
+The crypto and log params are provided by implementing the [Crypto](https://github.com/balzack/databag/blob/sdk/app/sdk/src/crypto.ts) and [Logging](https://github.com/balzack/databag/blob/sdk/app/sdk/src/logging.ts) interface respectively. 
   
 ```DatabacgClientSDK(crypto?: Crypto, log?: Logging)```
 </details>
@@ -15,11 +17,11 @@ The API is provided through a set of typescript interfaces. Each interface group
 <details>
   <summary>Persistent storage can then be provided to the SDK</summary><br>
   
-Mobile apps typically use the SqlStore interface allowing for offline use cases where most of the relational data is stored
+Mobile apps typically use the SqlStore interface allowing for offline use cases where most of the relational data is stored. The sql param for the offline store is provided by implementing the [SqlStore]([Crypto](https://github.com/balzack/databag/blob/sdk/app/sdk/src/store.ts) interface.
 
 ```initOfflineStore(sql: SqlStore): Promise<Session | null>```
 
-Browser apps typically use the WebStore interface where minimal session data is stored
+Browser apps typically use the WebStore interface where minimal session data is stored. The web param for the minimal online store is provided by implementing the [WebStore]([Crypto](https://github.com/balzack/databag/blob/sdk/app/sdk/src/store.ts) interface.
 
 ```initOnlineStore(web: WebStore): Promise<Session | null>```
 </details>
