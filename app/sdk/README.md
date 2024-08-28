@@ -12,46 +12,52 @@ The API is provided through a set of typescript interfaces. Each interface group
 The crypto and log params are provided by implementing the [Crypto](https://github.com/balzack/databag/blob/sdk/app/sdk/src/crypto.ts) and [Logging](https://github.com/balzack/databag/blob/sdk/app/sdk/src/logging.ts) interface respectively. 
   
 ```DatabacgClientSDK(crypto?: Crypto, log?: Logging)```
+
+<br>
+
 </details>
 
 <details>
   <summary>User communcation is provided through the Session interface</summary><br>
 
-<details>
-  <summary>Storage can then be provided to the SDK to persist sessions</summary><br>
-  
-Mobile apps typically use the offline store where most of the relational data is saved. The sql param is provided by implementing the [SqlStore](https://github.com/balzack/databag/blob/sdk/app/sdk/src/store.ts) interface.
-
-```initOfflineStore(sql: SqlStore): Promise<Session | null>```
-
-Browser apps typically the online store where minimal session data is saved. The web param is provided by implementing the [WebStore](https://github.com/balzack/databag/blob/sdk/app/sdk/src/store.ts) interface.
-
-```initOnlineStore(web: WebStore): Promise<Session | null>```
-</details>
-
 Login provides a Session through an account login
 
-```login(handle: string, password: string, node: string, secure: boolean, mfaCode: string | null, params: SessionParams): Promise<Session>```
+```DatabacgClientSDK::login(handle: string, password: string, node: string, secure: boolean, mfaCode: string | null, params: SessionParams): Promise<Session>```
 
 Access provides a Session through token access to an account when password is forgotten
 
-```access(node: string, secure: boolean, token: string, params: SessionParams): Promise<Session>```
+```DatabacgClientSDK::access(node: string, secure: boolean, token: string, params: SessionParams): Promise<Session>```
 
 Create provides a Session to a newly created account
 
-```create(handle: string, password: string, node: string, secure: boolean, token: string | null, params: SessionParams): Promise<Session>```
+```DatabacgClientSDK::create(handle: string, password: string, node: string, secure: boolean, token: string | null, params: SessionParams): Promise<Session>```
 
 Available returns the number of accounts that can be publically created
 
-```available(node: string, secure: boolean): Promise<number>```
+```DatabacgClientSDK::available(node: string, secure: boolean): Promise<number>```
 
 Username returns whether the username is available for account creation
 
-```username(name: string, token: string, node: string, secure: boolean): Promise<boolean>```
+```DatabacgClientSDK::username(name: string, token: string, node: string, secure: boolean): Promise<boolean>```
 
 Logout releases the Session interface
 
-```logout(session: Session, all: boolean): Promise<void>```
+```DatabacgClientSDK::logout(session: Session, all: boolean): Promise<void>```
+
+<details>
+  <summary>Storage can then be provided to the SDK to persist sessions</summary><br>
+
+Mobile apps typically use the offline store where most of the relational data is saved. The sql param is provided by implementing the [SqlStore](https://github.com/balzack/databag/blob/sdk/app/sdk/src/store.ts) interface.
+
+```DatabacgClientSDK::initOfflineStore(sql: SqlStore): Promise<Session | null>```
+
+Browser apps typically the online store where minimal session data is saved. The web param is provided by implementing the [WebStore](https://github.com/balzack/databag/blob/sdk/app/sdk/src/store.ts) interface.
+
+```DatabacgClientSDK::initOnlineStore(web: WebStore): Promise<Session | null>```
+</details>
+
+<br>
+
 </details>
 
 <details>
@@ -59,7 +65,10 @@ Logout releases the Session interface
 
 Configure allocates the Node interface for the server
 
-```configure(node: string, secure: boolean, token: string, mfaCode: string | null): Promise<Node>```
+```DatabacgClientSDK::configure(node: string, secure: boolean, token: string, mfaCode: string | null): Promise<Node>```
+
+<br>
+
 </details>
 
 <details>
@@ -67,6 +76,6 @@ Configure allocates the Node interface for the server
 
 Automate allocates the Bot interface for ia specific communication channel
 
-```automate(node: string, secure: boolean, token: string): Promise<Bot>```
-</details>
+```DatabacgClientSDK::automate(node: string, secure: boolean, token: string): Promise<Bot>```
+<br></details>
 
