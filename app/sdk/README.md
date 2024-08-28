@@ -77,5 +77,13 @@ Configure allocates the Node interface for the server
 Automate allocates the Bot interface for ia specific communication channel
 
 ```DatabacgClientSDK::automate(node: string, secure: boolean, token: string): Promise<Bot>```
-<br></details>
 
+<br>
+
+</details>
+
+## User Communication
+
+## Admin Communication
+
+## Bot Communication
