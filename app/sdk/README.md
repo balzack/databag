@@ -17,11 +17,11 @@ The crypto and log params are provided by implementing the [Crypto](https://gith
 <details>
   <summary>Persistent storage can then be provided to the SDK</summary><br>
   
-Mobile apps typically use the SqlStore interface allowing for offline use cases where most of the relational data is stored. The sql param for the offline store is provided by implementing the [SqlStore](https://github.com/balzack/databag/blob/sdk/app/sdk/src/store.ts) interface.
+Mobile apps typically use the offline store where most of the relational data is saved. The sql param is provided by implementing the [SqlStore](https://github.com/balzack/databag/blob/sdk/app/sdk/src/store.ts) interface.
 
 ```initOfflineStore(sql: SqlStore): Promise<Session | null>```
 
-Browser apps typically use the WebStore interface where minimal session data is stored. The web param for the minimal online store is provided by implementing the [WebStore](https://github.com/balzack/databag/blob/sdk/app/sdk/src/store.ts) interface.
+Browser apps typically the online store where minimal session data is saved. The web param is provided by implementing the [WebStore](https://github.com/balzack/databag/blob/sdk/app/sdk/src/store.ts) interface.
 
 ```initOnlineStore(web: WebStore): Promise<Session | null>```
 </details>
