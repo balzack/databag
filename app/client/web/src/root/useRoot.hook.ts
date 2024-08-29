@@ -26,19 +26,19 @@ export function useRoot() {
   useEffect(() => {
     const { pathname, node, session } = app.state || {}
     const path = pathname === '/session' || pathname === '/node' || pathname === '/access' ? pathname : '/';
-    if (path === '/session' && !state.session) {
+    if (path === '/session' && !session) {
       navigate('/')
-    } else if (path === '/node' && !state.node) {
+    } else if (path === '/node' && !node) {
       navigate('/')
     } else if (
       path === '/' &&
-      !state.session &&
-      !state.node
+      !session &&
+      !node
     ) {
       navigate('/access')
-    } else if (path !== '/node' && state.node) {
+    } else if (path !== '/node' && node) {
       navigate('/node')
-    } else if (path !== '/session' && state.session) {
+    } else if (path !== '/session' && session) {
       navigate('/session')
     } else {
       navigate('/')
