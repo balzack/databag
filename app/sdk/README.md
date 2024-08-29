@@ -84,6 +84,56 @@ Automate allocates the Bot interface for ia specific communication channel
 
 ## User Communication
 
+
+<details>
+  <summary>Session provides the core functionality and provides access to all user interface modules</summary><br>
+
+  Account Settings are managed through the Account interface
+  
+  ```Session::getAccount(): Account```
+
+  Account Profile is managed through the Identity interface
+  
+  ```Session::getIdentity(): Identity```
+
+  Account Contacts are managed through the Contact Inferface
+  
+  ```Session::getContact(): Contact```
+
+  Contact groupings are managed through the Alias Interface
+  
+  ```Session::getAlias(): Alias```
+
+  Account attribute data is managed through the Attribute Interface
+  
+  ```Session::getAttribute(): Attribute```
+
+  Account content channels are managed through the Content Interface
+  
+  ```Session::getContent(): Content```
+
+  An aggregation of content channels provided by contacts is managed through the Stream Interface
+  
+  ```Session::getStream(): Stream```
+
+  WebRTC calling is managed through the Ring Interface
+  
+  ```Session::getRing(): Ring```
+
+  Management of an active content channel is provided through the Focus Interface
+  
+  ```Session::addFocus(cardId: string | null, channelId: string): Focus```   
+  ```Session::removeFocus(focus: Focus): void```
+
+  The connectivity status is provided through a status lisenter
+  
+  ```Session::addStatusListener(ev: (status: string) => void): void```   
+  ```Session::removeStatusListener(ev: (status: string) => void): void```
+
+<br>
+
+</details>
+
 ## Admin Communication
 
 ## Bot Communication
