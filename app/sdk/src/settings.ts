@@ -77,7 +77,7 @@ export class SettingsModule implements Settings {
             await this.store.setSettingsData(guid, config);
             await this.store.setSettingsRevision(guid, nextRev);
             this.config = config;
-            this.emitter.emit('config', this.getStatus());
+            this.emitter.emit('config', this.getConfig());
             this.revision = nextRev;
             if (this.nextRevision === nextRev) {
               this.nextRevision = null;
@@ -94,7 +94,7 @@ export class SettingsModule implements Settings {
     }
   }
 
-  public getStatus() {
+  public getConfig() {
     const { storageUsed, storageAvailable, forwardingAddress, searchable, allowUnsealed, pushEnabled, sealable, seal, enableIce, multiFactorAuth, webPushKey } = this.config;
     const { passwordSalt, privateKeyIv, privateKeyEncrypted, publicKey } = seal || {};
     const sealSet = Boolean(passwordSalt && privateKeyIv && privateKeyEncrypted && publicKey);
@@ -104,7 +104,7 @@ export class SettingsModule implements Settings {
 
   public addConfigListener(ev: (config: Config) => void): void {
     this.emitter.on('config', ev);
-    this.emitter.emit('config', this.getStatus());
+    this.emitter.emit('config', this.getConfig());
   }
 
   public removeConfigListener(ev: (config: Config) => void): void {
@@ -177,7 +177,7 @@ export class SettingsModule implements Settings {
     this.store.setSeal(guid, sealKey);
     this.sealKey = sealKey;
     
-    this.emitter.emit('config', this.getStatus());
+    this.emitter.emit('config', this.getConfig());
   }
 
   public async clearSeal(): Promise<void> {
@@ -185,7 +185,7 @@ export class SettingsModule implements Settings {
     await clearAccountSeal(node, secure, token);
     await this.store.clearSeal(guid);
     this.sealKey = null;
-    this.emitter.emit('config', this.getStatus());
+    this.emitter.emit('config', this.getConfig());
   }
 
   public async unlockSeal(password: string): Promise<void> {
@@ -204,14 +204,14 @@ export class SettingsModule implements Settings {
     this.store.setSeal(guid, seal);
     this.sealKey = seal;
 
-    this.emitter.emit('config', this.getStatus());
+    this.emitter.emit('config', this.getConfig());
   }
 
   public async forgetSeal(): Promise<void> {
     const { guid } = this;
     await this.store.clearSeal(guid);
     this.sealKey = null;
-    this.emitter.emit('config', this.getStatus());
+    this.emitter.emit('config', this.getConfig());
   }
 
   public async getUsernameStatus(username: string): Promise<boolean> {
