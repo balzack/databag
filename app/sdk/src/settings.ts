@@ -14,6 +14,7 @@ import { setAccountNotifications } from './net/setAccountNotifications';
 import { setAccountSearchable } from './net/setAccountSearchable';
 import { setAccountSeal } from './net/setAccountSeal';
 import { clearAccountSeal } from './net/clearAccountSeal';
+import { getUsername } from './net/getUsername';
 
 const CLOSE_POLL_MS = 100;
 const RETRY_POLL_MS = 2000;
@@ -211,6 +212,11 @@ export class SettingsModule implements Settings {
     await this.store.clearSeal(guid);
     this.sealKey = null;
     this.emitter.emit('config', this.getStatus());
+  }
+
+  public async getUsernameStatus(username: string): Promise<boolean> {
+    const { node, secure, token } = this;
+    return await getUsername(username, token, node, secure);
   }
 
   public async setLogin(username: string, password: string): Promise<void> {

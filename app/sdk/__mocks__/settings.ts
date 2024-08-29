@@ -61,6 +61,10 @@ export class MockSettingsModule implements Settings {
   public async forgetSeal(): Promise<void> {
   }
 
+  public async getUsernameStatus(username: string): Promise<boolean> {
+    return false;
+  }
+
   public async setLogin(username: string, password: string): Promise<void> {
   }
 }

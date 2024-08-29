@@ -7,7 +7,6 @@ import { getProfile } from './net/getProfile';
 import { getProfileImageUrl } from './net/getProfileImageUrl';
 import { setProfileData } from './net/setProfileData';
 import { setProfileImage } from './net/setProfileImage';
-import { getUsername } from './net/getUsername';
 import { ProfileEntity, defaultProfileEntity } from './entities';
 
 const CLOSE_POLL_MS = 100;
@@ -117,11 +116,6 @@ export class IdentityModule implements Identity {
   public async setProfileImage(image: string): Promise<void> {
     const { node, secure, token } = this;
     await setProfileImage(node, secure, token, image);
-  }
-
-  public async getHandleStatus(handle: string): Promise<boolean> {
-    const { node, secure, token } = this;
-    return await getUsername(handle, token, node, secure);
   }
 
   public getProfileImageUrl(): string {

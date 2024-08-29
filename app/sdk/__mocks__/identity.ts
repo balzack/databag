@@ -33,10 +33,6 @@ export class MockIdentityModule implements Identity {
   public async setProfileImage(image: string): Promise<void> {
   }
 
-  public async getHandleStatus(handle: string): Promise<boolean> {
-    return false;
-  }
-
   public getProfileImageUrl(): string {
     return '';
   }

@@ -37,6 +37,7 @@ export interface Ring {
 }
 
 export interface Settings {
+  getUsernameStatus(username: string): Promise<boolean>;
   setLogin(username: string, password: string): Promise<void>;
   enableNotifications(): Promise<void>;
   disableNotifications(): Promise<void>;
@@ -57,7 +58,6 @@ export interface Settings {
 export interface Identity {
   setProfileData(name: string, location: string, description: string): Promise<void>;
   setProfileImage(image: string): Promise<void>;
-  getHandleStatus(handle: string): Promise<boolean>;
 
   getProfileImageUrl(): string;
 
