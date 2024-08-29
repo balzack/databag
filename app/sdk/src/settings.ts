@@ -32,7 +32,7 @@ export class SettingsModule implements Settings {
   private closing: boolean;
   private revision: number;
   private nextRevision: number | null;
-  private entity: ConfigEntity;
+  private config: ConfigEntity;
   private sealKey: { privateKey: string, publicKey: string } | null;
 
   constructor(log: Logging, store: Store, crypto: Crypto | null, guid: string, token: string, node: string, secure: boolean) {
@@ -46,7 +46,7 @@ export class SettingsModule implements Settings {
     this.sealKey = null;
     this.secure = secure;
     this.revision = 0;
-    this.entity = defaultConfigEntity;
+    this.config = defaultConfigEntity;
     this.syncing = true;
     this.closing = false;
     this.nextRevision = null;
@@ -55,7 +55,7 @@ export class SettingsModule implements Settings {
 
   private async init() {
     this.revision = await this.store.getSettingsRevision(this.guid);
-    this.entity = await this.store.getSettingsData(this.guid);
+    this.config = await this.store.getSettingsData(this.guid);
     this.sealKey = await this.store.getSeal(this.guid);
     this.syncing = false;
     await this.sync();
@@ -72,11 +72,11 @@ export class SettingsModule implements Settings {
           const nextRev = this.nextRevision;
           try {
             const { guid, node, secure, token } = this;
-            const status = await getAccountStatus(node, secure, token);
-            await this.store.setSettingsData(guid, status);
+            const config = await getAccountStatus(node, secure, token);
+            await this.store.setSettingsData(guid, config);
             await this.store.setSettingsRevision(guid, nextRev);
-            this.entity = status;
-            this.emitter.emit('status', this.getStatus());
+            this.config = config;
+            this.emitter.emit('config', this.getStatus());
             this.revision = nextRev;
             if (this.nextRevision === nextRev) {
               this.nextRevision = null;
@@ -94,20 +94,20 @@ export class SettingsModule implements Settings {
   }
 
   public getStatus() {
-    const { storageUsed, storageAvailable, forwardingAddress, searchable, allowUnsealed, pushEnabled, sealable, seal, enableIce, multiFactorAuth, webPushKey } = this.entity;
+    const { storageUsed, storageAvailable, forwardingAddress, searchable, allowUnsealed, pushEnabled, sealable, seal, enableIce, multiFactorAuth, webPushKey } = this.config;
     const { passwordSalt, privateKeyIv, privateKeyEncrypted, publicKey } = seal || {};
     const sealSet = Boolean(passwordSalt && privateKeyIv && privateKeyEncrypted && publicKey);
     const sealUnlocked = Boolean(sealSet && this.sealKey?.privateKey && this.sealKey?.publicKey == publicKey)
     return { storageUsed, storageAvailable, forwardingAddress, searchable, allowUnsealed, pushEnabled, sealable, sealSet, sealUnlocked, enableIce, multiFactorAuth, webPushKey };
   }
 
-  public addStatusListener(ev: (status: Config) => void): void {
-    this.emitter.on('status', ev);
-    this.emitter.emit('status', this.getStatus());
+  public addConfigListener(ev: (config: Config) => void): void {
+    this.emitter.on('config', ev);
+    this.emitter.emit('config', this.getStatus());
   }
 
-  public removeStatusListener(ev: (status: Config) => void): void {
-    this.emitter.off('status', ev);
+  public removeConfigListener(ev: (config: Config) => void): void {
+    this.emitter.off('config', ev);
   }
 
   public async close(): Promise<void> {
@@ -169,14 +169,14 @@ export class SettingsModule implements Settings {
     const { ivHex } = crypto.aesIv();
     const { encryptedDataB64 } = crypto.aesEncrypt(privateKeyB64, ivHex, aesKeyHex);
 
-    const entity = { passwordSalt: saltHex, privateKeyIv: ivHex, privateKeyEncrypted: encryptedDataB64, publicKey: publicKeyB64 };
-    await setAccountSeal(node, secure, token, entity);
+    const seal = { passwordSalt: saltHex, privateKeyIv: ivHex, privateKeyEncrypted: encryptedDataB64, publicKey: publicKeyB64 };
+    await setAccountSeal(node, secure, token, seal);
 
-    const seal = { publicKey: publicKeyB64, privateKey: privateKeyB64 };
-    this.store.setSeal(guid, seal);
-    this.sealKey = seal;
+    const sealKey = { publicKey: publicKeyB64, privateKey: privateKeyB64 };
+    this.store.setSeal(guid, sealKey);
+    this.sealKey = sealKey;
     
-    this.emitter.emit('status', this.getStatus());
+    this.emitter.emit('config', this.getStatus());
   }
 
   public async clearSeal(): Promise<void> {
@@ -184,12 +184,12 @@ export class SettingsModule implements Settings {
     await clearAccountSeal(node, secure, token);
     await this.store.clearSeal(guid);
     this.sealKey = null;
-    this.emitter.emit('status', this.getStatus());
+    this.emitter.emit('config', this.getStatus());
   }
 
   public async unlockSeal(password: string): Promise<void> {
-    const { guid, entity, crypto } = this;
-    const { passwordSalt, privateKeyIv, privateKeyEncrypted, publicKey } = entity.seal;
+    const { guid, config, crypto } = this;
+    const { passwordSalt, privateKeyIv, privateKeyEncrypted, publicKey } = config.seal;
     if (!passwordSalt || !privateKeyIv || !privateKeyEncrypted || !publicKey) {
       throw new Error('account seal not set');
     }
@@ -203,14 +203,14 @@ export class SettingsModule implements Settings {
     this.store.setSeal(guid, seal);
     this.sealKey = seal;
 
-    this.emitter.emit('status', this.getStatus());
+    this.emitter.emit('config', this.getStatus());
   }
 
   public async forgetSeal(): Promise<void> {
     const { guid } = this;
     await this.store.clearSeal(guid);
     this.sealKey = null;
-    this.emitter.emit('status', this.getStatus());
+    this.emitter.emit('config', this.getStatus());
   }
 
   public async setLogin(username: string, password: string): Promise<void> {

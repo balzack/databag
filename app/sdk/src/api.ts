@@ -50,8 +50,8 @@ export interface Settings {
   unlockSeal(password: string): Promise<void>;
   forgetSeal(): Promise<void>;
 
-  addStatusListener(ev: (config: Config) => void): void;
-  removeStatusListener(ev: (config: Config) => void): void;
+  addConfigListener(ev: (config: Config) => void): void;
+  removeConfigListener(ev: (config: Config) => void): void;
 }
 
 export interface Identity {

@@ -7,23 +7,23 @@ import { Config } from '../src/types';
 import { waitFor } from '../__mocks__/waitFor';
 import axios from 'redaxios';
 
-const testStatus = JSON.parse(JSON.stringify(defaultConfigEntity));
+const testConfig = JSON.parse(JSON.stringify(defaultConfigEntity));
 
 jest.mock('redaxios', () => {
   return {
     get: jest.fn().mockImplementation(() => {
-      testStatus.storageUsed = 2;
-      return Promise.resolve({ status: 200, data: testStatus });
+      testConfig.storageUsed = 2;
+      return Promise.resolve({ status: 200, data: testConfig });
     }),
     put: jest.fn().mockImplementation((url, body) => {
       if (url == 'http://test_url/account/notification?agent=test_token') {
-        testStatus.pushEnabled = body;
+        testConfig.pushEnabled = body;
       }
       if (url == 'http://test_url/account/searchable?agent=test_token') {
-        testStatus.searchable = body;
+        testConfig.searchable = body;
       }
       if (url == 'http://test_url/account/seal?agent=test_token') {
-        testStatus.seal = body;
+        testConfig.seal = body;
       }
       return Promise.resolve({ status: 200 });
     }),
@@ -76,29 +76,29 @@ class TestStore extends NoStore {
 }
 
 test('allocates session correctly', async () => {
-  let status: Config | null = null;
+  let config: Config | null = null;
   const log = new ConsoleLogging();
   const store = new TestStore();
   const crypto = new TestCrypto();
   const settings = new SettingsModule(log, store, crypto, 'test_guid', 'test_token', 'test_url', false);
-  settings.addStatusListener((ev: Config) => { status = ev });
+  settings.addConfigListener((ev: Config) => { config = ev });
   settings.setRevision(5);
-  await waitFor(() => (status?.storageUsed == 2));
+  await waitFor(() => (config?.storageUsed == 2));
   settings.enableRegistry();
   settings.setRevision(6);
-  await waitFor(() => Boolean(status?.searchable));
+  await waitFor(() => Boolean(config?.searchable));
   settings.disableRegistry();
   settings.setRevision(7);
-  await waitFor(() => !Boolean(status?.searchable));
+  await waitFor(() => !Boolean(config?.searchable));
 
   settings.enableNotifications();
   settings.setRevision(8);
-  await waitFor(() => Boolean(status?.pushEnabled));
+  await waitFor(() => Boolean(config?.pushEnabled));
   settings.disableNotifications();
   settings.setRevision(9);
-  await waitFor(() => !Boolean(status?.pushEnabled));
+  await waitFor(() => !Boolean(config?.pushEnabled));
 
   settings.setSeal('password');
   settings.setRevision(10);
-  await waitFor(() => Boolean(status?.sealSet));
+  await waitFor(() => Boolean(config?.sealSet));
 });

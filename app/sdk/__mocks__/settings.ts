@@ -12,12 +12,12 @@ export class MockSettingsModule implements Settings {
     this.emitter = new EventEmitter();
   }
 
-  public addStatusListener(ev: (status: Config) => void): void {
-    this.emitter.on('status', ev);
+  public addConfigListener(ev: (config: Config) => void): void {
+    this.emitter.on('config', ev);
   }
 
-  public removeStatusListener(ev: (status: Config) => void): void {
-    this.emitter.off('status', ev);
+  public removeConfigListener(ev: (config: Config) => void): void {
+    this.emitter.off('config', ev);
   }
 
   public close(): void {
