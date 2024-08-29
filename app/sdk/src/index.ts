@@ -87,13 +87,13 @@ export class DatabagSDK {
       await clearLogin(node, secure, token, all);
     }
     catch(err) {
-      console.log(err);
+      this.log.error(err);
     }
     try {
       await this.store.clearLogin();
     }
     catch(err) {
-      console.log(err);
+      this.log.error(err);
     }
   }
 

@@ -24,21 +24,24 @@ export function useRoot() {
   }, [location.pathname])
 
   useEffect(() => {
-    const state = app.state || {}
-    if (state.pathname === '/session' && !state.session) {
+    const { pathname, node, session } = app.state || {}
+    const path = pathname === '/session' || pathname === '/node' || pathname === '/access' ? pathname : '/';
+    if (path === '/session' && !state.session) {
       navigate('/')
-    } else if (state.pathname === '/node' && !state.node) {
+    } else if (path === '/node' && !state.node) {
       navigate('/')
     } else if (
-      state.pathname === '/' &&
+      path === '/' &&
       !state.session &&
       !state.node
     ) {
       navigate('/access')
-    } else if (state.pathname !== '/node' && state.node) {
+    } else if (path !== '/node' && state.node) {
       navigate('/node')
-    } else if (state.pathname !== '/session' && state.session) {
+    } else if (path !== '/session' && state.session) {
       navigate('/session')
+    } else {
+      navigate('/')
     }
   }, [state?.pathname, app.state?.session, app.state?.node])
 

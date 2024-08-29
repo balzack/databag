@@ -30,14 +30,14 @@
     "react-dom": "18.2.0",
     "react-router-dom": "^6.26.0",
     "react-test-renderer": "18.2.0",
+    "redaxios": "^0.5.1",
     "ts-jest": "29.0.2",
     "ts-node": "10.9.1",
     "typescript": "5.5.4",
     "vite": "5.3.5",
     "vite-plugin-linter": "1.2.0",
     "vite-plugin-svgr": "4.2.0",
-    "vite-tsconfig-paths": "4.3.2",
-    "redaxios": "^0.5.1"
+    "vite-tsconfig-paths": "4.3.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.8.0",

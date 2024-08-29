@@ -169,14 +169,11 @@ export class SettingsModule implements Settings {
     const { publicKeyB64, privateKeyB64 } = crypto.rsaKey();
     const { ivHex } = crypto.aesIv();
     const { encryptedDataB64 } = crypto.aesEncrypt(privateKeyB64, ivHex, aesKeyHex);
-
     const seal = { passwordSalt: saltHex, privateKeyIv: ivHex, privateKeyEncrypted: encryptedDataB64, publicKey: publicKeyB64 };
     await setAccountSeal(node, secure, token, seal);
-
     const sealKey = { publicKey: publicKeyB64, privateKey: privateKeyB64 };
     this.store.setSeal(guid, sealKey);
     this.sealKey = sealKey;
-    
     this.emitter.emit('config', this.getConfig());
   }
 
@@ -199,11 +196,9 @@ export class SettingsModule implements Settings {
     }
     const { aesKeyHex } = crypto.pbkdfKey(passwordSalt, password);
     const { data } = crypto.aesDecrypt(privateKeyEncrypted, privateKeyIv, aesKeyHex);
-
     const seal = { publicKey: publicKey, privateKey: data };
     this.store.setSeal(guid, seal);
     this.sealKey = seal;
-
     this.emitter.emit('config', this.getConfig());
   }
 

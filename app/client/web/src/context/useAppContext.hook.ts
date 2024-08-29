@@ -3,7 +3,7 @@ import { DatabagSDK, Session } from 'databag-client-sdk'
 import { SessionStore } from '../SessionStore'
 
 export function useAppContext() {
-  const sdk = useRef(new DatabagSDK(null))
+  const sdk = useRef(new DatabagSDK())
   const [state, setState] = useState({
     session: null as null | Session,
   })
