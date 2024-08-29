@@ -82,7 +82,7 @@ Automate allocates the Bot interface for ia specific communication channel
 
 </details>
 
-## User Communication
+## Account Communication
 
 
 <details>
