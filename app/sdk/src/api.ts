@@ -4,54 +4,10 @@
 // formaize delete vs block remote channel
 // articles share by cards now
 
-import type { Channel, Topic, Asset, Tag, Article, Group, Card, Profile, Call, AccountStatus, NodeConfig, NodeAccount, Repeater } from './types';
-
-export interface SqlStore {
-  set(stmt: string, params?: (string | number | null)[]): Promise<void>;
-  get(stmt: string, params?: (string | number | null)[]): Promise<any[]>;
-}
-
-export interface WebStore {
-  getValue(key: string): Promise<string>;
-  setValue(key: string, value: string): Promise<void>;
-  clearValue(key: string): Promise<void>;
-  clearAll(): Promise<void>;
-}
-
-export interface Crypto {
-
-  // generate salt for pbk function
-  pkdkfSalt(): { saltHex: string };
-
-  // generate aes key with pbkdf2
-  pbkdfKey(saltHex: string, password: string): { aesKeyHex: string };
-
-  // generate random aes key
-  aesKey(): { aesKeyHex: string };
-
-  // generate iv to use to aes function
-  aesIv(): { ivHex: string };
-
-  // encrypt data with aes key and iv
-  aesEncrypt(data: string, ivHex: string, aesKeyHex: string): { encryptedDataB64: string };
-
-  // decrypt data with aes key and iv
-  aesDecrypt(encryptedDataB64: string, ivHex: string, aesKeyHex: string): { data: string };
-
-  // generate rsa key
-  rsaKey(): { publicKeyB64: string, privateKeyB64: string };
-
-  // encrypt data with public rsa key
-  rsaEncrypt(data: string, publicKeyB64: string): { encryptedDataB64: string }
-
-  // decrypt data with private rsa key
-  rsaDecrypt(encryptedDataB64: string, privateKeyB64: string): { data: string }
-}
+import type { Channel, Topic, Asset, Tag, Article, Group, Card, Profile, Call, Config, NodeConfig, NodeAccount, Repeater } from './types';
 
 export interface Session {
-  close(): Promise<{ node: string, secure: boolean, token: string }>;
-
-  getAccount(): Account;
+  getSettings(): Settings;
   getIdentity(): Identity;
   getContact(): Contact;
   getAlias(): Alias;
@@ -62,8 +18,6 @@ export interface Session {
 
   addFocus(cardId: string | null, channelId: string): Focus;
   removeFocus(focus: Focus): void;
-
-  resync(): void;
 
   addStatusListener(ev: (status: string) => void): void;
   removeStatusListener(ev: (status: string) => void): void;
@@ -82,7 +36,7 @@ export interface Ring {
   decline(callId: string): void;
 }
 
-export interface Account {
+export interface Settings {
   setLogin(username: string, password: string): Promise<void>;
   enableNotifications(): Promise<void>;
   disableNotifications(): Promise<void>;
@@ -96,8 +50,8 @@ export interface Account {
   unlockSeal(password: string): Promise<void>;
   forgetSeal(): Promise<void>;
 
-  addStatusListener(ev: (status: AccountStatus) => void): void;
-  removeStatusListener(ev: (status: AccountStatus) => void): void;
+  addStatusListener(ev: (config: Config) => void): void;
+  removeStatusListener(ev: (config: Config) => void): void;
 }
 
 export interface Identity {

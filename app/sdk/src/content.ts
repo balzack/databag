@@ -1,5 +1,5 @@
 import { EventEmitter } from 'eventemitter3';
-import type { Content, Account, Logging } from './api';
+import type { Content, Settings, Logging } from './api';
 import type { Channel, Topic, Asset, Tag, Repeater } from './types';
 import { Store } from './store';
 
@@ -10,16 +10,16 @@ export class ContentModule implements Content {
   private token: string;
   private node: string;
   private secure: boolean;
-  private account: Account;
+  private settings: Settings;
   private emitter: EventEmitter;
 
-  constructor(log: Logging, account: Account, store: Store, guid: string, token: string, node: string, secure: boolean) {
+  constructor(log: Logging, settings: Settings, store: Store, guid: string, token: string, node: string, secure: boolean) {
     this.guid = guid;
     this.token = token;
     this.node = node;
     this.secure = secure;
     this.log = log;
-    this.account = account;
+    this.settings = settings;
     this.emitter = new EventEmitter();
   }
 

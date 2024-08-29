@@ -1,5 +1,4 @@
-import { WebStore, SqlStore } from './api';
-import { Login, ProfileEntity, defaultProfileEntity, AccountEntity, defaultAccountEntity } from './entities';
+import { Login, ProfileEntity, defaultProfileEntity, ConfigEntity, defaultConfigEntity } from './entities';
 import type { Logging } from './logging';
 
 export interface Store {
@@ -15,10 +14,22 @@ export interface Store {
   getProfileData(guid: string): Promise<ProfileEntity>;
   setProfileData(guid: string, data: ProfileEntity): Promise<void>;
 
-  getAccountRevision(guid: string): Promise<number>;
-  setAccountRevision(guid: string, revision: number): Promise<void>;
-  getAccountData(guid: string): Promise<AccountEntity>;
-  setAccountData(guid: string, data: AccountEntity): Promise<void>;
+  getSettingsRevision(guid: string): Promise<number>;
+  setSettingsRevision(guid: string, revision: number): Promise<void>;
+  getSettingsData(guid: string): Promise<ConfigEntity>;
+  setSettingsData(guid: string, data: ConfigEntity): Promise<void>;
+}
+
+export interface SqlStore {
+  set(stmt: string, params?: (string | number | null)[]): Promise<void>;
+  get(stmt: string, params?: (string | number | null)[]): Promise<any[]>;
+}
+
+export interface WebStore {
+  getValue(key: string): Promise<string>;
+  setValue(key: string, value: string): Promise<void>;
+  clearValue(key: string): Promise<void>;
+  clearAll(): Promise<void>;
 }
 
 export class OfflineStore implements Store {
@@ -102,19 +113,19 @@ export class OfflineStore implements Store {
     await this.setAppValue(guid, 'profile_data', JSON.stringify(data));
   }
 
-  public async getAccountRevision(guid: string): Promise<number> {
+  public async getSettingsRevision(guid: string): Promise<number> {
     return await this.getAppValue(guid, 'account_revision', 0) as number;
   }
 
-  public async setAccountRevision(guid: string, revision: number): Promise<void> {
+  public async setSettingsRevision(guid: string, revision: number): Promise<void> {
     await this.setAppValue(guid, 'account_revision', revision.toString());
   } 
   
-  public async getAccountData(guid: string): Promise<AccountEntity> {
-    return await this.getAppValue(guid, 'account_data', defaultAccountEntity) as AccountEntity;
+  public async getSettingsData(guid: string): Promise<ConfigEntity> {
+    return await this.getAppValue(guid, 'account_data', defaultConfigEntity) as ConfigEntity;
   }
   
-  public async setAccountData(guid: string, data: AccountEntity): Promise<void> {
+  public async setSettingsData(guid: string, data: ConfigEntity): Promise<void> {
     await this.setAppValue(guid, 'account_data', JSON.stringify(data));
   }
 
@@ -184,18 +195,18 @@ export class OnlineStore implements Store {
   public async setProfileData(guid: string, data: ProfileEntity): Promise<void> {
   } 
 
-  public async getAccountRevision(guid: string): Promise<number> {
+  public async getSettingsRevision(guid: string): Promise<number> {
     return 0;
   }
 
-  public async setAccountRevision(guid: string, revision: number): Promise<void> {
+  public async setSettingsRevision(guid: string, revision: number): Promise<void> {
   } 
   
-  public async getAccountData(guid: string): Promise<AccountEntity> {
-    return defaultAccountEntity;
+  public async getSettingsData(guid: string): Promise<ConfigEntity> {
+    return defaultConfigEntity;
   }
   
-  public async setAccountData(guid: string, data: AccountEntity): Promise<void> {
+  public async setSettingsData(guid: string, data: ConfigEntity): Promise<void> {
   } 
 
 }
@@ -238,18 +249,18 @@ export class NoStore implements Store {
   public async setProfileData(guid: string, data: ProfileEntity): Promise<void> {
   }
 
-  public async getAccountRevision(guid: string): Promise<number> {
+  public async getSettingsRevision(guid: string): Promise<number> {
     return 0;
   }
 
-  public async setAccountRevision(guid: string, revision: number): Promise<void> {
+  public async setSettingsRevision(guid: string, revision: number): Promise<void> {
   }
 
-  public async getAccountData(guid: string): Promise<AccountEntity> {
-    return defaultAccountEntity;
+  public async getSettingsData(guid: string): Promise<ConfigEntity> {
+    return defaultConfigEntity;
   }
 
-  public async setAccountData(guid: string, data: AccountEntity): Promise<void> {
+  public async setSettingsData(guid: string, data: ConfigEntity): Promise<void> {
   }
 
 }

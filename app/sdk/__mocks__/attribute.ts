@@ -1,5 +1,5 @@
 import { EventEmitter } from 'eventemitter3';
-import type { Attribute, Account } from '../src/api';
+import type { Attribute } from '../src/api';
 import type { Article } from '../src/types';
 
 export class MockAttributeModule implements Attribute {

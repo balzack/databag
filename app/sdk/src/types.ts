@@ -135,7 +135,7 @@ export type Repeater = {
   server: string,
 }
 
-export type AccountStatus = {
+export type Config = {
   disabled: boolean,
   storageUsed: number,
   storageAvailable: number,

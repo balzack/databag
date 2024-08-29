@@ -1,8 +1,8 @@
 import { EventEmitter } from 'eventemitter3';
-import { type Account } from '../src/api';
-import type { AccountStatus } from '../src/types';
+import { type Settings } from '../src/api';
+import type { Config } from '../src/types';
 
-export class MockAccountModule implements Account {
+export class MockSettingsModule implements Settings {
 
   public revision: number;
   private emitter: EventEmitter;
@@ -12,11 +12,11 @@ export class MockAccountModule implements Account {
     this.emitter = new EventEmitter();
   }
 
-  public addStatusListener(ev: (status: AccountStatus) => void): void {
+  public addStatusListener(ev: (status: Config) => void): void {
     this.emitter.on('status', ev);
   }
 
-  public removeStatusListener(ev: (status: AccountStatus) => void): void {
+  public removeStatusListener(ev: (status: Config) => void): void {
     this.emitter.off('status', ev);
   }
 

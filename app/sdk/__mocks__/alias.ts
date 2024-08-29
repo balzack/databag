@@ -1,5 +1,5 @@
 import { EventEmitter } from 'eventemitter3';
-import type { Alias, Account } from '../src/api';
+import type { Alias } from '../src/api';
 import type { Group } from '../src/types';
 
 export class MockAliasModule implements Alias {

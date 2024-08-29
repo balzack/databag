@@ -1,5 +1,5 @@
 import { EventEmitter } from 'eventemitter3';
-import type { Content, Account } from '../src/api';
+import type { Content } from '../src/api';
 import type { Channel, Topic, Asset, Tag, Repeater } from '../src/types';
 
 export class MockContentModule implements Content {

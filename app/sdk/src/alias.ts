@@ -1,5 +1,5 @@
 import { EventEmitter } from 'eventemitter3';
-import type { Alias, Account, Logging } from './api';
+import type { Alias, Settings, Logging } from './api';
 import type { Group } from './types';
 import { Store } from './store';
 
@@ -10,16 +10,16 @@ export class AliasModule implements Alias {
   private token: string;
   private node: string;
   private secure: boolean;
-  private account: Account;
+  private settings: Settings;
   private emitter: EventEmitter;
 
-  constructor(log: Logging, account: Account, store: Store, guid: string, token: string, node: string, secure: boolean) {
+  constructor(log: Logging, settings: Settings, store: Store, guid: string, token: string, node: string, secure: boolean) {
     this.guid = guid;
     this.token = token;
     this.node = node;
     this.secure = secure;
     this.log = log;
-    this.account = account;
+    this.settings = settings;
     this.emitter = new EventEmitter();
   }
 

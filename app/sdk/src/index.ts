@@ -10,13 +10,16 @@ import { addAccount } from './net/addAccount';
 import { setAdmin } from './net/setAdmin';
 import { getAvailable } from './net/getAvailable';
 import { getUsername } from './net/getUsername';
-import type { Session, Node, Bot, SqlStore, WebStore } from './api';
+import type { Session, Node, Bot } from './api';
 import type { SessionParams } from './types';
 import type { Login } from './entities';
 import type { Crypto } from './crypto';
+import type { WebStore, SqlStore } from './store';
 
 export * from './api';
 export * from './types';
+export { WebStore, SqlStore } from './store';
+export { Crypto } from './crypto';
 
 export class DatabagSDK {
 
@@ -77,7 +80,8 @@ export class DatabagSDK {
   }
 
   public async logout(session: Session, all: boolean): Promise<void> {
-    const params = await session.close();
+    const sessionModule = session as SessionModule;
+    const params = await sessionModule.close();
     try {
       const { node, secure, token } = params;
       await clearLogin(node, secure, token, all);

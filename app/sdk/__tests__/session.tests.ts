@@ -2,7 +2,7 @@ import { DatabagSDK } from '../src/index';
 import { type SessionParams } from '../src/types';
 
 import { MockConnection } from '../__mocks__/connection';
-import { MockAccountModule } from '../__mocks__/account';
+import { MockSettingsModule } from '../__mocks__/settings';
 import { MockIdentityModule } from '../__mocks__/identity';
 import { MockAliasModule } from '../__mocks__/alias';
 import { MockContentModule } from '../__mocks__/content';
@@ -29,11 +29,11 @@ jest.mock('../src/connection', () => {
   }
 })
 
-const mockAccount = new MockAccountModule();
-jest.mock('../src/account', () => {
+const mockSettings = new MockSettingsModule();
+jest.mock('../src/settings', () => {
   return {
-    AccountModule: jest.fn().mockImplementation(() => {
-      return mockAccount;
+    SettingsModule: jest.fn().mockImplementation(() => {
+      return mockSettings;
     })
   }
 })
@@ -99,14 +99,14 @@ test('allocates session correctly', async () => {
   const params: SessionParams = { topicBatch: 0, tagBatch: 0, channelTypes: [], pushType: '', deviceToken: '', notifications: [], deviceId: '', version: '', appName: '' };
   const session = await sdk.login('handle', 'password', 'jest.test', true, null, params);
   session.addStatusListener((ev: string) => { status = ev; });
-  const account = session.getAccount();
-  account.enableNotifications();
+  const settings = session.getSettings();
+  settings.enableNotifications();
   mockConnection.emitStatus('connected');
   mockConnection.emitRevision({ account: 3, profile: 3, article: 3, group: 3, channel: 3, card: 3});
   mockConnection.emitRing({ cardId: '', callId: 'test', calleeToken: '', ice: []});
   await waitFor(() => (status === 'connected'));
   await waitFor(() => (mockRing.call?.callId === 'test'));
-  await waitFor(() => (mockAccount.revision == 3));
+  await waitFor(() => (mockSettings.revision == 3));
   await waitFor(() => (mockIdentity.revision == 3));
   await waitFor(() => (mockContent.revision == 3));
   await waitFor(() => (mockContact.revision == 3));

@@ -1,13 +1,13 @@
-import { AccountModule } from '../src/account';
+import { SettingsModule } from '../src/settings';
 import { NoStore } from '../src/store';
 import { Crypto } from '../src/crypto';
 import { ConsoleLogging } from '../src/logging';
-import { defaultAccountEntity } from '../src/entities';
-import { AccountStatus } from '../src/types';
+import { defaultConfigEntity } from '../src/entities';
+import { Config } from '../src/types';
 import { waitFor } from '../__mocks__/waitFor';
 import axios from 'redaxios';
 
-const testStatus = JSON.parse(JSON.stringify(defaultAccountEntity));
+const testStatus = JSON.parse(JSON.stringify(defaultConfigEntity));
 
 jest.mock('redaxios', () => {
   return {
@@ -76,29 +76,29 @@ class TestStore extends NoStore {
 }
 
 test('allocates session correctly', async () => {
-  let status: AccountStatus | null = null;
+  let status: Config | null = null;
   const log = new ConsoleLogging();
   const store = new TestStore();
   const crypto = new TestCrypto();
-  const account = new AccountModule(log, store, crypto, 'test_guid', 'test_token', 'test_url', false);
-  account.addStatusListener((ev: AccountStatus) => { status = ev });
-  account.setRevision(5);
+  const settings = new SettingsModule(log, store, crypto, 'test_guid', 'test_token', 'test_url', false);
+  settings.addStatusListener((ev: Config) => { status = ev });
+  settings.setRevision(5);
   await waitFor(() => (status?.storageUsed == 2));
-  account.enableRegistry();
-  account.setRevision(6);
+  settings.enableRegistry();
+  settings.setRevision(6);
   await waitFor(() => Boolean(status?.searchable));
-  account.disableRegistry();
-  account.setRevision(7);
+  settings.disableRegistry();
+  settings.setRevision(7);
   await waitFor(() => !Boolean(status?.searchable));
 
-  account.enableNotifications();
-  account.setRevision(8);
+  settings.enableNotifications();
+  settings.setRevision(8);
   await waitFor(() => Boolean(status?.pushEnabled));
-  account.disableNotifications();
-  account.setRevision(9);
+  settings.disableNotifications();
+  settings.setRevision(9);
   await waitFor(() => !Boolean(status?.pushEnabled));
 
-  account.setSeal('password');
-  account.setRevision(10);
+  settings.setSeal('password');
+  settings.setRevision(10);
   await waitFor(() => Boolean(status?.sealSet));
 });

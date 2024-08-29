@@ -149,7 +149,7 @@ export type SealEntity = {
   publicKey: string,
 }
 
-export type AccountEntity = {
+export type ConfigEntity = {
   disabled: boolean,
   storageUsed: number,
   storageAvailable: number,
@@ -164,7 +164,7 @@ export type AccountEntity = {
   webPushKey: string,
 }
 
-export const defaultAccountEntity = {
+export const defaultConfigEntity = {
   disabled: false,
   storageUsed: 0,
   storageAvailable: 0,
