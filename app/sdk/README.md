@@ -136,7 +136,7 @@ Automate allocates the Bot interface for ia specific communication channel
 
 
 <details>
-  <summary>Settings interface module manages the access settings of the account</summary><br>
+  <summary>Settings interface module manages the account access settings</summary><br>
 
   The login and password for the account can be changed through the setLogin method
   
