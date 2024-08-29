@@ -134,6 +134,66 @@ Automate allocates the Bot interface for ia specific communication channel
 
 </details>
 
+
+<details>
+  <summary>Account interface module manages the access settings of the account</summary><br>
+
+  The login and password for the account can be changed through the setLogin method
+  
+  ```Account::setLogin(username: string, password: string): Promise<void>```
+
+  Push notifications to the user's device can be enabled through enableNotifications
+  
+  ```Account::enableNotifications(): Promise<void>```
+
+  Push notifications to the user's device can be disabled through disableNotifications
+  
+  ```Account::disableNotifications(): Promise<void>```
+
+  The account will be visible in the server registry when enabled through enableRegistry
+  
+  ```Account::enableRegistry(): Promise<void>```
+
+  The account will not be visible in the server registry when disabled through disableRegistry
+  
+  ```Account::disableRegistry(): Promise<void>```
+
+  Multi-Factor authentication is enabled through enableMFA
+  
+  ```Account::enableMFA(): Promise<{ secretImage: string, secretText: string }>```
+
+  Multi-Factor authentication is disabled with disableMFA
+  
+  ```Account::disableMFA(): Promise<void>```
+
+  Once enabled the Mutli-Factor authentication must be confirmed before it will be required for login
+  
+  ```Account::confirmMFA(code: string): Promise<void>```
+
+  End-to-End encryption is enabled by setting up a client key with setSeal
+  
+  ```Account::setSeal(password: string): Promise<void>```
+
+  End-to-End encryption is disabled and the key deleted with clearSeal
+  
+  ```Account::clearSeal(): Promise<void>```
+
+  End-to-End encryption can be enabled of other devices by unlocking the key with unlockSeal
+  
+  ```Account::unlockSeal(password: string): Promise<void>```
+
+  End-to-End encryption is disabled, but the key remains locked with forgetSeal
+  
+  ```Account::forgetSeal(): Promise<void>```
+
+  The current account configuration can be accessed through a status listener
+
+  ```addStatusListener(ev: (status: AccountStatus) => void): void```   
+  ```removeStatusListener(ev: (status: AccountStatus) => void): void```
+  <br>
+  
+</details>
+
 ## Admin Communication
 
 ## Bot Communication
