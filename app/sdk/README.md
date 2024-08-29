@@ -194,6 +194,7 @@ Automate allocates the Bot interface for ia specific communication channel
 
   ```Settings::addConfigListener(ev: (config: Cofnig) => void): void```   
   ```Settings::removeConfigListener(ev: (config: Config) => void): void```
+  
   <br>
   
 </details>
@@ -213,7 +214,7 @@ Automate allocates the Bot interface for ia specific communication channel
 
   ```Identity:::getProfileImageUrl(): string```
 
-  The current profile can be access with a profile listener
+  The current profile can be access with a [Profile](https://github.com/balzack/databag/blob/sdk/app/sdk/src/types.ts) listener
 
   ```Identity::addProfileListener(ev: (profile: Profile) => void): void```   
   ```Identity::removeProfileListener(ev: (profile: Profile) => void): void```
