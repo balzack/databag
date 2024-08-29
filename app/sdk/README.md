@@ -1,4 +1,4 @@
-!!! still a work in progress !!!
+d!!! still a work in progress !!!
 
 DatabagClientSDK provides a typescript interface for communication over the decentralized databag network. The SDK has minimal dependencies and contains reference applications for react-js, react-native, and node.
 
@@ -9,10 +9,12 @@ The API is provided through a set of interfaces; each interface groups methods b
 <details>
   <summary>The SDK must first be allocated</summary><br>
 
+  <ul>
+    
 The crypto and log params are provided by implementing the [Crypto](https://github.com/balzack/databag/blob/sdk/app/sdk/src/crypto.ts) and [Logging](https://github.com/balzack/databag/blob/sdk/app/sdk/src/logging.ts) interface respectively. 
   
 ```DatabacgClientSDK(crypto?: Crypto, log?: Logging)```
-
+  </ul>
 <br>
 
 </details>
@@ -20,6 +22,8 @@ The crypto and log params are provided by implementing the [Crypto](https://gith
 <details>
   <summary>Account communcation is provided through the Session interface</summary><br>
 
+<ul>
+  
 Login provides a Session through an account login
 
 ```DatabacgClientSDK::login(handle: string, password: string, node: string, secure: boolean, mfaCode: string | null, params: SessionParams): Promise<Session>```
@@ -51,11 +55,11 @@ Mobile apps typically use the offline store where most of the relational data is
 
 ```DatabacgClientSDK::initOfflineStore(sql: SqlStore): Promise<Session | null>```
 
-Browser apps typically the online store where minimal session data is saved. The web param is provided by implementing the [WebStore](https://github.com/balzack/databag/blob/sdk/app/sdk/src/store.ts) interface.
+Browser apps typically use the online store where minimal session data is saved. The web param is provided by implementing the [WebStore](https://github.com/balzack/databag/blob/sdk/app/sdk/src/store.ts) interface.
 
 ```DatabacgClientSDK::initOnlineStore(web: WebStore): Promise<Session | null>```
 </details>
-
+</ul>
 <br>
 
 </details>
@@ -63,21 +67,25 @@ Browser apps typically the online store where minimal session data is saved. The
 <details>
   <summary>Admin communcation is provided through the Node interface</summary><br>
 
+  <ul>
+    
 Configure allocates the Node interface for the server
 
 ```DatabacgClientSDK::configure(node: string, secure: boolean, token: string, mfaCode: string | null): Promise<Node>```
 
+</ul>
 <br>
-
 </details>
 
 <details>
   <summary>Bot communication is provided through the Bot interface</summary><br>
-
+  <ul>
+    
 Automate allocates the Bot interface for ia specific communication channel
 
 ```DatabacgClientSDK::automate(node: string, secure: boolean, token: string): Promise<Bot>```
 
+</ul>
 <br>
 
 </details>
@@ -87,7 +95,9 @@ Automate allocates the Bot interface for ia specific communication channel
 
 <details>
   <summary>Session provides the core functionality and provides access to all user interface modules</summary><br>
-
+  
+  <ul>
+    
   Account Settings are managed through the Settings interface
   
   ```Session::getSettings(): Settings```
@@ -130,6 +140,8 @@ Automate allocates the Bot interface for ia specific communication channel
   ```Session::addStatusListener(ev: (status: string) => void): void```   
   ```Session::removeStatusListener(ev: (status: string) => void): void```
 
+</ul>
+
 <br>
 
 </details>
@@ -137,7 +149,9 @@ Automate allocates the Bot interface for ia specific communication channel
 
 <details>
   <summary>Settings interface module manages the account access settings</summary><br>
-
+  
+  <ul>
+    
   The login and password for the account can be changed through the setLogin method
   
   ```Settings::setLogin(username: string, password: string): Promise<void>```
@@ -194,6 +208,8 @@ Automate allocates the Bot interface for ia specific communication channel
 
   ```Settings::addConfigListener(ev: (config: Cofnig) => void): void```   
   ```Settings::removeConfigListener(ev: (config: Config) => void): void```
+
+  </ul>
   
   <br>
   
@@ -202,6 +218,8 @@ Automate allocates the Bot interface for ia specific communication channel
 <details>
   <summary>Identity interface module manages the account profile</summary><br>
 
+<ul>
+  
   The text details of the profile are set with setProfileData
 
   ```Identity::setProfileData(name: string, location: string, description: string): Promise<void>```
@@ -218,6 +236,8 @@ Automate allocates the Bot interface for ia specific communication channel
 
   ```Identity::addProfileListener(ev: (profile: Profile) => void): void```   
   ```Identity::removeProfileListener(ev: (profile: Profile) => void): void```
+  
+</ul>
 
   <br>
 </details>
