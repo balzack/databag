@@ -194,6 +194,29 @@ Automate allocates the Bot interface for ia specific communication channel
   
 </details>
 
+<details>
+  <summary>Identity interface module manages the account profile</summary><br>
+
+  The text details of the profile are set with setProfileData
+
+  ```Identity::setProfileData(name: string, location: string, description: string): Promise<void>```
+
+  The profile image is set with setProfileImage
+  
+  ```Identity::setProfileImage(image: string): Promise<void>```
+
+  A direct url to retrieve the profile image is provided with getProfileImageUrl
+
+  ```Identity:::getProfileImageUrl(): string```
+
+  The current profile can be access with a profile listener
+
+  ```Identity::addProfileListener(ev: (profile: Profile) => void): void```   
+  ```Identity::removeProfileListener(ev: (profile: Profile) => void): void```
+
+  <br>
+</details>
+
 ## Admin Communication
 
 ## Bot Communication
