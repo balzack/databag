@@ -18,7 +18,7 @@ The crypto and log params are provided by implementing the [Crypto](https://gith
 </details>
 
 <details>
-  <summary>User communcation is provided through the Session interface</summary><br>
+  <summary>Account communcation is provided through the Session interface</summary><br>
 
 Login provides a Session through an account login
 
@@ -88,9 +88,9 @@ Automate allocates the Bot interface for ia specific communication channel
 <details>
   <summary>Session provides the core functionality and provides access to all user interface modules</summary><br>
 
-  Account Settings are managed through the Account interface
+  Account Settings are managed through the Settings interface
   
-  ```Session::getAccount(): Account```
+  ```Session::getSettings(): Settings```
 
   Account Profile is managed through the Identity interface
   
@@ -136,60 +136,60 @@ Automate allocates the Bot interface for ia specific communication channel
 
 
 <details>
-  <summary>Account interface module manages the access settings of the account</summary><br>
+  <summary>Settings interface module manages the access settings of the account</summary><br>
 
   The login and password for the account can be changed through the setLogin method
   
-  ```Account::setLogin(username: string, password: string): Promise<void>```
+  ```Settings::setLogin(username: string, password: string): Promise<void>```
 
   Push notifications to the user's device can be enabled through enableNotifications
   
-  ```Account::enableNotifications(): Promise<void>```
+  ```Settings::enableNotifications(): Promise<void>```
 
   Push notifications to the user's device can be disabled through disableNotifications
   
-  ```Account::disableNotifications(): Promise<void>```
+  ```Settings::disableNotifications(): Promise<void>```
 
   The account will be visible in the server registry when enabled through enableRegistry
   
-  ```Account::enableRegistry(): Promise<void>```
+  ```Settings::enableRegistry(): Promise<void>```
 
   The account will not be visible in the server registry when disabled through disableRegistry
   
-  ```Account::disableRegistry(): Promise<void>```
+  ```Settings::disableRegistry(): Promise<void>```
 
   Multi-Factor authentication is enabled through enableMFA
   
-  ```Account::enableMFA(): Promise<{ secretImage: string, secretText: string }>```
+  ```Settings::enableMFA(): Promise<{ secretImage: string, secretText: string }>```
 
   Multi-Factor authentication is disabled with disableMFA
   
-  ```Account::disableMFA(): Promise<void>```
+  ```Settings::disableMFA(): Promise<void>```
 
   Once enabled the Mutli-Factor authentication must be confirmed before it will be required for login
   
-  ```Account::confirmMFA(code: string): Promise<void>```
+  ```Settings::confirmMFA(code: string): Promise<void>```
 
   End-to-End encryption is enabled by setting up a client key with setSeal
   
-  ```Account::setSeal(password: string): Promise<void>```
+  ```Settings::setSeal(password: string): Promise<void>```
 
   End-to-End encryption is disabled and the key deleted with clearSeal
   
-  ```Account::clearSeal(): Promise<void>```
+  ```Settings::clearSeal(): Promise<void>```
 
   End-to-End encryption can be enabled of other devices by unlocking the key with unlockSeal
   
-  ```Account::unlockSeal(password: string): Promise<void>```
+  ```Settings::unlockSeal(password: string): Promise<void>```
 
   End-to-End encryption is disabled, but the key remains locked with forgetSeal
   
-  ```Account::forgetSeal(): Promise<void>```
+  ```Settings::forgetSeal(): Promise<void>```
 
-  The current account configuration can be accessed through a status listener
+  The current configuration can be accessed through a [Config](https://github.com/balzack/databag/blob/sdk/app/sdk/src/types.ts) listener
 
-  ```addStatusListener(ev: (status: AccountStatus) => void): void```   
-  ```removeStatusListener(ev: (status: AccountStatus) => void): void```
+  ```Settings::addConfigListener(ev: (config: Cofnig) => void): void```   
+  ```Settings::removeConfigListener(ev: (config: Config) => void): void```
   <br>
   
 </details>
