@@ -2,7 +2,7 @@
 
 DatabagClientSDK provides a typescript interface for communication over the decentralized databag network. The SDK has minimal dependencies and contains reference applications for react-js, react-native, and node.
 
-The API is provided through a set of typescript interfaces. Each interface groups methods by their functionality and are only allocated as needed. The platform specific implementations of storage and cryptography are defined externally and are also provided to the SDK through interfaces.
+The API is provided through a set of interfaces; each interface groups methods by their functionality and are only allocated as needed. The platform specific implementations of storage and cryptography are defined externally and are also provided to the SDK through interfaces.
 
 ## Initialization
 
