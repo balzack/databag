@@ -142,6 +142,10 @@ Automate allocates the Bot interface for ia specific communication channel
   
   ```Settings::setLogin(username: string, password: string): Promise<void>```
 
+  Check if the specified username is available
+
+  ```Settings::getUsernameStatus(username: string): Promise<boolean>```
+
   Push notifications to the user's device can be enabled through enableNotifications
   
   ```Settings::enableNotifications(): Promise<void>```
