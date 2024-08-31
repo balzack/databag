@@ -1,0 +1,52 @@
+.session {
+  position: relative;
+  width: 100%;
+  height: 100%;
+
+  .tabs {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+
+    .activeTabItem {
+      flex: 1;
+      flex-grow: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--mantine-color-tab-2);      
+      color: var(--mantine-color-dbgreen-1);      
+      padding-bottom: 8px;
+      padding-top: 8px;
+      cursor: pointer;
+    }
+
+    .idleTabItem {
+      flex: 1;
+      flex-grow: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--mantine-color-tab-1);      
+      color: var(--mantine-color-dbgreen-0);      
+      padding-bottom: 8px;
+      padding-top: 8px;
+      cursor: pointer;
+
+      &:hover {
+        background: var(--mantine-color-tab-3);      
+      }
+    }
+
+    .tabDivider {
+      width: 2px;
+    }
+
+    .tabIcon {
+      width: 32px;
+      height: 32px;
+    }
+  }
+}

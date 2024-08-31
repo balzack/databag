@@ -339,7 +339,7 @@ export function Access() {
           leftSectionPointerEvents="none"
           leftSection={<IconServer />}
           placeholder={state.strings.host}
-          value={state.node}
+          value={state.host}
           onKeyDown={(ev) => {
             if (ev.code === 'Enter') urlClose()
           }}

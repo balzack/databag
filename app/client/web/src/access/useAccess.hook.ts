@@ -19,7 +19,6 @@ export function useAccess() {
     code: '',
     scheme: '',
     language: '',
-    node: '',
     loading: false,
     secure: false,
     host: '',
@@ -46,7 +45,7 @@ export function useAccess() {
     }
 
     const { protocol, host } = location
-    setUrl(`${protocol}//${host}`)
+    updateState({ host, secure: protocol === 'https' });
   }, [])
 
   useEffect(() => {
@@ -56,18 +55,6 @@ export function useAccess() {
       getAvailable(host, secure)
     }
   }, [state.mode, state.username, state.token, state.host, state.secure])
-
-  const setUrl = (node: string) => {
-    try {
-      const url = new URL(node)
-      const { protocol, host } = url
-      updateState({ node, host, secure: protocol === 'https:' })
-    } catch (err) {
-      console.log(err)
-      const { protocol, host } = location
-      updateState({ node, host, secure: protocol === 'https:' })
-    }
-  }
 
   const getAvailable = (node: string, secure: boolean) => {
     clearTimeout(debounceAvailable.current)
@@ -133,8 +120,9 @@ export function useAccess() {
     setCode: (code: string) => {
       updateState({ code })
     },
-    setNode: (node: string) => {
-      setUrl(node)
+    setNode: (host: string) => {
+      const insecure = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(host);
+      updateState({ host, secure: !insecure });
     },
     setLanguage: (code: string) => {
       settings.actions.setLanguage(code)
