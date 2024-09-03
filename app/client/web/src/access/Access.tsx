@@ -67,12 +67,12 @@ export function Access() {
 
   return (
     <div className={classes.split}>
-      {(state.display === 'medium' || state.display === 'large') && (
+      {state.layout === 'large' && (
         <div className={classes.left}>
           <Image className={classes.splash} src={left} fit="contain" />
         </div>
       )}
-      {state.display != null && (
+      {state.layout != null && (
         <div className={classes.right}>
           <div className={classes.frame}>
             {state.mode !== 'admin' && (

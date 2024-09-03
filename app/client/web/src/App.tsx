@@ -8,7 +8,7 @@ import './App.css'
 import '@mantine/core/styles.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import classes from './App.module.css'
-import { SettingsContext } from './context/SettingsContext'
+import { DisplayContext } from './context/DisplayContext'
 import { ContextType } from './context/ContextType'
 
 const theme = createTheme({
@@ -78,9 +78,25 @@ const theme = createTheme({
     'dark-databag-green': [
       '#99bb99',
       '#559e83',
+      '#559e83',
+      '#559e83',
+      '#559e83',
+      '#559e83',
+      '#559e83',
+      '#559e83',
+      '#559e83',
+      '#559e83',
     ],
      'light-databag-green': [
       '#888888',
+      '#448844',
+      '#448844',
+      '#448844',
+      '#448844',
+      '#448844',
+      '#448844',
+      '#448844',
+      '#448844',
       '#448844',
     ],
     'dark-tab': [
@@ -88,11 +104,23 @@ const theme = createTheme({
       '#222222',
       '#333333',
       '#444444',
+      '#444444',
+      '#444444',
+      '#444444',
+      '#444444',
+      '#444444',
+      '#444444',
     ],
     'light-tab': [
       '#dddddd',
       '#cccccc',
       '#bbbbbb',
+      '#aaaaaa',
+      '#aaaaaa',
+      '#aaaaaa',
+      '#aaaaaa',
+      '#aaaaaa',
+      '#aaaaaa',
       '#aaaaaa',
     ],
     dbgreen: virtualColor({
@@ -131,8 +159,8 @@ const router = createBrowserRouter([
 ])
 
 export function App() {
-  const settings = useContext(SettingsContext) as ContextType
-  const scheme = settings.state ? settings.state.scheme : undefined
+  const display = useContext(DisplayContext) as ContextType
+  const scheme = display.state ? display.state.scheme : undefined
 
   return (
     <div className={classes.app}>

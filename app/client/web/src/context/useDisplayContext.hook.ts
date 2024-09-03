@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react'
 import { LightTheme, DarkTheme } from '../constants/Colors'
 import { en, fr, sp, pt, de, ru } from '../constants/Strings'
 
-export function useSettingsContext() {
+export function useDisplayContext() {
   const [state, setState] = useState({
-    display: null,
+    layout: null,
     themes: [
       { value: 'dark', label: 'Dark' },
       { value: 'light', label: 'Light' },
@@ -31,8 +31,7 @@ export function useSettingsContext() {
     videoInputs: [],
   })
 
-  const SMALL_MEDIUM = 650
-  const MEDIUM_LARGE = 1000
+  const SMALL_LARGE = 650
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const updateState = (value: any) => {
@@ -40,21 +39,15 @@ export function useSettingsContext() {
   }
 
   const handleResize = () => {
-    if (window.innerWidth < SMALL_MEDIUM) {
+    if (window.innerWidth < SMALL_LARGE) {
       updateState({
-        display: 'small',
-        width: window.innerWidth,
-        height: window.innerHeight,
-      })
-    } else if (window.innerWidth < MEDIUM_LARGE) {
-      updateState({
-        display: 'medium',
+        layout: 'small',
         width: window.innerWidth,
         height: window.innerHeight,
       })
     } else {
       updateState({
-        display: 'large',
+        layout: 'large',
         width: window.innerWidth,
         height: window.innerHeight,
       })

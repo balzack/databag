@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { App } from '@/App'
 import './index.css'
 import { AppContextProvider } from './context/AppContext'
-import { SettingsContextProvider } from './context/SettingsContext'
+import { DisplayContextProvider } from './context/DisplayContext'
 
 const rootElement = document.querySelector('[data-js="root"]')
 
@@ -13,11 +13,11 @@ if (!rootElement) {
 
 const root = createRoot(rootElement)
 root.render(
-  <SettingsContextProvider>
-    <AppContextProvider>
+  <AppContextProvider>
+    <DisplayContextProvider>
       <StrictMode>
         <App />
       </StrictMode>
-    </AppContextProvider>
-  </SettingsContextProvider>
+    </DisplayContextProvider>
+  </AppContextProvider>
 )

@@ -1,5 +1,5 @@
 import { useRef, useState, useContext, useEffect } from 'react'
-import { SettingsContext } from '../context/SettingsContext'
+import { DisplayContext } from '../context/DisplayContext'
 import { AppContext } from '../context/AppContext'
 import { ContextType } from '../context/ContextType'
 
@@ -7,10 +7,10 @@ export function useAccess() {
   const debounceAvailable = useRef(setTimeout(() => {}, 0))
   const debounceTaken = useRef(setTimeout(() => {}, 0))
   const app = useContext(AppContext) as ContextType
-  const settings = useContext(SettingsContext) as ContextType
+  const display = useContext(DisplayContext) as ContextType
   const [state, setState] = useState({
-    display: null,
-    strings: settings.state.strings,
+    layout: null,
+    strings: display.state.strings,
     mode: '',
     username: '',
     password: '',
@@ -24,8 +24,8 @@ export function useAccess() {
     host: '',
     available: 0,
     taken: false,
-    themes: settings.state.themes,
-    languages: settings.state.languages,
+    themes: display.state.themes,
+    languages: display.state.languages,
   })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -89,17 +89,17 @@ export function useAccess() {
   }
 
   useEffect(() => {
-    const { display, strings, themes, scheme, languages, language } =
-      settings.state
+    const { layout, strings, themes, scheme, languages, language } =
+      display.state
     updateState({
-      display,
+      layout,
       strings,
       themes: [...themes],
       scheme,
       languages,
       language,
     })
-  }, [settings.state])
+  }, [display.state])
 
   const actions = {
     setMode: (mode: string) => {
@@ -125,10 +125,10 @@ export function useAccess() {
       updateState({ host, secure: !insecure });
     },
     setLanguage: (code: string) => {
-      settings.actions.setLanguage(code)
+      display.actions.setLanguage(code)
     },
     setTheme: (theme: string) => {
-      settings.actions.setTheme(theme)
+      display.actions.setTheme(theme)
     },
     setLoading: (loading: boolean) => {
       updateState({ loading })
