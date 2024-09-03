@@ -13,7 +13,7 @@ The API is provided through a set of interfaces; each interface groups methods b
     
 The crypto and log params are provided by implementing the [Crypto](https://github.com/balzack/databag/blob/sdk/app/sdk/src/crypto.ts) and [Logging](https://github.com/balzack/databag/blob/sdk/app/sdk/src/logging.ts) interface respectively. 
   
-```DatabacgClientSDK(crypto?: Crypto, log?: Logging)```
+```DatabagClientSDK(crypto?: Crypto, log?: Logging)```
   </ul>
 <br>
 
