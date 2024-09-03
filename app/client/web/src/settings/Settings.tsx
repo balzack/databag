@@ -1,4 +1,10 @@
+import { useSettings } from './useSettings.hook';
+
 export function Settings() {
-  return <></>
+  const { state, actions } = useSettings();
+
+  console.log(state);
+  
+  return <div>SETTINGS!!!</div>
 }
 

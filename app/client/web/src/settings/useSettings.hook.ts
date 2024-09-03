@@ -29,9 +29,13 @@ export function useSettings() {
 
   useEffect(() => {
     const { settings, identity } = getSession()
-    const setConfig = (config: Config) => { updateState({ config }) }
+    const setConfig = (config: Config) => {
+      updateState({ config }) 
+    }
     settings.addConfigListener(setConfig);
-    const setProfile = (profile: Profile) => { updateState({ profile }) }
+    const setProfile = (profile: Profile) => { 
+      updateState({ profile }) 
+    }
     identity.addProfileListener(setProfile)
     return () => { 
       settings.removeConfigListener(setConfig);
