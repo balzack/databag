@@ -6,6 +6,7 @@ import { ContextType } from '../context/ContextType'
 import classes from './Session.module.css'
 import { IconAddressBook, IconMessages, IconSettings } from '@tabler/icons-react'
 import { Settings } from '../settings/Settings';
+import { Identity } from '../identity/Identity';
 
 export function Session() {
   const [ tab, setTab ] = useState('channels');
@@ -47,7 +48,13 @@ export function Session() {
         </>
       )}
       { display.state.layout === 'large' && (
-        <div>LARGE DISPLAY</div>
+        <div className={classes.display}>
+          <div className={classes.left}>
+            <Identity />
+          </div>
+          <div className={classes.right}>
+          </div>
+        </div>
       )}
     </div>
   );
