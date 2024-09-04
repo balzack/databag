@@ -1,3 +1,12 @@
+.all {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: center;
+  gap: 16px;
+  padding: 8px;
+}
+
 .identity {
   width: 100%;
   height: 48px;

@@ -4,6 +4,7 @@ import { Access } from './access/Access'
 import { Node } from './node/Node'
 import { Session } from './session/Session'
 import { createTheme, MantineProvider, virtualColor } from '@mantine/core'
+import { ModalsProvider } from '@mantine/modals'
 import './App.css'
 import '@mantine/core/styles.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
@@ -165,7 +166,9 @@ export function App() {
   return (
     <div className={classes.app}>
       <MantineProvider forceColorScheme={scheme} theme={theme}>
-        <RouterProvider router={router} />
+        <ModalsProvider>
+          <RouterProvider router={router} />
+        </ModalsProvider>
       </MantineProvider>
     </div>
   )

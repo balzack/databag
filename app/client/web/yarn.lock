@@ -1102,6 +1102,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@mantine/modals@npm:^7.12.2":
+  version: 7.12.2
+  resolution: "@mantine/modals@npm:7.12.2"
+  peerDependencies:
+    "@mantine/core": 7.12.2
+    "@mantine/hooks": 7.12.2
+    react: ^18.2.0
+    react-dom: ^18.2.0
+  checksum: 87ff5d999e72e58196b8a5cab52e13f504f6e75ac65eb73192737b109eafa9be558d7174154a71e44503a2cc4cc38471791fff9fb6732ff52f12c7677af77d78
+  languageName: node
+  linkType: hard
+
 "@nodelib/fs.scandir@npm:2.1.5":
   version: 2.1.5
   resolution: "@nodelib/fs.scandir@npm:2.1.5"
@@ -2757,6 +2769,7 @@ __metadata:
     "@eslint/js": ^9.8.0
     "@mantine/core": ^7.11.2
     "@mantine/hooks": ^7.11.2
+    "@mantine/modals": ^7.12.2
     "@tabler/core": ^1.0.0-beta20
     "@tabler/icons-react": ^3.12.0
     "@types/jest": 29.0.3
