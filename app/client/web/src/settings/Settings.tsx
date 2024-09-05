@@ -2,6 +2,7 @@ import { useSettings } from './useSettings.hook';
 import { Switch, Text, Image, Button, UnstyledButton } from '@mantine/core';
 import classes from './Settings.module.css';
 import { IconCloudLock, IconBell, IconEye, IconBook, IconMapPin } from '@tabler/icons-react'
+import avatar from '../images/avatar.png'
 
 export function Settings() {
   const { state, actions } = useSettings();
@@ -12,10 +13,20 @@ export function Settings() {
     <div className={classes.settings}>
       <Text className={classes.header}>{`${state.profile.handle}${state.profile.node ? '/' + state.profile.node : ''}`}</Text>
       <div className={classes.image}>
-        <Image radius="md" src={state.imageUrl} /> 
-        <div className={classes.edit}>
-          <Button size="compact-md" variant="light">{ state.strings.edit }</Button>
-        </div>
+        { state.profile.imageSet && (
+          <div className={classes.imageSet}>
+            <Image radius="md" src={state.imageUrl} /> 
+            <div className={classes.edit}>
+              <Button size="compact-md" variant="light">{ state.strings.edit }</Button>
+            </div>
+          </div>
+        )}
+        { !state.profile.imageSet && (
+          <div className={classes.imageUnset}>
+            <Image radius="md" src={avatar} /> 
+            <Text className={classes.unsetEdit}>{ state.strings.edit }</Text>
+          </div>
+        )}
       </div>
       <div className={classes.section}>
         <div className={classes.divider} />

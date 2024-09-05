@@ -19,6 +19,26 @@
     max-width: 250px;
     margin-top: 8px;
     margin-bottom: 24px;
+
+    .imageUnset {
+      cursor: pointer;
+
+      .unsetEdit {
+        visibility: hidden;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+      }
+
+      &:hover {
+        .unsetEdit {
+          visibility: unset;
+          color: var(--mantine-color-dbgreen-1);
+        }
+      }
+    }
   }
 
   .edit {
