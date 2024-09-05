@@ -34,6 +34,7 @@ export function useSettings() {
     }
     settings.addConfigListener(setConfig);
     const setProfile = (profile: Profile) => { 
+console.log("URL: ", identity.getProfileImageUrl());
       updateState({ profile }) 
     }
     identity.addProfileListener(setProfile)

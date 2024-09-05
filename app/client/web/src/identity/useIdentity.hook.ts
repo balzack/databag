@@ -17,7 +17,7 @@ export function useIdentity() {
   }
 
   const actions = {
-    setAll: (all) => {
+    setAll: (all: boolean) => {
       updateState({ all });
     },
     logout: async () => {

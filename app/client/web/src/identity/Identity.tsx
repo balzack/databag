@@ -9,19 +9,15 @@ import {
 } from '@tabler/icons-react'
 import { modals } from '@mantine/modals';
 
-export function Identity({ settings, contacts }) {
+export function Identity({ settings, contacts }: { settings: () => void, contacts: () => void }) {
   const { state, actions } = useIdentity();
   const [all, setAll] = useState(false);
-
-  const click = (ev) => {
-    console.log("CLICK", ev.currentTarget.checked);
-  }
 
   const logout = () => modals.openConfirmModal({
     title: state.strings.confirmLogout,
     withCloseButton: false,
     children: (
-      <Switch label={state.strings.allDevices} value={all} size="md" onChange={(ev) => actions.setAll(ev.currentTarget.checked)} />
+      <Switch label={state.strings.allDevices} size="md" onChange={(ev) => actions.setAll(ev.currentTarget.checked)} />
     ),
     labels: { confirm: state.strings.logout, cancel: state.strings.cancel },
     onConfirm: actions.logout,

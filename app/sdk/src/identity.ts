@@ -65,7 +65,7 @@ export class IdentityModule implements Identity {
             await this.store.setProfileData(guid, profile);
             await this.store.setProfileRevision(guid, nextRev);
             this.profile = profile;
-            this.emitter.emit('profile', this.getProfile());
+            this.emitter.emit('profile', this.setProfile());
             this.revision = nextRev;
             if (this.nextRevision === nextRev) {
               this.nextRevision = null;
@@ -82,14 +82,14 @@ export class IdentityModule implements Identity {
     }
   }
 
-  public getProfile() {
+  public setProfile() {
     const { guid, handle, name, description, location, image, revision, seal, version, node } = this.profile;
-    return { guid, handle, name, description, location, image, version, node, sealSet: Boolean(seal) };
+    return { guid, handle, name, description, location, imageSet: Boolean(image), version, node, sealSet: Boolean(seal) };
   }
 
   public addProfileListener(ev: (profile: Profile) => void): void {
     this.emitter.on('profile', ev);
-    this.emitter.emit('profile', this.getProfile());
+    this.emitter.emit('profile', this.setProfile());
   }
 
   public removeProfileListener(ev: (profile: Profile) => void): void {
