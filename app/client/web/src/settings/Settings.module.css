@@ -2,10 +2,11 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  padding: 8px;
+  gap: 2px;
 
   .header {
-    font-size: 24px;
+    font-size: 22px;
     text-align: center;
     text-wrap: nowrap;
     text-overflow: ellipsis;
@@ -14,8 +15,10 @@
 
   .image {
     position: relative;
-    width: 80%;
+    width: 90%;
     max-width: 250px;
+    margin-top: 8px;
+    margin-bottom: 24px;
   }
 
   .edit {
@@ -24,5 +27,80 @@
     width: 100%;
     display: flex;
     justify-content: center;
+  }
+
+  .section {
+    width: 100%;
+    display: flex;
+    align-items: center;
+
+    .sectionEdit {
+      flex-shrink: 0;
+      color: var(--mantine-color-dbgreen-1);
+      padding-left: 8px;
+      height: 0px;
+      position: relative;
+      top: -12px;
+    }
+  }
+
+  .divider {
+    margin-top: 8px;
+    margin-bottom: 8px;
+    border: 1px solid var(--mantine-color-text-9);
+    width: 100%;
+  }
+
+  .nameSet {
+    width: 100%;
+    padding-left: 8px;
+    font-size: 24px;
+    text-wrap: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
+  .nameUnset {
+    width: 100%;
+    padding-left: 8px;
+    font-size: 24px;
+    text-wrap: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    font-style: italic;
+    color: var(--mantine-color-text-9);
+  }
+
+  .entry {
+    width: 100%;
+    padding-left: 8px;
+    display: flex;
+
+    .entryIcon {
+      width: 32px;
+    }
+
+    .entrySet {
+    }
+
+    .entryUnset {
+      font-style: italic;
+      color: var(--mantine-color-text-9);
+    }
+
+    .entryValue {
+      display: flex;
+      cursor: pointer;
+
+      .entryLabel {
+        padding-right: 16px;
+        color: var(--mantine-color-dbgreen-1);
+      }
+
+      .entryControl {
+        display: flex;
+        align-items: center;
+      }
+    }
   }
 }

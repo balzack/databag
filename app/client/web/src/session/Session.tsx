@@ -25,7 +25,6 @@ export function Session() {
       { display.state.layout === 'small' && (
         <>
           <div className={classes.screen}>
-            <Button onClick={app.actions.accountLogout}>Session Logout</Button>
             { tab === 'settings' && (
               <Settings />
             )}

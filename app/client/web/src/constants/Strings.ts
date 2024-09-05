@@ -12,6 +12,7 @@ export const en = {
   enableNotifications: 'Push Notifications',
   accessCode: 'Access Code',
   forgotPassword: 'Forgot Password',
+  manageTopics: 'Manage Sealing Key',
 
   new: 'New',
   newMessage: 'New Message',
@@ -225,6 +226,7 @@ export const fr = {
   enableNotifications: 'Notifications Push',
   accessCode: "Code d'Accès",
   forgotPassword: 'Mot de Passe Oublié',
+  manageTopics: 'Gérer la clé de sécurité',
 
   new: 'Nouveau',
   newMessage: 'Nouveau Message',
@@ -441,6 +443,7 @@ export const sp = {
   enableNotifications: 'Notificaciones Push',
   accessCode: 'Código de Acceso',
   forgotPassword: 'Contraseña Olvidada',
+  manageTopics: 'Administrar clave de seguridad',
 
   new: 'Nuevo',
   newMessage: 'Nuevo mensaje',
@@ -655,6 +658,7 @@ export const pt = {
   enableNotifications: 'Notificações Push',
   accessCode: 'Código de Acesso',
   forgotPassword: 'Senha Esquecida',
+  manageTopics: 'Gerenciar Chave de Selagem',
 
   new: 'Novo',
   newMessage: 'Nova mensagem',
@@ -869,6 +873,7 @@ export const de = {
   enableNotifications: 'Mitteilungen',
   accessCode: 'Zugangscode',
   forgotPassword: 'Passwort Vergessen',
+  manageTopics: 'Sicherheitsschlüssel verwalten',
 
   new: 'Neu',
   newMessage: 'Neue Nachricht',
@@ -1084,6 +1089,7 @@ export const ru = {
   enableNotifications: 'Уведомления',
   accessCode: 'Код доступа',
   forgotPassword: 'Пароль забыт',
+  manageTopics: 'Управление ключом запечатывания',
 
   new: 'Новый',
   newMessage: 'Новое сообщение',
