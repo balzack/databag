@@ -1,2 +1,28 @@
 .settings {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+
+  .header {
+    font-size: 24px;
+    text-align: center;
+    text-wrap: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
+  .image {
+    position: relative;
+    width: 80%;
+    max-width: 250px;
+  }
+
+  .edit {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
 }

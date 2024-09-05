@@ -1,15 +1,19 @@
 import { useEffect, useState, useContext } from 'react'
 import { AppContext } from '../context/AppContext';
+import { DisplayContext } from '../context/DisplayContext';
 import { ContextType } from '../context/ContextType';
 import { Session, Settings, Identity, type Profile, type Config } from 'databag-client-sdk'
 
 export function useSettings() {
 
+  const display = useContext(DisplayContext) as ContextType;
   const app = useContext(AppContext) as ContextType;
 
   const [state, setState] = useState({
     config: {},
     profile: {},
+    imageUrl: null,
+    strings: display.state.strings,
   })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -33,9 +37,8 @@ export function useSettings() {
       updateState({ config }) 
     }
     settings.addConfigListener(setConfig);
-    const setProfile = (profile: Profile) => { 
-console.log("URL: ", identity.getProfileImageUrl());
-      updateState({ profile }) 
+    const setProfile = (profile: Profile) => {
+      updateState({ profile, imageUrl: identity.getProfileImageUrl() }) 
     }
     identity.addProfileListener(setProfile)
     return () => { 
