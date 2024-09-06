@@ -115,6 +115,9 @@
       .entryLabel {
         padding-right: 16px;
         color: var(--mantine-color-dbgreen-1);
+        text-wrap: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
       }
 
       .entryControl {

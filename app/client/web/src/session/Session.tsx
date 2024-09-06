@@ -60,7 +60,7 @@ export function Session() {
           </div>
           <div className={classes.right}>
           </div>
-          <Drawer opened={settings} onClose={closeSettings} withCloseButton={false} size="xs" position="right">
+          <Drawer opened={settings} onClose={closeSettings} withCloseButton={false} size="sm" position="right">
             <Settings />
           </Drawer>
         </div>

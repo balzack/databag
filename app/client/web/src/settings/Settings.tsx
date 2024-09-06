@@ -1,7 +1,7 @@
 import { useSettings } from './useSettings.hook';
 import { Switch, Text, Image, Button, UnstyledButton } from '@mantine/core';
 import classes from './Settings.module.css';
-import { IconCloudLock, IconBell, IconEye, IconBook, IconMapPin } from '@tabler/icons-react'
+import { IconTicket, IconCloudLock, IconBell, IconEye, IconBook, IconMapPin, IconLogout, IconLogin } from '@tabler/icons-react'
 import avatar from '../images/avatar.png'
 
 export function Settings() {
@@ -85,6 +85,32 @@ export function Settings() {
         <div className={classes.entryValue}>
           <Text className={classes.entryLabel}>{ state.strings.enableNotifications }</Text>
           <Switch className={classes.entryControl} />
+        </div>
+      </div>
+      <div className={classes.divider} />
+      <div className={classes.entry}>
+        <div className={classes.entryIcon}>
+          <IconLogout />
+        </div>
+        <div className={classes.entryValue}>
+          <Text className={classes.entryLabel}>{ state.strings.logout }</Text>
+        </div>
+      </div>
+      <div className={classes.entry}>
+        <div className={classes.entryIcon}>
+          <IconTicket />
+        </div>
+        <div className={classes.entryValue}>
+          <Text className={classes.entryLabel}>{ state.strings.mfaTitle }</Text>
+          <Switch className={classes.entryControl} />
+        </div>
+      </div>
+      <div className={classes.entry}>
+        <div className={classes.entryIcon}>
+          <IconLogin />
+        </div>
+        <div className={classes.entryValue}>
+          <Text className={classes.entryLabel}>{ state.strings.changeLogin }</Text>
         </div>
       </div>
     </div>
