@@ -16,4 +16,7 @@ export default defineConfig(() => ({
   preview: {
     port: 8080,
   },
+  build: {
+      chunkSizeWarningLimit: 1600
+  }
 }))

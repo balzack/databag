@@ -1,14 +1,12 @@
 import { useSettings } from './useSettings.hook';
-import { Switch, Text, Image, Button, UnstyledButton } from '@mantine/core';
+import { Select, Switch, Text, Image, Button, UnstyledButton } from '@mantine/core';
 import classes from './Settings.module.css';
-import { IconTicket, IconCloudLock, IconBell, IconEye, IconBook, IconMapPin, IconLogout, IconLogin } from '@tabler/icons-react'
+import { IconWorld, IconBrightness, IconTicket, IconCloudLock, IconBell, IconEye, IconBook, IconMapPin, IconLogout, IconLogin } from '@tabler/icons-react'
 import avatar from '../images/avatar.png'
 
 export function Settings() {
   const { state, actions } = useSettings();
 
-  console.log(state);
-  
   return (
     <div className={classes.settings}>
       <Text className={classes.header}>{`${state.profile.handle}${state.profile.node ? '/' + state.profile.node : ''}`}</Text>
@@ -65,53 +63,68 @@ export function Settings() {
         <div className={classes.entryIcon}>
           <IconEye />
         </div>
-        <div className={classes.entryValue}>
-          <Text className={classes.entryLabel}>{ state.strings.registry }</Text>
-          <Switch className={classes.entryControl} />
-        </div>
+        <Text className={classes.entryLabel}>{ state.strings.registry }</Text>
+        <Switch className={classes.entryControl} />
       </div>
       <div className={classes.entry}>
         <div className={classes.entryIcon}>
           <IconCloudLock />
         </div>
-        <div className={classes.entryValue}>
-          <Text className={classes.entryLabel}>{ state.strings.manageTopics }</Text>
-        </div>
+        <Text className={classes.entryLabel}>{ state.strings.manageTopics }</Text>
       </div>
       <div className={classes.entry}>
         <div className={classes.entryIcon}>
           <IconBell />
         </div>
-        <div className={classes.entryValue}>
-          <Text className={classes.entryLabel}>{ state.strings.enableNotifications }</Text>
-          <Switch className={classes.entryControl} />
-        </div>
+        <Text className={classes.entryLabel}>{ state.strings.enableNotifications }</Text>
+        <Switch className={classes.entryControl} />
       </div>
       <div className={classes.divider} />
       <div className={classes.entry}>
         <div className={classes.entryIcon}>
           <IconLogout />
         </div>
-        <div className={classes.entryValue}>
-          <Text className={classes.entryLabel}>{ state.strings.logout }</Text>
-        </div>
+        <Text className={classes.entryLabel}>{ state.strings.logout }</Text>
       </div>
       <div className={classes.entry}>
         <div className={classes.entryIcon}>
           <IconTicket />
         </div>
-        <div className={classes.entryValue}>
-          <Text className={classes.entryLabel}>{ state.strings.mfaTitle }</Text>
-          <Switch className={classes.entryControl} />
-        </div>
+        <Text className={classes.entryLabel}>{ state.strings.mfaTitle }</Text>
+        <Switch className={classes.entryControl} />
       </div>
       <div className={classes.entry}>
         <div className={classes.entryIcon}>
           <IconLogin />
         </div>
-        <div className={classes.entryValue}>
           <Text className={classes.entryLabel}>{ state.strings.changeLogin }</Text>
+      </div>
+      <div className={classes.divider} />
+      <div className={classes.entry}>
+        <div className={classes.entryIcon}>
+          <IconBrightness />
         </div>
+        <Text className={classes.entryLabel}>{ state.strings.theme }</Text>
+        <Select
+          className={classes.entryControl}
+          size="xs"
+          data={state.themes}
+          value={state.scheme}
+          onChange={(theme) => actions.setTheme(theme as string)}
+        />
+      </div>
+       <div className={classes.entry}>
+        <div className={classes.entryIcon}>
+          <IconWorld />
+        </div>
+        <Text className={classes.entryLabel}>{ state.strings.language }</Text>
+        <Select
+          className={classes.entryControl}
+          size="xs"
+          data={state.languages}
+          value={state.language}
+          onChange={(language) => actions.setLanguage(language as string)}
+        />
       </div>
     </div>
   );

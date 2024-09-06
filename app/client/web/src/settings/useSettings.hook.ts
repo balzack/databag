@@ -10,10 +10,14 @@ export function useSettings() {
   const app = useContext(AppContext) as ContextType;
 
   const [state, setState] = useState({
-    config: {},
-    profile: {},
+    config: {} as Config,
+    profile: {} as Profile,
     imageUrl: null,
     strings: display.state.strings,
+    scheme: '',
+    language: '',
+    themes: display.state.themes,
+    languages: display.state.languages,
   })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -46,6 +50,18 @@ export function useSettings() {
       identity.removeProfileListener(setProfile);
     }
   }, []);
+
+  useEffect(() => {
+    const { strings, themes, scheme, languages, language } =
+      display.state
+    updateState({
+      strings,
+      themes: [...themes],
+      scheme,
+      languages,
+      language,
+    })
+  }, [display.state])
 
   const actions = {
     getUsernameStatus: async (username: string) => {
@@ -111,6 +127,12 @@ export function useSettings() {
     getProfileImageUrl: () => {
       const { identity } = getSession();
       return identity.getProfileImageUrl();
+    },
+    setLanguage: (code: string) => {
+      display.actions.setLanguage(code)
+    },
+    setTheme: (theme: string) => {
+      display.actions.setTheme(theme)
     },
   }
 

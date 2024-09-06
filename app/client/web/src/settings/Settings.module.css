@@ -101,9 +101,11 @@
     }
 
     .entrySet {
+      font-size: 14px;
     }
 
     .entryUnset {
+      font-size: 14px;
       font-style: italic;
       color: var(--mantine-color-text-9);
     }
@@ -111,19 +113,23 @@
     .entryValue {
       display: flex;
       cursor: pointer;
+      align-items: center;
+    }
 
-      .entryLabel {
-        padding-right: 16px;
-        color: var(--mantine-color-dbgreen-1);
-        text-wrap: nowrap;
-        text-overflow: ellipsis;
-        overflow: hidden;
-      }
+    .entryLabel {
+      padding-right: 8px;
+      color: var(--mantine-color-dbgreen-1);
+      text-wrap: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      font-size: 14px;
+    }
 
-      .entryControl {
-        display: flex;
-        align-items: center;
-      }
+    .entryControl {
+      display: flex;
+      align-items: center;
+      max-width: 40%;
+      padding: 0;
     }
   }
 }
