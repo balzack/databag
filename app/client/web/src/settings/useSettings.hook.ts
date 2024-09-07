@@ -24,6 +24,7 @@ export function useSettings() {
     videoInputs: [],
     timeFormat: '12h',
     dateFormat: 'mm/dd',
+    all: false,
   })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -148,17 +149,23 @@ console.log(audioInputs, videoInputs);
     setTheme: (theme: string) => {
       display.actions.setTheme(theme)
     },
-    setVideo: (device: string) => {
-      display.actions.setVideoInput(device);
+    setVideo: (device: string | null) => {
+      display.actions.setVideoInput(device ? device : null);
     },
-    setAudio: (device: string) => {
-      display.actions.setAudioInput(device);
+    setAudio: (device: string | null) => {
+      display.actions.setAudioInput(device ? device : null);
     },
     setDateFormat: (format: string) => {
       display.actions.setDateFormat(format);
     },
     setTimeFormat: (format: string) => {
       display.actions.setTimeFormat(format);
+    },
+    setAll: (all: boolean) => {
+      updateState({ all });
+    },
+    logout: async () => {
+      await app.actions.accountLogout(state.all);
     },
   }
 

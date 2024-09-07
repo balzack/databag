@@ -101,10 +101,11 @@
     width: 100%;
     padding-left: 8px;
     display: flex;
+    align-items: center;
 
     .radio {
       position: relative;
-      top: -8px;
+      top: -4px;
     }
 
     .entryIcon {
@@ -143,6 +144,7 @@
       text-overflow: ellipsis;
       overflow: hidden;
       font-size: 14px;
+      cursor: pointer;
     }
 
     .entryControl {

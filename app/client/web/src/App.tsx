@@ -4,19 +4,13 @@ import { Access } from './access/Access'
 import { Node } from './node/Node'
 import { Session } from './session/Session'
 import { createTheme, MantineProvider, virtualColor } from '@mantine/core'
-import { CSSVariablesResolver, ModalsProvider } from '@mantine/modals'
+import { ModalsProvider } from '@mantine/modals'
 import './App.css'
 import '@mantine/core/styles.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import classes from './App.module.css'
 import { DisplayContext } from './context/DisplayContext'
 import { ContextType } from './context/ContextType'
-
-const resolver: CSSVariablesResolver = (theme) => ({
-  variables: {
-  //  '--mantine-spacing-xs': 0,
-  },
-});
 
 const theme = createTheme({
   primaryColor: 'databag-green',
@@ -171,7 +165,7 @@ export function App() {
 
   return (
     <div className={classes.app}>
-      <MantineProvider forceColorScheme={scheme} cssVariablesResolver={resolver} theme={theme}>
+      <MantineProvider forceColorScheme={scheme} theme={theme}>
         <ModalsProvider>
           <RouterProvider router={router} />
         </ModalsProvider>

@@ -3,9 +3,20 @@ import { Radio, Group, Select, Switch, Text, Image, Button, UnstyledButton } fro
 import classes from './Settings.module.css';
 import { IconClock, IconCalendar, IconVideo, IconMicrophone, IconWorld, IconBrightness, IconTicket, IconCloudLock, IconBell, IconEye, IconBook, IconMapPin, IconLogout, IconLogin } from '@tabler/icons-react'
 import avatar from '../images/avatar.png'
+import { modals } from '@mantine/modals';
 
 export function Settings() {
   const { state, actions } = useSettings();
+
+  const logout = () => modals.openConfirmModal({
+    title: state.strings.confirmLogout,
+    withCloseButton: false,
+    children: (
+      <Switch label={state.strings.allDevices} size="md" onChange={(ev) => actions.setAll(ev.currentTarget.checked)} />
+    ),
+    labels: { confirm: state.strings.logout, cancel: state.strings.cancel },
+    onConfirm: actions.logout,
+  });
 
   return (
     <div className={classes.settings}>
@@ -84,7 +95,7 @@ export function Settings() {
         <div className={classes.entryIcon}>
           <IconLogout />
         </div>
-        <Text className={classes.entryLabel}>{ state.strings.logout }</Text>
+        <Text className={classes.entryLabel} onClick={logout}>{ state.strings.logout }</Text>
       </div>
       <div className={classes.entry}>
         <div className={classes.entryIcon}>
@@ -173,7 +184,7 @@ export function Settings() {
             size="xs"
             data={[ { value: '', label: state.strings.default }, ...state.audioInputs ]}
             value={state.audioId ? state.audioId : ''}
-            onChange={(language) => actions.setLanguage(language as string)}
+            onChange={actions.setAudio}
           />
         </div>
         <div className={classes.entry}>
@@ -186,7 +197,7 @@ export function Settings() {
             size="xs"
             data={[ { value: '', label: state.strings.default }, ...state.videoInputs ]}
             value={state.videoId ? state.videoId : ''}
-            onChange={(language) => actions.setLanguage(language as string)}
+            onChange={actions.setVideo}
           />
         </div>
       </div>
