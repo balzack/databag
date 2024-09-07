@@ -30,7 +30,9 @@
     padding-left: 10%;
     padding-right: 10%;
     height: calc(100% - 48px);
-    background-color: #444444;
+    background-color: var(--mantine-color-surface-1);
+    overflow: auto;
+    padding-bottom: 16px;
   } 
 
   .tabs {

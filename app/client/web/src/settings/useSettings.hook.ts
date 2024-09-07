@@ -12,6 +12,7 @@ export function useSettings() {
   const [state, setState] = useState({
     config: {} as Config,
     profile: {} as Profile,
+    profileSet: false,
     imageUrl: null,
     strings: display.state.strings,
     scheme: '',
@@ -49,7 +50,7 @@ export function useSettings() {
     }
     settings.addConfigListener(setConfig);
     const setProfile = (profile: Profile) => {
-      updateState({ profile, imageUrl: identity.getProfileImageUrl() }) 
+      updateState({ profile, profileSet: true, imageUrl: identity.getProfileImageUrl() }) 
     }
     identity.addProfileListener(setProfile)
     return () => { 
