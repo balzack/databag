@@ -102,6 +102,11 @@
     padding-left: 8px;
     display: flex;
 
+    .radio {
+      position: relative;
+      top: -8px;
+    }
+
     .entryIcon {
       width: 32px;
       display: flex;
@@ -124,7 +129,7 @@
     }
 
     .controlLabel {
-      padding-right: 8px;
+      padding-right: 16px;
       text-wrap: nowrap;
       text-overflow: ellipsis;
       overflow: hidden;

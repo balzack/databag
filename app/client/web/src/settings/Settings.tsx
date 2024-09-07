@@ -108,6 +108,7 @@ export function Settings() {
         <Text className={classes.controlLabel}>{ state.strings.timeFormat }</Text>
         <Radio.Group
           name="timeFormat"
+          className={classes.radio}
           value={state.timeFormat}
           onChange={actions.setTimeFormat}
         >
@@ -124,6 +125,7 @@ export function Settings() {
         <Text className={classes.controlLabel}>{ state.strings.dateFormat }</Text>
         <Radio.Group
           name="dateFormat"
+          className={classes.radio}
           value={state.dateFormat}
           onChange={actions.setDateFormat}
         >
