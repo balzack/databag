@@ -1,13 +1,15 @@
 import { useState } from 'react';
 import classes from './Identity.module.css';
 import { useIdentity } from './useIdentity.hook';
-import { Menu, Switch } from '@mantine/core';
+import { Text, Image, Menu, Switch } from '@mantine/core';
 import {
   IconLogout,
+  IconChevronRight,
   IconSettings,
   IconAddressBook
 } from '@tabler/icons-react'
 import { modals } from '@mantine/modals';
+import avatar from '../images/avatar.png'
 
 export function Identity({ settings, contacts }: { settings: () => void, contacts: () => void }) {
   const { state, actions } = useIdentity();
@@ -26,7 +28,19 @@ export function Identity({ settings, contacts }: { settings: () => void, contact
   return (
     <Menu shadow="md" position="right">
       <Menu.Target>
-        <div className={classes.identity}>IDENTITY</div>
+        <div className={classes.identity}>
+          <Image radius="sm" className={classes.image} src={state.profile.imageSet ? state.imageUrl : avatar} />
+          <div className={classes.text}>
+            { !state.profile.name && (
+              <Text className={classes.nameUnset}>{state.strings.name}</Text>
+            )}
+            { state.profile.name && (
+              <Text className={classes.nameSet}>{state.profile.name}</Text>
+            )}
+           <Text className={classes.handle}>{`${state.profile.handle}${state.profile.node ? '/' + state.profile.node : ''}`}</Text>
+          </div>
+          <IconChevronRight className={classes.icon} />
+        </div>
       </Menu.Target>
 
       <Menu.Dropdown>
