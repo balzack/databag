@@ -1,7 +1,7 @@
 import { useSettings } from './useSettings.hook';
-import { Select, Switch, Text, Image, Button, UnstyledButton } from '@mantine/core';
+import { Radio, Group, Select, Switch, Text, Image, Button, UnstyledButton } from '@mantine/core';
 import classes from './Settings.module.css';
-import { IconWorld, IconBrightness, IconTicket, IconCloudLock, IconBell, IconEye, IconBook, IconMapPin, IconLogout, IconLogin } from '@tabler/icons-react'
+import { IconClock, IconCalendar, IconVideo, IconMicrophone, IconWorld, IconBrightness, IconTicket, IconCloudLock, IconBell, IconEye, IconBook, IconMapPin, IconLogout, IconLogin } from '@tabler/icons-react'
 import avatar from '../images/avatar.png'
 
 export function Settings() {
@@ -100,60 +100,94 @@ export function Settings() {
           <Text className={classes.entryLabel}>{ state.strings.changeLogin }</Text>
       </div>
       <div className={classes.divider} />
-      <div className={classes.entry}>
-        <div className={classes.entryIcon}>
-          <IconBrightness />
-        </div>
-        <Text className={classes.entryLabel}>{ state.strings.theme }</Text>
-        <Select
-          className={classes.entryControl}
-          size="xs"
-          data={state.themes}
-          value={state.scheme}
-          onChange={(theme) => actions.setTheme(theme as string)}
-        />
-      </div>
-      <div className={classes.entry}>
-        <div className={classes.entryIcon}>
-          <IconWorld />
-        </div>
-        <Text className={classes.entryLabel}>{ state.strings.language }</Text>
-        <Select
-          className={classes.entryControl}
-          size="xs"
-          data={state.languages}
-          value={state.language}
-          onChange={(language) => actions.setLanguage(language as string)}
-        />
-      </div>
 
       <div className={classes.entry}>
         <div className={classes.entryIcon}>
-          <IconWorld />
+          <IconClock />
         </div>
-        <Text className={classes.entryLabel}>{ state.strings.microphone }</Text>
-        <Select
-          className={classes.entryControl}
-          size="xs"
-          data={[ { value: '', label: state.strings.default }, ...state.audioInputs ]}
-          value={state.audioId ? state.audioId : ''}
-          onChange={(language) => actions.setLanguage(language as string)}
-        />
+        <Text className={classes.controlLabel}>{ state.strings.timeFormat }</Text>
+        <Radio.Group
+          name="timeFormat"
+          value={state.timeFormat}
+          onChange={actions.setTimeFormat}
+        >
+          <Group mt="xs">
+            <Radio value="12h" label={ state.strings.timeUs } />
+            <Radio value="24h" label={ state.strings.timeEu } />
+          </Group>
+        </Radio.Group>
       </div>
       <div className={classes.entry}>
         <div className={classes.entryIcon}>
-          <IconWorld />
+          <IconCalendar />
         </div>
-        <Text className={classes.entryLabel}>{ state.strings.camera }</Text>
-        <Select
-          className={classes.entryControl}
-          size="xs"
-          data={[ { value: '', label: state.strings.default }, ...state.videoInputs ]}
-          value={state.videoId ? state.videoId : ''}
-          onChange={(language) => actions.setLanguage(language as string)}
-        />
+        <Text className={classes.controlLabel}>{ state.strings.dateFormat }</Text>
+        <Radio.Group
+          name="dateFormat"
+          value={state.dateFormat}
+          onChange={actions.setDateFormat}
+        >
+          <Group mt="xs">
+            <Radio value="mm/dd" label={ state.strings.dateUs } />
+            <Radio value="dd/mm" label={ state.strings.dateEu } />
+          </Group>
+        </Radio.Group>
       </div>
 
+      <div className={classes.selects}>
+        <div className={classes.entry}>
+          <div className={classes.entryIcon}>
+            <IconBrightness />
+          </div>
+          <Text className={classes.controlLabel}>{ state.strings.theme }</Text>
+          <Select
+            className={classes.entryControl}
+            size="xs"
+            data={state.themes}
+            value={state.scheme}
+            onChange={(theme) => actions.setTheme(theme as string)}
+          />
+        </div>
+        <div className={classes.entry}>
+          <div className={classes.entryIcon}>
+            <IconWorld />
+          </div>
+          <Text className={classes.controlLabel}>{ state.strings.language }</Text>
+          <Select
+            className={classes.entryControl}
+            size="xs"
+            data={state.languages}
+            value={state.language}
+            onChange={(language) => actions.setLanguage(language as string)}
+          />
+        </div>
+        <div className={classes.entry}>
+          <div className={classes.entryIcon}>
+            <IconMicrophone />
+          </div>
+          <Text className={classes.controlLabel}>{ state.strings.microphone }</Text>
+          <Select
+            className={classes.entryControl}
+            size="xs"
+            data={[ { value: '', label: state.strings.default }, ...state.audioInputs ]}
+            value={state.audioId ? state.audioId : ''}
+            onChange={(language) => actions.setLanguage(language as string)}
+          />
+        </div>
+        <div className={classes.entry}>
+          <div className={classes.entryIcon}>
+            <IconVideo />
+          </div>
+          <Text className={classes.controlLabel}>{ state.strings.camera }</Text>
+          <Select
+            className={classes.entryControl}
+            size="xs"
+            data={[ { value: '', label: state.strings.default }, ...state.videoInputs ]}
+            value={state.videoId ? state.videoId : ''}
+            onChange={(language) => actions.setLanguage(language as string)}
+          />
+        </div>
+      </div>
     </div>
   );
 }

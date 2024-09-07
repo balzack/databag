@@ -3,7 +3,7 @@
   flex-direction: column;
   align-items: center;
   padding: 8px;
-  gap: 2px;
+  gap: 8px;
 
   .header {
     font-size: 22px;
@@ -64,6 +64,12 @@
     }
   }
 
+  .selects {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
   .divider {
     margin-top: 8px;
     margin-bottom: 8px;
@@ -98,6 +104,7 @@
 
     .entryIcon {
       width: 32px;
+      display: flex;
     }
 
     .entrySet {
@@ -114,6 +121,14 @@
       display: flex;
       cursor: pointer;
       align-items: center;
+    }
+
+    .controlLabel {
+      padding-right: 8px;
+      text-wrap: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      font-size: 14px;
     }
 
     .entryLabel {

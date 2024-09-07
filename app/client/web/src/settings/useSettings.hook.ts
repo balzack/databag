@@ -22,6 +22,8 @@ export function useSettings() {
     audioInputs: [],
     videoId: null,
     videoInputs: [],
+    timeFormat: '12h',
+    dateFormat: 'mm/dd',
   })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -56,10 +58,12 @@ export function useSettings() {
   }, []);
 
   useEffect(() => {
-    const { strings, themes, scheme, languages, language, audioId, audioInputs, videoId, videoInputs } =
+    const { strings, dateFormat, timeFormat, themes, scheme, languages, language, audioId, audioInputs, videoId, videoInputs } =
       display.state
     updateState({
       strings,
+      dateFormat,
+      timeFormat,
       themes: [...themes],
       scheme,
       languages,
@@ -149,6 +153,12 @@ console.log(audioInputs, videoInputs);
     },
     setAudio: (device: string) => {
       display.actions.setAudioInput(device);
+    },
+    setDateFormat: (format: string) => {
+      display.actions.setDateFormat(format);
+    },
+    setTimeFormat: (format: string) => {
+      display.actions.setTimeFormat(format);
     },
   }
 

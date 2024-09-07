@@ -14,3 +14,6 @@
   background: var(--mantine-color-surface-4);
 }
 
+.menu {
+  padding: 8px;
+}
