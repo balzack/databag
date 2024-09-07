@@ -18,6 +18,10 @@ export function useSettings() {
     language: '',
     themes: display.state.themes,
     languages: display.state.languages,
+    audioId: null,
+    audioInputs: [],
+    videoId: null,
+    videoInputs: [],
   })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -52,7 +56,7 @@ export function useSettings() {
   }, []);
 
   useEffect(() => {
-    const { strings, themes, scheme, languages, language } =
+    const { strings, themes, scheme, languages, language, audioId, audioInputs, videoId, videoInputs } =
       display.state
     updateState({
       strings,
@@ -60,7 +64,13 @@ export function useSettings() {
       scheme,
       languages,
       language,
+      audioId,
+      audioInputs,
+      videoId,
+      videoInputs,
     })
+
+console.log(audioInputs, videoInputs);
   }, [display.state])
 
   const actions = {
@@ -133,6 +143,12 @@ export function useSettings() {
     },
     setTheme: (theme: string) => {
       display.actions.setTheme(theme)
+    },
+    setVideo: (device: string) => {
+      display.actions.setVideoInput(device);
+    },
+    setAudio: (device: string) => {
+      display.actions.setAudioInput(device);
     },
   }
 

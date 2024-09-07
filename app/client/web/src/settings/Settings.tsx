@@ -113,7 +113,7 @@ export function Settings() {
           onChange={(theme) => actions.setTheme(theme as string)}
         />
       </div>
-       <div className={classes.entry}>
+      <div className={classes.entry}>
         <div className={classes.entryIcon}>
           <IconWorld />
         </div>
@@ -126,6 +126,34 @@ export function Settings() {
           onChange={(language) => actions.setLanguage(language as string)}
         />
       </div>
+
+      <div className={classes.entry}>
+        <div className={classes.entryIcon}>
+          <IconWorld />
+        </div>
+        <Text className={classes.entryLabel}>{ state.strings.microphone }</Text>
+        <Select
+          className={classes.entryControl}
+          size="xs"
+          data={[ { value: '', label: state.strings.default }, ...state.audioInputs ]}
+          value={state.audioId ? state.audioId : ''}
+          onChange={(language) => actions.setLanguage(language as string)}
+        />
+      </div>
+      <div className={classes.entry}>
+        <div className={classes.entryIcon}>
+          <IconWorld />
+        </div>
+        <Text className={classes.entryLabel}>{ state.strings.camera }</Text>
+        <Select
+          className={classes.entryControl}
+          size="xs"
+          data={[ { value: '', label: state.strings.default }, ...state.videoInputs ]}
+          value={state.videoId ? state.videoId : ''}
+          onChange={(language) => actions.setLanguage(language as string)}
+        />
+      </div>
+
     </div>
   );
 }
