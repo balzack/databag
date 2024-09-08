@@ -1,22 +1,53 @@
 import { useSettings } from './useSettings.hook';
-import { Radio, Group, Select, Switch, Text, Image, Button, UnstyledButton } from '@mantine/core';
+import { Modal, TextInput, PasswordInput, Radio, Group, Select, Switch, Text, Image, Button, UnstyledButton } from '@mantine/core';
 import classes from './Settings.module.css';
-import { IconClock, IconCalendar, IconVideo, IconMicrophone, IconWorld, IconBrightness, IconTicket, IconCloudLock, IconBell, IconEye, IconBook, IconMapPin, IconLogout, IconLogin } from '@tabler/icons-react'
+import { IconLock, IconUser, IconClock, IconCalendar, IconUsers, IconVideo, IconMicrophone, IconWorld, IconBrightness, IconTicket, IconCloudLock, IconBell, IconEye, IconBook, IconMapPin, IconLogout, IconLogin } from '@tabler/icons-react'
 import avatar from '../images/avatar.png'
 import { modals } from '@mantine/modals';
+import { useDisclosure } from '@mantine/hooks'
 
-export function Settings() {
+export function Settings({ showLogout }) {
   const { state, actions } = useSettings();
+  const [changeOpened, { open: changeOpen, close: changeClose }] = useDisclosure(false)
 
   const logout = () => modals.openConfirmModal({
     title: state.strings.confirmLogout,
     withCloseButton: false,
+    overlayProps: {
+      backgroundOpacity: 0.55,
+      blur: 3,
+    },
     children: (
       <Switch label={state.strings.allDevices} size="md" onChange={(ev) => actions.setAll(ev.currentTarget.checked)} />
     ),
     labels: { confirm: state.strings.logout, cancel: state.strings.cancel },
     onConfirm: actions.logout,
   });
+
+  const setLogin = async () => {
+    try {
+throw new Error("NO");
+      await actions.setLogin();
+      changeClose();
+    }
+    catch (err) {
+      console.log(err);
+      modals.openConfirmModal({
+        title: state.strings.operationFailed,
+        withCloseButton: true,
+        overlayProps: {
+          backgroundOpacity: 0.55,
+          blur: 3,
+        },
+        children: (
+          <Text>{state.strings.tryAgain}</Text>
+        ),
+        cancelProps: { display: 'none' },
+        confirmProps: { display: 'none' },
+      });
+
+    }
+  }
 
   return (
     <>
@@ -93,12 +124,14 @@ export function Settings() {
             <Switch className={classes.entryControl} />
           </div>
           <div className={classes.divider} />
-          <div className={classes.entry}>
-            <div className={classes.entryIcon}>
-              <IconLogout />
+          { showLogout && (
+            <div className={classes.entry}>
+              <div className={classes.entryIcon}>
+                <IconLogout />
+              </div>
+              <Text className={classes.entryLabel} onClick={logout}>{ state.strings.logout }</Text>
             </div>
-            <Text className={classes.entryLabel} onClick={logout}>{ state.strings.logout }</Text>
-          </div>
+          )}
           <div className={classes.entry}>
             <div className={classes.entryIcon}>
               <IconTicket />
@@ -110,7 +143,7 @@ export function Settings() {
             <div className={classes.entryIcon}>
               <IconLogin />
             </div>
-              <Text className={classes.entryLabel}>{ state.strings.changeLogin }</Text>
+              <Text className={classes.entryLabel} onClick={changeOpen}>{ state.strings.changeLogin }</Text>
           </div>
           <div className={classes.divider} />
 
@@ -205,6 +238,62 @@ export function Settings() {
           </div>
         </div>
       )}
+      <Modal
+        title={state.strings.changeLogin}
+        opened={changeOpened}
+        onClose={changeClose}
+        overlayProps={{ backgroundOpacity: 0.55, blur: 3 }}
+        centered
+      >
+        <div className={classes.change}>
+          <TextInput
+            className={classes.input}
+            size="md"
+            value={state.username}
+            leftSectionPointerEvents="none"
+            leftSection={<IconUser />}
+            rightSection={state.taken ? <IconUsers /> : null}
+            placeholder={state.strings.username}
+            onChange={(event) =>
+              actions.setUsername(event.currentTarget.value)
+            }
+            error={state.taken}
+          />
+          <PasswordInput
+            className={classes.input}
+            size="md"
+            value={state.password}
+            leftSection={<IconLock />}
+            placeholder={state.strings.password}
+            onChange={(event) =>
+              actions.setPassword(event.currentTarget.value)
+            }
+          />
+          <PasswordInput
+            className={classes.input}
+            size="md"
+            value={state.confirm}
+            leftSection={<IconLock />}
+            placeholder={state.strings.confirmPassword}
+            onChange={(event) =>
+              actions.setConfirm(event.currentTarget.value)
+            }
+          />
+          <div className={classes.control}>
+            <Button variant="default" onClick={changeClose}>
+              {state.strings.cancel}
+            </Button>
+            <Button
+              variant="filled"
+              onClick={setLogin}
+              loading={state.loading}
+              disabled={state.taken || !state.checked || !state.username || !state.password || state.confirm !== state.password}
+            >
+              {state.strings.save}
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </>
   );
 }

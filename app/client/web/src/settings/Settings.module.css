@@ -1,3 +1,16 @@
+.change {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.control {
+  display: flex;
+  gap: 16px;
+  padding-top: 8px;
+  justify-content: flex-end;
+}
+
 .settings {
   display: flex;
   flex-direction: column;

@@ -17,15 +17,15 @@ import left from '../images/login.png'
 import {
   IconLock,
   IconUser,
+  IconUsers,
   IconSettings,
   IconServer,
   IconKey,
 } from '@tabler/icons-react'
+import { modals } from '@mantine/modals';
 
 export function Access() {
   const { state, actions } = useAccess()
-  const [alertOpened, { open: alertOpen, close: alertClose }] =
-    useDisclosure(false)
   const [urlOpened, { open: urlOpen, close: urlClose }] = useDisclosure(false)
   const [otpOpened, { open: otpOpen, close: otpClose }] = useDisclosure(false)
   const [disabled, setDisabled] = useState(false)
@@ -58,7 +58,19 @@ export function Access() {
           }
           otpOpen()
         } else {
-          alertOpen()
+          modals.openConfirmModal({
+            title: state.strings.operationFailed,
+            withCloseButton: true,
+            overlayProps: {
+              backgroundOpacity: 0.55,
+              blur: 3,
+            },
+            children: (
+              <div>{state.strings.tryAgain}</div>
+            ),
+            cancelProps: { display: 'none' },
+            confirmProps: { display: 'none' },
+          });
         }
       }
       actions.setLoading(false)
@@ -228,6 +240,7 @@ export function Access() {
                   value={state.username}
                   leftSectionPointerEvents="none"
                   leftSection={<IconUser />}
+                  rightSection={state.taken ? <IconUsers /> : null}
                   placeholder={state.strings.username}
                   onChange={(event) =>
                     actions.setUsername(event.currentTarget.value)
@@ -331,6 +344,7 @@ export function Access() {
         opened={urlOpened}
         onClose={urlClose}
         withCloseButton={false}
+        overlayProps={{ backgroundOpacity: 0.55, blur: 3 }}
         centered
       >
         <TextInput
@@ -347,16 +361,10 @@ export function Access() {
         />
       </Modal>
       <Modal
-        opened={alertOpened}
-        onClose={alertClose}
-        title={state.strings.operationFailed}
-      >
-        {state.strings.tryAgain}
-      </Modal>
-      <Modal
         opened={otpOpened}
         onClose={otpClose}
         withCloseButton={false}
+        overlayProps={{ backgroundOpacity: 0.55, blur: 3 }}
         centered
       >
         <div className={classes.mfa}>

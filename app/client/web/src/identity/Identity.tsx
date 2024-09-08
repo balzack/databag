@@ -18,6 +18,10 @@ export function Identity({ settings, contacts }: { settings: () => void, contact
   const logout = () => modals.openConfirmModal({
     title: state.strings.confirmLogout,
     withCloseButton: false,
+    overlayProps: {
+          backgroundOpacity: 0.55,
+          blur: 3,
+    },
     children: (
       <Switch label={state.strings.allDevices} size="md" onChange={(ev) => actions.setAll(ev.currentTarget.checked)} />
     ),

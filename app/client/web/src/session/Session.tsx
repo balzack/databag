@@ -26,7 +26,7 @@ export function Session() {
         <>
           <div className={classes.screen}>
             { tab === 'settings' && (
-              <Settings />
+              <Settings showLogout={true} />
             )}
           </div>
           <div className={classes.tabs}>
@@ -61,7 +61,7 @@ export function Session() {
           <div className={classes.right}>
           </div>
           <Drawer opened={settings} onClose={closeSettings} withCloseButton={false} size="sm" position="right">
-            <Settings />
+            <Settings showLogout={false} />
           </Drawer>
         </div>
       )}

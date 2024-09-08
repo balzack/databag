@@ -1,13 +1,16 @@
-import { useEffect, useState, useContext } from 'react'
+import { useEffect, useState, useContext, useRef } from 'react'
 import { AppContext } from '../context/AppContext';
 import { DisplayContext } from '../context/DisplayContext';
 import { ContextType } from '../context/ContextType';
 import { Session, Settings, Identity, type Profile, type Config } from 'databag-client-sdk'
 
+const DEBOUNCE_MS = 1000;
+
 export function useSettings() {
 
   const display = useContext(DisplayContext) as ContextType;
   const app = useContext(AppContext) as ContextType;
+  const debounce = useRef(useRef(setTimeout(() => {}, 0)));
 
   const [state, setState] = useState({
     config: {} as Config,
@@ -26,6 +29,11 @@ export function useSettings() {
     timeFormat: '12h',
     dateFormat: 'mm/dd',
     all: false,
+    password: '',
+    confirm: '',
+    username: '',
+    taken: false,
+    checked: true,
   })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -50,7 +58,7 @@ export function useSettings() {
     }
     settings.addConfigListener(setConfig);
     const setProfile = (profile: Profile) => {
-      updateState({ profile, profileSet: true, imageUrl: identity.getProfileImageUrl() }) 
+      updateState({ profile, username: profile.handle, profileSet: true, imageUrl: identity.getProfileImageUrl() }) 
     }
     identity.addProfileListener(setProfile)
     return () => { 
@@ -168,6 +176,30 @@ console.log(audioInputs, videoInputs);
     logout: async () => {
       await app.actions.accountLogout(state.all);
     },
+    setUsername: (username) => {
+      updateState({ username, taken: false, checked: false });
+      clearTimeout(debounce.current);
+      if (!username || username === state.profile.handle) {
+        updateState({ available: true, checked: true});
+      }
+      else {
+        debounce.current = setTimeout(async () => {
+          const { settings } = getSession();
+          const available = await settings.getUsernameStatus(username);
+          updateState({ taken: !available, checked: true });
+        }, DEBOUNCE_MS);
+      }
+    },
+    setPassword: (password) => {
+      updateState({ password });
+    },
+    setConfirm: (confirm) => {
+      updateState({ confirm });
+    },
+    setLogin: async () => {
+      const { settings } = getSession();
+      await settings.setLogin(state.username, state.password);
+    }
   }
 
   return { state, actions }

@@ -211,7 +211,7 @@ export class SettingsModule implements Settings {
 
   public async getUsernameStatus(username: string): Promise<boolean> {
     const { node, secure, token } = this;
-    return await getUsername(username, token, node, secure);
+    return await getUsername(username, null, token, node, secure);
   }
 
   public async setLogin(username: string, password: string): Promise<void> {

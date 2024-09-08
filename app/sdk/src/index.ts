@@ -51,7 +51,7 @@ export class DatabagSDK {
   }
 
   public async username(name: string, token: string, node: string, secure: boolean): Promise<boolean> {
-    return await getUsername(name, token, node, secure);
+    return await getUsername(name, token, null, node, secure);
   }
 
   public async login(handle: string, password: string, node: string, secure: boolean, mfaCode: string | null, params: SessionParams): Promise<Session> {
