@@ -17,13 +17,20 @@
   padding-left: 8px;
   padding-right: 8px;
 
-  .image {
-    width: 48px;
-    height: 48px;
+  &:hover {
+    .icon {
+      color: var(--mantine-color-dbgreen-1);
+      height: 48px;
+    }
   }
 
   .icon {
     width: 32px;
+  }
+
+  .image {
+    width: 48px;
+    height: 48px;
   }
 
   .text {
