@@ -34,6 +34,10 @@ export function useSettings() {
     username: '',
     taken: false,
     checked: true,
+    name: '',
+    description: '',
+    location: '',
+    handle: '',
   })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -58,7 +62,8 @@ export function useSettings() {
     }
     settings.addConfigListener(setConfig);
     const setProfile = (profile: Profile) => {
-      updateState({ profile, username: profile.handle, profileSet: true, imageUrl: identity.getProfileImageUrl() }) 
+      const { handle, name, location, description } = profile;
+      updateState({ profile, handle, name, location, description, profileSet: true, imageUrl: identity.getProfileImageUrl() }) 
     }
     identity.addProfileListener(setProfile)
     return () => { 
@@ -176,16 +181,16 @@ console.log(audioInputs, videoInputs);
     logout: async () => {
       await app.actions.accountLogout(state.all);
     },
-    setUsername: (username) => {
-      updateState({ username, taken: false, checked: false });
+    setHandle: (handle) => {
+      updateState({ handle, taken: false, checked: false });
       clearTimeout(debounce.current);
-      if (!username || username === state.profile.handle) {
+      if (!handle || handle === state.profile.handle) {
         updateState({ available: true, checked: true});
       }
       else {
         debounce.current = setTimeout(async () => {
           const { settings } = getSession();
-          const available = await settings.getUsernameStatus(username);
+          const available = await settings.getUsernameStatus(handle);
           updateState({ taken: !available, checked: true });
         }, DEBOUNCE_MS);
       }
@@ -199,6 +204,20 @@ console.log(audioInputs, videoInputs);
     setLogin: async () => {
       const { settings } = getSession();
       await settings.setLogin(state.username, state.password);
+    },
+    setName: (name) => {
+      updateState({ name });
+    },
+    setLocation: (location) => {
+      updateState({ location });
+    },
+    setDescription: (description) => {
+      updateState({ description });
+    },
+    setDetails: async () => {
+      const { identity } = getSession();
+      const { name, location, description } = state;
+      await identity.setProfileData(name, location, description);
     }
   }
 

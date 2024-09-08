@@ -16,7 +16,7 @@
   flex-direction: column;
   align-items: center;
   padding: 8px;
-  gap: 8px;
+  gap: 2px;
 
   .header {
     font-size: 22px;
@@ -115,20 +115,19 @@
     width: 100%;
     padding-left: 8px;
     display: flex;
-    align-items: center;
 
     .radio {
       position: relative;
-      top: -4px;
+      top: -8px;
     }
 
     .entryIcon {
       width: 32px;
-      display: flex;
     }
 
     .entrySet {
       font-size: 14px;
+      white-space: preserve;
     }
 
     .entryUnset {
@@ -166,6 +165,8 @@
       align-items: center;
       max-width: 40%;
       padding: 0;
+      position: relative;
+      top: -4px;
     }
   }
 }

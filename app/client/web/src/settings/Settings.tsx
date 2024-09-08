@@ -1,14 +1,18 @@
 import { useSettings } from './useSettings.hook';
-import { Modal, TextInput, PasswordInput, Radio, Group, Select, Switch, Text, Image, Button, UnstyledButton } from '@mantine/core';
+import { Modal, Textarea, TextInput, PasswordInput, Radio, Group, Select, Switch, Text, Image, Button, UnstyledButton } from '@mantine/core';
 import classes from './Settings.module.css';
-import { IconLock, IconUser, IconClock, IconCalendar, IconUsers, IconVideo, IconMicrophone, IconWorld, IconBrightness, IconTicket, IconCloudLock, IconBell, IconEye, IconBook, IconMapPin, IconLogout, IconLogin } from '@tabler/icons-react'
+import { IconLock, IconUser, IconClock, IconIdBadge, IconCalendar, IconUsers, IconVideo, IconMicrophone, IconWorld, IconBrightness, IconTicket, IconCloudLock, IconBell, IconEye, IconBook, IconMapPin, IconLogout, IconLogin } from '@tabler/icons-react'
 import avatar from '../images/avatar.png'
 import { modals } from '@mantine/modals';
 import { useDisclosure } from '@mantine/hooks'
+import { useState } from 'react'
 
 export function Settings({ showLogout }) {
   const { state, actions } = useSettings();
   const [changeOpened, { open: changeOpen, close: changeClose }] = useDisclosure(false)
+  const [detailsOpened, { open: detailsOpen, close: detailsClose }] = useDisclosure(false)
+  const [savingLogin, setSavingLogin] = useState(false);
+  const [savingDetails, setSavingDetails] = useState(false);
 
   const logout = () => modals.openConfirmModal({
     title: state.strings.confirmLogout,
@@ -24,28 +28,57 @@ export function Settings({ showLogout }) {
     onConfirm: actions.logout,
   });
 
-  const setLogin = async () => {
-    try {
-throw new Error("NO");
-      await actions.setLogin();
-      changeClose();
+  const setDetails = async () => {
+    if (!savingDetails) {
+      setSavingDetails(true);
+      try {
+        await actions.setDetails();
+        detailsClose();
+      }
+      catch (err) {
+        console.log(err);
+        modals.openConfirmModal({
+          title: state.strings.operationFailed,
+          withCloseButton: true,
+          overlayProps: {
+            backgroundOpacity: 0.55,
+            blur: 3,
+          },
+          children: (
+            <Text>{state.strings.tryAgain}</Text>
+          ),
+          cancelProps: { display: 'none' },
+          confirmProps: { display: 'none' },
+        });
+      }
+      setSavingDetails(false);
     }
-    catch (err) {
-      console.log(err);
-      modals.openConfirmModal({
-        title: state.strings.operationFailed,
-        withCloseButton: true,
-        overlayProps: {
-          backgroundOpacity: 0.55,
-          blur: 3,
-        },
-        children: (
-          <Text>{state.strings.tryAgain}</Text>
-        ),
-        cancelProps: { display: 'none' },
-        confirmProps: { display: 'none' },
-      });
+  }
 
+  const setLogin = async () => {
+    if (!savingLogin) { 
+      setSavingLogin(true);
+      try {
+        await actions.setLogin();
+        changeClose();
+      }
+      catch (err) {
+        console.log(err);
+        modals.openConfirmModal({
+          title: state.strings.operationFailed,
+          withCloseButton: true,
+          overlayProps: {
+            backgroundOpacity: 0.55,
+            blur: 3,
+          },
+          children: (
+            <Text>{state.strings.tryAgain}</Text>
+          ),
+          cancelProps: { display: 'none' },
+          confirmProps: { display: 'none' },
+        });
+      }
+      setSavingLogin(false);
     }
   }
 
@@ -72,7 +105,7 @@ throw new Error("NO");
           </div>
           <div className={classes.section}>
             <div className={classes.divider} />
-            <UnstyledButton className={classes.sectionEdit}>{ state.strings.edit }</UnstyledButton>
+            <UnstyledButton className={classes.sectionEdit} onClick={detailsOpen}>{ state.strings.edit }</UnstyledButton>
           </div>
           { !state.profile.name && (
             <Text className={classes.nameUnset}>{state.strings.name}</Text>
@@ -146,43 +179,41 @@ throw new Error("NO");
               <Text className={classes.entryLabel} onClick={changeOpen}>{ state.strings.changeLogin }</Text>
           </div>
           <div className={classes.divider} />
-
-          <div className={classes.entry}>
-            <div className={classes.entryIcon}>
-              <IconClock />
-            </div>
-            <Text className={classes.controlLabel}>{ state.strings.timeFormat }</Text>
-            <Radio.Group
-              name="timeFormat"
-              className={classes.radio}
-              value={state.timeFormat}
-              onChange={actions.setTimeFormat}
-            >
-              <Group mt="xs">
-                <Radio value="12h" label={ state.strings.timeUs } />
-                <Radio value="24h" label={ state.strings.timeEu } />
-              </Group>
-            </Radio.Group>
-          </div>
-          <div className={classes.entry}>
-            <div className={classes.entryIcon}>
-              <IconCalendar />
-            </div>
-            <Text className={classes.controlLabel}>{ state.strings.dateFormat }</Text>
-            <Radio.Group
-              name="dateFormat"
-              className={classes.radio}
-              value={state.dateFormat}
-              onChange={actions.setDateFormat}
-            >
-              <Group mt="xs">
-                <Radio value="mm/dd" label={ state.strings.dateUs } />
-                <Radio value="dd/mm" label={ state.strings.dateEu } />
-              </Group>
-            </Radio.Group>
-          </div>
-
           <div className={classes.selects}>
+            <div className={classes.entry}>
+              <div className={classes.entryIcon}>
+                <IconClock />
+              </div>
+              <Text className={classes.controlLabel}>{ state.strings.timeFormat }</Text>
+              <Radio.Group
+                name="timeFormat"
+                className={classes.radio}
+                value={state.timeFormat}
+                onChange={actions.setTimeFormat}
+              >
+                <Group mt="xs">
+                  <Radio value="12h" label={ state.strings.timeUs } />
+                  <Radio value="24h" label={ state.strings.timeEu } />
+                </Group>
+              </Radio.Group>
+            </div>
+            <div className={classes.entry}>
+              <div className={classes.entryIcon}>
+                <IconCalendar />
+              </div>
+              <Text className={classes.controlLabel}>{ state.strings.dateFormat }</Text>
+              <Radio.Group
+                name="dateFormat"
+                className={classes.radio}
+                value={state.dateFormat}
+                onChange={actions.setDateFormat}
+              >
+                <Group mt="xs">
+                  <Radio value="mm/dd" label={ state.strings.dateUs } />
+                  <Radio value="dd/mm" label={ state.strings.dateEu } />
+                </Group>
+              </Radio.Group>
+            </div>
             <div className={classes.entry}>
               <div className={classes.entryIcon}>
                 <IconBrightness />
@@ -249,13 +280,13 @@ throw new Error("NO");
           <TextInput
             className={classes.input}
             size="md"
-            value={state.username}
+            value={state.handle}
             leftSectionPointerEvents="none"
             leftSection={<IconUser />}
             rightSection={state.taken ? <IconUsers /> : null}
             placeholder={state.strings.username}
             onChange={(event) =>
-              actions.setUsername(event.currentTarget.value)
+              actions.setHandle(event.currentTarget.value)
             }
             error={state.taken}
           />
@@ -286,8 +317,66 @@ throw new Error("NO");
             <Button
               variant="filled"
               onClick={setLogin}
-              loading={state.loading}
-              disabled={state.taken || !state.checked || !state.username || !state.password || state.confirm !== state.password}
+              loading={savingLogin}
+              disabled={state.taken || !state.checked || !state.handle || !state.password || state.confirm !== state.password}
+            >
+              {state.strings.save}
+            </Button>
+          </div>
+        </div>
+      </Modal>
+      <Modal
+        title={state.strings.profileDetails}
+        opened={detailsOpened}
+        onClose={detailsClose}
+        overlayProps={{ backgroundOpacity: 0.55, blur: 3 }}
+        centered
+      >
+        <div className={classes.change}>
+          <TextInput
+            className={classes.input}
+            size="md"
+            value={state.name}
+            leftSectionPointerEvents="none"
+            leftSection={<IconIdBadge />}
+            placeholder={state.strings.name}
+            onChange={(event) =>
+              actions.setName(event.currentTarget.value)
+            }
+          />
+          <TextInput
+            className={classes.input}
+            size="md"
+            value={state.location}
+            leftSectionPointerEvents="none"
+            leftSection={<IconMapPin />}
+            placeholder={state.strings.location}
+            onChange={(event) =>
+              actions.setLocation(event.currentTarget.value)
+            }
+          />
+          <Textarea
+            className={classes.input}
+            size="md"
+            minRows={1}
+            maxRows={4}
+            autosize={true}
+            value={state.description}
+            leftSectionPointerEvents="none"
+            leftSection={<IconBook />}
+            placeholder={state.strings.description}
+            onChange={(event) =>
+              actions.setDescription(event.currentTarget.value)
+            }
+          />
+          <div className={classes.control}>
+            <Button variant="default" onClick={detailsClose}>
+              {state.strings.cancel}
+            </Button>
+            <Button
+              variant="filled"
+              onClick={setDetails}
+              loading={savingDetails}
             >
               {state.strings.save}
             </Button>
