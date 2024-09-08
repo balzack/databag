@@ -122,7 +122,7 @@ export function Settings({ showLogout }) {
               <div className={classes.imageSet}>
                 <Image radius="md" src={state.imageUrl} /> 
                 <div className={classes.edit}>
-                  <Button size="compact-md" variant="light">{ state.strings.edit }</Button>
+                  <Button size="compact-md" variant="outlined">{ state.strings.edit }</Button>
                 </div>
               </div>
             )}
