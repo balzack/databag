@@ -88,8 +88,6 @@ export function useSettings() {
       videoId,
       videoInputs,
     })
-
-console.log(audioInputs, videoInputs);
   }, [display.state])
 
   const actions = {
@@ -201,10 +199,6 @@ console.log(audioInputs, videoInputs);
     setConfirm: (confirm) => {
       updateState({ confirm });
     },
-    setLogin: async () => {
-      const { settings } = getSession();
-      await settings.setLogin(state.username, state.password);
-    },
     setName: (name) => {
       updateState({ name });
     },
@@ -218,7 +212,7 @@ console.log(audioInputs, videoInputs);
       const { identity } = getSession();
       const { name, location, description } = state;
       await identity.setProfileData(name, location, description);
-    }
+    },
   }
 
   return { state, actions }

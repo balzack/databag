@@ -13,6 +13,8 @@ export function Settings({ showLogout }) {
   const [detailsOpened, { open: detailsOpen, close: detailsClose }] = useDisclosure(false)
   const [savingLogin, setSavingLogin] = useState(false);
   const [savingDetails, setSavingDetails] = useState(false);
+  const [savingRegistry, setSavingRegistry] = useState(false);
+  const [savingNotifications, setSavingNotifications] = useState(false);
 
   const logout = () => modals.openConfirmModal({
     title: state.strings.confirmLogout,
@@ -28,6 +30,42 @@ export function Settings({ showLogout }) {
     onConfirm: actions.logout,
   });
 
+  const setRegistry = async (checked: boolean) => {
+    if (!savingRegistry) {
+      setSavingRegistry(true);
+      try {
+        if (checked) {
+          await actions.enableRegistry();
+        } else {
+          await actions.disableRegistry();
+        }
+      }
+      catch (err) {
+        console.log(err);
+        showError();
+      }
+      setSavingRegistry(false);
+    }
+  }
+
+  const setNotifications = async (checked: boolean) => {
+    if (!savingNotifications) {
+      setSavingNotifications(true);
+      try {
+        if (checked) {
+          await actions.enableNotifications();
+        } else {
+          await actions.disableNotifications();
+        }
+      }
+      catch (err) {
+        console.log(err);
+        showError();
+      }
+      setSavingNotifications(false);
+    }
+  }
+
   const setDetails = async () => {
     if (!savingDetails) {
       setSavingDetails(true);
@@ -37,19 +75,7 @@ export function Settings({ showLogout }) {
       }
       catch (err) {
         console.log(err);
-        modals.openConfirmModal({
-          title: state.strings.operationFailed,
-          withCloseButton: true,
-          overlayProps: {
-            backgroundOpacity: 0.55,
-            blur: 3,
-          },
-          children: (
-            <Text>{state.strings.tryAgain}</Text>
-          ),
-          cancelProps: { display: 'none' },
-          confirmProps: { display: 'none' },
-        });
+        showError();
       }
       setSavingDetails(false);
     }
@@ -64,22 +90,26 @@ export function Settings({ showLogout }) {
       }
       catch (err) {
         console.log(err);
-        modals.openConfirmModal({
-          title: state.strings.operationFailed,
-          withCloseButton: true,
-          overlayProps: {
-            backgroundOpacity: 0.55,
-            blur: 3,
-          },
-          children: (
-            <Text>{state.strings.tryAgain}</Text>
-          ),
-          cancelProps: { display: 'none' },
-          confirmProps: { display: 'none' },
-        });
+        showError();
       }
       setSavingLogin(false);
     }
+  }
+
+  const showError = () => {
+    modals.openConfirmModal({
+      title: state.strings.operationFailed,
+      withCloseButton: true,
+      overlayProps: {
+        backgroundOpacity: 0.55,
+        blur: 3,
+      },
+      children: (
+        <Text>{state.strings.tryAgain}</Text>
+      ),
+      cancelProps: { display: 'none' },
+      confirmProps: { display: 'none' },
+    });
   }
 
   return (
@@ -141,7 +171,7 @@ export function Settings({ showLogout }) {
               <IconEye />
             </div>
             <Text className={classes.entryLabel}>{ state.strings.registry }</Text>
-            <Switch className={classes.entryControl} />
+            <Switch className={classes.entryControl} checked={state.config.searchable} onChange={(ev) => setRegistry(ev.currentTarget.checked)} />
           </div>
           <div className={classes.entry}>
             <div className={classes.entryIcon}>
@@ -154,7 +184,7 @@ export function Settings({ showLogout }) {
               <IconBell />
             </div>
             <Text className={classes.entryLabel}>{ state.strings.enableNotifications }</Text>
-            <Switch className={classes.entryControl} />
+            <Switch className={classes.entryControl} checked={state.config.pushNotifications} onChange={(ev) => setNotifications(ev.currentTarget.checked)} />
           </div>
           <div className={classes.divider} />
           { showLogout && (
