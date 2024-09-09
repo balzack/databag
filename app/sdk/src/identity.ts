@@ -7,7 +7,7 @@ import { getProfile } from './net/getProfile';
 import { getProfileImageUrl } from './net/getProfileImageUrl';
 import { setProfileData } from './net/setProfileData';
 import { setProfileImage } from './net/setProfileImage';
-import { ProfileEntity, defaultProfileEntity } from './entities';
+import { ProfileEntity, defaultProfileEntity, avatar } from './entities';
 
 const CLOSE_POLL_MS = 100;
 const RETRY_POLL_MS = 2000;
@@ -18,6 +18,7 @@ export class IdentityModule implements Identity {
   private token: string;
   private node: string;
   private revision: number;
+  private imageUrl: string = avatar;
   private nextRevision: number | null;
   private profile: ProfileEntity;
   private secure: boolean;
@@ -65,6 +66,11 @@ export class IdentityModule implements Identity {
             await this.store.setProfileData(guid, profile);
             await this.store.setProfileRevision(guid, nextRev);
             this.profile = profile;
+            if (profile.image) {
+              this.imageUrl = `data:image/png;base64,${profile.image}`
+            } else {
+              this.imageUrl = avatar
+            }
             this.emitter.emit('profile', this.setProfile());
             this.revision = nextRev;
             if (this.nextRevision === nextRev) {
@@ -119,8 +125,7 @@ export class IdentityModule implements Identity {
   }
 
   public getProfileImageUrl(): string {
-    const { node, secure, token, revision } = this;
-    return getProfileImageUrl(node, secure, token, revision);
+    return this.imageUrl;
   }
 }
 

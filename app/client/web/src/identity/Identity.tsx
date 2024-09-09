@@ -9,7 +9,6 @@ import {
   IconAddressBook
 } from '@tabler/icons-react'
 import { modals } from '@mantine/modals';
-import avatar from '../images/avatar.png'
 
 export function Identity({ settings, contacts }: { settings: () => void, contacts: () => void }) {
   const { state, actions } = useIdentity();
@@ -33,7 +32,7 @@ export function Identity({ settings, contacts }: { settings: () => void, contact
     <Menu shadow="md" position="right">
       <Menu.Target>
         <div className={classes.identity}>
-          <Image radius="sm" className={classes.image} src={state.profile.imageSet ? state.imageUrl : avatar} />
+          <Image radius="sm" className={classes.image} src={state.imageUrl} />
           <div className={classes.text}>
             { !state.profile.name && (
               <Text className={classes.nameUnset}>{state.strings.name}</Text>

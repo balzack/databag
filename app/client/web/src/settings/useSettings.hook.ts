@@ -3,7 +3,6 @@ import { AppContext } from '../context/AppContext';
 import { DisplayContext } from '../context/DisplayContext';
 import { ContextType } from '../context/ContextType';
 import { Session, Settings, Identity, type Profile, type Config } from 'databag-client-sdk'
-import avatar from '../images/avatar.png'
 
 const IMAGE_DIM = 192;
 const DEBOUNCE_MS = 1000;
@@ -43,7 +42,7 @@ export function useSettings() {
     clip: { w: 0, h: 0, x: 0, y: 0 },
     crop: { x: 0, y: 0},
     zoom: 1,
-    editImage: avatar,
+    editImage: null,
   })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -69,9 +68,8 @@ export function useSettings() {
     settings.addConfigListener(setConfig);
     const setProfile = (profile: Profile) => {
       const { handle, name, location, description } = profile;
-      const imageUrl = identity.getProfileImageUrl();
-      const editImage = profile.imageSet ? imageUrl : state.editImage;
-      updateState({ profile, handle, name, location, description, imageUrl, editImage, profileSet: true }) 
+      const url = identity.getProfileImageUrl();
+      updateState({ profile, handle, name, location, description, imageUrl: url, editImage: url, profileSet: true }) 
     }
     identity.addProfileListener(setProfile)
     return () => { 
@@ -103,9 +101,9 @@ export function useSettings() {
       const { settings } = getSession();
       return await settings.getUsernameStatus(username);
     },
-    setLogin: async (username: string, password: string) => {
+    setLogin: async () => {
       const { settings } = getSession();
-      await settings.setLogin(username, password);
+      await settings.setLogin(state.handle, state.password);
     },
     enableNotifications: async () => {
       const { settings } = getSession();

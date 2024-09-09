@@ -6,7 +6,6 @@ import { modals } from '@mantine/modals';
 import { useDisclosure } from '@mantine/hooks'
 import { useCallback, useState, useRef } from 'react'
 import Cropper from 'react-easy-crop';
-import avatar from '../images/avatar.png'
 
 export function Settings({ showLogout }) {
   const imageFile = useRef(null);
@@ -160,7 +159,7 @@ export function Settings({ showLogout }) {
             )}
             { !state.profile.imageSet && (
               <div className={classes.imageUnset} onClick={imageOpen}>
-                <Image radius="md" src={avatar} /> 
+                <Image radius="md" src={state.imageUrl} /> 
                 <Text className={classes.unsetEdit}>{ state.strings.edit }</Text>
               </div>
             )}
