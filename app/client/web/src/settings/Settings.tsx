@@ -2,17 +2,21 @@ import { useSettings } from './useSettings.hook';
 import { Modal, Textarea, TextInput, PasswordInput, Radio, Group, Select, Switch, Text, Image, Button, UnstyledButton } from '@mantine/core';
 import classes from './Settings.module.css';
 import { IconLock, IconUser, IconClock, IconIdBadge, IconCalendar, IconUsers, IconVideo, IconMicrophone, IconWorld, IconBrightness, IconTicket, IconCloudLock, IconBell, IconEye, IconBook, IconMapPin, IconLogout, IconLogin } from '@tabler/icons-react'
-import avatar from '../images/avatar.png'
 import { modals } from '@mantine/modals';
 import { useDisclosure } from '@mantine/hooks'
-import { useState } from 'react'
+import { useCallback, useState, useRef } from 'react'
+import Cropper from 'react-easy-crop';
+import avatar from '../images/avatar.png'
 
 export function Settings({ showLogout }) {
+  const imageFile = useRef(null);
   const { state, actions } = useSettings();
   const [changeOpened, { open: changeOpen, close: changeClose }] = useDisclosure(false)
   const [detailsOpened, { open: detailsOpen, close: detailsClose }] = useDisclosure(false)
+  const [imageOpened, { open: imageOpen, close: imageClose }] = useDisclosure(false)
   const [savingLogin, setSavingLogin] = useState(false);
   const [savingDetails, setSavingDetails] = useState(false);
+  const [savingImage, setSavingImage] = useState(false);
   const [savingRegistry, setSavingRegistry] = useState(false);
   const [savingNotifications, setSavingNotifications] = useState(false);
 
@@ -81,6 +85,29 @@ export function Settings({ showLogout }) {
     }
   }
 
+  const selectImage = (e) => {
+    var reader = new FileReader();
+    reader.onload = () => {
+      actions.setEditImage(reader.result);
+    }
+    reader.readAsDataURL(e.target.files[0]);
+  }
+
+  const setImage = async () => {
+    if (!savingImage) {
+      setSavingImage(true);
+      try {
+        await actions.setImage();
+        imageClose();
+      }
+      catch (err) {
+        console.log(err);
+        showError();
+      }
+      setSavingImage(false);
+    }
+  }
+
   const setLogin = async () => {
     if (!savingLogin) { 
       setSavingLogin(true);
@@ -112,6 +139,11 @@ export function Settings({ showLogout }) {
     });
   }
 
+  const onCropComplete = useCallback((area, crop) => {
+    actions.setEditImageCrop(crop.width, crop.height, crop.x, crop.y)
+    // eslint-disable-next-line
+  }, []);
+
   return (
     <>
       { state.profileSet && (
@@ -122,12 +154,12 @@ export function Settings({ showLogout }) {
               <div className={classes.imageSet}>
                 <Image radius="md" src={state.imageUrl} /> 
                 <div className={classes.edit}>
-                  <Button size="compact-md" variant="outlined">{ state.strings.edit }</Button>
+                  <Button size="compact-md" variant="outlined" onClick={imageOpen}>{ state.strings.edit }</Button>
                 </div>
               </div>
             )}
             { !state.profile.imageSet && (
-              <div className={classes.imageUnset}>
+              <div className={classes.imageUnset} onClick={imageOpen}>
                 <Image radius="md" src={avatar} /> 
                 <Text className={classes.unsetEdit}>{ state.strings.edit }</Text>
               </div>
@@ -413,6 +445,40 @@ export function Settings({ showLogout }) {
           </div>
         </div>
       </Modal>
+
+      <Modal
+        title={state.strings.profileImage}
+        opened={imageOpened}
+        onClose={imageClose}
+        overlayProps={{ backgroundOpacity: 0.55, blur: 3 }}
+        centered
+      >
+        <div className={classes.change}>
+          <div className={classes.cropper}>
+            <Cropper image={state.editImage} crop={state.crop} zoom={state.zoom} aspect={1}
+              onCropChange={actions.setCrop} onCropComplete={onCropComplete} onZoomChange={actions.setZoom} />
+          </div>
+          <div className={classes.imageSelect}>
+            <input type='file' id='file' accept="image/*" ref={imageFile} onChange={e => selectImage(e)} style={{display: 'none'}}/>
+            <Button variant="default" className={classes.select} onClick={() => imageFile.current.click()}>
+              {state.strings.selectImage}
+            </Button>
+            <div className={classes.control}>
+              <Button variant="default" onClick={imageClose}>
+                {state.strings.cancel}
+              </Button>
+              <Button
+                variant="filled"
+                onClick={setImage}
+                loading={savingImage}
+              >
+                {state.strings.save}
+              </Button>
+            </div>
+          </div>
+        </div>
+      </Modal>
+
     </>
   );
 }

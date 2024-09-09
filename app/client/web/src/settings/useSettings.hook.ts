@@ -3,7 +3,9 @@ import { AppContext } from '../context/AppContext';
 import { DisplayContext } from '../context/DisplayContext';
 import { ContextType } from '../context/ContextType';
 import { Session, Settings, Identity, type Profile, type Config } from 'databag-client-sdk'
+import avatar from '../images/avatar.png'
 
+const IMAGE_DIM = 192;
 const DEBOUNCE_MS = 1000;
 
 export function useSettings() {
@@ -38,6 +40,10 @@ export function useSettings() {
     description: '',
     location: '',
     handle: '',
+    clip: { w: 0, h: 0, x: 0, y: 0 },
+    crop: { x: 0, y: 0},
+    zoom: 1,
+    editImage: avatar,
   })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -63,7 +69,9 @@ export function useSettings() {
     settings.addConfigListener(setConfig);
     const setProfile = (profile: Profile) => {
       const { handle, name, location, description } = profile;
-      updateState({ profile, handle, name, location, description, profileSet: true, imageUrl: identity.getProfileImageUrl() }) 
+      const imageUrl = identity.getProfileImageUrl();
+      const editImage = profile.imageSet ? imageUrl : state.editImage;
+      updateState({ profile, handle, name, location, description, imageUrl, editImage, profileSet: true }) 
     }
     identity.addProfileListener(setProfile)
     return () => { 
@@ -212,6 +220,47 @@ export function useSettings() {
       const { identity } = getSession();
       const { name, location, description } = state;
       await identity.setProfileData(name, location, description);
+    },
+    setCrop: (crop) => {
+      updateState({ crop });
+    },
+    setZoom: (zoom) => {
+      updateState({ zoom });
+    },
+    setEditImageCrop: (w, h, x, y) => {
+      updateState({ clip: { w, h, x, y }});
+    },
+    setEditImage: (editImage: string) => {
+      updateState({ editImage });
+    },
+    setImage: async () => {
+      const { identity } = getSession();
+      const processImg = () => {
+        return new Promise((resolve, reject) => {
+          let img = new Image();
+          img.onload = () => {
+            var canvas = document.createElement("canvas");
+            var context = canvas.getContext('2d');
+            canvas.width = IMAGE_DIM;
+            canvas.height = IMAGE_DIM;
+            context.imageSmoothingQuality = "medium";
+            context.drawImage(img, state.clip.x, state.clip.y, state.clip.w, state.clip.h,
+                0, 0, IMAGE_DIM, IMAGE_DIM);
+            try {
+              resolve(canvas.toDataURL());
+            }
+            catch (err) {
+              console.log(err);
+              reject();
+            }
+          }
+          img.onerror = reject;
+          img.src = state.editImage;
+        });
+      };
+      const dataUrl = await processImg();
+      const data = dataUrl.split(",")[1];
+      await identity.setProfileImage(data);
     },
   }
 

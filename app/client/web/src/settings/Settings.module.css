@@ -4,11 +4,24 @@
   gap: 8px;
 }
 
+.imageSelect {
+  display: flex;
+  align-items: center;
+}
+
 .control {
   display: flex;
   gap: 16px;
   padding-top: 8px;
   justify-content: flex-end;
+  flex-grow: 1;
+}
+
+.cropper {
+  position: relative;
+  height: 256px;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 .settings {
