@@ -349,7 +349,7 @@ func BasicCredentials(r *http.Request) (string, []byte, error) {
 	var password []byte
 
 	// parse bearer authentication
-	auth := r.Header.Get("Authorization")
+	auth := r.Header.Get("Credentials")
 	token := strings.TrimSpace(strings.TrimPrefix(auth, "Basic"))
 
 	// decode basic auth
