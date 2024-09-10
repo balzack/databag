@@ -49,11 +49,17 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
     useDisclosure(false)
   const [imageOpened, { open: imageOpen, close: imageClose }] =
     useDisclosure(false)
+  const [mfaOpened, { open: mfaOpen, close: mfaClose }] =
+    useDisclosure(false)
+  const [sealOpened, { open: sealOpen, close: sealClose }] =
+    useDisclosure(false)
   const [savingLogin, setSavingLogin] = useState(false)
   const [savingDetails, setSavingDetails] = useState(false)
   const [savingImage, setSavingImage] = useState(false)
   const [savingRegistry, setSavingRegistry] = useState(false)
   const [savingNotifications, setSavingNotifications] = useState(false)
+  const [savingSeal, setSavingSeal] = useState(false)
+  const [savingMfa, setSavingMfa] = useState(false)
 
   const logout = () =>
     modals.openConfirmModal({
@@ -105,6 +111,22 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
         showError()
       }
       setSavingNotifications(false)
+    }
+  }
+
+  const setSeal = async (checked: boolean) => {
+    if (!savingSeal) {
+      sealOpen();
+      setSavingSeal(true);
+      setSavingSeal(false);
+    }
+  }
+
+  const setMfa = async () => {
+    if (!savingMfa) {
+      mfaOpen();
+      setSavingMfa(true);
+      setSavingMfa(false);
     }
   }
 
@@ -275,7 +297,7 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
             <div className={classes.entryIcon}>
               <IconCloudLock />
             </div>
-            <Text className={classes.entryLabel}>
+            <Text className={classes.entryLabel} onClick={setSeal}>
               {state.strings.manageTopics}
             </Text>
           </div>
@@ -308,7 +330,9 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
               <IconTicket />
             </div>
             <Text className={classes.entryLabel}>{state.strings.mfaTitle}</Text>
-            <Switch className={classes.entryControl} />
+            <Switch className={classes.entryControl}
+              onChange={(ev) => setMfa(ev.currentTarget.checked)}
+            />
           </div>
           <div className={classes.entry}>
             <div className={classes.entryIcon}>
@@ -583,6 +607,24 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
             </div>
           </div>
         </div>
+      </Modal>
+      <Modal
+        title={state.strings.mfaTitle}
+        opened={mfaOpened}
+        onClose={mfaClose}
+        overlayProps={{ backgroundOpacity: 0.55, blur: 3 }}
+        centered
+      >
+        <div className={classes.mfa} />
+      </Modal>
+      <Modal
+        title={state.strings.sealedTopics}
+        opened={sealOpened}
+        onClose={sealClose}
+        overlayProps={{ backgroundOpacity: 0.55, blur: 3 }}
+        centered
+      >
+        <div className={classes.seal} />
       </Modal>
     </>
   )

@@ -136,6 +136,7 @@
 
     .entryIcon {
       width: 32px;
+      flex-shrink: 0;
     }
 
     .entrySet {
