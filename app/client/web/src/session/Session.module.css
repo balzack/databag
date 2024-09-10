@@ -13,17 +13,16 @@
       height: 100%;
       width: 33%;
       min-width: 325px;
-      background: var(--mantine-color-surface-2);      
+      background: var(--mantine-color-surface-2);
     }
 
     .right {
       height: 100%;
       display: flex;
       flex-grow: 1;
-      background: var(--mantine-color-surface-3);      
+      background: var(--mantine-color-surface-3);
     }
   }
-    
 
   .screen {
     width: 100%;
@@ -33,7 +32,7 @@
     background-color: var(--mantine-color-surface-1);
     overflow: auto;
     padding-bottom: 16px;
-  } 
+  }
 
   .tabs {
     position: absolute;
@@ -48,8 +47,8 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background: var(--mantine-color-tab-2);      
-      color: var(--mantine-color-dbgreen-1);      
+      background: var(--mantine-color-tab-2);
+      color: var(--mantine-color-dbgreen-1);
       padding-bottom: 8px;
       padding-top: 8px;
       cursor: pointer;
@@ -61,14 +60,14 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background: var(--mantine-color-tab-1);      
-      color: var(--mantine-color-dbgreen-0);      
+      background: var(--mantine-color-tab-1);
+      color: var(--mantine-color-dbgreen-0);
       padding-bottom: 8px;
       padding-top: 8px;
       cursor: pointer;
 
       &:hover {
-        background: var(--mantine-color-tab-3);      
+        background: var(--mantine-color-tab-3);
       }
     }
 

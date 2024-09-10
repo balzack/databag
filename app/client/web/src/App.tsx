@@ -88,7 +88,7 @@ const theme = createTheme({
       '#559e83',
       '#559e83',
     ],
-     'light-databag-green': [
+    'light-databag-green': [
       '#888888',
       '#448844',
       '#448844',

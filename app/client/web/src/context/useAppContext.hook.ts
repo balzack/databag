@@ -53,12 +53,12 @@ export function useAppContext() {
         code,
         params
       )
-      updateState({ session: login });
+      updateState({ session: login })
     },
     accountLogout: async () => {
       if (state.session) {
         await sdk.current.logout(state.session, false)
-        updateState({ session: null });
+        updateState({ session: null })
       }
     },
     accountCreate: async (
@@ -87,7 +87,7 @@ export function useAppContext() {
         token,
         params
       )
-      updateState({ session });
+      updateState({ session })
     },
     accountAccess: async (node: string, secure: boolean, token: string) => {
       const params = {
@@ -102,7 +102,7 @@ export function useAppContext() {
         appName: 'databag',
       }
       const session = await sdk.current.access(node, secure, token, params)
-      updateState({ session });
+      updateState({ session })
     },
     getAvailable: async (node: string, secure: boolean) => {
       return await sdk.current.available(node, secure)

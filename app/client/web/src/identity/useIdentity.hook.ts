@@ -2,7 +2,7 @@ import { useState, useContext, useEffect } from 'react'
 import { DisplayContext } from '../context/DisplayContext'
 import { AppContext } from '../context/AppContext'
 import { ContextType } from '../context/ContextType'
-import { Profile } from 'databag-client-sdk';
+import { Profile } from 'databag-client-sdk'
 
 export function useIdentity() {
   const app = useContext(AppContext) as ContextType
@@ -13,7 +13,7 @@ export function useIdentity() {
     profile: {} as Profile,
     profileSet: false,
     imageUrl: null,
-  });
+  })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const updateState = (value: any) => {
@@ -21,29 +21,32 @@ export function useIdentity() {
   }
 
   useEffect(() => {
-    const identity = app.state.session?.getIdentity();
+    const identity = app.state.session?.getIdentity()
     if (!identity) {
-      console.log('session not set in identity hook');
-    }
-    else {
+      console.log('session not set in identity hook')
+    } else {
       const setProfile = (profile: Profile) => {
-        updateState({ profile, profileSet: true, imageUrl: identity.getProfileImageUrl() })
+        updateState({
+          profile,
+          profileSet: true,
+          imageUrl: identity.getProfileImageUrl(),
+        })
       }
       identity.addProfileListener(setProfile)
       return () => {
-        identity.removeProfileListener(setProfile);
+        identity.removeProfileListener(setProfile)
       }
     }
-  }, []);
+  }, [])
 
   const actions = {
     setAll: (all: boolean) => {
-      updateState({ all });
+      updateState({ all })
     },
     logout: async () => {
-      await app.actions.accountLogout(state.all);
+      await app.actions.accountLogout(state.all)
     },
-  };
+  }
 
-  return { state, actions };
+  return { state, actions }
 }

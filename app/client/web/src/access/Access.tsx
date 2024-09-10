@@ -22,7 +22,7 @@ import {
   IconServer,
   IconKey,
 } from '@tabler/icons-react'
-import { modals } from '@mantine/modals';
+import { modals } from '@mantine/modals'
 
 export function Access() {
   const { state, actions } = useAccess()
@@ -65,12 +65,10 @@ export function Access() {
               backgroundOpacity: 0.55,
               blur: 3,
             },
-            children: (
-              <div>{state.strings.tryAgain}</div>
-            ),
+            children: <div>{state.strings.tryAgain}</div>,
             cancelProps: { display: 'none' },
             confirmProps: { display: 'none' },
-          });
+          })
         }
       }
       actions.setLoading(false)

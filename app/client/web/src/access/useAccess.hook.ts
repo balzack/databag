@@ -45,7 +45,7 @@ export function useAccess() {
     }
 
     const { protocol, host } = location
-    updateState({ host, secure: protocol === 'https' });
+    updateState({ host, secure: protocol === 'https' })
   }, [])
 
   useEffect(() => {
@@ -121,8 +121,9 @@ export function useAccess() {
       updateState({ code })
     },
     setNode: (host: string) => {
-      const insecure = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(host);
-      updateState({ host, secure: !insecure });
+      const insecure =
+        /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(host)
+      updateState({ host, secure: !insecure })
     },
     setLanguage: (code: string) => {
       display.actions.setLanguage(code)
