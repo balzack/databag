@@ -6,5 +6,6 @@ export async function setAccountLogin(node: string, secure: boolean, token: stri
   const auth = encode(`${username}:${password}`);
   const headers = new Headers()
   headers.append('Credentials', `Basic ${auth}`);
-  checkResponse(await fetchWithTimeout(endpoint, { method: 'PUT', headers }));
+  const { status } = await fetchWithTimeout(endpoint, { method: 'PUT', headers });
+  checkResponse(status);
 }

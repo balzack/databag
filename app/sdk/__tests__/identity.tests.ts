@@ -39,11 +39,11 @@ test('allocates session correctly', async () => {
   const identity = new IdentityModule(log, store, 'test_guid', 'test_token', 'test_url', false);
   identity.setRevision(5);
   identity.addProfileListener((ev: Profile) => { profile = ev });
-  await waitFor(() => (profile?.handle == 'test' && profile?.name != 'test_name' && profile?.image != 'test_image'));
+  await waitFor(() => (profile?.handle == 'test' && profile?.name != 'test_name' && !profile?.imageSet));
   identity.setProfileData("test_name", "test_location", "test_description");
   identity.setRevision(6);
-  await waitFor(() => (profile?.name == 'test_name' && profile?.image != 'test_image'));
+  await waitFor(() => (profile?.name == 'test_name' && !profile?.imageSet));
   identity.setProfileImage("test_image");
   identity.setRevision(7);
-  await waitFor(() => (profile?.image == 'test_image'));
+  await waitFor(() => (Boolean(profile?.imageSet)));
 });

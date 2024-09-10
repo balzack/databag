@@ -17,10 +17,10 @@ jest.mock('redaxios', () => {
     }),
     put: jest.fn().mockImplementation((url, body) => {
       if (url == 'http://test_url/account/notification?agent=test_token') {
-        testConfig.pushEnabled = body;
+        testConfig.pushEnabled = JSON.parse(body);
       }
       if (url == 'http://test_url/account/searchable?agent=test_token') {
-        testConfig.searchable = body;
+        testConfig.searchable = JSON.parse(body);
       }
       if (url == 'http://test_url/account/seal?agent=test_token') {
         testConfig.seal = body;
