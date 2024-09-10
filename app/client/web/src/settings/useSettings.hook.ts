@@ -3,6 +3,7 @@ import { AppContext } from '../context/AppContext';
 import { DisplayContext } from '../context/DisplayContext';
 import { ContextType } from '../context/ContextType';
 import { Session, Settings, Identity, type Profile, type Config } from 'databag-client-sdk'
+import { Point, Area } from 'react-easy-crop/types'
 
 const IMAGE_DIM = 192;
 const DEBOUNCE_MS = 1000;
@@ -11,7 +12,7 @@ export function useSettings() {
 
   const display = useContext(DisplayContext) as ContextType;
   const app = useContext(AppContext) as ContextType;
-  const debounce = useRef(useRef(setTimeout(() => {}, 0)));
+  const debounce = useRef(setTimeout(() => {}, 0));
 
   const [state, setState] = useState({
     config: {} as Config,
@@ -42,7 +43,7 @@ export function useSettings() {
     clip: { w: 0, h: 0, x: 0, y: 0 },
     crop: { x: 0, y: 0},
     zoom: 1,
-    editImage: null,
+    editImage: undefined,
   })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -185,7 +186,7 @@ export function useSettings() {
     logout: async () => {
       await app.actions.accountLogout(state.all);
     },
-    setHandle: (handle) => {
+    setHandle: (handle: string) => {
       updateState({ handle, taken: false, checked: false });
       clearTimeout(debounce.current);
       if (!handle || handle === state.profile.handle) {
@@ -199,19 +200,19 @@ export function useSettings() {
         }, DEBOUNCE_MS);
       }
     },
-    setPassword: (password) => {
+    setPassword: (password: string) => {
       updateState({ password });
     },
-    setConfirm: (confirm) => {
+    setConfirm: (confirm: string) => {
       updateState({ confirm });
     },
-    setName: (name) => {
+    setName: (name: string) => {
       updateState({ name });
     },
-    setLocation: (location) => {
+    setLocation: (location: string) => {
       updateState({ location });
     },
-    setDescription: (description) => {
+    setDescription: (description: string) => {
       updateState({ description });
     },
     setDetails: async () => {
@@ -219,14 +220,14 @@ export function useSettings() {
       const { name, location, description } = state;
       await identity.setProfileData(name, location, description);
     },
-    setCrop: (crop) => {
+    setCrop: (crop: Point) => {
       updateState({ crop });
     },
-    setZoom: (zoom) => {
+    setZoom: (zoom: number) => {
       updateState({ zoom });
     },
-    setEditImageCrop: (w, h, x, y) => {
-      updateState({ clip: { w, h, x, y }});
+    setEditImageCrop: (clip: Area) => {
+      updateState({ clip });
     },
     setEditImage: (editImage: string) => {
       updateState({ editImage });
@@ -234,23 +235,29 @@ export function useSettings() {
     setImage: async () => {
       const { identity } = getSession();
       const processImg = () => {
-        return new Promise((resolve, reject) => {
+        return new Promise<string>((resolve, reject) => {
           let img = new Image();
           img.onload = () => {
-            var canvas = document.createElement("canvas");
-            var context = canvas.getContext('2d');
-            canvas.width = IMAGE_DIM;
-            canvas.height = IMAGE_DIM;
-            context.imageSmoothingQuality = "medium";
-            context.drawImage(img, state.clip.x, state.clip.y, state.clip.w, state.clip.h,
-                0, 0, IMAGE_DIM, IMAGE_DIM);
             try {
+              const canvas = document.createElement("canvas");
+              const context = canvas.getContext('2d');
+              if (!context) {
+                throw new Error('failed to allocate context');
+              }
+              canvas.width = IMAGE_DIM;
+              canvas.height = IMAGE_DIM;
+              context.imageSmoothingQuality = "medium";
+              context.drawImage(img, state.clip.x, state.clip.y, state.clip.width, state.clip.height,
+                  0, 0, IMAGE_DIM, IMAGE_DIM);
               resolve(canvas.toDataURL());
             }
             catch (err) {
               console.log(err);
               reject();
             }
+          }
+          if (!state.editImage) {
+            throw new Error('invalid edit image');
           }
           img.onerror = reject;
           img.src = state.editImage;

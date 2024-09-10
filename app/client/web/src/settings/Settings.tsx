@@ -6,9 +6,10 @@ import { modals } from '@mantine/modals';
 import { useDisclosure } from '@mantine/hooks'
 import { useCallback, useState, useRef } from 'react'
 import Cropper from 'react-easy-crop';
+import { Area } from 'react-easy-crop/types';
 
-export function Settings({ showLogout }) {
-  const imageFile = useRef(null);
+export function Settings({ showLogout }: { showLogout: boolean }) {
+  const imageFile = useRef(null as null | HTMLInputElement);
   const { state, actions } = useSettings();
   const [changeOpened, { open: changeOpen, close: changeClose }] = useDisclosure(false)
   const [detailsOpened, { open: detailsOpen, close: detailsClose }] = useDisclosure(false)
@@ -84,12 +85,22 @@ export function Settings({ showLogout }) {
     }
   }
 
-  const selectImage = (e) => {
-    var reader = new FileReader();
-    reader.onload = () => {
-      actions.setEditImage(reader.result);
+  const clickSelect = () => {
+    if (imageFile.current) {
+      imageFile.current.click();
     }
-    reader.readAsDataURL(e.target.files[0]);
+  }
+
+  const selectImage = (target: HTMLInputElement) => {
+    if (target.files) {
+      var reader = new FileReader();
+      reader.onload = () => {
+        if (typeof reader.result === 'string') {
+          actions.setEditImage(reader.result);
+        }
+      }
+      reader.readAsDataURL(target.files[0]);
+    }
   }
 
   const setImage = async () => {
@@ -138,8 +149,8 @@ export function Settings({ showLogout }) {
     });
   }
 
-  const onCropComplete = useCallback((area, crop) => {
-    actions.setEditImageCrop(crop.width, crop.height, crop.x, crop.y)
+  const onCropComplete = useCallback((crop: Area) => {
+    actions.setEditImageCrop(crop)
     // eslint-disable-next-line
   }, []);
 
@@ -215,7 +226,7 @@ export function Settings({ showLogout }) {
               <IconBell />
             </div>
             <Text className={classes.entryLabel}>{ state.strings.enableNotifications }</Text>
-            <Switch className={classes.entryControl} checked={state.config.pushNotifications} onChange={(ev) => setNotifications(ev.currentTarget.checked)} />
+            <Switch className={classes.entryControl} checked={state.config.pushEnabled} onChange={(ev) => setNotifications(ev.currentTarget.checked)} />
           </div>
           <div className={classes.divider} />
           { showLogout && (
@@ -455,11 +466,11 @@ export function Settings({ showLogout }) {
         <div className={classes.change}>
           <div className={classes.cropper}>
             <Cropper image={state.editImage} crop={state.crop} zoom={state.zoom} aspect={1}
-              onCropChange={actions.setCrop} onCropComplete={onCropComplete} onZoomChange={actions.setZoom} />
+              onCropChange={actions.setCrop} onCropComplete={(area, crop) => onCropComplete(crop)} onZoomChange={actions.setZoom} />
           </div>
           <div className={classes.imageSelect}>
-            <input type='file' id='file' accept="image/*" ref={imageFile} onChange={e => selectImage(e)} style={{display: 'none'}}/>
-            <Button variant="default" className={classes.select} onClick={() => imageFile.current.click()}>
+            <input type='file' id='file' accept="image/*" ref={imageFile} onChange={e => selectImage(e.target)} style={{display: 'none'}}/>
+            <Button variant="default" className={classes.select} onClick={clickSelect}>
               {state.strings.selectImage}
             </Button>
             <div className={classes.control}>

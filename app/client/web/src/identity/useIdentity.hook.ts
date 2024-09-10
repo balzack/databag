@@ -2,6 +2,7 @@ import { useState, useContext, useEffect } from 'react'
 import { DisplayContext } from '../context/DisplayContext'
 import { AppContext } from '../context/AppContext'
 import { ContextType } from '../context/ContextType'
+import { Profile } from 'databag-client-sdk';
 
 export function useIdentity() {
   const app = useContext(AppContext) as ContextType
