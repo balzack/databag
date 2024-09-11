@@ -145,8 +145,8 @@ export class SettingsModule implements Settings {
 
   public async enableMFA(): Promise<{ secretImage: string, secretText: string }> {
     const { node, secure, token } = this;
-    const { image, text } = await addAccountMFAuth(node, secure, token);
-    return { secretImage: image, secretText: text };
+    const { secretImage, secretText } = await addAccountMFAuth(node, secure, token);
+    return { secretImage, secretText };
   }
 
   public async disableMFA(): Promise<void> {

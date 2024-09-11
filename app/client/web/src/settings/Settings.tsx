@@ -9,6 +9,7 @@ import {
   Select,
   Switch,
   Text,
+  PinInput,
   Image,
   Button,
   UnstyledButton,
@@ -33,6 +34,8 @@ import {
   IconMapPin,
   IconLogout,
   IconLogin,
+  IconCopy,
+  IconCheck,
 } from '@tabler/icons-react'
 import { modals } from '@mantine/modals'
 import { useDisclosure } from '@mantine/hooks'
@@ -60,6 +63,7 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
   const [savingNotifications, setSavingNotifications] = useState(false)
   const [savingSeal, setSavingSeal] = useState(false)
   const [savingMfa, setSavingMfa] = useState(false)
+  const [addingMfa, setAddingMfa] = useState(false)
 
   const logout = () =>
     modals.openConfirmModal({
@@ -114,7 +118,7 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
     }
   }
 
-  const setSeal = async (checked: boolean) => {
+  const setSeal = async () => {
     if (!savingSeal) {
       sealOpen();
       setSavingSeal(true);
@@ -122,10 +126,26 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
     }
   }
 
-  const setMfa = async () => {
+  const setMfa = async (checked: boolean) => {
+    if (!addingMfa) {
+      setAddingMfa(true);
+      try {
+        await actions.enableMFA();
+        mfaOpen();
+      } catch (err) {
+        console.log(err)
+        showError()
+      }
+      setAddingMfa(false);
+    }
+  }
+
+  const confirmMfa = async () => {
     if (!savingMfa) {
-      mfaOpen();
       setSavingMfa(true);
+
+      mfaClose();
+
       setSavingMfa(false);
     }
   }
@@ -615,7 +635,35 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
         overlayProps={{ backgroundOpacity: 0.55, blur: 3 }}
         centered
       >
-        <div className={classes.mfa} />
+        <div className={classes.mfa}>
+          <div className={classes.secret}>
+            <Text>{state.strings.mfaSteps}</Text>
+            <Image radius="md" className={classes.secretImage} src={state.secretImage} />
+            <div className={classes.secretText}>
+              <Text>{state.secretText}</Text>
+              { state.secretCopied && (
+                <IconCheck />
+              )}
+              { !state.secretCopied && (
+                <IconCopy className={classes.copyIcon} onClick={actions.copySecret} />
+              )}
+            </div>
+            <PinInput
+              value={state.code}
+              length={6}
+              className={classes.mfaPin}
+              onChange={(event) => actions.setCode(event)}
+            />
+          </div>
+          <div className={classes.control}>
+            <Button variant="default" onClick={mfaClose}>
+              {state.strings.cancel}
+            </Button>
+            <Button variant="filled" onClick={confirmMfa} disabled={state.code.length != 6} loading={savingMfa}>
+              {state.strings.save}
+            </Button>
+          </div>
+        </div>
       </Modal>
       <Modal
         title={state.strings.sealedTopics}

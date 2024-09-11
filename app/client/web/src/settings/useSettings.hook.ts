@@ -48,7 +48,10 @@ export function useSettings() {
     clip: { w: 0, h: 0, x: 0, y: 0 },
     crop: { x: 0, y: 0 },
     zoom: 1,
-    editImage: undefined,
+    secretText: '',
+    secretImage: '',
+    code: '',
+    editImage: '',
   })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -149,7 +152,8 @@ export function useSettings() {
     },
     enableMFA: async () => {
       const { settings } = getSession()
-      return await settings.enableMFA()
+      const { secretImage, secretText } = await settings.enableMFA()
+      updateState({ secretImage, secretText });
     },
     disableMFA: async () => {
       const { settings } = getSession()
@@ -158,6 +162,16 @@ export function useSettings() {
     confirmMFA: async (code: string) => {
       const { settings } = getSession()
       await settings.confirmMFA(code)
+    },
+    setCode: (code: string) => {
+      updateState({ code });
+    },
+    copySecret: () => {
+      navigator.clipboard.writeText(state.secretText);
+      updateState({ secretCopied: true });
+      setTimeout(() => {
+        updateState({ secretCopied: false });
+      }, 1000);
     },
     setSeal: async (password: string) => {
       const { settings } = getSession()
@@ -279,8 +293,8 @@ export function useSettings() {
                 img,
                 state.clip.x,
                 state.clip.y,
-                state.clip.width,
-                state.clip.height,
+                state.clip.w,
+                state.clip.h,
                 0,
                 0,
                 IMAGE_DIM,
