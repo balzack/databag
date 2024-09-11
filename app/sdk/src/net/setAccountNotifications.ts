@@ -1,10 +1,8 @@
-import axios from 'redaxios';
+import { checkResponse, fetchWithTimeout } from './fetchUtil';
 
 export async function setAccountNotifications(node: string, secure: boolean, token: string, flag: boolean) {
   const endpoint = `http${secure ? 's' : ''}://${node}/account/notification?agent=${token}`;
-  const response = await axios.put(endpoint, JSON.stringify(flag));
-  if (response.status >= 400 && response.status < 600) {
-    throw new Error('setAccountNotification failed');
-  }
+  const { status } = await fetchWithTimeout(endpoint, { method: 'PUT', body: JSON.stringify(flag) });
+  checkResponse(status);
 }
 

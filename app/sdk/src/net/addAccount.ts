@@ -1,16 +1,12 @@
-import axios from 'redaxios';
+import { checkResponse, fetchWithCustomTimeout } from './fetchUtil';
 import { encode } from './base64';
 
 export async function addAccount(node: string, secure: boolean, username: string, password: string, token: string | null): Promise<void> {
   const access = token ? `?token=${token}` : ''
   const endpoint = `http${secure ? 's' : ''}://${node}/account/profile${access}`
   const auth = encode(`${username}:${password}`)
-
-  const response = await Promise.race<{ status: number }>([
-    axios.post(endpoint, null, { headers: { 'Credentials' : `Basic ${auth}` } }).catch(err => { throw new Error('addAccount failed') }),
-    new Promise((_, reject) => setTimeout(() => reject(new Error('addAccount timeout')), 60000))
-  ]);
-  if (response.status >= 400 && response.status < 600) {
-    throw new Error('addAccount failed');
-  }
+  const headers = new Headers()
+  headers.append('Credentials', `Basic ${auth}`);
+  const { status } = await fetchWithCustomTimeout(endpoint, { method: 'POST', headers }, 60000);
+  checkResponse(status);
 }

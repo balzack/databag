@@ -1,16 +1,11 @@
-import axios from 'redaxios';
+import { checkResponse, fetchWithTimeout } from './fetchUtil';
 
 export async function getUsername(name: string, token: string | null, agent: string | null, node: string, secure: boolean): Promise<boolean> {
   const param = token ? `&token=${token}` : agent ? `&agent=${agent}` : '';
   const username = encodeURIComponent(name)
   const endpoint = `http${secure ? 's' : ''}://${node}/account/username?name=${username}${param}`;
-  const response = await axios.get(endpoint);
-  if (response.status >= 400 && response.status < 600) {
-    throw new Error('getAvailable fetch failed');
-  }
-  if (typeof response.data !== 'boolean') {
-    throw new Error('getAvailable response failed');
-  }
-  return response.data;
+  const taken = await fetchWithTimeout(endpoint, { method: 'GET' })
+  checkResponse(taken.status);
+  return await taken.json();
 }
 

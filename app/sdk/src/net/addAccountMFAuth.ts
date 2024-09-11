@@ -1,11 +1,9 @@
-import axios from 'redaxios';
+import { checkResponse, fetchWithTimeout } from './fetchUtil';
 
 export async function addAccountMFAuth(node: string, secure: boolean, token: string): Promise<{ text: string, image: string }> {
   const endpoint = `http${secure ? 's' : ''}://${node}/account/mfauth=${token}`;
-  const response = await axios.post(endpoint);
-  if (response.status >= 400 && response.status < 600) {
-    throw new Error('setAccountMFAuth failed');
-  }
-  return response.data;
+  const auth = await fetchWithTimeout(endpoint, { method: 'POST' })
+  checkResponse(auth.status);
+  return await auth.json();
 }
 

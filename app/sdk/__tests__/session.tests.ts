@@ -10,15 +10,18 @@ import { MockContactModule } from '../__mocks__/contact';
 import { MockAttributeModule } from '../__mocks__/attribute';
 import { MockRingModule } from '../__mocks__/ring';
 import { waitFor } from '../__mocks__/waitFor';
-import axios from 'redaxios';
 
-jest.mock('redaxios', () => {
+jest.mock('../src/net/fetchUtil', () => {
+  const fn = jest.fn().mockImplementation((url: string, options: { method: string, body: string }) => {
+    return Promise.resolve({ state: 200, json: () => ({ guid: 'guid', appToken: 'token', created: 3, pushSupported: false }) });
+  });
+
   return {
-    post: jest.fn().mockImplementation(() => {
-      return Promise.resolve({ status: 200, data: { guid: 'guid', appToken: 'token', created: 3, pushSupported: false }});
-    })
+    fetchWithTimeout: fn,
+    fetchWithCustomTimeout: fn,
+    checkResponse: () => {},
   }
-})
+});
 
 const mockConnection = new MockConnection();
 jest.mock('../src/connection', () => {

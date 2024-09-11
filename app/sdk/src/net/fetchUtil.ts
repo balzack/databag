@@ -15,3 +15,10 @@ export async function fetchWithTimeout(url: string, options: RequestInit): Promi
   ]);
 }
 
+export async function fetchWithCustomTimeout(url: string, options: RequestInit, timeout: number): Promise<Response> {
+  return Promise.race<Response>([
+    fetch(url, options).catch(err => { throw new Error(url + ' failed'); }),
+    new Promise((_, reject) => setTimeout(() => reject(new Error(url + ' timeout')), timeout))
+  ]);
+}
+

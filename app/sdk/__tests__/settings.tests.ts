@@ -5,30 +5,35 @@ import { ConsoleLogging } from '../src/logging';
 import { defaultConfigEntity } from '../src/entities';
 import { Config } from '../src/types';
 import { waitFor } from '../__mocks__/waitFor';
-import axios from 'redaxios';
 
 const testConfig = JSON.parse(JSON.stringify(defaultConfigEntity));
 
-jest.mock('redaxios', () => {
-  return {
-    get: jest.fn().mockImplementation(() => {
+jest.mock('../src/net/fetchUtil', () => {
+  const fn = jest.fn().mockImplementation((url: string, options: { method: string, body: string }) => {
+    if (options.method === 'GET') {
       testConfig.storageUsed = 2;
-      return Promise.resolve({ status: 200, data: testConfig });
-    }),
-    put: jest.fn().mockImplementation((url, body) => {
+      return Promise.resolve({ status: 200, json: () => (testConfig) });
+    }
+    if (options.method === 'PUT') {
       if (url == 'http://test_url/account/notification?agent=test_token') {
-        testConfig.pushEnabled = JSON.parse(body);
+        testConfig.pushEnabled = JSON.parse(options.body);
       }
       if (url == 'http://test_url/account/searchable?agent=test_token') {
-        testConfig.searchable = JSON.parse(body);
+        testConfig.searchable = JSON.parse(options.body);
       }
       if (url == 'http://test_url/account/seal?agent=test_token') {
-        testConfig.seal = body;
+        testConfig.seal = JSON.parse(options.body);
       }
-      return Promise.resolve({ status: 200 });
-    }),
+      return Promise.resolve({ state: 200 });
+    }
+  });
+
+  return {
+    fetchWithTimeout: fn,
+    fetchWithCustomTimeout: fn,
+    checkResponse: () => {},
   }
-})
+});
 
 class TestCrypto implements Crypto {
 

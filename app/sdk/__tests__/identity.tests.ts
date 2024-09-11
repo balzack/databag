@@ -4,28 +4,33 @@ import { ConsoleLogging } from '../src/logging';
 import { defaultProfileEntity } from '../src/entities';
 import { Profile } from '../src/types';
 import { waitFor } from '../__mocks__/waitFor';
-import axios from 'redaxios';
 
 const testProfile = JSON.parse(JSON.stringify(defaultProfileEntity));
 
-jest.mock('redaxios', () => {
-  return {
-    get: jest.fn().mockImplementation(() => {
+jest.mock('../src/net/fetchUtil', () => {
+  const fn = jest.fn().mockImplementation((url: string, options: { method: string, body: string }) => {
+    if (options.method === 'GET') {
       testProfile.handle = "test";
-      return Promise.resolve({ status: 200, data: testProfile });
-    }),
-    put: jest.fn().mockImplementation((url, body) => {
+      return Promise.resolve({ status: 200, json: () => (testProfile) });
+    }
+    if (options.method === 'PUT') {
       if (url == 'http://test_url/profile/data?agent=test_token') {
-        Object.assign(testProfile, body);
+        Object.assign(testProfile, JSON.parse(options.body));
       }
       else if (url == 'http://test_url/profile/image?agent=test_token') {
-        testProfile.image = body;
+        testProfile.image = options.body;
       }
       return Promise.resolve({ state: 200 });
-    })
-  }
-})
+    }
+  });
 
+  return {
+    fetchWithTimeout: fn,
+    fetchWithCustomTimeout: fn,
+    checkResponse: () => {},
+  }
+});
+  
 class TestStore extends NoStore {
   public async getProfileRevision(): Promise<number> {
     return 4;
