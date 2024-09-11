@@ -59,15 +59,28 @@ export type Channel = {
   enableAudio: boolean,
   enableVideo: boolean,
   enableBinary: boolean,
-  contacts?: {
-    groups: string[],
-    cards: string[],
-  },
-  members: {
-    member: string,
-    pushEnabled: boolean,
-  },
-  repeaters: Repeater[];
+  membership: Member,
+  members: Member[],
+}
+
+export type Member = {
+  id: string,
+  guid: string,
+  pushEnabled: boolean,
+  canAddTopic: boolean,
+  canAddTag: boolean,
+  canAddAsset: boolean,
+  canAddParticipant: boolean,
+  canSortTopic: boolean,
+  canSortTag: boolean,
+  participants: Participant[];
+}
+
+export type Participant = {
+  name: string,
+  token: string,
+  node: string,
+  secure: boolean,
 }
 
 export type Topic = {
@@ -81,6 +94,7 @@ export type Topic = {
   updated: number,
   status: string,
   transform: string,
+  sortOrder: number,
   tagCount: number,
   tagComplete: boolean,
   tags: Tag[]
@@ -95,6 +109,7 @@ export type Tag = {
   data: string,
   created: number,
   updated: number,
+  sortOrder: number,
 }
 
 export type Asset = {
@@ -125,14 +140,6 @@ export type Article = {
     cards: string[],
     groups: string[],
   }
-}
-
-export type Repeater = {
-  id: string,
-  guid: string,
-  name: string,
-  token: string,
-  server: string,
 }
 
 export type Config = {

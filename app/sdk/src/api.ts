@@ -4,8 +4,9 @@
 // add bot api
 // formaize delete vs block remote channel
 // articles share by cards now
+// enable sorting ( each topic & tag pool maintains latest revision and scrollSortOrder values, scrollSortOrder on same axis as row ID )
 
-import type { Channel, Topic, Asset, Tag, Article, Group, Card, Profile, Call, Config, NodeConfig, NodeAccount, Repeater } from './types';
+import type { Channel, Topic, Asset, Tag, Article, Group, Card, Profile, Call, Config, NodeConfig, NodeAccount, Participant } from './types';
 
 export interface Session {
   getSettings(): Settings;
@@ -81,9 +82,11 @@ export interface Contact {
   addTopic(cardId: string, channelId: string, type: string, subject: string, assets: Asset[]): Promise<string>;
   removeTopic(cardId: string, channelId: string, topicId: string): Promise<void>;
   setTopicSubject(cardId: string, channelId: string, topicId: string, subject: string): Promise<void>;
+  setTopicSort(cardId: string, channelId: string, topicId: string, sort: number): Promise<void>;
   addTag(cardId: string, channelId: string, topicId: string, type: string, subject: string): Promise<string>;
-  removeTag(cardId: string, topicId: string, tagId: string): Promise<void>;
-  setTagSubject(cardId: string, topicId: string, tagId: string, subject: string): Promise<void>;
+  removeTag(cardId: string, channelId: string, topicId: string, tagId: string): Promise<void>;
+  setTagSubject(cardId: string, channelId: string, topicId: string, tagId: string, subject: string): Promise<void>;
+  setTagSort(cardId: string, channelId: string, topicId: string, tagId: string, sort: number): Promise<void>;
 
   getTopics(cardId: string, channelId: string): Promise<Topic[]>;
   getMoreTopics(cardId: string, channelId: string): Promise<Topic[]>;
@@ -111,6 +114,9 @@ export interface Contact {
   getBlockedTags(): Promise<{ cardId: string, channelId: string, topicId: string, tagId: string }[]>;
   getBlockedArticles(): Promise<{ cardId: string, articleId: string }[]>;
 
+  enableChannelNotifications(cardId: string, channelId: string): Promise<void>;
+  disableChannelNotifications(chardId: string, channelId: string): Promise<void>;
+
   setUnreadChannel(cardId: string, channelId: string): Promise<void>;
   clearUnreadChannel(cardId: string, channelId: string): Promise<void>;
 
@@ -120,8 +126,8 @@ export interface Contact {
   getCardImageUrl(cardId: string): string;
   getTopicAssetUrl(cardId: string, channelId: string, topicId: string, assetId: string): string;
 
-  addRepeaterAccess(cardId: string, channelId: string, name: string): Promise<Repeater>;
-  removeRepeaterAccess(cardId: string, channelId: string, repeaterId: string): Promise<void>;
+  addParticipantAccess(cardId: string, channelId: string, name: string): Promise<Participant>;
+  removeParticipantAccess(cardId: string, channelId: string, participantId: string): Promise<void>;
 
   addCardListener(ev: (cards: Card[]) => void): void;
   removeCardListener(ev: (cards: Card[]) => void): void;
@@ -163,9 +169,11 @@ export interface Content {
   addTopic(channelId: string, type: string, message: string, assets: Asset[]): Promise<string>;
   removeTopic(channelId: string, topicId: string): Promise<void>;
   setTopicSubject(channelId: string, topicId: string, subject: string): Promise<void>;
+  setTopicSort(channelId: string, topicId: string, sort: number): Promise<void>;
   addTag(channelId: string, topicId: string, type: string, value: string): Promise<string>;
   removeTag(channelId: string, topicId: string, tagId: string): Promise<void>;
   setTagSubject(channelId: string, topicId: string, tagId: string, subject: string): Promise<void>;
+  setTagSort(channelId: string, topicId: string, tagId: string, sort: number): Promise<void>;
   getTopicAssetUrl(channelId: string, topicId: string, assetId: string): string;
 
   flagTopic(channelId: string, topicId: string): Promise<void>;
@@ -177,6 +185,21 @@ export interface Content {
   getBlockedTopics(): Promise<{ channelId: string, topicId: string }[]>;
   getBlockedTags(): Promise<{ channelId: string, topicId: string, tagId: string }[]>;
 
+  enableNotifications(channelId: string, memberId: string): Promise<void>;
+  disableNotifications(channelId: string, memberId: string): Promise<void>;
+  enableSortTopic(channelId: string, memberId: string): Promise<void>;
+  disableSortTopic(channelId: string, memberId: string): Promise<void>;
+  enableSortTag(channelId: string, memberId: string): Promise<void>;
+  disableSortTag(channelId: string, memberId: string): Promise<void>;
+  enableAddTopic(channelId: string, memberId: string): Promise<void>;
+  disableAddTopic(channelId: string, memberId: string): Promise<void>;
+  enableAddTag(channelId: string, memberId: string): Promise<void>;
+  disableAddTag(channelId: string, memberId: string): Promise<void>;
+  enableAddAsset(channelId: string, memberId: string): Promise<void>;
+  disableAddAsset(channelId: string, memberId: string): Promise<void>;
+  enableAddParticipant(channelId: string, memberId: string): Promise<void>;
+  disableAddParticipant(channelId: string, memberId: string): Promise<void>;
+
   getTopics(channelId: string): Promise<Topic[]>;
   getMoreTopics(channelId: string): Promise<Topic[]>;
   getTags(channelId: string, topicId: string): Promise<Tag[]>;
@@ -185,8 +208,8 @@ export interface Content {
   setUnreadChannel(channelId: string): Promise<void>;
   clearUnreadChannel(channelId: string): Promise<void>;
 
-  addRepeaterAccess(channelId: string, name: string): Promise<Repeater>;
-  removeRepeaterAccess(channelId: string, repeaterId: string): Promise<void>;
+  addParticipantAccess(channelId: string, name: string): Promise<Participant>;
+  removeParticipantAccess(channelId: string, participantId: string): Promise<void>;
 
   addChannelListener(ev: (channels: Channel[]) => void): void;
   removeChannelListener(ev: (channels: Channel[]) => void): void;
@@ -215,8 +238,8 @@ export interface Focus {
 
   getTopicAssetUrl(topicId: string, assetId: string): string;
 
-  addRepeaterAccess(name: string): Promise<Repeater>;
-  removeRepeaterAccess(repeaterId: string): Promise<void>;
+  addParticipantAccess(name: string): Promise<Participant>;
+  removeParticipantAccess(participantId: string): Promise<void>;
 
   flagTopic(topicId: string): Promise<void>;
   flagTag(topicId: string, tagId: string): Promise<void>;
@@ -239,7 +262,7 @@ export interface Node {
   setConfig(config: NodeConfig): Promise<void>;
 }
 
-export interface Bot {
+export interface Contributor {
   addTopic(type: string, message: string, assets: Asset[]): Promise<string>;
   removeTopic(topicId: string): Promise<void>;
   addTag(topicId: string, type: string, value: string): Promise<string>;

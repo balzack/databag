@@ -1,6 +1,6 @@
 import { EventEmitter } from 'eventemitter3';
 import type { Identity, Contact, Content, Focus } from './api';
-import type { Topic, Asset, Repeater } from './types';
+import type { Topic, Asset, Participant } from './types';
 import type { Logging } from './logging';
 import { Store } from './store';
 
@@ -37,6 +37,9 @@ export class FocusModule implements Focus {
   public async setTopicSubject(topicId: string, subject: string): Promise<void> {
   }
 
+  public async setTopicSort(topicId: string, sort: number): Promise<void> {
+  }
+
   public async addTag(topicId: string, type: string, subject: string): Promise<string> {
     return '';
   }
@@ -45,6 +48,9 @@ export class FocusModule implements Focus {
   }
 
   public async setTagSubject(topicId: string, tagId: string, subject: string): Promise<void> {
+  }
+
+  public async setTagSort(topicId: string, tagId: string, sort: number): Promise<void> {
   }
   
   public async viewMoreTopics(): Promise<void> {
@@ -63,11 +69,11 @@ export class FocusModule implements Focus {
     return '';
   }
   
-  public async addRepeaterAccess(name: string): Promise<Repeater> {
+  public async addParticipantAccess(name: string): Promise<Participant> {
     return { id: '', guid: '', name: '', server: '', token: '' };
   }
 
-  public async removeRepeaterAccess(repeaterId: string): Promise<void> {
+  public async removeParticipantAccess(repeaterId: string): Promise<void> {
   }
 
   public async flagTopic(topicId: string): Promise<void> {

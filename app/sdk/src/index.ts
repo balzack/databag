@@ -1,6 +1,6 @@
 import { SessionModule } from './session';
 import { NodeModule } from './node';
-import { BotModule } from './bot';
+import { ContributorModule } from './contributor';
 import { type Logging, ConsoleLogging } from './logging';
 import { type Store, OfflineStore, OnlineStore, NoStore } from './store';
 import { setLogin } from './net/setLogin';
@@ -10,7 +10,7 @@ import { addAccount } from './net/addAccount';
 import { setAdmin } from './net/setAdmin';
 import { getAvailable } from './net/getAvailable';
 import { getUsername } from './net/getUsername';
-import type { Session, Node, Bot } from './api';
+import type { Session, Node, Contributor } from './api';
 import type { SessionParams } from './types';
 import type { Login } from './entities';
 import type { Crypto } from './crypto';
@@ -102,7 +102,7 @@ export class DatabagSDK {
     return new NodeModule(this.log, node, secure, token);
   }
 
-  public async automate(node: string, secure: boolean, token: string): Promise<Bot> {
-    return new BotModule(this.log, this.crypto, node, secure, token);
+  public async automate(node: string, secure: boolean, token: string): Promise<Contributor> {
+    return new ContributorModule(this.log, this.crypto, node, secure, token);
   }
 }

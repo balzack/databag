@@ -1,6 +1,6 @@
 import { EventEmitter } from 'eventemitter3';
 import type { Contact, Logging } from './api';
-import type { Card, Topic, Asset, Tag, Profile, Repeater} from './types';
+import type { Card, Topic, Asset, Tag, Profile, Participant} from './types';
 import { Store } from './store';
 
 export class ContactModule implements Contact {
@@ -142,15 +142,21 @@ export class ContactModule implements Contact {
   public async setTopicSubject(cardId: string, channelId: string, topicId: string, subject: string): Promise<void> {
   }
 
+  public async setTopicSort(cardId: string, channelId: string, topicId: string, sort: number): Promise<void> {
+  }
+
   public async addTag(cardId: string, channelId: string, topicId: string, type: string, value: string): Promise<string> {
     return '';
   }
 
-  public async removeTag(cardId: string, topicId: string, tagId: string): Promise<void> {
+  public async removeTag(cardId: string, channelId: string, topicId: string, tagId: string): Promise<void> {
   }
 
-  public async setTagSubject(cardId: string, topicId: string, tagId: string, subject: string): Promise<void> {
+  public async setTagSubject(cardId: string, channelId: string, topicId: string, tagId: string, subject: string): Promise<void> {
   }
+
+  public async setTagSort(cardId: string, channelId: string, topicId: string, tagId: string, sort: number): Promise<void> {
+  } 
 
   public async getTopics(cardId: string, channelId: string): Promise<Topic[]> {
     return [];
@@ -166,6 +172,12 @@ export class ContactModule implements Contact {
 
   public async getMoreTags(cardId: string, channelId: string, topicId: string): Promise<Tag[]> {
     return [];
+  }
+
+  public async enableChannelNotifications(cardId: string, channelId: string): Promise<void> {
+  }
+
+  public async disableChannelNotifications(cardId: string, channelid: string): Promise<void> {
   }
 
   public async setUnreadChannel(cardId: string, channelId: string): Promise<void> {
@@ -190,11 +202,11 @@ export class ContactModule implements Contact {
     return '';
   }
 
-  public async addRepeaterAccess(cardId: string, channelId: string, name: string): Promise<Repeater> {
+  public async addParticipantAccess(cardId: string, channelId: string, name: string): Promise<Participant> {
     return { id: '', guid: '', name: '', server: '', token: '' };
   }
 
-  public async removeRepeaterAccess(cardId: string, channelId: string, repeaterId: string): Promise<void> {
+  public async removeParticipantAccess(cardId: string, channelId: string, repeaterId: string): Promise<void> {
   }
 
 }
