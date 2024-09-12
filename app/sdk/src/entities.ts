@@ -160,7 +160,7 @@ export type ConfigEntity = {
   sealable: boolean,
   seal: SealEntity,
   enableIce: boolean,
-  multiFactorAuth: boolean,
+  mfaEnabled: boolean,
   webPushKey: string,
 }
 
@@ -175,7 +175,7 @@ export const defaultConfigEntity = {
   seal: { passwordSalt: '', privateKeyIv: '', privateKeyEncrypted: '', publicKey: '' },
   sealable: false,
   enableIce: false,
-  multiFactorAuth: false,
+  mfaEnabled: false,
   webPushKey: '',
 };
 

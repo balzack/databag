@@ -155,7 +155,7 @@ export type Config = {
   sealSet: boolean,
   sealUnlocked: boolean,
   enableIce: boolean,
-  multiFactorAuth: boolean,
+  mfaEnabled: boolean,
   webPushKey: string,
 }
 

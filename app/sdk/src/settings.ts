@@ -95,11 +95,11 @@ export class SettingsModule implements Settings {
   }
 
   public getConfig() {
-    const { storageUsed, storageAvailable, forwardingAddress, searchable, allowUnsealed, pushEnabled, sealable, seal, enableIce, multiFactorAuth, webPushKey } = this.config;
+    const { storageUsed, storageAvailable, forwardingAddress, searchable, allowUnsealed, pushEnabled, sealable, seal, enableIce, mfaEnabled, webPushKey } = this.config;
     const { passwordSalt, privateKeyIv, privateKeyEncrypted, publicKey } = seal || {};
     const sealSet = Boolean(passwordSalt && privateKeyIv && privateKeyEncrypted && publicKey);
     const sealUnlocked = Boolean(sealSet && this.sealKey?.privateKey && this.sealKey?.publicKey == publicKey)
-    return { storageUsed, storageAvailable, forwardingAddress, searchable, allowUnsealed, pushEnabled, sealable, sealSet, sealUnlocked, enableIce, multiFactorAuth, webPushKey };
+    return { storageUsed, storageAvailable, forwardingAddress, searchable, allowUnsealed, pushEnabled, sealable, sealSet, sealUnlocked, enableIce, mfaEnabled, webPushKey };
   }
 
   public addConfigListener(ev: (config: Config) => void): void {

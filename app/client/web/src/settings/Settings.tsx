@@ -130,8 +130,12 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
     if (!addingMfa) {
       setAddingMfa(true);
       try {
-        await actions.enableMFA();
-        mfaOpen();
+        if (checked) {
+          await actions.enableMFA();
+          mfaOpen();
+        } else {
+          await actions.disableMFA();
+        }
       } catch (err) {
         console.log(err)
         showError()
@@ -143,9 +147,13 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
   const confirmMfa = async () => {
     if (!savingMfa) {
       setSavingMfa(true);
-
-      mfaClose();
-
+      try {
+        await actions.confirmMFA();
+        mfaClose();
+      } catch (err) {
+        console.log(err);
+        showError();
+      }
       setSavingMfa(false);
     }
   }
@@ -351,6 +359,7 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
             </div>
             <Text className={classes.entryLabel}>{state.strings.mfaTitle}</Text>
             <Switch className={classes.entryControl}
+              checked={state.config.mfaEnabled}
               onChange={(ev) => setMfa(ev.currentTarget.checked)}
             />
           </div>

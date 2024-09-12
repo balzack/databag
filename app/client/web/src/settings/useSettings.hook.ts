@@ -159,9 +159,9 @@ export function useSettings() {
       const { settings } = getSession()
       await settings.disableMFA()
     },
-    confirmMFA: async (code: string) => {
+    confirmMFA: async () => {
       const { settings } = getSession()
-      await settings.confirmMFA(code)
+      await settings.confirmMFA(state.code)
     },
     setCode: (code: string) => {
       updateState({ code });
