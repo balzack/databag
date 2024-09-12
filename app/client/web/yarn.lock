@@ -2681,6 +2681,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"crypto-js@npm:^4.2.0":
+  version: 4.2.0
+  resolution: "crypto-js@npm:4.2.0"
+  checksum: f051666dbc077c8324777f44fbd3aaea2986f198fe85092535130d17026c7c2ccf2d23ee5b29b36f7a4a07312db2fae23c9094b644cc35f7858b1b4fcaf27774
+  languageName: node
+  linkType: hard
+
 "cssom@npm:^0.5.0":
   version: 0.5.0
   resolution: "cssom@npm:0.5.0"
@@ -2778,12 +2785,14 @@ __metadata:
     "@types/react": ^18.3.5
     "@types/react-dom": 18.0.6
     "@vitejs/plugin-react": 4.3.1
+    crypto-js: ^4.2.0
     databag-client-sdk: ^0.0.21
     eslint: 9.x
     eslint-plugin-react: ^7.35.0
     globals: ^15.9.0
     jest: 29.1.1
     jest-environment-jsdom: ^29.7.0
+    jsencrypt: ^3.3.2
     prettier: 3.3.3
     react: 18.3.1
     react-dom: 18.2.0
@@ -5169,6 +5178,13 @@ __metadata:
     canvas:
       optional: true
   checksum: 6e2ae21db397133a061b270c26d2dbc0b9051733ea3b896a7ece78d79f475ff0974f766a413c1198a79c793159119169f2335ddb23150348fbfdcfa6f3105536
+  languageName: node
+  linkType: hard
+
+"jsencrypt@npm:^3.3.2":
+  version: 3.3.2
+  resolution: "jsencrypt@npm:3.3.2"
+  checksum: b78e896dc1c3d6bb2e9ce2437e679c1abd4dda098c29f3d1d00024543b03f7e962d0be08b5c1024a94e400c32eb40c720f8293cb5fe6b4b3859cf6b31eabf6a4
   languageName: node
   linkType: hard
 
