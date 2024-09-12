@@ -77,6 +77,7 @@ export type Member = {
 }
 
 export type Participant = {
+  id: string,
   name: string,
   token: string,
   node: string,

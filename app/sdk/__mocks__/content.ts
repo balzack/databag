@@ -1,6 +1,6 @@
 import { EventEmitter } from 'eventemitter3';
 import type { Content } from '../src/api';
-import type { Channel, Topic, Asset, Tag, Repeater } from '../src/types';
+import type { Channel, Topic, Asset, Tag, Participant } from '../src/types';
 
 export class MockContentModule implements Content {
 
@@ -62,6 +62,9 @@ export class MockContentModule implements Content {
   public async setTopicSubject(channelId: string, topicId: string, subject: string): Promise<void> {
   }
 
+  public async setTopicSort(channelId: string, topicId: string, sort: number): Promise<void> {
+  }
+
   public async addTag(channelId: string, topicId: string, type: string, value: string): Promise<string> {
     return '';
   }
@@ -70,6 +73,51 @@ export class MockContentModule implements Content {
   }
 
   public async setTagSubject(channelId: string, topicId: string, tagId: string, subject: string): Promise<void> {
+  }
+
+  public async setTagSort(chanenlId: string, topicId: string, tagId: string, sort: number): Promise<void> {
+  }
+
+  public async enableNotifications(channelId: string, memberId: string): Promise<void> {
+  }
+
+  public async disableNotifications(channelId: string, memberId: string): Promise<void> {
+  }
+
+  public async enableSortTopic(channelId: string, memberId: string): Promise<void> {
+  }
+
+  public async disableSortTopic(channelId: string, memberId: string): Promise<void> {
+  }
+
+  public async enableSortTag(channelId: string, memberId: string): Promise<void> {
+  }
+
+  public async disableSortTag(channelId: string, memberId: string): Promise<void> {
+  }
+
+  public async enableAddTopic(channelId: string, memberId: string): Promise<void> {
+  }
+
+  public async disableAddTopic(channelId: string, memberId: string): Promise<void> {
+  }
+
+  public async enableAddTag(channelId: string, memberId: string): Promise<void> {
+  }
+
+  public async disableAddTag(channelId: string, memberId: string): Promise<void> {
+  }
+
+  public async enableAddAsset(channelId: string, memberId: string): Promise<void> {
+  }
+
+  public async disableAddAsset(channelId: string, memberId: string): Promise<void> {
+  }
+
+  public async enableAddParticipant(channelId: string, memberId: string): Promise<void> {
+  }
+
+  public async disableAddParticipant(channelId: string, memberId: string): Promise<void> {
   }
 
   public async flagTag(channelId: string, topicId: string, tagId: string): Promise<void> {
@@ -121,11 +169,11 @@ export class MockContentModule implements Content {
   public async clearUnreadChannel(channelId: string): Promise<void> {
   }
 
-  public async addRepeaterAccess(channelId: string, name: string): Promise<Repeater> {
-    return { id: '', guid: '', name: '', server: '', token: '' };
+  public async addParticipantAccess(channelId: string, name: string): Promise<Participant> {
+    return { id: '', name: '', node: '', secure: false, token: '' };
   }
 
-  public async removeRepeaterAccess(channelId: string, repeaterId: string): Promise<void> {
+  public async removeParticipantAccess(channelId: string, participantId: string): Promise<void> {
   }
 }
 

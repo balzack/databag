@@ -203,7 +203,7 @@ export class ContactModule implements Contact {
   }
 
   public async addParticipantAccess(cardId: string, channelId: string, name: string): Promise<Participant> {
-    return { id: '', guid: '', name: '', server: '', token: '' };
+    return { id: '', name: '', node: '', secure: false, token: '' };
   }
 
   public async removeParticipantAccess(cardId: string, channelId: string, repeaterId: string): Promise<void> {

@@ -70,7 +70,7 @@ export class FocusModule implements Focus {
   }
   
   public async addParticipantAccess(name: string): Promise<Participant> {
-    return { id: '', guid: '', name: '', server: '', token: '' };
+    return { id: '', name: '', node: '', secure: false, token: '' };
   }
 
   public async removeParticipantAccess(repeaterId: string): Promise<void> {
