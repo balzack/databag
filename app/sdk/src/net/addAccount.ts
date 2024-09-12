@@ -1,4 +1,4 @@
-import { checkResponse, fetchWithCustomTimeout } from './fetchUtil';
+import { checkResponse, fetchWithTimeout } from './fetchUtil';
 import { encode } from './base64';
 
 export async function addAccount(node: string, secure: boolean, username: string, password: string, token: string | null): Promise<void> {
@@ -7,6 +7,6 @@ export async function addAccount(node: string, secure: boolean, username: string
   const auth = encode(`${username}:${password}`)
   const headers = new Headers()
   headers.append('Credentials', `Basic ${auth}`);
-  const { status } = await fetchWithCustomTimeout(endpoint, { method: 'POST', headers }, 60000);
+  const { status } = await fetchWithTimeout(endpoint, { method: 'POST', headers }, 60000);
   checkResponse(status);
 }

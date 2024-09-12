@@ -8,17 +8,10 @@ export function checkResponse(code: number) {
   }
 }
 
-export async function fetchWithTimeout(url: string, options: RequestInit): Promise<Response> {
+export async function fetchWithTimeout(url: string, options: RequestInit, timeout: number = TIMEOUT): Promise<Response> {
   return Promise.race<Response>([
     fetch(url, options).catch(err => { throw new Error(url + ' failed'); }),
     new Promise((_, reject) => setTimeout(() => reject(new Error(url + ' timeout')), TIMEOUT))
-  ]);
-}
-
-export async function fetchWithCustomTimeout(url: string, options: RequestInit, timeout: number): Promise<Response> {
-  return Promise.race<Response>([
-    fetch(url, options).catch(err => { throw new Error(url + ' failed'); }),
-    new Promise((_, reject) => setTimeout(() => reject(new Error(url + ' timeout')), timeout))
   ]);
 }
 

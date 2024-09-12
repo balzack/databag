@@ -18,7 +18,6 @@ jest.mock('../src/net/fetchUtil', () => {
 
   return {
     fetchWithTimeout: fn,
-    fetchWithCustomTimeout: fn,
     checkResponse: () => {},
   }
 });
