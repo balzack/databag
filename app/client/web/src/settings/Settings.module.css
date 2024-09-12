@@ -1,3 +1,28 @@
+.seal {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  .delete {
+    background-color: var(--mantine-color-red-9);
+    color: var(--mantine-color-red-0);
+  }
+
+  .buttons {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .controls {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: flex-end;
+    flex-grow: 1;
+  }
+}
+
 .mfa {
   .secret {
     display: flex;

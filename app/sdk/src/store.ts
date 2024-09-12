@@ -5,6 +5,7 @@ export interface Store {
   init(): Promise<Login | null>;
   setLogin(login: Login): Promise<void>;
   clearLogin(): Promise<void>;
+
   getSeal(guid: string): Promise<{ publicKey: string, privateKey: string } | null>;
   setSeal(guid: string, seal: { publicKey: string, privateKey: string }): Promise<void>;
   clearSeal(guid: string): Promise<void>;

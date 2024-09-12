@@ -42,6 +42,7 @@ export const en = {
 
   add: 'Add',
   save: 'Save',
+  resave: 'Resave',
   forget: 'Forget',
   unlock: 'Unlock',
   profile: 'Profile',
@@ -256,6 +257,7 @@ export const fr = {
 
   add: 'Ajouter',
   save: 'Enregistrer',
+  resave: 'Réenregistrer',
   forget: 'Oublier',
   unlock: 'Déverrouiller',
   profile: 'Profil',
@@ -473,6 +475,7 @@ export const sp = {
 
   add: 'Agregar',
   save: 'Guardar',
+  resave: 'Guardar',
   forget: 'Olvidar',
   unlock: 'Desbloquear',
   profile: 'Perfil',
@@ -688,6 +691,7 @@ export const pt = {
 
   add: 'Adicionar',
   save: 'Salvar',
+  resave: 'Salvar Novamente',
   forget: 'Esquecer',
   unlock: 'Desbloquear',
   profile: 'Perfil',
@@ -903,6 +907,7 @@ export const de = {
 
   add: 'Hinzufügen',
   save: 'Speichern',
+  resave: 'Erneut Speichern',
   forget: 'Vergessen',
   unlock: 'Entsperren',
   profile: 'Profil',
@@ -1119,6 +1124,7 @@ export const ru = {
 
   add: 'Добавить',
   save: 'Сохранить',
+  resave: 'Пересохранить',
   forget: 'Забыть',
   unlock: 'Разблокировать',
   profile: 'Профиль',

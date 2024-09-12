@@ -52,6 +52,9 @@ export function useSettings() {
     secretImage: '',
     code: '',
     editImage: '',
+    sealPassword: '',
+    sealConfirm: '',
+    sealDelete: '',
   })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -173,21 +176,25 @@ export function useSettings() {
         updateState({ secretCopied: false });
       }, 1000);
     },
-    setSeal: async (password: string) => {
+    setSeal: async () => {
       const { settings } = getSession()
-      await settings.setSeal(password)
+      await settings.setSeal(state.sealPassword)
     },
     clearSeal: async () => {
       const { settings } = getSession()
       await settings.clearSeal()
     },
-    unlockSeal: async (password: string) => {
+    unlockSeal: async () => {
       const { settings } = getSession()
-      await settings.unlockSeal(password)
+      await settings.unlockSeal(state.sealPassword)
     },
     forgetSeal: async () => {
       const { settings } = getSession()
       await settings.forgetSeal()
+    },
+    updateSeal: async () => {
+      const { settings } = getSession();
+      await settings.updateSeal(state.sealPassword);
     },
     setProfileData: async (
       name: string,
@@ -274,7 +281,17 @@ export function useSettings() {
     setEditImage: (editImage: string) => {
       updateState({ editImage })
     },
+    setSealDelete: (sealDelete) => {
+      updateState({ sealDelete });
+    },
+    setSealPassword: (sealPassword) => {
+      updateState({ sealPassword });
+    },
+    setSealConfirm: (sealConfirm) => {
+      updateState({ sealConfirm });
+    },
     setImage: async () => {
+console.log("SETTING");
       const { identity } = getSession()
       const processImg = () => {
         return new Promise<string>((resolve, reject) => {
@@ -310,10 +327,12 @@ export function useSettings() {
             throw new Error('invalid edit image')
           }
           img.onerror = reject
+console.log("CLIPPING: ", state.editImage);
           img.src = state.editImage
         })
       }
       const dataUrl = await processImg()
+console.log("--> ", dataUrl);
       const data = dataUrl.split(',')[1]
       await identity.setProfileImage(data)
     },

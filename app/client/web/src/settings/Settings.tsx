@@ -16,6 +16,7 @@ import {
 } from '@mantine/core'
 import classes from './Settings.module.css'
 import {
+  IconKey,
   IconLock,
   IconUser,
   IconClock,
@@ -64,6 +65,10 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
   const [savingSeal, setSavingSeal] = useState(false)
   const [savingMfa, setSavingMfa] = useState(false)
   const [addingMfa, setAddingMfa] = useState(false)
+  const [sealDelete, setSealDelete] = useState(false)
+  const [sealReset, setSealReset] = useState(false)
+
+  console.log("SEAL: ", state.config);
 
   const logout = () =>
     modals.openConfirmModal({
@@ -120,6 +125,11 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
 
   const setSeal = async () => {
     if (!savingSeal) {
+      setSealDelete(false);
+      setSealReset(false);
+      actions.setSealPassword('');
+      actions.setSealConfirm('');
+      actions.setSealDelete('');
       sealOpen();
       setSavingSeal(true);
       setSavingSeal(false);
@@ -215,6 +225,77 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
         showError()
       }
       setSavingLogin(false)
+    }
+  }
+
+  const sealUnlock = async () => {
+    if (!savingSeal) {
+      setSavingSeal(true);
+      try {
+        await actions.unlockSeal();
+        sealClose();
+      } catch (err) {
+        console.log(err);
+        showError();
+      }
+      setSavingSeal(false)
+    }
+  }
+
+  const sealForget = async () => {
+    if (!savingSeal) {
+      setSavingSeal(true);
+      try {
+        await actions.forgetSeal();
+        sealClose();
+      } catch (err) {
+        console.log(err);
+        shwoError();
+      }
+      setSavingSeal(false);
+    }
+  }
+
+  const sealRemove = async () => {
+    if (!savingSeal) {
+      setSavingSeal(true);
+      try {
+        await actions.clearSeal();
+        sealClose();
+      } catch (err) {
+        console.log(err);
+        showError();
+      }
+      setSavingSeal(false);
+    }
+  }
+
+  const sealCreate = async () => {
+    if (!savingSeal) {
+      setSavingSeal(true);
+      try {
+        await new Promise(r => setTimeout(r, 100));
+        await actions.setSeal();
+        sealClose();
+      } catch (err) {
+        console.log(err);
+        showError();
+      }
+      setSavingSeal(false);
+    }
+  }
+
+  const sealUpdate = async () => {
+    if (!savingSeal) {
+      setSavingSeal(true);
+      try {
+        await actions.updateSeal();
+        sealClose();
+      } catch (err) {
+        console.log(err);
+        showError();
+      }
+      setSavingSeal(false);
     }
   }
 
@@ -681,7 +762,148 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
         overlayProps={{ backgroundOpacity: 0.55, blur: 3 }}
         centered
       >
-        <div className={classes.seal} />
+        <>
+          { !sealDelete && !sealReset && state.config.sealSet && state.config.sealUnlocked && (
+            <div className={classes.seal}>
+              <span>UNLOCK SEAL</span>
+              <div className={classes.buttons}> 
+                <Button
+                  className={classes.delete}
+                  onClick={() => setSealDelete(true)}
+                >
+                  {state.strings.remove}
+                </Button>
+                <Button
+                  variant="filled"
+                  onClick={() => setSealReset(true)}
+                >
+                  {state.strings.resave}
+                </Button> 
+                <div className={classes.controls}>
+                  <Button variant="default" onClick={sealClose}>
+                    {state.strings.cancel}
+                  </Button>
+                  <Button variant="filled" onClick={sealForget} loading={savingSeal}>
+                    {state.strings.forget}
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
+          { !sealDelete && sealReset && state.config.sealSet && state.config.sealUnlocked && (
+            <div className={classes.seal}>
+              <span>UPDATE SEAL</span>
+              <TextInput
+                className={classes.input}
+                size="md"
+                value={state.sealPassword}
+                leftSectionPointerEvents="none"
+                leftSection={<IconLock />}
+                placeholder={state.strings.password}
+                onChange={(event) => actions.setSealPassword(event.currentTarget.value)}
+              />
+              <TextInput
+                className={classes.input}
+                size="md"
+                value={state.sealConfirm}
+                leftSectionPointerEvents="none"
+                leftSection={<IconLock />}
+                placeholder={state.strings.confirmPassword}
+                onChange={(event) => actions.setSealConfirm(event.currentTarget.value)}
+              />
+              <div className={classes.controls}>
+                <Button variant="default" onClick={sealClose}>
+                  {state.strings.cancel}
+                </Button>
+                <Button variant="filled" onClick={sealUpdate} loading={savingSeal} disabled={state.sealPassword === '' || state.sealPassword !== state.sealConfirm}>
+                  {state.strings.save}
+                </Button>
+              </div>
+            </div>
+          )}
+          { !sealDelete && state.config.sealSet && !state.config.sealUnlocked && (
+            <div className={classes.seal}>
+              <span>LOCKED SEAL</span>
+              <PasswordInput
+                className={classes.input}
+                size="md"
+                value={state.sealPassword}
+                leftSection={<IconLock />}
+                placeholder={state.strings.password}
+                onChange={(event) => actions.setSealPassword(event.currentTarget.value)}
+              />
+              <div className={classes.buttons}> 
+                <Button
+                  className={classes.delete}
+                  onClick={() => setSealDelete(true)}
+                >
+                  {state.strings.remove}
+                </Button> 
+                <div className={classes.controls}>
+                  <Button variant="default" onClick={sealClose}>
+                    {state.strings.cancel}
+                  </Button>
+                  <Button variant="filled" onClick={sealUnlock} disabled={state.sealPassword === ''} loading={savingSeal}>
+                    {state.strings.unlock}
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
+          { sealDelete && state.config.sealSet && (
+            <div className={classes.seal}>
+              <span>DELETE MODE</span>
+              <TextInput
+                className={classes.input}
+                size="md"
+                value={state.sealDelete}
+                leftSectionPointerEvents="none"
+                leftSection={<IconKey />}
+                placeholder={state.strings.deleteKey}
+                onChange={(event) => actions.setSealDelete(event.currentTarget.value)}
+              />
+              <div className={classes.controls}>
+                <Button variant="default" onClick={sealClose}>
+                  {state.strings.cancel}
+                </Button>
+                <Button variant="filled" className={state.sealDelete === state.strings.delete ? classes.delete : ''} onClick={sealRemove} disabled={state.sealDelete !== state.strings.delete} loading={savingSeal}>
+                  {state.strings.remove}
+                </Button>
+              </div>
+            </div>
+          )}
+          { !state.config.sealSet && (
+            <div className={classes.seal}>
+              <span>NO SEAL</span>
+              <TextInput
+                className={classes.input}
+                size="md"
+                value={state.sealPassword}
+                leftSectionPointerEvents="none"
+                leftSection={<IconLock />}
+                placeholder={state.strings.password}
+                onChange={(event) => actions.setSealPassword(event.currentTarget.value)}
+              />
+              <TextInput
+                className={classes.input}
+                size="md"
+                value={state.sealConfirm}
+                leftSectionPointerEvents="none"
+                leftSection={<IconLock />}
+                placeholder={state.strings.confirmPassword}
+                onChange={(event) => actions.setSealConfirm(event.currentTarget.value)}
+              />
+              <div className={classes.controls}>
+                <Button variant="default" onClick={sealClose}>
+                  {state.strings.cancel}
+                </Button>
+                <Button variant="filled" onClick={sealCreate} disabled={state.sealPassword == '' || state.sealPassword !== state.sealConfirm} loading={savingSeal}>
+                  {state.strings.save}
+                </Button>
+              </div>
+            </div>
+          )}
+        </>
       </Modal>
     </>
   )

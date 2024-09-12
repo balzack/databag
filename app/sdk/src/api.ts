@@ -51,6 +51,7 @@ export interface Settings {
   setSeal(password: string): Promise<void>;
   clearSeal(): Promise<void>;
   unlockSeal(password: string): Promise<void>;
+  updaterSeal(password: string): Promise<void>;
   forgetSeal(): Promise<void>;
 
   addConfigListener(ev: (config: Config) => void): void;

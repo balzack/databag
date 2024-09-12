@@ -151,7 +151,6 @@ export type Config = {
   searchable: boolean,
   allowUnsealed: boolean,
   pushEnabled: boolean,
-  sealable: boolean,
   sealSet: boolean,
   sealUnlocked: boolean,
   enableIce: boolean,

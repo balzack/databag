@@ -48,7 +48,7 @@ export class WebCrypto implements Crypto {
     const key = CryptoJS.enc.Hex.parse(aesKeyHex);
     const ciphertext = CryptoJS.enc.Base64.parse(encryptedDataB64);
     const cipher = CryptoJS.lib.CipherParams.create({ ciphertext, iv });
-    const deccrypted = CryptoJS.AES.decrypt(cipher, key, { iv });
+    const decrypted = CryptoJS.AES.decrypt(cipher, key, { iv });
     const data = decrypted.toString(CryptoJS.enc.Utf8);
     return { data };
   }
@@ -58,9 +58,9 @@ export class WebCrypto implements Crypto {
     const crypto = new JSEncrypt({ default_key_size: 2048 });
     crypto.getKey();
     const publicKey = crypto.getPublicKey();
-    const publicKeyB64 = convertPem(publicKey);
-    const privateKey = crypto.getProviateKey();
-    const privateKeyB64 = convertPem(privateKey);
+    const publicKeyB64 = this.convertPem(publicKey);
+    const privateKey = crypto.getPrivateKey();
+    const privateKeyB64 = this.convertPem(privateKey);
     return { publicKeyB64, privateKeyB64 };
   }
 
