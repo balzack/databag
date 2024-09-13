@@ -45,7 +45,7 @@ export function useAccess() {
     }
 
     const { protocol, host } = location
-    updateState({ host, secure: protocol === 'https' })
+    updateState({ host, secure: protocol === 'https:' })
   }, [])
 
   useEffect(() => {

@@ -7,7 +7,7 @@ import { createTheme, MantineProvider, virtualColor } from '@mantine/core'
 import { ModalsProvider } from '@mantine/modals'
 import './App.css'
 import '@mantine/core/styles.css'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { createHashRouter, RouterProvider } from 'react-router-dom'
 import classes from './App.module.css'
 import { DisplayContext } from './context/DisplayContext'
 import { ContextType } from './context/ContextType'
@@ -147,7 +147,7 @@ const theme = createTheme({
   },
 })
 
-const router = createBrowserRouter([
+const router = createHashRouter([
   {
     element: <Root />,
     children: [

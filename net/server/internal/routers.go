@@ -196,6 +196,13 @@ var endpoints = routes{
 	},
 
 	route{
+		"ClearAccountSeal",
+		strings.ToUpper("Delete"),
+		"/account/seal",
+		ClearAccountSeal,
+	},
+
+	route{
 		"SetAccountSerchable",
 		strings.ToUpper("Put"),
 		"/account/searchable",
