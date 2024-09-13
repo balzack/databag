@@ -14,6 +14,12 @@ export const en = {
   forgotPassword: 'Forgot Password',
   manageTopics: 'Manage Sealing Key',
 
+  sealUnlock: 'Unlock sealing key to access end-to-end encrypted messages',
+  sealForget: 'Forget sealing key to revoke access of end-to-end encrypted messages for this device only',
+  sealDelete: 'Deleting the sealing key will permantently revoke access to all end-to-end encrypted messages from all devices',
+  sealUpdate: 'Updating the sealing key will only change the locking password',
+  sealCreate: 'Create a sealing key to send and receive end-to-end encrypted messages',
+
   new: 'New',
   newMessage: 'New Message',
   topics: 'Topics',
@@ -228,6 +234,13 @@ export const fr = {
   accessCode: "Code d'Accès",
   forgotPassword: 'Mot de Passe Oublié',
   manageTopics: 'Gérer la clé de sécurité',
+
+
+  sealUnlock: 'Déverrouiller la clé de scellement pour accéder aux messages chiffrés de bout en bout',
+  sealForget: 'Oublier la clé de scellement pour révoquer l\'accès aux messages chiffrés de bout en bout pour cet appareil uniquement',
+  sealDelete: 'La suppression de la clé de scellement révoquera définitivement l\'accès à tous les messages chiffrés de bout en bout depuis tous les appareils',
+  sealUpdate: 'La mise à jour de la clé de scellement changera uniquement le mot de passe de verrouillage',
+  sealCreate: 'Créer une clé de scellement pour envoyer et recevoir des messages chiffrés de bout en bout',
 
   new: 'Nouveau',
   newMessage: 'Nouveau Message',
@@ -447,6 +460,12 @@ export const sp = {
   forgotPassword: 'Contraseña Olvidada',
   manageTopics: 'Administrar clave de seguridad',
 
+  sealUnlock: 'Desbloquear la clave de sellado para acceder a los mensajes cifrados de extremo a extremo',
+  sealForget: 'Olvidar la clave de sellado para revocar el acceso a los mensajes cifrados de extremo a extremo solo en este dispositivo',
+  sealDelete: 'Eliminar la clave de sellado revocará permanentemente el acceso a todos los mensajes cifrados de extremo a extremo desde todos los dispositivos',
+  sealUpdate: 'Actualizar la clave de sellado solo cambiará la contraseña de bloqueo',
+  sealCreate: 'Crear una clave de sellado para enviar y recibir mensajes cifrados de extremo a extremo',
+
   new: 'Nuevo',
   newMessage: 'Nuevo mensaje',
   topics: 'Temas',
@@ -662,6 +681,12 @@ export const pt = {
   accessCode: 'Código de Acesso',
   forgotPassword: 'Senha Esquecida',
   manageTopics: 'Gerenciar Chave de Selagem',
+
+  sealUnlock: 'Desbloquear a chave de selagem para acessar mensagens criptografadas de ponta a ponta',
+  sealForget: 'Esquecer a chave de selagem para revogar o acesso às mensagens criptografadas de ponta a ponta apenas para este dispositivo',
+  sealDelete: 'Excluir a chave de selagem revogará permanentemente o acesso a todas as mensagens criptografadas de ponta a ponta de todos os dispositivos',
+  sealUpdate: 'Atualizar a chave de selagem mudará apenas a senha de bloqueio',
+  sealCreate: 'Criar uma chave de selagem para enviar e receber mensagens criptografadas de ponta a ponta',
 
   new: 'Novo',
   newMessage: 'Nova mensagem',
@@ -879,6 +904,12 @@ export const de = {
   forgotPassword: 'Passwort Vergessen',
   manageTopics: 'Sicherheitsschlüssel verwalten',
 
+  sealUnlock: 'Entsperren Sie den Versiegelungsschlüssel, um auf Ende-zu-Ende-verschlüsselte Nachrichten zuzugreifen',
+  sealForget: 'Versiegelungsschlüssel vergessen, um den Zugriff auf Ende-zu-Ende-verschlüsselte Nachrichten nur für dieses Gerät zu widerrufen',
+  sealDelete: 'Das Löschen des Versiegelungsschlüssels widerruft dauerhaft den Zugriff auf alle Ende-zu-Ende-verschlüsselten Nachrichten von allen Geräten',
+  sealUpdate: 'Das Aktualisieren des Versiegelungsschlüssels ändert nur das Sperrpasswort',
+  sealCreate: 'Erstellen Sie einen Versiegelungsschlüssel, um Ende-zu-Ende-verschlüsselte Nachrichten zu senden und zu empfangen',
+
   new: 'Neu',
   newMessage: 'Neue Nachricht',
   topics: 'Themen',
@@ -1095,6 +1126,12 @@ export const ru = {
   accessCode: 'Код доступа',
   forgotPassword: 'Пароль забыт',
   manageTopics: 'Управление ключом запечатывания',
+
+  sealUnlock: 'Разблокировать ключ запечатывания для доступа к сообщениям с сквозным шифрованием',
+  sealForget: 'Забыть ключ запечатывания, чтобы отозвать доступ к сообщениям с сквозным шифрованием только для этого устройства',
+  sealDelete: 'Удаление ключа запечатывания навсегда отзовет доступ ко всем сообщениям с сквозным шифрованием со всех устройств',
+  sealUpdate: 'Обновление ключа запечатывания изменит только пароль блокировки',
+  sealCreate: 'Создать ключ запечатывания для отправки и получения сообщений с сквозным шифрованием',
 
   new: 'Новый',
   newMessage: 'Новое сообщение',

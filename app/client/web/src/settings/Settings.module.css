@@ -3,6 +3,11 @@
   flex-direction: column;
   gap: 16px;
 
+  .sealConfig {
+    cursor: pointer;
+    color: var(--mantine-color-dbgreen-1);
+  }
+
   .delete {
     background-color: var(--mantine-color-red-9);
     color: var(--mantine-color-red-0);

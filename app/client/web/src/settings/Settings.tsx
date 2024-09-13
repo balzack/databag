@@ -33,6 +33,9 @@ import {
   IconEye,
   IconBook,
   IconMapPin,
+  IconTrash,
+  IconCaretDown,
+  IconCaretRight,
   IconLogout,
   IconLogin,
   IconCopy,
@@ -67,8 +70,7 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
   const [addingMfa, setAddingMfa] = useState(false)
   const [sealDelete, setSealDelete] = useState(false)
   const [sealReset, setSealReset] = useState(false)
-
-  console.log("SEAL: ", state.config);
+  const [sealConfig, setSealConfig] = useState(false)
 
   const logout = () =>
     modals.openConfirmModal({
@@ -127,6 +129,7 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
     if (!savingSeal) {
       setSealDelete(false);
       setSealReset(false);
+      setSealConfig(false);
       actions.setSealPassword('');
       actions.setSealConfirm('');
       actions.setSealDelete('');
@@ -760,25 +763,36 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
         opened={sealOpened}
         onClose={sealClose}
         overlayProps={{ backgroundOpacity: 0.55, blur: 3 }}
+        size="lg"
         centered
       >
         <>
           { !sealDelete && !sealReset && state.config.sealSet && state.config.sealUnlocked && (
             <div className={classes.seal}>
-              <span>UNLOCK SEAL</span>
-              <div className={classes.buttons}> 
-                <Button
-                  className={classes.delete}
-                  onClick={() => setSealDelete(true)}
-                >
-                  {state.strings.remove}
-                </Button>
-                <Button
-                  variant="filled"
-                  onClick={() => setSealReset(true)}
-                >
-                  {state.strings.resave}
-                </Button> 
+              <span>{ state.strings.sealForget }</span>
+              <div className={classes.buttons}>
+                { !sealConfig && (
+                  <IconCaretDown className={classes.sealConfig} onClick={() => setSealConfig(true)}/>
+                )}
+                { sealConfig && (
+                  <IconCaretRight className={classes.sealConfig} onClick={() => setSealConfig(false)}/>
+                )}
+                { sealConfig && (
+                  <Button
+                    className={classes.delete}
+                    onClick={() => setSealDelete(true)}
+                  >
+                    {state.strings.remove}
+                  </Button>
+                )}
+                { sealConfig && (
+                  <Button
+                    variant="filled"
+                    onClick={() => setSealReset(true)}
+                  >
+                    {state.strings.resave}
+                  </Button> 
+                )}
                 <div className={classes.controls}>
                   <Button variant="default" onClick={sealClose}>
                     {state.strings.cancel}
@@ -792,7 +806,7 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
           )}
           { !sealDelete && sealReset && state.config.sealSet && state.config.sealUnlocked && (
             <div className={classes.seal}>
-              <span>UPDATE SEAL</span>
+              <span>{ state.strings.sealUpdate }</span>
               <TextInput
                 className={classes.input}
                 size="md"
@@ -823,7 +837,7 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
           )}
           { !sealDelete && state.config.sealSet && !state.config.sealUnlocked && (
             <div className={classes.seal}>
-              <span>LOCKED SEAL</span>
+              <span>{ state.strings.sealUnlock }</span>
               <PasswordInput
                 className={classes.input}
                 size="md"
@@ -832,13 +846,21 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
                 placeholder={state.strings.password}
                 onChange={(event) => actions.setSealPassword(event.currentTarget.value)}
               />
-              <div className={classes.buttons}> 
-                <Button
-                  className={classes.delete}
-                  onClick={() => setSealDelete(true)}
-                >
-                  {state.strings.remove}
-                </Button> 
+              <div className={classes.buttons}>
+                { !sealConfig && (
+                  <IconCaretDown className={classes.sealConfig} onClick={() => setSealConfig(true)}/>
+                )}
+                { sealConfig && (
+                  <IconCaretRight className={classes.sealConfig} onClick={() => setSealConfig(false)}/>
+                )}
+                { sealConfig && (
+                  <Button
+                    className={classes.delete}
+                    onClick={() => setSealDelete(true)}
+                  >
+                    {state.strings.remove}
+                  </Button>
+                )}
                 <div className={classes.controls}>
                   <Button variant="default" onClick={sealClose}>
                     {state.strings.cancel}
@@ -852,13 +874,13 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
           )}
           { sealDelete && state.config.sealSet && (
             <div className={classes.seal}>
-              <span>DELETE MODE</span>
+              <span>{ state.strings.sealDelete }</span>
               <TextInput
                 className={classes.input}
                 size="md"
                 value={state.sealDelete}
                 leftSectionPointerEvents="none"
-                leftSection={<IconKey />}
+                leftSection={<IconTrash />}
                 placeholder={state.strings.deleteKey}
                 onChange={(event) => actions.setSealDelete(event.currentTarget.value)}
               />
@@ -874,7 +896,7 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
           )}
           { !state.config.sealSet && (
             <div className={classes.seal}>
-              <span>NO SEAL</span>
+              <span>{ state.strings.sealCreate }</span>
               <TextInput
                 className={classes.input}
                 size="md"
