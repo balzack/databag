@@ -83,18 +83,15 @@ export class DatabagSDK {
     const sessionModule = session as SessionModule;
     const params = await sessionModule.close();
     try {
-      const { node, secure, token } = params;
-      await clearLogin(node, secure, token, all);
-    }
-    catch(err) {
-      this.log.error(err);
-    }
-    try {
       await this.store.clearLogin();
     }
     catch(err) {
       this.log.error(err);
     }
+    const { node, secure, token } = params;
+    clearLogin(node, secure, token, all).then(() => {}).catch(err => {
+      console.log(err);
+    });
   }
 
   public async configure(node: string, secure: boolean, token: string, mfaCode: string | null): Promise<Node> {
