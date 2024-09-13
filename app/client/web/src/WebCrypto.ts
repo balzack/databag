@@ -55,7 +55,7 @@ export class WebCrypto implements Crypto {
 
   // generate rsa key
   public rsaKey(): { publicKeyB64: string, privateKeyB64: string } {
-    const crypto = new JSEncrypt({ default_key_size: 2048 });
+    const crypto = new JSEncrypt({ default_key_size: '2048' });
     crypto.getKey();
     const publicKey = crypto.getPublicKey();
     const publicKeyB64 = this.convertPem(publicKey);
@@ -69,6 +69,9 @@ export class WebCrypto implements Crypto {
     const crypto = new JSEncrypt();
     crypto.setPublicKey(publicKeyB64);
     const encryptedDataB64 = crypto.encrypt(data);
+    if (!encryptedDataB64) {
+      throw new Error('rsaEncrypt failed');
+    }
     return { encryptedDataB64 };
   }
 
@@ -77,6 +80,9 @@ export class WebCrypto implements Crypto {
     const crypto = new JSEncrypt();
     crypto.setPrivateKey(privateKeyB64);
     const data = crypto.decrypt(encryptedDataB64);
+    if (!data) {
+      throw new Error('rsaDecrypt failed');
+    }
     return { data };
   }
 

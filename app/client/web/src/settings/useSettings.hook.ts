@@ -55,6 +55,7 @@ export function useSettings() {
     sealPassword: '',
     sealConfirm: '',
     sealDelete: '',
+    secretCopied: false,
   })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -281,13 +282,13 @@ export function useSettings() {
     setEditImage: (editImage: string) => {
       updateState({ editImage })
     },
-    setSealDelete: (sealDelete) => {
+    setSealDelete: (sealDelete: string) => {
       updateState({ sealDelete });
     },
-    setSealPassword: (sealPassword) => {
+    setSealPassword: (sealPassword: string) => {
       updateState({ sealPassword });
     },
-    setSealConfirm: (sealConfirm) => {
+    setSealConfirm: (sealConfirm: string) => {
       updateState({ sealConfirm });
     },
     setImage: async () => {
