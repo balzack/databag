@@ -45,7 +45,7 @@ export function useSettings() {
     description: '',
     location: '',
     handle: '',
-    clip: { w: 0, h: 0, x: 0, y: 0 },
+    clip: { width: 0, height: 0, x: 0, y: 0 },
     crop: { x: 0, y: 0 },
     zoom: 1,
     secretText: '',
@@ -291,7 +291,6 @@ export function useSettings() {
       updateState({ sealConfirm });
     },
     setImage: async () => {
-console.log("SETTING");
       const { identity } = getSession()
       const processImg = () => {
         return new Promise<string>((resolve, reject) => {
@@ -310,8 +309,8 @@ console.log("SETTING");
                 img,
                 state.clip.x,
                 state.clip.y,
-                state.clip.w,
-                state.clip.h,
+                state.clip.width,
+                state.clip.height,
                 0,
                 0,
                 IMAGE_DIM,
@@ -327,12 +326,10 @@ console.log("SETTING");
             throw new Error('invalid edit image')
           }
           img.onerror = reject
-console.log("CLIPPING: ", state.editImage);
           img.src = state.editImage
         })
       }
       const dataUrl = await processImg()
-console.log("--> ", dataUrl);
       const data = dataUrl.split(',')[1]
       await identity.setProfileImage(data)
     },

@@ -250,7 +250,7 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
         sealClose();
       } catch (err) {
         console.log(err);
-        shwoError();
+        showError();
       }
       setSavingSeal(false);
     }

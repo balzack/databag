@@ -14,7 +14,7 @@ export class WebCrypto implements Crypto {
   // generate aes key with pbkdf2
   public pbkdfKey(saltHex: string, password: string): { aesKeyHex: string } {
     const salt = CryptoJS.enc.Hex.parse(saltHex);
-    const aes = CryptoJS.PBKDF2(password, salt, { keySize: 256 / 32, iterations: 1024, });
+    const aes = CryptoJS.PBKDF2(password, salt, { keySize: 256 / 32, iterations: 1024, hasher: CryptoJS.algo.SHA1, });
     const aesKeyHex = aes.toString();
     return { aesKeyHex };
   }
