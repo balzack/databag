@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import { Text } from 'react-native';
 import {AppContextProvider} from './src/context/AppContext';
-import {SettingsContextProvider} from './src/context/SettingsContext';
+import {DisplayContextProvider} from './src/context/DisplayContext';
 import {styles} from './App.styled';
 import { NativeRouter } from "react-router-native";
 import { Routes, Route } from 'react-router-dom';
@@ -116,7 +116,7 @@ function App(): React.JSX.Element {
 
   return (
     <AppContextProvider>
-      <SettingsContextProvider>
+      <DisplayContextProvider>
         <PaperProvider theme={theme}>
           <NativeRouter>
             <Root />
@@ -128,7 +128,7 @@ function App(): React.JSX.Element {
             </Routes>
           </NativeRouter>
         </PaperProvider>
-      </SettingsContextProvider>
+      </DisplayContextProvider>
     </AppContextProvider>
   );
 }

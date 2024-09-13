@@ -61,7 +61,7 @@ export function Access() {
 
   return (
     <Surface style={styles.split}>
-      {state.wide && (
+      {state.layout === 'large' && (
         <Image style={styles.left} source={left} resizeMode="contain" />
       )}
       <KeyboardAwareScrollView style={styles.frame} contentContainerStyle={styles.scroll}>

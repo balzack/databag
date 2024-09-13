@@ -1,5 +1,5 @@
 import {useRef, useState, useContext, useEffect} from 'react';
-import {SettingsContext} from '../context/SettingsContext';
+import {DisplayContext} from '../context/DisplayContext';
 import {AppContext} from '../context/AppContext';
 import {ContextType} from '../context/ContextType';
 
@@ -9,10 +9,10 @@ export function useAccess() {
   const debounceAvailable = useRef(setTimeout(() => {}, 0));
   const debounceTaken = useRef(setTimeout(() => {}, 0));
   const app = useContext(AppContext) as ContextType;
-  const settings = useContext(SettingsContext) as ContextType;
+  const display = useContext(DisplayContext) as ContextType;
   const [state, setState] = useState({
-    wide: null,
-    strings: settings.state.strings,
+    layout: null,
+    strings: display.state.strings,
     mode: 'account',
     username: '',
     handle: '',
@@ -88,9 +88,9 @@ export function useAccess() {
   };
 
   useEffect(() => {
-    const {wide} = settings.state;
-    updateState({wide});
-  }, [settings.state]);
+    const {layout} = display.state;
+    updateState({layout});
+  }, [display.state.layout]);
 
   const actions = {
     setMode: (mode: string) => {
