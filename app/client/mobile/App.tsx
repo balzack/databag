@@ -1,14 +1,14 @@
 import React, {useState} from 'react';
-import { Text } from 'react-native';
+import {Text} from 'react-native';
 import {AppContextProvider} from './src/context/AppContext';
 import {DisplayContextProvider} from './src/context/DisplayContext';
 import {styles} from './App.styled';
-import { NativeRouter } from "react-router-native";
-import { Routes, Route } from 'react-router-dom';
-import { Root } from './src/root/Root';
-import { Access } from './src/access/Access';
-import { Node } from './src/node/Node';
-import { Session } from './src/session/Session';
+import {NativeRouter} from 'react-router-native';
+import {Routes, Route} from 'react-router-dom';
+import {Root} from './src/root/Root';
+import {Access} from './src/access/Access';
+import {Node} from './src/node/Node';
+import {Session} from './src/session/Session';
 
 import {SafeAreaView, StyleSheet, useColorScheme, View} from 'react-native';
 import {
@@ -121,10 +121,10 @@ function App(): React.JSX.Element {
           <NativeRouter>
             <Root />
             <Routes>
-              <Route path="/" element={ <Text>EMPTY</Text> } />
-              <Route path="/access" element={ <Access /> } />
-              <Route path="/node" element={ <Node /> } />
-              <Route path="/session" element={ <Session /> } />
+              <Route path="/" element={<Text>EMPTY</Text>} />
+              <Route path="/access" element={<Access />} />
+              <Route path="/node" element={<Node />} />
+              <Route path="/session" element={<Session />} />
             </Routes>
           </NativeRouter>
         </PaperProvider>

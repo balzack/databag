@@ -1,4 +1,4 @@
-import {createContext} from 'react';
+import React, {createContext} from 'react';
 import {useDisplayContext} from './useDisplayContext.hook';
 
 export const DisplayContext = createContext({});

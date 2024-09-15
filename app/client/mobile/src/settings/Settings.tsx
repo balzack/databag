@@ -1,6 +1,6 @@
 import React, {useContext} from 'react';
 import {AppContext} from '../context/AppContext';
-import {Text, Button} from 'react-native-paper';
+import {Button} from 'react-native-paper';
 import {SafeAreaView} from 'react-native';
 
 export function Settings() {
