@@ -16,8 +16,8 @@ export function useDisplayContext() {
   };
 
   useEffect(() => {
-    const layout = dim.width < SMALL_LARGE ? 'small' : 'large'
-    updateState({ layout });
+    const layout = dim.width < SMALL_LARGE ? 'small' : 'large';
+    updateState({layout});
   }, [dim.width]);
 
   const actions = {};

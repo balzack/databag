@@ -6,14 +6,21 @@ import {
   View,
   Image,
 } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {useAccess} from './useAccess.hook';
 import {styles} from './Access.styled';
 import left from '../images/login.png';
-import {IconButton, Modal, Surface, Text, TextInput, Button} from 'react-native-paper';
+import {
+  IconButton,
+  Modal,
+  Surface,
+  Text,
+  TextInput,
+  Button,
+} from 'react-native-paper';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import { BlurView } from "@react-native-community/blur";
-import { InputCode } from '../utils/InputCode';
+import {BlurView} from '@react-native-community/blur';
+import {InputCode} from '../utils/InputCode';
 
 export function Access() {
   const [text, setText] = useState('');
@@ -64,7 +71,9 @@ export function Access() {
       {state.layout === 'large' && (
         <Image style={styles.left} source={left} resizeMode="contain" />
       )}
-      <KeyboardAwareScrollView style={styles.frame} contentContainerStyle={styles.scroll}>
+      <KeyboardAwareScrollView
+        style={styles.frame}
+        contentContainerStyle={styles.scroll}>
         <SafeAreaView style={styles.right} edges={['top', 'bottom']}>
           <View style={styles.header}>
             <View style={styles.admin} />
@@ -92,9 +101,7 @@ export function Access() {
           </View>
           {state.mode === 'account' && (
             <View style={styles.body}>
-              <Text variant="headlineSmall">
-                {state.strings.accountLogin}
-              </Text>
+              <Text variant="headlineSmall">{state.strings.accountLogin}</Text>
               <TextInput
                 style={styles.input}
                 mode="flat"
@@ -160,9 +167,7 @@ export function Access() {
           )}
           {state.mode === 'reset' && (
             <View style={styles.body}>
-              <Text variant="headlineSmall">
-                {state.strings.accessAccount}
-              </Text>
+              <Text variant="headlineSmall">{state.strings.accessAccount}</Text>
               <TextInput
                 style={styles.input}
                 mode="flat"
@@ -202,9 +207,7 @@ export function Access() {
           )}
           {state.mode === 'create' && (
             <View style={styles.body}>
-              <Text variant="headlineSmall">
-                {state.strings.createAccount}
-              </Text>
+              <Text variant="headlineSmall">{state.strings.createAccount}</Text>
               <View style={styles.spacer}>
                 {!state.available && (
                   <TextInput
@@ -365,7 +368,12 @@ export function Access() {
         </SafeAreaView>
       </KeyboardAwareScrollView>
       {(alert || otp) && (
-        <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
+        <BlurView
+          style={styles.blur}
+          blurType="dark"
+          blurAmount={2}
+          reducedTransparencyFallbackColor="dark"
+        />
       )}
       <Modal
         visible={alert}
@@ -395,7 +403,7 @@ export function Access() {
               mode="outlined"
               style={styles.submit}
               onPress={() => setOtp(false)}>
-                {state.strings.cancel}
+              {state.strings.cancel}
             </Button>
             <Button
               mode="contained"
@@ -405,7 +413,7 @@ export function Access() {
               disabled={state.code.length !== 6}>
               {state.strings.login}
             </Button>
-          </View> 
+          </View>
         </Surface>
       </Modal>
     </Surface>

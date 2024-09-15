@@ -1,4 +1,3 @@
 export function Registry() {
-  return <></>
+  return <></>;
 }
-

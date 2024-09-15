@@ -1,17 +1,17 @@
-import { useState, useContext } from 'react';
-import { View, SafeAreaView } from 'react-native';
+import {useState, useContext} from 'react';
+import {View, SafeAreaView} from 'react-native';
 import {styles} from './Session.styled';
-import { BottomNavigation, Button, Text } from 'react-native-paper';
-import { DisplayContext } from '../context/DisplayContext';
-import { Settings } from '../settings/Settings';
-import { Channels } from '../channels/Channels';
-import { Contacts } from '../contacts/Contacts';
-import { Registry } from '../registry/Registry';
-import { Profile } from '../profile/Profile';
-import { Details } from '../details/Details';
+import {BottomNavigation, Button, Text} from 'react-native-paper';
+import {DisplayContext} from '../context/DisplayContext';
+import {Settings} from '../settings/Settings';
+import {Channels} from '../channels/Channels';
+import {Contacts} from '../contacts/Contacts';
+import {Registry} from '../registry/Registry';
+import {Profile} from '../profile/Profile';
+import {Details} from '../details/Details';
 
-import { NavigationContainer } from '@react-navigation/native';
-import { createDrawerNavigator } from '@react-navigation/drawer';
+import {NavigationContainer} from '@react-navigation/native';
+import {createDrawerNavigator} from '@react-navigation/drawer';
 
 const ChannelsRoute = () => <Channels />;
 const ContactsRoute = () => <Contacts />;
@@ -27,11 +27,26 @@ export function Session() {
   const display = useContext(DisplayContext);
   const [index, setIndex] = useState(0);
   const [routes] = useState([
-    { key: 'channels', title: 'Channels', focusedIcon: 'comment-multiple', unfocusedIcon: 'comment-multiple-outline' },
-    { key: 'contacts', title: 'Contacts', focusedIcon: 'contacts', unfocusedIcon: 'contacts-outline' },
-    { key: 'settings', title: 'Settings', focusedIcon: 'cog', unfocusedIcon: 'cog-outline' },
+    {
+      key: 'channels',
+      title: 'Channels',
+      focusedIcon: 'comment-multiple',
+      unfocusedIcon: 'comment-multiple-outline',
+    },
+    {
+      key: 'contacts',
+      title: 'Contacts',
+      focusedIcon: 'contacts',
+      unfocusedIcon: 'contacts-outline',
+    },
+    {
+      key: 'settings',
+      title: 'Settings',
+      focusedIcon: 'cog',
+      unfocusedIcon: 'cog-outline',
+    },
   ]);
-  const sessionNav = { settings: null };
+  const sessionNav = {settings: null};
 
   const renderScene = BottomNavigation.SceneMap({
     channels: ChannelsRoute,
@@ -44,7 +59,7 @@ export function Session() {
       {display.state.layout !== 'large' && (
         <BottomNavigation
           labeled={false}
-          navigationState={{ index, routes }}
+          navigationState={{index, routes}}
           onIndexChange={setIndex}
           renderScene={renderScene}
         />
@@ -56,9 +71,9 @@ export function Session() {
       )}
     </View>
   );
-};
+}
 
-function DetailsScreen({ nav }) {
+function DetailsScreen({nav}) {
   return (
     <ProfileDrawer.Navigator
       id="ProfileDrawer"
@@ -67,16 +82,17 @@ function DetailsScreen({ nav }) {
         drawerPosition: 'right',
         drawerType: 'front',
         headerShown: false,
-      }}
-    >
+      }}>
       <ProfileDrawer.Screen name="profile">
-        {({ navigation }) => <ProfileScreen nav={{...nav, details: navigation}} />}
+        {({navigation}) => (
+          <ProfileScreen nav={{...nav, details: navigation}} />
+        )}
       </ProfileDrawer.Screen>
     </ProfileDrawer.Navigator>
-  )
+  );
 }
 
-function ProfileScreen({ nav }) {
+function ProfileScreen({nav}) {
   return (
     <ProfileDrawer.Navigator
       id="ProfileDrawer"
@@ -85,16 +101,17 @@ function ProfileScreen({ nav }) {
         drawerPosition: 'right',
         drawerType: 'front',
         headerShown: false,
-      }}
-    >
+      }}>
       <ProfileDrawer.Screen name="registry">
-        {({ navigation }) => <RegistryScreen nav={{...nav, profile: navigation}} />}
+        {({navigation}) => (
+          <RegistryScreen nav={{...nav, profile: navigation}} />
+        )}
       </ProfileDrawer.Screen>
     </ProfileDrawer.Navigator>
-  )
+  );
 }
 
-function RegistryScreen({ nav }) {
+function RegistryScreen({nav}) {
   return (
     <RegistryDrawer.Navigator
       id="RegistryDrawer"
@@ -103,16 +120,17 @@ function RegistryScreen({ nav }) {
         drawerPosition: 'right',
         drawerType: 'front',
         headerShown: false,
-      }}
-    >
+      }}>
       <RegistryDrawer.Screen name="contacts">
-        {({ navigation }) => <ContactsScreen nav={{...nav, registry: navigation}} />}
+        {({navigation}) => (
+          <ContactsScreen nav={{...nav, registry: navigation}} />
+        )}
       </RegistryDrawer.Screen>
     </RegistryDrawer.Navigator>
-  )
+  );
 }
 
-function ContactsScreen({ nav }) {
+function ContactsScreen({nav}) {
   return (
     <ContactsDrawer.Navigator
       id="ContactsDrawer"
@@ -121,16 +139,17 @@ function ContactsScreen({ nav }) {
         drawerPosition: 'right',
         drawerType: 'front',
         headerShown: false,
-      }}
-    >
+      }}>
       <ContactsDrawer.Screen name="settings">
-        {({ navigation }) => <SettingsScreen nav={{...nav, contacts: navigation}} />}
+        {({navigation}) => (
+          <SettingsScreen nav={{...nav, contacts: navigation}} />
+        )}
       </ContactsDrawer.Screen>
     </ContactsDrawer.Navigator>
-  )
+  );
 }
 
-function SettingsScreen({ nav }) {
+function SettingsScreen({nav}) {
   return (
     <SettingsDrawer.Navigator
       id="SettingsDrawer"
@@ -139,16 +158,15 @@ function SettingsScreen({ nav }) {
         drawerPosition: 'right',
         drawerType: 'front',
         headerShown: false,
-      }}
-    >
+      }}>
       <SettingsDrawer.Screen name="home">
-        {({ navigation }) => <HomeScreen nav={{...nav, settings: navigation}} />}
+        {({navigation}) => <HomeScreen nav={{...nav, settings: navigation}} />}
       </SettingsDrawer.Screen>
     </SettingsDrawer.Navigator>
-  )
+  );
 }
 
-function HomeScreen({ nav }) {
+function HomeScreen({nav}) {
   return (
     <SafeAreaView style={styles.frame}>
       <View style={styles.left}>

@@ -47,7 +47,7 @@ export function useAppContext() {
         appName: 'databag',
       };
 
-console.log("SDK LOGIN:", username, password, node, secure);
+      console.log('SDK LOGIN:', username, password, node, secure);
 
       const login = await sdk.current.login(
         username,

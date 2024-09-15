@@ -47,8 +47,7 @@ export function useAccess() {
         if (node) {
           const available = await app.actions.getAvailable(node, secure);
           updateState({available});
-        }
-        else {
+        } else {
           updateState({available: 0});
         }
       } catch (err) {
@@ -76,9 +75,8 @@ export function useAccess() {
             secure,
           );
           updateState({taken: !available});
-        }
-        else {
-          updateState({ taken: false });
+        } else {
+          updateState({taken: false});
         }
       } catch (err) {
         console.log(err);
