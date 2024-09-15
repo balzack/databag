@@ -2,7 +2,7 @@ import {Button} from 'react-native-paper';
 import {Text} from 'react-native';
 import {AppContext} from '../context/AppContext';
 import {View} from 'react-native';
-import {useContext} from 'react';
+import React, {useContext} from 'react';
 
 export function Node() {
   const app = useContext(AppContext);

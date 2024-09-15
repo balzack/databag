@@ -1,4 +1,4 @@
-import {useState, useContext} from 'react';
+import React, {useState, useContext} from 'react';
 import {View, SafeAreaView} from 'react-native';
 import {styles} from './Session.styled';
 import {BottomNavigation, Button, Text} from 'react-native-paper';
