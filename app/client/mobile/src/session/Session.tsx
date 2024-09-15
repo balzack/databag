@@ -6,6 +6,9 @@ import { DisplayContext } from '../context/DisplayContext';
 import { Settings } from '../settings/Settings';
 import { Channels } from '../channels/Channels';
 import { Contacts } from '../contacts/Contacts';
+import { Registry } from '../registry/Registry';
+import { Profile } from '../profile/Profile';
+import { Details } from '../details/Details';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
@@ -59,7 +62,7 @@ function DetailsScreen({ nav }) {
   return (
     <ProfileDrawer.Navigator
       id="ProfileDrawer"
-      drawerContent={(props) => <Text>Details</Text>}
+      drawerContent={Details}
       screenOptions={{
         drawerPosition: 'right',
         drawerType: 'front',
@@ -77,7 +80,7 @@ function ProfileScreen({ nav }) {
   return (
     <ProfileDrawer.Navigator
       id="ProfileDrawer"
-      drawerContent={(props) => <Text>Profile</Text>}
+      drawerContent={Profile}
       screenOptions={{
         drawerPosition: 'right',
         drawerType: 'front',
@@ -95,7 +98,7 @@ function RegistryScreen({ nav }) {
   return (
     <RegistryDrawer.Navigator
       id="RegistryDrawer"
-      drawerContent={(props) => <Text>Registry</Text>}
+      drawerContent={Registry}
       screenOptions={{
         drawerPosition: 'right',
         drawerType: 'front',
@@ -113,7 +116,7 @@ function ContactsScreen({ nav }) {
   return (
     <ContactsDrawer.Navigator
       id="ContactsDrawer"
-      drawerContent={(props) => <Text>Contacts</Text>}
+      drawerContent={Contacts}
       screenOptions={{
         drawerPosition: 'right',
         drawerType: 'front',
@@ -131,7 +134,7 @@ function SettingsScreen({ nav }) {
   return (
     <SettingsDrawer.Navigator
       id="SettingsDrawer"
-      drawerContent={(props) => <Text>Settings</Text>}
+      drawerContent={Settings}
       screenOptions={{
         drawerPosition: 'right',
         drawerType: 'front',
