@@ -1,5 +1,5 @@
 import React, {useState, useContext} from 'react';
-import {View, SafeAreaView} from 'react-native';
+import {View, SafeAreaView, useColorScheme} from 'react-native';
 import {styles} from './Session.styled';
 import {BottomNavigation, Button, Text} from 'react-native-paper';
 import {DisplayContext} from '../context/DisplayContext';
@@ -10,7 +10,7 @@ import {Registry} from '../registry/Registry';
 import {Profile} from '../profile/Profile';
 import {Details} from '../details/Details';
 
-import {NavigationContainer} from '@react-navigation/native';
+import {NavigationContainer, DefaultTheme, DarkTheme} from '@react-navigation/native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 
 const ChannelsRoute = () => <Channels />;
@@ -24,6 +24,7 @@ const ProfileDrawer = createDrawerNavigator();
 const DetailsDrawer = createDrawerNavigator();
 
 export function Session() {
+  const scheme = useColorScheme();
   const display = useContext(DisplayContext);
   const [index, setIndex] = useState(0);
   const [routes] = useState([
@@ -65,7 +66,7 @@ export function Session() {
         />
       )}
       {display.state.layout === 'large' && (
-        <NavigationContainer>
+        <NavigationContainer theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
           <DetailsScreen nav={sessionNav} />
         </NavigationContainer>
       )}

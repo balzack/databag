@@ -47,6 +47,11 @@ export class IdentityModule implements Identity {
   private async init() {
     this.revision = await this.store.getProfileRevision(this.guid);
     this.profile = await this.store.getProfileData(this.guid);
+    if (this.profile.image) {
+      this.imageUrl = `data:image/png;base64,${this.profile.image}`
+    } else {
+      this.imageUrl = avatar
+    }
     this.syncing = false;
     await this.sync();
   }
