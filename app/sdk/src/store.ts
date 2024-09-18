@@ -103,7 +103,7 @@ export class OfflineStore implements Store {
   }
 
   public async setProfileRevision(guid: string, revision: number): Promise<void> {
-    await this.setAppValue(guid, 'profile_revision', revision.toString());
+    await this.setAppValue(guid, 'profile_revision', revision);
   } 
   
   public async getProfileData(guid: string): Promise<ProfileEntity> {
@@ -111,7 +111,7 @@ export class OfflineStore implements Store {
   }
   
   public async setProfileData(guid: string, data: ProfileEntity): Promise<void> {
-    await this.setAppValue(guid, 'profile_data', JSON.stringify(data));
+    await this.setAppValue(guid, 'profile_data', data);
   }
 
   public async getSettingsRevision(guid: string): Promise<number> {
@@ -119,7 +119,7 @@ export class OfflineStore implements Store {
   }
 
   public async setSettingsRevision(guid: string, revision: number): Promise<void> {
-    await this.setAppValue(guid, 'account_revision', revision.toString());
+    await this.setAppValue(guid, 'account_revision', revision);
   } 
   
   public async getSettingsData(guid: string): Promise<ConfigEntity> {
@@ -127,7 +127,7 @@ export class OfflineStore implements Store {
   }
   
   public async setSettingsData(guid: string, data: ConfigEntity): Promise<void> {
-    await this.setAppValue(guid, 'account_data', JSON.stringify(data));
+    await this.setAppValue(guid, 'account_data', data);
   }
 
 }
