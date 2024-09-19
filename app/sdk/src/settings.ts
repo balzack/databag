@@ -58,6 +58,7 @@ export class SettingsModule implements Settings {
     this.revision = await this.store.getSettingsRevision(this.guid);
     this.config = await this.store.getSettingsData(this.guid);
     this.seal = await this.store.getSeal(this.guid);
+    this.emitter.emit('config', this.getConfig());
     this.syncing = false;
     await this.sync();
   }

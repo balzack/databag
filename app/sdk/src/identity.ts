@@ -52,6 +52,7 @@ export class IdentityModule implements Identity {
     } else {
       this.imageUrl = avatar
     }
+    this.emitter.emit('profile', this.setProfile());
     this.syncing = false;
     await this.sync();
   }

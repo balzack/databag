@@ -250,6 +250,7 @@ export function Access() {
                 autoCapitalize="none"
                 autoComplete="off"
                 autoCorrect={false}
+                textContentType={'oneTimeCode'}
                 value={state.password}
                 label={state.strings.password}
                 secureTextEntry={!showPassword}
@@ -275,6 +276,7 @@ export function Access() {
                 autoCapitalize="none"
                 autoComplete="off"
                 autoCorrect={false}
+                textContentType={'oneTimeCode'}
                 value={state.confirm}
                 label={state.strings.confirmPassword}
                 secureTextEntry={!showConfirm}

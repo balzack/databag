@@ -1,6 +1,31 @@
 import {StyleSheet} from 'react-native';
 
 export const styles = StyleSheet.create({
+  modal: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    height: '100%',
+  },
+  blur: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+  },
+  content: {
+    width: 300,
+    padding: 16,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 16,
+  },
+  close: {
+    paddingTop: 8,
+  },
   settings: {
     position: 'relative',
     display: 'flex',
@@ -27,9 +52,11 @@ export const styles = StyleSheet.create({
     borderRadius: 8,
     width: null,
     height: null,
+    borderWidth: 1.5,
+    borderColor: 'green',
   },
   editDetails: {
-    fontSize: 18,
+    fontSize: 16,
   },
   editBar: {
     position: 'absolute',
@@ -39,15 +66,19 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  setLogo: {
-    fontSize: 18,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#888888'
-  },
-  unsetLogo: {
-    color: '#888888',
-    fontSize: 18,
+  editLogo: {
+    fontSize: 16,
+    paddingBottom: 2,
+    paddingLeft: 12,
+    paddingRight: 12,
+    overflow: 'hidden',
+    borderBottomLeftRadius: 6,
+    borderBottomRightRadius: 6,
+    backgroundColor: 'white',
+    borderLeftWidth: 1,
+    borderRightWidth: 1,
+    borderBottomWidth: 1,
+    borderColor: 'green',
   },
   editDivider: {
     paddingLeft: 16,
@@ -61,13 +92,13 @@ export const styles = StyleSheet.create({
     flexGrow: 1,
   },
   nameSet: {
-    fontSize: 28,
+    fontSize: 24,
     width: '100%',
     paddingLeft: 32,
     paddingRight: 32,
   },
   nameUnset: {
-    fontSize: 28,
+    fontSize: 24,
     width: '100%',
     paddingLeft: 32,
     paddingRight: 32,
@@ -93,12 +124,12 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   labelUnset: {
-    fontSize: 18,
+    fontSize: 16,
     fontStyle: 'italic',
     flexGrow: 1,
   },
   labelSet: {
-    fontSize: 18,
+    fontSize: 16,
     flexGrow: 1,
   },
 })

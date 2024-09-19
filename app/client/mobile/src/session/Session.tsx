@@ -171,7 +171,7 @@ function HomeScreen({nav}) {
   return (
     <SafeAreaView style={styles.frame}>
       <View style={styles.left}>
-        <Text onPress={() => nav.details.openDrawer()}>IDENTITY</Text>
+        <Text onPress={() => nav.settings.openDrawer()}>IDENTITY</Text>
       </View>
       <View style={styles.right}>
         <Text>CONVERSATION</Text>
