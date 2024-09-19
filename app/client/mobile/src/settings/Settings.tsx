@@ -3,11 +3,14 @@ import {Button, Text, Divider, Icon} from 'react-native-paper';
 import {SafeAreaView, TouchableOpacity, View, Image, ScrollView} from 'react-native';
 import {styles} from './Settings.styled';
 import {useSettings} from './useSettings.hook';
+import ImagePicker from 'react-native-image-crop-picker';
 
 export function Settings() {
   const { state, actions } = useSettings();
 
   const SelectImage = async () => {
+    const full = await ImagePicker.openPicker({ mediaType: 'photo', width: 256, height: 256 });
+    const crop = await ImagePicker.openCropper({ path: full.path, width: 256, height: 256, cropperCircleOverlay: true, includeBase64: true });
   }
 
   return (
@@ -18,7 +21,7 @@ export function Settings() {
           <View style={styles.image}>
             <Image style={styles.logo} resizeMode={'contain'} source={{ uri: state.imageUrl }} />
             <View style={styles.editBar}>
-              <Button style={styles.setLogo} mode="text" onPress={SelectImage}>{state.strings.edit}</Button>
+              <Button style={styles.setLogo} mode="contained" onPress={SelectImage}>{state.strings.edit}</Button>
             </View>
           </View>
         )}
@@ -33,7 +36,7 @@ export function Settings() {
 
         <View style={styles.editDivider}>
           <Divider style={styles.divider} bold={true} />
-          <Button style={styles.editDetails} mode="text">{state.strings.edit}</Button>
+          <Button labelStyle={styles.editDetails} mode="text">{state.strings.edit}</Button>
         </View>
 
         <View style={styles.attributes}>

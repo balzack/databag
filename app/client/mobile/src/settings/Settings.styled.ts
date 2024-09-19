@@ -28,6 +28,9 @@ export const styles = StyleSheet.create({
     width: null,
     height: null,
   },
+  editDetails: {
+    fontSize: 18,
+  },
   editBar: {
     position: 'absolute',
     top: 0,
@@ -39,7 +42,8 @@ export const styles = StyleSheet.create({
   setLogo: {
     fontSize: 18,
     borderRadius: 8,
-    backgroundColor: '#44444444',
+    borderWidth: 1,
+    borderColor: '#888888'
   },
   unsetLogo: {
     color: '#888888',
