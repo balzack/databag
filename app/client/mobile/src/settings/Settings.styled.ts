@@ -2,11 +2,10 @@ import {StyleSheet} from 'react-native';
 
 export const styles = StyleSheet.create({
   settings: {
+    position: 'relative',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    padding: 8,
-    gap: 2,
   },
   header: {
     fontSize: 22,
@@ -19,8 +18,8 @@ export const styles = StyleSheet.create({
     position: 'relative',
     width: '90%',
     maxWidth: 250,
-    marginTop: 8,
-    marginBottom: 24,
+    marginTop: 16,
+    marginBottom: 8,
   },
   logo: {
     aspectRatio: 1,
@@ -37,9 +36,65 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  editLogo: {
+  setLogo: {
     fontSize: 18,
     borderRadius: 8,
     backgroundColor: '#44444444',
+  },
+  unsetLogo: {
+    color: '#888888',
+    fontSize: 18,
+  },
+  editDivider: {
+    paddingLeft: 16,
+    paddingRight: 16,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    minHeight: 32,
+  },
+  divider: {
+    flexGrow: 1,
+  },
+  nameSet: {
+    fontSize: 28,
+    width: '100%',
+    paddingLeft: 32,
+    paddingRight: 32,
+  },
+  nameUnset: {
+    fontSize: 28,
+    width: '100%',
+    paddingLeft: 32,
+    paddingRight: 32,
+    fontStyle: 'italic',
+  },
+  attributes: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 8,
+    width: '100%',
+  },
+  attribute: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItem: 'center',
+    justifyContent: 'center',
+    paddingLeft: 32,
+    paddingRight: 32,
+  },
+  icon: {
+    width: 32,
+    display: 'flex',
+    justifyContent: 'center',
+  },
+  labelUnset: {
+    fontSize: 18,
+    fontStyle: 'italic',
+    flexGrow: 1,
+  },
+  labelSet: {
+    fontSize: 18,
+    flexGrow: 1,
   },
 })

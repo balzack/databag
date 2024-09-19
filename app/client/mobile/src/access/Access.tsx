@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import {
   Platform,
   KeyboardAvoidingView,
-  ScrollView,
   View,
   Image,
 } from 'react-native';
