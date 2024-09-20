@@ -4,6 +4,9 @@ export const styles = StyleSheet.create({
   avoid: {
     flex: 1,
   },
+  icon: {
+    backgroundColor: 'transparent',
+  },
   mfa: {
     display: 'flex',
     flexDirection: 'column',
@@ -35,6 +38,7 @@ export const styles = StyleSheet.create({
   },
   admin: {
     width: 64,
+    marginRight: 8,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',

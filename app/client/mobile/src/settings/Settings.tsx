@@ -1,5 +1,5 @@
 import React, {useState, useContext} from 'react';
-import {Modal, Surface, Button, Text, Divider, Icon} from 'react-native-paper';
+import {Modal, Surface, Button, Text, Divider, Icon, TextInput} from 'react-native-paper';
 import {SafeAreaView, TouchableOpacity, View, Image, ScrollView} from 'react-native';
 import {styles} from './Settings.styled';
 import {useSettings} from './useSettings.hook';
@@ -9,6 +9,7 @@ import {BlurView} from '@react-native-community/blur';
 export function Settings() {
   const { state, actions } = useSettings();
   const [alert, setAlert] = useState(false);
+  const [details, setDetails] = useState(false);
 
   const SelectImage = async () => {
     try {
@@ -41,9 +42,11 @@ export function Settings() {
             </View>
           </TouchableOpacity>
 
-          <View style={styles.editDivider}>
-            <Divider style={styles.divider} bold={true} />
-            <Button labelStyle={styles.editDetails} mode="text">{state.strings.edit}</Button>
+          <View style={styles.divider}>
+            <Divider style={styles.line} bold={true} />
+            <TouchableOpacity style={styles.editDetails} onPress={() => setDetails(true)}>
+              <Text style={styles.editDetailsLabel}>{state.strings.edit}</Text>
+            </TouchableOpacity>
           </View>
 
           <View style={styles.attributes}>
@@ -77,8 +80,8 @@ export function Settings() {
             </View>
           </View>
 
-          <View style={styles.editDivider}>
-            <Divider style={styles.divider} bold={true} />
+          <View style={styles.divider}>
+            <Divider style={styles.line} bold={true} />
           </View>
 
           <Button mode="contained" onPress={actions.logout}>
@@ -108,6 +111,24 @@ export function Settings() {
             {state.strings.close}
           </Button>
         </Surface>
+      </Modal>
+      <Modal
+        visible={details}
+        onDismiss={() => setDetails(false)}
+        contentContainerStyle={styles.modal}>
+        <Surface elevation={5} mode="flat" style={styles.content}>
+          <TextInput
+            style={styles.input}
+            mode="flat"
+            autoCapitalize="none"
+            autoComplete="off"
+            autoCorrect={false}
+            label={state.strings.name}
+            value={state.name}
+            left={<TextInput.Icon style={styles.inputIcon} icon="account" />}
+            onChangeText={value => actions.setName(value)}
+          />
+        </Surface> 
       </Modal>
     </>
   );

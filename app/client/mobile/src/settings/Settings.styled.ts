@@ -16,6 +16,9 @@ export const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
+  inputIcon: {
+    backgroundColor: 'transparent',
+  },
   content: {
     width: 300,
     padding: 16,
@@ -58,7 +61,17 @@ export const styles = StyleSheet.create({
     borderColor: Colors.primary,
   },
   editDetails: {
+    position: 'absolute',
+    bottom: -16,
+    right: 12,
+  },
+  editDetailsLabel: {
     fontSize: 16,
+    color: Colors.primary,
+    paddingLeft: 8,
+    paddingRight: 8,
+    paddingTop: 8,
+    paddingBottom: 8,
   },
   editBar: {
     position: 'absolute',
@@ -73,6 +86,7 @@ export const styles = StyleSheet.create({
     paddingBottom: 2,
     paddingLeft: 12,
     paddingRight: 12,
+    color: Colors.primary,
   },
   editBorder: {
     overflow: 'hidden',
@@ -83,16 +97,14 @@ export const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: Colors.primary,
   },
-  editDivider: {
+  divider: {
+    width: '100%',
     paddingLeft: 16,
     paddingRight: 16,
+    position: 'relative',
+    height: 24,
     display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    minHeight: 32,
-  },
-  divider: {
-    flexGrow: 1,
+    justifyContent: 'center',
   },
   nameSet: {
     fontSize: 24,
@@ -134,5 +146,11 @@ export const styles = StyleSheet.create({
   labelSet: {
     fontSize: 16,
     flexGrow: 1,
+  },
+  input: {
+    maxWidth: 300,
+    width: '80%',
+    margin: 4,
+    marginTop: 16,
   },
 })

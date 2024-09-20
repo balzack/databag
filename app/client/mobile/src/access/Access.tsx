@@ -109,7 +109,7 @@ export function Access() {
                 autoCorrect={false}
                 label={state.strings.server}
                 value={state.node}
-                left={<TextInput.Icon icon="server" />}
+                left={<TextInput.Icon style={styles.icon} icon="server" />}
                 onChangeText={value => actions.setNode(value)}
               />
               <TextInput
@@ -120,7 +120,7 @@ export function Access() {
                 autoCorrect={false}
                 label={state.strings.username}
                 value={state.username}
-                left={<TextInput.Icon icon="account" />}
+                left={<TextInput.Icon style={styles.icon} icon="account" />}
                 onChangeText={value => actions.setUsername(value)}
               />
               <TextInput
@@ -132,15 +132,15 @@ export function Access() {
                 value={state.password}
                 label={state.strings.password}
                 secureTextEntry={!showPassword}
-                left={<TextInput.Icon icon="lock" />}
+                left={<TextInput.Icon style={styles.icon} icon="lock" />}
                 right={
                   showPassword ? (
-                    <TextInput.Icon
+                    <TextInput.Icon style={styles.icon}
                       icon="eye-off"
                       onPress={() => setShowPassword(false)}
                     />
                   ) : (
-                    <TextInput.Icon
+                    <TextInput.Icon style={styles.icon}
                       icon="eye"
                       onPress={() => setShowPassword(true)}
                     />
@@ -174,7 +174,7 @@ export function Access() {
                 autoComplete="off"
                 autoCorrect={false}
                 label={state.strings.token}
-                left={<TextInput.Icon icon="ticket-account" />}
+                left={<TextInput.Icon style={styles.icon} icon="ticket-account" />}
                 onChangeText={value => actions.setToken(value)}
               />
               <TextInput
@@ -185,7 +185,7 @@ export function Access() {
                 autoCorrect={false}
                 label={state.strings.server}
                 value={state.node}
-                left={<TextInput.Icon icon="server" />}
+                left={<TextInput.Icon style={styles.icon} icon="server" />}
                 onChangeText={value => actions.setNode(value)}
               />
               <Button
@@ -216,7 +216,7 @@ export function Access() {
                     autoComplete="off"
                     autoCorrect={false}
                     label={state.strings.token}
-                    left={<TextInput.Icon icon="ticket-account" />}
+                    left={<TextInput.Icon style={styles.icon} icon="ticket-account" />}
                     onChangeText={value => actions.setToken(value)}
                   />
                 )}
@@ -229,7 +229,7 @@ export function Access() {
                 autoCorrect={false}
                 label={state.strings.server}
                 value={state.node}
-                left={<TextInput.Icon icon="server" />}
+                left={<TextInput.Icon style={styles.icon} icon="server" />}
                 onChangeText={value => actions.setNode(value)}
               />
               <TextInput
@@ -241,7 +241,7 @@ export function Access() {
                 error={state.taken}
                 label={state.strings.username}
                 value={state.username}
-                left={<TextInput.Icon icon="account" />}
+                left={<TextInput.Icon style={styles.icon} icon="account" />}
                 onChangeText={value => actions.setUsername(value)}
               />
               <TextInput
@@ -254,15 +254,15 @@ export function Access() {
                 value={state.password}
                 label={state.strings.password}
                 secureTextEntry={!showPassword}
-                left={<TextInput.Icon icon="lock" />}
+                left={<TextInput.Icon style={styles.icon} icon="lock" />}
                 right={
                   showPassword ? (
-                    <TextInput.Icon
+                    <TextInput.Icon style={styles.icon}
                       icon="eye-off"
                       onPress={() => setShowPassword(false)}
                     />
                   ) : (
-                    <TextInput.Icon
+                    <TextInput.Icon style={styles.icon}
                       icon="eye"
                       onPress={() => setShowPassword(true)}
                     />
@@ -280,15 +280,15 @@ export function Access() {
                 value={state.confirm}
                 label={state.strings.confirmPassword}
                 secureTextEntry={!showConfirm}
-                left={<TextInput.Icon icon="lock" />}
+                left={<TextInput.Icon style={styles.icon} icon="lock" />}
                 right={
                   showPassword ? (
-                    <TextInput.Icon
+                    <TextInput.Icon style={styles.icon}
                       icon="eye-off"
                       onPress={() => setShowConfirm(false)}
                     />
                   ) : (
-                    <TextInput.Icon
+                    <TextInput.Icon style={styles.icon}
                       icon="eye"
                       onPress={() => setShowConfirm(true)}
                     />
@@ -328,7 +328,7 @@ export function Access() {
                 autoCorrect={false}
                 label={state.strings.server}
                 value={state.node}
-                left={<TextInput.Icon icon="server" />}
+                left={<TextInput.Icon style={styles.icon} icon="server" />}
                 onChangeText={value => actions.setNode(value)}
               />
               <TextInput
@@ -340,15 +340,15 @@ export function Access() {
                 label="Password"
                 value={state.password}
                 secureTextEntry={!showPassword}
-                left={<TextInput.Icon icon="lock" />}
+                left={<TextInput.Icon style={styles.icon} icon="lock" />}
                 right={
                   showPassword ? (
-                    <TextInput.Icon
+                    <TextInput.Icon style={styles.icon}
                       icon="eye-off"
                       onPress={() => setShowPassword(false)}
                     />
                   ) : (
-                    <TextInput.Icon
+                    <TextInput.Icon style={styles.icon}
                       icon="eye"
                       onPress={() => setShowPassword(true)}
                     />
