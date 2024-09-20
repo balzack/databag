@@ -13,6 +13,7 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		7129C222D8D21DBC6428E317 /* Pods_Databag.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BCFB7DA873D4045CEFDFA64B /* Pods_Databag.framework */; };
+		7B9969C82C9BEB0200CE1F49 /* QBImagePicker.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7B9969C72C9BEB0200CE1F49 /* QBImagePicker.storyboard */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		91DE1DEFA24D4F0D68C20D28 /* Pods_Databag_DatabagTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33AAD1177A93A7C77ED52C08 /* Pods_Databag_DatabagTests.framework */; };
 /* End PBXBuildFile section */
@@ -44,6 +45,7 @@
 		5B7EB9410499542E8C5724F5 /* Pods-Databag-DatabagTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Databag-DatabagTests.debug.xcconfig"; path = "Target Support Files/Pods-Databag-DatabagTests/Pods-Databag-DatabagTests.debug.xcconfig"; sourceTree = "<group>"; };
 		7B413FF92C6CFD4F0032D17C /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = MaterialCommunityIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
 		7B466B912C7061BF00FE912E /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../GoogleService-Info.plist"; sourceTree = "<group>"; };
+		7B9969C72C9BEB0200CE1F49 /* QBImagePicker.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = QBImagePicker.storyboard; path = "../node_modules/react-native-image-crop-picker/ios/QBImagePicker/QBImagePicker/QBImagePicker.storyboard"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = Databag/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-Databag-DatabagTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Databag-DatabagTests.release.xcconfig"; path = "Target Support Files/Pods-Databag-DatabagTests/Pods-Databag-DatabagTests.release.xcconfig"; sourceTree = "<group>"; };
 		BCFB7DA873D4045CEFDFA64B /* Pods_Databag.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Databag.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -123,6 +125,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				7B9969C72C9BEB0200CE1F49 /* QBImagePicker.storyboard */,
 				7B466B912C7061BF00FE912E /* GoogleService-Info.plist */,
 				7B413FF92C6CFD4F0032D17C /* MaterialCommunityIcons.ttf */,
 				13B07FAE1A68108700A75B9A /* Databag */,
@@ -252,6 +255,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7B9969C82C9BEB0200CE1F49 /* QBImagePicker.storyboard in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				054418A1394B8F74B2D5F56A /* PrivacyInfo.xcprivacy in Resources */,
@@ -632,10 +636,7 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;
@@ -718,10 +719,7 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;

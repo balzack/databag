@@ -29,14 +29,16 @@ export function Settings() {
 
   return (
     <>
-      <ScrollView>
+      <ScrollView bounces={false}>
         <SafeAreaView style={styles.settings}>
           <Text style={styles.header} adjustsFontSizeToFit={true} numberOfLines={1}>{`${state.profile.handle}${state.profile.node ? '/' + state.profile.node : ''}`}</Text>
           <TouchableOpacity style={styles.image} onPress={SelectImage}>
             <Image style={styles.logo} resizeMode={'contain'} source={{ uri: state.imageUrl }} />
             <View style={styles.editBar}>
-              <View style={styles.editLogo}>
-                <Text>{state.strings.edit}</Text>
+              <View style={styles.editBorder}>
+                <Surface elevation={0}>
+                  <Text style={styles.editLogo}>{state.strings.edit}</Text>
+                </Surface>
               </View>
             </View>
           </TouchableOpacity>

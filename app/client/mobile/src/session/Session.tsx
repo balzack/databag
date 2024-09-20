@@ -156,6 +156,7 @@ function SettingsScreen({nav}) {
       id="SettingsDrawer"
       drawerContent={Settings}
       screenOptions={{
+        drawerStyle: { width: '40%' },
         drawerPosition: 'right',
         drawerType: 'front',
         headerShown: false,

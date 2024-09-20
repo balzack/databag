@@ -1,4 +1,5 @@
 import {StyleSheet} from 'react-native';
+import { Colors } from '../constants/Colors';
 
 export const styles = StyleSheet.create({
   modal: {
@@ -53,7 +54,7 @@ export const styles = StyleSheet.create({
     width: null,
     height: null,
     borderWidth: 1.5,
-    borderColor: 'green',
+    borderColor: Colors.primary,
   },
   editDetails: {
     fontSize: 16,
@@ -71,14 +72,15 @@ export const styles = StyleSheet.create({
     paddingBottom: 2,
     paddingLeft: 12,
     paddingRight: 12,
+  },
+  editBorder: {
     overflow: 'hidden',
-    borderBottomLeftRadius: 6,
-    borderBottomRightRadius: 6,
-    backgroundColor: 'white',
+    borderBottomLeftRadius: 8,
+    borderBottomRightRadius: 8,
     borderLeftWidth: 1,
     borderRightWidth: 1,
     borderBottomWidth: 1,
-    borderColor: 'green',
+    borderColor: Colors.primary,
   },
   editDivider: {
     paddingLeft: 16,
