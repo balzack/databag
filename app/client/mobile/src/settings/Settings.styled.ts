@@ -4,10 +4,9 @@ import { Colors } from '../constants/Colors';
 export const styles = StyleSheet.create({
   modal: {
     display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
     width: '100%',
     height: '100%',
+    alignItems: 'center',
   },
   blur: {
     position: 'absolute',
@@ -19,13 +18,18 @@ export const styles = StyleSheet.create({
   inputIcon: {
     backgroundColor: 'transparent',
   },
+  container: {
+    width: 600,
+    maxWidth: '80%',
+  },
   content: {
-    width: 300,
-    padding: 16,
     display: 'flex',
-    alignItems: 'center',
     justifyContent: 'center',
-    gap: 16,
+    height: '100%',
+    gap: 8,
+  },
+  surface: {
+    padding: 16,
   },
   close: {
     paddingTop: 8,
@@ -35,6 +39,23 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+  },
+  modalHeader: {
+    width: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    flexDirection: 'row',
+  },
+  modalLabel: {
+    width: '100%',
+    fontSize: 20,
+    paddingLeft: 16,
+  },
+  modalClose: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    backgroundColor: 'transparent',
   },
   header: {
     fontSize: 22,
@@ -62,8 +83,9 @@ export const styles = StyleSheet.create({
   },
   editDetails: {
     position: 'absolute',
-    bottom: -16,
+    bottom: -12,
     right: 12,
+    zIndex: 3,
   },
   editDetailsLabel: {
     fontSize: 16,
@@ -102,7 +124,7 @@ export const styles = StyleSheet.create({
     paddingLeft: 16,
     paddingRight: 16,
     position: 'relative',
-    height: 24,
+    height: 32,
     display: 'flex',
     justifyContent: 'center',
   },
@@ -148,9 +170,7 @@ export const styles = StyleSheet.create({
     flexGrow: 1,
   },
   input: {
-    maxWidth: 300,
-    width: '80%',
-    margin: 4,
+    width: '100%',
     marginTop: 16,
   },
 })

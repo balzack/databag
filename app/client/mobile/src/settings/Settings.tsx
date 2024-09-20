@@ -1,10 +1,11 @@
 import React, {useState, useContext} from 'react';
-import {Modal, Surface, Button, Text, Divider, Icon, TextInput} from 'react-native-paper';
-import {SafeAreaView, TouchableOpacity, View, Image, ScrollView} from 'react-native';
+import {Surface, Button, Text, IconButton, Divider, Icon, TextInput} from 'react-native-paper';
+import {SafeAreaView, TouchableOpacity, Modal, View, Image, ScrollView} from 'react-native';
 import {styles} from './Settings.styled';
 import {useSettings} from './useSettings.hook';
 import ImagePicker from 'react-native-image-crop-picker';
 import {BlurView} from '@react-native-community/blur';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 export function Settings() {
   const { state, actions } = useSettings();
@@ -89,46 +90,82 @@ export function Settings() {
           </Button>
         </SafeAreaView>
       </ScrollView>
-      {alert && (
-        <BlurView
-          style={styles.blur}
-          blurType="dark"
-          blurAmount={2}
-          reducedTransparencyFallbackColor="dark"
-        />
-      )}
       <Modal
         visible={alert}
         onDismiss={() => setAlert(false)}
         contentContainerStyle={styles.modal}>
-        <Surface elevation={5} mode="flat" style={styles.content}>
-          <Text variant="titleLarge">{state.strings.error}</Text>
-          <Text variant="titleSmall">{state.strings.tryAgain}</Text>
-          <Button
-            mode="text"
-            style={styles.close}
-            onPress={() => setAlert(false)}>
-            {state.strings.close}
-          </Button>
-        </Surface>
+        <View style={styles.modal}>
+          <BlurView
+            style={styles.blur}
+            blurType="dark"
+            blurAmount={2}
+            reducedTransparencyFallbackColor="dark"
+          />
+          <Surface elevation={1} mode="flat" style={styles.content}>
+            <Text variant="titleLarge">{state.strings.error}</Text>
+            <Text variant="titleSmall">{state.strings.tryAgain}</Text>
+            <Button
+              mode="text"
+              style={styles.close}
+              onPress={() => setAlert(false)}>
+              {state.strings.close}
+            </Button>
+          </Surface>
+        </View>
       </Modal>
       <Modal
+        animationType="fade"
+        transparent={true}
+        supportedOrientations={['portrait', 'landscape']}
         visible={details}
-        onDismiss={() => setDetails(false)}
-        contentContainerStyle={styles.modal}>
-        <Surface elevation={5} mode="flat" style={styles.content}>
-          <TextInput
-            style={styles.input}
-            mode="flat"
-            autoCapitalize="none"
-            autoComplete="off"
-            autoCorrect={false}
-            label={state.strings.name}
-            value={state.name}
-            left={<TextInput.Icon style={styles.inputIcon} icon="account" />}
-            onChangeText={value => actions.setName(value)}
+        onRequestClose={() => setDetails(false)}>
+        <View style={styles.modal}>
+          <BlurView
+            style={styles.blur}
+            blurType="dark"
+            blurAmount={2}
+            reducedTransparencyFallbackColor="dark"
           />
-        </Surface> 
+          <KeyboardAwareScrollView style={styles.container} contentContainerStyle={styles.content}>
+            <Surface elevation={1} mode="flat" style={styles.surface}>
+              <Text style={styles.modalLabel}>{ state.strings.editDetails }</Text>
+              <IconButton style={styles.modalClose} icon="close" size={24} onPress={() => setDetails(false)} />
+              <TextInput
+                style={styles.input}
+                mode="flat"
+                autoCapitalize="none"
+                autoComplete="off"
+                autoCorrect={false}
+                label={state.strings.name}
+                value={state.name}
+                left={<TextInput.Icon style={styles.inputIcon} icon="account" />}
+                onChangeText={value => actions.setName(value)}
+              />
+              <TextInput
+                style={styles.input}
+                mode="flat"
+                autoCapitalize="none"
+                autoComplete="off"
+                autoCorrect={false}
+                label={state.strings.location}
+                value={state.location}
+                left={<TextInput.Icon style={styles.inputIcon} icon="map-marker-outline" />}
+                onChangeText={value => actions.setLocation(value)}
+              />
+              <TextInput
+                style={styles.input}
+                mode="flat"
+                autoCapitalize="none"
+                autoComplete="off"
+                autoCorrect={false}
+                label={state.strings.description}
+                value={state.description}
+                left={<TextInput.Icon style={styles.inputIcon} icon="book-open-outline" />}
+                onChangeText={value => actions.setDescription(value)}
+              />
+            </Surface> 
+          </KeyboardAwareScrollView>
+        </View>
       </Modal>
     </>
   );
