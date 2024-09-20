@@ -35,11 +35,9 @@ export function Settings() {
           <TouchableOpacity style={styles.image} onPress={SelectImage}>
             <Image style={styles.logo} resizeMode={'contain'} source={{ uri: state.imageUrl }} />
             <View style={styles.editBar}>
-              <View style={styles.editBorder}>
-                <Surface elevation={0}>
+                <Surface style={styles.editBorder} elevation={0}>
                   <Text style={styles.editLogo}>{state.strings.edit}</Text>
                 </Surface>
-              </View>
             </View>
           </TouchableOpacity>
 

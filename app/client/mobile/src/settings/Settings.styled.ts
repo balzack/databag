@@ -39,6 +39,7 @@ export const styles = StyleSheet.create({
     textWrap: 'nowrap',
     textOverflow: 'ellipsis',
     overflow: 'hidden',
+    paddingTop: 8,
   },
   image: {
     position: 'relative',
