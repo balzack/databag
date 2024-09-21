@@ -12,12 +12,14 @@ export const styles = StyleSheet.create({
   left: {
     height: '100%',
     width: '33%',
-    minWidth: 325,
-    backgroundColor: 'yellow',
+    maxWidth: 300,
   },
   right: {
     height: '100%',
     display: 'flex',
+    flexGrow: 1,
+  },
+  channels: {
     flexGrow: 1,
   },
 });

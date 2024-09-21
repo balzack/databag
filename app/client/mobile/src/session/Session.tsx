@@ -1,14 +1,15 @@
 import React, {useState, useContext} from 'react';
-import {View, SafeAreaView, useColorScheme} from 'react-native';
+import {View, useColorScheme} from 'react-native';
 import {styles} from './Session.styled';
-import {BottomNavigation, Button, Text} from 'react-native-paper';
-import {DisplayContext} from '../context/DisplayContext';
+import {BottomNavigation, Surface, Menu, Button, Text} from 'react-native-paper';
 import {Settings} from '../settings/Settings';
 import {Channels} from '../channels/Channels';
 import {Contacts} from '../contacts/Contacts';
 import {Registry} from '../registry/Registry';
 import {Profile} from '../profile/Profile';
 import {Details} from '../details/Details';
+import {Identity} from '../identity/Identity';
+import {useSession} from './useSession.hook';
 
 import {NavigationContainer, DefaultTheme, DarkTheme} from '@react-navigation/native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
@@ -24,8 +25,8 @@ const ProfileDrawer = createDrawerNavigator();
 const DetailsDrawer = createDrawerNavigator();
 
 export function Session() {
+  const {state, actions} = useSession();
   const scheme = useColorScheme();
-  const display = useContext(DisplayContext);
   const [index, setIndex] = useState(0);
   const [routes] = useState([
     {
@@ -47,7 +48,7 @@ export function Session() {
       unfocusedIcon: 'cog-outline',
     },
   ]);
-  const sessionNav = {settings: null};
+  const sessionNav = {strings: state.strings};
 
   const renderScene = BottomNavigation.SceneMap({
     channels: ChannelsRoute,
@@ -57,7 +58,7 @@ export function Session() {
 
   return (
     <View style={styles.screen}>
-      {display.state.layout !== 'large' && (
+      {state.layout !== 'large' && (
         <BottomNavigation
           labeled={false}
           navigationState={{index, routes}}
@@ -65,7 +66,7 @@ export function Session() {
           renderScene={renderScene}
         />
       )}
-      {display.state.layout === 'large' && (
+      {state.layout === 'large' && (
         <NavigationContainer theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
           <DetailsScreen nav={sessionNav} />
         </NavigationContainer>
@@ -169,14 +170,20 @@ function SettingsScreen({nav}) {
 }
 
 function HomeScreen({nav}) {
+  const [menu, setMenu] = useState(false);
+
   return (
-    <SafeAreaView style={styles.frame}>
+    <View style={styles.frame}>
       <View style={styles.left}>
-        <Text onPress={() => nav.settings.openDrawer()}>IDENTITY</Text>
+        <Surface elevation={2} mode="flat">
+          <Identity openSettings={nav.settings.openDrawer} />
+        </Surface>
+        <Surface style={styles.channels} elevation={1} mode="flat">
+        </Surface>
       </View>
       <View style={styles.right}>
         <Text>CONVERSATION</Text>
       </View>
-    </SafeAreaView>
+    </View>
   );
 }

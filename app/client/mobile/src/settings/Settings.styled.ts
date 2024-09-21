@@ -57,6 +57,13 @@ export const styles = StyleSheet.create({
     right: 0,
     backgroundColor: 'transparent',
   },
+  modalControls: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 16,
+    paddingTop: 16,
+    justifyContent: 'flex-end',
+  },
   header: {
     fontSize: 22,
     textAlign: 'center',
@@ -83,7 +90,7 @@ export const styles = StyleSheet.create({
   },
   editDetails: {
     position: 'absolute',
-    bottom: -12,
+    bottom: -11,
     right: 12,
     zIndex: 3,
   },

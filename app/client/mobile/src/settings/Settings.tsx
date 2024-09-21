@@ -11,8 +11,9 @@ export function Settings() {
   const { state, actions } = useSettings();
   const [alert, setAlert] = useState(false);
   const [details, setDetails] = useState(false);
+  const [savingDetails, setSavingDetails] = useState(false);
 
-  const SelectImage = async () => {
+  const selectImage = async () => {
     try {
       const full = await ImagePicker.openPicker({ mediaType: 'photo', width: 256, height: 256 });
       const crop = await ImagePicker.openCropper({ path: full.path, width: 256, height: 256, cropperCircleOverlay: true, includeBase64: true });
@@ -29,19 +30,37 @@ export function Settings() {
     }
   }
 
+  const saveDetails = async () => {
+    if (!savingDetails) {
+      setSavingDetails(true);
+      try {
+        await actions.setDetails();
+        setDetails(false);
+      }
+      catch (err) {
+        console.log(err);
+        setDetails(false);
+        setAlert(true);
+      }
+      setSavingDetails(false);
+    }
+  }
+
   return (
     <>
       <ScrollView bounces={false}>
         <SafeAreaView style={styles.settings}>
           <Text style={styles.header} adjustsFontSizeToFit={true} numberOfLines={1}>{`${state.profile.handle}${state.profile.node ? '/' + state.profile.node : ''}`}</Text>
-          <TouchableOpacity style={styles.image} onPress={SelectImage}>
+          <View style={styles.image}>
             <Image style={styles.logo} resizeMode={'contain'} source={{ uri: state.imageUrl }} />
             <View style={styles.editBar}>
+              <TouchableOpacity onPress={selectImage}>
                 <Surface style={styles.editBorder} elevation={0}>
                   <Text style={styles.editLogo}>{state.strings.edit}</Text>
                 </Surface>
+              </TouchableOpacity>
             </View>
-          </TouchableOpacity>
+          </View>
 
           <View style={styles.divider}>
             <Divider style={styles.line} bold={true} />
@@ -55,7 +74,7 @@ export function Settings() {
               <Text style={styles.nameUnset}>{state.strings.name}</Text>
             )}
             {state.profile.name && (
-              <Text style={styles.nameSet}>{state.profile.name}</Text>
+              <Text style={styles.nameSet} adjustsFontSizeToFit={true} numberOfLines={1}>{state.profile.name}</Text>
             )}
             <View style={styles.attribute}>
               <View style={styles.icon}>
@@ -91,9 +110,11 @@ export function Settings() {
         </SafeAreaView>
       </ScrollView>
       <Modal
+        animationType="fade"
+        transparent={true}
         visible={alert}
-        onDismiss={() => setAlert(false)}
-        contentContainerStyle={styles.modal}>
+        supportedOrientations={['portrait', 'landscape']}
+        onRequestClose={() => setAlert(false)}>
         <View style={styles.modal}>
           <BlurView
             style={styles.blur}
@@ -101,16 +122,18 @@ export function Settings() {
             blurAmount={2}
             reducedTransparencyFallbackColor="dark"
           />
-          <Surface elevation={1} mode="flat" style={styles.content}>
-            <Text variant="titleLarge">{state.strings.error}</Text>
-            <Text variant="titleSmall">{state.strings.tryAgain}</Text>
-            <Button
-              mode="text"
-              style={styles.close}
-              onPress={() => setAlert(false)}>
-              {state.strings.close}
-            </Button>
-          </Surface>
+          <View style={styles.content}>
+            <Surface elevation={1} mode="flat" style={styles.surface}>
+              <Text variant="titleLarge">{state.strings.error}</Text>
+              <Text variant="titleSmall">{state.strings.tryAgain}</Text>
+              <Button
+                mode="text"
+                style={styles.close}
+                onPress={() => setAlert(false)}>
+                {state.strings.close}
+              </Button>
+            </Surface>
+          </View>
         </View>
       </Modal>
       <Modal
@@ -163,6 +186,11 @@ export function Settings() {
                 left={<TextInput.Icon style={styles.inputIcon} icon="book-open-outline" />}
                 onChangeText={value => actions.setDescription(value)}
               />
+
+              <View style={styles.modalControls}>
+                <Button mode="outlined" onPress={() => setDetails(false)}>{ state.strings.cancel }</Button>
+                <Button mode="contained" loading={savingDetails} onPress={saveDetails}>{ state.strings.save }</Button>
+              </View>
             </Surface> 
           </KeyboardAwareScrollView>
         </View>
