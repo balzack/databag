@@ -79,7 +79,16 @@ export const styles = StyleSheet.create({
     marginTop: 16,
     marginBottom: 8,
   },
-  logo: {
+  logoSet: {
+    aspectRatio: 1,
+    resizeMode: 'contain',
+    borderRadius: 8,
+    width: null,
+    height: null,
+    borderWidth: 1,
+    borderColor: Colors.primary,
+  },
+  logoUnset: {
     aspectRatio: 1,
     resizeMode: 'contain',
     borderRadius: 8,

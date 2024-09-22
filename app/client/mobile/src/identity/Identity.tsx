@@ -12,7 +12,12 @@ export function Identity({ openSettings }) {
     <SafeAreaView style={styles.identity}>
       <TouchableOpacity style={styles.identityData} activeOpacity={1} onPress={() => setMenu(true)}>
         <View style={styles.image}>
-          <Image style={styles.logo} resizeMode={'contain'} source={{ uri: state.imageUrl }} />
+          {state.profile.imageSet && (
+            <Image style={styles.logoSet} resizeMode={'contain'} source={state.imageUrl} />
+          )}
+          {!state.profile.imageSet && (
+            <Image style={styles.logoUnset} resizeMode={'contain'} source={state.imageUrl} />
+          )}
         </View>
         <View style={styles.details}>
           {state.profile.name && (

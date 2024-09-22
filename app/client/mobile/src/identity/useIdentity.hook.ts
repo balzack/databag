@@ -29,8 +29,9 @@ export function useIdentity() {
         updateState({
           profile,
           profileSet: true,
-          imageUrl: identity.getProfileImageUrl(),
+          imageUrl: { uri: identity.getProfileImageUrl() },
         })
+
       }
       identity.addProfileListener(setProfile)
       return () => {

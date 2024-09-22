@@ -23,7 +23,16 @@ export const styles = StyleSheet.create({
     width: 48,
     height: 48,
   },
-  logo: {
+  logoUnset: {
+    aspectRatio: 1,
+    resizeMode: 'contain',
+    borderRadius: 4,
+    width: null,
+    height: null,
+    borderWidth: 1,
+    borderColor: '#888888',
+  },
+  logoSet: {
     aspectRatio: 1,
     resizeMode: 'contain',
     borderRadius: 4,
