@@ -1,12 +1,17 @@
 import {useState, useEffect, useRef} from 'react';
 import {DatabagSDK, Session} from 'databag-client-sdk';
 import {SessionStore} from '../SessionStore';
+import {LocalStore} from '../LocalStore';
 const DATABAG_DB = 'db_v202.db';
+const SETTINGS_DB = 'ls_v001.db';
 
 export function useAppContext() {
+  const local = useRef(new LocalStore());
   const sdk = useRef(new DatabagSDK(null));
   const [state, setState] = useState({
     session: null as null | Session,
+    fullDayTime: false,
+    monthFirstDate: true,
   });
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -15,11 +20,15 @@ export function useAppContext() {
   };
 
   const setup = async () => {
+    await local.current.open(SETTINGS_DB);
+    const fullDayTime = await local.current.get('time_format', '12h') === '24h';
+    const monthFirstDate = await local.current.get('date_format', 'month_first') === 'month_first';
+    
     const store = new SessionStore();
     await store.open(DATABAG_DB);
     const session: Session | null = await sdk.current.initOfflineStore(store);
     if (session) {
-      updateState({session});
+      updateState({session, fullDayTime, monthFirstDate});
     }
   };
 
@@ -28,6 +37,14 @@ export function useAppContext() {
   }, []);
 
   const actions = {
+    setMonthFirstDate: async (monthFirstDate: boolean) => {
+      updateState({ monthFirstDate });
+      await local.current.set('date_format', monthFirstDate ? 'month_first' : 'day_first');
+    },
+    setFullDayTime: async (fullDayTime: boolean) => {
+      updateState({ fullDayTime });
+      await local.current.set('time_format', fullDayTime ? '24h' : '12h');
+    },
     accountLogin: async (
       username: string,
       password: string,

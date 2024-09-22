@@ -98,18 +98,19 @@ export const styles = StyleSheet.create({
     borderColor: Colors.primary,
   },
   editDetails: {
+    borderBottomLeftRadius: 8,
+    overflow: 'hidden',
     position: 'absolute',
-    bottom: -11,
-    right: 12,
-    zIndex: 3,
+    top: 0,
+    right: 16,
   },
   editDetailsLabel: {
     fontSize: 16,
     color: Colors.primary,
     paddingLeft: 8,
     paddingRight: 8,
-    paddingTop: 8,
-    paddingBottom: 8,
+    paddingTop: 4,
+    paddingBottom: 4,
   },
   editBar: {
     position: 'absolute',
@@ -140,15 +141,15 @@ export const styles = StyleSheet.create({
     paddingLeft: 16,
     paddingRight: 16,
     position: 'relative',
-    height: 32,
     display: 'flex',
     justifyContent: 'center',
+    paddingTop: 12,
   },
   nameSet: {
     fontSize: 24,
     width: '100%',
     paddingLeft: 32,
-    paddingRight: 32,
+    paddingRight: 72,
   },
   nameUnset: {
     fontSize: 24,
@@ -162,19 +163,25 @@ export const styles = StyleSheet.create({
     flexDirection: 'column',
     gap: 8,
     width: '100%',
+    paddingTop: 12,
   },
   attribute: {
     display: 'flex',
     flexDirection: 'row',
-    alignItem: 'center',
+    alignItems: 'center',
     justifyContent: 'center',
     paddingLeft: 32,
-    paddingRight: 32,
+    paddingRight: 8,
   },
   icon: {
+    flexShrink: 0,
     width: 32,
     display: 'flex',
-    justifyContent: 'center',
+    justifyContent: 'flex-begin',
+    height: '100%',
+  },
+  label: {
+    fontSize: 16,
   },
   labelUnset: {
     fontSize: 16,
@@ -185,8 +192,43 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     flexGrow: 1,
   },
+  control: {
+    flexGrow: 1,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  radioControl: {
+    flexGrow: 1,
+  },
+  radioButtons: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  controlIcon: {
+    flexShrink: 0,
+    width: 32,
+  },
+  controlLabel: {
+    fontSize: 16,
+    color: Colors.primary,
+  },
+  dangerLabel: {
+    fontSize: 16,
+    color: Colors.danger,
+  },
+  controlSwitch: {
+    transform: [
+      { scaleX: 0.7 },
+      {scaleY: 0.7 },
+    ]
+  },
   input: {
     width: '100%',
     marginTop: 16,
+  },
+  option: {
+    fontSize: 16,
+    paddingLeft: 24,
   },
 })

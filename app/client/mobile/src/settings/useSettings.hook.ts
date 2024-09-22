@@ -16,8 +16,6 @@ export function useSettings() {
     profileSet: false,
     imageUrl: null,
     strings: display.state.strings,
-    timeFormat: '12h',
-    dateFormat: 'mm/dd',
     all: false,
     password: '',
     confirm: '',
@@ -35,6 +33,8 @@ export function useSettings() {
     sealConfirm: '',
     sealDelete: '',
     secretCopied: false,
+    monthFirstDate: true,
+    fullDayTime: false,
   })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -77,6 +77,11 @@ export function useSettings() {
       identity.removeProfileListener(setProfile)
     }
   }, [])
+
+  useEffect(() => {
+    const { fullDayTime, monthFirstDate } = app.state;
+    updateState({ fullDayTime, monthFirstDate });
+  }, [app.state.fullDayTime, app.state.monthFirstDate]);
 
   useEffect(() => {
     const {
@@ -228,6 +233,17 @@ export function useSettings() {
     },
     setSealConfirm: (sealConfirm: string) => {
       updateState({ sealConfirm });
+    },
+    setFullDayTime: async (flag: boolean) => {
+      try {
+        await app.actions.setFullDayTime(flag);
+      }
+      catch (err) {
+        console.log(err);
+      }
+    },
+    setMonthFirstDate: async (flag: boolean) => {
+      await app.actions.setMonthFirstDate(flag);
     },
   }
 
