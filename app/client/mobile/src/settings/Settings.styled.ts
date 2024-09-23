@@ -158,6 +158,11 @@ export const styles = StyleSheet.create({
     paddingRight: 32,
     fontStyle: 'italic',
   },
+  options: {
+    width: '100%',
+    paddingTop: 12,
+    paddingBottom: 16,
+  },
   attributes: {
     display: 'flex',
     flexDirection: 'column',

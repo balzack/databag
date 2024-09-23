@@ -232,7 +232,7 @@ export function Settings() {
           <View style={styles.divider}>
             <Divider style={styles.line} bold={true} />
           </View>
-          <View style={styles.attributes}>
+          <View style={styles.options}>
             <View style={styles.attribute}>
               <View style={styles.icon}>
                 <Icon size={24} source="clock-outline" />
