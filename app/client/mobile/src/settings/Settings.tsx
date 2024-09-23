@@ -230,32 +230,68 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
               </View>
             </View>
           </View>
+
+          <View style={styles.divider}>
+            <Divider style={styles.line} bold={true} />
+          </View>
+          <View style={styles.attributes}>
+            <View style={styles.attribute}>
+              <View style={styles.controlIcon}>
+                <Icon size={24} source="account-cancel-outline" />
+              </View>
+              <View style={styles.control}>
+                <TouchableOpacity activeOpacity={1} onPress={() => manageSeal}>
+                  <Text style={styles.controlLabel}>{state.strings.blockedContacts}</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+            <View style={styles.attribute}>
+              <View style={styles.controlIcon}>
+                <Icon size={24} source="archive-cancel-outline" />
+              </View>
+              <View style={styles.control}>
+                <TouchableOpacity activeOpacity={1} onPress={() => manageSeal}>
+                  <Text style={styles.controlLabel}>{state.strings.blockedTopics}</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+             <View style={styles.attribute}>
+              <View style={styles.controlIcon}>
+                <Icon size={24} source="file-cancel-outline" />
+              </View>
+              <View style={styles.control}>
+                <TouchableOpacity activeOpacity={1} onPress={() => manageSeal}>
+                  <Text style={styles.controlLabel}>{state.strings.blockedMessages}</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
  
           <View style={styles.divider}>
             <Divider style={styles.line} bold={true} />
           </View>
           <View style={styles.options}>
             <View style={styles.attribute}>
-              <View style={styles.icon}>
+              <View style={styles.radioIcon}>
                 <Icon size={24} source="clock-outline" />
               </View>
               <View style={styles.radioControl}>
                 <Text style={styles.label}>{state.strings.timeFormat}:</Text>
                 <View style={styles.radioButtons}>
-                  <RadioButton.Item label={state.strings.timeHalf} mode="android" status={state.fullDayTime ? 'unchecked' : 'checked'} onPress={() => {actions.setFullDayTime(false)}} />
-                  <RadioButton.Item label={state.strings.timeFull} mode="android" status={state.fullDayTime ? 'checked' : 'unchecked'} onPress={() => {actions.setFullDayTime(true)}} />
+                  <RadioButton.Item label={state.strings.timeHalf} labelStyle={styles.option} mode="android" status={state.fullDayTime ? 'unchecked' : 'checked'} onPress={() => {actions.setFullDayTime(false)}} />
+                  <RadioButton.Item label={state.strings.timeFull} labelStyle={styles.option} mode="android" status={state.fullDayTime ? 'checked' : 'unchecked'} onPress={() => {actions.setFullDayTime(true)}} />
                 </View>
               </View>
             </View>
             <View style={styles.attribute}>
-              <View style={styles.icon}>
+              <View style={styles.radioIcon}>
                 <Icon size={24} source="calendar-text-outline" />
               </View>
               <View style={styles.radioControl}>
                 <Text style={styles.label}>{state.strings.dateFormat}:</Text>
                 <View style={styles.radioButtons}>
-                  <RadioButton.Item label={state.strings.monthStart} mode="android" status={state.monthFirstDate ? 'checked' : 'unchecked'} onPress={() => {actions.setMonthFirstDate(true)}} />
-                  <RadioButton.Item label={state.strings.monthEnd} mode="android" status={state.monthFirstDate ? 'unchecked' : 'checked'} onPress={() => {actions.setMonthFirstDate(false)}} />
+                  <RadioButton.Item label={state.strings.monthStart} labelStyle={styles.option} mode="android" status={state.monthFirstDate ? 'checked' : 'unchecked'} onPress={() => {actions.setMonthFirstDate(true)}} />
+                  <RadioButton.Item label={state.strings.monthEnd} labelStyle={styles.option} mode="android" status={state.monthFirstDate ? 'unchecked' : 'checked'} onPress={() => {actions.setMonthFirstDate(false)}} />
                 </View>
               </View>
             </View>

@@ -163,6 +163,10 @@ export const styles = StyleSheet.create({
     paddingTop: 12,
     paddingBottom: 16,
   },
+  option: {
+    fontSize: 12,
+    color: Colors.primary,
+  },
   attributes: {
     display: 'flex',
     flexDirection: 'column',
@@ -204,9 +208,19 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
+  radioIcon: {
+    flexShrink: 0,
+    width: 32,
+    display: 'flex',
+    justifyContent: 'center',
+  },
   radioControl: {
     flexGrow: 1,
     flexShrink: 1,
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'center',
   },
   radioButtons: {
     display: 'flex',
@@ -233,9 +247,5 @@ export const styles = StyleSheet.create({
   input: {
     width: '100%',
     marginTop: 16,
-  },
-  option: {
-    fontSize: 16,
-    paddingLeft: 24,
   },
 })
