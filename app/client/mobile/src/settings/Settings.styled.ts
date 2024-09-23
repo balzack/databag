@@ -206,6 +206,7 @@ export const styles = StyleSheet.create({
   },
   radioControl: {
     flexGrow: 1,
+    flexShrink: 1,
   },
   radioButtons: {
     display: 'flex',

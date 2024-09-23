@@ -16,7 +16,7 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 
 const ChannelsRoute = () => <Channels />;
 const ContactsRoute = () => <Contacts />;
-const SettingsRoute = () => <Settings />;
+const SettingsRoute = () => <Settings showLogout={true} />;
 
 const SettingsDrawer = createDrawerNavigator();
 const ContactsDrawer = createDrawerNavigator();

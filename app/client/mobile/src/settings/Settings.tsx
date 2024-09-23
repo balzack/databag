@@ -7,7 +7,7 @@ import ImagePicker from 'react-native-image-crop-picker';
 import {BlurView} from '@react-native-community/blur';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
-export function Settings() {
+export function Settings({ showLogout }: { showLogout: boolean }) {
   const { state, actions } = useSettings();
   const [alert, setAlert] = useState(false);
   const [details, setDetails] = useState(false);
@@ -207,17 +207,19 @@ export function Settings() {
                 </TouchableOpacity>
               </View>
             </View>
+            { showLogout && (
+              <View style={styles.attribute}>
+                <View style={styles.controlIcon}>
+                  <Icon size={24} source="logout" />
+                </View>
+                <View style={styles.control}>
+                  <TouchableOpacity activeOpacity={1} onPress={() => manageSeal}>
+                    <Text style={styles.controlLabel}>{state.strings.logout}</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            )}
             <View style={styles.attribute}>
-              <View style={styles.controlIcon}>
-                <Icon size={24} source="logout" />
-              </View>
-              <View style={styles.control}>
-                <TouchableOpacity activeOpacity={1} onPress={() => manageSeal}>
-                  <Text style={styles.controlLabel}>{state.strings.logout}</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-             <View style={styles.attribute}>
               <View style={styles.controlIcon}>
                 <Icon size={24} source="account-remove" />
               </View>
