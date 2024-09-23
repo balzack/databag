@@ -1,11 +1,12 @@
 import { Crypto } from 'databag-client-sdk';
 import CryptoJS from 'crypto-js';
 import { JSEncrypt } from 'jsencrypt'
+import { RSA } from 'react-native-rsa-native';
 
-export class WebCrypto implements Crypto {
+export class NativeCrypto implements Crypto {
 
   // generate salt for pbk function
-  public async pbkdfSalt(): { saltHex: string } {
+  public async pbkdfSalt(): Promise<{ saltHex: string }> {
     const salt = CryptoJS.lib.WordArray.random(128 / 8);
     const saltHex = salt.toString();
     return { saltHex };
@@ -79,7 +80,7 @@ export class WebCrypto implements Crypto {
   public async rsaDecrypt(encryptedDataB64: string, privateKeyB64: string): Promise<{ data: string }> {
     const crypto = new JSEncrypt();
     crypto.setPrivateKey(privateKeyB64);
-    const data = crypto.decrypt(encryptedDataB64);
+    const data = await RSA.decrypt(encryptedDataB64, privateKeyB64);
     if (!data) {
       throw new Error('rsaDecrypt failed');
     }

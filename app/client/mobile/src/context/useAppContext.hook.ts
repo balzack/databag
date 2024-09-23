@@ -1,13 +1,14 @@
 import {useState, useEffect, useRef} from 'react';
 import {DatabagSDK, Session} from 'databag-client-sdk';
 import {SessionStore} from '../SessionStore';
+import {NativeCrypto} from '../NativeCrypto';
 import {LocalStore} from '../LocalStore';
 const DATABAG_DB = 'db_v202.db';
 const SETTINGS_DB = 'ls_v001.db';
 
 export function useAppContext() {
   const local = useRef(new LocalStore());
-  const sdk = useRef(new DatabagSDK(null));
+  const sdk = useRef(new DatabagSDK(new NativeCrypto()))
   const [state, setState] = useState({
     session: null as null | Session,
     fullDayTime: false,
