@@ -171,7 +171,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingLeft: 32,
-    paddingRight: 8,
+    paddingRight: 32,
   },
   icon: {
     flexShrink: 0,
@@ -193,6 +193,7 @@ export const styles = StyleSheet.create({
     flexGrow: 1,
   },
   control: {
+    flexShrink: 1,
     flexGrow: 1,
     display: 'flex',
     flexDirection: 'row',

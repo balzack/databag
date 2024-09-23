@@ -15,8 +15,6 @@ export function Settings() {
   const [savingRegistry, setSavingRegistry] = useState(false);
   const [savingNotifications, setSavingNotifications] = useState(false);
 
-console.log("PREF: ", state.fullDayTime, state.monthFirstDate);
-
   const selectImage = async () => {
     try {
       const img = await ImagePicker.openPicker({ mediaType: 'photo', width: 256, height: 256, cropping: true, cropperCircleOverlay: true, includeBase64: true });
