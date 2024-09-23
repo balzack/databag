@@ -165,11 +165,11 @@ export class SettingsModule implements Settings {
     if (!crypto) {
       throw new Error('crypto not enabled');
     }
-    const { saltHex } = crypto.pbkdfSalt();
-    const { aesKeyHex } = crypto.pbkdfKey(saltHex, password);
-    const { publicKeyB64, privateKeyB64 } = crypto.rsaKey();
-    const { ivHex } = crypto.aesIv();
-    const { encryptedDataB64 } = crypto.aesEncrypt(privateKeyB64, ivHex, aesKeyHex);
+    const { saltHex } = await crypto.pbkdfSalt();
+    const { aesKeyHex } = await crypto.pbkdfKey(saltHex, password);
+    const { publicKeyB64, privateKeyB64 } = await crypto.rsaKey();
+    const { ivHex } = await crypto.aesIv();
+    const { encryptedDataB64 } = await crypto.aesEncrypt(privateKeyB64, ivHex, aesKeyHex);
     const seal = { passwordSalt: saltHex, privateKeyIv: ivHex, privateKeyEncrypted: encryptedDataB64, publicKey: publicKeyB64 };
     await setAccountSeal(node, secure, token, seal);
     this.seal = { publicKey: publicKeyB64, privateKey: privateKeyB64 };
@@ -185,10 +185,10 @@ export class SettingsModule implements Settings {
     if (!this.seal || this.seal.publicKey !== config.seal.publicKey) {
       throw new Error('seal not unlocked');
     }
-    const { saltHex } = crypto.pbkdfSalt();
-    const { aesKeyHex } = crypto.pbkdfKey(saltHex, password);
-    const { ivHex } = crypto.aesIv();
-    const { encryptedDataB64 } = crypto.aesEncrypt(this.seal.privateKey, ivHex, aesKeyHex);
+    const { saltHex } = await crypto.pbkdfSalt();
+    const { aesKeyHex } = await crypto.pbkdfKey(saltHex, password);
+    const { ivHex } = await crypto.aesIv();
+    const { encryptedDataB64 } = await crypto.aesEncrypt(this.seal.privateKey, ivHex, aesKeyHex);
     const seal = { passwordSalt: saltHex, privateKeyIv: ivHex, privateKeyEncrypted: encryptedDataB64, publicKey: config.seal.publicKey };
     await setAccountSeal(node, secure, token, seal);
   }
@@ -210,8 +210,8 @@ export class SettingsModule implements Settings {
     if (!crypto) {
       throw new Error('crypto not set');
     }
-    const { aesKeyHex } = crypto.pbkdfKey(passwordSalt, password);
-    const { data } = crypto.aesDecrypt(privateKeyEncrypted, privateKeyIv, aesKeyHex);
+    const { aesKeyHex } = await crypto.pbkdfKey(passwordSalt, password);
+    const { data } = await crypto.aesDecrypt(privateKeyEncrypted, privateKeyIv, aesKeyHex);
     const seal = { publicKey: publicKey, privateKey: data };
     this.store.setSeal(guid, seal);
     this.seal = seal;
