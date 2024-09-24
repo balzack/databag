@@ -11,6 +11,7 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
   const { state, actions } = useSettings();
   const [alert, setAlert] = useState(false);
   const [details, setDetails] = useState(false);
+  const [sealing, setSealing] = useState(false);
   const [savingDetails, setSavingDetails] = useState(false);
   const [savingRegistry, setSavingRegistry] = useState(false);
   const [savingNotifications, setSavingNotifications] = useState(false);
@@ -164,7 +165,7 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
                 <Icon size={24} source="cloud-lock-outline" />
               </View>
               <View style={styles.control}>
-                <TouchableOpacity activeOpacity={1} onPress={() => manageSeal}>
+                <TouchableOpacity activeOpacity={1} onPress={() => setSealing(true)}>
                   <Text style={styles.controlLabel}>{state.strings.manageTopics}</Text>
                 </TouchableOpacity>
               </View>
@@ -325,6 +326,27 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
           </View>
         </View>
       </Modal>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={sealing}
+        supportedOrientations={['portrait', 'landscape']}
+        onRequestClose={() => setSealing(false)}>
+        <View style={styles.modal}>
+          <BlurView
+            style={styles.blur}
+            blurType="dark"
+            blurAmount={2}
+            reducedTransparencyFallbackColor="dark"
+          />
+          <KeyboardAwareScrollView style={styles.container} contentContainerStyle={styles.content}>
+            <Surface elevation={1} mode="flat" style={styles.surface}>
+              <Text style={styles.modalLabel}>{ state.strings.manageTopics }</Text>
+              <IconButton style={styles.modalClose} icon="close" size={24} onPress={() => setSealing(false)} />
+            </Surface>
+          </KeyboardAwareScrollView>
+        </View>
+      </Modal> 
       <Modal
         animationType="fade"
         transparent={true}
