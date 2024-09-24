@@ -12,9 +12,14 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
   const [alert, setAlert] = useState(false);
   const [details, setDetails] = useState(false);
   const [sealing, setSealing] = useState(false);
+  const [sealDelete, setSealDelete] = useState(false);
+  const [sealReset, setSealReset] = useState(false);
+  const [sealConfig, setSealConfig] = useState(false);
+  const [savingSeal, setSavingSeal] = useState(false);
   const [savingDetails, setSavingDetails] = useState(false);
   const [savingRegistry, setSavingRegistry] = useState(false);
   const [savingNotifications, setSavingNotifications] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const selectImage = async () => {
     try {
@@ -29,6 +34,96 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
     }
     catch (err) {
       console.log(err);
+    }
+  }
+
+  const setSeal = async () => {
+    if (!savingSeal) {
+      setSealDelete(false);
+      setSealReset(false);
+      setSealConfig(false);
+      actions.setSealPassword('');
+      actions.setSealConfirm('');
+      actions.setSealDelete('');
+      sealOpen();
+      setSavingSeal(true); 
+      setSavingSeal(false);
+    } 
+  }   
+
+  const sealUnlock = async () => {
+    if (!savingSeal) {
+      setSavingSeal(true);
+      try {
+        await actions.unlockSeal();
+        setSealing(false);
+      } catch (err) {
+        console.log(err);
+        setSealing(false);
+        setAlert(true);
+      }
+      setSavingSeal(false)
+    }
+  }
+
+  const sealForget = async () => {
+    if (!savingSeal) {
+      setSavingSeal(true);
+      try {
+        await actions.forgetSeal();
+        setSealing(false);
+      } catch (err) {
+        console.log(err);
+        setSealing(false);
+        setAlert(true);
+      }
+      setSavingSeal(false);
+    }
+  }
+
+  const sealRemove = async () => {
+    if (!savingSeal) {
+      setSavingSeal(true);
+      try {
+        await actions.clearSeal();
+        setSealing(false);
+      } catch (err) {
+        console.log(err);
+        setSealing(false);
+        setAlert(true);
+      }
+      setSavingSeal(false);
+    }
+  }
+
+  const sealCreate = async () => {
+    if (!savingSeal) {
+      setSavingSeal(true);
+      try {
+        await new Promise(r => setTimeout(r, 100));
+        await actions.setSeal();
+        setSealing(false);
+      } catch (err) {
+        console.log(err);
+        setSealing(false);
+        setAlert(true);
+      }
+      setSavingSeal(false);
+    }
+  }
+
+  const sealUpdate = async () => {
+    if (!savingSeal) {
+      setSavingSeal(true);
+      try {
+        await actions.updateSeal();
+        setSealing(false);
+      } catch (err) {
+        console.log(err);
+        setSealing(false);
+        setAlert(true);
+      }
+      setSavingSeal(false);
     }
   }
 
@@ -343,6 +438,72 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
             <Surface elevation={1} mode="flat" style={styles.surface}>
               <Text style={styles.modalLabel}>{ state.strings.manageTopics }</Text>
               <IconButton style={styles.modalClose} icon="close" size={24} onPress={() => setSealing(false)} />
+              { !sealDelete && !sealReset && state.config.sealSet && state.config.sealUnlocked && (
+                <>
+                  <Text>seal is unlocked</Text>
+                  { !sealConfig && (
+                    <Text>hide options</Text>
+                  )}
+                  { sealConfig && (
+                    <Text>show options</Text>
+                  )}
+                </>
+              )}
+              { !sealDelete && sealReset && state.config.sealSet && state.config.sealUnlocked && (
+                <>
+                  <Text>update seal password</Text>
+                </>
+              )}
+              { !sealDelete && state.config.sealSet && !state.config.sealUnlocked && (
+                <>
+                  <Text>seal is locked</Text>
+                  { !sealConfig && (
+                    <Text>hide options</Text>
+                  )}
+                  { sealConfig && (
+                    <Text>show options</Text>
+                  )}
+                </>
+              )}
+              { sealDelete && state.config.sealSet && (
+                <>
+                  <Text>deleting seal</Text>
+                </>
+              )}
+              { !state.config.sealSet && (
+                <>
+                  <Text style={styles.modalDescription}>{ state.strings.sealUnset }</Text>
+                  <TextInput
+                    style={styles.input}
+                    mode="flat"
+                    autoCapitalize="none"
+                    autoComplete="off"
+                    autoCorrect={false}
+                    value={state.password}
+                    label={state.strings.password}
+                    secureTextEntry={!showPassword}
+                    left={<TextInput.Icon style={styles.icon} icon="lock" />}
+                    right={
+                      showPassword ? (
+                        <TextInput.Icon style={styles.icon}
+                          icon="eye-off"
+                          onPress={() => setShowPassword(false)}
+                        />
+                      ) : (
+                        <TextInput.Icon style={styles.icon}
+                          icon="eye"
+                          onPress={() => setShowPassword(true)}
+                        />
+                      )
+                    }
+                    onChangeText={value => actions.setPassword(value)}
+                  />
+                  <View style={styles.modalControls}>
+                    <Button mode="outlined" onPress={() => setSealing(false)}>{ state.strings.cancel }</Button>
+                    <Button mode="contained" loading={savingSeal} onPress={sealCreate}>{ state.strings.save }</Button>
+                  </View>
+                </>
+              )}
             </Surface>
           </KeyboardAwareScrollView>
         </View>

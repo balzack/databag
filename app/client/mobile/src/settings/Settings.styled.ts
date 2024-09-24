@@ -49,7 +49,6 @@ export const styles = StyleSheet.create({
   modalLabel: {
     width: '100%',
     fontSize: 20,
-    paddingLeft: 16,
   },
   modalClose: {
     position: 'absolute',
@@ -63,6 +62,9 @@ export const styles = StyleSheet.create({
     gap: 16,
     paddingTop: 16,
     justifyContent: 'flex-end',
+  },
+  modalDescription: {
+    paddingTop: 16,
   },
   header: {
     fontSize: 22,
@@ -188,6 +190,7 @@ export const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'flex-begin',
     height: '100%',
+    backgroundColor: 'transparent',
   },
   label: {
     fontSize: 16,
