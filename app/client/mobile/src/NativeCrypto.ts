@@ -2,13 +2,14 @@ import { Crypto } from 'databag-client-sdk';
 import CryptoJS from 'crypto-js';
 import { JSEncrypt } from 'jsencrypt'
 import { RSA } from 'react-native-rsa-native';
+import { generateSecureRandom } from 'react-native-securerandom';
 
 export class NativeCrypto implements Crypto {
 
   // generate salt for pbk function
   public async pbkdfSalt(): Promise<{ saltHex: string }> {
-    const salt = CryptoJS.lib.WordArray.random(128 / 8);
-    const saltHex = salt.toString();
+    const salt = await generateSecureRandom(16);
+    const saltHex = this.uint8ToHexStr(salt);
     return { saltHex };
   }
 
@@ -22,15 +23,15 @@ export class NativeCrypto implements Crypto {
 
   // generate random aes key
   public async aesKey(): Promise<{ aesKeyHex: string }> {
-    const aes = CryptoJS.lib.WordArray.random(256 / 8);
-    const aesKeyHex = aes.toString();
+    const aes = await generateSecureRandom(32);
+    const aesHex = this.uint8ToHexStr(aes);
     return { aesKeyHex };
   }
 
   // generate iv to use to aes function
   public async aesIv(): Promise<{ ivHex: string }> {
-    const iv = CryptoJS.lib.WordArray.random(128 / 8);
-    const ivHex = iv.toString();
+    const iv = await generateSecureRandom(16);
+    const ivHex = this.uint8ToHexStr(iv);
     return { ivHex };
   }
 
@@ -102,7 +103,13 @@ export class NativeCrypto implements Crypto {
       }
     }
     return encoded
-};
+  };
 
-
+  private uint8ToHexStr(bin: Uint8Array) {
+    let hex = '';
+    bin.forEach(val => {
+      hex += val.toString(16);
+    });
+    return hex;
+  }
 }

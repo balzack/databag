@@ -6,6 +6,7 @@ import {useSettings} from './useSettings.hook';
 import ImagePicker from 'react-native-image-crop-picker';
 import {BlurView} from '@react-native-community/blur';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import { Colors } from '../constants/Colors';
 
 export function Settings({ showLogout }: { showLogout: boolean }) {
   const { state, actions } = useSettings();
@@ -20,6 +21,7 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
   const [savingRegistry, setSavingRegistry] = useState(false);
   const [savingNotifications, setSavingNotifications] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   const selectImage = async () => {
     try {
@@ -45,9 +47,7 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
       actions.setSealPassword('');
       actions.setSealConfirm('');
       actions.setSealDelete('');
-      sealOpen();
-      setSavingSeal(true); 
-      setSavingSeal(false);
+      setSealing(true);
     } 
   }   
 
@@ -100,7 +100,6 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
     if (!savingSeal) {
       setSavingSeal(true);
       try {
-        await new Promise(r => setTimeout(r, 100));
         await actions.setSeal();
         setSealing(false);
       } catch (err) {
@@ -260,7 +259,7 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
                 <Icon size={24} source="cloud-lock-outline" />
               </View>
               <View style={styles.control}>
-                <TouchableOpacity activeOpacity={1} onPress={() => setSealing(true)}>
+                <TouchableOpacity activeOpacity={1} onPress={setSeal}>
                   <Text style={styles.controlLabel}>{state.strings.manageTopics}</Text>
                 </TouchableOpacity>
               </View>
@@ -435,51 +434,38 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
             reducedTransparencyFallbackColor="dark"
           />
           <KeyboardAwareScrollView style={styles.container} contentContainerStyle={styles.content}>
-            <Surface elevation={1} mode="flat" style={styles.surface}>
+            <Surface elevation={5} mode="flat" style={styles.surface}>
               <Text style={styles.modalLabel}>{ state.strings.manageTopics }</Text>
               <IconButton style={styles.modalClose} icon="close" size={24} onPress={() => setSealing(false)} />
               { !sealDelete && !sealReset && state.config.sealSet && state.config.sealUnlocked && (
                 <>
-                  <Text>seal is unlocked</Text>
+                  <Text style={styles.modalDescription}>{ state.strings.sealUnlocked }</Text>
                   { !sealConfig && (
-                    <Text>hide options</Text>
+                    <View style={styles.modalControls}>
+                      <IconButton style={styles.modalOption} iconColor={Colors.primary} icon="menu-right-outline" size={32} onPress={() => {setSealConfig(true)}} />
+                      <Button mode="outlined" onPress={() => setSealing(false)}>{ state.strings.cancel }</Button>
+                      <Button mode="contained" loading={savingSeal} onPress={sealForget}>{ state.strings.disable }</Button>
+                    </View>
                   )}
                   { sealConfig && (
-                    <Text>show options</Text>
+                    <View style={styles.modalControls}>
+                      <Button mode="contained" onPress={() => setSealReset(true)}>{ state.strings.update }</Button>
+                      <Button mode="contained" style={styles.deleteButton} loading={savingSeal} onPress={() => setSealDelete(true)}>{ state.strings.delete }</Button>
+                      <IconButton style={styles.modalOption} iconColor={Colors.primary} icon="menu-left-outline" size={32} onPress={() => {setSealConfig(false)}} />
+                    </View>
                   )}
                 </>
               )}
               { !sealDelete && sealReset && state.config.sealSet && state.config.sealUnlocked && (
                 <>
-                  <Text>update seal password</Text>
-                </>
-              )}
-              { !sealDelete && state.config.sealSet && !state.config.sealUnlocked && (
-                <>
-                  <Text>seal is locked</Text>
-                  { !sealConfig && (
-                    <Text>hide options</Text>
-                  )}
-                  { sealConfig && (
-                    <Text>show options</Text>
-                  )}
-                </>
-              )}
-              { sealDelete && state.config.sealSet && (
-                <>
-                  <Text>deleting seal</Text>
-                </>
-              )}
-              { !state.config.sealSet && (
-                <>
-                  <Text style={styles.modalDescription}>{ state.strings.sealUnset }</Text>
+                  <Text style={styles.modalDescription}>{ state.strings.changePassword }</Text>
                   <TextInput
                     style={styles.input}
                     mode="flat"
                     autoCapitalize="none"
                     autoComplete="off"
                     autoCorrect={false}
-                    value={state.password}
+                    value={state.sealPassword}
                     label={state.strings.password}
                     secureTextEntry={!showPassword}
                     left={<TextInput.Icon style={styles.icon} icon="lock" />}
@@ -496,11 +482,133 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
                         />
                       )
                     }
-                    onChangeText={value => actions.setPassword(value)}
+                    onChangeText={value => actions.setSealPassword(value)}
+                  />
+                  <TextInput
+                    style={styles.input}
+                    mode="flat"
+                    autoCapitalize="none"
+                    autoComplete="off"
+                    autoCorrect={false}
+                    value={state.sealConfirm}
+                    label={state.strings.confirmPassword}
+                    secureTextEntry={!showConfirm}
+                    left={<TextInput.Icon style={styles.icon} icon="lock" />}
+                    right={
+                      showPassword ? (
+                        <TextInput.Icon style={styles.icon}
+                          icon="eye-off"
+                          onPress={() => setShowConfirm(false)}
+                        />
+                      ) : (
+                        <TextInput.Icon style={styles.icon}
+                          icon="eye"
+                          onPress={() => setShowConfirm(true)}
+                        />
+                      )
+                    }
+                    onChangeText={value => actions.setSealConfirm(value)}
                   />
                   <View style={styles.modalControls}>
                     <Button mode="outlined" onPress={() => setSealing(false)}>{ state.strings.cancel }</Button>
-                    <Button mode="contained" loading={savingSeal} onPress={sealCreate}>{ state.strings.save }</Button>
+                    <Button mode="contained" disabled={state.sealPassword.length === 0 || state.sealConfirm !== state.sealPassword} loading={savingSeal} onPress={sealUpdate}>{ state.strings.update }</Button>
+                  </View>
+                </>
+              )}
+              { !sealDelete && state.config.sealSet && !state.config.sealUnlocked && (
+                <>
+                  <Text style={styles.modalDescription}>{ state.strings.sealLocked }</Text>
+                  <TextInput
+                    style={styles.input}
+                    mode="flat"
+                    autoCapitalize="none"
+                    autoComplete="off"
+                    autoCorrect={false}
+                    value={state.sealPassword}
+                    label={state.strings.password}
+                    secureTextEntry={!showPassword}
+                    left={<TextInput.Icon style={styles.icon} icon="lock" />}
+                    right={
+                      showPassword ? (
+                        <TextInput.Icon style={styles.icon}
+                          icon="eye-off"
+                          onPress={() => setShowPassword(false)}
+                        />
+                      ) : (
+                        <TextInput.Icon style={styles.icon}
+                          icon="eye"
+                          onPress={() => setShowPassword(true)}
+                        />
+                      )
+                    }
+                    onChangeText={value => actions.setSealPassword(value)}
+                  />
+                  { !sealConfig && (
+                    <View style={styles.modalControls}>
+                      <IconButton style={styles.modalOption} iconColor={Colors.primary} icon="menu-right-outline" size={32} onPress={() => {setSealConfig(true)}} />
+                      <Button mode="outlined" onPress={() => setSealing(false)}>{ state.strings.cancel }</Button>
+                      <Button mode="contained" disabled={state.sealPassword.length === 0} loading={savingSeal} onPress={sealUnlock}>{ state.strings.unlock }</Button>
+                    </View>
+                  )}
+                  { sealConfig && (
+                    <View style={styles.modalControls}>
+                      <Button mode="contained" style={styles.deleteButton} loading={savingSeal} onPress={() => setSealDelete(true)}>{ state.strings.delete }</Button>
+                      <IconButton style={styles.modalOption} iconColor={Colors.primary} icon="menu-left-outline" size={32} onPress={() => {setSealConfig(false)}} />
+                    </View>
+                  )}
+                </>
+              )}
+              { sealDelete && state.config.sealSet && (
+                <>
+                  <Text style={styles.modalDescription}>{ state.strings.sealDelete }</Text>
+                  <TextInput
+                    style={styles.input}
+                    mode="flat"
+                    autoCapitalize="none"
+                    autoComplete="off"
+                    autoCorrect={false}
+                    value={state.sealDelete}
+                    label={state.strings.typeDelete}
+                    left={<TextInput.Icon style={styles.icon} icon="lock" />}
+                    onChangeText={value => actions.setSealDelete(value)}
+                  />
+                  <View style={styles.modalControls}>
+                    <Button mode="contained" style={styles.deleteButton} disabled={state.sealDelete !== state.strings.deleteKey} loading={savingSeal} onPress={sealRemove}>{ state.strings.delete }</Button>
+                  </View>
+                </>
+              )}
+              { !state.config.sealSet && (
+                <>
+                  <Text style={styles.modalDescription}>{ state.strings.sealUnset }</Text>
+                  <Text style={styles.modalDescription}>{ state.strings.delayMessage }</Text>
+                  <TextInput
+                    style={styles.input}
+                    mode="flat"
+                    autoCapitalize="none"
+                    autoComplete="off"
+                    autoCorrect={false}
+                    value={state.sealPassword}
+                    label={state.strings.password}
+                    secureTextEntry={!showPassword}
+                    left={<TextInput.Icon style={styles.icon} icon="lock" />}
+                    right={
+                      showPassword ? (
+                        <TextInput.Icon style={styles.icon}
+                          icon="eye-off"
+                          onPress={() => setShowPassword(false)}
+                        />
+                      ) : (
+                        <TextInput.Icon style={styles.icon}
+                          icon="eye"
+                          onPress={() => setShowPassword(true)}
+                        />
+                      )
+                    }
+                    onChangeText={value => actions.setSealPassword(value)}
+                  />
+                  <View style={styles.modalControls}>
+                    <Button mode="outlined" onPress={() => setSealing(false)}>{ state.strings.cancel }</Button>
+                    <Button mode="contained" disabled={state.sealPassword.length === 0} loading={savingSeal} onPress={sealCreate}>{ state.strings.save }</Button>
                   </View>
                 </>
               )}

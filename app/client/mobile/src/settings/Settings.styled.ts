@@ -60,8 +60,9 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     gap: 16,
-    paddingTop: 16,
     justifyContent: 'flex-end',
+    alignItems: 'center',
+    marginTop: 16,
   },
   modalDescription: {
     paddingTop: 16,
@@ -191,6 +192,13 @@ export const styles = StyleSheet.create({
     justifyContent: 'flex-begin',
     height: '100%',
     backgroundColor: 'transparent',
+  },
+  modalOption: {
+    backgroundColor: 'transparent',
+    flexGrow: 1,
+  },
+  deleteButton: {
+    backgroundColor: Colors.danger,
   },
   label: {
     fontSize: 16,
