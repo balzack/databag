@@ -47,7 +47,6 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   modalLabel: {
-    width: '100%',
     fontSize: 20,
   },
   modalClose: {
@@ -258,5 +257,38 @@ export const styles = StyleSheet.create({
   input: {
     width: '100%',
     marginTop: 16,
+  },
+  secretImage: {
+    width: 192,
+    height: 192,
+    alignSelf: 'center',
+    borderRadius: 8,
+    margin: 16,
+  },
+  secretText: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingBottom: 16,
+    paddingLeft: 8,
+    paddingRight: 8,
+  },
+  secret: {
+    paddingRight: 16,
+  },
+  secretIcon: {
+    marginLeft: 8,
+  },
+  authMessage: {
+    height: 24,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingTop: 8,
+  },
+  authMessageText: {
+    fontSize: 16,
+    color: Colors.danger,
   },
 })

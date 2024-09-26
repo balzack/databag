@@ -11,6 +11,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@react-native-clipboard/clipboard": "^1.14.2",
     "@react-native-community/blur": "^4.4.0",
     "@react-navigation/drawer": "^6.7.2",
     "@react-navigation/native": "^6.1.18",

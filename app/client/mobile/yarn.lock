@@ -2167,6 +2167,23 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-native-clipboard/clipboard@npm:^1.14.2":
+  version: 1.14.2
+  resolution: "@react-native-clipboard/clipboard@npm:1.14.2"
+  peerDependencies:
+    react: ">= 16.9.0"
+    react-native: ">= 0.61.5"
+    react-native-macos: ">= 0.61.0"
+    react-native-windows: ">= 0.61.0"
+  peerDependenciesMeta:
+    react-native-macos:
+      optional: true
+    react-native-windows:
+      optional: true
+  checksum: a14c7de784f78c360b41fc723221d1091ccf59dc12ff5dcadf11c7fe078ae081afa1b95f2fe3cf0d4fcd25bc0e2a04cc56fb85aff8437de19cb2eba7d95362df
+  languageName: node
+  linkType: hard
+
 "@react-native-community/blur@npm:^4.4.0":
   version: 4.4.1
   resolution: "@react-native-community/blur@npm:4.4.1"
@@ -3140,6 +3157,7 @@ __metadata:
     "@babel/core": ^7.20.0
     "@babel/preset-env": ^7.20.0
     "@babel/runtime": ^7.20.0
+    "@react-native-clipboard/clipboard": ^1.14.2
     "@react-native-community/blur": ^4.4.0
     "@react-native/babel-preset": 0.74.85
     "@react-native/eslint-config": 0.74.85

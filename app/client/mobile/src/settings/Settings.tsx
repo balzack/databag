@@ -7,21 +7,29 @@ import ImagePicker from 'react-native-image-crop-picker';
 import {BlurView} from '@react-native-community/blur';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import { Colors } from '../constants/Colors';
+import {InputCode} from '../utils/InputCode';
+import Clipboard from '@react-native-clipboard/clipboard';
 
 export function Settings({ showLogout }: { showLogout: boolean }) {
   const { state, actions } = useSettings();
   const [alert, setAlert] = useState(false);
   const [details, setDetails] = useState(false);
   const [sealing, setSealing] = useState(false);
+  const [auth, setAuth] = useState(false);
+  const [clear, setClear] = useState(false);
   const [sealDelete, setSealDelete] = useState(false);
   const [sealReset, setSealReset] = useState(false);
   const [sealConfig, setSealConfig] = useState(false);
+  const [savingAuth, setSavingAuth] = useState(false);
   const [savingSeal, setSavingSeal] = useState(false);
   const [savingDetails, setSavingDetails] = useState(false);
   const [savingRegistry, setSavingRegistry] = useState(false);
   const [savingNotifications, setSavingNotifications] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [secretCopy, setSecretCopy] = useState(false);
+  const [confirmingAuth, setConfirmingAuth] = useState(false);
+  const [authMessage, setAuthMessage] = useState('');
 
   const selectImage = async () => {
     try {
@@ -36,6 +44,71 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
     }
     catch (err) {
       console.log(err);
+    }
+  }
+
+  const setMfa = async (flag: boolean) => {
+    if (!savingAuth) {
+      setSavingAuth(true);
+      try {   
+        if (flag) {
+          await actions.enableMFA();
+          setAuthMessage('');
+          actions.setCode('');
+          setAuth(true);
+        } else { 
+          setClear(true);
+        }   
+      } catch (err) {
+        console.log(err)
+        setAlert(true);
+      }
+      setSavingAuth(false);
+    }
+  }
+
+  const clearAuth = async () => {
+    if (!confirmingAuth) {
+      setConfirmingAuth(true);
+      try {
+        await actions.disableMFA();
+        setClear(false);
+      }
+      catch (err) {
+        console.log(err);
+        setAlert(true);
+      }
+      setConfirmingAuth(false);
+    }
+  }
+
+  const confirmAuth = async () => {
+    if (!confirmingAuth) {
+      setConfirmingAuth(true);
+      try {
+        await actions.confirmMFA();
+        setAuth(false);
+      }
+      catch(err) {
+        if (err.message === '401') {
+          setAuthMessage(state.strings.mfaError);
+        } else if (err.message === '429') {
+          setAuthMessage(state.strings.mfaDisabled);
+        } else {
+          setAuthMessage(`${state.strings.error}: ${state.strings.tryAgain}`); 
+        }
+      }
+      setConfirmingAuth(false);
+    }
+  }
+
+  const copySecret = async () => {
+    if (!secretCopy) {
+      setSecretCopy(true);
+      Clipboard.setString(state.secretText);
+      setTimeout(() => {
+        setSecretCopy(false);
+      }, 2000);
     }
   }
 
@@ -289,7 +362,7 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
                 <TouchableOpacity activeOpacity={1} onPress={() => setRegistry(!state.config.searchable)}>
                   <Text style={styles.controlLabel}>{state.strings.mfaTitle}</Text>
                 </TouchableOpacity>
-                <Switch style={styles.controlSwitch} value={state.config.searchable} onValueChange={setRegistry} />
+                <Switch style={styles.controlSwitch} value={state.config.mfaEnabled} onValueChange={setMfa} />
               </View>
             </View>
             <View style={styles.attribute}>
@@ -672,6 +745,75 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
                 <Button mode="contained" loading={savingDetails} onPress={saveDetails}>{ state.strings.save }</Button>
               </View>
             </Surface> 
+          </KeyboardAwareScrollView>
+        </View>
+      </Modal>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        supportedOrientations={['portrait', 'landscape']}
+        visible={auth}
+        onRequestClose={() => setAuth(false)}>
+        <View style={styles.modal}>
+          <BlurView
+            style={styles.blur}
+            blurType="dark"
+            blurAmount={2}
+            reducedTransparencyFallbackColor="dark"
+          />
+          <KeyboardAwareScrollView style={styles.container} contentContainerStyle={styles.content}>
+            <Surface elevation={5} mode="flat" style={styles.surface}>
+              <Text style={styles.modalLabel}>{ state.strings.mfaTitle }</Text>
+              <IconButton style={styles.modalClose} icon="close" size={24} onPress={() => setAuth(false)} />
+              <Text style={styles.modalDescription}>{ state.strings.mfaSteps }</Text>
+              <Image style={styles.secretImage} resizeMode={'contain'} source={{ uri: state.secretImage }} />
+
+              <View style={styles.secretText}>
+                <Text style={styles.secret} selectable={true} adjustsFontSizeToFit={true} numberOfLines={1}>{ state.secretText }</Text>
+                <TouchableOpacity onPress={copySecret}>
+                  <Icon style={styles.secretIcon} size={18} source={secretCopy ? 'check' : 'content-copy'} color={Colors.primary} />
+                </TouchableOpacity>
+              </View>
+
+              <InputCode onChangeText={actions.setCode} />
+
+              <View style={styles.authMessage}>
+                <Text style={styles.authMessageText}>{ authMessage }</Text>
+              </View>
+
+              <View style={styles.modalControls}>
+                <Button mode="outlined" onPress={() => setAuth(false)}>{ state.strings.cancel }</Button>
+                <Button mode="contained" loading={confirmingAuth} disabled={state.code.length !== 6} onPress={confirmAuth}>{ state.strings.mfaConfirm }</Button>
+              </View>
+
+            </Surface>
+          </KeyboardAwareScrollView>
+        </View>
+      </Modal>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        supportedOrientations={['portrait', 'landscape']}
+        visible={clear}
+        onRequestClose={() => setClear(false)}>
+        <View style={styles.modal}>
+          <BlurView
+            style={styles.blur}
+            blurType="dark"
+            blurAmount={2}
+            reducedTransparencyFallbackColor="dark"
+          />
+          <KeyboardAwareScrollView style={styles.container} contentContainerStyle={styles.content}>
+            <Surface elevation={5} mode="flat" style={styles.surface}>
+              <Text style={styles.modalLabel}>{ state.strings.mfaTitle }</Text>
+              <IconButton style={styles.modalClose} icon="close" size={24} onPress={() => setClear(false)} />
+              <Text style={styles.modalDescription}>{ state.strings.disablePrompt }</Text>
+ 
+              <View style={styles.modalControls}>
+                <Button mode="outlined" onPress={() => setClear(false)}>{ state.strings.cancel }</Button>
+                <Button mode="contained" loading={confirmingAuth} onPress={clearAuth}>{ state.strings.disable }</Button>
+              </View>
+            </Surface>
           </KeyboardAwareScrollView>
         </View>
       </Modal>
