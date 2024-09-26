@@ -17,11 +17,13 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
   const [sealing, setSealing] = useState(false);
   const [auth, setAuth] = useState(false);
   const [clear, setClear] = useState(false);
+  const [change, setChange] = useState(false);
   const [sealDelete, setSealDelete] = useState(false);
   const [sealReset, setSealReset] = useState(false);
   const [sealConfig, setSealConfig] = useState(false);
   const [savingAuth, setSavingAuth] = useState(false);
   const [savingSeal, setSavingSeal] = useState(false);
+  const [savingChange, setSavingChange] = useState(false);
   const [savingDetails, setSavingDetails] = useState(false);
   const [savingRegistry, setSavingRegistry] = useState(false);
   const [savingNotifications, setSavingNotifications] = useState(false);
@@ -30,6 +32,27 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
   const [secretCopy, setSecretCopy] = useState(false);
   const [confirmingAuth, setConfirmingAuth] = useState(false);
   const [authMessage, setAuthMessage] = useState('');
+
+  const changeLogin = () => {
+    actions.setPassword('');
+    actions.setConfirm('');
+    setChange(true);
+  }
+
+  const saveChange = async () => {
+    if (!savingChange) {
+      setSavingChange(true)
+      try {
+        await actions.setLogin()
+        setChange(false);
+      } catch (err) {
+        console.log(err)
+        setChange(false);
+        setAlert(true);
+      }
+      setSavingChange(false)
+    }   
+  }
 
   const selectImage = async () => {
     try {
@@ -345,7 +368,7 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
                 <TouchableOpacity activeOpacity={1} onPress={() => setRegistry(!state.config.pushEnabled)}>
                   <Text style={styles.controlLabel}>{state.strings.enableNotifications}</Text>
                 </TouchableOpacity>
-                <Switch style={styles.controlSwitch} value={state.config.pushEnabled} onValueChange={setRegistry} />
+                <Switch style={styles.controlSwitch} value={state.config.pushEnabled} onValueChange={setNotifications} />
               </View>
             </View>
           </View>
@@ -370,7 +393,7 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
                 <Icon size={24} source="login" />
               </View>
               <View style={styles.control}>
-                <TouchableOpacity activeOpacity={1} onPress={() => manageSeal}>
+                <TouchableOpacity activeOpacity={1} onPress={changeLogin}>
                   <Text style={styles.controlLabel}>{state.strings.changeLogin}</Text>
                 </TouchableOpacity>
               </View>
@@ -817,6 +840,108 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
           </KeyboardAwareScrollView>
         </View>
       </Modal>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        supportedOrientations={['portrait', 'landscape']}
+        visible={change}
+        onRequestClose={() => setChange(false)}>
+        <View style={styles.modal}>
+          <BlurView
+            style={styles.blur}
+            blurType="dark"
+            blurAmount={2}
+            reducedTransparencyFallbackColor="dark"
+          />
+          <KeyboardAwareScrollView style={styles.container} contentContainerStyle={styles.content}>
+            <Surface elevation={5} mode="flat" style={styles.surface}>
+              <Text style={styles.modalLabel}>{ state.strings.changeLogin }</Text>
+              <IconButton style={styles.modalClose} icon="close" size={24} onPress={() => setChange(false)} />
+              <TextInput
+                style={styles.input}
+                mode="flat"
+                autoCapitalize="none"
+                autoComplete="off"
+                autoCorrect={false}
+                label={state.strings.username}
+                value={state.handle}
+                left={<TextInput.Icon style={styles.inputIcon} icon="account" />}
+                right={
+                  !state.checked ? (
+                    <TextInput.Icon style={styles.icon}
+                      icon="refresh"
+                    />
+                  ) : state.taken ? (
+                    <TextInput.Icon style={styles.icon} color={Colors.danger}
+                      icon="account-cancel-outline"
+                    />
+                  ) : (
+                    <></>
+                  )
+                }
+  
+                onChangeText={value => actions.setHandle(value)}
+              />
+              <TextInput
+                style={styles.input}
+                mode="flat"
+                autoCapitalize="none"
+                autoComplete="off"
+                autoCorrect={false}
+                value={state.password}
+                label={state.strings.password}
+                secureTextEntry={!showPassword}
+                left={<TextInput.Icon style={styles.icon} icon="lock" />}
+                right={
+                  showPassword ? (
+                    <TextInput.Icon style={styles.icon}
+                      icon="eye-off"
+                      onPress={() => setShowPassword(false)}
+                    />
+                  ) : (
+                    <TextInput.Icon style={styles.icon}
+                      icon="eye"
+                      onPress={() => setShowPassword(true)}
+                    />
+                  )
+                }
+                onChangeText={value => actions.setPassword(value)}
+              />
+              <TextInput
+                style={styles.input}
+                mode="flat"
+                autoCapitalize="none"
+                autoComplete="off"
+                autoCorrect={false}
+                value={state.confirm}
+                label={state.strings.confirmPassword}
+                secureTextEntry={!showConfirm}
+                left={<TextInput.Icon style={styles.icon} icon="lock" />}
+                right={
+                  showPassword ? (
+                    <TextInput.Icon style={styles.icon}
+                      icon="eye-off"
+                      onPress={() => setShowConfirm(false)}
+                    />
+                  ) : (
+                    <TextInput.Icon style={styles.icon}
+                      icon="eye"
+                      onPress={() => setShowConfirm(true)}
+                    />
+                  )
+                }
+                onChangeText={value => actions.setConfirm(value)}
+              />
+
+              <View style={styles.modalControls}>
+                <Button mode="outlined" onPress={() => setChange(false)}>{ state.strings.cancel }</Button>
+                <Button mode="contained" loading={savingChange} disabled={state.password === '' || state.password !== state.confirm || state.taken || !state.checked} onPress={saveChange}>{ state.strings.update }</Button>
+              </View>
+            </Surface>
+          </KeyboardAwareScrollView>
+        </View>
+      </Modal>
+ 
     </>
   );
 }

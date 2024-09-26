@@ -200,8 +200,13 @@ export function useSettings() {
       } else {
         debounce.current = setTimeout(async () => {
           const { settings } = getSession()
-          const available = await settings.getUsernameStatus(handle)
-          updateState({ taken: !available, checked: true })
+          try {
+            const available = await settings.getUsernameStatus(handle)
+            updateState({ taken: !available, checked: true })
+          }
+          catch (err) {
+            console.log(err);
+          }
         }, DEBOUNCE_MS)
       }
     },
