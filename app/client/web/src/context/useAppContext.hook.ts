@@ -56,9 +56,9 @@ export function useAppContext() {
       )
       updateState({ session: login })
     },
-    accountLogout: async () => {
+    accountLogout: async (all: boolean) => {
       if (state.session) {
-        await sdk.current.logout(state.session, false)
+        await sdk.current.logout(state.session, all)
         updateState({ session: null })
       }
     },

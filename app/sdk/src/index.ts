@@ -5,6 +5,7 @@ import { type Logging, ConsoleLogging } from './logging';
 import { type Store, OfflineStore, OnlineStore, NoStore } from './store';
 import { setLogin } from './net/setLogin';
 import { clearLogin } from './net/clearLogin';
+import { removeAccount } from './net/removeAccount';
 import { setAccess } from './net/setAccess';
 import { addAccount } from './net/addAccount';
 import { setAdmin } from './net/setAdmin';
@@ -77,6 +78,24 @@ export class DatabagSDK {
     const login: Login = { guid, node, secure, token: appToken, timestamp: created, pushSupported };
     await this.store.setLogin(login);
     return new SessionModule(this.store, this.crypto, this.log, guid, appToken, node, secure, created);
+  }
+
+  public async remove(session: Session): Promise<void> {
+    const sessionModule = session as SessionModule;
+    const params = await sessionModule.close();
+    try {
+      await this.store.clearLogin();
+    }
+    catch(err) {
+      this.log.error(err);
+    }
+    try {
+      const { node, secure, token } = params;
+      await removeAccount(node, secure, token);
+    }
+    catch(err) {
+      this.log.error(err);
+    }
   }
 
   public async logout(session: Session, all: boolean): Promise<void> {

@@ -18,6 +18,10 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
   const [auth, setAuth] = useState(false);
   const [clear, setClear] = useState(false);
   const [change, setChange] = useState(false);
+  const [logout, setLogout] = useState(false);
+  const [remove, setRemove] = useState(false);
+  const [applyingLogout, setApplyingLogout] = useState(false);
+  const [applyingRemove, setApplyingRemove] = useState(false);
   const [sealDelete, setSealDelete] = useState(false);
   const [sealReset, setSealReset] = useState(false);
   const [sealConfig, setSealConfig] = useState(false);
@@ -67,6 +71,38 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
     }
     catch (err) {
       console.log(err);
+    }
+  }
+
+  const applyRemove = async () => {
+    if (!applyingRemove) {
+      setApplyingRemove(true);
+      try {
+        await actions.remove();
+        setRemove(false);
+      }
+      catch (err) {
+        console.log(err);
+        setRemove(false);
+        setAlert(true);
+      }
+      setApplyingRemove(false);
+    }
+  }
+
+  const applyLogout = async () => {
+    if (!applyingLogout) {
+      setApplyingLogout(true);
+      try {
+        await actions.logout();
+        setLogout(false);
+      }
+      catch (err) {
+        console.log(err);
+        setLogout(false);
+        setAlert(true);
+      }
+      setApplyingLogout(false);
     }
   }
 
@@ -404,7 +440,7 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
                   <Icon size={24} source="logout" />
                 </View>
                 <View style={styles.control}>
-                  <TouchableOpacity activeOpacity={1} onPress={() => manageSeal}>
+                  <TouchableOpacity activeOpacity={1} onPress={() => setLogout(true)}>
                     <Text style={styles.controlLabel}>{state.strings.logout}</Text>
                   </TouchableOpacity>
                 </View>
@@ -415,7 +451,7 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
                 <Icon size={24} source="account-remove" />
               </View>
               <View style={styles.control}>
-                <TouchableOpacity activeOpacity={1} onPress={() => manageSeal}>
+                <TouchableOpacity activeOpacity={1} onPress={() => setRemove(true)}>
                   <Text style={styles.dangerLabel}>{state.strings.deleteAccount}</Text>
                 </TouchableOpacity>
               </View>
@@ -936,6 +972,75 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
               <View style={styles.modalControls}>
                 <Button mode="outlined" onPress={() => setChange(false)}>{ state.strings.cancel }</Button>
                 <Button mode="contained" loading={savingChange} disabled={state.password === '' || state.password !== state.confirm || state.taken || !state.checked} onPress={saveChange}>{ state.strings.update }</Button>
+              </View>
+            </Surface>
+          </KeyboardAwareScrollView>
+        </View>
+      </Modal>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        supportedOrientations={['portrait', 'landscape']}
+        visible={logout}
+        onRequestClose={() => setLogout(false)}>
+        <View style={styles.modal}>
+          <BlurView
+            style={styles.blur}
+            blurType="dark"
+            blurAmount={2}
+            reducedTransparencyFallbackColor="dark"
+          />
+          <KeyboardAwareScrollView style={styles.container} contentContainerStyle={styles.content}>
+            <Surface elevation={5} mode="flat" style={styles.surface}>
+              <Text style={styles.modalLabel}>{ state.strings.loggingOut }</Text>
+              <IconButton style={styles.modalClose} icon="close" size={24} onPress={() => setLogout(false)} />
+
+              <View style={styles.allControl}>
+                <Text style={styles.controlLabel}>{state.strings.allDevices}</Text>
+                <Switch style={styles.controlSwitch} value={state.all} onValueChange={actions.setAll} />
+              </View>
+
+              <View style={styles.modalControls}>
+                <Button mode="outlined" onPress={() => setLogout(false)}>{ state.strings.cancel }</Button>
+                <Button mode="contained" loading={applyingLogout} onPress={applyLogout}>{ state.strings.logout }</Button>
+              </View>
+            </Surface>
+          </KeyboardAwareScrollView>
+        </View>
+      </Modal>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        supportedOrientations={['portrait', 'landscape']}
+        visible={remove}
+        onRequestClose={() => setRemove(false)}>
+        <View style={styles.modal}>
+          <BlurView
+            style={styles.blur}
+            blurType="dark"
+            blurAmount={2}
+            reducedTransparencyFallbackColor="dark"
+          />
+          <KeyboardAwareScrollView style={styles.container} contentContainerStyle={styles.content}>
+            <Surface elevation={5} mode="flat" style={styles.surface}>
+              <Text style={styles.modalLabel}>{ state.strings.deleteAccount }</Text>
+              <IconButton style={styles.modalClose} icon="close" size={24} onPress={() => setRemove(false)} />
+
+              <TextInput
+                style={styles.input}
+                mode="flat"
+                autoCapitalize="none"
+                autoComplete="off"
+                autoCorrect={false}
+                value={state.remove}
+                label={state.strings.typeDelete}
+                left={<TextInput.Icon style={styles.icon} icon="delete-outline" />}
+                onChangeText={value => actions.setRemove(value)}
+              />
+
+              <View style={styles.modalControls}>
+                <Button mode="outlined" onPress={() => setRemove(false)}>{ state.strings.cancel }</Button>
+                <Button mode="contained" loading={applyingRemove} disabled={state.remove !== state.strings.deleteKey} style={styles.remove} onPress={applyRemove}>{ state.strings.delete }</Button>
               </View>
             </Surface>
           </KeyboardAwareScrollView>

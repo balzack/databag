@@ -77,10 +77,16 @@ export function useAppContext() {
       );
       updateState({session: login});
     },
-    accountLogout: async () => {
+    accountLogout: async (all: boolean) => {
       if (state.session) {
-        await sdk.current.logout(state.session, false);
+        await sdk.current.logout(state.session, all);
         updateState({session: null});
+      }
+    },
+    accountRemove: async () => {
+      if (state.session) {
+        await sdk.current.remove(state.session);
+        updateState({ session: null });
       }
     },
     accountCreate: async (

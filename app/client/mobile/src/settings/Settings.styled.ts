@@ -28,6 +28,9 @@ export const styles = StyleSheet.create({
     height: '100%',
     gap: 8,
   },
+  remove: {
+    backgroundColor: Colors.danger,
+  },
   surface: {
     padding: 16,
   },
@@ -210,6 +213,14 @@ export const styles = StyleSheet.create({
   labelSet: {
     fontSize: 16,
     flexGrow: 1,
+  },
+  allControl: {
+    flexShrink: 1,
+    flexGrow: 1,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingTop: 16,
   },
   control: {
     flexShrink: 1,

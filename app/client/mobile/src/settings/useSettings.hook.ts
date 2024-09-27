@@ -19,6 +19,7 @@ export function useSettings() {
     all: false,
     password: '',
     confirm: '',
+    remove: '',
     username: '',
     taken: false,
     checked: true,
@@ -192,6 +193,9 @@ export function useSettings() {
     logout: async () => {
       await app.actions.accountLogout(state.all)
     },
+    remove: async () => {
+      await app.actions.accountRemove()
+    },
     setHandle: (handle: string) => {
       updateState({ handle, taken: false, checked: false })
       clearTimeout(debounce.current)
@@ -215,6 +219,9 @@ export function useSettings() {
     },
     setConfirm: (confirm: string) => {
       updateState({ confirm })
+    },
+    setRemove: (remove: string) => {
+      updateState({ remove });
     },
     setName: (name: string) => {
       updateState({ name })

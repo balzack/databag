@@ -31,6 +31,7 @@ const Strings = [
     monthEnd: 'dd/mm',
     error: 'Error',
     tryAgain: 'Please try again.',
+    allDevices: 'Logout of all devices',
 
     // seal wizard
     sealUnset: 'Generate a key to enable end-to-end encrypted topics.',
@@ -246,6 +247,7 @@ const Strings = [
     monthEnd: 'jj/mm',
     error: 'Erreur',
     tryAgain: 'Veuillez réessayer.',
+    allDevices: 'Déconnexion de tous les appareils',
 
     messages: 'Messages',
     sealUnset:
@@ -461,6 +463,7 @@ const Strings = [
     monthEnd: 'dd/mm',
     error: 'Error',
     tryAgain: 'Inténtalo de nuevo.',
+    allDevices: 'Cerrar sesión en todos los dispositivos',
 
     sealUnset:
       'Genere una clave para habilitar temas cifrados de un extremo a otro.',
@@ -673,6 +676,7 @@ const Strings = [
     monthEnd: 'dd/mm',
     error: 'Fehler',
     tryAgain: 'Bitte versuche es erneut.',
+    allDevices: 'Abmelden aller Geräte',
 
     sealUnset:
       'Generieren Sie einen Schlüssel, um Ende-zu-Ende-verschlüsselte Themen zu ermöglichen.',
@@ -1038,6 +1042,7 @@ const Strings = [
     start: 'Crie Uma Conversa',
     started: 'Iniciar',
 
+    allDevices: 'Sair de todos os dispositivos',
     deleteMessage: 'Apagar Mensagem',
     blockMessage: 'Bloquear Mensagem',
     reportMessage: 'Denunciar Mensagem',
@@ -1183,6 +1188,7 @@ const Strings = [
     guest: 'Гость',
     leave: 'Покинуть',
     members: 'Участники',
+    allDevices: 'Выход из всех устройств',
     editSubject: 'Редактировать тему',
     topicMembers: 'Участники темы',
     leaveTopic: 'Покинуть тему',
