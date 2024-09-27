@@ -1,4 +1,4 @@
-import {useEffect, useState, useContext, useRef} from 'react';
+import {useEffect, useState, useContext} from 'react';
 import {AppContext} from '../context/AppContext';
 import {DisplayContext} from '../context/DisplayContext';
 import {ContextType} from '../context/ContextType';
@@ -9,14 +9,12 @@ export function useIdentity() {
 
   const [state, setState] = useState({
     all: false,
-    strings: display.state.strings,
     profile: {} as Profile,
     profileSet: false,
     imageUrl: null,
     strings: display.state.strings,
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const updateState = (value: any) => {
     setState(s => ({...s, ...value}));
   };
@@ -38,6 +36,7 @@ export function useIdentity() {
         identity.removeProfileListener(setProfile);
       };
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const actions = {

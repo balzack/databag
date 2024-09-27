@@ -15,7 +15,6 @@ export function useAppContext() {
     monthFirstDate: true,
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const updateState = (value: any) => {
     setState(s => ({...s, ...value}));
   };
@@ -37,6 +36,7 @@ export function useAppContext() {
 
   useEffect(() => {
     setup();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const actions = {

@@ -29,8 +29,8 @@ export class NativeCrypto implements Crypto {
 
   // generate random aes key
   public async aesKey(): Promise<{aesKeyHex: string}> {
-    const aes = await generateSecureRandom(32);
-    const aesHex = this.uint8ToHexStr(aes);
+    const aesKey = await generateSecureRandom(32);
+    const aesKeyHex = this.uint8ToHexStr(aesKey);
     return {aesKeyHex};
   }
 

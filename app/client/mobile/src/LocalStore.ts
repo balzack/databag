@@ -21,7 +21,7 @@ export class LocalStore implements SqlStore {
       const rows = await this.localStoreGet(
         `SELECT * FROM local_store WHERE key='${key}';`,
       );
-      if (rows.length == 1 && rows[0].value != null) {
+      if (rows.length === 1 && rows[0].value != null) {
         return rows[0].value;
       }
     } catch (err) {

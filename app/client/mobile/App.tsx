@@ -1,8 +1,7 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {Text} from 'react-native';
 import {AppContextProvider} from './src/context/AppContext';
 import {DisplayContextProvider} from './src/context/DisplayContext';
-import {styles} from './App.styled';
 import {NativeRouter} from 'react-router-native';
 import {Routes, Route} from 'react-router-dom';
 import {Root} from './src/root/Root';
@@ -10,13 +9,8 @@ import {Access} from './src/access/Access';
 import {Node} from './src/node/Node';
 import {Session} from './src/session/Session';
 
-import {SafeAreaView, StyleSheet, useColorScheme, View} from 'react-native';
-import {
-  MD3LightTheme,
-  MD3DarkTheme,
-  TextInput,
-  PaperProvider,
-} from 'react-native-paper';
+import {useColorScheme} from 'react-native';
+import {MD3LightTheme, MD3DarkTheme, PaperProvider} from 'react-native-paper';
 
 const databagColors = {
   light: {
@@ -107,7 +101,6 @@ const databagColors = {
 
 function App(): React.JSX.Element {
   const colorScheme = useColorScheme();
-  const [text, setText] = useState('');
 
   const theme =
     colorScheme === 'dark'

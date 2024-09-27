@@ -1,4 +1,4 @@
-import {useEffect, useContext, useState, useRef} from 'react';
+import {useEffect, useState} from 'react';
 import {getLanguageStrings} from '../constants/Strings';
 import {useWindowDimensions} from 'react-native';
 

@@ -1,4 +1,4 @@
-import {TextInput, Text, View, TouchableOpacity} from 'react-native';
+import {TextInput, Text, View} from 'react-native';
 import React, {useState, useRef} from 'react';
 import {styles} from './InputCode.styled';
 
@@ -20,7 +20,7 @@ export function InputCode({onChangeText, style}) {
 
   return (
     <View style={style}>
-      <View style={{width: '100%', height: 32}}>
+      <View style={styles.container}>
         <View style={styles.row}>
           <View style={styles.cell}>
             <Text style={styles.text}>{code.charAt(0)}</Text>

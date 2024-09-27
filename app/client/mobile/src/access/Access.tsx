@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Platform, KeyboardAvoidingView, View, Image} from 'react-native';
+import {View, Image} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {useAccess} from './useAccess.hook';
 import {styles} from './Access.styled';
@@ -17,9 +17,7 @@ import {BlurView} from '@react-native-community/blur';
 import {InputCode} from '../utils/InputCode';
 
 export function Access() {
-  const [text, setText] = useState('');
   const {state, actions} = useAccess();
-  const [disabled, setDisabled] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [alert, setAlert] = useState(false);
@@ -46,11 +44,6 @@ export function Access() {
           err.message === '403' ||
           err.message === '429'
         ) {
-          if (err.message === '429') {
-            setDisabled(true);
-          } else {
-            setDisabled(false);
-          }
           setOtp(true);
         } else {
           setAlert(true);

@@ -3,8 +3,6 @@ import {DisplayContext} from '../context/DisplayContext';
 import {AppContext} from '../context/AppContext';
 import {ContextType} from '../context/ContextType';
 
-const location = 'https://balzack.coredb.org';
-
 export function useAccess() {
   const debounceAvailable = useRef(setTimeout(() => {}, 0));
   const debounceTaken = useRef(setTimeout(() => {}, 0));
@@ -27,7 +25,6 @@ export function useAccess() {
     taken: false,
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const updateState = (value: any) => {
     setState(s => ({...s, ...value}));
   };
@@ -38,6 +35,7 @@ export function useAccess() {
       checkTaken(username, token, node, secure);
       getAvailable(node, secure);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.mode, state.username, state.token, state.node, state.secure]);
 
   const getAvailable = (node: string, secure: boolean) => {
@@ -88,7 +86,7 @@ export function useAccess() {
   useEffect(() => {
     const {layout} = display.state;
     updateState({layout});
-  }, [display.state.layout]);
+  }, [display.state]);
 
   const actions = {
     setMode: (mode: string) => {

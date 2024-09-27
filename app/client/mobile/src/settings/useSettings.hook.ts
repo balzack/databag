@@ -38,7 +38,6 @@ export function useSettings() {
     fullDayTime: false,
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const updateState = (value: any) => {
     setState(s => ({...s, ...value}));
   };
@@ -77,12 +76,13 @@ export function useSettings() {
       settings.removeConfigListener(setConfig);
       identity.removeProfileListener(setProfile);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     const {fullDayTime, monthFirstDate} = app.state;
     updateState({fullDayTime, monthFirstDate});
-  }, [app.state.fullDayTime, app.state.monthFirstDate]);
+  }, [app.state]);
 
   useEffect(() => {
     const {strings, dateFormat, timeFormat} = display.state;

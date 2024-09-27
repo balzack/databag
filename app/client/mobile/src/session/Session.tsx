@@ -1,13 +1,7 @@
-import React, {useState, useContext} from 'react';
+import React, {useState} from 'react';
 import {View, useColorScheme} from 'react-native';
 import {styles} from './Session.styled';
-import {
-  BottomNavigation,
-  Surface,
-  Menu,
-  Button,
-  Text,
-} from 'react-native-paper';
+import {BottomNavigation, Surface, Text} from 'react-native-paper';
 import {Settings} from '../settings/Settings';
 import {Channels} from '../channels/Channels';
 import {Contacts} from '../contacts/Contacts';
@@ -35,7 +29,7 @@ const ProfileDrawer = createDrawerNavigator();
 const DetailsDrawer = createDrawerNavigator();
 
 export function Session() {
-  const {state, actions} = useSession();
+  const {state} = useSession();
   const scheme = useColorScheme();
   const [index, setIndex] = useState(0);
   const [routes] = useState([
@@ -88,20 +82,20 @@ export function Session() {
 
 function DetailsScreen({nav}) {
   return (
-    <ProfileDrawer.Navigator
-      id="ProfileDrawer"
+    <DetailsDrawer.Navigator
+      id="DetailsDrawer"
       drawerContent={Details}
       screenOptions={{
         drawerPosition: 'right',
         drawerType: 'front',
         headerShown: false,
       }}>
-      <ProfileDrawer.Screen name="profile">
+      <DetailsDrawer.Screen name="details">
         {({navigation}) => (
           <ProfileScreen nav={{...nav, details: navigation}} />
         )}
-      </ProfileDrawer.Screen>
-    </ProfileDrawer.Navigator>
+      </DetailsDrawer.Screen>
+    </DetailsDrawer.Navigator>
   );
 }
 
@@ -181,15 +175,15 @@ function SettingsScreen({nav}) {
 }
 
 function HomeScreen({nav}) {
-  const [menu, setMenu] = useState(false);
-
   return (
     <View style={styles.frame}>
       <View style={styles.left}>
         <Surface elevation={2} mode="flat">
           <Identity openSettings={nav.settings.openDrawer} />
         </Surface>
-        <Surface style={styles.channels} elevation={1} mode="flat"></Surface>
+        <Surface style={styles.channels} elevation={1} mode="flat">
+          <Text>CHANNELS</Text>
+        </Surface>
       </View>
       <View style={styles.right}>
         <Text>CONVERSATION</Text>

@@ -1,9 +1,7 @@
-import {useEffect, useState, useContext, useRef} from 'react';
+import {useEffect, useState, useContext} from 'react';
 import {AppContext} from '../context/AppContext';
 import {DisplayContext} from '../context/DisplayContext';
 import {ContextType} from '../context/ContextType';
-
-const DEBOUNCE_MS = 1000;
 
 export function useSession() {
   const display = useContext(DisplayContext) as ContextType;
@@ -14,7 +12,6 @@ export function useSession() {
     strings: {},
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const updateState = (value: any) => {
     setState(s => ({...s, ...value}));
   };
@@ -22,7 +19,7 @@ export function useSession() {
   useEffect(() => {
     const {layout, strings} = display.state;
     updateState({layout, strings});
-  }, [display.state.layout, display.state.strings]);
+  }, [display.state]);
 
   const actions = {
     logout: async () => {

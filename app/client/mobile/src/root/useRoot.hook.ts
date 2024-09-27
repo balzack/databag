@@ -11,7 +11,6 @@ export function useRoot() {
     pathname: '',
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const updateState = (value: any) => {
     setState(s => ({...s, ...value}));
   };
@@ -19,7 +18,7 @@ export function useRoot() {
   useEffect(() => {
     const {pathname} = location;
     updateState({pathname});
-  }, [location.pathname]);
+  }, [location]);
 
   useEffect(() => {
     if (state.pathname === '/session' && !app.state.session) {
@@ -37,7 +36,7 @@ export function useRoot() {
     } else if (state.pathname !== '/session' && app.state.session) {
       navigate('/session');
     }
-  }, [state.pathname, app.state.session, app.state.node]);
+  }, [state.pathname, app.state.session, app.state.node, navigate]);
 
   const actions = {};
 
