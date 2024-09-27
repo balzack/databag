@@ -11,28 +11,37 @@ export class LocalStore implements SqlStore {
 
   public async open(path: string) {
     this.db = await SQLite.openDatabase({name: path, location: 'default'});
-    await this.localStoreSet("CREATE TABLE IF NOT EXISTS local_store (key text, value text, unique(key));");
+    await this.localStoreSet(
+      'CREATE TABLE IF NOT EXISTS local_store (key text, value text, unique(key));',
+    );
   }
 
   public async get(key: string, value: string, unset: string): Promise<string> {
     try {
-      const rows = await this.localStoreGet(`SELECT * FROM local_store WHERE key='${key}';`);
+      const rows = await this.localStoreGet(
+        `SELECT * FROM local_store WHERE key='${key}';`,
+      );
       if (rows.length == 1 && rows[0].value != null) {
         return rows[0].value;
       }
-    }
-    catch(err) {
+    } catch (err) {
       console.log(err);
     }
     return unset;
   }
 
   public async set(key: string, value: string): Promise<void> {
-    await this.localStoreSet('INSERT OR REPLACE INTO local_store (key, value) values (?, ?)', [key, value]);
+    await this.localStoreSet(
+      'INSERT OR REPLACE INTO local_store (key, value) values (?, ?)',
+      [key, value],
+    );
   }
 
   public async clear(key: string): Promise<void> {
-    await this.localStoreSet('INSERT OR REPLACE INTO local_store (key, value) values (?, null)', [key]);
+    await this.localStoreSet(
+      'INSERT OR REPLACE INTO local_store (key, value) values (?, null)',
+      [key],
+    );
   }
 
   private async localStoreSet(

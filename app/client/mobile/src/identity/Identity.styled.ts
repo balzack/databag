@@ -123,9 +123,6 @@ export const styles = StyleSheet.create({
     fontSize: 16,
   },
   controlSwitch: {
-    transform: [
-      { scaleX: 0.7 },
-      {scaleY: 0.7 },
-    ]
+    transform: [{scaleX: 0.7}, {scaleY: 0.7}],
   },
 });

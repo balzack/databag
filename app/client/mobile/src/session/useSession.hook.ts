@@ -1,34 +1,34 @@
-import { useEffect, useState, useContext, useRef } from 'react'
-import { AppContext } from '../context/AppContext'
-import { DisplayContext } from '../context/DisplayContext'
-import { ContextType } from '../context/ContextType'
+import {useEffect, useState, useContext, useRef} from 'react';
+import {AppContext} from '../context/AppContext';
+import {DisplayContext} from '../context/DisplayContext';
+import {ContextType} from '../context/ContextType';
 
-const DEBOUNCE_MS = 1000
+const DEBOUNCE_MS = 1000;
 
 export function useSession() {
-  const display = useContext(DisplayContext) as ContextType
-  const app = useContext(AppContext) as ContextType
+  const display = useContext(DisplayContext) as ContextType;
+  const app = useContext(AppContext) as ContextType;
 
   const [state, setState] = useState({
     layout: null,
     strings: {},
-  })
+  });
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const updateState = (value: any) => {
-    setState((s) => ({ ...s, ...value }))
-  }
+    setState(s => ({...s, ...value}));
+  };
 
   useEffect(() => {
-    const { layout, strings } = display.state;
-    updateState({ layout, strings });
+    const {layout, strings} = display.state;
+    updateState({layout, strings});
   }, [display.state.layout, display.state.strings]);
 
   const actions = {
     logout: async () => {
       await app.actions.accountLogout();
-    }
-  }
+    },
+  };
 
-  return { state, actions }
+  return {state, actions};
 }

@@ -8,7 +8,7 @@ const SETTINGS_DB = 'ls_v001.db';
 
 export function useAppContext() {
   const local = useRef(new LocalStore());
-  const sdk = useRef(new DatabagSDK(new NativeCrypto()))
+  const sdk = useRef(new DatabagSDK(new NativeCrypto()));
   const [state, setState] = useState({
     session: null as null | Session,
     fullDayTime: false,
@@ -22,9 +22,11 @@ export function useAppContext() {
 
   const setup = async () => {
     await local.current.open(SETTINGS_DB);
-    const fullDayTime = await local.current.get('time_format', '12h') === '24h';
-    const monthFirstDate = await local.current.get('date_format', 'month_first') === 'month_first';
-    
+    const fullDayTime =
+      (await local.current.get('time_format', '12h')) === '24h';
+    const monthFirstDate =
+      (await local.current.get('date_format', 'month_first')) === 'month_first';
+
     const store = new SessionStore();
     await store.open(DATABAG_DB);
     const session: Session | null = await sdk.current.initOfflineStore(store);
@@ -39,11 +41,14 @@ export function useAppContext() {
 
   const actions = {
     setMonthFirstDate: async (monthFirstDate: boolean) => {
-      updateState({ monthFirstDate });
-      await local.current.set('date_format', monthFirstDate ? 'month_first' : 'day_first');
+      updateState({monthFirstDate});
+      await local.current.set(
+        'date_format',
+        monthFirstDate ? 'month_first' : 'day_first',
+      );
     },
     setFullDayTime: async (fullDayTime: boolean) => {
-      updateState({ fullDayTime });
+      updateState({fullDayTime});
       await local.current.set('time_format', fullDayTime ? '24h' : '12h');
     },
     accountLogin: async (
@@ -86,7 +91,7 @@ export function useAppContext() {
     accountRemove: async () => {
       if (state.session) {
         await sdk.current.remove(state.session);
-        updateState({ session: null });
+        updateState({session: null});
       }
     },
     accountCreate: async (

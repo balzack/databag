@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import { Colors } from '../constants/Colors';
+import {Colors} from '../constants/Colors';
 
 export const styles = StyleSheet.create({
   modal: {
@@ -260,10 +260,7 @@ export const styles = StyleSheet.create({
     color: Colors.danger,
   },
   controlSwitch: {
-    transform: [
-      { scaleX: 0.7 },
-      {scaleY: 0.7 },
-    ]
+    transform: [{scaleX: 0.7}, {scaleY: 0.7}],
   },
   input: {
     width: '100%',
@@ -302,4 +299,4 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     color: Colors.danger,
   },
-})
+});

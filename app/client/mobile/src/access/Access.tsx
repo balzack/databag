@@ -1,10 +1,5 @@
 import React, {useState} from 'react';
-import {
-  Platform,
-  KeyboardAvoidingView,
-  View,
-  Image,
-} from 'react-native';
+import {Platform, KeyboardAvoidingView, View, Image} from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {useAccess} from './useAccess.hook';
 import {styles} from './Access.styled';
@@ -135,12 +130,14 @@ export function Access() {
                 left={<TextInput.Icon style={styles.icon} icon="lock" />}
                 right={
                   showPassword ? (
-                    <TextInput.Icon style={styles.icon}
+                    <TextInput.Icon
+                      style={styles.icon}
                       icon="eye-off"
                       onPress={() => setShowPassword(false)}
                     />
                   ) : (
-                    <TextInput.Icon style={styles.icon}
+                    <TextInput.Icon
+                      style={styles.icon}
                       icon="eye"
                       onPress={() => setShowPassword(true)}
                     />
@@ -174,7 +171,9 @@ export function Access() {
                 autoComplete="off"
                 autoCorrect={false}
                 label={state.strings.token}
-                left={<TextInput.Icon style={styles.icon} icon="ticket-account" />}
+                left={
+                  <TextInput.Icon style={styles.icon} icon="ticket-account" />
+                }
                 onChangeText={value => actions.setToken(value)}
               />
               <TextInput
@@ -216,7 +215,12 @@ export function Access() {
                     autoComplete="off"
                     autoCorrect={false}
                     label={state.strings.token}
-                    left={<TextInput.Icon style={styles.icon} icon="ticket-account" />}
+                    left={
+                      <TextInput.Icon
+                        style={styles.icon}
+                        icon="ticket-account"
+                      />
+                    }
                     onChangeText={value => actions.setToken(value)}
                   />
                 )}
@@ -257,12 +261,14 @@ export function Access() {
                 left={<TextInput.Icon style={styles.icon} icon="lock" />}
                 right={
                   showPassword ? (
-                    <TextInput.Icon style={styles.icon}
+                    <TextInput.Icon
+                      style={styles.icon}
                       icon="eye-off"
                       onPress={() => setShowPassword(false)}
                     />
                   ) : (
-                    <TextInput.Icon style={styles.icon}
+                    <TextInput.Icon
+                      style={styles.icon}
                       icon="eye"
                       onPress={() => setShowPassword(true)}
                     />
@@ -283,12 +289,14 @@ export function Access() {
                 left={<TextInput.Icon style={styles.icon} icon="lock" />}
                 right={
                   showPassword ? (
-                    <TextInput.Icon style={styles.icon}
+                    <TextInput.Icon
+                      style={styles.icon}
                       icon="eye-off"
                       onPress={() => setShowConfirm(false)}
                     />
                   ) : (
-                    <TextInput.Icon style={styles.icon}
+                    <TextInput.Icon
+                      style={styles.icon}
                       icon="eye"
                       onPress={() => setShowConfirm(true)}
                     />
@@ -343,12 +351,14 @@ export function Access() {
                 left={<TextInput.Icon style={styles.icon} icon="lock" />}
                 right={
                   showPassword ? (
-                    <TextInput.Icon style={styles.icon}
+                    <TextInput.Icon
+                      style={styles.icon}
                       icon="eye-off"
                       onPress={() => setShowPassword(false)}
                     />
                   ) : (
-                    <TextInput.Icon style={styles.icon}
+                    <TextInput.Icon
+                      style={styles.icon}
                       icon="eye"
                       onPress={() => setShowPassword(true)}
                     />

@@ -1,7 +1,13 @@
 import React, {useState, useContext} from 'react';
 import {View, useColorScheme} from 'react-native';
 import {styles} from './Session.styled';
-import {BottomNavigation, Surface, Menu, Button, Text} from 'react-native-paper';
+import {
+  BottomNavigation,
+  Surface,
+  Menu,
+  Button,
+  Text,
+} from 'react-native-paper';
 import {Settings} from '../settings/Settings';
 import {Channels} from '../channels/Channels';
 import {Contacts} from '../contacts/Contacts';
@@ -11,7 +17,11 @@ import {Details} from '../details/Details';
 import {Identity} from '../identity/Identity';
 import {useSession} from './useSession.hook';
 
-import {NavigationContainer, DefaultTheme, DarkTheme} from '@react-navigation/native';
+import {
+  NavigationContainer,
+  DefaultTheme,
+  DarkTheme,
+} from '@react-navigation/native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 
 const ChannelsRoute = () => <Channels />;
@@ -67,7 +77,8 @@ export function Session() {
         />
       )}
       {state.layout === 'large' && (
-        <NavigationContainer theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
+        <NavigationContainer
+          theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
           <DetailsScreen nav={sessionNav} />
         </NavigationContainer>
       )}
@@ -157,7 +168,7 @@ function SettingsScreen({nav}) {
       id="SettingsDrawer"
       drawerContent={Settings}
       screenOptions={{
-        drawerStyle: { width: '40%' },
+        drawerStyle: {width: '40%'},
         drawerPosition: 'right',
         drawerType: 'front',
         headerShown: false,
@@ -178,8 +189,7 @@ function HomeScreen({nav}) {
         <Surface elevation={2} mode="flat">
           <Identity openSettings={nav.settings.openDrawer} />
         </Surface>
-        <Surface style={styles.channels} elevation={1} mode="flat">
-        </Surface>
+        <Surface style={styles.channels} elevation={1} mode="flat"></Surface>
       </View>
       <View style={styles.right}>
         <Text>CONVERSATION</Text>
