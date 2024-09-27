@@ -13,6 +13,7 @@ export function useIdentity() {
     profile: {} as Profile,
     profileSet: false,
     imageUrl: null,
+    strings: display.state.strings,
   })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -41,8 +42,11 @@ export function useIdentity() {
   }, [])
 
   const actions = {
+    setAll: (all) => {
+      updateState({ all });
+    },
     logout: async () => {
-      await app.actions.accountLogout();
+      await app.actions.accountLogout(state.all);
     }
   }
 

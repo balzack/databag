@@ -54,4 +54,78 @@ export const styles = StyleSheet.create({
   username: {
     fontSize: 16,
   },
+  modal: {
+    display: 'flex',
+    width: '100%',
+    height: '100%',
+    alignItems: 'center',
+  },
+  blur: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+  },
+  container: {
+    width: 600,
+    maxWidth: '80%',
+  },
+  content: {
+    display: 'flex',
+    justifyContent: 'center',
+    height: '100%',
+    gap: 8,
+  },
+  surface: {
+    padding: 16,
+  },
+  modalHeader: {
+    width: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    flexDirection: 'row',
+  },
+  modalLabel: {
+    fontSize: 20,
+  },
+  modalClose: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    backgroundColor: 'transparent',
+  },
+  modalControls: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 16,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    marginTop: 16,
+  },
+  allControl: {
+    flexShrink: 1,
+    flexGrow: 1,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingTop: 16,
+  },
+  modalControls: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 16,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    marginTop: 16,
+  },
+  controlLabel: {
+    fontSize: 16,
+  },
+  controlSwitch: {
+    transform: [
+      { scaleX: 0.7 },
+      {scaleY: 0.7 },
+    ]
+  },
 });
