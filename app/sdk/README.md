@@ -48,6 +48,10 @@ Logout releases the Session interface
 
 ```DatabacgClientSDK::logout(session: Session, all: boolean): Promise<void>```
 
+Remove releases the Session interface and deletes the account from the server
+
+```DatabacgClientSDK::remove(session: Session): Promise<void>```
+
 <details>
   <summary>Storage can then be provided to the SDK to persist sessions</summary><br>
 
