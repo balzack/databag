@@ -34,7 +34,6 @@
     flex-direction: column;
     align-items: center;
     gap: 16px;
-    padding-bottom: 24px;
   }
 
   .secretImage {
@@ -45,6 +44,10 @@
   .secretText {
     display: flex;
     gap: 16px;
+  }
+
+  .authMessage {
+    height: 24px;
   }
 
   .copyIcon {

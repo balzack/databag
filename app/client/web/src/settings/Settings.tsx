@@ -71,6 +71,7 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
   const [sealDelete, setSealDelete] = useState(false)
   const [sealReset, setSealReset] = useState(false)
   const [sealConfig, setSealConfig] = useState(false)
+  const [authMessage, setAuthMessage] = useState('');
 
   const logout = () =>
     modals.openConfirmModal({
@@ -90,6 +91,20 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
       labels: { confirm: state.strings.logout, cancel: state.strings.cancel },
       onConfirm: actions.logout,
     })
+
+  const clearMfa = () => {
+    modals.openConfirmModal({
+      title: state.strings.confirmDisable,
+      withCloseButton: true,
+      overlayProps: {
+        backgroundOpacity: 0.55,
+        blur: 3,
+      },
+      children: <Text>{state.strings.disablePrompt}</Text>,
+      labels: { confirm: state.strings.disable, cancel: state.strings.cancel },
+      onConfirm:  actions.disableMFA
+    })
+  }
 
   const setRegistry = async (checked: boolean) => {
     if (!savingRegistry) {
@@ -144,10 +159,12 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
       setAddingMfa(true);
       try {
         if (checked) {
+          actions.setCode('');
+          setAuthMessage('');
           await actions.enableMFA();
           mfaOpen();
         } else {
-          await actions.disableMFA();
+          clearMfa();
         }
       } catch (err) {
         console.log(err)
@@ -164,8 +181,13 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
         await actions.confirmMFA();
         mfaClose();
       } catch (err) {
-        console.log(err);
-        showError();
+        if (err.message === '401') {
+          setAuthMessage(state.strings.mfaError);
+        } else if (err.message === '429') {
+          setAuthMessage(state.strings.mfaDisabled);
+        } else {
+          setAuthMessage(`${state.strings.error}: ${state.strings.tryAgain}`);
+        }
       }
       setSavingMfa(false);
     }
@@ -747,6 +769,7 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
               className={classes.mfaPin}
               onChange={(event) => actions.setCode(event)}
             />
+            <Text className={classes.authMessage}>{ authMessage }</Text>
           </div>
           <div className={classes.control}>
             <Button variant="default" onClick={mfaClose}>
