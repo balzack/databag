@@ -100,8 +100,13 @@ export class SessionModule implements Session {
   private getStatus(): string {
     return this.status;
   }
+
+  public getParams(): { node: string, secure: boolean, token: string } {
+    const { node, secure, token } = this;
+    return { node, secure, token };
+  }
  
-  public async close(): Promise<{ node: string, secure: boolean, token: string }> {
+  public async close(): Promise<void> {
     await this.content.close();
     await this.attribute.close();
     await this.alias.close();
@@ -110,8 +115,6 @@ export class SessionModule implements Session {
     await this.settings.close();
     await this.stream.close();
     this.connection.close();
-    const { node, secure, token } = this;
-    return { node: node, secure: secure, token: token };
   }
 
   public getSettings(): Settings {

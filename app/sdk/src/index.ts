@@ -82,16 +82,11 @@ export class DatabagSDK {
 
   public async remove(session: Session): Promise<void> {
     const sessionModule = session as SessionModule;
-    const params = await sessionModule.close();
+    const { node, secure, token } = sessionModule.getParams();
+    await removeAccount(node, secure, token);
+    await sessionModule.close();
     try {
       await this.store.clearLogin();
-    }
-    catch(err) {
-      this.log.error(err);
-    }
-    try {
-      const { node, secure, token } = params;
-      await removeAccount(node, secure, token);
     }
     catch(err) {
       this.log.error(err);
@@ -100,14 +95,14 @@ export class DatabagSDK {
 
   public async logout(session: Session, all: boolean): Promise<void> {
     const sessionModule = session as SessionModule;
-    const params = await sessionModule.close();
+    const { node, secure, token } = sessionModule.getParams();
+    await sessionModule.close();
     try {
       await this.store.clearLogin();
     }
     catch(err) {
       this.log.error(err);
     }
-    const { node, secure, token } = params;
     clearLogin(node, secure, token, all).then(() => {}).catch(err => {
       console.log(err);
     });

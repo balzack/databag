@@ -53,7 +53,6 @@ export interface Settings {
   unlockSeal(password: string): Promise<void>;
   updaterSeal(password: string): Promise<void>;
   forgetSeal(): Promise<void>;
-  deleteAccount(): Promise<void>;
 
   addConfigListener(ev: (config: Config) => void): void;
   removeConfigListener(ev: (config: Config) => void): void;
