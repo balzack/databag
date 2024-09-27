@@ -1,6 +1,5 @@
 import React, { useState, useContext } from 'react'
-import { Text, Drawer, Button } from '@mantine/core'
-import { AppContext } from '../context/AppContext'
+import { Drawer } from '@mantine/core'
 import { DisplayContext } from '../context/DisplayContext'
 import { ContextType } from '../context/ContextType'
 import classes from './Session.module.css'
@@ -15,7 +14,6 @@ import { useDisclosure } from '@mantine/hooks'
 
 export function Session() {
   const [tab, setTab] = useState('channels')
-  const app = useContext(AppContext) as ContextType
   const display = useContext(DisplayContext) as ContextType
   const [settings, { open: openSettings, close: closeSettings }] =
     useDisclosure(false)

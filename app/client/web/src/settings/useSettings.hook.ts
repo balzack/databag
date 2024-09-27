@@ -3,9 +3,6 @@ import { AppContext } from '../context/AppContext'
 import { DisplayContext } from '../context/DisplayContext'
 import { ContextType } from '../context/ContextType'
 import {
-  Session,
-  Settings,
-  Identity,
   type Profile,
   type Config,
 } from 'databag-client-sdk'
@@ -295,7 +292,7 @@ export function useSettings() {
       const { identity } = getSession()
       const processImg = () => {
         return new Promise<string>((resolve, reject) => {
-          let img = new Image()
+          const img = new Image()
           img.onload = () => {
             try {
               const canvas = document.createElement('canvas')

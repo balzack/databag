@@ -1,8 +1,7 @@
-import { useState, useEffect, useRef, useContext } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { DatabagSDK, Session } from 'databag-client-sdk'
 import { SessionStore } from '../SessionStore'
 import { WebCrypto } from '../WebCrypto'
-import { ContextType } from './ContextType'
 
 export function useAppContext() {
   const sdk = useRef(new DatabagSDK(new WebCrypto()))

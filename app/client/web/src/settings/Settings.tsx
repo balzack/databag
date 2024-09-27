@@ -1,4 +1,4 @@
-import { useSettings } from './useSettings.hook'
+import React, { useSettings } from './useSettings.hook'
 import {
   Modal,
   Textarea,
@@ -16,7 +16,6 @@ import {
 } from '@mantine/core'
 import classes from './Settings.module.css'
 import {
-  IconKey,
   IconLock,
   IconUser,
   IconClock,
@@ -215,7 +214,7 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
 
   const selectImage = (target: HTMLInputElement) => {
     if (target.files) {
-      var reader = new FileReader()
+      const reader = new FileReader()
       reader.onload = () => {
         if (typeof reader.result === 'string') {
           actions.setEditImage(reader.result)
@@ -340,7 +339,6 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
 
   const onCropComplete = useCallback((crop: Area) => {
     actions.setEditImageCrop(crop)
-    // eslint-disable-next-line
   }, [])
 
   return (

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import React from 'react'
 import classes from './Identity.module.css'
 import { useIdentity } from './useIdentity.hook'
 import { Text, Image, Menu, Switch } from '@mantine/core'
@@ -18,7 +18,6 @@ export function Identity({
   contacts: () => void
 }) {
   const { state, actions } = useIdentity()
-  const [all, setAll] = useState(false)
 
   const logout = () =>
     modals.openConfirmModal({
@@ -63,7 +62,7 @@ export function Identity({
         <Menu.Item onClick={settings} leftSection={<IconSettings />}>
           {state.strings.settings}
         </Menu.Item>
-        <Menu.Item leftSection={<IconAddressBook />}>
+        <Menu.Item onClick={contacts} leftSection={<IconAddressBook />}>
           {state.strings.contacts}
         </Menu.Item>
         <Menu.Item onClick={logout} leftSection={<IconLogout />}>
