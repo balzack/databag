@@ -1,4 +1,5 @@
 import { Login, ProfileEntity, defaultProfileEntity, ConfigEntity, defaultConfigEntity } from './entities';
+import type { ArticleRevision, ArticleDetail, ArticleItem, ChannelItem, CardItem, CardRevision, CardNotification, CardProfile, CardDetail, ChannelRevision, ChannelSummary, ChannelDetail } from './items';
 import type { Logging } from './logging';
 
 export interface Store {
@@ -19,6 +20,34 @@ export interface Store {
   setSettingsRevision(guid: string, revision: number): Promise<void>;
   getSettingsData(guid: string): Promise<ConfigEntity>;
   setSettingsData(guid: string, data: ConfigEntity): Promise<void>;
+
+  getContactRevision(guid: string): Promise<number>;
+  setContactRevision(guid: string, revision: number): Promise<void>;
+
+  getContacts(guid: string): Promise<CardItem[]>;
+  setContactCardRevision(guid: string, cardId: string, revision: CardRevision): Promise<void>;
+  setContactCardProfile(guid: string, cardId: string, profile: CardProfile): Promise<void>;
+  setContactCardDetail(guid: string, cardId: string, detail: CardDetail): Promise<void>;
+  setContactCardBlocked(guid: string, cardId: string, blocked: boolean): Promise<void>;
+
+  setContactCardRemoteRevision(guid: string, cardId: string, notification: CardNotification): Promise<void>;
+  setContactCardSyncRevision(guid: string, cardId: string, notification: CardNotification): Promise<void>;
+  setContactCardOffsync(guid: string, cardId: string, offsync: boolean): Promise<void>;
+
+  getContactCardArticles(guid: string): Promise<ArticleItem[]>;
+  setContactCardArticleRevision(guid: string, cardId: string, articleId: string, revision: ArticleRevision): Promise<void>;
+  setContactCardArticleDetail(guid: string, cardId: string, articleId: string, detail: ChannelDetail, unsealedData: any): Promise<void>;
+  setContactCardArticleUnsealed(guid: string, cardId: string, articleId: string, unsealedData: any): Promise<void>;
+
+  getContactCardChannels(guid: string): Promise<ChannelItem[]>;
+  setContactCardChannelBlocked(guid: string, cardId: string, channelId: string, blocked: boolean): Promise<void>;
+  setContactCardChannelRevision(guid: string, cardId: string, channelId: string, revision: ChannelRevision): Promise<void>;
+  setContactCardChannelSummary(guid: string, cardId: string, channelId: string, summary: ChannelSummary): Promise<void>;
+  setContactCardChannelDetail(guid: string, cardId: string, channelId: string, detail: ChannelDetail, unsealedData: any): Promise<void>;
+  setContactCardChannelUnsealed(guid: string, cardId: string, channelId: string, unsealedData: any): Promise<void>;
+
+  setContactCardChannelTopicSyncRevision(guid: string, cardId: string, channelId: string, revision: number): Promise<void>;
+  setContactCardChannelTopicRemoteRevision(guid: string, cardId: string, channelId: string, revision: number): Promise<void>;
 }
 
 export interface SqlStore {
@@ -130,6 +159,75 @@ export class OfflineStore implements Store {
     await this.setAppValue(guid, 'account_data', data);
   }
 
+  public async getContactRevision(guid: string): Promise<number> {
+    return 0;
+  }
+
+  public async setContactRevision(guid: string, revision: number): Promise<void> {
+  }
+
+  public async getContacts(guid: string): Promise<CardItem[]> { 
+    return [];
+  }
+
+  public async setContactCardRevision(guid: string, cardId: string, revision: CardRevision): Promise<void> {
+  }
+
+  public async setContactCardProfile(guid: string, cardId: string, profile: CardProfile): Promise<void> {
+  }
+
+  public async setContactCardDetail(guid: string, cardId: string, detail: CardDetail): Promise<void> {
+  }
+
+  public async setContactCardBlocked(guid: string, cardId: string, blocked: boolean): Promise<void> {
+  }
+
+  public async setContactCardRemoteRevision(guid: string, cardId: string, notification: CardNotification): Promise<void> {
+  }
+
+  public async setContactCardSyncRevision(guid: string, cardId: string, notification: CardNotification): Promise<void> {
+  }
+
+  public async setContactCardOffsync(guid: string, cardId: string, offsync: boolean): Promise<void> {
+  }
+
+  public async getContactCardArticles(guid: string): Promise<ArticleItem[]> {
+    return [];
+  }
+
+  public async setContactCardArticleRevision(guid: string, cardId: string, articleId: string, revision: ArticleRevision): Promise<void> {
+  }
+
+  public async setContactCardArticleDetail(guid: string, cardId: string, articleId: string, detail: ChannelDetail, unsealedData: any): Promise<void> {
+  }
+
+  public async setContactCardArticleUnsealed(guid: string, cardId: string, articleId: string, unsealedData: any): Promise<void> {
+  }
+
+  public async getContactCardChannels(guid: string): Promise<ChannelItem[]> {
+    return [];
+  }
+
+  public async setContactCardChannelBlocked(guid: string, cardId: string, channelId: string, blocked: boolean): Promise<void> {
+  }
+
+  public async setContactCardChannelRevision(guid: string, cardId: string, channelId: string, revision: ChannelRevision): Promise<void> {
+  }
+
+  public async setContactCardChannelSummary(guid: string, cardId: string, channelId: string, summary: ChannelSummary): Promise<void> {
+  }
+
+  public async setContactCardChannelDetail(guid: string, cardId: string, channelId: string, detail: ChannelDetail, unsealedData: any): Promise<void> {
+  }
+
+  public async setContactCardChannelUnsealed(guid: string, cardId: string, channelId: string, unsealedData: any): Promise<void> {
+  }
+
+  public async setContactCardChannelTopicSyncRevision(guid: string, cardId: string, channelId: string, revision: number): Promise<void> {
+  }
+
+  public async setContactCardChannelTopicRemoteRevision(guid: string, cardId: string, channelId: string, revision: number): Promise<void> {
+  }
 }
 
 export class OnlineStore implements Store {
@@ -210,6 +308,75 @@ export class OnlineStore implements Store {
   public async setSettingsData(guid: string, data: ConfigEntity): Promise<void> {
   } 
 
+  public async getContactRevision(guid: string): Promise<number> {
+    return 0;
+  }
+
+  public async setContactRevision(guid: string, revision: number): Promise<void> {
+  }
+
+  public async getContacts(guid: string): Promise<CardItem[]> { 
+    return [];
+  }
+
+  public async setContactCardRevision(guid: string, cardId: string, revision: CardRevision): Promise<void> {
+  }
+
+  public async setContactCardProfile(guid: string, cardId: string, profile: CardProfile): Promise<void> {
+  }
+
+  public async setContactCardDetail(guid: string, cardId: string, detail: CardDetail): Promise<void> {
+  }
+
+  public async setContactCardBlocked(guid: string, cardId: string, blocked: boolean): Promise<void> {
+  }
+
+  public async setContactCardRemoteRevision(guid: string, cardId: string, notification: CardNotification): Promise<void> {
+  }
+
+  public async setContactCardSyncRevision(guid: string, cardId: string, notification: CardNotification): Promise<void> {
+  }
+
+  public async setContactCardOffsync(guid: string, cardId: string, offsync: boolean): Promise<void> {
+  }
+
+  public async getContactCardArticles(guid: string): Promise<ArticleItem[]> {
+    return [];
+  }
+
+  public async setContactCardArticleRevision(guid: string, cardId: string, articleId: string, revision: ArticleRevision): Promise<void> {
+  }
+
+  public async setContactCardArticleDetail(guid: string, cardId: string, articleId: string, detail: ChannelDetail, unsealedData: any): Promise<void> {
+  }
+
+  public async setContactCardArticleUnsealed(guid: string, cardId: string, articleId: string, unsealedData: any): Promise<void> {
+  }
+
+  public async getContactCardChannels(guid: string): Promise<ChannelItem[]> {
+    return [];
+  }
+
+  public async setContactCardChannelBlocked(guid: string, cardId: string, channelId: string, blocked: boolean): Promise<void> {
+  }
+
+  public async setContactCardChannelRevision(guid: string, cardId: string, channelId: string, revision: ChannelRevision): Promise<void> {
+  }
+
+  public async setContactCardChannelSummary(guid: string, cardId: string, channelId: string, summary: ChannelSummary): Promise<void> {
+  }
+
+  public async setContactCardChannelDetail(guid: string, cardId: string, channelId: string, detail: ChannelDetail, unsealedData: any): Promise<void> {
+  }
+
+  public async setContactCardChannelUnsealed(guid: string, cardId: string, channelId: string, unsealedData: any): Promise<void> {
+  }
+
+  public async setContactCardChannelTopicSyncRevision(guid: string, cardId: string, channelId: string, revision: number): Promise<void> {
+  }
+
+  public async setContactCardChannelTopicRemoteRevision(guid: string, cardId: string, channelId: string, revision: number): Promise<void> {
+  }
 }
 
 export class NoStore implements Store {
@@ -264,5 +431,74 @@ export class NoStore implements Store {
   public async setSettingsData(guid: string, data: ConfigEntity): Promise<void> {
   }
 
+  public async getContactRevision(guid: string): Promise<number> {
+    return 0;
+  }
+
+  public async setContactRevision(guid: string, revision: number): Promise<void> {
+  }
+
+  public async getContacts(guid: string): Promise<CardItem[]> { 
+    return [];
+  }
+
+  public async setContactCardRevision(guid: string, cardId: string, revision: CardRevision): Promise<void> {
+  }
+
+  public async setContactCardProfile(guid: string, cardId: string, profile: CardProfile): Promise<void> {
+  }
+
+  public async setContactCardDetail(guid: string, cardId: string, detail: CardDetail): Promise<void> {
+  }
+
+  public async setContactCardBlocked(guid: string, cardId: string, blocked: boolean): Promise<void> {
+  }
+
+  public async setContactCardRemoteRevision(guid: string, cardId: string, notification: CardNotification): Promise<void> {
+  }
+
+  public async setContactCardSyncRevision(guid: string, cardId: string, notification: CardNotification): Promise<void> {
+  }
+
+  public async setContactCardOffsync(guid: string, cardId: string, offsync: boolean): Promise<void> {
+  }
+
+  public async getContactCardArticles(guid: string): Promise<ArticleItem[]> {
+    return [];
+  }
+
+  public async setContactCardArticleRevision(guid: string, cardId: string, articleId: string, revision: ArticleRevision): Promise<void> {
+  }
+
+  public async setContactCardArticleDetail(guid: string, cardId: string, articleId: string, detail: ChannelDetail, unsealedData: any): Promise<void> {
+  }
+
+  public async setContactCardArticleUnsealed(guid: string, cardId: string, articleId: string, unsealedData: any): Promise<void> {
+  }
+
+  public async getContactCardChannels(guid: string): Promise<ChannelItem[]> {
+    return [];
+  }
+
+  public async setContactCardChannelBlocked(guid: string, cardId: string, channelId: string, blocked: boolean): Promise<void> {
+  }
+
+  public async setContactCardChannelRevision(guid: string, cardId: string, channelId: string, revision: ChannelRevision): Promise<void> {
+  }
+
+  public async setContactCardChannelSummary(guid: string, cardId: string, channelId: string, summary: ChannelSummary): Promise<void> {
+  }
+
+  public async setContactCardChannelDetail(guid: string, cardId: string, channelId: string, detail: ChannelDetail, unsealedData: any): Promise<void> {
+  }
+
+  public async setContactCardChannelUnsealed(guid: string, cardId: string, channelId: string, unsealedData: any): Promise<void> {
+  }
+
+  public async setContactCardChannelTopicSyncRevision(guid: string, cardId: string, channelId: string, revision: number): Promise<void> {
+  }
+
+  public async setContactCardChannelTopicRemoteRevision(guid: string, cardId: string, channelId: string, revision: number): Promise<void> {
+  }
 }
 

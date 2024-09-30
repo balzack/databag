@@ -1,6 +1,8 @@
 import { EventEmitter } from 'eventemitter3';
 import type { Contact, Logging } from './api';
 import type { Card, Topic, Asset, Tag, Profile, Participant} from './types';
+import type { CardEntity } from './entities';
+import type { ArticleRevision, ArticleDetail, ChannelRevision, ChannelSummary, ChannelDetail, CardRevision, CardNotification, CardProfile, CardDetail } from './items';
 import { Store } from './store';
 
 export class ContactModule implements Contact {
@@ -12,6 +14,21 @@ export class ContactModule implements Contact {
   private secure: boolean;
   private emitter: EventEmitter;
 
+  private store: Store;
+  private revision: number;
+  private nextRevision: number | null;
+  private syncing: boolean;
+  private closing: boolean;
+
+  // view of cards
+  private cardEntries: Map<string, { revision: CardRevision, profile: CardProfile, detail: CardDetails, card: Card }>
+
+  // view of articles
+  private articleEntries: Map<string, Map<string, { revision: ArticleRevision, detail: ArticleDetail, article: Article }>>
+
+  // view of channels
+  private channelEntries: Map<string, Map<string, { revision ChannelRevision, summary: ChannelSummary, detail: ChannelDetail, channel: Channel }>>;
+
   constructor(log: Logging, store: Store, guid: string, token: string, node: string, secure: boolean) {
     this.guid = guid;
     this.token = token;
@@ -19,14 +36,117 @@ export class ContactModule implements Contact {
     this.secure = secure;
     this.log = log;
     this.emitter = new EventEmitter();
+
+    this.revision = 0;
+    this.sycning = true;
+    this.closing = false;
+    this.nextRevision = null;
+    this.init();
+  }
+
+  private async init() {
+  }
+
+  private async sync(): Promise<void> {
   }
 
   public addCardListener(ev: (cards: Card[]) => void): void {
     this.emitter.on('card', ev);
+    const cards = Array.from(cardEntries, ([cardId, entry]) => (entry.card));
+    ev(cards);
   }
 
   public removeCardListener(ev: (cards: Card[]) => void): void {
     this.emitter.off('card', ev);
+  }
+
+  private emitCards(cards: Card[]) {
+    this.emitter.emit('card', cards);
+  }
+
+  public addArticleListener(id: string | null, ev: (arg: { cardId: string, articles: Article[] }) => void): void {
+    if (id) {
+      const cardId = id as string;
+      this.emitter.on(`article::${cardId}`, ev);
+      const entries = this.articleEntries.get(cardId);
+      if (entries) {
+        const articles = Array.from(entries, ([articleId, entry]) => (entry.article));
+        ev({ cardId, articles });
+      }
+    } else {
+      this.emitter.on('article', ev);
+      this.articleEntries.forEach((entries, cardId) => {
+        const articles = Array.from(entries, ([articleId, entry]) => (entry.article));
+        ev({ cardId, articles });
+      });
+    }
+  }
+
+  public removeArticleListener(id: string | null, ev: (arg: { cardId: string, articles: Article[] }) => void): void {
+    if (id) {
+      const cardId = id as string;
+      this.emitter.off(`article::${cardId}`, ev);
+    } else {
+      this.emitter.off('article', ev);
+    }
+  }
+
+  private emitArticles(cardId: string, articles: Article[]) {
+    this.emitter.emit('article', { cardId, articles });
+    this.emitter.emit(`article::${cardId}`, { cardId, articles });
+  }
+
+  public addChannelListener(id: string | null, ev: (arg: { cardId: string, channels: Channel[] }) => void): void {
+
+    if (id) {
+      const cardId = id as string;
+      this.emitter.on(`channel::${cardId}`, ev);
+      const entries = this.channelEntries.get(cardId);
+      if (entries) {
+        const channels = Array.from(entries, ([channelId, entry]) => (entry.channel));
+        ev({ cardId, channels });
+      }
+    } else {
+      this.emitter.on('channel', ev);
+      this.channelEntries.forEach((entries, cardId) => {
+        const channels = Array.from(entries, ([channelId, entry]) => (entry.channel));
+        ev({ cardId, channels });
+      });
+    }
+  }
+
+  public removeChannelListener(id: string | null, ev: (arg: { cardId: string, channels: Channel[] }) => void): void {
+    if (id) {
+      const cardId = id as string;
+      this.emitter.off(`channel::${cardId}`, ev);
+    } else {
+      this.emitter.off('channel', ev);
+    }
+  }
+
+  private emitChannels(cardId: string, channels: Channel[]) {
+    this.emitter.emit('channel', { cardId, channels });
+    this.emitter.emit(`channel::${cardId}`, { cardId, channels });
+  }
+
+  public addTopicRevisionListener(cardId: string, channelId: string, ev: (arg: { cardId: string, channelId: string, revision: number }) => void): void {
+    this.emitter.on(`revision::${cardId}::${channelId}`, ev);
+    const card = this.channelEntries.get(cardId);
+    if (card) {
+      const channel = card.get(channelId);
+      if (channel) {
+        const revision = channel.revision.topic;
+        ev({ cardId, channelId, revision });
+      }
+    }
+  }
+
+  public removeTopicRevisionListener(cardId: string, channelId: string, ev: (arg: { cardId: string, channelId: string, revision: number }) => void): void {
+    this.emitter.off(`revision::${cardId}::${channelId}`, ev);
+  }
+
+  public emitTopicRevision(cardId: string, channelId: string, revision: number) {
+    this.emitter.emit(`revision::${cardId}::${channelId}`, revision);
   }
 
   public async close(): void {

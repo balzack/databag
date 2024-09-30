@@ -2,7 +2,6 @@ export type Card = {
   id: string,
   status: string,
   statusUpdated: number,
-  groups: string[],
   guid: string,
   handle: string,
   name: string,
@@ -11,8 +10,6 @@ export type Card = {
   imageSet: boolean,
   version: string,
   node: string,
-  articles: Article[],
-  channels: Channel[],
 }
 
 export type Call = {
@@ -52,7 +49,7 @@ export type Channel = {
   sealed: boolean,
   unsealed: boolean;
   dataType: string,
-  data: string,
+  data: any,
   created: number,
   updated: number,
   enableImage: boolean,
@@ -90,7 +87,7 @@ export type Topic = {
   sealed: boolean,
   unsealed: boolean,
   dataType: string,
-  data: string,
+  data: any,
   created: number,
   updated: number,
   status: string,
