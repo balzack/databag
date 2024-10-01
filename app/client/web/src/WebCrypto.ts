@@ -5,7 +5,7 @@ import { JSEncrypt } from 'jsencrypt'
 export class WebCrypto implements Crypto {
 
   // generate salt for pbk function
-  public async pbkdfSalt(): { saltHex: string } {
+  public async pbkdfSalt(): Promise<{ saltHex: string }> {
     const salt = CryptoJS.lib.WordArray.random(128 / 8);
     const saltHex = salt.toString();
     return { saltHex };

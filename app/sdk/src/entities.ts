@@ -9,14 +9,14 @@ export type CardEntity = {
     notifiedProfile: number,
     notifiedArticle: number,
     notifiedChannel: number,
-    cardDetail: {
+    cardDetail?: {
       status: string,
       statusUpdated: number,
       token: string,
       notes: string,
       groups: [ string ]
     },
-    cardProfile: {
+    cardProfile?: {
       guid: string,
       handle: string,
       name: string,

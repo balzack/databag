@@ -1,4 +1,4 @@
-import React, { useSettings } from './useSettings.hook'
+import { useSettings } from './useSettings.hook'
 import {
   Modal,
   Textarea,
@@ -42,7 +42,7 @@ import {
 } from '@tabler/icons-react'
 import { modals } from '@mantine/modals'
 import { useDisclosure } from '@mantine/hooks'
-import { useCallback, useState, useRef } from 'react'
+import React, { useCallback, useState, useRef } from 'react'
 import Cropper from 'react-easy-crop'
 import { Area } from 'react-easy-crop/types'
 
@@ -179,7 +179,7 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
       try {
         await actions.confirmMFA();
         mfaClose();
-      } catch (err) {
+      } catch (err: any) {
         if (err.message === '401') {
           setAuthMessage(state.strings.mfaError);
         } else if (err.message === '429') {

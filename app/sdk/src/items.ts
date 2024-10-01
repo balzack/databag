@@ -1,8 +1,3 @@
-export type CardRevision = {
-  detail: number,
-  profile: number,
-}
-
 export type CardNotification = {
   profile: number,
   article: number,
@@ -10,12 +5,14 @@ export type CardNotification = {
 }
 
 export type CardDetail = {
+  revision: number,
   status: string,
   statusUpdated: number,
   token: string,
 }
 
 export type CardProfile = {
+  revision: number,
   handle: string,
   guid: string,
   name: string,
@@ -82,12 +79,45 @@ export type ArticleDetail = {
 export type CardItem = { 
   offsync: boolean,
   blocked: boolean,
-  revision: CardRevision,
+  revision: number,
   profile: CardProfile,
   detail: CardDetail,
   remote: CardNotification,
   sync: CardNotification,
 }
+
+export const defaultCardItem = {
+  offsync: false,
+  blocked: false,
+  cardRevision: 0,
+  profileRevision: 0,
+  profile: {
+    handle: '',
+    guid: '',
+    name: '',
+    description: '',
+    location: '',
+    imageSet: false,
+    node: '',
+    seal: '',    
+  },
+  detailRevision: 0,
+  detail: {
+    status: '',
+    statusUpdateed: 0,
+    token: 0,
+  },
+  remote: {
+    profile: 0,
+    article: 0,
+    channel: 0,
+  },
+  sync: {
+    profile: 0,
+    article: 0,
+    channel: 0,
+  },
+};
 
 export type ArticleItem = {
   blocked: boolean,

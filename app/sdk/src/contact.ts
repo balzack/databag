@@ -3,7 +3,12 @@ import type { Contact, Logging } from './api';
 import type { Card, Topic, Asset, Tag, Profile, Participant} from './types';
 import type { CardEntity } from './entities';
 import type { ArticleRevision, ArticleDetail, ChannelRevision, ChannelSummary, ChannelDetail, CardRevision, CardNotification, CardProfile, CardDetail } from './items';
+import { defaultConfigItem } from './items';
 import { Store } from './store';
+import { getCards } from './net/getCards';
+
+const CLOSE_POLL_MS = 100;
+const RETRY_POLL_MS = 2000;
 
 export class ContactModule implements Contact {
 
@@ -35,9 +40,9 @@ export class ContactModule implements Contact {
     this.node = node;
     this.secure = secure;
     this.log = log;
+    this.store = store;
     this.emitter = new EventEmitter();
 
-    this.cardGuid = new Map<string, string>();
     this.cardEntries = new Map<string, { item: CardItem, card: Card }>();
     this.articleEntries = new Map<string, Map<string, { item: ArticleItem, article: Article }>>;
     this.channelEntries = new Map<string, Map<string, { item: ChannelItem, channel: Channel }>>;
@@ -122,7 +127,7 @@ export class ContactModule implements Contact {
     });
 
     // load map of channels
-    const channels = await this.store.getContactCardChannles(this.guid);
+    const channels = await this.store.getContactCardChannels(this.guid);
     channels.forEach(({ cardId, channelId, item }) => {
       if (!this.channelEntries.has(cardId)) {
         this.channelEntries.set(cardId, new Map<string, Map<string, { item: ChannelItem, channel: Channel }>>);
@@ -135,7 +140,109 @@ export class ContactModule implements Contact {
     await this.sync();
   }
 
+  private getCardEntry(id: string) { item: CardItem, card: Card } {
+    const entry = this.cardEntries.get(id);
+    if (entry) {
+      return entry;
+    }
+    const item = JSON.parse(JSON.strifying(defaultCardItem));
+    const card = this.setCard(item);
+    const cardEntry = { item, card };
+    this.cardEntries.set(id, cardEntry);
+    return cardEntry;
+  }
+
   private async sync(): Promise<void> {
+    if (!this.syncing) {
+      this.syncing = true;
+      while (this.nextRevision && !this.closing) {
+        if (this.revision !== this.nextRevision) {
+          const nextRev = this.nextRevision;
+          try {
+            const { guid, node, secure, token } = this;
+            const delta = await getCards(node, secure, token, this.revision);
+            for (const entity of delta) {
+              const { id, revision, data } = entity;
+              if (data) {
+                const entry = this.getCardEntry(id);
+
+                if (data.detailRevision !== entry.detail.revison) {
+                  // update detail
+                  entry.detail.revision = data.detailRevision;
+                  // store detail
+                }
+
+                if (data.profileRevision !== entry.profile.revision) {
+                  // update profile
+                  entry.profile.revision = data.profileRevision;
+                  // store profile
+                }
+
+                if (data.notifiedProfile !== entry.remote.profile) {
+                  entry.remote.profile = data.notifiedProfile;
+                  try {
+                    // sync profile
+                  }
+                  catch (err) {
+                    this.log.warn(err);
+                    entry.offsync = true;
+                    // store offsync
+                  }
+                  // store remote
+                }
+
+                if (data.notifiedArticle !== entry.remote.article) {
+                  entry.remote.article = data.notifiedArticle;
+                  try {
+                    // sync articles
+                  }
+                  catch (err) {
+                    this.log.warn(err);
+                    entry.offsync = true;
+                    // store offsync
+                  }
+                  this.emitCardArticles(id);
+                  // store remote
+                }
+
+                if (data.notifiedChannel !== entry.remote.channel) {
+                  entry.remote.channel = data.notifiedChannel;
+                  try {
+                    //sync channels
+                  }
+                  catch (err) {
+                    this.log.warn(err);
+                    entry.offsync = true;
+                    this.emitCardChannels(id);
+                    // store offsync
+                  }
+                }
+              }
+              else {
+                this.cardEntries.delete(id);
+              }
+            }
+
+            this.emitCards();
+            await this.store.setContactRevision(guid, nextRev);
+            this.revision = nextRev;
+            if (this.nextRevision === nextRev) {
+              this.nextRevision = null;
+            }
+            this.log.info(`card revision: ${nextRev}`);
+          }
+          catch (err) {
+            this.log.warn(err);
+            await new Promise(r => setTimeout(r, RETRY_POLL_MS));
+          }
+        }
+
+        if (this.revision === this.nextRevsion) {
+          this.nextRevision = null;
+        }
+      }
+      this.syncing = false;
+    }
   }
 
   public addCardListener(ev: (cards: Card[]) => void): void {
@@ -240,7 +347,8 @@ export class ContactModule implements Contact {
   }
 
   public async setRevision(rev: number): Promise<void> {
-    console.log('set contact revision:', rev);
+    this.nextRevision = rev;
+    await this.sync();
   }
 
   public async addCard(server: string, guid: string): Promise<string> {
