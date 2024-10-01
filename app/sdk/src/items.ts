@@ -43,6 +43,7 @@ export type ChannelSummary = {
 
 export type ChannelDetail = {
   revision: number,
+  sealed: boolean,
   dataType: string,
   data: string,
   created: number,
@@ -66,6 +67,7 @@ export type ArticleRevision = {
 }
 
 export type ArticleDetail = {
+  sealed: boolean,
   dataType: string,
   data: string,
   created: number,
@@ -78,7 +80,6 @@ export type ArticleDetail = {
 }
 
 export type CardItem = { 
-  cardId: string,
   offsync: boolean,
   blocked: boolean,
   revision: CardRevision,
@@ -89,8 +90,6 @@ export type CardItem = {
 }
 
 export type ArticleItem = {
-  cardId: string | null,
-  articleId: string,
   blocked: boolean,
   detail: ArticleDetail,
   unsealedData: any,
@@ -98,11 +97,11 @@ export type ArticleItem = {
 }  
 
 export type ChannelItem = {
-  cardId: string | null,
-  channelId: string,
+  unread: boolean,
   blocked: boolean,
   summary: ChannelSummary,
   detail: ChannelDetail,
-  unsealedData: any,
+  unsealedChannelData: any,
+  unsealedTopicData: any,
   revision: ChannelRevision,
 }

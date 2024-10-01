@@ -1,5 +1,7 @@
 export type Card = {
-  id: string,
+  cardId: string,
+  offsync: boolean,
+  blocked: boolean,
   status: string,
   statusUpdated: number,
   guid: string,
@@ -34,10 +36,11 @@ export type Activity = {
 }
   
 export type Channel = {
-  id: string,
+  channelId: string,
   cardId: string | null,
   lastTopic: {
     guid: string,
+    sealed: boolean,
     dataType: string,
     data: string,
     created: number,
@@ -47,9 +50,8 @@ export type Channel = {
   }
   unread: boolean,
   sealed: boolean,
-  unsealed: boolean;
   dataType: string,
-  data: any,
+  data: string,
   created: number,
   updated: number,
   enableImage: boolean,
@@ -61,16 +63,15 @@ export type Channel = {
 }
 
 export type Member = {
-  id: string,
-  guid: string,
+  guid?: string,
   pushEnabled: boolean,
-  canAddTopic: boolean,
-  canAddTag: boolean,
-  canAddAsset: boolean,
-  canAddParticipant: boolean,
-  canSortTopic: boolean,
-  canSortTag: boolean,
-  participants: Participant[];
+  //canAddTopic: boolean,
+  //canAddTag: boolean,
+  //canAddAsset: boolean,
+  //canAddParticipant: boolean,
+  //canSortTopic: boolean,
+  //canSortTag: boolean,
+  //participants: Participant[];
 }
 
 export type Participant = {
@@ -127,11 +128,10 @@ export type Group = {
 }
 
 export type Article = {
-  id: string,
+  articleId: string,
   sealed: boolean,
-  unsealed: boolean,
   dataType: string,
-  data: string,
+  data?: string,
   created: number,
   updated: number,
   contacts?: {
