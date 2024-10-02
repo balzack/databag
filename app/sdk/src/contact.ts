@@ -3,9 +3,11 @@ import type { Contact, Logging } from './api';
 import type { Card, Topic, Asset, Tag, Profile, Participant} from './types';
 import type { CardEntity } from './entities';
 import type { ArticleRevision, ArticleDetail, ChannelRevision, ChannelSummary, ChannelDetail, CardRevision, CardNotification, CardProfile, CardDetail } from './items';
-import { defaultConfigItem } from './items';
+import { defaultCardItem } from './items';
 import { Store } from './store';
 import { getCards } from './net/getCards';
+import { getCardProfile } from './net/getCardProfile';
+import { getCardDetail } from './net/getCardDetail';
 
 const CLOSE_POLL_MS = 100;
 const RETRY_POLL_MS = 2000;
@@ -140,13 +142,13 @@ export class ContactModule implements Contact {
     await this.sync();
   }
 
-  private getCardEntry(id: string) { item: CardItem, card: Card } {
+  private getCardEntry(id: string) {
     const entry = this.cardEntries.get(id);
     if (entry) {
       return entry;
     }
-    const item = JSON.parse(JSON.strifying(defaultCardItem));
-    const card = this.setCard(item);
+    const item = JSON.parse(JSON.stringify(defaultCardItem));
+    const card = this.setCard(id, item);
     const cardEntry = { item, card };
     this.cardEntries.set(id, cardEntry);
     return cardEntry;
@@ -166,54 +168,58 @@ export class ContactModule implements Contact {
               if (data) {
                 const entry = this.getCardEntry(id);
 
-                if (data.detailRevision !== entry.detail.revison) {
-                  // update detail
-                  entry.detail.revision = data.detailRevision;
-                  // store detail
+                if (data.detailRevision !== entry.item.detail.revison) {
+                  const detail = data.cardDetail ? data.cardDetail : await getCardDetail(node, secure, token, id);
+                  const { status, statusUpdated, token } = detail;
+                  entry.item.detail = { revision: data.detailRevision, status, statusUpdated, token }
+                  entry.card = this.setCard(id, entry.item);                  
+                  this.store.setContactCardDetail(guid, id, entry.item.detail);
                 }
 
-                if (data.profileRevision !== entry.profile.revision) {
-                  // update profile
-                  entry.profile.revision = data.profileRevision;
-                  // store profile
+                if (data.profileRevision !== entry.item.profile.revision) {
+                  const profile = data.cardProfile ? data.cardProfile : await getCardProfile(node, secure, token, id);
+                  const { guid, handle, name, description, location, imageSet, node, seal } = profile;
+                  entry.item.profile = { revision: data.profileRevision, handle, guid, name, description, location, imageSet, node, seal };
+                  entry.card = this.setCard(id, entry.item);                  
+                  this.store.setContactCardProfile(guid, id, entry.item.profile);
                 }
 
-                if (data.notifiedProfile !== entry.remote.profile) {
-                  entry.remote.profile = data.notifiedProfile;
+                if (data.notifiedProfile !== entry.item.remote.profile) {
+                  entry.item.remote.profile = data.notifiedProfile;
                   try {
                     // sync profile
                   }
                   catch (err) {
                     this.log.warn(err);
-                    entry.offsync = true;
+                    entry.item.offsync = true;
                     // store offsync
                   }
                   // store remote
                 }
 
-                if (data.notifiedArticle !== entry.remote.article) {
-                  entry.remote.article = data.notifiedArticle;
+                if (data.notifiedArticle !== entry.item.remote.article) {
+                  entry.item.remote.article = data.notifiedArticle;
                   try {
                     // sync articles
                   }
                   catch (err) {
                     this.log.warn(err);
-                    entry.offsync = true;
+                    entry.item.offsync = true;
                     // store offsync
                   }
-                  this.emitCardArticles(id);
+                  this.emitArticles(id);
                   // store remote
                 }
 
-                if (data.notifiedChannel !== entry.remote.channel) {
-                  entry.remote.channel = data.notifiedChannel;
+                if (data.notifiedChannel !== entry.item.remote.channel) {
+                  entry.item.remote.channel = data.notifiedChannel;
                   try {
                     //sync channels
                   }
                   catch (err) {
                     this.log.warn(err);
-                    entry.offsync = true;
-                    this.emitCardChannels(id);
+                    entry.item.offsync = true;
+                    this.emitChannels(id);
                     // store offsync
                   }
                 }

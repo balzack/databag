@@ -1,5 +1,5 @@
 import { Login, ProfileEntity, defaultProfileEntity, ConfigEntity, defaultConfigEntity } from './entities';
-import type { ArticleRevision, ArticleDetail, ArticleItem, ChannelItem, CardItem, CardRevision, CardNotification, CardProfile, CardDetail, ChannelRevision, ChannelSummary, ChannelDetail } from './items';
+import type { ArticleRevision, ArticleDetail, ArticleItem, ChannelItem, CardItem, CardNotification, CardProfile, CardDetail, ChannelRevision, ChannelSummary, ChannelDetail } from './items';
 import type { Logging } from './logging';
 
 export interface Store {
@@ -25,7 +25,7 @@ export interface Store {
   setContactRevision(guid: string, revision: number): Promise<void>;
 
   getContacts(guid: string): Promise<{ cardId: string, item: CardItem }[]>;
-  setContactCardRevision(guid: string, cardId: string, revision: CardRevision): Promise<void>;
+  setContactCardRevision(guid: string, cardId: string, revision: number): Promise<void>;
   setContactCardProfile(guid: string, cardId: string, profile: CardProfile): Promise<void>;
   setContactCardDetail(guid: string, cardId: string, detail: CardDetail): Promise<void>;
   setContactCardBlocked(guid: string, cardId: string, blocked: boolean): Promise<void>;
@@ -170,7 +170,7 @@ export class OfflineStore implements Store {
     return [];
   }
 
-  public async setContactCardRevision(guid: string, cardId: string, revision: CardRevision): Promise<void> {
+  public async setContactCardRevision(guid: string, cardId: string, revision: number): Promise<void> {
   }
 
   public async setContactCardProfile(guid: string, cardId: string, profile: CardProfile): Promise<void> {
@@ -319,7 +319,7 @@ export class OnlineStore implements Store {
     return [];
   }
 
-  public async setContactCardRevision(guid: string, cardId: string, revision: CardRevision): Promise<void> {
+  public async setContactCardRevision(guid: string, cardId: string, revision: number): Promise<void> {
   }
 
   public async setContactCardProfile(guid: string, cardId: string, profile: CardProfile): Promise<void> {
@@ -442,7 +442,7 @@ export class NoStore implements Store {
     return [];
   }
 
-  public async setContactCardRevision(guid: string, cardId: string, revision: CardRevision): Promise<void> {
+  public async setContactCardRevision(guid: string, cardId: string, revision: number): Promise<void> {
   }
 
   public async setContactCardProfile(guid: string, cardId: string, profile: CardProfile): Promise<void> {

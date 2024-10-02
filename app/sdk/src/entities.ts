@@ -1,5 +1,26 @@
 import type { Profile } from './types';
 
+export type CardDetailEntity = {
+  status: string,
+  statusUpdated: number,
+  token: string,
+  notes: string,
+  groups: [ string ]
+}
+
+export type CardProfileEntity = {
+  guid: string,
+  handle: string,
+  name: string,
+  description: string,
+  location: string,
+  imageSet: boolean,
+  version: string,
+  node: string,
+  seal: string,
+  revision: number,
+}
+
 export type CardEntity = {
   id: string,
   revision: number,
@@ -9,25 +30,8 @@ export type CardEntity = {
     notifiedProfile: number,
     notifiedArticle: number,
     notifiedChannel: number,
-    cardDetail?: {
-      status: string,
-      statusUpdated: number,
-      token: string,
-      notes: string,
-      groups: [ string ]
-    },
-    cardProfile?: {
-      guid: string,
-      handle: string,
-      name: string,
-      description: string,
-      location: string,
-      imageSet: boolean,
-      version: string,
-      node: string,
-      seal: string,
-      revision: number,
-    }
+    cardDetail?: CardDetailEntity,
+    cardProfile?: CardProfileEntity,
   }
 }
 
