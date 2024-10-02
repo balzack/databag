@@ -8,6 +8,8 @@ import { Store } from './store';
 import { getCards } from './net/getCards';
 import { getCardProfile } from './net/getCardProfile';
 import { getCardDetail } from './net/getCardDetail';
+import { setCardProfile } from './net/setCardProfile';
+import { getContactProfile } from './net/getContactProfile';
 
 const CLOSE_POLL_MS = 100;
 const RETRY_POLL_MS = 2000;
@@ -154,7 +156,12 @@ export class ContactModule implements Contact {
     return cardEntry;
   }
 
-  private async syncProfile(id: string, revision: number): Promise<void> {
+  private async syncProfile(cardId: string, cardNode: string, cardGuid: string, cardToken: string, revision: number): Promise<void> {
+    const { node, secure, token } = this;
+    const server = cardNode ? cardNode : node;
+    const insecure = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(server);
+    const message = await getContactProfile(server, !insecure, cardGuid, cardToken);
+    await setCardProfile(node, secure, token, cardId, message);
   }
 
   private async syncArticles(id: string, revision: number): Promise<void> {
@@ -179,23 +186,23 @@ export class ContactModule implements Contact {
 
                 if (data.detailRevision !== entry.item.detail.revison) {
                   const detail = data.cardDetail ? data.cardDetail : await getCardDetail(node, secure, token, id);
-                  const { status, statusUpdated, token } = detail;
-                  entry.item.detail = { revision: data.detailRevision, status, statusUpdated, token }
+                  const { status, statusUpdated, token: cardToken } = detail;
+                  entry.item.detail = { revision: data.detailRevision, status, statusUpdated, token: cardToken }
                   entry.card = this.setCard(id, entry.item);                  
                   this.store.setContactCardDetail(guid, id, entry.item.detail);
                 }
 
                 if (data.profileRevision !== entry.item.profile.revision) {
                   const profile = data.cardProfile ? data.cardProfile : await getCardProfile(node, secure, token, id);
-                  const { guid: profileGuid, handle, name, description, location, imageSet, node, seal } = profile;
-                  entry.item.profile = { revision: data.profileRevision, handle, guid: profileGuid, name, description, location, imageSet, node, seal };
+                  const { guid: profileGuid, handle, name, description, location, imageSet, node: profileNode, seal } = profile;
+                  entry.item.profile = { revision: data.profileRevision, handle, guid: profileGuid, name, description, location, imageSet, node: profileNode, seal };
                   entry.card = this.setCard(id, entry.item);                  
                   this.store.setContactCardProfile(guid, id, entry.item.profile);
                 }
 
-                if (data.notifiedProfile !== entry.item.profileRevision) {
+                if (data.notifiedProfile > entry.item.profile.revision && data.notifiedProfile !== entry.item.profileRevision) {
                   try {
-                    await this.syncProfile(id, entry.item.profileRevision);
+                    await this.syncProfile(id, entry.item.profile.node, entry.item.profile.guid, entry.item.detail.token, entry.item.profileRevision);
                     entry.item.profileRevision = data.notifiedProfile;
                     this.store.setContactCardProfileRevision(guid, id, data.notifiedProfile);
                   }

@@ -1,5 +1,13 @@
 import type { Profile } from './types';
 
+export type DataMessage = {
+  message: string,
+  keyType: string,
+  publicKey: string,
+  signature: string,
+  signatureType: string,
+}
+
 export type CardDetailEntity = {
   status: string,
   statusUpdated: number,
