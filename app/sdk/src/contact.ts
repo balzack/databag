@@ -154,6 +154,15 @@ export class ContactModule implements Contact {
     return cardEntry;
   }
 
+  private async syncProfile(id: string, revision: number): Promise<void> {
+  }
+
+  private async syncArticles(id: string, revision: number): Promise<void> {
+  }
+
+  private async syncChannels(id: string, revision: number): Promise<void> {
+  }
+
   private async sync(): Promise<void> {
     if (!this.syncing) {
       this.syncing = true;
@@ -178,50 +187,51 @@ export class ContactModule implements Contact {
 
                 if (data.profileRevision !== entry.item.profile.revision) {
                   const profile = data.cardProfile ? data.cardProfile : await getCardProfile(node, secure, token, id);
-                  const { guid, handle, name, description, location, imageSet, node, seal } = profile;
-                  entry.item.profile = { revision: data.profileRevision, handle, guid, name, description, location, imageSet, node, seal };
+                  const { guid: profileGuid, handle, name, description, location, imageSet, node, seal } = profile;
+                  entry.item.profile = { revision: data.profileRevision, handle, guid: profileGuid, name, description, location, imageSet, node, seal };
                   entry.card = this.setCard(id, entry.item);                  
                   this.store.setContactCardProfile(guid, id, entry.item.profile);
                 }
 
-                if (data.notifiedProfile !== entry.item.remote.profile) {
-                  entry.item.remote.profile = data.notifiedProfile;
+                if (data.notifiedProfile !== entry.item.profileRevision) {
                   try {
-                    // sync profile
+                    await this.syncProfile(id, entry.item.profileRevision);
+                    entry.item.profileRevision = data.notifiedProfile;
+                    this.store.setContactCardProfileRevision(guid, id, data.notifiedProfile);
                   }
                   catch (err) {
                     this.log.warn(err);
                     entry.item.offsync = true;
-                    // store offsync
+                    this.store.setContactCardOffsync(guid, id, true);
                   }
-                  // store remote
                 }
 
-                if (data.notifiedArticle !== entry.item.remote.article) {
-                  entry.item.remote.article = data.notifiedArticle;
+                if (data.notifiedArticle !== entry.item.articleRevision) {
                   try {
-                    // sync articles
+                    await this.syncArticles(id, entry.item.articleRevision);
+                    entry.item.articleRevision = data.notifiedArticle;
+                    this.store.setContactCardArticlesRevision(guid, id, data.notifiedArticle);
                   }
                   catch (err) {
                     this.log.warn(err);
                     entry.item.offsync = true;
-                    // store offsync
+                    this.store.setContactCardOffsync(guid, id, true);
                   }
                   this.emitArticles(id);
-                  // store remote
                 }
 
-                if (data.notifiedChannel !== entry.item.remote.channel) {
-                  entry.item.remote.channel = data.notifiedChannel;
+                if (data.notifiedChannel !== entry.item.channelRevision) {
                   try {
-                    //sync channels
+                    await this.syncChannels(id, entry.item.channelRevision);
+                    entry.item.channelRevision = data.notifiedChannel;
+                    this.store.setContactCardChannelsRevision(guid, id, data.notifiedChannel);
                   }
                   catch (err) {
                     this.log.warn(err);
                     entry.item.offsync = true;
-                    this.emitChannels(id);
-                    // store offsync
+                    this.store.setContactCardOffsync(guid, id, true);
                   }
+                  this.emitChannels(id);
                 }
               }
               else {

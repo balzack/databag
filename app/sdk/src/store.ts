@@ -1,5 +1,5 @@
 import { Login, ProfileEntity, defaultProfileEntity, ConfigEntity, defaultConfigEntity } from './entities';
-import type { ArticleRevision, ArticleDetail, ArticleItem, ChannelItem, CardItem, CardNotification, CardProfile, CardDetail, ChannelRevision, ChannelSummary, ChannelDetail } from './items';
+import type { ArticleRevision, ArticleDetail, ArticleItem, ChannelItem, CardItem, CardProfile, CardDetail, ChannelRevision, ChannelSummary, ChannelDetail } from './items';
 import type { Logging } from './logging';
 
 export interface Store {
@@ -30,9 +30,11 @@ export interface Store {
   setContactCardDetail(guid: string, cardId: string, detail: CardDetail): Promise<void>;
   setContactCardBlocked(guid: string, cardId: string, blocked: boolean): Promise<void>;
 
-  setContactCardRemoteRevision(guid: string, cardId: string, notification: CardNotification): Promise<void>;
-  setContactCardSyncRevision(guid: string, cardId: string, notification: CardNotification): Promise<void>;
   setContactCardOffsync(guid: string, cardId: string, offsync: boolean): Promise<void>;
+
+  setContactCardProfileRevision(guid: string, cardId: string, revision: number): Promise<void>;
+  setContactCardArticlesRevision(guid: string, cardId: string, revision: number): Promise<void>;
+  setContactCardChannelsRevision(guid: string, cardId: string, revision: number): Promise<void>;
 
   getContactCardArticles(guid: string): Promise<{ cardId: string, articleId: string, item: ArticleItem }[]>;
   setContactCardArticleRevision(guid: string, cardId: string, articleId: string, revision: ArticleRevision): Promise<void>;
@@ -182,13 +184,16 @@ export class OfflineStore implements Store {
   public async setContactCardBlocked(guid: string, cardId: string, blocked: boolean): Promise<void> {
   }
 
-  public async setContactCardRemoteRevision(guid: string, cardId: string, notification: CardNotification): Promise<void> {
-  }
-
-  public async setContactCardSyncRevision(guid: string, cardId: string, notification: CardNotification): Promise<void> {
-  }
-
   public async setContactCardOffsync(guid: string, cardId: string, offsync: boolean): Promise<void> {
+  }
+
+  public async setContactCardProfileRevision(guid: string, cardId: string, revision: number): Promise<void> {
+  }
+  
+  public async setContactCardArticlesRevision(guid: string, cardId: string, revision: number): Promise<void> {
+  }
+  
+  public async setContactCardChannelsRevision(guid: string, cardId: string, revision: number): Promise<void> {
   }
 
   public async getContactCardArticles(guid: string): Promise<{ cardId: string, articleId: string, item: ArticleItem }[]> {
@@ -331,15 +336,18 @@ export class OnlineStore implements Store {
   public async setContactCardBlocked(guid: string, cardId: string, blocked: boolean): Promise<void> {
   }
 
-  public async setContactCardRemoteRevision(guid: string, cardId: string, notification: CardNotification): Promise<void> {
-  }
-
-  public async setContactCardSyncRevision(guid: string, cardId: string, notification: CardNotification): Promise<void> {
-  }
-
   public async setContactCardOffsync(guid: string, cardId: string, offsync: boolean): Promise<void> {
   }
 
+  public async setContactCardProfileRevision(guid: string, cardId: string, revision: number): Promise<void> {
+  }
+
+  public async setContactCardArticlesRevision(guid: string, cardId: string, revision: number): Promise<void> {
+  }
+
+  public async setContactCardChannelsRevision(guid: string, cardId: string, revision: number): Promise<void> {
+  }
+  
   public async getContactCardArticles(guid: string): Promise<{ cardId: string, articleId: string, item: ArticleItem }[]> {
     return [];
   }
@@ -454,15 +462,18 @@ export class NoStore implements Store {
   public async setContactCardBlocked(guid: string, cardId: string, blocked: boolean): Promise<void> {
   }
 
-  public async setContactCardRemoteRevision(guid: string, cardId: string, notification: CardNotification): Promise<void> {
-  }
-
-  public async setContactCardSyncRevision(guid: string, cardId: string, notification: CardNotification): Promise<void> {
-  }
-
   public async setContactCardOffsync(guid: string, cardId: string, offsync: boolean): Promise<void> {
   }
 
+  public async setContactCardProfileRevision(guid: string, cardId: string, revision: number): Promise<void> {
+  }
+
+  public async setContactCardArticlesRevision(guid: string, cardId: string, revision: number): Promise<void> {
+  }
+
+  public async setContactCardChannelsRevision(guid: string, cardId: string, revision: number): Promise<void> {
+  }
+  
   public async getContactCardArticles(guid: string): Promise<{ cardId: string, articleId: string, item: ArticleItem }[]> {
     return [];
   }
