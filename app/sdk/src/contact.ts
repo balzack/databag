@@ -236,7 +236,7 @@ export class ContactModule implements Contact {
     const summaryData = summary.sealed ? item.unsealedSummary : summary.data;
 
     const { pushEnabled } =
-      members.find(({ member }) => member === this.guid) | {};
+      detail.members.find(({ member }) => member === this.guid) | {};
     const contacts = detail.members
       .filter(({ member }) => member != this.guid)
       .map(({ member, pushEnabled }) => {
