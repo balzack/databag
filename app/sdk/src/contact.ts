@@ -30,6 +30,7 @@ export class ContactModule implements Contact {
   private seal: { privateKey: string, publicKey: string } | null;
   private unsealAll: boolean;
 
+  private cryptp: Crypto | null;
   private store: Store;
   private revision: number;
   private nextRevision: number | null;
@@ -45,13 +46,14 @@ export class ContactModule implements Contact {
   // view of channels
   private channelEntries: Map<string, Map<string, { item: ChannelItem, channel: Channel }>>;
 
-  constructor(log: Logging, store: Store, guid: string, token: string, node: string, secure: boolean, articleTypes, channelTypes) {
+  constructor(log: Logging, store: Store, crypto: Crypto | null, guid: string, token: string, node: string, secure: boolean, articleTypes, channelTypes) {
     this.guid = guid;
     this.token = token;
     this.node = node;
     this.secure = secure;
     this.log = log;
     this.store = store;
+    this.crypto = crypto;
     this.emitter = new EventEmitter();
     this.articleTypes = articleTypes;
     this.channelTypes = channelTypes;
@@ -82,17 +84,64 @@ export class ContactModule implements Contact {
     return { cardId, articleId, dataType, articleData, created, updated, status };
   }
 
-  private async unsealChannelItem(cardId: string, channelId: string, item: ChannelItem) {
-    const { guid } = this;
-    // unseal channel
+  private async getChannelKey(seals: [{ publicKey: string, sealedKey: string}]): Promise<string | null> {
+    const seal = seals.find(({ publicKey }) => (publicKey === this.seal.publicKey));
+    if (seal) {
+      const key = await this.crypto.rsaDecrypt(seal.sealedKey, this.seal.privateKey);
+      return key.data;
+    }
+    return null;
+  }
+
+  private async unsealChannelDetail(cardId: string, channelId: string, item: ChannelItem): Promise<boolean> {
+    if (item.unsealedDetail == null && item.detail.dataType === 'sealed' && this.seal && this.crypto) {
+      try {
+        const { subjectEncrypted, subjectIv, seals } = JSON.parse(item.detail.data);
+        if (!item.channelKey) {
+          item.channelKey = await this.getChannelKey(seals);
+        }
+        if (item.channelKey) {
+          const { data } = await this.crypto.aesDecrypt(subjectEncrypted, subjectIv, item.channelKey);
+          const { subject } = JSON.parse(data);
+          item.unsealedDetail = subject;
+          return true;
+        }
+      }
+      catch (err) {
+        console.log(err);
+      }
+    }
+    return false;
+  }
+
+  private async unsealChannelSummary(cardId: string, channelId: string, item: ChannelItem): Promise<boolean> {
+    if (item.unsealedSummary == null && item.summary.dataType === 'sealedtopic' && this.seal && this.crypto) {
+      try {
+        if (!item.channelKey) {
+          const { seals } = JSON.parse(item.detail.data);
+          item.channelKey = await this.getChannelKey(seals);
+        }
+        if (item.channelKey) {
+          const { messageEncrypted, messageIv } = JSON.parse(item.summary.data);
+          const { data } = await this.crypto.aesDecrypt(messageEncrypted, messageIv, item.channelKey)
+          const { message } = JSON.parse(data);
+          item.unsealedSummary = message;
+          return true;
+        }
+      }
+      catch (err) {
+        console.log(err);
+      }
+    }
+    return false;
   }
 
   private setChannel(cardId: string, channelId: string, item: ChannelItem): Channel {
-    const { unread, blocked, summary, detail, unsealedChannelData, unsealedTopicData } = item;
+    const { unread, blocked, summary, detail, unsealedDetail, unsealedSummary } = item;
     const { enableImage, enableAudio, enableVideo, enableBinary, members } = detail;
-    const channelData = detail.sealed ? unsealedChannelData : detail.data;
+    const detailData = detail.sealed ? unsealedDetail : detail.data;
     const { guid, status, transform } = summary;
-    const topicData = summary.sealed ? unsealedTopicData : summary.data;
+    const summaryData = summary.sealed ? unsealedSummary : summary.data;
 
     const { pushEnabled } = members.find(({ member }) => (member === this.guid)) | {}
     const contacts = members.filter(({ member }) => (member != this.guid)).map(({ member, pushEnabled }) => { guid: member, pushEnabled });
@@ -104,7 +153,7 @@ export class ContactModule implements Contact {
         guid,
         sealed: summary.sealed,
         dataType: summary.dataType,
-        data: topicData,
+        data: summaryData,
         created: summary.created,
         updated: summary.updated,
         status,
@@ -114,7 +163,7 @@ export class ContactModule implements Contact {
       unread,
       sealed: detail.sealed,
       dataType: detail.dataType,
-      data: channelData,
+      data: detailData,
       created: detail.created,
       updated: detail.updated,
       enableImage,
@@ -161,7 +210,7 @@ export class ContactModule implements Contact {
     await this.sync();
   }
 
-  private getCardEntry(cardId: string) {
+  private async getCardEntry(cardId: string) {
     const { guid } = this;
     const entry = this.cardEntries.get(cardId);
     if (entry) {
@@ -171,7 +220,7 @@ export class ContactModule implements Contact {
     const card = this.setCard(cardId, item);
     const cardEntry = { item, card };
     this.cardEntries.set(cardId, cardEntry);
-    this.store.addContactCard(guid, cardId, item);
+    await this.store.addContactCard(guid, cardId, item);
     return cardEntry;
   }
 
@@ -185,7 +234,7 @@ export class ContactModule implements Contact {
     return channels;
   }
 
-  private getChannelEntry(channels: Map<string, { item: ChannelItem, channel: Channel }>, cardId: string, channelId: string) {
+  private async getChannelEntry(channels: Map<string, { item: ChannelItem, channel: Channel }>, cardId: string, channelId: string) {
     const { guid } = this;
     const entry = channels.get(channelId);
     if (entry) {
@@ -195,7 +244,7 @@ export class ContactModule implements Contact {
     const channel = this.setChannel(cardId, channelId, item);
     const channelEntry = { item, channel };
     channels.set(channelId, channelEntry);
-    this.store.addContactCardChannel(guid, cardId, channelId, item);
+    await this.store.addContactCardChannel(guid, cardId, channelId, item);
     return channelEntry;
   }
 
@@ -225,7 +274,7 @@ export class ContactModule implements Contact {
       if (data) {
         const { detailRevision, topicRevision, channelSummary, channelDetail } = data;
         const entries = this.getChannelEntries(cardId);
-        const entry = this.getChannelEntry(entries, cardId, id);
+        const entry = await this.getChannelEntry(entries, cardId, id);
 
         if (detailRevision !== entry.item.detail.revision) {
           const detail = channelDetail ? channelDetail : await getContactChannelDetail(server, !insecure, id);
@@ -244,9 +293,10 @@ export class ContactModule implements Contact {
             contacts,
             members,
           }
-          await this.unsealChannelItem(cardId, id, entry.item);
+          entry.item.unsealedDetail = null;
+          await this.unsealChannelDetail(cardId, id, entry.item);
           entry.channel = this.setChannel(cardId, id, entry.item);
-          this.store.setContactCardChannelDetail(guid, cardId, id, entry.item.detail);
+          await this.store.setContactCardChannelDetail(guid, cardId, id, entry.item.detail, entry.item.unsealedDetail);
         }
 
         if (topicRevision !== entry.item.summary.revision) {
@@ -262,13 +312,15 @@ export class ContactModule implements Contact {
             status,
             transform,
           };
-          await this.unsealChannelItem(cardId, id, entry.item);
+          entry.item.unsealedSummary = null;
+          await this.unsealChannelSummary(cardId, id, entry.item);
           entry.channel = this.setChannel(cardId, id, entry.item);
-          this.store.setContactCardChannelSummary(guid, cardId, id, entry.item.summary);
+          await this.store.setContactCardChannelSummary(guid, cardId, id, entry.item.summary, entry.item.unsealedSummary);
         }
       } else {
         const channels = this.getChannelEntries(cardId);
         channels.delete(id);
+        await this.store.removeContactCardChannel(guid, cardId, id);
       }
     }
   }
@@ -285,14 +337,14 @@ export class ContactModule implements Contact {
             for (const entity of delta) {
               const { id, revision, data } = entity;
               if (data) {
-                const entry = this.getCardEntry(id);
+                const entry = await this.getCardEntry(id);
 
                 if (data.detailRevision !== entry.item.detail.revison) {
                   const detail = data.cardDetail ? data.cardDetail : await getCardDetail(node, secure, token, id);
                   const { status, statusUpdated, token: cardToken } = detail;
                   entry.item.detail = { revision: data.detailRevision, status, statusUpdated, token: cardToken }
                   entry.card = this.setCard(id, entry.item);                  
-                  this.store.setContactCardDetail(guid, id, entry.item.detail);
+                  await this.store.setContactCardDetail(guid, id, entry.item.detail);
                 }
 
                 if (data.profileRevision !== entry.item.profile.revision) {
@@ -300,19 +352,19 @@ export class ContactModule implements Contact {
                   const { guid: profileGuid, handle, name, description, location, imageSet, node: profileNode, seal } = profile;
                   entry.item.profile = { revision: data.profileRevision, handle, guid: profileGuid, name, description, location, imageSet, node: profileNode, seal };
                   entry.card = this.setCard(id, entry.item);                  
-                  this.store.setContactCardProfile(guid, id, entry.item.profile);
+                  await this.store.setContactCardProfile(guid, id, entry.item.profile);
                 }
 
                 if (data.notifiedProfile > entry.item.profile.revision && data.notifiedProfile !== entry.item.profileRevision) {
                   try {
                     await this.syncProfile(id, entry.item.profile.node, entry.item.profile.guid, entry.item.detail.token, entry.item.profileRevision);
                     entry.item.profileRevision = data.notifiedProfile;
-                    this.store.setContactCardProfileRevision(guid, id, data.notifiedProfile);
+                    await this.store.setContactCardProfileRevision(guid, id, data.notifiedProfile);
                   }
                   catch (err) {
                     this.log.warn(err);
                     entry.item.offsync = true;
-                    this.store.setContactCardOffsync(guid, id, true);
+                    await this.store.setContactCardOffsync(guid, id, true);
                   }
                 }
 
@@ -320,12 +372,12 @@ export class ContactModule implements Contact {
                   try {
                     await this.syncArticles(id, entry.item.profile.node, entry.item.profile.guid, entry.item.detail.token, entry.item.articleRevision);
                     entry.item.articleRevision = data.notifiedArticle;
-                    this.store.setContactCardArticlesRevision(guid, id, data.notifiedArticle);
+                    await this.store.setContactCardArticlesRevision(guid, id, data.notifiedArticle);
                   }
                   catch (err) {
                     this.log.warn(err);
                     entry.item.offsync = true;
-                    this.store.setContactCardOffsync(guid, id, true);
+                    await this.store.setContactCardOffsync(guid, id, true);
                   }
                   this.emitArticles(id);
                 }
@@ -334,19 +386,19 @@ export class ContactModule implements Contact {
                   try {
                     await this.syncChannels(id, entry.item.profile.node, entry.item.profile.guid, entry.item.detail.token, entry.item.channelRevision);
                     entry.item.channelRevision = data.notifiedChannel;
-                    this.store.setContactCardChannelsRevision(guid, id, data.notifiedChannel);
+                    await this.store.setContactCardChannelsRevision(guid, id, data.notifiedChannel);
                   }
                   catch (err) {
                     this.log.warn(err);
                     entry.item.offsync = true;
-                    this.store.setContactCardOffsync(guid, id, true);
+                    await this.store.setContactCardOffsync(guid, id, true);
                   }
                   this.emitChannels(id);
                 }
               }
               else {
                 this.cardEntries.delete(id);
-                this.store.removeContactCard(guid, id);
+                await this.store.removeContactCard(guid, id);
                 this.channelEntries.delete(id);
                 this.emitChannels(id);
                 this.articleEntries.delete(id);
@@ -375,12 +427,17 @@ export class ContactModule implements Contact {
 
       if (this.unsealAll) {
         for (const card of this.channelEntries.entries()) {
-          for (const channel of card.value().entries()) {
+          for (const channel of card.value.entries()) {
             try {
-              const { item } = channel.value();
-              const cardId = card.key();
-              const channelId = channel.key();
-              await this.unsealChannelItem(cardId, channelId, item);
+              const { item } = channel.value;
+              const cardId = card.key;
+              const channelId = channel.key;
+              if (await this.unsealChannelDetail(cardId, channelId, item)) {
+                await this.store.setContactCardChannelUnsealedDetail(guid, cardId, channelId, item.unsealedDetail);
+              }
+              if (await this.unsealChannelSummary(cardId, channelId, item)) {
+                await this.store.setContactCardChannelUnsealedSummary(guid, cardId, channelId, item.unsealedSummary);
+              }
               const channel = setChannel(cardId, channelId, item);
               this.channelEntries.set(cardId).set(channelId, { item, channel });
             }

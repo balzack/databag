@@ -112,8 +112,9 @@ export type ChannelItem = {
   blocked: boolean,
   summary: ChannelSummary,
   detail: ChannelDetail,
-  unsealedChannelData: string | null,
-  unsealedTopicData: string | null,
+  channelKey: string | null,
+  unsealedDetail: string | null,
+  unsealedSummary: string | null,
 }
 
 export const defaultChannelItem = {
@@ -147,7 +148,8 @@ export const defaultChannelItem = {
     },
     members: [],
   },
-  unsealedChannelData: null,
-  unsealedTopicData: null,
+  channelKey: null,
+  unsealedDetail: null,
+  unsealedSummary: null,
 };
  

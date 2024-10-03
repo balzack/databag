@@ -62,7 +62,7 @@ export class SessionModule implements Session {
 
     this.identity = new IdentityModule(log, this.store, guid, token, node, secure);
     this.settings = new SettingsModule(log, this.store, this.crypto, guid, token, node, secure);
-    this.contact = new ContactModule(log, this.store, guid, token, node, secure, channelTypes, articleTypes);
+    this.contact = new ContactModule(log, this.store, this.crypto, guid, token, node, secure, channelTypes, articleTypes);
     this.alias = new AliasModule(log, this.settings, this.store, guid, token, node, secure);
     this.attribute = new AttributeModule(log, this.settings, this.store, guid, token, node, secure);
     this.content = new ContentModule(log, this.settings, this.store, guid, token, node, secure);
