@@ -1,9 +1,8 @@
-import type { Node } from './api';
-import type { NodeAccount, NodeConfig } from './types';
-import type { Logging } from './logging';
+import type { Node } from "./api";
+import type { NodeAccount, NodeConfig } from "./types";
+import type { Logging } from "./logging";
 
 export class NodeModule implements Node {
-
   private log: Logging;
   private token: string;
   private node: string;
@@ -17,30 +16,42 @@ export class NodeModule implements Node {
   }
 
   public async createAccountAccess(): Promise<string> {
-    return '';
+    return "";
   }
 
   public async resetAccountAccess(): Promise<string> {
-    return '';
+    return "";
   }
 
-  public async blockAccount(flag: boolean): Promise<void> {
-  }
+  public async blockAccount(flag: boolean): Promise<void> {}
 
-  public async removeAccount(accountId: number): Promise<void> {
-  }
+  public async removeAccount(accountId: number): Promise<void> {}
 
   public async getAccounts(): Promise<NodeAccount[]> {
     return [];
   }
 
   public async getConfig(): Promise<NodeConfig> {
-    return { domain: '', accountStorage: '', enableImage: true, enableAudio: true, enableVideo: true, enableBinary: true, keyType: '',
-      pushSupported: true, allowUnsealed: true, transformSupported: true, enableIce: true, iceService: '', iceUrl: '', iceUsername: '', 
-      icePassword: '', enableOpenAccess: true, openAccessLimit: 0 };
+    return {
+      domain: "",
+      accountStorage: "",
+      enableImage: true,
+      enableAudio: true,
+      enableVideo: true,
+      enableBinary: true,
+      keyType: "",
+      pushSupported: true,
+      allowUnsealed: true,
+      transformSupported: true,
+      enableIce: true,
+      iceService: "",
+      iceUrl: "",
+      iceUsername: "",
+      icePassword: "",
+      enableOpenAccess: true,
+      openAccessLimit: 0,
+    };
   }
 
-  public async setConfig(config: NodeConfig): Promise<void> {
-  }
-
+  public async setConfig(config: NodeConfig): Promise<void> {}
 }

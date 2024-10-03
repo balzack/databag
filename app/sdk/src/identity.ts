@@ -1,19 +1,18 @@
-import { EventEmitter } from 'eventemitter3';
-import type { Identity } from './api';
-import type { Logging } from './logging';
-import type { Profile } from './types';
-import { Store } from './store';
-import { getProfile } from './net/getProfile';
-import { getProfileImageUrl } from './net/getProfileImageUrl';
-import { setProfileData } from './net/setProfileData';
-import { setProfileImage } from './net/setProfileImage';
-import { ProfileEntity, defaultProfileEntity, avatar } from './entities';
+import { EventEmitter } from "eventemitter3";
+import type { Identity } from "./api";
+import type { Logging } from "./logging";
+import type { Profile } from "./types";
+import { Store } from "./store";
+import { getProfile } from "./net/getProfile";
+import { getProfileImageUrl } from "./net/getProfileImageUrl";
+import { setProfileData } from "./net/setProfileData";
+import { setProfileImage } from "./net/setProfileImage";
+import { ProfileEntity, defaultProfileEntity, avatar } from "./entities";
 
 const CLOSE_POLL_MS = 100;
 const RETRY_POLL_MS = 2000;
 
 export class IdentityModule implements Identity {
-
   private guid: string;
   private token: string;
   private node: string;
@@ -28,7 +27,14 @@ export class IdentityModule implements Identity {
   private closing: boolean;
   private emitter: EventEmitter;
 
-  constructor(log: Logging, store: Store, guid: string, token: string, node: string, secure: boolean) {
+  constructor(
+    log: Logging,
+    store: Store,
+    guid: string,
+    token: string,
+    node: string,
+    secure: boolean,
+  ) {
     this.guid = guid;
     this.token = token;
     this.node = node;
@@ -48,11 +54,11 @@ export class IdentityModule implements Identity {
     this.revision = await this.store.getProfileRevision(this.guid);
     this.profile = await this.store.getProfileData(this.guid);
     if (this.profile.image) {
-      this.imageUrl = `data:image/png;base64,${this.profile.image}`
+      this.imageUrl = `data:image/png;base64,${this.profile.image}`;
     } else {
-      this.imageUrl = avatar
+      this.imageUrl = avatar;
     }
-    this.emitter.emit('profile', this.setProfile());
+    this.emitter.emit("profile", this.setProfile());
     this.syncing = false;
     await this.sync();
   }
@@ -63,8 +69,7 @@ export class IdentityModule implements Identity {
       while (this.nextRevision && !this.closing) {
         if (this.revision == this.nextRevision) {
           this.nextRevision = null;
-        }
-        else {
+        } else {
           const nextRev = this.nextRevision;
           try {
             const { guid, node, secure, token } = this;
@@ -73,20 +78,19 @@ export class IdentityModule implements Identity {
             await this.store.setProfileRevision(guid, nextRev);
             this.profile = profile;
             if (profile.image) {
-              this.imageUrl = `data:image/png;base64,${profile.image}`
+              this.imageUrl = `data:image/png;base64,${profile.image}`;
             } else {
-              this.imageUrl = avatar
+              this.imageUrl = avatar;
             }
-            this.emitter.emit('profile', this.setProfile());
+            this.emitter.emit("profile", this.setProfile());
             this.revision = nextRev;
             if (this.nextRevision === nextRev) {
               this.nextRevision = null;
             }
             this.log.info(`identity revision: ${nextRev}`);
-          }
-          catch (err) {
+          } catch (err) {
             this.log.warn(err);
-            await new Promise(r => setTimeout(r, RETRY_POLL_MS));
+            await new Promise((r) => setTimeout(r, RETRY_POLL_MS));
           }
         }
       }
@@ -95,23 +99,44 @@ export class IdentityModule implements Identity {
   }
 
   public setProfile() {
-    const { guid, handle, name, description, location, image, revision, seal, version, node } = this.profile;
-    return { guid, handle, name, description, location, imageSet: Boolean(image), version, node, sealSet: Boolean(seal) };
+    const {
+      guid,
+      handle,
+      name,
+      description,
+      location,
+      image,
+      revision,
+      seal,
+      version,
+      node,
+    } = this.profile;
+    return {
+      guid,
+      handle,
+      name,
+      description,
+      location,
+      imageSet: Boolean(image),
+      version,
+      node,
+      sealSet: Boolean(seal),
+    };
   }
 
   public addProfileListener(ev: (profile: Profile) => void): void {
-    this.emitter.on('profile', ev);
-    this.emitter.emit('profile', this.setProfile());
+    this.emitter.on("profile", ev);
+    this.emitter.emit("profile", this.setProfile());
   }
 
   public removeProfileListener(ev: (profile: Profile) => void): void {
-    this.emitter.off('profile', ev);
+    this.emitter.off("profile", ev);
   }
 
   public async close(): Promise<void> {
     this.closing = true;
-    while(this.syncing) {
-      await new Promise(r => setTimeout(r, CLOSE_POLL_MS));
+    while (this.syncing) {
+      await new Promise((r) => setTimeout(r, CLOSE_POLL_MS));
     }
   }
 
@@ -120,7 +145,11 @@ export class IdentityModule implements Identity {
     await this.sync();
   }
 
-  public async setProfileData(name: string, location: string, description: string): Promise<void> {
+  public async setProfileData(
+    name: string,
+    location: string,
+    description: string,
+  ): Promise<void> {
     const { node, secure, token } = this;
     await setProfileData(node, secure, token, name, location, description);
   }
@@ -134,4 +163,3 @@ export class IdentityModule implements Identity {
     return this.imageUrl;
   }
 }
-

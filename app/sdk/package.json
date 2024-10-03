@@ -10,6 +10,7 @@
   ],
   "scripts": {
     "build": "tsup",
+    "format": "prettier --write src",
     "test": "jest"
   },
   "repository": {
@@ -35,6 +36,7 @@
     "typescript": "^5.4.5"
   },
   "dependencies": {
-    "eventemitter3": "^5.0.1"
+    "eventemitter3": "^5.0.1",
+    "prettier": "^3.3.3"
   }
 }

@@ -1,79 +1,79 @@
 export type CardDetail = {
-  revision: number,
-  status: string,
-  statusUpdated: number,
-  token: string,
-}
+  revision: number;
+  status: string;
+  statusUpdated: number;
+  token: string;
+};
 
 export type CardProfile = {
-  revision: number,
-  handle: string,
-  guid: string,
-  name: string,
-  description: string,
-  location: string,
-  imageSet: boolean,
-  node: string,
-  seal: string,
-}
+  revision: number;
+  handle: string;
+  guid: string;
+  name: string;
+  description: string;
+  location: string;
+  imageSet: boolean;
+  node: string;
+  seal: string;
+};
 
 export type ChannelSummary = {
-  revision: number,
-  sealed: boolean,
-  guid: string,
-  dataType: string,
-  data: string,
-  created: number,
-  updated: number,
-  status: string,
-  transform: string
-}
+  revision: number;
+  sealed: boolean;
+  guid: string;
+  dataType: string;
+  data: string;
+  created: number;
+  updated: number;
+  status: string;
+  transform: string;
+};
 
 export type ChannelDetail = {
-  revision: number,
-  sealed: boolean,
-  dataType: string,
-  data: string,
-  created: number,
-  updated: number,
-  enableImage: boolean,
-  enableAudio: boolean,
-  enableVideo: boolean,
-  enableBinary: boolean,
+  revision: number;
+  sealed: boolean;
+  dataType: string;
+  data: string;
+  created: number;
+  updated: number;
+  enableImage: boolean;
+  enableAudio: boolean;
+  enableVideo: boolean;
+  enableBinary: boolean;
   contacts: {
-    groups: [ string ],
-    cards: [ string ],
-  },
+    groups: [string];
+    cards: [string];
+  };
   members: {
-    member: string,
-    pushEnabled: boolean,
-  },
-}
+    member: string;
+    pushEnabled: boolean;
+  };
+};
 
 export type ArticleDetail = {
-  revision: number,
-  sealed: boolean,
-  dataType: string,
-  data: string,
-  created: number,
-  updated: number,
-  status: string,
+  revision: number;
+  sealed: boolean;
+  dataType: string;
+  data: string;
+  created: number;
+  updated: number;
+  status: string;
   contacts?: {
-    cards: [ string ],
-    groups: [ string ],
-  }
-}
+    cards: [string];
+    groups: [string];
+  };
+};
 
-export type CardItem = { 
-  offsync: boolean,
-  blocked: boolean,
-  revision: number,
-  profile: CardProfile,
-  detail: CardDetail,
-  profileRevision: number,
-  articleRevision: number,
-  channelRevision: number,
-}
+export type CardItem = {
+  offsync: boolean;
+  blocked: boolean;
+  revision: number;
+  profile: CardProfile;
+  detail: CardDetail;
+  profileRevision: number;
+  articleRevision: number;
+  channelRevision: number;
+};
 
 export const defaultCardItem = {
   offsync: false,
@@ -81,18 +81,18 @@ export const defaultCardItem = {
   revision: 0,
   profile: {
     revision: 0,
-    handle: '',
-    guid: '',
-    name: '',
-    description: '',
-    location: '',
+    handle: "",
+    guid: "",
+    name: "",
+    description: "",
+    location: "",
     imageSet: false,
-    node: '',
-    seal: '',    
+    node: "",
+    seal: "",
   },
   detail: {
     revision: 0,
-    status: '',
+    status: "",
     statusUpdated: 0,
     token: 0,
   },
@@ -102,20 +102,20 @@ export const defaultCardItem = {
 };
 
 export type ArticleItem = {
-  blocked: boolean,
-  detail: ArticleDetail,
-  unsealedData: string | null,
-}  
+  blocked: boolean;
+  detail: ArticleDetail;
+  unsealedData: string | null;
+};
 
 export type ChannelItem = {
-  unread: boolean,
-  blocked: boolean,
-  summary: ChannelSummary,
-  detail: ChannelDetail,
-  channelKey: string | null,
-  unsealedDetail: string | null,
-  unsealedSummary: string | null,
-}
+  unread: boolean;
+  blocked: boolean;
+  summary: ChannelSummary;
+  detail: ChannelDetail;
+  channelKey: string | null;
+  unsealedDetail: string | null;
+  unsealedSummary: string | null;
+};
 
 export const defaultChannelItem = {
   unread: false,
@@ -123,19 +123,19 @@ export const defaultChannelItem = {
   summary: {
     revision: 0,
     sealed: false,
-    guid: '',
-    dataType: '',
-    data: '',
+    guid: "",
+    dataType: "",
+    data: "",
     created: 0,
     updated: 0,
-    status: '',
-    transform: '',
+    status: "",
+    transform: "",
   },
   detail: {
     revision: 0,
     sealed: false,
-    dataType: '',
-    data: '',
+    dataType: "",
+    data: "",
     created: 0,
     updated: 0,
     enableImage: false,
@@ -152,4 +152,3 @@ export const defaultChannelItem = {
   unsealedDetail: null,
   unsealedSummary: null,
 };
- 

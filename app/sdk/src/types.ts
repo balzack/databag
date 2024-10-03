@@ -1,70 +1,70 @@
 export type Card = {
-  cardId: string,
-  offsync: boolean,
-  blocked: boolean,
-  status: string,
-  statusUpdated: number,
-  guid: string,
-  handle: string,
-  name: string,
-  description: string,
-  location: string,
-  imageSet: boolean,
-  version: string,
-  node: string,
-}
+  cardId: string;
+  offsync: boolean;
+  blocked: boolean;
+  status: string;
+  statusUpdated: number;
+  guid: string;
+  handle: string;
+  name: string;
+  description: string;
+  location: string;
+  imageSet: boolean;
+  version: string;
+  node: string;
+};
 
 export type Call = {
-  cardId: string,
-  callId: string,
-  calleeToken: string,
-  ice: { urls: string, username: string, credential: string}[],
-}
+  cardId: string;
+  callId: string;
+  calleeToken: string;
+  ice: { urls: string; username: string; credential: string }[];
+};
 
 export type Revision = {
-  account: number,
-  profile: number,
-  article: number,
-  group: number,
-  channel: number,
-  card: number
-}
+  account: number;
+  profile: number;
+  article: number;
+  group: number;
+  channel: number;
+  card: number;
+};
 
 export type Activity = {
-  revision?: Revision,
-  phone?: Call,
-}
-  
+  revision?: Revision;
+  phone?: Call;
+};
+
 export type Channel = {
-  channelId: string,
-  cardId: string | null,
+  channelId: string;
+  cardId: string | null;
   lastTopic: {
-    guid: string,
-    sealed: boolean,
-    dataType: string,
-    data: string,
-    created: number,
-    updated: number,
-    status: string,
-    transform: string
-  }
-  unread: boolean,
-  sealed: boolean,
-  dataType: string,
-  data: string | null,
-  created: number,
-  updated: number,
-  enableImage: boolean,
-  enableAudio: boolean,
-  enableVideo: boolean,
-  enableBinary: boolean,
-  membership: Member,
-  members: Member[],
-}
+    guid: string;
+    sealed: boolean;
+    dataType: string;
+    data: string;
+    created: number;
+    updated: number;
+    status: string;
+    transform: string;
+  };
+  unread: boolean;
+  sealed: boolean;
+  dataType: string;
+  data: string | null;
+  created: number;
+  updated: number;
+  enableImage: boolean;
+  enableAudio: boolean;
+  enableVideo: boolean;
+  enableBinary: boolean;
+  membership: Member;
+  members: Member[];
+};
 
 export type Member = {
-  guid?: string,
-  pushEnabled: boolean,
+  guid?: string;
+  pushEnabled: boolean;
   //canAddTopic: boolean,
   //canAddTag: boolean,
   //canAddAsset: boolean,
@@ -72,146 +72,145 @@ export type Member = {
   //canSortTopic: boolean,
   //canSortTag: boolean,
   //participants: Participant[];
-}
+};
 
 export type Participant = {
-  id: string,
-  name: string,
-  token: string,
-  node: string,
-  secure: boolean,
-}
+  id: string;
+  name: string;
+  token: string;
+  node: string;
+  secure: boolean;
+};
 
 export type Topic = {
-  id: string,
-  guid: string,
-  sealed: boolean,
-  unsealed: boolean,
-  dataType: string,
-  data: any,
-  created: number,
-  updated: number,
-  status: string,
-  transform: string,
-  sortOrder: number,
-  tagCount: number,
-  tagComplete: boolean,
-  tags: Tag[]
-}
+  id: string;
+  guid: string;
+  sealed: boolean;
+  unsealed: boolean;
+  dataType: string;
+  data: any;
+  created: number;
+  updated: number;
+  status: string;
+  transform: string;
+  sortOrder: number;
+  tagCount: number;
+  tagComplete: boolean;
+  tags: Tag[];
+};
 
 export type Tag = {
-  id: string,
-  sealed: boolean,
-  unsealed: boolean,
-  guid: string,
-  dataType: string,
-  data: string,
-  created: number,
-  updated: number,
-  sortOrder: number,
-}
+  id: string;
+  sealed: boolean;
+  unsealed: boolean;
+  guid: string;
+  dataType: string;
+  data: string;
+  created: number;
+  updated: number;
+  sortOrder: number;
+};
 
 export type Asset = {
-  path: string,
-  fileType: string,
-}
+  path: string;
+  fileType: string;
+};
 
 export type Group = {
-  id: string,
-  sealed: boolean,
-  unsealed: boolean,
-  dataType: string,
-  data: string,
-  created: number,
-  updated: number,
-  cards: string[]
-}
+  id: string;
+  sealed: boolean;
+  unsealed: boolean;
+  dataType: string;
+  data: string;
+  created: number;
+  updated: number;
+  cards: string[];
+};
 
 export type Article = {
-  articleId: string,
-  sealed: boolean,
-  dataType: string,
-  data?: string,
-  created: number,
-  updated: number,
+  articleId: string;
+  sealed: boolean;
+  dataType: string;
+  data?: string;
+  created: number;
+  updated: number;
   contacts?: {
-    cards: string[],
-    groups: string[],
-  }
-}
+    cards: string[];
+    groups: string[];
+  };
+};
 
 export type Config = {
-  disabled: boolean,
-  storageUsed: number,
-  storageAvailable: number,
-  forwardingAddress: string,
-  searchable: boolean,
-  allowUnsealed: boolean,
-  pushEnabled: boolean,
-  sealSet: boolean,
-  sealUnlocked: boolean,
-  enableIce: boolean,
-  mfaEnabled: boolean,
-  webPushKey: string,
-}
+  disabled: boolean;
+  storageUsed: number;
+  storageAvailable: number;
+  forwardingAddress: string;
+  searchable: boolean;
+  allowUnsealed: boolean;
+  pushEnabled: boolean;
+  sealSet: boolean;
+  sealUnlocked: boolean;
+  enableIce: boolean;
+  mfaEnabled: boolean;
+  webPushKey: string;
+};
 
 export type Profile = {
-  guid: string,
-  handle: string,
-  name: string,
-  description: string,
-  location: string,
-  imageSet: boolean,
-  sealSet: boolean,
-  version: string,
-  node: string,
-}
+  guid: string;
+  handle: string;
+  name: string;
+  description: string;
+  location: string;
+  imageSet: boolean;
+  sealSet: boolean;
+  version: string;
+  node: string;
+};
 
 export type NodeAccount = {
-  accountId: number,
-  guid: string,
-  handle: string,
-  name: string,
-  description: string,
-  location: string,
-  imageSet: boolean,
-  disabled: boolean,
-}
+  accountId: number;
+  guid: string;
+  handle: string;
+  name: string;
+  description: string;
+  location: string;
+  imageSet: boolean;
+  disabled: boolean;
+};
 
 export type NodeConfig = {
-  domain: string,
-  accountStorage: string,
-  enableImage: boolean,
-  enableAudio: boolean,
-  enableVideo: boolean,
-  enableBinary: boolean,
-  keyType: string,
-  pushSupported: boolean,
-  allowUnsealed: boolean,
-  transformSupported: boolean,
-  enableIce: boolean,
-  iceService: string,
-  iceUrl: string,
-  iceUsername: string,
-  icePassword: string,
-  enableOpenAccess: boolean,
-  openAccessLimit: number,
-}
+  domain: string;
+  accountStorage: string;
+  enableImage: boolean;
+  enableAudio: boolean;
+  enableVideo: boolean;
+  enableBinary: boolean;
+  keyType: string;
+  pushSupported: boolean;
+  allowUnsealed: boolean;
+  transformSupported: boolean;
+  enableIce: boolean;
+  iceService: string;
+  iceUrl: string;
+  iceUsername: string;
+  icePassword: string;
+  enableOpenAccess: boolean;
+  openAccessLimit: number;
+};
 
 export type Params = {
-  topicBatch: number,
-  tagBatch: number,
-  articleTypes: string[],
-  channelTypes: string[],
-}
+  topicBatch: number;
+  tagBatch: number;
+  articleTypes: string[];
+  channelTypes: string[];
+};
 
 export type SessionParams = {
-  pushType: string,
-  deviceToken: string,
-  notifications: { event: string, messageTitle: string}[],
+  pushType: string;
+  deviceToken: string;
+  notifications: { event: string; messageTitle: string }[];
 
-  deviceId: string,
-  version: string,
-  appName: string,
-}
-
+  deviceId: string;
+  version: string;
+  appName: string;
+};

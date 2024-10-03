@@ -6,13 +6,12 @@ export interface Logging {
 
 export class ConsoleLogging implements Logging {
   public error(m: any): void {
-    console.log('error:', m);
+    console.log("error:", m);
   }
   public warn(m: any): void {
-    console.log('warn:', m);
+    console.log("warn:", m);
   }
   public info(m: any): void {
-    console.log('info:', m);
+    console.log("info:", m);
   }
 }
-
