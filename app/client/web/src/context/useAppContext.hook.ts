@@ -1,10 +1,11 @@
 import { useState, useEffect, useRef } from 'react'
-import { DatabagSDK, Session } from 'databag-client-sdk'
+import { DatabagSDK, Params, Session } from 'databag-client-sdk'
 import { SessionStore } from '../SessionStore'
 import { WebCrypto } from '../WebCrypto'
 
 export function useAppContext() {
-  const sdk = useRef(new DatabagSDK(new WebCrypto()))
+  const params = { tagBatch: 32, topicBatch: 32, articleTypes: [], channelTypes: [ 'sealed','superbasic'] };
+  const sdk = useRef(new DatabagSDK(params, new WebCrypto()))
   const [state, setState] = useState({
     session: null as null | Session,
   })

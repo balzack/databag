@@ -17,12 +17,8 @@ export type CardProfile = {
   seal: string,
 }
 
-export type ChannelRevision = {
-  topic: number,
-  detail: number,
-}
-
 export type ChannelSummary = {
+  revision: number,
   guid: string,
   dataType: string,
   data: string,
@@ -119,7 +115,41 @@ export type ChannelItem = {
   blocked: boolean,
   summary: ChannelSummary,
   detail: ChannelDetail,
-  unsealedChannelData: any,
-  unsealedTopicData: any,
-  revision: ChannelRevision,
+  unsealedChannelData: string,
+  unsealedTopicData: string,
 }
+
+export const defaultChannelItem = {
+  unread: false,
+  blocked: false,
+  summary: {
+    revision: 0,
+    guid: '',
+    dataType: '',
+    data: '',
+    created: 0,
+    updated: 0,
+    status: '',
+    transform: '',
+  },
+  detail: {
+    revision: 0,
+    sealed: false,
+    dataType: '',
+    data: '',
+    created: 0,
+    updated: 0,
+    enableImage: false,
+    enableAudio: false,
+    enableVideo: false,
+    enableBinary: false,
+    contacts: {
+      groups: [],
+      cards: [],
+    },
+    members: [],
+  },
+  unsealedChannelData: '',
+  unsealedTopicData: '',
+};
+ 

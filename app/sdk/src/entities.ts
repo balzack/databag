@@ -43,41 +43,45 @@ export type CardEntity = {
   }
 }
 
+export type ChannelSummaryEntity = {
+  lastTopic: {
+    guid: string,
+    dataType: string,
+    data: string,
+    created: number,
+    updated: number,
+    status: string,
+    transform: string
+  }
+}
+
+export type ChannelDetailEntity = {
+  dataType: string,
+  data: string,
+  created: number,
+  updated: number,
+  enableImage: boolean,
+  enableAudio: boolean,
+  enableVideo: boolean,
+  enableBinary: boolean,
+  contacts: {
+    groups: [ string ],
+    cards: [ string ],
+  },
+  members: {
+    member: string,
+    pushEnabled: boolean,
+  },
+}
+
 export type ChannelEntity = {
   id: string,
   revision: number,
   data: {
     detailRevision: number,
     topicRevision: number,
-    channelSummary?: {
-      lastTopic: {
-        guid: string,
-        dataType: string,
-        data: string,
-        created: number,
-        updated: number,
-        status: string,
-        transform: string
-      }
-    },
-    channelDetail?: {
-      dataType: string,
-      data: string,
-      created: number,
-      updated: number,
-      enableImage: boolean,
-      enableAudio: boolean,
-      enableVideo: boolean,
-      enableBinary: boolean,
-      contacts: {
-        groups: [ string ],
-        cards: [ string ],
-      },
-      members: {
-        member: string,
-        pushEnabled: boolean,
-      },
-    },
+    channelSummary?: ChannelSummaryEntity,
+    channelDetail?: ChannelDetailEntity,
   }
 }
 

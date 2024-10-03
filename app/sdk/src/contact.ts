@@ -3,13 +3,16 @@ import type { Contact, Logging } from './api';
 import type { Card, Topic, Asset, Tag, Profile, Participant} from './types';
 import type { CardEntity } from './entities';
 import type { ArticleRevision, ArticleDetail, ChannelRevision, ChannelSummary, ChannelDetail, CardRevision, CardNotification, CardProfile, CardDetail } from './items';
-import { defaultCardItem } from './items';
+import { defaultCardItem, defaultChannelItem } from './items';
 import { Store } from './store';
 import { getCards } from './net/getCards';
 import { getCardProfile } from './net/getCardProfile';
 import { getCardDetail } from './net/getCardDetail';
 import { setCardProfile } from './net/setCardProfile';
 import { getContactProfile } from './net/getContactProfile';
+import { getContactChannels } from './net/getContactChannels';
+import { getContactChannelDetail } from './net/getContactChannelDetail';
+import { getContactChannelSummary } from './net/getContactChannelSummary';
 
 const CLOSE_POLL_MS = 100;
 const RETRY_POLL_MS = 2000;
@@ -22,6 +25,8 @@ export class ContactModule implements Contact {
   private node: string;
   private secure: boolean;
   private emitter: EventEmitter;
+  private articleTypes: stirng[];
+  private channelTypes: string[];
 
   private store: Store;
   private revision: number;
@@ -38,7 +43,7 @@ export class ContactModule implements Contact {
   // view of channels
   private channelEntries: Map<string, Map<string, { item: ChannelItem, channel: Channel }>>;
 
-  constructor(log: Logging, store: Store, guid: string, token: string, node: string, secure: boolean) {
+  constructor(log: Logging, store: Store, guid: string, token: string, node: string, secure: boolean, articleTypes, channelTypes) {
     this.guid = guid;
     this.token = token;
     this.node = node;
@@ -46,6 +51,8 @@ export class ContactModule implements Contact {
     this.log = log;
     this.store = store;
     this.emitter = new EventEmitter();
+    this.articleTypes = articleTypes;
+    this.channelTypes = channelTypes;
 
     this.cardEntries = new Map<string, { item: CardItem, card: Card }>();
     this.articleEntries = new Map<string, Map<string, { item: ArticleItem, article: Article }>>;
@@ -73,7 +80,7 @@ export class ContactModule implements Contact {
   }
 
   private setChannel(cardId: string, channelId: string, item: ChannelItem): Channel {
-    const { blocked, summary, detail, unsealedChannelData, unsealedTopicData } = item;
+    const { unread, blocked, summary, detail, unsealedChannelData, unsealedTopicData } = item;
     const { enableImage, enableAudio, enableVideo, enableBinary, members } = detail;
     const channelData = detail.sealed ? unsealedChannelData : detail.data;
     const { guid, status, transform } = summary;
@@ -95,8 +102,9 @@ export class ContactModule implements Contact {
         status,
         transform,
       },
+      blocked,
       unread,
-      sealed: channelSealed,
+      sealed: detail.sealed,
       dataType: detail.dataType,
       data: channelData,
       created: detail.created,
@@ -144,16 +152,42 @@ export class ContactModule implements Contact {
     await this.sync();
   }
 
-  private getCardEntry(id: string) {
-    const entry = this.cardEntries.get(id);
+  private getCardEntry(cardId: string) {
+    const { guid } = this;
+    const entry = this.cardEntries.get(cardId);
     if (entry) {
       return entry;
     }
     const item = JSON.parse(JSON.stringify(defaultCardItem));
-    const card = this.setCard(id, item);
+    const card = this.setCard(cardId, item);
     const cardEntry = { item, card };
-    this.cardEntries.set(id, cardEntry);
+    this.cardEntries.set(cardId, cardEntry);
+    this.store.addContactCard(guid, cardId, item);
     return cardEntry;
+  }
+
+  private getChannelEntries(cardId: string) {
+    const entries = this.channelEntries.get(cardId);
+    if (entries) {
+      return entries;
+    }
+    const channels = new Map<string, { item: ChannelItem, channel: Channel }>();
+    this.channelEntries.set(cardId, channels);
+    return channels;
+  }
+
+  private getChannelEntry(channels: Map<string, { item: ChannelItem, channel: Channel }>, cardId: string, channelId: string) {
+    const { guid } = this;
+    const entry = channels.get(channelId);
+    if (entry) {
+      return entry;
+    }
+    const item = JSON.parse(JSON.stringify(defaultChannelItem));
+    const channel = this.setChannel(cardId, channelId, item);
+    const channelEntry = { item, channel };
+    channels.set(channelId, channelEntry);
+    this.store.addContactCardChannel(guid, cardId, channelId, item);
+    return channelEntry;
   }
 
   private async syncProfile(cardId: string, cardNode: string, cardGuid: string, cardToken: string, revision: number): Promise<void> {
@@ -164,10 +198,68 @@ export class ContactModule implements Contact {
     await setCardProfile(node, secure, token, cardId, message);
   }
 
-  private async syncArticles(id: string, revision: number): Promise<void> {
+  private async syncArticles(cardId: string, cardNode: string, cardGuid: string, cardToken: string, revision: number): Promise<void> {
+    const { node, secure, token } = this;
+    const server = cardNode ? cardNode : node;
+    const insecure = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(server);
+
   }
 
-  private async syncChannels(id: string, revision: number): Promise<void> {
+  private async syncChannels(cardId: string, cardNode: string, cardGuid: string, cardToken, string, revision: number): Promise<void> {
+    const { guid, node, secure, token, channelTypes } = this;
+    const server = cardNode ? cardNode : node;
+    const insecure = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(server);
+    const delta = await getContactChannels(server, !insecure, cardGuid, cardToken, revision, channelTypes);
+
+    for (const entity of delta) {
+      const { id, revision, data } = entity;
+      if (data) {
+        const { detailRevision, topicRevision, channelSummary, channelDetail } = data;
+        const entries = this.getChannelEntries(cardId);
+        const entry = this.getChannelEntry(entries, cardId, id);
+
+        if (detailRevision !== entry.item.detail.revision) {
+          const detail = channelDetail ? channelDetail : await getContactChannelDetail(server, !insecure, id);
+          const { dataType, data, created, updated, enableImage, enableAudio, enableVideo, enableBinary, contacts, members } = detail;
+          entry.item.detail = {
+            revision: detailRevision,
+            sealed: dataType === 'sealed',
+            dataType,
+            data,
+            created,
+            updated,
+            enableImage,
+            enableAudio,
+            enableVideo,
+            enableBinary,
+            contacts,
+            members,
+          }
+          entry.channel = this.setChannel(cardId, id, entry.item);
+          this.store.setContactCardChannelDetail(guid, cardId, id, entry.item.detail);
+        }
+
+        if (topicRevision !== entry.item.summary.revision) {
+          const summary = channelSummary ? channelSummary : await getContactChannelSummary(server, !insecure, id);
+          const { guid, dataType, data, created, updated, status, transform } = summary.lastTopic;
+          entry.item.summary = {
+            revision: topicRevision,
+            guid,
+            dataType,
+            data,
+            created,
+            updated,
+            status,
+            transform,
+          };
+          entry.channel = this.setChannel(cardId, id, entry.item);
+          this.store.setContactCardChannelSummary(guid, cardId, id, entry.item.summary);
+        }
+      } else {
+        const channels = this.getChannelEntries(cardId);
+        channels.delete(id);
+      }
+    }
   }
 
   private async sync(): Promise<void> {
@@ -215,7 +307,7 @@ export class ContactModule implements Contact {
 
                 if (data.notifiedArticle !== entry.item.articleRevision) {
                   try {
-                    await this.syncArticles(id, entry.item.articleRevision);
+                    await this.syncArticles(id, entry.item.profile.node, entry.item.profile.guid, entry.item.detail.token, entry.item.articleRevision);
                     entry.item.articleRevision = data.notifiedArticle;
                     this.store.setContactCardArticlesRevision(guid, id, data.notifiedArticle);
                   }
@@ -229,7 +321,7 @@ export class ContactModule implements Contact {
 
                 if (data.notifiedChannel !== entry.item.channelRevision) {
                   try {
-                    await this.syncChannels(id, entry.item.channelRevision);
+                    await this.syncChannels(id, entry.item.profile.node, entry.item.profile.guid, entry.item.detail.token, entry.item.channelRevision);
                     entry.item.channelRevision = data.notifiedChannel;
                     this.store.setContactCardChannelsRevision(guid, id, data.notifiedChannel);
                   }
@@ -243,6 +335,11 @@ export class ContactModule implements Contact {
               }
               else {
                 this.cardEntries.delete(id);
+                this.store.removeContactCard(guid, id);
+                this.channelEntries.delete(id);
+                this.emitChannels(id);
+                this.articleEntries.delete(id);
+                this.emitArticles(id);
               }
             }
 

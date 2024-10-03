@@ -198,11 +198,14 @@ export type NodeConfig = {
   openAccessLimit: number,
 }
 
-export type SessionParams = {
+export type Params = {
   topicBatch: number,
   tagBatch: number,
+  articleTypes: string[],
   channelTypes: string[],
+}
 
+export type SessionParams = {
   pushType: string,
   deviceToken: string,
   notifications: { event: string, messageTitle: string}[],

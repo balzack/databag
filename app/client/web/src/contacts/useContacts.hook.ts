@@ -1,7 +1,7 @@
 import { useState, useContext, useEffect } from 'react'
 import { AppContext } from '../context/AppContext'
 import { ContextType } from '../context/ContextType'
-import { Card } from 'databag-client-sdk'
+import { Card, Channel } from 'databag-client-sdk'
 
 export function useContacts() {
   const app = useContext(AppContext) as ContextType
@@ -19,8 +19,14 @@ export function useContacts() {
       console.log("CARDS", cards);
     };
     contact.addCardListener(setCards);
+    const setChannels = ({ cardId, channels }: { cardId: string, channels: Channel[] }) => {
+      
+      console.log("CHANNELS :", cardId, channels);
+    };
+    contact.addChannelListener(null, setChannels);
     return () => {
       contact.removeCardListener(setCards);
+      contact.removeChannelListener(setChannels);
     }
   }, [])
 
