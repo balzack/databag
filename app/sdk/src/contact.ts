@@ -27,6 +27,8 @@ export class ContactModule implements Contact {
   private emitter: EventEmitter;
   private articleTypes: stirng[];
   private channelTypes: string[];
+  private seal: { privateKey: string, publicKey: string } | null;
+  private unsealAll: boolean;
 
   private store: Store;
   private revision: number;
@@ -53,6 +55,7 @@ export class ContactModule implements Contact {
     this.emitter = new EventEmitter();
     this.articleTypes = articleTypes;
     this.channelTypes = channelTypes;
+    this.unsealAll = false;
 
     this.cardEntries = new Map<string, { item: CardItem, card: Card }>();
     this.articleEntries = new Map<string, Map<string, { item: ArticleItem, article: Article }>>;
@@ -77,6 +80,11 @@ export class ContactModule implements Contact {
     const { dataType, sealed, data, created, updated } = detail;
     const articleData = sealed ? unsealedData : data;
     return { cardId, articleId, dataType, articleData, created, updated, status };
+  }
+
+  private async unsealChannelItem(cardId: string, channelId: string, item: ChannelItem) {
+    const { guid } = this;
+    // unseal channel
   }
 
   private setChannel(cardId: string, channelId: string, item: ChannelItem): Channel {
@@ -119,17 +127,18 @@ export class ContactModule implements Contact {
   }
  
   private async init() {
-    this.revision = await this.store.getContactRevision(this.guid);
+    const { guid } = this;
+    this.revision = await this.store.getContactRevision(guid);
 
     // load map of cards
-    const cards = await this.store.getContacts(this.guid); 
+    const cards = await this.store.getContacts(guid); 
     cards.forEach(({ cardId, item }) => {
       const card = setCard(cardId, item);
       this.cardEntries.set(cardId, { item, card });
     })
  
     // load map of articles
-    const articles = await this.store.getContactCardArticles(this.guid);
+    const articles = await this.store.getContactCardArticles(guid);
     articles.forEach(({ cardId, articleId, item }) => {
       if (!this.articleEntries.has(cardId)) {
         this.articleEntries.set(cardId, new Map<string, Map<string, { item: ArticleItem, article: Article }>>);
@@ -139,7 +148,7 @@ export class ContactModule implements Contact {
     });
 
     // load map of channels
-    const channels = await this.store.getContactCardChannels(this.guid);
+    const channels = await this.store.getContactCardChannels(guid);
     channels.forEach(({ cardId, channelId, item }) => {
       if (!this.channelEntries.has(cardId)) {
         this.channelEntries.set(cardId, new Map<string, Map<string, { item: ChannelItem, channel: Channel }>>);
@@ -235,6 +244,7 @@ export class ContactModule implements Contact {
             contacts,
             members,
           }
+          await this.unsealChannelItem(cardId, id, entry.item);
           entry.channel = this.setChannel(cardId, id, entry.item);
           this.store.setContactCardChannelDetail(guid, cardId, id, entry.item.detail);
         }
@@ -252,6 +262,7 @@ export class ContactModule implements Contact {
             status,
             transform,
           };
+          await this.unsealChannelItem(cardId, id, entry.item);
           entry.channel = this.setChannel(cardId, id, entry.item);
           this.store.setContactCardChannelSummary(guid, cardId, id, entry.item.summary);
         }
@@ -361,6 +372,26 @@ export class ContactModule implements Contact {
           this.nextRevision = null;
         }
       }
+
+      if (this.unsealAll) {
+        for (const card of this.channelEntries.entries()) {
+          for (const channel of card.value().entries()) {
+            try {
+              const { item } = channel.value();
+              const cardId = card.key();
+              const channelId = channel.key();
+              await this.unsealChannelItem(cardId, channelId, item);
+              const channel = setChannel(cardId, channelId, item);
+              this.channelEntries.set(cardId).set(channelId, { item, channel });
+            }
+            catch (err) {
+              console.log(err);
+            }
+          }
+        }
+        this.unsealAll = false;
+      }
+
       this.syncing = false;
     }
   }
@@ -461,6 +492,12 @@ export class ContactModule implements Contact {
     const entry = entries ? entries.get(channelId) : null;
     const revision = entry ? entry.revision.topic : 0;
     this.emitter.emit(`revision::${cardId}::${channelId}`, revision);
+  }
+
+  public async setSeal(seal: { privateKey: string, publicKey: string } | null) {
+    this.seal = seal;
+    this.unsealAll = true;
+    await this.sync();
   }
 
   public async close(): void {

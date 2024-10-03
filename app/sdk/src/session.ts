@@ -75,6 +75,10 @@ export class SessionModule implements Session {
       this.emitter.emit('status', this.getStatus());
     }
 
+    const onSeal = (seal: { privateKey: string, publicKey: string } | null) => {
+      this.contact.setSeal(seal);
+    }
+
     const onRevision = async (ev: Revision) => {
       await this.identity.setRevision(ev.profile);
       await this.settings.setRevision(ev.account);
@@ -88,6 +92,7 @@ export class SessionModule implements Session {
       this.ring.ring(ev);
     }
 
+    this.settings.addSealListener(onSeal);
     this.connection.addStatusListener(onStatus);
     this.connection.addRevisionListener(onRevision);
     this.connection.addRingListener(onRing);

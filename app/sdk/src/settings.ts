@@ -54,10 +54,18 @@ export class SettingsModule implements Settings {
     this.init();    
   }
 
+  private getSeal() {
+    if (this.seal?.publicKey && this.config.seal?.publicKey) {
+      return this.seal;
+    }
+    return null;
+  } 
+
   private async init() {
     this.revision = await this.store.getSettingsRevision(this.guid);
     this.config = await this.store.getSettingsData(this.guid);
     this.seal = await this.store.getSeal(this.guid);
+    this.emitter.emit('seal', this.getSeal());
     this.emitter.emit('config', this.getConfig());
     this.syncing = false;
     await this.sync();
@@ -79,6 +87,7 @@ export class SettingsModule implements Settings {
             await this.store.setSettingsRevision(guid, nextRev);
             this.config = config;
             this.emitter.emit('config', this.getConfig());
+            this.emitter.emit('seal', this.getSeal());
             this.revision = nextRev;
             if (this.nextRevision === nextRev) {
               this.nextRevision = null;
@@ -110,6 +119,15 @@ export class SettingsModule implements Settings {
 
   public removeConfigListener(ev: (config: Config) => void): void {
     this.emitter.off('config', ev);
+  }
+
+  public addSealListener(ev: (seal: { privateKey: string, publicKey: string } | null) => void): void {
+    this.emitter.on('seal', ev);
+    ev(this.seal);
+  }
+
+  public removeSealListener(ev: (seal: { privateKey: string, publicKey: string } | null) => void): void {
+    this.emitter.off('seal', ev);
   }
 
   public async close(): Promise<void> {
@@ -175,6 +193,7 @@ export class SettingsModule implements Settings {
     this.seal = { publicKey: publicKeyB64, privateKey: privateKeyB64 };
     this.store.setSeal(guid, this.seal);
     this.emitter.emit('config', this.getConfig());
+    this.emitter.emit('seal', this.getSeal());
   }
 
   public async updateSeal(password: string): Promise<void> {
@@ -199,6 +218,7 @@ export class SettingsModule implements Settings {
     await this.store.clearSeal(guid);
     this.seal = null;
     this.emitter.emit('config', this.getConfig());
+    this.emitter.emit('seal', this.getSeal());
   }
 
   public async unlockSeal(password: string): Promise<void> {
@@ -216,6 +236,7 @@ export class SettingsModule implements Settings {
     this.store.setSeal(guid, seal);
     this.seal = seal;
     this.emitter.emit('config', this.getConfig());
+    this.emitter.emit('seal', this.getSeal());
   }
 
   public async forgetSeal(): Promise<void> {
@@ -223,6 +244,7 @@ export class SettingsModule implements Settings {
     await this.store.clearSeal(guid);
     this.seal = null;
     this.emitter.emit('config', this.getConfig());
+    this.emitter.emit('seal', this.getSeal());
   }
 
   public async getUsernameStatus(username: string): Promise<boolean> {

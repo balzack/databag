@@ -1,5 +1,5 @@
 import { Login, ProfileEntity, defaultProfileEntity, ConfigEntity, defaultConfigEntity } from './entities';
-import type { ArticleRevision, ArticleDetail, ArticleItem, ChannelItem, CardItem, CardProfile, CardDetail, ChannelSummary, ChannelDetail } from './items';
+import type { ArticleDetail, ArticleItem, ChannelItem, CardItem, CardProfile, CardDetail, ChannelSummary, ChannelDetail } from './items';
 import type { Logging } from './logging';
 
 export interface Store {
@@ -43,7 +43,6 @@ export interface Store {
   addContactCardArticle(guid: string, cardId: string, articleId: string, item: ArticleItem): Promise<void>;
   removeContactCardArticle(guid: string, cardId: string, articleId: string): Promise<void>;
 
-  setContactCardArticleRevision(guid: string, cardId: string, articleId: string, revision: ArticleRevision): Promise<void>;
   setContactCardArticleDetail(guid: string, cardId: string, articleId: string, detail: ChannelDetail, unsealedData: any): Promise<void>;
   setContactCardArticleUnsealed(guid: string, cardId: string, articleId: string, unsealedData: any): Promise<void>;
 
@@ -220,9 +219,6 @@ export class OfflineStore implements Store {
   public async removeContactCardArticle(guid: string, cardId: string, articleId: string): Promise<void> {
   }
 
-  public async setContactCardArticleRevision(guid: string, cardId: string, articleId: string, revision: ArticleRevision): Promise<void> {
-  }
-
   public async setContactCardArticleDetail(guid: string, cardId: string, articleId: string, detail: ChannelDetail, unsealedData: any): Promise<void> {
   }
 
@@ -387,9 +383,6 @@ export class OnlineStore implements Store {
   public async removeContactCardArticle(guid: string, cardId: string, articleId: string): Promise<void> {
   }
 
-  public async setContactCardArticleRevision(guid: string, cardId: string, articleId: string, revision: ArticleRevision): Promise<void> {
-  }
-
   public async setContactCardArticleDetail(guid: string, cardId: string, articleId: string, detail: ChannelDetail, unsealedData: any): Promise<void> {
   }
 
@@ -526,9 +519,6 @@ export class NoStore implements Store {
   }
 
   public async removeContactCardArticle(guid: string, cardId: string, articleId: string): Promise<void> {
-  }
-
-  public async setContactCardArticleRevision(guid: string, cardId: string, articleId: string, revision: ArticleRevision): Promise<void> {
   }
 
   public async setContactCardArticleDetail(guid: string, cardId: string, articleId: string, detail: ChannelDetail, unsealedData: any): Promise<void> {

@@ -19,6 +19,7 @@ export type CardProfile = {
 
 export type ChannelSummary = {
   revision: number,
+  sealed: boolean,
   guid: string,
   dataType: string,
   data: string,
@@ -49,11 +50,8 @@ export type ChannelDetail = {
   },
 }
 
-export type ArticleRevision = {
-  detail: number,
-}
-
 export type ArticleDetail = {
+  revision: number,
   sealed: boolean,
   dataType: string,
   data: string,
@@ -106,8 +104,7 @@ export const defaultCardItem = {
 export type ArticleItem = {
   blocked: boolean,
   detail: ArticleDetail,
-  unsealedData: any,
-  revision: ArticleRevision,
+  unsealedData: string | null,
 }  
 
 export type ChannelItem = {
@@ -115,8 +112,8 @@ export type ChannelItem = {
   blocked: boolean,
   summary: ChannelSummary,
   detail: ChannelDetail,
-  unsealedChannelData: string,
-  unsealedTopicData: string,
+  unsealedChannelData: string | null,
+  unsealedTopicData: string | null,
 }
 
 export const defaultChannelItem = {
@@ -124,6 +121,7 @@ export const defaultChannelItem = {
   blocked: false,
   summary: {
     revision: 0,
+    sealed: false,
     guid: '',
     dataType: '',
     data: '',
@@ -149,7 +147,7 @@ export const defaultChannelItem = {
     },
     members: [],
   },
-  unsealedChannelData: '',
-  unsealedTopicData: '',
+  unsealedChannelData: null,
+  unsealedTopicData: null,
 };
  
