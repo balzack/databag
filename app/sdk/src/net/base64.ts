@@ -3,8 +3,7 @@ export function encode(input: string) {
   let chr1, chr2, chr3, enc1, enc2, enc3, enc4;
   let i = 0;
 
-  const _keyStr =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+  const _keyStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
 
   input = _utf8_encode(input);
 
@@ -24,12 +23,7 @@ export function encode(input: string) {
       enc4 = 64;
     }
 
-    output =
-      output +
-      _keyStr.charAt(enc1) +
-      _keyStr.charAt(enc2) +
-      _keyStr.charAt(enc3) +
-      _keyStr.charAt(enc4);
+    output = output + _keyStr.charAt(enc1) + _keyStr.charAt(enc2) + _keyStr.charAt(enc3) + _keyStr.charAt(enc4);
   }
 
   return output;

@@ -35,15 +35,7 @@ export class SettingsModule implements Settings {
   private config: ConfigEntity;
   private seal: { privateKey: string; publicKey: string } | null;
 
-  constructor(
-    log: Logging,
-    store: Store,
-    crypto: Crypto | null,
-    guid: string,
-    token: string,
-    node: string,
-    secure: boolean,
-  ) {
+  constructor(log: Logging, store: Store, crypto: Crypto | null, guid: string, token: string, node: string, secure: boolean) {
     this.log = log;
     this.store = store;
     this.crypto = crypto;
@@ -110,27 +102,10 @@ export class SettingsModule implements Settings {
   }
 
   public getConfig() {
-    const {
-      storageUsed,
-      storageAvailable,
-      forwardingAddress,
-      searchable,
-      allowUnsealed,
-      pushEnabled,
-      sealable,
-      seal,
-      enableIce,
-      mfaEnabled,
-      webPushKey,
-    } = this.config;
-    const { passwordSalt, privateKeyIv, privateKeyEncrypted, publicKey } =
-      seal || {};
-    const sealSet = Boolean(
-      passwordSalt && privateKeyIv && privateKeyEncrypted && publicKey,
-    );
-    const sealUnlocked = Boolean(
-      sealSet && this.seal?.privateKey && this.seal?.publicKey == publicKey,
-    );
+    const { storageUsed, storageAvailable, forwardingAddress, searchable, allowUnsealed, pushEnabled, sealable, seal, enableIce, mfaEnabled, webPushKey } = this.config;
+    const { passwordSalt, privateKeyIv, privateKeyEncrypted, publicKey } = seal || {};
+    const sealSet = Boolean(passwordSalt && privateKeyIv && privateKeyEncrypted && publicKey);
+    const sealUnlocked = Boolean(sealSet && this.seal?.privateKey && this.seal?.publicKey == publicKey);
     return {
       storageUsed,
       storageAvailable,
@@ -156,16 +131,12 @@ export class SettingsModule implements Settings {
     this.emitter.off("config", ev);
   }
 
-  public addSealListener(
-    ev: (seal: { privateKey: string; publicKey: string } | null) => void,
-  ): void {
+  public addSealListener(ev: (seal: { privateKey: string; publicKey: string } | null) => void): void {
     this.emitter.on("seal", ev);
     ev(this.seal);
   }
 
-  public removeSealListener(
-    ev: (seal: { privateKey: string; publicKey: string } | null) => void,
-  ): void {
+  public removeSealListener(ev: (seal: { privateKey: string; publicKey: string } | null) => void): void {
     this.emitter.off("seal", ev);
   }
 
@@ -206,11 +177,7 @@ export class SettingsModule implements Settings {
     secretText: string;
   }> {
     const { node, secure, token } = this;
-    const { secretImage, secretText } = await addAccountMFAuth(
-      node,
-      secure,
-      token,
-    );
+    const { secretImage, secretText } = await addAccountMFAuth(node, secure, token);
     return { secretImage, secretText };
   }
 
@@ -233,11 +200,7 @@ export class SettingsModule implements Settings {
     const { aesKeyHex } = await crypto.pbkdfKey(saltHex, password);
     const { publicKeyB64, privateKeyB64 } = await crypto.rsaKey();
     const { ivHex } = await crypto.aesIv();
-    const { encryptedDataB64 } = await crypto.aesEncrypt(
-      privateKeyB64,
-      ivHex,
-      aesKeyHex,
-    );
+    const { encryptedDataB64 } = await crypto.aesEncrypt(privateKeyB64, ivHex, aesKeyHex);
     const seal = {
       passwordSalt: saltHex,
       privateKeyIv: ivHex,
@@ -262,11 +225,7 @@ export class SettingsModule implements Settings {
     const { saltHex } = await crypto.pbkdfSalt();
     const { aesKeyHex } = await crypto.pbkdfKey(saltHex, password);
     const { ivHex } = await crypto.aesIv();
-    const { encryptedDataB64 } = await crypto.aesEncrypt(
-      this.seal.privateKey,
-      ivHex,
-      aesKeyHex,
-    );
+    const { encryptedDataB64 } = await crypto.aesEncrypt(this.seal.privateKey, ivHex, aesKeyHex);
     const seal = {
       passwordSalt: saltHex,
       privateKeyIv: ivHex,
@@ -287,8 +246,7 @@ export class SettingsModule implements Settings {
 
   public async unlockSeal(password: string): Promise<void> {
     const { guid, config, crypto } = this;
-    const { passwordSalt, privateKeyIv, privateKeyEncrypted, publicKey } =
-      config.seal;
+    const { passwordSalt, privateKeyIv, privateKeyEncrypted, publicKey } = config.seal;
     if (!passwordSalt || !privateKeyIv || !privateKeyEncrypted || !publicKey) {
       throw new Error("account seal not set");
     }
@@ -296,11 +254,7 @@ export class SettingsModule implements Settings {
       throw new Error("crypto not set");
     }
     const { aesKeyHex } = await crypto.pbkdfKey(passwordSalt, password);
-    const { data } = await crypto.aesDecrypt(
-      privateKeyEncrypted,
-      privateKeyIv,
-      aesKeyHex,
-    );
+    const { data } = await crypto.aesDecrypt(privateKeyEncrypted, privateKeyIv, aesKeyHex);
     const seal = { publicKey: publicKey, privateKey: data };
     this.store.setSeal(guid, seal);
     this.seal = seal;

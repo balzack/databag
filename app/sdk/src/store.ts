@@ -1,20 +1,5 @@
-import {
-  Login,
-  ProfileEntity,
-  defaultProfileEntity,
-  ConfigEntity,
-  defaultConfigEntity,
-} from "./entities";
-import type {
-  ArticleDetail,
-  ArticleItem,
-  ChannelItem,
-  CardItem,
-  CardProfile,
-  CardDetail,
-  ChannelSummary,
-  ChannelDetail,
-} from "./items";
+import { Login, ProfileEntity, defaultProfileEntity, ConfigEntity, defaultConfigEntity } from "./entities";
+import type { ArticleDetail, ArticleItem, ChannelItem, CardItem, CardProfile, CardDetail, ChannelSummary, ChannelDetail } from "./items";
 import type { Logging } from "./logging";
 
 export interface Store {
@@ -22,13 +7,8 @@ export interface Store {
   setLogin(login: Login): Promise<void>;
   clearLogin(): Promise<void>;
 
-  getSeal(
-    guid: string,
-  ): Promise<{ publicKey: string; privateKey: string } | null>;
-  setSeal(
-    guid: string,
-    seal: { publicKey: string; privateKey: string },
-  ): Promise<void>;
+  getSeal(guid: string): Promise<{ publicKey: string; privateKey: string } | null>;
+  setSeal(guid: string, seal: { publicKey: string; privateKey: string }): Promise<void>;
   clearSeal(guid: string): Promise<void>;
 
   getProfileRevision(guid: string): Promise<number>;
@@ -48,138 +28,36 @@ export interface Store {
   addContactCard(guid: string, cardId: string, item: CardItem): Promise<void>;
   removeContactCard(guid: string, cardId: string): Promise<void>;
 
-  setContactCardRevision(
-    guid: string,
-    cardId: string,
-    revision: number,
-  ): Promise<void>;
-  setContactCardProfile(
-    guid: string,
-    cardId: string,
-    profile: CardProfile,
-  ): Promise<void>;
-  setContactCardDetail(
-    guid: string,
-    cardId: string,
-    detail: CardDetail,
-  ): Promise<void>;
-  setContactCardBlocked(
-    guid: string,
-    cardId: string,
-    blocked: boolean,
-  ): Promise<void>;
+  setContactCardRevision(guid: string, cardId: string, revision: number): Promise<void>;
+  setContactCardProfile(guid: string, cardId: string, profile: CardProfile): Promise<void>;
+  setContactCardDetail(guid: string, cardId: string, detail: CardDetail): Promise<void>;
+  setContactCardBlocked(guid: string, cardId: string, blocked: boolean): Promise<void>;
 
-  setContactCardOffsync(
-    guid: string,
-    cardId: string,
-    offsync: boolean,
-  ): Promise<void>;
+  setContactCardOffsync(guid: string, cardId: string, offsync: boolean): Promise<void>;
 
-  setContactCardProfileRevision(
-    guid: string,
-    cardId: string,
-    revision: number,
-  ): Promise<void>;
-  setContactCardArticlesRevision(
-    guid: string,
-    cardId: string,
-    revision: number,
-  ): Promise<void>;
-  setContactCardChannelsRevision(
-    guid: string,
-    cardId: string,
-    revision: number,
-  ): Promise<void>;
+  setContactCardProfileRevision(guid: string, cardId: string, revision: number): Promise<void>;
+  setContactCardArticlesRevision(guid: string, cardId: string, revision: number): Promise<void>;
+  setContactCardChannelsRevision(guid: string, cardId: string, revision: number): Promise<void>;
 
-  getContactCardArticles(
-    guid: string,
-  ): Promise<{ cardId: string; articleId: string; item: ArticleItem }[]>;
-  addContactCardArticle(
-    guid: string,
-    cardId: string,
-    articleId: string,
-    item: ArticleItem,
-  ): Promise<void>;
-  removeContactCardArticle(
-    guid: string,
-    cardId: string,
-    articleId: string,
-  ): Promise<void>;
+  getContactCardArticles(guid: string): Promise<{ cardId: string; articleId: string; item: ArticleItem }[]>;
+  addContactCardArticle(guid: string, cardId: string, articleId: string, item: ArticleItem): Promise<void>;
+  removeContactCardArticle(guid: string, cardId: string, articleId: string): Promise<void>;
 
-  setContactCardArticleDetail(
-    guid: string,
-    cardId: string,
-    articleId: string,
-    detail: ChannelDetail,
-    unsealedData: string | null,
-  ): Promise<void>;
-  setContactCardArticleUnsealed(
-    guid: string,
-    cardId: string,
-    articleId: string,
-    unsealedData: string | null,
-  ): Promise<void>;
+  setContactCardArticleDetail(guid: string, cardId: string, articleId: string, detail: ChannelDetail, unsealedData: string | null): Promise<void>;
+  setContactCardArticleUnsealed(guid: string, cardId: string, articleId: string, unsealedData: string | null): Promise<void>;
 
-  getContactCardChannels(
-    guid: string,
-  ): Promise<{ cardId: string; channelId: string; item: ChannelItem }[]>;
-  addContactCardChannel(
-    guid: string,
-    cardId: string,
-    channelId: string,
-    item: ChannelItem,
-  ): Promise<void>;
-  removeContactCardChannel(
-    guid: string,
-    cardId: string,
-    channelId: string,
-  ): Promise<void>;
+  getContactCardChannels(guid: string): Promise<{ cardId: string; channelId: string; item: ChannelItem }[]>;
+  addContactCardChannel(guid: string, cardId: string, channelId: string, item: ChannelItem): Promise<void>;
+  removeContactCardChannel(guid: string, cardId: string, channelId: string): Promise<void>;
 
-  setContactCardChannelBlocked(
-    guid: string,
-    cardId: string,
-    channelId: string,
-    blocked: boolean,
-  ): Promise<void>;
-  setContactCardChannelDetail(
-    guid: string,
-    cardId: string,
-    channelId: string,
-    detail: ChannelDetail,
-    unsealedData: string,
-  ): Promise<void>;
-  setContactCardChannelSummary(
-    guid: string,
-    cardId: string,
-    channelId: string,
-    summary: ChannelSummary,
-    unsealedData: string,
-  ): Promise<void>;
-  setContactCardChannelUnsealedDetail(
-    guid: string,
-    cardId: string,
-    channelId: string,
-    data: string | null,
-  ): Promise<void>;
-  setContactCardChannelUnsealedSummary(
-    guid: string,
-    cardId: string,
-    channelId: string,
-    data: string | null,
-  ): Promise<void>;
+  setContactCardChannelBlocked(guid: string, cardId: string, channelId: string, blocked: boolean): Promise<void>;
+  setContactCardChannelDetail(guid: string, cardId: string, channelId: string, detail: ChannelDetail, unsealedData: string): Promise<void>;
+  setContactCardChannelSummary(guid: string, cardId: string, channelId: string, summary: ChannelSummary, unsealedData: string): Promise<void>;
+  setContactCardChannelUnsealedDetail(guid: string, cardId: string, channelId: string, data: string | null): Promise<void>;
+  setContactCardChannelUnsealedSummary(guid: string, cardId: string, channelId: string, data: string | null): Promise<void>;
 
-  setContactCardChannelTopicSyncRevision(
-    guid: string,
-    cardId: string,
-    channelId: string,
-    revision: number,
-  ): Promise<void>;
-  setContactCardChannelTopicRemoteRevision(
-    guid: string,
-    cardId: string,
-    channelId: string,
-    revision: number,
-  ): Promise<void>;
+  setContactCardChannelTopicSyncRevision(guid: string, cardId: string, channelId: string, revision: number): Promise<void>;
+  setContactCardChannelTopicRemoteRevision(guid: string, cardId: string, channelId: string, revision: number): Promise<void>;
 }
 
 export interface SqlStore {
@@ -203,15 +81,9 @@ export class OfflineStore implements Store {
     this.log = log;
   }
 
-  private async getAppValue(
-    guid: string,
-    id: string,
-    unset: any,
-  ): Promise<any> {
+  private async getAppValue(guid: string, id: string, unset: any): Promise<any> {
     try {
-      const rows = await this.sql.get(
-        `SELECT * FROM app WHERE key='${guid}::${id}';`,
-      );
+      const rows = await this.sql.get(`SELECT * FROM app WHERE key='${guid}::${id}';`);
       if (rows.length == 1 && rows[0].value != null) {
         return JSON.parse(rows[0].value);
       }
@@ -221,22 +93,12 @@ export class OfflineStore implements Store {
     return unset;
   }
 
-  private async setAppValue(
-    guid: string,
-    id: string,
-    value: any,
-  ): Promise<void> {
-    await this.sql.set(
-      "INSERT OR REPLACE INTO app (key, value) values (?, ?)",
-      [`${guid}::${id}`, JSON.stringify(value)],
-    );
+  private async setAppValue(guid: string, id: string, value: any): Promise<void> {
+    await this.sql.set("INSERT OR REPLACE INTO app (key, value) values (?, ?)", [`${guid}::${id}`, JSON.stringify(value)]);
   }
 
   private async clearAppValue(guid: string, id: string): Promise<void> {
-    await this.sql.set(
-      "INSERT OR REPLACE INTO app (key, value) values (?, null)",
-      [`${guid}::${id}`],
-    );
+    await this.sql.set("INSERT OR REPLACE INTO app (key, value) values (?, null)", [`${guid}::${id}`]);
   }
 
   private async initLogin(guid: string): Promise<void> {
@@ -258,9 +120,7 @@ export class OfflineStore implements Store {
   }
 
   public async init(): Promise<Login | null> {
-    await this.sql.set(
-      "CREATE TABLE IF NOT EXISTS app (key text, value text, unique(key));",
-    );
+    await this.sql.set("CREATE TABLE IF NOT EXISTS app (key text, value text, unique(key));");
     return (await this.getAppValue("", "login", null)) as Login | null;
   }
 
@@ -273,19 +133,14 @@ export class OfflineStore implements Store {
     await this.clearAppValue("", "login");
   }
 
-  public async getSeal(
-    guid: string,
-  ): Promise<{ publicKey: string; privateKey: string } | null> {
+  public async getSeal(guid: string): Promise<{ publicKey: string; privateKey: string } | null> {
     return (await this.getAppValue(guid, "seal", null)) as {
       publicKey: string;
       privateKey: string;
     } | null;
   }
 
-  public async setSeal(
-    guid: string,
-    seal: { publicKey: string; privateKey: string },
-  ): Promise<void> {
+  public async setSeal(guid: string, seal: { publicKey: string; privateKey: string }): Promise<void> {
     await this.setAppValue(guid, "seal", seal);
   }
 
@@ -297,25 +152,15 @@ export class OfflineStore implements Store {
     return (await this.getAppValue(guid, "profile_revision", 0)) as number;
   }
 
-  public async setProfileRevision(
-    guid: string,
-    revision: number,
-  ): Promise<void> {
+  public async setProfileRevision(guid: string, revision: number): Promise<void> {
     await this.setAppValue(guid, "profile_revision", revision);
   }
 
   public async getProfileData(guid: string): Promise<ProfileEntity> {
-    return (await this.getAppValue(
-      guid,
-      "profile_data",
-      defaultProfileEntity,
-    )) as ProfileEntity;
+    return (await this.getAppValue(guid, "profile_data", defaultProfileEntity)) as ProfileEntity;
   }
 
-  public async setProfileData(
-    guid: string,
-    data: ProfileEntity,
-  ): Promise<void> {
+  public async setProfileData(guid: string, data: ProfileEntity): Promise<void> {
     await this.setAppValue(guid, "profile_data", data);
   }
 
@@ -323,25 +168,15 @@ export class OfflineStore implements Store {
     return (await this.getAppValue(guid, "account_revision", 0)) as number;
   }
 
-  public async setSettingsRevision(
-    guid: string,
-    revision: number,
-  ): Promise<void> {
+  public async setSettingsRevision(guid: string, revision: number): Promise<void> {
     await this.setAppValue(guid, "account_revision", revision);
   }
 
   public async getSettingsData(guid: string): Promise<ConfigEntity> {
-    return (await this.getAppValue(
-      guid,
-      "account_data",
-      defaultConfigEntity,
-    )) as ConfigEntity;
+    return (await this.getAppValue(guid, "account_data", defaultConfigEntity)) as ConfigEntity;
   }
 
-  public async setSettingsData(
-    guid: string,
-    data: ConfigEntity,
-  ): Promise<void> {
+  public async setSettingsData(guid: string, data: ConfigEntity): Promise<void> {
     await this.setAppValue(guid, "account_data", data);
   }
 
@@ -349,176 +184,65 @@ export class OfflineStore implements Store {
     return 0;
   }
 
-  public async setContactRevision(
-    guid: string,
-    revision: number,
-  ): Promise<void> {}
+  public async setContactRevision(guid: string, revision: number): Promise<void> {}
 
-  public async getContacts(
-    guid: string,
-  ): Promise<{ cardId: string; item: CardItem }[]> {
+  public async getContacts(guid: string): Promise<{ cardId: string; item: CardItem }[]> {
     return [];
   }
 
-  public async addContactCard(
-    guid: string,
-    cardId: string,
-    item: CardItem,
-  ): Promise<void> {}
+  public async addContactCard(guid: string, cardId: string, item: CardItem): Promise<void> {}
 
   public async removeContactCard(guid: string, cardId: string): Promise<void> {}
 
-  public async setContactCardRevision(
-    guid: string,
-    cardId: string,
-    revision: number,
-  ): Promise<void> {}
+  public async setContactCardRevision(guid: string, cardId: string, revision: number): Promise<void> {}
 
-  public async setContactCardProfile(
-    guid: string,
-    cardId: string,
-    profile: CardProfile,
-  ): Promise<void> {}
+  public async setContactCardProfile(guid: string, cardId: string, profile: CardProfile): Promise<void> {}
 
-  public async setContactCardDetail(
-    guid: string,
-    cardId: string,
-    detail: CardDetail,
-  ): Promise<void> {}
+  public async setContactCardDetail(guid: string, cardId: string, detail: CardDetail): Promise<void> {}
 
-  public async setContactCardBlocked(
-    guid: string,
-    cardId: string,
-    blocked: boolean,
-  ): Promise<void> {}
+  public async setContactCardBlocked(guid: string, cardId: string, blocked: boolean): Promise<void> {}
 
-  public async setContactCardOffsync(
-    guid: string,
-    cardId: string,
-    offsync: boolean,
-  ): Promise<void> {}
+  public async setContactCardOffsync(guid: string, cardId: string, offsync: boolean): Promise<void> {}
 
-  public async setContactCardProfileRevision(
-    guid: string,
-    cardId: string,
-    revision: number,
-  ): Promise<void> {}
+  public async setContactCardProfileRevision(guid: string, cardId: string, revision: number): Promise<void> {}
 
-  public async setContactCardArticlesRevision(
-    guid: string,
-    cardId: string,
-    revision: number,
-  ): Promise<void> {}
+  public async setContactCardArticlesRevision(guid: string, cardId: string, revision: number): Promise<void> {}
 
-  public async setContactCardChannelsRevision(
-    guid: string,
-    cardId: string,
-    revision: number,
-  ): Promise<void> {}
+  public async setContactCardChannelsRevision(guid: string, cardId: string, revision: number): Promise<void> {}
 
-  public async getContactCardArticles(
-    guid: string,
-  ): Promise<{ cardId: string; articleId: string; item: ArticleItem }[]> {
+  public async getContactCardArticles(guid: string): Promise<{ cardId: string; articleId: string; item: ArticleItem }[]> {
     return [];
   }
 
-  public async addContactCardArticle(
-    guid: string,
-    cardId: string,
-    articleId: string,
-    item: ArticleItem,
-  ): Promise<void> {}
+  public async addContactCardArticle(guid: string, cardId: string, articleId: string, item: ArticleItem): Promise<void> {}
 
-  public async removeContactCardArticle(
-    guid: string,
-    cardId: string,
-    articleId: string,
-  ): Promise<void> {}
+  public async removeContactCardArticle(guid: string, cardId: string, articleId: string): Promise<void> {}
 
-  public async setContactCardArticleDetail(
-    guid: string,
-    cardId: string,
-    articleId: string,
-    detail: ChannelDetail,
-    unsealedData: string | null,
-  ): Promise<void> {}
+  public async setContactCardArticleDetail(guid: string, cardId: string, articleId: string, detail: ChannelDetail, unsealedData: string | null): Promise<void> {}
 
-  public async setContactCardArticleUnsealed(
-    guid: string,
-    cardId: string,
-    articleId: string,
-    unsealedData: string | null,
-  ): Promise<void> {}
+  public async setContactCardArticleUnsealed(guid: string, cardId: string, articleId: string, unsealedData: string | null): Promise<void> {}
 
-  public async getContactCardChannels(
-    guid: string,
-  ): Promise<{ cardId: string; channelId: string; item: ChannelItem }[]> {
+  public async getContactCardChannels(guid: string): Promise<{ cardId: string; channelId: string; item: ChannelItem }[]> {
     return [];
   }
 
-  public async addContactCardChannel(
-    guid: string,
-    cardId: string,
-    channelId: string,
-    item: ChannelItem,
-  ): Promise<void> {}
+  public async addContactCardChannel(guid: string, cardId: string, channelId: string, item: ChannelItem): Promise<void> {}
 
-  public async removeContactCardChannel(
-    guid: string,
-    cardId: string,
-    channelId: string,
-  ): Promise<void> {}
+  public async removeContactCardChannel(guid: string, cardId: string, channelId: string): Promise<void> {}
 
-  public async setContactCardChannelBlocked(
-    guid: string,
-    cardId: string,
-    channelId: string,
-    blocked: boolean,
-  ): Promise<void> {}
+  public async setContactCardChannelBlocked(guid: string, cardId: string, channelId: string, blocked: boolean): Promise<void> {}
 
-  public async setContactCardChannelDetail(
-    guid: string,
-    cardId: string,
-    channelId: string,
-    detail: ChannelDetail,
-    unsealedData: string,
-  ): Promise<void> {}
+  public async setContactCardChannelDetail(guid: string, cardId: string, channelId: string, detail: ChannelDetail, unsealedData: string): Promise<void> {}
 
-  public async setContactCardChannelSummary(
-    guid: string,
-    cardId: string,
-    channelId: string,
-    summary: ChannelSummary,
-    unsealedData: string,
-  ): Promise<void> {}
+  public async setContactCardChannelSummary(guid: string, cardId: string, channelId: string, summary: ChannelSummary, unsealedData: string): Promise<void> {}
 
-  public async setContactCardChannelUnsealedDetail(
-    guid: string,
-    cardId: string,
-    channelId: string,
-    data: string | null,
-  ): Promise<void> {}
+  public async setContactCardChannelUnsealedDetail(guid: string, cardId: string, channelId: string, data: string | null): Promise<void> {}
 
-  public async setContactCardChannelUnsealedSummary(
-    guid: string,
-    cardId: string,
-    channelId: string,
-    data: string | null,
-  ): Promise<void> {}
+  public async setContactCardChannelUnsealedSummary(guid: string, cardId: string, channelId: string, data: string | null): Promise<void> {}
 
-  public async setContactCardChannelTopicSyncRevision(
-    guid: string,
-    cardId: string,
-    channelId: string,
-    revision: number,
-  ): Promise<void> {}
+  public async setContactCardChannelTopicSyncRevision(guid: string, cardId: string, channelId: string, revision: number): Promise<void> {}
 
-  public async setContactCardChannelTopicRemoteRevision(
-    guid: string,
-    cardId: string,
-    channelId: string,
-    revision: number,
-  ): Promise<void> {}
+  public async setContactCardChannelTopicRemoteRevision(guid: string, cardId: string, channelId: string, revision: number): Promise<void> {}
 }
 
 export class OnlineStore implements Store {
@@ -530,11 +254,7 @@ export class OnlineStore implements Store {
     this.log = log;
   }
 
-  private async getAppValue(
-    guid: string,
-    id: string,
-    unset: any,
-  ): Promise<any> {
+  private async getAppValue(guid: string, id: string, unset: any): Promise<any> {
     const value = await this.web.getValue(`${guid}::${id}`);
     if (value != null) {
       return JSON.parse(value);
@@ -542,11 +262,7 @@ export class OnlineStore implements Store {
     return unset;
   }
 
-  private async setAppValue(
-    guid: string,
-    id: string,
-    value: any,
-  ): Promise<void> {
+  private async setAppValue(guid: string, id: string, value: any): Promise<void> {
     await this.web.setValue(`${guid}::${id}`, JSON.stringify(value));
   }
 
@@ -566,19 +282,14 @@ export class OnlineStore implements Store {
     await this.clearAppValue("", "login");
   }
 
-  public async getSeal(
-    guid: string,
-  ): Promise<{ publicKey: string; privateKey: string } | null> {
+  public async getSeal(guid: string): Promise<{ publicKey: string; privateKey: string } | null> {
     return (await this.getAppValue(guid, "seal", null)) as {
       publicKey: string;
       privateKey: string;
     } | null;
   }
 
-  public async setSeal(
-    guid: string,
-    seal: { publicKey: string; privateKey: string },
-  ): Promise<void> {
+  public async setSeal(guid: string, seal: { publicKey: string; privateKey: string }): Promise<void> {
     await this.setAppValue(guid, "seal", seal);
   }
 
@@ -590,212 +301,89 @@ export class OnlineStore implements Store {
     return 0;
   }
 
-  public async setProfileRevision(
-    guid: string,
-    revision: number,
-  ): Promise<void> {}
+  public async setProfileRevision(guid: string, revision: number): Promise<void> {}
 
   public async getProfileData(guid: string): Promise<ProfileEntity> {
     return defaultProfileEntity;
   }
 
-  public async setProfileData(
-    guid: string,
-    data: ProfileEntity,
-  ): Promise<void> {}
+  public async setProfileData(guid: string, data: ProfileEntity): Promise<void> {}
 
   public async getSettingsRevision(guid: string): Promise<number> {
     return 0;
   }
 
-  public async setSettingsRevision(
-    guid: string,
-    revision: number,
-  ): Promise<void> {}
+  public async setSettingsRevision(guid: string, revision: number): Promise<void> {}
 
   public async getSettingsData(guid: string): Promise<ConfigEntity> {
     return defaultConfigEntity;
   }
 
-  public async setSettingsData(
-    guid: string,
-    data: ConfigEntity,
-  ): Promise<void> {}
+  public async setSettingsData(guid: string, data: ConfigEntity): Promise<void> {}
 
   public async getContactRevision(guid: string): Promise<number> {
     return 0;
   }
 
-  public async setContactRevision(
-    guid: string,
-    revision: number,
-  ): Promise<void> {}
+  public async setContactRevision(guid: string, revision: number): Promise<void> {}
 
-  public async getContacts(
-    guid: string,
-  ): Promise<{ cardId: string; item: CardItem }[]> {
+  public async getContacts(guid: string): Promise<{ cardId: string; item: CardItem }[]> {
     return [];
   }
 
-  public async addContactCard(
-    guid: string,
-    cardId: string,
-    item: CardItem,
-  ): Promise<void> {}
+  public async addContactCard(guid: string, cardId: string, item: CardItem): Promise<void> {}
 
   public async removeContactCard(guid: string, cardId: string): Promise<void> {}
 
-  public async setContactCardRevision(
-    guid: string,
-    cardId: string,
-    revision: number,
-  ): Promise<void> {}
+  public async setContactCardRevision(guid: string, cardId: string, revision: number): Promise<void> {}
 
-  public async setContactCardProfile(
-    guid: string,
-    cardId: string,
-    profile: CardProfile,
-  ): Promise<void> {}
+  public async setContactCardProfile(guid: string, cardId: string, profile: CardProfile): Promise<void> {}
 
-  public async setContactCardDetail(
-    guid: string,
-    cardId: string,
-    detail: CardDetail,
-  ): Promise<void> {}
+  public async setContactCardDetail(guid: string, cardId: string, detail: CardDetail): Promise<void> {}
 
-  public async setContactCardBlocked(
-    guid: string,
-    cardId: string,
-    blocked: boolean,
-  ): Promise<void> {}
+  public async setContactCardBlocked(guid: string, cardId: string, blocked: boolean): Promise<void> {}
 
-  public async setContactCardOffsync(
-    guid: string,
-    cardId: string,
-    offsync: boolean,
-  ): Promise<void> {}
+  public async setContactCardOffsync(guid: string, cardId: string, offsync: boolean): Promise<void> {}
 
-  public async setContactCardProfileRevision(
-    guid: string,
-    cardId: string,
-    revision: number,
-  ): Promise<void> {}
+  public async setContactCardProfileRevision(guid: string, cardId: string, revision: number): Promise<void> {}
 
-  public async setContactCardArticlesRevision(
-    guid: string,
-    cardId: string,
-    revision: number,
-  ): Promise<void> {}
+  public async setContactCardArticlesRevision(guid: string, cardId: string, revision: number): Promise<void> {}
 
-  public async setContactCardChannelsRevision(
-    guid: string,
-    cardId: string,
-    revision: number,
-  ): Promise<void> {}
+  public async setContactCardChannelsRevision(guid: string, cardId: string, revision: number): Promise<void> {}
 
-  public async getContactCardArticles(
-    guid: string,
-  ): Promise<{ cardId: string; articleId: string; item: ArticleItem }[]> {
+  public async getContactCardArticles(guid: string): Promise<{ cardId: string; articleId: string; item: ArticleItem }[]> {
     return [];
   }
 
-  public async addContactCardArticle(
-    guid: string,
-    cardId: string,
-    articleId: string,
-    item: ArticleItem,
-  ): Promise<void> {}
+  public async addContactCardArticle(guid: string, cardId: string, articleId: string, item: ArticleItem): Promise<void> {}
 
-  public async removeContactCardArticle(
-    guid: string,
-    cardId: string,
-    articleId: string,
-  ): Promise<void> {}
+  public async removeContactCardArticle(guid: string, cardId: string, articleId: string): Promise<void> {}
 
-  public async setContactCardArticleDetail(
-    guid: string,
-    cardId: string,
-    articleId: string,
-    detail: ChannelDetail,
-    unsealedData: string | null,
-  ): Promise<void> {}
+  public async setContactCardArticleDetail(guid: string, cardId: string, articleId: string, detail: ChannelDetail, unsealedData: string | null): Promise<void> {}
 
-  public async setContactCardArticleUnsealed(
-    guid: string,
-    cardId: string,
-    articleId: string,
-    unsealedData: string | null,
-  ): Promise<void> {}
+  public async setContactCardArticleUnsealed(guid: string, cardId: string, articleId: string, unsealedData: string | null): Promise<void> {}
 
-  public async getContactCardChannels(
-    guid: string,
-  ): Promise<{ cardId: string; channelId: string; item: ChannelItem }[]> {
+  public async getContactCardChannels(guid: string): Promise<{ cardId: string; channelId: string; item: ChannelItem }[]> {
     return [];
   }
 
-  public async addContactCardChannel(
-    guid: string,
-    cardId: string,
-    channelId: string,
-    item: ChannelItem,
-  ): Promise<void> {}
+  public async addContactCardChannel(guid: string, cardId: string, channelId: string, item: ChannelItem): Promise<void> {}
 
-  public async removeContactCardChannel(
-    guid: string,
-    cardId: string,
-    channelId: string,
-  ): Promise<void> {}
+  public async removeContactCardChannel(guid: string, cardId: string, channelId: string): Promise<void> {}
 
-  public async setContactCardChannelBlocked(
-    guid: string,
-    cardId: string,
-    channelId: string,
-    blocked: boolean,
-  ): Promise<void> {}
+  public async setContactCardChannelBlocked(guid: string, cardId: string, channelId: string, blocked: boolean): Promise<void> {}
 
-  public async setContactCardChannelDetail(
-    guid: string,
-    cardId: string,
-    channelId: string,
-    detail: ChannelDetail,
-    unsealedData: string,
-  ): Promise<void> {}
+  public async setContactCardChannelDetail(guid: string, cardId: string, channelId: string, detail: ChannelDetail, unsealedData: string): Promise<void> {}
 
-  public async setContactCardChannelSummary(
-    guid: string,
-    cardId: string,
-    channelId: string,
-    summary: ChannelSummary,
-    unsealedData: string,
-  ): Promise<void> {}
+  public async setContactCardChannelSummary(guid: string, cardId: string, channelId: string, summary: ChannelSummary, unsealedData: string): Promise<void> {}
 
-  public async setContactCardChannelUnsealedDetail(
-    guid: string,
-    cardId: string,
-    channelId: string,
-    data: string | null,
-  ): Promise<void> {}
+  public async setContactCardChannelUnsealedDetail(guid: string, cardId: string, channelId: string, data: string | null): Promise<void> {}
 
-  public async setContactCardChannelUnsealedSummary(
-    guid: string,
-    cardId: string,
-    channelId: string,
-    data: string | null,
-  ): Promise<void> {}
+  public async setContactCardChannelUnsealedSummary(guid: string, cardId: string, channelId: string, data: string | null): Promise<void> {}
 
-  public async setContactCardChannelTopicSyncRevision(
-    guid: string,
-    cardId: string,
-    channelId: string,
-    revision: number,
-  ): Promise<void> {}
+  public async setContactCardChannelTopicSyncRevision(guid: string, cardId: string, channelId: string, revision: number): Promise<void> {}
 
-  public async setContactCardChannelTopicRemoteRevision(
-    guid: string,
-    cardId: string,
-    channelId: string,
-    revision: number,
-  ): Promise<void> {}
+  public async setContactCardChannelTopicRemoteRevision(guid: string, cardId: string, channelId: string, revision: number): Promise<void> {}
 }
 
 export class NoStore implements Store {
@@ -809,16 +397,11 @@ export class NoStore implements Store {
 
   public async clearLogin(): Promise<void> {}
 
-  public async getSeal(
-    guid: string,
-  ): Promise<{ publicKey: string; privateKey: string } | null> {
+  public async getSeal(guid: string): Promise<{ publicKey: string; privateKey: string } | null> {
     return null;
   }
 
-  public async setSeal(
-    guid: string,
-    seal: { publicKey: string; privateKey: string },
-  ): Promise<void> {}
+  public async setSeal(guid: string, seal: { publicKey: string; privateKey: string }): Promise<void> {}
 
   public async clearSeal(guid: string): Promise<void> {}
 
@@ -826,210 +409,87 @@ export class NoStore implements Store {
     return 0;
   }
 
-  public async setProfileRevision(
-    guid: string,
-    revision: number,
-  ): Promise<void> {}
+  public async setProfileRevision(guid: string, revision: number): Promise<void> {}
 
   public async getProfileData(guid: string): Promise<ProfileEntity> {
     return defaultProfileEntity;
   }
 
-  public async setProfileData(
-    guid: string,
-    data: ProfileEntity,
-  ): Promise<void> {}
+  public async setProfileData(guid: string, data: ProfileEntity): Promise<void> {}
 
   public async getSettingsRevision(guid: string): Promise<number> {
     return 0;
   }
 
-  public async setSettingsRevision(
-    guid: string,
-    revision: number,
-  ): Promise<void> {}
+  public async setSettingsRevision(guid: string, revision: number): Promise<void> {}
 
   public async getSettingsData(guid: string): Promise<ConfigEntity> {
     return defaultConfigEntity;
   }
 
-  public async setSettingsData(
-    guid: string,
-    data: ConfigEntity,
-  ): Promise<void> {}
+  public async setSettingsData(guid: string, data: ConfigEntity): Promise<void> {}
 
   public async getContactRevision(guid: string): Promise<number> {
     return 0;
   }
 
-  public async setContactRevision(
-    guid: string,
-    revision: number,
-  ): Promise<void> {}
+  public async setContactRevision(guid: string, revision: number): Promise<void> {}
 
-  public async getContacts(
-    guid: string,
-  ): Promise<{ cardId: string; item: CardItem }[]> {
+  public async getContacts(guid: string): Promise<{ cardId: string; item: CardItem }[]> {
     return [];
   }
 
-  public async addContactCard(
-    guid: string,
-    cardId: string,
-    item: CardItem,
-  ): Promise<void> {}
+  public async addContactCard(guid: string, cardId: string, item: CardItem): Promise<void> {}
 
   public async removeContactCard(guid: string, cardId: string): Promise<void> {}
 
-  public async setContactCardRevision(
-    guid: string,
-    cardId: string,
-    revision: number,
-  ): Promise<void> {}
+  public async setContactCardRevision(guid: string, cardId: string, revision: number): Promise<void> {}
 
-  public async setContactCardProfile(
-    guid: string,
-    cardId: string,
-    profile: CardProfile,
-  ): Promise<void> {}
+  public async setContactCardProfile(guid: string, cardId: string, profile: CardProfile): Promise<void> {}
 
-  public async setContactCardDetail(
-    guid: string,
-    cardId: string,
-    detail: CardDetail,
-  ): Promise<void> {}
+  public async setContactCardDetail(guid: string, cardId: string, detail: CardDetail): Promise<void> {}
 
-  public async setContactCardBlocked(
-    guid: string,
-    cardId: string,
-    blocked: boolean,
-  ): Promise<void> {}
+  public async setContactCardBlocked(guid: string, cardId: string, blocked: boolean): Promise<void> {}
 
-  public async setContactCardOffsync(
-    guid: string,
-    cardId: string,
-    offsync: boolean,
-  ): Promise<void> {}
+  public async setContactCardOffsync(guid: string, cardId: string, offsync: boolean): Promise<void> {}
 
-  public async setContactCardProfileRevision(
-    guid: string,
-    cardId: string,
-    revision: number,
-  ): Promise<void> {}
+  public async setContactCardProfileRevision(guid: string, cardId: string, revision: number): Promise<void> {}
 
-  public async setContactCardArticlesRevision(
-    guid: string,
-    cardId: string,
-    revision: number,
-  ): Promise<void> {}
+  public async setContactCardArticlesRevision(guid: string, cardId: string, revision: number): Promise<void> {}
 
-  public async setContactCardChannelsRevision(
-    guid: string,
-    cardId: string,
-    revision: number,
-  ): Promise<void> {}
+  public async setContactCardChannelsRevision(guid: string, cardId: string, revision: number): Promise<void> {}
 
-  public async getContactCardArticles(
-    guid: string,
-  ): Promise<{ cardId: string; articleId: string; item: ArticleItem }[]> {
+  public async getContactCardArticles(guid: string): Promise<{ cardId: string; articleId: string; item: ArticleItem }[]> {
     return [];
   }
 
-  public async addContactCardArticle(
-    guid: string,
-    cardId: string,
-    articleId: string,
-    item: ArticleItem,
-  ): Promise<void> {}
+  public async addContactCardArticle(guid: string, cardId: string, articleId: string, item: ArticleItem): Promise<void> {}
 
-  public async removeContactCardArticle(
-    guid: string,
-    cardId: string,
-    articleId: string,
-  ): Promise<void> {}
+  public async removeContactCardArticle(guid: string, cardId: string, articleId: string): Promise<void> {}
 
-  public async setContactCardArticleDetail(
-    guid: string,
-    cardId: string,
-    articleId: string,
-    detail: ChannelDetail,
-    unsealedData: string | null,
-  ): Promise<void> {}
+  public async setContactCardArticleDetail(guid: string, cardId: string, articleId: string, detail: ChannelDetail, unsealedData: string | null): Promise<void> {}
 
-  public async setContactCardArticleUnsealed(
-    guid: string,
-    cardId: string,
-    articleId: string,
-    unsealedData: string | null,
-  ): Promise<void> {}
+  public async setContactCardArticleUnsealed(guid: string, cardId: string, articleId: string, unsealedData: string | null): Promise<void> {}
 
-  public async getContactCardChannels(
-    guid: string,
-  ): Promise<{ cardId: string; channelId: string; item: ChannelItem }[]> {
+  public async getContactCardChannels(guid: string): Promise<{ cardId: string; channelId: string; item: ChannelItem }[]> {
     return [];
   }
 
-  public async addContactCardChannel(
-    guid: string,
-    cardId: string,
-    channelId: string,
-    item: ChannelItem,
-  ): Promise<void> {}
+  public async addContactCardChannel(guid: string, cardId: string, channelId: string, item: ChannelItem): Promise<void> {}
 
-  public async removeContactCardChannel(
-    guid: string,
-    cardId: string,
-    channelId: string,
-  ): Promise<void> {}
+  public async removeContactCardChannel(guid: string, cardId: string, channelId: string): Promise<void> {}
 
-  public async setContactCardChannelBlocked(
-    guid: string,
-    cardId: string,
-    channelId: string,
-    blocked: boolean,
-  ): Promise<void> {}
+  public async setContactCardChannelBlocked(guid: string, cardId: string, channelId: string, blocked: boolean): Promise<void> {}
 
-  public async setContactCardChannelDetail(
-    guid: string,
-    cardId: string,
-    channelId: string,
-    detail: ChannelDetail,
-    unsealedData: string,
-  ): Promise<void> {}
+  public async setContactCardChannelDetail(guid: string, cardId: string, channelId: string, detail: ChannelDetail, unsealedData: string): Promise<void> {}
 
-  public async setContactCardChannelSummary(
-    guid: string,
-    cardId: string,
-    channelId: string,
-    summary: ChannelSummary,
-    unsealedData: string,
-  ): Promise<void> {}
+  public async setContactCardChannelSummary(guid: string, cardId: string, channelId: string, summary: ChannelSummary, unsealedData: string): Promise<void> {}
 
-  public async setContactCardChannelUnsealedDetail(
-    guid: string,
-    cardId: string,
-    channelId: string,
-    data: string | null,
-  ): Promise<void> {}
+  public async setContactCardChannelUnsealedDetail(guid: string, cardId: string, channelId: string, data: string | null): Promise<void> {}
 
-  public async setContactCardChannelUnsealedSummary(
-    guid: string,
-    cardId: string,
-    channelId: string,
-    data: string | null,
-  ): Promise<void> {}
+  public async setContactCardChannelUnsealedSummary(guid: string, cardId: string, channelId: string, data: string | null): Promise<void> {}
 
-  public async setContactCardChannelTopicSyncRevision(
-    guid: string,
-    cardId: string,
-    channelId: string,
-    revision: number,
-  ): Promise<void> {}
+  public async setContactCardChannelTopicSyncRevision(guid: string, cardId: string, channelId: string, revision: number): Promise<void> {}
 
-  public async setContactCardChannelTopicRemoteRevision(
-    guid: string,
-    cardId: string,
-    channelId: string,
-    revision: number,
-  ): Promise<void> {}
+  public async setContactCardChannelTopicRemoteRevision(guid: string, cardId: string, channelId: string, revision: number): Promise<void> {}
 }

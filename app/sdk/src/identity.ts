@@ -27,14 +27,7 @@ export class IdentityModule implements Identity {
   private closing: boolean;
   private emitter: EventEmitter;
 
-  constructor(
-    log: Logging,
-    store: Store,
-    guid: string,
-    token: string,
-    node: string,
-    secure: boolean,
-  ) {
+  constructor(log: Logging, store: Store, guid: string, token: string, node: string, secure: boolean) {
     this.guid = guid;
     this.token = token;
     this.node = node;
@@ -99,18 +92,7 @@ export class IdentityModule implements Identity {
   }
 
   public setProfile() {
-    const {
-      guid,
-      handle,
-      name,
-      description,
-      location,
-      image,
-      revision,
-      seal,
-      version,
-      node,
-    } = this.profile;
+    const { guid, handle, name, description, location, image, revision, seal, version, node } = this.profile;
     return {
       guid,
       handle,
@@ -145,11 +127,7 @@ export class IdentityModule implements Identity {
     await this.sync();
   }
 
-  public async setProfileData(
-    name: string,
-    location: string,
-    description: string,
-  ): Promise<void> {
+  public async setProfileData(name: string, location: string, description: string): Promise<void> {
     const { node, secure, token } = this;
     await setProfileData(node, secure, token, name, location, description);
   }

@@ -10,13 +10,7 @@ export class ContributorModule implements Contributor {
   private secure: boolean;
   private token: string;
 
-  constructor(
-    log: Logging,
-    crypto: Crypto | null,
-    node: string,
-    secure: boolean,
-    token: string,
-  ) {
+  constructor(log: Logging, crypto: Crypto | null, node: string, secure: boolean, token: string) {
     this.log = log;
     this.crypto = crypto;
     this.node = node;
@@ -24,21 +18,13 @@ export class ContributorModule implements Contributor {
     this.token = token;
   }
 
-  public async addTopic(
-    type: string,
-    message: string,
-    assets: Asset[],
-  ): Promise<string> {
+  public async addTopic(type: string, message: string, assets: Asset[]): Promise<string> {
     return "";
   }
 
   public async removeTopic(topicId: string): Promise<void> {}
 
-  public async addTag(
-    topicId: string,
-    type: string,
-    value: string,
-  ): Promise<string> {
+  public async addTag(topicId: string, type: string, value: string): Promise<string> {
     return "";
   }
 

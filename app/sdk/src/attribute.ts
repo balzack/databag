@@ -12,15 +12,7 @@ export class AttributeModule implements Attribute {
   private settings: Settings;
   private emitter: EventEmitter;
 
-  constructor(
-    log: Logging,
-    settings: Settings,
-    store: Store,
-    guid: string,
-    token: string,
-    node: string,
-    secure: boolean,
-  ) {
+  constructor(log: Logging, settings: Settings, store: Store, guid: string, token: string, node: string, secure: boolean) {
     this.guid = guid;
     this.token = token;
     this.node = node;
@@ -44,42 +36,21 @@ export class AttributeModule implements Attribute {
     console.log("set attribute revision:", rev);
   }
 
-  public async addArticle(
-    sealed: boolean,
-    type: string,
-    subject: string,
-    cardIds: string[],
-    groupIds: string[],
-  ): Promise<string> {
+  public async addArticle(sealed: boolean, type: string, subject: string, cardIds: string[], groupIds: string[]): Promise<string> {
     return "";
   }
 
   public async removeArticle(articleId: string): Promise<void> {}
 
-  public async setArticleSubject(
-    articleId: string,
-    subject: string,
-  ): Promise<void> {}
+  public async setArticleSubject(articleId: string, subject: string): Promise<void> {}
 
-  public async setArticleCard(
-    articleId: string,
-    cardId: string,
-  ): Promise<void> {}
+  public async setArticleCard(articleId: string, cardId: string): Promise<void> {}
 
-  public async clearArticleCard(
-    articleId: string,
-    cardId: string,
-  ): Promise<void> {}
+  public async clearArticleCard(articleId: string, cardId: string): Promise<void> {}
 
-  public async setArticleGroup(
-    articleId: string,
-    groupId: string,
-  ): Promise<void> {}
+  public async setArticleGroup(articleId: string, groupId: string): Promise<void> {}
 
-  public async clearArticleGroup(
-    articleId: string,
-    groupId: string,
-  ): Promise<void> {}
+  public async clearArticleGroup(articleId: string, groupId: string): Promise<void> {}
 
   public addArticleListener(ev: (articles: Article[]) => void): void {}
 

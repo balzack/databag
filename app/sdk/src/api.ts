@@ -1,4 +1,4 @@
-import type { Channel, Topic, Asset, Tag, Article, Group, Card, Profile, Call, Config, NodeConfig, NodeAccount, Participant } from './types';
+import type { Channel, Topic, Asset, Tag, Article, Group, Card, Profile, Call, Config, NodeConfig, NodeAccount, Participant } from "./types";
 
 export interface Session {
   getSettings(): Settings;
@@ -36,7 +36,7 @@ export interface Settings {
   disableNotifications(): Promise<void>;
   enableRegistry(): Promise<void>;
   disableRegistry(): Promise<void>;
-  enableMFA(): Promise<{ secretImage: string, secretText: string }>;
+  enableMFA(): Promise<{ secretImage: string; secretText: string }>;
   disableMFA(): Promise<void>;
   confirmMFA(code: string): Promise<void>;
   setSeal(password: string): Promise<void>;
@@ -84,8 +84,8 @@ export interface Contact {
   clearBlockArticle(cardId: string, articleId: string): Promise<void>;
   clearBlockChannel(cardId: string, channelId: string): Promise<void>;
   getBlockedCards(): Promise<{ cardId: string }[]>;
-  getBlockedChannels(): Promise<{ cardId: string, channelId: string }[]>;
-  getBlockedArticles(): Promise<{ cardId: string, articleId: string }[]>;
+  getBlockedChannels(): Promise<{ cardId: string; channelId: string }[]>;
+  getBlockedArticles(): Promise<{ cardId: string; articleId: string }[]>;
 
   enableChannelNotifications(cardId: string, channelId: string): Promise<void>;
   disableChannelNotifications(chardId: string, channelId: string): Promise<void>;
@@ -109,7 +109,7 @@ export interface Alias {
   setGroupCard(groupId: string, cardId: string): Promise<void>;
   clearGroupCard(groupId: string, cardId: string): Promise<void>;
   compare(groupIds: string[], cardIds: string[]): Promise<Map<string, string[]>>;
-  
+
   addGroupListener(ev: (groups: Group[]) => void): void;
   removeGroupListener(ev: (groups: Group[]) => void): void;
 }
@@ -151,8 +151,8 @@ export interface Content {
   setBlockTag(channelId: string, topicId: string, tagId: string): Promise<void>;
   clearBlockTopic(channelId: string, topicId: string): Promise<void>;
   clearBlockTag(channelId: string, topicId: string, tagId: string): Promise<void>;
-  getBlockedTopics(): Promise<{ channelId: string, topicId: string }[]>;
-  getBlockedTags(): Promise<{ channelId: string, topicId: string, tagId: string }[]>;
+  getBlockedTopics(): Promise<{ channelId: string; topicId: string }[]>;
+  getBlockedTags(): Promise<{ channelId: string; topicId: string; tagId: string }[]>;
 
   enableNotifications(channelId: string, memberId: string): Promise<void>;
   disableNotifications(channelId: string, memberId: string): Promise<void>;
@@ -237,5 +237,3 @@ export interface Contributor {
   addTag(topicId: string, type: string, value: string): Promise<string>;
   removeTag(topicId: string, tagId: string): Promise<void>;
 }
-
-

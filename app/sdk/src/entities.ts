@@ -1,12 +1,12 @@
 import type { Profile } from "./types";
 
 export type ContactStatus = {
-  token: string,
-  status: string,
-  viewRevision: number,
-  channelRevision: number,
-  profileRevision: number,
-  articleRevision: number,
+  token: string;
+  status: string;
+  viewRevision: number;
+  channelRevision: number;
+  profileRevision: number;
+  articleRevision: number;
 };
 
 export type DataMessage = {

@@ -13,15 +13,7 @@ export class FocusModule implements Focus {
   private log: Logging;
   private emitter: EventEmitter;
 
-  constructor(
-    log: Logging,
-    identity: Identity,
-    contact: Contact,
-    content: Content,
-    store: Store,
-    cardId: string | null,
-    channelId: string,
-  ) {
+  constructor(log: Logging, identity: Identity, contact: Contact, content: Content, store: Store, cardId: string | null, channelId: string) {
     this.identity = identity;
     this.contact = contact;
     this.content = content;
@@ -33,58 +25,33 @@ export class FocusModule implements Focus {
 
   public blur(): void {}
 
-  public async addTopic(
-    type: string,
-    message: string,
-    assets: Asset[],
-  ): Promise<string> {
+  public async addTopic(type: string, message: string, assets: Asset[]): Promise<string> {
     return "";
   }
 
   public async removeTopic(topicId: string): Promise<void> {}
 
-  public async setTopicSubject(
-    topicId: string,
-    subject: string,
-  ): Promise<void> {}
+  public async setTopicSubject(topicId: string, subject: string): Promise<void> {}
 
   public async setTopicSort(topicId: string, sort: number): Promise<void> {}
 
-  public async addTag(
-    topicId: string,
-    type: string,
-    subject: string,
-  ): Promise<string> {
+  public async addTag(topicId: string, type: string, subject: string): Promise<string> {
     return "";
   }
 
   public async removeTag(cardId: string, tagId: string): Promise<void> {}
 
-  public async setTagSubject(
-    topicId: string,
-    tagId: string,
-    subject: string,
-  ): Promise<void> {}
+  public async setTagSubject(topicId: string, tagId: string, subject: string): Promise<void> {}
 
-  public async setTagSort(
-    topicId: string,
-    tagId: string,
-    sort: number,
-  ): Promise<void> {}
+  public async setTagSort(topicId: string, tagId: string, sort: number): Promise<void> {}
 
   public async viewMoreTopics(): Promise<void> {}
 
   public async viewMoreTags(topicId: string): Promise<void> {}
 
-  public async setUnreadChannel(
-    cardId: string,
-    channelId: string,
-  ): Promise<void> {}
+  public async setUnreadChannel(cardId: string, channelId: string): Promise<void> {}
 
-  public async clearUnreadChannel(
-    cardId: string,
-    channelId: string,
-  ): Promise<void> {}
+  public async clearUnreadChannel(cardId: string, channelId: string): Promise<void> {}
 
   public getTopicAssetUrl(topicId: string, assetId: string): string {
     return "";

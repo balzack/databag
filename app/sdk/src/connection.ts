@@ -47,11 +47,7 @@ export class Connection {
     this.emitter.off("status", ev);
   }
 
-  private setWebSocket(
-    token: string,
-    node: string,
-    secure: boolean,
-  ): WebSocket {
+  private setWebSocket(token: string, node: string, secure: boolean): WebSocket {
     if (this.closed) {
       this.emitter.emit("status", "closed");
       return this.websocket;
@@ -70,15 +66,7 @@ export class Connection {
         if (activity.revision) {
           this.emitter.emit("revision", activity.revision as Revision);
         } else if (activity.ring) {
-          const {
-            cardId,
-            callId,
-            calleeToken,
-            ice,
-            iceUrl,
-            iceUsername,
-            icePassword,
-          } = activity.ring;
+          const { cardId, callId, calleeToken, ice, iceUrl, iceUsername, icePassword } = activity.ring;
           const call: Call = {
             cardId,
             callId,

@@ -11,13 +11,7 @@ export class StreamModule implements Stream {
   private content: Content;
   private emitter: EventEmitter;
 
-  constructor(
-    log: Logging,
-    contact: Contact,
-    content: Content,
-    store: Store,
-    guid: string,
-  ) {
+  constructor(log: Logging, contact: Contact, content: Content, store: Store, guid: string) {
     this.contact = contact;
     this.content = content;
     this.log = log;

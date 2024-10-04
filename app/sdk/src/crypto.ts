@@ -12,31 +12,17 @@ export interface Crypto {
   aesIv(): Promise<{ ivHex: string }>;
 
   // encrypt data with aes key and iv
-  aesEncrypt(
-    data: string,
-    ivHex: string,
-    aesKeyHex: string,
-  ): Promise<{ encryptedDataB64: string }>;
+  aesEncrypt(data: string, ivHex: string, aesKeyHex: string): Promise<{ encryptedDataB64: string }>;
 
   // decrypt data with aes key and iv
-  aesDecrypt(
-    encryptedDataB64: string,
-    ivHex: string,
-    aesKeyHex: string,
-  ): Promise<{ data: string }>;
+  aesDecrypt(encryptedDataB64: string, ivHex: string, aesKeyHex: string): Promise<{ data: string }>;
 
   // generate rsa key
   rsaKey(): Promise<{ publicKeyB64: string; privateKeyB64: string }>;
 
   // encrypt data with public rsa key
-  rsaEncrypt(
-    data: string,
-    publicKeyB64: string,
-  ): Promise<{ encryptedDataB64: string }>;
+  rsaEncrypt(data: string, publicKeyB64: string): Promise<{ encryptedDataB64: string }>;
 
   // decrypt data with private rsa key
-  rsaDecrypt(
-    encryptedDataB64: string,
-    privateKeyB64: string,
-  ): Promise<{ data: string }>;
+  rsaDecrypt(encryptedDataB64: string, privateKeyB64: string): Promise<{ data: string }>;
 }
