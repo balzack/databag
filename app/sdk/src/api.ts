@@ -18,7 +18,6 @@ export interface Session {
 }
 
 export interface Ring {
-
   addCallingListener(ev: (calls: Call[]) => void): void;
   removeCallingListener(ev: (calls: Call[]) => void): void;
 
@@ -74,37 +73,18 @@ export interface Contact {
   removeChannel(cardId: string, channelId: string): Promise<void>;
   addTopic(cardId: string, channelId: string, type: string, subject: string, assets: Asset[]): Promise<string>;
   removeTopic(cardId: string, channelId: string, topicId: string): Promise<void>;
-  setTopicSubject(cardId: string, channelId: string, topicId: string, subject: string): Promise<void>;
-  setTopicSort(cardId: string, channelId: string, topicId: string, sort: number): Promise<void>;
-  addTag(cardId: string, channelId: string, topicId: string, type: string, subject: string): Promise<string>;
-  removeTag(cardId: string, channelId: string, topicId: string, tagId: string): Promise<void>;
-  setTagSubject(cardId: string, channelId: string, topicId: string, tagId: string, subject: string): Promise<void>;
-  setTagSort(cardId: string, channelId: string, topicId: string, tagId: string, sort: number): Promise<void>;
-
-  getTopics(cardId: string, channelId: string): Promise<Topic[]>;
-  getMoreTopics(cardId: string, channelId: string): Promise<Topic[]>;
-  getTags(cardId: string, channelId: string, topicId: string): Promise<Tag[]>;
-  getMoreTags(cardId: string, channelId: string, topicId: string): Promise<Tag[]>;
 
   flagCard(cardId: string): Promise<void>;
   flagArticle(cardId: string, articleId: string): Promise<void>;
   flagChannel(cardId: string, channelId: string): Promise<void>;
-  flagTopic(cardId: string, channelId: string, topicId: string): Promise<void>;
-  flagTag(cardId: string, channelId: string, topicId: string, tagId: string): Promise<void>;
   setBlockCard(cardId: string): Promise<void>;
   setBlockArticle(cardId: string, articleId: string): Promise<void>;
   setBlockChannel(cardId: string, channelId: string): Promise<void>;
-  setBlockTopic(cardId: string, channelId: string, topicId: string): Promise<void>;
-  setBlockTag(cardId: string, channelId: string, topicId: string, tagId: string): Promise<void>;
   clearBlockCard(cardId: string): Promise<void>;
   clearBlockArticle(cardId: string, articleId: string): Promise<void>;
   clearBlockChannel(cardId: string, channelId: string): Promise<void>;
-  clearBlockTopic(cardId: string, channelId: string, topicId: string): Promise<void>;
-  clearBlockTag(cardId: string, channelId: string, topicId: string, tagId: string): Promise<void>;
   getBlockedCards(): Promise<{ cardId: string }[]>;
   getBlockedChannels(): Promise<{ cardId: string, channelId: string }[]>;
-  getBlockedTopics(): Promise<{ cardId: string, channelId: string, topicId: string }[]>;
-  getBlockedTags(): Promise<{ cardId: string, channelId: string, topicId: string, tagId: string }[]>;
   getBlockedArticles(): Promise<{ cardId: string, articleId: string }[]>;
 
   enableChannelNotifications(cardId: string, channelId: string): Promise<void>;
@@ -117,10 +97,6 @@ export interface Contact {
   getRegistryImageUrl(server: string, guid: string): string;
 
   getCardImageUrl(cardId: string): string;
-  getTopicAssetUrl(cardId: string, channelId: string, topicId: string, assetId: string): string;
-
-  addParticipantAccess(cardId: string, channelId: string, name: string): Promise<Participant>;
-  removeParticipantAccess(cardId: string, channelId: string, participantId: string): Promise<void>;
 
   addCardListener(ev: (cards: Card[]) => void): void;
   removeCardListener(ev: (cards: Card[]) => void): void;

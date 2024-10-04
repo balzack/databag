@@ -260,11 +260,10 @@ export class ContactModule implements Contact {
 
                 if (data.notifiedChannel !== entry.item.channelRevision) {
                   try {
+                    const { profile, detail } = entry.item;
                     await this.syncChannels(
                       id,
-                      entry.item.profile.node,
-                      entry.item.profile.guid,
-                      entry.item.detail.token,
+                      { guid: profile.guid, node: profile.node, token: detail.token },
                       entry.item.channelRevision,
                     );
                     entry.item.channelRevision = data.notifiedChannel;
@@ -384,14 +383,11 @@ export class ContactModule implements Contact {
 
   private async syncChannels(
     cardId: string,
-    cardNode: string,
-    cardGuid: string,
-    cardToken,
-    string,
+    card: { guid, node, token },
     revision: number,
   ): Promise<void> {
     const { guid, node, secure, token, channelTypes } = this;
-    const server = cardNode ? cardNode : node;
+    const server = card.node ? card.node : node;
     const insecure =
       /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(
         server,
@@ -399,8 +395,8 @@ export class ContactModule implements Contact {
     const delta = await getContactChannels(
       server,
       !insecure,
-      cardGuid,
-      cardToken,
+      card.guid,
+      card.token,
       revision,
       channelTypes,
     );
@@ -481,7 +477,7 @@ export class ContactModule implements Contact {
             entry.item.summary,
             entry.item.unsealedSummary,
           );
-          this.emitTopicRevision(cardId, id)
+          this.emitTopicRevision(cardId, id, card, topicRevision)
         }
       } else {
         const channels = this.getChannelEntries(cardId);
@@ -599,32 +595,36 @@ export class ContactModule implements Contact {
     this.emitter.emit(`channel::${cardId}`, { cardId, channels });
   }
 
-
   public addTopicRevisionListener(
     cardId: string,
     channelId: string,
-    ev: (arg: { cardId: string; channelId: string; revision: number }) => void,
+    ev: (arg: { cardId: string; channelId: string, guid: string, node: string, token: string, revision: number }) => void,
   ): void {
     this.emitter.on(`revision::${cardId}::${channelId}`, ev);
     const entries = this.channelEntries.get(cardId);
-    const entry = entries ? entries.get(channelId) : null;
-    const revision = entry ? entry.revision.topic : 0;
-    ev({ cardId, channelId, revision });
+    if (entries) {
+      const entry = entries.get(channelId);
+      if (entry) {
+        const { profile, detail } = entry.item;
+        const { guid, node } = profile;
+        const { token } = detail; 
+        ev({ cardId, channelId, guid, node, token, revision });
+      }
+    }
   }
 
   public removeTopicRevisionListener(
     cardId: string,
     channelId: string,
-    ev: (arg: { cardId: string; channelId: string; revision: number }) => void,
+    ev: (arg: { cardId: string, channelId: string, guid: string, node: string, token: string, revision: number }) => void,
   ): void {
     this.emitter.off(`revision::${cardId}::${channelId}`, ev);
   }
 
-  private emitTopicRevision(cardId: string, channelId: string) {
-    const entries = this.channelEntries.get(cardId);
-    const entry = entries ? entries.get(channelId) : null;
-    const revision = entry ? entry.item.summary.revision : 0;
-    this.emitter.emit(`revision::${cardId}::${channelId}`, revision);
+  private emitTopicRevision(cardId: string, channelId: string, card: { guid: string, node: string, token: string }, revision: number) {
+    const { guid, node, token } = card;
+    const channel = { cardId, channelId, guid, node, token, revision };
+    this.emitter.emit(`revision::${cardId}::${channelId}`, channel);
   }
 
 
@@ -726,19 +726,6 @@ export class ContactModule implements Contact {
 
   public async flagChannel(cardId: string, channelId: string): Promise<void> {}
 
-  public async flagTopic(
-    cardId: string,
-    channelId: string,
-    topicId: string,
-  ): Promise<void> {}
-
-  public async flagTag(
-    cardId: string,
-    channelId: string,
-    topicId: string,
-    tagId: string,
-  ): Promise<void> {}
-
   public async setBlockCard(cardId: string): Promise<void> {}
 
   public async setBlockArticle(
@@ -749,20 +736,18 @@ export class ContactModule implements Contact {
   public async setBlockChannel(
     cardId: string,
     channelId: string,
-  ): Promise<void> {}
-
-  public async setBlockTopic(
-    cardId: string,
-    channelId: string,
-    topicId: string,
-  ): Promise<void> {}
-
-  public async setBlockTag(
-    cardId: string,
-    channelId: string,
-    topicId: string,
-    tagId: string,
-  ): Promise<void> {}
+  ): Promise<void> {
+    const entries = this.channelEntries.get(cardId);
+    if (entries) {
+      const entry = entries.get(channelId);
+      if (entry) {
+        item.entry.blocked = true;
+        item.entry.channel = this.setChannel(cardId, channelId, entry.item);
+        await this.store.setContactCardChannelBlocked(this.guid, cardId, channelId, blocked);
+        this.emitChannels(cardId);
+      }
+    }
+  }
 
   public async clearBlockCard(cardId: string): Promise<void> {}
 
@@ -776,37 +761,12 @@ export class ContactModule implements Contact {
     channelId: string,
   ): Promise<void> {}
 
-  public async clearBlockTopic(
-    cardId: string,
-    channelId: string,
-    topicId: string,
-  ): Promise<void> {}
-
-  public async clearBlockTag(
-    cardId: string,
-    channelId: string,
-    topicId: string,
-    tagId: string,
-  ): Promise<void> {}
-
   public async getBlockedCards(): Promise<{ cardId: string }[]> {
     return [];
   }
 
   public async getBlockedChannels(): Promise<
     { cardId: string; channelId: string }[]
-  > {
-    return [];
-  }
-
-  public async getBlockedTopics(): Promise<
-    { cardId: string; channelId: string; topicId: string }[]
-  > {
-    return [];
-  }
-
-  public async getBlockedTags(): Promise<
-    { cardId: string; channelId: string; topicId: string; tagId: string }[]
   > {
     return [];
   }
@@ -826,96 +786,6 @@ export class ContactModule implements Contact {
     cardId: string,
     channelId: string,
   ): Promise<void> {}
-
-  public async addTopic(
-    cardId: string,
-    channelId: string,
-    type: string,
-    message: string,
-    assets: Asset[],
-  ): Promise<string> {
-    return "";
-  }
-
-  public async removeTopic(
-    cardId: string,
-    channelId: string,
-    topicId: string,
-  ): Promise<void> {}
-
-  public async setTopicSubject(
-    cardId: string,
-    channelId: string,
-    topicId: string,
-    subject: string,
-  ): Promise<void> {}
-
-  public async setTopicSort(
-    cardId: string,
-    channelId: string,
-    topicId: string,
-    sort: number,
-  ): Promise<void> {}
-
-  public async addTag(
-    cardId: string,
-    channelId: string,
-    topicId: string,
-    type: string,
-    value: string,
-  ): Promise<string> {
-    return "";
-  }
-
-  public async removeTag(
-    cardId: string,
-    channelId: string,
-    topicId: string,
-    tagId: string,
-  ): Promise<void> {}
-
-  public async setTagSubject(
-    cardId: string,
-    channelId: string,
-    topicId: string,
-    tagId: string,
-    subject: string,
-  ): Promise<void> {}
-
-  public async setTagSort(
-    cardId: string,
-    channelId: string,
-    topicId: string,
-    tagId: string,
-    sort: number,
-  ): Promise<void> {}
-
-  public async getTopics(cardId: string, channelId: string): Promise<Topic[]> {
-    return [];
-  }
-
-  public async getMoreTopics(
-    cardId: string,
-    channelId: string,
-  ): Promise<Topic[]> {
-    return [];
-  }
-
-  public async getTags(
-    cardId: string,
-    channelId: string,
-    topicId: string,
-  ): Promise<Tag[]> {
-    return [];
-  }
-
-  public async getMoreTags(
-    cardId: string,
-    channelId: string,
-    topicId: string,
-  ): Promise<Tag[]> {
-    return [];
-  }
 
   public async enableChannelNotifications(
     cardId: string,
@@ -945,32 +815,10 @@ export class ContactModule implements Contact {
     return "";
   }
 
-  public getTopicAssetUrl(
-    cardId: string,
-    channelId: string,
-    topicId: string,
-    assetId: string,
-  ): string {
-    return "";
-  }
-
   public getCardImageUrl(cardId: string): string {
     return "";
   }
 
-  public async addParticipantAccess(
-    cardId: string,
-    channelId: string,
-    name: string,
-  ): Promise<Participant> {
-    return { id: "", name: "", node: "", secure: false, token: "" };
-  }
-
-  public async removeParticipantAccess(
-    cardId: string,
-    channelId: string,
-    repeaterId: string,
-  ): Promise<void> {}
 
 
 
