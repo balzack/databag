@@ -478,6 +478,7 @@ export class ContactModule implements Contact {
             entry.item.summary,
             entry.item.unsealedSummary,
           );
+          this.emitTopicRevision(cardId, id)
         }
       } else {
         const channels = this.getChannelEntries(cardId);
