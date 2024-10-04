@@ -25,6 +25,9 @@ import { getContactChannelDetail } from "./net/getContactChannelDetail";
 import { getContactChannelSummary } from "./net/getContactChannelSummary";
 import { addCard } from './net/addCard';
 import { getContactListing } from './net/getContactListing';
+import { setCardConfirmed } from './net/setCardConfirmed';
+import { setCardConnecting } from './net/setCardConnecting';
+import { setCardConnected } from './net/setCardConnected';
 
 const CLOSE_POLL_MS = 100;
 const RETRY_POLL_MS = 2000;
@@ -331,7 +334,7 @@ export class ContactModule implements Contact {
               const channel = setChannel(cardId, channelId, item);
               this.channelEntries.set(cardId).set(channelId, { item, channel });
             } catch (err) {
-              console.log(err);
+              this.log.warn(err);
             }
           }
         }
@@ -620,7 +623,7 @@ export class ContactModule implements Contact {
   private emitTopicRevision(cardId: string, channelId: string) {
     const entries = this.channelEntries.get(cardId);
     const entry = entries ? entries.get(channelId) : null;
-    const revision = entry ? entry.revision.topic : 0;
+    const revision = entry ? entry.item.summary.revision : 0;
     this.emitter.emit(`revision::${cardId}::${channelId}`, revision);
   }
 
@@ -651,7 +654,7 @@ export class ContactModule implements Contact {
 
   public async removeCard(cardId: string): Promise<void> {
     const { node, secure, token } = this;
-    return await removeCard(node, secure, token, cardId);
+    await removeCard(node, secure, token, cardId);
   }
 
 
@@ -661,11 +664,55 @@ export class ContactModule implements Contact {
 
 
 
-  public async confirmCard(cardId: string): Promise<void> {}
+  public async confirmCard(cardId: string): Promise<void> {
+    const { node, secure, token } = this;
+    await setCardConfirmed(node, secure, token, cardId);
+  }
 
-  public async connectCard(cardId: string): Promise<void> {}
+  public async connectCard(cardId: string): Promise<void> {
+    const { node, secure, token } = this;
+    await setCardConnecting(node, secure, token, cardId);
+    try {
+      const message = await getCardOpenMessage(node, secure, token, cardId);
 
-  public async disconnectCard(cardId: string): Promise<void> {}
+      const entry = this.cardEntries.get(cardId);
+      if (entry) {
+        const server = entry.item.profile.node ? entry.item.profile.node : node;
+        const insecure =
+          /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(
+            server,
+          );
+        const contact = await setCardOpenMessage(server, !insecure, message);
+        if (contact.status === 'connected') {
+          const { token, articleRevision, channelRevision, profileRevision } = contact;
+          await setCardConnected(node, secure, token, cardId, token, articleRevision, channelRevision, profileRevision);
+        }
+      }
+    }
+    catch (err) {
+      this.log.error('failed to deliver open message');
+    }
+  }
+
+  public async disconnectCard(cardId: string): Promise<void> {
+    const { node, secure, token } = this;
+    await setCardConfirmed(node, secure, token, cardId);
+    try {
+      const message = await getCardCloseMessage(node, secure, token, cardId);
+      const entry = this.cardEntries.get(cardId);
+      if (entry) {
+        const server = entry.item.profile.node ? entry.item.profile.node : node;
+        const insecure =
+          /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(
+            server,
+          );
+        await setCardCloseMessage(server, !insecure, message);
+      }
+    }
+    catch (err) {
+      this.log.warn('failed to deliver close message');
+    }
+  }
 
   public async rejectCard(cardId: string): Promise<void> {}
 
@@ -1016,7 +1063,7 @@ export class ContactModule implements Contact {
           return true;
         }
       } catch (err) {
-        console.log(err);
+        this.log.warn(err);
       }
     }
     return false;
@@ -1050,7 +1097,7 @@ export class ContactModule implements Contact {
           return true;
         }
       } catch (err) {
-        console.log(err);
+        this.log.warn(err);
       }
     }
     return false;

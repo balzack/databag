@@ -124,15 +124,6 @@ export interface Contact {
 
   addCardListener(ev: (cards: Card[]) => void): void;
   removeCardListener(ev: (cards: Card[]) => void): void;
-
-  addArticleListener(id: string | null, ev: (arg: { cardId: string; articles: Article[] }) => void): void;
-  removeArticleListener(id: string | null, ev: (arg: { cardId: string; articles: Article[] }) => void): void;
-
-  addChannelListener(id: string | null, ev: (arg: { cardId: string; channels: Channel[] }) => void): void;
-  removeChannelListener(id: string | null, ev: (arg: { cardId: string; channels: Channel[] }) => void): void;
-
-  addTopicRevisionListener(cardId: string, channelId: string, ev: (arg: { cardId: string; channelId: string; revision: number }) => void): void;
-  removeTopicRevisionListener(cardId: string, channelId: string, ev: (arg: { cardId: string; channelId: string; revision: number }) => void): void;
 }
 
 export interface Alias {

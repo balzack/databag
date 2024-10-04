@@ -3,9 +3,10 @@ import { DatabagSDK, Params, Session } from 'databag-client-sdk'
 import { SessionStore } from '../SessionStore'
 import { WebCrypto } from '../WebCrypto'
 
+const databag = new DatabagSDK({ tagBatch: 32, topicBatch: 32, articleTypes: [], channelTypes: [ 'sealed','superbasic'] }, new WebCrypto());
+
 export function useAppContext() {
-  const params = { tagBatch: 32, topicBatch: 32, articleTypes: [], channelTypes: [ 'sealed','superbasic'] };
-  const sdk = useRef(new DatabagSDK(params, new WebCrypto()))
+  const sdk = useRef(databag);
   const [state, setState] = useState({
     session: null as null | Session,
   })
