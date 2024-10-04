@@ -494,9 +494,55 @@ export class ContactModule implements Contact {
     }
   }
 
-  public async rejectCard(cardId: string): Promise<void> {}
+  public async denyCard(cardId: string): Promise<void> {
+    const { node, secure, token } = this;
+    const entry = this.cardEntries.get(cardId);
+    if (entry) {
+      try {
+        const message = await getCardCloseMessage(node, secure, token, cardId);
+        const server = entry.item.profile.node ? entry.item.profile.node : node;
+        const insecure = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(server);
+        await setCardCloseMessage(server, !insecure, message);
+      } catch (err) {
+        this.log.warn("failed to deliver close message");
+      }
+      if (entry.item.detail.status === 'pending') {
+        await removeCard(node, secure, token, cardId);
+      } else {
+        await setCardConfirmed(node, secure, token, cardId);
+      }
+    }
+  }
 
-  public async ignoreCard(cardId: string): Promise<void> {}
+  public async ignoreCard(cardId: string): Promise<void> {
+    const { node, secure, token } = this;
+    const entry = this.cardEntries.get(cardId);
+    if (entry) {
+      if (entry.item.detail.status === 'pending') {
+        await removeCard(node, secure, token, cardId);
+      } else {
+        await setCardConfirmed(node, secure, token, cardId);
+      }
+    }
+  }
+
+  public async cancelCard(cardId: string): Promise<void> {
+    const { node, secure, token } = this;
+    const entry = this.cardEntries.get(cardId);
+    if (entry) {
+      if (entry.item.detail.status === 'requesting') {
+        try {
+          const message = await getCardCloseMessage(node, secure, token, cardId);
+          const server = entry.item.profile.node ? entry.item.profile.node : node;
+          const insecure = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(server);
+          await setCardCloseMessage(server, !insecure, message);
+        } catch (err) {
+          this.log.warn("failed to deliver close message");
+        }
+        await setCardConfirmed(node, secure, token, cardId);
+      }
+    }
+  }
 
   public async resyncCard(cardId: string): Promise<void> {}
 
@@ -506,28 +552,30 @@ export class ContactModule implements Contact {
 
   public async flagChannel(cardId: string, channelId: string): Promise<void> {}
 
-  public async setBlockCard(cardId: string): Promise<void> {}
+  public async setBlockedCard(cardId: string, boolean: blocked): Promise<void> {
+    const entry = this.cardEntries.get(cardId);
+    if (entry) {
+      entry.item.blocked = blocked;
+      entry.item.card = this.setCard(cardId, entry.item);
+      await this.store.setContactCardBlocked(this.guid, cardId, blocked);
+      this.emitCards();
+    }
+  }
 
-  public async setBlockArticle(cardId: string, articleId: string): Promise<void> {}
+  public async setBlockedArticle(cardId: string, articleId: string, boolean: blocked): Promise<void> {}
 
-  public async setBlockChannel(cardId: string, channelId: string): Promise<void> {
+  public async setBlockedChannel(cardId: string, channelId: string, boolean: blocked): Promise<void> {
     const entries = this.channelEntries.get(cardId);
     if (entries) {
       const entry = entries.get(channelId);
       if (entry) {
-        item.entry.blocked = true;
-        item.entry.channel = this.setChannel(cardId, channelId, entry.item);
+        entry.item.blocked = blocked;
+        entry.item.channel = this.setChannel(cardId, channelId, entry.item);
         await this.store.setContactCardChannelBlocked(this.guid, cardId, channelId, blocked);
         this.emitChannels(cardId);
       }
     }
   }
-
-  public async clearBlockCard(cardId: string): Promise<void> {}
-
-  public async clearBlockArticle(cardId: string, articleId: string): Promise<void> {}
-
-  public async clearBlockChannel(cardId: string, channelId: string): Promise<void> {}
 
   public async getBlockedCards(): Promise<{ cardId: string }[]> {
     return [];
@@ -545,13 +593,20 @@ export class ContactModule implements Contact {
 
   public async removeChannel(cardId: string, channelId: string): Promise<void> {}
 
-  public async enableChannelNotifications(cardId: string, channelId: string): Promise<void> {}
+  public async setChannelNotifications(cardId: string, channelId: string, enabled: boolean): Promise<void> {}
 
-  public async disableChannelNotifications(cardId: string, channelid: string): Promise<void> {}
-
-  public async setUnreadChannel(cardId: string, channelId: string): Promise<void> {}
-
-  public async clearUnreadChannel(cardId: string, channelId: string): Promise<void> {}
+  public async setUnreadChannel(cardId: string, channelId: string, unread: boolean): Promise<void> {
+    const entries = this.channelEntries.get(cardId);
+    if (entries) {
+      const entry = entries.get(channelId);
+      if (entry) {
+        entry.item.unread = unread;
+        entry.item.channel = this.setChannel(cardId, channelId, entry.item);
+        await this.store.setContactCardChannelUnread(this.guid, cardId, channelId, unread);
+        this.emitChannels(cardId);
+      }
+    }
+  }
 
   public async getRegistry(server: string): Promise<Profile[]> {
     return [];

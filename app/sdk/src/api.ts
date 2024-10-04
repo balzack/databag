@@ -77,21 +77,15 @@ export interface Contact {
   flagCard(cardId: string): Promise<void>;
   flagArticle(cardId: string, articleId: string): Promise<void>;
   flagChannel(cardId: string, channelId: string): Promise<void>;
-  setBlockCard(cardId: string): Promise<void>;
-  setBlockArticle(cardId: string, articleId: string): Promise<void>;
-  setBlockChannel(cardId: string, channelId: string): Promise<void>;
-  clearBlockCard(cardId: string): Promise<void>;
-  clearBlockArticle(cardId: string, articleId: string): Promise<void>;
-  clearBlockChannel(cardId: string, channelId: string): Promise<void>;
+  setBlockedCard(cardId: string, blocked: boolean): Promise<void>;
+  setBlockedArticle(cardId: string, articleId: string, blocked: boolean): Promise<void>;
+  setBlockedChannel(cardId: string, channelId: string, blocked: boolean): Promise<void>;
   getBlockedCards(): Promise<{ cardId: string }[]>;
   getBlockedChannels(): Promise<{ cardId: string; channelId: string }[]>;
   getBlockedArticles(): Promise<{ cardId: string; articleId: string }[]>;
-
-  enableChannelNotifications(cardId: string, channelId: string): Promise<void>;
-  disableChannelNotifications(chardId: string, channelId: string): Promise<void>;
-
   setUnreadChannel(cardId: string, channelId: string): Promise<void>;
-  clearUnreadChannel(cardId: string, channelId: string): Promise<void>;
+
+  setChannelNotifications(cardId: string, channelId: string, enabled: boolean): Promise<void>;
 
   getRegistry(server: string): Promise<Profile[]>;
   getRegistryImageUrl(server: string, guid: string): string;
@@ -100,6 +94,9 @@ export interface Contact {
 
   addCardListener(ev: (cards: Card[]) => void): void;
   removeCardListener(ev: (cards: Card[]) => void): void;
+
+  addChannelListener(id: string | null, ev: (arg: { cardId: string; channels: Channel[] }) => void): void;
+  removeChannelListener(id: string | null, ev: (arg: { cardId: string; channels: Channel[] }) => void): void;
 }
 
 export interface Alias {
