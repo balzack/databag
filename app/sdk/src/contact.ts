@@ -33,6 +33,7 @@ export class ContactModule implements Contact {
   private channelTypes: string[];
   private seal: { privateKey: string; publicKey: string } | null;
   private unsealAll: boolean;
+  private resync: boolean;
 
   private cryptp: Crypto | null;
   private store: Store;
@@ -62,6 +63,7 @@ export class ContactModule implements Contact {
     this.articleTypes = articleTypes;
     this.channelTypes = channelTypes;
     this.unsealAll = false;
+    this.resync = false;
 
     this.cardEntries = new Map<string, { item: CardItem; card: Card }>();
     this.articleEntries = new Map<string, Map<string, { item: ArticleItem; article: Article }>>();
@@ -113,11 +115,64 @@ export class ContactModule implements Contact {
   private async sync(): Promise<void> {
     if (!this.syncing) {
       this.syncing = true;
-      while (this.nextRevision && !this.closing) {
+      const { guid, node, secure, token } = this;
+      while ((this.nextRevision || this.resnc) && !this.closing) {
+
+        if (this.resync) {
+          this.resync = false;
+          const entries = Array.from(this.cardEntries, ([key, value]) => ({ key, value }))
+          for (const entry of entries) {
+            const { key, value } = entry;
+            if (item.resync) {
+              value.item.resync = false;
+              if (value.item.offsyncProfile) {
+                try {
+                  await this.syncProfile(id, value.item.profile.node, value.item.profile.guid, value.item.detail.token, value.item.profileRevision);
+                  value.item.profileRevision = value.item.offsyncProfile;
+                  await this.store.setContactCardProfileRevision(guid, value.key, value.item.profileRevision);
+                  value.item.offsyncProfile = null;
+                  await this.store.clearContactCardOffsyncProfile(guid, value.key);
+                  entry.card = this.setCard(id, entry.item);
+                  this.emitCards();
+                } catch (err) {
+                  this.log.warn(err);
+                }
+              }
+              if (entry.item.offsyncArticle) {
+                try {
+                  await this.syncArticles(id, value.item.profile.node, value.item.profile.guid, value.item.detail.token, value.item.articleRevision);
+                  value.item.articleRevision = value.item.offsyncArticle;
+                  await this.store.setContactCardArticleRevision(guid, value.key, value.item.articleRevision);
+                  value.item.offsyncArticle = null;  
+                  await this.store.clearContactCardOffsyncArticle(guid, value.key);
+                  entry.card = this.setCard(id, entry.item);
+                  this.emitCards();
+                }
+                catch (err) {
+                  this.log.warn(err);
+                }
+              }
+              if (entry.item.offsyncChannel) {
+                try {
+                  await this.syncChannels(id, { guid: profile.guid, node: profile.node, token: detail.token }, entry.item.channelRevision);
+                  value.item.channelRevision = value.item.offsyncChannel;
+                  await this.store.setContactCardChannelRevision(guid, value.key, value.item.channelRevision);
+                  value.item.offsyncChannel = null;
+                  await this.store.clearContactCardOffsyncChannel(guid, value.key);
+                  entry.card = this.setCard(id, entry.item);
+                  this.emitCards();
+                }
+                catch (err) {
+                  this.log.warn(err);
+                }  
+              }
+            }
+          }
+        }
+
         if (this.revision !== this.nextRevision) {
           const nextRev = this.nextRevision;
           try {
-            const { guid, node, secure, token } = this;
             const delta = await getCards(node, secure, token, this.revision);
             for (const entity of delta) {
               const { id, revision, data } = entity;
@@ -154,43 +209,69 @@ export class ContactModule implements Contact {
                   await this.store.setContactCardProfile(guid, id, entry.item.profile);
                 }
 
-                if (data.notifiedProfile > entry.item.profile.revision && data.notifiedProfile !== entry.item.profileRevision) {
-                  try {
-                    await this.syncProfile(id, entry.item.profile.node, entry.item.profile.guid, entry.item.detail.token, entry.item.profileRevision);
-                    entry.item.profileRevision = data.notifiedProfile;
-                    await this.store.setContactCardProfileRevision(guid, id, data.notifiedProfile);
-                  } catch (err) {
-                    this.log.warn(err);
-                    entry.item.offsync = true;
-                    await this.store.setContactCardOffsync(guid, id, true);
+                const { profileRevision, articleRevision, channelRevision, offsyncProfile, offsyncChannel, offsyncArticle } = entry.item;
+
+                if (data.notifiedProfile > entry.item.profile.revision  && data.notifiedProfile !== profileRevision) {
+                  if (offsyncProfile) {
+                    entry.item.offsyncProfile = data.notifiedProfile;
+                    await this.store.setContactCardOffsyncProfile(guid, id, data.notifiedProfile);
+                    entry.card = this.setCard(id, entry.item);
+                  }
+                  else {
+                    try {
+                      await this.syncProfile(id, entry.item.profile.node, entry.item.profile.guid, entry.item.detail.token, entry.item.profileRevision);
+                      entry.item.profileRevision = data.notifiedProfile;
+                      await this.store.setContactCardProfileRevision(guid, id, data.notifiedProfile);
+                    } catch (err) {
+                      this.log.warn(err);
+                      entry.item.offsyncProfile = data.notifiedProfile;
+                      await this.store.setContactCardOffsyncProfile(guid, id, data.notifiedProfile);
+                      entry.card = this.setCard(id, entry.item);
+                    }
                   }
                 }
 
-                if (data.notifiedArticle !== entry.item.articleRevision) {
-                  try {
-                    await this.syncArticles(id, entry.item.profile.node, entry.item.profile.guid, entry.item.detail.token, entry.item.articleRevision);
-                    entry.item.articleRevision = data.notifiedArticle;
-                    await this.store.setContactCardArticlesRevision(guid, id, data.notifiedArticle);
-                  } catch (err) {
-                    this.log.warn(err);
-                    entry.item.offsync = true;
-                    await this.store.setContactCardOffsync(guid, id, true);
+                if (data.notifiedArticle !== articleRevision) {
+                  if (offsyncArticle) {
+                    entry.item.offsyncArticle = data.notifiedArticle;
+                    await this.store.setContactCardOffsyncArticle(guid, id, data.notifiedArticle);
+                    entry.card = this.setCard(id, entry.item);
                   }
-                  this.emitArticles(id);
+                  else {
+                    try {
+                      await this.syncArticles(id, entry.item.profile.node, entry.item.profile.guid, entry.item.detail.token, entry.item.articleRevision);
+                      entry.item.articleRevision = data.notifiedArticle;
+                      await this.store.setContactCardArticlesRevision(guid, id, data.notifiedArticle);
+                      this.emitArticles(id);
+                    } catch (err) {
+                      this.log.warn(err);
+                      entry.item.offsyncArticle = data.notifiedArticle;
+                      await this.store.setContactCardOffsyncArticle(guid, id, data.notifiedArticle);
+                      entry.card = this.setCard(id, entry.item);
+                    }
+                  }
                 }
 
-                if (data.notifiedChannel !== entry.item.channelRevision) {
-                  try {
-                    const { profile, detail } = entry.item;
-                    await this.syncChannels(id, { guid: profile.guid, node: profile.node, token: detail.token }, entry.item.channelRevision);
-                    entry.item.channelRevision = data.notifiedChannel;
-                    await this.store.setContactCardChannelsRevision(guid, id, data.notifiedChannel);
-                  } catch (err) {
-                    this.log.warn(err);
-                    entry.item.offsync = true;
-                    await this.store.setContactCardOffsync(guid, id, true);
+                if (data.notifiedChannel !== channelRevision) {
+                  if (offsyncChannel) {
+                    entry.item.offsyncChannel = data.notifiedChannel;
+                    await this.store.setContactCardOffsyncChannel(guid, id, data.notifiedChannel);
+                    entry.card = this.setCard(id, entry.item);
                   }
-                  this.emitChannels(id);
+                  else {
+                    try {
+                      const { profile, detail } = entry.item;
+                      await this.syncChannels(id, { guid: profile.guid, node: profile.node, token: detail.token }, entry.item.channelRevision);
+                      entry.item.channelRevision = data.notifiedChannel;
+                      await this.store.setContactCardChannelsRevision(guid, id, data.notifiedChannel);
+                      this.emitChannels(id);
+                    } catch (err) {
+                      this.log.warn(err);
+                      entry.item.offsyncChannel = data.notifiedChannel;
+                      await this.store.setContactCardOffsyncChannel(guid, id, data.notifiedChannel);
+                      entry.card = this.setCard(id, entry.item);
+                    }
+                  }
                 }
               } else {
                 this.cardEntries.delete(id);
@@ -245,6 +326,9 @@ export class ContactModule implements Contact {
 
       this.syncing = false;
     }
+  }
+
+  private async syncCard(entity: CardEntity) {
   }
 
   private async syncProfile(cardId: string, cardNode: string, cardGuid: string, cardToken: string, revision: number): Promise<void> {
@@ -544,7 +628,14 @@ export class ContactModule implements Contact {
     }
   }
 
-  public async resyncCard(cardId: string): Promise<void> {}
+  public async resyncCard(cardId: string): Promise<void> {
+    const entry = this.cardEntries.get(cardId);
+    if(entry) {
+      entry.item.resync = true;
+    }
+    this.resync = true;
+    this.sync();
+  }
 
   public async flagCard(cardId: string): Promise<void> {}
 
@@ -621,12 +712,12 @@ export class ContactModule implements Contact {
   }
 
   private setCard(cardId: string, item: CardItem): Card {
-    const { offsync, blocked, profile, detail } = item;
+    const { offsyncProfile, offsyncChannel, offsyncArticle, blocked, profile, detail } = item;
     const { guid, handle, name, description, location, imageSet, node } = profile;
     const { status, statusUpdated } = detail;
     return {
       cardId,
-      offsync,
+      offsync: Boolean(offsyncProfile || offsyncChannel || offsyncArticle),
       blocked,
       status,
       statusUpdated,

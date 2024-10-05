@@ -33,7 +33,12 @@ export interface Store {
   setContactCardDetail(guid: string, cardId: string, detail: CardDetail): Promise<void>;
   setContactCardBlocked(guid: string, cardId: string, blocked: boolean): Promise<void>;
 
-  setContactCardOffsync(guid: string, cardId: string, offsync: boolean): Promise<void>;
+  setContactCardOffsyncProfile(guid: string, cardId: string, revision: number): Promise<void>;
+  clearContactCardOffsyncProfile(guid: string, cardId: string): Promise<void>;
+  setContactCardOffsyncArticle(guid: string, cardId: string, revision: number): Promise<void>;
+  clearContactCardOffsyncArticle(guid: string, cardId: string): Promise<void>;
+  setContactCardOffsyncChannel(guid: string, cardId: string, revision: number): Promise<void>;
+  clearContactCardOffsyncChannel(guid: string, cardId: string): Promise<void>;
 
   setContactCardProfileRevision(guid: string, cardId: string, revision: number): Promise<void>;
   setContactCardArticlesRevision(guid: string, cardId: string, revision: number): Promise<void>;
@@ -202,7 +207,17 @@ export class OfflineStore implements Store {
 
   public async setContactCardBlocked(guid: string, cardId: string, blocked: boolean): Promise<void> {}
 
-  public async setContactCardOffsync(guid: string, cardId: string, offsync: boolean): Promise<void> {}
+  public async setContactCardOffsyncProfile(guid: string, cardId: string, revision: number): Promise<void> {}
+
+  public async clearContactCardOffsyncProfile(guid: string, cardId: string): Promise<void> {}
+
+  public async setContactCardOffsyncArticle(guid: string, cardId: string, revision: number): Promise<void> {}
+
+  public async clearContactCardOffsyncArticle(guid: string, cardId: string): Promise<void> {}
+
+  public async setContactCardOffsyncChannel(guid: string, cardId: string, revision: number): Promise<void> {}
+
+  public async clearContactCardOffsyncChannel(guid: string, cardId: string): Promise<void> {}
 
   public async setContactCardProfileRevision(guid: string, cardId: string, revision: number): Promise<void> {}
 
@@ -343,7 +358,17 @@ export class OnlineStore implements Store {
 
   public async setContactCardBlocked(guid: string, cardId: string, blocked: boolean): Promise<void> {}
 
-  public async setContactCardOffsync(guid: string, cardId: string, offsync: boolean): Promise<void> {}
+  public async setContactCardOffsyncProfile(guid: string, cardId: string, revision: number): Promise<void> {}
+
+  public async clearContactCardOffsyncProfile(guid: string, cardId: string): Promise<void> {}
+
+  public async setContactCardOffsyncArticle(guid: string, cardId: string, revision: number): Promise<void> {}
+
+  public async clearContactCardOffsyncArticle(guid: string, cardId: string): Promise<void> {}
+
+  public async setContactCardOffsyncChannel(guid: string, cardId: string, revision: number): Promise<void> {}
+
+  public async clearContactCardOffsyncChannel(guid: string, cardId: string): Promise<void> {}
 
   public async setContactCardProfileRevision(guid: string, cardId: string, revision: number): Promise<void> {}
 
@@ -451,7 +476,17 @@ export class NoStore implements Store {
 
   public async setContactCardBlocked(guid: string, cardId: string, blocked: boolean): Promise<void> {}
 
-  public async setContactCardOffsync(guid: string, cardId: string, offsync: boolean): Promise<void> {}
+  public async setContactCardOffsyncProfile(guid: string, cardId: string, revision: number): Promise<void> {}
+
+  public async clearContactCardOffsyncProfile(guid: string, cardId: string): Promise<void> {}
+
+  public async setContactCardOffsyncArticle(guid: string, cardId: string, revision: number): Promise<void> {}
+
+  public async clearContactCardOffsyncArticle(guid: string, cardId: string): Promise<void> {}
+
+  public async setContactCardOffsyncChannel(guid: string, cardId: string, revision: number): Promise<void> {}
+
+  public async clearContactCardOffsyncChannel(guid: string, cardId: string): Promise<void> {}
 
   public async setContactCardProfileRevision(guid: string, cardId: string, revision: number): Promise<void> {}
 

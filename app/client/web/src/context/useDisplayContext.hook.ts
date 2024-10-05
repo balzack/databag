@@ -61,12 +61,11 @@ export function useDisplayContext() {
 
     const filtered = new Map()
     const devices = await navigator.mediaDevices.enumerateDevices()
-
     devices
-      .filter((item) => item.kind === type + 'input')
+      .filter((item) => (item.deviceId !== '' && item.kind === type + 'input'))
       .forEach((item) => {
         if (item) {
-          const label = item.label ? item.label : state.strings.integrated
+          const label = item.label ? item.label : state.strings.integrated;
           const entry = filtered.get(item.groupId)
           if (entry) {
             if (item.label && label.length < entry.label.length) {

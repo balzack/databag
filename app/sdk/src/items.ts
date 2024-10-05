@@ -65,7 +65,10 @@ export type ArticleDetail = {
 };
 
 export type CardItem = {
-  offsync: boolean;
+  offsyncProfile: number | null;
+  offsyncArticle: number | null;
+  offsyncChannel: number | null;
+  resync: boolean;
   blocked: boolean;
   revision: number;
   profile: CardProfile;
@@ -76,7 +79,10 @@ export type CardItem = {
 };
 
 export const defaultCardItem = {
-  offsync: false,
+  offsyncProfile: null,
+  offsyncArticle: null,
+  offsyncChannel: null,
+  resync: false,
   blocked: false,
   revision: 0,
   profile: {
