@@ -58,13 +58,13 @@ export type Channel = {
   enableAudio: boolean;
   enableVideo: boolean;
   enableBinary: boolean;
-  membership: Member;
+  //membership: Member;
   members: Member[];
 };
 
 export type Member = {
-  guid?: string;
-  pushEnabled: boolean;
+  guid: string;
+  //pushEnabled: boolean;
   //canAddTopic: boolean,
   //canAddTag: boolean,
   //canAddAsset: boolean,

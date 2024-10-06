@@ -44,10 +44,7 @@ export type ChannelDetail = {
     groups: [string];
     cards: [string];
   };
-  members: {
-    member: string;
-    pushEnabled: boolean;
-  };
+  members: [string];
 };
 
 export type ArticleDetail = {

@@ -1,9 +1,9 @@
 import { EventEmitter } from "eventemitter3";
 import type { Contact, Logging } from "./api";
 import type { Card, Topic, Asset, Tag, Profile, Participant } from "./types";
-import type { CardEntity } from "./entities";
+import type { CardEntity, avatar } from "./entities";
 import type { ArticleRevision, ArticleDetail, ChannelRevision, ChannelSummary, ChannelDetail, CardRevision, CardNotification, CardProfile, CardDetail } from "./items";
-import { defaultCardItem, defaultChannelItem, avatar } from "./items";
+import { defaultCardItem, defaultChannelItem } from "./items";
 import { Store } from "./store";
 import { getCards } from "./net/getCards";
 import { getCardProfile } from "./net/getCardProfile";
@@ -19,6 +19,9 @@ import { getContactListing } from "./net/getContactListing";
 import { setCardConfirmed } from "./net/setCardConfirmed";
 import { setCardConnecting } from "./net/setCardConnecting";
 import { setCardConnected } from "./net/setCardConnected";
+import { removeContactChannel } from './net/removeContactChannel';
+import { getContactChannelNotifications } from './net/getContactChannelNotifications';
+import { setContactChannelNotifications } from './net/setContactChannelNotifications';
 
 const CLOSE_POLL_MS = 100;
 const RETRY_POLL_MS = 2000;
@@ -727,9 +730,33 @@ export class ContactModule implements Contact {
 
   public async removeArticle(cardId: string, articleId: string): Promise<void> {}
 
-  public async removeChannel(cardId: string, channelId: string): Promise<void> {}
+  public async removeChannel(cardId: string, channelId: string): Promise<void> {
+    const entry = this.cardEntries.get(cardId);
+    if (entry) {
+      const server = entry.item.profile.node ? entry.item.profile.node : this.node;
+      const insecure = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(server);
+      await removeContactChannel(server, !insecure, entry.item.profile.guid, entry.item.detail.token, channelId);
+    }
+  }
 
-  public async setChannelNotifications(cardId: string, channelId: string, enabled: boolean): Promise<void> {}
+  public async getChannelNotifications(cardId: string, channelId: string): Promise<boolean> {
+    const entry = this.cardEntries.get(cardId);
+    if (entry) {
+      const server = entry.item.profile.node ? entry.item.profile.node : this.node;
+      const insecure = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(server);
+      return await getConcatChannelNotifications(server, !insecure, entry.item.profile.guid, entry.item.detail.token, channelId);
+    }
+    return false;
+  }
+
+  public async setChannelNotifications(cardId: string, channelId: string, enabled: boolean): Promise<void> {
+    const entry = this.cardEntries.get(cardId);
+    if (entry) {
+      const server = entry.item.profile.node ? entry.item.profile.node : this.node;
+      const insecure = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(server);
+      await setConcatChannelNotifications(server, !insecure, entry.item.profile.guid, entry.item.detail.token, channelId, enabled);
+    }
+  }
 
   public async setUnreadChannel(cardId: string, channelId: string, unread: boolean): Promise<void> {
     const entries = this.channelEntries.get(cardId);
@@ -851,13 +878,6 @@ export class ContactModule implements Contact {
     const detailData = detail.sealed ? item.unsealedDetail : detail.data;
     const summaryData = summary.sealed ? item.unsealedSummary : summary.data;
 
-    const { pushEnabled } = detail.members.find(({ member }) => member === this.guid) | {};
-    const contacts = detail.members
-      .filter(({ member }) => member != this.guid)
-      .map(({ member, pushEnabled }) => {
-        guid: member, pushEnabled;
-      });
-
     return {
       channelId,
       cardId,
@@ -882,8 +902,7 @@ export class ContactModule implements Contact {
       enableAudio: detail.enableAudio,
       enableVideo: detail.enableVideo,
       enableBinary: detail.enableBinary,
-      membership: { pushEnabled },
-      members: contacts,
+      members: detail.members,
     };
   }
 

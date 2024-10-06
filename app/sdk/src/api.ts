@@ -85,6 +85,7 @@ export interface Contact {
   getBlockedArticles(): Promise<{ cardId: string; articleId: string }[]>;
   setUnreadChannel(cardId: string, channelId: string): Promise<void>;
 
+  getChannelNotifications(cardId: string, channelId: string): Promise<boolean>;
   setChannelNotifications(cardId: string, channelId: string, enabled: boolean): Promise<void>;
 
   getRegistry(server: string): Promise<Profile[]>;
