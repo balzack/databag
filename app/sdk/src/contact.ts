@@ -640,11 +640,32 @@ export class ContactModule implements Contact {
     this.sync();
   }
 
-  public async flagCard(cardId: string): Promise<void> {}
+  public async flagCard(cardId: string): Promise<void> {
+    const entry = this.cardEntries.get(cardId);
+    if (entry) {
+      const server = entry.item.profile.node ? entry.item.profile.node : this.node;
+      const insecure = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(server);
+      await addFlag(server, !insecure, entry.item.profile.guid, {});
+    }
+  }
 
-  public async flagArticle(cardId: string, articleId: string): Promise<void> {}
+  public async flagArticle(cardId: string, articleId: string): Promise<void> {
+    const entry = this.cardEntries.get(cardId);
+    if (entry) {
+      const server = entry.item.profile.node ? entry.item.profile.node : this.node;
+      const insecure = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(server);
+      await addFlag(server, !insecure, entry.item.profile.guid, { article: articleId });
+    }
+  }
 
-  public async flagChannel(cardId: string, channelId: string): Promise<void> {}
+  public async flagChannel(cardId: string, channelId: string): Promise<void> {
+    const entry = this.cardEntries.get(cardId);
+    if (entry) {
+      const server = entry.item.profile.node ? entry.item.profile.node : this.node;
+      const insecure = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(server);
+      await addFlag(server, !insecure, entry.item.profile.guid, { channel: channelId });
+    }
+  }
 
   public async setBlockedCard(cardId: string, boolean: blocked): Promise<void> {
     const entry = this.cardEntries.get(cardId);
