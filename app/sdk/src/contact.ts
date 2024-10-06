@@ -3,7 +3,7 @@ import type { Contact, Logging } from "./api";
 import type { Card, Topic, Asset, Tag, Profile, Participant } from "./types";
 import type { CardEntity } from "./entities";
 import type { ArticleRevision, ArticleDetail, ChannelRevision, ChannelSummary, ChannelDetail, CardRevision, CardNotification, CardProfile, CardDetail } from "./items";
-import { defaultCardItem, defaultChannelItem } from "./items";
+import { defaultCardItem, defaultChannelItem, avatar } from "./items";
 import { Store } from "./store";
 import { getCards } from "./net/getCards";
 import { getCardProfile } from "./net/getCardProfile";
@@ -13,6 +13,7 @@ import { getContactProfile } from "./net/getContactProfile";
 import { getContactChannels } from "./net/getContactChannels";
 import { getContactChannelDetail } from "./net/getContactChannelDetail";
 import { getContactChannelSummary } from "./net/getContactChannelSummary";
+import { getCardImageUrl } from './net/getCardImageUrl';
 import { addCard } from "./net/addCard";
 import { getContactListing } from "./net/getContactListing";
 import { setCardConfirmed } from "./net/setCardConfirmed";
@@ -116,7 +117,7 @@ export class ContactModule implements Contact {
     if (!this.syncing) {
       this.syncing = true;
       const { guid, node, secure, token } = this;
-      while ((this.nextRevision || this.resnc) && !this.closing) {
+      while ((this.nextRevision || this.resync) && !this.closing) {
 
         if (this.resync) {
           this.resync = false;
@@ -328,9 +329,6 @@ export class ContactModule implements Contact {
     }
   }
 
-  private async syncCard(entity: CardEntity) {
-  }
-
   private async syncProfile(cardId: string, cardNode: string, cardGuid: string, cardToken: string, revision: number): Promise<void> {
     const { node, secure, token } = this;
     const server = cardNode ? cardNode : node;
@@ -517,7 +515,12 @@ export class ContactModule implements Contact {
     await this.sync();
   }
 
-  public async close(): void {}
+  public async close(): void {
+    this.closing = true;
+    while (this.syncing) {
+      await new Promise((r) => setTimeout(r, CLOSE_POLL_MS));
+    }
+  }
 
   public async setRevision(rev: number): Promise<void> {
     this.nextRevision = rev;
@@ -653,7 +656,18 @@ export class ContactModule implements Contact {
     }
   }
 
-  public async setBlockedArticle(cardId: string, articleId: string, boolean: blocked): Promise<void> {}
+  public async setBlockedArticle(cardId: string, articleId: string, boolean: blocked): Promise<void> {
+    const entries = this.articleEntries.get(cardId);
+    if (entries) {
+      const entry = entries.get(articleId);
+      if (entry) {
+        entry.item.blocked = blocked;
+        entry.item.article = this.setArticle(cardId, articleId, entry.item);
+        await this.store.setContactCardArticleBlocked(this.guid, cardId, articleId, blocked);
+        this.emitArticles(cardId);
+      }
+    }
+  }
 
   public async setBlockedChannel(cardId: string, channelId: string, boolean: blocked): Promise<void> {
     const entries = this.channelEntries.get(cardId);
@@ -668,16 +682,26 @@ export class ContactModule implements Contact {
     }
   }
 
-  public async getBlockedCards(): Promise<{ cardId: string }[]> {
-    return [];
+  public async getBlockedCards(): Promise<Card[]> {
+    return Array.from(this.cardEntries.values()).filter(entry => entry.item.blocked).map(entry => entry.card);
   }
 
-  public async getBlockedChannels(): Promise<{ cardId: string; channelId: string }[]> {
-    return [];
+  public async getBlockedChannels(): Promise<Channel[]> {
+    const channels: Channel[] = [];
+    this.channelEntries.forEach((card) => {
+      const cardChannels = Array.from(card.values()).filter(channel => channel.item.blocked).map(entry => entry.channel);
+      channels.push([...cardChannels]);
+    })
+    return channels;
   }
 
-  public async getBlockedArticles(): Promise<{ cardId: string; articleId: string }[]> {
-    return [];
+  public async getBlockedArticles(): Promise<Article[]> {
+    const channels: Channel[] = [];
+    this.channelEntries.forEach((card) => {
+      const cardChannels = Array.from(card.values()).filter(channel => channel.item.blocked).map(entry => entry.channel);
+      channels.push([...cardChannels]);
+    })
+    return channels;
   }
 
   public async removeArticle(cardId: string, articleId: string): Promise<void> {}
@@ -708,7 +732,12 @@ export class ContactModule implements Contact {
   }
 
   public getCardImageUrl(cardId: string): string {
-    return "";
+    const entry = this.cardEntries.get(cardId);
+    if (entry && entry.item.profile.imageSet) {
+      const { node, secure, token } = this;
+      return getCardImageUrl(node, secure, token, cardId, entry.item.profile.revision);
+    }
+    return avatar;
   }
 
   private setCard(cardId: string, item: CardItem): Card {
