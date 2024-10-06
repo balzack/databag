@@ -24,6 +24,8 @@ import { setCardConnected } from "./net/setCardConnected";
 import { removeContactChannel } from './net/removeContactChannel';
 import { getContactChannelNotifications } from './net/getContactChannelNotifications';
 import { setContactChannelNotifications } from './net/setContactChannelNotifications';
+import { getRegistryImageUrl } from './net/getRegistryImageUrl';
+import { getRegistryListing } from './net/getRegistryListing';
 
 const CLOSE_POLL_MS = 100;
 const RETRY_POLL_MS = 2000;
@@ -780,12 +782,20 @@ export class ContactModule implements Contact {
     }
   }
 
-  public async getRegistry(server: string): Promise<Profile[]> {
-    return [];
+  public async getRegistry(server: string, secure: boolean): Promise<Profile[]> {
+    const listing = await getRegistryListing(server, secure);
+    return listing.map(entity => {
+      const { guid, handle, name, description, location, image, seal, version, node } = entity;
+      return {
+        guid, handle, name, description, location, node, version,
+        sealSet: Boolean(seal),
+        imageSet: Boolean(image),
+      };
+    });
   }
 
-  public getRegistryImageUrl(server: string, guid: string): string {
-    return "";
+  public getRegistryImageUrl(server: string, secure: boolean, guid: string): string {
+    return getRegistryImageUrl(server, secure, guid);
   }
 
   public getCardImageUrl(cardId: string): string {
