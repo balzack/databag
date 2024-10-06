@@ -1,10 +1,12 @@
 import { EventEmitter } from "eventemitter3";
-import type { Contact, Logging } from "./api";
+import type { Contact, Logging, Focus } from "./api";
+import type { FocusModule } from './focus';
 import type { Card, Topic, Asset, Tag, Profile, Participant } from "./types";
 import type { CardEntity, avatar } from "./entities";
 import type { ArticleRevision, ArticleDetail, ChannelRevision, ChannelSummary, ChannelDetail, CardRevision, CardNotification, CardProfile, CardDetail } from "./items";
 import { defaultCardItem, defaultChannelItem } from "./items";
 import { Store } from "./store";
+import { Crypto } from './crypto';
 import { getCards } from "./net/getCards";
 import { getCardProfile } from "./net/getCardProfile";
 import { getCardDetail } from "./net/getCardDetail";
@@ -38,6 +40,7 @@ export class ContactModule implements Contact {
   private seal: { privateKey: string; publicKey: string } | null;
   private unsealAll: boolean;
   private resync: boolean;
+  private focus: FocusModule | null;
 
   private cryptp: Crypto | null;
   private store: Store;
@@ -68,6 +71,7 @@ export class ContactModule implements Contact {
     this.channelTypes = channelTypes;
     this.unsealAll = false;
     this.resync = false;
+    this.focus = null;
 
     this.cardEntries = new Map<string, { item: CardItem; card: Card }>();
     this.articleEntries = new Map<string, Map<string, { item: ArticleItem; article: Article }>>();
@@ -245,7 +249,7 @@ export class ContactModule implements Contact {
                     try {
                       await this.syncArticles(id, entry.item.profile.node, entry.item.profile.guid, entry.item.detail.token, entry.item.articleRevision);
                       entry.item.articleRevision = data.notifiedArticle;
-                      await this.store.setContactCardArticlesRevision(guid, id, data.notifiedArticle);
+                      await this.store.setContactCardArticleRevision(guid, id, data.notifiedArticle);
                       this.emitArticles(id);
                     } catch (err) {
                       this.log.warn(err);
@@ -267,7 +271,7 @@ export class ContactModule implements Contact {
                       const { profile, detail } = entry.item;
                       await this.syncChannels(id, { guid: profile.guid, node: profile.node, token: detail.token }, entry.item.channelRevision);
                       entry.item.channelRevision = data.notifiedChannel;
-                      await this.store.setContactCardChannelsRevision(guid, id, data.notifiedChannel);
+                      await this.store.setContactCardChannelRevision(guid, id, data.notifiedChannel);
                       this.emitChannels(id);
                     } catch (err) {
                       this.log.warn(err);
@@ -399,12 +403,19 @@ export class ContactModule implements Contact {
           await this.unsealChannelSummary(cardId, id, entry.item);
           entry.channel = this.setChannel(cardId, id, entry.item);
           await this.store.setContactCardChannelSummary(guid, cardId, id, entry.item.summary, entry.item.unsealedSummary);
-          this.emitTopicRevision(cardId, id, card, topicRevision);
+        }
+
+        await this.store.setContactCardChannelTopicRemoteRevision(guid, cardId, id, topicRevision);
+        if (this.focus) {
+          await this.focus.setRevision(cardId, id, card, topicRevision);
         }
       } else {
         const channels = this.getChannelEntries(cardId);
         channels.delete(id);
         await this.store.removeContactCardChannel(guid, cardId, id);
+        if (this.focus) {
+          await this.focus.disconnect(chardId, id);
+        }
       }
     }
   }
@@ -488,29 +499,27 @@ export class ContactModule implements Contact {
     this.emitter.emit(`channel::${cardId}`, { cardId, channels });
   }
 
-  public addTopicRevisionListener(cardId: string, channelId: string, ev: (arg: { cardId: string; channelId: string; guid: string; node: string; token: string; revision: number }) => void): void {
-    this.emitter.on(`revision::${cardId}::${channelId}`, ev);
-    const entries = this.channelEntries.get(cardId);
-    if (entries) {
-      const entry = entries.get(channelId);
-      if (entry) {
-        const { profile, detail } = entry.item;
-        const { guid, node } = profile;
-        const { token } = detail;
-        ev({ cardId, channelId, guid, node, token, revision });
-      }
+  public async setFocus(cardId: string, channelId: string): Focus {
+    if (this.focus) {
+      await this.focus.close();
     }
+    const entry = this.cardEntries.get(cardId);
+    if (entry) {
+      const node = entry.item.profile.node;
+      const token = entry.item.detail.token;
+      this.focus = new FocusModule(this.log, this.store, this.crypto, cardId, channelId, { node, token });
+    }
+    else {
+      this.focus = new FocusModule(this.log, this.store, this.crypto, cardId, channelId, null);
+    }
+    return this.focus;
   }
 
-  public removeTopicRevisionListener(cardId: string, channelId: string, ev: (arg: { cardId: string; channelId: string; guid: string; node: string; token: string; revision: number }) => void): void {
-    this.emitter.off(`revision::${cardId}::${channelId}`, ev);
-  }
-
-  private emitTopicRevision(cardId: string, channelId: string, card: { guid: string; node: string; token: string }, revision: number) {
-    const { guid, node, token } = card;
-    const channel = { cardId, channelId, guid, node, token, revision };
-    this.emitter.emit(`revision::${cardId}::${channelId}`, channel);
-  }
+  public async clearFocus() {
+    if (this.focus) {
+      await this.focus.close();
+    }
+  } 
 
   public async setSeal(seal: { privateKey: string; publicKey: string } | null) {
     this.seal = seal;

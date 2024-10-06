@@ -41,8 +41,8 @@ export interface Store {
   clearContactCardOffsyncChannel(guid: string, cardId: string): Promise<void>;
 
   setContactCardProfileRevision(guid: string, cardId: string, revision: number): Promise<void>;
-  setContactCardArticlesRevision(guid: string, cardId: string, revision: number): Promise<void>;
-  setContactCardChannelsRevision(guid: string, cardId: string, revision: number): Promise<void>;
+  setContactCardArticleRevision(guid: string, cardId: string, revision: number): Promise<void>;
+  setContactCardChannelRevision(guid: string, cardId: string, revision: number): Promise<void>;
 
   getContactCardArticles(guid: string): Promise<{ cardId: string; articleId: string; item: ArticleItem }[]>;
   addContactCardArticle(guid: string, cardId: string, articleId: string, item: ArticleItem): Promise<void>;
@@ -221,9 +221,9 @@ export class OfflineStore implements Store {
 
   public async setContactCardProfileRevision(guid: string, cardId: string, revision: number): Promise<void> {}
 
-  public async setContactCardArticlesRevision(guid: string, cardId: string, revision: number): Promise<void> {}
+  public async setContactCardArticleRevision(guid: string, cardId: string, revision: number): Promise<void> {}
 
-  public async setContactCardChannelsRevision(guid: string, cardId: string, revision: number): Promise<void> {}
+  public async setContactCardChannelRevision(guid: string, cardId: string, revision: number): Promise<void> {}
 
   public async getContactCardArticles(guid: string): Promise<{ cardId: string; articleId: string; item: ArticleItem }[]> {
     return [];
@@ -372,9 +372,9 @@ export class OnlineStore implements Store {
 
   public async setContactCardProfileRevision(guid: string, cardId: string, revision: number): Promise<void> {}
 
-  public async setContactCardArticlesRevision(guid: string, cardId: string, revision: number): Promise<void> {}
+  public async setContactCardArticleRevision(guid: string, cardId: string, revision: number): Promise<void> {}
 
-  public async setContactCardChannelsRevision(guid: string, cardId: string, revision: number): Promise<void> {}
+  public async setContactCardChannelRevision(guid: string, cardId: string, revision: number): Promise<void> {}
 
   public async getContactCardArticles(guid: string): Promise<{ cardId: string; articleId: string; item: ArticleItem }[]> {
     return [];
@@ -490,9 +490,9 @@ export class NoStore implements Store {
 
   public async setContactCardProfileRevision(guid: string, cardId: string, revision: number): Promise<void> {}
 
-  public async setContactCardArticlesRevision(guid: string, cardId: string, revision: number): Promise<void> {}
+  public async setContactCardArticleRevision(guid: string, cardId: string, revision: number): Promise<void> {}
 
-  public async setContactCardChannelsRevision(guid: string, cardId: string, revision: number): Promise<void> {}
+  public async setContactCardChannelRevision(guid: string, cardId: string, revision: number): Promise<void> {}
 
   public async getContactCardArticles(guid: string): Promise<{ cardId: string; articleId: string; item: ArticleItem }[]> {
     return [];

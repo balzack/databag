@@ -1,29 +1,47 @@
 import { EventEmitter } from "eventemitter3";
-import type { Identity, Contact, Content, Focus } from "./api";
+import type { Focus } from "./api";
 import type { Topic, Asset, Participant } from "./types";
 import type { Logging } from "./logging";
 import { Store } from "./store";
+import { Crypto } from './crypto';
 
 export class FocusModule implements Focus {
-  private identity: Identity;
-  private contact: Contact;
-  private content: Content;
   private cardId: string | null;
   private channelId: string;
   private log: Logging;
   private emitter: EventEmitter;
+  private crypto: Crypto | null;
+  private store: Store;
+  private guid: string;
+  private node: string;
+  private token: string;
+  private connection: { node: string, token: string} | null;
 
-  constructor(log: Logging, identity: Identity, contact: Contact, content: Content, store: Store, cardId: string | null, channelId: string) {
-    this.identity = identity;
-    this.contact = contact;
-    this.content = content;
+  constructor(log: Logging, store: Store, crypto: Crypto | null, cardId: string | null, channelId: string, guid: string, connection: { node: string, token: string } | null) {
     this.cardId = cardId;
     this.channelId = channelId;
     this.log = log;
     this.emitter = new EventEmitter();
+    this.store = store;
+    this.crypto = crypto;
+    this.guid = guid;
+    this.connection = connection;
   }
 
-  public blur(): void {}
+  public async disconnect(cardId: string | null, channelId: string) {
+    if (cardId === this.cardId && channelId === this.channelId) {
+      this.connection = null;
+    }
+  }
+
+  public async setRevision(cardId: string | null, channelId: string, revision: number) {
+    if (cardId === this.cardId && channelId === this.channelId) {
+      // sync
+    }
+  }
+
+  public async close() {
+  }
 
   public async addTopic(type: string, message: string, assets: Asset[]): Promise<string> {
     return "";
