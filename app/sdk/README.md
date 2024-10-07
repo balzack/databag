@@ -136,8 +136,8 @@ Automate allocates the Bot interface for ia specific communication channel
 
   Management of an active content channel is provided through the Focus Interface
   
-  ```Session::addFocus(cardId: string | null, channelId: string): Focus```   
-  ```Session::removeFocus(focus: Focus): void```
+  ```Session::setFocus(cardId: string | null, channelId: string): Focus```   
+  ```Session::clearFocus(focus: Focus): void```
 
   The connectivity status is provided through a status lisenter
   
