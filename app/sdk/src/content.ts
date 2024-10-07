@@ -1,10 +1,13 @@
 import { EventEmitter } from "eventemitter3";
-import type { Content, Settings, Logging } from "./api";
+import type { Content, Settings, Logging, Focus } from "./api";
 import type { Channel, Topic, Asset, Tag, Participant } from "./types";
 import { Store } from "./store";
+import { Crypto } from "./crypto";
 
 export class ContentModule implements Content {
   private log: Logging;
+  private store: Store;
+  private crypto: Crypto | null;
   private guid: string;
   private token: string;
   private node: string;
@@ -12,12 +15,14 @@ export class ContentModule implements Content {
   private settings: Settings;
   private emitter: EventEmitter;
 
-  constructor(log: Logging, settings: Settings, store: Store, guid: string, token: string, node: string, secure: boolean) {
+  constructor(log: Logging, settings: Settings, store: Store, crypto: Crypto | null, guid: string, token: string, node: string, secure: boolean) {
     this.guid = guid;
     this.token = token;
     this.node = node;
     this.secure = secure;
     this.log = log;
+    this.store = store;
+    this.crypto = crypto;
     this.settings = settings;
     this.emitter = new EventEmitter();
   }
@@ -144,9 +149,15 @@ export class ContentModule implements Content {
 
   public async clearUnreadChannel(channelId: string): Promise<void> {}
 
+  public async setFocus(chanenlId: string): Focus {
+    return new FocusModule(this.log, this.store, this.crypto, null, channelId, null);
+  }
+
+  public async clearFocus() {}
+
   public async addParticipantAccess(channelId: string, name: string): Promise<Participant> {
     return { id: "", guid: "", name: "", server: "", token: "" };
   }
 
   public async removeParticipantAccess(channelId: string, repeaterId: string): Promise<void> {}
-}
+i}

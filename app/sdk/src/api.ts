@@ -10,8 +10,8 @@ export interface Session {
   getStream(): Stream;
   getRing(): Ring;
 
-  addFocus(cardId: string | null, channelId: string): Focus;
-  removeFocus(focus: Focus): void;
+  setFocus(cardId: string | null, channelId: string): Focus;
+  clearFocus(): void;
 
   addStatusListener(ev: (status: string) => void): void;
   removeStatusListener(ev: (status: string) => void): void;

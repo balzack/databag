@@ -156,11 +156,12 @@ export class SessionModule implements Session {
     return this.ring;
   }
 
-  public addFocus(cardId: string | null, channelId: string): Focus {
+  public setFocus(cardId: string | null, channelId: string): Focus {
     return new FocusModule(this.log, this.identity, this.contact, this.content, this.store, cardId, channelId);
   }
 
-  public removeFocus(focus: Focus): void {
-    focus.blur();
+  public clearFocus(): void {
+    this.contact.clearFocus();
+    this.content.clearFocus();
   }
 }
