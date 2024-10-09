@@ -82,7 +82,7 @@ Configure allocates the Node interface for the server
 </details>
 
 <details>
-  <summary>Bot communication is provided through the Bot interface</summary><br>
+  <summary>Automated communication is provided through the Bot interface</summary><br>
   <ul>
     
 Automate allocates the Bot interface for ia specific communication channel
@@ -245,6 +245,139 @@ Automate allocates the Bot interface for ia specific communication channel
 
   <br>
 </details>
+
+<details>
+  <summary>Contact interface module manages contacts and the shared articles and channels</summary><br>
+  
+  <ul>
+
+  The current contacts can be access with a [Card](https://github.com/balzack/databag/blob/sdk/app/sdk/src/types.ts) listener
+
+  ```Contact::addCardListener(ev: (cards: Card[]) => void): void```
+  
+  ```Contact::removeCardListener(ev: (cards: Card[]) => void): void```
+    
+  A new contact can be added to the account through the addCard method, the id of the card is returned
+  
+  ```Contact::addCard(server: string, guid: string): Promise<string>```
+
+  A contact is removed the the account through the removeCard method
+
+  ```Contact::removeCard(cardId: string): Promise<void>```
+
+  Get URL of contacts profile image with getCardImageUrl
+
+  ```Contact::getCardImageUrl(cardId: string): string```
+
+  Attempt synchronization of contact data if previously failed
+
+  ```Contact::resyncCard(cardId: string): Promise<void>```
+
+  Initiate or accept a contact connection with connectCard to share data
+
+  ```Contact::connectCard(cardId: string): Promise<void>```
+
+  Disconnect from a connected with diconnectCard to stop sharing with that contact
+
+  ```Contact::disconnectCard(cardId: string): Promise<void>```
+
+  Deny a connection request from a contact with denyCard
+
+  ```Contact::denyCard(cardId: string): Promise<void>```
+
+  Ignore a connection request from a contact with ignoreCard
+
+  ```Contact::ignoreCard(cardId: string): Promise<void>```
+
+  Cancel your connection request to a contact with cancelCard
+
+  ```Contact::cancelCard(cardId: string): Promise<void>```
+
+  Cancel your connection request to a contact with cancelCard
+
+  ```Contact::cancelCard(cardId: string): Promise<void>```
+
+  The current articles can be access with an [Article](https://github.com/balzack/databag/blob/sdk/app/sdk/src/types.ts) listener
+ 
+  ```Contact::addArticleListener(id: string | null, ev: (arg: { cardId: string; articles: Article[] }) => void): void```
+  
+  ```Contact::removeArticleListener(id: string | null, ev: (arg: { cardId: string; articles: Article[] }) => void): void```
+
+  Relinquish access to shared article 
+
+  ```Contact::removeArticle(cardId: string): Promise<void>```
+
+  The current channels can be access with a [Channel](https://github.com/balzack/databag/blob/sdk/app/sdk/src/types.ts) listener
+
+  ```Contact::addChannelListener(id: string | null, ev: (arg: { cardId: string; channels: Channel[] }) => void): void```
+  
+  ```Contact::removeChannelListener(id: string | null, ev: (arg: { cardId: string; channels: Channel[] }) => void): void```
+
+  Relinquish access to shared channel 
+
+  ```Contact::removeChannel(cardId: string): Promise<void>```
+
+  Enable or disable push notification associated with specified contact channel
+
+  ```Contact::setChannelNotifications(cardId: string, channelId: string, enabled: boolean): Promise<void>```
+
+  Get whether notifications are enabled on specified contact channel
+
+  ```Contact::getChannelNotifications(cardId: string, channelId: string): Promise<boolean>```
+
+  Mark contact channel as read or unread with setUnreadChannel
+
+  ```Contact::setUnreadChannel(cardId: string, channelId: string, unread: boolean): Promise<void>```
+
+  Get list of searchable accounts of specified server with getRegistry
+
+  ```Contact::getRegistry(server: string, secure: boolean): Promise<Profile[]>```
+
+  Get URL of profile image for searchable contact on specified server
+
+  ```Contact::getRegistryImageUrl(server: string, secure: boolean, guid: string): string```
+
+  Block or unblock contact to hide locally with setBlockedCard
+
+  ```Contact::setBlockedCard(cardId: string, boolean: blocked): Promise<void>```
+
+  Get list of all blocked contacts with getBlockedCards 
+
+  ```Contact::getBlockedCards(): Promise<Card[]>```
+
+  Flag contact to node admin for review with flagCard
+
+  ```Contact::flagCard(cardId: string): Promise<void>```
+
+  Block or unblock contact article to hide locallay with setBlockedArticle
+
+  ```Contact::setBlockedArticle(cardId: string, articleId: string, boolean: blocked): Promise<void>```
+
+  Get list of all blocked contact articles with getBlockedArticles
+
+  ```Contact::getBlockedArticles(): Promise<Article[]>```
+
+  Flag article for review by admin with flagArticle
+
+  ```Contact::flagArticle(cardId: string, articleId: string): Promise<void>```
+
+  Block or unblock contact channel with setBlockedChanenl
+
+  ```Contact::setBlockedChannel(cardId: string, channelId: string, boolean: blocked): Promise<void>```
+
+  Get list of all blocked contact channels with getBlockedChannels
+
+  ```Contact::getBlockedChannels(): Promise<Channel[]>```
+
+  Flag channel for review by admin with flagChannel
+
+  ```Contact::flagChannel(cardId: string, channelId: string): Promise<void>```
+
+</ul>
+
+  <br>
+</details>
+ 
 
 ## Admin Communication
 
