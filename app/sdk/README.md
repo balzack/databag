@@ -277,6 +277,10 @@ Automate allocates the Bot interface for ia specific communication channel
 
   ```Contact::connectCard(cardId: string): Promise<void>```
 
+  Save contact of connection request without accepting connection with confirmCard
+
+  ```Contact::confirmCard(cardId: string): Promise<void>```
+  
   Disconnect from a connected with diconnectCard to stop sharing with that contact
 
   ```Contact::disconnectCard(cardId: string): Promise<void>```
