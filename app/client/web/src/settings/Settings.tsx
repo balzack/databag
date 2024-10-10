@@ -353,13 +353,14 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
               <div className={classes.imageSet}>
                 <Image radius="md" src={state.imageUrl} />
                 <div className={classes.edit}>
-                  <Button
+                  <UnstyledButton
+                    className={classes.imageEdit}
                     size="compact-md"
                     variant="outlined"
                     onClick={imageOpen}
                   >
-                    {state.strings.edit}
-                  </Button>
+                    <span className={classes.editLabel}>{state.strings.edit}</span>
+                  </UnstyledButton>
                 </div>
               </div>
             )}
