@@ -46,6 +46,7 @@
       font-size: 18px;
       text-wrap: nowrap;
       text-overflow: ellipsis;
+      text-align: center;
       overflow: hidden;
       width: 100%;
     }
@@ -54,9 +55,17 @@
       font-size: 20px;
       text-wrap: nowrap;
       text-overflow: ellipsis;
+      text-align: center;
       overflow: hidden;
       font-style: italic;
       color: var(--mantine-color-text-9);
+    }
+
+    .handle {
+      text-wrap: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      width: 100%;
     }
   }
 }

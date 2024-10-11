@@ -208,7 +208,7 @@ export class ContactModule implements Contact {
           }
         }
 
-        if (this.revision !== this.nextRevision) {
+        if (this.nextRevision && this.revision !== this.nextRevision) {
           const nextRev = this.nextRevision;
           try {
             const delta = await getCards(node, secure, token, this.revision);
@@ -331,7 +331,7 @@ export class ContactModule implements Contact {
           }
         }
 
-        if (this.revision === this.nextRevsion) {
+        if (this.revision === this.nextRevision) {
           this.nextRevision = null;
         }
       }
