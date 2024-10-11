@@ -394,7 +394,7 @@ export class ContactModule implements Contact {
           const detail = channelDetail ? channelDetail : await getContactChannelDetail(server, !insecure, id);
           entry.item.detail = {
             revision: detailRevision,
-            sealed: dataType === 'sealed',
+            sealed: detail.dataType === 'sealed',
             dataType: detail.dataType,
             data: detail.data,
             created: detail.created,
