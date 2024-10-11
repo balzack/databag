@@ -85,6 +85,7 @@ export function Session() {
             onClose={closeContacts}
             withCloseButton={false}
             size="sm"
+            padding="0"
             position="right"
           >
             <Contacts />
@@ -94,6 +95,7 @@ export function Session() {
             onClose={closeSettings}
             withCloseButton={false}
             size="sm"
+            padding="0"
             position="right"
           >
             <Settings showLogout={false} />

@@ -1,0 +1,30 @@
+.contacts {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 8px;
+  gap: 2px;
+  width: 100%;
+
+  .header {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    align-items: center;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--mantine-color-text-9);
+    width: 100%;
+
+    .input {
+      width: 1%;
+      flex-grow: 1;
+      flex-shrink: 1;
+    }
+
+    .add {
+      flex-shrink: 0;
+    }
+  }
+}

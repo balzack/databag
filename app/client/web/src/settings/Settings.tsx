@@ -356,7 +356,6 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
                   <UnstyledButton
                     className={classes.imageEdit}
                     size="compact-md"
-                    variant="outlined"
                     onClick={imageOpen}
                   >
                     <span className={classes.editLabel}>{state.strings.edit}</span>

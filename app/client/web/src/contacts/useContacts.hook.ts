@@ -1,11 +1,14 @@
 import { useState, useContext, useEffect } from 'react'
 import { AppContext } from '../context/AppContext'
+import { DisplayContext } from '../context/DisplayContext';
 import { ContextType } from '../context/ContextType'
 import { Card, Channel } from 'databag-client-sdk'
 
 export function useContacts() {
   const app = useContext(AppContext) as ContextType
+  const display = useContext(DisplayContext) as ContextType
   const [state, setState] = useState({
+    strings: display.state.strings,
   })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
