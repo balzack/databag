@@ -20,7 +20,7 @@ export function Contacts() {
           leftSection={<IconSearch size={20} />}
           placeholder={state.strings.contacts}
         />
-        <Button classNae={classes.add} leftSection={<IconUserPlus size={20} />}>
+        <Button className={classes.add} leftSection={<IconUserPlus size={20} />}>
           {state.strings.add}
         </Button>
       </div>
