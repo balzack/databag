@@ -3,6 +3,7 @@ import { useContacts } from './useContacts.hook';
 import { UnstyledButton, ActionIcon, TextInput, Button } from '@mantine/core';
 import { IconSearch, IconUserPlus, IconSortAscending, IconSortDescending } from '@tabler/icons-react';
 import classes from './Contacts.module.css'
+import { Card } from '../card/Card';
 
 export function Contacts() {
   const { state, actions } = useContacts();
@@ -23,6 +24,12 @@ export function Contacts() {
         <Button className={classes.add} leftSection={<IconUserPlus size={20} />}>
           {state.strings.add}
         </Button>
+      </div>
+
+      <div className={classes.card}>
+        <Card>
+          <IconSearch />
+        </Card>
       </div>
     </div>
   );

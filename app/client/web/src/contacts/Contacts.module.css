@@ -27,4 +27,11 @@
       flex-shrink: 0;
     }
   }
+
+  .card {
+    height: 48px;
+    padding: 4px;
+    width: 100%;
+    border: 1px solid white;
+  }
 }
