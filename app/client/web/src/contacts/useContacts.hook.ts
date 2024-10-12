@@ -9,6 +9,10 @@ export function useContacts() {
   const display = useContext(DisplayContext) as ContextType
   const [state, setState] = useState({
     strings: display.state.strings,
+    cards: [] as Card[],
+    filtered: [] as Card[],
+    sortAsc: false,
+    filter: '',
   })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -16,24 +20,56 @@ export function useContacts() {
     setState((s) => ({ ...s, ...value }))
   }
 
+  const compare = (a: Channel, b: Channel) => {
+    const aval = `${a.handle}/${a.node}`;
+    const bval = `${b.handle}/${b.node}`;
+    if (aval < bval) {
+      return state.sortAsc ? 1 : -1;
+    } else if (aval > bval) {
+      return state.sortAsc ? -1 : 1;
+    }
+    return 0;
+  }
+
+  const select = (c: Channel) => {
+    if (!state.filter) {
+      return true;
+    }
+    const value = state.filter.toLowerCase();
+    if (c.name && c.name.toLowerCase().includes(value)) {
+      return true;
+    }
+    const handle = c.node ? `${c.handle}/${c.node}` : c.handle;
+    if (handle.toLowerCase().includes(value)) {
+      return true;
+    }
+    return false;
+  }
+
   useEffect(() => {
     const contact = app.state.session?.getContact();
     const setCards = (cards: Card[]) => {
-      console.log("CARDS", cards);
+      updateState({ cards }); 
     };
     contact.addCardListener(setCards);
-    const setChannels = ({ cardId, channels }: { cardId: string, channels: Channel[] }) => {
-      
-      console.log("CHANNELS :", cardId, channels);
-    };
-    contact.addChannelListener(null, setChannels);
     return () => {
       contact.removeCardListener(setCards);
-      contact.removeChannelListener(setChannels);
     }
   }, [])
 
+  useEffect(() => {
+    const filtered = state.cards.sort(compare).filter(select);
+    updateState({ filtered });
+  }, [state.sortAsc, state.filter, state.cards]); 
+
   const actions = {
+    toggleSort: () => {
+      const sortAsc = !state.sortAsc;
+      updateState({ sortAsc });
+    },
+    setFilter: (filter) => {
+      updateState({ filter });
+    },
   }
 
   return { state, actions }

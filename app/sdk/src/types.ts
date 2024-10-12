@@ -9,6 +9,7 @@ export type Card = {
   name: string;
   description: string;
   location: string;
+  imageUrl: string;
   imageSet: boolean;
   version: string;
   node: string;

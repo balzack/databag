@@ -64,6 +64,7 @@
     .handle {
       text-wrap: nowrap;
       text-overflow: ellipsis;
+      text-align: center;
       overflow: hidden;
       width: 100%;
     }

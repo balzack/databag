@@ -2,7 +2,7 @@ import { EventEmitter } from 'eventemitter3';
 import type { Contact, Logging, Focus } from './api';
 import type { FocusModule } from './focus';
 import type { Card, Topic, Asset, Tag, Profile, Participant } from './types';
-import type { CardEntity, avatar } from './entities';
+import { type CardEntity, avatar } from './entities';
 import type {
   ArticleRevision,
   ArticleDetail,
@@ -835,6 +835,7 @@ export class ContactModule implements Contact {
 
 
   private setCard(cardId: string, item: CardItem): Card {
+    const { node, secure, token } = this;
     const { profile, detail } = item;
     return {
       cardId,
@@ -847,6 +848,7 @@ export class ContactModule implements Contact {
       name: profile.name,
       description: profile.description,
       location: profile.location,
+      imageUrl: profile.imageSet ? getCardImageUrl(node, secure, token, cardId, item.profile.revision) : avatar,
       imageSet: profile.imageSet,
       node: profile.node
     };

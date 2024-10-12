@@ -2,6 +2,45 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  width: 100%;
+  width: auto;
   height: 100%;
+  cursor: default;
+
+  .details {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .image {
+    width: auto;
+    height: 100%;
+  }
+
+  .nameSet {
+    font-size: 16px;
+    text-wrap: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
+  .nameUnset {
+    font-size: 16px;
+    text-wrap: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    font-style: italic;
+    color: var(--mantine-color-text-9);
+  }
+
+  .handle {
+    font-size: 12px;
+    text-wrap: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    font-weight: bold;
+  }
+
 }
