@@ -88,7 +88,9 @@ export function Session() {
             padding="0"
             position="right"
           >
-            <Contacts />
+            <div style={{ height: '100vh' }}>
+              <Contacts />
+            </div>
           </Drawer>
           <Drawer
             opened={settings}
@@ -98,7 +100,9 @@ export function Session() {
             padding="0"
             position="right"
           >
-            <Settings showLogout={false} />
+            <div style={{ height: '100vh' }}>
+              <Settings showLogout={false} />
+            </div>
           </Drawer>
         </div>
       )}
