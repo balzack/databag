@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react'
 import { Image, Text } from '@mantine/core';
 import classes from './Card.module.css'
 
-export function Card({ imageUrl, name, placeholder, handle, node, children, className }: { className: string, imageUrl: string, name: string, placeholder: string, handle: string, node: string, children: ReactNode }) {
+export function Card({ imageUrl, name, placeholder, handle, node, actions, className }: { className: string, imageUrl: string, name: string, placeholder: string, handle: string, node: string, actions: ReactNode[] }) {
 
   return (
     <div className={className}>
@@ -17,7 +17,7 @@ export function Card({ imageUrl, name, placeholder, handle, node, children, clas
           )}
           <Text className={classes.handle}>{ node ? `${handle}/${node}` : handle }</Text>
         </div>
-        { children }
+        { actions }
       </div>
     </div>
   );

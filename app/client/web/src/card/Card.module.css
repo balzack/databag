@@ -5,6 +5,7 @@
   width: auto;
   height: 100%;
   cursor: default;
+  gap: 8px;
 
   .details {
     display: flex;

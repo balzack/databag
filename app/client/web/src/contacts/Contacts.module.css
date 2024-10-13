@@ -2,8 +2,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 8px;
-  gap: 2px;
   width: 100%;
   height: 100%;
 
@@ -11,11 +9,12 @@
     display: flex;
     flex-direction: row;
     gap: 8px;
+    padding-top: 8px;
     align-items: center;
     padding-left: 16px;
     padding-right: 16px;
     padding-bottom: 8px;
-    border-bottom: 1px solid var(--mantine-color-text-9);
+    border-bottom: 2px solid var(--mantine-color-text-9);
     width: 100%;
 
     .input {
@@ -34,6 +33,35 @@
     flex-direction: column;
     width: 100%;
     overflow: auto;
+    overscroll-behavior: none;
+
+    .requested {
+      border-right: 3px solid #aa44aa;
+    }
+
+    .connecting {
+      border-right: 3px solid #22aacc;
+    }
+
+    .pending {
+      border-right: 3px solid #aaaa44;
+    }
+
+    .connected {
+      border-right: 3px solid #44aa44;
+    }
+
+    .confirmed {
+      border-right: 3px solid #cccccc;
+    }
+
+    .unknown {
+      border-right: 3px solid #555555;
+    }
+
+    .offsync {
+      border-right: 3px solid #dd6633;
+    }
 
     .card {
       width: 100%;
@@ -45,7 +73,7 @@
       border-bottom: 1px solid var(--mantine-color-text-9);
 
       &:hover {
-        background: var(--mantine-color-surface-5);
+        background: var(--mantine-color-surface-4);
       }
     }
   }

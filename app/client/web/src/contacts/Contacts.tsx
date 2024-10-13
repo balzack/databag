@@ -1,14 +1,20 @@
 import { Text } from '@mantine/core'
 import { useContacts } from './useContacts.hook';
 import { UnstyledButton, ActionIcon, TextInput, Button } from '@mantine/core';
-import { IconSearch, IconUserPlus, IconSortAscending, IconSortDescending } from '@tabler/icons-react';
+import { IconSearch, IconUserPlus, IconSortAscending, IconSortDescending, IconMessage2, IconPhone } from '@tabler/icons-react';
 import classes from './Contacts.module.css'
 import { Card } from '../card/Card';
 
 export function Contacts() {
   const { state, actions } = useContacts();
 
-  const cards = state.filtered.map((card) => <Card className={classes.card} key={card.cardId} imageUrl={card.imageUrl} name={card.name} handle={card.handle} node={card.node} placeholder={state.strings.name} children={<IconSearch />} />)
+  const cards = state.filtered.map((card) => {
+    const call = <ActionIcon variant="subtle"><IconPhone size={24} onClick={() => {console.log('calling')}} /></ActionIcon>
+    const message = <ActionIcon variant="subtle"><IconMessage2 size={24} onClick={() => {console.log('texting')}} /></ActionIcon>
+    const options = card.status === 'connected' && !card.offsync ? [message, call] : [];
+    const status = card.offsync ? classes.offsync : classes[card.status];
+    return (<Card className={`${classes.card} ${status}`} key={card.cardId} imageUrl={card.imageUrl} name={card.name} handle={card.handle} node={card.node} placeholder={state.strings.name} actions={options} />)
+  });
 
   return (
     <div className={classes.contacts}>
