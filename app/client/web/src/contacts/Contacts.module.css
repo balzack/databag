@@ -36,31 +36,31 @@
     overscroll-behavior: none;
 
     .requested {
-      border-right: 3px solid #aa44aa;
+      border-right: 5px solid #aa44aa;
     }
 
     .connecting {
-      border-right: 3px solid #22aacc;
+      border-right: 5px solid #22aacc;
     }
 
     .pending {
-      border-right: 3px solid #aaaa44;
+      border-right: 5px solid #aaaa44;
     }
 
     .connected {
-      border-right: 3px solid #44aa44;
+      border-right: 5px solid #44aa44;
     }
 
     .confirmed {
-      border-right: 3px solid #cccccc;
+      border-right: 5px solid #cccccc;
     }
 
     .unknown {
-      border-right: 3px solid #555555;
+      border-right: 5px solid #555555;
     }
 
     .offsync {
-      border-right: 3px solid #dd6633;
+      border-right: 5px solid #dd6633;
     }
 
     .card {
