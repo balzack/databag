@@ -1,0 +1,45 @@
+.registry {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+
+  .header {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    padding-top: 8px;
+    align-items: center;
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--mantine-color-text-9);
+    width: 100%;
+
+    .close {
+      cursor: pointer;
+    }
+
+    .username {
+      flex: 2;
+    }
+
+    .server {
+      flex: 3;
+    }
+
+    .add {
+      flex-shrink: 0;
+    }
+  }
+
+  .cards {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    overflow: auto;
+    overscroll-behavior: none;
+  }
+}
+

@@ -3,6 +3,19 @@
   width: 100%;
   height: 100%;
 
+  .show {
+    display: flex;
+    width: 100%;
+    height: calc(100% - 48px);
+    position: absolute;
+    top: 0;
+    left: 0; 
+  }
+
+  .hide {
+    display: none;
+  }
+
   .display {
     display: flex;
     flex-direction: row;
@@ -26,10 +39,13 @@
 
   .screen {
     width: 100%;
-    height: calc(100% - 48px);
+    height: 100%;
     background-color: var(--mantine-color-surface-1);
     overflow: auto;
-    padding-bottom: 16px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
   }
 
   .tabs {

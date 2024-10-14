@@ -5,7 +5,7 @@ import { IconSearch, IconUserPlus, IconSortAscending, IconSortDescending, IconMe
 import classes from './Contacts.module.css'
 import { Card } from '../card/Card';
 
-export function Contacts() {
+export function Contacts({ openRegistry }: { openRegistry: ()=>void }) {
   const { state, actions } = useContacts();
 
   const cards = state.filtered.map((card) => {
@@ -37,7 +37,7 @@ export function Contacts() {
           value={state.filter}
           onChange={(event) => actions.setFilter(event.currentTarget.value)}
         />
-        <Button className={classes.add} leftSection={<IconUserPlus size={20} />}>
+        <Button className={classes.add} leftSection={<IconUserPlus size={20} />} onClick={openRegistry}>
           {state.strings.add}
         </Button>
       </div>
