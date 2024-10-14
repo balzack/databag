@@ -20,7 +20,7 @@ export function useContacts() {
     setState((s) => ({ ...s, ...value }))
   }
 
-  const compare = (a: Channel, b: Channel) => {
+  const compare = (a: Card, b: Card) => {
     const aval = `${a.handle}/${a.node}`;
     const bval = `${b.handle}/${b.node}`;
     if (aval < bval) {
@@ -31,7 +31,7 @@ export function useContacts() {
     return 0;
   }
 
-  const select = (c: Channel) => {
+  const select = (c: Card) => {
     if (!state.filter) {
       return true;
     }
@@ -67,7 +67,7 @@ export function useContacts() {
       const sortAsc = !state.sortAsc;
       updateState({ sortAsc });
     },
-    setFilter: (filter) => {
+    setFilter: (filter: string) => {
       updateState({ filter });
     },
   }

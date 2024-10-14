@@ -802,8 +802,9 @@ export class ContactModule implements Contact {
 
 
 
-  public async getRegistry(server: string, secure: boolean): Promise<Profile[]> {
-    const listing = await getRegistryListing(server, secure);
+  public async getRegistry(handle: string | null, server: string | null): Promise<Profile[]> {
+    const { node, secure } = this;
+    const listing = server ? await getRegistryListing(handle, server, true) : await getRegistryListing(handle, node, secure)
     return listing.map((entity) => {
       return {
         guid: entity.guid,
@@ -813,8 +814,8 @@ export class ContactModule implements Contact {
         location: entity.location,
         node: entity.node,
         version: entity.version,
-        sealSet: Boolean(seal),
-        imageSet: Boolean(image),
+        sealSet: Boolean(entity.seal),
+        imageSet: Boolean(entity.image),
       };
     });
   }

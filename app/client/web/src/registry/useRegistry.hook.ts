@@ -17,11 +17,20 @@ export function useRegistry() {
     setState((s) => ({ ...s, ...value }))
   }
 
+  const getRegistry = async () => {
+    const contact = app.state.session?.getContact();
+    console.log(await contact.getRegistry(null, null));
+  }
+
+  useEffect(() => {
+    getRegistry();
+  }, [])
+
   const actions = {
-    setUsername: (username) => {
+    setUsername: (username: string) => {
       updateState({ username });
     },
-    setServer: (server) => {
+    setServer: (server: string) => {
       updateState({ server });
     },
   }

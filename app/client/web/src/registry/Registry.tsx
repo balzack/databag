@@ -3,7 +3,7 @@ import { TextInput } from '@mantine/core';
 import classes from './Registry.module.css'
 import { IconX, IconArrowLeft, IconServer, IconUser } from '@tabler/icons-react';
 
-export function Registry({ close }: { close: ()=>void }) {
+export function Registry({ close }: { close?: ()=>void }) {
   const { state, actions } = useRegistry();
 
   return (

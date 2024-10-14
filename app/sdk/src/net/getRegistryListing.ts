@@ -1,10 +1,10 @@
 import { checkResponse, fetchWithTimeout } from './fetchUtil';
 import { ProfileEntity } from "../entities";
 
-export async function getRegistryListing(server: string, secure: boolean, filter: string): Promise<ProfileEntity[]> {
-  const param = filter ? `?filter=${filter}` : '';
-  const endpoint = `http${secure ? 's' : ''}://${server}/account/listing${filter}`
-  const listing = fetchWithTimeout(endpoint, { method: 'GET' });
+export async function getRegistryListing(handle: string | null, server: string, secure: boolean): Promise<ProfileEntity[]> {
+  const param = handle ? `?filter=${handle}` : '';
+  const endpoint = `http${secure ? 's' : ''}://${server}/account/listing${param}`
+  const listing = await fetchWithTimeout(endpoint, { method: 'GET' });
   checkResponse(listing.status);
   return await listing.json();
 }

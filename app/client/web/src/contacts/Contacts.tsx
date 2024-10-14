@@ -8,13 +8,16 @@ import { Card } from '../card/Card';
 export function Contacts({ openRegistry }: { openRegistry: ()=>void }) {
   const { state, actions } = useContacts();
 
-  const cards = state.filtered.map((card) => {
-    const call = <ActionIcon variant="subtle"><IconPhone size={24} onClick={() => {console.log("CALL:", card.cardId)}} /></ActionIcon>
-    const message = <ActionIcon variant="subtle"><IconMessage2 size={24} onClick={() => {console.log("TEXT:", card.cardId)}} /></ActionIcon>
+  const cards = state.filtered.map((card, idx) => {
+    const call = <ActionIcon key={'call'} variant="subtle"><IconPhone size={24} onClick={() => {console.log("CALL:", card.cardId)}} /></ActionIcon>
+    const message = <ActionIcon key={'text'} variant="subtle"><IconMessage2 size={24} onClick={() => {console.log("TEXT:", card.cardId)}} /></ActionIcon>
     const options = card.status === 'connected' && !card.offsync ? [message, call] : [];
     const select = () => { console.log("SELECT:", card.cardId); }
     const status = card.offsync ? classes.offsync : classes[card.status];
-    return (<Card className={`${classes.card} ${status}`} key={card.cardId} imageUrl={card.imageUrl} name={card.name} handle={card.handle} node={card.node} placeholder={state.strings.name} select={select} actions={options} />)
+
+    return (
+      <Card key={idx} className={`${classes.card} ${status}`} imageUrl={card.imageUrl} name={card.name} handle={card.handle} node={card.node} placeholder={state.strings.name} select={select} actions={options} />
+    )
   });
 
   return (

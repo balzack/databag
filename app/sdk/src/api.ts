@@ -88,7 +88,7 @@ export interface Contact {
   getChannelNotifications(cardId: string, channelId: string): Promise<boolean>;
   setChannelNotifications(cardId: string, channelId: string, enabled: boolean): Promise<void>;
 
-  getRegistry(server: string): Promise<Profile[]>;
+  getRegistry(handle: string | null, server: string | null): Promise<Profile[]>;
   getRegistryImageUrl(server: string, guid: string): string;
 
   getCardImageUrl(cardId: string): string;
