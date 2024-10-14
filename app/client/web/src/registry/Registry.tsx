@@ -2,9 +2,18 @@ import { useRegistry } from './useRegistry.hook';
 import { TextInput } from '@mantine/core';
 import classes from './Registry.module.css'
 import { IconX, IconArrowLeft, IconServer, IconUser } from '@tabler/icons-react';
+import { Card } from '../card/Card';
 
 export function Registry({ close }: { close?: ()=>void }) {
   const { state, actions } = useRegistry();
+
+console.log(state.profiles);
+  const profiles = state.profiles.map((profile, idx) => {
+    const select = () => { console.log("SELECT") }
+    return (
+      <Card key={idx} className={classes.card} imageUrl={profile.imageUrl} name={profile.name} handle={profile.handle} node={profile.node} placeholder={state.strings.name} select={select} actions={[]} />
+    )
+  });
 
   return (
     <div className={classes.registry}>
@@ -32,7 +41,7 @@ export function Registry({ close }: { close?: ()=>void }) {
         )}
       </div>
 
-      <div className={classes.cards}></div>
+      <div className={classes.cards}>{ profiles }</div>
     </div>
   );
 }

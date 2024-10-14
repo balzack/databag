@@ -2,6 +2,7 @@ import { useState, useContext, useEffect } from 'react'
 import { AppContext } from '../context/AppContext'
 import { DisplayContext } from '../context/DisplayContext';
 import { ContextType } from '../context/ContextType'
+import { Profile } from 'databag-client-sdk';
 
 export function useRegistry() {
   const app = useContext(AppContext) as ContextType
@@ -10,6 +11,7 @@ export function useRegistry() {
     strings: display.state.strings,
     username: '',
     server: '',
+    profiles: [] as Profile[],
   })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -19,7 +21,8 @@ export function useRegistry() {
 
   const getRegistry = async () => {
     const contact = app.state.session?.getContact();
-    console.log(await contact.getRegistry(null, null));
+    const profiles = await contact.getRegistry(null, null);
+    updateState({ profiles });
   }
 
   useEffect(() => {

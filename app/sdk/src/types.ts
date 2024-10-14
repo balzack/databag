@@ -162,6 +162,7 @@ export type Profile = {
   name: string;
   description: string;
   location: string;
+  imageUrl: string;
   imageSet: boolean;
   sealSet: boolean;
   version: string;
