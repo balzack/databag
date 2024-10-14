@@ -40,8 +40,12 @@ console.log(state.profiles);
           <IconX className={classes.close} onClick={close} />
         )}
       </div>
-
-      <div className={classes.cards}>{ profiles }</div>
+      { profiles.length !== 0 && (
+        <div className={classes.cards}>{ profiles }</div>
+      )}
+      { profiles.length === 0 && (
+        <div className={classes.none}>{ state.strings.noContacts }</div>
+      )}
     </div>
   );
 }

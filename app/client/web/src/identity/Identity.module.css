@@ -52,7 +52,7 @@
     }
 
     .nameUnset {
-      font-size: 20px;
+      font-size: 18px;
       text-wrap: nowrap;
       text-overflow: ellipsis;
       text-align: center;
@@ -62,11 +62,13 @@
     }
 
     .handle {
+      font-size: 14px;
       text-wrap: nowrap;
       text-overflow: ellipsis;
       text-align: center;
       overflow: hidden;
       width: 100%;
+      font-weight: bold;
     }
   }
 }

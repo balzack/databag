@@ -98,7 +98,7 @@ export function Session() {
             opened={contacts}
             onClose={closeContacts}
             withCloseButton={false}
-            size="sm"
+            size="md"
             padding="0"
             position="right"
           >
@@ -110,7 +110,7 @@ export function Session() {
             opened={registry}
             onClose={closeRegistry}
             withCloseButton={false}
-            size="xs"
+            size="sm"
             padding="0"
             position="right"
           >

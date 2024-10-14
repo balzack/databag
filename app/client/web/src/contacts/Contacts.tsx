@@ -44,8 +44,12 @@ export function Contacts({ openRegistry }: { openRegistry: ()=>void }) {
           {state.strings.add}
         </Button>
       </div>
-
-      <div className={classes.cards}>{ cards }</div>
+      { cards.length !== 0 && (
+        <div className={classes.cards}>{ cards }</div>
+      )}
+      { cards.length === 0 && (
+        <div className={classes.none}>{ state.strings.noContacts }</div>
+      )}
     </div>
   );
 }

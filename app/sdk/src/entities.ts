@@ -215,7 +215,7 @@ export type ProfileEntity = {
   name: string;
   description: string;
   location: string;
-  image: string;
+  imageSet: boolean;
   revision: number;
   seal?: string;
   version: string;
@@ -228,7 +228,7 @@ export const defaultProfileEntity = {
   name: "",
   description: "",
   location: "",
-  image: "",
+  imageSet: false,
   revision: 0,
   version: "",
   node: "",
