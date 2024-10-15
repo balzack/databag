@@ -1,0 +1,71 @@
+import { useState, useContext, useEffect } from 'react'
+import { AppContext } from '../context/AppContext'
+import { DisplayContext } from '../context/DisplayContext';
+import { ContextType } from '../context/ContextType'
+import { Card } from 'databag-client-sdk'
+import { ContactParams } from './Contact';
+
+export function useContact(params: ContactParams) {
+
+  const app = useContext(AppContext) as ContextType
+  const display = useContext(DisplayContext) as ContextType
+  const [state, setState] = useState({
+    strings: display.state.strings,
+    cards: [] as Card[],
+    guid: '',
+    name: '',
+    handle: '',
+    node: '',
+    location: '',
+    description: '',
+    imageUrl: null as string | null,
+    cardId: null as string | null,
+    status: '',
+    offsync: false,
+  })
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const updateState = (value: any) => {
+    setState((s) => ({ ...s, ...value }))
+  }
+
+  useEffect(() => {
+    const guid = params.guid;
+    const handle = params.handle ? params.handle : '';
+    const node = params.node ? params.node : '';
+    const name = params.name ? params.name : '';
+    const location = params.location ? params.location : '';
+    const description = params.description ? params.description : '';
+    const imageUrl = params.imageUrl ? params.imageUrl : null;
+    const cardId = params.cardId ? params.cardId : null;
+    const status = params.status ? params.status : '';
+    const offsync = params.offsync ? params.offsync : false;
+    updateState({ guid, handle, node, name, location, description, imageUrl, cardId, status, offsync });
+  }, [params]);
+
+  useEffect(() => {
+    const card = state.cards.find(card => card.guid === state.guid);
+    if (card) {
+      const { handle, node, name, location, description, imageUrl, cardId, status, offsync } = card;
+      updateState({ handle, node, name, location, description, imageUrl, cardId, status, offsync });
+    } else {
+      updateState({ cardId: null, status: '', offsync: false });
+    }
+  }, [state.cards, state.guid]);
+
+  useEffect(() => {
+    const contact = app.state.session?.getContact();
+    const setCards = (cards: Card[]) => {
+      updateState({ cards }); 
+    };
+    contact.addCardListener(setCards);
+    return () => {
+      contact.removeCardListener(setCards);
+    }
+  }, [])
+
+  const actions = {
+  }
+
+  return { state, actions }
+}

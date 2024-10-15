@@ -1,0 +1,95 @@
+.contact {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-left: 16px;
+  padding-right: 16px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  gap: 2px;
+
+  .header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+  }
+
+  .close {
+    cursor: pointer;
+    padding-top: 2px;
+    position: relative;
+    right: -9px;
+  }
+
+  .match {
+    opacity: 0;
+  }
+
+  .label {
+    font-size: 22px;
+    text-align: center;
+    text-wrap: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    flex-grow: 1;
+  }
+
+  .image {
+    position: relative;
+    width: 90%;
+    max-width: 250px;
+    margin-top: 8px;
+    margin-bottom: 24px;
+  }
+
+  .divider {
+    margin-top: 8px;
+    margin-bottom: 8px;
+    border: 1px solid var(--mantine-color-text-9);
+    width: 100%;
+  }
+
+  .nameSet {
+    width: 100%;
+    padding-left: 8px;
+    font-size: 24px;
+    text-wrap: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
+  .nameUnset {
+    width: 100%;
+    padding-left: 8px;
+    font-size: 24px;
+    text-wrap: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    font-style: italic;
+    color: var(--mantine-color-text-9);
+  }
+
+  .entry {
+    width: 100%;
+    padding-left: 8px;
+    display: flex;
+
+    .entryIcon {
+      width: 32px;
+      flex-shrink: 0;
+    }
+
+    .entrySet {
+      font-size: 14px;
+      white-space: preserve;
+    }
+
+    .entryUnset {
+      font-size: 14px;
+      font-style: italic;
+      color: var(--mantine-color-text-9);
+    }
+  }
+}
+  

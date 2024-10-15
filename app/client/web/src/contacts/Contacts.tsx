@@ -4,15 +4,20 @@ import { UnstyledButton, ActionIcon, TextInput, Button } from '@mantine/core';
 import { IconSearch, IconUserPlus, IconSortAscending, IconSortDescending, IconMessage2, IconPhone } from '@tabler/icons-react';
 import classes from './Contacts.module.css'
 import { Card } from '../card/Card';
+import { ContactParams } from '../contact/Contact';
 
-export function Contacts({ openRegistry }: { openRegistry: ()=>void }) {
+export function Contacts({ openRegistry, openContact }: { openRegistry: ()=>void, openContact: (params: ContactParams)=>void }) {
   const { state, actions } = useContacts();
 
   const cards = state.filtered.map((card, idx) => {
     const call = <ActionIcon key={'call'} variant="subtle"><IconPhone size={24} onClick={() => {console.log("CALL:", card.cardId)}} /></ActionIcon>
     const message = <ActionIcon key={'text'} variant="subtle"><IconMessage2 size={24} onClick={() => {console.log("TEXT:", card.cardId)}} /></ActionIcon>
     const options = card.status === 'connected' && !card.offsync ? [message, call] : [];
-    const select = () => { console.log("SELECT:", card.cardId); }
+    const select = () => {
+      const { guid, handle, node, name, location, description, offsync, imageUrl, cardId, status } = card;
+      const params = { guid, handle, node, name, location, description, offsync, imageUrl, cardId, status };
+      openContact(params);
+    }
     const status = card.offsync ? classes.offsync : classes[card.status];
 
     return (

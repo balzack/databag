@@ -19,6 +19,7 @@
 
     .close {
       cursor: pointer;
+      flex-shrink: 0;
     }
 
     .username {
