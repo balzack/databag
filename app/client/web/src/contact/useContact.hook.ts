@@ -130,7 +130,7 @@ export function useContact(params: ContactParams) {
     },
     resync: async () => {
       const contact = app.state.session?.getContact();
-      await contact.confirmCard(state.cardId);
+      await contact.resyncCard(state.cardId);
     },
     block: async () => {
       const contact = app.state.session?.getContact();
