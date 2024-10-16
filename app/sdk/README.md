@@ -281,7 +281,7 @@ Automate allocates the Bot interface for ia specific communication channel
 
   ```Contact::confirmCard(cardId: string): Promise<void>```
   
-  Disconnect from a connected with diconnectCard to stop sharing with that contact
+  Disconnect or cancel from a contact with diconnectCard to stop sharing with that contact
 
   ```Contact::disconnectCard(cardId: string): Promise<void>```
 
@@ -292,10 +292,6 @@ Automate allocates the Bot interface for ia specific communication channel
   Ignore a connection request from a contact with ignoreCard
 
   ```Contact::ignoreCard(cardId: string): Promise<void>```
-
-  Cancel your connection request to a contact with cancelCard
-
-  ```Contact::cancelCard(cardId: string): Promise<void>```
 
   Cancel your connection request to a contact with cancelCard
 

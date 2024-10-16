@@ -38,6 +38,10 @@ import { setContactChannelNotifications } from './net/setContactChannelNotificat
 import { getRegistryImageUrl } from './net/getRegistryImageUrl';
 import { getRegistryListing } from './net/getRegistryListing';
 import { addFlag } from './net/addFlag';
+import { getCardOpenMessage } from './net/getCardOpenMessage';
+import { setCardOpenMessage } from './net/setCardOpenMessage';
+import { getCardCloseMessage } from './net/getCardCloseMessage';
+import { setCardCloseMessage } from './net/setCardCloseMessage';
 
 const CLOSE_POLL_MS = 100;
 const RETRY_POLL_MS = 2000;
@@ -577,8 +581,11 @@ console.log("RESYNC ", key);
   public async connectCard(cardId: string): Promise<void> {
     const { node, secure, token } = this;
     await setCardConnecting(node, secure, token, cardId);
+console.log("CONNECTING!");
     try {
+console.log("GET MSG");
       const message = await getCardOpenMessage(node, secure, token, cardId);
+console.log("GET MSG: done");
 
       const entry = this.cardEntries.get(cardId);
       if (entry) {
@@ -591,6 +598,7 @@ console.log("RESYNC ", key);
         }
       }
     } catch (err) {
+      console.log(err);
       this.log.error('failed to deliver open message');
     }
   }
@@ -642,25 +650,6 @@ console.log("RESYNC ", key);
       }
     }
   }
-
-  public async cancelCard(cardId: string): Promise<void> {
-    const { node, secure, token } = this;
-    const entry = this.cardEntries.get(cardId);
-    if (entry) {
-      if (entry.item.detail.status === 'connecting') {
-        try {
-          const message = await getCardCloseMessage(node, secure, token, cardId);
-          const server = entry.item.profile.node ? entry.item.profile.node : node;
-          const insecure = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(server);
-          await setCardCloseMessage(server, !insecure, message);
-        } catch (err) {
-          this.log.warn('failed to deliver close message');
-        }
-        await setCardConfirmed(node, secure, token, cardId);
-      }
-    }
-  }
-
 
 
   public async removeArticle(cardId: string, articleId: string): Promise<void> {}

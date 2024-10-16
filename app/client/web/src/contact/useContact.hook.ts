@@ -122,7 +122,7 @@ export function useContact(params: ContactParams) {
     },
     cancel: async () => {
       const contact = app.state.session?.getContact();
-      await contact.cancelCard(state.cardId);
+      await contact.disconnectCard(state.cardId);
     },
     accept: async () => {
       const contact = app.state.session?.getContact();

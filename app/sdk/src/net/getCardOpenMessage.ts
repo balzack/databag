@@ -1,8 +1,9 @@
 import { checkResponse, fetchWithTimeout } from "./fetchUtil";
-import { CardStatus } from "../entities";
+import { DataMessage } from "../entities";
 
-export async function getCardOpenMessage(node: string, secure: boolean): Promise<CardStatus> {
-  const endpoint = `http${secure ? "s" : ""}://${node}/contact/openMessage`;
+export async function getCardOpenMessage(node: string, secure: boolean, token: string, cardId: string): Promise<DataMessage> {
+  const endpoint = `http${secure ? "s" : ""}://${node}/contact/cards/${cardId}/openMessage?agent=${token}`;
   const open = await fetchWithTimeout(endpoint, { method: "GET" });
   checkResponse(open.status);
+  return await open.json();
 }
