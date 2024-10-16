@@ -115,6 +115,7 @@
       flex-direction: column;
       align-items: center; 
       cursor: pointer;
+      height: fit-content;
 
       .actionLabel {
         font-size: 8px;

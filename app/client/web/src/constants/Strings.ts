@@ -211,8 +211,17 @@ export const en = {
 
   notes: 'Notes',
 
-  disconnecting: 'Disconnecting Contact',
-  confirmDisconnect: 'Are you sure you want to disconnect the contact?',
+  ignoring: 'Ignoring Contact',
+  connfirmIgnoring: 'Are you sure you want to ignore the request?',
+  denying: 'Denyping Contact',
+  confirmDenying: 'Are you sure you want to deny the request?',
+  reporting: 'Reporting Contact',
+  confirmReporting: 'Are you sure you want to report the contact?',
+  blocking: 'Blocking Contact',
+  confirmBlocking: 'Are you sure you want to block the contact?',
+  disconnecting: 'Disconnecting from Contact',
+  confirmDisconnecting: 'Are you sure you want to disconnect from the contact?',
+
   removing: 'Deleting Contact',
   confirmRemove: 'Are you sure you want to delete the contact?',
   message: 'Message',
@@ -256,6 +265,17 @@ export const fr = {
   requestedStatus: 'Demande de Connexion par le Contact',
   connectedStatus: 'Contact Connecté',
   offsyncStatus: 'Contact Désynchronisé',
+
+  ignoring: 'Ignorer le contact',
+  confirmIgnoring: 'Êtes-vous sûr de vouloir ignorer la demande?',
+  denying: 'Refuser le contact',
+  confirmDenying: 'Êtes-vous sûr de vouloir refuser la demande?',
+  reporting: 'Signaler le contact',
+  confirmReporting: 'Êtes-vous sûr de vouloir signaler ce contact?',
+  blocking: 'Bloquer le contact',
+  confirmBlocking: 'Êtes-vous sûr de vouloir bloquer ce contact?',
+  disconnecting: 'Se déconnecter du contact',
+  confirmDisconnecting: 'Êtes-vous sûr de vouloir vous déconnecter de ce contact?',
 
   block: 'Bloquer',
   report: 'Signaler',
@@ -447,8 +467,6 @@ export const fr = {
 
   notes: 'Notes',
 
-  disconnecting: 'Déconnexion du contact',
-  confirmDisconnect: 'Êtes-vous sûr de vouloir déconnecter le contact?',
   removing: 'Suppression du contact',
   confirmRemove: 'Êtes-vous sûr de vouloir supprimer le contact?',
 
@@ -494,6 +512,17 @@ export const sp = {
   requestedStatus: 'Solicitud de Conexión por el Contacto',
   connectedStatus: 'Contacto Conectado',
   offsyncStatus: 'Contacto Fuera de Sincronización',
+
+  ignoring: 'Ignorar el contacto',
+  confirmIgnoring: '¿Estás seguro de que quieres ignorar la solicitud?',
+  denying: 'Rechazar el contacto',
+  confirmDenying: '¿Estás seguro de que quieres rechazar la solicitud?',
+  reporting: 'Reportar el contacto',
+  confirmReporting: '¿Estás seguro de que quieres reportar este contacto?',
+  blocking: 'Bloquear el contacto',
+  confirmBlocking: '¿Estás seguro de que quieres bloquear este contacto?',
+  disconnecting: 'Desconectar del contacto',
+  confirmDisconnecting: '¿Estás seguro de que quieres desconectar de este contacto?',
 
   block: 'Bloquear',
   report: 'Reportar',
@@ -684,8 +713,6 @@ export const sp = {
 
   notes: 'Notas',
 
-  disconnecting: 'Desconexión de contacto',
-  confirmDisconnect: '¿Estás seguro de que quieres desconectar el contacto?',
   removing: 'Eliminando contacto',
   confirmRemove: '¿Estás seguro de que quieres eliminar el contacto?',
   message: 'Mensaje',
@@ -736,6 +763,17 @@ export const pt = {
   deny: 'Negar',
   ignore: 'Ignorar',
   accept: 'Aceitar',
+
+  ignoring: 'Ignorar o contato',
+  confirmIgnoring: 'Tem certeza de que deseja ignorar a solicitação?',
+  denying: 'Recusar o contato',
+  confirmDenying: 'Tem certeza de que deseja recusar a solicitação?',
+  reporting: 'Denunciar o contato',
+  confirmReporting: 'Tem certeza de que deseja denunciar este contato?',
+  blocking: 'Bloquear o contato',
+  confirmBlocking: 'Tem certeza de que deseja bloquear este contato?',
+  disconnecting: 'Desconectar do contato',
+  confirmDisconnecting: 'Tem certeza de que deseja se desconectar deste contato?',
 
   sealUnlock: 'Desbloquear a chave de selagem para acessar mensagens criptografadas de ponta a ponta',
   sealForget: 'Esquecer a chave de selagem para revogar o acesso às mensagens criptografadas de ponta a ponta apenas para este dispositivo',
@@ -920,8 +958,6 @@ export const pt = {
 
   notes: 'Notas',
 
-  disconnecting: 'Desconectando Contato',
-  confirmDisconnect: 'Tem certeza de que deseja desconectar o contato?',
   removing: 'Removendo Contato',
   confirmRemove: 'Tem certeza de que deseja remover o contato?',
   message: 'Mensagem',
@@ -972,6 +1008,17 @@ export const de = {
   deny: 'Ablehnen',
   ignore: 'Ignorieren',
   accept: 'Akzeptieren',
+
+  ignoring: 'Kontakt ignorieren',
+  confirmIgnoring: 'Sind Sie sicher, dass Sie die Anfrage ignorieren möchten?',
+  denying: 'Kontakt ablehnen',
+  confirmDenying: 'Sind Sie sicher, dass Sie die Anfrage ablehnen möchten?',
+  reporting: 'Kontakt melden',
+  confirmReporting: 'Sind Sie sicher, dass Sie diesen Kontakt melden möchten?',
+  blocking: 'Kontakt blockieren',
+  confirmBlocking: 'Sind Sie sicher, dass Sie diesen Kontakt blockieren möchten?',
+  disconnecting: 'Kontakt trennen',
+  confirmDisconnecting: 'Sind Sie sicher, dass Sie die Verbindung zu diesem Kontakt trennen möchten?',
 
   sealUnlock: 'Entsperren Sie den Versiegelungsschlüssel, um auf Ende-zu-Ende-verschlüsselte Nachrichten zuzugreifen',
   sealForget: 'Versiegelungsschlüssel vergessen, um den Zugriff auf Ende-zu-Ende-verschlüsselte Nachrichten nur für dieses Gerät zu widerrufen',
@@ -1156,8 +1203,6 @@ export const de = {
 
   notes: 'Notizen',
 
-  disconnecting: 'Kontakt wird getrennt',
-  confirmDisconnect: 'Sind Sie sicher, dass Sie den Kontakt trennen möchten?',
   removing: 'Kontakt wird gelöscht',
   confirmRemove: 'Sind Sie sicher, dass Sie den Kontakt löschen möchten?',
   message: 'Nachricht',
@@ -1209,6 +1254,17 @@ export const ru = {
   deny: 'Отклонить',
   ignore: 'Игнорировать',
   accept: 'Принять',
+
+  ignoring: 'Игнорировать контакт',
+  confirmIgnoring: 'Вы уверены, что хотите игнорировать запрос?',
+  denying: 'Отклонить контакт',
+  confirmDenying: 'Вы уверены, что хотите отклонить запрос?',
+  reporting: 'Пожаловаться на контакт',
+  confirmReporting: 'Вы уверены, что хотите пожаловаться на этот контакт?',
+  blocking: 'Заблокировать контакт',
+  confirmBlocking: 'Вы уверены, что хотите заблокировать этот контакт?',
+  disconnecting: 'Отключиться от контакта',
+  confirmDisconnecting: 'Вы уверены, что хотите отключиться от этого контакта?',
 
   sealUnlock: 'Разблокировать ключ запечатывания для доступа к сообщениям с сквозным шифрованием',
   sealForget: 'Забыть ключ запечатывания, чтобы отозвать доступ к сообщениям с сквозным шифрованием только для этого устройства',
@@ -1393,8 +1449,6 @@ export const ru = {
 
   notes: 'Заметки',
 
-  disconnecting: 'Отключение контакта',
-  confirmDisconnect: 'Вы уверены, что хотите отключить контакт?',
   removing: 'Удаление контакта',
   confirmRemove: 'Вы уверены, что хотите удалить контакт?',
   message: 'Cообщение',

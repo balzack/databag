@@ -92,6 +92,54 @@ export function useContact(params: ContactParams) {
   }, [])
 
   const actions = {
+    save: async () => {
+      const contact = app.state.session?.getContact();
+      await contact.addCard(state.node, state.guid);
+    },
+    remove: async () => {
+      const contact = app.state.session?.getContact();
+      await contact.removeCard(state.cardId);
+    },
+    connect: async () => {
+      const contact = app.state.session?.getContact();
+      await contact.connectCard(state.cardId);
+    },
+    disconnect: async () => {
+      const contact = app.state.session?.getContact();
+      await contact.disconnectCard(state.cardId);
+    },
+    ignore: async () => {
+      const contact = app.state.session?.getContact();
+      await contact.ignoreCard(state.cardId);
+    },
+    deny: async () => {
+      const contact = app.state.session?.getContact();
+      await contact.denyCard(state.cardId);
+    },
+    confirm: async () => {
+      const contact = app.state.session?.getContact();
+      await contact.confirmCard(state.cardId);
+    },
+    cancel: async () => {
+      const contact = app.state.session?.getContact();
+      await contact.cancelCard(state.cardId);
+    },
+    accept: async () => {
+      const contact = app.state.session?.getContact();
+      await contact.connectCard(state.cardId);
+    },
+    resync: async () => {
+      const contact = app.state.session?.getContact();
+      await contact.confirmCard(state.cardId);
+    },
+    block: async () => {
+      const contact = app.state.session?.getContact();
+      await contact.setBlockedCard(state.cardId, true);
+    },
+    report: async () => {
+      const contact = app.state.session?.getContact();
+      await contact.flagCard(state.cardId);
+    },
   }
 
   return { state, actions }

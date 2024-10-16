@@ -67,6 +67,7 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
   const [savingSeal, setSavingSeal] = useState(false)
   const [savingMfa, setSavingMfa] = useState(false)
   const [addingMfa, setAddingMfa] = useState(false)
+  const [removingMfa, setRemovingMfa] = useState(false)
   const [sealDelete, setSealDelete] = useState(false)
   const [sealReset, setSealReset] = useState(false)
   const [sealConfig, setSealConfig] = useState(false)
@@ -101,7 +102,19 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
       },
       children: <Text>{state.strings.disablePrompt}</Text>,
       labels: { confirm: state.strings.disable, cancel: state.strings.cancel },
-      onConfirm:  actions.disableMFA
+      onConfirm:  async () => {
+        if (!removingMfa) {
+          setRemovingMfa(true);
+          try {
+            await actions.disableMFA();
+          }
+          catch (err) {
+            console.log(err);
+            showError()
+          }
+          setRemovingMfa(false);
+        }
+      }
     })
   }
 

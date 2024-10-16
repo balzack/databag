@@ -27,6 +27,7 @@ import { getContactChannelDetail } from './net/getContactChannelDetail';
 import { getContactChannelSummary } from './net/getContactChannelSummary';
 import { getCardImageUrl } from './net/getCardImageUrl';
 import { addCard } from './net/addCard';
+import { removeCard } from './net/removeCard';
 import { getContactListing } from './net/getContactListing';
 import { setCardConfirmed } from './net/setCardConfirmed';
 import { setCardConnecting } from './net/setCardConnecting';
@@ -36,6 +37,7 @@ import { getContactChannelNotifications } from './net/getContactChannelNotificat
 import { setContactChannelNotifications } from './net/setContactChannelNotifications';
 import { getRegistryImageUrl } from './net/getRegistryImageUrl';
 import { getRegistryListing } from './net/getRegistryListing';
+import { addFlag } from './net/addFlag';
 
 const CLOSE_POLL_MS = 100;
 const RETRY_POLL_MS = 2000;
@@ -552,9 +554,9 @@ export class ContactModule implements Contact {
 
 
   public async addCard(server: string, guid: string): Promise<string> {
-    const insecure = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(server);
-    const message = await getContactListing(server, !insecure, guid);
     const { node, secure, token } = this;
+    const insecure = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(server);
+    const message = server ? await getContactListing(server, !insecure, guid) : await getContactListing(node, secure, guid);
     return await addCard(node, secure, token, message);
   }
 
@@ -641,7 +643,7 @@ export class ContactModule implements Contact {
     const { node, secure, token } = this;
     const entry = this.cardEntries.get(cardId);
     if (entry) {
-      if (entry.item.detail.status === 'requesting') {
+      if (entry.item.detail.status === 'connecting') {
         try {
           const message = await getCardCloseMessage(node, secure, token, cardId);
           const server = entry.item.profile.node ? entry.item.profile.node : node;
@@ -698,7 +700,7 @@ export class ContactModule implements Contact {
     return channels;
   }
 
-  public async setBlockedCard(cardId: string, boolean: blocked): Promise<void> {
+  public async setBlockedCard(cardId: string, blocked: boolean): Promise<void> {
     const entry = this.cardEntries.get(cardId);
     if (entry) {
       entry.item.blocked = blocked;
