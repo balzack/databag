@@ -92,6 +92,14 @@ export const en = {
   confirmedTip: 'Disconnected Contact',
   unsavedTip: 'Unknown Contact',
 
+  unknownStatus: 'Unsaved Contact',
+  savedStatus: 'Saved Contact',
+  pendingStatus: 'Unknown Contact Request',
+  connectingStatus: 'Connection Requested',
+  requestedStatus: 'Connection Requested by Contact',
+  connectedStatus: 'Connected Contact',
+  offsyncStatus: 'Offsync Contact',
+
   actions: 'Actions',
   resync: 'Resync',
   connect: 'Connect',
@@ -106,6 +114,12 @@ export const en = {
   requestConnection: 'Request Connection',
   cancelRequest: 'Cancel Request',
   resyncContact: 'Resync Contact',
+
+  block: 'Block',
+  report: 'Report',
+  deny: 'Deny',
+  ignore: 'Ignore',
+  accept: 'Accept',
 
   login: 'Login',
   create: 'Create',
@@ -235,6 +249,19 @@ export const fr = {
   forgotPassword: 'Mot de Passe Oublié',
   manageTopics: 'Gérer la clé de sécurité',
 
+  unknownStatus: 'Contact Inconnu',
+  savedStatus: 'Contact Enregistré',
+  pendingStatus: 'Demande de Contact Inconnue',
+  connectingStatus: 'Demande de Connexion Envoyée',
+  requestedStatus: 'Demande de Connexion par le Contact',
+  connectedStatus: 'Contact Connecté',
+  offsyncStatus: 'Contact Désynchronisé',
+
+  block: 'Bloquer',
+  report: 'Signaler',
+  deny: 'Refuser',
+  ignore: 'Ignorer',
+  accept: 'Accepter',
 
   sealUnlock: 'Déverrouiller la clé de scellement pour accéder aux messages chiffrés de bout en bout',
   sealForget: 'Oublier la clé de scellement pour révoquer l\'accès aux messages chiffrés de bout en bout pour cet appareil uniquement',
@@ -460,6 +487,20 @@ export const sp = {
   forgotPassword: 'Contraseña Olvidada',
   manageTopics: 'Administrar clave de seguridad',
 
+  unknownStatus: 'Contacto Desconocido',
+  savedStatus: 'Contacto Guardado',
+  pendingStatus: 'Solicitud de Contacto Desconocido',
+  connectingStatus: 'Solicitud de Conexión Enviada',
+  requestedStatus: 'Solicitud de Conexión por el Contacto',
+  connectedStatus: 'Contacto Conectado',
+  offsyncStatus: 'Contacto Fuera de Sincronización',
+
+  block: 'Bloquear',
+  report: 'Reportar',
+  deny: 'Denegar',
+  ignore: 'Ignorar',
+  accept: 'Aceptar',
+
   sealUnlock: 'Desbloquear la clave de sellado para acceder a los mensajes cifrados de extremo a extremo',
   sealForget: 'Olvidar la clave de sellado para revocar el acceso a los mensajes cifrados de extremo a extremo solo en este dispositivo',
   sealDelete: 'Eliminar la clave de sellado revocará permanentemente el acceso a todos los mensajes cifrados de extremo a extremo desde todos los dispositivos',
@@ -681,6 +722,20 @@ export const pt = {
   accessCode: 'Código de Acesso',
   forgotPassword: 'Senha Esquecida',
   manageTopics: 'Gerenciar Chave de Selagem',
+
+  unknownStatus: 'Contato Desconhecido',
+  savedStatus: 'Contato Salvo',
+  pendingStatus: 'Solicitação de Contato Desconhecido',
+  connectingStatus: 'Solicitação de Conexão Enviada',
+  requestedStatus: 'Solicitação de Conexão pelo Contato',
+  connectedStatus: 'Contato Conectado',
+  offsyncStatus: 'Contato Fora de Sincronização',
+
+  block: 'Bloquear',
+  report: 'Denunciar',
+  deny: 'Negar',
+  ignore: 'Ignorar',
+  accept: 'Aceitar',
 
   sealUnlock: 'Desbloquear a chave de selagem para acessar mensagens criptografadas de ponta a ponta',
   sealForget: 'Esquecer a chave de selagem para revogar o acesso às mensagens criptografadas de ponta a ponta apenas para este dispositivo',
@@ -904,6 +959,20 @@ export const de = {
   forgotPassword: 'Passwort Vergessen',
   manageTopics: 'Sicherheitsschlüssel verwalten',
 
+  unknownStatus: 'Unbekannter Kontakt',
+  savedStatus: 'Gespeicherter Kontakt',
+  pendingStatus: 'Unbekannte Kontaktanfrage',
+  connectingStatus: 'Verbindungsanfrage Gesendet',
+  requestedStatus: 'Verbindungsanfrage vom Kontakt',
+  connectedStatus: 'Verbunden Kontakt',
+  offsyncStatus: 'Unsynchronisierter Kontakt',
+
+  block: 'Blockieren',
+  report: 'Melden',
+  deny: 'Ablehnen',
+  ignore: 'Ignorieren',
+  accept: 'Akzeptieren',
+
   sealUnlock: 'Entsperren Sie den Versiegelungsschlüssel, um auf Ende-zu-Ende-verschlüsselte Nachrichten zuzugreifen',
   sealForget: 'Versiegelungsschlüssel vergessen, um den Zugriff auf Ende-zu-Ende-verschlüsselte Nachrichten nur für dieses Gerät zu widerrufen',
   sealDelete: 'Das Löschen des Versiegelungsschlüssels widerruft dauerhaft den Zugriff auf alle Ende-zu-Ende-verschlüsselten Nachrichten von allen Geräten',
@@ -1126,6 +1195,20 @@ export const ru = {
   accessCode: 'Код доступа',
   forgotPassword: 'Пароль забыт',
   manageTopics: 'Управление ключом запечатывания',
+
+  unknownStatus: 'Неизвестный Контакт',
+  savedStatus: 'Сохранённый Контакт',
+  pendingStatus: 'Запрос Неизвестного Контакта',
+  connectingStatus: 'Запрос на Подключение Отправлен',
+  requestedStatus: 'Запрос на Подключение от Контакта',
+  connectedStatus: 'Подключённый Контакт',
+  offsyncStatus: 'Несинхронизированный Контакт',
+
+  block: 'Заблокировать',
+  report: 'Пожаловаться',
+  deny: 'Отклонить',
+  ignore: 'Игнорировать',
+  accept: 'Принять',
 
   sealUnlock: 'Разблокировать ключ запечатывания для доступа к сообщениям с сквозным шифрованием',
   sealForget: 'Забыть ключ запечатывания, чтобы отозвать доступ к сообщениям с сквозным шифрованием только для этого устройства',

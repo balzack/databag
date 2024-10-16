@@ -22,6 +22,7 @@ export function useContact(params: ContactParams) {
     cardId: null as string | null,
     status: '',
     offsync: false,
+    statusLabel: '',
   })
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -43,13 +44,39 @@ export function useContact(params: ContactParams) {
     updateState({ guid, handle, node, name, location, description, imageUrl, cardId, status, offsync });
   }, [params]);
 
+  const getStatusLabel = (card?: Card) => {
+    if (card) {
+      const { status, offsync } = card;
+      if (status === 'confirmed') {
+        return 'savedStatus'
+      }
+      if (status === 'pending') {
+        return 'pendingStatus'
+      }
+      if (status === 'requested') {
+        return 'requestedStatus'
+      }
+      if (status === 'connecting') {
+        return 'connectingStatus'
+      }
+      if (status === 'connected' && !offsync) {
+        return 'connectedStatus'
+      }
+      if (status === 'connected' && offsync) {
+        return 'offsyncStatus'
+      }
+    }
+    return 'unknownStatus'
+  }
+
   useEffect(() => {
     const card = state.cards.find(card => card.guid === state.guid);
+    const statusLabel = getStatusLabel(card);
     if (card) {
       const { handle, node, name, location, description, imageUrl, cardId, status, offsync } = card;
-      updateState({ handle, node, name, location, description, imageUrl, cardId, status, offsync });
+      updateState({ handle, node, name, location, description, imageUrl, cardId, status, offsync, statusLabel });
     } else {
-      updateState({ cardId: null, status: '', offsync: false });
+      updateState({ cardId: null, status: '', offsync: false, statusLabel });
     }
   }, [state.cards, state.guid]);
 

@@ -44,31 +44,31 @@
     overscroll-behavior: none;
 
     .requested {
-      border-right: 5px solid #aa44aa;
+      border-right: 5px solid var(--mantine-color-status-3);
     }
 
     .connecting {
-      border-right: 5px solid #22aacc;
+      border-right: 5px solid var(--mantine-color-status-4);
     }
 
     .pending {
-      border-right: 5px solid #aaaa44;
+      border-right: 5px solid var(--mantine-color-status-2);
     }
 
     .connected {
-      border-right: 5px solid #44aa44;
+      border-right: 5px solid var(--mantine-color-status-5);
     }
 
     .confirmed {
-      border-right: 5px solid #cccccc;
+      border-right: 5px solid var(--mantine-color-status-1);
     }
 
     .unknown {
-      border-right: 5px solid #555555;
+      border-right: 5px solid var(--mantine-color-status-0);
     }
 
     .offsync {
-      border-right: 5px solid #dd6633;
+      border-right: 5px solid var(--mantine-color-status-6);
     }
 
     .card {

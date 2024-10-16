@@ -5,8 +5,19 @@
   padding-left: 16px;
   padding-right: 16px;
   padding-top: 8px;
-  padding-bottom: 8px;
-  gap: 2px;
+  padding-bottom: 4px;
+  height: 100%;
+  width: 100%;
+
+  .detail {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    flex-grow: 1;
+    width: 100%;
+  }
 
   .header {
     display: flex;
@@ -91,5 +102,66 @@
       color: var(--mantine-color-text-9);
     }
   }
+
+  .actions {
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+    gap: 12px;
+    padding-top: 16px;
+
+    .action {
+      display: flex;
+      flex-direction: column;
+      align-items: center; 
+      cursor: pointer;
+
+      .actionLabel {
+        font-size: 8px;
+        color: var(--mantine-color-dbgreen-1);  
+      }
+    }
+  }
+
+  .status {
+    flex-shrink: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .unknownStatus {
+      color: var(--mantine-color-status-0);
+      font-size: 12px;
+    }
+
+    .savedStatus {
+      color: var(--mantine-color-status-1);
+      font-size: 12px;
+    }
+
+    .pendingStatus {
+      color: var(--mantine-color-status-2);
+      font-size: 12px;
+    }
+
+    .requestedStatus {
+      color: var(--mantine-color-status-3);
+      font-size: 12px;
+    }
+
+    .connectingStatus {
+      color: var(--mantine-color-status-4);
+      font-size: 12px;
+    }
+
+    .connectedStatus {
+      color: var(--mantine-color-status-5);
+      font-size: 12px;
+    }
+
+    .offsyncStatus {
+      color: var(--mantine-color-status-6);
+      font-size: 12px;
+    }
+  }
 }
-  
