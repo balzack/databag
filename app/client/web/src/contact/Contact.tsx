@@ -236,9 +236,12 @@ export function Contact({ params, close }: { params: ContactParams, close?: ()=>
         )}
         { state.statusLabel === 'connectedStatus' && (
           <div className={classes.actions}>
-            <ActionIcon variant="subtle">
-              <IconRouteX2 size={32} />
-            </ActionIcon>
+            <div className={classes.action}>
+              <ActionIcon variant="subtle">
+                <IconRouteX2 />
+              </ActionIcon>
+              <Text className={classes.actionLabel}>{ state.strings.disconnect }</Text>
+            </div>
             <div className={classes.action}>
               <ActionIcon variant="subtle">
                 <IconUserX />
