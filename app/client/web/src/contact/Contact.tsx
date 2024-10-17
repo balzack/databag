@@ -283,7 +283,7 @@ export function Contact({ params, close }: { params: ContactParams, close?: ()=>
               <ActionIcon variant="subtle" loading={saving}>
                 <IconDeviceFloppy />
               </ActionIcon>
-              <Text className={classes.actionLabel}>{ state.strings.save }!!</Text>
+              <Text className={classes.actionLabel}>{ state.strings.save }</Text>
             </div>
             <div className={classes.action} onClick={confirmReport}>
               <ActionIcon variant="subtle" loading={reporting}>
