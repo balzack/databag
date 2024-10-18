@@ -18,6 +18,7 @@ export const styles = StyleSheet.create({
     paddingRight: 8,
     paddingLeft: 8,
     width: '100%',
+    zIndex: 1,
   },
   sort: {
     borderRadius: 4,
@@ -45,4 +46,25 @@ export const styles = StyleSheet.create({
   icon: {
     backgroundColor: 'transparent',
   },
+  none: {
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  cards: {
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
+    overscrollBehavior: 'none',
+  },
+  card: {
+    width: '100%',
+    height: 48,
+    paddingTop: 8,
+    paddingBottom: 8,
+    paddingRight: 16,
+    paddingLeft: 16,
+  }
 });

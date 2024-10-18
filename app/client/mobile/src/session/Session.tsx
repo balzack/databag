@@ -64,6 +64,7 @@ export function Session() {
     <View style={styles.screen}>
       {state.layout !== 'large' && (
         <BottomNavigation
+          barStyle={{ height: 92 }}
           labeled={false}
           navigationState={{index, routes}}
           onIndexChange={setIndex}
