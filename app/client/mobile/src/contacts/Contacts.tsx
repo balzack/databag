@@ -1,5 +1,5 @@
 import React from 'react';
-import {Divider, Surface, IconButton, Button, Text, TextInput} from 'react-native-paper';
+import {Divider, Surface, IconButton, Button, Text, TextInput, useTheme} from 'react-native-paper';
 import {SafeAreaView, FlatList, View} from 'react-native';
 import {styles} from './Contacts.styled';
 import {useContacts} from './useContacts.hook';
@@ -7,6 +7,7 @@ import { Card } from '../card/Card';
 
 export function Contacts() {
   const { state, actions } = useContacts();
+  const { colors } = useTheme();
 
   return (
     <SafeAreaView style={styles.contacts}>
@@ -19,7 +20,7 @@ export function Contacts() {
 
         <Button icon="account-plus" mode="contained" style={{ borderRadius: 8 }}>{ state.strings.add }</Button>
       </View>
-      <Divider style={{ width: '100%', height: 2 }} />
+      <Divider style={styles.divider} />
 
       { state.filtered.length !== 0 && (
         <FlatList
@@ -37,7 +38,7 @@ export function Contacts() {
             }
             const status = item.offsync ? styles.offsync : styles[item.status];
             return (
-              <Card containerStyle={styles.card} imageUrl={item.imageUrl} name={item.name} handle={item.handle} node={item.node} placeholder={state.strings.name} select={select} actions={options} />
+              <Card containerStyle={{ ...styles.card, borderColor: colors.outlineVariant }} imageUrl={item.imageUrl} name={item.name} handle={item.handle} node={item.node} placeholder={state.strings.name} select={select} actions={options} />
             )
           }}
           keyExtractor={(card) => card.cardId}

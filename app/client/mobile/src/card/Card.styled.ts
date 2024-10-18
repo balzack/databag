@@ -34,8 +34,9 @@ export const styles = StyleSheet.create({
     paddingRight: 8,
   },
   image: {
-    width: 32,
-    height: 32,
+    height: '100%',
+    aspectRatio: 1,
+    borderRadius: 4,
   },
   nameSet: {
     fontSize: 16,

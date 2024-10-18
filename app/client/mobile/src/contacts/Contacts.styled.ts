@@ -23,6 +23,10 @@ export const styles = StyleSheet.create({
   sort: {
     borderRadius: 4,
   },
+  divider: {
+    width: '100%',
+    height: 2,
+  },
   inputSurface: {
     flexGrow: 1,
     height: 40,
@@ -66,5 +70,6 @@ export const styles = StyleSheet.create({
     paddingBottom: 8,
     paddingRight: 16,
     paddingLeft: 16,
+    borderBottomWidth: 1,
   }
 });
