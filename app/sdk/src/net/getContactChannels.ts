@@ -6,6 +6,8 @@ export async function getContactChannels(node: string, secure: boolean, guid: st
   const param = revision ? `viewRevision=1&channelRevision=${revision}` : `viewRevision=1`;
   const endpoint = `http${secure ? "s" : ""}://${node}/content/channels?contact=${guid}.${token}&${param}&${type}`;
   const channels = await fetchWithTimeout(endpoint, { method: "GET" });
+console.log("GETTING: ", endpoint);
   checkResponse(channels.status);
+consolellog("SUCCESS");
   return await channels.json();
 }

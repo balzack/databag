@@ -170,7 +170,6 @@ export class ContactModule implements Contact {
           for (const entry of entries) {
             const { key, value } = entry;
             if (value.item.resync) {
-console.log("RESYNC ", key);
               value.item.resync = false;
               if (value.item.offsyncProfile) {
                 try {
@@ -270,6 +269,7 @@ console.log("RESYNC ", key);
                       entry.item.profileRevision = data.notifiedProfile;
                       await this.store.setContactCardProfileRevision(guid, id, data.notifiedProfile);
                     } catch (err) {
+console.log("OFFSYNC PROFILE: ", id);
                       this.log.warn(err);
                       entry.item.offsyncProfile = data.notifiedProfile;
                       await this.store.setContactCardOffsyncProfile(guid, id, data.notifiedProfile);
@@ -290,6 +290,7 @@ console.log("RESYNC ", key);
                       await this.store.setContactCardArticleRevision(guid, id, data.notifiedArticle);
                       this.emitArticles(id);
                     } catch (err) {
+console.log("OFFSYNC ARTICLE: ", id);
                       this.log.warn(err);
                       entry.item.offsyncArticle = data.notifiedArticle;
                       await this.store.setContactCardOffsyncArticle(guid, id, data.notifiedArticle);
@@ -311,6 +312,7 @@ console.log("RESYNC ", key);
                       await this.store.setContactCardChannelRevision(guid, id, data.notifiedChannel);
                       this.emitChannels(id);
                     } catch (err) {
+console.log("OFFSYNC CHANNEL: ", id);
                       this.log.warn(err);
                       entry.item.offsyncChannel = data.notifiedChannel;
                       await this.store.setContactCardOffsyncChannel(guid, id, data.notifiedChannel);

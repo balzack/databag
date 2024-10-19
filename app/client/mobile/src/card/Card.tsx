@@ -5,8 +5,6 @@ import { styles } from './Card.styled'
 
 export function Card({ imageUrl, name, placeholder, handle, node, select, actions, containerStyle }: { containerStyle: any, imageUrl: string, name: string, placeholder: string, handle: string, node: string, select?: () => void, actions: ReactNode[] }) {
 
-console.log(containerStyle);
-
   return (
     <View style={containerStyle}>
       <View style={styles.card}>

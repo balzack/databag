@@ -2,12 +2,13 @@ import React from 'react';
 import {Divider, Surface, IconButton, Button, Text, TextInput, useTheme} from 'react-native-paper';
 import {SafeAreaView, FlatList, View} from 'react-native';
 import {styles} from './Contacts.styled';
+import { Colors } from '../constants/Colors';
 import {useContacts} from './useContacts.hook';
 import { Card } from '../card/Card';
 
 export function Contacts() {
   const { state, actions } = useContacts();
-  const { colors } = useTheme();
+  const theme = useTheme();
 
   return (
     <SafeAreaView style={styles.contacts}>
@@ -36,9 +37,12 @@ export function Contacts() {
               const params = { guid, handle, node, name, location, description, offsync, imageUrl, cardId, status };
               openContact(params);
             }
-            const status = item.offsync ? styles.offsync : styles[item.status];
+            const status = item.offsync ? 'offsync' : item.status;
+console.log("USING :", item.offsync, item.status, status);
             return (
-              <Card containerStyle={{ ...styles.card, borderColor: colors.outlineVariant }} imageUrl={item.imageUrl} name={item.name} handle={item.handle} node={item.node} placeholder={state.strings.name} select={select} actions={options} />
+              <View style={{ borderRightWidth: 2, borderColor: Colors[status] }}>
+                <Card containerStyle={{ ...styles.card, borderColor: theme.colors.outlineVariant }} imageUrl={item.imageUrl} name={item.name} handle={item.handle} node={item.node} placeholder={state.strings.name} select={select} actions={options} />
+              </View>
             )
           }}
           keyExtractor={(card) => card.cardId}
