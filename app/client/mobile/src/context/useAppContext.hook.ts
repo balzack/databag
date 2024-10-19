@@ -6,9 +6,11 @@ import {LocalStore} from '../LocalStore';
 const DATABAG_DB = 'db_v202.db';
 const SETTINGS_DB = 'ls_v001.db';
 
+const databag = new DatabagSDK({ tagBatch: 32, topicBatch: 32, articleTypes: [], channelTypes: [ 'sealed','superbasic'] }, new NativeCrypto());
+
 export function useAppContext() {
   const local = useRef(new LocalStore());
-  const sdk = useRef(new DatabagSDK(new NativeCrypto()));
+  const sdk = useRef(databag);
   const [state, setState] = useState({
     session: null as null | Session,
     fullDayTime: false,

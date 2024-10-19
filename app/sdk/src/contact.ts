@@ -129,7 +129,7 @@ export class ContactModule implements Contact {
       if (!this.channelEntries.has(cardId)) {
         this.channelEntries.set(cardId, new Map<string, Map<string, { item: ChannelItem; channel: Channel }>>());
       }
-      const channel = setChannel(cardId, channelId, item);
+      const channel = this.setChannel(cardId, channelId, item);
       this.channelEntries.set(cardId).set(channelId, { item, channel });
     });
 
@@ -269,7 +269,6 @@ export class ContactModule implements Contact {
                       entry.item.profileRevision = data.notifiedProfile;
                       await this.store.setContactCardProfileRevision(guid, id, data.notifiedProfile);
                     } catch (err) {
-console.log("OFFSYNC PROFILE: ", id);
                       this.log.warn(err);
                       entry.item.offsyncProfile = data.notifiedProfile;
                       await this.store.setContactCardOffsyncProfile(guid, id, data.notifiedProfile);
@@ -290,7 +289,6 @@ console.log("OFFSYNC PROFILE: ", id);
                       await this.store.setContactCardArticleRevision(guid, id, data.notifiedArticle);
                       this.emitArticles(id);
                     } catch (err) {
-console.log("OFFSYNC ARTICLE: ", id);
                       this.log.warn(err);
                       entry.item.offsyncArticle = data.notifiedArticle;
                       await this.store.setContactCardOffsyncArticle(guid, id, data.notifiedArticle);
@@ -312,7 +310,6 @@ console.log("OFFSYNC ARTICLE: ", id);
                       await this.store.setContactCardChannelRevision(guid, id, data.notifiedChannel);
                       this.emitChannels(id);
                     } catch (err) {
-console.log("OFFSYNC CHANNEL: ", id);
                       this.log.warn(err);
                       entry.item.offsyncChannel = data.notifiedChannel;
                       await this.store.setContactCardOffsyncChannel(guid, id, data.notifiedChannel);
@@ -349,20 +346,17 @@ console.log("OFFSYNC CHANNEL: ", id);
       }
 
       if (this.unsealAll) {
-        for (const card of this.channelEntries.entries()) {
-          for (const channel of card.value.entries()) {
+        for (const [cardId, channels] of this.channelEntries.entries()) {
+          for (const [channelId, entry] of channels.entries()) {
             try {
-              const { item } = channel.value;
-              const cardId = card.key;
-              const channelId = channel.key;
+              const { item } = entry;
               if (await this.unsealChannelDetail(cardId, channelId, item)) {
                 await this.store.setContactCardChannelUnsealedDetail(guid, cardId, channelId, item.unsealedDetail);
               }
               if (await this.unsealChannelSummary(cardId, channelId, item)) {
                 await this.store.setContactCardChannelUnsealedSummary(guid, cardId, channelId, item.unsealedSummary);
               }
-              const channel = setChannel(cardId, channelId, item);
-              this.channelEntries.set(cardId).set(channelId, { item, channel });
+              entry.channel = this.setChannel(cardId, channelId, item);
             } catch (err) {
               this.log.warn(err);
             }
@@ -583,12 +577,8 @@ console.log("OFFSYNC CHANNEL: ", id);
   public async connectCard(cardId: string): Promise<void> {
     const { node, secure, token } = this;
     await setCardConnecting(node, secure, token, cardId);
-console.log("CONNECTING!");
     try {
-console.log("GET MSG");
       const message = await getCardOpenMessage(node, secure, token, cardId);
-console.log("GET MSG: done");
-
       const entry = this.cardEntries.get(cardId);
       if (entry) {
         const server = entry.item.profile.node ? entry.item.profile.node : node;
@@ -600,7 +590,6 @@ console.log("GET MSG: done");
         }
       }
     } catch (err) {
-      console.log(err);
       this.log.error('failed to deliver open message');
     }
   }

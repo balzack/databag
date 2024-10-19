@@ -8,12 +8,11 @@ export function Card({ imageUrl, name, placeholder, handle, node, select, action
   return (
     <View style={containerStyle}>
       <View style={styles.card}>
-              <Image
-                style={styles.image}
-                resizeMode={'contain'}
-                source={{ uri: imageUrl }}
-              />
-
+          <Image
+            style={styles.image}
+            resizeMode={'contain'}
+            source={{ uri: imageUrl }}
+          />
           <View style={styles.details}>
             { name && (
               <Text style={styles.nameSet}>{ name }</Text>
@@ -23,6 +22,7 @@ export function Card({ imageUrl, name, placeholder, handle, node, select, action
             )}
             <Text style={styles.handle}>{ node ? `${handle}/${node}` : handle }</Text>
           </View>
+          { actions }
       </View>
     </View>
   );

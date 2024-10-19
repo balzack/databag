@@ -13,7 +13,7 @@ export function Contacts() {
   return (
     <SafeAreaView style={styles.contacts}>
       <View style={styles.header}>
-        <IconButton style={{ borderRadius: 4 }} mode="contained" icon={state.sortAsc ? 'sort-descending' : 'sort-ascending'} size={24} onPress={actions.toggleSort} />
+        <IconButton style={styles.sort} mode="contained" icon={state.sortAsc ? 'sort-descending' : 'sort-ascending'} size={24} onPress={actions.toggleSort} />
 
         <Surface mode="flat" style={styles.inputSurface}>
           <TextInput dense={true} style={styles.input} unserlineStyle={styles.inputUnderline} mode="outlined" placeholder={state.strings.contacts} left={<TextInput.Icon style={styles.icon} icon="magnify" />} value={state.filter} onChangeText={value => actions.setFilter(value)} />
@@ -28,9 +28,10 @@ export function Contacts() {
           style={styles.cards}
           data={state.filtered}
           initialNumToRender={32}
+          showsVerticalScrollIndicator={false}
           renderItem={({ item }) => {
-            const call = <IconButton icon="phone" />
-            const message = <IconButton icon="message" />
+            const call = <IconButton key="call" style={styles.icon} mode="contained" icon="phone-outline" />
+            const message = <IconButton key="text" style={styles.icon} mode="contained" icon="message-outline" />
             const options = item.status === 'connected' && !item.offsync ? [message, call] : [];
             const select = () => {
               const { guid, handle, node, name, location, description, offsync, imageUrl, cardId, status } = item;
@@ -38,7 +39,6 @@ export function Contacts() {
               openContact(params);
             }
             const status = item.offsync ? 'offsync' : item.status;
-console.log("USING :", item.offsync, item.status, status);
             return (
               <View style={{ borderRightWidth: 2, borderColor: Colors[status] }}>
                 <Card containerStyle={{ ...styles.card, borderColor: theme.colors.outlineVariant }} imageUrl={item.imageUrl} name={item.name} handle={item.handle} node={item.node} placeholder={state.strings.name} select={select} actions={options} />

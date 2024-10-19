@@ -7,7 +7,6 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     height: '100%',
-    gap: 8,
   },
   cursor: {
     display: 'flex',
@@ -37,6 +36,7 @@ export const styles = StyleSheet.create({
     height: '100%',
     aspectRatio: 1,
     borderRadius: 4,
+    marginRight: 8,
   },
   nameSet: {
     fontSize: 16,
@@ -50,6 +50,7 @@ export const styles = StyleSheet.create({
     textOverflow: 'ellipsis',
     overflow: 'hidden',
     fontStyle: 'italic',
+    color: Colors.placeholder,
   },
   handle: {
     fontSize: 12,
