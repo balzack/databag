@@ -6,7 +6,7 @@ import {Settings} from '../settings/Settings';
 import {Channels} from '../channels/Channels';
 import {Contacts} from '../contacts/Contacts';
 import {Registry} from '../registry/Registry';
-import {Profile} from '../profile/Profile';
+import {Profile, ContactParams} from '../profile/Profile';
 import {Details} from '../details/Details';
 import {Identity} from '../identity/Identity';
 import {useSession} from './useSession.hook';
@@ -17,10 +17,6 @@ import {
   DarkTheme,
 } from '@react-navigation/native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
-
-const ChannelsRoute = () => <Channels />;
-const ContactsRoute = () => <Contacts />;
-const SettingsRoute = () => <Settings showLogout={true} />;
 
 const SettingsDrawer = createDrawerNavigator();
 const ContactsDrawer = createDrawerNavigator();
@@ -53,6 +49,10 @@ export function Session() {
     },
   ]);
   const sessionNav = {strings: state.strings};
+
+  const ChannelsRoute = () => <Channels />;
+  const ContactsRoute = () => <Contacts openRegistry={()=>{console.log('openreg')}} openContact={(params: ContactParams)=>{console.log('opencon', params)}} />;
+  const SettingsRoute = () => <Settings showLogout={true} />;
 
   const renderScene = BottomNavigation.SceneMap({
     channels: ChannelsRoute,
@@ -142,7 +142,7 @@ function ContactsScreen({nav}) {
   return (
     <ContactsDrawer.Navigator
       id="ContactsDrawer"
-      drawerContent={Contacts}
+      drawerContent={() => <Contacts onRegistry={()=>{console.log('openreg')}} openContact={(params: ContactParams)=>{console.log('opencon', params)}} />}
       screenOptions={{
         drawerPosition: 'right',
         drawerType: 'front',

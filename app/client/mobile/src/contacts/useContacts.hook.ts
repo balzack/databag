@@ -59,9 +59,6 @@ export function useContacts() {
 
   useEffect(() => {
     const filtered = state.cards.sort(compare).filter(select);
-
-console.log("FILTERED: ", filtered.length);
-
     updateState({ filtered });
   }, [state.sortAsc, state.filter, state.cards]); 
 

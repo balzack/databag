@@ -5,8 +5,9 @@ import {styles} from './Contacts.styled';
 import { Colors } from '../constants/Colors';
 import {useContacts} from './useContacts.hook';
 import { Card } from '../card/Card';
+import { ContactParams } from '../profile/Profile';
 
-export function Contacts() {
+export function Contacts({ openRegistry, openContact }: { openRegistry: ()=>void, openContact: (params: ContactParams)=>void }) {
   const { state, actions } = useContacts();
   const theme = useTheme();
 
@@ -19,7 +20,7 @@ export function Contacts() {
           <TextInput dense={true} style={styles.input} unserlineStyle={styles.inputUnderline} mode="outlined" placeholder={state.strings.contacts} left={<TextInput.Icon style={styles.icon} icon="magnify" />} value={state.filter} onChangeText={value => actions.setFilter(value)} />
         </Surface>
 
-        <Button icon="account-plus" mode="contained" style={{ borderRadius: 8 }}>{ state.strings.add }</Button>
+        <Button icon="account-plus" mode="contained" style={{ borderRadius: 8 }} onPress={openRegistry}>{ state.strings.add }</Button>
       </View>
       <Divider style={styles.divider} />
 
