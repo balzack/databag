@@ -3,9 +3,9 @@ import { TextInput } from '@mantine/core';
 import classes from './Registry.module.css'
 import { IconX, IconArrowLeft, IconServer, IconUser } from '@tabler/icons-react';
 import { Card } from '../card/Card';
-import { ContactParams } from '../contact/Contact';
+import { ProfileParams } from '../profile/Profile';
 
-export function Registry({ close, openContact }: { close?: ()=>void, openContact: (params: ContactParams)=>void }) {
+export function Registry({ close, openContact }: { close?: ()=>void, openContact: (params: ProfileParams)=>void }) {
   const { state, actions } = useRegistry();
 
 console.log(state.profiles);

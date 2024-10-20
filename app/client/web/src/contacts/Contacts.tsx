@@ -4,9 +4,9 @@ import { UnstyledButton, ActionIcon, TextInput, Button } from '@mantine/core';
 import { IconSearch, IconUserPlus, IconSortAscending, IconSortDescending, IconMessage2, IconPhone } from '@tabler/icons-react';
 import classes from './Contacts.module.css'
 import { Card } from '../card/Card';
-import { ContactParams } from '../contact/Contact';
+import { ProfileParams } from '../profile/Profile';
 
-export function Contacts({ openRegistry, openContact }: { openRegistry: ()=>void, openContact: (params: ContactParams)=>void }) {
+export function Contacts({ openRegistry, openContact }: { openRegistry: ()=>void, openContact: (params: ProfileParams)=>void }) {
   const { state, actions } = useContacts();
 
   const cards = state.filtered.map((card, idx) => {

@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
-import { useContact } from './useContact.hook';
-import classes from './Contact.module.css';
+import { useProfile } from './useProfile.hook';
+import classes from './Profile.module.css';
 import { modals } from '@mantine/modals'
 import { IconX, IconMapPin, IconBook, IconUserX, IconRouteX2, IconRoute2, IconCircleCheck, IconVolumeOff, IconArrowsCross, IconRefresh, IconAlertHexagon, IconEyeOff, IconCancel, IconDeviceFloppy } from '@tabler/icons-react';
 import {
@@ -10,7 +10,7 @@ import {
   Button,
 } from '@mantine/core'
 
-export type ContactParams = {
+export type ProfileParams = {
   guid: string;
   handle?: string;
   node?: string;
@@ -23,8 +23,8 @@ export type ContactParams = {
   offsync?: boolean;
 }
 
-export function Contact({ params, close }: { params: ContactParams, close?: ()=>void }) {
-  const { state, actions } = useContact(params);
+export function Profile({ params, close }: { params: ProfileParams, close?: ()=>void }) {
+  const { state, actions } = useProfile(params);
   const [removing, setRemoving] = useState(false);
   const [blocking, setBlocking] = useState(false);
   const [ignoring, setIgnoring] = useState(false);

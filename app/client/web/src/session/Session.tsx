@@ -12,12 +12,12 @@ import { Settings } from '../settings/Settings'
 import { Identity } from '../identity/Identity'
 import { Contacts } from '../contacts/Contacts'
 import { Registry } from '../registry/Registry'
-import { Contact, ContactParams } from '../contact/Contact';
+import { Profile, ProfileParams } from '../profile/Profile';
 import { useDisclosure } from '@mantine/hooks'
 
 export function Session() {
   const [tab, setTab] = useState('channels')
-  const [contactParams, setContactParams] = useState({ guid: '' } as ContactParams);
+  const [profileParams, setProfileParams] = useState({ guid: '' } as ProfileParams);
   const display = useContext(DisplayContext) as ContextType
   const [settings, { open: openSettings, close: closeSettings }] =
     useDisclosure(false)
@@ -25,7 +25,7 @@ export function Session() {
     useDisclosure(false)
   const [registry, { open: openRegistry, close: closeRegistry }] =
     useDisclosure(false)
-  const [contact, { open: openContact, close: closeContact }] =
+  const [profile, { open: openProfile, close: closeProfile }] =
     useDisclosure(false)
 
   return (
@@ -39,16 +39,16 @@ export function Session() {
           </div>
           <div className={tab === 'contacts' ? classes.show : classes.hide}>
             <div className={classes.screen}>
-              <Contacts openRegistry={openRegistry} openContact={(params) => { setContactParams(params); openContact() }}/>
+              <Contacts openRegistry={openRegistry} openContact={(params) => { setProfileParams(params); openProfile() }}/>
             </div>
             { registry && (
               <div className={classes.screen}>
-                <Registry close={closeRegistry} openContact={(params) => { setContactParams(params); openContact() }} />
+                <Registry close={closeRegistry} openContact={(params) => { setProfileParams(params); openProfile() }} />
               </div>
             )}
-            { contact && (
+            { profile && (
               <div className={classes.screen}>
-                <Contact params={contactParams} close={closeContact} />
+                <Profile params={profileParams} close={closeProfile} />
               </div>
             )}
           </div>
@@ -112,7 +112,7 @@ export function Session() {
             position="right"
           >
             <div style={{ height: '100vh' }}>
-              <Contacts openRegistry={openRegistry} openContact={(params) => { setContactParams(params); openContact() }} />
+              <Contacts openRegistry={openRegistry} openContact={(params) => { setProfileParams(params); openProfile() }} />
             </div>
           </Drawer>
           <Drawer
@@ -124,19 +124,19 @@ export function Session() {
             position="right"
           >
             <div style={{ height: '100vh' }}>
-              <Registry openContact={(params) => { setContactParams(params); openContact() }} />
+              <Registry openContact={(params) => { setProfileParams(params); openProfile() }} />
             </div>
           </Drawer>
           <Drawer
-            opened={contact}
-            onClose={closeContact}
+            opened={profile}
+            onClose={closeProfile}
             withCloseButton={false}
             size="xs"
             padding="0"
             position="right"
           >
             <div style={{ height: '100vh' }}>
-              <Contact params={contactParams} />
+              <Profile params={profileParams} />
             </div>
           </Drawer>
           <Drawer

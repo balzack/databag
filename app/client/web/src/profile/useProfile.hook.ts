@@ -3,9 +3,9 @@ import { AppContext } from '../context/AppContext'
 import { DisplayContext } from '../context/DisplayContext';
 import { ContextType } from '../context/ContextType'
 import { Card } from 'databag-client-sdk'
-import { ContactParams } from './Contact';
+import { ProfileParams } from './Profile';
 
-export function useContact(params: ContactParams) {
+export function useProfile(params: ProfileParams) {
 
   const app = useContext(AppContext) as ContextType
   const display = useContext(DisplayContext) as ContextType
