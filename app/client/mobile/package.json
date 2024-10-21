@@ -16,6 +16,7 @@
     "@react-navigation/drawer": "^6.7.2",
     "@react-navigation/native": "^6.1.18",
     "@react-navigation/native-stack": "^6.11.0",
+    "@react-navigation/stack": "^6.4.1",
     "@types/crypto-js": "^4.2.2",
     "crypto-js": "^4.2.0",
     "databag-client-sdk": "^0.0.22",

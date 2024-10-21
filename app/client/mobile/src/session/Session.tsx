@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, useColorScheme} from 'react-native';
+import {SafeAreaView, View, useColorScheme} from 'react-native';
 import {styles} from './Session.styled';
 import {BottomNavigation, Surface, Text} from 'react-native-paper';
 import {Settings} from '../settings/Settings';
@@ -17,12 +17,16 @@ import {
   DarkTheme,
 } from '@react-navigation/native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
+import { createStackNavigator } from '@react-navigation/stack';
 
 const SettingsDrawer = createDrawerNavigator();
 const ContactsDrawer = createDrawerNavigator();
 const RegistryDrawer = createDrawerNavigator();
 const ProfileDrawer = createDrawerNavigator();
 const DetailsDrawer = createDrawerNavigator();
+
+const ContactStack = createStackNavigator();
+const TopicStack = createStackNavigator();
 
 export function Session() {
   const {state} = useSession();
@@ -51,7 +55,7 @@ export function Session() {
   const sessionNav = {strings: state.strings};
 
   const ChannelsRoute = () => <Channels />;
-  const ContactsRoute = () => <Contacts openRegistry={()=>{console.log('openreg')}} openContact={(params: ContactParams)=>{console.log('opencon', params)}} />;
+  const ContactsRoute = () => <ContactTab />;
   const SettingsRoute = () => <Settings showLogout={true} />;
 
   const renderScene = BottomNavigation.SceneMap({
@@ -63,13 +67,20 @@ export function Session() {
   return (
     <View style={styles.screen}>
       {state.layout !== 'large' && (
-        <BottomNavigation
-          barStyle={{ height: 92 }}
-          labeled={false}
-          navigationState={{index, routes}}
-          onIndexChange={setIndex}
-          renderScene={renderScene}
-        />
+        <Surface elevation={2}>
+          <SafeAreaView style={{ width: '100%', height: '100%' }}>
+            <NavigationContainer
+                theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
+              <BottomNavigation
+                barStyle={{ height: 64 }}
+                labeled={false}
+                navigationState={{index, routes}}
+                onIndexChange={setIndex}
+                renderScene={renderScene}
+              />
+            </NavigationContainer>
+          </SafeAreaView>
+        </Surface>
       )}
       {state.layout === 'large' && (
         <NavigationContainer
@@ -78,6 +89,16 @@ export function Session() {
         </NavigationContainer>
       )}
     </View>
+  );
+}
+
+function ContactTab() {
+  return (
+    <ContactStack.Navigator initialRouteName="contacts" screenOptions={{ headerShown: false }}>
+      <ContactStack.Screen name="contacts" options={{ headerBackTitleVisible: false }}>
+        {(props) => <Contacts openRegistry={()=>{console.log('openreg')}} openContact={(params: ContactParams)=>{console.log('opencon', params)}} />}
+      </ContactStack.Screen>
+    </ContactStack.Navigator>
   );
 }
 
