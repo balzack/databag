@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {SafeAreaView, View, useColorScheme} from 'react-native';
 import {styles} from './Session.styled';
-import {BottomNavigation, Surface, Text} from 'react-native-paper';
+import {IconButton, Surface, Text} from 'react-native-paper';
 import {Settings} from '../settings/Settings';
 import {Channels} from '../channels/Channels';
 import {Contacts} from '../contacts/Contacts';
@@ -26,59 +26,55 @@ const ProfileDrawer = createDrawerNavigator();
 const DetailsDrawer = createDrawerNavigator();
 
 const ContactStack = createStackNavigator();
-const TopicStack = createStackNavigator();
+const ContentStack = createStackNavigator();
 
 export function Session() {
   const {state} = useSession();
   const scheme = useColorScheme();
-  const [index, setIndex] = useState(0);
-  const [routes] = useState([
-    {
-      key: 'channels',
-      title: 'Channels',
-      focusedIcon: 'comment-multiple',
-      unfocusedIcon: 'comment-multiple-outline',
-    },
-    {
-      key: 'contacts',
-      title: 'Contacts',
-      focusedIcon: 'contacts',
-      unfocusedIcon: 'contacts-outline',
-    },
-    {
-      key: 'settings',
-      title: 'Settings',
-      focusedIcon: 'cog',
-      unfocusedIcon: 'cog-outline',
-    },
-  ]);
+  const [tab, setTab] = useState('content');
+
   const sessionNav = {strings: state.strings};
 
   const ChannelsRoute = () => <Channels />;
   const ContactsRoute = () => <ContactTab />;
   const SettingsRoute = () => <Settings showLogout={true} />;
 
-  const renderScene = BottomNavigation.SceneMap({
-    channels: ChannelsRoute,
-    contacts: ContactsRoute,
-    settings: SettingsRoute,
-  });
-
   return (
-    <View style={styles.screen}>
+    <View style={styles.session}>
       {state.layout !== 'large' && (
         <Surface elevation={2}>
           <SafeAreaView style={{ width: '100%', height: '100%' }}>
-            <NavigationContainer
-                theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
-              <BottomNavigation
-                barStyle={{ height: 64 }}
-                labeled={false}
-                navigationState={{index, routes}}
-                onIndexChange={setIndex}
-                renderScene={renderScene}
-              />
-            </NavigationContainer>
+            <View style={styles.screen}>
+              <View style={{...styles.body, display: tab === 'content' ? 'flex' : 'none'}}>
+                <ContentTab scheme={scheme} />
+              </View>
+              <View style={{...styles.body, display: tab === 'contacts' ? 'flex' : 'none'}}>
+                <ContactTab scheme={scheme} />
+              </View>
+              <View style={{...styles.body, display: tab === 'settings' ? 'flex' : 'none'}}>
+                <Settings showLogout={true} />
+              </View>
+              <View style={styles.tabs}>
+                { tab === 'content' && (
+                  <IconButton style={styles.activeTab} mode="contained" icon={'comment-multiple'} size={28} onPress={()=>{setTab('content')}} />
+                )}
+                { tab !== 'content' && (
+                  <IconButton style={styles.idleTab} mode="contained" icon={'comment-multiple-outline'} size={28} onPress={()=>{setTab('content')}} />
+                )}
+                { tab === 'contacts' && (
+                  <IconButton style={styles.activeTab} mode="contained" icon={'contacts'} size={28} onPress={()=>{setTab('contacts')}} />
+                )}
+                { tab !== 'contacts' && (
+                  <IconButton style={styles.idleTab} mode="contained" icon={'contacts-outline'} size={28} onPress={()=>{setTab('contacts')}} />
+                )}
+                { tab === 'settings' && (
+                  <IconButton style={styles.activeTab} mode="contained" icon={'cog'} size={28} onPress={()=>{setTab('settings')}} />
+                )}
+                { tab !== 'settings' && (
+                  <IconButton style={styles.idleTab} mode="contained" icon={'cog-outline'} size={28} onPress={()=>{setTab('settings')}} />
+                )}
+              </View>
+            </View>
           </SafeAreaView>
         </Surface>
       )}
@@ -92,13 +88,31 @@ export function Session() {
   );
 }
 
-function ContactTab() {
+function ContentTab({ scheme }: { scheme: string }) {
   return (
+            <NavigationContainer
+                theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
     <ContactStack.Navigator initialRouteName="contacts" screenOptions={{ headerShown: false }}>
-      <ContactStack.Screen name="contacts" options={{ headerBackTitleVisible: false }}>
-        {(props) => <Contacts openRegistry={()=>{console.log('openreg')}} openContact={(params: ContactParams)=>{console.log('opencon', params)}} />}
+      <ContactStack.Screen name="content" options={{ headerBackTitleVisible: false }}>
+        {(props) => <Text>CONTENT</Text>}
       </ContactStack.Screen>
     </ContactStack.Navigator>
+            </NavigationContainer>
+  );
+}
+
+function ContactTab({ scheme }: { scheme: string }) {
+  return (
+    <NavigationContainer theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
+      <ContactStack.Navigator initialRouteName="contacts" screenOptions={{ headerShown: false }}>
+        <ContactStack.Screen name="contacts" options={{ headerBackTitleVisible: false }}>
+          {(props) => <Contacts openRegistry={()=>{props.navigation.navigate('registry')}} openContact={(params: ContactParams)=>{console.log('opencon', params)}} />}
+        </ContactStack.Screen>
+        <ContactStack.Screen name="registry" options={{ headerBackTitleVisible: false }}>
+          {(props) => <Registry close={props.navigation.goBack} openContact={(params: ContactParams)=>{console.log('opencon', params)}} />}
+        </ContactStack.Screen>
+      </ContactStack.Navigator>
+    </NavigationContainer>
   );
 }
 
