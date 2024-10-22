@@ -8,7 +8,6 @@ import { ProfileParams } from '../profile/Profile';
 export function Registry({ close, openContact }: { close?: ()=>void, openContact: (params: ProfileParams)=>void }) {
   const { state, actions } = useRegistry();
 
-console.log(state.profiles);
   const profiles = state.profiles.map((profile, idx) => {
     const select = () => { 
       const { guid, handle, node, name, location, description, imageUrl } = profile;

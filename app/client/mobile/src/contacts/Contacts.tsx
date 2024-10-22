@@ -12,7 +12,7 @@ export function Contacts({ openRegistry, openContact }: { openRegistry: ()=>void
   const theme = useTheme();
 
   return (
-    <SafeAreaView style={styles.contacts}>
+    <View style={styles.contacts}>
       <View style={styles.header}>
         <IconButton style={styles.sort} mode="contained" icon={state.sortAsc ? 'sort-descending' : 'sort-ascending'} size={24} onPress={actions.toggleSort} />
 
@@ -53,7 +53,7 @@ export function Contacts({ openRegistry, openContact }: { openRegistry: ()=>void
         <Text style={styles.none}>{ state.strings.noContacts }</Text>
       )}
 
-    </SafeAreaView>
+    </View>
   );
 }
 

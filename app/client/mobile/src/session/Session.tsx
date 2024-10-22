@@ -10,6 +10,7 @@ import {Profile, ContactParams} from '../profile/Profile';
 import {Details} from '../details/Details';
 import {Identity} from '../identity/Identity';
 import {useSession} from './useSession.hook';
+import { TransitionPresets } from '@react-navigation/stack';
 
 import {
   NavigationContainer,
@@ -90,14 +91,13 @@ export function Session() {
 
 function ContentTab({ scheme }: { scheme: string }) {
   return (
-            <NavigationContainer
-                theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
-    <ContactStack.Navigator initialRouteName="contacts" screenOptions={{ headerShown: false }}>
-      <ContactStack.Screen name="content" options={{ headerBackTitleVisible: false }}>
-        {(props) => <Text>CONTENT</Text>}
-      </ContactStack.Screen>
-    </ContactStack.Navigator>
-            </NavigationContainer>
+    <NavigationContainer theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
+      <ContactStack.Navigator initialRouteName="contacts" screenOptions={{ headerShown: false }}>
+        <ContactStack.Screen name="content" options={{ headerBackTitleVisible: false }}>
+          {(props) => <Text>CONTENT</Text>}
+        </ContactStack.Screen>
+      </ContactStack.Navigator>
+    </NavigationContainer>
   );
 }
 
@@ -108,7 +108,7 @@ function ContactTab({ scheme }: { scheme: string }) {
         <ContactStack.Screen name="contacts" options={{ headerBackTitleVisible: false }}>
           {(props) => <Contacts openRegistry={()=>{props.navigation.navigate('registry')}} openContact={(params: ContactParams)=>{console.log('opencon', params)}} />}
         </ContactStack.Screen>
-        <ContactStack.Screen name="registry" options={{ headerBackTitleVisible: false }}>
+        <ContactStack.Screen name="registry" options={{ headerBackTitleVisible: false, ...TransitionPresets.ScaleFromCenterAndroid }}>
           {(props) => <Registry close={props.navigation.goBack} openContact={(params: ContactParams)=>{console.log('opencon', params)}} />}
         </ContactStack.Screen>
       </ContactStack.Navigator>
@@ -158,7 +158,7 @@ function RegistryScreen({nav}) {
   return (
     <RegistryDrawer.Navigator
       id="RegistryDrawer"
-      drawerContent={Registry}
+      drawerContent={() => <Registry openContact={(params: ContactParams)=>{console.log('opencon', params)}} />}
       screenOptions={{
         drawerPosition: 'right',
         drawerType: 'front',
