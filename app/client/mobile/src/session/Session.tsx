@@ -162,9 +162,7 @@ function RegistryScreen({nav}) {
       id="RegistryDrawer"
       drawerContent={() => (
         <Surface elevation={1}>
-          <SafeAreaView>
-            <Registry openContact={(params: ContactParams)=>{console.log('opencon', params)}} />
-          </SafeAreaView>
+          <Registry openContact={(params: ContactParams)=>{console.log('opencon', params)}} />
         </Surface>
       )}
       screenOptions={{

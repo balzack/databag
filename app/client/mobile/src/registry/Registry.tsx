@@ -40,9 +40,7 @@ export function Registry({ close, openContact }: { close: ()=>void, openContact:
               openContact(params);
             }
             return (
-              <View style={{ borderRightWidth: 2 }}>
-                <Card containerStyle={{ ...styles.card, borderColor: theme.colors.outlineVariant }} imageUrl={item.imageUrl} name={item.name} handle={item.handle} node={item.node} placeholder={state.strings.name} select={select} actions={[]} />
-              </View>
+              <Card containerStyle={{ ...styles.card, borderColor: theme.colors.outlineVariant }} imageUrl={item.imageUrl} name={item.name} handle={item.handle} node={item.node} placeholder={state.strings.name} select={select} actions={[]} />
             )
           }}
           keyExtractor={(profile) => profile.guid}
