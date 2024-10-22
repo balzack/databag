@@ -1,4 +1,8 @@
 import React from 'react';
+import { IconButton } from 'react-native-paper';
+import { SafeAreaView, View } from 'react-native';
+import { styles } from './Profile.styled';
+import { useProfile } from './useProfile.hook';
 
 export type ContactParams = {
   guid: string;
@@ -13,6 +17,14 @@ export type ContactParams = {
   offsync?: boolean;
 }
 
-export function Profile() {
-  return <></>;
+export function Profile({ close }) {
+  return (
+    <View style={styles.profile}>
+      <SafeAreaView style={styles.header}>
+        { close && (
+          <IconButton style={styles.close} compact="true"  mode="contained" icon="arrow-left" size={24} onPress={close} />
+        )}
+      </SafeAreaView>
+    </View>
+  )
 }

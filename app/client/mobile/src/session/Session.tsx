@@ -108,10 +108,13 @@ function ContactTab({ scheme }: { scheme: string }) {
     <NavigationContainer theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
       <ContactStack.Navigator initialRouteName="contacts" screenOptions={{ headerShown: false }}>
         <ContactStack.Screen name="contacts" options={{ headerBackTitleVisible: false }}>
-          {(props) => <Contacts openRegistry={()=>{props.navigation.navigate('registry')}} openContact={(params: ContactParams)=>{console.log('opencon', params)}} />}
+          {(props) => <Contacts openRegistry={()=>{props.navigation.navigate('registry')}} openContact={(params: ContactParams)=>{props.navigation.navigate('profile')}} />}
         </ContactStack.Screen>
         <ContactStack.Screen name="registry" options={{ headerBackTitleVisible: false, ...TransitionPresets.ScaleFromCenterAndroid }}>
-          {(props) => <Registry close={props.navigation.goBack} openContact={(params: ContactParams)=>{console.log('opencon', params)}} />}
+          {(props) => <Registry close={props.navigation.goBack} openContact={(params: ContactParams)=>{props.navigation.navigate('profile')}} />}
+        </ContactStack.Screen>
+        <ContactStack.Screen name="profile" options={{ headerBackTitleVisible: false, ...TransitionPresets.ScaleFromCenterAndroid }}>
+          {(props) => <Profile close={props.navigation.goBack} />}
         </ContactStack.Screen>
       </ContactStack.Navigator>
     </NavigationContainer>
@@ -143,6 +146,7 @@ function ProfileScreen({nav}) {
       id="ProfileDrawer"
       drawerContent={Profile}
       screenOptions={{
+        drawerStyle: {width: 300},
         drawerPosition: 'right',
         drawerType: 'front',
         headerShown: false,
@@ -162,7 +166,7 @@ function RegistryScreen({nav}) {
       id="RegistryDrawer"
       drawerContent={() => (
         <Surface elevation={1}>
-          <Registry openContact={(params: ContactParams)=>{console.log('opencon', params)}} />
+          <Registry openContact={(params: ContactParams)=>{nav.profile.openDrawer()}} />
         </Surface>
       )}
       screenOptions={{
@@ -186,7 +190,7 @@ function ContactsScreen({nav}) {
       id="ContactsDrawer"
       drawerContent={() => (
         <Surface elevation={1}>
-          <Contacts openRegistry={()=>{nav.registry.openDrawer()}} openContact={(params: ContactParams)=>{console.log('opencon', params)}} />
+          <Contacts openRegistry={nav.registry.openDrawer} openContact={(params: ContactParams)=>{nav.profile.openDrawer()}} />
         </Surface>
       )}
       screenOptions={{
