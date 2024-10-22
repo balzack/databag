@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { SafeAreaView, View } from 'react-native';
 import { IconButton, Icon, Divider, Button, TextInput, Surface } from 'react-native-paper';
 import { ContactParams } from '../profile/Profile';
 import {styles} from './Registry.styled';
@@ -10,7 +10,7 @@ export function Registry({ close, openContact }: { close: ()=>void, openContact:
 
   return (
     <View style={styles.registry}>
-      <View style={styles.header}>
+      <SafeAreaView style={styles.header}>
         { close && (
           <IconButton style={styles.close} compact="true"  mode="contained" icon="arrow-left" size={24} onPress={close} />
         )}
@@ -20,7 +20,7 @@ export function Registry({ close, openContact }: { close: ()=>void, openContact:
         <Surface mode="flat" style={styles.inputServer}>
           <TextInput dense={true} style={styles.input} underlineStyle={styles.inputUnderline} mode="outlined" placeholder={state.strings.server} left={<TextInput.Icon style={styles.icon} icon="server" />} value={state.server} onChangeText={value => actions.setServer(value)} />
         </Surface>
-      </View>
+      </SafeAreaView>
       <Divider style={styles.divider} />
     </View>
   )

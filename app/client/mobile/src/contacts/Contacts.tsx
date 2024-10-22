@@ -13,7 +13,7 @@ export function Contacts({ openRegistry, openContact }: { openRegistry: ()=>void
 
   return (
     <View style={styles.contacts}>
-      <View style={styles.header}>
+      <SafeAreaView style={styles.header}>
         <IconButton style={styles.sort} mode="contained" icon={state.sortAsc ? 'sort-descending' : 'sort-ascending'} size={24} onPress={actions.toggleSort} />
 
         <Surface mode="flat" style={styles.inputSurface}>
@@ -21,7 +21,7 @@ export function Contacts({ openRegistry, openContact }: { openRegistry: ()=>void
         </Surface>
 
         <Button icon="account-plus" mode="contained" style={{ borderRadius: 8 }} onPress={openRegistry}>{ state.strings.add }</Button>
-      </View>
+      </SafeAreaView>
       <Divider style={styles.divider} />
 
       { state.filtered.length !== 0 && (
@@ -29,6 +29,7 @@ export function Contacts({ openRegistry, openContact }: { openRegistry: ()=>void
           style={styles.cards}
           data={state.filtered}
           initialNumToRender={32}
+          contentContainerStyle={styles.cardsContainer}
           showsVerticalScrollIndicator={false}
           renderItem={({ item }) => {
             const call = <IconButton key="call" style={styles.icon} mode="contained" icon="phone-outline" />

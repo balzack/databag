@@ -190,9 +190,7 @@ function ContactsScreen({nav}) {
       id="ContactsDrawer"
       drawerContent={() => (
         <Surface elevation={1}>
-          <SafeAreaView>
-            <Contacts openRegistry={()=>{nav.registry.openDrawer()}} openContact={(params: ContactParams)=>{console.log('opencon', params)}} />
-          </SafeAreaView>
+          <Contacts openRegistry={()=>{nav.registry.openDrawer()}} openContact={(params: ContactParams)=>{console.log('opencon', params)}} />
         </Surface>
       )}
       screenOptions={{
