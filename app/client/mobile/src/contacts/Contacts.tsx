@@ -17,7 +17,7 @@ export function Contacts({ openRegistry, openContact }: { openRegistry: ()=>void
         <IconButton style={styles.sort} mode="contained" icon={state.sortAsc ? 'sort-descending' : 'sort-ascending'} size={24} onPress={actions.toggleSort} />
 
         <Surface mode="flat" style={styles.inputSurface}>
-          <TextInput dense={true} style={styles.input} unserlineStyle={styles.inputUnderline} mode="outlined" placeholder={state.strings.contacts} left={<TextInput.Icon style={styles.icon} icon="magnify" />} value={state.filter} onChangeText={value => actions.setFilter(value)} />
+          <TextInput dense={true} style={styles.input} autoCapitalize={false} unserlineStyle={styles.inputUnderline} mode="outlined" placeholder={state.strings.contacts} left={<TextInput.Icon style={styles.icon} icon="magnify" />} value={state.filter} onChangeText={value => actions.setFilter(value)} />
         </Surface>
 
         <Button icon="account-plus" mode="contained" style={{ borderRadius: 8 }} onPress={openRegistry}>{ state.strings.add }</Button>

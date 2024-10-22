@@ -40,8 +40,6 @@ export function Session() {
   const ContactsRoute = () => <ContactTab />;
   const SettingsRoute = () => <Settings showLogout={true} />;
 
-console.log("RENDER: ", state.layout);
-
   return (
     <View style={styles.session}>
       {state.layout !== 'large' && (
@@ -170,7 +168,7 @@ function RegistryScreen({nav}) {
         </Surface>
       )}
       screenOptions={{
-        drawerStyle: {width: '45%'},
+        drawerStyle: {width: 350},
         drawerPosition: 'right',
         drawerType: 'front',
         headerShown: false,
@@ -194,7 +192,7 @@ function ContactsScreen({nav}) {
         </Surface>
       )}
       screenOptions={{
-        drawerStyle: {width: '50%'},
+        drawerStyle: {width: 400},
         drawerPosition: 'right',
         drawerType: 'front',
         headerShown: false,

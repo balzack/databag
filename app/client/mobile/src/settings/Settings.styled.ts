@@ -205,6 +205,9 @@ export const styles = StyleSheet.create({
   label: {
     fontSize: 16,
   },
+  smallLabel: {
+    wordBreak: 'break-all',
+  },
   labelUnset: {
     fontSize: 16,
     fontStyle: 'italic',
@@ -240,7 +243,6 @@ export const styles = StyleSheet.create({
     flexShrink: 1,
     display: 'flex',
     flexDirection: 'row',
-    flexWrap: 'wrap',
     alignItems: 'center',
   },
   radioButtons: {

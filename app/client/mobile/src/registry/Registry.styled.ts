@@ -10,20 +10,20 @@ export const styles = StyleSheet.create({
     height: '100%',
   },
   header: {
+    position: 'relative',
     display: 'flex',
     flexDirection: 'row',
-    gap: 8,
-    paddingTop: 8,
     alignItems: 'center',
-    paddingLeft: 8,
+    justifyContent: 'center',
     paddingRight: 8,
-    paddingBottom: 8,
+    paddingLeft: 8,
     width: '100%',
+    zIndex: 1,
   },
   close: {
     flexShrink: 0,
-    margin: 0,
-    padding: 0,
+    marginRight: 0,
+    marginLeft: 0,
     backgroundColor: 'transparent',
   },
   input: {
@@ -73,4 +73,29 @@ export const styles = StyleSheet.create({
   icon: {
     backgroundColor: 'transparent',
   },
+  none: {
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  cards: {
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
+    overscrollBehavior: 'none',
+  },
+  cardsContainer: {
+    paddingBottom: 64,
+  },
+  card: {
+    width: '100%',
+    height: 48,
+    paddingTop: 8,
+    paddingBottom: 8,
+    paddingRight: 16,
+    paddingLeft: 16,
+    borderBottomWidth: 1,
+  }
 });

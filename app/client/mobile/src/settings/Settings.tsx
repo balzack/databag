@@ -584,7 +584,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                 <Icon size={24} source="clock-outline" />
               </View>
               <View style={styles.radioControl}>
-                <Text style={styles.label}>{state.strings.timeFormat}:</Text>
+                <Text style={styles.smallLabel}>{state.strings.timeFormat}:</Text>
                 <View style={styles.radioButtons}>
                   <RadioButton.Item
                     label={state.strings.timeHalf}
@@ -612,7 +612,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                 <Icon size={24} source="calendar-text-outline" />
               </View>
               <View style={styles.radioControl}>
-                <Text style={styles.label}>{state.strings.dateFormat}:</Text>
+                <Text style={styles.smallLabel}>{state.strings.dateFormat}:</Text>
                 <View style={styles.radioButtons}>
                   <RadioButton.Item
                     label={state.strings.monthStart}
