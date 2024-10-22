@@ -40,6 +40,8 @@ export function Session() {
   const ContactsRoute = () => <ContactTab />;
   const SettingsRoute = () => <Settings showLogout={true} />;
 
+console.log("RENDER: ", state.layout);
+
   return (
     <View style={styles.session}>
       {state.layout !== 'large' && (
@@ -82,7 +84,9 @@ export function Session() {
       {state.layout === 'large' && (
         <NavigationContainer
           theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
-          <DetailsScreen nav={sessionNav} />
+          <View style={styles.container}>
+            <DetailsScreen nav={sessionNav} />
+          </View>
         </NavigationContainer>
       )}
     </View>
@@ -158,8 +162,15 @@ function RegistryScreen({nav}) {
   return (
     <RegistryDrawer.Navigator
       id="RegistryDrawer"
-      drawerContent={() => <Registry openContact={(params: ContactParams)=>{console.log('opencon', params)}} />}
+      drawerContent={() => (
+        <Surface elevation={1}>
+          <SafeAreaView>
+            <Registry openContact={(params: ContactParams)=>{console.log('opencon', params)}} />
+          </SafeAreaView>
+        </Surface>
+      )}
       screenOptions={{
+        drawerStyle: {width: '45%'},
         drawerPosition: 'right',
         drawerType: 'front',
         headerShown: false,
@@ -177,8 +188,15 @@ function ContactsScreen({nav}) {
   return (
     <ContactsDrawer.Navigator
       id="ContactsDrawer"
-      drawerContent={() => <Contacts onRegistry={()=>{console.log('openreg')}} openContact={(params: ContactParams)=>{console.log('opencon', params)}} />}
+      drawerContent={() => (
+        <Surface elevation={1}>
+          <SafeAreaView>
+            <Contacts openRegistry={()=>{nav.registry.openDrawer()}} openContact={(params: ContactParams)=>{console.log('opencon', params)}} />
+          </SafeAreaView>
+        </Surface>
+      )}
       screenOptions={{
+        drawerStyle: {width: '50%'},
         drawerPosition: 'right',
         drawerType: 'front',
         headerShown: false,
@@ -196,9 +214,9 @@ function SettingsScreen({nav}) {
   return (
     <SettingsDrawer.Navigator
       id="SettingsDrawer"
-      drawerContent={Settings}
+      drawerContent={() => (<Settings />)}
       screenOptions={{
-        drawerStyle: {width: '40%'},
+        drawerStyle: {width: '50%'},
         drawerPosition: 'right',
         drawerType: 'front',
         headerShown: false,
@@ -215,7 +233,7 @@ function HomeScreen({nav}) {
     <View style={styles.frame}>
       <View style={styles.left}>
         <Surface elevation={2} mode="flat">
-          <Identity openSettings={nav.settings.openDrawer} />
+          <Identity openSettings={nav.settings.openDrawer} openContacts={nav.contacts.openDrawer} />
         </Surface>
         <Surface style={styles.channels} elevation={1} mode="flat">
           <Text>CHANNELS</Text>

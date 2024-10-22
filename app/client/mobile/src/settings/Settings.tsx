@@ -327,7 +327,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
 
   return (
     <Surface elevation={0}>
-      <ScrollView bounces={false}>
+      <ScrollView bounces={false} style={{ width: '100%', height: '100%' }}>
         <SafeAreaView style={styles.settings}>
           <Text
             style={styles.header}

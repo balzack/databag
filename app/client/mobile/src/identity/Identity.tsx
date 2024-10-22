@@ -14,7 +14,7 @@ import {useIdentity} from './useIdentity.hook';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {BlurView} from '@react-native-community/blur';
 
-export function Identity({openSettings}) {
+export function Identity({openSettings, openContacts}) {
   const [menu, setMenu] = useState(false);
   const {state, actions} = useIdentity();
   const [logout, setLogout] = useState(false);
@@ -94,7 +94,10 @@ export function Identity({openSettings}) {
           />
           <Menu.Item
             leadingIcon="contacts-outline"
-            onPress={() => {}}
+            onPress={() => {
+              setMenu(false);
+              openContacts();
+            }}
             title={state.strings.contacts}
           />
           <Menu.Item
