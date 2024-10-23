@@ -326,7 +326,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
   };
 
   return (
-    <Surface elevation={0}>
+    <View>
       <ScrollView bounces={false} showsVerticalScrollIndicator={false} style={{ width: '100%', height: '100%' }}>
         <View style={styles.settings}>
           <Text
@@ -1427,6 +1427,6 @@ export function Settings({showLogout}: {showLogout: boolean}) {
           </KeyboardAwareScrollView>
         </View>
       </Modal>
-    </Surface>
+    </View>
   );
 }

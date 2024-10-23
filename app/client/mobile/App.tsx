@@ -86,7 +86,7 @@ const databagColors = {
     inverseOnSurface: 'rgb(46, 49, 46)',
     inversePrimary: 'rgb(0, 108, 71)',
     elevation: {
-      level0: 'rgb(25, 28, 26)',
+      level0: 'rgb(0, 0, 0)',
       level1: 'rgb(29, 38, 33)',
       level2: 'rgb(32, 43, 37)',
       level3: 'rgb(35, 49, 41)',

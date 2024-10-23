@@ -2,6 +2,14 @@ import {NativeModules, Platform} from 'react-native';
 
 const Strings = [
   {
+    unknownStatus: 'Unsaved Contact',
+    savedStatus: 'Saved Contact',
+    pendingStatus: 'Unknown Contact Request',
+    connectingStatus: 'Connection Requested',
+    requestedStatus: 'Connection Requested by Contact',
+    connectedStatus: 'Connected Contact',
+    offsyncStatus: 'Offsync Contact',
+
     // settings screen
     languageCode: 'en',
     visibleRegistry: 'Visible in Registry',
@@ -219,6 +227,14 @@ const Strings = [
       'Are you sure you want to disable multi-factor authentication',
   },
   {
+    unknownStatus: 'Contact Inconnu',
+    savedStatus: 'Contact Enregistré',
+    pendingStatus: 'Demande de Contact Inconnue',
+    connectingStatus: 'Demande de Connexion Envoyée',
+    requestedStatus: 'Demande de Connexion par le Contact',
+    connectedStatus: 'Contact Connecté',
+    offsyncStatus: 'Contact Désynchronisé',
+
     languageCode: 'fr',
     visibleRegistry: 'Visible dans le Registre',
     edit: 'Modifier',
@@ -434,6 +450,14 @@ const Strings = [
       "Êtes-vous sûr de vouloir désactiver l'authentification multi-facteurs",
   },
   {
+    unknownStatus: 'Contacto Desconocido',
+    savedStatus: 'Contacto Guardado',
+    pendingStatus: 'Solicitud de Contacto Desconocido',
+    connectingStatus: 'Solicitud de Conexión Enviada',
+    requestedStatus: 'Solicitud de Conexión por el Contacto',
+    connectedStatus: 'Contacto Conectado',
+    offsyncStatus: 'Contacto Fuera de Sincronización',
+
     languageCode: 'es',
     visibleRegistry: 'Visible en el Registro',
     edit: 'Editar',
@@ -648,6 +672,14 @@ const Strings = [
       '¿Estás seguro de que quieres desactivar la autenticación de dos factores?',
   },
   {
+    unknownStatus: 'Unbekannter Kontakt',
+    savedStatus: 'Gespeicherter Kontakt',
+    pendingStatus: 'Unbekannte Kontaktanfrage',
+    connectingStatus: 'Verbindungsanfrage Gesendet',
+    requestedStatus: 'Verbindungsanfrage vom Kontakt',
+    connectedStatus: 'Verbunden Kontakt',
+    offsyncStatus: 'Unsynchronisierter Kontakt',
+
     languageCode: 'de',
     visibleRegistry: 'Sichtbar in der Registrierung',
     edit: 'Bearbeiten',
@@ -863,6 +895,14 @@ const Strings = [
       'Sind Sie sicher, dass Sie die Zwei-Faktor-Authentifizierung deaktivieren möchten?',
   },
   {
+    unknownStatus: 'Contato Desconhecido',
+    savedStatus: 'Contato Salvo',
+    pendingStatus: 'Solicitação de Contato Desconhecido',
+    connectingStatus: 'Solicitação de Conexão Enviada',
+    requestedStatus: 'Solicitação de Conexão pelo Contato',
+    connectedStatus: 'Contato Conectado',
+    offsyncStatus: 'Contato Fora de Sincronização',
+
     languageCode: 'pt',
     visibleRegistry: 'Visível no Registro',
     edit: 'Editar',
@@ -1063,6 +1103,14 @@ const Strings = [
       'Tem certeza de que deseja desativar a autenticação de dois fatores?',
   },
   {
+    unknownStatus: 'Неизвестный Контакт',
+    savedStatus: 'Сохранённый Контакт',
+    pendingStatus: 'Запрос Неизвестного Контакта',
+    connectingStatus: 'Запрос на Подключение Отправлен',
+    requestedStatus: 'Запрос на Подключение от Контакта',
+    connectedStatus: 'Подключённый Контакт',
+    offsyncStatus: 'Несинхронизированный Контакт',
+
     languageCode: 'ru',
     visibleRegistry: 'Видимый в реестре',
     edit: 'Редактировать',
