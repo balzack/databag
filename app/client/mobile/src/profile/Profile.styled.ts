@@ -7,14 +7,13 @@ export const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     width: '100%',
-    height: '100%',
+    paddingBottom: 32,
   },
   body: {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
     width: '100%',
-    height: '100%',
     paddingLeft: 16,
     paddingRight: 16,
   },
@@ -37,6 +36,8 @@ export const styles = StyleSheet.create({
     textOverflow: 'ellipsis',
     overflow: 'hidden',
     paddingTop: 8,
+    paddingLeft: 16,
+    paddingRight: 16,
     flexGrow: 1,
     verticalAlign: 'baseline',
     lineHeight: 22,
@@ -120,7 +121,7 @@ export const styles = StyleSheet.create({
     fontStyle: 'italic',
   },
   status: {
-    flexShrink: 1,
+    flexShrink: 0,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -177,5 +178,26 @@ export const styles = StyleSheet.create({
   },
   surface: {
     padding: 16,
+  },
+  actions: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 12,
+    paddingTop: 16,
+  },
+  action: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },  
+  actionLabel: {
+    fontSize: 12,
+  },
+  actionIcon: {
+    position: 'relative',
+    top: 8,
+    backgroundColor: 'transparent',
+    padding: 0,
+    margin: 0,
   },
 });

@@ -277,9 +277,12 @@ export function Profile({ params, close }: { params: ProfileParams, close?: ()=>
           )}
         </div>
         <div className={classes.divider} />
+        <div className={classes.status}>
+          <Text className={classes[state.statusLabel]}>{ state.strings[state.statusLabel] }</Text>
+        </div>
         { state.statusLabel === 'unknownStatus' && (
-          <div className={classes.actions} onClick={applySave}>
-            <div className={classes.action}>
+          <div className={classes.actions}>
+            <div className={classes.action} onClick={applySave}>
               <ActionIcon variant="subtle" loading={saving}>
                 <IconDeviceFloppy />
               </ActionIcon>
@@ -497,9 +500,6 @@ export function Profile({ params, close }: { params: ProfileParams, close?: ()=>
             </div>
           </div>
         )}
-      </div>
-      <div className={classes.status}>
-        <Text className={classes[state.statusLabel]}>{ state.strings[state.statusLabel] }</Text>
       </div>
     </div>
   );

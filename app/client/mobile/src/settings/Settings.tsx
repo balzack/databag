@@ -26,6 +26,7 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {Colors} from '../constants/Colors';
 import {InputCode} from '../utils/InputCode';
 import Clipboard from '@react-native-clipboard/clipboard';
+import { Confirm } from '../confirm/Confirm';
 
 export function Settings({showLogout}: {showLogout: boolean}) {
   const {state, actions} = useSettings();
@@ -53,6 +54,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
   const [secretCopy, setSecretCopy] = useState(false);
   const [confirmingAuth, setConfirmingAuth] = useState(false);
   const [authMessage, setAuthMessage] = useState('');
+  const [alertParams, setAlertParams] = useState({ title: state.strings.error, prompt: state.strings.tryAgain, cancel: { label: state.strings.close, action: () => {setAlert(false)}}});
 
   const changeLogin = () => {
     actions.setPassword('');
@@ -280,6 +282,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
     if (!savingDetails) {
       setSavingDetails(true);
       try {
+throw new Error('nope');
         await actions.setDetails();
         setDetails(false);
       } catch (err) {
@@ -327,7 +330,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
 
   return (
     <View>
-      <ScrollView bounces={false} showsVerticalScrollIndicator={false} style={{ width: '100%', height: '100%' }}>
+      <ScrollView showsVerticalScrollIndicator={false} style={{ width: '100%', height: '100%' }}>
         <View style={styles.settings}>
           <Text
             style={styles.header}
@@ -638,33 +641,6 @@ export function Settings({showLogout}: {showLogout: boolean}) {
           </View>
         </View>
       </ScrollView>
-      <Modal
-        animationType="fade"
-        transparent={true}
-        visible={alert}
-        supportedOrientations={['portrait', 'landscape']}
-        onRequestClose={() => setAlert(false)}>
-        <View style={styles.modal}>
-          <BlurView
-            style={styles.blur}
-            blurType="dark"
-            blurAmount={2}
-            reducedTransparencyFallbackColor="dark"
-          />
-          <View style={styles.content}>
-            <Surface elevation={1} mode="flat" style={styles.surface}>
-              <Text variant="titleLarge">{state.strings.error}</Text>
-              <Text variant="titleSmall">{state.strings.tryAgain}</Text>
-              <Button
-                mode="text"
-                style={styles.close}
-                onPress={() => setAlert(false)}>
-                {state.strings.close}
-              </Button>
-            </Surface>
-          </View>
-        </View>
-      </Modal>
       <Modal
         animationType="fade"
         transparent={true}
@@ -1427,6 +1403,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
           </KeyboardAwareScrollView>
         </View>
       </Modal>
+      <Confirm show={alert} params={alertParams} />
     </View>
   );
 }

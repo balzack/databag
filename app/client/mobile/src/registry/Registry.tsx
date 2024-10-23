@@ -20,7 +20,7 @@ export function Registry({ close, openContact }: { close: ()=>void, openContact:
           <TextInput dense={true} style={styles.input} autoCapitalize={false} underlineStyle={styles.inputUnderline} mode="outlined" placeholder={state.strings.username} left={<TextInput.Icon style={styles.icon} icon="account" />} value={state.username} onChangeText={value => actions.setUsername(value)} />
         </Surface>
         <Surface mode="flat" style={styles.inputServer}>
-          <TextInput dense={true} style={styles.input} autoCapitalize={false} underlineStyle={styles.inputUnderline} mode="outlined" placeholder={state.strings.server} left={<TextInput.Icon style={styles.icon} icon="server" />} value={state.server} onChangeText={value => actions.setServer(value)} />
+          <TextInput dense={true} style={styles.input} autoCapitalize={false} underlineStyle={styles.inputUnderline} mode="outlined" placeholder={state.strings.node} left={<TextInput.Icon style={styles.icon} icon="server" />} value={state.server} onChangeText={value => actions.setServer(value)} />
         </Surface>
       </SafeAreaView>
       <Divider style={styles.divider} />
