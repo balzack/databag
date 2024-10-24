@@ -86,6 +86,24 @@ export class OfflineStore implements Store {
     this.log = log;
   }
 
+  private async getValues(guid: string, table: string, fields: string[]): Promise<any[]> {
+    return await this.sql.get(`SELECT ${fields.join(', ')} FROM ${table}_${guid}`)
+  }
+
+  private async setValue(guid: string, table: string, fields: string[], value: (string | number | null)[]): Promise<void> {
+    return await this.sql.set(`INSERT INTO ${table}_${guid} (${fields.join(', ')}) VALUES (${fields.map(field => '?').join(', ')})`, value);
+  }
+
+  private parse(value: string): any {
+    try {
+      return JSON.parse(value);
+    }
+    catch (err) {
+      console.log(err);
+    }
+    return {};
+  }
+
   private async getAppValue(guid: string, id: string, unset: any): Promise<any> {
     try {
       const rows = await this.sql.get(`SELECT * FROM app WHERE key='${guid}::${id}';`);
@@ -114,7 +132,7 @@ export class OfflineStore implements Store {
       `CREATE TABLE IF NOT EXISTS channel_topic_${guid} (channel_id text, topic_id text, revision integer, created integer, detail_revision integer, blocked integer, detail text, unsealed_detail text, unique(channel_id, topic_id))`,
     );
     await this.sql.set(
-      `CREATE TABLE IF NOT EXISTS card_${guid} (card_id text, revision integer, detail_revision integer, profile_revision integer, detail text, profile text, notified_view integer, notified_article integer, notified_profile integer, notified_channel integer, offsync integer, blocked integer, unique(card_id))`,
+      `CREATE TABLE IF NOT EXISTS card_${guid} (card_id text, revision integer, detail text, profile text, blocked integer, offsync_profile integer, offsync_article integer, offsync_channel integer, profile_revision, article_revision, channel_revision, unique(card_id))`,
     );
     await this.sql.set(
       `CREATE TABLE IF NOT EXISTS card_channel_${guid} (card_id text, channel_id text, revision integer, detail_revision integer, topic_revision integer, topic_marker integer, sync_revision integer, detail text, unsealed_detail text, summary text, unsealed_summary text, offsync integer, blocked integer, read_revision integer, unique(card_id, channel_id))`,
@@ -122,8 +140,9 @@ export class OfflineStore implements Store {
     await this.sql.set(
       `CREATE TABLE IF NOT EXISTS card_channel_topic_${guid} (card_id text, channel_id text, topic_id text, revision integer, created integer, detail_revision integer, blocked integer, detail text, unsealed_detail text, unique(card_id, channel_id, topic_id))`,
     );
-  }
 
+  }
+ 
   public async init(): Promise<Login | null> {
     await this.sql.set("CREATE TABLE IF NOT EXISTS app (key text, value text, unique(key));");
     return (await this.getAppValue("", "login", null)) as Login | null;
@@ -186,16 +205,39 @@ export class OfflineStore implements Store {
   }
 
   public async getContactRevision(guid: string): Promise<number> {
-    return 0;
+    return (await this.getAppValue(guid, "contact_revision", 0)) as number;
   }
 
-  public async setContactRevision(guid: string, revision: number): Promise<void> {}
+  public async setContactRevision(guid: string, revision: number): Promise<void> {
+    await this.setAppValue(guid, "contact_revision", revision);
+  }
 
   public async getContacts(guid: string): Promise<{ cardId: string; item: CardItem }[]> {
-    return [];
+    const cards = await this.getValues(guid, 'card', ['offsync_profile', 'offsync_article', 'offsync_channel', 'blocked', 'revision', 'card_id', 'profile', 'detail', 'profile_revision', 'article_revision', 'channel_revision']);
+    return cards.map(card => ({
+      cardId: card.card_id,
+      item: {
+        offsyncProfile: card.offsync_profile,
+        offsyncArticle: card.offsync_article,
+        offsyncChannel: card.offsync_channel,
+        blocked: Boolean(card.blocked),
+        revision: card.revision,
+        profile: this.parse(card.profile),
+        detail: this.parse(card.detail),
+        profileRevision: card.profile_revision,
+        articleRevision: card.article_revision,
+        channelRevision: card.channel_revision,
+        resync: false,
+      }
+    }));
   }
 
-  public async addContactCard(guid: string, cardId: string, item: CardItem): Promise<void> {}
+  public async addContactCard(guid: string, cardId: string, item: CardItem): Promise<void> {
+    const fields = ['card_id', 'offsync_profile', 'offsync_article', 'offsync_channel', 'blocked', 'revision', 'profile', 'detail', 'profile_revision', 'article_revision', 'channel_revision'];
+    const { offsyncProfile, offsyncArticle, offsyncChannel, blocked, revision, profile, detail, profileRevision, articleRevision, channelRevision } = item;
+    const value = [cardId, offsyncProfile, offsyncArticle, offsyncChannel, blocked ? 1 : 0, revision, JSON.stringify(profile), JSON.stringify(detail), profileRevision, articleRevision, channelRevision];
+    await this.setValue(guid, 'card', fields, value);
+  }
 
   public async removeContactCard(guid: string, cardId: string): Promise<void> {}
 

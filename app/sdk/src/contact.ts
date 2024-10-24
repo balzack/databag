@@ -109,7 +109,7 @@ export class ContactModule implements Contact {
     // load map of cards
     const cards = await this.store.getContacts(guid);
     cards.forEach(({ cardId, item }) => {
-      const card = setCard(cardId, item);
+      const card = this.setCard(cardId, item);
       this.cardEntries.set(cardId, { item, card });
     });
 
