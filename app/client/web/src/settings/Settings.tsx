@@ -39,6 +39,9 @@ import {
   IconLogin,
   IconCopy,
   IconCheck,
+  IconMessage2Cancel,
+  IconUserCancel,
+  IconFolderCancel,
 } from '@tabler/icons-react'
 import { modals } from '@mantine/modals'
 import { useDisclosure } from '@mantine/hooks'
@@ -486,6 +489,31 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
             </div>
             <Text className={classes.entryLabel} onClick={changeOpen}>
               {state.strings.changeLogin}
+            </Text>
+          </div>
+          <div className={classes.divider} />
+          <div className={classes.entry}>
+            <div className={classes.entryIcon}>
+              <IconUserCancel />
+            </div>
+            <Text className={classes.entryLabel}>
+              {state.strings.blockedContacts}
+            </Text>
+          </div>
+           <div className={classes.entry}>
+            <div className={classes.entryIcon}>
+              <IconFolderCancel />
+            </div>
+            <Text className={classes.entryLabel}>
+              {state.strings.blockedTopics}
+            </Text>
+          </div>
+           <div className={classes.entry}>
+            <div className={classes.entryIcon}>
+              <IconMessage2Cancel />
+            </div>
+            <Text className={classes.entryLabel}>
+              {state.strings.blockedMessages}
             </Text>
           </div>
           <div className={classes.divider} />

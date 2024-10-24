@@ -282,7 +282,6 @@ export function Settings({showLogout}: {showLogout: boolean}) {
     if (!savingDetails) {
       setSavingDetails(true);
       try {
-throw new Error('nope');
         await actions.setDetails();
         setDetails(false);
       } catch (err) {

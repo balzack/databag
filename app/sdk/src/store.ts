@@ -90,8 +90,16 @@ export class OfflineStore implements Store {
     return await this.sql.get(`SELECT ${fields.join(', ')} FROM ${table}_${guid}`)
   }
 
-  private async setValue(guid: string, table: string, fields: string[], value: (string | number | null)[]): Promise<void> {
+  private async addValue(guid: string, table: string, fields: string[], value: (string | number | null)[]): Promise<void> {
     return await this.sql.set(`INSERT INTO ${table}_${guid} (${fields.join(', ')}) VALUES (${fields.map(field => '?').join(', ')})`, value);
+  }
+
+  private async setValue(guid: string, table: string, idField: string, fields: string[], idValue: string | number, value: (string | number | null)[]): Promise<void> {
+    return await this.sql.set(`UPDATE ${table}_${guid} SET ${fields.map(field => `${field}=?`).join(',')} WHERE ${idField}=?`, [ ...value, idValue ]);
+  }
+
+  private async removeValue(guid: string, table: string, idField: string, idValue: string | number): Promise<void> {
+    return await this.sql.set(`DELETE FROM ${table}_${guid} WHERE ${idField}=?`, [idValue]);
   }
 
   private parse(value: string): any {
@@ -236,36 +244,65 @@ export class OfflineStore implements Store {
     const fields = ['card_id', 'offsync_profile', 'offsync_article', 'offsync_channel', 'blocked', 'revision', 'profile', 'detail', 'profile_revision', 'article_revision', 'channel_revision'];
     const { offsyncProfile, offsyncArticle, offsyncChannel, blocked, revision, profile, detail, profileRevision, articleRevision, channelRevision } = item;
     const value = [cardId, offsyncProfile, offsyncArticle, offsyncChannel, blocked ? 1 : 0, revision, JSON.stringify(profile), JSON.stringify(detail), profileRevision, articleRevision, channelRevision];
-    await this.setValue(guid, 'card', fields, value);
+    await this.addValue(guid, 'card', fields, value);
   }
 
-  public async removeContactCard(guid: string, cardId: string): Promise<void> {}
+  public async removeContactCard(guid: string, cardId: string): Promise<void> {
+    await this.removeValue(guid, 'card', 'card_id', cardId);
+  }
 
-  public async setContactCardRevision(guid: string, cardId: string, revision: number): Promise<void> {}
+  public async setContactCardRevision(guid: string, cardId: string, revision: number): Promise<void> {
+    await this.setValue(guid, 'card', 'card_id', ['revision'], cardId, [revision]);
+  }
 
-  public async setContactCardProfile(guid: string, cardId: string, profile: CardProfile): Promise<void> {}
+  public async setContactCardProfile(guid: string, cardId: string, profile: CardProfile): Promise<void> {
+    await this.setValue(guid, 'card', 'card_id', ['profile'], cardId, [JSON.stringify(profile)]);
+  }
 
-  public async setContactCardDetail(guid: string, cardId: string, detail: CardDetail): Promise<void> {}
+  public async setContactCardDetail(guid: string, cardId: string, detail: CardDetail): Promise<void> {
+    await this.setValue(guid, 'card', 'card_id', ['detail'], cardId, [JSON.stringify(detail)]);
+  }
 
-  public async setContactCardBlocked(guid: string, cardId: string, blocked: boolean): Promise<void> {}
+  public async setContactCardBlocked(guid: string, cardId: string, blocked: boolean): Promise<void> {
+    await this.setValue(guid, 'card', 'card_id', ['blocked'], cardId, [blocked ? 1 : 0]);
+  }
 
-  public async setContactCardOffsyncProfile(guid: string, cardId: string, revision: number): Promise<void> {}
+  public async setContactCardOffsyncProfile(guid: string, cardId: string, revision: number): Promise<void> {
+    await this.setValue(guid, 'card', 'card_id', ['offsync_profile'], cardId, [revision]);
+  }
 
-  public async clearContactCardOffsyncProfile(guid: string, cardId: string): Promise<void> {}
+  public async clearContactCardOffsyncProfile(guid: string, cardId: string): Promise<void> {
+    await this.setValue(guid, 'card', 'card_id', ['offsync_profile'], cardId, [null]);
+  }
 
-  public async setContactCardOffsyncArticle(guid: string, cardId: string, revision: number): Promise<void> {}
+  public async setContactCardOffsyncArticle(guid: string, cardId: string, revision: number): Promise<void> {
+    await this.setValue(guid, 'card', 'card_id', ['offsync_article'], cardId, [revision]);
+  }
 
-  public async clearContactCardOffsyncArticle(guid: string, cardId: string): Promise<void> {}
+  public async clearContactCardOffsyncArticle(guid: string, cardId: string): Promise<void> {
+    await this.setValue(guid, 'card', 'card_id', ['offsync_article'], cardId, [null]);
+  }
 
-  public async setContactCardOffsyncChannel(guid: string, cardId: string, revision: number): Promise<void> {}
+  public async setContactCardOffsyncChannel(guid: string, cardId: string, revision: number): Promise<void> {
+    await this.setValue(guid, 'card', 'card_id', ['offsync_channel'], cardId, [revision]);
+  }
 
-  public async clearContactCardOffsyncChannel(guid: string, cardId: string): Promise<void> {}
+  public async clearContactCardOffsyncChannel(guid: string, cardId: string): Promise<void> {
+    await this.setValue(guid, 'card', 'card_id', ['offsync_channel'], cardId, [null]);
+  }
 
-  public async setContactCardProfileRevision(guid: string, cardId: string, revision: number): Promise<void> {}
+  public async setContactCardProfileRevision(guid: string, cardId: string, revision: number): Promise<void> {
+    await this.setValue(guid, 'card', 'card_id', ['profile_revision'], cardId, [revision]);
+  }
 
-  public async setContactCardArticleRevision(guid: string, cardId: string, revision: number): Promise<void> {}
+  public async setContactCardArticleRevision(guid: string, cardId: string, revision: number): Promise<void> {
+    await this.setValue(guid, 'card', 'card_id', ['article_revision'], cardId, [revision]);
+  }
 
-  public async setContactCardChannelRevision(guid: string, cardId: string, revision: number): Promise<void> {}
+  public async setContactCardChannelRevision(guid: string, cardId: string, revision: number): Promise<void> {
+    await this.setValue(guid, 'card', 'card_id', ['channel_revision'], cardId, [revision]);
+  }
+
 
   public async getContactCardArticles(guid: string): Promise<{ cardId: string; articleId: string; item: ArticleItem }[]> {
     return [];

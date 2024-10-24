@@ -14,6 +14,10 @@ export const en = {
   forgotPassword: 'Forgot Password',
   manageTopics: 'Manage Sealing Key',
 
+  blockedContacts: 'Blocked Contacts',
+  blockedTopics: 'Blocked Topics',
+  blockedMessages: 'Blocked Messages',
+
   sealUnlock: 'Unlock sealing key to access end-to-end encrypted messages',
   sealForget: 'Forget sealing key to revoke access of end-to-end encrypted messages for this device only',
   sealDelete: 'Deleting the sealing key will permantently revoke access to all end-to-end encrypted messages from all devices',
@@ -257,6 +261,10 @@ export const fr = {
   accessCode: "Code d'Accès",
   forgotPassword: 'Mot de Passe Oublié',
   manageTopics: 'Gérer la clé de sécurité',
+
+  blockedContacts: 'Contacts Bloqués',
+  blockedTopics: 'Sujets Bloqués',
+  blockedMessages: 'Messages Bloqués',
 
   unknownStatus: 'Contact Inconnu',
   savedStatus: 'Contact Enregistré',
@@ -505,6 +513,10 @@ export const sp = {
   forgotPassword: 'Contraseña Olvidada',
   manageTopics: 'Administrar clave de seguridad',
 
+  blockedContacts: 'Contactos Bloqueados',
+  blockedTopics: 'Temas bloqueados',
+  blockedMessages: 'Mensajes Bloqueados',
+
   unknownStatus: 'Contacto Desconocido',
   savedStatus: 'Contacto Guardado',
   pendingStatus: 'Solicitud de Contacto Desconocido',
@@ -749,6 +761,10 @@ export const pt = {
   accessCode: 'Código de Acesso',
   forgotPassword: 'Senha Esquecida',
   manageTopics: 'Gerenciar Chave de Selagem',
+
+  blockedContacts: 'Contatos Bloqueados',
+  blockedTopics: 'Tópicos Bloqueados',
+  blockedMessages: 'Mensagens Bloqueadas',
 
   unknownStatus: 'Contato Desconhecido',
   savedStatus: 'Contato Salvo',
@@ -1002,6 +1018,10 @@ export const de = {
   requestedStatus: 'Verbindungsanfrage vom Kontakt',
   connectedStatus: 'Verbunden Kontakt',
   offsyncStatus: 'Unsynchronisierter Kontakt',
+ 
+  blockedContacts: 'Blockierte Kontakte',
+  blockedTopics: 'Blockierte Themen',
+  blockedMessages: 'Blockierte Nachrichten',
 
   block: 'Blockieren',
   report: 'Melden',
@@ -1241,6 +1261,10 @@ export const ru = {
   forgotPassword: 'Пароль забыт',
   manageTopics: 'Управление ключом запечатывания',
 
+  blockedContacts: 'Заблокированные контакты',
+  blockedTopics: 'Заблокированные темы',
+  blockedMessages: 'Заблокированные сообщения',
+
   unknownStatus: 'Неизвестный Контакт',
   savedStatus: 'Сохранённый Контакт',
   pendingStatus: 'Запрос Неизвестного Контакта',
@@ -1469,3 +1493,6 @@ export const ru = {
   disablePrompt:
     'Вы уверены, что хотите отключить двухфакторную аутентификацию?',
 }
+
+
+

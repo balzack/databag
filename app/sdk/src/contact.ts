@@ -106,13 +106,6 @@ export class ContactModule implements Contact {
     const { guid } = this;
     this.revision = await this.store.getContactRevision(guid);
 
-    // load map of cards
-    const cards = await this.store.getContacts(guid);
-    cards.forEach(({ cardId, item }) => {
-      const card = this.setCard(cardId, item);
-      this.cardEntries.set(cardId, { item, card });
-    });
-
     // load map of articles
     const articles = await this.store.getContactCardArticles(guid);
     articles.forEach(({ cardId, articleId, item }) => {
@@ -132,6 +125,16 @@ export class ContactModule implements Contact {
       const channel = this.setChannel(cardId, channelId, item);
       this.channelEntries.set(cardId).set(channelId, { item, channel });
     });
+
+    // load map of cards
+    const cards = await this.store.getContacts(guid);
+    cards.forEach(({ cardId, item }) => {
+      const card = this.setCard(cardId, item);
+      this.cardEntries.set(cardId, { item, card });
+      this.emitArticles(cardId);
+      this.emitChannels(cardId);
+    });
+    this.emitCards();
 
     this.unsealAll = true;
     this.syncing = false;
