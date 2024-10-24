@@ -42,7 +42,7 @@ export interface Settings {
   setSeal(password: string): Promise<void>;
   clearSeal(): Promise<void>;
   unlockSeal(password: string): Promise<void>;
-  updaterSeal(password: string): Promise<void>;
+  updateSeal(password: string): Promise<void>;
   forgetSeal(): Promise<void>;
 
   addConfigListener(ev: (config: Config) => void): void;
@@ -65,14 +65,12 @@ export interface Contact {
   confirmCard(cardId: string): Promise<void>;
   connectCard(cardId: string): Promise<void>;
   disconnectCard(cardId: string): Promise<void>;
-  rejectCard(cardId: string): Promise<void>;
+  denyCard(cardId: string): Promise<void>;
   ignoreCard(cardId: string): Promise<void>;
   resyncCard(cardId: string): Promise<void>;
 
   removeArticle(cardId: string, articleId: string): Promise<void>;
   removeChannel(cardId: string, channelId: string): Promise<void>;
-  addTopic(cardId: string, channelId: string, type: string, subject: string, assets: Asset[]): Promise<string>;
-  removeTopic(cardId: string, channelId: string, topicId: string): Promise<void>;
 
   flagCard(cardId: string): Promise<void>;
   flagArticle(cardId: string, articleId: string): Promise<void>;
@@ -83,13 +81,13 @@ export interface Contact {
   getBlockedCards(): Promise<{ cardId: string }[]>;
   getBlockedChannels(): Promise<{ cardId: string; channelId: string }[]>;
   getBlockedArticles(): Promise<{ cardId: string; articleId: string }[]>;
-  setUnreadChannel(cardId: string, channelId: string): Promise<void>;
+  setUnreadChannel(cardId: string, channelId: string, unread: boolean): Promise<void>;
 
   getChannelNotifications(cardId: string, channelId: string): Promise<boolean>;
   setChannelNotifications(cardId: string, channelId: string, enabled: boolean): Promise<void>;
 
   getRegistry(handle: string | null, server: string | null): Promise<Profile[]>;
-  getRegistryImageUrl(server: string, guid: string): string;
+  getRegistryImageUrl(server: string, secure: boolean, guid: string): string;
 
   getCardImageUrl(cardId: string): string;
 
@@ -188,8 +186,6 @@ export interface Stream {
 }
 
 export interface Focus {
-  blur(): void;
-
   addTopic(type: string, message: string, assets: Asset[]): Promise<string>;
   removeTopic(topicId: string): Promise<void>;
   setTopicSubject(topicId: string, subject: string): Promise<void>;

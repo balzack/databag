@@ -19,6 +19,14 @@ export class MockSettingsModule implements Settings {
   public removeConfigListener(ev: (config: Config) => void): void {
     this.emitter.off('config', ev);
   }
+  
+  public addSealListener(ev: (seal: { privateKey: string; publicKey: string } | null) => void): void {
+    this.emitter.on("seal", ev);
+  }
+  
+  public removeSealListener(ev: (seal: { privateKey: string; publicKey: string } | null) => void): void {
+    this.emitter.off("seal", ev);
+  }
 
   public close(): void {
   }
@@ -56,6 +64,9 @@ export class MockSettingsModule implements Settings {
   }
 
   public async unlockSeal(password: string): Promise<void> {
+  }
+
+  public async updateSeal(password: string): Promise<void> {
   }
 
   public async forgetSeal(): Promise<void> {

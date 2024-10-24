@@ -1,6 +1,6 @@
 import { EventEmitter } from 'eventemitter3';
 import type { Contact } from '../src/api';
-import type { Card, Topic, Asset, Tag, Profile, Participant} from '../src/types';
+import type { Card, Channel, Topic, Asset, Tag, Profile, Participant} from '../src/types';
 
 export class MockContactModule implements Contact {
 
@@ -181,7 +181,7 @@ export class MockContactModule implements Contact {
     return [];
   }
 
-  public getRegistryImageUrl(server: string, guid: string): string {
+  public getRegistryImageUrl(server: string, secure: boolean, guid: string): string {
     return '';
   }
 
@@ -200,5 +200,29 @@ export class MockContactModule implements Contact {
   public async removeParticipantAccess(cardId: string, channelId: string, participantId: string): Promise<void> {
   }
 
+  public async denyCard(cardId: string): Promise<void> {
+  }
+
+  public async setBlockedCard(cardId: string, blocked: boolean): Promise<void> {
+  }
+
+  public async setBlockedArticle(cardId: string, articleId: string, blocked: boolean): Promise<void> {
+  }
+
+  public async setBlockedChannel(cardId: string, channelId: string, blocked: boolean): Promise<void> {
+  }
+
+  public async getChannelNotifications(cardId: string, channelId: string): Promise<boolean> {
+    return false;
+  }
+
+  public async setChannelNotifications(cardId: string, channelId: string, enabled: boolean): Promise<void> {
+  }
+
+  public addChannelListener(id: string | null, ev: (arg: { cardId: string; channels: Channel[] }) => void): void {
+  }
+
+  public removeChannelListener(id: string | null, ev: (arg: { cardId: string; channels: Channel[] }) => void): void {
+  }
 }
 

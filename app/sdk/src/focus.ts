@@ -15,9 +15,9 @@ export class FocusModule implements Focus {
   private guid: string;
   private node: string;
   private token: string;
-  private connection: { node: string, token: string} | null;
+  private connection: { node: string, secure: boolean, token: string} | null;
 
-  constructor(log: Logging, store: Store, crypto: Crypto | null, cardId: string | null, channelId: string, guid: string, connection: { node: string, token: string } | null) {
+  constructor(log: Logging, store: Store, crypto: Crypto | null, cardId: string | null, channelId: string, guid: string, connection: { node: string, secure: boolean, token: string } | null) {
     this.cardId = cardId;
     this.channelId = channelId;
     this.log = log;

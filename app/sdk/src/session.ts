@@ -63,7 +63,7 @@ export class SessionModule implements Session {
     this.contact = new ContactModule(log, this.store, this.crypto, guid, token, node, secure, channelTypes, articleTypes);
     this.alias = new AliasModule(log, this.settings, this.store, guid, token, node, secure);
     this.attribute = new AttributeModule(log, this.settings, this.store, guid, token, node, secure);
-    this.content = new ContentModule(log, this.settings, this.store, guid, token, node, secure);
+    this.content = new ContentModule(log, this.settings, this.store, this.crypto, guid, token, node, secure);
     this.stream = new StreamModule(log, this.contact, this.content, this.store, guid);
     this.ring = new RingModule(log);
     this.connection = new Connection(log, token, node, secure);
@@ -157,7 +157,10 @@ export class SessionModule implements Session {
   }
 
   public setFocus(cardId: string | null, channelId: string): Focus {
-    return new FocusModule(this.log, this.identity, this.contact, this.content, this.store, cardId, channelId);
+    if (cardId) {
+      return this.contact.setFocus(cardId, channelId);
+    }
+    return this.content.setFocus(channelId);
   }
 
   public clearFocus(): void {

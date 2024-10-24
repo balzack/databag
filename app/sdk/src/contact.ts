@@ -544,8 +544,10 @@ export class ContactModule implements Contact {
     const entry = this.cardEntries.get(cardId);
     if (entry) {
       const node = entry.item.profile.node;
+      const guid = entry.item.profile.guid;
       const token = entry.item.detail.token;
-      this.focus = new FocusModule(this.log, this.store, this.crypto, cardId, channelId, { node, token });
+      const insecure = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(node);
+      this.focus = new FocusModule(this.log, this.store, this.crypto, cardId, channelId, { node, secure: !insecure, token: `${guid}.${token}` });
     } else {
       this.focus = new FocusModule(this.log, this.store, this.crypto, cardId, channelId, null);
     }
@@ -556,6 +558,7 @@ export class ContactModule implements Contact {
     if (this.focus) {
       await this.focus.close();
     }
+    this.focus = null;
   }
 
 
@@ -697,7 +700,7 @@ export class ContactModule implements Contact {
     }
   }
 
-  public async setBlockedArticle(cardId: string, articleId: string, boolean: blocked): Promise<void> {
+  public async setBlockedArticle(cardId: string, articleId: string, blocked: boolean): Promise<void> {
     const entries = this.articleEntries.get(cardId);
     if (entries) {
       const entry = entries.get(articleId);
@@ -710,7 +713,7 @@ export class ContactModule implements Contact {
     }
   }
 
-  public async setBlockedChannel(cardId: string, channelId: string, boolean: blocked): Promise<void> {
+  public async setBlockedChannel(cardId: string, channelId: string, blocked: boolean): Promise<void> {
     const entries = this.channelEntries.get(cardId);
     if (entries) {
       const entry = entries.get(channelId);

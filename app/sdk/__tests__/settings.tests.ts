@@ -36,39 +36,39 @@ jest.mock('../src/net/fetchUtil', () => {
 
 class TestCrypto implements Crypto {
 
-  public pbkdfSalt() {
+  public async pbkdfSalt() {
     return { saltHex: 'SALT_HEX' }
   }
 
-  public pbkdfKey(saltHex: string, password: string) {
+  public async pbkdfKey(saltHex: string, password: string) {
     return { aesKeyHex: 'AES_KEY_HEX' }
   }
 
-  public aesKey() {
+  public async aesKey() {
     return { aesKeyHex: 'AES_KEY_HEX' };
   }
 
-  public aesIv() {
+  public async aesIv() {
     return { ivHex: 'IV_HEX' };
   }
 
-  public aesEncrypt(data: string, ivHex: string, aesKeyHex: string) {
+  public async aesEncrypt(data: string, ivHex: string, aesKeyHex: string) {
     return { encryptedDataB64: 'ENCRYPTED_DATA_B64' };
   }
 
-  public aesDecrypt(encryptedDataB64: string, ivHex: string, aesKeyHex: string) {
+  public async aesDecrypt(encryptedDataB64: string, ivHex: string, aesKeyHex: string) {
     return { data: 'DATA' }
   }
 
-  public rsaKey() {
+  public async rsaKey() {
     return { publicKeyB64: 'PUBLIC_KEY_B64', privateKeyB64: 'PRIVATE_KEY_B64' };
   }
 
-  public rsaEncrypt(data: string, publicKeyB64: string) {
+  public async rsaEncrypt(data: string, publicKeyB64: string) {
     return { encryptedDataB64: 'ENCRYPTED_DATA_B64' }
   }
 
-  public rsaDecrypt(encryptedDataB64: string, privateKeyB64: string) {
+  public async rsaDecrypt(encryptedDataB64: string, privateKeyB64: string) {
     return { data: 'DATA' }
   }
 }
