@@ -14,6 +14,7 @@ export const en = {
   forgotPassword: 'Forgot Password',
   manageTopics: 'Manage Sealing Key',
 
+  loggingOut: 'Logging Out',
   blockedContacts: 'Blocked Contacts',
   blockedTopics: 'Blocked Topics',
   blockedMessages: 'Blocked Messages',
@@ -262,6 +263,7 @@ export const fr = {
   forgotPassword: 'Mot de Passe Oublié',
   manageTopics: 'Gérer la clé de sécurité',
 
+  loggingOut: 'Déconnexion',
   blockedContacts: 'Contacts Bloqués',
   blockedTopics: 'Sujets Bloqués',
   blockedMessages: 'Messages Bloqués',
@@ -513,6 +515,7 @@ export const sp = {
   forgotPassword: 'Contraseña Olvidada',
   manageTopics: 'Administrar clave de seguridad',
 
+  loggingOut: 'Cerrar Sesión',
   blockedContacts: 'Contactos Bloqueados',
   blockedTopics: 'Temas bloqueados',
   blockedMessages: 'Mensajes Bloqueados',
@@ -762,6 +765,7 @@ export const pt = {
   forgotPassword: 'Senha Esquecida',
   manageTopics: 'Gerenciar Chave de Selagem',
 
+  loggingOut: 'Saindo',
   blockedContacts: 'Contatos Bloqueados',
   blockedTopics: 'Tópicos Bloqueados',
   blockedMessages: 'Mensagens Bloqueadas',
@@ -1019,6 +1023,7 @@ export const de = {
   connectedStatus: 'Verbunden Kontakt',
   offsyncStatus: 'Unsynchronisierter Kontakt',
  
+  loggingOut: 'Abmelden',
   blockedContacts: 'Blockierte Kontakte',
   blockedTopics: 'Blockierte Themen',
   blockedMessages: 'Blockierte Nachrichten',
@@ -1261,6 +1266,7 @@ export const ru = {
   forgotPassword: 'Пароль забыт',
   manageTopics: 'Управление ключом запечатывания',
 
+  loggingOut: 'Выход из системы',
   blockedContacts: 'Заблокированные контакты',
   blockedTopics: 'Заблокированные темы',
   blockedMessages: 'Заблокированные сообщения',
@@ -1493,6 +1499,4 @@ export const ru = {
   disablePrompt:
     'Вы уверены, что хотите отключить двухфакторную аутентификацию?',
 }
-
-
 

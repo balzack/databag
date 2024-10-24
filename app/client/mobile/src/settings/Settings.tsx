@@ -425,7 +425,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                   activeOpacity={1}
                   onPress={() => setRegistry(!state.config.searchable)}>
                   <Text style={styles.controlLabel}>
-                    {state.strings.visibleRegistry}
+                    {state.strings.registry}
                   </Text>
                 </TouchableOpacity>
                 <Switch
@@ -672,7 +672,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                 state.config.sealUnlocked && (
                   <>
                     <Text style={styles.modalDescription}>
-                      {state.strings.sealUnlocked}
+                      {state.strings.sealForget}
                     </Text>
                     {!sealConfig && (
                       <View style={styles.modalControls}>
@@ -694,7 +694,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                           mode="contained"
                           loading={savingSeal}
                           onPress={sealForget}>
-                          {state.strings.disable}
+                          {state.strings.forget}
                         </Button>
                       </View>
                     )}
@@ -703,7 +703,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                         <Button
                           mode="contained"
                           onPress={() => setSealReset(true)}>
-                          {state.strings.update}
+                          {state.strings.resave}
                         </Button>
                         <Button
                           mode="contained"
@@ -731,7 +731,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                 state.config.sealUnlocked && (
                   <>
                     <Text style={styles.modalDescription}>
-                      {state.strings.changePassword}
+                      {state.strings.sealUpdate}
                     </Text>
                     <TextInput
                       style={styles.input}
@@ -799,7 +799,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                         }
                         loading={savingSeal}
                         onPress={sealUpdate}>
-                        {state.strings.update}
+                        {state.strings.save}
                       </Button>
                     </View>
                   </>
@@ -809,7 +809,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                 !state.config.sealUnlocked && (
                   <>
                     <Text style={styles.modalDescription}>
-                      {state.strings.sealLocked}
+                      {state.strings.sealUnlock}
                     </Text>
                     <TextInput
                       style={styles.input}
@@ -897,7 +897,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                     autoComplete="off"
                     autoCorrect={false}
                     value={state.sealDelete}
-                    label={state.strings.typeDelete}
+                    label={state.strings.deleteKey}
                     left={<TextInput.Icon style={styles.icon} icon="lock" />}
                     onChangeText={value => actions.setSealDelete(value)}
                   />
@@ -983,7 +983,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
             style={styles.container}
             contentContainerStyle={styles.content}>
             <Surface elevation={1} mode="flat" style={styles.surface}>
-              <Text style={styles.modalLabel}>{state.strings.editDetails}</Text>
+              <Text style={styles.modalLabel}>{state.strings.profileDetails}</Text>
               <IconButton
                 style={styles.modalClose}
                 icon="close"
