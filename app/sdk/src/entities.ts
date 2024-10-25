@@ -222,6 +222,19 @@ export type ProfileEntity = {
   node: string;
 };
 
+export type AccountEntity = {
+  guid: string;
+  handle: string;
+  name: string;
+  description: string;
+  location: string;
+  imageSet: boolean;
+  revision: number;
+  seal?: string;
+  version: string;
+  node: string;
+};
+
 export const defaultProfileEntity = {
   guid: "",
   handle: "",
