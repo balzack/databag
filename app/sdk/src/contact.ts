@@ -888,7 +888,7 @@ export class ContactModule implements Contact {
         version: entity.version,
         sealSet: Boolean(entity.seal),
         imageUrl: entity.imageSet ? server ? getRegistryImageUrl(server, true, entity.guid) : getRegistryImageUrl(node, secure, entity.guid) : avatar,
-        imageSet: Boolean(entity.image),
+        imageSet: entity.imageSet,
       };
     });
   }
