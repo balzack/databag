@@ -135,11 +135,11 @@ export class MockContentModule implements Content {
   public async clearBlockTag(channelId: string, topicId: string, tagId: string): Promise<void> {
   }
 
-  public async getBlockedTopics(): Promise<{ channelId: string, topicId: string }[]> {
+  public async getBlockedTopics(): Promise<Topic[]> {
     return [];
   }
 
-  public async getBlockedTags(): Promise<{ channelId: string, topicId: string, tagId: string }[]> {
+  public async getBlockedTags(): Promise<Tag[]> {
     return [];
   }
 

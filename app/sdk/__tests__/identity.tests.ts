@@ -36,7 +36,7 @@ class TestStore extends NoStore {
   }
 }
 
-test('allocates session correctly', async () => {
+test('identity module works', async () => {
   let profile: Profile | null = null;
   const log = new ConsoleLogging();
   const store = new TestStore();

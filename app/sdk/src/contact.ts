@@ -1,18 +1,18 @@
 import { EventEmitter } from 'eventemitter3';
-import type { Contact, Logging, Focus } from './api';
-import type { FocusModule } from './focus';
-import type { Card, Topic, Asset, Tag, Profile, Participant } from './types';
+import type { Contact, Focus } from './api';
+import { Logging } from './logging';
+import { FocusModule } from './focus';
+import type { Card, Channel, Article, Topic, Asset, Tag, Profile, Participant } from './types';
 import { type CardEntity, avatar } from './entities';
 import type {
-  ArticleRevision,
   ArticleDetail,
-  ChannelRevision,
   ChannelSummary,
   ChannelDetail,
-  CardRevision,
-  CardNotification,
   CardProfile,
   CardDetail,
+  CardItem,
+  ChannelItem,
+  ArticleItem,
 } from './items';
 import { defaultCardItem, defaultChannelItem } from './items';
 import { Store } from './store';
@@ -53,14 +53,14 @@ export class ContactModule implements Contact {
   private node: string;
   private secure: boolean;
   private emitter: EventEmitter;
-  private articleTypes: stirng[];
+  private articleTypes: string[];
   private channelTypes: string[];
   private seal: { privateKey: string; publicKey: string } | null;
   private unsealAll: boolean;
   private resync: boolean;
   private focus: FocusModule | null;
 
-  private cryptp: Crypto | null;
+  private crypto: Crypto | null;
   private store: Store;
   private revision: number;
   private nextRevision: number | null;
@@ -76,7 +76,7 @@ export class ContactModule implements Contact {
   // view of channels
   private channelEntries: Map<string, Map<string, { item: ChannelItem; channel: Channel }>>;
 
-  constructor(log: Logging, store: Store, crypto: Crypto | null, guid: string, token: string, node: string, secure: boolean, articleTypes, channelTypes) {
+  constructor(log: Logging, store: Store, crypto: Crypto | null, guid: string, token: string, node: string, secure: boolean, articleTypes: string[], channelTypes: string[]) {
     this.guid = guid;
     this.token = token;
     this.node = node;
@@ -90,13 +90,14 @@ export class ContactModule implements Contact {
     this.unsealAll = false;
     this.resync = false;
     this.focus = null;
+    this.seal = null;
 
     this.cardEntries = new Map<string, { item: CardItem; card: Card }>();
     this.articleEntries = new Map<string, Map<string, { item: ArticleItem; article: Article }>>();
     this.channelEntries = new Map<string, Map<string, { item: ChannelItem; channel: Channel }>>();
 
     this.revision = 0;
-    this.sycning = true;
+    this.syncing = true;
     this.closing = false;
     this.nextRevision = null;
     this.init();
@@ -109,21 +110,31 @@ export class ContactModule implements Contact {
     // load map of articles
     const articles = await this.store.getContactCardArticles(guid);
     articles.forEach(({ cardId, articleId, item }) => {
-      if (!this.articleEntries.has(cardId)) {
-        this.articleEntries.set(cardId, new Map<string, Map<string, { item: ArticleItem; article: Article }>>());
+      const articles = this.articleEntries.get(cardId);
+      const article = this.setArticle(cardId, articleId, item);
+      if (!articles) {
+        const entries = new Map<string, { item: ArticleItem, article: Article }>();
+        this.articleEntries.set(cardId, entries);
+        entries.set(articleId, { item, article });
       }
-      const article = setArticle(cardId, articleId, item);
-      this.articleEntries.set(cardId).set(articleId, { item, article });
+      else {
+        articles.set(articleId, { item, article });
+      }
     });
 
     // load map of channels
     const channels = await this.store.getContactCardChannels(guid);
     channels.forEach(({ cardId, channelId, item }) => {
-      if (!this.channelEntries.has(cardId)) {
-        this.channelEntries.set(cardId, new Map<string, Map<string, { item: ChannelItem; channel: Channel }>>());
+      const channels = this.channelEntries.get(cardId);
+      const channel = this.setChannel(cardId, channelId, item)
+      if (!channels) {
+        const entries = new Map<string, { item: ChannelItem, channel: Channel }>();
+        this.channelEntries.set(cardId, entries);
+        entries.set(channelId, { item, channel });
       }
-      const channel = this.setChannel(cardId, channelId, item);
-      this.channelEntries.set(cardId).set(channelId, { item, channel });
+      else { 
+        channels.set(channelId, { item, channel });
+      }
     });
 
     // load map of cards
@@ -146,7 +157,7 @@ export class ContactModule implements Contact {
     await this.sync();
   }
 
-  public async close(): void {
+  public async close() {
     this.closing = true;
     while (this.syncing) {
       await new Promise((r) => setTimeout(r, CLOSE_POLL_MS));
@@ -179,10 +190,10 @@ export class ContactModule implements Contact {
                   const { profile, detail, profileRevision, offsyncProfile } = value.item;
                   await this.syncProfile(key, profile.node, profile.guid, detail.token, profileRevision);
                   value.item.profileRevision = offsyncProfile;
-                  await this.store.setContactCardProfileRevision(guid, value.key, profileRevision);
+                  await this.store.setContactCardProfileRevision(guid, key, profileRevision);
                   value.item.offsyncProfile = null;
-                  await this.store.clearContactCardOffsyncProfile(guid, value.key);
-                  entry.card = this.setCard(id, entry.item);
+                  await this.store.clearContactCardOffsyncProfile(guid, key);
+                  entry.value.card = this.setCard(key, entry.value.item);
                   this.emitCards();
                 } catch (err) {
                   this.log.warn(err);
@@ -190,13 +201,13 @@ export class ContactModule implements Contact {
               }
               if (value.item.offsyncArticle) {
                 try {
-                  const { profile, detail, articleRevision, offsyncAritcle } = value.item;
+                  const { profile, detail, articleRevision, offsyncArticle } = value.item;
                   await this.syncArticles(key, profile.node, profile.guid, detail.token, articleRevision);
                   value.item.articleRevision = offsyncArticle;
-                  await this.store.setContactCardArticleRevision(guid, value.key, articleRevision);
+                  await this.store.setContactCardArticleRevision(guid, key, articleRevision);
                   value.item.offsyncArticle = null;
-                  await this.store.clearContactCardOffsyncArticle(guid, value.key);
-                  entry.card = this.setCard(key, entry.item);
+                  await this.store.clearContactCardOffsyncArticle(guid, key);
+                  entry.value.card = this.setCard(key, entry.value.item);
                   this.emitCards();
                 } catch (err) {
                   this.log.warn(err);
@@ -207,10 +218,10 @@ export class ContactModule implements Contact {
                   const { profile, detail, channelRevision, offsyncChannel } = value.item;
                   await this.syncChannels(key, { guid: profile.guid, node: profile.node, token: detail.token }, channelRevision);
                   value.item.channelRevision = offsyncChannel;
-                  await this.store.setContactCardChannelRevision(guid, value.key, value.item.channelRevision);
+                  await this.store.setContactCardChannelRevision(guid, key, value.item.channelRevision);
                   value.item.offsyncChannel = null;
-                  await this.store.clearContactCardOffsyncChannel(guid, value.key);
-                  entry.card = this.setCard(key, entry.item);
+                  await this.store.clearContactCardOffsyncChannel(guid, key);
+                  entry.value.card = this.setCard(key, entry.value.item);
                   this.emitCards();
                 } catch (err) {
                   this.log.warn(err);
@@ -386,7 +397,7 @@ export class ContactModule implements Contact {
     const insecure = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(server);
   }
 
-  private async syncChannels(cardId: string, card: { guid; node; token }, revision: number): Promise<void> {
+  private async syncChannels(cardId: string, card: { guid: string, node: string, token: string }, revision: number): Promise<void> {
     const { guid, node, secure, token, channelTypes } = this;
     const server = card.node ? card.node : node;
     const insecure = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(server);
@@ -400,7 +411,7 @@ export class ContactModule implements Contact {
         const entry = await this.getChannelEntry(entries, cardId, id);
 
         if (detailRevision !== entry.item.detail.revision) {
-          const detail = channelDetail ? channelDetail : await getContactChannelDetail(server, !insecure, id);
+          const detail = channelDetail ? channelDetail : await getContactChannelDetail(server, !insecure, card.guid, card.token, id);
           entry.item.detail = {
             revision: detailRevision,
             sealed: detail.dataType === 'sealed',
@@ -422,7 +433,7 @@ export class ContactModule implements Contact {
         }
 
         if (topicRevision !== entry.item.summary.revision) {
-          const summary = channelSummary ? channelSummary : await getContactChannelSummary(server, !insecure, id);
+          const summary = channelSummary ? channelSummary : await getContactChannelSummary(server, !insecure, card.guid, card.token, id);
           entry.item.summary = {
             revision: topicRevision,
             guid: summary.lastTopic.guid,
@@ -441,14 +452,14 @@ export class ContactModule implements Contact {
 
         await this.store.setContactCardChannelTopicRemoteRevision(guid, cardId, id, topicRevision);
         if (this.focus) {
-          await this.focus.setRevision(cardId, id, card, topicRevision);
+          await this.focus.setRevision(cardId, id, topicRevision);
         }
       } else {
         const channels = this.getChannelEntries(cardId);
         channels.delete(id);
         await this.store.removeContactCardChannel(guid, cardId, id);
         if (this.focus) {
-          await this.focus.disconnect(chardId, id);
+          await this.focus.disconnect(cardId, id);
         }
       }
     }
@@ -537,7 +548,7 @@ export class ContactModule implements Contact {
 
 
 
-  public async setFocus(cardId: string, channelId: string): Focus {
+  public async setFocus(cardId: string, channelId: string): Promise<Focus> {
     if (this.focus) {
       await this.focus.close();
     }
@@ -547,9 +558,9 @@ export class ContactModule implements Contact {
       const guid = entry.item.profile.guid;
       const token = entry.item.detail.token;
       const insecure = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(node);
-      this.focus = new FocusModule(this.log, this.store, this.crypto, cardId, channelId, { node, secure: !insecure, token: `${guid}.${token}` });
+      this.focus = new FocusModule(this.log, this.store, this.crypto, cardId, channelId, this.guid, { node, secure: !insecure, token: `${guid}.${token}` });
     } else {
-      this.focus = new FocusModule(this.log, this.store, this.crypto, cardId, channelId, null);
+      this.focus = new FocusModule(this.log, this.store, this.crypto, cardId, channelId, this.guid, null);
     }
     return this.focus;
   }
@@ -674,27 +685,31 @@ export class ContactModule implements Contact {
       const cardChannels = Array.from(card.values())
         .filter((channel) => channel.item.blocked)
         .map((entry) => entry.channel);
-      channels.push([...cardChannels]);
+      cardChannels.forEach(channel => {
+        channels.push(channel);
+      });
     });
     return channels;
   }
 
   public async getBlockedArticles(): Promise<Article[]> {
-    const channels: Channel[] = [];
-    this.channelEntries.forEach((card) => {
-      const cardChannels = Array.from(card.values())
-        .filter((channel) => channel.item.blocked)
-        .map((entry) => entry.channel);
-      channels.push([...cardChannels]);
+    const articles: Article[] = [];
+    this.articleEntries.forEach((card) => {
+      const cardArticles = Array.from(card.values())
+        .filter((article) => article.item.blocked)
+        .map((entry) => entry.article);
+      cardArticles.forEach(article => {
+        articles.push(article);
+      });
     });
-    return channels;
+    return articles;
   }
 
   public async setBlockedCard(cardId: string, blocked: boolean): Promise<void> {
     const entry = this.cardEntries.get(cardId);
     if (entry) {
       entry.item.blocked = blocked;
-      entry.item.card = this.setCard(cardId, entry.item);
+      entry.card = this.setCard(cardId, entry.item);
       await this.store.setContactCardBlocked(this.guid, cardId, blocked);
       this.emitCards();
     }
@@ -706,7 +721,7 @@ export class ContactModule implements Contact {
       const entry = entries.get(articleId);
       if (entry) {
         entry.item.blocked = blocked;
-        entry.item.article = this.setArticle(cardId, articleId, entry.item);
+        entry.article = this.setArticle(cardId, articleId, entry.item);
         await this.store.setContactCardArticleBlocked(this.guid, cardId, articleId, blocked);
         this.emitArticles(cardId);
       }
@@ -719,7 +734,7 @@ export class ContactModule implements Contact {
       const entry = entries.get(channelId);
       if (entry) {
         entry.item.blocked = blocked;
-        entry.item.channel = this.setChannel(cardId, channelId, entry.item);
+        entry.channel = this.setChannel(cardId, channelId, entry.item);
         await this.store.setContactCardChannelBlocked(this.guid, cardId, channelId, blocked);
         this.emitChannels(cardId);
       }
@@ -742,7 +757,7 @@ export class ContactModule implements Contact {
     if (entry) {
       const server = entry.item.profile.node ? entry.item.profile.node : this.node;
       const insecure = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(server);
-      await addFlag(server, !insecure, entry.item.profile.guid, { article: articleId });
+      await addFlag(server, !insecure, entry.item.profile.guid, { articleId });
     }
   }
 
@@ -751,7 +766,7 @@ export class ContactModule implements Contact {
     if (entry) {
       const server = entry.item.profile.node ? entry.item.profile.node : this.node;
       const insecure = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(server);
-      await addFlag(server, !insecure, entry.item.profile.guid, { channel: channelId });
+      await addFlag(server, !insecure, entry.item.profile.guid, { channelId });
     }
   }
 
@@ -763,7 +778,7 @@ export class ContactModule implements Contact {
       const entry = entries.get(channelId);
       if (entry) {
         entry.item.unread = unread;
-        entry.item.channel = this.setChannel(cardId, channelId, entry.item);
+        entry.channel = this.setChannel(cardId, channelId, entry.item);
         await this.store.setContactCardChannelUnread(this.guid, cardId, channelId, unread);
         this.emitChannels(cardId);
       }
@@ -777,7 +792,7 @@ export class ContactModule implements Contact {
     if (entry) {
       const server = entry.item.profile.node ? entry.item.profile.node : this.node;
       const insecure = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(server);
-      return await getConcatChannelNotifications(server, !insecure, entry.item.profile.guid, entry.item.detail.token, channelId);
+      return await getContactChannelNotifications(server, !insecure, entry.item.profile.guid, entry.item.detail.token, channelId);
     }
     return false;
   }
@@ -787,7 +802,7 @@ export class ContactModule implements Contact {
     if (entry) {
       const server = entry.item.profile.node ? entry.item.profile.node : this.node;
       const insecure = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(server);
-      await setConcatChannelNotifications(server, !insecure, entry.item.profile.guid, entry.item.detail.token, channelId, enabled);
+      await setContactChannelNotifications(server, !insecure, entry.item.profile.guid, entry.item.detail.token, channelId, enabled);
     }
   }
 
@@ -807,8 +822,8 @@ export class ContactModule implements Contact {
         node: entity.node,
         version: entity.version,
         sealSet: Boolean(entity.seal),
-        imageUrl: entity.imageSet ? server ? getRegistryImageUrl(server, true, entity.guid) : getRegistryImageUrl(node, secure, entity.guid) : avatar,
-        imageSet: entity.imageSet,
+        imageUrl: entity.image ? server ? getRegistryImageUrl(server, true, entity.guid) : getRegistryImageUrl(node, secure, entity.guid) : avatar,
+        imageSet: Boolean(entity.image),
       };
     });
   }
@@ -844,7 +859,8 @@ export class ContactModule implements Contact {
       location: profile.location,
       imageUrl: profile.imageSet ? getCardImageUrl(node, secure, token, cardId, item.profile.revision) : avatar,
       imageSet: profile.imageSet,
-      node: profile.node
+      node: profile.node,
+      version: profile.version,
     };
   }
 
@@ -857,7 +873,7 @@ export class ContactModule implements Contact {
       sealed: detail.sealed,
       blocked: item.blocked,
       dataType: detail.dataType,
-      articleData,
+      data: articleData,
       created: detail.created,
       updated: detail.updated,
     };
@@ -892,7 +908,7 @@ export class ContactModule implements Contact {
       enableAudio: detail.enableAudio,
       enableVideo: detail.enableVideo,
       enableBinary: detail.enableBinary,
-      members: detail.members,
+      members: detail.members.map(guid => ({ guid })),
     };
   }
 
@@ -905,8 +921,8 @@ export class ContactModule implements Contact {
   }
 
   private async getChannelKey(seals: [{ publicKey: string; sealedKey: string }]): Promise<string | null> {
-    const seal = seals.find(({ publicKey }) => publicKey === this.seal.publicKey);
-    if (seal) {
+    const seal = seals.find(({ publicKey }) => (this.seal && publicKey === this.seal.publicKey));
+    if (seal && this.crypto && this.seal) {
       const key = await this.crypto.rsaDecrypt(seal.sealedKey, this.seal.privateKey);
       return key.data;
     }

@@ -43,12 +43,13 @@ export type Channel = {
     guid: string;
     sealed: boolean;
     dataType: string;
-    data: string;
+    data: any;
     created: number;
     updated: number;
     status: string;
     transform: string;
   };
+  blocked: boolean;
   unread: boolean;
   sealed: boolean;
   dataType: string;
@@ -106,7 +107,7 @@ export type Tag = {
   unsealed: boolean;
   guid: string;
   dataType: string;
-  data: string;
+  data: any;
   created: number;
   updated: number;
   sortOrder: number;
@@ -129,10 +130,12 @@ export type Group = {
 };
 
 export type Article = {
+  cardId: string;
   articleId: string;
+  blocked: boolean;
   sealed: boolean;
   dataType: string;
-  data?: string;
+  data: any;
   created: number;
   updated: number;
   contacts?: {

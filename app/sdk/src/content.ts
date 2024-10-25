@@ -92,11 +92,11 @@ export class ContentModule implements Content {
 
   public async clearBlockTag(channelId: string, topicId: string, tagId: string): Promise<void> {}
 
-  public async getBlockedTopics(): Promise<{ channelId: string; topicId: string }[]> {
+  public async getBlockedTopics(): Promise<Topic[]> {
     return [];
   }
 
-  public async getBlockedTags(): Promise<{ channelId: string; topicId: string; tagId: string }[]> {
+  public async getBlockedTags(): Promise<Tag[]> {
     return [];
   }
 
@@ -152,7 +152,7 @@ export class ContentModule implements Content {
 
   public async clearUnreadChannel(channelId: string): Promise<void> {}
 
-  public async setFocus(chanenlId: string): Focus {
+  public async setFocus(chanenlId: string): Promise<Focus> {
     const { node, secure, token } = this;
     this.focus = new FocusModule(this.log, this.store, this.crypto, null, channelId, { node, secure, token });
     return this.focus;

@@ -10,8 +10,8 @@ export interface Session {
   getStream(): Stream;
   getRing(): Ring;
 
-  setFocus(cardId: string | null, channelId: string): Focus;
-  clearFocus(): void;
+  setFocus(cardId: string | null, channelId: string): Promise<Focus>;
+  clearFocus(): Promise<void>;
 
   addStatusListener(ev: (status: string) => void): void;
   removeStatusListener(ev: (status: string) => void): void;
@@ -78,9 +78,9 @@ export interface Contact {
   setBlockedCard(cardId: string, blocked: boolean): Promise<void>;
   setBlockedArticle(cardId: string, articleId: string, blocked: boolean): Promise<void>;
   setBlockedChannel(cardId: string, channelId: string, blocked: boolean): Promise<void>;
-  getBlockedCards(): Promise<{ cardId: string }[]>;
-  getBlockedChannels(): Promise<{ cardId: string; channelId: string }[]>;
-  getBlockedArticles(): Promise<{ cardId: string; articleId: string }[]>;
+  getBlockedCards(): Promise<Card[]>;
+  getBlockedChannels(): Promise<Channel[]>;
+  getBlockedArticles(): Promise<Article[]>;
   setUnreadChannel(cardId: string, channelId: string, unread: boolean): Promise<void>;
 
   getChannelNotifications(cardId: string, channelId: string): Promise<boolean>;
@@ -147,8 +147,8 @@ export interface Content {
   setBlockTag(channelId: string, topicId: string, tagId: string): Promise<void>;
   clearBlockTopic(channelId: string, topicId: string): Promise<void>;
   clearBlockTag(channelId: string, topicId: string, tagId: string): Promise<void>;
-  getBlockedTopics(): Promise<{ channelId: string; topicId: string }[]>;
-  getBlockedTags(): Promise<{ channelId: string; topicId: string; tagId: string }[]>;
+  getBlockedTopics(): Promise<Topic[]>;
+  getBlockedTags(): Promise<Tag[]>;
 
   enableNotifications(channelId: string, memberId: string): Promise<void>;
   disableNotifications(channelId: string, memberId: string): Promise<void>;

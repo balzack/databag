@@ -1,6 +1,6 @@
 import { EventEmitter } from 'eventemitter3';
 import type { Contact } from '../src/api';
-import type { Card, Channel, Topic, Asset, Tag, Profile, Participant} from '../src/types';
+import type { Card, Channel, Article, Topic, Asset, Tag, Profile, Participant} from '../src/types';
 
 export class MockContactModule implements Contact {
 
@@ -97,23 +97,23 @@ export class MockContactModule implements Contact {
   public async clearBlockTag(cardId: string, channelId: string, topicId: string, tagId: string): Promise<void> {
   }
 
-  public async getBlockedCards(): Promise<{ cardId: string }[]> {
+  public async getBlockedCards(): Promise<Card[]> {
     return [];
   }
 
-  public async getBlockedChannels(): Promise<{ cardId: string, channelId: string }[]> {
+  public async getBlockedChannels(): Promise<Channel[]> {
     return [];
   }
 
-  public async getBlockedTopics(): Promise<{ cardId: string, channelId: string, topicId: string }[]> {
+  public async getBlockedTopics(): Promise<Topic[]> {
     return [];
   }
 
-  public async getBlockedTags(): Promise<{ cardId: string, channelId: string, topicId: string, tagId: string }[]> {
+  public async getBlockedTags(): Promise<Tag[]> {
     return [];
   }
 
-  public async getBlockedArticles(): Promise<{ cardId: string, articleId: string }[]> {
+  public async getBlockedArticles(): Promise<Article[]> {
     return [];
   }
 

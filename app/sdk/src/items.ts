@@ -14,6 +14,7 @@ export type CardProfile = {
   location: string;
   imageSet: boolean;
   node: string;
+  version: string;
   seal: string;
 };
 
@@ -91,6 +92,7 @@ export const defaultCardItem = {
     location: "",
     imageSet: false,
     node: "",
+    version: "",
     seal: "",
   },
   detail: {
@@ -107,7 +109,7 @@ export const defaultCardItem = {
 export type ArticleItem = {
   blocked: boolean;
   detail: ArticleDetail;
-  unsealedData: string | null;
+  unsealedDetail: string | null;
 };
 
 export type ChannelItem = {

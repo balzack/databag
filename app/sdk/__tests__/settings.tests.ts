@@ -79,7 +79,7 @@ class TestStore extends NoStore {
   }
 }
 
-test('allocates session correctly', async () => {
+test('settings module works', async () => {
   let config: Config | null = null;
   const log = new ConsoleLogging();
   const store = new TestStore();
