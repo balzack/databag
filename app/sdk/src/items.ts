@@ -66,8 +66,6 @@ export type CardItem = {
   offsyncProfile: number | null;
   offsyncArticle: number | null;
   offsyncChannel: number | null;
-  resync: boolean;
-  blocked: boolean;
   revision: number;
   profile: CardProfile;
   detail: CardDetail;
@@ -80,8 +78,6 @@ export const defaultCardItem = {
   offsyncProfile: null,
   offsyncArticle: null,
   offsyncChannel: null,
-  resync: false,
-  blocked: false,
   revision: 0,
   profile: {
     revision: 0,
@@ -107,14 +103,11 @@ export const defaultCardItem = {
 };
 
 export type ArticleItem = {
-  blocked: boolean;
   detail: ArticleDetail;
   unsealedDetail: string | null;
 };
 
 export type ChannelItem = {
-  unread: boolean;
-  blocked: boolean;
   summary: ChannelSummary;
   detail: ChannelDetail;
   channelKey: string | null;
@@ -123,8 +116,6 @@ export type ChannelItem = {
 };
 
 export const defaultChannelItem = {
-  unread: false,
-  blocked: false,
   summary: {
     revision: 0,
     sealed: false,

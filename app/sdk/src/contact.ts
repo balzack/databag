@@ -57,7 +57,6 @@ export class ContactModule implements Contact {
   private channelTypes: string[];
   private seal: { privateKey: string; publicKey: string } | null;
   private unsealAll: boolean;
-  private resync: boolean;
   private focus: FocusModule | null;
 
   private crypto: Crypto | null;
@@ -66,6 +65,12 @@ export class ContactModule implements Contact {
   private nextRevision: number | null;
   private syncing: boolean;
   private closing: boolean;
+
+  // set of markers
+  private markers: Set<string>;
+
+  // set of cards to resync
+  private resync: Set<string>;
 
   // view of cards
   private cardEntries: Map<string, { item: CardItem; card: Card }>;
@@ -88,13 +93,14 @@ export class ContactModule implements Contact {
     this.articleTypes = articleTypes;
     this.channelTypes = channelTypes;
     this.unsealAll = false;
-    this.resync = false;
     this.focus = null;
     this.seal = null;
 
     this.cardEntries = new Map<string, { item: CardItem; card: Card }>();
     this.articleEntries = new Map<string, Map<string, { item: ArticleItem; article: Article }>>();
     this.channelEntries = new Map<string, Map<string, { item: ChannelItem; channel: Channel }>>();
+    this.markers = new Set<string>();
+    this.resync = new Set<string>();
 
     this.revision = 0;
     this.syncing = true;
@@ -106,6 +112,11 @@ export class ContactModule implements Contact {
   private async init() {
     const { guid } = this;
     this.revision = await this.store.getContactRevision(guid);
+    
+    const values = await this.store.getMarkers(guid);
+    values.forEach(value => {
+      this.markers.add(value);
+    });
 
     // load map of articles
     const articles = await this.store.getContactCardArticles(guid);
@@ -164,12 +175,73 @@ export class ContactModule implements Contact {
     }
   }
 
+  private isMarked(marker: string, cardId: string | null, channelId: string | null, topicId: string | null, tagId: string | null): boolean {
+    const value = `${marker}::${cardId}::${channelId}::${topicId}::${tagId}`
+    return this.markers.has(value);
+  }
+
+  private async setMarker(marker: string, cardId: string | null, channelId: string | null, topicId: string | null, tagId: string | null) {
+    const value = `${marker}::${cardId}::${channelId}::${topicId}::${tagId}`
+    this.markers.add(value);
+    await this.store.setMarker(this.guid, value);
+  }
+
+  private async clearMarker(marker: string, cardId: string | null, channelId: string | null, topicId: string | null, tagId: string | null) {
+    const value = `${marker}::${cardId}::${channelId}::${topicId}::${tagId}`
+    this.markers.delete(value);
+    await this.store.clearMarker(this.guid, value); 
+  }
+
+  private isCardBlocked(cardId: string): boolean {
+    return this.isMarked('blocked', cardId, null, null, null);
+  }
+
+  private async setCardBlocked(cardId: string) {
+    await this.setMarker('blocked', cardId, null, null, null);
+  }
+
+  private async clearCardBlocked(cardId: string) {
+    await this.clearMarker('blocked', cardId, null, null, null);
+  }
+
+  private isChannelBlocked(cardId: string, channelId: string): boolean {
+    return this.isMarked('blocked', cardId, channelId, null, null);
+  }
+
+  private async setChannelBlocked(cardId: string, channelId: string) {
+    await this.setMarker('blocked', cardId, channelId, null, null);
+  }
+
+  private async clearChannelBlocked(cardId: string, channelId: string) {
+    await this.clearMarker('blocked', cardId, channelId, null, null);
+  } 
+
+  private isArticleBlocked(cardId: string, articleId: string): boolean {
+    return this.isMarked('blocked', cardId, articleId, null, null);
+  }
+
+  private async setArticleBlocked(cardId: string, articleId: string) {
+    await this.setMarker('blocked', cardId, articleId, null, null);
+  }
+
+  private async clearArticleBlocked(cardId: string, articleId: string) {
+    await this.clearMarker('blocked', cardId, articleId, null, null);
+  }
+
+  private isChannelUnread(cardId: string, channelId: string): boolean {
+    return this.isMarked('unread', cardId, channelId, null, null);
+  }
+
+  private async setChannelUnread(cardId: string, channelId: string) {
+    await this.setMarker('unread', cardId, channelId, null, null);
+  }
+
+  private async clearChannelUnread(cardId: string, channelId: string) {
+    await this.clearMarker('unread', cardId, channelId, null, null);
+  }
+
   public async resyncCard(cardId: string): Promise<void> {
-    const entry = this.cardEntries.get(cardId);
-    if (entry) {
-      entry.item.resync = true;
-    }
-    this.resync = true;
+    this.resync.add(cardId);
     this.sync();
   }
 
@@ -177,14 +249,12 @@ export class ContactModule implements Contact {
     if (!this.syncing) {
       this.syncing = true;
       const { guid, node, secure, token } = this;
-      while ((this.nextRevision || this.resync) && !this.closing) {
-        if (this.resync) {
-          this.resync = false;
+      while ((this.nextRevision || this.resync.size) && !this.closing) {
+        if (this.resync.size) {
           const entries = Array.from(this.cardEntries, ([key, value]) => ({ key, value }));
           for (const entry of entries) {
             const { key, value } = entry;
-            if (value.item.resync) {
-              value.item.resync = false;
+            if (this.resync.has(key)) {
               if (value.item.offsyncProfile) {
                 try {
                   const { profile, detail, profileRevision, offsyncProfile } = value.item;
@@ -229,6 +299,7 @@ export class ContactModule implements Contact {
               }
             }
           }
+          this.resync.clear();
         }
 
         if (this.nextRevision && this.revision !== this.nextRevision) {
@@ -446,6 +517,7 @@ export class ContactModule implements Contact {
           };
           entry.item.unsealedSummary = null;
           await this.unsealChannelSummary(cardId, id, entry.item);
+          this.setChannelUnread(cardId, id);
           entry.channel = this.setChannel(cardId, id, entry.item);
           await this.store.setContactCardChannelSummary(guid, cardId, id, entry.item.summary, entry.item.unsealedSummary);
         }
@@ -674,17 +746,17 @@ export class ContactModule implements Contact {
 
 
   public async getBlockedCards(): Promise<Card[]> {
-    return Array.from(this.cardEntries.values())
-      .filter((entry) => entry.item.blocked)
-      .map((entry) => entry.card);
+    return Array.from(this.cardEntries.entries())
+      .filter(([key, value]) => this.isCardBlocked(key))
+      .map(([key, value]) => value.card);
   }
 
   public async getBlockedChannels(): Promise<Channel[]> {
     const channels: Channel[] = [];
-    this.channelEntries.forEach((card) => {
-      const cardChannels = Array.from(card.values())
-        .filter((channel) => channel.item.blocked)
-        .map((entry) => entry.channel);
+    this.channelEntries.forEach((card, cardId) => {
+      const cardChannels = Array.from(card.entries())
+        .filter(([key, value]) => this.isChannelBlocked(cardId, key))
+        .map(([key, value]) => value.channel);
       cardChannels.forEach(channel => {
         channels.push(channel);
       });
@@ -694,37 +766,15 @@ export class ContactModule implements Contact {
 
   public async getBlockedArticles(): Promise<Article[]> {
     const articles: Article[] = [];
-    this.articleEntries.forEach((card) => {
-      const cardArticles = Array.from(card.values())
-        .filter((article) => article.item.blocked)
-        .map((entry) => entry.article);
-      cardArticles.forEach(article => {
-        articles.push(article);
-      });
-    });
     return articles;
   }
 
   public async setBlockedCard(cardId: string, blocked: boolean): Promise<void> {
     const entry = this.cardEntries.get(cardId);
     if (entry) {
-      entry.item.blocked = blocked;
+      await this.setCardBlocked(cardId);
       entry.card = this.setCard(cardId, entry.item);
-      await this.store.setContactCardBlocked(this.guid, cardId, blocked);
       this.emitCards();
-    }
-  }
-
-  public async setBlockedArticle(cardId: string, articleId: string, blocked: boolean): Promise<void> {
-    const entries = this.articleEntries.get(cardId);
-    if (entries) {
-      const entry = entries.get(articleId);
-      if (entry) {
-        entry.item.blocked = blocked;
-        entry.article = this.setArticle(cardId, articleId, entry.item);
-        await this.store.setContactCardArticleBlocked(this.guid, cardId, articleId, blocked);
-        this.emitArticles(cardId);
-      }
     }
   }
 
@@ -733,10 +783,21 @@ export class ContactModule implements Contact {
     if (entries) {
       const entry = entries.get(channelId);
       if (entry) {
-        entry.item.blocked = blocked;
+        await this.setChannelBlocked(cardId, channelId);
         entry.channel = this.setChannel(cardId, channelId, entry.item);
-        await this.store.setContactCardChannelBlocked(this.guid, cardId, channelId, blocked);
         this.emitChannels(cardId);
+      }
+    }
+  }
+
+  public async setBlockedArticle(cardId: string, articleId: string, blocked: boolean): Promise<void> {
+    const entries = this.articleEntries.get(cardId);
+    if (entries) {
+      const entry = entries.get(articleId);
+      if (entry) {
+        await this.setArticleBlocked(cardId, articleId);
+        entry.article = this.setArticle(cardId, articleId, entry.item);
+        this.emitArticles(cardId);
       }
     }
   }
@@ -777,9 +838,13 @@ export class ContactModule implements Contact {
     if (entries) {
       const entry = entries.get(channelId);
       if (entry) {
-        entry.item.unread = unread;
+        if (unread) {
+          await this.setChannelUnread(cardId, channelId);
+        }
+        else {
+          await this.clearChannelUnread(cardId, channelId);
+        }
         entry.channel = this.setChannel(cardId, channelId, entry.item);
-        await this.store.setContactCardChannelUnread(this.guid, cardId, channelId, unread);
         this.emitChannels(cardId);
       }
     }
@@ -849,7 +914,7 @@ export class ContactModule implements Contact {
     return {
       cardId,
       offsync: Boolean(item.offsyncProfile || item.offsyncChannel || item.offsyncArticle),
-      blocked: item.blocked,
+      blocked: this.isCardBlocked(cardId),
       status: detail.status,
       statusUpdated: detail.statusUpdated,
       guid: profile.guid,
@@ -871,7 +936,7 @@ export class ContactModule implements Contact {
       cardId,
       articleId,
       sealed: detail.sealed,
-      blocked: item.blocked,
+      blocked: this.isArticleBlocked(cardId, articleId),
       dataType: detail.dataType,
       data: articleData,
       created: detail.created,
@@ -897,8 +962,8 @@ export class ContactModule implements Contact {
         status: summary.status,
         transform: summary.transform,
       },
-      blocked: item.blocked,
-      unread: item.unread,
+      blocked: this.isChannelBlocked(cardId, channelId),
+      unread: this.isChannelUnread(cardId, channelId),
       sealed: detail.sealed,
       dataType: detail.dataType,
       data: channelData,
