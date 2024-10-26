@@ -74,14 +74,25 @@ const getCard = (id: string) => {
   }
 }
 
+let deleted = false;
+
 jest.mock('../src/net/fetchUtil', () => {
   const fn = jest.fn().mockImplementation((url: string, options: { method: string, body: string }) => {
       console.log(url, options);
       if (url === 'http://test_url/contact/cards?agent=test_token' && options.method === 'GET') {
         return Promise.resolve({ status: 200, json: () => [getCard('A')] });
       }
+      else if (url === 'http://test_url/contact/cards/C000A?agent=test_token' && options.method === 'DELETE') {
+        deleted = true;
+        return Promise.resolve({ status: 200, json: () => {} });
+      }
       else if (url === 'http://test_url/contact/cards?agent=test_token&revision=1' && options.method === 'GET') {
-        return Promise.resolve({ status: 200, json: () => [getCard('A'), getCard('B')] });
+        if (deleted) {
+          return Promise.resolve({ status: 200, json: () => [{ id: 'C000A', revision: 2 }] });
+        }
+        else {
+          return Promise.resolve({ status: 200, json: () => [getCard('A'), getCard('B')] });
+        }
       }
       else if (url === 'http://test_url/account/listing') {
         return Promise.resolve({ status: 200, json: () => JSON.parse('[{"guid": "dbc14d0237657b5e5a08b76355e883c762f1d8e7b1b9ff51d0b6ed9469e814e2", "handle": "test1234", "imageSet": false, "node": "balzack.coredb.org", "version": "0.1.0"}, {"guid": "5e0cec83c81786ba6b374cac38bb248349965ba2e5ba53b0d7bbe6b61a749832", "handle": "1234ttttrr", "imageSet": false, "node": "balzack.coredb.org", "version": "0.1.0"}, {"guid": "0035d6ffd34218a12b6f3c67ed2c20f4eee06dc36eed03715bbf46f04366511c", "handle": "123ttttrr", "imageSet": false, "node": "balzack.coredb.org", "version": "0.1.0"}]')});
@@ -173,18 +184,6 @@ test('adds new contact', async () => {
   expect(added).toBe('eyJndWlkI');
 });
 
-test('accepts unknown contact', async () => {
-  const contact = new ContactModule(log, store, crypto, 'test_guid', 'test_token', 'test_url', false, [], []);
-});
-
-test('ignores unknown contact', async () => {
-  const contact = new ContactModule(log, store, crypto, 'test_guid', 'test_token', 'test_url', false, [], []);
-});
-
-test('denies unknown contact', async () => {
-  const contact = new ContactModule(log, store, crypto, 'test_guid', 'test_token', 'test_url', false, [], []);
-});
-
 test('connects with known contact', async () => {
   const contact = new ContactModule(log, store, crypto, 'test_guid', 'test_token', 'test_url', false, [], []);
 });
@@ -194,6 +193,14 @@ test('disconnects with connected contact', async () => {
 });
 
 test('removes connected contact', async () => {
+  let testCards: Card[] = [];
+  const update = (cards: Card[]) => { testCards = cards }
   const contact = new ContactModule(log, store, crypto, 'test_guid', 'test_token', 'test_url', false, [], []);
+  contact.addCardListener(update);
+  contact.setRevision(1)
+  await waitFor(() => testCards.length === 1);
+  await contact.removeCard('C000A'); 
+  contact.setRevision(2)
+  await waitFor(() => testCards.length === 0);
 });
 
