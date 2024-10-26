@@ -4,7 +4,7 @@ export async function setCardConnected(node: string, secure: boolean, token: str
   const endpoint = `http${secure ? "s" : ""}://${node}/contact/cards/${cardId}/status?agent=${token}&token=${access}&viewRevision=1&articleRevision=${article}&channelRevision=${channel}&profileRevision=${profile}`;
   const { status } = await fetchWithTimeout(endpoint, {
     method: "PUT",
-    body: JSON.stringify("connecting"),
+    body: JSON.stringify("connected"),
   });
   checkResponse(status);
 }

@@ -674,8 +674,8 @@ export class ContactModule implements Contact {
         const insecure = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(server);
         const contact = await setCardOpenMessage(server, !insecure, message);
         if (contact.status === 'connected') {
-          const { token, articleRevision, channelRevision, profileRevision } = contact;
-          await setCardConnected(node, secure, token, cardId, token, articleRevision, channelRevision, profileRevision);
+          const { token: contactToken, articleRevision, channelRevision, profileRevision } = contact;
+          await setCardConnected(node, secure, token, cardId, contactToken, articleRevision, channelRevision, profileRevision);
         }
       }
     } catch (err) {
