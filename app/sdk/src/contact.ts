@@ -646,9 +646,9 @@ export class ContactModule implements Contact {
 
 
 
-  public async addCard(server: string, guid: string): Promise<string> {
+  public async addCard(server: string | null, guid: string): Promise<string> {
     const { node, secure, token } = this;
-    const insecure = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(server);
+    const insecure = server ? /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(server) : false;
     const message = server ? await getContactListing(server, !insecure, guid) : await getContactListing(node, secure, guid);
     return await addCard(node, secure, token, message);
   }
@@ -876,7 +876,8 @@ export class ContactModule implements Contact {
 
   public async getRegistry(handle: string | null, server: string | null): Promise<Profile[]> {
     const { node, secure } = this;
-    const listing = server ? await getRegistryListing(handle, server, true) : await getRegistryListing(handle, node, secure)
+    const insecure = server ? /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(server) : false;
+    const listing = server ? await getRegistryListing(handle, server, !insecure) : await getRegistryListing(handle, node, secure)
     return listing.map((entity) => {
       return {
         guid: entity.guid,
@@ -892,20 +893,6 @@ export class ContactModule implements Contact {
       };
     });
   }
-
-  public getRegistryImageUrl(server: string, secure: boolean, guid: string): string {
-    return getRegistryImageUrl(server, secure, guid);
-  }
-
-  public getCardImageUrl(cardId: string): string {
-    const entry = this.cardEntries.get(cardId);
-    if (entry && entry.item.profile.imageSet) {
-      const { node, secure, token } = this;
-      return getCardImageUrl(node, secure, token, cardId, entry.item.profile.revision);
-    }
-    return avatar;
-  }
-
 
 
   private setCard(cardId: string, item: CardItem): Card {

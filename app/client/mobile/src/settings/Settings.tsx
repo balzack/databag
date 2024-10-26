@@ -589,6 +589,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                 <Text style={styles.smallLabel}>{state.strings.timeFormat}:</Text>
                 <View style={styles.radioButtons}>
                   <RadioButton.Item
+                    style={styles.radio}
                     label={state.strings.timeHalf}
                     labelStyle={styles.option}
                     mode="android"
@@ -598,6 +599,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                     }}
                   />
                   <RadioButton.Item
+                    style={styles.radio}
                     label={state.strings.timeFull}
                     labelStyle={styles.option}
                     mode="android"
@@ -617,6 +619,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                 <Text style={styles.smallLabel}>{state.strings.dateFormat}:</Text>
                 <View style={styles.radioButtons}>
                   <RadioButton.Item
+                    style={styles.radio}
                     label={state.strings.monthStart}
                     labelStyle={styles.option}
                     mode="android"
@@ -626,6 +629,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                     }}
                   />
                   <RadioButton.Item
+                    style={styles.radio}
                     label={state.strings.monthEnd}
                     labelStyle={styles.option}
                     mode="android"

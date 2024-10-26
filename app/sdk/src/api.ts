@@ -60,7 +60,7 @@ export interface Identity {
 }
 
 export interface Contact {
-  addCard(server: string, guid: string): Promise<string>;
+  addCard(server: string | null, guid: string): Promise<string>;
   removeCard(cardId: string): Promise<void>;
   confirmCard(cardId: string): Promise<void>;
   connectCard(cardId: string): Promise<void>;
@@ -87,9 +87,6 @@ export interface Contact {
   setChannelNotifications(cardId: string, channelId: string, enabled: boolean): Promise<void>;
 
   getRegistry(handle: string | null, server: string | null): Promise<Profile[]>;
-  getRegistryImageUrl(server: string, secure: boolean, guid: string): string;
-
-  getCardImageUrl(cardId: string): string;
 
   addCardListener(ev: (cards: Card[]) => void): void;
   removeCardListener(ev: (cards: Card[]) => void): void;

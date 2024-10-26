@@ -301,4 +301,8 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     color: Colors.danger,
   },
+  radio: {
+    borderRadius: 32,
+    backgroundColor: 'yellow',
+  },
 });

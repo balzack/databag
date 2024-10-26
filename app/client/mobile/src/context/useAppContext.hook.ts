@@ -3,7 +3,7 @@ import {DatabagSDK, Session} from 'databag-client-sdk';
 import {SessionStore} from '../SessionStore';
 import {NativeCrypto} from '../NativeCrypto';
 import {LocalStore} from '../LocalStore';
-const DATABAG_DB = 'db_v210.db';
+const DATABAG_DB = 'db_v213.db';
 const SETTINGS_DB = 'ls_v001.db';
 
 const databag = new DatabagSDK({ tagBatch: 32, topicBatch: 32, articleTypes: [], channelTypes: [ 'sealed','superbasic'] }, new NativeCrypto());

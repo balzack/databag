@@ -181,15 +181,7 @@ export class MockContactModule implements Contact {
     return [];
   }
 
-  public getRegistryImageUrl(server: string, secure: boolean, guid: string): string {
-    return '';
-  }
-
   public getTopicAssetUrl(cardId: string, channelId: string, topicId: string, assetId: string): string {
-    return '';
-  }
-
-  public getCardImageUrl(cardId: string): string {
     return '';
   }
 
