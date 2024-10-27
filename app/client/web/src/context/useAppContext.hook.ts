@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { DatabagSDK, Params, Session } from 'databag-client-sdk'
+import { DatabagSDK, Session } from 'databag-client-sdk'
 import { SessionStore } from '../SessionStore'
 import { WebCrypto } from '../WebCrypto'
 

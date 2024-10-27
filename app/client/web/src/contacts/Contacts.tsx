@@ -1,6 +1,6 @@
-import { Text } from '@mantine/core'
+import React from 'react'
 import { useContacts } from './useContacts.hook'
-import { UnstyledButton, ActionIcon, TextInput, Button } from '@mantine/core'
+import { ActionIcon, TextInput, Button } from '@mantine/core'
 import { IconSearch, IconUserPlus, IconSortAscending, IconSortDescending, IconMessage2, IconPhone } from '@tabler/icons-react'
 import classes from './Contacts.module.css'
 import { Card } from '../card/Card'

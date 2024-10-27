@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useProfile } from './useProfile.hook'
 import classes from './Profile.module.css'
 import { modals } from '@mantine/modals'
@@ -18,7 +18,7 @@ import {
   IconCancel,
   IconDeviceFloppy,
 } from '@tabler/icons-react'
-import { Text, Image, ActionIcon, Button } from '@mantine/core'
+import { Text, Image, ActionIcon } from '@mantine/core'
 
 export type ProfileParams = {
   guid: string

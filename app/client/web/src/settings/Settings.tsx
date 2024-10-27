@@ -169,10 +169,11 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
       try {
         await actions.confirmMFA()
         mfaClose()
-      } catch (err: any) {
-        if (err.message === '401') {
+      } catch (err) {
+        const { message } = err as { message: string }
+        if (message === '401') {
           setAuthMessage(state.strings.mfaError)
-        } else if (err.message === '429') {
+        } else if (message === '429') {
           setAuthMessage(state.strings.mfaDisabled)
         } else {
           setAuthMessage(`${state.strings.error}: ${state.strings.tryAgain}`)

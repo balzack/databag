@@ -27,10 +27,11 @@ export function Access() {
           await actions.adminLogin()
         }
         otpClose()
-      } catch (err: any) {
-        console.log(err.message)
-        if (err.message === '405' || err.message === '403' || err.message === '429') {
-          if (err.message === '429') {
+      } catch (err) {
+        const { message } = err as { message: string }
+        console.log(message)
+        if (message === '405' || message === '403' || message === '429') {
+          if (message === '429') {
             setDisabled(true)
           } else {
             setDisabled(false)

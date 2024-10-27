@@ -1,7 +1,8 @@
+import React from 'react'
 import { useRegistry } from './useRegistry.hook'
 import { TextInput } from '@mantine/core'
 import classes from './Registry.module.css'
-import { IconX, IconArrowLeft, IconServer, IconUser } from '@tabler/icons-react'
+import { IconX, IconServer, IconUser } from '@tabler/icons-react'
 import { Card } from '../card/Card'
 import { ProfileParams } from '../profile/Profile'
 

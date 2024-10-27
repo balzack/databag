@@ -2,7 +2,7 @@ import { useState, useContext, useEffect } from 'react'
 import { AppContext } from '../context/AppContext'
 import { DisplayContext } from '../context/DisplayContext'
 import { ContextType } from '../context/ContextType'
-import { Card, Channel } from 'databag-client-sdk'
+import { Card } from 'databag-client-sdk'
 
 export function useContacts() {
   const app = useContext(AppContext) as ContextType
