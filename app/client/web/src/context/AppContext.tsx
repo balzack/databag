@@ -5,9 +5,5 @@ export const AppContext = createContext({})
 
 export function AppContextProvider({ children }: { children: ReactNode }) {
   const { state, actions } = useAppContext()
-  return (
-    <AppContext.Provider value={{ state, actions }}>
-      {children}
-    </AppContext.Provider>
-  )
+  return <AppContext.Provider value={{ state, actions }}>{children}</AppContext.Provider>
 }

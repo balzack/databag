@@ -62,10 +62,10 @@ export function useDisplayContext() {
     const filtered = new Map()
     const devices = await navigator.mediaDevices.enumerateDevices()
     devices
-      .filter((item) => (item.deviceId !== '' && item.kind === type + 'input'))
+      .filter((item) => item.deviceId !== '' && item.kind === type + 'input')
       .forEach((item) => {
         if (item) {
-          const label = item.label ? item.label : state.strings.integrated;
+          const label = item.label ? item.label : state.strings.integrated
           const entry = filtered.get(item.groupId)
           if (entry) {
             if (item.label && label.length < entry.label.length) {
@@ -124,10 +124,7 @@ export function useDisplayContext() {
         },
       })
     } else {
-      if (
-        window.matchMedia &&
-        window.matchMedia('(prefers-color-scheme: dark)').matches
-      ) {
+      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
         updateState({
           theme: null,
           scheme: 'dark',
@@ -314,10 +311,7 @@ export function useDisplayContext() {
         })
       } else {
         localStorage.removeItem('color_scheme')
-        if (
-          window.matchMedia &&
-          window.matchMedia('(prefers-color-scheme: dark)').matches
-        ) {
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
           updateState({
             theme: null,
             scheme: 'dark',

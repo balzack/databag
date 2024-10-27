@@ -3,30 +3,22 @@ import { Drawer } from '@mantine/core'
 import { DisplayContext } from '../context/DisplayContext'
 import { ContextType } from '../context/ContextType'
 import classes from './Session.module.css'
-import {
-  IconAddressBook,
-  IconMessages,
-  IconSettings,
-} from '@tabler/icons-react'
+import { IconAddressBook, IconMessages, IconSettings } from '@tabler/icons-react'
 import { Settings } from '../settings/Settings'
 import { Identity } from '../identity/Identity'
 import { Contacts } from '../contacts/Contacts'
 import { Registry } from '../registry/Registry'
-import { Profile, ProfileParams } from '../profile/Profile';
+import { Profile, ProfileParams } from '../profile/Profile'
 import { useDisclosure } from '@mantine/hooks'
 
 export function Session() {
   const [tab, setTab] = useState('channels')
-  const [profileParams, setProfileParams] = useState({ guid: '' } as ProfileParams);
+  const [profileParams, setProfileParams] = useState({ guid: '' } as ProfileParams)
   const display = useContext(DisplayContext) as ContextType
-  const [settings, { open: openSettings, close: closeSettings }] =
-    useDisclosure(false)
-  const [contacts, { open: openContacts, close: closeContacts }] =
-    useDisclosure(false)
-  const [registry, { open: openRegistry, close: closeRegistry }] =
-    useDisclosure(false)
-  const [profile, { open: openProfile, close: closeProfile }] =
-    useDisclosure(false)
+  const [settings, { open: openSettings, close: closeSettings }] = useDisclosure(false)
+  const [contacts, { open: openContacts, close: closeContacts }] = useDisclosure(false)
+  const [registry, { open: openRegistry, close: closeRegistry }] = useDisclosure(false)
+  const [profile, { open: openProfile, close: closeProfile }] = useDisclosure(false)
 
   return (
     <div className={classes.session}>
@@ -39,14 +31,26 @@ export function Session() {
           </div>
           <div className={tab === 'contacts' ? classes.show : classes.hide}>
             <div className={classes.screen}>
-              <Contacts openRegistry={openRegistry} openContact={(params) => { setProfileParams(params); openProfile() }}/>
+              <Contacts
+                openRegistry={openRegistry}
+                openContact={(params) => {
+                  setProfileParams(params)
+                  openProfile()
+                }}
+              />
             </div>
-            { registry && (
+            {registry && (
               <div className={classes.screen}>
-                <Registry close={closeRegistry} openContact={(params) => { setProfileParams(params); openProfile() }} />
+                <Registry
+                  close={closeRegistry}
+                  openContact={(params) => {
+                    setProfileParams(params)
+                    openProfile()
+                  }}
+                />
               </div>
             )}
-            { profile && (
+            {profile && (
               <div className={classes.screen}>
                 <Profile params={profileParams} close={closeProfile} />
               </div>
@@ -59,10 +63,7 @@ export function Session() {
               </div>
             )}
             {tab !== 'channels' && (
-              <div
-                className={classes.idleTabItem}
-                onClick={() => setTab('channels')}
-              >
+              <div className={classes.idleTabItem} onClick={() => setTab('channels')}>
                 <IconMessages className={classes.tabIcon} />
               </div>
             )}
@@ -73,10 +74,7 @@ export function Session() {
               </div>
             )}
             {tab !== 'contacts' && (
-              <div
-                className={classes.idleTabItem}
-                onClick={() => setTab('contacts')}
-              >
+              <div className={classes.idleTabItem} onClick={() => setTab('contacts')}>
                 <IconAddressBook className={classes.tabIcon} />
               </div>
             )}
@@ -87,10 +85,7 @@ export function Session() {
               </div>
             )}
             {tab !== 'settings' && (
-              <div
-                className={classes.idleTabItem}
-                onClick={() => setTab('settings')}
-              >
+              <div className={classes.idleTabItem} onClick={() => setTab('settings')}>
                 <IconSettings className={classes.tabIcon} />
               </div>
             )}
@@ -103,50 +98,33 @@ export function Session() {
             <Identity settings={openSettings} contacts={openContacts} />
           </div>
           <div className={classes.right}></div>
-          <Drawer
-            opened={contacts}
-            onClose={closeContacts}
-            withCloseButton={false}
-            size="md"
-            padding="0"
-            position="right"
-          >
+          <Drawer opened={contacts} onClose={closeContacts} withCloseButton={false} size="md" padding="0" position="right">
             <div style={{ height: '100vh' }}>
-              <Contacts openRegistry={openRegistry} openContact={(params) => { setProfileParams(params); openProfile() }} />
+              <Contacts
+                openRegistry={openRegistry}
+                openContact={(params) => {
+                  setProfileParams(params)
+                  openProfile()
+                }}
+              />
             </div>
           </Drawer>
-          <Drawer
-            opened={registry}
-            onClose={closeRegistry}
-            withCloseButton={false}
-            size="sm"
-            padding="0"
-            position="right"
-          >
+          <Drawer opened={registry} onClose={closeRegistry} withCloseButton={false} size="sm" padding="0" position="right">
             <div style={{ height: '100vh' }}>
-              <Registry openContact={(params) => { setProfileParams(params); openProfile() }} />
+              <Registry
+                openContact={(params) => {
+                  setProfileParams(params)
+                  openProfile()
+                }}
+              />
             </div>
           </Drawer>
-          <Drawer
-            opened={profile}
-            onClose={closeProfile}
-            withCloseButton={false}
-            size="xs"
-            padding="0"
-            position="right"
-          >
+          <Drawer opened={profile} onClose={closeProfile} withCloseButton={false} size="xs" padding="0" position="right">
             <div style={{ height: '100vh' }}>
               <Profile params={profileParams} />
             </div>
           </Drawer>
-          <Drawer
-            opened={settings}
-            onClose={closeSettings}
-            withCloseButton={false}
-            size="sm"
-            padding="0"
-            position="right"
-          >
+          <Drawer opened={settings} onClose={closeSettings} withCloseButton={false} size="sm" padding="0" position="right">
             <div style={{ height: '100vh' }}>
               <Settings showLogout={false} />
             </div>

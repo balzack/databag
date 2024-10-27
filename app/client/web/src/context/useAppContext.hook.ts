@@ -3,10 +3,10 @@ import { DatabagSDK, Params, Session } from 'databag-client-sdk'
 import { SessionStore } from '../SessionStore'
 import { WebCrypto } from '../WebCrypto'
 
-const databag = new DatabagSDK({ tagBatch: 32, topicBatch: 32, articleTypes: [], channelTypes: [ 'sealed','superbasic'] }, new WebCrypto());
+const databag = new DatabagSDK({ tagBatch: 32, topicBatch: 32, articleTypes: [], channelTypes: ['sealed', 'superbasic'] }, new WebCrypto())
 
 export function useAppContext() {
-  const sdk = useRef(databag);
+  const sdk = useRef(databag)
   const [state, setState] = useState({
     session: null as null | Session,
   })
@@ -29,13 +29,7 @@ export function useAppContext() {
   }
 
   const actions = {
-    accountLogin: async (
-      username: string,
-      password: string,
-      node: string,
-      secure: boolean,
-      code: string
-    ) => {
+    accountLogin: async (username: string, password: string, node: string, secure: boolean, code: string) => {
       const params = {
         topicBatch: 16,
         tagBatch: 16,
@@ -47,14 +41,7 @@ export function useAppContext() {
         version: '0.0.1',
         appName: 'databag',
       }
-      const login = await sdk.current.login(
-        username,
-        password,
-        node,
-        secure,
-        code,
-        params
-      )
+      const login = await sdk.current.login(username, password, node, secure, code, params)
       updateState({ session: login })
     },
     accountLogout: async (all: boolean) => {
@@ -63,13 +50,7 @@ export function useAppContext() {
         updateState({ session: null })
       }
     },
-    accountCreate: async (
-      handle: string,
-      password: string,
-      node: string,
-      secure: boolean,
-      token: string
-    ) => {
+    accountCreate: async (handle: string, password: string, node: string, secure: boolean, token: string) => {
       const params = {
         topicBatch: 16,
         tagBatch: 16,
@@ -81,14 +62,7 @@ export function useAppContext() {
         version: '0.0.1',
         appName: 'databag',
       }
-      const session = await sdk.current.create(
-        handle,
-        password,
-        node,
-        secure,
-        token,
-        params
-      )
+      const session = await sdk.current.create(handle, password, node, secure, token, params)
       updateState({ session })
     },
     accountAccess: async (node: string, secure: boolean, token: string) => {
@@ -109,20 +83,10 @@ export function useAppContext() {
     getAvailable: async (node: string, secure: boolean) => {
       return await sdk.current.available(node, secure)
     },
-    getUsername: async (
-      username: string,
-      token: string,
-      node: string,
-      secure: boolean
-    ) => {
+    getUsername: async (username: string, token: string, node: string, secure: boolean) => {
       return await sdk.current.username(username, token, node, secure)
     },
-    adminLogin: async (
-      token: string,
-      node: string,
-      secure: boolean,
-      code: string
-    ) => {
+    adminLogin: async (token: string, node: string, secure: boolean, code: string) => {
       const login = await sdk.current.configure(node, secure, token, code)
       updateState({ node: login })
     },

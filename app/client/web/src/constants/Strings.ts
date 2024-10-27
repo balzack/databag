@@ -130,8 +130,7 @@ export const en = {
   create: 'Create',
   createAccount: 'Create Account',
   accountLogin: 'Account Login',
-  toCreate:
-    'Accounts are created through a link generated from the admin dashboard.',
+  toCreate: 'Accounts are created through a link generated from the admin dashboard.',
   admin: 'Admin',
   loginError: 'Login Error',
   loginMessage: 'Please confirm your username and password.',
@@ -294,8 +293,8 @@ export const fr = {
   accept: 'Accepter',
 
   sealUnlock: 'Déverrouiller la clé de scellement pour accéder aux messages chiffrés de bout en bout',
-  sealForget: 'Oublier la clé de scellement pour révoquer l\'accès aux messages chiffrés de bout en bout pour cet appareil uniquement',
-  sealDelete: 'La suppression de la clé de scellement révoquera définitivement l\'accès à tous les messages chiffrés de bout en bout depuis tous les appareils',
+  sealForget: "Oublier la clé de scellement pour révoquer l'accès aux messages chiffrés de bout en bout pour cet appareil uniquement",
+  sealDelete: "La suppression de la clé de scellement révoquera définitivement l'accès à tous les messages chiffrés de bout en bout depuis tous les appareils",
   sealUpdate: 'La mise à jour de la clé de scellement changera uniquement le mot de passe de verrouillage',
   sealCreate: 'Créer une clé de scellement pour envoyer et recevoir des messages chiffrés de bout en bout',
 
@@ -390,12 +389,10 @@ export const fr = {
   create: 'Créer',
   createAccount: 'Créer un Compte',
   accountLogin: 'Connexion au Compte',
-  toCreate:
-    "Les comptes sont créés via un lien généré depuis le tableau de bord d'administration.",
+  toCreate: "Les comptes sont créés via un lien généré depuis le tableau de bord d'administration.",
   admin: 'Administrateur',
   loginError: 'Erreur de connexion',
-  loginMessage:
-    "Veuillez confirmer votre nom d'utilisateur et votre mot de passe.",
+  loginMessage: "Veuillez confirmer votre nom d'utilisateur et votre mot de passe.",
   createError: 'Erreur de création de compte',
   createMessage: 'Veuillez vérifier auprès de votre administrateur.',
   adminError: "Erreur d'Accès",
@@ -495,8 +492,7 @@ export const fr = {
 
   disable: 'Désactiver',
   confirmDisable: "Désactivation de l'authentification multi-facteurs",
-  disablePrompt:
-    "Êtes-vous sûr de vouloir désactiver l'authentification multi-facteurs",
+  disablePrompt: "Êtes-vous sûr de vouloir désactiver l'authentification multi-facteurs",
 }
 
 export const sp = {
@@ -642,8 +638,7 @@ export const sp = {
   create: 'Crear',
   createAccount: 'Crear cuenta',
   accountLogin: 'Inicio de sesión en la cuenta',
-  toCreate:
-    'Las cuentas se crean a través de un enlace generado desde el panel de administración.',
+  toCreate: 'Las cuentas se crean a través de un enlace generado desde el panel de administración.',
   admin: 'Administrador',
   loginError: 'Error de inicio de sesión',
   loginMessage: 'Por favor, confirme su nombre de usuario y contraseña.',
@@ -745,8 +740,7 @@ export const sp = {
 
   disable: 'Desactivar',
   confirmDisable: 'Desactivación de la autenticación de dos factores',
-  disablePrompt:
-    '¿Estás seguro de que quieres desactivar la autenticación de dos factores?',
+  disablePrompt: '¿Estás seguro de que quieres desactivar la autenticación de dos factores?',
 }
 
 export const pt = {
@@ -892,8 +886,7 @@ export const pt = {
   create: 'Criar',
   createAccount: 'Criar uma conta',
   accountLogin: 'Login da conta',
-  toCreate:
-    'As contas são criadas através de um link gerado no painel de administração.',
+  toCreate: 'As contas são criadas através de um link gerado no painel de administração.',
   admin: 'Administrador',
   loginError: 'Erro de login',
   loginMessage: 'Por favor, confirme seu nome de usuário e senha.',
@@ -995,8 +988,7 @@ export const pt = {
 
   disable: 'Desativar',
   confirmDisable: 'Desativando Autenticação de Dois Fatores',
-  disablePrompt:
-    'Tem certeza de que deseja desativar a autenticação de dois fatores?',
+  disablePrompt: 'Tem certeza de que deseja desativar a autenticação de dois fatores?',
 }
 
 export const de = {
@@ -1022,7 +1014,7 @@ export const de = {
   requestedStatus: 'Verbindungsanfrage vom Kontakt',
   connectedStatus: 'Verbunden Kontakt',
   offsyncStatus: 'Unsynchronisierter Kontakt',
- 
+
   loggingOut: 'Abmelden',
   blockedContacts: 'Blockierte Kontakte',
   blockedTopics: 'Blockierte Themen',
@@ -1142,8 +1134,7 @@ export const de = {
   create: 'Erstellen',
   createAccount: 'Konto erstellen',
   accountLogin: 'Kontoanmeldung',
-  toCreate:
-    'Konten werden über einen Link erstellt, der im Administrations-Dashboard generiert wird.',
+  toCreate: 'Konten werden über einen Link erstellt, der im Administrations-Dashboard generiert wird.',
   admin: 'Administrator',
   loginError: 'Anmeldefehler',
   loginMessage: 'Bitte bestätigen Sie Ihren Benutzernamen und Ihr Passwort.',
@@ -1234,8 +1225,7 @@ export const de = {
   sealedMessage: 'Gesicherte Nachricht',
 
   mfaTitle: 'Zwei-Faktor-Authentifizierung',
-  mfaSteps:
-    'Speichern Sie das Geheimnis und bestätigen Sie den Bestätigungscode',
+  mfaSteps: 'Speichern Sie das Geheimnis und bestätigen Sie den Bestätigungscode',
   mfaEnter: 'Geben Sie Ihren Bestätigungs-Code ein',
   mfaError: 'Verifizierungscodefehler',
   mfaDisabled: 'Verifizierung vorübergehend deaktiviert',
@@ -1246,8 +1236,7 @@ export const de = {
 
   disable: 'Deaktivieren',
   confirmDisable: 'Deaktivierung der Zwei-Faktor-Authentifizierung',
-  disablePrompt:
-    'Sind Sie sicher, dass Sie die Zwei-Faktor-Authentifizierung deaktivieren möchten?',
+  disablePrompt: 'Sind Sie sicher, dass Sie die Zwei-Faktor-Authentifizierung deaktivieren möchten?',
 }
 
 export const ru = {
@@ -1393,8 +1382,7 @@ export const ru = {
   create: 'Создать',
   createAccount: 'Создать аккаунт',
   accountLogin: 'Вход в аккаунт',
-  toCreate:
-    'Учетные записи создаются через ссылку, сгенерированную в панели администратора.',
+  toCreate: 'Учетные записи создаются через ссылку, сгенерированную в панели администратора.',
   admin: 'Администратор',
   loginError: 'Ошибка входа',
   loginMessage: 'Пожалуйста, подтвердите свое имя пользователя и пароль.',
@@ -1496,7 +1484,5 @@ export const ru = {
 
   disable: 'Отключить',
   confirmDisable: 'Отключение двухфакторной аутентификации',
-  disablePrompt:
-    'Вы уверены, что хотите отключить двухфакторную аутентификацию?',
+  disablePrompt: 'Вы уверены, что хотите отключить двухфакторную аутентификацию?',
 }
-

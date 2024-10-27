@@ -25,10 +25,7 @@ export function useRoot() {
 
   useEffect(() => {
     const { pathname, node, session } = app.state || {}
-    const path =
-      pathname === '/session' || pathname === '/node' || pathname === '/access'
-        ? pathname
-        : '/'
+    const path = pathname === '/session' || pathname === '/node' || pathname === '/access' ? pathname : '/'
     if (path === '/session' && !session) {
       navigate('/')
     } else if (path === '/node' && !node) {

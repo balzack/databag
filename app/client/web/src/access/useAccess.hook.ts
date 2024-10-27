@@ -69,28 +69,17 @@ export function useAccess() {
     }, 2000)
   }
 
-  const checkTaken = (
-    username: string,
-    token: string,
-    node: string,
-    secure: boolean
-  ) => {
+  const checkTaken = (username: string, token: string, node: string, secure: boolean) => {
     updateState({ taken: false })
     clearTimeout(debounceTaken.current)
     debounceTaken.current = setTimeout(async () => {
-      const available = await app.actions.getUsername(
-        username,
-        token,
-        node,
-        secure
-      )
+      const available = await app.actions.getUsername(username, token, node, secure)
       updateState({ taken: !available })
     }, 2000)
   }
 
   useEffect(() => {
-    const { layout, strings, themes, scheme, languages, language } =
-      display.state
+    const { layout, strings, themes, scheme, languages, language } = display.state
     updateState({
       layout,
       strings,
@@ -121,8 +110,7 @@ export function useAccess() {
       updateState({ code })
     },
     setNode: (host: string) => {
-      const insecure =
-        /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(host)
+      const insecure = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(host)
       updateState({ host, secure: !insecure })
     },
     setLanguage: (code: string) => {

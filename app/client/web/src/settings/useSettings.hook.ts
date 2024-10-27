@@ -2,10 +2,7 @@ import { useEffect, useState, useContext, useRef } from 'react'
 import { AppContext } from '../context/AppContext'
 import { DisplayContext } from '../context/DisplayContext'
 import { ContextType } from '../context/ContextType'
-import {
-  type Profile,
-  type Config,
-} from 'databag-client-sdk'
+import { type Profile, type Config } from 'databag-client-sdk'
 import { Point, Area } from 'react-easy-crop/types'
 
 const IMAGE_DIM = 192
@@ -98,19 +95,7 @@ export function useSettings() {
   }, [])
 
   useEffect(() => {
-    const {
-      strings,
-      dateFormat,
-      timeFormat,
-      themes,
-      scheme,
-      languages,
-      language,
-      audioId,
-      audioInputs,
-      videoId,
-      videoInputs,
-    } = display.state
+    const { strings, dateFormat, timeFormat, themes, scheme, languages, language, audioId, audioInputs, videoId, videoInputs } = display.state
     updateState({
       strings,
       dateFormat,
@@ -154,7 +139,7 @@ export function useSettings() {
     enableMFA: async () => {
       const { settings } = getSession()
       const { secretImage, secretText } = await settings.enableMFA()
-      updateState({ secretImage, secretText });
+      updateState({ secretImage, secretText })
     },
     disableMFA: async () => {
       const { settings } = getSession()
@@ -165,14 +150,14 @@ export function useSettings() {
       await settings.confirmMFA(state.code)
     },
     setCode: (code: string) => {
-      updateState({ code });
+      updateState({ code })
     },
     copySecret: () => {
-      navigator.clipboard.writeText(state.secretText);
-      updateState({ secretCopied: true });
+      navigator.clipboard.writeText(state.secretText)
+      updateState({ secretCopied: true })
       setTimeout(() => {
-        updateState({ secretCopied: false });
-      }, 1000);
+        updateState({ secretCopied: false })
+      }, 1000)
     },
     setSeal: async () => {
       const { settings } = getSession()
@@ -191,14 +176,10 @@ export function useSettings() {
       await settings.forgetSeal()
     },
     updateSeal: async () => {
-      const { settings } = getSession();
-      await settings.updateSeal(state.sealPassword);
+      const { settings } = getSession()
+      await settings.updateSeal(state.sealPassword)
     },
-    setProfileData: async (
-      name: string,
-      location: string,
-      description: string
-    ) => {
+    setProfileData: async (name: string, location: string, description: string) => {
       const { identity } = getSession()
       await identity.setProfileData(name, location, description)
     },
@@ -280,13 +261,13 @@ export function useSettings() {
       updateState({ editImage })
     },
     setSealDelete: (sealDelete: string) => {
-      updateState({ sealDelete });
+      updateState({ sealDelete })
     },
     setSealPassword: (sealPassword: string) => {
-      updateState({ sealPassword });
+      updateState({ sealPassword })
     },
     setSealConfirm: (sealConfirm: string) => {
-      updateState({ sealConfirm });
+      updateState({ sealConfirm })
     },
     setImage: async () => {
       const { identity } = getSession()
@@ -303,17 +284,7 @@ export function useSettings() {
               canvas.width = IMAGE_DIM
               canvas.height = IMAGE_DIM
               context.imageSmoothingQuality = 'medium'
-              context.drawImage(
-                img,
-                state.clip.x,
-                state.clip.y,
-                state.clip.width,
-                state.clip.height,
-                0,
-                0,
-                IMAGE_DIM,
-                IMAGE_DIM
-              )
+              context.drawImage(img, state.clip.x, state.clip.y, state.clip.width, state.clip.height, 0, 0, IMAGE_DIM, IMAGE_DIM)
               resolve(canvas.toDataURL())
             } catch (err) {
               console.log(err)

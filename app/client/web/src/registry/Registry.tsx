@@ -1,23 +1,33 @@
-import { useRegistry } from './useRegistry.hook';
-import { TextInput } from '@mantine/core';
+import { useRegistry } from './useRegistry.hook'
+import { TextInput } from '@mantine/core'
 import classes from './Registry.module.css'
-import { IconX, IconArrowLeft, IconServer, IconUser } from '@tabler/icons-react';
-import { Card } from '../card/Card';
-import { ProfileParams } from '../profile/Profile';
+import { IconX, IconArrowLeft, IconServer, IconUser } from '@tabler/icons-react'
+import { Card } from '../card/Card'
+import { ProfileParams } from '../profile/Profile'
 
-export function Registry({ close, openContact }: { close?: ()=>void, openContact: (params: ProfileParams)=>void }) {
-  const { state, actions } = useRegistry();
+export function Registry({ close, openContact }: { close?: () => void; openContact: (params: ProfileParams) => void }) {
+  const { state, actions } = useRegistry()
 
   const profiles = state.profiles.map((profile, idx) => {
-    const select = () => { 
-      const { guid, handle, node, name, location, description, imageUrl } = profile;
-      const params = { guid, handle, node, name, location, description, imageUrl };
-      openContact(params);
+    const select = () => {
+      const { guid, handle, node, name, location, description, imageUrl } = profile
+      const params = { guid, handle, node, name, location, description, imageUrl }
+      openContact(params)
     }
     return (
-      <Card key={idx} className={classes.card} imageUrl={profile.imageUrl} name={profile.name} handle={profile.handle} node={profile.node} placeholder={state.strings.name} select={select} actions={[]} />
+      <Card
+        key={idx}
+        className={classes.card}
+        imageUrl={profile.imageUrl}
+        name={profile.name}
+        handle={profile.handle}
+        node={profile.node}
+        placeholder={state.strings.name}
+        select={select}
+        actions={[]}
+      />
     )
-  });
+  })
 
   return (
     <div className={classes.registry}>
@@ -40,17 +50,10 @@ export function Registry({ close, openContact }: { close?: ()=>void, openContact
           value={state.server}
           onChange={(event) => actions.setServer(event.currentTarget.value)}
         />
-        { close && (
-          <IconX size={28} className={classes.close} onClick={close} />
-        )}
+        {close && <IconX size={28} className={classes.close} onClick={close} />}
       </div>
-      { profiles.length !== 0 && (
-        <div className={classes.cards}>{ profiles }</div>
-      )}
-      { profiles.length === 0 && (
-        <div className={classes.none}>{ state.strings.noContacts }</div>
-      )}
+      {profiles.length !== 0 && <div className={classes.cards}>{profiles}</div>}
+      {profiles.length === 0 && <div className={classes.none}>{state.strings.noContacts}</div>}
     </div>
-  );
+  )
 }
-

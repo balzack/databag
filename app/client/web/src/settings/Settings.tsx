@@ -1,19 +1,5 @@
 import { useSettings } from './useSettings.hook'
-import {
-  Modal,
-  Textarea,
-  TextInput,
-  PasswordInput,
-  Radio,
-  Group,
-  Select,
-  Switch,
-  Text,
-  PinInput,
-  Image,
-  Button,
-  UnstyledButton,
-} from '@mantine/core'
+import { Modal, Textarea, TextInput, PasswordInput, Radio, Group, Select, Switch, Text, PinInput, Image, Button, UnstyledButton } from '@mantine/core'
 import classes from './Settings.module.css'
 import {
   IconLock,
@@ -52,16 +38,11 @@ import { Area } from 'react-easy-crop/types'
 export function Settings({ showLogout }: { showLogout: boolean }) {
   const imageFile = useRef(null as null | HTMLInputElement)
   const { state, actions } = useSettings()
-  const [changeOpened, { open: changeOpen, close: changeClose }] =
-    useDisclosure(false)
-  const [detailsOpened, { open: detailsOpen, close: detailsClose }] =
-    useDisclosure(false)
-  const [imageOpened, { open: imageOpen, close: imageClose }] =
-    useDisclosure(false)
-  const [mfaOpened, { open: mfaOpen, close: mfaClose }] =
-    useDisclosure(false)
-  const [sealOpened, { open: sealOpen, close: sealClose }] =
-    useDisclosure(false)
+  const [changeOpened, { open: changeOpen, close: changeClose }] = useDisclosure(false)
+  const [detailsOpened, { open: detailsOpen, close: detailsClose }] = useDisclosure(false)
+  const [imageOpened, { open: imageOpen, close: imageClose }] = useDisclosure(false)
+  const [mfaOpened, { open: mfaOpen, close: mfaClose }] = useDisclosure(false)
+  const [sealOpened, { open: sealOpen, close: sealClose }] = useDisclosure(false)
   const [savingLogin, setSavingLogin] = useState(false)
   const [savingDetails, setSavingDetails] = useState(false)
   const [savingImage, setSavingImage] = useState(false)
@@ -74,7 +55,7 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
   const [sealDelete, setSealDelete] = useState(false)
   const [sealReset, setSealReset] = useState(false)
   const [sealConfig, setSealConfig] = useState(false)
-  const [authMessage, setAuthMessage] = useState('');
+  const [authMessage, setAuthMessage] = useState('')
 
   const logout = () =>
     modals.openConfirmModal({
@@ -84,13 +65,7 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
         backgroundOpacity: 0.55,
         blur: 3,
       },
-      children: (
-        <Switch
-          label={state.strings.allDevices}
-          size="md"
-          onChange={(ev) => actions.setAll(ev.currentTarget.checked)}
-        />
-      ),
+      children: <Switch label={state.strings.allDevices} size="md" onChange={(ev) => actions.setAll(ev.currentTarget.checked)} />,
       labels: { confirm: state.strings.logout, cancel: state.strings.cancel },
       onConfirm: actions.logout,
     })
@@ -105,19 +80,18 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
       },
       children: <Text>{state.strings.disablePrompt}</Text>,
       labels: { confirm: state.strings.disable, cancel: state.strings.cancel },
-      onConfirm:  async () => {
+      onConfirm: async () => {
         if (!removingMfa) {
-          setRemovingMfa(true);
+          setRemovingMfa(true)
           try {
-            await actions.disableMFA();
-          }
-          catch (err) {
-            console.log(err);
+            await actions.disableMFA()
+          } catch (err) {
+            console.log(err)
             showError()
           }
-          setRemovingMfa(false);
+          setRemovingMfa(false)
         }
-      }
+      },
     })
   }
 
@@ -157,54 +131,54 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
 
   const setSeal = async () => {
     if (!savingSeal) {
-      setSealDelete(false);
-      setSealReset(false);
-      setSealConfig(false);
-      actions.setSealPassword('');
-      actions.setSealConfirm('');
-      actions.setSealDelete('');
-      sealOpen();
-      setSavingSeal(true);
-      setSavingSeal(false);
+      setSealDelete(false)
+      setSealReset(false)
+      setSealConfig(false)
+      actions.setSealPassword('')
+      actions.setSealConfirm('')
+      actions.setSealDelete('')
+      sealOpen()
+      setSavingSeal(true)
+      setSavingSeal(false)
     }
   }
 
   const setMfa = async (checked: boolean) => {
     if (!addingMfa) {
-      setAddingMfa(true);
+      setAddingMfa(true)
       try {
         if (checked) {
-          actions.setCode('');
-          setAuthMessage('');
-          await actions.enableMFA();
-          mfaOpen();
+          actions.setCode('')
+          setAuthMessage('')
+          await actions.enableMFA()
+          mfaOpen()
         } else {
-          clearMfa();
+          clearMfa()
         }
       } catch (err) {
         console.log(err)
         showError()
       }
-      setAddingMfa(false);
+      setAddingMfa(false)
     }
   }
 
   const confirmMfa = async () => {
     if (!savingMfa) {
-      setSavingMfa(true);
+      setSavingMfa(true)
       try {
-        await actions.confirmMFA();
-        mfaClose();
+        await actions.confirmMFA()
+        mfaClose()
       } catch (err: any) {
         if (err.message === '401') {
-          setAuthMessage(state.strings.mfaError);
+          setAuthMessage(state.strings.mfaError)
         } else if (err.message === '429') {
-          setAuthMessage(state.strings.mfaDisabled);
+          setAuthMessage(state.strings.mfaDisabled)
         } else {
-          setAuthMessage(`${state.strings.error}: ${state.strings.tryAgain}`);
+          setAuthMessage(`${state.strings.error}: ${state.strings.tryAgain}`)
         }
       }
-      setSavingMfa(false);
+      setSavingMfa(false)
     }
   }
 
@@ -270,13 +244,13 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
 
   const sealUnlock = async () => {
     if (!savingSeal) {
-      setSavingSeal(true);
+      setSavingSeal(true)
       try {
-        await actions.unlockSeal();
-        sealClose();
+        await actions.unlockSeal()
+        sealClose()
       } catch (err) {
-        console.log(err);
-        showError();
+        console.log(err)
+        showError()
       }
       setSavingSeal(false)
     }
@@ -284,58 +258,58 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
 
   const sealForget = async () => {
     if (!savingSeal) {
-      setSavingSeal(true);
+      setSavingSeal(true)
       try {
-        await actions.forgetSeal();
-        sealClose();
+        await actions.forgetSeal()
+        sealClose()
       } catch (err) {
-        console.log(err);
-        showError();
+        console.log(err)
+        showError()
       }
-      setSavingSeal(false);
+      setSavingSeal(false)
     }
   }
 
   const sealRemove = async () => {
     if (!savingSeal) {
-      setSavingSeal(true);
+      setSavingSeal(true)
       try {
-        await actions.clearSeal();
-        sealClose();
+        await actions.clearSeal()
+        sealClose()
       } catch (err) {
-        console.log(err);
-        showError();
+        console.log(err)
+        showError()
       }
-      setSavingSeal(false);
+      setSavingSeal(false)
     }
   }
 
   const sealCreate = async () => {
     if (!savingSeal) {
-      setSavingSeal(true);
+      setSavingSeal(true)
       try {
-        await new Promise(r => setTimeout(r, 100));
-        await actions.setSeal();
-        sealClose();
+        await new Promise((r) => setTimeout(r, 100))
+        await actions.setSeal()
+        sealClose()
       } catch (err) {
-        console.log(err);
-        showError();
+        console.log(err)
+        showError()
       }
-      setSavingSeal(false);
+      setSavingSeal(false)
     }
   }
 
   const sealUpdate = async () => {
     if (!savingSeal) {
-      setSavingSeal(true);
+      setSavingSeal(true)
       try {
-        await actions.updateSeal();
-        sealClose();
+        await actions.updateSeal()
+        sealClose()
       } catch (err) {
-        console.log(err);
-        showError();
+        console.log(err)
+        showError()
       }
-      setSavingSeal(false);
+      setSavingSeal(false)
     }
   }
 
@@ -361,19 +335,13 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
     <>
       {state.profileSet && (
         <div className={classes.settings}>
-          <Text
-            className={classes.header}
-          >{`${state.profile.handle}${state.profile.node ? '/' + state.profile.node : ''}`}</Text>
+          <Text className={classes.header}>{`${state.profile.handle}${state.profile.node ? '/' + state.profile.node : ''}`}</Text>
           <div className={classes.image}>
             {state.profile.imageSet && (
               <div className={classes.imageSet}>
                 <Image radius="md" src={state.imageUrl} />
                 <div className={classes.edit}>
-                  <UnstyledButton
-                    className={classes.imageEdit}
-                    size="compact-md"
-                    onClick={imageOpen}
-                  >
+                  <UnstyledButton className={classes.imageEdit} size="compact-md" onClick={imageOpen}>
                     <span className={classes.editLabel}>{state.strings.edit}</span>
                   </UnstyledButton>
                 </div>
@@ -388,46 +356,25 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
           </div>
           <div className={classes.section}>
             <div className={classes.divider} />
-            <UnstyledButton
-              className={classes.sectionEdit}
-              onClick={detailsOpen}
-            >
+            <UnstyledButton className={classes.sectionEdit} onClick={detailsOpen}>
               {state.strings.edit}
             </UnstyledButton>
           </div>
-          {!state.profile.name && (
-            <Text className={classes.nameUnset}>{state.strings.name}</Text>
-          )}
-          {state.profile.name && (
-            <Text className={classes.nameSet}>{state.profile.name}</Text>
-          )}
+          {!state.profile.name && <Text className={classes.nameUnset}>{state.strings.name}</Text>}
+          {state.profile.name && <Text className={classes.nameSet}>{state.profile.name}</Text>}
           <div className={classes.entry}>
             <div className={classes.entryIcon}>
               <IconMapPin />
             </div>
-            {!state.profile.location && (
-              <Text className={classes.entryUnset}>
-                {state.strings.location}
-              </Text>
-            )}
-            {state.profile.location && (
-              <Text className={classes.entrySet}>{state.profile.location}</Text>
-            )}
+            {!state.profile.location && <Text className={classes.entryUnset}>{state.strings.location}</Text>}
+            {state.profile.location && <Text className={classes.entrySet}>{state.profile.location}</Text>}
           </div>
           <div className={classes.entry}>
             <div className={classes.entryIcon}>
               <IconBook />
             </div>
-            {!state.profile.description && (
-              <Text className={classes.entryUnset}>
-                {state.strings.description}
-              </Text>
-            )}
-            {state.profile.description && (
-              <Text className={classes.entrySet}>
-                {state.profile.description}
-              </Text>
-            )}
+            {!state.profile.description && <Text className={classes.entryUnset}>{state.strings.description}</Text>}
+            {state.profile.description && <Text className={classes.entrySet}>{state.profile.description}</Text>}
           </div>
           <div className={classes.divider} />
           <div className={classes.entry}>
@@ -435,11 +382,7 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
               <IconEye />
             </div>
             <Text className={classes.entryLabel}>{state.strings.registry}</Text>
-            <Switch
-              className={classes.entryControl}
-              checked={state.config.searchable}
-              onChange={(ev) => setRegistry(ev.currentTarget.checked)}
-            />
+            <Switch className={classes.entryControl} checked={state.config.searchable} onChange={(ev) => setRegistry(ev.currentTarget.checked)} />
           </div>
           <div className={classes.entry}>
             <div className={classes.entryIcon}>
@@ -453,14 +396,8 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
             <div className={classes.entryIcon}>
               <IconBell />
             </div>
-            <Text className={classes.entryLabel}>
-              {state.strings.enableNotifications}
-            </Text>
-            <Switch
-              className={classes.entryControl}
-              checked={state.config.pushEnabled}
-              onChange={(ev) => setNotifications(ev.currentTarget.checked)}
-            />
+            <Text className={classes.entryLabel}>{state.strings.enableNotifications}</Text>
+            <Switch className={classes.entryControl} checked={state.config.pushEnabled} onChange={(ev) => setNotifications(ev.currentTarget.checked)} />
           </div>
           <div className={classes.divider} />
           {showLogout && (
@@ -478,10 +415,7 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
               <IconTicket />
             </div>
             <Text className={classes.entryLabel}>{state.strings.mfaTitle}</Text>
-            <Switch className={classes.entryControl}
-              checked={state.config.mfaEnabled}
-              onChange={(ev) => setMfa(ev.currentTarget.checked)}
-            />
+            <Switch className={classes.entryControl} checked={state.config.mfaEnabled} onChange={(ev) => setMfa(ev.currentTarget.checked)} />
           </div>
           <div className={classes.entry}>
             <div className={classes.entryIcon}>
@@ -496,25 +430,19 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
             <div className={classes.entryIcon}>
               <IconUserCancel />
             </div>
-            <Text className={classes.entryLabel}>
-              {state.strings.blockedContacts}
-            </Text>
+            <Text className={classes.entryLabel}>{state.strings.blockedContacts}</Text>
           </div>
-           <div className={classes.entry}>
+          <div className={classes.entry}>
             <div className={classes.entryIcon}>
               <IconFolderCancel />
             </div>
-            <Text className={classes.entryLabel}>
-              {state.strings.blockedTopics}
-            </Text>
+            <Text className={classes.entryLabel}>{state.strings.blockedTopics}</Text>
           </div>
-           <div className={classes.entry}>
+          <div className={classes.entry}>
             <div className={classes.entryIcon}>
               <IconMessage2Cancel />
             </div>
-            <Text className={classes.entryLabel}>
-              {state.strings.blockedMessages}
-            </Text>
+            <Text className={classes.entryLabel}>{state.strings.blockedMessages}</Text>
           </div>
           <div className={classes.divider} />
           <div className={classes.selects}>
@@ -522,15 +450,8 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
               <div className={classes.entryIcon}>
                 <IconClock />
               </div>
-              <Text className={classes.controlLabel}>
-                {state.strings.timeFormat}
-              </Text>
-              <Radio.Group
-                name="timeFormat"
-                className={classes.radio}
-                value={state.timeFormat}
-                onChange={actions.setTimeFormat}
-              >
+              <Text className={classes.controlLabel}>{state.strings.timeFormat}</Text>
+              <Radio.Group name="timeFormat" className={classes.radio} value={state.timeFormat} onChange={actions.setTimeFormat}>
                 <Group mt="xs">
                   <Radio value="12h" label={state.strings.timeUs} />
                   <Radio value="24h" label={state.strings.timeEu} />
@@ -541,15 +462,8 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
               <div className={classes.entryIcon}>
                 <IconCalendar />
               </div>
-              <Text className={classes.controlLabel}>
-                {state.strings.dateFormat}
-              </Text>
-              <Radio.Group
-                name="dateFormat"
-                className={classes.radio}
-                value={state.dateFormat}
-                onChange={actions.setDateFormat}
-              >
+              <Text className={classes.controlLabel}>{state.strings.dateFormat}</Text>
+              <Radio.Group name="dateFormat" className={classes.radio} value={state.dateFormat} onChange={actions.setDateFormat}>
                 <Group mt="xs">
                   <Radio value="mm/dd" label={state.strings.dateUs} />
                   <Radio value="dd/mm" label={state.strings.dateEu} />
@@ -560,46 +474,25 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
               <div className={classes.entryIcon}>
                 <IconBrightness />
               </div>
-              <Text className={classes.controlLabel}>
-                {state.strings.theme}
-              </Text>
-              <Select
-                className={classes.entryControl}
-                size="xs"
-                data={state.themes}
-                value={state.scheme}
-                onChange={(theme) => actions.setTheme(theme as string)}
-              />
+              <Text className={classes.controlLabel}>{state.strings.theme}</Text>
+              <Select className={classes.entryControl} size="xs" data={state.themes} value={state.scheme} onChange={(theme) => actions.setTheme(theme as string)} />
             </div>
             <div className={classes.entry}>
               <div className={classes.entryIcon}>
                 <IconWorld />
               </div>
-              <Text className={classes.controlLabel}>
-                {state.strings.language}
-              </Text>
-              <Select
-                className={classes.entryControl}
-                size="xs"
-                data={state.languages}
-                value={state.language}
-                onChange={(language) => actions.setLanguage(language as string)}
-              />
+              <Text className={classes.controlLabel}>{state.strings.language}</Text>
+              <Select className={classes.entryControl} size="xs" data={state.languages} value={state.language} onChange={(language) => actions.setLanguage(language as string)} />
             </div>
             <div className={classes.entry}>
               <div className={classes.entryIcon}>
                 <IconMicrophone />
               </div>
-              <Text className={classes.controlLabel}>
-                {state.strings.microphone}
-              </Text>
+              <Text className={classes.controlLabel}>{state.strings.microphone}</Text>
               <Select
                 className={classes.entryControl}
                 size="xs"
-                data={[
-                  { value: '', label: state.strings.default },
-                  ...state.audioInputs,
-                ]}
+                data={[{ value: '', label: state.strings.default }, ...state.audioInputs]}
                 value={state.audioId ? state.audioId : ''}
                 onChange={actions.setAudio}
               />
@@ -608,16 +501,11 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
               <div className={classes.entryIcon}>
                 <IconVideo />
               </div>
-              <Text className={classes.controlLabel}>
-                {state.strings.camera}
-              </Text>
+              <Text className={classes.controlLabel}>{state.strings.camera}</Text>
               <Select
                 className={classes.entryControl}
                 size="xs"
-                data={[
-                  { value: '', label: state.strings.default },
-                  ...state.videoInputs,
-                ]}
+                data={[{ value: '', label: state.strings.default }, ...state.videoInputs]}
                 value={state.videoId ? state.videoId : ''}
                 onChange={actions.setVideo}
               />
@@ -625,13 +513,7 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
           </div>
         </div>
       )}
-      <Modal
-        title={state.strings.changeLogin}
-        opened={changeOpened}
-        onClose={changeClose}
-        overlayProps={{ backgroundOpacity: 0.55, blur: 3 }}
-        centered
-      >
+      <Modal title={state.strings.changeLogin} opened={changeOpened} onClose={changeClose} overlayProps={{ backgroundOpacity: 0.55, blur: 3 }} centered>
         <div className={classes.change}>
           <TextInput
             className={classes.input}
@@ -664,30 +546,13 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
             <Button variant="default" onClick={changeClose}>
               {state.strings.cancel}
             </Button>
-            <Button
-              variant="filled"
-              onClick={setLogin}
-              loading={savingLogin}
-              disabled={
-                state.taken ||
-                !state.checked ||
-                !state.handle ||
-                !state.password ||
-                state.confirm !== state.password
-              }
-            >
+            <Button variant="filled" onClick={setLogin} loading={savingLogin} disabled={state.taken || !state.checked || !state.handle || !state.password || state.confirm !== state.password}>
               {state.strings.save}
             </Button>
           </div>
         </div>
       </Modal>
-      <Modal
-        title={state.strings.profileDetails}
-        opened={detailsOpened}
-        onClose={detailsClose}
-        overlayProps={{ backgroundOpacity: 0.55, blur: 3 }}
-        centered
-      >
+      <Modal title={state.strings.profileDetails} opened={detailsOpened} onClose={detailsClose} overlayProps={{ backgroundOpacity: 0.55, blur: 3 }} centered>
         <div className={classes.change}>
           <TextInput
             className={classes.input}
@@ -717,32 +582,20 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
             leftSectionPointerEvents="none"
             leftSection={<IconBook />}
             placeholder={state.strings.description}
-            onChange={(event) =>
-              actions.setDescription(event.currentTarget.value)
-            }
+            onChange={(event) => actions.setDescription(event.currentTarget.value)}
           />
           <div className={classes.control}>
             <Button variant="default" onClick={detailsClose}>
               {state.strings.cancel}
             </Button>
-            <Button
-              variant="filled"
-              onClick={setDetails}
-              loading={savingDetails}
-            >
+            <Button variant="filled" onClick={setDetails} loading={savingDetails}>
               {state.strings.save}
             </Button>
           </div>
         </div>
       </Modal>
 
-      <Modal
-        title={state.strings.profileImage}
-        opened={imageOpened}
-        onClose={imageClose}
-        overlayProps={{ backgroundOpacity: 0.55, blur: 3 }}
-        centered
-      >
+      <Modal title={state.strings.profileImage} opened={imageOpened} onClose={imageClose} overlayProps={{ backgroundOpacity: 0.55, blur: 3 }} centered>
         <div className={classes.change}>
           <div className={classes.cropper}>
             <Cropper
@@ -756,19 +609,8 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
             />
           </div>
           <div className={classes.imageSelect}>
-            <input
-              type="file"
-              id="file"
-              accept="image/*"
-              ref={imageFile}
-              onChange={(e) => selectImage(e.target)}
-              style={{ display: 'none' }}
-            />
-            <Button
-              variant="default"
-              className={classes.select}
-              onClick={clickSelect}
-            >
+            <input type="file" id="file" accept="image/*" ref={imageFile} onChange={(e) => selectImage(e.target)} style={{ display: 'none' }} />
+            <Button variant="default" className={classes.select} onClick={clickSelect}>
               {state.strings.selectImage}
             </Button>
             <div className={classes.control}>
@@ -782,33 +624,18 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
           </div>
         </div>
       </Modal>
-      <Modal
-        title={state.strings.mfaTitle}
-        opened={mfaOpened}
-        onClose={mfaClose}
-        overlayProps={{ backgroundOpacity: 0.55, blur: 3 }}
-        centered
-      >
+      <Modal title={state.strings.mfaTitle} opened={mfaOpened} onClose={mfaClose} overlayProps={{ backgroundOpacity: 0.55, blur: 3 }} centered>
         <div className={classes.mfa}>
           <div className={classes.secret}>
             <Text>{state.strings.mfaSteps}</Text>
             <Image radius="md" className={classes.secretImage} src={state.secretImage} />
             <div className={classes.secretText}>
               <Text>{state.secretText}</Text>
-              { state.secretCopied && (
-                <IconCheck />
-              )}
-              { !state.secretCopied && (
-                <IconCopy className={classes.copyIcon} onClick={actions.copySecret} />
-              )}
+              {state.secretCopied && <IconCheck />}
+              {!state.secretCopied && <IconCopy className={classes.copyIcon} onClick={actions.copySecret} />}
             </div>
-            <PinInput
-              value={state.code}
-              length={6}
-              className={classes.mfaPin}
-              onChange={(event) => actions.setCode(event)}
-            />
-            <Text className={classes.authMessage}>{ authMessage }</Text>
+            <PinInput value={state.code} length={6} className={classes.mfaPin} onChange={(event) => actions.setCode(event)} />
+            <Text className={classes.authMessage}>{authMessage}</Text>
           </div>
           <div className={classes.control}>
             <Button variant="default" onClick={mfaClose}>
@@ -820,40 +647,23 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
           </div>
         </div>
       </Modal>
-      <Modal
-        title={state.strings.sealedTopics}
-        opened={sealOpened}
-        onClose={sealClose}
-        overlayProps={{ backgroundOpacity: 0.55, blur: 3 }}
-        size="lg"
-        centered
-      >
+      <Modal title={state.strings.sealedTopics} opened={sealOpened} onClose={sealClose} overlayProps={{ backgroundOpacity: 0.55, blur: 3 }} size="lg" centered>
         <>
-          { !sealDelete && !sealReset && state.config.sealSet && state.config.sealUnlocked && (
+          {!sealDelete && !sealReset && state.config.sealSet && state.config.sealUnlocked && (
             <div className={classes.seal}>
-              <span>{ state.strings.sealForget }</span>
+              <span>{state.strings.sealForget}</span>
               <div className={classes.buttons}>
-                { !sealConfig && (
-                  <IconCaretDown className={classes.sealConfig} onClick={() => setSealConfig(true)}/>
-                )}
-                { sealConfig && (
-                  <IconCaretRight className={classes.sealConfig} onClick={() => setSealConfig(false)}/>
-                )}
-                { sealConfig && (
-                  <Button
-                    className={classes.delete}
-                    onClick={() => setSealDelete(true)}
-                  >
+                {!sealConfig && <IconCaretDown className={classes.sealConfig} onClick={() => setSealConfig(true)} />}
+                {sealConfig && <IconCaretRight className={classes.sealConfig} onClick={() => setSealConfig(false)} />}
+                {sealConfig && (
+                  <Button className={classes.delete} onClick={() => setSealDelete(true)}>
                     {state.strings.remove}
                   </Button>
                 )}
-                { sealConfig && (
-                  <Button
-                    variant="filled"
-                    onClick={() => setSealReset(true)}
-                  >
+                {sealConfig && (
+                  <Button variant="filled" onClick={() => setSealReset(true)}>
                     {state.strings.resave}
-                  </Button> 
+                  </Button>
                 )}
                 <div className={classes.controls}>
                   <Button variant="default" onClick={sealClose}>
@@ -866,9 +676,9 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
               </div>
             </div>
           )}
-          { !sealDelete && sealReset && state.config.sealSet && state.config.sealUnlocked && (
+          {!sealDelete && sealReset && state.config.sealSet && state.config.sealUnlocked && (
             <div className={classes.seal}>
-              <span>{ state.strings.sealUpdate }</span>
+              <span>{state.strings.sealUpdate}</span>
               <TextInput
                 className={classes.input}
                 size="md"
@@ -897,9 +707,9 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
               </div>
             </div>
           )}
-          { !sealDelete && state.config.sealSet && !state.config.sealUnlocked && (
+          {!sealDelete && state.config.sealSet && !state.config.sealUnlocked && (
             <div className={classes.seal}>
-              <span>{ state.strings.sealUnlock }</span>
+              <span>{state.strings.sealUnlock}</span>
               <PasswordInput
                 className={classes.input}
                 size="md"
@@ -909,17 +719,10 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
                 onChange={(event) => actions.setSealPassword(event.currentTarget.value)}
               />
               <div className={classes.buttons}>
-                { !sealConfig && (
-                  <IconCaretDown className={classes.sealConfig} onClick={() => setSealConfig(true)}/>
-                )}
-                { sealConfig && (
-                  <IconCaretRight className={classes.sealConfig} onClick={() => setSealConfig(false)}/>
-                )}
-                { sealConfig && (
-                  <Button
-                    className={classes.delete}
-                    onClick={() => setSealDelete(true)}
-                  >
+                {!sealConfig && <IconCaretDown className={classes.sealConfig} onClick={() => setSealConfig(true)} />}
+                {sealConfig && <IconCaretRight className={classes.sealConfig} onClick={() => setSealConfig(false)} />}
+                {sealConfig && (
+                  <Button className={classes.delete} onClick={() => setSealDelete(true)}>
                     {state.strings.remove}
                   </Button>
                 )}
@@ -934,9 +737,9 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
               </div>
             </div>
           )}
-          { sealDelete && state.config.sealSet && (
+          {sealDelete && state.config.sealSet && (
             <div className={classes.seal}>
-              <span>{ state.strings.sealDelete }</span>
+              <span>{state.strings.sealDelete}</span>
               <TextInput
                 className={classes.input}
                 size="md"
@@ -950,15 +753,21 @@ export function Settings({ showLogout }: { showLogout: boolean }) {
                 <Button variant="default" onClick={sealClose}>
                   {state.strings.cancel}
                 </Button>
-                <Button variant="filled" className={state.sealDelete === state.strings.delete ? classes.delete : ''} onClick={sealRemove} disabled={state.sealDelete !== state.strings.delete} loading={savingSeal}>
+                <Button
+                  variant="filled"
+                  className={state.sealDelete === state.strings.delete ? classes.delete : ''}
+                  onClick={sealRemove}
+                  disabled={state.sealDelete !== state.strings.delete}
+                  loading={savingSeal}
+                >
                   {state.strings.remove}
                 </Button>
               </div>
             </div>
           )}
-          { !state.config.sealSet && (
+          {!state.config.sealSet && (
             <div className={classes.seal}>
-              <span>{ state.strings.sealCreate }</span>
+              <span>{state.strings.sealCreate}</span>
               <TextInput
                 className={classes.input}
                 size="md"

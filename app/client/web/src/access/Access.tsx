@@ -1,27 +1,10 @@
 import React, { useState } from 'react'
 import { useAccess } from './useAccess.hook'
 import classes from './Access.module.css'
-import {
-  Select,
-  Space,
-  Title,
-  Image,
-  Button,
-  Modal,
-  PasswordInput,
-  TextInput,
-  PinInput,
-} from '@mantine/core'
+import { Select, Space, Title, Image, Button, Modal, PasswordInput, TextInput, PinInput } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import left from '../images/login.png'
-import {
-  IconLock,
-  IconUser,
-  IconUsers,
-  IconSettings,
-  IconServer,
-  IconKey,
-} from '@tabler/icons-react'
+import { IconLock, IconUser, IconUsers, IconSettings, IconServer, IconKey } from '@tabler/icons-react'
 import { modals } from '@mantine/modals'
 
 export function Access() {
@@ -46,11 +29,7 @@ export function Access() {
         otpClose()
       } catch (err: any) {
         console.log(err.message)
-        if (
-          err.message === '405' ||
-          err.message === '403' ||
-          err.message === '429'
-        ) {
+        if (err.message === '405' || err.message === '403' || err.message === '429') {
           if (err.message === '429') {
             setDisabled(true)
           } else {
@@ -85,33 +64,15 @@ export function Access() {
       {state.layout != null && (
         <div className={classes.right}>
           <div className={classes.frame}>
-            {state.mode !== 'admin' && (
-              <Button
-                variant="transparent"
-                className={classes.float}
-                leftSection={<IconSettings size={28} />}
-                onClick={() => actions.setMode('admin')}
-              />
-            )}
-            {state.mode === 'admin' && (
-              <Button
-                variant="transparent"
-                className={classes.float}
-                leftSection={<IconUser size={28} />}
-                onClick={() => actions.setMode('account')}
-              />
-            )}
+            {state.mode !== 'admin' && <Button variant="transparent" className={classes.float} leftSection={<IconSettings size={28} />} onClick={() => actions.setMode('admin')} />}
+            {state.mode === 'admin' && <Button variant="transparent" className={classes.float} leftSection={<IconUser size={28} />} onClick={() => actions.setMode('account')} />}
             <Title className={classes.title} order={1}>
               Databag
             </Title>
             {state.mode === 'account' && (
               <>
                 <Title order={3}>{state.strings.login}</Title>
-                <Button
-                  size="compact-sm"
-                  variant="transparent"
-                  onClick={urlOpen}
-                >
+                <Button size="compact-sm" variant="transparent" onClick={urlOpen}>
                   {state.host}
                 </Button>
                 <Space h="md" />
@@ -122,9 +83,7 @@ export function Access() {
                   leftSectionPointerEvents="none"
                   leftSection={<IconUser />}
                   placeholder={state.strings.username}
-                  onChange={(event) =>
-                    actions.setUsername(event.currentTarget.value)
-                  }
+                  onChange={(event) => actions.setUsername(event.currentTarget.value)}
                 />
                 <PasswordInput
                   className={classes.input}
@@ -132,36 +91,19 @@ export function Access() {
                   value={state.password}
                   leftSection={<IconLock />}
                   placeholder={state.strings.password}
-                  onChange={(event) =>
-                    actions.setPassword(event.currentTarget.value)
-                  }
+                  onChange={(event) => actions.setPassword(event.currentTarget.value)}
                   onKeyDown={(ev) => {
-                    if (ev.code === 'Enter' && state.password && state.username)
-                      login()
+                    if (ev.code === 'Enter' && state.password && state.username) login()
                   }}
                 />
                 <Space h="md" />
-                <Button
-                  variant="filled"
-                  className={classes.submit}
-                  onClick={login}
-                  loading={state.loading}
-                  disabled={!state.username || !state.password}
-                >
+                <Button variant="filled" className={classes.submit} onClick={login} loading={state.loading} disabled={!state.username || !state.password}>
                   {state.strings.login}
                 </Button>
-                <Button
-                  size="compact-sm"
-                  variant="subtle"
-                  onClick={() => actions.setMode('create')}
-                >
+                <Button size="compact-sm" variant="subtle" onClick={() => actions.setMode('create')}>
                   {state.strings.createAccount}
                 </Button>
-                <Button
-                  size="compact-sm"
-                  variant="subtle"
-                  onClick={() => actions.setMode('reset')}
-                >
+                <Button size="compact-sm" variant="subtle" onClick={() => actions.setMode('reset')}>
                   {state.strings.forgotPassword}
                 </Button>
               </>
@@ -169,11 +111,7 @@ export function Access() {
             {state.mode === 'reset' && (
               <>
                 <Title order={3}>{state.strings.accessAccount}</Title>
-                <Button
-                  size="compact-sm"
-                  variant="transparent"
-                  onClick={urlOpen}
-                >
+                <Button size="compact-sm" variant="transparent" onClick={urlOpen}>
                   {state.host}
                 </Button>
                 <Space h="md" />
@@ -184,25 +122,13 @@ export function Access() {
                   leftSectionPointerEvents="none"
                   leftSection={<IconKey />}
                   placeholder={state.strings.accessCode}
-                  onChange={(event) =>
-                    actions.setToken(event.currentTarget.value)
-                  }
+                  onChange={(event) => actions.setToken(event.currentTarget.value)}
                 />
                 <Space h="md" />
-                <Button
-                  variant="filled"
-                  className={classes.submit}
-                  disabled={!state.token}
-                  onClick={login}
-                  loading={state.loading}
-                >
+                <Button variant="filled" className={classes.submit} disabled={!state.token} onClick={login} loading={state.loading}>
                   {state.strings.login}
                 </Button>
-                <Button
-                  size="compact-sm"
-                  variant="subtle"
-                  onClick={() => actions.setMode('account')}
-                >
+                <Button size="compact-sm" variant="subtle" onClick={() => actions.setMode('account')}>
                   {state.strings.accountLogin}
                 </Button>
               </>
@@ -211,26 +137,18 @@ export function Access() {
               <>
                 <Space h="md" />
                 <Title order={3}>{state.strings.createAccount}</Title>
-                <Button
-                  size="compact-sm"
-                  variant="transparent"
-                  onClick={urlOpen}
-                >
+                <Button size="compact-sm" variant="transparent" onClick={urlOpen}>
                   {state.host}
                 </Button>
                 <Space h="md" />
                 <TextInput
-                  className={
-                    state.available === 0 ? classes.input : classes.hidden
-                  }
+                  className={state.available === 0 ? classes.input : classes.hidden}
                   size="md"
                   value={state.token}
                   leftSectionPointerEvents="none"
                   leftSection={<IconKey />}
                   placeholder={state.strings.accessCode}
-                  onChange={(event) =>
-                    actions.setToken(event.currentTarget.value)
-                  }
+                  onChange={(event) => actions.setToken(event.currentTarget.value)}
                 />
                 <TextInput
                   className={classes.input}
@@ -240,9 +158,7 @@ export function Access() {
                   leftSection={<IconUser />}
                   rightSection={state.taken ? <IconUsers /> : null}
                   placeholder={state.strings.username}
-                  onChange={(event) =>
-                    actions.setUsername(event.currentTarget.value)
-                  }
+                  onChange={(event) => actions.setUsername(event.currentTarget.value)}
                   error={state.taken ? true : false}
                 />
                 <PasswordInput
@@ -251,9 +167,7 @@ export function Access() {
                   value={state.password}
                   leftSection={<IconLock />}
                   placeholder={state.strings.password}
-                  onChange={(event) =>
-                    actions.setPassword(event.currentTarget.value)
-                  }
+                  onChange={(event) => actions.setPassword(event.currentTarget.value)}
                 />
                 <PasswordInput
                   className={classes.input}
@@ -261,29 +175,13 @@ export function Access() {
                   value={state.confirm}
                   leftSection={<IconLock />}
                   placeholder={state.strings.confirmPassword}
-                  onChange={(event) =>
-                    actions.setConfirm(event.currentTarget.value)
-                  }
+                  onChange={(event) => actions.setConfirm(event.currentTarget.value)}
                 />
                 <Space h="md" />
-                <Button
-                  variant="filled"
-                  className={classes.submit}
-                  onClick={login}
-                  disabled={
-                    state.taken ||
-                    !state.username ||
-                    !state.password ||
-                    state.password !== state.confirm
-                  }
-                >
+                <Button variant="filled" className={classes.submit} onClick={login} disabled={state.taken || !state.username || !state.password || state.password !== state.confirm}>
                   {state.strings.create}
                 </Button>
-                <Button
-                  variant="subtle"
-                  onClick={() => actions.setMode('account')}
-                  size="compact-sm"
-                >
+                <Button variant="subtle" onClick={() => actions.setMode('account')} size="compact-sm">
                   {state.strings.accountLogin}
                 </Button>
               </>
@@ -291,11 +189,7 @@ export function Access() {
             {state.mode === 'admin' && (
               <>
                 <Title order={3}>{state.strings.admin}</Title>
-                <Button
-                  size="compact-sm"
-                  variant="transparent"
-                  onClick={urlOpen}
-                >
+                <Button size="compact-sm" variant="transparent" onClick={urlOpen}>
                   {state.host}
                 </Button>
                 <Space h="md" />
@@ -305,46 +199,22 @@ export function Access() {
                   value={state.password}
                   leftSection={<IconLock />}
                   placeholder={state.strings.password}
-                  onChange={(event) =>
-                    actions.setPassword(event.currentTarget.value)
-                  }
+                  onChange={(event) => actions.setPassword(event.currentTarget.value)}
                 />
                 <Space h="md" />
-                <Button
-                  variant="filled"
-                  className={classes.submit}
-                  disabled={!state.password}
-                  onClick={login}
-                  loading={state.loading}
-                >
+                <Button variant="filled" className={classes.submit} disabled={!state.password} onClick={login} loading={state.loading}>
                   {state.strings.login}
                 </Button>
               </>
             )}
             <div className={classes.settings}>
-              <Select
-                label={state.strings.theme}
-                data={state.themes}
-                value={state.scheme}
-                onChange={(theme) => actions.setTheme(theme as string)}
-              />
-              <Select
-                label={state.strings.language}
-                data={state.languages}
-                value={state.language}
-                onChange={(language) => actions.setLanguage(language as string)}
-              />
+              <Select label={state.strings.theme} data={state.themes} value={state.scheme} onChange={(theme) => actions.setTheme(theme as string)} />
+              <Select label={state.strings.language} data={state.languages} value={state.language} onChange={(language) => actions.setLanguage(language as string)} />
             </div>
           </div>
         </div>
       )}
-      <Modal
-        opened={urlOpened}
-        onClose={urlClose}
-        withCloseButton={false}
-        overlayProps={{ backgroundOpacity: 0.55, blur: 3 }}
-        centered
-      >
+      <Modal opened={urlOpened} onClose={urlClose} withCloseButton={false} overlayProps={{ backgroundOpacity: 0.55, blur: 3 }} centered>
         <TextInput
           className={classes.urlInput}
           size="md"
@@ -358,35 +228,17 @@ export function Access() {
           onChange={(event) => actions.setNode(event.currentTarget.value)}
         />
       </Modal>
-      <Modal
-        opened={otpOpened}
-        onClose={otpClose}
-        withCloseButton={false}
-        overlayProps={{ backgroundOpacity: 0.55, blur: 3 }}
-        centered
-      >
+      <Modal opened={otpOpened} onClose={otpClose} withCloseButton={false} overlayProps={{ backgroundOpacity: 0.55, blur: 3 }} centered>
         <div className={classes.mfa}>
           <div className={classes.mfaTitle}>{state.strings.mfaTitle}</div>
           <div className={classes.mfaDescription}>{state.strings.mfaEnter}</div>
-          <PinInput
-            value={state.code}
-            length={6}
-            className={classes.mfaPin}
-            onChange={(event) => actions.setCode(event)}
-          />
-          <div className={classes.mfaDisabled}>
-            {disabled ? state.strings.mfaDisabled : ''}
-          </div>
+          <PinInput value={state.code} length={6} className={classes.mfaPin} onChange={(event) => actions.setCode(event)} />
+          <div className={classes.mfaDisabled}>{disabled ? state.strings.mfaDisabled : ''}</div>
           <div className={classes.mfaControl}>
             <Button variant="outline" onClick={otpClose}>
               {state.strings.cancel}
             </Button>
-            <Button
-              variant="filled"
-              onClick={login}
-              loading={state.loading}
-              disabled={state.code.length !== 6}
-            >
+            <Button variant="filled" onClick={login} loading={state.loading} disabled={state.code.length !== 6}>
               {state.strings.login}
             </Button>
           </div>

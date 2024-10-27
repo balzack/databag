@@ -6,7 +6,7 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "lint": "eslint .",
-    "format": "prettier --write src",
+    "format": "prettier --single-quote true --print-width 200 --write src",
     "lint:fix": "yarn lint --fix",
     "type-check": "tsc --project tsconfig.json --pretty --noEmit",
     "update-deps": "node ./src/config/update-deps.mjs"
