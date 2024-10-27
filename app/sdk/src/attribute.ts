@@ -1,7 +1,7 @@
-import { EventEmitter } from "eventemitter3";
-import type { Attribute, Settings, Logging } from "./api";
-import type { Article } from "./types";
-import { Store } from "./store";
+import { EventEmitter } from 'eventemitter3';
+import type { Attribute, Settings, Logging } from './api';
+import type { Article } from './types';
+import { Store } from './store';
 
 export class AttributeModule implements Attribute {
   private log: Logging;
@@ -23,21 +23,21 @@ export class AttributeModule implements Attribute {
   }
 
   public addCardListener(ev: (articles: Article[]) => void): void {
-    this.emitter.on("artcile", ev);
+    this.emitter.on('artcile', ev);
   }
 
   public removeCardListener(ev: (articles: Article[]) => void): void {
-    this.emitter.off("article", ev);
+    this.emitter.off('article', ev);
   }
 
   public async close(): void {}
 
   public async setRevision(rev: number): Promise<void> {
-    console.log("set attribute revision:", rev);
+    console.log('set attribute revision:', rev);
   }
 
   public async addArticle(sealed: boolean, type: string, subject: string, cardIds: string[], groupIds: string[]): Promise<string> {
-    return "";
+    return '';
   }
 
   public async removeArticle(articleId: string): Promise<void> {}

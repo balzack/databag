@@ -1,7 +1,7 @@
-import { EventEmitter } from "eventemitter3";
-import type { Alias, Settings, Logging } from "./api";
-import type { Group } from "./types";
-import { Store } from "./store";
+import { EventEmitter } from 'eventemitter3';
+import type { Alias, Settings, Logging } from './api';
+import type { Group } from './types';
+import { Store } from './store';
 
 export class AliasModule implements Alias {
   private log: Logging;
@@ -23,21 +23,21 @@ export class AliasModule implements Alias {
   }
 
   public addGroupListener(ev: (groups: Group[]) => void): void {
-    this.emitter.on("group", ev);
+    this.emitter.on('group', ev);
   }
 
   public removeGroupListener(ev: (groups: Group[]) => void): void {
-    this.emitter.off("group", ev);
+    this.emitter.off('group', ev);
   }
 
   public async close(): void {}
 
   public async setRevision(rev: number): Promise<void> {
-    console.log("set alias revision:", rev);
+    console.log('set alias revision:', rev);
   }
 
   public async addGroup(sealed: boolean, dataType: string, subject: string, cardIds: string[]): Promise<string> {
-    return "";
+    return '';
   }
 
   public async removeGroup(groupId: string): Promise<void> {}

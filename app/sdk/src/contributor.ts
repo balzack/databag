@@ -1,7 +1,7 @@
-import type { Contributor } from "./api";
-import type { Asset } from "./types";
-import type { Crypto } from "./crypto";
-import type { Logging } from "./logging";
+import type { Contributor } from './api';
+import type { Asset } from './types';
+import type { Crypto } from './crypto';
+import type { Logging } from './logging';
 
 export class ContributorModule implements Contributor {
   private log: Logging;
@@ -19,13 +19,13 @@ export class ContributorModule implements Contributor {
   }
 
   public async addTopic(type: string, message: string, assets: Asset[]): Promise<string> {
-    return "";
+    return '';
   }
 
   public async removeTopic(topicId: string): Promise<void> {}
 
   public async addTag(topicId: string, type: string, value: string): Promise<string> {
-    return "";
+    return '';
   }
 
   public async removeTag(topicId: string, tagId: string): Promise<void> {}

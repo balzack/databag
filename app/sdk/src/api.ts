@@ -1,4 +1,4 @@
-import type { Channel, Topic, Asset, Tag, Article, Group, Card, Profile, Call, Config, NodeConfig, NodeAccount, Participant } from "./types";
+import type { Channel, Topic, Asset, Tag, Article, Group, Card, Profile, Call, Config, NodeConfig, NodeAccount, Participant } from './types';
 
 export interface Session {
   getSettings(): Settings;

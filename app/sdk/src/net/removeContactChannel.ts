@@ -5,4 +5,3 @@ export async function removeContactChannel(node: string, secure: boolean, guid: 
   const response = await fetchWithTimeout(endpoint, { method: 'DELETE' });
   checkResponse(response.status);
 }
-

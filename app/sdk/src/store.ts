@@ -1,6 +1,6 @@
-import { Login, ProfileEntity, defaultProfileEntity, ConfigEntity, defaultConfigEntity } from "./entities";
-import type { ArticleDetail, ArticleItem, ChannelItem, CardItem, CardProfile, CardDetail, ChannelSummary, ChannelDetail } from "./items";
-import type { Logging } from "./logging";
+import { Login, ProfileEntity, defaultProfileEntity, ConfigEntity, defaultConfigEntity } from './entities';
+import type { ArticleDetail, ArticleItem, ChannelItem, CardItem, CardProfile, CardDetail, ChannelSummary, ChannelDetail } from './items';
+import type { Logging } from './logging';
 
 export interface Store {
   init(): Promise<Login | null>;
@@ -87,17 +87,16 @@ export class OfflineStore implements Store {
     this.log = log;
   }
 
-
   private async getValues(guid: string, table: string, fields: string[]): Promise<any[]> {
-    return await this.sql.get(`SELECT ${fields.join(', ')} FROM ${table}_${guid}`)
+    return await this.sql.get(`SELECT ${fields.join(', ')} FROM ${table}_${guid}`);
   }
 
   private async addValue(guid: string, table: string, fields: string[], value: (string | number | null)[]): Promise<void> {
-    return await this.sql.set(`INSERT INTO ${table}_${guid} (${fields.join(', ')}) VALUES (${fields.map(field => '?').join(', ')})`, value);
+    return await this.sql.set(`INSERT INTO ${table}_${guid} (${fields.join(', ')}) VALUES (${fields.map((field) => '?').join(', ')})`, value);
   }
 
   private async setValue(guid: string, table: string, idField: string, fields: string[], idValue: string | number, value: (string | number | null)[]): Promise<void> {
-    return await this.sql.set(`UPDATE ${table}_${guid} SET ${fields.map(field => `${field}=?`).join(',')} WHERE ${idField}=?`, [ ...value, idValue ]);
+    return await this.sql.set(`UPDATE ${table}_${guid} SET ${fields.map((field) => `${field}=?`).join(',')} WHERE ${idField}=?`, [...value, idValue]);
   }
 
   private async removeValue(guid: string, table: string, idField: string, idValue: string | number): Promise<void> {
@@ -107,8 +106,7 @@ export class OfflineStore implements Store {
   private parse(value: string): any {
     try {
       return JSON.parse(value);
-    }
-    catch (err) {
+    } catch (err) {
       console.log(err);
     }
     return {};
@@ -127,11 +125,11 @@ export class OfflineStore implements Store {
   }
 
   private async setAppValue(guid: string, id: string, value: any): Promise<void> {
-    await this.sql.set("INSERT OR REPLACE INTO app (key, value) values (?, ?)", [`${guid}::${id}`, JSON.stringify(value)]);
+    await this.sql.set('INSERT OR REPLACE INTO app (key, value) values (?, ?)', [`${guid}::${id}`, JSON.stringify(value)]);
   }
 
   private async clearAppValue(guid: string, id: string): Promise<void> {
-    await this.sql.set("INSERT OR REPLACE INTO app (key, value) values (?, null)", [`${guid}::${id}`]);
+    await this.sql.set('INSERT OR REPLACE INTO app (key, value) values (?, null)', [`${guid}::${id}`]);
   }
 
   private async initLogin(guid: string): Promise<void> {
@@ -150,14 +148,12 @@ export class OfflineStore implements Store {
     await this.sql.set(
       `CREATE TABLE IF NOT EXISTS card_channel_topic_${guid} (card_id text, channel_id text, topic_id text, revision integer, created integer, detail_revision integer, detail text, unsealed_detail text, unique(card_id, channel_id, topic_id))`,
     );
-    await this.sql.set(
-      `CREATE TABLE IF NOT EXISTS marker_${guid} (value text)`,
-    );
+    await this.sql.set(`CREATE TABLE IF NOT EXISTS marker_${guid} (value text)`);
   }
 
   public async init(): Promise<Login | null> {
-    await this.sql.set("CREATE TABLE IF NOT EXISTS app (key text, value text, unique(key));");
-    return (await this.getAppValue("", "login", null)) as Login | null;
+    await this.sql.set('CREATE TABLE IF NOT EXISTS app (key text, value text, unique(key));');
+    return (await this.getAppValue('', 'login', null)) as Login | null;
   }
 
   public async setMarker(guid: string, value: string) {
@@ -169,76 +165,87 @@ export class OfflineStore implements Store {
   }
 
   public async getMarkers(guid: string): Promise<string[]> {
-    return (await this.getValues(guid, 'marker', ['value'])).map(marker => marker.value);
+    return (await this.getValues(guid, 'marker', ['value'])).map((marker) => marker.value);
   }
 
   public async setLogin(login: Login): Promise<void> {
     await this.initLogin(login.guid);
-    await this.setAppValue("", "login", login);
+    await this.setAppValue('', 'login', login);
   }
 
   public async clearLogin(): Promise<void> {
-    await this.clearAppValue("", "login");
+    await this.clearAppValue('', 'login');
   }
 
   public async getSeal(guid: string): Promise<{ publicKey: string; privateKey: string } | null> {
-    return (await this.getAppValue(guid, "seal", null)) as {
+    return (await this.getAppValue(guid, 'seal', null)) as {
       publicKey: string;
       privateKey: string;
     } | null;
   }
 
   public async setSeal(guid: string, seal: { publicKey: string; privateKey: string }): Promise<void> {
-    await this.setAppValue(guid, "seal", seal);
+    await this.setAppValue(guid, 'seal', seal);
   }
 
   public async clearSeal(guid: string): Promise<void> {
-    await this.clearAppValue(guid, "seal");
+    await this.clearAppValue(guid, 'seal');
   }
 
   public async getProfileRevision(guid: string): Promise<number> {
-    return (await this.getAppValue(guid, "profile_revision", 0)) as number;
+    return (await this.getAppValue(guid, 'profile_revision', 0)) as number;
   }
 
   public async setProfileRevision(guid: string, revision: number): Promise<void> {
-    await this.setAppValue(guid, "profile_revision", revision);
+    await this.setAppValue(guid, 'profile_revision', revision);
   }
 
   public async getProfileData(guid: string): Promise<ProfileEntity> {
-    return (await this.getAppValue(guid, "profile_data", defaultProfileEntity)) as ProfileEntity;
+    return (await this.getAppValue(guid, 'profile_data', defaultProfileEntity)) as ProfileEntity;
   }
 
   public async setProfileData(guid: string, data: ProfileEntity): Promise<void> {
-    await this.setAppValue(guid, "profile_data", data);
+    await this.setAppValue(guid, 'profile_data', data);
   }
 
   public async getSettingsRevision(guid: string): Promise<number> {
-    return (await this.getAppValue(guid, "account_revision", 0)) as number;
+    return (await this.getAppValue(guid, 'account_revision', 0)) as number;
   }
 
   public async setSettingsRevision(guid: string, revision: number): Promise<void> {
-    await this.setAppValue(guid, "account_revision", revision);
+    await this.setAppValue(guid, 'account_revision', revision);
   }
 
   public async getSettingsData(guid: string): Promise<ConfigEntity> {
-    return (await this.getAppValue(guid, "account_data", defaultConfigEntity)) as ConfigEntity;
+    return (await this.getAppValue(guid, 'account_data', defaultConfigEntity)) as ConfigEntity;
   }
 
   public async setSettingsData(guid: string, data: ConfigEntity): Promise<void> {
-    await this.setAppValue(guid, "account_data", data);
+    await this.setAppValue(guid, 'account_data', data);
   }
 
   public async getContactRevision(guid: string): Promise<number> {
-    return (await this.getAppValue(guid, "contact_revision", 0)) as number;
+    return (await this.getAppValue(guid, 'contact_revision', 0)) as number;
   }
 
   public async setContactRevision(guid: string, revision: number): Promise<void> {
-    await this.setAppValue(guid, "contact_revision", revision);
+    await this.setAppValue(guid, 'contact_revision', revision);
   }
 
   public async getContacts(guid: string): Promise<{ cardId: string; item: CardItem }[]> {
-    const cards = await this.getValues(guid, 'card', ['offsync_profile', 'offsync_article', 'offsync_channel', 'revision', 'card_id', 'profile', 'detail', 'profile_revision', 'article_revision', 'channel_revision']);
-    return cards.map(card => ({
+    const cards = await this.getValues(guid, 'card', [
+      'offsync_profile',
+      'offsync_article',
+      'offsync_channel',
+      'revision',
+      'card_id',
+      'profile',
+      'detail',
+      'profile_revision',
+      'article_revision',
+      'channel_revision',
+    ]);
+    return cards.map((card) => ({
       cardId: card.card_id,
       item: {
         offsyncProfile: card.offsync_profile,
@@ -250,7 +257,7 @@ export class OfflineStore implements Store {
         profileRevision: card.profile_revision,
         articleRevision: card.article_revision,
         channelRevision: card.channel_revision,
-      }
+      },
     }));
   }
 
@@ -313,7 +320,6 @@ export class OfflineStore implements Store {
     await this.setValue(guid, 'card', 'card_id', ['channel_revision'], cardId, [revision]);
   }
 
-
   public async getContactCardArticles(guid: string): Promise<{ cardId: string; articleId: string; item: ArticleItem }[]> {
     return [];
   }
@@ -373,7 +379,7 @@ export class OnlineStore implements Store {
   }
 
   public async init(): Promise<Login | null> {
-    return (await this.getAppValue("", "login", null)) as Login | null;
+    return (await this.getAppValue('', 'login', null)) as Login | null;
   }
 
   public async setMarker(guid: string, value: string) {
@@ -384,7 +390,11 @@ export class OnlineStore implements Store {
 
   public async clearMarker(guid: string, value: string) {
     const markers = (await this.getAppValue(guid, 'marker', [])) as string[];
-    this.setAppValue(guid, 'marker', markers.filter(marker => (value != marker)));
+    this.setAppValue(
+      guid,
+      'marker',
+      markers.filter((marker) => value != marker),
+    );
   }
 
   public async getMarkers(guid: string): Promise<string[]> {
@@ -392,26 +402,26 @@ export class OnlineStore implements Store {
   }
 
   public async setLogin(login: Login): Promise<void> {
-    await this.setAppValue("", "login", login);
+    await this.setAppValue('', 'login', login);
   }
 
   public async clearLogin(): Promise<void> {
-    await this.clearAppValue("", "login");
+    await this.clearAppValue('', 'login');
   }
 
   public async getSeal(guid: string): Promise<{ publicKey: string; privateKey: string } | null> {
-    return (await this.getAppValue(guid, "seal", null)) as {
+    return (await this.getAppValue(guid, 'seal', null)) as {
       publicKey: string;
       privateKey: string;
     } | null;
   }
 
   public async setSeal(guid: string, seal: { publicKey: string; privateKey: string }): Promise<void> {
-    await this.setAppValue(guid, "seal", seal);
+    await this.setAppValue(guid, 'seal', seal);
   }
 
   public async clearSeal(guid: string): Promise<void> {
-    await this.clearAppValue(guid, "seal");
+    await this.clearAppValue(guid, 'seal');
   }
 
   public async getProfileRevision(guid: string): Promise<number> {

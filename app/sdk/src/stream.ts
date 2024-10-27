@@ -1,8 +1,8 @@
-import { EventEmitter } from "eventemitter3";
-import type { Contact, Content, Stream } from "./api";
-import type { Channel } from "./types";
-import { Store } from "./store";
-import { Logging } from "./logging";
+import { EventEmitter } from 'eventemitter3';
+import type { Contact, Content, Stream } from './api';
+import type { Channel } from './types';
+import { Store } from './store';
+import { Logging } from './logging';
 
 export class StreamModule implements Stream {
   private log: Logging;
@@ -20,11 +20,11 @@ export class StreamModule implements Stream {
   }
 
   public addChannelListener(ev: (channels: Channel[]) => void): void {
-    this.emitter.on("channel", ev);
+    this.emitter.on('channel', ev);
   }
 
   public removeChannelListener(ev: (channels: Channel[]) => void): void {
-    this.emitter.off("channel", ev);
+    this.emitter.off('channel', ev);
   }
 
   public async close(): Promise<void> {}

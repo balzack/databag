@@ -1,8 +1,8 @@
-import { EventEmitter } from "eventemitter3";
-import type { Focus } from "./api";
-import type { Topic, Asset, Participant } from "./types";
-import type { Logging } from "./logging";
-import { Store } from "./store";
+import { EventEmitter } from 'eventemitter3';
+import type { Focus } from './api';
+import type { Topic, Asset, Participant } from './types';
+import type { Logging } from './logging';
+import { Store } from './store';
 import { Crypto } from './crypto';
 
 export class FocusModule implements Focus {
@@ -13,9 +13,9 @@ export class FocusModule implements Focus {
   private crypto: Crypto | null;
   private store: Store;
   private guid: string;
-  private connection: { node: string, secure: boolean, token: string} | null;
+  private connection: { node: string; secure: boolean; token: string } | null;
 
-  constructor(log: Logging, store: Store, crypto: Crypto | null, cardId: string | null, channelId: string, guid: string, connection: { node: string, secure: boolean, token: string } | null) {
+  constructor(log: Logging, store: Store, crypto: Crypto | null, cardId: string | null, channelId: string, guid: string, connection: { node: string; secure: boolean; token: string } | null) {
     this.cardId = cardId;
     this.channelId = channelId;
     this.log = log;
@@ -38,11 +38,10 @@ export class FocusModule implements Focus {
     }
   }
 
-  public async close() {
-  }
+  public async close() {}
 
   public async addTopic(type: string, message: string, assets: Asset[]): Promise<string> {
-    return "";
+    return '';
   }
 
   public async removeTopic(topicId: string): Promise<void> {}
@@ -52,7 +51,7 @@ export class FocusModule implements Focus {
   public async setTopicSort(topicId: string, sort: number): Promise<void> {}
 
   public async addTag(topicId: string, type: string, subject: string): Promise<string> {
-    return "";
+    return '';
   }
 
   public async removeTag(cardId: string, tagId: string): Promise<void> {}
@@ -70,11 +69,11 @@ export class FocusModule implements Focus {
   public async clearUnreadChannel(cardId: string, channelId: string): Promise<void> {}
 
   public getTopicAssetUrl(topicId: string, assetId: string): string {
-    return "";
+    return '';
   }
 
   public async addParticipantAccess(name: string): Promise<Participant> {
-    return { id: "", name: "", node: "", secure: false, token: "" };
+    return { id: '', name: '', node: '', secure: false, token: '' };
   }
 
   public async removeParticipantAccess(repeaterId: string): Promise<void> {}

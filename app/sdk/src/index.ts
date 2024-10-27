@@ -1,26 +1,26 @@
-import { SessionModule } from "./session";
-import { NodeModule } from "./node";
-import { ContributorModule } from "./contributor";
-import { type Logging, ConsoleLogging } from "./logging";
-import { type Store, OfflineStore, OnlineStore, NoStore } from "./store";
-import { setLogin } from "./net/setLogin";
-import { clearLogin } from "./net/clearLogin";
-import { removeAccount } from "./net/removeAccount";
-import { setAccess } from "./net/setAccess";
-import { addAccount } from "./net/addAccount";
-import { setAdmin } from "./net/setAdmin";
-import { getAvailable } from "./net/getAvailable";
-import { getUsername } from "./net/getUsername";
-import type { Session, Node, Contributor } from "./api";
-import type { Params, SessionParams } from "./types";
-import type { Login } from "./entities";
-import type { Crypto } from "./crypto";
-import type { WebStore, SqlStore } from "./store";
+import { SessionModule } from './session';
+import { NodeModule } from './node';
+import { ContributorModule } from './contributor';
+import { type Logging, ConsoleLogging } from './logging';
+import { type Store, OfflineStore, OnlineStore, NoStore } from './store';
+import { setLogin } from './net/setLogin';
+import { clearLogin } from './net/clearLogin';
+import { removeAccount } from './net/removeAccount';
+import { setAccess } from './net/setAccess';
+import { addAccount } from './net/addAccount';
+import { setAdmin } from './net/setAdmin';
+import { getAvailable } from './net/getAvailable';
+import { getUsername } from './net/getUsername';
+import type { Session, Node, Contributor } from './api';
+import type { Params, SessionParams } from './types';
+import type { Login } from './entities';
+import type { Crypto } from './crypto';
+import type { WebStore, SqlStore } from './store';
 
-export * from "./api";
-export * from "./types";
-export { WebStore, SqlStore } from "./store";
-export { Crypto } from "./crypto";
+export * from './api';
+export * from './types';
+export { WebStore, SqlStore } from './store';
+export { Crypto } from './crypto';
 
 export class DatabagSDK {
   private log: Logging;
@@ -33,7 +33,7 @@ export class DatabagSDK {
     this.params = params;
     this.crypto = crypto ? crypto : null;
     this.log = log ? log : new ConsoleLogging();
-    this.log.info("databag sdk");
+    this.log.info('databag sdk');
   }
 
   public async initOfflineStore(sql: SqlStore): Promise<Session | null> {

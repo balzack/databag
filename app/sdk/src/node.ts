@@ -1,6 +1,6 @@
-import type { Node } from "./api";
-import type { NodeAccount, NodeConfig } from "./types";
-import type { Logging } from "./logging";
+import type { Node } from './api';
+import type { NodeAccount, NodeConfig } from './types';
+import type { Logging } from './logging';
 
 export class NodeModule implements Node {
   private log: Logging;
@@ -16,11 +16,11 @@ export class NodeModule implements Node {
   }
 
   public async createAccountAccess(): Promise<string> {
-    return "";
+    return '';
   }
 
   public async resetAccountAccess(): Promise<string> {
-    return "";
+    return '';
   }
 
   public async blockAccount(flag: boolean): Promise<void> {}
@@ -33,21 +33,21 @@ export class NodeModule implements Node {
 
   public async getConfig(): Promise<NodeConfig> {
     return {
-      domain: "",
-      accountStorage: "",
+      domain: '',
+      accountStorage: '',
       enableImage: true,
       enableAudio: true,
       enableVideo: true,
       enableBinary: true,
-      keyType: "",
+      keyType: '',
       pushSupported: true,
       allowUnsealed: true,
       transformSupported: true,
       enableIce: true,
-      iceService: "",
-      iceUrl: "",
-      iceUsername: "",
-      icePassword: "",
+      iceService: '',
+      iceUrl: '',
+      iceUsername: '',
+      icePassword: '',
       enableOpenAccess: true,
       openAccessLimit: 0,
     };

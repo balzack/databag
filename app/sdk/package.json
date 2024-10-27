@@ -10,7 +10,7 @@
   ],
   "scripts": {
     "build": "tsup",
-    "format": "prettier --print-width 200 --write src",
+    "format": "prettier --single-quote true --print-width 200 --write src",
     "test": "jest"
   },
   "repository": {

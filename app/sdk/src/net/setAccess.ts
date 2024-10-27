@@ -1,4 +1,4 @@
-import { checkResponse, fetchWithTimeout } from "./fetchUtil";
+import { checkResponse, fetchWithTimeout } from './fetchUtil';
 
 export async function setAccess(
   node: string,
@@ -16,9 +16,9 @@ export async function setAccess(
   created: number;
   pushSupported: boolean;
 }> {
-  const endpoint = `http${secure ? "s" : ""}://${node}/account/access?token=${token}&appName=${appName}&appVersion=${appVersion}&platform=${platform}&deviceToken=${deviceToken}&pushType=${pushType}`;
+  const endpoint = `http${secure ? 's' : ''}://${node}/account/access?token=${token}&appName=${appName}&appVersion=${appVersion}&platform=${platform}&deviceToken=${deviceToken}&pushType=${pushType}`;
   const access = await fetchWithTimeout(endpoint, {
-    method: "PUT",
+    method: 'PUT',
     body: JSON.stringify(notifications),
   });
   checkResponse(access.status);

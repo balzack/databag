@@ -1,9 +1,9 @@
-import { EventEmitter } from "eventemitter3";
-import type { Content, Settings, Logging, Focus } from "./api";
+import { EventEmitter } from 'eventemitter3';
+import type { Content, Settings, Logging, Focus } from './api';
 import { FocusModule } from './focus';
-import type { Channel, Topic, Asset, Tag, Participant } from "./types";
-import { Store } from "./store";
-import { Crypto } from "./crypto";
+import type { Channel, Topic, Asset, Tag, Participant } from './types';
+import { Store } from './store';
+import { Crypto } from './crypto';
 
 export class ContentModule implements Content {
   private log: Logging;
@@ -31,21 +31,21 @@ export class ContentModule implements Content {
   }
 
   public addChannelListener(ev: (channels: Channel[]) => void): void {
-    this.emitter.on("channel", ev);
+    this.emitter.on('channel', ev);
   }
 
   public removeChannelListener(ev: (channels: Channel[]) => void): void {
-    this.emitter.off("channel", ev);
+    this.emitter.off('channel', ev);
   }
 
   public async close(): void {}
 
   public async setRevision(rev: number): Promise<void> {
-    console.log("set content revision:", rev);
+    console.log('set content revision:', rev);
   }
 
   public async addChannel(sealed: boolean, type: string, subject: string, cardIds: string[], groupIds: string[]): Promise<string> {
-    return "";
+    return '';
   }
 
   public async removeChannel(channelId: string): Promise<void> {}
@@ -61,7 +61,7 @@ export class ContentModule implements Content {
   public async clearChannelGroup(channelId: string, groupId: string): Promise<void> {}
 
   public async addTopic(channelId: string, type: string, subject: string, assets: Asset[]): Promise<string> {
-    return "";
+    return '';
   }
 
   public async removeTopic(channelId: string, topicId: string): Promise<void> {}
@@ -73,7 +73,7 @@ export class ContentModule implements Content {
   public async setTopicSort(channelId: string, topicId: string, sort: number): Promise<void> {}
 
   public async addTag(channelId: string, topicId: string, type: string, value: string): Promise<string> {
-    return "";
+    return '';
   }
 
   public async removeTag(channelId: string, topicId: string, tagId: string): Promise<void> {}
@@ -129,7 +129,7 @@ export class ContentModule implements Content {
   public async disableAddParticipant(channelId: string, memberId: string): Promise<void> {}
 
   public getTopicAssetUrl(channelId: string, topicId: string, assetId: string): string {
-    return "";
+    return '';
   }
 
   public async getTopics(channelId: string): Promise<Topic[]> {
@@ -166,8 +166,9 @@ export class ContentModule implements Content {
   }
 
   public async addParticipantAccess(channelId: string, name: string): Promise<Participant> {
-    return { id: "", guid: "", name: "", server: "", token: "" };
+    return { id: '', guid: '', name: '', server: '', token: '' };
   }
 
   public async removeParticipantAccess(channelId: string, repeaterId: string): Promise<void> {}
-i}
+  i;
+}

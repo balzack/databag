@@ -1,23 +1,23 @@
-import { EventEmitter } from "eventemitter3";
+import { EventEmitter } from 'eventemitter3';
 
-import { SettingsModule } from "./settings";
-import { IdentityModule } from "./identity";
-import { ContactModule } from "./contact";
-import { AliasModule } from "./alias";
-import { AttributeModule } from "./attribute";
-import { ContentModule } from "./content";
-import { StreamModule } from "./stream";
-import { FocusModule } from "./focus";
-import { RingModule } from "./ring";
+import { SettingsModule } from './settings';
+import { IdentityModule } from './identity';
+import { ContactModule } from './contact';
+import { AliasModule } from './alias';
+import { AttributeModule } from './attribute';
+import { ContentModule } from './content';
+import { StreamModule } from './stream';
+import { FocusModule } from './focus';
+import { RingModule } from './ring';
 
-import { Connection } from "./connection";
+import { Connection } from './connection';
 
-import type { Session, Settings, Identity, Contact, Ring, Alias, Attribute, Content, Stream, Focus } from "./api";
-import { Revision } from "./entities";
-import { Call } from "./types";
-import { Store } from "./store";
-import type { Logging } from "./logging";
-import type { Crypto } from "./crypto";
+import type { Session, Settings, Identity, Contact, Ring, Alias, Attribute, Content, Stream, Focus } from './api';
+import { Revision } from './entities';
+import { Call } from './types';
+import { Store } from './store';
+import type { Logging } from './logging';
+import type { Crypto } from './crypto';
 
 export class SessionModule implements Session {
   private emitter: EventEmitter;
@@ -43,7 +43,7 @@ export class SessionModule implements Session {
   private articleTypes: string[];
 
   constructor(store: Store, crypto: Crypto | null, log: Logging, guid: string, token: string, node: string, secure: boolean, loginTimestamp: number, channelTypes: string[], articleTypes: string[]) {
-    log.info("new databag session");
+    log.info('new databag session');
 
     this.store = store;
     this.crypto = crypto;
@@ -55,7 +55,7 @@ export class SessionModule implements Session {
     this.channelTypes = channelTypes;
     this.articleTypes = articleTypes;
     this.loginTimestamp = loginTimestamp;
-    this.status = "connecting";
+    this.status = 'connecting';
     this.emitter = new EventEmitter();
 
     this.identity = new IdentityModule(log, this.store, guid, token, node, secure);
@@ -70,7 +70,7 @@ export class SessionModule implements Session {
 
     const onStatus = (ev: string) => {
       this.status = ev;
-      this.emitter.emit("status", this.getStatus());
+      this.emitter.emit('status', this.getStatus());
     };
 
     const onSeal = (seal: { privateKey: string; publicKey: string } | null) => {
@@ -97,11 +97,11 @@ export class SessionModule implements Session {
   }
 
   public addStatusListener(ev: (status: string) => void): void {
-    this.emitter.on("status", ev);
+    this.emitter.on('status', ev);
   }
 
   public removeStatusListener(ev: (status: string) => void): void {
-    this.emitter.off("status", ev);
+    this.emitter.off('status', ev);
   }
 
   private getStatus(): string {

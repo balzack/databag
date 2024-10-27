@@ -1,13 +1,13 @@
-import { EventEmitter } from "eventemitter3";
-import type { Identity } from "./api";
-import type { Logging } from "./logging";
-import type { Profile } from "./types";
-import { Store } from "./store";
-import { getProfile } from "./net/getProfile";
-import { getProfileImageUrl } from "./net/getProfileImageUrl";
-import { setProfileData } from "./net/setProfileData";
-import { setProfileImage } from "./net/setProfileImage";
-import { ProfileEntity, defaultProfileEntity, avatar } from "./entities";
+import { EventEmitter } from 'eventemitter3';
+import type { Identity } from './api';
+import type { Logging } from './logging';
+import type { Profile } from './types';
+import { Store } from './store';
+import { getProfile } from './net/getProfile';
+import { getProfileImageUrl } from './net/getProfileImageUrl';
+import { setProfileData } from './net/setProfileData';
+import { setProfileImage } from './net/setProfileImage';
+import { ProfileEntity, defaultProfileEntity, avatar } from './entities';
 
 const CLOSE_POLL_MS = 100;
 const RETRY_POLL_MS = 2000;
@@ -51,7 +51,7 @@ export class IdentityModule implements Identity {
     } else {
       this.imageUrl = avatar;
     }
-    this.emitter.emit("profile", this.setProfile());
+    this.emitter.emit('profile', this.setProfile());
     this.syncing = false;
     await this.sync();
   }
@@ -75,7 +75,7 @@ export class IdentityModule implements Identity {
             } else {
               this.imageUrl = avatar;
             }
-            this.emitter.emit("profile", this.setProfile());
+            this.emitter.emit('profile', this.setProfile());
             this.revision = nextRev;
             if (this.nextRevision === nextRev) {
               this.nextRevision = null;
@@ -107,12 +107,12 @@ export class IdentityModule implements Identity {
   }
 
   public addProfileListener(ev: (profile: Profile) => void): void {
-    this.emitter.on("profile", ev);
-    this.emitter.emit("profile", this.setProfile());
+    this.emitter.on('profile', ev);
+    this.emitter.emit('profile', this.setProfile());
   }
 
   public removeProfileListener(ev: (profile: Profile) => void): void {
-    this.emitter.off("profile", ev);
+    this.emitter.off('profile', ev);
   }
 
   public async close(): Promise<void> {

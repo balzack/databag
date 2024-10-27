@@ -1,6 +1,6 @@
-import { EventEmitter } from "eventemitter3";
-import type { Ring, Logging } from "./api";
-import type { Call } from "./types";
+import { EventEmitter } from 'eventemitter3';
+import type { Ring, Logging } from './api';
+import type { Call } from './types';
 
 export class RingModule implements Ring {
   private log: Logging;
@@ -12,19 +12,19 @@ export class RingModule implements Ring {
   }
 
   public addCallingListener(ev: (calls: Call[]) => void): void {
-    this.emitter.on("calling", ev);
+    this.emitter.on('calling', ev);
   }
 
   public removeCallingListener(ev: (calls: Call[]) => void): void {
-    this.emitter.off("calling", ev);
+    this.emitter.off('calling', ev);
   }
 
   public addCallListener(ev: (call: Call | null) => void): void {
-    this.emitter.on("call", ev);
+    this.emitter.on('call', ev);
   }
 
   public removeCallListener(ev: (call: Call | null) => void): void {
-    this.emitter.off("call", ev);
+    this.emitter.off('call', ev);
   }
 
   public ring(call: Call): void {}

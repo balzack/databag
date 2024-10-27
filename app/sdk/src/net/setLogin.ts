@@ -1,5 +1,5 @@
-import { checkResponse, fetchWithTimeout } from "./fetchUtil";
-import { encode } from "./base64";
+import { checkResponse, fetchWithTimeout } from './fetchUtil';
+import { encode } from './base64';
 
 export async function setLogin(
   node: string,
@@ -19,13 +19,13 @@ export async function setLogin(
   created: number;
   pushSupported: boolean;
 }> {
-  const mfa = code ? `&code=${code}` : "";
-  const endpoint = `http${secure ? "s" : ""}://${node}/account/apps?appName=${appName}&appVersion=${appVersion}&platform=${platform}&deviceToken=${deviceToken}&pushType=${pushType}${mfa}`;
+  const mfa = code ? `&code=${code}` : '';
+  const endpoint = `http${secure ? 's' : ''}://${node}/account/apps?appName=${appName}&appVersion=${appVersion}&platform=${platform}&deviceToken=${deviceToken}&pushType=${pushType}${mfa}`;
   const auth = encode(`${username}:${password}`);
   const headers = new Headers();
-  headers.append("Authorization", "Basic " + auth);
+  headers.append('Authorization', 'Basic ' + auth);
   const login = await fetchWithTimeout(endpoint, {
-    method: "POST",
+    method: 'POST',
     headers,
     body: JSON.stringify(notifications),
   });

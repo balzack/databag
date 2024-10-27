@@ -4,16 +4,7 @@ import { Logging } from './logging';
 import { FocusModule } from './focus';
 import type { Card, Channel, Article, Topic, Asset, Tag, Profile, Participant } from './types';
 import { type CardEntity, avatar } from './entities';
-import type {
-  ArticleDetail,
-  ChannelSummary,
-  ChannelDetail,
-  CardProfile,
-  CardDetail,
-  CardItem,
-  ChannelItem,
-  ArticleItem,
-} from './items';
+import type { ArticleDetail, ChannelSummary, ChannelDetail, CardProfile, CardDetail, CardItem, ChannelItem, ArticleItem } from './items';
 import { defaultCardItem, defaultChannelItem } from './items';
 import { Store } from './store';
 import { Crypto } from './crypto';
@@ -112,9 +103,9 @@ export class ContactModule implements Contact {
   private async init() {
     const { guid } = this;
     this.revision = await this.store.getContactRevision(guid);
-    
+
     const values = await this.store.getMarkers(guid);
-    values.forEach(value => {
+    values.forEach((value) => {
       this.markers.add(value);
     });
 
@@ -124,11 +115,10 @@ export class ContactModule implements Contact {
       const articles = this.articleEntries.get(cardId);
       const article = this.setArticle(cardId, articleId, item);
       if (!articles) {
-        const entries = new Map<string, { item: ArticleItem, article: Article }>();
+        const entries = new Map<string, { item: ArticleItem; article: Article }>();
         this.articleEntries.set(cardId, entries);
         entries.set(articleId, { item, article });
-      }
-      else {
+      } else {
         articles.set(articleId, { item, article });
       }
     });
@@ -137,13 +127,12 @@ export class ContactModule implements Contact {
     const channels = await this.store.getContactCardChannels(guid);
     channels.forEach(({ cardId, channelId, item }) => {
       const channels = this.channelEntries.get(cardId);
-      const channel = this.setChannel(cardId, channelId, item)
+      const channel = this.setChannel(cardId, channelId, item);
       if (!channels) {
-        const entries = new Map<string, { item: ChannelItem, channel: Channel }>();
+        const entries = new Map<string, { item: ChannelItem; channel: Channel }>();
         this.channelEntries.set(cardId, entries);
         entries.set(channelId, { item, channel });
-      }
-      else { 
+      } else {
         channels.set(channelId, { item, channel });
       }
     });
@@ -176,20 +165,20 @@ export class ContactModule implements Contact {
   }
 
   private isMarked(marker: string, cardId: string | null, channelId: string | null, topicId: string | null, tagId: string | null): boolean {
-    const value = `${marker}::${cardId}::${channelId}::${topicId}::${tagId}`
+    const value = `${marker}::${cardId}::${channelId}::${topicId}::${tagId}`;
     return this.markers.has(value);
   }
 
   private async setMarker(marker: string, cardId: string | null, channelId: string | null, topicId: string | null, tagId: string | null) {
-    const value = `${marker}::${cardId}::${channelId}::${topicId}::${tagId}`
+    const value = `${marker}::${cardId}::${channelId}::${topicId}::${tagId}`;
     this.markers.add(value);
     await this.store.setMarker(this.guid, value);
   }
 
   private async clearMarker(marker: string, cardId: string | null, channelId: string | null, topicId: string | null, tagId: string | null) {
-    const value = `${marker}::${cardId}::${channelId}::${topicId}::${tagId}`
+    const value = `${marker}::${cardId}::${channelId}::${topicId}::${tagId}`;
     this.markers.delete(value);
-    await this.store.clearMarker(this.guid, value); 
+    await this.store.clearMarker(this.guid, value);
   }
 
   private isCardBlocked(cardId: string): boolean {
@@ -214,7 +203,7 @@ export class ContactModule implements Contact {
 
   private async clearChannelBlocked(cardId: string, channelId: string) {
     await this.clearMarker('blocked', cardId, channelId, null, null);
-  } 
+  }
 
   private isArticleBlocked(cardId: string, articleId: string): boolean {
     return this.isMarked('blocked', cardId, articleId, null, null);
@@ -468,7 +457,7 @@ export class ContactModule implements Contact {
     const insecure = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(server);
   }
 
-  private async syncChannels(cardId: string, card: { guid: string, node: string, token: string }, revision: number): Promise<void> {
+  private async syncChannels(cardId: string, card: { guid: string; node: string; token: string }, revision: number): Promise<void> {
     const { guid, node, secure, token, channelTypes } = this;
     const server = card.node ? card.node : node;
     const insecure = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(server);
@@ -536,8 +525,6 @@ export class ContactModule implements Contact {
       }
     }
   }
-
-
 
   public addCardListener(ev: (cards: Card[]) => void): void {
     this.emitter.on('card', ev);
@@ -618,8 +605,6 @@ export class ContactModule implements Contact {
     this.emitter.emit(`channel::${cardId}`, { cardId, channels });
   }
 
-
-
   public async setFocus(cardId: string, channelId: string): Promise<Focus> {
     if (this.focus) {
       await this.focus.close();
@@ -643,8 +628,6 @@ export class ContactModule implements Contact {
     }
     this.focus = null;
   }
-
-
 
   public async addCard(server: string | null, guid: string): Promise<string> {
     const { node, secure, token } = this;
@@ -731,7 +714,6 @@ export class ContactModule implements Contact {
     }
   }
 
-
   public async removeArticle(cardId: string, articleId: string): Promise<void> {}
 
   public async removeChannel(cardId: string, channelId: string): Promise<void> {
@@ -742,8 +724,6 @@ export class ContactModule implements Contact {
       await removeContactChannel(server, !insecure, entry.item.profile.guid, entry.item.detail.token, channelId);
     }
   }
-
-
 
   public async getBlockedCards(): Promise<Card[]> {
     return Array.from(this.cardEntries.entries())
@@ -757,7 +737,7 @@ export class ContactModule implements Contact {
       const cardChannels = Array.from(card.entries())
         .filter(([key, value]) => this.isChannelBlocked(cardId, key))
         .map(([key, value]) => value.channel);
-      cardChannels.forEach(channel => {
+      cardChannels.forEach((channel) => {
         channels.push(channel);
       });
     });
@@ -802,8 +782,6 @@ export class ContactModule implements Contact {
     }
   }
 
-
-
   public async flagCard(cardId: string): Promise<void> {
     const entry = this.cardEntries.get(cardId);
     if (entry) {
@@ -831,8 +809,6 @@ export class ContactModule implements Contact {
     }
   }
 
-
-
   public async setUnreadChannel(cardId: string, channelId: string, unread: boolean): Promise<void> {
     const entries = this.channelEntries.get(cardId);
     if (entries) {
@@ -840,8 +816,7 @@ export class ContactModule implements Contact {
       if (entry) {
         if (unread) {
           await this.setChannelUnread(cardId, channelId);
-        }
-        else {
+        } else {
           await this.clearChannelUnread(cardId, channelId);
         }
         entry.channel = this.setChannel(cardId, channelId, entry.item);
@@ -849,8 +824,6 @@ export class ContactModule implements Contact {
       }
     }
   }
-
-
 
   public async getChannelNotifications(cardId: string, channelId: string): Promise<boolean> {
     const entry = this.cardEntries.get(cardId);
@@ -871,13 +844,10 @@ export class ContactModule implements Contact {
     }
   }
 
-
-
-
   public async getRegistry(handle: string | null, server: string | null): Promise<Profile[]> {
     const { node, secure } = this;
     const insecure = server ? /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(server) : false;
-    const listing = server ? await getRegistryListing(handle, server, !insecure) : await getRegistryListing(handle, node, secure)
+    const listing = server ? await getRegistryListing(handle, server, !insecure) : await getRegistryListing(handle, node, secure);
     return listing.map((entity) => {
       return {
         guid: entity.guid,
@@ -888,12 +858,11 @@ export class ContactModule implements Contact {
         node: entity.node,
         version: entity.version,
         sealSet: Boolean(entity.seal),
-        imageUrl: entity.imageSet ? server ? getRegistryImageUrl(server, true, entity.guid) : getRegistryImageUrl(node, secure, entity.guid) : avatar,
+        imageUrl: entity.imageSet ? (server ? getRegistryImageUrl(server, true, entity.guid) : getRegistryImageUrl(node, secure, entity.guid)) : avatar,
         imageSet: entity.imageSet,
       };
     });
   }
-
 
   private setCard(cardId: string, item: CardItem): Card {
     const { node, secure, token } = this;
@@ -960,11 +929,9 @@ export class ContactModule implements Contact {
       enableAudio: detail.enableAudio,
       enableVideo: detail.enableVideo,
       enableBinary: detail.enableBinary,
-      members: detail.members.map(guid => ({ guid })),
+      members: detail.members.map((guid) => ({ guid })),
     };
   }
-
-
 
   public async setSeal(seal: { privateKey: string; publicKey: string } | null) {
     this.seal = seal;
@@ -973,7 +940,7 @@ export class ContactModule implements Contact {
   }
 
   private async getChannelKey(seals: [{ publicKey: string; sealedKey: string }]): Promise<string | null> {
-    const seal = seals.find(({ publicKey }) => (this.seal && publicKey === this.seal.publicKey));
+    const seal = seals.find(({ publicKey }) => this.seal && publicKey === this.seal.publicKey);
     if (seal && this.crypto && this.seal) {
       const key = await this.crypto.rsaDecrypt(seal.sealedKey, this.seal.privateKey);
       return key.data;
@@ -1021,8 +988,6 @@ export class ContactModule implements Contact {
     }
     return false;
   }
-
-
 
   private async getCardEntry(cardId: string) {
     const { guid } = this;
