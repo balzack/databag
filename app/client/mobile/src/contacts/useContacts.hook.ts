@@ -2,7 +2,7 @@ import {useState, useContext, useEffect} from 'react';
 import {AppContext} from '../context/AppContext';
 import {DisplayContext} from '../context/DisplayContext';
 import {ContextType} from '../context/ContextType';
-import {Card, Channel} from 'databag-client-sdk';
+import {Card} from 'databag-client-sdk';
 
 export function useContacts() {
   const app = useContext(AppContext) as ContextType;
@@ -15,7 +15,6 @@ export function useContacts() {
     filter: '',
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const updateState = (value: any) => {
     setState(s => ({...s, ...value}));
   };
@@ -55,11 +54,13 @@ export function useContacts() {
     return () => {
       contact.removeCardListener(setCards);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     const filtered = state.cards.sort(compare).filter(select);
     updateState({filtered});
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.sortAsc, state.filter, state.cards]);
 
   const actions = {

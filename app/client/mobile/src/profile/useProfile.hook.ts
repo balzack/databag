@@ -5,7 +5,7 @@ import {ContextType} from '../context/ContextType';
 import {Card} from 'databag-client-sdk';
 import {ContactParams} from './Profile';
 
-export function useProfile(params: ProfileParams) {
+export function useProfile(params: ContactParams) {
   const app = useContext(AppContext) as ContextType;
   const display = useContext(DisplayContext) as ContextType;
   const [state, setState] = useState({
@@ -24,7 +24,6 @@ export function useProfile(params: ProfileParams) {
     statusLabel: '',
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const updateState = (value: any) => {
     setState(s => ({...s, ...value}));
   };
@@ -40,7 +39,18 @@ export function useProfile(params: ProfileParams) {
     const cardId = params.cardId ? params.cardId : null;
     const status = params.status ? params.status : '';
     const offsync = params.offsync ? params.offsync : false;
-    updateState({guid, handle, node, name, location, description, imageUrl, cardId, status, offsync});
+    updateState({
+      guid,
+      handle,
+      node,
+      name,
+      location,
+      description,
+      imageUrl,
+      cardId,
+      status,
+      offsync,
+    });
   }, [params]);
 
   const getStatusLabel = (card?: Card) => {
@@ -69,11 +79,22 @@ export function useProfile(params: ProfileParams) {
   };
 
   useEffect(() => {
-    const card = state.cards.find(card => card.guid === state.guid);
-    const statusLabel = getStatusLabel(card);
-    if (card) {
-      const {handle, node, name, location, description, imageUrl, cardId, status, offsync} = card;
-      updateState({handle, node, name, location, description, imageUrl, cardId, status, offsync, statusLabel});
+    const saved = state.cards.find(card => card.guid === state.guid);
+    const statusLabel = getStatusLabel(saved);
+    if (saved) {
+      const {handle, node, name, location, description, imageUrl, cardId, status, offsync} = saved;
+      updateState({
+        handle,
+        node,
+        name,
+        location,
+        description,
+        imageUrl,
+        cardId,
+        status,
+        offsync,
+        statusLabel,
+      });
     } else {
       updateState({cardId: null, status: '', offsync: false, statusLabel});
     }
@@ -88,6 +109,7 @@ export function useProfile(params: ProfileParams) {
     return () => {
       contact.removeCardListener(setCards);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const actions = {

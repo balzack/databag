@@ -17,7 +17,6 @@ export function useRegistry() {
     profiles: [] as Profile[],
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const updateState = (value: any) => {
     setState(s => ({...s, ...value}));
   };
@@ -31,9 +30,9 @@ export function useRegistry() {
         update.current = null;
         try {
           const contact = app.state.session?.getContact();
-          const username = params.username ? params.username : null;
-          const server = params.server ? params.server : null;
-          const profiles = await contact.getRegistry(username, server);
+          const handle = params.username ? params.username : null;
+          const node = params.server ? params.server : null;
+          const profiles = await contact.getRegistry(handle, node);
           updateState({profiles});
         } catch (err) {
           console.log(err);
@@ -54,6 +53,7 @@ export function useRegistry() {
         getRegistry(state.username, state.server);
       }, 1000);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.username, state.server]);
 
   const actions = {

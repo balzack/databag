@@ -3,7 +3,6 @@ import {SafeAreaView, View, useColorScheme} from 'react-native';
 import {styles} from './Session.styled';
 import {IconButton, Surface, Text} from 'react-native-paper';
 import {Settings} from '../settings/Settings';
-import {Channels} from '../channels/Channels';
 import {Contacts} from '../contacts/Contacts';
 import {Registry} from '../registry/Registry';
 import {Profile, ContactParams} from '../profile/Profile';
@@ -23,7 +22,6 @@ const ProfileDrawer = createDrawerNavigator();
 const DetailsDrawer = createDrawerNavigator();
 
 const ContactStack = createStackNavigator();
-const ContentStack = createStackNavigator();
 
 export function Session() {
   const {state} = useSession();
@@ -31,24 +29,35 @@ export function Session() {
   const [tab, setTab] = useState('content');
 
   const sessionNav = {strings: state.strings};
-
-  const ChannelsRoute = () => <Channels />;
-  const ContactsRoute = () => <ContactTab />;
-  const SettingsRoute = () => <Settings showLogout={true} />;
+  const showContent = {display: tab === 'content' ? 'flex' : 'none'};
+  const showContact = {display: tab === 'contacts' ? 'flex' : 'none'};
+  const showSettings = {display: tab === 'settings' ? 'flex' : 'none'};
 
   return (
     <View style={styles.session}>
       {state.layout !== 'large' && (
         <Surface elevation={2}>
-          <SafeAreaView style={{width: '100%', height: '100%'}}>
+          <SafeAreaView style={styles.full}>
             <View style={styles.screen}>
-              <View style={{...styles.body, display: tab === 'content' ? 'flex' : 'none'}}>
+              <View
+                style={{
+                  ...styles.body,
+                  ...showContent,
+                }}>
                 <ContentTab scheme={scheme} />
               </View>
-              <View style={{...styles.body, display: tab === 'contacts' ? 'flex' : 'none'}}>
+              <View
+                style={{
+                  ...styles.body,
+                  ...showContact,
+                }}>
                 <ContactTab scheme={scheme} />
               </View>
-              <View style={{...styles.body, display: tab === 'settings' ? 'flex' : 'none'}}>
+              <View
+                style={{
+                  ...styles.body,
+                  ...showSettings,
+                }}>
                 <Surface elevation={0}>
                   <Settings showLogout={true} />
                 </Surface>
@@ -141,7 +150,7 @@ function ContentTab({scheme}: {scheme: string}) {
     <NavigationContainer theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
       <ContactStack.Navigator initialRouteName="contacts" screenOptions={{headerShown: false}}>
         <ContactStack.Screen name="content" options={{headerBackTitleVisible: false}}>
-          {props => <Text>CONTENT</Text>}
+          {() => <Text>CONTENT</Text>}
         </ContactStack.Screen>
       </ContactStack.Navigator>
     </NavigationContainer>
@@ -149,11 +158,9 @@ function ContentTab({scheme}: {scheme: string}) {
 }
 
 function ContactTab({scheme}: {scheme: string}) {
-  const [contactParams, setContactParams] = useState({guid: ''} as ContactParams);
-  const openContact = (params: ContactParams, nav) => {
-    setContactParams(params);
-    nav.navigate('profile');
-  };
+  const [contactParams, setContactParams] = useState({
+    guid: '',
+  } as ContactParams);
 
   return (
     <NavigationContainer theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
@@ -171,7 +178,12 @@ function ContactTab({scheme}: {scheme: string}) {
             />
           )}
         </ContactStack.Screen>
-        <ContactStack.Screen name="registry" options={{headerBackTitleVisible: false, ...TransitionPresets.ScaleFromCenterAndroid}}>
+        <ContactStack.Screen
+          name="registry"
+          options={{
+            headerBackTitleVisible: false,
+            ...TransitionPresets.ScaleFromCenterAndroid,
+          }}>
           {props => (
             <Registry
               close={props.navigation.goBack}
@@ -182,7 +194,12 @@ function ContactTab({scheme}: {scheme: string}) {
             />
           )}
         </ContactStack.Screen>
-        <ContactStack.Screen name="profile" options={{headerBackTitleVisible: false, ...TransitionPresets.ScaleFromCenterAndroid}}>
+        <ContactStack.Screen
+          name="profile"
+          options={{
+            headerBackTitleVisible: false,
+            ...TransitionPresets.ScaleFromCenterAndroid,
+          }}>
           {props => <Profile close={props.navigation.goBack} params={contactParams} />}
         </ContactStack.Screen>
       </ContactStack.Navigator>
@@ -206,7 +223,9 @@ function DetailsScreen({nav}) {
 }
 
 function ProfileScreen({nav}) {
-  const [contactParams, setContactParams] = useState({guid: ''} as ContactParams);
+  const [contactParams, setContactParams] = useState({
+    guid: '',
+  } as ContactParams);
   const openContact = (params: ContactParams, open: () => {}) => {
     setContactParams(params);
     open();

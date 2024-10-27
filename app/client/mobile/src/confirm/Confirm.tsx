@@ -1,3 +1,4 @@
+import React from 'react';
 import {Modal, View} from 'react-native';
 import {BlurView} from '@react-native-community/blur';
 import {Surface, Text, Button} from 'react-native-paper';

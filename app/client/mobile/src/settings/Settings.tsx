@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {Surface, Button, Text, IconButton, Divider, Icon, TextInput, RadioButton, Switch} from 'react-native-paper';
-import {SafeAreaView, TouchableOpacity, Modal, View, Image, ScrollView} from 'react-native';
+import {TouchableOpacity, Modal, View, Image, ScrollView} from 'react-native';
 import {styles} from './Settings.styled';
 import {useSettings} from './useSettings.hook';
 import ImagePicker from 'react-native-image-crop-picker';
@@ -37,7 +37,8 @@ export function Settings({showLogout}: {showLogout: boolean}) {
   const [secretCopy, setSecretCopy] = useState(false);
   const [confirmingAuth, setConfirmingAuth] = useState(false);
   const [authMessage, setAuthMessage] = useState('');
-  const [alertParams, setAlertParams] = useState({
+
+  const alertParams = {
     title: state.strings.error,
     prompt: state.strings.tryAgain,
     cancel: {
@@ -46,7 +47,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
         setAlert(false);
       },
     },
-  });
+  };
 
   const changeLogin = () => {
     actions.setPassword('');
@@ -321,7 +322,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
 
   return (
     <View>
-      <ScrollView showsVerticalScrollIndicator={false} style={{width: '100%', height: '100%'}}>
+      <ScrollView showsVerticalScrollIndicator={false} style={styles.full}>
         <View style={styles.settings}>
           <Text style={styles.header} adjustsFontSizeToFit={true} numberOfLines={1}>{`${state.profile.handle}${state.profile.node ? '/' + state.profile.node : ''}`}</Text>
           <View style={styles.image}>

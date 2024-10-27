@@ -1,5 +1,4 @@
 import {StyleSheet} from 'react-native';
-import {Colors} from '../constants/Colors';
 
 export const styles = StyleSheet.create({
   registry: {
@@ -25,17 +24,6 @@ export const styles = StyleSheet.create({
     marginRight: 0,
     marginLeft: 0,
     backgroundColor: 'transparent',
-  },
-  input: {
-    flex: 3,
-    flexGrow: 1,
-    backgroundColor: 'transparent',
-    paddingTop: 0,
-    paddingBottom: 0,
-    display: 'flex',
-    height: 40,
-    maxHeight: 40,
-    borderRadius: 8,
   },
   divider: {
     width: '100%',

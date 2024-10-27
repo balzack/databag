@@ -18,6 +18,10 @@ export const styles = StyleSheet.create({
   inputIcon: {
     backgroundColor: 'transparent',
   },
+  full: {
+    width: '100%',
+    height: '100%',
+  },
   container: {
     width: 600,
     maxWidth: '80%',

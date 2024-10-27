@@ -1,5 +1,4 @@
 import {StyleSheet} from 'react-native';
-import {Colors} from '../constants/Colors';
 
 export const styles = StyleSheet.create({
   contacts: {
@@ -8,6 +7,12 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     width: '100%',
     height: '100%',
+  },
+  button: {
+    borderRadius: 8,
+  },
+  indicator: {
+    borderRightWidth: 2,
   },
   header: {
     position: 'relative',

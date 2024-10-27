@@ -1,6 +1,6 @@
 import React from 'react';
 import {SafeAreaView, View, FlatList} from 'react-native';
-import {Text, IconButton, Icon, Divider, Button, TextInput, Surface, useTheme} from 'react-native-paper';
+import {Text, IconButton, Divider, TextInput, Surface, useTheme} from 'react-native-paper';
 import {ContactParams} from '../profile/Profile';
 import {styles} from './Registry.styled';
 import {useRegistry} from './useRegistry.hook';
@@ -53,12 +53,23 @@ export function Registry({close, openContact}: {close: () => void; openContact: 
           renderItem={({item}) => {
             const select = () => {
               const {guid, handle, node, name, location, description, imageUrl} = item;
-              const params = {guid, handle, node, name, location, description, imageUrl};
+              const params = {
+                guid,
+                handle,
+                node,
+                name,
+                location,
+                description,
+                imageUrl,
+              };
               openContact(params);
             };
             return (
               <Card
-                containerStyle={{...styles.card, borderColor: theme.colors.outlineVariant}}
+                containerStyle={{
+                  ...styles.card,
+                  borderColor: theme.colors.outlineVariant,
+                }}
                 imageUrl={item.imageUrl}
                 name={item.name}
                 handle={item.handle}

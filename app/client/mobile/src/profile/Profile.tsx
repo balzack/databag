@@ -1,9 +1,8 @@
 import React, {useState} from 'react';
-import {Button, Surface, Icon, Text, IconButton, Divider} from 'react-native-paper';
-import {ScrollView, Modal, Image, SafeAreaView, View} from 'react-native';
+import {Icon, Text, IconButton, Divider} from 'react-native-paper';
+import {ScrollView, Image, SafeAreaView, View} from 'react-native';
 import {styles} from './Profile.styled';
 import {useProfile} from './useProfile.hook';
-import {BlurView} from '@react-native-community/blur';
 import {Confirm} from '../confirm/Confirm';
 
 export type ContactParams = {
@@ -19,8 +18,7 @@ export type ContactParams = {
   offsync?: boolean;
 };
 
-export function Profile({close, params}) {
-  const [alert, setAlert] = useState(false);
+export function Profile({close, params}: {close: () => void; params: ContactParams}) {
   const {state, actions} = useProfile(params);
   const [confirmShow, setConfirmShow] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -31,18 +29,18 @@ export function Profile({close, params}) {
   const [denying, setDenying] = useState(false);
   const [reporting, setReporting] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [connecting, setConnecting] = useState(false);
   const [disconnecting, setDisconnecting] = useState(false);
-  const [resyncing, setResyncing] = useState(false);
   const [canceling, setCanceling] = useState(false);
   const [accepting, setAccepting] = useState(false);
-  const [confirming, setConfirming] = useState(false);
 
   const confirmAction = (title: string, prompt: string, label: string, loading: (boolean) => void, action: () => Promise<void>) => {
     setConfirmParams({
       title,
       prompt,
-      cancel: {label: state.strings.cancel, action: () => setConfirmShow(false)},
+      cancel: {
+        label: state.strings.cancel,
+        action: () => setConfirmShow(false),
+      },
       confirm: {
         label,
         action: async () => {
@@ -75,7 +73,14 @@ export function Profile({close, params}) {
       setConfirmShow(false);
     } catch (err) {
       console.log(err);
-      setConfirmParams({title: state.strings.error, prompt: state.strings.tryAgain, cancel: {label: state.strings.cancel, action: () => setConfirmShow(false)}});
+      setConfirmParams({
+        title: state.strings.error,
+        prompt: state.strings.tryAgain,
+        cancel: {
+          label: state.strings.cancel,
+          action: () => setConfirmShow(false),
+        },
+      });
     }
   };
 
@@ -88,7 +93,7 @@ export function Profile({close, params}) {
           </View>
         )}
         <Text style={styles.headerLabel} adjustsFontSizeToFit={true} numberOfLines={1}>{`${state.handle}${state.node ? '/' + state.node : ''}`}</Text>
-        {close && <View style={styles.spaceHolder}></View>}
+        {close && <View style={styles.spaceHolder} />}
       </SafeAreaView>
 
       <View style={styles.image}>
@@ -149,8 +154,7 @@ export function Profile({close, params}) {
                 icon="alert-octagon-outline"
                 size={32}
                 onPress={() => {
-                  const {reporting, confirmReporting, report} = state.strings;
-                  confirmAction(reporting, confirmReporting, report, setReporting, actions.report);
+                  confirmAction(state.strings.reporting, state.strings.confirmReporting, state.strings.report, setReporting, actions.report);
                 }}
               />
               <Text style={styles.actionLabel}>{state.strings.report}</Text>
@@ -183,8 +187,7 @@ export function Profile({close, params}) {
                 icon="account-remove"
                 size={32}
                 onPress={() => {
-                  const {removing, confirmRemove, remove} = state.strings;
-                  confirmAction(removing, confirmRemove, remove, setRemoving, actions.remove);
+                  confirmAction(state.strings.removing, state.strings.confirmRemove, state.strings.remove, setRemoving, actions.remove);
                 }}
               />
               <Text style={styles.actionLabel}>{state.strings.remove}</Text>
@@ -198,8 +201,7 @@ export function Profile({close, params}) {
                 icon="eye-remove-outline"
                 size={32}
                 onPress={() => {
-                  const {blocking, confirmBlocking, block} = state.strings;
-                  confirmAction(blocking, confirmBlocking, block, setBlocking, actions.block);
+                  confirmAction(state.strings.blocking, state.strings.confirmBlocking, state.strings.block, setBlocking, actions.block);
                 }}
               />
               <Text style={styles.actionLabel}>{state.strings.block}</Text>
@@ -213,8 +215,7 @@ export function Profile({close, params}) {
                 icon="alert-octagon-outline"
                 size={32}
                 onPress={() => {
-                  const {reporting, confirmReporting, report} = state.strings;
-                  confirmAction(reporting, confirmReporting, report, setReporting, actions.report);
+                  confirmAction(state.strings.reporting, state.strings.confirmReporting, state.strings.report, setReporting, actions.report);
                 }}
               />
               <Text style={styles.actionLabel}>{state.strings.report}</Text>
@@ -289,8 +290,7 @@ export function Profile({close, params}) {
                 icon="account-remove"
                 size={32}
                 onPress={() => {
-                  const {removing, confirmRemove, remove} = state.strings;
-                  confirmAction(removing, confirmRemove, remove, setRemoving, actions.remove);
+                  confirmAction(state.strings.removing, state.strings.confirmRemove, state.strings.remove, setRemoving, actions.remove);
                 }}
               />
               <Text style={styles.actionLabel}>{state.strings.remove}</Text>
@@ -304,8 +304,7 @@ export function Profile({close, params}) {
                 icon="eye-remove-outline"
                 size={32}
                 onPress={() => {
-                  const {blocking, confirmBlocking, block} = state.strings;
-                  confirmAction(blocking, confirmBlocking, block, setBlocking, actions.block);
+                  confirmAction(state.strings.blocking, state.strings.confirmBlocking, state.strings.block, setBlocking, actions.block);
                 }}
               />
               <Text style={styles.actionLabel}>{state.strings.block}</Text>
@@ -319,8 +318,7 @@ export function Profile({close, params}) {
                 icon="alert-octagon-outline"
                 size={32}
                 onPress={() => {
-                  const {reporting, confirmReporting, report} = state.strings;
-                  confirmAction(reporting, confirmReporting, report, setReporting, actions.report);
+                  confirmAction(state.strings.reporting, state.strings.confirmReporting, state.strings.report, setReporting, actions.report);
                 }}
               />
               <Text style={styles.actionLabel}>{state.strings.report}</Text>
@@ -381,8 +379,7 @@ export function Profile({close, params}) {
                 icon="account-remove"
                 size={32}
                 onPress={() => {
-                  const {removing, confirmRemove, remove} = state.strings;
-                  confirmAction(removing, confirmRemove, remove, setRemoving, actions.remove);
+                  confirmAction(state.strings.removing, state.strings.confirmRemove, state.strings.remove, setRemoving, actions.remove);
                 }}
               />
               <Text style={styles.actionLabel}>{state.strings.remove}</Text>
@@ -396,8 +393,7 @@ export function Profile({close, params}) {
                 icon="eye-remove-outline"
                 size={32}
                 onPress={() => {
-                  const {blocking, confirmBlocking, block} = state.strings;
-                  confirmAction(blocking, confirmBlocking, block, setBlocking, actions.block);
+                  confirmAction(state.strings.blocking, state.strings.confirmBlocking, state.strings.block, setBlocking, actions.block);
                 }}
               />
               <Text style={styles.actionLabel}>{state.strings.block}</Text>
@@ -411,8 +407,7 @@ export function Profile({close, params}) {
                 icon="alert-octagon-outline"
                 size={32}
                 onPress={() => {
-                  const {reporting, confirmReporting, report} = state.strings;
-                  confirmAction(reporting, confirmReporting, report, setReporting, actions.report);
+                  confirmAction(state.strings.reporting, state.strings.confirmReporting, state.strings.report, setReporting, actions.report);
                 }}
               />
               <Text style={styles.actionLabel}>{state.strings.report}</Text>
@@ -445,8 +440,7 @@ export function Profile({close, params}) {
                 icon="account-remove"
                 size={32}
                 onPress={() => {
-                  const {removing, confirmRemove, remove} = state.strings;
-                  confirmAction(removing, confirmRemove, remove, setRemoving, actions.remove);
+                  confirmAction(state.strings.removing, state.strings.confirmRemove, state.strings.remove, setRemoving, actions.remove);
                 }}
               />
               <Text style={styles.actionLabel}>{state.strings.remove}</Text>
@@ -460,8 +454,7 @@ export function Profile({close, params}) {
                 icon="eye-remove-outline"
                 size={32}
                 onPress={() => {
-                  const {blocking, confirmBlocking, block} = state.strings;
-                  confirmAction(blocking, confirmBlocking, block, setBlocking, actions.block);
+                  confirmAction(state.strings.blocking, state.strings.confirmBlocking, state.strings.block, setBlocking, actions.block);
                 }}
               />
               <Text style={styles.actionLabel}>{state.strings.block}</Text>
@@ -475,8 +468,7 @@ export function Profile({close, params}) {
                 icon="alert-octagon-outline"
                 size={32}
                 onPress={() => {
-                  const {reporting, confirmReporting, report} = state.strings;
-                  confirmAction(reporting, confirmReporting, report, setReporting, actions.report);
+                  confirmAction(state.strings.reporting, state.strings.confirmReporting, state.strings.report, setReporting, actions.report);
                 }}
               />
               <Text style={styles.actionLabel}>{state.strings.report}</Text>
@@ -495,8 +487,7 @@ export function Profile({close, params}) {
                 icon="electric-switch"
                 size={32}
                 onPress={() => {
-                  const {disconnecting, confirmDisconnecting, disconnect} = state.strings;
-                  confirmAction(disconnecting, confirmDisconnect, disconnect, setDisconnecting, actions.disconnect);
+                  confirmAction(state.strings.disconnecting, state.strings.confirmDisconnect, state.strings.disconnect, setDisconnecting, actions.disconnect);
                 }}
               />
               <Text style={styles.actionLabel}>{state.strings.disconnect}</Text>
@@ -510,8 +501,7 @@ export function Profile({close, params}) {
                 icon="account-remove"
                 size={32}
                 onPress={() => {
-                  const {removing, confirmRemove, remove} = state.strings;
-                  confirmAction(removing, confirmRemove, remove, setRemoving, actions.remove);
+                  confirmAction(state.strings.removing, state.strings.confirmRemove, state.strings.remove, setRemoving, actions.remove);
                 }}
               />
               <Text style={styles.actionLabel}>{state.strings.remove}</Text>
@@ -525,8 +515,7 @@ export function Profile({close, params}) {
                 icon="eye-remove-outline"
                 size={32}
                 onPress={() => {
-                  const {blocking, confirmBlocking, block} = state.strings;
-                  confirmAction(blocking, confirmBlocking, block, setBlocking, actions.block);
+                  confirmAction(state.strings.blocking, state.strings.confirmBlocking, state.strings.block, setBlocking, actions.block);
                 }}
               />
               <Text style={styles.actionLabel}>{state.strings.block}</Text>
@@ -540,8 +529,7 @@ export function Profile({close, params}) {
                 icon="alert-octagon-outline"
                 size={32}
                 onPress={() => {
-                  const {reporting, confirmReporting, report} = state.strings;
-                  confirmAction(reporting, confirmReporting, report, setReporting, actions.report);
+                  confirmAction(state.strings.reporting, state.strings.confirmReporting, state.strings.report, setReporting, actions.report);
                 }}
               />
               <Text style={styles.actionLabel}>{state.strings.report}</Text>
@@ -574,8 +562,7 @@ export function Profile({close, params}) {
                 icon="electric-switch"
                 size={32}
                 onPress={() => {
-                  const {disconnecting, confirmDisconnecting, disconnect} = state.strings;
-                  confirmAction(disconnecting, confirmDisconnect, disconnect, setDisconnecting, actions.disconnect);
+                  confirmAction(state.strings.disconnecting, state.strings.confirmDisconnect, state.strings.disconnect, setDisconnecting, actions.disconnect);
                 }}
               />
               <Text style={styles.actionLabel}>{state.strings.disconnect}</Text>
@@ -589,8 +576,7 @@ export function Profile({close, params}) {
                 icon="account-remove"
                 size={32}
                 onPress={() => {
-                  const {removing, confirmRemove, remove} = state.strings;
-                  confirmAction(removing, confirmRemove, remove, setRemoving, actions.remove);
+                  confirmAction(state.strings.removing, state.strings.confirmRemove, state.strings.remove, setRemoving, actions.remove);
                 }}
               />
               <Text style={styles.actionLabel}>{state.strings.remove}</Text>
@@ -604,8 +590,7 @@ export function Profile({close, params}) {
                 icon="eye-remove-outline"
                 size={32}
                 onPress={() => {
-                  const {blocking, confirmBlocking, block} = state.strings;
-                  confirmAction(blocking, confirmBlocking, block, setBlocking, actions.block);
+                  confirmAction(state.strings.blocking, state.strings.confirmBlocking, state.strings.block, setBlocking, actions.block);
                 }}
               />
               <Text style={styles.actionLabel}>{state.strings.block}</Text>
@@ -619,8 +604,7 @@ export function Profile({close, params}) {
                 icon="alert-octagon-outline"
                 size={32}
                 onPress={() => {
-                  const {reporting, confirmReporting, report} = state.strings;
-                  confirmAction(reporting, confirmReporting, report, setReporting, actions.report);
+                  confirmAction(state.strings.reporting, state.strings.confirmReporting, state.strings.report, setReporting, actions.report);
                 }}
               />
               <Text style={styles.actionLabel}>{state.strings.report}</Text>

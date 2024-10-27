@@ -30,7 +30,7 @@ export function Contacts({openRegistry, openContact}: {openRegistry: () => void;
           />
         </Surface>
 
-        <Button icon="account-plus" mode="contained" style={{borderRadius: 8}} onPress={openRegistry}>
+        <Button icon="account-plus" mode="contained" style={styles.button} onPress={openRegistry}>
           {state.strings.add}
         </Button>
       </SafeAreaView>
@@ -49,14 +49,28 @@ export function Contacts({openRegistry, openContact}: {openRegistry: () => void;
             const options = item.status === 'connected' && !item.offsync ? [message, call] : [];
             const select = () => {
               const {guid, handle, node, name, location, description, offsync, imageUrl, cardId, status} = item;
-              const params = {guid, handle, node, name, location, description, offsync, imageUrl, cardId, status};
+              const params = {
+                guid,
+                handle,
+                node,
+                name,
+                location,
+                description,
+                offsync,
+                imageUrl,
+                cardId,
+                status,
+              };
               openContact(params);
             };
             const status = item.offsync ? 'offsync' : item.status;
             return (
-              <View style={{borderRightWidth: 2, borderColor: Colors[status]}}>
+              <View style={{...styles.indicator, borderColor: Colors[status]}}>
                 <Card
-                  containerStyle={{...styles.card, borderColor: theme.colors.outlineVariant}}
+                  containerStyle={{
+                    ...styles.card,
+                    borderColor: theme.colors.outlineVariant,
+                  }}
                   imageUrl={item.imageUrl}
                   name={item.name}
                   handle={item.handle}
