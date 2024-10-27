@@ -25,11 +25,7 @@ export function useRoot() {
       navigate('/');
     } else if (state.pathname === '/node' && !app.state.node) {
       navigate('/');
-    } else if (
-      state.pathname === '/' &&
-      !app.state.session &&
-      !app.state.node
-    ) {
+    } else if (state.pathname === '/' && !app.state.session && !app.state.node) {
       navigate('/access');
     } else if (state.pathname !== '/node' && app.state.node) {
       navigate('/node');

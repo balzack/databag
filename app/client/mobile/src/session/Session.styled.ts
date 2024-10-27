@@ -48,5 +48,5 @@ export const styles = StyleSheet.create({
   activeTab: {
     flex: 1,
     backgroundColor: 'transparent',
-  }
+  },
 });

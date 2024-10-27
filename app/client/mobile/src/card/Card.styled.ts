@@ -59,5 +59,4 @@ export const styles = StyleSheet.create({
     overflow: 'hidden',
     fontWeight: 'bold',
   },
-})
-
+});

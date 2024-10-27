@@ -189,7 +189,7 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-  },  
+  },
   actionLabel: {
     fontSize: 12,
   },

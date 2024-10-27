@@ -13,18 +13,12 @@ export class SessionStore implements SqlStore {
     this.db = await SQLite.openDatabase({name: path, location: 'default'});
   }
 
-  public async set(
-    stmt: string,
-    params: (string | number | null)[],
-  ): Promise<void> {
+  public async set(stmt: string, params: (string | number | null)[]): Promise<void> {
     console.log('SET: ', stmt);
     await this.db.executeSql(stmt, params);
   }
 
-  public async get(
-    stmt: string,
-    params: (string | number | null)[],
-  ): Promise<any[]> {
+  public async get(stmt: string, params: (string | number | null)[]): Promise<any[]> {
     console.log('GET: ', stmt);
     const res = await this.db.executeSql(stmt, params);
     const rows = [];

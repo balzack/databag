@@ -13,10 +13,7 @@ export class NativeCrypto implements Crypto {
   }
 
   // generate aes key with pbkdf2
-  public async pbkdfKey(
-    saltHex: string,
-    password: string,
-  ): Promise<{aesKeyHex: string}> {
+  public async pbkdfKey(saltHex: string, password: string): Promise<{aesKeyHex: string}> {
     const salt = CryptoJS.enc.Hex.parse(saltHex);
     const aes = CryptoJS.PBKDF2(password, salt, {
       keySize: 256 / 32,
@@ -42,11 +39,7 @@ export class NativeCrypto implements Crypto {
   }
 
   // encrypt data with aes key and iv
-  public async aesEncrypt(
-    data: string,
-    ivHex: string,
-    aesKeyHex: string,
-  ): Promise<{encryptedDataB64: string}> {
+  public async aesEncrypt(data: string, ivHex: string, aesKeyHex: string): Promise<{encryptedDataB64: string}> {
     const iv = CryptoJS.enc.Hex.parse(ivHex);
     const key = CryptoJS.enc.Hex.parse(aesKeyHex);
     const encrypted = CryptoJS.AES.encrypt(data, key, {iv});
@@ -55,11 +48,7 @@ export class NativeCrypto implements Crypto {
   }
 
   // decrypt data with aes key and iv
-  public async aesDecrypt(
-    encryptedDataB64: string,
-    ivHex: string,
-    aesKeyHex: string,
-  ): Promise<{data: string}> {
+  public async aesDecrypt(encryptedDataB64: string, ivHex: string, aesKeyHex: string): Promise<{data: string}> {
     const iv = CryptoJS.enc.Hex.parse(ivHex);
     const key = CryptoJS.enc.Hex.parse(aesKeyHex);
     const ciphertext = CryptoJS.enc.Base64.parse(encryptedDataB64);
@@ -84,10 +73,7 @@ export class NativeCrypto implements Crypto {
   }
 
   // encrypt data with public rsa key
-  public async rsaEncrypt(
-    data: string,
-    publicKeyB64: string,
-  ): Promise<{encryptedDataB64: string}> {
+  public async rsaEncrypt(data: string, publicKeyB64: string): Promise<{encryptedDataB64: string}> {
     const crypto = new JSEncrypt();
     crypto.setPublicKey(publicKeyB64);
     const encryptedDataB64 = crypto.encrypt(data);
@@ -98,10 +84,7 @@ export class NativeCrypto implements Crypto {
   }
 
   // decrypt data with private rsa key
-  public async rsaDecrypt(
-    encryptedDataB64: string,
-    privateKeyB64: string,
-  ): Promise<{data: string}> {
+  public async rsaDecrypt(encryptedDataB64: string, privateKeyB64: string): Promise<{data: string}> {
     const crypto = new JSEncrypt();
     crypto.setPrivateKey(privateKeyB64);
     const data = await RSA.decrypt(encryptedDataB64, privateKeyB64);

@@ -161,11 +161,7 @@ export function useSettings() {
       const {settings} = getSession();
       await settings.updateSeal(state.sealPassword);
     },
-    setProfileData: async (
-      name: string,
-      location: string,
-      description: string,
-    ) => {
+    setProfileData: async (name: string, location: string, description: string) => {
       const {identity} = getSession();
       await identity.setProfileData(name, location, description);
     },

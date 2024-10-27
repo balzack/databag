@@ -55,23 +55,13 @@ export function useAccess() {
     }, 2000);
   };
 
-  const checkTaken = (
-    username: string,
-    token: string,
-    node: string,
-    secure: boolean,
-  ) => {
+  const checkTaken = (username: string, token: string, node: string, secure: boolean) => {
     updateState({taken: false});
     clearTimeout(debounceTaken.current);
     debounceTaken.current = setTimeout(async () => {
       try {
         if (node && username) {
-          const available = await app.actions.getUsername(
-            username,
-            token,
-            node,
-            secure,
-          );
+          const available = await app.actions.getUsername(username, token, node, secure);
           updateState({taken: !available});
         } else {
           updateState({taken: false});
@@ -108,10 +98,7 @@ export function useAccess() {
       updateState({code});
     },
     setNode: (node: string) => {
-      const insecure =
-        /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(
-          node,
-        );
+      const insecure = /^(?!0)(?!.*\.$)((1?\d?\d|25[0-5]|2[0-4]\d)(\.|:\d+$|$)){4}$/.test(node);
       updateState({node, secure: !insecure});
     },
     setLoading: (loading: boolean) => {

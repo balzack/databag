@@ -1,14 +1,13 @@
-import { useState, useContext, useEffect } from 'react'
-import { AppContext } from '../context/AppContext'
-import { DisplayContext } from '../context/DisplayContext';
-import { ContextType } from '../context/ContextType'
-import { Card } from 'databag-client-sdk'
-import { ContactParams } from './Profile';
+import {useState, useContext, useEffect} from 'react';
+import {AppContext} from '../context/AppContext';
+import {DisplayContext} from '../context/DisplayContext';
+import {ContextType} from '../context/ContextType';
+import {Card} from 'databag-client-sdk';
+import {ContactParams} from './Profile';
 
 export function useProfile(params: ProfileParams) {
-
-  const app = useContext(AppContext) as ContextType
-  const display = useContext(DisplayContext) as ContextType
+  const app = useContext(AppContext) as ContextType;
+  const display = useContext(DisplayContext) as ContextType;
   const [state, setState] = useState({
     strings: display.state.strings,
     cards: [] as Card[],
@@ -23,12 +22,12 @@ export function useProfile(params: ProfileParams) {
     status: '',
     offsync: false,
     statusLabel: '',
-  })
+  });
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const updateState = (value: any) => {
-    setState((s) => ({ ...s, ...value }))
-  }
+    setState(s => ({...s, ...value}));
+  };
 
   useEffect(() => {
     const guid = params.guid;
@@ -41,55 +40,55 @@ export function useProfile(params: ProfileParams) {
     const cardId = params.cardId ? params.cardId : null;
     const status = params.status ? params.status : '';
     const offsync = params.offsync ? params.offsync : false;
-    updateState({ guid, handle, node, name, location, description, imageUrl, cardId, status, offsync });
+    updateState({guid, handle, node, name, location, description, imageUrl, cardId, status, offsync});
   }, [params]);
 
   const getStatusLabel = (card?: Card) => {
     if (card) {
-      const { status, offsync } = card;
+      const {status, offsync} = card;
       if (status === 'confirmed') {
-        return 'savedStatus'
+        return 'savedStatus';
       }
       if (status === 'pending') {
-        return 'pendingStatus'
+        return 'pendingStatus';
       }
       if (status === 'requested') {
-        return 'requestedStatus'
+        return 'requestedStatus';
       }
       if (status === 'connecting') {
-        return 'connectingStatus'
+        return 'connectingStatus';
       }
       if (status === 'connected' && !offsync) {
-        return 'connectedStatus'
+        return 'connectedStatus';
       }
       if (status === 'connected' && offsync) {
-        return 'offsyncStatus'
+        return 'offsyncStatus';
       }
     }
-    return 'unknownStatus'
-  }
+    return 'unknownStatus';
+  };
 
   useEffect(() => {
     const card = state.cards.find(card => card.guid === state.guid);
     const statusLabel = getStatusLabel(card);
     if (card) {
-      const { handle, node, name, location, description, imageUrl, cardId, status, offsync } = card;
-      updateState({ handle, node, name, location, description, imageUrl, cardId, status, offsync, statusLabel });
+      const {handle, node, name, location, description, imageUrl, cardId, status, offsync} = card;
+      updateState({handle, node, name, location, description, imageUrl, cardId, status, offsync, statusLabel});
     } else {
-      updateState({ cardId: null, status: '', offsync: false, statusLabel });
+      updateState({cardId: null, status: '', offsync: false, statusLabel});
     }
   }, [state.cards, state.guid]);
 
   useEffect(() => {
     const contact = app.state.session?.getContact();
     const setCards = (cards: Card[]) => {
-      updateState({ cards }); 
+      updateState({cards});
     };
     contact.addCardListener(setCards);
     return () => {
       contact.removeCardListener(setCards);
-    }
-  }, [])
+    };
+  }, []);
 
   const actions = {
     save: async () => {
@@ -140,7 +139,7 @@ export function useProfile(params: ProfileParams) {
       const contact = app.state.session?.getContact();
       await contact.flagCard(state.cardId);
     },
-  }
+  };
 
-  return { state, actions }
+  return {state, actions};
 }

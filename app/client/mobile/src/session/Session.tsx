@@ -10,15 +10,11 @@ import {Profile, ContactParams} from '../profile/Profile';
 import {Details} from '../details/Details';
 import {Identity} from '../identity/Identity';
 import {useSession} from './useSession.hook';
-import { TransitionPresets } from '@react-navigation/stack';
+import {TransitionPresets} from '@react-navigation/stack';
 
-import {
-  NavigationContainer,
-  DefaultTheme,
-  DarkTheme,
-} from '@react-navigation/native';
+import {NavigationContainer, DefaultTheme, DarkTheme} from '@react-navigation/native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
-import { createStackNavigator } from '@react-navigation/stack';
+import {createStackNavigator} from '@react-navigation/stack';
 
 const SettingsDrawer = createDrawerNavigator();
 const ContactsDrawer = createDrawerNavigator();
@@ -44,7 +40,7 @@ export function Session() {
     <View style={styles.session}>
       {state.layout !== 'large' && (
         <Surface elevation={2}>
-          <SafeAreaView style={{ width: '100%', height: '100%' }}>
+          <SafeAreaView style={{width: '100%', height: '100%'}}>
             <View style={styles.screen}>
               <View style={{...styles.body, display: tab === 'content' ? 'flex' : 'none'}}>
                 <ContentTab scheme={scheme} />
@@ -58,23 +54,71 @@ export function Session() {
                 </Surface>
               </View>
               <View style={styles.tabs}>
-                { tab === 'content' && (
-                  <IconButton style={styles.activeTab} mode="contained" icon={'comment-multiple'} size={28} onPress={()=>{setTab('content')}} />
+                {tab === 'content' && (
+                  <IconButton
+                    style={styles.activeTab}
+                    mode="contained"
+                    icon={'comment-multiple'}
+                    size={28}
+                    onPress={() => {
+                      setTab('content');
+                    }}
+                  />
                 )}
-                { tab !== 'content' && (
-                  <IconButton style={styles.idleTab} mode="contained" icon={'comment-multiple-outline'} size={28} onPress={()=>{setTab('content')}} />
+                {tab !== 'content' && (
+                  <IconButton
+                    style={styles.idleTab}
+                    mode="contained"
+                    icon={'comment-multiple-outline'}
+                    size={28}
+                    onPress={() => {
+                      setTab('content');
+                    }}
+                  />
                 )}
-                { tab === 'contacts' && (
-                  <IconButton style={styles.activeTab} mode="contained" icon={'contacts'} size={28} onPress={()=>{setTab('contacts')}} />
+                {tab === 'contacts' && (
+                  <IconButton
+                    style={styles.activeTab}
+                    mode="contained"
+                    icon={'contacts'}
+                    size={28}
+                    onPress={() => {
+                      setTab('contacts');
+                    }}
+                  />
                 )}
-                { tab !== 'contacts' && (
-                  <IconButton style={styles.idleTab} mode="contained" icon={'contacts-outline'} size={28} onPress={()=>{setTab('contacts')}} />
+                {tab !== 'contacts' && (
+                  <IconButton
+                    style={styles.idleTab}
+                    mode="contained"
+                    icon={'contacts-outline'}
+                    size={28}
+                    onPress={() => {
+                      setTab('contacts');
+                    }}
+                  />
                 )}
-                { tab === 'settings' && (
-                  <IconButton style={styles.activeTab} mode="contained" icon={'cog'} size={28} onPress={()=>{setTab('settings')}} />
+                {tab === 'settings' && (
+                  <IconButton
+                    style={styles.activeTab}
+                    mode="contained"
+                    icon={'cog'}
+                    size={28}
+                    onPress={() => {
+                      setTab('settings');
+                    }}
+                  />
                 )}
-                { tab !== 'settings' && (
-                  <IconButton style={styles.idleTab} mode="contained" icon={'cog-outline'} size={28} onPress={()=>{setTab('settings')}} />
+                {tab !== 'settings' && (
+                  <IconButton
+                    style={styles.idleTab}
+                    mode="contained"
+                    icon={'cog-outline'}
+                    size={28}
+                    onPress={() => {
+                      setTab('settings');
+                    }}
+                  />
                 )}
               </View>
             </View>
@@ -82,8 +126,7 @@ export function Session() {
         </Surface>
       )}
       {state.layout === 'large' && (
-        <NavigationContainer
-          theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
+        <NavigationContainer theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
           <View style={styles.container}>
             <DetailsScreen nav={sessionNav} />
           </View>
@@ -93,42 +136,54 @@ export function Session() {
   );
 }
 
-function ContentTab({ scheme }: { scheme: string }) {
+function ContentTab({scheme}: {scheme: string}) {
   return (
     <NavigationContainer theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <ContactStack.Navigator initialRouteName="contacts" screenOptions={{ headerShown: false }}>
-        <ContactStack.Screen name="content" options={{ headerBackTitleVisible: false }}>
-          {(props) => <Text>CONTENT</Text>}
+      <ContactStack.Navigator initialRouteName="contacts" screenOptions={{headerShown: false}}>
+        <ContactStack.Screen name="content" options={{headerBackTitleVisible: false}}>
+          {props => <Text>CONTENT</Text>}
         </ContactStack.Screen>
       </ContactStack.Navigator>
     </NavigationContainer>
   );
 }
 
-function ContactTab({ scheme }: { scheme: string }) {
-  const [contactParams, setContactParams] = useState({ guid: '' } as ContactParams);
+function ContactTab({scheme}: {scheme: string}) {
+  const [contactParams, setContactParams] = useState({guid: ''} as ContactParams);
   const openContact = (params: ContactParams, nav) => {
     setContactParams(params);
     nav.navigate('profile');
-  }
+  };
 
   return (
     <NavigationContainer theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <ContactStack.Navigator initialRouteName="contacts" screenOptions={{ headerShown: false }}>
-        <ContactStack.Screen name="contacts" options={{ headerBackTitleVisible: false }}>
-          {(props) => <Contacts openRegistry={()=>{props.navigation.navigate('registry')}} openContact={(params: ContactParams)=>{
-            setContactParams(params);
-            props.navigation.navigate('profile')
-          }} />}
+      <ContactStack.Navigator initialRouteName="contacts" screenOptions={{headerShown: false}}>
+        <ContactStack.Screen name="contacts" options={{headerBackTitleVisible: false}}>
+          {props => (
+            <Contacts
+              openRegistry={() => {
+                props.navigation.navigate('registry');
+              }}
+              openContact={(params: ContactParams) => {
+                setContactParams(params);
+                props.navigation.navigate('profile');
+              }}
+            />
+          )}
         </ContactStack.Screen>
-        <ContactStack.Screen name="registry" options={{ headerBackTitleVisible: false, ...TransitionPresets.ScaleFromCenterAndroid }}>
-          {(props) => <Registry close={props.navigation.goBack} openContact={(params: ContactParams)=>{
-            setContactParams(params);
-            props.navigation.navigate('profile')
-          }} />}
+        <ContactStack.Screen name="registry" options={{headerBackTitleVisible: false, ...TransitionPresets.ScaleFromCenterAndroid}}>
+          {props => (
+            <Registry
+              close={props.navigation.goBack}
+              openContact={(params: ContactParams) => {
+                setContactParams(params);
+                props.navigation.navigate('profile');
+              }}
+            />
+          )}
         </ContactStack.Screen>
-        <ContactStack.Screen name="profile" options={{ headerBackTitleVisible: false, ...TransitionPresets.ScaleFromCenterAndroid }}>
-          {(props) => <Profile close={props.navigation.goBack} params={contactParams} />}
+        <ContactStack.Screen name="profile" options={{headerBackTitleVisible: false, ...TransitionPresets.ScaleFromCenterAndroid}}>
+          {props => <Profile close={props.navigation.goBack} params={contactParams} />}
         </ContactStack.Screen>
       </ContactStack.Navigator>
     </NavigationContainer>
@@ -145,37 +200,29 @@ function DetailsScreen({nav}) {
         drawerType: 'front',
         headerShown: false,
       }}>
-      <DetailsDrawer.Screen name="details">
-        {({navigation}) => (
-          <ProfileScreen nav={{...nav, details: navigation}} />
-        )}
-      </DetailsDrawer.Screen>
+      <DetailsDrawer.Screen name="details">{({navigation}) => <ProfileScreen nav={{...nav, details: navigation}} />}</DetailsDrawer.Screen>
     </DetailsDrawer.Navigator>
   );
 }
 
 function ProfileScreen({nav}) {
-  const [contactParams, setContactParams] = useState({ guid: '' } as ContactParams);
-  const openContact = (params: ContactParams, open: ()=>{}) => {
+  const [contactParams, setContactParams] = useState({guid: ''} as ContactParams);
+  const openContact = (params: ContactParams, open: () => {}) => {
     setContactParams(params);
     open();
-  }
+  };
 
   return (
     <ProfileDrawer.Navigator
       id="ProfileDrawer"
-      drawerContent={() => (<Profile params={contactParams} />)}
+      drawerContent={() => <Profile params={contactParams} />}
       screenOptions={{
         drawerStyle: {width: 300},
         drawerPosition: 'right',
         drawerType: 'front',
         headerShown: false,
       }}>
-      <ProfileDrawer.Screen name="registry">
-        {({navigation}) => (
-          <RegistryScreen nav={{...nav, profile: navigation, openContact}} />
-        )}
-      </ProfileDrawer.Screen>
+      <ProfileDrawer.Screen name="registry">{({navigation}) => <RegistryScreen nav={{...nav, profile: navigation, openContact}} />}</ProfileDrawer.Screen>
     </ProfileDrawer.Navigator>
   );
 }
@@ -186,7 +233,11 @@ function RegistryScreen({nav}) {
       id="RegistryDrawer"
       drawerContent={() => (
         <Surface elevation={1}>
-          <Registry openContact={(params: ContactParams)=>{nav.openContact(params, nav.profile.openDrawer)}} />
+          <Registry
+            openContact={(params: ContactParams) => {
+              nav.openContact(params, nav.profile.openDrawer);
+            }}
+          />
         </Surface>
       )}
       screenOptions={{
@@ -195,11 +246,7 @@ function RegistryScreen({nav}) {
         drawerType: 'front',
         headerShown: false,
       }}>
-      <RegistryDrawer.Screen name="contacts">
-        {({navigation}) => (
-          <ContactsScreen nav={{...nav, registry: navigation}} />
-        )}
-      </RegistryDrawer.Screen>
+      <RegistryDrawer.Screen name="contacts">{({navigation}) => <ContactsScreen nav={{...nav, registry: navigation}} />}</RegistryDrawer.Screen>
     </RegistryDrawer.Navigator>
   );
 }
@@ -210,7 +257,12 @@ function ContactsScreen({nav}) {
       id="ContactsDrawer"
       drawerContent={() => (
         <Surface elevation={1}>
-          <Contacts openRegistry={nav.registry.openDrawer} openContact={(params: ContactParams)=>{nav.openContact(params, nav.profile.openDrawer)}} />
+          <Contacts
+            openRegistry={nav.registry.openDrawer}
+            openContact={(params: ContactParams) => {
+              nav.openContact(params, nav.profile.openDrawer);
+            }}
+          />
         </Surface>
       )}
       screenOptions={{
@@ -219,11 +271,7 @@ function ContactsScreen({nav}) {
         drawerType: 'front',
         headerShown: false,
       }}>
-      <ContactsDrawer.Screen name="settings">
-        {({navigation}) => (
-          <SettingsScreen nav={{...nav, contacts: navigation}} />
-        )}
-      </ContactsDrawer.Screen>
+      <ContactsDrawer.Screen name="settings">{({navigation}) => <SettingsScreen nav={{...nav, contacts: navigation}} />}</ContactsDrawer.Screen>
     </ContactsDrawer.Navigator>
   );
 }
@@ -243,9 +291,7 @@ function SettingsScreen({nav}) {
         drawerType: 'front',
         headerShown: false,
       }}>
-      <SettingsDrawer.Screen name="home">
-        {({navigation}) => <HomeScreen nav={{...nav, settings: navigation}} />}
-      </SettingsDrawer.Screen>
+      <SettingsDrawer.Screen name="home">{({navigation}) => <HomeScreen nav={{...nav, settings: navigation}} />}</SettingsDrawer.Screen>
     </SettingsDrawer.Navigator>
   );
 }

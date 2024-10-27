@@ -1,23 +1,6 @@
 import React, {useState} from 'react';
-import {
-  Surface,
-  Button,
-  Text,
-  IconButton,
-  Divider,
-  Icon,
-  TextInput,
-  RadioButton,
-  Switch,
-} from 'react-native-paper';
-import {
-  SafeAreaView,
-  TouchableOpacity,
-  Modal,
-  View,
-  Image,
-  ScrollView,
-} from 'react-native';
+import {Surface, Button, Text, IconButton, Divider, Icon, TextInput, RadioButton, Switch} from 'react-native-paper';
+import {SafeAreaView, TouchableOpacity, Modal, View, Image, ScrollView} from 'react-native';
 import {styles} from './Settings.styled';
 import {useSettings} from './useSettings.hook';
 import ImagePicker from 'react-native-image-crop-picker';
@@ -26,7 +9,7 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {Colors} from '../constants/Colors';
 import {InputCode} from '../utils/InputCode';
 import Clipboard from '@react-native-clipboard/clipboard';
-import { Confirm } from '../confirm/Confirm';
+import {Confirm} from '../confirm/Confirm';
 
 export function Settings({showLogout}: {showLogout: boolean}) {
   const {state, actions} = useSettings();
@@ -54,7 +37,16 @@ export function Settings({showLogout}: {showLogout: boolean}) {
   const [secretCopy, setSecretCopy] = useState(false);
   const [confirmingAuth, setConfirmingAuth] = useState(false);
   const [authMessage, setAuthMessage] = useState('');
-  const [alertParams, setAlertParams] = useState({ title: state.strings.error, prompt: state.strings.tryAgain, cancel: { label: state.strings.close, action: () => {setAlert(false)}}});
+  const [alertParams, setAlertParams] = useState({
+    title: state.strings.error,
+    prompt: state.strings.tryAgain,
+    cancel: {
+      label: state.strings.close,
+      action: () => {
+        setAlert(false);
+      },
+    },
+  });
 
   const changeLogin = () => {
     actions.setPassword('');
@@ -329,29 +321,12 @@ export function Settings({showLogout}: {showLogout: boolean}) {
 
   return (
     <View>
-      <ScrollView showsVerticalScrollIndicator={false} style={{ width: '100%', height: '100%' }}>
+      <ScrollView showsVerticalScrollIndicator={false} style={{width: '100%', height: '100%'}}>
         <View style={styles.settings}>
-          <Text
-            style={styles.header}
-            adjustsFontSizeToFit={true}
-            numberOfLines={1}>{`${state.profile.handle}${
-            state.profile.node ? '/' + state.profile.node : ''
-          }`}</Text>
+          <Text style={styles.header} adjustsFontSizeToFit={true} numberOfLines={1}>{`${state.profile.handle}${state.profile.node ? '/' + state.profile.node : ''}`}</Text>
           <View style={styles.image}>
-            {!state.profile.imageSet && (
-              <Image
-                style={styles.logoUnset}
-                resizeMode={'contain'}
-                source={{uri: state.imageUrl}}
-              />
-            )}
-            {state.profile.imageSet && (
-              <Image
-                style={styles.logoSet}
-                resizeMode={'contain'}
-                source={{uri: state.imageUrl}}
-              />
-            )}
+            {!state.profile.imageSet && <Image style={styles.logoUnset} resizeMode={'contain'} source={{uri: state.imageUrl}} />}
+            {state.profile.imageSet && <Image style={styles.logoSet} resizeMode={'contain'} source={{uri: state.imageUrl}} />}
             <View style={styles.editBar}>
               <TouchableOpacity onPress={selectImage}>
                 <Surface style={styles.editBorder} elevation={0}>
@@ -366,14 +341,9 @@ export function Settings({showLogout}: {showLogout: boolean}) {
           </View>
 
           <View style={styles.attributes}>
-            {!state.profile.name && (
-              <Text style={styles.nameUnset}>{state.strings.name}</Text>
-            )}
+            {!state.profile.name && <Text style={styles.nameUnset}>{state.strings.name}</Text>}
             {state.profile.name && (
-              <Text
-                style={styles.nameSet}
-                adjustsFontSizeToFit={true}
-                numberOfLines={1}>
+              <Text style={styles.nameSet} adjustsFontSizeToFit={true} numberOfLines={1}>
                 {state.profile.name}
               </Text>
             )}
@@ -381,33 +351,19 @@ export function Settings({showLogout}: {showLogout: boolean}) {
               <View style={styles.icon}>
                 <Icon size={24} source="map-marker-outline" />
               </View>
-              {!state.profile.location && (
-                <Text style={styles.labelUnset}>{state.strings.location}</Text>
-              )}
-              {state.profile.location && (
-                <Text style={styles.labelSet}>{state.profile.location}</Text>
-              )}
+              {!state.profile.location && <Text style={styles.labelUnset}>{state.strings.location}</Text>}
+              {state.profile.location && <Text style={styles.labelSet}>{state.profile.location}</Text>}
             </View>
             <View style={styles.attribute}>
               <View style={styles.icon}>
                 <Icon size={24} source="book-open-outline" />
               </View>
-              {!state.profile.description && (
-                <Text style={styles.labelUnset}>
-                  {state.strings.description}
-                </Text>
-              )}
-              {state.profile.description && (
-                <Text style={styles.labelSet}>{state.profile.description}</Text>
-              )}
+              {!state.profile.description && <Text style={styles.labelUnset}>{state.strings.description}</Text>}
+              {state.profile.description && <Text style={styles.labelSet}>{state.profile.description}</Text>}
             </View>
-            <TouchableOpacity
-              style={styles.editDetails}
-              onPress={() => setDetails(true)}>
+            <TouchableOpacity style={styles.editDetails} onPress={() => setDetails(true)}>
               <Surface elevation={4} mode="flat">
-                <Text style={styles.editDetailsLabel}>
-                  {state.strings.edit}
-                </Text>
+                <Text style={styles.editDetailsLabel}>{state.strings.edit}</Text>
               </Surface>
             </TouchableOpacity>
           </View>
@@ -421,18 +377,10 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                 <Icon size={24} source="eye-outline" />
               </View>
               <View style={styles.control}>
-                <TouchableOpacity
-                  activeOpacity={1}
-                  onPress={() => setRegistry(!state.config.searchable)}>
-                  <Text style={styles.controlLabel}>
-                    {state.strings.registry}
-                  </Text>
+                <TouchableOpacity activeOpacity={1} onPress={() => setRegistry(!state.config.searchable)}>
+                  <Text style={styles.controlLabel}>{state.strings.registry}</Text>
                 </TouchableOpacity>
-                <Switch
-                  style={styles.controlSwitch}
-                  value={state.config.searchable}
-                  onValueChange={setRegistry}
-                />
+                <Switch style={styles.controlSwitch} value={state.config.searchable} onValueChange={setRegistry} />
               </View>
             </View>
             <View style={styles.attribute}>
@@ -441,9 +389,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
               </View>
               <View style={styles.control}>
                 <TouchableOpacity activeOpacity={1} onPress={setSeal}>
-                  <Text style={styles.controlLabel}>
-                    {state.strings.manageTopics}
-                  </Text>
+                  <Text style={styles.controlLabel}>{state.strings.manageTopics}</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -452,18 +398,10 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                 <Icon size={24} source="bell-outline" />
               </View>
               <View style={styles.control}>
-                <TouchableOpacity
-                  activeOpacity={1}
-                  onPress={() => setRegistry(!state.config.pushEnabled)}>
-                  <Text style={styles.controlLabel}>
-                    {state.strings.enableNotifications}
-                  </Text>
+                <TouchableOpacity activeOpacity={1} onPress={() => setRegistry(!state.config.pushEnabled)}>
+                  <Text style={styles.controlLabel}>{state.strings.enableNotifications}</Text>
                 </TouchableOpacity>
-                <Switch
-                  style={styles.controlSwitch}
-                  value={state.config.pushEnabled}
-                  onValueChange={setNotifications}
-                />
+                <Switch style={styles.controlSwitch} value={state.config.pushEnabled} onValueChange={setNotifications} />
               </View>
             </View>
           </View>
@@ -477,18 +415,10 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                 <Icon size={24} source="ticket-confirmation-outline" />
               </View>
               <View style={styles.control}>
-                <TouchableOpacity
-                  activeOpacity={1}
-                  onPress={() => setRegistry(!state.config.searchable)}>
-                  <Text style={styles.controlLabel}>
-                    {state.strings.mfaTitle}
-                  </Text>
+                <TouchableOpacity activeOpacity={1} onPress={() => setRegistry(!state.config.searchable)}>
+                  <Text style={styles.controlLabel}>{state.strings.mfaTitle}</Text>
                 </TouchableOpacity>
-                <Switch
-                  style={styles.controlSwitch}
-                  value={state.config.mfaEnabled}
-                  onValueChange={setMfa}
-                />
+                <Switch style={styles.controlSwitch} value={state.config.mfaEnabled} onValueChange={setMfa} />
               </View>
             </View>
             <View style={styles.attribute}>
@@ -497,9 +427,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
               </View>
               <View style={styles.control}>
                 <TouchableOpacity activeOpacity={1} onPress={changeLogin}>
-                  <Text style={styles.controlLabel}>
-                    {state.strings.changeLogin}
-                  </Text>
+                  <Text style={styles.controlLabel}>{state.strings.changeLogin}</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -509,12 +437,8 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                   <Icon size={24} source="logout" />
                 </View>
                 <View style={styles.control}>
-                  <TouchableOpacity
-                    activeOpacity={1}
-                    onPress={() => setLogout(true)}>
-                    <Text style={styles.controlLabel}>
-                      {state.strings.logout}
-                    </Text>
+                  <TouchableOpacity activeOpacity={1} onPress={() => setLogout(true)}>
+                    <Text style={styles.controlLabel}>{state.strings.logout}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -524,12 +448,8 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                 <Icon size={24} source="account-remove" />
               </View>
               <View style={styles.control}>
-                <TouchableOpacity
-                  activeOpacity={1}
-                  onPress={() => setRemove(true)}>
-                  <Text style={styles.dangerLabel}>
-                    {state.strings.deleteAccount}
-                  </Text>
+                <TouchableOpacity activeOpacity={1} onPress={() => setRemove(true)}>
+                  <Text style={styles.dangerLabel}>{state.strings.deleteAccount}</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -545,9 +465,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
               </View>
               <View style={styles.control}>
                 <TouchableOpacity activeOpacity={1} onPress={() => manageSeal}>
-                  <Text style={styles.controlLabel}>
-                    {state.strings.blockedContacts}
-                  </Text>
+                  <Text style={styles.controlLabel}>{state.strings.blockedContacts}</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -557,9 +475,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
               </View>
               <View style={styles.control}>
                 <TouchableOpacity activeOpacity={1} onPress={() => manageSeal}>
-                  <Text style={styles.controlLabel}>
-                    {state.strings.blockedTopics}
-                  </Text>
+                  <Text style={styles.controlLabel}>{state.strings.blockedTopics}</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -569,9 +485,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
               </View>
               <View style={styles.control}>
                 <TouchableOpacity activeOpacity={1} onPress={() => manageSeal}>
-                  <Text style={styles.controlLabel}>
-                    {state.strings.blockedMessages}
-                  </Text>
+                  <Text style={styles.controlLabel}>{state.strings.blockedMessages}</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -644,287 +558,59 @@ export function Settings({showLogout}: {showLogout: boolean}) {
           </View>
         </View>
       </ScrollView>
-      <Modal
-        animationType="fade"
-        transparent={true}
-        visible={sealing}
-        supportedOrientations={['portrait', 'landscape']}
-        onRequestClose={() => setSealing(false)}>
+      <Modal animationType="fade" transparent={true} visible={sealing} supportedOrientations={['portrait', 'landscape']} onRequestClose={() => setSealing(false)}>
         <View style={styles.modal}>
-          <BlurView
-            style={styles.blur}
-            blurType="dark"
-            blurAmount={2}
-            reducedTransparencyFallbackColor="dark"
-          />
-          <KeyboardAwareScrollView
-            style={styles.container}
-            contentContainerStyle={styles.content}>
+          <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
+          <KeyboardAwareScrollView style={styles.container} contentContainerStyle={styles.content}>
             <Surface elevation={5} mode="flat" style={styles.surface}>
-              <Text style={styles.modalLabel}>
-                {state.strings.manageTopics}
-              </Text>
-              <IconButton
-                style={styles.modalClose}
-                icon="close"
-                size={24}
-                onPress={() => setSealing(false)}
-              />
-              {!sealDelete &&
-                !sealReset &&
-                state.config.sealSet &&
-                state.config.sealUnlocked && (
-                  <>
-                    <Text style={styles.modalDescription}>
-                      {state.strings.sealForget}
-                    </Text>
-                    {!sealConfig && (
-                      <View style={styles.modalControls}>
-                        <IconButton
-                          style={styles.modalOption}
-                          iconColor={Colors.primary}
-                          icon="menu-right-outline"
-                          size={32}
-                          onPress={() => {
-                            setSealConfig(true);
-                          }}
-                        />
-                        <Button
-                          mode="outlined"
-                          onPress={() => setSealing(false)}>
-                          {state.strings.cancel}
-                        </Button>
-                        <Button
-                          mode="contained"
-                          loading={savingSeal}
-                          onPress={sealForget}>
-                          {state.strings.forget}
-                        </Button>
-                      </View>
-                    )}
-                    {sealConfig && (
-                      <View style={styles.modalControls}>
-                        <Button
-                          mode="contained"
-                          onPress={() => setSealReset(true)}>
-                          {state.strings.resave}
-                        </Button>
-                        <Button
-                          mode="contained"
-                          style={styles.deleteButton}
-                          loading={savingSeal}
-                          onPress={() => setSealDelete(true)}>
-                          {state.strings.delete}
-                        </Button>
-                        <IconButton
-                          style={styles.modalOption}
-                          iconColor={Colors.primary}
-                          icon="menu-left-outline"
-                          size={32}
-                          onPress={() => {
-                            setSealConfig(false);
-                          }}
-                        />
-                      </View>
-                    )}
-                  </>
-                )}
-              {!sealDelete &&
-                sealReset &&
-                state.config.sealSet &&
-                state.config.sealUnlocked && (
-                  <>
-                    <Text style={styles.modalDescription}>
-                      {state.strings.sealUpdate}
-                    </Text>
-                    <TextInput
-                      style={styles.input}
-                      mode="flat"
-                      autoCapitalize="none"
-                      autoComplete="off"
-                      autoCorrect={false}
-                      value={state.sealPassword}
-                      label={state.strings.password}
-                      secureTextEntry={!showPassword}
-                      left={<TextInput.Icon style={styles.icon} icon="lock" />}
-                      right={
-                        showPassword ? (
-                          <TextInput.Icon
-                            style={styles.icon}
-                            icon="eye-off"
-                            onPress={() => setShowPassword(false)}
-                          />
-                        ) : (
-                          <TextInput.Icon
-                            style={styles.icon}
-                            icon="eye"
-                            onPress={() => setShowPassword(true)}
-                          />
-                        )
-                      }
-                      onChangeText={value => actions.setSealPassword(value)}
-                    />
-                    <TextInput
-                      style={styles.input}
-                      mode="flat"
-                      autoCapitalize="none"
-                      autoComplete="off"
-                      autoCorrect={false}
-                      value={state.sealConfirm}
-                      label={state.strings.confirmPassword}
-                      secureTextEntry={!showConfirm}
-                      left={<TextInput.Icon style={styles.icon} icon="lock" />}
-                      right={
-                        showPassword ? (
-                          <TextInput.Icon
-                            style={styles.icon}
-                            icon="eye-off"
-                            onPress={() => setShowConfirm(false)}
-                          />
-                        ) : (
-                          <TextInput.Icon
-                            style={styles.icon}
-                            icon="eye"
-                            onPress={() => setShowConfirm(true)}
-                          />
-                        )
-                      }
-                      onChangeText={value => actions.setSealConfirm(value)}
-                    />
+              <Text style={styles.modalLabel}>{state.strings.manageTopics}</Text>
+              <IconButton style={styles.modalClose} icon="close" size={24} onPress={() => setSealing(false)} />
+              {!sealDelete && !sealReset && state.config.sealSet && state.config.sealUnlocked && (
+                <>
+                  <Text style={styles.modalDescription}>{state.strings.sealForget}</Text>
+                  {!sealConfig && (
                     <View style={styles.modalControls}>
+                      <IconButton
+                        style={styles.modalOption}
+                        iconColor={Colors.primary}
+                        icon="menu-right-outline"
+                        size={32}
+                        onPress={() => {
+                          setSealConfig(true);
+                        }}
+                      />
                       <Button mode="outlined" onPress={() => setSealing(false)}>
                         {state.strings.cancel}
                       </Button>
-                      <Button
-                        mode="contained"
-                        disabled={
-                          state.sealPassword.length === 0 ||
-                          state.sealConfirm !== state.sealPassword
-                        }
-                        loading={savingSeal}
-                        onPress={sealUpdate}>
-                        {state.strings.save}
+                      <Button mode="contained" loading={savingSeal} onPress={sealForget}>
+                        {state.strings.forget}
                       </Button>
                     </View>
-                  </>
-                )}
-              {!sealDelete &&
-                state.config.sealSet &&
-                !state.config.sealUnlocked && (
-                  <>
-                    <Text style={styles.modalDescription}>
-                      {state.strings.sealUnlock}
-                    </Text>
-                    <TextInput
-                      style={styles.input}
-                      mode="flat"
-                      autoCapitalize="none"
-                      autoComplete="off"
-                      autoCorrect={false}
-                      value={state.sealPassword}
-                      label={state.strings.password}
-                      secureTextEntry={!showPassword}
-                      left={<TextInput.Icon style={styles.icon} icon="lock" />}
-                      right={
-                        showPassword ? (
-                          <TextInput.Icon
-                            style={styles.icon}
-                            icon="eye-off"
-                            onPress={() => setShowPassword(false)}
-                          />
-                        ) : (
-                          <TextInput.Icon
-                            style={styles.icon}
-                            icon="eye"
-                            onPress={() => setShowPassword(true)}
-                          />
-                        )
-                      }
-                      onChangeText={value => actions.setSealPassword(value)}
-                    />
-                    {!sealConfig && (
-                      <View style={styles.modalControls}>
-                        <IconButton
-                          style={styles.modalOption}
-                          iconColor={Colors.primary}
-                          icon="menu-right-outline"
-                          size={32}
-                          onPress={() => {
-                            setSealConfig(true);
-                          }}
-                        />
-                        <Button
-                          mode="outlined"
-                          onPress={() => setSealing(false)}>
-                          {state.strings.cancel}
-                        </Button>
-                        <Button
-                          mode="contained"
-                          disabled={state.sealPassword.length === 0}
-                          loading={savingSeal}
-                          onPress={sealUnlock}>
-                          {state.strings.unlock}
-                        </Button>
-                      </View>
-                    )}
-                    {sealConfig && (
-                      <View style={styles.modalControls}>
-                        <Button
-                          mode="contained"
-                          style={styles.deleteButton}
-                          loading={savingSeal}
-                          onPress={() => setSealDelete(true)}>
-                          {state.strings.delete}
-                        </Button>
-                        <IconButton
-                          style={styles.modalOption}
-                          iconColor={Colors.primary}
-                          icon="menu-left-outline"
-                          size={32}
-                          onPress={() => {
-                            setSealConfig(false);
-                          }}
-                        />
-                      </View>
-                    )}
-                  </>
-                )}
-              {sealDelete && state.config.sealSet && (
-                <>
-                  <Text style={styles.modalDescription}>
-                    {state.strings.sealDelete}
-                  </Text>
-                  <TextInput
-                    style={styles.input}
-                    mode="flat"
-                    autoCapitalize="none"
-                    autoComplete="off"
-                    autoCorrect={false}
-                    value={state.sealDelete}
-                    label={state.strings.deleteKey}
-                    left={<TextInput.Icon style={styles.icon} icon="lock" />}
-                    onChangeText={value => actions.setSealDelete(value)}
-                  />
-                  <View style={styles.modalControls}>
-                    <Button
-                      mode="contained"
-                      style={styles.deleteButton}
-                      disabled={state.sealDelete !== state.strings.deleteKey}
-                      loading={savingSeal}
-                      onPress={sealRemove}>
-                      {state.strings.delete}
-                    </Button>
-                  </View>
+                  )}
+                  {sealConfig && (
+                    <View style={styles.modalControls}>
+                      <Button mode="contained" onPress={() => setSealReset(true)}>
+                        {state.strings.resave}
+                      </Button>
+                      <Button mode="contained" style={styles.deleteButton} loading={savingSeal} onPress={() => setSealDelete(true)}>
+                        {state.strings.delete}
+                      </Button>
+                      <IconButton
+                        style={styles.modalOption}
+                        iconColor={Colors.primary}
+                        icon="menu-left-outline"
+                        size={32}
+                        onPress={() => {
+                          setSealConfig(false);
+                        }}
+                      />
+                    </View>
+                  )}
                 </>
               )}
-              {!state.config.sealSet && (
+              {!sealDelete && sealReset && state.config.sealSet && state.config.sealUnlocked && (
                 <>
-                  <Text style={styles.modalDescription}>
-                    {state.strings.sealUnset}
-                  </Text>
-                  <Text style={styles.modalDescription}>
-                    {state.strings.delayMessage}
-                  </Text>
+                  <Text style={styles.modalDescription}>{state.strings.sealUpdate}</Text>
                   <TextInput
                     style={styles.input}
                     mode="flat"
@@ -937,17 +623,141 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                     left={<TextInput.Icon style={styles.icon} icon="lock" />}
                     right={
                       showPassword ? (
-                        <TextInput.Icon
-                          style={styles.icon}
-                          icon="eye-off"
-                          onPress={() => setShowPassword(false)}
-                        />
+                        <TextInput.Icon style={styles.icon} icon="eye-off" onPress={() => setShowPassword(false)} />
                       ) : (
-                        <TextInput.Icon
-                          style={styles.icon}
-                          icon="eye"
-                          onPress={() => setShowPassword(true)}
-                        />
+                        <TextInput.Icon style={styles.icon} icon="eye" onPress={() => setShowPassword(true)} />
+                      )
+                    }
+                    onChangeText={value => actions.setSealPassword(value)}
+                  />
+                  <TextInput
+                    style={styles.input}
+                    mode="flat"
+                    autoCapitalize="none"
+                    autoComplete="off"
+                    autoCorrect={false}
+                    value={state.sealConfirm}
+                    label={state.strings.confirmPassword}
+                    secureTextEntry={!showConfirm}
+                    left={<TextInput.Icon style={styles.icon} icon="lock" />}
+                    right={
+                      showPassword ? (
+                        <TextInput.Icon style={styles.icon} icon="eye-off" onPress={() => setShowConfirm(false)} />
+                      ) : (
+                        <TextInput.Icon style={styles.icon} icon="eye" onPress={() => setShowConfirm(true)} />
+                      )
+                    }
+                    onChangeText={value => actions.setSealConfirm(value)}
+                  />
+                  <View style={styles.modalControls}>
+                    <Button mode="outlined" onPress={() => setSealing(false)}>
+                      {state.strings.cancel}
+                    </Button>
+                    <Button mode="contained" disabled={state.sealPassword.length === 0 || state.sealConfirm !== state.sealPassword} loading={savingSeal} onPress={sealUpdate}>
+                      {state.strings.save}
+                    </Button>
+                  </View>
+                </>
+              )}
+              {!sealDelete && state.config.sealSet && !state.config.sealUnlocked && (
+                <>
+                  <Text style={styles.modalDescription}>{state.strings.sealUnlock}</Text>
+                  <TextInput
+                    style={styles.input}
+                    mode="flat"
+                    autoCapitalize="none"
+                    autoComplete="off"
+                    autoCorrect={false}
+                    value={state.sealPassword}
+                    label={state.strings.password}
+                    secureTextEntry={!showPassword}
+                    left={<TextInput.Icon style={styles.icon} icon="lock" />}
+                    right={
+                      showPassword ? (
+                        <TextInput.Icon style={styles.icon} icon="eye-off" onPress={() => setShowPassword(false)} />
+                      ) : (
+                        <TextInput.Icon style={styles.icon} icon="eye" onPress={() => setShowPassword(true)} />
+                      )
+                    }
+                    onChangeText={value => actions.setSealPassword(value)}
+                  />
+                  {!sealConfig && (
+                    <View style={styles.modalControls}>
+                      <IconButton
+                        style={styles.modalOption}
+                        iconColor={Colors.primary}
+                        icon="menu-right-outline"
+                        size={32}
+                        onPress={() => {
+                          setSealConfig(true);
+                        }}
+                      />
+                      <Button mode="outlined" onPress={() => setSealing(false)}>
+                        {state.strings.cancel}
+                      </Button>
+                      <Button mode="contained" disabled={state.sealPassword.length === 0} loading={savingSeal} onPress={sealUnlock}>
+                        {state.strings.unlock}
+                      </Button>
+                    </View>
+                  )}
+                  {sealConfig && (
+                    <View style={styles.modalControls}>
+                      <Button mode="contained" style={styles.deleteButton} loading={savingSeal} onPress={() => setSealDelete(true)}>
+                        {state.strings.delete}
+                      </Button>
+                      <IconButton
+                        style={styles.modalOption}
+                        iconColor={Colors.primary}
+                        icon="menu-left-outline"
+                        size={32}
+                        onPress={() => {
+                          setSealConfig(false);
+                        }}
+                      />
+                    </View>
+                  )}
+                </>
+              )}
+              {sealDelete && state.config.sealSet && (
+                <>
+                  <Text style={styles.modalDescription}>{state.strings.sealDelete}</Text>
+                  <TextInput
+                    style={styles.input}
+                    mode="flat"
+                    autoCapitalize="none"
+                    autoComplete="off"
+                    autoCorrect={false}
+                    value={state.sealDelete}
+                    label={state.strings.deleteKey}
+                    left={<TextInput.Icon style={styles.icon} icon="lock" />}
+                    onChangeText={value => actions.setSealDelete(value)}
+                  />
+                  <View style={styles.modalControls}>
+                    <Button mode="contained" style={styles.deleteButton} disabled={state.sealDelete !== state.strings.deleteKey} loading={savingSeal} onPress={sealRemove}>
+                      {state.strings.delete}
+                    </Button>
+                  </View>
+                </>
+              )}
+              {!state.config.sealSet && (
+                <>
+                  <Text style={styles.modalDescription}>{state.strings.sealUnset}</Text>
+                  <Text style={styles.modalDescription}>{state.strings.delayMessage}</Text>
+                  <TextInput
+                    style={styles.input}
+                    mode="flat"
+                    autoCapitalize="none"
+                    autoComplete="off"
+                    autoCorrect={false}
+                    value={state.sealPassword}
+                    label={state.strings.password}
+                    secureTextEntry={!showPassword}
+                    left={<TextInput.Icon style={styles.icon} icon="lock" />}
+                    right={
+                      showPassword ? (
+                        <TextInput.Icon style={styles.icon} icon="eye-off" onPress={() => setShowPassword(false)} />
+                      ) : (
+                        <TextInput.Icon style={styles.icon} icon="eye" onPress={() => setShowPassword(true)} />
                       )
                     }
                     onChangeText={value => actions.setSealPassword(value)}
@@ -956,11 +766,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                     <Button mode="outlined" onPress={() => setSealing(false)}>
                       {state.strings.cancel}
                     </Button>
-                    <Button
-                      mode="contained"
-                      disabled={state.sealPassword.length === 0}
-                      loading={savingSeal}
-                      onPress={sealCreate}>
+                    <Button mode="contained" disabled={state.sealPassword.length === 0} loading={savingSeal} onPress={sealCreate}>
                       {state.strings.save}
                     </Button>
                   </View>
@@ -970,30 +776,13 @@ export function Settings({showLogout}: {showLogout: boolean}) {
           </KeyboardAwareScrollView>
         </View>
       </Modal>
-      <Modal
-        animationType="fade"
-        transparent={true}
-        supportedOrientations={['portrait', 'landscape']}
-        visible={details}
-        onRequestClose={() => setDetails(false)}>
+      <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={details} onRequestClose={() => setDetails(false)}>
         <View style={styles.modal}>
-          <BlurView
-            style={styles.blur}
-            blurType="dark"
-            blurAmount={2}
-            reducedTransparencyFallbackColor="dark"
-          />
-          <KeyboardAwareScrollView
-            style={styles.container}
-            contentContainerStyle={styles.content}>
+          <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
+          <KeyboardAwareScrollView style={styles.container} contentContainerStyle={styles.content}>
             <Surface elevation={1} mode="flat" style={styles.surface}>
               <Text style={styles.modalLabel}>{state.strings.profileDetails}</Text>
-              <IconButton
-                style={styles.modalClose}
-                icon="close"
-                size={24}
-                onPress={() => setDetails(false)}
-              />
+              <IconButton style={styles.modalClose} icon="close" size={24} onPress={() => setDetails(false)} />
               <TextInput
                 style={styles.input}
                 mode="flat"
@@ -1002,9 +791,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                 autoCorrect={false}
                 label={state.strings.name}
                 value={state.name}
-                left={
-                  <TextInput.Icon style={styles.inputIcon} icon="account" />
-                }
+                left={<TextInput.Icon style={styles.inputIcon} icon="account" />}
                 onChangeText={value => actions.setName(value)}
               />
               <TextInput
@@ -1015,12 +802,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                 autoCorrect={false}
                 label={state.strings.location}
                 value={state.location}
-                left={
-                  <TextInput.Icon
-                    style={styles.inputIcon}
-                    icon="map-marker-outline"
-                  />
-                }
+                left={<TextInput.Icon style={styles.inputIcon} icon="map-marker-outline" />}
                 onChangeText={value => actions.setLocation(value)}
               />
               <TextInput
@@ -1031,12 +813,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                 autoCorrect={false}
                 label={state.strings.description}
                 value={state.description}
-                left={
-                  <TextInput.Icon
-                    style={styles.inputIcon}
-                    icon="book-open-outline"
-                  />
-                }
+                left={<TextInput.Icon style={styles.inputIcon} icon="book-open-outline" />}
                 onChangeText={value => actions.setDescription(value)}
               />
 
@@ -1044,10 +821,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                 <Button mode="outlined" onPress={() => setDetails(false)}>
                   {state.strings.cancel}
                 </Button>
-                <Button
-                  mode="contained"
-                  loading={savingDetails}
-                  onPress={saveDetails}>
+                <Button mode="contained" loading={savingDetails} onPress={saveDetails}>
                   {state.strings.save}
                 </Button>
               </View>
@@ -1055,54 +829,22 @@ export function Settings({showLogout}: {showLogout: boolean}) {
           </KeyboardAwareScrollView>
         </View>
       </Modal>
-      <Modal
-        animationType="fade"
-        transparent={true}
-        supportedOrientations={['portrait', 'landscape']}
-        visible={auth}
-        onRequestClose={() => setAuth(false)}>
+      <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={auth} onRequestClose={() => setAuth(false)}>
         <View style={styles.modal}>
-          <BlurView
-            style={styles.blur}
-            blurType="dark"
-            blurAmount={2}
-            reducedTransparencyFallbackColor="dark"
-          />
-          <KeyboardAwareScrollView
-            style={styles.container}
-            contentContainerStyle={styles.content}>
+          <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
+          <KeyboardAwareScrollView style={styles.container} contentContainerStyle={styles.content}>
             <Surface elevation={5} mode="flat" style={styles.surface}>
               <Text style={styles.modalLabel}>{state.strings.mfaTitle}</Text>
-              <IconButton
-                style={styles.modalClose}
-                icon="close"
-                size={24}
-                onPress={() => setAuth(false)}
-              />
-              <Text style={styles.modalDescription}>
-                {state.strings.mfaSteps}
-              </Text>
-              <Image
-                style={styles.secretImage}
-                resizeMode={'contain'}
-                source={{uri: state.secretImage}}
-              />
+              <IconButton style={styles.modalClose} icon="close" size={24} onPress={() => setAuth(false)} />
+              <Text style={styles.modalDescription}>{state.strings.mfaSteps}</Text>
+              <Image style={styles.secretImage} resizeMode={'contain'} source={{uri: state.secretImage}} />
 
               <View style={styles.secretText}>
-                <Text
-                  style={styles.secret}
-                  selectable={true}
-                  adjustsFontSizeToFit={true}
-                  numberOfLines={1}>
+                <Text style={styles.secret} selectable={true} adjustsFontSizeToFit={true} numberOfLines={1}>
                   {state.secretText}
                 </Text>
                 <TouchableOpacity onPress={copySecret}>
-                  <Icon
-                    style={styles.secretIcon}
-                    size={18}
-                    source={secretCopy ? 'check' : 'content-copy'}
-                    color={Colors.primary}
-                  />
+                  <Icon style={styles.secretIcon} size={18} source={secretCopy ? 'check' : 'content-copy'} color={Colors.primary} />
                 </TouchableOpacity>
               </View>
 
@@ -1116,11 +858,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                 <Button mode="outlined" onPress={() => setAuth(false)}>
                   {state.strings.cancel}
                 </Button>
-                <Button
-                  mode="contained"
-                  loading={confirmingAuth}
-                  disabled={state.code.length !== 6}
-                  onPress={confirmAuth}>
+                <Button mode="contained" loading={confirmingAuth} disabled={state.code.length !== 6} onPress={confirmAuth}>
                   {state.strings.mfaConfirm}
                 </Button>
               </View>
@@ -1128,42 +866,20 @@ export function Settings({showLogout}: {showLogout: boolean}) {
           </KeyboardAwareScrollView>
         </View>
       </Modal>
-      <Modal
-        animationType="fade"
-        transparent={true}
-        supportedOrientations={['portrait', 'landscape']}
-        visible={clear}
-        onRequestClose={() => setClear(false)}>
+      <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={clear} onRequestClose={() => setClear(false)}>
         <View style={styles.modal}>
-          <BlurView
-            style={styles.blur}
-            blurType="dark"
-            blurAmount={2}
-            reducedTransparencyFallbackColor="dark"
-          />
-          <KeyboardAwareScrollView
-            style={styles.container}
-            contentContainerStyle={styles.content}>
+          <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
+          <KeyboardAwareScrollView style={styles.container} contentContainerStyle={styles.content}>
             <Surface elevation={5} mode="flat" style={styles.surface}>
               <Text style={styles.modalLabel}>{state.strings.mfaTitle}</Text>
-              <IconButton
-                style={styles.modalClose}
-                icon="close"
-                size={24}
-                onPress={() => setClear(false)}
-              />
-              <Text style={styles.modalDescription}>
-                {state.strings.disablePrompt}
-              </Text>
+              <IconButton style={styles.modalClose} icon="close" size={24} onPress={() => setClear(false)} />
+              <Text style={styles.modalDescription}>{state.strings.disablePrompt}</Text>
 
               <View style={styles.modalControls}>
                 <Button mode="outlined" onPress={() => setClear(false)}>
                   {state.strings.cancel}
                 </Button>
-                <Button
-                  mode="contained"
-                  loading={confirmingAuth}
-                  onPress={clearAuth}>
+                <Button mode="contained" loading={confirmingAuth} onPress={clearAuth}>
                   {state.strings.disable}
                 </Button>
               </View>
@@ -1171,30 +887,13 @@ export function Settings({showLogout}: {showLogout: boolean}) {
           </KeyboardAwareScrollView>
         </View>
       </Modal>
-      <Modal
-        animationType="fade"
-        transparent={true}
-        supportedOrientations={['portrait', 'landscape']}
-        visible={change}
-        onRequestClose={() => setChange(false)}>
+      <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={change} onRequestClose={() => setChange(false)}>
         <View style={styles.modal}>
-          <BlurView
-            style={styles.blur}
-            blurType="dark"
-            blurAmount={2}
-            reducedTransparencyFallbackColor="dark"
-          />
-          <KeyboardAwareScrollView
-            style={styles.container}
-            contentContainerStyle={styles.content}>
+          <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
+          <KeyboardAwareScrollView style={styles.container} contentContainerStyle={styles.content}>
             <Surface elevation={5} mode="flat" style={styles.surface}>
               <Text style={styles.modalLabel}>{state.strings.changeLogin}</Text>
-              <IconButton
-                style={styles.modalClose}
-                icon="close"
-                size={24}
-                onPress={() => setChange(false)}
-              />
+              <IconButton style={styles.modalClose} icon="close" size={24} onPress={() => setChange(false)} />
               <TextInput
                 style={styles.input}
                 mode="flat"
@@ -1203,18 +902,12 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                 autoCorrect={false}
                 label={state.strings.username}
                 value={state.handle}
-                left={
-                  <TextInput.Icon style={styles.inputIcon} icon="account" />
-                }
+                left={<TextInput.Icon style={styles.inputIcon} icon="account" />}
                 right={
                   !state.checked ? (
                     <TextInput.Icon style={styles.icon} icon="refresh" />
                   ) : state.taken ? (
-                    <TextInput.Icon
-                      style={styles.icon}
-                      color={Colors.danger}
-                      icon="account-cancel-outline"
-                    />
+                    <TextInput.Icon style={styles.icon} color={Colors.danger} icon="account-cancel-outline" />
                   ) : (
                     <></>
                   )
@@ -1233,17 +926,9 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                 left={<TextInput.Icon style={styles.icon} icon="lock" />}
                 right={
                   showPassword ? (
-                    <TextInput.Icon
-                      style={styles.icon}
-                      icon="eye-off"
-                      onPress={() => setShowPassword(false)}
-                    />
+                    <TextInput.Icon style={styles.icon} icon="eye-off" onPress={() => setShowPassword(false)} />
                   ) : (
-                    <TextInput.Icon
-                      style={styles.icon}
-                      icon="eye"
-                      onPress={() => setShowPassword(true)}
-                    />
+                    <TextInput.Icon style={styles.icon} icon="eye" onPress={() => setShowPassword(true)} />
                   )
                 }
                 onChangeText={value => actions.setPassword(value)}
@@ -1260,17 +945,9 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                 left={<TextInput.Icon style={styles.icon} icon="lock" />}
                 right={
                   showPassword ? (
-                    <TextInput.Icon
-                      style={styles.icon}
-                      icon="eye-off"
-                      onPress={() => setShowConfirm(false)}
-                    />
+                    <TextInput.Icon style={styles.icon} icon="eye-off" onPress={() => setShowConfirm(false)} />
                   ) : (
-                    <TextInput.Icon
-                      style={styles.icon}
-                      icon="eye"
-                      onPress={() => setShowConfirm(true)}
-                    />
+                    <TextInput.Icon style={styles.icon} icon="eye" onPress={() => setShowConfirm(true)} />
                   )
                 }
                 onChangeText={value => actions.setConfirm(value)}
@@ -1280,16 +957,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                 <Button mode="outlined" onPress={() => setChange(false)}>
                   {state.strings.cancel}
                 </Button>
-                <Button
-                  mode="contained"
-                  loading={savingChange}
-                  disabled={
-                    state.password === '' ||
-                    state.password !== state.confirm ||
-                    state.taken ||
-                    !state.checked
-                  }
-                  onPress={saveChange}>
+                <Button mode="contained" loading={savingChange} disabled={state.password === '' || state.password !== state.confirm || state.taken || !state.checked} onPress={saveChange}>
                   {state.strings.update}
                 </Button>
               </View>
@@ -1297,50 +965,24 @@ export function Settings({showLogout}: {showLogout: boolean}) {
           </KeyboardAwareScrollView>
         </View>
       </Modal>
-      <Modal
-        animationType="fade"
-        transparent={true}
-        supportedOrientations={['portrait', 'landscape']}
-        visible={logout}
-        onRequestClose={() => setLogout(false)}>
+      <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={logout} onRequestClose={() => setLogout(false)}>
         <View style={styles.modal}>
-          <BlurView
-            style={styles.blur}
-            blurType="dark"
-            blurAmount={2}
-            reducedTransparencyFallbackColor="dark"
-          />
-          <KeyboardAwareScrollView
-            style={styles.container}
-            contentContainerStyle={styles.content}>
+          <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
+          <KeyboardAwareScrollView style={styles.container} contentContainerStyle={styles.content}>
             <Surface elevation={5} mode="flat" style={styles.surface}>
               <Text style={styles.modalLabel}>{state.strings.loggingOut}</Text>
-              <IconButton
-                style={styles.modalClose}
-                icon="close"
-                size={24}
-                onPress={() => setLogout(false)}
-              />
+              <IconButton style={styles.modalClose} icon="close" size={24} onPress={() => setLogout(false)} />
 
               <View style={styles.allControl}>
-                <Text style={styles.controlLabel}>
-                  {state.strings.allDevices}
-                </Text>
-                <Switch
-                  style={styles.controlSwitch}
-                  value={state.all}
-                  onValueChange={actions.setAll}
-                />
+                <Text style={styles.controlLabel}>{state.strings.allDevices}</Text>
+                <Switch style={styles.controlSwitch} value={state.all} onValueChange={actions.setAll} />
               </View>
 
               <View style={styles.modalControls}>
                 <Button mode="outlined" onPress={() => setLogout(false)}>
                   {state.strings.cancel}
                 </Button>
-                <Button
-                  mode="contained"
-                  loading={applyingLogout}
-                  onPress={applyLogout}>
+                <Button mode="contained" loading={applyingLogout} onPress={applyLogout}>
                   {state.strings.logout}
                 </Button>
               </View>
@@ -1348,32 +990,13 @@ export function Settings({showLogout}: {showLogout: boolean}) {
           </KeyboardAwareScrollView>
         </View>
       </Modal>
-      <Modal
-        animationType="fade"
-        transparent={true}
-        supportedOrientations={['portrait', 'landscape']}
-        visible={remove}
-        onRequestClose={() => setRemove(false)}>
+      <Modal animationType="fade" transparent={true} supportedOrientations={['portrait', 'landscape']} visible={remove} onRequestClose={() => setRemove(false)}>
         <View style={styles.modal}>
-          <BlurView
-            style={styles.blur}
-            blurType="dark"
-            blurAmount={2}
-            reducedTransparencyFallbackColor="dark"
-          />
-          <KeyboardAwareScrollView
-            style={styles.container}
-            contentContainerStyle={styles.content}>
+          <BlurView style={styles.blur} blurType="dark" blurAmount={2} reducedTransparencyFallbackColor="dark" />
+          <KeyboardAwareScrollView style={styles.container} contentContainerStyle={styles.content}>
             <Surface elevation={5} mode="flat" style={styles.surface}>
-              <Text style={styles.modalLabel}>
-                {state.strings.deleteAccount}
-              </Text>
-              <IconButton
-                style={styles.modalClose}
-                icon="close"
-                size={24}
-                onPress={() => setRemove(false)}
-              />
+              <Text style={styles.modalLabel}>{state.strings.deleteAccount}</Text>
+              <IconButton style={styles.modalClose} icon="close" size={24} onPress={() => setRemove(false)} />
 
               <TextInput
                 style={styles.input}
@@ -1383,9 +1006,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                 autoCorrect={false}
                 value={state.remove}
                 label={state.strings.typeDelete}
-                left={
-                  <TextInput.Icon style={styles.icon} icon="delete-outline" />
-                }
+                left={<TextInput.Icon style={styles.icon} icon="delete-outline" />}
                 onChangeText={value => actions.setRemove(value)}
               />
 
@@ -1393,12 +1014,7 @@ export function Settings({showLogout}: {showLogout: boolean}) {
                 <Button mode="outlined" onPress={() => setRemove(false)}>
                   {state.strings.cancel}
                 </Button>
-                <Button
-                  mode="contained"
-                  loading={applyingRemove}
-                  disabled={state.remove !== state.strings.deleteKey}
-                  style={styles.remove}
-                  onPress={applyRemove}>
+                <Button mode="contained" loading={applyingRemove} disabled={state.remove !== state.strings.deleteKey} style={styles.remove} onPress={applyRemove}>
                   {state.strings.delete}
                 </Button>
               </View>

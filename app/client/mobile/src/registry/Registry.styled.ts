@@ -97,5 +97,5 @@ export const styles = StyleSheet.create({
     paddingRight: 16,
     paddingLeft: 16,
     borderBottomWidth: 1,
-  }
+  },
 });

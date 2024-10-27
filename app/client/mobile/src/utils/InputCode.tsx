@@ -41,15 +41,7 @@ export function InputCode({onChangeText, style}) {
             <Text style={styles.text}>{code.charAt(5)}</Text>
           </View>
         </View>
-        <TextInput
-          style={styles.input}
-          keyboardType={Platform.OS === 'ios' ? 'numeric' : 'number-pad'}
-          onChangeText={updateCode}
-          autoCorrect={false}
-          autoCapitalize="none"
-          maxLength={6}
-          ref={ref}
-        />
+        <TextInput style={styles.input} keyboardType={Platform.OS === 'ios' ? 'numeric' : 'number-pad'} onChangeText={updateCode} autoCorrect={false} autoCapitalize="none" maxLength={6} ref={ref} />
       </View>
     </View>
   );
