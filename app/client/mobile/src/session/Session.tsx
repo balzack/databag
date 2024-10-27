@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useCallback} from 'react';
 import {SafeAreaView, View, useColorScheme} from 'react-native';
 import {styles} from './Session.styled';
 import {IconButton, Surface, Text} from 'react-native-paper';
@@ -231,10 +231,12 @@ function ProfileScreen({nav}) {
     open();
   };
 
+  const ProfileComponent = useCallback(() => <Profile params={contactParams} />, [contactParams]);
+
   return (
     <ProfileDrawer.Navigator
       id="ProfileDrawer"
-      drawerContent={() => <Profile params={contactParams} />}
+      drawerContent={ProfileComponent}
       screenOptions={{
         drawerStyle: {width: 300},
         drawerPosition: 'right',
@@ -247,18 +249,23 @@ function ProfileScreen({nav}) {
 }
 
 function RegistryScreen({nav}) {
+  const RegistryComponent = useCallback(
+    () => (
+      <Surface elevation={1}>
+        <Registry
+          openContact={(params: ContactParams) => {
+            nav.openContact(params, nav.profile.openDrawer);
+          }}
+        />
+      </Surface>
+    ),
+    [nav],
+  );
+
   return (
     <RegistryDrawer.Navigator
       id="RegistryDrawer"
-      drawerContent={() => (
-        <Surface elevation={1}>
-          <Registry
-            openContact={(params: ContactParams) => {
-              nav.openContact(params, nav.profile.openDrawer);
-            }}
-          />
-        </Surface>
-      )}
+      drawerContent={RegistryComponent}
       screenOptions={{
         drawerStyle: {width: 350},
         drawerPosition: 'right',
@@ -271,19 +278,24 @@ function RegistryScreen({nav}) {
 }
 
 function ContactsScreen({nav}) {
+  const ContactsComponent = useCallback(
+    () => (
+      <Surface elevation={1}>
+        <Contacts
+          openRegistry={nav.registry.openDrawer}
+          openContact={(params: ContactParams) => {
+            nav.openContact(params, nav.profile.openDrawer);
+          }}
+        />
+      </Surface>
+    ),
+    [nav],
+  );
+
   return (
     <ContactsDrawer.Navigator
       id="ContactsDrawer"
-      drawerContent={() => (
-        <Surface elevation={1}>
-          <Contacts
-            openRegistry={nav.registry.openDrawer}
-            openContact={(params: ContactParams) => {
-              nav.openContact(params, nav.profile.openDrawer);
-            }}
-          />
-        </Surface>
-      )}
+      drawerContent={ContactsComponent}
       screenOptions={{
         drawerStyle: {width: 400},
         drawerPosition: 'right',
@@ -296,14 +308,19 @@ function ContactsScreen({nav}) {
 }
 
 function SettingsScreen({nav}) {
+  const SettingsComponent = useCallback(
+    () => (
+      <Surface elevation={1}>
+        <Settings />
+      </Surface>
+    ),
+    [],
+  );
+
   return (
     <SettingsDrawer.Navigator
       id="SettingsDrawer"
-      drawerContent={() => (
-        <Surface elevation={1}>
-          <Settings />
-        </Surface>
-      )}
+      drawerContent={SettingsComponent}
       screenOptions={{
         drawerStyle: {width: '50%'},
         drawerPosition: 'right',
