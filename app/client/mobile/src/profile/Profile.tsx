@@ -29,6 +29,7 @@ export function Profile({close, params}: {close: () => void; params: ContactPara
   const [denying, setDenying] = useState(false);
   const [reporting, setReporting] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [resyncing, setResyncing] = useState(false);
   const [disconnecting, setDisconnecting] = useState(false);
   const [canceling, setCanceling] = useState(false);
   const [accepting, setAccepting] = useState(false);
@@ -548,7 +549,7 @@ export function Profile({close, params}: {close: () => void; params: ContactPara
                 icon="cached"
                 size={32}
                 onPress={() => {
-                  applyAction(setResycning, actions.resync);
+                  applyAction(setResyncing, actions.resync);
                 }}
               />
               <Text style={styles.actionLabel}>{state.strings.resync}</Text>

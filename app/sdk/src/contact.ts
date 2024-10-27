@@ -231,7 +231,7 @@ export class ContactModule implements Contact {
 
   public async resyncCard(cardId: string): Promise<void> {
     this.resync.add(cardId);
-    this.sync();
+    await this.sync();
   }
 
   private async sync(): Promise<void> {
