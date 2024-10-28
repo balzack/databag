@@ -165,56 +165,68 @@ export class ContactModule implements Contact {
   }
 
   private isMarked(marker: string, cardId: string | null, channelId: string | null, topicId: string | null, tagId: string | null): boolean {
-    const value = `${marker}::${cardId}::${channelId}::${topicId}::${tagId}`;
+    const card = cardId ? `"${cardId}"` : 'null';
+    const channel = channelId ? `"${channelId}"` : 'null';
+    const topic = topicId ? `"{topicId}"` : 'null';
+    const tag = tagId ? `"${tagId}"` : 'null';
+    const value = `{ "marker": "${marker}", "cardId": ${card}, "channelId": ${channel}, "topicId": ${topic}, "tagId": ${tag} }`;
     return this.markers.has(value);
   }
 
   private async setMarker(marker: string, cardId: string | null, channelId: string | null, topicId: string | null, tagId: string | null) {
-    const value = `${marker}::${cardId}::${channelId}::${topicId}::${tagId}`;
+    const card = cardId ? `"${cardId}"` : 'null';
+    const channel = channelId ? `"${channelId}"` : 'null';
+    const topic = topicId ? `"{topicId}"` : 'null';
+    const tag = tagId ? `"${tagId}"` : 'null';
+    const value = `{ "marker": "${marker}", "cardId": ${card}, "channelId": ${channel}, "topicId": ${topic}, "tagId": ${tag} }`;
     this.markers.add(value);
     await this.store.setMarker(this.guid, value);
   }
 
   private async clearMarker(marker: string, cardId: string | null, channelId: string | null, topicId: string | null, tagId: string | null) {
-    const value = `${marker}::${cardId}::${channelId}::${topicId}::${tagId}`;
+    const card = cardId ? `"${cardId}"` : 'null';
+    const channel = channelId ? `"${channelId}"` : 'null';
+    const topic = topicId ? `"{topicId}"` : 'null';
+    const tag = tagId ? `"${tagId}"` : 'null';
+    const value = `{ "marker": "${marker}", "cardId": ${card}, "channelId": ${channel}, "topicId": ${topic}, "tagId": ${tag} }`;
     this.markers.delete(value);
     await this.store.clearMarker(this.guid, value);
   }
 
   private isCardBlocked(cardId: string): boolean {
-    return this.isMarked('blocked', cardId, null, null, null);
+    return this.isMarked('blocked_card', cardId, null, null, null);
   }
 
   private async setCardBlocked(cardId: string) {
-    await this.setMarker('blocked', cardId, null, null, null);
+    await this.setMarker('blocked_card', cardId, null, null, null);
   }
 
   private async clearCardBlocked(cardId: string) {
-    await this.clearMarker('blocked', cardId, null, null, null);
+    await this.clearMarker('blocked_card', cardId, null, null, null);
   }
 
   private isChannelBlocked(cardId: string, channelId: string): boolean {
-    return this.isMarked('blocked', cardId, channelId, null, null);
+    return this.isMarked('blocked_channel', cardId, channelId, null, null);
   }
 
   private async setChannelBlocked(cardId: string, channelId: string) {
-    await this.setMarker('blocked', cardId, channelId, null, null);
+    await this.setMarker('blocked_channel', cardId, channelId, null, null);
   }
 
   private async clearChannelBlocked(cardId: string, channelId: string) {
-    await this.clearMarker('blocked', cardId, channelId, null, null);
+    await this.clearMarker('blocked_channel', cardId, channelId, null, null);
   }
 
   private isArticleBlocked(cardId: string, articleId: string): boolean {
-    return this.isMarked('blocked', cardId, articleId, null, null);
+    return this.isMarked('blocked_article', cardId, articleId, null, null);
   }
 
   private async setArticleBlocked(cardId: string, articleId: string) {
-    await this.setMarker('blocked', cardId, articleId, null, null);
+    await this.setMarker('blocked_article', cardId, articleId, null, null);
   }
 
   private async clearArticleBlocked(cardId: string, articleId: string) {
-    await this.clearMarker('blocked', cardId, articleId, null, null);
+    await this.clearMarker('blocked_article', cardId, articleId, null, null);
   }
 
   private isChannelUnread(cardId: string, channelId: string): boolean {

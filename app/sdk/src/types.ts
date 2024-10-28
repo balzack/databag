@@ -85,7 +85,9 @@ export type Participant = {
 };
 
 export type Topic = {
-  id: string;
+  topicId: string;
+  cardId: string | null;
+  channelId: string;
   guid: string;
   sealed: boolean;
   unsealed: boolean;

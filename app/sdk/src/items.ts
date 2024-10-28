@@ -148,3 +148,10 @@ export const defaultChannelItem = {
   unsealedDetail: null,
   unsealedSummary: null,
 };
+
+export type TopicItem = {
+  detail: TopicDetail;
+  unsealedDetail: string | null;
+};
+
+
