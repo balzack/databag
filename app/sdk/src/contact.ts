@@ -585,36 +585,22 @@ export class ContactModule implements Contact {
     this.emitter.emit(`article::${cardId}`, { cardId, articles });
   }
 
-  public addChannelListener(id: string | null, ev: (arg: { cardId: string; channels: Channel[] }) => void): void {
-    if (id) {
-      const cardId = id as string;
-      this.emitter.on(`channel::${cardId}`, ev);
-      const entries = this.channelEntries.get(cardId);
-      const channels = entries ? Array.from(entries, ([channelId, entry]) => entry.channel) : [];
+  public addChannelListener(ev: (arg: { cardId: string; channels: Channel[] }) => void): void {
+    this.emitter.on('channel', ev);
+    this.channelEntries.forEach((entries, cardId) => {
+      const channels = Array.from(entries, ([channelId, entry]) => entry.channel);
       ev({ cardId, channels });
-    } else {
-      this.emitter.on('channel', ev);
-      this.channelEntries.forEach((entries, cardId) => {
-        const channels = Array.from(entries, ([channelId, entry]) => entry.channel);
-        ev({ cardId, channels });
-      });
-    }
+    });
   }
 
-  public removeChannelListener(id: string | null, ev: (arg: { cardId: string; channels: Channel[] }) => void): void {
-    if (id) {
-      const cardId = id as string;
-      this.emitter.off(`channel::${cardId}`, ev);
-    } else {
-      this.emitter.off('channel', ev);
-    }
+  public removeChannelListener(ev: (arg: { cardId: string; channels: Channel[] }) => void): void {
+    this.emitter.off('channel', ev);
   }
 
   private emitChannels(cardId: string) {
     const entries = this.channelEntries.get(cardId);
     const channels = entries ? Array.from(entries, ([channelId, entry]) => entry.channel) : [];
     this.emitter.emit('channel', { cardId, channels });
-    this.emitter.emit(`channel::${cardId}`, { cardId, channels });
   }
 
   public async setFocus(cardId: string, channelId: string): Promise<Focus> {
@@ -728,7 +714,7 @@ export class ContactModule implements Contact {
 
   public async removeArticle(cardId: string, articleId: string): Promise<void> {}
 
-  public async removeChannel(cardId: string, channelId: string): Promise<void> {
+  public async leaveChannel(cardId: string, channelId: string): Promise<void> {
     const entry = this.cardEntries.get(cardId);
     if (entry) {
       const server = entry.item.profile.node ? entry.item.profile.node : this.node;

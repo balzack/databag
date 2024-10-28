@@ -126,7 +126,7 @@ export class MockContactModule implements Contact {
   public async removeArticle(cardId: string, articleId: string): Promise<void> {
   }
 
-  public async removeChannel(cardId: string, channelId: string): Promise<void> {
+  public async leaveChannel(cardId: string, channelId: string): Promise<void> {
   }
 
   public async addTopic(cardId: string, channelId: string, type: string, message: string, assets: Asset[]): Promise<string> {
@@ -211,10 +211,10 @@ export class MockContactModule implements Contact {
   public async setChannelNotifications(cardId: string, channelId: string, enabled: boolean): Promise<void> {
   }
 
-  public addChannelListener(id: string | null, ev: (arg: { cardId: string; channels: Channel[] }) => void): void {
+  public addChannelListener(ev: (arg: { cardId: string | null; channels: Channel[] }) => void): void {
   }
 
-  public removeChannelListener(id: string | null, ev: (arg: { cardId: string; channels: Channel[] }) => void): void {
+  public removeChannelListener(ev: (arg: { cardId: string | null; channels: Channel[] }) => void): void {
   }
 }
 

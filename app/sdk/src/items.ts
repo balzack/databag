@@ -149,6 +149,16 @@ export const defaultChannelItem = {
   unsealedSummary: null,
 };
 
+export type TopicDetail = {
+  revision: number;
+  sealed: boolean;
+  dataType: string;
+  data: string;
+  created: number;
+  updated: number;
+  status: string;
+};
+
 export type TopicItem = {
   detail: TopicDetail;
   unsealedDetail: string | null;

@@ -6,7 +6,6 @@ export interface Session {
   getContact(): Contact;
   getAlias(): Alias;
   getAttribute(): Attribute;
-  getContent(): Content;
   getStream(): Stream;
   getRing(): Ring;
 
@@ -68,31 +67,62 @@ export interface Contact {
   denyCard(cardId: string): Promise<void>;
   ignoreCard(cardId: string): Promise<void>;
   resyncCard(cardId: string): Promise<void>;
-
-  removeArticle(cardId: string, articleId: string): Promise<void>;
-  removeChannel(cardId: string, channelId: string): Promise<void>;
-
   flagCard(cardId: string): Promise<void>;
-  flagArticle(cardId: string, articleId: string): Promise<void>;
-  flagChannel(cardId: string, channelId: string): Promise<void>;
   setBlockedCard(cardId: string, blocked: boolean): Promise<void>;
-  setBlockedArticle(cardId: string, articleId: string, blocked: boolean): Promise<void>;
-  setBlockedChannel(cardId: string, channelId: string, blocked: boolean): Promise<void>;
   getBlockedCards(): Promise<Card[]>;
-  getBlockedChannels(): Promise<Channel[]>;
-  getBlockedArticles(): Promise<Article[]>;
-  setUnreadChannel(cardId: string, channelId: string, unread: boolean): Promise<void>;
+  getRegistry(handle: string | null, server: string | null): Promise<Profile[]>;
 
+  leaveChannel(cardId: string, channelId: string): Promise<void>;
+  flagChannel(cardId: string, channelId: string): Promise<void>;
+  setBlockedChannel(cardId: string, channelId: string, blocked: boolean): Promise<void>;
+  getBlockedChannels(): Promise<Channel[]>;
+  setUnreadChannel(cardId: string, channelId: string, unread: boolean): Promise<void>;
   getChannelNotifications(cardId: string, channelId: string): Promise<boolean>;
   setChannelNotifications(cardId: string, channelId: string, enabled: boolean): Promise<void>;
-
-  getRegistry(handle: string | null, server: string | null): Promise<Profile[]>;
 
   addCardListener(ev: (cards: Card[]) => void): void;
   removeCardListener(ev: (cards: Card[]) => void): void;
 
-  addChannelListener(id: string | null, ev: (arg: { cardId: string; channels: Channel[] }) => void): void;
-  removeChannelListener(id: string | null, ev: (arg: { cardId: string; channels: Channel[] }) => void): void;
+  addChannelListener(ev: (arg: { channels: Channel[], cardId: string | null }) => void): void;
+  removeChannelListener(ev: (arg: { channels: Channel[], cardId: string | null }) => void): void;
+}
+
+export interface Content {
+  addChannel(sealed: boolean, type: string, subject: string, cardIds: string[]): Promise<string>;
+  removeChannel(channelId: string): Promise<void>;
+  setChannelSubject(channelId: string, subject: string): Promise<void>;
+  setChannelCard(channelId: string, cardId: string): Promise<void>;
+  clearChannelCard(channelId: string, cardId: string): Promise<void>;
+  setBlockedChannel(channelId: string, blocked: boolean): Promise<void>;
+  getBlockedChannels(): Promise<Channel[]>;
+  flagChannel(channelId: string): Promise<void>;
+  getChannelNotifications(channelId: string): Promise<boolean>;
+  setChannelNotifications(channelId: string, enabled: boolean): Promise<void>;
+  setUnreadChannel(channelId: string, unread: boolean): Promise<void>;
+
+  addChannelListener(ev: (arg: { channels: Channel[], cardId: string | null }) => void): void;
+  removeChannelListener(ev: (arg: { channels: Channel[], cardId: string | null }) => void): void;
+}
+
+export interface Stream {
+  addChannel(sealed: boolean, type: string, subject: string, cardIds: string[]): Promise<string>;
+  removeChannel(channelId: string): Promise<void>;
+  setChannelSubject(channelId: string, subject: string): Promise<void>;
+  setChannelCard(channelId: string, cardId: string): Promise<void>;
+  clearChannelCard(channelId: string, cardId: string): Promise<void>;
+
+  leaveChannel(cardId: string, channelId: string): Promise<void>;
+
+  getChannelNotifications(cardId: string | null, channelId: string): Promise<boolean>;
+  setChannelNotifications(cardId: string | null, channelId: string, enabled: boolean): Promise<void>;
+  setUnreadChannel(cardId: string | null, channelId: string, unread: boolean): Promise<void>;
+
+  flagChannel(cardId: string, channelId: string): Promise<void>;
+  setBlockedChannel(cardId: string | null, channelId: string, blocked: boolean): Promise<void>;
+  getBlockedChannels(): Promise<Channel[]>;
+
+  addChannelListener(ev: (arg: { channels: Channel[], cardId: string | null }) => void): void;
+  removeChannelListener(ev: (arg: { channels: Channel[], cardId: string | null }) => void): void;
 }
 
 export interface Alias {
@@ -118,68 +148,6 @@ export interface Attribute {
 
   addArticleListener(ev: (articles: Article[]) => void): void;
   removeArticleListener(ev: (articles: Article[]) => void): void;
-}
-
-export interface Content {
-  addChannel(sealed: boolean, type: string, subject: string, cardIds: string[], groupIds: string[]): Promise<string>;
-  removeChannel(channelId: string): Promise<void>;
-  setChannelSubject(channelId: string, subject: string): Promise<void>;
-  setChannelCard(channelId: string, cardId: string): Promise<void>;
-  clearChannelCard(channelId: string, cardId: string): Promise<void>;
-  setChannelGroup(channelId: string, cardId: string): Promise<void>;
-  clearChannelGroup(channelId: string, cardId: string): Promise<void>;
-  addTopic(channelId: string, type: string, message: string, assets: Asset[]): Promise<string>;
-  removeTopic(channelId: string, topicId: string): Promise<void>;
-  setTopicSubject(channelId: string, topicId: string, subject: string): Promise<void>;
-  setTopicSort(channelId: string, topicId: string, sort: number): Promise<void>;
-  addTag(channelId: string, topicId: string, type: string, value: string): Promise<string>;
-  removeTag(channelId: string, topicId: string, tagId: string): Promise<void>;
-  setTagSubject(channelId: string, topicId: string, tagId: string, subject: string): Promise<void>;
-  setTagSort(channelId: string, topicId: string, tagId: string, sort: number): Promise<void>;
-  getTopicAssetUrl(channelId: string, topicId: string, assetId: string): string;
-
-  flagTopic(channelId: string, topicId: string): Promise<void>;
-  flagTag(channelId: string, topicId: string, tagId: string): Promise<void>;
-  setBlockTopic(channelId: string, topicId: string): Promise<void>;
-  setBlockTag(channelId: string, topicId: string, tagId: string): Promise<void>;
-  clearBlockTopic(channelId: string, topicId: string): Promise<void>;
-  clearBlockTag(channelId: string, topicId: string, tagId: string): Promise<void>;
-  getBlockedTopics(): Promise<Topic[]>;
-  getBlockedTags(): Promise<Tag[]>;
-
-  enableNotifications(channelId: string, memberId: string): Promise<void>;
-  disableNotifications(channelId: string, memberId: string): Promise<void>;
-  enableSortTopic(channelId: string, memberId: string): Promise<void>;
-  disableSortTopic(channelId: string, memberId: string): Promise<void>;
-  enableSortTag(channelId: string, memberId: string): Promise<void>;
-  disableSortTag(channelId: string, memberId: string): Promise<void>;
-  enableAddTopic(channelId: string, memberId: string): Promise<void>;
-  disableAddTopic(channelId: string, memberId: string): Promise<void>;
-  enableAddTag(channelId: string, memberId: string): Promise<void>;
-  disableAddTag(channelId: string, memberId: string): Promise<void>;
-  enableAddAsset(channelId: string, memberId: string): Promise<void>;
-  disableAddAsset(channelId: string, memberId: string): Promise<void>;
-  enableAddParticipant(channelId: string, memberId: string): Promise<void>;
-  disableAddParticipant(channelId: string, memberId: string): Promise<void>;
-
-  getTopics(channelId: string): Promise<Topic[]>;
-  getMoreTopics(channelId: string): Promise<Topic[]>;
-  getTags(channelId: string, topicId: string): Promise<Tag[]>;
-  getMoreTags(channelId: string, topicId: string): Promise<Tag[]>;
-
-  setUnreadChannel(channelId: string): Promise<void>;
-  clearUnreadChannel(channelId: string): Promise<void>;
-
-  addParticipantAccess(channelId: string, name: string): Promise<Participant>;
-  removeParticipantAccess(channelId: string, participantId: string): Promise<void>;
-
-  addChannelListener(ev: (channels: Channel[]) => void): void;
-  removeChannelListener(ev: (channels: Channel[]) => void): void;
-}
-
-export interface Stream {
-  addChannelListener(ev: (channels: Channel[]) => void): void;
-  removeChannelListener(ev: (channels: Channel[]) => void): void;
 }
 
 export interface Focus {

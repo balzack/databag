@@ -63,8 +63,8 @@ export class SessionModule implements Session {
     this.contact = new ContactModule(log, this.store, this.crypto, guid, token, node, secure, channelTypes, articleTypes);
     this.alias = new AliasModule(log, this.settings, this.store, guid, token, node, secure);
     this.attribute = new AttributeModule(log, this.settings, this.store, guid, token, node, secure);
-    this.content = new ContentModule(log, this.settings, this.store, this.crypto, guid, token, node, secure);
-    this.stream = new StreamModule(log, this.contact, this.content, this.store, guid);
+    this.content = new ContentModule(log, this.store, this.crypto, guid, token, node, secure);
+    this.stream = new StreamModule(log, this.contact, this.content);
     this.ring = new RingModule(log);
     this.connection = new Connection(log, token, node, secure);
 
@@ -75,6 +75,7 @@ export class SessionModule implements Session {
 
     const onSeal = (seal: { privateKey: string; publicKey: string } | null) => {
       this.contact.setSeal(seal);
+      this.content.setSeal(seal);
     };
 
     const onRevision = async (ev: Revision) => {
@@ -120,7 +121,6 @@ export class SessionModule implements Session {
     await this.contact.close();
     await this.identity.close();
     await this.settings.close();
-    await this.stream.close();
     this.connection.close();
   }
 
@@ -142,10 +142,6 @@ export class SessionModule implements Session {
 
   public getAttribute(): Attribute {
     return this.attribute;
-  }
-
-  public getContent(): Content {
-    return this.content;
   }
 
   public getStream(): Stream {
