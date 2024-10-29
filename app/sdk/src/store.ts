@@ -64,6 +64,19 @@ export interface Store {
 
   setContactCardChannelTopicSyncRevision(guid: string, cardId: string, channelId: string, revision: number): Promise<void>;
   setContactCardChannelTopicRemoteRevision(guid: string, cardId: string, channelId: string, revision: number): Promise<void>;
+
+  getContentRevision(guid: string): Promise<number>;
+  setContentRevision(guid: string, revision: number): Promise<void>;
+
+  addContentChannel(guid: string, channelId: string, item: ChannelItem): Promise<void>;
+  removeContentChannel(guid: string, channelId: string): Promise<void>;
+  getContentChannels(guid: string): Promise<{ channelId: string, item: ChannelItem }[]>;
+
+  setContentChannelRevision(guid: string, channelId: string): Promise<void>;
+  setContentChannelDetail(guid: string, channelId: string, detail: ChannelDetail, unsealedData: string): Promise<void>;
+  setContentChannelSummary(guid: string, channelId: string, summary: ChannelSummary, unsealedData: string): Promise<void>;
+  setContentChannelUnsealedDetail(guid: string, channelId: string, data: string | null): Promise<void>;
+  setContentChannelUnsealedSummary(guid: string, channelId: string, data: string | null): Promise<void>;
 }
 
 export interface SqlStore {
@@ -351,6 +364,23 @@ export class OfflineStore implements Store {
   public async setContactCardChannelTopicSyncRevision(guid: string, cardId: string, channelId: string, revision: number): Promise<void> {}
 
   public async setContactCardChannelTopicRemoteRevision(guid: string, cardId: string, channelId: string, revision: number): Promise<void> {}
+
+  public async getContentRevision(guid: string): Promise<number> {
+    return 0;
+  }
+  public async setContentRevision(guid: string, revision: number): Promise<void> {}
+
+  public async addContentChannel(guid: string, channelId: string, item: ChannelItem): Promise<void> {}
+  public async removeContentChannel(guid: string, channelId: string): Promise<void> {}
+  public async getContentChannels(guid: string): Promise<{ channelId: string, item: ChannelItem }[]> {
+    return [];
+  }
+
+  public async setContentChannelRevision(guid: string, channelId: string): Promise<void> {}
+  public async setContentChannelDetail(guid: string, channelId: string, detail: ChannelDetail, unsealedData: string): Promise<void> {}
+  public async setContentChannelSummary(guid: string, channelId: string, summary: ChannelSummary, unsealedData: string): Promise<void> {}
+  public async setContentChannelUnsealedDetail(guid: string, channelId: string, data: string | null): Promise<void> {}
+  public async setContentChannelUnsealedSummary(guid: string, channelId: string, data: string | null): Promise<void> {}
 }
 
 export class OnlineStore implements Store {
@@ -517,6 +547,23 @@ export class OnlineStore implements Store {
   public async setContactCardChannelTopicSyncRevision(guid: string, cardId: string, channelId: string, revision: number): Promise<void> {}
 
   public async setContactCardChannelTopicRemoteRevision(guid: string, cardId: string, channelId: string, revision: number): Promise<void> {}
+
+  public async getContentRevision(guid: string): Promise<number> {
+    return 0;
+  }
+  public async setContentRevision(guid: string, revision: number): Promise<void> {}
+
+  public async addContentChannel(guid: string, channelId: string, item: ChannelItem): Promise<void> {}
+  public async removeContentChannel(guid: string, channelId: string): Promise<void> {}
+  public async getContentChannels(guid: string): Promise<{ channelId: string, item: ChannelItem }[]> {
+    return [];
+  }
+
+  public async setContentChannelRevision(guid: string, channelId: string): Promise<void> {}
+  public async setContentChannelDetail(guid: string, channelId: string, detail: ChannelDetail, unsealedData: string): Promise<void> {}
+  public async setContentChannelSummary(guid: string, channelId: string, summary: ChannelSummary, unsealedData: string): Promise<void> {}
+  public async setContentChannelUnsealedDetail(guid: string, channelId: string, data: string | null): Promise<void> {}
+  public async setContentChannelUnsealedSummary(guid: string, channelId: string, data: string | null): Promise<void> {}
 }
 
 export class NoStore implements Store {
@@ -639,4 +686,21 @@ export class NoStore implements Store {
   public async setContactCardChannelTopicSyncRevision(guid: string, cardId: string, channelId: string, revision: number): Promise<void> {}
 
   public async setContactCardChannelTopicRemoteRevision(guid: string, cardId: string, channelId: string, revision: number): Promise<void> {}
+
+  public async getContentRevision(guid: string): Promise<number> {
+    return 0;
+  }
+  public async setContentRevision(guid: string, revision: number): Promise<void> {}
+
+  public async addContentChannel(guid: string, channelId: string, item: ChannelItem): Promise<void> {}
+  public async removeContentChannel(guid: string, channelId: string): Promise<void> {}
+  public async getContentChannels(guid: string): Promise<{ channelId: string, item: ChannelItem }[]> {
+    return [];
+  }
+
+  public async setContentChannelRevision(guid: string, channelId: string): Promise<void> {}
+  public async setContentChannelDetail(guid: string, channelId: string, detail: ChannelDetail, unsealedData: string): Promise<void> {}
+  public async setContentChannelSummary(guid: string, channelId: string, summary: ChannelSummary, unsealedData: string): Promise<void> {}
+  public async setContentChannelUnsealedDetail(guid: string, channelId: string, data: string | null): Promise<void> {}
+  public async setContentChannelUnsealedSummary(guid: string, channelId: string, data: string | null): Promise<void> {}
 }

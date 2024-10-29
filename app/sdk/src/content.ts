@@ -89,14 +89,19 @@ export class ContentModule implements Content {
 
   flagChannel(channelId: string): Promise<void> { }
 
-  getChannelNotifications(channelId: string): Promise<boolean> { }
+  getChannelNotifications(channelId: string): Promise<boolean> {
+    return false;
+  }
 
   setChannelNotifications(channelId: string, enabled: boolean): Promise<void> { }
 
   setUnreadChannel(channelId: string, unread: boolean): Promise<void> { }
 
   public async setFocus(chanenlId: string): Promise<Focus> {
-    const { node, secure, token } = this;
+    const { node, secure, token, focus } = this;
+    if (focus) {
+      await focus.close();
+    }
     this.focus = new FocusModule(this.log, this.store, this.crypto, null, channelId, { node, secure, token });
     return this.focus;
   }
