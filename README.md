@@ -56,10 +56,24 @@ The app is available on fdroid as well as the google and apple stores. You can t
 
 To use databag, you will need a DNS name pointing to your node with a certificate. You can deploy a node manually, but you will have a much easier time using a container service. Containers for arm64 and amd64 are available [here](https://hub.docker.com/r/balzack/databag/tags). 
 
-### Docker Compose Command
+### Docker Compose 
 
-From the net/container sub directory:
-  - sudo docker-compose -f compose.yaml -p databag up
+Launch with dockerhub container using docker compose:
+
+#### Standard launch
+```shell
+# From the net/container sub directory:
+docker-compose -f compose.yaml -p databag up
+```
+
+#### Launch with certbot https certificate
+```shell
+# FIRST: create a DNS entry in your DNS to point your desired subdomain to your host
+# SECOND: edit the net/container/docker-compose-swag.yml to include your domain name
+# THIRD: From the root of the project directory:
+mkdir -p ~/appdata
+docker-compose -f net/container/docker-compose-swag.yml -p databag up
+```
 
 ### Example with Portainer and Nginx Proxy Manager
 
