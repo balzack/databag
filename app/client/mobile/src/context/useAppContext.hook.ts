@@ -3,7 +3,7 @@ import {DatabagSDK, Session} from 'databag-client-sdk';
 import {SessionStore} from '../SessionStore';
 import {NativeCrypto} from '../NativeCrypto';
 import {LocalStore} from '../LocalStore';
-const DATABAG_DB = 'db_v214.db';
+const DATABAG_DB = 'db_v215.db';
 const SETTINGS_DB = 'ls_v001.db';
 
 const databag = new DatabagSDK(

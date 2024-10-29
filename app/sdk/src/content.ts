@@ -1,121 +1,92 @@
-import { EventEmitter } from 'eventemitter3';
-import type { Content, Logging, Focus } from './api';
-import { FocusModule } from './focus';
-import type { ChannelItem } from './items';
-import type { Channel, Topic, Asset, Tag, Participant } from './types';
-import { Store } from './store';
-import { Crypto } from './crypto';
+import type { Content } from './api';
+import type { Channel } from './types';
+import { ContactModule } from './contact';
+import { StreamModule } from './stream';
+import { Logging } from './logging';
 
 export class ContentModule implements Content {
   private log: Logging;
-  private store: Store;
-  private crypto: Crypto | null;
-  private guid: string;
-  private token: string;
-  private node: string;
-  private secure: boolean;
-  private emitter: EventEmitter;
-  private focus: Focus | null;
-  private revision: number;
-  private syncing: boolean;
-  private closing: boolean;
-  private nextRevision: number | null;
+  private contact: ContactModule;
+  private stream: StreamModule;
 
-  // view of channels
-  private channelEntries: Map<string, { item: ChannelItem; channel: Channel }>;
-
-  constructor(log: Logging, store: Store, crypto: Crypto | null, guid: string, token: string, node: string, secure: boolean) {
-    this.guid = guid;
-    this.token = token;
-    this.node = node;
-    this.secure = secure;
+  constructor(log: Logging, contact: ContactModule, stream: StreamModule) {
+    this.contact = contact;
+    this.stream = stream;
     this.log = log;
-    this.store = store;
-    this.crypto = crypto;
-    this.focus = null;
-    this.emitter = new EventEmitter();
-
-    this.channelEntries = new Map<string, { item: ChannelItem; channel: Channel }>();
-
-    this.revision = 0;
-    this.syncing = true;
-    this.closing = false;
-    this.nextRevision = null;
-    this.init();
-  }
-
-  private async init() { }
-
-  private async sync() { }
-
-  public addChannelListener(ev: (arg: { channels: Channel[], cardId: string | null }) => void): void {
-    this.emitter.on('channel', ev);
-    const channels = Array.from(this.channelEntries, ([channelId, entry]) => entry.channel);
-    ev({ channels, cardId: null });
-  }
-
-  public removeChannelListener(ev: (arg: { channels: Channel[], cardId: string | null }) => void): void {
-    this.emitter.off('channel', ev);
-  }
-
-  private emitChannels() {
-    const channels = Array.from(this.channelEntries, ([channelId, entry]) => entry.channel);
-    this.emitter.emit('channel', { channels, cardId: null });
-  } 
-
-  public async close(): void {}
-
-  public async setRevision(rev: number): Promise<void> {
-    console.log('set content revision:', rev);
   }
 
   public async addChannel(sealed: boolean, type: string, subject: string, cardIds: string[]): Promise<string> {
-    return '';
+    return await this.stream.addChannel(sealed, type, subject, cardIds);
   }
 
-  public async removeChannel(channelId: string): Promise<void> { }
-
-  setChannelSubject(channelId: string, subject: string): Promise<void> { }
-
-  setChannelCard(channelId: string, cardId: string): Promise<void> { }
-
-  clearChannelCard(channelId: string, cardId: string): Promise<void> { }
-
-  setBlockedChannel(channelId: string, blocked: boolean): Promise<void> { }
-
-  getBlockedChannels(): Promise<Channel[]> {
-    return [];
+  public async removeChannel(channelId: string): Promise<void> {
+    return await this.stream.removeChannel(channelId);
   }
 
-  flagChannel(channelId: string): Promise<void> { }
-
-  getChannelNotifications(channelId: string): Promise<boolean> {
-    return false;
+  public async setChannelSubject(channelId: string, subject: string): Promise<void> {
+    return await this.stream.setChannelSubject(channelId, subject);
   }
 
-  setChannelNotifications(channelId: string, enabled: boolean): Promise<void> { }
+  public async setChannelCard(channelId: string, cardId: string): Promise<void> {
+    return await this.stream.setChannelCard(channelId, cardId);
+  }
 
-  setUnreadChannel(channelId: string, unread: boolean): Promise<void> { }
+  public async clearChannelCard(channelId: string, cardId: string): Promise<void> {
+    return await this.stream.clearChannelCard(channelId, cardId);
+  }
 
-  public async setFocus(chanenlId: string): Promise<Focus> {
-    const { node, secure, token, focus } = this;
-    if (focus) {
-      await focus.close();
+  public async leaveChannel(cardId: string, channelId: string): Promise<void> {
+    return await this.contact.leaveChannel(cardId, channelId)
+  }
+
+  public async getChannelNotifications(cardId: string | null, channelId: string): Promise<boolean> {
+    if (cardId) {
+      return await this.contact.getChannelNotifications(cardId, channelId);
     }
-    this.focus = new FocusModule(this.log, this.store, this.crypto, null, channelId, { node, secure, token });
-    return this.focus;
+    return await this.stream.getChannelNotifications(channelId)
   }
-
-  public async clearFocus() {
-    if (this.focus) {
-      await this.focus.close();
+    
+  public async setChannelNotifications(cardId: string | null, channelId: string, enabled: boolean): Promise<void> {
+    if (cardId) {
+      return await this.contact.setChannelNotifications(cardId, channelId, enabled)
     }
-    this.focus = null;
+    return await this.stream.setChannelNotifications(channelId, enabled);
   }
 
-  public async setSeal(seal: { privateKey: string; publicKey: string } | null) {
-    this.seal = seal;
-    this.unsealAll = true;
-    await this.sync();
+  public async setUnreadChannel(cardId: string | null, channelId: string, unread: boolean): Promise<void> {
+    if (cardId) {
+      return await this.contact.setUnreadChannel(cardId, channelId, unread);
+    }
+    return await this.stream.setUnreadChannel(channelId, unread);
+  }
+
+  public async flagChannel(cardId: string, channelId: string): Promise<void> {
+    if (cardId) {
+      return await this.contact.flagChannel(cardId, channelId);
+    }
+    return await this.stream.flagChannel(channelId);
+  }
+
+  public async setBlockedChannel(cardId: string | null, channelId: string, blocked: boolean): Promise<void> {
+    if (cardId) {
+      return await this.contact.setBlockedChannel(cardId, channelId, blocked);
+    }
+    return await this.stream.setBlockedChannel(channelId, blocked);
+  }
+
+  public async getBlockedChannels(): Promise<Channel[]> {
+    const channels = await this.stream.getBlockedChannels();
+    const cardChannels = await this.contact.getBlockedChannels();
+    return channels.concat(cardChannels);
+  }
+
+  public addChannelListener(ev: (arg: { channels: Channel[], cardId: string | null }) => void): void {
+    this.stream.addChannelListener(ev);
+    this.contact.addChannelListener(ev);
+  }
+
+  public removeChannelListener(ev: (arg: { channels: Channel[], cardId: string | null }) => void): void {
+    this.stream.removeChannelListener(ev);
+    this.contact.removeChannelListener(ev);
   }
 }

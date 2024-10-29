@@ -1,8 +1,7 @@
 import { EventEmitter } from 'eventemitter3';
-import type { Content } from '../src/api';
 import type { Channel, Topic, Asset, Tag, Participant } from '../src/types';
 
-export class MockContentModule implements Content {
+export class MockStreamModule {
 
   public revision: number;
   private emitter: EventEmitter;

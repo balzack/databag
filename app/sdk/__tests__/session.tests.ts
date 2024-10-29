@@ -5,7 +5,7 @@ import { MockConnection } from '../__mocks__/connection';
 import { MockSettingsModule } from '../__mocks__/settings';
 import { MockIdentityModule } from '../__mocks__/identity';
 import { MockAliasModule } from '../__mocks__/alias';
-import { MockContentModule } from '../__mocks__/content';
+import { MockStreamModule } from '../__mocks__/stream';
 import { MockContactModule } from '../__mocks__/contact';
 import { MockAttributeModule } from '../__mocks__/attribute';
 import { MockRingModule } from '../__mocks__/ring';
@@ -49,11 +49,11 @@ jest.mock('../src/identity', () => {
   }
 })
 
-const mockContent = new MockContentModule();
-jest.mock('../src/content', () => {
+const mockStream = new MockStreamModule();
+jest.mock('../src/stream', () => {
   return {
-    ContentModule: jest.fn().mockImplementation(() => {
-      return mockContent;
+    StreamModule: jest.fn().mockImplementation(() => {
+      return mockStream;
     })
   }
 })
@@ -109,7 +109,7 @@ test('allocates session correctly', async () => {
   await waitFor(() => (mockRing.call?.callId === 'test'));
   await waitFor(() => (mockSettings.revision == 3));
   await waitFor(() => (mockIdentity.revision == 3));
-  await waitFor(() => (mockContent.revision == 3));
+  await waitFor(() => (mockStream.revision == 3));
   await waitFor(() => (mockContact.revision == 3));
   await waitFor(() => (mockAttribute.revision == 3));
   await waitFor(() => (mockAlias.revision == 3));

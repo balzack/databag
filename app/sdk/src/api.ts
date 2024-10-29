@@ -6,7 +6,7 @@ export interface Session {
   getContact(): Contact;
   getAlias(): Alias;
   getAttribute(): Attribute;
-  getStream(): Stream;
+  getContent(): Content;
   getRing(): Ring;
 
   setFocus(cardId: string | null, channelId: string): Promise<Focus>;
@@ -88,23 +88,6 @@ export interface Contact {
 }
 
 export interface Content {
-  addChannel(sealed: boolean, type: string, subject: string, cardIds: string[]): Promise<string>;
-  removeChannel(channelId: string): Promise<void>;
-  setChannelSubject(channelId: string, subject: string): Promise<void>;
-  setChannelCard(channelId: string, cardId: string): Promise<void>;
-  clearChannelCard(channelId: string, cardId: string): Promise<void>;
-  setBlockedChannel(channelId: string, blocked: boolean): Promise<void>;
-  getBlockedChannels(): Promise<Channel[]>;
-  flagChannel(channelId: string): Promise<void>;
-  getChannelNotifications(channelId: string): Promise<boolean>;
-  setChannelNotifications(channelId: string, enabled: boolean): Promise<void>;
-  setUnreadChannel(channelId: string, unread: boolean): Promise<void>;
-
-  addChannelListener(ev: (arg: { channels: Channel[], cardId: string | null }) => void): void;
-  removeChannelListener(ev: (arg: { channels: Channel[], cardId: string | null }) => void): void;
-}
-
-export interface Stream {
   addChannel(sealed: boolean, type: string, subject: string, cardIds: string[]): Promise<string>;
   removeChannel(channelId: string): Promise<void>;
   setChannelSubject(channelId: string, subject: string): Promise<void>;

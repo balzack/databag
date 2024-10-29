@@ -12,7 +12,7 @@ import { RingModule } from './ring';
 
 import { Connection } from './connection';
 
-import type { Session, Settings, Identity, Contact, Ring, Alias, Attribute, Content, Stream, Focus } from './api';
+import type { Session, Settings, Identity, Contact, Ring, Alias, Attribute, Content, Focus } from './api';
 import { Revision } from './entities';
 import { Call } from './types';
 import { Store } from './store';
@@ -63,8 +63,8 @@ export class SessionModule implements Session {
     this.contact = new ContactModule(log, this.store, this.crypto, guid, token, node, secure, channelTypes, articleTypes);
     this.alias = new AliasModule(log, this.settings, this.store, guid, token, node, secure);
     this.attribute = new AttributeModule(log, this.settings, this.store, guid, token, node, secure);
-    this.content = new ContentModule(log, this.store, this.crypto, guid, token, node, secure);
-    this.stream = new StreamModule(log, this.contact, this.content);
+    this.stream = new StreamModule(log, this.store, this.crypto, guid, token, node, secure);
+    this.content = new ContentModule(log, this.contact, this.stream);
     this.ring = new RingModule(log);
     this.connection = new Connection(log, token, node, secure);
 
@@ -75,7 +75,7 @@ export class SessionModule implements Session {
 
     const onSeal = (seal: { privateKey: string; publicKey: string } | null) => {
       this.contact.setSeal(seal);
-      this.content.setSeal(seal);
+      this.stream.setSeal(seal);
     };
 
     const onRevision = async (ev: Revision) => {
@@ -84,7 +84,7 @@ export class SessionModule implements Session {
       await this.contact.setRevision(ev.card);
       await this.attribute.setRevision(ev.article);
       await this.alias.setRevision(ev.group);
-      await this.content.setRevision(ev.channel);
+      await this.stream.setRevision(ev.channel);
     };
 
     const onRing = (ev: Call) => {
@@ -115,7 +115,7 @@ export class SessionModule implements Session {
   }
 
   public async close(): Promise<void> {
-    await this.content.close();
+    await this.stream.close();
     await this.attribute.close();
     await this.alias.close();
     await this.contact.close();
@@ -144,8 +144,8 @@ export class SessionModule implements Session {
     return this.attribute;
   }
 
-  public getStream(): Stream {
-    return this.stream;
+  public getContent(): Content {
+    return this.content;
   }
 
   public getRing(): Ring {
@@ -156,11 +156,11 @@ export class SessionModule implements Session {
     if (cardId) {
       return await this.contact.setFocus(cardId, channelId);
     }
-    return await this.content.setFocus(channelId);
+    return await this.stream.setFocus(channelId);
   }
 
   public async clearFocus(): Promise<void> {
     await this.contact.clearFocus();
-    await this.content.clearFocus();
+    await this.stream.clearFocus();
   }
 }

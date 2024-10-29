@@ -122,13 +122,9 @@ Automate allocates the Bot interface for ia specific communication channel
   
   ```Session::getAttribute(): Attribute```
 
-  Account content channels are managed through the Content Interface
+  Account and Contact channels are managed through the Content Interface
   
   ```Session::getContent(): Content```
-
-  An aggregation of content channels provided by contacts is managed through the Stream Interface
-  
-  ```Session::getStream(): Stream```
 
   WebRTC calling is managed through the Ring Interface
   
