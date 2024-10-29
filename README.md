@@ -60,11 +60,13 @@ To use databag, you will need a DNS name pointing to your node with a certificat
 
 Launch with dockerhub container using docker compose:
 
+#### Standard launch
 ```shell
 # From the net/container sub directory:
 docker-compose -f compose.yaml -p databag up
 ```
 
+#### Launch with certbot https certificate
 ```shell
 # FIRST: create a DNS entry in your DNS to point your desired subdomain to your host
 # SECOND: edit the net/container/docker-compose-swag.yml to include your domain name
