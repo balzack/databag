@@ -88,7 +88,7 @@ export interface Contact {
 }
 
 export interface Content {
-  addChannel(sealed: boolean, type: string, subject: string, cardIds: string[]): Promise<string>;
+  addChannel(sealed: boolean, type: string, subject: any, cardIds: string[]): Promise<string>;
   removeChannel(channelId: string): Promise<void>;
   setChannelSubject(channelId: string, subject: string): Promise<void>;
   setChannelCard(channelId: string, cardId: string): Promise<void>;
@@ -100,7 +100,7 @@ export interface Content {
   setChannelNotifications(cardId: string | null, channelId: string, enabled: boolean): Promise<void>;
   setUnreadChannel(cardId: string | null, channelId: string, unread: boolean): Promise<void>;
 
-  flagChannel(cardId: string, channelId: string): Promise<void>;
+  flagChannel(cardId: string | null, channelId: string): Promise<void>;
   setBlockedChannel(cardId: string | null, channelId: string, blocked: boolean): Promise<void>;
   getBlockedChannels(): Promise<Channel[]>;
 

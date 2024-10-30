@@ -225,7 +225,7 @@ export class StreamModule {
     await this.sync();
   }
 
-  public async addSealedChannel(type: string, subject: string, cardIds: string[], aesKeyHex: string, seals: { publicKey: string, sealedKey: string}[]): Promise<string> {
+  public async addSealedChannel(type: string, subject: any, cardIds: string[], aesKeyHex: string, seals: { publicKey: string, sealedKey: string}[]): Promise<string> {
     const { node, secure, token, crypto, seal } = this;
     if (!crypto) {
       throw new Error('crypto not set');
@@ -235,14 +235,15 @@ export class StreamModule {
     }
     const sealKey = await this.crypto.rsaEncrypt(aesKeyHex, seal.publicKey);
     const { ivHex } = await crypto.aesIv();
-    const { encryptedDataB64 } = await crypto.aesEncrypt(subject, ivHex, aesKeyHex);
+    const subjectData = JSON.stringify(subject);
+    const { encryptedDataB64 } = await crypto.aesEncrypt(subjectData, ivHex, aesKeyHex);
     const sealedSubject = { subjectEncrypted: encryptedDataB64, subjectIv: ivHex, seals: [ ...seals, sealKey ] };
     return await addChannel(node, secure, token, type, sealedSubject, cardIds);
   }
 
-  public async addUnsealedChannel(type: string, subject: string, cardIds: string[]): Promise<string> {
+  public async addUnsealedChannel(type: string, subject: any, cardIds: string[]): Promise<string> {
     const { node, secure, token } = this;
-    return await addChannel(node, secure, token, type, { subject }, cardIds);
+    return await addChannel(node, secure, token, type, subject, cardIds);
   }
 
   public async removeChannel(channelId: string): Promise<void> {
@@ -279,11 +280,22 @@ export class StreamModule {
 
   public async setChannelCard(channelId: string, cardId: string): Promise<void> {
     const { node, secure, token } = this;
+    const channel = this.channelEntries.get(channelId);
+    if (!channel) {
+      throw new Error('channel not found');
+    }
+    if (channel.item.sealed) {
+      throw new Error('sealed channels cannot add members');
+    }
     await setChannelCard(node, secure, token, channelId, cardId);
   }
 
   public async clearChannelCard(channelId: string, cardId: string): Promise<void> {
     const { node, secure, token } = this;
+    const channel = this.channelEntries.get(channelId);
+    if (!channel) {
+      throw new Error('channel not found');
+    }
     await clearChannelCard(node, secure, token, channelid, cardId);
   }
 

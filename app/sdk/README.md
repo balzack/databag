@@ -293,45 +293,9 @@ Automate allocates the Bot interface for ia specific communication channel
 
   ```Contact::cancelCard(cardId: string): Promise<void>```
 
-  The current articles can be access with an [Article](https://github.com/balzack/databag/blob/sdk/app/sdk/src/types.ts) listener
- 
-  ```Contact::addArticleListener(id: string | null, ev: (arg: { cardId: string; articles: Article[] }) => void): void```
-  
-  ```Contact::removeArticleListener(id: string | null, ev: (arg: { cardId: string; articles: Article[] }) => void): void```
-
-  Relinquish access to shared article 
-
-  ```Contact::removeArticle(cardId: string): Promise<void>```
-
-  The current channels can be access with a [Channel](https://github.com/balzack/databag/blob/sdk/app/sdk/src/types.ts) listener
-
-  ```Contact::addChannelListener(id: string | null, ev: (arg: { cardId: string; channels: Channel[] }) => void): void```
-  
-  ```Contact::removeChannelListener(id: string | null, ev: (arg: { cardId: string; channels: Channel[] }) => void): void```
-
-  Relinquish access to shared channel 
-
-  ```Contact::removeChannel(cardId: string): Promise<void>```
-
-  Enable or disable push notification associated with specified contact channel
-
-  ```Contact::setChannelNotifications(cardId: string, channelId: string, enabled: boolean): Promise<void>```
-
-  Get whether notifications are enabled on specified contact channel
-
-  ```Contact::getChannelNotifications(cardId: string, channelId: string): Promise<boolean>```
-
-  Mark contact channel as read or unread with setUnreadChannel
-
-  ```Contact::setUnreadChannel(cardId: string, channelId: string, unread: boolean): Promise<void>```
-
   Get list of searchable accounts of specified server with getRegistry
 
   ```Contact::getRegistry(server: string, secure: boolean): Promise<Profile[]>```
-
-  Get URL of profile image for searchable contact on specified server
-
-  ```Contact::getRegistryImageUrl(server: string, secure: boolean, guid: string): string```
 
   Block or unblock contact to hide locally with setBlockedCard
 
@@ -345,35 +309,74 @@ Automate allocates the Bot interface for ia specific communication channel
 
   ```Contact::flagCard(cardId: string): Promise<void>```
 
-  Block or unblock contact article to hide locallay with setBlockedArticle
+</ul>
 
-  ```Contact::setBlockedArticle(cardId: string, articleId: string, boolean: blocked): Promise<void>```
+  <br>
+</details>
 
-  Get list of all blocked contact articles with getBlockedArticles
+<details>
+  <summary>Contact interface module manages contacts and the shared articles and channels</summary><br>
 
-  ```Contact::getBlockedArticles(): Promise<Article[]>```
+  <ul>
 
-  Flag article for review by admin with flagArticle
+  The current channels can be access with a [Channel](https://github.com/balzack/databag/blob/sdk/app/sdk/src/types.ts) listener
 
-  ```Contact::flagArticle(cardId: string, articleId: string): Promise<void>```
+  ```Content::addChannelListener(ev: (arg: { channels: Channel[], cardId: string | null }) => void): void```
 
-  Block or unblock contact channel with setBlockedChanenl
+  ```Content::removeChannelListener(ev: (arg: { channels: Channel[], cardId: string | null }) => void): void```
 
-  ```Contact::setBlockedChannel(cardId: string, channelId: string, boolean: blocked): Promise<void>```
+  Add a new channel shared with specified contacts with addChannel
 
-  Get list of all blocked contact channels with getBlockedChannels
+  ```Content::addChannel(sealed: boolean, type: string, subject: any, cardIds: string[]): Promise<string>```
 
-  ```Contact::getBlockedChannels(): Promise<Channel[]>```
+  Remove a hosted channel with removeChannel
+
+  ```Content::removeChannel(channelId: string): Promise<void>```
+
+  Leave a channel hosted by a contact with leaveChannel
+
+  ```Content::leaveChannel(cardId: string, channelId: string): Promise<void>```
+
+  Update the subject on specified channel
+
+  ```Content::setChannelSubject(channelId: string, subject: string): Promise<void>```
+
+  Add member to specified channel
+
+  ```Content::setChannelCard(channelId: string, cardId: string): Promise<void>```
+
+  Remove member from specified channel
+
+  ```Content::clearChannelCard(channelId: string, cardId: string): Promise<void>```
+
+  Enable or disable push notification associated with specified channel
+
+  ```Content::setChannelNotifications(cardId: string | null, channelId: string, enabled: boolean): Promise<void>```
+
+  Get whether notifications are enabled on specified channel
+
+  ```Content::getChannelNotifications(cardId: string | null, channelId: string): Promise<boolean>```
+
+  Mark channel as read or unread with setUnreadChannel
+
+  ```Content::setUnreadChannel(cardId: string | null, channelId: string, unread: boolean): Promise<void>```
+
+  Block or unblock channel with setBlockedChannel
+
+  ```Content::setBlockedChannel(cardId: string | null, channelId: string, boolean: blocked): Promise<void>```
+
+  Get list of all blocked channels with getBlockedChannels
+
+  ```Content::getBlockedChannels(): Promise<Channel[]>```
 
   Flag channel for review by admin with flagChannel
 
-  ```Contact::flagChannel(cardId: string, channelId: string): Promise<void>```
+  ```Content::flagChannel(cardId: string | null, channelId: string): Promise<void>```
 
 </ul>
 
   <br>
 </details>
- 
 
 ## Admin Communication
 

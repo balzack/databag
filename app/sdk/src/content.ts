@@ -18,7 +18,7 @@ export class ContentModule implements Content {
     this.crypto = crypto;
   }
 
-  public async addChannel(sealed: boolean, type: string, subject: string, cardIds: string[]): Promise<string> {
+  public async addChannel(sealed: boolean, type: string, subject: any, cardIds: string[]): Promise<string> {
     if (sealed) {
       if (!this.crypto) {
         throw new Error('crypto not set');
@@ -77,7 +77,7 @@ export class ContentModule implements Content {
     return await this.stream.setUnreadChannel(channelId, unread);
   }
 
-  public async flagChannel(cardId: string, channelId: string): Promise<void> {
+  public async flagChannel(cardId: string | null, channelId: string): Promise<void> {
     if (cardId) {
       return await this.contact.flagChannel(cardId, channelId);
     }
