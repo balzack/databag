@@ -4,6 +4,7 @@ import {styles} from './Session.styled';
 import {IconButton, Surface, Text} from 'react-native-paper';
 import {Settings} from '../settings/Settings';
 import {Contacts} from '../contacts/Contacts';
+import {Content} from '../content/Content';
 import {Registry} from '../registry/Registry';
 import {Profile, ContactParams} from '../profile/Profile';
 import {Details} from '../details/Details';
@@ -22,6 +23,7 @@ const ProfileDrawer = createDrawerNavigator();
 const DetailsDrawer = createDrawerNavigator();
 
 const ContactStack = createStackNavigator();
+const ContentStack = createStackNavigator();
 
 export function Session() {
   const {state} = useSession();
@@ -150,7 +152,7 @@ function ContentTab({scheme}: {scheme: string}) {
     <NavigationContainer theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
       <ContactStack.Navigator initialRouteName="contacts" screenOptions={{headerShown: false}}>
         <ContactStack.Screen name="content" options={{headerBackTitleVisible: false}}>
-          {() => <Text>CONTENT</Text>}
+          {() => <Content />}
         </ContactStack.Screen>
       </ContactStack.Navigator>
     </NavigationContainer>
@@ -340,7 +342,7 @@ function HomeScreen({nav}) {
           <Identity openSettings={nav.settings.openDrawer} openContacts={nav.contacts.openDrawer} />
         </Surface>
         <Surface style={styles.channels} elevation={1} mode="flat">
-          <Text>CHANNELS</Text>
+          <Content />
         </Surface>
       </View>
       <View style={styles.right}>

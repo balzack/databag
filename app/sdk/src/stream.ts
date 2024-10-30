@@ -91,8 +91,6 @@ export class StreamModule {
           const nextRev = this.nextRevision;
           try {
             const delta = await getChannels(node, secure, token, this.revision, channelTypes);
-console.log("DELTA:" ,delta);
-
             for (const entity of delta) {
               const { id, revision, data } = entity;
               if (data) {
@@ -195,6 +193,7 @@ console.log("DELTA:" ,delta);
   public addChannelListener(ev: (arg: { channels: Channel[], cardId: string | null }) => void): void {
     this.emitter.on('channel', ev);
     const channels = Array.from(this.channelEntries, ([channelId, entry]) => entry.channel);
+console.log("EMIT ON ADD", channels.length);
     ev({ channels, cardId: null });
   }
 
@@ -204,10 +203,16 @@ console.log("DELTA:" ,delta);
 
   private emitChannels() {
     const channels = Array.from(this.channelEntries, ([channelId, entry]) => entry.channel);
+console.log("EMIT", channels.length);
     this.emitter.emit('channel', { channels, cardId: null });
   } 
 
-  public async close(): Promise<void> {}
+  public async close(): Promise<void> {
+    this.closing = true;
+    while (this.syncing) { 
+      await new Promise((r) => setTimeout(r, CLOSE_POLL_MS));
+    }
+  }
 
   public async setRevision(rev: number): Promise<void> {
     this.nextRevision = rev;

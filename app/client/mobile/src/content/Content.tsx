@@ -1,11 +1,14 @@
 import React from 'react';
 import {Text} from 'react-native-paper';
 import {SafeAreaView} from 'react-native';
+import {useContent} from './useContent.hook';
 
-export function Channels() {
+export function Content() {
+  const { state, actions } = useContent();
+
   return (
     <SafeAreaView>
-      <Text>CHANNELS</Text>
+      <Text>CONTENT PANE</Text>
     </SafeAreaView>
   );
 }
