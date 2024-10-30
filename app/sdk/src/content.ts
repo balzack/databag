@@ -3,20 +3,37 @@ import type { Channel } from './types';
 import { ContactModule } from './contact';
 import { StreamModule } from './stream';
 import { Logging } from './logging';
+import { Crypto } from './crypto';
 
 export class ContentModule implements Content {
+  private crypto: Crypto | null;
   private log: Logging;
   private contact: ContactModule;
   private stream: StreamModule;
 
-  constructor(log: Logging, contact: ContactModule, stream: StreamModule) {
+  constructor(log: Logging, crypto: Crypto | null, contact: ContactModule, stream: StreamModule) {
     this.contact = contact;
     this.stream = stream;
     this.log = log;
+    this.crypto = crypto;
   }
 
   public async addChannel(sealed: boolean, type: string, subject: string, cardIds: string[]): Promise<string> {
-    return await this.stream.addChannel(sealed, type, subject, cardIds);
+    if (sealed) {
+      if (!this.crypto) {
+        throw new Error('crypto not set');
+      }
+      const { aesKeyHex } = await this.crypto.aesKey();
+      const seals = [];
+      for (let cardId of cardIds) {
+        const seal = await this.contact.getSeal(cardId, aesKeyHex);
+        seals.push(seal);
+      }
+      return await this.stream.addSealedChannel(type, subject, cardIds, aesKeyHex, seals);
+    }
+    else {
+      return await this.stream.addUnsealedChannel(type, subject, cardIds);
+    }
   }
 
   public async removeChannel(channelId: string): Promise<void> {

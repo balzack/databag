@@ -67,7 +67,7 @@ console.log(">>> ", channelTypes);
     this.alias = new AliasModule(log, this.settings, this.store, guid, token, node, secure);
     this.attribute = new AttributeModule(log, this.settings, this.store, guid, token, node, secure);
     this.stream = new StreamModule(log, this.store, this.crypto, guid, token, node, secure, channelTypes);
-    this.content = new ContentModule(log, this.contact, this.stream);
+    this.content = new ContentModule(log, this.crypto, this.contact, this.stream);
     this.ring = new RingModule(log);
     this.connection = new Connection(log, token, node, secure);
 

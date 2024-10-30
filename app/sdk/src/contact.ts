@@ -750,7 +750,11 @@ export class ContactModule implements Contact {
   public async setBlockedCard(cardId: string, blocked: boolean): Promise<void> {
     const entry = this.cardEntries.get(cardId);
     if (entry) {
-      await this.setCardBlocked(cardId);
+      if (blocked) {
+        await this.setCardBlocked(cardId);
+      } else {
+        await this.clearCardBlocked(cardId);
+      }
       entry.card = this.setCard(cardId, entry.item);
       this.emitCards();
     }
@@ -761,7 +765,11 @@ export class ContactModule implements Contact {
     if (entries) {
       const entry = entries.get(channelId);
       if (entry) {
-        await this.setChannelBlocked(cardId, channelId);
+        if (blocked) {
+          await this.setChannelBlocked(cardId, channelId);
+        } else {
+          await this.clearChannelBlocked(cardId, channelId);
+        }
         entry.channel = this.setChannel(cardId, channelId, entry.item);
         this.emitChannels(cardId);
       }
@@ -773,7 +781,11 @@ export class ContactModule implements Contact {
     if (entries) {
       const entry = entries.get(articleId);
       if (entry) {
-        await this.setArticleBlocked(cardId, articleId);
+        if (blocked) {
+          await this.setArticleBlocked(cardId, articleId);
+        } else {
+          await this.clearArticleBlocked(cardId, articleId);
+        }
         entry.article = this.setArticle(cardId, articleId, entry.item);
         this.emitArticles(cardId);
       }
@@ -935,6 +947,23 @@ export class ContactModule implements Contact {
     this.seal = seal;
     this.unsealAll = true;
     await this.sync();
+  }
+
+  public async getSeal(cardId: string, keyData: string): Promise<{ publicKey: string, sealedKey: string }> {
+    if (!this.crypto) {
+      throw new Error('crypto not set');
+    }
+    const card = this.cardEntries.get(cardId);
+    if (!card) {
+      throw new Error('specified card not found');
+    }
+    const publicKey = card.item.profile.seal;
+    if (!publicKey) {
+      throw new Error('seal key not set for card');
+    }
+    const sealed = await this.crypto.rsaEncrypt(keyData, publicKey);
+    const sealedKey = sealed.encryptedDataB64;
+    return { publicKey, sealedKey }; 
   }
 
   private async getChannelKey(seals: [{ publicKey: string; sealedKey: string }]): Promise<string | null> {
