@@ -315,7 +315,7 @@ Automate allocates the Bot interface for ia specific communication channel
 </details>
 
 <details>
-  <summary>Contact interface module manages contacts and the shared articles and channels</summary><br>
+  <summary>Content interface module manages hosted and contact shared channels</summary><br>
 
   <ul>
 
