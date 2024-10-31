@@ -98,7 +98,7 @@ Automate allocates the Bot interface for ia specific communication channel
 
 
 <details>
-  <summary>Session divides the account communication into separate modules</summary><br>
+  <summary>Session provides connectivity status and divides the account communication into separate modules</summary><br>
   
   <ul>
     
