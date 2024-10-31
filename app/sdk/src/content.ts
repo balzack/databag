@@ -40,8 +40,8 @@ export class ContentModule implements Content {
     return await this.stream.removeChannel(channelId);
   }
 
-  public async setChannelSubject(channelId: string, subject: string): Promise<void> {
-    return await this.stream.setChannelSubject(channelId, subject);
+  public async setChannelSubject(channelId: string, type: string, subject: any): Promise<void> {
+    return await this.stream.setChannelSubject(channelId, type, subject);
   }
 
   public async setChannelCard(channelId: string, cardId: string): Promise<void> {

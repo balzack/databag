@@ -251,7 +251,7 @@ export class StreamModule {
     return await removeChannel(node, secure, token);
   }
 
-  public async setChannelSubject(channelId: string, subject: string): Promise<void> {
+  public async setChannelSubject(channelId: string, type: string, subject: any): Promise<void> {
     const channel = this.channelEntries.get(channelId);
     if (!channel) {
       throw new Error('channel not found');
@@ -269,12 +269,13 @@ export class StreamModule {
       if (!item.channelKey) {
         item.channelKey = await this.getChannelKey(seals);
       }
-      const { encryptedDataB64 } = await crypto.aesEncrypt(subject, subjectIv, item.channelKey);
+      const subjectData = JSON.stringify(subject);
+      const { encryptedDataB64 } = await crypto.aesEncrypt(subjectData, subjectIv, item.channelKey);
       const sealedSubject = { subjectEncrypted, encryptedDataB64, subjectIv, seals };
-      await setChannelSubject(node, secure, token, channelId, item.dataType, sealedSubject);
+      await setChannelSubject(node, secure, token, channelId, type, sealedSubject);
     }
     else {
-      await setChannelSubject(node, secure, token, channelId, item.dataType, { subject });
+      await setChannelSubject(node, secure, token, channelId, type, subject);
     }
   }
 

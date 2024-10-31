@@ -339,7 +339,7 @@ Automate allocates the Bot interface for ia specific communication channel
 
   Update the subject on specified channel
 
-  ```Content::setChannelSubject(channelId: string, subject: string): Promise<void>```
+  ```Content::setChannelSubject(channelId: string, type: string, subject: any): Promise<void>```
 
   Add member to specified channel
 

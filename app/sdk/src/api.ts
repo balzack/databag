@@ -90,7 +90,7 @@ export interface Contact {
 export interface Content {
   addChannel(sealed: boolean, type: string, subject: any, cardIds: string[]): Promise<string>;
   removeChannel(channelId: string): Promise<void>;
-  setChannelSubject(channelId: string, subject: string): Promise<void>;
+  setChannelSubject(channelId: string, type: string, subject: any): Promise<void>;
   setChannelCard(channelId: string, cardId: string): Promise<void>;
   clearChannelCard(channelId: string, cardId: string): Promise<void>;
 
