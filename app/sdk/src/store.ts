@@ -108,8 +108,8 @@ export class OfflineStore implements Store {
     return await this.sql.set(`INSERT INTO ${table}_${guid} (${fields.join(', ')}) VALUES (${fields.map((field) => '?').join(', ')})`, value);
   }
 
-  private async setValue(guid: string, table: string, idField: string, fields: string[], idValue: string | number, value: (string | number | null)[]): Promise<void> {
-    return await this.sql.set(`UPDATE ${table}_${guid} SET ${fields.map((field) => `${field}=?`).join(',')} WHERE ${idField}=?`, [...value, idValue]);
+  private async setValue(guid: string, table: string, idFields: string[], fields: string[], idValues: string[], values: (string | number | null)[]): Promise<void> {
+    return await this.sql.set(`UPDATE ${table}_${guid} SET ${fields.map((field) => `${field}=?`).join(',')} WHERE ${idFields.map((idField) => `${idField}=?`).join(' AND ')}`, [...values, ...idValues]);
   }
 
   private async removeValue(guid: string, table: string, idField: string, idValue: string | number): Promise<void> {
@@ -147,7 +147,7 @@ export class OfflineStore implements Store {
 
   private async initLogin(guid: string): Promise<void> {
     await this.sql.set(
-      `CREATE TABLE IF NOT EXISTS channel_${guid} (channel_id text, revision integer, detail_revision integer, topic_revision integer, topic_marker integer, sync_revision integer, detail text, unsealed_detail text, summary text, unsealed_summary text, offsync integer, unique(channel_id))`,
+      `CREATE TABLE IF NOT EXISTS channel_${guid} (channel_id text, detail text, unsealed_detail text, summary text, unsealed_summary text, topic_revision integer, sync_revision integer, topic_marker integer, unique(channel_id))`,
     );
     await this.sql.set(
       `CREATE TABLE IF NOT EXISTS channel_topic_${guid} (channel_id text, topic_id text, revision integer, created integer, detail_revision integer, detail text, unsealed_detail text, unique(channel_id, topic_id))`,
@@ -156,7 +156,7 @@ export class OfflineStore implements Store {
       `CREATE TABLE IF NOT EXISTS card_${guid} (card_id text, revision integer, detail text, profile text, offsync_profile integer, offsync_article integer, offsync_channel integer, profile_revision, article_revision, channel_revision, unique(card_id))`,
     );
     await this.sql.set(
-      `CREATE TABLE IF NOT EXISTS card_channel_${guid} (card_id text, channel_id text, revision integer, detail_revision integer, topic_revision integer, topic_marker integer, sync_revision integer, detail text, unsealed_detail text, summary text, unsealed_summary text, offsync integer, unique(card_id, channel_id))`,
+      `CREATE TABLE IF NOT EXISTS card_channel_${guid} (card_id text, channel_id text, detail text, unsealed_detail text, summary text, unsealed_summary text, topic_revision integer, sync_revision integer, topic_marker integer, unique(card_id, channel_id))`,
     );
     await this.sql.set(
       `CREATE TABLE IF NOT EXISTS card_channel_topic_${guid} (card_id text, channel_id text, topic_id text, revision integer, created integer, detail_revision integer, detail text, unsealed_detail text, unique(card_id, channel_id, topic_id))`,
@@ -286,97 +286,134 @@ export class OfflineStore implements Store {
   }
 
   public async setContactCardRevision(guid: string, cardId: string, revision: number): Promise<void> {
-    await this.setValue(guid, 'card', 'card_id', ['revision'], cardId, [revision]);
+    await this.setValue(guid, 'card', ['card_id'], ['revision'], [cardId], [revision]);
   }
 
   public async setContactCardProfile(guid: string, cardId: string, profile: CardProfile): Promise<void> {
-    await this.setValue(guid, 'card', 'card_id', ['profile'], cardId, [JSON.stringify(profile)]);
+    await this.setValue(guid, 'card', ['card_id'], ['profile'], [cardId], [JSON.stringify(profile)]);
   }
 
   public async setContactCardDetail(guid: string, cardId: string, detail: CardDetail): Promise<void> {
-    await this.setValue(guid, 'card', 'card_id', ['detail'], cardId, [JSON.stringify(detail)]);
+    await this.setValue(guid, 'card', ['card_id'], ['detail'], [cardId], [JSON.stringify(detail)]);
   }
 
   public async setContactCardOffsyncProfile(guid: string, cardId: string, revision: number): Promise<void> {
-    await this.setValue(guid, 'card', 'card_id', ['offsync_profile'], cardId, [revision]);
+    await this.setValue(guid, 'card', ['card_id'], ['offsync_profile'], [cardId], [revision]);
   }
 
   public async clearContactCardOffsyncProfile(guid: string, cardId: string): Promise<void> {
-    await this.setValue(guid, 'card', 'card_id', ['offsync_profile'], cardId, [null]);
+    await this.setValue(guid, 'card', ['card_id'], ['offsync_profile'], [cardId], [null]);
   }
 
   public async setContactCardOffsyncArticle(guid: string, cardId: string, revision: number): Promise<void> {
-    await this.setValue(guid, 'card', 'card_id', ['offsync_article'], cardId, [revision]);
+    await this.setValue(guid, 'card', ['card_id'], ['offsync_article'], [cardId], [revision]);
   }
 
   public async clearContactCardOffsyncArticle(guid: string, cardId: string): Promise<void> {
-    await this.setValue(guid, 'card', 'card_id', ['offsync_article'], cardId, [null]);
+    await this.setValue(guid, 'card', ['card_id'], ['offsync_article'], [cardId], [null]);
   }
 
   public async setContactCardOffsyncChannel(guid: string, cardId: string, revision: number): Promise<void> {
-    await this.setValue(guid, 'card', 'card_id', ['offsync_channel'], cardId, [revision]);
+    await this.setValue(guid, 'card', ['card_id'], ['offsync_channel'], [cardId], [revision]);
   }
 
   public async clearContactCardOffsyncChannel(guid: string, cardId: string): Promise<void> {
-    await this.setValue(guid, 'card', 'card_id', ['offsync_channel'], cardId, [null]);
+    await this.setValue(guid, 'card', ['card_id'], ['offsync_channel'], [cardId], [null]);
   }
 
   public async setContactCardProfileRevision(guid: string, cardId: string, revision: number): Promise<void> {
-    await this.setValue(guid, 'card', 'card_id', ['profile_revision'], cardId, [revision]);
+    await this.setValue(guid, 'card', ['card_id'], ['profile_revision'], [cardId], [revision]);
   }
 
   public async setContactCardArticleRevision(guid: string, cardId: string, revision: number): Promise<void> {
-    await this.setValue(guid, 'card', 'card_id', ['article_revision'], cardId, [revision]);
+    await this.setValue(guid, 'card', ['card_id'], ['article_revision'], [cardId], [revision]);
   }
 
   public async setContactCardChannelRevision(guid: string, cardId: string, revision: number): Promise<void> {
-    await this.setValue(guid, 'card', 'card_id', ['channel_revision'], cardId, [revision]);
+    await this.setValue(guid, 'card', ['card_id'], ['channel_revision'], [cardId], [revision]);
   }
 
   public async getContactCardArticles(guid: string): Promise<{ cardId: string; articleId: string; item: ArticleItem }[]> {
     return [];
   }
-
   public async addContactCardArticle(guid: string, cardId: string, articleId: string, item: ArticleItem): Promise<void> {}
-
   public async removeContactCardArticle(guid: string, cardId: string, articleId: string): Promise<void> {}
-
   public async setContactCardArticleDetail(guid: string, cardId: string, articleId: string, detail: ChannelDetail, unsealedData: string | null): Promise<void> {}
-
   public async setContactCardArticleUnsealed(guid: string, cardId: string, articleId: string, unsealedData: string | null): Promise<void> {}
 
-  public async getContactCardChannels(guid: string): Promise<{ cardId: string; channelId: string; item: ChannelItem }[]> {
-    return [];
+
+  public async getContactCardChannels(guid: string): Promise<{ cardId: string, channelId: string, item: ChannelItem }[]> {
+    const channels = await this.getValues(guid, 'card_channel', [
+      'card_id',
+      'channel_id',
+      'detail',
+      'unsealed_detail',
+      'summary',
+      'unsealed_summary',
+    ]);
+    return channels.map((channel) => ({
+      cardId: channel.card_id,
+      channelId: channel.channel_id,
+      item: {
+        detail: this.parse(channel.detail),
+        summary: this.parse(channel.summary),
+        unsealedDetail: this.parse(channel.unsealed_detail),
+        unsealedSummary: this.parse(channel.unsealed_summary),
+        channelKey: null,
+      },
+    }));
   }
 
-  public async addContactCardChannel(guid: string, cardId: string, channelId: string, item: ChannelItem): Promise<void> {}
+  public async addContactCardChannel(guid: string, cardId: string, channelId: string, item: ChannelItem): Promise<void> {
+    const fields = ['card_id', 'channel_id', 'detail', 'unsealed_detail', 'summary', 'unsealed_summary', 'topic_revision', 'sync_revision' ];
+    const { detail, unsealedDetail, summary, unsealedSummary } = item;
+    const value = [cardId, channelId, JSON.stringify(detail), JSON.stringify(unsealedDetail), JSON.stringify(summary), JSON.stringify(unsealedSummary), 0, 0];
+    await this.addValue(guid, 'card_channel', fields, value);
+  }
 
   public async removeContactCardChannel(guid: string, cardId: string, channelId: string): Promise<void> {}
-
   public async setContactCardChannelDetail(guid: string, cardId: string, channelId: string, detail: ChannelDetail, unsealedData: string): Promise<void> {}
-
   public async setContactCardChannelSummary(guid: string, cardId: string, channelId: string, summary: ChannelSummary, unsealedData: string): Promise<void> {}
-
   public async setContactCardChannelUnsealedDetail(guid: string, cardId: string, channelId: string, data: string | null): Promise<void> {}
-
   public async setContactCardChannelUnsealedSummary(guid: string, cardId: string, channelId: string, data: string | null): Promise<void> {}
-
   public async setContactCardChannelTopicSyncRevision(guid: string, cardId: string, channelId: string, revision: number): Promise<void> {}
-
   public async setContactCardChannelTopicRemoteRevision(guid: string, cardId: string, channelId: string, revision: number): Promise<void> {}
+  public async setContentChannelRevision(guid: string, channelId: string): Promise<void> {}
 
   public async getContentRevision(guid: string): Promise<number> {
-    return 0;
+    return (await this.getAppValue(guid, 'content_revision', 0)) as number;
   }
-  public async setContentRevision(guid: string, revision: number): Promise<void> {}
+  public async setContentRevision(guid: string, revision: number): Promise<void> {
+    await this.setAppValue(guid, 'content_revision', revision);
+  }
 
-  public async addContentChannel(guid: string, channelId: string, item: ChannelItem): Promise<void> {}
+  public async addContentChannel(guid: string, channelId: string, item: ChannelItem): Promise<void> {
+    const fields = ['channel_id', 'detail', 'unsealed_detail', 'summary', 'unsealed_summary', 'topic_revision', 'sync_revision' ];
+    const { detail, unsealedDetail, summary, unsealedSummary } = item;
+    const value = [channelId, JSON.stringify(detail), JSON.stringify(unsealedDetail), JSON.stringify(summary), JSON.stringify(unsealedSummary), 0, 0];
+    await this.addValue(guid, 'channel', fields, value);
+  }
   public async removeContentChannel(guid: string, channelId: string): Promise<void> {}
   public async getContentChannels(guid: string): Promise<{ channelId: string, item: ChannelItem }[]> {
-    return [];
+    const channels = await this.getValues(guid, 'channel', [
+      'channel_id',
+      'detail',
+      'unsealed_detail',
+      'summary',
+      'unsealed_summary',
+    ]);
+    return channels.map((channel) => ({
+      channelId: channel.channel_id,
+      item: {
+        detail: this.parse(channel.detail),
+        summary: this.parse(channel.summary),
+        unsealedDetail: this.parse(channel.unsealed_detail),
+        unsealedSummary: this.parse(channel.unsealed_summary),
+        channelKey: null,
+      },
+    }));
   }
 
-  public async setContentChannelRevision(guid: string, channelId: string): Promise<void> {}
   public async setContentChannelDetail(guid: string, channelId: string, detail: ChannelDetail, unsealedData: string): Promise<void> {}
   public async setContentChannelSummary(guid: string, channelId: string, summary: ChannelSummary, unsealedData: string): Promise<void> {}
   public async setContentChannelUnsealedDetail(guid: string, channelId: string, data: string | null): Promise<void> {}
