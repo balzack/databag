@@ -1,4 +1,4 @@
-d!!! still a work in progress !!!
+!!! still a work in progress !!!
 
 DatabagClientSDK provides a typescript interface for communication over the decentralized databag network. The SDK has minimal dependencies and contains reference applications for react-js, react-native, and node.
 
@@ -98,7 +98,7 @@ Automate allocates the Bot interface for ia specific communication channel
 
 
 <details>
-  <summary>Session provides the core functionality and provides access to all user interface modules</summary><br>
+  <summary>Session divides the account communication into separate modules</summary><br>
   
   <ul>
     
