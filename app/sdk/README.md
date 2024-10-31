@@ -261,10 +261,6 @@ Automate allocates the Bot interface for ia specific communication channel
 
   ```Contact::removeCard(cardId: string): Promise<void>```
 
-  Get URL of contacts profile image with getCardImageUrl
-
-  ```Contact::getCardImageUrl(cardId: string): string```
-
   Attempt synchronization of contact data if previously failed
 
   ```Contact::resyncCard(cardId: string): Promise<void>```
