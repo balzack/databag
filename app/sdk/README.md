@@ -295,7 +295,7 @@ Automate allocates the Bot interface for ia specific communication channel
 
   Get list of searchable accounts of specified server with getRegistry
 
-  ```Contact::getRegistry(server: string, secure: boolean): Promise<Profile[]>```
+  ```Contact::getRegistry(handle: string | null, server: string | null): Promise<Profile[]>```
 
   Block or unblock contact to hide locally with setBlockedCard
 
