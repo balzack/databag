@@ -1,5 +1,5 @@
 import React, {ReactNode} from 'react';
-import {Image, View, Pressable} from 'react-native';
+import {SafeAreaView, Image, View, Pressable} from 'react-native';
 import {Text} from 'react-native-paper';
 import {styles} from './Card.styled';
 
@@ -24,7 +24,7 @@ export function Card({
 }) {
   return (
     <Pressable style={containerStyle} onPress={select ? select : () => {}}>
-      <View style={styles.card}>
+      <SafeAreaView style={styles.card}>
         <Image style={styles.image} resizeMode={'contain'} source={{uri: imageUrl}} />
         <View style={styles.details}>
           {name && <Text style={styles.nameSet}>{name}</Text>}
@@ -32,7 +32,7 @@ export function Card({
           <Text style={styles.handle}>{node ? `${handle}/${node}` : handle}</Text>
         </View>
         {actions}
-      </View>
+      </SafeAreaView>
     </Pressable>
   );
 }

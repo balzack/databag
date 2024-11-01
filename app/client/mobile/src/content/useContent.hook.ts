@@ -9,14 +9,20 @@ export function useContent() {
   const display = useContext(DisplayContext) as ContextType;
   const [state, setState] = useState({
     strings: display.state.strings,
-    cards: [] as Card[],
-    filtered: [] as Card[],
+    layout: null,
+    cards: [] as Channel[],
+    filtered: [] as Channel[],
     filter: '',
   });
 
   const updateState = (value: any) => {
     setState(s => ({...s, ...value}));
   };
+
+  useEffect(() => {
+    const { layout } = display.state;
+    updateState({ layout });
+  }, [display.state]);
 
   useEffect(() => {
     const content = app.state.session?.getContent();
@@ -31,7 +37,11 @@ export function useContent() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const actions = {};
+  const actions = {
+    setFilter: (filter) => {
+      updateState({ filter });
+    },
+  };
 
   return { state, actions };
 }

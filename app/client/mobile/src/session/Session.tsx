@@ -338,7 +338,7 @@ function HomeScreen({nav}) {
   return (
     <View style={styles.frame}>
       <View style={styles.left}>
-        <Surface elevation={2} mode="flat">
+        <Surface style={styles.identity} elevation={2} mode="flat">
           <Identity openSettings={nav.settings.openDrawer} openContacts={nav.contacts.openDrawer} />
         </Surface>
         <Surface style={styles.channels} elevation={1} mode="flat">

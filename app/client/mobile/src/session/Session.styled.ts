@@ -12,8 +12,12 @@ export const styles = StyleSheet.create({
   frame: {
     display: 'flex',
     flexDirection: 'row',
+    width: '100%',
+    height: '100%',
   },
   left: {
+    display: 'flex',
+    flexDirection: 'column',
     height: '100%',
     width: '33%',
     maxWidth: 300,
@@ -23,8 +27,12 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexGrow: 1,
   },
+  identity: {
+    flexShrink: 0,
+  },
   channels: {
     flexGrow: 1,
+    height: 1,
   },
   screen: {
     width: '100%',
