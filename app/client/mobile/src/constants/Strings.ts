@@ -1,6 +1,10 @@
 import {NativeModules, Platform} from 'react-native';
 
 export const en = {
+  unknown: 'Unknown',
+  sealed: 'Sealed',
+  notes: 'Notes',
+
   code: 'en',
   settings: 'Settings',
   contacts: 'Contacts',
@@ -215,7 +219,6 @@ export const en = {
   microphone: 'Microphone',
   camera: 'Camera',
 
-  notes: 'Notes',
 
   ignoring: 'Ignoring Contact',
   connfirmIgnoring: 'Are you sure you want to ignore the request?',
@@ -249,6 +252,9 @@ export const en = {
 };
 
 export const fr = {
+  unknown: 'Inconnu',
+  sealed: 'Scellé',
+  notes: 'Notes',
   code: 'fr',
   settings: 'Paramètres',
   contacts: 'Contacts',
@@ -474,8 +480,6 @@ export const fr = {
   microphone: 'Microphone',
   camera: 'Caméra',
 
-  notes: 'Notes',
-
   removing: 'Suppression du contact',
   confirmRemove: 'Êtes-vous sûr de vouloir supprimer le contact?',
 
@@ -498,6 +502,10 @@ export const fr = {
 };
 
 export const sp = {
+  unknown: 'Desconocido',
+  sealed: 'Sellado',
+  notes: 'Notas',
+
   code: 'sp',
   settings: 'Configuración',
   contacts: 'Contactos',
@@ -723,8 +731,6 @@ export const sp = {
   microphone: 'Micrófono',
   camera: 'Cámara',
 
-  notes: 'Notas',
-
   removing: 'Eliminando contacto',
   confirmRemove: '¿Estás seguro de que quieres eliminar el contacto?',
   message: 'Mensaje',
@@ -746,6 +752,10 @@ export const sp = {
 };
 
 export const pt = {
+  unknown: 'Desconhecido',
+  sealed: 'Selado',
+  notes: 'Notas',
+
   code: 'pt',
   settings: 'Configurações',
   contacts: 'Contatos',
@@ -971,8 +981,6 @@ export const pt = {
   microphone: 'Microfone',
   camera: 'Câmera',
 
-  notes: 'Notas',
-
   removing: 'Removendo Contato',
   confirmRemove: 'Tem certeza de que deseja remover o contato?',
   message: 'Mensagem',
@@ -994,6 +1002,10 @@ export const pt = {
 };
 
 export const de = {
+  unknown: 'Unbekannt',
+  sealed: 'Versiegelt',
+  notes: 'Notizen',
+
   code: 'de',
   settings: 'Einstellungen',
   contacts: 'Kontakte',
@@ -1219,8 +1231,6 @@ export const de = {
   microphone: 'Mikrofon',
   camera: 'Kamera',
 
-  notes: 'Notizen',
-
   removing: 'Kontakt wird gelöscht',
   confirmRemove: 'Sind Sie sicher, dass Sie den Kontakt löschen möchten?',
   message: 'Nachricht',
@@ -1242,6 +1252,10 @@ export const de = {
 };
 
 export const ru = {
+  unknown: 'Неизвестно',
+  sealed: 'Запечатано',
+  notes: 'Заметки',
+
   code: 'ru',
   settings: 'Настройки',
   contacts: 'Контакты',
@@ -1466,8 +1480,6 @@ export const ru = {
   integrated: 'Интегрированный',
   microphone: 'Микрофон',
   camera: 'Камера',
-
-  notes: 'Заметки',
 
   removing: 'Удаление контакта',
   confirmRemove: 'Вы уверены, что хотите удалить контакт?',

@@ -508,6 +508,7 @@ export class ContactModule implements Contact {
           const summary = channelSummary ? channelSummary : await getContactChannelSummary(server, !insecure, card.guid, card.token, id);
           entry.item.summary = {
             revision: topicRevision,
+            sealed: summary.lastTopic.dataType === 'sealedtopic',
             guid: summary.lastTopic.guid,
             dataType: summary.lastTopic.dataType,
             data: summary.lastTopic.data,

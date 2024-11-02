@@ -53,7 +53,7 @@ export type Channel = {
   unread: boolean;
   sealed: boolean;
   dataType: string;
-  data: string | null;
+  data: any;
   created: number;
   updated: number;
   enableImage: boolean;

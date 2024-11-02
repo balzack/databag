@@ -4,6 +4,7 @@ import {SafeAreaView, FlatList, View} from 'react-native';
 import {styles} from './Content.styled';
 import {Colors} from '../constants/Colors';
 import {useContent} from './useContent.hook';
+import {Channel} from '../channel/Channel';
 
 export function Content() {
   const {state, actions} = useContent();
@@ -42,8 +43,16 @@ export function Content() {
             contentContainerStyle={styles.channelContainer}
             showsVerticalScrollIndicator={false}
             renderItem={({item}) => {
+              const { sealed, hosted, unread, imageUrl, subject, message } = item;
+              const select = () => {
+                console.log('selected channel', item.cardId, item.channelId);
+              }
               return (
-                <Text>CHANNEL ITEM</Text>
+                <Channel i
+                  containerStyle={{
+                    ...styles.channel,
+                    borderColor: theme.colors.outlineVariant,
+                  }} select={select} sealed={sealed} hosted={hosted} unread={unread} imageUrl={imageUrl} notesPlaceholder={state.strings.notes} subjectPlaceholder={state.strings.unknown} subject={subject} messagePlaceholder={`[${state.strings.sealed}]`} message={message}  />
               );
             }}
             keyExtractor={channel => `${channel.cardId}:${channel.channelId}`}

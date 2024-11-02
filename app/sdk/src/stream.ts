@@ -90,6 +90,18 @@ export class StreamModule {
     await this.sync();
   }
 
+  private parse(data: string | null): any {
+    if (data) {
+      try {
+        return JSON.parse(data);
+      }
+      catch (err) {
+        console.log('invalid channel data');
+      }
+    }
+    return null;
+  }
+
   private async sync(): Promise<void> {
     if (!this.syncing) {
       this.syncing = true;
@@ -131,6 +143,7 @@ export class StreamModule {
                   const summary = channelSummary ? channelSummary : await getChannelSummary(node, secure, token, id);
                   entry.item.summary = {
                     revision: topicRevision,
+                    sealed: summary.lastTopic.dataType === 'sealedtopic',
                     guid: summary.lastTopic.guid,
                     dataType: summary.lastTopic.dataType,
                     data: summary.lastTopic.data,
@@ -440,7 +453,7 @@ export class StreamModule {
         guid: summary.guid,
         sealed: summary.sealed,
         dataType: summary.dataType,
-        data: topicData,
+        data: this.parse(topicData),
         created: summary.created,
         updated: summary.updated,
         status: summary.status,
@@ -450,7 +463,7 @@ export class StreamModule {
       unread: this.isChannelUnread(channelId),
       sealed: detail.sealed,
       dataType: detail.dataType,
-      data: channelData, 
+      data: this.parse(channelData), 
       created: detail.created,
       updated: detail.updated,
       enableImage: detail.enableImage,

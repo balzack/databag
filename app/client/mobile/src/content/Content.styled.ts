@@ -81,7 +81,7 @@ export const styles = StyleSheet.create({
     width: '100%',
   },
   channelContainer: {
-    paddingBottom: 64,
+    paddingBottom: 128,
   },
   channel: {
     width: '100%',
