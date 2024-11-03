@@ -75,7 +75,7 @@ export function Profile({close, params}: {close: () => void; params: ContactPara
     } catch (err) {
       console.log(err);
       setConfirmParams({
-        title: state.strings.error,
+        title: state.strings.operationFailed,
         prompt: state.strings.tryAgain,
         cancel: {
           label: state.strings.cancel,
@@ -246,7 +246,7 @@ export function Profile({close, params}: {close: () => void; params: ContactPara
                 loading={accepting}
                 compact="true"
                 mode="contained"
-                icon="electric-switch-closed"
+                icon="account-check-outline"
                 size={32}
                 onPress={() => {
                   applyAction(setAccepting, actions.accept);
@@ -335,7 +335,7 @@ export function Profile({close, params}: {close: () => void; params: ContactPara
                 loading={saving}
                 compact="true"
                 mode="contained"
-                icon="electric-switch-closed"
+                icon="account-check-outline"
                 size={32}
                 onPress={() => {
                   applyAction(setAccepting, actions.accept);

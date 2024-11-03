@@ -183,7 +183,10 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     gap: 12,
-    paddingTop: 16,
+    flexWrap: 'wrap',
+    paddingLeft: 16,
+    paddingRight: 16,
+    justifyContent: 'center',
   },
   action: {
     display: 'flex',

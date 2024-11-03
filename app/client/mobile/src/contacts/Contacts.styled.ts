@@ -76,7 +76,6 @@ export const styles = StyleSheet.create({
     height: 48,
     paddingTop: 8,
     paddingBottom: 8,
-    paddingRight: 16,
     paddingLeft: 16,
     borderBottomWidth: 1,
   },

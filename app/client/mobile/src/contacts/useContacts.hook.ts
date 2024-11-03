@@ -71,6 +71,18 @@ export function useContacts() {
     setFilter: (filter: string) => {
       updateState({filter});
     },
+    cancel: async (cardId: string) => {
+      const contact = app.state.session?.getContact();
+      await contact.disconnectCard(cardId);
+    },
+    accept: async (cardId: string) => {
+      const contact = app.state.session?.getContact();
+      await contact.connectCard(cardId);
+    },
+    resync: async (cardId: string) => {
+      const contact = app.state.session?.getContact();
+      await contact.resyncCard(cardId);
+    },
   };
 
   return {state, actions};

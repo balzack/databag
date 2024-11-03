@@ -40,7 +40,6 @@ export function Content() {
             style={styles.channels}
             data={state.filtered}
             initialNumToRender={32}
-            contentContainerStyle={styles.channelContainer}
             showsVerticalScrollIndicator={false}
             renderItem={({item}) => {
               const { sealed, hosted, unread, imageUrl, subject, message } = item;
@@ -48,11 +47,11 @@ export function Content() {
                 console.log('selected channel', item.cardId, item.channelId);
               }
               return (
-                <Channel i
+                <Channel
                   containerStyle={{
                     ...styles.channel,
                     borderColor: theme.colors.outlineVariant,
-                  }} select={select} sealed={sealed} hosted={hosted} unread={unread} imageUrl={imageUrl} notesPlaceholder={state.strings.notes} subjectPlaceholder={state.strings.unknown} subject={subject} messagePlaceholder={`[${state.strings.sealed}]`} message={message}  />
+                  }} select={select} unread={unread} sealed={sealed} hosted={hosted} imageUrl={imageUrl} notesPlaceholder={state.strings.notes} subjectPlaceholder={state.strings.unknown} subject={subject} messagePlaceholder={`[${state.strings.sealed}]`} message={message}  />
               );
             }}
             keyExtractor={channel => `${channel.cardId}:${channel.channelId}`}
@@ -62,7 +61,10 @@ export function Content() {
       </View>
       { state.layout === 'large' && (
         <View style={styles.bar}>
-          <Text>BAR</Text>
+          <Divider style={styles.divider} />
+          <Button icon="comment-plus" mode="contained" style={styles.button} onPress={() => {console.log("ADD CHANNEL")}}>
+            {state.strings.new}
+          </Button>
         </View>
       )}
     </View>

@@ -57,4 +57,10 @@ export const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontStyle: 'italic',
   },
+  unread: {
+    width: 8,
+    height: 8,
+    backgroundColor: Colors.connected,
+    borderRadius: 2,
+  },
 });

@@ -9,4 +9,5 @@ export const Colors = {
   connecting: '#22aacc',
   connected: '#44aa44',
   offsync: '#dd6633',
+  unread: '#448844',
 };

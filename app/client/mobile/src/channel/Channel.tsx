@@ -44,6 +44,9 @@ export function Channel({
             <Text style={styles.messageUnset}>{ messagePlaceholder }</Text>
           )}
         </View>
+        { unread && (
+          <View style={styles.unread} />
+        )}
       </SafeAreaView>
     </Pressable>
   );

@@ -1,4 +1,5 @@
 import {StyleSheet} from 'react-native';
+import {Colors} from '../constants/Colors';
 
 export const styles = StyleSheet.create({
   container: {
@@ -14,11 +15,13 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     width: '100%',
     flexGrow: 1,
+    height: 1,
   },
   bar: {
+    flexShrink: 0,
     width: '100%',
-    height: 40,
-    backgroundColor: 'yellow',
+    display: 'flex',
+    alignItems: 'center',
   },
   button: {
     borderRadius: 8,
@@ -80,9 +83,6 @@ export const styles = StyleSheet.create({
   channels: {
     width: '100%',
   },
-  channelContainer: {
-    paddingBottom: 128,
-  },
   channel: {
     width: '100%',
     height: 48,
@@ -91,5 +91,12 @@ export const styles = StyleSheet.create({
     paddingRight: 16,
     paddingLeft: 16,
     borderBottomWidth: 1,
+  },
+  unread: {
+    borderRightWidth: 2,
+    borderColor: Colors.unread,
+    borderRadius: 8,
+  },
+  read: {
   },
 });
