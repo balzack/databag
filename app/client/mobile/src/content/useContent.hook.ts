@@ -154,6 +154,9 @@ export function useContent() {
     setFilter: (filter) => {
       updateState({ filter });
     },
+    getFocus: (cardId: string | null, channelId: string) => {
+      return app.state.session.setFocus(cardId, channelId);
+    },
   };
 
   return { state, actions };

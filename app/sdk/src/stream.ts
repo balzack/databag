@@ -360,20 +360,20 @@ export class StreamModule {
     }
   }
 
-  public async setFocus(channelId: string): Promise<Focus> {
+  public setFocus(channelId: string): Focus {
     const { node, secure, token, focus } = this;
     if (focus) {
-      await focus.close();
+      focus.close();
     }
     this.focus = new FocusModule(this.log, this.store, this.crypto, null, channelId, this.guid, { node, secure, token });
     return this.focus;
   }
 
-  public async clearFocus() {
+  public clearFocus() {
     if (this.focus) {
-      await this.focus.close();
+      this.focus.close();
+      this.focus = null;
     }
-    this.focus = null;
   }
 
   public async setSeal(seal: { privateKey: string; publicKey: string } | null) {

@@ -9,9 +9,10 @@ import {Registry} from '../registry/Registry';
 import {Profile, ContactParams} from '../profile/Profile';
 import {Details} from '../details/Details';
 import {Identity} from '../identity/Identity';
+import {Conversation} from '../conversation/Conversation';
 import {useSession} from './useSession.hook';
 import {TransitionPresets} from '@react-navigation/stack';
-
+import {Focus} from 'databag-client-sdk';
 import {NavigationContainer, DefaultTheme, DarkTheme} from '@react-navigation/native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {createStackNavigator} from '@react-navigation/stack';
@@ -148,13 +149,24 @@ export function Session() {
 }
 
 function ContentTab({scheme}: {scheme: string}) {
+  const [focus, setFocus] = useState(null as Focus | null);
+
   return (
     <NavigationContainer theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <ContactStack.Navigator initialRouteName="contacts" screenOptions={{headerShown: false}}>
-        <ContactStack.Screen name="content" options={{headerBackTitleVisible: false}}>
-          {() => <Content />}
-        </ContactStack.Screen>
-      </ContactStack.Navigator>
+      <ContentStack.Navigator initialRouteName="contacts" screenOptions={{headerShown: false}}>
+        <ContentStack.Screen name="content" options={{headerBackTitleVisible: false}}>
+          {props => (
+            <Content select={(focus: Focus) => {
+                setFocus(focus);
+                props.navigation.navigate('conversation');
+              }}
+            />
+          )}
+        </ContentStack.Screen>
+        <ContentStack.Screen name="conversation" options={{headerBackTitleVisible: false}}>
+          {() => <Conversation />}
+        </ContentStack.Screen>
+      </ContentStack.Navigator>
     </NavigationContainer>
   );
 }
@@ -335,6 +347,8 @@ function SettingsScreen({nav}) {
 }
 
 function HomeScreen({nav}) {
+  const [focus, setFocus] = useState(null as Foucs | null)
+
   return (
     <View style={styles.frame}>
       <View style={styles.left}>
@@ -342,11 +356,16 @@ function HomeScreen({nav}) {
           <Identity openSettings={nav.settings.openDrawer} openContacts={nav.contacts.openDrawer} />
         </Surface>
         <Surface style={styles.channels} elevation={1} mode="flat">
-          <Content />
+          <Content select={(focus: Focus) => setFocus(focus)} />
         </Surface>
       </View>
       <View style={styles.right}>
-        <Text>CONVERSATION</Text>
+        { focus && (
+          <Conversation />
+        )}
+        { !focus && (
+          <Text>FOCUS NOT SET</Text>
+        )}
       </View>
     </View>
   );

@@ -604,9 +604,9 @@ export class ContactModule implements Contact {
     this.emitter.emit('channel', { cardId, channels });
   }
 
-  public async setFocus(cardId: string, channelId: string): Promise<Focus> {
+  public setFocus(cardId: string, channelId: string): Focus {
     if (this.focus) {
-      await this.focus.close();
+      this.focus.close();
     }
     const entry = this.cardEntries.get(cardId);
     if (entry) {
@@ -623,9 +623,9 @@ export class ContactModule implements Contact {
 
   public async clearFocus() {
     if (this.focus) {
-      await this.focus.close();
+      this.focus.close();
+      this.focus = null;
     }
-    this.focus = null;
   }
 
   public async addCard(server: string | null, guid: string): Promise<string> {

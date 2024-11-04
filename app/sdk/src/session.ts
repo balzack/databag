@@ -155,15 +155,15 @@ console.log(">>> ", channelTypes);
     return this.ring;
   }
 
-  public async setFocus(cardId: string | null, channelId: string): Promise<Focus> {
+  public setFocus(cardId: string | null, channelId: string): Focus {
     if (cardId) {
-      return await this.contact.setFocus(cardId, channelId);
+      return this.contact.setFocus(cardId, channelId);
     }
-    return await this.stream.setFocus(channelId);
+    return this.stream.setFocus(channelId);
   }
 
-  public async clearFocus(): Promise<void> {
-    await this.contact.clearFocus();
-    await this.stream.clearFocus();
+  public async clearFocus() {
+    this.contact.clearFocus();
+    this.stream.clearFocus();
   }
 }

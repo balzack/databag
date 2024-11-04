@@ -5,8 +5,9 @@ import {styles} from './Content.styled';
 import {Colors} from '../constants/Colors';
 import {useContent} from './useContent.hook';
 import {Channel} from '../channel/Channel';
+import {Focus} from 'databag-client-sdk';
 
-export function Content() {
+export function Content({ select }: { select: (focus: Focus)=>void }) {
   const {state, actions} = useContent();
   const theme = useTheme();
 
@@ -43,15 +44,16 @@ export function Content() {
             showsVerticalScrollIndicator={false}
             renderItem={({item}) => {
               const { sealed, hosted, unread, imageUrl, subject, message } = item;
-              const select = () => {
-                console.log('selected channel', item.cardId, item.channelId);
+              const open = () => {
+                const focus = actions.getFocus(item.cardId, item.channelId);
+                select(focus);
               }
               return (
                 <Channel
                   containerStyle={{
                     ...styles.channel,
                     borderColor: theme.colors.outlineVariant,
-                  }} select={select} unread={unread} sealed={sealed} hosted={hosted} imageUrl={imageUrl} notesPlaceholder={state.strings.notes} subjectPlaceholder={state.strings.unknown} subject={subject} messagePlaceholder={`[${state.strings.sealed}]`} message={message}  />
+                  }} select={open} unread={unread} sealed={sealed} hosted={hosted} imageUrl={imageUrl} notesPlaceholder={state.strings.notes} subjectPlaceholder={state.strings.unknown} subject={subject} messagePlaceholder={`[${state.strings.sealed}]`} message={message}  />
               );
             }}
             keyExtractor={channel => `${channel.cardId}:${channel.channelId}`}
