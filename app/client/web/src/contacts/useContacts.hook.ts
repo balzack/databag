@@ -70,6 +70,24 @@ export function useContacts() {
     setFilter: (filter: string) => {
       updateState({ filter })
     },
+    call: async (cardId: string) => {
+      console.log('call');
+    },
+    text: async (cardId: string) => {
+      console.log('text');
+    },
+    cancel: async (cardId: string) => {
+      const contact = app.state.session?.getContact();
+      await contact.disconnectCard(cardId);
+    },
+    accept: async (cardId: string) => {
+      const contact = app.state.session?.getContact();
+      await contact.connectCard(cardId);
+    },
+    resync: async (cardId: string) => {
+      const contact = app.state.session?.getContact();
+      await contact.resyncCard(cardId);
+    },
   }
 
   return { state, actions }

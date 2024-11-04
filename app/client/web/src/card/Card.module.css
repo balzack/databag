@@ -13,6 +13,7 @@
     height: 100%;
     gap: 4px;
     cursor: pointer;
+    width: 1%;
   }
 
   .nocursor {
@@ -23,6 +24,7 @@
     height: 100%;
     gap: 4px;
     cursor: default;
+    width: 1%;
   }
 
   .details {

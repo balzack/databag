@@ -9,7 +9,7 @@ import {
   IconUserX,
   IconRouteX2,
   IconRoute2,
-  IconCircleCheck,
+  IconUserCheck,
   IconVolumeOff,
   IconArrowsCross,
   IconRefresh,
@@ -321,7 +321,7 @@ export function Profile({ params, close }: { params: ProfileParams; close?: () =
             </div>
             <div className={classes.action} onClick={applyAccept}>
               <ActionIcon variant="subtle" loading={accepting}>
-                <IconCircleCheck />
+                <IconUserCheck />
               </ActionIcon>
               <Text className={classes.actionLabel}>{state.strings.accept}</Text>
             </div>
@@ -361,7 +361,7 @@ export function Profile({ params, close }: { params: ProfileParams; close?: () =
           <div className={classes.actions} onClick={applyAccept}>
             <div className={classes.action}>
               <ActionIcon variant="subtle" loading={accepting}>
-                <IconCircleCheck />
+                <IconUserCheck />
               </ActionIcon>
               <Text className={classes.actionLabel}>{state.strings.accept}</Text>
             </div>
@@ -499,7 +499,7 @@ export function Profile({ params, close }: { params: ProfileParams; close?: () =
 //resync - Refresh - resync
 //deny - ArrowsCross - deny
 //ignore - VolumeOff - ignore
-//accept - CircleCheck - accept
+//accept - UserCheck - accept
 //connect - Route2 - connect
 //disconnect - RouteX2 - disconnect
 //remove - UserX - remove

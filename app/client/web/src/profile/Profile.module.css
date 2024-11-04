@@ -108,6 +108,10 @@
     flex-grow: 1;
     gap: 12px;
     padding-top: 16px;
+    flex-wrap: wrap;
+    padding-left: 16px;
+    padding-right: 16px;
+    justify-content: center;
 
     .action {
       display: flex;
